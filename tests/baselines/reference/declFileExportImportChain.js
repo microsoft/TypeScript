@@ -69,6 +69,7 @@ export = m1;
 //// [declFileExportImportChain_b.d.ts]
 export import a = require("declFileExportImportChain_a");
 //// [declFileExportImportChain_b1.d.ts]
+import b = require("declFileExportImportChain_b");
 export = b;
 //// [declFileExportImportChain_c.d.ts]
 export import b1 = require("declFileExportImportChain_b1");

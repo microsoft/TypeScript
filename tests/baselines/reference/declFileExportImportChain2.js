@@ -60,6 +60,7 @@ declare module m1 {
 }
 export = m1;
 //// [declFileExportImportChain2_b.d.ts]
+import a = require("declFileExportImportChain2_a");
 export = a;
 //// [declFileExportImportChain2_c.d.ts]
 export import b = require("declFileExportImportChain2_b");

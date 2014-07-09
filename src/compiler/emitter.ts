@@ -1895,28 +1895,7 @@ module ts {
             writeLine();
         }
 
-        function emitImportDeclaration(node: ImportDeclaration) {
-            // TODO(shkamat): Emit if import decl is used to declare type in this context or as export assignment
-            if (node.flags & NodeFlags.Export) {
-                //TODO: only emit when export flag once the above condition is modified
-                write("export ");
-                write("import ");
-                emitSourceTextOfNode(node.name);
-                write(" = ");
-                if (node.entityName) {
-                    emitSourceTextOfNode(node.entityName);
-                    write(";");
-                }
-                else {
-                    write("require(");
-                    emitSourceTextOfNode(node.externalModuleName);
-                    write(");");
-                }
-                writeLine();
-            }
-        }
-
-        function canEmitModuleElementDeclaration(node: Declaration) {
+        function isModuleElementExternallyVisible(node: Declaration) {
             if (node.flags & NodeFlags.Export) {
                 // Exported member - emit this declaration
                 return true;
@@ -1927,8 +1906,17 @@ module ts {
                 return resolver.isReferencedInExportAssignment(node);
             }
 
+            return false;
+        }
+
+        function canEmitModuleElementDeclaration(node: Declaration) {
+            if (isModuleElementExternallyVisible(node)) {
+                // Either exported module element or is referenced in export assignment
+                return true;
+            }
+
             // emit the declaration if this is global source file
-            return node.parent.kind === SyntaxKind.SourceFile;
+            return node.parent.kind === SyntaxKind.SourceFile && !(node.parent.flags & NodeFlags.ExternalModule);
         }
 
         function emitDeclarationFlags(node: Declaration) {
@@ -1953,6 +1941,28 @@ module ts {
                         write("declare ");
                     }
                 }
+            }
+        }
+
+        function emitImportDeclaration(node: ImportDeclaration) {
+            // TODO(shkamat): Emit if import decl is used to declare type in this context
+            if (isModuleElementExternallyVisible(node)) {
+                if (node.flags & NodeFlags.Export) {
+                    write("export ");
+                }
+                write("import ");
+                emitSourceTextOfNode(node.name);
+                write(" = ");
+                if (node.entityName) {
+                    emitSourceTextOfNode(node.entityName);
+                    write(";");
+                }
+                else {
+                    write("require(");
+                    emitSourceTextOfNode(node.externalModuleName);
+                    write(");");
+                }
+                writeLine();
             }
         }
         

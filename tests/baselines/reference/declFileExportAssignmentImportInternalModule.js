@@ -31,4 +31,5 @@ module.exports = m;
 
 
 //// [declFileExportAssignmentImportInternalModule.d.ts]
+import m = m3;
 export = m;
