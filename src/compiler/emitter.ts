@@ -2125,9 +2125,9 @@ module ts {
         }
 
         function emitFunctionDeclaration(node: FunctionDeclaration) {
-            // TODO(shkamat): if this is overloaded declaration do not emit if body is present
             // If we are emitting Method/Constructor it isnt moduleElement and doesnt need canEmitModuleElement check
-            if (node.kind !== SyntaxKind.FunctionDeclaration || canEmitModuleElementDeclaration(node)) {
+            if ((node.kind !== SyntaxKind.FunctionDeclaration || canEmitModuleElementDeclaration(node)) &&
+                !resolver.isImplementationOfOverload(node)) {
                 emitDeclarationFlags(node);
                 if (node.kind === SyntaxKind.FunctionDeclaration) {
                     write("function ");

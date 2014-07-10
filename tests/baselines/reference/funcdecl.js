@@ -153,7 +153,6 @@ declare function withRestParams(a, ...myRestParameter);
 declare var withRestParamsVar;
 declare function overload1(n);
 declare function overload1(s);
-declare function overload1(ns);
 declare var withOverloadSignature;
 declare function f(n);
 declare module m2 {

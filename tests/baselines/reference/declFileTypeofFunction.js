@@ -66,10 +66,8 @@ function foo5(x) {
 //// [declFileTypeofFunction.d.ts]
 declare function f(n);
 declare function f(n);
-declare function f();
 declare function g(n);
 declare function g(n);
-declare function g();
 declare var b;
 declare function b1();
 declare function foo();

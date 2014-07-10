@@ -5722,6 +5722,14 @@ module ts {
             return false;
         }
 
+        function isImplementationOfOverload(node: FunctionDeclaration) {
+            if (node.body) {
+                var symbol = getSymbolOfNode(node);
+                return getSignaturesOfSymbol(symbol).length > 1;
+            }
+            return false;
+        }
+
         function getNodeCheckFlags(node: Node): NodeCheckFlags {
             return getNodeLinks(node).flags;
         }
@@ -5742,7 +5750,8 @@ module ts {
                 getEnumMemberValue: getEnumMemberValue,
                 isTopLevelValueImportedViaEntityName: isTopLevelValueImportedViaEntityName,
                 shouldEmitDeclarations: shouldEmitDeclarations,
-                isReferencedInExportAssignment: isReferencedInExportAssignment
+                isReferencedInExportAssignment: isReferencedInExportAssignment,
+                isImplementationOfOverload: isImplementationOfOverload
             };
             checkProgram();
             return emitFiles(resolver);

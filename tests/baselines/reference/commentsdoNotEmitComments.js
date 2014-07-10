@@ -142,7 +142,6 @@ declare class c {
     prop1;
     foo1(a);
     foo1(b);
-    foo1(aOrb);
 }
 declare var i;
 interface i1 {

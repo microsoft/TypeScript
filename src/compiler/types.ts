@@ -602,6 +602,7 @@ module ts {
         getEnumMemberValue(node: EnumMember): number;
         shouldEmitDeclarations(): boolean;
         isReferencedInExportAssignment(node: Declaration): boolean;
+        isImplementationOfOverload(node: FunctionDeclaration): boolean;
     }
 
     export enum SymbolFlags {

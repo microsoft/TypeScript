@@ -20,5 +20,4 @@ var C = (function () {
 declare class C {
     private foo(x);
     private foo(x);
-    private foo(x);
 }

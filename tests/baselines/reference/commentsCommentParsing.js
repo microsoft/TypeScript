@@ -242,7 +242,6 @@ declare function sum(a, b);
 declare function multiply(a, b, c?, d?, e?);
 declare function f1(a);
 declare function f1(b);
-declare function f1(aOrb, opt?);
 declare function subtract(a, b, c?, d?, e?, f?);
 declare function square(a);
 declare function divide(a, b);

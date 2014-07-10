@@ -20,5 +20,4 @@ var C = (function () {
 declare class C {
     foo(n);
     foo(s);
-    foo(a);
 }

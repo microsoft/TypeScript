@@ -259,16 +259,12 @@ var c5_i_2 = new c5("hello");
 //// [commentsOverloads.d.ts]
 declare function f1(a);
 declare function f1(b);
-declare function f1(aOrb);
 declare function f2(a);
 declare function f2(b);
-declare function f2(aOrb);
 declare function f3(a);
 declare function f3(b);
-declare function f3(aOrb);
 declare function f4(a);
 declare function f4(b);
-declare function f4(aOrb);
 interface i1 {
     (a);
     (b);
@@ -310,44 +306,34 @@ interface i4 {
 declare class c {
     prop1(a);
     prop1(b);
-    prop1(aorb);
     prop2(a);
     prop2(b);
-    prop2(aorb);
     prop3(a);
     prop3(b);
-    prop3(aorb);
     prop4(a);
     prop4(b);
-    prop4(aorb);
     prop5(a);
     prop5(b);
-    prop5(aorb);
 }
 declare class c1 {
     constructor (a);
     constructor (b);
-    constructor (aorb);
 }
 declare class c2 {
     constructor (a);
     constructor (b);
-    constructor (aorb);
 }
 declare class c3 {
     constructor (a);
     constructor (b);
-    constructor (aorb);
 }
 declare class c4 {
     constructor (a);
     constructor (b);
-    constructor (aorb);
 }
 declare class c5 {
     constructor (a);
     constructor (b);
-    constructor (aorb);
 }
 declare var c_i;
 declare var c1_i_1;

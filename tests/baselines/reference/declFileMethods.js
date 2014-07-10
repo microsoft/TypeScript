@@ -332,11 +332,9 @@ export declare class c1 {
     fooWithRestParameters(a, ...rests);
     fooWithOverloads(a);
     fooWithOverloads(a);
-    fooWithOverloads(a);
     private privateFoo();
     private privateFooWithParameters(a, b);
     private privateFooWithRestParameters(a, ...rests);
-    private privateFooWithOverloads(a);
     private privateFooWithOverloads(a);
     private privateFooWithOverloads(a);
     static staticFoo();
@@ -344,11 +342,9 @@ export declare class c1 {
     static staticFooWithRestParameters(a, ...rests);
     static staticFooWithOverloads(a);
     static staticFooWithOverloads(a);
-    static staticFooWithOverloads(a);
     private static privateStaticFoo();
     private static privateStaticFooWithParameters(a, b);
     private static privateStaticFooWithRestParameters(a, ...rests);
-    private static privateStaticFooWithOverloads(a);
     private static privateStaticFooWithOverloads(a);
     private static privateStaticFooWithOverloads(a);
 }
@@ -366,11 +362,9 @@ declare class c2 {
     fooWithRestParameters(a, ...rests);
     fooWithOverloads(a);
     fooWithOverloads(a);
-    fooWithOverloads(a);
     private privateFoo();
     private privateFooWithParameters(a, b);
     private privateFooWithRestParameters(a, ...rests);
-    private privateFooWithOverloads(a);
     private privateFooWithOverloads(a);
     private privateFooWithOverloads(a);
     static staticFoo();
@@ -378,11 +372,9 @@ declare class c2 {
     static staticFooWithRestParameters(a, ...rests);
     static staticFooWithOverloads(a);
     static staticFooWithOverloads(a);
-    static staticFooWithOverloads(a);
     private static privateStaticFoo();
     private static privateStaticFooWithParameters(a, b);
     private static privateStaticFooWithRestParameters(a, ...rests);
-    private static privateStaticFooWithOverloads(a);
     private static privateStaticFooWithOverloads(a);
     private static privateStaticFooWithOverloads(a);
 }

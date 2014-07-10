@@ -118,11 +118,9 @@ export declare function fooWithParameters(a, b);
 export declare function fooWithRestParameters(a, ...rests);
 export declare function fooWithOverloads(a);
 export declare function fooWithOverloads(a);
-export declare function fooWithOverloads(a);
 //// [declFileFunctions_1.d.ts]
 declare function globalfoo();
 declare function globalfooWithParameters(a, b);
 declare function globalfooWithRestParameters(a, ...rests);
-declare function globalfooWithOverloads(a);
 declare function globalfooWithOverloads(a);
 declare function globalfooWithOverloads(a);

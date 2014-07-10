@@ -224,7 +224,6 @@ export declare class ConstructorWithRestParamters {
 export declare class ConstructorWithOverloads {
     constructor (a);
     constructor (a);
-    constructor (a);
 }
 export declare class ConstructorWithPublicParameterProperty {
     x;
@@ -253,7 +252,6 @@ declare class GlobalConstructorWithRestParamters {
     constructor (a, ...rests);
 }
 declare class GlobalConstructorWithOverloads {
-    constructor (a);
     constructor (a);
     constructor (a);
 }
