@@ -273,6 +273,11 @@ module ts {
         return s.parameters.length > 0 && (s.parameters[s.parameters.length - 1].flags & NodeFlags.Rest) !== 0;
     }
 
+    export function getContainerOfModuleElementDeclaration(node: Declaration) {
+        // If the declaration is var declaration, then the parent is variable statement but we actually want the module
+        return node.kind === SyntaxKind.VariableDeclaration ? node.parent.parent : node.parent;
+    }
+
     enum ParsingContext {
         SourceElements,          // Elements in source file
         ModuleElements,          // Elements in module declaration

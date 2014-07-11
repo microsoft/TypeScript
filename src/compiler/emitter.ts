@@ -1857,27 +1857,16 @@ module ts {
             }
         }
 
-        function emitCommaList(nodes: Node[]) {
+        function emitCommaList(nodes: Node[], eachNodeEmitFn: (node: Node) => void) {
+            var currentWriterPos = writer.getTextPos();
             for (var i = 0, n = nodes.length; i < n; i++) {
-                if (i) {
+                if (currentWriterPos !== writer.getTextPos()) {
                     write(", ");
                 }
-                emitNode(nodes[i]);
+                currentWriterPos = writer.getTextPos();
+                eachNodeEmitFn(nodes[i]);
             }
         }
-
-        function emitCommaSeparatedSymbolToString(nodes: Node[]) {
-            if (nodes) {
-                for (var i = 0, n = nodes.length; i < n; i++) {
-                    if (i) {
-                        write(", ");
-                    }
-                    // TODO(shkamat): get the symbol name in the scope for this node
-                    emitSourceTextOfNode(nodes[i]);
-                }
-            }
-        }
-
 
         function emitSourceTextOfNode(node: Node) {
             write(getSourceTextOfLocalNode(node));
@@ -1902,7 +1891,7 @@ module ts {
             }
 
             // If this node is in external module, check if this is export assigned 
-            if (node.parent.flags & NodeFlags.ExternalModule) {
+            if (getContainerOfModuleElementDeclaration(node).flags & NodeFlags.ExternalModule) {
                 return resolver.isReferencedInExportAssignment(node);
             }
 
@@ -1915,8 +1904,9 @@ module ts {
                 return true;
             }
 
-            // emit the declaration if this is global source file
-            return node.parent.kind === SyntaxKind.SourceFile && !(node.parent.flags & NodeFlags.ExternalModule);
+            // emit the declaration if this is in global scope source file
+            var moduleDeclaration = getContainerOfModuleElementDeclaration(node);
+            return moduleDeclaration.kind === SyntaxKind.SourceFile && !(moduleDeclaration.flags & NodeFlags.ExternalModule);
         }
 
         function emitDeclarationFlags(node: Declaration) {
@@ -2013,9 +2003,18 @@ module ts {
         }
 
         function emitTypeParameters(typeParameters: TypeParameterDeclaration[]) {
+            function emitTypeParameter(node: TypeParameterDeclaration) {
+                emitSourceTextOfNode(node.name);
+                if (node.constraint) {
+                    write(" extends ");
+                    // TODO(shkamat): emit constraint using type
+                    emitSourceTextOfNode(node.constraint);
+                }
+            }
+
             if (typeParameters) {
                 write("<");
-                emitCommaSeparatedSymbolToString(typeParameters);
+                emitCommaList(typeParameters, emitTypeParameter);
                 write(">");
             }
         }
@@ -2023,7 +2022,8 @@ module ts {
         function emitHeritageClause(typeReferences: TypeReferenceNode[], isImplementsList: boolean) {
             if (typeReferences) {
                 write(isImplementsList ? " implments " : " extends ");
-                emitCommaSeparatedSymbolToString(typeReferences);
+                // TODO(shkamat): get the symbol name in the scope for this node
+                emitCommaList(typeReferences, emitSourceTextOfNode);
             }
         }
 
@@ -2083,21 +2083,24 @@ module ts {
         }
 
         function emitVariableDeclaration(node: VariableDeclaration) {
-            emitSourceTextOfNode(node.name);
-            // If optional property emit ?
-            if (node.kind === SyntaxKind.Property && (node.flags & NodeFlags.QuestionMark)) {
-                write("?");
-            }
-            if (!(node.flags & NodeFlags.Private)) {
-                // TODO(shkamat): emit type of the node in given scope
+            if (node.kind !== SyntaxKind.VariableDeclaration || canEmitModuleElementDeclaration(node)) {
+                emitSourceTextOfNode(node.name);
+                // If optional property emit ?
+                if (node.kind === SyntaxKind.Property && (node.flags & NodeFlags.QuestionMark)) {
+                    write("?");
+                }
+                if (!(node.flags & NodeFlags.Private)) {
+                    // TODO(shkamat): emit type of the node in given scope
+                }
             }
         }
 
         function emitVariableStatement(node: VariableStatement) {
-            if (canEmitModuleElementDeclaration(node)) {
+            var hasDeclarationWithEmit = forEach(node.declarations, varDeclaration => canEmitModuleElementDeclaration(varDeclaration));
+            if (hasDeclarationWithEmit) {
                 emitDeclarationFlags(node);
                 write("var ");
-                emitCommaList(node.declarations);
+                emitCommaList(node.declarations, emitVariableDeclaration);
                 write(";");
                 writeLine();
             }
@@ -2154,7 +2157,7 @@ module ts {
             }
 
             // Parameters
-            emitCommaList(node.parameters);
+            emitCommaList(node.parameters, emitParameterDeclaration);
 
             if (node.kind === SyntaxKind.IndexSignature) {
                 write("]");
@@ -2186,8 +2189,6 @@ module ts {
 
         function emitNode(node: Node) {
             switch (node.kind) {
-                case SyntaxKind.Parameter:
-                    return emitParameterDeclaration(<ParameterDeclaration>node);
                 case SyntaxKind.Constructor:
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.Method:
@@ -2202,8 +2203,6 @@ module ts {
                     return emitAccessorDeclaration(<AccessorDeclaration>node);
                 case SyntaxKind.VariableStatement:
                     return emitVariableStatement(<VariableStatement>node);
-                case SyntaxKind.VariableDeclaration: 
-                    return emitVariableDeclaration(<VariableDeclaration>node);
                 case SyntaxKind.Property:
                     return emitPropertyDeclaration(<PropertyDeclaration>node);
                 case SyntaxKind.InterfaceDeclaration:

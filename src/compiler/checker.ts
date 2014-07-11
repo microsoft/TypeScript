@@ -5707,7 +5707,7 @@ module ts {
         }
 
         function isReferencedInExportAssignment(node: Declaration): boolean {
-            var exportAssignedSymbol = getExportAssignmentSymbol(getSymbolOfNode(node.parent));
+            var exportAssignedSymbol = getExportAssignmentSymbol(getSymbolOfNode(getContainerOfModuleElementDeclaration(node)));
             if (exportAssignedSymbol) {
                 var symbol = getSymbolOfNode(node);
                 if (exportAssignedSymbol === symbol) {

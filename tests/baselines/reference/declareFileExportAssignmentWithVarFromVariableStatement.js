@@ -1,4 +1,4 @@
-//// [declareFileExportAssignment.ts]
+//// [declareFileExportAssignmentWithVarFromVariableStatement.ts]
 module m2 {
     export interface connectModule {
         (res, req, next): void;
@@ -10,7 +10,7 @@ module m2 {
 
 }
 
-var m2: {
+var x = 10, m2: {
     (): m2.connectExport;
     test1: m2.connectModule;
     test2(): m2.connectModule;
@@ -18,12 +18,12 @@ var m2: {
 
 export = m2;
 
-//// [declareFileExportAssignment.js]
-var m2;
+//// [declareFileExportAssignmentWithVarFromVariableStatement.js]
+var x = 10, m2;
 module.exports = m2;
 
 
-//// [declareFileExportAssignment.d.ts]
+//// [declareFileExportAssignmentWithVarFromVariableStatement.d.ts]
 declare module m2 {
     interface connectModule {
         (res, req, next);

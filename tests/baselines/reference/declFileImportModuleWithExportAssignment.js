@@ -45,6 +45,7 @@ declare module m2 {
         listen;
     }
 }
+declare var m2;
 export = m2;
 //// [declFileImportModuleWithExportAssignment_1.d.ts]
 export declare var a;
