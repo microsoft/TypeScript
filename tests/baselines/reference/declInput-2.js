@@ -61,3 +61,24 @@ var M;
 
 
 //// [declInput-2.d.ts]
+declare module M {
+    class E {
+    }
+    interface I1 {
+    }
+    class D {
+        private c;
+        m1;
+        m2;
+        m22;
+        m23;
+        m24;
+        m25;
+        m232();
+        m242();
+        m252();
+        m26(i);
+        m262(i);
+        m3();
+    }
+}

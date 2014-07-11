@@ -7406,3 +7406,1021 @@ var caurinus;
 
 
 //// [resolvingClassDeclarationWhenInBaseTypeResolution.d.ts]
+declare module rionegrensis {
+    class caniventer extends Lanthanum.nitidus<petrophilus.minutilla, julianae.sumatrana> {
+        salomonseni();
+        uchidai();
+        raffrayana();
+        Uranium();
+        nayaur();
+    }
+    class veraecrucis<T0, T1> extends trivirgatus.mixtus<gabriellae.amicus, lutreolus.punicus> {
+        naso();
+        vancouverensis();
+        africana();
+        palliolata();
+        nivicola();
+    }
+}
+declare module julianae {
+    class steerii {
+    }
+    class nudicaudus {
+        brandtii();
+        maxwellii();
+        endoi();
+        venezuelae();
+        zamicrus();
+    }
+    class galapagoensis {
+        isabellae();
+        rueppellii();
+        peregusna();
+        gliroides();
+        banakrisi();
+        rozendaali();
+        stuhlmanni();
+    }
+    class albidens<T0, T1> {
+        mattheyi();
+        Astatine();
+        vincenti();
+        hirta();
+        virginianus();
+        macrophyllum();
+        porcellus();
+    }
+    class oralis<T0, T1> extends caurinus.psilurus {
+        cepapi();
+        porteri();
+        bindi();
+        puda();
+        mindorensis();
+        ignitus();
+        rufus();
+        monax();
+        unalascensis();
+        wuchihensis();
+        leucippe();
+        ordii();
+        eisentrauti();
+    }
+    class sumatrana extends Lanthanum.jugularis {
+        wolffsohni();
+        geata();
+        awashensis();
+        sturdeei();
+        pachyurus();
+        lyelli();
+        neohibernicus();
+    }
+    class gerbillus<T0, T1> {
+        pundti();
+        tristrami();
+        swarthi();
+        horsfieldii();
+        diazi();
+        rennelli();
+        maulinus();
+        muscina();
+        pelengensis();
+        abramus();
+        reevesi();
+    }
+    class acariensis {
+        levicula();
+        minous();
+        cinereiventer();
+        longicaudatus();
+        baeodon();
+        soricoides();
+        datae();
+        spixii();
+        anakuma();
+        kihaulei();
+        gymnura();
+        olchonensis();
+    }
+    class durangae extends dogramacii.aurata {
+        Californium();
+        Flerovium();
+        phrudus();
+    }
+}
+declare module ruatanica {
+    class hector<T0, T1> {
+        humulis();
+        eurycerus();
+    }
+}
+declare module Lanthanum {
+    class suillus<T0, T1> {
+        spilosoma();
+        tumbalensis();
+        anatolicus();
+    }
+    class nitidus<T0, T1> extends argurus.gilbertii<lavali.thaeleri, lutreolus.punicus> {
+        granatensis();
+        negligens();
+        lewisi();
+        arge();
+        dominicensis();
+        taurus();
+        tonganus();
+        silvatica();
+        midas();
+        bicornis();
+    }
+    class megalonyx extends caurinus.johorensis<caurinus.megaphyllus, julianae.steerii> {
+        phillipsii();
+        melanogaster();
+        elaphus();
+        elater();
+        ourebi();
+        caraccioli();
+        parva();
+        albipes();
+    }
+    class jugularis {
+        torrei();
+        revoili();
+        macrobullatus();
+        compactus();
+        talpinus();
+        stramineus();
+        dartmouthi();
+        ogilbyi();
+        incomtus();
+        surdaster();
+        melanorhinus();
+        picticaudata();
+        pomona();
+        ileile();
+    }
+}
+declare module rendalli {
+    class zuluensis extends julianae.steerii {
+        telfairi();
+        keyensis();
+        occasius();
+        damarensis();
+        Neptunium();
+        griseoflavus();
+        thar();
+        alborufus();
+        fusicaudus();
+        gordonorum();
+        ruber();
+        desmarestianus();
+        lutillus();
+        salocco();
+    }
+    class moojeni<T0, T1> {
+        floweri();
+        montosa();
+        miletus();
+        heaneyi();
+        marchei();
+        budini();
+        maggietaylorae();
+        poliocephalus();
+        zibethicus();
+        biacensis();
+    }
+    class crenulata<T0, T1> extends trivirgatus.falconeri {
+        salvanius();
+        maritimus();
+        edax();
+    }
+}
+declare module trivirgatus {
+    class tumidifrons<T0, T1> {
+        nivalis();
+        vestitus();
+        aequatorius();
+        scherman();
+        improvisum();
+        cervinipes();
+        audax();
+        vallinus();
+    }
+    class mixtus<T0, T1> extends argurus.pygmaea<argurus.oreas, panglima.fundatus<quasiater.carolinensis, macrorhinos.daphaenodon>> {
+        ochrogaster();
+        bryophilus();
+        liechtensteini();
+        crawfordi();
+        hypsibia();
+        matacus();
+        demidoff();
+    }
+    class lotor<T0, T1> {
+        balensis();
+        pullata();
+    }
+    class falconeri {
+        cabrali();
+        gouldi();
+        fuscicollis();
+        martiensseni();
+        gaoligongensis();
+        shawi();
+        gmelini();
+    }
+    class oconnelli {
+        youngsoni();
+        terrestris();
+        chrysopus();
+        fuscomurina();
+        hellwaldii();
+        aenea();
+        perrini();
+        entellus();
+        krebsii();
+        cephalotes();
+        molossinus();
+        luisi();
+        ceylonicus();
+        ralli();
+    }
+}
+declare module quasiater {
+    class bobrinskoi {
+        crassicaudatus();
+        mulatta();
+        ansorgei();
+        Copper();
+    }
+}
+declare module ruatanica {
+    class americanus extends imperfecta.ciliolabrum<argurus.germaini, lutreolus.foina> {
+        nasoloi();
+        mystacalis();
+        fardoulisi();
+        tumidus();
+    }
+}
+declare module lavali {
+    class wilsoni extends Lanthanum.nitidus<rionegrensis.caniventer, Lanthanum.jugularis> {
+        setiger();
+        lorentzii();
+        antisensis();
+        blossevillii();
+        bontanus();
+        caligata();
+        franqueti();
+        roberti();
+        degelidus();
+        amoenus();
+        kob();
+        csorbai();
+        dorsata();
+    }
+    class beisa {
+    }
+    class otion extends howi.coludo<argurus.oreas, howi.marcanoi> {
+        bonaerensis();
+        dussumieri();
+        osvaldoreigi();
+        grevyi();
+        hirtula();
+        cristatus();
+        darlingtoni();
+        fontanierii();
+        umbrosus();
+        chiriquinus();
+        orarius();
+        ilaeus();
+        musschenbroekii();
+    }
+    class xanthognathus {
+        nanulus();
+        albigena();
+        onca();
+        gunnii();
+        apeco();
+        variegates();
+        goudotii();
+        pohlei();
+        ineptus();
+        euryotis();
+        maurisca();
+        coyhaiquensis();
+    }
+    class thaeleri extends argurus.oreas {
+        coromandra();
+        parvipes();
+        sponsorius();
+        vates();
+        roosmalenorum();
+        rubicola();
+        ikonnikovi();
+        paramicrus();
+    }
+    class lepturus extends Lanthanum.suillus<dammermani.melanops, quasiater.carolinensis> {
+        ferrumequinum();
+        aequalis();
+    }
+}
+declare module dogramacii {
+    class robustulus extends lavali.wilsoni {
+        fossor();
+        humboldti();
+        mexicana();
+        martini();
+        beatus();
+        leporina();
+        pearsonii();
+        keaysi();
+        hindei();
+    }
+    class koepckeae {
+        culturatus();
+    }
+    class kaiseri {
+        bedfordiae();
+        paramorum();
+        rubidus();
+        juninensis();
+        marginata();
+        Meitnerium();
+        pinetorum();
+        hoolock();
+        poeyi();
+        Thulium();
+        patrius();
+        quadraticauda();
+        ater();
+    }
+    class aurata {
+        grunniens();
+        howensis();
+        karlkoopmani();
+        mirapitanga();
+        ophiodon();
+        landeri();
+        sonomae();
+        erythromos();
+    }
+}
+declare module lutreolus {
+    class schlegeli extends lavali.beisa {
+        mittendorfi();
+        blicki();
+        culionensis();
+        scrofa();
+        fernandoni();
+        Tin();
+        marmorata();
+        tavaratra();
+        peregrina();
+        frontalis();
+        cuniculus();
+        magdalenae();
+        andamanensis();
+        dispar();
+    }
+}
+declare module argurus {
+    class dauricus<T0, T1> {
+        chinensis();
+        duodecimcostatus();
+        foxi();
+        macleayii();
+        darienensis();
+        hardwickii();
+        albifrons();
+        jacobitus();
+        guentheri();
+        mahomet();
+        misionensis();
+    }
+}
+declare module nigra {
+    class dolichurus<T0, T1> {
+        solomonis();
+        alfredi();
+        morrisi();
+        lekaguli();
+        dimissus();
+        phaeotis();
+        ustus();
+        sagei();
+    }
+}
+declare module panglima {
+    class amphibius<T0, T1> extends caurinus.johorensis<Lanthanum.nitidus<petrophilus.minutilla, julianae.sumatrana>, Lanthanum.jugularis> {
+        bottegi();
+        jerdoni();
+        camtschatica();
+        spadix();
+        luismanueli();
+        aceramarcae();
+    }
+    class fundatus<T0, T1> extends lutreolus.schlegeli {
+        crassulus();
+        flamarioni();
+        mirabilis();
+    }
+    class abidi<T0, T1> extends argurus.dauricus<argurus.germaini, julianae.durangae> {
+        greyii();
+        macedonicus();
+        galili();
+        thierryi();
+        ega();
+    }
+}
+declare module quasiater {
+    class carolinensis {
+        concinna();
+        aeneus();
+        aloysiisabaudiae();
+        tenellus();
+        andium();
+        persephone();
+        patrizii();
+    }
+}
+declare module minutus {
+    class himalayana<T0, T1> extends lutreolus.punicus {
+        simoni();
+        lobata();
+        rusticus();
+        latona();
+        famulus();
+        flaviceps();
+        paradoxolophus();
+        Osmium();
+        vulgaris();
+        betsileoensis();
+        vespuccii();
+        olympus();
+    }
+}
+declare module caurinus {
+    class mahaganus<T0, T1> extends panglima.fundatus<quasiater.carolinensis, macrorhinos.daphaenodon> {
+        martiniquensis();
+        devius();
+        masalai();
+        kathleenae();
+        simulus();
+        nigrovittatus();
+        senegalensis();
+        acticola();
+    }
+}
+declare module macrorhinos {
+    class marmosurus<T0, T1> {
+        tansaniana();
+    }
+}
+declare module howi {
+    class angulatus<T0, T1> extends sagitta.stolzmanni {
+        pennatus();
+    }
+}
+declare module daubentonii {
+    class nesiotes<T0, T1> {
+    }
+}
+declare module nigra {
+    class thalia<T0, T1> {
+        dichotomus();
+        arnuxii();
+        verheyeni();
+        dauuricus();
+        tristriatus();
+        lasiura();
+        gangetica();
+        brucei();
+    }
+}
+declare module sagitta {
+    class walkeri extends minutus.portoricensis {
+        maracajuensis();
+    }
+}
+declare module minutus {
+    class inez<T0, T1> extends samarensis.pelurus<argurus.germaini, julianae.durangae> {
+        vexillaris();
+    }
+}
+declare module macrorhinos {
+    class konganensis extends imperfecta.lasiurus<caurinus.psilurus, caurinus.psilurus> {
+    }
+}
+declare module panamensis {
+    class linulus<T0, T1> extends ruatanica.hector<julianae.sumatrana, samarensis.pelurus<Lanthanum.jugularis, sagitta.walkeri>> {
+        goslingi();
+        taki();
+        fumosus();
+        rufinus();
+        lami();
+        regina();
+        nanilla();
+        enganus();
+        gomantongensis();
+    }
+}
+declare module nigra {
+    class gracilis<T0, T1> {
+        weddellii();
+        echinothrix();
+        garridoi();
+        rouxii();
+        aurita();
+        geoffrensis();
+        theresa();
+        melanocarpus();
+        dubiaquercus();
+        pectoralis();
+        apoensis();
+        grisescens();
+        ramirohitra();
+    }
+}
+declare module samarensis {
+    class pelurus<T0, T1> extends sagitta.stolzmanni {
+        Palladium();
+        castanea();
+        chamek();
+        nigriceps();
+        lunatus();
+        madurae();
+        chinchilla();
+        eliasi();
+        proditor();
+        gambianus();
+        petteri();
+        nusatenggara();
+        olitor();
+    }
+    class fuscus<T0, T1> extends macrorhinos.daphaenodon {
+        planifrons();
+        badia();
+        prymnolopha();
+        natalensis();
+        hunteri();
+        sapiens();
+        macrocercus();
+        nimbae();
+        suricatta();
+        jagorii();
+        beecrofti();
+        imaizumii();
+        colocolo();
+        wolfi();
+    }
+    class pallidus {
+        oblativa();
+        watersi();
+        glacialis();
+        viaria();
+    }
+    class cahirinus<T0, T1> {
+        alashanicus();
+        flaviventer();
+        bottai();
+        pinetis();
+        saussurei();
+    }
+}
+declare module sagitta {
+    class leptoceros<T0, T1> extends caurinus.johorensis<argurus.peninsulae, daubentonii.arboreus<argurus.germaini, sagitta.stolzmanni>> {
+        victus();
+        hoplomyoides();
+        gratiosus();
+        rex();
+        bolami();
+    }
+}
+declare module daubentonii {
+    class nigricans<T0, T1> extends sagitta.stolzmanni {
+        woosnami();
+    }
+}
+declare module dammermani {
+    class siberu<T0, T1> {
+    }
+}
+declare module argurus {
+    class pygmaea<T0, T1> extends rendalli.moojeni<macrorhinos.konganensis, gabriellae.echinatus> {
+        pajeros();
+        capucinus();
+        cuvieri();
+    }
+}
+declare module chrysaeolus {
+    class sarasinorum<T0, T1> extends caurinus.psilurus {
+        belzebul();
+        hinpoon();
+        kandti();
+        cynosuros();
+        Germanium();
+        Ununoctium();
+        princeps();
+    }
+}
+declare module argurus {
+    class wetmorei<T0, T1> {
+        leucoptera();
+        ochraventer();
+        tephromelas();
+        cracens();
+        jamaicensis();
+        gymnocaudus();
+        mayori();
+    }
+}
+declare module argurus {
+    class oreas extends lavali.wilsoni {
+        salamonis();
+        paniscus();
+        fagani();
+        papuanus();
+        timidus();
+        nghetinhensis();
+        barbei();
+        univittatus();
+    }
+}
+declare module daubentonii {
+    class arboreus<T0, T1> {
+        capreolus();
+        moreni();
+        hypoleucos();
+        paedulcus();
+        pucheranii();
+        stella();
+        brasiliensis();
+        brevicaudata();
+        vitticollis();
+        huangensis();
+        cameroni();
+        tianshanica();
+    }
+}
+declare module patas {
+    class uralensis {
+        cartilagonodus();
+        pyrrhinus();
+        insulans();
+        nigricauda();
+        muricauda();
+        albicaudus();
+        fallax();
+        attenuata();
+        megalura();
+        neblina();
+        citellus();
+        tanezumi();
+        albiventer();
+    }
+}
+declare module provocax {
+    class melanoleuca extends lavali.wilsoni {
+        Neodymium();
+        baeri();
+    }
+}
+declare module sagitta {
+    class sicarius<T0, T1> {
+        Chlorine();
+        simulator();
+    }
+}
+declare module howi {
+    class marcanoi extends Lanthanum.megalonyx {
+        formosae();
+        dudui();
+        leander();
+        martinsi();
+        beatrix();
+        griseoventer();
+        zerda();
+        yucatanicus();
+        nigrita();
+        jouvenetae();
+        indefessus();
+        vuquangensis();
+        Zirconium();
+        hyaena();
+    }
+}
+declare module argurus {
+    class gilbertii<T0, T1> {
+        nasutus();
+        poecilops();
+        sondaicus();
+        auriventer();
+        cherriei();
+        lindberghi();
+        pipistrellus();
+        paranus();
+        dubosti();
+        opossum();
+        oreopolus();
+        amurensis();
+    }
+}
+declare module petrophilus {
+    class minutilla {
+    }
+}
+declare module lutreolus {
+    class punicus {
+        strandi();
+        lar();
+        erica();
+        trichura();
+        lemniscatus();
+        aspalax();
+        marshalli();
+        Zinc();
+        monochromos();
+        purinus();
+        ischyrus();
+        tenuis();
+        Helium();
+    }
+}
+declare module macrorhinos {
+    class daphaenodon {
+        bredanensis();
+        othus();
+        hammondi();
+        aureocollaris();
+        flavipes();
+        callosus();
+    }
+}
+declare module sagitta {
+    class cinereus<T0, T1> {
+        zunigae();
+        microps();
+        guaporensis();
+        tonkeana();
+        montensis();
+        sphinx();
+        glis();
+        dorsalis();
+        fimbriatus();
+        sara();
+        epimelas();
+        pittieri();
+    }
+}
+declare module nigra {
+    class caucasica<T0, T1> {
+    }
+}
+declare module gabriellae {
+    class klossii<T0, T1> extends imperfecta.lasiurus<dogramacii.robustulus, caurinus.psilurus> {
+    }
+    class amicus {
+        pirrensis();
+        phaeura();
+        voratus();
+        satarae();
+        hooperi();
+        perrensi();
+        ridei();
+        audeberti();
+        Lutetium();
+        atrox();
+    }
+    class echinatus {
+        tenuipes();
+    }
+}
+declare module imperfecta {
+    class lasiurus<T0, T1> {
+        marisae();
+        fulvus();
+        paranaensis();
+        didactylus();
+        schreibersii();
+        orii();
+    }
+    class subspinosus {
+        monticularis();
+        Gadolinium();
+        oasicus();
+        paterculus();
+        punctata();
+        invictus();
+        stangeri();
+        siskiyou();
+        welwitschii();
+        Polonium();
+        harpia();
+    }
+    class ciliolabrum<T0, T1> extends dogramacii.robustulus {
+        leschenaultii();
+        ludia();
+        sinicus();
+    }
+}
+declare module quasiater {
+    class wattsi<T0, T1> {
+        lagotis();
+        hussoni();
+        bilarni();
+        cabrerae();
+    }
+}
+declare module butleri {
+}
+declare module petrophilus {
+    class sodyi<T0, T1> extends quasiater.bobrinskoi {
+        saundersiae();
+        imberbis();
+        cansdalei();
+        Lawrencium();
+        catta();
+        breviceps();
+        transitionalis();
+        heptneri();
+        bairdii();
+    }
+}
+declare module caurinus {
+    class megaphyllus extends imperfecta.lasiurus<julianae.acariensis, howi.coludo<argurus.oreas, howi.marcanoi>> {
+        montana();
+        amatus();
+        bucculentus();
+        lepida();
+        graecus();
+        forsteri();
+        perotensis();
+        cirrhosus();
+    }
+}
+declare module minutus {
+    class portoricensis {
+        relictus();
+        aequatorianus();
+        rhinogradoides();
+    }
+}
+declare module lutreolus {
+    class foina {
+        tarfayensis();
+        Promethium();
+        salinae();
+        kerri();
+        scotti();
+        camerunensis();
+        affinis();
+        siebersi();
+        maquassiensis();
+        layardi();
+        bishopi();
+        apodemoides();
+        argentiventer();
+    }
+}
+declare module lutreolus {
+    class cor<T0, T1> extends panglima.fundatus<panamensis.linulus<trivirgatus.lotor<argurus.luctuosa, lavali.wilsoni>, lavali.beisa>, dammermani.melanops> {
+        antinorii();
+        voi();
+        mussoi();
+        truncatus();
+        achates();
+        praedatrix();
+        mzabi();
+        xanthinus();
+        tapoatafa();
+        castroviejoi();
+    }
+}
+declare module howi {
+    class coludo<T0, T1> {
+        bernhardi();
+        isseli();
+    }
+}
+declare module argurus {
+    class germaini extends gabriellae.amicus {
+        sharpei();
+        palmarum();
+    }
+}
+declare module sagitta {
+    class stolzmanni {
+        riparius();
+        dhofarensis();
+        tricolor();
+        gardneri();
+        walleri();
+        talpoides();
+        pallipes();
+        lagurus();
+        hipposideros();
+        griselda();
+        florium();
+    }
+}
+declare module dammermani {
+    class melanops extends minutus.inez<sagitta.stolzmanni, dammermani.melanops> {
+        blarina();
+        harwoodi();
+        ashaninka();
+        wiedii();
+        godmani();
+        condorensis();
+        xerophila();
+        laminatus();
+        archeri();
+        hidalgo();
+        unicolor();
+        philippii();
+        bocagei();
+    }
+}
+declare module argurus {
+    class peninsulae extends patas.uralensis {
+        aitkeni();
+        novaeangliae();
+        olallae();
+        anselli();
+        timminsi();
+        sordidus();
+        telfordi();
+        cavernarum();
+    }
+}
+declare module argurus {
+    class netscheri<T0, T1> {
+        gravis();
+        ruschii();
+        tricuspidatus();
+        fernandezi();
+        colletti();
+        microbullatus();
+        eburneae();
+        tatei();
+        millardi();
+        pruinosus();
+        delator();
+        nyikae();
+        ruemmleri();
+    }
+}
+declare module ruatanica {
+    class Praseodymium<T0, T1> extends ruatanica.hector<lutreolus.punicus, gabriellae.amicus> {
+        clara();
+        spectabilis();
+        kamensis();
+        ruddi();
+        bartelsii();
+        yerbabuenae();
+        davidi();
+        pilirostris();
+        catherinae();
+        frontata();
+        Terbium();
+        thomensis();
+        soricinus();
+    }
+}
+declare module caurinus {
+    class johorensis<T0, T1> extends lutreolus.punicus {
+        maini();
+    }
+}
+declare module argurus {
+    class luctuosa {
+        loriae();
+    }
+}
+declare module panamensis {
+    class setulosus<T0, T1> {
+        duthieae();
+        guereza();
+        buselaphus();
+        nuttalli();
+        pelii();
+        tunneyi();
+        lamula();
+        vampyrus();
+    }
+}
+declare module petrophilus {
+    class rosalia<T0, T1> {
+        palmeri();
+        baeops();
+        ozensis();
+        creaghi();
+        montivaga();
+    }
+}
+declare module caurinus {
+    class psilurus extends lutreolus.punicus {
+        socialis();
+        lundi();
+        araeum();
+        calamianensis();
+        petersoni();
+        nitela();
+    }
+}

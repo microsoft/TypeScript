@@ -25,3 +25,7 @@ var A = (function () {
 //# sourceMappingURL=es5-declaration-amd.js.map
 
 //// [es5-declaration-amd.d.ts]
+declare class A {
+    constructor ();
+    B();
+}

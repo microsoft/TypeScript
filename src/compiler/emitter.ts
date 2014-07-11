@@ -33,7 +33,7 @@ module ts {
         return !!(sourceFile.flags & (NodeFlags.ExternalModule | NodeFlags.DeclarationFile));
     }
 
-    function findConstructor(node: ClassDeclaration): ConstructorDeclaration {
+    function getFirstConstructorWithBody(node: ClassDeclaration): ConstructorDeclaration {
         return forEach(node.members, member => {
             if (member.kind === SyntaxKind.Constructor && (<ConstructorDeclaration>member).body) {
                 return <ConstructorDeclaration>member;
@@ -1352,7 +1352,7 @@ module ts {
         }
 
         function emitClassDeclaration(node: ClassDeclaration) {
-            var ctor = findConstructor(node);
+            var ctor = getFirstConstructorWithBody(node);
             write("var ");
             emit(node.name);
             write(" = (function (");
@@ -1866,7 +1866,7 @@ module ts {
             }
         }
 
-        function emitCommaTypeList(nodes: Node[]) {
+        function emitCommaSeparatedSymbolToString(nodes: Node[]) {
             if (nodes) {
                 for (var i = 0, n = nodes.length; i < n; i++) {
                     if (i) {
@@ -1901,7 +1901,8 @@ module ts {
                 //TODO: only emit when export flag once the above condition is modified
                 write("export ");
                 write("import ");
-                write(getSourceTextOfLocalNode(node.name) + " = ");
+                emitSourceTextOfNode(node.name);
+                write(" = ");
                 if (node.entityName) {
                     emitSourceTextOfNode(node.entityName);
                     write(";");
@@ -1915,17 +1916,22 @@ module ts {
             }
         }
 
-        function canEmitDeclaration(node: Declaration) {
-            if (node.parent.kind === SyntaxKind.ModuleDeclaration || node.parent.kind === SyntaxKind.SourceFile) {
-                if (!(node.flags & NodeFlags.Export)) {
-                    // Non exported member
-                    // TODO(shkamat): check if the symbol at this location is externally visible 
-                    // eg. because of export assignment or is in global context because source file is non external module
-                    return false;
+        function canEmitModuleElementDeclaration(node: Declaration) {
+            if (node.flags & NodeFlags.Export) {
+                // Exported member - emit this declaration
+                return true;
+            }
+
+            if (node.parent.kind === SyntaxKind.SourceFile) {
+                // Global context nodes - emit this declaration
+                if (!(node.parent.flags & NodeFlags.ExternalModule)) {
+                    return true;
                 }
             }
 
-            return true;
+            // TODO(shkamat): check if this node is part of export assignment in the external module
+
+            return false;
         }
 
         function emitDeclarationFlags(node: Declaration) {
@@ -1954,7 +1960,7 @@ module ts {
         }
         
         function emitModuleDeclaration(node: ModuleDeclaration) {
-            if (canEmitDeclaration(node)) {
+            if (canEmitModuleElementDeclaration(node)) {
                 emitDeclarationFlags(node);
                 write("module ");
                 emitSourceTextOfNode(node.name);
@@ -1974,7 +1980,7 @@ module ts {
         }
 
         function emitEnumDeclaration(node: EnumDeclaration) {
-            if (canEmitDeclaration(node)) {
+            if (canEmitModuleElementDeclaration(node)) {
                 emitDeclarationFlags(node);
                 write("enum ");
                 emitSourceTextOfNode(node.name);
@@ -2002,7 +2008,7 @@ module ts {
         function emitTypeParameters(typeParameters: TypeParameterDeclaration[]) {
             if (typeParameters) {
                 write("<");
-                emitCommaTypeList(typeParameters);
+                emitCommaSeparatedSymbolToString(typeParameters);
                 write(">");
             }
         }
@@ -2010,14 +2016,14 @@ module ts {
         function emitHeritageClause(typeReferences: TypeReferenceNode[], isImplementsList: boolean) {
             if (typeReferences) {
                 write(isImplementsList ? " implments " : " extends ");
-                emitCommaTypeList(typeReferences);
+                emitCommaSeparatedSymbolToString(typeReferences);
             }
         }
 
         function emitClassDeclaration(node: ClassDeclaration) {
-            function emitParameterProperties(node: ConstructorDeclaration) {
-                if (node) {
-                    forEach(node.parameters, param => {
+            function emitParameterProperties(constructorDeclaration: ConstructorDeclaration) {
+                if (constructorDeclaration) {
+                    forEach(constructorDeclaration.parameters, param => {
                         if (param.flags & (NodeFlags.Public | NodeFlags.Private)) {
                             emitPropertyDeclaration(param);
                         }
@@ -2025,7 +2031,7 @@ module ts {
                 }
             }
 
-            if (canEmitDeclaration(node)) {
+            if (canEmitModuleElementDeclaration(node)) {
                 emitDeclarationFlags(node);
                 write("class ");
                 emitSourceTextOfNode(node.name);
@@ -2037,7 +2043,7 @@ module ts {
                 write(" {");
                 writeLine();
                 increaseIndent();
-                emitParameterProperties(findConstructor(node));
+                emitParameterProperties(getFirstConstructorWithBody(node));
                 emitLines(node.members);
                 decreaseIndent();
                 write("}");
@@ -2046,7 +2052,7 @@ module ts {
         }
 
         function emitInterfaceDeclaration(node: InterfaceDeclaration) {
-            if (canEmitDeclaration(node)) {
+            if (canEmitModuleElementDeclaration(node)) {
                 emitDeclarationFlags(node);
                 write("interface ");
                 emitSourceTextOfNode(node.name);
@@ -2081,7 +2087,7 @@ module ts {
         }
 
         function emitVariableStatement(node: VariableStatement) {
-            if (canEmitDeclaration(node)) {
+            if (canEmitModuleElementDeclaration(node)) {
                 emitDeclarationFlags(node);
                 write("var ");
                 emitCommaList(node.declarations);
@@ -2106,7 +2112,8 @@ module ts {
 
         function emitFunctionDeclaration(node: FunctionDeclaration) {
             // TODO(shkamat): if this is overloaded declaration do not emit if body is present
-            if (canEmitDeclaration(node)) {
+            // If we are emitting Method/Constructor it isnt moduleElement and doesnt need canEmitModuleElement check
+            if (node.kind !== SyntaxKind.FunctionDeclaration || canEmitModuleElementDeclaration(node)) {
                 emitDeclarationFlags(node);
                 if (node.kind === SyntaxKind.FunctionDeclaration) {
                     write("function ");

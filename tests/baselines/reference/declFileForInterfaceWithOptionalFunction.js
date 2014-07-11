@@ -9,3 +9,7 @@ interface I {
 
 
 //// [declFileForInterfaceWithOptionalFunction.d.ts]
+interface I {
+    foo?(x?);
+    foo2?(x?);
+}

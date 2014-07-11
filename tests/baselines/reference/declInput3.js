@@ -31,3 +31,10 @@ var bar = (function () {
 
 
 //// [declInput3.d.ts]
+interface bar2 {
+}
+declare class bar {
+    f();
+    g();
+    h(x?, y?, z?);
+}

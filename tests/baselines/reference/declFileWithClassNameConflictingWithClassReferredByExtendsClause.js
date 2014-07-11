@@ -67,3 +67,18 @@ var X;
 
 
 //// [declFileWithClassNameConflictingWithClassReferredByExtendsClause.d.ts]
+declare module A.B.Base {
+    class W {
+        id;
+    }
+}
+declare module X.Y.base {
+    class W extends A.B.Base.W {
+        name;
+    }
+}
+declare module X.Y.base.Z {
+    class W<TValue> extends X.Y.base.W {
+        value;
+    }
+}

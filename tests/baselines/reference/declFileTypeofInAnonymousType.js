@@ -53,3 +53,16 @@ var d = {
 
 
 //// [declFileTypeofInAnonymousType.d.ts]
+declare module m1 {
+    class c {
+    }
+    enum e {
+        weekday = 0,
+        weekend = 1,
+        holiday = 2,
+    }
+}
+declare var a;
+declare var b;
+declare var c;
+declare var d;

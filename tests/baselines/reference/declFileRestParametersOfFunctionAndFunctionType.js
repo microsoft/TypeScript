@@ -31,3 +31,9 @@ var f6 = function () {
 
 
 //// [declFileRestParametersOfFunctionAndFunctionType.d.ts]
+declare function f1(...args);
+declare function f2(x);
+declare function f3(x);
+declare function f4<T extends (...args) => void>();
+declare function f5<T extends { (...args): void }>();
+declare var f6;

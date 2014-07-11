@@ -54,3 +54,16 @@ export interface IIndexSignatureWithTypeParameter<T> {
     [a];
 }
 //// [declFileIndexSignatures_1.d.ts]
+interface IGlobalStringIndexSignature {
+    [s];
+}
+interface IGlobalNumberIndexSignature {
+    [n];
+}
+interface IGlobalBothIndexSignature {
+    [s];
+    [n];
+}
+interface IGlobalIndexSignatureWithTypeParameter<T> {
+    [a];
+}

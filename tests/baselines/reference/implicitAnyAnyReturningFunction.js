@@ -43,3 +43,9 @@ var C = (function () {
 
 
 //// [implicitAnyAnyReturningFunction.d.ts]
+declare function A();
+declare function B();
+declare class C {
+    A();
+    B();
+}

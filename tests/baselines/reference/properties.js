@@ -31,3 +31,6 @@ var MyClass = (function () {
 //# sourceMappingURL=properties.js.map
 
 //// [properties.d.ts]
+declare class MyClass {
+    Count;
+}

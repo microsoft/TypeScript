@@ -18,3 +18,10 @@ var c;
 
 
 //// [internalAliasInterface.d.ts]
+declare module a {
+    interface I {
+    }
+}
+declare module c {
+    var x;
+}

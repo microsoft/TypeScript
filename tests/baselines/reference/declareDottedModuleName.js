@@ -14,3 +14,11 @@ module T.U { // This needs to be emitted
 
 
 //// [declareDottedModuleName.d.ts]
+declare module M {
+}
+declare module M {
+    module R.S {
+    }
+}
+declare module T.U {
+}

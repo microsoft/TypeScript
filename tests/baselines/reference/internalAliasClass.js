@@ -27,3 +27,10 @@ var c;
 
 
 //// [internalAliasClass.d.ts]
+declare module a {
+    class c {
+    }
+}
+declare module c {
+    var x;
+}

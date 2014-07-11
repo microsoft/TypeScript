@@ -19,3 +19,4 @@ var lengths = ["a", "b", "c"].map(function (x) { return x.length; });
 
 
 //// [genericArray1.d.ts]
+declare var lengths;

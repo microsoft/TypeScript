@@ -224,3 +224,28 @@ var NoQuickInfoClass = (function () {
 
 
 //// [commentsCommentParsing.d.ts]
+declare function simple();
+declare function multiLine();
+declare function jsDocSingleLine();
+declare function jsDocMultiLine();
+declare function jsDocMultiLineMerge();
+declare function jsDocMixedComments1();
+declare function jsDocMixedComments2();
+declare function jsDocMixedComments3();
+declare function jsDocMixedComments4();
+declare function jsDocMixedComments5();
+declare function jsDocMixedComments6();
+declare function noHelpComment1();
+declare function noHelpComment2();
+declare function noHelpComment3();
+declare function sum(a, b);
+declare function multiply(a, b, c?, d?, e?);
+declare function f1(a);
+declare function f1(b);
+declare function f1(aOrb, opt?);
+declare function subtract(a, b, c?, d?, e?, f?);
+declare function square(a);
+declare function divide(a, b);
+declare function jsDocParamTest(a, b, c, d);
+declare class NoQuickInfoClass {
+}

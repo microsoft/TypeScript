@@ -90,3 +90,22 @@ export interface ICallSignatureWithOwnTypeParametes {
     <T extends ICallSignature>(a);
 }
 //// [declFileCallSignatures_1.d.ts]
+interface IGlobalCallSignature {
+    ();
+}
+interface IGlobalCallSignatureWithParameters {
+    (a, b);
+}
+interface IGlobalCallSignatureWithRestParameters {
+    (a, ...rests);
+}
+interface IGlobalCallSignatureWithOverloads {
+    (a);
+    (a);
+}
+interface IGlobalCallSignatureWithTypeParameters<T> {
+    (a);
+}
+interface IGlobalCallSignatureWithOwnTypeParametes {
+    <T extends IGlobalCallSignature>(a);
+}

@@ -18,3 +18,9 @@ var x = e;
 
 
 //// [declFileEnumUsedAsValue.d.ts]
+declare enum e {
+    a = 0,
+    b = 1,
+    c = 2,
+}
+declare var x;

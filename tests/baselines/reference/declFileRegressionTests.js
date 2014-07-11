@@ -11,3 +11,4 @@ var n = { w: null, x: '', y: function () {
 
 
 //// [declFileRegressionTests.d.ts]
+declare var n;

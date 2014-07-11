@@ -103,3 +103,46 @@ i3_i.nc_l(10);
 
 
 //// [commentsInterface.d.ts]
+interface i1 {
+}
+declare var i1_i;
+interface nc_i1 {
+}
+declare var nc_i1_i;
+interface i2 {
+    x;
+    foo;
+    [i];
+    new (i);
+    nc_x;
+    nc_foo;
+    [i];
+    (a, b);
+    fnfoo(b);
+    nc_fnfoo(b);
+    nc_y;
+}
+declare var i2_i;
+declare var i2_i_x;
+declare var i2_i_foo;
+declare var i2_i_foo_r;
+declare var i2_i_i2_si;
+declare var i2_i_i2_ii;
+declare var i2_i_n;
+declare var i2_i_nc_x;
+declare var i2_i_nc_foo;
+declare var i2_i_nc_foo_r;
+declare var i2_i_r;
+declare var i2_i_fnfoo;
+declare var i2_i_fnfoo_r;
+declare var i2_i_nc_fnfoo;
+declare var i2_i_nc_fnfoo_r;
+interface i3 {
+    x;
+    f(a);
+    l;
+    nc_x;
+    nc_f(a);
+    nc_l;
+}
+declare var i3_i;

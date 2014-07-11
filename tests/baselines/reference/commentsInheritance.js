@@ -258,3 +258,86 @@ i2_i = i3_i;
 
 
 //// [commentsInheritance.d.ts]
+interface i1 {
+    i1_p1;
+    i1_f1();
+    i1_l1;
+    i1_nc_p1;
+    i1_nc_f1();
+    i1_nc_l1;
+    p1;
+    f1();
+    l1;
+    nc_p1;
+    nc_f1();
+    nc_l1;
+}
+declare class c1 implments i1 {
+    i1_p1;
+    i1_f1();
+    i1_l1;
+    i1_nc_p1;
+    i1_nc_f1();
+    i1_nc_l1;
+    p1;
+    f1();
+    l1;
+    nc_p1;
+    nc_f1();
+    nc_l1;
+}
+declare var i1_i;
+declare var c1_i;
+declare class c2 {
+    c2_p1;
+    c2_f1();
+    c2_prop;
+    c2_nc_p1;
+    c2_nc_f1();
+    c2_nc_prop;
+    p1;
+    f1();
+    prop;
+    nc_p1;
+    nc_f1();
+    nc_prop;
+    constructor (a);
+}
+declare class c3 extends c2 {
+    constructor ();
+    p1;
+    f1();
+    prop;
+    nc_p1;
+    nc_f1();
+    nc_prop;
+}
+declare var c2_i;
+declare var c3_i;
+declare class c4 extends c2 {
+}
+declare var c4_i;
+interface i2 {
+    i2_p1;
+    i2_f1();
+    i2_l1;
+    i2_nc_p1;
+    i2_nc_f1();
+    i2_nc_l1;
+    p1;
+    f1();
+    l1;
+    nc_p1;
+    nc_f1();
+    nc_l1;
+}
+interface i3 extends i2 {
+    p1;
+    f1();
+    l1;
+    nc_p1;
+    nc_f1();
+    nc_l1;
+}
+declare var i2_i;
+declare var i3_i;

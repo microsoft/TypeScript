@@ -171,3 +171,44 @@ var b = 10;
 
 
 //// [vardecl.d.ts]
+declare var simpleVar;
+declare var anotherVar;
+declare var varWithSimpleType;
+declare var varWithArrayType;
+declare var varWithInitialValue;
+declare var withComplicatedValue;
+declare var declaredVar;
+declare var declareVar2;
+declare var declaredVar3;
+declare var deckareVarWithType;
+declare var arrayVar;
+declare var complicatedArrayVar;
+declare var n1;
+declare var c;
+declare var d;
+declare var d3;
+declare var d2;
+declare var n2;
+declare var n4;
+declare var d4;
+declare module m2 {
+    var a, b2, b;
+    class C2 {
+        b;
+        constructor (b);
+    }
+    var mE;
+    var d1E, d2E;
+    var b2E;
+    var v1E;
+}
+declare var a22, b22, c22;
+declare var nn;
+declare var da1, da2;
+declare var normalVar;
+declare var dv1;
+declare var xl;
+declare var x;
+declare var z;
+declare function foo(a2);
+declare var b;

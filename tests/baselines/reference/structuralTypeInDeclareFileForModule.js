@@ -12,3 +12,7 @@ var m = M;
 
 
 //// [structuralTypeInDeclareFileForModule.d.ts]
+declare module M {
+    var x;
+}
+declare var m;

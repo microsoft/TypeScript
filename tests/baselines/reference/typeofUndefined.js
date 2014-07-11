@@ -9,3 +9,5 @@ var x;
 
 
 //// [typeofUndefined.d.ts]
+declare var x;
+declare var x;

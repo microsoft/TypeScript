@@ -26,3 +26,8 @@ var d = {
 
 
 //// [declFileModuleAssignmentInObjectLiteralProperty.d.ts]
+declare module m1 {
+    class c {
+    }
+}
+declare var d;

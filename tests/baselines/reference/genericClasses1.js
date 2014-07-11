@@ -18,3 +18,8 @@ var y = v1.x;
 
 
 //// [genericClasses1.d.ts]
+declare class C<T> {
+    x;
+}
+declare var v1;
+declare var y;

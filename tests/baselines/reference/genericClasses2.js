@@ -28,3 +28,15 @@ var z = v1.z.a;
 
 
 //// [genericClasses2.d.ts]
+interface Foo<T> {
+    a;
+}
+declare class C<T> {
+    x;
+    y;
+    z;
+}
+declare var v1;
+declare var y;
+declare var w;
+declare var z;

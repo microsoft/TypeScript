@@ -30,3 +30,7 @@ var MyClass = (function () {
 //# sourceMappingURL=out-flag.js.map
 
 //// [out-flag.d.ts]
+declare class MyClass {
+    Count();
+    SetCount(value);
+}

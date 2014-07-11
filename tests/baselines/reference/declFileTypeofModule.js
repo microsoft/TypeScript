@@ -29,3 +29,13 @@ var m2_2;
 
 
 //// [declFileTypeofModule.d.ts]
+declare module m1 {
+    var c;
+}
+declare var m1_1;
+declare var m1_2;
+declare module m2 {
+    var d;
+}
+declare var m2_1;
+declare var m2_2;

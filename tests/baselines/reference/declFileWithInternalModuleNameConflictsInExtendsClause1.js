@@ -33,3 +33,11 @@ var X;
 
 
 //// [declFileWithInternalModuleNameConflictsInExtendsClause1.d.ts]
+declare module X.A.C {
+    interface Z {
+    }
+}
+declare module X.A.B.C {
+    class W implments X.A.C.Z {
+    }
+}

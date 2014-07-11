@@ -10,3 +10,4 @@ function somefn() {
 
 
 //// [functionReturningItself.d.ts]
+declare function somefn();

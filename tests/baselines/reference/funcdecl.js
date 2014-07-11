@@ -133,3 +133,33 @@ var f2 = function () {
 
 
 //// [funcdecl.d.ts]
+declare function simpleFunc();
+declare var simpleFuncVar;
+declare function anotherFuncNoReturn();
+declare var anotherFuncNoReturnVar;
+declare function withReturn();
+declare var withReturnVar;
+declare function withParams(a);
+declare var withparamsVar;
+declare function withMultiParams(a, b, c);
+declare var withMultiParamsVar;
+declare function withOptionalParams(a?);
+declare var withOptionalParamsVar;
+declare function withInitializedParams(a, b0, b?, c?);
+declare var withInitializedParamsVar;
+declare function withOptionalInitializedParams(a, c?);
+declare var withOptionalInitializedParamsVar;
+declare function withRestParams(a, ...myRestParameter);
+declare var withRestParamsVar;
+declare function overload1(n);
+declare function overload1(s);
+declare function overload1(ns);
+declare var withOverloadSignature;
+declare function f(n);
+declare module m2 {
+    function foo(n);
+}
+declare function fooAmbient(n);
+declare function overloadAmbient(n);
+declare function overloadAmbient(s);
+declare var f2;

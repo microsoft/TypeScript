@@ -34,6 +34,9 @@ module.exports = MainModule;
 
 
 //// [missingImportAfterModuleImport_0.d.ts]
+declare module "SubModule" {
+    export = SubModule;
+}
 //// [missingImportAfterModuleImport_1.d.ts]
 /// <reference path='missingImportAfterModuleImport_0.d.ts' />
 export = MainModule;

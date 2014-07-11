@@ -47,3 +47,18 @@ var M;
 
 
 //// [declInput4.d.ts]
+declare module M {
+    class E {
+    }
+    interface I1 {
+    }
+    class D {
+        m1;
+        m2;
+        m23;
+        m24;
+        m232();
+        m242();
+        m26(i);
+    }
+}

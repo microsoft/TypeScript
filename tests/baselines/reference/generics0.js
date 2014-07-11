@@ -13,3 +13,8 @@ var z = v2.x;
 
 
 //// [generics0.d.ts]
+interface G<T> {
+    x;
+}
+declare var v2;
+declare var z;

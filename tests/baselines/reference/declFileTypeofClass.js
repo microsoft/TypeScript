@@ -34,3 +34,15 @@ var genericX = genericC;
 
 
 //// [declFileTypeofClass.d.ts]
+declare class c {
+    static x;
+    private static y;
+    private x3;
+    y3;
+}
+declare var x;
+declare var y;
+declare var z;
+declare class genericC<T> {
+}
+declare var genericX;

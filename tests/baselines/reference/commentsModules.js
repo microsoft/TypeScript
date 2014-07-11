@@ -243,3 +243,49 @@ new m7.m8.m9.c();
 
 
 //// [commentsModules.d.ts]
+declare module m1 {
+    var b;
+    module m2 {
+        class c {
+        }
+        var i;
+    }
+    function fooExport();
+    function foo2Export(a);
+    function foo3Export();
+}
+declare var myvar;
+declare module m2.m3 {
+    class c {
+    }
+}
+declare module m3.m4.m5 {
+    class c {
+    }
+}
+declare module m4.m5.m6 {
+    module m7 {
+        class c {
+        }
+    }
+}
+declare module m5.m6.m7 {
+    module m8 {
+        class c {
+        }
+    }
+}
+declare module m6.m7 {
+    module m8 {
+        class c {
+        }
+    }
+}
+declare module m7.m8 {
+    module m9 {
+        class c {
+        }
+        class e {
+        }
+    }
+}

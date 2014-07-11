@@ -22,3 +22,10 @@ var List = (function () {
 
 
 //// [declFileImportedTypeUseInTypeArgPosition.d.ts]
+declare class List<T> {
+}
+declare module 'mod1' {
+}
+declare module 'moo' {
+    var p;
+}

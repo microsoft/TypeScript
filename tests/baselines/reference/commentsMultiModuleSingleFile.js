@@ -60,3 +60,15 @@ new multiM.c();
 
 
 //// [commentsMultiModuleSingleFile.d.ts]
+declare module multiM {
+    class b {
+    }
+    class d {
+    }
+}
+declare module multiM {
+    class c {
+    }
+    class e {
+    }
+}

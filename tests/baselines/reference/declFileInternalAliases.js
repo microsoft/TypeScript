@@ -35,3 +35,14 @@ var m2;
 
 
 //// [declFileInternalAliases.d.ts]
+declare module m {
+    class c {
+    }
+}
+declare module m1 {
+    var d;
+}
+declare module m2 {
+    export import x = m.c;
+    var d;
+}

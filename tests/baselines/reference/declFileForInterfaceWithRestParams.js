@@ -10,3 +10,8 @@ interface I {
 
 
 //// [declFileForInterfaceWithRestParams.d.ts]
+interface I {
+    foo(...x);
+    foo2(a, ...x);
+    foo3(b, ...x);
+}

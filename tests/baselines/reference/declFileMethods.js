@@ -360,3 +360,36 @@ export interface I1 {
     fooWithOverloads(a);
 }
 //// [declFileMethods_1.d.ts]
+declare class c2 {
+    foo();
+    fooWithParameters(a, b);
+    fooWithRestParameters(a, ...rests);
+    fooWithOverloads(a);
+    fooWithOverloads(a);
+    fooWithOverloads(a);
+    private privateFoo();
+    private privateFooWithParameters(a, b);
+    private privateFooWithRestParameters(a, ...rests);
+    private privateFooWithOverloads(a);
+    private privateFooWithOverloads(a);
+    private privateFooWithOverloads(a);
+    static staticFoo();
+    static staticFooWithParameters(a, b);
+    static staticFooWithRestParameters(a, ...rests);
+    static staticFooWithOverloads(a);
+    static staticFooWithOverloads(a);
+    static staticFooWithOverloads(a);
+    private static privateStaticFoo();
+    private static privateStaticFooWithParameters(a, b);
+    private static privateStaticFooWithRestParameters(a, ...rests);
+    private static privateStaticFooWithOverloads(a);
+    private static privateStaticFooWithOverloads(a);
+    private static privateStaticFooWithOverloads(a);
+}
+interface I2 {
+    foo();
+    fooWithParameters(a, b);
+    fooWithRestParameters(a, ...rests);
+    fooWithOverloads(a);
+    fooWithOverloads(a);
+}

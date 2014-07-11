@@ -88,3 +88,30 @@ var M;
 
 
 //// [declarationEmit_nameConflicts3.d.ts]
+declare module M {
+    interface D {
+    }
+    module D {
+        function f();
+    }
+    module C {
+        function f();
+    }
+    module E {
+        function f();
+    }
+}
+declare module M.P {
+    class C {
+        static f();
+    }
+    class E extends C {
+    }
+    enum D {
+        f = 0,
+    }
+    var v;
+    var w;
+    var x;
+    var x;
+}

@@ -57,3 +57,15 @@ var A;
 
 
 //// [declFileWithExtendsClauseThatHasItsContainerNameConflict.d.ts]
+declare module A.B.C {
+}
+declare module A.B {
+    class EventManager {
+        id;
+    }
+}
+declare module A.B.C {
+    class ContextMenu extends EventManager {
+        name;
+    }
+}

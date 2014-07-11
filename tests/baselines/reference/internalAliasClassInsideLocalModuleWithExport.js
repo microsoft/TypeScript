@@ -52,7 +52,6 @@ export declare module m2 {
     module m3 {
         export import c = x.c;
         var cProp;
-        var cReturnVal;
     }
 }
 export declare var d;

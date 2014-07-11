@@ -262,3 +262,13 @@ export declare class c1 {
     onlySetter;
 }
 //// [declFileAccessors_1.d.ts]
+declare class c2 {
+    p3;
+    private pp3;
+    static s3;
+    nc_p3;
+    private nc_pp3;
+    static nc_s3;
+    onlyGetter;
+    onlySetter;
+}

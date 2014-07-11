@@ -32,3 +32,12 @@ var c;
 
 
 //// [internalAliasInitializedModule.d.ts]
+declare module a {
+    module b {
+        class c {
+        }
+    }
+}
+declare module c {
+    var x;
+}

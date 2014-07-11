@@ -32,3 +32,6 @@ function fn3() {
 
 
 //// [implicitAnyDeclareFunctionWithoutFormalType2.d.ts]
+declare function fn1();
+declare function fn2();
+declare function fn3();

@@ -25,3 +25,7 @@ var A = (function () {
 //# sourceMappingURL=es3-amd.js.map
 
 //// [es3-amd.d.ts]
+declare class A {
+    constructor ();
+    B();
+}

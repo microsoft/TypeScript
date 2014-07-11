@@ -20,3 +20,11 @@ var bar;
 
 
 //// [genericClassImplementingGenericInterfaceFromAnotherModule.d.ts]
+declare module foo {
+    interface IFoo<T> {
+    }
+}
+declare module bar {
+    class Foo<T> implments foo.IFoo<T> {
+    }
+}

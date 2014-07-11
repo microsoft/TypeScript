@@ -22,3 +22,13 @@ var c;
 
 
 //// [internalAliasUninitializedModule.d.ts]
+declare module a {
+    module b {
+        interface I {
+            foo();
+        }
+    }
+}
+declare module c {
+    var x;
+}

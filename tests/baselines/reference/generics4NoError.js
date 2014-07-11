@@ -17,3 +17,14 @@ var b;
 
 
 //// [generics4NoError.d.ts]
+declare class C<T> {
+    private x;
+}
+interface X {
+    f();
+}
+interface Y {
+    f();
+}
+declare var a;
+declare var b;

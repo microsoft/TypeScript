@@ -19,3 +19,14 @@ a = b;
 
 
 //// [generics3.d.ts]
+declare class C<T> {
+    private x;
+}
+interface X {
+    f();
+}
+interface Y {
+    f();
+}
+declare var a;
+declare var b;

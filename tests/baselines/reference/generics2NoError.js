@@ -24,3 +24,19 @@ var v4;
 
 
 //// [generics2NoError.d.ts]
+interface A {
+    a;
+}
+interface B extends A {
+    b;
+}
+interface C extends B {
+    c;
+}
+interface G<T, U extends B> {
+    x;
+    y;
+}
+declare var v1;
+declare var v2;
+declare var v4;

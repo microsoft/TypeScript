@@ -13,3 +13,5 @@ declare module mAmbient {
 
 
 //// [enumDecl1.d.ts]
+declare module mAmbient {
+}

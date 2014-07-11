@@ -132,3 +132,33 @@ var m1;
 
 
 //// [commentsdoNotEmitComments.d.ts]
+declare var myVariable;
+declare function foo(p);
+declare var fooVar;
+declare class c {
+    constructor ();
+    b;
+    myFoo();
+    prop1;
+    foo1(a);
+    foo1(b);
+    foo1(aOrb);
+}
+declare var i;
+interface i1 {
+    (a);
+    new (b);
+    [a];
+    myFoo(a);
+    prop;
+}
+declare var i1_i;
+declare module m1 {
+    class b {
+        x;
+        constructor (x);
+    }
+    module m2 {
+    }
+}
+declare var x;

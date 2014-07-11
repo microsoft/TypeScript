@@ -29,3 +29,10 @@ var c;
 
 
 //// [internalAliasFunction.d.ts]
+declare module a {
+    function foo(x);
+}
+declare module c {
+    var bVal;
+    var bVal2;
+}

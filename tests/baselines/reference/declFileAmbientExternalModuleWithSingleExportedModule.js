@@ -24,6 +24,12 @@ exports.x;
 
 
 //// [declFileAmbientExternalModuleWithSingleExportedModule_0.d.ts]
+declare module "SubModule" {
+    module m {
+        module m3 {
+        }
+    }
+}
 //// [declFileAmbientExternalModuleWithSingleExportedModule_1.d.ts]
 /// <reference path='declFileAmbientExternalModuleWithSingleExportedModule_0.d.ts' />
 export declare var x;

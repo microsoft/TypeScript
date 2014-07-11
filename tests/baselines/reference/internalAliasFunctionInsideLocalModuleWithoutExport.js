@@ -33,6 +33,5 @@ export declare module a {
     function foo(x);
 }
 export declare module c {
-    var bVal;
     var bVal2;
 }

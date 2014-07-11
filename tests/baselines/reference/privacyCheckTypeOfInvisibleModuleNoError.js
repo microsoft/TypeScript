@@ -20,3 +20,6 @@ var Outer;
 
 
 //// [privacyCheckTypeOfInvisibleModuleNoError.d.ts]
+declare module Outer {
+    var f;
+}

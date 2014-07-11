@@ -64,3 +64,17 @@ function foo5(x) {
 
 
 //// [declFileTypeofFunction.d.ts]
+declare function f(n);
+declare function f(n);
+declare function f();
+declare function g(n);
+declare function g(n);
+declare function g();
+declare var b;
+declare function b1();
+declare function foo();
+declare var foo1;
+declare var foo2;
+declare var foo3;
+declare var x;
+declare function foo5(x);

@@ -21,3 +21,8 @@ var m;
 
 
 //// [declFileModuleWithPropertyOfTypeModule.d.ts]
+declare module m {
+    class c {
+    }
+    var a;
+}

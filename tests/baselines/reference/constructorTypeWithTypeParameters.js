@@ -12,3 +12,6 @@ var anotherVar;
 
 
 //// [constructorTypeWithTypeParameters.d.ts]
+declare var X;
+declare var Y;
+declare var anotherVar;

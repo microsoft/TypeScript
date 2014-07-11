@@ -10,3 +10,5 @@ var y = (function () {
 
 
 //// [objectLiteralDeclarationGeneration1.d.ts]
+declare class y<T extends {}> {
+}

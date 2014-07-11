@@ -61,3 +61,19 @@ var X;
 
 
 //// [declarationEmit_nameConflicts2.d.ts]
+declare module X.Y.base {
+    function f();
+    class C {
+    }
+    module M {
+        var v;
+    }
+    enum E {
+    }
+}
+declare module X.Y.base.Z {
+    var f;
+    var C;
+    var M;
+    var E;
+}

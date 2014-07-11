@@ -17,3 +17,8 @@ var C = (function () {
 
 
 //// [methodSignatureDeclarationEmit1.d.ts]
+declare class C {
+    foo(n);
+    foo(s);
+    foo(a);
+}

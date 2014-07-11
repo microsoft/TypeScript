@@ -90,3 +90,22 @@ export interface IConstructSignatureWithOwnTypeParametes {
     new <T extends IConstructSignature>(a);
 }
 //// [declFileConstructSignatures_1.d.ts]
+interface IGlobalConstructSignature {
+    new ();
+}
+interface IGlobalConstructSignatureWithParameters {
+    new (a, b);
+}
+interface IGlobalConstructSignatureWithRestParameters {
+    new (a, ...rests);
+}
+interface IGlobalConstructSignatureWithOverloads {
+    new (a);
+    new (a);
+}
+interface IGlobalConstructSignatureWithTypeParameters<T> {
+    new (a);
+}
+interface IGlobalConstructSignatureWithOwnTypeParametes {
+    new <T extends IGlobalConstructSignature>(a);
+}

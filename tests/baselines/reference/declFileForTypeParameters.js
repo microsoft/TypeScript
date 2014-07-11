@@ -19,3 +19,7 @@ var C = (function () {
 
 
 //// [declFileForTypeParameters.d.ts]
+declare class C<T> {
+    x;
+    foo(a);
+}

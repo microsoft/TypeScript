@@ -8,3 +8,4 @@ var x = function somefn() {
 
 
 //// [functionExpressionReturningItself.d.ts]
+declare var x;

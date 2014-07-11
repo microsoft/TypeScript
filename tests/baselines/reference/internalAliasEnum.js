@@ -31,3 +31,13 @@ var c;
 
 
 //// [internalAliasEnum.d.ts]
+declare module a {
+    enum weekend {
+        Friday = 0,
+        Saturday = 1,
+        Sunday = 2,
+    }
+}
+declare module c {
+    var bVal;
+}

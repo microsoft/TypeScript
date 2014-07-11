@@ -243,3 +243,33 @@ export declare class ConstructorWithParameterInitializer {
     constructor (x?);
 }
 //// [declFileConstructors_1.d.ts]
+declare class GlobalSimpleConstructor {
+    constructor ();
+}
+declare class GlobalConstructorWithParameters {
+    constructor (a, b);
+}
+declare class GlobalConstructorWithRestParamters {
+    constructor (a, ...rests);
+}
+declare class GlobalConstructorWithOverloads {
+    constructor (a);
+    constructor (a);
+    constructor (a);
+}
+declare class GlobalConstructorWithPublicParameterProperty {
+    x;
+    constructor (x);
+}
+declare class GlobalConstructorWithPrivateParameterProperty {
+    private x;
+    constructor (x);
+}
+declare class GlobalConstructorWithOptionalParameterProperty {
+    x;
+    constructor (x?);
+}
+declare class GlobalConstructorWithParameterInitializer {
+    x;
+    constructor (x?);
+}

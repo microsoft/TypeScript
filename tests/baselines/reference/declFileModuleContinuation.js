@@ -28,3 +28,11 @@ var A;
 
 
 //// [declFileModuleContinuation.d.ts]
+declare module A.C {
+    interface Z {
+    }
+}
+declare module A.B.C {
+    class W implments A.C.Z {
+    }
+}

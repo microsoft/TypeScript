@@ -11,3 +11,5 @@ var x = foo(5);
 
 
 //// [genericFunctions0.d.ts]
+declare function foo<T>(x);
+declare var x;

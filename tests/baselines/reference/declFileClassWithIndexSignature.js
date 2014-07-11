@@ -13,3 +13,6 @@ var BlockIntrinsics = (function () {
 
 
 //// [declFileClassWithIndexSignature.d.ts]
+declare class BlockIntrinsics {
+    [s];
+}

@@ -8,3 +8,6 @@ interface I {
 
 
 //// [interfaceWithOptionalProperty.d.ts]
+interface I {
+    x?;
+}

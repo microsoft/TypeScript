@@ -438,3 +438,68 @@ cProperties_i.nc_p2 = cProperties_i.nc_p1;
 
 
 //// [commentsClassMembers.d.ts]
+declare class c1 {
+    p1;
+    p2(b);
+    p3;
+    private pp1;
+    private pp2(b);
+    private pp3;
+    constructor ();
+    static s1;
+    static s2(b);
+    static s3;
+    nc_p1;
+    nc_p2(b);
+    nc_p3;
+    private nc_pp1;
+    private nc_pp2(b);
+    private nc_pp3;
+    static nc_s1;
+    static nc_s2(b);
+    static nc_s3;
+    a_p1;
+    a_p2(b);
+    a_p3;
+    private a_pp1;
+    private a_pp2(b);
+    private a_pp3;
+    static a_s1;
+    static a_s2(b);
+    static a_s3;
+    b_p1;
+    b_p2(b);
+    b_p3;
+    private b_pp1;
+    private b_pp2(b);
+    private b_pp3;
+    static b_s1;
+    static b_s2(b);
+    static b_s3;
+}
+declare var i1;
+declare var i1_p;
+declare var i1_f;
+declare var i1_r;
+declare var i1_prop;
+declare var i1_nc_p;
+declare var i1_ncf;
+declare var i1_ncr;
+declare var i1_ncprop;
+declare var i1_s_p;
+declare var i1_s_f;
+declare var i1_s_r;
+declare var i1_s_prop;
+declare var i1_s_nc_p;
+declare var i1_s_ncf;
+declare var i1_s_ncr;
+declare var i1_s_ncprop;
+declare var i1_c;
+declare class cProperties {
+    private val;
+    p1;
+    nc_p1;
+    p2;
+    nc_p2;
+}
+declare var cProperties_i;
