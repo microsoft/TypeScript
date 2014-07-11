@@ -275,7 +275,8 @@ module ts {
 
     export function getContainerOfModuleElementDeclaration(node: Declaration) {
         // If the declaration is var declaration, then the parent is variable statement but we actually want the module
-        return node.kind === SyntaxKind.VariableDeclaration ? node.parent.parent : node.parent;
+        var container = node.kind === SyntaxKind.VariableDeclaration ? node.parent.parent : node.parent;
+        return container.kind == SyntaxKind.ModuleBlock ? container.parent : container;
     }
 
     enum ParsingContext {

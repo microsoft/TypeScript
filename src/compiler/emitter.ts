@@ -1891,7 +1891,10 @@ module ts {
             }
 
             // If this node is in external module, check if this is export assigned 
-            if (getContainerOfModuleElementDeclaration(node).flags & NodeFlags.ExternalModule) {
+            var moduleDeclaration = getContainerOfModuleElementDeclaration(node);
+            if ((moduleDeclaration.flags & NodeFlags.ExternalModule) || // Source file with external module flag
+                // Ambient external module declaration
+                (moduleDeclaration.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>moduleDeclaration).name.kind === SyntaxKind.StringLiteral)) {
                 return resolver.isReferencedInExportAssignment(node);
             }
 
@@ -2083,6 +2086,7 @@ module ts {
         }
 
         function emitVariableDeclaration(node: VariableDeclaration) {
+            // If we are emitting property it isnt moduleElement and doesnt need canEmitModuleElement check
             if (node.kind !== SyntaxKind.VariableDeclaration || canEmitModuleElementDeclaration(node)) {
                 emitSourceTextOfNode(node.name);
                 // If optional property emit ?

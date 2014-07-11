@@ -35,6 +35,11 @@ module.exports = MainModule;
 
 //// [missingImportAfterModuleImport_0.d.ts]
 declare module "SubModule" {
+    class SubModule {
+        static StaticVar;
+        InstanceVar;
+        constructor ();
+    }
     export = SubModule;
 }
 //// [missingImportAfterModuleImport_1.d.ts]
