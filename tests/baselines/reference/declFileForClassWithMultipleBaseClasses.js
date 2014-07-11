@@ -59,22 +59,22 @@ var D = (function () {
 
 //// [declFileForClassWithMultipleBaseClasses.d.ts]
 declare class A {
-    foo();
+    foo(): void;
 }
 declare class B {
-    bar();
+    bar(): void;
 }
 interface I {
-    baz();
+    baz(): any;
 }
 interface J {
-    bat();
+    bat(): any;
 }
 declare class D implments I, J {
-    baz();
-    bat();
-    foo();
-    bar();
+    baz(): void;
+    bat(): void;
+    foo(): void;
+    bar(): void;
 }
 interface I extends A, B {
 }

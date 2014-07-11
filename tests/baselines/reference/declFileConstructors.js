@@ -213,61 +213,61 @@ var GlobalConstructorWithParameterInitializer = (function () {
 
 //// [declFileConstructors_0.d.ts]
 export declare class SimpleConstructor {
-    constructor ();
+    constructor();
 }
 export declare class ConstructorWithParameters {
-    constructor (a, b);
+    constructor(a: string, b: number);
 }
 export declare class ConstructorWithRestParamters {
-    constructor (a, ...rests);
+    constructor(a: string, ...rests: string[]);
 }
 export declare class ConstructorWithOverloads {
-    constructor (a);
-    constructor (a);
+    constructor(a: string);
+    constructor(a: number);
 }
 export declare class ConstructorWithPublicParameterProperty {
-    x;
-    constructor (x);
+    x: string;
+    constructor(x: string);
 }
 export declare class ConstructorWithPrivateParameterProperty {
     private x;
-    constructor (x);
+    constructor(x: string);
 }
 export declare class ConstructorWithOptionalParameterProperty {
-    x;
-    constructor (x?);
+    x: string;
+    constructor(x?: string);
 }
 export declare class ConstructorWithParameterInitializer {
-    x;
-    constructor (x?);
+    x: string;
+    constructor(x?: string);
 }
 //// [declFileConstructors_1.d.ts]
 declare class GlobalSimpleConstructor {
-    constructor ();
+    constructor();
 }
 declare class GlobalConstructorWithParameters {
-    constructor (a, b);
+    constructor(a: string, b: number);
 }
 declare class GlobalConstructorWithRestParamters {
-    constructor (a, ...rests);
+    constructor(a: string, ...rests: string[]);
 }
 declare class GlobalConstructorWithOverloads {
-    constructor (a);
-    constructor (a);
+    constructor(a: string);
+    constructor(a: number);
 }
 declare class GlobalConstructorWithPublicParameterProperty {
-    x;
-    constructor (x);
+    x: string;
+    constructor(x: string);
 }
 declare class GlobalConstructorWithPrivateParameterProperty {
     private x;
-    constructor (x);
+    constructor(x: string);
 }
 declare class GlobalConstructorWithOptionalParameterProperty {
-    x;
-    constructor (x?);
+    x: string;
+    constructor(x?: string);
 }
 declare class GlobalConstructorWithParameterInitializer {
-    x;
-    constructor (x?);
+    x: string;
+    constructor(x?: string);
 }

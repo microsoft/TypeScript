@@ -34,4 +34,4 @@ export declare module a {
     }
 }
 export import b = a.b;
-export declare var x;
+export declare var x: c;

@@ -596,98 +596,136 @@ module ts {
             return symbol.name;
         }
 
-        function typeToString(type: Type, printArrayAsGenericType: boolean): string {
+        function createSingleLineTextWriter() {
+            var result = "";
+            return {
+                write(s: string) { result += s; },
+                writeLine() { result += " "; },
+                increaseIndent() { },
+                decreaseIndent() { },
+                getText() { return result; }
+            };
+        }
+
+        function typeToString(type: Type, flags?: TypeFormatFlags): string {
+            var stringWriter = createSingleLineTextWriter();
+            // TODO(shkamat): typeToString should take enclosingDeclaration as input, once we have implemented enclosingDeclaration
+            writeTypeToTextWriter(type, /*enclosingDeclaration*/ null, flags, stringWriter);
+            return stringWriter.getText();
+        }
+
+        function writeTypeToTextWriter(type: Type, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter) {
+            // TODO(shkamat): usage of enclosingDeclaration
             var typeStack: Type[];
-            return typeToString(type);
+            return writeType(type);
 
-            function typeToString(type: Type): string {
+            function writeType(type: Type) {
                 if (type.flags & TypeFlags.Intrinsic) {
-                    return (<IntrinsicType>type).intrinsicName;
+                    writer.write((<IntrinsicType>type).intrinsicName);
                 }
-                if (type.flags & TypeFlags.Reference) {
-                    return typeReferenceToString(<TypeReference>type);
+                else if (type.flags & TypeFlags.Reference) {
+                    writeTypeReference(<TypeReference>type);
                 }
-                if (type.flags & (TypeFlags.Class | TypeFlags.Interface | TypeFlags.Enum | TypeFlags.TypeParameter)) {
-                    return symbolToString(type.symbol);
+                else if (type.flags & (TypeFlags.Class | TypeFlags.Interface | TypeFlags.Enum | TypeFlags.TypeParameter)) {
+                    writer.write(symbolToString(type.symbol));
                 }
-                if (type.flags & TypeFlags.Anonymous) {
-                    return anonymousTypeToString(<ObjectType>type);
+                else if (type.flags & TypeFlags.Anonymous) {
+                    writeAnonymousType(<ObjectType>type);
                 }
-                if (type.flags & TypeFlags.StringLiteral) {
-                    return (<StringLiteralType>type).text;
+                else if (type.flags & TypeFlags.StringLiteral) {
+                    writer.write((<StringLiteralType>type).text);
                 }
-                // Should never get here
-                return "{ ... }";
+                else {
+                    // Should never get here
+                    writer.write("{ ... }");
+                }
             }
 
-            function typeReferenceToString(type: TypeReference): string {
-                if (type.target === globalArrayType && !printArrayAsGenericType) {
-                    return typeToString(type.typeArguments[0]) + "[]";
+            function writeTypeReference(type: TypeReference) {
+                if (type.target === globalArrayType && !(flags & TypeFormatFlags.WriteArrayAsGenericType)) {
+                    writeType(type.typeArguments[0]);
+                    writer.write("[]");
                 }
-                var result = symbolToString(type.target.symbol);
-                result += "<";
-                for (var i = 0; i < type.typeArguments.length; i++) {
-                    if (i > 0) result += ", ";
-                    result += typeToString(type.typeArguments[i]);
+                else {
+                    writer.write(symbolToString(type.target.symbol));
+                    writer.write("<");
+                    for (var i = 0; i < type.typeArguments.length; i++) {
+                        if (i > 0) {
+                            writer.write(", ");
+                        }
+                        writeType(type.typeArguments[i]);
+                    }
+                    writer.write(">");
                 }
-                result += ">";
-                return result;
             }
 
-            function anonymousTypeToString(type: ObjectType): string {
+            function writeAnonymousType(type: ObjectType) {
                 // Always use 'typeof T' for type of class, enum, and module objects
                 if (type.symbol && type.symbol.flags & (SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.ValueModule)) {
-                    return symbolTypeToString(type);
+                    writeTypeofSymbol(type);
                 }
                 // Use 'typeof T' for types of functions and methods that circularly reference themselves
-                if (type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method)) {
-                    if (typeStack && contains(typeStack, type)) {
-                        return symbolTypeToString(type);
-                    }
+                else if (type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && typeStack && contains(typeStack, type)) {
+                    writeTypeofSymbol(type);
                 }
-                if (!typeStack) typeStack = [];
-                typeStack.push(type);
-                var result = literalTypeToString(type);
-                typeStack.pop();
-                return result;
+                else {
+                    if (!typeStack) {
+                        typeStack = [];
+                    }
+                    typeStack.push(type);
+                    writeLiteralType(type);
+                    typeStack.pop();
+                }
             }
 
-            function symbolTypeToString(type: ObjectType): string {
-                return "typeof " + symbolToString(type.symbol);
+            function writeTypeofSymbol(type: ObjectType) {
+                writer.write("typeof ");
+                writer.write(symbolToString(type.symbol));
             }
 
-            function literalTypeToString(type: ObjectType): string {
+            function writeLiteralType(type: ObjectType) {
                 var resolved = resolveObjectTypeMembers(type);
                 if (!resolved.properties.length && !resolved.stringIndexType && !resolved.numberIndexType) {
                     if (!resolved.callSignatures.length && !resolved.constructSignatures.length) {
-                        return "{}";
+                        writer.write("{}");
+                        return;
                     }
                     if (resolved.callSignatures.length === 1 && !resolved.constructSignatures.length) {
-                        return signatureToString(resolved.callSignatures[0], /*arrowStyle*/ true);
+                        writeSignature(resolved.callSignatures[0], /*arrowStyle*/ true);
+                        return;
                     }
                     if (resolved.constructSignatures.length === 1 && !resolved.callSignatures.length) {
-                        return "new " + signatureToString(resolved.constructSignatures[0], /*arrowStyle*/ true);
+                        writer.write("new ");
+                        writeSignature(resolved.constructSignatures[0], /*arrowStyle*/ true);
+                        return;
                     }
                 }
-                var result = "{ ";
+
+                writer.write("{");
+                writer.writeLine();
+                writer.increaseIndent();
                 for (var i = 0; i < resolved.callSignatures.length; i++) {
-                    result += signatureToString(resolved.callSignatures[i]);
-                    result += "; ";
+                    writeSignature(resolved.callSignatures[i]);
+                    writer.write(";");
+                    writer.writeLine();
                 }
                 for (var i = 0; i < resolved.constructSignatures.length; i++) {
-                    result += "new ";
-                    result += signatureToString(resolved.constructSignatures[i]);
-                    result += "; ";
+                    writer.write("new ");
+                    writeSignature(resolved.constructSignatures[i]);
+                    writer.write(";");
+                    writer.writeLine();
                 }
                 if (resolved.stringIndexType) {
-                    result += "[x: string]: ";
-                    result += typeToString(resolved.stringIndexType);
-                    result += "; ";
+                    writer.write("[x: string]: ");
+                    writeType(resolved.stringIndexType);
+                    writer.write(";");
+                    writer.writeLine();
                 }
                 if (resolved.numberIndexType) {
-                    result += "[x: number]: ";
-                    result += typeToString(resolved.numberIndexType);
-                    result += "; ";
+                    writer.write("[x: number]: ");
+                    writeType(resolved.numberIndexType);
+                    writer.write(";");
+                    writer.writeLine();
                 }
                 for (var i = 0; i < resolved.properties.length; i++) {
                     var p = resolved.properties[i];
@@ -695,61 +733,65 @@ module ts {
                     if (p.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfType(t).length) {
                         var signatures = getSignaturesOfType(t, SignatureKind.Call);
                         for (var j = 0; j < signatures.length; j++) {
-                            result += symbolToString(p);
+                            writer.write(symbolToString(p));
                             if (isOptionalProperty(p)) {
-                                result += "?";
+                                writer.write("?");
                             }
-                            result += signatureToString(signatures[j]);
-                            result += "; ";
+                            writeSignature(signatures[j]);
+                            writer.write(";");
+                            writer.writeLine();
                         }
                     }
                     else {
-                        result += symbolToString(p);
+                        writer.write(symbolToString(p));
                         if (isOptionalProperty(p)) {
-                            result += "?";
+                            writer.write("?");
                         }
-                        result += ": ";
-                        result += typeToString(t);
-                        result += "; ";
+                        writer.write(": ");
+                        writeType(t);
+                        writer.write(";");
+                        writer.writeLine();
                     }
                 }
-                result += "}";
-                return result;
+                writer.decreaseIndent();
+                writer.write("}");
             }
 
-            function signatureToString(signature: Signature, arrowStyle?: boolean): string {
-                var result = "";
+            function writeSignature(signature: Signature, arrowStyle?: boolean) {
                 if (signature.typeParameters) {
-                    result += "<";
+                    writer.write("<");
                     for (var i = 0; i < signature.typeParameters.length; i++) {
-                        if (i > 0) result += ", ";
+                        if (i > 0) {
+                            writer.write(", ");
+                        }
                         var tp = signature.typeParameters[i];
-                        result += symbolToString(tp.symbol);
+                        writer.write(symbolToString(tp.symbol));
                         var constraint = getConstraintOfTypeParameter(tp);
                         if (constraint) {
-                            result += " extends ";
-                            result += typeToString(constraint);
+                            writer.write(" extends ");
+                            writeType(constraint);
                         }
                     }
-                    result += ">";
+                    writer.write(">");
                 }
-                result += "(";
+                writer.write("(");
                 for (var i = 0; i < signature.parameters.length; i++) {
-                    if (i > 0) result += ", ";
+                    if (i > 0) {
+                        writer.write(", ");
+                    }
                     var p = signature.parameters[i];
                     if (getDeclarationFlagsFromSymbol(p) & NodeFlags.Rest) {
-                        result += "...";
+                        writer.write("...");
                     }
-                    result += symbolToString(p);
+                    writer.write(symbolToString(p));
                     if (p.valueDeclaration.flags & NodeFlags.QuestionMark || (<VariableDeclaration>p.valueDeclaration).initializer) {
-                        result += "?";
+                        writer.write("?");
                     }
-                    result += ": ";
-                    result += typeToString(getTypeOfSymbol(p));
+                    writer.write(": ");
+                    writeType(getTypeOfSymbol(p));
                 }
-                result += arrowStyle ? ") => " : "): ";
-                result += typeToString(getReturnTypeOfSignature(signature));
-                return result;
+                writer.write(arrowStyle ? ") => " : "): ");
+                writeType(getReturnTypeOfSignature(signature));
             }
         }
 
@@ -846,7 +888,7 @@ module ts {
 
             function reportNoImplicitAnyOnVariableOrParameterOrProperty(declaration: VariableDeclaration, type: Type): void {
                 var varName = identifierToString(declaration.name);
-                var typeName = typeToString(type, /* printArrayAsGeneric */ false);
+                var typeName = typeToString(type);
 
                 switch (declaration.kind) {
                     case SyntaxKind.VariableDeclaration:
@@ -1080,7 +1122,7 @@ module ts {
                                 type.baseTypes.push(baseType);
                             }
                             else {
-                                error(declaration, Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, /*printArrayAsGenericType*/ false));
+                                error(declaration, Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, TypeFormatFlags.WriteArrayAsGenericType));
                             }
                         }
                         else {
@@ -1121,7 +1163,7 @@ module ts {
                                         type.baseTypes.push(baseType);
                                     }
                                     else {
-                                        error(declaration, Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, /*printArrayAsGenericType*/ false));
+                                        error(declaration, Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, TypeFormatFlags.WriteArrayAsGenericType));
                                     }
                                 }
                                 else {
@@ -1688,13 +1730,13 @@ module ts {
                                 type = createTypeReference(<GenericType>type, map(node.typeArguments, t => getTypeFromTypeNode(t)));
                             }
                             else {
-                                error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeToString(type, /*printArrayAsGenericType*/ true), typeParameters.length);
+                                error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeToString(type, TypeFormatFlags.WriteArrayAsGenericType), typeParameters.length);
                                 type = undefined;
                             }
                         }
                         else {
                             if (node.typeArguments) {
-                                error(node, Diagnostics.Type_0_is_not_generic, typeToString(type, /*printArrayAsGenericType*/ false));
+                                error(node, Diagnostics.Type_0_is_not_generic, typeToString(type));
                                 type = undefined;
                             }
                         }
@@ -2068,11 +2110,11 @@ module ts {
                         if (isInheritedProperty && !isPropertyIdenticalTo(existing.prop, prop)) {
                             ok = false;
 
-                            var typeName1 = typeToString(existing.containingType, /*printArrayAsGenericType*/ false);
-                            var typeName2 = typeToString(base, /*printArrayAsGenericType*/ false);
+                            var typeName1 = typeToString(existing.containingType);
+                            var typeName2 = typeToString(base);
 
                             var errorInfo = chainDiagnosticMessages(undefined, Diagnostics.Named_properties_0_of_types_1_and_2_are_not_identical, prop.name, typeName1, typeName2);
-                            errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Interface_0_cannot_simultaneously_extend_types_1_and_2_Colon, typeToString(type, /*printArrayAsGenericType*/ false), typeName1, typeName2);
+                            errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Interface_0_cannot_simultaneously_extend_types_1_and_2_Colon, typeToString(type), typeName1, typeName2);
                             addDiagnostic(createDiagnosticForNodeFromMessageChain(typeNode, errorInfo));
                         }
                     }
@@ -2117,7 +2159,7 @@ module ts {
 
             var result = isRelatedToWithCustomErrors(source, target, errorNode !== undefined, chainedMessage, terminalMessage);
             if (overflow) {
-                error(errorNode, Diagnostics.Excessive_stack_depth_comparing_types_0_and_1, typeToString(source, /*printArrayAsGenericType*/ false), typeToString(target, /*printArrayAsGenericType*/ false));
+                error(errorNode, Diagnostics.Excessive_stack_depth_comparing_types_0_and_1, typeToString(source), typeToString(target));
             }
             else if (errorInfo) {
                 addDiagnostic(createDiagnosticForNodeFromMessageChain(errorNode, errorInfo));
@@ -2183,7 +2225,7 @@ module ts {
                     terminalMessage = terminalMessage || Diagnostics.Type_0_is_not_assignable_to_type_1;
                     var diagnosticKey = errorInfo ? chainedMessage : terminalMessage;
                     Debug.assert(diagnosticKey);
-                    reportError(diagnosticKey, typeToString(source, /*printArrayAsGenericType*/ false), typeToString(target, /*printArrayAsGenericType*/ false));
+                    reportError(diagnosticKey, typeToString(source), typeToString(target));
                 }
                 return false;
             }
@@ -2332,7 +2374,7 @@ module ts {
                     if (!sourceProp) {
                         if (!targetPropIsOptional) {
                             if (reportErrors) {
-                                reportError(Diagnostics.Property_0_is_missing_in_type_1, symbolToString(targetProp), typeToString(source, /*printArrayAsGenericType*/ false));
+                                reportError(Diagnostics.Property_0_is_missing_in_type_1, symbolToString(targetProp), typeToString(source));
                             }
                             return false;
                         }
@@ -2363,7 +2405,7 @@ module ts {
                             // (M - property in T)
                             // (N - property in S)
                             if (reportErrors) {
-                                reportError(Diagnostics.Required_property_0_cannot_be_reimplemented_with_optional_property_in_1, targetProp.name, typeToString(source, /*printArrayAsGenericType*/ false));
+                                reportError(Diagnostics.Required_property_0_cannot_be_reimplemented_with_optional_property_in_1, targetProp.name, typeToString(source));
                             }
                             return false;
                         }
@@ -2535,7 +2577,7 @@ module ts {
                         var sourceType = getIndexTypeOfType(source, IndexKind.String);
                         if (!sourceType) {
                             if (reportErrors) {
-                                reportError(Diagnostics.Index_signature_is_missing_in_type_0, typeToString(source, /*printArrayAsGenericType*/ false));
+                                reportError(Diagnostics.Index_signature_is_missing_in_type_0, typeToString(source));
                             }
                             return false;
                         }
@@ -2561,7 +2603,7 @@ module ts {
                         var sourceNumberType = getIndexTypeOfType(source, IndexKind.Number);
                         if (!(sourceStringType || sourceNumberType)) {
                             if (reportErrors) {
-                                reportError(Diagnostics.Index_signature_is_missing_in_type_0, typeToString(source, /*printArrayAsGenericType*/ false));
+                                reportError(Diagnostics.Index_signature_is_missing_in_type_0, typeToString(source));
                             }
                             return false;
                         }
@@ -2618,7 +2660,7 @@ module ts {
                         propTypeWasWidened = true;
 
                         if (program.getCompilerOptions().noImplicitAny && getInnermostTypeOfNestedArrayTypes(widenedType) === anyType) {
-                            error(p.valueDeclaration, Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type, p.name, typeToString(widenedType, /* printArrayAsGeneric */ false));
+                            error(p.valueDeclaration, Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type, p.name, typeToString(widenedType));
                         }
                     }
                     widenedTypes.push(widenedType);
@@ -3224,7 +3266,7 @@ module ts {
                 var prop = getPropertyOfApparentType(apparentType, node.right.text);
                 if (!prop) {
                     if (node.right.text) {
-                        error(node.right, Diagnostics.Property_0_does_not_exist_on_type_1, identifierToString(node.right), typeToString(type, /*printArrayAsGenericType*/ false));
+                        error(node.right, Diagnostics.Property_0_does_not_exist_on_type_1, identifierToString(node.right), typeToString(type));
                     }
                     return unknownType;
                 }
@@ -3500,7 +3542,7 @@ module ts {
             // with multiple call signatures.
             if (!signatures.length) {
                 if (constructSignatures.length) {
-                    error(node, Diagnostics.Value_of_type_0_is_not_callable_Did_you_mean_to_include_new, typeToString(funcType, /*printArrayAsGenericType*/ false));
+                    error(node, Diagnostics.Value_of_type_0_is_not_callable_Did_you_mean_to_include_new, typeToString(funcType));
                 }
                 else {
                     error(node, Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature);
@@ -3625,7 +3667,7 @@ module ts {
                 var widenedType = getWidenedType(unwidenedType);
 
                 if (program.getCompilerOptions().noImplicitAny && widenedType !== unwidenedType && getInnermostTypeOfNestedArrayTypes(widenedType) === anyType) {
-                    error(func, Diagnostics.Function_expression_which_lacks_return_type_annotation_implicitly_has_an_0_return_type, typeToString(widenedType, /* printArrayAsGeneric */ false));
+                    error(func, Diagnostics.Function_expression_which_lacks_return_type_annotation_implicitly_has_an_0_return_type, typeToString(widenedType));
                 }
 
                 return widenedType;
@@ -3649,7 +3691,7 @@ module ts {
 
                 // Check and report for noImplicitAny if the best common type implicitly gets widened to an 'any'/arrays-of-'any' type.
                 if (program.getCompilerOptions().noImplicitAny && widenedType !== commonType && getInnermostTypeOfNestedArrayTypes(widenedType) === anyType) {
-                    var typeName = typeToString(widenedType, /* printArrayAsGeneric */ false);
+                    var typeName = typeToString(widenedType);
 
                     if (func.name) {
                         error(func, Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type, identifierToString(func.name), typeName);
@@ -3978,7 +4020,7 @@ module ts {
             }
 
             function reportOperatorError() {
-                error(node, Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2, tokenToString(node.operator), typeToString(leftType, /*printArrayAsGenericType*/ false), typeToString(rightType, /*printArrayAsGenericType*/ false));
+                error(node, Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2, tokenToString(node.operator), typeToString(leftType), typeToString(rightType));
             }
         }
 
@@ -3990,10 +4032,10 @@ module ts {
             if (!resultType) {
 
                 if (contextualType && !isInferentialContext(contextualMapper)) {
-                    error(node, Diagnostics.No_best_common_type_exists_between_0_1_and_2, typeToString(contextualType, /*printArrayAsGenericType*/ false), typeToString(type1, /*printArrayAsGenericType*/ false), typeToString(type2, /*printArrayAsGenericType*/ false));
+                    error(node, Diagnostics.No_best_common_type_exists_between_0_1_and_2, typeToString(contextualType), typeToString(type1), typeToString(type2));
                 }
                 else {
-                    error(node, Diagnostics.No_best_common_type_exists_between_0_and_1, typeToString(type1, /*printArrayAsGenericType*/ false), typeToString(type2, /*printArrayAsGenericType*/ false));
+                    error(node, Diagnostics.No_best_common_type_exists_between_0_and_1, typeToString(type1), typeToString(type2));
                 }
 
                 resultType = emptyObjectType;
@@ -4564,7 +4606,7 @@ module ts {
                 // Ignore privates within ambient contexts; they exist purely for documentative purposes to avoid name clashing.
                 // (e.g. privates within .d.ts files do not expose type information)
                 if (!isPrivateWithinAmbient(node)) {
-                    var typeName = typeToString(anyType, /* printArrayAsGeneric */ false);
+                    var typeName = typeToString(anyType);
 
                     if (node.name) {
                         error(node, Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type, identifierToString(node.name), typeName);
@@ -4735,7 +4777,7 @@ module ts {
                 // Multiple declarations for the same variable name in the same declaration space are permitted,
                 // provided that each declaration associates the same type with the variable.
                 if (typeOfValueDeclaration !== unknownType && type !== unknownType && !isTypeIdenticalTo(typeOfValueDeclaration, type)) {
-                    error(node.name, Diagnostics.Subsequent_variable_declarations_must_have_the_same_type_Variable_0_must_be_of_type_1_but_here_has_type_2, identifierToString(node.name), typeToString(typeOfValueDeclaration, /*printArrayAsGenericType*/ false), typeToString(type, /*printArrayAsGenericType*/ false));
+                    error(node.name, Diagnostics.Subsequent_variable_declarations_must_have_the_same_type_Variable_0_must_be_of_type_1_but_here_has_type_2, identifierToString(node.name), typeToString(typeOfValueDeclaration), typeToString(type));
                 }
             }
         }
@@ -4933,7 +4975,7 @@ module ts {
                         indexKind === IndexKind.String
                         ? Diagnostics.Property_0_of_type_1_is_not_assignable_to_string_index_type_2
                         : Diagnostics.Property_0_of_type_1_is_not_assignable_to_numeric_index_type_2;
-                    error(errorNode, errorMessage, symbolToString(prop), typeToString(propertyType, /*printArrayAsGenericType*/ false), typeToString(indexType, /*printArrayAsGenericType*/ false));
+                    error(errorNode, errorMessage, symbolToString(prop), typeToString(propertyType), typeToString(indexType));
                 }
             }
 
@@ -4963,7 +5005,7 @@ module ts {
 
             if (errorNode && !isTypeAssignableTo(numberIndexType, stringIndexType)) {                
                 error(errorNode, Diagnostics.Numeric_index_type_0_is_not_assignable_to_string_index_type_1,
-                    typeToString(numberIndexType, /*printArrayAsGenericType*/ false), typeToString(stringIndexType, /*printArrayAsGenericType*/ false));
+                    typeToString(numberIndexType), typeToString(stringIndexType));
             }
         }
 
@@ -5014,7 +5056,7 @@ module ts {
                 checkTypeAssignableTo(staticType, getTypeWithoutConstructors(staticBaseType), node.name,
                     Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1_Colon, Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
                 if (baseType.symbol !== resolveEntityName(node, node.baseType.typeName, SymbolFlags.Value)) {
-                    error(node.baseType, Diagnostics.Type_name_0_in_extends_clause_does_not_reference_constructor_function_for_0, typeToString(baseType, /*printArrayAsGenericType*/ false));
+                    error(node.baseType, Diagnostics.Type_name_0_in_extends_clause_does_not_reference_constructor_function_for_0, typeToString(baseType));
                 }
                 
                 // Check that base type can be evaluated as expression
@@ -5113,7 +5155,7 @@ module ts {
                         errorMessage = Diagnostics.Class_0_defines_instance_member_accessor_1_but_extended_class_2_defines_it_as_instance_member_function;
                     }
 
-                    error(derived.valueDeclaration.name, errorMessage, typeToString(baseType, /* printArrayAsGenericType*/ false), symbolToString(base), typeToString(type, /* printArrayAsGenericType*/ false));
+                    error(derived.valueDeclaration.name, errorMessage, typeToString(baseType), symbolToString(base), typeToString(type));
                 }
             }
         }
@@ -5738,6 +5780,19 @@ module ts {
             return getNodeLinks(node).enumMemberValue;
         }
 
+        function writeTypeAtLocation(location: Node, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter) {
+            // Get type of the symbol if this is the valid symbol otherwise get type at location
+            var symbol = getSymbolOfNode(location);
+            var type = symbol && !(symbol.flags & SymbolFlags.TypeLiteral) ? getTypeOfSymbol(symbol) : getTypeFromTypeNode(location);
+
+            writeTypeToTextWriter(type, enclosingDeclaration, flags, writer);
+        }
+
+        function writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter) {
+            var signature = getSignatureFromDeclaration(signatureDeclaration);
+            writeTypeToTextWriter(getReturnTypeOfSignature(signature), enclosingDeclaration, flags , writer);
+        }
+
         function invokeEmitter() {
             var resolver: EmitResolver = {
                 getProgram: () => program,
@@ -5751,7 +5806,9 @@ module ts {
                 isTopLevelValueImportedViaEntityName: isTopLevelValueImportedViaEntityName,
                 shouldEmitDeclarations: shouldEmitDeclarations,
                 isReferencedInExportAssignment: isReferencedInExportAssignment,
-                isImplementationOfOverload: isImplementationOfOverload
+                isImplementationOfOverload: isImplementationOfOverload,
+                writeTypeAtLocation: writeTypeAtLocation,
+                writeReturnTypeOfSignatureDeclaration: writeReturnTypeOfSignatureDeclaration
             };
             checkProgram();
             return emitFiles(resolver);

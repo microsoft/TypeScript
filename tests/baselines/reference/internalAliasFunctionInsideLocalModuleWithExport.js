@@ -30,10 +30,10 @@ var c = exports.c;
 
 //// [internalAliasFunctionInsideLocalModuleWithExport.d.ts]
 export declare module a {
-    function foo(x);
+    function foo(x: number): number;
 }
 export declare module c {
     export import b = a.foo;
-    var bVal;
-    var bVal2;
+    var bVal: number;
+    var bVal2: (x: number) => number;
 }

@@ -35,4 +35,4 @@ export declare module a {
         }
     }
 }
-export declare var x;
+export declare var x: c;

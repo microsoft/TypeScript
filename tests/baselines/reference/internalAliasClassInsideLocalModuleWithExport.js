@@ -45,13 +45,13 @@ exports.d = new m2.m3.c();
 //// [internalAliasClassInsideLocalModuleWithExport.d.ts]
 export declare module x {
     class c {
-        foo(a);
+        foo(a: number): number;
     }
 }
 export declare module m2 {
     module m3 {
         export import c = x.c;
-        var cProp;
+        var cProp: c;
     }
 }
-export declare var d;
+export declare var d: c;

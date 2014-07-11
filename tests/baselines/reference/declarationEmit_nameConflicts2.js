@@ -62,18 +62,18 @@ var X;
 
 //// [declarationEmit_nameConflicts2.d.ts]
 declare module X.Y.base {
-    function f();
+    function f(): void;
     class C {
     }
     module M {
-        var v;
+        var v: any;
     }
     enum E {
     }
 }
 declare module X.Y.base.Z {
-    var f;
-    var C;
-    var M;
-    var E;
+    var f: () => void;
+    var C: typeof C;
+    var M: typeof M;
+    var E: typeof E;
 }

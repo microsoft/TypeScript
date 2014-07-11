@@ -40,9 +40,9 @@ declare module m {
     }
 }
 declare module m1 {
-    var d;
+    var d: c;
 }
 declare module m2 {
     export import x = m.c;
-    var d;
+    var d: c;
 }

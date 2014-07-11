@@ -40,15 +40,15 @@ var Baz = (function () {
 
 //// [declFileGenericClassWithGenericExtendedClass.d.ts]
 interface IFoo {
-    baz;
+    baz: Baz;
 }
 declare class Base<T> {
 }
 declare class Derived<T> extends Base<T> {
 }
 interface IBar<T> {
-    derived;
+    derived: Derived<T>;
 }
 declare class Baz implments IBar<Baz> {
-    derived;
+    derived: Derived<Baz>;
 }

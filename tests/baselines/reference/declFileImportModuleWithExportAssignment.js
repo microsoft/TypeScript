@@ -38,14 +38,22 @@ exports.a.test1(null, null, null);
 //// [declFileImportModuleWithExportAssignment_0.d.ts]
 declare module m2 {
     interface connectModule {
-        (res, req, next);
+        (res: any, req: any, next: any): void;
     }
     interface connectExport {
-        use;
-        listen;
+        use: (mod: connectModule) => connectExport;
+        listen: (port: number) => void;
     }
 }
-declare var m2;
+declare var m2: {
+    (): connectExport;
+    test1: connectModule;
+    test2(): connectModule;
+};
 export = m2;
 //// [declFileImportModuleWithExportAssignment_1.d.ts]
-export declare var a;
+export declare var a: {
+    (): connectExport;
+    test1: connectModule;
+    test2(): connectModule;
+};

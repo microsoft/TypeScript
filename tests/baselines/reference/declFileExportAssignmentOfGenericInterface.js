@@ -24,8 +24,8 @@ define(["require", "exports"], function (require, exports) {
 
 //// [declFileExportAssignmentOfGenericInterface_0.d.ts]
 interface Foo<T> {
-    a;
+    a: string;
 }
 export = Foo;
 //// [declFileExportAssignmentOfGenericInterface_1.d.ts]
-export declare var x;
+export declare var x: Foo<Foo<string>>;

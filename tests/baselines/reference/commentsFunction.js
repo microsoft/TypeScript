@@ -42,8 +42,8 @@ lambddaNoVarComment(10, 20);
 
 
 //// [commentsFunction.d.ts]
-declare function foo();
-declare function fooWithParameters(a, b);
-declare var fooFunc;
-declare var lambdaFoo;
-declare var lambddaNoVarComment;
+declare function foo(): void;
+declare function fooWithParameters(a: string, b: number): void;
+declare var fooFunc: (b: string) => string;
+declare var lambdaFoo: (a: number, b: number) => number;
+declare var lambddaNoVarComment: (a: number, b: number) => number;

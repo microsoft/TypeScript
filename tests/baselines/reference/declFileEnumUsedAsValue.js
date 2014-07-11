@@ -23,4 +23,4 @@ declare enum e {
     b = 1,
     c = 2,
 }
-declare var x;
+declare var x: typeof e;

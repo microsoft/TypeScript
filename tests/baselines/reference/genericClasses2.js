@@ -29,14 +29,14 @@ var z = v1.z.a;
 
 //// [genericClasses2.d.ts]
 interface Foo<T> {
-    a;
+    a: T;
 }
 declare class C<T> {
-    x;
-    y;
-    z;
+    x: T;
+    y: Foo<T>;
+    z: Foo<number>;
 }
-declare var v1;
-declare var y;
-declare var w;
-declare var z;
+declare var v1: C<string>;
+declare var y: string;
+declare var w: string;
+declare var z: number;

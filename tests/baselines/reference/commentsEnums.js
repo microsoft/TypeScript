@@ -27,4 +27,4 @@ declare enum Colors {
     Cornflower = 0,
     FancyPink = 1,
 }
-declare var x;
+declare var x: Colors;

@@ -25,11 +25,11 @@ var c = exports.c;
 export declare module a {
     module b {
         interface I {
-            foo();
+            foo(): any;
         }
     }
 }
 export declare module c {
     export import b = a.b;
-    var x;
+    var x: I;
 }

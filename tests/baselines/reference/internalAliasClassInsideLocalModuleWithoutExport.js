@@ -42,11 +42,11 @@ var m2 = exports.m2;
 //// [internalAliasClassInsideLocalModuleWithoutExport.d.ts]
 export declare module x {
     class c {
-        foo(a);
+        foo(a: number): number;
     }
 }
 export declare module m2 {
     module m3 {
-        var cProp;
+        var cProp: c;
     }
 }

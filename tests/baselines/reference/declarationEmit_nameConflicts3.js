@@ -92,26 +92,26 @@ declare module M {
     interface D {
     }
     module D {
-        function f();
+        function f(): void;
     }
     module C {
-        function f();
+        function f(): void;
     }
     module E {
-        function f();
+        function f(): void;
     }
 }
 declare module M.P {
     class C {
-        static f();
+        static f(): void;
     }
     class E extends C {
     }
     enum D {
         f = 0,
     }
-    var v;
-    var w;
-    var x;
-    var x;
+    var v: D;
+    var w: () => void;
+    var x: () => void;
+    var x: () => void;
 }

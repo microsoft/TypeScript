@@ -33,9 +33,9 @@ define(["require", "exports"], function (require, exports) {
 //// [w1.d.ts]
 export = Widget1;
 interface Widget1 {
-    name;
+    name: string;
 }
 //// [exporter.d.ts]
 export import w = require('./w1');
 //// [consumer.d.ts]
-export declare function w();
+export declare function w(): Widget1;

@@ -36,16 +36,16 @@ module.exports = MainModule;
 //// [missingImportAfterModuleImport_0.d.ts]
 declare module "SubModule" {
     class SubModule {
-        static StaticVar;
-        InstanceVar;
-        constructor ();
+        static StaticVar: number;
+        InstanceVar: number;
+        constructor();
     }
     export = SubModule;
 }
 //// [missingImportAfterModuleImport_1.d.ts]
 /// <reference path='missingImportAfterModuleImport_0.d.ts' />
 declare class MainModule {
-    SubModule;
-    constructor ();
+    SubModule: SubModule;
+    constructor();
 }
 export = MainModule;

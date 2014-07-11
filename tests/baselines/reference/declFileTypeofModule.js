@@ -30,12 +30,12 @@ var m2_2;
 
 //// [declFileTypeofModule.d.ts]
 declare module m1 {
-    var c;
+    var c: string;
 }
-declare var m1_1;
-declare var m1_2;
+declare var m1_1: typeof m1;
+declare var m1_2: typeof m1;
 declare module m2 {
-    var d;
+    var d: typeof m2;
 }
-declare var m2_1;
-declare var m2_2;
+declare var m2_1: typeof m2;
+declare var m2_2: typeof m2;

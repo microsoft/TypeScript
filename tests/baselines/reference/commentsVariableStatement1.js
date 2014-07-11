@@ -8,4 +8,4 @@ var v = 1;
 
 
 //// [commentsVariableStatement1.d.ts]
-declare var v;
+declare var v: number;

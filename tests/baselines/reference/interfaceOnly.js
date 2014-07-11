@@ -9,6 +9,6 @@ interface foo {
 
 //// [interfaceOnly.d.ts]
 interface foo {
-    foo();
-    f2(f);
+    foo(): any;
+    f2(f: () => void): any;
 }

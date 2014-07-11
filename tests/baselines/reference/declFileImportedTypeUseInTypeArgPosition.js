@@ -27,5 +27,5 @@ declare class List<T> {
 declare module 'mod1' {
 }
 declare module 'moo' {
-    var p;
+    var p: List<Foo>;
 }

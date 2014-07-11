@@ -82,7 +82,7 @@ define(["require", "exports", "withImportDecl_0"], function (require, exports, m
 
 //// [withImportDecl_0.d.ts]
 export declare class A {
-    foo;
+    foo: string;
 }
 //// [withImportDecl_1.d.ts]
 /// <reference path='withImportDecl_0.d.ts' />

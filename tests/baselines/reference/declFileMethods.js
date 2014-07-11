@@ -327,21 +327,21 @@ var c2 = (function () {
 
 //// [declFileMethods_0.d.ts]
 export declare class c1 {
-    foo();
-    fooWithParameters(a, b);
-    fooWithRestParameters(a, ...rests);
-    fooWithOverloads(a);
-    fooWithOverloads(a);
+    foo(): void;
+    fooWithParameters(a: string, b: number): void;
+    fooWithRestParameters(a: string, ...rests: string[]): string;
+    fooWithOverloads(a: string): string;
+    fooWithOverloads(a: number): number;
     private privateFoo();
     private privateFooWithParameters(a, b);
     private privateFooWithRestParameters(a, ...rests);
     private privateFooWithOverloads(a);
     private privateFooWithOverloads(a);
-    static staticFoo();
-    static staticFooWithParameters(a, b);
-    static staticFooWithRestParameters(a, ...rests);
-    static staticFooWithOverloads(a);
-    static staticFooWithOverloads(a);
+    static staticFoo(): void;
+    static staticFooWithParameters(a: string, b: number): void;
+    static staticFooWithRestParameters(a: string, ...rests: string[]): string;
+    static staticFooWithOverloads(a: string): string;
+    static staticFooWithOverloads(a: number): number;
     private static privateStaticFoo();
     private static privateStaticFooWithParameters(a, b);
     private static privateStaticFooWithRestParameters(a, ...rests);
@@ -349,29 +349,29 @@ export declare class c1 {
     private static privateStaticFooWithOverloads(a);
 }
 export interface I1 {
-    foo();
-    fooWithParameters(a, b);
-    fooWithRestParameters(a, ...rests);
-    fooWithOverloads(a);
-    fooWithOverloads(a);
+    foo(): string;
+    fooWithParameters(a: string, b: number): void;
+    fooWithRestParameters(a: string, ...rests: string[]): string;
+    fooWithOverloads(a: string): string;
+    fooWithOverloads(a: number): number;
 }
 //// [declFileMethods_1.d.ts]
 declare class c2 {
-    foo();
-    fooWithParameters(a, b);
-    fooWithRestParameters(a, ...rests);
-    fooWithOverloads(a);
-    fooWithOverloads(a);
+    foo(): void;
+    fooWithParameters(a: string, b: number): void;
+    fooWithRestParameters(a: string, ...rests: string[]): string;
+    fooWithOverloads(a: string): string;
+    fooWithOverloads(a: number): number;
     private privateFoo();
     private privateFooWithParameters(a, b);
     private privateFooWithRestParameters(a, ...rests);
     private privateFooWithOverloads(a);
     private privateFooWithOverloads(a);
-    static staticFoo();
-    static staticFooWithParameters(a, b);
-    static staticFooWithRestParameters(a, ...rests);
-    static staticFooWithOverloads(a);
-    static staticFooWithOverloads(a);
+    static staticFoo(): void;
+    static staticFooWithParameters(a: string, b: number): void;
+    static staticFooWithRestParameters(a: string, ...rests: string[]): string;
+    static staticFooWithOverloads(a: string): string;
+    static staticFooWithOverloads(a: number): number;
     private static privateStaticFoo();
     private static privateStaticFooWithParameters(a, b);
     private static privateStaticFooWithRestParameters(a, ...rests);
@@ -379,9 +379,9 @@ declare class c2 {
     private static privateStaticFooWithOverloads(a);
 }
 interface I2 {
-    foo();
-    fooWithParameters(a, b);
-    fooWithRestParameters(a, ...rests);
-    fooWithOverloads(a);
-    fooWithOverloads(a);
+    foo(): string;
+    fooWithParameters(a: string, b: number): void;
+    fooWithRestParameters(a: string, ...rests: string[]): string;
+    fooWithOverloads(a: string): string;
+    fooWithOverloads(a: number): number;
 }

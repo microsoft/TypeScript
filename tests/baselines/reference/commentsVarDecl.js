@@ -61,15 +61,15 @@ n4 = z2;
 
 
 //// [commentsVarDecl.d.ts]
-declare var myVariable;
-declare var anotherVariable;
-declare var aVar;
-declare var anotherAnotherVariable;
-declare var x;
-declare var n;
-declare var y;
-declare var yy;
-declare var z;
-declare var z2;
-declare var x2;
-declare var n4;
+declare var myVariable: number;
+declare var anotherVariable: number;
+declare var aVar: string;
+declare var anotherAnotherVariable: number;
+declare var x: number;
+declare var n: number;
+declare var y: number;
+declare var yy: number;
+declare var z: (x: number, y: number) => number;
+declare var z2: (x: number) => string;
+declare var x2: (x: number) => string;
+declare var n4: (x: number) => string;

@@ -120,38 +120,38 @@ var i8_c = c8;
 //// [commentsClass.d.ts]
 declare class c2 {
 }
-declare var i2;
-declare var i2_c;
+declare var i2: c2;
+declare var i2_c: typeof c2;
 declare class c3 {
-    constructor ();
+    constructor();
 }
-declare var i3;
-declare var i3_c;
+declare var i3: c3;
+declare var i3_c: typeof c3;
 declare class c4 {
-    constructor ();
+    constructor();
 }
-declare var i4;
-declare var i4_c;
+declare var i4: c4;
+declare var i4_c: typeof c4;
 declare class c5 {
-    static s1;
+    static s1: number;
 }
-declare var i5;
-declare var i5_c;
+declare var i5: c5;
+declare var i5_c: typeof c5;
 declare class c6 {
-    static s1;
-    constructor ();
+    static s1: number;
+    constructor();
 }
-declare var i6;
-declare var i6_c;
+declare var i6: c6;
+declare var i6_c: typeof c6;
 declare class c7 {
-    static s1;
-    constructor ();
+    static s1: number;
+    constructor();
 }
-declare var i7;
-declare var i7_c;
+declare var i7: c7;
+declare var i7_c: typeof c7;
 declare class c8 {
-    static s1;
-    constructor ();
+    static s1: number;
+    constructor();
 }
-declare var i8;
-declare var i8_c;
+declare var i8: c8;
+declare var i8_c: typeof c8;

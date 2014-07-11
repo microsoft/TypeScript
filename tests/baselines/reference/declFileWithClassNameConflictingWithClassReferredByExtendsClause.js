@@ -69,16 +69,16 @@ var X;
 //// [declFileWithClassNameConflictingWithClassReferredByExtendsClause.d.ts]
 declare module A.B.Base {
     class W {
-        id;
+        id: number;
     }
 }
 declare module X.Y.base {
-    class W extends A.B.Base.W {
-        name;
+    class W extends W {
+        name: string;
     }
 }
 declare module X.Y.base.Z {
-    class W<TValue> extends X.Y.base.W {
-        value;
+    class W<TValue> extends W {
+        value: boolean;
     }
 }

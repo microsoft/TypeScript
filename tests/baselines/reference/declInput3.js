@@ -34,7 +34,11 @@ var bar = (function () {
 interface bar2 {
 }
 declare class bar {
-    f();
-    g();
-    h(x?, y?, z?);
+    f(): string;
+    g(): {
+        a: bar;
+        b: any;
+        c: any;
+    };
+    h(x?: number, y?: any, z?: string): void;
 }

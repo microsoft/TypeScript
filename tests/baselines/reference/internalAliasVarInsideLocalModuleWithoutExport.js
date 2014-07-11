@@ -25,8 +25,8 @@ define(["require", "exports"], function (require, exports) {
 
 //// [internalAliasVarInsideLocalModuleWithoutExport.d.ts]
 export declare module a {
-    var x;
+    var x: number;
 }
 export declare module c {
-    var bVal;
+    var bVal: number;
 }

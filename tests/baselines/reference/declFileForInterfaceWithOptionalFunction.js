@@ -10,6 +10,6 @@ interface I {
 
 //// [declFileForInterfaceWithOptionalFunction.d.ts]
 interface I {
-    foo?(x?);
-    foo2?(x?);
+    foo?(x?: any): any;
+    foo2?(x?: number): number;
 }

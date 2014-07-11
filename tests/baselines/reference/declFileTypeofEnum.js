@@ -40,6 +40,6 @@ declare enum days {
     saturday = 5,
     sunday = 6,
 }
-declare var weekendDay;
-declare var daysOfMonth;
-declare var daysOfYear;
+declare var weekendDay: days;
+declare var daysOfMonth: typeof days;
+declare var daysOfYear: typeof days;

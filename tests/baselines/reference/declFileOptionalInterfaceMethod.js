@@ -9,5 +9,5 @@ interface X {
 
 //// [declFileOptionalInterfaceMethod.d.ts]
 interface X {
-    f?<T>();
+    f?<T>(): any;
 }

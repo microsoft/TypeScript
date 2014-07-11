@@ -68,17 +68,17 @@ declare module M {
     }
     class D {
         private c;
-        m1;
-        m2;
-        m22;
-        m23;
-        m24;
-        m25;
-        m232();
-        m242();
-        m252();
-        m26(i);
-        m262(i);
-        m3();
+        m1: number;
+        m2: string;
+        m22: C;
+        m23: E;
+        m24: I1;
+        m25: I2;
+        m232(): E;
+        m242(): I1;
+        m252(): I2;
+        m26(i: I1): void;
+        m262(i: I2): void;
+        m3(): C;
     }
 }

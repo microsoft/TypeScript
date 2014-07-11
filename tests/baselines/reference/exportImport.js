@@ -41,9 +41,9 @@ define(["require", "exports", './exporter'], function (require, exports, e) {
 //// [w1.d.ts]
 export = Widget1;
 declare class Widget1 {
-    name;
+    name: string;
 }
 //// [exporter.d.ts]
 export import w = require('./w1');
 //// [consumer.d.ts]
-export declare function w();
+export declare function w(): Widget1;

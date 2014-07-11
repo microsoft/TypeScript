@@ -14,7 +14,7 @@ var z = v2.x;
 
 //// [generics0.d.ts]
 interface G<T> {
-    x;
+    x: T;
 }
-declare var v2;
-declare var z;
+declare var v2: G<string>;
+declare var z: string;

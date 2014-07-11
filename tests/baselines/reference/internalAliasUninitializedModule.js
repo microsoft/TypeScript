@@ -25,10 +25,10 @@ var c;
 declare module a {
     module b {
         interface I {
-            foo();
+            foo(): any;
         }
     }
 }
 declare module c {
-    var x;
+    var x: I;
 }

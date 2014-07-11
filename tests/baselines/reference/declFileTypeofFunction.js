@@ -64,15 +64,39 @@ function foo5(x) {
 
 
 //// [declFileTypeofFunction.d.ts]
-declare function f(n);
-declare function f(n);
-declare function g(n);
-declare function g(n);
-declare var b;
-declare function b1();
-declare function foo();
-declare var foo1;
-declare var foo2;
-declare var foo3;
-declare var x;
-declare function foo5(x);
+declare function f(n: {
+    (n: typeof f): string;
+    (n: {
+        (n: typeof g): number;
+        (n: typeof f): number;
+    }): string;
+}): string;
+declare function f(n: {
+    (n: typeof g): number;
+    (n: {
+        (n: typeof f): string;
+        (n: typeof g): string;
+    }): number;
+}): string;
+declare function g(n: {
+    (n: typeof g): number;
+    (n: {
+        (n: typeof f): string;
+        (n: typeof g): string;
+    }): number;
+}): number;
+declare function g(n: {
+    (n: typeof f): string;
+    (n: {
+        (n: typeof g): number;
+        (n: typeof f): number;
+    }): string;
+}): number;
+declare var b: any;
+declare function b1(): () => typeof b1;
+declare function foo(): () => typeof foo;
+declare var foo1: () => typeof foo;
+declare var foo2: () => typeof foo;
+declare var foo3: any;
+declare var x: any;
+declare function foo5(x: number): (x: number) => number;

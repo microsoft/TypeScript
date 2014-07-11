@@ -224,27 +224,27 @@ var NoQuickInfoClass = (function () {
 
 
 //// [commentsCommentParsing.d.ts]
-declare function simple();
-declare function multiLine();
-declare function jsDocSingleLine();
-declare function jsDocMultiLine();
-declare function jsDocMultiLineMerge();
-declare function jsDocMixedComments1();
-declare function jsDocMixedComments2();
-declare function jsDocMixedComments3();
-declare function jsDocMixedComments4();
-declare function jsDocMixedComments5();
-declare function jsDocMixedComments6();
-declare function noHelpComment1();
-declare function noHelpComment2();
-declare function noHelpComment3();
-declare function sum(a, b);
-declare function multiply(a, b, c?, d?, e?);
-declare function f1(a);
-declare function f1(b);
-declare function subtract(a, b, c?, d?, e?, f?);
-declare function square(a);
-declare function divide(a, b);
-declare function jsDocParamTest(a, b, c, d);
+declare function simple(): void;
+declare function multiLine(): void;
+declare function jsDocSingleLine(): void;
+declare function jsDocMultiLine(): void;
+declare function jsDocMultiLineMerge(): void;
+declare function jsDocMixedComments1(): void;
+declare function jsDocMixedComments2(): void;
+declare function jsDocMixedComments3(): void;
+declare function jsDocMixedComments4(): void;
+declare function jsDocMixedComments5(): void;
+declare function jsDocMixedComments6(): void;
+declare function noHelpComment1(): void;
+declare function noHelpComment2(): void;
+declare function noHelpComment3(): void;
+declare function sum(a: number, b: number): number;
+declare function multiply(a: number, b: number, c?: number, d?: any, e?: any): void;
+declare function f1(a: number): any;
+declare function f1(b: string): any;
+declare function subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void;
+declare function square(a: number): number;
+declare function divide(a: number, b: number): void;
+declare function jsDocParamTest(a: number, b: number, c: number, d: number): number;
 declare class NoQuickInfoClass {
 }

@@ -23,10 +23,10 @@ declare class C<T> {
     private x;
 }
 interface X {
-    f();
+    f(): string;
 }
 interface Y {
-    f();
+    f(): string;
 }
-declare var a;
-declare var b;
+declare var a: C<X>;
+declare var b: C<Y>;

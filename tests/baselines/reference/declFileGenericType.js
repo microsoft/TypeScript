@@ -119,27 +119,27 @@ export declare module C {
     }
     class B {
     }
-    function F<T>(x);
-    function F2<T>(x);
-    function F3<T>(x);
-    function F4<T extends A<B>>(x);
-    function F5<T>();
-    function F6<T extends A<B>>(x);
+    function F<T>(x: T): A<B>;
+    function F2<T>(x: T): A<B>;
+    function F3<T>(x: T): A<B>[];
+    function F4<T extends A<B>>(x: T): A<B>[];
+    function F5<T>(): T;
+    function F6<T extends A<B>>(x: T): T;
     class D<T> {
-        val;
-        constructor (val);
+        val: T;
+        constructor(val: T);
     }
 }
-export declare var a;
-export declare var b;
-export declare var c;
-export declare var d;
-export declare var e;
-export declare var x;
-export declare function f<T extends C.A<C.B>>();
-export declare var g;
-export declare class h extends C.A<C.B> {
+export declare var a: A<B>;
+export declare var b: <T>(x: T) => A<B>;
+export declare var c: <T>(x: T) => A<B>;
+export declare var d: <T>(x: T) => A<B>[];
+export declare var e: <T extends A<B>>(x: T) => A<B>[];
+export declare var x: A<B>;
+export declare function f<T extends A<B>>(): void;
+export declare var g: A<B>;
+export declare class h extends A<B> {
 }
-export interface i extends C.A<C.B> {
+export interface i extends A<B> {
 }
-export declare var j;
+export declare var j: <T extends A<B>>(x: T) => T;

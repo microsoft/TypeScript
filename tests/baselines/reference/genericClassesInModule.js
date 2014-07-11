@@ -35,4 +35,4 @@ declare module Foo {
     class A {
     }
 }
-declare var a;
+declare var a: B<A>;

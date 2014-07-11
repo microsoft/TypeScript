@@ -252,23 +252,23 @@ var c2 = (function () {
 
 //// [declFileAccessors_0.d.ts]
 export declare class c1 {
-    p3;
+    p3: number;
     private pp3;
-    static s3;
-    nc_p3;
+    static s3: number;
+    nc_p3: number;
     private nc_pp3;
-    static nc_s3;
-    onlyGetter;
-    onlySetter;
+    static nc_s3: string;
+    onlyGetter: number;
+    onlySetter: number;
 }
 //// [declFileAccessors_1.d.ts]
 declare class c2 {
-    p3;
+    p3: number;
     private pp3;
-    static s3;
-    nc_p3;
+    static s3: number;
+    nc_p3: number;
     private nc_pp3;
-    static nc_s3;
-    onlyGetter;
-    onlySetter;
+    static nc_s3: string;
+    onlyGetter: number;
+    onlySetter: number;
 }

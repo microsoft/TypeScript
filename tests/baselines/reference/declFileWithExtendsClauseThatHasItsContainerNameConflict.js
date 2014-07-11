@@ -61,11 +61,11 @@ declare module A.B.C {
 }
 declare module A.B {
     class EventManager {
-        id;
+        id: number;
     }
 }
 declare module A.B.C {
     class ContextMenu extends EventManager {
-        name;
+        name: string;
     }
 }

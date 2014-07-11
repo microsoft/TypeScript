@@ -26,6 +26,6 @@ var A = (function () {
 
 //// [es5-amd.d.ts]
 declare class A {
-    constructor ();
-    B();
+    constructor();
+    B(): number;
 }

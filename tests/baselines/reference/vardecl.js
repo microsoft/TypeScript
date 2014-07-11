@@ -171,44 +171,76 @@ var b = 10;
 
 
 //// [vardecl.d.ts]
-declare var simpleVar;
-declare var anotherVar;
-declare var varWithSimpleType;
-declare var varWithArrayType;
-declare var varWithInitialValue;
-declare var withComplicatedValue;
-declare var declaredVar;
-declare var declareVar2;
-declare var declaredVar3;
-declare var deckareVarWithType;
-declare var arrayVar;
-declare var complicatedArrayVar;
-declare var n1;
-declare var c;
-declare var d;
-declare var d3;
-declare var d2;
-declare var n2;
-declare var n4;
-declare var d4;
+declare var simpleVar: any;
+declare var anotherVar: any;
+declare var varWithSimpleType: number;
+declare var varWithArrayType: number[];
+declare var varWithInitialValue: number;
+declare var withComplicatedValue: {
+    x: number;
+    y: number;
+    desc: string;
+};
+declare var declaredVar: any;
+declare var declareVar2: any;
+declare var declaredVar3: any;
+declare var deckareVarWithType: number;
+declare var arrayVar: string[];
+declare var complicatedArrayVar: {
+    x: number;
+    y: string;
+}[];
+declare var n1: {
+    [x: string]: number;
+};
+declare var c: {
+    new?(): any;
+};
+declare var d: {
+    foo?(): {
+        x: number;
+    };
+};
+declare var d3: {
+    foo(): {
+        x: number;
+        y: number;
+    };
+};
+declare var d2: {
+    foo(): {
+        x: number;
+    };
+};
+declare var n2: () => void;
+declare var n4: () => void[];
+declare var d4: {
+    foo(n: string, x: {
+        x: number;
+        y: number;
+    }): {
+        x: number;
+        y: number;
+    };
+};
 declare module m2 {
-    var a, b2, b;
+    var a: any, b2: number, b: any;
     class C2 {
-        b;
-        constructor (b);
+        b: any;
+        constructor(b: any);
     }
-    var mE;
-    var d1E, d2E;
-    var b2E;
-    var v1E;
+    var mE: any;
+    var d1E: any, d2E: any;
+    var b2E: any;
+    var v1E: any;
 }
-declare var a22, b22, c22;
-declare var nn;
-declare var da1, da2;
-declare var normalVar;
-declare var dv1;
-declare var xl;
-declare var x;
-declare var z;
-declare function foo(a2);
-declare var b;
+declare var a22: any, b22: number, c22: number;
+declare var nn: any;
+declare var da1: any, da2: any;
+declare var normalVar: any;
+declare var dv1: any;
+declare var xl: any;
+declare var x: any;
+declare var z: any;
+declare function foo(a2: any): void;
+declare var b: number;

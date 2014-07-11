@@ -12,6 +12,6 @@ var lengths = map(myItems, function (x) { return x.length; });
 
 
 //// [genericFunctions2.d.ts]
-declare function map<T, U>(items, f);
-declare var myItems;
-declare var lengths;
+declare function map<T, U>(items: T[], f: (x: T) => U): U[];
+declare var myItems: string[];
+declare var lengths: number[];

@@ -113,14 +113,14 @@ function globalfooWithOverloads(a) {
 
 
 //// [declFileFunctions_0.d.ts]
-export declare function foo();
-export declare function fooWithParameters(a, b);
-export declare function fooWithRestParameters(a, ...rests);
-export declare function fooWithOverloads(a);
-export declare function fooWithOverloads(a);
+export declare function foo(): void;
+export declare function fooWithParameters(a: string, b: number): void;
+export declare function fooWithRestParameters(a: string, ...rests: string[]): string;
+export declare function fooWithOverloads(a: string): string;
+export declare function fooWithOverloads(a: number): number;
 //// [declFileFunctions_1.d.ts]
-declare function globalfoo();
-declare function globalfooWithParameters(a, b);
-declare function globalfooWithRestParameters(a, ...rests);
-declare function globalfooWithOverloads(a);
-declare function globalfooWithOverloads(a);
+declare function globalfoo(): void;
+declare function globalfooWithParameters(a: string, b: number): void;
+declare function globalfooWithRestParameters(a: string, ...rests: string[]): string;
+declare function globalfooWithOverloads(a: string): string;
+declare function globalfooWithOverloads(a: number): number;

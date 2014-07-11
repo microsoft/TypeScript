@@ -132,32 +132,32 @@ var m1;
 
 
 //// [commentsemitComments.d.ts]
-declare var myVariable;
-declare function foo(p);
-declare var fooVar;
+declare var myVariable: number;
+declare function foo(p: number): void;
+declare var fooVar: () => void;
 declare class c {
-    constructor ();
-    b;
-    myFoo();
-    prop1;
-    foo1(a);
-    foo1(b);
+    constructor();
+    b: number;
+    myFoo(): number;
+    prop1: number;
+    foo1(a: number): string;
+    foo1(b: string): string;
 }
-declare var i;
+declare var i: c;
 interface i1 {
-    (a);
-    new (b);
-    [a];
-    myFoo(a);
-    prop;
+    (a: number): number;
+    new (b: string): any;
+    [a: number]: string;
+    myFoo(a: number): string;
+    prop: string;
 }
-declare var i1_i;
+declare var i1_i: i1;
 declare module m1 {
     class b {
-        x;
-        constructor (x);
+        x: number;
+        constructor(x: number);
     }
     module m2 {
     }
 }
-declare var x;
+declare var x: any;

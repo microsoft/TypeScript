@@ -24,8 +24,8 @@ exports.x;
 
 //// [importDeclarationUsedAsTypeQuery_require.d.ts]
 export declare class B {
-    id;
+    id: number;
 }
 //// [importDeclarationUsedAsTypeQuery_1.d.ts]
 /// <reference path='importDeclarationUsedAsTypeQuery_require.d.ts' />
-export declare var x;
+export declare var x: typeof "tests/cases/compiler/importDeclarationUsedAsTypeQuery_require";

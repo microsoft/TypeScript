@@ -27,8 +27,8 @@ define(["require", "exports"], function (require, exports) {
 
 //// [internalAliasFunctionInsideTopLevelModuleWithExport.d.ts]
 export declare module a {
-    function foo(x);
+    function foo(x: number): number;
 }
 export import b = a.foo;
-export declare var bVal;
-export declare var bVal2;
+export declare var bVal: number;
+export declare var bVal2: (x: number) => number;

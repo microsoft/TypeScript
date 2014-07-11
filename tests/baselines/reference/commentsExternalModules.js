@@ -123,21 +123,21 @@ define(["require", "exports", "commentsExternalModules_0"], function (require, e
 
 //// [commentsExternalModules_0.d.ts]
 export declare module m1 {
-    var b;
+    var b: number;
     module m2 {
         class c {
         }
-        var i;
+        var i: c;
     }
-    function fooExport();
+    function fooExport(): number;
 }
 export declare module m4 {
-    var b;
+    var b: number;
     module m2 {
         class c {
         }
-        var i;
+        var i: c;
     }
-    function fooExport();
+    function fooExport(): number;
 }
 //// [commentsExternalModules_1.d.ts]

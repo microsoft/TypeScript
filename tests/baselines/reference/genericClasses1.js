@@ -19,7 +19,7 @@ var y = v1.x;
 
 //// [genericClasses1.d.ts]
 declare class C<T> {
-    x;
+    x: T;
 }
-declare var v1;
-declare var y;
+declare var v1: C<string>;
+declare var y: string;

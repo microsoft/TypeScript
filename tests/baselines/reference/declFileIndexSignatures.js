@@ -41,29 +41,29 @@ interface IGlobalIndexSignatureWithTypeParameter<T> {
 
 //// [declFileIndexSignatures_0.d.ts]
 export interface IStringIndexSignature {
-    [s];
+    [s: string]: string;
 }
 export interface INumberIndexSignature {
-    [n];
+    [n: number]: number;
 }
 export interface IBothIndexSignature {
-    [s];
-    [n];
+    [s: string]: any;
+    [n: number]: number;
 }
 export interface IIndexSignatureWithTypeParameter<T> {
-    [a];
+    [a: string]: T;
 }
 //// [declFileIndexSignatures_1.d.ts]
 interface IGlobalStringIndexSignature {
-    [s];
+    [s: string]: string;
 }
 interface IGlobalNumberIndexSignature {
-    [n];
+    [n: number]: number;
 }
 interface IGlobalBothIndexSignature {
-    [s];
-    [n];
+    [s: string]: any;
+    [n: number]: number;
 }
 interface IGlobalIndexSignatureWithTypeParameter<T> {
-    [a];
+    [a: string]: T;
 }

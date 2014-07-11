@@ -105,44 +105,44 @@ i3_i.nc_l(10);
 //// [commentsInterface.d.ts]
 interface i1 {
 }
-declare var i1_i;
+declare var i1_i: i1;
 interface nc_i1 {
 }
-declare var nc_i1_i;
+declare var nc_i1_i: nc_i1;
 interface i2 {
-    x;
-    foo;
-    [i];
-    new (i);
-    nc_x;
-    nc_foo;
-    [i];
-    (a, b);
-    fnfoo(b);
-    nc_fnfoo(b);
-    nc_y;
+    x: number;
+    foo: (b: number) => string;
+    [i: string]: any;
+    new (i: i1): any;
+    nc_x: number;
+    nc_foo: (b: number) => string;
+    [i: number]: number;
+    (a: number, b: number): number;
+    fnfoo(b: number): string;
+    nc_fnfoo(b: number): string;
+    nc_y: number;
 }
-declare var i2_i;
-declare var i2_i_x;
-declare var i2_i_foo;
-declare var i2_i_foo_r;
-declare var i2_i_i2_si;
-declare var i2_i_i2_ii;
-declare var i2_i_n;
-declare var i2_i_nc_x;
-declare var i2_i_nc_foo;
-declare var i2_i_nc_foo_r;
-declare var i2_i_r;
-declare var i2_i_fnfoo;
-declare var i2_i_fnfoo_r;
-declare var i2_i_nc_fnfoo;
-declare var i2_i_nc_fnfoo_r;
+declare var i2_i: i2;
+declare var i2_i_x: number;
+declare var i2_i_foo: (b: number) => string;
+declare var i2_i_foo_r: string;
+declare var i2_i_i2_si: any;
+declare var i2_i_i2_ii: number;
+declare var i2_i_n: any;
+declare var i2_i_nc_x: number;
+declare var i2_i_nc_foo: (b: number) => string;
+declare var i2_i_nc_foo_r: string;
+declare var i2_i_r: number;
+declare var i2_i_fnfoo: (b: number) => string;
+declare var i2_i_fnfoo_r: string;
+declare var i2_i_nc_fnfoo: (b: number) => string;
+declare var i2_i_nc_fnfoo_r: string;
 interface i3 {
-    x;
-    f(a);
-    l;
-    nc_x;
-    nc_f(a);
-    nc_l;
+    x: number;
+    f(a: number): string;
+    l: (b: number) => string;
+    nc_x: number;
+    nc_f(a: number): string;
+    nc_l: (b: number) => string;
 }
-declare var i3_i;
+declare var i3_i: i3;

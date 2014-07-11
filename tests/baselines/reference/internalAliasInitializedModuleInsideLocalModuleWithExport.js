@@ -42,5 +42,5 @@ export declare module a {
 }
 export declare module c {
     export import b = a.b;
-    var x;
+    var x: c;
 }

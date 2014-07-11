@@ -71,41 +71,41 @@ interface IGlobalConstructSignatureWithOwnTypeParametes {
 
 //// [declFileConstructSignatures_0.d.ts]
 export interface IConstructSignature {
-    new ();
+    new (): string;
 }
 export interface IConstructSignatureWithParameters {
-    new (a, b);
+    new (a: string, b: number): any;
 }
 export interface IConstructSignatureWithRestParameters {
-    new (a, ...rests);
+    new (a: string, ...rests: string[]): string;
 }
 export interface IConstructSignatureWithOverloads {
-    new (a);
-    new (a);
+    new (a: string): string;
+    new (a: number): number;
 }
 export interface IConstructSignatureWithTypeParameters<T> {
-    new (a);
+    new (a: T): T;
 }
 export interface IConstructSignatureWithOwnTypeParametes {
-    new <T extends IConstructSignature>(a);
+    new <T extends IConstructSignature>(a: T): T;
 }
 //// [declFileConstructSignatures_1.d.ts]
 interface IGlobalConstructSignature {
-    new ();
+    new (): string;
 }
 interface IGlobalConstructSignatureWithParameters {
-    new (a, b);
+    new (a: string, b: number): any;
 }
 interface IGlobalConstructSignatureWithRestParameters {
-    new (a, ...rests);
+    new (a: string, ...rests: string[]): string;
 }
 interface IGlobalConstructSignatureWithOverloads {
-    new (a);
-    new (a);
+    new (a: string): string;
+    new (a: number): number;
 }
 interface IGlobalConstructSignatureWithTypeParameters<T> {
-    new (a);
+    new (a: T): T;
 }
 interface IGlobalConstructSignatureWithOwnTypeParametes {
-    new <T extends IGlobalConstructSignature>(a);
+    new <T extends IGlobalConstructSignature>(a: T): T;
 }

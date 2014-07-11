@@ -30,4 +30,11 @@ declare module m1 {
     class c {
     }
 }
-declare var d;
+declare var d: {
+    m1: {
+        m: typeof m1;
+    };
+    m2: {
+        c: typeof c;
+    };
+};

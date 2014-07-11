@@ -31,6 +31,6 @@ var MyClass = (function () {
 
 //// [out-flag.d.ts]
 declare class MyClass {
-    Count();
-    SetCount(value);
+    Count(): number;
+    SetCount(value: number): void;
 }

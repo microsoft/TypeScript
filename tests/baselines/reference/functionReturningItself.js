@@ -10,4 +10,4 @@ function somefn() {
 
 
 //// [functionReturningItself.d.ts]
-declare function somefn();
+declare function somefn(): () => typeof somefn;

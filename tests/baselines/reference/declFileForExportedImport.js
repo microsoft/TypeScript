@@ -21,7 +21,7 @@ var z = exports.b.x;
 
 
 //// [declFileForExportedImport_0.d.ts]
-export declare var x;
+export declare var x: number;
 //// [declFileForExportedImport_1.d.ts]
 /// <reference path='declFileForExportedImport_0.d.ts' />
 export import a = require('declFileForExportedImport_0');

@@ -13,5 +13,7 @@ var m1;
 
 //// [stringLiteralObjectLiteralDeclaration1.d.ts]
 declare module m1 {
-    var n;
+    var n: {
+        'foo bar': number;
+    };
 }

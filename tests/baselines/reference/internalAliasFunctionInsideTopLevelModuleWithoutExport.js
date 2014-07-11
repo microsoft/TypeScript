@@ -25,7 +25,7 @@ exports.bVal2 = b;
 
 //// [internalAliasFunctionInsideTopLevelModuleWithoutExport.d.ts]
 export declare module a {
-    function foo(x);
+    function foo(x: number): number;
 }
-export declare var bVal;
-export declare var bVal2;
+export declare var bVal: number;
+export declare var bVal2: (x: number) => number;

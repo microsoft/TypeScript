@@ -23,8 +23,8 @@ var c;
 
 //// [internalAliasVar.d.ts]
 declare module a {
-    var x;
+    var x: number;
 }
 declare module c {
-    var bVal;
+    var bVal: number;
 }

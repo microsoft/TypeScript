@@ -94,19 +94,14 @@ module ts {
         return sourceMapDataList;
     }
 
-    interface TextWriter {
-        write(s: string): void;
+    interface EmitTextWriter extends TextWriter {
         writeLiteral(s: string): void;
-        writeLine(): void;
-        increaseIndent(): void;
-        decreaseIndent(): void;
         getTextPos(): number;
         getLine(): number;
         getColumn(): number;
-        getText(): string;
     }
 
-    function createTextWriter(): TextWriter {
+    function createTextWriter(): EmitTextWriter {
         var output = "";
         var indent = 0;
         var lineStart = true;
@@ -1851,6 +1846,7 @@ module ts {
         var increaseIndent = writer.increaseIndent;
         var decreaseIndent = writer.decreaseIndent;
 
+        var enclosingDeclaration: Node;
         function emitLines(nodes: Node[]) {
             for (var i = 0, n = nodes.length; i < n; i++) {
                 emitNode(nodes[i]);
@@ -1874,6 +1870,7 @@ module ts {
 
         function emitSourceFile(node: SourceFile) {
             currentSourceFile = node;
+            enclosingDeclaration = node;
             emitLines(node.statements);
         }
 
@@ -1969,6 +1966,8 @@ module ts {
                     write(".");
                     emitSourceTextOfNode(node.name);
                 }
+                var prevEnclosingDeclaration = enclosingDeclaration;
+                enclosingDeclaration = node;
                 write(" {");
                 writeLine();
                 increaseIndent();
@@ -1976,6 +1975,7 @@ module ts {
                 decreaseIndent();
                 write("}");
                 writeLine();
+                enclosingDeclaration = prevEnclosingDeclaration;
             }
         }
 
@@ -2010,9 +2010,8 @@ module ts {
                 emitSourceTextOfNode(node.name);
                 if (node.constraint) {
                     write(" extends ");
-                    // TODO(shkamat): emit constraint using type
-                    emitSourceTextOfNode(node.constraint);
-                }
+                    resolver.writeTypeAtLocation(node.constraint, enclosingDeclaration, TypeFormatFlags.None, writer);
+                }   
             }
 
             if (typeParameters) {
@@ -2023,10 +2022,13 @@ module ts {
         }
 
         function emitHeritageClause(typeReferences: TypeReferenceNode[], isImplementsList: boolean) {
+            function emitTypeOfTypeReference(node: Node) {
+                resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.WriteArrayAsGenericType, writer);
+            }
+
             if (typeReferences) {
                 write(isImplementsList ? " implments " : " extends ");
-                // TODO(shkamat): get the symbol name in the scope for this node
-                emitCommaList(typeReferences, emitSourceTextOfNode);
+                emitCommaList(typeReferences, emitTypeOfTypeReference);
             }
         }
 
@@ -2045,6 +2047,8 @@ module ts {
                 emitDeclarationFlags(node);
                 write("class ");
                 emitSourceTextOfNode(node.name);
+                var prevEnclosingDeclaration = enclosingDeclaration;
+                enclosingDeclaration = node;
                 emitTypeParameters(node.typeParameters);
                 if (node.baseType) {
                     emitHeritageClause([node.baseType], /*isImplementsList*/ false);
@@ -2058,6 +2062,7 @@ module ts {
                 decreaseIndent();
                 write("}");
                 writeLine();
+                enclosingDeclaration = prevEnclosingDeclaration;
             }
         }
 
@@ -2066,6 +2071,8 @@ module ts {
                 emitDeclarationFlags(node);
                 write("interface ");
                 emitSourceTextOfNode(node.name);
+                var prevEnclosingDeclaration = enclosingDeclaration;
+                enclosingDeclaration = node;
                 emitTypeParameters(node.typeParameters);
                 emitHeritageClause(node.baseTypes, /*isImplementsList*/ false);
                 write(" {");
@@ -2075,6 +2082,7 @@ module ts {
                 decreaseIndent();
                 write("}");
                 writeLine();
+                enclosingDeclaration = prevEnclosingDeclaration;
             }
         }
 
@@ -2094,7 +2102,8 @@ module ts {
                     write("?");
                 }
                 if (!(node.flags & NodeFlags.Private)) {
-                    // TODO(shkamat): emit type of the node in given scope
+                    write(": ");
+                    resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.None, writer);
                 }
             }
         }
@@ -2116,8 +2125,8 @@ module ts {
                 emitDeclarationFlags(node);
                 emitSourceTextOfNode(node.name);
                 if (!(node.flags & NodeFlags.Private)) {
-                    // TODO(shkamat): emit type of the node in given scope
-                    // If get accessor -> return type of getAccessor otherwise parameter type of setAccessor
+                    write(": ");
+                    resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.None, writer);
                 }
                 write(";");
                 writeLine();
@@ -2134,7 +2143,7 @@ module ts {
                     emitSourceTextOfNode(node.name);
                 }
                 else if (node.kind === SyntaxKind.Constructor) {
-                    write("constructor ");
+                    write("constructor");
                 }
                 else {
                     emitSourceTextOfNode(node.name);
@@ -2170,8 +2179,10 @@ module ts {
                 write(")");
             }
 
-            if (!(node.flags & NodeFlags.Private)) {
-                // TODO(shkamat): emit return type of the signature
+            // If this is not a constructor and is not private, emit the return type
+            if (node.kind !== SyntaxKind.Constructor && !(node.flags & NodeFlags.Private)) {
+                write(": ");
+                resolver.writeReturnTypeOfSignatureDeclaration(node, enclosingDeclaration, TypeFormatFlags.None, writer);
             }
             write(";");
             writeLine();
@@ -2187,7 +2198,8 @@ module ts {
             }
 
             if (!(node.parent.flags & NodeFlags.Private)) {
-                // TODO(shkamat): emitType of the parameter if the method is not private
+                write(": ");
+                resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.None, writer);
             }
         }
 

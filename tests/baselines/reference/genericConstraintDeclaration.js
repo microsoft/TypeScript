@@ -21,5 +21,5 @@ var List = (function () {
 
 //// [genericConstraintDeclaration.d.ts]
 declare class List<T extends {}> {
-    static empty<T extends {}>();
+    static empty<T extends {}>(): List<T>;
 }

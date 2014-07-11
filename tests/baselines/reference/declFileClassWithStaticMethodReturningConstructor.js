@@ -20,5 +20,5 @@ exports.Enhancement = Enhancement;
 
 //// [declFileClassWithStaticMethodReturningConstructor.d.ts]
 export declare class Enhancement {
-    static getType();
+    static getType(): typeof Enhancement;
 }

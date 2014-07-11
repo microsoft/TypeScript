@@ -53,12 +53,12 @@ declare module M {
     interface I1 {
     }
     class D {
-        m1;
-        m2;
-        m23;
-        m24;
-        m232();
-        m242();
-        m26(i);
+        m1: number;
+        m2: string;
+        m23: E;
+        m24: I1;
+        m232(): E;
+        m242(): I1;
+        m26(i: I1): void;
     }
 }

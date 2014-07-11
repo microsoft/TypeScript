@@ -35,4 +35,4 @@ export declare module a {
         Sunday = 2,
     }
 }
-export declare var bVal;
+export declare var bVal: weekend;

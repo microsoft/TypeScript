@@ -25,18 +25,29 @@ var v4;
 
 //// [generics2NoError.d.ts]
 interface A {
-    a;
+    a: string;
 }
 interface B extends A {
-    b;
+    b: string;
 }
 interface C extends B {
-    c;
+    c: string;
 }
 interface G<T, U extends B> {
-    x;
-    y;
+    x: T;
+    y: U;
 }
-declare var v1;
-declare var v2;
-declare var v4;
+declare var v1: {
+    x: {
+        a: string;
+    };
+    y: {
+        a: string;
+        b: string;
+        c: string;
+    };
+};
+declare var v2: G<{
+    a: string;
+}, C>;
+declare var v4: G<G<A, B>, C>;

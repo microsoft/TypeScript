@@ -62,7 +62,25 @@ declare module m1 {
         holiday = 2,
     }
 }
-declare var a;
-declare var b;
-declare var c;
-declare var d;
+declare var a: {
+    c: c;
+};
+declare var b: {
+    c: typeof c;
+    m1: typeof m1;
+};
+declare var c: {
+    m1: typeof m1;
+};
+declare var d: {
+    m: {
+        mod: typeof m1;
+    };
+    mc: {
+        cl: typeof c;
+    };
+    me: {
+        en: typeof e;
+    };
+    mh: e;
+};

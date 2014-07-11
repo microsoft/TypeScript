@@ -590,6 +590,21 @@ module ts {
         getSymbolOfIdentifier(identifier: Identifier): Symbol;
     }
 
+    export interface TextWriter {
+        write(s: string): void;
+        writeLine(): void;
+        increaseIndent(): void;
+        decreaseIndent(): void;
+        getText(): string;
+    }
+
+    export enum TypeFormatFlags {
+        None                        = 0x00000000, 
+
+        /** writes Array<T> instead T[]  */
+        WriteArrayAsGenericType     = 0x00000001,  // Declarations
+    }
+
     export interface EmitResolver {
         getProgram(): Program;
         getModuleObjectName(node: ModuleDeclaration): string;
@@ -603,6 +618,8 @@ module ts {
         shouldEmitDeclarations(): boolean;
         isReferencedInExportAssignment(node: Declaration): boolean;
         isImplementationOfOverload(node: FunctionDeclaration): boolean;
+        writeTypeAtLocation(location: Node, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter): void;
+        writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter): void;
     }
 
     export enum SymbolFlags {

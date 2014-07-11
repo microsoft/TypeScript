@@ -23,9 +23,9 @@ define(["require", "exports"], function (require, exports) {
 export declare module a {
     module b {
         interface I {
-            foo();
+            foo(): any;
         }
     }
 }
 export import b = a.b;
-export declare var x;
+export declare var x: I;

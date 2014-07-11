@@ -11,4 +11,9 @@ var n = { w: null, x: '', y: function () {
 
 
 //// [declFileRegressionTests.d.ts]
-declare var n;
+declare var n: {
+    w: any;
+    x: string;
+    y: () => void;
+    z: number;
+};

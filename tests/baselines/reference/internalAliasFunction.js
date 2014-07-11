@@ -30,9 +30,9 @@ var c;
 
 //// [internalAliasFunction.d.ts]
 declare module a {
-    function foo(x);
+    function foo(x: number): number;
 }
 declare module c {
-    var bVal;
-    var bVal2;
+    var bVal: number;
+    var bVal2: (x: number) => number;
 }

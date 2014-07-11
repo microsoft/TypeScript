@@ -244,17 +244,17 @@ new m7.m8.m9.c();
 
 //// [commentsModules.d.ts]
 declare module m1 {
-    var b;
+    var b: number;
     module m2 {
         class c {
         }
-        var i;
+        var i: c;
     }
-    function fooExport();
-    function foo2Export(a);
-    function foo3Export();
+    function fooExport(): number;
+    function foo2Export(a: string): void;
+    function foo3Export(): void;
 }
-declare var myvar;
+declare var myvar: c;
 declare module m2.m3 {
     class c {
     }

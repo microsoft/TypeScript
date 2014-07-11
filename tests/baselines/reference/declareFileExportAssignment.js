@@ -26,12 +26,16 @@ module.exports = m2;
 //// [declareFileExportAssignment.d.ts]
 declare module m2 {
     interface connectModule {
-        (res, req, next);
+        (res: any, req: any, next: any): void;
     }
     interface connectExport {
-        use;
-        listen;
+        use: (mod: connectModule) => connectExport;
+        listen: (port: number) => void;
     }
 }
-declare var m2;
+declare var m2: {
+    (): connectExport;
+    test1: connectModule;
+    test2(): connectModule;
+};
 export = m2;

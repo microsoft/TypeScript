@@ -21,8 +21,8 @@ exports.x.foo();
 export declare module a {
     module b {
         interface I {
-            foo();
+            foo(): any;
         }
     }
 }
-export declare var x;
+export declare var x: I;

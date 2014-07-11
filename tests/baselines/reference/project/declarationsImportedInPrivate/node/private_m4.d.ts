@@ -1,4 +1,4 @@
 export declare class d {
 }
-export declare var x;
-export declare function foo();
+export declare var x: d;
+export declare function foo(): d;

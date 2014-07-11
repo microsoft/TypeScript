@@ -32,5 +32,5 @@ var MyClass = (function () {
 
 //// [properties.d.ts]
 declare class MyClass {
-    Count;
+    Count: number;
 }

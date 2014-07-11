@@ -8,4 +8,4 @@ var x = function somefn() {
 
 
 //// [functionExpressionReturningItself.d.ts]
-declare var x;
+declare var x: () => typeof somefn;

@@ -1,5 +1,5 @@
 declare module test {
     class ClassA {
-        method();
+        method(): void;
     }
 }

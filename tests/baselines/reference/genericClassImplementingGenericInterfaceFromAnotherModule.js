@@ -25,6 +25,6 @@ declare module foo {
     }
 }
 declare module bar {
-    class Foo<T> implments foo.IFoo<T> {
+    class Foo<T> implments IFoo<T> {
     }
 }

@@ -71,41 +71,41 @@ interface IGlobalCallSignatureWithOwnTypeParametes {
 
 //// [declFileCallSignatures_0.d.ts]
 export interface ICallSignature {
-    ();
+    (): string;
 }
 export interface ICallSignatureWithParameters {
-    (a, b);
+    (a: string, b: number): void;
 }
 export interface ICallSignatureWithRestParameters {
-    (a, ...rests);
+    (a: string, ...rests: string[]): string;
 }
 export interface ICallSignatureWithOverloads {
-    (a);
-    (a);
+    (a: string): string;
+    (a: number): number;
 }
 export interface ICallSignatureWithTypeParameters<T> {
-    (a);
+    (a: T): string;
 }
 export interface ICallSignatureWithOwnTypeParametes {
-    <T extends ICallSignature>(a);
+    <T extends ICallSignature>(a: T): string;
 }
 //// [declFileCallSignatures_1.d.ts]
 interface IGlobalCallSignature {
-    ();
+    (): string;
 }
 interface IGlobalCallSignatureWithParameters {
-    (a, b);
+    (a: string, b: number): void;
 }
 interface IGlobalCallSignatureWithRestParameters {
-    (a, ...rests);
+    (a: string, ...rests: string[]): string;
 }
 interface IGlobalCallSignatureWithOverloads {
-    (a);
-    (a);
+    (a: string): string;
+    (a: number): number;
 }
 interface IGlobalCallSignatureWithTypeParameters<T> {
-    (a);
+    (a: T): string;
 }
 interface IGlobalCallSignatureWithOwnTypeParametes {
-    <T extends IGlobalCallSignature>(a);
+    <T extends IGlobalCallSignature>(a: T): string;
 }

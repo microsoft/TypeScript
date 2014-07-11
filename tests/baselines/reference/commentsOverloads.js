@@ -257,92 +257,92 @@ var c5_i_2 = new c5("hello");
 
 
 //// [commentsOverloads.d.ts]
-declare function f1(a);
-declare function f1(b);
-declare function f2(a);
-declare function f2(b);
-declare function f3(a);
-declare function f3(b);
-declare function f4(a);
-declare function f4(b);
+declare function f1(a: number): number;
+declare function f1(b: string): number;
+declare function f2(a: number): number;
+declare function f2(b: string): number;
+declare function f3(a: number): number;
+declare function f3(b: string): number;
+declare function f4(a: number): number;
+declare function f4(b: string): number;
 interface i1 {
-    (a);
-    (b);
-    foo(a);
-    foo(b);
-    foo(arr);
-    foo(arr);
-    foo2(a);
-    foo2(b);
-    foo3(a);
-    foo3(b);
-    foo4(a);
-    foo4(b);
-    foo4(c);
-    new (a);
-    new (b);
+    (a: number): number;
+    (b: string): number;
+    foo(a: number): number;
+    foo(b: string): number;
+    foo(arr: number[]): number;
+    foo(arr: string[]): number;
+    foo2(a: number): number;
+    foo2(b: string): number;
+    foo3(a: number): number;
+    foo3(b: string): number;
+    foo4(a: number): number;
+    foo4(b: string): number;
+    foo4(c: any): any;
+    new (a: string): any;
+    new (b: number): any;
 }
-declare var i1_i;
+declare var i1_i: i1;
 interface i2 {
-    new (a);
-    new (b);
-    (a);
-    (b);
+    new (a: string): any;
+    new (b: number): any;
+    (a: number): number;
+    (b: string): number;
 }
-declare var i2_i;
+declare var i2_i: i2;
 interface i3 {
-    new (a);
-    new (b);
-    (a);
-    (b);
+    new (a: string): any;
+    new (b: number): any;
+    (a: number): number;
+    (b: string): number;
 }
-declare var i3_i;
+declare var i3_i: i3;
 interface i4 {
-    new (a);
-    new (b);
-    (a);
-    (b);
+    new (a: string): any;
+    new (b: number): any;
+    (a: number): number;
+    (b: string): number;
 }
 declare class c {
-    prop1(a);
-    prop1(b);
-    prop2(a);
-    prop2(b);
-    prop3(a);
-    prop3(b);
-    prop4(a);
-    prop4(b);
-    prop5(a);
-    prop5(b);
+    prop1(a: number): number;
+    prop1(b: string): number;
+    prop2(a: number): number;
+    prop2(b: string): number;
+    prop3(a: number): number;
+    prop3(b: string): number;
+    prop4(a: number): number;
+    prop4(b: string): number;
+    prop5(a: number): number;
+    prop5(b: string): number;
 }
 declare class c1 {
-    constructor (a);
-    constructor (b);
+    constructor(a: number);
+    constructor(b: string);
 }
 declare class c2 {
-    constructor (a);
-    constructor (b);
+    constructor(a: number);
+    constructor(b: string);
 }
 declare class c3 {
-    constructor (a);
-    constructor (b);
+    constructor(a: number);
+    constructor(b: string);
 }
 declare class c4 {
-    constructor (a);
-    constructor (b);
+    constructor(a: number);
+    constructor(b: string);
 }
 declare class c5 {
-    constructor (a);
-    constructor (b);
+    constructor(a: number);
+    constructor(b: string);
 }
-declare var c_i;
-declare var c1_i_1;
-declare var c1_i_2;
-declare var c2_i_1;
-declare var c2_i_2;
-declare var c3_i_1;
-declare var c3_i_2;
-declare var c4_i_1;
-declare var c4_i_2;
-declare var c5_i_1;
-declare var c5_i_2;
+declare var c_i: c;
+declare var c1_i_1: c1;
+declare var c1_i_2: c1;
+declare var c2_i_1: c2;
+declare var c2_i_2: c2;
+declare var c3_i_1: c3;
+declare var c3_i_2: c3;
+declare var c4_i_1: c4;
+declare var c4_i_2: c4;
+declare var c5_i_1: c5;
+declare var c5_i_2: c5;
