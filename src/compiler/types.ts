@@ -601,6 +601,7 @@ module ts {
         getNodeCheckFlags(node: Node): NodeCheckFlags;
         getEnumMemberValue(node: EnumMember): number;
         shouldEmitDeclarations(): boolean;
+        isReferencedInExportAssignment(node: Declaration): boolean;
     }
 
     export enum SymbolFlags {

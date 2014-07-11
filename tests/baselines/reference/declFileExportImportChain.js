@@ -59,6 +59,12 @@ define(["require", "exports"], function (require, exports) {
 
 
 //// [declFileExportImportChain_a.d.ts]
+declare module m1 {
+    module m2 {
+        class c1 {
+        }
+    }
+}
 export = m1;
 //// [declFileExportImportChain_b.d.ts]
 export import a = require("declFileExportImportChain_a");

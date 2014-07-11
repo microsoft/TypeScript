@@ -5706,6 +5706,22 @@ module ts {
             return false;
         }
 
+        function isReferencedInExportAssignment(node: Declaration): boolean {
+            var exportAssignedSymbol = getExportAssignmentSymbol(getSymbolOfNode(node.parent));
+            if (exportAssignedSymbol) {
+                var symbol = getSymbolOfNode(node);
+                if (exportAssignedSymbol === symbol) {
+                    // This symbol was export assigned symbol
+                    return true;
+                }
+
+                // TODO(shkamat): if export assignment is alias, the alias target would make the node as referenced in export assignment 
+                
+            }
+
+            return false;
+        }
+
         function getNodeCheckFlags(node: Node): NodeCheckFlags {
             return getNodeLinks(node).flags;
         }
@@ -5725,7 +5741,8 @@ module ts {
                 getNodeCheckFlags: getNodeCheckFlags,
                 getEnumMemberValue: getEnumMemberValue,
                 isTopLevelValueImportedViaEntityName: isTopLevelValueImportedViaEntityName,
-                shouldEmitDeclarations: shouldEmitDeclarations
+                shouldEmitDeclarations: shouldEmitDeclarations,
+                isReferencedInExportAssignment: isReferencedInExportAssignment
             };
             checkProgram();
             return emitFiles(resolver);

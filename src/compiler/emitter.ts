@@ -1922,16 +1922,13 @@ module ts {
                 return true;
             }
 
-            if (node.parent.kind === SyntaxKind.SourceFile) {
-                // Global context nodes - emit this declaration
-                if (!(node.parent.flags & NodeFlags.ExternalModule)) {
-                    return true;
-                }
+            // If this node is in external module, check if this is export assigned 
+            if (node.parent.flags & NodeFlags.ExternalModule) {
+                return resolver.isReferencedInExportAssignment(node);
             }
 
-            // TODO(shkamat): check if this node is part of export assignment in the external module
-
-            return false;
+            // emit the declaration if this is global source file
+            return node.parent.kind === SyntaxKind.SourceFile;
         }
 
         function emitDeclarationFlags(node: Declaration) {

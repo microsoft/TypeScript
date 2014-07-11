@@ -24,4 +24,13 @@ module.exports = m2;
 
 
 //// [declareFileExportAssignment.d.ts]
+declare module m2 {
+    interface connectModule {
+        (res, req, next);
+    }
+    interface connectExport {
+        use;
+        listen;
+    }
+}
 export = m2;
