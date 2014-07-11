@@ -617,9 +617,9 @@ module ts {
         function writeTypeToTextWriter(type: Type, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter) {
             // TODO(shkamat): usage of enclosingDeclaration
             var typeStack: Type[];
-            return writeType(type);
+            return writeType(type, /*allowFunctionOrConstructorTypeLiteral*/ true);
 
-            function writeType(type: Type) {
+            function writeType(type: Type, allowFunctionOrConstructorTypeLiteral: boolean) {
                 if (type.flags & TypeFlags.Intrinsic) {
                     writer.write((<IntrinsicType>type).intrinsicName);
                 }
@@ -630,7 +630,7 @@ module ts {
                     writer.write(symbolToString(type.symbol));
                 }
                 else if (type.flags & TypeFlags.Anonymous) {
-                    writeAnonymousType(<ObjectType>type);
+                    writeAnonymousType(<ObjectType>type, allowFunctionOrConstructorTypeLiteral);
                 }
                 else if (type.flags & TypeFlags.StringLiteral) {
                     writer.write((<StringLiteralType>type).text);
@@ -643,7 +643,9 @@ module ts {
 
             function writeTypeReference(type: TypeReference) {
                 if (type.target === globalArrayType && !(flags & TypeFormatFlags.WriteArrayAsGenericType)) {
-                    writeType(type.typeArguments[0]);
+                    // If we are writing array element type the arrow style signatures are not allowed as 
+                    // we need to surround it by curlies, eg. { (): T; }[]; as () => T[] would mean something different
+                    writeType(type.typeArguments[0], /*allowFunctionOrConstructorTypeLiteral*/ false);
                     writer.write("[]");
                 }
                 else {
@@ -653,18 +655,19 @@ module ts {
                         if (i > 0) {
                             writer.write(", ");
                         }
-                        writeType(type.typeArguments[i]);
+                        writeType(type.typeArguments[i], /*allowFunctionOrConstructorTypeLiteral*/ true);
                     }
                     writer.write(">");
                 }
             }
 
-            function writeAnonymousType(type: ObjectType) {
+            function writeAnonymousType(type: ObjectType, allowFunctionOrConstructorTypeLiteral: boolean) {
                 // Always use 'typeof T' for type of class, enum, and module objects
                 if (type.symbol && type.symbol.flags & (SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.ValueModule)) {
                     writeTypeofSymbol(type);
                 }
                 // Use 'typeof T' for types of functions and methods that circularly reference themselves
+                // TODO(shkamat): correct the usuage of typeof function - always on functions that are visible
                 else if (type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && typeStack && contains(typeStack, type)) {
                     writeTypeofSymbol(type);
                 }
@@ -673,7 +676,7 @@ module ts {
                         typeStack = [];
                     }
                     typeStack.push(type);
-                    writeLiteralType(type);
+                    writeLiteralType(type, allowFunctionOrConstructorTypeLiteral);
                     typeStack.pop();
                 }
             }
@@ -683,21 +686,24 @@ module ts {
                 writer.write(symbolToString(type.symbol));
             }
 
-            function writeLiteralType(type: ObjectType) {
+            function writeLiteralType(type: ObjectType, allowFunctionOrConstructorTypeLiteral: boolean) {
                 var resolved = resolveObjectTypeMembers(type);
                 if (!resolved.properties.length && !resolved.stringIndexType && !resolved.numberIndexType) {
                     if (!resolved.callSignatures.length && !resolved.constructSignatures.length) {
                         writer.write("{}");
                         return;
                     }
-                    if (resolved.callSignatures.length === 1 && !resolved.constructSignatures.length) {
-                        writeSignature(resolved.callSignatures[0], /*arrowStyle*/ true);
-                        return;
-                    }
-                    if (resolved.constructSignatures.length === 1 && !resolved.callSignatures.length) {
-                        writer.write("new ");
-                        writeSignature(resolved.constructSignatures[0], /*arrowStyle*/ true);
-                        return;
+
+                    if (allowFunctionOrConstructorTypeLiteral) {
+                        if (resolved.callSignatures.length === 1 && !resolved.constructSignatures.length) {
+                            writeSignature(resolved.callSignatures[0], /*arrowStyle*/ true);
+                            return;
+                        }
+                        if (resolved.constructSignatures.length === 1 && !resolved.callSignatures.length) {
+                            writer.write("new ");
+                            writeSignature(resolved.constructSignatures[0], /*arrowStyle*/ true);
+                            return;
+                        }
                     }
                 }
 
@@ -717,13 +723,13 @@ module ts {
                 }
                 if (resolved.stringIndexType) {
                     writer.write("[x: string]: ");
-                    writeType(resolved.stringIndexType);
+                    writeType(resolved.stringIndexType, /*allowFunctionOrConstructorTypeLiteral*/ true);
                     writer.write(";");
                     writer.writeLine();
                 }
                 if (resolved.numberIndexType) {
                     writer.write("[x: number]: ");
-                    writeType(resolved.numberIndexType);
+                    writeType(resolved.numberIndexType, /*allowFunctionOrConstructorTypeLiteral*/ true);
                     writer.write(";");
                     writer.writeLine();
                 }
@@ -748,7 +754,7 @@ module ts {
                             writer.write("?");
                         }
                         writer.write(": ");
-                        writeType(t);
+                        writeType(t, /*allowFunctionOrConstructorTypeLiteral*/ true);
                         writer.write(";");
                         writer.writeLine();
                     }
@@ -769,7 +775,7 @@ module ts {
                         var constraint = getConstraintOfTypeParameter(tp);
                         if (constraint) {
                             writer.write(" extends ");
-                            writeType(constraint);
+                            writeType(constraint, /*allowFunctionOrConstructorTypeLiteral*/ true);
                         }
                     }
                     writer.write(">");
@@ -788,10 +794,10 @@ module ts {
                         writer.write("?");
                     }
                     writer.write(": ");
-                    writeType(getTypeOfSymbol(p));
+                    writeType(getTypeOfSymbol(p), /*allowFunctionOrConstructorTypeLiteral*/ true);
                 }
                 writer.write(arrowStyle ? ") => " : "): ");
-                writeType(getReturnTypeOfSignature(signature));
+                writeType(getReturnTypeOfSignature(signature), /*allowFunctionOrConstructorTypeLiteral*/ true);
             }
         }
 

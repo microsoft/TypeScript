@@ -11,4 +11,6 @@ function foo(args) {
 
 
 //// [functionDeclarationWithArgumentOfTypeFunctionTypeArray.d.ts]
-declare function foo(args: (x: any) => number[]): number;
+declare function foo(args: {
+    (x: any): number;
+}[]): number;
