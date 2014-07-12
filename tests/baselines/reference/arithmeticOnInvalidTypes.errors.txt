@@ -1,0 +1,21 @@
+==== tests/cases/compiler/arithmeticOnInvalidTypes.ts (7 errors) ====
+    var x: Number;
+    var y: Number;
+    var z = x + y;
+            ~~~~~
+!!! Operator '+' cannot be applied to types 'Number' and 'Number'.
+    var z2 = x - y;
+             ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                 ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var z3 = x * y;
+             ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                 ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var z4 = x / y;
+             ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                 ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.

@@ -1,0 +1,28 @@
+==== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts (2 errors) ====
+    class C {
+        y: number;
+        constructor(y: number) { } // ok
+    }
+    
+    var c: C;
+    var r = c.y;
+    
+    class D {
+        y: number;
+        constructor(public y: number) { } // error
+                           ~
+!!! Duplicate identifier 'y'.
+    }
+    
+    var d: D;
+    var r2 = d.y;
+    
+    class E {
+        y: number;
+        constructor(private y: number) { } // error
+                            ~
+!!! Duplicate identifier 'y'.
+    }
+    
+    var e: E;
+    var r3 = e.y; // error

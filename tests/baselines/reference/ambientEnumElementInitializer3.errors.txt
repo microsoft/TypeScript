@@ -1,0 +1,6 @@
+==== tests/cases/compiler/ambientEnumElementInitializer3.ts (1 errors) ====
+    declare enum E {
+     e = 3.3 // Decimal
+     ~
+!!! Ambient enum elements can only have integer literal initializers.
+    }

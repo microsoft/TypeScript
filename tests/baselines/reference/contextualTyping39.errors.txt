@@ -1,0 +1,4 @@
+==== tests/cases/compiler/contextualTyping39.ts (1 errors) ====
+    var foo = <{ (): number; }> function() { return "err"; };
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Neither type '() => number' nor type '() => string' is assignable to the other.

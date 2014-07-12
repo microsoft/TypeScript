@@ -1,0 +1,64 @@
+==== tests/cases/compiler/optionalPropertiesSyntax.ts (14 errors) ====
+    interface fnSigs {
+        //functions signatures can be optional
+        fn(): void;
+        fn?(): void; //err
+        ~~
+!!! Overload signatures must all be optional or required.
+        fn2?(): void;
+    }
+    
+    interface callSig {
+        //Call signatures can't be optional
+        (): any;
+        ()?: any; //err
+          ~
+!!! ';' expected.
+           ~
+!!! Property or signature expected.
+        ?(): any; //err
+        ~
+!!! Property or signature expected.
+    }
+    
+    interface constructSig {
+        //Construct signatures can't be optional
+        new (): any;
+        new ()?: any; //err
+              ~
+!!! ';' expected.
+               ~
+!!! Property or signature expected.
+        new ?(): any; //err
+    }
+    
+    interface propertySig {
+        //Property signatures can be optional
+        prop: any;
+        prop?: any;
+        ~~~~
+!!! Duplicate identifier 'prop'.
+        prop2?: any;
+    }
+    
+    interface indexSig {
+        //Index signatures can't be optional
+        [idx: number]: any;
+        [idx: number]?: any; //err
+                     ~
+!!! ';' expected.
+                      ~
+!!! Property or signature expected.
+        ~~~~~~~~~~~~~
+!!! Duplicate number index signature.
+        ? [idx: number]: any; //err
+        ~
+!!! Property or signature expected.
+          ~~~~~~~~~~~~~~~~~~~
+!!! Duplicate number index signature.
+        [idx?: number]: any; //err
+         ~~~
+!!! An index signature parameter cannot have a question mark.
+        ~~~~~~~~~~~~~~~~~~~~
+!!! Duplicate number index signature.
+    }

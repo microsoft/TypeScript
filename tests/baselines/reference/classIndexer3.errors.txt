@@ -1,0 +1,13 @@
+==== tests/cases/compiler/classIndexer3.ts (1 errors) ====
+    class C123 {
+        [s: string]: number;
+        constructor() {
+        }
+    }
+    
+    class D123 extends C123 {
+        x: number;
+        y: string;
+        ~~~~~~~~~~
+!!! Property 'y' of type 'string' is not assignable to string index type 'number'.
+    }

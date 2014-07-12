@@ -1,0 +1,19 @@
+==== tests/cases/conformance/types/members/objectTypeWithConstructSignatureHidingMembersOfFunctionAssignmentCompat.ts (2 errors) ====
+    interface I {
+        new(): any;
+    }
+    
+    var i: I;
+    var f: Object;
+    f = i;
+    i = f;
+    ~
+!!! Type 'Object' is not assignable to type 'I'.
+    
+    var a: {
+        new(): any
+    }
+    f = a;
+    a = f;
+    ~
+!!! Type 'Object' is not assignable to type 'new () => any'.

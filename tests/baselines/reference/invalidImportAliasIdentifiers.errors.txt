@@ -1,0 +1,33 @@
+==== tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts (4 errors) ====
+    // none of these should work, since non are actually modules
+    
+    var V = 12;
+    
+    import v = V;
+    ~~~~~~~~~~~~~
+!!! Cannot find name 'V'.
+    
+    class C {
+        name: string;
+    }
+    
+    import c = C;
+    ~~~~~~~~~~~~~
+!!! Cannot find name 'C'.
+    
+    enum E {
+        Red, Blue
+    }
+    
+    import e = E;
+    ~~~~~~~~~~~~~
+!!! Cannot find name 'E'.
+    
+    interface I {
+        id: number;
+    }
+    
+    import i = I;
+    ~~~~~~~~~~~~~
+!!! Cannot find name 'I'.
+    

@@ -1,0 +1,6 @@
+==== tests/cases/conformance/parser/ecmascript5/parserObjectCreationArrayLiteral1.ts (2 errors) ====
+    new Foo[];
+           ~~
+!!! 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+        ~~~
+!!! Cannot find name 'Foo'.

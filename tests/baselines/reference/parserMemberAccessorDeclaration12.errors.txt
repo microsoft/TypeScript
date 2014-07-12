@@ -1,0 +1,8 @@
+==== tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration12.ts (2 errors) ====
+    class C {
+       get Foo(a: number) { }
+           ~~~
+!!! A 'get' accessor cannot have parameters.
+           ~~~
+!!! Getters must return a value.
+    }

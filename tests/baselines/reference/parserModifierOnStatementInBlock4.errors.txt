@@ -1,0 +1,13 @@
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserModifierOnStatementInBlock4.ts (3 errors) ====
+    {
+       export function bar() {
+       ~~~~~~
+!!! Statement expected.
+       ~~~~~~~~~~~~~~~~~~~~~~~
+       }
+    ~~~~
+!!! Cannot compile external modules unless the '--module' flag is provided.
+    }
+    ~
+!!! Declaration or statement expected.
+    

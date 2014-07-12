@@ -1,0 +1,40 @@
+==== tests/cases/compiler/fuzzy.ts (3 errors) ====
+    module M {
+        export interface I {
+            works:()=>R;
+            alsoWorks:()=>R;
+            doesntWork:()=>R;
+        }
+    
+        export interface R {
+            anything:number;
+            oneI:I;
+        }
+    
+        export class C implements I {
+                     ~
+!!! Class 'C' incorrectly implements interface 'I':
+!!!   Property 'alsoWorks' is missing in type 'C'.
+            constructor(public x:number) {
+            }
+            works():R {
+                return <R>({ anything: 1 });
+            }
+    
+            doesntWork():R {
+                return { anything:1, oneI:this };
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type '{ anything: number; oneI: C; }' is not assignable to type 'R':
+!!!   Types of property 'oneI' are incompatible:
+!!!     Type 'C' is not assignable to type 'I'.
+            }
+    
+            worksToo():R {
+                return <R>({ oneI: this });
+                       ~~~~~~~~~~~~~~~~~~~
+!!! Neither type 'R' nor type '{ oneI: C; }' is assignable to the other.
+            }
+        }
+    }
+    
+    

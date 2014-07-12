@@ -1,0 +1,26 @@
+==== tests/cases/compiler/lastPropertyInLiteralWins.ts (3 errors) ====
+    interface Thing {
+        thunk: (str: string) => void;
+    }
+    function test(thing: Thing) {
+        thing.thunk("str");
+    }
+    test({ // Should error, as last one wins, and is wrong type
+        thunk: (str: string) => {},
+        thunk: (num: number) => {}
+        ~~~~~
+!!! Duplicate identifier 'thunk'.
+    });
+    
+    test({ // Should be OK.  Last 'thunk' is of correct type
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        thunk: (num: number) => {},
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        thunk: (str: string) => {}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~
+!!! Duplicate identifier 'thunk'.
+    });
+    ~~
+!!! Supplied parameters do not match any signature of call target.
+    

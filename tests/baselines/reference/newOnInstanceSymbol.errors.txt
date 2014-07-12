@@ -1,0 +1,6 @@
+==== tests/cases/compiler/newOnInstanceSymbol.ts (1 errors) ====
+    class C {}
+    var x = new C(); // should be ok
+    new x(); // should error
+    ~~~~~~~
+!!! Cannot use 'new' with an expression whose type lacks a call or construct signature.

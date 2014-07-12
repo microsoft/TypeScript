@@ -1,0 +1,10 @@
+==== tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression2.ts (4 errors) ====
+    href.match(/:\/\/(.[^/]+)/)[1];
+                          ~
+!!! ',' expected.
+                            ~
+!!! Expression expected.
+                              ~
+!!! Expression expected.
+    ~~~~
+!!! Cannot find name 'href'.

@@ -1,0 +1,30 @@
+==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints3.ts (7 errors) ====
+    // checking whether other types are subtypes of type parameters with constraints
+    
+    function f<T extends U, U, V>(t: T, u: U, v: V) {
+               ~~~~~~~~~~~
+!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        // ok
+        var r = true ? t : u;
+                ~~~~~~~~~~~~
+!!! No best common type exists between 'T' and 'U'.
+        var r = true ? u : t;
+                ~~~~~~~~~~~~
+!!! No best common type exists between 'U' and 'T'.
+    
+        // error
+        var r2 = true ? t : v;
+                 ~~~~~~~~~~~~
+!!! No best common type exists between 'T' and 'V'.
+        var r2 = true ? v : t;
+                 ~~~~~~~~~~~~
+!!! No best common type exists between 'V' and 'T'.
+    
+        // error
+        var r3 = true ? v : u;
+                 ~~~~~~~~~~~~
+!!! No best common type exists between 'V' and 'U'.
+        var r3 = true ? u : v;
+                 ~~~~~~~~~~~~
+!!! No best common type exists between 'U' and 'V'.
+    }

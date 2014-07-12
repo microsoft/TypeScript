@@ -1,0 +1,13 @@
+==== tests/cases/compiler/typeParametersShouldNotBeEqual.ts (2 errors) ====
+    function ff<T, U>(x: T, y: U) {
+        var z: Object;
+        x = x;  // Ok
+        x = y;  // Error
+        ~
+!!! Type 'U' is not assignable to type 'T'.
+        x = z;  // Error
+        ~
+!!! Type 'Object' is not assignable to type 'T'.
+        z = x;  // Ok
+    }
+    

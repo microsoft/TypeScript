@@ -1,0 +1,31 @@
+==== tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateNonGenericTypeWithTypeArguments.ts (6 errors) ====
+    // it is an error to provide type arguments to a non-generic call
+    // all of these are errors
+    
+    class C {
+        x: string;
+    }
+    
+    var c = new C<number>();
+            ~~~~~~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+    
+    function Foo(): void { }
+    var r = new Foo<number>();
+            ~~~~~~~~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+            ~~~~~~~~~~~~~~~~~
+!!! Only a void function can be called with the 'new' keyword.
+    
+    var f: { (): void };
+    var r2 = new f<number>();
+             ~~~~~~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+             ~~~~~~~~~~~~~~~
+!!! Only a void function can be called with the 'new' keyword.
+    
+    var a: any;
+    // BUG 790977
+    var r2 = new a<number>();
+             ~~~~~~~~~~~~~~~
+!!! Untyped function calls may not accept type arguments.

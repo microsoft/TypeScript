@@ -1,0 +1,25 @@
+==== tests/cases/compiler/superCallsInConstructor.ts (2 errors) ====
+    class C {
+        foo() {}
+        bar() {}
+    }
+    
+    class Base {
+        x: string;
+    }
+     
+    class Derived extends Base {
+        constructor() {
+            with(new C()) {
+                foo();
+                ~~~
+!!! Cannot find name 'foo'.
+                super();
+                bar();
+                ~~~
+!!! Cannot find name 'bar'.
+            }
+    
+            try {} catch(e) { super(); }
+        }
+    }

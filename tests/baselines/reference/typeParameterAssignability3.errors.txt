@@ -1,0 +1,34 @@
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts (4 errors) ====
+    // type parameters are not assignable to one another unless directly or indirectly constrained to one another
+    
+    class Foo { foo: string; }
+    
+    function foo<T extends Foo, U extends Foo>(t: T, u: U) {
+        var a: T;
+        var b: U;
+        t = a; // ok
+        a = t; // ok
+    
+        b = u; // ok
+        u = b; // ok
+    
+        t = u; // error
+        ~
+!!! Type 'U' is not assignable to type 'T'.
+        u = t; // error
+        ~
+!!! Type 'T' is not assignable to type 'U'.
+    }
+    
+    class C<T extends Foo, U extends Foo> {
+        t: T;
+        u: U;
+        r = () => {
+            this.t = this.u; // error
+            ~~~~~~
+!!! Type 'U' is not assignable to type 'T'.
+            this.u = this.t; // error
+            ~~~~~~
+!!! Type 'T' is not assignable to type 'U'.
+        }
+    }

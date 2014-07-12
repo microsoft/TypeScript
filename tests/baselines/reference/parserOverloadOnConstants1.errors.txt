@@ -1,0 +1,15 @@
+==== tests/cases/conformance/parser/ecmascript5/parserOverloadOnConstants1.ts (4 errors) ====
+    interface Document {
+        createElement(tagName: string): HTMLElement;
+                                        ~~~~~~~~~~~
+!!! Cannot find name 'HTMLElement'.
+        createElement(tagName: 'canvas'): HTMLCanvasElement;
+                                          ~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'HTMLCanvasElement'.
+        createElement(tagName: 'div'): HTMLDivElement;
+                                       ~~~~~~~~~~~~~~
+!!! Cannot find name 'HTMLDivElement'.
+        createElement(tagName: 'span'): HTMLSpanElement;
+                                        ~~~~~~~~~~~~~~~
+!!! Cannot find name 'HTMLSpanElement'.
+    }

@@ -1,0 +1,18 @@
+==== tests/cases/conformance/expressions/commaOperator/commaOperatorOtherInvalidOperation.ts (2 errors) ====
+    //Expect to have compiler errors
+    //Comma operator in fuction arguments and return
+    function foo(x: number, y: string) {
+        return x, y;
+    }
+    var resultIsString: number = foo(1, "123"); //error here
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type 'string' is not assignable to type 'number'.
+    
+    //TypeParameters
+    function foo1<T1, T2>() {
+        var x: T1;
+        var y: T2;
+        var result: T1 = (x, y); //error here
+            ~~~~~~~~~~~~~~~~~~~
+!!! Type 'T2' is not assignable to type 'T1'.
+    }

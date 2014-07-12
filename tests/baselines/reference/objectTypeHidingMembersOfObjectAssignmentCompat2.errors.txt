@@ -1,0 +1,47 @@
+==== tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat2.ts (5 errors) ====
+    interface I {
+        toString(): number;
+    }
+    
+    var i: I;
+    var o: Object;
+    o = i; // error
+    ~
+!!! Type 'I' is not assignable to type 'Object':
+!!!   Types of property 'toString' are incompatible:
+!!!     Type '() => number' is not assignable to type '() => string':
+!!!       Type 'number' is not assignable to type 'string'.
+    i = o; // error
+    ~
+!!! Type 'Object' is not assignable to type 'I':
+!!!   Types of property 'toString' are incompatible:
+!!!     Type '() => string' is not assignable to type '() => number':
+!!!       Type 'string' is not assignable to type 'number'.
+    
+    class C {
+        toString(): number { return 1; }
+    }
+    var c: C;
+    o = c; // error
+    ~
+!!! Type 'C' is not assignable to type 'Object':
+!!!   Types of property 'toString' are incompatible:
+!!!     Type '() => number' is not assignable to type '() => string':
+!!!       Type 'number' is not assignable to type 'string'.
+    c = o; // error
+    ~
+!!! Type 'Object' is not assignable to type 'C':
+!!!   Types of property 'toString' are incompatible:
+!!!     Type '() => string' is not assignable to type '() => number':
+!!!       Type 'string' is not assignable to type 'number'.
+    
+    var a = {
+        toString: () => { }
+    }
+    o = a; // error
+    ~
+!!! Type '{ toString: () => void; }' is not assignable to type 'Object':
+!!!   Types of property 'toString' are incompatible:
+!!!     Type '() => void' is not assignable to type '() => string':
+!!!       Type 'void' is not assignable to type 'string'.
+    a = o; // ok

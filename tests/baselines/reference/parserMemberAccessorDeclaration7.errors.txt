@@ -1,0 +1,8 @@
+==== tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration7.ts (2 errors) ====
+    class C {
+        public public get Foo() { }
+               ~~~~~~
+!!! Accessibility modifier already seen.
+                          ~~~
+!!! Getters must return a value.
+    }

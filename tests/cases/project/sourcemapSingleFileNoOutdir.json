@@ -1,0 +1,10 @@
+{
+    "scenario": "[Sourcemap]: outputdir_singleFile: no outdir",
+    "projectRoot": "tests/cases/projects/outputdir_singleFile",
+    "inputFiles": [
+        "test.ts"
+    ],
+    "sourceMap": true,
+    "declaration": true,
+    "baselineCheck": true
+}

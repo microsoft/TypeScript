@@ -1,0 +1,6 @@
+==== tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclaration2.ts (1 errors) ====
+    class C {
+        static static Foo() { }
+               ~~~~~~
+!!! 'static' modifier already seen.
+    }

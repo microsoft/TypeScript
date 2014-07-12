@@ -1,0 +1,14 @@
+==== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration25.ts (2 errors) ====
+    interface IList<T> {
+        data(): T;
+        next(): string;
+    }
+    class List<U> implements IList<U> {
+        data(): U;
+        ~~~~~~~~~~
+!!! Function implementation expected.
+        next(): string;
+        ~~~~~~~~~~~~~~~
+!!! Function implementation expected.
+    }
+    

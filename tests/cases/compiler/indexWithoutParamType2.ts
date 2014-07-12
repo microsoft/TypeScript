@@ -1,0 +1,3 @@
+class C {
+    [x]: string
+}

@@ -1,0 +1,64 @@
+==== tests/cases/conformance/externalModules/foo1.ts (3 errors) ====
+    var x = 10;
+    var y = 20;
+    export = x;
+    ~~~~~~~~~~~
+!!! Cannot compile external modules unless the '--module' flag is provided.
+    ~~~~~~~~~~~
+!!! A module cannot have more than one export assignment.
+    export = y;
+    ~~~~~~~~~~~
+!!! A module cannot have more than one export assignment.
+    
+==== tests/cases/conformance/externalModules/foo2.ts (2 errors) ====
+    var x = 10;
+    class y {};
+    export = x;
+    ~~~~~~~~~~~
+!!! A module cannot have more than one export assignment.
+    export = y;
+    ~~~~~~~~~~~
+!!! A module cannot have more than one export assignment.
+    
+==== tests/cases/conformance/externalModules/foo3.ts (2 errors) ====
+    module x {
+    	export var x = 10;
+    }
+    class y {
+    	y: number;
+    }
+    export = x;
+    ~~~~~~~~~~~
+!!! A module cannot have more than one export assignment.
+    export = y;
+    ~~~~~~~~~~~
+!!! A module cannot have more than one export assignment.
+    
+==== tests/cases/conformance/externalModules/foo4.ts (2 errors) ====
+    export = x;
+    ~~~~~~~~~~~
+!!! A module cannot have more than one export assignment.
+    function x(){
+    	return 42;
+    }
+    function y(){
+    	return 42;
+    }
+    export = y;
+    ~~~~~~~~~~~
+!!! A module cannot have more than one export assignment.
+    
+==== tests/cases/conformance/externalModules/foo5.ts (3 errors) ====
+    var x = 5;
+    var y = "test";
+    var z = {};
+    export = x;
+    ~~~~~~~~~~~
+!!! A module cannot have more than one export assignment.
+    export = y;
+    ~~~~~~~~~~~
+!!! A module cannot have more than one export assignment.
+    export = z;
+    ~~~~~~~~~~~
+!!! A module cannot have more than one export assignment.
+    

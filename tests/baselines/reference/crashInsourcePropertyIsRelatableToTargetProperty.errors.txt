@@ -1,0 +1,16 @@
+==== tests/cases/compiler/crashInsourcePropertyIsRelatableToTargetProperty.ts (2 errors) ====
+    class C {
+        private x = 1;
+    }
+    class D extends C { }
+    function foo(x: "hi", items: string[]): typeof foo;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Specialized overload signature is not assignable to any non-specialized signature.
+    function foo(x: string, items: string[]): typeof foo {
+        return null;
+    }
+    var a: D = foo("hi", []);
+        ~~~~~~~~~~~~~~~~~~~~
+!!! Type '(x: "hi", items: string[]) => typeof foo' is not assignable to type 'D':
+!!!   Property 'x' is missing in type '(x: "hi", items: string[]) => typeof foo'.
+    

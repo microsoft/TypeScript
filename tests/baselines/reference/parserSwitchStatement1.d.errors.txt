@@ -1,0 +1,7 @@
+==== tests/cases/conformance/parser/ecmascript5/Statements/parserSwitchStatement1.d.ts (2 errors) ====
+    switch (foo) {
+    ~~~~~~
+!!! Statements are not allowed in ambient contexts.
+            ~~~
+!!! Cannot find name 'foo'.
+    }

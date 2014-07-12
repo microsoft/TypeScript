@@ -1,0 +1,25 @@
+==== tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts (7 errors) ====
+    var v = <T>() => 1;
+    var v = <T>a;
+             ~
+!!! Cannot find name 'T'.
+    
+    var v = <T>(a) => 1;
+        ~
+!!! Subsequent variable declarations must have the same type.  Variable 'v' must be of type '<T>() => number', but here has type '<T>(a: any) => number'.
+    var v = <T>(a, b) => 1;
+        ~
+!!! Subsequent variable declarations must have the same type.  Variable 'v' must be of type '<T>() => number', but here has type '<T>(a: any, b: any) => number'.
+    var v = <T>(a = 1, b = 2) => 1;
+        ~
+!!! Subsequent variable declarations must have the same type.  Variable 'v' must be of type '<T>() => number', but here has type '<T>(a?: number, b?: number) => number'.
+    
+    var v = <T>(a);
+             ~
+!!! Cannot find name 'T'.
+    var v = <T>(a, b);
+             ~
+!!! Cannot find name 'T'.
+    var v = <T>(a = 1, b = 2);
+             ~
+!!! Cannot find name 'T'.

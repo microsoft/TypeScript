@@ -1,0 +1,11 @@
+==== tests/cases/compiler/functionCall9.ts (2 errors) ====
+    function foo(a?:string, b?:number){};
+    foo('foo', 1); 
+    foo('foo'); 
+    foo('foo','bar');
+    ~~~~~~~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+    foo('foo', 1, 'bar');
+    ~~~~~~~~~~~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+    foo();

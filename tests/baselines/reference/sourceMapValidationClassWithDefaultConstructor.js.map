@@ -1,0 +1,2 @@
+//// [sourceMapValidationClassWithDefaultConstructor.js.map]
+{"version":3,"file":"sourceMapValidationClassWithDefaultConstructor.js","sourceRoot":"","sources":["sourceMapValidationClassWithDefaultConstructor.ts"],"names":["Greeter","Greeter.constructor"],"mappings":"AAAA,IAAM,OAAO;IAAbA,SAAMA,OAAOA;QACFC,MAACA,GAAGA,EAAEA,CAACA;QACPA,UAAKA,GAAGA,KAAKA,CAACA;IACzBA,CAACA;IAADD,cAACA;AAADA,CAACA,AAHD,IAGC"}

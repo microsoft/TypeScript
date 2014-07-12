@@ -1,0 +1,41 @@
+==== tests/cases/conformance/types/primitives/null/validNullAssignments.ts (5 errors) ====
+    var a: number = null;
+    var b: boolean = null;
+    var c: string = null;
+    var d: void = null;
+    
+    var e: typeof undefined = null;
+    e = null; // ok
+    
+    enum E { A }
+    E.A = null; // error
+    ~~~
+!!! Invalid left-hand side of assignment expression.
+    
+    class C { foo: string }
+    var f: C;
+    f = null; // ok
+    C = null; // error
+    ~
+!!! Invalid left-hand side of assignment expression.
+    
+    interface I { foo: string }
+    var g: I;
+    g = null; // ok
+    I = null; // error
+    ~
+!!! Cannot find name 'I'.
+    
+    module M { export var x = 1; }
+    M = null; // error
+    ~
+!!! Invalid left-hand side of assignment expression.
+    
+    var h: { f(): void } = null;
+    
+    function i<T>(a: T) {
+        a = null;
+    }
+    i = null; // error
+    ~
+!!! Invalid left-hand side of assignment expression.

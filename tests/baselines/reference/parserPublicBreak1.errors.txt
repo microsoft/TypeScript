@@ -1,0 +1,5 @@
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserPublicBreak1.ts (1 errors) ====
+    public break;
+    ~~~~~~
+!!! Declaration or statement expected.
+    

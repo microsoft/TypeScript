@@ -1,0 +1,11 @@
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ExtendsOrImplementsClauses/parserErrorRecovery_ExtendsOrImplementsClause3.ts (4 errors) ====
+    class C extends implements A {
+                               ~
+!!! '{' expected.
+                                 ~
+!!! ';' expected.
+                    ~~~~~~~~~~
+!!! Cannot find name 'implements'.
+                               ~
+!!! Cannot find name 'A'.
+    }

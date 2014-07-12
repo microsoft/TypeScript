@@ -1,0 +1,9 @@
+==== tests/cases/compiler/extendGenericArray.ts (1 errors) ====
+    interface Array<T> {
+        foo(): T;
+    }
+    
+    var arr: string[] = [];
+    var x: number = arr.foo();
+        ~~~~~~~~~~~~~~~~~~~~~
+!!! Type 'string' is not assignable to type 'number'.

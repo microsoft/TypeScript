@@ -1,0 +1,22 @@
+==== tests/cases/compiler/validRegexp.ts (9 errors) ====
+    var x = / [a - z /]$ / i;
+                      ~
+!!! ',' expected.
+                         ~
+!!! '=' expected.
+                           ~
+!!! Cannot find name 'i'.
+    var x1 = /[a-z/]$/i;
+                   ~
+!!! ',' expected.
+                     ~
+!!! '=' expected.
+                      ~
+!!! Cannot find name 'i'.
+    var x2 = /[a-z/]$ /i;
+                   ~
+!!! ',' expected.
+                      ~
+!!! '=' expected.
+                       ~
+!!! Cannot find name 'i'.

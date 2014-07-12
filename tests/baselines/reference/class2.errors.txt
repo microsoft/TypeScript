@@ -1,0 +1,6 @@
+==== tests/cases/compiler/class2.ts (2 errors) ====
+    class foo { constructor() { static f = 3; } }
+                                ~~~~~~
+!!! Statement expected.
+                                                ~
+!!! Declaration or statement expected.

@@ -1,0 +1,80 @@
+==== tests/cases/compiler/indexTypeCheck.ts (8 errors) ====
+    interface Red {
+    	[n:number]; // ok
+    	~~~~~~~~~~
+!!! An index signature must have a type annotation.
+    	[s:string]; // ok
+    	~~~~~~~~~~
+!!! An index signature must have a type annotation.
+    }
+    
+    interface Blue {
+    	[n:number]: any; // ok
+    	[s:string]: any; // ok
+    }
+    
+    interface Yellow {
+    	[n:number]: Red; // ok
+    	[s:string]: Red; // ok
+    }
+    
+    interface Orange {
+    	[n:number]: number; // ok
+    	~~~~~~~~~~~~~~~~~~~
+!!! Numeric index type 'number' is not assignable to string index type 'string'.
+    	[s:string]: string; // error
+    }
+    
+    interface Green {
+    	[n:number]: Orange; // error
+    	~~~~~~~~~~~~~~~~~~~
+!!! Numeric index type 'Orange' is not assignable to string index type 'Yellow'.
+    	[s:string]: Yellow; // ok
+    }
+    
+    interface Cyan {
+    	[n:number]: number; // error
+    	~~~~~~~~~~~~~~~~~~~
+!!! Numeric index type 'number' is not assignable to string index type 'string'.
+    	[s:string]: string; // ok
+    }
+    
+    interface Purple {
+    	[n:number, s:string]; // error
+    	 ~
+!!! An index signature must have exactly one parameter.
+    }
+    
+    interface Magenta {
+    	[p:Purple]; // error
+    	 ~
+!!! An index signature parameter type must be 'string' or 'number'.
+    }
+    
+    var yellow: Yellow;
+    var blue: Blue;
+    var s = "some string";
+    
+    yellow[5]; // ok
+    yellow["hue"]; // ok
+    yellow[<any>{}]; // ok
+    
+    s[0]; // error
+    s["s"]; // ok
+    s[<any>{}]; // ok
+    
+    yellow[blue]; // error
+    ~~~~~~~~~~~~
+!!! An index expression argument must be of type 'string', 'number', or 'any'.
+    
+    var x:number[];
+    x[0];
+    
+    class Benchmark {
+    
+        public results: { [x:string]: any; } = <{ [x:string]: any; }>{};
+    
+        public addTimingFor(name: string, timing: number) {
+            this.results[name] = this.results[name];
+        }
+    }

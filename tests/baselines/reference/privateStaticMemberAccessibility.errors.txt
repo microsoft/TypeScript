@@ -1,0 +1,13 @@
+==== tests/cases/conformance/classes/members/accessibility/privateStaticMemberAccessibility.ts (2 errors) ====
+    class Base {
+        private static foo: string;
+    }
+    
+    class Derived extends Base {
+        static bar = Base.foo; // error
+                     ~~~~~~~~
+!!! Property 'Base.foo' is inaccessible.
+        bing = () => Base.foo; // error
+                     ~~~~~~~~
+!!! Property 'Base.foo' is inaccessible.
+    }

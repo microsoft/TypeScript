@@ -1,0 +1,11 @@
+==== tests/cases/compiler/errorSupression1.ts (1 errors) ====
+    
+    class Foo { static bar() { return "x"; } }
+    
+    var baz = Foo.b;
+                  ~
+!!! Property 'b' does not exist on type 'typeof Foo'.
+      // Foo.b won't bind. 
+    baz.concat("y");
+    
+      // So we don't want an error on 'concat'.

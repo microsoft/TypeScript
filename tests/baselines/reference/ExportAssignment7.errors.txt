@@ -1,0 +1,12 @@
+==== tests/cases/compiler/ExportAssignment7.ts (3 errors) ====
+    export class C {
+    ~~~~~~~~~~~~~~~~
+    }
+    ~
+!!! Cannot compile external modules unless the '--module' flag is provided.
+    
+    export = B;
+    ~~~~~~~~~~~
+!!! An export assignment cannot be used in a module with other exported elements.
+    ~~~~~~~~~~~
+!!! Cannot find name 'B'.

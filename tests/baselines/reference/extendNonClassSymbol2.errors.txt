@@ -1,0 +1,8 @@
+==== tests/cases/compiler/extendNonClassSymbol2.ts (1 errors) ====
+    function Foo() {
+       this.x = 1;
+    }
+    var x = new Foo(); // legal, considered a constructor function
+    class C extends Foo {} // error, could not find symbol Foo
+                    ~~~
+!!! Cannot find name 'Foo'.

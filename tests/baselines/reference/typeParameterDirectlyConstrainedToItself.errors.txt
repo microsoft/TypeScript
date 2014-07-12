@@ -1,0 +1,39 @@
+==== tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterDirectlyConstrainedToItself.ts (10 errors) ====
+    // all of the below should be errors
+    
+    class C<T extends T> { } 
+            ~~~~~~~~~~~
+!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+    class C2<T, U extends U> { } 
+                ~~~~~~~~~~~
+!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+    
+    interface I<T extends T> { }
+                ~~~~~~~~~~~
+!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+    interface I2<T, U extends U> { }
+                    ~~~~~~~~~~~
+!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+    
+    function f<T extends T>() { }
+               ~~~~~~~~~~~
+!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+    function f2<T, U extends U>() { }
+                   ~~~~~~~~~~~
+!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+    
+    var a: {
+        <T extends T>(): void;
+         ~~~~~~~~~~~
+!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        <T, U extends U>(): void;
+            ~~~~~~~~~~~
+!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+    }
+    
+    var b = <T extends T>() => { }
+             ~~~~~~~~~~~
+!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+    var b2 = <T, U extends U>() => { }
+                 ~~~~~~~~~~~
+!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.

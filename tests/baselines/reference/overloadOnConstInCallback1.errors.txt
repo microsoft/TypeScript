@@ -1,0 +1,12 @@
+==== tests/cases/compiler/overloadOnConstInCallback1.ts (1 errors) ====
+    class C {
+        x1(a: number, callback: (x: 'hi') => number); // error
+                                ~~~~~~~~~~~~~~~~~~~
+!!! Specialized overload signature is not assignable to any non-specialized signature.
+        x1(a: number, callback: (x: any) => number) {
+            callback('hi');
+            callback('bye');
+            var hm = "hm";
+            callback(hm);
+        }
+    }

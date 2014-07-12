@@ -1,0 +1,8 @@
+==== tests/cases/compiler/numericIndexerConstraint1.ts (1 errors) ====
+    class Foo { foo() { } }
+    var x: { [index: string]: number; };
+    var result: Foo = x["one"]; // error
+        ~~~~~~~~~~~~~~~~~~~~~~
+!!! Type 'number' is not assignable to type 'Foo':
+!!!   Property 'foo' is missing in type 'Number'.
+    

@@ -1,0 +1,11 @@
+==== tests/cases/compiler/overridingPrivateStaticMembers.ts (1 errors) ====
+    class Base2 {
+        private static y: { foo: string };
+    }
+     
+    class Derived2 extends Base2 {
+          ~~~~~~~~
+!!! Class static side 'typeof Derived2' incorrectly extends base class static side 'typeof Base2':
+!!!   Private property 'y' cannot be reimplemented.
+        private static y: { foo: string; bar: string; };
+    }

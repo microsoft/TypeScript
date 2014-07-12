@@ -1,0 +1,9 @@
+==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser585151.ts (2 errors) ====
+    class Foo2 {
+      var icecream = "chocolate";
+      ~~~
+!!! Unexpected token. A constructor, method, accessor, or property was expected.
+    }
+    ~
+!!! Declaration or statement expected.
+    

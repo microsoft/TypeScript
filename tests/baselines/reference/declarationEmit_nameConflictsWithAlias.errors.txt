@@ -1,0 +1,10 @@
+==== tests/cases/compiler/declarationEmit_nameConflictsWithAlias.ts (1 errors) ====
+    // Bug 887180
+    export module C { export interface I { } }
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Cannot compile external modules unless the '--module' flag is provided.
+    export import v = C;
+    export module M {
+        export module C { export interface I { } }
+        export var w: v.I; // Gets emitted as C.I, which is the wrong interface
+    }

@@ -1,0 +1,11 @@
+==== tests/cases/compiler/overloadsInDifferentContainersDisagreeOnAmbient.ts (1 errors) ====
+    declare module M {
+        // Error because body is not ambient and this overload is
+        export function f();
+    }
+    
+    module M {
+        export function f() { }
+                        ~
+!!! Overload signatures must all be ambient or non-ambient.
+    }

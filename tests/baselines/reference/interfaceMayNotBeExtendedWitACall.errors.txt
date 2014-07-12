@@ -1,0 +1,11 @@
+==== tests/cases/compiler/interfaceMayNotBeExtendedWitACall.ts (2 errors) ====
+    interface color {}
+    
+    interface blue extends color() { // error
+                                ~
+!!! ',' expected.
+                                   ~
+!!! '=>' expected.
+    
+    }
+    

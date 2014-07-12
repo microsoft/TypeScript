@@ -1,0 +1,20 @@
+==== tests/cases/conformance/classes/indexMemberDeclarations/publicIndexer.ts (3 errors) ====
+    // public indexers not allowed
+    
+    class C {
+        public [x: string]: string;
+        ~~~~~~
+!!! Modifiers not permitted on index signature members.
+    }
+    
+    class D {
+        public [x: number]: string;
+        ~~~~~~
+!!! Modifiers not permitted on index signature members.
+    }
+    
+    class E<T> {
+        public [x: string]: T;
+        ~~~~~~
+!!! Modifiers not permitted on index signature members.
+    }

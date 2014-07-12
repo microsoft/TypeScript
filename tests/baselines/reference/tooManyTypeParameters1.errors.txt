@@ -1,0 +1,20 @@
+==== tests/cases/compiler/tooManyTypeParameters1.ts (4 errors) ====
+    function f<T>() { }
+    f<string, string>();
+    ~~~~~~~~~~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+    
+    var x = <T>() => {};
+    x<number,number>();
+    ~~~~~~~~~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+    
+    class C<T> {}
+    var c = new C<Date,Date>();
+            ~~~~~~~~~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+    
+    interface I<T> {}
+    var i: I<number,number>;
+           ~~~~~~~~~~~~~~~~
+!!! Generic type 'I<T>' requires 1 type argument(s).

@@ -1,0 +1,7 @@
+==== tests/cases/compiler/callOnClass.ts (1 errors) ====
+    class C { }
+    var c = C();
+            ~~~
+!!! Value of type 'typeof C' is not callable. Did you mean to include 'new'?
+     
+    

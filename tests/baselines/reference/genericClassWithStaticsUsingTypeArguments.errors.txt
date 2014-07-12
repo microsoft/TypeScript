@@ -1,0 +1,32 @@
+==== tests/cases/compiler/genericClassWithStaticsUsingTypeArguments.ts (7 errors) ====
+    // Should be error to use 'T' in all declarations within Foo.
+    class Foo<T> {
+        static a = (n: T) => { };
+                       ~
+!!! Static members cannot reference class type parameters.
+    
+        static b: T;
+                  ~
+!!! Static members cannot reference class type parameters.
+    
+        static c: T[] = [];
+                  ~
+!!! Static members cannot reference class type parameters.
+    
+        static d = false || ((x: T) => x || undefined)(null)
+                                 ~
+!!! Static members cannot reference class type parameters.
+    
+        static e = function (x: T) { return null; }
+                                ~
+!!! Static members cannot reference class type parameters.
+    
+        static f(xs: T[]): T[] {
+                     ~
+!!! Static members cannot reference class type parameters.
+                           ~
+!!! Static members cannot reference class type parameters.
+            return xs.reverse();
+        }
+    }
+    

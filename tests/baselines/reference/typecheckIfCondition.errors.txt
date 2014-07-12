@@ -1,0 +1,12 @@
+==== tests/cases/compiler/typecheckIfCondition.ts (2 errors) ====
+    // both uses of module should be an undefined symbol
+    function myWrapper()
+    {
+        if (!module.exports) module.exports = "";
+             ~~~~~~
+!!! Cannot find name 'module'.
+                             ~~~~~~
+!!! Cannot find name 'module'.
+        var x = null; // don't want to baseline output
+    }
+    

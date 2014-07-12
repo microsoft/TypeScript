@@ -1,0 +1,14 @@
+==== tests/cases/compiler/typeArgumentsOnFunctionsWithNoTypeParameters.ts (3 errors) ====
+    function foo<T, U>(f: (v: T) => U) {
+       var r1 = f<number>(1);
+                ~~~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+       var r2 = f(1);
+                ~~~~
+!!! Supplied parameters do not match any signature of call target.
+       var r3 = f<any>(null);
+                ~~~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+       var r4 = f(null);
+    }
+    

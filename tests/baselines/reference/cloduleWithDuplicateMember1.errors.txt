@@ -1,0 +1,26 @@
+==== tests/cases/compiler/cloduleWithDuplicateMember1.ts (5 errors) ====
+    class C {
+        get x() { return 1; }
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+        static get x() {
+                   ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            return '';
+        }
+        static foo() { }
+    }
+    
+    module C {
+        export var x = 1;
+                   ~
+!!! Duplicate identifier 'x'.
+    }
+    module C {
+        export function foo() { }
+                        ~~~
+!!! Duplicate identifier 'foo'.
+        export function x() { }
+                        ~
+!!! Duplicate identifier 'x'.
+    }

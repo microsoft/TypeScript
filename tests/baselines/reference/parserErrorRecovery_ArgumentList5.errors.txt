@@ -1,0 +1,11 @@
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList5.ts (3 errors) ====
+    function foo() {
+       bar(a,)
+            ~
+!!! Trailing comma not allowed.
+       ~~~
+!!! Cannot find name 'bar'.
+           ~
+!!! Cannot find name 'a'.
+       return;
+    }

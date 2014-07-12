@@ -1,0 +1,27 @@
+==== tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts (9 errors) ====
+    foo(): Bar { }
+         ~
+!!! ';' expected.
+               ~
+!!! ';' expected.
+    ~~~
+!!! Cannot find name 'foo'.
+           ~~~
+!!! Cannot find name 'Bar'.
+    function Foo      () #   { }
+                         
+!!! Invalid character.
+    ~~~~~~~~~~~~~~~~~~~~
+!!! Function implementation expected.
+    4+:5
+      ~
+!!! Expression expected.
+    module M {
+    function a(
+        : T) { }
+        ~
+!!! Parameter declaration expected.
+    }
+    var x       =
+                 
+!!! Expression expected.

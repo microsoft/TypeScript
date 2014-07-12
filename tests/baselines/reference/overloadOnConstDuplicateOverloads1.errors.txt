@@ -1,0 +1,15 @@
+==== tests/cases/compiler/overloadOnConstDuplicateOverloads1.ts (2 errors) ====
+    function foo(a: 'hi', x: string);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Specialized overload signature is not assignable to any non-specialized signature.
+    function foo(a: 'hi', x: string);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Specialized overload signature is not assignable to any non-specialized signature.
+    function foo(a: any, x: any) {
+    }
+    
+    function foo2(a: 'hi', x: string);
+    function foo2(a: 'hi', x: string);
+    function foo2(a: string, x: string);
+    function foo2(a: any, x: any) {
+    }

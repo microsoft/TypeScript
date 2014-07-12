@@ -1,0 +1,8 @@
+==== tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens11.ts (3 errors) ====
+    ; \ \ \ 
+      
+!!! Invalid character.
+        
+!!! Invalid character.
+          
+!!! Invalid character.

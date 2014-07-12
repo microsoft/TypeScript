@@ -1,0 +1,8 @@
+==== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofTypeParameter.ts (1 errors) ====
+    function f<T>(x: T): T {
+        var a: typeof x;
+        var y: typeof T;
+                      ~
+!!! Cannot find name 'T'.
+        return a;
+    }

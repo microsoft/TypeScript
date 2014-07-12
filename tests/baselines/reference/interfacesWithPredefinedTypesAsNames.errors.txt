@@ -1,0 +1,16 @@
+==== tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts (5 errors) ====
+    interface any { }
+              ~~~
+!!! Interface name cannot be 'any'
+    interface number { }
+              ~~~~~~
+!!! Interface name cannot be 'number'
+    interface string { }
+              ~~~~~~
+!!! Interface name cannot be 'string'
+    interface boolean { }
+              ~~~~~~~
+!!! Interface name cannot be 'boolean'
+    interface void {}
+              ~~~~
+!!! Identifier expected.

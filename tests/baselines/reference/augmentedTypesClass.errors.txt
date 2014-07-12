@@ -1,0 +1,12 @@
+==== tests/cases/compiler/augmentedTypesClass.ts (2 errors) ====
+    //// class then var
+    class c1 { public foo() { } }
+    var c1 = 1; // error
+        ~~
+!!! Duplicate identifier 'c1'.
+    
+    //// class then enum
+    class c4 { public foo() { } }
+    enum c4 { One } // error
+         ~~
+!!! Duplicate identifier 'c4'.

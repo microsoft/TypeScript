@@ -1,0 +1,27 @@
+==== tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts (9 errors) ====
+    var x1: typeof {};
+                   ~
+!!! Identifier expected.
+    var x2: typeof (): void;
+                   ~
+!!! Identifier expected.
+                           ~
+!!! '=>' expected.
+    var x3: typeof 1;
+                   ~
+!!! Identifier expected.
+    var x4: typeof '';
+                   ~~
+!!! Identifier expected.
+    var x5: typeof [];
+                   ~
+!!! Identifier expected.
+    var x6: typeof null;
+                   ~~~~
+!!! Identifier expected.
+    var x7: typeof function f() { };
+                   ~~~~~~~~
+!!! Identifier expected.
+    var x8: typeof /123/;
+                   ~
+!!! Identifier expected.

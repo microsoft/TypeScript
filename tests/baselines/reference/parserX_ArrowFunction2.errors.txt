@@ -1,0 +1,8 @@
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrowFunctions/parserX_ArrowFunction2.ts (2 errors) ====
+    var v = (a: b,) => {
+                 ~
+!!! Trailing comma not allowed.
+                ~
+!!! Cannot find name 'b'.
+       
+    };

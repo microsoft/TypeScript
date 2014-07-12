@@ -1,0 +1,40 @@
+==== tests/cases/conformance/internalModules/moduleBody/invalidModuleWithVarStatements.ts (6 errors) ====
+    // All of these should be an error
+    
+    module Y {
+        public var x: number = 0;
+        ~~~~~~
+!!! 'public' modifier cannot appear on a module element.
+    }
+    
+    module Y2 {
+        public function fn(x: string) { }
+        ~~~~~~
+!!! 'public' modifier cannot appear on a module element.
+    }
+    
+    module Y4 {
+        static var x: number = 0;
+        ~~~~~~
+!!! 'static' modifier cannot appear on a module element.
+    }
+    
+    module YY {
+        static function fn(x: string) { }
+        ~~~~~~
+!!! 'static' modifier cannot appear on a module element.
+    }
+    
+    module YY2 {
+        private var x: number = 0;
+        ~~~~~~~
+!!! 'private' modifier cannot appear on a module element.
+    }
+    
+    
+    module YY3 {
+        private function fn(x: string) { }
+        ~~~~~~~
+!!! 'private' modifier cannot appear on a module element.
+    }
+    

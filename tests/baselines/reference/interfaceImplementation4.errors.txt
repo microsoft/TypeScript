@@ -1,0 +1,17 @@
+==== tests/cases/compiler/interfaceImplementation4.ts (1 errors) ====
+    interface I1 {
+        iObj:{ };
+        iNum:number;
+        iAny:any;
+        iFn():void;
+    }
+    
+    class C5 implements I1 {
+          ~~
+!!! Class 'C5' incorrectly implements interface 'I1':
+!!!   Property 'iObj' is missing in type 'C5'.
+        public iNum:number;
+        public iAny:any;
+        public iFn() { }
+    }
+    

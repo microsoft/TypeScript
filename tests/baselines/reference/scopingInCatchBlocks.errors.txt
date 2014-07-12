@@ -1,0 +1,13 @@
+==== tests/cases/compiler/scopingInCatchBlocks.ts (1 errors) ====
+    try { } catch(ex1) { 
+    	throw ex1;
+    }
+    
+    try { } catch(ex1) { } // should not error
+    
+    try { } catch(ex1) { } // should not error
+    
+    var x = ex1; // should error
+            ~~~
+!!! Cannot find name 'ex1'.
+    

@@ -1,0 +1,54 @@
+==== tests/cases/conformance/enums/enumErrors.ts (11 errors) ====
+    // Enum named with PredefinedTypes
+    enum any { }
+         ~~~
+!!! Enum name cannot be 'any'
+    enum number { }
+         ~~~~~~
+!!! Enum name cannot be 'number'
+    enum string { }
+         ~~~~~~
+!!! Enum name cannot be 'string'
+    enum boolean { }
+         ~~~~~~~
+!!! Enum name cannot be 'boolean'
+    
+    // Enum with computed member initializer of type Number
+    enum E5 {
+        C = new Number(30)
+            ~~~~~~~~~~~~~~
+!!! Type 'Number' is not assignable to type 'E5'.
+    }
+    
+    enum E9 {
+        A,
+        B = A
+    }
+    
+    //Enum with computed member intializer of different enum type
+    // Bug 707850: This should be allowed
+    enum E10 {
+        A = E9.A,
+            ~~~~
+!!! Type 'E9' is not assignable to type 'E10'.
+        B = E9.B
+            ~~~~
+!!! Type 'E9' is not assignable to type 'E10'.
+    }
+    
+    // Enum with computed member intializer of other types
+    enum E11 {
+        A = '',
+            ~~
+!!! Type 'string' is not assignable to type 'E11'.
+        B = new Date(),
+            ~~~~~~~~~~
+!!! Type 'Date' is not assignable to type 'E11'.
+        C = window,
+            ~~~~~~
+!!! Cannot find name 'window'.
+        D = {}
+            ~~
+!!! Type '{}' is not assignable to type 'E11'.
+    }
+    

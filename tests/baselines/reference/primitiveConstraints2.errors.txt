@@ -1,0 +1,14 @@
+==== tests/cases/compiler/primitiveConstraints2.ts (2 errors) ====
+    class C<T> {
+       public bar2<U extends T>(x: T, y: U): T {
+          return null;
+         }
+    }
+     
+    var x = new C<number>();
+    x.bar2(2, ""); // should error
+    ~~~~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+    x.bar2<string>(2, ""); // should error
+           ~~~~~~
+!!! Type 'string' does not satisfy the constraint 'number'.

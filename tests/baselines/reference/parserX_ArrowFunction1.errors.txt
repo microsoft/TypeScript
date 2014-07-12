@@ -1,0 +1,12 @@
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrowFunctions/parserX_ArrowFunction1.ts (4 errors) ====
+    var v = (a: ) => {
+              ~
+!!! ')' expected.
+                ~
+!!! Variable declaration expected.
+                  ~~
+!!! ';' expected.
+             ~
+!!! Cannot find name 'a'.
+       
+    };

@@ -1,0 +1,53 @@
+==== tests/cases/compiler/collisionSuperAndLocalVarInAccessors.ts (10 errors) ====
+    var _super = 10; // No Error
+    class Foo {
+        get prop1(): number {
+            ~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            var _super = 10; // No error
+            return 10;
+        }
+        set prop1(val: number) {
+            ~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            var _super = 10; // No error
+        }
+    }
+    class b extends Foo {
+        get prop2(): number {
+            ~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            var _super = 10; // Should be error
+                ~~~~~~~~~~~
+!!! Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+            return 10;
+        }
+        set prop2(val: number) {
+            ~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            var _super = 10; // Should be error
+                ~~~~~~~~~~~
+!!! Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+        }
+    }
+    class c extends Foo {
+        get prop2(): number {
+            ~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            var x = () => {
+                var _super = 10; // Should be error
+                    ~~~~~~~~~~~
+!!! Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+            }
+            return 10;
+        }
+        set prop2(val: number) {
+            ~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            var x = () => {
+                var _super = 10; // Should be error
+                    ~~~~~~~~~~~
+!!! Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+            }
+        }
+    }

@@ -1,0 +1,17 @@
+==== tests/cases/conformance/classes/classDeclarations/classAndInterfaceWithSameName.ts (2 errors) ====
+    class C { foo: string; }
+    interface C { foo: string; } // error
+              ~
+!!! Duplicate identifier 'C'.
+    
+    module M {
+        class D {
+            bar: string;
+        }
+    
+        interface D { // error
+                  ~
+!!! Duplicate identifier 'D'.
+            bar: string;
+        }
+    }

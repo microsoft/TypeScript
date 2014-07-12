@@ -1,0 +1,13 @@
+==== tests/cases/compiler/interfaceNaming1.ts (4 errors) ====
+    interface { }
+              ~
+!!! ';' expected.
+    ~~~~~~~~~
+!!! Cannot find name 'interface'.
+    interface interface{ }
+    interface & { }
+    ~~~~~~~~~
+!!! Cannot find name 'interface'.
+                ~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    

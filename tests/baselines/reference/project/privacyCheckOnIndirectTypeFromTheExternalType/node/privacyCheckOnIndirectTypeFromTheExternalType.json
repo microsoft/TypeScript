@@ -1,0 +1,18 @@
+{
+    "scenario": "privacy Check on indirect type from the external type",
+    "projectRoot": "tests/cases/projects/privacyCheck-IndirectReference",
+    "inputFiles": [
+        "test.ts"
+    ],
+    "resolvedInputFiles": [
+        "test.ts",
+        "externalModule.ts",
+        "indirectExternalModule.ts",
+        "lib.d.ts"
+    ],
+    "emittedFiles": [
+        "indirectExternalModule.js",
+        "externalModule.js",
+        "test.js"
+    ]
+}

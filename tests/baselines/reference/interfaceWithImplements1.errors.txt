@@ -1,0 +1,15 @@
+==== tests/cases/compiler/interfaceWithImplements1.ts (5 errors) ====
+    interface IFoo { }
+    
+    interface IBar implements IFoo {
+                   ~~~~~~~~~~
+!!! '{' expected.
+                              ~~~~
+!!! ';' expected.
+                                   ~
+!!! ';' expected.
+                   ~~~~~~~~~~
+!!! Cannot find name 'implements'.
+                              ~~~~
+!!! Cannot find name 'IFoo'.
+    }

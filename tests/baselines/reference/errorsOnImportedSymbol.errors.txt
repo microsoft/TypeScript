@@ -1,0 +1,18 @@
+==== tests/cases/compiler/errorsOnImportedSymbol_1.ts (2 errors) ====
+    import Sammy = require("errorsOnImportedSymbol_0");
+    var x = new Sammy.Sammy();
+                ~~~~~
+!!! Cannot find name 'Sammy'.
+    var y = Sammy.Sammy(); 
+            ~~~~~
+!!! Cannot find name 'Sammy'.
+    
+    
+==== tests/cases/compiler/errorsOnImportedSymbol_0.ts (0 errors) ====
+    
+    interface Sammy {
+        new (): any;
+        (): number;
+    }
+    export = Sammy;
+    

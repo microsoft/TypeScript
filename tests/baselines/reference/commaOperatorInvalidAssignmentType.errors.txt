@@ -1,0 +1,31 @@
+==== tests/cases/conformance/expressions/commaOperator/commaOperatorInvalidAssignmentType.ts (6 errors) ====
+    var BOOLEAN: boolean;
+    var NUMBER: number;
+    var STRING: string;
+    
+    var resultIsBoolean: boolean
+    var resultIsNumber: number
+    var resultIsString: string
+    
+    //Expect errors when the results type is different form the second operand
+    resultIsBoolean = (BOOLEAN, STRING);
+    ~~~~~~~~~~~~~~~
+!!! Type 'string' is not assignable to type 'boolean'.
+    resultIsBoolean = (BOOLEAN, NUMBER);
+    ~~~~~~~~~~~~~~~
+!!! Type 'number' is not assignable to type 'boolean'.
+    
+    resultIsNumber = (NUMBER, BOOLEAN);
+    ~~~~~~~~~~~~~~
+!!! Type 'boolean' is not assignable to type 'number'.
+    resultIsNumber = (NUMBER, STRING);
+    ~~~~~~~~~~~~~~
+!!! Type 'string' is not assignable to type 'number'.
+    
+    resultIsString = (STRING, BOOLEAN);
+    ~~~~~~~~~~~~~~
+!!! Type 'boolean' is not assignable to type 'string'.
+    resultIsString = (STRING, NUMBER);
+    ~~~~~~~~~~~~~~
+!!! Type 'number' is not assignable to type 'string'.
+    

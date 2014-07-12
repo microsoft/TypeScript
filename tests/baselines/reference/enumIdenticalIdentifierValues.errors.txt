@@ -1,0 +1,7 @@
+==== tests/cases/compiler/enumIdenticalIdentifierValues.ts (1 errors) ====
+    enum Enum {
+        1,
+        1.0
+        ~~~
+!!! Duplicate identifier '1.0'.
+    }

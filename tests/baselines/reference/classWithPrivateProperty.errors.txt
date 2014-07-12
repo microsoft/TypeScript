@@ -1,0 +1,39 @@
+==== tests/cases/conformance/types/members/classWithPrivateProperty.ts (8 errors) ====
+    // accessing any private outside the class is an error
+    
+    class C {
+        private x;
+        private a = '';
+        private b: string = '';
+        private c() { return '' }
+        private d = () => '';
+        private static e;
+        private static f() { return '' }
+        private static g = () => '';
+    }
+    
+    var c = new C();
+    var r1: string = c.x;
+                     ~~~
+!!! Property 'C.x' is inaccessible.
+    var r2: string = c.a;
+                     ~~~
+!!! Property 'C.a' is inaccessible.
+    var r3: string = c.b;
+                     ~~~
+!!! Property 'C.b' is inaccessible.
+    var r4: string = c.c();
+                     ~~~
+!!! Property 'C.c' is inaccessible.
+    var r5: string = c.d();
+                     ~~~
+!!! Property 'C.d' is inaccessible.
+    var r6: string = C.e;
+                     ~~~
+!!! Property 'C.e' is inaccessible.
+    var r7: string = C.f();
+                     ~~~
+!!! Property 'C.f' is inaccessible.
+    var r8: string = C.g();
+                     ~~~
+!!! Property 'C.g' is inaccessible.

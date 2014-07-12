@@ -1,0 +1,384 @@
+==== tests/cases/compiler/expr.ts (69 errors) ====
+    interface I {
+    }
+    
+    enum E {
+        Red, Green, Blue
+    }
+    
+    function f() {
+        var a;
+        var n=3;
+        var s="";
+        var b=false;
+        var i:I;
+        var e:E;
+    
+        n&&a;
+        n&&s;
+        n&&b;
+        n&&i;
+        n&&n;
+        n&&e;
+    
+        s&&a;
+        s&&n;
+        s&&b;
+        s&&i;
+        s&&s;
+        s&&e;
+    
+        a&&n;
+        a&&s;
+        a&&b;
+        a&&i;
+        a&&a;
+        a&&e;
+    
+        i&&n;
+        i&&s;
+        i&&b;
+        i&&a;
+        i&&i;
+        i&&e;
+    
+        e&&n;
+        e&&s;
+        e&&b;
+        e&&a;
+        e&&i;
+        e&&e;
+    
+        n||a;
+        n||s;
+        n||b;
+        n||i;
+        n||n;
+        n||e;
+    
+        s||a;
+        s||n;
+        s||b;
+        s||i;
+        s||s;
+        s||e;
+    
+        a||n;
+        a||s;
+        a||b;
+        a||i;
+        a||a;
+        a||e;
+    
+        i||n;
+        i||s;
+        i||b;
+        i||a;
+        i||i;
+        i||e;
+    
+        e||n;
+        e||s;
+        e||b;
+        e||a;
+        e||i;
+        e||e;
+    
+        n==a;
+        n==s;
+        ~~~~
+!!! Operator '==' cannot be applied to types 'number' and 'string'.
+        n==b;
+        ~~~~
+!!! Operator '==' cannot be applied to types 'number' and 'boolean'.
+        n==i;
+        n==n;
+        n==e;
+    
+        s==a;
+        s==n;
+        ~~~~
+!!! Operator '==' cannot be applied to types 'string' and 'number'.
+        s==b;
+        ~~~~
+!!! Operator '==' cannot be applied to types 'string' and 'boolean'.
+        s==i;
+        s==s;
+        s==e;
+        ~~~~
+!!! Operator '==' cannot be applied to types 'string' and 'E'.
+    
+        a==n;
+        a==s;
+        a==b;
+        a==i;
+        a==a;
+        a==e;
+    
+        i==n;
+        i==s;
+        i==b;
+        i==a;
+        i==i;
+        i==e;
+    
+        e==n;
+        e==s;
+        ~~~~
+!!! Operator '==' cannot be applied to types 'E' and 'string'.
+        e==b;
+        ~~~~
+!!! Operator '==' cannot be applied to types 'E' and 'boolean'.
+        e==a;
+        e==i;
+        e==e;
+    
+        +i;
+        +s;
+        +n;
+        +a;
+        +b;
+    
+        -i;
+        -s;
+        -n;
+        -a;
+        -b;
+    
+        !i;
+        !s;
+        !n;
+        !a;
+        !b;
+    
+    
+        n+a;
+        n+s;
+        n+b;
+        ~~~
+!!! Operator '+' cannot be applied to types 'number' and 'boolean'.
+        n+i;
+        ~~~
+!!! Operator '+' cannot be applied to types 'number' and 'I'.
+        n+n;
+        n+e;
+    
+        s+a;
+        s+n;
+        s+b;
+        s+i;
+        s+s;
+        s+e;
+    
+        a+n;
+        a+s;
+        a+b;
+        a+i;
+        a+a;
+        a+e;
+    
+        i+n;
+        ~~~
+!!! Operator '+' cannot be applied to types 'I' and 'number'.
+        i+s;
+        i+b;
+        ~~~
+!!! Operator '+' cannot be applied to types 'I' and 'boolean'.
+        i+a;
+        i+i;
+        ~~~
+!!! Operator '+' cannot be applied to types 'I' and 'I'.
+        i+e;
+        ~~~
+!!! Operator '+' cannot be applied to types 'I' and 'E'.
+    
+        e+n;
+        e+s;
+        e+b;
+        ~~~
+!!! Operator '+' cannot be applied to types 'E' and 'boolean'.
+        e+a;
+        e+i;
+        ~~~
+!!! Operator '+' cannot be applied to types 'E' and 'I'.
+        e+e;
+    
+        n^a;
+        n^s;
+          ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        n^b;
+          ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        n^i;
+          ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        n^n;
+        n^e;
+    
+        s^a;
+        ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        s^n;
+        ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        s^b;
+        ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+          ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        s^i;
+        ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+          ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        s^s;
+        ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+          ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        s^e;
+        ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    
+        a^n;
+        a^s;
+          ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        a^b;
+          ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        a^i;
+          ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        a^a;
+        a^e;
+    
+        i^n;
+        ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        i^s;
+        ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+          ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        i^b;
+        ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+          ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        i^a;
+        ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        i^i;
+        ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+          ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        i^e;
+        ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    
+        e^n;
+        e^s;
+          ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        e^b;
+          ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        e^a;
+        e^i;
+          ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        e^e;
+    
+        n-a;
+        n-s;
+          ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        n-b;
+          ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        n-i;
+          ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        n-n;
+        n-e;
+    
+        s-a;
+        ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        s-n;
+        ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        s-b;
+        ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+          ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        s-i;
+        ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+          ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        s-s;
+        ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+          ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        s-e;
+        ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    
+        a-n;
+        a-s;
+          ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        a-b;
+          ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        a-i;
+          ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        a-a;
+        a-e;
+    
+        i-n;
+        ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        i-s;
+        ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+          ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        i-b;
+        ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+          ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        i-a;
+        ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        i-i;
+        ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+          ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        i-e;
+        ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    
+        e-n;
+        e-s;
+          ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        e-b;
+          ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        e-a;
+        e-i;
+          ~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+        e-e;
+    
+    }

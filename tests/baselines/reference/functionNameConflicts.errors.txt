@@ -1,0 +1,40 @@
+==== tests/cases/conformance/functions/functionNameConflicts.ts (6 errors) ====
+    //Function and variable of the same name in same declaration space
+    //Function overload with different name from implementation signature 
+    
+    module M {
+        function fn1() { }
+        var fn1;
+            ~~~
+!!! Duplicate identifier 'fn1'.
+    
+        var fn2;
+        function fn2() { }
+                 ~~~
+!!! Duplicate identifier 'fn2'.
+    }
+    
+    function fn3() { }
+    var fn3;
+        ~~~
+!!! Duplicate identifier 'fn3'.
+    
+    function func() {
+        var fn4;
+        function fn4() { }
+                 ~~~
+!!! Duplicate identifier 'fn4'.
+    
+        function fn5() { }
+        var fn5;
+            ~~~
+!!! Duplicate identifier 'fn5'.
+    }
+    
+    function over();
+    ~~~~~~~~~~~~~~~~
+!!! Function implementation expected.
+    function overrr() {
+    
+    }
+    

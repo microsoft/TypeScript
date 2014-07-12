@@ -1,0 +1,11 @@
+==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509546_2.ts (1 errors) ====
+    "use strict";
+    
+    export class Logger { 
+    ~~~~~~~~~~~~~~~~~~~~~~
+         public
+    ~~~~~~~~~~~
+    }
+    ~
+!!! Cannot compile external modules unless the '--module' flag is provided.
+    

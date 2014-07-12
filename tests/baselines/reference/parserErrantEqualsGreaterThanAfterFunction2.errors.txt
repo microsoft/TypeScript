@@ -1,0 +1,10 @@
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserErrantEqualsGreaterThanAfterFunction2.ts (4 errors) ====
+    function f(p: A) => p;
+                     ~~
+!!! Block or ';' expected.
+    ~~~~~~~~~~~~~~~~
+!!! Function implementation expected.
+                  ~
+!!! Cannot find name 'A'.
+                        ~
+!!! Cannot find name 'p'.

@@ -1,0 +1,8 @@
+==== tests/cases/compiler/genericConstructInvocationWithNoTypeArg.ts (1 errors) ====
+    interface Foo<T> {
+       new (x: number): Foo<T>;
+    }
+    var f2: Foo<number> = new Foo(3);
+                              ~~~
+!!! Cannot find name 'Foo'.
+    

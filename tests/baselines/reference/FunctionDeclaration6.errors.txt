@@ -1,0 +1,7 @@
+==== tests/cases/compiler/FunctionDeclaration6.ts (1 errors) ====
+    {
+        function foo();
+        ~~~~~~~~~~~~~~~
+!!! Function implementation expected.
+        function bar() { }
+    }

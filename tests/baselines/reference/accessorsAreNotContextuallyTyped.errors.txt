@@ -1,0 +1,18 @@
+==== tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorsAreNotContextuallyTyped.ts (2 errors) ====
+    // accessors are not contextually typed
+    
+    class C {
+        set x(v: (a: string) => string) {
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+        }
+    
+        get x() {
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            return (x: string) => "";
+        }
+    }
+    
+    var c: C;
+    var r = c.x(''); // string

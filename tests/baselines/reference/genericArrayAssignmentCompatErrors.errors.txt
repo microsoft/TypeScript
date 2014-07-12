@@ -1,0 +1,26 @@
+==== tests/cases/compiler/genericArrayAssignmentCompatErrors.ts (2 errors) ====
+    var myCars=new Array(); 
+    var myCars2 = new [];
+                  ~~~~~~
+!!! Cannot use 'new' with an expression whose type lacks a call or construct signature.
+    var myCars3 = new Array({});
+    var myCars4: Array; // error
+                 ~~~~~
+!!! Generic type 'Array<T>' requires 1 type argument(s).
+    var myCars5: Array<any>[];
+     
+    myCars = myCars2;
+    myCars = myCars3;
+    myCars = myCars4;
+    myCars = myCars5;
+     
+    myCars2 = myCars;
+    myCars2 = myCars3;
+    myCars2 = myCars4;
+    myCars2 = myCars5;
+     
+    myCars3 = myCars;
+    myCars3 = myCars2;
+    myCars3 = myCars4;
+    myCars3 = myCars5;   
+    

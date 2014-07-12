@@ -1,0 +1,19 @@
+==== tests/cases/conformance/types/members/objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts (2 errors) ====
+    interface I {
+        (): void;
+    }
+    
+    var i: I;
+    var f: Object;
+    f = i;
+    i = f;
+    ~
+!!! Type 'Object' is not assignable to type 'I'.
+    
+    var a: {
+        (): void
+    }
+    f = a;
+    a = f;
+    ~
+!!! Type 'Object' is not assignable to type '() => void'.

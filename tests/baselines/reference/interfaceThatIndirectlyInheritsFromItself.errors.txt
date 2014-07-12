@@ -1,0 +1,34 @@
+==== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatIndirectlyInheritsFromItself.ts (2 errors) ====
+    interface Base extends Derived2 { // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        x: string;
+    ~~~~~~~~~~~~~~
+    }
+    ~
+!!! Type 'Base' recursively references itself as a base type.
+    
+    interface Derived extends Base {
+        y: string;
+    }
+    
+    interface Derived2 extends Derived {
+        z: string;
+    }
+    
+    module Generic {
+        interface Base<T> extends Derived2<T> { // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            x: string;
+    ~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+!!! Type 'Base<T>' recursively references itself as a base type.
+    
+        interface Derived<T> extends Base<T> {
+            y: string;
+        }
+    
+        interface Derived2<T> extends Derived<T> {
+            z: string;
+        }
+    }

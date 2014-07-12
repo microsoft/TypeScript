@@ -1,0 +1,44 @@
+==== tests/cases/conformance/types/objectTypeLiteral/indexSignatures/multipleStringIndexers.ts (6 errors) ====
+    // Multiple indexers of the same type are an error
+    
+    class C {
+        [x: string]: string;
+        [x: string]: string;
+        ~~~~~~~~~~~~~~~~~~~~
+!!! Duplicate string index signature.
+    }
+    
+    interface I {
+        [x: string]: string;
+        [x: string]: string;
+        ~~~~~~~~~~~~~~~~~~~~
+!!! Duplicate string index signature.
+    }
+    
+    var a: {
+        [x: string]: string;
+        [x: string]: string;
+        ~~~~~~~~~~~~~~~~~~~~
+!!! Duplicate string index signature.
+    }
+    
+    var b: {
+        [x: string]: string;
+        [x: string]: string;
+        ~~~~~~~~~~~~~~~~~~~~
+!!! Duplicate string index signature.
+    } = { y: '' }
+    
+    class C2<T> {
+        [x: string]: string;
+        [x: string]: string;
+        ~~~~~~~~~~~~~~~~~~~~
+!!! Duplicate string index signature.
+    }
+    
+    interface I2<T> {
+        [x: string]: string;
+        [x: string]: string;
+        ~~~~~~~~~~~~~~~~~~~~
+!!! Duplicate string index signature.
+    }

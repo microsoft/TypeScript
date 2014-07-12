@@ -1,0 +1,16 @@
+==== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatHidesBaseProperty2.ts (1 errors) ====
+    interface Base {
+        x: { a: number };
+    }
+    
+    interface Derived extends Base { // error
+              ~~~~~~~
+!!! Interface 'Derived' incorrectly extends interface 'Base':
+!!!   Types of property 'x' are incompatible:
+!!!     Type '{ a: string; }' is not assignable to type '{ a: number; }':
+!!!       Types of property 'a' are incompatible:
+!!!         Type 'string' is not assignable to type 'number'.
+        x: {
+            a: string;
+        };
+    }

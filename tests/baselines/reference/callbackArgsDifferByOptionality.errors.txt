@@ -1,0 +1,10 @@
+==== tests/cases/compiler/callbackArgsDifferByOptionality.ts (2 errors) ====
+    function x3(callback: (x?: 'hi') => number);
+                          ~~~~~~~~~~~~~~~~~~~~
+!!! Specialized overload signature is not assignable to any non-specialized signature.
+    function x3(callback: (x: string) => number);
+    function x3(callback: (x: any) => number) {
+        cb();
+        ~~
+!!! Cannot find name 'cb'.
+    }

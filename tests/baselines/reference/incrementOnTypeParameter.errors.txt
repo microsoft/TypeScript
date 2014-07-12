@@ -1,0 +1,14 @@
+==== tests/cases/compiler/incrementOnTypeParameter.ts (2 errors) ====
+    class C<T> {
+        a: T;
+        foo() {
+            this.a++; 
+            ~~~~~~
+!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+            for (var i: T, j = 0; j < 10; i++) { 
+                                          ~
+!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+            }
+        }
+    }
+    

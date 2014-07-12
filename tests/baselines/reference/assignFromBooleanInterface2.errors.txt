@@ -1,0 +1,27 @@
+==== tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface2.ts (2 errors) ====
+    interface Boolean {
+        doStuff(): string;
+    }
+    
+    interface NotBoolean {
+        doStuff(): string;
+    }
+    
+    var x = true;
+    var a: Boolean;
+    var b: NotBoolean;
+    
+    a = x;
+    a = b;
+    
+    b = a;
+    b = x;
+    
+    x = a; // expected error
+    ~
+!!! Type 'Boolean' is not assignable to type 'boolean'.
+    x = b; // expected error
+    ~
+!!! Type 'NotBoolean' is not assignable to type 'boolean'.
+    
+    

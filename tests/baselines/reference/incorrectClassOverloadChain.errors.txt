@@ -1,0 +1,8 @@
+==== tests/cases/compiler/incorrectClassOverloadChain.ts (1 errors) ====
+    class C {
+        foo(): string;
+        foo(x): number;
+        ~~~~~~~~~~~~~~~
+!!! Function implementation expected.
+        x = 1;
+    }

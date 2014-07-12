@@ -1,0 +1,4 @@
+==== tests/cases/compiler/separate1-1.ts (1 errors) ====
+    X.f();
+    ~
+!!! Cannot find name 'X'.

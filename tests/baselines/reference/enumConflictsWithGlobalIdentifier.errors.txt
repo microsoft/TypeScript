@@ -1,0 +1,11 @@
+==== tests/cases/compiler/enumConflictsWithGlobalIdentifier.ts (2 errors) ====
+    enum Position { 
+        IgnoreRulesSpecific = 0,
+    }
+    var x = IgnoreRulesSpecific.
+            ~~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'IgnoreRulesSpecific'.
+    var y = Position.IgnoreRulesSpecific;
+        ~
+!!! ',' expected.
+    

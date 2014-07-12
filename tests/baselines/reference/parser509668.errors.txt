@@ -1,0 +1,7 @@
+==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509668.ts (1 errors) ====
+    class Foo3 {
+      // Doesn't work, but should
+      constructor (public ...args: string[]) { }
+                          ~~~
+!!! ',' expected.
+    }

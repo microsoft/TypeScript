@@ -1,0 +1,18 @@
+==== tests/cases/compiler/ambientExternalModuleInAnotherExternalModule.ts (2 errors) ====
+    
+    class D { }
+    export = D;
+    
+    declare module "ext" {
+    ~~~~~~~~~~~~~~~~~~~~~~
+        export class C { }
+    ~~~~~~~~~~~~~~~~~~~~~~
+    }
+    ~
+!!! Ambient external modules cannot be nested in other modules.
+    
+    // Cannot resolve this ext module reference
+    import ext = require("ext");
+                         ~~~~~
+!!! Cannot find external module 'ext'.
+    var x = ext;

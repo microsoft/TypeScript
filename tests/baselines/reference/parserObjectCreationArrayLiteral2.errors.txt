@@ -1,0 +1,4 @@
+==== tests/cases/conformance/parser/ecmascript5/parserObjectCreationArrayLiteral2.ts (1 errors) ====
+    new Foo[1];
+        ~~~
+!!! Cannot find name 'Foo'.

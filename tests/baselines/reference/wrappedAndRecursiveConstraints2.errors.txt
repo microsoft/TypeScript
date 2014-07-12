@@ -1,0 +1,9 @@
+==== tests/cases/conformance/types/typeParameters/typeArgumentLists/wrappedAndRecursiveConstraints2.ts (1 errors) ====
+    class C<T extends C<T>> { // error
+            ~~~~~~~~~~~~~~
+!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        constructor(x: T) { }
+    }
+    
+    var c = new C(1);
+    var c = new C(new C('')); // error

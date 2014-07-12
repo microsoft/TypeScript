@@ -1,0 +1,12 @@
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ParameterLists/parserErrorRecovery_ParameterList6.ts (4 errors) ====
+    class Foo {
+        public banana (x: break) { }
+                          ~~~~~
+!!! Type expected.
+                               ~
+!!! Identifier expected.
+        ~~~~~~~~~~~~~~~~~
+!!! Function implementation expected.
+    }
+    ~
+!!! Declaration or statement expected.

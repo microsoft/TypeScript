@@ -1,0 +1,3 @@
+decl.ts(1,26): Cannot find external module './foo/bar.js'.
+decl.ts(2,26): Cannot find external module 'baz'.
+decl.ts(3,26): Cannot find external module './baz'.

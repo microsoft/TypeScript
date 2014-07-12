@@ -1,0 +1,76 @@
+==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts (7 errors) ====
+    class C {
+        x: number;
+        get X(): number { return 1; }
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+        foo(): number {
+            return 1;
+        }
+    
+        static y: number;
+        static get Y(): number {
+                   ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            return 1;
+        }
+        static bar(): number {
+            return 1;
+        }
+    }
+    
+    class D extends C {
+        x: any;
+        get X(): any {
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            return null;
+        }
+        foo(): any {
+            return 1;
+        }
+    
+        static y: any;
+        static get Y(): any {
+                   ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            return null;
+        }
+        static bar(): any {
+            return null;
+        }
+    }
+    
+    // if D is a valid class definition than E is now not safe tranisitively through C
+    class E extends D {
+        x: string;
+        get X(): string{ return ''; }
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+        foo(): string {
+            return '';
+        }
+    
+        static y: string;
+        static get Y(): string {
+                   ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            return '';
+        }
+        static bar(): string {
+            return '';
+        }
+    }
+    
+    var c: C;
+    var d: D;
+    var e: E;
+    
+    c = d;
+    c = e;
+    ~
+!!! Type 'E' is not assignable to type 'C':
+!!!   Types of property 'x' are incompatible:
+!!!     Type 'string' is not assignable to type 'number'.
+    var r = c.foo(); // e.foo would return string
+    

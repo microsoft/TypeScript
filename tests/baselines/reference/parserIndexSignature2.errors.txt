@@ -1,0 +1,8 @@
+==== tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature2.ts (2 errors) ====
+    interface I {
+      [public a]
+              ~
+!!! An index signature parameter cannot have an accessibility modifier.
+       ~~~~~~~~
+!!! A parameter property is only allowed in a constructor implementation.
+    }

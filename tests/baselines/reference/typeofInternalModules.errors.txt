@@ -1,0 +1,37 @@
+==== tests/cases/compiler/typeofInternalModules.ts (5 errors) ====
+    module Outer {
+        export module instantiated {
+            export class C { }
+        }
+        export module uninstantiated {
+            export interface P { }
+        }
+    }
+    
+    import importInst = Outer.instantiated;
+    import importUninst = Outer.uninstantiated;
+    
+    var x1: typeof importInst.C = importInst.C;
+    var x2: importInst.C = new x1();
+    var x3: typeof importUninst.P; // Error again
+                   ~~~~~~~~~~~~
+!!! Cannot find name 'importUninst'.
+    
+    var x4: Outer = Outer;
+            ~~~~~
+!!! Cannot find name 'Outer'.
+    var x5: typeof importInst;
+    x5 = Outer;
+    ~~
+!!! Type 'typeof Outer' is not assignable to type 'typeof instantiated':
+!!!   Property 'C' is missing in type 'typeof Outer'.
+    x5 = Outer.instantiated;
+    var x6: typeof importUninst;
+                   ~~~~~~~~~~~~
+!!! Cannot find name 'importUninst'.
+    var x7: typeof Outer = Outer;
+    x7 = importInst;
+    ~~
+!!! Type 'typeof instantiated' is not assignable to type 'typeof Outer':
+!!!   Property 'instantiated' is missing in type 'typeof instantiated'.
+    

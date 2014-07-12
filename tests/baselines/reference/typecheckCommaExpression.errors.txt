@@ -1,0 +1,6 @@
+==== tests/cases/compiler/typecheckCommaExpression.ts (2 errors) ====
+    (a, b)
+     ~
+!!! Cannot find name 'a'.
+        ~
+!!! Cannot find name 'b'.

@@ -1,0 +1,75 @@
+==== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts (16 errors) ====
+    interface A1 {
+        b?: number;
+    }
+    
+    interface B1 {
+        b?: string;
+    }
+    
+    var a: A1;
+    var b: B1;
+    
+    // operator <
+    var ra1 = a < b;
+              ~~~~~
+!!! Operator '<' cannot be applied to types 'A1' and 'B1'.
+    var ra2 = b < a;
+              ~~~~~
+!!! Operator '<' cannot be applied to types 'B1' and 'A1'.
+    
+    // operator >
+    var rb1 = a > b;
+              ~~~~~
+!!! Operator '>' cannot be applied to types 'A1' and 'B1'.
+    var rb2 = b > a;
+              ~~~~~
+!!! Operator '>' cannot be applied to types 'B1' and 'A1'.
+    
+    // operator <=
+    var rc1 = a <= b;
+              ~~~~~~
+!!! Operator '<=' cannot be applied to types 'A1' and 'B1'.
+    var rc2 = b <= a;
+              ~~~~~~
+!!! Operator '<=' cannot be applied to types 'B1' and 'A1'.
+    
+    // operator >=
+    var rd1 = a >= b;
+              ~~~~~~
+!!! Operator '>=' cannot be applied to types 'A1' and 'B1'.
+    var rd2 = b >= a;
+              ~~~~~~
+!!! Operator '>=' cannot be applied to types 'B1' and 'A1'.
+    
+    // operator ==
+    var re1 = a == b;
+              ~~~~~~
+!!! Operator '==' cannot be applied to types 'A1' and 'B1'.
+    var re2 = b == a;
+              ~~~~~~
+!!! Operator '==' cannot be applied to types 'B1' and 'A1'.
+    
+    // operator !=
+    var rf1 = a != b;
+              ~~~~~~
+!!! Operator '!=' cannot be applied to types 'A1' and 'B1'.
+    var rf2 = b != a;
+              ~~~~~~
+!!! Operator '!=' cannot be applied to types 'B1' and 'A1'.
+    
+    // operator ===
+    var rg1 = a === b;
+              ~~~~~~~
+!!! Operator '===' cannot be applied to types 'A1' and 'B1'.
+    var rg2 = b === a;
+              ~~~~~~~
+!!! Operator '===' cannot be applied to types 'B1' and 'A1'.
+    
+    // operator !==
+    var rh1 = a !== b;
+              ~~~~~~~
+!!! Operator '!==' cannot be applied to types 'A1' and 'B1'.
+    var rh2 = b !== a;
+              ~~~~~~~
+!!! Operator '!==' cannot be applied to types 'B1' and 'A1'.

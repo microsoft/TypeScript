@@ -1,0 +1,10 @@
+==== tests/cases/compiler/arrayCast.ts (1 errors) ====
+    // Should fail. Even though the array is contextually typed with { id: number }[], it still
+    // has type { foo: string }[], which is not assignable to { id: number }[].
+    <{ id: number; }[]>[{ foo: "s" }];
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Neither type '{ id: number; }[]' nor type '{ foo: string; }[]' is assignable to the other:
+!!!   Type '{ id: number; }' is not assignable to type '{ foo: string; }'.
+    
+    // Should succeed, as the {} element causes the type of the array to be {}[]
+    <{ id: number; }[]>[{ foo: "s" }, {}]; 

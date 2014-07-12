@@ -1,0 +1,1197 @@
+{
+    "Unknown compiler option '{0}'.": {
+        "category": "Error",
+        "code": 6001
+    },
+    "File '{0}' not found.": {
+        "category": "Error",
+        "code": 6002
+    },
+    "File '{0}' must have extension '.ts' or '.d.ts'.": {
+        "category": "Error",
+        "code": 6003
+    },
+
+
+	
+    "Unrecognized escape sequence.": {
+        "category": "Error",
+        "code": 1000
+    },
+    "Unexpected character {0}.": {
+        "category": "Error",
+        "code": 1001
+    },
+    "Missing close quote character.": {
+        "category": "Error",
+        "code": 1002
+    },
+    "Identifier expected.": {
+        "category": "Error",
+        "code": 1003
+    },
+    "'{0}' keyword expected.": {
+        "category": "Error",
+        "code": 1004
+    },
+    "'{0}' expected.": {
+        "category": "Error",
+        "code": 1005
+    },
+    "Identifier expected; '{0}' is a keyword.": {
+        "category": "Error",
+        "code": 1006
+    },
+    "Automatic semicolon insertion not allowed.": {
+        "category": "Error",
+        "code": 1007
+    },
+    "Trailing comma not allowed.": {
+        "category": "Error",
+        "code": 1009
+    },
+    "'*/' expected.": {
+        "category": "Error",
+        "code": 1010
+    },
+    "'public' or 'private' modifier must precede 'static'.": {
+        "category": "Error",
+        "code": 1011
+    },
+    "Unexpected token.": {
+        "category": "Error",
+        "code": 1012
+    },
+    "Catch clause parameter cannot have a type annotation.": {
+        "category": "Error",
+        "code": 1013
+    },
+    "A rest parameter must be last in a parameter list.": {
+        "category": "Error",
+        "code": 1014
+    },
+    "Parameter cannot have question mark and initializer.": {
+        "category": "Error",
+        "code": 1015
+    },
+    "A required parameter cannot follow an optional parameter.": {
+        "category": "Error",
+        "code": 1016
+    },
+    "An index signature cannot have a rest parameter.": {
+        "category": "Error",
+        "code": 1017
+    },
+    "An index signature parameter cannot have an accessibility modifier.": {
+        "category": "Error",
+        "code": 1018
+    },
+    "An index signature parameter cannot have a question mark.": {
+        "category": "Error",
+        "code": 1019
+    },
+    "An index signature parameter cannot have an initializer.": {
+        "category": "Error",
+        "code": 1020
+    },
+    "An index signature must have a type annotation.": {
+        "category": "Error",
+        "code": 1021
+    },
+    "An index signature parameter must have a type annotation.": {
+        "category": "Error",
+        "code": 1022
+    },
+    "An index signature parameter type must be 'string' or 'number'.": {
+        "category": "Error",
+        "code": 1023
+    },
+    "'extends' clause already seen.": {
+        "category": "Error",
+        "code": 1024
+    },
+    "'extends' clause must precede 'implements' clause.": {
+        "category": "Error",
+        "code": 1025
+    },
+    "Classes can only extend a single class.": {
+        "category": "Error",
+        "code": 1026
+    },
+    "'implements' clause already seen.": {
+        "category": "Error",
+        "code": 1027
+    },
+    "Accessibility modifier already seen.": {
+        "category": "Error",
+        "code": 1028
+    },
+    "'{0}' modifier must precede '{1}' modifier.": {
+        "category": "Error",
+        "code": 1029
+    },
+    "'{0}' modifier already seen.": {
+        "category": "Error",
+        "code": 1030
+    },
+    "'{0}' modifier cannot appear on a class element.": {
+        "category": "Error",
+        "code": 1031
+    },
+    "Interface declaration cannot have 'implements' clause.": {
+        "category": "Error",
+        "code": 1032
+    },
+    "'super' invocation cannot have type arguments.": {
+        "category": "Error",
+        "code": 1034
+    },
+    "Only ambient modules can use quoted names.": {
+        "category": "Error",
+        "code": 1035
+    },
+    "Statements are not allowed in ambient contexts.": {
+        "category": "Error",
+        "code": 1036
+    },
+    "A function implementation cannot be declared in an ambient context.": {
+        "category": "Error",
+        "code": 1037
+    },
+    "A 'declare' modifier cannot be used in an already ambient context.": {
+        "category": "Error",
+        "code": 1038
+    },
+    "Initializers are not allowed in ambient contexts.": {
+        "category": "Error",
+        "code": 1039
+    },
+    "'{0}' modifier cannot appear on a module element.": {
+        "category": "Error",
+        "code": 1044
+    },
+    "A 'declare' modifier cannot be used with an interface declaration.": {
+        "category": "Error",
+        "code": 1045
+    },
+    "A 'declare' modifier is required for a top level declaration in a .d.ts file.": {
+        "category": "Error",
+        "code": 1046
+    },
+    "A rest parameter cannot be optional.": {
+        "category": "Error",
+        "code": 1047
+    },
+    "A rest parameter cannot have an initializer.": {
+        "category": "Error",
+        "code": 1048
+    },
+    "A 'set' accessor must have exactly one parameter.": {
+        "category": "Error",
+        "code": 1049
+    },
+    "A 'set' accessor cannot have an optional parameter.": {
+        "category": "Error",
+        "code": 1051
+    },
+    "A 'set' accessor parameter cannot have an initializer.": {
+        "category": "Error",
+        "code": 1052
+    },
+    "A 'set' accessor cannot have rest parameter.": {
+        "category": "Error",
+        "code": 1053
+    },
+    "A 'get' accessor cannot have parameters.": {
+        "category": "Error",
+        "code": 1054
+    },
+    "Modifiers cannot appear here.": {
+        "category": "Error",
+        "code": 1055
+    },
+    "Accessors are only available when targeting ECMAScript 5 and higher.": {
+        "category": "Error",
+        "code": 1056
+    },
+    "Enum member must have initializer.": {
+        "category": "Error",
+        "code": 1061
+    },
+    "An export assignment cannot be used in an internal module.": {
+        "category": "Error",
+        "code": 1063
+    },
+    "Ambient enum elements can only have integer literal initializers.": {
+        "category": "Error",
+        "code": 1066
+    },
+    "module, class, interface, enum, import or statement": {
+        "category": "NoPrefix",
+        "code": 1067
+    },
+    "Unexpected token. A constructor, method, accessor, or property was expected." : {
+        "category": "Error",
+        "code": 1068
+    },
+    "statement": {
+        "category": "NoPrefix",
+        "code": 1069
+    },
+    "case or default clause": {
+        "category": "NoPrefix",
+        "code": 1070
+    },
+    "identifier": {
+        "category": "NoPrefix",
+        "code": 1071
+    },
+    "call, construct, index, property or function signature": {
+        "category": "NoPrefix",
+        "code": 1072
+    },
+    "expression": {
+        "category": "NoPrefix",
+        "code": 1073
+    },
+    "type name": {
+        "category": "NoPrefix",
+        "code": 1074
+    },
+    "property or accessor": {
+        "category": "NoPrefix",
+        "code": 1075
+    },
+    "parameter": {
+        "category": "NoPrefix",
+        "code": 1076
+    },
+    "type": {
+        "category": "NoPrefix",
+        "code": 1077
+    },
+    "type parameter": {
+        "category": "NoPrefix",
+        "code": 1078
+    },
+    "A 'declare' modifier cannot be used with an import declaration.": {
+        "category": "Error",
+        "code": 1079
+    },
+    "Invalid 'reference' directive syntax.": {
+        "category": "Error",
+        "code": 1084
+    },
+    "Octal literals are not available when targeting ECMAScript 5 and higher.": {
+        "category": "Error",
+        "code": 1085
+    },
+    "An accessor cannot be declared in an ambient context.": {
+        "category": "Error",
+        "code": 1086
+    },
+    "'{0}' modifier cannot appear on a constructor declaration.": {
+        "category": "Error",
+        "code": 1089
+    },
+    "'{0}' modifier cannot appear on a parameter.": {
+        "category": "Error",
+        "code": 1090
+    },
+    "Only a single variable declaration is allowed in a 'for...in' statement.": {
+        "category": "Error",
+        "code": 1091
+    },
+    "Type parameters cannot appear on a constructor declaration.": {
+        "category": "Error",
+        "code": 1092
+    },
+    "Type annotation cannot appear on a constructor declaration.": {
+        "category": "Error",
+        "code": 1093
+    },
+    "An accessor cannot have type parameters.": {
+        "category": "Error",
+        "code": 1094
+    },
+    "A 'set' accessor cannot have a return type annotation.": {
+        "category": "Error",
+        "code": 1095
+    },
+    "An index signature must have exactly one parameter.": {
+        "category": "Error",
+        "code": 1096
+    },
+    "'{0}' list cannot be empty.": {
+        "category": "Error",
+        "code": 1097
+    },
+    "Type parameter list cannot be empty.": {
+        "category": "Error",
+        "code": 1098
+    },
+    "Type argument list cannot be empty.": {
+        "category": "Error",
+        "code": 1099
+    },
+    "Invalid use of '{0}' in strict mode.": {
+        "category": "Error",
+        "code": 1100
+    },
+    "'with' statements are not allowed in strict mode.": {
+        "category": "Error",
+        "code": 1101
+    },
+    "'delete' cannot be called on an identifier in strict mode.": {
+        "category": "Error",
+        "code": 1102
+    },
+    "Invalid left-hand side in 'for...in' statement.": {
+        "category": "Error",
+        "code": 1103
+    },
+    "'continue' statement can only be used within an enclosing iteration statement.": {
+        "category": "Error",
+        "code": 1104
+    },
+    "'break' statement can only be used within an enclosing iteration or switch statement.": {
+        "category": "Error",
+        "code": 1105
+    },
+    "Jump target not found.": {
+        "category": "Error",
+        "code": 1106
+    },
+    "Jump target cannot cross function boundary.": {
+        "category": "Error",
+        "code": 1107
+    },
+    "'return' statement must be contained within a function body.": {
+        "category": "Error",
+        "code": 1108
+    },
+    "Expression expected.": {
+        "category": "Error",
+        "code": 1109
+    },
+    "Type expected.": {
+        "category": "Error",
+        "code": 1110
+    },
+    "A constructor implementation cannot be declared in an ambient context.": {
+        "category": "Error",
+        "code": 1111
+    },
+    "A class member cannot be declared optional.": {
+        "category": "Error",
+        "code": 1112
+    },
+    
+
+    "Duplicate identifier '{0}'.": {
+        "category": "Error",
+        "code": 2000
+    },
+    "'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.": {
+        "category": "Error",
+        "code": 2068
+    },
+    "Multiple constructor implementations are not allowed.": {
+        "category": "Error",
+        "code": 2070
+    },
+    "A class may only implement another class or interface.": {
+        "category": "Error",
+        "code": 2074
+    },
+    "'get' and 'set' accessor must have the same type.": {
+        "category": "Error",
+        "code": 2096
+    },
+    "Static members cannot reference class type parameters.": {
+        "category": "Error",
+        "code": 2099
+    },
+    "'super' property access is permitted only in a constructor, member function, or member accessor of a derived class": {
+        "category": "Error",
+        "code": 2102
+    },
+    "The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.": {
+        "category": "Error",
+        "code": 2112
+    },
+    "The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.": {
+        "category": "Error",
+        "code": 2113
+    },
+    "An arithmetic operand must be of type 'any', 'number' or an enum type.": {
+        "category": "Error",
+        "code": 2114
+    },
+    "Variable declarations of a 'for' statement cannot use a type annotation.": {
+        "category": "Error",
+        "code": 2115
+    },
+    "Variable declarations of a 'for' statement must be of types 'string' or 'any'.": {
+        "category": "Error",
+        "code": 2116
+    },
+    "The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.": {
+        "category": "Error",
+        "code": 2117
+    },
+    "The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.": {
+        "category": "Error",
+        "code": 2118
+    }, 
+    "The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter": {
+        "category": "Error",
+        "code": 2119
+    },
+    "Getters must return a value.": {
+        "category": "Error",
+        "code": 2126
+    },
+    "Getter and setter accessors do not agree in visibility.": {
+        "category": "Error",
+        "code": 2127
+    },
+    "Untyped function calls may not accept type arguments.": {
+        "category": "Error",
+        "code": 2158
+    },
+    "The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.": {
+        "category": "Error",
+        "code": 2120
+    },
+    "The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type.": {
+        "category": "Error",
+        "code": 2121
+    },
+    "Setters cannot return a value.": {
+        "category": "Error",
+        "code": 2122
+    },
+    "Invalid left-hand side of assignment expression.": {
+        "category": "Error",
+        "code": 2130
+    },
+    "Subsequent variable declarations must have the same type.  Variable '{0}' must be of type '{1}', but here has type '{2}'.": {
+        "category": "Error",
+        "code": 2134
+    },
+    "The operand of an increment or decrement operator must be a variable, property or indexer.": {
+        "category": "Error",
+        "code": 2139
+    },
+    "Overload signatures must all be public or private.": {
+        "category": "Error",
+        "code": 2150
+    },
+    "Overload signatures must all be exported or not exported.": {
+        "category": "Error",
+        "code": 2151
+    },
+    "Overload signatures must all be ambient or non-ambient.": {
+        "category": "Error",
+        "code": 2152
+    },
+    "Overload signatures must all be optional or required.": {
+        "category": "Error",
+        "code": 2153
+    },
+    "'this' cannot be referenced in constructor arguments.": {
+        "category": "Error",
+        "code": 2155
+    },
+    "Value of type '{0}' is not callable. Did you mean to include 'new'?": {
+        "category": "Error",
+        "code": 2161
+    },
+    "A signature with an implementation cannot use a string literal type.": {
+        "category": "Error",
+        "code": 2163
+    },
+    "Interface '{0}' cannot simultaneously extend types '{1}' and '{2}':": {
+        "category": "Error",
+        "code": 2189
+    },
+    "Initializer of parameter '{0}' cannot reference identifier '{1}' declared after it.": {
+        "category": "Error",
+        "code": 2190
+    },
+    "'super' cannot be referenced in constructor arguments.":{
+        "category": "Error",
+        "code": 2193
+    },
+    "Return type of constructor signature must be assignable to the instance type of the class":{
+        "category": "Error",
+        "code": 2194
+    },
+    "Ambient external module declaration cannot specify relative module name.":{
+        "category": "Error",
+        "code": 2196
+    },
+    "Import declaration in an ambient external module declaration cannot reference external module through relative external module name.": {
+        "category": "Error",
+        "code": 2197
+    },
+    "Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.": {
+        "category": "Error",
+        "code": 2205
+    },
+    "Expression resolves to '_super' that compiler uses to capture base class reference.": {
+        "category": "Error",
+        "code": 2207
+    },
+    "Duplicate identifier '_i'. Compiler uses '_i' to initialize rest parameter.": {
+        "category": "Error",
+        "code": 2224
+    },
+    "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.": {
+        "category": "Error",
+        "code": 2225
+    },
+    "Constraint of a type parameter cannot reference any type parameter from the same type parameter list.": {
+        "category": "Error",
+        "code": 2229
+    },
+    "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor.": {
+        "category": "Error",
+        "code": 2230
+    },
+    "Parameter '{0}' cannot be referenced in its initializer.": {
+        "category": "Error",
+        "code": 2231
+    },
+    "Duplicate string index signature.": {
+        "category": "Error",
+        "code": 2232
+    },
+    "Duplicate number index signature.": {
+        "category": "Error",
+        "code": 2233
+    },
+    "All declarations of an interface must have identical type parameters.": {
+        "category": "Error",
+        "code": 2234
+    },
+    "Expression resolves to variable declaration '_i' that compiler uses to initialize rest parameter.": {
+        "category": "Error",
+        "code": 2235
+	},
+    "Constructor implementation expected.": {
+        "category": "Error",
+        "code": 2240
+    },
+    "An export assignment cannot be used in a module with other exported elements.": {
+        "category": "Error",
+        "code": 2245
+    },
+    "A parameter property is only allowed in a constructor implementation.": {
+        "category": "Error",
+        "code": 2246
+    },
+    "Circular definition of import alias '{0}'.": {
+        "category": "Error",
+        "code": 3000
+    },
+    "Cannot find name '{0}'.": {
+        "category": "Error",
+        "code": 3001
+    },
+    "Module '{0}' has no exported member '{1}'.": {
+        "category": "Error",
+        "code": 3002
+    },
+    "Cannot find external module '{0}'.": {
+        "category": "Error",
+        "code": 3003
+    },
+    "A module cannot have more than one export assignment.": {
+        "category": "Error",
+        "code": 3004
+    },
+    "Type '{0}' recursively references itself as a base type.": {
+        "category": "Error",
+        "code": 3005
+    },
+    "A class may only extend another class.": {
+        "category": "Error",
+        "code": 3006
+    },
+    "An interface may only extend a class or another interface.": {
+        "category": "Error",
+        "code": 3007
+    },
+    "Generic type '{0}' requires {1} type argument(s).": {
+        "category": "Error",
+        "code": 3008
+    },
+    "Type '{0}' is not generic.": {
+        "category": "Error",
+        "code": 3009
+    },
+    "Cannot find global type '{0}'.": {
+        "category": "Error",
+        "code": 3010
+    },
+    "Global type '{0}' must be a class or interface type.": {
+        "category": "Error",
+        "code": 3011
+    },
+    "Global type '{0}' must have {1} type parameter(s).": {
+        "category": "Error",
+        "code": 3012
+    },
+    "'this' cannot be referenced in a module body.": {
+        "category": "Error",
+        "code": 3013
+    },
+    "'this' cannot be referenced in a static property initializer.": {
+        "category": "Error",
+        "code": 3014
+    },
+    "'this' cannot be referenced in current location.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "'super' can only be referenced in a derived class.": {
+        "category": "Error",
+        "code": 3015
+    },
+    "Property '{0}' does not exist on type '{1}'.": {
+        "category": "Error",
+        "code": 3017
+    },
+    "An index expression argument must be of type 'string', 'number', or 'any'.": {
+        "category": "Error",
+        "code": 3018
+    },
+    "Type '{0}' does not satisfy the constraint '{1}':": {
+        "category": "Error",
+        "code": 3019
+    },
+    "Type '{0}' does not satisfy the constraint '{1}'.": {
+        "category": "Error",
+        "code": 3019
+    },
+    "Supplied parameters do not match any signature of call target.": {
+        "category": "Error",
+        "code": 3020
+    },
+    "Cannot invoke an expression whose type lacks a call signature.": {
+        "category": "Error",
+        "code": 3021
+    },
+    "Only a void function can be called with the 'new' keyword.": {
+        "category": "Error",
+        "code": 3022
+    },
+    "Cannot use 'new' with an expression whose type lacks a call or construct signature.": {
+        "category": "Error",
+        "code": 3023
+    },
+    "Neither type '{0}' nor type '{1}' is assignable to the other:": {
+        "category": "Error",
+        "code": 3024
+    },
+    "Neither type '{0}' nor type '{1}' is assignable to the other.": {
+        "category": "Error",
+        "code": 3024
+    },
+    "No best common type exists among return expressions.": {
+        "category": "Error",
+        "code": 3027
+    },
+    "Operator '{0}' cannot be applied to types '{1}' and '{2}'.": {
+        "category": "Error",
+        "code": 3028
+    },
+    "No best common type exists between '{0}' and '{1}'.": {
+        "category": "Error",
+        "code": 3029
+    },
+    "No best common type exists between '{0}', '{1}', and '{2}'.": {
+        "category": "Error",
+        "code": 3030
+    },
+    "A rest parameter must be of an array type.": {
+        "category": "Error",
+        "code": 3031
+    },
+    "A parameter initializer is only allowed in a function or constructor implementation.": {
+        "category": "Error",
+        "code": 3032
+    },
+    "Specialized overload signature is not assignable to any non-specialized signature.": {
+        "category": "Error",
+        "code": 3033
+    },
+    "Duplicate function implementation.": {
+        "category": "Error",
+        "code": 3034
+    },
+    "Overload signature is not compatible with function implementation.": {
+        "category": "Error",
+        "code": 3035
+    },
+
+
+
+    "Index signature is missing in type '{0}'.": {
+        "category": "Error",
+        "code": 4003
+    },
+    "Index signatures are incompatible:": {
+        "category": "Error",
+        "code": 4004
+    },
+    "Class '{0}' defines instance member accessor '{1}', but extended class '{2}' defines it as instance member function.": {
+        "category": "NoPrefix",
+        "code": 4016
+    },
+    "Class '{0}' defines instance member property '{1}', but extended class '{2}' defines it as instance member function.": {
+        "category": "NoPrefix",
+        "code": 4017
+    },
+    "Class '{0}' defines instance member function '{1}', but extended class '{2}' defines it as instance member accessor.": {
+        "category": "NoPrefix",
+        "code": 4018
+    },
+    "Class '{0}' defines instance member function '{1}', but extended class '{2}' defines it as instance member property.": {
+        "category": "NoPrefix",
+        "code": 4019
+    },
+    "Named properties '{0}' of types '{1}' and '{2}' are not identical.": {
+        "category": "NoPrefix",
+        "code": 4032
+    },
+    "Cannot find the common subdirectory path for the input files.": {
+        "category": "Error",
+        "code": 5009
+    },
+    "Cannot read file '{0}': {1}": {
+        "category": "Error",
+        "code": 5012
+    },
+    "Unsupported file encoding.": {
+        "category": "NoPrefix",
+        "code": 5013
+    },
+    "Could not write file '{0}'.": {
+        "category": "Error",
+        "code": 5033
+    },
+    "Could not create directory '{0}'.": {
+        "category": "Error",
+        "code": 5035
+    },
+    "Option mapRoot cannot be specified without specifying sourcemap option.": {
+        "category": "Error",
+        "code": 5038
+    },
+    "Option sourceRoot cannot be specified without specifying sourcemap option.": {
+        "category": "Error",
+        "code": 5039
+    },
+
+    "Variable '{0}' implicitly has an '{1}' type.": {
+        "category": "Error",
+        "code": 7005
+    },
+
+    "Parameter '{0}' implicitly has an '{1}' type.": {
+        "category": "Error",
+        "code": 7006
+    },
+    "Member '{0}' implicitly has an '{1}' type.": {
+        "category": "Error",
+        "code": 7008
+    },
+    "'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.": {
+        "category": "Error",
+        "code": 7009
+    },
+    "'{0}', which lacks return-type annotation, implicitly has an '{1}' return type.": {
+        "category": "Error",
+        "code": 7010
+    },
+    "Function expression, which lacks return-type annotation, implicitly has an '{0}' return type.": {
+        "category": "Error",
+        "code": 7011
+    },
+    "Construct signature, which lacks return-type annotation, implicitly has an 'any' return type.": {
+        "category": "Error",
+        "code": 7013
+    },
+    "Lambda function, which lacks return-type annotation, implicitly has an '{0}' return type.": {
+        "category": "Error",
+        "code": 7014
+    },
+    "Array literal implicitly has an '{0}' type.": {
+        "category": "Error",
+        "code": 7015
+    },
+    "Property '{0}' implicitly has type 'any', because its 'set' accessor lacks a type annotation.": {
+        "category": "Error",
+        "code": 7016
+    },
+    "Index signature of object type implicitly has an 'any' type.": {
+        "category": "Error",
+        "code": 7017
+    },
+    "Object literal's property '{0}' implicitly has an '{1}' type.": {
+        "category": "Error",
+        "code": 7018
+    },
+    "Rest parameter '{0}' implicitly has an 'any[]' type.": {
+        "category": "Error",
+        "code": 7019
+    },
+    "Call signature, which lacks return-type annotation, implicitly has an 'any' return type.": {
+        "category": "Error",
+        "code": 7020
+    },
+
+    "Variable declaration list cannot be empty.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Digit expected.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Hexadecimal digit expected.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Unexpected end of text.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Unterminated string constant.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Invalid character.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Declaration or statement expected.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Statement expected.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "'case' or 'default' expected.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Property or signature expected.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Enum member expected.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Type reference expected.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Variable declaration expected.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Argument expression expected.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Property assignment expected.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Expression or comma expected.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Parameter declaration expected.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Type parameter declaration expected.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Type argument expected.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "'{0}' expected.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Identifier expected.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "String literal expected.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Type expected.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "'=>' not preceded by parameter list.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Invalid assignment target.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "'super' must be followed by argument list or member access.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Expression expected.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Line break not permitted here.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "'catch' or 'finally' expected.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Block or ';' expected.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Modifiers not permitted on index signature members.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Class member declaration expected.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Declaration expected.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Invalid reference comment.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "File '{0}' is not an external module.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Excessive stack depth comparing types '{0}' and '{1}'.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Type '{0}' is not assignable to type '{1}':": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Type '{0}' is not assignable to type '{1}'.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Property '{0}' is missing in type '{1}'.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Private property '{0}' cannot be reimplemented.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Required property '{0}' cannot be reimplemented with optional property in '{1}'.": {
+        "category": "Error",
+        "code": 2012
+    },
+    "Super calls are not permitted outside constructors or in nested functions inside constructors": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Only public methods of the base class are accessible via the 'super' keyword": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Constructors for derived classes must contain a 'super' call.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Only public methods of the base class are accessible via the 'super' keyword": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Import name cannot be '{0}'": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Type parameter name cannot be '{0}'": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Class name cannot be '{0}'": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Interface name cannot be '{0}'": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Enum name cannot be '{0}'": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Types of property '{0}' are incompatible:": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Types of parameters '{0}' and '{1}' are incompatible:": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Unknown identifier '{0}'.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Property '{0}' is inaccessible.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Function implementation expected.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "'return' statement has no containing function.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Property '{0}' of type '{1}' is not assignable to string index type '{2}'.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Property '{0}' of type '{1}' is not assignable to numeric index type '{2}'.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Numeric index type '{0}' is not assignable to string index type '{1}'.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Class '{0}' incorrectly extends base class '{1}':": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Class '{0}' incorrectly extends base class '{1}'.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Class static side '{0}' incorrectly extends base class static side '{1}':": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Class static side '{0}' incorrectly extends base class static side '{1}'.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Type name '{0}' in extends clause does not reference constructor function for '{0}'.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Class '{0}' incorrectly implements interface '{1}':": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Class '{0}' incorrectly implements interface '{1}'.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Interface '{0}' incorrectly extends interface '{1}':": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Interface '{0}' incorrectly extends interface '{1}'.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Enum member must have initializer.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Ambient external modules require a 'declare' modifier.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Ambient external modules cannot be nested in other modules.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Import declarations in an internal module cannot reference an external module.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Cannot compile external modules unless the '--module' flag is provided.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Import declaration conflicts with local declaration of '{0}'": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Filename '{0}' differs from already included filename '{1}' only in casing": {
+        "category": "Error",
+        "code": -9999999
+    },
+     "Argument for '--module' option must be 'commonjs' or 'amd'.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Argument for '--target' option must be 'es3' or 'es5'.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Compiler option '{0}' expects an argument.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Unterminated quoted string in response file '{0}'.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Locale must be of the form <language> or <language>-<territory>. For example '{0}' or '{1}'.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Unsupported locale {0}.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Unable to open file {0}.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "Corrupted locale file {0}.": {
+        "category": "Error",
+        "code": -9999999
+    },
+    "No input files specified.": {
+        "category": "Error",
+        "code": -9999999
+    }
+}

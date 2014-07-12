@@ -1,0 +1,1 @@
+Option mapRoot cannot be specified without specifying sourcemap option.

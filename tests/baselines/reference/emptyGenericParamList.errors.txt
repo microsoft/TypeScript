@@ -1,0 +1,7 @@
+==== tests/cases/compiler/emptyGenericParamList.ts (2 errors) ====
+    class I<T> {}
+    var x: I<>;
+            ~~
+!!! Type argument list cannot be empty.
+           ~~~
+!!! Generic type 'I<T>' requires 1 type argument(s).

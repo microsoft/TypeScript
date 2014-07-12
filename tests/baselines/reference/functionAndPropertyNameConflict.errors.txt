@@ -1,0 +1,11 @@
+==== tests/cases/compiler/functionAndPropertyNameConflict.ts (2 errors) ====
+    class C65 {
+        public aaaaa() { }
+        public get aaaaa() {
+                   ~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+                   ~~~~~
+!!! Duplicate identifier 'aaaaa'.
+            return 1;
+        }
+    }

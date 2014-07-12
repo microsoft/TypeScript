@@ -1,0 +1,5 @@
+==== tests/cases/compiler/classInheritence.ts (1 errors) ====
+    class B extends A { }
+    class A extends A { }
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! Type 'A' recursively references itself as a base type.

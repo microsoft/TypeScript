@@ -1,0 +1,13 @@
+==== tests/cases/compiler/genericCallWithoutArgs.ts (4 errors) ====
+    function f<X, Y>(x: X, y: Y) {
+    }
+    
+    f<number,string>.
+                    ~
+!!! Expression expected.
+                     
+!!! Identifier expected.
+      ~~~~~~
+!!! Cannot find name 'number'.
+             ~~~~~~
+!!! Cannot find name 'string'.

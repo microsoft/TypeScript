@@ -1,0 +1,4 @@
+do {
+  continue;
+}
+while (true);

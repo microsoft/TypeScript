@@ -1,0 +1,7 @@
+==== tests/cases/conformance/classes/propertyMemberDeclarations/propertyNamedPrototype.ts (1 errors) ====
+    class C {
+        prototype: number; // ok
+        static prototype: C; // error
+               ~~~~~~~~~
+!!! Duplicate identifier 'prototype'.
+    }

@@ -1,0 +1,9 @@
+==== tests/cases/compiler/invokingNonGenericMethodWithTypeArguments1.ts (1 errors) ====
+    class Foo {
+        constructor() {
+            this.foo<string>();
+                 ~~~
+!!! Property 'foo' does not exist on type 'Foo'.
+        }
+    }
+    

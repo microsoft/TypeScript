@@ -1,0 +1,21 @@
+==== tests/cases/compiler/constructorOverloads5.ts (1 errors) ====
+     interface IArguments {}
+    
+     declare module M {
+        export function RegExp(pattern: string): RegExp;
+        export function RegExp(pattern: string, flags: string): RegExp;
+        export class RegExp {
+                     ~~~~~~
+!!! Duplicate identifier 'RegExp'.
+            constructor(pattern: string);
+            constructor(pattern: string, flags: string);
+            exec(string: string): string[];
+            test(string: string): boolean;
+            source: string;
+            global: boolean;
+            ignoreCase: boolean;
+            multiline: boolean;
+            lastIndex: boolean;
+        }
+    }
+    

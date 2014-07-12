@@ -1,0 +1,20 @@
+==== tests/cases/conformance/parser/ecmascript5/AutomaticSemicolonInsertion/parserAutomaticSemicolonInsertion1.ts (2 errors) ====
+    interface I {
+        (): void;
+    }
+     
+    var i: I;
+    var o: Object;
+    o = i;
+    i = o;
+    ~
+!!! Type 'Object' is not assignable to type 'I'.
+     
+    var a: {
+        (): void
+    }
+    o = a;
+    a = o;
+    ~
+!!! Type 'Object' is not assignable to type '() => void'.
+    

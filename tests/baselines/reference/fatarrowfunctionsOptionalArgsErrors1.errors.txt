@@ -1,0 +1,19 @@
+==== tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors1.ts (5 errors) ====
+    (arg1?, arg2) => 101;
+            ~~~~
+!!! A required parameter cannot follow an optional parameter.
+    (...arg?) => 102;
+        ~~~
+!!! A rest parameter cannot be optional.
+    (...arg) => 103;
+    (...arg:number [] = []) => 104;
+        ~~~
+!!! A rest parameter cannot have an initializer.
+    (...) => 105;
+        ~
+!!! Identifier expected.
+    
+    // Non optional parameter following an optional one
+    (arg1 = 1, arg2) => 1; 
+               ~~~~
+!!! A required parameter cannot follow an optional parameter.

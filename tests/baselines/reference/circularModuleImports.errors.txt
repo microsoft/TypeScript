@@ -1,0 +1,13 @@
+==== tests/cases/compiler/circularModuleImports.ts (1 errors) ====
+    module M
+     
+    {
+     
+        import A = B;
+        ~~~~~~~~~~~~~
+!!! Circular definition of import alias 'A'.
+     
+        import B = A;
+     
+    }
+    

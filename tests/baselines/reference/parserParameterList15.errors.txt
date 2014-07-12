@@ -1,0 +1,7 @@
+==== tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList15.ts (2 errors) ====
+    function foo(a = 4);
+    ~~~~~~~~~~~~~~~~~~~~
+!!! Overload signature is not compatible with function implementation.
+                 ~~~~~
+!!! A parameter initializer is only allowed in a function or constructor implementation.
+    function foo(a, b) {}

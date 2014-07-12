@@ -1,0 +1,8 @@
+==== tests/cases/compiler/overloadOnConstAsTypeAnnotation.ts (3 errors) ====
+    var f: (x: 'hi') => number = ('hi') => { return 1; };
+                                        ~~
+!!! ';' expected.
+           ~~~~~~~~~~~~~~~~~~~
+!!! Specialized overload signature is not assignable to any non-specialized signature.
+                                             ~~~~~~~~~
+!!! 'return' statement has no containing function.

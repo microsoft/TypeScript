@@ -1,0 +1,26 @@
+{
+    "scenario": "outputdir_module_multifolder: specify outputFile",
+    "projectRoot": "tests/cases/projects/outputdir_module_multifolder",
+    "inputFiles": [
+        "test.ts"
+    ],
+    "out": "bin/test.js",
+    "declaration": true,
+    "baselineCheck": true,
+    "resolvedInputFiles": [
+        "test.ts",
+        "ref/m1.ts",
+        "../outputdir_module_multifolder_ref/m2.ts",
+        "lib.d.ts"
+    ],
+    "emittedFiles": [
+        "ref/m1.js",
+        "ref/m1.d.ts",
+        "../outputdir_module_multifolder_ref/m2.js",
+        "../outputdir_module_multifolder_ref/m2.d.ts",
+        "test.js",
+        "test.d.ts",
+        "bin/test.js",
+        "bin/test.d.ts"
+    ]
+}

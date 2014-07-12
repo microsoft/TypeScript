@@ -1,0 +1,41 @@
+==== tests/cases/compiler/assignmentToObjectAndFunction.ts (3 errors) ====
+    var errObj: Object = { toString: 0 }; // Error, incompatible toString
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type '{ toString: number; }' is not assignable to type 'Object':
+!!!   Types of property 'toString' are incompatible:
+!!!     Type 'number' is not assignable to type '() => string'.
+    var goodObj: Object = {
+        toString(x?) {
+            return "";
+        }
+    }; // Ok, because toString is a subtype of Object's toString
+    
+    var errFun: Function = {}; // Error for no call signature
+        ~~~~~~~~~~~~~~~~~~~~~
+!!! Type '{}' is not assignable to type 'Function':
+!!!   Property 'apply' is missing in type '{}'.
+    
+    function foo() { }
+    module foo {
+        export var boom = 0;
+    }
+    
+    var goodFundule: Function = foo; // ok
+    
+    function bar() { }
+    module bar {
+        export function apply(thisArg: string, argArray?: string) { }
+    }
+    
+    var goodFundule2: Function = bar; // ok
+    
+    function bad() { }
+    module bad {
+        export var apply = 0;
+    }
+    
+    var badFundule: Function = bad; // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type 'typeof bad' is not assignable to type 'Function':
+!!!   Types of property 'apply' are incompatible:
+!!!     Type 'number' is not assignable to type '(thisArg: any, argArray?: any) => any'.

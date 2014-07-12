@@ -1,0 +1,23 @@
+==== tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraint2.ts (2 errors) ====
+    // using a type parameter as a constraint for a type parameter is invalid
+    // these should be errors unless otherwise noted
+    
+    function foo<T, U extends T>(x: T, y: U): U { return y; } // this is now an error
+                    ~~~~~~~~~~~
+!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+    
+    foo(1, '');
+    foo(1, {});
+    
+    interface NumberVariant extends Number {
+        x: number;
+    }
+    var n: NumberVariant;
+    var r3 = foo(1, n);
+    
+    function foo2<T, U extends { length: T }>(x: T, y: U) { return y; } // this is now an error
+                     ~~~~~~~~~~~~~~~~~~~~~~~
+!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+    foo2(1, { length: '' });
+    foo2(1, { length: {} });
+    foo2([], ['']);

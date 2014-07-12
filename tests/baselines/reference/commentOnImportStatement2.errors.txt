@@ -1,0 +1,5 @@
+==== tests/cases/compiler/commentOnImportStatement2.ts (1 errors) ====
+    /* not copyright */
+    import foo = require('./foo');
+                         ~~~~~~~
+!!! Cannot find external module './foo'.

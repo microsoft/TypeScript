@@ -1,0 +1,7 @@
+{
+    "scenario": "No-default-lib",
+    "projectRoot": "tests/cases/projects/No-default-lib",
+    "inputFiles": [
+        "test.ts"
+    ]
+}

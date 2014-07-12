@@ -1,0 +1,4 @@
+==== tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors9.ts (1 errors) ====
+    var v = { set foo(a, b) { } }
+                  ~~~
+!!! A 'set' accessor must have exactly one parameter.

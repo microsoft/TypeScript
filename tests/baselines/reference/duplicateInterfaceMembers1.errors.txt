@@ -1,0 +1,8 @@
+==== tests/cases/compiler/duplicateInterfaceMembers1.ts (1 errors) ====
+    interface Bar {
+       x: number;
+       x: number;
+       ~
+!!! Duplicate identifier 'x'.
+    }
+    

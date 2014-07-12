@@ -1,0 +1,28 @@
+==== tests/cases/compiler/typeCheckTypeArgument.ts (6 errors) ====
+    /// <reference no-default-lib="true"/>
+    
+    var f: <T extends UNKNOWN>() => void;
+                      ~~~~~~~
+!!! Cannot find name 'UNKNOWN'.
+    
+    interface IFoo<T extends UNKNOWN> { }
+                             ~~~~~~~
+!!! Cannot find name 'UNKNOWN'.
+    
+    class Foo<T extends UNKNOWN> { }
+                        ~~~~~~~
+!!! Cannot find name 'UNKNOWN'.
+    
+    function bar<T extends UNKNOWN>() { }
+                           ~~~~~~~
+!!! Cannot find name 'UNKNOWN'.
+    
+    class Foo2 {
+        method<T extends UNKNOWN>() { }
+                         ~~~~~~~
+!!! Cannot find name 'UNKNOWN'.
+    }
+    
+    (<T extends UNKNOWN>(a) => { });
+                ~~~~~~~
+!!! Cannot find name 'UNKNOWN'.

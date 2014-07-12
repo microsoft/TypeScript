@@ -1,0 +1,18 @@
+==== tests/cases/compiler/typeParameterExplicitlyExtendsAny.ts (3 errors) ====
+    function fee<T>() {
+        var t: T;
+        t.blah; // Error
+          ~~~~
+!!! Property 'blah' does not exist on type 'T'.
+        t.toString; // ok
+    }
+    
+    function fee2<T extends any>() {
+        var t: T;
+        t.blah; // Error
+          ~~~~
+!!! Property 'blah' does not exist on type 'T'.
+        t.toString; // ok
+          ~~~~~~~~
+!!! Property 'toString' does not exist on type 'T'.
+    }

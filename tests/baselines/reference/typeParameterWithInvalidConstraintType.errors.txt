@@ -1,0 +1,13 @@
+==== tests/cases/compiler/typeParameterWithInvalidConstraintType.ts (1 errors) ====
+    class A<T extends T> {
+            ~~~~~~~~~~~
+!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        foo() {
+            var x: T;
+            // no error expected below this line
+            var a = x.foo();
+            var b = new x(123);
+            var c = x[1];
+            var d = x();
+        }
+    }

@@ -1,0 +1,26 @@
+==== tests/cases/conformance/classes/members/accessibility/privateInstanceMemberAccessibility.ts (6 errors) ====
+    class Base {
+        private foo: string;
+    }
+    
+    class Derived extends Base {
+        x = super.foo; // error
+                  ~~~
+!!! Only public methods of the base class are accessible via the 'super' keyword
+        y() {
+            return super.foo; // error
+                         ~~~
+!!! Only public methods of the base class are accessible via the 'super' keyword
+        }
+        z: typeof super.foo; // error
+                  ~~~~~
+!!! Identifier expected.
+                        ~~~
+!!! Only public methods of the base class are accessible via the 'super' keyword
+    
+        a: this.foo; // error
+           ~~~~
+!!! Type expected.
+           ~~~~~~~~
+!!! Property 'Base.foo' is inaccessible.
+    }

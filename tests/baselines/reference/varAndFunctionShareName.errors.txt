@@ -1,0 +1,5 @@
+==== tests/cases/compiler/varAndFunctionShareName.ts (1 errors) ====
+    var myFn;
+    function myFn(): any { }
+             ~~~~
+!!! Duplicate identifier 'myFn'.

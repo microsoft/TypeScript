@@ -1,0 +1,18 @@
+==== tests/cases/compiler/constructorParametersThatShadowExternalNamesInVariableDeclarations.ts (2 errors) ====
+    var x = 1;
+    class A {
+        private a = x;
+                    ~
+!!! Initializer of instance member variable 'a' cannot reference identifier 'x' declared in the constructor.
+        constructor(x: number) {
+        }
+    }
+    
+    class B {
+        private a = x;
+                    ~
+!!! Initializer of instance member variable 'a' cannot reference identifier 'x' declared in the constructor.
+        constructor() {
+            var x = "";
+        }
+    }

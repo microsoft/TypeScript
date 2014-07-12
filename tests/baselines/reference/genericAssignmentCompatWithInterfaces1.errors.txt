@@ -1,0 +1,54 @@
+==== tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts (4 errors) ====
+    interface Comparable<T> {
+       compareTo(other: T): number;
+    }
+    interface I<T> {
+        x: Comparable<T>;
+    }
+    interface K<T> {
+       x: A<T>;
+    }
+    class A<T> implements Comparable<T> { compareTo(other: T) { return 1; } }
+    var z = { x: new A<number>() };
+    var a1: I<string> = { x: new A<number>() };
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type '{ x: A<number>; }' is not assignable to type 'I<string>':
+!!!   Types of property 'x' are incompatible:
+!!!     Type 'A<number>' is not assignable to type 'Comparable<string>':
+!!!       Types of property 'compareTo' are incompatible:
+!!!         Type '(other: number) => number' is not assignable to type '(other: string) => number':
+!!!           Types of parameters 'other' and 'other' are incompatible:
+!!!             Type 'number' is not assignable to type 'string'.
+    var a2: I<string> = function (): { x: A<number> } {
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       var z = { x: new A<number>() }; return z;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    } ();
+    ~~~~
+!!! Type '{ x: A<number>; }' is not assignable to type 'I<string>':
+!!!   Types of property 'x' are incompatible:
+!!!     Type 'A<number>' is not assignable to type 'Comparable<string>':
+!!!       Types of property 'compareTo' are incompatible:
+!!!         Type '(other: number) => number' is not assignable to type '(other: string) => number':
+!!!           Types of parameters 'other' and 'other' are incompatible:
+!!!             Type 'number' is not assignable to type 'string'.
+    var a3: I<string> = z;
+        ~~~~~~~~~~~~~~~~~
+!!! Type '{ x: A<number>; }' is not assignable to type 'I<string>':
+!!!   Types of property 'x' are incompatible:
+!!!     Type 'A<number>' is not assignable to type 'Comparable<string>':
+!!!       Types of property 'compareTo' are incompatible:
+!!!         Type '(other: number) => number' is not assignable to type '(other: string) => number':
+!!!           Types of parameters 'other' and 'other' are incompatible:
+!!!             Type 'number' is not assignable to type 'string'.
+    var a4: I<string> = <K<number>>z;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type 'K<number>' is not assignable to type 'I<string>':
+!!!   Types of property 'x' are incompatible:
+!!!     Type 'A<number>' is not assignable to type 'Comparable<string>':
+!!!       Types of property 'compareTo' are incompatible:
+!!!         Type '(other: number) => number' is not assignable to type '(other: string) => number':
+!!!           Types of parameters 'other' and 'other' are incompatible:
+!!!             Type 'number' is not assignable to type 'string'.
+     
+    

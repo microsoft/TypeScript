@@ -1,0 +1,10 @@
+==== tests/cases/compiler/indexer2A.ts (1 errors) ====
+    class IHeapObjectProperty { }
+    class IDirectChildrenMap {
+        // Decided to enforce a semicolon after declarations
+        hasOwnProperty(objectId: number): boolean
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Function implementation expected.
+        [objectId: number]: IHeapObjectProperty[]
+    }
+    var directChildrenMap = <IDirectChildrenMap>{}; 

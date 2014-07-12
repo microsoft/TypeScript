@@ -1,0 +1,23 @@
+==== tests/cases/compiler/parseTypes.ts (4 errors) ====
+    
+    var x = <() => number>null;
+    var y = <{(): number; }>null;
+    var z = <{new(): number; }>null
+    var w = <{[x:number]: number; }>null
+    function f() { return 3 };
+    function g(s: string) { true };
+    y=f;
+    y=g;
+    ~
+!!! Type '(s: string) => void' is not assignable to type '() => number'.
+    x=g;
+    ~
+!!! Type '(s: string) => void' is not assignable to type '() => number'.
+    w=g;
+    ~
+!!! Type '(s: string) => void' is not assignable to type '{ [x: number]: number; }':
+!!!   Index signature is missing in type '(s: string) => void'.
+    z=g;
+    ~
+!!! Type '(s: string) => void' is not assignable to type 'new () => number'.
+    

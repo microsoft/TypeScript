@@ -1,0 +1,9 @@
+==== tests/cases/compiler/switchAssignmentCompat.ts (1 errors) ====
+    class Foo { }
+    
+    switch (0) {
+        case Foo: break; // Error expected
+             ~~~
+!!! Type 'typeof Foo' is not assignable to type 'number'.
+    }
+    

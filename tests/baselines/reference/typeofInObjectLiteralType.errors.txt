@@ -1,0 +1,4 @@
+==== tests/cases/compiler/typeofInObjectLiteralType.ts (1 errors) ====
+    var a: { b: number; c: typeof b }; // Should give error for attempting to use type query on b.
+                                  ~
+!!! Cannot find name 'b'.

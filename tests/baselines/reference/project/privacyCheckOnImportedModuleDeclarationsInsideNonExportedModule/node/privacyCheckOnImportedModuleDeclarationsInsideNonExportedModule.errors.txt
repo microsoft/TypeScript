@@ -1,0 +1,2 @@
+test.ts(5,5): Import declarations in an internal module cannot reference an external module.
+test.ts(24,5): Import declarations in an internal module cannot reference an external module.

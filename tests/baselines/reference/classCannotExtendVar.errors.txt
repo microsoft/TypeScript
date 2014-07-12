@@ -1,0 +1,10 @@
+==== tests/cases/compiler/classCannotExtendVar.ts (1 errors) ====
+    var Markup;
+    
+    class Markup {
+          ~~~~~~
+!!! Duplicate identifier 'Markup'.
+        constructor() {
+        }
+    }
+    

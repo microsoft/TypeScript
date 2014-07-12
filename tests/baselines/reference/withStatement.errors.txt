@@ -1,0 +1,17 @@
+==== tests/cases/compiler/withStatement.ts (2 errors) ====
+    declare var ooo:any;
+    
+    with (ooo.eee.oo.ah_ah.ting.tang.walla.walla) { // error
+        bing = true; // no error
+        ~~~~
+!!! Cannot find name 'bing'.
+        bang = true; // no error
+        ~~~~
+!!! Cannot find name 'bang'.
+        
+        function bar() {}
+    
+        bar();
+            
+    }
+    

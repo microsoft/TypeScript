@@ -1,0 +1,17 @@
+==== tests/cases/conformance/parser/ecmascript5/parserOptionalTypeMembers1.ts (4 errors) ====
+    interface PropertyDescriptor {
+        configurable?: boolean;
+        ~~~~~~~~~~~~
+!!! Duplicate identifier 'configurable'.
+        enumerable?: boolean;
+        ~~~~~~~~~~
+!!! Duplicate identifier 'enumerable'.
+        value?: any;
+        ~~~~~
+!!! Duplicate identifier 'value'.
+        writable?: boolean;
+        ~~~~~~~~
+!!! Duplicate identifier 'writable'.
+        get?(): any;
+        set?(v: any): void;
+    }

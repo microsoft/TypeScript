@@ -1,0 +1,8 @@
+==== tests/cases/conformance/parser/ecmascript5/Expressions/parserMemberAccessAfterPostfixExpression1.ts (3 errors) ====
+    a--.toString()
+       ~
+!!! ';' expected.
+    ~
+!!! Cannot find name 'a'.
+        ~~~~~~~~
+!!! Cannot find name 'toString'.

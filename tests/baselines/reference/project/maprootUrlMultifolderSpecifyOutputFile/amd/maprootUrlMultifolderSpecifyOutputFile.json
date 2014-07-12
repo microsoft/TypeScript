@@ -1,0 +1,23 @@
+{
+    "scenario": "[Sourcemap]/[Maproot-Url]: outputdir_multifolder: specify outputFile",
+    "projectRoot": "tests/cases/projects/outputdir_multifolder",
+    "inputFiles": [
+        "test.ts"
+    ],
+    "out": "bin/test.js",
+    "sourceMap": true,
+    "mapRoot": "http://www.typescriptlang.org/",
+    "declaration": true,
+    "baselineCheck": true,
+    "resolvedInputFiles": [
+        "test.ts",
+        "ref/m1.ts",
+        "../outputdir_multifolder_ref/m2.ts",
+        "lib.d.ts"
+    ],
+    "emittedFiles": [
+        "bin/test.js.map",
+        "bin/test.js",
+        "bin/test.d.ts"
+    ]
+}

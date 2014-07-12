@@ -1,0 +1,76 @@
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures.ts (8 errors) ====
+    // void returning call signatures can be assigned a non-void returning call signature that otherwise matches
+    
+    interface T {
+        (x: number): void;
+    }
+    var t: T;
+    var a: { (x: number): void };
+    
+    t = a;
+    a = t;
+    
+    interface S {
+        (x: number): string;
+    }
+    var s: S;
+    var a2: { (x: number): string };
+    t = s;
+    t = a2;
+    a = s;
+    a = a2;
+    
+    t = <T>(x: T) => 1;
+    t = () => 1;
+    t = function (x: number) { return ''; }
+    a = <T>(x: T) => 1;
+    a = () => 1;
+    a = function (x: number) { return ''; }
+    
+    interface S2 {
+        (x: string): void;
+    }
+    var s2: S2;
+    var a3: { (x: string): void };
+    // these are errors
+    t = s2;
+    ~
+!!! Type 'S2' is not assignable to type 'T':
+!!!   Types of parameters 'x' and 'x' are incompatible:
+!!!     Type 'string' is not assignable to type 'number'.
+    t = a3;
+    ~
+!!! Type '(x: string) => void' is not assignable to type 'T':
+!!!   Types of parameters 'x' and 'x' are incompatible:
+!!!     Type 'string' is not assignable to type 'number'.
+    t = (x: string) => 1;
+    ~
+!!! Type '(x: string) => number' is not assignable to type 'T':
+!!!   Types of parameters 'x' and 'x' are incompatible:
+!!!     Type 'string' is not assignable to type 'number'.
+    t = function (x: string) { return ''; }
+    ~
+!!! Type '(x: string) => string' is not assignable to type 'T':
+!!!   Types of parameters 'x' and 'x' are incompatible:
+!!!     Type 'string' is not assignable to type 'number'.
+    a = s2;
+    ~
+!!! Type 'S2' is not assignable to type '(x: number) => void':
+!!!   Types of parameters 'x' and 'x' are incompatible:
+!!!     Type 'string' is not assignable to type 'number'.
+    a = a3;
+    ~
+!!! Type '(x: string) => void' is not assignable to type '(x: number) => void':
+!!!   Types of parameters 'x' and 'x' are incompatible:
+!!!     Type 'string' is not assignable to type 'number'.
+    a = (x: string) => 1;
+    ~
+!!! Type '(x: string) => number' is not assignable to type '(x: number) => void':
+!!!   Types of parameters 'x' and 'x' are incompatible:
+!!!     Type 'string' is not assignable to type 'number'.
+    a = function (x: string) { return ''; }
+    ~
+!!! Type '(x: string) => string' is not assignable to type '(x: number) => void':
+!!!   Types of parameters 'x' and 'x' are incompatible:
+!!!     Type 'string' is not assignable to type 'number'.
+    

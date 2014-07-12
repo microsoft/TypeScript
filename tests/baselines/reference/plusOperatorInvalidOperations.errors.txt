@@ -1,0 +1,13 @@
+==== tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorInvalidOperations.ts (2 errors) ====
+    // Unary operator +
+    var b;
+    
+    // operand before +
+    var result1 = b+;   //expect error
+                    ~
+!!! Expression expected.
+    
+    // miss  an operand
+    var result2 =+;
+                  ~
+!!! Expression expected.

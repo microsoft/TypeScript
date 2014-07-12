@@ -1,0 +1,57 @@
+==== tests/cases/compiler/interfacedeclWithIndexerErrors.ts (5 errors) ====
+    interface a0 {
+        (): string;
+        (a, b, c?: string): number;
+        
+        new (): string;
+        new (s: string);
+    
+        [n: number]: ()=>string;
+        [s: string]: ()=>string;
+    
+        p1;
+        p2: string;
+        ~~~~~~~~~~~
+!!! Property 'p2' of type 'string' is not assignable to string index type '() => string'.
+        p3?;
+        p4?: number;
+        ~~~~~~~~~~~~
+!!! Property 'p4' of type 'number' is not assignable to string index type '() => string'.
+        p5: (s: number) =>string;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Property 'p5' of type '(s: number) => string' is not assignable to string index type '() => string'.
+    
+        f1();
+        f2? ();
+        f3(a: string): number;
+        ~~~~~~~~~~~~~~~~~~~~~~
+!!! Property 'f3' of type '(a: string) => number' is not assignable to string index type '() => string'.
+        f4? (s: number): string;
+        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Property 'f4' of type '(s: number) => string' is not assignable to string index type '() => string'.
+    }
+    
+    
+    interface a1 {
+        [n: number]: number;
+    }
+    
+    interface a2 {
+        [s: string]: number;
+    }
+    
+    interface a {
+    }
+    
+    interface b extends a {
+    }
+    
+    interface c extends a, b {
+    }
+    
+    interface d extends a {
+    }
+    
+    class c1 implements a {
+    }
+    var instance2 = new c1();

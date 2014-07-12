@@ -1,0 +1,4 @@
+==== tests/cases/compiler/primitiveTypeAsClassName.ts (1 errors) ====
+    class any {}
+          ~~~
+!!! Class name cannot be 'any'

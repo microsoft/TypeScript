@@ -1,0 +1,14 @@
+==== tests/cases/compiler/internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts (1 errors) ====
+    export module a {
+        export interface I {
+        }
+    }
+    
+    export module c {
+        import b = a.I;
+        export var x: b;
+    }
+    
+    var x: c.b;
+           ~~~
+!!! Module '"tests/cases/compiler/internalAliasInterfaceInsideLocalModuleWithoutExportAccessError".c' has no exported member 'b'.

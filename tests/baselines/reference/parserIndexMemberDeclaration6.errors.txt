@@ -1,0 +1,6 @@
+==== tests/cases/conformance/parser/ecmascript5/IndexMemberDeclarations/parserIndexMemberDeclaration6.ts (1 errors) ====
+    class C {
+       static [x: string]: string;
+       ~~~~~~
+!!! Modifiers not permitted on index signature members.
+    }

@@ -1,0 +1,15 @@
+{
+    "scenario": "relative - nested - ref",
+    "projectRoot": "tests/cases/projects/relative-nested-ref",
+    "inputFiles": [
+        "main/consume.ts"
+    ],
+    "resolvedInputFiles": [
+        "main/consume.ts",
+        "decl.d.ts",
+        "lib.d.ts"
+    ],
+    "emittedFiles": [
+        "main/consume.js"
+    ]
+}

@@ -1,0 +1,15 @@
+==== tests/cases/compiler/specializedSignatureAsCallbackParameter1.ts (3 errors) ====
+    function x3(a: number, cb: (x: number) => number);
+    function x3(a: string, cb: (x: number) => number);
+    function x3(a: any, cb: (x: number) => number) {
+       cb(a);
+    }
+    // both are errors
+    x3(1, (x: string) => 1); 
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+    x3(1, (x: 'hm') => 1); 
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+          ~~~~~~~~~~~~~~
+!!! A signature with an implementation cannot use a string literal type.

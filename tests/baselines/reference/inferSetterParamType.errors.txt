@@ -1,0 +1,29 @@
+==== tests/cases/compiler/inferSetterParamType.ts (5 errors) ====
+    class Foo {
+    
+        get bar() {
+            ~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            return 0;
+        }
+        set bar(n) { // should not be an error - infer number
+            ~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+        }
+    }
+    
+    class Foo2 {
+    
+        get bar() {
+            ~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            return 0; // should be an error - can't coerce infered return type to match setter annotated type
+                   ~
+!!! Type 'number' is not assignable to type 'string'.
+        }
+        set bar(n:string) {
+            ~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+        }
+    }
+    

@@ -1,0 +1,13 @@
+==== tests/cases/compiler/addMoreOverloadsToBaseSignature.ts (1 errors) ====
+    interface Foo {
+        f(): string;
+    }
+    
+    interface Bar extends Foo {
+              ~~~
+!!! Interface 'Bar' incorrectly extends interface 'Foo':
+!!!   Types of property 'f' are incompatible:
+!!!     Type '(key: string) => string' is not assignable to type '() => string'.
+        f(key: string): string;
+    }
+    

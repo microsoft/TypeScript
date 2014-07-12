@@ -1,0 +1,4 @@
+==== tests/cases/compiler/primitiveTypeAsInterfaceName.ts (1 errors) ====
+    interface number {}
+              ~~~~~~
+!!! Interface name cannot be 'number'

@@ -1,0 +1,12 @@
+==== tests/cases/compiler/detachedCommentAtStartOfFunctionBody2.ts (1 errors) ====
+    class TestFile {
+        foo(message: string): () => string {
+            /// <summary>Test summary</summary>
+            /// <param name="message" type="String" />
+            /// <returns type="Function" />
+    
+            return () => message + this.name;
+                                        ~~~~
+!!! Property 'name' does not exist on type 'TestFile'.
+        }
+    }

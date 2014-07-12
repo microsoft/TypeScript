@@ -1,0 +1,12 @@
+==== tests/cases/compiler/unicodeIdentifierName2.ts (5 errors) ====
+    var a₁ = "hello"; alert(a₁)
+         
+!!! Invalid character.
+           ~
+!!! Variable declaration expected.
+             ~~~~~~~
+!!! Variable declaration expected.
+                             
+!!! Invalid character.
+                      ~~~~~
+!!! Cannot find name 'alert'.

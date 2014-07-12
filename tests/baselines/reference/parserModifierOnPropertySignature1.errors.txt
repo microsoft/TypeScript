@@ -1,0 +1,7 @@
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserModifierOnPropertySignature1.ts (1 errors) ====
+    interface Foo{
+        public biz;
+        ~~~~~~
+!!! Property or signature expected.
+    }
+    

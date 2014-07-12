@@ -1,0 +1,22 @@
+==== tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclarationAmbiguities1.ts (4 errors) ====
+    class C {
+      public() {}
+      static() {}
+    
+      public public() {}
+      ~~~~~~~~~~~~~~~~~~
+!!! Duplicate function implementation.
+      public static() {}
+      ~~~~~~~~~~~~~~~~~~
+!!! Duplicate function implementation.
+    
+      public static public() {}
+      public static static() {}
+      
+      static public() {}
+      ~~~~~~~~~~~~~~~~~~
+!!! Duplicate function implementation.
+      static static() {}
+      ~~~~~~~~~~~~~~~~~~
+!!! Duplicate function implementation.
+    }

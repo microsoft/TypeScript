@@ -1,0 +1,10 @@
+==== tests/cases/compiler/accessorWithInitializer.ts (2 errors) ====
+    
+    class C {
+        set X(v = 0) { }
+            ~
+!!! A 'set' accessor parameter cannot have an initializer.
+        static set X(v2 = 0) { }
+                   ~
+!!! A 'set' accessor parameter cannot have an initializer.
+    }

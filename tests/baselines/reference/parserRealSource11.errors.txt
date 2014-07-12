@@ -1,0 +1,3395 @@
+==== tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts (515 errors) ====
+    // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+    // See LICENSE.txt in the project root for complete license information.
+    
+    ///<reference path='typescript.ts' />
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! File 'typescript.ts' not found.
+    
+    module TypeScript {
+        export class ASTSpan {
+            public minChar: number = -1;  // -1 = "undefined" or "compiler generated"
+            public limChar: number = -1;  // -1 = "undefined" or "compiler generated"   
+        }
+    
+        export class AST extends ASTSpan {
+            public type: Type = null;
+                         ~~~~
+!!! Cannot find name 'Type'.
+            public flags = ASTFlags.Writeable;
+                           ~~~~~~~~
+!!! Cannot find name 'ASTFlags'.
+    
+            // REVIEW: for diagnostic purposes
+            public passCreated: number = CompilerDiagnostics.analysisPass;
+                                         ~~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'CompilerDiagnostics'.
+    
+            public preComments: Comment[] = null;
+            public postComments: Comment[] = null;
+    
+            public isParenthesized = false;
+    
+            constructor (public nodeType: NodeType) {
+                                          ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                super();
+            }
+    
+            public isExpression() { return false; }
+    
+            public isStatementOrExpression() { return false; }
+    
+            public isCompoundStatement() { return false; }
+    
+            public isLeaf() { return this.isStatementOrExpression() && (!this.isCompoundStatement()); }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                switch (this.nodeType) {
+                    case NodeType.Error:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.EmptyExpr:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        this.type = typeFlow.anyType;
+                        break;
+                    case NodeType.This:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        return typeFlow.typeCheckThis(this);
+                    case NodeType.Null:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        this.type = typeFlow.nullType;
+                        break;
+                    case NodeType.False:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.True:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        this.type = typeFlow.booleanType;
+                        break;
+                    case NodeType.Super:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        return typeFlow.typeCheckSuper(this);
+                    case NodeType.EndCode:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.Empty:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.Void:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        this.type = typeFlow.voidType;
+                        break;
+                    default:
+                        throw new Error("please implement in derived class");
+                }
+                return this;
+            }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitParensAndCommentsInPlace(this, true);
+                switch (this.nodeType) {
+                    case NodeType.This:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        emitter.recordSourceMappingStart(this);
+                        if (emitter.thisFnc && (hasFlag(emitter.thisFnc.fncFlags, FncFlags.IsFatArrowFunction))) {
+                                                ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                                                                  ~~~~~~~~
+!!! Cannot find name 'FncFlags'.
+                            emitter.writeToOutput("_this");
+                        }
+                        else {
+                            emitter.writeToOutput("this");
+                        }
+                        emitter.recordSourceMappingEnd(this);
+                        break;
+                    case NodeType.Null:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        emitter.recordSourceMappingStart(this);
+                        emitter.writeToOutput("null");
+                        emitter.recordSourceMappingEnd(this);
+                        break;
+                    case NodeType.False:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        emitter.recordSourceMappingStart(this);
+                        emitter.writeToOutput("false");
+                        emitter.recordSourceMappingEnd(this);
+                        break;
+                    case NodeType.True:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        emitter.recordSourceMappingStart(this);
+                        emitter.writeToOutput("true");
+                        emitter.recordSourceMappingEnd(this);
+                        break;
+                    case NodeType.Super:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        emitter.recordSourceMappingStart(this);
+                        emitter.emitSuperReference();
+                        emitter.recordSourceMappingEnd(this);
+                        break;
+                    case NodeType.EndCode:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        break;
+                    case NodeType.Error:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.EmptyExpr:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        break;
+    
+                    case NodeType.Empty:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        emitter.recordSourceMappingStart(this);
+                        emitter.writeToOutput("; ");
+                        emitter.recordSourceMappingEnd(this);
+                        break;
+                    case NodeType.Void:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        emitter.recordSourceMappingStart(this);
+                        emitter.writeToOutput("void ");
+                        emitter.recordSourceMappingEnd(this);
+                        break;
+                    default:
+                        throw new Error("please implement in derived class");
+                }
+                emitter.emitParensAndCommentsInPlace(this, false);
+            }
+    
+            public print(context: PrintContext) {
+                                  ~~~~~~~~~~~~
+!!! Cannot find name 'PrintContext'.
+                context.startLine();
+                var lineCol = { line: -1, col: -1 };
+                var limLineCol = { line: -1, col: -1 };
+                if (context.parser !== null) {
+                    context.parser.getSourceLineCol(lineCol, this.minChar);
+                    context.parser.getSourceLineCol(limLineCol, this.limChar);
+                    context.write("(" + lineCol.line + "," + lineCol.col + ")--" +
+                                  "(" + limLineCol.line + "," + limLineCol.col + "): ");
+                }
+                var lab = this.printLabel();
+                if (hasFlag(this.flags, ASTFlags.Error)) {
+                    ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                        ~~~~~~~~
+!!! Cannot find name 'ASTFlags'.
+                    lab += " (Error)";
+                }
+                context.writeLine(lab);
+            }
+    
+            public printLabel() {
+                if (nodeTypeTable[this.nodeType] !== undefined) {
+                    ~~~~~~~~~~~~~
+!!! Cannot find name 'nodeTypeTable'.
+                    return nodeTypeTable[this.nodeType];
+                           ~~~~~~~~~~~~~
+!!! Cannot find name 'nodeTypeTable'.
+                }
+                else {
+                    return (<any>NodeType)._map[this.nodeType];
+                                 ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                }
+            }
+    
+            public addToControlFlow(context: ControlFlowContext): void {
+                                             ~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'ControlFlowContext'.
+                // by default, AST adds itself to current basic block and does not check its children
+                context.walker.options.goChildren = false;
+                context.addContent(this);
+            }
+    
+            public netFreeUses(container: Symbol, freeUses: StringHashTable) {
+                                          ~~~~~~
+!!! Cannot find name 'Symbol'.
+                                                            ~~~~~~~~~~~~~~~
+!!! Cannot find name 'StringHashTable'.
+            }
+    
+            public treeViewLabel() {
+                return (<any>NodeType)._map[this.nodeType];
+                             ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+    
+            public static getResolvedIdentifierName(name: string): string {
+                if (!name) return "";
+    
+                var resolved = "";
+                var start = 0;
+                var i = 0;
+                while(i <= name.length - 6) {
+                    // Look for escape sequence \uxxxx
+                    if (name.charAt(i) == '\\' && name.charAt(i+1) == 'u') {
+                        var charCode = parseInt(name.substr(i + 2, 4), 16);
+                        resolved += name.substr(start, i - start);
+                        resolved += String.fromCharCode(charCode);
+                        i += 6;
+                        start = i;
+                        continue;
+                    } 
+                    i++;
+                }
+                // Append remaining string
+                resolved += name.substring(start);
+                return resolved;
+            }
+        }
+    
+        export class IncompleteAST extends AST {
+            constructor (min: number, lim: number) {
+                super(NodeType.Error);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+    
+                this.minChar = min;
+                this.limChar = lim;
+            }
+        }
+    
+        export class ASTList extends AST {
+            public enclosingScope: SymbolScope = null;
+                                   ~~~~~~~~~~~
+!!! Cannot find name 'SymbolScope'.
+            public members: AST[] = new AST[];
+                                           ~~
+!!! 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+    
+            constructor () {
+                super(NodeType.List);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+    
+            public addToControlFlow(context: ControlFlowContext) {
+                                             ~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'ControlFlowContext'.
+                var len = this.members.length;
+                for (var i = 0; i < len; i++) {
+                    if (context.noContinuation) {
+                        context.addUnreachable(this.members[i]);
+                        break;
+                    }
+                    else {
+                        this.members[i] = context.walk(this.members[i], this);
+                    }
+                }
+                context.walker.options.goChildren = false;
+            }
+    
+            public append(ast: AST) {
+                this.members[this.members.length] = ast;
+                return this;
+            }
+    
+            public appendAll(ast: AST) {
+                if (ast.nodeType == NodeType.List) {
+                                    ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    var list = <ASTList>ast;
+                    for (var i = 0, len = list.members.length; i < len; i++) {
+                        this.append(list.members[i]);
+                    }
+                }
+                else {
+                    this.append(ast);
+                }
+                return this;
+            }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.recordSourceMappingStart(this);
+                emitter.emitJavascriptList(this, null, TokenID.Semicolon, startLine, false, false);
+                                                       ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.recordSourceMappingEnd(this);
+            }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                var len = this.members.length;
+                typeFlow.nestingLevel++;
+                for (var i = 0; i < len; i++) {
+                    if (this.members[i]) {
+                        this.members[i] = this.members[i].typeCheck(typeFlow);
+                    }
+                }
+                typeFlow.nestingLevel--;
+                return this;
+            }
+        }
+    
+        export class Identifier extends AST {
+            public sym: Symbol = null;
+                        ~~~~~~
+!!! Cannot find name 'Symbol'.
+            public cloId = -1;
+            public text: string;
+    
+            // 'actualText' is the text that the user has entered for the identifier. the text might 
+            // include any Unicode escape sequences (e.g.: \u0041 for 'A'). 'text', however, contains 
+            // the resolved value of any escape sequences in the actual text; so in the previous 
+            // example, actualText = '\u0041', text = 'A'.
+            //
+            // For purposes of finding a symbol, use text, as this will allow you to match all 
+            // variations of the variable text. For full-fidelity translation of the user input, such
+            // as emitting, use the actualText field.
+            // 
+            // Note: 
+            //    To change text, and to avoid running into a situation where 'actualText' does not 
+            //    match 'text', always use setText.
+            constructor (public actualText: string, public hasEscapeSequence?: boolean) {
+                super(NodeType.Name);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                this.setText(actualText, hasEscapeSequence);
+            }
+    
+            public setText(actualText: string, hasEscapeSequence?: boolean) {
+                this.actualText = actualText;
+                if (hasEscapeSequence) {
+                    this.text = AST.getResolvedIdentifierName(actualText);
+                }
+                else {
+                    this.text = actualText;
+                }
+            }
+    
+            public isMissing() { return false; }
+            public isLeaf() { return true; }
+    
+            public treeViewLabel() {
+                return "id: " + this.actualText;
+            }
+    
+            public printLabel() {
+                if (this.actualText) {
+                    return "id: " + this.actualText;
+                }
+                else {
+                    return "name node";
+                }
+            }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                return typeFlow.typeCheckName(this);
+            }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitJavascriptName(this, true);
+            }
+    
+            public static fromToken(token: Token): Identifier {
+                                           ~~~~~
+!!! Cannot find name 'Token'.
+                return new Identifier(token.getText(), (<IdentifierToken>token).hasEscapeSequence);
+                                                         ~~~~~~~~~~~~~~~
+!!! Cannot find name 'IdentifierToken'.
+            }
+        }
+    
+        export class MissingIdentifier extends Identifier {
+            constructor () {
+                super("__missing");
+            }
+    
+            public isMissing() {
+                return true;
+            }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                // Emit nothing for a missing ID
+            }
+        }
+    
+        export class Label extends AST {
+            constructor (public id: Identifier) {
+                super(NodeType.Label);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+    
+            public printLabel() { return this.id.actualText + ":"; }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                this.type = typeFlow.voidType;
+                return this;
+            }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitParensAndCommentsInPlace(this, true);
+                emitter.recordSourceMappingStart(this);
+                emitter.recordSourceMappingStart(this.id);
+                emitter.writeToOutput(this.id.actualText);
+                emitter.recordSourceMappingEnd(this.id);
+                emitter.writeLineToOutput(":");
+                emitter.recordSourceMappingEnd(this);
+                emitter.emitParensAndCommentsInPlace(this, false);
+            }
+        }
+    
+        export class Expression extends AST {
+            constructor (nodeType: NodeType) {
+                                   ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                super(nodeType);
+            }
+    
+            public isExpression() { return true; }
+    
+            public isStatementOrExpression() { return true; }
+        }
+    
+        export class UnaryExpression extends Expression {
+            public targetType: Type = null; // Target type for an object literal (null if no target type)
+                               ~~~~
+!!! Cannot find name 'Type'.
+            public castTerm: AST = null;
+    
+            constructor (nodeType: NodeType, public operand: AST) {
+                                   ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                super(nodeType);
+            }
+    
+            public addToControlFlow(context: ControlFlowContext): void {
+                                             ~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'ControlFlowContext'.
+                super.addToControlFlow(context);
+                // TODO: add successor as catch block/finally block if present
+                if (this.nodeType == NodeType.Throw) {
+                                     ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    context.returnStmt();
+                }
+            }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                switch (this.nodeType) {
+                    case NodeType.Not:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        return typeFlow.typeCheckBitNot(this);
+    
+                    case NodeType.LogNot:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        return typeFlow.typeCheckLogNot(this);
+    
+                    case NodeType.Pos:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.Neg:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        return typeFlow.typeCheckUnaryNumberOperator(this);
+    
+                    case NodeType.IncPost:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.IncPre:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.DecPost:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.DecPre:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        return typeFlow.typeCheckIncOrDec(this);
+    
+                    case NodeType.ArrayLit:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        typeFlow.typeCheckArrayLit(this);
+                        return this;
+    
+                    case NodeType.ObjectLit:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        typeFlow.typeCheckObjectLit(this);
+                        return this;
+    
+                    case NodeType.Throw:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        this.operand = typeFlow.typeCheck(this.operand);
+                        this.type = typeFlow.voidType;
+                        return this;
+    
+                    case NodeType.Typeof:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        this.operand = typeFlow.typeCheck(this.operand);
+                        this.type = typeFlow.stringType;
+                        return this;
+    
+                    case NodeType.Delete:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        this.operand = typeFlow.typeCheck(this.operand);
+                        this.type = typeFlow.booleanType;
+                        break;
+    
+                    case NodeType.TypeAssertion:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        this.castTerm = typeFlow.typeCheck(this.castTerm);
+                        var applyTargetType = !this.operand.isParenthesized;
+    
+                        var targetType = applyTargetType ? this.castTerm.type : null;
+    
+                        typeFlow.checker.typeCheckWithContextualType(targetType, typeFlow.checker.inProvisionalTypecheckMode(), true, this.operand);
+                        typeFlow.castWithCoercion(this.operand, this.castTerm.type, false, true);
+                        this.type = this.castTerm.type;
+                        return this;
+    
+                    case NodeType.Void:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        // REVIEW - Although this is good to do for completeness's sake,
+                        // this shouldn't be strictly necessary from the void operator's
+                        // point of view
+                        this.operand = typeFlow.typeCheck(this.operand);
+                        this.type = typeFlow.checker.undefinedType;
+                        break;
+    
+                    default:
+                        throw new Error("please implement in derived class");
+                }
+                return this;
+            }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitParensAndCommentsInPlace(this, true);
+                emitter.recordSourceMappingStart(this);
+                switch (this.nodeType) {
+                    case NodeType.IncPost:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        emitter.emitJavascript(this.operand, TokenID.PlusPlus, false);
+                                                             ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                        emitter.writeToOutput("++");
+                        break;
+                    case NodeType.LogNot:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        emitter.writeToOutput("!");
+                        emitter.emitJavascript(this.operand, TokenID.Exclamation, false);
+                                                             ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                        break;
+                    case NodeType.DecPost:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        emitter.emitJavascript(this.operand, TokenID.MinusMinus, false);
+                                                             ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                        emitter.writeToOutput("--");
+                        break;
+                    case NodeType.ObjectLit:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        emitter.emitObjectLiteral(<ASTList>this.operand);
+                        break;
+                    case NodeType.ArrayLit:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        emitter.emitArrayLiteral(<ASTList>this.operand);
+                        break;
+                    case NodeType.Not:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        emitter.writeToOutput("~");
+                        emitter.emitJavascript(this.operand, TokenID.Tilde, false);
+                                                             ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                        break;
+                    case NodeType.Neg:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        emitter.writeToOutput("-");
+                        if (this.operand.nodeType == NodeType.Neg) {
+                                                     ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                            this.operand.isParenthesized = true;
+                        }
+                        emitter.emitJavascript(this.operand, TokenID.Minus, false);
+                                                             ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                        break;
+                    case NodeType.Pos:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        emitter.writeToOutput("+");
+                        if (this.operand.nodeType == NodeType.Pos) {
+                                                     ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                            this.operand.isParenthesized = true;
+                        }
+                        emitter.emitJavascript(this.operand, TokenID.Plus, false);
+                                                             ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                        break;
+                    case NodeType.IncPre:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        emitter.writeToOutput("++");
+                        emitter.emitJavascript(this.operand, TokenID.PlusPlus, false);
+                                                             ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                        break;
+                    case NodeType.DecPre:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        emitter.writeToOutput("--");
+                        emitter.emitJavascript(this.operand, TokenID.MinusMinus, false);
+                                                             ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                        break;
+                    case NodeType.Throw:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        emitter.writeToOutput("throw ");
+                        emitter.emitJavascript(this.operand, TokenID.Tilde, false);
+                                                             ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                        emitter.writeToOutput(";");
+                        break;
+                    case NodeType.Typeof:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        emitter.writeToOutput("typeof ");
+                        emitter.emitJavascript(this.operand, TokenID.Tilde, false);
+                                                             ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                        break;
+                    case NodeType.Delete:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        emitter.writeToOutput("delete ");
+                        emitter.emitJavascript(this.operand, TokenID.Tilde, false);
+                                                             ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                        break;
+                    case NodeType.Void:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        emitter.writeToOutput("void ");
+                        emitter.emitJavascript(this.operand, TokenID.Tilde, false);
+                                                             ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                        break;
+                    case NodeType.TypeAssertion:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        emitter.emitJavascript(this.operand, TokenID.Tilde, false);
+                                                             ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                        break;
+                    default:
+                        throw new Error("please implement in derived class");
+                }
+                emitter.recordSourceMappingEnd(this);
+                emitter.emitParensAndCommentsInPlace(this, false);
+            }
+        }
+    
+        export class CallExpression extends Expression {
+            constructor (nodeType: NodeType,
+                                   ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                         public target: AST,
+                         public arguments: ASTList) {
+                super(nodeType);
+                this.minChar = this.target.minChar;
+            }
+    
+            public signature: Signature = null;
+                              ~~~~~~~~~
+!!! Cannot find name 'Signature'.
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                if (this.nodeType == NodeType.New) {
+                                     ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    return typeFlow.typeCheckNew(this);
+                }
+                else {
+                    return typeFlow.typeCheckCall(this);
+                }
+            }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitParensAndCommentsInPlace(this, true);
+                emitter.recordSourceMappingStart(this);
+    
+                if (this.nodeType == NodeType.New) {
+                                     ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    emitter.emitNew(this.target, this.arguments);
+                }
+                else {
+                    emitter.emitCall(this, this.target, this.arguments);
+                }
+    
+                emitter.recordSourceMappingEnd(this);
+                emitter.emitParensAndCommentsInPlace(this, false);
+            }
+        }
+    
+        export class BinaryExpression extends Expression {
+            constructor (nodeType: NodeType, public operand1: AST, public operand2: AST) {
+                                   ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                super(nodeType);
+            }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                switch (this.nodeType) {
+                    case NodeType.Dot:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        return typeFlow.typeCheckDotOperator(this);
+                    case NodeType.Asg:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        return typeFlow.typeCheckAsgOperator(this);
+                    case NodeType.Add:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.Sub:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.Mul:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.Div:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.Mod:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.Or:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.And:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        return typeFlow.typeCheckArithmeticOperator(this, false);
+                    case NodeType.Xor:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        return typeFlow.typeCheckBitwiseOperator(this, false);
+                    case NodeType.Ne:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.Eq:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        var text: string;
+                        if (typeFlow.checker.styleSettings.eqeqeq) {
+                            text = nodeTypeTable[this.nodeType];
+                                   ~~~~~~~~~~~~~
+!!! Cannot find name 'nodeTypeTable'.
+                            typeFlow.checker.errorReporter.styleError(this, "use of " + text);
+                        }
+                        else if (typeFlow.checker.styleSettings.eqnull) {
+                            text = nodeTypeTable[this.nodeType];
+                                   ~~~~~~~~~~~~~
+!!! Cannot find name 'nodeTypeTable'.
+                            if ((this.operand2 !== null) && (this.operand2.nodeType == NodeType.Null)) {
+                                                                                       ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                                typeFlow.checker.errorReporter.styleError(this, "use of " + text + " to compare with null");
+                            }
+                        }
+                    case NodeType.Eqv:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.NEqv:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.Lt:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.Le:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.Ge:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.Gt:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        return typeFlow.typeCheckBooleanOperator(this);
+                    case NodeType.Index:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        return typeFlow.typeCheckIndex(this);
+                    case NodeType.Member:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        this.type = typeFlow.voidType;
+                        return this;
+                    case NodeType.LogOr:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        return typeFlow.typeCheckLogOr(this);
+                    case NodeType.LogAnd:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        return typeFlow.typeCheckLogAnd(this);
+                    case NodeType.AsgAdd:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.AsgSub:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.AsgMul:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.AsgDiv:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.AsgMod:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.AsgOr:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.AsgAnd:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        return typeFlow.typeCheckArithmeticOperator(this, true);
+                    case NodeType.AsgXor:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        return typeFlow.typeCheckBitwiseOperator(this, true);
+                    case NodeType.Lsh:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.Rsh:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.Rs2:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        return typeFlow.typeCheckShift(this, false);
+                    case NodeType.AsgLsh:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.AsgRsh:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    case NodeType.AsgRs2:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        return typeFlow.typeCheckShift(this, true);
+                    case NodeType.Comma:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        return typeFlow.typeCheckCommaOperator(this);
+                    case NodeType.InstOf:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        return typeFlow.typeCheckInstOf(this);
+                    case NodeType.In:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        return typeFlow.typeCheckInOperator(this);
+                    case NodeType.From:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        typeFlow.checker.errorReporter.simpleError(this, "Illegal use of 'from' keyword in binary expression");
+                        break;
+                    default:
+                        throw new Error("please implement in derived class");
+                }
+                return this;
+            }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                var binTokenId = nodeTypeToTokTable[this.nodeType];
+                                 ~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'nodeTypeToTokTable'.
+    
+                emitter.emitParensAndCommentsInPlace(this, true);
+                emitter.recordSourceMappingStart(this);
+                if (binTokenId != undefined) {
+    
+                    emitter.emitJavascript(this.operand1, binTokenId, false);
+    
+                    if (tokenTable[binTokenId].text == "instanceof") {
+                        ~~~~~~~~~~
+!!! Cannot find name 'tokenTable'.
+                        emitter.writeToOutput(" instanceof ");
+                    }
+                    else if (tokenTable[binTokenId].text == "in") {
+                             ~~~~~~~~~~
+!!! Cannot find name 'tokenTable'.
+                        emitter.writeToOutput(" in ");
+                    }
+                    else {
+                        emitter.writeToOutputTrimmable(" " + tokenTable[binTokenId].text + " ");
+                                                             ~~~~~~~~~~
+!!! Cannot find name 'tokenTable'.
+                    }
+    
+                    emitter.emitJavascript(this.operand2, binTokenId, false);
+                }
+                else {
+                    switch (this.nodeType) {
+                        case NodeType.Dot:
+                             ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                            if (!emitter.tryEmitConstant(this)) {
+                                emitter.emitJavascript(this.operand1, TokenID.Dot, false);
+                                                                      ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                                emitter.writeToOutput(".");
+                                emitter.emitJavascriptName(<Identifier>this.operand2, false);
+                            }
+                            break;
+                        case NodeType.Index:
+                             ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                            emitter.emitIndex(this.operand1, this.operand2);
+                            break;
+    
+                        case NodeType.Member:
+                             ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                            if (this.operand2.nodeType == NodeType.FuncDecl && (<FuncDecl>this.operand2).isAccessor()) {
+                                                          ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                                var funcDecl = <FuncDecl>this.operand2;
+                                if (hasFlag(funcDecl.fncFlags, FncFlags.GetAccessor)) {
+                                    ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                                               ~~~~~~~~
+!!! Cannot find name 'FncFlags'.
+                                    emitter.writeToOutput("get ");
+                                }
+                                else {
+                                    emitter.writeToOutput("set ");
+                                }
+                                emitter.emitJavascript(this.operand1, TokenID.Colon, false);
+                                                                      ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                            }
+                            else {
+                                emitter.emitJavascript(this.operand1, TokenID.Colon, false);
+                                                                      ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                                emitter.writeToOutputTrimmable(": ");
+                            }
+                            emitter.emitJavascript(this.operand2, TokenID.Comma, false);
+                                                                  ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                            break;
+                        case NodeType.Comma:
+                             ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                            emitter.emitJavascript(this.operand1, TokenID.Comma, false);
+                                                                  ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                            if (emitter.emitState.inObjectLiteral) {
+                                emitter.writeLineToOutput(", ");
+                            }
+                            else {
+                                emitter.writeToOutput(",");
+                            }
+                            emitter.emitJavascript(this.operand2, TokenID.Comma, false);
+                                                                  ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                            break;
+                        case NodeType.Is:
+                             ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                            throw new Error("should be de-sugared during type check");
+                        default:
+                            throw new Error("please implement in derived class");
+                    }
+                }
+                emitter.recordSourceMappingEnd(this);
+                emitter.emitParensAndCommentsInPlace(this, false);
+            }
+        }
+    
+        export class ConditionalExpression extends Expression {
+            constructor (public operand1: AST,
+                         public operand2: AST,
+                         public operand3: AST) {
+                super(NodeType.ConditionalExpression);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                return typeFlow.typeCheckQMark(this);
+            }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitParensAndCommentsInPlace(this, true);
+                emitter.recordSourceMappingStart(this);
+                emitter.emitJavascript(this.operand1, TokenID.Question, false);
+                                                      ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.writeToOutput(" ? ");
+                emitter.emitJavascript(this.operand2, TokenID.Question, false);
+                                                      ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.writeToOutput(" : ");
+                emitter.emitJavascript(this.operand3, TokenID.Question, false);
+                                                      ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.recordSourceMappingEnd(this);
+                emitter.emitParensAndCommentsInPlace(this, false);
+            }
+        }
+    
+        export class NumberLiteral extends Expression {
+            constructor (public value: number, public hasEmptyFraction?: boolean) {
+                super(NodeType.NumberLit);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+    
+            public isNegativeZero = false;
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                this.type = typeFlow.doubleType;
+                return this;
+            }
+    
+            public treeViewLabel() {
+                return "num: " + this.printLabel();
+            }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitParensAndCommentsInPlace(this, true);
+                emitter.recordSourceMappingStart(this);
+                if (this.isNegativeZero) {
+                    emitter.writeToOutput("-");
+                }
+    
+                emitter.writeToOutput(this.value.toString());
+    
+                if (this.hasEmptyFraction)
+                    emitter.writeToOutput(".0");
+    
+                emitter.recordSourceMappingEnd(this);
+                emitter.emitParensAndCommentsInPlace(this, false);
+            }
+    
+            public printLabel() {
+                if (Math.floor(this.value) != this.value) {
+                    return this.value.toFixed(2).toString();
+                }
+                else if (this.hasEmptyFraction) {
+                    return this.value.toString() + ".0";
+                }
+                else {
+                    return this.value.toString();
+                }
+            }
+        }
+    
+        export class RegexLiteral extends Expression {
+            constructor (public regex) {
+                super(NodeType.Regex);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+            
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                this.type = typeFlow.regexType;
+                return this;
+            }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitParensAndCommentsInPlace(this, true);
+                emitter.recordSourceMappingStart(this);
+                emitter.writeToOutput(this.regex.toString());
+                emitter.recordSourceMappingEnd(this);
+                emitter.emitParensAndCommentsInPlace(this, false);
+            }
+        }
+    
+        export class StringLiteral extends Expression {
+            constructor (public text: string) {
+                super(NodeType.QString);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitParensAndCommentsInPlace(this, true);
+                emitter.recordSourceMappingStart(this);
+                emitter.emitStringLiteral(this.text);
+                emitter.recordSourceMappingEnd(this);
+                emitter.emitParensAndCommentsInPlace(this, false);
+            }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                this.type = typeFlow.stringType;
+                return this;
+            }
+    
+            public treeViewLabel() {
+                return "st: " + this.text;
+            }
+    
+            public printLabel() {
+                return this.text;
+            }
+        }
+    
+        export class ModuleElement extends AST {
+            constructor (nodeType: NodeType) {
+                                   ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                super(nodeType);
+            }
+        }
+    
+        export class ImportDeclaration extends ModuleElement {
+            public isStatementOrExpression() { return true; }
+            public varFlags = VarFlags.None;
+                              ~~~~~~~~
+!!! Cannot find name 'VarFlags'.
+            public isDynamicImport = false;
+    
+            constructor (public id: Identifier, public alias: AST) {
+                super(NodeType.ImportDeclaration);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                var mod = <ModuleType>this.alias.type;
+                           ~~~~~~~~~~
+!!! Cannot find name 'ModuleType'.
+                // REVIEW: Only modules may be aliased for now, though there's no real
+                // restriction on what the type symbol may be
+                if (!this.isDynamicImport || (this.id.sym && !(<TypeSymbol>this.id.sym).onlyReferencedAsTypeRef)) {
+                                                                ~~~~~~~~~~
+!!! Cannot find name 'TypeSymbol'.
+                    var prevModAliasId = emitter.modAliasId;
+                    var prevFirstModAlias = emitter.firstModAlias;
+    
+                    emitter.recordSourceMappingStart(this);
+                    emitter.emitParensAndCommentsInPlace(this, true);
+                    emitter.writeToOutput("var " + this.id.actualText + " = ");
+                    emitter.modAliasId = this.id.actualText;
+                    emitter.firstModAlias = this.firstAliasedModToString();
+                    emitter.emitJavascript(this.alias, TokenID.Tilde, false);
+                                                       ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                    // the dynamic import case will insert the semi-colon automatically
+                    if (!this.isDynamicImport) {
+                        emitter.writeToOutput(";");
+                    }
+                    emitter.emitParensAndCommentsInPlace(this, false);
+                    emitter.recordSourceMappingEnd(this);
+    
+                    emitter.modAliasId = prevModAliasId;
+                    emitter.firstModAlias = prevFirstModAlias;
+                }
+            }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                return typeFlow.typeCheckImportDecl(this);
+            }
+    
+            public getAliasName(aliasAST?: AST = this.alias) : string {
+                                ~~~~~~~~
+!!! Parameter cannot have question mark and initializer.
+                if (aliasAST.nodeType == NodeType.Name) {
+                                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    return (<Identifier>aliasAST).actualText;
+                } else {
+                    var dotExpr = <BinaryExpression>aliasAST;
+                    return this.getAliasName(dotExpr.operand1) + "." + this.getAliasName(dotExpr.operand2);
+                }
+            }
+    
+            public firstAliasedModToString() {
+                if (this.alias.nodeType == NodeType.Name) {
+                                           ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    return (<Identifier>this.alias).actualText;
+                }
+                else {
+                    var dotExpr = <BinaryExpression>this.alias;
+                    var firstMod = <Identifier>dotExpr.operand1;
+                    return firstMod.actualText;
+                }
+            }
+        }
+    
+        export class BoundDecl extends AST {
+            public init: AST = null;
+            public typeExpr: AST = null;
+            public varFlags = VarFlags.None;
+                              ~~~~~~~~
+!!! Cannot find name 'VarFlags'.
+            public sym: Symbol = null;
+                        ~~~~~~
+!!! Cannot find name 'Symbol'.
+    
+            constructor (public id: Identifier, nodeType: NodeType, public nestingLevel: number) {
+                                                          ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                super(nodeType);
+            }
+    
+            public isStatementOrExpression() { return true; }
+    
+            public isPrivate() { return hasFlag(this.varFlags, VarFlags.Private); }
+                                        ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                                               ~~~~~~~~
+!!! Cannot find name 'VarFlags'.
+            public isPublic() { return hasFlag(this.varFlags, VarFlags.Public); }
+                                       ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                                              ~~~~~~~~
+!!! Cannot find name 'VarFlags'.
+            public isProperty() { return hasFlag(this.varFlags, VarFlags.Property); }
+                                         ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                                                ~~~~~~~~
+!!! Cannot find name 'VarFlags'.
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                return typeFlow.typeCheckBoundDecl(this);
+            }
+    
+            public printLabel() {
+                return this.treeViewLabel();
+            }
+        }
+    
+        export class VarDecl extends BoundDecl {
+            constructor (id: Identifier, nest: number) {
+                super(id, NodeType.VarDecl, nest);
+                          ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+    
+            public isAmbient() { return hasFlag(this.varFlags, VarFlags.Ambient); }
+                                        ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                                               ~~~~~~~~
+!!! Cannot find name 'VarFlags'.
+            public isExported() { return hasFlag(this.varFlags, VarFlags.Exported); }
+                                         ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                                                ~~~~~~~~
+!!! Cannot find name 'VarFlags'.
+            public isStatic() { return hasFlag(this.varFlags, VarFlags.Static); }
+                                       ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                                              ~~~~~~~~
+!!! Cannot find name 'VarFlags'.
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitJavascriptVarDecl(this, tokenId);
+            }
+    
+            public treeViewLabel() {
+                return "var " + this.id.actualText;
+            }
+        }
+    
+        export class ArgDecl extends BoundDecl {
+            constructor (id: Identifier) {
+                super(id, NodeType.ArgDecl, 0);
+                          ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+    
+            public isOptional = false;
+    
+            public isOptionalArg() { return this.isOptional || this.init; }
+    
+            public treeViewLabel() {
+                return "arg: " + this.id.actualText;
+            }
+    
+            public parameterPropertySym: FieldSymbol = null;
+                                         ~~~~~~~~~~~
+!!! Cannot find name 'FieldSymbol'.
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitParensAndCommentsInPlace(this, true);
+                emitter.recordSourceMappingStart(this);
+                emitter.writeToOutput(this.id.actualText);
+                emitter.recordSourceMappingEnd(this);
+                emitter.emitParensAndCommentsInPlace(this, false);
+            }
+        }
+    
+        var internalId = 0;
+    
+        export class FuncDecl extends AST {
+            public hint: string = null;
+            public fncFlags = FncFlags.None;
+                              ~~~~~~~~
+!!! Cannot find name 'FncFlags'.
+            public returnTypeAnnotation: AST = null;
+            public symbols: IHashTable;
+                            ~~~~~~~~~~
+!!! Cannot find name 'IHashTable'.
+            public variableArgList = false;
+            public signature: Signature;
+                              ~~~~~~~~~
+!!! Cannot find name 'Signature'.
+            public envids: Identifier[];
+            public jumpRefs: Identifier[] = null;
+            public internalNameCache: string = null;
+            public tmp1Declared = false;
+            public enclosingFnc: FuncDecl = null;
+            public freeVariables: Symbol[] = [];
+                                  ~~~~~~
+!!! Cannot find name 'Symbol'.
+            public unitIndex = -1;
+            public classDecl: NamedDeclaration = null;
+            public boundToProperty: VarDecl = null;
+            public isOverload = false;
+            public innerStaticFuncs: FuncDecl[] = [];
+            public isTargetTypedAsMethod = false;
+            public isInlineCallLiteral = false;
+            public accessorSymbol: Symbol = null;
+                                   ~~~~~~
+!!! Cannot find name 'Symbol'.
+            public leftCurlyCount = 0;
+            public rightCurlyCount = 0;
+            public returnStatementsWithExpressions: ReturnStatement[] = [];
+            public scopeType: Type = null; // Type of the FuncDecl, before target typing
+                              ~~~~
+!!! Cannot find name 'Type'.
+            public endingToken: ASTSpan = null;
+    
+            constructor (public name: Identifier, public bod: ASTList, public isConstructor: boolean,
+                         public arguments: ASTList, public vars: ASTList, public scopes: ASTList, public statics: ASTList,
+                nodeType: number) {
+    
+                super(nodeType);
+            }
+    
+            public internalName(): string {
+                if (this.internalNameCache == null) {
+                    var extName = this.getNameText();
+                    if (extName) {
+                        this.internalNameCache = "_internal_" + extName;
+                    }
+                    else {
+                        this.internalNameCache = "_internal_" + internalId++;
+                    }
+                }
+                return this.internalNameCache;
+            }
+    
+            public hasSelfReference() { return hasFlag(this.fncFlags, FncFlags.HasSelfReference); }
+                                               ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                                                      ~~~~~~~~
+!!! Cannot find name 'FncFlags'.
+            public setHasSelfReference() { this.fncFlags |= FncFlags.HasSelfReference; }
+                                                            ~~~~~~~~
+!!! Cannot find name 'FncFlags'.
+    
+            public addCloRef(id: Identifier, sym: Symbol): number {
+                                                  ~~~~~~
+!!! Cannot find name 'Symbol'.
+                if (this.envids == null) {
+                    this.envids = new Identifier[];
+                                                ~~
+!!! 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+                }
+                this.envids[this.envids.length] = id;
+                var outerFnc = this.enclosingFnc;
+                if (sym) {
+                    while (outerFnc && (outerFnc.type.symbol != sym.container)) {
+                        outerFnc.addJumpRef(sym);
+                        outerFnc = outerFnc.enclosingFnc;
+                    }
+                }
+                return this.envids.length - 1;
+            }
+    
+            public addJumpRef(sym: Symbol): void {
+                                   ~~~~~~
+!!! Cannot find name 'Symbol'.
+                if (this.jumpRefs == null) {
+                    this.jumpRefs = new Identifier[];
+                                                  ~~
+!!! 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+                }
+                var id = new Identifier(sym.name);
+                this.jumpRefs[this.jumpRefs.length] = id;
+                id.sym = sym;
+                id.cloId = this.addCloRef(id, null);
+            }
+    
+            public buildControlFlow(): ControlFlowContext {
+                                       ~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'ControlFlowContext'.
+                var entry = new BasicBlock();
+                                ~~~~~~~~~~
+!!! Cannot find name 'BasicBlock'.
+                var exit = new BasicBlock();
+                               ~~~~~~~~~~
+!!! Cannot find name 'BasicBlock'.
+    
+                var context = new ControlFlowContext(entry, exit);
+                                  ~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'ControlFlowContext'.
+    
+                var controlFlowPrefix = (ast: AST, parent: AST, walker: IAstWalker) => {
+                                                                        ~~~~~~~~~~
+!!! Cannot find name 'IAstWalker'.
+                    ast.addToControlFlow(walker.state);
+                    return ast;
+                }
+    
+                var walker = getAstWalkerFactory().getWalker(controlFlowPrefix, null, null, context);
+                             ~~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'getAstWalkerFactory'.
+                context.walker = walker;
+                walker.walk(this.bod, this);
+    
+                return context;
+            }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                return typeFlow.typeCheckFunction(this);
+            }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitJavascriptFunction(this);
+            }
+    
+            public getNameText() {
+                if (this.name) {
+                    return this.name.actualText;
+                }
+                else {
+                    return this.hint;
+                }
+            }
+    
+            public isMethod() {
+                return (this.fncFlags & FncFlags.Method) != FncFlags.None;
+                                        ~~~~~~~~
+!!! Cannot find name 'FncFlags'.
+                                                            ~~~~~~~~
+!!! Cannot find name 'FncFlags'.
+            }
+    
+            public isCallMember() { return hasFlag(this.fncFlags, FncFlags.CallMember); }
+                                           ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                                                  ~~~~~~~~
+!!! Cannot find name 'FncFlags'.
+            public isConstructMember() { return hasFlag(this.fncFlags, FncFlags.ConstructMember); }
+                                                ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                                                       ~~~~~~~~
+!!! Cannot find name 'FncFlags'.
+            public isIndexerMember() { return hasFlag(this.fncFlags, FncFlags.IndexerMember); }
+                                              ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                                                     ~~~~~~~~
+!!! Cannot find name 'FncFlags'.
+            public isSpecialFn() { return this.isCallMember() || this.isIndexerMember() || this.isConstructMember(); }
+            public isAnonymousFn() { return this.name === null; }
+            public isAccessor() { return hasFlag(this.fncFlags, FncFlags.GetAccessor) || hasFlag(this.fncFlags, FncFlags.SetAccessor); }
+                                         ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                                                ~~~~~~~~
+!!! Cannot find name 'FncFlags'.
+                                                                                         ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                                                                                                ~~~~~~~~
+!!! Cannot find name 'FncFlags'.
+            public isGetAccessor() { return hasFlag(this.fncFlags, FncFlags.GetAccessor); }
+                                            ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                                                   ~~~~~~~~
+!!! Cannot find name 'FncFlags'.
+            public isSetAccessor() { return hasFlag(this.fncFlags, FncFlags.SetAccessor); }
+                                            ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                                                   ~~~~~~~~
+!!! Cannot find name 'FncFlags'.
+            public isAmbient() { return hasFlag(this.fncFlags, FncFlags.Ambient); }
+                                        ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                                               ~~~~~~~~
+!!! Cannot find name 'FncFlags'.
+            public isExported() { return hasFlag(this.fncFlags, FncFlags.Exported); }
+                                         ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                                                ~~~~~~~~
+!!! Cannot find name 'FncFlags'.
+            public isPrivate() { return hasFlag(this.fncFlags, FncFlags.Private); }
+                                        ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                                               ~~~~~~~~
+!!! Cannot find name 'FncFlags'.
+            public isPublic() { return hasFlag(this.fncFlags, FncFlags.Public); }
+                                       ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                                              ~~~~~~~~
+!!! Cannot find name 'FncFlags'.
+            public isStatic() { return hasFlag(this.fncFlags, FncFlags.Static); }
+                                       ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                                              ~~~~~~~~
+!!! Cannot find name 'FncFlags'.
+    
+            public treeViewLabel() {
+                if (this.name == null) {
+                    return "funcExpr";
+                }
+                else {
+                    return "func: " + this.name.actualText
+                }
+            }
+    
+            public ClearFlags(): void {
+                this.fncFlags = FncFlags.None;
+                                ~~~~~~~~
+!!! Cannot find name 'FncFlags'.
+            }
+    
+            public isSignature() { return (this.fncFlags & FncFlags.Signature) != FncFlags.None; }
+                                                           ~~~~~~~~
+!!! Cannot find name 'FncFlags'.
+                                                                                  ~~~~~~~~
+!!! Cannot find name 'FncFlags'.
+    
+            public hasStaticDeclarations() { return (!this.isConstructor && (this.statics.members.length > 0 || this.innerStaticFuncs.length > 0)); }
+        }
+    
+        export class LocationInfo {
+            constructor (public filename: string, public lineMap: number[], public unitIndex) { }
+        }
+    
+        export var unknownLocationInfo = new LocationInfo("unknown", null, -1);
+    
+        export class Script extends FuncDecl {
+            public locationInfo: LocationInfo = null;
+            public referencedFiles: IFileReference[] = [];
+                                    ~~~~~~~~~~~~~~
+!!! Cannot find name 'IFileReference'.
+            public requiresGlobal = false;
+            public requiresInherits = false;
+            public isResident = false;
+            public isDeclareFile = false;
+            public hasBeenTypeChecked = false;
+            public topLevelMod: ModuleDeclaration = null;
+            public leftCurlyCount = 0;
+            public rightCurlyCount = 0;
+            public vars: ASTList;
+            public scopes: ASTList;
+            // Remember if the script contains Unicode chars, that is needed when generating code for this script object to decide the output file correct encoding.
+            public containsUnicodeChar = false;
+            public containsUnicodeCharInComment = false;
+    
+            constructor (vars: ASTList, scopes: ASTList) {
+                super(new Identifier("script"), null, false, null, vars, scopes, null, NodeType.Script);
+                                                                                       ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                this.vars = vars;
+                this.scopes = scopes;
+            }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                return typeFlow.typeCheckScript(this);
+            }
+    
+            public treeViewLabel() {
+                return "Script";
+            }
+    
+            public emitRequired() {
+                if (!this.isDeclareFile && !this.isResident && this.bod) {
+                    for (var i = 0, len = this.bod.members.length; i < len; i++) {
+                        var stmt = this.bod.members[i];
+                        if (stmt.nodeType == NodeType.ModuleDeclaration) {
+                                             ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                            if (!hasFlag((<ModuleDeclaration>stmt).modFlags, ModuleFlags.ShouldEmitModuleDecl | ModuleFlags.Ambient)) {
+                                 ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                                                             ~~~~~~~~~~~
+!!! Cannot find name 'ModuleFlags'.
+                                                                                                                ~~~~~~~~~~~
+!!! Cannot find name 'ModuleFlags'.
+                                return true;
+                            }
+                        }
+                        else if (stmt.nodeType == NodeType.ClassDeclaration) {
+                                                  ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                            if (!hasFlag((<InterfaceDeclaration>stmt).varFlags, VarFlags.Ambient)) {
+                                 ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                                                                ~~~~~~~~
+!!! Cannot find name 'VarFlags'.
+                                return true;
+                            }
+                        }
+                        else if (stmt.nodeType == NodeType.VarDecl) {
+                                                  ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                            if (!hasFlag((<VarDecl>stmt).varFlags, VarFlags.Ambient)) {
+                                 ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                                                   ~~~~~~~~
+!!! Cannot find name 'VarFlags'.
+                                return true;
+                            }
+                        }
+                        else if (stmt.nodeType == NodeType.FuncDecl) {
+                                                  ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                            if (!(<FuncDecl>stmt).isSignature()) {
+                                return true;
+                            }
+                        }
+                        else if (stmt.nodeType != NodeType.InterfaceDeclaration && stmt.nodeType != NodeType.Empty) {
+                                                  ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                                                                                                    ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                if (this.emitRequired()) {
+                    emitter.emitParensAndCommentsInPlace(this, true);
+                    emitter.recordSourceMappingStart(this);
+                    emitter.emitJavascriptList(this.bod, null, TokenID.Semicolon, true, false, false, true, this.requiresInherits);
+                                                               ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                    emitter.recordSourceMappingEnd(this);
+                    emitter.emitParensAndCommentsInPlace(this, false);
+                }
+            }
+        }
+    
+        export class NamedDeclaration extends ModuleElement {
+            public leftCurlyCount = 0;
+            public rightCurlyCount = 0;
+    
+            constructor (nodeType: NodeType,
+                                   ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                         public name: Identifier,
+                         public members: ASTList) {
+                super(nodeType);
+            }
+        }
+    
+        export class ModuleDeclaration extends NamedDeclaration {
+            public modFlags = ModuleFlags.ShouldEmitModuleDecl;
+                              ~~~~~~~~~~~
+!!! Cannot find name 'ModuleFlags'.
+            public mod: ModuleType;
+                        ~~~~~~~~~~
+!!! Cannot find name 'ModuleType'.
+            public prettyName: string;
+            public amdDependencies: string[] = [];
+            public vars: ASTList;
+            public scopes: ASTList;
+            // Remember if the module contains Unicode chars, that is needed for dynamic module as we will generate a file for each.
+            public containsUnicodeChar = false;
+            public containsUnicodeCharInComment = false;
+    
+            constructor (name: Identifier, members: ASTList, vars: ASTList, scopes: ASTList, public endingToken: ASTSpan) {
+                super(NodeType.ModuleDeclaration, name, members);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+    
+                this.vars = vars;
+                this.scopes = scopes;
+                this.prettyName = this.name.actualText;
+            }
+    
+            public isExported() { return hasFlag(this.modFlags, ModuleFlags.Exported); }
+                                         ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                                                ~~~~~~~~~~~
+!!! Cannot find name 'ModuleFlags'.
+            public isAmbient() { return hasFlag(this.modFlags, ModuleFlags.Ambient); }
+                                        ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                                               ~~~~~~~~~~~
+!!! Cannot find name 'ModuleFlags'.
+            public isEnum() { return hasFlag(this.modFlags, ModuleFlags.IsEnum); }
+                                     ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                                            ~~~~~~~~~~~
+!!! Cannot find name 'ModuleFlags'.
+    
+            public recordNonInterface() {
+                this.modFlags &= ~ModuleFlags.ShouldEmitModuleDecl;
+                                  ~~~~~~~~~~~
+!!! Cannot find name 'ModuleFlags'.
+            }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                return typeFlow.typeCheckModule(this);
+            }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                if (!hasFlag(this.modFlags, ModuleFlags.ShouldEmitModuleDecl)) {
+                     ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                            ~~~~~~~~~~~
+!!! Cannot find name 'ModuleFlags'.
+                    emitter.emitParensAndCommentsInPlace(this, true);
+                    emitter.recordSourceMappingStart(this);
+                    emitter.emitJavascriptModule(this);
+                    emitter.recordSourceMappingEnd(this);
+                    emitter.emitParensAndCommentsInPlace(this, false);
+                }
+            }
+        }
+    
+        export class TypeDeclaration extends NamedDeclaration {
+            public varFlags = VarFlags.None;
+                              ~~~~~~~~
+!!! Cannot find name 'VarFlags'.
+    
+            constructor (nodeType: NodeType,
+                                   ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                         name: Identifier,
+                         public extendsList: ASTList,
+                         public implementsList: ASTList,
+                         members: ASTList) {
+                super(nodeType, name, members);
+            }
+    
+            public isExported() { 
+                return hasFlag(this.varFlags, VarFlags.Exported);
+                       ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                              ~~~~~~~~
+!!! Cannot find name 'VarFlags'.
+            }
+    
+            public isAmbient() {
+                return hasFlag(this.varFlags, VarFlags.Ambient);
+                       ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                              ~~~~~~~~
+!!! Cannot find name 'VarFlags'.
+            }
+        }
+    
+        export class ClassDeclaration extends TypeDeclaration {
+            public knownMemberNames: any = {};
+            public constructorDecl: FuncDecl = null;
+            public constructorNestingLevel = 0;
+            public endingToken: ASTSpan = null;
+    
+            constructor (name: Identifier,
+                         members: ASTList,
+                         extendsList: ASTList,
+                         implementsList: ASTList) {
+                super(NodeType.ClassDeclaration, name, extendsList, implementsList, members);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                return typeFlow.typeCheckClass(this);
+            }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitJavascriptClass(this);
+            }
+        }
+    
+        export class InterfaceDeclaration extends TypeDeclaration {
+            constructor (name: Identifier,
+                         members: ASTList,
+                         extendsList: ASTList,
+                         implementsList: ASTList) {
+                super(NodeType.InterfaceDeclaration, name, extendsList, implementsList, members);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                return typeFlow.typeCheckInterface(this);
+            }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+            }
+        }
+    
+        export class Statement extends ModuleElement {
+            constructor (nodeType: NodeType) {
+                                   ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                super(nodeType);
+                this.flags |= ASTFlags.IsStatement;
+                              ~~~~~~~~
+!!! Cannot find name 'ASTFlags'.
+            }
+    
+            public isLoop() { return false; }
+    
+            public isStatementOrExpression() { return true; }
+    
+            public isCompoundStatement() { return this.isLoop(); }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                this.type = typeFlow.voidType;
+                return this;
+            }
+        }
+    
+        export class LabeledStatement extends Statement {
+            constructor (public labels: ASTList, public stmt: AST) {
+                super(NodeType.LabeledStatement);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitParensAndCommentsInPlace(this, true);
+                emitter.recordSourceMappingStart(this);
+                if (this.labels) {
+                    var labelsLen = this.labels.members.length;
+                    for (var i = 0; i < labelsLen; i++) {
+                        this.labels.members[i].emit(emitter, tokenId, startLine);
+                    }
+                }
+                this.stmt.emit(emitter, tokenId, true);
+                emitter.recordSourceMappingEnd(this);
+                emitter.emitParensAndCommentsInPlace(this, false);
+            }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                typeFlow.typeCheck(this.labels);
+                this.stmt = this.stmt.typeCheck(typeFlow);
+                return this;
+            }
+    
+            public addToControlFlow(context: ControlFlowContext): void {
+                                             ~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'ControlFlowContext'.
+                var beforeBB = context.current;
+                var bb = new BasicBlock();
+                             ~~~~~~~~~~
+!!! Cannot find name 'BasicBlock'.
+                context.current = bb;
+                beforeBB.addSuccessor(bb);
+            }
+        }
+    
+        export class Block extends Statement {
+            constructor (public statements: ASTList,
+                         public isStatementBlock: boolean) {
+                super(NodeType.Block);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitParensAndCommentsInPlace(this, true);
+                emitter.recordSourceMappingStart(this);
+                if (this.isStatementBlock) {
+                    emitter.writeLineToOutput(" {");
+                    emitter.indenter.increaseIndent();
+                } else {
+                    emitter.setInVarBlock(this.statements.members.length);
+                }
+                var temp = emitter.setInObjectLiteral(false);
+                if (this.statements) {
+                    emitter.emitJavascriptList(this.statements, null, TokenID.Semicolon, true, false, false);
+                                                                      ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                }
+                if (this.isStatementBlock) {
+                    emitter.indenter.decreaseIndent();
+                    emitter.emitIndent();
+                    emitter.writeToOutput("}");
+                }
+                emitter.setInObjectLiteral(temp);
+                emitter.recordSourceMappingEnd(this);
+                emitter.emitParensAndCommentsInPlace(this, false);
+            }
+    
+            public addToControlFlow(context: ControlFlowContext) {
+                                             ~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'ControlFlowContext'.
+                var afterIfNeeded = new BasicBlock();
+                                        ~~~~~~~~~~
+!!! Cannot find name 'BasicBlock'.
+                context.pushStatement(this, context.current, afterIfNeeded);
+                if (this.statements) {
+                    context.walk(this.statements, this);
+                }
+                context.walker.options.goChildren = false;
+                context.popStatement();
+                if (afterIfNeeded.predecessors.length > 0) {
+                    context.current.addSuccessor(afterIfNeeded);
+                    context.current = afterIfNeeded;
+                }
+            }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                if (!typeFlow.checker.styleSettings.emptyBlocks) {
+                    if ((this.statements === null) || (this.statements.members.length == 0)) {
+                        typeFlow.checker.errorReporter.styleError(this, "empty block");
+                    }
+                }
+    
+                typeFlow.typeCheck(this.statements);
+                return this;
+            }
+        }
+    
+        export class Jump extends Statement {
+            public target: string = null;
+            public hasExplicitTarget() { return (this.target); }
+            public resolvedTarget: Statement = null;
+    
+            constructor (nodeType: NodeType) {
+                                   ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                super(nodeType);
+            }
+    
+            public setResolvedTarget(parser: Parser, stmt: Statement): boolean {
+                                             ~~~~~~
+!!! Cannot find name 'Parser'.
+                if (stmt.isLoop()) {
+                    this.resolvedTarget = stmt;
+                    return true;
+                }
+                if (this.nodeType === NodeType.Continue) {
+                                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    parser.reportParseError("continue statement applies only to loops");
+                    return false;
+                }
+                else {
+                    if ((stmt.nodeType == NodeType.Switch) || this.hasExplicitTarget()) {
+                                          ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        this.resolvedTarget = stmt;
+                        return true;
+                    }
+                    else {
+                        parser.reportParseError("break statement with no label can apply only to a loop or switch statement");
+                        return false;
+                    }
+                }
+            }
+    
+            public addToControlFlow(context: ControlFlowContext): void {
+                                             ~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'ControlFlowContext'.
+                super.addToControlFlow(context);
+                context.unconditionalBranch(this.resolvedTarget, (this.nodeType == NodeType.Continue));
+                                                                                   ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitParensAndCommentsInPlace(this, true);
+                emitter.recordSourceMappingStart(this);
+                if (this.nodeType == NodeType.Break) {
+                                     ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    emitter.writeToOutput("break");
+                }
+                else {
+                    emitter.writeToOutput("continue");
+                }
+                if (this.hasExplicitTarget()) {
+                    emitter.writeToOutput(" " + this.target);
+                }
+                emitter.recordSourceMappingEnd(this);
+                emitter.writeToOutput(";");
+                emitter.emitParensAndCommentsInPlace(this, false);
+            }
+        }
+    
+        export class WhileStatement extends Statement {
+            public body: AST = null;
+    
+            constructor (public cond: AST) {
+                super(NodeType.While);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+    
+            public isLoop() { return true; }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitParensAndCommentsInPlace(this, true);
+                emitter.recordSourceMappingStart(this);
+                var temp = emitter.setInObjectLiteral(false);
+                emitter.writeToOutput("while(");
+                emitter.emitJavascript(this.cond, TokenID.While, false);
+                                                  ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.writeToOutput(")");
+                emitter.emitJavascriptStatements(this.body, false, false);
+                emitter.setInObjectLiteral(temp);
+                emitter.recordSourceMappingEnd(this);
+                emitter.emitParensAndCommentsInPlace(this, false);
+            }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                return typeFlow.typeCheckWhile(this);
+            }
+    
+            public addToControlFlow(context: ControlFlowContext): void {
+                                             ~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'ControlFlowContext'.
+                var loopHeader = context.current;
+                var loopStart = new BasicBlock();
+                                    ~~~~~~~~~~
+!!! Cannot find name 'BasicBlock'.
+                var afterLoop = new BasicBlock();
+                                    ~~~~~~~~~~
+!!! Cannot find name 'BasicBlock'.
+    
+                loopHeader.addSuccessor(loopStart);
+                context.current = loopStart;
+                context.addContent(this.cond);
+                var condBlock = context.current;
+                var targetInfo: ITargetInfo = null;
+                                ~~~~~~~~~~~
+!!! Cannot find name 'ITargetInfo'.
+                if (this.body) {
+                    context.current = new BasicBlock();
+                                          ~~~~~~~~~~
+!!! Cannot find name 'BasicBlock'.
+                    condBlock.addSuccessor(context.current);
+                    context.pushStatement(this, loopStart, afterLoop);
+                    context.walk(this.body, this);
+                    targetInfo = context.popStatement();
+                }
+                if (!(context.noContinuation)) {
+                    var loopEnd = context.current;
+                    loopEnd.addSuccessor(loopStart);
+                }
+                context.current = afterLoop;
+                condBlock.addSuccessor(afterLoop);
+                // TODO: check for while (true) and then only continue if afterLoop has predecessors
+                context.noContinuation = false;
+                context.walker.options.goChildren = false;
+            }
+        }
+    
+        export class DoWhileStatement extends Statement {
+            public body: AST = null;
+            public whileAST: AST = null;
+            public cond: AST = null;
+            public isLoop() { return true; }
+    
+            constructor () {
+                super(NodeType.DoWhile);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitParensAndCommentsInPlace(this, true);
+                emitter.recordSourceMappingStart(this);
+                var temp = emitter.setInObjectLiteral(false);
+                emitter.writeToOutput("do");
+                emitter.emitJavascriptStatements(this.body, true, false);
+                emitter.recordSourceMappingStart(this.whileAST);
+                emitter.writeToOutput("while");
+                emitter.recordSourceMappingEnd(this.whileAST);
+                emitter.writeToOutput('(');
+                emitter.emitJavascript(this.cond, TokenID.CloseParen, false);
+                                                  ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.writeToOutput(")");
+                emitter.setInObjectLiteral(temp);
+                emitter.recordSourceMappingEnd(this);
+                emitter.emitParensAndCommentsInPlace(this, false);
+            }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                return typeFlow.typeCheckDoWhile(this);
+            }
+    
+            public addToControlFlow(context: ControlFlowContext): void {
+                                             ~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'ControlFlowContext'.
+                var loopHeader = context.current;
+                var loopStart = new BasicBlock();
+                                    ~~~~~~~~~~
+!!! Cannot find name 'BasicBlock'.
+                var afterLoop = new BasicBlock();
+                                    ~~~~~~~~~~
+!!! Cannot find name 'BasicBlock'.
+                loopHeader.addSuccessor(loopStart);
+                context.current = loopStart;
+                var targetInfo: ITargetInfo = null;
+                                ~~~~~~~~~~~
+!!! Cannot find name 'ITargetInfo'.
+                if (this.body) {
+                    context.pushStatement(this, loopStart, afterLoop);
+                    context.walk(this.body, this);
+                    targetInfo = context.popStatement();
+                }
+                if (!(context.noContinuation)) {
+                    var loopEnd = context.current;
+                    loopEnd.addSuccessor(loopStart);
+                    context.addContent(this.cond);
+                    // TODO: check for while (true) 
+                    context.current = afterLoop;
+                    loopEnd.addSuccessor(afterLoop);
+                }
+                else {
+                    context.addUnreachable(this.cond);
+                }
+                context.walker.options.goChildren = false;
+            }
+        }
+    
+        export class IfStatement extends Statement {
+            public thenBod: AST;
+            public elseBod: AST = null;
+            public statement: ASTSpan = new ASTSpan();
+    
+            constructor (public cond: AST) {
+                super(NodeType.If);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+    
+            public isCompoundStatement() { return true; }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitParensAndCommentsInPlace(this, true);
+                emitter.recordSourceMappingStart(this);
+                var temp = emitter.setInObjectLiteral(false);
+                emitter.recordSourceMappingStart(this.statement);
+                emitter.writeToOutput("if(");
+                emitter.emitJavascript(this.cond, TokenID.If, false);
+                                                  ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.writeToOutput(")");
+                emitter.recordSourceMappingEnd(this.statement);
+                emitter.emitJavascriptStatements(this.thenBod, true, false);
+                if (this.elseBod) {
+                    emitter.writeToOutput(" else");
+                    emitter.emitJavascriptStatements(this.elseBod, true, true);
+                }
+                emitter.setInObjectLiteral(temp);
+                emitter.recordSourceMappingEnd(this);
+                emitter.emitParensAndCommentsInPlace(this, false);
+            }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                return typeFlow.typeCheckIf(this);
+            }
+    
+            public addToControlFlow(context: ControlFlowContext): void {
+                                             ~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'ControlFlowContext'.
+                this.cond.addToControlFlow(context);
+                var afterIf = new BasicBlock();
+                                  ~~~~~~~~~~
+!!! Cannot find name 'BasicBlock'.
+                var beforeIf = context.current;
+                context.pushStatement(this, beforeIf, afterIf);
+                var hasContinuation = false;
+                context.current = new BasicBlock();
+                                      ~~~~~~~~~~
+!!! Cannot find name 'BasicBlock'.
+                beforeIf.addSuccessor(context.current);
+                context.walk(this.thenBod, this);
+                if (!context.noContinuation) {
+                    hasContinuation = true;
+                    context.current.addSuccessor(afterIf);
+                }
+                if (this.elseBod) {
+                    // current block will be thenBod
+                    context.current = new BasicBlock();
+                                          ~~~~~~~~~~
+!!! Cannot find name 'BasicBlock'.
+                    context.noContinuation = false;
+                    beforeIf.addSuccessor(context.current);
+                    context.walk(this.elseBod, this);
+                    if (!context.noContinuation) {
+                        hasContinuation = true;
+                        context.current.addSuccessor(afterIf);
+                    }
+                    else {
+                        // thenBod created continuation for if statement
+                        if (hasContinuation) {
+                            context.noContinuation = false;
+                        }
+                    }
+                }
+                else {
+                    beforeIf.addSuccessor(afterIf);
+                    context.noContinuation = false;
+                    hasContinuation = true;
+                }
+                var targetInfo = context.popStatement();
+                if (afterIf.predecessors.length > 0) {
+                    context.noContinuation = false;
+                    hasContinuation = true;
+                }
+                if (hasContinuation) {
+                    context.current = afterIf;
+                }
+                context.walker.options.goChildren = false;
+            }
+        }
+    
+        export class ReturnStatement extends Statement {
+            public returnExpression: AST = null;
+    
+            constructor () {
+                super(NodeType.Return);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitParensAndCommentsInPlace(this, true);
+                emitter.recordSourceMappingStart(this);
+                var temp = emitter.setInObjectLiteral(false);
+                if (this.returnExpression) {
+                    emitter.writeToOutput("return ");
+                    emitter.emitJavascript(this.returnExpression, TokenID.Semicolon, false);
+                                                                  ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                }
+                else {
+                    emitter.writeToOutput("return;");
+                }
+                emitter.setInObjectLiteral(temp);
+                emitter.recordSourceMappingEnd(this);
+                emitter.emitParensAndCommentsInPlace(this, false);
+            }
+    
+            public addToControlFlow(context: ControlFlowContext): void {
+                                             ~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'ControlFlowContext'.
+                super.addToControlFlow(context);
+                context.returnStmt();
+            }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                return typeFlow.typeCheckReturn(this);
+            }
+        }
+    
+        export class EndCode extends AST {
+            constructor () {
+                super(NodeType.EndCode);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+        }
+    
+        export class ForInStatement extends Statement {
+            constructor (public lval: AST, public obj: AST) {
+                super(NodeType.ForIn);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                if (this.lval && (this.lval.nodeType == NodeType.VarDecl)) {
+                                                        ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                    (<BoundDecl>this.lval).varFlags |= VarFlags.AutoInit;
+                                                       ~~~~~~~~
+!!! Cannot find name 'VarFlags'.
+                }
+            }
+            public statement: ASTSpan = new ASTSpan();
+            public body: AST;
+    
+            public isLoop() { return true; }
+    
+            public isFiltered() {
+                if (this.body) {
+                    var singleItem: AST = null;
+                    if (this.body.nodeType == NodeType.List) {
+                                              ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        var stmts = <ASTList>this.body;
+                        if (stmts.members.length == 1) {
+                            singleItem = stmts.members[0];
+                        }
+                    }
+                    else {
+                        singleItem = this.body;
+                    }
+                    // match template for filtering 'own' properties from obj
+                    if (singleItem !== null) {
+                        if (singleItem.nodeType == NodeType.Block) {
+                                                   ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                            var block = <Block>singleItem;
+                            if ((block.statements !== null) && (block.statements.members.length == 1)) {
+                                singleItem = block.statements.members[0];
+                            }
+                        }
+                        if (singleItem.nodeType == NodeType.If) {
+                                                   ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                            var cond = (<IfStatement>singleItem).cond;
+                            if (cond.nodeType == NodeType.Call) {
+                                                 ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                                var target = (<CallExpression>cond).target;
+                                if (target.nodeType == NodeType.Dot) {
+                                                       ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                                    var binex = <BinaryExpression>target;
+                                    if ((binex.operand1.nodeType == NodeType.Name) &&
+                                                                    ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                                        (this.obj.nodeType == NodeType.Name) &&
+                                                              ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                                        ((<Identifier>binex.operand1).actualText == (<Identifier>this.obj).actualText)) {
+                                        var prop = <Identifier>binex.operand2;
+                                        if (prop.actualText == "hasOwnProperty") {
+                                            var args = (<CallExpression>cond).arguments;
+                                            if ((args !== null) && (args.members.length == 1)) {
+                                                var arg = args.members[0];
+                                                if ((arg.nodeType == NodeType.Name) &&
+                                                                     ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                                                     (this.lval.nodeType == NodeType.Name)) {
+                                                                            ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                                                    if (((<Identifier>this.lval).actualText) == (<Identifier>arg).actualText) {
+                                                        return true;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return false;
+            }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitParensAndCommentsInPlace(this, true);
+                emitter.recordSourceMappingStart(this);
+                var temp = emitter.setInObjectLiteral(false);
+                emitter.recordSourceMappingStart(this.statement);
+                emitter.writeToOutput("for(");
+                emitter.emitJavascript(this.lval, TokenID.For, false);
+                                                  ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.writeToOutput(" in ");
+                emitter.emitJavascript(this.obj, TokenID.For, false);
+                                                 ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.writeToOutput(")");
+                emitter.recordSourceMappingEnd(this.statement);
+                emitter.emitJavascriptStatements(this.body, true, false);
+                emitter.setInObjectLiteral(temp);
+                emitter.recordSourceMappingEnd(this);
+                emitter.emitParensAndCommentsInPlace(this, false);
+            }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                if (typeFlow.checker.styleSettings.forin) {
+                    if (!this.isFiltered()) {
+                        typeFlow.checker.errorReporter.styleError(this, "no hasOwnProperty filter");
+                    }
+                }
+                return typeFlow.typeCheckForIn(this);
+            }
+    
+            public addToControlFlow(context: ControlFlowContext): void {
+                                             ~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'ControlFlowContext'.
+                if (this.lval) {
+                    context.addContent(this.lval);
+                }
+                if (this.obj) {
+                    context.addContent(this.obj);
+                }
+    
+                var loopHeader = context.current;
+                var loopStart = new BasicBlock();
+                                    ~~~~~~~~~~
+!!! Cannot find name 'BasicBlock'.
+                var afterLoop = new BasicBlock();
+                                    ~~~~~~~~~~
+!!! Cannot find name 'BasicBlock'.
+    
+                loopHeader.addSuccessor(loopStart);
+                context.current = loopStart;
+                if (this.body) {
+                    context.pushStatement(this, loopStart, afterLoop);
+                    context.walk(this.body, this);
+                    context.popStatement();
+                }
+                if (!(context.noContinuation)) {
+                    var loopEnd = context.current;
+                    loopEnd.addSuccessor(loopStart);
+                }
+                context.current = afterLoop;
+                context.noContinuation = false;
+                loopHeader.addSuccessor(afterLoop);
+                context.walker.options.goChildren = false;
+            }
+        }
+    
+        export class ForStatement extends Statement {
+            public cond: AST;
+            public body: AST;
+            public incr: AST;
+    
+            constructor (public init: AST) {
+                super(NodeType.For);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+    
+            public isLoop() { return true; }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitParensAndCommentsInPlace(this, true);
+                emitter.recordSourceMappingStart(this);
+                var temp = emitter.setInObjectLiteral(false);
+                emitter.writeToOutput("for(");
+                if (this.init) {
+                    if (this.init.nodeType != NodeType.List) {
+                                              ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        emitter.emitJavascript(this.init, TokenID.For, false);
+                                                          ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                    }
+                    else {
+                        emitter.setInVarBlock((<ASTList>this.init).members.length); 
+                        emitter.emitJavascriptList(this.init, null, TokenID.For, false, false, false);
+                                                                    ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                    }
+                }
+                emitter.writeToOutput("; ");
+                emitter.emitJavascript(this.cond, TokenID.For, false);
+                                                  ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.writeToOutput("; ");
+                emitter.emitJavascript(this.incr, TokenID.For, false);
+                                                  ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.writeToOutput(")");
+                emitter.emitJavascriptStatements(this.body, true, false);
+                emitter.setInObjectLiteral(temp);
+                emitter.recordSourceMappingEnd(this);
+                emitter.emitParensAndCommentsInPlace(this, false);
+            }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                return typeFlow.typeCheckFor(this);
+            }
+    
+            public addToControlFlow(context: ControlFlowContext): void {
+                                             ~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'ControlFlowContext'.
+                if (this.init) {
+                    context.addContent(this.init);
+                }
+                var loopHeader = context.current;
+                var loopStart = new BasicBlock();
+                                    ~~~~~~~~~~
+!!! Cannot find name 'BasicBlock'.
+                var afterLoop = new BasicBlock();
+                                    ~~~~~~~~~~
+!!! Cannot find name 'BasicBlock'.
+    
+                loopHeader.addSuccessor(loopStart);
+                context.current = loopStart;
+                var condBlock: BasicBlock = null;
+                               ~~~~~~~~~~
+!!! Cannot find name 'BasicBlock'.
+                var continueTarget = loopStart;
+                var incrBB: BasicBlock = null;
+                            ~~~~~~~~~~
+!!! Cannot find name 'BasicBlock'.
+                if (this.incr) {
+                    incrBB = new BasicBlock();
+                                 ~~~~~~~~~~
+!!! Cannot find name 'BasicBlock'.
+                    continueTarget = incrBB;
+                }
+                if (this.cond) {
+                    condBlock = context.current;
+                    context.addContent(this.cond);
+                    context.current = new BasicBlock();
+                                          ~~~~~~~~~~
+!!! Cannot find name 'BasicBlock'.
+                    condBlock.addSuccessor(context.current);
+                }
+                var targetInfo: ITargetInfo = null;
+                                ~~~~~~~~~~~
+!!! Cannot find name 'ITargetInfo'.
+                if (this.body) {
+                    context.pushStatement(this, continueTarget, afterLoop);
+                    context.walk(this.body, this);
+                    targetInfo = context.popStatement();
+                }
+                if (this.incr) {
+                    if (context.noContinuation) {
+                        if (incrBB.predecessors.length == 0) {
+                            context.addUnreachable(this.incr);
+                        }
+                    }
+                    else {
+                        context.current.addSuccessor(incrBB);
+                        context.current = incrBB;
+                        context.addContent(this.incr);
+                    }
+                }
+                var loopEnd = context.current;
+                if (!(context.noContinuation)) {
+                    loopEnd.addSuccessor(loopStart);
+    
+                }
+                if (condBlock) {
+                    condBlock.addSuccessor(afterLoop);
+                    context.noContinuation = false;
+                }
+                if (afterLoop.predecessors.length > 0) {
+                    context.noContinuation = false;
+                    context.current = afterLoop;
+                }
+                context.walker.options.goChildren = false;
+            }
+        }
+    
+        export class WithStatement extends Statement {
+            public body: AST;
+    
+            public isCompoundStatement() { return true; }
+    
+            public withSym: WithSymbol = null;
+                            ~~~~~~~~~~
+!!! Cannot find name 'WithSymbol'.
+    
+            constructor (public expr: AST) {
+                super(NodeType.With);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitParensAndCommentsInPlace(this, true);
+                emitter.recordSourceMappingStart(this);
+                emitter.writeToOutput("with (");
+                if (this.expr) {
+                    emitter.emitJavascript(this.expr, TokenID.With, false);
+                                                      ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                }
+    
+                emitter.writeToOutput(")");
+                emitter.emitJavascriptStatements(this.body, true, false);
+                emitter.recordSourceMappingEnd(this);
+                emitter.emitParensAndCommentsInPlace(this, false);
+            }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                return typeFlow.typeCheckWith(this);
+            }
+        }
+    
+        export class SwitchStatement extends Statement {
+            public caseList: ASTList;
+            public defaultCase: CaseStatement = null;
+            public statement: ASTSpan = new ASTSpan();
+    
+            constructor (public val: AST) {
+                super(NodeType.Switch);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+    
+            public isCompoundStatement() { return true; }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitParensAndCommentsInPlace(this, true);
+                emitter.recordSourceMappingStart(this);
+                var temp = emitter.setInObjectLiteral(false);
+                emitter.recordSourceMappingStart(this.statement);
+                emitter.writeToOutput("switch(");
+                emitter.emitJavascript(this.val, TokenID.Identifier, false);
+                                                 ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.writeToOutput(")"); 
+                emitter.recordSourceMappingEnd(this.statement);
+                emitter.writeLineToOutput(" {");
+                emitter.indenter.increaseIndent();
+                var casesLen = this.caseList.members.length;
+                for (var i = 0; i < casesLen; i++) {
+                    var caseExpr = this.caseList.members[i];
+                    emitter.emitJavascript(caseExpr, TokenID.Case, true);
+                                                     ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                    emitter.writeLineToOutput("");
+                }
+                emitter.indenter.decreaseIndent();
+                emitter.emitIndent();
+                emitter.writeToOutput("}");
+                emitter.setInObjectLiteral(temp);
+                emitter.recordSourceMappingEnd(this);
+                emitter.emitParensAndCommentsInPlace(this, false);
+            }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                var len = this.caseList.members.length;
+                this.val = typeFlow.typeCheck(this.val);
+                for (var i = 0; i < len; i++) {
+                    this.caseList.members[i] = typeFlow.typeCheck(this.caseList.members[i]);
+                }
+                this.defaultCase = <CaseStatement>typeFlow.typeCheck(this.defaultCase);
+                this.type = typeFlow.voidType;
+                return this;
+            }
+    
+            // if there are break statements that match this switch, then just link cond block with block after switch
+            public addToControlFlow(context: ControlFlowContext) {
+                                             ~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'ControlFlowContext'.
+                var condBlock = context.current;
+                context.addContent(this.val);
+                var execBlock = new BasicBlock();
+                                    ~~~~~~~~~~
+!!! Cannot find name 'BasicBlock'.
+                var afterSwitch = new BasicBlock();
+                                      ~~~~~~~~~~
+!!! Cannot find name 'BasicBlock'.
+    
+                condBlock.addSuccessor(execBlock);
+                context.pushSwitch(execBlock);
+                context.current = execBlock;
+                context.pushStatement(this, execBlock, afterSwitch);
+                context.walk(this.caseList, this);
+                context.popSwitch();
+                var targetInfo = context.popStatement();
+                var hasCondContinuation = (this.defaultCase == null);
+                if (this.defaultCase == null) {
+                    condBlock.addSuccessor(afterSwitch);
+                }
+                if (afterSwitch.predecessors.length > 0) {
+                    context.noContinuation = false;
+                    context.current = afterSwitch;
+                }
+                else {
+                    context.noContinuation = true;
+                }
+                context.walker.options.goChildren = false;
+            }
+        }
+    
+        export class CaseStatement extends Statement {
+            public expr: AST = null;
+            public body: ASTList;
+    
+            constructor () {
+                super(NodeType.Case);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitParensAndCommentsInPlace(this, true);
+                emitter.recordSourceMappingStart(this);
+                if (this.expr) {
+                    emitter.writeToOutput("case ");
+                    emitter.emitJavascript(this.expr, TokenID.Identifier, false);
+                                                      ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                }
+                else {
+                    emitter.writeToOutput("default");
+                }
+                emitter.writeToOutput(":");
+                emitter.emitJavascriptStatements(this.body, false, false);
+                emitter.recordSourceMappingEnd(this);
+                emitter.emitParensAndCommentsInPlace(this, false);
+            }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                this.expr = typeFlow.typeCheck(this.expr);
+                typeFlow.typeCheck(this.body);
+                this.type = typeFlow.voidType;
+                return this;
+            }
+    
+            // TODO: more reasoning about unreachable cases (such as duplicate literals as case expressions)
+            // for now, assume all cases are reachable, regardless of whether some cases fall through
+            public addToControlFlow(context: ControlFlowContext) {
+                                             ~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'ControlFlowContext'.
+                var execBlock = new BasicBlock();
+                                    ~~~~~~~~~~
+!!! Cannot find name 'BasicBlock'.
+                var sw = context.currentSwitch[context.currentSwitch.length - 1];
+                // TODO: fall-through from previous (+ to end of switch)
+                if (this.expr) {
+                    var exprBlock = new BasicBlock();
+                                        ~~~~~~~~~~
+!!! Cannot find name 'BasicBlock'.
+                    context.current = exprBlock;
+                    sw.addSuccessor(exprBlock);
+                    context.addContent(this.expr);
+                    exprBlock.addSuccessor(execBlock);
+                }
+                else {
+                    sw.addSuccessor(execBlock);
+                }
+                context.current = execBlock;
+                if (this.body) {
+                    context.walk(this.body, this);
+                }
+                context.noContinuation = false;
+                context.walker.options.goChildren = false;
+            }
+        }
+    
+        export class TypeReference extends AST {
+            constructor (public term: AST, public arrayCount: number) {
+                super(NodeType.TypeRef);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                throw new Error("should not emit a type ref");
+            }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                var prevInTCTR = typeFlow.inTypeRefTypeCheck;
+                typeFlow.inTypeRefTypeCheck = true;
+                var typeLink = getTypeLink(this, typeFlow.checker, true);
+                               ~~~~~~~~~~~
+!!! Cannot find name 'getTypeLink'.
+                typeFlow.checker.resolveTypeLink(typeFlow.scope, typeLink, false);
+    
+                if (this.term) {
+                    typeFlow.typeCheck(this.term);
+                }
+    
+                typeFlow.checkForVoidConstructor(typeLink.type, this);
+    
+                this.type = typeLink.type;
+    
+                // in error recovery cases, there may not be a term
+                if (this.term) {
+                    this.term.type = this.type;
+                }
+    
+                typeFlow.inTypeRefTypeCheck = prevInTCTR;
+                return this;
+            }
+        }
+    
+        export class TryFinally extends Statement {
+            constructor (public tryNode: AST, public finallyNode: Finally) {
+                super(NodeType.TryFinally);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+    
+            public isCompoundStatement() { return true; }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.recordSourceMappingStart(this);
+                emitter.emitJavascript(this.tryNode, TokenID.Try, false);
+                                                     ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitJavascript(this.finallyNode, TokenID.Finally, false);
+                                                         ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.recordSourceMappingEnd(this);
+            }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                this.tryNode = typeFlow.typeCheck(this.tryNode);
+                this.finallyNode = <Finally>typeFlow.typeCheck(this.finallyNode);
+                this.type = typeFlow.voidType;
+                return this;
+            }
+    
+            public addToControlFlow(context: ControlFlowContext) {
+                                             ~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'ControlFlowContext'.
+                var afterFinally = new BasicBlock();
+                                       ~~~~~~~~~~
+!!! Cannot find name 'BasicBlock'.
+                context.walk(this.tryNode, this);
+                var finBlock = new BasicBlock();
+                                   ~~~~~~~~~~
+!!! Cannot find name 'BasicBlock'.
+                if (context.current) {
+                    context.current.addSuccessor(finBlock);
+                }
+                context.current = finBlock;
+                context.pushStatement(this, null, afterFinally);
+                context.walk(this.finallyNode, this);
+                if (!context.noContinuation && context.current) {
+                    context.current.addSuccessor(afterFinally);
+                }
+                if (afterFinally.predecessors.length > 0) {
+                    context.current = afterFinally;
+                }
+                else {
+                    context.noContinuation = true;
+                }
+                context.popStatement();
+                context.walker.options.goChildren = false;
+            }
+        }
+    
+        export class TryCatch extends Statement {
+            constructor (public tryNode: Try, public catchNode: Catch) {
+                super(NodeType.TryCatch);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+    
+            public isCompoundStatement() { return true; }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitParensAndCommentsInPlace(this, true);
+                emitter.recordSourceMappingStart(this);
+                emitter.emitJavascript(this.tryNode, TokenID.Try, false);
+                                                     ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitJavascript(this.catchNode, TokenID.Catch, false);
+                                                       ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.recordSourceMappingEnd(this);
+                emitter.emitParensAndCommentsInPlace(this, false);
+            }
+    
+            public addToControlFlow(context: ControlFlowContext) {
+                                             ~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'ControlFlowContext'.
+                var beforeTry = context.current;
+                var tryBlock = new BasicBlock();
+                                   ~~~~~~~~~~
+!!! Cannot find name 'BasicBlock'.
+                beforeTry.addSuccessor(tryBlock);
+                context.current = tryBlock;
+                var afterTryCatch = new BasicBlock();
+                                        ~~~~~~~~~~
+!!! Cannot find name 'BasicBlock'.
+                context.pushStatement(this, null, afterTryCatch);
+                context.walk(this.tryNode, this);
+                if (!context.noContinuation) {
+                    if (context.current) {
+                        context.current.addSuccessor(afterTryCatch);
+                    }
+                }
+                context.current = new BasicBlock();
+                                      ~~~~~~~~~~
+!!! Cannot find name 'BasicBlock'.
+                beforeTry.addSuccessor(context.current);
+                context.walk(this.catchNode, this);
+                context.popStatement();
+                if (!context.noContinuation) {
+                    if (context.current) {
+                        context.current.addSuccessor(afterTryCatch);
+                    }
+                }
+                context.current = afterTryCatch;
+                context.walker.options.goChildren = false;
+            }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                this.tryNode = <Try>typeFlow.typeCheck(this.tryNode);
+                this.catchNode = <Catch>typeFlow.typeCheck(this.catchNode);
+                this.type = typeFlow.voidType;
+                return this;
+            }
+        }
+    
+        export class Try extends Statement {
+            constructor (public body: AST) {
+                super(NodeType.Try);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitParensAndCommentsInPlace(this, true);
+                emitter.recordSourceMappingStart(this);
+                emitter.writeToOutput("try ");
+                emitter.emitJavascript(this.body, TokenID.Try, false);
+                                                  ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.recordSourceMappingEnd(this);
+                emitter.emitParensAndCommentsInPlace(this, false);
+            }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                this.body = typeFlow.typeCheck(this.body);
+                return this;
+            }
+    
+            public addToControlFlow(context: ControlFlowContext) {
+                                             ~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'ControlFlowContext'.
+                if (this.body) {
+                    context.walk(this.body, this);
+                }
+                context.walker.options.goChildren = false;
+                context.noContinuation = false;
+            }
+        }
+    
+        export class Catch extends Statement {
+            constructor (public param: VarDecl, public body: AST) {
+                super(NodeType.Catch);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                if (this.param) {
+                    this.param.varFlags |= VarFlags.AutoInit;
+                                           ~~~~~~~~
+!!! Cannot find name 'VarFlags'.
+                }
+            }
+            public statement: ASTSpan = new ASTSpan();
+            public containedScope: SymbolScope = null;
+                                   ~~~~~~~~~~~
+!!! Cannot find name 'SymbolScope'.
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitParensAndCommentsInPlace(this, true);
+                emitter.recordSourceMappingStart(this);
+                emitter.writeToOutput(" ");
+                emitter.recordSourceMappingStart(this.statement);
+                emitter.writeToOutput("catch (");
+                emitter.emitJavascript(this.param, TokenID.OpenParen, false);
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.writeToOutput(")");
+                emitter.recordSourceMappingEnd(this.statement);
+                emitter.emitJavascript(this.body, TokenID.Catch, false);
+                                                  ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.recordSourceMappingEnd(this);
+                emitter.emitParensAndCommentsInPlace(this, false);
+            }
+    
+            public addToControlFlow(context: ControlFlowContext) {
+                                             ~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'ControlFlowContext'.
+                if (this.param) {
+                    context.addContent(this.param);
+                    var bodBlock = new BasicBlock();
+                                       ~~~~~~~~~~
+!!! Cannot find name 'BasicBlock'.
+                    context.current.addSuccessor(bodBlock);
+                    context.current = bodBlock;
+                }
+                if (this.body) {
+                    context.walk(this.body, this);
+                }
+                context.noContinuation = false;
+                context.walker.options.goChildren = false;
+            }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                var prevScope = typeFlow.scope;
+                typeFlow.scope = this.containedScope;
+                this.param = <VarDecl>typeFlow.typeCheck(this.param);
+                var exceptVar = new ValueLocation();
+                                    ~~~~~~~~~~~~~
+!!! Cannot find name 'ValueLocation'.
+                var varSym = new VariableSymbol((<VarDecl>this.param).id.text,
+                                 ~~~~~~~~~~~~~~
+!!! Cannot find name 'VariableSymbol'.
+                                              this.param.minChar,
+                                              typeFlow.checker.locationInfo.unitIndex,
+                                              exceptVar);
+                exceptVar.symbol = varSym;
+                exceptVar.typeLink = new TypeLink();
+                                         ~~~~~~~~
+!!! Cannot find name 'TypeLink'.
+                // var type for now (add syntax for type annotation)
+                exceptVar.typeLink.type = typeFlow.anyType;
+                var thisFnc = typeFlow.thisFnc;
+                if (thisFnc && thisFnc.type) {
+                    exceptVar.symbol.container = thisFnc.type.symbol;
+                }
+                else {
+                    exceptVar.symbol.container = null;
+                }
+                this.param.sym = exceptVar.symbol;
+                typeFlow.scope.enter(exceptVar.symbol.container, this.param, exceptVar.symbol,
+                                     typeFlow.checker.errorReporter, false, false, false);
+                this.body = typeFlow.typeCheck(this.body);
+    
+                // if we're in provisional typecheck mode, clean up the symbol entry
+                // REVIEW: This is obviously bad form, since we're counting on the internal
+                // layout of the symbol table, but this is also the only place where we insert
+                // symbols during typecheck
+                if (typeFlow.checker.inProvisionalTypecheckMode()) {
+                    var table = typeFlow.scope.getTable();
+                    (<any>table).secondaryTable.table[exceptVar.symbol.name] = undefined;
+                }
+                this.type = typeFlow.voidType;
+                typeFlow.scope = prevScope;
+                return this;
+            }
+        }
+    
+        export class Finally extends Statement {
+            constructor (public body: AST) {
+                super(NodeType.Finally);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitParensAndCommentsInPlace(this, true);
+                emitter.recordSourceMappingStart(this);
+                emitter.writeToOutput("finally");
+                emitter.emitJavascript(this.body, TokenID.Finally, false);
+                                                  ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.recordSourceMappingEnd(this);
+                emitter.emitParensAndCommentsInPlace(this, false);
+            }
+    
+            public addToControlFlow(context: ControlFlowContext) {
+                                             ~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'ControlFlowContext'.
+                if (this.body) {
+                    context.walk(this.body, this);
+                }
+                context.walker.options.goChildren = false;
+                context.noContinuation = false;
+            }
+    
+            public typeCheck(typeFlow: TypeFlow) {
+                                       ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                this.body = typeFlow.typeCheck(this.body);
+                return this;
+            }
+        }
+    
+        export class Comment extends AST {
+    
+            public text: string[] = null;
+    
+            constructor (public content: string, public isBlockComment: boolean, public endsLine) {
+                super(NodeType.Comment);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+    
+            public getText(): string[] {
+                if (this.text == null) {
+                    if (this.isBlockComment) {
+                        this.text = this.content.split("\n");
+                        for (var i = 0; i < this.text.length; i++) {
+                            this.text[i] = this.text[i].replace(/^\s+|\s+$/g, '');
+                        }
+                    }
+                    else {
+                        this.text = [(this.content.replace(/^\s+|\s+$/g, ''))];
+                    }
+                }
+    
+                return this.text;
+            }
+        }
+    
+        export class DebuggerStatement extends Statement {
+            constructor () {
+                super(NodeType.Debugger);
+                      ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+            }
+    
+            public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
+                                 ~~~~~~~
+!!! Cannot find name 'Emitter'.
+                                                   ~~~~~~~
+!!! Cannot find name 'TokenID'.
+                emitter.emitParensAndCommentsInPlace(this, true);
+                emitter.recordSourceMappingStart(this);
+                emitter.writeLineToOutput("debugger;");
+                emitter.recordSourceMappingEnd(this);
+                emitter.emitParensAndCommentsInPlace(this, false);
+            }
+        }
+    }

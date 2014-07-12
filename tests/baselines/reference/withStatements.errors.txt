@@ -1,0 +1,10 @@
+==== tests/cases/conformance/statements/withStatements/withStatements.ts (2 errors) ====
+    var x = 12;
+    with (x) {
+        name = 'twelve'
+        ~~~~
+!!! Cannot find name 'name'.
+        id = 12
+        ~~
+!!! Cannot find name 'id'.
+    }

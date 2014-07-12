@@ -1,0 +1,8 @@
+==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser645086_2.ts (3 errors) ====
+    var v = /[^]/]/
+                 ~
+!!! ',' expected.
+                  ~
+!!! Variable declaration expected.
+                   
+!!! Expression expected.

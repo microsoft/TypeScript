@@ -1,0 +1,11 @@
+==== tests/cases/conformance/parser/ecmascript5/ExportAssignments/parserExportAssignment8.ts (3 errors) ====
+    export = B;
+    ~~~~~~~~~~~
+!!! Cannot compile external modules unless the '--module' flag is provided.
+    ~~~~~~~~~~~
+!!! An export assignment cannot be used in a module with other exported elements.
+    ~~~~~~~~~~~
+!!! Cannot find name 'B'.
+    
+    export class C {
+    }

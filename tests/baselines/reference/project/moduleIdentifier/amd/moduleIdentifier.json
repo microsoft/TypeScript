@@ -1,0 +1,17 @@
+{
+    "scenario": "module identifier",
+    "projectRoot": "tests/cases/projects/ModuleIdentifier",
+    "inputFiles": [
+        "consume.ts"
+    ],
+    "runTest": true,
+    "resolvedInputFiles": [
+        "consume.ts",
+        "decl.ts",
+        "lib.d.ts"
+    ],
+    "emittedFiles": [
+        "decl.js",
+        "consume.js"
+    ]
+}

@@ -1,0 +1,23 @@
+==== tests/cases/compiler/inheritanceStaticAccessorOverridingMethod.ts (3 errors) ====
+    class a {
+        static x() {
+            return "20";
+        }
+    }
+    
+    class b extends a {
+          ~
+!!! Class static side 'typeof b' incorrectly extends base class static side 'typeof a':
+!!!   Types of property 'x' are incompatible:
+!!!     Type 'string' is not assignable to type '() => string'.
+        static get x() {
+                   ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            return "20";
+        }
+        static set x(aValue: string) {
+                   ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+    
+        }
+    }

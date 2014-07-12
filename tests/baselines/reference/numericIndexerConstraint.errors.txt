@@ -1,0 +1,7 @@
+==== tests/cases/compiler/numericIndexerConstraint.ts (1 errors) ====
+    class C {
+        0: number;
+        ~~~~~~~~~~
+!!! Property '0' of type 'number' is not assignable to numeric index type 'RegExp'.
+        [x: number]: RegExp;
+    }

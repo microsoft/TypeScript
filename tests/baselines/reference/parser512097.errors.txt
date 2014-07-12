@@ -1,0 +1,9 @@
+==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser512097.ts (2 errors) ====
+    var tt = { aa; } // After this point, no useful parsing occurs in the entire file
+                 ~
+!!! ':' expected.
+                   ~
+!!! Declaration or statement expected.
+    
+    if (true) {
+    }

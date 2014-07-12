@@ -1,0 +1,8 @@
+{
+    "scenario": "module identifier",
+    "projectRoot": "tests/cases/projects/ModuleIdentifier",
+    "inputFiles": [
+        "consume.ts"
+    ],
+    "runTest": true
+}

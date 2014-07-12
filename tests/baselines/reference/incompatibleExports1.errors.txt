@@ -1,0 +1,23 @@
+==== tests/cases/compiler/incompatibleExports1.ts (2 errors) ====
+    declare module "foo" { 
+        export interface x { a: string } 
+        interface y { a: Date }
+        export = y;
+        ~~~~~~~~~~~
+!!! An export assignment cannot be used in a module with other exported elements.
+    }
+     
+    declare module "baz" {
+        export module a {
+            export var b: number;
+        }
+     
+        module c {
+            export var c: string;
+        }
+     
+        export = c;
+        ~~~~~~~~~~~
+!!! An export assignment cannot be used in a module with other exported elements.
+    }
+    

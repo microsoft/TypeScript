@@ -1,0 +1,7 @@
+==== tests/cases/conformance/types/primitives/string/assignFromStringInterface.ts (1 errors) ====
+    var x = '';
+    var a: String;
+    x = a;
+    ~
+!!! Type 'String' is not assignable to type 'string'.
+    a = x;

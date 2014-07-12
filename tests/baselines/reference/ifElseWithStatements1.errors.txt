@@ -1,0 +1,17 @@
+==== tests/cases/compiler/ifElseWithStatements1.ts (2 errors) ====
+    if (true)
+        f();
+        ~
+!!! Cannot find name 'f'.
+    else
+        f();
+        ~
+!!! Cannot find name 'f'.
+    
+    function foo(): boolean {
+        if (true)
+            return true;
+        else
+            return false;
+    }
+    

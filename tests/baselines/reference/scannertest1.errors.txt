@@ -1,0 +1,57 @@
+==== tests/cases/conformance/scanner/ecmascript5/scannertest1.ts (16 errors) ====
+    ///<reference path='References.ts' />
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! File 'References.ts' not found.
+    
+    class CharacterInfo {
+        public static isDecimalDigit(c: number): boolean {
+            return c >= CharacterCodes._0 && c <= CharacterCodes._9;
+                        ~~~~~~~~~~~~~~
+!!! Cannot find name 'CharacterCodes'.
+                                                  ~~~~~~~~~~~~~~
+!!! Cannot find name 'CharacterCodes'.
+        }
+    
+        public static isHexDigit(c: number): boolean {
+            return isDecimalDigit(c) ||
+                   ~~~~~~~~~~~~~~
+!!! Cannot find name 'isDecimalDigit'.
+                   (c >= CharacterCodes.A && c <= CharacterCodes.F) ||
+                         ~~~~~~~~~~~~~~
+!!! Cannot find name 'CharacterCodes'.
+                                                  ~~~~~~~~~~~~~~
+!!! Cannot find name 'CharacterCodes'.
+                   (c >= CharacterCodes.a && c <= CharacterCodes.f);
+                         ~~~~~~~~~~~~~~
+!!! Cannot find name 'CharacterCodes'.
+                                                  ~~~~~~~~~~~~~~
+!!! Cannot find name 'CharacterCodes'.
+        }
+    
+        public static hexValue(c: number): number {
+            Debug.assert(isHexDigit(c));
+            ~~~~~
+!!! Cannot find name 'Debug'.
+                         ~~~~~~~~~~
+!!! Cannot find name 'isHexDigit'.
+            return isDecimalDigit(c)
+                   ~~~~~~~~~~~~~~
+!!! Cannot find name 'isDecimalDigit'.
+                ? (c - CharacterCodes._0)
+                       ~~~~~~~~~~~~~~
+!!! Cannot find name 'CharacterCodes'.
+                : (c >= CharacterCodes.A && c <= CharacterCodes.F)
+                        ~~~~~~~~~~~~~~
+!!! Cannot find name 'CharacterCodes'.
+                                                 ~~~~~~~~~~~~~~
+!!! Cannot find name 'CharacterCodes'.
+                    ? c - CharacterCodes.A + 10
+                          ~~~~~~~~~~~~~~
+!!! Cannot find name 'CharacterCodes'.
+                    : c - CharacterCodes.a + 10;
+                          ~~~~~~~~~~~~~~
+!!! Cannot find name 'CharacterCodes'.
+        }
+    }
+    
+    

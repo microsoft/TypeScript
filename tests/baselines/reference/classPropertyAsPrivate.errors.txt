@@ -1,0 +1,48 @@
+==== tests/cases/conformance/classes/members/accessibility/classPropertyAsPrivate.ts (12 errors) ====
+    class C {
+        private x: string;
+        private get y() { return null; }
+                    ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+        private set y(x) { }
+                    ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+        private foo() { }
+    
+        private static a: string;
+        private static get b() { return null; }
+                           ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+        private static set b(x) { }
+                           ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+        private static foo() { }
+    }
+    
+    var c: C;
+    // all errors
+    c.x;
+    ~~~
+!!! Property 'C.x' is inaccessible.
+    c.y;
+    ~~~
+!!! Property 'C.y' is inaccessible.
+    c.y = 1;
+    ~~~
+!!! Property 'C.y' is inaccessible.
+    c.foo();
+    ~~~~~
+!!! Property 'C.foo' is inaccessible.
+    
+    C.a;
+    ~~~
+!!! Property 'C.a' is inaccessible.
+    C.b();
+    ~~~
+!!! Property 'C.b' is inaccessible.
+    C.b = 1;
+    ~~~
+!!! Property 'C.b' is inaccessible.
+    C.foo();
+    ~~~~~
+!!! Property 'C.foo' is inaccessible.

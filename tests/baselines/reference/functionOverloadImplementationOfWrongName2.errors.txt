@@ -1,0 +1,6 @@
+==== tests/cases/compiler/functionOverloadImplementationOfWrongName2.ts (1 errors) ====
+    function foo(x);
+    function bar() { }
+    function foo(x, y);
+    ~~~~~~~~~~~~~~~~~~~
+!!! Function implementation expected.

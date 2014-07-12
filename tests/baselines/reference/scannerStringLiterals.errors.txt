@@ -1,0 +1,16 @@
+==== tests/cases/conformance/scanner/ecmascript5/scannerStringLiterals.ts (2 errors) ====
+    ""
+    " "
+    "a"
+    "'"
+    '"'
+    "\""
+    '\u2192\   '
+    "Legal line continuation \
+    "
+    "Should error because of newline.
+                                     
+!!! Unterminated string constant.
+    "Should error because of end of file.
+                                         
+!!! Unexpected end of text.

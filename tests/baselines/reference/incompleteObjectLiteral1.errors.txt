@@ -1,0 +1,7 @@
+==== tests/cases/compiler/incompleteObjectLiteral1.ts (2 errors) ====
+    var tt = { aa; }
+                 ~
+!!! ':' expected.
+                   ~
+!!! Declaration or statement expected.
+    var x = tt;

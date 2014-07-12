@@ -1,0 +1,8 @@
+==== tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression2.ts (3 errors) ====
+    a = () => { } || a
+                  ~~
+!!! ';' expected.
+    ~
+!!! Cannot find name 'a'.
+                     ~
+!!! Cannot find name 'a'.

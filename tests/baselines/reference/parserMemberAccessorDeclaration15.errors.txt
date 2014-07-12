@@ -1,0 +1,8 @@
+==== tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration15.ts (2 errors) ====
+    class C {
+       set Foo(public a: number) { }
+           ~~~
+!!! A parameter property is only allowed in a constructor implementation.
+               ~~~~~~~~~~~~~~~~
+!!! A parameter property is only allowed in a constructor implementation.
+    }

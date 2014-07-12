@@ -1,0 +1,9 @@
+==== tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement2.ts (1 errors) ====
+    var a;
+    var b = [];
+    var c;
+    for (a in b[c] = b[c] || [], d) {
+                                 ~
+!!! Cannot find name 'd'.
+    
+    }

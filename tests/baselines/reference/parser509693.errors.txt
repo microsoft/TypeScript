@@ -1,0 +1,6 @@
+==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509693.ts (2 errors) ====
+    if (!module.exports) module.exports = "";
+         ~~~~~~
+!!! Cannot find name 'module'.
+                         ~~~~~~
+!!! Cannot find name 'module'.

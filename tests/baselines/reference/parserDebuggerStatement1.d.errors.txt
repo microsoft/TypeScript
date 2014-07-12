@@ -1,0 +1,4 @@
+==== tests/cases/conformance/parser/ecmascript5/Statements/parserDebuggerStatement1.d.ts (1 errors) ====
+    debugger;
+    ~~~~~~~~
+!!! Statements are not allowed in ambient contexts.

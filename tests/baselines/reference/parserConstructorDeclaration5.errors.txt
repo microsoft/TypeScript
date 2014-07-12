@@ -1,0 +1,6 @@
+==== tests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration5.ts (1 errors) ====
+    class C {
+      private constructor() { }
+      ~~~~~~~
+!!! 'private' modifier cannot appear on a constructor declaration.
+    }

@@ -1,0 +1,5 @@
+==== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode4.ts (1 errors) ====
+    "use strict";
+    arguments = 1;
+    ~~~~~~~~~
+!!! Cannot find name 'arguments'.

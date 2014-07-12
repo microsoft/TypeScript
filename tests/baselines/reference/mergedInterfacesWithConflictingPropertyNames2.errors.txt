@@ -1,0 +1,48 @@
+==== tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConflictingPropertyNames2.ts (3 errors) ====
+    interface A {
+        x: string; // error
+    }
+    
+    interface A {
+        x: string; // error
+        ~
+!!! Duplicate identifier 'x'.
+    }
+    
+    module M {
+        interface A<T> {
+            x: T;
+        }
+    
+        interface A<T> {
+            x: T;  // error
+            ~
+!!! Duplicate identifier 'x'.
+        }
+    }
+    
+    module M2 {
+        interface A<T> {
+            x: T;
+        }   
+    }
+    
+    module M2 {
+        interface A<T> {
+            x: T;  // ok, different declaration space than other M2
+        }
+    }
+    
+    module M3 {
+        export interface A<T> {
+            x: T;
+        }
+    }
+    
+    module M3 {
+        export interface A<T> {
+            x: T;  // error
+            ~
+!!! Duplicate identifier 'x'.
+        }
+    }

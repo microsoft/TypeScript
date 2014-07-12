@@ -1,0 +1,182 @@
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts (24 errors) ====
+    // members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
+    
+    module TargetIsPublic {
+        // targets
+        class Base {
+            public foo: string;
+        }
+    
+        interface I {
+            foo: string;
+        }
+    
+        var a: { foo: string; }
+        var b: Base;
+        var i: I;
+    
+        // sources
+        class D {
+            public foo: string;
+        }
+    
+        class E {
+            private foo: string;
+        }
+        var d: D;
+        var e: E;
+    
+        a = b;
+        a = i;
+        a = d;
+        a = e; // error
+        ~
+!!! Type 'E' is not assignable to type '{ foo: string; }':
+!!!   Private property 'foo' cannot be reimplemented.
+    
+        b = a;
+        b = i;
+        b = d;
+        b = e; // error
+        ~
+!!! Type 'E' is not assignable to type 'Base':
+!!!   Private property 'foo' cannot be reimplemented.
+    
+        i = a;
+        i = b;
+        i = d;
+        i = e; // error
+        ~
+!!! Type 'E' is not assignable to type 'I':
+!!!   Private property 'foo' cannot be reimplemented.
+    
+        d = a;
+        d = b;
+        d = i;
+        d = e; // error
+        ~
+!!! Type 'E' is not assignable to type 'D':
+!!!   Private property 'foo' cannot be reimplemented.
+    
+        e = a; // errror
+        ~
+!!! Type '{ foo: string; }' is not assignable to type 'E':
+!!!   Private property 'foo' cannot be reimplemented.
+        e = b; // errror
+        ~
+!!! Type 'Base' is not assignable to type 'E':
+!!!   Private property 'foo' cannot be reimplemented.
+        e = i; // errror
+        ~
+!!! Type 'I' is not assignable to type 'E':
+!!!   Private property 'foo' cannot be reimplemented.
+        e = d; // errror
+        ~
+!!! Type 'D' is not assignable to type 'E':
+!!!   Private property 'foo' cannot be reimplemented.
+        e = e; 
+    
+    }
+    
+    module TargetIsPublic {
+        // targets
+        class Base {
+            private foo: string;
+        }
+    
+        interface I extends Base {
+        }
+    
+        var a: { foo: string; }
+        var b: Base;
+        var i: I;
+    
+        // sources
+        class D {
+            public foo: string;
+        }
+    
+        class E {
+            private foo: string;
+        }
+    
+        var d: D;
+        var e: E;
+    
+        a = b; // error
+        ~
+!!! Type 'Base' is not assignable to type '{ foo: string; }':
+!!!   Private property 'foo' cannot be reimplemented.
+        a = i; // error
+        ~
+!!! Type 'I' is not assignable to type '{ foo: string; }':
+!!!   Private property 'foo' cannot be reimplemented.
+        a = d;
+        a = e; // error
+        ~
+!!! Type 'E' is not assignable to type '{ foo: string; }':
+!!!   Private property 'foo' cannot be reimplemented.
+    
+        b = a; // error
+        ~
+!!! Type '{ foo: string; }' is not assignable to type 'Base':
+!!!   Private property 'foo' cannot be reimplemented.
+        b = i;
+        b = d; // error
+        ~
+!!! Type 'D' is not assignable to type 'Base':
+!!!   Private property 'foo' cannot be reimplemented.
+        b = e; // error
+        ~
+!!! Type 'E' is not assignable to type 'Base':
+!!!   Private property 'foo' cannot be reimplemented.
+        b = b;
+        
+        i = a; // error
+        ~
+!!! Type '{ foo: string; }' is not assignable to type 'I':
+!!!   Private property 'foo' cannot be reimplemented.
+        i = b;
+        i = d; // error
+        ~
+!!! Type 'D' is not assignable to type 'I':
+!!!   Private property 'foo' cannot be reimplemented.
+        i = e; // error
+        ~
+!!! Type 'E' is not assignable to type 'I':
+!!!   Private property 'foo' cannot be reimplemented.
+        i = i;
+    
+        d = a;
+        d = b; // error
+        ~
+!!! Type 'Base' is not assignable to type 'D':
+!!!   Private property 'foo' cannot be reimplemented.
+        d = i; // error
+        ~
+!!! Type 'I' is not assignable to type 'D':
+!!!   Private property 'foo' cannot be reimplemented.
+        d = e; // error
+        ~
+!!! Type 'E' is not assignable to type 'D':
+!!!   Private property 'foo' cannot be reimplemented.
+    
+        e = a; // errror
+        ~
+!!! Type '{ foo: string; }' is not assignable to type 'E':
+!!!   Private property 'foo' cannot be reimplemented.
+        e = b; // errror
+        ~
+!!! Type 'Base' is not assignable to type 'E':
+!!!   Private property 'foo' cannot be reimplemented.
+        e = i; // errror
+        ~
+!!! Type 'I' is not assignable to type 'E':
+!!!   Private property 'foo' cannot be reimplemented.
+        e = d; // errror
+        ~
+!!! Type 'D' is not assignable to type 'E':
+!!!   Private property 'foo' cannot be reimplemented.
+        e = e;
+    
+    }

@@ -1,0 +1,19 @@
+==== tests/cases/compiler/cloduleStaticMembers.ts (3 errors) ====
+    class Clod {
+        private static x = 10;
+        public static y = 10;
+    }
+    module Clod {
+        var p = Clod.x;
+                ~~~~~~
+!!! Property 'Clod.x' is inaccessible.
+        var q = x;
+                ~
+!!! Cannot find name 'x'.
+    
+        var s = Clod.y;
+        var t = y; 
+                ~
+!!! Cannot find name 'y'.
+    }
+    

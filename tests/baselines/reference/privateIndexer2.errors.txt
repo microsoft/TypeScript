@@ -1,0 +1,38 @@
+==== tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts (14 errors) ====
+    // private indexers not allowed
+    
+    var x = {
+        private [x: string]: string;
+                ~
+!!! ':' expected.
+                  ~
+!!! ',' expected.
+                           ~
+!!! ',' expected.
+                                   ~
+!!! ':' expected.
+                    ~~~~~~
+!!! Cannot find name 'string'.
+    }
+    ~
+!!! Declaration or statement expected.
+    
+    var y: {
+        private[x: string]: string;
+        ~~~~~~~
+!!! Property or signature expected.
+                 ~
+!!! ']' expected.
+                         ~
+!!! ';' expected.
+                          ~
+!!! Declaration or statement expected.
+        ~~~~~~~
+!!! Cannot find name 'private'.
+                   ~~~~~~
+!!! Cannot find name 'string'.
+                            ~~~~~~
+!!! Cannot find name 'string'.
+    }
+    ~
+!!! Declaration or statement expected.

@@ -1,0 +1,14 @@
+==== tests/cases/conformance/classes/constructorDeclarations/classWithTwoConstructorDefinitions.ts (2 errors) ====
+    class C {
+        constructor() { }
+        constructor(x) { } // error
+        ~~~~~~~~~~~~~~~~~~
+!!! Multiple constructor implementations are not allowed.
+    }
+    
+    class D<T> {
+        constructor(x: T) { }
+        constructor(x: T, y: T) { } // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Multiple constructor implementations are not allowed.
+    }

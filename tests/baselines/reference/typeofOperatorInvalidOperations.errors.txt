@@ -1,0 +1,14 @@
+==== tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorInvalidOperations.ts (3 errors) ====
+    // Unary operator typeof
+    
+    // opreand before typeof
+    var ANY = ANY typeof ;    //expect error
+                  ~~~~~~
+!!! ',' expected.
+                         ~
+!!! Expression expected.
+    
+    // miss an operand
+    var ANY1 = typeof ;
+                      ~
+!!! Expression expected.

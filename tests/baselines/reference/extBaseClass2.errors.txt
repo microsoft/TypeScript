@@ -1,0 +1,15 @@
+==== tests/cases/compiler/extBaseClass2.ts (2 errors) ====
+    module N {
+        export class C4 extends M.B {
+                                ~~~
+!!! Module 'M' has no exported member 'B'.
+        }
+    }
+    
+    module M {
+        export class C5 extends B {
+                                ~
+!!! Cannot find name 'B'.
+        }
+    }
+    

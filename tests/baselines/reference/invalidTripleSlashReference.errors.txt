@@ -1,0 +1,10 @@
+==== tests/cases/compiler/invalidTripleSlashReference.ts (2 errors) ====
+    /// <reference path='filedoesnotexist.ts'/>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! File 'filedoesnotexist.ts' not found.
+    /// <reference path='otherdoesnotexist.d.ts'/>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! File 'otherdoesnotexist.d.ts' not found.
+    
+    // this test doesn't actually give the errors you want due to the way the compiler reports errors
+    var x = 1;

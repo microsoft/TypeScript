@@ -1,0 +1,18 @@
+==== tests/cases/compiler/moduleProperty1.ts (3 errors) ====
+    module M {
+        var x=10;  // variable local to this module body
+        var y=x;  // property visible only in module
+        export var z=y;  // property visible to any code
+    }
+    
+    module M2 {
+        var x = 10;  // variable local to this module body
+        private y = x;  // can't use private in modules
+        ~~~~~~~
+!!! Declaration or statement expected.
+                ~
+!!! Cannot find name 'y'.
+        export var z = y;  // property visible to any code
+                       ~
+!!! Cannot find name 'y'.
+    }

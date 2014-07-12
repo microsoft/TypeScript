@@ -1,0 +1,9 @@
+==== tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnumDeclaration6.ts (1 errors) ====
+    enum E {
+        A = 1,
+        B,
+        C = 1 << 1,
+        D,
+        ~
+!!! Enum member must have initializer.
+    }

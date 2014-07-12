@@ -1,0 +1,7 @@
+==== tests/cases/compiler/functionOverloads22.ts (1 errors) ====
+    function foo(bar:number):{a:number;}[];
+    function foo(bar:string):{a:number; b:string;}[];
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Overload signature is not compatible with function implementation.
+    function foo(bar:any):{a:any;b?:any;}[] { return [{a:""}] }
+    

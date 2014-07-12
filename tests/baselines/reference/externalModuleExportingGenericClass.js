@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/externalModuleExportingGenericClass.ts] ////
+
+//// [externalModuleExportingGenericClass_file0.ts]
+
+class C<T> {
+    foo: T;
+}
+export = C;
+
+
+//// [externalModuleExportingGenericClass_file1.ts]
+import a = require('externalModuleExportingGenericClass_file0');
+var v: a; // this should report error
+var v2: any = (new a()).foo;
+var v3: number = (new a<number>()).foo;
+
+
+//// [externalModuleExportingGenericClass_file0.js]
+var C = (function () {
+    function C() {
+    }
+    return C;
+})();
+module.exports = C;
+//// [externalModuleExportingGenericClass_file1.js]
+var a = require('externalModuleExportingGenericClass_file0');
+var v;
+var v2 = (new a()).foo;
+var v3 = (new a()).foo;

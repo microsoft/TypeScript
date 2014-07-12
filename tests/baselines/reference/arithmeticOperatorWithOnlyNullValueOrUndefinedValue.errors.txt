@@ -1,0 +1,220 @@
+==== tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts (80 errors) ====
+    // operator *
+    var ra1 = null * null;
+              ~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                     ~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var ra2 = null * undefined;
+              ~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                     ~~~~~~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var ra3 = undefined * null;
+              ~~~~~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                          ~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var ra4 = undefined * undefined;
+              ~~~~~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                          ~~~~~~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    
+    // operator /
+    var rb1 = null / null;
+              ~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                     ~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var rb2 = null / undefined;
+              ~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                     ~~~~~~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var rb3 = undefined / null;
+              ~~~~~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                          ~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var rb4 = undefined / undefined;
+              ~~~~~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                          ~~~~~~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    
+    // operator %
+    var rc1 = null % null;
+              ~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                     ~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var rc2 = null % undefined;
+              ~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                     ~~~~~~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var rc3 = undefined % null;
+              ~~~~~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                          ~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var rc4 = undefined % undefined;
+              ~~~~~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                          ~~~~~~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    
+    // operator -
+    var rd1 = null - null;
+              ~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                     ~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var rd2 = null - undefined;
+              ~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                     ~~~~~~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var rd3 = undefined - null;
+              ~~~~~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                          ~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var rd4 = undefined - undefined;
+              ~~~~~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                          ~~~~~~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    
+    // operator <<
+    var re1 = null << null;
+              ~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                      ~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var re2 = null << undefined;
+              ~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                      ~~~~~~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var re3 = undefined << null;
+              ~~~~~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                           ~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var re4 = undefined << undefined;
+              ~~~~~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                           ~~~~~~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    
+    // operator >>
+    var rf1 = null >> null;
+              ~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                      ~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var rf2 = null >> undefined;
+              ~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                      ~~~~~~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var rf3 = undefined >> null;
+              ~~~~~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                           ~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var rf4 = undefined >> undefined;
+              ~~~~~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                           ~~~~~~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    
+    // operator >>>
+    var rg1 = null >>> null;
+              ~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                       ~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var rg2 = null >>> undefined;
+              ~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                       ~~~~~~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var rg3 = undefined >>> null;
+              ~~~~~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                            ~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var rg4 = undefined >>> undefined;
+              ~~~~~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                            ~~~~~~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    
+    // operator &
+    var rh1 = null & null;
+              ~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                     ~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var rh2 = null & undefined;
+              ~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                     ~~~~~~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var rh3 = undefined & null;
+              ~~~~~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                          ~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var rh4 = undefined & undefined;
+              ~~~~~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                          ~~~~~~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    
+    // operator ^
+    var ri1 = null ^ null;
+              ~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                     ~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var ri2 = null ^ undefined;
+              ~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                     ~~~~~~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var ri3 = undefined ^ null;
+              ~~~~~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                          ~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var ri4 = undefined ^ undefined;
+              ~~~~~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                          ~~~~~~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    
+    // operator |
+    var rj1 = null | null;
+              ~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                     ~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var rj2 = null | undefined;
+              ~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                     ~~~~~~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var rj3 = undefined | null;
+              ~~~~~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                          ~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var rj4 = undefined | undefined;
+              ~~~~~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                          ~~~~~~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.

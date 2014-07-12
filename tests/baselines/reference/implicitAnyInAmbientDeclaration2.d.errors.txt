@@ -1,0 +1,31 @@
+==== tests/cases/compiler/implicitAnyInAmbientDeclaration2.d.ts (8 errors) ====
+    declare function foo(x);  // this should be an error
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
+                         ~
+!!! Parameter 'x' implicitly has an 'any' type.
+    declare var bar;  // this should be be an erro
+                ~~~
+!!! Variable 'bar' implicitly has an 'any' type.
+    declare class C {
+        public publicMember;  // this should be an error
+        ~~~~~~~~~~~~~~~~~~~~
+!!! Member 'publicMember' implicitly has an 'any' type.
+        private privateMember;  // this should not be an error
+    
+        public publicFunction(x);  // this should be an error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! 'publicFunction', which lacks return-type annotation, implicitly has an 'any' return type.
+                              ~
+!!! Parameter 'x' implicitly has an 'any' type.
+        private privateFunction(privateParam);  // this should not be an error
+        private constructor(privateParam);  // this should not be an error
+        ~~~~~~~
+!!! 'private' modifier cannot appear on a constructor declaration.
+    }
+    
+    declare class D {
+        public constructor(publicConsParam, int: number);  // this should be an error
+                           ~~~~~~~~~~~~~~~
+!!! Parameter 'publicConsParam' implicitly has an 'any' type.
+    }

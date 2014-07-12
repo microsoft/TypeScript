@@ -1,0 +1,11 @@
+==== tests/cases/compiler/staticsInConstructorBodies.ts (2 errors) ====
+    class C {
+    	constructor() {
+    		static p1 = 0; // ERROR
+    		~~~~~~
+!!! Statement expected.
+    		static m1() {} // ERROR
+    	}
+    }
+    ~
+!!! Declaration or statement expected.

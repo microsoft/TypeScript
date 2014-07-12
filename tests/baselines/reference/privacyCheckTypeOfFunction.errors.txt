@@ -1,0 +1,8 @@
+==== tests/cases/compiler/privacyCheckTypeOfFunction.ts (1 errors) ====
+    function foo() {
+    }
+    export var x: typeof foo;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Cannot compile external modules unless the '--module' flag is provided.
+    export var b = foo;
+    

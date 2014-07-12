@@ -1,0 +1,10 @@
+==== tests/cases/compiler/importDeclWithExportModifier.ts (1 errors) ====
+    module x {
+        interface c {
+        }
+    }
+    export import a = x.c;
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! Module 'x' has no exported member 'c'.
+    var b: a;
+    

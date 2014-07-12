@@ -1,0 +1,4 @@
+==== tests/cases/compiler/invalidUnicodeEscapeSequance2.ts (1 errors) ====
+    var arg\uxxxx
+           
+!!! Invalid character.

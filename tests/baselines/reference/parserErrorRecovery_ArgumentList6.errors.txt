@@ -1,0 +1,8 @@
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList6.ts (3 errors) ====
+    Foo(,
+        ~
+!!! Argument expression expected.
+         
+!!! ')' expected.
+    ~~~
+!!! Cannot find name 'Foo'.

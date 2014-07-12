@@ -1,0 +1,29 @@
+==== tests/cases/compiler/chainedAssignmentChecking.ts (2 errors) ====
+    class X {
+      constructor(public z) { }
+      a: number;
+    }
+    
+    class Y {
+      constructor(public z) { }
+      a: number;
+      b: string;
+    }
+    
+    class Z {
+      z: any;
+      c: string;
+    }
+    
+    var c1 = new X(3);
+    var c2 = new Y(5);
+    var c3 = new Z();
+    
+    c1 = c2 = c3; // Should be error
+    ~~
+!!! Type 'Z' is not assignable to type 'X':
+!!!   Property 'a' is missing in type 'Z'.
+         ~~
+!!! Type 'Z' is not assignable to type 'Y':
+!!!   Property 'a' is missing in type 'Z'.
+    

@@ -1,0 +1,44 @@
+==== tests/cases/compiler/bases.ts (10 errors) ====
+    interface I {
+        x;
+    }
+    
+    class B {
+        constructor() {
+            this.y: any;
+                  ~
+!!! ';' expected.
+                 ~
+!!! Property 'y' does not exist on type 'B'.
+                    ~~~
+!!! Cannot find name 'any'.
+        }
+    }
+    
+    class C extends B implements I {
+          ~
+!!! Class 'C' incorrectly implements interface 'I':
+!!!   Property 'x' is missing in type 'C'.
+        constructor() {
+        ~~~~~~~~~~~~~~~
+            this.x: any;
+                  ~
+!!! ';' expected.
+    ~~~~~~~~~~~~~~~~~~~~
+                 ~
+!!! Property 'x' does not exist on type 'C'.
+                    ~~~
+!!! Cannot find name 'any'.
+        }
+    ~~~~~
+!!! Constructors for derived classes must contain a 'super' call.
+    }
+    
+    new C().x;
+            ~
+!!! Property 'x' does not exist on type 'C'.
+    new C().y;
+            ~
+!!! Property 'y' does not exist on type 'C'.
+    
+    

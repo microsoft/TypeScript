@@ -1,0 +1,10 @@
+==== tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInInterfaceDeclaration1.ts (1 errors) ====
+    interface I<T> {
+       v: A<T>;
+          ~~~~
+!!! Cannot find name 'A'.
+       f1<T>(): T;
+       f2?<T>(): T;
+       <T>(): void;
+       new <T>(): void;
+    }

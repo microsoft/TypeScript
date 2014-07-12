@@ -1,0 +1,7 @@
+==== tests/cases/compiler/thisInConstructorParameter1.ts (1 errors) ====
+    class Foo {
+        public y;
+        constructor(x = this.y) { }
+                        ~~~~
+!!! 'this' cannot be referenced in constructor arguments.
+    }

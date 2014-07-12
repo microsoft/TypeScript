@@ -1,0 +1,15 @@
+==== tests/cases/compiler/extendsClauseAlreadySeen.ts (4 errors) ====
+    class C {
+    
+    }
+    class D extends C extends C {
+                      ~~~~~~~
+!!! '{' expected.
+                                ~
+!!! ';' expected.
+        baz() { }
+              ~
+!!! ';' expected.
+        ~~~
+!!! Cannot find name 'baz'.
+    }

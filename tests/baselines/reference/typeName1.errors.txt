@@ -1,0 +1,72 @@
+==== tests/cases/compiler/typeName1.ts (16 errors) ====
+    interface I {
+        k;
+    }
+    class C {
+        public eek:string;
+        static zeek:number;
+    }
+    
+    var x1:{ f(s:string):number;f(n:number):string; }=3;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type 'number' is not assignable to type '{ f(s: string): number; f(n: number): string; }':
+!!!   Property 'f' is missing in type 'Number'.
+    var x2:{ f(s:string):number; } =3;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type 'number' is not assignable to type '{ f(s: string): number; }':
+!!!   Property 'f' is missing in type 'Number'.
+    var x3:{ (s:string):number;(n:number):string; }=3;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type 'number' is not assignable to type '{ (s: string): number; (n: number): string; }'.
+    var x4:{ x;y;z:number;f(n:number):string;f(s:string):number; }=3;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type 'number' is not assignable to type '{ x: any; y: any; z: number; f(n: number): string; f(s: string): number; }':
+!!!   Property 'x' is missing in type 'Number'.
+    var x5:{ (s:string):number;(n:number):string;x;y;z:number;f(n:number):string;f(s:string):number; }=3;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type 'number' is not assignable to type '{ (s: string): number; (n: number): string; x: any; y: any; z: number; f(n: number): string; f(s: string): number; }':
+!!!   Property 'x' is missing in type 'Number'.
+    var x6:{ z:number;f:{(n:number):string;(s:string):number;}; }=3;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type 'number' is not assignable to type '{ z: number; f: { (n: number): string; (s: string): number; }; }':
+!!!   Property 'z' is missing in type 'Number'.
+    var x7:(s:string)=>boolean=3;
+        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type 'number' is not assignable to type '(s: string) => boolean'.
+    var x8:{ z:I;[s:string]:{ x; y; };[n:number]:{x; y;};():boolean; }=3;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type 'number' is not assignable to type '{ (): boolean; [x: string]: { x: any; y: any; }; [x: number]: { x: any; y: any; }; z: I; }':
+!!!   Property 'z' is missing in type 'Number'.
+             ~~~~
+!!! Property 'z' of type 'I' is not assignable to string index type '{ x: any; y: any; }'.
+    var x9:I=3;
+        ~~~~~~
+!!! Type 'number' is not assignable to type 'I':
+!!!   Property 'k' is missing in type 'Number'.
+    var x10:I[][][][]=3;
+        ~~~~~~~~~~~~~~~
+!!! Type 'number' is not assignable to type 'I[][][][]':
+!!!   Property 'concat' is missing in type 'Number'.
+    var x11:{z:I;x:boolean;}[][]=3;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type 'number' is not assignable to type '{ z: I; x: boolean; }[][]':
+!!!   Property 'concat' is missing in type 'Number'.
+    var x12:{z:I;x:boolean;y:(s:string)=>boolean;w:{ z:I;[s:string]:{ x; y; };[n:number]:{x; y;};():boolean; };}[][]=3;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type 'number' is not assignable to type '{ z: I; x: boolean; y: (s: string) => boolean; w: { (): boolean; [x: string]: { x: any; y: any; }; [x: number]: { x: any; y: any; }; z: I; }; }[][]':
+!!!   Property 'concat' is missing in type 'Number'.
+    var x13:{ new(): number; new(n:number):number; x: string; w: {y: number;}; (): {}; } = 3;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type 'number' is not assignable to type '{ (): {}; new (): number; new (n: number): number; x: string; w: { y: number; }; }':
+!!!   Property 'x' is missing in type 'Number'.
+    var x14:{ f(x:number):boolean; p; q; ():string; }=3;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type 'number' is not assignable to type '{ (): string; f(x: number): boolean; p: any; q: any; }':
+!!!   Property 'f' is missing in type 'Number'.
+    var x15:number=C;
+        ~~~~~~~~~~~~
+!!! Type 'typeof C' is not assignable to type 'number'.
+    
+    
+    
+    

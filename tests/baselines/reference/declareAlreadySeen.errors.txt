@@ -1,0 +1,17 @@
+==== tests/cases/compiler/declareAlreadySeen.ts (4 errors) ====
+    module M {
+        declare declare var x;
+                ~~~~~~~
+!!! 'declare' modifier already seen.
+        declare declare function f();
+                ~~~~~~~
+!!! 'declare' modifier already seen.
+    
+        declare declare module N { }  
+                ~~~~~~~
+!!! 'declare' modifier already seen.
+    
+        declare declare class C { }
+                ~~~~~~~
+!!! 'declare' modifier already seen.
+    }

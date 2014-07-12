@@ -1,0 +1,8 @@
+==== tests/cases/conformance/parser/ecmascript5/SuperExpressions/parserSuperExpression3.ts (1 errors) ====
+    class C {
+      M() {
+        this.super<T>(0);
+             ~~~~~
+!!! Property 'super' does not exist on type 'C'.
+      }
+    }

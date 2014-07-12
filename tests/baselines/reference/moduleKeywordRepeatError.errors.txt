@@ -1,0 +1,8 @@
+==== tests/cases/compiler/moduleKeywordRepeatError.ts (2 errors) ====
+    // "module.module { }" should raise a syntax error
+    
+    module.module { }
+                  ~
+!!! ';' expected.
+    ~~~~~~
+!!! Cannot find name 'module'.

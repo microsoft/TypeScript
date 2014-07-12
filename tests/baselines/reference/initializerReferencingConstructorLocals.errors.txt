@@ -1,0 +1,46 @@
+==== tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorLocals.ts (12 errors) ====
+    // Initializer expressions for instance member variables are evaluated in the scope of the class constructor body but are not permitted to reference parameters or local variables of the constructor. 
+    
+    class C {
+        a = z; // error
+            ~
+!!! Cannot find name 'z'.
+        b: typeof z; // error
+                  ~
+!!! Cannot find name 'z'.
+        c = this.z; // error
+                 ~
+!!! Property 'z' does not exist on type 'C'.
+        d: typeof this.z; // error
+                  ~~~~
+!!! Identifier expected.
+                       ~
+!!! Property 'z' does not exist on type 'C'.
+        constructor(x) {
+            z = 1;
+            ~
+!!! Cannot find name 'z'.
+        }
+    }
+    
+    class D<T> {
+        a = z; // error
+            ~
+!!! Cannot find name 'z'.
+        b: typeof z; // error
+                  ~
+!!! Cannot find name 'z'.
+        c = this.z; // error
+                 ~
+!!! Property 'z' does not exist on type 'D<T>'.
+        d: typeof this.z; // error
+                  ~~~~
+!!! Identifier expected.
+                       ~
+!!! Property 'z' does not exist on type 'D<T>'.
+        constructor(x: T) {
+            z = 1;
+            ~
+!!! Cannot find name 'z'.
+        }
+    }

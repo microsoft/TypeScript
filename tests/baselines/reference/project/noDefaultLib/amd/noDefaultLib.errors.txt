@@ -1,0 +1,9 @@
+Cannot find global type 'Array'.
+Cannot find global type 'Boolean'.
+Cannot find global type 'Function'.
+Cannot find global type 'IArguments'.
+Cannot find global type 'Number'.
+Cannot find global type 'Object'.
+Cannot find global type 'RegExp'.
+Cannot find global type 'String'.
+test.ts(3,8): Cannot find name 'Array'.

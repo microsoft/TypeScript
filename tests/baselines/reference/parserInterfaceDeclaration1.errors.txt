@@ -1,0 +1,11 @@
+==== tests/cases/conformance/parser/ecmascript5/InterfaceDeclarations/parserInterfaceDeclaration1.ts (4 errors) ====
+    interface I extends A extends B {
+                          ~~~~~~~
+!!! '{' expected.
+                                    ~
+!!! ';' expected.
+                        ~
+!!! Cannot find name 'A'.
+                                  ~
+!!! Cannot find name 'B'.
+    }

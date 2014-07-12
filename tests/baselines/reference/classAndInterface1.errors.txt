@@ -1,0 +1,5 @@
+==== tests/cases/compiler/classAndInterface1.ts (1 errors) ====
+    class cli { }
+    interface cli { } // error
+              ~~~
+!!! Duplicate identifier 'cli'.

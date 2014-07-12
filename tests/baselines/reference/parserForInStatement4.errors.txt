@@ -1,0 +1,5 @@
+==== tests/cases/conformance/parser/ecmascript5/Statements/parserForInStatement4.ts (1 errors) ====
+    for (var a = 1 in X) {
+                      ~
+!!! Cannot find name 'X'.
+    }

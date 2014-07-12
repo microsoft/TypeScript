@@ -1,0 +1,16 @@
+{
+    "scenario": "declare export added",
+    "projectRoot": "tests/cases/projects/DeclareExportAdded",
+    "inputFiles": [
+        "consumer.ts"
+    ],
+    "baselineCheck": true,
+    "resolvedInputFiles": [
+        "consumer.ts",
+        "ref.d.ts",
+        "lib.d.ts"
+    ],
+    "emittedFiles": [
+        "consumer.js"
+    ]
+}

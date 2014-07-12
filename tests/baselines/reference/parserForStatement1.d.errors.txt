@@ -1,0 +1,5 @@
+==== tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement1.d.ts (1 errors) ====
+    for (;;) {
+    ~~~
+!!! Statements are not allowed in ambient contexts.
+    }

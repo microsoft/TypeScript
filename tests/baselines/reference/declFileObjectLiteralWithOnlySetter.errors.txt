@@ -1,0 +1,12 @@
+==== tests/cases/compiler/declFileObjectLiteralWithOnlySetter.ts (1 errors) ====
+    
+    function /*1*/makePoint(x: number) { 
+        return {
+            b: 10,
+            set x(a: number) { this.b = a; }
+                ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+        };
+    };
+    var /*3*/point = makePoint(2);
+    point./*2*/x = 30;

@@ -1,0 +1,34 @@
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer3.ts (3 errors) ====
+    // Derived type indexer must be subtype of base type indexer
+    
+    interface Base { foo: string; }
+    interface Derived extends Base { bar: string; }
+    interface Derived2 extends Derived { baz: string; }
+    
+    var a: A;
+           ~
+!!! Cannot find name 'A'.
+    var b1: { [x: string]: string; }
+    a = b1; // error
+    b1 = a; // error
+    
+    module Generics {
+        class A<T extends Derived> {
+            [x: string]: T;
+        }
+       
+        function foo<T extends Derived>() {
+            var a: A<T>;
+            var b: { [x: string]: string; }
+            a = b; // error
+            ~
+!!! Type '{ [x: string]: string; }' is not assignable to type 'A<T>':
+!!!   Index signatures are incompatible:
+!!!     Type 'string' is not assignable to type 'T'.
+            b = a; // error
+            ~
+!!! Type 'A<T>' is not assignable to type '{ [x: string]: string; }':
+!!!   Index signatures are incompatible:
+!!!     Type 'T' is not assignable to type 'string'.
+        }
+    }

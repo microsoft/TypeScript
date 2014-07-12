@@ -1,0 +1,4 @@
+==== tests/cases/compiler/varArgWithNoParamName.ts (1 errors) ====
+    function t1(...) {}
+                   ~
+!!! Identifier expected.

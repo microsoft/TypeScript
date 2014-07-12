@@ -1,0 +1,8 @@
+==== tests/cases/conformance/parser/ecmascript5/parservoidInQualifiedName2.ts (3 errors) ====
+    var v : x.void;
+              ~~~~
+!!! Identifier expected.
+                  ~
+!!! Expression expected.
+            ~~
+!!! Cannot find name 'x'.

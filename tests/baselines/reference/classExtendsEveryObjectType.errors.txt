@@ -1,0 +1,31 @@
+==== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts (7 errors) ====
+    interface I {
+        foo: string;
+    }
+    class C extends I { } // error
+                    ~
+!!! A class may only extend another class.
+    
+    class C2 extends { foo: string; } { } // error
+                     ~
+!!! Identifier expected.
+    var x: { foo: string; }
+    class C3 extends x { } // error
+                     ~
+!!! Cannot find name 'x'.
+    
+    module M { export var x = 1; }
+    class C4 extends M { } // error
+                     ~
+!!! Cannot find name 'M'.
+    
+    function foo() { }
+    class C5 extends foo { } // error
+                     ~~~
+!!! Cannot find name 'foo'.
+    
+    class C6 extends []{ } // error
+                     ~
+!!! Identifier expected.
+                       ~
+!!! ';' expected.

@@ -1,0 +1,7 @@
+==== tests/cases/conformance/parser/ecmascript5/Statements/parserLabeledStatement1.d.ts (2 errors) ====
+    foo:
+    ~~~
+!!! Statements are not allowed in ambient contexts.
+      bar();
+      ~~~
+!!! Cannot find name 'bar'.

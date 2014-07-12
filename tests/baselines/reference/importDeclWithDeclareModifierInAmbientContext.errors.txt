@@ -1,0 +1,16 @@
+==== tests/cases/compiler/importDeclWithDeclareModifierInAmbientContext.ts (3 errors) ====
+    declare module "m" {
+        module x {
+            interface c {
+            }
+        }
+        declare export import a = x.c;
+        ~~~~~~~
+!!! A 'declare' modifier cannot be used in an already ambient context.
+        ~~~~~~~
+!!! A 'declare' modifier cannot be used with an import declaration.
+                ~~~~~~
+!!! 'export' modifier must precede 'declare' modifier.
+        var b: a;
+    }
+    

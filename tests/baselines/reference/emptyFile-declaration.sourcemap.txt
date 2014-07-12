@@ -1,0 +1,7 @@
+===================================================================
+JsFile: emptyFile-declaration.js
+mapUrl: emptyFile-declaration.js.map
+sourceRoot: 
+sources: emptyFile-declaration.ts
+===================================================================
+>>>//# sourceMappingURL=emptyFile-declaration.js.map

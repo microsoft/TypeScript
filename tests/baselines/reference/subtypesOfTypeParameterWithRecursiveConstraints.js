@@ -1,0 +1,339 @@
+//// [subtypesOfTypeParameterWithRecursiveConstraints.ts]
+// checking whether other types are subtypes of type parameters with constraints
+
+class Foo<T> { foo: T; }
+function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: V) {
+    // error
+    var r1 = true ? t : u;
+    var r1 = true ? u : t;
+
+    // error
+    var r2 = true ? t : v;
+    var r2 = true ? v : t;
+
+    // error
+    var r3 = true ? v : u;
+    var r3 = true ? u : v;
+
+    // ok?
+    var r4 = true ? t : new Foo<T>();
+    var r4 = true ? new Foo<T>() : t;
+
+    // ok?
+    var r5 = true ? u : new Foo<T>();
+    var r5 = true ? new Foo<T>() : u;
+
+    // ok?
+    var r6 = true ? v : new Foo<T>();
+    var r6 = true ? new Foo<T>() : v;
+
+
+    // ok?
+    var r7 = true ? t : new Foo<U>();
+    var r7 = true ? new Foo<U>() : t;
+
+    // ok?
+    var r8 = true ? u : new Foo<U>();
+    var r8 = true ? new Foo<U>() : u;
+
+    // ok?
+    var r9 = true ? v : new Foo<U>();
+    var r9 = true ? new Foo<U>() : v;
+
+
+    // ok?
+    var r10 = true ? t : new Foo<V>();
+    var r10 = true ? new Foo<V>() : t;
+
+    // ok?
+    var r11 = true ? u : new Foo<V>();
+    var r11 = true ? new Foo<V>() : u;
+
+    // ok?
+    var r12 = true ? v : new Foo<V>();
+    var r12 = true ? new Foo<V>() : v;
+}
+
+module M1 {
+    class Base<T> {
+        foo: T;
+    }
+
+    class D1<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<T> {
+        [x: string]: T;
+        foo: T
+    }
+
+    class D2<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<T> {
+        [x: string]: T;
+        foo: U
+    }
+
+    class D3<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<T> {
+        [x: string]: T;
+        foo: V
+    }
+
+    class D4<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<U> {
+        [x: string]: U;
+        foo: T
+    }
+
+    class D5<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<U> {
+        [x: string]: U;
+        foo: U
+    }
+
+    class D6<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<U> {
+        [x: string]: U;
+        foo: V
+    }
+
+    class D7<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<V> {
+        [x: string]: V;
+        foo: T
+    }
+
+    class D8<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<V> {
+        [x: string]: V;
+        foo: U
+    }
+
+    class D9<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<V> {
+        [x: string]: V;
+        foo: V
+    }
+}
+
+
+module M2 {
+    class Base2<T> {
+        foo: Foo<T>;
+    }
+
+    class D1<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<T> {
+        [x: string]: T;
+        foo: T
+    }
+
+    class D2<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<T> {
+        [x: string]: T;
+        foo: U
+    }
+
+    class D3<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<T> {
+        [x: string]: T;
+        foo: V
+    }
+
+    class D4<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<U> {
+        [x: string]: U;
+        foo: T
+    }
+
+    class D5<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<U> {
+        [x: string]: U;
+        foo: U
+    }
+
+    class D6<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<U> {
+        [x: string]: U;
+        foo: V
+    }
+
+    class D7<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<V> {
+        [x: string]: V;
+        foo: T
+    }
+
+    class D8<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<V> {
+        [x: string]: V;
+        foo: U
+    }
+
+    class D9<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<V> {
+        [x: string]: V;
+        foo: V
+    }
+}
+
+//// [subtypesOfTypeParameterWithRecursiveConstraints.js]
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
+var Foo = (function () {
+    function Foo() {
+    }
+    return Foo;
+})();
+function f(t, u, v) {
+    var r1 = true ? t : u;
+    var r1 = true ? u : t;
+    var r2 = true ? t : v;
+    var r2 = true ? v : t;
+    var r3 = true ? v : u;
+    var r3 = true ? u : v;
+    var r4 = true ? t : new Foo();
+    var r4 = true ? new Foo() : t;
+    var r5 = true ? u : new Foo();
+    var r5 = true ? new Foo() : u;
+    var r6 = true ? v : new Foo();
+    var r6 = true ? new Foo() : v;
+    var r7 = true ? t : new Foo();
+    var r7 = true ? new Foo() : t;
+    var r8 = true ? u : new Foo();
+    var r8 = true ? new Foo() : u;
+    var r9 = true ? v : new Foo();
+    var r9 = true ? new Foo() : v;
+    var r10 = true ? t : new Foo();
+    var r10 = true ? new Foo() : t;
+    var r11 = true ? u : new Foo();
+    var r11 = true ? new Foo() : u;
+    var r12 = true ? v : new Foo();
+    var r12 = true ? new Foo() : v;
+}
+var M1;
+(function (M1) {
+    var Base = (function () {
+        function Base() {
+        }
+        return Base;
+    })();
+    var D1 = (function (_super) {
+        __extends(D1, _super);
+        function D1() {
+            _super.apply(this, arguments);
+        }
+        return D1;
+    })(Base);
+    var D2 = (function (_super) {
+        __extends(D2, _super);
+        function D2() {
+            _super.apply(this, arguments);
+        }
+        return D2;
+    })(Base);
+    var D3 = (function (_super) {
+        __extends(D3, _super);
+        function D3() {
+            _super.apply(this, arguments);
+        }
+        return D3;
+    })(Base);
+    var D4 = (function (_super) {
+        __extends(D4, _super);
+        function D4() {
+            _super.apply(this, arguments);
+        }
+        return D4;
+    })(Base);
+    var D5 = (function (_super) {
+        __extends(D5, _super);
+        function D5() {
+            _super.apply(this, arguments);
+        }
+        return D5;
+    })(Base);
+    var D6 = (function (_super) {
+        __extends(D6, _super);
+        function D6() {
+            _super.apply(this, arguments);
+        }
+        return D6;
+    })(Base);
+    var D7 = (function (_super) {
+        __extends(D7, _super);
+        function D7() {
+            _super.apply(this, arguments);
+        }
+        return D7;
+    })(Base);
+    var D8 = (function (_super) {
+        __extends(D8, _super);
+        function D8() {
+            _super.apply(this, arguments);
+        }
+        return D8;
+    })(Base);
+    var D9 = (function (_super) {
+        __extends(D9, _super);
+        function D9() {
+            _super.apply(this, arguments);
+        }
+        return D9;
+    })(Base);
+})(M1 || (M1 = {}));
+var M2;
+(function (M2) {
+    var Base2 = (function () {
+        function Base2() {
+        }
+        return Base2;
+    })();
+    var D1 = (function (_super) {
+        __extends(D1, _super);
+        function D1() {
+            _super.apply(this, arguments);
+        }
+        return D1;
+    })(Base2);
+    var D2 = (function (_super) {
+        __extends(D2, _super);
+        function D2() {
+            _super.apply(this, arguments);
+        }
+        return D2;
+    })(Base2);
+    var D3 = (function (_super) {
+        __extends(D3, _super);
+        function D3() {
+            _super.apply(this, arguments);
+        }
+        return D3;
+    })(Base2);
+    var D4 = (function (_super) {
+        __extends(D4, _super);
+        function D4() {
+            _super.apply(this, arguments);
+        }
+        return D4;
+    })(Base2);
+    var D5 = (function (_super) {
+        __extends(D5, _super);
+        function D5() {
+            _super.apply(this, arguments);
+        }
+        return D5;
+    })(Base2);
+    var D6 = (function (_super) {
+        __extends(D6, _super);
+        function D6() {
+            _super.apply(this, arguments);
+        }
+        return D6;
+    })(Base2);
+    var D7 = (function (_super) {
+        __extends(D7, _super);
+        function D7() {
+            _super.apply(this, arguments);
+        }
+        return D7;
+    })(Base2);
+    var D8 = (function (_super) {
+        __extends(D8, _super);
+        function D8() {
+            _super.apply(this, arguments);
+        }
+        return D8;
+    })(Base2);
+    var D9 = (function (_super) {
+        __extends(D9, _super);
+        function D9() {
+            _super.apply(this, arguments);
+        }
+        return D9;
+    })(Base2);
+})(M2 || (M2 = {}));

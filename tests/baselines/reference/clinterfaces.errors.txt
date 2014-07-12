@@ -1,0 +1,34 @@
+==== tests/cases/compiler/clinterfaces.ts (4 errors) ====
+    module M {
+        class C { }
+        interface C { }
+                  ~
+!!! Duplicate identifier 'C'.
+        interface D { }
+        class D { }
+              ~
+!!! Duplicate identifier 'D'.
+    }
+    
+    interface Foo<T> {
+        a: string;
+    }
+    
+    class Foo<T>{
+          ~~~
+!!! Duplicate identifier 'Foo'.
+        b: number;
+    }
+    
+    class Bar<T>{
+        b: number;
+    }
+    
+    interface Bar<T> {
+              ~~~
+!!! Duplicate identifier 'Bar'.
+        a: string;
+    }
+    
+    export = Foo;
+    

@@ -1,0 +1,8 @@
+==== tests/cases/compiler/enumWithoutInitializerAfterComputedMember.ts (1 errors) ====
+    enum E {
+        a,
+        b = a,
+        c
+        ~
+!!! Enum member must have initializer.
+    }

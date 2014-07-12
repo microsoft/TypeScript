@@ -1,0 +1,36 @@
+==== tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts1.ts (9 errors) ====
+    class C extends A<T> implements B<T> {
+                    ~~~~
+!!! Cannot find name 'A'.
+                                    ~~~~
+!!! Cannot find name 'B'.
+    }
+    
+    var v1: C<T>;
+            ~~~~
+!!! Type 'C' is not generic.
+    var v2: D<T> = null;
+            ~~~~
+!!! Cannot find name 'D'.
+    var v3: E.F<T>;
+            ~~~~~~
+!!! Cannot find name 'E'.
+    var v3: G.H.I<T>;
+            ~~~~~~~~
+!!! Cannot find name 'G'.
+    var v6: K<T>[];
+            ~~~~
+!!! Cannot find name 'K'.
+    
+    
+    function f1(a: E<T>) {
+                   ~~~~
+!!! Cannot find name 'E'.
+    }
+    
+    function f2(): F<T> {
+                   ~~~~
+!!! Cannot find name 'F'.
+    }
+    
+    

@@ -1,0 +1,14 @@
+==== tests/cases/compiler/superWithTypeArgument2.ts (2 errors) ====
+    class C<T> {
+        foo: T;
+    }
+    
+    class D<T> extends C<T> {
+        constructor(x) {
+            super<T>(x);
+                 ~
+!!! 'super' must be followed by argument list or member access.
+            ~~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+        }
+    }

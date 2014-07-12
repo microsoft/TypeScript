@@ -1,0 +1,443 @@
+// This file contains the build logic for the public repo
+
+var fs = require("fs");
+var path = require("path");
+
+// Variables
+var compilerDirectory = "src/compiler/";
+var servicesDirectory = "src/services/";
+var harnessDirectory = "src/harness/";
+var libraryDirectory = "src/lib/";
+var scriptsDirectory = "scripts/"
+
+var builtDirectory = "built/";
+var builtLocalDirectory = "built/local/";
+var LKGDirectory = "bin/";
+
+var copyright = "CopyrightNotice.txt";
+var thirdParty = "ThirdPartyNoticeText.txt";
+
+var compilerSources = [
+    "core.ts",
+    "sys.ts",
+    "types.ts",
+    "scanner.ts",
+    "parser.ts",
+    "binder.ts",
+    "checker.ts",
+    "emitter.ts",
+    "commandLineParser.ts",
+    "tc.ts",
+    "diagnosticInformationMap.generated.ts"
+].map(function (f) {
+    return path.join(compilerDirectory, f);
+});
+
+var servicesSources = [
+    "core.ts",
+    "sys.ts",
+    "types.ts",
+    "scanner.ts",
+    "parser.ts",
+    "binder.ts",
+    "checker.ts",
+    "emitter.ts"
+].map(function (f) {
+    return path.join(compilerDirectory, f);
+}).concat([
+    "services.ts",
+    "shims.ts",
+].map(function (f) {
+    return path.join(servicesDirectory, f);
+}));
+
+var harnessSources = [
+    "harness.ts",
+    "sourceMapRecorder.ts",
+// TODO Re-enable
+//    "harnessLanguageService.ts",
+//    "fourslash.ts",
+    "runner.ts",
+    "external/json2.ts",
+    "runnerbase.ts",
+    "compilerRunner.ts",
+    "typeWriter.ts",
+// TODO Re-enable fourslash and project tests
+//    "fourslashRunner.ts",
+    "projectsRunner.ts",
+    "unittestrunner.ts",
+    "rwcRunner.ts",
+].map(function (f) {
+    return path.join(harnessDirectory, f);
+});
+
+var librarySourceMap = [
+        { target: "lib.core.d.ts", sources: ["core.d.ts"] },
+        { target: "lib.dom.d.ts", sources: ["importcore.d.ts", "extensions.d.ts", "dom.generated.d.ts"], },
+        { target: "lib.webworker.d.ts", sources: ["importcore.d.ts", "extensions.d.ts", "webworker.generated.d.ts"], },
+        { target: "lib.scriptHost.d.ts", sources: ["importcore.d.ts", "scriptHost.d.ts"], },
+        { target: "lib.d.ts", sources: ["core.d.ts", "extensions.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"], },
+];
+
+var libraryTargets = librarySourceMap.map(function (f) {
+    return path.join(builtLocalDirectory, f.target);
+});
+
+// Prepends the contents of prefixFile to destinationFile
+function prependFile(prefixFile, destinationFile) {
+    if (!fs.existsSync(prefixFile)) {
+        fail(prefixFile + " does not exist!");
+    }
+    if (!fs.existsSync(destinationFile)) {
+        fail(destinationFile + " failed to be created!");
+    }
+    var temp = "temptemp";
+    jake.cpR(prefixFile, temp, {silent: true});
+    fs.appendFileSync(temp, fs.readFileSync(destinationFile));
+    fs.renameSync(temp, destinationFile);
+}
+
+// concatenate a list of sourceFiles to a destinationFile
+function concatenateFiles(destinationFile, sourceFiles) {
+    var temp = "temptemp";
+    // Copy the first file to temp
+    if (!fs.existsSync(sourceFiles[0])) {
+        fail(sourceFiles[0] + " does not exist!");
+    }
+    jake.cpR(sourceFiles[0], temp, {silent: true});
+    // append all files in sequence
+    for (var i = 1; i < sourceFiles.length; i++) {
+        if (!fs.existsSync(sourceFiles[i])) {
+                fail(sourceFiles[i] + " does not exist!");
+        }
+        fs.appendFileSync(temp, fs.readFileSync(sourceFiles[i]));
+    }
+    // Move the file to the final destination
+    fs.renameSync(temp, destinationFile);
+}
+
+var useDebugMode = false;
+/* Compiles a file from a list of sources
+    * @param outFile: the target file name
+    * @param sources: an array of the names of the source files
+    * @param prereqs: prerequisite tasks to compiling the file
+    * @param prefixes: a list of files to prepend to the target file
+    * @param useBuiltCompiler: true to use the built compiler, false to use the LKG
+    * @param noOutFile: true to compile without using --out
+    */
+function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile) {
+    file(outFile, prereqs, function() {
+        var dir = useBuiltCompiler ? builtLocalDirectory : LKGDirectory;
+        var compilerFilename = "tc.js";
+        var options = "-removeComments --module commonjs -noImplicitAny "; //" -propagateEnumConstants "
+        
+        var cmd = (process.env.host || process.env.TYPESCRIPT_HOST || "node") + " " + dir + compilerFilename + " " + options + " ";
+        if (useDebugMode) {
+            cmd = cmd + " " + path.join(harnessDirectory, "external/es5compat.ts") + " " + path.join(harnessDirectory, "external/json2.ts") + " ";
+        }
+        cmd = cmd + sources.join(" ") + (!noOutFile ? " -out " + outFile : "");
+        if (useDebugMode) {
+            cmd = cmd + " -sourcemap -mapRoot file:///" + path.resolve(path.dirname(outFile));
+        }
+        console.log(cmd + "\n");
+        var ex = jake.createExec([cmd]);
+        // Add listeners for output and error
+        ex.addListener("stdout", function(output) {
+            process.stdout.write(output);
+        });
+        ex.addListener("stderr", function(error) {
+            process.stderr.write(error);
+        });
+        ex.addListener("cmdEnd", function() {
+            if (!useDebugMode && prefixes && fs.existsSync(outFile)) {
+                for (var i in prefixes) {
+                    prependFile(prefixes[i], outFile);
+                }
+            }
+            complete();
+        });
+        ex.addListener("error", function() {
+            fs.unlinkSync(outFile);
+            console.log("Compilation of " + outFile + " unsuccessful");
+        });
+        ex.run();    
+    }, {async: true});
+}
+
+// Prerequisite task for built directory and library typings
+directory(builtLocalDirectory);
+
+for (var i in libraryTargets) {
+    (function (i) {
+        var entry = librarySourceMap[i];
+        var target = libraryTargets[i];
+        var sources = [copyright].concat(entry.sources.map(function (s) {
+            return path.join(libraryDirectory, s);
+        }));
+        file(target, [builtLocalDirectory].concat(sources), function() {
+            concatenateFiles(target, sources);
+        });
+    })(i);
+}
+
+// Lib target to build the library files
+desc("Builds the library targets");
+task("lib", libraryTargets);
+
+
+// Generate diagnostics
+var processDiagnosticMessagesJs = path.join(scriptsDirectory, "processDiagnosticMessages.js");
+var processDiagnosticMessagesTs = path.join(scriptsDirectory, "processDiagnosticMessages.ts");
+var diagnosticMessagesJson = path.join(compilerDirectory, "diagnosticMessages.json");
+var diagnosticInfoMapTs = path.join(compilerDirectory, "diagnosticInformationMap.generated.ts");
+
+// processDiagnosticMessages script
+compileFile(processDiagnosticMessagesJs,
+            [processDiagnosticMessagesTs],
+            [processDiagnosticMessagesTs],
+            [],
+            false);
+
+// The generated diagnostics map; built for the compiler and for the 'generate-diagnostics' task
+file(diagnosticInfoMapTs, [processDiagnosticMessagesJs, diagnosticMessagesJson], function () {
+    var cmd = "node " + processDiagnosticMessagesJs + " "  + diagnosticMessagesJson;
+    console.log(cmd);
+    var ex = jake.createExec([cmd]);
+    // Add listeners for output and error
+    ex.addListener("stdout", function(output) {
+        process.stdout.write(output);
+    });
+    ex.addListener("stderr", function(error) {
+        process.stderr.write(error);
+    });
+    ex.addListener("cmdEnd", function() {
+        complete();
+    });
+    ex.run();    
+}, {async: true})
+
+
+desc("Generates a diagnostic file in TypeScript based on an input JSON file");
+task("generate-diagnostics", [diagnosticInfoMapTs])
+
+
+// Local target to build the compiler and services
+var tcFile = path.join(builtLocalDirectory, "tc.js");
+compileFile(tcFile, compilerSources, [builtLocalDirectory, copyright].concat(compilerSources), [copyright], /*useBuiltCompiler:*/ false);
+
+var tcServicesFile = path.join(builtLocalDirectory, "services.js");
+compileFile(tcServicesFile, servicesSources, [builtLocalDirectory, copyright].concat(servicesSources), [copyright], /*useBuiltCompiler:*/ true);
+
+// Local target to build the compiler and services
+desc("Builds the full compiler and services");
+task("local", ["generate-diagnostics", "lib", tcFile, tcServicesFile]);
+
+
+// Local target to build the compiler and services
+desc("Emit debug mode files with sourcemaps");
+task("debug", function() {
+        useDebugMode = true;
+});
+
+
+// Set the default task to "local"
+task("default", ["local"]);
+
+
+// Cleans the built directory
+desc("Cleans the compiler output, declare files, and tests");
+task("clean", function() {
+    jake.rmRf(builtDirectory);
+});
+
+// Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
+desc("Makes a new LKG out of the built js files");
+task("LKG", libraryTargets, function() {
+    var expectedFiles = [tcFile, tcServicesFile].concat(libraryTargets);
+    var missingFiles = expectedFiles.filter(function (f) {
+        return !fs.existsSync(f);
+    });
+    if (missingFiles.length > 0) {
+        fail("Cannot replace the LKG unless all built targets are present in directory " + builtLocalDirectory +
+                    ". The following files are missing:\n" + missingFiles.join("\n"));
+    }
+    // Copy all the targets into the LKG directory
+    jake.mkdirP(LKGDirectory);
+    for (i in expectedFiles) {
+        jake.cpR(expectedFiles[i], LKGDirectory);
+    }
+    //var resourceDirectories = fs.readdirSync(builtLocalResourcesDirectory).map(function(p) { return path.join(builtLocalResourcesDirectory, p); });
+    //resourceDirectories.map(function(d) {
+    //    jake.cpR(d, LKGResourcesDirectory);
+    //});
+});
+
+// Test directory
+directory(builtLocalDirectory);
+
+// Task to build the tests infrastructure using the built compiler
+var run = path.join(builtLocalDirectory, "run.js");
+compileFile(run, harnessSources, [builtLocalDirectory, tcFile].concat(libraryTargets).concat(harnessSources), [], /*useBuiltCompiler:*/ true);
+
+var localBaseline = "tests/baselines/local/";
+var refBaseline = "tests/baselines/reference/";
+
+var localRwcBaseline = "tests/baselines/rwc/local/";
+var refRwcBaseline = "tests/baselines/rwc/reference/";
+
+desc("Builds the test infrastructure using the built compiler");
+task("tests", ["local", run].concat(libraryTargets));
+
+function exec(cmd) {
+    var ex = jake.createExec([cmd]);
+    // Add listeners for output and error
+    ex.addListener("stdout", function(output) {
+        process.stdout.write(output);
+    });
+    ex.addListener("stderr", function(error) {
+        process.stderr.write(error);
+    });
+    ex.addListener("cmdEnd", function() {
+        complete();
+    });
+    try{
+        ex.run();	
+    } catch(e) {
+        console.log('Exception: ' + e)
+    }
+}
+
+function cleanTestDirs() {
+    // Clean the local baselines directory
+    if (fs.existsSync(localBaseline)) {
+        jake.rmRf(localBaseline);
+    }
+
+        // Clean the local Rwc baselines directory
+    if (fs.existsSync(localRwcBaseline)) {
+        jake.rmRf(localRwcBaseline);
+    }
+
+    jake.mkdirP(localBaseline);
+}
+
+// used to pass data from jake command line directly to run.js
+function writeTestConfigFile(tests, testConfigFile) {
+    console.log('Running test(s): ' + tests);
+    var testConfigContents = '{\n' + '\ttest: [\'' + tests + '\']\n}';
+    fs.writeFileSync('test.config', testConfigContents);    
+}
+
+desc("Runs the tests using the built run.js file. Syntax is jake runtests. Optional parameters 'host=', 'tests=[regex], reporter=[list|spec|json|<more>]'.");
+task("runtests", ["tests", builtLocalDirectory], function() {
+    cleanTestDirs();
+    host = "mocha"
+    tests = process.env.test || process.env.tests;
+    var testConfigFile = 'test.config';
+    if(fs.existsSync(testConfigFile)) {
+        fs.unlinkSync(testConfigFile);
+    }
+    if(tests) {
+        writeTestConfigFile(tests, testConfigFile);
+    }
+
+    colors = process.env.colors || process.env.color
+    colors = colors ? ' --no-colors ' : ''
+    tests = tests ? ' -g ' + tests : '';
+    reporter = process.env.reporter || process.env.r || 'dot';
+    var cmd = host + " -R " + reporter + tests + colors + ' ' + run;
+    console.log(cmd);
+    exec(cmd)
+}, {async: true});
+
+// Browser tests
+var nodeServerOutFile = 'tests/webTestServer.js'
+var nodeServerInFile = 'tests/webTestServer.ts'
+compileFile(nodeServerOutFile, [nodeServerInFile], [builtLocalDirectory, tcFile], [], true, true);
+
+desc("Runs browserify on run.js to produce a file suitable for running tests in the browser");
+task("browserify", ["tests", builtLocalDirectory, nodeServerOutFile], function() {
+    var cmd = 'browserify built/local/run.js -o built/local/bundle.js';
+    exec(cmd);
+}, {async: true});
+
+desc("Runs the tests using the built run.js file like 'jake runtests'. Syntax is jake runtests-browser. Additional optional parameters tests=[regex], port=, browser=[chrome|IE]");
+task("runtests-browser", ["tests", "browserify", builtLocalDirectory], function() {
+    cleanTestDirs();
+    host = "node"
+    port = process.env.port || '8888';
+    browser = process.env.browser || "IE";
+    tests = process.env.test || process.env.tests;
+    var testConfigFile = 'test.config';
+    if(fs.existsSync(testConfigFile)) {
+        fs.unlinkSync(testConfigFile);
+    }
+    if(tests) {
+        writeTestConfigFile(tests, testConfigFile);
+    }
+
+    tests = tests ? tests : '';
+    var cmd = host + " tests/webTestServer.js " + port + " " + browser + " " + tests
+    console.log(cmd);
+    exec(cmd);
+}, {async: true});
+
+
+// Baseline Diff
+desc("Diffs the compiler baselines using the diff tool specified by the %DIFF% environment variable");
+task('diff', function () {
+    var cmd = "%DIFF% " + refBaseline + ' ' + localBaseline;
+    console.log(cmd)
+    exec(cmd);
+}, {async: true});
+
+desc("Diffs the RWC baselines using the diff tool specified by the %DIFF% environment variable");
+task('diff-rwc', function () {
+    var cmd = "%DIFF% " + refRwcBaseline + ' ' + localRwcBaseline;
+    console.log(cmd)
+    exec(cmd);
+}, {async: true});
+
+desc("Builds the test sources and automation in debug mode");
+task("tests-debug", ["setDebugMode", "tests"]);
+
+
+// Makes the test results the new baseline
+desc("Makes the most recent test results the new baseline, overwriting the old baseline");
+task("baseline-accept", function(hardOrSoft) {
+    if (!hardOrSoft || hardOrSoft == "hard") {
+        jake.rmRf(refBaseline);
+        fs.renameSync(localBaseline, refBaseline);
+    }
+    else if (hardOrSoft == "soft") {
+        var files = jake.readdirR(localBaseline);
+        for (var i in files) {
+            jake.cpR(files[i], refBaseline);
+        }
+        jake.rmRf(path.join(refBaseline, "local"));
+    }
+});
+
+desc("Makes the most recent rwc test results the new baseline, overwriting the old baseline");
+task("baseline-accept-rwc", function() {
+    jake.rmRf(refRwcBaseline);
+    fs.renameSync(localRwcBaseline, refRwcBaseline);
+});
+
+
+// Webhost
+var webhostPath = "tests/webhost/webtsc.ts";
+var webhostJsPath = "tests/webhost/webtsc.js";
+compileFile(webhostJsPath, [webhostPath], [tcFile, webhostPath].concat(libraryTargets), [], true);
+
+desc("Builds the tsc web host");
+task("webhost", [webhostJsPath], function() {
+        jake.cpR(path.join(builtLocalDirectory, "lib.d.ts"), "tests/webhost/", {silent: true});
+});
+
+// Perf compiler
+var perftcPath = "tests/perftc.ts";
+var perftcJsPath = "built/local/perftc.js";
+compileFile(perftcJsPath, [perftcPath], [tcFile, perftcPath, "tests/perfsys.ts"].concat(libraryTargets), [], true);
+desc("Builds augmented version of the compiler for perf tests");
+task("perftc", [perftcJsPath]);

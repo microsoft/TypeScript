@@ -1,0 +1,7 @@
+==== tests/cases/compiler/stringIndexerAndConstructor1.ts (1 errors) ====
+    interface I {
+        [s: string]: number;
+        "": string;
+        ~~~~~~~~~~~
+!!! Property '""' of type 'string' is not assignable to string index type 'number'.
+    }

@@ -1,0 +1,18 @@
+==== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorDefaultValuesReferencingThis.ts (3 errors) ====
+    class C {
+        constructor(x = this) { }
+                        ~~~~
+!!! 'this' cannot be referenced in constructor arguments.
+    }
+    
+    class D<T> {
+        constructor(x = this) { }
+                        ~~~~
+!!! 'this' cannot be referenced in constructor arguments.
+    }
+    
+    class E<T> {
+        constructor(public x = this) { }
+                               ~~~~
+!!! 'this' cannot be referenced in constructor arguments.
+    }

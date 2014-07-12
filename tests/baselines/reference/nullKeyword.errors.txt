@@ -1,0 +1,4 @@
+==== tests/cases/compiler/nullKeyword.ts (1 errors) ====
+    null.foo;
+         ~~~
+!!! Property 'foo' does not exist on type 'null'.

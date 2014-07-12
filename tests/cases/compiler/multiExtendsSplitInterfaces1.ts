@@ -1,0 +1,1 @@
+self.cancelAnimationFrame(0);

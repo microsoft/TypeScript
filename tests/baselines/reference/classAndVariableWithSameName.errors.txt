@@ -1,0 +1,15 @@
+==== tests/cases/conformance/classes/classDeclarations/classAndVariableWithSameName.ts (2 errors) ====
+    class C { foo: string; }
+    var C = ''; // error
+        ~
+!!! Duplicate identifier 'C'.
+    
+    module M {
+        class D {
+            bar: string;
+        }
+    
+        var D = 1; // error
+            ~
+!!! Duplicate identifier 'D'.
+    }

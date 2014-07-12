@@ -1,0 +1,21 @@
+//// [generics3.ts]
+class C<T> { private x: T; }
+interface X { f(): string; }
+interface Y { f(): string; }
+var a: C<X>;
+var b: C<Y>;
+
+a = b; // Ok - should be identical
+
+//// [generics3.js]
+var C = (function () {
+    function C() {
+    }
+    return C;
+})();
+var a;
+var b;
+a = b;
+
+
+//// [generics3.d.ts]

@@ -1,0 +1,7 @@
+==== tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity1.ts (2 errors) ====
+    1
+    /notregexp/a.foo();
+     ~~~~~~~~~
+!!! Cannot find name 'notregexp'.
+               ~
+!!! Cannot find name 'a'.

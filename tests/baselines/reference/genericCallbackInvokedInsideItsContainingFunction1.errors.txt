@@ -1,0 +1,33 @@
+==== tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts (8 errors) ====
+    function foo<T, U>(x:T, y:U, f: (v: T) => U) {
+        var r1 = f<number>(1);
+                 ~~~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+        var r2 = f(1);
+                 ~~~~
+!!! Supplied parameters do not match any signature of call target.
+        var r3 = f<any>(null);
+                 ~~~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+        var r4 = f(null);
+    
+        var r11 = f(x);
+        var r21 = f<number>(x);
+                  ~~~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+        var r31 = f<any>(null);
+                  ~~~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+        var r41 = f(null);
+    
+        var r12 = f(y);
+                  ~~~~
+!!! Supplied parameters do not match any signature of call target.
+        var r22 = f<number>(y);
+                  ~~~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+        var r32 = f<any>(null);
+                  ~~~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+        var r42 = f(null);
+    }

@@ -1,0 +1,14 @@
+==== tests/cases/compiler/copyrightWithNewLine1.ts (2 errors) ====
+    /*****************************
+    * (c) Copyright - Important
+    ****************************/
+    
+    import model = require("./greeter")
+                           ~~~~~~~~~~~
+!!! Cannot find external module './greeter'.
+    var el = document.getElementById('content');
+             ~~~~~~~~
+!!! Cannot find name 'document'.
+    var greeter = new model.Greeter(el);
+    /** things */
+    greeter.start();

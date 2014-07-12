@@ -1,0 +1,39 @@
+==== tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors2.ts (17 errors) ====
+    var tt1 = (a, (b, c)) => a+b+c;
+                          ~~
+!!! ';' expected.
+               ~
+!!! Cannot find name 'a'.
+                   ~
+!!! Cannot find name 'b'.
+                      ~
+!!! Cannot find name 'c'.
+                             ~
+!!! Cannot find name 'a'.
+                               ~
+!!! Cannot find name 'b'.
+                                 ~
+!!! Cannot find name 'c'.
+    var tt2 = ((a), b, c) => a+b+c;
+                          ~~
+!!! ';' expected.
+                ~
+!!! Cannot find name 'a'.
+                    ~
+!!! Cannot find name 'b'.
+                       ~
+!!! Cannot find name 'c'.
+                             ~
+!!! Cannot find name 'a'.
+                               ~
+!!! Cannot find name 'b'.
+                                 ~
+!!! Cannot find name 'c'.
+    
+    var tt3 = ((a)) => a;
+                    ~~
+!!! ';' expected.
+                ~
+!!! Cannot find name 'a'.
+                       ~
+!!! Cannot find name 'a'.

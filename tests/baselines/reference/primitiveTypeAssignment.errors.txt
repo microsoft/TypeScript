@@ -1,0 +1,13 @@
+==== tests/cases/compiler/primitiveTypeAssignment.ts (3 errors) ====
+    var x = any;
+            ~~~
+!!! Cannot find name 'any'.
+    
+    var y = number;
+            ~~~~~~
+!!! Cannot find name 'number'.
+    
+    var z = boolean;
+            ~~~~~~~
+!!! Cannot find name 'boolean'.
+    

@@ -1,0 +1,8 @@
+==== tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens20.ts (3 errors) ====
+    var v: X<T \
+               
+!!! Invalid character.
+                
+!!! '>' expected.
+           ~~~~~
+!!! Cannot find name 'X'.

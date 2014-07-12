@@ -1,0 +1,16 @@
+==== tests/cases/compiler/typeParameterArgumentEquivalence.ts (2 errors) ====
+    function foo<T>() {
+        var x: (item: number) => boolean;
+        var y: (item: T) => boolean;
+        x = y;  // Should be an error
+        ~
+!!! Type '(item: T) => boolean' is not assignable to type '(item: number) => boolean':
+!!!   Types of parameters 'item' and 'item' are incompatible:
+!!!     Type 'T' is not assignable to type 'number'.
+        y = x;  // Shound be an error
+        ~
+!!! Type '(item: number) => boolean' is not assignable to type '(item: T) => boolean':
+!!!   Types of parameters 'item' and 'item' are incompatible:
+!!!     Type 'number' is not assignable to type 'T'.
+    }
+    

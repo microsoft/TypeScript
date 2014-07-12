@@ -1,0 +1,9 @@
+{
+    "scenario": "declarations_GlobalImport",
+    "projectRoot": "tests/cases/projects/declarations_GlobalImport",
+    "inputFiles": [
+        "useModule.ts"
+    ],
+    "declaration": true,
+    "baselineCheck": true
+}

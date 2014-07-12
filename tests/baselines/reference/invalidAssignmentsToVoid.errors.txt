@@ -1,0 +1,43 @@
+==== tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts (10 errors) ====
+    var x: void;
+    x = 1;
+    ~
+!!! Type 'number' is not assignable to type 'void'.
+    x = true;
+    ~
+!!! Type 'boolean' is not assignable to type 'void'.
+    x = '';
+    ~
+!!! Type 'string' is not assignable to type 'void'.
+    x = {}
+    ~
+!!! Type '{}' is not assignable to type 'void'.
+    
+    class C { foo: string; }
+    var c: C;
+    x = C;
+    ~
+!!! Type 'typeof C' is not assignable to type 'void'.
+    x = c;
+    ~
+!!! Type 'C' is not assignable to type 'void'.
+    
+    interface I { foo: string; }
+    var i: I;
+    x = i;
+    ~
+!!! Type 'I' is not assignable to type 'void'.
+    
+    module M { export var x = 1; }
+    x = M;
+    ~
+!!! Type 'typeof M' is not assignable to type 'void'.
+    
+    function f<T>(a: T) {
+        x = a;
+        ~
+!!! Type 'T' is not assignable to type 'void'.
+    }
+    x = f;
+    ~
+!!! Type '<T>(a: T) => void' is not assignable to type 'void'.

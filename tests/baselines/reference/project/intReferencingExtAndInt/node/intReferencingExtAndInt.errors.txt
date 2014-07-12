@@ -1,0 +1,1 @@
+internal2.ts(2,2): Import declarations in an internal module cannot reference an external module.

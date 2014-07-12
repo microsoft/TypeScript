@@ -1,0 +1,13 @@
+==== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode1.ts (4 errors) ====
+    foo1();
+    ~~~~
+!!! Cannot find name 'foo1'.
+    foo1();
+    ~~~~
+!!! Cannot find name 'foo1'.
+    foo1();
+    ~~~~
+!!! Cannot find name 'foo1'.
+    static();
+    ~~~~~~
+!!! Cannot find name 'static'.

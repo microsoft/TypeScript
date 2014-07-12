@@ -1,0 +1,45 @@
+==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer4.ts (4 errors) ====
+    // Derived type indexer must be subtype of base type indexer
+    
+    interface Base { foo: string; }
+    interface Derived extends Base { bar: string; }
+    interface Derived2 extends Derived { baz: string; }
+    
+    class A {
+        [x: number]: Derived;
+    }
+    
+    class B extends A {
+          ~
+!!! Class 'B' incorrectly extends base class 'A':
+!!!   Index signatures are incompatible:
+!!!     Type 'string' is not assignable to type 'Derived':
+!!!       Property 'bar' is missing in type 'String'.
+        [x: number]: string; // error
+    }
+    
+    module Generics {
+        class A<T extends Derived> {
+            [x: number]: T;
+        }
+    
+        class B extends A<Base> {
+              ~
+!!! Class 'B' incorrectly extends base class 'A<Base>':
+!!!   Index signatures are incompatible:
+!!!     Type 'string' is not assignable to type 'Base':
+!!!       Property 'foo' is missing in type 'String'.
+                        ~~~~~~~
+!!! Type 'Base' does not satisfy the constraint 'Derived':
+!!!   Property 'bar' is missing in type 'Base'.
+            [x: number]: string; // error
+        }
+    
+        class B3<T extends Derived> extends A<T> {
+              ~~
+!!! Class 'B3<T>' incorrectly extends base class 'A<T>':
+!!!   Index signatures are incompatible:
+!!!     Type 'string' is not assignable to type 'T'.
+            [x: number]: string; // error
+        }
+    }

@@ -1,0 +1,344 @@
+===================================================================
+JsFile: sourceMapValidationIfElse.js
+mapUrl: sourceMapValidationIfElse.js.map
+sourceRoot: 
+sources: sourceMapValidationIfElse.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMapValidationIfElse.js
+sourceFile:sourceMapValidationIfElse.ts
+-------------------------------------------------------------------
+>>>var i = 10;
+1 >
+2 >^^^^
+3 >    ^
+4 >     ^^^
+5 >        ^^
+6 >          ^
+7 >           ^^^^->
+1 >
+2 >var 
+3 >    i
+4 >      = 
+5 >        10
+6 >          ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(1, 5) + SourceIndex(0)
+3 >Emitted(1, 6) Source(1, 6) + SourceIndex(0)
+4 >Emitted(1, 9) Source(1, 9) + SourceIndex(0)
+5 >Emitted(1, 11) Source(1, 11) + SourceIndex(0)
+6 >Emitted(1, 12) Source(1, 12) + SourceIndex(0)
+---
+>>>if (i == 10) {
+1->
+2 >^^
+3 >  ^
+4 >   ^
+5 >    ^
+6 >     ^^^^
+7 >         ^^
+8 >           ^
+9 >            ^
+10>             ^
+1->
+  >
+2 >if
+3 >   
+4 >   (
+5 >    i
+6 >      == 
+7 >         10
+8 >           )
+9 >             
+10>             {
+1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 3) Source(2, 3) + SourceIndex(0)
+3 >Emitted(2, 4) Source(2, 4) + SourceIndex(0)
+4 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+5 >Emitted(2, 6) Source(2, 6) + SourceIndex(0)
+6 >Emitted(2, 10) Source(2, 10) + SourceIndex(0)
+7 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
+8 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
+9 >Emitted(2, 14) Source(2, 14) + SourceIndex(0)
+10>Emitted(2, 15) Source(2, 15) + SourceIndex(0)
+---
+>>>    i++;
+1 >^^^^
+2 >    ^
+3 >     ^^
+4 >       ^
+1 >
+  >    
+2 >    i
+3 >     ++
+4 >       ;
+1 >Emitted(3, 5) Source(3, 5) + SourceIndex(0)
+2 >Emitted(3, 6) Source(3, 6) + SourceIndex(0)
+3 >Emitted(3, 8) Source(3, 8) + SourceIndex(0)
+4 >Emitted(3, 9) Source(3, 9) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(4, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(4, 2) Source(4, 2) + SourceIndex(0)
+---
+>>>else {
+1->
+2 >^^^^
+3 >    ^
+4 >     ^
+1-> 
+2 >else
+3 >    
+  >    
+4 >     {
+1->Emitted(5, 1) Source(4, 3) + SourceIndex(0)
+2 >Emitted(5, 5) Source(4, 7) + SourceIndex(0)
+3 >Emitted(5, 6) Source(5, 1) + SourceIndex(0)
+4 >Emitted(5, 7) Source(5, 2) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(6, 1) Source(6, 1) + SourceIndex(0)
+2 >Emitted(6, 2) Source(6, 2) + SourceIndex(0)
+---
+>>>if (i == 10) {
+1->
+2 >^^
+3 >  ^
+4 >   ^
+5 >    ^
+6 >     ^^^^
+7 >         ^^
+8 >           ^
+9 >            ^
+10>             ^
+1->
+  >
+2 >if
+3 >   
+4 >   (
+5 >    i
+6 >      == 
+7 >         10
+8 >           )
+9 >            
+  >            
+10>             {
+1->Emitted(7, 1) Source(7, 1) + SourceIndex(0)
+2 >Emitted(7, 3) Source(7, 3) + SourceIndex(0)
+3 >Emitted(7, 4) Source(7, 4) + SourceIndex(0)
+4 >Emitted(7, 5) Source(7, 5) + SourceIndex(0)
+5 >Emitted(7, 6) Source(7, 6) + SourceIndex(0)
+6 >Emitted(7, 10) Source(7, 10) + SourceIndex(0)
+7 >Emitted(7, 12) Source(7, 12) + SourceIndex(0)
+8 >Emitted(7, 13) Source(7, 13) + SourceIndex(0)
+9 >Emitted(7, 14) Source(8, 1) + SourceIndex(0)
+10>Emitted(7, 15) Source(8, 2) + SourceIndex(0)
+---
+>>>    i++;
+1 >^^^^
+2 >    ^
+3 >     ^^
+4 >       ^
+1 >
+  >    
+2 >    i
+3 >     ++
+4 >       ;
+1 >Emitted(8, 5) Source(9, 5) + SourceIndex(0)
+2 >Emitted(8, 6) Source(9, 6) + SourceIndex(0)
+3 >Emitted(8, 8) Source(9, 8) + SourceIndex(0)
+4 >Emitted(8, 9) Source(9, 9) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(9, 1) Source(10, 1) + SourceIndex(0)
+2 >Emitted(9, 2) Source(10, 2) + SourceIndex(0)
+---
+>>>else if (i == 20) {
+1->
+2 >^^^^
+3 >    ^
+4 >     ^^
+5 >       ^
+6 >        ^
+7 >         ^
+8 >          ^^^^
+9 >              ^^
+10>                ^
+11>                 ^
+12>                  ^
+1->
+  >
+2 >else
+3 >     
+4 >     if
+5 >        
+6 >        (
+7 >         i
+8 >           == 
+9 >              20
+10>                )
+11>                  
+12>                  {
+1->Emitted(10, 1) Source(11, 1) + SourceIndex(0)
+2 >Emitted(10, 5) Source(11, 5) + SourceIndex(0)
+3 >Emitted(10, 6) Source(11, 6) + SourceIndex(0)
+4 >Emitted(10, 8) Source(11, 8) + SourceIndex(0)
+5 >Emitted(10, 9) Source(11, 9) + SourceIndex(0)
+6 >Emitted(10, 10) Source(11, 10) + SourceIndex(0)
+7 >Emitted(10, 11) Source(11, 11) + SourceIndex(0)
+8 >Emitted(10, 15) Source(11, 15) + SourceIndex(0)
+9 >Emitted(10, 17) Source(11, 17) + SourceIndex(0)
+10>Emitted(10, 18) Source(11, 18) + SourceIndex(0)
+11>Emitted(10, 19) Source(11, 19) + SourceIndex(0)
+12>Emitted(10, 20) Source(11, 20) + SourceIndex(0)
+---
+>>>    i--;
+1 >^^^^
+2 >    ^
+3 >     ^^
+4 >       ^
+1 >
+  >    
+2 >    i
+3 >     --
+4 >       ;
+1 >Emitted(11, 5) Source(12, 5) + SourceIndex(0)
+2 >Emitted(11, 6) Source(12, 6) + SourceIndex(0)
+3 >Emitted(11, 8) Source(12, 8) + SourceIndex(0)
+4 >Emitted(11, 9) Source(12, 9) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(12, 1) Source(13, 1) + SourceIndex(0)
+2 >Emitted(12, 2) Source(13, 2) + SourceIndex(0)
+---
+>>>else if (i == 30) {
+1->
+2 >^^^^
+3 >    ^
+4 >     ^^
+5 >       ^
+6 >        ^
+7 >         ^
+8 >          ^^^^
+9 >              ^^
+10>                ^
+11>                 ^
+12>                  ^
+1-> 
+2 >else
+3 >     
+4 >     if
+5 >        
+6 >        (
+7 >         i
+8 >           == 
+9 >              30
+10>                )
+11>                  
+12>                  {
+1->Emitted(13, 1) Source(13, 3) + SourceIndex(0)
+2 >Emitted(13, 5) Source(13, 7) + SourceIndex(0)
+3 >Emitted(13, 6) Source(13, 8) + SourceIndex(0)
+4 >Emitted(13, 8) Source(13, 10) + SourceIndex(0)
+5 >Emitted(13, 9) Source(13, 11) + SourceIndex(0)
+6 >Emitted(13, 10) Source(13, 12) + SourceIndex(0)
+7 >Emitted(13, 11) Source(13, 13) + SourceIndex(0)
+8 >Emitted(13, 15) Source(13, 17) + SourceIndex(0)
+9 >Emitted(13, 17) Source(13, 19) + SourceIndex(0)
+10>Emitted(13, 18) Source(13, 20) + SourceIndex(0)
+11>Emitted(13, 19) Source(13, 21) + SourceIndex(0)
+12>Emitted(13, 20) Source(13, 22) + SourceIndex(0)
+---
+>>>    i += 70;
+1 >^^^^
+2 >    ^
+3 >     ^^^^
+4 >         ^^
+5 >           ^
+1 >
+  >    
+2 >    i
+3 >      += 
+4 >         70
+5 >           ;
+1 >Emitted(14, 5) Source(14, 5) + SourceIndex(0)
+2 >Emitted(14, 6) Source(14, 6) + SourceIndex(0)
+3 >Emitted(14, 10) Source(14, 10) + SourceIndex(0)
+4 >Emitted(14, 12) Source(14, 12) + SourceIndex(0)
+5 >Emitted(14, 13) Source(14, 13) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(15, 1) Source(15, 1) + SourceIndex(0)
+2 >Emitted(15, 2) Source(15, 2) + SourceIndex(0)
+---
+>>>else {
+1->
+2 >^^^^
+3 >    ^
+4 >     ^
+5 >      ^^^->
+1-> 
+2 >else
+3 >     
+4 >     {
+1->Emitted(16, 1) Source(15, 3) + SourceIndex(0)
+2 >Emitted(16, 5) Source(15, 7) + SourceIndex(0)
+3 >Emitted(16, 6) Source(15, 8) + SourceIndex(0)
+4 >Emitted(16, 7) Source(15, 9) + SourceIndex(0)
+---
+>>>    i--;
+1->^^^^
+2 >    ^
+3 >     ^^
+4 >       ^
+1->
+  >    
+2 >    i
+3 >     --
+4 >       ;
+1->Emitted(17, 5) Source(16, 5) + SourceIndex(0)
+2 >Emitted(17, 6) Source(16, 6) + SourceIndex(0)
+3 >Emitted(17, 8) Source(16, 8) + SourceIndex(0)
+4 >Emitted(17, 9) Source(16, 9) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(18, 1) Source(17, 1) + SourceIndex(0)
+2 >Emitted(18, 2) Source(17, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationIfElse.js.map

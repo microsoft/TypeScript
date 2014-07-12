@@ -1,0 +1,9 @@
+==== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration14.ts (2 errors) ====
+    class C {
+       foo();
+       ~~~~~~
+!!! Function implementation expected.
+       constructor();
+       ~~~~~~~~~~~~~~
+!!! Constructor implementation expected.
+    }

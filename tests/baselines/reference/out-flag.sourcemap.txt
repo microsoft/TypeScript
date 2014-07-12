@@ -1,0 +1,165 @@
+===================================================================
+JsFile: out-flag.js
+mapUrl: out-flag.js.map
+sourceRoot: 
+sources: out-flag.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/out-flag.js
+sourceFile:out-flag.ts
+-------------------------------------------------------------------
+>>>var MyClass = (function () {
+1 >
+2 >^^^^
+3 >    ^^^^^^^
+4 >           ^^^^^^^^^^^^^^->
+1 >//// @out: bin\
+  >
+  >// my class comments
+  >
+2 >class 
+3 >    MyClass
+1 >Emitted(1, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(4, 7) + SourceIndex(0)
+3 >Emitted(1, 12) Source(4, 14) + SourceIndex(0)
+---
+>>>    function MyClass() {
+1->^^^^
+2 >    ^^^^^^^^^
+3 >             ^^^^^^^
+1->
+2 >    class 
+3 >             MyClass
+1->Emitted(2, 5) Source(4, 1) + SourceIndex(0) name (MyClass)
+2 >Emitted(2, 14) Source(4, 7) + SourceIndex(0) name (MyClass)
+3 >Emitted(2, 21) Source(4, 14) + SourceIndex(0) name (MyClass)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >{
+  >    // my function comments
+  >    public Count(): number
+  >    {
+  >        return 42;
+  >    }
+  >
+  >    public SetCount(value: number)
+  >    {
+  >        //
+  >    }
+  >
+2 >    }
+1 >Emitted(3, 5) Source(16, 1) + SourceIndex(0) name (MyClass.constructor)
+2 >Emitted(3, 6) Source(16, 2) + SourceIndex(0) name (MyClass.constructor)
+---
+>>>    MyClass.prototype.Count = function () {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^
+3 >                           ^^^
+1->
+2 >    Count
+3 >                           
+1->Emitted(4, 5) Source(7, 12) + SourceIndex(0) name (MyClass)
+2 >Emitted(4, 28) Source(7, 17) + SourceIndex(0) name (MyClass)
+3 >Emitted(4, 31) Source(7, 5) + SourceIndex(0) name (MyClass)
+---
+>>>        return 42;
+1 >^^^^^^^^
+2 >        ^^^^^^
+3 >              ^
+4 >               ^^
+5 >                 ^
+1 >public Count(): number
+  >    {
+  >        
+2 >        return
+3 >               
+4 >               42
+5 >                 ;
+1 >Emitted(5, 9) Source(9, 9) + SourceIndex(0) name (MyClass.Count)
+2 >Emitted(5, 15) Source(9, 15) + SourceIndex(0) name (MyClass.Count)
+3 >Emitted(5, 16) Source(9, 16) + SourceIndex(0) name (MyClass.Count)
+4 >Emitted(5, 18) Source(9, 18) + SourceIndex(0) name (MyClass.Count)
+5 >Emitted(5, 19) Source(9, 19) + SourceIndex(0) name (MyClass.Count)
+---
+>>>    };
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >    
+2 >    }
+1 >Emitted(6, 5) Source(10, 5) + SourceIndex(0) name (MyClass.Count)
+2 >Emitted(6, 6) Source(10, 6) + SourceIndex(0) name (MyClass.Count)
+---
+>>>    MyClass.prototype.SetCount = function (value) {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                              ^^^
+4 >                                 ^^^^^^^^^^
+5 >                                           ^^^^^
+1->
+  >
+  >    public 
+2 >    SetCount
+3 >                              
+4 >                                 public SetCount(
+5 >                                           value: number
+1->Emitted(7, 5) Source(12, 12) + SourceIndex(0) name (MyClass)
+2 >Emitted(7, 31) Source(12, 20) + SourceIndex(0) name (MyClass)
+3 >Emitted(7, 34) Source(12, 5) + SourceIndex(0) name (MyClass)
+4 >Emitted(7, 44) Source(12, 21) + SourceIndex(0) name (MyClass)
+5 >Emitted(7, 49) Source(12, 34) + SourceIndex(0) name (MyClass)
+---
+>>>    };
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^->
+1 >)
+  >    {
+  >        //
+  >    
+2 >    }
+1 >Emitted(8, 5) Source(15, 5) + SourceIndex(0) name (MyClass.SetCount)
+2 >Emitted(8, 6) Source(15, 6) + SourceIndex(0) name (MyClass.SetCount)
+---
+>>>    return MyClass;
+1->^^^^
+2 >    ^^^^^^^^^^^^^^
+1->
+  >
+2 >    }
+1->Emitted(9, 5) Source(16, 1) + SourceIndex(0) name (MyClass)
+2 >Emitted(9, 19) Source(16, 2) + SourceIndex(0) name (MyClass)
+---
+>>>})();
+1 >
+2 >^
+3 > 
+4 > ^^^^
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >}
+3 > 
+4 > class MyClass
+  > {
+  >     // my function comments
+  >     public Count(): number
+  >     {
+  >         return 42;
+  >     }
+  > 
+  >     public SetCount(value: number)
+  >     {
+  >         //
+  >     }
+  > }
+1 >Emitted(10, 1) Source(16, 1) + SourceIndex(0) name (MyClass)
+2 >Emitted(10, 2) Source(16, 2) + SourceIndex(0) name (MyClass)
+3 >Emitted(10, 2) Source(4, 1) + SourceIndex(0)
+4 >Emitted(10, 6) Source(16, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=out-flag.js.map

@@ -1,0 +1,10 @@
+==== tests/cases/compiler/staticMustPrecedePublic.ts (2 errors) ====
+    class Outer {
+        static public intI: number;
+               ~~~~~~
+!!! 'public' modifier must precede 'static' modifier.
+        static private stringF: string;
+               ~~~~~~~
+!!! 'private' modifier must precede 'static' modifier.
+    }
+    

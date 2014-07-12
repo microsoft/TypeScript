@@ -1,0 +1,10 @@
+==== tests/cases/conformance/parser/ecmascript5/Expressions/parserPostfixPostfixExpression1.ts (4 errors) ====
+    a++ ++;
+        ~~
+!!! ';' expected.
+          ~
+!!! Expression expected.
+    ~
+!!! Cannot find name 'a'.
+          
+!!! The operand of an increment or decrement operator must be a variable, property or indexer.

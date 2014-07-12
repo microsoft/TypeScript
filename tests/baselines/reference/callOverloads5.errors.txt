@@ -1,0 +1,30 @@
+==== tests/cases/compiler/callOverloads5.ts (5 errors) ====
+    function Foo():Foo;
+                   ~~~
+!!! Cannot find name 'Foo'.
+    function Foo(s:string):Foo;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Function implementation expected.
+                           ~~~
+!!! Cannot find name 'Foo'.
+    class Foo {
+          ~~~
+!!! Duplicate identifier 'Foo'.
+    	bar1(s:string);
+    	bar1(n:number);
+        bar1(a:any) { /*WScript.Echo(a);*/ }
+        constructor(x: any) {
+            // WScript.Echo("Constructor function has executed");
+        }
+    }
+    //class Foo(s: String);
+    
+    var f1 = new Foo("hey");
+             ~~~~~~~~~~~~~~
+!!! Only a void function can be called with the 'new' keyword.
+    
+    
+    f1.bar1("a");
+    Foo();
+    Foo("s");
+    

@@ -1,0 +1,14 @@
+==== tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration2.ts (2 errors) ====
+    (function() {
+            var check = function () {
+            }
+    
+            var checkNot = function () {
+            }
+    
+            MUnit.test(a);
+            ~~~~~
+!!! Cannot find name 'MUnit'.
+                       ~
+!!! Cannot find name 'a'.
+    })();

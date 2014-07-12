@@ -1,0 +1,12 @@
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserErrantAccessibilityModifierInModule1.ts (3 errors) ====
+    module M {
+        var x=10;  // variable local to this module body
+        private y=x;  // property visible only in module
+        ~~~~~~~
+!!! Declaration or statement expected.
+                ~
+!!! Cannot find name 'y'.
+        export var z=y;  // property visible to any code
+                     ~
+!!! Cannot find name 'y'.
+    }

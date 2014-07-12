@@ -1,0 +1,21 @@
+==== tests/cases/compiler/crashIntypeCheckInvocationExpression.ts (4 errors) ====
+    var nake;
+    function doCompile<P0, P1, P2>(fileset: P0, moduleType: P1) {
+    
+        return undefined;
+    }
+    export var compileServer = task<number, number, any>(<P0, P1, P2>() => {
+                               ~~~~
+!!! Cannot find name 'task'.
+    
+        var folder = path.join(),
+                     ~~~~
+!!! Cannot find name 'path'.
+            fileset = nake.fileSetSync<number, number, any>(folder)
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Untyped function calls may not accept type arguments.
+      return doCompile<number, number, any>(fileset, moduleType);
+                                                     ~~~~~~~~~~
+!!! Cannot find name 'moduleType'.
+    });
+    

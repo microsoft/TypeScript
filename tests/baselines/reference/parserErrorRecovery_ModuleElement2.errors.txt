@@ -1,0 +1,16 @@
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ModuleElements/parserErrorRecovery_ModuleElement2.ts (3 errors) ====
+    function foo() {
+    }
+    
+    function foo() {
+    ~~~~~~~~~~~~~~~~
+    }
+    ~
+!!! Duplicate function implementation.
+    
+    )
+    ~
+!!! Declaration or statement expected.
+    )
+    ~
+!!! Declaration or statement expected.

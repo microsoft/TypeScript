@@ -1,0 +1,16 @@
+==== tests/cases/compiler/overloadOnConstConstraintChecks4.ts (1 errors) ====
+    class Z { }
+    class A extends Z { private x = 1 }
+    class B extends A {}
+    class C extends A {
+        public foo() { }
+    }
+    function foo(name: 'hi'): B;
+    function foo(name: 'bye'): C;
+    function foo(name: string): A; // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Overload signature is not compatible with function implementation.
+    function foo(name: any): Z {
+        return null;
+    }
+    

@@ -1,0 +1,10 @@
+==== tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnum5.ts (3 errors) ====
+    enum E2 { a, }
+    enum E3 { a: 1, }
+               ~
+!!! ',' expected.
+    enum E1 { a, b: 1, c, d: 2 = 3 }
+                  ~
+!!! ',' expected.
+                           ~
+!!! ',' expected.

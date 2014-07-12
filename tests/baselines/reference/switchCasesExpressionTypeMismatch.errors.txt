@@ -1,0 +1,25 @@
+==== tests/cases/compiler/switchCasesExpressionTypeMismatch.ts (3 errors) ====
+    class Foo { }
+    
+    switch (0) {
+        case Foo: break;    // Error
+             ~~~
+!!! Type 'typeof Foo' is not assignable to type 'number'.
+        case "sss": break;  // Error
+             ~~~~~
+!!! Type 'string' is not assignable to type 'number'.
+        case 123: break;    // No Error
+        case true: break;   // Error
+             ~~~~
+!!! Type 'boolean' is not assignable to type 'number'.
+    }
+    
+    var s: any = 0;
+    
+    // No error for all
+    switch (s) {
+        case Foo: break;
+        case "sss": break;
+        case 123: break;
+        case true: break;
+    }

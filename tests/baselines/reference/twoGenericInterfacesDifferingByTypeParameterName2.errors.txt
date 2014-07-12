@@ -1,0 +1,54 @@
+==== tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesDifferingByTypeParameterName2.ts (4 errors) ====
+    // type parameter names are relevant when choosing whether to merge interface declarations
+    
+    interface B<T, U> {
+        x: U;
+    }
+    
+    interface B<U, T> { // error
+              ~
+!!! All declarations of an interface must have identical type parameters.
+        y: V;
+           ~
+!!! Cannot find name 'V'.
+    }
+    
+    module M {
+        interface B<T, U> {
+            x: U;
+        }
+    
+        interface B<U, T> { // error
+                  ~
+!!! All declarations of an interface must have identical type parameters.
+            y: T;
+        }
+    }
+    
+    module M2 {
+        interface B<T, U> {
+            x: U;
+        }
+    }
+    
+    module M2 {
+        interface B<U, T> { // ok, different declaration space than other M2
+            y: T;
+        }
+    }
+    
+    module M3 {
+        export interface B<T, U> {
+            x: U;
+        }
+    }
+    
+    module M3 {
+        export interface B<U, T> { // error
+                         ~
+!!! All declarations of an interface must have identical type parameters.
+            y: T;
+        }
+    }
+    
+    

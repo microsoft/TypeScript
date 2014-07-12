@@ -1,0 +1,34 @@
+==== tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties.ts (4 errors) ====
+    // Basic uses of optional properties
+    
+    var a: {
+        x?: number; // ok
+    }
+    
+    interface I {
+        x?: number; // ok
+    }
+    
+    class C {
+        x?: number; // error
+         ~
+!!! A class member cannot be declared optional.
+    }
+    
+    interface I2<T> {
+        x?: T; // ok
+    }
+    
+    class C2<T> {
+        x?: T; // error
+         ~
+!!! A class member cannot be declared optional.
+    }
+    
+    var b = {
+        x?: 1 // error
+         ~
+!!! ':' expected.
+          ~
+!!! Expression expected.
+    }

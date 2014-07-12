@@ -1,0 +1,68 @@
+==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint.ts (18 errors) ====
+    // Type parameters are in scope in their own and other type parameter lists
+    
+    function foo<T, U extends T>(x: T, y: U): T {
+                    ~~~~~~~~~~~
+!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        x = y;
+        ~
+!!! Type 'U' is not assignable to type 'T'.
+        return y;
+               ~
+!!! Type 'U' is not assignable to type 'T'.
+    }
+    
+    function foo2<U extends T, T>(x: T, y: U): T {
+                  ~~~~~~~~~~~
+!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        x = y;
+        ~
+!!! Type 'U' is not assignable to type 'T'.
+        return y;
+               ~
+!!! Type 'U' is not assignable to type 'T'.
+    }
+    
+    var f = function <T, U extends T>(x: T, y: U): T {
+                         ~~~~~~~~~~~
+!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        x = y;
+        ~
+!!! Type 'U' is not assignable to type 'T'.
+        return y;
+               ~
+!!! Type 'U' is not assignable to type 'T'.
+    }
+    
+    var f2 = function <U extends T, T>(x: T, y: U): T {
+                       ~~~~~~~~~~~
+!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        x = y;
+        ~
+!!! Type 'U' is not assignable to type 'T'.
+        return y;
+               ~
+!!! Type 'U' is not assignable to type 'T'.
+    }
+    
+    var f3 = <T, U extends T>(x: T, y: U): T => {
+                 ~~~~~~~~~~~
+!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        x = y;
+        ~
+!!! Type 'U' is not assignable to type 'T'.
+        return y;
+               ~
+!!! Type 'U' is not assignable to type 'T'.
+    }
+    
+    var f4 = <U extends T, T>(x: T, y: U): T => {
+              ~~~~~~~~~~~
+!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        x = y;
+        ~
+!!! Type 'U' is not assignable to type 'T'.
+        return y;
+               ~
+!!! Type 'U' is not assignable to type 'T'.
+    }

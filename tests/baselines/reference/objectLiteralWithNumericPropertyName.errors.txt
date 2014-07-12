@@ -1,0 +1,14 @@
+==== tests/cases/compiler/objectLiteralWithNumericPropertyName.ts (1 errors) ====
+    interface A {
+        0: string;
+    }
+    var x: A = {
+        ~~~~~~~~
+        0: 3
+    ~~~~~~~~
+    };
+    ~
+!!! Type '{ 0: number; }' is not assignable to type 'A':
+!!!   Types of property '0' are incompatible:
+!!!     Type 'number' is not assignable to type 'string'.
+    

@@ -1,0 +1,49 @@
+//// [constructorParameterProperties2.ts]
+class C {
+    y: number;
+    constructor(y: number) { } // ok
+}
+
+var c: C;
+var r = c.y;
+
+class D {
+    y: number;
+    constructor(public y: number) { } // error
+}
+
+var d: D;
+var r2 = d.y;
+
+class E {
+    y: number;
+    constructor(private y: number) { } // error
+}
+
+var e: E;
+var r3 = e.y; // error
+
+//// [constructorParameterProperties2.js]
+var C = (function () {
+    function C(y) {
+    }
+    return C;
+})();
+var c;
+var r = c.y;
+var D = (function () {
+    function D(y) {
+        this.y = y;
+    }
+    return D;
+})();
+var d;
+var r2 = d.y;
+var E = (function () {
+    function E(y) {
+        this.y = y;
+    }
+    return E;
+})();
+var e;
+var r3 = e.y;

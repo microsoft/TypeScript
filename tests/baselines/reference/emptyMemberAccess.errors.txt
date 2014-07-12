@@ -1,0 +1,9 @@
+==== tests/cases/compiler/emptyMemberAccess.ts (1 errors) ====
+    function getObj() {
+    
+       ().toString();
+         ~
+!!! '=>' expected.
+    
+    }
+     

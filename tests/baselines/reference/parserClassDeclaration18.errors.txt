@@ -1,0 +1,10 @@
+==== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration18.ts (1 errors) ====
+    declare class FooBase {
+        constructor(s: string);
+        constructor(n: number);
+        constructor(x: any) {
+                            ~
+!!! A constructor implementation cannot be declared in an ambient context.
+        }
+        bar1():void;
+    }

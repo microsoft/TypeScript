@@ -1,0 +1,7 @@
+==== tests/cases/compiler/unresolvedTypeAssertionSymbol.ts (1 errors) ====
+    var x = 1;
+    var y = <asdf>x;
+             ~~~~
+!!! Cannot find name 'asdf'.
+     
+    

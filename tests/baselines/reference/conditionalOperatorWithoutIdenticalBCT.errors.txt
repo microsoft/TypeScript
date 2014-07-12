@@ -1,0 +1,48 @@
+==== tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts (12 errors) ====
+    //Cond ? Expr1 : Expr2,  Expr1 and Expr2 have no identical best common type
+    class X { propertyX: any; propertyX1: number; propertyX2: string };
+    class A extends X { propertyA: number };
+    class B extends X { propertyB: string };
+    
+    var x: X;
+    var a: A;
+    var b: B;
+    
+    //Expect to have compiler errors
+    //Be not contextually typed
+    true ? a : b;
+    ~~~~~~~~~~~~
+!!! No best common type exists between 'A' and 'B'.
+    var result1 = true ? a : b;
+                  ~~~~~~~~~~~~
+!!! No best common type exists between 'A' and 'B'.
+    
+    //Be contextually typed and and bct is not identical
+    var result2: A = true ? a : b;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type '{}' is not assignable to type 'A':
+!!!   Property 'propertyA' is missing in type '{}'.
+                     ~~~~~~~~~~~~
+!!! No best common type exists between 'A', 'A', and 'B'.
+    var result3: B = true ? a : b;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type '{}' is not assignable to type 'B':
+!!!   Property 'propertyB' is missing in type '{}'.
+                     ~~~~~~~~~~~~
+!!! No best common type exists between 'B', 'A', and 'B'.
+    
+    var result4: (t: X) => number = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type '{}' is not assignable to type '(t: X) => number'.
+                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! No best common type exists between '(t: X) => number', '(m: X) => number', and '(n: X) => string'.
+    var result5: (t: X) => string = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type '{}' is not assignable to type '(t: X) => string'.
+                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! No best common type exists between '(t: X) => string', '(m: X) => number', and '(n: X) => string'.
+    var result6: (t: X) => boolean = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type '{}' is not assignable to type '(t: X) => boolean'.
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! No best common type exists between '(t: X) => boolean', '(m: X) => number', and '(n: X) => string'.

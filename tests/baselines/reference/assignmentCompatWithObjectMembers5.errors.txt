@@ -1,0 +1,21 @@
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts (2 errors) ====
+    class C {
+        foo: string;
+    }
+    
+    var c: C;
+    
+    interface I {
+        fooo: string;
+    }
+    
+    var i: I;
+    
+    c = i; // error
+    ~
+!!! Type 'I' is not assignable to type 'C':
+!!!   Property 'foo' is missing in type 'I'.
+    i = c; // error
+    ~
+!!! Type 'C' is not assignable to type 'I':
+!!!   Property 'fooo' is missing in type 'C'.

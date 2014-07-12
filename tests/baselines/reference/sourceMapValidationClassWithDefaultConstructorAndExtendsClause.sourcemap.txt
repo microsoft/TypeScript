@@ -1,0 +1,202 @@
+===================================================================
+JsFile: sourceMapValidationClassWithDefaultConstructorAndExtendsClause.js
+mapUrl: sourceMapValidationClassWithDefaultConstructorAndExtendsClause.js.map
+sourceRoot: 
+sources: sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMapValidationClassWithDefaultConstructorAndExtendsClause.js
+sourceFile:sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts
+-------------------------------------------------------------------
+>>>var __extends = this.__extends || function (d, b) {
+>>>    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+>>>    function __() { this.constructor = d; }
+>>>    __.prototype = b.prototype;
+>>>    d.prototype = new __();
+>>>};
+>>>var AbstractGreeter = (function () {
+1 >
+2 >^^^^
+3 >    ^^^^^^^^^^^^^^^
+4 >                   ^^^^^^^^^^^^^^->
+1 >
+2 >class 
+3 >    AbstractGreeter
+1 >Emitted(7, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(7, 5) Source(1, 7) + SourceIndex(0)
+3 >Emitted(7, 20) Source(1, 22) + SourceIndex(0)
+---
+>>>    function AbstractGreeter() {
+1->^^^^
+2 >    ^^^^^^^^^
+3 >             ^^^^^^^^^^^^^^^
+1->
+2 >    class 
+3 >             AbstractGreeter
+1->Emitted(8, 5) Source(1, 1) + SourceIndex(0) name (AbstractGreeter)
+2 >Emitted(8, 14) Source(1, 7) + SourceIndex(0) name (AbstractGreeter)
+3 >Emitted(8, 29) Source(1, 22) + SourceIndex(0) name (AbstractGreeter)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^->
+1 > {
+  >
+2 >    }
+1 >Emitted(9, 5) Source(2, 1) + SourceIndex(0) name (AbstractGreeter.constructor)
+2 >Emitted(9, 6) Source(2, 2) + SourceIndex(0) name (AbstractGreeter.constructor)
+---
+>>>    return AbstractGreeter;
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^
+1->
+2 >    }
+1->Emitted(10, 5) Source(2, 1) + SourceIndex(0) name (AbstractGreeter)
+2 >Emitted(10, 27) Source(2, 2) + SourceIndex(0) name (AbstractGreeter)
+---
+>>>})();
+1 >
+2 >^
+3 > 
+4 > ^^^^
+5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >}
+3 > 
+4 > class AbstractGreeter {
+  > }
+1 >Emitted(11, 1) Source(2, 1) + SourceIndex(0) name (AbstractGreeter)
+2 >Emitted(11, 2) Source(2, 2) + SourceIndex(0) name (AbstractGreeter)
+3 >Emitted(11, 2) Source(1, 1) + SourceIndex(0)
+4 >Emitted(11, 6) Source(2, 2) + SourceIndex(0)
+---
+>>>var Greeter = (function (_super) {
+1->
+2 >^^^^
+3 >    ^^^^^^^
+4 >           ^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+  >
+2 >class 
+3 >    Greeter
+1->Emitted(12, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(12, 5) Source(4, 7) + SourceIndex(0)
+3 >Emitted(12, 12) Source(4, 14) + SourceIndex(0)
+---
+>>>    __extends(Greeter, _super);
+1->^^^^
+2 >    ^^^^^^^^^^
+3 >              ^^^^^^^
+4 >                     ^^^^^^^^^^
+1-> extends 
+2 >    
+3 >              Greeter
+4 >                      extends AbstractGreeter
+1->Emitted(13, 5) Source(4, 23) + SourceIndex(0) name (Greeter)
+2 >Emitted(13, 15) Source(4, 7) + SourceIndex(0) name (Greeter)
+3 >Emitted(13, 22) Source(4, 14) + SourceIndex(0) name (Greeter)
+4 >Emitted(13, 32) Source(4, 38) + SourceIndex(0) name (Greeter)
+---
+>>>    function Greeter() {
+1 >^^^^
+2 >    ^^^^^^^^^
+3 >             ^^^^^^^
+4 >                    ^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >    class 
+3 >             Greeter
+1 >Emitted(14, 5) Source(4, 1) + SourceIndex(0) name (Greeter)
+2 >Emitted(14, 14) Source(4, 7) + SourceIndex(0) name (Greeter)
+3 >Emitted(14, 21) Source(4, 14) + SourceIndex(0) name (Greeter)
+---
+>>>        _super.apply(this, arguments);
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1-> extends 
+2 >        AbstractGreeter
+1->Emitted(15, 9) Source(4, 23) + SourceIndex(0) name (Greeter.constructor)
+2 >Emitted(15, 39) Source(4, 38) + SourceIndex(0) name (Greeter.constructor)
+---
+>>>        this.a = 10;
+1 >^^^^^^^^
+2 >        ^^^^^^
+3 >              ^^^
+4 >                 ^^
+5 >                   ^
+6 >                    ^^^^^^^^->
+1 > {
+  >    public 
+2 >        a
+3 >               = 
+4 >                 10
+5 >                   ;
+1 >Emitted(16, 9) Source(5, 12) + SourceIndex(0) name (Greeter.constructor)
+2 >Emitted(16, 15) Source(5, 13) + SourceIndex(0) name (Greeter.constructor)
+3 >Emitted(16, 18) Source(5, 16) + SourceIndex(0) name (Greeter.constructor)
+4 >Emitted(16, 20) Source(5, 18) + SourceIndex(0) name (Greeter.constructor)
+5 >Emitted(16, 21) Source(5, 19) + SourceIndex(0) name (Greeter.constructor)
+---
+>>>        this.nameA = "Ten";
+1->^^^^^^^^
+2 >        ^^^^^^^^^^
+3 >                  ^^^
+4 >                     ^^^^^
+5 >                          ^
+1->
+  >    public 
+2 >        nameA
+3 >                   = 
+4 >                     "Ten"
+5 >                          ;
+1->Emitted(17, 9) Source(6, 12) + SourceIndex(0) name (Greeter.constructor)
+2 >Emitted(17, 19) Source(6, 17) + SourceIndex(0) name (Greeter.constructor)
+3 >Emitted(17, 22) Source(6, 20) + SourceIndex(0) name (Greeter.constructor)
+4 >Emitted(17, 27) Source(6, 25) + SourceIndex(0) name (Greeter.constructor)
+5 >Emitted(17, 28) Source(6, 26) + SourceIndex(0) name (Greeter.constructor)
+---
+>>>    }
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >    }
+1 >Emitted(18, 5) Source(7, 1) + SourceIndex(0) name (Greeter.constructor)
+2 >Emitted(18, 6) Source(7, 2) + SourceIndex(0) name (Greeter.constructor)
+---
+>>>    return Greeter;
+1->^^^^
+2 >    ^^^^^^^^^^^^^^
+3 >                  ^^^->
+1->
+2 >    }
+1->Emitted(19, 5) Source(7, 1) + SourceIndex(0) name (Greeter)
+2 >Emitted(19, 19) Source(7, 2) + SourceIndex(0) name (Greeter)
+---
+>>>})(AbstractGreeter);
+1->
+2 >^
+3 > 
+4 > ^^
+5 >   ^^^^^^^^^^^^^^^
+6 >                  ^^
+7 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+2 >}
+3 > 
+4 > class Greeter extends 
+5 >   AbstractGreeter
+6 >                   {
+  >                      public a = 10;
+  >                      public nameA = "Ten";
+  >                  }
+1->Emitted(20, 1) Source(7, 1) + SourceIndex(0) name (Greeter)
+2 >Emitted(20, 2) Source(7, 2) + SourceIndex(0) name (Greeter)
+3 >Emitted(20, 2) Source(4, 1) + SourceIndex(0)
+4 >Emitted(20, 4) Source(4, 23) + SourceIndex(0)
+5 >Emitted(20, 19) Source(4, 38) + SourceIndex(0)
+6 >Emitted(20, 21) Source(7, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationClassWithDefaultConstructorAndExtendsClause.js.map

@@ -1,0 +1,6 @@
+==== tests/cases/conformance/parser/ecmascript5/MemberVariableDeclarations/parserMemberVariableDeclaration3.ts (1 errors) ====
+    class C {
+      static public Foo;
+             ~~~~~~
+!!! 'public' modifier must precede 'static' modifier.
+    }

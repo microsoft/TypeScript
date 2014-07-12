@@ -1,0 +1,15 @@
+==== tests/cases/compiler/missingTypeArguments2.ts (4 errors) ====
+    class A<T> { }
+    
+    var x: () => A;
+                 ~
+!!! Generic type 'A<T>' requires 1 type argument(s).
+    (a: A) => { };
+        ~
+!!! Generic type 'A<T>' requires 1 type argument(s).
+    var y: A<A>;
+             ~
+!!! Generic type 'A<T>' requires 1 type argument(s).
+    (): A => null;
+        ~
+!!! Generic type 'A<T>' requires 1 type argument(s).

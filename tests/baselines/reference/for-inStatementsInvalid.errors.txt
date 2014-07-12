@@ -1,0 +1,96 @@
+==== tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts (16 errors) ====
+    var aNumber: number;
+    for (aNumber in {}) { }
+         ~~~~~~~
+!!! Variable declarations of a 'for' statement must be of types 'string' or 'any'.
+    
+    var aBoolean: boolean;
+    for (aBoolean in {}) { }
+         ~~~~~~~~
+!!! Variable declarations of a 'for' statement must be of types 'string' or 'any'.
+    
+    var aRegExp: RegExp;
+    for (aRegExp in {}) { }
+         ~~~~~~~
+!!! Variable declarations of a 'for' statement must be of types 'string' or 'any'.
+    
+    for (var idx : number in {}) { }
+             ~~~~~~~~~~~~
+!!! Variable declarations of a 'for' statement cannot use a type annotation.
+    
+    function fn(): void { }
+    for (var x in fn()) { }
+                  ~~~~
+!!! The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+    
+    var c : string, d:string, e;
+    
+    for (var x in c || d) { }
+                  ~~~~~~
+!!! The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+    for (var x in e ? c : d) { }
+                  ~~~~~~~~~
+!!! The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+    for (var x in 42 ? c : d) { }
+                  ~~~~~~~~~~
+!!! The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+    for (var x in '' ? c : d) { }
+                  ~~~~~~~~~~
+!!! The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+    for (var x in 42 ? d[x] : c[x]) { }
+                  ~~~~~~~~~~~~~~~~
+!!! The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+    for (var x in c[23]) { }
+                  ~~~~~
+!!! The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+    
+    for (var x in (<T>(x: T) => x)) { }
+    for (var x in function (x: string, y: number) { return x + y }) { }
+    
+    class A {
+        biz() : number{
+            for (var x in this.biz()) { }
+                          ~~~~~~~~~~
+!!! The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+            for (var x in this.biz) { }
+            for (var x in this) { }
+            return null;
+        }
+    
+        static baz() : number {
+            for (var x in this) { }
+            for (var x in this.baz) { }
+            for (var x in this.baz()) { }
+                          ~~~~~~~~~~
+!!! The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+    
+            return null;
+        }
+    }
+    
+    class B extends A {
+        boz() {
+            for (var x in this.biz()) { }
+                          ~~~~~~~~~~
+!!! The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+            for (var x in this.biz) { }
+            for (var x in this) { }
+    
+            for (var x in super.biz) { }
+            for (var x in super.biz()) { }
+                          ~~~~~~~~~~~
+!!! The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+            return null;
+        }
+    }
+    
+    interface I {
+        id: number;
+        [idx: number]: number;
+    }
+    var i: I;
+    
+    for (var x in i[42]) { } 
+                  ~~~~~
+!!! The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+    

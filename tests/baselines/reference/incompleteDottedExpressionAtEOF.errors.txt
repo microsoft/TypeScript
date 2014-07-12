@@ -1,0 +1,7 @@
+==== tests/cases/compiler/incompleteDottedExpressionAtEOF.ts (2 errors) ====
+    // used to leak __missing into error message
+    var p2 = window. 
+                     
+!!! Identifier expected.
+             ~~~~~~
+!!! Cannot find name 'window'.

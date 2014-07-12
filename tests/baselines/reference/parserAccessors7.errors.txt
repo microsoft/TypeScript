@@ -1,0 +1,6 @@
+==== tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors7.ts (2 errors) ====
+    var v = { get foo(v: number) { } };
+                  ~~~
+!!! A 'get' accessor cannot have parameters.
+                  ~~~
+!!! Getters must return a value.

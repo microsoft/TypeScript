@@ -1,0 +1,21 @@
+==== tests/cases/compiler/this_inside-object-literal-getters-and-setters.ts (2 errors) ====
+    module ObjectLiteral {
+        var ThisInObjectLiteral = {
+            _foo: '1',
+            get foo(): string {
+                ~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+                return this._foo;
+            },
+            set foo(value: string) {
+                ~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+                this._foo = value;
+            },
+            test: function () {
+                return this._foo;
+            }
+        }
+    }
+    
+    

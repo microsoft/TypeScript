@@ -1,0 +1,7 @@
+==== tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnumDeclaration2.ts (1 errors) ====
+    declare module M {
+      declare enum E {
+      ~~~~~~~
+!!! A 'declare' modifier cannot be used in an already ambient context.
+      }
+    }

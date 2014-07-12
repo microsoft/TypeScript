@@ -1,0 +1,51 @@
+==== tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts (8 errors) ====
+    // 3.8.4 Assignment Compatibility 
+    
+    interface Callable {
+        call(blah: any); // also works for 'apply'
+    }
+    
+    var x: Callable;
+    
+    // Should fail
+    x = '';
+    ~
+!!! Type 'string' is not assignable to type 'Callable':
+!!!   Property 'call' is missing in type 'String'.
+    x = [''];
+    ~
+!!! Type 'string[]' is not assignable to type 'Callable':
+!!!   Property 'call' is missing in type 'string[]'.
+    x = 4;
+    ~
+!!! Type 'number' is not assignable to type 'Callable':
+!!!   Property 'call' is missing in type 'Number'.
+    x = {};
+    ~
+!!! Type '{}' is not assignable to type 'Callable':
+!!!   Property 'call' is missing in type '{}'.
+    
+    // Should work
+    function f() { };
+    x = f;
+    
+    function fn(c: Callable) { }
+    
+    // Should Fail
+    fn('');
+    ~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+    fn(['']);
+    ~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+    fn(4);
+    ~~~~~
+!!! Supplied parameters do not match any signature of call target.
+    fn({});
+    ~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+    
+    
+    // Should work
+    fn(a => { });
+    

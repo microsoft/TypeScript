@@ -1,0 +1,7 @@
+==== tests/cases/compiler/matchingOfObjectLiteralConstraints.ts (1 errors) ====
+    function foo2<T, U extends { y: T; }>(x: U, z: T) { }
+                     ~~~~~~~~~~~~~~~~~~~
+!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+    foo2({ y: "foo" }, "foo");
+     
+    

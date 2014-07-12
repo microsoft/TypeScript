@@ -1,0 +1,12 @@
+==== tests/cases/compiler/instantiateTypeParameter.ts (4 errors) ====
+    interface Foo<T> {
+        var x: T<>;
+        ~~~
+!!! Property or signature expected.
+                ~~
+!!! Type argument list cannot be empty.
+               ~~~
+!!! Cannot find name 'T'.
+    }
+    ~
+!!! Declaration or statement expected.

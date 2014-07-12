@@ -1,0 +1,34 @@
+==== tests/cases/conformance/externalModules/initializersInDeclarations.ts (7 errors) ====
+    
+    // Errors: Initializers & statements in declaration file
+    
+    declare class Foo {
+    	name = "test";
+    	     ~
+!!! Initializers are not allowed in ambient contexts.
+    	"some prop" = 42;
+    	            ~
+!!! Initializers are not allowed in ambient contexts.
+    	fn(): boolean {
+    	              ~
+!!! A function implementation cannot be declared in an ambient context.
+    		return false;
+    	}
+    }
+    
+    declare var x = [];
+                  ~
+!!! Initializers are not allowed in ambient contexts.
+    declare var y = {};
+                  ~
+!!! Initializers are not allowed in ambient contexts.
+    
+    declare module M1 {
+    	while(true);
+    	~~~~~
+!!! Statements are not allowed in ambient contexts.
+    
+    	export var v1 = () => false;
+    	              ~
+!!! Initializers are not allowed in ambient contexts.
+    }

@@ -1,0 +1,24 @@
+==== tests/cases/compiler/augmentedTypesEnum2.ts (2 errors) ====
+    // enum then interface
+    enum e1 { One }
+    
+    interface e1 {
+              ~~
+!!! Duplicate identifier 'e1'.
+        foo(): void;
+    }
+    
+    // interface then enum works
+    
+    // enum then class
+    enum e2 { One };
+    class e2 { // error
+          ~~
+!!! Duplicate identifier 'e2'.
+        foo() {
+            return 1;
+        }
+    }
+    
+    //enum then enum - covered
+    //enum then import - covered

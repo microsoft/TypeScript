@@ -1,0 +1,9 @@
+==== tests/cases/compiler/unqualifiedCallToClassStatic1.ts (1 errors) ====
+    class Vector {
+     static foo = () => {
+      // 'foo' cannot be called in an unqualified manner.
+      foo();
+      ~~~
+!!! Cannot find name 'foo'.
+     }
+    }

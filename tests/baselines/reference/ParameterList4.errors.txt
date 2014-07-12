@@ -1,0 +1,5 @@
+==== tests/cases/compiler/ParameterList4.ts (1 errors) ====
+    function F(public A) {
+               ~~~~~~~~
+!!! A parameter property is only allowed in a constructor implementation.
+    }

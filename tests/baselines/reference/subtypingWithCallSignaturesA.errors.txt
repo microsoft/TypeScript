@@ -1,0 +1,5 @@
+==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesA.ts (1 errors) ====
+    declare function foo3(cb: (x: number) => number): typeof cb;
+    var r5 = foo3((x: number) => ''); // error
+             ~~~~~~~~~~~~~~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.

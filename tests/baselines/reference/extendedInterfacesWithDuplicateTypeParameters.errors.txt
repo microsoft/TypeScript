@@ -1,0 +1,18 @@
+==== tests/cases/compiler/extendedInterfacesWithDuplicateTypeParameters.ts (3 errors) ====
+    interface InterfaceWithMultipleTypars<A, A> { // should error
+                                             ~
+!!! Duplicate identifier 'A'.
+    	bar(): void;
+    }
+    
+    interface InterfaceWithSomeTypars<B> { // should not error
+    	bar(): void;
+    }
+    
+    interface InterfaceWithSomeTypars<C, C> { // should error
+              ~~~~~~~~~~~~~~~~~~~~~~~
+!!! All declarations of an interface must have identical type parameters.
+                                         ~
+!!! Duplicate identifier 'C'.
+    	bar2(): void;
+    }

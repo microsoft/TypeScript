@@ -1,0 +1,30 @@
+==== tests/cases/compiler/recursiveNamedLambdaCall.ts (5 errors) ====
+    var promise = function( obj ) {
+    	
+    		if ( top && top.doScroll ) {
+    		     ~~~
+!!! Cannot find name 'top'.
+    		            ~~~
+!!! Cannot find name 'top'.
+    			(function doScrollCheck() {
+    				if ( false ) {
+    
+    					try {
+    						top.doScroll("left");
+    						~~~
+!!! Cannot find name 'top'.
+    					} catch(e) {
+    						return setTimeout( doScrollCheck, 50 );
+    						       ~~~~~~~~~~
+!!! Cannot find name 'setTimeout'.
+    					}
+    
+    					// detach all dom ready events
+    					detach();
+    					~~~~~~
+!!! Cannot find name 'detach'.
+    
+    				}
+    			})();
+    		}
+    };

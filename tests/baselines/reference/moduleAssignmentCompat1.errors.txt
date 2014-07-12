@@ -1,0 +1,21 @@
+==== tests/cases/compiler/moduleAssignmentCompat1.ts (2 errors) ====
+    module A {
+        export class C { }
+    }
+    module B {
+        export class C { }
+        class D { }
+    }
+    
+    var a: A;
+           ~
+!!! Cannot find name 'A'.
+    var b: B;
+           ~
+!!! Cannot find name 'B'.
+    
+    // no error
+    a = b;
+    b = a;
+    
+    

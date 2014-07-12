@@ -1,0 +1,9 @@
+==== tests/cases/compiler/propertyAccessibility1.ts (1 errors) ====
+    class Foo {
+      private privProp = 0;
+    }
+    var f = new Foo();
+    f.privProp;
+    ~~~~~~~~~~
+!!! Property 'Foo.privProp' is inaccessible.
+    

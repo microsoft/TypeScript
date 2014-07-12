@@ -1,0 +1,35 @@
+==== tests/cases/conformance/classes/nestedClassDeclaration.ts (8 errors) ====
+    // nested classes are not allowed
+    
+    class C {
+        x: string;
+        class C2 {
+        ~~~~~
+!!! Unexpected token. A constructor, method, accessor, or property was expected.
+        }
+    }
+    ~
+!!! Declaration or statement expected.
+    
+    function foo() {
+        class C3 {
+        ~~~~~
+!!! Statement expected.
+        }
+    }
+    ~
+!!! Declaration or statement expected.
+    
+    var x = {
+        class C4 {
+              ~~
+!!! ':' expected.
+                 ~
+!!! ',' expected.
+              ~~
+!!! Cannot find name 'C4'.
+        }
+    }
+    ~
+!!! Declaration or statement expected.
+    

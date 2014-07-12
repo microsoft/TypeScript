@@ -1,0 +1,5 @@
+==== tests/cases/compiler/defaultValueInFunctionOverload1.ts (1 errors) ====
+    function foo(x: string = '');
+                 ~~~~~~~~~~~~~~
+!!! A parameter initializer is only allowed in a function or constructor implementation.
+    function foo(x = '') { }

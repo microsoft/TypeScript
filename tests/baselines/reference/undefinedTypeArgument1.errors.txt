@@ -1,0 +1,4 @@
+==== tests/cases/compiler/undefinedTypeArgument1.ts (1 errors) ====
+    var cats = new Array<WAWA>();
+                         ~~~~
+!!! Cannot find name 'WAWA'.

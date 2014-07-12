@@ -1,0 +1,16 @@
+==== tests/cases/compiler/importDeclRefereingExternalModuleWithNoResolve.ts (4 errors) ====
+    import b = require("externalModule");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Cannot compile external modules unless the '--module' flag is provided.
+                       ~~~~~~~~~~~~~~~~
+!!! Cannot find external module 'externalModule'.
+    declare module "m1" {
+    ~~~~~~~~~~~~~~~~~~~~~
+        import im2 = require("externalModule");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                             ~~~~~~~~~~~~~~~~
+!!! Cannot find external module 'externalModule'.
+    }
+    ~
+!!! Ambient external modules cannot be nested in other modules.
+    

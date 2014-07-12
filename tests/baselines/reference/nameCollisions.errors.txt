@@ -1,0 +1,64 @@
+==== tests/cases/compiler/nameCollisions.ts (8 errors) ====
+    module T {
+        var x = 2;
+    
+        module x { // error
+               ~
+!!! Duplicate identifier 'x'.
+            export class Bar {
+                test: number;
+            }
+        }
+    
+        module z {
+            var t;
+        }
+        var z; // error
+            ~
+!!! Duplicate identifier 'z'.
+    
+        module y {
+            var b;
+        }
+    
+        class y { } // error
+    
+        var w;
+        module w { } //ok
+    
+        var f;
+        function f() { } //error
+                 ~
+!!! Duplicate identifier 'f'.
+    
+        function f2() { }
+        var f2; // error
+            ~~
+!!! Duplicate identifier 'f2'.
+    
+        var i;
+        interface i { } //ok
+    
+        class C { }
+        function C() { } // error
+                 ~
+!!! Duplicate identifier 'C'.
+    
+        function C2() { }
+        class C2 { } // error
+              ~~
+!!! Duplicate identifier 'C2'.
+    
+        function fi() { }
+        interface fi { } // ok
+    
+        class cli { }
+        interface cli { } // error
+                  ~~~
+!!! Duplicate identifier 'cli'.
+    
+        interface cli2 { }
+        class cli2 { } // error
+              ~~~~
+!!! Duplicate identifier 'cli2'.
+    }

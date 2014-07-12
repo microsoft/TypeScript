@@ -1,0 +1,6 @@
+==== tests/cases/compiler/numericIndexerConstraint5.ts (1 errors) ====
+    var x = { name: "x", 0: new Date() };
+    var z: { [name: number]: string } = x;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type '{ 0: Date; name: string; }' is not assignable to type '{ [x: number]: string; }':
+!!!   Index signature is missing in type '{ 0: Date; name: string; }'.

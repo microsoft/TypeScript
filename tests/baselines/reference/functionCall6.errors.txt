@@ -1,0 +1,13 @@
+==== tests/cases/compiler/functionCall6.ts (3 errors) ====
+    function foo(a:string){}; 
+    foo('bar');
+    foo(2);
+    ~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+    foo('foo', 'bar');
+    ~~~~~~~~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+    foo();
+    ~~~~~
+!!! Supplied parameters do not match any signature of call target.
+    

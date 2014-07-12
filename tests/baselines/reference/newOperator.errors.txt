@@ -1,0 +1,72 @@
+==== tests/cases/compiler/newOperator.ts (11 errors) ====
+    interface ifc { }
+    // Attempting to 'new' an interface yields poor error
+    var i = new ifc();
+                ~~~
+!!! Cannot find name 'ifc'.
+    
+    // Parens are optional
+    var x = new Date;
+    var y = new Date();
+    
+    // Target is not a class or var, good error
+    var t1 = new 53();
+             ~~~~~~~~
+!!! Cannot use 'new' with an expression whose type lacks a call or construct signature.
+    var t2 = new ''();
+             ~~~~~~~~
+!!! Cannot use 'new' with an expression whose type lacks a call or construct signature.
+    new string;
+        ~~~~~~
+!!! Cannot find name 'string'.
+    
+    // Use in LHS of expression?
+    (new Date()).toString();
+    
+    // Various spacing
+    var t3 = new string[]( );
+                       ~~
+!!! 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+                 ~~~~~~
+!!! Cannot find name 'string'.
+    var t4 =
+    new
+    string
+    ~~~~~~
+!!! Cannot find name 'string'.
+    [
+    ~
+        ]
+    ~~~~~
+!!! 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+        (
+            );
+    
+    // Unresolved symbol
+    var f = new q();
+                ~
+!!! Cannot find name 'q'.
+    
+    // not legal
+    var t5 = new new Date;
+             ~~~~~~~~~~~~
+!!! Cannot use 'new' with an expression whose type lacks a call or construct signature.
+    
+    // Can be an expression
+    new String;
+    
+    
+    module M {
+        export class T {
+            x: number;
+        }
+    }
+    
+    class S {
+        public get xs(): M.T[] {
+            return new M.T[];
+                          ~~
+!!! 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+        }
+    }
+    

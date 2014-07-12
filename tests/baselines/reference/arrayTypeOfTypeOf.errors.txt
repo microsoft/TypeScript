@@ -1,0 +1,21 @@
+==== tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfTypeOf.ts (6 errors) ====
+    // array type cannot use typeof.
+    
+    var x = 1;
+    var xs: typeof x[];  // Not an error.  This is equivalent to Array<typeof x>
+    var xs2: typeof Array;
+    var xs3: typeof Array<number>;
+                         ~
+!!! '=' expected.
+                                 ~
+!!! Expression expected.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type 'number' is not assignable to type '{ (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: any[]; }':
+!!!   Property 'isArray' is missing in type 'Number'.
+    var xs4: typeof Array<typeof x>;
+                         ~
+!!! '=' expected.
+                                   ~
+!!! Expression expected.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type 'number' is not assignable to type '{ (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: any[]; }'.

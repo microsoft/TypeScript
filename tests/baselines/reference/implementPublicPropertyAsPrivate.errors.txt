@@ -1,0 +1,10 @@
+==== tests/cases/compiler/implementPublicPropertyAsPrivate.ts (1 errors) ====
+    interface I {
+        x: number;
+    }
+    class C implements I {
+          ~
+!!! Class 'C' incorrectly implements interface 'I':
+!!!   Private property 'x' cannot be reimplemented.
+        private x = 0; // should raise error at class decl
+    }

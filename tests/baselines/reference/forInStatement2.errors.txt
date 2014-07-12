@@ -1,0 +1,6 @@
+==== tests/cases/compiler/forInStatement2.ts (1 errors) ====
+    var expr: number;
+    for (var a in expr) {
+                  ~~~~
+!!! The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+    }

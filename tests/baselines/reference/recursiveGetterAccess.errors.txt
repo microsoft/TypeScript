@@ -1,0 +1,8 @@
+==== tests/cases/compiler/recursiveGetterAccess.ts (1 errors) ====
+    class MyClass {
+    get testProp() { return this.testProp; }
+        ~~~~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+    }
+     
+    

@@ -1,0 +1,36 @@
+==== tests/cases/compiler/checkForObjectTooStrict.ts (2 errors) ====
+    module Foo {
+    
+        export class Object {
+    
+        }
+    
+    }
+    
+     
+    
+    class Bar extends Foo.Object { // should work
+    
+        constructor () {
+    
+            super();
+    
+        }
+    
+    }
+    
+    
+    class Baz extends Object {
+                      ~~~~~~
+!!! A class may only extend another class.
+    
+        constructor () { // ERROR, as expected
+    
+            super();
+            ~~~~~
+!!! 'super' can only be referenced in a derived class.
+    
+        }
+    
+    }
+    

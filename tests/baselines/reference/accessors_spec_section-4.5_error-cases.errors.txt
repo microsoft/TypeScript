@@ -1,0 +1,38 @@
+==== tests/cases/compiler/accessors_spec_section-4.5_error-cases.ts (12 errors) ====
+    class LanguageSpec_section_4_5_error_cases {
+        public set AnnotatedSetter_SetterFirst(a: number) { }
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+        public get AnnotatedSetter_SetterFirst() { return ""; }
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+                                                          ~~
+!!! Type 'string' is not assignable to type 'number'.
+    
+        public get AnnotatedSetter_SetterLast() { return ""; }
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+                                                         ~~
+!!! Type 'string' is not assignable to type 'number'.
+        public set AnnotatedSetter_SetterLast(a: number) { }
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+    
+        public get AnnotatedGetter_GetterFirst(): string { return ""; }
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+        public set AnnotatedGetter_GetterFirst(aStr) { aStr = 0; }
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+                                                       ~~~~
+!!! Type 'number' is not assignable to type 'string'.
+    
+        public set AnnotatedGetter_GetterLast(aStr) { aStr = 0; }
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+                                                      ~~~~
+!!! Type 'number' is not assignable to type 'string'.
+        public get AnnotatedGetter_GetterLast(): string { return ""; }
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+    }

@@ -1,0 +1,38 @@
+==== tests/cases/compiler/superPropertyAccess1.ts (5 errors) ====
+    class C {
+        public foo() { }
+        public get x() {
+                   ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            return 1;
+        }
+    
+        public bar() { }
+    }
+    
+    class D extends C {
+        public foo() {
+            super.bar();
+            super.x;  // error
+                  ~
+!!! Only public methods of the base class are accessible via the 'super' keyword
+        }    
+    
+        constructor() {
+            super();
+            super.bar();
+            super.x;  // error
+                  ~
+!!! Only public methods of the base class are accessible via the 'super' keyword
+        }
+    
+        public get y() {
+                   ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            super.bar();
+            super.x; // error
+                  ~
+!!! Only public methods of the base class are accessible via the 'super' keyword
+            return 1;
+        }
+    }

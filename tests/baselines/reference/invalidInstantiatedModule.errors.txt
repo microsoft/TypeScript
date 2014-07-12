@@ -1,0 +1,20 @@
+==== tests/cases/conformance/internalModules/moduleDeclarations/invalidInstantiatedModule.ts (2 errors) ====
+    module M {
+        export class Point { x: number; y: number }
+        export var Point = 1;  // Error
+                   ~~~~~
+!!! Duplicate identifier 'Point'.
+    }
+    
+    module M2 {
+        export interface Point { x: number; y: number }
+        export var Point = 1;
+    }
+    
+    var m = M2;
+    var p: m.Point; // Error
+           ~~~~~~~
+!!! Cannot find name 'm'.
+    
+    
+     

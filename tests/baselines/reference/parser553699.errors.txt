@@ -1,0 +1,11 @@
+==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser553699.ts (1 errors) ====
+    class Foo {
+      constructor() { }
+      public banana (x: public) { }
+                        ~~~~~~
+!!! Cannot find name 'public'.
+    }
+    
+    class Bar {
+      constructor(c: Bar) { }
+    }

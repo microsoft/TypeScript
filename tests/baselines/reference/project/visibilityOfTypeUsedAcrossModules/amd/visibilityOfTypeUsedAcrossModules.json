@@ -1,0 +1,19 @@
+{
+    "scenario": "Visibility of type used across modules",
+    "projectRoot": "tests/cases/projects/VisibilityOfCrosssModuleTypeUsage",
+    "inputFiles": [
+        "commands.ts"
+    ],
+    "baselineCheck": true,
+    "resolvedInputFiles": [
+        "commands.ts",
+        "fs.ts",
+        "server.ts",
+        "lib.d.ts"
+    ],
+    "emittedFiles": [
+        "fs.js",
+        "server.js",
+        "commands.js"
+    ]
+}

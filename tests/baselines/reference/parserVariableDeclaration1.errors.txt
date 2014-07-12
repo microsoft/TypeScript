@@ -1,0 +1,14 @@
+==== tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration1.ts (4 errors) ====
+    
+    		var selection = a, 
+    		                ~
+!!! Cannot find name 'a'.
+    			position = b,
+    			           ~
+!!! Cannot find name 'b'.
+    			model = c,
+    			        ~
+!!! Cannot find name 'c'.
+    			support = d;
+    			          ~
+!!! Cannot find name 'd'.

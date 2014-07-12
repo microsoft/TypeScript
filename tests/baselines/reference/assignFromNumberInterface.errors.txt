@@ -1,0 +1,7 @@
+==== tests/cases/conformance/types/primitives/number/assignFromNumberInterface.ts (1 errors) ====
+    var x = 1;
+    var a: Number;
+    x = a;
+    ~
+!!! Type 'Number' is not assignable to type 'number'.
+    a = x;

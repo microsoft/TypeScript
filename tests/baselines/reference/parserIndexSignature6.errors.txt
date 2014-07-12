@@ -1,0 +1,6 @@
+==== tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature6.ts (1 errors) ====
+    interface I {
+      [a:boolean]
+       ~
+!!! An index signature parameter type must be 'string' or 'number'.
+    }

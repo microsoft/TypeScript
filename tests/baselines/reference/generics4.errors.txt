@@ -1,0 +1,14 @@
+==== tests/cases/compiler/generics4.ts (1 errors) ====
+    class C<T> { private x: T; }
+    interface X { f(): string; }
+    interface Y { f(): boolean; }
+    var a: C<X>;
+    var b: C<Y>;
+    
+    a = b; // Not ok - return types of "f" are different
+    ~
+!!! Type 'C<Y>' is not assignable to type 'C<X>':
+!!!   Type 'Y' is not assignable to type 'X':
+!!!     Types of property 'f' are incompatible:
+!!!       Type '() => boolean' is not assignable to type '() => string':
+!!!         Type 'boolean' is not assignable to type 'string'.

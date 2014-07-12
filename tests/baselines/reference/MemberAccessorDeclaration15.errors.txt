@@ -1,0 +1,8 @@
+==== tests/cases/compiler/MemberAccessorDeclaration15.ts (2 errors) ====
+    class C {
+       set Foo(public a: number) { }
+           ~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+               ~~~~~~~~~~~~~~~~
+!!! A parameter property is only allowed in a constructor implementation.
+    }

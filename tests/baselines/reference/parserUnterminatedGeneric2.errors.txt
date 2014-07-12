@@ -1,0 +1,55 @@
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts (23 errors) ====
+    declare module ng {
+        interfaceICompiledExpression {
+                                     ~
+!!! ';' expected.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'interfaceICompiledExpression'.
+            (context: any, locals?: any): any;
+                    ~
+!!! ')' expected.
+                                  ~
+!!! Expression expected.
+                                       ~
+!!! ';' expected.
+                                        ~
+!!! Statement expected.
+             ~~~~~~~
+!!! Cannot find name 'context'.
+                      ~~~
+!!! Cannot find name 'any'.
+                           ~~~~~~
+!!! Cannot find name 'locals'.
+                                    ~~~
+!!! Cannot find name 'any'.
+                                          ~~~
+!!! Cannot find name 'any'.
+            assign(context: any, value: any): any;
+                          ~
+!!! ',' expected.
+                                      ~
+!!! ',' expected.
+                                            ~
+!!! ';' expected.
+            ~~~~~~
+!!! Cannot find name 'assign'.
+                   ~~~~~~~
+!!! Cannot find name 'context'.
+                            ~~~
+!!! Cannot find name 'any'.
+                                 ~~~~~
+!!! Cannot find name 'value'.
+                                        ~~~
+!!! Cannot find name 'any'.
+                                              ~~~
+!!! Cannot find name 'any'.
+        }
+    
+        interface IQService {
+            all(promises: IPromise < any > []): IPromise<
+                                                         
+!!! '>' expected.
+                          ~~~~~~~~~~~~~~~~
+!!! Cannot find name 'IPromise'.
+                                                ~~~~~~~~~
+!!! Cannot find name 'IPromise'.

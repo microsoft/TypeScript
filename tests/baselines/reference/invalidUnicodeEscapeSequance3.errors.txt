@@ -1,0 +1,8 @@
+==== tests/cases/compiler/invalidUnicodeEscapeSequance3.ts (3 errors) ====
+    a\u
+     
+!!! Invalid character.
+    ~
+!!! Cannot find name 'a'.
+      ~
+!!! Cannot find name 'u'.

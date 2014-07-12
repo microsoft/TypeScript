@@ -1,0 +1,6 @@
+==== tests/cases/conformance/parser/ecmascript5/MemberVariableDeclarations/parserMemberVariableDeclaration1.ts (1 errors) ====
+    class C {
+      public public Foo;
+             ~~~~~~
+!!! Accessibility modifier already seen.
+    }

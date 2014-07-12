@@ -1,0 +1,5 @@
+==== tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration1.d.ts (1 errors) ====
+    module "Foo" {
+    ~~~~~~
+!!! A 'declare' modifier is required for a top level declaration in a .d.ts file.
+    }

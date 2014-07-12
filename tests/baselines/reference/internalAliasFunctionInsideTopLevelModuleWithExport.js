@@ -1,0 +1,34 @@
+//// [internalAliasFunctionInsideTopLevelModuleWithExport.ts]
+export module a {
+    export function foo(x: number) {
+        return x;
+    }
+}
+
+export import b = a.foo;
+export var bVal = b(10);
+export var bVal2 = b;
+
+
+//// [internalAliasFunctionInsideTopLevelModuleWithExport.js]
+define(["require", "exports"], function (require, exports) {
+    (function (a) {
+        function foo(x) {
+            return x;
+        }
+        a.foo = foo;
+    })(exports.a || (exports.a = {}));
+    var a = exports.a;
+    exports.b = a.foo;
+    exports.bVal = exports.b(10);
+    exports.bVal2 = exports.b;
+});
+
+
+//// [internalAliasFunctionInsideTopLevelModuleWithExport.d.ts]
+export declare module a {
+    function foo(x);
+}
+export import b = a.foo;
+export declare var bVal;
+export declare var bVal2;

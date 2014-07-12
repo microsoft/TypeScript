@@ -1,0 +1,7 @@
+==== tests/cases/compiler/invocationExpressionInFunctionParameter.ts (1 errors) ====
+    function foo1(val: string) {
+    }
+    function foo3(x = foo1(123)) { //should error, 123 is not string
+                      ~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+    }

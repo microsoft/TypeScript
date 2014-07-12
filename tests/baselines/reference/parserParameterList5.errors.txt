@@ -1,0 +1,7 @@
+==== tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList5.ts (2 errors) ====
+    function A(): (public B) => C {
+                   ~~~~~~~~
+!!! A parameter property is only allowed in a constructor implementation.
+                                ~
+!!! Cannot find name 'C'.
+    }

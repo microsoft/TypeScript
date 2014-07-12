@@ -1,0 +1,12 @@
+==== tests/cases/compiler/declFileObjectLiteralWithOnlyGetter.ts (1 errors) ====
+    
+    function /*1*/makePoint(x: number) { 
+        return {
+            get x() { return x; },
+                ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+        };
+    };
+    var /*4*/point = makePoint(2);
+    var /*2*/x = point./*3*/x;
+    

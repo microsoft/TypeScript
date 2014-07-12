@@ -1,0 +1,397 @@
+==== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts (120 errors) ====
+    enum E { a, b, c }
+    
+    var a: boolean;
+    var b: number;
+    var c: string;
+    var d: void;
+    var e: E;
+    var f: { a: string };
+    var g: any[];
+    
+    function foo<T, U>(t: T, u: U) {
+        var r1 = t < u;
+                 ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'U'.
+        var r2 = t > u;
+                 ~~~~~
+!!! Operator '>' cannot be applied to types 'T' and 'U'.
+        var r3 = t <= u;
+                 ~~~~~~
+!!! Operator '<=' cannot be applied to types 'T' and 'U'.
+        var r4 = t >= u;
+                 ~~~~~~
+!!! Operator '>=' cannot be applied to types 'T' and 'U'.
+        var r5 = t == u;
+                 ~~~~~~
+!!! Operator '==' cannot be applied to types 'T' and 'U'.
+        var r6 = t != u;
+                 ~~~~~~
+!!! Operator '!=' cannot be applied to types 'T' and 'U'.
+        var r7 = t === u;
+                 ~~~~~~~
+!!! Operator '===' cannot be applied to types 'T' and 'U'.
+        var r8 = t !== u;
+                 ~~~~~~~
+!!! Operator '!==' cannot be applied to types 'T' and 'U'.
+    
+        // operator <
+        var r1a1 = t < a;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'boolean'.
+        var r1a2 = t < b;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'number'.
+        var r1a3 = t < c;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'string'.
+        var r1a4 = t < d;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'void'.
+        var r1a5 = t < e;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'E'.
+        var r1a6 = t < f;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and '{ a: string; }'.
+        var r1a7 = t < g;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'any[]'.
+    
+        var r1b1 = a < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'boolean' and 'T'.
+        var r1b2 = b < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'number' and 'T'.
+        var r1b3 = c < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'string' and 'T'.
+        var r1b4 = d < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'void' and 'T'.
+        var r1b5 = e < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'E' and 'T'.
+        var r1b6 = f < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types '{ a: string; }' and 'T'.
+        var r1b7 = g < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'any[]' and 'T'.
+    
+        // operator >
+        var r2a1 = t < a;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'boolean'.
+        var r2a2 = t < b;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'number'.
+        var r2a3 = t < c;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'string'.
+        var r2a4 = t < d;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'void'.
+        var r2a5 = t < e;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'E'.
+        var r2a6 = t < f;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and '{ a: string; }'.
+        var r2a7 = t < g;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'any[]'.
+    
+        var r2b1 = a < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'boolean' and 'T'.
+        var r2b2 = b < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'number' and 'T'.
+        var r2b3 = c < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'string' and 'T'.
+        var r2b4 = d < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'void' and 'T'.
+        var r2b5 = e < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'E' and 'T'.
+        var r2b6 = f < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types '{ a: string; }' and 'T'.
+        var r2b7 = g < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'any[]' and 'T'.
+    
+        // operator <=
+        var r3a1 = t < a;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'boolean'.
+        var r3a2 = t < b;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'number'.
+        var r3a3 = t < c;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'string'.
+        var r3a4 = t < d;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'void'.
+        var r3a5 = t < e;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'E'.
+        var r3a6 = t < f;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and '{ a: string; }'.
+        var r3a7 = t < g;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'any[]'.
+    
+        var r3b1 = a < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'boolean' and 'T'.
+        var r3b2 = b < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'number' and 'T'.
+        var r3b3 = c < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'string' and 'T'.
+        var r3b4 = d < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'void' and 'T'.
+        var r3b5 = e < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'E' and 'T'.
+        var r3b6 = f < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types '{ a: string; }' and 'T'.
+        var r3b7 = g < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'any[]' and 'T'.
+    
+        // operator >=
+        var r4a1 = t < a;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'boolean'.
+        var r4a2 = t < b;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'number'.
+        var r4a3 = t < c;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'string'.
+        var r4a4 = t < d;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'void'.
+        var r4a5 = t < e;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'E'.
+        var r4a6 = t < f;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and '{ a: string; }'.
+        var r4a7 = t < g;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'any[]'.
+    
+        var r4b1 = a < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'boolean' and 'T'.
+        var r4b2 = b < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'number' and 'T'.
+        var r4b3 = c < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'string' and 'T'.
+        var r4b4 = d < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'void' and 'T'.
+        var r4b5 = e < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'E' and 'T'.
+        var r4b6 = f < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types '{ a: string; }' and 'T'.
+        var r4b7 = g < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'any[]' and 'T'.
+    
+        // operator ==
+        var r5a1 = t < a;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'boolean'.
+        var r5a2 = t < b;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'number'.
+        var r5a3 = t < c;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'string'.
+        var r5a4 = t < d;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'void'.
+        var r5a5 = t < e;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'E'.
+        var r5a6 = t < f;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and '{ a: string; }'.
+        var r5a7 = t < g;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'any[]'.
+    
+        var r5b1 = a < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'boolean' and 'T'.
+        var r5b2 = b < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'number' and 'T'.
+        var r5b3 = c < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'string' and 'T'.
+        var r5b4 = d < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'void' and 'T'.
+        var r5b5 = e < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'E' and 'T'.
+        var r5b6 = f < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types '{ a: string; }' and 'T'.
+        var r5b7 = g < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'any[]' and 'T'.
+    
+        // operator !=
+        var r6a1 = t < a;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'boolean'.
+        var r6a2 = t < b;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'number'.
+        var r6a3 = t < c;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'string'.
+        var r6a4 = t < d;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'void'.
+        var r6a5 = t < e;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'E'.
+        var r6a6 = t < f;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and '{ a: string; }'.
+        var r6a7 = t < g;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'any[]'.
+    
+        var r6b1 = a < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'boolean' and 'T'.
+        var r6b2 = b < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'number' and 'T'.
+        var r6b3 = c < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'string' and 'T'.
+        var r6b4 = d < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'void' and 'T'.
+        var r6b5 = e < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'E' and 'T'.
+        var r6b6 = f < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types '{ a: string; }' and 'T'.
+        var r6b7 = g < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'any[]' and 'T'.
+    
+        // operator ===
+        var r7a1 = t < a;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'boolean'.
+        var r7a2 = t < b;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'number'.
+        var r7a3 = t < c;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'string'.
+        var r7a4 = t < d;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'void'.
+        var r7a5 = t < e;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'E'.
+        var r7a6 = t < f;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and '{ a: string; }'.
+        var r7a7 = t < g;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'any[]'.
+    
+        var r7b1 = a < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'boolean' and 'T'.
+        var r7b2 = b < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'number' and 'T'.
+        var r7b3 = c < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'string' and 'T'.
+        var r7b4 = d < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'void' and 'T'.
+        var r7b5 = e < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'E' and 'T'.
+        var r7b6 = f < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types '{ a: string; }' and 'T'.
+        var r7b7 = g < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'any[]' and 'T'.
+    
+        // operator !==
+        var r8a1 = t < a;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'boolean'.
+        var r8a2 = t < b;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'number'.
+        var r8a3 = t < c;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'string'.
+        var r8a4 = t < d;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'void'.
+        var r8a5 = t < e;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'E'.
+        var r8a6 = t < f;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and '{ a: string; }'.
+        var r8a7 = t < g;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'T' and 'any[]'.
+    
+        var r8b1 = a < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'boolean' and 'T'.
+        var r8b2 = b < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'number' and 'T'.
+        var r8b3 = c < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'string' and 'T'.
+        var r8b4 = d < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'void' and 'T'.
+        var r8b5 = e < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'E' and 'T'.
+        var r8b6 = f < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types '{ a: string; }' and 'T'.
+        var r8b7 = g < t;
+                   ~~~~~
+!!! Operator '<' cannot be applied to types 'any[]' and 'T'.
+    }

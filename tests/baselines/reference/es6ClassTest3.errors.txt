@@ -1,0 +1,45 @@
+==== tests/cases/compiler/es6ClassTest3.ts (15 errors) ====
+    module M {	
+    	class Visibility {
+    	    public foo() { };
+    	                    ~
+!!! Unexpected token. A constructor, method, accessor, or property was expected.
+    	    private bar() { };
+    	    ~~~~~~~
+!!! Declaration or statement expected.
+    	                  ~
+!!! ';' expected.
+    	            ~~~
+!!! Cannot find name 'bar'.
+            private x: number;
+            ~~~~~~~
+!!! Declaration or statement expected.
+                       ~~~~~~
+!!! Cannot find name 'number'.
+    	    public y: number;
+    	    ~~~~~~
+!!! Declaration or statement expected.
+    	              ~~~~~~
+!!! Cannot find name 'number'.
+    	    public z: number;
+    	    ~~~~~~
+!!! Declaration or statement expected.
+    	              ~~~~~~
+!!! Cannot find name 'number'.
+    
+    	    constructor() {
+    	                  ~
+!!! ';' expected.
+    	    ~~~~~~~~~~~
+!!! Cannot find name 'constructor'.
+    	        this.x = 1;
+    	        ~~~~
+!!! 'this' cannot be referenced in a module body.
+    	        this.y = 2;
+    	        ~~~~
+!!! 'this' cannot be referenced in a module body.
+    	    }
+    	}
+    }
+    ~
+!!! Declaration or statement expected.

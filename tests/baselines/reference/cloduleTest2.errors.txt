@@ -1,0 +1,53 @@
+==== tests/cases/compiler/cloduleTest2.ts (8 errors) ====
+    module T1 {
+        module m3d { export var y = 2; }
+        declare class m3d { constructor(foo); foo(): void ; static bar(); }
+        var r = new m3d(); // error
+                ~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+    }
+    
+    module T2 {
+        declare class m3d { constructor(foo); foo(): void; static bar(); }
+        module m3d { export var y = 2; }
+        var r = new m3d(); // error
+                ~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+    }
+    
+    module T3 {
+        module m3d { export var y = 2; }
+        declare class m3d { foo(): void; static bar(); }
+        var r = new m3d();
+        r.foo();
+        r.bar(); // error
+          ~~~
+!!! Property 'bar' does not exist on type 'm3d'.
+        r.y; // error
+          ~
+!!! Property 'y' does not exist on type 'm3d'.
+    }
+    
+    module T4 {
+        declare class m3d { foo(): void; static bar(); }
+        module m3d { export var y = 2; }
+        var r = new m3d();
+        r.foo();
+        r.bar(); // error
+          ~~~
+!!! Property 'bar' does not exist on type 'm3d'.
+        r.y; // error
+          ~
+!!! Property 'y' does not exist on type 'm3d'.
+    }
+    
+    module m3d { export var y = 2; }
+    declare class m3d { constructor(foo); foo(): void; static bar(); }
+    var r = new m3d(); // error
+            ~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+    
+    declare class m4d extends m3d { }
+    var r2 = new m4d(); // error
+             ~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.

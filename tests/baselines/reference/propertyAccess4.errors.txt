@@ -1,0 +1,4 @@
+==== tests/cases/compiler/propertyAccess4.ts (1 errors) ====
+    null.toBAZ();
+         ~~~~~
+!!! Property 'toBAZ' does not exist on type 'null'.

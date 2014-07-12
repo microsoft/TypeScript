@@ -1,0 +1,23 @@
+==== tests/cases/conformance/externalModules/file1.ts (0 errors) ====
+    var v1 = "sausages"; // Global scope
+    
+==== tests/cases/conformance/externalModules/file2.ts (0 errors) ====
+    var v2 = 42; // Global scope
+    var v4 = () => 5;
+    
+==== tests/cases/conformance/externalModules/file3.ts (1 errors) ====
+    export var v3 = true;
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! Cannot compile external modules unless the '--module' flag is provided.
+    var v2 = [1,2,3]; // Module scope. Should not appear in global scope
+    
+==== tests/cases/conformance/externalModules/file4.ts (0 errors) ====
+    import file3 = require('./file3');
+    var t1 = v1;
+    var t2 = v2;
+    var t3 = file3.v3;
+    var v4 = {a: true, b: NaN};  // Should shadow global v2 in this module
+    
+==== tests/cases/conformance/externalModules/file5.ts (0 errors) ====
+    var x = v2; // Should be global v2 of type number again
+    

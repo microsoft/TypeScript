@@ -1,0 +1,16 @@
+==== tests/cases/compiler/indexSignatureWithInitializer.ts (4 errors) ====
+    interface I {
+        [x = '']: string;
+         ~
+!!! An index signature parameter cannot have an initializer.
+         ~~~~~~
+!!! A parameter initializer is only allowed in a function or constructor implementation.
+    }
+    
+    class C {
+        [x = 0]: string
+         ~
+!!! An index signature parameter cannot have an initializer.
+         ~~~~~
+!!! A parameter initializer is only allowed in a function or constructor implementation.
+    }

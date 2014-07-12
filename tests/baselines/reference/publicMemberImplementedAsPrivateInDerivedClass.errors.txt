@@ -1,0 +1,11 @@
+==== tests/cases/compiler/publicMemberImplementedAsPrivateInDerivedClass.ts (1 errors) ====
+    interface Qux {
+     Bar: number;
+    }
+    class Foo implements Qux {
+          ~~~
+!!! Class 'Foo' incorrectly implements interface 'Qux':
+!!!   Private property 'Bar' cannot be reimplemented.
+     private Bar: number;
+    }
+    

@@ -1,0 +1,54 @@
+==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/stringLiteralTypesInImplementationSignatures2.ts (12 errors) ====
+    // String literal types are only valid in overload signatures
+    
+    function foo(x: any);
+    function foo(x: 'hi') { }
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! A signature with an implementation cannot use a string literal type.
+    
+    class C {
+        foo(x: string);
+        foo(x: 'hi') { }
+        ~~~~~~~~~~~~~~~~
+!!! A signature with an implementation cannot use a string literal type.
+    }
+    
+    interface I {
+        (x: 'a');
+        ~~~~~~~~~
+!!! Specialized overload signature is not assignable to any non-specialized signature.
+        (x: 'hi');
+        ~~~~~~~~~~
+!!! Specialized overload signature is not assignable to any non-specialized signature.
+        foo(x: 'a', y: 'a');
+        ~~~~~~~~~~~~~~~~~~~~
+!!! Specialized overload signature is not assignable to any non-specialized signature.
+        foo(x: 'hi', y: 'hi');
+        ~~~~~~~~~~~~~~~~~~~~~~
+!!! Specialized overload signature is not assignable to any non-specialized signature.
+    }
+    
+    var a: {
+        (x: 'hi');
+        ~~~~~~~~~~
+!!! Specialized overload signature is not assignable to any non-specialized signature.
+        (x: 'a');
+        ~~~~~~~~~
+!!! Specialized overload signature is not assignable to any non-specialized signature.
+        foo(x: 'hi');
+        ~~~~~~~~~~~~~
+!!! Specialized overload signature is not assignable to any non-specialized signature.
+        foo(x: 'a');
+        ~~~~~~~~~~~~
+!!! Specialized overload signature is not assignable to any non-specialized signature.
+    }
+    
+    var b = {
+        foo(x: 'hi') { },
+        ~~~~~~~~~~~~~~~~
+!!! A signature with an implementation cannot use a string literal type.
+        foo(x: 'a') { },
+        ~~~
+!!! Duplicate identifier 'foo'.
+    }
+    

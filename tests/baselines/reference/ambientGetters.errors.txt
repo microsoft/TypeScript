@@ -1,0 +1,15 @@
+==== tests/cases/compiler/ambientGetters.ts (3 errors) ====
+    
+    declare class A {
+        get length() : number;
+                             ~
+!!! '{' expected.
+    }
+    ~
+!!! Declaration or statement expected.
+    
+    declare class B {
+        get length() { return 0; }
+            ~~~~~~
+!!! An accessor cannot be declared in an ambient context.
+    }

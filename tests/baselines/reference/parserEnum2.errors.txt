@@ -1,0 +1,16 @@
+==== tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnum2.ts (1 errors) ====
+    
+    
+        export enum SignatureFlags {
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            None = 0,
+    ~~~~~~~~~~~~~~~~~
+            IsIndexer = 1,
+    ~~~~~~~~~~~~~~~~~~~~~~
+            IsStringIndexer = 1 << 1,
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            IsNumberIndexer = 1 << 2
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+!!! Cannot compile external modules unless the '--module' flag is provided.

@@ -1,0 +1,14 @@
+==== tests/cases/conformance/expressions/unaryOperators/voidOperator/voidOperatorInvalidOperations.ts (3 errors) ====
+    // Unary operator void
+    
+    // operand before void
+    var ANY = ANY void ;    //expect error
+                  ~~~~
+!!! ',' expected.
+                       ~
+!!! Expression expected.
+    
+    // miss an operand
+    var ANY1 = void ;
+                    ~
+!!! Expression expected.

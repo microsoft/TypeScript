@@ -1,0 +1,38 @@
+==== tests/cases/compiler/propertyWrappedInTry.ts (9 errors) ====
+    class Foo {
+    
+        try {
+        ~~~
+!!! Unexpected token. A constructor, method, accessor, or property was expected.
+    
+            public bar = someInitThatMightFail();
+            ~~~~~~
+!!! Statement expected.
+                   ~~~
+!!! Cannot find name 'bar'.
+                         ~~~~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'someInitThatMightFail'.
+    
+        } catch(e) {}
+    
+    
+    
+        public baz() {
+        ~~~~~~
+!!! Declaration or statement expected.
+                     ~
+!!! ';' expected.
+               ~~~
+!!! Cannot find name 'baz'.
+    
+            return this.bar; // doesn't get rewritten to Foo.bar.
+            ~~~~~~~~~~~~~~~~
+!!! 'return' statement has no containing function.
+    
+        }
+    
+    }
+    ~
+!!! Declaration or statement expected.
+    
+    

@@ -1,0 +1,22 @@
+==== tests/cases/compiler/selfReferencesInFunctionParameters.ts (4 errors) ====
+    function foo(x: number = x) {
+                             ~
+!!! Parameter 'x' cannot be referenced in its initializer.
+    }
+    
+    function bar(x0 = "", x: number = x) {
+                                      ~
+!!! Parameter 'x' cannot be referenced in its initializer.
+    }
+    
+    class C {
+        constructor(x = 1, y = y) {
+                               ~
+!!! Parameter 'y' cannot be referenced in its initializer.
+        }
+         
+        bar(a = "", b: string = b.toString()) {
+                                ~
+!!! Parameter 'b' cannot be referenced in its initializer.
+        }
+    }

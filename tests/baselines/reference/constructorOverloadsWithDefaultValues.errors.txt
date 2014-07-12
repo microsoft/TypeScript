@@ -1,0 +1,18 @@
+==== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorOverloadsWithDefaultValues.ts (2 errors) ====
+    class C {
+        foo: string;
+        constructor(x = 1); // error
+                    ~~~~~
+!!! A parameter initializer is only allowed in a function or constructor implementation.
+        constructor() {
+        }
+    }
+    
+    class D<T> {
+        foo: string;
+        constructor(x = 1); // error
+                    ~~~~~
+!!! A parameter initializer is only allowed in a function or constructor implementation.
+        constructor() {
+        }
+    }

@@ -1,0 +1,44 @@
+==== tests/cases/compiler/primitiveMembers.ts (6 errors) ====
+    var x = 5;
+    var r = /yo/;
+    r.source;
+    
+    x.toBAZ();
+      ~~~~~
+!!! Property 'toBAZ' does not exist on type 'number'.
+    x.toString();
+    
+    var n = 0;
+    var N: Number;
+    
+    n = N;  // should not work, as 'number' has a different brand
+    ~
+!!! Type 'Number' is not assignable to type 'number'.
+    N = n; // should work
+    
+    var o: Object = {}
+    var f: Function = (x: string) => x.length;
+    var r2: RegExp = /./g;
+    var n2: Number = 34;
+    var s: String = "yo";
+    var b: Boolean = true;
+    
+    var n3 = 5 || {};
+    
+    
+    class baz { public bar(): void { }; }
+                                      ~
+!!! Unexpected token. A constructor, method, accessor, or property was expected.
+                                        ~
+!!! Declaration or statement expected.
+    class foo extends baz { public bar(){ return undefined}; }
+                                                           ~
+!!! Unexpected token. A constructor, method, accessor, or property was expected.
+                                                             ~
+!!! Declaration or statement expected.
+    
+    
+    
+     
+    
+    

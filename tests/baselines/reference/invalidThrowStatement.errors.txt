@@ -1,0 +1,9 @@
+==== tests/cases/conformance/statements/throwStatements/invalidThrowStatement.ts (2 errors) ====
+    throw; 
+         ~
+!!! Expression expected.
+    
+    export throw null;
+    ~~~~~~
+!!! Declaration or statement expected.
+    

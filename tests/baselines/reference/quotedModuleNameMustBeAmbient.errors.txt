@@ -1,0 +1,6 @@
+==== tests/cases/compiler/quotedModuleNameMustBeAmbient.ts (1 errors) ====
+    module 'M' {}
+    ~~~~~~~~~~~~~
+!!! Ambient external modules require a 'declare' modifier.
+    
+    declare module 'M2' {}

@@ -1,0 +1,10 @@
+==== tests/cases/compiler/genericInterfacesWithoutTypeArguments.ts (2 errors) ====
+    interface I<T> { }
+    class C<T> { }
+    var i: I;
+           ~
+!!! Generic type 'I<T>' requires 1 type argument(s).
+    var c: C<I>;
+             ~
+!!! Generic type 'I<T>' requires 1 type argument(s).
+    

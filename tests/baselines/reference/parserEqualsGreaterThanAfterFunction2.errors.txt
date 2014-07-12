@@ -1,0 +1,10 @@
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserEqualsGreaterThanAfterFunction2.ts (4 errors) ====
+    function (a => b;
+             ~
+!!! Identifier expected.
+                ~~
+!!! ',' expected.
+                    ~
+!!! ',' expected.
+    ~~~~~~~~~~~~~~~~~
+!!! Function implementation expected.

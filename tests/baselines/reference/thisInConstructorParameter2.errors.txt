@@ -1,0 +1,16 @@
+==== tests/cases/compiler/thisInConstructorParameter2.ts (3 errors) ====
+    class P {
+        x = this;
+        static y = this;
+                   ~~~~
+!!! 'this' cannot be referenced in a static property initializer.
+    
+        constructor(public z = this, zz = this) { }
+                               ~~~~
+!!! 'this' cannot be referenced in constructor arguments.
+                                          ~~~~
+!!! 'this' cannot be referenced in constructor arguments.
+    
+        foo(zz = this) { zz.x; }
+        static bar(zz = this) { zz.y; }
+    }

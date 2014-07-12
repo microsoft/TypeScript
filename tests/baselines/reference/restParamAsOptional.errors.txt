@@ -1,0 +1,7 @@
+==== tests/cases/compiler/restParamAsOptional.ts (2 errors) ====
+    function f(...x?) { }
+                  ~
+!!! A rest parameter cannot be optional.
+    function f2(...x = []) { }
+                   ~
+!!! A rest parameter cannot have an initializer.

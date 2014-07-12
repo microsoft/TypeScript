@@ -1,0 +1,5 @@
+==== tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens9.ts (1 errors) ====
+    ; // existing trivia
+    /*foo*/ \ /*bar*/
+            
+!!! Invalid character.

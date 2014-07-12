@@ -1,0 +1,22 @@
+==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesPrivates.ts (2 errors) ====
+    class Base {
+        private x: { foo: string };
+    }
+    
+    class Derived extends Base {
+          ~~~~~~~
+!!! Class 'Derived' incorrectly extends base class 'Base':
+!!!   Private property 'x' cannot be reimplemented.
+        private x: { foo: string; bar: string; }; // error
+    }
+    
+    class Base2 {
+        private static y: { foo: string };
+    }
+    
+    class Derived2 extends Base2 {
+          ~~~~~~~~
+!!! Class static side 'typeof Derived2' incorrectly extends base class static side 'typeof Base2':
+!!!   Private property 'y' cannot be reimplemented.
+        private static y: { foo: string; bar: string; }; // error
+    }

@@ -1,0 +1,11 @@
+==== tests/cases/compiler/collisionRestParameterUnderscoreIUsage.ts (1 errors) ====
+    declare var console: { log(msg?: string): void; };
+    var _i = "This is what I'd expect to see";
+    class Foo {
+        constructor(...args: any[]) {
+            console.log(_i); // This should result in error
+                        ~~
+!!! Expression resolves to variable declaration '_i' that compiler uses to initialize rest parameter.
+        }
+    }
+    new Foo();

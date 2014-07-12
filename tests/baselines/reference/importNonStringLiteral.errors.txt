@@ -1,0 +1,8 @@
+==== tests/cases/conformance/externalModules/importNonStringLiteral.ts (2 errors) ====
+    var x = "filename";
+    import foo = require(x); // invalid
+                         ~
+!!! String literal expected.
+                          ~
+!!! ';' expected.
+    

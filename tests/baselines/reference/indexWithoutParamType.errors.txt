@@ -1,0 +1,4 @@
+==== tests/cases/compiler/indexWithoutParamType.ts (1 errors) ====
+    var y: { []; } // Error
+             ~~
+!!! An index signature must have exactly one parameter.

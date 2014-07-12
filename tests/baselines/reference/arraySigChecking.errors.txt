@@ -1,0 +1,43 @@
+==== tests/cases/compiler/arraySigChecking.ts (3 errors) ====
+    declare module M {
+        interface iBar { t: any; }
+        interface iFoo extends iBar {
+            s: any;
+        }
+    
+        class cFoo {
+            t: any;
+        }
+    
+        var foo: { [index: any]; }; // expect an error here
+                    ~~~~~
+!!! An index signature parameter type must be 'string' or 'number'.
+    }
+    
+    interface myInt {
+        voidFn(): void;
+    }
+    var myVar: myInt;
+    var strArray: string[] = [myVar.voidFn()];
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type 'void[]' is not assignable to type 'string[]':
+!!!   Type 'void' is not assignable to type 'string'.
+    
+    
+    var myArray: number[][][];
+    myArray = [[1, 2]];
+    ~~~~~~~
+!!! Type 'number[][]' is not assignable to type 'number[][][]':
+!!!   Type 'number[]' is not assignable to type 'number[][]':
+!!!     Type 'number' is not assignable to type 'number[]':
+!!!       Property 'concat' is missing in type 'Number'.
+    
+    function isEmpty(l: { length: number }) {
+        return l.length === 0;
+    }
+    
+    isEmpty([]);
+    isEmpty(new Array(3));
+    isEmpty(new Array<string>(3));
+    isEmpty(['a']);
+    

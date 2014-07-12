@@ -1,0 +1,10 @@
+==== tests/cases/compiler/enumWithPrimitiveName.ts (3 errors) ====
+    enum string { }
+         ~~~~~~
+!!! Enum name cannot be 'string'
+    enum number { }
+         ~~~~~~
+!!! Enum name cannot be 'number'
+    enum any { }
+         ~~~
+!!! Enum name cannot be 'any'

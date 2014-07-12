@@ -1,0 +1,344 @@
+==== tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts (61 errors) ====
+    // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+    // See LICENSE.txt in the project root for complete license information.
+    
+    ///<reference path='typescript.ts' />
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! File 'typescript.ts' not found.
+    
+    module TypeScript {
+        export class TypeCollectionContext {
+            public script: Script = null;
+                           ~~~~~~
+!!! Cannot find name 'Script'.
+    
+            constructor (public scopeChain: ScopeChain, public checker: TypeChecker) {
+                                            ~~~~~~~~~~
+!!! Cannot find name 'ScopeChain'.
+                                                                        ~~~~~~~~~~~
+!!! Cannot find name 'TypeChecker'.
+            }
+        }
+    
+        export class MemberScopeContext {
+            public type: Type = null;
+                         ~~~~
+!!! Cannot find name 'Type'.
+            public ast: AST = null;
+                        ~~~
+!!! Cannot find name 'AST'.
+            public scope: SymbolScope;
+                          ~~~~~~~~~~~
+!!! Cannot find name 'SymbolScope'.
+            public options = new AstWalkOptions();
+                                 ~~~~~~~~~~~~~~
+!!! Cannot find name 'AstWalkOptions'.
+    
+            constructor (public flow: TypeFlow, public pos: number, public matchFlag: ASTFlags) {
+                                      ~~~~~~~~
+!!! Cannot find name 'TypeFlow'.
+                                                                                      ~~~~~~~~
+!!! Cannot find name 'ASTFlags'.
+            }
+        }
+    
+        export class EnclosingScopeContext {
+    
+            public scopeGetter: () => SymbolScope = null;
+                                      ~~~~~~~~~~~
+!!! Cannot find name 'SymbolScope'.
+            public objectLiteralScopeGetter: () => SymbolScope = null;
+                                                   ~~~~~~~~~~~
+!!! Cannot find name 'SymbolScope'.
+            public scopeStartAST: AST = null;
+                                  ~~~
+!!! Cannot find name 'AST'.
+            public skipNextFuncDeclForClass = false;
+            public deepestModuleDecl: ModuleDeclaration = null;
+                                      ~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'ModuleDeclaration'.
+            public enclosingClassDecl: TypeDeclaration = null;
+                                       ~~~~~~~~~~~~~~~
+!!! Cannot find name 'TypeDeclaration'.
+            public enclosingObjectLit: UnaryExpression = null;
+                                       ~~~~~~~~~~~~~~~
+!!! Cannot find name 'UnaryExpression'.
+            public publicsOnly = true;
+            public useFullAst = false;
+            private scriptFragment: Script;
+                                    ~~~~~~
+!!! Cannot find name 'Script'.
+    
+            constructor (public logger: ILogger,
+                                        ~~~~~~~
+!!! Cannot find name 'ILogger'.
+                        public script: Script,
+                                       ~~~~~~
+!!! Cannot find name 'Script'.
+                        public text: ISourceText,
+                                     ~~~~~~~~~~~
+!!! Cannot find name 'ISourceText'.
+                        public pos: number,
+                        public isMemberCompletion: boolean) {
+            }
+    
+            public getScope(): SymbolScope {
+                               ~~~~~~~~~~~
+!!! Cannot find name 'SymbolScope'.
+                return this.scopeGetter();
+            }
+    
+            public getObjectLiteralScope(): SymbolScope {
+                                            ~~~~~~~~~~~
+!!! Cannot find name 'SymbolScope'.
+                return this.objectLiteralScopeGetter();
+            }
+    
+            public getScopeAST() {
+                return this.scopeStartAST;
+            }
+    
+            public getScopePosition() {
+                return this.scopeStartAST.minChar;
+            }
+    
+            public getScriptFragmentStartAST(): AST {
+                                                ~~~
+!!! Cannot find name 'AST'.
+                return this.scopeStartAST;
+            }
+    
+            public getScriptFragmentPosition(): number {
+                return this.getScriptFragmentStartAST().minChar;
+            }
+    
+            public getScriptFragment(): Script {
+                                        ~~~~~~
+!!! Cannot find name 'Script'.
+                if (this.scriptFragment == null) {
+                    var ast = this.getScriptFragmentStartAST();
+                    var minChar = ast.minChar;
+                    var limChar = (this.isMemberCompletion ? this.pos : this.pos + 1);
+                    this.scriptFragment = TypeScript.quickParse(this.logger, ast, this.text, minChar, limChar, null/*errorCapture*/).Script;
+                                                     ~~~~~~~~~~
+!!! Property 'quickParse' does not exist on type 'typeof TypeScript'.
+                }
+                return this.scriptFragment;
+            }
+        }
+    
+        export function preFindMemberScope(ast: AST, parent: AST, walker: IAstWalker) {
+                                                ~~~
+!!! Cannot find name 'AST'.
+                                                             ~~~
+!!! Cannot find name 'AST'.
+                                                                          ~~~~~~~~~~
+!!! Cannot find name 'IAstWalker'.
+            var memScope: MemberScopeContext = walker.state;
+            if (hasFlag(ast.flags, memScope.matchFlag) && ((memScope.pos < 0) || (memScope.pos == ast.limChar))) {
+                ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                memScope.ast = ast;
+                if ((ast.type == null) && (memScope.pos >= 0)) {
+                    memScope.flow.inScopeTypeCheck(ast, memScope.scope);
+                }
+                memScope.type = ast.type;
+                memScope.options.stopWalk();
+            }
+            return ast;
+        }
+    
+        export function pushTypeCollectionScope(container: Symbol,
+                                                           ~~~~~~
+!!! Cannot find name 'Symbol'.
+            valueMembers: ScopedMembers,
+                          ~~~~~~~~~~~~~
+!!! Cannot find name 'ScopedMembers'.
+            ambientValueMembers: ScopedMembers,
+                                 ~~~~~~~~~~~~~
+!!! Cannot find name 'ScopedMembers'.
+            enclosedTypes: ScopedMembers,
+                           ~~~~~~~~~~~~~
+!!! Cannot find name 'ScopedMembers'.
+            ambientEnclosedTypes: ScopedMembers,
+                                  ~~~~~~~~~~~~~
+!!! Cannot find name 'ScopedMembers'.
+            context: TypeCollectionContext,
+            thisType: Type,
+                      ~~~~
+!!! Cannot find name 'Type'.
+            classType: Type,
+                       ~~~~
+!!! Cannot find name 'Type'.
+            moduleDecl: ModuleDeclaration) {
+                        ~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'ModuleDeclaration'.
+            var builder = new SymbolScopeBuilder(valueMembers, ambientValueMembers, enclosedTypes, ambientEnclosedTypes, null, container);
+                              ~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'SymbolScopeBuilder'.
+            var chain: ScopeChain = new ScopeChain(container, context.scopeChain, builder);
+                       ~~~~~~~~~~
+!!! Cannot find name 'ScopeChain'.
+                                        ~~~~~~~~~~
+!!! Cannot find name 'ScopeChain'.
+            chain.thisType = thisType;
+            chain.classType = classType;
+            chain.moduleDecl = moduleDecl;
+            context.scopeChain = chain;
+        }
+    
+        export function popTypeCollectionScope(context: TypeCollectionContext) {
+            context.scopeChain = context.scopeChain.previous;
+        }
+    
+        export function preFindEnclosingScope(ast: AST, parent: AST, walker: IAstWalker) {
+                                                   ~~~
+!!! Cannot find name 'AST'.
+                                                                ~~~
+!!! Cannot find name 'AST'.
+                                                                             ~~~~~~~~~~
+!!! Cannot find name 'IAstWalker'.
+            var context: EnclosingScopeContext = walker.state;
+            var minChar = ast.minChar;
+            var limChar = ast.limChar;
+    
+            // Account for the fact completion list may be called at the end of a file which
+            // is has not been fully re-parsed yet.
+            if (ast.nodeType == NodeType.Script && context.pos > limChar)
+                                ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                limChar = context.pos;
+    
+            if ((minChar <= context.pos) &&
+                (limChar >= context.pos)) {
+                switch (ast.nodeType) {
+                    case NodeType.Script:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        var script = <Script>ast;
+                                      ~~~~~~
+!!! Cannot find name 'Script'.
+                        context.scopeGetter = function () {
+                            return script.bod === null ? null : script.bod.enclosingScope;
+                        };
+                        context.scopeStartAST = script;
+                        break;
+    
+                    case NodeType.ClassDeclaration:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        context.scopeGetter = function () {
+                            return (ast.type === null || ast.type.instanceType.containedScope === null) ? null : ast.type.instanceType.containedScope;
+                        };
+                        context.scopeStartAST = ast;
+                        context.enclosingClassDecl = <TypeDeclaration>ast;
+                                                      ~~~~~~~~~~~~~~~
+!!! Cannot find name 'TypeDeclaration'.
+                        break;
+    
+                    case NodeType.ObjectLit:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        var objectLit = <UnaryExpression>ast;
+                                         ~~~~~~~~~~~~~~~
+!!! Cannot find name 'UnaryExpression'.
+                        // Only consider target-typed object literals
+                        if (objectLit.targetType) {
+                            context.scopeGetter = function () {
+                                return objectLit.targetType.containedScope;
+                            };
+                            context.objectLiteralScopeGetter = function () {
+                                return objectLit.targetType.memberScope;
+                            }
+                            context.enclosingObjectLit = objectLit;
+                        }
+                        break;
+    
+                    case NodeType.ModuleDeclaration:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        context.deepestModuleDecl = <ModuleDeclaration>ast;
+                                                     ~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'ModuleDeclaration'.
+                        context.scopeGetter = function () {
+                            return ast.type === null ? null : ast.type.containedScope;
+                        };
+                        context.scopeStartAST = ast;
+                        break;
+    
+                    case NodeType.InterfaceDeclaration:
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        context.scopeGetter = function () {
+                            return (ast.type === null) ? null : ast.type.containedScope;
+                        };
+                        context.scopeStartAST = ast;
+                        break;
+    
+                    case NodeType.FuncDecl: {
+                         ~~~~~~~~
+!!! Cannot find name 'NodeType'.
+                        var funcDecl = <FuncDecl>ast;
+                                        ~~~~~~~~
+!!! Cannot find name 'FuncDecl'.
+                        if (context.skipNextFuncDeclForClass) {
+                            context.skipNextFuncDeclForClass = false;
+                        }
+                        else {
+                            context.scopeGetter = function () {
+                                // The scope of a class constructor is hidden somewhere we don't expect :-S
+                                if (funcDecl.isConstructor && hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) {
+                                                              ~~~~~~~
+!!! Cannot find name 'hasFlag'.
+                                                                                         ~~~~~~~~
+!!! Cannot find name 'FncFlags'.
+                                    if (ast.type && ast.type.enclosingType) {
+                                        return ast.type.enclosingType.constructorScope;
+                                    }
+                                }
+    
+                                if (funcDecl.scopeType) {
+                                    return funcDecl.scopeType.containedScope;
+                                }
+    
+                                if (funcDecl.type) {
+                                    return funcDecl.type.containedScope;
+                                }
+                                return null;
+                            };
+                            context.scopeStartAST = ast;
+                        }
+                    }
+                        break;
+                }
+                walker.options.goChildren = true;
+            }
+            else {
+                walker.options.goChildren = false;
+            }
+            return ast;
+        }
+    
+        //
+        // Find the enclosing scope context from a position inside a script AST.
+        // The "scopeStartAST" of the returned scope is always valid.
+        // Return "null" if the enclosing scope can't be found.
+        //
+        export function findEnclosingScopeAt(logger: ILogger, script: Script, text: ISourceText, pos: number, isMemberCompletion: boolean): EnclosingScopeContext {
+                                                     ~~~~~~~
+!!! Cannot find name 'ILogger'.
+                                                                      ~~~~~~
+!!! Cannot find name 'Script'.
+                                                                                    ~~~~~~~~~~~
+!!! Cannot find name 'ISourceText'.
+            var context = new EnclosingScopeContext(logger, script, text, pos, isMemberCompletion);
+    
+            TypeScript.getAstWalkerFactory().walk(script, preFindEnclosingScope, null, null, context);
+                       ~~~~~~~~~~~~~~~~~~~
+!!! Property 'getAstWalkerFactory' does not exist on type 'typeof TypeScript'.
+    
+            if (context.scopeStartAST === null)
+                return null;
+            return context;
+        }
+    }

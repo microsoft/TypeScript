@@ -1,0 +1,12 @@
+==== tests/cases/compiler/staticPrototypeProperty.ts (2 errors) ====
+    class C {
+       static prototype() { }
+              ~~~~~~~~~
+!!! Duplicate identifier 'prototype'.
+    }
+     
+    class C2 {
+       static prototype;
+              ~~~~~~~~~
+!!! Duplicate identifier 'prototype'.
+    }

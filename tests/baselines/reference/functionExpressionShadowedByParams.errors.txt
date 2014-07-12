@@ -1,0 +1,18 @@
+==== tests/cases/compiler/functionExpressionShadowedByParams.ts (2 errors) ====
+    function b1(b1: number) {
+       b1.toPrecision(2); // should not error
+       b1(12); // should error
+       ~~~~~~
+!!! Cannot invoke an expression whose type lacks a call signature.
+    }
+    
+    
+    var x = {
+       b: function b(b: number) {
+          b.toPrecision(2); // should not error
+          b.apply(null, null); // should error
+            ~~~~~
+!!! Property 'apply' does not exist on type 'number'.
+       }
+    };
+    

@@ -1,0 +1,7 @@
+==== tests/cases/compiler/forInStatement7.ts (1 errors) ====
+    var a: number;
+    var expr: any;
+    for (a in expr) {
+         ~
+!!! Variable declarations of a 'for' statement must be of types 'string' or 'any'.
+    }

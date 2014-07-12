@@ -1,0 +1,11 @@
+==== tests/cases/compiler/importAsBaseClass_1.ts (1 errors) ====
+    import Greeter = require("importAsBaseClass_0");
+    class Hello extends Greeter { }
+                        ~~~~~~~
+!!! Cannot find name 'Greeter'.
+    
+==== tests/cases/compiler/importAsBaseClass_0.ts (0 errors) ====
+    export class Greeter {
+       greet() { return 'greet' }
+    }
+    

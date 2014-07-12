@@ -1,0 +1,71 @@
+==== tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts (16 errors) ====
+    // type parameter type is not a valid operand of addition operator
+    enum E { a, b }
+    
+    function foo<T, U>(t: T, u: U) {
+        var a: any;
+        var b: boolean;
+        var c: number;
+        var d: string;
+        var e: Object;
+        var g: E;
+        var f: void;
+    
+        // type parameter as left operand
+        var r1: any = t + a; // ok, one operand is any
+        var r2 = t + b;
+                 ~~~~~
+!!! Operator '+' cannot be applied to types 'T' and 'boolean'.
+        var r3 = t + c;
+                 ~~~~~
+!!! Operator '+' cannot be applied to types 'T' and 'number'.
+        var r4 = t + d; // ok, one operand is string
+        var r5 = t + e;
+                 ~~~~~
+!!! Operator '+' cannot be applied to types 'T' and 'Object'.
+        var r6 = t + g;
+                 ~~~~~
+!!! Operator '+' cannot be applied to types 'T' and 'E'.
+        var r7 = t + f;
+                 ~~~~~
+!!! Operator '+' cannot be applied to types 'T' and 'void'.
+    
+        // type parameter as right operand
+        var r8 = a + t; // ok, one operand is any
+        var r9 = b + t;
+                 ~~~~~
+!!! Operator '+' cannot be applied to types 'boolean' and 'T'.
+        var r10 = c + t;
+                  ~~~~~
+!!! Operator '+' cannot be applied to types 'number' and 'T'.
+        var r11 = d + t; // ok, one operand is string
+        var r12 = e + t;
+                  ~~~~~
+!!! Operator '+' cannot be applied to types 'Object' and 'T'.
+        var r13 = g + t;
+                  ~~~~~
+!!! Operator '+' cannot be applied to types 'E' and 'T'.
+        var r14 = f + t;
+                  ~~~~~
+!!! Operator '+' cannot be applied to types 'void' and 'T'.
+    
+        // other cases
+        var r15 = t + null;
+                  ~~~~~~~~
+!!! Operator '+' cannot be applied to types 'T' and 'T'.
+        var r16 = t + undefined;
+                  ~~~~~~~~~~~~~
+!!! Operator '+' cannot be applied to types 'T' and 'T'.
+        var r17 = t + t;
+                  ~~~~~
+!!! Operator '+' cannot be applied to types 'T' and 'T'.
+        var r18 = t + u;
+                  ~~~~~
+!!! Operator '+' cannot be applied to types 'T' and 'U'.
+        var r19 = t + (() => { });
+                  ~~~~~~~~~~~~~~~
+!!! Operator '+' cannot be applied to types 'T' and '() => void'.
+        var r20 = t + [];
+                  ~~~~~~
+!!! Operator '+' cannot be applied to types 'T' and 'undefined[]'.
+    }

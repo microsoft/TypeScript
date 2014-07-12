@@ -1,0 +1,13 @@
+==== tests/cases/compiler/genericMergedDeclarationUsingTypeParameter.ts (3 errors) ====
+    function foo<T extends U, U>(y: T, z: U) { return y; }
+                 ~~~~~~~~~~~
+!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+    module foo {
+        export var x: T;
+                      ~
+!!! Cannot find name 'T'.
+        var y = <T>1;
+                 ~
+!!! Cannot find name 'T'.
+    }
+    

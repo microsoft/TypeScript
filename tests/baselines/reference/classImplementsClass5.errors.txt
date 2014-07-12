@@ -1,0 +1,27 @@
+==== tests/cases/compiler/classImplementsClass5.ts (3 errors) ====
+    class A {
+        private x = 1;
+        foo(): number { return 1; }
+    }
+    class C implements A {
+          ~
+!!! Class 'C' incorrectly implements interface 'A':
+!!!   Private property 'x' cannot be reimplemented.
+        private x = 1;
+        foo() {
+            return 1;
+        }
+    }
+    
+    class C2 extends A {}
+    
+    var c: C;
+    var c2: C2;
+    c = c2;
+    ~
+!!! Type 'C2' is not assignable to type 'C':
+!!!   Private property 'x' cannot be reimplemented.
+    c2 = c;
+    ~~
+!!! Type 'C' is not assignable to type 'C2':
+!!!   Private property 'x' cannot be reimplemented.

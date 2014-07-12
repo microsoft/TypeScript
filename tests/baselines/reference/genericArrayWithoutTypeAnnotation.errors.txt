@@ -1,0 +1,10 @@
+==== tests/cases/compiler/genericArrayWithoutTypeAnnotation.ts (1 errors) ====
+    interface IFoo<T>{
+    }
+    class Bar {
+        public getBar(foo: IFoo[]) {
+                           ~~~~
+!!! Generic type 'IFoo<T>' requires 1 type argument(s).
+        }
+    }
+    

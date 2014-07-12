@@ -1,0 +1,7 @@
+==== tests/cases/conformance/parser/ecmascript5/Generics/parserGenericConstraint6.ts (2 errors) ====
+    class C<T extends List<List<T> >> {
+            ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+                      ~~~~~~~~~~~~~~
+!!! Cannot find name 'List'.
+    }

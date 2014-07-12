@@ -1,0 +1,9 @@
+==== tests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration8.ts (2 errors) ====
+    class C {
+      // Not a constructor
+      public constructor;
+                        ~
+!!! '(' expected.
+      ~~~~~~~~~~~~~~~~~~~
+!!! Constructor implementation expected.
+    }

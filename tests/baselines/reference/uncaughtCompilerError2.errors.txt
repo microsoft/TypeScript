@@ -1,0 +1,7 @@
+==== tests/cases/compiler/uncaughtCompilerError2.ts (1 errors) ====
+    function getObj() {
+       ().toString();
+         ~
+!!! '=>' expected.
+    }
+    

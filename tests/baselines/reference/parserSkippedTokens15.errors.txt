@@ -1,0 +1,9 @@
+==== tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens15.ts (2 errors) ====
+    /*existing trivia*/
+    \
+    
+!!! Invalid character.
+    \
+    
+!!! Invalid character.
+    ;

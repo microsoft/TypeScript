@@ -1,0 +1,205 @@
+==== tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts (38 errors) ====
+    //super property access in constructor of class with no base type
+    //super property access in instance member function of class with no base type
+    //super property access in instance member accessor(get and set) of class with no base type
+    class NoBase {
+        constructor() {
+            var a = super.prototype;
+                    ~~~~~
+!!! 'super' can only be referenced in a derived class.
+            var b = super.hasOwnProperty('');
+                    ~~~~~
+!!! 'super' can only be referenced in a derived class.
+        }
+    
+        fn() {
+            var a = super.prototype;
+                    ~~~~~
+!!! 'super' can only be referenced in a derived class.
+            var b = super.hasOwnProperty('');
+                    ~~~~~
+!!! 'super' can only be referenced in a derived class.
+        }
+    
+        m = super.prototype;
+            ~~~~~
+!!! 'super' can only be referenced in a derived class.
+        n = super.hasOwnProperty('');
+            ~~~~~
+!!! 'super' can only be referenced in a derived class.
+    
+        //super static property access in static member function of class with no base type
+        //super static property access in static member accessor(get and set) of class with no base type
+        public static static1() {
+            super.hasOwnProperty('');
+            ~~~~~
+!!! 'super' can only be referenced in a derived class.
+        }
+    
+        public static get static2() {
+                          ~~~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            super.hasOwnProperty('');
+            ~~~~~
+!!! 'super' can only be referenced in a derived class.
+            return '';
+        }
+    
+        public static set static2(n) {
+                          ~~~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            super.hasOwnProperty('');
+            ~~~~~
+!!! 'super' can only be referenced in a derived class.
+        }
+    }
+    
+    class SomeBase {
+        private privateFunc() { }
+        private privateMember = 0;
+    
+        public publicFunc() { }
+        public publicMember = 0;
+    
+        private static privateStaticFunc() { }
+        private static privateStaticMember = 0;
+    
+        public static publicStaticFunc() { }
+        public static publicStaticMember = 0;
+    
+    }
+    
+    
+    //super.publicInstanceMemberNotFunction in constructor of derived class
+    //super.publicInstanceMemberNotFunction in instance member function of derived class
+    //super.publicInstanceMemberNotFunction in instance member accessor(get and set) of derived class
+    //super property access only available with typed this
+    class SomeDerived1 extends SomeBase {
+        constructor() {
+            super();
+            super.publicMember = 1;
+                  ~~~~~~~~~~~~
+!!! Only public methods of the base class are accessible via the 'super' keyword
+        }
+    
+        fn() {
+            var x = super.publicMember;
+                          ~~~~~~~~~~~~
+!!! Only public methods of the base class are accessible via the 'super' keyword
+        }
+    
+        get a() {
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            var x = super.publicMember;
+                          ~~~~~~~~~~~~
+!!! Only public methods of the base class are accessible via the 'super' keyword
+            return undefined;
+        }
+        set a(n) {
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            n = super.publicMember;
+                      ~~~~~~~~~~~~
+!!! Only public methods of the base class are accessible via the 'super' keyword
+        }
+        fn2() {
+            function inner() {
+                super.publicFunc();
+                ~~~~~
+!!! 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+            }
+            var x = {
+                test: function () { return super.publicFunc(); }
+                                           ~~~~~
+!!! 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+            }
+        }
+    }
+    
+    //super.privateProperty in constructor of derived class
+    //super.privateProperty in instance member function of derived class
+    //super.privateProperty in instance member accessor(get and set) of derived class
+    class SomeDerived2 extends SomeBase {
+        constructor() {
+            super();
+            super.privateMember = 1;
+                  ~~~~~~~~~~~~~
+!!! Only public methods of the base class are accessible via the 'super' keyword
+        }
+    
+        fn() {
+            var x = super.privateMember;
+                          ~~~~~~~~~~~~~
+!!! Only public methods of the base class are accessible via the 'super' keyword
+        }
+    
+        get a() {
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            var x = super.privateMember;
+                          ~~~~~~~~~~~~~
+!!! Only public methods of the base class are accessible via the 'super' keyword
+            return undefined;
+        }
+        set a(n) {
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            n = super.privateMember;
+                      ~~~~~~~~~~~~~
+!!! Only public methods of the base class are accessible via the 'super' keyword
+        }
+    }
+    
+    //super.publicStaticMemberNotFunction in static member function of derived class
+    //super.publicStaticMemberNotFunction in static member accessor(get and set) of derived class
+    //super.privateStaticProperty in static member function of derived class
+    //super.privateStaticProperty in static member accessor(get and set) of derived class
+    class SomeDerived3 extends SomeBase {
+        static fn() {
+            super.publicStaticMember = 3;
+                  ~~~~~~~~~~~~~~~~~~
+!!! Only public methods of the base class are accessible via the 'super' keyword
+            super.privateStaticMember = 3;
+                  ~~~~~~~~~~~~~~~~~~~
+!!! Only public methods of the base class are accessible via the 'super' keyword
+            super.privateStaticFunc();
+            ~~~~~~~~~~~~~~~~~~~~~~~
+!!! Property 'SomeBase.privateStaticFunc' is inaccessible.
+        }
+        static get a() {
+                   ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            super.publicStaticMember = 3;
+                  ~~~~~~~~~~~~~~~~~~
+!!! Only public methods of the base class are accessible via the 'super' keyword
+            super.privateStaticMember = 3;
+                  ~~~~~~~~~~~~~~~~~~~
+!!! Only public methods of the base class are accessible via the 'super' keyword
+            super.privateStaticFunc();
+            ~~~~~~~~~~~~~~~~~~~~~~~
+!!! Property 'SomeBase.privateStaticFunc' is inaccessible.
+            return '';
+        }
+        static set a(n) {
+                   ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            super.publicStaticMember = 3;
+                  ~~~~~~~~~~~~~~~~~~
+!!! Only public methods of the base class are accessible via the 'super' keyword
+            super.privateStaticMember = 3;
+                  ~~~~~~~~~~~~~~~~~~~
+!!! Only public methods of the base class are accessible via the 'super' keyword
+            super.privateStaticFunc();
+            ~~~~~~~~~~~~~~~~~~~~~~~
+!!! Property 'SomeBase.privateStaticFunc' is inaccessible.
+        }
+    }
+    
+    // In object literal
+    var obj = { n: super.wat, p: super.foo() };
+                   ~~~~~
+!!! 'super' can only be referenced in a derived class.
+                                 ~~~~~
+!!! 'super' can only be referenced in a derived class.
+    

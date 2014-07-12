@@ -1,0 +1,13 @@
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ModuleElements/parserErrorRecovery_ModuleElement1.ts (4 errors) ====
+    return foo;
+    ~~~~~~~~~~~
+!!! 'return' statement has no containing function.
+    }
+    ~
+!!! Declaration or statement expected.
+    return bar;
+    ~~~~~~~~~~~
+!!! 'return' statement has no containing function.
+    }
+    ~
+!!! Declaration or statement expected.

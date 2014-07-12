@@ -1,0 +1,31 @@
+==== tests/cases/compiler/getAndSetNotIdenticalType2.ts (5 errors) ====
+    class A<T> { foo: T; }
+    
+    class C<T> {
+        data: A<T>;
+        get x(): A<T> {
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+        ~~~~~~~~~~~~~~~
+            return this.data;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+!!! 'get' and 'set' accessor must have the same type.
+        set x(v: A<string>) {
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+        ~~~~~~~~~~~~~~~~~~~~~
+            this.data = v;
+    ~~~~~~~~~~~~~~~~~~~~~~
+            ~~~~~~~~~
+!!! Type 'A<string>' is not assignable to type 'A<T>':
+!!!   Type 'string' is not assignable to type 'T'.
+        }
+    ~~~~~
+!!! 'get' and 'set' accessor must have the same type.
+    }
+    
+    var x = new C();
+    var r = x.x;
+    x.x = r;

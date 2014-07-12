@@ -1,0 +1,11 @@
+==== tests/cases/compiler/genericLambaArgWithoutTypeArguments.ts (1 errors) ====
+    interface Foo<T> {
+       x: T;
+    }
+    function foo(a) {
+       return null;
+    }
+    foo((arg: Foo) => { return arg.x; });
+              ~~~
+!!! Generic type 'Foo<T>' requires 1 type argument(s).
+    

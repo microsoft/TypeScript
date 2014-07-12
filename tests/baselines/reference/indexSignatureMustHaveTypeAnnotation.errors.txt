@@ -1,0 +1,22 @@
+==== tests/cases/compiler/indexSignatureMustHaveTypeAnnotation.ts (4 errors) ====
+    interface I {
+        [x]: string;
+         ~
+!!! An index signature parameter must have a type annotation.
+        [x: string];
+        ~~~~~~~~~~~
+!!! An index signature must have a type annotation.
+    }
+    
+    class C {
+        [x]: string
+         ~
+!!! An index signature parameter must have a type annotation.
+        
+    }
+    
+    class C2 {
+        [x: string]
+        ~~~~~~~~~~~
+!!! An index signature must have a type annotation.
+    }

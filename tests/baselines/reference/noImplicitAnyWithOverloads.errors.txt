@@ -1,0 +1,18 @@
+==== tests/cases/compiler/noImplicitAnyWithOverloads.ts (4 errors) ====
+    interface A {
+        foo;
+        ~~~~
+!!! Member 'foo' implicitly has an 'any' type.
+    }
+    interface B { }
+    
+    function callb(lam: (l: A) => void);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! 'callb', which lacks return-type annotation, implicitly has an 'any' return type.
+    function callb(lam: (n: B) => void);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! 'callb', which lacks return-type annotation, implicitly has an 'any' return type.
+    function callb(a) { }
+                   ~
+!!! Parameter 'a' implicitly has an 'any' type.
+    callb((a) => { a.foo; }); // error, chose first overload

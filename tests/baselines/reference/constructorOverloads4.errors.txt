@@ -1,0 +1,21 @@
+==== tests/cases/compiler/constructorOverloads4.ts (4 errors) ====
+    declare module M {    
+        export class Function {
+            constructor(...args: string[]);
+        }
+        export function Function(...args: any[]): any;
+                        ~~~~~~~~
+!!! Duplicate identifier 'Function'.
+        export function Function(...args: string[]): Function;
+                        ~~~~~~~~
+!!! Duplicate identifier 'Function'.
+    }
+    
+    
+    (new M.Function("return 5"))();
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Cannot invoke an expression whose type lacks a call signature.
+    M.Function("yo");
+    ~~~~~~~~~~~~~~~~
+!!! Value of type 'typeof Function' is not callable. Did you mean to include 'new'?
+    

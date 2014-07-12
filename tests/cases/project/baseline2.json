@@ -1,0 +1,9 @@
+{
+    "scenario": "baseline 2",
+    "projectRoot": "tests/cases/projects/baseline",
+    "inputFiles": [
+        "dont_emit.ts"
+    ],
+    "baselineCheck": true,
+    "runTest": true
+}

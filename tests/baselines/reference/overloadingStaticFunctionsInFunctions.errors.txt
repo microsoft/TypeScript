@@ -1,0 +1,34 @@
+==== tests/cases/compiler/overloadingStaticFunctionsInFunctions.ts (14 errors) ====
+    function boo {
+                 ~
+!!! '(' expected.
+      static test()
+      ~~~~~~
+!!! Statement expected.
+             ~~~~
+!!! Cannot find name 'test'.
+      static test(name:string)
+      ~~~~~~
+!!! Statement expected.
+                      ~
+!!! ',' expected.
+             ~~~~
+!!! Cannot find name 'test'.
+                  ~~~~
+!!! Cannot find name 'name'.
+                       ~~~~~~
+!!! Cannot find name 'string'.
+      static test(name?:any){ }
+      ~~~~~~
+!!! Statement expected.
+                       ~
+!!! Expression expected.
+                            ~
+!!! ';' expected.
+             ~~~~
+!!! Cannot find name 'test'.
+                  ~~~~
+!!! Cannot find name 'name'.
+                        ~~~
+!!! Cannot find name 'any'.
+    }

@@ -1,0 +1,28 @@
+{
+    "scenario": "[Sourcemap]/[Sourceroot-Url]: outputdir_multifolder: no outdir",
+    "projectRoot": "tests/cases/projects/outputdir_multifolder",
+    "inputFiles": [
+        "test.ts"
+    ],
+    "sourceMap": true,
+    "sourceRoot": "http://typescript.codeplex.com/",
+    "declaration": true,
+    "baselineCheck": true,
+    "resolvedInputFiles": [
+        "test.ts",
+        "ref/m1.ts",
+        "../outputdir_multifolder_ref/m2.ts",
+        "lib.d.ts"
+    ],
+    "emittedFiles": [
+        "ref/m1.js.map",
+        "ref/m1.js",
+        "ref/m1.d.ts",
+        "../outputdir_multifolder_ref/m2.js.map",
+        "../outputdir_multifolder_ref/m2.js",
+        "../outputdir_multifolder_ref/m2.d.ts",
+        "test.js.map",
+        "test.js",
+        "test.d.ts"
+    ]
+}

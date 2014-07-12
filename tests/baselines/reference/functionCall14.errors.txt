@@ -1,0 +1,10 @@
+==== tests/cases/compiler/functionCall14.ts (1 errors) ====
+    function foo(a?:string, ...b:number[]){} 
+    foo('foo', 1); 
+    foo('foo'); 
+    foo();
+    foo(1, 'bar');
+    ~~~~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+    foo('foo', 1, 3);
+    

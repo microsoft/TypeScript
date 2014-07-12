@@ -1,0 +1,18 @@
+==== tests/cases/compiler/genericCallsWithoutParens.ts (4 errors) ====
+    function f<T>() { }
+    var r = f<number>; // parse error
+                     ~
+!!! Expression expected.
+              ~~~~~~
+!!! Cannot find name 'number'.
+    
+    class C<T> {
+        foo: T;
+    }
+    var c = new C<number>; // parse error
+                         ~
+!!! Expression expected.
+                  ~~~~~~
+!!! Cannot find name 'number'.
+    
+    

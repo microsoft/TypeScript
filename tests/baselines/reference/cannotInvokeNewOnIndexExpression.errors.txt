@@ -1,0 +1,4 @@
+==== tests/cases/compiler/cannotInvokeNewOnIndexExpression.ts (1 errors) ====
+    var test: any[] = new any[1];
+                          ~~~
+!!! Cannot find name 'any'.

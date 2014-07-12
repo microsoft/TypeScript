@@ -1,0 +1,11 @@
+==== tests/cases/compiler/invokingNonGenericMethodWithTypeArguments2.ts (1 errors) ====
+    class Foo {
+        private foo: any;
+    
+        constructor() {
+            this.foo<string>();
+            ~~~~~~~~~~~~~~~~~~
+!!! Untyped function calls may not accept type arguments.
+        }
+    }
+    

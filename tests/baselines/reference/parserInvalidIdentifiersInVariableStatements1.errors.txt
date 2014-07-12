@@ -1,0 +1,10 @@
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/VariableLists/parserInvalidIdentifiersInVariableStatements1.ts (2 errors) ====
+    var export;
+        ~~~~~~
+!!! Variable declaration expected.
+    var foo;
+    var class;
+        ~~~~~
+!!! Variable declaration expected.
+    var bar;
+    

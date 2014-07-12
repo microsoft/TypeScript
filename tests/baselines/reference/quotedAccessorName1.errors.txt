@@ -1,0 +1,6 @@
+==== tests/cases/compiler/quotedAccessorName1.ts (1 errors) ====
+    class C {
+        get "foo"() { return 0; }
+            ~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+    }

@@ -1,0 +1,5 @@
+==== tests/cases/compiler/functionOverloads4.ts (1 errors) ====
+    function foo():number;
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! Overload signature is not compatible with function implementation.
+    function foo():string { return "a" }

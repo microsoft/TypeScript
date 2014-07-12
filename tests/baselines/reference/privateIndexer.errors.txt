@@ -1,0 +1,20 @@
+==== tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer.ts (3 errors) ====
+    // private indexers not allowed
+    
+    class C {
+        private [x: string]: string;
+        ~~~~~~~
+!!! Modifiers not permitted on index signature members.
+    }
+    
+    class D {
+        private [x: number]: string;
+        ~~~~~~~
+!!! Modifiers not permitted on index signature members.
+    }
+    
+    class E<T> {
+        private [x: string]: T;
+        ~~~~~~~
+!!! Modifiers not permitted on index signature members.
+    }

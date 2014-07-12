@@ -1,0 +1,4 @@
+==== tests/cases/conformance/parser/ecmascript5/Types/parserTypeQuery7.ts (1 errors) ====
+    var v: typeof A[]
+                  ~
+!!! Cannot find name 'A'.

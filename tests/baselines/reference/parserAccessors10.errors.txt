@@ -1,0 +1,10 @@
+==== tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors10.ts (3 errors) ====
+    var v = {
+      public get foo() { }
+             ~~~
+!!! ':' expected.
+                 ~~~
+!!! ',' expected.
+             ~~~
+!!! Cannot find name 'get'.
+    };

@@ -1,0 +1,32 @@
+==== tests/cases/compiler/assignmentToReferenceTypes.ts (4 errors) ====
+    // Should all be allowed
+    
+    module M {
+    }
+    M = null;
+    ~
+!!! Cannot find name 'M'.
+    
+    class C {
+    }
+    C = null;
+    ~
+!!! Invalid left-hand side of assignment expression.
+    
+    enum E {
+    }
+    E = null;
+    ~
+!!! Invalid left-hand side of assignment expression.
+    
+    function f() { }
+    f = null;
+    ~
+!!! Invalid left-hand side of assignment expression.
+    
+    var x = 1;
+    x = null;
+    
+    function g(x) {
+        x = null;
+    }

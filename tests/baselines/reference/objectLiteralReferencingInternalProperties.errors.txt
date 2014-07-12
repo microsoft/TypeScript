@@ -1,0 +1,4 @@
+==== tests/cases/compiler/objectLiteralReferencingInternalProperties.ts (1 errors) ====
+    var a = { b: 10, c: b }; // Should give error for attempting to reference b.
+                        ~
+!!! Cannot find name 'b'.

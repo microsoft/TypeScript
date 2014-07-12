@@ -1,0 +1,4 @@
+==== tests/cases/conformance/parser/ecmascript5/Statements/parserBreakStatement1.d.ts (1 errors) ====
+    break;
+    ~~~~~
+!!! Statements are not allowed in ambient contexts.

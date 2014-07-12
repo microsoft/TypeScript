@@ -1,0 +1,46 @@
+==== tests/cases/conformance/interfaces/declarationMerging/twoInterfacesDifferentRootModule2.ts (4 errors) ====
+    // two interfaces with different root modules should not merge
+    
+    module M {
+        export interface A {
+            foo: string;
+        }
+    
+        export interface B<T> {
+            foo: T;
+        }
+    
+        module M2 {
+            export interface A {
+                bar: number;
+            }
+    
+            var a: A;
+            var r1 = a.foo; // error
+                       ~~~
+!!! Property 'foo' does not exist on type 'A'.
+            var r2 = a.bar;
+    
+            export interface B<T> {
+                bar: T;
+            }
+    
+            var b: B<string>;
+            var r3 = b.foo; // error
+                       ~~~
+!!! Property 'foo' does not exist on type 'B<string>'.
+            var r4 = b.bar;
+        }
+    
+        var a: A;
+        var r1 = a.foo; 
+        var r2 = a.bar; // error
+                   ~~~
+!!! Property 'bar' does not exist on type 'A'.
+    
+        var b: B<string>;
+        var r3 = b.foo; 
+        var r4 = b.bar; // error
+                   ~~~
+!!! Property 'bar' does not exist on type 'B<string>'.
+    }

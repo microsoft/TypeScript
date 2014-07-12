@@ -1,0 +1,104 @@
+==== tests/cases/conformance/expressions/operators/incrementAndDecrement.ts (21 errors) ====
+    enum E { A, B, C };
+    var x = 4;
+    var e = E.B;
+    var a: any;
+    var w = window;
+            ~~~~~~
+!!! Cannot find name 'window'.
+    
+    // Assign to expression++
+    x++ = 4; // Error
+        ~
+!!! ';' expected.
+    
+    // Assign to expression--
+    x-- = 5; // Error
+        ~
+!!! ';' expected.
+    
+    // Assign to++expression
+    ++x = 4; // Error
+        ~
+!!! ';' expected.
+    
+    // Assign to--expression
+    --x = 5; // Error
+        ~
+!!! ';' expected.
+    
+    // Pre and postfix++ on number
+    x++;
+    x--;
+    ++x;
+    --x;
+    ++x++; // Error
+      ~~~
+!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+    --x--; // Error
+      ~~~
+!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+    ++x--; // Error
+      ~~~
+!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+    --x++; // Error
+      ~~~
+!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+    
+    // Pre and postfix++ on enum
+    e++;
+    e--;
+    ++e;
+    --e;
+    ++e++; // Error
+      ~~~
+!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+    --e--; // Error
+      ~~~
+!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+    ++e--; // Error
+      ~~~
+!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+    --e++; // Error
+      ~~~
+!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+    
+    // Pre and postfix++ on value of type 'any'
+    a++;
+    a--;
+    ++a;
+    --a;
+    ++a++; // Error
+      ~~~
+!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+    --a--; // Error
+      ~~~
+!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+    ++a--; // Error
+      ~~~
+!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+    --a++; // Error
+      ~~~
+!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+    
+    
+    // Pre and postfix++ on other types
+    w++; // Error
+    w--; // Error
+    ++w; // Error
+    --w; // Error
+    ++w++; // Error
+      ~~~
+!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+    --w--; // Error
+      ~~~
+!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+    ++w--; // Error
+      ~~~
+!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+    --w++; // Error
+      ~~~
+!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+    
+    
+    

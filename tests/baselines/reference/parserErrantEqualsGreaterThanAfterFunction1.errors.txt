@@ -1,0 +1,6 @@
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserErrantEqualsGreaterThanAfterFunction1.ts (2 errors) ====
+    function f() => 4;
+                 ~~
+!!! Block or ';' expected.
+    ~~~~~~~~~~~~
+!!! Function implementation expected.

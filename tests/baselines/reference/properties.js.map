@@ -1,0 +1,2 @@
+//// [properties.js.map]
+{"version":3,"file":"properties.js","sourceRoot":"","sources":["properties.ts"],"names":["MyClass","MyClass.constructor","MyClass.Count"],"mappings":"AACA,IAAM,OAAO;IAAbA,SAAMA,OAAOA;IAWbC,CAACA;IATGD,sBAAWA,0BAAKA;aAAhBA;YAEIE,MAAMA,CAACA,EAAEA,CAACA;QACdA,CAACA;aAEDF,UAAiBA,KAAaA;QAG9BE,CAACA;;;OALAF;IAMLA,cAACA;AAADA,CAACA,AAXD,IAWC"}

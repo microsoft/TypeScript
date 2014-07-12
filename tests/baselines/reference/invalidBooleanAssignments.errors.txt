@@ -1,0 +1,49 @@
+==== tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts (10 errors) ====
+    var x = true;
+    
+    var a: number = x;
+        ~~~~~~~~~~~~~
+!!! Type 'boolean' is not assignable to type 'number'.
+    var b: string = x;
+        ~~~~~~~~~~~~~
+!!! Type 'boolean' is not assignable to type 'string'.
+    var c: void = x;
+        ~~~~~~~~~~~
+!!! Type 'boolean' is not assignable to type 'void'.
+    var d: typeof undefined = x;
+    
+    enum E { A }
+    var e: E = x;
+        ~~~~~~~~
+!!! Type 'boolean' is not assignable to type 'E'.
+    
+    class C { foo: string }
+    var f: C = x;
+        ~~~~~~~~
+!!! Type 'boolean' is not assignable to type 'C':
+!!!   Property 'foo' is missing in type 'Boolean'.
+    
+    interface I { bar: string }
+    var g: I = x;
+        ~~~~~~~~
+!!! Type 'boolean' is not assignable to type 'I':
+!!!   Property 'bar' is missing in type 'Boolean'.
+    
+    var h: { (): string } = x;
+        ~~~~~~~~~~~~~~~~~~~~~
+!!! Type 'boolean' is not assignable to type '() => string'.
+    var h2: { toString(): string } = x; // no error
+    
+    module M { export var a = 1; }
+    M = x;
+    ~
+!!! Invalid left-hand side of assignment expression.
+    
+    function i<T>(a: T) {
+        a = x;
+        ~
+!!! Type 'boolean' is not assignable to type 'T'.
+    }
+    i = x;
+    ~
+!!! Invalid left-hand side of assignment expression.

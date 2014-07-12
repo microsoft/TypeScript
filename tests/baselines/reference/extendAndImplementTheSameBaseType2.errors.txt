@@ -1,0 +1,26 @@
+==== tests/cases/compiler/extendAndImplementTheSameBaseType2.ts (3 errors) ====
+    class C<T> {
+        foo: number
+        bar(): T {
+            return null;
+        }
+    }
+    class D extends C<string> implements C<number> {
+          ~
+!!! Class 'D' incorrectly implements interface 'C<number>':
+!!!   Types of property 'bar' are incompatible:
+!!!     Type '() => string' is not assignable to type '() => number':
+!!!       Type 'string' is not assignable to type 'number'.
+        baz() { }
+    }
+    
+    var d: D = new D();
+    var r: string = d.foo;
+        ~~~~~~~~~~~~~~~~~
+!!! Type 'number' is not assignable to type 'string'.
+    var r2: number = d.foo;
+    
+    var r3: string = d.bar();
+    var r4: number = d.bar();
+        ~~~~~~~~~~~~~~~~~~~~
+!!! Type 'string' is not assignable to type 'number'.

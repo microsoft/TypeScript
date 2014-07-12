@@ -1,0 +1,10 @@
+==== tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens17.ts (4 errors) ====
+    foo(a, \
+           
+!!! Invalid character.
+            
+!!! ')' expected.
+    ~~~
+!!! Cannot find name 'foo'.
+        ~
+!!! Cannot find name 'a'.

@@ -1,0 +1,11 @@
+==== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration3.ts (4 errors) ====
+    class C implements A extends B {
+                         ~~~~~~~
+!!! '{' expected.
+                                   ~
+!!! ';' expected.
+                       ~
+!!! Cannot find name 'A'.
+                                 ~
+!!! Cannot find name 'B'.
+    }

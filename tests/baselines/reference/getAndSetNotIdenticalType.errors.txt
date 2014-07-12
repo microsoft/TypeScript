@@ -1,0 +1,17 @@
+==== tests/cases/compiler/getAndSetNotIdenticalType.ts (4 errors) ====
+    class C {
+        get x(): number {
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+        ~~~~~~~~~~~~~~~~~
+            return 1;
+    ~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+!!! 'get' and 'set' accessor must have the same type.
+        set x(v: string) { }
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+        ~~~~~~~~~~~~~~~~~~~~
+!!! 'get' and 'set' accessor must have the same type.
+    }

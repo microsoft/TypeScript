@@ -1,0 +1,60 @@
+==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingPublicInstance.ts (13 errors) ====
+    class Base {
+        public x: string;
+        public fn(): string {
+            return '';
+        }
+    
+        public get a() { return 1; }
+                   ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+        public set a(v) { }
+                   ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+    }
+    
+    // error, not a subtype
+    class Derived extends Base {
+          ~~~~~~~
+!!! Class 'Derived' incorrectly extends base class 'Base':
+!!!   Private property 'x' cannot be reimplemented.
+        private x: string; 
+        private fn(): string {
+            return '';
+        }
+    
+        private get a() { return 1; }
+                    ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+        private set a(v) { }
+                    ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+    }
+    
+    var r = Base.x; // ok
+                 ~
+!!! Property 'x' does not exist on type 'typeof Base'.
+    var r2 = Derived.x; // error
+                     ~
+!!! Property 'x' does not exist on type 'typeof Derived'.
+    
+    var r3 = Base.fn(); // ok
+                  ~~
+!!! Property 'fn' does not exist on type 'typeof Base'.
+    var r4 = Derived.fn(); // error
+                     ~~
+!!! Property 'fn' does not exist on type 'typeof Derived'.
+    
+    var r5 = Base.a; // ok
+                  ~
+!!! Property 'a' does not exist on type 'typeof Base'.
+    Base.a = 2; // ok
+         ~
+!!! Property 'a' does not exist on type 'typeof Base'.
+    
+    var r6 = Derived.a; // error
+                     ~
+!!! Property 'a' does not exist on type 'typeof Derived'.
+    Derived.a = 2; // error
+            ~
+!!! Property 'a' does not exist on type 'typeof Derived'.

@@ -1,0 +1,20 @@
+{
+    "scenario": "outputdir_simple: no outdir",
+    "projectRoot": "tests/cases/projects/outputdir_simple",
+    "inputFiles": [
+        "test.ts"
+    ],
+    "declaration": true,
+    "baselineCheck": true,
+    "resolvedInputFiles": [
+        "test.ts",
+        "m1.ts",
+        "lib.d.ts"
+    ],
+    "emittedFiles": [
+        "m1.js",
+        "m1.d.ts",
+        "test.js",
+        "test.d.ts"
+    ]
+}

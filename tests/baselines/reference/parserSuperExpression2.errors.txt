@@ -1,0 +1,10 @@
+==== tests/cases/conformance/parser/ecmascript5/SuperExpressions/parserSuperExpression2.ts (2 errors) ====
+    class C {
+      M() {
+        super<T>(0);
+             ~
+!!! 'super' must be followed by argument list or member access.
+        ~~~~~
+!!! 'super' can only be referenced in a derived class.
+      }
+    }

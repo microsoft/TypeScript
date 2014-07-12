@@ -1,0 +1,20 @@
+==== tests/cases/conformance/classes/indexMemberDeclarations/staticIndexers.ts (3 errors) ====
+    // static indexers not allowed
+    
+    class C {
+        static [x: string]: string;
+        ~~~~~~
+!!! Modifiers not permitted on index signature members.
+    }
+    
+    class D {
+        static [x: number]: string;
+        ~~~~~~
+!!! Modifiers not permitted on index signature members.
+    }
+    
+    class E<T> {
+        static [x: string]: T;
+        ~~~~~~
+!!! Modifiers not permitted on index signature members.
+    }

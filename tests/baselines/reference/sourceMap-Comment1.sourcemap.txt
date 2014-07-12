@@ -1,0 +1,7 @@
+===================================================================
+JsFile: sourceMap-Comment1.js
+mapUrl: sourceMap-Comment1.js.map
+sourceRoot: 
+sources: sourceMap-Comment1.ts
+===================================================================
+>>>//# sourceMappingURL=sourceMap-Comment1.js.map

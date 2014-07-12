@@ -1,0 +1,20 @@
+{
+    "scenario": "declarations_CascadingImports",
+    "projectRoot": "tests/cases/projects/declarations_CascadingImports",
+    "inputFiles": [
+        "useModule.ts"
+    ],
+    "declaration": true,
+    "baselineCheck": true,
+    "resolvedInputFiles": [
+        "useModule.ts",
+        "m4.ts",
+        "lib.d.ts"
+    ],
+    "emittedFiles": [
+        "m4.js",
+        "m4.d.ts",
+        "useModule.js",
+        "useModule.d.ts"
+    ]
+}

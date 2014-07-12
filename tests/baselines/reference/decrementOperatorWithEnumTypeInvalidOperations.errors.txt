@@ -1,0 +1,43 @@
+==== tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumTypeInvalidOperations.ts (10 errors) ====
+    // -- operator on enum type
+    
+    enum ENUM { };
+    enum ENUM1 { 1, 2, "" };
+    
+    // enum type var
+    var ResultIsNumber1 = --ENUM;
+                            ~~~~
+!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+    var ResultIsNumber2 = --ENUM1;
+                            ~~~~~
+!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+    
+    var ResultIsNumber3 = ENUM--;
+                          ~~~~
+!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+    var ResultIsNumber4 = ENUM1--;
+                          ~~~~~
+!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+    
+    // enum type expressions
+    var ResultIsNumber5 = --(ENUM[1] + ENUM[2]);
+                            ~~~~~~~~~~~~~~~~~~~
+!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+    var ResultIsNumber6 = (ENUM[1] + ENUM[2])--;
+                          ~~~~~~~~~~~~~~~~~~~
+!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+    
+    // miss assignment operator
+    --ENUM;
+      ~~~~
+!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+    --ENUM1;
+      ~~~~~
+!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+    
+    ENUM--;
+    ~~~~
+!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+    ENUM1--;
+    ~~~~~
+!!! An arithmetic operand must be of type 'any', 'number' or an enum type.

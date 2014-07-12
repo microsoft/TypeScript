@@ -1,0 +1,34 @@
+﻿<html>
+<head>
+  <meta charset="utf-8">
+  <title>Mocha Tests</title>
+  <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
+</head>
+<body>
+  <div id='setup'>   
+    <div>
+      <button id='selectCompilerBtn' onclick='location.href="http://localhost:8888/tests/webTestResults.html?grep=compiler"'>Select Compiler Tests</button>  
+      <button id='selectFourslashBtn' onclick='location.href="http://localhost:8888/tests/webTestResults.html?grep=fourslash"'>Select Fourslash Tests</button>  
+    </div>
+    <button id='runTestBtn' onclick='runTests()'>Run Tests</button>  
+  </div>
+  
+  <div id="mocha"></div>
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.0.js"></script>
+  <script src="../node_modules/mocha/mocha.js"></script>
+  <script>mocha.setup('bdd')</script>
+  <script src="../built/local/bundle.js"></script>
+  
+  <script>
+    // mocha is going to call this on every test result and make the results page unusable for a long
+    // time after the tests are already done, doesn't seem necessary
+    Mocha.utils.highlightTags = function() {}
+
+    function runTests() {
+      mocha.checkLeaks();
+      mocha.globals(['jQuery']);
+      mocha.run();
+    }
+  </script>
+</body>
+</html>

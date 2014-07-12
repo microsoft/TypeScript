@@ -1,0 +1,4 @@
+==== tests/cases/compiler/functionCall15.ts (1 errors) ====
+    function foo(a?:string, b?:number, ...b:number[]){}
+                                          ~
+!!! Duplicate identifier 'b'.

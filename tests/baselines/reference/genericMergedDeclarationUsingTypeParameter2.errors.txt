@@ -1,0 +1,11 @@
+==== tests/cases/compiler/genericMergedDeclarationUsingTypeParameter2.ts (2 errors) ====
+    class foo<T> { constructor(x: T) { } }
+    module foo {
+        export var x: T;
+                      ~
+!!! Cannot find name 'T'.
+        var y = <T>1;
+                 ~
+!!! Cannot find name 'T'.
+    }
+    

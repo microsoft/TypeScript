@@ -1,0 +1,20 @@
+==== tests/cases/conformance/types/namedTypes/classWithOptionalParameter.ts (4 errors) ====
+    // classes do not permit optional parameters, these are errors
+    
+    class C {
+        x?: string;
+         ~
+!!! A class member cannot be declared optional.
+        f?() {}
+         ~
+!!! A class member cannot be declared optional.
+    }
+    
+    class C2<T> {
+        x?: T;
+         ~
+!!! A class member cannot be declared optional.
+        f?(x: T) {}
+         ~
+!!! A class member cannot be declared optional.
+    }

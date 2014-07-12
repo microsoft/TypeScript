@@ -1,0 +1,44 @@
+==== tests/cases/conformance/expressions/valuesAndReferences/assignments.ts (6 errors) ====
+    // In this file:
+    //  Assign to a module
+    //  Assign to a class
+    //  Assign to an enum
+    //  Assign to a function
+    //  Assign to a variable
+    //  Assign to a parameter
+    //  Assign to an interface
+    
+    module M { }
+    M = null; // Error
+    ~
+!!! Cannot find name 'M'.
+    
+    class C { }
+    C = null; // Error
+    ~
+!!! Invalid left-hand side of assignment expression.
+    
+    enum E { A }
+    E = null; // Error
+    ~
+!!! Invalid left-hand side of assignment expression.
+    E.A = null; // OK per spec, Error per implementation (509581)
+    ~~~
+!!! Invalid left-hand side of assignment expression.
+    
+    function fn() { }
+    fn = null; // Should be error
+    ~~
+!!! Invalid left-hand side of assignment expression.
+    
+    var v;
+    v = null; // OK
+    
+    function fn2(p) {
+        p = null; // OK
+    }
+    
+    interface I { }
+    I = null; // Error
+    ~
+!!! Cannot find name 'I'.

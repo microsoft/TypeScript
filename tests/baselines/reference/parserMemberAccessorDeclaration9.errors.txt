@@ -1,0 +1,8 @@
+==== tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration9.ts (2 errors) ====
+    class C {
+        static public get Foo() { }
+               ~~~~~~
+!!! 'public' modifier must precede 'static' modifier.
+                          ~~~
+!!! Getters must return a value.
+    }

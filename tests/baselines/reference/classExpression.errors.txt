@@ -1,0 +1,27 @@
+==== tests/cases/conformance/classes/classExpression.ts (7 errors) ====
+    var x = class C {
+            ~~~~~
+!!! Expression expected.
+    }
+    
+    var y = {
+        foo: class C2 {
+             ~~~~~
+!!! Expression expected.
+                   ~~
+!!! ':' expected.
+                      ~
+!!! ',' expected.
+                   ~~
+!!! Cannot find name 'C2'.
+        }
+    }
+    ~
+!!! Declaration or statement expected.
+    
+    module M {
+        var z = class C4 {
+                ~~~~~
+!!! Expression expected.
+        }
+    }

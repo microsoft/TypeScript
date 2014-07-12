@@ -1,0 +1,7 @@
+==== tests/cases/conformance/parser/ecmascript5/Statements/parserForInStatement2.ts (2 errors) ====
+    for (var in X) {
+             ~~
+!!! Variable declaration list cannot be empty.
+                ~
+!!! Cannot find name 'X'.
+    }

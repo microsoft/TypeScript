@@ -1,0 +1,31 @@
+==== tests/cases/conformance/types/primitives/number/assignFromNumberInterface2.ts (2 errors) ====
+    interface Number {
+        doStuff(): string;
+    }
+    
+    interface NotNumber {
+        toString(radix?: number): string;
+        toFixed(fractionDigits?: number): string;
+        toExponential(fractionDigits?: number): string;
+        toPrecision(precision?: number): string;
+        doStuff(): string;
+    }
+    
+    var x = 1;
+    var a: Number;
+    var b: NotNumber;
+    
+    a = x; 
+    a = b; 
+    
+    b = a; 
+    b = x; 
+    
+    x = a; // expected error
+    ~
+!!! Type 'Number' is not assignable to type 'number'.
+    x = b; // expected error
+    ~
+!!! Type 'NotNumber' is not assignable to type 'number'.
+    
+    

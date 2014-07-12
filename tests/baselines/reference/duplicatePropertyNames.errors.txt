@@ -1,0 +1,69 @@
+==== tests/cases/conformance/types/members/duplicatePropertyNames.ts (10 errors) ====
+    // duplicate property names are an error in all types
+    
+    interface Number {
+        foo: string;
+        foo: string;
+        ~~~
+!!! Duplicate identifier 'foo'.
+    }
+    
+    interface String {
+        foo(): string;
+        foo(): string;
+    }
+    
+    interface Array<T> {
+        foo: T;
+        foo: T;
+        ~~~
+!!! Duplicate identifier 'foo'.
+    }
+    
+    class C {
+        foo: string;
+        foo: string;
+        ~~~
+!!! Duplicate identifier 'foo'.
+    
+        bar(x) { }
+        bar(x) { }
+        ~~~~~~~~~~
+!!! Duplicate function implementation.
+    
+        baz = () => { }
+        baz = () => { }
+        ~~~
+!!! Duplicate identifier 'baz'.
+    }
+    
+    interface I {
+        foo: string;
+        foo: string;
+        ~~~
+!!! Duplicate identifier 'foo'.
+    }
+    
+    var a: {
+        foo: string;
+        foo: string;
+        ~~~
+!!! Duplicate identifier 'foo'.
+    
+        bar: () => {};
+        bar: () => {};
+        ~~~
+!!! Duplicate identifier 'bar'.
+    }
+    
+    var b = {
+        foo: '',
+        foo: '',
+        ~~~
+!!! Duplicate identifier 'foo'.
+        bar: () => { },
+        bar: () => { }
+        ~~~
+!!! Duplicate identifier 'bar'.
+    }
+    

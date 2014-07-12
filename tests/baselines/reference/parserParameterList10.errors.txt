@@ -1,0 +1,8 @@
+==== tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList10.ts (2 errors) ====
+    class C {
+       foo(...bar = 0) { }
+              ~~~
+!!! A rest parameter cannot have an initializer.
+           ~~~~~~~~~~
+!!! A rest parameter must be of an array type.
+    }

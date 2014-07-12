@@ -1,0 +1,19 @@
+==== tests/cases/compiler/staticClassMemberError.ts (3 errors) ====
+    class C {
+    	static s;
+    	public a() {
+    		s = 1;
+    		~
+!!! Cannot find name 's'.
+    	}
+    }
+    
+    // just want to make sure this one doesn't crash the compiler
+    function Foo();
+    ~~~~~~~~~~~~~~~
+!!! Function implementation expected.
+    class Foo {
+          ~~~
+!!! Duplicate identifier 'Foo'.
+     static bar;
+    }

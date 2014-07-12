@@ -1,0 +1,45 @@
+==== tests/cases/compiler/aliasErrors.ts (7 errors) ====
+    module foo {    
+        export class Provide {
+        }
+        export module bar { export module baz {export class boo {}}}
+    }
+    
+    import provide = foo;
+    import booz = foo.bar.baz;
+    import beez = foo.bar;
+    
+    import m = no;
+    ~~~~~~~~~~~~~~
+!!! Cannot find name 'no'.
+    import m2 = no.mod;
+    ~~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'no'.
+    import n = 5;
+               ~
+!!! Identifier expected.
+    import o = "s";
+               ~~~
+!!! Identifier expected.
+    import q = null;
+               ~~~~
+!!! Identifier expected.
+    import r = undefined;
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'undefined'.
+    
+    
+    var p = new provide.Provide();
+    
+    function use() {
+        
+      beez.baz.boo;
+      var p1: provide.Provide; 
+      var p2: foo.Provide;
+      var p3:booz.bar;
+             ~~~~~~~~
+!!! Module 'foo.bar.baz' has no exported member 'bar'.
+      var p22 = new provide.Provide();
+    }
+    
+    

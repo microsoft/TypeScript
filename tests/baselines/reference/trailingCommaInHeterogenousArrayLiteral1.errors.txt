@@ -1,0 +1,14 @@
+==== tests/cases/compiler/trailingCommaInHeterogenousArrayLiteral1.ts (2 errors) ====
+    class arrTest {
+        test(arg1: number[]) {    }
+        callTest() {
+            // these two should give the same error
+            this.test([1, 2, "hi", 5, ]);
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+            this.test([1, 2, "hi", 5]); 
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+        }
+    }
+    

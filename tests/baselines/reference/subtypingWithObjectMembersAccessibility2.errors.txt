@@ -1,0 +1,80 @@
+==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility2.ts (6 errors) ====
+    // Derived member is private, base member is not causes errors
+    
+    class Base {
+        foo: string;
+    }
+    
+    class Derived extends Base {
+        bar: string;
+    }
+    
+    module ExplicitPublic {
+        class A {
+            private foo: Base;
+        }
+    
+        class B extends A {
+              ~
+!!! Class 'B' incorrectly extends base class 'A':
+!!!   Private property 'foo' cannot be reimplemented.
+            public foo: Derived; // error
+        }
+    
+        class A2 {
+            private 1: Base;
+        }
+    
+        class B2 extends A2 {
+              ~~
+!!! Class 'B2' incorrectly extends base class 'A2':
+!!!   Private property '1' cannot be reimplemented.
+            public 1: Derived; // error
+        }
+    
+        class A3 {
+            private '1': Base;
+        }
+    
+        class B3 extends A3 {
+              ~~
+!!! Class 'B3' incorrectly extends base class 'A3':
+!!!   Private property ''1'' cannot be reimplemented.
+            public '1': Derived; // error
+        }
+    }
+    
+    module ImplicitPublic {
+        class A {
+            private foo: Base;
+        }
+    
+        class B extends A {
+              ~
+!!! Class 'B' incorrectly extends base class 'A':
+!!!   Private property 'foo' cannot be reimplemented.
+            foo: Derived; // error
+        }
+    
+        class A2 {
+            private 1: Base;
+        }
+    
+        class B2 extends A2 {
+              ~~
+!!! Class 'B2' incorrectly extends base class 'A2':
+!!!   Private property '1' cannot be reimplemented.
+            1: Derived; // error
+        }
+    
+        class A3 {
+            private '1': Base;
+        }
+    
+        class B3 extends A3 {
+              ~~
+!!! Class 'B3' incorrectly extends base class 'A3':
+!!!   Private property ''1'' cannot be reimplemented.
+            '1': Derived; // error
+        }
+    }

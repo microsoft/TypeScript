@@ -1,0 +1,18 @@
+==== tests/cases/compiler/overloadOnConstInheritance3.ts (3 errors) ====
+    interface Base {
+        addEventListener(x: string): any;
+    }
+    interface Deriver extends Base {
+              ~~~~~~~
+!!! Interface 'Deriver' incorrectly extends interface 'Base':
+!!!   Types of property 'addEventListener' are incompatible:
+!!!     Type '{ (x: 'bar'): string; (x: 'foo'): string; }' is not assignable to type '(x: string) => any'.
+        // shouldn't need to redeclare the string overload
+        addEventListener(x: 'bar'): string;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Specialized overload signature is not assignable to any non-specialized signature.
+        addEventListener(x: 'foo'): string;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Specialized overload signature is not assignable to any non-specialized signature.
+    }
+    

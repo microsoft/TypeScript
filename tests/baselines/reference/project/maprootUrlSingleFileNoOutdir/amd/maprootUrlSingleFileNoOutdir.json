@@ -1,0 +1,20 @@
+{
+    "scenario": "[Sourcemap]/[Maproot-Url]: outputdir_singleFile: no outdir",
+    "projectRoot": "tests/cases/projects/outputdir_singleFile",
+    "inputFiles": [
+        "test.ts"
+    ],
+    "sourceMap": true,
+    "mapRoot": "http://www.typescriptlang.org/",
+    "declaration": true,
+    "baselineCheck": true,
+    "resolvedInputFiles": [
+        "test.ts",
+        "lib.d.ts"
+    ],
+    "emittedFiles": [
+        "test.js.map",
+        "test.js",
+        "test.d.ts"
+    ]
+}

@@ -1,0 +1,35 @@
+==== tests/cases/compiler/collisionSuperAndLocalFunctionInMethod.ts (2 errors) ====
+    function _super() { // No error
+    } 
+    class Foo {
+        x() {
+            function _super() { // No error
+            } 
+        }
+        _super() { // No error
+        }
+    }
+    class b extends Foo {
+        public foo() {
+            function _super() { // should be error
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            } 
+    ~~~~~~~~~
+!!! Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+        }
+        _super() { // No Error
+        }
+    }
+    class c extends Foo {
+        public foo() {
+            var x = () => {
+                function _super() { // should be error
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                } 
+    ~~~~~~~~~~~~~
+!!! Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+            }
+        }
+        _super() { // No error
+        }
+    }

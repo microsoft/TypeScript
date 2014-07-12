@@ -1,0 +1,16 @@
+==== tests/cases/compiler/assignToEnum.ts (4 errors) ====
+    enum A { foo, bar }
+    A = undefined;  // invalid LHS
+    ~
+!!! Invalid left-hand side of assignment expression.
+    A = A.bar;      // invalid LHS
+    ~
+!!! Invalid left-hand side of assignment expression.
+    A.foo = 1;      // invalid LHS
+    ~~~~~
+!!! Invalid left-hand side of assignment expression.
+    A.foo = A.bar;  // invalid LHS
+    ~~~~~
+!!! Invalid left-hand side of assignment expression.
+    
+    

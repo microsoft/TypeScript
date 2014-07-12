@@ -1,0 +1,40 @@
+==== tests/cases/compiler/exportAlreadySeen.ts (10 errors) ====
+    module M {
+        export export var x = 1;
+               ~~~~~~
+!!! 'export' modifier already seen.
+        export export function f() { }
+               ~~~~~~
+!!! 'export' modifier already seen.
+    
+        export export module N {
+               ~~~~~~
+!!! 'export' modifier already seen.
+            export export class C { }
+                   ~~~~~~
+!!! 'export' modifier already seen.
+            export export interface I { }
+                   ~~~~~~
+!!! 'export' modifier already seen.
+        }  
+    }
+    
+    declare module A {
+        export export var x;
+               ~~~~~~
+!!! 'export' modifier already seen.
+        export export function f()
+               ~~~~~~
+!!! 'export' modifier already seen.
+    
+        export export module N {
+               ~~~~~~
+!!! 'export' modifier already seen.
+            export export class C { }
+                   ~~~~~~
+!!! 'export' modifier already seen.
+            export export interface I { }
+                   ~~~~~~
+!!! 'export' modifier already seen.
+        }
+    }

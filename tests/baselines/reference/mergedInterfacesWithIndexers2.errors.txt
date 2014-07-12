@@ -1,0 +1,29 @@
+==== tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithIndexers2.ts (3 errors) ====
+    // indexers should behave like other members when merging interface declarations
+    
+    interface A {
+        [x: number]: string; // error
+        ~~~~~~~~~~~~~~~~~~~~
+!!! Numeric index type 'string' is not assignable to string index type '{ length: string; }'.
+    }
+    
+    
+    interface A {
+        [x: string]: { length: string }; // error
+    }
+    
+    interface A2 {
+        [x: number]: string;
+        'a': number; //error
+        ~~~~~~~~~~~~
+!!! Property ''a'' of type 'number' is not assignable to string index type '{ length: number; }'.
+    }
+    
+    
+    interface A2 {
+        [x: string]: { length: number };
+        1: { length: number }; // error
+        ~~~~~~~~~~~~~~~~~~~~~~
+!!! Property '1' of type '{ length: number; }' is not assignable to numeric index type 'string'.
+    }
+    

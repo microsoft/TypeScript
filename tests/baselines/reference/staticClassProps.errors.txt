@@ -1,0 +1,13 @@
+==== tests/cases/compiler/staticClassProps.ts (2 errors) ====
+    class C
+    {
+        public foo() {
+            static z = 1;
+            ~~~~~~
+!!! Statement expected.
+        }
+    }
+    ~
+!!! Declaration or statement expected.
+    
+    

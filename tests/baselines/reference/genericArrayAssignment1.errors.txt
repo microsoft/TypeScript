@@ -1,0 +1,8 @@
+==== tests/cases/compiler/genericArrayAssignment1.ts (1 errors) ====
+    var s: string[];
+    var n: number[];
+    
+    s = n;
+    ~
+!!! Type 'number[]' is not assignable to type 'string[]':
+!!!   Type 'number' is not assignable to type 'string'.

@@ -1,0 +1,24 @@
+==== tests/cases/compiler/varAsID.ts (2 errors) ====
+    
+    class Foo {
+        var; // ok
+        x=1;
+    }
+    
+    var f = new Foo();
+    
+    
+    class Foo2 {
+        var // not an error, because of ASI.
+        ~~~
+!!! Unexpected token. A constructor, method, accessor, or property was expected.
+        x=1;
+    }
+    ~
+!!! Declaration or statement expected.
+    
+    var f2 = new Foo2();
+    
+    
+    
+    

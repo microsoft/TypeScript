@@ -1,0 +1,7 @@
+==== tests/cases/compiler/ClassDeclaration22.ts (1 errors) ====
+    class C {
+        "foo"();
+        ~~~~~~~~
+!!! Function implementation expected.
+        "bar"() { }
+    }

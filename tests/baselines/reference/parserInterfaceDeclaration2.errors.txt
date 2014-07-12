@@ -1,0 +1,13 @@
+==== tests/cases/conformance/parser/ecmascript5/InterfaceDeclarations/parserInterfaceDeclaration2.ts (5 errors) ====
+    interface I implements A {
+                ~~~~~~~~~~
+!!! '{' expected.
+                           ~
+!!! ';' expected.
+                             ~
+!!! ';' expected.
+                ~~~~~~~~~~
+!!! Cannot find name 'implements'.
+                           ~
+!!! Cannot find name 'A'.
+    }

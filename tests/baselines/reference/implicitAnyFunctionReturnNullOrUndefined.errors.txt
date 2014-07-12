@@ -1,0 +1,37 @@
+==== tests/cases/compiler/implicitAnyFunctionReturnNullOrUndefined.ts (4 errors) ====
+    // this should be an error
+    function nullWidenFunction() { return null;}             // error at "nullWidenFunction"
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! 'nullWidenFunction', which lacks return-type annotation, implicitly has an 'any' return type.
+    function undefinedWidenFunction() { return undefined; }  // error at "undefinedWidenFunction"
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! 'undefinedWidenFunction', which lacks return-type annotation, implicitly has an 'any' return type.
+    
+    class C {
+        nullWidenFuncOfC() {  // error at "nullWidenFuncOfC"
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            return null;
+    ~~~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+!!! 'nullWidenFuncOfC', which lacks return-type annotation, implicitly has an 'any' return type.
+    
+        underfinedWidenFuncOfC() {  // error at "underfinedWidenFuncOfC"
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            return undefined;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+!!! 'underfinedWidenFuncOfC', which lacks return-type annotation, implicitly has an 'any' return type.
+    }
+    
+    // this should not be an error
+    function foo1(): any { return null; }
+    function bar1(): any { return undefined; }
+    function fooBar(): number { return 1; }
+    function fooFoo() { return 5; }
+    
+    // this should not be an error as the error is raised by expr above
+    nullWidenFunction();
+    undefinedWidenFunction();
+    

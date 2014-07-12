@@ -1,0 +1,7 @@
+==== tests/cases/compiler/duplicateStringNamedProperty1.ts (1 errors) ====
+    export interface Album {
+        "artist": string;
+        artist: string;
+        ~~~~~~
+!!! Duplicate identifier 'artist'.
+    }

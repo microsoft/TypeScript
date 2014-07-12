@@ -1,0 +1,22 @@
+==== tests/cases/compiler/collisionSuperAndLocalFunctionInProperty.ts (1 errors) ====
+    function _super() { // No error
+    } 
+    class Foo {
+       public prop1 = {
+            doStuff: () => {
+                function _super() { // No error
+                } 
+            }
+       }
+    }
+    class b extends Foo {
+        public prop2 = {
+            doStuff: () => {
+                function _super() { // error
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                } 
+    ~~~~~~~~~~~~~
+!!! Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+            }
+        }
+    }

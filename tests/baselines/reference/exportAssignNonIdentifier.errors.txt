@@ -1,0 +1,44 @@
+==== tests/cases/conformance/externalModules/foo1.ts (2 errors) ====
+    var x = 10;
+    export = typeof x; // Error
+             ~~~~~~
+!!! Identifier expected.
+    ~~~~~~~~
+!!! Cannot compile external modules unless the '--module' flag is provided.
+    
+==== tests/cases/conformance/externalModules/foo2.ts (1 errors) ====
+    export = "sausages"; // Error
+             ~~~~~~~~~~
+!!! Identifier expected.
+    
+==== tests/cases/conformance/externalModules/foo3.ts (1 errors) ====
+    export = class Foo3 {}; // Error
+             ~~~~~
+!!! Identifier expected.
+    
+==== tests/cases/conformance/externalModules/foo4.ts (1 errors) ====
+    export = true; // Error
+             ~~~~
+!!! Identifier expected.
+    
+==== tests/cases/conformance/externalModules/foo5.ts (0 errors) ====
+    export = undefined; // Valid.  undefined is an identifier in JavaScript/TypeScript
+    
+==== tests/cases/conformance/externalModules/foo6.ts (2 errors) ====
+    export = void; // Error
+             ~~~~
+!!! Identifier expected.
+                 ~
+!!! Expression expected.
+    
+==== tests/cases/conformance/externalModules/foo7.ts (1 errors) ====
+    export = Date || String; // Error
+                  ~~
+!!! ';' expected.
+    
+==== tests/cases/conformance/externalModules/foo8.ts (1 errors) ====
+    export = null; // Error
+             ~~~~
+!!! Identifier expected.
+    
+    

@@ -1,0 +1,18 @@
+==== tests/cases/compiler/inheritanceMemberPropertyOverridingAccessor.ts (2 errors) ====
+    class a {
+        private __x: () => string;
+        get x() {
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            return this.__x;
+        }
+        set x(aValue: () => string) {
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            this.__x = aValue;
+        }
+    }
+    
+    class b extends a {
+        x: () => string;
+    }

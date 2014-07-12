@@ -1,0 +1,56 @@
+==== tests/cases/compiler/ambientWithStatements.ts (14 errors) ====
+    declare module M {
+        break;
+        ~~~~~
+!!! Statements are not allowed in ambient contexts.
+        continue;
+        ~~~~~~~~
+!!! Statements are not allowed in ambient contexts.
+        debugger;
+        ~~~~~~~~
+!!! Statements are not allowed in ambient contexts.
+        do { } while (true);
+        ~~
+!!! Statements are not allowed in ambient contexts.
+        var x;
+        for (x in null) { }
+        ~~~
+!!! Statements are not allowed in ambient contexts.
+                  ~~~~
+!!! The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+        if (true) { } else { }
+        ~~
+!!! Statements are not allowed in ambient contexts.
+        1;
+        ~
+!!! Statements are not allowed in ambient contexts.
+        L: var y;
+        ~
+!!! Statements are not allowed in ambient contexts.
+        return;
+        ~~~~~~
+!!! Statements are not allowed in ambient contexts.
+        switch (x) {
+        ~~~~~~
+!!! Statements are not allowed in ambient contexts.
+            case 1:
+                break;
+            default:
+                break;
+        }
+        throw "nooo";
+        ~~~~~
+!!! Statements are not allowed in ambient contexts.
+        try {
+        ~~~
+!!! Statements are not allowed in ambient contexts.
+        }
+        catch (e) {
+        }
+        finally {
+        }
+        with (x) {
+        ~~~~
+!!! Statements are not allowed in ambient contexts.
+        }
+    }

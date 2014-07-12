@@ -1,0 +1,18 @@
+==== tests/cases/conformance/internalModules/exportDeclarations/ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts (3 errors) ====
+    module A {
+    
+        class Point {
+            constructor(public x: number, public y: number) { }
+        }
+    
+        export var UnitSquare : {
+            top: { left: Point, right: Point },
+                              ~
+!!! ';' expected.
+                                              ~
+!!! ';' expected.
+            bottom: { left: Point, right: Point }
+                                 ~
+!!! ';' expected.
+        } = null;
+    }

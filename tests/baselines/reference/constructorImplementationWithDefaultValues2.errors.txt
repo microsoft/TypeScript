@@ -1,0 +1,29 @@
+==== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues2.ts (4 errors) ====
+    class C {
+        constructor(x);
+        constructor(public x: string = 1) { // error
+                    ~~~~~~~~~~~~~~~~~~~~
+!!! Type 'number' is not assignable to type 'string'.
+            var y = x;
+        }
+    }
+    
+    class D<T, U> {
+        constructor(x: T, y: U);
+        constructor(x: T = 1, public y: U = x) { // error
+                    ~~~~~~~~
+!!! Type 'number' is not assignable to type 'T'.
+                              ~~~~~~~~~~~~~~~
+!!! Type 'T' is not assignable to type 'U'.
+            var z = x;
+        }
+    }
+    
+    class E<T extends Date> {
+        constructor(x);
+        constructor(x: T = new Date()) { // error
+                    ~~~~~~~~~~~~~~~~~
+!!! Type 'Date' is not assignable to type 'T'.
+            var y = x;
+        }
+    }

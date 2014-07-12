@@ -1,0 +1,7 @@
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral2.ts (2 errors) ====
+    var v = { a
+    return;
+    ~~~~~~
+!!! ':' expected.
+          ~
+!!! ':' expected.

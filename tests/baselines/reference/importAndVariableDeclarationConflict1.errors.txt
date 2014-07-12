@@ -1,0 +1,10 @@
+==== tests/cases/compiler/importAndVariableDeclarationConflict1.ts (1 errors) ====
+    module m {
+      export var m = '';
+    }
+    
+    import x = m.m;
+    ~~~~~~~~~~~~~~~
+!!! Import declaration conflicts with local declaration of 'x'
+    var x = '';
+    

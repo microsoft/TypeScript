@@ -1,0 +1,18 @@
+{
+    "scenario": "ext referencing ext and int",
+    "projectRoot": "tests/cases/projects/ext-int-ext",
+    "inputFiles": [
+        "external.ts"
+    ],
+    "resolvedInputFiles": [
+        "external.ts",
+        "internal.ts",
+        "external2.ts",
+        "lib.d.ts"
+    ],
+    "emittedFiles": [
+        "internal.js",
+        "external2.js",
+        "external.js"
+    ]
+}

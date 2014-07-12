@@ -1,0 +1,8 @@
+==== tests/cases/compiler/newNonReferenceType.ts (2 errors) ====
+    var a = new any();
+                ~~~
+!!! Cannot find name 'any'.
+    var b = new boolean(); // error
+                ~~~~~~~
+!!! Cannot find name 'boolean'.
+    

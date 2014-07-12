@@ -1,0 +1,36 @@
+==== tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionOverloadMixingStaticAndInstance.ts (8 errors) ====
+    class C {
+        foo();
+        ~~~~~~
+!!! Function implementation expected.
+        static foo(); // error
+        ~~~~~~~~~~~~~
+!!! Function implementation expected.
+    }
+    
+    class D {
+        static foo();
+        ~~~~~~~~~~~~~
+!!! Function implementation expected.
+        foo(); // error    
+        ~~~~~~
+!!! Function implementation expected.
+    }
+    
+    class E<T> {
+        foo(x: T);
+        ~~~~~~~~~~
+!!! Function implementation expected.
+        static foo(x: number); // error
+        ~~~~~~~~~~~~~~~~~~~~~~
+!!! Function implementation expected.
+    }
+    
+    class F<T> {
+        static foo(x: number);
+        ~~~~~~~~~~~~~~~~~~~~~~
+!!! Function implementation expected.
+        foo(x: T); // error    
+        ~~~~~~~~~~
+!!! Function implementation expected.
+    }

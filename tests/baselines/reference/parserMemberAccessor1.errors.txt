@@ -1,0 +1,7 @@
+==== tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessor1.ts (1 errors) ====
+    class C {
+      get foo() { }
+          ~~~
+!!! Getters must return a value.
+      set foo(a) { }
+    }

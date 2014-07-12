@@ -1,0 +1,15 @@
+==== tests/cases/compiler/parameterPropertyInConstructor2.ts (3 errors) ====
+    module mod {
+      class Customers {
+        constructor(public names: string);
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Overload signature is not compatible with function implementation.
+                    ~~~~~~~~~~~~~~~~~~~~
+!!! A parameter property is only allowed in a constructor implementation.
+        constructor(public names: string, public ages: number) {
+                           ~~~~~
+!!! Duplicate identifier 'names'.
+        }
+      }
+    }
+    

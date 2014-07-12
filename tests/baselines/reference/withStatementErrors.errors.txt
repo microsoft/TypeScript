@@ -1,0 +1,27 @@
+==== tests/cases/compiler/withStatementErrors.ts (4 errors) ====
+    declare var ooo:any;
+    
+    with (ooo.eee.oo.ah_ah.ting.tang.walla.walla) { // error
+        bing = true; // no error
+        ~~~~
+!!! Cannot find name 'bing'.
+        bang = true; // no error
+        ~~~~
+!!! Cannot find name 'bang'.
+        
+        function bar() {} // no error
+    
+        bar(); // no error
+    
+        class C {} // error   
+        ~~~~~
+!!! Statement expected.
+        
+        interface I {} // error
+        
+        module M {} // error
+            
+    }
+    ~
+!!! Declaration or statement expected.
+    

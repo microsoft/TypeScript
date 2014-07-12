@@ -1,0 +1,17 @@
+==== tests/cases/compiler/staticInstanceResolution5_1.ts (1 errors) ====
+    import WinJS = require('staticInstanceResolution5_0.ts');
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Cannot find external module 'staticInstanceResolution5_0.ts'.
+    
+    // these 3 should be errors
+    var x = (w1: WinJS) => { };
+    var y = function (w2: WinJS) { }
+    function z(w3: WinJS) { }
+    
+==== tests/cases/compiler/staticInstanceResolution5_0.ts (0 errors) ====
+    export class Promise {
+        static timeout(delay: number): Promise {
+            return null;
+        }
+    }
+    

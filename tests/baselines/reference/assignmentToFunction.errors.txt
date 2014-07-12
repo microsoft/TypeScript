@@ -1,0 +1,15 @@
+==== tests/cases/compiler/assignmentToFunction.ts (2 errors) ====
+    function fn() { }
+    fn = () => 3;
+    ~~
+!!! Invalid left-hand side of assignment expression.
+    
+    module foo {
+        function xyz() {
+            function bar() {
+            }
+            bar = null;
+            ~~~
+!!! Invalid left-hand side of assignment expression.
+        }
+    }

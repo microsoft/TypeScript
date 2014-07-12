@@ -1,0 +1,16 @@
+==== tests/cases/compiler/indexSignatureWithAccessibilityModifier.ts (4 errors) ====
+    interface I {
+        [public x: string]: string;
+                ~
+!!! An index signature parameter cannot have an accessibility modifier.
+         ~~~~~~~~~~~~~~~~
+!!! A parameter property is only allowed in a constructor implementation.
+    }
+    
+    class C {
+        [public x: string]: string
+                ~
+!!! An index signature parameter cannot have an accessibility modifier.
+         ~~~~~~~~~~~~~~~~
+!!! A parameter property is only allowed in a constructor implementation.
+    }

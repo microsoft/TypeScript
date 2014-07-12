@@ -1,0 +1,8 @@
+==== tests/cases/compiler/voidArrayLit.ts (1 errors) ====
+    var va = [(() => {})()]; // ok
+    (() => {})(); // ok
+    function foo(s:string) {}
+    foo((()=>{})()); // error
+    ~~~~~~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+    

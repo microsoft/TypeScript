@@ -1,0 +1,20 @@
+==== tests/cases/compiler/overloadOnConstantsInvalidOverload1.ts (3 errors) ====
+    class Base { foo() { } }
+    class Derived1 extends Base { bar() { } }
+    class Derived2 extends Base { baz() { } }
+    class Derived3 extends Base { biz() { } }
+    
+    function foo(name: "SPAN"): Derived1;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Specialized overload signature is not assignable to any non-specialized signature.
+    function foo(name: "DIV"): Derived2 {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        return null;
+    ~~~~~~~~~~~~~~~~
+    }
+    ~
+!!! A signature with an implementation cannot use a string literal type.
+    
+    foo("HI");
+    ~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.

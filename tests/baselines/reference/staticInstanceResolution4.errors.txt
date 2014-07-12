@@ -1,0 +1,8 @@
+==== tests/cases/compiler/staticInstanceResolution4.ts (1 errors) ====
+    class A {
+       public foo() {}
+    }
+    
+    A.foo();
+      ~~~
+!!! Property 'foo' does not exist on type 'typeof A'.

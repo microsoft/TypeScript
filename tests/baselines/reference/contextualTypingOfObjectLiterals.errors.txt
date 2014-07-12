@@ -1,0 +1,16 @@
+==== tests/cases/compiler/contextualTypingOfObjectLiterals.ts (2 errors) ====
+    var obj1: { [x: string]: string; };
+    var obj2 = {x: ""};
+    obj1 = {}; // Ok
+    obj1 = obj2; // Error - indexer doesn't match
+    ~~~~
+!!! Type '{ x: string; }' is not assignable to type '{ [x: string]: string; }':
+!!!   Index signature is missing in type '{ x: string; }'.
+    
+    function f(x: { [s: string]: string }) { }
+    
+    f({}); // Ok
+    f(obj1); // Ok
+    f(obj2); // Error - indexer doesn't match
+    ~~~~~~~
+!!! Supplied parameters do not match any signature of call target.

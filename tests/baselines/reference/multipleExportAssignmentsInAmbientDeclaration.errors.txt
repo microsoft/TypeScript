@@ -1,0 +1,11 @@
+==== tests/cases/compiler/multipleExportAssignmentsInAmbientDeclaration.ts (2 errors) ====
+    declare module "m1" {
+        var a: number
+        var b: number;
+        export = a;
+        ~~~~~~~~~~~
+!!! A module cannot have more than one export assignment.
+        export = b;
+        ~~~~~~~~~~~
+!!! A module cannot have more than one export assignment.
+    }

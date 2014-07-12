@@ -1,0 +1,23 @@
+==== tests/cases/compiler/grammarAmbiguities1.ts (6 errors) ====
+    class A { foo() { } }
+    class B { bar() { }}
+    function f(x) { return x; }
+    function g<T, U>(x) { return f(x); }
+    g<A, B>(7)
+    
+    f(g<A, B>(7));
+    f(g < A, B > 7);
+    ~~~~~~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+      ~~~~~
+!!! Operator '<' cannot be applied to types '<T, U>(x: any) => any' and 'typeof A'.
+             ~~~~~
+!!! Operator '>' cannot be applied to types 'typeof B' and 'number'.
+    f(g < A, B > +(7));
+    ~~~~~~~~~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+      ~~~~~
+!!! Operator '<' cannot be applied to types '<T, U>(x: any) => any' and 'typeof A'.
+             ~~~~~~~~
+!!! Operator '>' cannot be applied to types 'typeof B' and 'number'.
+    

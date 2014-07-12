@@ -1,0 +1,39 @@
+==== tests/cases/compiler/arithAssignTyping.ts (12 errors) ====
+    class f { }
+    
+    f += ''; // error
+    ~
+!!! Invalid left-hand side of assignment expression.
+    f += 1; // error
+    ~~~~~~
+!!! Operator '+=' cannot be applied to types 'typeof f' and 'number'.
+    f -= 1; // error
+    ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    f *= 1; // error
+    ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    f /= 1; // error
+    ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    f %= 1; // error
+    ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    f &= 1; // error
+    ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    f |= 1; // error
+    ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    f <<= 1; // error
+    ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    f >>= 1; // error
+    ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    f >>>= 1; // error
+    ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    f ^= 1; // error
+    ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.

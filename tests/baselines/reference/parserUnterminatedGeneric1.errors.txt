@@ -1,0 +1,9 @@
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric1.ts (3 errors) ====
+     interface IQService {
+            all(promises: IPromise < any > []): IPromise<
+                                                         
+!!! '>' expected.
+                          ~~~~~~~~~~~~~~~~
+!!! Cannot find name 'IPromise'.
+                                                ~~~~~~~~~
+!!! Cannot find name 'IPromise'.

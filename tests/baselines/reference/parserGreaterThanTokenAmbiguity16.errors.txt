@@ -1,0 +1,4 @@
+==== tests/cases/conformance/parser/ecmascript5/Generics/parserGreaterThanTokenAmbiguity16.ts (1 errors) ====
+    1 >>>= 2;
+    ~
+!!! Invalid left-hand side of assignment expression.

@@ -1,0 +1,16 @@
+==== tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement3.ts (7 errors) ====
+    for(d in _.jh[a]=_.jh[a]||[],b);
+        ~
+!!! Variable declarations of a 'for' statement must be of types 'string' or 'any'.
+        ~
+!!! Cannot find name 'd'.
+             ~
+!!! Cannot find name '_'.
+                  ~
+!!! Cannot find name 'a'.
+                     ~
+!!! Cannot find name '_'.
+                          ~
+!!! Cannot find name 'a'.
+                                 ~
+!!! Cannot find name 'b'.

@@ -1,0 +1,8 @@
+==== tests/cases/compiler/classExtendsMultipleBaseClasses.ts (2 errors) ====
+    class A { }
+    class B { }
+    class C extends A,B { }
+                     ~
+!!! '{' expected.
+                        ~
+!!! ';' expected.

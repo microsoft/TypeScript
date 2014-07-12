@@ -1,0 +1,8 @@
+==== tests/cases/compiler/conflictingTypeAnnotatedVar.ts (2 errors) ====
+    var foo: string;
+    function foo(): number { }
+             ~~~
+!!! Duplicate identifier 'foo'.
+    function foo(): number { }
+             ~~~
+!!! Duplicate identifier 'foo'.

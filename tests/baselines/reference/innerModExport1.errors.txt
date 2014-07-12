@@ -1,0 +1,30 @@
+==== tests/cases/compiler/innerModExport1.ts (5 errors) ====
+    module Outer {
+    
+        // inner mod 1
+        var non_export_var: number;
+        module {
+               ~
+!!! ';' expected.
+        ~~~~~~
+!!! Cannot find name 'module'.
+            var non_export_var = 0;
+            export var export_var = 1;
+            ~~~~~~
+!!! Statement expected.
+    
+            function NonExportFunc() { return 0; }
+    
+            export function ExportFunc() { return 0; }
+        }
+    
+        export var outer_var_export = 0;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Cannot compile external modules unless the '--module' flag is provided.
+        export function outerFuncExport() { return 0; }
+    
+    }
+    ~
+!!! Declaration or statement expected.
+    
+    Outer.ExportFunc();

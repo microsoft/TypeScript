@@ -1,0 +1,35 @@
+==== tests/cases/compiler/duplicateObjectLiteralProperty.ts (8 errors) ====
+    var x = {
+        a: 1,
+        b: true, // OK
+        a: 56,   // Duplicate
+        ~
+!!! Duplicate identifier 'a'.
+        \u0061: "ss", // Duplicate
+        ~~~~~~
+!!! Duplicate identifier '\u0061'.
+        a: {
+        ~
+!!! Duplicate identifier 'a'.
+            c: 1,
+            "c": 56, // Duplicate
+            ~~~
+!!! Duplicate identifier '"c"'.
+        }
+    };
+    
+    
+    var y = {
+        get a() { return 0; },
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+        set a(v: number) { },
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+        get a() { return 0; }
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            ~
+!!! Duplicate identifier 'a'.
+    };
+    

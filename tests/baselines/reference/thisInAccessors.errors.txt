@@ -1,0 +1,43 @@
+==== tests/cases/compiler/thisInAccessors.ts (6 errors) ====
+    // this capture only in getter
+    class GetterOnly {
+        get Value() {
+            ~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            var fn = () => this;
+            return '';
+        }
+        set Value(val) {
+            ~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+        }
+    }
+    
+    // this capture only in setter
+    class SetterOnly {
+        get Value() {
+            ~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            return '';
+        }
+        set Value(val) {
+            ~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            var fn = () => this;
+        }
+    }
+    
+    // this capture only in both setter and getter
+    class GetterAndSetter {
+        get Value() {
+            ~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            var fn = () => this;
+            return '';
+        }
+        set Value(val) {
+            ~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            var fn = () => this;
+        }
+    }

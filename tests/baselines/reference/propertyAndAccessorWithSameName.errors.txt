@@ -1,0 +1,36 @@
+==== tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts (8 errors) ====
+    class C {
+        x: number;
+        get x() { // error
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            ~
+!!! Duplicate identifier 'x'.
+            return 1;
+        }
+    }
+    
+    class D {
+        x: number;
+        set x(v) { } // error
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            ~
+!!! Duplicate identifier 'x'.
+    }
+    
+    class E {
+        private x: number;
+        get x() { // error
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            ~
+!!! Duplicate identifier 'x'.
+            return 1;
+        }
+        set x(v) { }
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            ~
+!!! Duplicate identifier 'x'.
+    }

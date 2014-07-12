@@ -1,0 +1,38 @@
+==== tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts (4 errors) ====
+    interface A {
+        name();
+    }
+    class B {
+        public name() { }
+    }
+    class C {
+        public static name() { }
+    }
+    
+    var a: A = new B();
+    a = new C(); // error name is missing
+    ~
+!!! Type 'C' is not assignable to type 'A':
+!!!   Property 'name' is missing in type 'C'.
+    a = B; // error name is missing
+    ~
+!!! Type 'typeof B' is not assignable to type 'A':
+!!!   Property 'name' is missing in type 'typeof B'.
+    a = C;
+    
+    var b: B = new C(); // error name is missing
+        ~~~~~~~~~~~~~~
+!!! Type 'C' is not assignable to type 'B':
+!!!   Property 'name' is missing in type 'C'.
+    b = B; // error name is missing
+    ~
+!!! Type 'typeof B' is not assignable to type 'B':
+!!!   Property 'name' is missing in type 'typeof B'.
+    b = C;
+    b = a;
+    
+    var c: C = new B();
+    c = B;
+    c = C;
+    c = a;
+    

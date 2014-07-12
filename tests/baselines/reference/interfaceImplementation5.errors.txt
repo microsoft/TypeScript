@@ -1,0 +1,48 @@
+==== tests/cases/compiler/interfaceImplementation5.ts (8 errors) ====
+    interface I1 {
+        getset1:number;
+    }
+    
+    class C1 implements I1 {
+        public get getset1(){return 1;}
+                   ~~~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+    }
+    
+    class C2 implements I1 {
+        public set getset1(baz:number){}
+                   ~~~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+    }
+    
+    class C3 implements I1 {
+        public get getset1(){return 1;}
+                   ~~~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+        public set getset1(baz:number){}
+                   ~~~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+    }
+    
+    class C4 implements I1 {
+        public get getset1(){var x:any; return x;}
+                   ~~~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+    }
+    
+    class C5 implements I1 {
+        public set getset1(baz:any){}
+                   ~~~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+    }
+    
+    class C6 implements I1 {
+        public set getset1(baz:any){}
+                   ~~~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+        public get getset1(){var x:any; return x;}
+                   ~~~~~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+    }
+    
+    

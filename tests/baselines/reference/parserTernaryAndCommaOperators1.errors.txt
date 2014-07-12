@@ -1,0 +1,9 @@
+==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parserTernaryAndCommaOperators1.ts (3 errors) ====
+    b.src ? 1 : 2, c && d;
+    ~
+!!! Cannot find name 'b'.
+                   ~
+!!! Cannot find name 'c'.
+                        ~
+!!! Cannot find name 'd'.
+    

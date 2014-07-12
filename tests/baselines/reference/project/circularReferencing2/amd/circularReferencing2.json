@@ -1,0 +1,19 @@
+{
+    "scenario": "circular referencing - 2",
+    "projectRoot": "tests/cases/projects/CircularReferencing-2",
+    "inputFiles": [
+        "a.ts"
+    ],
+    "runTest": true,
+    "resolvedInputFiles": [
+        "a.ts",
+        "c.ts",
+        "b.ts",
+        "lib.d.ts"
+    ],
+    "emittedFiles": [
+        "b.js",
+        "c.js",
+        "a.js"
+    ]
+}

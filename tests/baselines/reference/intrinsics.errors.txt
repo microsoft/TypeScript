@@ -1,0 +1,20 @@
+==== tests/cases/compiler/intrinsics.ts (2 errors) ====
+    
+    var hasOwnProperty: hasOwnProperty; // Error
+                        ~~~~~~~~~~~~~~
+!!! Cannot find name 'hasOwnProperty'.
+    
+    module m1 {
+        export var __proto__;
+        interface __proto__ {}
+    
+        class C<T extends { __proto__: __proto__ }> { }
+    }
+    
+    __proto__ = 0; // Error, __proto__ not defined
+    ~~~~~~~~~
+!!! Cannot find name '__proto__'.
+    m1.__proto__ = 0;
+    
+    class Foo<__proto__> { }
+    var foo: (__proto__: number) => void;

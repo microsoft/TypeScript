@@ -1,0 +1,16 @@
+==== tests/cases/conformance/classes/constructorDeclarations/superCalls/superCallInConstructorWithNoBaseType.ts (2 errors) ====
+    class C {
+        constructor() {
+            super(); // error
+            ~~~~~
+!!! 'super' can only be referenced in a derived class.
+        }
+    }
+    
+    class D<T> {
+        public constructor(public x: T) {
+            super(); // error
+            ~~~~~
+!!! 'super' can only be referenced in a derived class.
+        }
+    }

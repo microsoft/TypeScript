@@ -1,0 +1,15 @@
+==== tests/cases/compiler/scopeCheckInsideStaticMethod1.ts (2 errors) ====
+    class C {
+       private v;
+       public p;
+       static s;
+       static b() {
+          v = 1; // ERR
+          ~
+!!! Cannot find name 'v'.
+          C.s = 1;
+          this.p = 1; // ERR
+               ~
+!!! Property 'p' does not exist on type 'typeof C'.
+       }
+    }

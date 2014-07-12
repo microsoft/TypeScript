@@ -1,0 +1,32 @@
+==== tests/cases/compiler/propertyOrdering.ts (4 errors) ====
+    class Foo {
+        constructor(store: string) { }
+          public foo() {
+                return this._store.length;   // shouldn't be an error
+          }
+          public _store = store; // no repro if this is first line in class body
+                          ~~~~~
+!!! Cannot find name 'store'.
+    
+    
+          public bar() { return this.store; } // should be an error
+                                     ~~~~~
+!!! Property 'store' does not exist on type 'Foo'.
+    
+    }
+    
+    class Bar {
+          public foo() {
+    
+                return this._store.length;   // shouldn't be an error
+                            ~~~~~~
+!!! Property '_store' does not exist on type 'Bar'.
+    
+          }
+        constructor(store: string) {
+            this._store = store;
+                 ~~~~~~
+!!! Property '_store' does not exist on type 'Bar'.
+        }
+    }
+    

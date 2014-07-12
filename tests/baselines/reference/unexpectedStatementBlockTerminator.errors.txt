@@ -1,0 +1,10 @@
+==== tests/cases/compiler/unexpectedStatementBlockTerminator.ts (1 errors) ====
+    class Foo {}
+    
+    class Bar {}
+    case
+    ~~~~
+!!! Declaration or statement expected.
+    
+    function Goo() {return {a:1,b:2};}
+    

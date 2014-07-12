@@ -1,0 +1,11 @@
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList1.ts (3 errors) ====
+    function foo() {
+       bar(
+       ~~~
+!!! Cannot find name 'bar'.
+       return x;
+       ~~~~~~
+!!! Argument expression expected.
+              ~
+!!! Cannot find name 'x'.
+    }

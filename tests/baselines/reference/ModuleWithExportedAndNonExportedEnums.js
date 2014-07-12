@@ -1,0 +1,29 @@
+//// [ModuleWithExportedAndNonExportedEnums.ts]
+module A {
+    export enum Color { Red, Blue }
+    enum Day { Monday, Tuesday }
+}
+
+// not an error since exported
+var a: A.Color = A.Color.Red;
+
+// error not exported
+var b = A.Day.Monday;
+
+
+//// [ModuleWithExportedAndNonExportedEnums.js]
+var A;
+(function (A) {
+    (function (Color) {
+        Color[Color["Red"] = 0] = "Red";
+        Color[Color["Blue"] = 1] = "Blue";
+    })(A.Color || (A.Color = {}));
+    var Color = A.Color;
+    var Day;
+    (function (Day) {
+        Day[Day["Monday"] = 0] = "Monday";
+        Day[Day["Tuesday"] = 1] = "Tuesday";
+    })(Day || (Day = {}));
+})(A || (A = {}));
+var a = 0 /* Red */;
+var b = A.Day.Monday;

@@ -1,0 +1,7 @@
+==== tests/cases/compiler/ClassDeclaration21.ts (1 errors) ====
+    class C {
+        0();
+        ~~~~
+!!! Function implementation expected.
+        1() { }
+    }

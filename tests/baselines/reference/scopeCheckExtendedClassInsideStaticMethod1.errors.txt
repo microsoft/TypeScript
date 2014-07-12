@@ -1,0 +1,15 @@
+==== tests/cases/compiler/scopeCheckExtendedClassInsideStaticMethod1.ts (3 errors) ====
+    class C { private v; public p; static s; }
+    class D extends C {
+       static c() {
+          v = 1;
+          ~
+!!! Cannot find name 'v'.
+          this.p = 1;
+               ~
+!!! Property 'p' does not exist on type 'typeof D'.
+          s = 1;
+          ~
+!!! Cannot find name 's'.
+       }
+    }

@@ -1,0 +1,9 @@
+==== tests/cases/compiler/noTypeArgumentOnReturnType1.ts (1 errors) ====
+    class A<T>{
+     
+     foo(): A{
+            ~
+!!! Generic type 'A<T>' requires 1 type argument(s).
+      return null;
+     }
+    }

@@ -1,0 +1,10 @@
+==== tests/cases/compiler/targetTypeVoidFunc.ts (1 errors) ====
+    function f1(): { new (): number; } {
+        return function () { return; }
+               ~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type '() => void' is not assignable to type 'new () => number'.
+    }; 
+    
+    var x = f1();
+    var y = new x();
+    var z = new (f1())();

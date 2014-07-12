@@ -1,0 +1,63 @@
+//// [comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts]
+interface A1 {
+    b?: number;
+}
+
+interface B1 {
+    b?: string;
+}
+
+var a: A1;
+var b: B1;
+
+// operator <
+var ra1 = a < b;
+var ra2 = b < a;
+
+// operator >
+var rb1 = a > b;
+var rb2 = b > a;
+
+// operator <=
+var rc1 = a <= b;
+var rc2 = b <= a;
+
+// operator >=
+var rd1 = a >= b;
+var rd2 = b >= a;
+
+// operator ==
+var re1 = a == b;
+var re2 = b == a;
+
+// operator !=
+var rf1 = a != b;
+var rf2 = b != a;
+
+// operator ===
+var rg1 = a === b;
+var rg2 = b === a;
+
+// operator !==
+var rh1 = a !== b;
+var rh2 = b !== a;
+
+//// [comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.js]
+var a;
+var b;
+var ra1 = a < b;
+var ra2 = b < a;
+var rb1 = a > b;
+var rb2 = b > a;
+var rc1 = a <= b;
+var rc2 = b <= a;
+var rd1 = a >= b;
+var rd2 = b >= a;
+var re1 = a == b;
+var re2 = b == a;
+var rf1 = a != b;
+var rf2 = b != a;
+var rg1 = a === b;
+var rg2 = b === a;
+var rh1 = a !== b;
+var rh2 = b !== a;

@@ -1,0 +1,18 @@
+==== tests/cases/compiler/cloduleWithDuplicateMember2.ts (3 errors) ====
+    class C {
+        set x(y) { }
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+        static set y(z) { }
+                   ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+    }
+    
+    module C {
+        export var x = 1;
+    }
+    module C {
+        export function x() { }
+                        ~
+!!! Duplicate identifier 'x'.
+    }

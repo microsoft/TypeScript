@@ -1,0 +1,11 @@
+==== tests/cases/compiler/objectCreationExpressionInFunctionParameter.ts (2 errors) ====
+    class A {
+        constructor(public a1: string) {
+        }
+    }
+    function foo(x = new A(123)) { //should error, 123 is not string
+                     ~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+    }}
+     ~
+!!! Declaration or statement expected.

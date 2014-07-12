@@ -1,0 +1,16 @@
+==== tests/cases/compiler/superInConstructorParam1.ts (2 errors) ====
+    class B {
+      public foo(): number {
+        return 0;
+      }
+    }
+    
+    class C extends B {
+      constructor(a = super.foo()) {
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                      ~~~~~
+!!! 'super' cannot be referenced in constructor arguments.
+      }
+    ~~~
+!!! Constructors for derived classes must contain a 'super' call.
+    }

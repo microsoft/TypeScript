@@ -1,0 +1,11 @@
+==== tests/cases/compiler/exportAssignmentWithoutIdentifier1.ts (1 errors) ====
+    function Greeter() {
+        //...
+    }
+    Greeter.prototype.greet = function () {
+        //...
+    }
+    export = new Greeter();
+             ~~~
+!!! Identifier expected.
+    

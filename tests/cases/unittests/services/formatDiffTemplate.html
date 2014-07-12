@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+.code 
+{
+    font-family: Lucida Console;
+    font-size: 80%;
+}
+
+table
+{
+    border: solid black 1px;
+    margin-bottom: 2em;
+    background: #F5F5F5;
+    padding: 0.5em;
+}
+
+th
+{
+    text-align: left;
+    padding-left: 1em;
+}
+
+td
+{
+    vertical-align: top;
+    padding: 0.75em;
+    margin: 0.25em;
+}
+
+td.test-input
+{
+    background: #DDE;
+}
+
+td.test-output
+{
+    background: #FEE;
+}
+
+td.test-expected
+{
+    background: #EFE;
+}
+
+td.test-operation
+{
+    font-family: inherit;
+    padding: 0.1em;
+}
+</style>
+
+<script type="text/javascript">
+    function copy(code) {
+        if (window.clipboardData) {
+            window.clipboardData.setData('Text', decodeURIComponent(code));
+        } else {
+            alert(code);
+        }
+    }
+</script>
+
+</head>
+
+<body>

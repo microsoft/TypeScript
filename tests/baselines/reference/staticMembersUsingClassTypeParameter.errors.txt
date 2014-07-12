@@ -1,0 +1,28 @@
+==== tests/cases/conformance/types/typeParameters/typeParameterLists/staticMembersUsingClassTypeParameter.ts (6 errors) ====
+    // BUG 745747
+    class C<T> {
+        static x: T;
+                  ~
+!!! Static members cannot reference class type parameters.
+        static f(x: T) {}
+                    ~
+!!! Static members cannot reference class type parameters.
+    }
+    
+    class C2<T, U> {
+        static x: U;
+                  ~
+!!! Static members cannot reference class type parameters.
+        static f(x: U) { }
+                    ~
+!!! Static members cannot reference class type parameters.
+    }
+    
+    class C3<T extends Date> {
+        static x: T;
+                  ~
+!!! Static members cannot reference class type parameters.
+        static f(x: T) { }
+                    ~
+!!! Static members cannot reference class type parameters.
+    }

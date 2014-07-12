@@ -1,0 +1,25 @@
+==== tests/cases/compiler/typeParametersShouldNotBeEqual2.ts (6 errors) ====
+    function ff<T extends Date, U extends Date, V>(x: T, y: U, z: V) {
+        var zz: Object;
+        x = x;  // Ok
+        x = y;  // Ok
+        ~
+!!! Type 'U' is not assignable to type 'T'.
+        x = z;  // Error
+        ~
+!!! Type 'V' is not assignable to type 'T'.
+        z = x;  // Error
+        ~
+!!! Type 'T' is not assignable to type 'V'.
+        y = z;  // Error
+        ~
+!!! Type 'V' is not assignable to type 'U'.
+        z = y;  // Error
+        ~
+!!! Type 'U' is not assignable to type 'V'.
+        x = zz;  // Error
+        ~
+!!! Type 'Object' is not assignable to type 'T'.
+        zz = x;  // Ok
+    }
+    

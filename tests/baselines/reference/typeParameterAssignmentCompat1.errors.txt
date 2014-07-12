@@ -1,0 +1,32 @@
+==== tests/cases/compiler/typeParameterAssignmentCompat1.ts (4 errors) ====
+    interface Foo<T> {
+        frobble(value: T): T;
+    }
+    
+    function f<T, U>(): Foo<U> {
+        var x: Foo<T>;
+        var y: Foo<U>;
+        x = y; // should be an error
+        ~
+!!! Type 'Foo<U>' is not assignable to type 'Foo<T>':
+!!!   Type 'U' is not assignable to type 'T'.
+        return x;
+               ~
+!!! Type 'Foo<T>' is not assignable to type 'Foo<U>':
+!!!   Type 'T' is not assignable to type 'U'.
+    }
+    
+    class C<T> {
+        f<U>(): Foo<U> {
+            var x: Foo<T>;
+            var y: Foo<U>;
+            x = y; // should be an error
+            ~
+!!! Type 'Foo<U>' is not assignable to type 'Foo<T>':
+!!!   Type 'U' is not assignable to type 'T'.
+            return x;
+                   ~
+!!! Type 'Foo<T>' is not assignable to type 'Foo<U>':
+!!!   Type 'T' is not assignable to type 'U'.
+        }
+    }

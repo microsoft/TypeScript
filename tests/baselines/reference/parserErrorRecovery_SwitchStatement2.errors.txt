@@ -1,0 +1,11 @@
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/SwitchStatements/parserErrorRecovery_SwitchStatement2.ts (2 errors) ====
+    class C {
+      constructor() {
+        switch (e) {
+                ~
+!!! Cannot find name 'e'.
+    
+    class D {
+    ~~~~~
+!!! 'case' or 'default' expected.
+    }

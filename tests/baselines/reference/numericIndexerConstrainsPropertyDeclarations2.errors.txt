@@ -1,0 +1,69 @@
+==== tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations2.ts (7 errors) ====
+    // String indexer providing a constraint of a user defined type
+    
+    class A {
+        foo(): string { return ''; }
+    }
+    
+    class B extends A {
+        bar(): string { return ''; }
+    }
+    
+    class Foo {
+        [x: number]: A;
+        1.0: A; // ok
+        2.0: B; // ok
+        "2.5": B // ok
+        3.0: number; // error
+        ~~~~~~~~~~~~
+!!! Property '3.0' of type 'number' is not assignable to numeric index type 'A'.
+        "4.0": string; // error
+        ~~~~~~~~~~~~~~
+!!! Property '"4.0"' of type 'string' is not assignable to numeric index type 'A'.
+    }
+    
+    interface Foo2 {
+        [x: number]: A;
+        1.0: A; // ok
+        2.0: B; // ok
+        "2.5": B // ok
+        3.0: number; // error
+        ~~~~~~~~~~~~
+!!! Property '3.0' of type 'number' is not assignable to numeric index type 'A'.
+        "4.0": string; // error
+        ~~~~~~~~~~~~~~
+!!! Property '"4.0"' of type 'string' is not assignable to numeric index type 'A'.
+    }
+    
+    var a: {
+        [x: number]: A;
+        1.0: A; // ok
+        2.0: B; // ok
+        "2.5": B // ok
+        3.0: number; // error
+        ~~~~~~~~~~~~
+!!! Property '3.0' of type 'number' is not assignable to numeric index type 'A'.
+        "4.0": string; // error
+        ~~~~~~~~~~~~~~
+!!! Property '"4.0"' of type 'string' is not assignable to numeric index type 'A'.
+    };
+    
+    // error
+    var b: { [x: number]: A } = {
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        1.0: new A(), 
+    ~~~~~~~~~~~~~~~~~~
+        2.0: new B(), 
+    ~~~~~~~~~~~~~~~~~~
+        "2.5": new B(),
+    ~~~~~~~~~~~~~~~~~~~
+        3.0: 1,
+    ~~~~~~~~~~~
+        "4.0": ''
+    ~~~~~~~~~~~~~
+    }
+    ~
+!!! Type '{ [x: number]: {}; 1.0: A; 2.0: B; 3.0: number; "2.5": B; "4.0": string; }' is not assignable to type '{ [x: number]: A; }':
+!!!   Index signatures are incompatible:
+!!!     Type '{}' is not assignable to type 'A':
+!!!       Property 'foo' is missing in type '{}'.

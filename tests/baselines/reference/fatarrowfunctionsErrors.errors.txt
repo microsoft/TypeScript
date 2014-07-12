@@ -1,0 +1,63 @@
+==== tests/cases/compiler/fatarrowfunctionsErrors.ts (25 errors) ====
+    foo((...Far:any[])=>{return 0;})
+    ~~~
+!!! Cannot find name 'foo'.
+    foo((1)=>{return 0;}); 
+           ~~
+!!! ',' expected.
+                     ~
+!!! ':' expected.
+                      ~
+!!! ',' expected.
+                       ~
+!!! Declaration or statement expected.
+                        ~
+!!! Declaration or statement expected.
+    ~~~
+!!! Cannot find name 'foo'.
+    foo((x?)=>{return x;})
+    ~~~
+!!! Cannot find name 'foo'.
+    foo((x=0)=>{return x;})
+    ~~~
+!!! Cannot find name 'foo'.
+    var y = x:number => x*x;
+             ~
+!!! ',' expected.
+                     ~~
+!!! ';' expected.
+            ~
+!!! Cannot find name 'x'.
+                        ~
+!!! Cannot find name 'x'.
+                          ~
+!!! Cannot find name 'x'.
+    false? (() => null): null;
+    
+    // missing fatarrow
+    var x1 = () :void {};
+                      ~
+!!! '=>' expected.
+    var x2 = (a:number) :void {};
+               ~
+!!! ')' expected.
+                      ~
+!!! ',' expected.
+                        ~
+!!! Variable declaration expected.
+                         ~~~~
+!!! Variable declaration expected.
+              ~
+!!! Cannot find name 'a'.
+    var x3 = (a:number) {};
+               ~
+!!! ')' expected.
+                      ~
+!!! ',' expected.
+                        ~
+!!! Variable declaration expected.
+              ~
+!!! Cannot find name 'a'.
+    var x4= (...a: any[]) { };
+                          ~
+!!! '=>' expected.

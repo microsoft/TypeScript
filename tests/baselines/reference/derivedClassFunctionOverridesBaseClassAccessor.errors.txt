@@ -1,0 +1,25 @@
+==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassFunctionOverridesBaseClassAccessor.ts (4 errors) ====
+    class Base {
+        get x() {
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            return 1;
+        }
+        set x(v) {
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+        }
+    }
+    
+    // error
+    class Derived extends Base {
+          ~~~~~~~
+!!! Class 'Derived' incorrectly extends base class 'Base':
+!!!   Types of property 'x' are incompatible:
+!!!     Type '() => number' is not assignable to type 'number'.
+        x() {
+        ~
+!!! Class 'Base' defines instance member accessor 'x', but extended class 'Derived' defines it as instance member function.
+            return 1;
+        }
+    }

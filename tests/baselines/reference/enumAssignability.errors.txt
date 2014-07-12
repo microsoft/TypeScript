@@ -1,0 +1,104 @@
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts (21 errors) ====
+    // enums assignable to number, any, Object, errors unless otherwise noted
+    
+    enum E { A }
+    enum F { B }
+    
+    var e = E.A;
+    var f = F.B;
+    
+    e = f; 
+    ~
+!!! Type 'F' is not assignable to type 'E'.
+    f = e; 
+    ~
+!!! Type 'E' is not assignable to type 'F'.
+    e = 1; // ok
+    f = 1; // ok
+    var x: number = e; // ok
+    x = f; // ok
+    
+    module Others {
+        var a: any = e; // ok
+    
+        class C {
+            foo: string;
+        }
+        var ac: C;
+        interface I {
+            foo: string;
+        }
+        var ai: I;
+    
+        var b: number = e; // ok
+        var c: string = e;
+            ~~~~~~~~~~~~~
+!!! Type 'E' is not assignable to type 'string'.
+        var d: boolean = e;
+            ~~~~~~~~~~~~~~
+!!! Type 'E' is not assignable to type 'boolean'.
+        var ee: Date = e;
+            ~~~~~~~~~~~~
+!!! Type 'E' is not assignable to type 'Date':
+!!!   Property 'toDateString' is missing in type 'Number'.
+        var f: any = e; // ok
+        var g: void = e;
+            ~~~~~~~~~~~
+!!! Type 'E' is not assignable to type 'void'.
+        var h: Object = e;
+        var i: {} = e;
+        var j: () => {} = e;
+            ~~~~~~~~~~~~~~~
+!!! Type 'E' is not assignable to type '() => {}'.
+        var k: Function = e;
+            ~~~~~~~~~~~~~~~
+!!! Type 'E' is not assignable to type 'Function':
+!!!   Property 'apply' is missing in type 'Number'.
+        var l: (x: number) => string = e;
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type 'E' is not assignable to type '(x: number) => string'.
+        ac = e;
+        ~~
+!!! Type 'E' is not assignable to type 'C':
+!!!   Property 'foo' is missing in type 'Number'.
+        ai = e;
+        ~~
+!!! Type 'E' is not assignable to type 'I':
+!!!   Property 'foo' is missing in type 'Number'.
+        var m: number[] = e;
+            ~~~~~~~~~~~~~~~
+!!! Type 'E' is not assignable to type 'number[]':
+!!!   Property 'concat' is missing in type 'Number'.
+        var n: { foo: string } = e;
+            ~~~~~~~~~~~~~~~~~~~~~~
+!!! Type 'E' is not assignable to type '{ foo: string; }':
+!!!   Property 'foo' is missing in type 'Number'.
+        var o: <T>(x: T) => T = e;
+            ~~~~~~~~~~~~~~~~~~~~~
+!!! Type 'E' is not assignable to type '<T>(x: T) => T'.
+        var p: Number = e;
+        var q: String = e;
+            ~~~~~~~~~~~~~
+!!! Type 'E' is not assignable to type 'String':
+!!!   Property 'charAt' is missing in type 'Number'.
+    
+        function foo<T, U extends T, V extends Date, A extends Number, B extends E>(x: T, y: U, z: V) {
+                        ~~~~~~~~~~~
+!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+            x = e;
+            ~
+!!! Type 'E' is not assignable to type 'T'.
+            y = e;
+            ~
+!!! Type 'E' is not assignable to type 'U'.
+            z = e;
+            ~
+!!! Type 'E' is not assignable to type 'V'.
+            var a: A = e;
+                ~~~~~~~~
+!!! Type 'E' is not assignable to type 'A'.
+            var b: B = e;
+                ~~~~~~~~
+!!! Type 'E' is not assignable to type 'B'.
+        }
+    }

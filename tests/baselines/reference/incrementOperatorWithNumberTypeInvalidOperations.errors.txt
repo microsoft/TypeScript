@@ -1,0 +1,87 @@
+==== tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithNumberTypeInvalidOperations.ts (20 errors) ====
+    // ++ operator on number type
+    var NUMBER: number;
+    var NUMBER1: number[] = [1, 2];
+    
+    function foo(): number { return 1; }
+    
+    class A {
+        public a: number;
+        static foo() { return 1; }
+    }
+    module M {
+        export var n: number;
+    }
+    
+    var objA = new A();
+    
+    //number type var
+    var ResultIsNumber1 = ++NUMBER1;
+                            ~~~~~~~
+!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+    var ResultIsNumber2 = NUMBER1++;
+                          ~~~~~~~
+!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+    
+    // number type literal
+    var ResultIsNumber3 = ++1;
+                            ~
+!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+    var ResultIsNumber4 = ++{ x: 1, y: 2};
+                            ~~~~~~~~~~~~~
+!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+    var ResultIsNumber5 = ++{ x: 1, y: (n: number) => { return n; } };
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+    
+    var ResultIsNumber6 = 1++;
+                          ~
+!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+    var ResultIsNumber7 = { x: 1, y: 2 }++;
+                          ~~~~~~~~~~~~~~
+!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+    var ResultIsNumber8 = { x: 1, y: (n: number) => { return n; } }++;
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+    
+    // number type expressions
+    var ResultIsNumber9 = ++foo();
+                            ~~~~~
+!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+    var ResultIsNumber10 = ++A.foo();
+                             ~~~~~~~
+!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+    var ResultIsNumber11 = ++(NUMBER + NUMBER);
+                             ~~~~~~~~~~~~~~~~~
+!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+    
+    var ResultIsNumber12 = foo()++;
+                           ~~~~~
+!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+    var ResultIsNumber13 = A.foo()++;
+                           ~~~~~~~
+!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+    var ResultIsNumber14 = (NUMBER + NUMBER)++;
+                           ~~~~~~~~~~~~~~~~~
+!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+    
+    // miss assignment operator
+    ++1;
+      ~
+!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+    ++NUMBER1;
+      ~~~~~~~
+!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+    ++foo();
+      ~~~~~
+!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+    
+    1++;
+    ~
+!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+    NUMBER1++;
+    ~~~~~~~
+!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+    foo()++;
+    ~~~~~
+!!! The operand of an increment or decrement operator must be a variable, property or indexer.

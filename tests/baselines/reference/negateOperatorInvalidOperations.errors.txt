@@ -1,0 +1,33 @@
+==== tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorInvalidOperations.ts (10 errors) ====
+    // Unary operator -
+    
+    // operand before -
+    var NUMBER1 = var NUMBER-;  //expect error
+                  ~~~
+!!! Expression expected.
+                            ~
+!!! '=' expected.
+                             ~
+!!! Expression expected.
+    
+    // invalid expressions
+    var NUMBER2 = -(null - undefined);
+                    ~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                           ~~~~~~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var NUMBER3 = -(null - null);
+                    ~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                           ~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var NUMBER4 = -(undefined - undefined);
+                    ~~~~~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                                ~~~~~~~~~
+!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    
+    // miss operand
+    var NUMBER =-;
+                 ~
+!!! Expression expected.

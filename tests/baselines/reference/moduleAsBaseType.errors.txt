@@ -1,0 +1,11 @@
+==== tests/cases/compiler/moduleAsBaseType.ts (3 errors) ====
+    module M {}
+    class C extends M {}
+                    ~
+!!! Cannot find name 'M'.
+    interface I extends M { }
+                        ~
+!!! Cannot find name 'M'.
+    class C2 implements M { }
+                        ~
+!!! Cannot find name 'M'.

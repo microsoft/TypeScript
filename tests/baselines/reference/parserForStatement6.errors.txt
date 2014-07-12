@@ -1,0 +1,9 @@
+==== tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement6.ts (3 errors) ====
+    for (foo() in b) {
+         ~~~
+!!! Cannot find name 'foo'.
+         ~~~~~
+!!! Variable declarations of a 'for' statement must be of types 'string' or 'any'.
+                  ~
+!!! Cannot find name 'b'.
+    }

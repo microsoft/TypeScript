@@ -1,0 +1,13 @@
+==== tests/cases/compiler/callConstructAssignment.ts (2 errors) ====
+    
+    
+    var foo:{ ( ):void; }
+    
+    var bar:{ new ( ):any; }
+    
+    foo = bar; // error
+    ~~~
+!!! Type 'new () => any' is not assignable to type '() => void'.
+    bar = foo; // error
+    ~~~
+!!! Type '() => void' is not assignable to type 'new () => any'.

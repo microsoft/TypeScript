@@ -1,0 +1,42 @@
+==== tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/typeOfThisInAccessor.ts (5 errors) ====
+    class C {
+        get x() {
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            var r = this; // C
+            return 1;
+        }
+    
+        static get y() {
+                   ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            var r2 = this; // typeof C
+            return 1;
+        }
+    }
+    
+    class D<T> {
+        a: T;
+        get x() {
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            var r = this; // D<T>
+            return 1;
+        }
+    
+        static get y() {
+                   ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            var r2 = this; // typeof D
+            return 1;
+        }
+    }
+    
+    var x = {
+        get a() {
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            var r3 = this; // any
+            return 1;
+        }
+    }

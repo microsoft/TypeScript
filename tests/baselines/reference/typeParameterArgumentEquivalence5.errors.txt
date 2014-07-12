@@ -1,0 +1,16 @@
+==== tests/cases/compiler/typeParameterArgumentEquivalence5.ts (2 errors) ====
+    function foo<T,U>() {
+        var x: () => (item) => U;
+        var y: () => (item) => T;
+        x = y;  // Should be an error
+        ~
+!!! Type '() => (item: any) => T' is not assignable to type '() => (item: any) => U':
+!!!   Type '(item: any) => T' is not assignable to type '(item: any) => U':
+!!!     Type 'T' is not assignable to type 'U'.
+        y = x;  // Shound be an error
+        ~
+!!! Type '() => (item: any) => U' is not assignable to type '() => (item: any) => T':
+!!!   Type '(item: any) => U' is not assignable to type '(item: any) => T':
+!!!     Type 'U' is not assignable to type 'T'.
+    }
+    

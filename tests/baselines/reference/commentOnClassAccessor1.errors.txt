@@ -1,0 +1,9 @@
+==== tests/cases/compiler/commentOnClassAccessor1.ts (1 errors) ====
+    class C {
+      /**
+       * @type {number}
+       */
+      get bar(): number { return 1;}
+          ~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+    }

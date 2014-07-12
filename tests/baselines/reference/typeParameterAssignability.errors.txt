@@ -1,0 +1,11 @@
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability.ts (2 errors) ====
+    // type parameters are not assignable to one another unless directly or indirectly constrained to one another
+    
+    function foo<T, U>(t: T, u: U) {
+        t = u; // error
+        ~
+!!! Type 'U' is not assignable to type 'T'.
+        u = t; // error
+        ~
+!!! Type 'T' is not assignable to type 'U'.
+    }

@@ -1,0 +1,37 @@
+==== tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat.ts (3 errors) ====
+    interface I {
+        toString(): void;
+    }
+    
+    var i: I;
+    var o: Object;
+    o = i; // error
+    ~
+!!! Type 'I' is not assignable to type 'Object':
+!!!   Types of property 'toString' are incompatible:
+!!!     Type '() => void' is not assignable to type '() => string':
+!!!       Type 'void' is not assignable to type 'string'.
+    i = o; // ok
+    
+    class C {
+        toString(): void { }
+    }
+    var c: C;
+    o = c; // error
+    ~
+!!! Type 'C' is not assignable to type 'Object':
+!!!   Types of property 'toString' are incompatible:
+!!!     Type '() => void' is not assignable to type '() => string':
+!!!       Type 'void' is not assignable to type 'string'.
+    c = o; // ok
+    
+    var a = {
+        toString: () => { }
+    }
+    o = a; // error
+    ~
+!!! Type '{ toString: () => void; }' is not assignable to type 'Object':
+!!!   Types of property 'toString' are incompatible:
+!!!     Type '() => void' is not assignable to type '() => string':
+!!!       Type 'void' is not assignable to type 'string'.
+    a = o; // ok

@@ -1,0 +1,8 @@
+==== tests/cases/compiler/objectLitTargetTypeCallSite.ts (1 errors) ====
+    function process( x: {a:number; b:string;}) {
+    	return x.a;
+    }
+    
+    process({a:true,b:"y"});
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.

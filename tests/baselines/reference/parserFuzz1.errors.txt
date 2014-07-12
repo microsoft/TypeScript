@@ -1,0 +1,15 @@
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserFuzz1.ts (6 errors) ====
+    cla <ss {
+            ~
+!!! ';' expected.
+    ~~~
+!!! Cannot find name 'cla'.
+         ~~
+!!! Cannot find name 'ss'.
+      _ static try
+        ~~~~~~
+!!! ';' expected.
+                  
+!!! '{' expected.
+      ~
+!!! Cannot find name '_'.

@@ -1,0 +1,9 @@
+==== tests/cases/conformance/externalModules/foo_1.ts (1 errors) ====
+    import foo = require('./foo_0.js');
+                         ~~~~~~~~~~~~
+!!! Cannot find external module './foo_0.js'.
+    var x = foo.foo + 42;
+    
+==== tests/cases/conformance/externalModules/foo_0.ts (0 errors) ====
+    export var foo = 42;
+    

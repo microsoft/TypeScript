@@ -1,0 +1,45 @@
+==== tests/cases/compiler/assignmentCompatWithOverloads.ts (4 errors) ====
+    function f1(x: string): number { return null; }
+    
+    function f2(x: string): string { return null; }
+    
+    function f3(x: number): number { return null; }
+    
+    function f4(x: string): string;
+    
+    function f4(x: number): number;
+    
+    function f4(x: any): any { return undefined; }
+    
+    var g: (s1: string) => number;
+    
+    g = f1; // OK 
+    
+    g = f2; // Error
+    ~
+!!! Type '(x: string) => string' is not assignable to type '(s1: string) => number':
+!!!   Type 'string' is not assignable to type 'number'.
+    
+    g = f3; // Error
+    ~
+!!! Type '(x: number) => number' is not assignable to type '(s1: string) => number':
+!!!   Types of parameters 'x' and 's1' are incompatible:
+!!!     Type 'number' is not assignable to type 'string'.
+    
+    g = f4; // Error
+    ~
+!!! Type '{ (x: string): string; (x: number): number; }' is not assignable to type '(s1: string) => number':
+!!!   Type 'string' is not assignable to type 'number'.
+    
+    class C {
+        constructor(x: string);
+    constructor(x: any) {}
+    }
+    
+    var d: new(x: number) => void;
+    
+    d = C; // Error
+    ~
+!!! Type 'typeof C' is not assignable to type 'new (x: number) => void':
+!!!   Types of parameters 'x' and 'x' are incompatible:
+!!!     Type 'string' is not assignable to type 'number'.

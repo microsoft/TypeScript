@@ -1,0 +1,5 @@
+==== tests/cases/compiler/restArgMissingName.ts (1 errors) ====
+    function sum (...) {} 
+                     ~
+!!! Identifier expected.
+    

@@ -1,0 +1,4 @@
+==== tests/cases/compiler/undeclaredVarEmit.ts (1 errors) ====
+    f: number;
+       ~~~~~~
+!!! Cannot find name 'number'.

@@ -1,0 +1,39 @@
+==== tests/cases/compiler/extension.ts (5 errors) ====
+    interface I {
+        x;
+    }
+    
+    interface I {
+        y;
+    }
+    
+    declare module M {
+        export class C {
+            public p:number;
+        }
+    }
+    
+    declare module M {
+        export extension class C {
+        ~~~~~~
+!!! Declaration or statement expected.
+                         ~~~~~
+!!! ';' expected.
+               ~~~~~~~~~
+!!! Cannot find name 'extension'.
+                               ~
+!!! Duplicate identifier 'C'.
+            public pe:string;
+        }
+    }
+    
+    var c=new M.C();
+    c.pe;
+      ~~
+!!! Property 'pe' does not exist on type 'C'.
+    c.p;
+    var i:I;
+    i.x;
+    i.y;
+    
+    

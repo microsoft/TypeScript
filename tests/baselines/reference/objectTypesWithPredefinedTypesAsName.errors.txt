@@ -1,0 +1,22 @@
+==== tests/cases/conformance/types/specifyingTypes/predefinedTypes/objectTypesWithPredefinedTypesAsName.ts (4 errors) ====
+    // it is an error to use a predefined type as a type name
+    
+    class any { }
+          ~~~
+!!! Class name cannot be 'any'
+    
+    class number { }
+          ~~~~~~
+!!! Class name cannot be 'number'
+    
+    class boolean { }
+          ~~~~~~~
+!!! Class name cannot be 'boolean'
+    class bool { } // not a predefined type anymore
+    
+    class string { }
+          ~~~~~~
+!!! Class name cannot be 'string'
+    
+    
+    

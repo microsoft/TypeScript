@@ -1,0 +1,8 @@
+==== tests/cases/compiler/concatClassAndString.ts (1 errors) ====
+    // Shouldn't compile (the long form f = f + ""; doesn't):
+    class f { }
+    
+    f += '';
+    ~
+!!! Invalid left-hand side of assignment expression.
+    

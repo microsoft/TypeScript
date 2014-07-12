@@ -1,0 +1,7 @@
+==== tests/cases/conformance/parser/ecmascript5/Statements/parserForInStatement3.ts (2 errors) ====
+    for (var a, b in X) {
+                     ~
+!!! Only a single variable declaration is allowed in a 'for...in' statement.
+                     ~
+!!! Cannot find name 'X'.
+    }

@@ -1,0 +1,14 @@
+==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser536727.ts (2 errors) ====
+    function foo(f: (x: string) => string) {
+        return f("");
+    }
+    var g = (x: string) => x + "blah";
+    var x = () => g;
+    foo(g);
+    foo(() => g);
+    ~~~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+    foo(x);
+    ~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+    

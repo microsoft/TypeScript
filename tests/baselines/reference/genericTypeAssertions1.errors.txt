@@ -1,0 +1,14 @@
+==== tests/cases/compiler/genericTypeAssertions1.ts (3 errors) ====
+    class A<T> { foo(x: T) { }}
+    var foo = new A<number>();
+    var r: A<string> = <A<number>>new A(); // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type 'A<number>' is not assignable to type 'A<string>':
+!!!   Type 'number' is not assignable to type 'string'.
+    var r2: A<number> = <A<A<number>>>foo; // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type 'A<A<number>>' is not assignable to type 'A<number>':
+!!!   Type 'A<number>' is not assignable to type 'number'.
+                        ~~~~~~~~~~~~~~~~~
+!!! Neither type 'A<A<number>>' nor type 'A<number>' is assignable to the other:
+!!!   Type 'A<number>' is not assignable to type 'number'.

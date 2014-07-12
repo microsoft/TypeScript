@@ -1,0 +1,8 @@
+==== tests/cases/compiler/parse1.ts (1 errors) ====
+    var bar = 42;
+    function foo() {
+     bar.
+    }
+    ~
+!!! Identifier expected.
+    

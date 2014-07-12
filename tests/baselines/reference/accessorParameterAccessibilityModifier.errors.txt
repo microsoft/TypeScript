@@ -1,0 +1,14 @@
+==== tests/cases/compiler/accessorParameterAccessibilityModifier.ts (4 errors) ====
+    
+    class C {
+        set X(public v) { }
+            ~
+!!! A parameter property is only allowed in a constructor implementation.
+              ~~~~~~~~
+!!! A parameter property is only allowed in a constructor implementation.
+        static set X(public v2) { }
+                   ~
+!!! A parameter property is only allowed in a constructor implementation.
+                     ~~~~~~~~~
+!!! A parameter property is only allowed in a constructor implementation.
+    }

@@ -1,0 +1,26 @@
+==== tests/cases/compiler/dottedModuleName.ts (3 errors) ====
+    module M {
+        export module N {
+    	export function f(x:number)=>2*x;
+    	                           ~~
+!!! Block or ';' expected.
+    	~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Function implementation expected.
+    	                               ~
+!!! Cannot find name 'x'.
+    	export module X.Y.Z {
+    	    export var v2=f(v);
+    	}
+        }
+    }
+    
+    
+    
+    module M.N {
+        export module X {
+    	export module Y.Z {
+    	    export var v=f(10);
+    	}
+        }
+    }
+    

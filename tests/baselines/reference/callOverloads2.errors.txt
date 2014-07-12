@@ -1,0 +1,36 @@
+==== tests/cases/compiler/callOverloads2.ts (5 errors) ====
+    
+    
+    class Foo {    
+        bar1() { /*WScript.Echo("bar1");*/ }
+    
+        constructor(x: any) {
+            // WScript.Echo("Constructor function has executed");
+        }
+    }
+    
+    function Foo();
+    ~~~~~~~~~~~~~~~
+!!! Function implementation expected.
+             ~~~
+!!! Duplicate identifier 'Foo'.
+    
+    function F1(s:string) {return s;}
+    function F1(a:any) { return a;} // error -  duplicate identifier
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Duplicate function implementation.
+    
+    function Goo(s:string); // error - no implementation
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! Function implementation expected.
+    
+    declare function Gar(s:String); // expect no error
+    
+    var f1 = new Foo("hey");
+    
+    
+    f1.bar1();
+    Foo();
+    ~~~~~
+!!! Value of type 'typeof Foo' is not callable. Did you mean to include 'new'?
+    

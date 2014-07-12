@@ -1,0 +1,8 @@
+==== tests/cases/compiler/defaultValueInConstructorOverload1.ts (1 errors) ====
+    class C {
+        constructor(x = '');
+                    ~~~~~~
+!!! A parameter initializer is only allowed in a function or constructor implementation.
+        constructor(x = '') {
+        }
+    }

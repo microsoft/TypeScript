@@ -1,0 +1,23 @@
+==== tests/cases/compiler/classImplementsClass4.ts (2 errors) ====
+    class A {
+        private x = 1;
+        foo(): number { return 1; }
+    }
+    class C implements A {
+          ~
+!!! Class 'C' incorrectly implements interface 'A':
+!!!   Property 'x' is missing in type 'C'.
+        foo() {
+            return 1;
+        }
+    }
+    
+    class C2 extends A {}
+    
+    var c: C;
+    var c2: C2;
+    c = c2;
+    c2 = c;
+    ~~
+!!! Type 'C' is not assignable to type 'C2':
+!!!   Property 'x' is missing in type 'C'.

@@ -1,0 +1,27 @@
+==== tests/cases/compiler/indexSignatureTypeCheck.ts (4 errors) ====
+    interface IPropertySet {
+    
+        [index: string]: any;
+    
+    }
+    
+    
+    var ps: IPropertySet = null;
+    var index: any = "hello";
+    ps[index] = 12;
+    
+    
+    interface indexErrors {
+        [p2?: string];
+         ~~
+!!! An index signature parameter cannot have a question mark.
+        [...p3: any[]];
+            ~~
+!!! An index signature cannot have a rest parameter.
+        [p4: string, p5?: string];
+         ~~
+!!! An index signature must have exactly one parameter.
+        [p6: string, ...p7: any[]];
+         ~~
+!!! An index signature must have exactly one parameter.
+    }

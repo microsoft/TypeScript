@@ -1,0 +1,22 @@
+==== tests/cases/compiler/libMembers.ts (3 errors) ====
+    var s="hello";
+    s.substring(0);
+    s.substring(3,4);
+    s.subby(12);   // error unresolved
+      ~~~~~
+!!! Property 'subby' does not exist on type 'string'.
+    String.fromCharCode(12);
+    module M {
+        export class C {
+        }
+        var a=new C[];
+                   ~~
+!!! 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+        a.length;
+        a.push(new C());
+        (new C()).prototype;
+                  ~~~~~~~~~
+!!! Property 'prototype' does not exist on type 'C'.
+    }
+    
+    

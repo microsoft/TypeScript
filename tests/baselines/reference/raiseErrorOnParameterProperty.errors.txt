@@ -1,0 +1,10 @@
+==== tests/cases/compiler/raiseErrorOnParameterProperty.ts (1 errors) ====
+    class C1 {
+      constructor(public x: X) {
+                            ~
+!!! Cannot find name 'X'.
+      }
+    }
+    var c1 = new C1(0);
+     
+    

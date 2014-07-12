@@ -1,0 +1,12 @@
+built
+doc
+samples
+src
+tests
+typings
+bin/winjs.d.ts
+bin/winrt.d.ts
+bin/*.bat
+bin/jquery.d.ts
+bin/typescriptServices.js
+Jakefile

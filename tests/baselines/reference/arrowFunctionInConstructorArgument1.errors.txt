@@ -1,0 +1,8 @@
+==== tests/cases/compiler/arrowFunctionInConstructorArgument1.ts (1 errors) ====
+    class C {
+        constructor(x: () => void) { }
+    }
+    var c = new C(() => { return asdf; } ) // should error
+                                 ~~~~
+!!! Cannot find name 'asdf'.
+    

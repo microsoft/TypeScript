@@ -1,0 +1,6 @@
+==== tests/cases/compiler/staticIndexer.ts (1 errors) ====
+    class C {
+        static [s: string]: number;
+        ~~~~~~
+!!! Modifiers not permitted on index signature members.
+    }

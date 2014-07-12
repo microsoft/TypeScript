@@ -1,0 +1,15 @@
+==== tests/cases/compiler/extendsClauseAlreadySeen2.ts (3 errors) ====
+    class C<T> {
+    
+    }
+    class D<T> extends C<number> extends C<string> {
+                                 ~~~~~~~
+!!! '{' expected.
+                                         ~~~~~~~~~~~
+                                           ~~~~~~
+!!! Cannot find name 'string'.
+        baz() { }
+    ~~~~~~~~~~~~~
+    }
+    ~
+!!! Operator '>' cannot be applied to types 'boolean' and '{ baz: () => void; }'.

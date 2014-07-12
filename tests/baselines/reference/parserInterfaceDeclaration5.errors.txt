@@ -1,0 +1,5 @@
+==== tests/cases/conformance/parser/ecmascript5/InterfaceDeclarations/parserInterfaceDeclaration5.ts (1 errors) ====
+    declare interface I {
+    ~~~~~~~
+!!! A 'declare' modifier cannot be used with an interface declaration.
+    }

@@ -1,0 +1,21 @@
+==== tests/cases/compiler/es6DeclOrdering.ts (2 errors) ====
+    class Bar {
+    
+       //public bar() { }
+    
+       public foo() {
+           return this._store.length;
+                       ~~~~~~
+!!! Property '_store' does not exist on type 'Bar'.
+     
+       }
+    
+       constructor(store: string) {
+           this._store = store; // this is an error for some reason? Unresolved symbol store
+                ~~~~~~
+!!! Property '_store' does not exist on type 'Bar'.
+     
+       } 
+    }
+    
+    

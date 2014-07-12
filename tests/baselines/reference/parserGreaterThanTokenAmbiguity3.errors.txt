@@ -1,0 +1,6 @@
+==== tests/cases/conformance/parser/ecmascript5/Generics/parserGreaterThanTokenAmbiguity3.ts (2 errors) ====
+    1 >/**/> 2;
+           ~
+!!! Expression expected.
+    ~~~~~~~~~~
+!!! Operator '>' cannot be applied to types 'boolean' and 'number'.

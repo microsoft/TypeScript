@@ -1,0 +1,6 @@
+==== tests/cases/conformance/parser/ecmascript5/parservoidInQualifiedName1.ts (2 errors) ====
+    var v : void.x;
+            ~~~~
+!!! Identifier expected.
+                ~
+!!! Expression expected.

@@ -1,0 +1,283 @@
+==== tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts (80 errors) ====
+    // expected error for all the LHS of compound assignments (arithmetic and addition)
+    var value;
+    
+    // this
+    class C {
+        constructor() {
+            this *= value;
+            ~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+            this += value;
+            ~~~~
+!!! Invalid left-hand side of assignment expression.
+        }
+        foo() {
+            this *= value;
+            ~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+            this += value;
+            ~~~~
+!!! Invalid left-hand side of assignment expression.
+        }
+        static sfoo() {
+            this *= value;
+            ~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+            this += value;
+            ~~~~
+!!! Invalid left-hand side of assignment expression.
+        }
+    }
+    
+    function foo() {
+        this *= value;
+        ~~~~
+!!! Invalid left-hand side of assignment expression.
+        this += value;
+        ~~~~
+!!! Invalid left-hand side of assignment expression.
+    }
+    
+    this *= value;
+    ~~~~
+!!! Invalid left-hand side of assignment expression.
+    this += value;
+    ~~~~
+!!! Invalid left-hand side of assignment expression.
+    
+    // identifiers: module, class, enum, function
+    module M { export var a; }
+    M *= value;
+    ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    M += value;
+    ~
+!!! Invalid left-hand side of assignment expression.
+    
+    C *= value;
+    ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    C += value;
+    ~
+!!! Invalid left-hand side of assignment expression.
+    
+    enum E { }
+    E *= value;
+    ~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    E += value;
+    ~
+!!! Invalid left-hand side of assignment expression.
+    
+    foo *= value;
+    ~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    foo += value;
+    ~~~
+!!! Invalid left-hand side of assignment expression.
+    
+    // literals
+    null *= value;
+    ~~~~
+!!! Invalid left-hand side of assignment expression.
+    null += value;
+    ~~~~
+!!! Invalid left-hand side of assignment expression.
+    true *= value;
+    ~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    true += value;
+    ~~~~
+!!! Invalid left-hand side of assignment expression.
+    false *= value;
+    ~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    false += value;
+    ~~~~~
+!!! Invalid left-hand side of assignment expression.
+    0 *= value;
+    ~
+!!! Invalid left-hand side of assignment expression.
+    0 += value;
+    ~
+!!! Invalid left-hand side of assignment expression.
+    '' *= value;
+    ~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    '' += value;
+    ~~
+!!! Invalid left-hand side of assignment expression.
+    /d+/ *= value;
+    ~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    /d+/ += value;
+    ~~~~
+!!! Invalid left-hand side of assignment expression.
+    
+    // object literals
+    { a: 0} *= value;
+            ~~
+!!! Declaration or statement expected.
+    { a: 0} += value;
+            ~~
+!!! Declaration or statement expected.
+    
+    // array literals
+    ['', ''] *= value;
+    ~~~~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    ['', ''] += value;
+    ~~~~~~~~
+!!! Invalid left-hand side of assignment expression.
+    
+    // super
+    class Derived extends C {
+        constructor() {
+            super();
+            super *= value;
+                  ~~
+!!! 'super' must be followed by argument list or member access.
+            ~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+            super += value;
+                  ~~
+!!! 'super' must be followed by argument list or member access.
+            ~~~~~
+!!! Invalid left-hand side of assignment expression.
+        }
+    
+        foo() {
+            super *= value;
+                  ~~
+!!! 'super' must be followed by argument list or member access.
+            ~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+            super += value;
+                  ~~
+!!! 'super' must be followed by argument list or member access.
+            ~~~~~
+!!! Invalid left-hand side of assignment expression.
+        }
+    
+        static sfoo() {
+            super *= value;
+                  ~~
+!!! 'super' must be followed by argument list or member access.
+            ~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+            super += value;
+                  ~~
+!!! 'super' must be followed by argument list or member access.
+            ~~~~~
+!!! Invalid left-hand side of assignment expression.
+        }
+    }
+    
+    // function expression
+    function bar1() { } *= value;
+                        ~~
+!!! Declaration or statement expected.
+    function bar2() { } += value;
+                        ~~
+!!! Declaration or statement expected.
+    () => { } *= value;
+              ~~
+!!! ';' expected.
+    () => { } += value;
+              ~~
+!!! ';' expected.
+    
+    // function calls
+    foo() *= value;
+    ~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    foo() += value;
+    ~~~~~
+!!! Invalid left-hand side of assignment expression.
+    
+    // parentheses, the containted expression is value
+    (this) *= value;
+    ~~~~~~
+!!! Invalid left-hand side of assignment expression.
+    (this) += value;
+    ~~~~~~
+!!! Invalid left-hand side of assignment expression.
+    (M) *= value;
+    ~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    (M) += value;
+    ~~~
+!!! Invalid left-hand side of assignment expression.
+    (C) *= value;
+    ~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    (C) += value;
+    ~~~
+!!! Invalid left-hand side of assignment expression.
+    (E) *= value;
+    ~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    (E) += value;
+    ~~~
+!!! Invalid left-hand side of assignment expression.
+    (foo) *= value;
+    ~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    (foo) += value;
+    ~~~~~
+!!! Invalid left-hand side of assignment expression.
+    (null) *= value;
+    ~~~~~~
+!!! Invalid left-hand side of assignment expression.
+    (null) += value;
+    ~~~~~~
+!!! Invalid left-hand side of assignment expression.
+    (true) *= value;
+    ~~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    (true) += value;
+    ~~~~~~
+!!! Invalid left-hand side of assignment expression.
+    (0) *= value;
+    ~~~
+!!! Invalid left-hand side of assignment expression.
+    (0) += value;
+    ~~~
+!!! Invalid left-hand side of assignment expression.
+    ('') *= value;
+    ~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    ('') += value;
+    ~~~~
+!!! Invalid left-hand side of assignment expression.
+    (/d+/) *= value;
+    ~~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    (/d+/) += value;
+    ~~~~~~
+!!! Invalid left-hand side of assignment expression.
+    ({}) *= value;
+    ~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    ({}) += value;
+    ~~~~
+!!! Invalid left-hand side of assignment expression.
+    ([]) *= value;
+    ~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    ([]) += value;
+    ~~~~
+!!! Invalid left-hand side of assignment expression.
+    (function baz1() { }) *= value;
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    (function baz2() { }) += value;
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! Invalid left-hand side of assignment expression.
+    (foo()) *= value;
+    ~~~~~~~
+!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    (foo()) += value;
+    ~~~~~~~
+!!! Invalid left-hand side of assignment expression.

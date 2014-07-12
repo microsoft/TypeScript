@@ -1,0 +1,16 @@
+==== tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndFunctionWithSameName.ts (2 errors) ====
+    class C {
+        x: number;
+        x() { // error
+        ~
+!!! Duplicate identifier 'x'.
+            return 1;
+        }
+    }
+    
+    class D {
+        x: number;
+        x(v) { } // error
+        ~
+!!! Duplicate identifier 'x'.
+    }

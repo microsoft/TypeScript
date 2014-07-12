@@ -1,0 +1,18 @@
+==== tests/cases/compiler/interfaceNameAsIdentifier.ts (2 errors) ====
+    interface C {
+        (): void;
+    }
+    C();
+    ~
+!!! Cannot find name 'C'.
+    
+    module m2 {
+        export interface C {
+            (): void;
+        }
+    }
+    
+    m2.C();
+    ~~
+!!! Cannot find name 'm2'.
+    

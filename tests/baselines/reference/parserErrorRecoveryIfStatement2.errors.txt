@@ -1,0 +1,14 @@
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IfStatements/parserErrorRecoveryIfStatement2.ts (2 errors) ====
+    class Foo {
+      f1() {
+        if (a
+            ~
+!!! Cannot find name 'a'.
+      }
+      ~
+!!! ')' expected.
+      f2() {
+      }
+      f3() {
+      }
+    }

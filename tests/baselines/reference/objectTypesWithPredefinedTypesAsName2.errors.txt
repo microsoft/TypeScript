@@ -1,0 +1,6 @@
+==== tests/cases/conformance/types/specifyingTypes/predefinedTypes/objectTypesWithPredefinedTypesAsName2.ts (1 errors) ====
+    // it is an error to use a predefined type as a type name
+    
+    class void {} // parse error unlike the others
+          ~~~~
+!!! Identifier expected.

@@ -1,0 +1,24 @@
+==== tests/cases/compiler/overloadOnConstNoAnyImplementation.ts (4 errors) ====
+    function x1(a: number, cb: (x: 'hi') => number);
+                               ~~~~~~~~~~~~~~~~~~~
+!!! Specialized overload signature is not assignable to any non-specialized signature.
+    function x1(a: number, cb: (x: 'bye') => number);
+                               ~~~~~~~~~~~~~~~~~~~~
+!!! Specialized overload signature is not assignable to any non-specialized signature.
+    function x1(a: number, cb: (x: string) => number) {
+        cb('hi');
+        cb('bye');
+        var hm = 'hm';
+        cb(hm);
+        cb('uh');
+        cb(1); // error
+        ~~~~~
+!!! Supplied parameters do not match any signature of call target.
+    }
+    
+    var cb: (number) => number = (x: number) => 1;
+    x1(1, cb);
+    x1(1, (x: 'hi') => 1); // error
+          ~~~~~~~~~~~~~~
+!!! A signature with an implementation cannot use a string literal type.
+    x1(1, (x: string) => 1);

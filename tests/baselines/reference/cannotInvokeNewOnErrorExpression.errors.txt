@@ -1,0 +1,10 @@
+==== tests/cases/compiler/cannotInvokeNewOnErrorExpression.ts (2 errors) ====
+    module M
+    {
+        class ClassA {}
+    }
+    var t = new M.ClassA[];
+                        ~~
+!!! 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+                  ~~~~~~
+!!! Property 'ClassA' does not exist on type 'typeof M'.

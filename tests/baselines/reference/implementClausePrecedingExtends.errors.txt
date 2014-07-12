@@ -1,0 +1,10 @@
+==== tests/cases/compiler/implementClausePrecedingExtends.ts (3 errors) ====
+    class C { foo: number }
+    class D implements C extends C { }
+                         ~~~~~~~
+!!! '{' expected.
+                                   ~
+!!! ';' expected.
+          ~
+!!! Class 'D' incorrectly implements interface 'C':
+!!!   Property 'foo' is missing in type 'D'.

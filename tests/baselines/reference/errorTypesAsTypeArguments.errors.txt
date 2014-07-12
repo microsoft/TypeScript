@@ -1,0 +1,8 @@
+==== tests/cases/compiler/errorTypesAsTypeArguments.ts (2 errors) ====
+    interface Foo<A> {
+      bar(baz: Foo<B>): Foo<C>;
+                   ~
+!!! Cannot find name 'B'.
+                            ~
+!!! Cannot find name 'C'.
+    }

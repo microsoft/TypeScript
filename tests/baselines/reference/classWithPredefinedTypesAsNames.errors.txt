@@ -1,0 +1,15 @@
+==== tests/cases/conformance/classes/classDeclarations/classWithPredefinedTypesAsNames.ts (4 errors) ====
+    // classes cannot use predefined types as names
+    
+    class any { }
+          ~~~
+!!! Class name cannot be 'any'
+    class number { }
+          ~~~~~~
+!!! Class name cannot be 'number'
+    class boolean { }
+          ~~~~~~~
+!!! Class name cannot be 'boolean'
+    class string { }
+          ~~~~~~
+!!! Class name cannot be 'string'

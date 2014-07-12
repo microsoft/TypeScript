@@ -1,0 +1,20 @@
+==== tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorInvalidOperations.ts (4 errors) ====
+    // Unary operator ~
+    var q;
+    
+    // operand before ~
+    var a = q~;  //expect error
+             ~
+!!! ',' expected.
+              ~
+!!! Expression expected.
+    
+    // multiple operands after ~
+    var mul = ~[1, 2, "abc"], "";  //expect error
+                              ~~
+!!! Variable declaration expected.
+    
+    // miss an operand
+    var b =~;
+            ~
+!!! Expression expected.

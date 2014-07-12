@@ -1,0 +1,46 @@
+==== tests/cases/conformance/internalModules/DeclarationMerging/function.ts (0 errors) ====
+    module A {
+        export function Point() {
+            return { x: 0, y: 0 };
+        }
+    }
+    
+==== tests/cases/conformance/internalModules/DeclarationMerging/module.ts (0 errors) ====
+    module A {
+        export module Point {
+            export var Origin = { x: 0, y: 0 };
+        }
+    }
+    
+==== tests/cases/conformance/internalModules/DeclarationMerging/test.ts (1 errors) ====
+    var fn: () => { x: number; y: number };
+    var fn = A.Point;
+        ~~
+!!! Subsequent variable declarations must have the same type.  Variable 'fn' must be of type '() => { x: number; y: number; }', but here has type 'typeof Point'.
+    
+    var cl: { x: number; y: number; }
+    var cl = A.Point();
+    var cl = A.Point.Origin; // not expected to be an error.
+    
+    
+==== tests/cases/conformance/internalModules/DeclarationMerging/simple.ts (1 errors) ====
+    module B {
+    
+        export function Point() {
+            return { x: 0, y: 0 };
+        }
+    
+        export module Point {
+            export var Origin = { x: 0, y: 0 };
+        }
+    }
+    
+    var fn: () => { x: number; y: number };
+    var fn = B.Point;  // not expected to be an error. bug 840000: [corelang] Function of fundule not assignalbe as expected
+        ~~
+!!! Subsequent variable declarations must have the same type.  Variable 'fn' must be of type '() => { x: number; y: number; }', but here has type 'typeof Point'.
+    
+    var cl: { x: number; y: number; }
+    var cl = B.Point();
+    var cl = B.Point.Origin;
+    

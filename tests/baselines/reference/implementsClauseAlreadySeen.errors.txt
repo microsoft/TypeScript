@@ -1,0 +1,19 @@
+==== tests/cases/compiler/implementsClauseAlreadySeen.ts (6 errors) ====
+    class C {
+        
+    }
+    class D implements C implements C {
+                         ~~~~~~~~~~
+!!! '{' expected.
+                                    ~
+!!! ';' expected.
+                                      ~
+!!! ';' expected.
+                         ~~~~~~~~~~
+!!! Cannot find name 'implements'.
+        baz() { }
+              ~
+!!! ';' expected.
+        ~~~
+!!! Cannot find name 'baz'.
+    }

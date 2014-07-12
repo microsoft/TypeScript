@@ -1,0 +1,11 @@
+==== tests/cases/compiler/propertyOrdering2.ts (1 errors) ====
+    class Foo {
+        constructor(public x, y) { }
+           foo() {
+            var a = this.x;
+            return this.y;
+                        ~
+!!! Property 'y' does not exist on type 'Foo'.
+        }
+    }
+    

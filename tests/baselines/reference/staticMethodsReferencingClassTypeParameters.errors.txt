@@ -1,0 +1,6 @@
+==== tests/cases/compiler/staticMethodsReferencingClassTypeParameters.ts (1 errors) ====
+    class C<T> {
+        static s(p: T) { return p; }
+                    ~
+!!! Static members cannot reference class type parameters.
+    }

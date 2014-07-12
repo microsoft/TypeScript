@@ -1,0 +1,17 @@
+==== tests/cases/compiler/externSyntax.ts (1 errors) ====
+    declare var v;
+    declare module M {
+        export class D {
+            public p;
+        }
+        export class C {
+            public f();
+            public g() { } // error body
+                       ~
+!!! A function implementation cannot be declared in an ambient context.
+        }
+    }
+    
+    
+    
+    

@@ -1,0 +1,200 @@
+==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithRestParameters.ts (11 errors) ====
+    // call signatures in derived types must have the same or fewer optional parameters as the base type
+    
+    interface Base { 
+        a: (...args: number[]) => number;
+        a2: (x: number, ...z: number[]) => number;
+        a3: (x: number, y?: string, ...z: number[]) => number;
+        a4: (x?: number, y?: string, ...z: number[]) => number;
+    }
+    
+    interface I1 extends Base {
+        a: () => number; // ok, same number of required params
+    }
+    
+    interface I1B extends Base {
+        a: (...args: number[]) => number; // ok, same number of required params
+    }
+    
+    interface I1C extends Base {
+              ~~~
+!!! Interface 'I1C' incorrectly extends interface 'Base':
+!!!   Types of property 'a' are incompatible:
+!!!     Type '(...args: string[]) => number' is not assignable to type '(...args: number[]) => number':
+!!!       Types of parameters 'args' and 'args' are incompatible:
+!!!         Type 'string' is not assignable to type 'number'.
+        a: (...args: string[]) => number; // error, type mismatch
+    }
+    
+    interface I2 extends Base {
+        a: (x?: number) => number; // ok, same number of required params
+    }
+    
+    interface I2B extends Base {
+        a: (x?: number, y?: number, z?: number) => number; // ok, same number of required params
+    }
+    
+    interface I3 extends Base {
+        a: (x: number) => number; // ok, all present params match
+    }
+    
+    interface I3B extends Base {
+              ~~~
+!!! Interface 'I3B' incorrectly extends interface 'Base':
+!!!   Types of property 'a' are incompatible:
+!!!     Type '(x?: string) => number' is not assignable to type '(...args: number[]) => number':
+!!!       Types of parameters 'x' and 'args' are incompatible:
+!!!         Type 'string' is not assignable to type 'number'.
+        a: (x?: string) => number; // error, incompatible type
+    }
+    
+    
+    
+    interface I4 extends Base {
+        a2: () => number; // ok, fewer required params
+    }
+    
+    interface I4B extends Base {
+        a2: (...args: number[]) => number; // ok, fewer required params
+    }
+    
+    interface I5 extends Base {
+        a2: (x?: number) => number; // ok, fewer required params
+    }
+    
+    interface I6 extends Base {
+        a2: (x: number) => number; // ok, same number of required params
+    }
+    
+    interface I6B extends Base {
+        a2: (x: number, ...args: number[]) => number; // ok, same number of required params
+    }
+    
+    interface I6C extends Base {
+              ~~~
+!!! Interface 'I6C' incorrectly extends interface 'Base':
+!!!   Types of property 'a2' are incompatible:
+!!!     Type '(x: number, ...args: string[]) => number' is not assignable to type '(x: number, ...z: number[]) => number':
+!!!       Types of parameters 'args' and 'z' are incompatible:
+!!!         Type 'string' is not assignable to type 'number'.
+        a2: (x: number, ...args: string[]) => number; // error
+    }
+    
+    interface I6D extends Base {
+        a2: (x: number, y: number) => number; // ok, all present params match
+    }
+    
+    interface I6E extends Base {
+        a2: (x: number, y?: number) => number; // ok, same number of required params
+    }
+    
+    
+    
+    interface I7 extends Base {
+        a3: () => number; // ok, fewer required params
+    }
+    
+    interface I8 extends Base {
+        a3: (x?: number) => number; // ok, fewer required params
+    }
+    
+    interface I9 extends Base {
+        a3: (x: number) => number; // ok, same number of required params
+    }
+    
+    interface I10 extends Base {
+        a3: (x: number, y: string) => number;  // ok, all present params match
+    }
+    
+    interface I10B extends Base {
+              ~~~~
+!!! Interface 'I10B' incorrectly extends interface 'Base':
+!!!   Types of property 'a3' are incompatible:
+!!!     Type '(x: number, y?: number, z?: number) => number' is not assignable to type '(x: number, y?: string, ...z: number[]) => number':
+!!!       Types of parameters 'y' and 'y' are incompatible:
+!!!         Type 'number' is not assignable to type 'string'.
+        a3: (x: number, y?: number, z?: number) => number;  // error
+    }
+    
+    interface I10C extends Base {
+              ~~~~
+!!! Interface 'I10C' incorrectly extends interface 'Base':
+!!!   Types of property 'a3' are incompatible:
+!!!     Type '(x: number, ...z: number[]) => number' is not assignable to type '(x: number, y?: string, ...z: number[]) => number':
+!!!       Types of parameters 'z' and 'y' are incompatible:
+!!!         Type 'number' is not assignable to type 'string'.
+        a3: (x: number, ...z: number[]) => number;  // error
+    }
+    
+    interface I10D extends Base {
+              ~~~~
+!!! Interface 'I10D' incorrectly extends interface 'Base':
+!!!   Types of property 'a3' are incompatible:
+!!!     Type '(x: string, y?: string, z?: string) => number' is not assignable to type '(x: number, y?: string, ...z: number[]) => number':
+!!!       Types of parameters 'x' and 'x' are incompatible:
+!!!         Type 'string' is not assignable to type 'number'.
+        a3: (x: string, y?: string, z?: string) => number;  // error, incompatible types
+    }
+    
+    interface I10E extends Base {
+              ~~~~
+!!! Interface 'I10E' incorrectly extends interface 'Base':
+!!!   Types of property 'a3' are incompatible:
+!!!     Type '(x: number, ...z: string[]) => number' is not assignable to type '(x: number, y?: string, ...z: number[]) => number':
+!!!       Types of parameters 'z' and 'z' are incompatible:
+!!!         Type 'string' is not assignable to type 'number'.
+        a3: (x: number, ...z: string[]) => number;  // error
+    }
+    
+    interface I11 extends Base {
+        a4: () => number; // ok, fewer required params
+    }
+    
+    interface I12 extends Base {
+              ~~~
+!!! Interface 'I12' incorrectly extends interface 'Base':
+!!!   Types of property 'a4' are incompatible:
+!!!     Type '(x?: number, y?: number) => number' is not assignable to type '(x?: number, y?: string, ...z: number[]) => number':
+!!!       Types of parameters 'y' and 'y' are incompatible:
+!!!         Type 'number' is not assignable to type 'string'.
+        a4: (x?: number, y?: number) => number; // error, type mismatch
+    }
+    
+    interface I13 extends Base {
+        a4: (x: number) => number; // ok, all present params match
+    }
+    
+    interface I14 extends Base {
+              ~~~
+!!! Interface 'I14' incorrectly extends interface 'Base':
+!!!   Types of property 'a4' are incompatible:
+!!!     Type '(x: number, y?: number) => number' is not assignable to type '(x?: number, y?: string, ...z: number[]) => number':
+!!!       Types of parameters 'y' and 'y' are incompatible:
+!!!         Type 'number' is not assignable to type 'string'.
+        a4: (x: number, y?: number) => number;  // error, second param has type mismatch
+    }
+    
+    interface I15 extends Base {
+        a4: (x?: number, y?: string) => number;  // ok, same number of required params with matching types
+    }
+    
+    interface I16 extends Base {
+              ~~~
+!!! Interface 'I16' incorrectly extends interface 'Base':
+!!!   Types of property 'a4' are incompatible:
+!!!     Type '(x: number, ...args: string[]) => number' is not assignable to type '(x?: number, y?: string, ...z: number[]) => number':
+!!!       Types of parameters 'args' and 'z' are incompatible:
+!!!         Type 'string' is not assignable to type 'number'.
+        a4: (x: number, ...args: string[]) => number;  // error, rest param has type mismatch
+    }
+    
+    interface I17 extends Base {
+              ~~~
+!!! Interface 'I17' incorrectly extends interface 'Base':
+!!!   Types of property 'a4' are incompatible:
+!!!     Type '(...args: number[]) => number' is not assignable to type '(x?: number, y?: string, ...z: number[]) => number':
+!!!       Types of parameters 'args' and 'y' are incompatible:
+!!!         Type 'number' is not assignable to type 'string'.
+        a4: (...args: number[]) => number; // error
+    }
+    

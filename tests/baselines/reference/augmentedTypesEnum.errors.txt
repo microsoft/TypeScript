@@ -1,0 +1,46 @@
+==== tests/cases/compiler/augmentedTypesEnum.ts (5 errors) ====
+    // enum then var
+    enum e1111 { One }
+    var e1111 = 1; // error
+        ~~~~~
+!!! Duplicate identifier 'e1111'.
+    
+    // enum then function
+    enum e2 { One }
+    function e2() { } // error
+             ~~
+!!! Duplicate identifier 'e2'.
+    
+    enum e3 { One }
+    var e3 = () => { } // error
+        ~~
+!!! Duplicate identifier 'e3'.
+    
+    // enum then class
+    enum e4 { One }
+    class e4 { public foo() { } } // error
+          ~~
+!!! Duplicate identifier 'e4'.
+    
+    // enum then enum
+    enum e5 { One }
+    enum e5 { Two }
+    
+    enum e5a { One }
+    enum e5a { One } // error
+               ~~~
+!!! Duplicate identifier 'One'.
+    
+    // enum then internal module
+    enum e6 { One } 
+    module e6 { } // ok
+    
+    enum e6a { One }
+    module e6a { var y = 2; } // should be error
+    
+    enum e6b { One }
+    module e6b { export var y = 2; } // should be error
+    
+    // enum then import, messes with error reporting
+    //enum e7 { One }
+    //import e7 = require(''); // should be error

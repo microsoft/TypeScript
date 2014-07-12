@@ -1,0 +1,18 @@
+==== tests/cases/conformance/parser/ecmascript5/SuperExpressions/parserSuperExpression1.ts (2 errors) ====
+    class C {
+        private foo() {
+            super.foo();
+            ~~~~~
+!!! 'super' can only be referenced in a derived class.
+        }
+    }
+    
+    module M1.M2 {
+        class C {
+            private foo() {
+                super.foo();
+                ~~~~~
+!!! 'super' can only be referenced in a derived class.
+            }
+        }
+    }

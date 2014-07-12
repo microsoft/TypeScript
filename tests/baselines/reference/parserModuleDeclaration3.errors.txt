@@ -1,0 +1,7 @@
+==== tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration3.ts (1 errors) ====
+    declare module M {
+      declare module M2 {
+      ~~~~~~~
+!!! A 'declare' modifier cannot be used in an already ambient context.
+      }
+    }

@@ -1,0 +1,46 @@
+==== tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndInvalidOperator.ts (11 errors) ====
+    // If one operand is the null or undefined value, it is treated as having the type of the other operand.
+    
+    function foo(): void { return undefined }
+    
+    var a: boolean;
+    var b: Object;
+    var c: void;
+    var d: Number;
+    
+    // null + boolean/Object
+    var r1 = null + a;
+             ~~~~~~~~
+!!! Operator '+' cannot be applied to types 'boolean' and 'boolean'.
+    var r2 = null + b;
+             ~~~~~~~~
+!!! Operator '+' cannot be applied to types 'Object' and 'Object'.
+    var r3 = null + c;
+             ~~~~~~~~
+!!! Operator '+' cannot be applied to types 'void' and 'void'.
+    var r4 = a + null;
+             ~~~~~~~~
+!!! Operator '+' cannot be applied to types 'boolean' and 'boolean'.
+    var r5 = b + null;
+             ~~~~~~~~
+!!! Operator '+' cannot be applied to types 'Object' and 'Object'.
+    var r6 = null + c;
+             ~~~~~~~~
+!!! Operator '+' cannot be applied to types 'void' and 'void'.
+    
+    // other cases
+    var r7 = null + d;
+             ~~~~~~~~
+!!! Operator '+' cannot be applied to types 'Number' and 'Number'.
+    var r8 = null + true;
+             ~~~~~~~~~~~
+!!! Operator '+' cannot be applied to types 'boolean' and 'boolean'.
+    var r9 = null + { a: '' };
+             ~~~~~~~~~~~~~~~~
+!!! Operator '+' cannot be applied to types '{ a: string; }' and '{ a: string; }'.
+    var r10 = null + foo();
+              ~~~~~~~~~~~~
+!!! Operator '+' cannot be applied to types 'void' and 'void'.
+    var r11 = null + (() => { });
+              ~~~~~~~~~~~~~~~~~~
+!!! Operator '+' cannot be applied to types '() => void' and '() => void'.

@@ -1,0 +1,5 @@
+==== tests/cases/conformance/types/primitives/undefined/directReferenceToUndefined.ts (1 errors) ====
+    var x: Undefined;
+           ~~~~~~~~~
+!!! Cannot find name 'Undefined'.
+    var y = undefined;

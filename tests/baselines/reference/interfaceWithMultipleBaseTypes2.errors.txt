@@ -1,0 +1,32 @@
+==== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes2.ts (1 errors) ====
+    interface Base {
+        x: {
+            a?: string; b: string;
+        }
+    }
+    
+    interface Base2 {
+        x: {
+            b: string; c?: number;
+        }
+    }
+    
+    interface Derived extends Base, Base2 {
+        x: { b: string }
+    }
+    
+    interface Derived2 extends Base, Base2 { // error
+              ~~~~~~~~
+!!! Interface 'Derived2' incorrectly extends interface 'Base':
+!!!   Types of property 'x' are incompatible:
+!!!     Type '{ a: number; b: string; }' is not assignable to type '{ a?: string; b: string; }':
+!!!       Types of property 'a' are incompatible:
+!!!         Type 'number' is not assignable to type 'string'.
+        x: { a: number; b: string }
+    }
+    
+    interface Derived3 extends Base, Base2 {
+        x: { a: string; b: string }
+    }
+    
+    

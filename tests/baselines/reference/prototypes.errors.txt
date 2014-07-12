@@ -1,0 +1,7 @@
+==== tests/cases/compiler/prototypes.ts (1 errors) ====
+    Object.prototype; // ok
+    new Object().prototype; // error
+                 ~~~~~~~~~
+!!! Property 'prototype' does not exist on type 'Object'.
+    function f() {}
+    f.prototype;

@@ -1,0 +1,38 @@
+==== tests/cases/compiler/anonymousModules.ts (12 errors) ====
+    module {
+           ~
+!!! ';' expected.
+    ~~~~~~
+!!! Cannot find name 'module'.
+    	export var foo = 1;
+    	~~~~~~
+!!! Statement expected.
+    	~~~~~~~~~~~~~~~~~~~
+!!! Cannot compile external modules unless the '--module' flag is provided.
+    
+    	module {
+    	       ~
+!!! ';' expected.
+    	~~~~~~
+!!! Cannot find name 'module'.
+    		export var bar = 1;
+    		~~~~~~
+!!! Statement expected.
+    	}
+    	~
+!!! Declaration or statement expected.
+    
+    	var bar = 2;
+    	    ~~~
+!!! Duplicate identifier 'bar'.
+    
+    	module {
+    	       ~
+!!! ';' expected.
+    	~~~~~~
+!!! Cannot find name 'module'.
+    		var x = bar;
+    	}
+    }
+    ~
+!!! Declaration or statement expected.

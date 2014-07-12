@@ -1,0 +1,7 @@
+==== tests/cases/compiler/thisInModule.ts (1 errors) ====
+    module myMod {
+        var x;
+        this.x = 5;
+        ~~~~
+!!! 'this' cannot be referenced in a module body.
+    }

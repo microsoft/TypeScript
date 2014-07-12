@@ -1,0 +1,15 @@
+==== tests/cases/compiler/recursiveInheritance.ts (2 errors) ====
+    
+    interface I5 extends I5 { // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        foo():void;
+    ~~~~~~~~~~~~~~~
+    } 
+    ~
+!!! Type 'I5' recursively references itself as a base type.
+    
+    interface i8 extends i9 { } // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Type 'i8' recursively references itself as a base type.
+    interface i9 extends i8 { } // error
+    

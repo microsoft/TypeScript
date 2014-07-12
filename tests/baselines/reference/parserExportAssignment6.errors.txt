@@ -1,0 +1,6 @@
+==== tests/cases/conformance/parser/ecmascript5/ExportAssignments/parserExportAssignment6.ts (1 errors) ====
+    declare module "M" {
+        export = A;
+        ~~~~~~~~~~~
+!!! Cannot find name 'A'.
+    }
