@@ -1,0 +1,45 @@
+==== tests/cases/compiler/subtypingWithObjectMembersOptionality2.ts (4 errors) ====
+    // Derived member is optional but base member is not, should be an error
+    
+    interface Base { foo: string; }
+    interface Derived extends Base { bar: string; }
+    
+    interface T {
+        Foo: Base;
+    }
+    
+    interface S extends T {
+              ~
+!!! subtypingWithObjectMembersOptionality2.ts(10,11): error TS2143: Interface 'S' cannot extend interface 'T':
+!!! 	Property 'Foo' defined as optional in type 'S', but is required in type 'T'.
+        Foo?: Derived // error
+    }
+    
+    interface T2 {
+        1: Base;
+    }
+    
+    interface S2 extends T2 {
+              ~~
+!!! subtypingWithObjectMembersOptionality2.ts(18,11): error TS2143: Interface 'S2' cannot extend interface 'T2':
+!!! 	Property '1' defined as optional in type 'S2', but is required in type 'T2'.
+        1?: Derived; // error
+    }
+    
+    interface T3 {
+        '1': Base;
+    }
+    
+    interface S3 extends T3 {
+              ~~
+!!! subtypingWithObjectMembersOptionality2.ts(26,11): error TS2143: Interface 'S3' cannot extend interface 'T3':
+!!! 	Property ''1'' defined as optional in type 'S3', but is required in type 'T3'.
+        '1'?: Derived; // error
+    }
+    
+    // object literal case
+    var a: { Foo: Base; }
+    var b: { Foo?: Derived; }
+    var r = true ? a : b; // error
+            ~~~~~~~~~~~~
+!!! subtypingWithObjectMembersOptionality2.ts(33,9): error TS2226: Type of conditional '{}' must be identical to '{ Foo: Base; }' or '{ Foo?: Derived; }'.

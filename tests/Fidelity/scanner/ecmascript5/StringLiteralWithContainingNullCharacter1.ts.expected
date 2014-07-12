@@ -1,0 +1,21 @@
+[
+    {
+        "kind": "StringLiteral",
+        "width": 5,
+        "text": "\" \u0000 \"",
+        "value": " \u0000 ",
+        "valueText": " \u0000 "
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "text": ";",
+        "value": ";",
+        "valueText": ";"
+    },
+    {
+        "kind": "EndOfFileToken",
+        "width": 0,
+        "text": ""
+    }
+]

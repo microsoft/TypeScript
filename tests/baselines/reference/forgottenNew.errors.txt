@@ -1,0 +1,8 @@
+==== tests/cases/compiler/forgottenNew.ts (1 errors) ====
+    module Tools {
+        export class NullLogger { }
+    }
+    
+    var logger = Tools.NullLogger();
+                       ~~~~~~~~~~
+!!! forgottenNew.ts(5,20): error TS2161: Value of type 'typeof Tools.NullLogger' is not callable. Did you mean to include 'new'?

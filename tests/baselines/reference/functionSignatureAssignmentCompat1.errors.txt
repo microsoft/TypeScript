@@ -1,0 +1,15 @@
+==== tests/cases/compiler/functionSignatureAssignmentCompat1.ts (1 errors) ====
+    interface ParserFunc {
+        (eventEmitter: number, buffer: string): void;
+    }
+    interface Parsers {
+        raw: ParserFunc;
+        readline(delimiter?: string): ParserFunc;
+    }
+    var parsers: Parsers;
+    var c: ParserFunc = parsers.raw; // ok!
+    var d: ParserFunc = parsers.readline; // not ok
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! functionSignatureAssignmentCompat1.ts(10,5): error TS2012: Cannot convert '(delimiter?: string) => ParserFunc' to 'ParserFunc':
+!!! 	Call signatures of types '(delimiter?: string) => ParserFunc' and 'ParserFunc' are incompatible.
+    var e: ParserFunc = parsers.readline(); // ok

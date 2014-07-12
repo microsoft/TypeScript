@@ -1,0 +1,111 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "diagnostics": [
+        {
+            "start": 0,
+            "length": 1,
+            "diagnosticCode": "Unexpected character {0}.",
+            "arguments": [
+                "\"\\\""
+            ]
+        },
+        {
+            "start": 0,
+            "length": 1,
+            "diagnosticCode": "Unexpected token; '{0}' expected.",
+            "arguments": [
+                "module, class, interface, enum, import or statement"
+            ]
+        },
+        {
+            "start": 2,
+            "length": 1,
+            "diagnosticCode": "Unexpected character {0}.",
+            "arguments": [
+                "\"\\\""
+            ]
+        },
+        {
+            "start": 2,
+            "length": 1,
+            "diagnosticCode": "Unexpected token; '{0}' expected.",
+            "arguments": [
+                "module, class, interface, enum, import or statement"
+            ]
+        },
+        {
+            "start": 4,
+            "length": 1,
+            "diagnosticCode": "Unexpected character {0}.",
+            "arguments": [
+                "\"\\\""
+            ]
+        },
+        {
+            "start": 4,
+            "length": 1,
+            "diagnosticCode": "Unexpected token; '{0}' expected.",
+            "arguments": [
+                "module, class, interface, enum, import or statement"
+            ]
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 5,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "fullWidth": 5,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingSkippedText": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "ErrorToken",
+                        "width": 1,
+                        "text": "\\"
+                    }
+                },
+                {
+                    "kind": "WhitespaceTrivia",
+                    "text": " "
+                },
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "ErrorToken",
+                        "width": 1,
+                        "text": "\\"
+                    }
+                },
+                {
+                    "kind": "WhitespaceTrivia",
+                    "text": " "
+                },
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "ErrorToken",
+                        "width": 1,
+                        "text": "\\"
+                    }
+                }
+            ]
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 5
+    }
+}

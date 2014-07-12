@@ -1,0 +1,21 @@
+==== tests/cases/compiler/es6DeclOrdering.ts (2 errors) ====
+    class Bar {
+    
+       //public bar() { }
+    
+       public foo() {
+           return this._store.length;
+                       ~~~~~~
+!!! es6DeclOrdering.ts(6,20): error TS2094: The property '_store' does not exist on value of type 'Bar'.
+     
+       }
+    
+       constructor(store: string) {
+           this._store = store; // this is an error for some reason? Unresolved symbol store
+                ~~~~~~
+!!! es6DeclOrdering.ts(11,13): error TS2094: The property '_store' does not exist on value of type 'Bar'.
+     
+       } 
+    }
+    
+    

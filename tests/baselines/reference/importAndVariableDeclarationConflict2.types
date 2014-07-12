@@ -1,0 +1,23 @@
+=== tests/cases/compiler/importAndVariableDeclarationConflict2.ts ===
+module m {
+>m : m
+
+  export var m = '';
+>m : string
+}
+
+import x = m.m;
+>x : x
+>m : m
+>m : string
+
+class C {
+>C : C
+
+  public foo() {
+>foo : () => void
+
+    var x = '';
+>x : string
+  }
+}

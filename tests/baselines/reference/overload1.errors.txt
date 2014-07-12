@@ -1,0 +1,61 @@
+==== tests/cases/compiler/overload1.ts (10 errors) ====
+    module O {
+        export class A {
+            
+        }
+    
+        export class B extends A {
+        }
+    
+        export class C extends B {
+            
+        }
+    
+        export interface I {
+            f(s:string):number;
+            f(n:number):string;
+            g(n1:number,n2:number):number;
+            g(n:number):string;
+            g(a:A):C;
+            g(c:C):string;
+            ~~~~~~~~~~~~~
+!!! overload1.ts(19,9): error TS2175: Overloads cannot differ only by return type.
+            h(s1:string,s2:number):string;
+            h(s1:number,s2:string):number;
+        }
+    }
+    
+    declare var x:O.I;
+    
+    var e:string=x.g(new O.A()); // matches overload but bad assignment
+        ~~~~~~~~~~~~~~~~~~~~~~~
+!!! overload1.ts(27,5): error TS2011: Cannot convert 'O.C' to 'string'.
+    var y:string=x.f(3); // good
+    y=x.f("nope"); // can't assign number to string
+    ~
+!!! overload1.ts(29,1): error TS2011: Cannot convert 'number' to 'string'.
+    var z:string=x.g(x.g(3,3)); // good
+    z=x.g(2,2,2); // no match
+        ~
+!!! overload1.ts(31,5): error TS2081: Supplied parameters do not match any signature of call target.
+        ~
+!!! overload1.ts(31,5): error TS2087: Could not select overload for 'call' expression.
+    z=x.g(); // no match
+        ~
+!!! overload1.ts(32,5): error TS2081: Supplied parameters do not match any signature of call target.
+        ~
+!!! overload1.ts(32,5): error TS2087: Could not select overload for 'call' expression.
+    z=x.g(new O.B()); // ambiguous (up and down conversion)
+    ~
+!!! overload1.ts(33,1): error TS2011: Cannot convert 'O.C' to 'string'.
+    z=x.h(2,2); // no match
+        ~
+!!! overload1.ts(34,5): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Could not apply type 'string' to argument 1 which is of type 'number'.
+        ~
+!!! overload1.ts(34,5): error TS2087: Could not select overload for 'call' expression.
+    z=x.h("hello",0); // good
+    
+    var v=x.g;
+    
+    

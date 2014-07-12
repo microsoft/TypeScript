@@ -1,0 +1,21 @@
+==== tests/cases/compiler/arithmeticOnInvalidTypes.ts (7 errors) ====
+    var x: Number;
+    var y: Number;
+    var z = x + y;
+            ~
+!!! arithmeticOnInvalidTypes.ts(3,9): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+    var z2 = x - y;
+             ~
+!!! arithmeticOnInvalidTypes.ts(4,10): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                 ~
+!!! arithmeticOnInvalidTypes.ts(4,14): error TS2112: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var z3 = x * y;
+             ~
+!!! arithmeticOnInvalidTypes.ts(5,10): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                 ~
+!!! arithmeticOnInvalidTypes.ts(5,14): error TS2112: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var z4 = x / y;
+             ~
+!!! arithmeticOnInvalidTypes.ts(6,10): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                 ~
+!!! arithmeticOnInvalidTypes.ts(6,14): error TS2112: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.

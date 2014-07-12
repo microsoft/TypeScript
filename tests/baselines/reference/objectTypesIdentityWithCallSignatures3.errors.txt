@@ -1,0 +1,56 @@
+==== tests/cases/compiler/objectTypesIdentityWithCallSignatures3.ts (8 errors) ====
+    // object types are identical structurally
+    
+    interface I {
+        (x: string): string;
+    }
+    
+    interface I2<T> {
+        (x: T): T;
+    }
+    
+    var a: { (x: string): string }
+    
+    function foo2(x: I);
+    function foo2(x: I); // error
+    ~~~~~~~~~~~~~~~~~~~~
+!!! objectTypesIdentityWithCallSignatures3.ts(14,1): error TS2144: Duplicate overload signature for 'foo2'.
+    function foo2(x: any) { }
+    
+    function foo3(x: typeof a);
+    function foo3(x: typeof a); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! objectTypesIdentityWithCallSignatures3.ts(18,1): error TS2144: Duplicate overload signature for 'foo3'.
+    function foo3(x: any) { }
+    
+    function foo4(x: typeof b);
+                            ~
+!!! objectTypesIdentityWithCallSignatures3.ts(21,25): error TS2095: Could not find symbol 'b'.
+    function foo4(x: typeof b); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! objectTypesIdentityWithCallSignatures3.ts(22,1): error TS2144: Duplicate overload signature for 'foo4'.
+                            ~
+!!! objectTypesIdentityWithCallSignatures3.ts(22,25): error TS2095: Could not find symbol 'b'.
+    function foo4(x: any) { }
+    
+    function foo13(x: I);
+    function foo13(x: typeof a); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! objectTypesIdentityWithCallSignatures3.ts(26,1): error TS2144: Duplicate overload signature for 'foo13'.
+    function foo13(x: any) { }
+    
+    function foo14(x: I);
+    function foo14(x: I2<string>); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! objectTypesIdentityWithCallSignatures3.ts(30,1): error TS2144: Duplicate overload signature for 'foo14'.
+    function foo14(x: any) { }
+    
+    function foo14b(x: typeof a);
+    function foo14b(x: I2<string>); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! objectTypesIdentityWithCallSignatures3.ts(34,1): error TS2144: Duplicate overload signature for 'foo14b'.
+    function foo14b(x: any) { }
+    
+    function foo15(x: I);
+    function foo15(x: I2<number>); // ok
+    function foo15(x: any) { }

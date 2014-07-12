@@ -1,0 +1,16 @@
+==== tests/cases/compiler/recursiveBaseCheck2.ts (1 errors) ====
+    declare module Box2D.Collision.Shapes {
+        export class b2CircleShape extends b2Shape {
+                     ~~~~~~~~~~~~~
+!!! recursiveBaseCheck2.ts(2,18): error TS2100: Class 'Box2D.Collision.Shapes.b2CircleShape' is recursively referenced as a base type of itself.
+        }
+        export class b2Shape extends Box2D.Collision.Shapes.b2CircleShape {
+        }
+    }
+    declare module Box2D.Dynamics {
+        export class b2ContactListener extends Box2D.Collision.Shapes.b2Shape {
+        }
+        export class b2FixtureDef extends Box2D.Dynamics.b2ContactListener {
+        }
+    }
+    

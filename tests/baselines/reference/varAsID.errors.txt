@@ -1,0 +1,24 @@
+==== tests/cases/compiler/varAsID.ts (2 errors) ====
+    
+    class Foo {
+        var; // ok
+        x=1;
+    }
+    
+    var f = new Foo();
+    
+    
+    class Foo2 {
+        var // error
+        ~~~
+!!! varAsID.ts(11,5): error TS1008: Unexpected token; 'constructor, function, accessor or variable' expected.
+        x=1;
+    }
+    ~
+!!! varAsID.ts(13,1): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.
+    
+    var f2 = new Foo2();
+    
+    
+    
+    

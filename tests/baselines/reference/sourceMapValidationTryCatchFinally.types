@@ -1,0 +1,56 @@
+=== tests/cases/compiler/sourceMapValidationTryCatchFinally.ts ===
+var x = 10;
+>x : number
+
+try {
+    x = x + 1;
+>x = x + 1 : number
+>x : number
+>x + 1 : number
+>x : number
+
+} catch (e) {
+>e : any
+
+    x = x - 1;
+>x = x - 1 : number
+>x : number
+>x - 1 : number
+>x : number
+
+} finally {
+    x = x * 10;
+>x = x * 10 : number
+>x : number
+>x * 10 : number
+>x : number
+}
+try
+{
+    x = x + 1;
+>x = x + 1 : number
+>x : number
+>x + 1 : number
+>x : number
+
+    throw new Error();
+>new Error() : Error
+>Error : { prototype: Error; (message?: string): Error; new(message?: string): Error; }
+}
+catch (e)
+>e : any
+{
+    x = x - 1;
+>x = x - 1 : number
+>x : number
+>x - 1 : number
+>x : number
+}
+finally
+{
+    x = x * 10;
+>x = x * 10 : number
+>x : number
+>x * 10 : number
+>x : number
+}

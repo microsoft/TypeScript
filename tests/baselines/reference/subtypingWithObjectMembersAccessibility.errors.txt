@@ -1,0 +1,43 @@
+==== tests/cases/compiler/subtypingWithObjectMembersAccessibility.ts (3 errors) ====
+    // Derived member is private, base member is not causes errors
+    
+    class Base {
+        foo: string;
+    }
+    
+    class Derived extends Base {
+        bar: string;
+    }
+    
+    class A {
+        public foo: Base;
+    }
+    
+    class B extends A {
+          ~
+!!! subtypingWithObjectMembersAccessibility.ts(15,7): error TS2141: Class 'B' cannot extend class 'A':
+!!! 	Property 'foo' defined as private in type 'B' is defined as public in type 'A'.
+        private foo: Derived; // error
+    }
+    
+    class A2 {
+        public 1: Base; 
+    }
+    
+    class B2 extends A2 {
+          ~~
+!!! subtypingWithObjectMembersAccessibility.ts(23,7): error TS2141: Class 'B2' cannot extend class 'A2':
+!!! 	Property '1' defined as private in type 'B2' is defined as public in type 'A2'.
+        private 1: Derived; // error
+    }
+    
+    class A3 {
+        public '1': Base;
+    }
+    
+    class B3 extends A3 {
+          ~~
+!!! subtypingWithObjectMembersAccessibility.ts(31,7): error TS2141: Class 'B3' cannot extend class 'A3':
+!!! 	Property ''1'' defined as private in type 'B3' is defined as public in type 'A3'.
+        private '1': Derived; // error
+    }

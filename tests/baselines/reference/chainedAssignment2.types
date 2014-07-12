@@ -1,0 +1,32 @@
+=== tests/cases/compiler/chainedAssignment2.ts ===
+var a: string;
+>a : string
+
+var b: number;
+>b : number
+
+var c: boolean;
+>c : boolean
+
+var d: Date;
+>d : Date
+>Date : Date
+
+var e: RegExp;
+>e : RegExp
+>RegExp : RegExp
+
+>a = b = c = d = e = null : any
+>a : string
+
+a = b = c = d = e = null;
+>b = c = d = e = null : any
+>b : number
+>c = d = e = null : any
+>c : boolean
+>d = e = null : any
+>d : Date
+>e = null : any
+>e : RegExp
+
+

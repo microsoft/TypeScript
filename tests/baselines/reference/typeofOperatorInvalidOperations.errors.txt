@@ -1,0 +1,14 @@
+==== tests/cases/compiler/typeofOperatorInvalidOperations.ts (3 errors) ====
+    // Unary operator typeof
+    
+    // opreand before typeof
+    var ANY = ANY typeof ;    //expect error
+                  ~~~~~~
+!!! typeofOperatorInvalidOperations.ts(4,15): error TS1005: ',' expected.
+                         ~
+!!! typeofOperatorInvalidOperations.ts(4,22): error TS1003: Identifier expected.
+    
+    // miss an operand
+    var ANY1 = typeof ;
+                      ~
+!!! typeofOperatorInvalidOperations.ts(7,19): error TS1003: Identifier expected.

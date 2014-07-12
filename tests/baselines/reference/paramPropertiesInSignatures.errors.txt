@@ -1,0 +1,22 @@
+==== tests/cases/compiler/paramPropertiesInSignatures.ts (5 errors) ====
+    class C1 {
+        constructor(public p1:string); // ERROR
+                 ~~~~~~
+!!! paramPropertiesInSignatures.ts(2,14): error TS1083: Parameter property declarations cannot be used in a constructor overload.
+        constructor(private p2:number); // ERROR
+                 ~~~~~~~
+!!! paramPropertiesInSignatures.ts(3,14): error TS1083: Parameter property declarations cannot be used in a constructor overload.
+        constructor(public p3:any) {} // OK
+    }
+    
+    declare class C2 {
+        constructor(public p1:string); // ERROR
+                 ~~~~~~
+!!! paramPropertiesInSignatures.ts(8,14): error TS1040: Parameter property declarations can only be used in a non-ambient constructor declaration.
+        constructor(private p2:number); // ERROR
+                 ~~~~~~~
+!!! paramPropertiesInSignatures.ts(9,14): error TS1040: Parameter property declarations can only be used in a non-ambient constructor declaration.
+        constructor(public p3:any); // ERROR
+                 ~~~~~~
+!!! paramPropertiesInSignatures.ts(10,14): error TS1040: Parameter property declarations can only be used in a non-ambient constructor declaration.
+    }

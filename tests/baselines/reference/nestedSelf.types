@@ -1,0 +1,27 @@
+=== tests/cases/compiler/nestedSelf.ts ===
+module M {
+>M : M
+
+ export class C {
+>C : C
+
+   public n = 42;
+>n : number
+
+   public foo() { [1,2,3].map((x) => { return this.n * x; })}
+>foo : () => void
+>[1,2,3].map((x) => { return this.n * x; }) : number[]
+>[1,2,3].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>[1,2,3] : number[]
+>map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>(x) => { return this.n * x; } : (x: number) => number
+>x : number
+>this.n * x : number
+>this.n : number
+>this : C
+>n : number
+>x : number
+ }
+}
+
+

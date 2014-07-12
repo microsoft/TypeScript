@@ -1,0 +1,3 @@
+throw; 
+
+export throw null;

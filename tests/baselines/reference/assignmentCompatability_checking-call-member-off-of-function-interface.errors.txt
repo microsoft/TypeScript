@@ -1,0 +1,63 @@
+==== tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts (12 errors) ====
+    // 3.8.4 Assignment Compatibility 
+    
+    interface Callable {
+        call(blah: any); // also works for 'apply'
+    }
+    
+    var x: Callable;
+    
+    // Should fail
+    x = '';
+    ~
+!!! assignmentCompatability_checking-call-member-off-of-function-interface.ts(10,1): error TS2012: Cannot convert 'string' to 'Callable':
+!!! 	Type 'String' is missing property 'call' from type 'Callable'.
+    x = [''];
+    ~
+!!! assignmentCompatability_checking-call-member-off-of-function-interface.ts(11,1): error TS2012: Cannot convert 'string[]' to 'Callable':
+!!! 	Type 'string[]' is missing property 'call' from type 'Callable'.
+    x = 4;
+    ~
+!!! assignmentCompatability_checking-call-member-off-of-function-interface.ts(12,1): error TS2012: Cannot convert 'number' to 'Callable':
+!!! 	Type 'Number' is missing property 'call' from type 'Callable'.
+    x = {};
+    ~
+!!! assignmentCompatability_checking-call-member-off-of-function-interface.ts(13,1): error TS2012: Cannot convert '{}' to 'Callable':
+!!! 	Type '{}' is missing property 'call' from type 'Callable'.
+    
+    // Should work
+    function f() { };
+    x = f;
+    
+    function fn(c: Callable) { }
+    
+    // Should Fail
+    fn('');
+    ~~
+!!! assignmentCompatability_checking-call-member-off-of-function-interface.ts(22,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Type 'String' is missing property 'call' from type 'Callable'.
+    ~~
+!!! assignmentCompatability_checking-call-member-off-of-function-interface.ts(22,1): error TS2087: Could not select overload for 'call' expression.
+    fn(['']);
+    ~~
+!!! assignmentCompatability_checking-call-member-off-of-function-interface.ts(23,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Type 'string[]' is missing property 'call' from type 'Callable'.
+    ~~
+!!! assignmentCompatability_checking-call-member-off-of-function-interface.ts(23,1): error TS2087: Could not select overload for 'call' expression.
+    fn(4);
+    ~~
+!!! assignmentCompatability_checking-call-member-off-of-function-interface.ts(24,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Type 'Number' is missing property 'call' from type 'Callable'.
+    ~~
+!!! assignmentCompatability_checking-call-member-off-of-function-interface.ts(24,1): error TS2087: Could not select overload for 'call' expression.
+    fn({});
+    ~~
+!!! assignmentCompatability_checking-call-member-off-of-function-interface.ts(25,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Type '{}' is missing property 'call' from type 'Callable'.
+    ~~
+!!! assignmentCompatability_checking-call-member-off-of-function-interface.ts(25,1): error TS2087: Could not select overload for 'call' expression.
+    
+    
+    // Should work
+    fn(a => { });
+    

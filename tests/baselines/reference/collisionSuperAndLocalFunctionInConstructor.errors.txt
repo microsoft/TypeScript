@@ -1,0 +1,31 @@
+==== tests/cases/compiler/collisionSuperAndLocalFunctionInConstructor.ts (2 errors) ====
+    function _super() { // No error
+    }
+    class Foo {
+        constructor() {
+            function _super() { // No error
+            }
+        }
+    }
+    class b extends Foo {
+        constructor() {
+            super();
+            function _super() { // Should be error
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            }
+    ~~~~~~~~~
+!!! collisionSuperAndLocalFunctionInConstructor.ts(12,9): error TS2205: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+        }
+    }
+    class c extends Foo {
+        constructor() {
+            super();
+            var x = () => {
+                function _super() { // Should be error
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                }
+    ~~~~~~~~~~~~~
+!!! collisionSuperAndLocalFunctionInConstructor.ts(20,13): error TS2205: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+            }
+        }
+    }

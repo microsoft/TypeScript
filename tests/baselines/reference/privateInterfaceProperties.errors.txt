@@ -1,0 +1,13 @@
+==== tests/cases/compiler/privateInterfaceProperties.ts (1 errors) ====
+    interface i1 { name:string; }
+     
+    // should be an error 
+    class c1 implements i1 { private name:string; }
+          ~~
+!!! privateInterfaceProperties.ts(4,7): error TS2137: Class c1 declares interface i1 but does not implement it:
+!!! 	Property 'name' defined as private in type 'c1' is defined as public in type 'i1'.
+     
+    // should be ok 
+    class c2 implements i1 { public name:string; }
+    
+     

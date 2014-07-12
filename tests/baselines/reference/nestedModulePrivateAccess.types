@@ -1,0 +1,15 @@
+=== tests/cases/compiler/nestedModulePrivateAccess.ts ===
+module a{
+>a : a
+
+       var x:number;
+>x : number
+
+       module b{
+>b : b
+
+               var y = x; // should not be an error
+>y : number
+>x : number
+       }
+}

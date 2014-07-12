@@ -1,0 +1,21 @@
+=== tests/cases/compiler/interfaceInReopenedModule.ts ===
+module m {
+>m : m
+}
+
+// In second instance of same module, exported interface is not visible
+module m {
+>m : m
+
+    interface f {}
+>f : f
+
+    export class n { 
+>n : n
+
+        private n: f;
+>n : f
+>f : f
+    }
+}
+

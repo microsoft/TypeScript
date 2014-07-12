@@ -1,0 +1,13 @@
+==== tests/cases/compiler/genericConstraintSatisfaction1.ts (2 errors) ====
+    interface I<S> {
+       f: <T extends S>(x: T) => void
+    }
+     
+    var x: I<{s: string}>
+    x.f({s: 1})
+      ~
+!!! genericConstraintSatisfaction1.ts(6,3): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Types of property 's' of types '{ s: number; }' and '{ s: string; }' are incompatible.
+      ~
+!!! genericConstraintSatisfaction1.ts(6,3): error TS2087: Could not select overload for 'call' expression.
+    

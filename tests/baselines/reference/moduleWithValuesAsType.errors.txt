@@ -1,0 +1,8 @@
+==== tests/cases/compiler/moduleWithValuesAsType.ts (1 errors) ====
+    module A {
+        var b = 1;
+    }
+    
+    var a: A; // no error
+           ~
+!!! moduleWithValuesAsType.ts(5,8): error TS4022: Type reference cannot refer to container 'A'.

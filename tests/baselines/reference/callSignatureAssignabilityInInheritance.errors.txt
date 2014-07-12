@@ -1,0 +1,75 @@
+==== tests/cases/compiler/callSignatureAssignabilityInInheritance.ts (2 errors) ====
+    module CallSignature {
+        interface Base { // T
+            // M's
+            (x: number): void;
+            (x: number, y: number): void;
+        }
+    
+        // S's
+        interface I extends Base {
+            // N's
+            (x: number): number; // ok because base returns void
+            (x: number, y: number): boolean; // ok because base returns void
+            <T>(x: T): string; // ok because base returns void
+        }
+    
+        interface Base2 { // T
+            // M's
+            (x: number): number;
+        }
+    
+        // S's
+        interface I2 extends Base2 {
+                  ~~
+!!! callSignatureAssignabilityInInheritance.ts(22,15): error TS2143: Interface 'CallSignature.I2' cannot extend interface 'CallSignature.Base2':
+!!! 	Call signatures of types 'I2' and 'Base2' are incompatible.
+            // N's
+            (x: number): string; // error because base returns non-void;
+        }
+    
+        // S's
+        interface I3 extends Base2 {
+            // N's
+            <T>(x: T): string; // ok, adds a new call signature
+        }
+    }
+    
+    module MemberWithCallSignature {
+        interface Base { // T
+            // M's
+            a: (x: number) => void;
+            a2: (x: number, y: number) => void;
+            a3: <T>(x: T) => void;
+        }
+    
+        // S's
+        interface I extends Base {
+            // N's
+            a: (x: number) => number; // ok because base returns void
+            a2: (x: number, y: number) => boolean; // ok because base returns void
+            a3: <T>(x: T) => string; // ok because base returns void
+        }
+    
+        interface Base2 { // T
+            // M's
+            a: (x: number) => number;
+            a2: <T>(x: T) => T;
+        }
+    
+        // S's
+        interface I2 extends Base2 {
+                  ~~
+!!! callSignatureAssignabilityInInheritance.ts(57,15): error TS2143: Interface 'MemberWithCallSignature.I2' cannot extend interface 'MemberWithCallSignature.Base2':
+!!! 	Types of property 'a' of types 'I2' and 'Base2' are incompatible:
+!!! 		Call signatures of types '(x: number) => string' and '(x: number) => number' are incompatible.
+            // N's
+            a: (x: number) => string; // error because base returns non-void;
+        }
+    
+        // S's
+        interface I3 extends Base2 {
+            // N's
+            a2: <T>(x: T) => string; // error because base returns non-void;
+        }
+    }

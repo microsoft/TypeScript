@@ -1,0 +1,19 @@
+=== tests/cases/compiler/staticMemberInitialization.ts ===
+class C {
+>C : C
+
+    static x = 1;
+>x : number
+}
+
+var c = new C();
+>c : C
+>new C() : C
+>C : typeof C
+
+var r = C.x;
+>r : number
+>C.x : number
+>C : typeof C
+>x : number
+

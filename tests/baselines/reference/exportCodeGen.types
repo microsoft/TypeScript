@@ -1,0 +1,111 @@
+=== tests/cases/compiler/exportCodeGen.ts ===
+
+// should replace all refs to 'x' in the body,
+// with fully qualified
+module A {
+>A : A
+
+    export var x = 12;
+>x : number
+
+    function lt12() {
+>lt12 : typeof lt12
+
+        return x < 12;
+>x < 12 : boolean
+>x : number
+    }
+} 
+
+// should not fully qualify 'x'
+module B {
+>B : B
+
+    var x = 12;
+>x : number
+
+    function lt12() {
+>lt12 : typeof lt12
+
+        return x < 12;
+>x < 12 : boolean
+>x : number
+    }
+}
+
+// not copied, since not exported
+module C {
+>C : C
+
+    function no() {
+>no : typeof no
+
+        return false;
+    }
+}
+
+// copies, since exported
+module D {
+>D : D
+
+    export function yes() {
+>yes : typeof yes
+
+        return true;
+    }
+}
+
+// validate all exportable statements
+module E {
+>E : E
+
+    export enum Color { Red }
+>Color : Color
+>Red : Color
+
+    export function fn() { }
+>fn : typeof fn
+
+    export interface I { id: number }
+>I : I
+>id : number
+
+    export class C { name: string }
+>C : C
+>name : string
+
+    export module M {
+>M : M
+
+        export var x = 42;
+>x : number
+    }
+}
+
+// validate all exportable statements,
+// which are not exported
+module F {
+>F : F
+
+    enum Color { Red }
+>Color : Color
+>Red : Color
+
+    function fn() { }
+>fn : typeof fn
+
+    interface I { id: number }
+>I : I
+>id : number
+
+    class C { name: string }
+>C : C
+>name : string
+
+    module M {
+>M : M
+
+        var x = 42;
+>x : number
+    }
+}

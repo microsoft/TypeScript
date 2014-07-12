@@ -1,0 +1,178 @@
+==== tests/cases/compiler/subtypingWithCallSignaturesWithRestParameters.ts (11 errors) ====
+    // call signatures in derived types must have the same or fewer optional parameters as the base type
+    
+    interface Base { 
+        a: (...args: number[]) => number;
+        a2: (x: number, ...z: number[]) => number;
+        a3: (x: number, y?: string, ...z: number[]) => number;
+        a4: (x?: number, y?: string, ...z: number[]) => number;
+    }
+    
+    interface I1 extends Base {
+        a: () => number; // ok, same number of required params
+    }
+    
+    interface I1B extends Base {
+        a: (...args: number[]) => number; // ok, same number of required params
+    }
+    
+    interface I1C extends Base {
+              ~~~
+!!! subtypingWithCallSignaturesWithRestParameters.ts(18,11): error TS2143: Interface 'I1C' cannot extend interface 'Base':
+!!! 	Types of property 'a' of types 'I1C' and 'Base' are incompatible:
+!!! 		Call signatures of types '(...args: string[]) => number' and '(...args: number[]) => number' are incompatible.
+        a: (...args: string[]) => number; // error, type mismatch
+    }
+    
+    interface I2 extends Base {
+        a: (x?: number) => number; // ok, same number of required params
+    }
+    
+    interface I2B extends Base {
+        a: (x?: number, y?: number, z?: number) => number; // ok, same number of required params
+    }
+    
+    interface I3 extends Base {
+        a: (x: number) => number; // ok, all present params match
+    }
+    
+    interface I3B extends Base {
+              ~~~
+!!! subtypingWithCallSignaturesWithRestParameters.ts(34,11): error TS2143: Interface 'I3B' cannot extend interface 'Base':
+!!! 	Types of property 'a' of types 'I3B' and 'Base' are incompatible:
+!!! 		Call signatures of types '(x?: string) => number' and '(...args: number[]) => number' are incompatible.
+        a: (x?: string) => number; // error, incompatible type
+    }
+    
+    
+    
+    interface I4 extends Base {
+        a2: () => number; // ok, fewer required params
+    }
+    
+    interface I4B extends Base {
+        a2: (...args: number[]) => number; // ok, fewer required params
+    }
+    
+    interface I5 extends Base {
+        a2: (x?: number) => number; // ok, fewer required params
+    }
+    
+    interface I6 extends Base {
+        a2: (x: number) => number; // ok, same number of required params
+    }
+    
+    interface I6B extends Base {
+        a2: (x: number, ...args: number[]) => number; // ok, same number of required params
+    }
+    
+    interface I6C extends Base {
+              ~~~
+!!! subtypingWithCallSignaturesWithRestParameters.ts(60,11): error TS2143: Interface 'I6C' cannot extend interface 'Base':
+!!! 	Types of property 'a2' of types 'I6C' and 'Base' are incompatible:
+!!! 		Call signatures of types '(x: number, ...args: string[]) => number' and '(x: number, ...z: number[]) => number' are incompatible.
+        a2: (x: number, ...args: string[]) => number; // error
+    }
+    
+    interface I6D extends Base {
+        a2: (x: number, y: number) => number; // ok, all present params match
+    }
+    
+    interface I6E extends Base {
+        a2: (x: number, y?: number) => number; // ok, same number of required params
+    }
+    
+    
+    
+    interface I7 extends Base {
+        a3: () => number; // ok, fewer required params
+    }
+    
+    interface I8 extends Base {
+        a3: (x?: number) => number; // ok, fewer required params
+    }
+    
+    interface I9 extends Base {
+        a3: (x: number) => number; // ok, same number of required params
+    }
+    
+    interface I10 extends Base {
+        a3: (x: number, y: string) => number;  // ok, all present params match
+    }
+    
+    interface I10B extends Base {
+              ~~~~
+!!! subtypingWithCallSignaturesWithRestParameters.ts(90,11): error TS2143: Interface 'I10B' cannot extend interface 'Base':
+!!! 	Types of property 'a3' of types 'I10B' and 'Base' are incompatible:
+!!! 		Call signatures of types '(x: number, y?: number, z?: number) => number' and '(x: number, y?: string, ...z: number[]) => number' are incompatible.
+        a3: (x: number, y?: number, z?: number) => number;  // error
+    }
+    
+    interface I10C extends Base {
+              ~~~~
+!!! subtypingWithCallSignaturesWithRestParameters.ts(94,11): error TS2143: Interface 'I10C' cannot extend interface 'Base':
+!!! 	Types of property 'a3' of types 'I10C' and 'Base' are incompatible:
+!!! 		Call signatures of types '(x: number, ...z: number[]) => number' and '(x: number, y?: string, ...z: number[]) => number' are incompatible.
+        a3: (x: number, ...z: number[]) => number;  // error
+    }
+    
+    interface I10D extends Base {
+              ~~~~
+!!! subtypingWithCallSignaturesWithRestParameters.ts(98,11): error TS2143: Interface 'I10D' cannot extend interface 'Base':
+!!! 	Types of property 'a3' of types 'I10D' and 'Base' are incompatible:
+!!! 		Call signatures of types '(x: string, y?: string, z?: string) => number' and '(x: number, y?: string, ...z: number[]) => number' are incompatible.
+        a3: (x: string, y?: string, z?: string) => number;  // error, incompatible types
+    }
+    
+    interface I10E extends Base {
+              ~~~~
+!!! subtypingWithCallSignaturesWithRestParameters.ts(102,11): error TS2143: Interface 'I10E' cannot extend interface 'Base':
+!!! 	Types of property 'a3' of types 'I10E' and 'Base' are incompatible:
+!!! 		Call signatures of types '(x: number, ...z: string[]) => number' and '(x: number, y?: string, ...z: number[]) => number' are incompatible.
+        a3: (x: number, ...z: string[]) => number;  // error
+    }
+    
+    interface I11 extends Base {
+        a4: () => number; // ok, fewer required params
+    }
+    
+    interface I12 extends Base {
+              ~~~
+!!! subtypingWithCallSignaturesWithRestParameters.ts(110,11): error TS2143: Interface 'I12' cannot extend interface 'Base':
+!!! 	Types of property 'a4' of types 'I12' and 'Base' are incompatible:
+!!! 		Call signatures of types '(x?: number, y?: number) => number' and '(x?: number, y?: string, ...z: number[]) => number' are incompatible.
+        a4: (x?: number, y?: number) => number; // error, type mismatch
+    }
+    
+    interface I13 extends Base {
+        a4: (x: number) => number; // ok, all present params match
+    }
+    
+    interface I14 extends Base {
+              ~~~
+!!! subtypingWithCallSignaturesWithRestParameters.ts(118,11): error TS2143: Interface 'I14' cannot extend interface 'Base':
+!!! 	Types of property 'a4' of types 'I14' and 'Base' are incompatible:
+!!! 		Call signatures of types '(x: number, y?: number) => number' and '(x?: number, y?: string, ...z: number[]) => number' are incompatible.
+        a4: (x: number, y?: number) => number;  // error, second param has type mismatch
+    }
+    
+    interface I15 extends Base {
+        a4: (x?: number, y?: string) => number;  // ok, same number of required params with matching types
+    }
+    
+    interface I16 extends Base {
+              ~~~
+!!! subtypingWithCallSignaturesWithRestParameters.ts(126,11): error TS2143: Interface 'I16' cannot extend interface 'Base':
+!!! 	Types of property 'a4' of types 'I16' and 'Base' are incompatible:
+!!! 		Call signatures of types '(x: number, ...args: string[]) => number' and '(x?: number, y?: string, ...z: number[]) => number' are incompatible.
+        a4: (x: number, ...args: string[]) => number;  // error, rest param has type mismatch
+    }
+    
+    interface I17 extends Base {
+              ~~~
+!!! subtypingWithCallSignaturesWithRestParameters.ts(130,11): error TS2143: Interface 'I17' cannot extend interface 'Base':
+!!! 	Types of property 'a4' of types 'I17' and 'Base' are incompatible:
+!!! 		Call signatures of types '(...args: number[]) => number' and '(x?: number, y?: string, ...z: number[]) => number' are incompatible.
+        a4: (...args: number[]) => number; // error
+    }
+    

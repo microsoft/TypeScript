@@ -1,0 +1,6 @@
+==== tests/cases/compiler/binaryArithmatic3.ts (2 errors) ====
+    var v = undefined | undefined;
+            ~~~~~~~~~
+!!! binaryArithmatic3.ts(1,9): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                        ~~~~~~~~~
+!!! binaryArithmatic3.ts(1,21): error TS2112: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.

@@ -1,0 +1,50 @@
+==== tests/cases/compiler/derivedGenericClassWithAny.ts (3 errors) ====
+    class C<T extends number> {
+        x: T;
+        get X(): T { return null; }
+        foo(): T {
+            return null;
+        }
+    }
+    
+    class D extends C<number> {
+        x: any;
+        get X(): any {
+            return null;
+        }
+        foo(): any {
+            return 1;
+        }
+    
+        static y: any;
+        static get Y(): any {
+            return null;
+        }
+        static bar(): any {
+            return null;
+        }
+    }
+    
+    // if D is a valid class definition than E is now not safe tranisitively through C
+    class E<T extends string> extends D {
+        x: T;
+        get X(): T { return ''; } // error
+                            ~~
+!!! derivedGenericClassWithAny.ts(30,25): error TS2011: Cannot convert 'string' to 'T'.
+        foo(): T {
+            return ''; // error
+                   ~~
+!!! derivedGenericClassWithAny.ts(32,16): error TS2011: Cannot convert 'string' to 'T'.
+        }
+    }
+    
+    var c: C<number>;
+    var d: D;
+    var e: E<string>;
+    
+    c = d;
+    c = e;
+    ~
+!!! derivedGenericClassWithAny.ts(41,1): error TS2012: Cannot convert 'E<string>' to 'C<number>':
+!!! 	Types of property 'x' of types 'E<string>' and 'C<number>' are incompatible.
+    var r = c.foo(); // e.foo would return string

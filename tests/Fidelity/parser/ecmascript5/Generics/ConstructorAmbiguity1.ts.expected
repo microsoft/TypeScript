@@ -1,0 +1,80 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 11,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullWidth": 11,
+                "expression": {
+                    "kind": "LessThanExpression",
+                    "fullWidth": 10,
+                    "left": {
+                        "kind": "ObjectCreationExpression",
+                        "fullWidth": 8,
+                        "newKeyword": {
+                            "kind": "NewKeyword",
+                            "width": 3,
+                            "fullWidth": 4,
+                            "text": "new",
+                            "value": "new",
+                            "valueText": "new",
+                            "hasTrailingTrivia": true,
+                            "trailingTrivia": [
+                                {
+                                    "kind": "WhitespaceTrivia",
+                                    "text": " "
+                                }
+                            ]
+                        },
+                        "expression": {
+                            "kind": "IdentifierName",
+                            "width": 4,
+                            "text": "Date",
+                            "value": "Date",
+                            "valueText": "Date"
+                        }
+                    },
+                    "operatorToken": {
+                        "kind": "LessThanToken",
+                        "width": 1,
+                        "text": "<",
+                        "value": "<",
+                        "valueText": "<"
+                    },
+                    "right": {
+                        "kind": "IdentifierName",
+                        "width": 1,
+                        "text": "A",
+                        "value": "A",
+                        "valueText": "A"
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 11
+    }
+}

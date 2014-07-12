@@ -1,0 +1,26 @@
+==== tests/cases/compiler/ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts (5 errors) ====
+    module A {
+    
+        class Point {
+            x: number;
+            y: number;
+        }
+    
+        export class Line {
+            constructor(public start: Point, public end: Point) { }
+                        ~~~~~~~~~~~~~~~~~~~
+!!! ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts(9,21): error TS2025: Public property 'start' of exported class has or is using private type 'Point'.
+                        ~~~~~~~~~~~~~~~~~~~
+!!! ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts(9,21): error TS2032: Parameter 'start' of constructor from exported class has or is using private type 'Point'.
+                                             ~~~~~~~~~~~~~~~~~
+!!! ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts(9,42): error TS2025: Public property 'end' of exported class has or is using private type 'Point'.
+                                             ~~~~~~~~~~~~~~~~~
+!!! ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts(9,42): error TS2032: Parameter 'end' of constructor from exported class has or is using private type 'Point'.
+        }
+    
+        export function fromOrigin(p: Point): Line {
+                                   ~~~~~~~~
+!!! ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts(12,32): error TS2040: Parameter 'p' of exported function has or is using private type 'Point'.
+            return new Line({ x: 0, y: 0 }, p);
+        }
+    }

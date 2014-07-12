@@ -1,0 +1,169 @@
+==== tests/cases/compiler/objectTypesIdentityWithStringIndexers.ts (23 errors) ====
+    // object types are identical structurally
+    
+    class A {
+        [x: string]: string;
+    }
+    
+    class B {
+        [x: string]: string;
+    }
+    
+    class C<T> {
+        [x: string]: T;
+    }
+    
+    interface I {
+        [x: string]: string;
+    }
+    
+    class PA extends A {
+    }
+    
+    class PB extends B {
+    }
+    
+    var a: {
+        [x: string]: string;
+    }
+    var b: { [x: string]: string; } = { foo: '' };
+    
+    function foo1(x: A);
+    function foo1(x: A); // error
+    ~~~~~~~~~~~~~~~~~~~~
+!!! objectTypesIdentityWithStringIndexers.ts(31,1): error TS2144: Duplicate overload signature for 'foo1'.
+    function foo1(x: any) { }
+    
+    function foo1b(x: B);
+    function foo1b(x: B); // error
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! objectTypesIdentityWithStringIndexers.ts(35,1): error TS2144: Duplicate overload signature for 'foo1b'.
+    function foo1b(x: any) { }
+    
+    function foo1c(x: C<string>);
+    function foo1c(x: C<string>); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! objectTypesIdentityWithStringIndexers.ts(39,1): error TS2144: Duplicate overload signature for 'foo1c'.
+    function foo1c(x: any) { }
+    
+    function foo2(x: I);
+    function foo2(x: I); // error
+    ~~~~~~~~~~~~~~~~~~~~
+!!! objectTypesIdentityWithStringIndexers.ts(43,1): error TS2144: Duplicate overload signature for 'foo2'.
+    function foo2(x: any) { }
+    
+    function foo3(x: typeof a);
+    function foo3(x: typeof a); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! objectTypesIdentityWithStringIndexers.ts(47,1): error TS2144: Duplicate overload signature for 'foo3'.
+    function foo3(x: any) { }
+    
+    function foo4(x: typeof b);
+    function foo4(x: typeof b); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! objectTypesIdentityWithStringIndexers.ts(51,1): error TS2144: Duplicate overload signature for 'foo4'.
+    function foo4(x: any) { }
+    
+    function foo5(x: A);
+    function foo5(x: B); // error
+    ~~~~~~~~~~~~~~~~~~~~
+!!! objectTypesIdentityWithStringIndexers.ts(55,1): error TS2144: Duplicate overload signature for 'foo5'.
+    function foo5(x: any) { }
+    
+    function foo5b(x: A);
+    function foo5b(x: C<string>); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! objectTypesIdentityWithStringIndexers.ts(59,1): error TS2144: Duplicate overload signature for 'foo5b'.
+    function foo5b(x: any) { }
+    
+    function foo5c(x: A);
+    function foo5c(x: PA); // error
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! objectTypesIdentityWithStringIndexers.ts(63,1): error TS2144: Duplicate overload signature for 'foo5c'.
+    function foo5c(x: any) { }
+    
+    function foo5d(x: A);
+    function foo5d(x: PB); // error
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! objectTypesIdentityWithStringIndexers.ts(67,1): error TS2144: Duplicate overload signature for 'foo5d'.
+    function foo5d(x: any) { }
+    
+    function foo6(x: A);
+    function foo6(x: I); // error
+    ~~~~~~~~~~~~~~~~~~~~
+!!! objectTypesIdentityWithStringIndexers.ts(71,1): error TS2144: Duplicate overload signature for 'foo6'.
+    function foo6(x: any) { }
+    
+    function foo7(x: A);
+    function foo7(x: typeof a); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! objectTypesIdentityWithStringIndexers.ts(75,1): error TS2144: Duplicate overload signature for 'foo7'.
+    function foo7(x: any) { }
+    
+    function foo8(x: B);
+    function foo8(x: I); // error
+    ~~~~~~~~~~~~~~~~~~~~
+!!! objectTypesIdentityWithStringIndexers.ts(79,1): error TS2144: Duplicate overload signature for 'foo8'.
+    function foo8(x: any) { }
+    
+    function foo9(x: B);
+    function foo9(x: C<string>); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! objectTypesIdentityWithStringIndexers.ts(83,1): error TS2144: Duplicate overload signature for 'foo9'.
+    function foo9(x: any) { }
+    
+    function foo10(x: B);
+    function foo10(x: typeof a); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! objectTypesIdentityWithStringIndexers.ts(87,1): error TS2144: Duplicate overload signature for 'foo10'.
+    function foo10(x: any) { }
+    
+    function foo11(x: B);
+    function foo11(x: typeof b); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! objectTypesIdentityWithStringIndexers.ts(91,1): error TS2144: Duplicate overload signature for 'foo11'.
+    function foo11(x: any) { }
+    
+    function foo11b(x: B);
+    function foo11b(x: PA); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! objectTypesIdentityWithStringIndexers.ts(95,1): error TS2144: Duplicate overload signature for 'foo11b'.
+    function foo11b(x: any) { }
+    
+    function foo11c(x: B);
+    function foo11c(x: PB); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! objectTypesIdentityWithStringIndexers.ts(99,1): error TS2144: Duplicate overload signature for 'foo11c'.
+    function foo11c(x: any) { }
+    
+    function foo12(x: I);
+    function foo12(x: C<string>); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! objectTypesIdentityWithStringIndexers.ts(103,1): error TS2144: Duplicate overload signature for 'foo12'.
+    function foo12(x: any) { }
+    
+    function foo13(x: I);
+    function foo13(x: typeof a); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! objectTypesIdentityWithStringIndexers.ts(107,1): error TS2144: Duplicate overload signature for 'foo13'.
+    function foo13(x: any) { }
+    
+    function foo14(x: I);
+    function foo14(x: typeof b); // error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! objectTypesIdentityWithStringIndexers.ts(111,1): error TS2144: Duplicate overload signature for 'foo14'.
+    function foo14(x: any) { }
+    
+    function foo15(x: I);
+    function foo15(x: PA); // error
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! objectTypesIdentityWithStringIndexers.ts(115,1): error TS2144: Duplicate overload signature for 'foo15'.
+    function foo15(x: any) { }
+    
+    function foo16(x: I);
+    function foo16(x: PB); // error
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! objectTypesIdentityWithStringIndexers.ts(119,1): error TS2144: Duplicate overload signature for 'foo16'.
+    function foo16(x: any) { }
+    
+    

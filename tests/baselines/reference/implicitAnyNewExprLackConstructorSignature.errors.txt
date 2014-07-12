@@ -1,0 +1,5 @@
+==== tests/cases/compiler/implicitAnyNewExprLackConstructorSignature.ts (1 errors) ====
+    function Point() { this.x = 3; }
+    var x: any = new Point();  // error at "new"
+                 ~~~~~~~~~~~
+!!! implicitAnyNewExprLackConstructorSignature.ts(2,14): error TS7009: 'new' expression, which lacks a constructor signature, implicitly has an 'any' type.

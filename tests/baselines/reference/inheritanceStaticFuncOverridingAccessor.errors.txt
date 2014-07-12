@@ -1,0 +1,18 @@
+==== tests/cases/compiler/inheritanceStaticFuncOverridingAccessor.ts (1 errors) ====
+    class a {
+        static get x() {
+            return "20";
+        }
+        static set x(aValue: string) {
+    
+        }
+    }
+    
+    class b extends a {
+          ~
+!!! inheritanceStaticFuncOverridingAccessor.ts(10,7): error TS2141: Class 'b' cannot extend class 'a':
+!!! 	Types of static property 'x' of class 'b' and class 'a' are incompatible.
+        static x() {
+            return "20";
+        }
+    }

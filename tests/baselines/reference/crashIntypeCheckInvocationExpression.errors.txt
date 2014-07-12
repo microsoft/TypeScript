@@ -1,0 +1,21 @@
+==== tests/cases/compiler/crashIntypeCheckInvocationExpression.ts (4 errors) ====
+    var nake;
+    function doCompile<P0, P1, P2>(fileset: P0, moduleType: P1) {
+    
+        return undefined;
+    }
+    export var compileServer = task<number, number, any>(<P0, P1, P2>() => {
+                               ~~~~
+!!! crashIntypeCheckInvocationExpression.ts(6,28): error TS2095: Could not find symbol 'task'.
+    
+        var folder = path.join(),
+                     ~~~~
+!!! crashIntypeCheckInvocationExpression.ts(8,18): error TS2095: Could not find symbol 'path'.
+            fileset = nake.fileSetSync<number, number, any>(folder)
+                           ~~~~~~~~~~~
+!!! crashIntypeCheckInvocationExpression.ts(9,24): error TS2158: Untyped function calls may not accept type arguments.
+      return doCompile<number, number, any>(fileset, moduleType);
+                                                     ~~~~~~~~~~
+!!! crashIntypeCheckInvocationExpression.ts(10,50): error TS2095: Could not find symbol 'moduleType'.
+    });
+    

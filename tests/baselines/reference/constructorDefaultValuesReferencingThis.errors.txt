@@ -1,0 +1,18 @@
+==== tests/cases/compiler/constructorDefaultValuesReferencingThis.ts (3 errors) ====
+    class C {
+        constructor(x = this) { }
+                        ~~~~
+!!! constructorDefaultValuesReferencingThis.ts(2,21): error TS2155: 'this' cannot be referenced in constructor arguments.
+    }
+    
+    class D<T> {
+        constructor(x = this) { }
+                        ~~~~
+!!! constructorDefaultValuesReferencingThis.ts(6,21): error TS2155: 'this' cannot be referenced in constructor arguments.
+    }
+    
+    class E<T> {
+        constructor(public x = this) { }
+                               ~~~~
+!!! constructorDefaultValuesReferencingThis.ts(10,28): error TS2155: 'this' cannot be referenced in constructor arguments.
+    }

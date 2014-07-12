@@ -1,0 +1,41 @@
+==== tests/cases/compiler/subtypingWithNumericIndexer4.ts (4 errors) ====
+    // Derived type indexer must be subtype of base type indexer
+    
+    interface Base { foo: string; }
+    interface Derived extends Base { bar: string; }
+    interface Derived2 extends Derived { baz: string; }
+    
+    class A {
+        [x: number]: Derived;
+    }
+    
+    class B extends A {
+          ~
+!!! subtypingWithNumericIndexer4.ts(11,7): error TS2141: Class 'B' cannot extend class 'A':
+!!! 	Index signatures of types 'B' and 'A' are incompatible:
+!!! 		Type 'String' is missing property 'bar' from type 'Derived'.
+        [x: number]: string; // error
+    }
+    
+    module Generics {
+        class A<T extends Derived> {
+            [x: number]: T;
+        }
+    
+        class B extends A<Base> {
+              ~
+!!! subtypingWithNumericIndexer4.ts(20,11): error TS2141: Class 'Generics.B' cannot extend class 'Generics.A<Base>':
+!!! 	Index signatures of types 'B' and 'A<Base>' are incompatible:
+!!! 		Type 'String' is missing property 'foo' from type 'Base'.
+                        ~~~~~~~
+!!! subtypingWithNumericIndexer4.ts(20,21): error TS2086: Type 'Base' does not satisfy the constraint 'Derived' for type parameter 'T extends Derived'.
+            [x: number]: string; // error
+        }
+    
+        class B3<T extends Derived> extends A<T> {
+              ~~
+!!! subtypingWithNumericIndexer4.ts(24,11): error TS2141: Class 'Generics.B3<T>' cannot extend class 'Generics.A<T>':
+!!! 	Index signatures of types 'B3<T>' and 'A<T>' are incompatible.
+            [x: number]: string; // error
+        }
+    }

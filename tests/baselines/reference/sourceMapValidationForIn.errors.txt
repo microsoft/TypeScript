@@ -1,0 +1,23 @@
+==== tests/cases/compiler/sourceMapValidationForIn.ts (4 errors) ====
+    for (var x in String) {
+        WScript.Echo(x);
+        ~~~~~~~
+!!! sourceMapValidationForIn.ts(2,5): error TS2095: Could not find symbol 'WScript'.
+    }
+    for (x in String) {
+        WScript.Echo(x);
+        ~~~~~~~
+!!! sourceMapValidationForIn.ts(5,5): error TS2095: Could not find symbol 'WScript'.
+    }
+    for (var x2 in String)
+    {
+        WScript.Echo(x2);
+        ~~~~~~~
+!!! sourceMapValidationForIn.ts(9,5): error TS2095: Could not find symbol 'WScript'.
+    }
+    for (x in String)
+    {
+        WScript.Echo(x);
+        ~~~~~~~
+!!! sourceMapValidationForIn.ts(13,5): error TS2095: Could not find symbol 'WScript'.
+    }

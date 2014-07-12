@@ -1,0 +1,21 @@
+=== tests/cases/compiler/lambdaASIEmit.ts ===
+
+function Foo(x: any)
+>Foo : typeof Foo
+>x : any
+{
+}
+ 
+>Foo(() =>
+    // do something
+    127) : void
+>Foo : typeof Foo
+
+Foo(() =>
+>() =>
+    // do something
+    127 : () => number
+
+    // do something
+    127);
+

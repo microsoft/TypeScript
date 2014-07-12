@@ -1,0 +1,31 @@
+==== tests/cases/compiler/genericTypeAssertions6.ts (3 errors) ====
+    class A<T,U> {
+        constructor(x) {
+            var y = <T>x;
+            var z = <U>x;
+        }
+    
+        f(x: T, y: U) {
+            x = <T>y;
+                ~~~~
+!!! genericTypeAssertions6.ts(8,13): error TS2011: Cannot convert 'U' to 'T'.
+            y = <U>x;
+                ~~~~
+!!! genericTypeAssertions6.ts(9,13): error TS2011: Cannot convert 'T' to 'U'.
+        }
+    }
+    
+    class B<T extends Date, U extends Date> extends A<T, U> {
+        g(x: T) {
+            var a: Date = x;
+            var b = <Date>x;
+            var c = <T>new Date();
+            var d = <U>new Date();
+            var e = <T><U>new Date();
+                    ~~~~~~~~~~~~~~~~
+!!! genericTypeAssertions6.ts(19,17): error TS2011: Cannot convert 'U' to 'T'.
+        }
+    }
+    
+    var b: B<Date, Date>;
+    var c: A<Date, Date> = <A<Date, Date>>b;

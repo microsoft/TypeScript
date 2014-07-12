@@ -1,0 +1,48 @@
+=== tests/cases/compiler/null.ts ===
+var x=null; 
+>x : any
+
+var y=3+x;  
+>y : any
+>3+x : any
+>x : any
+
+var z=3+null; 
+>z : number
+>3+null : number
+
+class C {
+>C : C
+}
+function f() {
+>f : typeof f
+
+    return null;
+    return new C();
+>new C() : C
+>C : typeof C
+}
+function g() {
+>g : typeof g
+
+    return null;
+    return 3;
+}
+interface I {
+>I : I
+
+    x:any;
+>x : any
+
+    y:number;
+>y : number
+}
+var w:I={x:null,y:3};
+>w : I
+>I : I
+>{x:null,y:3} : { x: any; y: number; }
+>x : any
+>y : number
+
+
+

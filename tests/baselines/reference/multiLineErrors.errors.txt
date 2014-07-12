@@ -1,0 +1,32 @@
+==== tests/cases/compiler/multiLineErrors.ts (2 errors) ====
+    var t = 32;
+    
+    function noReturn(): {
+                         ~
+        n: string;
+    ~~~~~~~~~~~~~~
+        y: number;
+    ~~~~~~~~~~~~~~
+    }
+    ~
+!!! multiLineErrors.ts(3,22): error TS2131: Function declared a non-void return type, but has no return expression.
+    {
+        var x = 4;
+        var y = 10;
+    }
+    
+    interface A1 {
+        x: { y: number; };
+    }
+    interface A2 {
+        x: { y: string; };
+    }
+    
+    var t1: A1;
+    var t2: A2;
+    t1 = t2;
+    ~~
+!!! multiLineErrors.ts(21,1): error TS2012: Cannot convert 'A2' to 'A1':
+!!! 	Types of property 'x' of types 'A2' and 'A1' are incompatible:
+!!! 		Types of property 'y' of types '{ y: string; }' and '{ y: number; }' are incompatible.
+    

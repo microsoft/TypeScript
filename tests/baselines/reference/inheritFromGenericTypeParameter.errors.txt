@@ -1,0 +1,7 @@
+==== tests/cases/compiler/inheritFromGenericTypeParameter.ts (2 errors) ====
+    class C<T> extends T { }
+                       ~
+!!! inheritFromGenericTypeParameter.ts(1,20): error TS2073: A class may only extend another class.
+    interface I<T> extends T { }
+                           ~
+!!! inheritFromGenericTypeParameter.ts(2,24): error TS2075: An interface may only extend another class or interface.

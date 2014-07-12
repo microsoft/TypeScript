@@ -1,0 +1,20 @@
+==== tests/cases/compiler/recursiveBaseCheck.ts (1 errors) ====
+    declare module Module {
+        class C extends D {
+              ~
+!!! recursiveBaseCheck.ts(2,11): error TS2100: Class 'Module.C' is recursively referenced as a base type of itself.
+        }
+        export class B extends Module.C {
+        }
+        export class A extends Module.B {
+        }
+        export class AmChart extends Module.A {
+        }
+        export class D extends AmChart {
+        }
+        export class E extends Module.D {
+        }
+        export class F extends Module.E {
+        }
+    }
+    

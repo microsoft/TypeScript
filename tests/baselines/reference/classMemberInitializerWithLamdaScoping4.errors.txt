@@ -1,0 +1,16 @@
+==== tests/cases/compiler/classMemberInitializerWithLamdaScoping3_0.ts (0 errors) ====
+    export var field1: string;
+    
+==== tests/cases/compiler/classMemberInitializerWithLamdaScoping3_1.ts (1 errors) ====
+    declare var console: {
+        log(msg?: any): void;
+    };
+    export class Test1 {
+        constructor(private field1: string) {
+        }
+        messageHandler = () => {
+            console.log(field1); // Should be error that couldnt find symbol field1
+                        ~~~~~~
+!!! classMemberInitializerWithLamdaScoping3_1.ts(8,21): error TS2095: Could not find symbol 'field1'.
+        };
+    }

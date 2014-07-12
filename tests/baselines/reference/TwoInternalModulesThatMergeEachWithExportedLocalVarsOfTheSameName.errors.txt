@@ -1,0 +1,34 @@
+==== tests/cases/compiler/part1.ts (0 errors) ====
+    export module A {
+        export interface Point {
+            x: number;
+            y: number;
+        }
+    
+        export module Utils {
+            export function mirror<T extends Point>(p: T) {
+                return { x: p.y, y: p.x };
+            }
+        }
+    
+        export var Origin: Point = { x: 0, y: 0 };
+    }
+    
+==== tests/cases/compiler/part2.ts (3 errors) ====
+    export module A {
+        // collision with 'Origin' var in other part of merged module
+        export var Origin: Point = { x: 0, y: 0 };
+                           ~~~~~
+!!! part2.ts(3,24): error TS2095: Could not find symbol 'Point'.
+    
+        export module Utils {
+            export class Plane {
+                constructor(public tl: Point, public br: Point) { }
+                                       ~~~~~
+!!! part2.ts(7,36): error TS2095: Could not find symbol 'Point'.
+                                                         ~~~~~
+!!! part2.ts(7,54): error TS2095: Could not find symbol 'Point'.
+            }
+        }
+    }
+    

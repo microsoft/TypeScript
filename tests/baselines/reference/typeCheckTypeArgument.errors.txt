@@ -1,0 +1,28 @@
+==== tests/cases/compiler/typeCheckTypeArgument.ts (6 errors) ====
+    /// <reference no-default-lib="true"/>
+    
+    var f: <T extends UNKNOWN>() => void;
+                      ~~~~~~~
+!!! typeCheckTypeArgument.ts(3,19): error TS2095: Could not find symbol 'UNKNOWN'.
+    
+    interface IFoo<T extends UNKNOWN> { }
+                             ~~~~~~~
+!!! typeCheckTypeArgument.ts(5,26): error TS2095: Could not find symbol 'UNKNOWN'.
+    
+    class Foo<T extends UNKNOWN> { }
+                        ~~~~~~~
+!!! typeCheckTypeArgument.ts(7,21): error TS2095: Could not find symbol 'UNKNOWN'.
+    
+    function bar<T extends UNKNOWN>() { }
+                           ~~~~~~~
+!!! typeCheckTypeArgument.ts(9,24): error TS2095: Could not find symbol 'UNKNOWN'.
+    
+    class Foo2 {
+        method<T extends UNKNOWN>() { }
+                         ~~~~~~~
+!!! typeCheckTypeArgument.ts(12,22): error TS2095: Could not find symbol 'UNKNOWN'.
+    }
+    
+    (<T extends UNKNOWN>(a) => { });
+                ~~~~~~~
+!!! typeCheckTypeArgument.ts(15,13): error TS2095: Could not find symbol 'UNKNOWN'.

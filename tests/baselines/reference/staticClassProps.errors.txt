@@ -1,0 +1,13 @@
+==== tests/cases/compiler/staticClassProps.ts (2 errors) ====
+    class C
+    {
+        public foo() {
+            static z = 1;
+            ~~~~~~
+!!! staticClassProps.ts(4,9): error TS1008: Unexpected token; 'statement' expected.
+        }
+    }
+    ~
+!!! staticClassProps.ts(6,1): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.
+    
+    

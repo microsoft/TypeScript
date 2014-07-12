@@ -1,0 +1,59 @@
+=== tests/cases/compiler/commaOperatorOtherValidOperation.ts ===
+//Comma operator in for loop
+for (var i = 0, j = 10; i < j; i++, j--)
+>i : number
+>j : number
+>i < j : boolean
+>i : number
+>j : number
+>i++, j-- : number
+>i++ : number
+>i : number
+>j-- : number
+>j : number
+{
+}
+
+//Comma operator in fuction arguments and return
+function foo(x: number, y: string)
+>foo : typeof foo
+>x : number
+>y : string
+{
+    return x, y;
+>x, y : string
+>x : number
+>y : string
+}
+var resultIsString = foo(1, "123");
+>resultIsString : string
+>foo(1, "123") : string
+>foo : typeof foo
+
+//TypeParameters
+function foo1<T1, T2>()
+>foo1 : typeof foo1
+>T1 : T1
+>T2 : T2
+{
+    var x: T1;
+>x : T1
+>T1 : T1
+
+    var y: T2;
+>y : T2
+>T2 : T2
+
+    x, y;
+>x, y : T2
+>x : T1
+>y : T2
+
+    var resultIsT1 = (y, x);
+>resultIsT1 : T1
+>(y, x) : T1
+>y, x : T1
+>y : T2
+>x : T1
+}
+

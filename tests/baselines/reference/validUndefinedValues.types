@@ -1,0 +1,10 @@
+=== tests/cases/compiler/validUndefinedValues.ts ===
+var x: typeof undefined;
+>x : any
+>undefined : any
+
+x = undefined;
+>x = undefined : any
+>x : any
+>undefined : any
+

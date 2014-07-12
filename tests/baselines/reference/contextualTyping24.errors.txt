@@ -1,0 +1,6 @@
+==== tests/cases/compiler/contextualTyping24.ts (1 errors) ====
+    var foo:(a:{():number; (i:number):number; })=>number; foo = function(a:string){return 5};
+                                                          ~~~
+!!! contextualTyping24.ts(1,55): error TS2012: Cannot convert '(a: string) => number' to '(a: { (): number; (i: number): number; }) => number':
+!!! 	Call signatures of types '(a: string) => number' and '(a: { (): number; (i: number): number; }) => number' are incompatible:
+!!! 		Type '{ (): number; (i: number): number; }' requires a call signature, but type 'String' lacks one.

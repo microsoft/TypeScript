@@ -1,0 +1,109 @@
+{
+    "isDeclaration": true,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "diagnostics": [
+        {
+            "start": 0,
+            "length": 3,
+            "diagnosticCode": "Statements are not allowed in ambient contexts."
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 14,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "LabeledStatement",
+                "fullWidth": 14,
+                "identifier": {
+                    "kind": "IdentifierName",
+                    "width": 3,
+                    "text": "foo",
+                    "value": "foo",
+                    "valueText": "foo"
+                },
+                "colonToken": {
+                    "kind": "ColonToken",
+                    "width": 1,
+                    "fullWidth": 3,
+                    "text": ":",
+                    "value": ":",
+                    "valueText": ":",
+                    "hasTrailingTrivia": true,
+                    "hasTrailingNewLine": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "text": "\r\n"
+                        }
+                    ]
+                },
+                "statement": {
+                    "kind": "ExpressionStatement",
+                    "fullWidth": 8,
+                    "expression": {
+                        "kind": "InvocationExpression",
+                        "fullWidth": 7,
+                        "expression": {
+                            "kind": "IdentifierName",
+                            "width": 3,
+                            "fullWidth": 5,
+                            "text": "bar",
+                            "value": "bar",
+                            "valueText": "bar",
+                            "hasLeadingTrivia": true,
+                            "leadingTrivia": [
+                                {
+                                    "kind": "WhitespaceTrivia",
+                                    "text": "  "
+                                }
+                            ]
+                        },
+                        "argumentList": {
+                            "kind": "ArgumentList",
+                            "fullWidth": 2,
+                            "openParenToken": {
+                                "kind": "OpenParenToken",
+                                "width": 1,
+                                "text": "(",
+                                "value": "(",
+                                "valueText": "("
+                            },
+                            "arguments": [],
+                            "closeParenToken": {
+                                "kind": "CloseParenToken",
+                                "width": 1,
+                                "text": ")",
+                                "value": ")",
+                                "valueText": ")"
+                            }
+                        }
+                    },
+                    "semicolonToken": {
+                        "kind": "SemicolonToken",
+                        "width": 1,
+                        "text": ";",
+                        "value": ";",
+                        "valueText": ";"
+                    }
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            6
+        ],
+        "length": 14
+    }
+}

@@ -1,0 +1,13 @@
+==== tests/cases/compiler/genericMergedDeclarationUsingTypeParameter.ts (3 errors) ====
+    function foo<T extends U, U>(y: T, z: U) { return y; }
+                 ~~~~~~~~~~~
+!!! genericMergedDeclarationUsingTypeParameter.ts(1,14): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+    module foo {
+        export var x: T;
+                      ~
+!!! genericMergedDeclarationUsingTypeParameter.ts(3,19): error TS2095: Could not find symbol 'T'.
+        var y = <T>1;
+                 ~
+!!! genericMergedDeclarationUsingTypeParameter.ts(4,14): error TS2095: Could not find symbol 'T'.
+    }
+    

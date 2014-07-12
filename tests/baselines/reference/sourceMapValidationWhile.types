@@ -1,0 +1,20 @@
+=== tests/cases/compiler/sourceMapValidationWhile.ts ===
+var a = 10;
+>a : number
+
+while (a == 10) {
+>a == 10 : boolean
+>a : number
+
+    a++;
+>a++ : number
+>a : number
+}
+while (a == 10)
+>a == 10 : boolean
+>a : number
+{
+    a++;
+>a++ : number
+>a : number
+}

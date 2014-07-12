@@ -1,0 +1,20 @@
+==== tests/cases/compiler/implicitAnyDeclareMemberWithoutType2.ts (5 errors) ====
+    // this should be an error
+    class C {
+        public x = null;// error at "x"
+        ~~~~~~~~~~~~~~~~
+!!! implicitAnyDeclareMemberWithoutType2.ts(3,5): error TS7005: Variable 'x' implicitly has an 'any' type.
+        public x1: string  // no error
+    
+        constructor(c1, c2, c3: string) { }  // error at "c1, c2"
+                    ~~
+!!! implicitAnyDeclareMemberWithoutType2.ts(6,17): error TS7006: Parameter 'c1' of 'C' implicitly has an 'any' type.
+                        ~~
+!!! implicitAnyDeclareMemberWithoutType2.ts(6,21): error TS7006: Parameter 'c2' of 'C' implicitly has an 'any' type.
+        funcOfC(f1, f2, f3: number) { }     // error at "f1,f2"
+                ~~
+!!! implicitAnyDeclareMemberWithoutType2.ts(7,13): error TS7006: Parameter 'f1' of 'funcOfC' implicitly has an 'any' type.
+                    ~~
+!!! implicitAnyDeclareMemberWithoutType2.ts(7,17): error TS7006: Parameter 'f2' of 'funcOfC' implicitly has an 'any' type.
+    }
+    

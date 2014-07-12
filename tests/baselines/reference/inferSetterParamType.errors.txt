@@ -1,0 +1,21 @@
+==== tests/cases/compiler/inferSetterParamType.ts (1 errors) ====
+    class Foo {
+    
+        get bar() {
+            return 0;
+        }
+        set bar(n) { // should not be an error - infer number
+        }
+    }
+    
+    class Foo2 {
+    
+        get bar() {
+            return 0; // should be an error - can't coerce infered return type to match setter annotated type
+                   ~
+!!! inferSetterParamType.ts(13,16): error TS2011: Cannot convert 'number' to 'string'.
+        }
+        set bar(n:string) {
+        }
+    }
+    

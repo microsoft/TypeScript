@@ -1,0 +1,19 @@
+==== tests/cases/compiler/cloduleStaticMembers.ts (3 errors) ====
+    class Clod {
+        private static x = 10;
+        public static y = 10;
+    }
+    module Clod {
+        var p = Clod.x;
+                     ~
+!!! cloduleStaticMembers.ts(6,18): error TS2107: 'Clod.x' is inaccessible.
+        var q = x;
+                ~
+!!! cloduleStaticMembers.ts(7,13): error TS2095: Could not find symbol 'x'.
+    
+        var s = Clod.y;
+        var t = y; 
+                ~
+!!! cloduleStaticMembers.ts(10,13): error TS2095: Could not find symbol 'y'.
+    }
+    

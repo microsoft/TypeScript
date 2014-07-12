@@ -1,0 +1,9 @@
+==== tests/cases/compiler/missingReturnStatement1.ts (1 errors) ====
+    class Foo {
+        foo(): number {
+               ~~~~~~
+!!! missingReturnStatement1.ts(2,12): error TS2131: Function declared a non-void return type, but has no return expression.
+            //return 4;
+        }
+    }
+    

@@ -1,0 +1,133 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 17,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ClassDeclaration",
+                "fullWidth": 17,
+                "modifiers": [],
+                "classKeyword": {
+                    "kind": "ClassKeyword",
+                    "width": 5,
+                    "fullWidth": 6,
+                    "text": "class",
+                    "value": "class",
+                    "valueText": "class",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "text": " "
+                        }
+                    ]
+                },
+                "identifier": {
+                    "kind": "IdentifierName",
+                    "width": 1,
+                    "text": "C",
+                    "value": "C",
+                    "valueText": "C"
+                },
+                "typeParameterList": {
+                    "kind": "TypeParameterList",
+                    "fullWidth": 6,
+                    "lessThanToken": {
+                        "kind": "LessThanToken",
+                        "width": 1,
+                        "text": "<",
+                        "value": "<",
+                        "valueText": "<"
+                    },
+                    "typeParameters": [
+                        {
+                            "kind": "TypeParameter",
+                            "fullWidth": 1,
+                            "identifier": {
+                                "kind": "IdentifierName",
+                                "width": 1,
+                                "text": "K",
+                                "value": "K",
+                                "valueText": "K"
+                            }
+                        },
+                        {
+                            "kind": "CommaToken",
+                            "width": 1,
+                            "text": ",",
+                            "value": ",",
+                            "valueText": ","
+                        },
+                        {
+                            "kind": "TypeParameter",
+                            "fullWidth": 1,
+                            "identifier": {
+                                "kind": "IdentifierName",
+                                "width": 1,
+                                "text": "V",
+                                "value": "V",
+                                "valueText": "V"
+                            }
+                        }
+                    ],
+                    "greaterThanToken": {
+                        "kind": "GreaterThanToken",
+                        "width": 1,
+                        "fullWidth": 2,
+                        "text": ">",
+                        "value": ">",
+                        "valueText": ">",
+                        "hasTrailingTrivia": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "text": " "
+                            }
+                        ]
+                    }
+                },
+                "openBraceToken": {
+                    "kind": "OpenBraceToken",
+                    "width": 1,
+                    "fullWidth": 3,
+                    "text": "{",
+                    "value": "{",
+                    "valueText": "{",
+                    "hasTrailingTrivia": true,
+                    "hasTrailingNewLine": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "text": "\r\n"
+                        }
+                    ]
+                },
+                "closeBraceToken": {
+                    "kind": "CloseBraceToken",
+                    "width": 1,
+                    "text": "}",
+                    "value": "}",
+                    "valueText": "}"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            16
+        ],
+        "length": 17
+    }
+}

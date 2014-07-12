@@ -1,0 +1,40 @@
+==== tests/cases/compiler/invalidModuleWithVarStatements.ts (6 errors) ====
+    // All of these should be an error
+    
+    module Y {
+        public var x: number = 0;
+        ~~~~~~
+!!! invalidModuleWithVarStatements.ts(4,5): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.
+    }
+    
+    module Y2 {
+        public function fn(x: string) { }
+        ~~~~~~
+!!! invalidModuleWithVarStatements.ts(8,5): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.
+    }
+    
+    module Y4 {
+        static var x: number = 0;
+        ~~~~~~
+!!! invalidModuleWithVarStatements.ts(12,5): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.
+    }
+    
+    module YY {
+        static function fn(x: string) { }
+        ~~~~~~
+!!! invalidModuleWithVarStatements.ts(16,5): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.
+    }
+    
+    module YY2 {
+        private var x: number = 0;
+        ~~~~~~~
+!!! invalidModuleWithVarStatements.ts(20,5): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.
+    }
+    
+    
+    module YY3 {
+        private function fn(x: string) { }
+        ~~~~~~~
+!!! invalidModuleWithVarStatements.ts(25,5): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.
+    }
+    

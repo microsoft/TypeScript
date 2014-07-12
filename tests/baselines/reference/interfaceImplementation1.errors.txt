@@ -1,0 +1,58 @@
+==== tests/cases/compiler/interfaceImplementation1.ts (3 errors) ====
+    interface I1 {
+        iObj:{ };
+        iNum:number;
+        iAny:any;
+        iFn():void;
+    }
+    
+    interface I2 {
+        iFn(n:number, s:string):void;
+    }
+    
+    class C1 implements I1,I2 {
+          ~~
+!!! interfaceImplementation1.ts(12,7): error TS2137: Class C1 declares interface I2 but does not implement it:
+!!! 	Property 'iFn' defined as private in type 'C1' is defined as public in type 'I2'.
+          ~~
+!!! interfaceImplementation1.ts(12,7): error TS2137: Class C1 declares interface I1 but does not implement it:
+!!! 	Property 'iObj' defined as private in type 'C1' is defined as public in type 'I1'.
+        private iFn();
+        private iFn(n?:number, s?:string) { }
+        private iAny:any;
+        private iNum:number;
+        private iObj:{ };
+    }
+    
+    interface I3 {
+        x: number;
+    }
+    
+    interface I4 {
+        ():I3;
+        new ():I3;
+        [call:number]:string;
+    }
+    
+    class C2 implements I3 {
+        public x = 1;
+    }
+    
+    var a:I4 = function(){ 
+        ~~~~~~~~~~~~~~~~~~~
+        return new C2();
+    ~~~~~~~~~~~~~~~~~~~~
+    }
+    ~
+!!! interfaceImplementation1.ts(34,5): error TS2012: Cannot convert '() => C2' to 'I4':
+!!! 	Type 'I4' requires a construct signature, but type '() => C2' lacks one.
+    new a();
+    
+    /*var b:I4 = C2;
+    new b();
+    */
+    
+    var c:I4;
+    c[5];
+    c["foo"];
+    

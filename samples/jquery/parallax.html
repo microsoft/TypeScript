@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <style type="text/css">
+        #plaxHost {
+            height: 2000px;
+            background-color: Black;
+        }
+
+            #plaxHost div {
+                width: 95%;
+            }
+
+        #plax1 {
+            position: fixed;
+            color:White;
+            height: 2000px;
+            background-image: url(starfield2.png);
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        #plax2 {
+            position: fixed;
+            height: 2000px;
+            background-image: url(starfield.png);
+            background-position: 1087px 0;
+            top: 0;
+
+            left: 0;
+            z-index: 2;
+        }
+        
+        #plax3 {
+            position: fixed;
+            height: 2000px;
+            background-position: 577px 0;
+            background-image: url(starfield.png);
+            top: 0;
+            left: 0;
+            z-index: 3;
+        }
+
+        #plax4 {
+            position: fixed;
+            height: 2000px;
+            background-position: 337px 0;
+            background-image: url(starfield.png);
+            top: 0;
+            left: 0;
+            z-index: 4;
+        }
+
+        #plax5 {
+            position: fixed;
+            height: 2000px;
+            background-position: 145px 0;
+            background-image: url(starfield.png);
+            top: 0;
+            left: 0;
+            z-index: 5;
+        }
+        
+    </style>
+</head>
+<body>
+    <div id="plaxHost">
+        <div id="plax1">
+        &nbsp;
+        </div>
+        <div id="plax2">
+        &nbsp;
+        </div>
+        <div id="plax3">
+        &nbsp;
+        </div>
+        <div id="plax4">
+        &nbsp;
+        </div>
+        <div id="plax5">
+        &nbsp;
+        </div>
+    </div>
+
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.10.1.min.js"></script>
+    <script type="text/javascript" src="parallax.js"></script>
+    <script type="text/javascript">
+        var p = new Parallax.ParallaxContainer(window, 0.7);
+        for (i = 1; i <= 5; ++i) {
+            var star_layer = new Parallax.ParallaxSurface(document.querySelector('#plax' + i));
+            p.addSurface(star_layer);
+        }
+
+    </script>
+</body>
+</html>

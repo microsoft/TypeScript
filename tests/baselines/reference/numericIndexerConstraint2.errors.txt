@@ -1,0 +1,8 @@
+==== tests/cases/compiler/numericIndexerConstraint2.ts (1 errors) ====
+    class Foo { foo() { } }
+    var x: { [index: string]: Foo; };
+    var a: { one: number; };
+    x = a;
+    ~
+!!! numericIndexerConstraint2.ts(4,1): error TS2012: Cannot convert '{ one: number; }' to '{ [index: string]: Foo; }':
+!!! 	Index signatures of types '{ one: number; }' and '{ [index: string]: Foo; }' are incompatible.

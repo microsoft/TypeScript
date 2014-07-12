@@ -1,0 +1,283 @@
+﻿/*
+body 
+{
+    word-wrap: break-word !important;
+    font-size:1.5em !important;
+}
+
+h2
+{
+    font-size: 1.5em;
+}
+
+h3
+{
+    font-size: 1.5em;
+}
+h4
+{
+    font-size: 1.5em;
+}
+    */
+
+h2, h3, h4, h5, h6, h7
+{
+    break-after: avoid;
+}
+
+img.tex 
+{
+    /*max-width: 380px !important;*/
+}
+
+a
+{
+    text-decoration:none !important;
+}
+
+.firstHeading
+{
+    display:none !important;
+}
+
+.noprint 
+{
+    display:none !important;
+}
+
+.printfooter
+{
+    display: none !important;
+}
+
+.catlinks
+{
+    display: none !important;
+}
+
+.metadata
+{
+    display: none !important;
+}
+
+#footer
+{
+    display:none !important;
+}
+
+#jump-to-nav
+{
+    display:none !important;
+}
+
+.toc
+{
+    display:none !important;
+}
+
+#siteSub { display:none !important; }
+#contentSub { display: none !important; }
+
+
+.dablink
+{
+    float:none !important;
+    width: 100%!important;
+    display:block !important;
+    background-color:rgb(230, 230, 230) !important;
+    margin: 2px 2px 2px 2px !important;
+    font-size: .6em !important;
+    font-style: italic !important;
+}
+
+.infobox
+{
+    float:none !important;
+    width: 100% !important;
+    background-color: rgb(230, 230, 230) !important;
+    margin: 2px 2px 2px 2px !important;
+    border-style:solid !important;
+    border-width: 1px !important;
+    border-color: rgb(200,200,200) !important;
+    font-size: .75em !important;
+}
+
+.infobox caption
+{
+    display:none;
+}
+
+#coordinates
+{
+    display: block !important;
+    border-style:outset !important;
+    border-width: 2px !important;
+    border-color: rgb(200,200,200) !important;
+}
+
+.floatnone
+{
+    float:none !important;
+}
+
+.rellink
+{
+    font-size: .9em !important;
+    margin: 10px 10px 10px 10px !important;
+    font-style: italic !important;
+    background-color:rgb(230, 230, 230) !important;
+    break-inside: avoid;
+    break-before: avoid;
+}
+
+.editsection 
+{
+    display:none !important;
+}
+
+.magnify 
+{
+    display:none !important;
+}
+
+.thumb
+{
+    display:block;
+    
+    margin-top: 0.5em;
+    margin-bottom: 0.8em;
+    border-width: 1px;
+    border-color: #cccccc !important;
+    break-inside:avoid !important;
+    text-align: center;
+    background-color: white;
+}
+
+.tright
+{
+    width:40% !important;
+    float:right !important;
+    clear:both !important;
+    margin-top: 0.5em;
+    margin-left: 0.8em;
+    /*margin-right: 0px;*/
+    margin-bottom: 0.8em;
+}
+
+.tleft
+{
+    width:40% !important;
+    float:left !important;
+    clear:both !important;
+    margin-top: 0.5em;
+    margin-right: 0.4em;
+    /*margin-left: 0px;*/
+    margin-bottom: 0.8em;
+}
+
+.tnone
+{
+    margin-top: 0.5em;
+    margin-right: 0.4em;
+    margin-left: 0.4em;
+    margin-bottom: 0.8em;
+}
+
+.thumbinner
+{
+    text-align: center;
+    overflow: hidden;
+    padding: 3px;
+    font-size: 94%;
+    border-width: 1px;
+    border-style: solid;
+    width: 90% !important;
+}
+
+.thumbimage
+{
+    width:100% !important;
+    height:100% !important;
+}
+
+.thumbcaption
+{
+    font-size:0.8em;
+}
+
+.references-small
+{
+    font-size:0.5em;
+}
+
+.wikitable
+{
+    float:none !important;
+    width: 400px !important;
+    max-width: 400px !important;
+    background-color: rgb(230, 230, 230) !important;
+    margin: 2px 2px 2px 2px !important;
+    font-size: .6em !important;
+}
+
+.wikitable th
+{
+    background-color: rgb(220,220,220); 
+    border-style: solid !important;
+    border-width: 1px !important;
+    border-color: rgb(200,200,200) !important;
+}
+
+.wikitable td
+{
+    border-style: solid !important;
+    border-width: 1px !important;
+    border-color: rgb(200,200,200) !important;
+}
+
+table.autocollapse tbody tr
+{
+    display:none !important; 
+}
+
+table.autocollapse tbody tr:first
+{
+    display: block !important; 
+}
+
+table.collapsed tr.collapsable {
+    display: none !important;
+}
+ 
+.collapseButton {        /* 'show'/'hide' buttons created dynamically by the        */
+    float: right;        /* CollapsibleTables JavaScript in [[MediaWiki:Common.js]] */
+    font-weight: normal;    /* are styled here so they can be customised.          */
+    text-align: right;
+    width: auto;
+}
+
+.NavFrame
+{
+    width: 100% !important;
+}
+
+/*#ogg_player_1
+{
+    width: 100% !important;
+}
+
+a.image img
+{
+    width: 100% !important;
+}
+
+
+div.thumbinner div div button
+{
+    width: 100% !important;
+}*/
+
+.multicol
+{
+    font-size: .8em !important;
+}

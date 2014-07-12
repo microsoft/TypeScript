@@ -1,0 +1,11 @@
+==== tests/cases/compiler/inheritanceStaticMembersIncompatible.ts (1 errors) ====
+    class a {
+        static x: string;
+    }
+    
+    class b extends a {
+          ~
+!!! inheritanceStaticMembersIncompatible.ts(5,7): error TS2141: Class 'b' cannot extend class 'a':
+!!! 	Types of static property 'x' of class 'b' and class 'a' are incompatible.
+        static x: number;
+    }

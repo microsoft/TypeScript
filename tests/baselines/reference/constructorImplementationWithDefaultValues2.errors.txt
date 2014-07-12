@@ -1,0 +1,29 @@
+==== tests/cases/compiler/constructorImplementationWithDefaultValues2.ts (4 errors) ====
+    class C {
+        constructor(x);
+        constructor(public x: string = 1) { // error
+                    ~~~~~~~~~~~~~~~~~~~~
+!!! constructorImplementationWithDefaultValues2.ts(3,17): error TS2011: Cannot convert 'number' to 'string'.
+            var y = x;
+        }
+    }
+    
+    class D<T, U> {
+        constructor(x: T, y: U);
+        constructor(x: T = 1, public y: U = x) { // error
+                    ~~~~~~~~
+!!! constructorImplementationWithDefaultValues2.ts(10,17): error TS2011: Cannot convert 'number' to 'T'.
+                              ~~~~~~~~~~~~~~~
+!!! constructorImplementationWithDefaultValues2.ts(10,27): error TS2011: Cannot convert 'T' to 'U'.
+            var z = x;
+        }
+    }
+    
+    class E<T extends Date> {
+        constructor(x);
+        constructor(x: T = new Date()) { // error
+                    ~~~~~~~~~~~~~~~~~
+!!! constructorImplementationWithDefaultValues2.ts(17,17): error TS2011: Cannot convert 'Date' to 'T'.
+            var y = x;
+        }
+    }

@@ -1,0 +1,6 @@
+==== tests/cases/compiler/unterminatedRegexAtEndOfSource1.ts (2 errors) ====
+    var a = /
+            ~
+!!! unterminatedRegexAtEndOfSource1.ts(1,9): error TS1003: Identifier expected.
+             
+!!! unterminatedRegexAtEndOfSource1.ts(1,10): error TS1003: Identifier expected.

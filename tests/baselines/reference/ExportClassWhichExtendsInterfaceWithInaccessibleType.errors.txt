@@ -1,0 +1,24 @@
+==== tests/cases/compiler/ExportClassWhichExtendsInterfaceWithInaccessibleType.ts (2 errors) ====
+    module A {
+    
+        interface Point {
+            x: number;
+            y: number;
+    
+            fromOrigin(p: Point): number;
+        }
+    
+        export class Point2d implements Point {
+                                        ~~~~~
+!!! ExportClassWhichExtendsInterfaceWithInaccessibleType.ts(10,37): error TS2019: Exported class 'Point2d' implements private interface 'Point'.
+            constructor(public x: number, public y: number) { }
+    
+            fromOrigin(p: Point) {
+                       ~~~~~~~~
+!!! ExportClassWhichExtendsInterfaceWithInaccessibleType.ts(13,20): error TS2038: Parameter 'p' of public method from exported class has or is using private type 'Point'.
+                return 1;
+            }
+        }
+    }
+    
+    

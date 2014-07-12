@@ -1,0 +1,145 @@
+==== tests/cases/compiler/assignmentLHSIsValue.ts (37 errors) ====
+    // expected error for all the LHS of assignments
+    var value;
+    
+    // this
+    class C {
+        constructor() { this = value; }
+                        ~~~~
+!!! assignmentLHSIsValue.ts(6,21): error TS2130: Invalid left-hand side of assignment expression.
+        foo() { this = value; }
+                ~~~~
+!!! assignmentLHSIsValue.ts(7,13): error TS2130: Invalid left-hand side of assignment expression.
+        static sfoo() { this = value; }
+                        ~~~~
+!!! assignmentLHSIsValue.ts(8,21): error TS2130: Invalid left-hand side of assignment expression.
+    }
+    
+    function foo() { this = value; }
+                     ~~~~
+!!! assignmentLHSIsValue.ts(11,18): error TS2130: Invalid left-hand side of assignment expression.
+    
+    this = value;
+    ~~~~
+!!! assignmentLHSIsValue.ts(13,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    // identifiers: module, class, enum, function
+    module M { export var a; }
+    M = value;
+    ~
+!!! assignmentLHSIsValue.ts(17,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    C = value;
+    ~
+!!! assignmentLHSIsValue.ts(19,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    enum E { }
+    E = value;
+    ~
+!!! assignmentLHSIsValue.ts(22,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    foo = value;
+    ~~~
+!!! assignmentLHSIsValue.ts(24,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    // literals
+    null = value;
+    ~~~~
+!!! assignmentLHSIsValue.ts(27,1): error TS2130: Invalid left-hand side of assignment expression.
+    true = value;
+    ~~~~
+!!! assignmentLHSIsValue.ts(28,1): error TS2130: Invalid left-hand side of assignment expression.
+    false = value;
+    ~~~~~
+!!! assignmentLHSIsValue.ts(29,1): error TS2130: Invalid left-hand side of assignment expression.
+    0 = value;
+    ~
+!!! assignmentLHSIsValue.ts(30,1): error TS2130: Invalid left-hand side of assignment expression.
+    '' = value;
+    ~~
+!!! assignmentLHSIsValue.ts(31,1): error TS2130: Invalid left-hand side of assignment expression.
+    /d+/ = value;
+    ~~~~
+!!! assignmentLHSIsValue.ts(32,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    // object literals
+    { a: 0} = value;
+            ~
+!!! assignmentLHSIsValue.ts(35,9): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.
+    
+    // array literals
+    ['', ''] = value;
+    ~~~~~~~~
+!!! assignmentLHSIsValue.ts(38,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    // super
+    class Derived extends C {
+        constructor() { super(); super = value; }
+                                       ~
+!!! assignmentLHSIsValue.ts(42,36): error TS1005: '.' expected.
+    
+        foo() { super = value }
+                      ~
+!!! assignmentLHSIsValue.ts(44,19): error TS1005: '.' expected.
+    
+        static sfoo() { super = value; }
+                              ~
+!!! assignmentLHSIsValue.ts(46,27): error TS1005: '.' expected.
+    }
+    
+    // function expression
+    function bar() { } = value;
+                       ~
+!!! assignmentLHSIsValue.ts(50,20): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.
+    () => { } = value;
+              ~
+!!! assignmentLHSIsValue.ts(51,11): error TS1005: ';' expected.
+    
+    // function calls
+    foo() = value;
+    ~~~~~
+!!! assignmentLHSIsValue.ts(54,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    // parentheses, the containted expression is value
+    (this) = value;
+    ~~~~~~
+!!! assignmentLHSIsValue.ts(57,1): error TS2130: Invalid left-hand side of assignment expression.
+    (M) = value;
+    ~~~
+!!! assignmentLHSIsValue.ts(58,1): error TS2130: Invalid left-hand side of assignment expression.
+    (C) = value;
+    ~~~
+!!! assignmentLHSIsValue.ts(59,1): error TS2130: Invalid left-hand side of assignment expression.
+    (E) = value;
+    ~~~
+!!! assignmentLHSIsValue.ts(60,1): error TS2130: Invalid left-hand side of assignment expression.
+    (foo) = value;
+    ~~~~~
+!!! assignmentLHSIsValue.ts(61,1): error TS2130: Invalid left-hand side of assignment expression.
+    (null) = value;
+    ~~~~~~
+!!! assignmentLHSIsValue.ts(62,1): error TS2130: Invalid left-hand side of assignment expression.
+    (true) = value;
+    ~~~~~~
+!!! assignmentLHSIsValue.ts(63,1): error TS2130: Invalid left-hand side of assignment expression.
+    (0) = value;
+    ~~~
+!!! assignmentLHSIsValue.ts(64,1): error TS2130: Invalid left-hand side of assignment expression.
+    ('') = value;
+    ~~~~
+!!! assignmentLHSIsValue.ts(65,1): error TS2130: Invalid left-hand side of assignment expression.
+    (/d+/) = value;
+    ~~~~~~
+!!! assignmentLHSIsValue.ts(66,1): error TS2130: Invalid left-hand side of assignment expression.
+    ({}) = value;
+    ~~~~
+!!! assignmentLHSIsValue.ts(67,1): error TS2130: Invalid left-hand side of assignment expression.
+    ([]) = value;
+    ~~~~
+!!! assignmentLHSIsValue.ts(68,1): error TS2130: Invalid left-hand side of assignment expression.
+    (function baz() { }) = value;
+    ~~~~~~~~~~~~~~~~~~~~
+!!! assignmentLHSIsValue.ts(69,1): error TS2130: Invalid left-hand side of assignment expression.
+    (foo()) = value;
+    ~~~~~~~
+!!! assignmentLHSIsValue.ts(70,1): error TS2130: Invalid left-hand side of assignment expression.

@@ -1,0 +1,18 @@
+==== tests/cases/compiler/derivedClassFunctionOverridesBaseClassAccessor.ts (1 errors) ====
+    class Base {
+        get x() {
+            return 1;
+        }
+        set x(v) {
+        }
+    }
+    
+    // error
+    class Derived extends Base {
+          ~~~~~~~
+!!! derivedClassFunctionOverridesBaseClassAccessor.ts(10,7): error TS2141: Class 'Derived' cannot extend class 'Base':
+!!! 	Class 'Derived' defines instance member function 'x', but extended class 'Base' defines it as instance member accessor.
+        x() {
+            return 1;
+        }
+    }

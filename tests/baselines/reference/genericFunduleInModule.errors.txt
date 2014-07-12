@@ -1,0 +1,13 @@
+==== tests/cases/compiler/genericFunduleInModule.ts (1 errors) ====
+    // BUG 756210
+    module A {
+        export function B<T>(x: T) { return x; }
+        export module B {
+            export var x = 1;
+        }
+    }
+    
+    var b: A.B;
+             ~
+!!! genericFunduleInModule.ts(9,10): error TS2094: The property 'B' does not exist on value of type 'A'.
+    A.B(1);

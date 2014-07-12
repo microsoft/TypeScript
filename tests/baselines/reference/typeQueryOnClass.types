@@ -1,0 +1,126 @@
+=== tests/cases/compiler/typeQueryOnClass.ts ===
+class C<T> {
+>C : C<T>
+>T : T
+
+    constructor(x: number);
+>x : number
+
+    constructor(x: string);
+>x : string
+
+    constructor(public x) { }
+>x : any
+
+    static foo(x: number);
+>foo : { (x: number): any; (x: {}): any; }
+>x : number
+
+    static foo(x: {});
+>foo : { (x: number): any; (x: {}): any; }
+>x : {}
+
+    static foo(x) { }
+>foo : { (x: number): any; (x: {}): any; }
+>x : any
+
+    static bar(x) { }
+>bar : (x: any) => void
+>x : any
+
+    static sa = 1;
+>sa : number
+
+    static sb = () => 1;
+>sb : () => number
+>() => 1 : () => number
+
+    static get sc() {
+>sc : number
+
+        return 1;
+    }
+    static set sc(x) {
+>sc : number
+>x : number
+    }
+
+    static get sd() {
+>sd : number
+
+        return 1;
+    }
+
+>baz : (x: any) => string
+
+    baz(x): string { return ''; }
+>x : any
+
+>ia : number
+
+    ia = 1;
+    ib = () => this.ia;
+>ib : () => number
+>() => this.ia : () => number
+>this.ia : number
+>this : C<T>
+>ia : number
+
+    get ic() {
+>ic : number
+
+        return 1;
+    }
+    set ic(x) {
+>ic : number
+>x : number
+    }
+
+    get id() {
+>id : number
+
+        return 1;
+    }
+
+}
+
+var c: C<string>;
+>c : C<string>
+>C : C<T>
+
+// BUG 820454
+var r1: typeof C;
+>r1 : typeof C
+>C : typeof C
+
+var r2: typeof c;
+>r2 : C<string>
+>c : C<string>
+
+class D<T> {
+>D : D<T>
+>T : T
+
+    constructor(public y?) { }
+>y : any
+
+    x: T;
+>x : T
+>T : T
+
+    foo() { }
+>foo : () => void
+}
+
+var d: D<string>;
+>d : D<string>
+>D : D<T>
+
+var r3: typeof D;
+>r3 : typeof D
+>D : typeof D
+
+var r4: typeof d;
+>r4 : D<string>
+>d : D<string>
+

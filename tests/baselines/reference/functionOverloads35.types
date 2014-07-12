@@ -1,0 +1,24 @@
+=== tests/cases/compiler/functionOverloads35.ts ===
+function foo(bar:{a:number;}):number;
+>foo : typeof foo
+>bar : { a: number; }
+>a : number
+
+function foo(bar:{a:string;}):string;
+>foo : typeof foo
+>bar : { a: string; }
+>a : string
+
+function foo(bar:{a:any;}):any{ return bar }
+>foo : typeof foo
+>bar : { a: any; }
+>a : any
+>bar : { a: any; }
+
+var x = foo({a:1});
+>x : number
+>foo({a:1}) : number
+>foo : typeof foo
+>{a:1} : { a: number; }
+>a : number
+

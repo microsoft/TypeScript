@@ -1,0 +1,29 @@
+=== tests/cases/compiler/constraintPropagationThroughReturnTypes.ts ===
+function g<T>(x: T): T {
+>g : typeof g
+>T : T
+>x : T
+>T : T
+>T : T
+
+  return x;
+>x : T
+}
+ 
+function f<S extends { foo: string }>(x: S) {
+>f : typeof f
+>S : S
+>foo : string
+>x : S
+>S : S
+
+  var y = g(x);
+>y : S
+>g(x) : S
+>g : typeof g
+>x : S
+
+  y;
+>y : S
+}
+

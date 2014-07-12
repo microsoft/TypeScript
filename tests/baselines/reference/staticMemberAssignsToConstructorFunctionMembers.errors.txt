@@ -1,0 +1,16 @@
+==== tests/cases/compiler/staticMemberAssignsToConstructorFunctionMembers.ts (1 errors) ====
+    class C {
+        static foo() {
+            C.foo = () => { }
+        }
+    
+        static bar(x: number): number {
+            C.bar = () => { } // error
+            ~~~~~
+!!! staticMemberAssignsToConstructorFunctionMembers.ts(7,9): error TS2012: Cannot convert '() => void' to '(x: number) => number':
+!!! 	Call signatures of types '() => void' and '(x: number) => number' are incompatible.
+            C.bar = (x) => x; // ok
+            C.bar = (x: number) => 1; // ok
+            return 1;
+        }
+    }

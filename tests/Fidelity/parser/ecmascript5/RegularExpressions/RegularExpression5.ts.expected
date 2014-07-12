@@ -1,0 +1,170 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 45,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "IfStatement",
+                "fullWidth": 45,
+                "isIncrementallyUnusable": true,
+                "ifKeyword": {
+                    "kind": "IfKeyword",
+                    "width": 2,
+                    "fullWidth": 3,
+                    "text": "if",
+                    "value": "if",
+                    "valueText": "if",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "text": " "
+                        }
+                    ]
+                },
+                "openParenToken": {
+                    "kind": "OpenParenToken",
+                    "width": 1,
+                    "text": "(",
+                    "value": "(",
+                    "valueText": "("
+                },
+                "condition": {
+                    "kind": "IdentifierName",
+                    "width": 1,
+                    "text": "a",
+                    "value": "a",
+                    "valueText": "a"
+                },
+                "closeParenToken": {
+                    "kind": "CloseParenToken",
+                    "width": 1,
+                    "fullWidth": 2,
+                    "text": ")",
+                    "value": ")",
+                    "valueText": ")",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "text": " "
+                        }
+                    ]
+                },
+                "statement": {
+                    "kind": "ExpressionStatement",
+                    "fullWidth": 38,
+                    "isIncrementallyUnusable": true,
+                    "expression": {
+                        "kind": "InvocationExpression",
+                        "fullWidth": 37,
+                        "isIncrementallyUnusable": true,
+                        "expression": {
+                            "kind": "MemberAccessExpression",
+                            "fullWidth": 29,
+                            "isIncrementallyUnusable": true,
+                            "expression": {
+                                "kind": "RegularExpressionLiteral",
+                                "width": 23,
+                                "fullWidth": 24,
+                                "text": "/ (\\\\ ? | & ) rct = j /",
+                                "value": {},
+                                "valueText": "/ (\\\\ ? | & ) rct = j /",
+                                "hasTrailingTrivia": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "text": " "
+                                    }
+                                ]
+                            },
+                            "dotToken": {
+                                "kind": "DotToken",
+                                "width": 1,
+                                "text": ".",
+                                "value": ".",
+                                "valueText": "."
+                            },
+                            "name": {
+                                "kind": "IdentifierName",
+                                "width": 4,
+                                "text": "test",
+                                "value": "test",
+                                "valueText": "test"
+                            }
+                        },
+                        "argumentList": {
+                            "kind": "ArgumentList",
+                            "fullWidth": 8,
+                            "openParenToken": {
+                                "kind": "OpenParenToken",
+                                "width": 1,
+                                "text": "(",
+                                "value": "(",
+                                "valueText": "("
+                            },
+                            "arguments": [
+                                {
+                                    "kind": "MemberAccessExpression",
+                                    "fullWidth": 6,
+                                    "expression": {
+                                        "kind": "IdentifierName",
+                                        "width": 1,
+                                        "text": "c",
+                                        "value": "c",
+                                        "valueText": "c"
+                                    },
+                                    "dotToken": {
+                                        "kind": "DotToken",
+                                        "width": 1,
+                                        "text": ".",
+                                        "value": ".",
+                                        "valueText": "."
+                                    },
+                                    "name": {
+                                        "kind": "IdentifierName",
+                                        "width": 4,
+                                        "text": "href",
+                                        "value": "href",
+                                        "valueText": "href"
+                                    }
+                                }
+                            ],
+                            "closeParenToken": {
+                                "kind": "CloseParenToken",
+                                "width": 1,
+                                "text": ")",
+                                "value": ")",
+                                "valueText": ")"
+                            }
+                        }
+                    },
+                    "semicolonToken": {
+                        "kind": "SemicolonToken",
+                        "width": 1,
+                        "text": ";",
+                        "value": ";",
+                        "valueText": ";"
+                    }
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 45
+    }
+}

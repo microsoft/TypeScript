@@ -1,0 +1,47 @@
+=== tests/cases/compiler/circularImportAlias.ts ===
+// expected no error
+
+module B {
+>B : B
+
+    export import a = A;
+>a : a
+>A : a
+
+    export class D extends a.C {
+>D : D
+>a : a
+>C : A.C
+
+        id: number;
+>id : number
+    }
+}
+
+module A {
+>A : A
+
+    export class C { name: string }
+>C : C
+>name : string
+
+    export import b = B;
+>b : b
+>B : b
+}
+
+var c: { name: string };
+>c : { name: string; }
+>name : string
+
+var c = new B.a.C();
+>c : A.C
+>new B.a.C() : A.C
+>B.a.C : typeof A.C
+>B.a : typeof A
+>B : typeof B
+>a : typeof A
+>C : typeof A.C
+
+
+

@@ -1,0 +1,22 @@
+==== tests/cases/compiler/classBodyWithStatements.ts (4 errors) ====
+    class C {
+        var x = 1;
+        ~~~
+!!! classBodyWithStatements.ts(2,5): error TS1008: Unexpected token; 'constructor, function, accessor or variable' expected.
+    }
+    ~
+!!! classBodyWithStatements.ts(3,1): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.
+    
+    class C2 {
+        function foo() {}
+        ~~~~~~~~
+!!! classBodyWithStatements.ts(6,5): error TS1008: Unexpected token; 'constructor, function, accessor or variable' expected.
+    }
+    ~
+!!! classBodyWithStatements.ts(7,1): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.
+    
+    var x = 1;
+    var y = 2;
+    class C3 {
+        x: number = y + 1; // ok, need a var in the statement production
+    }

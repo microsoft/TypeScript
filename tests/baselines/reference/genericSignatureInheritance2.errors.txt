@@ -1,0 +1,12 @@
+==== tests/cases/compiler/genericSignatureInheritance2.ts (1 errors) ====
+    interface I {
+        <T>(x: T): string;
+    }
+    
+    interface I2 extends I { 
+              ~~
+!!! genericSignatureInheritance2.ts(5,11): error TS2143: Interface 'I2' cannot extend interface 'I':
+!!! 	Call signatures of types 'I2' and 'I' are incompatible.
+        <T>(x: T): void;
+    }
+    

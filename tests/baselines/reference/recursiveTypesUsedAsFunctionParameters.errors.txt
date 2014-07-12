@@ -1,0 +1,52 @@
+==== tests/cases/compiler/recursiveTypesUsedAsFunctionParameters.ts (3 errors) ====
+    class List<T> {
+        data: T;
+        next: List<List<T>>;
+    }
+    
+    class MyList<T> {
+        data: T;
+        next: MyList<MyList<T>>;
+    }
+    
+    function foo<T>(x: List<T>);
+    function foo<U>(x: List<U>); // error, duplicate
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! recursiveTypesUsedAsFunctionParameters.ts(12,1): error TS2144: Duplicate overload signature for 'foo'.
+    function foo<T>(x: List<T>) {
+    }
+    
+    function foo2<T>(x: List<T>);
+    function foo2<U>(x: MyList<U>); // ok, nominally compared with first overload
+    function foo2<T>(x: any) {
+    }
+    
+    function other<T extends List<U>, U>() {
+                   ~~~~~~~~~~~~~~~~~
+!!! recursiveTypesUsedAsFunctionParameters.ts(21,16): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        // error but wrong error
+        // BUG 838247
+        function foo3<V>(x: T);
+        ~~~~~~~~~~~~~~~~~~~~~~~
+!!! recursiveTypesUsedAsFunctionParameters.ts(24,5): error TS2149: Overload signature is not compatible with function definition:
+!!! 	Types of property 'next' of types 'List<U>' and 'MyList<any>' are incompatible:
+!!! 		Types 'List<List<U>>' and 'MyList<MyList<any>>' originating in infinitely expanding type reference do not refer to same named type.
+        function foo3<V>(x: MyList<V>) { }
+    
+        // should be error
+        // BUG 838247
+        function foo4<V>(x: T);
+        function foo4<V>(x: List<V>) { }
+    
+        // ok
+        function foo5<V>(x: T): string;
+        function foo5<V>(x: List<V>): number;
+        function foo5<V>(x: MyList<V>): boolean;
+        function foo5<V>(x: any): any { return null; }
+    
+        var list: List<string>;
+        var myList: MyList<string>;
+    
+        var r = foo5(list);
+        var r2 = foo5(myList);
+    }

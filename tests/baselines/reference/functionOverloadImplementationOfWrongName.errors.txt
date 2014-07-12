@@ -1,0 +1,6 @@
+==== tests/cases/compiler/functionOverloadImplementationOfWrongName.ts (1 errors) ====
+    function foo(x);
+    function foo(x, y);
+    function bar() { }
+             ~~~
+!!! functionOverloadImplementationOfWrongName.ts(3,10): error TS1043: Function overload name must be 'foo'.

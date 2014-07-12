@@ -1,0 +1,135 @@
+==== tests/cases/compiler/typeParameterAssignability2.ts (31 errors) ====
+    // type parameters are not assignable to one another unless directly or indirectly constrained to one another
+    
+    function foo<T, U extends T>(t: T, u: U) {
+                    ~~~~~~~~~~~
+!!! typeParameterAssignability2.ts(3,17): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        t = u; // error
+        u = t; // ok
+        ~
+!!! typeParameterAssignability2.ts(5,5): error TS2011: Cannot convert 'T' to 'U'.
+    }
+    
+    function foo2<T extends U, U>(t: T, u: U) {
+                  ~~~~~~~~~~~
+!!! typeParameterAssignability2.ts(8,15): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        t = u; // error
+        ~
+!!! typeParameterAssignability2.ts(9,5): error TS2011: Cannot convert 'U' to 'T'.
+        u = t; // ok
+    }
+    
+    function foo3<T extends U, U extends V, V>(t: T, u: U, v: V) {
+                  ~~~~~~~~~~~
+!!! typeParameterAssignability2.ts(13,15): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+                               ~~~~~~~~~~~
+!!! typeParameterAssignability2.ts(13,28): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        t = u; // error
+        ~
+!!! typeParameterAssignability2.ts(14,5): error TS2011: Cannot convert 'U' to 'T'.
+        u = t;
+    
+        t = v; // error
+        ~
+!!! typeParameterAssignability2.ts(17,5): error TS2011: Cannot convert 'V' to 'T'.
+        v = t; // ok
+    
+        u = v; // error
+        ~
+!!! typeParameterAssignability2.ts(20,5): error TS2011: Cannot convert 'V' to 'U'.
+        v = u; // ok
+    }
+    
+    function foo4<T extends U, U extends V, V extends Date>(t: T, u: U, v: V) {
+                  ~~~~~~~~~~~
+!!! typeParameterAssignability2.ts(24,15): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+                               ~~~~~~~~~~~
+!!! typeParameterAssignability2.ts(24,28): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        t = u; // error
+        ~
+!!! typeParameterAssignability2.ts(25,5): error TS2011: Cannot convert 'U' to 'T'.
+        t = v; // error
+        ~
+!!! typeParameterAssignability2.ts(26,5): error TS2011: Cannot convert 'V' to 'T'.
+        t = new Date(); // error
+        ~
+!!! typeParameterAssignability2.ts(27,5): error TS2011: Cannot convert 'Date' to 'T'.
+    
+        u = t;
+        u = v; // error
+        ~
+!!! typeParameterAssignability2.ts(30,5): error TS2011: Cannot convert 'V' to 'U'.
+        u = new Date(); // error
+        ~
+!!! typeParameterAssignability2.ts(31,5): error TS2011: Cannot convert 'Date' to 'U'.
+    
+        v = t;
+        v = u;
+        v = new Date(); // ok
+        ~
+!!! typeParameterAssignability2.ts(35,5): error TS2011: Cannot convert 'Date' to 'V'.
+    
+        var d: Date;
+        d = t; // ok
+        d = u; // ok
+        d = v; // ok
+    }
+    
+    // same as foo4 with different type parameter ordering
+    function foo5<V extends Date, U extends V, T extends U>(t: T, u: U, v: V) {
+                                  ~~~~~~~~~~~
+!!! typeParameterAssignability2.ts(44,31): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+                                               ~~~~~~~~~~~
+!!! typeParameterAssignability2.ts(44,44): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        t = u; // error
+        ~
+!!! typeParameterAssignability2.ts(45,5): error TS2011: Cannot convert 'U' to 'T'.
+        t = v; // error
+        ~
+!!! typeParameterAssignability2.ts(46,5): error TS2011: Cannot convert 'V' to 'T'.
+        t = new Date(); // error
+        ~
+!!! typeParameterAssignability2.ts(47,5): error TS2011: Cannot convert 'Date' to 'T'.
+    
+        u = t;
+        u = v; // error
+        ~
+!!! typeParameterAssignability2.ts(50,5): error TS2011: Cannot convert 'V' to 'U'.
+        u = new Date(); // error
+        ~
+!!! typeParameterAssignability2.ts(51,5): error TS2011: Cannot convert 'Date' to 'U'.
+    
+        v = t;
+        v = u;
+        v = new Date(); // ok
+        ~
+!!! typeParameterAssignability2.ts(55,5): error TS2011: Cannot convert 'Date' to 'V'.
+    
+        var d: Date;
+        d = t; // ok
+        d = u; // ok
+        d = v; // ok
+    }
+    
+    function foo6<T extends U, U, V>(t: T, u: U, v: V) {
+                  ~~~~~~~~~~~
+!!! typeParameterAssignability2.ts(63,15): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        t = u; // error
+        ~
+!!! typeParameterAssignability2.ts(64,5): error TS2011: Cannot convert 'U' to 'T'.
+        t = v; // error
+        ~
+!!! typeParameterAssignability2.ts(65,5): error TS2011: Cannot convert 'V' to 'T'.
+    
+        u = t; // ok
+        u = v; // error
+        ~
+!!! typeParameterAssignability2.ts(68,5): error TS2011: Cannot convert 'V' to 'U'.
+    
+        v = t; // error
+        ~
+!!! typeParameterAssignability2.ts(70,5): error TS2011: Cannot convert 'T' to 'V'.
+        v = u; // error
+        ~
+!!! typeParameterAssignability2.ts(71,5): error TS2011: Cannot convert 'U' to 'V'.
+    }

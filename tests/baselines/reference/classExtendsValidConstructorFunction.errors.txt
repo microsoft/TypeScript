@@ -1,0 +1,8 @@
+==== tests/cases/compiler/classExtendsValidConstructorFunction.ts (1 errors) ====
+    function foo() { }
+    
+    var x = new foo(); // can be used as a constructor function
+    
+    class C extends foo { } // error, cannot extend it though
+                    ~~~
+!!! classExtendsValidConstructorFunction.ts(5,17): error TS2095: Could not find symbol 'foo'.

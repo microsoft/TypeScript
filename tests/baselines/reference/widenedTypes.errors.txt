@@ -1,0 +1,45 @@
+==== tests/cases/compiler/widenedTypes.ts (8 errors) ====
+    null instanceof (() => { });
+    ~~~~
+!!! widenedTypes.ts(1,1): error TS2120: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
+    ({}) instanceof null; // Ok because null is a subtype of function
+    
+    null in {};
+    ~~~~
+!!! widenedTypes.ts(4,1): error TS2118: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+    "" in null;
+          ~~~~
+!!! widenedTypes.ts(5,7): error TS2119: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
+    
+    for (var a in null) { }
+                  ~~~~
+!!! widenedTypes.ts(7,15): error TS2117: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+    
+    var t = [3, (3, null)];
+    t[3] = "";
+    ~~~~
+!!! widenedTypes.ts(10,1): error TS2011: Cannot convert 'string' to 'number'.
+    
+    // Bug 774508: typeof undefined has the type undefined
+    var x: typeof undefined = 3;
+    x = 3;
+    
+    var y;
+    var u = [3, (y = null)];
+    u[3] = "";
+    ~~~~
+!!! widenedTypes.ts(18,1): error TS2011: Cannot convert 'string' to 'number'.
+    
+    // Bug 774508: typeof undefined has the type undefined
+    var ob: { x: typeof undefined } = { x: "" };
+    
+    // Highlights the difference between array literals and object literals
+    var arr: string[] = [3, null]; // not assignable because null is not widened. BCT is {}
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! widenedTypes.ts(24,5): error TS2012: Cannot convert '{}[]' to 'string[]':
+!!! 	Types of property 'pop' of types '{}[]' and 'string[]' are incompatible:
+!!! 		Call signatures of types '() => {}' and '() => string' are incompatible.
+    var obj: { [x: string]: string; } = { x: 3, y: null }; // assignable because null is widened, and therefore BCT is any
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! widenedTypes.ts(25,5): error TS2012: Cannot convert '{ x: number; y: any; [x: string]: {}; }' to '{ [x: string]: string; }':
+!!! 	Index signatures of types '{ x: number; y: any; [x: string]: {}; }' and '{ [x: string]: string; }' are incompatible.

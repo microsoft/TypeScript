@@ -1,0 +1,256 @@
+=== tests/cases/compiler/commentsCommentParsing.ts ===
+
+/// This is simple /// comments
+function simple() {
+>simple : typeof simple
+}
+
+>simple() : void
+>simple : typeof simple
+
+simple();
+
+/// multiLine /// Comments
+/// This is example of multiline /// comments
+/// Another multiLine
+function multiLine() {
+>multiLine : typeof multiLine
+}
+multiLine();
+>multiLine() : void
+>multiLine : typeof multiLine
+
+/** this is eg of single line jsdoc style comment */
+function jsDocSingleLine() {
+>jsDocSingleLine : typeof jsDocSingleLine
+}
+jsDocSingleLine();
+>jsDocSingleLine() : void
+>jsDocSingleLine : typeof jsDocSingleLine
+
+
+/** this is multiple line jsdoc stule comment
+*New line1
+*New Line2*/
+function jsDocMultiLine() {
+>jsDocMultiLine : typeof jsDocMultiLine
+}
+jsDocMultiLine();
+>jsDocMultiLine() : void
+>jsDocMultiLine : typeof jsDocMultiLine
+
+/** this is multiple line jsdoc stule comment
+*New line1
+*New Line2*/
+/** Shoul mege this line as well
+* and this too*/ /** Another this one too*/
+function jsDocMultiLineMerge() {
+>jsDocMultiLineMerge : typeof jsDocMultiLineMerge
+}
+jsDocMultiLineMerge();
+>jsDocMultiLineMerge() : void
+>jsDocMultiLineMerge : typeof jsDocMultiLineMerge
+
+
+/// Triple slash comment
+/** jsdoc comment */
+function jsDocMixedComments1() {
+>jsDocMixedComments1 : typeof jsDocMixedComments1
+}
+jsDocMixedComments1();
+>jsDocMixedComments1() : void
+>jsDocMixedComments1 : typeof jsDocMixedComments1
+
+/// Triple slash comment
+/** jsdoc comment */ /*** another jsDocComment*/
+function jsDocMixedComments2() {
+>jsDocMixedComments2 : typeof jsDocMixedComments2
+}
+jsDocMixedComments2();
+>jsDocMixedComments2() : void
+>jsDocMixedComments2 : typeof jsDocMixedComments2
+
+/** jsdoc comment */ /*** another jsDocComment*/
+/// Triple slash comment
+function jsDocMixedComments3() {
+>jsDocMixedComments3 : typeof jsDocMixedComments3
+}
+jsDocMixedComments3();
+>jsDocMixedComments3() : void
+>jsDocMixedComments3 : typeof jsDocMixedComments3
+
+/** jsdoc comment */ /*** another jsDocComment*/
+/// Triple slash comment
+/// Triple slash comment 2
+function jsDocMixedComments4() {
+>jsDocMixedComments4 : typeof jsDocMixedComments4
+}
+jsDocMixedComments4();
+>jsDocMixedComments4() : void
+>jsDocMixedComments4 : typeof jsDocMixedComments4
+
+/// Triple slash comment 1
+/** jsdoc comment */ /*** another jsDocComment*/
+/// Triple slash comment
+/// Triple slash comment 2
+function jsDocMixedComments5() {
+>jsDocMixedComments5 : typeof jsDocMixedComments5
+}
+jsDocMixedComments5();
+>jsDocMixedComments5() : void
+>jsDocMixedComments5 : typeof jsDocMixedComments5
+
+/*** another jsDocComment*/
+/// Triple slash comment 1
+/// Triple slash comment
+/// Triple slash comment 2
+/** jsdoc comment */
+function jsDocMixedComments6() {
+>jsDocMixedComments6 : typeof jsDocMixedComments6
+}
+jsDocMixedComments6();
+>jsDocMixedComments6() : void
+>jsDocMixedComments6 : typeof jsDocMixedComments6
+
+// This shoulnot be help comment
+function noHelpComment1() {
+>noHelpComment1 : typeof noHelpComment1
+}
+noHelpComment1();
+>noHelpComment1() : void
+>noHelpComment1 : typeof noHelpComment1
+
+/* This shoulnot be help comment */
+function noHelpComment2() {
+>noHelpComment2 : typeof noHelpComment2
+}
+noHelpComment2();
+>noHelpComment2() : void
+>noHelpComment2 : typeof noHelpComment2
+
+function noHelpComment3() {
+>noHelpComment3 : typeof noHelpComment3
+}
+noHelpComment3();
+>noHelpComment3() : void
+>noHelpComment3 : typeof noHelpComment3
+
+/** Adds two integers and returns the result
+  * @param {number} a first number
+  * @param b second number
+  */
+function sum(a: number, b: number) {
+>sum : typeof sum
+>a : number
+>b : number
+
+    return a + b;
+>a + b : number
+>a : number
+>b : number
+}
+sum(10, 20);
+>sum(10, 20) : number
+>sum : typeof sum
+
+/** This is multiplication function*/
+/** @param */
+/** @param a first number*/
+/** @param b */
+/** @param c {
+ @param d @anotherTag*/
+/** @param e LastParam @anotherTag*/
+function multiply(a: number, b: number, c?: number, d?, e?) {
+>multiply : typeof multiply
+>a : number
+>b : number
+>c : number
+>d : any
+>e : any
+}
+/** fn f1 with number
+* @param { string} b about b
+*/
+function f1(a: number);
+>f1 : typeof f1
+>a : number
+
+function f1(b: string);
+>f1 : typeof f1
+>b : string
+
+/**@param opt optional parameter*/
+function f1(aOrb, opt?) {
+>f1 : typeof f1
+>aOrb : any
+>opt : any
+
+    return aOrb;
+>aOrb : any
+}
+/** This is subtract function
+@param { a
+*@param { number | } b this is about b
+@param { { () => string; } } c this is optional param c
+@param { { () => string; } d this is optional param d
+@param { { () => string; } } e this is optional param e
+@param { { { () => string; } } f this is optional param f
+*/
+function subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string) {
+>subtract : typeof subtract
+>a : number
+>b : number
+>c : () => string
+>d : () => string
+>e : () => string
+>f : () => string
+}
+/** this is square function
+@paramTag { number } a this is input number of paramTag
+@param { number } a this is input number
+@returnType { number } it is return type
+*/
+function square(a: number) {
+>square : typeof square
+>a : number
+
+    return a * a;
+>a * a : number
+>a : number
+>a : number
+}
+/** this is divide function
+@param { number} a this is a
+@paramTag { number } g this is optional param g
+@param { number} b this is b
+*/
+function divide(a: number, b: number) {
+>divide : typeof divide
+>a : number
+>b : number
+}
+/** this is jsdoc style function with param tag as well as inline parameter help
+*@param a it is first parameter
+*@param c it is third parameter
+*/
+function jsDocParamTest(/** this is inline comment for a */a: number, /** this is inline comment for b*/ b: number, c: number, d: number) {
+>jsDocParamTest : typeof jsDocParamTest
+>a : number
+>b : number
+>c : number
+>d : number
+
+    return a + b + c + d;
+>a + b + c + d : number
+>a + b + c : number
+>a + b : number
+>a : number
+>b : number
+>c : number
+>d : number
+}
+
+/**/
+class NoQuickInfoClass {
+>NoQuickInfoClass : NoQuickInfoClass
+}

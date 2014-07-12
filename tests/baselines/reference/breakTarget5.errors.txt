@@ -1,0 +1,11 @@
+==== tests/cases/compiler/breakTarget5.ts (1 errors) ====
+    target:
+    while (true) {
+      function f() {
+        while (true) {
+          break target;
+          ~~~~~~~~~~~~~
+!!! breakTarget5.ts(5,7): error TS2204: Jump target cannot cross function boundary.
+        }
+      }
+    }

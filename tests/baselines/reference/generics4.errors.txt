@@ -1,0 +1,13 @@
+==== tests/cases/compiler/generics4.ts (1 errors) ====
+    class C<T> { private x: T; }
+    interface X { f(): string; }
+    interface Y { f(): boolean; }
+    var a: C<X>;
+    var b: C<Y>;
+    
+    a = b; // Not ok - return types of "f" are different
+    ~
+!!! generics4.ts(7,1): error TS2012: Cannot convert 'C<Y>' to 'C<X>':
+!!! 	Types of property 'x' of types 'C<Y>' and 'C<X>' are incompatible:
+!!! 		Types of property 'f' of types 'Y' and 'X' are incompatible:
+!!! 			Call signatures of types '() => boolean' and '() => string' are incompatible.

@@ -1,0 +1,1 @@
+//// [ambientExternalModuleWithRelativeModuleName.js]

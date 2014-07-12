@@ -1,0 +1,42 @@
+=== tests/cases/compiler/overload2.ts ===
+enum A { }
+>A : A
+
+enum B { }
+>B : B
+    
+function foo(a: A);
+>foo : typeof foo
+>a : A
+>A : A
+
+function foo(b: B);
+>foo : typeof foo
+>b : B
+>B : B
+
+// should be ok
+function foo(x: number) { 
+>foo : typeof foo
+>x : number
+}
+
+class C { }
+>C : C
+
+function foo1(a: A);
+>foo1 : typeof foo1
+>a : A
+>A : A
+
+function foo1(c: C);
+>foo1 : typeof foo1
+>c : C
+>C : C
+
+// should be ok
+function foo1(x: number) { 
+>foo1 : typeof foo1
+>x : number
+}
+

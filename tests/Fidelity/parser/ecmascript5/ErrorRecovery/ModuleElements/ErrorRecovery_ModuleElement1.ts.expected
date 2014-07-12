@@ -1,0 +1,158 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "diagnostics": [
+        {
+            "start": 13,
+            "length": 1,
+            "diagnosticCode": "Unexpected token; '{0}' expected.",
+            "arguments": [
+                "module, class, interface, enum, import or statement"
+            ]
+        },
+        {
+            "start": 29,
+            "length": 1,
+            "diagnosticCode": "Unexpected token; '{0}' expected.",
+            "arguments": [
+                "module, class, interface, enum, import or statement"
+            ]
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 30,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ReturnStatement",
+                "fullWidth": 16,
+                "isIncrementallyUnusable": true,
+                "returnKeyword": {
+                    "kind": "ReturnKeyword",
+                    "width": 6,
+                    "fullWidth": 7,
+                    "text": "return",
+                    "value": "return",
+                    "valueText": "return",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "text": " "
+                        }
+                    ]
+                },
+                "expression": {
+                    "kind": "IdentifierName",
+                    "width": 3,
+                    "text": "foo",
+                    "value": "foo",
+                    "valueText": "foo"
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 1,
+                    "fullWidth": 6,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";",
+                    "hasTrailingTrivia": true,
+                    "hasTrailingNewLine": true,
+                    "hasTrailingSkippedText": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "text": "\r\n"
+                        },
+                        {
+                            "kind": "SkippedTokenTrivia",
+                            "skippedToken": {
+                                "kind": "CloseBraceToken",
+                                "width": 1,
+                                "text": "}",
+                                "value": "}",
+                                "valueText": "}"
+                            }
+                        },
+                        {
+                            "kind": "NewLineTrivia",
+                            "text": "\r\n"
+                        }
+                    ]
+                }
+            },
+            {
+                "kind": "ReturnStatement",
+                "fullWidth": 14,
+                "isIncrementallyUnusable": true,
+                "returnKeyword": {
+                    "kind": "ReturnKeyword",
+                    "width": 6,
+                    "fullWidth": 7,
+                    "text": "return",
+                    "value": "return",
+                    "valueText": "return",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "text": " "
+                        }
+                    ]
+                },
+                "expression": {
+                    "kind": "IdentifierName",
+                    "width": 3,
+                    "text": "bar",
+                    "value": "bar",
+                    "valueText": "bar"
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 1,
+                    "fullWidth": 4,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";",
+                    "hasTrailingTrivia": true,
+                    "hasTrailingNewLine": true,
+                    "hasTrailingSkippedText": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "text": "\r\n"
+                        },
+                        {
+                            "kind": "SkippedTokenTrivia",
+                            "skippedToken": {
+                                "kind": "CloseBraceToken",
+                                "width": 1,
+                                "text": "}",
+                                "value": "}",
+                                "valueText": "}"
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            13,
+            16,
+            29
+        ],
+        "length": 30
+    }
+}

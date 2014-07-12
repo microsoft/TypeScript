@@ -1,0 +1,26 @@
+==== tests/cases/compiler/interfaceWithStringIndexerHidingBaseTypeIndexer2.ts (1 errors) ====
+    interface Base {
+        [x: number]: { a: number; b: number }
+        x: {
+            a: number; b: number;
+        }
+    }
+    
+    interface Derived extends Base {
+        [x: string]: {
+            a: number
+        };
+    
+        y: {
+            a: number;
+        }
+        // error
+        1: {
+        ~~~~
+            a: number;
+    ~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+!!! interfaceWithStringIndexerHidingBaseTypeIndexer2.ts(17,5): error TS2170: All numerically named properties must be assignable to numeric indexer type '{ a: number; b: number; }':
+!!! 	Type '{ a: number; }' is missing property 'b' from type '{ a: number; b: number; }'.
+    }

@@ -1,0 +1,6 @@
+==== tests/cases/compiler/typeOfOperator1.ts (1 errors) ====
+    var x = 1;
+    var y: string = typeof x;
+    var z: number = typeof x;
+        ~~~~~~~~~~~~~~~~~~~~
+!!! typeOfOperator1.ts(3,5): error TS2011: Cannot convert 'string' to 'number'.

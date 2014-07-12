@@ -1,0 +1,8 @@
+==== tests/cases/compiler/classOverloadForFunction2.ts (2 errors) ====
+    function bar(): string;
+    class bar {}
+    ~~~~~
+!!! classOverloadForFunction2.ts(2,1): error TS1041: Function implementation expected.
+          ~~~
+!!! classOverloadForFunction2.ts(2,7): error TS2000: Duplicate identifier 'bar'. Additional locations:
+!!! 	classOverloadForFunction2.ts(1,1)

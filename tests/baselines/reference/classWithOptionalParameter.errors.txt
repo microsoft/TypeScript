@@ -1,0 +1,38 @@
+==== tests/cases/compiler/classWithOptionalParameter.ts (13 errors) ====
+    // classes do not permit optional parameters, these are errors
+    
+    class C {
+        x?: string;
+         ~
+!!! classWithOptionalParameter.ts(4,6): error TS1005: ';' expected.
+          ~
+!!! classWithOptionalParameter.ts(4,7): error TS1008: Unexpected token; 'constructor, function, accessor or variable' expected.
+        f?() {}
+         ~
+!!! classWithOptionalParameter.ts(5,6): error TS1005: ';' expected.
+          ~
+!!! classWithOptionalParameter.ts(5,7): error TS1008: Unexpected token; 'constructor, function, accessor or variable' expected.
+             ~
+!!! classWithOptionalParameter.ts(5,10): error TS1005: '=>' expected.
+    }
+    ~
+!!! classWithOptionalParameter.ts(6,1): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.
+    
+    class C2<T> {
+        x?: T;
+         ~
+!!! classWithOptionalParameter.ts(9,6): error TS1005: ';' expected.
+          ~
+!!! classWithOptionalParameter.ts(9,7): error TS1008: Unexpected token; 'constructor, function, accessor or variable' expected.
+        f?(x: T) {}
+         ~
+!!! classWithOptionalParameter.ts(10,6): error TS1005: ';' expected.
+          ~
+!!! classWithOptionalParameter.ts(10,7): error TS1008: Unexpected token; 'constructor, function, accessor or variable' expected.
+                 ~
+!!! classWithOptionalParameter.ts(10,14): error TS1005: '=>' expected.
+              ~
+!!! classWithOptionalParameter.ts(10,11): error TS2095: Could not find symbol 'T'.
+    }
+    ~
+!!! classWithOptionalParameter.ts(11,1): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.

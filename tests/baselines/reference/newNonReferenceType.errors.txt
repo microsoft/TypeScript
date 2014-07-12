@@ -1,0 +1,8 @@
+==== tests/cases/compiler/newNonReferenceType.ts (2 errors) ====
+    var a = new any();
+                ~~~
+!!! newNonReferenceType.ts(1,13): error TS2095: Could not find symbol 'any'.
+    var b = new boolean(); // error
+                ~~~~~~~
+!!! newNonReferenceType.ts(2,13): error TS2095: Could not find symbol 'boolean'.
+    

@@ -1,0 +1,23 @@
+==== tests/cases/compiler/classImplementsClass4.ts (2 errors) ====
+    class A {
+        private x = 1;
+        foo(): number { return 1; }
+    }
+    class C implements A {
+          ~
+!!! classImplementsClass4.ts(5,7): error TS2137: Class C declares interface A but does not implement it:
+!!! 	Type 'C' is missing property 'x' from type 'A'.
+        foo() {
+            return 1;
+        }
+    }
+    
+    class C2 extends A {}
+    
+    var c: C;
+    var c2: C2;
+    c = c2;
+    c2 = c;
+    ~~
+!!! classImplementsClass4.ts(16,1): error TS2012: Cannot convert 'C' to 'C2':
+!!! 	Type 'C' is missing property 'x' from type 'C2'.

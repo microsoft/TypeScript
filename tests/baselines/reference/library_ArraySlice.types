@@ -1,0 +1,31 @@
+=== tests/cases/compiler/library_ArraySlice.ts ===
+// Array.prototype.slice can have zero, one, or two arguments
+>// Array.prototype.slice can have zero, one, or two arguments
+Array.prototype.slice() : any[]
+>// Array.prototype.slice can have zero, one, or two arguments
+Array.prototype.slice : (start?: number, end?: number) => any[]
+>// Array.prototype.slice can have zero, one, or two arguments
+Array.prototype : any[]
+>// Array.prototype.slice can have zero, one, or two arguments
+Array : { isArray(arg: any): boolean; prototype: any[]; (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new(arrayLength?: number): any[]; new<T>(arrayLength: number): T[]; new<T>(...items: T[]): T[]; }
+
+Array.prototype.slice();
+>prototype : any[]
+>slice : (start?: number, end?: number) => any[]
+
+Array.prototype.slice(0);
+>Array.prototype.slice(0) : any[]
+>Array.prototype.slice : (start?: number, end?: number) => any[]
+>Array.prototype : any[]
+>Array : { isArray(arg: any): boolean; prototype: any[]; (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new(arrayLength?: number): any[]; new<T>(arrayLength: number): T[]; new<T>(...items: T[]): T[]; }
+>prototype : any[]
+>slice : (start?: number, end?: number) => any[]
+
+Array.prototype.slice(0, 1);
+>Array.prototype.slice(0, 1) : any[]
+>Array.prototype.slice : (start?: number, end?: number) => any[]
+>Array.prototype : any[]
+>Array : { isArray(arg: any): boolean; prototype: any[]; (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new(arrayLength?: number): any[]; new<T>(arrayLength: number): T[]; new<T>(...items: T[]): T[]; }
+>prototype : any[]
+>slice : (start?: number, end?: number) => any[]
+

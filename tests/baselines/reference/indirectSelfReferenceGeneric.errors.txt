@@ -1,0 +1,5 @@
+==== tests/cases/compiler/indirectSelfReferenceGeneric.ts (1 errors) ====
+    class a<T> extends b<T> { }
+          ~
+!!! indirectSelfReferenceGeneric.ts(1,7): error TS2100: Class 'a<T>' is recursively referenced as a base type of itself.
+    class b<T> extends a<T> { }

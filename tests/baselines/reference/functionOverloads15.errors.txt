@@ -1,0 +1,7 @@
+==== tests/cases/compiler/functionOverloads15.ts (1 errors) ====
+    function foo(foo:{a:string; b:number;}):string;
+    function foo(foo:{a:string; b:number;}):number;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! functionOverloads15.ts(2,1): error TS2175: Overloads cannot differ only by return type.
+    function foo(foo:{a:string; b?:number;}):any { return "" }
+    

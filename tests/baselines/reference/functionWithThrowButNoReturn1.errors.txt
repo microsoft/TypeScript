@@ -1,0 +1,8 @@
+==== tests/cases/compiler/functionWithThrowButNoReturn1.ts (1 errors) ====
+    function fn(): number {
+                   ~~~~~~
+!!! functionWithThrowButNoReturn1.ts(1,16): error TS2131: Function declared a non-void return type, but has no return expression.
+      throw new Error('NYI');
+      var t;
+    }
+    

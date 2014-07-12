@@ -1,0 +1,13 @@
+==== tests/cases/compiler/superCallAssignResult.ts (1 errors) ====
+    class E {
+        constructor(arg: any) { }
+    }
+    
+    class H extends E {
+        constructor() {
+            var x = super(5); // Should be of type void, not E.
+            x = 5;
+            ~
+!!! superCallAssignResult.ts(8,9): error TS2011: Cannot convert 'number' to 'void'.
+        }
+    }

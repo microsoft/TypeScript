@@ -1,0 +1,182 @@
+=== tests/cases/compiler/castExpressionParentheses.ts ===
+declare var a;
+>a : any
+
+>// parentheses should be omitted
+// literals
+(<any>{a:0}) : any
+
+// parentheses should be omitted
+// literals
+(<any>{a:0});  
+><any>{a:0} : any
+>{a:0} : { a: number; }
+>a : number
+
+(<any>[1,3,]); 
+>(<any>[1,3,]) : any
+><any>[1,3,] : any
+>[1,3,] : number[]
+
+(<any>"string"); 
+>(<any>"string") : any
+><any>"string" : any
+
+(<any>23.0); 
+>(<any>23.0) : any
+><any>23.0 : any
+
+(<any>/regexp/g); 
+>(<any>/regexp/g) : any
+><any>/regexp/g : any
+
+(<any>false); 
+>(<any>false) : any
+><any>false : any
+
+(<any>true); 
+>(<any>true) : any
+><any>true : any
+
+(<any>null); 
+>(<any>null) : any
+><any>null : any
+
+// names and dotted names
+>// names and dotted names
+(<any>this) : any
+
+(<any>this); 
+><any>this : any
+>this : any
+
+(<any>this.x); 
+>(<any>this.x) : any
+><any>this.x : any
+>this.x : any
+>this : any
+>x : any
+
+(<any>(<any>a).x);
+>(<any>(<any>a).x) : any
+><any>(<any>a).x : any
+>(<any>a).x : any
+>(<any>a) : any
+><any>a : any
+>a : any
+>x : any
+
+(<any><any>a);
+>(<any><any>a) : any
+><any><any>a : any
+><any>a : any
+>a : any
+
+(<any>a[0]);
+>(<any>a[0]) : any
+><any>a[0] : any
+>a[0] : any
+>a : any
+
+(<any>a.b["0"]);
+>(<any>a.b["0"]) : any
+><any>a.b["0"] : any
+>a.b["0"] : any
+>a.b : any
+>a : any
+>b : any
+
+(<any>a()).x;
+>(<any>a()).x : any
+>(<any>a()) : any
+><any>a() : any
+>a() : any
+>a : any
+>x : any
+
+declare var A;
+>A : any
+
+>// should keep the parentheses in emit
+(<any>new A).foo : any
+>// should keep the parentheses in emit
+(<any>new A) : any
+
+// should keep the parentheses in emit
+(<any>new A).foo; 
+><any>new A : any
+>new A : any
+>A : any
+>foo : any
+
+(<any>typeof A).x; 
+>(<any>typeof A).x : any
+>(<any>typeof A) : any
+><any>typeof A : any
+>typeof A : string
+>A : any
+>x : any
+
+(<any>-A).x; 
+>(<any>-A).x : any
+>(<any>-A) : any
+><any>-A : any
+>-A : number
+>A : any
+>x : any
+
+new (<any>A());
+>new (<any>A()) : any
+>(<any>A()) : any
+><any>A() : any
+>A() : any
+>A : any
+
+(<any>()=> {})();
+>(<any>()=> {})() : void
+>(<any>()=> {}) : <any>() => void
+><any>()=> {} : <any>() => void
+>any : any
+
+(<any>function foo() { })();
+>(<any>function foo() { })() : any
+>(<any>function foo() { }) : any
+><any>function foo() { } : any
+>function foo() { } : () => void
+>foo : () => void
+
+(<any><number><any>-A).x; 
+>(<any><number><any>-A).x : any
+>(<any><number><any>-A) : any
+><any><number><any>-A : any
+><number><any>-A : number
+><any>-A : any
+>-A : number
+>A : any
+>x : any
+
+>// nested cast, should keep one pair of parenthese
+(<any><number>(<any>-A)).x : any
+>// nested cast, should keep one pair of parenthese
+(<any><number>(<any>-A)) : any
+
+// nested cast, should keep one pair of parenthese
+(<any><number>(<any>-A)).x; 
+><any><number>(<any>-A) : any
+><number>(<any>-A) : number
+>(<any>-A) : any
+><any>-A : any
+>-A : number
+>A : any
+>x : any
+
+>// nested parenthesized expression, should keep one pair of parenthese
+(<any>(A)) : any
+
+// nested parenthesized expression, should keep one pair of parenthese
+(<any>(A)) 
+><any>(A) : any
+>(A) : any
+>A : any
+
+

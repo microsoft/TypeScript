@@ -1,0 +1,49 @@
+=== tests/cases/compiler/getterSetterNonAccessor.ts ===
+function getFunc():any{return 0;}
+>getFunc : typeof getFunc
+
+function setFunc(v){}          
+>setFunc : typeof setFunc
+>v : any
+
+>Object.defineProperty({}, "0", <PropertyDescriptor>({
+          get: getFunc,
+          set: setFunc,
+          configurable: true
+      })) : any
+>Object.defineProperty : (o: any, p: string, attributes: PropertyDescriptor) => any
+>Object : { prototype: Object; getPrototypeOf(o: any): any; getOwnPropertyDescriptor(o: any, p: string): PropertyDescriptor; getOwnPropertyNames(o: any): string[]; create(o: any, properties?: PropertyDescriptorMap): any; defineProperty(o: any, p: string, attributes: PropertyDescriptor): any; defineProperties(o: any, properties: PropertyDescriptorMap): any; seal(o: any): any; freeze(o: any): any; preventExtensions(o: any): any; isSealed(o: any): boolean; isFrozen(o: any): boolean; isExtensible(o: any): boolean; keys(o: any): string[]; (): any; (value: any): any; new(value?: any): Object; }
+
+Object.defineProperty({}, "0", <PropertyDescriptor>({
+>defineProperty : (o: any, p: string, attributes: PropertyDescriptor) => any
+>{} : {}
+><PropertyDescriptor>({
+          get: getFunc,
+          set: setFunc,
+          configurable: true
+      }) : PropertyDescriptor
+>PropertyDescriptor : PropertyDescriptor
+>({
+          get: getFunc,
+          set: setFunc,
+          configurable: true
+      }) : { get: typeof getFunc; set: typeof setFunc; configurable: boolean; }
+>{
+          get: getFunc,
+          set: setFunc,
+          configurable: true
+      } : { get: typeof getFunc; set: typeof setFunc; configurable: boolean; }
+
+          get: getFunc,
+>get : typeof getFunc
+>getFunc : typeof getFunc
+
+          set: setFunc,
+>set : typeof setFunc
+>setFunc : typeof setFunc
+
+          configurable: true
+>configurable : boolean
+
+      }));
+

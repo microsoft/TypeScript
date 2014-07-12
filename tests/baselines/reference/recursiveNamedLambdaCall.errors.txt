@@ -1,0 +1,30 @@
+==== tests/cases/compiler/recursiveNamedLambdaCall.ts (5 errors) ====
+    var promise = function( obj ) {
+        
+            if ( top && top.doScroll ) {
+           ~~~
+!!! recursiveNamedLambdaCall.ts(3,8): error TS2095: Could not find symbol 'top'.
+                  ~~~
+!!! recursiveNamedLambdaCall.ts(3,15): error TS2095: Could not find symbol 'top'.
+                (function doScrollCheck() {
+                    if ( false ) {
+    
+                        try {
+                            top.doScroll("left");
+          ~~~
+!!! recursiveNamedLambdaCall.ts(8,7): error TS2095: Could not find symbol 'top'.
+                        } catch(e) {
+                            return setTimeout( doScrollCheck, 50 );
+                 ~~~~~~~~~~
+!!! recursiveNamedLambdaCall.ts(10,14): error TS2095: Could not find symbol 'setTimeout'.
+                        }
+    
+                        // detach all dom ready events
+                        detach();
+         ~~~~~~
+!!! recursiveNamedLambdaCall.ts(14,6): error TS2095: Could not find symbol 'detach'.
+    
+                    }
+                })();
+            }
+    };

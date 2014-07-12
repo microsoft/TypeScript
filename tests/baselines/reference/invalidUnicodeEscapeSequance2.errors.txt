@@ -1,0 +1,6 @@
+==== tests/cases/compiler/invalidUnicodeEscapeSequance2.ts (2 errors) ====
+    var arg\uxxxx
+           ~
+!!! invalidUnicodeEscapeSequance2.ts(1,8): error TS1001: Unexpected character "\".
+           ~
+!!! invalidUnicodeEscapeSequance2.ts(1,8): error TS1005: ',' expected.

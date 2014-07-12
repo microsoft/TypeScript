@@ -1,0 +1,22 @@
+==== tests/cases/compiler/functionCall7.ts (6 errors) ====
+    module m1 { export class c1 { public a; }}
+    function foo(a:m1.c1){ a.a = 1; }; 
+    var myC = new m1.c1(); 
+    foo(myC); 
+    foo(myC, myC); 
+    ~~~
+!!! functionCall7.ts(5,1): error TS2081: Supplied parameters do not match any signature of call target.
+    ~~~
+!!! functionCall7.ts(5,1): error TS2087: Could not select overload for 'call' expression.
+    foo(4);
+    ~~~
+!!! functionCall7.ts(6,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Type 'Number' is missing property 'a' from type 'm1.c1'.
+    ~~~
+!!! functionCall7.ts(6,1): error TS2087: Could not select overload for 'call' expression.
+    foo();
+    ~~~
+!!! functionCall7.ts(7,1): error TS2081: Supplied parameters do not match any signature of call target.
+    ~~~
+!!! functionCall7.ts(7,1): error TS2087: Could not select overload for 'call' expression.
+    

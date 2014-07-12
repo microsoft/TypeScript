@@ -1,0 +1,16 @@
+==== tests/cases/compiler/typeOfEnumAndVarRedeclarations.ts (2 errors) ====
+    enum E {
+        a
+    }
+    enum E {
+        b = 1
+    }
+    var x = E;
+    var x: { a: E; b: E;[x: number]: string; }; // Shouldnt error
+    var y = E;
+    var y: { a: E; b: E;[x: number]: string;[x: number]: string } // two errors: the types are not identical and duplicate signatures
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! typeOfEnumAndVarRedeclarations.ts(10,5): error TS2134: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'typeof E', but here has type '{ a: E; b: E; [x: number]: string; [x: number]: string; }'.
+                                            ~~~~~~~~~~~~~~~~~~~
+!!! typeOfEnumAndVarRedeclarations.ts(10,41): error TS2233: Duplicate number index signature. Additional locations:
+!!! 	typeOfEnumAndVarRedeclarations.ts(10,21)

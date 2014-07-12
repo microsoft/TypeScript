@@ -1,0 +1,606 @@
+=== tests/cases/compiler/genericClassWithStaticFactory.ts ===
+module Editor {
+>Editor : Editor
+
+    export class List<T> {
+>List : List<T>
+>T : T
+
+        public next: List<T>;
+>next : List<T>
+>List : List<T>
+>T : T
+
+        public prev: List<T>;
+>prev : List<T>
+>List : List<T>
+>T : T
+
+        private listFactory: ListFactory<T>;
+>listFactory : ListFactory<T>
+>ListFactory : ListFactory<T>
+>T : T
+
+        constructor(public isHead: boolean, public data: T) {
+>isHead : boolean
+>data : T
+>T : T
+
+            this.listFactory = new ListFactory<T>();
+>this.listFactory = new ListFactory<T>() : ListFactory<T>
+>this.listFactory : ListFactory<T>
+>this : List<T>
+>listFactory : ListFactory<T>
+>new ListFactory<T>() : ListFactory<T>
+>ListFactory : typeof ListFactory
+>T : T
+           
+        }
+
+        public add(data: T): List<T> {
+>add : (data: T) => List<T>
+>data : T
+>T : T
+>List : List<T>
+>T : T
+
+            var entry = this.listFactory.MakeEntry(data);
+>entry : List<T>
+>this.listFactory.MakeEntry(data) : List<T>
+>this.listFactory.MakeEntry : <T>(data: T) => List<T>
+>this.listFactory : ListFactory<T>
+>this : List<T>
+>listFactory : ListFactory<T>
+>MakeEntry : <T>(data: T) => List<T>
+>data : T
+            
+>this.prev.next = entry : List<T>
+>this.prev.next : List<T>
+>this.prev : List<T>
+>this : List<T>
+
+            this.prev.next = entry;
+>prev : List<T>
+>next : List<T>
+>entry : List<T>
+
+            entry.next = this;
+>entry.next = this : List<T>
+>entry.next : List<T>
+>entry : List<T>
+>next : List<T>
+>this : List<T>
+
+            entry.prev = this.prev;
+>entry.prev = this.prev : List<T>
+>entry.prev : List<T>
+>entry : List<T>
+>prev : List<T>
+>this.prev : List<T>
+>this : List<T>
+>prev : List<T>
+
+            this.prev = entry;
+>this.prev = entry : List<T>
+>this.prev : List<T>
+>this : List<T>
+>prev : List<T>
+>entry : List<T>
+
+            return entry;
+>entry : List<T>
+        }
+
+        public count(): number {
+>count : () => number
+
+            var entry: List<T>;
+>entry : List<T>
+>List : List<T>
+>T : T
+
+            var i: number;
+>i : number
+
+>entry = this.next : List<T>
+>entry : List<T>
+
+            entry = this.next;
+>this.next : List<T>
+>this : List<T>
+>next : List<T>
+
+            for (i = 0; !(entry.isHead); i++) {
+>i = 0 : number
+>i : number
+>!(entry.isHead) : boolean
+>(entry.isHead) : boolean
+>entry.isHead : boolean
+>entry : List<T>
+>isHead : boolean
+>i++ : number
+>i : number
+
+                entry = entry.next;
+>entry = entry.next : List<T>
+>entry : List<T>
+>entry.next : List<T>
+>entry : List<T>
+>next : List<T>
+            }
+
+            return (i);
+>(i) : number
+>i : number
+        }
+
+        public isEmpty(): boolean {
+>isEmpty : () => boolean
+
+            return (this.next == this);
+>(this.next == this) : boolean
+>this.next == this : boolean
+>this.next : List<T>
+>this : List<T>
+>next : List<T>
+>this : List<T>
+        }
+
+        public first(): T {
+>first : () => T
+>T : T
+
+            if (this.isEmpty())
+>this.isEmpty() : boolean
+>this.isEmpty : () => boolean
+>this : List<T>
+>isEmpty : () => boolean
+            {
+                return this.next.data;
+>this.next.data : T
+>this.next : List<T>
+>this : List<T>
+>next : List<T>
+>data : T
+            }
+            else {
+                return null;
+            }
+        }
+
+        public pushEntry(entry: List<T>): void {
+>pushEntry : (entry: List<T>) => void
+>entry : List<T>
+>List : List<T>
+>T : T
+
+            entry.isHead = false;
+>entry.isHead = false : boolean
+>entry.isHead : boolean
+>entry : List<T>
+>isHead : boolean
+
+            entry.next = this.next;
+>entry.next = this.next : List<T>
+>entry.next : List<T>
+>entry : List<T>
+>next : List<T>
+>this.next : List<T>
+>this : List<T>
+>next : List<T>
+
+            entry.prev = this;
+>entry.prev = this : List<T>
+>entry.prev : List<T>
+>entry : List<T>
+>prev : List<T>
+>this : List<T>
+
+            this.next = entry;
+>this.next = entry : List<T>
+>this.next : List<T>
+>this : List<T>
+>next : List<T>
+>entry : List<T>
+
+            entry.next.prev = entry; // entry.next.prev does not show intellisense, but entry.prev.prev does
+>entry.next.prev = entry : List<T>
+>entry.next.prev : List<T>
+>entry.next : List<T>
+>entry : List<T>
+>next : List<T>
+>prev : List<T>
+>entry : List<T>
+        }
+
+        public push(data: T): void {
+>push : (data: T) => void
+>data : T
+>T : T
+
+            var entry = this.listFactory.MakeEntry(data);
+>entry : List<T>
+>this.listFactory.MakeEntry(data) : List<T>
+>this.listFactory.MakeEntry : <T>(data: T) => List<T>
+>this.listFactory : ListFactory<T>
+>this : List<T>
+>listFactory : ListFactory<T>
+>MakeEntry : <T>(data: T) => List<T>
+>data : T
+
+            entry.data = data;
+>entry.data = data : T
+>entry.data : T
+>entry : List<T>
+>data : T
+>data : T
+
+            entry.isHead = false;
+>entry.isHead = false : boolean
+>entry.isHead : boolean
+>entry : List<T>
+>isHead : boolean
+
+            entry.next = this.next;
+>entry.next = this.next : List<T>
+>entry.next : List<T>
+>entry : List<T>
+>next : List<T>
+>this.next : List<T>
+>this : List<T>
+>next : List<T>
+
+            entry.prev = this;
+>entry.prev = this : List<T>
+>entry.prev : List<T>
+>entry : List<T>
+>prev : List<T>
+>this : List<T>
+
+            this.next = entry;
+>this.next = entry : List<T>
+>this.next : List<T>
+>this : List<T>
+>next : List<T>
+>entry : List<T>
+
+            entry.next.prev = entry;  // entry.next.prev does not show intellisense, but entry.prev.prev does
+>entry.next.prev = entry : List<T>
+>entry.next.prev : List<T>
+>entry.next : List<T>
+>entry : List<T>
+>next : List<T>
+>prev : List<T>
+>entry : List<T>
+        }
+
+        public popEntry(head: List<T>): List<T> {
+>popEntry : (head: List<T>) => List<T>
+>head : List<T>
+>List : List<T>
+>T : T
+>List : List<T>
+>T : T
+
+            if (this.next.isHead) {
+>this.next.isHead : boolean
+>this.next : List<T>
+>this : List<T>
+>next : List<T>
+>isHead : boolean
+
+                return null;
+            }
+            else {
+                return this.listFactory.RemoveEntry(this.next);
+>this.listFactory.RemoveEntry(this.next) : List<T>
+>this.listFactory.RemoveEntry : <T>(entry: List<T>) => List<T>
+>this.listFactory : ListFactory<T>
+>this : List<T>
+>listFactory : ListFactory<T>
+>RemoveEntry : <T>(entry: List<T>) => List<T>
+>this.next : List<T>
+>this : List<T>
+>next : List<T>
+            }
+        }
+
+        public insertEntry(entry: List<T>): List<T> {
+>insertEntry : (entry: List<T>) => List<T>
+>entry : List<T>
+>List : List<T>
+>T : T
+>List : List<T>
+>T : T
+
+            entry.isHead = false;
+>entry.isHead = false : boolean
+>entry.isHead : boolean
+>entry : List<T>
+>isHead : boolean
+
+            this.prev.next = entry;
+>this.prev.next = entry : List<T>
+>this.prev.next : List<T>
+>this.prev : List<T>
+>this : List<T>
+>prev : List<T>
+>next : List<T>
+>entry : List<T>
+
+            entry.next = this;
+>entry.next = this : List<T>
+>entry.next : List<T>
+>entry : List<T>
+>next : List<T>
+>this : List<T>
+
+            entry.prev = this.prev;
+>entry.prev = this.prev : List<T>
+>entry.prev : List<T>
+>entry : List<T>
+>prev : List<T>
+>this.prev : List<T>
+>this : List<T>
+>prev : List<T>
+
+            this.prev = entry;
+>this.prev = entry : List<T>
+>this.prev : List<T>
+>this : List<T>
+>prev : List<T>
+>entry : List<T>
+
+            return entry;
+>entry : List<T>
+        }
+
+        public insertAfter(data: T): List<T> {
+>insertAfter : (data: T) => List<T>
+>data : T
+>T : T
+>List : List<T>
+>T : T
+
+            var entry: List<T> = this.listFactory.MakeEntry(data);
+>entry : List<T>
+>List : List<T>
+>T : T
+>this.listFactory.MakeEntry(data) : List<T>
+>this.listFactory.MakeEntry : <T>(data: T) => List<T>
+>this.listFactory : ListFactory<T>
+>this : List<T>
+>listFactory : ListFactory<T>
+>MakeEntry : <T>(data: T) => List<T>
+>data : T
+
+            entry.next = this.next;
+>entry.next = this.next : List<T>
+>entry.next : List<T>
+>entry : List<T>
+>next : List<T>
+>this.next : List<T>
+>this : List<T>
+>next : List<T>
+
+            entry.prev = this;
+>entry.prev = this : List<T>
+>entry.prev : List<T>
+>entry : List<T>
+>prev : List<T>
+>this : List<T>
+
+            this.next = entry;
+>this.next = entry : List<T>
+>this.next : List<T>
+>this : List<T>
+>next : List<T>
+>entry : List<T>
+
+            entry.next.prev = entry;// entry.next.prev does not show intellisense, but entry.prev.prev does
+>entry.next.prev = entry : List<T>
+>entry.next.prev : List<T>
+>entry.next : List<T>
+>entry : List<T>
+>next : List<T>
+>prev : List<T>
+>entry : List<T>
+
+            return entry;
+>entry : List<T>
+        }
+
+        public insertEntryBefore(entry: List<T>): List<T> {
+>insertEntryBefore : (entry: List<T>) => List<T>
+>entry : List<T>
+>List : List<T>
+>T : T
+>List : List<T>
+>T : T
+
+            this.prev.next = entry;
+>this.prev.next = entry : List<T>
+>this.prev.next : List<T>
+>this.prev : List<T>
+>this : List<T>
+>prev : List<T>
+>next : List<T>
+>entry : List<T>
+
+>entry.next = this : List<T>
+>entry.next : List<T>
+>entry : List<T>
+
+            entry.next = this;
+>next : List<T>
+>this : List<T>
+
+            entry.prev = this.prev;
+>entry.prev = this.prev : List<T>
+>entry.prev : List<T>
+>entry : List<T>
+>prev : List<T>
+>this.prev : List<T>
+>this : List<T>
+>prev : List<T>
+
+            this.prev = entry;
+>this.prev = entry : List<T>
+>this.prev : List<T>
+>this : List<T>
+>prev : List<T>
+>entry : List<T>
+
+            return entry;
+>entry : List<T>
+        }
+
+        public insertBefore(data: T): List<T> {
+>insertBefore : (data: T) => List<T>
+>data : T
+>T : T
+>List : List<T>
+>T : T
+
+            var entry = this.listFactory.MakeEntry(data);
+>entry : List<T>
+>this.listFactory.MakeEntry(data) : List<T>
+>this.listFactory.MakeEntry : <T>(data: T) => List<T>
+>this.listFactory : ListFactory<T>
+>this : List<T>
+>listFactory : ListFactory<T>
+>MakeEntry : <T>(data: T) => List<T>
+>data : T
+
+            return this.insertEntryBefore(entry);
+>this.insertEntryBefore(entry) : List<T>
+>this.insertEntryBefore : (entry: List<T>) => List<T>
+>this : List<T>
+>insertEntryBefore : (entry: List<T>) => List<T>
+>entry : List<T>
+        }
+    }
+
+    export class ListFactory<T> {
+>ListFactory : ListFactory<T>
+>T : T
+
+        public MakeHead<T>(): List<T> {
+>MakeHead : <T>() => List<T>
+>T : T
+>List : List<T>
+>T : T
+
+            var entry: List<T> = new List<T>(true, null);
+>entry : List<T>
+>List : List<T>
+>T : T
+>new List<T>(true, null) : List<T>
+>List : typeof List
+>T : T
+
+            entry.prev = entry;
+>entry.prev = entry : List<T>
+>entry.prev : List<T>
+>entry : List<T>
+>prev : List<T>
+>entry : List<T>
+
+            entry.next = entry;
+>entry.next = entry : List<T>
+>entry.next : List<T>
+>entry : List<T>
+>next : List<T>
+>entry : List<T>
+
+            return entry;
+>entry : List<T>
+        }
+
+        public MakeEntry<T>(data: T): List<T> {
+>MakeEntry : <T>(data: T) => List<T>
+>T : T
+>data : T
+>T : T
+>List : List<T>
+>T : T
+
+            var entry: List<T> = new List<T>(false, data);
+>entry : List<T>
+>List : List<T>
+>T : T
+>new List<T>(false, data) : List<T>
+>List : typeof List
+>T : T
+>data : T
+
+            entry.prev = entry;
+>entry.prev = entry : List<T>
+>entry.prev : List<T>
+>entry : List<T>
+>prev : List<T>
+>entry : List<T>
+
+            entry.next = entry;
+>entry.next = entry : List<T>
+>entry.next : List<T>
+>entry : List<T>
+>next : List<T>
+>entry : List<T>
+
+            return entry;
+>entry : List<T>
+        }
+
+        public RemoveEntry<T>(entry: List<T>): List<T> {
+>RemoveEntry : <T>(entry: List<T>) => List<T>
+>T : T
+>entry : List<T>
+>List : List<T>
+>T : T
+>List : List<T>
+>T : T
+
+            if (entry == null) {
+>entry == null : boolean
+>entry : List<T>
+
+                return null;
+            }
+            else if (entry.isHead) {
+>entry.isHead : boolean
+>entry : List<T>
+>isHead : boolean
+
+            // Can't remove the head of a list!
+                return null;
+            }
+            else {
+                entry.next.prev = entry.prev;
+>entry.next.prev = entry.prev : List<T>
+>entry.next.prev : List<T>
+>entry.next : List<T>
+>entry : List<T>
+>next : List<T>
+>prev : List<T>
+>entry.prev : List<T>
+>entry : List<T>
+>prev : List<T>
+
+                entry.prev.next = entry.next;
+>entry.prev.next = entry.next : List<T>
+>entry.prev.next : List<T>
+>entry.prev : List<T>
+>entry : List<T>
+>prev : List<T>
+>next : List<T>
+>entry.next : List<T>
+>entry : List<T>
+>next : List<T>
+
+                return entry;
+>entry : List<T>
+            }
+        }
+    }
+}

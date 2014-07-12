@@ -1,0 +1,12 @@
+==== tests/cases/compiler/declareClassInterfaceImplementation.ts (1 errors) ====
+    interface IBuffer {
+        [index: number]: number;
+    }
+    
+    declare class Buffer implements IBuffer {
+                  ~~~~~~
+!!! declareClassInterfaceImplementation.ts(5,15): error TS2137: Class Buffer declares interface IBuffer but does not implement it:
+!!! 	Index signatures of types 'Buffer' and 'IBuffer' are incompatible.
+    
+    }
+    

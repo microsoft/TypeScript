@@ -1,0 +1,79 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 7,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullWidth": 7,
+                "isIncrementallyUnusable": true,
+                "expression": {
+                    "kind": "SignedRightShiftExpression",
+                    "fullWidth": 6,
+                    "isIncrementallyUnusable": true,
+                    "left": {
+                        "kind": "NumericLiteral",
+                        "width": 1,
+                        "fullWidth": 2,
+                        "text": "1",
+                        "value": 1,
+                        "valueText": "1",
+                        "hasTrailingTrivia": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "text": " "
+                            }
+                        ]
+                    },
+                    "operatorToken": {
+                        "kind": "GreaterThanGreaterThanToken",
+                        "width": 2,
+                        "fullWidth": 3,
+                        "text": ">>",
+                        "value": ">>",
+                        "valueText": ">>",
+                        "hasTrailingTrivia": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "text": " "
+                            }
+                        ]
+                    },
+                    "right": {
+                        "kind": "NumericLiteral",
+                        "width": 1,
+                        "text": "2",
+                        "value": 2,
+                        "valueText": "2"
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 7
+    }
+}

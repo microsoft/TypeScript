@@ -1,0 +1,69 @@
+==== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithExport_core.ts (12 errors) ====
+    // Privacy errors - importing private elements
+    export import im_public_mi_private = require("privacyTopLevelAmbientExternalModuleImportWithExport_require");
+    export import im_public_mu_private = require("privacyTopLevelAmbientExternalModuleImportWithExport_require1");
+    export import im_public_mi_public = require("m");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyTopLevelAmbientExternalModuleImportWithExport_core.ts(4,1): error TS2071: Unable to resolve external module '"m"'.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyTopLevelAmbientExternalModuleImportWithExport_core.ts(4,1): error TS2072: Module cannot be aliased to a non-module type.
+    export import im_public_mu_public = require("m2");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyTopLevelAmbientExternalModuleImportWithExport_core.ts(5,1): error TS2071: Unable to resolve external module '"m2"'.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyTopLevelAmbientExternalModuleImportWithExport_core.ts(5,1): error TS2072: Module cannot be aliased to a non-module type.
+    
+    // Usage of privacy error imports
+    var privateUse_im_public_mi_private = new im_public_mi_private.c_private();
+                                                                   ~~~~~~~~~
+!!! privacyTopLevelAmbientExternalModuleImportWithExport_core.ts(8,64): error TS2094: The property 'c_private' does not exist on value of type 'typeof im_public_mi_private'.
+    export var publicUse_im_public_mi_private = new im_public_mi_private.c_private();
+                                                                         ~~~~~~~~~
+!!! privacyTopLevelAmbientExternalModuleImportWithExport_core.ts(9,70): error TS2094: The property 'c_private' does not exist on value of type 'typeof im_public_mi_private'.
+    var privateUse_im_public_mu_private = new im_public_mu_private.c_private();
+                                                                   ~~~~~~~~~
+!!! privacyTopLevelAmbientExternalModuleImportWithExport_core.ts(10,64): error TS2094: The property 'c_private' does not exist on value of type 'typeof im_public_mu_private'.
+    export var publicUse_im_public_mu_private = new im_public_mu_private.c_private();
+                                                                         ~~~~~~~~~
+!!! privacyTopLevelAmbientExternalModuleImportWithExport_core.ts(11,70): error TS2094: The property 'c_private' does not exist on value of type 'typeof im_public_mu_private'.
+    var privateUse_im_public_mi_public = new im_public_mi_public.c_public();
+                                             ~~~~~~~~~~~~~~~~~~~
+!!! privacyTopLevelAmbientExternalModuleImportWithExport_core.ts(12,42): error TS2095: Could not find symbol 'im_public_mi_public'.
+    export var publicUse_im_public_mi_public = new im_public_mi_public.c_public();
+                                                   ~~~~~~~~~~~~~~~~~~~
+!!! privacyTopLevelAmbientExternalModuleImportWithExport_core.ts(13,48): error TS2095: Could not find symbol 'im_public_mi_public'.
+    var privateUse_im_public_mi_public = new im_public_mi_public.c_public();
+                                             ~~~~~~~~~~~~~~~~~~~
+!!! privacyTopLevelAmbientExternalModuleImportWithExport_core.ts(14,42): error TS2095: Could not find symbol 'im_public_mi_public'.
+    export var publicUse_im_public_mi_public = new im_public_mi_public.c_public();
+                                                   ~~~~~~~~~~~~~~~~~~~
+!!! privacyTopLevelAmbientExternalModuleImportWithExport_core.ts(15,48): error TS2095: Could not find symbol 'im_public_mi_public'.
+    
+==== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithExport_require.ts (0 errors) ====
+    // Public elements
+    export class c_public {
+        foo: string;
+    }
+    
+==== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithExport_require1.ts (0 errors) ====
+    export class c_public {
+        bar: string;
+    }
+    
+==== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithExport_require2.ts (0 errors) ====
+    // private elements
+    // Export - Error ambient modules allowed only in global
+    declare module 'm' {
+        export class c_private {
+            baz: string;
+        }
+    }
+    
+    
+==== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithExport_require3.ts (0 errors) ====
+    declare module 'm2' {
+        export class c_private {
+            bing: string;
+        }
+    }
+    

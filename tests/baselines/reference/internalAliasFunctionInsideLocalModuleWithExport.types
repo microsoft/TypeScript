@@ -1,0 +1,31 @@
+=== tests/cases/compiler/internalAliasFunctionInsideLocalModuleWithExport.ts ===
+export module a {
+>a : a
+
+    export function foo(x: number) {
+>foo : typeof foo
+>x : number
+
+        return x;
+>x : number
+    }
+}
+
+export module c {
+>c : c
+
+    export import b = a.foo;
+>b : b
+>a : a
+>foo : typeof b
+
+    export var bVal = b(10);
+>bVal : number
+>b(10) : number
+>b : typeof b
+
+    export var bVal2 = b;
+>bVal2 : typeof b
+>b : typeof b
+}
+

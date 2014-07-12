@@ -1,0 +1,32 @@
+=== tests/cases/compiler/recursiveInferenceBug.ts ===
+function f(x: number) {
+>f : typeof f
+>x : number
+
+    var z = f(x);
+>z : number
+>f(x) : number
+>f : typeof f
+>x : number
+
+    return x;
+>x : number
+}
+
+
+var zz = {
+>zz : { g: () => void; f: string; }
+>{
+    g: () =>{ },
+    get f() { return "abc"; },
+} : { g: () => void; f: string; }
+
+    g: () =>{ },
+>g : () => void
+>() =>{ } : () => void
+
+    get f() { return "abc"; },
+>f : string
+
+};
+

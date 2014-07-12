@@ -1,0 +1,29 @@
+==== tests/cases/compiler/objectLiteralParameterResolution.ts (6 errors) ====
+    interface Foo{
+        extend<T>(target: T, ...objs: any[]): T;
+        extend<T>(deep: boolean, target: T, ...objs: any[]): T;
+    }
+    declare var $: Foo;
+    var s = $.extend({
+        type: "GET" ,
+        data: "data" ,
+        success: wrapSuccessCallback(requestContext, callback) ,
+                 ~~~~~~~~~~~~~~~~~~~
+!!! objectLiteralParameterResolution.ts(9,14): error TS2095: Could not find symbol 'wrapSuccessCallback'.
+                                     ~~~~~~~~~~~~~~
+!!! objectLiteralParameterResolution.ts(9,34): error TS2095: Could not find symbol 'requestContext'.
+                                                     ~~~~~~~~
+!!! objectLiteralParameterResolution.ts(9,50): error TS2095: Could not find symbol 'callback'.
+        error: wrapErrorCallback(requestContext, errorCallback) ,
+               ~~~~~~~~~~~~~~~~~
+!!! objectLiteralParameterResolution.ts(10,12): error TS2095: Could not find symbol 'wrapErrorCallback'.
+                                 ~~~~~~~~~~~~~~
+!!! objectLiteralParameterResolution.ts(10,30): error TS2095: Could not find symbol 'requestContext'.
+                                                 ~~~~~~~~~~~~~
+!!! objectLiteralParameterResolution.ts(10,46): error TS2095: Could not find symbol 'errorCallback'.
+        dataType: "json" ,
+        converters: { "text json": "" },
+        traditional: true ,
+        timeout: 12,
+        }, "");
+    

@@ -1,0 +1,363 @@
+
+**Pos: 0 SpanInfo: {"minChar":0,"limChar":21,"text":null}
+** Statement: for (var x in String)
+**Pos: 1 SpanInfo: {"minChar":0,"limChar":21,"text":null}
+** Statement: for (var x in String)
+**Pos: 2 SpanInfo: {"minChar":0,"limChar":21,"text":null}
+** Statement: for (var x in String)
+**Pos: 3 SpanInfo: {"minChar":0,"limChar":21,"text":null}
+** Statement: for (var x in String)
+**Pos: 4 SpanInfo: {"minChar":0,"limChar":21,"text":null}
+** Statement: for (var x in String)
+**Pos: 5 SpanInfo: null
+** Statement: 
+**Pos: 6 SpanInfo: null
+** Statement: 
+**Pos: 7 SpanInfo: null
+** Statement: 
+**Pos: 8 SpanInfo: null
+** Statement: 
+**Pos: 9 SpanInfo: null
+** Statement: 
+**Pos: 10 SpanInfo: null
+** Statement: 
+**Pos: 11 SpanInfo: {"minChar":0,"limChar":21,"text":null}
+** Statement: for (var x in String)
+**Pos: 12 SpanInfo: {"minChar":0,"limChar":21,"text":null}
+** Statement: for (var x in String)
+**Pos: 13 SpanInfo: {"minChar":0,"limChar":21,"text":null}
+** Statement: for (var x in String)
+**Pos: 14 SpanInfo: {"minChar":0,"limChar":21,"text":null}
+** Statement: for (var x in String)
+**Pos: 15 SpanInfo: {"minChar":0,"limChar":21,"text":null}
+** Statement: for (var x in String)
+**Pos: 16 SpanInfo: {"minChar":0,"limChar":21,"text":null}
+** Statement: for (var x in String)
+**Pos: 17 SpanInfo: {"minChar":0,"limChar":21,"text":null}
+** Statement: for (var x in String)
+**Pos: 18 SpanInfo: {"minChar":0,"limChar":21,"text":null}
+** Statement: for (var x in String)
+**Pos: 19 SpanInfo: {"minChar":0,"limChar":21,"text":null}
+** Statement: for (var x in String)
+**Pos: 20 SpanInfo: {"minChar":0,"limChar":21,"text":null}
+** Statement: for (var x in String)
+**Pos: 21 SpanInfo: {"minChar":0,"limChar":21,"text":null}
+** Statement: for (var x in String)
+**Pos: 22 SpanInfo: {"minChar":0,"limChar":21,"text":null}
+** Statement: for (var x in String)
+**Pos: 23 SpanInfo: {"minChar":0,"limChar":21,"text":null}
+** Statement: for (var x in String)
+**Pos: 24 SpanInfo: {"minChar":28,"limChar":43,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 25 SpanInfo: {"minChar":28,"limChar":43,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 26 SpanInfo: {"minChar":28,"limChar":43,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 27 SpanInfo: {"minChar":28,"limChar":43,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 28 SpanInfo: {"minChar":28,"limChar":43,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 29 SpanInfo: {"minChar":28,"limChar":43,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 30 SpanInfo: {"minChar":28,"limChar":43,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 31 SpanInfo: {"minChar":28,"limChar":43,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 32 SpanInfo: {"minChar":28,"limChar":43,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 33 SpanInfo: {"minChar":28,"limChar":43,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 34 SpanInfo: {"minChar":28,"limChar":43,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 35 SpanInfo: {"minChar":28,"limChar":43,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 36 SpanInfo: {"minChar":28,"limChar":43,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 37 SpanInfo: {"minChar":28,"limChar":43,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 38 SpanInfo: {"minChar":28,"limChar":43,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 39 SpanInfo: {"minChar":28,"limChar":43,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 40 SpanInfo: {"minChar":28,"limChar":43,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 41 SpanInfo: {"minChar":28,"limChar":43,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 42 SpanInfo: {"minChar":28,"limChar":43,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 43 SpanInfo: {"minChar":28,"limChar":43,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 44 SpanInfo: {"minChar":28,"limChar":43,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 45 SpanInfo: {"minChar":28,"limChar":43,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 46 SpanInfo: {"minChar":28,"limChar":43,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 47 SpanInfo: {"minChar":47,"limChar":64,"text":null}
+** Statement: for (x in String)
+**Pos: 48 SpanInfo: {"minChar":47,"limChar":64,"text":null}
+** Statement: for (x in String)
+**Pos: 49 SpanInfo: {"minChar":47,"limChar":64,"text":null}
+** Statement: for (x in String)
+**Pos: 50 SpanInfo: {"minChar":47,"limChar":64,"text":null}
+** Statement: for (x in String)
+**Pos: 51 SpanInfo: {"minChar":47,"limChar":64,"text":null}
+** Statement: for (x in String)
+**Pos: 52 SpanInfo: {"minChar":47,"limChar":64,"text":null}
+** Statement: for (x in String)
+**Pos: 53 SpanInfo: {"minChar":47,"limChar":64,"text":null}
+** Statement: for (x in String)
+**Pos: 54 SpanInfo: {"minChar":47,"limChar":64,"text":null}
+** Statement: for (x in String)
+**Pos: 55 SpanInfo: {"minChar":47,"limChar":64,"text":null}
+** Statement: for (x in String)
+**Pos: 56 SpanInfo: {"minChar":47,"limChar":64,"text":null}
+** Statement: for (x in String)
+**Pos: 57 SpanInfo: {"minChar":47,"limChar":64,"text":null}
+** Statement: for (x in String)
+**Pos: 58 SpanInfo: {"minChar":47,"limChar":64,"text":null}
+** Statement: for (x in String)
+**Pos: 59 SpanInfo: {"minChar":47,"limChar":64,"text":null}
+** Statement: for (x in String)
+**Pos: 60 SpanInfo: {"minChar":47,"limChar":64,"text":null}
+** Statement: for (x in String)
+**Pos: 61 SpanInfo: {"minChar":47,"limChar":64,"text":null}
+** Statement: for (x in String)
+**Pos: 62 SpanInfo: {"minChar":47,"limChar":64,"text":null}
+** Statement: for (x in String)
+**Pos: 63 SpanInfo: {"minChar":47,"limChar":64,"text":null}
+** Statement: for (x in String)
+**Pos: 64 SpanInfo: {"minChar":47,"limChar":64,"text":null}
+** Statement: for (x in String)
+**Pos: 65 SpanInfo: {"minChar":47,"limChar":64,"text":null}
+** Statement: for (x in String)
+**Pos: 66 SpanInfo: {"minChar":47,"limChar":64,"text":null}
+** Statement: for (x in String)
+**Pos: 67 SpanInfo: {"minChar":71,"limChar":86,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 68 SpanInfo: {"minChar":71,"limChar":86,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 69 SpanInfo: {"minChar":71,"limChar":86,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 70 SpanInfo: {"minChar":71,"limChar":86,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 71 SpanInfo: {"minChar":71,"limChar":86,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 72 SpanInfo: {"minChar":71,"limChar":86,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 73 SpanInfo: {"minChar":71,"limChar":86,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 74 SpanInfo: {"minChar":71,"limChar":86,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 75 SpanInfo: {"minChar":71,"limChar":86,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 76 SpanInfo: {"minChar":71,"limChar":86,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 77 SpanInfo: {"minChar":71,"limChar":86,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 78 SpanInfo: {"minChar":71,"limChar":86,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 79 SpanInfo: {"minChar":71,"limChar":86,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 80 SpanInfo: {"minChar":71,"limChar":86,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 81 SpanInfo: {"minChar":71,"limChar":86,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 82 SpanInfo: {"minChar":71,"limChar":86,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 83 SpanInfo: {"minChar":71,"limChar":86,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 84 SpanInfo: {"minChar":71,"limChar":86,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 85 SpanInfo: {"minChar":71,"limChar":86,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 86 SpanInfo: {"minChar":71,"limChar":86,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 87 SpanInfo: {"minChar":71,"limChar":86,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 88 SpanInfo: {"minChar":71,"limChar":86,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 89 SpanInfo: {"minChar":71,"limChar":86,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 90 SpanInfo: {"minChar":90,"limChar":112,"text":null}
+** Statement: for (var x2 in String)
+**Pos: 91 SpanInfo: {"minChar":90,"limChar":112,"text":null}
+** Statement: for (var x2 in String)
+**Pos: 92 SpanInfo: {"minChar":90,"limChar":112,"text":null}
+** Statement: for (var x2 in String)
+**Pos: 93 SpanInfo: {"minChar":90,"limChar":112,"text":null}
+** Statement: for (var x2 in String)
+**Pos: 94 SpanInfo: {"minChar":90,"limChar":112,"text":null}
+** Statement: for (var x2 in String)
+**Pos: 95 SpanInfo: null
+** Statement: 
+**Pos: 96 SpanInfo: null
+** Statement: 
+**Pos: 97 SpanInfo: null
+** Statement: 
+**Pos: 98 SpanInfo: null
+** Statement: 
+**Pos: 99 SpanInfo: null
+** Statement: 
+**Pos: 100 SpanInfo: null
+** Statement: 
+**Pos: 101 SpanInfo: null
+** Statement: 
+**Pos: 102 SpanInfo: {"minChar":90,"limChar":112,"text":null}
+** Statement: for (var x2 in String)
+**Pos: 103 SpanInfo: {"minChar":90,"limChar":112,"text":null}
+** Statement: for (var x2 in String)
+**Pos: 104 SpanInfo: {"minChar":90,"limChar":112,"text":null}
+** Statement: for (var x2 in String)
+**Pos: 105 SpanInfo: {"minChar":90,"limChar":112,"text":null}
+** Statement: for (var x2 in String)
+**Pos: 106 SpanInfo: {"minChar":90,"limChar":112,"text":null}
+** Statement: for (var x2 in String)
+**Pos: 107 SpanInfo: {"minChar":90,"limChar":112,"text":null}
+** Statement: for (var x2 in String)
+**Pos: 108 SpanInfo: {"minChar":90,"limChar":112,"text":null}
+** Statement: for (var x2 in String)
+**Pos: 109 SpanInfo: {"minChar":90,"limChar":112,"text":null}
+** Statement: for (var x2 in String)
+**Pos: 110 SpanInfo: {"minChar":90,"limChar":112,"text":null}
+** Statement: for (var x2 in String)
+**Pos: 111 SpanInfo: {"minChar":90,"limChar":112,"text":null}
+** Statement: for (var x2 in String)
+**Pos: 112 SpanInfo: {"minChar":90,"limChar":112,"text":null}
+** Statement: for (var x2 in String)
+**Pos: 113 SpanInfo: {"minChar":119,"limChar":135,"text":null}
+** Statement: WScript.Echo(x2)
+**Pos: 114 SpanInfo: {"minChar":119,"limChar":135,"text":null}
+** Statement: WScript.Echo(x2)
+**Pos: 115 SpanInfo: {"minChar":119,"limChar":135,"text":null}
+** Statement: WScript.Echo(x2)
+**Pos: 116 SpanInfo: {"minChar":119,"limChar":135,"text":null}
+** Statement: WScript.Echo(x2)
+**Pos: 117 SpanInfo: {"minChar":119,"limChar":135,"text":null}
+** Statement: WScript.Echo(x2)
+**Pos: 118 SpanInfo: {"minChar":119,"limChar":135,"text":null}
+** Statement: WScript.Echo(x2)
+**Pos: 119 SpanInfo: {"minChar":119,"limChar":135,"text":null}
+** Statement: WScript.Echo(x2)
+**Pos: 120 SpanInfo: {"minChar":119,"limChar":135,"text":null}
+** Statement: WScript.Echo(x2)
+**Pos: 121 SpanInfo: {"minChar":119,"limChar":135,"text":null}
+** Statement: WScript.Echo(x2)
+**Pos: 122 SpanInfo: {"minChar":119,"limChar":135,"text":null}
+** Statement: WScript.Echo(x2)
+**Pos: 123 SpanInfo: {"minChar":119,"limChar":135,"text":null}
+** Statement: WScript.Echo(x2)
+**Pos: 124 SpanInfo: {"minChar":119,"limChar":135,"text":null}
+** Statement: WScript.Echo(x2)
+**Pos: 125 SpanInfo: {"minChar":119,"limChar":135,"text":null}
+** Statement: WScript.Echo(x2)
+**Pos: 126 SpanInfo: {"minChar":119,"limChar":135,"text":null}
+** Statement: WScript.Echo(x2)
+**Pos: 127 SpanInfo: {"minChar":119,"limChar":135,"text":null}
+** Statement: WScript.Echo(x2)
+**Pos: 128 SpanInfo: {"minChar":119,"limChar":135,"text":null}
+** Statement: WScript.Echo(x2)
+**Pos: 129 SpanInfo: {"minChar":119,"limChar":135,"text":null}
+** Statement: WScript.Echo(x2)
+**Pos: 130 SpanInfo: {"minChar":119,"limChar":135,"text":null}
+** Statement: WScript.Echo(x2)
+**Pos: 131 SpanInfo: {"minChar":119,"limChar":135,"text":null}
+** Statement: WScript.Echo(x2)
+**Pos: 132 SpanInfo: {"minChar":119,"limChar":135,"text":null}
+** Statement: WScript.Echo(x2)
+**Pos: 133 SpanInfo: {"minChar":119,"limChar":135,"text":null}
+** Statement: WScript.Echo(x2)
+**Pos: 134 SpanInfo: {"minChar":119,"limChar":135,"text":null}
+** Statement: WScript.Echo(x2)
+**Pos: 135 SpanInfo: {"minChar":119,"limChar":135,"text":null}
+** Statement: WScript.Echo(x2)
+**Pos: 136 SpanInfo: {"minChar":119,"limChar":135,"text":null}
+** Statement: WScript.Echo(x2)
+**Pos: 137 SpanInfo: {"minChar":119,"limChar":135,"text":null}
+** Statement: WScript.Echo(x2)
+**Pos: 138 SpanInfo: {"minChar":119,"limChar":135,"text":null}
+** Statement: WScript.Echo(x2)
+**Pos: 139 SpanInfo: {"minChar":139,"limChar":156,"text":null}
+** Statement: for (x in String)
+**Pos: 140 SpanInfo: {"minChar":139,"limChar":156,"text":null}
+** Statement: for (x in String)
+**Pos: 141 SpanInfo: {"minChar":139,"limChar":156,"text":null}
+** Statement: for (x in String)
+**Pos: 142 SpanInfo: {"minChar":139,"limChar":156,"text":null}
+** Statement: for (x in String)
+**Pos: 143 SpanInfo: {"minChar":139,"limChar":156,"text":null}
+** Statement: for (x in String)
+**Pos: 144 SpanInfo: {"minChar":139,"limChar":156,"text":null}
+** Statement: for (x in String)
+**Pos: 145 SpanInfo: {"minChar":139,"limChar":156,"text":null}
+** Statement: for (x in String)
+**Pos: 146 SpanInfo: {"minChar":139,"limChar":156,"text":null}
+** Statement: for (x in String)
+**Pos: 147 SpanInfo: {"minChar":139,"limChar":156,"text":null}
+** Statement: for (x in String)
+**Pos: 148 SpanInfo: {"minChar":139,"limChar":156,"text":null}
+** Statement: for (x in String)
+**Pos: 149 SpanInfo: {"minChar":139,"limChar":156,"text":null}
+** Statement: for (x in String)
+**Pos: 150 SpanInfo: {"minChar":139,"limChar":156,"text":null}
+** Statement: for (x in String)
+**Pos: 151 SpanInfo: {"minChar":139,"limChar":156,"text":null}
+** Statement: for (x in String)
+**Pos: 152 SpanInfo: {"minChar":139,"limChar":156,"text":null}
+** Statement: for (x in String)
+**Pos: 153 SpanInfo: {"minChar":139,"limChar":156,"text":null}
+** Statement: for (x in String)
+**Pos: 154 SpanInfo: {"minChar":139,"limChar":156,"text":null}
+** Statement: for (x in String)
+**Pos: 155 SpanInfo: {"minChar":139,"limChar":156,"text":null}
+** Statement: for (x in String)
+**Pos: 156 SpanInfo: {"minChar":139,"limChar":156,"text":null}
+** Statement: for (x in String)
+**Pos: 157 SpanInfo: {"minChar":163,"limChar":178,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 158 SpanInfo: {"minChar":163,"limChar":178,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 159 SpanInfo: {"minChar":163,"limChar":178,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 160 SpanInfo: {"minChar":163,"limChar":178,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 161 SpanInfo: {"minChar":163,"limChar":178,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 162 SpanInfo: {"minChar":163,"limChar":178,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 163 SpanInfo: {"minChar":163,"limChar":178,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 164 SpanInfo: {"minChar":163,"limChar":178,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 165 SpanInfo: {"minChar":163,"limChar":178,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 166 SpanInfo: {"minChar":163,"limChar":178,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 167 SpanInfo: {"minChar":163,"limChar":178,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 168 SpanInfo: {"minChar":163,"limChar":178,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 169 SpanInfo: {"minChar":163,"limChar":178,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 170 SpanInfo: {"minChar":163,"limChar":178,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 171 SpanInfo: {"minChar":163,"limChar":178,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 172 SpanInfo: {"minChar":163,"limChar":178,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 173 SpanInfo: {"minChar":163,"limChar":178,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 174 SpanInfo: {"minChar":163,"limChar":178,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 175 SpanInfo: {"minChar":163,"limChar":178,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 176 SpanInfo: {"minChar":163,"limChar":178,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 177 SpanInfo: {"minChar":163,"limChar":178,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 178 SpanInfo: {"minChar":163,"limChar":178,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 179 SpanInfo: {"minChar":163,"limChar":178,"text":null}
+** Statement: WScript.Echo(x)
+**Pos: 180 SpanInfo: {"minChar":163,"limChar":178,"text":null}
+** Statement: WScript.Echo(x)

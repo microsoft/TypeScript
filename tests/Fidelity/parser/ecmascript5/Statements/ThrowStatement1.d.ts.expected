@@ -1,0 +1,65 @@
+{
+    "isDeclaration": true,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "diagnostics": [
+        {
+            "start": 0,
+            "length": 5,
+            "diagnosticCode": "Statements are not allowed in ambient contexts."
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 8,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ThrowStatement",
+                "fullWidth": 8,
+                "throwKeyword": {
+                    "kind": "ThrowKeyword",
+                    "width": 5,
+                    "fullWidth": 6,
+                    "text": "throw",
+                    "value": "throw",
+                    "valueText": "throw",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "text": " "
+                        }
+                    ]
+                },
+                "expression": {
+                    "kind": "IdentifierName",
+                    "width": 1,
+                    "text": "e",
+                    "value": "e",
+                    "valueText": "e"
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 8
+    }
+}

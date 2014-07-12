@@ -1,0 +1,24 @@
+==== tests/cases/compiler/ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts (3 errors) ====
+    class clodule<T> {
+        id: string;
+        value: T;
+    
+        static fn<U>(id: U) { }
+        ~~~~~~~~~~~~~~~~~~~~~~~
+!!! ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts(5,5): error TS2149: Overload signature is not compatible with function definition:
+!!! 	Call signature expects 1 or fewer parameters.
+        ~~~~~~~~~~~~~~~~~~~~~~~
+!!! ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts(5,5): error TS2151: Overload signatures must all be exported or not exported.
+    }
+    
+    module clodule {
+        // error: duplicate identifier expected
+        export function fn<T>(x: T, y: T): T {
+                        ~~
+!!! ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts(10,21): error TS2000: Duplicate identifier 'fn'. Additional locations:
+!!! 	ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts(5,5)
+            return x;
+        }
+    }
+    
+    

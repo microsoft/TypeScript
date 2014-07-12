@@ -1,0 +1,6 @@
+=== tests/cases/compiler/enumWithQuotedElementName2.ts ===
+enum E {
+>E : E
+
+   "fo'o",
+}

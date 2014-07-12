@@ -1,0 +1,193 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 19,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullWidth": 19,
+                "expression": {
+                    "kind": "InvocationExpression",
+                    "fullWidth": 18,
+                    "expression": {
+                        "kind": "IdentifierName",
+                        "width": 1,
+                        "text": "f",
+                        "value": "f",
+                        "valueText": "f"
+                    },
+                    "argumentList": {
+                        "kind": "ArgumentList",
+                        "fullWidth": 17,
+                        "openParenToken": {
+                            "kind": "OpenParenToken",
+                            "width": 1,
+                            "text": "(",
+                            "value": "(",
+                            "valueText": "("
+                        },
+                        "arguments": [
+                            {
+                                "kind": "LessThanExpression",
+                                "fullWidth": 5,
+                                "left": {
+                                    "kind": "IdentifierName",
+                                    "width": 1,
+                                    "fullWidth": 2,
+                                    "text": "g",
+                                    "value": "g",
+                                    "valueText": "g",
+                                    "hasTrailingTrivia": true,
+                                    "trailingTrivia": [
+                                        {
+                                            "kind": "WhitespaceTrivia",
+                                            "text": " "
+                                        }
+                                    ]
+                                },
+                                "operatorToken": {
+                                    "kind": "LessThanToken",
+                                    "width": 1,
+                                    "fullWidth": 2,
+                                    "text": "<",
+                                    "value": "<",
+                                    "valueText": "<",
+                                    "hasTrailingTrivia": true,
+                                    "trailingTrivia": [
+                                        {
+                                            "kind": "WhitespaceTrivia",
+                                            "text": " "
+                                        }
+                                    ]
+                                },
+                                "right": {
+                                    "kind": "IdentifierName",
+                                    "width": 1,
+                                    "text": "A",
+                                    "value": "A",
+                                    "valueText": "A"
+                                }
+                            },
+                            {
+                                "kind": "CommaToken",
+                                "width": 1,
+                                "fullWidth": 2,
+                                "text": ",",
+                                "value": ",",
+                                "valueText": ",",
+                                "hasTrailingTrivia": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "text": " "
+                                    }
+                                ]
+                            },
+                            {
+                                "kind": "GreaterThanExpression",
+                                "fullWidth": 8,
+                                "left": {
+                                    "kind": "IdentifierName",
+                                    "width": 1,
+                                    "fullWidth": 2,
+                                    "text": "B",
+                                    "value": "B",
+                                    "valueText": "B",
+                                    "hasTrailingTrivia": true,
+                                    "trailingTrivia": [
+                                        {
+                                            "kind": "WhitespaceTrivia",
+                                            "text": " "
+                                        }
+                                    ]
+                                },
+                                "operatorToken": {
+                                    "kind": "GreaterThanToken",
+                                    "width": 1,
+                                    "fullWidth": 2,
+                                    "text": ">",
+                                    "value": ">",
+                                    "valueText": ">",
+                                    "hasTrailingTrivia": true,
+                                    "trailingTrivia": [
+                                        {
+                                            "kind": "WhitespaceTrivia",
+                                            "text": " "
+                                        }
+                                    ]
+                                },
+                                "right": {
+                                    "kind": "PlusExpression",
+                                    "fullWidth": 4,
+                                    "operatorToken": {
+                                        "kind": "PlusToken",
+                                        "width": 1,
+                                        "text": "+",
+                                        "value": "+",
+                                        "valueText": "+"
+                                    },
+                                    "operand": {
+                                        "kind": "ParenthesizedExpression",
+                                        "fullWidth": 3,
+                                        "openParenToken": {
+                                            "kind": "OpenParenToken",
+                                            "width": 1,
+                                            "text": "(",
+                                            "value": "(",
+                                            "valueText": "("
+                                        },
+                                        "expression": {
+                                            "kind": "NumericLiteral",
+                                            "width": 1,
+                                            "text": "7",
+                                            "value": 7,
+                                            "valueText": "7"
+                                        },
+                                        "closeParenToken": {
+                                            "kind": "CloseParenToken",
+                                            "width": 1,
+                                            "text": ")",
+                                            "value": ")",
+                                            "valueText": ")"
+                                        }
+                                    }
+                                }
+                            }
+                        ],
+                        "closeParenToken": {
+                            "kind": "CloseParenToken",
+                            "width": 1,
+                            "text": ")",
+                            "value": ")",
+                            "valueText": ")"
+                        }
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 19
+    }
+}

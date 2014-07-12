@@ -1,0 +1,15 @@
+==== tests/cases/compiler/objectLiteralErrorsES3.ts (4 errors) ====
+    
+    var e1 = { get a() { return 4; } };
+               ~~~
+!!! objectLiteralErrorsES3.ts(2,12): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+    var e2 = { set a(n) { } };
+               ~~~
+!!! objectLiteralErrorsES3.ts(3,12): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+    var e3 = { get a() { return ''; }, set a(n) { } };
+               ~~~
+!!! objectLiteralErrorsES3.ts(4,12): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                                       ~~~
+!!! objectLiteralErrorsES3.ts(4,36): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+    
+    

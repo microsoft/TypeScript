@@ -1,0 +1,10 @@
+==== tests/cases/compiler/i3.ts (1 errors) ====
+    interface I3 { one?: number; }; 
+    var x: {one: number};
+    var i: I3;
+    
+    i = x;
+    x = i;
+    ~
+!!! i3.ts(6,1): error TS2012: Cannot convert 'I3' to '{ one: number; }':
+!!! 	Property 'one' defined as optional in type 'I3', but is required in type '{ one: number; }'.

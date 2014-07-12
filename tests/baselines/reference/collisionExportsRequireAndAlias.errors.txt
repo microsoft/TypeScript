@@ -1,0 +1,20 @@
+==== tests/cases/compiler/collisionExportsRequireAndAlias_file2.ts (2 errors) ====
+    import require = require('collisionExportsRequireAndAlias_file1'); // Error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! collisionExportsRequireAndAlias_file2.ts(1,1): error TS2228: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of an external module.
+    import exports = require('collisionExportsRequireAndAlias_file11'); // Error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! collisionExportsRequireAndAlias_file2.ts(2,1): error TS2228: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of an external module.
+    export function foo() {
+        require.bar();
+    }
+    export function foo2() {
+        exports.bar2();
+    }
+==== tests/cases/compiler/collisionExportsRequireAndAlias_file1.ts (0 errors) ====
+    export function bar() {
+    }
+    
+==== tests/cases/compiler/collisionExportsRequireAndAlias_file11.ts (0 errors) ====
+    export function bar2() {
+    }

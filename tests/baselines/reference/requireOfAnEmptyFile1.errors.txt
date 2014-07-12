@@ -1,0 +1,11 @@
+==== tests/cases/compiler/requireOfAnEmptyFile1_a.ts (2 errors) ====
+    //requireOfAnEmptyFile1
+    
+    import fs = require('requireOfAnEmptyFile1_b');
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! requireOfAnEmptyFile1_a.ts(3,1): error TS2071: Unable to resolve external module ''requireOfAnEmptyFile1_b''.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! requireOfAnEmptyFile1_a.ts(3,1): error TS2072: Module cannot be aliased to a non-module type.
+    
+==== tests/cases/compiler/requireOfAnEmptyFile1_b.ts (0 errors) ====
+    

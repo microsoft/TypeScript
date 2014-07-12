@@ -1,0 +1,11 @@
+==== tests/cases/compiler/concatClassAndString.ts (2 errors) ====
+    // Shouldn't compile (the long form f = f + ""; doesn't):
+    class f { }
+    
+    f += '';
+    ~
+!!! concatClassAndString.ts(4,1): error TS2012: Cannot convert 'string' to 'typeof f':
+!!! 	Type 'String' is missing property 'prototype' from type 'typeof f'.
+    ~
+!!! concatClassAndString.ts(4,1): error TS2130: Invalid left-hand side of assignment expression.
+    

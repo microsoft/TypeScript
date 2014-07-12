@@ -1,0 +1,26 @@
+==== tests/cases/compiler/defaultBestCommonTypesHaveDecls.ts (3 errors) ====
+    
+    var obj1: {};
+    
+    obj1.length;
+         ~~~~~~
+!!! defaultBestCommonTypesHaveDecls.ts(4,6): error TS2094: The property 'length' does not exist on value of type '{}'.
+     
+     
+    
+    var obj2: Object;
+    
+    obj2.length;
+         ~~~~~~
+!!! defaultBestCommonTypesHaveDecls.ts(10,6): error TS2094: The property 'length' does not exist on value of type 'Object'.
+     
+     
+    
+    function concat<T>(x: T, y: T): T { return null; }
+    
+    var result = concat(1, "");
+    
+    var elementCount = result.length; // would like to get an error by now
+                              ~~~~~~
+!!! defaultBestCommonTypesHaveDecls.ts(18,27): error TS2094: The property 'length' does not exist on value of type '{}'.
+    

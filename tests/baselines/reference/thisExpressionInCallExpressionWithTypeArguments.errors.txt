@@ -1,0 +1,7 @@
+==== tests/cases/compiler/thisExpressionInCallExpressionWithTypeArguments.ts (1 errors) ====
+    class C {
+        public foo() { [1,2,3].map<any,any>((x) => { return this; })}
+                               ~~~
+!!! thisExpressionInCallExpressionWithTypeArguments.ts(2,28): error TS4027: Signature expected 1 type arguments, got 2 instead.
+    }
+    

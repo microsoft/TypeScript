@@ -1,0 +1,14 @@
+==== tests/cases/compiler/classWithTwoConstructorDefinitions.ts (2 errors) ====
+    class C {
+        constructor() { }
+        constructor(x) { } // error
+        ~~~~~~~~~~~~~~~~~~
+!!! classWithTwoConstructorDefinitions.ts(3,5): error TS2070: Multiple constructor implementations are not allowed.
+    }
+    
+    class D<T> {
+        constructor(x: T) { }
+        constructor(x: T, y: T) { } // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! classWithTwoConstructorDefinitions.ts(8,5): error TS2070: Multiple constructor implementations are not allowed.
+    }

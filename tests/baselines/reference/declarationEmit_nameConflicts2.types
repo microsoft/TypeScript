@@ -1,0 +1,69 @@
+=== tests/cases/compiler/declarationEmit_nameConflicts2.ts ===
+module X.Y.base {
+>X : X
+>Y : X.Y
+>base : X.Y.base
+
+    export function f() { }
+>f : typeof f
+
+    export class C { }
+>C : C
+
+    export module M {
+>M : M
+
+        export var v;
+>v : any
+    }
+    export enum E { }
+>E : E
+}
+
+module X.Y.base.Z {
+>X : X
+>Y : X.Y
+>base : X.Y.base
+>Z : X.Y.base.Z
+
+    // Bug 887180
+    export var f = X.Y.base.f; // Should be base.f
+>f : typeof f
+>X.Y.base.f : typeof f
+>X.Y.base : typeof base
+>X.Y : typeof Y
+>X : typeof X
+>Y : typeof Y
+>base : typeof base
+>f : typeof f
+
+    export var C = X.Y.base.C; // Should be base.C
+>C : typeof C
+>X.Y.base.C : typeof C
+>X.Y.base : typeof base
+>X.Y : typeof Y
+>X : typeof X
+>Y : typeof Y
+>base : typeof base
+>C : typeof C
+
+    export var M = X.Y.base.M; // Should be base.M
+>M : typeof M
+>X.Y.base.M : typeof M
+>X.Y.base : typeof base
+>X.Y : typeof Y
+>X : typeof X
+>Y : typeof Y
+>base : typeof base
+>M : typeof M
+
+    export var E = X.Y.base.E; // Should be base.E
+>E : typeof E
+>X.Y.base.E : typeof E
+>X.Y.base : typeof base
+>X.Y : typeof Y
+>X : typeof X
+>Y : typeof Y
+>base : typeof base
+>E : typeof E
+}

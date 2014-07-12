@@ -1,0 +1,15 @@
+=== tests/cases/compiler/commentOnClassMethod1.ts ===
+class WebControls {
+>WebControls : WebControls
+
+    /**
+>/**
+     * Render a control
+     */
+    createControl : () => any
+
+     * Render a control
+     */
+    createControl(): any {
+    }
+}

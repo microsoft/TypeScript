@@ -1,0 +1,26 @@
+==== tests/cases/compiler/switchCasesExpressionTypeMismatch.ts (3 errors) ====
+    class Foo { }
+    
+    switch (0) {
+        case Foo: break;    // Error
+             ~~~
+!!! switchCasesExpressionTypeMismatch.ts(4,10): error TS2012: Cannot convert 'typeof Foo' to 'number':
+!!! 	Type 'Number' is missing property 'prototype' from type 'typeof Foo'.
+        case "sss": break;  // Error
+             ~~~~~
+!!! switchCasesExpressionTypeMismatch.ts(5,10): error TS2011: Cannot convert 'string' to 'number'.
+        case 123: break;    // No Error
+        case true: break;   // Error
+             ~~~~
+!!! switchCasesExpressionTypeMismatch.ts(7,10): error TS2011: Cannot convert 'boolean' to 'number'.
+    }
+    
+    var s: any = 0;
+    
+    // No error for all
+    switch (s) {
+        case Foo: break;
+        case "sss": break;
+        case 123: break;
+        case true: break;
+    }

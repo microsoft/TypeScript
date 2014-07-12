@@ -1,0 +1,69 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "diagnostics": [
+        {
+            "start": 8,
+            "length": 0,
+            "diagnosticCode": "Identifier expected."
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 8,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ExportAssignment",
+                "fullWidth": 8,
+                "isIncrementallyUnusable": true,
+                "exportKeyword": {
+                    "kind": "ExportKeyword",
+                    "width": 6,
+                    "fullWidth": 7,
+                    "text": "export",
+                    "value": "export",
+                    "valueText": "export",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "text": " "
+                        }
+                    ]
+                },
+                "equalsToken": {
+                    "kind": "EqualsToken",
+                    "width": 1,
+                    "text": "=",
+                    "value": "=",
+                    "valueText": "="
+                },
+                "identifier": {
+                    "kind": "IdentifierName",
+                    "width": 0,
+                    "text": ""
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 0,
+                    "text": ""
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 8
+    }
+}

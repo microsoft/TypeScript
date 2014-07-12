@@ -1,0 +1,29 @@
+=== tests/cases/compiler/foo3.ts ===
+import foo2 = require('./foo2');
+>foo2 : foo2
+
+var x = foo2(); // should be boolean
+>x : boolean
+>foo2() : boolean
+>foo2 : typeof x
+
+=== tests/cases/compiler/foo1.ts ===
+export function x(){
+>x : typeof x
+
+	return true;
+}
+
+=== tests/cases/compiler/foo2.ts ===
+import foo1 = require('./foo1');
+>foo1 : foo1
+
+var x = foo1.x;
+>x : typeof foo1.x
+>foo1.x : typeof foo1.x
+>foo1 : typeof foo1
+>x : typeof foo1.x
+
+export = x;
+>x : typeof foo1.x
+

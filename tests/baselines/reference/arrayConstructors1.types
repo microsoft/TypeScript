@@ -1,0 +1,43 @@
+=== tests/cases/compiler/arrayConstructors1.ts ===
+var x: string[];
+>x : string[]
+
+x = new Array(1);
+>x = new Array(1) : any[]
+>x : string[]
+>new Array(1) : any[]
+>Array : { isArray(arg: any): boolean; prototype: any[]; (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new(arrayLength?: number): any[]; new<T>(arrayLength: number): T[]; new<T>(...items: T[]): T[]; }
+
+x = new Array('hi', 'bye'); 
+>x = new Array('hi', 'bye') : string[]
+>x : string[]
+>new Array('hi', 'bye') : string[]
+>Array : { isArray(arg: any): boolean; prototype: any[]; (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new(arrayLength?: number): any[]; new<T>(arrayLength: number): T[]; new<T>(...items: T[]): T[]; }
+
+x = new Array<string>('hi', 'bye');
+>x = new Array<string>('hi', 'bye') : string[]
+>x : string[]
+>new Array<string>('hi', 'bye') : string[]
+>Array : { isArray(arg: any): boolean; prototype: any[]; (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new(arrayLength?: number): any[]; new<T>(arrayLength: number): T[]; new<T>(...items: T[]): T[]; }
+
+var y: number[];
+>y : number[]
+
+y = new Array(1);
+>y = new Array(1) : any[]
+>y : number[]
+>new Array(1) : any[]
+>Array : { isArray(arg: any): boolean; prototype: any[]; (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new(arrayLength?: number): any[]; new<T>(arrayLength: number): T[]; new<T>(...items: T[]): T[]; }
+
+y = new Array(1,2);
+>y = new Array(1,2) : number[]
+>y : number[]
+>new Array(1,2) : number[]
+>Array : { isArray(arg: any): boolean; prototype: any[]; (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new(arrayLength?: number): any[]; new<T>(arrayLength: number): T[]; new<T>(...items: T[]): T[]; }
+
+y = new Array<number>(1, 2);
+>y = new Array<number>(1, 2) : number[]
+>y : number[]
+>new Array<number>(1, 2) : number[]
+>Array : { isArray(arg: any): boolean; prototype: any[]; (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new(arrayLength?: number): any[]; new<T>(arrayLength: number): T[]; new<T>(...items: T[]): T[]; }
+

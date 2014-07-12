@@ -1,0 +1,14 @@
+==== tests/cases/compiler/internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts (1 errors) ====
+    export module a {
+        export interface I {
+        }
+    }
+    
+    export module c {
+        import b = a.I;
+        export var x: b;
+    }
+    
+    var x: c.b;
+             ~
+!!! internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts(11,10): error TS2094: The property 'b' does not exist on value of type 'c'.

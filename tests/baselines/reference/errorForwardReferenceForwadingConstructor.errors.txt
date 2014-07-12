@@ -1,0 +1,15 @@
+==== tests/cases/compiler/errorForwardReferenceForwadingConstructor.ts (2 errors) ====
+    // Error forward referencing derived class with forwarding constructor
+    
+    function f() {
+        var d1 = new derived();
+                     ~~~~~~~
+!!! errorForwardReferenceForwadingConstructor.ts(4,18): error TS2081: Supplied parameters do not match any signature of call target.
+                     ~~~~~~~
+!!! errorForwardReferenceForwadingConstructor.ts(4,18): error TS2085: Could not select overload for 'new' expression.
+        var d2 = new derived(4);
+    }
+    
+    class base { constructor(public n: number) { } }
+    class derived extends base { }
+    

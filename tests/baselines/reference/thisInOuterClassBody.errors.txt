@@ -1,0 +1,27 @@
+==== tests/cases/compiler/thisInOuterClassBody.ts (3 errors) ====
+    class Foo {
+    
+        x = this;
+    
+        static y = this;
+                   ~~~~
+!!! thisInOuterClassBody.ts(5,16): error TS2140: 'this' cannot be referenced in static initializers in a class body.
+    
+        bar() {
+     
+            this.x; // 'this' is type 'Foo'
+     
+            var f = () => this.x; // 'this' should be type 'Foo' as well
+            var p = this.y;
+                         ~
+!!! thisInOuterClassBody.ts(12,22): error TS2094: The property 'y' does not exist on value of type 'Foo'.
+            return this;
+        }
+    
+        static bar2() {
+            var a = this.y;
+            var b = this.x;
+                         ~
+!!! thisInOuterClassBody.ts(18,22): error TS2094: The property 'x' does not exist on value of type 'typeof Foo'.
+        }
+    }

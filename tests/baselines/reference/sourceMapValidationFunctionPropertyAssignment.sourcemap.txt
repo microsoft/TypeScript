@@ -1,0 +1,13 @@
+
+EmittedFile: (sourceMapValidationFunctionPropertyAssignment.js) sourceFile: (sourceMapValidationFunctionPropertyAssignment.ts)
+-------------------------------------------------------------------
+Emitted (1, 1) source (1, 1)
+Emitted (1, 5) source (1, 5)
+Emitted (1, 6) source (1, 6)
+Emitted (1, 9) source (1, 9)
+Emitted (1, 11) source (1, 11)
+Emitted (1, 12) source (1, 12)
+Emitted (1, 14) source (1, 11)
+Emitted (2, 5) source (1, 17) name (n)
+Emitted (2, 6) source (1, 18) name (n)
+Emitted (2, 8) source (1, 20)

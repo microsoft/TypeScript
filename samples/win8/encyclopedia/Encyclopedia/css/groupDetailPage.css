@@ -1,0 +1,173 @@
+﻿.groupDetailPage .groupList
+{
+    height: 100%;
+    margin-bottom: 4px;
+    position: relative;
+    width: 100%;
+    z-index: 0;
+}
+
+    .groupDetailPage .groupList .win-groupheader
+    {
+        -ms-grid-columns: 1fr;
+        -ms-grid-rows: auto 11px auto 20px 1fr 36px;
+        display: -ms-grid;
+        font-family: "Segoe UI";
+        font-size: 11pt;
+        height: 100%;
+        line-height: 15pt;
+        margin-left: 120px;
+        margin-right: 70px;
+        overflow: visible;
+        padding: 0;
+        width: 480px;
+    }
+
+        .groupDetailPage .groupList .win-groupheader .win-type-x-large
+        {
+            -ms-grid-row: 1;
+            margin: 0;
+            max-height: 48pt;
+            overflow: hidden;
+            padding-bottom: 4px;
+        }
+
+        .groupDetailPage .groupList .win-groupheader .image
+        {
+            -ms-grid-row: 3;
+            background-color: rgba(147, 149, 152, 1);
+            height: 238px;
+            margin: 0;
+            width: 480px;
+        }
+
+        .groupDetailPage .groupList .win-groupheader .description
+        {
+            -ms-grid-row: 5;
+            column-fill: auto;
+            column-gap: 70px;
+            columns: 480px auto;
+            margin-bottom: 12px;
+            margin-top: -2px;
+            overflow: hidden;
+        }
+
+            .groupDetailPage .groupList .win-groupheader .description p
+            {
+                margin-top: 0;
+            }
+
+    .groupDetailPage .groupList .item
+    {
+        -ms-grid-columns: 110px 10px 1fr;
+        -ms-grid-rows: 1fr;
+        display: -ms-grid;
+        height: 100%;
+        width: 100%;
+    }
+
+        .groupDetailPage .groupList .item .item-info
+        {
+            -ms-grid-column: 3;
+        }
+
+            .groupDetailPage .groupList .item .item-info .item-title
+            {
+                margin-top: 4px;
+                max-height: 20px;
+                opacity: 0.8;
+                overflow: hidden;
+            }
+
+            .groupDetailPage .groupList .item .item-info .item-subtitle
+            {
+                max-height: 20px;
+                opacity: 0.49;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .groupDetailPage .groupList .item .item-info .item-description
+            {
+                max-height: 60px;
+                opacity: 0.8;
+                overflow: hidden;
+            }
+
+    .groupDetailPage .groupList .win-item
+    {
+        height: 110px;
+        margin-bottom: 10px;
+        margin-right: 60px;
+        padding: 10px;
+        width: 472px;
+    }
+
+.groupDetailPage header[role=banner] .menu
+{
+    background-color: #FFFFFF;
+}
+
+    .groupDetailPage header[role=banner] .menu .win-command
+    {
+        color: #2A2A2A;
+        font-size: 20pt;
+        line-height: 24pt;
+        margin-bottom: 13px;
+        margin-top: 6px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+@media screen and (-ms-view-state: snapped)
+{
+    .groupDetailPage .groupList
+    {
+        width: calc(100% - 10px);
+        margin-left: 10px;
+    }
+
+        .groupDetailPage .groupList .win-groupheader
+        {
+            visibility: hidden;
+        }
+
+        .groupDetailPage .groupList .win-item
+        {
+            height: 64px;
+            margin: 0;
+            margin-right: 18px;
+            padding: 10px 0px 10px 10px;
+            width: 282px;
+        }
+
+        .groupDetailPage .groupList .item
+        {
+            -ms-grid-columns: 60px 10px 1fr;
+            -ms-grid-rows: 1fr;
+            display: -ms-grid;
+            height: 100%;
+            width: 100%;
+        }
+
+            .groupDetailPage .groupList .item .item-info .item-title
+            {
+                max-height: 30pt;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .groupDetailPage .groupList .item .item-info .item-description
+            {
+                visibility: hidden;
+            }
+        }
+
+@media screen and (-ms-view-state: fullscreen-portrait)
+{
+    .groupDetailPage .groupList .win-groupheader
+    {
+        margin-left: 100px;
+    }
+}

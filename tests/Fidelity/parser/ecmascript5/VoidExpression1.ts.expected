@@ -1,0 +1,62 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 7,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullWidth": 7,
+                "expression": {
+                    "kind": "VoidExpression",
+                    "fullWidth": 6,
+                    "voidKeyword": {
+                        "kind": "VoidKeyword",
+                        "width": 4,
+                        "fullWidth": 5,
+                        "text": "void",
+                        "value": "void",
+                        "valueText": "void",
+                        "hasTrailingTrivia": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "text": " "
+                            }
+                        ]
+                    },
+                    "expression": {
+                        "kind": "NumericLiteral",
+                        "width": 1,
+                        "text": "0",
+                        "value": 0,
+                        "valueText": "0"
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 7
+    }
+}

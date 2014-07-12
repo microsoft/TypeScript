@@ -1,0 +1,44 @@
+=== tests/cases/compiler/conditionalExpressions2.ts ===
+var a = false ? 1 : null;
+>a : number
+>false ? 1 : null : number
+
+var b = false ? undefined : 0;
+>b : number
+>false ? undefined : 0 : number
+>undefined : any
+
+var c = false ? 1 : 0;
+>c : number
+>false ? 1 : 0 : number
+
+var d = false ? false : true;
+>d : boolean
+>false ? false : true : boolean
+
+var e = false ? "foo" : "bar";
+>e : string
+>false ? "foo" : "bar" : string
+
+var f = false ? null : undefined;
+>f : any
+>false ? null : undefined : any
+>undefined : any
+
+var g = true ? {g:5} : null;
+>g : { g: number; }
+>true ? {g:5} : null : { g: number; }
+>{g:5} : { g: number; }
+>g : number
+
+var h = [{h:5}, null];
+>h : { h: number; }[]
+>[{h:5}, null] : { h: number; }[]
+>{h:5} : { h: number; }
+>h : number
+
+function i() { if (true) { return { x: 5 }; } else { return null; } }
+>i : typeof i
+>{ x: 5 } : { x: number; }
+>x : number
+

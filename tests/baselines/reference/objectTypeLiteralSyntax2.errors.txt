@@ -1,0 +1,15 @@
+==== tests/cases/compiler/objectTypeLiteralSyntax2.ts (1 errors) ====
+    var x: {
+        foo: string,
+        bar: string
+    }
+    
+    // ASI makes this work
+    var y: {
+        foo: string
+        bar: string
+    }
+    
+    var z: { foo: string bar: string }
+                         ~~~
+!!! objectTypeLiteralSyntax2.ts(12,22): error TS1005: ';' expected.

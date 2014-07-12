@@ -1,0 +1,19 @@
+==== tests/cases/compiler/constraints0.ts (1 errors) ====
+    interface A {
+        a: number;
+    }
+    
+    interface B {
+        b: string;
+    }
+    
+    interface C<T extends A> {
+        x: T;
+    }
+    
+    var v1: C<A>; // should work
+    var v2: C<B>; // should not work
+            ~~~~
+!!! constraints0.ts(14,9): error TS2086: Type 'B' does not satisfy the constraint 'A' for type parameter 'T extends A'.
+    
+    var y = v1.x.a; // 'a' should be of type 'number'

@@ -1,0 +1,4 @@
+==== tests/cases/compiler/conditionalExpression1.ts (1 errors) ====
+    var x: boolean = (true ? 1 : ""); // should be an error
+                      ~~~~~~~~~~~~~
+!!! conditionalExpression1.ts(1,19): error TS2226: Type of conditional '{}' must be identical to 'number' or 'string'.

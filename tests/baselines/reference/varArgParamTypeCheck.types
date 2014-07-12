@@ -1,0 +1,82 @@
+=== tests/cases/compiler/varArgParamTypeCheck.ts ===
+function sequence(...sequences:{():void;}[]) {
+>sequence : typeof sequence
+>sequences : { (): void; }[]
+}
+
+function callback(clb:()=>void) {
+>callback : typeof callback
+>clb : () => void
+}
+
+>sequence(
+    function bar() {
+    },
+    function foo() {
+        callback(()=>{
+            this();
+        });
+    },
+    function baz() {
+        callback(()=>{
+            this();
+        });
+    }
+) : void
+>sequence : typeof sequence
+
+sequence(
+    function bar() {
+>function bar() {
+    } : () => void
+>bar : () => void
+
+    },
+    function foo() {
+>function foo() {
+        callback(()=>{
+            this();
+        });
+    } : () => void
+>foo : () => void
+
+        callback(()=>{
+>callback(()=>{
+            this();
+        }) : void
+>callback : typeof callback
+>()=>{
+            this();
+        } : () => void
+
+            this();
+>this() : any
+>this : any
+
+        });
+    },
+    function baz() {
+>function baz() {
+        callback(()=>{
+            this();
+        });
+    } : () => void
+>baz : () => void
+
+        callback(()=>{
+>callback(()=>{
+            this();
+        }) : void
+>callback : typeof callback
+>()=>{
+            this();
+        } : () => void
+
+            this();
+>this() : any
+>this : any
+
+        });
+    }
+);
+

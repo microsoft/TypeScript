@@ -1,0 +1,7 @@
+=== tests/cases/compiler/separate1-2.ts ===
+module X {
+>X : X
+
+    export function f() { }
+>f : typeof f
+}

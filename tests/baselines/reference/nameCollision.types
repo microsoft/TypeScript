@@ -1,0 +1,88 @@
+=== tests/cases/compiler/nameCollision.ts ===
+module A {
+>A : A
+
+    // these 2 statements force an underscore before the 'A' 
+    // in the generated function call.
+    var A = 12;
+>A : number
+
+    var _A = '';
+>_A : string
+}
+
+module B {
+>B : B
+
+    var A = 12;
+>A : number
+}
+
+module B {
+>B : B
+
+    // re-opened module with colliding name
+    // this should add an underscore.
+    class B {
+>B : B
+
+        name: string;
+>name : string
+    }
+}
+
+module X {
+>X : X
+
+    var X = 13;
+>X : number
+
+    export module Y {
+>Y : Y
+
+        var Y = 13;
+>Y : number
+
+        export module Z {
+>Z : Z
+
+            var X = 12;
+>X : number
+
+            var Y = 12;
+>Y : number
+
+            var Z = 12;
+>Z : number
+        }
+    }
+}
+
+module Y.Y {
+>Y : Y
+>Y : Y.Y
+
+    export enum Y {
+>Y : Y
+
+        Red, Blue
+>Red : Y
+>Blue : Y
+    }
+}
+
+// no collision, since interface doesn't
+// generate code.
+module D {
+>D : D
+
+    export interface D {
+>D : D
+
+        id: number;
+>id : number
+    }
+
+    export var E = 'hello';
+>E : string
+}

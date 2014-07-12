@@ -1,0 +1,122 @@
+=== tests/cases/compiler/part1.ts ===
+module A {
+>A : A
+
+    export interface Point {
+>Point : Point
+
+        x: number;
+>x : number
+
+        y: number;
+>y : number
+    }
+
+    export module Utils {
+>Utils : Utils
+
+        export function mirror<T extends Point>(p: T) {
+>mirror : typeof mirror
+>T : T
+>Point : Point
+>p : T
+>T : T
+
+            return { x: p.y, y: p.x };
+>{ x: p.y, y: p.x } : { x: number; y: number; }
+>x : number
+>p.y : number
+>p : T
+>y : number
+>y : number
+>p.x : number
+>p : T
+>x : number
+        }
+    }
+}
+
+=== tests/cases/compiler/part2.ts ===
+module A {
+>A : A
+
+    export var Origin: Point = { x: 0, y: 0 };
+>Origin : Point
+>Point : Point
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>y : number
+
+    export module Utils {
+>Utils : Utils
+
+        export class Plane {
+>Plane : Plane
+
+            constructor(public tl: Point, public br: Point) { }
+>tl : Point
+>Point : Point
+>br : Point
+>Point : Point
+        }
+    }
+}
+
+=== tests/cases/compiler/part3.ts ===
+// test the merging actually worked
+
+var o: { x: number; y: number };
+>o : { x: number; y: number; }
+>x : number
+>y : number
+
+var o: A.Point;
+>o : A.Point
+>A : A
+>Point : A.Point
+
+var o = A.Origin;
+>o : A.Point
+>A.Origin : A.Point
+>A : typeof A
+>Origin : A.Point
+
+var o = A.Utils.mirror(o);
+>o : { x: number; y: number; }
+>A.Utils.mirror(o) : { x: number; y: number; }
+>A.Utils.mirror : typeof A.Utils.mirror
+>A.Utils : typeof A.Utils
+>A : typeof A
+>Utils : typeof A.Utils
+>mirror : typeof A.Utils.mirror
+>o : { x: number; y: number; }
+
+var p: { tl: A.Point; br: A.Point };
+>p : { tl: A.Point; br: A.Point; }
+>tl : A.Point
+>A : A
+>Point : A.Point
+>br : A.Point
+>A : A
+>Point : A.Point
+
+var p: A.Utils.Plane;
+>p : A.Utils.Plane
+>A : A
+>Utils : A.Utils
+>Plane : A.Utils.Plane
+
+var p = new A.Utils.Plane(o, { x: 1, y: 1 });
+>p : A.Utils.Plane
+>new A.Utils.Plane(o, { x: 1, y: 1 }) : A.Utils.Plane
+>A.Utils.Plane : typeof A.Utils.Plane
+>A.Utils : typeof A.Utils
+>A : typeof A
+>Utils : typeof A.Utils
+>Plane : typeof A.Utils.Plane
+>o : { x: number; y: number; }
+>{ x: 1, y: 1 } : { x: number; y: number; }
+>x : number
+>y : number
+
+

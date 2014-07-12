@@ -1,0 +1,15 @@
+==== tests/cases/compiler/contextualTypingOfConditionalExpression2.ts (1 errors) ====
+    class A {
+        foo: number;
+    }
+    class B extends A {
+        bar: number;
+    }
+    class C extends A {
+        baz: number;
+    }
+    
+    var x2: (a: A) => void = true ? (a: C) => a.foo : (b: number) => { };
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! contextualTypingOfConditionalExpression2.ts(11,26): error TS2227: Type of conditional '{}' must be identical to '(a: C) => number', '(b: number) => void' or '(a: A) => void'.
+    

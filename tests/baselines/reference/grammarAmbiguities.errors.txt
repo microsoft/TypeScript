@@ -1,0 +1,20 @@
+==== tests/cases/compiler/grammarAmbiguities.ts (4 errors) ====
+    function f(n: any) { return null; }
+    function g<A, B>(x: any) { return null; }
+    interface A { }
+    interface B { }
+    var A, B;
+    
+    f(g<A, B>(7));
+    f(g < A, B > 7); // Should error
+    ~
+!!! grammarAmbiguities.ts(8,1): error TS2081: Supplied parameters do not match any signature of call target.
+    ~
+!!! grammarAmbiguities.ts(8,1): error TS2087: Could not select overload for 'call' expression.
+    f(g < A, B > +(7)); // Should error
+    ~
+!!! grammarAmbiguities.ts(9,1): error TS2081: Supplied parameters do not match any signature of call target.
+    ~
+!!! grammarAmbiguities.ts(9,1): error TS2087: Could not select overload for 'call' expression.
+    
+    

@@ -1,0 +1,8 @@
+==== tests/cases/compiler/instantiateTypeParameter.ts (2 errors) ====
+    interface Foo<T> {
+        var x: T<>;
+            ~
+!!! instantiateTypeParameter.ts(2,9): error TS1005: ';' expected.
+               ~~~
+!!! instantiateTypeParameter.ts(2,12): error TS2125: Type 'T' does not have type parameters.
+    }

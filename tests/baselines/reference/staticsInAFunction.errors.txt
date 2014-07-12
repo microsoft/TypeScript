@@ -1,0 +1,35 @@
+==== tests/cases/compiler/staticsInAFunction.ts (14 errors) ====
+    function boo{
+                ~
+!!! staticsInAFunction.ts(1,13): error TS1005: '(' expected.
+       static test()
+       ~~~~~~
+!!! staticsInAFunction.ts(2,4): error TS1008: Unexpected token; 'statement' expected.
+              ~~~~
+!!! staticsInAFunction.ts(2,11): error TS2095: Could not find symbol 'test'.
+       static test(name:string)
+       ~~~~~~
+!!! staticsInAFunction.ts(3,4): error TS1008: Unexpected token; 'statement' expected.
+                       ~
+!!! staticsInAFunction.ts(3,20): error TS1005: ',' expected.
+              ~~~~
+!!! staticsInAFunction.ts(3,11): error TS2095: Could not find symbol 'test'.
+                   ~~~~
+!!! staticsInAFunction.ts(3,16): error TS2095: Could not find symbol 'name'.
+                        ~~~~~~
+!!! staticsInAFunction.ts(3,21): error TS2095: Could not find symbol 'string'.
+       static test(name?:any){}
+       ~~~~~~
+!!! staticsInAFunction.ts(4,4): error TS1008: Unexpected token; 'statement' expected.
+                        ~
+!!! staticsInAFunction.ts(4,21): error TS1003: Identifier expected.
+                             ~
+!!! staticsInAFunction.ts(4,26): error TS1005: ';' expected.
+              ~~~~
+!!! staticsInAFunction.ts(4,11): error TS2095: Could not find symbol 'test'.
+                   ~~~~
+!!! staticsInAFunction.ts(4,16): error TS2095: Could not find symbol 'name'.
+                         ~~~
+!!! staticsInAFunction.ts(4,22): error TS2095: Could not find symbol 'any'.
+    }
+    

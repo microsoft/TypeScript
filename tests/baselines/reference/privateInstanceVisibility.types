@@ -1,0 +1,69 @@
+=== tests/cases/compiler/privateInstanceVisibility.ts ===
+module Test {
+>Test : Test
+ 
+    export class Example {
+>Example : Example
+ 
+        private someNumber: number;
+>someNumber : number
+ 
+        
+
+        public doSomething() {
+>doSomething : () => void
+ 
+            var that = this;                      
+>that : Example
+>this : Example
+
+            function innerFunction() {
+>innerFunction : () => void
+                
+                var num = that.someNumber;
+>num : number
+>that.someNumber : number
+>that : Example
+>someNumber : number
+ 
+            }
+ 
+        }        
+
+    }
+ 
+}
+
+
+
+class C {
+>C : C
+
+    private x: number;
+>x : number
+
+>getX : () => number
+
+    getX() { return this.x; }
+>this.x : number
+>this : C
+>x : number
+
+>clone : (other: C) => void
+
+    clone(other: C) {
+>other : C
+>C : C
+
+        this.x = other.x;
+>this.x = other.x : number
+>this.x : number
+>this : C
+>x : number
+>other.x : number
+>other : C
+>x : number
+
+    }
+}
+

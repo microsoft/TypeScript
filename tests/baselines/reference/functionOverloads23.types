@@ -1,0 +1,16 @@
+=== tests/cases/compiler/functionOverloads23.ts ===
+function foo(bar:(b:string)=>void);
+>foo : typeof foo
+>bar : (b: string) => void
+>b : string
+
+function foo(bar:(a:number)=>void);
+>foo : typeof foo
+>bar : (a: number) => void
+>a : number
+
+function foo(bar:(a?)=>void) { return 0 }
+>foo : typeof foo
+>bar : (a?: any) => void
+>a : any
+

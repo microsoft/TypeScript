@@ -1,0 +1,14 @@
+==== tests/cases/compiler/inheritanceStaticPropertyOverridingMethod.ts (1 errors) ====
+    class a {
+        static x() {
+            return "20";
+        }
+    }
+    
+    class b extends a {
+          ~
+!!! inheritanceStaticPropertyOverridingMethod.ts(7,7): error TS2141: Class 'b' cannot extend class 'a':
+!!! 	Types of static property 'x' of class 'b' and class 'a' are incompatible:
+!!! 		Type '() => string' requires a call signature, but type 'String' lacks one.
+        static x: string;
+    }

@@ -1,0 +1,22 @@
+==== tests/cases/compiler/moduleWithNoValuesAsType.ts (3 errors) ====
+    module A { }
+    var a: A; // error
+           ~
+!!! moduleWithNoValuesAsType.ts(2,8): error TS4022: Type reference cannot refer to container 'A'.
+    
+    module B {
+        interface I {}
+    }
+    var b: B; // error
+           ~
+!!! moduleWithNoValuesAsType.ts(7,8): error TS4022: Type reference cannot refer to container 'B'.
+    
+    module C {
+        module M {
+            interface I {}
+        }
+    }
+    
+    var c: C; // error
+           ~
+!!! moduleWithNoValuesAsType.ts(15,8): error TS4022: Type reference cannot refer to container 'C'.

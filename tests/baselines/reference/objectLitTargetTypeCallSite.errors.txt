@@ -1,0 +1,11 @@
+==== tests/cases/compiler/objectLitTargetTypeCallSite.ts (2 errors) ====
+    function process( x: {a:number; b:string;}) {
+        return x.a;
+    }
+    
+    process({a:true,b:"y"});
+    ~~~~~~~
+!!! objectLitTargetTypeCallSite.ts(5,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Types of property 'a' of types '{ a: boolean; b: string; }' and '{ a: number; b: string; }' are incompatible.
+    ~~~~~~~
+!!! objectLitTargetTypeCallSite.ts(5,1): error TS2087: Could not select overload for 'call' expression.

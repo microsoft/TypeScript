@@ -1,0 +1,83 @@
+==== tests/cases/compiler/moduleVisibilityTest2.ts (7 errors) ====
+    
+    
+    module OuterMod {
+        export function someExportedOuterFunc() { return -1; }
+    
+        export module OuterInnerMod {
+            export function someExportedOuterInnerFunc() { return "foo"; }
+        }
+    }
+    
+    import OuterInnerAlias = OuterMod.OuterInnerMod;
+    
+    module M {
+    
+        module InnerMod {
+            export function someExportedInnerFunc() { return -2; }
+        }
+    
+        enum E {
+            A,
+            B,
+            C,
+        }
+    
+        var x = 5;
+        export declare var exported_var;
+    
+        var y = x + x;
+    
+    
+        interface I {
+            someMethod():number;
+        }
+    
+         class B {public b = 0;}
+    
+         export class C implements I {
+                                ~
+!!! moduleVisibilityTest2.ts(37,29): error TS2019: Exported class 'C' implements private interface 'I'.
+            public someMethodThatCallsAnOuterMethod() {return OuterInnerAlias.someExportedOuterInnerFunc();}
+            public someMethodThatCallsAnInnerMethod() {return InnerMod.someExportedInnerFunc();}
+            public someMethodThatCallsAnOuterInnerMethod() {return OuterMod.someExportedOuterFunc();}
+            public someMethod() { return 0; }
+            public someProp = 1;
+    
+            constructor() {
+                function someInnerFunc() { return 2; }
+                var someInnerVar = 3;
+            }
+            
+        }
+    
+        var someModuleVar = 4;
+    
+        function someModuleFunction() { return 5;}
+    }
+    
+    module M {
+        export var c = x;
+                    ~
+!!! moduleVisibilityTest2.ts(57,17): error TS2095: Could not find symbol 'x'.
+        export var meb = M.E.B;
+                        ~
+!!! moduleVisibilityTest2.ts(58,21): error TS2094: The property 'E' does not exist on value of type 'typeof M'.
+    }
+    
+    var cprime : M.I = <M.I>null;
+                   ~
+!!! moduleVisibilityTest2.ts(61,16): error TS2094: The property 'I' does not exist on value of type 'M'.
+                          ~
+!!! moduleVisibilityTest2.ts(61,23): error TS2094: The property 'I' does not exist on value of type 'M'.
+    
+    var c = new M.C();
+    var z = M.x;
+              ~
+!!! moduleVisibilityTest2.ts(64,11): error TS2094: The property 'x' does not exist on value of type 'typeof M'.
+    var alpha = M.E.A;
+                  ~
+!!! moduleVisibilityTest2.ts(65,15): error TS2094: The property 'E' does not exist on value of type 'typeof M'.
+    var omega = M.exported_var;
+    c.someMethodThatCallsAnOuterMethod();
+    

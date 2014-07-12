@@ -1,0 +1,15 @@
+==== tests/cases/compiler/scopeCheckInsideStaticMethod1.ts (2 errors) ====
+    class C {
+       private v;
+       public p;
+       static s;
+       static b() {
+          v = 1; // ERR
+          ~
+!!! scopeCheckInsideStaticMethod1.ts(6,7): error TS2095: Could not find symbol 'v'.
+          C.s = 1;
+          this.p = 1; // ERR
+               ~
+!!! scopeCheckInsideStaticMethod1.ts(8,12): error TS2094: The property 'p' does not exist on value of type 'typeof C'.
+       }
+    }

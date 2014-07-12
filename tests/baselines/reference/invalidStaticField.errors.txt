@@ -1,0 +1,5 @@
+==== tests/cases/compiler/invalidStaticField.ts (1 errors) ====
+    class A { foo() { return B.NULL; } }
+                               ~~~~
+!!! invalidStaticField.ts(1,28): error TS2094: The property 'NULL' does not exist on value of type 'typeof B'.
+    class B { static NOT_NULL = new B(); }

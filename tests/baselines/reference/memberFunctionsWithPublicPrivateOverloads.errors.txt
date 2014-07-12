@@ -1,0 +1,66 @@
+==== tests/cases/compiler/memberFunctionsWithPublicPrivateOverloads.ts (10 errors) ====
+    class C {
+        private foo(x: number);
+        public foo(x: number, y: string); // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! memberFunctionsWithPublicPrivateOverloads.ts(3,5): error TS2150: Overload signatures must all be public or private.
+        private foo(x: any, y?: any) { }
+    
+        private bar(x: 'hi');
+        public bar(x: string); // error
+        ~~~~~~~~~~~~~~~~~~~~~~
+!!! memberFunctionsWithPublicPrivateOverloads.ts(7,5): error TS2150: Overload signatures must all be public or private.
+        private bar(x: number, y: string);
+        private bar(x: any, y?: any) { }
+    
+        private static foo(x: number);
+        public static foo(x: number, y: string); // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! memberFunctionsWithPublicPrivateOverloads.ts(12,5): error TS2150: Overload signatures must all be public or private.
+        private static foo(x: any, y?: any) { }
+    
+        private static bar(x: 'hi');
+        public static bar(x: string); // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! memberFunctionsWithPublicPrivateOverloads.ts(16,5): error TS2150: Overload signatures must all be public or private.
+        private static bar(x: number, y: string);
+        private static bar(x: any, y?: any) { }
+    }
+    
+    class D<T> {
+        private foo(x: number); 
+        public foo(x: T, y: T); // error
+        ~~~~~~~~~~~~~~~~~~~~~~~
+!!! memberFunctionsWithPublicPrivateOverloads.ts(23,5): error TS2150: Overload signatures must all be public or private.
+        private foo(x: any, y?: any) { }
+    
+        private bar(x: 'hi');
+        public bar(x: string); // error
+        ~~~~~~~~~~~~~~~~~~~~~~
+!!! memberFunctionsWithPublicPrivateOverloads.ts(27,5): error TS2150: Overload signatures must all be public or private.
+        private bar(x: T, y: T);
+        private bar(x: any, y?: any) { }
+    
+        private static foo(x: number);
+        public static foo(x: number, y: string); // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! memberFunctionsWithPublicPrivateOverloads.ts(32,5): error TS2150: Overload signatures must all be public or private.
+        private static foo(x: any, y?: any) { }
+    
+        private static bar(x: 'hi');
+        public static bar(x: string); // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! memberFunctionsWithPublicPrivateOverloads.ts(36,5): error TS2150: Overload signatures must all be public or private.
+        private static bar(x: number, y: string);
+        private static bar(x: any, y?: any) { }
+    }
+    
+    var c: C;
+    var r = c.foo(1); // error
+              ~~~
+!!! memberFunctionsWithPublicPrivateOverloads.ts(42,11): error TS2107: 'C.foo' is inaccessible.
+    
+    var d: D<number>;
+    var r2 = d.foo(2); // error
+               ~~~
+!!! memberFunctionsWithPublicPrivateOverloads.ts(45,12): error TS2107: 'D<T>.foo' is inaccessible.

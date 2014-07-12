@@ -1,0 +1,43 @@
+==== tests/cases/compiler/lambdaArgCrash.ts (3 errors) ====
+    class Event {
+    
+         private _listeners: any[] = [];
+    
+         constructor () {
+    
+             // TODO: remove
+    
+             this._listeners = [];
+    
+        }
+    
+         add(listener: () => any): void {
+    
+             /// <summary>Registers a new listener for the event.</summary>
+    
+             /// <param name="listener">The callback function to register.</param>
+    
+             this._listeners.push(listener);
+    
+        }
+    
+    }
+     
+    class ItemSetEvent extends Event {
+    
+         add(listener: (items: ItemSet) => void ) {
+                            ~~~~~~~
+!!! lambdaArgCrash.ts(27,25): error TS2095: Could not find symbol 'ItemSet'.
+    
+             super.add(listener);
+             ~~~
+!!! lambdaArgCrash.ts(29,10): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Call signatures of types '(items: any) => void' and '() => any' are incompatible:
+!!! 		Call signature expects 0 or fewer parameters.
+             ~~~
+!!! lambdaArgCrash.ts(29,10): error TS2087: Could not select overload for 'call' expression.
+    
+        }
+    
+    }
+    

@@ -1,0 +1,20 @@
+==== tests/cases/compiler/ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.ts (2 errors) ====
+    module A {
+    
+        class Point {
+            x: number;
+            y: number;
+        }
+    
+        export class points {
+    
+            [idx: number]: Point;
+                           ~~~~~
+!!! ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.ts(10,24): error TS2054: Return type of index signature from exported interface has or is using private type 'Point'.
+            [idx: string]: Point;
+                           ~~~~~
+!!! ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.ts(11,24): error TS2054: Return type of index signature from exported interface has or is using private type 'Point'.
+        }
+    }
+    
+    

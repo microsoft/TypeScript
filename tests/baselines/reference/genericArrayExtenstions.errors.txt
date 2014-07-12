@@ -1,0 +1,9 @@
+==== tests/cases/compiler/genericArrayExtenstions.ts (1 errors) ====
+    export declare class ObservableArray<T> implements Array<T> { // MS.Entertainment.ObservableArray
+                         ~~~~~~~~~~~~~~~
+!!! genericArrayExtenstions.ts(1,22): error TS2137: Class ObservableArray<T> declares interface T[] but does not implement it:
+!!! 	Type 'ObservableArray<T>' is missing property 'join' from type 'T[]'.
+    concat<U extends T[]>(...items: U[]): T[];
+    concat(...items: T[]): T[];
+    }
+    

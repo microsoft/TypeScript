@@ -1,0 +1,51 @@
+==== tests/cases/compiler/invalidForInContinueStatements.ts (6 errors) ====
+    // All errors
+    
+    // naked continue not allowed
+    continue;
+    ~~~~~~~~~
+!!! invalidForInContinueStatements.ts(4,1): error TS2201: 'continue' statement can only be used within an enclosing iteration statement.
+    
+    // non-existent label
+    ONE:
+    for (var x in {}) continue TWO;
+                      ~~~~~~~~~~~~~
+!!! invalidForInContinueStatements.ts(8,19): error TS2203: Jump target not found.
+    
+    // continue from inside function
+    TWO:
+    for (var x in {}) {
+        var fn = () => {
+            continue TWO;
+            ~~~~~~~~~~~~~
+!!! invalidForInContinueStatements.ts(14,9): error TS2204: Jump target cannot cross function boundary.
+        }
+    }
+    
+    THREE:
+    for (var x in {}) {
+        var fn = function () {
+            continue THREE;
+            ~~~~~~~~~~~~~~~
+!!! invalidForInContinueStatements.ts(21,9): error TS2204: Jump target cannot cross function boundary.
+        }
+    }
+    
+    // continue forward
+    for (var x in {}) {
+        continue FIVE;
+        ~~~~~~~~~~~~~~
+!!! invalidForInContinueStatements.ts(27,5): error TS2203: Jump target not found.
+        FIVE:
+        for (var x in {}) { }
+    }
+    
+    // label on non-loop statement
+    NINE:
+    var y = 12;
+    
+    for (var x in {}) {
+        continue NINE;
+        ~~~~~~~~~~~~~~
+!!! invalidForInContinueStatements.ts(37,5): error TS2203: Jump target not found.
+    }

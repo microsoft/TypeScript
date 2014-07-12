@@ -1,0 +1,176 @@
+==== tests/cases/compiler/incrementOperatorWithUnsupportedStringType.ts (55 errors) ====
+    // ++ operator on string type
+    var STRING: string;
+    var STRING1: string[] = ["", ""];
+    
+    function foo(): string { return ""; }
+    
+    class A {
+        public a: string;
+        static foo() { return ""; }
+    }
+    module M {
+        export var n: string;
+    }
+    
+    var objA = new A();
+    
+    // string type var
+    var ResultIsNumber1 = ++STRING;
+                            ~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(18,25): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    var ResultIsNumber2 = ++STRING1;
+                            ~~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(19,25): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    
+    var ResultIsNumber3 = STRING++;
+                          ~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(21,23): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    var ResultIsNumber4 = STRING1++;
+                          ~~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(22,23): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    
+    // string type literal
+    var ResultIsNumber5 = ++"";
+                            ~~
+!!! incrementOperatorWithUnsupportedStringType.ts(25,25): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+                            ~~
+!!! incrementOperatorWithUnsupportedStringType.ts(25,25): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    var ResultIsNumber6 = ++{ x: "", y: "" };
+                            ~~~~~~~~~~~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(26,25): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+                            ~~~~~~~~~~~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(26,25): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    var ResultIsNumber7 = ++{ x: "", y: (s: string) => { return s; } };
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(27,25): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(27,25): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    
+    var ResultIsNumber8 = ""++;
+                          ~~
+!!! incrementOperatorWithUnsupportedStringType.ts(29,23): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+                          ~~
+!!! incrementOperatorWithUnsupportedStringType.ts(29,23): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    var ResultIsNumber9 = { x: "", y: "" }++;
+                          ~~~~~~~~~~~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(30,23): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+                          ~~~~~~~~~~~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(30,23): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    var ResultIsNumber10 = { x: "", y: (s: string) => { return s; } }++;
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(31,24): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(31,24): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    
+    // string type expressions
+    var ResultIsNumber11 = ++objA.a;
+                             ~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(34,26): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    var ResultIsNumber12 = ++M.n;
+                             ~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(35,26): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    var ResultIsNumber13 = ++STRING1[0];
+                             ~~~~~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(36,26): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    var ResultIsNumber14 = ++foo();
+                             ~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(37,26): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+                             ~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(37,26): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    var ResultIsNumber15 = ++A.foo();
+                             ~~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(38,26): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+                             ~~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(38,26): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    var ResultIsNumber16 = ++(STRING + STRING);
+                             ~~~~~~~~~~~~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(39,26): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+                             ~~~~~~~~~~~~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(39,26): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    
+    var ResultIsNumber17 = objA.a++;
+                           ~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(41,24): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    var ResultIsNumber18 = M.n++;
+                           ~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(42,24): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    var ResultIsNumber19 = STRING1[0]++;
+                           ~~~~~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(43,24): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    var ResultIsNumber20 = foo()++;
+                           ~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(44,24): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+                           ~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(44,24): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    var ResultIsNumber21 = A.foo()++;
+                           ~~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(45,24): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+                           ~~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(45,24): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    var ResultIsNumber22 = (STRING + STRING)++;
+                           ~~~~~~~~~~~~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(46,24): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+                           ~~~~~~~~~~~~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(46,24): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    
+    // miss assignment operators
+    ++"";
+      ~~
+!!! incrementOperatorWithUnsupportedStringType.ts(49,3): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+      ~~
+!!! incrementOperatorWithUnsupportedStringType.ts(49,3): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    ++STRING;
+      ~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(50,3): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    ++STRING1;
+      ~~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(51,3): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    ++STRING1[0];
+      ~~~~~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(52,3): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    ++foo();
+      ~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(53,3): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+      ~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(53,3): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    ++objA.a;
+      ~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(54,3): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    ++M.n;
+      ~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(55,3): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    ++objA.a, M.n;
+      ~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(56,3): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    
+    ""++;
+    ~~
+!!! incrementOperatorWithUnsupportedStringType.ts(58,1): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    ~~
+!!! incrementOperatorWithUnsupportedStringType.ts(58,1): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    STRING++;
+    ~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(59,1): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    STRING1++;
+    ~~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(60,1): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    STRING1[0]++;
+    ~~~~~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(61,1): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    foo()++;
+    ~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(62,1): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    ~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(62,1): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    objA.a++;
+    ~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(63,1): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    M.n++;
+    ~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(64,1): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    objA.a++, M.n++;
+    ~~~~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(65,1): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+              ~~~
+!!! incrementOperatorWithUnsupportedStringType.ts(65,11): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.

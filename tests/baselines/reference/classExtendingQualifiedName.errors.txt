@@ -1,0 +1,10 @@
+==== tests/cases/compiler/classExtendingQualifiedName.ts (1 errors) ====
+    module M {
+        class C {
+        }
+    
+        class D extends M.C {
+                          ~
+!!! classExtendingQualifiedName.ts(5,23): error TS2094: The property 'C' does not exist on value of type 'M'.
+        }
+    }

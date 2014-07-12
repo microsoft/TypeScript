@@ -1,0 +1,16 @@
+==== tests/cases/compiler/ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts (2 errors) ====
+    module A {
+    
+        class Point {
+            constructor(public x: number, public y: number) { }
+        }
+    
+        export var Origin: Point = { x: 0, y: 0 };
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts(7,16): error TS2027: Exported variable 'Origin' has or is using private type 'Point'.
+    
+        export var Unity = { start: new Point(0, 0), end: new Point(1, 0) };
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts(9,16): error TS2027: Exported variable 'Unity' has or is using private type 'Point'.
+    }
+    

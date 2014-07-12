@@ -1,0 +1,76 @@
+==== tests/cases/compiler/typeofANonExportedType.ts (12 errors) ====
+    var x = 1;
+    export var r1: typeof x;
+    var y = { foo: '' };
+    export var r2: typeof y;
+    class C {
+        foo: string;
+    }
+    export var c: C;
+               ~~~~
+!!! typeofANonExportedType.ts(8,12): error TS2027: Exported variable 'c' has or is using private type 'C'.
+    var c2: C;
+    
+    export var r3: typeof C;
+               ~~~~~~~~~~~~
+!!! typeofANonExportedType.ts(11,12): error TS2027: Exported variable 'r3' has or is using private type 'C'.
+    export var r4: typeof c;
+               ~~~~~~~~~~~~
+!!! typeofANonExportedType.ts(12,12): error TS2027: Exported variable 'r4' has or is using private type 'C'.
+    export var r4b: typeof c2;
+               ~~~~~~~~~~~~~~
+!!! typeofANonExportedType.ts(13,12): error TS2027: Exported variable 'r4b' has or is using private type 'C'.
+    
+    interface I {
+        foo: string;
+    }
+    export var i: I;
+               ~~~~
+!!! typeofANonExportedType.ts(18,12): error TS2027: Exported variable 'i' has or is using private type 'I'.
+    var i2: I;
+    export var r5: typeof i;
+               ~~~~~~~~~~~~
+!!! typeofANonExportedType.ts(20,12): error TS2027: Exported variable 'r5' has or is using private type 'I'.
+    export var r5: typeof i2;
+               ~~~~~~~~~~~~~
+!!! typeofANonExportedType.ts(21,12): error TS2027: Exported variable 'r5' has or is using private type 'I'.
+    
+    module M {
+        export var foo = '';
+        export class C {
+            foo: string;
+        }
+    }
+    export var r6: typeof M;
+               ~~~~~~~~~~~~
+!!! typeofANonExportedType.ts(29,12): error TS2031: Exported variable 'r6' is using inaccessible module 'M'.
+    export var r7: typeof M.foo;
+    
+    import Z = M;
+    export var r8: typeof Z;
+               ~~~~~~~~~~~~
+!!! typeofANonExportedType.ts(33,12): error TS2031: Exported variable 'r8' is using inaccessible module 'M'.
+    export var r9: typeof Z.foo;
+    
+    enum E {
+        A
+    }
+    export var r10: typeof E;
+               ~~~~~~~~~~~~~
+!!! typeofANonExportedType.ts(39,12): error TS2027: Exported variable 'r10' has or is using private type 'E'.
+    export var r11: typeof E.A;
+               ~~~~~~~~~~~~~~~
+!!! typeofANonExportedType.ts(40,12): error TS2027: Exported variable 'r11' has or is using private type 'E'.
+    
+    export var r12: typeof r12;
+    
+    function foo() { }
+    module foo {
+        export var y = 1;
+        export class C {
+            foo: string;
+        }
+    }
+    export var r13: typeof foo;
+               ~~~~~~~~~~~~~~~
+!!! typeofANonExportedType.ts(51,12): error TS2031: Exported variable 'r13' is using inaccessible module 'foo'.

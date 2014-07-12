@@ -1,0 +1,4 @@
+==== tests/cases/compiler/undeclaredVarEmit.ts (1 errors) ====
+    f: number;
+       ~~~~~~
+!!! undeclaredVarEmit.ts(1,4): error TS2095: Could not find symbol 'number'.

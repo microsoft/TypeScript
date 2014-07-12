@@ -1,0 +1,10 @@
+==== tests/cases/compiler/invalidSwitchContinueStatement.ts (1 errors) ====
+    // continue is not allowed in a switch statement
+    
+    switch (12) {
+        case 5:
+            continue;
+            ~~~~~~~~~
+!!! invalidSwitchContinueStatement.ts(5,9): error TS2201: 'continue' statement can only be used within an enclosing iteration statement.
+    }
+    

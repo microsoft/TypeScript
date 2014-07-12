@@ -1,0 +1,22 @@
+==== tests/cases/compiler/objectTypesWithPredefinedTypesAsName.ts (4 errors) ====
+    // it is an error to use a predefined type as a type name
+    
+    class any { }
+          ~~~
+!!! objectTypesWithPredefinedTypesAsName.ts(3,7): error TS1057: Class name cannot be 'any'.
+    
+    class number { }
+          ~~~~~~
+!!! objectTypesWithPredefinedTypesAsName.ts(5,7): error TS1057: Class name cannot be 'number'.
+    
+    class boolean { }
+          ~~~~~~~
+!!! objectTypesWithPredefinedTypesAsName.ts(7,7): error TS1057: Class name cannot be 'boolean'.
+    class bool { } // not a predefined type anymore
+    
+    class string { }
+          ~~~~~~
+!!! objectTypesWithPredefinedTypesAsName.ts(10,7): error TS1057: Class name cannot be 'string'.
+    
+    
+    

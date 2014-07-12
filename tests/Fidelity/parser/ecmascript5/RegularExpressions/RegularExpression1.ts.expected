@@ -1,0 +1,59 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 45,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ReturnStatement",
+                "fullWidth": 45,
+                "isIncrementallyUnusable": true,
+                "returnKeyword": {
+                    "kind": "ReturnKeyword",
+                    "width": 6,
+                    "fullWidth": 7,
+                    "text": "return",
+                    "value": "return",
+                    "valueText": "return",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "text": " "
+                        }
+                    ]
+                },
+                "expression": {
+                    "kind": "RegularExpressionLiteral",
+                    "width": 37,
+                    "text": "/(#?-?\\d*\\.\\d\\w*%?)|(@?#?[\\w-?]+%?)/g",
+                    "value": {},
+                    "valueText": "/(#?-?\\d*\\.\\d\\w*%?)|(@?#?[\\w-?]+%?)/g"
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 45
+    }
+}

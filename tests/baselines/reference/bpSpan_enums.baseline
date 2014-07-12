@@ -1,0 +1,281 @@
+
+**Pos: 0 SpanInfo: {"minChar":0,"limChar":30,"text":null}
+** Statement: enum e {
+    x,
+    y,
+    x
+}
+**Pos: 1 SpanInfo: {"minChar":0,"limChar":30,"text":null}
+** Statement: enum e {
+    x,
+    y,
+    x
+}
+**Pos: 2 SpanInfo: {"minChar":0,"limChar":30,"text":null}
+** Statement: enum e {
+    x,
+    y,
+    x
+}
+**Pos: 3 SpanInfo: {"minChar":0,"limChar":30,"text":null}
+** Statement: enum e {
+    x,
+    y,
+    x
+}
+**Pos: 4 SpanInfo: {"minChar":0,"limChar":30,"text":null}
+** Statement: enum e {
+    x,
+    y,
+    x
+}
+**Pos: 5 SpanInfo: {"minChar":0,"limChar":30,"text":null}
+** Statement: enum e {
+    x,
+    y,
+    x
+}
+**Pos: 6 SpanInfo: {"minChar":0,"limChar":30,"text":null}
+** Statement: enum e {
+    x,
+    y,
+    x
+}
+**Pos: 7 SpanInfo: {"minChar":0,"limChar":30,"text":null}
+** Statement: enum e {
+    x,
+    y,
+    x
+}
+**Pos: 8 SpanInfo: {"minChar":0,"limChar":30,"text":null}
+** Statement: enum e {
+    x,
+    y,
+    x
+}
+**Pos: 9 SpanInfo: {"minChar":13,"limChar":14,"text":null}
+** Statement: x
+**Pos: 10 SpanInfo: {"minChar":13,"limChar":14,"text":null}
+** Statement: x
+**Pos: 11 SpanInfo: {"minChar":13,"limChar":14,"text":null}
+** Statement: x
+**Pos: 12 SpanInfo: {"minChar":13,"limChar":14,"text":null}
+** Statement: x
+**Pos: 13 SpanInfo: {"minChar":13,"limChar":14,"text":null}
+** Statement: x
+**Pos: 14 SpanInfo: {"minChar":13,"limChar":14,"text":null}
+** Statement: x
+**Pos: 15 SpanInfo: {"minChar":13,"limChar":14,"text":null}
+** Statement: x
+**Pos: 16 SpanInfo: {"minChar":20,"limChar":21,"text":null}
+** Statement: y
+**Pos: 17 SpanInfo: {"minChar":20,"limChar":21,"text":null}
+** Statement: y
+**Pos: 18 SpanInfo: {"minChar":20,"limChar":21,"text":null}
+** Statement: y
+**Pos: 19 SpanInfo: {"minChar":20,"limChar":21,"text":null}
+** Statement: y
+**Pos: 20 SpanInfo: {"minChar":20,"limChar":21,"text":null}
+** Statement: y
+**Pos: 21 SpanInfo: {"minChar":20,"limChar":21,"text":null}
+** Statement: y
+**Pos: 22 SpanInfo: {"minChar":20,"limChar":21,"text":null}
+** Statement: y
+**Pos: 23 SpanInfo: {"minChar":27,"limChar":28,"text":null}
+** Statement: x
+**Pos: 24 SpanInfo: {"minChar":27,"limChar":28,"text":null}
+** Statement: x
+**Pos: 25 SpanInfo: {"minChar":27,"limChar":28,"text":null}
+** Statement: x
+**Pos: 26 SpanInfo: {"minChar":27,"limChar":28,"text":null}
+** Statement: x
+**Pos: 27 SpanInfo: {"minChar":27,"limChar":28,"text":null}
+** Statement: x
+**Pos: 28 SpanInfo: {"minChar":27,"limChar":28,"text":null}
+** Statement: x
+**Pos: 29 SpanInfo: {"minChar":29,"limChar":30,"text":null}
+** Statement: }
+**Pos: 30 SpanInfo: {"minChar":29,"limChar":30,"text":null}
+** Statement: }
+**Pos: 31 SpanInfo: {"minChar":31,"limChar":80,"text":null}
+** Statement: enum e2 {
+    x = 10,
+    y = 10,
+    z,
+    x2
+}
+**Pos: 32 SpanInfo: {"minChar":31,"limChar":80,"text":null}
+** Statement: enum e2 {
+    x = 10,
+    y = 10,
+    z,
+    x2
+}
+**Pos: 33 SpanInfo: {"minChar":31,"limChar":80,"text":null}
+** Statement: enum e2 {
+    x = 10,
+    y = 10,
+    z,
+    x2
+}
+**Pos: 34 SpanInfo: {"minChar":31,"limChar":80,"text":null}
+** Statement: enum e2 {
+    x = 10,
+    y = 10,
+    z,
+    x2
+}
+**Pos: 35 SpanInfo: {"minChar":31,"limChar":80,"text":null}
+** Statement: enum e2 {
+    x = 10,
+    y = 10,
+    z,
+    x2
+}
+**Pos: 36 SpanInfo: {"minChar":31,"limChar":80,"text":null}
+** Statement: enum e2 {
+    x = 10,
+    y = 10,
+    z,
+    x2
+}
+**Pos: 37 SpanInfo: {"minChar":31,"limChar":80,"text":null}
+** Statement: enum e2 {
+    x = 10,
+    y = 10,
+    z,
+    x2
+}
+**Pos: 38 SpanInfo: {"minChar":31,"limChar":80,"text":null}
+** Statement: enum e2 {
+    x = 10,
+    y = 10,
+    z,
+    x2
+}
+**Pos: 39 SpanInfo: {"minChar":31,"limChar":80,"text":null}
+** Statement: enum e2 {
+    x = 10,
+    y = 10,
+    z,
+    x2
+}
+**Pos: 40 SpanInfo: {"minChar":31,"limChar":80,"text":null}
+** Statement: enum e2 {
+    x = 10,
+    y = 10,
+    z,
+    x2
+}
+**Pos: 41 SpanInfo: {"minChar":45,"limChar":51,"text":null}
+** Statement: x = 10
+**Pos: 42 SpanInfo: {"minChar":45,"limChar":51,"text":null}
+** Statement: x = 10
+**Pos: 43 SpanInfo: {"minChar":45,"limChar":51,"text":null}
+** Statement: x = 10
+**Pos: 44 SpanInfo: {"minChar":45,"limChar":51,"text":null}
+** Statement: x = 10
+**Pos: 45 SpanInfo: {"minChar":45,"limChar":51,"text":null}
+** Statement: x = 10
+**Pos: 46 SpanInfo: {"minChar":45,"limChar":51,"text":null}
+** Statement: x = 10
+**Pos: 47 SpanInfo: {"minChar":45,"limChar":51,"text":null}
+** Statement: x = 10
+**Pos: 48 SpanInfo: {"minChar":45,"limChar":51,"text":null}
+** Statement: x = 10
+**Pos: 49 SpanInfo: {"minChar":45,"limChar":51,"text":null}
+** Statement: x = 10
+**Pos: 50 SpanInfo: {"minChar":45,"limChar":51,"text":null}
+** Statement: x = 10
+**Pos: 51 SpanInfo: {"minChar":45,"limChar":51,"text":null}
+** Statement: x = 10
+**Pos: 52 SpanInfo: {"minChar":45,"limChar":51,"text":null}
+** Statement: x = 10
+**Pos: 53 SpanInfo: {"minChar":57,"limChar":63,"text":null}
+** Statement: y = 10
+**Pos: 54 SpanInfo: {"minChar":57,"limChar":63,"text":null}
+** Statement: y = 10
+**Pos: 55 SpanInfo: {"minChar":57,"limChar":63,"text":null}
+** Statement: y = 10
+**Pos: 56 SpanInfo: {"minChar":57,"limChar":63,"text":null}
+** Statement: y = 10
+**Pos: 57 SpanInfo: {"minChar":57,"limChar":63,"text":null}
+** Statement: y = 10
+**Pos: 58 SpanInfo: {"minChar":57,"limChar":63,"text":null}
+** Statement: y = 10
+**Pos: 59 SpanInfo: {"minChar":57,"limChar":63,"text":null}
+** Statement: y = 10
+**Pos: 60 SpanInfo: {"minChar":57,"limChar":63,"text":null}
+** Statement: y = 10
+**Pos: 61 SpanInfo: {"minChar":57,"limChar":63,"text":null}
+** Statement: y = 10
+**Pos: 62 SpanInfo: {"minChar":57,"limChar":63,"text":null}
+** Statement: y = 10
+**Pos: 63 SpanInfo: {"minChar":57,"limChar":63,"text":null}
+** Statement: y = 10
+**Pos: 64 SpanInfo: {"minChar":57,"limChar":63,"text":null}
+** Statement: y = 10
+**Pos: 65 SpanInfo: {"minChar":69,"limChar":70,"text":null}
+** Statement: z
+**Pos: 66 SpanInfo: {"minChar":69,"limChar":70,"text":null}
+** Statement: z
+**Pos: 67 SpanInfo: {"minChar":69,"limChar":70,"text":null}
+** Statement: z
+**Pos: 68 SpanInfo: {"minChar":69,"limChar":70,"text":null}
+** Statement: z
+**Pos: 69 SpanInfo: {"minChar":69,"limChar":70,"text":null}
+** Statement: z
+**Pos: 70 SpanInfo: {"minChar":69,"limChar":70,"text":null}
+** Statement: z
+**Pos: 71 SpanInfo: {"minChar":69,"limChar":70,"text":null}
+** Statement: z
+**Pos: 72 SpanInfo: {"minChar":76,"limChar":78,"text":null}
+** Statement: x2
+**Pos: 73 SpanInfo: {"minChar":76,"limChar":78,"text":null}
+** Statement: x2
+**Pos: 74 SpanInfo: {"minChar":76,"limChar":78,"text":null}
+** Statement: x2
+**Pos: 75 SpanInfo: {"minChar":76,"limChar":78,"text":null}
+** Statement: x2
+**Pos: 76 SpanInfo: {"minChar":76,"limChar":78,"text":null}
+** Statement: x2
+**Pos: 77 SpanInfo: {"minChar":76,"limChar":78,"text":null}
+** Statement: x2
+**Pos: 78 SpanInfo: {"minChar":76,"limChar":78,"text":null}
+** Statement: x2
+**Pos: 79 SpanInfo: {"minChar":79,"limChar":80,"text":null}
+** Statement: }
+**Pos: 80 SpanInfo: {"minChar":79,"limChar":80,"text":null}
+** Statement: }
+**Pos: 81 SpanInfo: {"minChar":81,"limChar":92,"text":null}
+** Statement: enum e3 {
+}
+**Pos: 82 SpanInfo: {"minChar":81,"limChar":92,"text":null}
+** Statement: enum e3 {
+}
+**Pos: 83 SpanInfo: {"minChar":81,"limChar":92,"text":null}
+** Statement: enum e3 {
+}
+**Pos: 84 SpanInfo: {"minChar":81,"limChar":92,"text":null}
+** Statement: enum e3 {
+}
+**Pos: 85 SpanInfo: {"minChar":81,"limChar":92,"text":null}
+** Statement: enum e3 {
+}
+**Pos: 86 SpanInfo: {"minChar":81,"limChar":92,"text":null}
+** Statement: enum e3 {
+}
+**Pos: 87 SpanInfo: {"minChar":81,"limChar":92,"text":null}
+** Statement: enum e3 {
+}
+**Pos: 88 SpanInfo: {"minChar":81,"limChar":92,"text":null}
+** Statement: enum e3 {
+}
+**Pos: 89 SpanInfo: {"minChar":81,"limChar":92,"text":null}
+** Statement: enum e3 {
+}
+**Pos: 90 SpanInfo: {"minChar":81,"limChar":92,"text":null}
+** Statement: enum e3 {
+}
+**Pos: 91 SpanInfo: {"minChar":91,"limChar":92,"text":null}
+** Statement: }

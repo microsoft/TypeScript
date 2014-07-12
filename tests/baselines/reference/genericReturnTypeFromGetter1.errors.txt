@@ -1,0 +1,11 @@
+==== tests/cases/compiler/genericReturnTypeFromGetter1.ts (1 errors) ====
+    export interface A<T> {
+       new (dbSet: DbSet<T>): T;
+    }
+    export class DbSet<T> {
+        _entityType: A;
+                     ~
+!!! genericReturnTypeFromGetter1.ts(5,18): error TS2173: Generic type references must include all type arguments.
+      get entityType() { return this._entityType; }  // used to ICE without return type annotation
+    }
+    

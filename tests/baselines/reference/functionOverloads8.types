@@ -1,0 +1,12 @@
+=== tests/cases/compiler/functionOverloads8.ts ===
+function foo();
+>foo : typeof foo
+
+function foo(foo:string);
+>foo : typeof foo
+>foo : string
+
+function foo(foo?:any){ return '' }
+>foo : typeof foo
+>foo : any
+

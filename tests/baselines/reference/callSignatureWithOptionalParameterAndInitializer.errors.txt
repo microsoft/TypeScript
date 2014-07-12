@@ -1,0 +1,88 @@
+==== tests/cases/compiler/callSignatureWithOptionalParameterAndInitializer.ts (16 errors) ====
+    // Optional parameters cannot also have initializer expressions, these are all errors
+    
+    function foo(x?: number = 1) { }
+                 ~~~~~~~~~~~~~~
+!!! callSignatureWithOptionalParameterAndInitializer.ts(3,14): error TS1015: Parameter cannot have question mark and initializer.
+    var f = function foo(x?: number = 1) { }
+                         ~~~~~~~~~~~~~~
+!!! callSignatureWithOptionalParameterAndInitializer.ts(4,22): error TS1015: Parameter cannot have question mark and initializer.
+    var f2 = (x: number, y? = 1) => { }
+                         ~~~~~~
+!!! callSignatureWithOptionalParameterAndInitializer.ts(5,22): error TS1015: Parameter cannot have question mark and initializer.
+    
+    foo(1);
+    foo();
+    f(1);
+    f();
+    f2(1);
+    f2(1, 2);
+    
+    class C {
+        foo(x?: number = 1) { }
+            ~~~~~~~~~~~~~~
+!!! callSignatureWithOptionalParameterAndInitializer.ts(15,9): error TS1015: Parameter cannot have question mark and initializer.
+    }
+    
+    var c: C;
+    c.foo();
+    c.foo(1);
+    
+    interface I {
+        (x? = 1);
+         ~~~~~~
+!!! callSignatureWithOptionalParameterAndInitializer.ts(23,6): error TS1015: Parameter cannot have question mark and initializer.
+         ~~~~~~
+!!! callSignatureWithOptionalParameterAndInitializer.ts(23,6): error TS2174: Default arguments are only allowed in implementation.
+        foo(x: number, y?: number = 1);
+                       ~~~~~~~~~~~~~~
+!!! callSignatureWithOptionalParameterAndInitializer.ts(24,20): error TS1015: Parameter cannot have question mark and initializer.
+                       ~~~~~~~~~~~~~~
+!!! callSignatureWithOptionalParameterAndInitializer.ts(24,20): error TS2174: Default arguments are only allowed in implementation.
+    }
+    
+    var i: I;
+    i();
+    i(1);
+    i.foo(1);
+    i.foo(1, 2);
+    
+    var a: {
+        (x?: number = 1);
+         ~~~~~~~~~~~~~~
+!!! callSignatureWithOptionalParameterAndInitializer.ts(34,6): error TS1015: Parameter cannot have question mark and initializer.
+         ~~~~~~~~~~~~~~
+!!! callSignatureWithOptionalParameterAndInitializer.ts(34,6): error TS2174: Default arguments are only allowed in implementation.
+        foo(x? = 1);
+            ~~~~~~
+!!! callSignatureWithOptionalParameterAndInitializer.ts(35,9): error TS1015: Parameter cannot have question mark and initializer.
+            ~~~~~~
+!!! callSignatureWithOptionalParameterAndInitializer.ts(35,9): error TS2174: Default arguments are only allowed in implementation.
+    }
+    
+    a();
+    a(1);
+    a.foo();
+    a.foo(1);
+    
+    var b = {
+        foo(x?: number = 1) { },
+            ~~~~~~~~~~~~~~
+!!! callSignatureWithOptionalParameterAndInitializer.ts(44,9): error TS1015: Parameter cannot have question mark and initializer.
+        a: function foo(x: number, y?: number = '') { },
+                                   ~~~~~~~~~~~~~~~
+!!! callSignatureWithOptionalParameterAndInitializer.ts(45,32): error TS1015: Parameter cannot have question mark and initializer.
+                                   ~~~~~~~~~~~~~~~
+!!! callSignatureWithOptionalParameterAndInitializer.ts(45,32): error TS2011: Cannot convert 'string' to 'number'.
+        b: (x?: any = '') => { }
+            ~~~~~~~~~~~~
+!!! callSignatureWithOptionalParameterAndInitializer.ts(46,9): error TS1015: Parameter cannot have question mark and initializer.
+    }
+    
+    b.foo();
+    b.foo(1);
+    b.a(1);
+    b.a(1, 2);
+    b.b();
+    b.b(1);
+    

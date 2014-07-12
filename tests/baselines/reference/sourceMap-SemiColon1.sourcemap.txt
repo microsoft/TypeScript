@@ -1,0 +1,5 @@
+
+EmittedFile: (sourceMap-SemiColon1.js) sourceFile: (sourceMap-SemiColon1.ts)
+-------------------------------------------------------------------
+Emitted (1, 1) source (1, 1)
+Emitted (1, 2) source (1, 2)

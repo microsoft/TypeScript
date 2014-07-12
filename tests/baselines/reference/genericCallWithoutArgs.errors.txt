@@ -1,0 +1,9 @@
+==== tests/cases/compiler/genericCallWithoutArgs.ts (2 errors) ====
+    function f<X, Y>(x: X, y: Y) {
+    }
+    
+    f<number,string>.
+                    ~
+!!! genericCallWithoutArgs.ts(4,17): error TS2069: A parameter list must follow a generic type argument list. '(' expected.
+                     
+!!! genericCallWithoutArgs.ts(4,18): error TS1003: Identifier expected.

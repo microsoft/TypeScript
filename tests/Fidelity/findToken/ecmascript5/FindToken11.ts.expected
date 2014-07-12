@@ -1,0 +1,84 @@
+{
+    "tokens": {
+        "0": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "fullWidth": 1,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingSkippedText": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "ErrorToken",
+                        "width": 1,
+                        "text": "\\"
+                    }
+                }
+            ]
+        },
+        "1": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "fullWidth": 1,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingSkippedText": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "ErrorToken",
+                        "width": 1,
+                        "text": "\\"
+                    }
+                }
+            ]
+        }
+    },
+    "tokensOnLeft": {
+        "0": null,
+        "1": null
+    },
+    "leftToRight": [
+        {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "fullWidth": 1,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingSkippedText": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "ErrorToken",
+                        "width": 1,
+                        "text": "\\"
+                    }
+                }
+            ]
+        }
+    ],
+    "rightToLeft": [
+        {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "fullWidth": 1,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingSkippedText": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "ErrorToken",
+                        "width": 1,
+                        "text": "\\"
+                    }
+                }
+            ]
+        }
+    ]
+}

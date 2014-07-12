@@ -1,0 +1,50 @@
+==== tests/cases/compiler/multipleStringIndexers.ts (6 errors) ====
+    // Multiple indexers of the same type are an error
+    
+    class C {
+        [x: string]: string;
+        [x: string]: string;
+        ~~~~~~~~~~~~~~~~~~~
+!!! multipleStringIndexers.ts(5,5): error TS2232: Duplicate string index signature. Additional locations:
+!!! 	multipleStringIndexers.ts(4,5)
+    }
+    
+    interface I {
+        [x: string]: string;
+        [x: string]: string;
+        ~~~~~~~~~~~~~~~~~~~
+!!! multipleStringIndexers.ts(10,5): error TS2232: Duplicate string index signature. Additional locations:
+!!! 	multipleStringIndexers.ts(9,5)
+    }
+    
+    var a: {
+        [x: string]: string;
+        [x: string]: string;
+        ~~~~~~~~~~~~~~~~~~~
+!!! multipleStringIndexers.ts(15,5): error TS2232: Duplicate string index signature. Additional locations:
+!!! 	multipleStringIndexers.ts(14,5)
+    }
+    
+    var b: {
+        [x: string]: string;
+        [x: string]: string;
+        ~~~~~~~~~~~~~~~~~~~
+!!! multipleStringIndexers.ts(20,5): error TS2232: Duplicate string index signature. Additional locations:
+!!! 	multipleStringIndexers.ts(19,5)
+    } = { y: '' }
+    
+    class C2<T> {
+        [x: string]: string;
+        [x: string]: string;
+        ~~~~~~~~~~~~~~~~~~~
+!!! multipleStringIndexers.ts(25,5): error TS2232: Duplicate string index signature. Additional locations:
+!!! 	multipleStringIndexers.ts(24,5)
+    }
+    
+    interface I2<T> {
+        [x: string]: string;
+        [x: string]: string;
+        ~~~~~~~~~~~~~~~~~~~
+!!! multipleStringIndexers.ts(30,5): error TS2232: Duplicate string index signature. Additional locations:
+!!! 	multipleStringIndexers.ts(29,5)
+    }

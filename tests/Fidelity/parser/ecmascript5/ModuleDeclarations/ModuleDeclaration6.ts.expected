@@ -1,0 +1,95 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "diagnostics": [
+        {
+            "start": 7,
+            "length": 6,
+            "diagnosticCode": "Module name cannot be '{0}'.",
+            "arguments": [
+                "number"
+            ]
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 18,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ModuleDeclaration",
+                "fullWidth": 18,
+                "isIncrementallyUnusable": true,
+                "modifiers": [],
+                "moduleKeyword": {
+                    "kind": "ModuleKeyword",
+                    "width": 6,
+                    "fullWidth": 7,
+                    "text": "module",
+                    "value": "module",
+                    "valueText": "module",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "text": " "
+                        }
+                    ]
+                },
+                "name": {
+                    "kind": "IdentifierName",
+                    "width": 6,
+                    "fullWidth": 7,
+                    "text": "number",
+                    "value": "number",
+                    "valueText": "number",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "text": " "
+                        }
+                    ]
+                },
+                "openBraceToken": {
+                    "kind": "OpenBraceToken",
+                    "width": 1,
+                    "fullWidth": 3,
+                    "text": "{",
+                    "value": "{",
+                    "valueText": "{",
+                    "hasTrailingTrivia": true,
+                    "hasTrailingNewLine": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "text": "\r\n"
+                        }
+                    ]
+                },
+                "closeBraceToken": {
+                    "kind": "CloseBraceToken",
+                    "width": 1,
+                    "text": "}",
+                    "value": "}",
+                    "valueText": "}"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            17
+        ],
+        "length": 18
+    }
+}

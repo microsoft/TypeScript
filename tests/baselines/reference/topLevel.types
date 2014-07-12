@@ -1,0 +1,94 @@
+=== tests/cases/compiler/topLevel.ts ===
+interface IPoint {
+>IPoint : IPoint
+
+    x:number;
+>x : number
+
+    y:number;
+>y : number
+}
+
+class Point implements IPoint {
+>Point : Point
+>IPoint : IPoint
+
+    constructor(public x,public y){}
+>x : any
+>y : any
+
+    public move(xo:number,yo:number) {
+>move : (xo: number, yo: number) => Point
+>xo : number
+>yo : number
+
+	this.x+=xo;
+>this.x+=xo : any
+>this.x : any
+>this : Point
+>x : any
+>xo : number
+
+	this.y+=yo;
+>this.y+=yo : any
+>this.y : any
+>this : Point
+>y : any
+>yo : number
+
+	return this;
+>this : Point
+    }
+    public toString() {
+>toString : () => string
+
+	return ("("+this.x+","+this.y+")");
+>("("+this.x+","+this.y+")") : string
+>"("+this.x+","+this.y+")" : string
+>"("+this.x+","+this.y : string
+>"("+this.x+"," : string
+>"("+this.x : string
+>this.x : any
+>this : Point
+>x : any
+>this.y : any
+>this : Point
+>y : any
+    }
+}
+
+var result="";
+>result : string
+
+result+=(new Point(3,4).move(2,2));
+>result+=(new Point(3,4).move(2,2)) : string
+>result : string
+>(new Point(3,4).move(2,2)) : Point
+>new Point(3,4).move(2,2) : Point
+>new Point(3,4).move : (xo: number, yo: number) => Point
+>new Point(3,4) : Point
+>Point : typeof Point
+>move : (xo: number, yo: number) => Point
+
+module M {
+>M : M
+
+    export var origin=new Point(0,0);
+>origin : Point
+>new Point(0,0) : Point
+>Point : typeof Point
+}
+
+>result+=(M.origin.move(1,1)) : string
+>result : string
+
+result+=(M.origin.move(1,1));
+>(M.origin.move(1,1)) : Point
+>M.origin.move(1,1) : Point
+>M.origin.move : (xo: number, yo: number) => Point
+>M.origin : Point
+>M : typeof M
+>origin : Point
+>move : (xo: number, yo: number) => Point
+
+

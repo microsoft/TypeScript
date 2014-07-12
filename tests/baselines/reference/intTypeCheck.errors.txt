@@ -1,0 +1,412 @@
+==== tests/cases/compiler/intTypeCheck.ts (83 errors) ====
+    interface i1 {
+        //Property Signatures
+        p;
+        p1?;
+        p2?: string;
+        p3();
+        p4? ();
+        p5? (): void;
+        p6(pa1): void;
+        p7? (pa1, pa2): void;
+    }
+    interface i2 {
+        //Call Signatures
+        ();
+        (): number;
+        ~~~~~~~~~~
+!!! intTypeCheck.ts(15,5): error TS2175: Overloads cannot differ only by return type.
+        (p);
+        (p1: string);
+        (p2?: string);
+        (...p3: any[]);
+        (p4: string, p5?: string);
+        (p6: string, ...p7: any[]);
+    }
+    interface i3 {
+        //Construct Signatures
+        new ();
+        new (): number;
+        ~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(26,5): error TS2175: Overloads cannot differ only by return type.
+        new (p: string);
+        new (p2?: string);
+        new (...p3: any[]);
+        new (p4: string, p5?: string);
+        new (p6: string, ...p7: any[]);
+    }
+    interface i4 {
+        //Index Signatures
+        [p];
+        [p1: string];
+        [p2: string, p3: number];
+                   ~
+!!! intTypeCheck.ts(37,16): error TS1005: ']' expected.
+                               ~
+!!! intTypeCheck.ts(37,28): error TS1005: ';' expected.
+                                ~
+!!! intTypeCheck.ts(37,29): error TS1008: Unexpected token; 'call, construct, index, property or function signature' expected.
+        ~~~~~~~~~~~
+!!! intTypeCheck.ts(37,5): error TS2232: Duplicate string index signature. Additional locations:
+!!! 	intTypeCheck.ts(36,5)
+    }
+    interface i5 extends i1 { }
+    interface i6 extends i2 { }
+    interface i7 extends i3 { }
+    interface i8 extends i4 { }
+    interface i9 { }
+    
+    class Base { foo() { } }
+    
+    interface i11 {
+        //Call Signatures
+        ();
+        (): number;
+        ~~~~~~~~~~
+!!! intTypeCheck.ts(50,5): error TS2175: Overloads cannot differ only by return type.
+        (p);
+        (p1: string);
+        (p2?: string);
+        (...p3: any[]);
+        (p4: string, p5?: string);
+        (p6: string, ...p7: any[]);
+        //(p8?: string, ...p9: any[]);
+        //(p10:string, p8?: string, ...p9: any[]);
+    
+        //Construct Signatures
+        new ();
+        new (): number;
+        ~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(62,5): error TS2175: Overloads cannot differ only by return type.
+        new (p: string);
+        new (p2?: string);
+        new (...p3: any[]);
+        new (p4: string, p5?: string);
+        new (p6: string, ...p7: any[]);
+    
+        //Index Signatures
+        [p];
+        [p1: string];
+        [p2: string, p3: number];
+                   ~
+!!! intTypeCheck.ts(72,16): error TS1005: ']' expected.
+                               ~
+!!! intTypeCheck.ts(72,28): error TS1005: ';' expected.
+                                ~
+!!! intTypeCheck.ts(72,29): error TS1008: Unexpected token; 'call, construct, index, property or function signature' expected.
+        ~~~~~~~~~~~
+!!! intTypeCheck.ts(72,5): error TS2232: Duplicate string index signature. Additional locations:
+!!! 	intTypeCheck.ts(71,5)
+    
+        //Property Signatures
+        p;
+        p1?;
+        p2?: string;
+        p3();
+        ~~~~
+!!! intTypeCheck.ts(78,5): error TS2000: Duplicate identifier 'p3'. Additional locations:
+!!! 	intTypeCheck.ts(72,18)
+        p4? ();
+        p5? (): void;
+        p6(pa1): void;
+        p7(pa1, pa2): void;
+        p7? (pa1, pa2): void;
+        ~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(83,5): error TS2144: Duplicate overload signature for 'p7'.
+        ~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(83,5): error TS2153: Overload signatures must all be optional or required.
+    }
+    
+    var anyVar: any;
+    //
+    // Property signatures
+    //
+    var obj0: i1;
+    var obj1: i1 = {
+        p: null,
+        p3: function ():any { return 0; },
+        p6: function (pa1):any { return 0; },
+        p7: function (pa1, pa2):any { return 0; }
+    };
+    var obj2: i1 = new Object();
+        ~~~~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(97,5): error TS2012: Cannot convert 'Object' to 'i1':
+!!! 	Type 'Object' is missing property 'p' from type 'i1'.
+    var obj3: i1 = new obj0;
+                       ~~~~
+!!! intTypeCheck.ts(98,20): error TS2083: Invalid 'new' expression.
+    var obj4: i1 = new Base;
+        ~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(99,5): error TS2012: Cannot convert 'Base' to 'i1':
+!!! 	Type 'Base' is missing property 'p' from type 'i1'.
+    var obj5: i1 = null;
+    var obj6: i1 = function () { };
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(101,5): error TS2012: Cannot convert '() => void' to 'i1':
+!!! 	Type '() => void' is missing property 'p' from type 'i1'.
+    //var obj7: i1 = function foo() { };
+    var obj8: i1 = <i1> anyVar;
+    var obj9: i1 = new <i1> anyVar;
+                       ~
+!!! intTypeCheck.ts(104,20): error TS1003: Identifier expected.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(104,5): error TS2012: Cannot convert 'boolean' to 'i1':
+!!! 	Type 'Boolean' is missing property 'p' from type 'i1'.
+                        ~~
+!!! intTypeCheck.ts(104,21): error TS2095: Could not find symbol 'i1'.
+    var obj10: i1 = new {};
+                        ~~
+!!! intTypeCheck.ts(105,21): error TS2083: Invalid 'new' expression.
+    //
+    // Call signatures
+    //
+    var obj11: i2;
+    var obj12: i2 = {};
+        ~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(110,5): error TS2012: Cannot convert '{}' to 'i2':
+!!! 	Type 'i2' requires a call signature, but type '{}' lacks one.
+    var obj13: i2 = new Object();
+        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(111,5): error TS2012: Cannot convert 'Object' to 'i2':
+!!! 	Type 'i2' requires a call signature, but type 'Object' lacks one.
+    var obj14: i2 = new obj11;
+                        ~~~~~
+!!! intTypeCheck.ts(112,21): error TS2084: Call signatures used in a 'new' expression must have a 'void' return type.
+    var obj15: i2 = new Base;
+        ~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(113,5): error TS2012: Cannot convert 'Base' to 'i2':
+!!! 	Type 'i2' requires a call signature, but type 'Base' lacks one.
+    var obj16: i2 = null;
+    var obj17: i2 = function ():any { return 0; };
+    //var obj18: i2 = function foo() { };
+    var obj19: i2 = <i2> anyVar;
+    var obj20: i2 = new <i2> anyVar;
+                        ~
+!!! intTypeCheck.ts(118,21): error TS1003: Identifier expected.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(118,5): error TS2012: Cannot convert 'boolean' to 'i2':
+!!! 	Type 'i2' requires a call signature, but type 'Boolean' lacks one.
+                         ~~
+!!! intTypeCheck.ts(118,22): error TS2095: Could not find symbol 'i2'.
+    var obj21: i2 = new {};
+                        ~~
+!!! intTypeCheck.ts(119,21): error TS2083: Invalid 'new' expression.
+    //
+    // Construct Signatures
+    //
+    var obj22: i3;
+    var obj23: i3 = {};
+        ~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(124,5): error TS2012: Cannot convert '{}' to 'i3':
+!!! 	Type 'i3' requires a construct signature, but type '{}' lacks one.
+    var obj24: i3 = new Object();
+        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(125,5): error TS2012: Cannot convert 'Object' to 'i3':
+!!! 	Type 'i3' requires a construct signature, but type 'Object' lacks one.
+    var obj25: i3 = new obj22;
+    var obj26: i3 = new Base;
+        ~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(127,5): error TS2012: Cannot convert 'Base' to 'i3':
+!!! 	Type 'i3' requires a construct signature, but type 'Base' lacks one.
+    var obj27: i3 = null;
+    var obj28: i3 = function () { };
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(129,5): error TS2012: Cannot convert '() => void' to 'i3':
+!!! 	Type 'i3' requires a construct signature, but type '() => void' lacks one.
+    //var obj29: i3 = function foo() { };
+    var obj30: i3 = <i3> anyVar;
+    var obj31: i3 = new <i3> anyVar;
+                        ~
+!!! intTypeCheck.ts(132,21): error TS1003: Identifier expected.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(132,5): error TS2012: Cannot convert 'boolean' to 'i3':
+!!! 	Type 'i3' requires a construct signature, but type 'Boolean' lacks one.
+                         ~~
+!!! intTypeCheck.ts(132,22): error TS2095: Could not find symbol 'i3'.
+    var obj32: i3 = new {};
+                        ~~
+!!! intTypeCheck.ts(133,21): error TS2083: Invalid 'new' expression.
+    //
+    // Index Signatures
+    //
+    var obj33: i4;
+    var obj34: i4 = {};
+        ~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(138,5): error TS2012: Cannot convert '{ [p1: string]: any; }' to 'i4':
+!!! 	Type '{ [p1: string]: any; }' is missing property 'p3' from type 'i4'.
+    var obj35: i4 = new Object();
+        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(139,5): error TS2012: Cannot convert 'Object' to 'i4':
+!!! 	Type 'Object' is missing property 'p3' from type 'i4'.
+    var obj36: i4 = new obj33;
+                        ~~~~~
+!!! intTypeCheck.ts(140,21): error TS2083: Invalid 'new' expression.
+    var obj37: i4 = new Base;
+        ~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(141,5): error TS2012: Cannot convert 'Base' to 'i4':
+!!! 	Type 'Base' is missing property 'p3' from type 'i4'.
+    var obj38: i4 = null;
+    var obj39: i4 = function () { };
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(143,5): error TS2012: Cannot convert '() => void' to 'i4':
+!!! 	Type '() => void' is missing property 'p3' from type 'i4'.
+    //var obj40: i4 = function foo() { };
+    var obj41: i4 = <i4> anyVar;
+    var obj42: i4 = new <i4> anyVar;
+                        ~
+!!! intTypeCheck.ts(146,21): error TS1003: Identifier expected.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(146,5): error TS2012: Cannot convert 'boolean' to 'i4':
+!!! 	Type 'Boolean' is missing property 'p3' from type 'i4'.
+                         ~~
+!!! intTypeCheck.ts(146,22): error TS2095: Could not find symbol 'i4'.
+    var obj43: i4 = new {};
+                        ~~
+!!! intTypeCheck.ts(147,21): error TS2083: Invalid 'new' expression.
+    //
+    // Interface Derived I1
+    //
+    var obj44: i5;
+    var obj45: i5 = {};
+        ~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(152,5): error TS2012: Cannot convert '{}' to 'i5':
+!!! 	Type '{}' is missing property 'p' from type 'i5'.
+    var obj46: i5 = new Object();
+        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(153,5): error TS2012: Cannot convert 'Object' to 'i5':
+!!! 	Type 'Object' is missing property 'p' from type 'i5'.
+    var obj47: i5 = new obj44;
+                        ~~~~~
+!!! intTypeCheck.ts(154,21): error TS2083: Invalid 'new' expression.
+    var obj48: i5 = new Base;
+        ~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(155,5): error TS2012: Cannot convert 'Base' to 'i5':
+!!! 	Type 'Base' is missing property 'p' from type 'i5'.
+    var obj49: i5 = null;
+    var obj50: i5 = function () { };
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(157,5): error TS2012: Cannot convert '() => void' to 'i5':
+!!! 	Type '() => void' is missing property 'p' from type 'i5'.
+    //var obj51: i5 = function foo() { };
+    var obj52: i5 = <i5> anyVar;
+    var obj53: i5 = new <i5> anyVar;
+                        ~
+!!! intTypeCheck.ts(160,21): error TS1003: Identifier expected.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(160,5): error TS2012: Cannot convert 'boolean' to 'i5':
+!!! 	Type 'Boolean' is missing property 'p' from type 'i5'.
+                         ~~
+!!! intTypeCheck.ts(160,22): error TS2095: Could not find symbol 'i5'.
+    var obj54: i5 = new {};
+                        ~~
+!!! intTypeCheck.ts(161,21): error TS2083: Invalid 'new' expression.
+    //
+    // Interface Derived I2
+    //
+    var obj55: i6;
+    var obj56: i6 = {};
+        ~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(166,5): error TS2012: Cannot convert '{}' to 'i6':
+!!! 	Type 'i6' requires a call signature, but type '{}' lacks one.
+    var obj57: i6 = new Object();
+        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(167,5): error TS2012: Cannot convert 'Object' to 'i6':
+!!! 	Type 'i6' requires a call signature, but type 'Object' lacks one.
+    var obj58: i6 = new obj55;
+                        ~~~~~
+!!! intTypeCheck.ts(168,21): error TS2084: Call signatures used in a 'new' expression must have a 'void' return type.
+    var obj59: i6 = new Base;
+        ~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(169,5): error TS2012: Cannot convert 'Base' to 'i6':
+!!! 	Type 'i6' requires a call signature, but type 'Base' lacks one.
+    var obj60: i6 = null;
+    var obj61: i6 = function () { };
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(171,5): error TS2012: Cannot convert '() => void' to 'i6':
+!!! 	Call signatures of types '() => void' and 'i6' are incompatible.
+    //var obj62: i6 = function foo() { };
+    var obj63: i6 = <i6> anyVar;
+    var obj64: i6 = new <i6> anyVar;
+                        ~
+!!! intTypeCheck.ts(174,21): error TS1003: Identifier expected.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(174,5): error TS2012: Cannot convert 'boolean' to 'i6':
+!!! 	Type 'i6' requires a call signature, but type 'Boolean' lacks one.
+                         ~~
+!!! intTypeCheck.ts(174,22): error TS2095: Could not find symbol 'i6'.
+    var obj65: i6 = new {};
+                        ~~
+!!! intTypeCheck.ts(175,21): error TS2083: Invalid 'new' expression.
+    //
+    // Interface Derived I3
+    //
+    var obj66: i7;
+    var obj67: i7 = {};
+        ~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(180,5): error TS2012: Cannot convert '{}' to 'i7':
+!!! 	Type 'i7' requires a construct signature, but type '{}' lacks one.
+    var obj68: i7 = new Object();
+        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(181,5): error TS2012: Cannot convert 'Object' to 'i7':
+!!! 	Type 'i7' requires a construct signature, but type 'Object' lacks one.
+    var obj69: i7 = new obj66;
+    var obj70: i7 = <i7>new Base;
+                    ~~~~~~~~~~~~
+!!! intTypeCheck.ts(183,17): error TS2012: Cannot convert 'Base' to 'i7':
+!!! 	Type 'i7' requires a construct signature, but type 'Base' lacks one.
+!!! 	Type 'i7' is missing property 'foo' from type 'Base'.
+    var obj71: i7 = null;
+    var obj72: i7 = function () { };
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(185,5): error TS2012: Cannot convert '() => void' to 'i7':
+!!! 	Type 'i7' requires a construct signature, but type '() => void' lacks one.
+    //var obj73: i7 = function foo() { };
+    var obj74: i7 = <i7> anyVar;
+    var obj75: i7 = new <i7> anyVar;
+                        ~
+!!! intTypeCheck.ts(188,21): error TS1003: Identifier expected.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(188,5): error TS2012: Cannot convert 'boolean' to 'i7':
+!!! 	Type 'i7' requires a construct signature, but type 'Boolean' lacks one.
+                         ~~
+!!! intTypeCheck.ts(188,22): error TS2095: Could not find symbol 'i7'.
+    var obj76: i7 = new {};
+                        ~~
+!!! intTypeCheck.ts(189,21): error TS2083: Invalid 'new' expression.
+    //
+    // Interface Derived I4
+    //
+    var obj77: i8;
+    var obj78: i8 = {};
+        ~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(194,5): error TS2012: Cannot convert '{ [p1: string]: any; }' to 'i8':
+!!! 	Type '{ [p1: string]: any; }' is missing property 'p3' from type 'i8'.
+    var obj79: i8 = new Object();
+        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(195,5): error TS2012: Cannot convert 'Object' to 'i8':
+!!! 	Type 'Object' is missing property 'p3' from type 'i8'.
+    var obj80: i8 = new obj77;
+                        ~~~~~
+!!! intTypeCheck.ts(196,21): error TS2083: Invalid 'new' expression.
+    var obj81: i8 = new Base;
+        ~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(197,5): error TS2012: Cannot convert 'Base' to 'i8':
+!!! 	Type 'Base' is missing property 'p3' from type 'i8'.
+    var obj82: i8 = null;
+    var obj83: i8 = function () { };
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(199,5): error TS2012: Cannot convert '() => void' to 'i8':
+!!! 	Type '() => void' is missing property 'p3' from type 'i8'.
+    //var obj84: i8 = function foo() { };
+    var obj85: i8 = <i8> anyVar;
+    var obj86: i8 = new <i8> anyVar;
+                        ~
+!!! intTypeCheck.ts(202,21): error TS1003: Identifier expected.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! intTypeCheck.ts(202,5): error TS2012: Cannot convert 'boolean' to 'i8':
+!!! 	Type 'Boolean' is missing property 'p3' from type 'i8'.
+                         ~~
+!!! intTypeCheck.ts(202,22): error TS2095: Could not find symbol 'i8'.
+    var obj87: i8 = new {};
+                        ~~
+!!! intTypeCheck.ts(203,21): error TS2083: Invalid 'new' expression.

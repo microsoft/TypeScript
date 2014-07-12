@@ -1,0 +1,11 @@
+==== tests/cases/compiler/importAndVariableDeclarationConflict3.ts (1 errors) ====
+    module m {
+      export var m = '';
+    }
+    
+    import x = m.m;
+    import x = m.m;
+    ~~~~~~~~~~~~~~~
+!!! importAndVariableDeclarationConflict3.ts(6,1): error TS2000: Duplicate identifier 'x'. Additional locations:
+!!! 	importAndVariableDeclarationConflict3.ts(5,1)
+    

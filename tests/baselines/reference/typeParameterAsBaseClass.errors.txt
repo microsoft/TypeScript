@@ -1,0 +1,7 @@
+==== tests/cases/compiler/typeParameterAsBaseClass.ts (2 errors) ====
+    class C<T> extends T {}
+                       ~
+!!! typeParameterAsBaseClass.ts(1,20): error TS2073: A class may only extend another class.
+    class C2<T> implements T {}
+                           ~
+!!! typeParameterAsBaseClass.ts(2,24): error TS2074: A class may only implement another class or interface.

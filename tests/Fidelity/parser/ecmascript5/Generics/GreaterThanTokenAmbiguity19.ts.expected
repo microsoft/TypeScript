@@ -1,0 +1,113 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "diagnostics": [
+        {
+            "start": 7,
+            "length": 1,
+            "diagnosticCode": "Identifier expected."
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 11,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullWidth": 11,
+                "isIncrementallyUnusable": true,
+                "expression": {
+                    "kind": "AssignmentExpression",
+                    "fullWidth": 10,
+                    "isIncrementallyUnusable": true,
+                    "left": {
+                        "kind": "UnsignedRightShiftExpression",
+                        "fullWidth": 7,
+                        "isIncrementallyUnusable": true,
+                        "left": {
+                            "kind": "NumericLiteral",
+                            "width": 1,
+                            "fullWidth": 2,
+                            "text": "1",
+                            "value": 1,
+                            "valueText": "1",
+                            "hasTrailingTrivia": true,
+                            "trailingTrivia": [
+                                {
+                                    "kind": "WhitespaceTrivia",
+                                    "text": " "
+                                }
+                            ]
+                        },
+                        "operatorToken": {
+                            "kind": "GreaterThanGreaterThanGreaterThanToken",
+                            "width": 3,
+                            "fullWidth": 5,
+                            "text": ">>>",
+                            "value": ">>>",
+                            "valueText": ">>>",
+                            "hasTrailingTrivia": true,
+                            "hasTrailingNewLine": true,
+                            "trailingTrivia": [
+                                {
+                                    "kind": "NewLineTrivia",
+                                    "text": "\r\n"
+                                }
+                            ]
+                        },
+                        "right": {
+                            "kind": "IdentifierName",
+                            "width": 0,
+                            "text": ""
+                        }
+                    },
+                    "operatorToken": {
+                        "kind": "EqualsToken",
+                        "width": 1,
+                        "fullWidth": 2,
+                        "text": "=",
+                        "value": "=",
+                        "valueText": "=",
+                        "hasTrailingTrivia": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "text": " "
+                            }
+                        ]
+                    },
+                    "right": {
+                        "kind": "NumericLiteral",
+                        "width": 1,
+                        "text": "2",
+                        "value": 2,
+                        "valueText": "2"
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            7
+        ],
+        "length": 11
+    }
+}

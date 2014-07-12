@@ -1,0 +1,11 @@
+=== tests/cases/compiler/thisExpressionInIndexExpression.ts ===
+function f() {
+>f : typeof f
+
+    return r => r[this];
+>r => r[this] : (r: any) => any
+>r : any
+>r[this] : any
+>r : any
+>this : any
+}

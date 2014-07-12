@@ -1,0 +1,23 @@
+==== tests/cases/compiler/objectLiteralIndexerErrors.ts (2 errors) ====
+    interface A {
+        x: number;
+    }
+    
+    interface B extends A {
+        y: string;
+    }
+    
+    var a: A;
+    var b: B;
+    var c: any;
+    
+    var o1: { [s: string]: A;[n: number]: B; } = { x: b, 0: a }; // both indexers are A
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! objectLiteralIndexerErrors.ts(13,5): error TS2012: Cannot convert '{ x: B; 0: A; [s: string]: A; [n: number]: A; }' to '{ [s: string]: A; [n: number]: B; }':
+!!! 	Index signatures of types '{ x: B; 0: A; [s: string]: A; [n: number]: A; }' and '{ [s: string]: A; [n: number]: B; }' are incompatible:
+!!! 		Type 'A' is missing property 'y' from type 'B'.
+    o1 = { x: c, 0: a }; // string indexer is any, number indexer is A
+    ~~
+!!! objectLiteralIndexerErrors.ts(14,1): error TS2012: Cannot convert '{ x: any; 0: A; [s: string]: any; [n: number]: A; }' to '{ [s: string]: A; [n: number]: B; }':
+!!! 	Index signatures of types '{ x: any; 0: A; [s: string]: any; [n: number]: A; }' and '{ [s: string]: A; [n: number]: B; }' are incompatible:
+!!! 		Type 'A' is missing property 'y' from type 'B'.

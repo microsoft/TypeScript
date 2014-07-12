@@ -1,0 +1,48 @@
+==== tests/cases/compiler/genericSpecializations3.ts (3 errors) ====
+    interface IFoo<T> {
+        foo(x: T): T;
+    }
+    
+    var iFoo: IFoo<number>;
+    iFoo.foo(1);
+    
+    class IntFooBad implements IFoo<number> { // error
+          ~~~~~~~~~
+!!! genericSpecializations3.ts(8,7): error TS2137: Class IntFooBad declares interface IFoo<number> but does not implement it:
+!!! 	Types of property 'foo' of types 'IntFooBad' and 'IFoo<number>' are incompatible:
+!!! 		Call signatures of types '(x: string) => string' and '(x: number) => number' are incompatible.
+        foo(x: string): string { return null; }
+    }
+    
+    var intFooBad: IntFooBad;
+    
+    class IntFoo implements IFoo<number> {
+        foo(x: number): number { return null; }
+    }
+    
+    var intFoo: IntFoo;
+    
+    class StringFoo2 implements IFoo<string> {
+        foo(x: string): string { return null; }
+    }
+    
+    var stringFoo2: StringFoo2;
+    stringFoo2.foo("hm");
+    
+    
+    intFoo = stringFoo2; // error
+    ~~~~~~
+!!! genericSpecializations3.ts(28,1): error TS2012: Cannot convert 'StringFoo2' to 'IntFoo':
+!!! 	Types of property 'foo' of types 'StringFoo2' and 'IntFoo' are incompatible:
+!!! 		Call signatures of types '(x: string) => string' and '(x: number) => number' are incompatible.
+    stringFoo2 = intFoo; // error
+    ~~~~~~~~~~
+!!! genericSpecializations3.ts(29,1): error TS2012: Cannot convert 'IntFoo' to 'StringFoo2':
+!!! 	Types of property 'foo' of types 'IntFoo' and 'StringFoo2' are incompatible:
+!!! 		Call signatures of types '(x: number) => number' and '(x: string) => string' are incompatible.
+    
+    
+    class StringFoo3 implements IFoo<string> { // error
+        foo<T>(x: T): T { return null; }
+    }
+    var stringFoo3: StringFoo3;

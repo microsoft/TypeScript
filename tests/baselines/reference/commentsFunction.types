@@ -1,0 +1,70 @@
+=== tests/cases/compiler/commentsFunction.ts ===
+
+/** This comment should appear for foo*/
+function foo() {
+>foo : typeof foo
+}
+foo();
+>foo() : void
+>foo : typeof foo
+
+/** This is comment for function signature*/
+function fooWithParameters(/** this is comment about a*/a: string,
+>fooWithParameters : typeof fooWithParameters
+>a : string
+
+    /** this is comment for b*/
+>/** this is comment for b*/
+    b : number
+
+    b: number) {
+    var d = a;
+>d : string
+>a : string
+}
+fooWithParameters("a", 10);
+>fooWithParameters("a", 10) : void
+>fooWithParameters : typeof fooWithParameters
+
+/** fooFunc
+ * comment
+ */
+var fooFunc = function FooFunctionValue(/** fooFunctionValue param */ b: string) {
+>fooFunc : (b: string) => string
+>function FooFunctionValue(/** fooFunctionValue param */ b: string) {
+    return b;
+} : (b: string) => string
+>FooFunctionValue : (b: string) => string
+>b : string
+
+    return b;
+>b : string
+}
+
+/// lamdaFoo var comment
+var lambdaFoo = /** this is lambda comment*/ (/**param a*/a: number, /**param b*/b: number) => a + b;
+>lambdaFoo : (a: number, b: number) => number
+>(/**param a*/a: number, /**param b*/b: number) => a + b : (a: number, b: number) => number
+>a : number
+>b : number
+>a + b : number
+>a : number
+>b : number
+
+var lambddaNoVarComment = /** this is lambda multiplication*/ (/**param a*/a: number, /**param b*/b: number) => a * b;
+>lambddaNoVarComment : (a: number, b: number) => number
+>(/**param a*/a: number, /**param b*/b: number) => a * b : (a: number, b: number) => number
+>a : number
+>b : number
+>a * b : number
+>a : number
+>b : number
+
+lambdaFoo(10, 20);
+>lambdaFoo(10, 20) : number
+>lambdaFoo : (a: number, b: number) => number
+
+lambddaNoVarComment(10, 20);
+>lambddaNoVarComment(10, 20) : number
+>lambddaNoVarComment : (a: number, b: number) => number
+

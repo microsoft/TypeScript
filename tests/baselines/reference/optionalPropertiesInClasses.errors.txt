@@ -1,0 +1,21 @@
+==== tests/cases/compiler/optionalPropertiesInClasses.ts (1 errors) ====
+    interface ifoo {
+        x?:number;
+        y:number;
+    }
+    
+    class C1 implements ifoo {
+        public y:number;
+    }
+    
+    class C2 implements ifoo { // ERROR - still need 'y'
+          ~~
+!!! optionalPropertiesInClasses.ts(10,7): error TS2137: Class C2 declares interface ifoo but does not implement it:
+!!! 	Type 'C2' is missing property 'y' from type 'ifoo'.
+        public x:number;
+    }
+    
+    class C3 implements ifoo {
+        public x:number;
+        public y:number;
+    }

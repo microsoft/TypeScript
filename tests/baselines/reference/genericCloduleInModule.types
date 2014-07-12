@@ -1,0 +1,34 @@
+=== tests/cases/compiler/genericCloduleInModule.ts ===
+// BUG 756210
+module A {
+>A : A
+
+    export class B<T> {
+>B : B<T>
+>T : T
+
+        foo() { }
+>foo : () => void
+
+        static bar() { }
+>bar : () => void
+    }
+    export module B {
+>B : B
+
+        export var x = 1;
+>x : number
+    }
+}
+
+var b: A.B<number>;
+>b : A.B<number>
+>A : A
+>B : A.B<T>
+
+b.foo();
+>b.foo() : void
+>b.foo : () => void
+>b : A.B<number>
+>foo : () => void
+

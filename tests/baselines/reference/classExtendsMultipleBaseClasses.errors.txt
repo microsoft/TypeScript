@@ -1,0 +1,6 @@
+==== tests/cases/compiler/classExtendsMultipleBaseClasses.ts (1 errors) ====
+    class A { }
+    class B { }
+    class C extends A,B { }
+            ~~~~~~~~~~~
+!!! classExtendsMultipleBaseClasses.ts(3,9): error TS1026: Classes can only extend a single class.

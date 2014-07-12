@@ -1,0 +1,29 @@
+==== tests/cases/compiler/superCallArgsMustMatch.ts (2 errors) ====
+    class T5<T>{
+    
+        public foo: T;
+    
+        constructor(public bar: T) { }
+    
+    }
+    
+     
+    
+    class T6 extends T5<number>{
+    
+        constructor() {
+    
+            super("hi"); // Should error, base constructor has type T for first arg, which is fixed as number in the extends clause
+            ~~~~~
+!!! superCallArgsMustMatch.ts(15,9): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Could not apply type 'number' to argument 1 which is of type 'string'.
+            ~~~~~
+!!! superCallArgsMustMatch.ts(15,9): error TS2087: Could not select overload for 'call' expression.
+    
+            var x: number = this.foo;
+    
+        }
+    
+    }
+    
+    

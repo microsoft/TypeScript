@@ -1,0 +1,21 @@
+==== tests/cases/compiler/assignmentCompatWithObjectMembers5.ts (2 errors) ====
+    class C {
+        foo: string;
+    }
+    
+    var c: C;
+    
+    interface I {
+        fooo: string;
+    }
+    
+    var i: I;
+    
+    c = i; // error
+    ~
+!!! assignmentCompatWithObjectMembers5.ts(13,1): error TS2012: Cannot convert 'I' to 'C':
+!!! 	Type 'I' is missing property 'foo' from type 'C'.
+    i = c; // error
+    ~
+!!! assignmentCompatWithObjectMembers5.ts(14,1): error TS2012: Cannot convert 'C' to 'I':
+!!! 	Type 'C' is missing property 'fooo' from type 'I'.

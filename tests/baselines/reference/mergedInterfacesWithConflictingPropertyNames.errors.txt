@@ -1,0 +1,51 @@
+==== tests/cases/compiler/mergedInterfacesWithConflictingPropertyNames.ts (3 errors) ====
+    interface A {
+        x: string; // error
+    }
+    
+    interface A {
+        x: number;
+        ~
+!!! mergedInterfacesWithConflictingPropertyNames.ts(6,5): error TS2000: Duplicate identifier 'x'. Additional locations:
+!!! 	mergedInterfacesWithConflictingPropertyNames.ts(2,5)
+    }
+    
+    module M {
+        interface A<T> {
+            x: T;
+        }
+    
+        interface A<T> {
+            x: number;  // error
+            ~
+!!! mergedInterfacesWithConflictingPropertyNames.ts(15,9): error TS2000: Duplicate identifier 'x'. Additional locations:
+!!! 	mergedInterfacesWithConflictingPropertyNames.ts(11,9)
+        }
+    }
+    
+    module M2 {
+        interface A<T> {
+            x: T;
+        }   
+    }
+    
+    module M2 {
+        interface A<T> {
+            x: number;  // ok, different declaration space than other M2
+        }
+    }
+    
+    module M3 {
+        export interface A<T> {
+            x: T;
+        }
+    }
+    
+    module M3 {
+        export interface A<T> {
+            x: number;  // error
+            ~
+!!! mergedInterfacesWithConflictingPropertyNames.ts(39,9): error TS2000: Duplicate identifier 'x'. Additional locations:
+!!! 	mergedInterfacesWithConflictingPropertyNames.ts(33,9)
+        }
+    }

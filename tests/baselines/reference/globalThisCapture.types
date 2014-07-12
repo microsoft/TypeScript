@@ -1,0 +1,23 @@
+=== tests/cases/compiler/globalThisCapture.ts ===
+// Add a lambda to ensure global 'this' capture is triggered
+>// Add a lambda to ensure global 'this' capture is triggered
+(()=>this.window) : () => any
+
+(()=>this.window);
+>()=>this.window : () => any
+>this.window : any
+>this : any
+>window : any
+
+var parts = [];
+>parts : any[]
+>[] : any[]
+
+>// Ensure that the generated code is correct
+parts[0] : any
+>// Ensure that the generated code is correct
+parts : any[]
+
+// Ensure that the generated code is correct
+parts[0];
+

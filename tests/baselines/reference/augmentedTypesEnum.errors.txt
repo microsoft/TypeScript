@@ -1,0 +1,55 @@
+==== tests/cases/compiler/augmentedTypesEnum.ts (7 errors) ====
+    // enum then var
+    enum e1111 { One }
+    var e1111 = 1; // error
+        ~~~~~
+!!! augmentedTypesEnum.ts(3,5): error TS2000: Duplicate identifier 'e1111'. Additional locations:
+!!! 	augmentedTypesEnum.ts(2,1)
+    
+    // enum then function
+    enum e2 { One }
+    function e2() { } // error
+             ~~
+!!! augmentedTypesEnum.ts(7,10): error TS2000: Duplicate identifier 'e2'. Additional locations:
+!!! 	augmentedTypesEnum.ts(6,1)
+    
+    enum e3 { One }
+    var e3 = () => { } // error
+        ~~
+!!! augmentedTypesEnum.ts(10,5): error TS2000: Duplicate identifier 'e3'. Additional locations:
+!!! 	augmentedTypesEnum.ts(9,1)
+    
+    // enum then class
+    enum e4 { One }
+    class e4 { public foo() { } } // error
+          ~~
+!!! augmentedTypesEnum.ts(14,7): error TS2000: Duplicate identifier 'e4'. Additional locations:
+!!! 	augmentedTypesEnum.ts(13,1)
+    
+    // enum then enum
+    enum e5 { One }
+    enum e5 { Two }
+              ~~~
+!!! augmentedTypesEnum.ts(18,11): error TS4024: In enums with multiple declarations only one declaration can omit an initializer for the first enum element.
+    
+    enum e5a { One }
+    enum e5a { One } // error
+               ~~~
+!!! augmentedTypesEnum.ts(21,12): error TS2000: Duplicate identifier 'One'. Additional locations:
+!!! 	augmentedTypesEnum.ts(20,12)
+               ~~~
+!!! augmentedTypesEnum.ts(21,12): error TS4024: In enums with multiple declarations only one declaration can omit an initializer for the first enum element.
+    
+    // enum then internal module
+    enum e6 { One } 
+    module e6 { } // ok
+    
+    enum e6a { One }
+    module e6a { var y = 2; } // should be error
+    
+    enum e6b { One }
+    module e6b { export var y = 2; } // should be error
+    
+    // enum then import, messes with error reporting
+    //enum e7 { One }
+    //import e7 = require(''); // should be error

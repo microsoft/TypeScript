@@ -1,0 +1,14 @@
+!!!
+html
+  head
+    title ImageBoard
+    link(rel='stylesheet', href='http://cachedcommons.org/cache/960/0.0.0/stylesheets/960.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    #header.container_12
+      #fb-root
+      script(src='http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js')
+      script(src='http://connect.facebook.net/en_US/all.js')
+      script(src='/javascripts/fb.js')
+    #container.container_12!= body
+      block mainContent

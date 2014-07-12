@@ -1,0 +1,10 @@
+==== tests/cases/compiler/overloadOnConstInObjectLiteralImplementingAnInterface.ts (2 errors) ====
+    interface I {
+        x1(a: number, callback: (x: 'hi') => number);
+                                ~~~~~~~~~~~~~~~~~~~
+!!! overloadOnConstInObjectLiteralImplementingAnInterface.ts(2,29): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+    }
+    
+    var i2: I = { x1: (a: number, cb: (x: 'hi') => number) => { } }; // error
+                                      ~~~~~~~~~~~~~~~~~~~
+!!! overloadOnConstInObjectLiteralImplementingAnInterface.ts(5,35): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.

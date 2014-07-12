@@ -1,0 +1,11 @@
+==== tests/cases/compiler/overridingPrivateStaticMembers.ts (1 errors) ====
+    class Base2 {
+        private static y: { foo: string };
+    }
+     
+    class Derived2 extends Base2 {
+          ~~~~~~~~
+!!! overridingPrivateStaticMembers.ts(5,7): error TS2141: Class 'Derived2' cannot extend class 'Base2':
+!!! 	Types 'Derived2' and 'Base2' define static property 'y' as private.
+        private static y: { foo: string; bar: string; };
+    }

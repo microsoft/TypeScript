@@ -1,0 +1,21 @@
+=== tests/cases/compiler/innerBoundLambdaEmit.ts ===
+module M {
+>M : M
+
+    export class Foo {
+>Foo : Foo
+    }
+    var bar = () => { };
+>bar : () => void
+>() => { } : () => void
+}
+interface Array<T> {
+>Array : Array<T>
+>T : T
+
+    toFoo(): M.Foo
+>toFoo : () => M.Foo
+>M : M
+>Foo : M.Foo
+}
+

@@ -1,0 +1,18 @@
+=== tests/cases/compiler/typeInferenceWithTypeAnnotation.ts ===
+declare function f<T>(p: (t: T) => T): T;
+>f : typeof f
+>T : T
+>p : (t: T) => T
+>t : T
+>T : T
+>T : T
+>T : T
+
+>f((n: number) => n) : number
+>f : typeof f
+
+f((n: number) => n); 
+>(n: number) => n : (n: number) => number
+>n : number
+>n : number
+

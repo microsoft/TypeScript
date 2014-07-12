@@ -1,0 +1,37 @@
+=== tests/cases/compiler/bestCommonTypeReturnStatement.ts ===
+// bug 804258: cannot determine return type
+interface IPromise<T> {
+>IPromise : IPromise<T>
+>T : T
+
+    then(successCallback: (promiseValue: T) => any, errorCallback?: (reason: any) => any): IPromise<any>;
+>then : (successCallback: (promiseValue: T) => any, errorCallback?: (reason: any) => any) => IPromise<any>
+>successCallback : (promiseValue: T) => any
+>promiseValue : T
+>T : T
+>errorCallback : (reason: any) => any
+>reason : any
+>IPromise : IPromise<T>
+}
+
+function f() {
+>f : typeof f
+
+    if (true) return b();
+>b() : IPromise<void>
+>b : typeof b
+
+    return d();
+>d() : IPromise<any>
+>d : typeof d
+}
+
+
+function b(): IPromise<void> { return null; }
+>b : typeof b
+>IPromise : IPromise<T>
+
+function d(): IPromise<any> { return null; }
+>d : typeof d
+>IPromise : IPromise<T>
+

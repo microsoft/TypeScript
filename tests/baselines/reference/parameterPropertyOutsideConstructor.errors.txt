@@ -1,0 +1,7 @@
+==== tests/cases/compiler/parameterPropertyOutsideConstructor.ts (1 errors) ====
+    class C {
+        foo(public x) {
+            ~~~~~~
+!!! parameterPropertyOutsideConstructor.ts(2,9): error TS1040: Parameter property declarations can only be used in a non-ambient constructor declaration.
+        }
+    }

@@ -1,0 +1,37 @@
+==== tests/cases/compiler/augmentedTypesClass2.ts (2 errors) ====
+    // Checking class with other things in type space not value space
+    
+    // class then interface
+    class c11 {
+        foo() {
+            return 1;
+        }
+    }
+    
+    interface c11 { // error
+              ~~~
+!!! augmentedTypesClass2.ts(10,11): error TS2000: Duplicate identifier 'c11'. Additional locations:
+!!! 	augmentedTypesClass2.ts(4,1)
+        bar(): void;
+    }
+    
+    // class then class - covered
+    // class then enum 
+    class c33 {
+        foo() {
+            return 1;
+        }
+    }
+    enum c33 { One };
+         ~~~
+!!! augmentedTypesClass2.ts(21,6): error TS2000: Duplicate identifier 'c33'. Additional locations:
+!!! 	augmentedTypesClass2.ts(16,1)
+    
+    // class then import
+    class c44 {
+        foo() {
+            return 1;
+        }
+    }
+    
+    //import c44 = require(''); // BUG?: not currently allowed

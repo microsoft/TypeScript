@@ -1,0 +1,35 @@
+==== tests/cases/compiler/inheritedStringIndexersFromDifferentBaseTypes.ts (2 errors) ====
+    // string indexer tests
+    interface A {
+        [s: string]: number;
+    }
+    interface B {
+        [s: string]: number;
+    }
+    interface C extends A, B { } // ok
+    
+    interface D {
+        [s: string]: string;
+    }
+    interface E extends A, D { } // error
+              ~
+!!! inheritedStringIndexersFromDifferentBaseTypes.ts(13,11): error TS2189: Interface 'E' cannot simultaneously extend types 'A' and 'D':
+!!! Types of string indexer of types 'A' and 'D' are not identical.
+    
+    
+    // Same tests for number indexer
+    interface A2 {
+        [s: number]: number;
+    }
+    interface B2 {
+        [s: number]: number;
+    }
+    interface C2 extends A2, B2 { } // ok
+    
+    interface D2 {
+        [s: number]: string;
+    }
+    interface E2 extends A2, D2 { } // error
+              ~~
+!!! inheritedStringIndexersFromDifferentBaseTypes.ts(28,11): error TS2189: Interface 'E2' cannot simultaneously extend types 'A2' and 'D2':
+!!! Types of number indexer of types 'A2' and 'D2' are not identical.

@@ -1,0 +1,79 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "diagnostics": [
+        {
+            "start": 9,
+            "length": 1,
+            "diagnosticCode": "Identifier expected."
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 10,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ExportAssignment",
+                "fullWidth": 10,
+                "isIncrementallyUnusable": true,
+                "exportKeyword": {
+                    "kind": "ExportKeyword",
+                    "width": 6,
+                    "fullWidth": 7,
+                    "text": "export",
+                    "value": "export",
+                    "valueText": "export",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "text": " "
+                        }
+                    ]
+                },
+                "equalsToken": {
+                    "kind": "EqualsToken",
+                    "width": 1,
+                    "fullWidth": 2,
+                    "text": "=",
+                    "value": "=",
+                    "valueText": "=",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "text": " "
+                        }
+                    ]
+                },
+                "identifier": {
+                    "kind": "IdentifierName",
+                    "width": 0,
+                    "text": ""
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 10
+    }
+}

@@ -1,0 +1,20 @@
+==== tests/cases/compiler/superWithTypeArgument3.ts (3 errors) ====
+    class C<T> {
+        foo: T;
+        bar<U>(x: U) { }
+    }
+    
+    class D<T> extends C<T> {
+        constructor() {
+        ~~~~~~~~~~~
+!!! superWithTypeArgument3.ts(7,5): error TS2105: Constructors for derived classes must contain a 'super' call.
+            super<T>();
+                 ~
+!!! superWithTypeArgument3.ts(8,14): error TS1005: '.' expected.
+                 
+!!! superWithTypeArgument3.ts(8,14): error TS2158: Untyped function calls may not accept type arguments.
+        }
+        bar() {
+            super.bar<T>(null);
+        }
+    }

@@ -1,0 +1,22 @@
+=== tests/cases/compiler/additionOperatorWithOnlyNullValueOrUndefinedValue.ts ===
+// bug 819721
+var r1 = null + null;
+>r1 : any
+>null + null : any
+
+var r2 = null + undefined;
+>r2 : any
+>null + undefined : any
+>undefined : any
+
+var r3 = undefined + null;
+>r3 : any
+>undefined + null : any
+>undefined : any
+
+var r4 = undefined + undefined;
+>r4 : any
+>undefined + undefined : any
+>undefined : any
+>undefined : any
+

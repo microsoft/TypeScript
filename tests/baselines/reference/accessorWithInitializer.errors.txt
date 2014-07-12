@@ -1,0 +1,11 @@
+==== tests/cases/compiler/accessorWithInitializer.ts (2 errors) ====
+    // target: es5
+    
+    class C {
+        set X(v = 0) { }
+             ~~~~~
+!!! accessorWithInitializer.ts(4,10): error TS1052: 'set' accessor parameter cannot have an initializer.
+        static set X(v2 = 0) { }
+                    ~~~~~~
+!!! accessorWithInitializer.ts(5,17): error TS1052: 'set' accessor parameter cannot have an initializer.
+    }

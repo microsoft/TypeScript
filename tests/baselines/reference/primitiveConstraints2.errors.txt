@@ -1,0 +1,17 @@
+==== tests/cases/compiler/primitiveConstraints2.ts (3 errors) ====
+    class C<T> {
+       public bar2<U extends T>(x: T, y: U): T {
+          return null;
+         }
+    }
+     
+    var x = new C<number>();
+    x.bar2(2, ""); // should error
+      ~~~~
+!!! primitiveConstraints2.ts(8,3): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Could not apply type 'number' to argument 2 which is of type 'string'.
+      ~~~~
+!!! primitiveConstraints2.ts(8,3): error TS2087: Could not select overload for 'call' expression.
+    x.bar2<string>(2, ""); // should error
+      ~~~~
+!!! primitiveConstraints2.ts(9,3): error TS2086: Type 'string' does not satisfy the constraint 'number' for type parameter 'U extends number'.

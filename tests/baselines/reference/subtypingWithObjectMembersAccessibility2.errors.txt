@@ -1,0 +1,80 @@
+==== tests/cases/compiler/subtypingWithObjectMembersAccessibility2.ts (6 errors) ====
+    // Derived member is private, base member is not causes errors
+    
+    class Base {
+        foo: string;
+    }
+    
+    class Derived extends Base {
+        bar: string;
+    }
+    
+    module ExplicitPublic {
+        class A {
+            private foo: Base;
+        }
+    
+        class B extends A {
+              ~
+!!! subtypingWithObjectMembersAccessibility2.ts(16,11): error TS2141: Class 'ExplicitPublic.B' cannot extend class 'ExplicitPublic.A':
+!!! 	Property 'foo' defined as public in type 'B' is defined as private in type 'A'.
+            public foo: Derived; // error
+        }
+    
+        class A2 {
+            private 1: Base;
+        }
+    
+        class B2 extends A2 {
+              ~~
+!!! subtypingWithObjectMembersAccessibility2.ts(24,11): error TS2141: Class 'ExplicitPublic.B2' cannot extend class 'ExplicitPublic.A2':
+!!! 	Property '1' defined as public in type 'B2' is defined as private in type 'A2'.
+            public 1: Derived; // error
+        }
+    
+        class A3 {
+            private '1': Base;
+        }
+    
+        class B3 extends A3 {
+              ~~
+!!! subtypingWithObjectMembersAccessibility2.ts(32,11): error TS2141: Class 'ExplicitPublic.B3' cannot extend class 'ExplicitPublic.A3':
+!!! 	Property ''1'' defined as public in type 'B3' is defined as private in type 'A3'.
+            public '1': Derived; // error
+        }
+    }
+    
+    module ImplicitPublic {
+        class A {
+            private foo: Base;
+        }
+    
+        class B extends A {
+              ~
+!!! subtypingWithObjectMembersAccessibility2.ts(42,11): error TS2141: Class 'ImplicitPublic.B' cannot extend class 'ImplicitPublic.A':
+!!! 	Property 'foo' defined as public in type 'B' is defined as private in type 'A'.
+            foo: Derived; // error
+        }
+    
+        class A2 {
+            private 1: Base;
+        }
+    
+        class B2 extends A2 {
+              ~~
+!!! subtypingWithObjectMembersAccessibility2.ts(50,11): error TS2141: Class 'ImplicitPublic.B2' cannot extend class 'ImplicitPublic.A2':
+!!! 	Property '1' defined as public in type 'B2' is defined as private in type 'A2'.
+            1: Derived; // error
+        }
+    
+        class A3 {
+            private '1': Base;
+        }
+    
+        class B3 extends A3 {
+              ~~
+!!! subtypingWithObjectMembersAccessibility2.ts(58,11): error TS2141: Class 'ImplicitPublic.B3' cannot extend class 'ImplicitPublic.A3':
+!!! 	Property ''1'' defined as public in type 'B3' is defined as private in type 'A3'.
+            '1': Derived; // error
+        }
+    }

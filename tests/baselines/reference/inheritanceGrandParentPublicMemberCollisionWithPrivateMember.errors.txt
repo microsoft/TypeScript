@@ -1,0 +1,14 @@
+==== tests/cases/compiler/inheritanceGrandParentPublicMemberCollisionWithPrivateMember.ts (1 errors) ====
+    class A {
+        public myMethod() { }
+    }
+    
+    class B extends A { }
+    
+    class C extends B {
+          ~
+!!! inheritanceGrandParentPublicMemberCollisionWithPrivateMember.ts(7,7): error TS2141: Class 'C' cannot extend class 'B':
+!!! 	Property 'myMethod' defined as private in type 'C' is defined as public in type 'A'.
+        private myMethod() { }
+    }
+    

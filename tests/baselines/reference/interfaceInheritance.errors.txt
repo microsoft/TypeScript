@@ -1,0 +1,53 @@
+==== tests/cases/compiler/interfaceInheritance.ts (4 errors) ====
+    interface I1 {
+        i1P1: number;
+        i1P2(): void;
+    }
+    
+    interface I2 extends I1 {
+        i2P1: string;
+    }
+    
+    interface I3 {
+        i2P1: string; // has a member from i2P1, but not from I1
+    }
+    
+    interface I4 {
+        one: number;
+    }
+    
+    interface I5 {
+        one: string;
+    }
+    
+    class C1 implements I2 { // should be an error - it doesn't implement the members of I1
+          ~~
+!!! interfaceInheritance.ts(22,7): error TS2137: Class C1 declares interface I2 but does not implement it:
+!!! 	Type 'C1' is missing property 'i1P1' from type 'I2'.
+        public i2P1: string;
+    }
+    
+    var i2: I2;
+    var i1: I1;
+    var i3: I3;
+    i1 = i2;
+    i2 = i3; // should be an error - i3 does not implement the members of i1
+    ~~
+!!! interfaceInheritance.ts(30,1): error TS2012: Cannot convert 'I3' to 'I2':
+!!! 	Type 'I3' is missing property 'i1P1' from type 'I2'.
+    
+    var c1: C1;
+    
+    var i4: I4;
+    var i5: I5;
+    
+    i4 = i5; // should be an error
+    ~~
+!!! interfaceInheritance.ts(37,1): error TS2012: Cannot convert 'I5' to 'I4':
+!!! 	Types of property 'one' of types 'I5' and 'I4' are incompatible.
+    i5 = i4; // should be an error
+    ~~
+!!! interfaceInheritance.ts(38,1): error TS2012: Cannot convert 'I4' to 'I5':
+!!! 	Types of property 'one' of types 'I4' and 'I5' are incompatible.
+    
+    

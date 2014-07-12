@@ -1,0 +1,35 @@
+==== tests/cases/compiler/accessorsInAmbientContext.ts (8 errors) ====
+    
+    declare module M {
+        class C {
+            get X() { return 1; }
+            ~~~~~~~~~~~~~~~~~~~~~
+!!! accessorsInAmbientContext.ts(4,9): error TS1086: Accessors are not allowed in ambient contexts.
+            set X(v) { }
+            ~~~~~~~~~~~~
+!!! accessorsInAmbientContext.ts(5,9): error TS1086: Accessors are not allowed in ambient contexts.
+    
+            static get Y() { return 1; }
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! accessorsInAmbientContext.ts(7,9): error TS1086: Accessors are not allowed in ambient contexts.
+            static set Y(v) { }
+            ~~~~~~~~~~~~~~~~~~~
+!!! accessorsInAmbientContext.ts(8,9): error TS1086: Accessors are not allowed in ambient contexts.
+        }
+    }
+    
+    declare class C {
+        get X() { return 1; }
+        ~~~~~~~~~~~~~~~~~~~~~
+!!! accessorsInAmbientContext.ts(13,5): error TS1086: Accessors are not allowed in ambient contexts.
+        set X(v) { }
+        ~~~~~~~~~~~~
+!!! accessorsInAmbientContext.ts(14,5): error TS1086: Accessors are not allowed in ambient contexts.
+    
+        static get Y() { return 1; }
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! accessorsInAmbientContext.ts(16,5): error TS1086: Accessors are not allowed in ambient contexts.
+        static set Y(v) { }
+        ~~~~~~~~~~~~~~~~~~~
+!!! accessorsInAmbientContext.ts(17,5): error TS1086: Accessors are not allowed in ambient contexts.
+    }

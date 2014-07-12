@@ -1,0 +1,119 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "diagnostics": [
+        {
+            "start": 3,
+            "length": 1,
+            "diagnosticCode": "'{0}' expected.",
+            "arguments": [
+                ";"
+            ]
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 14,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullWidth": 4,
+                "isIncrementallyUnusable": true,
+                "expression": {
+                    "kind": "PostDecrementExpression",
+                    "fullWidth": 4,
+                    "isIncrementallyUnusable": true,
+                    "operand": {
+                        "kind": "IdentifierName",
+                        "width": 1,
+                        "text": "a",
+                        "value": "a",
+                        "valueText": "a"
+                    },
+                    "operatorToken": {
+                        "kind": "MinusMinusToken",
+                        "width": 2,
+                        "fullWidth": 3,
+                        "text": "--",
+                        "value": "--",
+                        "valueText": "--",
+                        "hasTrailingTrivia": true,
+                        "hasTrailingSkippedText": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "SkippedTokenTrivia",
+                                "skippedToken": {
+                                    "kind": "DotToken",
+                                    "width": 1,
+                                    "text": ".",
+                                    "value": ".",
+                                    "valueText": "."
+                                }
+                            }
+                        ]
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 0,
+                    "text": ""
+                }
+            },
+            {
+                "kind": "ExpressionStatement",
+                "fullWidth": 10,
+                "isIncrementallyUnusable": true,
+                "expression": {
+                    "kind": "InvocationExpression",
+                    "fullWidth": 10,
+                    "expression": {
+                        "kind": "IdentifierName",
+                        "width": 8,
+                        "text": "toString",
+                        "value": "toString",
+                        "valueText": "toString"
+                    },
+                    "argumentList": {
+                        "kind": "ArgumentList",
+                        "fullWidth": 2,
+                        "openParenToken": {
+                            "kind": "OpenParenToken",
+                            "width": 1,
+                            "text": "(",
+                            "value": "(",
+                            "valueText": "("
+                        },
+                        "arguments": [],
+                        "closeParenToken": {
+                            "kind": "CloseParenToken",
+                            "width": 1,
+                            "text": ")",
+                            "value": ")",
+                            "valueText": ")"
+                        }
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 0,
+                    "text": ""
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 14
+    }
+}

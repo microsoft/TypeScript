@@ -1,0 +1,32 @@
+==== tests/cases/compiler/propertyOrdering.ts (4 errors) ====
+    class Foo {
+        constructor(store: string) { }
+          public foo() {
+                return this._store.length;   // shouldn't be an error
+          }
+          public _store = store; // no repro if this is first line in class body
+                          ~~~~~
+!!! propertyOrdering.ts(6,23): error TS2095: Could not find symbol 'store'.
+    
+    
+          public bar() { return this.store; } // should be an error
+                                     ~~~~~
+!!! propertyOrdering.ts(9,34): error TS2094: The property 'store' does not exist on value of type 'Foo'.
+    
+    }
+    
+    class Bar {
+          public foo() {
+    
+                return this._store.length;   // shouldn't be an error
+                            ~~~~~~
+!!! propertyOrdering.ts(16,25): error TS2094: The property '_store' does not exist on value of type 'Bar'.
+    
+          }
+        constructor(store: string) {
+            this._store = store;
+                 ~~~~~~
+!!! propertyOrdering.ts(20,14): error TS2094: The property '_store' does not exist on value of type 'Bar'.
+        }
+    }
+    

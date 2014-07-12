@@ -1,0 +1,65 @@
+==== tests/cases/compiler/interfacedeclWithIndexerErrors.ts (5 errors) ====
+    interface a0 {
+        (): string;
+        (a, b, c?: string): number;
+        
+        new (): string;
+        new (s: string);
+    
+        [n: number]: ()=>string;
+        [s: string]: ()=>string;
+    
+        p1;
+        p2: string;
+        ~~~~~~~~~~
+!!! interfacedeclWithIndexerErrors.ts(12,5): error TS2172: All named properties must be assignable to string indexer type '() => string':
+!!! 	Type '() => string' requires a call signature, but type 'String' lacks one.
+        p3?;
+        p4?: number;
+        ~~~~~~~~~~~
+!!! interfacedeclWithIndexerErrors.ts(14,5): error TS2172: All named properties must be assignable to string indexer type '() => string':
+!!! 	Type '() => string' requires a call signature, but type 'Number' lacks one.
+        p5: (s: number) =>string;
+        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! interfacedeclWithIndexerErrors.ts(15,5): error TS2172: All named properties must be assignable to string indexer type '() => string':
+!!! 	Call signatures of types '(s: number) => string' and '() => string' are incompatible:
+!!! 		Call signature expects 0 or fewer parameters.
+    
+        f1();
+        f2? ();
+        f3(a: string): number;
+        ~~~~~~~~~~~~~~~~~~~~~
+!!! interfacedeclWithIndexerErrors.ts(19,5): error TS2172: All named properties must be assignable to string indexer type '() => string':
+!!! 	Call signatures of types '(a: string) => number' and '() => string' are incompatible:
+!!! 		Call signature expects 0 or fewer parameters.
+        f4? (s: number): string;
+        ~~~~~~~~~~~~~~~~~~~~~~~
+!!! interfacedeclWithIndexerErrors.ts(20,5): error TS2172: All named properties must be assignable to string indexer type '() => string':
+!!! 	Call signatures of types '(s: number) => string' and '() => string' are incompatible:
+!!! 		Call signature expects 0 or fewer parameters.
+    }
+    
+    
+    interface a1 {
+        [n: number]: number;
+    }
+    
+    interface a2 {
+        [s: string]: number;
+    }
+    
+    interface a {
+    }
+    
+    interface b extends a {
+    }
+    
+    interface c extends a, b {
+    }
+    
+    interface d extends a {
+    }
+    
+    class c1 implements a {
+    }
+    var instance2 = new c1();

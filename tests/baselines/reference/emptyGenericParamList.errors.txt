@@ -1,0 +1,5 @@
+==== tests/cases/compiler/emptyGenericParamList.ts (1 errors) ====
+    class I<T> {}
+    var x: I<>;
+             ~
+!!! emptyGenericParamList.ts(2,10): error TS1008: Unexpected token; 'identifier' expected.

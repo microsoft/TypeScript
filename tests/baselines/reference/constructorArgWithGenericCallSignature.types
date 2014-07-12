@@ -1,0 +1,46 @@
+=== tests/cases/compiler/constructorArgWithGenericCallSignature.ts ===
+module Test {
+>Test : Test
+
+    export interface MyFunc {
+>MyFunc : MyFunc
+
+        <T>(value1: T): T;
+>T : T
+>value1 : T
+>T : T
+>T : T
+    }
+    export class MyClass {
+>MyClass : MyClass
+
+        constructor(func: MyFunc) { }
+>func : MyFunc
+>MyFunc : MyFunc
+    }
+ 
+ export function F(func: MyFunc) { }
+>F : typeof F
+>func : MyFunc
+>MyFunc : MyFunc
+}
+var func: Test.MyFunc;
+>func : Test.MyFunc
+>Test : Test
+>MyFunc : Test.MyFunc
+
+Test.F(func); // OK
+>Test.F(func) : void
+>Test.F : typeof Test.F
+>Test : typeof Test
+>F : typeof Test.F
+>func : Test.MyFunc
+
+var test = new Test.MyClass(func); // Should be OK
+>test : Test.MyClass
+>new Test.MyClass(func) : Test.MyClass
+>Test.MyClass : typeof Test.MyClass
+>Test : typeof Test
+>MyClass : typeof Test.MyClass
+>func : Test.MyFunc
+

@@ -1,0 +1,34 @@
+=== tests/cases/compiler/instanceMemberInitialization.ts ===
+class C {
+>C : C
+
+    x = 1;
+>x : number
+}
+
+var c = new C();
+>c : C
+>new C() : C
+>C : typeof C
+
+c.x = 3;
+>c.x = 3 : number
+>c.x : number
+>c : C
+>x : number
+
+var c2 = new C();
+>c2 : C
+>new C() : C
+>C : typeof C
+
+var r = c.x === c2.x;
+>r : boolean
+>c.x === c2.x : boolean
+>c.x : number
+>c : C
+>x : number
+>c2.x : number
+>c2 : C
+>x : number
+

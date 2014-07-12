@@ -1,0 +1,241 @@
+=== tests/cases/compiler/throwStatements.ts ===
+// all legal
+
+interface I {
+>I : I
+
+    id: number;
+>id : number
+}
+
+class C implements I {
+>C : C
+>I : I
+
+    id: number;
+>id : number
+}
+
+class D<T>{
+>D : D<T>
+>T : T
+
+    source: T;
+>source : T
+>T : T
+
+    recurse: D<T>;
+>recurse : D<T>
+>D : D<T>
+>T : T
+
+    wrapped: D<D<T>>
+>wrapped : D<D<T>>
+>D : D<T>
+>D : D<T>
+>T : T
+}
+
+function F(x: string): number { return 42; }
+>F : typeof F
+>x : string
+
+module M {
+>M : M
+
+    export class A {
+>A : A
+
+        name: string;
+>name : string
+    }
+
+    export function F2(x: number): string { return x.toString(); }
+>F2 : typeof F2
+>x : number
+>x.toString() : string
+>x.toString : (radix?: number) => string
+>x : number
+>toString : (radix?: number) => string
+}
+
+var aNumber = 9.9;
+>aNumber : number
+
+throw aNumber;
+>aNumber : number
+
+var aString = 'this is a string';
+>aString : string
+
+throw aString;
+>aString : string
+
+var aDate = new Date(12);
+>aDate : Date
+>new Date(12) : Date
+>Date : { prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; (): string; new(): Date; new(value: number): Date; new(value: string): Date; new(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; }
+
+throw aDate;
+>aDate : Date
+
+var anObject = new Object();
+>anObject : Object
+>new Object() : Object
+>Object : { prototype: Object; getPrototypeOf(o: any): any; getOwnPropertyDescriptor(o: any, p: string): PropertyDescriptor; getOwnPropertyNames(o: any): string[]; create(o: any, properties?: PropertyDescriptorMap): any; defineProperty(o: any, p: string, attributes: PropertyDescriptor): any; defineProperties(o: any, properties: PropertyDescriptorMap): any; seal(o: any): any; freeze(o: any): any; preventExtensions(o: any): any; isSealed(o: any): boolean; isFrozen(o: any): boolean; isExtensible(o: any): boolean; keys(o: any): string[]; (): any; (value: any): any; new(value?: any): Object; }
+
+throw anObject;
+>anObject : Object
+
+var anAny = null;
+>anAny : any
+
+throw anAny;
+>anAny : any
+
+var anOtherAny = <any> new C();
+>anOtherAny : any
+><any> new C() : any
+>new C() : C
+>C : typeof C
+
+throw anOtherAny;
+>anOtherAny : any
+
+var anUndefined = undefined;
+>anUndefined : any
+>undefined : any
+
+throw anUndefined;
+>anUndefined : any
+
+var aClass = new C();
+>aClass : C
+>new C() : C
+>C : typeof C
+
+throw aClass;
+>aClass : C
+
+var aGenericClass = new D<string>();
+>aGenericClass : D<string>
+>new D<string>() : D<string>
+>D : typeof D
+
+throw aGenericClass;
+>aGenericClass : D<string>
+
+var anObjectLiteral = { id: 12 };
+>anObjectLiteral : { id: number; }
+>{ id: 12 } : { id: number; }
+>id : number
+
+throw anObjectLiteral;
+>anObjectLiteral : { id: number; }
+
+var aFunction = F;
+>aFunction : typeof F
+>F : typeof F
+
+throw aFunction;
+>aFunction : typeof F
+
+throw aFunction('');
+>aFunction('') : number
+>aFunction : typeof F
+
+var aLambda = (x) => 2;
+>aLambda : (x: any) => number
+>(x) => 2 : (x: any) => number
+>x : any
+
+throw aLambda;
+>aLambda : (x: any) => number
+
+throw aLambda(1);
+>aLambda(1) : number
+>aLambda : (x: any) => number
+
+var aModule = M;
+>aModule : typeof M
+>M : typeof M
+
+throw aModule;
+>aModule : typeof M
+
+throw typeof M;
+>typeof M : string
+>M : typeof M
+
+var aClassInModule = new M.A();
+>aClassInModule : M.A
+>new M.A() : M.A
+>M.A : typeof M.A
+>M : typeof M
+>A : typeof M.A
+
+throw aClassInModule;
+>aClassInModule : M.A
+
+var aFunctionInModule = M.F2;
+>aFunctionInModule : typeof M.F2
+>M.F2 : typeof M.F2
+>M : typeof M
+>F2 : typeof M.F2
+
+throw aFunctionInModule;
+>aFunctionInModule : typeof M.F2
+
+// no initializer or annotation, so this is an 'any'
+var x;
+>x : any
+
+throw x;
+>x : any
+
+// literals
+throw 0.0;
+throw false;
+throw null;
+throw undefined;
+>undefined : any
+
+throw 'a string';
+throw function () { return 'a string' };
+>function () { return 'a string' } : () => string
+
+throw <T>(x:T) => 42;
+><T>(x:T) => 42 : <T>(x: T) => number
+>T : T
+>x : T
+>T : T
+
+throw { x: 12, y: 13 };
+>{ x: 12, y: 13 } : { x: number; y: number; }
+>x : number
+>y : number
+
+throw [];
+>[] : any[]
+
+throw ['a', ['b']];
+>['a', ['b']] : {}[]
+>['b'] : string[]
+
+throw /[a-z]/;
+throw new Date();
+>new Date() : Date
+>Date : { prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; (): string; new(): Date; new(value: number): Date; new(value: string): Date; new(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; }
+
+throw new C();
+>new C() : C
+>C : typeof C
+
+throw new Object();
+>new Object() : Object
+>Object : { prototype: Object; getPrototypeOf(o: any): any; getOwnPropertyDescriptor(o: any, p: string): PropertyDescriptor; getOwnPropertyNames(o: any): string[]; create(o: any, properties?: PropertyDescriptorMap): any; defineProperty(o: any, p: string, attributes: PropertyDescriptor): any; defineProperties(o: any, properties: PropertyDescriptorMap): any; seal(o: any): any; freeze(o: any): any; preventExtensions(o: any): any; isSealed(o: any): boolean; isFrozen(o: any): boolean; isExtensible(o: any): boolean; keys(o: any): string[]; (): any; (value: any): any; new(value?: any): Object; }
+
+throw new D<number>();
+>new D<number>() : D<number>
+>D : typeof D
+

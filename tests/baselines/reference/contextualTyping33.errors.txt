@@ -1,0 +1,9 @@
+==== tests/cases/compiler/contextualTyping33.ts (2 errors) ====
+    function foo(param: {():number; (i:number):number; }[]) { }; foo([function(){return 1;}, function(){return "foo"}]);
+                                                                 ~~~
+!!! contextualTyping33.ts(1,62): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Types of property 'pop' of types '{}[]' and '{ (): number; (i: number): number; }[]' are incompatible:
+!!! 		Call signatures of types '() => {}' and '() => { (): number; (i: number): number; }' are incompatible:
+!!! 			Type '{ (): number; (i: number): number; }' requires a call signature, but type '{}' lacks one.
+                                                                 ~~~
+!!! contextualTyping33.ts(1,62): error TS2087: Could not select overload for 'call' expression.

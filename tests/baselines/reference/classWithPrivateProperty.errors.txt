@@ -1,0 +1,39 @@
+==== tests/cases/compiler/classWithPrivateProperty.ts (8 errors) ====
+    // accessing any private outside the class is an error
+    
+    class C {
+        private x;
+        private a = '';
+        private b: string = '';
+        private c() { return '' }
+        private d = () => '';
+        private static e;
+        private static f() { return '' }
+        private static g = () => '';
+    }
+    
+    var c = new C();
+    var r1: string = c.x;
+                       ~
+!!! classWithPrivateProperty.ts(15,20): error TS2107: 'C.x' is inaccessible.
+    var r2: string = c.a;
+                       ~
+!!! classWithPrivateProperty.ts(16,20): error TS2107: 'C.a' is inaccessible.
+    var r3: string = c.b;
+                       ~
+!!! classWithPrivateProperty.ts(17,20): error TS2107: 'C.b' is inaccessible.
+    var r4: string = c.c();
+                       ~
+!!! classWithPrivateProperty.ts(18,20): error TS2107: 'C.c' is inaccessible.
+    var r5: string = c.d();
+                       ~
+!!! classWithPrivateProperty.ts(19,20): error TS2107: 'C.d' is inaccessible.
+    var r6: string = C.e;
+                       ~
+!!! classWithPrivateProperty.ts(20,20): error TS2107: 'C.e' is inaccessible.
+    var r7: string = C.f();
+                       ~
+!!! classWithPrivateProperty.ts(21,20): error TS2107: 'C.f' is inaccessible.
+    var r8: string = C.g();
+                       ~
+!!! classWithPrivateProperty.ts(22,20): error TS2107: 'C.g' is inaccessible.

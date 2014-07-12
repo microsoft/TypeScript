@@ -1,0 +1,8 @@
+=== tests/cases/compiler/objectLiteral2.ts ===
+var v30 = {a:1, b:2}, v31;
+>v30 : { a: number; b: number; }
+>{a:1, b:2} : { a: number; b: number; }
+>a : number
+>b : number
+>v31 : any
+

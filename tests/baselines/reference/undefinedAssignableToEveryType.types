@@ -1,0 +1,152 @@
+=== tests/cases/compiler/undefinedAssignableToEveryType.ts ===
+class C {
+>C : C
+
+    foo: string;
+>foo : string
+}
+var ac: C;
+>ac : C
+>C : C
+
+interface I {
+>I : I
+
+    foo: string;
+>foo : string
+}
+var ai: I;
+>ai : I
+>I : I
+
+enum E { A }
+>E : E
+>A : E
+
+var ae: E;
+>ae : E
+>E : E
+
+var b: number = undefined;
+>b : number
+>undefined : any
+
+var c: string = undefined;
+>c : string
+>undefined : any
+
+var d: boolean = undefined;
+>d : boolean
+>undefined : any
+
+var e: Date = undefined;
+>e : Date
+>Date : Date
+>undefined : any
+
+var f: any = undefined;
+>f : any
+>undefined : any
+
+var g: void = undefined;
+>g : void
+>undefined : any
+
+var h: Object = undefined;
+>h : Object
+>Object : Object
+>undefined : any
+
+var i: {} = undefined;
+>i : {}
+>undefined : any
+
+var j: () => {} = undefined;
+>j : () => {}
+>undefined : any
+
+var k: Function = undefined;
+>k : Function
+>Function : Function
+>undefined : any
+
+var l: (x: number) => string = undefined;
+>l : (x: number) => string
+>x : number
+>undefined : any
+
+ac = undefined;
+>ac = undefined : any
+>ac : C
+>undefined : any
+
+ai = undefined;
+>ai = undefined : any
+>ai : I
+>undefined : any
+
+ae = undefined;
+>ae = undefined : any
+>ae : E
+>undefined : any
+
+var m: number[] = undefined;
+>m : number[]
+>undefined : any
+
+var n: { foo: string } = undefined;
+>n : { foo: string; }
+>foo : string
+>undefined : any
+
+var o: <T>(x: T) => T = undefined;
+>o : <T>(x: T) => T
+>T : T
+>x : T
+>T : T
+>T : T
+>undefined : any
+
+var p: Number = undefined;
+>p : Number
+>Number : Number
+>undefined : any
+
+var q: String = undefined;
+>q : String
+>String : String
+>undefined : any
+
+function foo<T, U, V extends Date>(x: T, y: U, z: V) {
+>foo : typeof foo
+>T : T
+>U : U
+>V : V
+>Date : Date
+>x : T
+>T : T
+>y : U
+>U : U
+>z : V
+>V : V
+
+    x = undefined;
+>x = undefined : any
+>x : T
+>undefined : any
+
+    y = undefined;
+>y = undefined : any
+>y : U
+>undefined : any
+
+    z = undefined;
+>z = undefined : any
+>z : V
+>undefined : any
+}
+//function foo<T, U extends T, V extends Date>(x: T, y: U, z: V) {
+//    x = undefined;
+//    y = undefined;
+//    z = undefined;
+//}

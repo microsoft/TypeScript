@@ -1,0 +1,9 @@
+==== tests/cases/compiler/typeParametersInStaticAccessors.ts (2 errors) ====
+    class foo<T> {
+        static get Foo(): () => T { return null; }
+                                ~
+!!! typeParametersInStaticAccessors.ts(2,29): error TS2099: Static members cannot reference class type parameters.
+        static set Bar(v: { v: T }) { }
+                               ~
+!!! typeParametersInStaticAccessors.ts(3,28): error TS2099: Static members cannot reference class type parameters.
+    } 

@@ -1,0 +1,25 @@
+==== tests/cases/compiler/withStatementErrors.ts (3 errors) ====
+    declare var ooo:any;
+    
+    with (ooo.eee.oo.ah_ah.ting.tang.walla.walla) { // error
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! withStatementErrors.ts(3,7): error TS2135: All symbols within a with block will be resolved to 'any'.
+        bing = true; // no error
+        bang = true; // no error
+        
+        function bar() {} // no error
+    
+        bar(); // no error
+    
+        class C {} // error   
+        ~~~~~
+!!! withStatementErrors.ts(11,5): error TS1008: Unexpected token; 'statement' expected.
+        
+        interface I {} // error
+        
+        module M {} // error
+            
+    }
+    ~
+!!! withStatementErrors.ts(17,1): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.
+    

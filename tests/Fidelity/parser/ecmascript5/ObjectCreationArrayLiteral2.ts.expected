@@ -1,0 +1,87 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 11,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullWidth": 11,
+                "expression": {
+                    "kind": "ObjectCreationExpression",
+                    "fullWidth": 10,
+                    "newKeyword": {
+                        "kind": "NewKeyword",
+                        "width": 3,
+                        "fullWidth": 4,
+                        "text": "new",
+                        "value": "new",
+                        "valueText": "new",
+                        "hasTrailingTrivia": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "text": " "
+                            }
+                        ]
+                    },
+                    "expression": {
+                        "kind": "ElementAccessExpression",
+                        "fullWidth": 6,
+                        "expression": {
+                            "kind": "IdentifierName",
+                            "width": 3,
+                            "text": "Foo",
+                            "value": "Foo",
+                            "valueText": "Foo"
+                        },
+                        "openBracketToken": {
+                            "kind": "OpenBracketToken",
+                            "width": 1,
+                            "text": "[",
+                            "value": "[",
+                            "valueText": "["
+                        },
+                        "argumentExpression": {
+                            "kind": "NumericLiteral",
+                            "width": 1,
+                            "text": "1",
+                            "value": 1,
+                            "valueText": "1"
+                        },
+                        "closeBracketToken": {
+                            "kind": "CloseBracketToken",
+                            "width": 1,
+                            "text": "]",
+                            "value": "]",
+                            "valueText": "]"
+                        }
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 11
+    }
+}

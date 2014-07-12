@@ -1,0 +1,9 @@
+==== tests/cases/compiler/commentOnImportStatement1.ts (2 errors) ====
+    /* Copyright */
+    
+    import foo = require('./foo');
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! commentOnImportStatement1.ts(3,1): error TS2071: Unable to resolve external module ''./foo''.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! commentOnImportStatement1.ts(3,1): error TS2072: Module cannot be aliased to a non-module type.
+    

@@ -1,0 +1,198 @@
+=== tests/cases/compiler/conditionalOperatorWithIdenticalBCT.ts ===
+//Cond ? Expr1 : Expr2,  Expr1 and Expr2 have identical best common type
+class X { propertyX: any; propertyX1: number; propertyX2: string };
+>X : X
+>propertyX : any
+>propertyX1 : number
+>propertyX2 : string
+
+class A extends X { propertyA: number };
+>A : A
+>X : X
+>propertyA : number
+
+class B extends X { propertyB: string };
+>B : B
+>X : X
+>propertyB : string
+
+var x: X;
+>x : X
+>X : X
+
+var a: A;
+>a : A
+>A : A
+
+var b: B;
+>b : B
+>B : B
+
+>//Cond ? Expr1 : Expr2,  Expr1 is supertype
+//Be Not contextually typed
+true ? x : a : X
+
+//Cond ? Expr1 : Expr2,  Expr1 is supertype
+//Be Not contextually typed
+true ? x : a;
+>x : X
+>a : A
+
+var result1 = true ? x : a;
+>result1 : X
+>true ? x : a : X
+>x : X
+>a : A
+
+>//Expr1 and Expr2 are literals
+true ? {} : 1 : {}
+
+//Expr1 and Expr2 are literals
+true ? {} : 1;
+>{} : {}
+
+true ? { a: 1 } : { a: 2, b: 'string' };
+>true ? { a: 1 } : { a: 2, b: 'string' } : { a: number; }
+>{ a: 1 } : { a: number; }
+>a : number
+>{ a: 2, b: 'string' } : { a: number; b: string; }
+>a : number
+>b : string
+
+var result2 = true ? {} : 1;
+>result2 : {}
+>true ? {} : 1 : {}
+>{} : {}
+
+var result3 = true ? { a: 1 } : { a: 2, b: 'string' };
+>result3 : { a: number; }
+>true ? { a: 1 } : { a: 2, b: 'string' } : { a: number; }
+>{ a: 1 } : { a: number; }
+>a : number
+>{ a: 2, b: 'string' } : { a: number; b: string; }
+>a : number
+>b : string
+
+//Contextually typed
+var resultIsX1: X = true ? x : a;
+>resultIsX1 : X
+>X : X
+>true ? x : a : X
+>x : X
+>a : A
+
+var result4: (t: A) => any = true ? (m) => m.propertyX : (n) => n.propertyA;
+>result4 : (t: A) => any
+>t : A
+>A : A
+>true ? (m) => m.propertyX : (n) => n.propertyA : (t: A) => any
+>(m) => m.propertyX : (m: A) => any
+>m : A
+>m.propertyX : any
+>m : A
+>propertyX : any
+>(n) => n.propertyA : (n: A) => number
+>n : A
+>n.propertyA : number
+>n : A
+>propertyA : number
+
+>//Cond ? Expr1 : Expr2,  Expr2 is supertype
+//Be Not contextually typed
+true ? a : x : X
+
+//Cond ? Expr1 : Expr2,  Expr2 is supertype
+//Be Not contextually typed
+true ? a : x;
+>a : A
+>x : X
+
+var result5 = true ? a : x;
+>result5 : X
+>true ? a : x : X
+>a : A
+>x : X
+
+>//Expr1 and Expr2 are literals
+true ? 1 : {} : {}
+
+//Expr1 and Expr2 are literals
+true ? 1 : {};
+>{} : {}
+
+true ? { a: 2, b: 'string' } : { a: 1 };
+>true ? { a: 2, b: 'string' } : { a: 1 } : { a: number; }
+>{ a: 2, b: 'string' } : { a: number; b: string; }
+>a : number
+>b : string
+>{ a: 1 } : { a: number; }
+>a : number
+
+var result6 = true ? 1 : {};
+>result6 : {}
+>true ? 1 : {} : {}
+>{} : {}
+
+var result7 = true ? { a: 2, b: 'string' } : { a: 1 };
+>result7 : { a: number; }
+>true ? { a: 2, b: 'string' } : { a: 1 } : { a: number; }
+>{ a: 2, b: 'string' } : { a: number; b: string; }
+>a : number
+>b : string
+>{ a: 1 } : { a: number; }
+>a : number
+
+//Contextually typed
+var resultIsX2: X = true ? x : a;
+>resultIsX2 : X
+>X : X
+>true ? x : a : X
+>x : X
+>a : A
+
+var result8: (t: A) => any = true ? (m) => m.propertyA : (n) => n.propertyX;
+>result8 : (t: A) => any
+>t : A
+>A : A
+>true ? (m) => m.propertyA : (n) => n.propertyX : (t: A) => any
+>(m) => m.propertyA : (m: A) => number
+>m : A
+>m.propertyA : number
+>m : A
+>propertyA : number
+>(n) => n.propertyX : (n: A) => any
+>n : A
+>n.propertyX : any
+>n : A
+>propertyX : any
+
+//Result = Cond ? Expr1 : Expr2,  Result is supertype
+//Contextually typed
+var resultIsX3: X = true ? a : b;
+>resultIsX3 : X
+>X : X
+>true ? a : b : X
+>a : A
+>b : B
+
+var result10: (t: X) => any = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
+>result10 : (t: X) => any
+>t : X
+>X : X
+>true ? (m) => m.propertyX1 : (n) => n.propertyX2 : (t: X) => any
+>(m) => m.propertyX1 : (m: X) => number
+>m : X
+>m.propertyX1 : number
+>m : X
+>propertyX1 : number
+>(n) => n.propertyX2 : (n: X) => string
+>n : X
+>n.propertyX2 : string
+>n : X
+>propertyX2 : string
+
+//Expr1 and Expr2 are literals
+var result11: any = true ? 1 : 'string';
+>result11 : any
+>true ? 1 : 'string' : any
+

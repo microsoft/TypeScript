@@ -1,0 +1,15 @@
+=== tests/cases/compiler/es6ClassTest7.ts ===
+declare module M {
+>M : M
+
+    export class Foo {
+>Foo : Foo
+    }
+}
+
+class Bar extends M.Foo {
+>Bar : Bar
+>M : M
+>Foo : M.Foo
+}
+

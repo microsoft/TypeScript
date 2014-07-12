@@ -1,0 +1,54 @@
+=== tests/cases/compiler/function.ts ===
+module A {
+>A : A
+
+    export function Point() {
+>Point : typeof Point
+
+        return { x: 0, y: 0 };
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>y : number
+    }
+}
+
+=== tests/cases/compiler/module.ts ===
+module B {
+>B : B
+
+    export module Point {
+>Point : Point
+
+        export var Origin = { x: 0, y: 0 };
+>Origin : { x: number; y: number; }
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>y : number
+    }
+}
+
+=== tests/cases/compiler/test.ts ===
+var fn: () => { x: number; y: number };
+>fn : () => { x: number; y: number; }
+>x : number
+>y : number
+
+var fn = A.Point;
+>fn : typeof A.Point
+>A.Point : typeof A.Point
+>A : typeof A
+>Point : typeof A.Point
+
+var cl: { x: number; y: number; }
+>cl : { x: number; y: number; }
+>x : number
+>y : number
+
+var cl = B.Point.Origin;
+>cl : { x: number; y: number; }
+>B.Point.Origin : { x: number; y: number; }
+>B.Point : typeof B.Point
+>B : typeof B
+>Point : typeof B.Point
+>Origin : { x: number; y: number; }
+

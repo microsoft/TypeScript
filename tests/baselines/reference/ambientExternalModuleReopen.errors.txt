@@ -1,0 +1,12 @@
+==== tests/cases/compiler/ambientExternalModuleReopen.ts (2 errors) ====
+    declare module "fs" {
+        var x: string;
+    }
+    declare module 'fs' {
+                   ~~~~
+!!! ambientExternalModuleReopen.ts(4,16): error TS2000: Duplicate identifier ''fs''. Additional locations:
+!!! 	ambientExternalModuleReopen.ts(1,16)
+                   ~~~~
+!!! ambientExternalModuleReopen.ts(4,16): error TS2191: Ambient external module declaration cannot be reopened.
+        var y: number;
+    }

@@ -1,0 +1,12 @@
+==== tests/cases/compiler/importDeclWithDeclareModifierInAmbientContext.ts (1 errors) ====
+    declare module "m" {
+        module x {
+            interface c {
+            }
+        }
+        declare export import a = x.c;
+        ~~~~~~~
+!!! importDeclWithDeclareModifierInAmbientContext.ts(6,5): error TS1079: 'declare' modifier not allowed on import declaration.
+        var b: a;
+    }
+    

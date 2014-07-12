@@ -1,0 +1,8 @@
+=== tests/cases/compiler/strictMode2.ts ===
+"use strict";
+
+function foo() {
+>foo : typeof foo
+
+    return 30;
+}

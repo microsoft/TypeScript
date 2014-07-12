@@ -1,0 +1,38 @@
+==== tests/cases/compiler/constructSignatureWithAccessibilityModifiersOnParameters.ts (4 errors) ====
+    // Parameter properties are only valid in constructor definitions, not even in other forms of construct signatures
+    
+    class C {
+        constructor(public x, private y) { }
+    }
+    
+    class C2 {
+        constructor(public x) { }
+    }
+    
+    class C3 {
+        constructor(private x) { }
+    }
+    
+    interface I {
+        new (public x);
+             ~~~~~~
+!!! constructSignatureWithAccessibilityModifiersOnParameters.ts(16,10): error TS1040: Parameter property declarations can only be used in a non-ambient constructor declaration.
+    }
+    
+    interface I2 {
+        new (private x);
+             ~~~~~~~
+!!! constructSignatureWithAccessibilityModifiersOnParameters.ts(20,10): error TS1040: Parameter property declarations can only be used in a non-ambient constructor declaration.
+    }
+    
+    var a: {
+        new (public x);
+             ~~~~~~
+!!! constructSignatureWithAccessibilityModifiersOnParameters.ts(24,10): error TS1040: Parameter property declarations can only be used in a non-ambient constructor declaration.
+    }
+    
+    var b: {
+        new (private x);
+             ~~~~~~~
+!!! constructSignatureWithAccessibilityModifiersOnParameters.ts(28,10): error TS1040: Parameter property declarations can only be used in a non-ambient constructor declaration.
+    }

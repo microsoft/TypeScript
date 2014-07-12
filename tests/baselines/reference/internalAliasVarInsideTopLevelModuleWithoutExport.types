@@ -1,0 +1,18 @@
+=== tests/cases/compiler/internalAliasVarInsideTopLevelModuleWithoutExport.ts ===
+export module a {
+>a : a
+
+    export var x = 10;
+>x : number
+}
+
+import b = a.x;
+>b : b
+>a : a
+>x : number
+
+export var bVal = b;
+>bVal : number
+>b : number
+
+

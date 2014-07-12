@@ -1,0 +1,22 @@
+==== tests/cases/compiler/arrayTypeOfTypeOf.ts (6 errors) ====
+    // array type cannot use typeof.
+    
+    var x = 1;
+    var xs: typeof x[];  // Not an error.  This is equivalent to Array<typeof x>
+    var xs2: typeof Array;
+    var xs3: typeof Array<number>;
+                         ~
+!!! arrayTypeOfTypeOf.ts(6,22): error TS1005: '=' expected.
+                                 ~
+!!! arrayTypeOfTypeOf.ts(6,30): error TS1003: Identifier expected.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! arrayTypeOfTypeOf.ts(6,5): error TS2012: Cannot convert 'number' to '{ isArray(arg: any): boolean; prototype: any[]; (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new(arrayLength?: number): any[]; new<T>(arrayLength: number): T[]; new<T>(...items: T[]): T[]; }':
+!!! 	Type 'Number' is missing property 'isArray' from type '{ isArray(arg: any): boolean; prototype: any[]; (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new(arrayLength?: number): any[]; new<T>(arrayLength: number): T[]; new<T>(...items: T[]): T[]; }'.
+    var xs4: typeof Array<typeof x>;
+                         ~
+!!! arrayTypeOfTypeOf.ts(7,22): error TS1005: '=' expected.
+                                   ~
+!!! arrayTypeOfTypeOf.ts(7,32): error TS1003: Identifier expected.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! arrayTypeOfTypeOf.ts(7,5): error TS2012: Cannot convert 'number' to '{ isArray(arg: any): boolean; prototype: any[]; (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new(arrayLength?: number): any[]; new<T>(arrayLength: number): T[]; new<T>(...items: T[]): T[]; }':
+!!! 	Type 'Number' is missing property 'isArray' from type '{ isArray(arg: any): boolean; prototype: any[]; (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new(arrayLength?: number): any[]; new<T>(arrayLength: number): T[]; new<T>(...items: T[]): T[]; }'.

@@ -1,0 +1,21 @@
+==== tests/cases/compiler/mismatchedExplicitTypeParameterAndArgumentType.ts (3 errors) ====
+    function map<T, U>(xs: T[], f: (x: T) => U) {
+        var ys: U[] = [];
+        xs.forEach(x => ys.push(f(x)));
+        return ys;
+    }
+    
+    var r0 = map([1, ""], (x) => x.toString());
+    var r5 = map<any, any>([1, ""], (x) => x.toString());
+    var r6 = map<Object, Object>([1, ""], (x) => x.toString());
+    var r7 = map<number, string>([1, ""], (x) => x.toString()); // error
+             ~~~
+!!! mismatchedExplicitTypeParameterAndArgumentType.ts(10,10): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Types of property 'pop' of types '{}[]' and 'number[]' are incompatible:
+!!! 		Call signatures of types '() => {}' and '() => number' are incompatible.
+             ~~~
+!!! mismatchedExplicitTypeParameterAndArgumentType.ts(10,10): error TS2087: Could not select overload for 'call' expression.
+    var r7b = map<number>([1, ""], (x) => x.toString()); // error
+              ~~~
+!!! mismatchedExplicitTypeParameterAndArgumentType.ts(11,11): error TS4027: Signature expected 2 type arguments, got 1 instead.
+    var r8 = map<any, string>([1, ""], (x) => x.toString());

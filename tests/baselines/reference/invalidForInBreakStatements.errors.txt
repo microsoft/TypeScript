@@ -1,0 +1,51 @@
+==== tests/cases/compiler/invalidForInBreakStatements.ts (6 errors) ====
+    // All errors
+    
+    // naked break not allowed
+    break;
+    ~~~~~~
+!!! invalidForInBreakStatements.ts(4,1): error TS2202: 'break' statement can only be used within an enclosing iteration or switch statement.
+    
+    // non-existent label
+    ONE:
+    for (var x in {}) break TWO;
+                      ~~~~~~~~~~
+!!! invalidForInBreakStatements.ts(8,19): error TS2203: Jump target not found.
+    
+    // break from inside function
+    TWO:
+    for (var x in {}) {
+        var fn = () => {
+            break TWO;
+            ~~~~~~~~~~
+!!! invalidForInBreakStatements.ts(14,9): error TS2204: Jump target cannot cross function boundary.
+        }
+    }
+    
+    THREE:
+    for (var x in {}) {
+        var fn = function () {
+            break THREE;
+            ~~~~~~~~~~~~
+!!! invalidForInBreakStatements.ts(21,9): error TS2204: Jump target cannot cross function boundary.
+        }
+    }
+    
+    // break forward
+    for (var x in {}) {
+        break FIVE;
+        ~~~~~~~~~~~
+!!! invalidForInBreakStatements.ts(27,5): error TS2203: Jump target not found.
+        FIVE:
+        for (var x in {}) { }
+    }
+    
+    // label on non-loop statement
+    NINE:
+    var y = 12;
+    
+    for (var x in {}) {
+        break NINE;
+        ~~~~~~~~~~~
+!!! invalidForInBreakStatements.ts(37,5): error TS2203: Jump target not found.
+    }

@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>groupedItemsPage</title>
+    
+    <!-- WinJS references -->
+    <link href="//Microsoft.WinJS.1.0/css/ui-light.css" rel="stylesheet" />
+    <script src="//Microsoft.WinJS.1.0/js/base.js"></script>
+    <script src="//Microsoft.WinJS.1.0/js/ui.js"></script>
+    
+    <link href="/css/default.css" rel="stylesheet">
+    <link href="/css/groupedItemsPage.css" rel="stylesheet">
+    <script src="/js/data.js"></script>
+    <script src="/js/groupedItemsPage.js"></script>
+</head>
+<body>
+    <!-- These templates are used to display each item in the ListView declared below. -->
+    <div class="headerTemplate" data-win-control="WinJS.Binding.Template">
+        <p class="group-title win-type-x-large" data-win-bind="onclick: click; textContent: title" role="link"></p>
+    </div>
+    <div class="itemtemplate" data-win-control="WinJS.Binding.Template">
+        <div class="item">
+            <img class="item-image" data-win-bind="src: imageSrc" />
+            <!--<div class="item-image" data-win-bind="style.backgroundImage: imageSrc"></div>-->
+            <div class="item-overlay">
+                <h2 class="item-title" data-win-bind="textContent: title"></h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- The content that will be loaded and displayed. -->
+    <div class="fragment groupeditemspage">
+        <header aria-label="Header content" role="banner">
+            <button class="win-backbutton" aria-label="Back" disabled></button>
+            <h1 class="titlearea win-type-ellipsis">
+                <span class="pagetitle"><span class="wiki">Encyclo</span><span class="bee">pedia</span></span>
+            </h1>
+        </header>
+        <section aria-label="Main content" role="main">
+            <div class="groupeditemslist" aria-label="List of groups" data-win-control="WinJS.UI.ListView" data-win-options="{ selectionMode: 'none' }"></div>
+        </section>
+    </div>
+</body>
+</html>

@@ -1,0 +1,17 @@
+==== tests/cases/compiler/externSyntax.ts (1 errors) ====
+    declare var v;
+    declare module M {
+        export class D {
+            public p;
+        }
+        export class C {
+            public f();
+            public g() { } // error body
+                       ~
+!!! externSyntax.ts(8,20): error TS1037: Implementations are not allowed in ambient contexts.
+        }
+    }
+    
+    
+    
+    

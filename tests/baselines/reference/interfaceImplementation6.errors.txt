@@ -1,0 +1,31 @@
+==== tests/cases/compiler/interfaceImplementation6.ts (2 errors) ====
+    interface I1 {
+        item:number;
+    }
+    
+    class C1 implements I1 {
+        public item:number;
+    }
+    
+    class C2 implements I1 {
+          ~~
+!!! interfaceImplementation6.ts(9,7): error TS2137: Class C2 declares interface I1 but does not implement it:
+!!! 	Property 'item' defined as private in type 'C2' is defined as public in type 'I1'.
+        private item:number;
+    }
+    
+    class C3 implements I1 {
+          ~~
+!!! interfaceImplementation6.ts(13,7): error TS2137: Class C3 declares interface I1 but does not implement it:
+!!! 	Type 'C3' is missing property 'item' from type 'I1'.
+        constructor() {
+           var item: number;
+        }
+    }
+     
+    export class Test {
+        private pt: I1 = { item: 1 };
+    }
+    
+    
+    

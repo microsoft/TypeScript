@@ -1,0 +1,9 @@
+==== tests/cases/compiler/module_augmentExistingVariable.ts (1 errors) ====
+    var console: any;
+    
+    module console {
+           ~~~~~~~
+!!! module_augmentExistingVariable.ts(3,8): error TS2000: Duplicate identifier 'console'. Additional locations:
+!!! 	module_augmentExistingVariable.ts(1,5)
+        export var x = 2;
+    }

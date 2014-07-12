@@ -1,0 +1,14 @@
+==== tests/cases/compiler/declInput.ts (1 errors) ====
+    interface bar {
+    
+    }
+    
+    class bar {
+          ~~~
+!!! declInput.ts(5,7): error TS2000: Duplicate identifier 'bar'. Additional locations:
+!!! 	declInput.ts(1,1)
+      public f() { return ''; }
+      public g() { return {a: <bar>null, b: undefined, c: void 4 }; }
+      public h(x = 4, y = null, z = '') { x++; }
+    }
+    

@@ -1,0 +1,21 @@
+==== tests/cases/compiler/specializedSignatureAsCallbackParameter1.ts (5 errors) ====
+    function x3(a: number, cb: (x: number) => number);
+    function x3(a: string, cb: (x: number) => number);
+    function x3(a: any, cb: (x: number) => number) {
+       cb(a);
+    }
+    // both are errors
+    x3(1, (x: string) => 1); 
+    ~~
+!!! specializedSignatureAsCallbackParameter1.ts(7,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Call signatures of types '(x: string) => number' and '(x: number) => number' are incompatible.
+    ~~
+!!! specializedSignatureAsCallbackParameter1.ts(7,1): error TS2087: Could not select overload for 'call' expression.
+    x3(1, (x: 'hm') => 1); 
+    ~~
+!!! specializedSignatureAsCallbackParameter1.ts(8,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Call signatures of types '(x: 'hm') => number' and '(x: number) => number' are incompatible.
+    ~~
+!!! specializedSignatureAsCallbackParameter1.ts(8,1): error TS2087: Could not select overload for 'call' expression.
+          ~~~~~~~~~~~~~~
+!!! specializedSignatureAsCallbackParameter1.ts(8,7): error TS2163: Overload signature implementation cannot use specialized type.

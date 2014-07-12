@@ -1,0 +1,23 @@
+==== tests/cases/compiler/collisionThisExpressionAndLocalVarWithSuperExperssion.ts (2 errors) ====
+    class a {
+        public foo() {
+        }
+    }
+    class b extends a {
+        public foo() {
+            var _this = 10;
+                ~~~~~~~~~~
+!!! collisionThisExpressionAndLocalVarWithSuperExperssion.ts(7,13): error TS2200: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+            var f = () => super.foo();
+        }
+    }
+    class b2 extends a {
+        public foo() {
+            var f = () => {
+                var _this = 10;
+                    ~~~~~~~~~~
+!!! collisionThisExpressionAndLocalVarWithSuperExperssion.ts(14,17): error TS2200: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+                return super.foo()
+            }
+        }
+    }

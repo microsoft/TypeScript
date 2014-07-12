@@ -1,0 +1,39 @@
+=== tests/cases/compiler/exportAssignmentEnum_B.ts ===
+import EnumE = require("exportAssignmentEnum_A");
+>EnumE : EnumE
+
+var a = EnumE.A;
+>a : EnumE
+>EnumE.A : EnumE
+>EnumE : typeof EnumE
+>A : EnumE
+
+var b = EnumE.B;
+>b : EnumE
+>EnumE.B : EnumE
+>EnumE : typeof EnumE
+>B : EnumE
+
+var c = EnumE.C;
+>c : EnumE
+>EnumE.C : EnumE
+>EnumE : typeof EnumE
+>C : EnumE
+
+=== tests/cases/compiler/exportAssignmentEnum_A.ts ===
+enum E {
+>E : E
+
+	A,
+>A : E
+
+	B,
+>B : E
+
+	C,
+>C : E
+}
+
+export = E;
+>E : typeof E
+

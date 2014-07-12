@@ -1,0 +1,6 @@
+==== tests/cases/compiler/classWithPredefinedTypesAsNames2.ts (1 errors) ====
+    // classes cannot use predefined types as names
+    
+    class void {}
+    ~~~~~
+!!! classWithPredefinedTypesAsNames2.ts(3,1): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.

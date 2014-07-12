@@ -1,0 +1,21 @@
+==== tests/cases/compiler/classExpression.ts (4 errors) ====
+    var x = class C {
+            ~~~~~
+!!! classExpression.ts(1,9): error TS1006: Identifier expected; 'class' is a keyword.
+    }
+    
+    var y = {
+        foo: class C2 {
+             ~~~~~
+!!! classExpression.ts(5,10): error TS1006: Identifier expected; 'class' is a keyword.
+        }
+    }
+    ~
+!!! classExpression.ts(7,1): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.
+    
+    module M {
+        var z = class C4 {
+                ~~~~~
+!!! classExpression.ts(10,13): error TS1006: Identifier expected; 'class' is a keyword.
+        }
+    }

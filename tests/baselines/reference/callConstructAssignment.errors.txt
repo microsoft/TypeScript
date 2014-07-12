@@ -1,0 +1,15 @@
+==== tests/cases/compiler/callConstructAssignment.ts (2 errors) ====
+    
+    
+    var foo:{ ( ):void; }
+    
+    var bar:{ new ( ):any; }
+    
+    foo = bar; // error
+    ~~~
+!!! callConstructAssignment.ts(7,1): error TS2012: Cannot convert 'new() => any' to '() => void':
+!!! 	Type '() => void' requires a call signature, but type 'new() => any' lacks one.
+    bar = foo; // error
+    ~~~
+!!! callConstructAssignment.ts(8,1): error TS2012: Cannot convert '() => void' to 'new() => any':
+!!! 	Type 'new() => any' requires a construct signature, but type '() => void' lacks one.

@@ -1,0 +1,54 @@
+==== tests/cases/compiler/staticPropertyNotInClassType.ts (7 errors) ====
+    module NonGeneric {
+        class C {
+            fn() { return this; }
+            static get x() { return 1; }
+            static set x(v) { }
+            constructor(public a: number, private b: number) { }
+            static foo: string; // not reflected in class type
+        }
+    
+        module C {
+            export var bar = ''; // not reflected in class type
+        }
+    
+        var c = new C(1, 2);
+        var r = c.fn();
+        var r4 = c.foo; // error
+                   ~~~
+!!! staticPropertyNotInClassType.ts(16,16): error TS2094: The property 'foo' does not exist on value of type 'C'.
+        var r5 = c.bar; // error
+                   ~~~
+!!! staticPropertyNotInClassType.ts(17,16): error TS2094: The property 'bar' does not exist on value of type 'C'.
+        var r6 = c.x; // error
+                   ~
+!!! staticPropertyNotInClassType.ts(18,16): error TS2094: The property 'x' does not exist on value of type 'C'.
+    }
+    
+    module Generic {
+        class C<T, U> {
+            fn() { return this; }
+            static get x() { return 1; }
+            static set x(v) { }
+            constructor(public a: T, private b: U) { }
+            static foo: T; // not reflected in class type
+                        ~
+!!! staticPropertyNotInClassType.ts(27,21): error TS2099: Static members cannot reference class type parameters.
+        }
+    
+        module C {
+            export var bar = ''; // not reflected in class type
+        }
+    
+        var c = new C(1, '');
+        var r = c.fn();
+        var r4 = c.foo; // error
+                   ~~~
+!!! staticPropertyNotInClassType.ts(36,16): error TS2094: The property 'foo' does not exist on value of type 'C<number, string>'.
+        var r5 = c.bar; // error
+                   ~~~
+!!! staticPropertyNotInClassType.ts(37,16): error TS2094: The property 'bar' does not exist on value of type 'C<number, string>'.
+        var r6 = c.x; // error
+                   ~
+!!! staticPropertyNotInClassType.ts(38,16): error TS2094: The property 'x' does not exist on value of type 'C<number, string>'.
+    }

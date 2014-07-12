@@ -1,0 +1,11 @@
+==== tests/cases/compiler/privacyCheckTypeOfInvisibleModuleError.ts (1 errors) ====
+    module Outer {
+        module Inner {
+            export var m: typeof Inner;
+        }
+    
+        export var f: typeof Inner;
+                   ~~~~~~~~~~~~~~~
+!!! privacyCheckTypeOfInvisibleModuleError.ts(6,16): error TS2031: Exported variable 'f' is using inaccessible module 'Inner'.
+    }
+    

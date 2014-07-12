@@ -1,0 +1,22 @@
+==== tests/cases/compiler/covariance1.ts (2 errors) ====
+    module M {
+    
+        interface X { m1:number; }
+        export class XX implements X { constructor(public m1:number) { } }
+                                   ~
+!!! covariance1.ts(4,32): error TS2019: Exported class 'XX' implements private interface 'X'.
+    
+        interface Y { x:X; }
+    
+        export function f(y:Y) { }
+                          ~~~
+!!! covariance1.ts(8,23): error TS2040: Parameter 'y' of exported function has or is using private type 'Y'.
+    
+        var a:X;
+        f({x:a}); // ok
+    
+        var b:XX;
+        f({x:b}); // ok covariant subtype
+    }
+    
+    

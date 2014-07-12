@@ -1,0 +1,47 @@
+=== tests/cases/compiler/indexSignaturesInferentialTyping.ts ===
+function foo<T>(items: { [index: number]: T }): T { return undefined; }
+>foo : typeof foo
+>T : T
+>items : { [index: number]: T; }
+>index : number
+>T : T
+>T : T
+>undefined : any
+
+function bar<T>(items: { [index: string]: T }): T { return undefined; }
+>bar : typeof bar
+>T : T
+>items : { [index: string]: T; }
+>index : string
+>T : T
+>T : T
+>undefined : any
+
+var x1 = foo({ 0: 0, 1: 1 });       // type should be number
+>x1 : number
+>foo({ 0: 0, 1: 1 }) : number
+>foo : typeof foo
+>{ 0: 0, 1: 1 } : { 0: number; 1: number; [index: number]: number; }
+
+var x2 = foo({ zero: 0, one: 1 });
+>x2 : {}
+>foo({ zero: 0, one: 1 }) : {}
+>foo : typeof foo
+>{ zero: 0, one: 1 } : { zero: number; one: number; [index: number]: {}; }
+>zero : number
+>one : number
+
+var x3 = bar({ 0: 0, 1: 1 });
+>x3 : number
+>bar({ 0: 0, 1: 1 }) : number
+>bar : typeof bar
+>{ 0: 0, 1: 1 } : { 0: number; 1: number; [index: string]: number; }
+
+var x4 = bar({ zero: 0, one: 1 });  // type should be number
+>x4 : number
+>bar({ zero: 0, one: 1 }) : number
+>bar : typeof bar
+>{ zero: 0, one: 1 } : { zero: number; one: number; [index: string]: number; }
+>zero : number
+>one : number
+

@@ -1,0 +1,1 @@
+var v = { get foo(v: number) { } };

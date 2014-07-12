@@ -1,0 +1,16 @@
+==== tests/cases/compiler/superCallInConstructorWithNoBaseType.ts (2 errors) ====
+    class C {
+        constructor() {
+            super(); // error
+            ~~~~~
+!!! superCallInConstructorWithNoBaseType.ts(3,9): error TS2103: 'super' cannot be referenced in non-derived classes.
+        }
+    }
+    
+    class D<T> {
+        public constructor(public x: T) {
+            super(); // error
+            ~~~~~
+!!! superCallInConstructorWithNoBaseType.ts(9,9): error TS2103: 'super' cannot be referenced in non-derived classes.
+        }
+    }

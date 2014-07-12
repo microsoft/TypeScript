@@ -1,0 +1,35 @@
+==== tests/cases/compiler/invalidEnumAssignments.ts (6 errors) ====
+    enum E {
+        A,
+        B
+    }
+    
+    enum E2 {
+        A,
+        B
+    }
+    
+    var e: E;
+    var e2: E2;
+    
+    e = E2.A;
+    ~
+!!! invalidEnumAssignments.ts(14,1): error TS2011: Cannot convert 'E2' to 'E'.
+    e2 = E.A;
+    ~~
+!!! invalidEnumAssignments.ts(15,1): error TS2011: Cannot convert 'E' to 'E2'.
+    e = <void>null;
+    ~
+!!! invalidEnumAssignments.ts(16,1): error TS2011: Cannot convert 'void' to 'E'.
+    e = {};
+    ~
+!!! invalidEnumAssignments.ts(17,1): error TS2011: Cannot convert '{}' to 'E'.
+    e = '';
+    ~
+!!! invalidEnumAssignments.ts(18,1): error TS2011: Cannot convert 'string' to 'E'.
+    
+    function f<T>(a: T) {
+        e = a;
+        ~
+!!! invalidEnumAssignments.ts(21,5): error TS2011: Cannot convert 'T' to 'E'.
+    }

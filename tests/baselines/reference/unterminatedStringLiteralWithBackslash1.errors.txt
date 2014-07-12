@@ -1,0 +1,4 @@
+==== tests/cases/compiler/unterminatedStringLiteralWithBackslash1.ts (1 errors) ====
+    "\
+      
+!!! unterminatedStringLiteralWithBackslash1.ts(1,3): error TS1002: Missing close quote character.

@@ -1,0 +1,69 @@
+=== tests/cases/compiler/foo_1.ts ===
+import foo = require("./foo_0");
+>foo : foo
+
+var x: foo;
+>x : foo
+>foo : foo
+
+x("test");
+>x("test") : void
+>x : foo
+
+x(42);
+>x(42) : number
+>x : foo
+
+var y: string = x.b;
+>y : string
+>x.b : string
+>x : foo
+>b : string
+
+if(!!x.c){ }
+>!!x.c : boolean
+>!x.c : boolean
+>x.c : boolean
+>x : foo
+>c : boolean
+
+var z = {x: 1, y: 2};
+>z : { x: number; y: number; }
+>{x: 1, y: 2} : { x: number; y: number; }
+>x : number
+>y : number
+
+z = x.d;
+>z = x.d : { x: number; y: number; }
+>z : { x: number; y: number; }
+>x.d : { x: number; y: number; }
+>x : foo
+>d : { x: number; y: number; }
+
+=== tests/cases/compiler/foo_0.ts ===
+interface Foo {
+>Foo : Foo
+
+	(a: string): void;
+>a : string
+
+	b: string;
+>b : string
+}
+interface Foo {
+>Foo : Foo
+
+	(a: number): number;
+>a : number
+
+	c: boolean;
+>c : boolean
+
+	d: {x: number; y: number};
+>d : { x: number; y: number; }
+>x : number
+>y : number
+}
+export = Foo;
+>Foo : any
+

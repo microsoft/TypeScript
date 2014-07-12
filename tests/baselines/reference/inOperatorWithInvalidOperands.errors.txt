@@ -1,0 +1,81 @@
+==== tests/cases/compiler/inOperatorWithInvalidOperands.ts (20 errors) ====
+    enum E { a }
+    
+    var x: any;
+    
+    // invalid left operands
+    // the left operand is required to be of type Any, the String primitive type, or the Number primitive type
+    var a1: boolean;
+    var a2: void;
+    var a3: {};
+    var a4: E
+    
+    var ra1 = a1 in x;
+              ~~
+!!! inOperatorWithInvalidOperands.ts(12,11): error TS2118: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+    var ra2 = a2 in x;
+              ~~
+!!! inOperatorWithInvalidOperands.ts(13,11): error TS2118: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+    var ra3 = a3 in x;
+              ~~
+!!! inOperatorWithInvalidOperands.ts(14,11): error TS2118: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+    var ra4 = a4 in x;
+              ~~
+!!! inOperatorWithInvalidOperands.ts(15,11): error TS2118: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+    var ra5 = null in x;
+              ~~~~
+!!! inOperatorWithInvalidOperands.ts(16,11): error TS2118: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+    var ra6 = undefined in x;
+              ~~~~~~~~~
+!!! inOperatorWithInvalidOperands.ts(17,11): error TS2118: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+    var ra7 = E.a in x;
+              ~~~
+!!! inOperatorWithInvalidOperands.ts(18,11): error TS2118: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+    var ra8 = false in x;
+              ~~~~~
+!!! inOperatorWithInvalidOperands.ts(19,11): error TS2118: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+    var ra9 = {} in x;
+              ~~
+!!! inOperatorWithInvalidOperands.ts(20,11): error TS2118: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+    
+    // invalid right operands
+    // the right operand is required to be of type Any, an object type, or a type parameter type
+    var b1: number;
+    var b2: boolean;
+    var b3: string;
+    var b4: void;
+    
+    var rb1 = x in b1;
+                   ~~
+!!! inOperatorWithInvalidOperands.ts(29,16): error TS2119: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
+    var rb2 = x in b2;
+                   ~~
+!!! inOperatorWithInvalidOperands.ts(30,16): error TS2119: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
+    var rb3 = x in b3;
+                   ~~
+!!! inOperatorWithInvalidOperands.ts(31,16): error TS2119: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
+    var rb4 = x in b4;
+                   ~~
+!!! inOperatorWithInvalidOperands.ts(32,16): error TS2119: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
+    var rb5 = x in 0;
+                   ~
+!!! inOperatorWithInvalidOperands.ts(33,16): error TS2119: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
+    var rb6 = x in false;
+                   ~~~~~
+!!! inOperatorWithInvalidOperands.ts(34,16): error TS2119: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
+    var rb7 = x in '';
+                   ~~
+!!! inOperatorWithInvalidOperands.ts(35,16): error TS2119: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
+    var rb8 = x in null;
+                   ~~~~
+!!! inOperatorWithInvalidOperands.ts(36,16): error TS2119: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
+    var rb9 = x in undefined;
+                   ~~~~~~~~~
+!!! inOperatorWithInvalidOperands.ts(37,16): error TS2119: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
+    
+    // both operands are invalid
+    var rc1 = {} in '';
+              ~~
+!!! inOperatorWithInvalidOperands.ts(40,11): error TS2118: The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.
+                    ~~
+!!! inOperatorWithInvalidOperands.ts(40,17): error TS2119: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.

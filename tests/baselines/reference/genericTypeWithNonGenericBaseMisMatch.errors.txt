@@ -1,0 +1,21 @@
+==== tests/cases/compiler/genericTypeWithNonGenericBaseMisMatch.ts (2 errors) ====
+    interface I {
+        f: (a: { a: number }) => void
+    }
+    class X<T extends { a: string }> implements I {
+          ~
+!!! genericTypeWithNonGenericBaseMisMatch.ts(4,7): error TS2137: Class X<T> declares interface I but does not implement it:
+!!! 	Types of property 'f' of types 'X<T>' and 'I' are incompatible:
+!!! 		Call signatures of types '(a: T) => void' and '(a: { a: number; }) => void' are incompatible:
+!!! 			Types of property 'a' of types '{ a: string; }' and '{ a: number; }' are incompatible.
+        f(a: T): void { }
+    }
+    var x = new X<{ a: string }>();
+    var i: I = x; // Should not be allowed -- type of 'f' is incompatible with 'I'
+        ~~~~~~~~
+!!! genericTypeWithNonGenericBaseMisMatch.ts(8,5): error TS2012: Cannot convert 'X<{ a: string; }>' to 'I':
+!!! 	Types of property 'f' of types 'X<{ a: string; }>' and 'I' are incompatible:
+!!! 		Call signatures of types '(a: { a: string; }) => void' and '(a: { a: number; }) => void' are incompatible:
+!!! 			Types of property 'a' of types '{ a: string; }' and '{ a: number; }' are incompatible.
+!!! 			Types of property 'a' of types '{ a: number; }' and '{ a: string; }' are incompatible.
+    

@@ -1,0 +1,24 @@
+==== tests/cases/compiler/callOverloads4.ts (2 errors) ====
+    
+    function Foo():Foo;
+    function Foo(s:string):Foo;
+    class Foo {    
+    ~~~~~
+!!! callOverloads4.ts(4,1): error TS1041: Function implementation expected.
+          ~~~
+!!! callOverloads4.ts(4,7): error TS2000: Duplicate identifier 'Foo'. Additional locations:
+!!! 	callOverloads4.ts(2,1)
+        bar1() { /*WScript.Echo("bar1");*/ }
+        constructor(s: string);
+        constructor(x: any) {
+            // WScript.Echo("Constructor function has executed");
+        }
+    }
+    
+    var f1 = new Foo("hey");
+    
+    
+    f1.bar1();
+    Foo();
+    Foo("s");
+    

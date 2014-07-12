@@ -1,0 +1,15 @@
+==== tests/cases/compiler/cloduleWithDuplicateMember2.ts (1 errors) ====
+    class C {
+        set x(y) { }
+        static set y(z) { }
+    }
+    
+    module C {
+        export var x = 1;
+    }
+    module C {
+        export function x() { }
+                        ~
+!!! cloduleWithDuplicateMember2.ts(10,21): error TS2000: Duplicate identifier 'x'. Additional locations:
+!!! 	cloduleWithDuplicateMember2.ts(7,16)
+    }

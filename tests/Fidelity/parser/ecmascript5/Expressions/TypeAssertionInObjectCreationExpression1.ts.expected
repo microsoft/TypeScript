@@ -1,0 +1,128 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "diagnostics": [
+        {
+            "start": 4,
+            "length": 1,
+            "diagnosticCode": "Identifier expected."
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 12,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullWidth": 12,
+                "isIncrementallyUnusable": true,
+                "expression": {
+                    "kind": "GreaterThanExpression",
+                    "fullWidth": 12,
+                    "isIncrementallyUnusable": true,
+                    "left": {
+                        "kind": "LessThanExpression",
+                        "fullWidth": 6,
+                        "isIncrementallyUnusable": true,
+                        "left": {
+                            "kind": "ObjectCreationExpression",
+                            "fullWidth": 4,
+                            "isIncrementallyUnusable": true,
+                            "newKeyword": {
+                                "kind": "NewKeyword",
+                                "width": 3,
+                                "fullWidth": 4,
+                                "text": "new",
+                                "value": "new",
+                                "valueText": "new",
+                                "hasTrailingTrivia": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "text": " "
+                                    }
+                                ]
+                            },
+                            "expression": {
+                                "kind": "IdentifierName",
+                                "width": 0,
+                                "text": ""
+                            }
+                        },
+                        "operatorToken": {
+                            "kind": "LessThanToken",
+                            "width": 1,
+                            "text": "<",
+                            "value": "<",
+                            "valueText": "<"
+                        },
+                        "right": {
+                            "kind": "IdentifierName",
+                            "width": 1,
+                            "text": "T",
+                            "value": "T",
+                            "valueText": "T"
+                        }
+                    },
+                    "operatorToken": {
+                        "kind": "GreaterThanToken",
+                        "width": 1,
+                        "text": ">",
+                        "value": ">",
+                        "valueText": ">"
+                    },
+                    "right": {
+                        "kind": "InvocationExpression",
+                        "fullWidth": 5,
+                        "expression": {
+                            "kind": "IdentifierName",
+                            "width": 3,
+                            "text": "Foo",
+                            "value": "Foo",
+                            "valueText": "Foo"
+                        },
+                        "argumentList": {
+                            "kind": "ArgumentList",
+                            "fullWidth": 2,
+                            "openParenToken": {
+                                "kind": "OpenParenToken",
+                                "width": 1,
+                                "text": "(",
+                                "value": "(",
+                                "valueText": "("
+                            },
+                            "arguments": [],
+                            "closeParenToken": {
+                                "kind": "CloseParenToken",
+                                "width": 1,
+                                "text": ")",
+                                "value": ")",
+                                "valueText": ")"
+                            }
+                        }
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 0,
+                    "text": ""
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 12
+    }
+}

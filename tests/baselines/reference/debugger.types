@@ -1,0 +1,9 @@
+=== tests/cases/compiler/debugger.ts ===
+debugger;
+
+function foo() {
+>foo : typeof foo
+
+    debugger;
+
+}

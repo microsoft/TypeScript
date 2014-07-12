@@ -1,0 +1,28 @@
+[
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "text": "e",
+        "value": "e",
+        "valueText": "e"
+    },
+    {
+        "kind": "PlusToken",
+        "width": 1,
+        "text": "+",
+        "value": "+",
+        "valueText": "+"
+    },
+    {
+        "kind": "EndOfFileToken",
+        "width": 0,
+        "text": ""
+    }
+]

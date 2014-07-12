@@ -1,0 +1,37 @@
+=== tests/cases/compiler/importAliasWithDottedName.ts ===
+module M {
+>M : M
+
+    export var x = 1;
+>x : number
+
+    export module N {
+>N : N
+
+        export var y = 2;
+>y : number
+    }
+}
+
+module A {
+>A : A
+
+    import N = M.N;
+>N : N
+>M : M
+>N : typeof M.N
+
+    var r = N.y;
+>r : number
+>N.y : number
+>N : typeof M.N
+>y : number
+
+    var r2 = M.N.y;
+>r2 : number
+>M.N.y : number
+>M.N : typeof M.N
+>M : typeof M
+>N : typeof M.N
+>y : number
+}

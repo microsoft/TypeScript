@@ -1,0 +1,15 @@
+==== tests/cases/compiler/interfaceWithConstructSignaturesThatHidesBaseSignature2.ts (1 errors) ====
+    interface Foo {
+        new (): { a: number; b: number };
+    }
+    
+    interface Derived extends Foo {
+              ~~~~~~~
+!!! interfaceWithConstructSignaturesThatHidesBaseSignature2.ts(5,11): error TS2143: Interface 'Derived' cannot extend interface 'Foo':
+!!! 	Construct signatures of types 'Derived' and 'Foo' are incompatible:
+!!! 		Type '{ a: number; }' is missing property 'b' from type '{ a: number; b: number; }'.
+        new (): { a: number }; // constructors not checked for conformance like a call signature is
+    }
+    
+    var d: Derived;
+    var r = new d();

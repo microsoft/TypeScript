@@ -1,0 +1,28 @@
+==== tests/cases/compiler/staticMembersUsingClassTypeParameter.ts (6 errors) ====
+    // BUG 745747
+    class C<T> {
+        static x: T;
+                  ~
+!!! staticMembersUsingClassTypeParameter.ts(3,15): error TS2099: Static members cannot reference class type parameters.
+        static f(x: T) {}
+                    ~
+!!! staticMembersUsingClassTypeParameter.ts(4,17): error TS2099: Static members cannot reference class type parameters.
+    }
+    
+    class C2<T, U> {
+        static x: U;
+                  ~
+!!! staticMembersUsingClassTypeParameter.ts(8,15): error TS2099: Static members cannot reference class type parameters.
+        static f(x: U) { }
+                    ~
+!!! staticMembersUsingClassTypeParameter.ts(9,17): error TS2099: Static members cannot reference class type parameters.
+    }
+    
+    class C3<T extends Date> {
+        static x: T;
+                  ~
+!!! staticMembersUsingClassTypeParameter.ts(13,15): error TS2099: Static members cannot reference class type parameters.
+        static f(x: T) { }
+                    ~
+!!! staticMembersUsingClassTypeParameter.ts(14,17): error TS2099: Static members cannot reference class type parameters.
+    }

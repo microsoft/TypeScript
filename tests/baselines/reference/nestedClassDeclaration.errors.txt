@@ -1,0 +1,35 @@
+==== tests/cases/compiler/nestedClassDeclaration.ts (8 errors) ====
+    // nested classes are not allowed
+    
+    class C {
+        x: string;
+        class C2 {
+        ~~~~~
+!!! nestedClassDeclaration.ts(5,5): error TS1008: Unexpected token; 'constructor, function, accessor or variable' expected.
+        }
+    }
+    ~
+!!! nestedClassDeclaration.ts(7,1): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.
+    
+    function foo() {
+        class C3 {
+        ~~~~~
+!!! nestedClassDeclaration.ts(10,5): error TS1008: Unexpected token; 'statement' expected.
+        }
+    }
+    ~
+!!! nestedClassDeclaration.ts(12,1): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.
+    
+    var x = {
+        class C4 {
+              ~~
+!!! nestedClassDeclaration.ts(15,11): error TS1005: ':' expected.
+                 ~
+!!! nestedClassDeclaration.ts(15,14): error TS1005: ',' expected.
+              ~~
+!!! nestedClassDeclaration.ts(15,11): error TS2095: Could not find symbol 'C4'.
+        }
+    }
+    ~
+!!! nestedClassDeclaration.ts(17,1): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.
+    

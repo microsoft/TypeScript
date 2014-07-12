@@ -1,0 +1,34 @@
+=== tests/cases/compiler/stringPropCodeGen.ts ===
+var a = {
+>a : { "foo": () => void; "bar": number; }
+>{
+
+  "foo" : function() { },
+  "bar" : 5
+
+} : { "foo": () => void; "bar": number; }
+
+  "foo" : function() { },
+>function() { } : () => void
+
+  "bar" : 5
+
+};
+
+>a.foo() : void
+>a.foo : () => void
+>a : { "foo": () => void; "bar": number; }
+
+
+a.foo();
+>foo : () => void
+
+>a.bar.toString() : string
+>a.bar.toString : (radix?: number) => string
+>a.bar : number
+>a : { "foo": () => void; "bar": number; }
+
+a.bar.toString();
+>bar : number
+>toString : (radix?: number) => string
+

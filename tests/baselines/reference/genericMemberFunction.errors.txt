@@ -1,0 +1,39 @@
+==== tests/cases/compiler/genericMemberFunction.ts (8 errors) ====
+    export class BuildError<A, B, C>{
+      public parent<A, B extends A, C>(): FileWithErrors<A, B, C> {
+                       ~~~~~~~~~~~
+!!! genericMemberFunction.ts(2,20): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        return undefined;
+      }
+    }
+    export class FileWithErrors<A, B, C>{
+      public errors<A, B extends A, C>(): BuildError<A, B, C>[] {
+                       ~~~~~~~~~~~
+!!! genericMemberFunction.ts(7,20): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        return undefined;
+      }
+      public parent<A, B extends A, C>(): BuildResult<A, B, C> {
+                       ~~~~~~~~~~~
+!!! genericMemberFunction.ts(10,20): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        return undefined;
+      }
+    }
+    export class BuildResult<A, B, C>{
+      public merge<A, B extends A, C>(other: BuildResult<A, B, C>): void {
+                      ~~~~~~~~~~~
+!!! genericMemberFunction.ts(15,19): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        a.b.c.d.e.f.g = 0;
+        ~
+!!! genericMemberFunction.ts(16,5): error TS2095: Could not find symbol 'a'.
+        removedFiles.forEach(<A, B extends A, C>(each: FileWithErrors<A, B, C>) => {
+        ~~~~~~~~~~~~
+!!! genericMemberFunction.ts(17,5): error TS2095: Could not find symbol 'removedFiles'.
+                                 ~~~~~~~~~~~
+!!! genericMemberFunction.ts(17,30): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+          this.removeFile(each);
+               ~~~~~~~~~~
+!!! genericMemberFunction.ts(18,12): error TS2094: The property 'removeFile' does not exist on value of type 'BuildResult<A, B, C>'.
+        });
+      }
+    }
+    

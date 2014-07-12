@@ -1,0 +1,12 @@
+==== tests/cases/compiler/genericGetter.ts (1 errors) ====
+    class C<T> {
+        data: T;
+        get x(): T {
+            return this.data;
+        }
+    }
+    
+    var c = new C<number>();
+    var r: string = c.x;
+        ~~~~~~~~~~~~~~~
+!!! genericGetter.ts(9,5): error TS2011: Cannot convert 'number' to 'string'.

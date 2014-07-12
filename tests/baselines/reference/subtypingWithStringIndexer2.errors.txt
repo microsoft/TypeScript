@@ -1,0 +1,59 @@
+==== tests/cases/compiler/subtypingWithStringIndexer2.ts (5 errors) ====
+    // Derived type indexer must be subtype of base type indexer
+    
+    interface Base { foo: string; }
+    interface Derived extends Base { bar: string; }
+    interface Derived2 extends Derived { baz: string; }
+    
+    interface A {
+        [x: string]: Derived;
+    }
+    
+    interface B extends A {
+              ~
+!!! subtypingWithStringIndexer2.ts(11,11): error TS2143: Interface 'B' cannot extend interface 'A':
+!!! 	Index signatures of types 'B' and 'A' are incompatible:
+!!! 		Type 'Base' is missing property 'bar' from type 'Derived'.
+        [x: string]: Base; // error
+    }
+    
+    interface B2 extends A {
+        [x: string]: Derived2; // ok
+    }
+    
+    module Generics {
+        interface A<T extends Derived> {
+            [x: string]: T;
+        }
+    
+        interface B extends A<Base> {
+                            ~~~~~~~
+!!! subtypingWithStringIndexer2.ts(24,25): error TS2086: Type 'Base' does not satisfy the constraint 'Derived' for type parameter 'T extends Derived'.
+            [x: string]: Derived; // error
+        }
+    
+        interface B2 extends A<Derived> {
+            [x: string]: Derived2; // ok
+        }
+    
+        interface B3<T extends Derived> extends A<T> {
+                  ~~
+!!! subtypingWithStringIndexer2.ts(32,15): error TS2143: Interface 'Generics.B3<T>' cannot extend interface 'Generics.A<T>':
+!!! 	Index signatures of types 'B3<T>' and 'A<T>' are incompatible.
+            [x: string]: Base; // error
+        }
+    
+        interface B4<T extends Derived> extends A<T> {
+                  ~~
+!!! subtypingWithStringIndexer2.ts(36,15): error TS2143: Interface 'Generics.B4<T>' cannot extend interface 'Generics.A<T>':
+!!! 	Index signatures of types 'B4<T>' and 'A<T>' are incompatible.
+            [x: string]: Derived; // error
+        }
+    
+        interface B5<T extends Derived2> extends A<T> {
+                  ~~
+!!! subtypingWithStringIndexer2.ts(40,15): error TS2143: Interface 'Generics.B5<T>' cannot extend interface 'Generics.A<T>':
+!!! 	Index signatures of types 'B5<T>' and 'A<T>' are incompatible.
+            [x: string]: Derived2; // error
+        }
+    }

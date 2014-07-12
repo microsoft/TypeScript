@@ -1,0 +1,33 @@
+==== tests/cases/compiler/negateOperatorInvalidOperations.ts (10 errors) ====
+    // Unary operator -
+    
+    // operand before -
+    var NUMBER1 = var NUMBER-;  //expect error
+                  ~~~
+!!! negateOperatorInvalidOperations.ts(4,15): error TS1006: Identifier expected; 'var' is a keyword.
+                            ~
+!!! negateOperatorInvalidOperations.ts(4,25): error TS1005: '=' expected.
+                             ~
+!!! negateOperatorInvalidOperations.ts(4,26): error TS1003: Identifier expected.
+    
+    // invalid expressions
+    var NUMBER2 = -(null - undefined);
+                    ~~~~
+!!! negateOperatorInvalidOperations.ts(7,17): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                           ~~~~~~~~~
+!!! negateOperatorInvalidOperations.ts(7,24): error TS2112: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var NUMBER3 = -(null - null);
+                    ~~~~
+!!! negateOperatorInvalidOperations.ts(8,17): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                           ~~~~
+!!! negateOperatorInvalidOperations.ts(8,24): error TS2112: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    var NUMBER4 = -(undefined - undefined);
+                    ~~~~~~~~~
+!!! negateOperatorInvalidOperations.ts(9,17): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                                ~~~~~~~~~
+!!! negateOperatorInvalidOperations.ts(9,29): error TS2112: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    
+    // miss operand
+    var NUMBER =-;
+                 ~
+!!! negateOperatorInvalidOperations.ts(12,14): error TS1003: Identifier expected.

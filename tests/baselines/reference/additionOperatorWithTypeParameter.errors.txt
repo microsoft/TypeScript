@@ -1,0 +1,71 @@
+==== tests/cases/compiler/additionOperatorWithTypeParameter.ts (16 errors) ====
+    // type parameter type is not a valid operand of addition operator
+    enum E { a, b }
+    
+    function foo<T, U>(t: T, u: U) {
+        var a: any;
+        var b: boolean;
+        var c: number;
+        var d: string;
+        var e: Object;
+        var g: E;
+        var f: void;
+    
+        // type parameter as left operand
+        var r1: any = t + a; // ok, one operand is any
+        var r2 = t + b;
+                 ~
+!!! additionOperatorWithTypeParameter.ts(15,14): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+        var r3 = t + c;
+                 ~
+!!! additionOperatorWithTypeParameter.ts(16,14): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+        var r4 = t + d; // ok, one operand is string
+        var r5 = t + e;
+                 ~
+!!! additionOperatorWithTypeParameter.ts(18,14): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+        var r6 = t + g;
+                 ~
+!!! additionOperatorWithTypeParameter.ts(19,14): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+        var r7 = t + f;
+                 ~
+!!! additionOperatorWithTypeParameter.ts(20,14): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+    
+        // type parameter as right operand
+        var r8 = a + t; // ok, one operand is any
+        var r9 = b + t;
+                 ~
+!!! additionOperatorWithTypeParameter.ts(24,14): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+        var r10 = c + t;
+                  ~
+!!! additionOperatorWithTypeParameter.ts(25,15): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+        var r11 = d + t; // ok, one operand is string
+        var r12 = e + t;
+                  ~
+!!! additionOperatorWithTypeParameter.ts(27,15): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+        var r13 = g + t;
+                  ~
+!!! additionOperatorWithTypeParameter.ts(28,15): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+        var r14 = f + t;
+                  ~
+!!! additionOperatorWithTypeParameter.ts(29,15): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+    
+        // other cases
+        var r15 = t + null;
+                  ~
+!!! additionOperatorWithTypeParameter.ts(32,15): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+        var r16 = t + undefined;
+                  ~
+!!! additionOperatorWithTypeParameter.ts(33,15): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+        var r17 = t + t;
+                  ~
+!!! additionOperatorWithTypeParameter.ts(34,15): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+        var r18 = t + u;
+                  ~
+!!! additionOperatorWithTypeParameter.ts(35,15): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+        var r19 = t + (() => { });
+                  ~
+!!! additionOperatorWithTypeParameter.ts(36,15): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+        var r20 = t + [];
+                  ~
+!!! additionOperatorWithTypeParameter.ts(37,15): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+    }

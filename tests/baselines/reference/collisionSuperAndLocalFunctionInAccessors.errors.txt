@@ -1,0 +1,52 @@
+==== tests/cases/compiler/collisionSuperAndLocalFunctionInAccessors.ts (4 errors) ====
+    function _super() { // No error
+    }
+    class Foo {
+        get prop1(): number {
+            function _super() { // No error
+            }
+            return 10;
+        }
+        set prop1(val: number) {
+            function _super() { // No error
+            }
+        }
+    }
+    class b extends Foo {
+        get prop2(): number {
+            function _super() { // Should be error
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            }
+    ~~~~~~~~~
+!!! collisionSuperAndLocalFunctionInAccessors.ts(16,9): error TS2205: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+            return 10;
+        }
+        set prop2(val: number) {
+            function _super() { // Should be error
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            }
+    ~~~~~~~~~
+!!! collisionSuperAndLocalFunctionInAccessors.ts(21,9): error TS2205: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+        }
+    }
+    class c extends Foo {
+        get prop2(): number {
+            var x = () => {
+                function _super() { // Should be error
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                }
+    ~~~~~~~~~~~~~
+!!! collisionSuperAndLocalFunctionInAccessors.ts(28,13): error TS2205: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+            }
+            return 10;
+        }
+        set prop2(val: number) {
+            var x = () => {
+                function _super() { // Should be error
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                }
+    ~~~~~~~~~~~~~
+!!! collisionSuperAndLocalFunctionInAccessors.ts(35,13): error TS2205: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+            }
+        }
+    }

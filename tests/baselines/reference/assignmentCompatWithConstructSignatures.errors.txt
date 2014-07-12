@@ -1,0 +1,65 @@
+==== tests/cases/compiler/assignmentCompatWithConstructSignatures.ts (10 errors) ====
+    // void returning call signatures can be assigned a non-void returning call signature that otherwise matches
+    
+    interface T {
+        new (x: number): void;
+        ~~~~~~~~~~~~~~~~~~~~~
+!!! assignmentCompatWithConstructSignatures.ts(4,5): error TS2133: Constructors cannot have a return type of 'void'.
+    }
+    var t: T;
+    var a: { new (x: number): void };
+             ~~~~~~~~~~~~~~~~~~~~~
+!!! assignmentCompatWithConstructSignatures.ts(7,10): error TS2133: Constructors cannot have a return type of 'void'.
+    
+    t = a;
+    a = t;
+    
+    interface S {
+        new (x: number): string;
+    }
+    var s: S;
+    var a2: { new (x: number): string };
+    t = s;
+    t = a2;
+    a = s;
+    a = a2;
+    
+    interface S2 {
+        (x: string): void;
+    }
+    var s2: S2;
+    var a3: { (x: string): void };
+    // these are errors
+    t = s2;
+    ~
+!!! assignmentCompatWithConstructSignatures.ts(28,1): error TS2012: Cannot convert 'S2' to 'T':
+!!! 	Type 'T' requires a construct signature, but type 'S2' lacks one.
+    t = a3;
+    ~
+!!! assignmentCompatWithConstructSignatures.ts(29,1): error TS2012: Cannot convert '(x: string) => void' to 'T':
+!!! 	Type 'T' requires a construct signature, but type '(x: string) => void' lacks one.
+    t = (x: string) => 1;
+    ~
+!!! assignmentCompatWithConstructSignatures.ts(30,1): error TS2012: Cannot convert '(x: string) => number' to 'T':
+!!! 	Type 'T' requires a construct signature, but type '(x: string) => number' lacks one.
+    t = function (x: string) { return ''; }
+    ~
+!!! assignmentCompatWithConstructSignatures.ts(31,1): error TS2012: Cannot convert '(x: string) => string' to 'T':
+!!! 	Type 'T' requires a construct signature, but type '(x: string) => string' lacks one.
+    a = s2;
+    ~
+!!! assignmentCompatWithConstructSignatures.ts(32,1): error TS2012: Cannot convert 'S2' to 'new(x: number) => void':
+!!! 	Type 'new(x: number) => void' requires a construct signature, but type 'S2' lacks one.
+    a = a3;
+    ~
+!!! assignmentCompatWithConstructSignatures.ts(33,1): error TS2012: Cannot convert '(x: string) => void' to 'new(x: number) => void':
+!!! 	Type 'new(x: number) => void' requires a construct signature, but type '(x: string) => void' lacks one.
+    a = (x: string) => 1;
+    ~
+!!! assignmentCompatWithConstructSignatures.ts(34,1): error TS2012: Cannot convert '(x: string) => number' to 'new(x: number) => void':
+!!! 	Type 'new(x: number) => void' requires a construct signature, but type '(x: string) => number' lacks one.
+    a = function (x: string) { return ''; }
+    ~
+!!! assignmentCompatWithConstructSignatures.ts(35,1): error TS2012: Cannot convert '(x: string) => string' to 'new(x: number) => void':
+!!! 	Type 'new(x: number) => void' requires a construct signature, but type '(x: string) => string' lacks one.
+    

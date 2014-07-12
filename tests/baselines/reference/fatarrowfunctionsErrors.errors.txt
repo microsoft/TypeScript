@@ -1,0 +1,41 @@
+==== tests/cases/compiler/fatarrowfunctionsErrors.ts (14 errors) ====
+    foo((...Far:any[])=>{return 0;})
+    ~~~
+!!! fatarrowfunctionsErrors.ts(1,1): error TS2095: Could not find symbol 'foo'.
+    foo((1)=>{return 0;}); 
+           ~~
+!!! fatarrowfunctionsErrors.ts(2,8): error TS1005: ',' expected.
+    ~~~
+!!! fatarrowfunctionsErrors.ts(2,1): error TS2095: Could not find symbol 'foo'.
+    foo((x?)=>{return x;})
+    ~~~
+!!! fatarrowfunctionsErrors.ts(3,1): error TS2095: Could not find symbol 'foo'.
+    foo((x=0)=>{return x;})
+    ~~~
+!!! fatarrowfunctionsErrors.ts(4,1): error TS2095: Could not find symbol 'foo'.
+    var y = x:number => x*x;
+             ~
+!!! fatarrowfunctionsErrors.ts(5,10): error TS1005: ',' expected.
+                     ~~
+!!! fatarrowfunctionsErrors.ts(5,18): error TS1005: ';' expected.
+            ~
+!!! fatarrowfunctionsErrors.ts(5,9): error TS2095: Could not find symbol 'x'.
+                        ~
+!!! fatarrowfunctionsErrors.ts(5,21): error TS2095: Could not find symbol 'x'.
+                          ~
+!!! fatarrowfunctionsErrors.ts(5,23): error TS2095: Could not find symbol 'x'.
+    false? (() => null): null;
+    
+    // missing fatarrow
+    var x1 = () :void {};
+                      ~
+!!! fatarrowfunctionsErrors.ts(9,19): error TS1005: '=>' expected.
+    var x2 = (a:number) :void {};
+                              ~
+!!! fatarrowfunctionsErrors.ts(10,27): error TS1005: '=>' expected.
+    var x3 = (a:number) {};
+                        ~
+!!! fatarrowfunctionsErrors.ts(11,21): error TS1005: '=>' expected.
+    var x4= (...a: any[]) { };
+                          ~
+!!! fatarrowfunctionsErrors.ts(12,23): error TS1005: '=>' expected.

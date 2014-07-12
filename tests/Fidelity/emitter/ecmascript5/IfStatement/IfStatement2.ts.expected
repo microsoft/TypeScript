@@ -1,0 +1,85 @@
+{
+    "fullText": [
+        "if(true)a=2;"
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 12,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "IfStatement",
+                "fullWidth": 12,
+                "ifKeyword": {
+                    "kind": "IfKeyword",
+                    "width": 2,
+                    "text": "if",
+                    "value": "if",
+                    "valueText": "if"
+                },
+                "openParenToken": {
+                    "kind": "OpenParenToken",
+                    "width": 1,
+                    "text": "(",
+                    "value": "(",
+                    "valueText": "("
+                },
+                "condition": {
+                    "kind": "TrueKeyword",
+                    "width": 4,
+                    "text": "true",
+                    "value": true,
+                    "valueText": "true"
+                },
+                "closeParenToken": {
+                    "kind": "CloseParenToken",
+                    "width": 1,
+                    "text": ")",
+                    "value": ")",
+                    "valueText": ")"
+                },
+                "statement": {
+                    "kind": "ExpressionStatement",
+                    "fullWidth": 4,
+                    "expression": {
+                        "kind": "AssignmentExpression",
+                        "fullWidth": 3,
+                        "left": {
+                            "kind": "IdentifierName",
+                            "width": 1,
+                            "text": "a",
+                            "value": "a",
+                            "valueText": "a"
+                        },
+                        "operatorToken": {
+                            "kind": "EqualsToken",
+                            "width": 1,
+                            "text": "=",
+                            "value": "=",
+                            "valueText": "="
+                        },
+                        "right": {
+                            "kind": "NumericLiteral",
+                            "width": 1,
+                            "text": "2",
+                            "value": 2,
+                            "valueText": "2"
+                        }
+                    },
+                    "semicolonToken": {
+                        "kind": "SemicolonToken",
+                        "width": 1,
+                        "text": ";",
+                        "value": ";",
+                        "valueText": ";"
+                    }
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    }
+}

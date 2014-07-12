@@ -1,0 +1,14 @@
+==== tests/cases/compiler/voidAsNonAmbiguousReturnType_1.ts (0 errors) ====
+    ///<reference path='voidAsNonAmbiguousReturnType_0.ts'/>
+    import fs = require("voidAsNonAmbiguousReturnType_0");
+    
+    function main() {
+     fs.mkdirSync('test'); // should not error - return types are the same
+    }
+    
+==== tests/cases/compiler/voidAsNonAmbiguousReturnType_0.ts (1 errors) ====
+    export function mkdirSync(path: string, mode?: number): void;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! voidAsNonAmbiguousReturnType_0.ts(1,1): error TS2148: Overload signature is not compatible with function definition.
+    export function mkdirSync(path: string, mode?: string): void {}
+    

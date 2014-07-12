@@ -1,0 +1,4 @@
+==== tests/cases/compiler/directReferenceToNull.ts (1 errors) ====
+    var x: Null;
+           ~~~~
+!!! directReferenceToNull.ts(1,8): error TS2095: Could not find symbol 'Null'.

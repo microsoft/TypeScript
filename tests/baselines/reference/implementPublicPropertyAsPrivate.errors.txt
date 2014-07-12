@@ -1,0 +1,10 @@
+==== tests/cases/compiler/implementPublicPropertyAsPrivate.ts (1 errors) ====
+    interface I {
+        x: number;
+    }
+    class C implements I {
+          ~
+!!! implementPublicPropertyAsPrivate.ts(4,7): error TS2137: Class C declares interface I but does not implement it:
+!!! 	Property 'x' defined as private in type 'C' is defined as public in type 'I'.
+        private x = 0; // should raise error at class decl
+    }

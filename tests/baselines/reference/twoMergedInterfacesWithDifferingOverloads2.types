@@ -1,0 +1,93 @@
+=== tests/cases/compiler/twoMergedInterfacesWithDifferingOverloads2.ts ===
+interface A {
+>A : A
+
+    (): string;
+    (x: number): number;
+>x : number
+}
+
+interface A {
+>A : A
+
+    (x: number, y: number): boolean;
+>x : number
+>y : number
+}
+
+var a: A;
+>a : A
+>A : A
+
+var r = a();
+>r : string
+>a() : string
+>a : A
+
+var r2 = a(1);
+>r2 : number
+>a(1) : number
+>a : A
+
+var r3 = a(1, 2);
+>r3 : boolean
+>a(1, 2) : boolean
+>a : A
+
+module G {
+>G : G
+
+    interface A<T> {
+>A : A<T>
+>T : T
+
+        (): string;
+        (x: T): T;
+>x : T
+>T : T
+>T : T
+    }
+
+    interface A<T> {
+>A : A<T>
+>T : T
+
+        (x: T, y: number): T;
+>x : T
+>T : T
+>y : number
+>T : T
+
+        <U>(x: U, y: T): U;
+>U : U
+>x : U
+>U : U
+>y : T
+>T : T
+>U : U
+    }
+
+    var a: A<boolean>;
+>a : A<boolean>
+>A : A<T>
+
+    var r = a();
+>r : string
+>a() : string
+>a : A<boolean>
+
+    var r2 = a(true);
+>r2 : boolean
+>a(true) : boolean
+>a : A<boolean>
+
+    var r3 = a(true, 2);
+>r3 : boolean
+>a(true, 2) : boolean
+>a : A<boolean>
+
+    var r4 = a(1, true);
+>r4 : number
+>a(1, true) : number
+>a : A<boolean>
+}

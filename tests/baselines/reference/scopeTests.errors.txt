@@ -1,0 +1,15 @@
+==== tests/cases/compiler/scopeTests.ts (1 errors) ====
+    class C { private v; public p; static s; }
+    class D extends C {
+          ~
+!!! scopeTests.ts(2,7): error TS2141: Class 'D' cannot extend class 'C':
+!!! 	Property 'v' defined as public in type 'D' is defined as private in type 'C'.
+      public v: number;
+      public p: number
+      constructor() {
+       super()
+       this.v = 1;
+       this.p = 1;
+       C.s = 1;
+      }
+    }

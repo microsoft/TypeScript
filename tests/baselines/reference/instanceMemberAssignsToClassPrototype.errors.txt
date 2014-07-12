@@ -1,0 +1,16 @@
+==== tests/cases/compiler/instanceMemberAssignsToClassPrototype.ts (1 errors) ====
+    class C {
+        foo() {
+            C.prototype.foo = () => { }
+        }
+    
+        bar(x: number): number {
+            C.prototype.bar = () => { } // error
+            ~~~~~~~~~~~~~~~
+!!! instanceMemberAssignsToClassPrototype.ts(7,9): error TS2012: Cannot convert '() => void' to '(x: number) => number':
+!!! 	Call signatures of types '() => void' and '(x: number) => number' are incompatible.
+            C.prototype.bar = (x) => x; // ok
+            C.prototype.bar = (x: number) => 1; // ok
+            return 1;
+        }
+    }

@@ -1,0 +1,13 @@
+==== tests/cases/compiler/assignmentCompatability12.ts (1 errors) ====
+    module __test1__ {
+        export interface interfaceWithPublicAndOptional<T,U> { one: T; two?: U; };  var obj4: interfaceWithPublicAndOptional<number,string> = { one: 1 };;
+        export var __val__obj4 = obj4;
+    }
+    module __test2__ {
+        export var obj = {one: "1"};
+        export var __val__obj = obj;
+    }
+    __test2__.__val__obj = __test1__.__val__obj4
+    ~~~~~~~~~~~~~~~~~~~~
+!!! assignmentCompatability12.ts(9,1): error TS2012: Cannot convert '__test1__.interfaceWithPublicAndOptional<number, string>' to '{ one: string; }':
+!!! 	Types of property 'one' of types '__test1__.interfaceWithPublicAndOptional<number, string>' and '{ one: string; }' are incompatible.

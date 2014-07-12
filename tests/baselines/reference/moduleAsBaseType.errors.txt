@@ -1,0 +1,17 @@
+==== tests/cases/compiler/moduleAsBaseType.ts (6 errors) ====
+    module M {}
+    class C extends M {}
+                    ~
+!!! moduleAsBaseType.ts(2,17): error TS2073: A class may only extend another class.
+                    ~
+!!! moduleAsBaseType.ts(2,17): error TS4022: Type reference cannot refer to container 'M'.
+    interface I extends M { }
+                        ~
+!!! moduleAsBaseType.ts(3,21): error TS2075: An interface may only extend another class or interface.
+                        ~
+!!! moduleAsBaseType.ts(3,21): error TS4022: Type reference cannot refer to container 'M'.
+    class C2 implements M { }
+                        ~
+!!! moduleAsBaseType.ts(4,21): error TS2074: A class may only implement another class or interface.
+                        ~
+!!! moduleAsBaseType.ts(4,21): error TS4022: Type reference cannot refer to container 'M'.

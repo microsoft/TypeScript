@@ -1,0 +1,18 @@
+==== tests/cases/compiler/genericCallsWithoutParens.ts (4 errors) ====
+    function f<T>() { }
+    var r = f<number>; // parse error
+                     ~
+!!! genericCallsWithoutParens.ts(2,18): error TS1003: Identifier expected.
+              ~~~~~~
+!!! genericCallsWithoutParens.ts(2,11): error TS2095: Could not find symbol 'number'.
+    
+    class C<T> {
+        foo: T;
+    }
+    var c = new C<number>; // parse error
+                         ~
+!!! genericCallsWithoutParens.ts(7,22): error TS1003: Identifier expected.
+                  ~~~~~~
+!!! genericCallsWithoutParens.ts(7,15): error TS2095: Could not find symbol 'number'.
+    
+    

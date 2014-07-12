@@ -1,0 +1,14 @@
+==== tests/cases/compiler/augmentedTypesClass.ts (2 errors) ====
+    //// class then var
+    class c1 { public foo() { } }
+    var c1 = 1; // error
+        ~~
+!!! augmentedTypesClass.ts(3,5): error TS2000: Duplicate identifier 'c1'. Additional locations:
+!!! 	augmentedTypesClass.ts(2,1)
+    
+    //// class then enum
+    class c4 { public foo() { } }
+    enum c4 { One } // error
+         ~~
+!!! augmentedTypesClass.ts(7,6): error TS2000: Duplicate identifier 'c4'. Additional locations:
+!!! 	augmentedTypesClass.ts(6,1)

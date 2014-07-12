@@ -1,0 +1,70 @@
+==== tests/cases/compiler/interfaceAssignmentCompat.ts (5 errors) ====
+    module M {
+        export enum Color {
+            Green,
+            Blue,
+            Brown,
+        }
+    
+        export interface IEye {
+            color:number;
+        }
+    
+        export interface IFrenchEye {
+            coleur:number;
+        }
+    
+        export function CompareEyes(a:IEye,b:IEye):number {
+            return a.color-b.color;
+        }
+    
+        export function CompareYeux(a:IFrenchEye,b:IFrenchEye):number {
+            return a.coleur-b.coleur;
+        }
+    
+        export function test() {
+            var x:IEye[]= [];
+            var result="";
+        
+            x[0]={ color:Color.Brown };
+            x[1]={ color:Color.Blue };
+            x[2]={ color:Color.Green };
+    
+            x=x.sort(CompareYeux); // parameter mismatch
+                ~~~~
+!!! interfaceAssignmentCompat.ts(32,13): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Call signatures of types 'typeof CompareYeux' and '(a: IEye, b: IEye) => number' are incompatible:
+!!! 		Type 'IFrenchEye' is missing property 'color' from type 'IEye'.
+!!! 		Type 'IEye' is missing property 'coleur' from type 'IFrenchEye'.
+                ~~~~
+!!! interfaceAssignmentCompat.ts(32,13): error TS2087: Could not select overload for 'call' expression.
+            // type of z inferred from specialized array type
+            var z=x.sort(CompareEyes); // ok
+    
+            for (var i=0,len=z.length;i<len;i++) {
+                result+=((Color._map[z[i].color])+"\r\n");
+                                ~~~~
+!!! interfaceAssignmentCompat.ts(37,29): error TS2094: The property '_map' does not exist on value of type 'typeof Color'.
+            }
+    
+            var eeks:IFrenchEye[] = [];
+            for (var j=z.length=1;j>=0;j--) {
+                eeks[j]=z[j];  // nope: element assignment
+                ~~~~~~~
+!!! interfaceAssignmentCompat.ts(42,13): error TS2012: Cannot convert 'IEye' to 'IFrenchEye':
+!!! 	Type 'IEye' is missing property 'coleur' from type 'IFrenchEye'.
+            }
+            eeks=z; // nope: array assignment
+            ~~~~
+!!! interfaceAssignmentCompat.ts(44,9): error TS2012: Cannot convert 'IEye[]' to 'IFrenchEye[]':
+!!! 	Types of property 'pop' of types 'IEye[]' and 'IFrenchEye[]' are incompatible:
+!!! 		Call signatures of types '() => IEye' and '() => IFrenchEye' are incompatible:
+!!! 			Type 'IEye' is missing property 'coleur' from type 'IFrenchEye'.
+            return result;
+        }
+    }
+    
+    M.test();
+    
+    
+    

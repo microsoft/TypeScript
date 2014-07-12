@@ -1,0 +1,29 @@
+==== tests/cases/compiler/infinitelyExpandingTypes4.ts (1 errors) ====
+    interface Query<T> {
+        // ...
+        groupBy<K>(keySelector: (item: T) => K): Query<Grouping<K, T>>;
+        // ...
+    }
+    
+    interface QueryEnumerator<T> {
+        // ...
+        groupBy<K>(keySelector: (item: T) => K): QueryEnumerator<Grouping<K, T>>;
+        // ...
+    }
+    
+    interface Grouping<K, T> extends Query<T> {
+        key(): K;
+    }
+    
+    var q1: Query<number>;
+    var q2: QueryEnumerator<number>;
+    var q3: Query<number>;
+    
+    q1 = q2; // should error
+    ~~
+!!! infinitelyExpandingTypes4.ts(21,1): error TS2012: Cannot convert 'QueryEnumerator<number>' to 'Query<number>':
+!!! 	Types of property 'groupBy' of types 'QueryEnumerator<number>' and 'Query<number>' are incompatible:
+!!! 		Call signatures of types '<K>(keySelector: (item: number) => K) => QueryEnumerator<Grouping<K, number>>' and '<K>(keySelector: (item: number) => K) => Query<Grouping<K, number>>' are incompatible:
+!!! 			Types 'QueryEnumerator<Grouping<any, number>>' and 'Query<Grouping<any, number>>' originating in infinitely expanding type reference do not refer to same named type.
+    q1 = q3; // should not error
+    

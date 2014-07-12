@@ -1,0 +1,30 @@
+{
+    "diagnostics": [
+        {
+            "start": 0,
+            "length": 2,
+            "diagnosticCode": "Octal literals are not available when targeting ECMAScript 5 and higher."
+        }
+    ],
+    "tokens": [
+        {
+            "kind": "NumericLiteral",
+            "width": 2,
+            "text": "01",
+            "value": 1,
+            "valueText": "1"
+        },
+        {
+            "kind": "NumericLiteral",
+            "width": 2,
+            "text": ".0",
+            "value": 0,
+            "valueText": "0"
+        },
+        {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    ]
+}

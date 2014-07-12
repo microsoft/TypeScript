@@ -1,0 +1,318 @@
+=== tests/cases/compiler/assignmentCompatWithObjectMembers.ts ===
+// members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
+// no errors expected
+
+module SimpleTypes {
+>SimpleTypes : SimpleTypes
+
+    class S { foo: string; }
+>S : S
+>foo : string
+
+    class T { foo: string; }
+>T : T
+>foo : string
+
+    var s: S;
+>s : S
+>S : S
+
+    var t: T;
+>t : T
+>T : T
+
+    interface S2 { foo: string; }
+>S2 : S2
+>foo : string
+
+    interface T2 { foo: string; }
+>T2 : T2
+>foo : string
+
+    var s2: S2;
+>s2 : S2
+>S2 : S2
+
+    var t2: T2;
+>t2 : T2
+>T2 : T2
+
+    var a: { foo: string; }
+>a : { foo: string; }
+>foo : string
+
+    var b: { foo: string; }
+>b : { foo: string; }
+>foo : string
+
+    var a2 = { foo: '' };
+>a2 : { foo: string; }
+>{ foo: '' } : { foo: string; }
+>foo : string
+
+    var b2 = { foo: '' };
+>b2 : { foo: string; }
+>{ foo: '' } : { foo: string; }
+>foo : string
+
+>s = t : T
+>s : S
+
+    s = t;
+>t : T
+
+    t = s;
+>t = s : S
+>t : T
+>s : S
+
+    s = s2;
+>s = s2 : S2
+>s : S
+>s2 : S2
+
+    s = a2;
+>s = a2 : { foo: string; }
+>s : S
+>a2 : { foo: string; }
+
+>s2 = t2 : T2
+>s2 : S2
+
+    s2 = t2;
+>t2 : T2
+
+    t2 = s2;
+>t2 = s2 : S2
+>t2 : T2
+>s2 : S2
+
+    s2 = t;
+>s2 = t : T
+>s2 : S2
+>t : T
+
+    s2 = b;
+>s2 = b : { foo: string; }
+>s2 : S2
+>b : { foo: string; }
+
+    s2 = a2;
+>s2 = a2 : { foo: string; }
+>s2 : S2
+>a2 : { foo: string; }
+
+>a = b : { foo: string; }
+>a : { foo: string; }
+
+    a = b;
+>b : { foo: string; }
+
+    b = a;
+>b = a : { foo: string; }
+>b : { foo: string; }
+>a : { foo: string; }
+
+    a = s;
+>a = s : S
+>a : { foo: string; }
+>s : S
+
+    a = s2;
+>a = s2 : S2
+>a : { foo: string; }
+>s2 : S2
+
+    a = a2;
+>a = a2 : { foo: string; }
+>a : { foo: string; }
+>a2 : { foo: string; }
+
+>a2 = b2 : { foo: string; }
+>a2 : { foo: string; }
+
+    a2 = b2;
+>b2 : { foo: string; }
+
+    b2 = a2;
+>b2 = a2 : { foo: string; }
+>b2 : { foo: string; }
+>a2 : { foo: string; }
+
+    a2 = b;
+>a2 = b : { foo: string; }
+>a2 : { foo: string; }
+>b : { foo: string; }
+
+    a2 = t2;
+>a2 = t2 : T2
+>a2 : { foo: string; }
+>t2 : T2
+
+    a2 = t;
+>a2 = t : T
+>a2 : { foo: string; }
+>t : T
+}
+
+module ObjectTypes {
+>ObjectTypes : ObjectTypes
+
+    class S { foo: S; }
+>S : S
+>foo : S
+>S : S
+
+    class T { foo: T; }
+>T : T
+>foo : T
+>T : T
+
+    var s: S;
+>s : S
+>S : S
+
+    var t: T;
+>t : T
+>T : T
+
+    interface S2 { foo: S2; }
+>S2 : S2
+>foo : S2
+>S2 : S2
+
+    interface T2 { foo: T2; }
+>T2 : T2
+>foo : T2
+>T2 : T2
+
+    var s2: S2;
+>s2 : S2
+>S2 : S2
+
+    var t2: T2;
+>t2 : T2
+>T2 : T2
+
+    var a: { foo: typeof a; }
+>a : { foo: any; }
+>foo : any
+>a : { foo: any; }
+
+    var b: { foo: typeof b; }
+>b : { foo: any; }
+>foo : any
+>b : { foo: any; }
+
+    var a2 = { foo: a2 };
+>a2 : { foo: any; }
+>{ foo: a2 } : { foo: any; }
+>foo : any
+>a2 : { foo: any; }
+
+    var b2 = { foo: b2 };
+>b2 : { foo: any; }
+>{ foo: b2 } : { foo: any; }
+>foo : any
+>b2 : { foo: any; }
+
+>s = t : T
+>s : S
+
+    s = t;
+>t : T
+
+    t = s;
+>t = s : S
+>t : T
+>s : S
+
+    s = s2;
+>s = s2 : S2
+>s : S
+>s2 : S2
+
+    s = a2;
+>s = a2 : { foo: any; }
+>s : S
+>a2 : { foo: any; }
+
+>s2 = t2 : T2
+>s2 : S2
+
+    s2 = t2;
+>t2 : T2
+
+    t2 = s2;
+>t2 = s2 : S2
+>t2 : T2
+>s2 : S2
+
+    s2 = t;
+>s2 = t : T
+>s2 : S2
+>t : T
+
+    s2 = b;
+>s2 = b : { foo: any; }
+>s2 : S2
+>b : { foo: any; }
+
+    s2 = a2;
+>s2 = a2 : { foo: any; }
+>s2 : S2
+>a2 : { foo: any; }
+
+>a = b : { foo: any; }
+>a : { foo: any; }
+
+    a = b;
+>b : { foo: any; }
+
+    b = a;
+>b = a : { foo: any; }
+>b : { foo: any; }
+>a : { foo: any; }
+
+    a = s;
+>a = s : S
+>a : { foo: any; }
+>s : S
+
+    a = s2;
+>a = s2 : S2
+>a : { foo: any; }
+>s2 : S2
+
+    a = a2;
+>a = a2 : { foo: any; }
+>a : { foo: any; }
+>a2 : { foo: any; }
+
+>a2 = b2 : { foo: any; }
+>a2 : { foo: any; }
+
+    a2 = b2;
+>b2 : { foo: any; }
+
+    b2 = a2;
+>b2 = a2 : { foo: any; }
+>b2 : { foo: any; }
+>a2 : { foo: any; }
+
+    a2 = b;
+>a2 = b : { foo: any; }
+>a2 : { foo: any; }
+>b : { foo: any; }
+
+    a2 = t2;
+>a2 = t2 : T2
+>a2 : { foo: any; }
+>t2 : T2
+
+    a2 = t;
+>a2 = t : T
+>a2 : { foo: any; }
+>t : T
+
+}

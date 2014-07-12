@@ -1,0 +1,35 @@
+=== tests/cases/compiler/internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts ===
+export module a {
+>a : a
+
+    export module b {
+>b : b
+
+        export interface I {
+>I : I
+
+            foo();
+>foo : () => any
+        }
+    }
+}
+
+export module c {
+>c : c
+
+    import b = a.b;
+>b : b
+>a : a
+>b : any
+
+    export var x: b.I;
+>x : a.b.I
+>b : b
+>I : a.b.I
+
+    x.foo();
+>x.foo() : any
+>x.foo : () => any
+>x : a.b.I
+>foo : () => any
+}

@@ -1,0 +1,11 @@
+==== tests/cases/compiler/staticOffOfInstance2.ts (1 errors) ====
+    class List<T> {
+        public Blah() {
+            this.Foo(); // no error
+                 ~~~
+!!! staticOffOfInstance2.ts(3,14): error TS2094: The property 'Foo' does not exist on value of type 'List<T>'.
+            List.Foo();
+        }
+        public static Foo() { }
+    }
+    

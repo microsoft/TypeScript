@@ -1,0 +1,524 @@
+=== tests/cases/compiler/typeOfThis.ts ===
+class MyTestClass {
+>MyTestClass : MyTestClass
+
+    private canary: number;
+>canary : number
+
+    static staticCanary: number;
+>staticCanary : number
+
+    constructor() {
+        //type of 'this' in constructor body is the class instance type
+        var p = this.canary;
+>p : number
+>this.canary : number
+>this : MyTestClass
+>canary : number
+
+        var p: number;
+>p : number
+
+        this.canary = 3;
+>this.canary = 3 : number
+>this.canary : number
+>this : MyTestClass
+>canary : number
+    }
+
+>//type of 'this' in member function param list is the class instance type
+    memberFunc : (t?: MyTestClass) => void
+
+    //type of 'this' in member function param list is the class instance type
+    memberFunc(t = this) {
+>t : MyTestClass
+>this : MyTestClass
+
+        var t: MyTestClass;
+>t : MyTestClass
+>MyTestClass : MyTestClass
+
+        //type of 'this' in member function body is the class instance type
+        var p = this;
+>p : MyTestClass
+>this : MyTestClass
+
+        var p: MyTestClass;
+>p : MyTestClass
+>MyTestClass : MyTestClass
+    }
+
+    //type of 'this' in member accessor(get and set) body is the class instance type
+    get prop() {
+>prop : MyTestClass
+
+        var p = this;
+>p : MyTestClass
+>this : MyTestClass
+
+        var p: MyTestClass;
+>p : MyTestClass
+>MyTestClass : MyTestClass
+
+        return this;
+>this : MyTestClass
+    }
+    set prop(v) {
+>prop : MyTestClass
+>v : MyTestClass
+
+        var p = this;
+>p : MyTestClass
+>this : MyTestClass
+
+        var p: MyTestClass;
+>p : MyTestClass
+>MyTestClass : MyTestClass
+
+        p = v;
+>p = v : MyTestClass
+>p : MyTestClass
+>v : MyTestClass
+
+        v = p;
+>v = p : MyTestClass
+>v : MyTestClass
+>p : MyTestClass
+    }
+
+>someFunc : () => void
+
+    someFunc = () => {
+>() => {
+        //type of 'this' in member variable initializer is the class instance type
+        var t = this;
+        var t: MyTestClass;
+    } : () => void
+
+        //type of 'this' in member variable initializer is the class instance type
+        var t = this;
+>t : MyTestClass
+>this : MyTestClass
+
+        var t: MyTestClass;
+>t : MyTestClass
+>MyTestClass : MyTestClass
+
+    };
+
+    //type of 'this' in static function param list is constructor function type
+    static staticFn(t = this) {
+>staticFn : (t?: typeof MyTestClass) => void
+>t : typeof MyTestClass
+>this : typeof MyTestClass
+
+        var t: typeof MyTestClass;
+>t : typeof MyTestClass
+>MyTestClass : typeof MyTestClass
+
+        var t = MyTestClass;
+>t : typeof MyTestClass
+>MyTestClass : typeof MyTestClass
+
+        t.staticCanary;
+>t.staticCanary : number
+>t : typeof MyTestClass
+>staticCanary : number
+
+        //type of 'this' in static function body is constructor function type
+        var p = this;
+>p : typeof MyTestClass
+>this : typeof MyTestClass
+
+        var p: typeof MyTestClass;
+>p : typeof MyTestClass
+>MyTestClass : typeof MyTestClass
+
+        var p = MyTestClass;
+>p : typeof MyTestClass
+>MyTestClass : typeof MyTestClass
+
+        p.staticCanary;
+>p.staticCanary : number
+>p : typeof MyTestClass
+>staticCanary : number
+    }
+
+    static get staticProp() {
+>staticProp : typeof MyTestClass
+
+        //type of 'this' in static accessor body is constructor function type
+        var p = this;
+>p : typeof MyTestClass
+>this : typeof MyTestClass
+
+        var p: typeof MyTestClass;
+>p : typeof MyTestClass
+>MyTestClass : typeof MyTestClass
+
+        var p = MyTestClass;
+>p : typeof MyTestClass
+>MyTestClass : typeof MyTestClass
+
+        p.staticCanary;
+>p.staticCanary : number
+>p : typeof MyTestClass
+>staticCanary : number
+
+        return this;
+>this : typeof MyTestClass
+    }
+    static set staticProp(v: typeof MyTestClass) {
+>staticProp : typeof MyTestClass
+>v : typeof MyTestClass
+>MyTestClass : typeof MyTestClass
+
+        //type of 'this' in static accessor body is constructor function type
+        var p = this;
+>p : typeof MyTestClass
+>this : typeof MyTestClass
+
+        var p: typeof MyTestClass;
+>p : typeof MyTestClass
+>MyTestClass : typeof MyTestClass
+
+        var p = MyTestClass;
+>p : typeof MyTestClass
+>MyTestClass : typeof MyTestClass
+
+        p.staticCanary;
+>p.staticCanary : number
+>p : typeof MyTestClass
+>staticCanary : number
+    }
+}
+
+class MyGenericTestClass<T, U> {
+>MyGenericTestClass : MyGenericTestClass<T, U>
+>T : T
+>U : U
+
+    private canary: number;
+>canary : number
+
+    static staticCanary: number;
+>staticCanary : number
+
+    constructor() {
+        //type of 'this' in constructor body is the class instance type
+        var p = this.canary;
+>p : number
+>this.canary : number
+>this : MyGenericTestClass<T, U>
+>canary : number
+
+        var p: number;
+>p : number
+
+        this.canary = 3;
+>this.canary = 3 : number
+>this.canary : number
+>this : MyGenericTestClass<T, U>
+>canary : number
+    }
+
+>//type of 'this' in member function param list is the class instance type
+    memberFunc : (t?: MyGenericTestClass<T, U>) => void
+
+    //type of 'this' in member function param list is the class instance type
+    memberFunc(t = this) {
+>t : MyGenericTestClass<T, U>
+>this : MyGenericTestClass<T, U>
+
+        var t: MyGenericTestClass<T, U>;
+>t : MyGenericTestClass<T, U>
+>MyGenericTestClass : MyGenericTestClass<T, U>
+>T : T
+>U : U
+
+        //type of 'this' in member function body is the class instance type
+        var p = this;
+>p : MyGenericTestClass<T, U>
+>this : MyGenericTestClass<T, U>
+
+        var p: MyGenericTestClass<T, U>;
+>p : MyGenericTestClass<T, U>
+>MyGenericTestClass : MyGenericTestClass<T, U>
+>T : T
+>U : U
+    }
+
+    //type of 'this' in member accessor(get and set) body is the class instance type
+    get prop() {
+>prop : MyGenericTestClass<T, U>
+
+        var p = this;
+>p : MyGenericTestClass<T, U>
+>this : MyGenericTestClass<T, U>
+
+        var p: MyGenericTestClass<T, U>;
+>p : MyGenericTestClass<T, U>
+>MyGenericTestClass : MyGenericTestClass<T, U>
+>T : T
+>U : U
+
+        return this;
+>this : MyGenericTestClass<T, U>
+    }
+    set prop(v) {
+>prop : MyGenericTestClass<T, U>
+>v : MyGenericTestClass<T, U>
+
+        var p = this;
+>p : MyGenericTestClass<T, U>
+>this : MyGenericTestClass<T, U>
+
+        var p: MyGenericTestClass<T, U>;
+>p : MyGenericTestClass<T, U>
+>MyGenericTestClass : MyGenericTestClass<T, U>
+>T : T
+>U : U
+
+        p = v;
+>p = v : MyGenericTestClass<T, U>
+>p : MyGenericTestClass<T, U>
+>v : MyGenericTestClass<T, U>
+
+        v = p;
+>v = p : MyGenericTestClass<T, U>
+>v : MyGenericTestClass<T, U>
+>p : MyGenericTestClass<T, U>
+    }
+
+>someFunc : () => void
+
+    someFunc = () => {
+>() => {
+        //type of 'this' in member variable initializer is the class instance type
+        var t = this;
+        var t: MyGenericTestClass<T, U>;
+    } : () => void
+
+        //type of 'this' in member variable initializer is the class instance type
+        var t = this;
+>t : MyGenericTestClass<T, U>
+>this : MyGenericTestClass<T, U>
+
+        var t: MyGenericTestClass<T, U>;
+>t : MyGenericTestClass<T, U>
+>MyGenericTestClass : MyGenericTestClass<T, U>
+>T : T
+>U : U
+
+    };
+
+    //type of 'this' in static function param list is constructor function type
+    static staticFn(t = this) {
+>staticFn : (t?: typeof MyGenericTestClass) => void
+>t : typeof MyGenericTestClass
+>this : typeof MyGenericTestClass
+
+        var t: typeof MyGenericTestClass;
+>t : typeof MyGenericTestClass
+>MyGenericTestClass : typeof MyGenericTestClass
+
+        var t = MyGenericTestClass;
+>t : typeof MyGenericTestClass
+>MyGenericTestClass : typeof MyGenericTestClass
+
+        t.staticCanary;
+>t.staticCanary : number
+>t : typeof MyGenericTestClass
+>staticCanary : number
+
+        //type of 'this' in static function body is constructor function type
+        var p = this;
+>p : typeof MyGenericTestClass
+>this : typeof MyGenericTestClass
+
+        var p: typeof MyGenericTestClass;
+>p : typeof MyGenericTestClass
+>MyGenericTestClass : typeof MyGenericTestClass
+
+        var p = MyGenericTestClass;
+>p : typeof MyGenericTestClass
+>MyGenericTestClass : typeof MyGenericTestClass
+
+        p.staticCanary;
+>p.staticCanary : number
+>p : typeof MyGenericTestClass
+>staticCanary : number
+    }
+
+    static get staticProp() {
+>staticProp : typeof MyGenericTestClass
+
+        //type of 'this' in static accessor body is constructor function type
+        var p = this;
+>p : typeof MyGenericTestClass
+>this : typeof MyGenericTestClass
+
+        var p: typeof MyGenericTestClass;
+>p : typeof MyGenericTestClass
+>MyGenericTestClass : typeof MyGenericTestClass
+
+        var p = MyGenericTestClass;
+>p : typeof MyGenericTestClass
+>MyGenericTestClass : typeof MyGenericTestClass
+
+        p.staticCanary;
+>p.staticCanary : number
+>p : typeof MyGenericTestClass
+>staticCanary : number
+
+        return this;
+>this : typeof MyGenericTestClass
+    }
+    static set staticProp(v: typeof MyGenericTestClass) {
+>staticProp : typeof MyGenericTestClass
+>v : typeof MyGenericTestClass
+>MyGenericTestClass : typeof MyGenericTestClass
+
+        //type of 'this' in static accessor body is constructor function type
+        var p = this;
+>p : typeof MyGenericTestClass
+>this : typeof MyGenericTestClass
+
+        var p: typeof MyGenericTestClass;
+>p : typeof MyGenericTestClass
+>MyGenericTestClass : typeof MyGenericTestClass
+
+        var p = MyGenericTestClass;
+>p : typeof MyGenericTestClass
+>MyGenericTestClass : typeof MyGenericTestClass
+
+        p.staticCanary;
+>p.staticCanary : number
+>p : typeof MyGenericTestClass
+>staticCanary : number
+    }
+}
+
+//type of 'this' in a function declaration param list is Any
+function fn(s = this) {
+>fn : typeof fn
+>s : any
+>this : any
+
+    var s: any;
+>s : any
+
+    s.spaaaaaaace = 4;
+>s.spaaaaaaace = 4 : number
+>s.spaaaaaaace : any
+>s : any
+>spaaaaaaace : any
+
+    //type of 'this' in a function declaration body is Any
+    var t: any;
+>t : any
+
+    var t = this;
+>t : any
+>this : any
+
+    this.spaaaaace = 4;
+>this.spaaaaace = 4 : number
+>this.spaaaaace : any
+>this : any
+>spaaaaace : any
+}
+
+//type of 'this' in a function expression param list list is Any
+var q1 = function (s = this) {
+>q1 : (s?: any) => void
+>function (s = this) {
+    var s: any;
+    s.spaaaaaaace = 4;
+
+    //type of 'this' in a function expression body is Any
+    var t: any;
+    var t = this;
+    this.spaaaaace = 4;
+} : (s?: any) => void
+>s : any
+>this : any
+
+    var s: any;
+>s : any
+
+    s.spaaaaaaace = 4;
+>s.spaaaaaaace = 4 : number
+>s.spaaaaaaace : any
+>s : any
+>spaaaaaaace : any
+
+    //type of 'this' in a function expression body is Any
+    var t: any;
+>t : any
+
+    var t = this;
+>t : any
+>this : any
+
+    this.spaaaaace = 4;
+>this.spaaaaace = 4 : number
+>this.spaaaaace : any
+>this : any
+>spaaaaace : any
+}
+
+//type of 'this' in a fat arrow expression param list is Any
+var q2 = (s = this) => {
+>q2 : (s?: any) => void
+>(s = this) => {
+    var s: any;
+    s.spaaaaaaace = 4;
+
+    //type of 'this' in a fat arrow expression body is Any
+    var t: any;
+    var t = this;
+    this.spaaaaace = 4;
+} : (s?: any) => void
+>s : any
+>this : any
+
+    var s: any;
+>s : any
+
+    s.spaaaaaaace = 4;
+>s.spaaaaaaace = 4 : number
+>s.spaaaaaaace : any
+>s : any
+>spaaaaaaace : any
+
+    //type of 'this' in a fat arrow expression body is Any
+    var t: any;
+>t : any
+
+    var t = this;
+>t : any
+>this : any
+
+    this.spaaaaace = 4;
+>this.spaaaaace = 4 : number
+>this.spaaaaace : any
+>this : any
+>spaaaaace : any
+}
+
+//type of 'this' in global module is Any
+var t: any;
+>t : any
+
+var t = this;
+>t : any
+>this : any
+
+this.spaaaaace = 4;
+>this.spaaaaace = 4 : number
+>this.spaaaaace : any
+>this : any
+>spaaaaace : any
+
+

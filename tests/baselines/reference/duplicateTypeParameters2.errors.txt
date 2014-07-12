@@ -1,0 +1,7 @@
+==== tests/cases/compiler/duplicateTypeParameters2.ts (1 errors) ====
+    class A { public foo() { } }
+    class B { public bar() { } }
+    
+    interface I<T extends A, T extends B> {}
+                ~~~~~~~~~~~
+!!! duplicateTypeParameters2.ts(4,13): error TS2000: Duplicate identifier 'T'.

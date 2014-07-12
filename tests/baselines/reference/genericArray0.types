@@ -1,0 +1,21 @@
+=== tests/cases/compiler/genericArray0.ts ===
+
+
+var x:number[];
+>x : number[]
+
+
+var y = x; 
+>y : number[]
+>x : number[]
+
+function map<U>() {
+>map : typeof map
+>U : U
+
+    var ys: U[] = [];
+>ys : U[]
+>U : U
+>[] : U[]
+}
+

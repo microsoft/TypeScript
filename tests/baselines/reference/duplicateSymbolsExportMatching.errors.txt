@@ -1,0 +1,85 @@
+==== tests/cases/compiler/duplicateSymbolsExportMatching.ts (9 errors) ====
+    module M {
+        export interface E { }
+        interface I { }
+    }
+    module M {
+        export interface E { } // ok
+        interface I { } // ok
+    }
+    
+    // Doesn't match export visibility, but it's in a different parent, so it's ok
+    module M {
+        interface E { } // ok
+        export interface I { } // ok
+    }
+    
+    module N {
+        interface I { }
+        interface I { } // ok
+        export interface E { }
+        export interface E { } // ok
+    }
+    
+    module N2 {
+        interface I { }
+        export interface I { } // error
+        ~~~~~~~~~~~~~~~~~~~~~~
+!!! duplicateSymbolsExportMatching.ts(25,5): error TS2192: All declarations of merged declaration 'I' must be exported or not exported.
+        export interface E { }
+        interface E { } // error
+        ~~~~~~~~~~~~~~~
+!!! duplicateSymbolsExportMatching.ts(27,5): error TS2192: All declarations of merged declaration 'E' must be exported or not exported.
+    }
+    
+    // Should report error only once for instantiated module
+    module M {
+        module inst {
+            var t;
+        }
+        export module inst { // one error
+                      ~~~~
+!!! duplicateSymbolsExportMatching.ts(35,19): error TS2192: All declarations of merged declaration 'inst' must be exported or not exported.
+            var t;
+        }
+    }
+    
+    // Variables of the same / different type
+    module M2 {
+        var v: string;
+        export var v: string; // one error (visibility)
+                   ~~~~~~~~~
+!!! duplicateSymbolsExportMatching.ts(43,16): error TS2192: All declarations of merged declaration 'v' must be exported or not exported.
+        var w: number;
+        export var w: string; // two errors (visibility and type mismatch)
+                   ~~~~~~~~~
+!!! duplicateSymbolsExportMatching.ts(45,16): error TS2134: Subsequent variable declarations must have the same type.  Variable 'M2.w' must be of type 'number', but here has type 'string'.
+                   ~~~~~~~~~
+!!! duplicateSymbolsExportMatching.ts(45,16): error TS2192: All declarations of merged declaration 'w' must be exported or not exported.
+    }
+    
+    module M {
+        module F {
+            var t;
+        }
+        export function F() { } // Only one error for duplicate identifier (don't consider visibility)
+                        ~
+!!! duplicateSymbolsExportMatching.ts(52,21): error TS2000: Duplicate identifier 'F'. Additional locations:
+!!! 	duplicateSymbolsExportMatching.ts(49,12)
+    }
+    
+    module M {
+        class C { }
+        module C { }
+        export module C { // Two visibility errors (one for the clodule symbol, and one for the merged container symbol)
+                      ~
+!!! duplicateSymbolsExportMatching.ts(58,19): error TS2192: All declarations of merged declaration 'C' must be exported or not exported.
+            var t;
+        }
+    }
+    
+    // Top level
+    interface D { }
+    export interface D { }
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! duplicateSymbolsExportMatching.ts(65,1): error TS2192: All declarations of merged declaration 'D' must be exported or not exported.

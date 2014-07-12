@@ -1,0 +1,7 @@
+==== tests/cases/compiler/unresolvedTypeAssertionSymbol.ts (1 errors) ====
+    var x = 1;
+    var y = <asdf>x;
+             ~~~~
+!!! unresolvedTypeAssertionSymbol.ts(2,10): error TS2095: Could not find symbol 'asdf'.
+     
+    

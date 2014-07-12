@@ -1,0 +1,108 @@
+=== tests/cases/compiler/collisionCodeGenModuleWithAccessorChildren.ts ===
+module M {
+>M : M
+
+    export var x = 3;
+>x : number
+
+    class c {
+>c : c
+
+        private y;
+>y : any
+
+        set Z(M) {
+>Z : any
+>M : any
+
+            this.y = x;
+>this.y = x : number
+>this.y : any
+>this : c
+>y : any
+>x : number
+        }
+    }
+}
+
+module M {
+>M : M
+
+    class d {
+>d : d
+
+        private y;
+>y : any
+
+        set Z(p) {
+>Z : any
+>p : any
+
+            var M = 10;
+>M : number
+
+            this.y = x;
+>this.y = x : number
+>this.y : any
+>this : d
+>y : any
+>x : number
+        }
+    }
+}
+
+module M { // Shouldnt be _M
+>M : M
+
+    class e {
+>e : e
+
+        private y;
+>y : any
+
+        set M(p) {
+>M : any
+>p : any
+
+            this.y = x;
+>this.y = x : number
+>this.y : any
+>this : e
+>y : any
+>x : number
+        }
+    }
+}
+
+module M {
+>M : M
+
+    class f {
+>f : f
+
+        get Z() {
+>Z : number
+
+            var M = 10;
+>M : number
+
+            return x;
+>x : number
+        }
+    }
+}
+
+module M { // Shouldnt be _M
+>M : M
+
+    class e {
+>e : e
+
+        get M() {
+>M : number
+
+            return x;
+>x : number
+        }
+    }
+}

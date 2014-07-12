@@ -1,0 +1,6 @@
+==== tests/cases/compiler/class2.ts (2 errors) ====
+    class foo { constructor() { static f = 3; } }
+                                ~~~~~~
+!!! class2.ts(1,29): error TS1008: Unexpected token; 'statement' expected.
+                                                ~
+!!! class2.ts(1,45): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.

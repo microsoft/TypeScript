@@ -1,0 +1,31 @@
+==== tests/cases/compiler/classExtendsEveryObjectType.ts (7 errors) ====
+    interface I {
+        foo: string;
+    }
+    class C extends I { } // error
+                    ~
+!!! classExtendsEveryObjectType.ts(4,17): error TS2073: A class may only extend another class.
+    
+    class C2 extends { foo: string; } { } // error
+    var x: { foo: string; }
+    class C3 extends x { } // error
+                     ~
+!!! classExtendsEveryObjectType.ts(8,18): error TS2095: Could not find symbol 'x'.
+    
+    module M { export var x = 1; }
+    class C4 extends M { } // error
+                     ~
+!!! classExtendsEveryObjectType.ts(11,18): error TS2073: A class may only extend another class.
+                     ~
+!!! classExtendsEveryObjectType.ts(11,18): error TS4022: Type reference cannot refer to container 'M'.
+    
+    function foo() { }
+    class C5 extends foo { } // error
+                     ~~~
+!!! classExtendsEveryObjectType.ts(14,18): error TS2095: Could not find symbol 'foo'.
+    
+    class C6 extends []{ } // error
+                     ~
+!!! classExtendsEveryObjectType.ts(16,18): error TS1008: Unexpected token; 'type name' expected.
+                       ~
+!!! classExtendsEveryObjectType.ts(16,20): error TS1005: ';' expected.

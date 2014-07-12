@@ -1,0 +1,29 @@
+==== tests/cases/compiler/inheritedStringIndexersFromDifferentBaseTypes2.ts (1 errors) ====
+    // indexer in B is a subtype of indexer in A
+    interface A {
+        [s: string]: {
+            a;
+        };
+    }
+    interface B {
+        [s: number]: {
+            a;
+            b;
+        };
+    }
+    interface C extends A, B { } // ok
+    
+    interface D {
+        [s: number]: {};
+    }
+    interface E extends A, D { } // error
+              ~
+!!! inheritedStringIndexersFromDifferentBaseTypes2.ts(18,11): error TS2189: Interface 'E' cannot simultaneously extend types 'D' and 'A':
+!!! Type of number indexer in type 'D' is not assignable to string indexer type in type 'A'.
+!!! 	Type '{}' is missing property 'a' from type '{ a: any; }'.
+    
+    interface F extends A, D {
+        [s: number]: {
+            a;
+        };
+    } // ok because we overrode D's number index signature

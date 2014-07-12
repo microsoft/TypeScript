@@ -1,0 +1,70 @@
+==== tests/cases/compiler/interfaceDeclaration1.ts (6 errors) ====
+    interface I1 {
+        item:number;
+        item:number;
+        ~~~~
+!!! interfaceDeclaration1.ts(3,5): error TS2000: Duplicate identifier 'item'. Additional locations:
+!!! 	interfaceDeclaration1.ts(2,5)
+    }
+    
+    interface I2 {
+        item:any;
+        item:number;
+        ~~~~
+!!! interfaceDeclaration1.ts(8,5): error TS2000: Duplicate identifier 'item'. Additional locations:
+!!! 	interfaceDeclaration1.ts(7,5)
+    }
+    
+    interface I3 {
+        prototype:number;
+    }
+    
+    interface I4 {
+        class:number;
+        number:number;
+        super:number;
+        prototype:number;
+    }
+    
+    interface I5 extends I5 { 
+              ~~
+!!! interfaceDeclaration1.ts(22,11): error TS2101: Interface 'I5' is recursively referenced as a base type of itself.
+        foo():void;
+    }
+    
+    interface I6 {
+        ():void;
+    }
+    
+    interface I7 extends I6 { }
+    
+    var v1:I7;
+    v1();
+    
+    class C1 implements I3 {
+          ~~
+!!! interfaceDeclaration1.ts(35,7): error TS2137: Class C1 declares interface I3 but does not implement it:
+!!! 	Type 'C1' is missing property 'prototype' from type 'I3'.
+        constructor() {
+            var prototype: number = 3;
+        }
+    }
+    
+    interface i8 extends i9 { }
+              ~~
+!!! interfaceDeclaration1.ts(41,11): error TS2101: Interface 'i8' is recursively referenced as a base type of itself.
+    interface i9 extends i8 { }
+    
+    interface i10 {
+        foo():number;
+    }
+    
+    interface i11{
+        foo():string;
+    }
+    
+    interface i12 extends i10, i11 { }
+              ~~~
+!!! interfaceDeclaration1.ts(52,11): error TS2189: Interface 'i12' cannot simultaneously extend types 'i10' and 'i11':
+!!! Named properties 'foo' of types 'i10' and 'i11' are not identical.
+    

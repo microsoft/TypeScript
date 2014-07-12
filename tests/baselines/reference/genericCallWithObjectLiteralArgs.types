@@ -1,0 +1,50 @@
+=== tests/cases/compiler/genericCallWithObjectLiteralArgs.ts ===
+function foo<T>(x: { bar: T; baz: T }) {
+>foo : typeof foo
+>T : T
+>x : { bar: T; baz: T; }
+>bar : T
+>T : T
+>baz : T
+>T : T
+
+    return x;
+>x : { bar: T; baz: T; }
+}
+
+var r = foo({ bar: 1, baz: '' }); // T = {}
+>r : { bar: {}; baz: {}; }
+>foo({ bar: 1, baz: '' }) : { bar: {}; baz: {}; }
+>foo : typeof foo
+>{ bar: 1, baz: '' } : { bar: number; baz: string; }
+>bar : number
+>baz : string
+
+var r2 = foo({ bar: 1, baz: 1 }); // T = number
+>r2 : { bar: number; baz: number; }
+>foo({ bar: 1, baz: 1 }) : { bar: number; baz: number; }
+>foo : typeof foo
+>{ bar: 1, baz: 1 } : { bar: number; baz: number; }
+>bar : number
+>baz : number
+
+// BUG 835724
+var r3 = foo({ bar: foo, baz: foo }); // T = any
+>r3 : { bar: any; baz: any; }
+>foo({ bar: foo, baz: foo }) : { bar: any; baz: any; }
+>foo : typeof foo
+>{ bar: foo, baz: foo } : { bar: typeof foo; baz: typeof foo; }
+>bar : typeof foo
+>foo : typeof foo
+>baz : typeof foo
+>foo : typeof foo
+
+var r4 = foo<Object>({ bar: 1, baz: '' }); // T = Object
+>r4 : { bar: Object; baz: Object; }
+>foo<Object>({ bar: 1, baz: '' }) : { bar: Object; baz: Object; }
+>foo : typeof foo
+>Object : Object
+>{ bar: 1, baz: '' } : { bar: number; baz: string; }
+>bar : number
+>baz : string
+

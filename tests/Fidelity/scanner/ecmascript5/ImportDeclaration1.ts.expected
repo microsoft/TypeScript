@@ -1,0 +1,80 @@
+[
+    {
+        "kind": "ImportKeyword",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "import",
+        "value": "import",
+        "valueText": "import",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 10,
+        "fullWidth": 11,
+        "text": "TypeScript",
+        "value": "TypeScript",
+        "valueText": "TypeScript",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 18,
+        "text": "TypeScriptServices",
+        "value": "TypeScriptServices",
+        "valueText": "TypeScriptServices"
+    },
+    {
+        "kind": "DotToken",
+        "width": 1,
+        "text": ".",
+        "value": ".",
+        "valueText": "."
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 10,
+        "text": "TypeScript",
+        "value": "TypeScript",
+        "valueText": "TypeScript"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "text": ";",
+        "value": ";",
+        "valueText": ";"
+    },
+    {
+        "kind": "EndOfFileToken",
+        "width": 0,
+        "text": ""
+    }
+]

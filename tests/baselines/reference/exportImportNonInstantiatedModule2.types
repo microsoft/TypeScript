@@ -1,0 +1,26 @@
+=== tests/cases/compiler/consumer.ts ===
+import e = require('./exporter');
+>e : e
+
+export function w(): e.w { // Should be OK
+>w : typeof w
+>e : e
+>w : e.w
+
+    return {name: 'value' };
+>{name: 'value' } : { name: string; }
+>name : string
+}
+=== tests/cases/compiler/w1.ts ===
+
+export = Widget1
+>Widget1 : any
+
+interface Widget1 { name: string; }
+>Widget1 : Widget1
+>name : string
+
+=== tests/cases/compiler/exporter.ts ===
+export import w = require('./w1');
+>w : w
+

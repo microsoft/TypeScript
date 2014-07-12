@@ -1,0 +1,19 @@
+=== tests/cases/compiler/typeOfPrototype.ts ===
+class Foo {
+>Foo : Foo
+
+    bar = 3;
+>bar : number
+
+    static bar = '';
+>bar : string
+}
+Foo.prototype.bar = undefined; // Should be OK
+>Foo.prototype.bar = undefined : any
+>Foo.prototype.bar : number
+>Foo.prototype : Foo
+>Foo : typeof Foo
+>prototype : Foo
+>bar : number
+>undefined : any
+

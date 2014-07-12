@@ -1,0 +1,16 @@
+==== tests/cases/compiler/enumsWithMultipleDeclarations1.ts (2 errors) ====
+    enum E {
+      A
+    }
+    
+    enum E {
+      B
+      ~
+!!! enumsWithMultipleDeclarations1.ts(6,3): error TS4024: In enums with multiple declarations only one declaration can omit an initializer for the first enum element.
+    }
+    
+    enum E {
+      C
+      ~
+!!! enumsWithMultipleDeclarations1.ts(10,3): error TS4024: In enums with multiple declarations only one declaration can omit an initializer for the first enum element.
+    }

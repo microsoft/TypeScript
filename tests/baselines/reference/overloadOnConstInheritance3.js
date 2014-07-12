@@ -1,0 +1,1 @@
+//// [overloadOnConstInheritance3.js]

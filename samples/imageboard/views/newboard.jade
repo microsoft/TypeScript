@@ -1,0 +1,18 @@
+extends layout
+
+block mainContent
+  h1 Create a new board for 
+    a(href= "/user/"+username)!= username
+  form( method="post")
+      div
+          br
+          div
+              span.inputtitle Title :
+              input(type="text", name="title", id="editArticleTitle")
+          br
+          div
+              span.inputtitle Description :
+              textarea( name="description", rows=10, cols=16, id="editArticleBody")
+          br
+          #editArticleSubmit
+              input.button(type="submit", value="Save board")

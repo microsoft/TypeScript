@@ -1,0 +1,4 @@
+var f: {
+    x: number;
+    <-
+};

@@ -1,0 +1,51 @@
+==== tests/cases/compiler/invalidWhileContinueStatements.ts (6 errors) ====
+    // All errors
+    
+    // naked continue not allowed
+    continue;
+    ~~~~~~~~~
+!!! invalidWhileContinueStatements.ts(4,1): error TS2201: 'continue' statement can only be used within an enclosing iteration statement.
+    
+    // non-existent label
+    ONE:
+    while (true) continue TWO;
+                 ~~~~~~~~~~~~~
+!!! invalidWhileContinueStatements.ts(8,14): error TS2203: Jump target not found.
+    
+    // continue from inside function
+    TWO:
+    while (true){
+        var x = () => {
+            continue TWO;
+            ~~~~~~~~~~~~~
+!!! invalidWhileContinueStatements.ts(14,9): error TS2204: Jump target cannot cross function boundary.
+        }
+    }
+    
+    THREE:
+    while (true) {
+        var fn = function () {
+            continue THREE;
+            ~~~~~~~~~~~~~~~
+!!! invalidWhileContinueStatements.ts(21,9): error TS2204: Jump target cannot cross function boundary.
+        }
+    }
+    
+    // continue forward
+    while (true) {
+        continue FIVE;
+        ~~~~~~~~~~~~~~
+!!! invalidWhileContinueStatements.ts(27,5): error TS2203: Jump target not found.
+        FIVE:
+        while (true) { }
+    }
+    
+    // label on non-loop statement
+    NINE:
+    var y = 12;
+    
+    while (true) {
+        continue NINE;
+        ~~~~~~~~~~~~~~
+!!! invalidWhileContinueStatements.ts(37,5): error TS2203: Jump target not found.
+    }

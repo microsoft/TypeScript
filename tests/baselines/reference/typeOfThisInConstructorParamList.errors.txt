@@ -1,0 +1,9 @@
+==== tests/cases/compiler/typeOfThisInConstructorParamList.ts (1 errors) ====
+    //type of 'this' in constructor param list is the class instance type (error)
+    class ErrClass {
+        // Should be an error
+        constructor(f = this) { }
+                        ~~~~
+!!! typeOfThisInConstructorParamList.ts(4,21): error TS2155: 'this' cannot be referenced in constructor arguments.
+    }
+    

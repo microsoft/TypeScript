@@ -1,0 +1,2 @@
+//// [implicitAnyFunctionOverloadWithImplicitAnyReturnType.js]
+

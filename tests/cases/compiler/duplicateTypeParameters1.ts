@@ -1,0 +1,1 @@
+function A<X, X>() { }

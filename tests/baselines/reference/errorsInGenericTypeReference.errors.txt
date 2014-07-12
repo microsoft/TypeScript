@@ -1,0 +1,115 @@
+==== tests/cases/compiler/errorsInGenericTypeReference.ts (21 errors) ====
+    
+    interface IFoo<T> { }
+    
+    class Foo<T> { }
+    
+    
+    // in call type arguments
+    class testClass1 {
+        method<T>(): void { }
+    }
+    var tc1 = new testClass1();
+    tc1.method<{ x: V }>(); // error: could not find symbol V
+                    ~
+!!! errorsInGenericTypeReference.ts(12,17): error TS2095: Could not find symbol 'V'.
+    
+    
+    // in constructor type arguments
+    class testClass2<T> {
+    }
+    var tc2 = new testClass2<{ x: V }>(); // error: could not find symbol V
+                                  ~
+!!! errorsInGenericTypeReference.ts(18,31): error TS2095: Could not find symbol 'V'.
+    
+    
+    // in method return type annotation
+    class testClass3 {
+        testMethod1(): Foo<{ x: V }> { return null; } // error: could not find symbol V
+                                ~
+!!! errorsInGenericTypeReference.ts(23,29): error TS2095: Could not find symbol 'V'.
+        static testMethod2(): Foo<{ x: V }> { return null } // error: could not find symbol V
+                                       ~
+!!! errorsInGenericTypeReference.ts(24,36): error TS2095: Could not find symbol 'V'.
+        set a(value: Foo<{ x: V }>) { } // error: could not find symbol V
+                              ~
+!!! errorsInGenericTypeReference.ts(25,27): error TS2095: Could not find symbol 'V'.
+        property: Foo<{ x: V }>; // error: could not find symbol V
+                           ~
+!!! errorsInGenericTypeReference.ts(26,24): error TS2095: Could not find symbol 'V'.
+    }
+    
+    
+    // in function return type annotation
+    function testFunction1(): Foo<{ x: V }> { return null; } // error: could not find symbol V
+                                       ~
+!!! errorsInGenericTypeReference.ts(31,36): error TS2095: Could not find symbol 'V'.
+    
+    
+    // in paramter types
+    function testFunction2(p: Foo<{ x: V }>) { }// error: could not find symbol V
+                                       ~
+!!! errorsInGenericTypeReference.ts(35,36): error TS2095: Could not find symbol 'V'.
+    
+    
+    // in var type annotation
+    var f: Foo<{ x: V }>; // error: could not find symbol V
+                    ~
+!!! errorsInGenericTypeReference.ts(39,17): error TS2095: Could not find symbol 'V'.
+    
+    
+    // in constraints
+    class testClass4<T extends { x: V }> { } // error: could not find symbol V
+                                    ~
+!!! errorsInGenericTypeReference.ts(43,33): error TS2095: Could not find symbol 'V'.
+    
+    interface testClass5<T extends Foo<{ x: V }>> { } // error: could not find symbol V
+                                            ~
+!!! errorsInGenericTypeReference.ts(45,41): error TS2095: Could not find symbol 'V'.
+    
+    class testClass6<T> {
+        method<M extends { x: V }>(): void { } // error: could not find symbol V
+                              ~
+!!! errorsInGenericTypeReference.ts(48,27): error TS2095: Could not find symbol 'V'.
+    }
+    
+    interface testInterface1 {
+        new <M extends { x: V }>(a: M); // error: could not find symbol V
+                            ~
+!!! errorsInGenericTypeReference.ts(52,25): error TS2095: Could not find symbol 'V'.
+    }
+    
+    
+    // in extends clause
+    class testClass7 extends Foo<{ x: V }> { } // error: could not find symbol V
+                                      ~
+!!! errorsInGenericTypeReference.ts(57,35): error TS2095: Could not find symbol 'V'.
+    
+    
+    // in implements clause
+    class testClass8 implements IFoo<{ x: V }> { } // error: could not find symbol V
+                                          ~
+!!! errorsInGenericTypeReference.ts(61,39): error TS2095: Could not find symbol 'V'.
+    
+    
+    // in signatures
+    interface testInterface2 {
+        new (a: Foo<{ x: V }>): Foo<{ x: V }>; //2x: error: could not find symbol V
+                         ~
+!!! errorsInGenericTypeReference.ts(66,22): error TS2095: Could not find symbol 'V'.
+                                         ~
+!!! errorsInGenericTypeReference.ts(66,38): error TS2095: Could not find symbol 'V'.
+        [x: string]: Foo<{ x: V }>; // error: could not find symbol V
+                              ~
+!!! errorsInGenericTypeReference.ts(67,27): error TS2095: Could not find symbol 'V'.
+        method(a: Foo<{ x: V }>): Foo<{ x: V }>; //2x: error: could not find symbol V
+                           ~
+!!! errorsInGenericTypeReference.ts(68,24): error TS2095: Could not find symbol 'V'.
+                                           ~
+!!! errorsInGenericTypeReference.ts(68,40): error TS2095: Could not find symbol 'V'.
+        property: Foo<{ x: V }>; // error: could not find symbol V
+                           ~
+!!! errorsInGenericTypeReference.ts(69,24): error TS2095: Could not find symbol 'V'.
+    }
+    
+    

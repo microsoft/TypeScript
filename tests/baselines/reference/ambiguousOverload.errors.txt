@@ -1,0 +1,20 @@
+==== tests/cases/compiler/ambiguousOverload.ts (4 errors) ====
+    function foof(bar: string, y): number;
+    function foof(bar: string, x): string;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! ambiguousOverload.ts(2,1): error TS2175: Overloads cannot differ only by return type.
+    function foof(bar: any): any { return bar };
+    var x: number = foof("s", null);
+    var y: string = foof("s", null);
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! ambiguousOverload.ts(5,5): error TS2011: Cannot convert 'number' to 'string'.
+    
+    function foof2(bar: string, x): string;
+    function foof2(bar: string, y): number;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! ambiguousOverload.ts(8,1): error TS2175: Overloads cannot differ only by return type.
+    function foof2(bar: any): any { return bar };
+    var x2: string = foof2("s", null);
+    var y2: number = foof2("s", null);
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! ambiguousOverload.ts(11,5): error TS2011: Cannot convert 'string' to 'number'.

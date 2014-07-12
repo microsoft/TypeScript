@@ -1,0 +1,1 @@
+//// [genericClassesRedeclaration.js]

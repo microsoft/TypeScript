@@ -1,0 +1,44 @@
+=== tests/cases/compiler/collisionCodeGenModuleWithFunctionChildren.ts ===
+module M {
+>M : M
+
+    export var x = 3;
+>x : number
+
+    function fn(M, p = x) { }
+>fn : typeof fn
+>M : any
+>p : number
+>x : number
+}
+
+module M {
+>M : M
+
+    function fn2() {
+>fn2 : typeof fn2
+
+        var M;
+>M : any
+
+        var p = x;
+>p : number
+>x : number
+    }
+}
+
+module M {
+>M : M
+
+    function fn3() {
+>fn3 : typeof fn3
+
+        function M() {
+>M : () => void
+
+            var p = x;
+>p : number
+>x : number
+        }
+    }
+}

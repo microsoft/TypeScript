@@ -1,0 +1,10 @@
+==== tests/cases/compiler/unaryOperators1.ts (3 errors) ====
+    +foo;
+     ~~~
+!!! unaryOperators1.ts(1,2): error TS2095: Could not find symbol 'foo'.
+    -bar;
+     ~~~
+!!! unaryOperators1.ts(2,2): error TS2095: Could not find symbol 'bar'.
+    ~quux;
+     ~~~~
+!!! unaryOperators1.ts(3,2): error TS2095: Could not find symbol 'quux'.

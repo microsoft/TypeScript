@@ -1,0 +1,7 @@
+==== tests/cases/compiler/functionOverloads17.ts (1 errors) ====
+    function foo():{a:number;}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! functionOverloads17.ts(1,1): error TS2149: Overload signature is not compatible with function definition:
+!!! 	Types of property 'a' of types '{ a: string; }' and '{ a: number; }' are incompatible.
+    function foo():{a:string;} { return {a:""} }
+    

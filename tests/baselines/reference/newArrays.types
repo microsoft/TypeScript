@@ -1,0 +1,41 @@
+=== tests/cases/compiler/newArrays.ts ===
+module M {
+>M : M
+
+	class Foo {}
+>Foo : Foo
+
+	class Gar {
+>Gar : Gar
+
+		public fa: Foo[];
+>fa : Foo[]
+>Foo : Foo
+
+		public x = 10;
+>x : number
+
+		public y = 10;
+>y : number
+
+		public m () {
+>m : () => void
+
+			this.fa = new Array<Foo>(this.x * this.y);		
+>this.fa = new Array<Foo>(this.x * this.y) : Foo[]
+>this.fa : Foo[]
+>this : Gar
+>fa : Foo[]
+>new Array<Foo>(this.x * this.y) : Foo[]
+>Array : { isArray(arg: any): boolean; prototype: any[]; (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new(arrayLength?: number): any[]; new<T>(arrayLength: number): T[]; new<T>(...items: T[]): T[]; }
+>Foo : Foo
+>this.x * this.y : number
+>this.x : number
+>this : Gar
+>x : number
+>this.y : number
+>this : Gar
+>y : number
+		}
+	}
+}

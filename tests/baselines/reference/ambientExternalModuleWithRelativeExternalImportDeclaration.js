@@ -1,0 +1,1 @@
+//// [ambientExternalModuleWithRelativeExternalImportDeclaration.js]

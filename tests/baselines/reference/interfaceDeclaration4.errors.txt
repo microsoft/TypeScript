@@ -1,0 +1,56 @@
+==== tests/cases/compiler/interfaceDeclaration4.ts (6 errors) ====
+    // Import this module when test harness supports external modules. Also remove the internal module below.
+    // import Foo = require("interfaceDeclaration5")
+    module Foo {
+        export interface I1 { item: string; }
+        export class C1 { }
+    }
+    
+    class C1 implements Foo.I1 {
+        public item:string;
+    }
+    
+    // Allowed
+    interface I2 extends Foo.I1 {
+        item:string;
+    }
+    
+    // Negative Case
+    interface I3 extends Foo.I1 {
+              ~~
+!!! interfaceDeclaration4.ts(18,11): error TS2143: Interface 'I3' cannot extend interface 'Foo.I1':
+!!! 	Types of property 'item' of types 'I3' and 'Foo.I1' are incompatible.
+        item:number;
+    }
+    
+    interface I4 extends Foo.I1 {
+        token:string;
+    }
+    
+    // Err - not implemented item
+    class C2 implements I4 {
+          ~~
+!!! interfaceDeclaration4.ts(27,7): error TS2137: Class C2 declares interface I4 but does not implement it:
+!!! 	Type 'C2' is missing property 'item' from type 'I4'.
+        public token: string;
+    }
+    
+    interface I5 extends Foo { }
+    
+    // Negative case
+    interface I6 extends Foo.C1 { }
+    
+    class C3 implements Foo.I1 { }
+          ~~
+!!! interfaceDeclaration4.ts(36,7): error TS2137: Class C3 declares interface Foo.I1 but does not implement it:
+!!! 	Type 'C3' is missing property 'item' from type 'Foo.I1'.
+    
+    // Negative case 
+    interface Foo.I1 { }
+                 ~
+!!! interfaceDeclaration4.ts(39,14): error TS1005: '{' expected.
+                     ~
+!!! interfaceDeclaration4.ts(39,18): error TS1005: ';' expected.
+                  ~~
+!!! interfaceDeclaration4.ts(39,15): error TS2095: Could not find symbol 'I1'.
+    

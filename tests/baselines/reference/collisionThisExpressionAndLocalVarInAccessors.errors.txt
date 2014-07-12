@@ -1,0 +1,52 @@
+==== tests/cases/compiler/collisionThisExpressionAndLocalVarInAccessors.ts (4 errors) ====
+    class class1 {
+        get a(): number {
+            var x2 = {
+                doStuff: (callback) => () => {
+                    var _this = 2;
+                        ~~~~~~~~~
+!!! collisionThisExpressionAndLocalVarInAccessors.ts(5,21): error TS2200: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+                    return callback(this);
+                }
+            }
+    
+            return 10;
+        }
+        set a(val: number) {
+            var x2 = {
+                doStuff: (callback) => () => {
+                    var _this = 2;
+                        ~~~~~~~~~
+!!! collisionThisExpressionAndLocalVarInAccessors.ts(15,21): error TS2200: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+                    return callback(this);
+                }
+            }
+    
+        }
+    }
+    
+    class class2 {
+        get a(): number {
+            var _this = 2;
+                ~~~~~~~~~
+!!! collisionThisExpressionAndLocalVarInAccessors.ts(25,13): error TS2200: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+            var x2 = {
+                doStuff: (callback) => () => {
+                    return callback(this);
+                }
+            }
+    
+            return 10;
+        }
+        set a(val: number) {
+            var _this = 2;
+                ~~~~~~~~~
+!!! collisionThisExpressionAndLocalVarInAccessors.ts(35,13): error TS2200: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+            var x2 = {
+                doStuff: (callback) => () => {
+                    return callback(this);
+                }
+            }
+    
+        }
+    }

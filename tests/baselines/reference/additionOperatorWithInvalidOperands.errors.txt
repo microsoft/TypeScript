@@ -1,0 +1,79 @@
+==== tests/cases/compiler/additionOperatorWithInvalidOperands.ts (19 errors) ====
+    function foo() { }
+    class C {
+        public a: string;
+        static foo() { }
+    }
+    enum E { a, b, c }
+    module M { export var a }
+    
+    var a: boolean;
+    var b: number;
+    var c: Object;
+    var d: Number;
+    
+    // boolean + every type except any and string
+    var r1 = a + a;
+             ~
+!!! additionOperatorWithInvalidOperands.ts(15,10): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+    var r2 = a + b;
+             ~
+!!! additionOperatorWithInvalidOperands.ts(16,10): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+    var r3 = a + c;
+             ~
+!!! additionOperatorWithInvalidOperands.ts(17,10): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+    
+    // number + every type except any and string
+    var r4 = b + a;
+             ~
+!!! additionOperatorWithInvalidOperands.ts(20,10): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+    var r5 = b + b; // number + number is valid
+    var r6 = b + c;
+             ~
+!!! additionOperatorWithInvalidOperands.ts(22,10): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+    
+    // object + every type except any and string
+    var r7 = c + a;
+             ~
+!!! additionOperatorWithInvalidOperands.ts(25,10): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+    var r8 = c + b;
+             ~
+!!! additionOperatorWithInvalidOperands.ts(26,10): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+    var r9 = c + c;
+             ~
+!!! additionOperatorWithInvalidOperands.ts(27,10): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+    
+    // other cases
+    var r10 = a + true;
+              ~
+!!! additionOperatorWithInvalidOperands.ts(30,11): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+    var r11 = true + false;
+              ~~~~
+!!! additionOperatorWithInvalidOperands.ts(31,11): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+    var r12 = true + 123;
+              ~~~~
+!!! additionOperatorWithInvalidOperands.ts(32,11): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+    var r13 = {} + {};
+              ~~
+!!! additionOperatorWithInvalidOperands.ts(33,11): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+    var r14 = b + d;
+              ~
+!!! additionOperatorWithInvalidOperands.ts(34,11): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+    var r15 = b + foo;
+              ~
+!!! additionOperatorWithInvalidOperands.ts(35,11): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+    var r16 = b + foo();
+              ~
+!!! additionOperatorWithInvalidOperands.ts(36,11): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+    var r17 = b + C;
+              ~
+!!! additionOperatorWithInvalidOperands.ts(37,11): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+    var r18 = E.a + new C();
+              ~~~
+!!! additionOperatorWithInvalidOperands.ts(38,11): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+    var r19 = E.a + C.foo();
+              ~~~
+!!! additionOperatorWithInvalidOperands.ts(39,11): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+    var r20 = E.a + M;
+              ~~~
+!!! additionOperatorWithInvalidOperands.ts(40,11): error TS2111: Invalid '+' expression - types not known to support the addition operator.

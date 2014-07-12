@@ -1,0 +1,138 @@
+{
+    "tokens": {
+        "0": {
+            "kind": "RegularExpressionLiteral",
+            "width": 5,
+            "text": "/foo/",
+            "value": {},
+            "valueText": "/foo/"
+        },
+        "1": {
+            "kind": "RegularExpressionLiteral",
+            "width": 5,
+            "text": "/foo/",
+            "value": {},
+            "valueText": "/foo/"
+        },
+        "2": {
+            "kind": "RegularExpressionLiteral",
+            "width": 5,
+            "text": "/foo/",
+            "value": {},
+            "valueText": "/foo/"
+        },
+        "3": {
+            "kind": "RegularExpressionLiteral",
+            "width": 5,
+            "text": "/foo/",
+            "value": {},
+            "valueText": "/foo/"
+        },
+        "4": {
+            "kind": "RegularExpressionLiteral",
+            "width": 5,
+            "text": "/foo/",
+            "value": {},
+            "valueText": "/foo/"
+        },
+        "5": {
+            "kind": "SemicolonToken",
+            "width": 1,
+            "text": ";",
+            "value": ";",
+            "valueText": ";"
+        },
+        "6": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "tokensOnLeft": {
+        "0": null,
+        "1": {
+            "kind": "RegularExpressionLiteral",
+            "width": 5,
+            "text": "/foo/",
+            "value": {},
+            "valueText": "/foo/"
+        },
+        "2": {
+            "kind": "RegularExpressionLiteral",
+            "width": 5,
+            "text": "/foo/",
+            "value": {},
+            "valueText": "/foo/"
+        },
+        "3": {
+            "kind": "RegularExpressionLiteral",
+            "width": 5,
+            "text": "/foo/",
+            "value": {},
+            "valueText": "/foo/"
+        },
+        "4": {
+            "kind": "RegularExpressionLiteral",
+            "width": 5,
+            "text": "/foo/",
+            "value": {},
+            "valueText": "/foo/"
+        },
+        "5": {
+            "kind": "RegularExpressionLiteral",
+            "width": 5,
+            "text": "/foo/",
+            "value": {},
+            "valueText": "/foo/"
+        },
+        "6": {
+            "kind": "SemicolonToken",
+            "width": 1,
+            "text": ";",
+            "value": ";",
+            "valueText": ";"
+        }
+    },
+    "leftToRight": [
+        {
+            "kind": "RegularExpressionLiteral",
+            "width": 5,
+            "text": "/foo/",
+            "value": {},
+            "valueText": "/foo/"
+        },
+        {
+            "kind": "SemicolonToken",
+            "width": 1,
+            "text": ";",
+            "value": ";",
+            "valueText": ";"
+        },
+        {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    ],
+    "rightToLeft": [
+        {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        },
+        {
+            "kind": "SemicolonToken",
+            "width": 1,
+            "text": ";",
+            "value": ";",
+            "valueText": ";"
+        },
+        {
+            "kind": "RegularExpressionLiteral",
+            "width": 5,
+            "text": "/foo/",
+            "value": {},
+            "valueText": "/foo/"
+        }
+    ]
+}

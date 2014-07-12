@@ -1,0 +1,27 @@
+==== tests/cases/compiler/overloadOnConstNoAnyImplementation.ts (5 errors) ====
+    function x1(a: number, cb: (x: 'hi') => number);
+                               ~~~~~~~~~~~~~~~~~~~
+!!! overloadOnConstNoAnyImplementation.ts(1,28): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+    function x1(a: number, cb: (x: 'bye') => number);
+                               ~~~~~~~~~~~~~~~~~~~~
+!!! overloadOnConstNoAnyImplementation.ts(2,28): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+    function x1(a: number, cb: (x: string) => number) {
+        cb('hi');
+        cb('bye');
+        var hm = 'hm';
+        cb(hm);
+        cb('uh');
+        cb(1); // error
+        ~~
+!!! overloadOnConstNoAnyImplementation.ts(9,5): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Could not apply type 'string' to argument 1 which is of type 'number'.
+        ~~
+!!! overloadOnConstNoAnyImplementation.ts(9,5): error TS2087: Could not select overload for 'call' expression.
+    }
+    
+    var cb: (number) => number = (x: number) => 1;
+    x1(1, cb);
+    x1(1, (x: 'hi') => 1); // error
+          ~~~~~~~~~~~~~~
+!!! overloadOnConstNoAnyImplementation.ts(14,7): error TS2163: Overload signature implementation cannot use specialized type.
+    x1(1, (x: string) => 1);

@@ -1,0 +1,174 @@
+=== tests/cases/compiler/objectTypeHidingMembersOfExtendedObject.ts ===
+class A {
+>A : A
+
+    foo: string;
+>foo : string
+}
+
+class B extends A {
+>B : B
+>A : A
+
+    bar: string;
+>bar : string
+}
+
+interface Object {
+>Object : Object
+
+    data: A;
+>data : A
+>A : A
+
+    [x: string]: Object;
+>x : string
+>Object : Object
+}
+
+class C {
+>C : C
+
+    valueOf() { }
+>valueOf : () => void
+
+    data: B;
+>data : B
+>B : B
+
+    [x: string]: any;
+>x : string
+}
+
+var c: C;
+>c : C
+>C : C
+
+var r1: void = c.valueOf();
+>r1 : void
+>c.valueOf() : void
+>c.valueOf : () => void
+>c : C
+>valueOf : () => void
+
+var r1b: B = c.data;
+>r1b : B
+>B : B
+>c.data : B
+>c : C
+>data : B
+
+var r1c = r1b['hm']; // should be 'Object'
+>r1c : Object
+>r1b['hm'] : Object
+>r1b : B
+
+var r1d = c['hm']; // should be 'any'
+>r1d : any
+>c['hm'] : any
+>c : C
+
+interface I {
+>I : I
+
+    valueOf(): void;
+>valueOf : () => void
+
+    data: B;
+>data : B
+>B : B
+
+    [x: string]: any;
+>x : string
+}
+
+var i: I;
+>i : I
+>I : I
+
+var r2: void = i.valueOf();
+>r2 : void
+>i.valueOf() : void
+>i.valueOf : () => void
+>i : I
+>valueOf : () => void
+
+var r2b: B = i.data;
+>r2b : B
+>B : B
+>i.data : B
+>i : I
+>data : B
+
+var r2c = r2b['hm']; // should be 'Object'
+>r2c : Object
+>r2b['hm'] : Object
+>r2b : B
+
+var r2d = i['hm']; // should be 'any'
+>r2d : any
+>i['hm'] : any
+>i : I
+
+var a = {
+>a : { valueOf: () => void; data: B; }
+>{
+    valueOf: () => { },
+    data: new B()
+} : { valueOf: () => void; data: B; }
+
+    valueOf: () => { },
+>valueOf : () => void
+>() => { } : () => void
+
+    data: new B()
+>data : B
+>new B() : B
+>B : typeof B
+}
+
+var r3: void = a.valueOf();
+>r3 : void
+>a.valueOf() : void
+>a.valueOf : () => void
+>a : { valueOf: () => void; data: B; }
+>valueOf : () => void
+
+var r3b: B = a.data;
+>r3b : B
+>B : B
+>a.data : B
+>a : { valueOf: () => void; data: B; }
+>data : B
+
+var r3c = r3b['hm']; // should be 'Object'
+>r3c : Object
+>r3b['hm'] : Object
+>r3b : B
+
+var r3d = i['hm'];
+>r3d : any
+>i['hm'] : any
+>i : I
+
+var b: {
+>b : { valueOf(): void; data: B; [x: string]: any; }
+
+    valueOf(): void;
+>valueOf : () => void
+
+    data: B;
+>data : B
+>B : B
+
+    [x: string]: any;
+>x : string
+}
+
+var r4: void = b.valueOf();
+>r4 : void
+>b.valueOf() : void
+>b.valueOf : () => void
+>b : { valueOf(): void; data: B; [x: string]: any; }
+>valueOf : () => void
+

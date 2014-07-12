@@ -1,0 +1,39 @@
+=== tests/cases/compiler/interMixingModulesInterfaces0.ts ===
+// bug 742098: intermixing modules and interfaces causes errors at call site and order matters
+
+module A {
+>A : A
+
+    export module B {
+>B : B
+
+        export function createB(): B {
+>createB : typeof createB
+>B : B
+
+            return null;
+        }
+    }
+
+    export interface B {
+>B : B
+
+        name: string;
+>name : string
+
+        value: number;
+>value : number
+    }
+}
+
+var x: A.B = A.B.createB();
+>x : A.B
+>A : A
+>B : A.B
+>A.B.createB() : A.B
+>A.B.createB : typeof A.B.createB
+>A.B : typeof A.B
+>A : typeof A
+>B : typeof A.B
+>createB : typeof A.B.createB
+

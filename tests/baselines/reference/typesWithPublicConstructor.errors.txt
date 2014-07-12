@@ -1,0 +1,24 @@
+==== tests/cases/compiler/typesWithPublicConstructor.ts (3 errors) ====
+    // public is allowed on a constructor but is not meaningful
+    
+    class C {
+        public constructor() { }
+    }
+    
+    var c = new C();
+    var r: () => void = c.constructor;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! typesWithPublicConstructor.ts(8,5): error TS2012: Cannot convert 'Function' to '() => void':
+!!! 	Type '() => void' requires a call signature, but type 'Function' lacks one.
+    
+    class C2 {
+        public constructor(x: number);
+        public constructor(x: any) { }
+    }
+    
+    var c2 = new C2();
+                 ~~
+!!! typesWithPublicConstructor.ts(15,14): error TS2081: Supplied parameters do not match any signature of call target.
+                 ~~
+!!! typesWithPublicConstructor.ts(15,14): error TS2085: Could not select overload for 'new' expression.
+    var r2: (x: number) => void = c2.constructor;

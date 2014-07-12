@@ -1,0 +1,99 @@
+==== tests/cases/compiler/everyTypeWithAnnotationAndInvalidInitializer.ts (15 errors) ====
+    interface I {
+        id: number;
+    }
+    
+    class C implements I {
+        id: number;
+    }
+    
+    class D<T>{
+        source: T;
+        recurse: D<T>;
+        wrapped: D<D<T>>
+    }
+    
+    function F(x: string): number { return 42; }
+    function F2(x: number): boolean { return x < 42; }
+    
+    module M {
+        export class A {
+            name: string;
+        }
+    
+        export function F2(x: number): string { return x.toString(); }
+    }
+    
+    module N {
+        export class A {
+            id: number;
+        }
+    
+        export function F2(x: number): string { return x.toString(); }
+    }
+    
+    var aNumber: number = 'this is a string';
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! everyTypeWithAnnotationAndInvalidInitializer.ts(34,5): error TS2011: Cannot convert 'string' to 'number'.
+    var aString: string = 9.9;
+        ~~~~~~~~~~~~~~~~~~~~~
+!!! everyTypeWithAnnotationAndInvalidInitializer.ts(35,5): error TS2011: Cannot convert 'number' to 'string'.
+    var aDate: Date = 9.9;
+        ~~~~~~~~~~~~~~~~~
+!!! everyTypeWithAnnotationAndInvalidInitializer.ts(36,5): error TS2012: Cannot convert 'number' to 'Date':
+!!! 	Type 'Number' is missing property 'toDateString' from type 'Date'.
+    
+    var aVoid: void = 9.9;
+        ~~~~~~~~~~~~~~~~~
+!!! everyTypeWithAnnotationAndInvalidInitializer.ts(38,5): error TS2011: Cannot convert 'number' to 'void'.
+    
+    var anInterface: I = new D();
+        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! everyTypeWithAnnotationAndInvalidInitializer.ts(40,5): error TS2012: Cannot convert 'D<{}>' to 'I':
+!!! 	Type 'D<{}>' is missing property 'id' from type 'I'.
+    var aClass: C = new D();
+        ~~~~~~~~~~~~~~~~~~~
+!!! everyTypeWithAnnotationAndInvalidInitializer.ts(41,5): error TS2012: Cannot convert 'D<{}>' to 'C':
+!!! 	Type 'D<{}>' is missing property 'id' from type 'C'.
+    var aGenericClass: D<string> = new C();
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! everyTypeWithAnnotationAndInvalidInitializer.ts(42,5): error TS2012: Cannot convert 'C' to 'D<string>':
+!!! 	Type 'C' is missing property 'source' from type 'D<string>'.
+    var anObjectLiteral: I = { id: 'a string' };
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! everyTypeWithAnnotationAndInvalidInitializer.ts(43,5): error TS2012: Cannot convert '{ id: string; }' to 'I':
+!!! 	Types of property 'id' of types '{ id: string; }' and 'I' are incompatible.
+    var anOtherObjectLiteral: { id: string } = new C();
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! everyTypeWithAnnotationAndInvalidInitializer.ts(44,5): error TS2012: Cannot convert 'C' to '{ id: string; }':
+!!! 	Types of property 'id' of types 'C' and '{ id: string; }' are incompatible.
+    
+    var aFunction: typeof F = F2;
+        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! everyTypeWithAnnotationAndInvalidInitializer.ts(46,5): error TS2012: Cannot convert 'typeof F2' to 'typeof F':
+!!! 	Call signatures of types 'typeof F2' and 'typeof F' are incompatible.
+    var anOtherFunction: (x: string) => number = F2;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! everyTypeWithAnnotationAndInvalidInitializer.ts(47,5): error TS2012: Cannot convert 'typeof F2' to '(x: string) => number':
+!!! 	Call signatures of types 'typeof F2' and '(x: string) => number' are incompatible.
+    var aLambda: typeof F = (x) => 'a string';
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! everyTypeWithAnnotationAndInvalidInitializer.ts(48,5): error TS2012: Cannot convert '(x: string) => string' to 'typeof F':
+!!! 	Call signatures of types '(x: string) => string' and 'typeof F' are incompatible.
+    
+    var aModule: typeof M = N;
+        ~~~~~~~~~~~~~~~~~~~~~
+!!! everyTypeWithAnnotationAndInvalidInitializer.ts(50,5): error TS2012: Cannot convert 'typeof N' to 'typeof M':
+!!! 	Types of property 'M.A' of types 'typeof N' and 'typeof M' are incompatible:
+!!! 		Types of static property 'prototype' of class 'N.A' and class 'M.A' are incompatible:
+!!! 			Type 'N.A' is missing property 'name' from type 'M.A'.
+    var aClassInModule: M.A = new N.A();
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! everyTypeWithAnnotationAndInvalidInitializer.ts(51,5): error TS2012: Cannot convert 'N.A' to 'M.A':
+!!! 	Type 'N.A' is missing property 'name' from type 'M.A'.
+    var aFunctionInModule: typeof M.F2 = F2;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! everyTypeWithAnnotationAndInvalidInitializer.ts(52,5): error TS2012: Cannot convert 'typeof F2' to 'typeof M.F2':
+!!! 	Call signatures of types 'typeof F2' and 'typeof M.F2' are incompatible.
+    
+    

@@ -1,0 +1,101 @@
+=== tests/cases/compiler/genericCallWithObjectTypeArgsAndNumericIndexer.ts ===
+// Type inference infers from indexers in target type, no errors expected
+
+function foo<T>(x: T) {
+>foo : typeof foo
+>T : T
+>x : T
+>T : T
+
+    return x;
+>x : T
+}
+
+var a: { [x: number]: Date };
+>a : { [x: number]: Date; }
+>x : number
+>Date : Date
+
+var r = foo(a);
+>r : { [x: number]: Date; }
+>foo(a) : { [x: number]: Date; }
+>foo : typeof foo
+>a : { [x: number]: Date; }
+
+function other<T>(arg: T) {
+>other : typeof other
+>T : T
+>arg : T
+>T : T
+
+    var b: { [x: number]: T };
+>b : { [x: number]: T; }
+>x : number
+>T : T
+
+    var r2 = foo(b); // T
+>r2 : { [x: number]: T; }
+>foo(b) : { [x: number]: T; }
+>foo : typeof foo
+>b : { [x: number]: T; }
+}
+
+function other2<T extends Date>(arg: T) {
+>other2 : typeof other2
+>T : T
+>Date : Date
+>arg : T
+>T : T
+
+    var b: { [x: number]: T };
+>b : { [x: number]: T; }
+>x : number
+>T : T
+
+    var r2 = foo(b);
+>r2 : { [x: number]: T; }
+>foo(b) : { [x: number]: T; }
+>foo : typeof foo
+>b : { [x: number]: T; }
+
+    var d = r2[1];
+>d : T
+>r2[1] : T
+>r2 : { [x: number]: T; }
+}
+
+function other3<T extends Date, U extends Date>(arg: T) {
+>other3 : typeof other3
+>T : T
+>Date : Date
+>U : U
+>Date : Date
+>arg : T
+>T : T
+
+    var b: { [x: number]: T };
+>b : { [x: number]: T; }
+>x : number
+>T : T
+
+    var r2 = foo(b);
+>r2 : { [x: number]: T; }
+>foo(b) : { [x: number]: T; }
+>foo : typeof foo
+>b : { [x: number]: T; }
+
+    var d = r2[1];
+>d : T
+>r2[1] : T
+>r2 : { [x: number]: T; }
+
+    // BUG 821629
+    //var u: U = r2[1]; // ok
+}
+//function other3<T extends U, U extends Date>(arg: T) {
+//    var b: { [x: number]: T };
+//    var r2 = foo(b);
+//    var d = r2[1];
+//    // BUG 821629
+//    //var u: U = r2[1]; // ok
+//}

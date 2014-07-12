@@ -1,0 +1,66 @@
+[
+    {
+        "kind": "VarKeyword",
+        "width": 8,
+        "fullWidth": 9,
+        "text": "\\u0076ar",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "x",
+        "value": "x",
+        "valueText": "x",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 7,
+        "text": "\"hello\"",
+        "value": "hello",
+        "valueText": "hello"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "text": ";",
+        "value": ";",
+        "valueText": ";"
+    },
+    {
+        "kind": "EndOfFileToken",
+        "width": 0,
+        "text": ""
+    }
+]

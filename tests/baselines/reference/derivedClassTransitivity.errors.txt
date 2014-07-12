@@ -1,0 +1,25 @@
+==== tests/cases/compiler/derivedClassTransitivity.ts (1 errors) ====
+    // subclassing is not transitive when you can remove required parameters and add optional parameters
+    
+    class C {
+        foo(x: number) { }
+    }
+    
+    class D extends C {
+        foo() { } // ok to drop parameters
+    }
+    
+    class E extends D {
+        foo(x?: string) { } // ok to add optional parameters
+    }
+    
+    var c: C;
+    var d: D;
+    var e: E;
+    c = e;
+    ~
+!!! derivedClassTransitivity.ts(18,1): error TS2012: Cannot convert 'E' to 'C':
+!!! 	Types of property 'foo' of types 'E' and 'C' are incompatible:
+!!! 		Call signatures of types '(x?: string) => void' and '(x: number) => void' are incompatible.
+    var r = c.foo(1);
+    var r2 = e.foo('');

@@ -1,0 +1,9 @@
+==== tests/cases/compiler/scopeCheckInsidePublicMethod1.ts (1 errors) ====
+    class C {
+       static s;
+       public a() {
+          s = 1; // ERR
+          ~
+!!! scopeCheckInsidePublicMethod1.ts(4,7): error TS2095: Could not find symbol 's'.
+       }
+    }

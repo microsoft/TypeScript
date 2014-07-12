@@ -1,0 +1,54 @@
+==== tests/cases/compiler/restParametersOfNonArrayTypes.ts (14 errors) ====
+    // Rest parameters must be an array type if they have a type annotation, so all these are errors
+    
+    function foo(...x: string) { }
+                 ~~~~~~~~~~~~
+!!! restParametersOfNonArrayTypes.ts(3,14): error TS2162: Rest parameters must be array types.
+    var f = function foo(...x: number) { }
+                         ~~~~~~~~~~~~
+!!! restParametersOfNonArrayTypes.ts(4,22): error TS2162: Rest parameters must be array types.
+    var f2 = (...x: Date, ...y: boolean) => { }
+              ~~~~~~~~~~
+!!! restParametersOfNonArrayTypes.ts(5,11): error TS1014: Rest parameter must be last in list.
+                          ~~~~~~~~~~~~~
+!!! restParametersOfNonArrayTypes.ts(5,23): error TS2162: Rest parameters must be array types.
+    
+    class C {
+        foo(...x: C) { }
+            ~~~~~~~
+!!! restParametersOfNonArrayTypes.ts(8,9): error TS2162: Rest parameters must be array types.
+    }
+    
+    interface I {
+        (...x: string);
+         ~~~~~~~~~~~~
+!!! restParametersOfNonArrayTypes.ts(12,6): error TS2162: Rest parameters must be array types.
+        foo(...x: number, ...y: number);
+            ~~~~~~~~~~~~
+!!! restParametersOfNonArrayTypes.ts(13,9): error TS1014: Rest parameter must be last in list.
+                          ~~~~~~~~~~~~
+!!! restParametersOfNonArrayTypes.ts(13,23): error TS2162: Rest parameters must be array types.
+    }
+    
+    var a: {
+        (...x: string);
+         ~~~~~~~~~~~~
+!!! restParametersOfNonArrayTypes.ts(17,6): error TS2162: Rest parameters must be array types.
+        foo(...x: string);
+            ~~~~~~~~~~~~
+!!! restParametersOfNonArrayTypes.ts(18,9): error TS2162: Rest parameters must be array types.
+    }
+    
+    var b = {
+        foo(...x: string) { },
+            ~~~~~~~~~~~~
+!!! restParametersOfNonArrayTypes.ts(22,9): error TS2162: Rest parameters must be array types.
+        a: function foo(...x: number, ...y: Date) { },
+                        ~~~~~~~~~~~~
+!!! restParametersOfNonArrayTypes.ts(23,21): error TS1014: Rest parameter must be last in list.
+                                      ~~~~~~~~~~
+!!! restParametersOfNonArrayTypes.ts(23,35): error TS2162: Rest parameters must be array types.
+        b: (...x: string) => { }
+            ~~~~~~~~~~~~
+!!! restParametersOfNonArrayTypes.ts(24,9): error TS2162: Rest parameters must be array types.
+    }

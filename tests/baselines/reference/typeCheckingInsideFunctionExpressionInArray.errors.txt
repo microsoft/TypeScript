@@ -1,0 +1,16 @@
+==== tests/cases/compiler/typeCheckingInsideFunctionExpressionInArray.ts (4 errors) ====
+    var functions = [function () {
+      var k: string = 10;
+          ~~~~~~~~~~~~~~
+!!! typeCheckingInsideFunctionExpressionInArray.ts(2,7): error TS2011: Cannot convert 'number' to 'string'.
+        k = new Object();
+        ~
+!!! typeCheckingInsideFunctionExpressionInArray.ts(3,5): error TS2011: Cannot convert 'Object' to 'string'.
+        [1, 2, 3].NonexistantMethod();
+                  ~~~~~~~~~~~~~~~~~
+!!! typeCheckingInsideFunctionExpressionInArray.ts(4,15): error TS2094: The property 'NonexistantMethod' does not exist on value of type 'number[]'.
+        derp();
+        ~~~~
+!!! typeCheckingInsideFunctionExpressionInArray.ts(5,5): error TS2095: Could not find symbol 'derp'.
+    }];
+    

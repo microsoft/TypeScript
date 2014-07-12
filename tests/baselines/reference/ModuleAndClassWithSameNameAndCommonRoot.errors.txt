@@ -1,0 +1,36 @@
+==== tests/cases/compiler/module.ts (0 errors) ====
+    module X.Y {
+        export module Point {
+            export var Origin = new Point(0, 0);
+        }
+    }
+    
+==== tests/cases/compiler/class.ts (1 errors) ====
+    module X.Y {
+        // duplicate identifier
+        export class Point {
+                     ~~~~~
+!!! class.ts(3,18): error TS2000: Duplicate identifier 'Point'. Additional locations:
+!!! 	module.ts(2,19)
+            constructor(x: number, y: number) {
+                this.x = x;
+                this.y = y;
+            }
+            x: number;
+            y: number;
+        }
+    }
+    
+==== tests/cases/compiler/simple.ts (1 errors) ====
+    module A {
+        export var Instance = new A();
+    }
+    
+    // duplicate identifier
+    class A {
+          ~
+!!! simple.ts(6,7): error TS2000: Duplicate identifier 'A'. Additional locations:
+!!! 	simple.ts(1,8)
+        id: string;
+    }
+    

@@ -1,0 +1,16 @@
+==== tests/cases/compiler/externalModuleExportingGenericClass_file1.ts (1 errors) ====
+    import a = require('externalModuleExportingGenericClass_file0');
+    var v: a; // this should report error
+           ~
+!!! externalModuleExportingGenericClass_file1.ts(2,8): error TS2173: Generic type references must include all type arguments.
+    var v2: any = (new a()).foo;
+    var v3: number = (new a<number>()).foo;
+    
+==== tests/cases/compiler/externalModuleExportingGenericClass_file0.ts (0 errors) ====
+    
+    class C<T> {
+        foo: T;
+    }
+    export = C;
+    
+    

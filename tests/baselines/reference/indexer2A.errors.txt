@@ -1,0 +1,16 @@
+==== tests/cases/compiler/indexer2A.ts (4 errors) ====
+    class IHeapObjectProperty {}
+    class IDirectChildrenMap { 
+            // BUG 765883
+            hasOwnProperty(objectId: number) : boolean
+            [objectId: number] : IHeapObjectProperty[] 
+             ~~~~~~~~
+!!! indexer2A.ts(5,10): error TS1005: ']' expected.
+                             ~
+!!! indexer2A.ts(5,26): error TS1005: ';' expected.
+                               ~
+!!! indexer2A.ts(5,28): error TS1008: Unexpected token; 'constructor, function, accessor or variable' expected.
+                                                    ~
+!!! indexer2A.ts(5,49): error TS1005: '=' expected.
+    }    
+    var directChildrenMap = <IDirectChildrenMap>{}; 

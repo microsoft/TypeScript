@@ -1,0 +1,11 @@
+==== tests/cases/compiler/badExternalModuleReference.ts (2 errors) ====
+    import a1 = require("garbage");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! badExternalModuleReference.ts(1,1): error TS2071: Unable to resolve external module '"garbage"'.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! badExternalModuleReference.ts(1,1): error TS2072: Module cannot be aliased to a non-module type.
+    export declare var a: {
+        test1: a1.connectModule;
+        (): a1.connectExport;
+    };
+    

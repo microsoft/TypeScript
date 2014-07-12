@@ -1,0 +1,10 @@
+
+EmittedFile: (sourceMapValidationLabeled.js) sourceFile: (sourceMapValidationLabeled.ts)
+-------------------------------------------------------------------
+Emitted (1, 1) source (1, 1)
+Emitted (1, 2) source (1, 2)
+Emitted (2, 1) source (2, 1)
+Emitted (2, 5) source (2, 5)
+Emitted (2, 6) source (2, 6)
+Emitted (2, 9) source (2, 9)
+Emitted (2, 11) source (2, 11)

@@ -1,0 +1,72 @@
+==== tests/cases/compiler/subtypingWithObjectMembers5.ts (3 errors) ====
+    interface Base {
+        foo: string;
+    }
+    
+    interface Derived extends Base {
+        bar: string;
+    }
+    
+    // N and M have the same name, same accessibility, same optionality, and N is a subtype of M
+    // foo properties are valid, bar properties cause errors in the derived class declarations
+    module NotOptional {
+        interface A {
+            foo: Base;
+        }
+    
+        class B implements A {
+              ~
+!!! subtypingWithObjectMembers5.ts(16,11): error TS2137: Class B declares interface A but does not implement it:
+!!! 	Type 'B' is missing property 'foo' from type 'A'.
+            fooo: Derived; // error
+        }
+    
+        interface A2 {
+            1: Base;
+        }
+    
+        class B2 implements A2 {
+              ~~
+!!! subtypingWithObjectMembers5.ts(24,11): error TS2137: Class B2 declares interface A2 but does not implement it:
+!!! 	Type 'B2' is missing property '1' from type 'A2'.
+            2: Derived; // error
+        }
+    
+        interface A3 {
+            '1': Base;
+        }
+    
+        class B3 implements A3 {
+              ~~
+!!! subtypingWithObjectMembers5.ts(32,11): error TS2137: Class B3 declares interface A3 but does not implement it:
+!!! 	Type 'B3' is missing property ''1'' from type 'A3'.
+            '1.0': Derived; // error
+        }
+    }
+    
+    // same cases as above but with optional
+    module Optional {
+        interface A {
+            foo?: Base;
+        }
+    
+        class B implements A {
+            fooo: Derived; // ok
+        }
+    
+        interface A2 {
+            1?: Base;
+        }
+    
+        class B2 implements A2 {
+            2: Derived; // ok
+        }
+    
+        interface A3 {
+            '1'?: Base;
+        }
+    
+        class B3 implements A3 {
+            '1.0': Derived; // ok
+        }
+    }

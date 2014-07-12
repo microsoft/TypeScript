@@ -1,0 +1,13 @@
+==== tests/cases/compiler/importAsBaseClass_1.ts (2 errors) ====
+    import Greeter = require("importAsBaseClass_0");
+    class Hello extends Greeter { }
+                        ~~~~~~~
+!!! importAsBaseClass_1.ts(2,21): error TS2073: A class may only extend another class.
+                        ~~~~~~~
+!!! importAsBaseClass_1.ts(2,21): error TS4022: Type reference cannot refer to container 'Greeter'.
+    
+==== tests/cases/compiler/importAsBaseClass_0.ts (0 errors) ====
+    export class Greeter {
+       greet() { return 'greet' }
+    }
+    

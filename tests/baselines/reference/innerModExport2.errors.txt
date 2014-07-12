@@ -1,0 +1,29 @@
+==== tests/cases/compiler/innerModExport2.ts (4 errors) ====
+    module Outer {
+    
+        // inner mod 1
+        var non_export_var: number;
+        module {
+               ~
+!!! innerModExport2.ts(5,12): error TS1005: ';' expected.
+        ~~~~~~
+!!! innerModExport2.ts(5,5): error TS2095: Could not find symbol 'module'.
+            var non_export_var = 0;
+            export var export_var = 1;
+    
+            function NonExportFunc() { return 0; }
+    
+            export function ExportFunc() { return 0; }
+        }
+        var export_var: number;
+            ~~~~~~~~~~~~~~~~~~
+!!! innerModExport2.ts(13,9): error TS2192: All declarations of merged declaration 'export_var' must be exported or not exported.
+    
+        export var outer_var_export = 0;
+        export function outerFuncExport() { return 0; }
+    
+    }
+    
+    Outer.NonExportFunc();
+          ~~~~~~~~~~~~~
+!!! innerModExport2.ts(20,7): error TS2094: The property 'NonExportFunc' does not exist on value of type 'typeof Outer'.

@@ -1,0 +1,16 @@
+==== tests/cases/compiler/genericFunctionsWithOptionalParameters2.ts (2 errors) ====
+    interface Utils {
+       fold<T, S>(c: Array<T>, folder?: (s: S, t: T) => T, init?: S): T;
+    }
+    
+    var utils: Utils;
+    
+    utils.fold(); // error
+          ~~~~
+!!! genericFunctionsWithOptionalParameters2.ts(7,7): error TS2081: Supplied parameters do not match any signature of call target.
+          ~~~~
+!!! genericFunctionsWithOptionalParameters2.ts(7,7): error TS2087: Could not select overload for 'call' expression.
+    utils.fold(null); // no error
+    utils.fold(null, null); // no error
+    utils.fold(null, null, null); // error: Unable to invoke type with no call signatures
+    

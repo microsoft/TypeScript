@@ -1,0 +1,288 @@
+{
+    "tokens": {
+        "0": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "fullWidth": 11,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "MultiLineCommentTrivia",
+                    "text": "/* foo */"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        },
+        "1": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "fullWidth": 11,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "MultiLineCommentTrivia",
+                    "text": "/* foo */"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        },
+        "2": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "fullWidth": 11,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "MultiLineCommentTrivia",
+                    "text": "/* foo */"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        },
+        "3": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "fullWidth": 11,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "MultiLineCommentTrivia",
+                    "text": "/* foo */"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        },
+        "4": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "fullWidth": 11,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "MultiLineCommentTrivia",
+                    "text": "/* foo */"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        },
+        "5": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "fullWidth": 11,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "MultiLineCommentTrivia",
+                    "text": "/* foo */"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        },
+        "6": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "fullWidth": 11,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "MultiLineCommentTrivia",
+                    "text": "/* foo */"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        },
+        "7": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "fullWidth": 11,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "MultiLineCommentTrivia",
+                    "text": "/* foo */"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        },
+        "8": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "fullWidth": 11,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "MultiLineCommentTrivia",
+                    "text": "/* foo */"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        },
+        "9": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "fullWidth": 11,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "MultiLineCommentTrivia",
+                    "text": "/* foo */"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        },
+        "10": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "fullWidth": 11,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "MultiLineCommentTrivia",
+                    "text": "/* foo */"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        },
+        "11": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "fullWidth": 11,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "MultiLineCommentTrivia",
+                    "text": "/* foo */"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        }
+    },
+    "tokensOnLeft": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null
+    },
+    "leftToRight": [
+        {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "fullWidth": 11,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "MultiLineCommentTrivia",
+                    "text": "/* foo */"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        }
+    ],
+    "rightToLeft": [
+        {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "fullWidth": 11,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "MultiLineCommentTrivia",
+                    "text": "/* foo */"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        }
+    ]
+}

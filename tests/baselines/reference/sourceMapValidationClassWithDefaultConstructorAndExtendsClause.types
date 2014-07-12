@@ -1,0 +1,15 @@
+=== tests/cases/compiler/sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts ===
+class AbstractGreeter {
+>AbstractGreeter : AbstractGreeter
+}
+
+class Greeter extends AbstractGreeter {
+>Greeter : Greeter
+>AbstractGreeter : AbstractGreeter
+
+    public a = 10;
+>a : number
+
+    public nameA = "Ten";
+>nameA : string
+}

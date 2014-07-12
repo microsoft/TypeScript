@@ -1,0 +1,10 @@
+==== tests/cases/compiler/unexpectedStatementBlockTerminator.ts (1 errors) ====
+    class Foo {}
+    
+    class Bar {}
+    case
+    ~~~~
+!!! unexpectedStatementBlockTerminator.ts(4,1): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.
+    
+    function Goo() {return {a:1,b:2};}
+    

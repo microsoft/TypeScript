@@ -1,0 +1,6 @@
+==== tests/cases/compiler/contextualTyping41.ts (1 errors) ====
+    var foo = <{():number; (i:number):number; }> (function(){return "err";});
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! contextualTyping41.ts(1,11): error TS2012: Cannot convert '() => string' to '{ (): number; (i: number): number; }':
+!!! 	Call signatures of types '() => string' and '{ (): number; (i: number): number; }' are incompatible.
+!!! 	Call signatures of types '{ (): number; (i: number): number; }' and '() => string' are incompatible.

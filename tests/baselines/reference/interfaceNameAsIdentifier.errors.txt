@@ -1,0 +1,18 @@
+==== tests/cases/compiler/interfaceNameAsIdentifier.ts (2 errors) ====
+    interface C {
+        (): void;
+    }
+    C();
+    ~
+!!! interfaceNameAsIdentifier.ts(4,1): error TS2095: Could not find symbol 'C'.
+    
+    module m2 {
+        export interface C {
+            (): void;
+        }
+    }
+    
+    m2.C();
+    ~~
+!!! interfaceNameAsIdentifier.ts(12,1): error TS2095: Could not find symbol 'm2'.
+    

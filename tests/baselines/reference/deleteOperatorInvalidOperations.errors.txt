@@ -1,0 +1,22 @@
+==== tests/cases/compiler/deleteOperatorInvalidOperations.ts (3 errors) ====
+    // Unary operator delete
+    var ANY;
+    
+    // operand before delete operator
+    var BOOLEAN1 = ANY delete ;     //expect error
+                       ~~~~~~
+!!! deleteOperatorInvalidOperations.ts(5,20): error TS1005: ',' expected.
+                              ~
+!!! deleteOperatorInvalidOperations.ts(5,27): error TS1003: Identifier expected.
+    
+    // miss an operand
+    var BOOLEAN2 = delete ;
+                          ~
+!!! deleteOperatorInvalidOperations.ts(8,23): error TS1003: Identifier expected.
+    
+    // delete global variable s
+    class testADelx {
+        constructor(public s: () => {}) {
+            delete s;      //expect error
+        }
+    }

@@ -1,0 +1,14 @@
+=== tests/cases/compiler/restParameterNoTypeAnnotation.ts ===
+function foo(...rest) {   
+>foo : typeof foo
+>rest : any[]
+
+     var x: number = rest[0];
+>x : number
+>rest[0] : any
+>rest : any[]
+
+     return x;   
+>x : number
+}  
+

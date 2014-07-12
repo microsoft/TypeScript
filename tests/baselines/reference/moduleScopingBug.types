@@ -1,0 +1,41 @@
+=== tests/cases/compiler/moduleScopingBug.ts ===
+module M
+>M : M
+
+{
+
+    var outer: number;
+>outer : number
+
+    function f() {
+>f : typeof f
+
+        var inner = outer;   // Ok
+>inner : number
+>outer : number
+
+    }
+
+    class C {
+>C : C
+
+        constructor() {
+            var inner = outer;   // Ok
+>inner : number
+>outer : number
+        }
+
+    }
+
+    module X {
+>X : X
+
+        var inner = outer;   // Error: outer not visible
+>inner : number
+>outer : number
+
+    }
+
+}
+
+

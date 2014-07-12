@@ -1,0 +1,22 @@
+==== tests/cases/compiler/assignmentCompatInterfaceWithStringIndexSignature.ts (2 errors) ====
+    interface IHandler {
+        (e): boolean;
+    }
+    
+    interface IHandlerMap {
+        [type: string]: IHandler;
+    }
+    
+    class Foo {
+        public Boz(): void { }
+    }
+    
+    function Biz(map: IHandlerMap) { }
+    
+    Biz(new Foo());
+    ~~~
+!!! assignmentCompatInterfaceWithStringIndexSignature.ts(15,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Index signatures of types 'Foo' and 'IHandlerMap' are incompatible.
+    ~~~
+!!! assignmentCompatInterfaceWithStringIndexSignature.ts(15,1): error TS2087: Could not select overload for 'call' expression.
+    

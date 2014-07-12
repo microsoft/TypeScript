@@ -1,0 +1,19 @@
+==== tests/cases/compiler/circularModuleImports.ts (4 errors) ====
+    module M
+     
+    {
+     
+        import A = B;
+        ~~~~~~~~~~~~~
+!!! circularModuleImports.ts(5,5): error TS2072: Module cannot be aliased to a non-module type.
+                   ~
+!!! circularModuleImports.ts(5,16): error TS2179: Unable to resolve module reference 'B'.
+     
+        import B = A;
+        ~~~~~~~~~~~~~
+!!! circularModuleImports.ts(7,5): error TS2072: Module cannot be aliased to a non-module type.
+                   ~
+!!! circularModuleImports.ts(7,16): error TS2179: Unable to resolve module reference 'A'.
+     
+    }
+    

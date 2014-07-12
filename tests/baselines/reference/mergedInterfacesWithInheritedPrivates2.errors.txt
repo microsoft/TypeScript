@@ -1,0 +1,45 @@
+==== tests/cases/compiler/mergedInterfacesWithInheritedPrivates2.ts (5 errors) ====
+    class C {
+        private x: number;
+    }
+    
+    class C2 {
+        private w: number;
+    }
+    
+    interface A extends C {
+        y: string;
+    }
+    
+    interface A extends C2 {
+        z: string;
+    }
+    
+    class D extends C implements A { // error
+          ~
+!!! mergedInterfacesWithInheritedPrivates2.ts(17,7): error TS2137: Class D declares interface A but does not implement it:
+!!! 	Types 'D' and 'C2' define property 'w' as private.
+        private w: number;
+        y: string;
+        z: string;
+    }
+    
+    class E extends C2 implements A { // error
+          ~
+!!! mergedInterfacesWithInheritedPrivates2.ts(23,7): error TS2137: Class E declares interface A but does not implement it:
+!!! 	Type 'E' is missing property 'x' from type 'A'.
+          ~
+!!! mergedInterfacesWithInheritedPrivates2.ts(23,7): error TS2141: Class 'E' cannot extend class 'C2':
+!!! 	Property 'w' defined as public in type 'E' is defined as private in type 'C2'.
+        w: number;
+        y: string;
+        z: string;
+    }
+    
+    var a: A;
+    var r = a.x; // error
+              ~
+!!! mergedInterfacesWithInheritedPrivates2.ts(30,11): error TS2107: 'C.x' is inaccessible.
+    var r2 = a.w; // error
+               ~
+!!! mergedInterfacesWithInheritedPrivates2.ts(31,12): error TS2107: 'C2.w' is inaccessible.

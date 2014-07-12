@@ -1,0 +1,43 @@
+==== tests/cases/compiler/invalidAssignmentsToVoid.ts (10 errors) ====
+    var x: void;
+    x = 1;
+    ~
+!!! invalidAssignmentsToVoid.ts(2,1): error TS2011: Cannot convert 'number' to 'void'.
+    x = true;
+    ~
+!!! invalidAssignmentsToVoid.ts(3,1): error TS2011: Cannot convert 'boolean' to 'void'.
+    x = '';
+    ~
+!!! invalidAssignmentsToVoid.ts(4,1): error TS2011: Cannot convert 'string' to 'void'.
+    x = {}
+    ~
+!!! invalidAssignmentsToVoid.ts(5,1): error TS2011: Cannot convert '{}' to 'void'.
+    
+    class C { foo: string; }
+    var c: C;
+    x = C;
+    ~
+!!! invalidAssignmentsToVoid.ts(9,1): error TS2011: Cannot convert 'typeof C' to 'void'.
+    x = c;
+    ~
+!!! invalidAssignmentsToVoid.ts(10,1): error TS2011: Cannot convert 'C' to 'void'.
+    
+    interface I { foo: string; }
+    var i: I;
+    x = i;
+    ~
+!!! invalidAssignmentsToVoid.ts(14,1): error TS2011: Cannot convert 'I' to 'void'.
+    
+    module M { export var x = 1; }
+    x = M;
+    ~
+!!! invalidAssignmentsToVoid.ts(17,1): error TS2011: Cannot convert 'typeof M' to 'void'.
+    
+    function f<T>(a: T) {
+        x = a;
+        ~
+!!! invalidAssignmentsToVoid.ts(20,5): error TS2011: Cannot convert 'T' to 'void'.
+    }
+    x = f;
+    ~
+!!! invalidAssignmentsToVoid.ts(22,1): error TS2011: Cannot convert 'typeof f' to 'void'.

@@ -1,0 +1,22 @@
+==== tests/cases/compiler/selfReferencesInFunctionParameters.ts (4 errors) ====
+    function foo(x: number = x) {
+                             ~
+!!! selfReferencesInFunctionParameters.ts(1,26): error TS2231: Parameter 'x' cannot be referenced in its initializer.
+    }
+    
+    function bar(x0 = "", x: number = x) {
+                                      ~
+!!! selfReferencesInFunctionParameters.ts(4,35): error TS2231: Parameter 'x' cannot be referenced in its initializer.
+    }
+    
+    class C {
+        constructor(x = 1, y = y) {
+                               ~
+!!! selfReferencesInFunctionParameters.ts(8,28): error TS2231: Parameter 'y' cannot be referenced in its initializer.
+        }
+         
+        bar(a = "", b: string = b.toString()) {
+                                ~
+!!! selfReferencesInFunctionParameters.ts(11,29): error TS2231: Parameter 'b' cannot be referenced in its initializer.
+        }
+    }

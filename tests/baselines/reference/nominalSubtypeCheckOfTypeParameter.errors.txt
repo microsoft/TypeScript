@@ -1,0 +1,24 @@
+==== tests/cases/compiler/nominalSubtypeCheckOfTypeParameter.ts (1 errors) ====
+    interface Tuple<T, S> {
+        first: T
+          second: S
+    }
+    
+    interface Sequence<T> {
+        hasNext(): boolean
+          pop(): T
+          zip<S>(seq: Sequence<S>): Sequence<Tuple<T, S>>
+    }
+    
+    // error, despite the fact that the code explicitly says List<T> extends Sequence<T>, the current rules for infinitely expanding type references 
+    // perform nominal subtyping checks that allow variance for type arguments, but not nominal subtyping for the generic type itself
+    interface List<T> extends Sequence<T> {
+              ~~~~
+!!! nominalSubtypeCheckOfTypeParameter.ts(14,11): error TS2143: Interface 'List<T>' cannot extend interface 'Sequence<T>':
+!!! 	Types of property 'zip' of types 'List<T>' and 'Sequence<T>' are incompatible:
+!!! 		Call signatures of types '<S>(seq: Sequence<S>) => List<Tuple<T, S>>' and '<S>(seq: Sequence<S>) => Sequence<Tuple<T, S>>' are incompatible:
+!!! 			Types 'List<Tuple<T, any>>' and 'Sequence<Tuple<T, any>>' originating in infinitely expanding type reference do not refer to same named type.
+        getLength(): number
+          zip<S>(seq: Sequence<S>): List<Tuple<T, S>>
+    }
+    

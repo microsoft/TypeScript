@@ -1,0 +1,91 @@
+==== tests/cases/compiler/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts (12 errors) ====
+    // Specialized signatures must be a subtype of a non-specialized signature
+    // All the below should be errors
+    
+    function foo(x: 'a');
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(4,1): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+    function foo(x: number) { }
+    
+    class C {
+        foo(x: 'a');
+        ~~~~~~~~~~~~
+!!! specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(8,5): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+        foo(x: number);
+        foo(x: any) { }
+    }
+    
+    class C2<T> {
+        foo(x: 'a');
+        ~~~~~~~~~~~~
+!!! specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(14,5): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+        foo(x: T);
+        foo(x: any) { }
+    }
+    
+    class C3<T extends String> {
+        foo(x: 'a');
+        ~~~~~~~~~~~~
+!!! specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(20,5): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+        foo(x: T);
+        foo(x: any) { }
+    }
+    
+    interface I {
+        (x: 'a');
+        ~~~~~~~~
+!!! specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(26,5): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+        (x: number);
+        foo(x: 'a');
+        ~~~~~~~~~~~
+!!! specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(28,5): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+        foo(x: number);
+    }
+    
+    interface I2<T> {
+        (x: 'a');
+        ~~~~~~~~
+!!! specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(33,5): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+        (x: T);
+        foo(x: 'a');
+        ~~~~~~~~~~~
+!!! specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(35,5): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+        foo(x: T);
+    }
+    
+    interface I3<T extends String> {
+        (x: 'a');
+        ~~~~~~~~
+!!! specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(40,5): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+        (x: T);
+        foo(x: 'a');
+        ~~~~~~~~~~~
+!!! specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(42,5): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+        foo(x: T);
+    }
+    
+    var a: {
+        (x: 'a');
+        ~~~~~~~~
+!!! specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(47,5): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+        (x: number);
+        foo(x: 'a');
+        ~~~~~~~~~~~
+!!! specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(49,5): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+        foo(x: number);
+    }
+    
+    var a2: {
+        (x: 'a');
+        <T>(x: T);
+        foo(x: 'a');
+        foo<T>(x: T);
+    }
+    
+    var a3: {
+        (x: 'a');
+        <T>(x: T);
+        foo(x: 'a');
+        foo<T extends String>(x: T);
+    }
+    

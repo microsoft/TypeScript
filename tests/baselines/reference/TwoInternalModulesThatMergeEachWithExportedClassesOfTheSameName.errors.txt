@@ -1,0 +1,39 @@
+==== tests/cases/compiler/TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts (2 errors) ====
+    module A {
+        export class Point {
+            x: number;
+            y: number;
+        }
+    }
+    
+    module A{
+        // expected error
+        export class Point {
+                     ~~~~~
+!!! TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(10,18): error TS2000: Duplicate identifier 'Point'. Additional locations:
+!!! 	TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(2,5)
+            origin: number;
+            angle: number;
+        }
+    }
+    
+    module X.Y.Z {
+        export class Line {
+            length: number;
+        }
+    }
+    
+    module X {
+        export module Y {
+            export module Z {
+                // expected error
+                export class Line {
+                             ~~~~
+!!! TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(26,26): error TS2000: Duplicate identifier 'Line'. Additional locations:
+!!! 	TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(17,5)
+                    name: string;
+                }
+            }
+        }
+    }
+    

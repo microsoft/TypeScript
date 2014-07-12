@@ -1,0 +1,5 @@
+==== tests/cases/compiler/defaultValueInFunctionOverload1.ts (1 errors) ====
+    function foo(x: string = '');
+                 ~~~~~~~~~~~~~~
+!!! defaultValueInFunctionOverload1.ts(1,14): error TS2174: Default arguments are only allowed in implementation.
+    function foo(x = '') { }

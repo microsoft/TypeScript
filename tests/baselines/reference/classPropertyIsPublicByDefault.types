@@ -1,0 +1,81 @@
+=== tests/cases/compiler/classPropertyIsPublicByDefault.ts ===
+class C {
+>C : C
+
+    x: string;
+>x : string
+
+    get y() { return null; }
+>y : any
+
+    set y(x) { }
+>y : any
+>x : any
+
+    foo() { }
+>foo : () => void
+
+    static a: string;
+>a : string
+
+    static get b() { return null; }
+>b : any
+
+    static set b(x) { }
+>b : any
+>x : any
+
+    static foo() { }
+>foo : () => void
+}
+
+var c: C;
+>c : C
+>C : C
+
+c.x;
+>c.x : string
+>c : C
+>x : string
+
+c.y;
+>c.y : any
+>c : C
+>y : any
+
+c.y = 1;
+>c.y = 1 : number
+>c.y : any
+>c : C
+>y : any
+
+c.foo();
+>c.foo() : void
+>c.foo : () => void
+>c : C
+>foo : () => void
+
+>C.a : string
+>C : typeof C
+
+C.a;
+>a : string
+
+C.b();
+>C.b() : any
+>C.b : any
+>C : typeof C
+>b : any
+
+C.b = 1;
+>C.b = 1 : number
+>C.b : any
+>C : typeof C
+>b : any
+
+C.foo();
+>C.foo() : void
+>C.foo : () => void
+>C : typeof C
+>foo : () => void
+

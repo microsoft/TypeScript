@@ -1,0 +1,173 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 48,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullWidth": 15,
+                "expression": {
+                    "kind": "StringLiteral",
+                    "width": 12,
+                    "text": "\"use strict\"",
+                    "value": "use strict",
+                    "valueText": "use strict"
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 1,
+                    "fullWidth": 3,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";",
+                    "hasTrailingTrivia": true,
+                    "hasTrailingNewLine": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "text": "\r\n"
+                        }
+                    ]
+                }
+            },
+            {
+                "kind": "EnumDeclaration",
+                "fullWidth": 33,
+                "isIncrementallyUnusable": true,
+                "parsedInStrictMode": true,
+                "modifiers": [],
+                "enumKeyword": {
+                    "kind": "EnumKeyword",
+                    "width": 4,
+                    "fullWidth": 7,
+                    "text": "enum",
+                    "value": "enum",
+                    "valueText": "enum",
+                    "hasLeadingTrivia": true,
+                    "hasLeadingNewLine": true,
+                    "hasTrailingTrivia": true,
+                    "leadingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "text": "\r\n"
+                        }
+                    ],
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "text": " "
+                        }
+                    ]
+                },
+                "identifier": {
+                    "kind": "IdentifierName",
+                    "width": 3,
+                    "fullWidth": 4,
+                    "text": "Bar",
+                    "value": "Bar",
+                    "valueText": "Bar",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "text": " "
+                        }
+                    ]
+                },
+                "openBraceToken": {
+                    "kind": "OpenBraceToken",
+                    "width": 1,
+                    "fullWidth": 3,
+                    "text": "{",
+                    "value": "{",
+                    "valueText": "{",
+                    "hasTrailingTrivia": true,
+                    "hasTrailingNewLine": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "text": "\r\n"
+                        }
+                    ]
+                },
+                "enumElements": [
+                    {
+                        "kind": "EnumElement",
+                        "fullWidth": 13,
+                        "isIncrementallyUnusable": true,
+                        "parsedInStrictMode": true,
+                        "propertyName": {
+                            "kind": "IdentifierName",
+                            "width": 9,
+                            "fullWidth": 13,
+                            "text": "interface",
+                            "value": "interface",
+                            "valueText": "interface",
+                            "hasLeadingTrivia": true,
+                            "leadingTrivia": [
+                                {
+                                    "kind": "WhitespaceTrivia",
+                                    "text": "    "
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "kind": "CommaToken",
+                        "width": 1,
+                        "fullWidth": 3,
+                        "text": ",",
+                        "value": ",",
+                        "valueText": ",",
+                        "hasTrailingTrivia": true,
+                        "hasTrailingNewLine": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "NewLineTrivia",
+                                "text": "\r\n"
+                            }
+                        ]
+                    }
+                ],
+                "closeBraceToken": {
+                    "kind": "CloseBraceToken",
+                    "width": 1,
+                    "fullWidth": 3,
+                    "text": "}",
+                    "value": "}",
+                    "valueText": "}",
+                    "hasTrailingTrivia": true,
+                    "hasTrailingNewLine": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "text": "\r\n"
+                        }
+                    ]
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            15,
+            17,
+            29,
+            45,
+            48
+        ],
+        "length": 48
+    }
+}

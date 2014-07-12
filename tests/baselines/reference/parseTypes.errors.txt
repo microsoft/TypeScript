@@ -1,0 +1,28 @@
+==== tests/cases/compiler/parseTypes.ts (4 errors) ====
+    
+    var x = <() => number>null;
+    var y = <{(): number; }>null;
+    var z = <{new(): number; }>null
+    var w = <{[x:number]: number; }>null
+    function f() { return 3 };
+    function g(s: string) { true };
+    y=f;
+    y=g;
+    ~
+!!! parseTypes.ts(9,1): error TS2012: Cannot convert 'typeof g' to '() => number':
+!!! 	Call signatures of types 'typeof g' and '() => number' are incompatible:
+!!! 		Call signature expects 0 or fewer parameters.
+    x=g;
+    ~
+!!! parseTypes.ts(10,1): error TS2012: Cannot convert 'typeof g' to '() => number':
+!!! 	Call signatures of types 'typeof g' and '() => number' are incompatible:
+!!! 		Call signature expects 0 or fewer parameters.
+    w=g;
+    ~
+!!! parseTypes.ts(11,1): error TS2012: Cannot convert 'typeof g' to '{ [x: number]: number; }':
+!!! 	Index signatures of types 'typeof g' and '{ [x: number]: number; }' are incompatible.
+    z=g;
+    ~
+!!! parseTypes.ts(12,1): error TS2012: Cannot convert 'typeof g' to 'new() => number':
+!!! 	Type 'new() => number' requires a construct signature, but type 'typeof g' lacks one.
+    

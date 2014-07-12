@@ -1,0 +1,23 @@
+==== tests/cases/compiler/callSignaturesThatDifferOnlyByReturnType2.ts (3 errors) ====
+    // Normally it is an error to have multiple overloads which differ only by return type in a single type declaration.
+    // Here the multiple overloads come from multiple bases.
+    
+    interface I<T> {
+        foo(x: number): T;
+    }
+    
+    interface A extends I<number>, I<string> { }
+              ~
+!!! callSignaturesThatDifferOnlyByReturnType2.ts(8,11): error TS2189: Interface 'A' cannot simultaneously extend types 'I<number>' and 'I<string>':
+!!! Named properties 'foo' of types 'I<number>' and 'I<string>' are not identical.
+    
+    var x: A;
+    // BUG 822524
+    var r = x.foo(1); // no error
+    var r2 = x.foo(''); // error
+               ~~~
+!!! callSignaturesThatDifferOnlyByReturnType2.ts(13,12): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Could not apply type 'number' to argument 1 which is of type 'string'.
+               ~~~
+!!! callSignaturesThatDifferOnlyByReturnType2.ts(13,12): error TS2087: Could not select overload for 'call' expression.
+    

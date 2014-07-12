@@ -1,0 +1,5 @@
+==== tests/cases/compiler/propertyAccess2.ts (1 errors) ====
+    var foo: number;
+    foo.toBAZ();
+        ~~~~~
+!!! propertyAccess2.ts(2,5): error TS2094: The property 'toBAZ' does not exist on value of type 'number'.

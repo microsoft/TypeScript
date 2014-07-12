@@ -1,0 +1,10 @@
+==== tests/cases/compiler/invalidUnicodeEscapeSequance3.ts (4 errors) ====
+    a\u
+     ~
+!!! invalidUnicodeEscapeSequance3.ts(1,2): error TS1001: Unexpected character "\".
+     ~
+!!! invalidUnicodeEscapeSequance3.ts(1,2): error TS1005: ';' expected.
+    ~
+!!! invalidUnicodeEscapeSequance3.ts(1,1): error TS2095: Could not find symbol 'a'.
+      ~
+!!! invalidUnicodeEscapeSequance3.ts(1,3): error TS2095: Could not find symbol 'u'.

@@ -1,0 +1,17 @@
+==== tests/cases/compiler/incompatibleGenericTypes.ts (1 errors) ====
+    
+    interface I1<T> {
+    
+      m1<U>(callback: (p: T) => U): I1<U>;
+    
+    }
+     
+    var v1: I1<boolean>;
+     
+    var v2: I1<number> = v1;
+        ~~~~~~~~~~~~~~~~~~~
+!!! incompatibleGenericTypes.ts(10,5): error TS2012: Cannot convert 'I1<boolean>' to 'I1<number>':
+!!! 	Types of property 'm1' of types 'I1<boolean>' and 'I1<number>' are incompatible:
+!!! 		Call signatures of types '<U>(callback: (p: boolean) => U) => I1<U>' and '<U>(callback: (p: number) => U) => I1<U>' are incompatible:
+!!! 			Call signatures of types '(p: boolean) => any' and '(p: number) => any' are incompatible.
+!!! 			Call signatures of types '(p: number) => any' and '(p: boolean) => any' are incompatible.

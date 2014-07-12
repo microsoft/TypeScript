@@ -1,0 +1,43 @@
+==== tests/cases/compiler/constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts (5 errors) ====
+    // Error for construct signature overloads to differ only by return type
+    
+    class C {
+        constructor(x: number) { }
+    }
+    
+    class C2<T> {
+        constructor(x: T, y?: string) { }
+    }
+    
+    interface I {
+        new(x: number, y: string): C;
+        new(x: number, y: string): C2<number>; // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts(13,5): error TS2147: Duplicate overload construct signature.
+    }
+    
+    interface I2<T> {
+        new (x: T, y: string): C2<number>;
+        new (x: T, y: string): C; // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts(18,5): error TS2147: Duplicate overload construct signature.
+        new <T>(x: T, y: string): C2<T>;
+        new <T>(x: T, y: string): C; // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts(20,5): error TS2147: Duplicate overload construct signature.
+    
+    }
+    
+    var a: {
+        new (x: number, y: string): C2<number>;
+        new (x: number, y: string): C; // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts(26,5): error TS2147: Duplicate overload construct signature.
+    }
+    
+    var b: {
+        new <T>(x: T, y: string): C2<T>;
+        new <T>(x: T, y: string): C; // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts(31,5): error TS2147: Duplicate overload construct signature.
+    }

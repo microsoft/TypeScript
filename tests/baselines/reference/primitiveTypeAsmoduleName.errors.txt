@@ -1,0 +1,4 @@
+==== tests/cases/compiler/primitiveTypeAsmoduleName.ts (1 errors) ====
+    module string {}
+           ~~~~~~
+!!! primitiveTypeAsmoduleName.ts(1,8): error TS1060: Module name cannot be 'string'.

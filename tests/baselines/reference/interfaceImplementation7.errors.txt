@@ -1,0 +1,19 @@
+==== tests/cases/compiler/interfaceImplementation7.ts (2 errors) ====
+    interface i1{ name(): { s: string; }; }
+    interface i2{ name(): { n: number; }; }
+    
+    interface i3 extends i1, i2 { }
+              ~~
+!!! interfaceImplementation7.ts(4,11): error TS2189: Interface 'i3' cannot simultaneously extend types 'i1' and 'i2':
+!!! Named properties 'name' of types 'i1' and 'i2' are not identical.
+    interface i4 extends i1, i2 { name(): { s: string; n: number; }; }
+    
+    class C1 implements i4 {
+          ~~
+!!! interfaceImplementation7.ts(7,7): error TS2137: Class C1 declares interface i4 but does not implement it:
+!!! 	Types of property 'name' of types 'C1' and 'i4' are incompatible:
+!!! 		Call signatures of types '() => string' and '() => { s: string; n: number; }' are incompatible:
+!!! 			Type 'String' is missing property 's' from type '{ s: string; n: number; }'.
+        public name(): string { return ""; }
+    }
+    

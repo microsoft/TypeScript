@@ -1,0 +1,16 @@
+==== tests/cases/compiler/genericDerivedTypeWithSpecializedBase.ts (1 errors) ====
+    class A<T> {
+        x: T;
+    }
+    
+    class B<U> extends A<string> {
+        y: U;
+    }
+    
+    var x: A<number>;
+    var y: B<number>;
+    x = y;  // error
+    ~
+!!! genericDerivedTypeWithSpecializedBase.ts(11,1): error TS2012: Cannot convert 'B<number>' to 'A<number>':
+!!! 	Types of property 'x' of types 'B<number>' and 'A<number>' are incompatible.
+    

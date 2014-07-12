@@ -1,0 +1,20 @@
+==== tests/cases/compiler/classSideInheritance1.ts (2 errors) ====
+    class A {
+      static bar(): string {
+         return "";
+        }
+        foo(): number { return 1; }
+    }
+     
+    class C2 extends A {}
+    
+    var a: A;
+    var c: C2;
+    a.bar(); // static off an instance - should be an error
+      ~~~
+!!! classSideInheritance1.ts(12,3): error TS2094: The property 'bar' does not exist on value of type 'A'.
+    c.bar(); // static off an instance - should be an error
+      ~~~
+!!! classSideInheritance1.ts(13,3): error TS2094: The property 'bar' does not exist on value of type 'C2'.
+    A.bar(); // valid
+    C2.bar(); // valid

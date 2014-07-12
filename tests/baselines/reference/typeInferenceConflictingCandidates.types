@@ -1,0 +1,22 @@
+=== tests/cases/compiler/typeInferenceConflictingCandidates.ts ===
+declare function g<T>(a: T, b: T, c: (t: T) => T): T;
+>g : typeof g
+>T : T
+>a : T
+>T : T
+>b : T
+>T : T
+>c : (t: T) => T
+>t : T
+>T : T
+>T : T
+>T : T
+
+>g("", 3, a => a) : {}
+>g : typeof g
+
+g("", 3, a => a);
+>a => a : (a: {}) => {}
+>a : {}
+>a : {}
+

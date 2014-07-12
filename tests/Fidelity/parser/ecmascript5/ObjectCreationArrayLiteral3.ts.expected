@@ -1,0 +1,114 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "diagnostics": [
+        {
+            "start": 7,
+            "length": 2,
+            "diagnosticCode": "'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead."
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 12,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullWidth": 12,
+                "isIncrementallyUnusable": true,
+                "expression": {
+                    "kind": "ObjectCreationExpression",
+                    "fullWidth": 11,
+                    "isIncrementallyUnusable": true,
+                    "newKeyword": {
+                        "kind": "NewKeyword",
+                        "width": 3,
+                        "fullWidth": 4,
+                        "text": "new",
+                        "value": "new",
+                        "valueText": "new",
+                        "hasTrailingTrivia": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "text": " "
+                            }
+                        ]
+                    },
+                    "expression": {
+                        "kind": "ElementAccessExpression",
+                        "fullWidth": 5,
+                        "isIncrementallyUnusable": true,
+                        "expression": {
+                            "kind": "IdentifierName",
+                            "width": 3,
+                            "text": "Foo",
+                            "value": "Foo",
+                            "valueText": "Foo"
+                        },
+                        "openBracketToken": {
+                            "kind": "OpenBracketToken",
+                            "width": 1,
+                            "text": "[",
+                            "value": "[",
+                            "valueText": "["
+                        },
+                        "argumentExpression": {
+                            "kind": "IdentifierName",
+                            "width": 0,
+                            "text": ""
+                        },
+                        "closeBracketToken": {
+                            "kind": "CloseBracketToken",
+                            "width": 1,
+                            "text": "]",
+                            "value": "]",
+                            "valueText": "]"
+                        }
+                    },
+                    "argumentList": {
+                        "kind": "ArgumentList",
+                        "fullWidth": 2,
+                        "openParenToken": {
+                            "kind": "OpenParenToken",
+                            "width": 1,
+                            "text": "(",
+                            "value": "(",
+                            "valueText": "("
+                        },
+                        "arguments": [],
+                        "closeParenToken": {
+                            "kind": "CloseParenToken",
+                            "width": 1,
+                            "text": ")",
+                            "value": ")",
+                            "valueText": ")"
+                        }
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 12
+    }
+}

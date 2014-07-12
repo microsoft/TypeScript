@@ -1,0 +1,54 @@
+=== tests/cases/compiler/genericAndNonGenericInterfaceWithTheSameName2.ts ===
+// generic and non-generic interfaces with the same name do not merge
+
+module M {
+>M : M
+
+    interface A<T> {
+>A : A<T>
+>T : T
+
+        bar: T;
+>bar : T
+>T : T
+    }
+}
+
+module M2 {
+>M2 : M2
+
+    interface A { // ok
+>A : A
+
+        foo: string;
+>foo : string
+    }
+}
+
+module N {
+>N : N
+
+    module M {
+>M : M
+
+        interface A<T> {
+>A : A<T>
+>T : T
+
+            bar: T;
+>bar : T
+>T : T
+        }
+    }
+
+    module M2 {
+>M2 : M2
+
+        interface A { // ok
+>A : A
+
+            foo: string;
+>foo : string
+        }
+    }
+}

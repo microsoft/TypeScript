@@ -1,0 +1,66 @@
+==== tests/cases/compiler/assignmentCompatWithNumericIndexer.ts (6 errors) ====
+    // Derived type indexer must be subtype of base type indexer
+    
+    interface Base { foo: string; }
+    interface Derived extends Base { bar: string; }
+    interface Derived2 extends Derived { baz: string; }
+    
+    class A {
+        [x: number]: Base;
+    }
+    
+    var a: A;
+    var b: { [x: number]: Derived; }
+    a = b;
+    b = a; // error
+    ~
+!!! assignmentCompatWithNumericIndexer.ts(14,1): error TS2012: Cannot convert 'A' to '{ [x: number]: Derived; }':
+!!! 	Index signatures of types 'A' and '{ [x: number]: Derived; }' are incompatible:
+!!! 		Type 'Base' is missing property 'bar' from type 'Derived'.
+    
+    var b2: { [x: number]: Derived2; }
+    a = b2;
+    b2 = a; // error
+    ~~
+!!! assignmentCompatWithNumericIndexer.ts(18,1): error TS2012: Cannot convert 'A' to '{ [x: number]: Derived2; }':
+!!! 	Index signatures of types 'A' and '{ [x: number]: Derived2; }' are incompatible:
+!!! 		Type 'Base' is missing property 'baz' from type 'Derived2'.
+    
+    module Generics {
+        class A<T extends Base> {
+            [x: number]: T;
+        }
+    
+        class B extends A<Base> {
+            [x: number]: Derived; // ok
+        }
+    
+        function foo<T extends Base>() {
+            var a: A<T>;
+            var b: { [x: number]: Derived; }
+            a = b; // error
+            ~
+!!! assignmentCompatWithNumericIndexer.ts(32,9): error TS2012: Cannot convert '{ [x: number]: Derived; }' to 'A<T>':
+!!! 	Index signatures of types '{ [x: number]: Derived; }' and 'A<T>' are incompatible.
+            b = a; // error
+            ~
+!!! assignmentCompatWithNumericIndexer.ts(33,9): error TS2012: Cannot convert 'A<T>' to '{ [x: number]: Derived; }':
+!!! 	Index signatures of types 'A<T>' and '{ [x: number]: Derived; }' are incompatible:
+!!! 		Type 'Base' is missing property 'bar' from type 'Derived'.
+    
+            var b2: { [x: number]: Derived2; }
+            a = b2; // error
+            ~
+!!! assignmentCompatWithNumericIndexer.ts(36,9): error TS2012: Cannot convert '{ [x: number]: Derived2; }' to 'A<T>':
+!!! 	Index signatures of types '{ [x: number]: Derived2; }' and 'A<T>' are incompatible.
+            b2 = a; // error
+            ~~
+!!! assignmentCompatWithNumericIndexer.ts(37,9): error TS2012: Cannot convert 'A<T>' to '{ [x: number]: Derived2; }':
+!!! 	Index signatures of types 'A<T>' and '{ [x: number]: Derived2; }' are incompatible:
+!!! 		Type 'Base' is missing property 'baz' from type 'Derived2'.
+    
+            var b3: { [x: number]: T; }
+            a = b3; // ok
+            b3 = a; // ok
+        }
+    }

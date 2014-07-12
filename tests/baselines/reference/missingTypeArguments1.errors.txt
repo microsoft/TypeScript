@@ -1,0 +1,75 @@
+==== tests/cases/compiler/missingTypeArguments1.ts (10 errors) ====
+    interface I<T> { }
+    class Y<T> {}
+    class X<T> {
+        p1: () => X;
+                  ~
+!!! missingTypeArguments1.ts(4,15): error TS2173: Generic type references must include all type arguments.
+    }
+    var a: X<number>;
+    
+    class X2<T> {
+        p2: { [idx: number]: X2 } 
+                             ~~
+!!! missingTypeArguments1.ts(9,26): error TS2173: Generic type references must include all type arguments.
+    }
+    var a2: X2<number>;
+    
+    class X3<T> {
+        p3: X3[]
+            ~~
+!!! missingTypeArguments1.ts(14,9): error TS2173: Generic type references must include all type arguments.
+    }
+    var a3: X3<number>;
+    
+    class X4<T> {
+        p4: I<X4>
+              ~~
+!!! missingTypeArguments1.ts(19,11): error TS2173: Generic type references must include all type arguments.
+    }
+    var a4: X4<number>;
+    
+    class X5<T> {
+        p5: X5
+            ~~
+!!! missingTypeArguments1.ts(24,9): error TS2173: Generic type references must include all type arguments.
+    }
+    var a5: X5<number>;
+    
+    class X6<T> {
+        p6: () => Y;
+                  ~
+!!! missingTypeArguments1.ts(29,15): error TS2173: Generic type references must include all type arguments.
+    }
+    var a6: X6<number>;
+    
+    class X7<T> {
+        p7: { [idx: number]: Y } 
+                             ~
+!!! missingTypeArguments1.ts(34,26): error TS2173: Generic type references must include all type arguments.
+    }
+    var a7: X7<number>;
+    
+    class X8<T> {
+        p8: Y[]
+            ~
+!!! missingTypeArguments1.ts(39,9): error TS2173: Generic type references must include all type arguments.
+    }
+    var a8: X8<number>;
+    
+    class X9<T> {
+        p9: I<Y>
+              ~
+!!! missingTypeArguments1.ts(44,11): error TS2173: Generic type references must include all type arguments.
+    }
+    var a9: X9<number>;
+    
+    class X10<T> {
+        pa: Y
+            ~
+!!! missingTypeArguments1.ts(49,9): error TS2173: Generic type references must include all type arguments.
+    }
+    var a10: X10<number>;
+    
+     
+    

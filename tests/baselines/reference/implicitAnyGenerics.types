@@ -1,0 +1,83 @@
+=== tests/cases/compiler/implicitAnyGenerics.ts ===
+
+class C<T> {
+>C : C<T>
+>T : T
+
+    x: T;
+>x : T
+>T : T
+}
+
+var c = new C();
+>c : C<{}>
+>new C() : C<{}>
+>C : typeof C
+
+var c2 = new C<any>();
+>c2 : C<any>
+>new C<any>() : C<any>
+>C : typeof C
+
+var c3 = new C<number>();
+>c3 : C<number>
+>new C<number>() : C<number>
+>C : typeof C
+
+var c4: C<any> = new C();
+>c4 : C<any>
+>C : C<T>
+>new C() : C<{}>
+>C : typeof C
+
+class D<T> {
+>D : D<T>
+>T : T
+
+    constructor(x: T) { }
+>x : T
+>T : T
+}
+
+var d = new D(null);
+>d : D<any>
+>new D(null) : D<any>
+>D : typeof D
+
+var d2 = new D(1);
+>d2 : D<number>
+>new D(1) : D<number>
+>D : typeof D
+
+var d3 = new D<any>(1);
+>d3 : D<any>
+>new D<any>(1) : D<any>
+>D : typeof D
+
+var d4 = new D(<any>1);
+>d4 : D<any>
+>new D(<any>1) : D<any>
+>D : typeof D
+><any>1 : any
+
+var d5: D<any> = new D(null);
+>d5 : D<any>
+>D : D<T>
+>new D(null) : D<any>
+>D : typeof D
+
+function foo<T>(): T { return null; };
+>foo : typeof foo
+>T : T
+>T : T
+
+foo() 
+>foo() : {}
+>foo : typeof foo
+
+foo<any>();
+>foo<any>() : any
+>foo : typeof foo
+
+
+    

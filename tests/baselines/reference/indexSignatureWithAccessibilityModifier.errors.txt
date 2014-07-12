@@ -1,0 +1,12 @@
+==== tests/cases/compiler/indexSignatureWithAccessibilityModifier.ts (2 errors) ====
+    interface I {
+        [public x: string]: string;
+         ~~~~~~~~~~~~~~~~
+!!! indexSignatureWithAccessibilityModifier.ts(2,6): error TS1018: Index signature parameter cannot have accessibility modifiers.
+    }
+    
+    class C {
+        [public x: string]: string
+         ~~~~~~~~~~~~~~~~
+!!! indexSignatureWithAccessibilityModifier.ts(6,6): error TS1018: Index signature parameter cannot have accessibility modifiers.
+    }

@@ -1,0 +1,127 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "diagnostics": [
+        {
+            "start": 1,
+            "length": 7,
+            "diagnosticCode": "Rest parameter cannot be optional."
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 17,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullWidth": 17,
+                "expression": {
+                    "kind": "ParenthesizedArrowFunctionExpression",
+                    "fullWidth": 16,
+                    "callSignature": {
+                        "kind": "CallSignature",
+                        "fullWidth": 10,
+                        "parameterList": {
+                            "kind": "ParameterList",
+                            "fullWidth": 10,
+                            "openParenToken": {
+                                "kind": "OpenParenToken",
+                                "width": 1,
+                                "text": "(",
+                                "value": "(",
+                                "valueText": "("
+                            },
+                            "parameters": [
+                                {
+                                    "kind": "Parameter",
+                                    "fullWidth": 7,
+                                    "dotDotDotToken": {
+                                        "kind": "DotDotDotToken",
+                                        "width": 3,
+                                        "text": "...",
+                                        "value": "...",
+                                        "valueText": "..."
+                                    },
+                                    "modifiers": [],
+                                    "identifier": {
+                                        "kind": "IdentifierName",
+                                        "width": 3,
+                                        "text": "arg",
+                                        "value": "arg",
+                                        "valueText": "arg"
+                                    },
+                                    "questionToken": {
+                                        "kind": "QuestionToken",
+                                        "width": 1,
+                                        "text": "?",
+                                        "value": "?",
+                                        "valueText": "?"
+                                    }
+                                }
+                            ],
+                            "closeParenToken": {
+                                "kind": "CloseParenToken",
+                                "width": 1,
+                                "fullWidth": 2,
+                                "text": ")",
+                                "value": ")",
+                                "valueText": ")",
+                                "hasTrailingTrivia": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "text": " "
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "equalsGreaterThanToken": {
+                        "kind": "EqualsGreaterThanToken",
+                        "width": 2,
+                        "fullWidth": 3,
+                        "text": "=>",
+                        "value": "=>",
+                        "valueText": "=>",
+                        "hasTrailingTrivia": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "text": " "
+                            }
+                        ]
+                    },
+                    "expression": {
+                        "kind": "NumericLiteral",
+                        "width": 3,
+                        "text": "102",
+                        "value": 102,
+                        "valueText": "102"
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 17
+    }
+}

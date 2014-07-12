@@ -1,0 +1,10 @@
+==== tests/cases/compiler/varNameConflictsWithImportInDifferentPartOfModule.ts (1 errors) ====
+    module M1 {
+        export var q = 5;
+                   ~~~~~
+!!! varNameConflictsWithImportInDifferentPartOfModule.ts(2,16): error TS4026: Variable declaration cannot have the same name as an import declaration.
+        export var s = '';
+    }
+    module M1 {
+        export import q = M1.s; // Should be an error but isn't
+    }

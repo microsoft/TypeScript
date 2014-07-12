@@ -1,0 +1,18 @@
+==== tests/cases/compiler/inheritanceMemberFuncOverridingAccessor.ts (1 errors) ====
+    class a {
+        get x() {
+            return "20";
+        }
+        set x(aValue: string) {
+    
+        }
+    }
+    
+    class b extends a {
+          ~
+!!! inheritanceMemberFuncOverridingAccessor.ts(10,7): error TS2141: Class 'b' cannot extend class 'a':
+!!! 	Class 'b' defines instance member function 'x', but extended class 'a' defines it as instance member accessor.
+        x() {
+            return "20";
+        }
+    }

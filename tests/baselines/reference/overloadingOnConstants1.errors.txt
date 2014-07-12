@@ -1,0 +1,38 @@
+==== tests/cases/compiler/overloadingOnConstants1.ts (4 errors) ====
+    class Base { foo() { } }
+    class Derived1 extends Base { bar() { } }
+    class Derived2 extends Base { baz() { } }
+    class Derived3 extends Base { biz() { } }
+    
+    interface Document2 {
+        createElement(tagName: 'canvas'): Derived1;
+        createElement(tagName: 'div'): Derived2;
+        createElement(tagName: 'span'): Derived3;
+        createElement(tagName: string): Base;
+    }
+    
+    var d2: Document2;
+    
+    // these are ok
+    var htmlElement: Base = d2.createElement("yo")
+    var htmlCanvasElement: Derived1 = d2.createElement("canvas");
+    var htmlDivElement: Derived2 = d2.createElement("div");
+    var htmlSpanElement: Derived3 = d2.createElement("span");
+    
+    // these are errors
+    var htmlElement2: Derived1 = d2.createElement("yo")
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! overloadingOnConstants1.ts(22,5): error TS2012: Cannot convert 'Base' to 'Derived1':
+!!! 	Type 'Base' is missing property 'bar' from type 'Derived1'.
+    var htmlCanvasElement2: Derived3 = d2.createElement("canvas");
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! overloadingOnConstants1.ts(23,5): error TS2012: Cannot convert 'Derived1' to 'Derived3':
+!!! 	Type 'Derived1' is missing property 'biz' from type 'Derived3'.
+    var htmlDivElement2: Derived1 = d2.createElement("div");
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! overloadingOnConstants1.ts(24,5): error TS2012: Cannot convert 'Derived2' to 'Derived1':
+!!! 	Type 'Derived2' is missing property 'bar' from type 'Derived1'.
+    var htmlSpanElement2: Derived1 = d2.createElement("span");
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! overloadingOnConstants1.ts(25,5): error TS2012: Cannot convert 'Derived3' to 'Derived1':
+!!! 	Type 'Derived3' is missing property 'bar' from type 'Derived1'.

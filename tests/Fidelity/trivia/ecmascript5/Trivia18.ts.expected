@@ -1,0 +1,27 @@
+[
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 4,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasLeadingTrivia": true,
+        "hasLeadingNewLine": true,
+        "leadingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\r\n"
+            },
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EndOfFileToken",
+        "width": 0,
+        "text": ""
+    }
+]

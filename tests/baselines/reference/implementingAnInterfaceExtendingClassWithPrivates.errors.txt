@@ -1,0 +1,37 @@
+==== tests/cases/compiler/implementingAnInterfaceExtendingClassWithPrivates.ts (4 errors) ====
+    class Foo {
+        private x: string;
+    }
+    
+    interface I extends Foo {
+        y: number;
+    }
+    
+    class Bar implements I { // error
+          ~~~
+!!! implementingAnInterfaceExtendingClassWithPrivates.ts(9,7): error TS2137: Class Bar declares interface I but does not implement it:
+!!! 	Type 'Bar' is missing property 'y' from type 'I'.
+    }
+    
+    class Bar2 implements I { // error
+          ~~~~
+!!! implementingAnInterfaceExtendingClassWithPrivates.ts(12,7): error TS2137: Class Bar2 declares interface I but does not implement it:
+!!! 	Type 'Bar2' is missing property 'x' from type 'I'.
+        y: number;
+    }
+    
+    class Bar3 implements I { // error
+          ~~~~
+!!! implementingAnInterfaceExtendingClassWithPrivates.ts(16,7): error TS2137: Class Bar3 declares interface I but does not implement it:
+!!! 	Property 'x' defined as public in type 'Bar3' is defined as private in type 'Foo'.
+        x: string;
+        y: number;
+    }
+    
+    class Bar4 implements I { // error
+          ~~~~
+!!! implementingAnInterfaceExtendingClassWithPrivates.ts(21,7): error TS2137: Class Bar4 declares interface I but does not implement it:
+!!! 	Types 'Bar4' and 'Foo' define property 'x' as private.
+        private x: string;
+        y: number;
+    }

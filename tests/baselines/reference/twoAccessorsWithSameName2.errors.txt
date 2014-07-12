@@ -1,0 +1,21 @@
+==== tests/cases/compiler/twoAccessorsWithSameName2.ts (2 errors) ====
+    class C {
+        static get x() { return 1; }
+        static get x() { return 1; } // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! twoAccessorsWithSameName2.ts(3,5): error TS2015: Getter 'x' already declared.
+    }
+    
+    class D {
+        static set x(v) {  }
+        static set x(v) {  } // error
+        ~~~~~~~~~~~~~~~~~~~~
+!!! twoAccessorsWithSameName2.ts(8,5): error TS2016: Setter 'x' already declared.
+    }
+    
+    class E {
+        static get x() {
+            return 1;
+        }
+        static set x(v) { }
+    }

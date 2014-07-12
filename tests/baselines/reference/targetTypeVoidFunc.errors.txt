@@ -1,0 +1,11 @@
+==== tests/cases/compiler/targetTypeVoidFunc.ts (1 errors) ====
+    function f1(): { new (): number; } {
+        return function () { return; }
+               ~~~~~~~~~~~~~~~~~~~~~~~
+!!! targetTypeVoidFunc.ts(2,12): error TS2012: Cannot convert '() => void' to 'new() => number':
+!!! 	Type 'new() => number' requires a construct signature, but type '() => void' lacks one.
+    }; 
+    
+    var x = f1();
+    var y = new x();
+    var z = new (f1())();

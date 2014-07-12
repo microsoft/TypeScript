@@ -1,0 +1,68 @@
+==== tests/cases/compiler/optionalPropertiesSyntax.ts (15 errors) ====
+    interface fnSigs {
+        //functions signatures can be optional
+        fn(): void;
+        fn?(): void; //err
+        ~~~~~~~~~~~
+!!! optionalPropertiesSyntax.ts(4,5): error TS2144: Duplicate overload signature for 'fn'.
+        ~~~~~~~~~~~
+!!! optionalPropertiesSyntax.ts(4,5): error TS2153: Overload signatures must all be optional or required.
+        fn2?(): void;
+    }
+    
+    interface callSig {
+        //Call signatures can't be optional
+        (): any;
+        ()?: any; //err
+          ~
+!!! optionalPropertiesSyntax.ts(11,7): error TS1005: ';' expected.
+           ~
+!!! optionalPropertiesSyntax.ts(11,8): error TS1008: Unexpected token; 'call, construct, index, property or function signature' expected.
+        ~~
+!!! optionalPropertiesSyntax.ts(11,5): error TS2146: Duplicate overload call signature.
+        ?(): any; //err
+        ~
+!!! optionalPropertiesSyntax.ts(12,5): error TS1008: Unexpected token; 'call, construct, index, property or function signature' expected.
+         ~~~~~~~
+!!! optionalPropertiesSyntax.ts(12,6): error TS2146: Duplicate overload call signature.
+    }
+    
+    interface constructSig {
+        //Construct signatures can't be optional
+        new (): any;
+        new ()?: any; //err
+              ~
+!!! optionalPropertiesSyntax.ts(18,11): error TS1005: ';' expected.
+               ~
+!!! optionalPropertiesSyntax.ts(18,12): error TS1008: Unexpected token; 'call, construct, index, property or function signature' expected.
+        ~~~~~~
+!!! optionalPropertiesSyntax.ts(18,5): error TS2147: Duplicate overload construct signature.
+        new ?(): any; //err
+    }
+    
+    interface propertySig {
+        //Property signatures can be optional
+        prop: any;
+        prop?: any;
+        ~~~~
+!!! optionalPropertiesSyntax.ts(25,5): error TS2000: Duplicate identifier 'prop'. Additional locations:
+!!! 	optionalPropertiesSyntax.ts(24,5)
+        prop2?: any;
+    }
+    
+    interface indexSig {
+        //Index signatures can't be optional
+        [idx: number]: any;
+        [idx: number]?: any; //err
+                     ~
+!!! optionalPropertiesSyntax.ts(32,18): error TS1005: ';' expected.
+                      ~
+!!! optionalPropertiesSyntax.ts(32,19): error TS1008: Unexpected token; 'call, construct, index, property or function signature' expected.
+        ~~~~~~~~~~~~~
+!!! optionalPropertiesSyntax.ts(32,5): error TS2233: Duplicate number index signature. Additional locations:
+!!! 	optionalPropertiesSyntax.ts(31,5)
+        ? [idx: number]: any; //err
+        ~
+!!! optionalPropertiesSyntax.ts(33,5): error TS1008: Unexpected token; 'call, construct, index, property or function signature' expected.
+        [idx?: number]: any; //err
+    }

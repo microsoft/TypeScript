@@ -1,0 +1,5 @@
+
+EmittedFile: (sourceMapValidationDebugger.js) sourceFile: (sourceMapValidationDebugger.ts)
+-------------------------------------------------------------------
+Emitted (1, 1) source (1, 1)
+Emitted (1, 9) source (1, 10)

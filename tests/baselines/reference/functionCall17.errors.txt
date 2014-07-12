@@ -1,0 +1,28 @@
+==== tests/cases/compiler/functionCall17.ts (8 errors) ====
+    function foo(a:string, b?:string, c?:number, ...d:number[]){}
+    foo('foo', 1); 
+    ~~~
+!!! functionCall17.ts(2,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Could not apply type 'string' to argument 2 which is of type 'number'.
+    ~~~
+!!! functionCall17.ts(2,1): error TS2087: Could not select overload for 'call' expression.
+    foo('foo'); 
+    foo();
+    ~~~
+!!! functionCall17.ts(4,1): error TS2081: Supplied parameters do not match any signature of call target.
+    ~~~
+!!! functionCall17.ts(4,1): error TS2087: Could not select overload for 'call' expression.
+    foo(1, 'bar');
+    ~~~
+!!! functionCall17.ts(5,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Could not apply type 'string' to argument 1 which is of type 'number'.
+    ~~~
+!!! functionCall17.ts(5,1): error TS2087: Could not select overload for 'call' expression.
+    foo('foo', 1, 3);
+    ~~~
+!!! functionCall17.ts(6,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Could not apply type 'string' to argument 2 which is of type 'number'.
+    ~~~
+!!! functionCall17.ts(6,1): error TS2087: Could not select overload for 'call' expression.
+    foo('foo', 'bar', 3, 4);
+    

@@ -1,0 +1,40 @@
+==== tests/cases/compiler/primitiveMembers.ts (4 errors) ====
+    var x = 5;
+    var r = /yo/;
+    r.source;
+    
+    x.toBAZ();
+      ~~~~~
+!!! primitiveMembers.ts(5,3): error TS2094: The property 'toBAZ' does not exist on value of type 'number'.
+    x.toString();
+    
+    var n = 0;
+    var N: Number;
+    
+    n = N;  // should not work, as 'number' has a different brand
+    ~
+!!! primitiveMembers.ts(11,1): error TS2011: Cannot convert 'Number' to 'number'.
+    N = n; // should work
+    
+    var o: Object = {}
+    var f: Function = (x: string) => x.length;
+    var r2: RegExp = /./g;
+    var n2: Number = 34;
+    var s: String = "yo";
+    var b: Boolean = true;
+    
+    var n3 = 5 || {};
+    
+    
+    class baz { public bar(): void { }; }
+                                      ~
+!!! primitiveMembers.ts(24,35): error TS1008: Unexpected token; 'constructor, function, accessor or variable' expected.
+    class foo extends baz { public bar(){ return undefined}; }
+                                                           ~
+!!! primitiveMembers.ts(25,56): error TS1008: Unexpected token; 'constructor, function, accessor or variable' expected.
+    
+    
+    
+     
+    
+    

@@ -1,0 +1,75 @@
+==== tests/cases/compiler/stringLiteralsErrors.ts (17 errors) ====
+    // Srtings missing line terminator
+    var es1 = "line 1
+                     
+    ";
+    
+!!! stringLiteralsErrors.ts(2,18): error TS1002: Missing close quote character.
+      
+    var es2 = 'line 1
+    
+!!! stringLiteralsErrors.ts(3,3): error TS1002: Missing close quote character.
+                     
+    ';
+    
+!!! stringLiteralsErrors.ts(4,18): error TS1002: Missing close quote character.
+      
+    
+    
+!!! stringLiteralsErrors.ts(5,3): error TS1002: Missing close quote character.
+    // Space after backslash
+    var es3 = 'line 1\ 
+                       
+    ';
+    
+!!! stringLiteralsErrors.ts(8,20): error TS1002: Missing close quote character.
+      
+    var es4 = 'line 1\ 
+    
+!!! stringLiteralsErrors.ts(9,3): error TS1002: Missing close quote character.
+                       
+    ';
+    
+!!! stringLiteralsErrors.ts(10,20): error TS1002: Missing close quote character.
+      
+    
+    
+!!! stringLiteralsErrors.ts(11,3): error TS1002: Missing close quote character.
+    // Unterminated strings
+    var es5 = "unterminated
+                           
+    var es6 = 'unterminated
+    
+!!! stringLiteralsErrors.ts(14,24): error TS1002: Missing close quote character.
+                           
+    
+    
+!!! stringLiteralsErrors.ts(15,24): error TS1002: Missing close quote character.
+    // wrong terminator
+    var es7 = "unterminated '
+                             
+    var es8 = 'unterminated "
+    
+!!! stringLiteralsErrors.ts(18,26): error TS1002: Missing close quote character.
+                             
+    
+    
+!!! stringLiteralsErrors.ts(19,26): error TS1002: Missing close quote character.
+    // wrong unicode sequences
+    var es9 = "\u00";
+               ~~~~
+!!! stringLiteralsErrors.ts(22,12): error TS1000: Unrecognized escape sequence.
+    var es10 = "\u00GG";
+                ~~~~
+!!! stringLiteralsErrors.ts(23,13): error TS1000: Unrecognized escape sequence.
+    var es11 = "\x0";
+                ~~~
+!!! stringLiteralsErrors.ts(24,13): error TS1000: Unrecognized escape sequence.
+    var es12 = "\xmm";
+                ~~
+!!! stringLiteralsErrors.ts(25,13): error TS1000: Unrecognized escape sequence.
+    
+    // End of file
+    var es13 = " 
+                 
+!!! stringLiteralsErrors.ts(28,14): error TS1002: Missing close quote character.

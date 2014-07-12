@@ -1,0 +1,1 @@
+//// [duplicateConstructSignature2.js]

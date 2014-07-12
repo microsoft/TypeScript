@@ -1,0 +1,14 @@
+==== tests/cases/compiler/interfaceThatHidesBaseProperty2.ts (1 errors) ====
+    interface Base {
+        x: { a: number };
+    }
+    
+    interface Derived extends Base { // error
+              ~~~~~~~
+!!! interfaceThatHidesBaseProperty2.ts(5,11): error TS2143: Interface 'Derived' cannot extend interface 'Base':
+!!! 	Types of property 'x' of types 'Derived' and 'Base' are incompatible:
+!!! 		Types of property 'a' of types '{ a: string; }' and '{ a: number; }' are incompatible.
+        x: {
+            a: string;
+        };
+    }

@@ -1,0 +1,313 @@
+
+**Pos: 0 SpanInfo: {"minChar":0,"limChar":10,"text":null}
+** Statement: var i = 10
+**Pos: 1 SpanInfo: {"minChar":0,"limChar":10,"text":null}
+** Statement: var i = 10
+**Pos: 2 SpanInfo: {"minChar":0,"limChar":10,"text":null}
+** Statement: var i = 10
+**Pos: 3 SpanInfo: {"minChar":0,"limChar":10,"text":null}
+** Statement: var i = 10
+**Pos: 4 SpanInfo: {"minChar":0,"limChar":10,"text":null}
+** Statement: var i = 10
+**Pos: 5 SpanInfo: {"minChar":0,"limChar":10,"text":null}
+** Statement: var i = 10
+**Pos: 6 SpanInfo: {"minChar":0,"limChar":10,"text":null}
+** Statement: var i = 10
+**Pos: 7 SpanInfo: {"minChar":0,"limChar":10,"text":null}
+** Statement: var i = 10
+**Pos: 8 SpanInfo: {"minChar":0,"limChar":10,"text":null}
+** Statement: var i = 10
+**Pos: 9 SpanInfo: {"minChar":0,"limChar":10,"text":null}
+** Statement: var i = 10
+**Pos: 10 SpanInfo: {"minChar":0,"limChar":10,"text":null}
+** Statement: var i = 10
+**Pos: 11 SpanInfo: {"minChar":0,"limChar":10,"text":null}
+** Statement: var i = 10
+**Pos: 12 SpanInfo: {"minChar":12,"limChar":24,"text":null}
+** Statement: if (i == 10)
+**Pos: 13 SpanInfo: {"minChar":12,"limChar":24,"text":null}
+** Statement: if (i == 10)
+**Pos: 14 SpanInfo: {"minChar":12,"limChar":24,"text":null}
+** Statement: if (i == 10)
+**Pos: 15 SpanInfo: {"minChar":12,"limChar":24,"text":null}
+** Statement: if (i == 10)
+**Pos: 16 SpanInfo: {"minChar":12,"limChar":24,"text":null}
+** Statement: if (i == 10)
+**Pos: 17 SpanInfo: {"minChar":12,"limChar":24,"text":null}
+** Statement: if (i == 10)
+**Pos: 18 SpanInfo: {"minChar":12,"limChar":24,"text":null}
+** Statement: if (i == 10)
+**Pos: 19 SpanInfo: {"minChar":12,"limChar":24,"text":null}
+** Statement: if (i == 10)
+**Pos: 20 SpanInfo: {"minChar":12,"limChar":24,"text":null}
+** Statement: if (i == 10)
+**Pos: 21 SpanInfo: {"minChar":12,"limChar":24,"text":null}
+** Statement: if (i == 10)
+**Pos: 22 SpanInfo: {"minChar":12,"limChar":24,"text":null}
+** Statement: if (i == 10)
+**Pos: 23 SpanInfo: {"minChar":12,"limChar":24,"text":null}
+** Statement: if (i == 10)
+**Pos: 24 SpanInfo: {"minChar":12,"limChar":24,"text":null}
+** Statement: if (i == 10)
+**Pos: 25 SpanInfo: {"minChar":12,"limChar":24,"text":null}
+** Statement: if (i == 10)
+**Pos: 26 SpanInfo: {"minChar":12,"limChar":24,"text":null}
+** Statement: if (i == 10)
+**Pos: 27 SpanInfo: {"minChar":31,"limChar":34,"text":null}
+** Statement: i++
+**Pos: 28 SpanInfo: {"minChar":31,"limChar":34,"text":null}
+** Statement: i++
+**Pos: 29 SpanInfo: {"minChar":31,"limChar":34,"text":null}
+** Statement: i++
+**Pos: 30 SpanInfo: {"minChar":31,"limChar":34,"text":null}
+** Statement: i++
+**Pos: 31 SpanInfo: {"minChar":31,"limChar":34,"text":null}
+** Statement: i++
+**Pos: 32 SpanInfo: {"minChar":31,"limChar":34,"text":null}
+** Statement: i++
+**Pos: 33 SpanInfo: {"minChar":31,"limChar":34,"text":null}
+** Statement: i++
+**Pos: 34 SpanInfo: {"minChar":31,"limChar":34,"text":null}
+** Statement: i++
+**Pos: 35 SpanInfo: {"minChar":31,"limChar":34,"text":null}
+** Statement: i++
+**Pos: 36 SpanInfo: {"minChar":31,"limChar":34,"text":null}
+** Statement: i++
+**Pos: 37 SpanInfo: {"minChar":31,"limChar":34,"text":null}
+** Statement: i++
+**Pos: 38 SpanInfo: null
+** Statement: 
+**Pos: 39 SpanInfo: null
+** Statement: 
+**Pos: 40 SpanInfo: null
+** Statement: 
+**Pos: 41 SpanInfo: null
+** Statement: 
+**Pos: 42 SpanInfo: null
+** Statement: 
+**Pos: 43 SpanInfo: null
+** Statement: 
+**Pos: 44 SpanInfo: null
+** Statement: 
+**Pos: 45 SpanInfo: null
+** Statement: 
+**Pos: 46 SpanInfo: null
+** Statement: 
+**Pos: 47 SpanInfo: {"minChar":47,"limChar":59,"text":null}
+** Statement: if (i == 10)
+**Pos: 48 SpanInfo: {"minChar":47,"limChar":59,"text":null}
+** Statement: if (i == 10)
+**Pos: 49 SpanInfo: {"minChar":47,"limChar":59,"text":null}
+** Statement: if (i == 10)
+**Pos: 50 SpanInfo: {"minChar":47,"limChar":59,"text":null}
+** Statement: if (i == 10)
+**Pos: 51 SpanInfo: {"minChar":47,"limChar":59,"text":null}
+** Statement: if (i == 10)
+**Pos: 52 SpanInfo: {"minChar":47,"limChar":59,"text":null}
+** Statement: if (i == 10)
+**Pos: 53 SpanInfo: {"minChar":47,"limChar":59,"text":null}
+** Statement: if (i == 10)
+**Pos: 54 SpanInfo: {"minChar":47,"limChar":59,"text":null}
+** Statement: if (i == 10)
+**Pos: 55 SpanInfo: {"minChar":47,"limChar":59,"text":null}
+** Statement: if (i == 10)
+**Pos: 56 SpanInfo: {"minChar":47,"limChar":59,"text":null}
+** Statement: if (i == 10)
+**Pos: 57 SpanInfo: {"minChar":47,"limChar":59,"text":null}
+** Statement: if (i == 10)
+**Pos: 58 SpanInfo: {"minChar":47,"limChar":59,"text":null}
+** Statement: if (i == 10)
+**Pos: 59 SpanInfo: {"minChar":47,"limChar":59,"text":null}
+** Statement: if (i == 10)
+**Pos: 60 SpanInfo: {"minChar":66,"limChar":69,"text":null}
+** Statement: i++
+**Pos: 61 SpanInfo: {"minChar":66,"limChar":69,"text":null}
+** Statement: i++
+**Pos: 62 SpanInfo: {"minChar":66,"limChar":69,"text":null}
+** Statement: i++
+**Pos: 63 SpanInfo: {"minChar":66,"limChar":69,"text":null}
+** Statement: i++
+**Pos: 64 SpanInfo: {"minChar":66,"limChar":69,"text":null}
+** Statement: i++
+**Pos: 65 SpanInfo: {"minChar":66,"limChar":69,"text":null}
+** Statement: i++
+**Pos: 66 SpanInfo: {"minChar":66,"limChar":69,"text":null}
+** Statement: i++
+**Pos: 67 SpanInfo: {"minChar":66,"limChar":69,"text":null}
+** Statement: i++
+**Pos: 68 SpanInfo: {"minChar":66,"limChar":69,"text":null}
+** Statement: i++
+**Pos: 69 SpanInfo: {"minChar":66,"limChar":69,"text":null}
+** Statement: i++
+**Pos: 70 SpanInfo: {"minChar":66,"limChar":69,"text":null}
+** Statement: i++
+**Pos: 71 SpanInfo: {"minChar":66,"limChar":69,"text":null}
+** Statement: i++
+**Pos: 72 SpanInfo: {"minChar":66,"limChar":69,"text":null}
+** Statement: i++
+**Pos: 73 SpanInfo: {"minChar":78,"limChar":90,"text":null}
+** Statement: if (i == 20)
+**Pos: 74 SpanInfo: {"minChar":78,"limChar":90,"text":null}
+** Statement: if (i == 20)
+**Pos: 75 SpanInfo: {"minChar":78,"limChar":90,"text":null}
+** Statement: if (i == 20)
+**Pos: 76 SpanInfo: {"minChar":78,"limChar":90,"text":null}
+** Statement: if (i == 20)
+**Pos: 77 SpanInfo: {"minChar":78,"limChar":90,"text":null}
+** Statement: if (i == 20)
+**Pos: 78 SpanInfo: {"minChar":78,"limChar":90,"text":null}
+** Statement: if (i == 20)
+**Pos: 79 SpanInfo: {"minChar":78,"limChar":90,"text":null}
+** Statement: if (i == 20)
+**Pos: 80 SpanInfo: {"minChar":78,"limChar":90,"text":null}
+** Statement: if (i == 20)
+**Pos: 81 SpanInfo: {"minChar":78,"limChar":90,"text":null}
+** Statement: if (i == 20)
+**Pos: 82 SpanInfo: {"minChar":78,"limChar":90,"text":null}
+** Statement: if (i == 20)
+**Pos: 83 SpanInfo: {"minChar":78,"limChar":90,"text":null}
+** Statement: if (i == 20)
+**Pos: 84 SpanInfo: {"minChar":78,"limChar":90,"text":null}
+** Statement: if (i == 20)
+**Pos: 85 SpanInfo: {"minChar":78,"limChar":90,"text":null}
+** Statement: if (i == 20)
+**Pos: 86 SpanInfo: {"minChar":78,"limChar":90,"text":null}
+** Statement: if (i == 20)
+**Pos: 87 SpanInfo: {"minChar":78,"limChar":90,"text":null}
+** Statement: if (i == 20)
+**Pos: 88 SpanInfo: {"minChar":78,"limChar":90,"text":null}
+** Statement: if (i == 20)
+**Pos: 89 SpanInfo: {"minChar":78,"limChar":90,"text":null}
+** Statement: if (i == 20)
+**Pos: 90 SpanInfo: {"minChar":78,"limChar":90,"text":null}
+** Statement: if (i == 20)
+**Pos: 91 SpanInfo: {"minChar":78,"limChar":90,"text":null}
+** Statement: if (i == 20)
+**Pos: 92 SpanInfo: {"minChar":78,"limChar":90,"text":null}
+** Statement: if (i == 20)
+**Pos: 93 SpanInfo: {"minChar":97,"limChar":100,"text":null}
+** Statement: i--
+**Pos: 94 SpanInfo: {"minChar":97,"limChar":100,"text":null}
+** Statement: i--
+**Pos: 95 SpanInfo: {"minChar":97,"limChar":100,"text":null}
+** Statement: i--
+**Pos: 96 SpanInfo: {"minChar":97,"limChar":100,"text":null}
+** Statement: i--
+**Pos: 97 SpanInfo: {"minChar":97,"limChar":100,"text":null}
+** Statement: i--
+**Pos: 98 SpanInfo: {"minChar":97,"limChar":100,"text":null}
+** Statement: i--
+**Pos: 99 SpanInfo: {"minChar":97,"limChar":100,"text":null}
+** Statement: i--
+**Pos: 100 SpanInfo: {"minChar":97,"limChar":100,"text":null}
+** Statement: i--
+**Pos: 101 SpanInfo: {"minChar":97,"limChar":100,"text":null}
+** Statement: i--
+**Pos: 102 SpanInfo: {"minChar":97,"limChar":100,"text":null}
+** Statement: i--
+**Pos: 103 SpanInfo: {"minChar":97,"limChar":100,"text":null}
+** Statement: i--
+**Pos: 104 SpanInfo: {"minChar":109,"limChar":121,"text":null}
+** Statement: if (i == 30)
+**Pos: 105 SpanInfo: {"minChar":109,"limChar":121,"text":null}
+** Statement: if (i == 30)
+**Pos: 106 SpanInfo: {"minChar":109,"limChar":121,"text":null}
+** Statement: if (i == 30)
+**Pos: 107 SpanInfo: {"minChar":109,"limChar":121,"text":null}
+** Statement: if (i == 30)
+**Pos: 108 SpanInfo: {"minChar":109,"limChar":121,"text":null}
+** Statement: if (i == 30)
+**Pos: 109 SpanInfo: {"minChar":109,"limChar":121,"text":null}
+** Statement: if (i == 30)
+**Pos: 110 SpanInfo: {"minChar":109,"limChar":121,"text":null}
+** Statement: if (i == 30)
+**Pos: 111 SpanInfo: {"minChar":109,"limChar":121,"text":null}
+** Statement: if (i == 30)
+**Pos: 112 SpanInfo: {"minChar":109,"limChar":121,"text":null}
+** Statement: if (i == 30)
+**Pos: 113 SpanInfo: {"minChar":109,"limChar":121,"text":null}
+** Statement: if (i == 30)
+**Pos: 114 SpanInfo: {"minChar":109,"limChar":121,"text":null}
+** Statement: if (i == 30)
+**Pos: 115 SpanInfo: {"minChar":109,"limChar":121,"text":null}
+** Statement: if (i == 30)
+**Pos: 116 SpanInfo: {"minChar":109,"limChar":121,"text":null}
+** Statement: if (i == 30)
+**Pos: 117 SpanInfo: {"minChar":109,"limChar":121,"text":null}
+** Statement: if (i == 30)
+**Pos: 118 SpanInfo: {"minChar":109,"limChar":121,"text":null}
+** Statement: if (i == 30)
+**Pos: 119 SpanInfo: {"minChar":109,"limChar":121,"text":null}
+** Statement: if (i == 30)
+**Pos: 120 SpanInfo: {"minChar":109,"limChar":121,"text":null}
+** Statement: if (i == 30)
+**Pos: 121 SpanInfo: {"minChar":109,"limChar":121,"text":null}
+** Statement: if (i == 30)
+**Pos: 122 SpanInfo: {"minChar":109,"limChar":121,"text":null}
+** Statement: if (i == 30)
+**Pos: 123 SpanInfo: {"minChar":109,"limChar":121,"text":null}
+** Statement: if (i == 30)
+**Pos: 124 SpanInfo: {"minChar":128,"limChar":135,"text":null}
+** Statement: i += 70
+**Pos: 125 SpanInfo: {"minChar":128,"limChar":135,"text":null}
+** Statement: i += 70
+**Pos: 126 SpanInfo: {"minChar":128,"limChar":135,"text":null}
+** Statement: i += 70
+**Pos: 127 SpanInfo: {"minChar":128,"limChar":135,"text":null}
+** Statement: i += 70
+**Pos: 128 SpanInfo: {"minChar":128,"limChar":135,"text":null}
+** Statement: i += 70
+**Pos: 129 SpanInfo: {"minChar":128,"limChar":135,"text":null}
+** Statement: i += 70
+**Pos: 130 SpanInfo: {"minChar":128,"limChar":135,"text":null}
+** Statement: i += 70
+**Pos: 131 SpanInfo: {"minChar":128,"limChar":135,"text":null}
+** Statement: i += 70
+**Pos: 132 SpanInfo: {"minChar":128,"limChar":135,"text":null}
+** Statement: i += 70
+**Pos: 133 SpanInfo: {"minChar":128,"limChar":135,"text":null}
+** Statement: i += 70
+**Pos: 134 SpanInfo: {"minChar":128,"limChar":135,"text":null}
+** Statement: i += 70
+**Pos: 135 SpanInfo: {"minChar":128,"limChar":135,"text":null}
+** Statement: i += 70
+**Pos: 136 SpanInfo: {"minChar":128,"limChar":135,"text":null}
+** Statement: i += 70
+**Pos: 137 SpanInfo: {"minChar":128,"limChar":135,"text":null}
+** Statement: i += 70
+**Pos: 138 SpanInfo: {"minChar":128,"limChar":135,"text":null}
+** Statement: i += 70
+**Pos: 139 SpanInfo: null
+** Statement: 
+**Pos: 140 SpanInfo: null
+** Statement: 
+**Pos: 141 SpanInfo: null
+** Statement: 
+**Pos: 142 SpanInfo: null
+** Statement: 
+**Pos: 143 SpanInfo: null
+** Statement: 
+**Pos: 144 SpanInfo: {"minChar":150,"limChar":153,"text":null}
+** Statement: i--
+**Pos: 145 SpanInfo: {"minChar":150,"limChar":153,"text":null}
+** Statement: i--
+**Pos: 146 SpanInfo: {"minChar":150,"limChar":153,"text":null}
+** Statement: i--
+**Pos: 147 SpanInfo: {"minChar":150,"limChar":153,"text":null}
+** Statement: i--
+**Pos: 148 SpanInfo: {"minChar":150,"limChar":153,"text":null}
+** Statement: i--
+**Pos: 149 SpanInfo: {"minChar":150,"limChar":153,"text":null}
+** Statement: i--
+**Pos: 150 SpanInfo: {"minChar":150,"limChar":153,"text":null}
+** Statement: i--
+**Pos: 151 SpanInfo: {"minChar":150,"limChar":153,"text":null}
+** Statement: i--
+**Pos: 152 SpanInfo: {"minChar":150,"limChar":153,"text":null}
+** Statement: i--
+**Pos: 153 SpanInfo: {"minChar":150,"limChar":153,"text":null}
+** Statement: i--
+**Pos: 154 SpanInfo: {"minChar":150,"limChar":153,"text":null}
+** Statement: i--
+**Pos: 155 SpanInfo: {"minChar":150,"limChar":153,"text":null}
+** Statement: i--

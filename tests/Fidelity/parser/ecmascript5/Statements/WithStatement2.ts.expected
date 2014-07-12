@@ -1,0 +1,101 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 19,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "WithStatement",
+                "fullWidth": 19,
+                "withKeyword": {
+                    "kind": "WithKeyword",
+                    "width": 4,
+                    "fullWidth": 5,
+                    "text": "with",
+                    "value": "with",
+                    "valueText": "with",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "text": " "
+                        }
+                    ]
+                },
+                "openParenToken": {
+                    "kind": "OpenParenToken",
+                    "width": 1,
+                    "text": "(",
+                    "value": "(",
+                    "valueText": "("
+                },
+                "condition": {
+                    "kind": "NumericLiteral",
+                    "width": 1,
+                    "text": "1",
+                    "value": 1,
+                    "valueText": "1"
+                },
+                "closeParenToken": {
+                    "kind": "CloseParenToken",
+                    "width": 1,
+                    "fullWidth": 3,
+                    "text": ")",
+                    "value": ")",
+                    "valueText": ")",
+                    "hasTrailingTrivia": true,
+                    "hasTrailingNewLine": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "text": "\r\n"
+                        }
+                    ]
+                },
+                "statement": {
+                    "kind": "ReturnStatement",
+                    "fullWidth": 9,
+                    "returnKeyword": {
+                        "kind": "ReturnKeyword",
+                        "width": 6,
+                        "fullWidth": 8,
+                        "text": "return",
+                        "value": "return",
+                        "valueText": "return",
+                        "hasLeadingTrivia": true,
+                        "leadingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "text": "  "
+                            }
+                        ]
+                    },
+                    "semicolonToken": {
+                        "kind": "SemicolonToken",
+                        "width": 1,
+                        "text": ";",
+                        "value": ";",
+                        "valueText": ";"
+                    }
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            10
+        ],
+        "length": 19
+    }
+}

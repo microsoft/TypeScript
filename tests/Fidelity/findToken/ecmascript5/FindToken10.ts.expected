@@ -1,0 +1,186 @@
+{
+    "tokens": {
+        "0": {
+            "kind": "NumericLiteral",
+            "width": 2,
+            "fullWidth": 4,
+            "text": "10",
+            "value": 10,
+            "valueText": "10",
+            "hasTrailingTrivia": true,
+            "hasTrailingNewLine": true,
+            "trailingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        },
+        "1": {
+            "kind": "NumericLiteral",
+            "width": 2,
+            "fullWidth": 4,
+            "text": "10",
+            "value": 10,
+            "valueText": "10",
+            "hasTrailingTrivia": true,
+            "hasTrailingNewLine": true,
+            "trailingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        },
+        "2": {
+            "kind": "NumericLiteral",
+            "width": 2,
+            "fullWidth": 4,
+            "text": "10",
+            "value": 10,
+            "valueText": "10",
+            "hasTrailingTrivia": true,
+            "hasTrailingNewLine": true,
+            "trailingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        },
+        "3": {
+            "kind": "NumericLiteral",
+            "width": 2,
+            "fullWidth": 4,
+            "text": "10",
+            "value": 10,
+            "valueText": "10",
+            "hasTrailingTrivia": true,
+            "hasTrailingNewLine": true,
+            "trailingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        },
+        "4": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "tokensOnLeft": {
+        "0": null,
+        "1": {
+            "kind": "NumericLiteral",
+            "width": 2,
+            "fullWidth": 4,
+            "text": "10",
+            "value": 10,
+            "valueText": "10",
+            "hasTrailingTrivia": true,
+            "hasTrailingNewLine": true,
+            "trailingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        },
+        "2": {
+            "kind": "NumericLiteral",
+            "width": 2,
+            "fullWidth": 4,
+            "text": "10",
+            "value": 10,
+            "valueText": "10",
+            "hasTrailingTrivia": true,
+            "hasTrailingNewLine": true,
+            "trailingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        },
+        "3": {
+            "kind": "NumericLiteral",
+            "width": 2,
+            "fullWidth": 4,
+            "text": "10",
+            "value": 10,
+            "valueText": "10",
+            "hasTrailingTrivia": true,
+            "hasTrailingNewLine": true,
+            "trailingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        },
+        "4": {
+            "kind": "NumericLiteral",
+            "width": 2,
+            "fullWidth": 4,
+            "text": "10",
+            "value": 10,
+            "valueText": "10",
+            "hasTrailingTrivia": true,
+            "hasTrailingNewLine": true,
+            "trailingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        }
+    },
+    "leftToRight": [
+        {
+            "kind": "NumericLiteral",
+            "width": 2,
+            "fullWidth": 4,
+            "text": "10",
+            "value": 10,
+            "valueText": "10",
+            "hasTrailingTrivia": true,
+            "hasTrailingNewLine": true,
+            "trailingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        },
+        {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    ],
+    "rightToLeft": [
+        {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        },
+        {
+            "kind": "NumericLiteral",
+            "width": 2,
+            "fullWidth": 4,
+            "text": "10",
+            "value": 10,
+            "valueText": "10",
+            "hasTrailingTrivia": true,
+            "hasTrailingNewLine": true,
+            "trailingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,40 @@
+=== tests/cases/compiler/typeArgumentInferenceWithConstraintAsCommonRoot.ts ===
+interface Animal { x }
+>Animal : Animal
+>x : any
+
+interface Giraffe extends Animal { y }
+>Giraffe : Giraffe
+>Animal : Animal
+>y : any
+
+interface Elephant extends Animal { z }
+>Elephant : Elephant
+>Animal : Animal
+>z : any
+
+function f<T extends Animal>(x: T, y: T): T { return undefined; }
+>f : typeof f
+>T : T
+>Animal : Animal
+>x : T
+>T : T
+>y : T
+>T : T
+>T : T
+>undefined : any
+
+var g: Giraffe;
+>g : Giraffe
+>Giraffe : Giraffe
+
+var e: Elephant;
+>e : Elephant
+>Elephant : Elephant
+
+f(g, e); // valid because both Giraffe and Elephant satisfy the constraint. T is Animal
+>f(g, e) : Animal
+>f : typeof f
+>g : Giraffe
+>e : Elephant
+

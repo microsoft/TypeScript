@@ -1,0 +1,10 @@
+==== tests/cases/compiler/invocationExpressionInFunctionParameter.ts (2 errors) ====
+    function foo1(val: string) {
+    }
+    function foo3(x = foo1(123)) { //should error, 123 is not string
+                      ~~~~
+!!! invocationExpressionInFunctionParameter.ts(3,19): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Could not apply type 'string' to argument 1 which is of type 'number'.
+                      ~~~~
+!!! invocationExpressionInFunctionParameter.ts(3,19): error TS2087: Could not select overload for 'call' expression.
+    }

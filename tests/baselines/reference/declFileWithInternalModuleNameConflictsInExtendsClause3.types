@@ -1,0 +1,36 @@
+=== tests/cases/compiler/declFileWithInternalModuleNameConflictsInExtendsClause3.ts ===
+
+module X.A.C {
+>X : X
+>A : X.A
+>C : X.A.C
+
+    export interface Z {
+>Z : Z
+    }
+}
+module X.A.B.C {
+>X : X
+>A : X.A
+>B : X.A.B
+>C : X.A.B.C
+
+    export class W implements X.A.C.Z { // This needs to be refered as X.A.C.Z as A has conflict
+>W : W
+>X : X
+>A : A
+>C : X.A.C
+>Z : X.A.C.Z
+    }
+}
+
+module X.A.B.C {
+>X : X
+>A : X.A
+>B : X.A.B
+>C : X.A.B.C
+
+    export module A {
+>A : A
+    }
+}

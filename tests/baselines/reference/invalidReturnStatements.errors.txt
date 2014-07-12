@@ -1,0 +1,35 @@
+==== tests/cases/compiler/invalidReturnStatements.ts (6 errors) ====
+    // all the following should be error
+    function fn1(): number {  }
+                    ~~~~~~
+!!! invalidReturnStatements.ts(2,17): error TS2131: Function declared a non-void return type, but has no return expression.
+    function fn2(): string { }
+                    ~~~~~~
+!!! invalidReturnStatements.ts(3,17): error TS2131: Function declared a non-void return type, but has no return expression.
+    function fn3(): boolean { }
+                    ~~~~~~~
+!!! invalidReturnStatements.ts(4,17): error TS2131: Function declared a non-void return type, but has no return expression.
+    function fn4(): Date {  }
+                    ~~~~
+!!! invalidReturnStatements.ts(5,17): error TS2131: Function declared a non-void return type, but has no return expression.
+    function fn7(): any {  } // should be valid: any includes void
+    
+    interface I { id: number }
+    class C implements I {
+        id: number;
+        dispose() {}
+    }
+    class D extends C {
+        name: string;
+    }
+    function fn10(): D { return { id: 12 }; } 
+                                ~~~~~~~~~~
+!!! invalidReturnStatements.ts(16,29): error TS2012: Cannot convert '{ id: number; }' to 'D':
+!!! 	Type '{ id: number; }' is missing property 'name' from type 'D'.
+    
+    function fn11(): D { return new C(); }
+                                ~~~~~~~
+!!! invalidReturnStatements.ts(18,29): error TS2012: Cannot convert 'C' to 'D':
+!!! 	Type 'C' is missing property 'name' from type 'D'.
+    
+    

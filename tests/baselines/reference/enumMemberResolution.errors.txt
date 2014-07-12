@@ -1,0 +1,12 @@
+==== tests/cases/compiler/enumMemberResolution.ts (2 errors) ====
+    enum Position2 {
+        IgnoreRulesSpecific = 0
+    }
+    var x = IgnoreRulesSpecific. // error
+            ~~~~~~~~~~~~~~~~~~~
+!!! enumMemberResolution.ts(4,9): error TS2095: Could not find symbol 'IgnoreRulesSpecific'.
+    var y = 1;
+        ~
+!!! enumMemberResolution.ts(5,5): error TS1005: ',' expected.
+    var z = Position2.IgnoreRulesSpecific; // no error
+    

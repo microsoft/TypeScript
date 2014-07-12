@@ -1,0 +1,52 @@
+==== tests/cases/compiler/derivedClassWithPrivateInstanceShadowingPublicInstance.ts (9 errors) ====
+    class Base {
+        public x: string;
+        public fn(): string {
+            return '';
+        }
+    
+        public get a() { return 1; }
+        public set a(v) { }
+    }
+    
+    // error, not a subtype
+    class Derived extends Base {
+          ~~~~~~~
+!!! derivedClassWithPrivateInstanceShadowingPublicInstance.ts(12,7): error TS2141: Class 'Derived' cannot extend class 'Base':
+!!! 	Property 'x' defined as private in type 'Derived' is defined as public in type 'Base'.
+        private x: string; 
+        private fn(): string {
+            return '';
+        }
+    
+        private get a() { return 1; }
+        private set a(v) { }
+    }
+    
+    var r = Base.x; // ok
+                 ~
+!!! derivedClassWithPrivateInstanceShadowingPublicInstance.ts(22,14): error TS2094: The property 'x' does not exist on value of type 'typeof Base'.
+    var r2 = Derived.x; // error
+                     ~
+!!! derivedClassWithPrivateInstanceShadowingPublicInstance.ts(23,18): error TS2094: The property 'x' does not exist on value of type 'typeof Derived'.
+    
+    var r3 = Base.fn(); // ok
+                  ~~
+!!! derivedClassWithPrivateInstanceShadowingPublicInstance.ts(25,15): error TS2094: The property 'fn' does not exist on value of type 'typeof Base'.
+    var r4 = Derived.fn(); // error
+                     ~~
+!!! derivedClassWithPrivateInstanceShadowingPublicInstance.ts(26,18): error TS2094: The property 'fn' does not exist on value of type 'typeof Derived'.
+    
+    var r5 = Base.a; // ok
+                  ~
+!!! derivedClassWithPrivateInstanceShadowingPublicInstance.ts(28,15): error TS2094: The property 'a' does not exist on value of type 'typeof Base'.
+    Base.a = 2; // ok
+         ~
+!!! derivedClassWithPrivateInstanceShadowingPublicInstance.ts(29,6): error TS2094: The property 'a' does not exist on value of type 'typeof Base'.
+    
+    var r6 = Derived.a; // error
+                     ~
+!!! derivedClassWithPrivateInstanceShadowingPublicInstance.ts(31,18): error TS2094: The property 'a' does not exist on value of type 'typeof Derived'.
+    Derived.a = 2; // error
+            ~
+!!! derivedClassWithPrivateInstanceShadowingPublicInstance.ts(32,9): error TS2094: The property 'a' does not exist on value of type 'typeof Derived'.

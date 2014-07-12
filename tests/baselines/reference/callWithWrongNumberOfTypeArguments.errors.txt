@@ -1,0 +1,10 @@
+==== tests/cases/compiler/callWithWrongNumberOfTypeArguments.ts (2 errors) ====
+    function f<T, U>() { }
+    
+    f<number>();
+    ~
+!!! callWithWrongNumberOfTypeArguments.ts(3,1): error TS4027: Signature expected 2 type arguments, got 1 instead.
+    f<number, string>();
+    f<number, string, number>();
+    ~
+!!! callWithWrongNumberOfTypeArguments.ts(5,1): error TS4027: Signature expected 2 type arguments, got 3 instead.

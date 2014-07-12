@@ -1,0 +1,20 @@
+==== tests/cases/compiler/tooManyTypeParameters1.ts (4 errors) ====
+    function f<T>() { }
+    f<string, string>();
+    ~
+!!! tooManyTypeParameters1.ts(2,1): error TS4027: Signature expected 1 type arguments, got 2 instead.
+    
+    var x = <T>() => {};
+    x<number,number>();
+    ~
+!!! tooManyTypeParameters1.ts(5,1): error TS4027: Signature expected 1 type arguments, got 2 instead.
+    
+    class C<T> {}
+    var c = new C<Date,Date>();
+                ~
+!!! tooManyTypeParameters1.ts(8,13): error TS4027: Signature expected 1 type arguments, got 2 instead.
+    
+    interface I<T> {}
+    var i: I<number,number>;
+           ~~~~~~~~~~~~~~~~
+!!! tooManyTypeParameters1.ts(11,8): error TS2090: Generic type 'I<T>' requires 1 type argument(s).

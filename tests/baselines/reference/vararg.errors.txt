@@ -1,0 +1,67 @@
+==== tests/cases/compiler/vararg.ts (12 errors) ====
+    module M {
+        export class C {
+            public f(x:string,...rest:number[]) {
+                var sum=0;
+                for (var i=0;i<rest.length;i++) {
+                    sum+=rest[i];
+                }
+                result+=(x+": "+sum);
+                return result;
+            }
+    
+            public fnope(x:string,...rest:number) {
+                                  ~~~~~~~~~~~~~~
+!!! vararg.ts(12,31): error TS2162: Rest parameters must be array types.
+        
+            }
+    
+            public fonly(...rest:string[]) {
+                builder="";
+                ~~~~~~~
+!!! vararg.ts(17,13): error TS2095: Could not find symbol 'builder'.
+                for (var i=0;i<rest.length;i++) {
+                    builder+=rest[i];
+                    ~~~~~~~
+!!! vararg.ts(19,17): error TS2095: Could not find symbol 'builder'.
+                }
+                return builder;
+                       ~~~~~~~
+!!! vararg.ts(21,20): error TS2095: Could not find symbol 'builder'.
+            }
+        }
+    }
+    
+    var x=new M.C();
+    var result="";
+    result+=x.f(x,3,3); // bad first param
+              ~
+!!! vararg.ts(28,11): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Could not apply type 'string' to argument 1 which is of type 'M.C'.
+              ~
+!!! vararg.ts(28,11): error TS2087: Could not select overload for 'call' expression.
+    result+=x.f(3,"hello",3); // bad second param
+              ~
+!!! vararg.ts(29,11): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Could not apply type 'string' to argument 1 which is of type 'number'.
+              ~
+!!! vararg.ts(29,11): error TS2087: Could not select overload for 'call' expression.
+    result+=x.f("hello",3,3,3,3,3); // ok
+    result+=x.f("hello"); // ok varargs length 0
+    result+=x.fonly(3); // ok conversion
+              ~~~~~
+!!! vararg.ts(32,11): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Could not apply type 'string' to argument 1 which is of type 'number'.
+              ~~~~~
+!!! vararg.ts(32,11): error TS2087: Could not select overload for 'call' expression.
+    result+=x.fonly(x); // bad param
+              ~~~~~
+!!! vararg.ts(33,11): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Could not apply type 'string' to argument 1 which is of type 'M.C'.
+              ~~~~~
+!!! vararg.ts(33,11): error TS2087: Could not select overload for 'call' expression.
+    result+=x.fonly("a"); // ok 
+    result+=x.fonly("a","b","c","d"); //ok 
+    
+    
+    

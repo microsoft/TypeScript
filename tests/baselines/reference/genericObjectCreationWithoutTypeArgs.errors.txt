@@ -1,0 +1,14 @@
+==== tests/cases/compiler/genericObjectCreationWithoutTypeArgs.ts (2 errors) ====
+    class SS<T>{
+    
+    }
+    
+    var x1 = new SS<number>(); // OK
+    var x2 = new SS < number>;   // Correctly give error 
+                             ~
+!!! genericObjectCreationWithoutTypeArgs.ts(6,26): error TS1003: Identifier expected.
+                      ~~~~~~
+!!! genericObjectCreationWithoutTypeArgs.ts(6,19): error TS2095: Could not find symbol 'number'.
+    var x3 = new SS();         // OK
+    var x4 = new SS;           // Should be allowed, but currently give error ('supplied parameters do not match any signature of the call target')
+    

@@ -1,0 +1,37 @@
+=== tests/cases/compiler/overloadOnConstConstraintChecks2.ts ===
+class A {} 
+>A : A
+
+class B extends A {}
+>B : B
+>A : A
+
+class C extends A {
+>C : C
+>A : A
+
+    public foo() { }
+>foo : () => void
+}
+function foo(name: 'hi'): B;
+>foo : typeof foo
+>name : 'hi'
+>B : B
+
+function foo(name: 'bye'): C;
+>foo : typeof foo
+>name : 'bye'
+>C : C
+
+function foo(name: string): A;
+>foo : typeof foo
+>name : string
+>A : A
+
+function foo(name: any): A {
+>foo : typeof foo
+>name : any
+>A : A
+
+    return null;
+}

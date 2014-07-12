@@ -1,0 +1,14 @@
+=== tests/cases/compiler/lambdaExpression.ts ===
+() => 0; // Needs to be wrapped in parens to be a valid expression (not declaration)
+>() => 0 : () => number
+
+var y = 0;
+>y : number
+
+(()=>0);
+>(()=>0) : () => number
+>()=>0 : () => number
+
+var x = 0;
+>x : number
+

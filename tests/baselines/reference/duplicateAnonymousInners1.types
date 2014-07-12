@@ -1,0 +1,33 @@
+=== tests/cases/compiler/duplicateAnonymousInners1.ts ===
+module Foo {
+>Foo : Foo
+
+    class Helper {
+>Helper : Helper
+
+    }
+    
+    class Inner {}
+>Inner : Inner
+
+    // Inner should show up in intellisense
+    
+    export var Outer=0;
+>Outer : number
+}
+
+
+module Foo {
+>Foo : Foo
+    
+    // Should not be an error
+    class Helper {
+>Helper : Helper
+
+    }
+    
+    // Inner should not show up in intellisense
+    // Outer should show up in intellisense
+
+}
+

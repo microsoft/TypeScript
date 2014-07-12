@@ -1,0 +1,10 @@
+==== tests/cases/compiler/genericArrayWithoutTypeAnnotation.ts (1 errors) ====
+    interface IFoo<T>{
+    }
+    class Bar {
+        public getBar(foo: IFoo[]) {
+                           ~~~~
+!!! genericArrayWithoutTypeAnnotation.ts(4,24): error TS2173: Generic type references must include all type arguments.
+        }
+    }
+    

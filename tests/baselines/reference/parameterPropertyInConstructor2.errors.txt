@@ -1,0 +1,17 @@
+==== tests/cases/compiler/parameterPropertyInConstructor2.ts (3 errors) ====
+    module mod {
+      class Customers {
+        constructor(public names: string);
+                    ~~~~~~
+!!! parameterPropertyInConstructor2.ts(3,17): error TS1083: Parameter property declarations cannot be used in a constructor overload.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! parameterPropertyInConstructor2.ts(3,5): error TS2149: Overload signature is not compatible with function definition:
+!!! 	Call signature expects 1 or fewer parameters.
+        constructor(public names: string, public ages: number) {
+                           ~~~~~
+!!! parameterPropertyInConstructor2.ts(4,24): error TS2000: Duplicate identifier 'names'. Additional locations:
+!!! 	parameterPropertyInConstructor2.ts(3,17)
+        }
+      }
+    }
+    

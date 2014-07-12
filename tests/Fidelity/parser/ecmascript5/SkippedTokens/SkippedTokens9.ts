@@ -1,0 +1,2 @@
+; // existing trivia
+/*foo*/ \ /*bar*/

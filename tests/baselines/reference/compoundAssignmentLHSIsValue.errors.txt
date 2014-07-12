@@ -1,0 +1,271 @@
+==== tests/cases/compiler/compoundAssignmentLHSIsValue.ts (74 errors) ====
+    // expected error for all the LHS of compound assignments (arithmetic and addition)
+    var value;
+    
+    // this
+    class C {
+        constructor() {
+            this *= value;
+            ~~~~
+!!! compoundAssignmentLHSIsValue.ts(7,9): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+            this += value;
+            ~~~~
+!!! compoundAssignmentLHSIsValue.ts(8,9): error TS2130: Invalid left-hand side of assignment expression.
+        }
+        foo() {
+            this *= value;
+            ~~~~
+!!! compoundAssignmentLHSIsValue.ts(11,9): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+            this += value;
+            ~~~~
+!!! compoundAssignmentLHSIsValue.ts(12,9): error TS2130: Invalid left-hand side of assignment expression.
+        }
+        static sfoo() {
+            this *= value;
+            ~~~~
+!!! compoundAssignmentLHSIsValue.ts(15,9): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+            this += value;
+            ~~~~
+!!! compoundAssignmentLHSIsValue.ts(16,9): error TS2130: Invalid left-hand side of assignment expression.
+        }
+    }
+    
+    function foo() {
+        this *= value;
+        ~~~~
+!!! compoundAssignmentLHSIsValue.ts(21,5): error TS2130: Invalid left-hand side of assignment expression.
+        this += value;
+        ~~~~
+!!! compoundAssignmentLHSIsValue.ts(22,5): error TS2130: Invalid left-hand side of assignment expression.
+    }
+    
+    this *= value;
+    ~~~~
+!!! compoundAssignmentLHSIsValue.ts(25,1): error TS2130: Invalid left-hand side of assignment expression.
+    this += value;
+    ~~~~
+!!! compoundAssignmentLHSIsValue.ts(26,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    // identifiers: module, class, enum, function
+    module M { export var a; }
+    M *= value;
+    ~
+!!! compoundAssignmentLHSIsValue.ts(30,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    M += value;
+    ~
+!!! compoundAssignmentLHSIsValue.ts(31,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    C *= value;
+    ~
+!!! compoundAssignmentLHSIsValue.ts(33,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    C += value;
+    ~
+!!! compoundAssignmentLHSIsValue.ts(34,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    enum E { }
+    E *= value;
+    ~
+!!! compoundAssignmentLHSIsValue.ts(37,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    E += value;
+    ~
+!!! compoundAssignmentLHSIsValue.ts(38,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    foo *= value;
+    ~~~
+!!! compoundAssignmentLHSIsValue.ts(40,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    foo += value;
+    ~~~
+!!! compoundAssignmentLHSIsValue.ts(41,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    // literals
+    null *= value;
+    ~~~~
+!!! compoundAssignmentLHSIsValue.ts(44,1): error TS2130: Invalid left-hand side of assignment expression.
+    null += value;
+    ~~~~
+!!! compoundAssignmentLHSIsValue.ts(45,1): error TS2130: Invalid left-hand side of assignment expression.
+    true *= value;
+    ~~~~
+!!! compoundAssignmentLHSIsValue.ts(46,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    true += value;
+    ~~~~
+!!! compoundAssignmentLHSIsValue.ts(47,1): error TS2130: Invalid left-hand side of assignment expression.
+    false *= value;
+    ~~~~~
+!!! compoundAssignmentLHSIsValue.ts(48,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    false += value;
+    ~~~~~
+!!! compoundAssignmentLHSIsValue.ts(49,1): error TS2130: Invalid left-hand side of assignment expression.
+    0 *= value;
+    ~
+!!! compoundAssignmentLHSIsValue.ts(50,1): error TS2130: Invalid left-hand side of assignment expression.
+    0 += value;
+    ~
+!!! compoundAssignmentLHSIsValue.ts(51,1): error TS2130: Invalid left-hand side of assignment expression.
+    '' *= value;
+    ~~
+!!! compoundAssignmentLHSIsValue.ts(52,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    '' += value;
+    ~~
+!!! compoundAssignmentLHSIsValue.ts(53,1): error TS2130: Invalid left-hand side of assignment expression.
+    /d+/ *= value;
+    ~~~~
+!!! compoundAssignmentLHSIsValue.ts(54,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    /d+/ += value;
+    ~~~~
+!!! compoundAssignmentLHSIsValue.ts(55,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    // object literals
+    { a: 0} *= value;
+            ~~
+!!! compoundAssignmentLHSIsValue.ts(58,9): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.
+    { a: 0} += value;
+            ~~
+!!! compoundAssignmentLHSIsValue.ts(59,9): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.
+    
+    // array literals
+    ['', ''] *= value;
+    ~~~~~~~~
+!!! compoundAssignmentLHSIsValue.ts(62,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    ['', ''] += value;
+    ~~~~~~~~
+!!! compoundAssignmentLHSIsValue.ts(63,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    // super
+    class Derived extends C {
+        constructor() {
+            super();
+            super *= value;
+                  ~~
+!!! compoundAssignmentLHSIsValue.ts(69,15): error TS1005: '.' expected.
+            super += value;
+                  ~~
+!!! compoundAssignmentLHSIsValue.ts(70,15): error TS1005: '.' expected.
+        }
+    
+        foo() {
+            super *= value;
+                  ~~
+!!! compoundAssignmentLHSIsValue.ts(74,15): error TS1005: '.' expected.
+            super += value;
+                  ~~
+!!! compoundAssignmentLHSIsValue.ts(75,15): error TS1005: '.' expected.
+        }
+    
+        static sfoo() {
+            super *= value;
+                  ~~
+!!! compoundAssignmentLHSIsValue.ts(79,15): error TS1005: '.' expected.
+            super += value;
+                  ~~
+!!! compoundAssignmentLHSIsValue.ts(80,15): error TS1005: '.' expected.
+        }
+    }
+    
+    // function expression
+    function bar1() { } *= value;
+                        ~~
+!!! compoundAssignmentLHSIsValue.ts(85,21): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.
+    function bar2() { } += value;
+                        ~~
+!!! compoundAssignmentLHSIsValue.ts(86,21): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.
+    () => { } *= value;
+              ~~
+!!! compoundAssignmentLHSIsValue.ts(87,11): error TS1005: ';' expected.
+    () => { } += value;
+              ~~
+!!! compoundAssignmentLHSIsValue.ts(88,11): error TS1005: ';' expected.
+    
+    // function calls
+    foo() *= value;
+    ~~~~~
+!!! compoundAssignmentLHSIsValue.ts(91,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    foo() += value;
+    ~~~~~
+!!! compoundAssignmentLHSIsValue.ts(92,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    // parentheses, the containted expression is value
+    (this) *= value;
+    ~~~~~~
+!!! compoundAssignmentLHSIsValue.ts(95,1): error TS2130: Invalid left-hand side of assignment expression.
+    (this) += value;
+    ~~~~~~
+!!! compoundAssignmentLHSIsValue.ts(96,1): error TS2130: Invalid left-hand side of assignment expression.
+    (M) *= value;
+    ~~~
+!!! compoundAssignmentLHSIsValue.ts(97,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    (M) += value;
+    ~~~
+!!! compoundAssignmentLHSIsValue.ts(98,1): error TS2130: Invalid left-hand side of assignment expression.
+    (C) *= value;
+    ~~~
+!!! compoundAssignmentLHSIsValue.ts(99,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    (C) += value;
+    ~~~
+!!! compoundAssignmentLHSIsValue.ts(100,1): error TS2130: Invalid left-hand side of assignment expression.
+    (E) *= value;
+    ~~~
+!!! compoundAssignmentLHSIsValue.ts(101,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    (E) += value;
+    ~~~
+!!! compoundAssignmentLHSIsValue.ts(102,1): error TS2130: Invalid left-hand side of assignment expression.
+    (foo) *= value;
+    ~~~~~
+!!! compoundAssignmentLHSIsValue.ts(103,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    (foo) += value;
+    ~~~~~
+!!! compoundAssignmentLHSIsValue.ts(104,1): error TS2130: Invalid left-hand side of assignment expression.
+    (null) *= value;
+    ~~~~~~
+!!! compoundAssignmentLHSIsValue.ts(105,1): error TS2130: Invalid left-hand side of assignment expression.
+    (null) += value;
+    ~~~~~~
+!!! compoundAssignmentLHSIsValue.ts(106,1): error TS2130: Invalid left-hand side of assignment expression.
+    (true) *= value;
+    ~~~~~~
+!!! compoundAssignmentLHSIsValue.ts(107,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    (true) += value;
+    ~~~~~~
+!!! compoundAssignmentLHSIsValue.ts(108,1): error TS2130: Invalid left-hand side of assignment expression.
+    (0) *= value;
+    ~~~
+!!! compoundAssignmentLHSIsValue.ts(109,1): error TS2130: Invalid left-hand side of assignment expression.
+    (0) += value;
+    ~~~
+!!! compoundAssignmentLHSIsValue.ts(110,1): error TS2130: Invalid left-hand side of assignment expression.
+    ('') *= value;
+    ~~~~
+!!! compoundAssignmentLHSIsValue.ts(111,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    ('') += value;
+    ~~~~
+!!! compoundAssignmentLHSIsValue.ts(112,1): error TS2130: Invalid left-hand side of assignment expression.
+    (/d+/) *= value;
+    ~~~~~~
+!!! compoundAssignmentLHSIsValue.ts(113,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    (/d+/) += value;
+    ~~~~~~
+!!! compoundAssignmentLHSIsValue.ts(114,1): error TS2130: Invalid left-hand side of assignment expression.
+    ({}) *= value;
+    ~~~~
+!!! compoundAssignmentLHSIsValue.ts(115,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    ({}) += value;
+    ~~~~
+!!! compoundAssignmentLHSIsValue.ts(116,1): error TS2130: Invalid left-hand side of assignment expression.
+    ([]) *= value;
+    ~~~~
+!!! compoundAssignmentLHSIsValue.ts(117,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    ([]) += value;
+    ~~~~
+!!! compoundAssignmentLHSIsValue.ts(118,1): error TS2130: Invalid left-hand side of assignment expression.
+    (function baz1() { }) *= value;
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! compoundAssignmentLHSIsValue.ts(119,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    (function baz2() { }) += value;
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! compoundAssignmentLHSIsValue.ts(120,1): error TS2130: Invalid left-hand side of assignment expression.
+    (foo()) *= value;
+    ~~~~~~~
+!!! compoundAssignmentLHSIsValue.ts(121,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    (foo()) += value;
+    ~~~~~~~
+!!! compoundAssignmentLHSIsValue.ts(122,1): error TS2130: Invalid left-hand side of assignment expression.

@@ -1,0 +1,7 @@
+==== tests/cases/compiler/collisionThisExpressionAndClassInGlobal.ts (1 errors) ====
+    class _this {
+    ~~~~~~~~~~~~~
+    }
+    ~
+!!! collisionThisExpressionAndClassInGlobal.ts(1,1): error TS2200: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+    var f = () => this;

@@ -1,0 +1,19 @@
+==== tests/cases/compiler/es6ClassTest3.ts (2 errors) ====
+    module M {    
+        class Visibility {
+            public foo() { };
+                         ~
+!!! es6ClassTest3.ts(3,22): error TS1008: Unexpected token; 'constructor, function, accessor or variable' expected.
+            private bar() { };
+                          ~
+!!! es6ClassTest3.ts(4,23): error TS1008: Unexpected token; 'constructor, function, accessor or variable' expected.
+            private x: number;
+            public y: number;
+            public z: number;
+    
+            constructor() {
+                this.x = 1;
+                this.y = 2;
+            }
+        }
+    }

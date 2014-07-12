@@ -1,0 +1,83 @@
+==== tests/cases/compiler/privacyTypeParametersOfInterface.ts (12 errors) ====
+    class privateClass {
+    }
+    
+    export class publicClass {
+    }
+    
+    class privateClassT<T> {
+    }
+    
+    export class publicClassT<T> {
+    }
+    
+    // TypeParameter_0_of_exported_interface_1_has_or_is_using_private_type_2
+    export interface publicInterfaceWithPrivateTypeParameters<T extends privateClass> {
+                                                              ~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyTypeParametersOfInterface.ts(14,59): error TS2221: TypeParameter 'T extends privateClass' of exported interface has or is using private type 'privateClass'.
+        myMethod(val: T): T; // Error
+                 ~~~~~~
+!!! privacyTypeParametersOfInterface.ts(15,14): error TS2039: Parameter 'val' of method from exported interface has or is using private type 'privateClass'.
+                          ~
+!!! privacyTypeParametersOfInterface.ts(15,23): error TS2057: Return type of method from exported interface has or is using private type 'privateClass'.
+        myMethod0(): publicClassT<T>; // error
+                     ~~~~~~~~~~~~~~~
+!!! privacyTypeParametersOfInterface.ts(16,18): error TS2057: Return type of method from exported interface has or is using private type 'privateClass'.
+        myMethod1(): privateClassT<privateClass>; // error
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyTypeParametersOfInterface.ts(17,18): error TS2057: Return type of method from exported interface has or is using private type 'privateClass'.
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyTypeParametersOfInterface.ts(17,18): error TS2057: Return type of method from exported interface has or is using private type 'privateClassT<privateClass>'.
+        myMethod2(): privateClassT<publicClass>; // error
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyTypeParametersOfInterface.ts(18,18): error TS2057: Return type of method from exported interface has or is using private type 'privateClassT<publicClass>'.
+        myMethod3(): publicClassT<privateClass>; //error
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyTypeParametersOfInterface.ts(19,18): error TS2057: Return type of method from exported interface has or is using private type 'privateClass'.
+        myMethod4(): publicClassT<publicClass>; // no error
+    }
+    
+    export interface publicInterfaceWithPublicTypeParameters<T extends publicClass> {
+        myMethod(val: T): T; // No Error
+        myMethod0(): publicClassT<T>; // No error
+        myMethod1(): privateClassT<privateClass>; // error
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyTypeParametersOfInterface.ts(26,18): error TS2057: Return type of method from exported interface has or is using private type 'privateClass'.
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyTypeParametersOfInterface.ts(26,18): error TS2057: Return type of method from exported interface has or is using private type 'privateClassT<privateClass>'.
+        myMethod2(): privateClassT<publicClass>; // error
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyTypeParametersOfInterface.ts(27,18): error TS2057: Return type of method from exported interface has or is using private type 'privateClassT<publicClass>'.
+        myMethod3(): publicClassT<privateClass>; //error
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyTypeParametersOfInterface.ts(28,18): error TS2057: Return type of method from exported interface has or is using private type 'privateClass'.
+        myMethod4(): publicClassT<publicClass>; // no error
+    }
+    
+    interface privateInterfaceWithPrivateTypeParameters<T extends privateClass> {
+        myMethod(val: T): T; // No Error
+        myMethod0(): publicClassT<T>; // No error
+        myMethod1(): privateClassT<privateClass>; // No error
+        myMethod2(): privateClassT<publicClass>; // No error
+        myMethod3(): publicClassT<privateClass>; //No error
+        myMethod4(): publicClassT<publicClass>; // no error
+    }
+    
+    interface privateInterfaceWithPublicTypeParameters<T extends publicClass> {
+        myMethod(val: T): T; // No Error
+        myMethod0(): publicClassT<T>; // No error
+        myMethod1(): privateClassT<privateClass>; // No error
+        myMethod2(): privateClassT<publicClass>; // No error
+        myMethod3(): publicClassT<privateClass>; //No error
+        myMethod4(): publicClassT<publicClass>; // no error
+    }
+    
+    export interface publicInterfaceWithPublicTypeParametersWithoutExtends<T> {
+        myMethod(val: T): T; // No Error
+        myMethod0(): publicClassT<T>; // No error
+    }
+    
+    interface privateInterfaceWithPublicTypeParametersWithoutExtends<T> {
+        myMethod(val: T): T; // No Error
+        myMethod0(): publicClassT<T>; // No error
+    }

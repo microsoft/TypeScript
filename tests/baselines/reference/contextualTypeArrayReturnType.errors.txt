@@ -1,0 +1,34 @@
+==== tests/cases/compiler/contextualTypeArrayReturnType.ts (1 errors) ====
+    interface IBookStyle {
+        initialLeftPageTransforms?: (width: number) => NamedTransform[];
+    }
+    
+    interface NamedTransform {
+        [name: string]: Transform3D;
+    }
+    
+    interface Transform3D {
+        cachedCss: string;
+    }
+    
+    var style: IBookStyle = {
+        ~~~~~~~~~~~~~~~~~~~~~
+        initialLeftPageTransforms: (width: number) => {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            return [
+    ~~~~~~~~~~~~~~~~
+                {'ry': null }
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+            ];
+    ~~~~~~~~~~
+        }
+    ~~~~~
+    }
+    ~
+!!! contextualTypeArrayReturnType.ts(13,5): error TS2012: Cannot convert '{ initialLeftPageTransforms: (width: number) => { 'ry': any; }[]; }' to 'IBookStyle':
+!!! 	Types of property 'initialLeftPageTransforms' of types '{ initialLeftPageTransforms: (width: number) => { 'ry': any; }[]; }' and 'IBookStyle' are incompatible:
+!!! 		Call signatures of types '(width: number) => { 'ry': any; }[]' and '(width: number) => NamedTransform[]' are incompatible:
+!!! 			Types of property 'pop' of types '{ 'ry': any; }[]' and 'NamedTransform[]' are incompatible:
+!!! 				Call signatures of types '() => { 'ry': any; }' and '() => NamedTransform' are incompatible:
+!!! 					Index signatures of types '{ 'ry': any; }' and 'NamedTransform' are incompatible.
+    

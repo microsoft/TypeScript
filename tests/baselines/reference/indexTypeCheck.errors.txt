@@ -1,0 +1,80 @@
+==== tests/cases/compiler/indexTypeCheck.ts (7 errors) ====
+    interface Red {
+        [n:number]; // ok
+        [s:string]; // ok
+    }
+    
+    interface Blue {
+        [n:number]: any; // ok
+        [s:string]: any; // ok
+    }
+    
+    interface Yellow {
+        [n:number]: Red; // ok
+        [s:string]: Red; // ok
+    }
+    
+    interface Orange {
+        [n:number]: number; // ok
+     ~~~~~~~~~~~~~~~~~~
+!!! indexTypeCheck.ts(17,2): error TS2167: Numeric indexer type 'number' must be assignable to string indexer type 'string'.
+        [s:string]: string; // error
+    }
+    
+    interface Green {
+        [n:number]: Orange; // error
+     ~~~~~~~~~~~~~~~~~~
+!!! indexTypeCheck.ts(22,2): error TS2168: Numeric indexer type 'Orange' must be assignable to string indexer type 'Yellow':
+!!! 	Index signatures of types 'Orange' and 'Yellow' are incompatible:
+!!! 		Index signatures of types 'String' and 'Red' are incompatible.
+        [s:string]: Yellow; // ok
+    }
+    
+    interface Cyan {
+        [n:number]: number; // error
+     ~~~~~~~~~~~~~~~~~~
+!!! indexTypeCheck.ts(27,2): error TS2167: Numeric indexer type 'number' must be assignable to string indexer type 'string'.
+        [s:string]: string; // ok
+    }
+    
+    interface Purple {
+        [n:number, s:string]; // error
+              ~
+!!! indexTypeCheck.ts(32,11): error TS1005: ']' expected.
+                        ~
+!!! indexTypeCheck.ts(32,21): error TS1005: ';' expected.
+                         ~
+!!! indexTypeCheck.ts(32,22): error TS1008: Unexpected token; 'call, construct, index, property or function signature' expected.
+    }
+    
+    interface Magenta {
+        [p:Purple]; // error
+    }
+    
+    var yellow: Yellow;
+    var blue: Blue;
+    var s = "some string";
+    
+    yellow[5]; // ok
+    yellow["hue"]; // ok
+    yellow[<any>{}]; // ok
+    
+    s[0]; // error
+    s["s"]; // ok
+    s[<any>{}]; // ok
+    
+    yellow[blue]; // error
+    ~~~~~~~~~~~~
+!!! indexTypeCheck.ts(51,1): error TS2008: Value of type 'Yellow' is not indexable by type 'Blue'.
+    
+    var x:number[];
+    x[0];
+    
+    class Benchmark {
+    
+        public results: { [x:string]: any; } = <{ [x:string]: any; }>{};
+    
+        public addTimingFor(name: string, timing: number) {
+            this.results[name] = this.results[name];
+        }
+    }

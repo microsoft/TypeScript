@@ -1,0 +1,360 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 50,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullWidth": 50,
+                "isIncrementallyUnusable": true,
+                "expression": {
+                    "kind": "ConditionalExpression",
+                    "fullWidth": 50,
+                    "condition": {
+                        "kind": "ParenthesizedExpression",
+                        "fullWidth": 13,
+                        "openParenToken": {
+                            "kind": "OpenParenToken",
+                            "width": 1,
+                            "text": "(",
+                            "value": "(",
+                            "valueText": "("
+                        },
+                        "expression": {
+                            "kind": "AssignmentExpression",
+                            "fullWidth": 11,
+                            "left": {
+                                "kind": "IdentifierName",
+                                "width": 1,
+                                "text": "a",
+                                "value": "a",
+                                "valueText": "a"
+                            },
+                            "operatorToken": {
+                                "kind": "EqualsToken",
+                                "width": 1,
+                                "text": "=",
+                                "value": "=",
+                                "valueText": "="
+                            },
+                            "right": {
+                                "kind": "ElementAccessExpression",
+                                "fullWidth": 9,
+                                "expression": {
+                                    "kind": "MemberAccessExpression",
+                                    "fullWidth": 6,
+                                    "expression": {
+                                        "kind": "ThisKeyword",
+                                        "width": 4,
+                                        "text": "this",
+                                        "value": "this",
+                                        "valueText": "this"
+                                    },
+                                    "dotToken": {
+                                        "kind": "DotToken",
+                                        "width": 1,
+                                        "text": ".",
+                                        "value": ".",
+                                        "valueText": "."
+                                    },
+                                    "name": {
+                                        "kind": "IdentifierName",
+                                        "width": 1,
+                                        "text": "R",
+                                        "value": "R",
+                                        "valueText": "R"
+                                    }
+                                },
+                                "openBracketToken": {
+                                    "kind": "OpenBracketToken",
+                                    "width": 1,
+                                    "text": "[",
+                                    "value": "[",
+                                    "valueText": "["
+                                },
+                                "argumentExpression": {
+                                    "kind": "IdentifierName",
+                                    "width": 1,
+                                    "text": "c",
+                                    "value": "c",
+                                    "valueText": "c"
+                                },
+                                "closeBracketToken": {
+                                    "kind": "CloseBracketToken",
+                                    "width": 1,
+                                    "text": "]",
+                                    "value": "]",
+                                    "valueText": "]"
+                                }
+                            }
+                        },
+                        "closeParenToken": {
+                            "kind": "CloseParenToken",
+                            "width": 1,
+                            "text": ")",
+                            "value": ")",
+                            "valueText": ")"
+                        }
+                    },
+                    "questionToken": {
+                        "kind": "QuestionToken",
+                        "width": 1,
+                        "text": "?",
+                        "value": "?",
+                        "valueText": "?"
+                    },
+                    "whenTrue": {
+                        "kind": "LogicalOrExpression",
+                        "fullWidth": 29,
+                        "left": {
+                            "kind": "MemberAccessExpression",
+                            "fullWidth": 4,
+                            "expression": {
+                                "kind": "IdentifierName",
+                                "width": 1,
+                                "text": "a",
+                                "value": "a",
+                                "valueText": "a"
+                            },
+                            "dotToken": {
+                                "kind": "DotToken",
+                                "width": 1,
+                                "text": ".",
+                                "value": ".",
+                                "valueText": "."
+                            },
+                            "name": {
+                                "kind": "IdentifierName",
+                                "width": 2,
+                                "text": "JW",
+                                "value": "JW",
+                                "valueText": "JW"
+                            }
+                        },
+                        "operatorToken": {
+                            "kind": "BarBarToken",
+                            "width": 2,
+                            "text": "||",
+                            "value": "||",
+                            "valueText": "||"
+                        },
+                        "right": {
+                            "kind": "ParenthesizedExpression",
+                            "fullWidth": 23,
+                            "openParenToken": {
+                                "kind": "OpenParenToken",
+                                "width": 1,
+                                "text": "(",
+                                "value": "(",
+                                "valueText": "("
+                            },
+                            "expression": {
+                                "kind": "CommaExpression",
+                                "fullWidth": 21,
+                                "left": {
+                                    "kind": "InvocationExpression",
+                                    "fullWidth": 12,
+                                    "expression": {
+                                        "kind": "MemberAccessExpression",
+                                        "fullWidth": 4,
+                                        "expression": {
+                                            "kind": "IdentifierName",
+                                            "width": 1,
+                                            "text": "a",
+                                            "value": "a",
+                                            "valueText": "a"
+                                        },
+                                        "dotToken": {
+                                            "kind": "DotToken",
+                                            "width": 1,
+                                            "text": ".",
+                                            "value": ".",
+                                            "valueText": "."
+                                        },
+                                        "name": {
+                                            "kind": "IdentifierName",
+                                            "width": 2,
+                                            "text": "e5",
+                                            "value": "e5",
+                                            "valueText": "e5"
+                                        }
+                                    },
+                                    "argumentList": {
+                                        "kind": "ArgumentList",
+                                        "fullWidth": 8,
+                                        "openParenToken": {
+                                            "kind": "OpenParenToken",
+                                            "width": 1,
+                                            "text": "(",
+                                            "value": "(",
+                                            "valueText": "("
+                                        },
+                                        "arguments": [
+                                            {
+                                                "kind": "ThisKeyword",
+                                                "width": 4,
+                                                "text": "this",
+                                                "value": "this",
+                                                "valueText": "this"
+                                            },
+                                            {
+                                                "kind": "CommaToken",
+                                                "width": 1,
+                                                "text": ",",
+                                                "value": ",",
+                                                "valueText": ","
+                                            },
+                                            {
+                                                "kind": "IdentifierName",
+                                                "width": 1,
+                                                "text": "c",
+                                                "value": "c",
+                                                "valueText": "c"
+                                            }
+                                        ],
+                                        "closeParenToken": {
+                                            "kind": "CloseParenToken",
+                                            "width": 1,
+                                            "text": ")",
+                                            "value": ")",
+                                            "valueText": ")"
+                                        }
+                                    }
+                                },
+                                "operatorToken": {
+                                    "kind": "CommaToken",
+                                    "width": 1,
+                                    "text": ",",
+                                    "value": ",",
+                                    "valueText": ","
+                                },
+                                "right": {
+                                    "kind": "AssignmentExpression",
+                                    "fullWidth": 8,
+                                    "left": {
+                                        "kind": "MemberAccessExpression",
+                                        "fullWidth": 4,
+                                        "expression": {
+                                            "kind": "IdentifierName",
+                                            "width": 1,
+                                            "text": "a",
+                                            "value": "a",
+                                            "valueText": "a"
+                                        },
+                                        "dotToken": {
+                                            "kind": "DotToken",
+                                            "width": 1,
+                                            "text": ".",
+                                            "value": ".",
+                                            "valueText": "."
+                                        },
+                                        "name": {
+                                            "kind": "IdentifierName",
+                                            "width": 2,
+                                            "text": "JW",
+                                            "value": "JW",
+                                            "valueText": "JW"
+                                        }
+                                    },
+                                    "operatorToken": {
+                                        "kind": "EqualsToken",
+                                        "width": 1,
+                                        "text": "=",
+                                        "value": "=",
+                                        "valueText": "="
+                                    },
+                                    "right": {
+                                        "kind": "MemberAccessExpression",
+                                        "fullWidth": 3,
+                                        "expression": {
+                                            "kind": "IdentifierName",
+                                            "width": 1,
+                                            "text": "_",
+                                            "value": "_",
+                                            "valueText": "_"
+                                        },
+                                        "dotToken": {
+                                            "kind": "DotToken",
+                                            "width": 1,
+                                            "text": ".",
+                                            "value": ".",
+                                            "valueText": "."
+                                        },
+                                        "name": {
+                                            "kind": "IdentifierName",
+                                            "width": 1,
+                                            "text": "l",
+                                            "value": "l",
+                                            "valueText": "l"
+                                        }
+                                    }
+                                }
+                            },
+                            "closeParenToken": {
+                                "kind": "CloseParenToken",
+                                "width": 1,
+                                "text": ")",
+                                "value": ")",
+                                "valueText": ")"
+                            }
+                        }
+                    },
+                    "colonToken": {
+                        "kind": "ColonToken",
+                        "width": 1,
+                        "text": ":",
+                        "value": ":",
+                        "valueText": ":"
+                    },
+                    "whenFalse": {
+                        "kind": "MemberAccessExpression",
+                        "fullWidth": 6,
+                        "expression": {
+                            "kind": "ThisKeyword",
+                            "width": 4,
+                            "text": "this",
+                            "value": "this",
+                            "valueText": "this"
+                        },
+                        "dotToken": {
+                            "kind": "DotToken",
+                            "width": 1,
+                            "text": ".",
+                            "value": ".",
+                            "valueText": "."
+                        },
+                        "name": {
+                            "kind": "IdentifierName",
+                            "width": 1,
+                            "text": "A",
+                            "value": "A",
+                            "valueText": "A"
+                        }
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 0,
+                    "text": ""
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 50
+    }
+}

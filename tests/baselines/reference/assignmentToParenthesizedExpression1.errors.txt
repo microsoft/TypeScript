@@ -1,0 +1,5 @@
+==== tests/cases/compiler/assignmentToParenthesizedExpression1.ts (1 errors) ====
+    var x;
+    (1, x)=0;
+    ~~~~~~
+!!! assignmentToParenthesizedExpression1.ts(2,1): error TS2130: Invalid left-hand side of assignment expression.

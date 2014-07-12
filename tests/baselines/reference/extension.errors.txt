@@ -1,0 +1,38 @@
+==== tests/cases/compiler/extension.ts (4 errors) ====
+    interface I {
+        x;
+    }
+    
+    interface I {
+        y;
+    }
+    
+    declare module M {
+        export class C {
+            public p:number;
+        }
+    }
+    
+    declare module M {
+        export extension class C {
+        ~~~~~~
+!!! extension.ts(16,5): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.
+                         ~~~~~
+!!! extension.ts(16,22): error TS1005: ';' expected.
+               ~~~~~~~~~
+!!! extension.ts(16,12): error TS2095: Could not find symbol 'extension'.
+                               ~
+!!! extension.ts(16,28): error TS2000: Duplicate identifier 'C'. Additional locations:
+!!! 	extension.ts(10,5)
+            public pe:string;
+        }
+    }
+    
+    var c=new M.C();
+    c.pe;
+    c.p;
+    var i:I;
+    i.x;
+    i.y;
+    
+    

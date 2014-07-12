@@ -1,0 +1,23 @@
+==== tests/cases/compiler/overloadOnConstantsInvalidOverload1.ts (4 errors) ====
+    class Base { foo() { } }
+    class Derived1 extends Base { bar() { } }
+    class Derived2 extends Base { baz() { } }
+    class Derived3 extends Base { biz() { } }
+    
+    function foo(name: "SPAN"): Derived1;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! overloadOnConstantsInvalidOverload1.ts(6,1): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+    function foo(name: "DIV"): Derived2 {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        return null;
+    ~~~~~~~~~~~~~~~~
+    }
+    ~
+!!! overloadOnConstantsInvalidOverload1.ts(7,1): error TS2163: Overload signature implementation cannot use specialized type.
+    
+    foo("HI");
+    ~~~
+!!! overloadOnConstantsInvalidOverload1.ts(11,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Could not apply type '"SPAN"' to argument 1 which is of type 'string'.
+    ~~~
+!!! overloadOnConstantsInvalidOverload1.ts(11,1): error TS2087: Could not select overload for 'call' expression.

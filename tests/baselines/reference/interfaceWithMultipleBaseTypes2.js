@@ -1,0 +1,1 @@
+//// [interfaceWithMultipleBaseTypes2.js]

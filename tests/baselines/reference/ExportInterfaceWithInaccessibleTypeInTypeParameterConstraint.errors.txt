@@ -1,0 +1,38 @@
+==== tests/cases/compiler/ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts (7 errors) ====
+    module A {
+    
+        interface Point {
+            x: number;
+            y: number;
+        }
+    
+        export var Origin: Point = { x: 0, y: 0 };
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts(8,16): error TS2027: Exported variable 'Origin' has or is using private type 'Point'.
+    
+        export interface Point3d extends Point {
+                                         ~~~~~
+!!! ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts(10,38): error TS2020: Exported interface 'Point3d' extends private interface 'Point'.
+            z: number;
+        }
+    
+        export var Origin3d: Point3d = { x: 0, y: 0, z: 0 };
+    
+        export interface Line<TPoint extends Point>{
+                              ~~~~~~~~~~~~~~~~~~~~
+!!! ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts(16,27): error TS2221: TypeParameter 'TPoint extends Point' of exported interface has or is using private type 'Point'.
+            new (start: TPoint, end: TPoint);
+                 ~~~~~~~~~~~~~
+!!! ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts(17,14): error TS2035: Parameter 'start' of constructor signature from exported interface has or is using private type 'Point'.
+                                ~~~~~~~~~~~
+!!! ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts(17,29): error TS2035: Parameter 'end' of constructor signature from exported interface has or is using private type 'Point'.
+    
+            start: TPoint;
+            ~~~~~~~~~~~~~
+!!! ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts(19,9): error TS2026: Property 'start' of exported interface has or is using private type 'Point'.
+            end: TPoint;
+            ~~~~~~~~~~~
+!!! ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts(20,9): error TS2026: Property 'end' of exported interface has or is using private type 'Point'.
+        }
+    }
+    

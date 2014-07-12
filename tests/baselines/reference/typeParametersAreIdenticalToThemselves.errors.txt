@@ -1,0 +1,111 @@
+==== tests/cases/compiler/typeParametersAreIdenticalToThemselves.ts (17 errors) ====
+    // type parameters from the same declaration are identical to themself
+    
+    function foo1<T>(x: T);
+    function foo1<T>(x: T); // no error, different declaration for each T
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! typeParametersAreIdenticalToThemselves.ts(4,1): error TS2144: Duplicate overload signature for 'foo1'.
+    function foo1<T>(x: T) { }
+    
+    function foo2<T, U>(x: T);
+    function foo2<T, U>(x: T); // no error, different declaration for each T
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! typeParametersAreIdenticalToThemselves.ts(8,1): error TS2144: Duplicate overload signature for 'foo2'.
+    function foo2<T, U>(x: T) { }
+    
+    function foo3<T, U>(x: T, y: U) {
+        function inner(x: T);
+        function inner(x: T); // error, same T
+        ~~~~~~~~~~~~~~~~~~~~~
+!!! typeParametersAreIdenticalToThemselves.ts(13,5): error TS2144: Duplicate overload signature for 'inner'.
+        function inner(x: T) { }
+    
+        function inner2(x: T);
+        function inner2<T>(x: T); // no error, different T
+        function inner2(x: any) { }
+    }
+    
+    class C<T> {
+        foo1(x: T);
+        foo1(x: T); // error, same T
+        ~~~~~~~~~~~
+!!! typeParametersAreIdenticalToThemselves.ts(23,5): error TS2144: Duplicate overload signature for 'foo1'.
+        foo1(x: T) { }
+    
+        foo2<U>(a: T, x: U);
+        foo2<U>(a: T, x: U); // no error, different declaration for each U
+        ~~~~~~~~~~~~~~~~~~~~
+!!! typeParametersAreIdenticalToThemselves.ts(27,5): error TS2144: Duplicate overload signature for 'foo2'.
+        foo2<U>(a: T, x: U) { }
+    
+        foo3<T>(x: T);
+        foo3<T>(x: T); // no error, different declaration for each T
+        ~~~~~~~~~~~~~~
+!!! typeParametersAreIdenticalToThemselves.ts(31,5): error TS2144: Duplicate overload signature for 'foo3'.
+        foo3<T>(x: T) { }
+    
+        foo4<T extends Date>(x: T);
+        foo4<T extends Date>(x: T); // no error, different declaration for each T
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! typeParametersAreIdenticalToThemselves.ts(35,5): error TS2144: Duplicate overload signature for 'foo4'.
+        foo4<T extends Date>(x: T) { }
+    }
+    
+    class C2<T extends Date> {
+        foo1(x: T);
+        foo1(x: T); // error, same T
+        ~~~~~~~~~~~
+!!! typeParametersAreIdenticalToThemselves.ts(41,5): error TS2144: Duplicate overload signature for 'foo1'.
+        foo1(x: T) { }
+    
+        foo2<U>(a: T, x: U);
+        foo2<U>(a: T, x: U); // no error, different declaration for each U
+        ~~~~~~~~~~~~~~~~~~~~
+!!! typeParametersAreIdenticalToThemselves.ts(45,5): error TS2144: Duplicate overload signature for 'foo2'.
+        foo2<U>(a: T, x: U) { }
+    
+        foo3<T>(x: T);
+        foo3<T>(x: T); // no error, different declaration for each T
+        ~~~~~~~~~~~~~~
+!!! typeParametersAreIdenticalToThemselves.ts(49,5): error TS2144: Duplicate overload signature for 'foo3'.
+        foo3<T>(x: T) { }
+    }
+    
+    interface I<T> {
+        foo1(x: T);
+        foo1(x: T); // error, same T
+        ~~~~~~~~~~
+!!! typeParametersAreIdenticalToThemselves.ts(55,5): error TS2144: Duplicate overload signature for 'foo1'.
+    
+        foo2<U>(a: T, x: U);
+        foo2<U>(a: T, x: U); // no error, different declaration for each U
+        ~~~~~~~~~~~~~~~~~~~
+!!! typeParametersAreIdenticalToThemselves.ts(58,5): error TS2144: Duplicate overload signature for 'foo2'.
+    
+        foo3<T>(x: T);
+        foo3<T>(x: T); // no error, different declaration for each T
+        ~~~~~~~~~~~~~
+!!! typeParametersAreIdenticalToThemselves.ts(61,5): error TS2144: Duplicate overload signature for 'foo3'.
+    
+        foo4<T extends Date>(x: T);
+        foo4<T extends Date>(x: T); // no error, different declaration for each T
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! typeParametersAreIdenticalToThemselves.ts(64,5): error TS2144: Duplicate overload signature for 'foo4'.
+    }
+    
+    interface I2<T extends Date> {
+        foo1(x: T);
+        foo1(x: T); // error, same T
+        ~~~~~~~~~~
+!!! typeParametersAreIdenticalToThemselves.ts(69,5): error TS2144: Duplicate overload signature for 'foo1'.
+    
+        foo2<U>(a: T, x: U);
+        foo2<U>(a: T, x: U); // no error, different declaration for each U
+        ~~~~~~~~~~~~~~~~~~~
+!!! typeParametersAreIdenticalToThemselves.ts(72,5): error TS2144: Duplicate overload signature for 'foo2'.
+    
+        foo3<T>(x: T);
+        foo3<T>(x: T); // no error, different declaration for each T
+        ~~~~~~~~~~~~~
+!!! typeParametersAreIdenticalToThemselves.ts(75,5): error TS2144: Duplicate overload signature for 'foo3'.
+    }

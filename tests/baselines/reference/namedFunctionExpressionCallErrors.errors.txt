@@ -1,0 +1,23 @@
+==== tests/cases/compiler/namedFunctionExpressionCallErrors.ts (3 errors) ====
+    var recurser = function foo() {
+    };
+    
+    // Error: foo should not be visible here
+    foo();
+    ~~~
+!!! namedFunctionExpressionCallErrors.ts(5,1): error TS2095: Could not find symbol 'foo'.
+    
+    // recurser should be
+    recurser();
+    
+    (function bar() {
+        // Error: foo should not be visible here either
+        foo();
+        ~~~
+!!! namedFunctionExpressionCallErrors.ts(12,5): error TS2095: Could not find symbol 'foo'.
+    });
+    
+    // Error: bar should not be visible
+    bar();
+    ~~~
+!!! namedFunctionExpressionCallErrors.ts(16,1): error TS2095: Could not find symbol 'bar'.

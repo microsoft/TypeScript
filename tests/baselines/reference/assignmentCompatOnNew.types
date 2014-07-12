@@ -1,0 +1,15 @@
+=== tests/cases/compiler/assignmentCompatOnNew.ts ===
+class Foo{};
+>Foo : Foo
+
+function bar(x: {new(): Foo;}){}
+>bar : typeof bar
+>x : new() => Foo
+>Foo : Foo
+
+>bar(Foo) : void
+>bar : typeof bar
+
+bar(Foo); // Error, but should be allowed
+>Foo : typeof Foo
+

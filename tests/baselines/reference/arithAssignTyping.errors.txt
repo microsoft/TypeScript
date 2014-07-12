@@ -1,0 +1,42 @@
+==== tests/cases/compiler/arithAssignTyping.ts (13 errors) ====
+    class f { }
+    
+    f += ''; // error
+    ~
+!!! arithAssignTyping.ts(3,1): error TS2012: Cannot convert 'string' to 'typeof f':
+!!! 	Type 'String' is missing property 'prototype' from type 'typeof f'.
+    ~
+!!! arithAssignTyping.ts(3,1): error TS2130: Invalid left-hand side of assignment expression.
+    f += 1; // error
+    ~
+!!! arithAssignTyping.ts(4,1): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+    f -= 1; // error
+    ~
+!!! arithAssignTyping.ts(5,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    f *= 1; // error
+    ~
+!!! arithAssignTyping.ts(6,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    f /= 1; // error
+    ~
+!!! arithAssignTyping.ts(7,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    f %= 1; // error
+    ~
+!!! arithAssignTyping.ts(8,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    f &= 1; // error
+    ~
+!!! arithAssignTyping.ts(9,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    f |= 1; // error
+    ~
+!!! arithAssignTyping.ts(10,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    f <<= 1; // error
+    ~
+!!! arithAssignTyping.ts(11,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    f >>= 1; // error
+    ~
+!!! arithAssignTyping.ts(12,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    f >>>= 1; // error
+    ~
+!!! arithAssignTyping.ts(13,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    f ^= 1; // error
+    ~
+!!! arithAssignTyping.ts(14,1): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.

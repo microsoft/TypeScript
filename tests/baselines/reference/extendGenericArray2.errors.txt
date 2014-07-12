@@ -1,0 +1,11 @@
+==== tests/cases/compiler/extendGenericArray2.ts (1 errors) ====
+    interface IFoo<T> {
+        x: T;
+    }
+    
+    interface Array<T> extends IFoo<T> { }
+    
+    var arr: string[] = [];
+    var y: number = arr.x;
+        ~~~~~~~~~~~~~~~~~
+!!! extendGenericArray2.ts(8,5): error TS2011: Cannot convert 'string' to 'number'.

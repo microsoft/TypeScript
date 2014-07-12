@@ -1,0 +1,20 @@
+==== tests/cases/compiler/indexerAssignability.ts (3 errors) ====
+    var a: { [s: string]: string; };
+    var b: { [n: number]: string; };
+    var c: {};
+    
+    a = b;
+    ~
+!!! indexerAssignability.ts(5,1): error TS2012: Cannot convert '{ [n: number]: string; }' to '{ [s: string]: string; }':
+!!! 	Index signatures of types '{ [n: number]: string; }' and '{ [s: string]: string; }' are incompatible.
+    a = c;
+    ~
+!!! indexerAssignability.ts(6,1): error TS2012: Cannot convert '{}' to '{ [s: string]: string; }':
+!!! 	Index signatures of types '{}' and '{ [s: string]: string; }' are incompatible.
+    b = a;
+    b = c;
+    ~
+!!! indexerAssignability.ts(8,1): error TS2012: Cannot convert '{}' to '{ [n: number]: string; }':
+!!! 	Index signatures of types '{}' and '{ [n: number]: string; }' are incompatible.
+    c = a;
+    c = b;

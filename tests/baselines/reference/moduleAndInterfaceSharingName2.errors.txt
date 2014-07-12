@@ -1,0 +1,11 @@
+==== tests/cases/compiler/moduleAndInterfaceSharingName2.ts (1 errors) ====
+    module X {
+        export module Y {
+            export interface Z { }
+        }
+        export interface Y { }
+    }
+    var z: X.Y.Z = null;
+    var z2: X.Y<string>;
+            ~~~~~~~~~~~
+!!! moduleAndInterfaceSharingName2.ts(8,9): error TS2125: Type 'X.Y' does not have type parameters.

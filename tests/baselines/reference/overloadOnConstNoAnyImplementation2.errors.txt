@@ -1,0 +1,37 @@
+==== tests/cases/compiler/overloadOnConstNoAnyImplementation2.ts (7 errors) ====
+    interface I {
+        x1(a: number, callback: (x: 'hi') => number);
+                                ~~~~~~~~~~~~~~~~~~~
+!!! overloadOnConstNoAnyImplementation2.ts(2,29): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+    }
+    
+    class C {
+        x1(a: number, callback: (x: 'hi') => number);
+                                ~~~~~~~~~~~~~~~~~~~
+!!! overloadOnConstNoAnyImplementation2.ts(6,29): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+        x1(a: number, callback: (x: string) => number) {
+            callback('hi');
+            callback('bye');
+            var hm = "hm";
+            callback(hm);
+            callback(1); // error
+            ~~~~~~~~
+!!! overloadOnConstNoAnyImplementation2.ts(12,9): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Could not apply type 'string' to argument 1 which is of type 'number'.
+            ~~~~~~~~
+!!! overloadOnConstNoAnyImplementation2.ts(12,9): error TS2087: Could not select overload for 'call' expression.
+        }
+    }
+    
+    var c: C;
+    c.x1(1, (x: 'hi') => { return 1; } );
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! overloadOnConstNoAnyImplementation2.ts(17,9): error TS2163: Overload signature implementation cannot use specialized type.
+    c.x1(1, (x: 'bye') => { return 1; } );
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! overloadOnConstNoAnyImplementation2.ts(18,9): error TS2163: Overload signature implementation cannot use specialized type.
+    c.x1(1, (x) => { return 1; } );
+            ~~~~~~~~~~~~~~~~~~~~
+!!! overloadOnConstNoAnyImplementation2.ts(19,9): error TS2163: Overload signature implementation cannot use specialized type.
+    
+    c.x1(1, (x: number) => { return 1; } );

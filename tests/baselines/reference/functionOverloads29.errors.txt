@@ -1,0 +1,10 @@
+==== tests/cases/compiler/functionOverloads29.ts (2 errors) ====
+    function foo(bar:string):string;
+    function foo(bar:number):number;
+    function foo(bar:any):any{ return bar }
+    var x = foo();
+            ~~~
+!!! functionOverloads29.ts(4,9): error TS2081: Supplied parameters do not match any signature of call target.
+            ~~~
+!!! functionOverloads29.ts(4,9): error TS2087: Could not select overload for 'call' expression.
+    

@@ -1,0 +1,17 @@
+==== tests/cases/compiler/aliasAssignments_1.ts (2 errors) ====
+    import moduleA = require("aliasAssignments_moduleA");
+    var x = moduleA;
+    x = 1; // Should be error
+    ~
+!!! aliasAssignments_1.ts(3,1): error TS2012: Cannot convert 'number' to 'typeof moduleA':
+!!! 	Type 'Number' is missing property 'someClass' from type 'typeof moduleA'.
+    var y = 1;
+    y = moduleA; // should be error
+    ~
+!!! aliasAssignments_1.ts(5,1): error TS2011: Cannot convert 'typeof moduleA' to 'number'.
+    
+==== tests/cases/compiler/aliasAssignments_moduleA.ts (0 errors) ====
+    export class someClass {
+        public someData: string;
+    }
+    

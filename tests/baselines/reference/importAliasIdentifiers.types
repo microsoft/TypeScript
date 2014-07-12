@@ -1,0 +1,123 @@
+=== tests/cases/compiler/importAliasIdentifiers.ts ===
+module moduleA {
+>moduleA : moduleA
+
+    export class Point {
+>Point : Point
+
+        constructor(public x: number, public y: number) { }
+>x : number
+>y : number
+    }
+}
+
+import alias = moduleA;
+>alias : alias
+>moduleA : moduleA
+
+var p: alias.Point;
+>p : moduleA.Point
+>alias : alias
+>Point : moduleA.Point
+
+var p: moduleA.Point;
+>p : moduleA.Point
+>moduleA : moduleA
+>Point : moduleA.Point
+
+var p: { x: number; y: number; };
+>p : { x: number; y: number; }
+>x : number
+>y : number
+
+class clodule {
+>clodule : clodule
+
+    name: string;
+>name : string
+}
+
+module clodule {
+>clodule : clodule
+
+    export interface Point {
+>Point : Point
+
+        x: number; y: number;
+>x : number
+>y : number
+    }
+    var Point: Point = { x: 0, y: 0 };
+>Point : Point
+>Point : Point
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>y : number
+}
+
+import clolias = clodule;
+>clolias : clolias
+>clodule : clodule
+
+var p: clolias.Point;
+>p : clodule.Point
+>clolias : clolias
+>Point : clodule.Point
+
+var p: clodule.Point;
+>p : clodule.Point
+>clodule : clodule
+>Point : clodule.Point
+
+var p: { x: number; y: number; };
+>p : { x: number; y: number; }
+>x : number
+>y : number
+
+
+function fundule() {
+>fundule : typeof fundule
+
+    return { x: 0, y: 0 };
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>y : number
+}
+
+module fundule {
+>fundule : fundule
+
+    export interface Point {
+>Point : Point
+
+        x: number; y: number;
+>x : number
+>y : number
+    }
+    var Point: Point = { x: 0, y: 0 };
+>Point : Point
+>Point : Point
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>y : number
+}
+
+import funlias = fundule;
+>funlias : funlias
+>fundule : fundule
+
+var p: funlias.Point;
+>p : fundule.Point
+>funlias : funlias
+>Point : fundule.Point
+
+var p: fundule.Point;
+>p : fundule.Point
+>fundule : fundule
+>Point : fundule.Point
+
+var p: { x: number; y: number; };
+>p : { x: number; y: number; }
+>x : number
+>y : number
+

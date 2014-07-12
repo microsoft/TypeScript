@@ -1,0 +1,58 @@
+=== tests/cases/compiler/wrappedAndRecursiveConstraints3.ts ===
+// no errors expected
+
+class C<T extends { length: number }> {
+>C : C<T>
+>T : T
+>length : number
+
+    constructor(x: T) { }
+>x : T
+>T : T
+
+    foo<U extends T>(x: U) {
+>foo : <U extends T>(x: U) => <V extends U>(x: V) => V
+>U : U
+>T : T
+>x : U
+>U : U
+
+        function bar<V extends U>(x: V) {
+>bar : <V extends U>(x: V) => V
+>V : V
+>U : U
+>x : V
+>V : V
+
+            return x;
+>x : V
+        }
+        return bar;
+>bar : <V extends U>(x: V) => V
+    }
+}
+
+var c = new C({ length: 2 });
+>c : C<{ length: number; }>
+>new C({ length: 2 }) : C<{ length: number; }>
+>C : typeof C
+>{ length: 2 } : { length: number; }
+>length : number
+
+var r = c.foo({ length: 3, charAt: (x: number) => { '' } });
+>r : <V extends { length: number; charAt: (x: number) => void; }>(x: V) => V
+>c.foo({ length: 3, charAt: (x: number) => { '' } }) : <V extends { length: number; charAt: (x: number) => void; }>(x: V) => V
+>c.foo : <U extends { length: number; }>(x: U) => <V extends U>(x: V) => V
+>c : C<{ length: number; }>
+>foo : <U extends { length: number; }>(x: U) => <V extends U>(x: V) => V
+>{ length: 3, charAt: (x: number) => { '' } } : { length: number; charAt: (x: number) => void; }
+>length : number
+>charAt : (x: number) => void
+>(x: number) => { '' } : (x: number) => void
+>x : number
+
+var r2 = r('');
+>r2 : string
+>r('') : string
+>r : <V extends { length: number; charAt: (x: number) => void; }>(x: V) => V
+

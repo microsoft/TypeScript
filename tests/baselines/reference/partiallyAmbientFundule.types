@@ -1,0 +1,10 @@
+=== tests/cases/compiler/partiallyAmbientFundule.ts ===
+declare module foo {
+>foo : foo
+
+    export function x(): any;
+>x : typeof x
+}
+function foo () { } // Legal, because module is ambient
+>foo : typeof foo
+

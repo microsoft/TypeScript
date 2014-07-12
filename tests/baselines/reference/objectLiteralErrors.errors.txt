@@ -1,0 +1,169 @@
+==== tests/cases/compiler/objectLiteralErrors.ts (43 errors) ====
+    
+    // Multiple properties with the same name
+    var e1 = { a: 0, a: 0 };
+                     ~~~~
+!!! objectLiteralErrors.ts(3,18): error TS2000: Duplicate identifier 'a'. Additional locations:
+!!! 	objectLiteralErrors.ts(3,12)
+    var e2 = { a: '', a: '' };
+                      ~~~~~
+!!! objectLiteralErrors.ts(4,19): error TS2000: Duplicate identifier 'a'. Additional locations:
+!!! 	objectLiteralErrors.ts(4,12)
+    var e3 = { a: 0, a: '' };
+                     ~~~~~
+!!! objectLiteralErrors.ts(5,18): error TS2000: Duplicate identifier 'a'. Additional locations:
+!!! 	objectLiteralErrors.ts(5,12)
+    var e4 = { a: true, a: false };
+                        ~~~~~~~~
+!!! objectLiteralErrors.ts(6,21): error TS2000: Duplicate identifier 'a'. Additional locations:
+!!! 	objectLiteralErrors.ts(6,12)
+    var e5 = { a: {}, a: {} };
+                      ~~~~~
+!!! objectLiteralErrors.ts(7,19): error TS2000: Duplicate identifier 'a'. Additional locations:
+!!! 	objectLiteralErrors.ts(7,12)
+    var e6 = { a: 0, 'a': 0 };
+                     ~~~~~~
+!!! objectLiteralErrors.ts(8,18): error TS2000: Duplicate identifier ''a''. Additional locations:
+!!! 	objectLiteralErrors.ts(8,12)
+    var e7 = { 'a': 0, a: 0 };
+                       ~~~~
+!!! objectLiteralErrors.ts(9,20): error TS2000: Duplicate identifier 'a'. Additional locations:
+!!! 	objectLiteralErrors.ts(9,12)
+    var e8 = { 'a': 0, "a": 0 };
+                       ~~~~~~
+!!! objectLiteralErrors.ts(10,20): error TS2000: Duplicate identifier '"a"'. Additional locations:
+!!! 	objectLiteralErrors.ts(10,12)
+    var e9 = { 'a': 0, 'a': 0 };
+                       ~~~~~~
+!!! objectLiteralErrors.ts(11,20): error TS2000: Duplicate identifier ''a''. Additional locations:
+!!! 	objectLiteralErrors.ts(11,12)
+    var e10 = { "a": 0, 'a': 0 };
+                        ~~~~~~
+!!! objectLiteralErrors.ts(12,21): error TS2000: Duplicate identifier ''a''. Additional locations:
+!!! 	objectLiteralErrors.ts(12,13)
+    var e11 = { 1.0: 0, '1': 0 };
+                        ~~~~~~
+!!! objectLiteralErrors.ts(13,21): error TS2000: Duplicate identifier ''1''. Additional locations:
+!!! 	objectLiteralErrors.ts(13,13)
+    var e12 = { 0: 0, 0: 0 };
+                      ~~~~
+!!! objectLiteralErrors.ts(14,19): error TS2000: Duplicate identifier '0'. Additional locations:
+!!! 	objectLiteralErrors.ts(14,13)
+    var e13 = { 0: 0, 0: 0 };
+                      ~~~~
+!!! objectLiteralErrors.ts(15,19): error TS2000: Duplicate identifier '0'. Additional locations:
+!!! 	objectLiteralErrors.ts(15,13)
+    var e14 = { 0: 0, 0x0: 0 };
+                      ~~~~~~
+!!! objectLiteralErrors.ts(16,19): error TS2000: Duplicate identifier '0x0'. Additional locations:
+!!! 	objectLiteralErrors.ts(16,13)
+    var e14 = { 0: 0, 000: 0 };
+                      ~~~
+!!! objectLiteralErrors.ts(17,19): error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher.
+                      ~~~~~~
+!!! objectLiteralErrors.ts(17,19): error TS2000: Duplicate identifier '000'. Additional locations:
+!!! 	objectLiteralErrors.ts(17,13)
+    var e15 = { "100": 0, 1e2: 0 };
+                          ~~~~~~
+!!! objectLiteralErrors.ts(18,23): error TS2000: Duplicate identifier '1e2'. Additional locations:
+!!! 	objectLiteralErrors.ts(18,13)
+    var e16 = { 0x20: 0, 3.2e1: 0 };
+                         ~~~~~~~~
+!!! objectLiteralErrors.ts(19,22): error TS2000: Duplicate identifier '3.2e1'. Additional locations:
+!!! 	objectLiteralErrors.ts(19,13)
+    var e17 = { a: 0, b: 1, a: 0 };
+                            ~~~~
+!!! objectLiteralErrors.ts(20,25): error TS2000: Duplicate identifier 'a'. Additional locations:
+!!! 	objectLiteralErrors.ts(20,13)
+    
+    // Accessor and property with the same name
+    var f1 = { a: 0, get a() { return 0; } };
+                         ~
+!!! objectLiteralErrors.ts(23,22): error TS2000: Duplicate identifier 'a'. Additional locations:
+!!! 	objectLiteralErrors.ts(23,12)
+    var f2 = { a: '', get a() { return ''; } };
+                          ~
+!!! objectLiteralErrors.ts(24,23): error TS2000: Duplicate identifier 'a'. Additional locations:
+!!! 	objectLiteralErrors.ts(24,12)
+    var f3 = { a: 0, get a() { return ''; } };
+                         ~
+!!! objectLiteralErrors.ts(25,22): error TS2000: Duplicate identifier 'a'. Additional locations:
+!!! 	objectLiteralErrors.ts(25,12)
+    var f4 = { a: true, get a() { return false; } };
+                            ~
+!!! objectLiteralErrors.ts(26,25): error TS2000: Duplicate identifier 'a'. Additional locations:
+!!! 	objectLiteralErrors.ts(26,12)
+    var f5 = { a: {}, get a() { return {}; } };
+                          ~
+!!! objectLiteralErrors.ts(27,23): error TS2000: Duplicate identifier 'a'. Additional locations:
+!!! 	objectLiteralErrors.ts(27,12)
+    var f6 = { a: 0, get 'a'() { return 0; } };
+                         ~~~
+!!! objectLiteralErrors.ts(28,22): error TS2000: Duplicate identifier ''a''. Additional locations:
+!!! 	objectLiteralErrors.ts(28,12)
+    var f7 = { 'a': 0, get a() { return 0; } };
+                           ~
+!!! objectLiteralErrors.ts(29,24): error TS2000: Duplicate identifier 'a'. Additional locations:
+!!! 	objectLiteralErrors.ts(29,12)
+    var f8 = { 'a': 0, get "a"() { return 0; } };
+                           ~~~
+!!! objectLiteralErrors.ts(30,24): error TS2000: Duplicate identifier '"a"'. Additional locations:
+!!! 	objectLiteralErrors.ts(30,12)
+    var f9 = { 'a': 0, get 'a'() { return 0; } };
+                           ~~~
+!!! objectLiteralErrors.ts(31,24): error TS2000: Duplicate identifier ''a''. Additional locations:
+!!! 	objectLiteralErrors.ts(31,12)
+    var f10 = { "a": 0, get 'a'() { return 0; } };
+                            ~~~
+!!! objectLiteralErrors.ts(32,25): error TS2000: Duplicate identifier ''a''. Additional locations:
+!!! 	objectLiteralErrors.ts(32,13)
+    var f11 = { 1.0: 0, get '1'() { return 0; } };
+                            ~~~
+!!! objectLiteralErrors.ts(33,25): error TS2000: Duplicate identifier ''1''. Additional locations:
+!!! 	objectLiteralErrors.ts(33,13)
+    var f12 = { 0: 0, get 0() { return 0; } };
+                          ~
+!!! objectLiteralErrors.ts(34,23): error TS2000: Duplicate identifier '0'. Additional locations:
+!!! 	objectLiteralErrors.ts(34,13)
+    var f13 = { 0: 0, get 0() { return 0; } };
+                          ~
+!!! objectLiteralErrors.ts(35,23): error TS2000: Duplicate identifier '0'. Additional locations:
+!!! 	objectLiteralErrors.ts(35,13)
+    var f14 = { 0: 0, get 0x0() { return 0; } };
+                          ~~~
+!!! objectLiteralErrors.ts(36,23): error TS2000: Duplicate identifier '0x0'. Additional locations:
+!!! 	objectLiteralErrors.ts(36,13)
+    var f14 = { 0: 0, get 000() { return 0; } };
+                          ~~~
+!!! objectLiteralErrors.ts(37,23): error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher.
+                          ~~~
+!!! objectLiteralErrors.ts(37,23): error TS2000: Duplicate identifier '000'. Additional locations:
+!!! 	objectLiteralErrors.ts(37,13)
+    var f15 = { "100": 0, get 1e2() { return 0; } };
+                              ~~~
+!!! objectLiteralErrors.ts(38,27): error TS2000: Duplicate identifier '1e2'. Additional locations:
+!!! 	objectLiteralErrors.ts(38,13)
+    var f16 = { 0x20: 0, get 3.2e1() { return 0; } };
+                             ~~~~~
+!!! objectLiteralErrors.ts(39,26): error TS2000: Duplicate identifier '3.2e1'. Additional locations:
+!!! 	objectLiteralErrors.ts(39,13)
+    var f17 = { a: 0, get b() { return 1; }, get a() { return 0; } };
+                                                 ~
+!!! objectLiteralErrors.ts(40,46): error TS2000: Duplicate identifier 'a'. Additional locations:
+!!! 	objectLiteralErrors.ts(40,13)
+    
+    // Get and set accessor with mismatched type annotations
+    var g1 = { get a(): number { return 4; }, set a(n: string) { } };
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! objectLiteralErrors.ts(43,12): error TS2096: 'get' and 'set' accessor must have the same type.
+                                              ~~~~~~~~~~~~~~~~~~~~
+!!! objectLiteralErrors.ts(43,43): error TS2096: 'get' and 'set' accessor must have the same type.
+    var g2 = { get a() { return 4; }, set a(n: string) { } };
+                                ~
+!!! objectLiteralErrors.ts(44,29): error TS2011: Cannot convert 'number' to 'string'.
+    var g3 = { get a(): number { return undefined; }, set a(n: string) { } };
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! objectLiteralErrors.ts(45,12): error TS2096: 'get' and 'set' accessor must have the same type.
+                                                      ~~~~~~~~~~~~~~~~~~~~
+!!! objectLiteralErrors.ts(45,51): error TS2096: 'get' and 'set' accessor must have the same type.
+    

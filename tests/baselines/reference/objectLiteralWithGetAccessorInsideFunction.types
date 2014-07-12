@@ -1,0 +1,25 @@
+=== tests/cases/compiler/objectLiteralWithGetAccessorInsideFunction.ts ===
+function bar() {
+>bar : typeof bar
+
+    var x = {
+>x : { _extraOccluded: number; }
+>{
+        get _extraOccluded() {
+            var occluded = 0;
+            return occluded;
+        },
+    } : { _extraOccluded: number; }
+
+        get _extraOccluded() {
+>_extraOccluded : number
+
+            var occluded = 0;
+>occluded : number
+
+            return occluded;
+>occluded : number
+
+        },
+    }
+}

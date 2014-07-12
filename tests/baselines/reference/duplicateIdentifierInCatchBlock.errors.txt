@@ -1,0 +1,26 @@
+==== tests/cases/compiler/duplicateIdentifierInCatchBlock.ts (3 errors) ====
+    var v;
+    try { } catch (e) {
+        function v() { }
+    }
+    
+    function w() { }
+    try { } catch (e) {
+        var w;
+    }
+    
+    try { } catch (e) {
+        var x;
+        function x() { } // error
+                 ~
+!!! duplicateIdentifierInCatchBlock.ts(13,14): error TS2000: Duplicate identifier 'x'. Additional locations:
+!!! 	duplicateIdentifierInCatchBlock.ts(12,9)
+        function e() { } // error
+                 ~
+!!! duplicateIdentifierInCatchBlock.ts(14,14): error TS2000: Duplicate identifier 'e'. Additional locations:
+!!! 	duplicateIdentifierInCatchBlock.ts(11,16)
+        var p: string;
+        var p: number; // error
+            ~~~~~~~~~
+!!! duplicateIdentifierInCatchBlock.ts(16,9): error TS2134: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'string', but here has type 'number'.
+    }

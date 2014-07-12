@@ -1,0 +1,8 @@
+=== tests/cases/compiler/contextualTyping29.ts ===
+function foo(param:number[]){}; foo([1, 3]);
+>foo : typeof foo
+>param : number[]
+>foo([1, 3]) : void
+>foo : typeof foo
+>[1, 3] : number[]
+

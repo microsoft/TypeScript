@@ -1,0 +1,38 @@
+==== tests/cases/compiler/clinterfaces.ts (4 errors) ====
+    module M {
+        class C { }
+        interface C { }
+                  ~
+!!! clinterfaces.ts(3,15): error TS2000: Duplicate identifier 'C'. Additional locations:
+!!! 	clinterfaces.ts(2,5)
+        interface D { }
+        class D { }
+              ~
+!!! clinterfaces.ts(5,11): error TS2000: Duplicate identifier 'D'. Additional locations:
+!!! 	clinterfaces.ts(4,5)
+    }
+    
+    interface Foo<T> {
+        a: string;
+    }
+    
+    class Foo<T>{
+          ~~~
+!!! clinterfaces.ts(12,7): error TS2000: Duplicate identifier 'Foo'. Additional locations:
+!!! 	clinterfaces.ts(8,1)
+        b: number;
+    }
+    
+    class Bar<T>{
+        b: number;
+    }
+    
+    interface Bar<T> {
+              ~~~
+!!! clinterfaces.ts(20,11): error TS2000: Duplicate identifier 'Bar'. Additional locations:
+!!! 	clinterfaces.ts(16,1)
+        a: string;
+    }
+    
+    export = Foo;
+    

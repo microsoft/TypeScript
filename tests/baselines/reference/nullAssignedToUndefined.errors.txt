@@ -1,0 +1,5 @@
+==== tests/cases/compiler/nullAssignedToUndefined.ts (1 errors) ====
+    var x = undefined = null; // error
+            ~~~~~~~~~
+!!! nullAssignedToUndefined.ts(1,9): error TS2011: Cannot convert 'any' to 'any'.
+    var y: typeof undefined = null; // ok, widened

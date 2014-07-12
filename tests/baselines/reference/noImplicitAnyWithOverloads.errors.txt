@@ -1,0 +1,18 @@
+==== tests/cases/compiler/noImplicitAnyWithOverloads.ts (4 errors) ====
+    interface A {
+        foo;
+        ~~~
+!!! noImplicitAnyWithOverloads.ts(2,5): error TS7005: Variable 'foo' implicitly has an 'any' type.
+    }
+    interface B { }
+    
+    function callb(lam: (l: A) => void);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! noImplicitAnyWithOverloads.ts(6,1): error TS7010: 'callb', which lacks return-type annotation, implicitly has an 'any' return type.
+    function callb(lam: (n: B) => void);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! noImplicitAnyWithOverloads.ts(7,1): error TS7010: 'callb', which lacks return-type annotation, implicitly has an 'any' return type.
+    function callb(a) { }
+                   ~
+!!! noImplicitAnyWithOverloads.ts(8,16): error TS7006: Parameter 'a' of 'callb' implicitly has an 'any' type.
+    callb((a) => { a.foo; }); // error, chose first overload

@@ -1,0 +1,54 @@
+==== tests/cases/compiler/assignmentCompatBug2.ts (5 errors) ====
+    var b2: { b: number;} = { a: 0 }; // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! assignmentCompatBug2.ts(1,5): error TS2012: Cannot convert '{ a: number; }' to '{ b: number; }':
+!!! 	Type '{ a: number; }' is missing property 'b' from type '{ b: number; }'.
+    
+    b2 = { a: 0 }; // error
+    ~~
+!!! assignmentCompatBug2.ts(3,1): error TS2012: Cannot convert '{ a: number; }' to '{ b: number; }':
+!!! 	Type '{ a: number; }' is missing property 'b' from type '{ b: number; }'.
+    
+    b2 = {b: 0, a: 0 };
+    
+    var b3: { f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; };
+    
+    b3 = {
+        f: (n) => { return 0; },
+        g: (s) => { return 0; },
+        m: 0,
+    }; // ok
+    
+    b3 = {
+    ~~
+!!! assignmentCompatBug2.ts(15,1): error TS2012: Cannot convert '{ f: (n: number) => number; g: (s: string) => number; }' to '{ f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }':
+!!! 	Type '{ f: (n: number) => number; g: (s: string) => number; }' is missing property 'm' from type '{ f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }'.
+        f: (n) => { return 0; },
+        g: (s) => { return 0; },
+    }; // error
+    
+    b3 = {
+    ~~
+!!! assignmentCompatBug2.ts(20,1): error TS2012: Cannot convert '{ f: (n: number) => number; m: number; }' to '{ f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }':
+!!! 	Type '{ f: (n: number) => number; m: number; }' is missing property 'g' from type '{ f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }'.
+        f: (n) => { return 0; },
+        m: 0,
+    }; // error
+    
+    b3 = {
+        f: (n) => { return 0; },
+        g: (s) => { return 0; },
+        m: 0,
+        n: 0,
+        k: (a) =>{ return null; },
+    }; // ok
+    
+    b3 = {
+    ~~
+!!! assignmentCompatBug2.ts(33,1): error TS2012: Cannot convert '{ f: (n: number) => number; g: (s: string) => number; n: number; k: (a: any) => any; }' to '{ f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }':
+!!! 	Type '{ f: (n: number) => number; g: (s: string) => number; n: number; k: (a: any) => any; }' is missing property 'm' from type '{ f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }'.
+        f: (n) => { return 0; },
+        g: (s) => { return 0; },
+        n: 0,
+        k: (a) =>{ return null; },
+    }; // error

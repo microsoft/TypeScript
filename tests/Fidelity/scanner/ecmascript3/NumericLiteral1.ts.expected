@@ -1,0 +1,14 @@
+[
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "0",
+        "value": 0,
+        "valueText": "0"
+    },
+    {
+        "kind": "EndOfFileToken",
+        "width": 0,
+        "text": ""
+    }
+]

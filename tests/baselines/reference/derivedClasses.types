@@ -1,0 +1,92 @@
+=== tests/cases/compiler/derivedClasses.ts ===
+class Red extends Color {
+>Red : Red
+>Color : Color
+
+    public shade() { 
+>shade : () => string
+
+    	var getHue = () => { return this.hue(); };
+>getHue : () => string
+>() => { return this.hue(); } : () => string
+>this.hue() : string
+>this.hue : () => string
+>this : Red
+>hue : () => string
+
+    	return getHue() + " red"; 
+>getHue() + " red" : string
+>getHue() : string
+>getHue : () => string
+    }
+}
+
+class Color {
+>Color : Color
+
+    public shade() { return "some shade"; }
+>shade : () => string
+
+    public hue() { return "some hue"; }
+>hue : () => string
+}
+
+class Blue extends Color {
+>Blue : Blue
+>Color : Color
+    
+    public shade() { 
+>shade : () => string
+
+    	var getHue = () => { return this.hue(); };
+>getHue : () => string
+>() => { return this.hue(); } : () => string
+>this.hue() : string
+>this.hue : () => string
+>this : Blue
+>hue : () => string
+
+    	return getHue() + " blue"; 
+>getHue() + " blue" : string
+>getHue() : string
+>getHue : () => string
+    }
+}
+
+var r = new Red();
+>r : Red
+>new Red() : Red
+>Red : typeof Red
+
+var b = new Blue();
+>b : Blue
+>new Blue() : Blue
+>Blue : typeof Blue
+
+>r.shade() : string
+>r.shade : () => string
+>r : Red
+
+r.shade();
+>shade : () => string
+
+r.hue();
+>r.hue() : string
+>r.hue : () => string
+>r : Red
+>hue : () => string
+
+b.shade();
+>b.shade() : string
+>b.shade : () => string
+>b : Blue
+>shade : () => string
+
+b.hue();
+>b.hue() : string
+>b.hue : () => string
+>b : Blue
+>hue : () => string
+
+
+

@@ -1,0 +1,7 @@
+==== tests/cases/compiler/prototypes.ts (1 errors) ====
+    Object.prototype; // ok
+    new Object().prototype; // error
+                 ~~~~~~~~~
+!!! prototypes.ts(2,14): error TS2094: The property 'prototype' does not exist on value of type 'Object'.
+    function f() {}
+    f.prototype;

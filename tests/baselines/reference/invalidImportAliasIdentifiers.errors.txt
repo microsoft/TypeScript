@@ -1,0 +1,41 @@
+==== tests/cases/compiler/invalidImportAliasIdentifiers.ts (8 errors) ====
+    // none of these should work, since non are actually modules
+    
+    var V = 12;
+    
+    import v = V;
+    ~~~~~~~~~~~~~
+!!! invalidImportAliasIdentifiers.ts(5,1): error TS2072: Module cannot be aliased to a non-module type.
+               ~
+!!! invalidImportAliasIdentifiers.ts(5,12): error TS2179: Unable to resolve module reference 'V'.
+    
+    class C {
+        name: string;
+    }
+    
+    import c = C;
+    ~~~~~~~~~~~~~
+!!! invalidImportAliasIdentifiers.ts(11,1): error TS2072: Module cannot be aliased to a non-module type.
+               ~
+!!! invalidImportAliasIdentifiers.ts(11,12): error TS2179: Unable to resolve module reference 'C'.
+    
+    enum E {
+        Red, Blue
+    }
+    
+    import e = E;
+    ~~~~~~~~~~~~~
+!!! invalidImportAliasIdentifiers.ts(17,1): error TS2072: Module cannot be aliased to a non-module type.
+               ~
+!!! invalidImportAliasIdentifiers.ts(17,12): error TS2179: Unable to resolve module reference 'E'.
+    
+    interface I {
+        id: number;
+    }
+    
+    import i = I;
+    ~~~~~~~~~~~~~
+!!! invalidImportAliasIdentifiers.ts(23,1): error TS2072: Module cannot be aliased to a non-module type.
+               ~
+!!! invalidImportAliasIdentifiers.ts(23,12): error TS2179: Unable to resolve module reference 'I'.
+    

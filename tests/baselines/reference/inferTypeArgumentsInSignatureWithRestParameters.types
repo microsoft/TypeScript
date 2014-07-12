@@ -1,0 +1,52 @@
+=== tests/cases/compiler/inferTypeArgumentsInSignatureWithRestParameters.ts ===
+function f<T>(array: T[], ...args) { }
+>f : typeof f
+>T : T
+>array : T[]
+>T : T
+>args : any[]
+
+function g(array: number[], ...args) { }
+>g : typeof g
+>array : number[]
+>args : any[]
+
+function h<T>(nonarray: T, ...args) { }
+>h : typeof h
+>T : T
+>nonarray : T
+>T : T
+>args : any[]
+
+function i<T>(array: T[], opt?: any[]) { }
+>i : typeof i
+>T : T
+>array : T[]
+>T : T
+>opt : any[]
+
+var a = [1, 2, 3, 4, 5];
+>a : number[]
+>[1, 2, 3, 4, 5] : number[]
+
+>f(a) : void
+>f : typeof f
+
+f(a); // OK
+>a : number[]
+
+g(a); // OK
+>g(a) : void
+>g : typeof g
+>a : number[]
+
+h(a); // OK
+>h(a) : void
+>h : typeof h
+>a : number[]
+
+i(a); // OK
+>i(a) : void
+>i : typeof i
+>a : number[]
+

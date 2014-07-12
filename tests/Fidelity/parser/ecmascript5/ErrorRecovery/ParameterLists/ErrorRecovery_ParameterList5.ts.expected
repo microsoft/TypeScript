@@ -1,0 +1,154 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "diagnostics": [
+        {
+            "start": 10,
+            "length": 2,
+            "diagnosticCode": "'{0}' expected.",
+            "arguments": [
+                ")"
+            ]
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 16,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullWidth": 16,
+                "isIncrementallyUnusable": true,
+                "expression": {
+                    "kind": "ParenthesizedArrowFunctionExpression",
+                    "fullWidth": 16,
+                    "isIncrementallyUnusable": true,
+                    "callSignature": {
+                        "kind": "CallSignature",
+                        "fullWidth": 10,
+                        "isIncrementallyUnusable": true,
+                        "parameterList": {
+                            "kind": "ParameterList",
+                            "fullWidth": 10,
+                            "isIncrementallyUnusable": true,
+                            "openParenToken": {
+                                "kind": "OpenParenToken",
+                                "width": 1,
+                                "text": "(",
+                                "value": "(",
+                                "valueText": "("
+                            },
+                            "parameters": [
+                                {
+                                    "kind": "Parameter",
+                                    "fullWidth": 9,
+                                    "modifiers": [],
+                                    "identifier": {
+                                        "kind": "IdentifierName",
+                                        "width": 1,
+                                        "text": "a",
+                                        "value": "a",
+                                        "valueText": "a"
+                                    },
+                                    "typeAnnotation": {
+                                        "kind": "TypeAnnotation",
+                                        "fullWidth": 8,
+                                        "colonToken": {
+                                            "kind": "ColonToken",
+                                            "width": 1,
+                                            "text": ":",
+                                            "value": ":",
+                                            "valueText": ":"
+                                        },
+                                        "type": {
+                                            "kind": "NumberKeyword",
+                                            "width": 6,
+                                            "fullWidth": 7,
+                                            "text": "number",
+                                            "value": "number",
+                                            "valueText": "number",
+                                            "hasTrailingTrivia": true,
+                                            "trailingTrivia": [
+                                                {
+                                                    "kind": "WhitespaceTrivia",
+                                                    "text": " "
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ],
+                            "closeParenToken": {
+                                "kind": "CloseParenToken",
+                                "width": 0,
+                                "text": ""
+                            }
+                        }
+                    },
+                    "equalsGreaterThanToken": {
+                        "kind": "EqualsGreaterThanToken",
+                        "width": 2,
+                        "fullWidth": 3,
+                        "text": "=>",
+                        "value": "=>",
+                        "valueText": "=>",
+                        "hasTrailingTrivia": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "text": " "
+                            }
+                        ]
+                    },
+                    "block": {
+                        "kind": "Block",
+                        "fullWidth": 3,
+                        "openBraceToken": {
+                            "kind": "OpenBraceToken",
+                            "width": 1,
+                            "fullWidth": 2,
+                            "text": "{",
+                            "value": "{",
+                            "valueText": "{",
+                            "hasTrailingTrivia": true,
+                            "trailingTrivia": [
+                                {
+                                    "kind": "WhitespaceTrivia",
+                                    "text": " "
+                                }
+                            ]
+                        },
+                        "statements": [],
+                        "closeBraceToken": {
+                            "kind": "CloseBraceToken",
+                            "width": 1,
+                            "text": "}",
+                            "value": "}",
+                            "valueText": "}"
+                        }
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 0,
+                    "text": ""
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 16
+    }
+}

@@ -1,0 +1,63 @@
+==== tests/cases/compiler/propertyAccessOnTypeParameterWithConstraints5.ts (9 errors) ====
+    class A {
+        foo(): string { return ''; }
+    }
+    
+    class B extends A {
+        bar(): string {
+            return '';
+        }
+    }
+    
+    class C<U extends T, T extends A> {
+            ~~~~~~~~~~~
+!!! propertyAccessOnTypeParameterWithConstraints5.ts(11,9): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        f() {
+            var x: U;
+            var a = x['foo'](); // should be string
+            return a + x.foo() + x.notHere();
+                                   ~~~~~~~
+!!! propertyAccessOnTypeParameterWithConstraints5.ts(15,32): error TS2094: The property 'notHere' does not exist on value of type 'U'.
+        }
+    }
+    
+    var r = (new C<B, A>()).f();
+    
+    interface I<U extends T, T extends A> {
+                ~~~~~~~~~~~
+!!! propertyAccessOnTypeParameterWithConstraints5.ts(21,13): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        foo: U;
+    }
+    var i: I<B, A>;
+    var r2 = i.foo.notHere();
+                   ~~~~~~~
+!!! propertyAccessOnTypeParameterWithConstraints5.ts(25,16): error TS2094: The property 'notHere' does not exist on value of type 'B'.
+    var r2b = i.foo['foo']();
+    
+    var a: {
+        <U extends T, T extends A>(): U;
+         ~~~~~~~~~~~
+!!! propertyAccessOnTypeParameterWithConstraints5.ts(29,6): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+    }
+    // BUG 794164
+    var r3: string = a().notHere();
+                         ~~~~~~~
+!!! propertyAccessOnTypeParameterWithConstraints5.ts(32,22): error TS2094: The property 'notHere' does not exist on value of type '{}'.
+    var r3b: string = a()['foo']();
+    
+    var b = {
+        foo: <U extends T, T extends A>(x: U): U => {
+              ~~~~~~~~~~~
+!!! propertyAccessOnTypeParameterWithConstraints5.ts(36,11): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+            var a = x['foo'](); // should be string
+            return a + x.notHere();
+                   ~~~~~~~~~~~~~~~
+!!! propertyAccessOnTypeParameterWithConstraints5.ts(38,16): error TS2011: Cannot convert 'string' to 'U'.
+                         ~~~~~~~
+!!! propertyAccessOnTypeParameterWithConstraints5.ts(38,22): error TS2094: The property 'notHere' does not exist on value of type 'U'.
+        },
+        // BUG 794164
+        bar: b.foo(1).notHere()
+    }
+    
+    var r4 = b.foo(new B()); // error after constraints above made illegal, doesn't matter

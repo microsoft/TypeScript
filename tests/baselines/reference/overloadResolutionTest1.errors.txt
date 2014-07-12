@@ -1,0 +1,43 @@
+==== tests/cases/compiler/overloadResolutionTest1.ts (6 errors) ====
+    
+    function foo(bar:{a:number;}[]):string;
+    function foo(bar:{a:boolean;}[]):number;
+    function foo(bar:{a:any;}[]):any{ return bar };
+    
+    var x1 = foo([{a:true}]); // works
+    var x11 = foo([{a:0}]); // works
+    var x111 = foo([{a:"s"}]); // error - does not match any signature
+               ~~~
+!!! overloadResolutionTest1.ts(8,12): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Types of property 'pop' of types '{}[]' and '{ a: number; }[]' are incompatible:
+!!! 		Call signatures of types '() => {}' and '() => { a: number; }' are incompatible:
+!!! 			Type '{}' is missing property 'a' from type '{ a: number; }'.
+               ~~~
+!!! overloadResolutionTest1.ts(8,12): error TS2087: Could not select overload for 'call' expression.
+    var x1111 = foo([{a:null}]); // works - ambiguous call is resolved to be the first in the overload set so this returns a string
+    
+    
+    
+    function foo2(bar:{a:number;}):string;
+    function foo2(bar:{a:boolean;}):number;
+    function foo2(bar:{a:any;}):any{ return bar };
+    
+    var x2 = foo2({a:0}); // works
+    var x3 = foo2({a:true}); // works
+    var x4 = foo2({a:"s"}); // error
+             ~~~~
+!!! overloadResolutionTest1.ts(19,10): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Types of property 'a' of types '{ a: string; }' and '{ a: number; }' are incompatible.
+             ~~~~
+!!! overloadResolutionTest1.ts(19,10): error TS2087: Could not select overload for 'call' expression.
+    
+    
+    function foo4(bar:{a:number;}):number;
+    function foo4(bar:{a:string;}):string;
+    function foo4(bar:{a:any;}):any{ return bar };
+    var x = foo4({a:true}); // error
+            ~~~~
+!!! overloadResolutionTest1.ts(25,9): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Types of property 'a' of types '{ a: boolean; }' and '{ a: number; }' are incompatible.
+            ~~~~
+!!! overloadResolutionTest1.ts(25,9): error TS2087: Could not select overload for 'call' expression.

@@ -1,0 +1,85 @@
+[
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "fullWidth": 308,
+        "text": "0",
+        "value": 0,
+        "valueText": "0",
+        "hasLeadingTrivia": true,
+        "hasLeadingComment": true,
+        "hasLeadingNewLine": true,
+        "leadingTrivia": [
+            {
+                "kind": "SingleLineCommentTrivia",
+                "text": "// Copyright 2009 the Sputnik authors.  All rights reserved."
+            },
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            },
+            {
+                "kind": "SingleLineCommentTrivia",
+                "text": "// This code is governed by the BSD license found in the LICENSE file."
+            },
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            },
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            },
+            {
+                "kind": "MultiLineCommentTrivia",
+                "text": "/**\n * HexIntegerLiteral :: 0(x/X) is incorrect\n *\n * @path ch07/7.8/7.8.3/S7.8.3_A6.1_T1.js\n * @description Checking if execution of \"0x\" passes\n * @negative\n */"
+            },
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            },
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            },
+            {
+                "kind": "SingleLineCommentTrivia",
+                "text": "//CHECK#1"
+            },
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "x",
+        "value": "x",
+        "valueText": "x",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "EndOfFileToken",
+        "width": 0,
+        "fullWidth": 1,
+        "text": "",
+        "hasLeadingTrivia": true,
+        "hasLeadingNewLine": true,
+        "leadingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    }
+]

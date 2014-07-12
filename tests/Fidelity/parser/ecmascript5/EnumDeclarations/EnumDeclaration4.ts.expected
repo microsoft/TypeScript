@@ -1,0 +1,112 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "diagnostics": [
+        {
+            "start": 0,
+            "length": 4,
+            "diagnosticCode": "Unexpected token; '{0}' expected.",
+            "arguments": [
+                "module, class, interface, enum, import or statement"
+            ]
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 14,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullWidth": 14,
+                "isIncrementallyUnusable": true,
+                "expression": {
+                    "kind": "VoidExpression",
+                    "fullWidth": 14,
+                    "isIncrementallyUnusable": true,
+                    "voidKeyword": {
+                        "kind": "VoidKeyword",
+                        "width": 4,
+                        "fullWidth": 10,
+                        "text": "void",
+                        "value": "void",
+                        "valueText": "void",
+                        "hasLeadingTrivia": true,
+                        "hasLeadingSkippedText": true,
+                        "hasTrailingTrivia": true,
+                        "leadingTrivia": [
+                            {
+                                "kind": "SkippedTokenTrivia",
+                                "skippedToken": {
+                                    "kind": "EnumKeyword",
+                                    "width": 4,
+                                    "text": "enum",
+                                    "value": "enum",
+                                    "valueText": "enum"
+                                }
+                            },
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "text": " "
+                            }
+                        ],
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "text": " "
+                            }
+                        ]
+                    },
+                    "expression": {
+                        "kind": "ObjectLiteralExpression",
+                        "fullWidth": 4,
+                        "openBraceToken": {
+                            "kind": "OpenBraceToken",
+                            "width": 1,
+                            "fullWidth": 3,
+                            "text": "{",
+                            "value": "{",
+                            "valueText": "{",
+                            "hasTrailingTrivia": true,
+                            "hasTrailingNewLine": true,
+                            "trailingTrivia": [
+                                {
+                                    "kind": "NewLineTrivia",
+                                    "text": "\r\n"
+                                }
+                            ]
+                        },
+                        "propertyAssignments": [],
+                        "closeBraceToken": {
+                            "kind": "CloseBraceToken",
+                            "width": 1,
+                            "text": "}",
+                            "value": "}",
+                            "valueText": "}"
+                        }
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 0,
+                    "text": ""
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            13
+        ],
+        "length": 14
+    }
+}

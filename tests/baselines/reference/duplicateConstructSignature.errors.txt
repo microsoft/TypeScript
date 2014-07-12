@@ -1,0 +1,7 @@
+==== tests/cases/compiler/duplicateConstructSignature.ts (1 errors) ====
+    interface I {
+        (): number;
+        (): string;
+        ~~~~~~~~~~
+!!! duplicateConstructSignature.ts(3,5): error TS2175: Overloads cannot differ only by return type.
+    }

@@ -1,0 +1,111 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 50,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ImportDeclaration",
+                "fullWidth": 50,
+                "modifiers": [],
+                "importKeyword": {
+                    "kind": "ImportKeyword",
+                    "width": 6,
+                    "fullWidth": 7,
+                    "text": "import",
+                    "value": "import",
+                    "valueText": "import",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "text": " "
+                        }
+                    ]
+                },
+                "identifier": {
+                    "kind": "IdentifierName",
+                    "width": 10,
+                    "fullWidth": 11,
+                    "text": "TypeScript",
+                    "value": "TypeScript",
+                    "valueText": "TypeScript",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "text": " "
+                        }
+                    ]
+                },
+                "equalsToken": {
+                    "kind": "EqualsToken",
+                    "width": 1,
+                    "fullWidth": 2,
+                    "text": "=",
+                    "value": "=",
+                    "valueText": "=",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "text": " "
+                        }
+                    ]
+                },
+                "moduleReference": {
+                    "kind": "Last",
+                    "fullWidth": 29,
+                    "moduleName": {
+                        "kind": "QualifiedName",
+                        "fullWidth": 29,
+                        "left": {
+                            "kind": "IdentifierName",
+                            "width": 18,
+                            "text": "TypeScriptServices",
+                            "value": "TypeScriptServices",
+                            "valueText": "TypeScriptServices"
+                        },
+                        "dotToken": {
+                            "kind": "DotToken",
+                            "width": 1,
+                            "text": ".",
+                            "value": ".",
+                            "valueText": "."
+                        },
+                        "right": {
+                            "kind": "IdentifierName",
+                            "width": 10,
+                            "text": "TypeScript",
+                            "value": "TypeScript",
+                            "valueText": "TypeScript"
+                        }
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 50
+    }
+}

@@ -1,0 +1,36 @@
+==== tests/cases/compiler/conditionalOperatorWithoutIdenticalBCT.ts (7 errors) ====
+    //Cond ? Expr1 : Expr2,  Expr1 and Expr2 have no identical best common type
+    class X { propertyX: any; propertyX1: number; propertyX2: string };
+    class A extends X { propertyA: number };
+    class B extends X { propertyB: string };
+    
+    var x: X;
+    var a: A;
+    var b: B;
+    
+    //Expect to have compiler errors
+    //Be not contextually typed
+    true ? a : b;
+    ~~~~~~~~~~~~
+!!! conditionalOperatorWithoutIdenticalBCT.ts(12,1): error TS2226: Type of conditional '{}' must be identical to 'A' or 'B'.
+    var result1 = true ? a : b;
+                  ~~~~~~~~~~~~
+!!! conditionalOperatorWithoutIdenticalBCT.ts(13,15): error TS2226: Type of conditional '{}' must be identical to 'A' or 'B'.
+    
+    //Be contextually typed and and bct is not identical
+    var result2: A = true ? a : b;
+                     ~~~~~~~~~~~~
+!!! conditionalOperatorWithoutIdenticalBCT.ts(16,18): error TS2227: Type of conditional '{}' must be identical to 'A', 'B' or 'A'.
+    var result3: B = true ? a : b;
+                     ~~~~~~~~~~~~
+!!! conditionalOperatorWithoutIdenticalBCT.ts(17,18): error TS2227: Type of conditional '{}' must be identical to 'A', 'B' or 'B'.
+    
+    var result4: (t: X) => number = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
+                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! conditionalOperatorWithoutIdenticalBCT.ts(19,33): error TS2227: Type of conditional '{}' must be identical to '(m: X) => number', '(n: X) => string' or '(t: X) => number'.
+    var result5: (t: X) => string = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
+                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! conditionalOperatorWithoutIdenticalBCT.ts(20,33): error TS2227: Type of conditional '{}' must be identical to '(m: X) => number', '(n: X) => string' or '(t: X) => string'.
+    var result6: (t: X) => boolean = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! conditionalOperatorWithoutIdenticalBCT.ts(21,34): error TS2227: Type of conditional '{}' must be identical to '(m: X) => number', '(n: X) => string' or '(t: X) => boolean'.

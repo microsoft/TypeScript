@@ -1,0 +1,8 @@
+==== tests/cases/compiler/classWithOverloadImplementationOfWrongName.ts (1 errors) ====
+    class C {
+        foo(): string;
+        foo(x): number;
+        bar(x): any { }
+        ~~~
+!!! classWithOverloadImplementationOfWrongName.ts(4,5): error TS1043: Function overload name must be 'foo'.
+    }

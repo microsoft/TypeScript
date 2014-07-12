@@ -1,0 +1,65 @@
+=== tests/cases/compiler/ambientModuleExports.ts ===
+declare module Foo {
+>Foo : Foo
+
+	function a():void;
+>a : typeof a
+
+	var b:number;
+>b : number
+
+	class C {}
+>C : C
+}
+
+>Foo.a() : void
+>Foo.a : typeof Foo.a
+>Foo : typeof Foo
+
+Foo.a();
+>a : typeof Foo.a
+
+Foo.b;
+>Foo.b : number
+>Foo : typeof Foo
+>b : number
+
+var c = new Foo.C();
+>c : Foo.C
+>new Foo.C() : Foo.C
+>Foo.C : typeof Foo.C
+>Foo : typeof Foo
+>C : typeof Foo.C
+
+declare module Foo2 {
+>Foo2 : Foo2
+
+    export function a(): void;
+>a : typeof a
+
+    export var b: number;
+>b : number
+
+    export class C { }
+>C : C
+}
+
+>Foo2.a() : void
+>Foo2.a : typeof Foo2.a
+>Foo2 : typeof Foo2
+
+Foo2.a();
+>a : typeof Foo2.a
+
+Foo2.b;
+>Foo2.b : number
+>Foo2 : typeof Foo2
+>b : number
+
+var c2 = new Foo2.C();
+>c2 : Foo2.C
+>new Foo2.C() : Foo2.C
+>Foo2.C : typeof Foo2.C
+>Foo2 : typeof Foo2
+>C : typeof Foo2.C
+

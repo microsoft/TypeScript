@@ -1,0 +1,1 @@
+//// [interfaceWithStringIndexerHidingBaseTypeIndexer3.js]

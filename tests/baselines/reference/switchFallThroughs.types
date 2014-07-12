@@ -1,0 +1,27 @@
+=== tests/cases/compiler/switchFallThroughs.ts ===
+function R1(index: number) {
+>R1 : typeof R1
+>index : number
+
+    switch (index) {
+>index : number
+
+        case 0:
+        case 1:
+        case 2:
+            var a = 'a';
+>a : string
+
+            return a;
+>a : string
+
+        case 3:
+        case 4: {
+            return 'b';
+        }
+		case 5:
+		default:
+			return 'c';
+    }
+}
+

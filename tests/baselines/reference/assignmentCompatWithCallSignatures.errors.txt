@@ -1,0 +1,68 @@
+==== tests/cases/compiler/assignmentCompatWithCallSignatures.ts (8 errors) ====
+    // void returning call signatures can be assigned a non-void returning call signature that otherwise matches
+    
+    interface T {
+        (x: number): void;
+    }
+    var t: T;
+    var a: { (x: number): void };
+    
+    t = a;
+    a = t;
+    
+    interface S {
+        (x: number): string;
+    }
+    var s: S;
+    var a2: { (x: number): string };
+    t = s;
+    t = a2;
+    a = s;
+    a = a2;
+    
+    t = <T>(x: T) => 1;
+    t = () => 1;
+    t = function (x: number) { return ''; }
+    a = <T>(x: T) => 1;
+    a = () => 1;
+    a = function (x: number) { return ''; }
+    
+    interface S2 {
+        (x: string): void;
+    }
+    var s2: S2;
+    var a3: { (x: string): void };
+    // these are errors
+    t = s2;
+    ~
+!!! assignmentCompatWithCallSignatures.ts(35,1): error TS2012: Cannot convert 'S2' to 'T':
+!!! 	Call signatures of types 'S2' and 'T' are incompatible.
+    t = a3;
+    ~
+!!! assignmentCompatWithCallSignatures.ts(36,1): error TS2012: Cannot convert '(x: string) => void' to 'T':
+!!! 	Call signatures of types '(x: string) => void' and 'T' are incompatible.
+    t = (x: string) => 1;
+    ~
+!!! assignmentCompatWithCallSignatures.ts(37,1): error TS2012: Cannot convert '(x: string) => number' to 'T':
+!!! 	Call signatures of types '(x: string) => number' and 'T' are incompatible.
+    t = function (x: string) { return ''; }
+    ~
+!!! assignmentCompatWithCallSignatures.ts(38,1): error TS2012: Cannot convert '(x: string) => string' to 'T':
+!!! 	Call signatures of types '(x: string) => string' and 'T' are incompatible.
+    a = s2;
+    ~
+!!! assignmentCompatWithCallSignatures.ts(39,1): error TS2012: Cannot convert 'S2' to '(x: number) => void':
+!!! 	Call signatures of types 'S2' and '(x: number) => void' are incompatible.
+    a = a3;
+    ~
+!!! assignmentCompatWithCallSignatures.ts(40,1): error TS2012: Cannot convert '(x: string) => void' to '(x: number) => void':
+!!! 	Call signatures of types '(x: string) => void' and '(x: number) => void' are incompatible.
+    a = (x: string) => 1;
+    ~
+!!! assignmentCompatWithCallSignatures.ts(41,1): error TS2012: Cannot convert '(x: string) => number' to '(x: number) => void':
+!!! 	Call signatures of types '(x: string) => number' and '(x: number) => void' are incompatible.
+    a = function (x: string) { return ''; }
+    ~
+!!! assignmentCompatWithCallSignatures.ts(42,1): error TS2012: Cannot convert '(x: string) => string' to '(x: number) => void':
+!!! 	Call signatures of types '(x: string) => string' and '(x: number) => void' are incompatible.
+    

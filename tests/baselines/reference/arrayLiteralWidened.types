@@ -1,0 +1,50 @@
+=== tests/cases/compiler/arrayLiteralWidened.ts ===
+// array literals are widened upon assignment according to their element type
+
+var a = []; // any[]
+>a : any[]
+>[] : any[]
+
+var a = [null, null];
+>a : any[]
+>[null, null] : any[]
+
+var a = [undefined, undefined];
+>a : any[]
+>[undefined, undefined] : any[]
+>undefined : any
+>undefined : any
+
+var b = [[], [null, null]]; // any[][]
+>b : any[][]
+>[[], [null, null]] : any[][]
+>[] : any[]
+>[null, null] : any[]
+
+var b = [[], []];
+>b : any[][]
+>[[], []] : any[][]
+>[] : any[]
+>[] : any[]
+
+var b = [[undefined, undefined]];
+>b : any[][]
+>[[undefined, undefined]] : any[][]
+>[undefined, undefined] : any[]
+>undefined : any
+>undefined : any
+
+var c = [[[]]]; // any[][][]
+>c : any[][][]
+>[[[]]] : any[][][]
+>[[]] : any[][]
+>[] : any[]
+
+var c = [[[null]],[undefined]]
+>c : any[][][]
+>[[[null]],[undefined]] : any[][][]
+>[[null]] : any[][]
+>[null] : any[]
+>[undefined] : any[]
+>undefined : any
+

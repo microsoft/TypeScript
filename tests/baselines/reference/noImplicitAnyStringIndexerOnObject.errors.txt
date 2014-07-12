@@ -1,0 +1,5 @@
+==== tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts (1 errors) ====
+    
+    var x = {}["hello"];
+               ~~~~~~~
+!!! noImplicitAnyStringIndexerOnObject.ts(2,12): error TS7017: Index signature of object type implicitly has an 'any' type.

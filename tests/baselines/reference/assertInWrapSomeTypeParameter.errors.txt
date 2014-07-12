@@ -1,0 +1,10 @@
+==== tests/cases/compiler/assertInWrapSomeTypeParameter.ts (2 errors) ====
+    class C<T extends C<T>> {
+            ~~~~~~~~~~~~~~
+!!! assertInWrapSomeTypeParameter.ts(1,9): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        foo<U extends C<C<T>>(x: U) {
+                             ~
+!!! assertInWrapSomeTypeParameter.ts(2,26): error TS1005: '>' expected.
+            return null;
+        }
+    }

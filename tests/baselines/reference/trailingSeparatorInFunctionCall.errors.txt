@@ -1,0 +1,22 @@
+==== tests/cases/compiler/trailingSeparatorInFunctionCall.ts (6 errors) ====
+    function f(x, y) {
+    }
+    
+    f(1, 2, );
+          ~
+!!! trailingSeparatorInFunctionCall.ts(4,7): error TS1009: Trailing separator not allowed.
+    ~
+!!! trailingSeparatorInFunctionCall.ts(4,1): error TS2081: Supplied parameters do not match any signature of call target.
+    ~
+!!! trailingSeparatorInFunctionCall.ts(4,1): error TS2087: Could not select overload for 'call' expression.
+    
+    function f2<T>(x: T, y: T) {
+    }
+    
+    f2(1, 2, );
+           ~
+!!! trailingSeparatorInFunctionCall.ts(9,8): error TS1009: Trailing separator not allowed.
+    ~~
+!!! trailingSeparatorInFunctionCall.ts(9,1): error TS2081: Supplied parameters do not match any signature of call target.
+    ~~
+!!! trailingSeparatorInFunctionCall.ts(9,1): error TS2087: Could not select overload for 'call' expression.

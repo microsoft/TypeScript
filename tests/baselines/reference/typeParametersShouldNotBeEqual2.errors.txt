@@ -1,0 +1,25 @@
+==== tests/cases/compiler/typeParametersShouldNotBeEqual2.ts (6 errors) ====
+    function ff<T extends Date, U extends Date, V>(x: T, y: U, z: V) {
+        var zz: Object;
+        x = x;  // Ok
+        x = y;  // Ok
+        ~
+!!! typeParametersShouldNotBeEqual2.ts(4,5): error TS2011: Cannot convert 'U' to 'T'.
+        x = z;  // Error
+        ~
+!!! typeParametersShouldNotBeEqual2.ts(5,5): error TS2011: Cannot convert 'V' to 'T'.
+        z = x;  // Error
+        ~
+!!! typeParametersShouldNotBeEqual2.ts(6,5): error TS2011: Cannot convert 'T' to 'V'.
+        y = z;  // Error
+        ~
+!!! typeParametersShouldNotBeEqual2.ts(7,5): error TS2011: Cannot convert 'V' to 'U'.
+        z = y;  // Error
+        ~
+!!! typeParametersShouldNotBeEqual2.ts(8,5): error TS2011: Cannot convert 'U' to 'V'.
+        x = zz;  // Error
+        ~
+!!! typeParametersShouldNotBeEqual2.ts(9,5): error TS2011: Cannot convert 'Object' to 'T'.
+        zz = x;  // Ok
+    }
+    

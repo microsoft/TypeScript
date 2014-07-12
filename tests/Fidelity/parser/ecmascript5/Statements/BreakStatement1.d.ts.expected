@@ -1,0 +1,50 @@
+{
+    "isDeclaration": true,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "diagnostics": [
+        {
+            "start": 0,
+            "length": 5,
+            "diagnosticCode": "Statements are not allowed in ambient contexts."
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 6,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "BreakStatement",
+                "fullWidth": 6,
+                "breakKeyword": {
+                    "kind": "BreakKeyword",
+                    "width": 5,
+                    "text": "break",
+                    "value": "break",
+                    "valueText": "break"
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 6
+    }
+}

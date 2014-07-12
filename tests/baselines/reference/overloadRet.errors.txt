@@ -1,0 +1,13 @@
+==== tests/cases/compiler/overloadRet.ts (1 errors) ====
+    interface I {
+        f(s:string):number;  
+        f(n:number):string;
+        g(n:number):any; 
+        g(n:number,m:number):string;
+        h(n:number):I;  
+        h(b:boolean):number;
+        i(b:boolean):number;
+        i(b:boolean):any;
+        ~~~~~~~~~~~~~~~~
+!!! overloadRet.ts(9,5): error TS2175: Overloads cannot differ only by return type.
+    }

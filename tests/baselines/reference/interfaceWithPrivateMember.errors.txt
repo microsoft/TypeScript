@@ -1,0 +1,24 @@
+==== tests/cases/compiler/interfaceWithPrivateMember.ts (5 errors) ====
+    // interfaces do not permit private members, these are errors
+    
+    interface I {
+        private x: string;
+        ~~~~~~~
+!!! interfaceWithPrivateMember.ts(4,5): error TS1008: Unexpected token; 'call, construct, index, property or function signature' expected.
+    }
+    
+    interface I2<T> {
+        private y: T;
+        ~~~~~~~
+!!! interfaceWithPrivateMember.ts(8,5): error TS1008: Unexpected token; 'call, construct, index, property or function signature' expected.
+    }
+    
+    var x: {
+        private y: string;
+        ~~~~~~~
+!!! interfaceWithPrivateMember.ts(12,5): error TS1008: Unexpected token; 'call, construct, index, property or function signature' expected.
+                   ~~~~~~
+!!! interfaceWithPrivateMember.ts(12,16): error TS2095: Could not find symbol 'string'.
+    }
+    ~
+!!! interfaceWithPrivateMember.ts(13,1): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.

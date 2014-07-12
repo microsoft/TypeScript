@@ -1,0 +1,46 @@
+==== tests/cases/compiler/primtiveTypesAreIdentical.ts (7 errors) ====
+    // primitive types are identical to themselves so these overloads will all cause errors
+    
+    function foo1(x: number);
+    function foo1(x: number);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! primtiveTypesAreIdentical.ts(4,1): error TS2144: Duplicate overload signature for 'foo1'.
+    function foo1(x: any) { }
+    
+    function foo2(x: string);
+    function foo2(x: string);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! primtiveTypesAreIdentical.ts(8,1): error TS2144: Duplicate overload signature for 'foo2'.
+    function foo2(x: any) { }
+    
+    function foo3(x: boolean);
+    function foo3(x: boolean);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! primtiveTypesAreIdentical.ts(12,1): error TS2144: Duplicate overload signature for 'foo3'.
+    function foo3(x: any) { }
+    
+    function foo4(x: any);
+    function foo4(x: any);
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! primtiveTypesAreIdentical.ts(16,1): error TS2144: Duplicate overload signature for 'foo4'.
+    function foo4(x: any) { }
+    
+    function foo5(x: 'a');
+    function foo5(x: 'a');
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! primtiveTypesAreIdentical.ts(20,1): error TS2144: Duplicate overload signature for 'foo5'.
+    function foo5(x: string);
+    function foo5(x: any) { }
+    
+    enum E { A }
+    function foo6(x: E);
+    function foo6(x: E);
+    ~~~~~~~~~~~~~~~~~~~~
+!!! primtiveTypesAreIdentical.ts(26,1): error TS2144: Duplicate overload signature for 'foo6'.
+    function foo6(x: any) { }
+    
+    function foo7(x: void);
+    function foo7(x: void);
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! primtiveTypesAreIdentical.ts(30,1): error TS2144: Duplicate overload signature for 'foo7'.
+    function foo7(x: any) { }

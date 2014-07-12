@@ -1,0 +1,46 @@
+=== tests/cases/compiler/objectTypeWithCallSignatureAppearsToBeFunctionType.ts ===
+// objects with call signatures should be permitted where function types are expected
+// no errors expected below
+
+interface I {
+>I : I
+
+    (): void;
+}
+
+var i: I;
+>i : I
+>I : I
+
+var r2: void = i();
+>r2 : void
+>i() : void
+>i : I
+
+var r2b: (x: any, y?: any) => any = i.apply;
+>r2b : (x: any, y?: any) => any
+>x : any
+>y : any
+>i.apply : (thisArg: any, argArray?: any) => any
+>i : I
+>apply : (thisArg: any, argArray?: any) => any
+
+var b: {
+>b : () => void
+
+    (): void;
+}
+
+var r4: void = b();
+>r4 : void
+>b() : void
+>b : () => void
+
+var rb4: (x: any, y?: any) => any = b.apply;
+>rb4 : (x: any, y?: any) => any
+>x : any
+>y : any
+>b.apply : (thisArg: any, argArray?: any) => any
+>b : () => void
+>apply : (thisArg: any, argArray?: any) => any
+

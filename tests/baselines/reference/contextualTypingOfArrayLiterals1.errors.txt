@@ -1,0 +1,13 @@
+==== tests/cases/compiler/contextualTypingOfArrayLiterals1.ts (1 errors) ====
+    interface I {
+       [x: number]: Date;
+    }
+    
+    var x3: I = [new Date(), 1]; 
+        ~~~~~~~~~~~~~~~~~~~~~~~
+!!! contextualTypingOfArrayLiterals1.ts(5,5): error TS2012: Cannot convert '{}[]' to 'I':
+!!! 	Index signatures of types '{}[]' and 'I' are incompatible:
+!!! 		Type '{}' is missing property 'toDateString' from type 'Date'.
+    var r2 = x3[1]; 
+    r2.getDate(); 
+    

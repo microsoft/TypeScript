@@ -1,0 +1,16 @@
+==== tests/cases/compiler/callOverloadViaElementAccessExpression.ts (2 errors) ====
+    class C {
+        foo(x: number): number;
+        foo(x: string): string;
+        foo(x: any): any {
+            return null;
+        }
+    }
+    
+    var c = new C();
+    var r: string = c['foo'](1);
+        ~~~~~~~~~~~~~~~~~~~~~~~
+!!! callOverloadViaElementAccessExpression.ts(10,5): error TS2011: Cannot convert 'number' to 'string'.
+    var r2: number = c['foo']('');
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! callOverloadViaElementAccessExpression.ts(11,5): error TS2011: Cannot convert 'string' to 'number'.

@@ -1,0 +1,34 @@
+==== tests/cases/compiler/mergedInterfacesWithIndexers2.ts (4 errors) ====
+    // indexers should behave like other members when merging interface declarations
+    
+    interface A {
+        [x: number]: string; // error
+        ~~~~~~~~~~~~~~~~~~~
+!!! mergedInterfacesWithIndexers2.ts(4,5): error TS2168: Numeric indexer type 'string' must be assignable to string indexer type '{ length: string; }':
+!!! 	Types of property 'length' of types 'String' and '{ length: string; }' are incompatible.
+    }
+    
+    
+    interface A {
+        [x: string]: { length: string }; // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! mergedInterfacesWithIndexers2.ts(9,5): error TS2168: Numeric indexer type 'string' must be assignable to string indexer type '{ length: string; }':
+!!! 	Types of property 'length' of types 'String' and '{ length: string; }' are incompatible.
+    }
+    
+    interface A2 {
+        [x: number]: string;
+        'a': number; //error
+        ~~~~~~~~~~~
+!!! mergedInterfacesWithIndexers2.ts(14,5): error TS2172: All named properties must be assignable to string indexer type '{ length: number; }':
+!!! 	Type 'Number' is missing property 'length' from type '{ length: number; }'.
+    }
+    
+    
+    interface A2 {
+        [x: string]: { length: number };
+        1: { length: number }; // error
+        ~~~~~~~~~~~~~~~~~~~~~
+!!! mergedInterfacesWithIndexers2.ts(20,5): error TS2169: All numerically named properties must be assignable to numeric indexer type 'string'.
+    }
+    

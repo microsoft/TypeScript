@@ -1,0 +1,52 @@
+==== tests/cases/compiler/foo1.ts (1 errors) ====
+    var x = 10;
+    var y = 20;
+    export = x;
+    export = y;
+    ~~~~~~~~~~~
+!!! foo1.ts(4,1): error TS1065: Module cannot have multiple export assignments.
+    
+==== tests/cases/compiler/foo2.ts (1 errors) ====
+    var x = 10;
+    class y {};
+    export = x;
+    export = y;
+    ~~~~~~~~~~~
+!!! foo2.ts(4,1): error TS1065: Module cannot have multiple export assignments.
+    
+==== tests/cases/compiler/foo3.ts (1 errors) ====
+    module x {
+        export var x = 10;
+    }
+    class y {
+        y: number;
+    }
+    export = x;
+    export = y;
+    ~~~~~~~~~~~
+!!! foo3.ts(8,1): error TS1065: Module cannot have multiple export assignments.
+    
+==== tests/cases/compiler/foo4.ts (1 errors) ====
+    export = x;
+    function x(){
+        return 42;
+    }
+    function y(){
+        return 42;
+    }
+    export = y;
+    ~~~~~~~~~~~
+!!! foo4.ts(8,1): error TS1065: Module cannot have multiple export assignments.
+    
+==== tests/cases/compiler/foo5.ts (2 errors) ====
+    var x = 5;
+    var y = "test";
+    var z = {};
+    export = x;
+    export = y;
+    ~~~~~~~~~~~
+!!! foo5.ts(5,1): error TS1065: Module cannot have multiple export assignments.
+    export = z;
+    ~~~~~~~~~~~
+!!! foo5.ts(6,1): error TS1065: Module cannot have multiple export assignments.
+    

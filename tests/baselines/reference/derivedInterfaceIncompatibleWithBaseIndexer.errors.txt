@@ -1,0 +1,51 @@
+==== tests/cases/compiler/derivedInterfaceIncompatibleWithBaseIndexer.ts (7 errors) ====
+    interface Base {
+        [x: number]: { x: number; y: number; };
+        [x: string]: { x: number; }
+    }
+    
+    interface Derived extends Base {
+        1: { y: number } // error
+        ~~~~~~~~~~~~~~~~
+!!! derivedInterfaceIncompatibleWithBaseIndexer.ts(7,5): error TS2170: All numerically named properties must be assignable to numeric indexer type '{ x: number; y: number; }':
+!!! 	Type '{ y: number; }' is missing property 'x' from type '{ x: number; y: number; }'.
+    }
+    
+    interface Derived2 extends Base {
+        '1': { y: number } // error
+        ~~~~~~~~~~~~~~~~~~
+!!! derivedInterfaceIncompatibleWithBaseIndexer.ts(11,5): error TS2170: All numerically named properties must be assignable to numeric indexer type '{ x: number; y: number; }':
+!!! 	Type '{ y: number; }' is missing property 'x' from type '{ x: number; y: number; }'.
+    }
+    
+    interface Derived3 extends Base {
+        foo: { y: number } // error
+        ~~~~~~~~~~~~~~~~~~
+!!! derivedInterfaceIncompatibleWithBaseIndexer.ts(15,5): error TS2172: All named properties must be assignable to string indexer type '{ x: number; }':
+!!! 	Type '{ y: number; }' is missing property 'x' from type '{ x: number; }'.
+    }
+    
+    interface Derived4 extends Base {
+        foo(): { x: number } // error
+        ~~~~~~~~~~~~~~~~~~~~
+!!! derivedInterfaceIncompatibleWithBaseIndexer.ts(19,5): error TS2172: All named properties must be assignable to string indexer type '{ x: number; }':
+!!! 	Type '() => { x: number; }' is missing property 'x' from type '{ x: number; }'.
+    }
+    
+    // satisifies string indexer but not numeric indexer
+    interface Derived5 extends Base {
+        1: { x: number } // error
+        ~~~~~~~~~~~~~~~~
+!!! derivedInterfaceIncompatibleWithBaseIndexer.ts(24,5): error TS2170: All numerically named properties must be assignable to numeric indexer type '{ x: number; y: number; }':
+!!! 	Type '{ x: number; }' is missing property 'y' from type '{ x: number; y: number; }'.
+    }
+    
+    interface Derived5 extends Base {
+        '1': { x: number } // error
+        ~~~
+!!! derivedInterfaceIncompatibleWithBaseIndexer.ts(28,5): error TS2000: Duplicate identifier ''1''. Additional locations:
+!!! 	derivedInterfaceIncompatibleWithBaseIndexer.ts(24,5)
+        ~~~~~~~~~~~~~~~~~~
+!!! derivedInterfaceIncompatibleWithBaseIndexer.ts(28,5): error TS2170: All numerically named properties must be assignable to numeric indexer type '{ x: number; y: number; }':
+!!! 	Type '{ x: number; }' is missing property 'y' from type '{ x: number; y: number; }'.
+    }

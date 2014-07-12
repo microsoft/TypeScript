@@ -1,0 +1,59 @@
+=== tests/cases/compiler/classWithEmptyBody.ts ===
+class C {
+>C : C
+}
+
+var c: C;
+>c : C
+>C : C
+
+var o: {} = c;
+>o : {}
+>c : C
+
+c = 1;
+>c = 1 : number
+>c : C
+
+c = { foo: '' }
+>c = { foo: '' } : { foo: string; }
+>c : C
+>{ foo: '' } : { foo: string; }
+>foo : string
+
+c = () => { }
+>c = () => { } : () => void
+>c : C
+>() => { } : () => void
+
+class D {
+>D : D
+
+    constructor() {
+        return 1;
+    }
+}
+
+var d: D;
+>d : D
+>D : D
+
+var o: {} = d;
+>o : {}
+>d : D
+
+d = 1;
+>d = 1 : number
+>d : D
+
+d = { foo: '' }
+>d = { foo: '' } : { foo: string; }
+>d : D
+>{ foo: '' } : { foo: string; }
+>foo : string
+
+d = () => { }
+>d = () => { } : () => void
+>d : D
+>() => { } : () => void
+

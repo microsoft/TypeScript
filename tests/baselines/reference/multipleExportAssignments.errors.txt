@@ -1,0 +1,31 @@
+==== tests/cases/compiler/multipleExportAssignments.ts (3 errors) ====
+    interface connectModule {
+        (res, req, next): void;
+    }
+    interface connectExport {
+        use: (mod: connectModule) => connectExport;
+        listen: (port: number) => void;
+    }
+    var server: {
+        ~~~~~~~~~
+        ~~~~~~~~~
+        (): connectExport;
+    ~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~
+        test1: connectModule;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+        test2(): connectModule;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    };
+    ~
+!!! multipleExportAssignments.ts(8,5): error TS2027: Exported variable 'server' has or is using private type 'connectModule'.
+    ~
+!!! multipleExportAssignments.ts(8,5): error TS2027: Exported variable 'server' has or is using private type 'connectExport'.
+    export = server;
+    export = connectExport;
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! multipleExportAssignments.ts(14,1): error TS1065: Module cannot have multiple export assignments.
+     
+    

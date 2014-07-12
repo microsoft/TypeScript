@@ -1,0 +1,1 @@
+//// [interfaceThatHidesBaseProperty2.js]

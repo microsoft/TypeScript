@@ -1,0 +1,29 @@
+==== tests/cases/compiler/genericCombinators2.ts (4 errors) ====
+    interface Collection<T, U> {
+        length: number;
+        add(x: T, y: U): void;
+        remove(x: T, y: U): boolean;
+    }
+    
+    interface Combinators {
+        map<T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>;
+        map<T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>;
+    }
+    
+    var _: Combinators;
+    var c2: Collection<number, string>;
+    var rf1 = (x: number, y: string) => { return x.toFixed() };
+    var r5a = _.map<number, string, Date>(c2, (x, y) => { return x.toFixed() });
+                ~~~
+!!! genericCombinators2.ts(15,13): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Call signatures of types '(x: number, y: string) => string' and '(x: number, y: string) => Date' are incompatible:
+!!! 		Type 'String' is missing property 'toDateString' from type 'Date'.
+                ~~~
+!!! genericCombinators2.ts(15,13): error TS2087: Could not select overload for 'call' expression.
+    var r5b = _.map<number, string, Date>(c2, rf1);
+                ~~~
+!!! genericCombinators2.ts(16,13): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Call signatures of types '(x: number, y: string) => string' and '(x: number, y: string) => Date' are incompatible:
+!!! 		Type 'String' is missing property 'toDateString' from type 'Date'.
+                ~~~
+!!! genericCombinators2.ts(16,13): error TS2087: Could not select overload for 'call' expression.

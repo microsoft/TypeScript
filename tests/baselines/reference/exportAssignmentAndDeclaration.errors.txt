@@ -1,0 +1,13 @@
+==== tests/cases/compiler/exportAssignmentAndDeclaration.ts (1 errors) ====
+    export enum E1 {
+        A,B,C
+    }
+    
+    class C1 {
+    
+    }
+    
+    // Invalid, as there is already an exported member.
+    export = C1;
+    ~~~~~~~~~~~~
+!!! exportAssignmentAndDeclaration.ts(10,1): error TS1064: Export assignment not allowed in module with exported element.

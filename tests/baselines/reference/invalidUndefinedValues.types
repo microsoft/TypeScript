@@ -1,0 +1,108 @@
+=== tests/cases/compiler/invalidUndefinedValues.ts ===
+var x: typeof undefined;
+>x : any
+>undefined : any
+
+>x = 1 : number
+>x : any
+
+x = 1;
+x = '';
+>x = '' : string
+>x : any
+
+x = true;
+>x = true : boolean
+>x : any
+
+var a: void;
+>a : void
+
+x = a;
+>x = a : void
+>x : any
+>a : void
+
+x = null;
+>x = null : any
+>x : any
+
+class C { foo: string }
+>C : C
+>foo : string
+
+var b: C;
+>b : C
+>C : C
+
+x = C;
+>x = C : typeof C
+>x : any
+>C : typeof C
+
+x = b;
+>x = b : C
+>x : any
+>b : C
+
+interface I { foo: string }
+>I : I
+>foo : string
+
+var c: I;
+>c : I
+>I : I
+
+x = c;
+>x = c : I
+>x : any
+>c : I
+
+module M { export var x = 1; }
+>M : M
+>x : number
+
+x = M;
+>x = M : typeof M
+>x : any
+>M : typeof M
+
+>x = { f() { } } : { f(): void; }
+>x : any
+
+x = { f() { } }
+>{ f() { } } : { f(): void; }
+>f : () => void
+
+function f<T>(a: T) {
+>f : typeof f
+>T : T
+>a : T
+>T : T
+
+    x = a;
+>x = a : T
+>x : any
+>a : T
+}
+x = f;
+>x = f : typeof f
+>x : any
+>f : typeof f
+
+enum E { A }
+>E : E
+>A : E
+
+x = E;
+>x = E : typeof E
+>x : any
+>E : typeof E
+
+x = E.A;
+>x = E.A : E
+>x : any
+>E.A : E
+>E : typeof E
+>A : E
+

@@ -1,0 +1,250 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 32,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ForInStatement",
+                "fullWidth": 32,
+                "forKeyword": {
+                    "kind": "ForKeyword",
+                    "width": 3,
+                    "text": "for",
+                    "value": "for",
+                    "valueText": "for"
+                },
+                "openParenToken": {
+                    "kind": "OpenParenToken",
+                    "width": 1,
+                    "text": "(",
+                    "value": "(",
+                    "valueText": "("
+                },
+                "left": {
+                    "kind": "IdentifierName",
+                    "width": 1,
+                    "fullWidth": 2,
+                    "text": "d",
+                    "value": "d",
+                    "valueText": "d",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "text": " "
+                        }
+                    ]
+                },
+                "inKeyword": {
+                    "kind": "InKeyword",
+                    "width": 2,
+                    "fullWidth": 3,
+                    "text": "in",
+                    "value": "in",
+                    "valueText": "in",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "text": " "
+                        }
+                    ]
+                },
+                "expression": {
+                    "kind": "CommaExpression",
+                    "fullWidth": 21,
+                    "left": {
+                        "kind": "AssignmentExpression",
+                        "fullWidth": 19,
+                        "left": {
+                            "kind": "ElementAccessExpression",
+                            "fullWidth": 7,
+                            "expression": {
+                                "kind": "MemberAccessExpression",
+                                "fullWidth": 4,
+                                "expression": {
+                                    "kind": "IdentifierName",
+                                    "width": 1,
+                                    "text": "_",
+                                    "value": "_",
+                                    "valueText": "_"
+                                },
+                                "dotToken": {
+                                    "kind": "DotToken",
+                                    "width": 1,
+                                    "text": ".",
+                                    "value": ".",
+                                    "valueText": "."
+                                },
+                                "name": {
+                                    "kind": "IdentifierName",
+                                    "width": 2,
+                                    "text": "jh",
+                                    "value": "jh",
+                                    "valueText": "jh"
+                                }
+                            },
+                            "openBracketToken": {
+                                "kind": "OpenBracketToken",
+                                "width": 1,
+                                "text": "[",
+                                "value": "[",
+                                "valueText": "["
+                            },
+                            "argumentExpression": {
+                                "kind": "IdentifierName",
+                                "width": 1,
+                                "text": "a",
+                                "value": "a",
+                                "valueText": "a"
+                            },
+                            "closeBracketToken": {
+                                "kind": "CloseBracketToken",
+                                "width": 1,
+                                "text": "]",
+                                "value": "]",
+                                "valueText": "]"
+                            }
+                        },
+                        "operatorToken": {
+                            "kind": "EqualsToken",
+                            "width": 1,
+                            "text": "=",
+                            "value": "=",
+                            "valueText": "="
+                        },
+                        "right": {
+                            "kind": "LogicalOrExpression",
+                            "fullWidth": 11,
+                            "left": {
+                                "kind": "ElementAccessExpression",
+                                "fullWidth": 7,
+                                "expression": {
+                                    "kind": "MemberAccessExpression",
+                                    "fullWidth": 4,
+                                    "expression": {
+                                        "kind": "IdentifierName",
+                                        "width": 1,
+                                        "text": "_",
+                                        "value": "_",
+                                        "valueText": "_"
+                                    },
+                                    "dotToken": {
+                                        "kind": "DotToken",
+                                        "width": 1,
+                                        "text": ".",
+                                        "value": ".",
+                                        "valueText": "."
+                                    },
+                                    "name": {
+                                        "kind": "IdentifierName",
+                                        "width": 2,
+                                        "text": "jh",
+                                        "value": "jh",
+                                        "valueText": "jh"
+                                    }
+                                },
+                                "openBracketToken": {
+                                    "kind": "OpenBracketToken",
+                                    "width": 1,
+                                    "text": "[",
+                                    "value": "[",
+                                    "valueText": "["
+                                },
+                                "argumentExpression": {
+                                    "kind": "IdentifierName",
+                                    "width": 1,
+                                    "text": "a",
+                                    "value": "a",
+                                    "valueText": "a"
+                                },
+                                "closeBracketToken": {
+                                    "kind": "CloseBracketToken",
+                                    "width": 1,
+                                    "text": "]",
+                                    "value": "]",
+                                    "valueText": "]"
+                                }
+                            },
+                            "operatorToken": {
+                                "kind": "BarBarToken",
+                                "width": 2,
+                                "text": "||",
+                                "value": "||",
+                                "valueText": "||"
+                            },
+                            "right": {
+                                "kind": "ArrayLiteralExpression",
+                                "fullWidth": 2,
+                                "openBracketToken": {
+                                    "kind": "OpenBracketToken",
+                                    "width": 1,
+                                    "text": "[",
+                                    "value": "[",
+                                    "valueText": "["
+                                },
+                                "expressions": [],
+                                "closeBracketToken": {
+                                    "kind": "CloseBracketToken",
+                                    "width": 1,
+                                    "text": "]",
+                                    "value": "]",
+                                    "valueText": "]"
+                                }
+                            }
+                        }
+                    },
+                    "operatorToken": {
+                        "kind": "CommaToken",
+                        "width": 1,
+                        "text": ",",
+                        "value": ",",
+                        "valueText": ","
+                    },
+                    "right": {
+                        "kind": "IdentifierName",
+                        "width": 1,
+                        "text": "b",
+                        "value": "b",
+                        "valueText": "b"
+                    }
+                },
+                "closeParenToken": {
+                    "kind": "CloseParenToken",
+                    "width": 1,
+                    "text": ")",
+                    "value": ")",
+                    "valueText": ")"
+                },
+                "statement": {
+                    "kind": "EmptyStatement",
+                    "fullWidth": 1,
+                    "semicolonToken": {
+                        "kind": "SemicolonToken",
+                        "width": 1,
+                        "text": ";",
+                        "value": ";",
+                        "valueText": ";"
+                    }
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 32
+    }
+}

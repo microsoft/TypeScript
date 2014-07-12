@@ -1,0 +1,28 @@
+==== tests/cases/compiler/module.d.ts (0 errors) ====
+    declare module A {
+        export module Point {
+            export var Origin: {
+                x: number;
+                y: number;
+            }
+        }
+    }
+    
+==== tests/cases/compiler/class.d.ts (0 errors) ====
+    declare module A {
+        export class Point {
+            constructor(x: number, y: number);
+            x: number;
+            y: number;
+        }
+    }
+    
+==== tests/cases/compiler/test.ts (2 errors) ====
+    var p: { x: number; y: number; }
+    var p = A.Point.Origin;
+    var p = new A.Point(0, 0); // unexpected error here, bug 840000
+        ~~~~~~~~~~~~~~~~~~~~~
+!!! test.ts(3,5): error TS2134: Subsequent variable declarations must have the same type.  Variable 'p' must be of type '{ x: number; y: number; }', but here has type 'any'.
+                  ~~~~~
+!!! test.ts(3,15): error TS2083: Invalid 'new' expression.
+     

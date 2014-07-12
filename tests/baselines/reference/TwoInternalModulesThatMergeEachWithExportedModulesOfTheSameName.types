@@ -1,0 +1,76 @@
+=== tests/cases/compiler/TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts ===
+module A.B {
+>A : A
+>B : A.B
+
+    export var x: number;
+>x : number
+}
+
+module A{ 
+>A : A
+
+    module B {
+>B : A.B
+
+        export var x: string;
+>x : string
+    }
+}
+
+// ensure the right var decl is exported
+var x: number;
+>x : number
+
+var x = A.B.x;
+>x : number
+>A.B.x : number
+>A.B : typeof A.B
+>A : typeof A
+>B : typeof A.B
+>x : number
+
+module X.Y.Z {
+>X : X
+>Y : X.Y
+>Z : X.Y.Z
+
+    export class Line {
+>Line : Line
+
+        length: number;
+>length : number
+    }
+}
+
+module X {
+>X : X
+
+    export module Y {
+>Y : Y
+
+        module Z {
+>Z : Y.Z
+
+            export class Line {
+>Line : Line
+
+                name: string;
+>name : string
+            }
+        }
+    }
+}
+
+// make sure merging works as expected
+var l: { length: number };
+>l : { length: number; }
+>length : number
+
+var l: X.Y.Z.Line;
+>l : X.Y.Z.Line
+>X : X
+>Y : X.Y
+>Z : X.Y.Z
+>Line : X.Y.Z.Line
+

@@ -1,0 +1,7 @@
+==== tests/cases/compiler/invalidUnicodeEscapeSequance4.ts (2 errors) ====
+    var a\u0031; // a1 is a valid identifier
+    var \u0031a; // 1a is an invalid identifier
+        ~
+!!! invalidUnicodeEscapeSequance4.ts(2,5): error TS1001: Unexpected character "\".
+        ~
+!!! invalidUnicodeEscapeSequance4.ts(2,5): error TS1008: Unexpected token; 'identifier' expected.

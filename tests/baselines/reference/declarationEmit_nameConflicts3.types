@@ -1,0 +1,77 @@
+=== tests/cases/compiler/declarationEmit_nameConflicts3.ts ===
+module M {
+>M : M
+
+    export interface D { }
+>D : D
+
+    export module D {
+>D : D
+
+        export function f() { }
+>f : typeof f
+    }
+    export module C {
+>C : C
+
+        export function f() { }
+>f : typeof f
+    }
+    export module E {
+>E : E
+
+        export function f() { }
+>f : typeof f
+    }
+}
+
+module M.P {
+>M : M
+>P : M.P
+
+    export class C {
+>C : C
+
+        static f() { }
+>f : () => void
+    }
+    export class E extends C { }
+>E : E
+>C : C
+
+    export enum D {
+>D : D
+
+        f
+>f : D
+    }
+    // Bug 887180
+    export var v: M.D; // ok
+>v : M.D
+>M : M
+>D : M.D
+
+    export var w = M.D.f; // error, should be typeof M.D.f
+>w : typeof D.f
+>M.D.f : typeof D.f
+>M.D : typeof D
+>M : typeof M
+>D : typeof D
+>f : typeof D.f
+
+    export var x = M.C.f; // error, should be typeof M.C.f
+>x : typeof C.f
+>M.C.f : typeof C.f
+>M.C : typeof C
+>M : typeof M
+>C : typeof C
+>f : typeof C.f
+
+    export var x = M.E.f; // error, should be typeof M.E.f
+>x : typeof E.f
+>M.E.f : typeof E.f
+>M.E : typeof E
+>M : typeof M
+>E : typeof E
+>f : typeof E.f
+}

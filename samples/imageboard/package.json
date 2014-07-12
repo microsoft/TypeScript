@@ -1,0 +1,11 @@
+{
+    "name": "application-name"
+  , "version": "0.0.1"
+  , "private": true
+  , "dependencies": {
+      "express": ">= 3.0.0"
+    , "ejs": ">= 0.5.0"
+    , "jade": ">= 0.0.1"
+    , "mongodb": ">= 1.0.0"
+  }
+}

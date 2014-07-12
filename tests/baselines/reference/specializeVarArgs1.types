@@ -1,0 +1,45 @@
+=== tests/cases/compiler/specializeVarArgs1.ts ===
+interface Observable<T>{ }
+>Observable : Observable<T>
+>T : T
+
+ 
+
+interface ObservableArray<T> extends Observable<T[]>
+>ObservableArray : ObservableArray<T>
+>T : T
+>Observable : Observable<T>
+>T : T
+
+{
+
+>push : (...values: T[]) => any
+
+    push(...values: T[]);
+>values : T[]
+>T : T
+
+}
+
+ 
+
+function observableArray<T>(): ObservableArray<T> { return null;}
+>observableArray : typeof observableArray
+>T : T
+>ObservableArray : ObservableArray<T>
+>T : T
+
+ 
+
+var a =  observableArray<string>();
+>a : ObservableArray<string>
+>observableArray<string>() : ObservableArray<string>
+>observableArray : typeof observableArray
+
+>a.push('Some Value') : any
+>a.push : (...values: string[]) => any
+>a : ObservableArray<string>
+
+a.push('Some Value');
+>push : (...values: string[]) => any
+

@@ -1,0 +1,25 @@
+==== tests/cases/compiler/constructorParameterProperties.ts (3 errors) ====
+    class C {
+        y: string;
+        constructor(private x: string) { }
+    }
+    
+    var c: C;
+    var r = c.y;
+    var r2 = c.x; // error
+               ~
+!!! constructorParameterProperties.ts(8,12): error TS2107: 'C.x' is inaccessible.
+    
+    class D<T> {
+        y: T;
+        constructor(a: T, private x: T) { }
+    }
+    
+    var d: D<string>;
+    var r = d.y;
+    var r2 = d.x; // error
+               ~
+!!! constructorParameterProperties.ts(17,12): error TS2107: 'D<T>.x' is inaccessible.
+    var r3 = d.a; // error
+               ~
+!!! constructorParameterProperties.ts(18,12): error TS2094: The property 'a' does not exist on value of type 'D<string>'.

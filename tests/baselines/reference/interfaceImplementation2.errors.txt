@@ -1,0 +1,17 @@
+==== tests/cases/compiler/interfaceImplementation2.ts (1 errors) ====
+    interface I1 {
+        iObj:{ };
+        iNum:number;
+        iAny:any;
+        iFn():void;
+    }
+    
+    class C3 implements I1 {
+          ~~
+!!! interfaceImplementation2.ts(8,7): error TS2137: Class C3 declares interface I1 but does not implement it:
+!!! 	Type 'C3' is missing property 'iFn' from type 'I1'.
+        public iObj:{ };
+        public iNum:number;
+        public iAny:any;
+    }
+    

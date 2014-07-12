@@ -1,0 +1,4 @@
+//// [interfaceDeclaration6.js]
+;
+;
+;

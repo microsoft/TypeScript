@@ -1,0 +1,48 @@
+=== tests/cases/compiler/collisionCodeGenModuleWithConstructorChildren.ts ===
+module M {
+>M : M
+
+    export var x = 3;
+>x : number
+
+    class c {
+>c : c
+
+        constructor(M, p = x) {
+>M : any
+>p : number
+>x : number
+        }
+    }
+}
+
+module M {
+>M : M
+
+    class d {
+>d : d
+
+        constructor(private M, p = x) {
+>M : any
+>p : number
+>x : number
+        }
+    }
+}
+
+module M {
+>M : M
+
+    class d2 {
+>d2 : d2
+
+        constructor() {
+            var M = 10;
+>M : number
+
+            var p = x;
+>p : number
+>x : number
+        }
+    }
+}

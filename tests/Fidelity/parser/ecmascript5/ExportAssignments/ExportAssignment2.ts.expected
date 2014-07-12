@@ -1,0 +1,73 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 13,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ExportAssignment",
+                "fullWidth": 13,
+                "exportKeyword": {
+                    "kind": "ExportKeyword",
+                    "width": 6,
+                    "fullWidth": 7,
+                    "text": "export",
+                    "value": "export",
+                    "valueText": "export",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "text": " "
+                        }
+                    ]
+                },
+                "equalsToken": {
+                    "kind": "EqualsToken",
+                    "width": 1,
+                    "fullWidth": 2,
+                    "text": "=",
+                    "value": "=",
+                    "valueText": "=",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "text": " "
+                        }
+                    ]
+                },
+                "identifier": {
+                    "kind": "IdentifierName",
+                    "width": 3,
+                    "text": "foo",
+                    "value": "foo",
+                    "valueText": "foo"
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 13
+    }
+}

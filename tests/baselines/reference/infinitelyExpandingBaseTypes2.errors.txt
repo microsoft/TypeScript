@@ -1,0 +1,18 @@
+==== tests/cases/compiler/infinitelyExpandingBaseTypes2.ts (1 errors) ====
+    interface A<T>
+    {
+       x : A<()=>T>
+    }
+     
+    interface B<T>
+    {
+       x : B<()=>T>
+    }
+     
+    var a: A<string>
+    var b: B<string> = a
+        ~~~~~~~~~~~~~~~~
+!!! infinitelyExpandingBaseTypes2.ts(12,5): error TS2012: Cannot convert 'A<string>' to 'B<string>':
+!!! 	Types of property 'x' of types 'A<string>' and 'B<string>' are incompatible:
+!!! 		Types 'A<() => string>' and 'B<() => string>' originating in infinitely expanding type reference do not refer to same named type.
+    

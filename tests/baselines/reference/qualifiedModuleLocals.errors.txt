@@ -1,0 +1,13 @@
+==== tests/cases/compiler/qualifiedModuleLocals.ts (1 errors) ====
+    module A {
+    
+      function b() {}
+    
+      export function a(){  A.b();  } // A.b should be an unresolved symbol error
+                              ~
+!!! qualifiedModuleLocals.ts(5,27): error TS2094: The property 'b' does not exist on value of type 'typeof A'.
+    
+    }
+    
+    A.a();
+    

@@ -1,0 +1,41 @@
+==== tests/cases/compiler/validNullAssignments.ts (5 errors) ====
+    var a: number = null;
+    var b: boolean = null;
+    var c: string = null;
+    var d: void = null;
+    
+    var e: typeof undefined = null;
+    e = null; // ok
+    
+    enum E { A }
+    E.A = null; // error
+    ~~~
+!!! validNullAssignments.ts(10,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    class C { foo: string }
+    var f: C;
+    f = null; // ok
+    C = null; // error
+    ~
+!!! validNullAssignments.ts(15,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    interface I { foo: string }
+    var g: I;
+    g = null; // ok
+    I = null; // error
+    ~
+!!! validNullAssignments.ts(20,1): error TS2095: Could not find symbol 'I'.
+    
+    module M { export var x = 1; }
+    M = null; // error
+    ~
+!!! validNullAssignments.ts(23,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    var h: { f(): void } = null;
+    
+    function i<T>(a: T) {
+        a = null;
+    }
+    i = null; // error
+    ~
+!!! validNullAssignments.ts(30,1): error TS2130: Invalid left-hand side of assignment expression.

@@ -1,0 +1,13 @@
+==== tests/cases/compiler/stringIndexerAssignments1.ts (2 errors) ====
+    var x: { [index: string]: string; one: string; };
+    var a: { one: string; };
+    var b: { one: number; two: string; };
+    x = a;
+    ~
+!!! stringIndexerAssignments1.ts(4,1): error TS2012: Cannot convert '{ one: string; }' to '{ one: string; [index: string]: string; }':
+!!! 	Index signatures of types '{ one: string; }' and '{ one: string; [index: string]: string; }' are incompatible.
+    x = b; // error
+    ~
+!!! stringIndexerAssignments1.ts(5,1): error TS2012: Cannot convert '{ one: number; two: string; }' to '{ one: string; [index: string]: string; }':
+!!! 	Types of property 'one' of types '{ one: number; two: string; }' and '{ one: string; [index: string]: string; }' are incompatible.
+    

@@ -1,0 +1,92 @@
+==== tests/cases/compiler/subtypingWithObjectMembers.ts (6 errors) ====
+    class Base { foo: string; }
+    class Derived extends Base { bar: string; }
+    class Derived2 extends Derived { baz: string; }
+    
+    // N and M have the same name, same accessibility, same optionality, and N is a subtype of M
+    // foo properties are valid, bar properties cause errors in the derived class declarations
+    class A {
+        foo: Base;
+        bar: Base;
+    }
+    
+    class B extends A {
+          ~
+!!! subtypingWithObjectMembers.ts(12,7): error TS2141: Class 'B' cannot extend class 'A':
+!!! 	Types of property 'bar' of types 'B' and 'A' are incompatible:
+!!! 		Type 'String' is missing property 'foo' from type 'Base'.
+        foo: Derived; // ok
+        bar: string; // error
+    }
+    
+    class A2 {
+        1: Base; 
+        2.0: Base;
+    }
+    
+    class B2 extends A2 {
+          ~~
+!!! subtypingWithObjectMembers.ts(22,7): error TS2141: Class 'B2' cannot extend class 'A2':
+!!! 	Types of property '2.0' of types 'B2' and 'A2' are incompatible:
+!!! 		Type 'String' is missing property 'foo' from type 'Base'.
+        1: Derived; // ok
+        2: string; // error
+    }
+    
+    class A3 {
+        '1': Base;
+        '2.0': Base;
+    }
+    
+    class B3 extends A3 {
+          ~~
+!!! subtypingWithObjectMembers.ts(32,7): error TS2141: Class 'B3' cannot extend class 'A3':
+!!! 	Types of property ''2.0'' of types 'B3' and 'A3' are incompatible:
+!!! 		Type 'String' is missing property 'foo' from type 'Base'.
+        '1': Derived; // ok
+        '2.0': string; // error
+    }
+    
+    module TwoLevels {
+        class A {
+            foo: Base;
+            bar: Base;
+        }
+    
+        class B extends A {
+              ~
+!!! subtypingWithObjectMembers.ts(43,11): error TS2141: Class 'TwoLevels.B' cannot extend class 'TwoLevels.A':
+!!! 	Types of property 'bar' of types 'B' and 'A' are incompatible:
+!!! 		Type 'String' is missing property 'foo' from type 'Base'.
+            foo: Derived2; // ok
+            bar: string; // error
+        }
+    
+        class A2 {
+            1: Base;
+            2.0: Base;
+        }
+    
+        class B2 extends A2 {
+              ~~
+!!! subtypingWithObjectMembers.ts(53,11): error TS2141: Class 'TwoLevels.B2' cannot extend class 'TwoLevels.A2':
+!!! 	Types of property '2.0' of types 'B2' and 'A2' are incompatible:
+!!! 		Type 'String' is missing property 'foo' from type 'Base'.
+            1: Derived2; // ok
+            2: string; // error
+        }
+    
+        class A3 {
+            '1': Base;
+            '2.0': Base;
+        }
+    
+        class B3 extends A3 {
+              ~~
+!!! subtypingWithObjectMembers.ts(63,11): error TS2141: Class 'TwoLevels.B3' cannot extend class 'TwoLevels.A3':
+!!! 	Types of property ''2.0'' of types 'B3' and 'A3' are incompatible:
+!!! 		Type 'String' is missing property 'foo' from type 'Base'.
+            '1': Derived2; // ok
+            '2.0': string; // error
+        }
+    }

@@ -1,0 +1,48 @@
+==== tests/cases/compiler/commaOperatorWithoutOperand.ts (12 errors) ====
+    var ANY: any;
+    var BOOLEAN: boolean;
+    var NUMBER: number;
+    var STRING: string;
+    var OBJECT: Object;
+    
+    // Expect to have compiler errors
+    // Missing the second operand
+    (ANY, );
+          ~
+!!! commaOperatorWithoutOperand.ts(9,7): error TS1003: Identifier expected.
+    (BOOLEAN, );
+              ~
+!!! commaOperatorWithoutOperand.ts(10,11): error TS1003: Identifier expected.
+    (NUMBER, );
+             ~
+!!! commaOperatorWithoutOperand.ts(11,10): error TS1003: Identifier expected.
+    (STRING, );
+             ~
+!!! commaOperatorWithoutOperand.ts(12,10): error TS1003: Identifier expected.
+    (OBJECT, );
+             ~
+!!! commaOperatorWithoutOperand.ts(13,10): error TS1003: Identifier expected.
+    
+    // Missing the first operand
+    (, ANY);
+     ~
+!!! commaOperatorWithoutOperand.ts(16,2): error TS1003: Identifier expected.
+    (, BOOLEAN);
+     ~
+!!! commaOperatorWithoutOperand.ts(17,2): error TS1003: Identifier expected.
+    (, NUMBER);
+     ~
+!!! commaOperatorWithoutOperand.ts(18,2): error TS1003: Identifier expected.
+    (, STRING);
+     ~
+!!! commaOperatorWithoutOperand.ts(19,2): error TS1003: Identifier expected.
+    (, OBJECT);
+     ~
+!!! commaOperatorWithoutOperand.ts(20,2): error TS1003: Identifier expected.
+    
+    // Missing all operands
+    ( , );
+      ~
+!!! commaOperatorWithoutOperand.ts(23,3): error TS1003: Identifier expected.
+        ~
+!!! commaOperatorWithoutOperand.ts(23,5): error TS1003: Identifier expected.

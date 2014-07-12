@@ -1,0 +1,65 @@
+=== tests/cases/compiler/commentsOnObjectLiteral3.ts ===
+
+var v = {
+>v : { prop: number; func: () => void; func1(): void; a: any; }
+>{
+ //property
+ prop: 1,
+ //property
+ func: function () {
+ },
+ //PropertyName + CallSignature
+ func1() { },
+ //getter
+ get a() {
+  return this.prop;
+ },
+ //setter
+ set a(value) {
+  this.prop = value;
+ }
+} : { prop: number; func: () => void; func1(): void; a: any; }
+
+ //property
+>//property
+ prop : number
+
+ prop: 1,
+ //property
+>//property
+ func : () => void
+
+ func: function () {
+>function () {
+ } : () => void
+
+ },
+ //PropertyName + CallSignature
+>//PropertyName + CallSignature
+ func1 : () => void
+
+ func1() { },
+ //getter
+ get a() {
+>a : any
+
+  return this.prop;
+>this.prop : any
+>this : any
+>prop : any
+
+ },
+ //setter
+ set a(value) {
+>a : any
+>value : any
+
+  this.prop = value;
+>this.prop = value : any
+>this.prop : any
+>this : any
+>prop : any
+>value : any
+ }
+};
+

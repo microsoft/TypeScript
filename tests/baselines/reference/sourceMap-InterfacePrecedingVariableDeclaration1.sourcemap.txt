@@ -1,0 +1,8 @@
+
+EmittedFile: (sourceMap-InterfacePrecedingVariableDeclaration1.js) sourceFile: (sourceMap-InterfacePrecedingVariableDeclaration1.ts)
+-------------------------------------------------------------------
+Emitted (1, 1) source (3, 1)
+Emitted (1, 5) source (3, 5)
+Emitted (1, 6) source (3, 6)
+Emitted (1, 9) source (3, 9)
+Emitted (1, 10) source (3, 10)

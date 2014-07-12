@@ -1,0 +1,19 @@
+==== tests/cases/compiler/genericCloduleInModule2.ts (1 errors) ====
+    // BUG 756210
+    module A {
+        export class B<T> {
+            foo() { }
+            static bar() { }
+        }
+    }
+    
+    module A {
+        export module B {
+            export var x = 1;
+        }
+    }
+    
+    var b: A.B;
+           ~~~
+!!! genericCloduleInModule2.ts(15,8): error TS2173: Generic type references must include all type arguments.
+    b.foo();

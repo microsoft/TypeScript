@@ -1,0 +1,21 @@
+==== tests/cases/compiler/objectTypesIdentityWithComplexConstraints.ts (2 errors) ====
+    interface A {
+          <T extends {
+           ~~~~~~~~~~~
+                <S extends A>(x: T, y: S): void
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          }>(x: T, y: T): void
+    ~~~~~~~
+!!! objectTypesIdentityWithComplexConstraints.ts(2,8): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+    }
+    
+    interface B {
+          <U extends B>(x: U, y: U): void
+    }
+    
+    // ok, not considered identical because the steps of contextual signature instantiation create fresh type parameters
+    function foo(x: A);
+    function foo(x: B); // error after constraints above made illegal
+    ~~~~~~~~~~~~~~~~~~~
+!!! objectTypesIdentityWithComplexConstraints.ts(13,1): error TS2144: Duplicate overload signature for 'foo'.
+    function foo(x: any) { }

@@ -1,0 +1,1 @@
+//// [declareClassInterfaceImplementation.js]

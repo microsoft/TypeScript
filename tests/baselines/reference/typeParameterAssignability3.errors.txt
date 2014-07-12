@@ -1,0 +1,34 @@
+==== tests/cases/compiler/typeParameterAssignability3.ts (4 errors) ====
+    // type parameters are not assignable to one another unless directly or indirectly constrained to one another
+    
+    class Foo { foo: string; }
+    
+    function foo<T extends Foo, U extends Foo>(t: T, u: U) {
+        var a: T;
+        var b: U;
+        t = a; // ok
+        a = t; // ok
+    
+        b = u; // ok
+        u = b; // ok
+    
+        t = u; // error
+        ~
+!!! typeParameterAssignability3.ts(14,5): error TS2011: Cannot convert 'U' to 'T'.
+        u = t; // error
+        ~
+!!! typeParameterAssignability3.ts(15,5): error TS2011: Cannot convert 'T' to 'U'.
+    }
+    
+    class C<T extends Foo, U extends Foo> {
+        t: T;
+        u: U;
+        r = () => {
+            this.t = this.u; // error
+            ~~~~~~
+!!! typeParameterAssignability3.ts(22,9): error TS2011: Cannot convert 'U' to 'T'.
+            this.u = this.t; // error
+            ~~~~~~
+!!! typeParameterAssignability3.ts(23,9): error TS2011: Cannot convert 'T' to 'U'.
+        }
+    }

@@ -1,0 +1,791 @@
+
+**Pos: 0 SpanInfo: {"minChar":5,"limChar":14,"text":null}
+** Statement: var i = 0
+**Pos: 1 SpanInfo: {"minChar":5,"limChar":14,"text":null}
+** Statement: var i = 0
+**Pos: 2 SpanInfo: {"minChar":5,"limChar":14,"text":null}
+** Statement: var i = 0
+**Pos: 3 SpanInfo: {"minChar":5,"limChar":14,"text":null}
+** Statement: var i = 0
+**Pos: 4 SpanInfo: {"minChar":5,"limChar":14,"text":null}
+** Statement: var i = 0
+**Pos: 5 SpanInfo: {"minChar":5,"limChar":14,"text":null}
+** Statement: var i = 0
+**Pos: 6 SpanInfo: {"minChar":5,"limChar":14,"text":null}
+** Statement: var i = 0
+**Pos: 7 SpanInfo: {"minChar":5,"limChar":14,"text":null}
+** Statement: var i = 0
+**Pos: 8 SpanInfo: {"minChar":5,"limChar":14,"text":null}
+** Statement: var i = 0
+**Pos: 9 SpanInfo: {"minChar":5,"limChar":14,"text":null}
+** Statement: var i = 0
+**Pos: 10 SpanInfo: {"minChar":5,"limChar":14,"text":null}
+** Statement: var i = 0
+**Pos: 11 SpanInfo: {"minChar":5,"limChar":14,"text":null}
+** Statement: var i = 0
+**Pos: 12 SpanInfo: {"minChar":5,"limChar":14,"text":null}
+** Statement: var i = 0
+**Pos: 13 SpanInfo: {"minChar":5,"limChar":14,"text":null}
+** Statement: var i = 0
+**Pos: 14 SpanInfo: {"minChar":5,"limChar":14,"text":null}
+** Statement: var i = 0
+**Pos: 15 SpanInfo: {"minChar":5,"limChar":14,"text":null}
+** Statement: var i = 0
+**Pos: 16 SpanInfo: {"minChar":16,"limChar":22,"text":null}
+** Statement: i < 10
+**Pos: 17 SpanInfo: {"minChar":16,"limChar":22,"text":null}
+** Statement: i < 10
+**Pos: 18 SpanInfo: {"minChar":16,"limChar":22,"text":null}
+** Statement: i < 10
+**Pos: 19 SpanInfo: {"minChar":16,"limChar":22,"text":null}
+** Statement: i < 10
+**Pos: 20 SpanInfo: {"minChar":16,"limChar":22,"text":null}
+** Statement: i < 10
+**Pos: 21 SpanInfo: {"minChar":16,"limChar":22,"text":null}
+** Statement: i < 10
+**Pos: 22 SpanInfo: {"minChar":16,"limChar":22,"text":null}
+** Statement: i < 10
+**Pos: 23 SpanInfo: {"minChar":16,"limChar":22,"text":null}
+** Statement: i < 10
+**Pos: 24 SpanInfo: {"minChar":24,"limChar":27,"text":null}
+** Statement: i++
+**Pos: 25 SpanInfo: {"minChar":24,"limChar":27,"text":null}
+** Statement: i++
+**Pos: 26 SpanInfo: {"minChar":24,"limChar":27,"text":null}
+** Statement: i++
+**Pos: 27 SpanInfo: {"minChar":24,"limChar":27,"text":null}
+** Statement: i++
+**Pos: 28 SpanInfo: {"minChar":24,"limChar":27,"text":null}
+** Statement: i++
+**Pos: 29 SpanInfo: {"minChar":24,"limChar":27,"text":null}
+** Statement: i++
+**Pos: 30 SpanInfo: {"minChar":24,"limChar":27,"text":null}
+** Statement: i++
+**Pos: 31 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 32 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 33 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 34 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 35 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 36 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 37 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 38 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 39 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 40 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 41 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 42 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 43 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 44 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 45 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 46 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 47 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 48 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 49 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 50 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 51 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 52 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 53 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 54 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 55 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 56 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 57 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 58 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 59 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 60 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 61 SpanInfo: {"minChar":35,"limChar":58,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 62 SpanInfo: {"minChar":67,"limChar":72,"text":null}
+** Statement: i = 0
+**Pos: 63 SpanInfo: {"minChar":67,"limChar":72,"text":null}
+** Statement: i = 0
+**Pos: 64 SpanInfo: {"minChar":67,"limChar":72,"text":null}
+** Statement: i = 0
+**Pos: 65 SpanInfo: {"minChar":67,"limChar":72,"text":null}
+** Statement: i = 0
+**Pos: 66 SpanInfo: {"minChar":67,"limChar":72,"text":null}
+** Statement: i = 0
+**Pos: 67 SpanInfo: {"minChar":67,"limChar":72,"text":null}
+** Statement: i = 0
+**Pos: 68 SpanInfo: {"minChar":67,"limChar":72,"text":null}
+** Statement: i = 0
+**Pos: 69 SpanInfo: {"minChar":67,"limChar":72,"text":null}
+** Statement: i = 0
+**Pos: 70 SpanInfo: {"minChar":67,"limChar":72,"text":null}
+** Statement: i = 0
+**Pos: 71 SpanInfo: {"minChar":67,"limChar":72,"text":null}
+** Statement: i = 0
+**Pos: 72 SpanInfo: {"minChar":67,"limChar":72,"text":null}
+** Statement: i = 0
+**Pos: 73 SpanInfo: {"minChar":67,"limChar":72,"text":null}
+** Statement: i = 0
+**Pos: 74 SpanInfo: {"minChar":74,"limChar":80,"text":null}
+** Statement: i < 10
+**Pos: 75 SpanInfo: {"minChar":74,"limChar":80,"text":null}
+** Statement: i < 10
+**Pos: 76 SpanInfo: {"minChar":74,"limChar":80,"text":null}
+** Statement: i < 10
+**Pos: 77 SpanInfo: {"minChar":74,"limChar":80,"text":null}
+** Statement: i < 10
+**Pos: 78 SpanInfo: {"minChar":74,"limChar":80,"text":null}
+** Statement: i < 10
+**Pos: 79 SpanInfo: {"minChar":74,"limChar":80,"text":null}
+** Statement: i < 10
+**Pos: 80 SpanInfo: {"minChar":74,"limChar":80,"text":null}
+** Statement: i < 10
+**Pos: 81 SpanInfo: {"minChar":74,"limChar":80,"text":null}
+** Statement: i < 10
+**Pos: 82 SpanInfo: {"minChar":82,"limChar":85,"text":null}
+** Statement: i++
+**Pos: 83 SpanInfo: {"minChar":82,"limChar":85,"text":null}
+** Statement: i++
+**Pos: 84 SpanInfo: {"minChar":82,"limChar":85,"text":null}
+** Statement: i++
+**Pos: 85 SpanInfo: {"minChar":82,"limChar":85,"text":null}
+** Statement: i++
+**Pos: 86 SpanInfo: {"minChar":82,"limChar":85,"text":null}
+** Statement: i++
+**Pos: 87 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 88 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 89 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 90 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 91 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 92 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 93 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 94 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 95 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 96 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 97 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 98 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 99 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 100 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 101 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 102 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 103 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 104 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 105 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 106 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 107 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 108 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 109 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 110 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 111 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 112 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 113 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 114 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 115 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 116 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 117 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 118 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 119 SpanInfo: {"minChar":93,"limChar":116,"text":null}
+** Statement: WScript.Echo("i: " + i)
+**Pos: 120 SpanInfo: {"minChar":125,"limChar":134,"text":null}
+** Statement: var j = 0
+**Pos: 121 SpanInfo: {"minChar":125,"limChar":134,"text":null}
+** Statement: var j = 0
+**Pos: 122 SpanInfo: {"minChar":125,"limChar":134,"text":null}
+** Statement: var j = 0
+**Pos: 123 SpanInfo: {"minChar":125,"limChar":134,"text":null}
+** Statement: var j = 0
+**Pos: 124 SpanInfo: {"minChar":125,"limChar":134,"text":null}
+** Statement: var j = 0
+**Pos: 125 SpanInfo: {"minChar":125,"limChar":134,"text":null}
+** Statement: var j = 0
+**Pos: 126 SpanInfo: {"minChar":125,"limChar":134,"text":null}
+** Statement: var j = 0
+**Pos: 127 SpanInfo: {"minChar":125,"limChar":134,"text":null}
+** Statement: var j = 0
+**Pos: 128 SpanInfo: {"minChar":125,"limChar":134,"text":null}
+** Statement: var j = 0
+**Pos: 129 SpanInfo: {"minChar":125,"limChar":134,"text":null}
+** Statement: var j = 0
+**Pos: 130 SpanInfo: {"minChar":125,"limChar":134,"text":null}
+** Statement: var j = 0
+**Pos: 131 SpanInfo: {"minChar":125,"limChar":134,"text":null}
+** Statement: var j = 0
+**Pos: 132 SpanInfo: {"minChar":125,"limChar":134,"text":null}
+** Statement: var j = 0
+**Pos: 133 SpanInfo: {"minChar":125,"limChar":134,"text":null}
+** Statement: var j = 0
+**Pos: 134 SpanInfo: {"minChar":125,"limChar":134,"text":null}
+** Statement: var j = 0
+**Pos: 135 SpanInfo: {"minChar":125,"limChar":134,"text":null}
+** Statement: var j = 0
+**Pos: 136 SpanInfo: {"minChar":136,"limChar":142,"text":null}
+** Statement: j < 10
+**Pos: 137 SpanInfo: {"minChar":136,"limChar":142,"text":null}
+** Statement: j < 10
+**Pos: 138 SpanInfo: {"minChar":136,"limChar":142,"text":null}
+** Statement: j < 10
+**Pos: 139 SpanInfo: {"minChar":136,"limChar":142,"text":null}
+** Statement: j < 10
+**Pos: 140 SpanInfo: {"minChar":136,"limChar":142,"text":null}
+** Statement: j < 10
+**Pos: 141 SpanInfo: {"minChar":136,"limChar":142,"text":null}
+** Statement: j < 10
+**Pos: 142 SpanInfo: {"minChar":136,"limChar":142,"text":null}
+** Statement: j < 10
+**Pos: 143 SpanInfo: {"minChar":136,"limChar":142,"text":null}
+** Statement: j < 10
+**Pos: 144 SpanInfo: {"minChar":136,"limChar":142,"text":null}
+** Statement: j < 10
+**Pos: 145 SpanInfo: {"minChar":136,"limChar":142,"text":null}
+** Statement: j < 10
+**Pos: 146 SpanInfo: {"minChar":136,"limChar":142,"text":null}
+** Statement: j < 10
+**Pos: 147 SpanInfo: {"minChar":136,"limChar":142,"text":null}
+** Statement: j < 10
+**Pos: 148 SpanInfo: {"minChar":152,"limChar":155,"text":null}
+** Statement: j++
+**Pos: 149 SpanInfo: {"minChar":152,"limChar":155,"text":null}
+** Statement: j++
+**Pos: 150 SpanInfo: {"minChar":152,"limChar":155,"text":null}
+** Statement: j++
+**Pos: 151 SpanInfo: {"minChar":152,"limChar":155,"text":null}
+** Statement: j++
+**Pos: 152 SpanInfo: {"minChar":152,"limChar":155,"text":null}
+** Statement: j++
+**Pos: 153 SpanInfo: {"minChar":152,"limChar":155,"text":null}
+** Statement: j++
+**Pos: 154 SpanInfo: {"minChar":152,"limChar":155,"text":null}
+** Statement: j++
+**Pos: 155 SpanInfo: {"minChar":152,"limChar":155,"text":null}
+** Statement: j++
+**Pos: 156 SpanInfo: {"minChar":152,"limChar":155,"text":null}
+** Statement: j++
+**Pos: 157 SpanInfo: {"minChar":161,"limChar":172,"text":null}
+** Statement: if (j == 1)
+**Pos: 158 SpanInfo: {"minChar":161,"limChar":172,"text":null}
+** Statement: if (j == 1)
+**Pos: 159 SpanInfo: {"minChar":161,"limChar":172,"text":null}
+** Statement: if (j == 1)
+**Pos: 160 SpanInfo: {"minChar":161,"limChar":172,"text":null}
+** Statement: if (j == 1)
+**Pos: 161 SpanInfo: {"minChar":161,"limChar":172,"text":null}
+** Statement: if (j == 1)
+**Pos: 162 SpanInfo: {"minChar":161,"limChar":172,"text":null}
+** Statement: if (j == 1)
+**Pos: 163 SpanInfo: {"minChar":161,"limChar":172,"text":null}
+** Statement: if (j == 1)
+**Pos: 164 SpanInfo: {"minChar":161,"limChar":172,"text":null}
+** Statement: if (j == 1)
+**Pos: 165 SpanInfo: {"minChar":161,"limChar":172,"text":null}
+** Statement: if (j == 1)
+**Pos: 166 SpanInfo: {"minChar":161,"limChar":172,"text":null}
+** Statement: if (j == 1)
+**Pos: 167 SpanInfo: {"minChar":161,"limChar":172,"text":null}
+** Statement: if (j == 1)
+**Pos: 168 SpanInfo: {"minChar":161,"limChar":172,"text":null}
+** Statement: if (j == 1)
+**Pos: 169 SpanInfo: {"minChar":161,"limChar":172,"text":null}
+** Statement: if (j == 1)
+**Pos: 170 SpanInfo: {"minChar":161,"limChar":172,"text":null}
+** Statement: if (j == 1)
+**Pos: 171 SpanInfo: {"minChar":161,"limChar":172,"text":null}
+** Statement: if (j == 1)
+**Pos: 172 SpanInfo: {"minChar":161,"limChar":172,"text":null}
+** Statement: if (j == 1)
+**Pos: 173 SpanInfo: {"minChar":161,"limChar":172,"text":null}
+** Statement: if (j == 1)
+**Pos: 174 SpanInfo: {"minChar":161,"limChar":172,"text":null}
+** Statement: if (j == 1)
+**Pos: 175 SpanInfo: {"minChar":183,"limChar":191,"text":null}
+** Statement: continue
+**Pos: 176 SpanInfo: {"minChar":183,"limChar":191,"text":null}
+** Statement: continue
+**Pos: 177 SpanInfo: {"minChar":183,"limChar":191,"text":null}
+** Statement: continue
+**Pos: 178 SpanInfo: {"minChar":183,"limChar":191,"text":null}
+** Statement: continue
+**Pos: 179 SpanInfo: {"minChar":183,"limChar":191,"text":null}
+** Statement: continue
+**Pos: 180 SpanInfo: {"minChar":183,"limChar":191,"text":null}
+** Statement: continue
+**Pos: 181 SpanInfo: {"minChar":183,"limChar":191,"text":null}
+** Statement: continue
+**Pos: 182 SpanInfo: {"minChar":183,"limChar":191,"text":null}
+** Statement: continue
+**Pos: 183 SpanInfo: {"minChar":183,"limChar":191,"text":null}
+** Statement: continue
+**Pos: 184 SpanInfo: {"minChar":183,"limChar":191,"text":null}
+** Statement: continue
+**Pos: 185 SpanInfo: {"minChar":183,"limChar":191,"text":null}
+** Statement: continue
+**Pos: 186 SpanInfo: {"minChar":183,"limChar":191,"text":null}
+** Statement: continue
+**Pos: 187 SpanInfo: {"minChar":183,"limChar":191,"text":null}
+** Statement: continue
+**Pos: 188 SpanInfo: {"minChar":183,"limChar":191,"text":null}
+** Statement: continue
+**Pos: 189 SpanInfo: {"minChar":183,"limChar":191,"text":null}
+** Statement: continue
+**Pos: 190 SpanInfo: {"minChar":183,"limChar":191,"text":null}
+** Statement: continue
+**Pos: 191 SpanInfo: {"minChar":183,"limChar":191,"text":null}
+** Statement: continue
+**Pos: 192 SpanInfo: {"minChar":183,"limChar":191,"text":null}
+** Statement: continue
+**Pos: 193 SpanInfo: {"minChar":183,"limChar":191,"text":null}
+** Statement: continue
+**Pos: 194 SpanInfo: {"minChar":183,"limChar":191,"text":null}
+** Statement: continue
+**Pos: 195 SpanInfo: {"minChar":183,"limChar":191,"text":null}
+** Statement: continue
+**Pos: 196 SpanInfo: {"minChar":183,"limChar":191,"text":null}
+** Statement: continue
+**Pos: 197 SpanInfo: {"minChar":183,"limChar":191,"text":null}
+** Statement: continue
+**Pos: 198 SpanInfo: {"minChar":183,"limChar":191,"text":null}
+** Statement: continue
+**Pos: 199 SpanInfo: {"minChar":161,"limChar":172,"text":null}
+** Statement: if (j == 1)
+**Pos: 200 SpanInfo: {"minChar":161,"limChar":172,"text":null}
+** Statement: if (j == 1)
+**Pos: 201 SpanInfo: {"minChar":206,"limChar":211,"text":null}
+** Statement: j = 0
+**Pos: 202 SpanInfo: {"minChar":206,"limChar":211,"text":null}
+** Statement: j = 0
+**Pos: 203 SpanInfo: {"minChar":206,"limChar":211,"text":null}
+** Statement: j = 0
+**Pos: 204 SpanInfo: {"minChar":206,"limChar":211,"text":null}
+** Statement: j = 0
+**Pos: 205 SpanInfo: {"minChar":206,"limChar":211,"text":null}
+** Statement: j = 0
+**Pos: 206 SpanInfo: {"minChar":206,"limChar":211,"text":null}
+** Statement: j = 0
+**Pos: 207 SpanInfo: {"minChar":206,"limChar":211,"text":null}
+** Statement: j = 0
+**Pos: 208 SpanInfo: {"minChar":206,"limChar":211,"text":null}
+** Statement: j = 0
+**Pos: 209 SpanInfo: {"minChar":206,"limChar":211,"text":null}
+** Statement: j = 0
+**Pos: 210 SpanInfo: {"minChar":206,"limChar":211,"text":null}
+** Statement: j = 0
+**Pos: 211 SpanInfo: {"minChar":206,"limChar":211,"text":null}
+** Statement: j = 0
+**Pos: 212 SpanInfo: {"minChar":206,"limChar":211,"text":null}
+** Statement: j = 0
+**Pos: 213 SpanInfo: {"minChar":213,"limChar":219,"text":null}
+** Statement: j < 10
+**Pos: 214 SpanInfo: {"minChar":213,"limChar":219,"text":null}
+** Statement: j < 10
+**Pos: 215 SpanInfo: {"minChar":213,"limChar":219,"text":null}
+** Statement: j < 10
+**Pos: 216 SpanInfo: {"minChar":213,"limChar":219,"text":null}
+** Statement: j < 10
+**Pos: 217 SpanInfo: {"minChar":213,"limChar":219,"text":null}
+** Statement: j < 10
+**Pos: 218 SpanInfo: {"minChar":213,"limChar":219,"text":null}
+** Statement: j < 10
+**Pos: 219 SpanInfo: {"minChar":213,"limChar":219,"text":null}
+** Statement: j < 10
+**Pos: 220 SpanInfo: {"minChar":213,"limChar":219,"text":null}
+** Statement: j < 10
+**Pos: 221 SpanInfo: {"minChar":213,"limChar":219,"text":null}
+** Statement: j < 10
+**Pos: 222 SpanInfo: {"minChar":228,"limChar":231,"text":null}
+** Statement: j++
+**Pos: 223 SpanInfo: {"minChar":228,"limChar":231,"text":null}
+** Statement: j++
+**Pos: 224 SpanInfo: {"minChar":228,"limChar":231,"text":null}
+** Statement: j++
+**Pos: 225 SpanInfo: {"minChar":228,"limChar":231,"text":null}
+** Statement: j++
+**Pos: 226 SpanInfo: {"minChar":228,"limChar":231,"text":null}
+** Statement: j++
+**Pos: 227 SpanInfo: {"minChar":228,"limChar":231,"text":null}
+** Statement: j++
+**Pos: 228 SpanInfo: {"minChar":228,"limChar":231,"text":null}
+** Statement: j++
+**Pos: 229 SpanInfo: {"minChar":228,"limChar":231,"text":null}
+** Statement: j++
+**Pos: 230 SpanInfo: {"minChar":228,"limChar":231,"text":null}
+** Statement: j++
+**Pos: 231 SpanInfo: {"minChar":228,"limChar":231,"text":null}
+** Statement: j++
+**Pos: 232 SpanInfo: {"minChar":228,"limChar":231,"text":null}
+** Statement: j++
+**Pos: 233 SpanInfo: {"minChar":228,"limChar":231,"text":null}
+** Statement: j++
+**Pos: 234 SpanInfo: {"minChar":228,"limChar":231,"text":null}
+** Statement: j++
+**Pos: 235 SpanInfo: {"minChar":240,"limChar":249,"text":null}
+** Statement: var k = 0
+**Pos: 236 SpanInfo: {"minChar":240,"limChar":249,"text":null}
+** Statement: var k = 0
+**Pos: 237 SpanInfo: {"minChar":240,"limChar":249,"text":null}
+** Statement: var k = 0
+**Pos: 238 SpanInfo: {"minChar":240,"limChar":249,"text":null}
+** Statement: var k = 0
+**Pos: 239 SpanInfo: {"minChar":240,"limChar":249,"text":null}
+** Statement: var k = 0
+**Pos: 240 SpanInfo: {"minChar":240,"limChar":249,"text":null}
+** Statement: var k = 0
+**Pos: 241 SpanInfo: {"minChar":240,"limChar":249,"text":null}
+** Statement: var k = 0
+**Pos: 242 SpanInfo: {"minChar":240,"limChar":249,"text":null}
+** Statement: var k = 0
+**Pos: 243 SpanInfo: {"minChar":240,"limChar":249,"text":null}
+** Statement: var k = 0
+**Pos: 244 SpanInfo: {"minChar":240,"limChar":249,"text":null}
+** Statement: var k = 0
+**Pos: 245 SpanInfo: {"minChar":240,"limChar":249,"text":null}
+** Statement: var k = 0
+**Pos: 246 SpanInfo: {"minChar":240,"limChar":249,"text":null}
+** Statement: var k = 0
+**Pos: 247 SpanInfo: {"minChar":240,"limChar":249,"text":null}
+** Statement: var k = 0
+**Pos: 248 SpanInfo: {"minChar":240,"limChar":249,"text":null}
+** Statement: var k = 0
+**Pos: 249 SpanInfo: {"minChar":240,"limChar":249,"text":null}
+** Statement: var k = 0
+**Pos: 250 SpanInfo: {"minChar":240,"limChar":249,"text":null}
+** Statement: var k = 0
+**Pos: 251 SpanInfo: {"minChar":240,"limChar":249,"text":null}
+** Statement: var k = 0
+**Pos: 252 SpanInfo: {"minChar":252,"limChar":255,"text":null}
+** Statement: k++
+**Pos: 253 SpanInfo: {"minChar":252,"limChar":255,"text":null}
+** Statement: k++
+**Pos: 254 SpanInfo: {"minChar":252,"limChar":255,"text":null}
+** Statement: k++
+**Pos: 255 SpanInfo: {"minChar":252,"limChar":255,"text":null}
+** Statement: k++
+**Pos: 256 SpanInfo: {"minChar":252,"limChar":255,"text":null}
+** Statement: k++
+**Pos: 257 SpanInfo: {"minChar":252,"limChar":255,"text":null}
+** Statement: k++
+**Pos: 258 SpanInfo: {"minChar":252,"limChar":255,"text":null}
+** Statement: k++
+**Pos: 259 SpanInfo: null
+** Statement: 
+**Pos: 260 SpanInfo: null
+** Statement: 
+**Pos: 261 SpanInfo: {"minChar":266,"limChar":271,"text":null}
+** Statement: k = 0
+**Pos: 262 SpanInfo: {"minChar":266,"limChar":271,"text":null}
+** Statement: k = 0
+**Pos: 263 SpanInfo: {"minChar":266,"limChar":271,"text":null}
+** Statement: k = 0
+**Pos: 264 SpanInfo: {"minChar":266,"limChar":271,"text":null}
+** Statement: k = 0
+**Pos: 265 SpanInfo: {"minChar":266,"limChar":271,"text":null}
+** Statement: k = 0
+**Pos: 266 SpanInfo: {"minChar":266,"limChar":271,"text":null}
+** Statement: k = 0
+**Pos: 267 SpanInfo: {"minChar":266,"limChar":271,"text":null}
+** Statement: k = 0
+**Pos: 268 SpanInfo: {"minChar":266,"limChar":271,"text":null}
+** Statement: k = 0
+**Pos: 269 SpanInfo: {"minChar":266,"limChar":271,"text":null}
+** Statement: k = 0
+**Pos: 270 SpanInfo: {"minChar":266,"limChar":271,"text":null}
+** Statement: k = 0
+**Pos: 271 SpanInfo: {"minChar":266,"limChar":271,"text":null}
+** Statement: k = 0
+**Pos: 272 SpanInfo: {"minChar":266,"limChar":271,"text":null}
+** Statement: k = 0
+**Pos: 273 SpanInfo: {"minChar":266,"limChar":271,"text":null}
+** Statement: k = 0
+**Pos: 274 SpanInfo: {"minChar":274,"limChar":277,"text":null}
+** Statement: k++
+**Pos: 275 SpanInfo: {"minChar":274,"limChar":277,"text":null}
+** Statement: k++
+**Pos: 276 SpanInfo: {"minChar":274,"limChar":277,"text":null}
+** Statement: k++
+**Pos: 277 SpanInfo: {"minChar":274,"limChar":277,"text":null}
+** Statement: k++
+**Pos: 278 SpanInfo: {"minChar":274,"limChar":277,"text":null}
+** Statement: k++
+**Pos: 279 SpanInfo: null
+** Statement: 
+**Pos: 280 SpanInfo: null
+** Statement: 
+**Pos: 281 SpanInfo: null
+** Statement: 
+**Pos: 282 SpanInfo: null
+** Statement: 
+**Pos: 283 SpanInfo: null
+** Statement: 
+**Pos: 284 SpanInfo: null
+** Statement: 
+**Pos: 285 SpanInfo: null
+** Statement: 
+**Pos: 286 SpanInfo: null
+** Statement: 
+**Pos: 287 SpanInfo: null
+** Statement: 
+**Pos: 288 SpanInfo: null
+** Statement: 
+**Pos: 289 SpanInfo: null
+** Statement: 
+**Pos: 290 SpanInfo: {"minChar":290,"limChar":296,"text":null}
+** Statement: k < 10
+**Pos: 291 SpanInfo: {"minChar":290,"limChar":296,"text":null}
+** Statement: k < 10
+**Pos: 292 SpanInfo: {"minChar":290,"limChar":296,"text":null}
+** Statement: k < 10
+**Pos: 293 SpanInfo: {"minChar":290,"limChar":296,"text":null}
+** Statement: k < 10
+**Pos: 294 SpanInfo: {"minChar":290,"limChar":296,"text":null}
+** Statement: k < 10
+**Pos: 295 SpanInfo: {"minChar":290,"limChar":296,"text":null}
+** Statement: k < 10
+**Pos: 296 SpanInfo: {"minChar":290,"limChar":296,"text":null}
+** Statement: k < 10
+**Pos: 297 SpanInfo: {"minChar":290,"limChar":296,"text":null}
+** Statement: k < 10
+**Pos: 298 SpanInfo: {"minChar":298,"limChar":301,"text":null}
+** Statement: k++
+**Pos: 299 SpanInfo: {"minChar":298,"limChar":301,"text":null}
+** Statement: k++
+**Pos: 300 SpanInfo: {"minChar":298,"limChar":301,"text":null}
+** Statement: k++
+**Pos: 301 SpanInfo: {"minChar":298,"limChar":301,"text":null}
+** Statement: k++
+**Pos: 302 SpanInfo: {"minChar":298,"limChar":301,"text":null}
+** Statement: k++
+**Pos: 303 SpanInfo: {"minChar":298,"limChar":301,"text":null}
+** Statement: k++
+**Pos: 304 SpanInfo: {"minChar":298,"limChar":301,"text":null}
+** Statement: k++
+**Pos: 305 SpanInfo: null
+** Statement: 
+**Pos: 306 SpanInfo: null
+** Statement: 
+**Pos: 307 SpanInfo: null
+** Statement: 
+**Pos: 308 SpanInfo: null
+** Statement: 
+**Pos: 309 SpanInfo: null
+** Statement: 
+**Pos: 310 SpanInfo: null
+** Statement: 
+**Pos: 311 SpanInfo: null
+** Statement: 
+**Pos: 312 SpanInfo: null
+** Statement: 
+**Pos: 313 SpanInfo: null
+** Statement: 
+**Pos: 314 SpanInfo: null
+** Statement: 
+**Pos: 315 SpanInfo: null
+** Statement: 
+**Pos: 316 SpanInfo: null
+** Statement: 
+**Pos: 317 SpanInfo: null
+** Statement: 
+**Pos: 318 SpanInfo: {"minChar":322,"limChar":325,"text":null}
+** Statement: i++
+**Pos: 319 SpanInfo: {"minChar":322,"limChar":325,"text":null}
+** Statement: i++
+**Pos: 320 SpanInfo: {"minChar":322,"limChar":325,"text":null}
+** Statement: i++
+**Pos: 321 SpanInfo: {"minChar":322,"limChar":325,"text":null}
+** Statement: i++
+**Pos: 322 SpanInfo: {"minChar":322,"limChar":325,"text":null}
+** Statement: i++
+**Pos: 323 SpanInfo: {"minChar":322,"limChar":325,"text":null}
+** Statement: i++
+**Pos: 324 SpanInfo: {"minChar":322,"limChar":325,"text":null}
+** Statement: i++
+**Pos: 325 SpanInfo: {"minChar":322,"limChar":325,"text":null}
+** Statement: i++
+**Pos: 326 SpanInfo: {"minChar":322,"limChar":325,"text":null}
+** Statement: i++
+**Pos: 327 SpanInfo: {"minChar":322,"limChar":325,"text":null}
+** Statement: i++
+**Pos: 328 SpanInfo: {"minChar":322,"limChar":325,"text":null}
+** Statement: i++
+**Pos: 329 SpanInfo: null
+** Statement: 
+**Pos: 330 SpanInfo: null
+** Statement: 
+**Pos: 331 SpanInfo: null
+** Statement: 
+**Pos: 332 SpanInfo: null
+** Statement: 
+**Pos: 333 SpanInfo: null
+** Statement: 
+**Pos: 334 SpanInfo: null
+** Statement: 
+**Pos: 335 SpanInfo: null
+** Statement: 
+**Pos: 336 SpanInfo: null
+** Statement: 
+**Pos: 337 SpanInfo: null
+** Statement: 
+**Pos: 338 SpanInfo: {"minChar":344,"limChar":347,"text":null}
+** Statement: i++
+**Pos: 339 SpanInfo: {"minChar":344,"limChar":347,"text":null}
+** Statement: i++
+**Pos: 340 SpanInfo: {"minChar":344,"limChar":347,"text":null}
+** Statement: i++
+**Pos: 341 SpanInfo: {"minChar":344,"limChar":347,"text":null}
+** Statement: i++
+**Pos: 342 SpanInfo: {"minChar":344,"limChar":347,"text":null}
+** Statement: i++
+**Pos: 343 SpanInfo: {"minChar":344,"limChar":347,"text":null}
+** Statement: i++
+**Pos: 344 SpanInfo: {"minChar":344,"limChar":347,"text":null}
+** Statement: i++
+**Pos: 345 SpanInfo: {"minChar":344,"limChar":347,"text":null}
+** Statement: i++
+**Pos: 346 SpanInfo: {"minChar":344,"limChar":347,"text":null}
+** Statement: i++
+**Pos: 347 SpanInfo: {"minChar":344,"limChar":347,"text":null}
+** Statement: i++
+**Pos: 348 SpanInfo: {"minChar":344,"limChar":347,"text":null}
+** Statement: i++
+**Pos: 349 SpanInfo: {"minChar":344,"limChar":347,"text":null}
+** Statement: i++
+**Pos: 350 SpanInfo: {"minChar":344,"limChar":347,"text":null}
+** Statement: i++
+**Pos: 351 SpanInfo: {"minChar":356,"limChar":361,"text":null}
+** Statement: i = 0
+**Pos: 352 SpanInfo: {"minChar":356,"limChar":361,"text":null}
+** Statement: i = 0
+**Pos: 353 SpanInfo: {"minChar":356,"limChar":361,"text":null}
+** Statement: i = 0
+**Pos: 354 SpanInfo: {"minChar":356,"limChar":361,"text":null}
+** Statement: i = 0
+**Pos: 355 SpanInfo: {"minChar":356,"limChar":361,"text":null}
+** Statement: i = 0
+**Pos: 356 SpanInfo: {"minChar":356,"limChar":361,"text":null}
+** Statement: i = 0
+**Pos: 357 SpanInfo: {"minChar":356,"limChar":361,"text":null}
+** Statement: i = 0
+**Pos: 358 SpanInfo: {"minChar":356,"limChar":361,"text":null}
+** Statement: i = 0
+**Pos: 359 SpanInfo: {"minChar":356,"limChar":361,"text":null}
+** Statement: i = 0
+**Pos: 360 SpanInfo: {"minChar":356,"limChar":361,"text":null}
+** Statement: i = 0
+**Pos: 361 SpanInfo: {"minChar":356,"limChar":361,"text":null}
+** Statement: i = 0
+**Pos: 362 SpanInfo: {"minChar":356,"limChar":361,"text":null}
+** Statement: i = 0
+**Pos: 363 SpanInfo: {"minChar":363,"limChar":369,"text":null}
+** Statement: j = 20
+**Pos: 364 SpanInfo: {"minChar":363,"limChar":369,"text":null}
+** Statement: j = 20
+**Pos: 365 SpanInfo: {"minChar":363,"limChar":369,"text":null}
+** Statement: j = 20
+**Pos: 366 SpanInfo: {"minChar":363,"limChar":369,"text":null}
+** Statement: j = 20
+**Pos: 367 SpanInfo: {"minChar":363,"limChar":369,"text":null}
+** Statement: j = 20
+**Pos: 368 SpanInfo: {"minChar":363,"limChar":369,"text":null}
+** Statement: j = 20
+**Pos: 369 SpanInfo: {"minChar":363,"limChar":369,"text":null}
+** Statement: j = 20
+**Pos: 370 SpanInfo: {"minChar":363,"limChar":369,"text":null}
+** Statement: j = 20
+**Pos: 371 SpanInfo: {"minChar":371,"limChar":377,"text":null}
+** Statement: j < 20
+**Pos: 372 SpanInfo: {"minChar":371,"limChar":377,"text":null}
+** Statement: j < 20
+**Pos: 373 SpanInfo: {"minChar":371,"limChar":377,"text":null}
+** Statement: j < 20
+**Pos: 374 SpanInfo: {"minChar":371,"limChar":377,"text":null}
+** Statement: j < 20
+**Pos: 375 SpanInfo: {"minChar":371,"limChar":377,"text":null}
+** Statement: j < 20
+**Pos: 376 SpanInfo: {"minChar":371,"limChar":377,"text":null}
+** Statement: j < 20
+**Pos: 377 SpanInfo: {"minChar":371,"limChar":377,"text":null}
+** Statement: j < 20
+**Pos: 378 SpanInfo: {"minChar":371,"limChar":377,"text":null}
+** Statement: j < 20
+**Pos: 379 SpanInfo: {"minChar":379,"limChar":385,"text":null}
+** Statement: i < 20
+**Pos: 380 SpanInfo: {"minChar":379,"limChar":385,"text":null}
+** Statement: i < 20
+**Pos: 381 SpanInfo: {"minChar":379,"limChar":385,"text":null}
+** Statement: i < 20
+**Pos: 382 SpanInfo: {"minChar":379,"limChar":385,"text":null}
+** Statement: i < 20
+**Pos: 383 SpanInfo: {"minChar":379,"limChar":385,"text":null}
+** Statement: i < 20
+**Pos: 384 SpanInfo: {"minChar":379,"limChar":385,"text":null}
+** Statement: i < 20
+**Pos: 385 SpanInfo: {"minChar":379,"limChar":385,"text":null}
+** Statement: i < 20
+**Pos: 386 SpanInfo: {"minChar":379,"limChar":385,"text":null}
+** Statement: i < 20
+**Pos: 387 SpanInfo: {"minChar":387,"limChar":390,"text":null}
+** Statement: j++
+**Pos: 388 SpanInfo: {"minChar":387,"limChar":390,"text":null}
+** Statement: j++
+**Pos: 389 SpanInfo: {"minChar":387,"limChar":390,"text":null}
+** Statement: j++
+**Pos: 390 SpanInfo: {"minChar":387,"limChar":390,"text":null}
+** Statement: j++
+**Pos: 391 SpanInfo: {"minChar":387,"limChar":390,"text":null}
+** Statement: j++
+**Pos: 392 SpanInfo: {"minChar":387,"limChar":390,"text":null}
+** Statement: j++
+**Pos: 393 SpanInfo: {"minChar":387,"limChar":390,"text":null}
+** Statement: j++
+**Pos: 394 SpanInfo: null
+** Statement: 

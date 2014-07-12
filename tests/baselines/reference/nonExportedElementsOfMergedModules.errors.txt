@@ -1,0 +1,19 @@
+==== tests/cases/compiler/nonExportedElementsOfMergedModules.ts (1 errors) ====
+    module One {
+        enum A { X }
+        module B {
+            export var x;
+        }
+    }
+    
+    module One {
+        enum A { Y }
+        module B {
+            export var y;
+        }
+        B.x;
+          ~
+!!! nonExportedElementsOfMergedModules.ts(13,7): error TS2094: The property 'x' does not exist on value of type 'typeof B'.
+        B.y;
+    }
+    

@@ -1,0 +1,7 @@
+==== tests/cases/compiler/genericArrayMethods1.ts (1 errors) ====
+    var x:string[] =  [0,1].slice(0); // this should be an error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! genericArrayMethods1.ts(1,5): error TS2012: Cannot convert 'number[]' to 'string[]':
+!!! 	Types of property 'pop' of types 'number[]' and 'string[]' are incompatible:
+!!! 		Call signatures of types '() => number' and '() => string' are incompatible.
+    

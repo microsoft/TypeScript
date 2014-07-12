@@ -1,0 +1,17 @@
+=== tests/cases/compiler/typeInferenceFixEarly.ts ===
+declare function f<T>(p: (t: T) => T): T;
+>f : typeof f
+>T : T
+>p : (t: T) => T
+>t : T
+>T : T
+>T : T
+>T : T
+
+>f(n => 3) : {}
+>f : typeof f
+
+f(n => 3);
+>n => 3 : (n: {}) => number
+>n : {}
+

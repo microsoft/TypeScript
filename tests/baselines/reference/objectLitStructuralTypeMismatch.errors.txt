@@ -1,0 +1,6 @@
+==== tests/cases/compiler/objectLitStructuralTypeMismatch.ts (1 errors) ====
+    // Shouldn't compile
+    var x: { a: number; } = { b: 5 };
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! objectLitStructuralTypeMismatch.ts(2,5): error TS2012: Cannot convert '{ b: number; }' to '{ a: number; }':
+!!! 	Type '{ b: number; }' is missing property 'a' from type '{ a: number; }'.

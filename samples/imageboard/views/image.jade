@@ -1,0 +1,15 @@
+extends layout
+
+block mainContent
+  h1 Posted by #{image.user}
+  div.image.grid_9
+    div.imagebox
+      div
+        img.large(src= image.imageUri)
+      =image.caption
+    div.commentbox
+      - each comment in image.comments
+        div.comment
+          a(href= "/user/"+comment.user)
+            b= comment.user
+          &nbsp; #{comment.text}

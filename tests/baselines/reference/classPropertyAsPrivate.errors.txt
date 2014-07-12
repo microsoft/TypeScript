@@ -1,0 +1,40 @@
+==== tests/cases/compiler/classPropertyAsPrivate.ts (8 errors) ====
+    class C {
+        private x: string;
+        private get y() { return null; }
+        private set y(x) { }
+        private foo() { }
+    
+        private static a: string;
+        private static get b() { return null; }
+        private static set b(x) { }
+        private static foo() { }
+    }
+    
+    var c: C;
+    // all errors
+    c.x;
+      ~
+!!! classPropertyAsPrivate.ts(15,3): error TS2107: 'C.x' is inaccessible.
+    c.y;
+      ~
+!!! classPropertyAsPrivate.ts(16,3): error TS2107: 'C.y' is inaccessible.
+    c.y = 1;
+      ~
+!!! classPropertyAsPrivate.ts(17,3): error TS2107: 'C.y' is inaccessible.
+    c.foo();
+      ~~~
+!!! classPropertyAsPrivate.ts(18,3): error TS2107: 'C.foo' is inaccessible.
+    
+    C.a;
+      ~
+!!! classPropertyAsPrivate.ts(20,3): error TS2107: 'C.a' is inaccessible.
+    C.b();
+      ~
+!!! classPropertyAsPrivate.ts(21,3): error TS2107: 'C.b' is inaccessible.
+    C.b = 1;
+      ~
+!!! classPropertyAsPrivate.ts(22,3): error TS2107: 'C.b' is inaccessible.
+    C.foo();
+      ~~~
+!!! classPropertyAsPrivate.ts(23,3): error TS2107: 'C.foo' is inaccessible.

@@ -1,0 +1,8 @@
+==== tests/cases/compiler/staticInstanceResolution4.ts (1 errors) ====
+    class A {
+       public foo() {}
+    }
+    
+    A.foo();
+      ~~~
+!!! staticInstanceResolution4.ts(5,3): error TS2094: The property 'foo' does not exist on value of type 'typeof A'.

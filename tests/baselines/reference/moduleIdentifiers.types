@@ -1,0 +1,23 @@
+=== tests/cases/compiler/moduleIdentifiers.ts ===
+module M {
+>M : M
+
+    interface P { x: number; y: number; }
+>P : P
+>x : number
+>y : number
+
+    export var a = 1
+>a : number
+}
+
+//var p: M.P;
+//var m: M = M;
+var x1 = M.a;
+>x1 : number
+>M.a : number
+>M : typeof M
+>a : number
+
+//var x2 = m.a;
+//var q: m.P;

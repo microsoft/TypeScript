@@ -1,0 +1,13 @@
+=== tests/cases/compiler/declFileForInterfaceWithOptionalFunction.ts ===
+
+interface I {
+>I : I
+
+    foo? (x?);
+>foo : (x?: any) => any
+>x : any
+
+    foo2? (x?: number): number;
+>foo2 : (x?: number) => number
+>x : number
+}

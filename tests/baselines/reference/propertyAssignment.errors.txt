@@ -1,0 +1,25 @@
+==== tests/cases/compiler/propertyAssignment.ts (3 errors) ====
+    
+    
+    var foo1: { new ():any; }   
+    var bar1: { x : number; }
+    
+    var foo2: { [index]; } // should be an error
+                 ~~~~~
+!!! propertyAssignment.ts(6,14): error TS1022: Index signature parameter must have a type annotation.
+    var bar2: { x : number; }
+    
+    var foo3: { ():void; }
+    var bar3: { x : number; }
+    
+    
+    
+    foo1 = bar1; // should be an error
+    ~~~~
+!!! propertyAssignment.ts(14,1): error TS2012: Cannot convert '{ x: number; }' to 'new() => any':
+!!! 	Type 'new() => any' requires a construct signature, but type '{ x: number; }' lacks one.
+    foo2 = bar2; 
+    foo3 = bar3; // should be an error
+    ~~~~
+!!! propertyAssignment.ts(16,1): error TS2012: Cannot convert '{ x: number; }' to '() => void':
+!!! 	Type '() => void' requires a call signature, but type '{ x: number; }' lacks one.

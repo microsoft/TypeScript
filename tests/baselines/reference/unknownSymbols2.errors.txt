@@ -1,0 +1,53 @@
+==== tests/cases/compiler/unknownSymbols2.ts (11 errors) ====
+    module M {
+        var x: asdf;
+               ~~~~
+!!! unknownSymbols2.ts(2,12): error TS2095: Could not find symbol 'asdf'.
+        var y = x + asdf;
+                    ~~~~
+!!! unknownSymbols2.ts(3,17): error TS2095: Could not find symbol 'asdf'.
+        var z = <asdf>x; // should be an error
+                 ~~~~
+!!! unknownSymbols2.ts(4,14): error TS2095: Could not find symbol 'asdf'.
+        if (asdf) {
+            ~~~~
+!!! unknownSymbols2.ts(5,9): error TS2095: Could not find symbol 'asdf'.
+        }
+        else if (qwerty) {
+                 ~~~~~~
+!!! unknownSymbols2.ts(7,14): error TS2095: Could not find symbol 'qwerty'.
+        }
+    
+        try {
+        }
+        catch (asdf) { // no error
+        }
+    
+        switch (asdf) {
+                ~~~~
+!!! unknownSymbols2.ts(15,13): error TS2095: Could not find symbol 'asdf'.
+            case qwerty:
+                 ~~~~~~
+!!! unknownSymbols2.ts(16,14): error TS2095: Could not find symbol 'qwerty'.
+                break;
+            default:
+                break;
+        }
+    
+        var a = () => asdf;
+                      ~~~~
+!!! unknownSymbols2.ts(22,19): error TS2095: Could not find symbol 'asdf'.
+        var b = (asdf) => { return qwerty };
+                                   ~~~~~~
+!!! unknownSymbols2.ts(23,32): error TS2095: Could not find symbol 'qwerty'.
+    
+        module N {
+            var x = 1;
+        }
+        import c = N;
+        import d = asdf;
+        ~~~~~~~~~~~~~~~~
+!!! unknownSymbols2.ts(29,5): error TS2072: Module cannot be aliased to a non-module type.
+                   ~~~~
+!!! unknownSymbols2.ts(29,16): error TS2179: Unable to resolve module reference 'asdf'.
+    }

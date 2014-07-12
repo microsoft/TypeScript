@@ -1,0 +1,7 @@
+==== tests/cases/compiler/ambientClassOverloadForFunction.ts (1 errors) ====
+    declare class foo{};
+    function foo() { return null; }
+             ~~~
+!!! ambientClassOverloadForFunction.ts(2,10): error TS2000: Duplicate identifier 'foo'. Additional locations:
+!!! 	ambientClassOverloadForFunction.ts(1,1)
+    

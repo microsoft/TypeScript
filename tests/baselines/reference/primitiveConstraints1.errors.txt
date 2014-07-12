@@ -1,0 +1,15 @@
+==== tests/cases/compiler/primitiveConstraints1.ts (4 errors) ====
+    function foo1<T extends U, U>(t: T, u: U) { }
+                  ~~~~~~~~~~~
+!!! primitiveConstraints1.ts(1,15): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+    foo1<string, number>('hm', 1); // no error
+    ~~~~
+!!! primitiveConstraints1.ts(2,1): error TS2086: Type 'string' does not satisfy the constraint 'number' for type parameter 'T extends U'.
+     
+    function foo2<T, U extends T>(t: T, u: U) { }
+                     ~~~~~~~~~~~
+!!! primitiveConstraints1.ts(4,18): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+    foo2<number, string>(1, 'hm'); // error
+    ~~~~
+!!! primitiveConstraints1.ts(5,1): error TS2086: Type 'string' does not satisfy the constraint 'number' for type parameter 'U extends T'.
+    

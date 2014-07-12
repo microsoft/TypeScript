@@ -1,0 +1,11 @@
+==== tests/cases/compiler/wrappedAndRecursiveConstraints2.ts (2 errors) ====
+    class C<T extends C<T>> { // error
+            ~~~~~~~~~~~~~~
+!!! wrappedAndRecursiveConstraints2.ts(1,9): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        constructor(x: T) { }
+    }
+    
+    var c = new C(1);
+    var c = new C(new C('')); // error
+        ~~~~~~~~~~~~~~~~~~~~
+!!! wrappedAndRecursiveConstraints2.ts(6,5): error TS2134: Subsequent variable declarations must have the same type.  Variable 'c' must be of type 'C<number>', but here has type 'C<C<string>>'.

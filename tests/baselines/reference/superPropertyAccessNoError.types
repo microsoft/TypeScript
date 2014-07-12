@@ -1,0 +1,136 @@
+=== tests/cases/compiler/superPropertyAccessNoError.ts ===
+//super.publicInstanceMemberFunction in constructor of derived class
+//super.publicInstanceMemberFunction in instance member function of derived class
+//super.publicInstanceMemberFunction in instance member accessor(get and set) of derived class
+//super.publicInstanceMemberFunction in lambda in member function
+//super.publicStaticMemberFunction in static member function of derived class
+//super.publicStaticMemberFunction in static member accessor(get and set) of derived class
+
+
+class SomeBaseClass {
+>SomeBaseClass : SomeBaseClass
+
+    public func() {
+>func : () => string
+
+        return '';
+    }
+
+    static func() {
+>func : () => number
+
+        return 3;
+    }
+
+}
+
+class SomeDerivedClass extends SomeBaseClass {
+>SomeDerivedClass : SomeDerivedClass
+>SomeBaseClass : SomeBaseClass
+
+    constructor() {
+        super();
+>super() : void
+
+        var x = super.func();
+>x : string
+>super.func() : string
+>super.func : () => string
+>func : () => string
+
+        var x: string;
+>x : string
+    }
+
+>fn : () => void
+
+    fn() {
+        var x = super.func();
+>x : string
+>super.func() : string
+>super.func : () => string
+>func : () => string
+
+        var x: string;
+>x : string
+
+        var y = () => super.func();
+>y : () => string
+>() => super.func() : () => string
+>super.func() : string
+>super.func : () => string
+>func : () => string
+    }
+
+    get a() {
+>a : any
+
+        var x = super.func();
+>x : string
+>super.func() : string
+>super.func : () => string
+>func : () => string
+
+        var x: string;
+>x : string
+
+        return null;
+    }
+
+    set a(n) {
+>a : any
+>n : any
+
+        var x = super.func();
+>x : string
+>super.func() : string
+>super.func : () => string
+>func : () => string
+
+        var x: string;
+>x : string
+    }
+
+    static fn() {
+>fn : () => void
+
+        var x = super.func();
+>x : number
+>super.func() : number
+>super.func : () => number
+>func : () => number
+
+        var x: number;
+>x : number
+    }
+
+    static get a() {
+>a : any
+
+        var x = super.func();
+>x : number
+>super.func() : number
+>super.func : () => number
+>func : () => number
+
+        var x: number;
+>x : number
+
+        return null;
+    }
+
+    static set a(n) {
+>a : any
+>n : any
+
+        var x = super.func();
+>x : number
+>super.func() : number
+>super.func : () => number
+>func : () => number
+
+        var x: number;
+>x : number
+    }
+
+}

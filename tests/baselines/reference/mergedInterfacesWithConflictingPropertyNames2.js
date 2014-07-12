@@ -1,0 +1,1 @@
+//// [mergedInterfacesWithConflictingPropertyNames2.js]

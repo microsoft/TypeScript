@@ -1,0 +1,4 @@
+==== tests/cases/compiler/undefinedTypeArgument1.ts (1 errors) ====
+    var cats = new Array<WAWA>();
+                         ~~~~
+!!! undefinedTypeArgument1.ts(1,22): error TS2095: Could not find symbol 'WAWA'.

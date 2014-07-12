@@ -1,0 +1,1 @@
+//// [errorTypesAsTypeArguments.js]

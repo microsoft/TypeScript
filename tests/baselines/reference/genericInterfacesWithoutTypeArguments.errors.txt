@@ -1,0 +1,10 @@
+==== tests/cases/compiler/genericInterfacesWithoutTypeArguments.ts (2 errors) ====
+    interface I<T> { }
+    class C<T> { }
+    var i: I;
+           ~
+!!! genericInterfacesWithoutTypeArguments.ts(3,8): error TS2173: Generic type references must include all type arguments.
+    var c: C<I>;
+             ~
+!!! genericInterfacesWithoutTypeArguments.ts(4,10): error TS2173: Generic type references must include all type arguments.
+    

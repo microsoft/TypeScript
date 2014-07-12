@@ -1,0 +1,50 @@
+==== tests/cases/compiler/enumAssignmentCompat2.ts (5 errors) ====
+    enum W {
+    
+        a, b, c,
+    
+    }
+    
+    module W {
+        export class D { }
+    }
+    
+    interface WStatic {
+    
+        a: W;
+    
+        b: W;
+    
+        c: W;
+    
+    }
+    
+    
+    
+    var x: WStatic = W;
+    var y: typeof W = W;
+    var z: number = W; // error
+        ~~~~~~~~~~~~~
+!!! enumAssignmentCompat2.ts(25,5): error TS2011: Cannot convert 'typeof W' to 'number'.
+    var a: number = W.a;
+    var b: typeof W = W.a; // error
+        ~~~~~~~~~~~~~~~~~
+!!! enumAssignmentCompat2.ts(27,5): error TS2011: Cannot convert 'W' to 'typeof W'.
+    var c: typeof W.a = W.a;
+    var d: typeof W = 3; // error
+        ~~~~~~~~~~~~~~~
+!!! enumAssignmentCompat2.ts(29,5): error TS2012: Cannot convert 'number' to 'typeof W':
+!!! 	Type 'Number' is missing property 'a' from type 'typeof W'.
+    var e: typeof W.a = 4;
+    var f: WStatic = W.a; // error
+        ~~~~~~~~~~~~~~~~
+!!! enumAssignmentCompat2.ts(31,5): error TS2011: Cannot convert 'W' to 'WStatic'.
+    var g: WStatic = 5; // error
+        ~~~~~~~~~~~~~~
+!!! enumAssignmentCompat2.ts(32,5): error TS2012: Cannot convert 'number' to 'WStatic':
+!!! 	Type 'Number' is missing property 'a' from type 'WStatic'.
+    var h: W = 3;
+    var i: W = W.a;
+    i = W.a;
+    W.D;
+    var p: W.D;

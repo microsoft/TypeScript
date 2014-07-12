@@ -1,0 +1,8 @@
+==== tests/cases/compiler/duplicateTypeParameters3.ts (1 errors) ====
+    interface X {
+    x: () => <A, A>() => void;
+              ~
+!!! duplicateTypeParameters3.ts(2,11): error TS2000: Duplicate identifier 'A'.
+    }
+     
+    

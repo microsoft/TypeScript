@@ -1,0 +1,2 @@
+//// [errorLocationForInterfaceExtension.js]
+var n = '';

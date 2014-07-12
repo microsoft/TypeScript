@@ -1,0 +1,11 @@
+==== tests/cases/compiler/publicMemberImplementedAsPrivateInDerivedClass.ts (1 errors) ====
+    interface Qux {
+     Bar: number;
+    }
+    class Foo implements Qux {
+          ~~~
+!!! publicMemberImplementedAsPrivateInDerivedClass.ts(4,7): error TS2137: Class Foo declares interface Qux but does not implement it:
+!!! 	Property 'Bar' defined as private in type 'Foo' is defined as public in type 'Qux'.
+     private Bar: number;
+    }
+    

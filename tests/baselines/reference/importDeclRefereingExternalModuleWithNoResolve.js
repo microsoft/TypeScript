@@ -1,0 +1,1 @@
+//// [importDeclRefereingExternalModuleWithNoResolve.js]

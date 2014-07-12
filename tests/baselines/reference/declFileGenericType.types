@@ -1,0 +1,167 @@
+=== tests/cases/compiler/declFileGenericType.ts ===
+export module C {
+>C : C
+
+    export class A<T>{ }
+>A : A<T>
+>T : T
+
+    export class B { }
+>B : B
+    
+    export function F<T>(x: T): A<B> { return null; }
+>F : typeof F
+>T : T
+>x : T
+>T : T
+>A : A<T>
+>B : B
+
+    export function F2<T>(x: T): C.A<C.B> { return null; }
+>F2 : typeof F2
+>T : T
+>x : T
+>T : T
+>C : C
+>A : A<T>
+>C : C
+>B : B
+
+    export function F3<T>(x: T): C.A<C.B>[] { return null; }
+>F3 : typeof F3
+>T : T
+>x : T
+>T : T
+>C : C
+>A : A<T>
+>C : C
+>B : B
+
+    export function F4<T extends A<B>>(x: T): Array<C.A<C.B>> { return null; }
+>F4 : typeof F4
+>T : T
+>A : A<T>
+>B : B
+>x : T
+>T : T
+>Array : Array<T>
+>C : C
+>A : A<T>
+>C : C
+>B : B
+
+    export function F5<T>(): T { return null; }
+>F5 : typeof F5
+>T : T
+>T : T
+
+    export function F6<T extends A<B>>(x: T): T { return null; }
+>F6 : typeof F6
+>T : T
+>A : A<T>
+>B : B
+>x : T
+>T : T
+>T : T
+
+    export class D<T>{
+>D : D<T>
+>T : T
+
+        constructor(public val: T) { }
+>val : T
+>T : T
+
+    }
+}
+
+export var a: C.A<C.B>;
+>a : C.A<C.B>
+>C : C
+>A : C.A<T>
+>C : C
+>B : C.B
+
+export var b = C.F;
+>b : typeof C.F
+>C.F : typeof C.F
+>C : typeof C
+>F : typeof C.F
+
+export var c = C.F2;
+>c : typeof C.F2
+>C.F2 : typeof C.F2
+>C : typeof C
+>F2 : typeof C.F2
+
+export var d = C.F3;
+>d : typeof C.F3
+>C.F3 : typeof C.F3
+>C : typeof C
+>F3 : typeof C.F3
+
+export var e = C.F4;
+>e : typeof C.F4
+>C.F4 : typeof C.F4
+>C : typeof C
+>F4 : typeof C.F4
+
+export var x = (new C.D<C.A<C.B>>(new C.A<C.B>())).val;
+>x : C.A<C.B>
+>(new C.D<C.A<C.B>>(new C.A<C.B>())).val : C.A<C.B>
+>(new C.D<C.A<C.B>>(new C.A<C.B>())) : C.D<C.A<C.B>>
+>new C.D<C.A<C.B>>(new C.A<C.B>()) : C.D<C.A<C.B>>
+>C.D : typeof C.D
+>C : typeof C
+>D : typeof C.D
+>C : C
+>A : C.A<T>
+>C : C
+>B : C.B
+>new C.A<C.B>() : C.A<C.B>
+>C.A : typeof C.A
+>C : typeof C
+>A : typeof C.A
+>C : C
+>B : C.B
+>val : C.A<C.B>
+
+export function f<T extends C.A<C.B>>() { }
+>f : typeof f
+>T : T
+>C : C
+>A : C.A<T>
+>C : C
+>B : C.B
+
+export var g = C.F5<C.A<C.B>>();
+>g : C.A<C.B>
+>C.F5<C.A<C.B>>() : C.A<C.B>
+>C.F5 : typeof C.F5
+>C : typeof C
+>F5 : typeof C.F5
+>C : C
+>A : C.A<T>
+>C : C
+>B : C.B
+
+export class h extends C.A<C.B>{ }
+>h : h
+>C : C
+>A : C.A<T>
+>C : C
+>B : C.B
+
+export interface i extends C.A<C.B> { }
+>i : i
+>C : C
+>A : C.A<T>
+>C : C
+>B : C.B
+
+export var j = C.F6;
+>j : typeof C.F6
+>C.F6 : typeof C.F6
+>C : typeof C
+>F6 : typeof C.F6
+

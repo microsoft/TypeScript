@@ -1,0 +1,15 @@
+==== tests/cases/compiler/generics5.ts (1 errors) ====
+    interface A { a: string; }
+    interface B extends A { b: string; }
+    
+    interface C extends B { c: string; }
+    interface G<T, U extends B> {
+    
+    
+    }
+    
+    var v3: G<A, A>;               // Error, A not valid argument for U
+            ~~~~~~~
+!!! generics5.ts(10,9): error TS2086: Type 'A' does not satisfy the constraint 'B' for type parameter 'U extends B'.
+    
+    

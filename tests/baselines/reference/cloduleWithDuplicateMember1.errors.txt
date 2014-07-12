@@ -1,0 +1,27 @@
+==== tests/cases/compiler/cloduleWithDuplicateMember1.ts (4 errors) ====
+    class C {
+        get x() { return 1; }
+        static get x() {
+            return '';
+        }
+        static foo() { }
+        ~~~~~~~~~~~~~~~~
+!!! cloduleWithDuplicateMember1.ts(6,5): error TS2151: Overload signatures must all be exported or not exported.
+    }
+    
+    module C {
+        export var x = 1;
+                   ~
+!!! cloduleWithDuplicateMember1.ts(10,16): error TS2000: Duplicate identifier 'x'. Additional locations:
+!!! 	cloduleWithDuplicateMember1.ts(3,5)
+    }
+    module C {
+        export function foo() { }
+                        ~~~
+!!! cloduleWithDuplicateMember1.ts(13,21): error TS2000: Duplicate identifier 'foo'. Additional locations:
+!!! 	cloduleWithDuplicateMember1.ts(6,5)
+        export function x() { }
+                        ~
+!!! cloduleWithDuplicateMember1.ts(14,21): error TS2000: Duplicate identifier 'x'. Additional locations:
+!!! 	cloduleWithDuplicateMember1.ts(3,5)
+    }

@@ -1,0 +1,18 @@
+==== tests/cases/compiler/constructorOverloadsWithDefaultValues.ts (2 errors) ====
+    class C {
+        foo: string;
+        constructor(x = 1); // error
+                    ~~~~~
+!!! constructorOverloadsWithDefaultValues.ts(3,17): error TS2174: Default arguments are only allowed in implementation.
+        constructor() {
+        }
+    }
+    
+    class D<T> {
+        foo: string;
+        constructor(x = 1); // error
+                    ~~~~~
+!!! constructorOverloadsWithDefaultValues.ts(10,17): error TS2174: Default arguments are only allowed in implementation.
+        constructor() {
+        }
+    }

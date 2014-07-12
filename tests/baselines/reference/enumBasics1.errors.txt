@@ -1,0 +1,42 @@
+==== tests/cases/compiler/enumBasics1.ts (2 errors) ====
+    enum E {
+        A = 1,
+        B,
+        C
+    }
+    
+    /*
+    var a: E;
+    var b = E["B"]; // shouldn't error
+    
+    
+    function foo(e: E) {}
+    
+    foo(a); // shouldn't error
+    
+    
+    class C {
+        public e: E;
+    
+        public m(): E { return this.e; } // shouldn't error
+    }
+    
+    
+    var e = E; // shouldn't error
+    */
+    E.A.A; // should error
+        ~
+!!! enumBasics1.ts(26,5): error TS2094: The property 'A' does not exist on value of type 'E'.
+    
+    
+    enum E2 {
+        A,
+        B,
+    }
+    
+    enum E2 { // shouldn't error
+        C,
+     ~
+!!! enumBasics1.ts(35,2): error TS4024: In enums with multiple declarations only one declaration can omit an initializer for the first enum element.
+        D,
+    }

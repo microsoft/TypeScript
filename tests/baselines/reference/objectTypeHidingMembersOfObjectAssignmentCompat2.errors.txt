@@ -1,0 +1,42 @@
+==== tests/cases/compiler/objectTypeHidingMembersOfObjectAssignmentCompat2.ts (5 errors) ====
+    interface I {
+        toString(): number;
+    }
+    
+    var i: I;
+    var o: Object;
+    o = i; // error
+    ~
+!!! objectTypeHidingMembersOfObjectAssignmentCompat2.ts(7,1): error TS2012: Cannot convert 'I' to 'Object':
+!!! 	Types of property 'toString' of types 'I' and 'Object' are incompatible:
+!!! 		Call signatures of types '() => number' and '() => string' are incompatible.
+    i = o; // error
+    ~
+!!! objectTypeHidingMembersOfObjectAssignmentCompat2.ts(8,1): error TS2012: Cannot convert 'Object' to 'I':
+!!! 	Types of property 'toString' of types 'Object' and 'I' are incompatible:
+!!! 		Call signatures of types '() => string' and '() => number' are incompatible.
+    
+    class C {
+        toString(): number { return 1; }
+    }
+    var c: C;
+    o = c; // error
+    ~
+!!! objectTypeHidingMembersOfObjectAssignmentCompat2.ts(14,1): error TS2012: Cannot convert 'C' to 'Object':
+!!! 	Types of property 'toString' of types 'C' and 'Object' are incompatible:
+!!! 		Call signatures of types '() => number' and '() => string' are incompatible.
+    c = o; // error
+    ~
+!!! objectTypeHidingMembersOfObjectAssignmentCompat2.ts(15,1): error TS2012: Cannot convert 'Object' to 'C':
+!!! 	Types of property 'toString' of types 'Object' and 'C' are incompatible:
+!!! 		Call signatures of types '() => string' and '() => number' are incompatible.
+    
+    var a = {
+        toString: () => { }
+    }
+    o = a; // error
+    ~
+!!! objectTypeHidingMembersOfObjectAssignmentCompat2.ts(20,1): error TS2012: Cannot convert '{ toString: () => void; }' to 'Object':
+!!! 	Types of property 'toString' of types '{ toString: () => void; }' and 'Object' are incompatible:
+!!! 		Call signatures of types '() => void' and '() => string' are incompatible.
+    a = o; // ok

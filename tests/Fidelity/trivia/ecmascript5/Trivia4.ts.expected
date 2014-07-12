@@ -1,0 +1,21 @@
+[
+    {
+        "kind": "EndOfFileToken",
+        "width": 0,
+        "fullWidth": 7,
+        "text": "",
+        "hasLeadingTrivia": true,
+        "hasLeadingComment": true,
+        "hasLeadingNewLine": true,
+        "leadingTrivia": [
+            {
+                "kind": "SingleLineCommentTrivia",
+                "text": "//foo"
+            },
+            {
+                "kind": "NewLineTrivia",
+                "text": "\r\n"
+            }
+        ]
+    }
+]

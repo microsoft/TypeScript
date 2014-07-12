@@ -1,0 +1,47 @@
+=== tests/cases/compiler/arrayLiteral.ts ===
+// valid uses of array literals
+
+var x = [];
+>x : any[]
+>[] : any[]
+
+var x = new Array(1);
+>x : any[]
+>new Array(1) : any[]
+>Array : { isArray(arg: any): boolean; prototype: any[]; (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new(arrayLength?: number): any[]; new<T>(arrayLength: number): T[]; new<T>(...items: T[]): T[]; }
+
+var y = [1];
+>y : number[]
+>[1] : number[]
+
+var y = [1, 2];
+>y : number[]
+>[1, 2] : number[]
+
+var y = new Array<number>();
+>y : number[]
+>new Array<number>() : number[]
+>Array : { isArray(arg: any): boolean; prototype: any[]; (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new(arrayLength?: number): any[]; new<T>(arrayLength: number): T[]; new<T>(...items: T[]): T[]; }
+
+var x2: number[] = [];
+>x2 : number[]
+>[] : number[]
+
+var x2: number[] = new Array(1);
+>x2 : number[]
+>new Array(1) : any[]
+>Array : { isArray(arg: any): boolean; prototype: any[]; (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new(arrayLength?: number): any[]; new<T>(arrayLength: number): T[]; new<T>(...items: T[]): T[]; }
+
+var y2: number[] = [1];
+>y2 : number[]
+>[1] : number[]
+
+var y2: number[] = [1, 2];
+>y2 : number[]
+>[1, 2] : number[]
+
+var y2: number[] = new Array<number>();
+>y2 : number[]
+>new Array<number>() : number[]
+>Array : { isArray(arg: any): boolean; prototype: any[]; (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new(arrayLength?: number): any[]; new<T>(arrayLength: number): T[]; new<T>(...items: T[]): T[]; }
+

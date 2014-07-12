@@ -1,0 +1,29 @@
+==== tests/cases/compiler/chainedAssignment3.ts (2 errors) ====
+    class A {
+        id: number;
+    }
+    
+    class B extends A {
+        value: string;
+    }
+    
+    var a: A;
+    var b: B;
+    a = b = null;
+    a = b = new B();
+    b = a = new B();
+    
+    a.id = b.value = null;
+    
+    // error cases
+    b = a = new A();
+    ~
+!!! chainedAssignment3.ts(18,1): error TS2012: Cannot convert 'A' to 'B':
+!!! 	Type 'A' is missing property 'value' from type 'B'.
+    a = b = new A();
+        ~
+!!! chainedAssignment3.ts(19,5): error TS2012: Cannot convert 'A' to 'B':
+!!! 	Type 'A' is missing property 'value' from type 'B'.
+    
+    
+    

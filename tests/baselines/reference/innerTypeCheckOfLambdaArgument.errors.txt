@@ -1,0 +1,16 @@
+==== tests/cases/compiler/innerTypeCheckOfLambdaArgument.ts (1 errors) ====
+    function takesCallback(callback: (n) =>any) {
+    
+    }
+     
+    takesCallback(
+     
+        function inner(n) {
+                    // this line should raise an error
+                    // otherwise, there's a bug in overload resolution / partial typechecking
+            var k: string = 10; 
+          ~~~~~~~~~~~~~~
+!!! innerTypeCheckOfLambdaArgument.ts(10,7): error TS2011: Cannot convert 'number' to 'string'.
+        }
+    );
+    

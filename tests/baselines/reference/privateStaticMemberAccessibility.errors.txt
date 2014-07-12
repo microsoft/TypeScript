@@ -1,0 +1,13 @@
+==== tests/cases/compiler/privateStaticMemberAccessibility.ts (2 errors) ====
+    class Base {
+        private static foo: string;
+    }
+    
+    class Derived extends Base {
+        static bar = Base.foo; // error
+                          ~~~
+!!! privateStaticMemberAccessibility.ts(6,23): error TS2107: 'Base.foo' is inaccessible.
+        bing = () => Base.foo; // error
+                          ~~~
+!!! privateStaticMemberAccessibility.ts(7,23): error TS2107: 'Base.foo' is inaccessible.
+    }

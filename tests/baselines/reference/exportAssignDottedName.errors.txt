@@ -1,0 +1,13 @@
+==== tests/cases/compiler/foo2.ts (2 errors) ====
+    import foo1 = require('./foo1');
+    export = foo1.x; // Error, export assignment must be identifier only
+                 ~
+!!! foo2.ts(2,14): error TS1005: ';' expected.
+                  ~
+!!! foo2.ts(2,15): error TS2095: Could not find symbol 'x'.
+    
+==== tests/cases/compiler/foo1.ts (0 errors) ====
+    export function x(){
+        return true;
+    }
+    

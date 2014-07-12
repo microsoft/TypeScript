@@ -1,0 +1,26 @@
+=== tests/cases/compiler/inheritedFunctionAssignmentCompatibility.ts ===
+interface IResultCallback extends Function { }
+>IResultCallback : IResultCallback
+>Function : Function
+
+function fn(cb: IResultCallback) { }
+>fn : typeof fn
+>cb : IResultCallback
+>IResultCallback : IResultCallback
+
+>fn((a, b) => true) : void
+>fn : typeof fn
+
+fn((a, b) => true);
+>(a, b) => true : (a: any, b: any) => boolean
+>a : any
+>b : any
+
+fn(function (a, b) { return true; })
+>fn(function (a, b) { return true; }) : void
+>fn : typeof fn
+>function (a, b) { return true; } : (a: any, b: any) => boolean
+>a : any
+>b : any
+
+

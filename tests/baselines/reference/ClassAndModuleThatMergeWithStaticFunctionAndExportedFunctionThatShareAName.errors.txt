@@ -1,0 +1,36 @@
+==== tests/cases/compiler/ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts (5 errors) ====
+    class Point {
+        constructor(public x: number, public y: number) { }
+    
+        static Origin(): Point { return { x: 0, y: 0 }; } // unexpected error here bug 840246
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(4,5): error TS2151: Overload signatures must all be exported or not exported.
+    }
+    
+    module Point {
+        export function Origin() { return null; } //expected duplicate identifier error
+                        ~~~~~~
+!!! ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(8,21): error TS2000: Duplicate identifier 'Origin'. Additional locations:
+!!! 	ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(4,5)
+    }
+    
+    
+    module A {
+        export class Point {
+            constructor(public x: number, public y: number) { }
+    
+            static Origin(): Point { return { x: 0, y: 0 }; } // unexpected error here bug 840246
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(16,9): error TS2149: Overload signature is not compatible with function definition:
+!!! 	Type 'String' is missing property 'x' from type 'Point'.
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(16,9): error TS2151: Overload signatures must all be exported or not exported.
+        }
+    
+        export module Point {
+            export function Origin() { return ""; }//expected duplicate identifier error
+                            ~~~~~~
+!!! ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(20,25): error TS2000: Duplicate identifier 'Origin'. Additional locations:
+!!! 	ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(16,9)
+        }
+    }

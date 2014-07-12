@@ -1,0 +1,31 @@
+==== tests/cases/compiler/contextualTypingOfGenericFunctionTypedArguments1.ts (4 errors) ====
+    interface Collection<T> {
+        length: number;
+        add(x: T): void;
+        remove(x: T): boolean;
+    }
+    
+    interface Combinators {
+        forEach<T>(c: Collection<T>, f: (x: T) => Date): void;
+    }
+    
+    var c2: Collection<number>;
+    var _: Combinators;
+    
+    // errors on all 3 lines, bug was that r5 was the only line with errors
+    var f = (x: number) => { return x.toFixed() };
+    var r5 = _.forEach<number>(c2, f); 
+               ~~~~~~~
+!!! contextualTypingOfGenericFunctionTypedArguments1.ts(16,12): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Call signatures of types '(x: number) => string' and '(x: number) => Date' are incompatible:
+!!! 		Type 'String' is missing property 'toDateString' from type 'Date'.
+               ~~~~~~~
+!!! contextualTypingOfGenericFunctionTypedArguments1.ts(16,12): error TS2087: Could not select overload for 'call' expression.
+    var r6 = _.forEach<number>(c2, (x) => { return x.toFixed() }); 
+               ~~~~~~~
+!!! contextualTypingOfGenericFunctionTypedArguments1.ts(17,12): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Call signatures of types '(x: number) => string' and '(x: number) => Date' are incompatible:
+!!! 		Type 'String' is missing property 'toDateString' from type 'Date'.
+               ~~~~~~~
+!!! contextualTypingOfGenericFunctionTypedArguments1.ts(17,12): error TS2087: Could not select overload for 'call' expression.
+    

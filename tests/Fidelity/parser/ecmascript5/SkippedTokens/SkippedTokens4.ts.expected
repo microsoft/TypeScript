@@ -1,0 +1,79 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "diagnostics": [
+        {
+            "start": 0,
+            "length": 1,
+            "diagnosticCode": "Unexpected character {0}.",
+            "arguments": [
+                "\"\\\""
+            ]
+        },
+        {
+            "start": 0,
+            "length": 1,
+            "diagnosticCode": "Unexpected token; '{0}' expected.",
+            "arguments": [
+                "module, class, interface, enum, import or statement"
+            ]
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 12,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullWidth": 12,
+                "isIncrementallyUnusable": true,
+                "expression": {
+                    "kind": "RegularExpressionLiteral",
+                    "width": 8,
+                    "fullWidth": 11,
+                    "text": "/regexp/",
+                    "value": {},
+                    "valueText": "/regexp/",
+                    "hasLeadingTrivia": true,
+                    "hasLeadingSkippedText": true,
+                    "leadingTrivia": [
+                        {
+                            "kind": "SkippedTokenTrivia",
+                            "skippedToken": {
+                                "kind": "ErrorToken",
+                                "width": 1,
+                                "text": "\\"
+                            }
+                        },
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "text": "  "
+                        }
+                    ]
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 12
+    }
+}

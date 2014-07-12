@@ -1,0 +1,19 @@
+==== tests/cases/compiler/contextualTypingOfObjectLiterals.ts (3 errors) ====
+    var obj1: { [x: string]: string; };
+    var obj2 = {x: ""};
+    obj1 = {}; // Ok
+    obj1 = obj2; // Error - indexer doesn't match
+    ~~~~
+!!! contextualTypingOfObjectLiterals.ts(4,1): error TS2012: Cannot convert '{ x: string; }' to '{ [x: string]: string; }':
+!!! 	Index signatures of types '{ x: string; }' and '{ [x: string]: string; }' are incompatible.
+    
+    function f(x: { [s: string]: string }) { }
+    
+    f({}); // Ok
+    f(obj1); // Ok
+    f(obj2); // Error - indexer doesn't match
+    ~
+!!! contextualTypingOfObjectLiterals.ts(10,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Index signatures of types '{ x: string; }' and '{ [s: string]: string; }' are incompatible.
+    ~
+!!! contextualTypingOfObjectLiterals.ts(10,1): error TS2087: Could not select overload for 'call' expression.

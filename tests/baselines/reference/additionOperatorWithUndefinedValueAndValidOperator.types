@@ -1,0 +1,123 @@
+=== tests/cases/compiler/additionOperatorWithUndefinedValueAndValidOperator.ts ===
+// If one operand is the null or undefined value, it is treated as having the type of the other operand.
+
+enum E { a, b, c }
+>E : E
+>a : E
+>b : E
+>c : E
+
+var a: any;
+>a : any
+
+var b: number;
+>b : number
+
+var c: E;
+>c : E
+>E : E
+
+var d: string;
+>d : string
+
+// undefined + any
+var r1: any = undefined + a;
+>r1 : any
+>undefined + a : any
+>undefined : any
+>a : any
+
+var r2: any = a + undefined;
+>r2 : any
+>a + undefined : any
+>a : any
+>undefined : any
+
+// undefined + number/enum
+var r3 = undefined + b;
+>r3 : number
+>undefined + b : number
+>undefined : any
+>b : number
+
+var r4 = undefined + 1;
+>r4 : number
+>undefined + 1 : number
+>undefined : any
+
+var r5 = undefined + c;
+>r5 : number
+>undefined + c : number
+>undefined : any
+>c : E
+
+var r6 = undefined + E.a;
+>r6 : number
+>undefined + E.a : number
+>undefined : any
+>E.a : E
+>E : typeof E
+>a : E
+
+var r7 = undefined + E['a'];
+>r7 : number
+>undefined + E['a'] : number
+>undefined : any
+>E['a'] : E
+>E : typeof E
+
+var r8 = b + undefined;
+>r8 : number
+>b + undefined : number
+>b : number
+>undefined : any
+
+var r9 = 1 + undefined;
+>r9 : number
+>1 + undefined : number
+>undefined : any
+
+var r10 = c + undefined
+>r10 : number
+>c + undefined : number
+>c : E
+>undefined : any
+
+var r11 = E.a + undefined;
+>r11 : number
+>E.a + undefined : number
+>E.a : E
+>E : typeof E
+>a : E
+>undefined : any
+
+var r12 = E['a'] + undefined;
+>r12 : number
+>E['a'] + undefined : number
+>E['a'] : E
+>E : typeof E
+>undefined : any
+
+// undefined + string
+var r13 = undefined + d;
+>r13 : string
+>undefined + d : string
+>undefined : any
+>d : string
+
+var r14 = undefined + '';
+>r14 : string
+>undefined + '' : string
+>undefined : any
+
+var r15 = d + undefined;
+>r15 : string
+>d + undefined : string
+>d : string
+>undefined : any
+
+var r16 = '' + undefined;
+>r16 : string
+>'' + undefined : string
+>undefined : any
+

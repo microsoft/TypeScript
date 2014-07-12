@@ -1,0 +1,13 @@
+==== tests/cases/compiler/privateStaticNotAccessibleInClodule.ts (1 errors) ====
+    // Any attempt to access a private property member outside the class body that contains its declaration results in a compile-time error.
+    
+    class C {
+        private foo: string;
+        private static bar: string;
+    }
+    
+    module C {
+        export var y = C.bar; // error
+                         ~~~
+!!! privateStaticNotAccessibleInClodule.ts(9,22): error TS2107: 'C.bar' is inaccessible.
+    }

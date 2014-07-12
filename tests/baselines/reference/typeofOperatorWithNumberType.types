@@ -1,0 +1,215 @@
+=== tests/cases/compiler/typeofOperatorWithNumberType.ts ===
+// typeof  operator on number type
+var NUMBER: number;
+>NUMBER : number
+
+var NUMBER1: number[] = [1, 2];
+>NUMBER1 : number[]
+>[1, 2] : number[]
+
+function foo(): number { return 1; }
+>foo : typeof foo
+
+class A {
+>A : A
+
+    public a: number;
+>a : number
+
+    static foo() { return 1; }
+>foo : () => number
+}
+module M {
+>M : M
+
+    export var n: number;
+>n : number
+}
+
+var objA = new A();
+>objA : A
+>new A() : A
+>A : typeof A
+
+// number type var
+var ResultIsString1 = typeof NUMBER;
+>ResultIsString1 : string
+>typeof NUMBER : string
+>NUMBER : number
+
+var ResultIsString2 = typeof NUMBER1;
+>ResultIsString2 : string
+>typeof NUMBER1 : string
+>NUMBER1 : number[]
+
+// number type literal
+var ResultIsString3 = typeof 1;
+>ResultIsString3 : string
+>typeof 1 : string
+
+var ResultIsString4 = typeof { x: 1, y: 2};
+>ResultIsString4 : string
+>typeof { x: 1, y: 2} : string
+>{ x: 1, y: 2} : { x: number; y: number; }
+>x : number
+>y : number
+
+var ResultIsString5 = typeof { x: 1, y: (n: number) => { return n; } };
+>ResultIsString5 : string
+>typeof { x: 1, y: (n: number) => { return n; } } : string
+>{ x: 1, y: (n: number) => { return n; } } : { x: number; y: (n: number) => number; }
+>x : number
+>y : (n: number) => number
+>(n: number) => { return n; } : (n: number) => number
+>n : number
+>n : number
+
+// number type expressions
+var ResultIsString6 = typeof objA.a;
+>ResultIsString6 : string
+>typeof objA.a : string
+>objA.a : number
+>objA : A
+>a : number
+
+var ResultIsString7 = typeof M.n;
+>ResultIsString7 : string
+>typeof M.n : string
+>M.n : number
+>M : typeof M
+>n : number
+
+var ResultIsString8 = typeof NUMBER1[0];
+>ResultIsString8 : string
+>typeof NUMBER1[0] : string
+>NUMBER1[0] : number
+>NUMBER1 : number[]
+
+var ResultIsString9 = typeof foo();
+>ResultIsString9 : string
+>typeof foo() : string
+>foo() : number
+>foo : typeof foo
+
+var ResultIsString10 = typeof A.foo();
+>ResultIsString10 : string
+>typeof A.foo() : string
+>A.foo() : number
+>A.foo : () => number
+>A : typeof A
+>foo : () => number
+
+var ResultIsString11 = typeof (NUMBER + NUMBER);
+>ResultIsString11 : string
+>typeof (NUMBER + NUMBER) : string
+>(NUMBER + NUMBER) : number
+>NUMBER + NUMBER : number
+>NUMBER : number
+>NUMBER : number
+
+// multiple typeof  operators
+var ResultIsString12 = typeof typeof NUMBER;
+>ResultIsString12 : string
+>typeof typeof NUMBER : string
+>typeof NUMBER : string
+>NUMBER : number
+
+var ResultIsString13 = typeof typeof typeof (NUMBER + NUMBER);
+>ResultIsString13 : string
+>typeof typeof typeof (NUMBER + NUMBER) : string
+>typeof typeof (NUMBER + NUMBER) : string
+>typeof (NUMBER + NUMBER) : string
+>(NUMBER + NUMBER) : number
+>NUMBER + NUMBER : number
+>NUMBER : number
+>NUMBER : number
+
+>// miss assignment operators
+typeof 1 : string
+
+// miss assignment operators
+typeof 1;
+typeof NUMBER;
+>typeof NUMBER : string
+>NUMBER : number
+
+typeof NUMBER1;
+>typeof NUMBER1 : string
+>NUMBER1 : number[]
+
+typeof foo();
+>typeof foo() : string
+>foo() : number
+>foo : typeof foo
+
+typeof objA.a;
+>typeof objA.a : string
+>objA.a : number
+>objA : A
+>a : number
+
+typeof M.n;
+>typeof M.n : string
+>M.n : number
+>M : typeof M
+>n : number
+
+typeof objA.a, M.n;
+>typeof objA.a, M.n : number
+>typeof objA.a : string
+>objA.a : number
+>objA : A
+>a : number
+>M.n : number
+>M : typeof M
+>n : number
+
+// use typeof in type query
+var z: number;
+>z : number
+
+var x: number[];
+>x : number[]
+
+z: typeof NUMBER;
+>typeof NUMBER : string
+>NUMBER : number
+
+x: typeof NUMBER1;
+>typeof NUMBER1 : string
+>NUMBER1 : number[]
+
+r: typeof foo;
+>typeof foo : string
+>foo : typeof foo
+
+var y = { a: 1, b: 2 };
+>y : { a: number; b: number; }
+>{ a: 1, b: 2 } : { a: number; b: number; }
+>a : number
+>b : number
+
+z: typeof y.a;
+>typeof y.a : string
+>y.a : number
+>y : { a: number; b: number; }
+>a : number
+
+z: typeof objA.a;
+>typeof objA.a : string
+>objA.a : number
+>objA : A
+>a : number
+
+z: typeof A.foo;
+>typeof A.foo : string
+>A.foo : () => number
+>A : typeof A
+>foo : () => number
+
+z: typeof M.n;
+>typeof M.n : string
+>M.n : number
+>M : typeof M
+>n : number
+

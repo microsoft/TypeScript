@@ -1,0 +1,49 @@
+=== tests/cases/compiler/ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.ts ===
+class Point {
+>Point : Point
+
+    constructor(public x: number, public y: number) { }
+>x : number
+>y : number
+
+    static Origin: Point = { x: 0, y: 0 };
+>Origin : Point
+>Point : Point
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>y : number
+}
+
+module Point {
+>Point : Point
+
+    var Origin = ""; // not an error, since not exported
+>Origin : string
+}
+
+
+module A {
+>A : A
+
+    export class Point {
+>Point : Point
+
+        constructor(public x: number, public y: number) { }
+>x : number
+>y : number
+
+        static Origin: Point = { x: 0, y: 0 };
+>Origin : Point
+>Point : Point
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>y : number
+    }
+
+    export module Point {
+>Point : Point
+
+        var Origin = ""; // not an error since not exported
+>Origin : string
+    }
+}

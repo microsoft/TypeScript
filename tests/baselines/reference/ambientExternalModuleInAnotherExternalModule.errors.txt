@@ -1,0 +1,20 @@
+==== tests/cases/compiler/ambientExternalModuleInAnotherExternalModule.ts (4 errors) ====
+    
+    class D { }
+    export = D;
+    
+    declare module "ext" {
+                   ~~~~~
+!!! ambientExternalModuleInAnotherExternalModule.ts(5,16): error TS2195: Ambient external module declaration must be defined in global context.
+        export class C { }
+    }
+    
+    // Cannot resolve this ext module reference
+    import ext = require("ext");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! ambientExternalModuleInAnotherExternalModule.ts(10,1): error TS2071: Unable to resolve external module '"ext"'.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! ambientExternalModuleInAnotherExternalModule.ts(10,1): error TS2072: Module cannot be aliased to a non-module type.
+    var x = ext;
+            ~~~
+!!! ambientExternalModuleInAnotherExternalModule.ts(11,9): error TS2095: Could not find symbol 'ext'.

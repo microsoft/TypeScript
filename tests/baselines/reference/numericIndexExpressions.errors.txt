@@ -1,0 +1,24 @@
+==== tests/cases/compiler/numericIndexExpressions.ts (4 errors) ====
+    interface Numbers1 {
+        1: string;
+    }
+    interface Strings1 {
+        '1': string;
+    }
+     
+     
+    var x: Numbers1;
+    x[1] = 4; // error
+    ~~~~
+!!! numericIndexExpressions.ts(10,1): error TS2011: Cannot convert 'number' to 'string'.
+    x['1'] = 4; // error
+    ~~~~~~
+!!! numericIndexExpressions.ts(11,1): error TS2011: Cannot convert 'number' to 'string'.
+    
+    var y: Strings1;
+    y['1'] = 4; // should be error
+    ~~~~~~
+!!! numericIndexExpressions.ts(14,1): error TS2011: Cannot convert 'number' to 'string'.
+    y[1] = 4; // should be error
+    ~~~~
+!!! numericIndexExpressions.ts(15,1): error TS2011: Cannot convert 'number' to 'string'.

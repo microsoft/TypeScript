@@ -1,0 +1,238 @@
+=== tests/cases/compiler/conditionalOperatorConditionIsBooleanType.ts ===
+//Cond ? Expr1 : Expr2,  Cond is of boolean type, Expr1 and Expr2 have the same type
+var condBoolean: boolean;
+>condBoolean : boolean
+
+var exprAny1: any;
+>exprAny1 : any
+
+var exprBoolean1: boolean;
+>exprBoolean1 : boolean
+
+var exprNumber1: number;
+>exprNumber1 : number
+
+var exprString1: string;
+>exprString1 : string
+
+var exprIsObject1: Object;
+>exprIsObject1 : Object
+>Object : Object
+
+var exprAny2: any;
+>exprAny2 : any
+
+var exprBoolean2: boolean;
+>exprBoolean2 : boolean
+
+var exprNumber2: number;
+>exprNumber2 : number
+
+var exprString2: string;
+>exprString2 : string
+
+var exprIsObject2: Object;
+>exprIsObject2 : Object
+>Object : Object
+
+>//Cond is a boolean type variable
+condBoolean ? exprAny1 : exprAny2 : any
+>//Cond is a boolean type variable
+condBoolean : boolean
+
+//Cond is a boolean type variable
+condBoolean ? exprAny1 : exprAny2;
+>exprAny1 : any
+>exprAny2 : any
+
+condBoolean ? exprBoolean1 : exprBoolean2;
+>condBoolean ? exprBoolean1 : exprBoolean2 : boolean
+>condBoolean : boolean
+>exprBoolean1 : boolean
+>exprBoolean2 : boolean
+
+condBoolean ? exprNumber1 : exprNumber2;
+>condBoolean ? exprNumber1 : exprNumber2 : number
+>condBoolean : boolean
+>exprNumber1 : number
+>exprNumber2 : number
+
+condBoolean ? exprString1 : exprString2;
+>condBoolean ? exprString1 : exprString2 : string
+>condBoolean : boolean
+>exprString1 : string
+>exprString2 : string
+
+condBoolean ? exprIsObject1 : exprIsObject2;
+>condBoolean ? exprIsObject1 : exprIsObject2 : Object
+>condBoolean : boolean
+>exprIsObject1 : Object
+>exprIsObject2 : Object
+
+>//Cond is a boolean type literal
+true ? exprAny1 : exprAny2 : any
+
+//Cond is a boolean type literal
+true ? exprAny1 : exprAny2;
+>exprAny1 : any
+>exprAny2 : any
+
+false ? exprBoolean1 : exprBoolean2;
+>false ? exprBoolean1 : exprBoolean2 : boolean
+>exprBoolean1 : boolean
+>exprBoolean2 : boolean
+
+true ? exprNumber1 : exprNumber2;
+>true ? exprNumber1 : exprNumber2 : number
+>exprNumber1 : number
+>exprNumber2 : number
+
+false ? exprString1 : exprString2;
+>false ? exprString1 : exprString2 : string
+>exprString1 : string
+>exprString2 : string
+
+true ? exprIsObject1 : exprIsObject2;
+>true ? exprIsObject1 : exprIsObject2 : Object
+>exprIsObject1 : Object
+>exprIsObject2 : Object
+
+>//Cond is a boolean type expression
+!true ? exprAny1 : exprAny2 : any
+>//Cond is a boolean type expression
+!true : boolean
+
+//Cond is a boolean type expression
+!true ? exprAny1 : exprAny2;
+>exprAny1 : any
+>exprAny2 : any
+
+typeof "123" == "string" ? exprBoolean1 : exprBoolean2;
+>typeof "123" == "string" ? exprBoolean1 : exprBoolean2 : boolean
+>typeof "123" == "string" : boolean
+>typeof "123" : string
+>exprBoolean1 : boolean
+>exprBoolean2 : boolean
+
+2 > 1 ? exprNumber1 : exprNumber2;
+>2 > 1 ? exprNumber1 : exprNumber2 : number
+>2 > 1 : boolean
+>exprNumber1 : number
+>exprNumber2 : number
+
+null === undefined ? exprString1 : exprString2;
+>null === undefined ? exprString1 : exprString2 : string
+>null === undefined : boolean
+>undefined : any
+>exprString1 : string
+>exprString2 : string
+
+true || false ? exprIsObject1 : exprIsObject2;
+>true || false ? exprIsObject1 : exprIsObject2 : Object
+>true || false : boolean
+>exprIsObject1 : Object
+>exprIsObject2 : Object
+
+//Results shoud be same as Expr1 and Expr2
+var resultIsAny1 = condBoolean ? exprAny1 : exprAny2;
+>resultIsAny1 : any
+>condBoolean ? exprAny1 : exprAny2 : any
+>condBoolean : boolean
+>exprAny1 : any
+>exprAny2 : any
+
+var resultIsBoolean1 = condBoolean ? exprBoolean1 : exprBoolean2;
+>resultIsBoolean1 : boolean
+>condBoolean ? exprBoolean1 : exprBoolean2 : boolean
+>condBoolean : boolean
+>exprBoolean1 : boolean
+>exprBoolean2 : boolean
+
+var resultIsNumber1 = condBoolean ? exprNumber1 : exprNumber2;
+>resultIsNumber1 : number
+>condBoolean ? exprNumber1 : exprNumber2 : number
+>condBoolean : boolean
+>exprNumber1 : number
+>exprNumber2 : number
+
+var resultIsString1 = condBoolean ? exprString1 : exprString2;
+>resultIsString1 : string
+>condBoolean ? exprString1 : exprString2 : string
+>condBoolean : boolean
+>exprString1 : string
+>exprString2 : string
+
+var resultIsObject1 = condBoolean ? exprIsObject1 : exprIsObject2;
+>resultIsObject1 : Object
+>condBoolean ? exprIsObject1 : exprIsObject2 : Object
+>condBoolean : boolean
+>exprIsObject1 : Object
+>exprIsObject2 : Object
+
+var resultIsAny2 = true ? exprAny1 : exprAny2;
+>resultIsAny2 : any
+>true ? exprAny1 : exprAny2 : any
+>exprAny1 : any
+>exprAny2 : any
+
+var resultIsBoolean2 = false ? exprBoolean1 : exprBoolean2;
+>resultIsBoolean2 : boolean
+>false ? exprBoolean1 : exprBoolean2 : boolean
+>exprBoolean1 : boolean
+>exprBoolean2 : boolean
+
+var resultIsNumber2 = true ? exprNumber1 : exprNumber2;
+>resultIsNumber2 : number
+>true ? exprNumber1 : exprNumber2 : number
+>exprNumber1 : number
+>exprNumber2 : number
+
+var resultIsString2 = false ? exprString1 : exprString2;
+>resultIsString2 : string
+>false ? exprString1 : exprString2 : string
+>exprString1 : string
+>exprString2 : string
+
+var resultIsObject2 = true ? exprIsObject1 : exprIsObject2;
+>resultIsObject2 : Object
+>true ? exprIsObject1 : exprIsObject2 : Object
+>exprIsObject1 : Object
+>exprIsObject2 : Object
+
+var resultIsAny3 = !true ? exprAny1 : exprAny2;
+>resultIsAny3 : any
+>!true ? exprAny1 : exprAny2 : any
+>!true : boolean
+>exprAny1 : any
+>exprAny2 : any
+
+var resultIsBoolean3 = typeof "123" == "string" ? exprBoolean1 : exprBoolean2;
+>resultIsBoolean3 : boolean
+>typeof "123" == "string" ? exprBoolean1 : exprBoolean2 : boolean
+>typeof "123" == "string" : boolean
+>typeof "123" : string
+>exprBoolean1 : boolean
+>exprBoolean2 : boolean
+
+var resultIsNumber3 = 2 > 1 ? exprNumber1 : exprNumber2;
+>resultIsNumber3 : number
+>2 > 1 ? exprNumber1 : exprNumber2 : number
+>2 > 1 : boolean
+>exprNumber1 : number
+>exprNumber2 : number
+
+var resultIsString3 = null === undefined ? exprString1 : exprString2;
+>resultIsString3 : string
+>null === undefined ? exprString1 : exprString2 : string
+>null === undefined : boolean
+>undefined : any
+>exprString1 : string
+>exprString2 : string
+
+var resultIsObject3 = true || false ? exprIsObject1 : exprIsObject2;
+>resultIsObject3 : Object
+>true || false ? exprIsObject1 : exprIsObject2 : Object
+>true || false : boolean
+>exprIsObject1 : Object
+>exprIsObject2 : Object
+

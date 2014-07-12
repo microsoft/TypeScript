@@ -1,0 +1,11 @@
+extends layout
+
+block mainContent
+    h1= title
+    p Welcome to #{title}
+
+    ul
+    - each user in users
+      li
+        a(href= "/user/"+user._id)
+          b= user._id

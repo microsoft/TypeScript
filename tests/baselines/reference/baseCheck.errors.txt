@@ -1,0 +1,53 @@
+==== tests/cases/compiler/baseCheck.ts (11 errors) ====
+    class C { constructor(x: number, y: number) { } }
+    class ELoc extends C {
+        constructor(x: number) {
+            super(0, x);
+        }
+    }
+    class ELocVar extends C {  
+        constructor(x: number) {
+            super(0, loc);
+                     ~~~
+!!! baseCheck.ts(9,18): error TS2095: Could not find symbol 'loc'.
+        }
+    
+        m() {
+            var loc=10;
+        }
+    }
+    
+    class D extends C { constructor(public z: number) { super(this.z) }  } // too few params
+                                                        ~~~~~
+!!! baseCheck.ts(17,53): error TS2081: Supplied parameters do not match any signature of call target.
+                                                        ~~~~~
+!!! baseCheck.ts(17,53): error TS2087: Could not select overload for 'call' expression.
+                                                              ~~~~
+!!! baseCheck.ts(17,59): error TS2097: 'this' cannot be referenced in current location.
+    class E extends C { constructor(public z: number) { super(0, this.z) } }
+                                                                 ~~~~
+!!! baseCheck.ts(18,62): error TS2097: 'this' cannot be referenced in current location.
+    class F extends C { constructor(public z: number) { super("hello", this.z) } } // first param type
+                                                        ~~~~~
+!!! baseCheck.ts(19,53): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Could not apply type 'number' to argument 1 which is of type 'string'.
+                                                        ~~~~~
+!!! baseCheck.ts(19,53): error TS2087: Could not select overload for 'call' expression.
+                                                                       ~~~~
+!!! baseCheck.ts(19,68): error TS2097: 'this' cannot be referenced in current location.
+    
+    function f() {
+        if (x<10) {
+            ~
+!!! baseCheck.ts(22,9): error TS2095: Could not find symbol 'x'.
+          x=11;
+          ~
+!!! baseCheck.ts(23,7): error TS2095: Could not find symbol 'x'.
+        }
+        else {
+            x=12;
+            ~
+!!! baseCheck.ts(26,9): error TS2095: Could not find symbol 'x'.
+        }
+    }
+    

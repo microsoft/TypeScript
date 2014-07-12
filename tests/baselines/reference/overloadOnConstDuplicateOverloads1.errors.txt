@@ -1,0 +1,19 @@
+==== tests/cases/compiler/overloadOnConstDuplicateOverloads1.ts (4 errors) ====
+    function foo(a: 'hi', x: string);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! overloadOnConstDuplicateOverloads1.ts(1,1): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+    function foo(a: 'hi', x: string);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! overloadOnConstDuplicateOverloads1.ts(2,1): error TS2144: Duplicate overload signature for 'foo'.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! overloadOnConstDuplicateOverloads1.ts(2,1): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+    function foo(a: any, x: any) {
+    }
+    
+    function foo2(a: 'hi', x: string);
+    function foo2(a: 'hi', x: string);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! overloadOnConstDuplicateOverloads1.ts(7,1): error TS2144: Duplicate overload signature for 'foo2'.
+    function foo2(a: string, x: string);
+    function foo2(a: any, x: any) {
+    }

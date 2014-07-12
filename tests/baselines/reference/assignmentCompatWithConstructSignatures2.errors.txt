@@ -1,0 +1,83 @@
+==== tests/cases/compiler/assignmentCompatWithConstructSignatures2.ts (12 errors) ====
+    // void returning call signatures can be assigned a non-void returning call signature that otherwise matches
+    
+    interface T {
+        f: new (x: number) => void;
+    }
+    var t: T;
+    var a: { f: new (x: number) => void };
+    
+    t = a;
+    a = t;
+    
+    interface S {
+        f: new (x: number) => string;
+    }
+    var s: S;
+    var a2: { f: new (x: number) => string };
+    t = s;
+    t = a2;
+    a = s;
+    a = a2;
+    
+    // errors
+    t = () => 1;
+    ~
+!!! assignmentCompatWithConstructSignatures2.ts(23,1): error TS2012: Cannot convert '() => number' to 'T':
+!!! 	Type '() => number' is missing property 'f' from type 'T'.
+    t = function (x: number) { return ''; }
+    ~
+!!! assignmentCompatWithConstructSignatures2.ts(24,1): error TS2012: Cannot convert '(x: number) => string' to 'T':
+!!! 	Type '(x: number) => string' is missing property 'f' from type 'T'.
+    a = () => 1;
+    ~
+!!! assignmentCompatWithConstructSignatures2.ts(25,1): error TS2012: Cannot convert '() => number' to '{ f: new(x: number) => void; }':
+!!! 	Type '() => number' is missing property 'f' from type '{ f: new(x: number) => void; }'.
+    a = function (x: number) { return ''; }
+    ~
+!!! assignmentCompatWithConstructSignatures2.ts(26,1): error TS2012: Cannot convert '(x: number) => string' to '{ f: new(x: number) => void; }':
+!!! 	Type '(x: number) => string' is missing property 'f' from type '{ f: new(x: number) => void; }'.
+    
+    interface S2 {
+        f(x: string): void;
+    }
+    var s2: S2;
+    var a3: { f(x: string): void };
+    // these are errors
+    t = s2;
+    ~
+!!! assignmentCompatWithConstructSignatures2.ts(34,1): error TS2012: Cannot convert 'S2' to 'T':
+!!! 	Types of property 'f' of types 'S2' and 'T' are incompatible:
+!!! 		Type 'new(x: number) => void' requires a construct signature, but type '(x: string) => void' lacks one.
+    t = a3;
+    ~
+!!! assignmentCompatWithConstructSignatures2.ts(35,1): error TS2012: Cannot convert '{ f(x: string): void; }' to 'T':
+!!! 	Types of property 'f' of types '{ f(x: string): void; }' and 'T' are incompatible:
+!!! 		Type 'new(x: number) => void' requires a construct signature, but type '(x: string) => void' lacks one.
+    t = (x: string) => 1;
+    ~
+!!! assignmentCompatWithConstructSignatures2.ts(36,1): error TS2012: Cannot convert '(x: string) => number' to 'T':
+!!! 	Type '(x: string) => number' is missing property 'f' from type 'T'.
+    t = function (x: string) { return ''; }
+    ~
+!!! assignmentCompatWithConstructSignatures2.ts(37,1): error TS2012: Cannot convert '(x: string) => string' to 'T':
+!!! 	Type '(x: string) => string' is missing property 'f' from type 'T'.
+    a = s2;
+    ~
+!!! assignmentCompatWithConstructSignatures2.ts(38,1): error TS2012: Cannot convert 'S2' to '{ f: new(x: number) => void; }':
+!!! 	Types of property 'f' of types 'S2' and '{ f: new(x: number) => void; }' are incompatible:
+!!! 		Type 'new(x: number) => void' requires a construct signature, but type '(x: string) => void' lacks one.
+    a = a3;
+    ~
+!!! assignmentCompatWithConstructSignatures2.ts(39,1): error TS2012: Cannot convert '{ f(x: string): void; }' to '{ f: new(x: number) => void; }':
+!!! 	Types of property 'f' of types '{ f(x: string): void; }' and '{ f: new(x: number) => void; }' are incompatible:
+!!! 		Type 'new(x: number) => void' requires a construct signature, but type '(x: string) => void' lacks one.
+    a = (x: string) => 1;
+    ~
+!!! assignmentCompatWithConstructSignatures2.ts(40,1): error TS2012: Cannot convert '(x: string) => number' to '{ f: new(x: number) => void; }':
+!!! 	Type '(x: string) => number' is missing property 'f' from type '{ f: new(x: number) => void; }'.
+    a = function (x: string) { return ''; }
+    ~
+!!! assignmentCompatWithConstructSignatures2.ts(41,1): error TS2012: Cannot convert '(x: string) => string' to '{ f: new(x: number) => void; }':
+!!! 	Type '(x: string) => string' is missing property 'f' from type '{ f: new(x: number) => void; }'.
+    

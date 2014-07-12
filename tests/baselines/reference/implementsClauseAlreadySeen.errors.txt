@@ -1,0 +1,9 @@
+==== tests/cases/compiler/implementsClauseAlreadySeen.ts (1 errors) ====
+    class C {
+        
+    }
+    class D implements C implements C {
+                         ~~~~~~~~~~~~
+!!! implementsClauseAlreadySeen.ts(4,22): error TS1027: 'implements' clause already seen.
+        baz() { }
+    }

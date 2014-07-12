@@ -1,0 +1,7 @@
+==== tests/cases/compiler/nonArrayRestArgs.ts (1 errors) ====
+    function foo(...rest: number) { // error
+                 ~~~~~~~~~~~~~~~
+!!! nonArrayRestArgs.ts(1,14): error TS2162: Rest parameters must be array types.
+        var x: string = rest[0];
+        return x;
+    }

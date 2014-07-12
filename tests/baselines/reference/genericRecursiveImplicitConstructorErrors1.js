@@ -1,0 +1,1 @@
+//// [genericRecursiveImplicitConstructorErrors1.js]

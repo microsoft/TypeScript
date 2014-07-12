@@ -1,0 +1,15 @@
+==== tests/cases/compiler/internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts (1 errors) ====
+    export module a {
+        export function foo(x: number) {
+            return x;
+        }
+    }
+    
+    export module c {
+        import b = a.foo;
+        var bVal = b(10);
+        export var bVal2 = b;
+    }
+    var d = c.b(11);
+              ~
+!!! internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts(12,11): error TS2094: The property 'b' does not exist on value of type 'typeof c'.

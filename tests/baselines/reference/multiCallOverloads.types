@@ -1,0 +1,46 @@
+=== tests/cases/compiler/multiCallOverloads.ts ===
+interface ICallback {
+>ICallback : ICallback
+
+    (x?: string):void;
+>x : string
+}
+
+function load(f: ICallback) {}
+>load : typeof load
+>f : ICallback
+>ICallback : ICallback
+
+var f1: ICallback = function(z?) {}
+>f1 : ICallback
+>ICallback : ICallback
+>function(z?) {} : (z?: string) => void
+>z : string
+
+var f2: ICallback = function(z?) {}
+>f2 : ICallback
+>ICallback : ICallback
+>function(z?) {} : (z?: string) => void
+>z : string
+
+load(f1) // ok
+>load(f1) // ok : void
+>load : typeof load
+>f1 : ICallback
+
+load(f2) // ok
+>load(f2) // ok : void
+>load : typeof load
+>f2 : ICallback
+
+load(function() {}) // this shouldn’t be an error
+>load(function() {}) // this shouldn’t be an error : void
+>load : typeof load
+>function() {} : () => void
+
+load(function(z?) {}) // this shouldn't be an error
+>load(function(z?) {}) // this shouldn't be an error : void
+>load : typeof load
+>function(z?) {} : (z?: string) => void
+>z : string
+

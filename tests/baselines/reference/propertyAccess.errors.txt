@@ -1,0 +1,167 @@
+==== tests/cases/compiler/propertyAccess.ts (17 errors) ====
+    enum Compass {
+        North, South, East, West
+    }
+    
+    var numIndex: { [n: number]: string } = { 3: 'three', 'three': 'three' };
+    var strIndex: { [n: string]: Compass } = { 'N': Compass.North, 'E': Compass.East };
+    var bothIndex:
+        {
+            [n: string]: HTMLElement;
+                         ~~~~~~~~~~~
+!!! propertyAccess.ts(9,22): error TS2095: Could not find symbol 'HTMLElement'.
+            [m: number]: HTMLDivElement;
+                         ~~~~~~~~~~~~~~
+!!! propertyAccess.ts(10,22): error TS2095: Could not find symbol 'HTMLDivElement'.
+        };
+    
+    function noIndex() { }
+    
+    var obj = {
+        10: 'ten',
+        x: 'hello',
+        y: 32,
+        z: { n: 'world', m: 15, o: () => false },
+        'literal property': 100
+    };
+    var anyVar: any = {};
+    
+    // Assign to a property access
+    obj.y = 4;
+    
+    // Property access on value of type 'any'
+    anyVar.x = anyVar.y = obj.x = anyVar.z;
+    
+    // Dotted property access of property that exists
+    var aa = obj.x;
+    
+    // Dotted property access of property that exists on value's apparent type
+    var bb = obj.hasOwnProperty;
+    
+    // Dotted property access of property that doesn't exist on value's apparent type
+    var cc = obj.qqq; // error
+                 ~~~
+!!! propertyAccess.ts(37,14): error TS2094: The property 'qqq' does not exist on value of type '{ 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }'.
+    
+    // Bracket notation property access using string literal value on type with property of that literal name
+    var dd = obj['literal property'];
+    var dd: number;
+    
+    // Bracket notation property access using string literal value on type without property of that literal name
+    var ee = obj['wa wa wa wa wa'];
+    var ee: any;
+    
+    // Bracket notation property access using numeric string literal value on type with property of that literal name
+    var ff = obj['10'];
+    var ff: string;
+    
+    // Bracket notation property access using numeric string literal value on type without property of that literal name
+    var gg = obj['1'];
+    var gg: any;
+    
+    // Bracket notation property access using numeric value on type with numeric index signature
+    var hh = numIndex[3.0];
+    var hh: string;
+    
+    // Bracket notation property access using enum value on type with numeric index signature
+    var ii = numIndex[Compass.South];
+    var ii: string;
+    
+    // Bracket notation property access using value of type 'any' on type with numeric index signature
+    var jj = numIndex[anyVar];
+    var jj: string;
+    
+    // Bracket notation property access using string value on type with numeric index signature
+    var kk = numIndex['what'];
+    var kk: any;
+    
+    // Bracket notation property access using value of other type on type with numeric index signature and no string index signature
+    var ll = numIndex[window]; // Error
+             ~~~~~~~~~~~~~~~~
+!!! propertyAccess.ts(72,10): error TS2008: Value of type '{ [n: number]: string; }' is not indexable by type 'any'.
+                      ~~~~~~
+!!! propertyAccess.ts(72,19): error TS2095: Could not find symbol 'window'.
+    
+    // Bracket notation property access using string value on type with string index signature and no numeric index signature
+    var mm = strIndex['N'];
+    var mm: Compass;
+    var mm2 = strIndex['zzz'];
+    var mm2: Compass;
+    
+    // Bracket notation property access using numeric value on type with string index signature and no numeric index signature
+    var nn = strIndex[10];
+    var nn: Compass;
+    
+    // Bracket notation property access using enum value on type with string index signature and no numeric index signature
+    var oo = strIndex[Compass.East];
+    var oo: Compass;
+    
+    // Bracket notation property access using value of type 'any' on type with string index signature and no numeric index signature
+    var pp = strIndex[<any>null];
+    var pp: Compass;
+    
+    // Bracket notation property access using numeric value on type with no index signatures
+    var qq = noIndex[123];
+    var qq: any;
+    
+    // Bracket notation property access using string value on type with no index signatures
+    var rr = noIndex['zzzz'];
+    var rr: any;
+    
+    // Bracket notation property access using enum value on type with no index signatures
+    var ss = noIndex[Compass.South];
+    var ss: any;
+    
+    // Bracket notation property access using value of type 'any' on type with no index signatures
+    var tt = noIndex[<any>null];
+    var tt: any;
+    
+    // Bracket notation property access using values of other types on type with no index signatures
+    var uu = noIndex[window]; // Error
+             ~~~~~~~~~~~~~~~
+!!! propertyAccess.ts(109,10): error TS2008: Value of type 'typeof noIndex' is not indexable by type 'any'.
+                     ~~~~~~
+!!! propertyAccess.ts(109,18): error TS2095: Could not find symbol 'window'.
+    
+    // Bracket notation property access using numeric value on type with numeric index signature and string index signature
+    var vv = noIndex[32];
+    var vv: any;
+    
+    // Bracket notation property access using enum value on type with numeric index signature and string index signature
+    var ww = bothIndex[Compass.East];
+    var ww: HTMLDivElement;
+        ~~~~~~~~~~~~~~~~~~
+!!! propertyAccess.ts(117,5): error TS2134: Subsequent variable declarations must have the same type.  Variable 'ww' must be of type 'any', but here has type 'any'.
+            ~~~~~~~~~~~~~~
+!!! propertyAccess.ts(117,9): error TS2095: Could not find symbol 'HTMLDivElement'.
+    
+    // Bracket notation property access using value of type 'any' on type with numeric index signature and string index signature
+    var xx = bothIndex[<any>null];
+    var xx: HTMLDivElement;
+        ~~~~~~~~~~~~~~~~~~
+!!! propertyAccess.ts(121,5): error TS2134: Subsequent variable declarations must have the same type.  Variable 'xx' must be of type 'any', but here has type 'any'.
+            ~~~~~~~~~~~~~~
+!!! propertyAccess.ts(121,9): error TS2095: Could not find symbol 'HTMLDivElement'.
+    
+    // Bracket notation property access using string value on type with numeric index signature and string index signature
+    var yy = bothIndex['foo'];
+    var yy: HTMLElement;
+        ~~~~~~~~~~~~~~~
+!!! propertyAccess.ts(125,5): error TS2134: Subsequent variable declarations must have the same type.  Variable 'yy' must be of type 'any', but here has type 'any'.
+            ~~~~~~~~~~~
+!!! propertyAccess.ts(125,9): error TS2095: Could not find symbol 'HTMLElement'.
+    
+    // Bracket notation property access using numeric string value on type with numeric index signature and string index signature
+    var zz = bothIndex['1.0'];
+    var zz: HTMLElement;
+        ~~~~~~~~~~~~~~~
+!!! propertyAccess.ts(129,5): error TS2134: Subsequent variable declarations must have the same type.  Variable 'zz' must be of type 'any', but here has type 'any'.
+            ~~~~~~~~~~~
+!!! propertyAccess.ts(129,9): error TS2095: Could not find symbol 'HTMLElement'.
+    
+    // Bracket notation property access using value of other type on type with numeric index signature and no string index signature and string index signature
+    var zzzz = bothIndex[window]; // Error
+               ~~~~~~~~~~~~~~~~~
+!!! propertyAccess.ts(132,12): error TS2008: Value of type '{ [n: string]: any; [m: number]: any; }' is not indexable by type 'any'.
+                         ~~~~~~
+!!! propertyAccess.ts(132,22): error TS2095: Could not find symbol 'window'.

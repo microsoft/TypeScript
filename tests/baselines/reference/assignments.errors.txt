@@ -1,0 +1,44 @@
+==== tests/cases/compiler/assignments.ts (6 errors) ====
+    // In this file:
+    //  Assign to a module
+    //  Assign to a class
+    //  Assign to an enum
+    //  Assign to a function
+    //  Assign to a variable
+    //  Assign to a parameter
+    //  Assign to an interface
+    
+    module M { }
+    M = null; // Error
+    ~
+!!! assignments.ts(11,1): error TS2095: Could not find symbol 'M'.
+    
+    class C { }
+    C = null; // Error
+    ~
+!!! assignments.ts(14,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    enum E { A }
+    E = null; // Error
+    ~
+!!! assignments.ts(17,1): error TS2130: Invalid left-hand side of assignment expression.
+    E.A = null; // OK per spec, Error per implementation (509581)
+    ~~~
+!!! assignments.ts(18,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    function fn() { }
+    fn = null; // Should be error
+    ~~
+!!! assignments.ts(21,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    var v;
+    v = null; // OK
+    
+    function fn2(p) {
+        p = null; // OK
+    }
+    
+    interface I { }
+    I = null; // Error
+    ~
+!!! assignments.ts(31,1): error TS2095: Could not find symbol 'I'.

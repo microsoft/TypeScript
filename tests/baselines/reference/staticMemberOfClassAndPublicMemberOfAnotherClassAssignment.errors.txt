@@ -1,0 +1,38 @@
+==== tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts (4 errors) ====
+    interface A {
+        name();
+    }
+    class B {
+        public name() { }
+    }
+    class C {
+        public static name() { }
+    }
+    
+    var a: A = new B();
+    a = new C(); // error name is missing
+    ~
+!!! staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts(12,1): error TS2012: Cannot convert 'C' to 'A':
+!!! 	Type 'C' is missing property 'name' from type 'A'.
+    a = B; // error name is missing
+    ~
+!!! staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts(13,1): error TS2012: Cannot convert 'typeof B' to 'A':
+!!! 	Type 'typeof B' is missing property 'name' from type 'A'.
+    a = C;
+    
+    var b: B = new C(); // error name is missing
+        ~~~~~~~~~~~~~~
+!!! staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts(16,5): error TS2012: Cannot convert 'C' to 'B':
+!!! 	Type 'C' is missing property 'name' from type 'B'.
+    b = B; // error name is missing
+    ~
+!!! staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts(17,1): error TS2012: Cannot convert 'typeof B' to 'B':
+!!! 	Type 'typeof B' is missing property 'name' from type 'B'.
+    b = C;
+    b = a;
+    
+    var c: C = new B();
+    c = B;
+    c = C;
+    c = a;
+    

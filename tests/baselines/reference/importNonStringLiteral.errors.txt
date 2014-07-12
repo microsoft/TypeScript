@@ -1,0 +1,12 @@
+==== tests/cases/compiler/importNonStringLiteral.ts (4 errors) ====
+    var x = "filename";
+    import foo = require(x); // invalid
+                         ~
+!!! importNonStringLiteral.ts(2,22): error TS1003: Identifier expected.
+                          ~
+!!! importNonStringLiteral.ts(2,23): error TS1005: ';' expected.
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! importNonStringLiteral.ts(2,1): error TS2071: Unable to resolve external module ''.
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! importNonStringLiteral.ts(2,1): error TS2072: Module cannot be aliased to a non-module type.
+    

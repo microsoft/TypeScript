@@ -1,0 +1,29 @@
+=== tests/cases/compiler/structural1.ts ===
+module M {
+>M : M
+
+    export interface I {
+>I : I
+
+        salt:number;
+>salt : number
+
+        pepper:number;
+>pepper : number
+    }
+
+    export function f(i:I) {
+>f : typeof f
+>i : I
+>I : I
+    }
+
+>f({salt:2,pepper:0}) : void
+>f : typeof f
+
+    f({salt:2,pepper:0});
+>{salt:2,pepper:0} : { salt: number; pepper: number; }
+>salt : number
+>pepper : number
+}
+

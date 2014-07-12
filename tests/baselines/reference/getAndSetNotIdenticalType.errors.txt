@@ -1,0 +1,13 @@
+==== tests/cases/compiler/getAndSetNotIdenticalType.ts (2 errors) ====
+    class C {
+        get x(): number {
+        ~~~~~~~~~~~~~~~~~
+            return 1;
+    ~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+!!! getAndSetNotIdenticalType.ts(2,5): error TS2096: 'get' and 'set' accessor must have the same type.
+        set x(v: string) { }
+        ~~~~~~~~~~~~~~~~~~~~
+!!! getAndSetNotIdenticalType.ts(5,5): error TS2096: 'get' and 'set' accessor must have the same type.
+    }

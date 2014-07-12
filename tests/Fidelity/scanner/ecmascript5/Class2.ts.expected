@@ -1,0 +1,377 @@
+[
+    {
+        "kind": "ExportKeyword",
+        "width": 6,
+        "fullWidth": 15,
+        "text": "export",
+        "value": "export",
+        "valueText": "export",
+        "hasLeadingTrivia": true,
+        "hasLeadingNewLine": true,
+        "hasTrailingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\r\n"
+            },
+            {
+                "kind": "NewLineTrivia",
+                "text": "\r\n"
+            },
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "    "
+            }
+        ],
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ClassKeyword",
+        "width": 5,
+        "fullWidth": 6,
+        "text": "class",
+        "value": "class",
+        "valueText": "class",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 13,
+        "fullWidth": 14,
+        "text": "LoggerAdapter",
+        "value": "LoggerAdapter",
+        "valueText": "LoggerAdapter",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ImplementsKeyword",
+        "width": 10,
+        "fullWidth": 11,
+        "text": "implements",
+        "value": "implements",
+        "valueText": "implements",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 7,
+        "fullWidth": 8,
+        "text": "ILogger",
+        "value": "ILogger",
+        "valueText": "ILogger",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 3,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\r\n"
+            }
+        ]
+    },
+    {
+        "kind": "ConstructorKeyword",
+        "width": 11,
+        "fullWidth": 20,
+        "text": "constructor",
+        "value": "constructor",
+        "valueText": "constructor",
+        "hasLeadingTrivia": true,
+        "hasTrailingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "        "
+            }
+        ],
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "PublicKeyword",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "public",
+        "value": "public",
+        "valueText": "public",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "text": "logger",
+        "value": "logger",
+        "valueText": "logger"
+    },
+    {
+        "kind": "ColonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ":",
+        "value": ":",
+        "valueText": ":",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 7,
+        "text": "ILogger",
+        "value": "ILogger",
+        "valueText": "ILogger"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 4,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            },
+            {
+                "kind": "NewLineTrivia",
+                "text": "\r\n"
+            }
+        ]
+    },
+    {
+        "kind": "ThisKeyword",
+        "width": 4,
+        "fullWidth": 16,
+        "text": "this",
+        "value": "this",
+        "valueText": "this",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "            "
+            }
+        ]
+    },
+    {
+        "kind": "DotToken",
+        "width": 1,
+        "text": ".",
+        "value": ".",
+        "valueText": "."
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 12,
+        "fullWidth": 13,
+        "text": "_information",
+        "value": "_information",
+        "valueText": "_information",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ThisKeyword",
+        "width": 4,
+        "text": "this",
+        "value": "this",
+        "valueText": "this"
+    },
+    {
+        "kind": "DotToken",
+        "width": 1,
+        "text": ".",
+        "value": ".",
+        "valueText": "."
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "text": "logger",
+        "value": "logger",
+        "valueText": "logger"
+    },
+    {
+        "kind": "DotToken",
+        "width": 1,
+        "text": ".",
+        "value": ".",
+        "valueText": "."
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 11,
+        "text": "information",
+        "value": "information",
+        "valueText": "information"
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 3,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\r\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 11,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasLeadingTrivia": true,
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "        "
+            }
+        ],
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\r\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 5,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "    "
+            }
+        ]
+    },
+    {
+        "kind": "EndOfFileToken",
+        "width": 0,
+        "text": ""
+    }
+]

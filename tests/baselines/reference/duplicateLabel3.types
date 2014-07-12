@@ -1,0 +1,11 @@
+=== tests/cases/compiler/duplicateLabel3.ts ===
+target:
+while (true) {
+  function f() {
+>f : typeof f
+
+    target:
+    while (true) {
+    }
+  }
+}

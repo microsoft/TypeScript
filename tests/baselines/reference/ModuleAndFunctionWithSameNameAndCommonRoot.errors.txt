@@ -1,0 +1,34 @@
+==== tests/cases/compiler/module.ts (0 errors) ====
+    module A {
+        export module Point {
+            export var Origin = { x: 0, y: 0 };
+        }
+    }
+    
+==== tests/cases/compiler/function.ts (1 errors) ====
+    module A {
+        // duplicate identifier error
+        export function Point() {
+                        ~~~~~
+!!! function.ts(3,21): error TS2000: Duplicate identifier 'Point'. Additional locations:
+!!! 	module.ts(2,19)
+            return { x: 0, y: 0 };
+        }
+    }
+    
+==== tests/cases/compiler/simple.ts (1 errors) ====
+    module B {
+    
+        export module Point {
+            export var Origin = { x: 0, y: 0 };
+        }
+    
+        // duplicate identifier error
+        export function Point() {
+                        ~~~~~
+!!! simple.ts(8,21): error TS2000: Duplicate identifier 'Point'. Additional locations:
+!!! 	simple.ts(3,19)
+            return { x: 0, y: 0 };
+        }
+    }
+    

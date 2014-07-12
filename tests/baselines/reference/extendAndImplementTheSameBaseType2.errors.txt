@@ -1,0 +1,25 @@
+==== tests/cases/compiler/extendAndImplementTheSameBaseType2.ts (3 errors) ====
+    class C<T> {
+        foo: number
+        bar(): T {
+            return null;
+        }
+    }
+    class D extends C<string> implements C<number> {
+          ~
+!!! extendAndImplementTheSameBaseType2.ts(7,7): error TS2137: Class D declares interface C<number> but does not implement it:
+!!! 	Types of property 'bar' of types 'D' and 'C<number>' are incompatible:
+!!! 		Call signatures of types '() => string' and '() => number' are incompatible.
+        baz() { }
+    }
+    
+    var d: D = new D();
+    var r: string = d.foo;
+        ~~~~~~~~~~~~~~~~~
+!!! extendAndImplementTheSameBaseType2.ts(12,5): error TS2011: Cannot convert 'number' to 'string'.
+    var r2: number = d.foo;
+    
+    var r3: string = d.bar();
+    var r4: number = d.bar();
+        ~~~~~~~~~~~~~~~~~~~~
+!!! extendAndImplementTheSameBaseType2.ts(16,5): error TS2011: Cannot convert 'string' to 'number'.

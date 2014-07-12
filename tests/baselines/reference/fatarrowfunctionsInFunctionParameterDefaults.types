@@ -1,0 +1,23 @@
+=== tests/cases/compiler/fatarrowfunctionsInFunctionParameterDefaults.ts ===
+function fn(x = () => this, y = x()) {
+>fn : typeof fn
+>x : () => any
+>() => this : () => any
+>this : any
+>y : any
+>x() : any
+>x : () => any
+
+    // should be 4
+    return y;
+>y : any
+
+}
+
+>fn.call(4) : any
+>fn.call : (thisArg: any, ...argArray: any[]) => any
+>fn : typeof fn
+
+fn.call(4); // Should be 4
+>call : (thisArg: any, ...argArray: any[]) => any
+

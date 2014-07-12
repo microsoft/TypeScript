@@ -1,0 +1,34 @@
+==== tests/cases/compiler/superPropertyAccess1.ts (3 errors) ====
+    class C {
+        public foo() { }
+        public get x() {
+            return 1;
+        }
+    
+        public bar() { }
+    }
+    
+    class D extends C {
+        public foo() {
+            super.bar();
+            super.x;  // error
+                  ~
+!!! superPropertyAccess1.ts(13,15): error TS2166: Only public methods of the base class are accessible via the 'super' keyword.
+        }    
+    
+        constructor() {
+            super();
+            super.bar();
+            super.x;  // error
+                  ~
+!!! superPropertyAccess1.ts(19,15): error TS2166: Only public methods of the base class are accessible via the 'super' keyword.
+        }
+    
+        public get y() {
+            super.bar();
+            super.x; // error
+                  ~
+!!! superPropertyAccess1.ts(24,15): error TS2166: Only public methods of the base class are accessible via the 'super' keyword.
+            return 1;
+        }
+    }

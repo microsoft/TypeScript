@@ -1,0 +1,26 @@
+extends layout
+
+block mainContent
+  h1 #{board.title} by 
+    a(href= "/user/"+username)!= username
+  div.board
+    h4.description= board.description
+    #board.images
+      - each image in images
+        div.image.grid_3
+          div.imagebox
+            div
+              a(href= "/image/"+image._id.toString())
+                img.small(src= image.imageUri)
+            =image.caption
+            div.primarysource
+              a(href= image.link)!= /http:\/\/([^\/]*)\//.exec(image.link)[1]
+          div.commentbox
+            - each comment in image.comments
+              div.comment
+                a(href= "/user/"+comment.user)
+                  b= comment.user
+                &nbsp; #{comment.text}
+  .grid_12
+    br
+    a(href= "/user/"+username+"/"+board.title+"/newpin") Add a new pin...

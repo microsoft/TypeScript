@@ -1,0 +1,20 @@
+==== tests/cases/compiler/logicalNotOperatorInvalidOperations.ts (4 errors) ====
+    // Unary operator !
+    var b: number;
+    
+    // operand before !
+    var BOOLEAN1 = b!;  //expect error
+                    ~
+!!! logicalNotOperatorInvalidOperations.ts(5,17): error TS1005: ',' expected.
+                     ~
+!!! logicalNotOperatorInvalidOperations.ts(5,18): error TS1003: Identifier expected.
+    
+    // miss parentheses
+    var BOOLEAN2 = !b + b;
+                   ~~
+!!! logicalNotOperatorInvalidOperations.ts(8,16): error TS2111: Invalid '+' expression - types not known to support the addition operator.
+    
+    // miss an operand
+    var BOOLEAN3 =!;
+                   ~
+!!! logicalNotOperatorInvalidOperations.ts(11,16): error TS1003: Identifier expected.

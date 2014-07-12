@@ -1,0 +1,10 @@
+==== tests/cases/compiler/functionAndPropertyNameConflict.ts (1 errors) ====
+    class C65 {
+        public aaaaa() { }
+        public get aaaaa() {
+                   ~~~~~
+!!! functionAndPropertyNameConflict.ts(3,16): error TS2000: Duplicate identifier 'aaaaa'. Additional locations:
+!!! 	functionAndPropertyNameConflict.ts(2,5)
+            return 1;
+        }
+    }

@@ -1,0 +1,51 @@
+==== tests/cases/compiler/invalidWhileBreakStatements.ts (6 errors) ====
+    // All errors
+    
+    // naked break not allowed
+    break;
+    ~~~~~~
+!!! invalidWhileBreakStatements.ts(4,1): error TS2202: 'break' statement can only be used within an enclosing iteration or switch statement.
+    
+    // non-existent label
+    ONE:
+    while (true) break TWO;
+                 ~~~~~~~~~~
+!!! invalidWhileBreakStatements.ts(8,14): error TS2203: Jump target not found.
+    
+    // break from inside function
+    TWO:
+    while (true){
+        var x = () => {
+            break TWO;
+            ~~~~~~~~~~
+!!! invalidWhileBreakStatements.ts(14,9): error TS2204: Jump target cannot cross function boundary.
+        }
+    }
+    
+    THREE:
+    while (true) {
+        var fn = function () {
+            break THREE;
+            ~~~~~~~~~~~~
+!!! invalidWhileBreakStatements.ts(21,9): error TS2204: Jump target cannot cross function boundary.
+        }
+    }
+    
+    // break forward
+    while (true) {
+        break FIVE;
+        ~~~~~~~~~~~
+!!! invalidWhileBreakStatements.ts(27,5): error TS2203: Jump target not found.
+        FIVE:
+        while (true) { }
+    }
+    
+    // label on non-loop statement
+    NINE:
+    var y = 12;
+    
+    while (true) {
+        break NINE;
+        ~~~~~~~~~~~
+!!! invalidWhileBreakStatements.ts(37,5): error TS2203: Jump target not found.
+    }

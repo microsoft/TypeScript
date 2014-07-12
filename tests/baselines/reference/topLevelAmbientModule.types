@@ -1,0 +1,18 @@
+=== tests/cases/compiler/foo_1.ts ===
+/// <reference path="foo_0.ts"/>
+import foo = require("foo");
+>foo : foo
+
+var z = foo.x + 10;
+>z : number
+>foo.x + 10 : number
+>foo.x : number
+>foo : typeof foo
+>x : number
+
+=== tests/cases/compiler/foo_0.ts ===
+declare module "foo" {
+	export var x: number;
+>x : number
+}
+

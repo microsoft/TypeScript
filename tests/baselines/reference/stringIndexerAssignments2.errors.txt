@@ -1,0 +1,27 @@
+==== tests/cases/compiler/stringIndexerAssignments2.ts (2 errors) ====
+    class C1 {
+        [index: string]: string
+        one: string;
+    }
+    
+    class C2 {
+        one: string;
+    }
+    
+    class C3 {
+        one: number;
+        two: string;
+    }
+    
+    var x: C1;
+    var a: C2;
+    var b: C3;
+    
+    x = a;
+    ~
+!!! stringIndexerAssignments2.ts(19,1): error TS2012: Cannot convert 'C2' to 'C1':
+!!! 	Index signatures of types 'C2' and 'C1' are incompatible.
+    x = b;
+    ~
+!!! stringIndexerAssignments2.ts(20,1): error TS2012: Cannot convert 'C3' to 'C1':
+!!! 	Types of property 'one' of types 'C3' and 'C1' are incompatible.

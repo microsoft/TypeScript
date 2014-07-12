@@ -1,0 +1,13 @@
+==== tests/cases/compiler/internalImportInstantiatedModuleNotReferencingInstance.ts (1 errors) ====
+    module A {
+        export interface X { s: string }
+        export var a = 10;
+    }
+    
+    module B {
+        var A = 1;
+        import Y = A;
+                   ~
+!!! internalImportInstantiatedModuleNotReferencingInstance.ts(8,16): error TS2187: Internal module reference 'A' in import declaration does not reference module instance for 'A'.
+    }
+    

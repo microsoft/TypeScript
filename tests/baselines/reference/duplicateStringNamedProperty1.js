@@ -1,0 +1,1 @@
+//// [duplicateStringNamedProperty1.js]

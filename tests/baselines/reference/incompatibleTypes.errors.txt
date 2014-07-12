@@ -1,0 +1,112 @@
+==== tests/cases/compiler/incompatibleTypes.ts (11 errors) ====
+    interface IFoo1 {
+        p1(): number;
+    }
+    
+    class C1 implements IFoo1 { // incompatible on the return type
+          ~~
+!!! incompatibleTypes.ts(5,7): error TS2137: Class C1 declares interface IFoo1 but does not implement it:
+!!! 	Types of property 'p1' of types 'C1' and 'IFoo1' are incompatible:
+!!! 		Call signatures of types '() => string' and '() => number' are incompatible.
+        public p1() {
+            return "s";
+        }
+    }
+    
+    interface IFoo2 {
+        p1(s:string): number;
+    }
+    
+    class C2 implements IFoo2 { // incompatible on the param type
+          ~~
+!!! incompatibleTypes.ts(15,7): error TS2137: Class C2 declares interface IFoo2 but does not implement it:
+!!! 	Types of property 'p1' of types 'C2' and 'IFoo2' are incompatible:
+!!! 		Call signatures of types '(n: number) => number' and '(s: string) => number' are incompatible.
+        public p1(n:number) {
+            return 0;
+        }
+    }
+    
+    interface IFoo3 {
+        p1: string;
+    }
+    
+    class C3 implements IFoo3 { // incompatible on the property type
+          ~~
+!!! incompatibleTypes.ts(25,7): error TS2137: Class C3 declares interface IFoo3 but does not implement it:
+!!! 	Types of property 'p1' of types 'C3' and 'IFoo3' are incompatible.
+        public p1: number;
+    }
+    
+    interface IFoo4 {
+        p1: { a: { a: string; }; b: string; };
+    }
+    
+    class C4 implements IFoo4 { // incompatible on the property type
+          ~~
+!!! incompatibleTypes.ts(33,7): error TS2137: Class C4 declares interface IFoo4 but does not implement it:
+!!! 	Types of property 'p1' of types 'C4' and 'IFoo4' are incompatible:
+!!! 		Type '{ c: { b: string; }; d: string; }' is missing property 'a' from type '{ a: { a: string; }; b: string; }'.
+        public p1: { c: { b: string; }; d: string; };
+    }
+    
+    function if1(i: IFoo1): void;
+    function if1(i: IFoo2): void;
+    function if1(a: any) { }
+    var c1: C1;
+    var c2: C2;
+    if1(c1);
+    ~~~
+!!! incompatibleTypes.ts(42,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Types of property 'p1' of types 'C1' and 'IFoo1' are incompatible:
+!!! 		Call signatures of types '() => string' and '() => number' are incompatible.
+    ~~~
+!!! incompatibleTypes.ts(42,1): error TS2087: Could not select overload for 'call' expression.
+    
+    
+    function of1(n: { a: { a: string; }; b: string; }): number;
+    function of1(s: { c: { b: string; }; d: string; }): string;
+    function of1(a: any) { return null; }
+    
+    of1({ e: 0, f: 0 });
+    ~~~
+!!! incompatibleTypes.ts(49,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Type '{ e: number; f: number; }' is missing property 'a' from type '{ a: { a: string; }; b: string; }'.
+    ~~~
+!!! incompatibleTypes.ts(49,1): error TS2087: Could not select overload for 'call' expression.
+    
+    interface IMap {
+     [key:string]:string;
+    }
+    
+    function foo(fn:() => void) {
+     
+    }
+    
+    function bar() {
+     var map:IMap;
+     foo(() => {
+      map = {};
+     });
+    }
+    
+    var o1: { a: { a: string; }; b: string; } = { e: 0, f: 0 };
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! incompatibleTypes.ts(66,5): error TS2012: Cannot convert '{ e: number; f: number; }' to '{ a: { a: string; }; b: string; }':
+!!! 	Type '{ e: number; f: number; }' is missing property 'a' from type '{ a: { a: string; }; b: string; }'.
+    
+    var a1 = [{ e: 0, f: 0 }, { e: 0, f: 0 }, { e: 0, g: 0 }];
+    
+    
+    
+    var i1c1: { (): string; } = 5;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! incompatibleTypes.ts(72,5): error TS2012: Cannot convert 'number' to '() => string':
+!!! 	Type '() => string' requires a call signature, but type 'Number' lacks one.
+    
+    var fp1: () =>any = a => 0;
+        ~~~~~~~~~~~~~~~~~~~~~~
+!!! incompatibleTypes.ts(74,5): error TS2012: Cannot convert '(a: any) => number' to '() => any':
+!!! 	Call signatures of types '(a: any) => number' and '() => any' are incompatible:
+!!! 		Call signature expects 0 or fewer parameters.
+    

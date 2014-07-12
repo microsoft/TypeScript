@@ -1,0 +1,167 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 28,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "EnumDeclaration",
+                "fullWidth": 28,
+                "modifiers": [],
+                "enumKeyword": {
+                    "kind": "EnumKeyword",
+                    "width": 4,
+                    "fullWidth": 5,
+                    "text": "enum",
+                    "value": "enum",
+                    "valueText": "enum",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "text": " "
+                        }
+                    ]
+                },
+                "identifier": {
+                    "kind": "IdentifierName",
+                    "width": 1,
+                    "fullWidth": 2,
+                    "text": "E",
+                    "value": "E",
+                    "valueText": "E",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "text": " "
+                        }
+                    ]
+                },
+                "openBraceToken": {
+                    "kind": "OpenBraceToken",
+                    "width": 1,
+                    "fullWidth": 3,
+                    "text": "{",
+                    "value": "{",
+                    "valueText": "{",
+                    "hasTrailingTrivia": true,
+                    "hasTrailingNewLine": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "text": "\r\n"
+                        }
+                    ]
+                },
+                "enumElements": [
+                    {
+                        "kind": "EnumElement",
+                        "fullWidth": 5,
+                        "propertyName": {
+                            "kind": "StringLiteral",
+                            "width": 3,
+                            "fullWidth": 5,
+                            "text": "\"A\"",
+                            "value": "A",
+                            "valueText": "A",
+                            "hasLeadingTrivia": true,
+                            "leadingTrivia": [
+                                {
+                                    "kind": "WhitespaceTrivia",
+                                    "text": "  "
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "kind": "CommaToken",
+                        "width": 1,
+                        "fullWidth": 2,
+                        "text": ",",
+                        "value": ",",
+                        "valueText": ",",
+                        "hasTrailingTrivia": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "text": " "
+                            }
+                        ]
+                    },
+                    {
+                        "kind": "EnumElement",
+                        "fullWidth": 3,
+                        "propertyName": {
+                            "kind": "StringLiteral",
+                            "width": 3,
+                            "text": "\"B\"",
+                            "value": "B",
+                            "valueText": "B"
+                        }
+                    },
+                    {
+                        "kind": "CommaToken",
+                        "width": 1,
+                        "fullWidth": 2,
+                        "text": ",",
+                        "value": ",",
+                        "valueText": ",",
+                        "hasTrailingTrivia": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "text": " "
+                            }
+                        ]
+                    },
+                    {
+                        "kind": "EnumElement",
+                        "fullWidth": 5,
+                        "propertyName": {
+                            "kind": "StringLiteral",
+                            "width": 3,
+                            "fullWidth": 5,
+                            "text": "\"C\"",
+                            "value": "C",
+                            "valueText": "C",
+                            "hasTrailingTrivia": true,
+                            "hasTrailingNewLine": true,
+                            "trailingTrivia": [
+                                {
+                                    "kind": "NewLineTrivia",
+                                    "text": "\r\n"
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "closeBraceToken": {
+                    "kind": "CloseBraceToken",
+                    "width": 1,
+                    "text": "}",
+                    "value": "}",
+                    "valueText": "}"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            10,
+            27
+        ],
+        "length": 28
+    }
+}

@@ -1,0 +1,19 @@
+==== tests/cases/compiler/noErrorsInCallback.ts (4 errors) ====
+    class Bar {
+        constructor(public foo: string) { }
+    }
+    var one = new Bar({}); // Error
+                  ~~~
+!!! noErrorsInCallback.ts(4,15): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Could not apply type 'string' to argument 1 which is of type '{}'.
+                  ~~~
+!!! noErrorsInCallback.ts(4,15): error TS2085: Could not select overload for 'new' expression.
+    [].forEach(() => {
+        var two = new Bar({}); // No error?
+                      ~~~
+!!! noErrorsInCallback.ts(6,19): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Could not apply type 'string' to argument 1 which is of type '{}'.
+                      ~~~
+!!! noErrorsInCallback.ts(6,19): error TS2085: Could not select overload for 'new' expression.
+    });
+     

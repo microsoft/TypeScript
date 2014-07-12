@@ -1,0 +1,107 @@
+==== tests/cases/compiler/functionConstraintSatisfaction2.ts (27 errors) ====
+    // satisfaction of a constraint to Function, all of these invocations are errors unless otherwise noted
+    
+    function foo<T extends Function>(x: T): T { return x; }
+    
+    foo(1);
+    ~~~
+!!! functionConstraintSatisfaction2.ts(5,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Type 'Number' is missing property 'apply' from type 'Function'.
+    ~~~
+!!! functionConstraintSatisfaction2.ts(5,1): error TS2087: Could not select overload for 'call' expression.
+    foo(() => { }, 1);
+    ~~~
+!!! functionConstraintSatisfaction2.ts(6,1): error TS2081: Supplied parameters do not match any signature of call target.
+    ~~~
+!!! functionConstraintSatisfaction2.ts(6,1): error TS2087: Could not select overload for 'call' expression.
+    foo(1, () => { });
+    ~~~
+!!! functionConstraintSatisfaction2.ts(7,1): error TS2081: Supplied parameters do not match any signature of call target.
+    ~~~
+!!! functionConstraintSatisfaction2.ts(7,1): error TS2087: Could not select overload for 'call' expression.
+    
+    function foo2<T extends (x: string) => string>(x: T): T { return x; }
+    
+    class C {
+        foo: string;
+    }
+    
+    var b: { new (x: string): string };
+    
+    class C2<T> {
+        foo: T;
+    }
+    
+    var b2: { new <T>(x: T): T };
+    
+    var r = foo2(new Function());
+            ~~~~
+!!! functionConstraintSatisfaction2.ts(23,9): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Type '(x: string) => string' requires a call signature, but type 'Function' lacks one.
+            ~~~~
+!!! functionConstraintSatisfaction2.ts(23,9): error TS2087: Could not select overload for 'call' expression.
+    var r2 = foo2((x: string[]) => x);
+             ~~~~
+!!! functionConstraintSatisfaction2.ts(24,10): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Call signatures of types '(x: string[]) => string[]' and '(x: string) => string' are incompatible.
+             ~~~~
+!!! functionConstraintSatisfaction2.ts(24,10): error TS2087: Could not select overload for 'call' expression.
+    var r6 = foo2(C);
+             ~~~~
+!!! functionConstraintSatisfaction2.ts(25,10): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Type '(x: string) => string' requires a call signature, but type 'typeof C' lacks one.
+             ~~~~
+!!! functionConstraintSatisfaction2.ts(25,10): error TS2087: Could not select overload for 'call' expression.
+    var r7 = foo2(b);
+             ~~~~
+!!! functionConstraintSatisfaction2.ts(26,10): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Type '(x: string) => string' requires a call signature, but type 'new(x: string) => string' lacks one.
+             ~~~~
+!!! functionConstraintSatisfaction2.ts(26,10): error TS2087: Could not select overload for 'call' expression.
+    var r8 = foo2(<U>(x: U) => x); // no error expected
+    var r11 = foo2(<U, V>(x: U, y: V) => x);
+              ~~~~
+!!! functionConstraintSatisfaction2.ts(28,11): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Call signatures of types '<U, V>(x: U, y: V) => U' and '(x: string) => string' are incompatible:
+!!! 		Call signature expects 1 or fewer parameters.
+              ~~~~
+!!! functionConstraintSatisfaction2.ts(28,11): error TS2087: Could not select overload for 'call' expression.
+    var r13 = foo2(C2);
+              ~~~~
+!!! functionConstraintSatisfaction2.ts(29,11): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Type '(x: string) => string' requires a call signature, but type 'typeof C2' lacks one.
+              ~~~~
+!!! functionConstraintSatisfaction2.ts(29,11): error TS2087: Could not select overload for 'call' expression.
+    var r14 = foo2(b2);
+              ~~~~
+!!! functionConstraintSatisfaction2.ts(30,11): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Type '(x: string) => string' requires a call signature, but type 'new<T>(x: T) => T' lacks one.
+              ~~~~
+!!! functionConstraintSatisfaction2.ts(30,11): error TS2087: Could not select overload for 'call' expression.
+    
+    interface F2 extends Function { foo: string; }
+    var f2: F2;
+    var r16 = foo2(f2);
+              ~~~~
+!!! functionConstraintSatisfaction2.ts(34,11): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Type '(x: string) => string' requires a call signature, but type 'F2' lacks one.
+              ~~~~
+!!! functionConstraintSatisfaction2.ts(34,11): error TS2087: Could not select overload for 'call' expression.
+    
+    function fff<T extends { (): void }, U extends T>(x: T, y: U) {
+                                         ~~~~~~~~~~~
+!!! functionConstraintSatisfaction2.ts(36,38): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        foo2(x);
+        ~~~~
+!!! functionConstraintSatisfaction2.ts(37,5): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Call signatures of types '() => void' and '(x: string) => string' are incompatible.
+        ~~~~
+!!! functionConstraintSatisfaction2.ts(37,5): error TS2087: Could not select overload for 'call' expression.
+        foo2(y);
+        ~~~~
+!!! functionConstraintSatisfaction2.ts(38,5): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Call signatures of types '() => void' and '(x: string) => string' are incompatible.
+        ~~~~
+!!! functionConstraintSatisfaction2.ts(38,5): error TS2087: Could not select overload for 'call' expression.
+    }
+    

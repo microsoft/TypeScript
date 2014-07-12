@@ -1,0 +1,5 @@
+==== tests/cases/compiler/directReferenceToUndefined.ts (1 errors) ====
+    var x: Undefined;
+           ~~~~~~~~~
+!!! directReferenceToUndefined.ts(1,8): error TS2095: Could not find symbol 'Undefined'.
+    var y = undefined;

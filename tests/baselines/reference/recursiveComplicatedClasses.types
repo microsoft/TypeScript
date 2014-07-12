@@ -1,0 +1,51 @@
+=== tests/cases/compiler/recursiveComplicatedClasses.ts ===
+class Signature {
+>Signature : Signature
+
+    public parameters: ParameterSymbol[] = null;
+>parameters : ParameterSymbol[]
+>ParameterSymbol : ParameterSymbol
+}
+
+function aEnclosesB(a: Symbol) {
+>aEnclosesB : typeof aEnclosesB
+>a : Symbol
+>Symbol : Symbol
+
+    return true;
+}
+
+class Symbol {
+>Symbol : Symbol
+
+    public bound: boolean;
+>bound : boolean
+
+    public visible() {
+>visible : () => boolean
+
+        var b: TypeSymbol;
+>b : TypeSymbol
+>TypeSymbol : TypeSymbol
+
+        return aEnclosesB(b);
+>aEnclosesB(b) : boolean
+>aEnclosesB : typeof aEnclosesB
+>b : TypeSymbol
+    }
+
+}
+class InferenceSymbol extends Symbol {
+>InferenceSymbol : InferenceSymbol
+>Symbol : Symbol
+}
+
+class ParameterSymbol extends InferenceSymbol {
+>ParameterSymbol : ParameterSymbol
+>InferenceSymbol : InferenceSymbol
+}
+
+class TypeSymbol extends InferenceSymbol {
+>TypeSymbol : TypeSymbol
+>InferenceSymbol : InferenceSymbol
+}

@@ -1,0 +1,16 @@
+==== tests/cases/compiler/targetTypeTest3.ts (1 errors) ====
+    // Test target typing for array literals and call expressions
+    
+    
+    var a : string[] = [1,2,"3"]; // should produce an error
+        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! targetTypeTest3.ts(4,5): error TS2012: Cannot convert '{}[]' to 'string[]':
+!!! 	Types of property 'pop' of types '{}[]' and 'string[]' are incompatible:
+!!! 		Call signatures of types '() => {}' and '() => string' are incompatible.
+    
+    
+    function func1(stuff:any[]) { return stuff; }
+    
+    function func2(stuff1:string, stuff2:number, stuff3:number) {
+        return func1([stuff1, stuff2, stuff3]);
+    }

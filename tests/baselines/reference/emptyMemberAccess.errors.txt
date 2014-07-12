@@ -1,0 +1,9 @@
+==== tests/cases/compiler/emptyMemberAccess.ts (1 errors) ====
+    function getObj() {
+    
+       ().toString();
+        ~
+!!! emptyMemberAccess.ts(3,5): error TS1003: Identifier expected.
+    
+    }
+     

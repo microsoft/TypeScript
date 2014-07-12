@@ -1,0 +1,8 @@
+==== tests/cases/compiler/contextualTyping30.ts (2 errors) ====
+    function foo(param:number[]){}; foo([1, "a"]);
+                                    ~~~
+!!! contextualTyping30.ts(1,33): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Types of property 'pop' of types '{}[]' and 'number[]' are incompatible:
+!!! 		Call signatures of types '() => {}' and '() => number' are incompatible.
+                                    ~~~
+!!! contextualTyping30.ts(1,33): error TS2087: Could not select overload for 'call' expression.

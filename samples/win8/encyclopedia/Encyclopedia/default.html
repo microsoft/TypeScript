@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Encyclopedia</title>
+
+    <!-- WinJS references -->
+    <link href="//Microsoft.WinJS.1.0/css/ui-light.css" rel="stylesheet" />
+    <script src="//Microsoft.WinJS.1.0/js/base.js"></script>
+    <script src="//Microsoft.WinJS.1.0/js/ui.js"></script>
+
+    <!-- Encyclopedia references -->
+    <link href="/css/default.css" rel="stylesheet">
+    <script src="/js/topic.js"></script>
+    <script src="/js/data.js"></script>
+    <script src="/js/navigator.js"></script>
+    <script src="/js/default.js"></script>
+    <script src="/js/groupedItemsPage.js"></script>
+    <script src="/js/groupDetailPage.js"></script>
+    <script src="/js/itemDetailPage.js"></script>
+</head>
+<body>
+    <div id="contenthost" data-win-control="Encyclopedia.PageControlNavigator" data-win-options="{home: '/html/groupedItemsPage.html'}">
+    </div>
+    <div id="appbar" data-win-control="WinJS.UI.AppBar" data-win-options="
+        {commands:[{id:'home', label:'Home', icon:'&#xE10F;', section: 'global', onclick: Encyclopedia.navigateHome},
+                   {id:'refresh', label:'Refresh', icon:'&#xE117;', section: 'selection', onclick: Encyclopedia.refresh},
+                   {id:'addfavorite', label:'Add Favorite', icon:'&#xE109;', section: 'selection', onclick: Encyclopedia.addFavorite},
+                   {id:'removefavorite', label:'Remove Favorite', icon:'&#xE108;', section: 'selection', onclick: Encyclopedia.removeFavorite},
+                   {id:'pin', label:'Pin', icon:'&#xE141;', section: 'selection', onclick: Encyclopedia.pin}
+        ]}">
+    </div>
+</body>
+</html>

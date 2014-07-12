@@ -1,0 +1,11 @@
+==== tests/cases/compiler/thisInArrowFunctionInStaticInitializer1.ts (1 errors) ====
+    function log(a) { }
+    
+    class Vector {
+     static foo = () => {
+      // 'this' should not be available in a static initializer.
+      log(this);
+          ~~~~
+!!! thisInArrowFunctionInStaticInitializer1.ts(6,7): error TS2140: 'this' cannot be referenced in static initializers in a class body.
+     }
+    }

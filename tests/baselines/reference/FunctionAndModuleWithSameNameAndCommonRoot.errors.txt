@@ -1,0 +1,52 @@
+==== tests/cases/compiler/function.ts (0 errors) ====
+    module A {
+        export function Point() {
+            return { x: 0, y: 0 };
+        }
+    }
+    
+==== tests/cases/compiler/module.ts (1 errors) ====
+    module A {
+        export module Point {
+                      ~~~~~
+!!! module.ts(2,19): error TS2188: Module 'Point' cannot merge with previous declaration of 'Point' in a different file 'function.ts'.
+            export var Origin = { x: 0, y: 0 };
+        }
+    }
+    
+==== tests/cases/compiler/test.ts (3 errors) ====
+    var fn: () => { x: number; y: number };
+    var fn = A.Point;
+        ~~~~~~~~~~~~
+!!! test.ts(2,5): error TS2134: Subsequent variable declarations must have the same type.  Variable 'fn' must be of type '() => { x: number; y: number; }', but here has type 'any'.
+    
+    var cl: { x: number; y: number; }
+    var cl = A.Point();
+        ~~~~~~~~~~~~~~
+!!! test.ts(5,5): error TS2134: Subsequent variable declarations must have the same type.  Variable 'cl' must be of type '{ x: number; y: number; }', but here has type 'any'.
+    var cl = A.Point.Origin; // not expected to be an error.
+        ~~~~~~~~~~~~~~~~~~~
+!!! test.ts(6,5): error TS2134: Subsequent variable declarations must have the same type.  Variable 'cl' must be of type '{ x: number; y: number; }', but here has type 'any'.
+    
+    
+==== tests/cases/compiler/simple.ts (1 errors) ====
+    module B {
+    
+        export function Point() {
+            return { x: 0, y: 0 };
+        }
+    
+        export module Point {
+            export var Origin = { x: 0, y: 0 };
+        }
+    }
+    
+    var fn: () => { x: number; y: number };
+    var fn = B.Point;  // not expected to be an error. bug 840000: [corelang] Function of fundule not assignalbe as expected
+        ~~~~~~~~~~~~
+!!! simple.ts(13,5): error TS2134: Subsequent variable declarations must have the same type.  Variable 'fn' must be of type '() => { x: number; y: number; }', but here has type 'typeof B.Point'.
+    
+    var cl: { x: number; y: number; }
+    var cl = B.Point();
+    var cl = B.Point.Origin;
+    

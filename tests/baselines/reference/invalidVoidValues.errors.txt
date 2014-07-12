@@ -1,0 +1,49 @@
+==== tests/cases/compiler/invalidVoidValues.ts (11 errors) ====
+    var x: void;
+    x = 1;
+    ~
+!!! invalidVoidValues.ts(2,1): error TS2011: Cannot convert 'number' to 'void'.
+    x = '';
+    ~
+!!! invalidVoidValues.ts(3,1): error TS2011: Cannot convert 'string' to 'void'.
+    x = true;
+    ~
+!!! invalidVoidValues.ts(4,1): error TS2011: Cannot convert 'boolean' to 'void'.
+    
+    enum E { A }
+    x = E;
+    ~
+!!! invalidVoidValues.ts(7,1): error TS2011: Cannot convert 'typeof E' to 'void'.
+    x = E.A;
+    ~
+!!! invalidVoidValues.ts(8,1): error TS2011: Cannot convert 'E' to 'void'.
+    
+    class C { foo: string }
+    var a: C;
+    x = a;
+    ~
+!!! invalidVoidValues.ts(12,1): error TS2011: Cannot convert 'C' to 'void'.
+    
+    interface I { foo: string }
+    var b: I;
+    x = b;
+    ~
+!!! invalidVoidValues.ts(16,1): error TS2011: Cannot convert 'I' to 'void'.
+    
+    x = { f() {} }
+    ~
+!!! invalidVoidValues.ts(18,1): error TS2011: Cannot convert '{ f(): void; }' to 'void'.
+    
+    module M { export var x = 1; }
+    x = M;
+    ~
+!!! invalidVoidValues.ts(21,1): error TS2011: Cannot convert 'typeof M' to 'void'.
+    
+    function f<T>(a: T) {
+        x = a;
+        ~
+!!! invalidVoidValues.ts(24,5): error TS2011: Cannot convert 'T' to 'void'.
+    }
+    x = f;
+    ~
+!!! invalidVoidValues.ts(26,1): error TS2011: Cannot convert 'typeof f' to 'void'.

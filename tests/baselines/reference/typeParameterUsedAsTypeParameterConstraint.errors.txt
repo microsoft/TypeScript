@@ -1,0 +1,44 @@
+==== tests/cases/compiler/typeParameterUsedAsTypeParameterConstraint.ts (6 errors) ====
+    // Type parameters are in scope in their own and other type parameter lists
+    
+    function foo<T, U extends T>(x: T, y: U): T {
+                    ~~~~~~~~~~~
+!!! typeParameterUsedAsTypeParameterConstraint.ts(3,17): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        x = y;
+        return y;
+    }
+    
+    function foo2<U extends T, T>(x: T, y: U): T {
+                  ~~~~~~~~~~~
+!!! typeParameterUsedAsTypeParameterConstraint.ts(8,15): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        x = y;
+        return y;
+    }
+    
+    var f = function <T, U extends T>(x: T, y: U): T {
+                         ~~~~~~~~~~~
+!!! typeParameterUsedAsTypeParameterConstraint.ts(13,22): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        x = y;
+        return y;
+    }
+    
+    var f2 = function <U extends T, T>(x: T, y: U): T {
+                       ~~~~~~~~~~~
+!!! typeParameterUsedAsTypeParameterConstraint.ts(18,20): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        x = y;
+        return y;
+    }
+    
+    var f3 = <T, U extends T>(x: T, y: U): T => {
+                 ~~~~~~~~~~~
+!!! typeParameterUsedAsTypeParameterConstraint.ts(23,14): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        x = y;
+        return y;
+    }
+    
+    var f4 = <U extends T, T>(x: T, y: U): T => {
+              ~~~~~~~~~~~
+!!! typeParameterUsedAsTypeParameterConstraint.ts(28,11): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        x = y;
+        return y;
+    }

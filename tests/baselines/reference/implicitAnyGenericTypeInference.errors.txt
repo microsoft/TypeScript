@@ -1,0 +1,13 @@
+==== tests/cases/compiler/implicitAnyGenericTypeInference.ts (2 errors) ====
+    
+    interface Comparer<T> {
+        compareTo<U>(x: T, y: U): U;
+    }
+    
+    var c: Comparer<any>;
+    c = { compareTo: (x, y) => { return y; } };
+                      ~
+!!! implicitAnyGenericTypeInference.ts(7,19): error TS7012: Parameter 'x' of lambda function implicitly has an 'any' type.
+                         ~
+!!! implicitAnyGenericTypeInference.ts(7,22): error TS7012: Parameter 'y' of lambda function implicitly has an 'any' type.
+    var r = c.compareTo(1, '');

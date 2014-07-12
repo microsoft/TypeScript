@@ -1,0 +1,22 @@
+==== tests/cases/compiler/interfaceWithPropertyThatIsPrivateInBaseType2.ts (2 errors) ====
+    class Base {
+        private x() {}
+    }
+    
+    interface Foo extends Base { // error
+              ~~~
+!!! interfaceWithPropertyThatIsPrivateInBaseType2.ts(5,11): error TS2142: Interface 'Foo' cannot extend class 'Base':
+!!! 	Property 'x' defined as public in type 'Foo' is defined as private in type 'Base'.
+        x(): any;
+    }
+    
+    class Base2<T> {
+        private x() { }
+    }
+    
+    interface Foo2<T> extends Base2<T> { // error
+              ~~~~
+!!! interfaceWithPropertyThatIsPrivateInBaseType2.ts(13,11): error TS2142: Interface 'Foo2<T>' cannot extend class 'Base2<T>':
+!!! 	Property 'x' defined as public in type 'Foo2<T>' is defined as private in type 'Base2<T>'.
+        x(): any;
+    }

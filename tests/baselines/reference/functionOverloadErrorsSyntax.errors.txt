@@ -1,0 +1,18 @@
+==== tests/cases/compiler/functionOverloadErrorsSyntax.ts (3 errors) ====
+    //Function overload signature with optional parameter followed by non-optional parameter
+    function fn4a(x?: number, y: string);
+                              ~~~~~~~~~
+!!! functionOverloadErrorsSyntax.ts(2,27): error TS1016: Required parameter cannot follow optional parameter.
+    function fn4a() { }
+    
+    function fn4b(n: string, x?: number, y: string);
+                                         ~~~~~~~~~
+!!! functionOverloadErrorsSyntax.ts(5,38): error TS1016: Required parameter cannot follow optional parameter.
+    function fn4b() { }
+    
+    //Function overload signature with rest param followed by non-optional parameter
+    function fn5(x: string, ...y: any[], z: string);
+                            ~~~~~~~~~~~
+!!! functionOverloadErrorsSyntax.ts(9,25): error TS1014: Rest parameter must be last in list.
+    function fn5() { }
+    

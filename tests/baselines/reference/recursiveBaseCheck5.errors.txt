@@ -1,0 +1,9 @@
+==== tests/cases/compiler/recursiveBaseCheck5.ts (2 errors) ====
+    interface I1<T> extends I2<string> { }
+              ~~
+!!! recursiveBaseCheck5.ts(1,11): error TS2101: Interface 'I1<T>' is recursively referenced as a base type of itself.
+    interface I2<T> extends I1<T> { }
+    class X<T, U> implements I2<T> { }
+    (new X).blah;
+            ~~~~
+!!! recursiveBaseCheck5.ts(4,9): error TS2094: The property 'blah' does not exist on value of type 'X<{}, {}>'.

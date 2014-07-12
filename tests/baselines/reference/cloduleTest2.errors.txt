@@ -1,0 +1,61 @@
+==== tests/cases/compiler/cloduleTest2.ts (12 errors) ====
+    module T1 {
+        module m3d { export var y = 2; }
+        declare class m3d { constructor(foo); foo(): void ; static bar(); }
+        var r = new m3d(); // error
+                    ~~~
+!!! cloduleTest2.ts(4,17): error TS2081: Supplied parameters do not match any signature of call target.
+                    ~~~
+!!! cloduleTest2.ts(4,17): error TS2085: Could not select overload for 'new' expression.
+    }
+    
+    module T2 {
+        declare class m3d { constructor(foo); foo(): void; static bar(); }
+        module m3d { export var y = 2; }
+        var r = new m3d(); // error
+                    ~~~
+!!! cloduleTest2.ts(10,17): error TS2081: Supplied parameters do not match any signature of call target.
+                    ~~~
+!!! cloduleTest2.ts(10,17): error TS2085: Could not select overload for 'new' expression.
+    }
+    
+    module T3 {
+        module m3d { export var y = 2; }
+        declare class m3d { foo(): void; static bar(); }
+        var r = new m3d();
+        r.foo();
+        r.bar(); // error
+          ~~~
+!!! cloduleTest2.ts(18,7): error TS2094: The property 'bar' does not exist on value of type 'm3d'.
+        r.y; // error
+          ~
+!!! cloduleTest2.ts(19,7): error TS2094: The property 'y' does not exist on value of type 'm3d'.
+    }
+    
+    module T4 {
+        declare class m3d { foo(): void; static bar(); }
+        module m3d { export var y = 2; }
+        var r = new m3d();
+        r.foo();
+        r.bar(); // error
+          ~~~
+!!! cloduleTest2.ts(27,7): error TS2094: The property 'bar' does not exist on value of type 'm3d'.
+        r.y; // error
+          ~
+!!! cloduleTest2.ts(28,7): error TS2094: The property 'y' does not exist on value of type 'm3d'.
+    }
+    
+    module m3d { export var y = 2; }
+    declare class m3d { constructor(foo); foo(): void; static bar(); }
+    var r = new m3d(); // error
+                ~~~
+!!! cloduleTest2.ts(33,13): error TS2081: Supplied parameters do not match any signature of call target.
+                ~~~
+!!! cloduleTest2.ts(33,13): error TS2085: Could not select overload for 'new' expression.
+    
+    declare class m4d extends m3d { }
+    var r2 = new m4d(); // error
+                 ~~~
+!!! cloduleTest2.ts(36,14): error TS2081: Supplied parameters do not match any signature of call target.
+                 ~~~
+!!! cloduleTest2.ts(36,14): error TS2085: Could not select overload for 'new' expression.

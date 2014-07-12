@@ -1,0 +1,26 @@
+==== tests/cases/compiler/inheritedModuleMembersForClodule.ts (1 errors) ====
+    class C {
+        static foo(): string {
+            return "123";
+        }
+    }
+    
+    class D extends C {
+          ~
+!!! inheritedModuleMembersForClodule.ts(7,7): error TS2141: Class 'D' cannot extend class 'C':
+!!! 	Types of static property 'foo' of class 'D' and class 'C' are incompatible:
+!!! 		Call signatures of types '() => number' and '() => string' are incompatible.
+    }
+    
+    module D {
+        export function foo(): number {
+            return 0;
+        };
+    }
+    
+    class E extends D {
+        static bar() {
+            return this.foo();
+        }
+    }
+    

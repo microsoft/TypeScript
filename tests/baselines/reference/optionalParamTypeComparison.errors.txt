@@ -1,0 +1,12 @@
+==== tests/cases/compiler/optionalParamTypeComparison.ts (2 errors) ====
+    var f: (s: string, n?: number) => void;
+    var g: (s: string, b?: boolean) => void;
+    
+    f = g;
+    ~
+!!! optionalParamTypeComparison.ts(4,1): error TS2012: Cannot convert '(s: string, b?: boolean) => void' to '(s: string, n?: number) => void':
+!!! 	Call signatures of types '(s: string, b?: boolean) => void' and '(s: string, n?: number) => void' are incompatible.
+    g = f;
+    ~
+!!! optionalParamTypeComparison.ts(5,1): error TS2012: Cannot convert '(s: string, n?: number) => void' to '(s: string, b?: boolean) => void':
+!!! 	Call signatures of types '(s: string, n?: number) => void' and '(s: string, b?: boolean) => void' are incompatible.

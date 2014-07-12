@@ -1,0 +1,114 @@
+<!DOCTYPE html> 
+
+<html>
+<head>
+    <title>TypeScript Web harness</title>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.js"></script>
+    <script src='perfCompiler.js'></script>
+    <script>
+        var repeat = 10;
+        var batch;
+
+        if (!batch) {
+            batch = new BatchCompiler();
+        }
+
+        function appendTime(message, time) {
+            var res = message + ": " + time;
+            var div = document.createElement('div');
+            div.innerText = res;
+            document.body.appendChild(div);
+        }
+
+        function clear1() {
+            $("div").remove();
+        }
+
+        function run(f) {
+            var start = new Date().getTime();
+            for (var i = 0; i < repeat; i++) {
+                f();
+
+                // If we're repeating multiple times, then ignore the first run so we don't count 
+                // the time taken to JIT.
+                if (repeat > 1 && i === 0) {
+                    start = new Date().getTime();
+                }
+            }
+
+            var end = new Date().getTime();
+            if (repeat > 1) {
+                appendTime("Average", (end - start) / (repeat - 1));
+            }
+        }
+
+        function newParse() {
+            var batch = new BatchCompiler();
+
+            run(function () {
+                var start = new Date().getTime();
+                batch.newParse();
+                var end = new Date().getTime();
+                appendTime("New Parse", end - start);
+            });
+        }
+
+        function newParseAndAST() {
+            var batch = new BatchCompiler();
+
+            run(function () {
+                var start = new Date().getTime();
+
+                var tree = batch.newParse();
+                TypeScript.SyntaxTreeToAstVisitor.visit(tree, "", new TypeScript.CompilationSettings(), false);
+
+                var end = new Date().getTime();
+                appendTime("AST", end - start);
+            });
+        }
+
+        function newIncrementalParse() {
+            var batch = new BatchCompiler();
+            var tree = batch.newParse();
+
+            run(function () {
+                var start = new Date().getTime();
+                tree = batch.newIncrementalParse(tree);
+                var end = new Date().getTime();
+                appendTime("Incremental Parse", end - start);
+            });
+        }
+
+        function newIncrementalParseAndAST() {
+            var batch = new BatchCompiler();
+            var tree = batch.newParse();
+            TypeScript.SyntaxTreeToAstVisitor.visit(tree, "", new TypeScript.CompilationSettings(), false);
+
+            run(function () {
+                var start = new Date().getTime();
+                tree = batch.newIncrementalParse(tree);
+                TypeScript.SyntaxTreeToAstVisitor.visit(tree, "", new TypeScript.CompilationSettings(), false);
+                var end = new Date().getTime();
+                appendTime("Incremental Parse and AST", end - start);
+            });
+        }
+
+        function fullCompile() {
+            var start = new Date().getTime();
+            compile();
+            var end = new Date().getTime();
+            appendTime("Compile", end - start);
+        }
+
+    </script>
+</head>
+<body>
+    <h1>TypeScript Perf Testbed</h1>
+    <button onclick="newParse()">Parse</button>
+    <button onclick="newParseAndAST()">Parse + AST</button>
+    <button onclick="newIncrementalParse()">Incremental Parse</button>
+    <button onclick="newIncrementalParseAndAST()">Incremental Parse + AST</button>
+    <button onclick="fullCompile()">Compile</button>
+    <button onclick="clear1()">Clear</button>
+</body>
+</html>

@@ -1,0 +1,34 @@
+{
+    "fullText": [
+        "100000000000000000000.123"
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 25,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullWidth": 25,
+                "isIncrementallyUnusable": true,
+                "expression": {
+                    "kind": "NumericLiteral",
+                    "width": 25,
+                    "text": "100000000000000000000.123",
+                    "value": 100000000000000000000,
+                    "valueText": "100000000000000000000"
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 0,
+                    "text": ""
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    }
+}

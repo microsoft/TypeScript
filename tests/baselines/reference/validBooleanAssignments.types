@@ -1,0 +1,22 @@
+=== tests/cases/compiler/validBooleanAssignments.ts ===
+var x = true;
+>x : boolean
+
+var a: any = x;
+>a : any
+>x : boolean
+
+var b: Object = x;
+>b : Object
+>Object : Object
+>x : boolean
+
+var c: Boolean = x;
+>c : Boolean
+>Boolean : Boolean
+>x : boolean
+
+var d: boolean = x;
+>d : boolean
+>x : boolean
+

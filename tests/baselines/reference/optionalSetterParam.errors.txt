@@ -1,0 +1,8 @@
+==== tests/cases/compiler/optionalSetterParam.ts (1 errors) ====
+    class foo {
+    
+        public set bar(param?:any) { }
+                      ~~~~~~~~~~
+!!! optionalSetterParam.ts(3,19): error TS1051: 'set' accessor parameter cannot be optional.
+    }
+    

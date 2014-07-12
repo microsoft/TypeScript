@@ -1,0 +1,19 @@
+==== tests/cases/compiler/typeInfer1.ts (1 errors) ====
+    interface ITextWriter2 {
+        Write(s:string):void;
+        WriteLine(s:string):void;
+    }
+    
+    var x: ITextWriter2 = {
+        Write: function (s:string):void {},
+        WriteLine: function(s:string):void {}
+    }
+    
+    var yyyyyyyy: ITextWriter2 = {
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+        Moo: function() { return "cow"; }
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    }
+    ~
+!!! typeInfer1.ts(11,5): error TS2012: Cannot convert '{ Moo: () => string; }' to 'ITextWriter2':
+!!! 	Type '{ Moo: () => string; }' is missing property 'Write' from type 'ITextWriter2'.

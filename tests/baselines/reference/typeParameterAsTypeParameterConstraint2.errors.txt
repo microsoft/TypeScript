@@ -1,0 +1,54 @@
+==== tests/cases/compiler/typeParameterAsTypeParameterConstraint2.ts (14 errors) ====
+    // using a type parameter as a constraint for a type parameter is invalid
+    // these should be errors unless otherwise noted
+    
+    function foo<T, U extends T>(x: T, y: U): U { return y; } // this is now an error
+                    ~~~~~~~~~~~
+!!! typeParameterAsTypeParameterConstraint2.ts(4,17): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+    
+    foo(1, '');
+    ~~~
+!!! typeParameterAsTypeParameterConstraint2.ts(6,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Could not apply type 'number' to argument 2 which is of type 'string'.
+    ~~~
+!!! typeParameterAsTypeParameterConstraint2.ts(6,1): error TS2087: Could not select overload for 'call' expression.
+    foo(1, {});
+    ~~~
+!!! typeParameterAsTypeParameterConstraint2.ts(7,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Could not apply type 'number' to argument 2 which is of type '{}'.
+    ~~~
+!!! typeParameterAsTypeParameterConstraint2.ts(7,1): error TS2087: Could not select overload for 'call' expression.
+    
+    interface NumberVariant extends Number {
+        x: number;
+    }
+    var n: NumberVariant;
+    var r3 = foo(1, n);
+             ~~~
+!!! typeParameterAsTypeParameterConstraint2.ts(13,10): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Could not apply type 'number' to argument 2 which is of type 'NumberVariant'.
+             ~~~
+!!! typeParameterAsTypeParameterConstraint2.ts(13,10): error TS2087: Could not select overload for 'call' expression.
+    
+    function foo2<T, U extends { length: T }>(x: T, y: U) { return y; } // this is now an error
+                     ~~~~~~~~~~~~~~~~~~~~~~~
+!!! typeParameterAsTypeParameterConstraint2.ts(15,18): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+    foo2(1, { length: '' });
+    ~~~~
+!!! typeParameterAsTypeParameterConstraint2.ts(16,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Types of property 'length' of types '{ length: string; }' and '{ length: number; }' are incompatible.
+    ~~~~
+!!! typeParameterAsTypeParameterConstraint2.ts(16,1): error TS2087: Could not select overload for 'call' expression.
+    foo2(1, { length: {} });
+    ~~~~
+!!! typeParameterAsTypeParameterConstraint2.ts(17,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Types of property 'length' of types '{ length: {}; }' and '{ length: number; }' are incompatible.
+    ~~~~
+!!! typeParameterAsTypeParameterConstraint2.ts(17,1): error TS2087: Could not select overload for 'call' expression.
+    foo2([], ['']);
+    ~~~~
+!!! typeParameterAsTypeParameterConstraint2.ts(18,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Types of property 'length' of types 'string[]' and '{ length: any[]; }' are incompatible:
+!!! 		Type 'Number' is missing property 'concat' from type 'any[]'.
+    ~~~~
+!!! typeParameterAsTypeParameterConstraint2.ts(18,1): error TS2087: Could not select overload for 'call' expression.

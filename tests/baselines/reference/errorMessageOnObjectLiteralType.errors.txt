@@ -1,0 +1,11 @@
+==== tests/cases/compiler/errorMessageOnObjectLiteralType.ts (2 errors) ====
+    var x: {
+        a: string;
+        b: number;
+    };
+    x.getOwnPropertyNamess();
+      ~~~~~~~~~~~~~~~~~~~~
+!!! errorMessageOnObjectLiteralType.ts(5,3): error TS2094: The property 'getOwnPropertyNamess' does not exist on value of type '{ a: string; b: number; }'.
+    Object.getOwnPropertyNamess(null);
+           ~~~~~~~~~~~~~~~~~~~~
+!!! errorMessageOnObjectLiteralType.ts(6,8): error TS2094: The property 'getOwnPropertyNamess' does not exist on value of type '{ prototype: Object; getPrototypeOf(o: any): any; getOwnPropertyDescriptor(o: any, p: string): PropertyDescriptor; getOwnPropertyNames(o: any): string[]; create(o: any, properties?: PropertyDescriptorMap): any; defineProperty(o: any, p: string, attributes: PropertyDescriptor): any; defineProperties(o: any, properties: PropertyDescriptorMap): any; seal(o: any): any; freeze(o: any): any; preventExtensions(o: any): any; isSealed(o: any): boolean; isFrozen(o: any): boolean; isExtensible(o: any): boolean; keys(o: any): string[]; (): any; (value: any): any; new(value?: any): Object; }'.

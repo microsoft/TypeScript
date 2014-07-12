@@ -1,0 +1,14 @@
+==== tests/cases/compiler/objectCreationExpressionInFunctionParameter.ts (3 errors) ====
+    class A {
+        constructor(public a1: string) {
+        }
+    }
+    function foo(x = new A(123)) { //should error, 123 is not string
+                         ~
+!!! objectCreationExpressionInFunctionParameter.ts(5,22): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Could not apply type 'string' to argument 1 which is of type 'number'.
+                         ~
+!!! objectCreationExpressionInFunctionParameter.ts(5,22): error TS2085: Could not select overload for 'new' expression.
+    }}
+     ~
+!!! objectCreationExpressionInFunctionParameter.ts(6,2): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.

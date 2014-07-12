@@ -1,0 +1,7 @@
+==== tests/cases/compiler/incompleteObjectLiteral1.ts (2 errors) ====
+    var tt = { aa; }
+                 ~
+!!! incompleteObjectLiteral1.ts(1,14): error TS1005: ':' expected.
+                   ~
+!!! incompleteObjectLiteral1.ts(1,16): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.
+    var x = tt;

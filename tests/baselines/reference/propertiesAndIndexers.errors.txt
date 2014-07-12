@@ -1,0 +1,77 @@
+==== tests/cases/compiler/propertiesAndIndexers.ts (12 errors) ====
+    interface X { }
+    interface Y {
+        n: number;
+    }
+    interface Z {
+        s: string;
+    }
+    
+    interface A {
+        a: Y;
+        b: X;
+        1: Z;
+    }
+    
+    interface B extends A {
+        [n: number]: string;
+        ~~~~~~~~~~~~~~~~~~~
+!!! propertiesAndIndexers.ts(16,5): error TS2169: All numerically named properties must be assignable to numeric indexer type 'string'.
+        c: boolean;
+        3: boolean;
+        ~~~~~~~~~~
+!!! propertiesAndIndexers.ts(18,5): error TS2169: All numerically named properties must be assignable to numeric indexer type 'string'.
+        6(): string;
+        ~~~~~~~~~~~
+!!! propertiesAndIndexers.ts(19,5): error TS2169: All numerically named properties must be assignable to numeric indexer type 'string'.
+    }
+    
+    interface B {
+        4: boolean;
+        ~~~~~~~~~~
+!!! propertiesAndIndexers.ts(23,5): error TS2169: All numerically named properties must be assignable to numeric indexer type 'string'.
+        5: string;
+    }
+    
+    interface C extends A {
+        [s: string]: number;
+        ~~~~~~~~~~~~~~~~~~~
+!!! propertiesAndIndexers.ts(28,5): error TS2171: All named properties must be assignable to string indexer type 'number'.
+        c: boolean;
+        ~~~~~~~~~~
+!!! propertiesAndIndexers.ts(29,5): error TS2171: All named properties must be assignable to string indexer type 'number'.
+        3: boolean;
+        ~~~~~~~~~~
+!!! propertiesAndIndexers.ts(30,5): error TS2171: All named properties must be assignable to string indexer type 'number'.
+    }
+    
+    interface D extends B, C {
+              ~
+!!! propertiesAndIndexers.ts(33,11): error TS2189: Interface 'D' cannot simultaneously extend types 'B' and 'C':
+!!! Type of number indexer in type 'B' is not assignable to string indexer type in type 'C'.
+        2: Z;
+        ~~~~
+!!! propertiesAndIndexers.ts(34,5): error TS2169: All numerically named properties must be assignable to numeric indexer type 'string'.
+        Infinity: number;
+        zoo: string;
+        ~~~~~~~~~~~
+!!! propertiesAndIndexers.ts(36,5): error TS2171: All named properties must be assignable to string indexer type 'number'.
+    }
+    
+    class P {
+        [n: string]: string
+    }
+    
+    class Q extends P {
+        t: number;
+        ~~~~~~~~~~
+!!! propertiesAndIndexers.ts(44,5): error TS2171: All named properties must be assignable to string indexer type 'string'.
+    }
+    
+    var c: {
+        [n: number]: string;
+        c: boolean;
+        3: boolean;
+        ~~~~~~~~~~
+!!! propertiesAndIndexers.ts(50,5): error TS2169: All numerically named properties must be assignable to numeric indexer type 'string'.
+    };

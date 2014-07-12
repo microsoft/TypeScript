@@ -1,0 +1,57 @@
+==== tests/cases/compiler/stringLiteralTypesInImplementationSignatures2.ts (13 errors) ====
+    // String literal types are only valid in overload signatures
+    
+    function foo(x: any);
+    function foo(x: 'hi') { }
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! stringLiteralTypesInImplementationSignatures2.ts(4,1): error TS2163: Overload signature implementation cannot use specialized type.
+    
+    class C {
+        foo(x: string);
+        foo(x: 'hi') { }
+        ~~~~~~~~~~~~~~~~
+!!! stringLiteralTypesInImplementationSignatures2.ts(8,5): error TS2163: Overload signature implementation cannot use specialized type.
+    }
+    
+    interface I {
+        (x: 'a');
+        ~~~~~~~~
+!!! stringLiteralTypesInImplementationSignatures2.ts(12,5): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+        (x: 'hi');
+        ~~~~~~~~~
+!!! stringLiteralTypesInImplementationSignatures2.ts(13,5): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+        foo(x: 'a', y: 'a');
+        ~~~~~~~~~~~~~~~~~~~
+!!! stringLiteralTypesInImplementationSignatures2.ts(14,5): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+        foo(x: 'hi', y: 'hi');
+        ~~~~~~~~~~~~~~~~~~~~~
+!!! stringLiteralTypesInImplementationSignatures2.ts(15,5): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+    }
+    
+    var a: {
+        (x: 'hi');
+        ~~~~~~~~~
+!!! stringLiteralTypesInImplementationSignatures2.ts(19,5): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+        (x: 'a');
+        ~~~~~~~~
+!!! stringLiteralTypesInImplementationSignatures2.ts(20,5): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+        foo(x: 'hi');
+        ~~~~~~~~~~~~
+!!! stringLiteralTypesInImplementationSignatures2.ts(21,5): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+        foo(x: 'a');
+        ~~~~~~~~~~~
+!!! stringLiteralTypesInImplementationSignatures2.ts(22,5): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+    }
+    
+    var b = {
+        foo(x: 'hi') { },
+        ~~~~~~~~~~~~~~~~
+!!! stringLiteralTypesInImplementationSignatures2.ts(26,5): error TS2163: Overload signature implementation cannot use specialized type.
+        foo(x: 'a') { },
+        ~~~~~~~~~~~~~~~
+!!! stringLiteralTypesInImplementationSignatures2.ts(27,5): error TS2000: Duplicate identifier 'foo'. Additional locations:
+!!! 	stringLiteralTypesInImplementationSignatures2.ts(26,5)
+        ~~~~~~~~~~~~~~~
+!!! stringLiteralTypesInImplementationSignatures2.ts(27,5): error TS2163: Overload signature implementation cannot use specialized type.
+    }
+    

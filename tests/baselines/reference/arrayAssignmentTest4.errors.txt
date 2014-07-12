@@ -1,0 +1,33 @@
+==== tests/cases/compiler/arrayAssignmentTest4.ts (2 errors) ====
+    
+    
+    class C3 {
+        CM3M1() { return 3;}
+    }
+    
+    
+    /*
+    
+    This behaves unexpectedly with teh following types:
+    
+    Type 1 of any[]:
+    
+    * Type 2 of the following throws an error but shouldn't: () => void[], SomeClass[], and {one: 1}[].
+    
+    * Type 2 of the following doesn't throw an error but should: {one: 1}, new() => SomeClass, SomeClass.
+    
+    */
+    var c3 : C3 = new C3();
+    var o1 = {one : 1};
+    
+    var arr_any: any[] = [];
+    
+    arr_any = function () { return null;} // should be an error - is
+    ~~~~~~~
+!!! arrayAssignmentTest4.ts(24,1): error TS2012: Cannot convert '() => any' to 'any[]':
+!!! 	Type '() => any' is missing property 'concat' from type 'any[]'.
+    arr_any = c3; // should be an error - is
+    ~~~~~~~
+!!! arrayAssignmentTest4.ts(25,1): error TS2012: Cannot convert 'C3' to 'any[]':
+!!! 	Type 'C3' is missing property 'concat' from type 'any[]'.
+    

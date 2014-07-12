@@ -1,0 +1,78 @@
+==== tests/cases/compiler/invalidMultipleVariableDeclarations.ts (12 errors) ====
+    interface I {
+        id: number;
+    }
+    
+    class C implements I {
+        id: number;
+        valid: boolean;
+    }
+    
+    class C2 extends C {
+        name: string;
+    }
+    
+    class D<T>{
+        source: T;
+        recurse: D<T>;
+        wrapped: D<D<T>>
+    }
+    
+    function F(x: string): number { return 42; }
+    
+    module M {
+        export class A {
+            name: string;
+        }
+    
+        export function F2(x: number): string { return x.toString(); }
+    }
+    
+    // all of these are errors
+    var a: any;
+    var a = 1;
+        ~~~~~
+!!! invalidMultipleVariableDeclarations.ts(32,5): error TS2134: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'number'.
+    var a = 'a string';
+        ~~~~~~~~~~~~~~
+!!! invalidMultipleVariableDeclarations.ts(33,5): error TS2134: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'string'.
+    var a = new C();
+        ~~~~~~~~~~~
+!!! invalidMultipleVariableDeclarations.ts(34,5): error TS2134: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'C'.
+    var a = new D<string>();
+        ~~~~~~~~~~~~~~~~~~~
+!!! invalidMultipleVariableDeclarations.ts(35,5): error TS2134: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'D<string>'.
+    var a = M;
+        ~~~~~
+!!! invalidMultipleVariableDeclarations.ts(36,5): error TS2134: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'typeof M'.
+    
+    var b: I;
+    var b = new C();
+        ~~~~~~~~~~~
+!!! invalidMultipleVariableDeclarations.ts(39,5): error TS2134: Subsequent variable declarations must have the same type.  Variable 'b' must be of type 'I', but here has type 'C'.
+    var b = new C2();
+        ~~~~~~~~~~~~
+!!! invalidMultipleVariableDeclarations.ts(40,5): error TS2134: Subsequent variable declarations must have the same type.  Variable 'b' must be of type 'I', but here has type 'C2'.
+    
+    var f = F;
+    var f = (x: number) => '';
+        ~~~~~~~~~~~~~~~~~~~~~
+!!! invalidMultipleVariableDeclarations.ts(43,5): error TS2134: Subsequent variable declarations must have the same type.  Variable 'f' must be of type 'typeof F', but here has type '(x: number) => string'.
+    
+    var arr: string[];
+    var arr = [1, 2, 3, 4];
+        ~~~~~~~~~~~~~~~~~~
+!!! invalidMultipleVariableDeclarations.ts(46,5): error TS2134: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'string[]', but here has type 'number[]'.
+    var arr = [new C(), new C2(), new D<string>()];
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! invalidMultipleVariableDeclarations.ts(47,5): error TS2134: Subsequent variable declarations must have the same type.  Variable 'arr' must be of type 'string[]', but here has type '{}[]'.
+    
+    var arr2 = [new D<string>()];
+    var arr2 = new Array<D<number>>();
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! invalidMultipleVariableDeclarations.ts(50,5): error TS2134: Subsequent variable declarations must have the same type.  Variable 'arr2' must be of type 'D<string>[]', but here has type 'D<number>[]'.
+    
+    var m: typeof M;
+    var m = M.A;
+        ~~~~~~~
+!!! invalidMultipleVariableDeclarations.ts(53,5): error TS2134: Subsequent variable declarations must have the same type.  Variable 'm' must be of type 'typeof M', but here has type 'typeof M.A'.

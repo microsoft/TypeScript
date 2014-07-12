@@ -1,0 +1,23 @@
+==== tests/cases/compiler/ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts (4 errors) ====
+    module A {
+    
+        class Point {
+            constructor(public x: number, public y: number) { }
+        }
+    
+        export var UnitSquare : {
+                   ~~~~~~~~~~~~~~
+            top: { left: Point, right: Point },
+                                              ~
+!!! ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts(8,43): error TS1005: ';' expected.
+                              ~
+!!! ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts(8,27): error TS1005: ';' expected.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            bottom: { left: Point, right: Point }
+                                 ~
+!!! ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts(9,30): error TS1005: ';' expected.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        } = null;
+    ~~~~~~~~~~~~
+!!! ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts(7,16): error TS2027: Exported variable 'UnitSquare' has or is using private type 'Point'.
+    }

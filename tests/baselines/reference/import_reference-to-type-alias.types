@@ -1,0 +1,39 @@
+=== tests/cases/compiler/file2.ts ===
+import appJs = require("file1");
+>appJs : appJs
+
+import Services = appJs.App.Services;
+>Services : Services
+>appJs : appJs
+>App : appJs.App
+>Services : typeof appJs.App.Services
+
+var x = new Services.UserServices().getUserName();
+>x : string
+>new Services.UserServices().getUserName() : string
+>new Services.UserServices().getUserName : () => string
+>new Services.UserServices() : appJs.App.Services.UserServices
+>Services.UserServices : typeof appJs.App.Services.UserServices
+>Services : typeof appJs.App.Services
+>UserServices : typeof appJs.App.Services.UserServices
+>getUserName : () => string
+
+=== tests/cases/compiler/file1.ts ===
+export module App {
+>App : App
+
+    export module Services {
+>Services : Services
+
+        export class UserServices {
+>UserServices : UserServices
+
+            public getUserName(): string {
+>getUserName : () => string
+
+                return "Bill Gates";
+            }
+        }
+    }
+}
+

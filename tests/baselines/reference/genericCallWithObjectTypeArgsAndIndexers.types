@@ -1,0 +1,66 @@
+=== tests/cases/compiler/genericCallWithObjectTypeArgsAndIndexers.ts ===
+// Type inference infers from indexers in target type, no errors expected
+
+function foo<T>(x: T) {
+>foo : typeof foo
+>T : T
+>x : T
+>T : T
+
+    return x;
+>x : T
+}
+
+var a: {
+>a : { [x: string]: Object; [x: number]: Date; }
+
+    [x: string]: Object;
+>x : string
+>Object : Object
+
+    [x: number]: Date;
+>x : number
+>Date : Date
+
+};
+var r = foo(a);
+>r : { [x: string]: Object; [x: number]: Date; }
+>foo(a) : { [x: string]: Object; [x: number]: Date; }
+>foo : typeof foo
+>a : { [x: string]: Object; [x: number]: Date; }
+
+function other<T extends Date>(arg: T) {
+>other : typeof other
+>T : T
+>Date : Date
+>arg : T
+>T : T
+
+    var b: {
+>b : { [x: string]: Object; [x: number]: T; }
+
+        [x: string]: Object;
+>x : string
+>Object : Object
+
+        [x: number]: T
+>x : number
+>T : T
+
+    };
+    var r2 = foo(b);
+>r2 : { [x: string]: Object; [x: number]: T; }
+>foo(b) : { [x: string]: Object; [x: number]: T; }
+>foo : typeof foo
+>b : { [x: string]: Object; [x: number]: T; }
+
+    var d = r2[1]; 
+>d : T
+>r2[1] : T
+>r2 : { [x: string]: Object; [x: number]: T; }
+
+    var e = r2['1']; 
+>e : Object
+>r2['1'] : Object
+>r2 : { [x: string]: Object; [x: number]: T; }
+}

@@ -1,0 +1,65 @@
+==== tests/cases/compiler/interfaceDeclaration3.ts (3 errors) ====
+    interface I1 { item:number; }
+    
+    module M1 {
+        interface I1 { item:string; }  
+        interface I2 { item:number; }   
+        class C1 implements I1 {
+              ~~
+!!! interfaceDeclaration3.ts(6,11): error TS2137: Class C1 declares interface I1 but does not implement it:
+!!! 	Types of property 'item' of types 'C1' and 'I1' are incompatible.
+            public item:number;
+        }
+        class C2 implements I1 {
+            public item:string;
+        }
+        class C3 implements I2 {
+            public item:number;
+        }
+        
+        class C4 implements M2.I1 { 
+            public item:string;
+        }
+    
+        class C5 implements M2.M3.I1 {
+            public item:string;
+        }
+    }
+    
+    export module M2 {
+        export interface I1 { item:string; }
+        export interface I2 { item:string; }
+        export module M3 {
+            export interface I1 { item:string; }
+        }
+        class C1 implements I1 {
+              ~~
+!!! interfaceDeclaration3.ts(31,11): error TS2137: Class C1 declares interface I1 but does not implement it:
+!!! 	Types of property 'item' of types 'C1' and 'I1' are incompatible.
+            public item:number;    
+        }
+        class C2 implements I1 {
+            public item:string;    
+        }
+        class C3 implements I2 {
+            public item:string;    
+        }
+    }
+    
+    class C1 implements I1 {
+        public item:number;
+    }
+    
+    class C2 implements M2.I1 { 
+        public item:string;
+    }
+    
+    class C3 implements M2.M3.I1 {
+        public item:string;
+    }
+    
+    interface I2 extends I1 { item:string; }
+              ~~
+!!! interfaceDeclaration3.ts(54,11): error TS2143: Interface 'I2' cannot extend interface 'I1':
+!!! 	Types of property 'item' of types 'I2' and 'I1' are incompatible.
+    

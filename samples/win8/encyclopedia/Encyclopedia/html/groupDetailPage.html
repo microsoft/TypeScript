@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>groupDetailPage</title>
+
+    <!-- WinJS references -->
+    <link href="//Microsoft.WinJS.1.0/css/ui-light.css" rel="stylesheet">
+    <script src="//Microsoft.WinJS.1.0/js/base.js"></script>
+    <script src="//Microsoft.WinJS.1.0/js/ui.js"></script>
+
+    <link href="/css/default.css" rel="stylesheet">
+    <link href="/css/groupDetailPage.css" rel="stylesheet">
+    <script src="/js/data.js"></script>
+    <script src="/js/groupDetailPage.js"></script>
+</head>
+<body>
+    <!-- These templates are used to display each item in the ListView declared below. -->
+    <div class="headerTemplate" data-win-control="WinJS.Binding.Template">
+        <h3 class="win-type-x-large" data-win-bind="textContent: subtitle"></h3>
+        <img class="image" data-win-bind="src: backgroundImage; alt: title" />
+        <div class="description win-normalText" data-win-bind="innerHTML: description"></div>
+    </div>
+    <div class="itemTemplate" data-win-control="WinJS.Binding.Template">
+        <div class="item">
+            <!--<img class="item-image" data-win-bind="src: backgroundImage; alt: title" />-->
+            <div class="item-image" data-win-bind="style.backgroundImage: imageSrc"></div>
+            <div class="item-info">
+                <div class="win-type-medium item-title" data-win-bind="textContent: title"></div>
+                <!--<div class="win-type-xx-small item-subtitle" data-win-bind="textContent: subtitle"></div>
+                <div class="item-description win-type-medium" data-win-bind="textContent: description"></div>-->
+            </div>
+        </div>
+    </div>
+
+    <!-- The content that will be loaded and displayed. -->
+    <div class="groupDetailPage fragment">
+        <header aria-label="Header content" role="banner">
+            <button class="win-backbutton" aria-label="Back" disabled></button>
+            <div class="titleArea">
+                <h1 class="win-type-xx-large" tabindex="0"></h1>
+            </div>
+            <div class="menu"></div>
+        </header>
+        <section aria-label="Main content" role="main">
+            <div class="groupList" aria-label="List of groups" data-win-control="WinJS.UI.ListView" data-win-options="{ selectionMode: 'none' }"></div>
+        </section>
+    </div>
+</body>
+</html>

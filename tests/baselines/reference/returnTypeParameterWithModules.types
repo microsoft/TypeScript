@@ -1,0 +1,80 @@
+=== tests/cases/compiler/returnTypeParameterWithModules.ts ===
+module M1 {
+>M1 : M1
+
+    export function reduce<A>(ar, f, e?): Array<A> {
+>reduce : typeof reduce
+>A : A
+>ar : any
+>f : any
+>e : any
+>Array : Array<T>
+>A : A
+
+        return Array.prototype.reduce.apply(ar, e ? [f, e] : [f]);
+>Array.prototype.reduce.apply(ar, e ? [f, e] : [f]) : any
+>Array.prototype.reduce.apply : (thisArg: any, argArray?: any) => any
+>Array.prototype.reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue?: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
+>Array.prototype : any[]
+>Array : { isArray(arg: any): boolean; prototype: any[]; (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new(arrayLength?: number): any[]; new<T>(arrayLength: number): T[]; new<T>(...items: T[]): T[]; }
+>prototype : any[]
+>reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue?: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
+>apply : (thisArg: any, argArray?: any) => any
+>ar : any
+>e ? [f, e] : [f] : any
+>e : any
+>[f, e] : any[]
+>f : any
+>e : any
+>[f] : any[]
+>f : any
+
+    };
+};
+module M2 {
+>M2 : M2
+
+  import A = M1
+>A : A
+>M1 : M1
+
+  export function compose() {
+>compose : typeof compose
+
+        A.reduce(arguments, compose2);
+>A.reduce(arguments, compose2) : {}[]
+>A.reduce : typeof M1.reduce
+>A : typeof M1
+>reduce : typeof M1.reduce
+>arguments : IArguments
+>compose2 : typeof compose2
+
+    };
+    export function compose2<B, C, D>(g: (x: B) => C, f: (x: D) => B): (x: D) => C {
+>compose2 : typeof compose2
+>B : B
+>C : C
+>D : D
+>g : (x: B) => C
+>x : B
+>B : B
+>C : C
+>f : (x: D) => B
+>x : D
+>D : D
+>B : B
+>x : D
+>D : D
+>C : C
+
+    return function (x) { return g(f(x)); }
+>function (x) { return g(f(x)); } : (x: D) => C
+>x : D
+>g(f(x)) : C
+>g : (x: B) => C
+>f(x) : B
+>f : (x: D) => B
+>x : D
+
+  };
+};

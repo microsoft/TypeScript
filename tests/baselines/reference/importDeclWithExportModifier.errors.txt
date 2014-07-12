@@ -1,0 +1,10 @@
+==== tests/cases/compiler/importDeclWithExportModifier.ts (1 errors) ====
+    module x {
+        interface c {
+        }
+    }
+    export import a = x.c;
+                        ~
+!!! importDeclWithExportModifier.ts(5,21): error TS2178: Could not find symbol 'c' in module 'x'.
+    var b: a;
+    

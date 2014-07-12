@@ -1,0 +1,24 @@
+extends layout
+
+block mainContent
+  h1 Pin new image to  
+    a(href= "/user/"+username)!= username
+    's board 
+    a(href= "/user/"+username+"/"+boardid)!= boardid
+  form( method="post")
+      div
+          br
+          div
+              span.inputtitle Image url:
+              input(type="text", name="imageUri")
+          br
+          div
+              span.inputtitle Link :
+              input(type="text", name="link")
+          br
+          div
+              span.inputtitle Caption :
+              textarea( name="caption", rows=10, cols=16)
+          br
+          #editArticleSubmit
+              input.button(type="submit", value="Save pin")

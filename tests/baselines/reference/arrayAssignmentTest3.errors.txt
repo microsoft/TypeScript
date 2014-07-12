@@ -1,0 +1,20 @@
+==== tests/cases/compiler/arrayAssignmentTest3.ts (2 errors) ====
+    // The following gives no error
+    // Michal saw no error if he used number instead of B, 
+    // but I do...
+    class B {}
+    
+    class a {
+        constructor(public x: string, public y: number, z: B[]) { }
+    }
+    
+    
+    
+    var xx = new a(null, 7, new B());
+                 ~
+!!! arrayAssignmentTest3.ts(12,14): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Type 'B' is missing property 'concat' from type 'B[]'.
+                 ~
+!!! arrayAssignmentTest3.ts(12,14): error TS2085: Could not select overload for 'new' expression.
+    
+    

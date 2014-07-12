@@ -1,0 +1,19 @@
+==== tests/cases/compiler/collisionExportsRequireAndEnum.ts (2 errors) ====
+    export enum require { // Error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        _thisVal1,
+    ~~~~~~~~~~~~~~
+        _thisVal2,
+    ~~~~~~~~~~~~~~
+    }
+    ~
+!!! collisionExportsRequireAndEnum.ts(1,1): error TS2228: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of an external module.
+    export enum exports { // Error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        _thisVal1,
+    ~~~~~~~~~~~~~~
+        _thisVal2,
+    ~~~~~~~~~~~~~~
+    }
+    ~
+!!! collisionExportsRequireAndEnum.ts(5,1): error TS2228: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of an external module.

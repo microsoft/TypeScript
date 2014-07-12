@@ -1,0 +1,12 @@
+==== tests/cases/compiler/indexerSignatureWithRestParam.ts (2 errors) ====
+    interface I {
+        [...x]: string;
+         ~~~~
+!!! indexerSignatureWithRestParam.ts(2,6): error TS1017: Index signatures cannot have rest parameters.
+    }
+    
+    class C {
+        [...x]: string
+         ~~~~
+!!! indexerSignatureWithRestParam.ts(6,6): error TS1017: Index signatures cannot have rest parameters.
+    }

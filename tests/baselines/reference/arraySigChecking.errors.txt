@@ -1,0 +1,48 @@
+==== tests/cases/compiler/arraySigChecking.ts (3 errors) ====
+    declare module M {
+        interface iBar { t: any; }
+        interface iFoo extends iBar {
+            s:any;
+        }
+    
+        class cFoo {
+            t:any;
+        }
+    
+        var foo: { [index: any]; }; // expect an error here
+                 ~~~~~~~~~~
+!!! arraySigChecking.ts(11,14): error TS1023: Index signature parameter type must be 'string' or 'number'.
+    }
+    
+    interface myInt {
+        voidFn(): void;
+    }
+    var myVar: myInt;
+    var strArray: string[] = [myVar.voidFn()];
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! arraySigChecking.ts(18,5): error TS2012: Cannot convert '{}[]' to 'string[]':
+!!! 	Types of property 'pop' of types '{}[]' and 'string[]' are incompatible:
+!!! 		Call signatures of types '() => {}' and '() => string' are incompatible.
+    
+    
+    var myArray: number[][][];
+    myArray = [[1, 2]];
+    ~~~~~~~
+!!! arraySigChecking.ts(22,1): error TS2012: Cannot convert '{}[][]' to 'number[][][]':
+!!! 	Types of property 'pop' of types '{}[][]' and 'number[][][]' are incompatible:
+!!! 		Call signatures of types '() => {}[]' and '() => number[][]' are incompatible:
+!!! 			Types of property 'pop' of types '{}[]' and 'number[][]' are incompatible:
+!!! 				Call signatures of types '() => {}' and '() => number[]' are incompatible:
+!!! 					Type '{}' is missing property 'concat' from type 'number[]'.
+    
+    // regression for 604980
+    function isEmpty(l: { length: number })
+    {
+        return l.length === 0;
+    }
+    
+    isEmpty([]);
+    isEmpty(new Array(3));
+    isEmpty(new Array<string>(3));
+    isEmpty(['a']);
+    

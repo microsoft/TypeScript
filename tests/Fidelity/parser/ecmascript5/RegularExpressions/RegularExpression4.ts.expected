@@ -1,0 +1,1297 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 297,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "IfStatement",
+                "fullWidth": 297,
+                "isIncrementallyUnusable": true,
+                "ifKeyword": {
+                    "kind": "IfKeyword",
+                    "width": 2,
+                    "fullWidth": 3,
+                    "text": "if",
+                    "value": "if",
+                    "valueText": "if",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "text": " "
+                        }
+                    ]
+                },
+                "openParenToken": {
+                    "kind": "OpenParenToken",
+                    "width": 1,
+                    "text": "(",
+                    "value": "(",
+                    "valueText": "("
+                },
+                "condition": {
+                    "kind": "LogicalOrExpression",
+                    "fullWidth": 95,
+                    "isIncrementallyUnusable": true,
+                    "left": {
+                        "kind": "InvocationExpression",
+                        "fullWidth": 16,
+                        "expression": {
+                            "kind": "MemberAccessExpression",
+                            "fullWidth": 7,
+                            "expression": {
+                                "kind": "IdentifierName",
+                                "width": 2,
+                                "text": "Ca",
+                                "value": "Ca",
+                                "valueText": "Ca"
+                            },
+                            "dotToken": {
+                                "kind": "DotToken",
+                                "width": 1,
+                                "text": ".",
+                                "value": ".",
+                                "valueText": "."
+                            },
+                            "name": {
+                                "kind": "IdentifierName",
+                                "width": 4,
+                                "text": "test",
+                                "value": "test",
+                                "valueText": "test"
+                            }
+                        },
+                        "argumentList": {
+                            "kind": "ArgumentList",
+                            "fullWidth": 9,
+                            "openParenToken": {
+                                "kind": "OpenParenToken",
+                                "width": 1,
+                                "text": "(",
+                                "value": "(",
+                                "valueText": "("
+                            },
+                            "arguments": [
+                                {
+                                    "kind": "MemberAccessExpression",
+                                    "fullWidth": 6,
+                                    "expression": {
+                                        "kind": "IdentifierName",
+                                        "width": 1,
+                                        "text": "c",
+                                        "value": "c",
+                                        "valueText": "c"
+                                    },
+                                    "dotToken": {
+                                        "kind": "DotToken",
+                                        "width": 1,
+                                        "text": ".",
+                                        "value": ".",
+                                        "valueText": "."
+                                    },
+                                    "name": {
+                                        "kind": "IdentifierName",
+                                        "width": 4,
+                                        "text": "href",
+                                        "value": "href",
+                                        "valueText": "href"
+                                    }
+                                }
+                            ],
+                            "closeParenToken": {
+                                "kind": "CloseParenToken",
+                                "width": 1,
+                                "fullWidth": 2,
+                                "text": ")",
+                                "value": ")",
+                                "valueText": ")",
+                                "hasTrailingTrivia": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "text": " "
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "operatorToken": {
+                        "kind": "BarBarToken",
+                        "width": 2,
+                        "fullWidth": 3,
+                        "text": "||",
+                        "value": "||",
+                        "valueText": "||",
+                        "hasTrailingTrivia": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "text": " "
+                            }
+                        ]
+                    },
+                    "right": {
+                        "kind": "LogicalAndExpression",
+                        "fullWidth": 76,
+                        "isIncrementallyUnusable": true,
+                        "left": {
+                            "kind": "LogicalAndExpression",
+                            "fullWidth": 48,
+                            "isIncrementallyUnusable": true,
+                            "left": {
+                                "kind": "InvocationExpression",
+                                "fullWidth": 16,
+                                "expression": {
+                                    "kind": "MemberAccessExpression",
+                                    "fullWidth": 7,
+                                    "expression": {
+                                        "kind": "IdentifierName",
+                                        "width": 2,
+                                        "text": "Ba",
+                                        "value": "Ba",
+                                        "valueText": "Ba"
+                                    },
+                                    "dotToken": {
+                                        "kind": "DotToken",
+                                        "width": 1,
+                                        "text": ".",
+                                        "value": ".",
+                                        "valueText": "."
+                                    },
+                                    "name": {
+                                        "kind": "IdentifierName",
+                                        "width": 4,
+                                        "text": "test",
+                                        "value": "test",
+                                        "valueText": "test"
+                                    }
+                                },
+                                "argumentList": {
+                                    "kind": "ArgumentList",
+                                    "fullWidth": 9,
+                                    "openParenToken": {
+                                        "kind": "OpenParenToken",
+                                        "width": 1,
+                                        "text": "(",
+                                        "value": "(",
+                                        "valueText": "("
+                                    },
+                                    "arguments": [
+                                        {
+                                            "kind": "MemberAccessExpression",
+                                            "fullWidth": 6,
+                                            "expression": {
+                                                "kind": "IdentifierName",
+                                                "width": 1,
+                                                "text": "c",
+                                                "value": "c",
+                                                "valueText": "c"
+                                            },
+                                            "dotToken": {
+                                                "kind": "DotToken",
+                                                "width": 1,
+                                                "text": ".",
+                                                "value": ".",
+                                                "valueText": "."
+                                            },
+                                            "name": {
+                                                "kind": "IdentifierName",
+                                                "width": 4,
+                                                "text": "href",
+                                                "value": "href",
+                                                "valueText": "href"
+                                            }
+                                        }
+                                    ],
+                                    "closeParenToken": {
+                                        "kind": "CloseParenToken",
+                                        "width": 1,
+                                        "fullWidth": 2,
+                                        "text": ")",
+                                        "value": ")",
+                                        "valueText": ")",
+                                        "hasTrailingTrivia": true,
+                                        "trailingTrivia": [
+                                            {
+                                                "kind": "WhitespaceTrivia",
+                                                "text": " "
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            "operatorToken": {
+                                "kind": "AmpersandAmpersandToken",
+                                "width": 2,
+                                "fullWidth": 3,
+                                "text": "&&",
+                                "value": "&&",
+                                "valueText": "&&",
+                                "hasTrailingTrivia": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "text": " "
+                                    }
+                                ]
+                            },
+                            "right": {
+                                "kind": "InvocationExpression",
+                                "fullWidth": 29,
+                                "isIncrementallyUnusable": true,
+                                "expression": {
+                                    "kind": "MemberAccessExpression",
+                                    "fullWidth": 20,
+                                    "isIncrementallyUnusable": true,
+                                    "expression": {
+                                        "kind": "RegularExpressionLiteral",
+                                        "width": 15,
+                                        "text": "/(\\\\?|&)adurl=/",
+                                        "value": {},
+                                        "valueText": "/(\\\\?|&)adurl=/"
+                                    },
+                                    "dotToken": {
+                                        "kind": "DotToken",
+                                        "width": 1,
+                                        "text": ".",
+                                        "value": ".",
+                                        "valueText": "."
+                                    },
+                                    "name": {
+                                        "kind": "IdentifierName",
+                                        "width": 4,
+                                        "text": "test",
+                                        "value": "test",
+                                        "valueText": "test"
+                                    }
+                                },
+                                "argumentList": {
+                                    "kind": "ArgumentList",
+                                    "fullWidth": 9,
+                                    "openParenToken": {
+                                        "kind": "OpenParenToken",
+                                        "width": 1,
+                                        "text": "(",
+                                        "value": "(",
+                                        "valueText": "("
+                                    },
+                                    "arguments": [
+                                        {
+                                            "kind": "MemberAccessExpression",
+                                            "fullWidth": 6,
+                                            "expression": {
+                                                "kind": "IdentifierName",
+                                                "width": 1,
+                                                "text": "c",
+                                                "value": "c",
+                                                "valueText": "c"
+                                            },
+                                            "dotToken": {
+                                                "kind": "DotToken",
+                                                "width": 1,
+                                                "text": ".",
+                                                "value": ".",
+                                                "valueText": "."
+                                            },
+                                            "name": {
+                                                "kind": "IdentifierName",
+                                                "width": 4,
+                                                "text": "href",
+                                                "value": "href",
+                                                "valueText": "href"
+                                            }
+                                        }
+                                    ],
+                                    "closeParenToken": {
+                                        "kind": "CloseParenToken",
+                                        "width": 1,
+                                        "fullWidth": 2,
+                                        "text": ")",
+                                        "value": ")",
+                                        "valueText": ")",
+                                        "hasTrailingTrivia": true,
+                                        "trailingTrivia": [
+                                            {
+                                                "kind": "WhitespaceTrivia",
+                                                "text": " "
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        "operatorToken": {
+                            "kind": "AmpersandAmpersandToken",
+                            "width": 2,
+                            "fullWidth": 3,
+                            "text": "&&",
+                            "value": "&&",
+                            "valueText": "&&",
+                            "hasTrailingTrivia": true,
+                            "trailingTrivia": [
+                                {
+                                    "kind": "WhitespaceTrivia",
+                                    "text": " "
+                                }
+                            ]
+                        },
+                        "right": {
+                            "kind": "LogicalNotExpression",
+                            "fullWidth": 25,
+                            "isIncrementallyUnusable": true,
+                            "operatorToken": {
+                                "kind": "ExclamationToken",
+                                "width": 1,
+                                "text": "!",
+                                "value": "!",
+                                "valueText": "!"
+                            },
+                            "operand": {
+                                "kind": "InvocationExpression",
+                                "fullWidth": 24,
+                                "isIncrementallyUnusable": true,
+                                "expression": {
+                                    "kind": "MemberAccessExpression",
+                                    "fullWidth": 16,
+                                    "isIncrementallyUnusable": true,
+                                    "expression": {
+                                        "kind": "RegularExpressionLiteral",
+                                        "width": 11,
+                                        "text": "/(\\\\?|&)q=/",
+                                        "value": {},
+                                        "valueText": "/(\\\\?|&)q=/"
+                                    },
+                                    "dotToken": {
+                                        "kind": "DotToken",
+                                        "width": 1,
+                                        "text": ".",
+                                        "value": ".",
+                                        "valueText": "."
+                                    },
+                                    "name": {
+                                        "kind": "IdentifierName",
+                                        "width": 4,
+                                        "text": "test",
+                                        "value": "test",
+                                        "valueText": "test"
+                                    }
+                                },
+                                "argumentList": {
+                                    "kind": "ArgumentList",
+                                    "fullWidth": 8,
+                                    "openParenToken": {
+                                        "kind": "OpenParenToken",
+                                        "width": 1,
+                                        "text": "(",
+                                        "value": "(",
+                                        "valueText": "("
+                                    },
+                                    "arguments": [
+                                        {
+                                            "kind": "MemberAccessExpression",
+                                            "fullWidth": 6,
+                                            "expression": {
+                                                "kind": "IdentifierName",
+                                                "width": 1,
+                                                "text": "c",
+                                                "value": "c",
+                                                "valueText": "c"
+                                            },
+                                            "dotToken": {
+                                                "kind": "DotToken",
+                                                "width": 1,
+                                                "text": ".",
+                                                "value": ".",
+                                                "valueText": "."
+                                            },
+                                            "name": {
+                                                "kind": "IdentifierName",
+                                                "width": 4,
+                                                "text": "href",
+                                                "value": "href",
+                                                "valueText": "href"
+                                            }
+                                        }
+                                    ],
+                                    "closeParenToken": {
+                                        "kind": "CloseParenToken",
+                                        "width": 1,
+                                        "text": ")",
+                                        "value": ")",
+                                        "valueText": ")"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "closeParenToken": {
+                    "kind": "CloseParenToken",
+                    "width": 1,
+                    "fullWidth": 2,
+                    "text": ")",
+                    "value": ")",
+                    "valueText": ")",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "text": " "
+                        }
+                    ]
+                },
+                "statement": {
+                    "kind": "ExpressionStatement",
+                    "fullWidth": 196,
+                    "isIncrementallyUnusable": true,
+                    "expression": {
+                        "kind": "CommaExpression",
+                        "fullWidth": 195,
+                        "isIncrementallyUnusable": true,
+                        "left": {
+                            "kind": "CommaExpression",
+                            "fullWidth": 187,
+                            "isIncrementallyUnusable": true,
+                            "left": {
+                                "kind": "LogicalOrExpression",
+                                "fullWidth": 56,
+                                "isIncrementallyUnusable": true,
+                                "left": {
+                                    "kind": "InvocationExpression",
+                                    "fullWidth": 38,
+                                    "isIncrementallyUnusable": true,
+                                    "expression": {
+                                        "kind": "MemberAccessExpression",
+                                        "fullWidth": 29,
+                                        "isIncrementallyUnusable": true,
+                                        "expression": {
+                                            "kind": "RegularExpressionLiteral",
+                                            "width": 23,
+                                            "fullWidth": 24,
+                                            "text": "/ (\\\\ ? | & ) rct = j /",
+                                            "value": {},
+                                            "valueText": "/ (\\\\ ? | & ) rct = j /",
+                                            "hasTrailingTrivia": true,
+                                            "trailingTrivia": [
+                                                {
+                                                    "kind": "WhitespaceTrivia",
+                                                    "text": " "
+                                                }
+                                            ]
+                                        },
+                                        "dotToken": {
+                                            "kind": "DotToken",
+                                            "width": 1,
+                                            "text": ".",
+                                            "value": ".",
+                                            "valueText": "."
+                                        },
+                                        "name": {
+                                            "kind": "IdentifierName",
+                                            "width": 4,
+                                            "text": "test",
+                                            "value": "test",
+                                            "valueText": "test"
+                                        }
+                                    },
+                                    "argumentList": {
+                                        "kind": "ArgumentList",
+                                        "fullWidth": 9,
+                                        "openParenToken": {
+                                            "kind": "OpenParenToken",
+                                            "width": 1,
+                                            "text": "(",
+                                            "value": "(",
+                                            "valueText": "("
+                                        },
+                                        "arguments": [
+                                            {
+                                                "kind": "MemberAccessExpression",
+                                                "fullWidth": 6,
+                                                "expression": {
+                                                    "kind": "IdentifierName",
+                                                    "width": 1,
+                                                    "text": "c",
+                                                    "value": "c",
+                                                    "valueText": "c"
+                                                },
+                                                "dotToken": {
+                                                    "kind": "DotToken",
+                                                    "width": 1,
+                                                    "text": ".",
+                                                    "value": ".",
+                                                    "valueText": "."
+                                                },
+                                                "name": {
+                                                    "kind": "IdentifierName",
+                                                    "width": 4,
+                                                    "text": "href",
+                                                    "value": "href",
+                                                    "valueText": "href"
+                                                }
+                                            }
+                                        ],
+                                        "closeParenToken": {
+                                            "kind": "CloseParenToken",
+                                            "width": 1,
+                                            "fullWidth": 2,
+                                            "text": ")",
+                                            "value": ")",
+                                            "valueText": ")",
+                                            "hasTrailingTrivia": true,
+                                            "trailingTrivia": [
+                                                {
+                                                    "kind": "WhitespaceTrivia",
+                                                    "text": " "
+                                                }
+                                            ]
+                                        }
+                                    }
+                                },
+                                "operatorToken": {
+                                    "kind": "BarBarToken",
+                                    "width": 2,
+                                    "fullWidth": 3,
+                                    "text": "||",
+                                    "value": "||",
+                                    "valueText": "||",
+                                    "hasTrailingTrivia": true,
+                                    "trailingTrivia": [
+                                        {
+                                            "kind": "WhitespaceTrivia",
+                                            "text": " "
+                                        }
+                                    ]
+                                },
+                                "right": {
+                                    "kind": "ParenthesizedExpression",
+                                    "fullWidth": 15,
+                                    "openParenToken": {
+                                        "kind": "OpenParenToken",
+                                        "width": 1,
+                                        "text": "(",
+                                        "value": "(",
+                                        "valueText": "("
+                                    },
+                                    "expression": {
+                                        "kind": "AddAssignmentExpression",
+                                        "fullWidth": 13,
+                                        "left": {
+                                            "kind": "IdentifierName",
+                                            "width": 1,
+                                            "fullWidth": 2,
+                                            "text": "d",
+                                            "value": "d",
+                                            "valueText": "d",
+                                            "hasTrailingTrivia": true,
+                                            "trailingTrivia": [
+                                                {
+                                                    "kind": "WhitespaceTrivia",
+                                                    "text": " "
+                                                }
+                                            ]
+                                        },
+                                        "operatorToken": {
+                                            "kind": "PlusEqualsToken",
+                                            "width": 2,
+                                            "fullWidth": 3,
+                                            "text": "+=",
+                                            "value": "+=",
+                                            "valueText": "+=",
+                                            "hasTrailingTrivia": true,
+                                            "trailingTrivia": [
+                                                {
+                                                    "kind": "WhitespaceTrivia",
+                                                    "text": " "
+                                                }
+                                            ]
+                                        },
+                                        "right": {
+                                            "kind": "StringLiteral",
+                                            "width": 8,
+                                            "text": "\"&rct=j\"",
+                                            "value": "&rct=j",
+                                            "valueText": "&rct=j"
+                                        }
+                                    },
+                                    "closeParenToken": {
+                                        "kind": "CloseParenToken",
+                                        "width": 1,
+                                        "text": ")",
+                                        "value": ")",
+                                        "valueText": ")"
+                                    }
+                                }
+                            },
+                            "operatorToken": {
+                                "kind": "CommaToken",
+                                "width": 1,
+                                "fullWidth": 2,
+                                "text": ",",
+                                "value": ",",
+                                "valueText": ",",
+                                "hasTrailingTrivia": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "text": " "
+                                    }
+                                ]
+                            },
+                            "right": {
+                                "kind": "LogicalOrExpression",
+                                "fullWidth": 129,
+                                "isIncrementallyUnusable": true,
+                                "left": {
+                                    "kind": "InvocationExpression",
+                                    "fullWidth": 25,
+                                    "isIncrementallyUnusable": true,
+                                    "expression": {
+                                        "kind": "MemberAccessExpression",
+                                        "fullWidth": 16,
+                                        "isIncrementallyUnusable": true,
+                                        "expression": {
+                                            "kind": "RegularExpressionLiteral",
+                                            "width": 11,
+                                            "text": "/(\\\\?|&)q=/",
+                                            "value": {},
+                                            "valueText": "/(\\\\?|&)q=/"
+                                        },
+                                        "dotToken": {
+                                            "kind": "DotToken",
+                                            "width": 1,
+                                            "text": ".",
+                                            "value": ".",
+                                            "valueText": "."
+                                        },
+                                        "name": {
+                                            "kind": "IdentifierName",
+                                            "width": 4,
+                                            "text": "test",
+                                            "value": "test",
+                                            "valueText": "test"
+                                        }
+                                    },
+                                    "argumentList": {
+                                        "kind": "ArgumentList",
+                                        "fullWidth": 9,
+                                        "openParenToken": {
+                                            "kind": "OpenParenToken",
+                                            "width": 1,
+                                            "text": "(",
+                                            "value": "(",
+                                            "valueText": "("
+                                        },
+                                        "arguments": [
+                                            {
+                                                "kind": "MemberAccessExpression",
+                                                "fullWidth": 6,
+                                                "expression": {
+                                                    "kind": "IdentifierName",
+                                                    "width": 1,
+                                                    "text": "c",
+                                                    "value": "c",
+                                                    "valueText": "c"
+                                                },
+                                                "dotToken": {
+                                                    "kind": "DotToken",
+                                                    "width": 1,
+                                                    "text": ".",
+                                                    "value": ".",
+                                                    "valueText": "."
+                                                },
+                                                "name": {
+                                                    "kind": "IdentifierName",
+                                                    "width": 4,
+                                                    "text": "href",
+                                                    "value": "href",
+                                                    "valueText": "href"
+                                                }
+                                            }
+                                        ],
+                                        "closeParenToken": {
+                                            "kind": "CloseParenToken",
+                                            "width": 1,
+                                            "fullWidth": 2,
+                                            "text": ")",
+                                            "value": ")",
+                                            "valueText": ")",
+                                            "hasTrailingTrivia": true,
+                                            "trailingTrivia": [
+                                                {
+                                                    "kind": "WhitespaceTrivia",
+                                                    "text": " "
+                                                }
+                                            ]
+                                        }
+                                    }
+                                },
+                                "operatorToken": {
+                                    "kind": "BarBarToken",
+                                    "width": 2,
+                                    "fullWidth": 3,
+                                    "text": "||",
+                                    "value": "||",
+                                    "valueText": "||",
+                                    "hasTrailingTrivia": true,
+                                    "trailingTrivia": [
+                                        {
+                                            "kind": "WhitespaceTrivia",
+                                            "text": " "
+                                        }
+                                    ]
+                                },
+                                "right": {
+                                    "kind": "ParenthesizedExpression",
+                                    "fullWidth": 101,
+                                    "openParenToken": {
+                                        "kind": "OpenParenToken",
+                                        "width": 1,
+                                        "text": "(",
+                                        "value": "(",
+                                        "valueText": "("
+                                    },
+                                    "expression": {
+                                        "kind": "CommaExpression",
+                                        "fullWidth": 99,
+                                        "left": {
+                                            "kind": "AddAssignmentExpression",
+                                            "fullWidth": 57,
+                                            "left": {
+                                                "kind": "IdentifierName",
+                                                "width": 1,
+                                                "fullWidth": 2,
+                                                "text": "d",
+                                                "value": "d",
+                                                "valueText": "d",
+                                                "hasTrailingTrivia": true,
+                                                "trailingTrivia": [
+                                                    {
+                                                        "kind": "WhitespaceTrivia",
+                                                        "text": " "
+                                                    }
+                                                ]
+                                            },
+                                            "operatorToken": {
+                                                "kind": "PlusEqualsToken",
+                                                "width": 2,
+                                                "fullWidth": 3,
+                                                "text": "+=",
+                                                "value": "+=",
+                                                "valueText": "+=",
+                                                "hasTrailingTrivia": true,
+                                                "trailingTrivia": [
+                                                    {
+                                                        "kind": "WhitespaceTrivia",
+                                                        "text": " "
+                                                    }
+                                                ]
+                                            },
+                                            "right": {
+                                                "kind": "AddExpression",
+                                                "fullWidth": 52,
+                                                "left": {
+                                                    "kind": "StringLiteral",
+                                                    "width": 5,
+                                                    "fullWidth": 6,
+                                                    "text": "\"&q=\"",
+                                                    "value": "&q=",
+                                                    "valueText": "&q=",
+                                                    "hasTrailingTrivia": true,
+                                                    "trailingTrivia": [
+                                                        {
+                                                            "kind": "WhitespaceTrivia",
+                                                            "text": " "
+                                                        }
+                                                    ]
+                                                },
+                                                "operatorToken": {
+                                                    "kind": "PlusToken",
+                                                    "width": 1,
+                                                    "fullWidth": 2,
+                                                    "text": "+",
+                                                    "value": "+",
+                                                    "valueText": "+",
+                                                    "hasTrailingTrivia": true,
+                                                    "trailingTrivia": [
+                                                        {
+                                                            "kind": "WhitespaceTrivia",
+                                                            "text": " "
+                                                        }
+                                                    ]
+                                                },
+                                                "right": {
+                                                    "kind": "InvocationExpression",
+                                                    "fullWidth": 44,
+                                                    "expression": {
+                                                        "kind": "IdentifierName",
+                                                        "width": 18,
+                                                        "text": "encodeURIComponent",
+                                                        "value": "encodeURIComponent",
+                                                        "valueText": "encodeURIComponent"
+                                                    },
+                                                    "argumentList": {
+                                                        "kind": "ArgumentList",
+                                                        "fullWidth": 26,
+                                                        "openParenToken": {
+                                                            "kind": "OpenParenToken",
+                                                            "width": 1,
+                                                            "text": "(",
+                                                            "value": "(",
+                                                            "valueText": "("
+                                                        },
+                                                        "arguments": [
+                                                            {
+                                                                "kind": "LogicalOrExpression",
+                                                                "fullWidth": 24,
+                                                                "left": {
+                                                                    "kind": "LogicalOrExpression",
+                                                                    "fullWidth": 20,
+                                                                    "left": {
+                                                                        "kind": "InvocationExpression",
+                                                                        "fullWidth": 7,
+                                                                        "expression": {
+                                                                            "kind": "IdentifierName",
+                                                                            "width": 1,
+                                                                            "text": "W",
+                                                                            "value": "W",
+                                                                            "valueText": "W"
+                                                                        },
+                                                                        "argumentList": {
+                                                                            "kind": "ArgumentList",
+                                                                            "fullWidth": 6,
+                                                                            "openParenToken": {
+                                                                                "kind": "OpenParenToken",
+                                                                                "width": 1,
+                                                                                "text": "(",
+                                                                                "value": "(",
+                                                                                "valueText": "("
+                                                                            },
+                                                                            "arguments": [
+                                                                                {
+                                                                                    "kind": "StringLiteral",
+                                                                                    "width": 3,
+                                                                                    "text": "\"q\"",
+                                                                                    "value": "q",
+                                                                                    "valueText": "q"
+                                                                                }
+                                                                            ],
+                                                                            "closeParenToken": {
+                                                                                "kind": "CloseParenToken",
+                                                                                "width": 1,
+                                                                                "fullWidth": 2,
+                                                                                "text": ")",
+                                                                                "value": ")",
+                                                                                "valueText": ")",
+                                                                                "hasTrailingTrivia": true,
+                                                                                "trailingTrivia": [
+                                                                                    {
+                                                                                        "kind": "WhitespaceTrivia",
+                                                                                        "text": " "
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    "operatorToken": {
+                                                                        "kind": "BarBarToken",
+                                                                        "width": 2,
+                                                                        "fullWidth": 3,
+                                                                        "text": "||",
+                                                                        "value": "||",
+                                                                        "valueText": "||",
+                                                                        "hasTrailingTrivia": true,
+                                                                        "trailingTrivia": [
+                                                                            {
+                                                                                "kind": "WhitespaceTrivia",
+                                                                                "text": " "
+                                                                            }
+                                                                        ]
+                                                                    },
+                                                                    "right": {
+                                                                        "kind": "InvocationExpression",
+                                                                        "fullWidth": 10,
+                                                                        "expression": {
+                                                                            "kind": "IdentifierName",
+                                                                            "width": 1,
+                                                                            "text": "W",
+                                                                            "value": "W",
+                                                                            "valueText": "W"
+                                                                        },
+                                                                        "argumentList": {
+                                                                            "kind": "ArgumentList",
+                                                                            "fullWidth": 9,
+                                                                            "openParenToken": {
+                                                                                "kind": "OpenParenToken",
+                                                                                "width": 1,
+                                                                                "text": "(",
+                                                                                "value": "(",
+                                                                                "valueText": "("
+                                                                            },
+                                                                            "arguments": [
+                                                                                {
+                                                                                    "kind": "StringLiteral",
+                                                                                    "width": 6,
+                                                                                    "text": "\"as_q\"",
+                                                                                    "value": "as_q",
+                                                                                    "valueText": "as_q"
+                                                                                }
+                                                                            ],
+                                                                            "closeParenToken": {
+                                                                                "kind": "CloseParenToken",
+                                                                                "width": 1,
+                                                                                "fullWidth": 2,
+                                                                                "text": ")",
+                                                                                "value": ")",
+                                                                                "valueText": ")",
+                                                                                "hasTrailingTrivia": true,
+                                                                                "trailingTrivia": [
+                                                                                    {
+                                                                                        "kind": "WhitespaceTrivia",
+                                                                                        "text": " "
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "operatorToken": {
+                                                                    "kind": "BarBarToken",
+                                                                    "width": 2,
+                                                                    "fullWidth": 3,
+                                                                    "text": "||",
+                                                                    "value": "||",
+                                                                    "valueText": "||",
+                                                                    "hasTrailingTrivia": true,
+                                                                    "trailingTrivia": [
+                                                                        {
+                                                                            "kind": "WhitespaceTrivia",
+                                                                            "text": " "
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                "right": {
+                                                                    "kind": "IdentifierName",
+                                                                    "width": 1,
+                                                                    "text": "A",
+                                                                    "value": "A",
+                                                                    "valueText": "A"
+                                                                }
+                                                            }
+                                                        ],
+                                                        "closeParenToken": {
+                                                            "kind": "CloseParenToken",
+                                                            "width": 1,
+                                                            "text": ")",
+                                                            "value": ")",
+                                                            "valueText": ")"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "operatorToken": {
+                                            "kind": "CommaToken",
+                                            "width": 1,
+                                            "fullWidth": 2,
+                                            "text": ",",
+                                            "value": ",",
+                                            "valueText": ",",
+                                            "hasTrailingTrivia": true,
+                                            "trailingTrivia": [
+                                                {
+                                                    "kind": "WhitespaceTrivia",
+                                                    "text": " "
+                                                }
+                                            ]
+                                        },
+                                        "right": {
+                                            "kind": "AssignmentExpression",
+                                            "fullWidth": 40,
+                                            "left": {
+                                                "kind": "IdentifierName",
+                                                "width": 1,
+                                                "fullWidth": 2,
+                                                "text": "d",
+                                                "value": "d",
+                                                "valueText": "d",
+                                                "hasTrailingTrivia": true,
+                                                "trailingTrivia": [
+                                                    {
+                                                        "kind": "WhitespaceTrivia",
+                                                        "text": " "
+                                                    }
+                                                ]
+                                            },
+                                            "operatorToken": {
+                                                "kind": "EqualsToken",
+                                                "width": 1,
+                                                "fullWidth": 2,
+                                                "text": "=",
+                                                "value": "=",
+                                                "valueText": "=",
+                                                "hasTrailingTrivia": true,
+                                                "trailingTrivia": [
+                                                    {
+                                                        "kind": "WhitespaceTrivia",
+                                                        "text": " "
+                                                    }
+                                                ]
+                                            },
+                                            "right": {
+                                                "kind": "InvocationExpression",
+                                                "fullWidth": 36,
+                                                "expression": {
+                                                    "kind": "MemberAccessExpression",
+                                                    "fullWidth": 11,
+                                                    "expression": {
+                                                        "kind": "IdentifierName",
+                                                        "width": 1,
+                                                        "text": "d",
+                                                        "value": "d",
+                                                        "valueText": "d"
+                                                    },
+                                                    "dotToken": {
+                                                        "kind": "DotToken",
+                                                        "width": 1,
+                                                        "text": ".",
+                                                        "value": ".",
+                                                        "valueText": "."
+                                                    },
+                                                    "name": {
+                                                        "kind": "IdentifierName",
+                                                        "width": 9,
+                                                        "text": "substring",
+                                                        "value": "substring",
+                                                        "valueText": "substring"
+                                                    }
+                                                },
+                                                "argumentList": {
+                                                    "kind": "ArgumentList",
+                                                    "fullWidth": 25,
+                                                    "openParenToken": {
+                                                        "kind": "OpenParenToken",
+                                                        "width": 1,
+                                                        "text": "(",
+                                                        "value": "(",
+                                                        "valueText": "("
+                                                    },
+                                                    "arguments": [
+                                                        {
+                                                            "kind": "NumericLiteral",
+                                                            "width": 1,
+                                                            "text": "0",
+                                                            "value": 0,
+                                                            "valueText": "0"
+                                                        },
+                                                        {
+                                                            "kind": "CommaToken",
+                                                            "width": 1,
+                                                            "fullWidth": 2,
+                                                            "text": ",",
+                                                            "value": ",",
+                                                            "valueText": ",",
+                                                            "hasTrailingTrivia": true,
+                                                            "trailingTrivia": [
+                                                                {
+                                                                    "kind": "WhitespaceTrivia",
+                                                                    "text": " "
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "kind": "SubtractExpression",
+                                                            "fullWidth": 20,
+                                                            "left": {
+                                                                "kind": "NumericLiteral",
+                                                                "width": 4,
+                                                                "fullWidth": 5,
+                                                                "text": "1948",
+                                                                "value": 1948,
+                                                                "valueText": "1948",
+                                                                "hasTrailingTrivia": true,
+                                                                "trailingTrivia": [
+                                                                    {
+                                                                        "kind": "WhitespaceTrivia",
+                                                                        "text": " "
+                                                                    }
+                                                                ]
+                                                            },
+                                                            "operatorToken": {
+                                                                "kind": "MinusToken",
+                                                                "width": 1,
+                                                                "fullWidth": 2,
+                                                                "text": "-",
+                                                                "value": "-",
+                                                                "valueText": "-",
+                                                                "hasTrailingTrivia": true,
+                                                                "trailingTrivia": [
+                                                                    {
+                                                                        "kind": "WhitespaceTrivia",
+                                                                        "text": " "
+                                                                    }
+                                                                ]
+                                                            },
+                                                            "right": {
+                                                                "kind": "MemberAccessExpression",
+                                                                "fullWidth": 13,
+                                                                "expression": {
+                                                                    "kind": "MemberAccessExpression",
+                                                                    "fullWidth": 6,
+                                                                    "expression": {
+                                                                        "kind": "IdentifierName",
+                                                                        "width": 1,
+                                                                        "text": "c",
+                                                                        "value": "c",
+                                                                        "valueText": "c"
+                                                                    },
+                                                                    "dotToken": {
+                                                                        "kind": "DotToken",
+                                                                        "width": 1,
+                                                                        "text": ".",
+                                                                        "value": ".",
+                                                                        "valueText": "."
+                                                                    },
+                                                                    "name": {
+                                                                        "kind": "IdentifierName",
+                                                                        "width": 4,
+                                                                        "text": "href",
+                                                                        "value": "href",
+                                                                        "valueText": "href"
+                                                                    }
+                                                                },
+                                                                "dotToken": {
+                                                                    "kind": "DotToken",
+                                                                    "width": 1,
+                                                                    "text": ".",
+                                                                    "value": ".",
+                                                                    "valueText": "."
+                                                                },
+                                                                "name": {
+                                                                    "kind": "IdentifierName",
+                                                                    "width": 6,
+                                                                    "text": "length",
+                                                                    "value": "length",
+                                                                    "valueText": "length"
+                                                                }
+                                                            }
+                                                        }
+                                                    ],
+                                                    "closeParenToken": {
+                                                        "kind": "CloseParenToken",
+                                                        "width": 1,
+                                                        "text": ")",
+                                                        "value": ")",
+                                                        "valueText": ")"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "closeParenToken": {
+                                        "kind": "CloseParenToken",
+                                        "width": 1,
+                                        "text": ")",
+                                        "value": ")",
+                                        "valueText": ")"
+                                    }
+                                }
+                            }
+                        },
+                        "operatorToken": {
+                            "kind": "CommaToken",
+                            "width": 1,
+                            "fullWidth": 2,
+                            "text": ",",
+                            "value": ",",
+                            "valueText": ",",
+                            "hasTrailingTrivia": true,
+                            "trailingTrivia": [
+                                {
+                                    "kind": "WhitespaceTrivia",
+                                    "text": " "
+                                }
+                            ]
+                        },
+                        "right": {
+                            "kind": "AssignmentExpression",
+                            "fullWidth": 6,
+                            "left": {
+                                "kind": "IdentifierName",
+                                "width": 1,
+                                "fullWidth": 2,
+                                "text": "b",
+                                "value": "b",
+                                "valueText": "b",
+                                "hasTrailingTrivia": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "text": " "
+                                    }
+                                ]
+                            },
+                            "operatorToken": {
+                                "kind": "EqualsToken",
+                                "width": 1,
+                                "fullWidth": 2,
+                                "text": "=",
+                                "value": "=",
+                                "valueText": "=",
+                                "hasTrailingTrivia": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "text": " "
+                                    }
+                                ]
+                            },
+                            "right": {
+                                "kind": "LogicalNotExpression",
+                                "fullWidth": 2,
+                                "operatorToken": {
+                                    "kind": "ExclamationToken",
+                                    "width": 1,
+                                    "text": "!",
+                                    "value": "!",
+                                    "valueText": "!"
+                                },
+                                "operand": {
+                                    "kind": "NumericLiteral",
+                                    "width": 1,
+                                    "text": "0",
+                                    "value": 0,
+                                    "valueText": "0"
+                                }
+                            }
+                        }
+                    },
+                    "semicolonToken": {
+                        "kind": "SemicolonToken",
+                        "width": 1,
+                        "text": ";",
+                        "value": ";",
+                        "valueText": ";"
+                    }
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 297
+    }
+}

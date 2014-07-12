@@ -1,0 +1,42 @@
+==== tests/cases/compiler/bases.ts (10 errors) ====
+    interface I {
+        x;
+    }
+    
+    class B {
+        constructor() {
+            this.y: any;
+                  ~
+!!! bases.ts(7,15): error TS1005: ';' expected.
+                 ~
+!!! bases.ts(7,14): error TS2094: The property 'y' does not exist on value of type 'B'.
+                    ~~~
+!!! bases.ts(7,17): error TS2095: Could not find symbol 'any'.
+        }
+    }
+    
+    class C extends B implements I {
+          ~
+!!! bases.ts(11,7): error TS2137: Class C declares interface I but does not implement it:
+!!! 	Type 'C' is missing property 'x' from type 'I'.
+        constructor() {
+        ~~~~~~~~~~~
+!!! bases.ts(12,5): error TS2105: Constructors for derived classes must contain a 'super' call.
+            this.x: any;
+                  ~
+!!! bases.ts(13,15): error TS1005: ';' expected.
+                 ~
+!!! bases.ts(13,14): error TS2094: The property 'x' does not exist on value of type 'C'.
+                    ~~~
+!!! bases.ts(13,17): error TS2095: Could not find symbol 'any'.
+        }
+    }
+    
+    new C().x;
+            ~
+!!! bases.ts(17,9): error TS2094: The property 'x' does not exist on value of type 'C'.
+    new C().y;
+            ~
+!!! bases.ts(18,9): error TS2094: The property 'y' does not exist on value of type 'C'.
+    
+    

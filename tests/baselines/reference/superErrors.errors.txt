@@ -1,0 +1,74 @@
+==== tests/cases/compiler/superErrors.ts (11 errors) ====
+    function foo() {
+        // super in a non class context
+        var x = super;
+                     ~
+!!! superErrors.ts(3,18): error TS1005: '.' expected.
+        var y = () => super;
+                           ~
+!!! superErrors.ts(4,24): error TS1005: '.' expected.
+        var z = () => () => () => super;
+                                       ~
+!!! superErrors.ts(5,36): error TS1005: '.' expected.
+    }
+    
+    class User {
+        name: string = "Bob";
+        sayHello(): void {
+            //console.log("Hello, " + this.name);
+        }
+    }
+    
+    class RegisteredUser extends User {
+        name: string = "Frank";
+        constructor() {
+            super();
+    
+            // super call in an inner function in a constructor
+            function inner() {
+                super.sayHello();
+                ~~~~~
+!!! superErrors.ts(22,13): error TS2102: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.
+            }
+    
+            // super call in a lambda in an inner function in a constructor 
+            function inner2() {
+                var x = () => super.sayHello();
+                              ~~~~~
+!!! superErrors.ts(27,27): error TS2102: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.
+            }
+    
+            // super call in a lambda in a function expression in a constructor 
+            (function() { return () => super; })();
+                                            ~
+!!! superErrors.ts(31,41): error TS1005: '.' expected.
+        }
+        sayHello(): void {
+            // super call in a method
+            super.sayHello();
+    
+            // super call in a lambda in an inner function in a method
+            function inner() {
+                var x = () => super.sayHello();
+                              ~~~~~
+!!! superErrors.ts(39,27): error TS2102: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.
+            }
+    
+            // super call in a lambda in a function expression in a constructor 
+            (function() { return () => super; })();
+                                            ~
+!!! superErrors.ts(43,41): error TS1005: '.' expected.
+        }
+        static staticFunction(): void {
+            // super in static functions
+            var s = super;
+                         ~
+!!! superErrors.ts(47,22): error TS1005: '.' expected.
+            var x = () => super;
+                               ~
+!!! superErrors.ts(48,28): error TS1005: '.' expected.
+            var y = () => () => () => super;
+                                           ~
+!!! superErrors.ts(49,40): error TS1005: '.' expected.
+        }
+    }

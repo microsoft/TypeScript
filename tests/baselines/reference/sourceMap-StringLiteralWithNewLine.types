@@ -1,0 +1,32 @@
+=== tests/cases/compiler/sourceMap-StringLiteralWithNewLine.ts ===
+
+interface Document {
+>Document : Document
+}
+interface Window {
+>Window : Window
+
+    document: Document;
+>document : Document
+>Document : Document
+}
+declare var window: Window;
+>window : Window
+>Window : Window
+
+module Foo {
+>Foo : Foo
+
+    var x = "test1";
+>x : string
+
+    var y = "test 2\
+>y : string
+
+isn't this a lot of fun";
+    var z = window.document;
+>z : Document
+>window.document : Document
+>window : Window
+>document : Document
+}

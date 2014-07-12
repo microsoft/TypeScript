@@ -1,0 +1,10 @@
+=== tests/cases/compiler/sourceMapValidationClassWithDefaultConstructor.ts ===
+class Greeter {
+>Greeter : Greeter
+
+    public a = 10;
+>a : number
+
+    public nameA = "Ten";
+>nameA : string
+}

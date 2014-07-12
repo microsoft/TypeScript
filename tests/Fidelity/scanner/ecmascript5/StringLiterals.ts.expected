@@ -1,0 +1,172 @@
+{
+    "diagnostics": [
+        {
+            "start": 108,
+            "length": 1,
+            "diagnosticCode": "Missing close quote character."
+        },
+        {
+            "start": 147,
+            "length": 1,
+            "diagnosticCode": "Missing close quote character."
+        }
+    ],
+    "tokens": [
+        {
+            "kind": "StringLiteral",
+            "width": 2,
+            "fullWidth": 4,
+            "text": "\"\"",
+            "value": "",
+            "valueText": "",
+            "hasTrailingTrivia": true,
+            "hasTrailingNewLine": true,
+            "trailingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        },
+        {
+            "kind": "StringLiteral",
+            "width": 3,
+            "fullWidth": 5,
+            "text": "\" \"",
+            "value": " ",
+            "valueText": " ",
+            "hasTrailingTrivia": true,
+            "hasTrailingNewLine": true,
+            "trailingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        },
+        {
+            "kind": "StringLiteral",
+            "width": 3,
+            "fullWidth": 5,
+            "text": "\"a\"",
+            "value": "a",
+            "valueText": "a",
+            "hasTrailingTrivia": true,
+            "hasTrailingNewLine": true,
+            "trailingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        },
+        {
+            "kind": "StringLiteral",
+            "width": 3,
+            "fullWidth": 5,
+            "text": "\"'\"",
+            "value": "'",
+            "valueText": "'",
+            "hasTrailingTrivia": true,
+            "hasTrailingNewLine": true,
+            "trailingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        },
+        {
+            "kind": "StringLiteral",
+            "width": 3,
+            "fullWidth": 5,
+            "text": "'\"'",
+            "value": "\"",
+            "valueText": "\"",
+            "hasTrailingTrivia": true,
+            "hasTrailingNewLine": true,
+            "trailingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        },
+        {
+            "kind": "StringLiteral",
+            "width": 4,
+            "fullWidth": 6,
+            "text": "\"\\\"\"",
+            "value": "\"",
+            "valueText": "\"",
+            "hasTrailingTrivia": true,
+            "hasTrailingNewLine": true,
+            "trailingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        },
+        {
+            "kind": "StringLiteral",
+            "width": 12,
+            "fullWidth": 14,
+            "text": "'\\u2192\\   '",
+            "value": "→   ",
+            "valueText": "→   ",
+            "hasTrailingTrivia": true,
+            "hasTrailingNewLine": true,
+            "trailingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        },
+        {
+            "kind": "StringLiteral",
+            "width": 29,
+            "fullWidth": 31,
+            "text": "\"Legal line continuation \\\r\n\"",
+            "value": "Legal line continuation ",
+            "valueText": "Legal line continuation ",
+            "hasTrailingTrivia": true,
+            "hasTrailingNewLine": true,
+            "trailingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        },
+        {
+            "kind": "StringLiteral",
+            "width": 33,
+            "fullWidth": 35,
+            "text": "\"Should error because of newline.",
+            "value": "Should error because of newline.",
+            "valueText": "Should error because of newline.",
+            "hasTrailingTrivia": true,
+            "hasTrailingNewLine": true,
+            "trailingTrivia": [
+                {
+                    "kind": "NewLineTrivia",
+                    "text": "\r\n"
+                }
+            ]
+        },
+        {
+            "kind": "StringLiteral",
+            "width": 37,
+            "text": "\"Should error because of end of file.",
+            "value": "Should error because of end of file.",
+            "valueText": "Should error because of end of file."
+        },
+        {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    ]
+}

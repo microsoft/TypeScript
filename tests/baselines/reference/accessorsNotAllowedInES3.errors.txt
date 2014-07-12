@@ -1,0 +1,11 @@
+==== tests/cases/compiler/accessorsNotAllowedInES3.ts (2 errors) ====
+    
+    class C {
+        get x(): number { return 1; }
+        ~~~
+!!! accessorsNotAllowedInES3.ts(3,5): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+    }
+    var y = { get foo() { return 3; } };
+              ~~~
+!!! accessorsNotAllowedInES3.ts(5,11): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+    

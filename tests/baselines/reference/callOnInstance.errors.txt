@@ -1,0 +1,16 @@
+==== tests/cases/compiler/callOnInstance.ts (2 errors) ====
+    declare function D(): string;
+    
+    declare class D { constructor (value: number); } // Duplicate identifier
+                  ~
+!!! callOnInstance.ts(3,15): error TS2000: Duplicate identifier 'D'. Additional locations:
+!!! 	callOnInstance.ts(1,1)
+    
+    var s1: string = D(); // OK
+    
+    var s2: string = (new D(1))();
+    
+    declare class C { constructor(value: number); }
+    (new C(1))(); // Error for calling an instance
+    ~~~~~~~~~~~~
+!!! callOnInstance.ts(10,1): error TS2088: Cannot invoke an expression whose type lacks a call signature.

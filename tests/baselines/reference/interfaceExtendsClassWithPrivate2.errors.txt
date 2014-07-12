@@ -1,0 +1,36 @@
+==== tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts (4 errors) ====
+    class C {
+        public foo(x: any) { return x; }
+        private x = 1;
+    }
+    
+    interface I extends C {
+        other(x: any): any;
+    }
+    
+    class D extends C implements I { // error
+          ~
+!!! interfaceExtendsClassWithPrivate2.ts(10,7): error TS2137: Class D declares interface I but does not implement it:
+!!! 	Types 'D' and 'C' define property 'x' as private.
+          ~
+!!! interfaceExtendsClassWithPrivate2.ts(10,7): error TS2141: Class 'D' cannot extend class 'C':
+!!! 	Types 'D' and 'C' define property 'x' as private.
+        public foo(x: any) { return x; }
+        private x = 2;
+        private y = 3;
+        other(x: any) { return x; }
+        bar() {}
+    } 
+    
+    class D2 extends C implements I { // error
+          ~~
+!!! interfaceExtendsClassWithPrivate2.ts(18,7): error TS2137: Class D2 declares interface I but does not implement it:
+!!! 	Types 'D2' and 'C' define property 'x' as private.
+          ~~
+!!! interfaceExtendsClassWithPrivate2.ts(18,7): error TS2141: Class 'D2' cannot extend class 'C':
+!!! 	Types 'D2' and 'C' define property 'x' as private.
+        public foo(x: any) { return x; }
+        private x = "";
+        other(x: any) { return x; }
+        bar() { }
+    } 

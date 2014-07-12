@@ -1,0 +1,38 @@
+=== tests/cases/compiler/interfaceWithOverloadedCallAndConstructSignatures.ts ===
+interface Foo {
+>Foo : Foo
+
+    (): number;
+    (x: string): number;
+>x : string
+
+    new (): any;
+    new (x: string): Object;
+>x : string
+>Object : Object
+}
+
+var f: Foo;
+>f : Foo
+>Foo : Foo
+
+var r1 = f();
+>r1 : number
+>f() : number
+>f : Foo
+
+var r2 = f('');
+>r2 : number
+>f('') : number
+>f : Foo
+
+var r3 = new f();
+>r3 : any
+>new f() : any
+>f : Foo
+
+var r4 = new f('');
+>r4 : Object
+>new f('') : Object
+>f : Foo
+

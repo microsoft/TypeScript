@@ -1,0 +1,38 @@
+==== tests/cases/compiler/shadowedInternalModule.ts (2 errors) ====
+    // all errors imported modules conflict with local variables
+    
+    module A {
+        export var Point = { x: 0, y: 0 }
+        export interface Point {
+            x: number;
+            y: number;
+        }
+    } 
+    
+    module B {
+        var A = { x: 0, y: 0 };
+        import Point = A;
+                       ~
+!!! shadowedInternalModule.ts(13,20): error TS2187: Internal module reference 'A' in import declaration does not reference module instance for 'A'.
+    }
+    
+    module X {
+        export module Y {
+            export interface Point{
+                x: number;
+                y: number
+            }
+        }
+    
+        export class Y {
+            name: string;
+        }
+    }
+    
+    module Z {
+        import Y = X.Y;
+    
+        var Y = 12;
+            ~~~~~~
+!!! shadowedInternalModule.ts(32,9): error TS4026: Variable declaration cannot have the same name as an import declaration.
+    }

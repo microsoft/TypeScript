@@ -1,0 +1,14 @@
+==== tests/cases/compiler/typeParameterArgumentEquivalence.ts (2 errors) ====
+    function foo<T>() {
+        var x: (item: number) => boolean;
+        var y: (item: T) => boolean;
+        x = y;  // Should be an error
+        ~
+!!! typeParameterArgumentEquivalence.ts(4,5): error TS2012: Cannot convert '(item: T) => boolean' to '(item: number) => boolean':
+!!! 	Call signatures of types '(item: T) => boolean' and '(item: number) => boolean' are incompatible.
+        y = x;  // Shound be an error
+        ~
+!!! typeParameterArgumentEquivalence.ts(5,5): error TS2012: Cannot convert '(item: number) => boolean' to '(item: T) => boolean':
+!!! 	Call signatures of types '(item: number) => boolean' and '(item: T) => boolean' are incompatible.
+    }
+    

@@ -1,0 +1,62 @@
+==== tests/cases/compiler/enumErrors.ts (15 errors) ====
+    // Enum named with PredefinedTypes
+    enum any { }
+         ~~~
+!!! enumErrors.ts(2,6): error TS1059: Enum name cannot be 'any'.
+         ~~~
+!!! enumErrors.ts(2,6): error TS2000: Duplicate identifier 'any'.
+    enum number { }
+         ~~~~~~
+!!! enumErrors.ts(3,6): error TS1059: Enum name cannot be 'number'.
+         ~~~~~~
+!!! enumErrors.ts(3,6): error TS2000: Duplicate identifier 'number'.
+    enum string { }
+         ~~~~~~
+!!! enumErrors.ts(4,6): error TS1059: Enum name cannot be 'string'.
+         ~~~~~~
+!!! enumErrors.ts(4,6): error TS2000: Duplicate identifier 'string'.
+    enum boolean { }
+         ~~~~~~~
+!!! enumErrors.ts(5,6): error TS1059: Enum name cannot be 'boolean'.
+         ~~~~~~~
+!!! enumErrors.ts(5,6): error TS2000: Duplicate identifier 'boolean'.
+    
+    // Enum with computed member initializer of type Number
+    enum E5 {
+        C = new Number(30)
+        ~~~~~~~~~~~~~~~~~~
+!!! enumErrors.ts(9,5): error TS2011: Cannot convert 'Number' to 'E5'.
+    }
+    
+    enum E9 {
+        A,
+        B = A
+    }
+    
+    //Enum with computed member intializer of different enum type
+    // Bug 707850: This should be allowed
+    enum E10 {
+        A = E9.A,
+        ~~~~~~~~
+!!! enumErrors.ts(20,5): error TS2011: Cannot convert 'E9' to 'E10'.
+        B = E9.B
+        ~~~~~~~~
+!!! enumErrors.ts(21,5): error TS2011: Cannot convert 'E9' to 'E10'.
+    }
+    
+    // Enum with computed member intializer of other types
+    enum E11 {
+        A = '',
+        ~~~~~~
+!!! enumErrors.ts(26,5): error TS2011: Cannot convert 'string' to 'E11'.
+        B = new Date(),
+        ~~~~~~~~~~~~~~
+!!! enumErrors.ts(27,5): error TS2011: Cannot convert 'Date' to 'E11'.
+        C = window,
+            ~~~~~~
+!!! enumErrors.ts(28,9): error TS2095: Could not find symbol 'window'.
+        D = {}
+        ~~~~~~
+!!! enumErrors.ts(29,5): error TS2011: Cannot convert '{}' to 'E11'.
+    }
+    

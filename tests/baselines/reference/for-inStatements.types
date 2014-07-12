@@ -1,0 +1,253 @@
+=== tests/cases/compiler/for-inStatements.ts ===
+var aString: string;
+>aString : string
+
+for (aString in {}) { }
+>aString : string
+>{} : {}
+
+var anAny: any;
+>anAny : any
+
+for (anAny in {}) { }
+>anAny : any
+>{} : {}
+
+for (var x in {}) { }
+>x : any
+>{} : {}
+
+for (var x in []) { }
+>x : any
+>[] : any[]
+
+for (var x in [1, 2, 3, 4, 5]) { }
+>x : any
+>[1, 2, 3, 4, 5] : number[]
+
+function fn(): any { }
+>fn : typeof fn
+
+for (var x in fn()) { }
+>x : any
+>fn() : any
+>fn : typeof fn
+
+for (var x in /[a-z]/) { }
+>x : any
+
+for (var x in new Date()) { }
+>x : any
+>new Date() : Date
+>Date : { prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; (): string; new(): Date; new(value: number): Date; new(value: string): Date; new(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; }
+
+var c, d, e;
+>c : any
+>d : any
+>e : any
+
+for (var x in c || d) { }
+>x : any
+>c || d : any
+>c : any
+>d : any
+
+for (var x in e ? c : d) { }
+>x : any
+>e ? c : d : any
+>e : any
+>c : any
+>d : any
+
+for (var x in 42 ? c : d) { }
+>x : any
+>42 ? c : d : any
+>c : any
+>d : any
+
+for (var x in '' ? c : d) { }
+>x : any
+>'' ? c : d : any
+>c : any
+>d : any
+
+for (var x in 42 ? d[x] : c[x]) { }
+>x : any
+>42 ? d[x] : c[x] : any
+>d[x] : any
+>d : any
+>x : any
+>c[x] : any
+>c : any
+>x : any
+
+for (var x in c[d]) { }
+>x : any
+>c[d] : any
+>c : any
+>d : any
+
+for (var x in (<T>(x: T) => x)) { }
+>x : any
+>(<T>(x: T) => x) : <T>(x: T) => T
+><T>(x: T) => x : <T>(x: T) => T
+>T : T
+>x : T
+>T : T
+>x : T
+
+for (var x in function (x: string, y: number) { return x + y }) { }
+>x : any
+>function (x: string, y: number) { return x + y } : (x: string, y: number) => string
+>x : string
+>y : number
+>x + y : string
+>x : string
+>y : number
+
+class A {
+>A : A
+
+    biz() {
+>biz : () => any
+
+        for (var x in this.biz()) { }
+>x : any
+>this.biz() : any
+>this.biz : () => any
+>this : A
+>biz : () => any
+
+        for (var x in this.biz) { }
+>x : any
+>this.biz : () => any
+>this : A
+>biz : () => any
+
+        for (var x in this) { }
+>x : any
+>this : A
+
+        return null;
+    }
+
+    static baz() {
+>baz : () => any
+
+        for (var x in this) { }
+>x : any
+>this : typeof A
+
+        for (var x in this.baz) { }
+>x : any
+>this.baz : () => any
+>this : typeof A
+>baz : () => any
+
+        for (var x in this.baz()) { }
+>x : any
+>this.baz() : any
+>this.baz : () => any
+>this : typeof A
+>baz : () => any
+
+        return null;
+    }
+}
+
+class B extends A {
+>B : B
+>A : A
+
+    boz() {
+>boz : () => any
+
+        for (var x in this.biz()) { }
+>x : any
+>this.biz() : any
+>this.biz : () => any
+>this : B
+>biz : () => any
+
+        for (var x in this.biz) { }
+>x : any
+>this.biz : () => any
+>this : B
+>biz : () => any
+
+        for (var x in this) { }
+>x : any
+>this : B
+
+        for (var x in super.biz) { }
+>x : any
+>super.biz : () => any
+>biz : () => any
+
+        for (var x in super.biz()) { }
+>x : any
+>super.biz() : any
+>super.biz : () => any
+>biz : () => any
+
+        return null;
+    }
+}
+
+interface I {
+>I : I
+
+    id: number;
+>id : number
+
+    [idx: number]: I;
+>idx : number
+>I : I
+}
+var i: I;
+>i : I
+>I : I
+
+for (var x in i[42]) { } 
+>x : any
+>i[42] : I
+>i : I
+
+
+module M {
+>M : M
+
+    export class X<T> {
+>X : X<T>
+>T : T
+
+        name:string
+>name : string
+    }
+}
+
+for (var x in M) { }
+>x : any
+>M : typeof M
+
+for (var x in M.X) { }
+>x : any
+>M.X : typeof M.X
+>M : typeof M
+>X : typeof M.X
+
+enum Color { Red, Blue }
+>Color : Color
+>Red : Color
+>Blue : Color
+
+for (var x in Color) { }
+>x : any
+>Color : typeof Color
+
+for (var x in Color.Blue) { }
+>x : any
+>Color.Blue : Color
+>Color : typeof Color
+>Blue : Color
+

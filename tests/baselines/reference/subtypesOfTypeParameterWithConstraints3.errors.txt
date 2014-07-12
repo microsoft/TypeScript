@@ -1,0 +1,26 @@
+==== tests/cases/compiler/subtypesOfTypeParameterWithConstraints3.ts (5 errors) ====
+    // checking whether other types are subtypes of type parameters with constraints
+    
+    function f<T extends U, U, V>(t: T, u: U, v: V) {
+               ~~~~~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints3.ts(3,12): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        // ok
+        var r = true ? t : u;
+        var r = true ? u : t;
+    
+        // error
+        var r2 = true ? t : v;
+                 ~~~~~~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints3.ts(9,14): error TS2226: Type of conditional '{}' must be identical to 'T' or 'V'.
+        var r2 = true ? v : t;
+                 ~~~~~~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints3.ts(10,14): error TS2226: Type of conditional '{}' must be identical to 'V' or 'T'.
+    
+        // error
+        var r3 = true ? v : u;
+                 ~~~~~~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints3.ts(13,14): error TS2226: Type of conditional '{}' must be identical to 'V' or 'U'.
+        var r3 = true ? u : v;
+                 ~~~~~~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints3.ts(14,14): error TS2226: Type of conditional '{}' must be identical to 'U' or 'V'.
+    }

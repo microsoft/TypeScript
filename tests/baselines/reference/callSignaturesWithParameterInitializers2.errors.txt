@@ -1,0 +1,35 @@
+==== tests/cases/compiler/callSignaturesWithParameterInitializers2.ts (4 errors) ====
+    // Optional parameters allow initializers only in implementation signatures
+    // All the below declarations are errors
+    
+    function foo(x = 2);
+                 ~~~~~
+!!! callSignaturesWithParameterInitializers2.ts(4,14): error TS2174: Default arguments are only allowed in implementation.
+    function foo(x = 1) { }
+    
+    foo(1);
+    foo();
+    
+    class C {
+        foo(x = 2);
+            ~~~~~
+!!! callSignaturesWithParameterInitializers2.ts(11,9): error TS2174: Default arguments are only allowed in implementation.
+        foo(x = 1) { }
+    }
+    
+    var c: C;
+    c.foo();
+    c.foo(1);
+    
+    var b = {
+        foo(x = 1),
+                  ~
+!!! callSignaturesWithParameterInitializers2.ts(20,15): error TS1005: '{' expected.
+        foo(x = 1) { },
+        ~~~~~~~~~~~~~~
+!!! callSignaturesWithParameterInitializers2.ts(21,5): error TS2000: Duplicate identifier 'foo'. Additional locations:
+!!! 	callSignaturesWithParameterInitializers2.ts(20,5)
+    }
+    
+    b.foo();
+    b.foo(1);

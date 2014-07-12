@@ -1,0 +1,7 @@
+==== tests/cases/compiler/mismatchedClassConstructorVariable.ts (1 errors) ====
+    var baz: foo;
+    class baz { }
+          ~~~
+!!! mismatchedClassConstructorVariable.ts(2,7): error TS2000: Duplicate identifier 'baz'. Additional locations:
+!!! 	mismatchedClassConstructorVariable.ts(1,5)
+    class foo { }

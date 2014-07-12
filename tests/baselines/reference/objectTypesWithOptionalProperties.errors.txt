@@ -1,0 +1,38 @@
+==== tests/cases/compiler/objectTypesWithOptionalProperties.ts (6 errors) ====
+    // Basic uses of optional properties
+    
+    var a: {
+        x?: number; // ok
+    }
+    
+    interface I {
+        x?: number; // ok
+    }
+    
+    class C {
+        x?: number; // error
+         ~
+!!! objectTypesWithOptionalProperties.ts(12,6): error TS1005: ';' expected.
+          ~
+!!! objectTypesWithOptionalProperties.ts(12,7): error TS1008: Unexpected token; 'constructor, function, accessor or variable' expected.
+    }
+    
+    interface I2<T> {
+        x?: T; // ok
+    }
+    
+    class C2<T> {
+        x?: T; // error
+         ~
+!!! objectTypesWithOptionalProperties.ts(20,6): error TS1005: ';' expected.
+          ~
+!!! objectTypesWithOptionalProperties.ts(20,7): error TS1008: Unexpected token; 'constructor, function, accessor or variable' expected.
+    }
+    
+    var b = {
+        x?: 1 // error
+         ~
+!!! objectTypesWithOptionalProperties.ts(24,6): error TS1005: ':' expected.
+          ~
+!!! objectTypesWithOptionalProperties.ts(24,7): error TS1003: Identifier expected.
+    }

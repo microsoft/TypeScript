@@ -1,0 +1,11 @@
+==== tests/cases/compiler/genericConstraint1.ts (1 errors) ====
+    class C<T> {
+        public bar2<U extends T>(x: T, y: U): T {
+            return null;
+        }
+    }
+    
+    var x = new C<number>();
+    x.bar2<string>(2, "");
+      ~~~~
+!!! genericConstraint1.ts(8,3): error TS2086: Type 'string' does not satisfy the constraint 'number' for type parameter 'U extends number'.

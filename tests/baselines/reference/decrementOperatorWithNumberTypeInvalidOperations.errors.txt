@@ -1,0 +1,95 @@
+==== tests/cases/compiler/decrementOperatorWithNumberTypeInvalidOperations.ts (24 errors) ====
+    // -- operator on number type
+    var NUMBER: number;
+    var NUMBER1: number[] = [1, 2];
+    
+    function foo(): number { return 1; }
+    
+    class A {
+        public a: number;
+        static foo() { return 1; }
+    }
+    module M {
+        export var n: number;
+    }
+    
+    var objA = new A();
+    
+    //number type var
+    var ResultIsNumber1 = --NUMBER1;
+                            ~~~~~~~
+!!! decrementOperatorWithNumberTypeInvalidOperations.ts(18,25): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    var ResultIsNumber2 = NUMBER1--;
+                          ~~~~~~~
+!!! decrementOperatorWithNumberTypeInvalidOperations.ts(19,23): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    
+    // number type literal
+    var ResultIsNumber3 = --1;
+                            ~
+!!! decrementOperatorWithNumberTypeInvalidOperations.ts(22,25): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    var ResultIsNumber4 = --{ x: 1, y: 2};
+                            ~~~~~~~~~~~~~
+!!! decrementOperatorWithNumberTypeInvalidOperations.ts(23,25): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+                            ~~~~~~~~~~~~~
+!!! decrementOperatorWithNumberTypeInvalidOperations.ts(23,25): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    var ResultIsNumber5 = --{ x: 1, y: (n: number) => { return n; } };
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! decrementOperatorWithNumberTypeInvalidOperations.ts(24,25): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! decrementOperatorWithNumberTypeInvalidOperations.ts(24,25): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    
+    var ResultIsNumber6 = 1--;
+                          ~
+!!! decrementOperatorWithNumberTypeInvalidOperations.ts(26,23): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    var ResultIsNumber7 = { x: 1, y: 2 }--;
+                          ~~~~~~~~~~~~~~
+!!! decrementOperatorWithNumberTypeInvalidOperations.ts(27,23): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+                          ~~~~~~~~~~~~~~
+!!! decrementOperatorWithNumberTypeInvalidOperations.ts(27,23): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    var ResultIsNumber8 = { x: 1, y: (n: number) => { return n; } }--;
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! decrementOperatorWithNumberTypeInvalidOperations.ts(28,23): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! decrementOperatorWithNumberTypeInvalidOperations.ts(28,23): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    
+    // number type expressions
+    var ResultIsNumber9 = --foo();
+                            ~~~~~
+!!! decrementOperatorWithNumberTypeInvalidOperations.ts(31,25): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    var ResultIsNumber10 = --A.foo();
+                             ~~~~~~~
+!!! decrementOperatorWithNumberTypeInvalidOperations.ts(32,26): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    var ResultIsNumber11 = --(NUMBER + NUMBER);
+                             ~~~~~~~~~~~~~~~~~
+!!! decrementOperatorWithNumberTypeInvalidOperations.ts(33,26): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    
+    var ResultIsNumber12 = foo()--;
+                           ~~~~~
+!!! decrementOperatorWithNumberTypeInvalidOperations.ts(35,24): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    var ResultIsNumber13 = A.foo()--;
+                           ~~~~~~~
+!!! decrementOperatorWithNumberTypeInvalidOperations.ts(36,24): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    var ResultIsNumber14 = (NUMBER + NUMBER)--;
+                           ~~~~~~~~~~~~~~~~~
+!!! decrementOperatorWithNumberTypeInvalidOperations.ts(37,24): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    
+    // miss assignment operator
+    --1;
+      ~
+!!! decrementOperatorWithNumberTypeInvalidOperations.ts(40,3): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    --NUMBER1;
+      ~~~~~~~
+!!! decrementOperatorWithNumberTypeInvalidOperations.ts(41,3): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    --foo();
+      ~~~~~
+!!! decrementOperatorWithNumberTypeInvalidOperations.ts(42,3): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    
+    1--;
+    ~
+!!! decrementOperatorWithNumberTypeInvalidOperations.ts(44,1): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    NUMBER1--;
+    ~~~~~~~
+!!! decrementOperatorWithNumberTypeInvalidOperations.ts(45,1): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    foo()--;
+    ~~~~~
+!!! decrementOperatorWithNumberTypeInvalidOperations.ts(46,1): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.

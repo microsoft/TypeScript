@@ -1,0 +1,22 @@
+=== tests/cases/compiler/assign1.ts ===
+module M {
+>M : M
+
+    interface I {
+>I : I
+
+        salt:number;
+>salt : number
+
+        pepper:number;
+>pepper : number
+    }
+
+    var x:I={salt:2,pepper:0};
+>x : I
+>I : I
+>{salt:2,pepper:0} : { salt: number; pepper: number; }
+>salt : number
+>pepper : number
+}
+

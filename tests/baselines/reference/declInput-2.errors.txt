@@ -1,0 +1,36 @@
+==== tests/cases/compiler/declInput-2.ts (7 errors) ====
+    module M {
+        class C { }
+        export class E {}
+        export interface I1 {}
+        interface I2 {}
+        export class D {
+            private c: C; // don't generate
+            public m1: number;
+            public m2: string;
+            public m22: C; // don't generate
+            ~~~~~~~~~~~~~~
+!!! declInput-2.ts(10,9): error TS2025: Public property 'm22' of exported class has or is using private type 'C'.
+            public m23: E;
+            public m24: I1;
+            public m25: I2; // don't generate
+            ~~~~~~~~~~~~~~~
+!!! declInput-2.ts(13,9): error TS2025: Public property 'm25' of exported class has or is using private type 'I2'.
+            public m232(): E { return null;}
+            public m242(): I1 { return null; }
+            public m252(): I2 { return null; } // don't generate
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! declInput-2.ts(16,9): error TS2056: Return type of public method from exported class has or is using private type 'I2'.
+                           ~~
+!!! declInput-2.ts(16,24): error TS2056: Return type of public method from exported class has or is using private type 'I2'.
+            public m26(i:I1) {}
+            public m262(i:I2) {}
+                        ~~~~
+!!! declInput-2.ts(18,21): error TS2038: Parameter 'i' of public method from exported class has or is using private type 'I2'.
+            public m3():C { return new C(); }
+                        ~
+!!! declInput-2.ts(19,21): error TS2056: Return type of public method from exported class has or is using private type 'C'.
+                            ~~~~~~~~~~~~~~~
+!!! declInput-2.ts(19,25): error TS2056: Return type of public method from exported class has or is using private type 'C'.
+        }
+    }

@@ -1,0 +1,27 @@
+==== tests/cases/compiler/getAndSetNotIdenticalType2.ts (3 errors) ====
+    class A<T> { foo: T; }
+    
+    class C<T> {
+        data: A<T>;
+        get x(): A<T> {
+        ~~~~~~~~~~~~~~~
+            return this.data;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+!!! getAndSetNotIdenticalType2.ts(5,5): error TS2096: 'get' and 'set' accessor must have the same type.
+        set x(v: A<string>) {
+        ~~~~~~~~~~~~~~~~~~~~~
+            this.data = v;
+    ~~~~~~~~~~~~~~~~~~~~~~
+            ~~~~~~~~~
+!!! getAndSetNotIdenticalType2.ts(9,9): error TS2012: Cannot convert 'A<string>' to 'A<T>':
+!!! 	Types of property 'foo' of types 'A<string>' and 'A<T>' are incompatible.
+        }
+    ~~~~~
+!!! getAndSetNotIdenticalType2.ts(8,5): error TS2096: 'get' and 'set' accessor must have the same type.
+    }
+    
+    var x = new C();
+    var r = x.x;
+    x.x = r;

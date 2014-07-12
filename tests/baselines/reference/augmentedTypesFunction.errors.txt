@@ -1,0 +1,57 @@
+==== tests/cases/compiler/augmentedTypesFunction.ts (6 errors) ====
+    // function then var
+    function y1() { }
+    var y1 = 1; // error
+        ~~
+!!! augmentedTypesFunction.ts(3,5): error TS2000: Duplicate identifier 'y1'. Additional locations:
+!!! 	augmentedTypesFunction.ts(2,1)
+    
+    // function then function
+    function y2() { }
+    function y2() { } // error
+             ~~
+!!! augmentedTypesFunction.ts(7,10): error TS2000: Duplicate identifier 'y2'. Additional locations:
+!!! 	augmentedTypesFunction.ts(6,1)
+    
+    function y2a() { }
+    var y2a = () => { } // error
+        ~~~
+!!! augmentedTypesFunction.ts(10,5): error TS2000: Duplicate identifier 'y2a'. Additional locations:
+!!! 	augmentedTypesFunction.ts(9,1)
+    
+    // function then class
+    function y3() { }
+    class y3 { } // error
+          ~~
+!!! augmentedTypesFunction.ts(14,7): error TS2000: Duplicate identifier 'y3'. Additional locations:
+!!! 	augmentedTypesFunction.ts(13,1)
+    
+    function y3a() { }
+    class y3a { public foo() { } } // error
+          ~~~
+!!! augmentedTypesFunction.ts(17,7): error TS2000: Duplicate identifier 'y3a'. Additional locations:
+!!! 	augmentedTypesFunction.ts(16,1)
+    
+    // function then enum
+    function y4() { }
+    enum y4 { One } // error
+         ~~
+!!! augmentedTypesFunction.ts(21,6): error TS2000: Duplicate identifier 'y4'. Additional locations:
+!!! 	augmentedTypesFunction.ts(20,1)
+    
+    // function then internal module
+    function y5() { }
+    module y5 { } // ok since module is not instantiated
+    
+    function y5a() { }
+    module y5a { var y = 2; } // should be an error
+    
+    function y5b() { }
+    module y5b { export var y = 3; } // should be an error
+    
+    function y5c() { }
+    module y5c { export interface I { foo(): void } } // should be an error
+    
+    // function then import, messes with other errors
+    //function y6() { }
+    //import y6 = require('');

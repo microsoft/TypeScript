@@ -1,0 +1,35 @@
+=== tests/cases/compiler/recursiveExportAssignmentAndFindAliasedType2_moduleA.ts ===
+/// <reference path="recursiveExportAssignmentAndFindAliasedType2_moduleDef.d.ts"/>
+import moduleC = require("moduleC");
+>moduleC : moduleC
+
+import ClassB = require("recursiveExportAssignmentAndFindAliasedType2_moduleB");
+>ClassB : ClassB
+
+export var b: ClassB; // This should result in type ClassB
+>b : ClassB
+>ClassB : ClassB
+
+=== tests/cases/compiler/recursiveExportAssignmentAndFindAliasedType2_moduleDef.d.ts ===
+declare module "moduleC" {
+    import self = require("moduleD");
+>self : self
+
+    export = self;
+>self : self
+}
+declare module "moduleD" {
+    import self = require("moduleC");
+>self : self
+
+    export = self;
+>self : self
+}
+
+=== tests/cases/compiler/recursiveExportAssignmentAndFindAliasedType2_moduleB.ts ===
+class ClassB { }
+>ClassB : ClassB
+
+export = ClassB;
+>ClassB : typeof ClassB
+

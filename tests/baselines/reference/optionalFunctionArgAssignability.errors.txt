@@ -1,0 +1,14 @@
+==== tests/cases/compiler/optionalFunctionArgAssignability.ts (1 errors) ====
+    interface Promise<T> {
+        then<U>(onFulfill?: (value: T) => U, onReject?: (reason: any) => U): Promise<U>;
+    }
+     
+    var a = function then<U>(onFulfill?: (value: string) => U, onReject?: (reason: any) => U): Promise<U> { return null };
+    var b = function then<U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U): Promise<U> { return null };
+    a = b; // error because number is not assignable to string
+    ~
+!!! optionalFunctionArgAssignability.ts(7,1): error TS2012: Cannot convert '<U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U) => Promise<U>' to '<U>(onFulfill?: (value: string) => U, onReject?: (reason: any) => U) => Promise<U>':
+!!! 	Call signatures of types '<U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U) => Promise<U>' and '<U>(onFulfill?: (value: string) => U, onReject?: (reason: any) => U) => Promise<U>' are incompatible:
+!!! 		Call signatures of types '(value: number) => any' and '(value: string) => any' are incompatible.
+!!! 		Call signatures of types '(value: string) => any' and '(value: number) => any' are incompatible.
+    

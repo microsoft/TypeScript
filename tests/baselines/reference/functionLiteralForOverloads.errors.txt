@@ -1,0 +1,24 @@
+==== tests/cases/compiler/functionLiteralForOverloads.ts (1 errors) ====
+    // basic uses of function literals with overloads
+    
+    var f: {
+        (x: string): string;
+        (x: number): number;
+    } = (x) => x;
+    
+    var f2: {
+        <T>(x: string): string;
+        <T>(x: number): number;
+    } = (x) => x;
+    
+    var f3: {
+        <T>(x: T): string;
+        <T>(x: T): number;
+        ~~~~~~~~~~~~~~~~~
+!!! functionLiteralForOverloads.ts(15,5): error TS2175: Overloads cannot differ only by return type.
+    } = (x) => x;
+    
+    var f4: {
+        <T>(x: string): T;
+        <T>(x: number): T;
+    } = (x) => x;

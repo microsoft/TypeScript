@@ -1,0 +1,28 @@
+==== tests/cases/compiler/implicitAnyDeclareFunctionWithoutFormalType.ts (8 errors) ====
+    // these should be errors
+    function foo(x) { };
+                 ~
+!!! implicitAnyDeclareFunctionWithoutFormalType.ts(2,14): error TS7006: Parameter 'x' of 'foo' implicitly has an 'any' type.
+    function bar(x: number, y) { };  // error at "y"; no error at "x"
+                            ~
+!!! implicitAnyDeclareFunctionWithoutFormalType.ts(3,25): error TS7006: Parameter 'y' of 'bar' implicitly has an 'any' type.
+    function func2(a, b, c) { };     // error at "a,b,c"
+                   ~
+!!! implicitAnyDeclareFunctionWithoutFormalType.ts(4,16): error TS7006: Parameter 'a' of 'func2' implicitly has an 'any' type.
+                      ~
+!!! implicitAnyDeclareFunctionWithoutFormalType.ts(4,19): error TS7006: Parameter 'b' of 'func2' implicitly has an 'any' type.
+                         ~
+!!! implicitAnyDeclareFunctionWithoutFormalType.ts(4,22): error TS7006: Parameter 'c' of 'func2' implicitly has an 'any' type.
+    function func3(...args) { };     // error at "args" 
+                   ~~~~~~~
+!!! implicitAnyDeclareFunctionWithoutFormalType.ts(5,16): error TS7006: Parameter 'args' of 'func3' implicitly has an 'any' type.
+    function func4(z= null, w= undefined) { };  // error at "z,w"
+                   ~~~~~~~
+!!! implicitAnyDeclareFunctionWithoutFormalType.ts(6,16): error TS7005: Variable 'z' implicitly has an 'any' type.
+                            ~~~~~~~~~~~~
+!!! implicitAnyDeclareFunctionWithoutFormalType.ts(6,25): error TS7005: Variable 'w' implicitly has an 'any' type.
+    
+    // these shouldn't be errors
+    function noError1(x= 3, y= 2) { };
+    function noError2(x: number, y: string) { };
+    

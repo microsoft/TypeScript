@@ -1,0 +1,7 @@
+==== tests/cases/compiler/assignFromNumberInterface.ts (1 errors) ====
+    var x = 1;
+    var a: Number;
+    x = a;
+    ~
+!!! assignFromNumberInterface.ts(3,1): error TS2011: Cannot convert 'Number' to 'number'.
+    a = x;

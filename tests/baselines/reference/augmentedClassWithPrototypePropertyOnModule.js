@@ -1,0 +1,1 @@
+//// [augmentedClassWithPrototypePropertyOnModule.js]

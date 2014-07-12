@@ -1,0 +1,38 @@
+=== tests/cases/compiler/sourceMapValidationFunctions.ts ===
+var greetings = 0;
+>greetings : number
+
+function greet(greeting: string): number {
+>greet : typeof greet
+>greeting : string
+
+    greetings++;
+>greetings++ : number
+>greetings : number
+
+    return greetings;
+>greetings : number
+}
+function greet2(greeting: string, n = 10, x?: string, ...restParams: string[]): number {
+>greet2 : typeof greet2
+>greeting : string
+>n : number
+>x : string
+>restParams : string[]
+
+    greetings++;
+>greetings++ : number
+>greetings : number
+
+    return greetings;
+>greetings : number
+}
+function foo(greeting: string, n = 10, x?: string, ...restParams: string[])
+>foo : typeof foo
+>greeting : string
+>n : number
+>x : string
+>restParams : string[]
+{
+    return;
+}

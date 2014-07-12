@@ -1,0 +1,105 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "diagnostics": [
+        {
+            "start": 4,
+            "length": 2,
+            "diagnosticCode": "'{0}' expected.",
+            "arguments": [
+                ";"
+            ]
+        },
+        {
+            "start": 6,
+            "length": 1,
+            "diagnosticCode": "Identifier expected."
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 7,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullWidth": 4,
+                "isIncrementallyUnusable": true,
+                "expression": {
+                    "kind": "PostIncrementExpression",
+                    "fullWidth": 4,
+                    "operand": {
+                        "kind": "IdentifierName",
+                        "width": 1,
+                        "text": "a",
+                        "value": "a",
+                        "valueText": "a"
+                    },
+                    "operatorToken": {
+                        "kind": "PlusPlusToken",
+                        "width": 2,
+                        "fullWidth": 3,
+                        "text": "++",
+                        "value": "++",
+                        "valueText": "++",
+                        "hasTrailingTrivia": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "text": " "
+                            }
+                        ]
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 0,
+                    "text": ""
+                }
+            },
+            {
+                "kind": "ExpressionStatement",
+                "fullWidth": 3,
+                "isIncrementallyUnusable": true,
+                "expression": {
+                    "kind": "PreIncrementExpression",
+                    "fullWidth": 2,
+                    "isIncrementallyUnusable": true,
+                    "operatorToken": {
+                        "kind": "PlusPlusToken",
+                        "width": 2,
+                        "text": "++",
+                        "value": "++",
+                        "valueText": "++"
+                    },
+                    "operand": {
+                        "kind": "IdentifierName",
+                        "width": 0,
+                        "text": ""
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 7
+    }
+}

@@ -1,0 +1,6 @@
+==== tests/cases/compiler/collisionThisExpressionAndAmbientVarInGlobal.ts (1 errors) ====
+    declare var _this: number; // no error as no code gen
+    var f = () => this;
+    _this = 10; // Error
+    ~~~~~
+!!! collisionThisExpressionAndAmbientVarInGlobal.ts(3,1): error TS2206: Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.

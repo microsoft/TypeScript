@@ -1,0 +1,40 @@
+==== tests/cases/compiler/inheritedMembersAndIndexSignaturesFromDifferentBases.ts (3 errors) ====
+    // indexer in B is a subtype of indexer in A
+    interface A {
+        [s: string]: {
+            a;
+        };
+    }
+    interface B {
+        [s: number]: {
+            a;
+            b;
+        };
+    }
+    interface C {
+        m: {};
+    }
+    
+    interface D extends A, B, C { } // error because m is not a subtype of {a;}
+              ~
+!!! inheritedMembersAndIndexSignaturesFromDifferentBases.ts(17,11): error TS2189: Interface 'D' cannot simultaneously extend types 'C' and 'A':
+!!! Type of property 'm' in type 'C' is not assignable to string indexer type in type 'A'.
+!!! 	Type '{}' is missing property 'a' from type '{ a: any; }'.
+    
+    interface E {
+        0: {};
+    }
+    
+    interface F extends A, B, E { } // error because 0 is not a subtype of {a; b;}
+              ~
+!!! inheritedMembersAndIndexSignaturesFromDifferentBases.ts(23,11): error TS2189: Interface 'F' cannot simultaneously extend types 'E' and 'B':
+!!! Type of property '0' in type 'E' is not assignable to number indexer type in type 'B'.
+!!! 	Type '{}' is missing property 'a' from type '{ a: any; b: any; }'.
+    
+    interface G extends A, B, C, E { } // should only report one error
+              ~
+!!! inheritedMembersAndIndexSignaturesFromDifferentBases.ts(25,11): error TS2189: Interface 'G' cannot simultaneously extend types 'E' and 'B':
+!!! Type of property '0' in type 'E' is not assignable to number indexer type in type 'B'.
+!!! 	Type '{}' is missing property 'a' from type '{ a: any; b: any; }'.
+    
+    interface H extends A, F { } // Should report no error at all because error is internal to F

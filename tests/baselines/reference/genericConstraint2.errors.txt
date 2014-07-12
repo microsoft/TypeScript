@@ -1,0 +1,29 @@
+==== tests/cases/compiler/genericConstraint2.ts (3 errors) ====
+    interface Comparable<T> {
+        comparer(other: T): number;
+    }
+    
+    function compare<T extends Comparable<T>>(x: T, y: T): number {
+                     ~~~~~~~~~~~~~~~~~~~~~~~
+!!! genericConstraint2.ts(5,18): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        if (x == null) return y == null ? 0 : -1;
+        if (y == null) return 1;
+        return x.comparer(y);
+    }
+    
+    class ComparableString implements Comparable<string>{
+          ~~~~~~~~~~~~~~~~
+!!! genericConstraint2.ts(11,7): error TS2137: Class ComparableString declares interface Comparable<string> but does not implement it:
+!!! 	Type 'ComparableString' is missing property 'comparer' from type 'Comparable<string>'.
+        constructor(public currentValue: string) { }
+    
+        localeCompare(other) {
+            return 0;
+        }
+    }
+    
+    var a = new ComparableString("a");
+    var b = new ComparableString("b");
+    var c = compare<ComparableString>(a, b);
+            ~~~~~~~
+!!! genericConstraint2.ts(21,9): error TS2086: Type 'ComparableString' does not satisfy the constraint 'Comparable<ComparableString>' for type parameter 'T extends Comparable<T>'.

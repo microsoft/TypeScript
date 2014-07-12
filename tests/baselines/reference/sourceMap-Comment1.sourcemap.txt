@@ -1,0 +1,5 @@
+
+EmittedFile: (sourceMap-Comment1.js) sourceFile: (sourceMap-Comment1.ts)
+-------------------------------------------------------------------
+Emitted (1, 1) source (1, 1)
+Emitted (1, 11) source (1, 11)

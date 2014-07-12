@@ -1,0 +1,13 @@
+==== tests/cases/compiler/foo_1.ts (3 errors) ====
+    import foo = require('./test/foo');
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! foo_1.ts(1,1): error TS2071: Unable to resolve external module ''./test/foo''.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! foo_1.ts(1,1): error TS2072: Module cannot be aliased to a non-module type.
+    var z = foo.x + 10;
+            ~~~
+!!! foo_1.ts(2,9): error TS2095: Could not find symbol 'foo'.
+    
+==== tests/cases/compiler/foo_0.ts (0 errors) ====
+    export var x = 42;
+    

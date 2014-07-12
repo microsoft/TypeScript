@@ -1,0 +1,117 @@
+==== tests/cases/compiler/assignmentCompatWithObjectMembersOptionality2.ts (9 errors) ====
+    // M is optional and S contains no property with the same name as M
+    // N is optional and T contains no property with the same name as N
+    
+    class Base { foo: string; }
+    class Derived extends Base { bar: string; }
+    class Derived2 extends Derived { baz: string; }
+    
+    module TargetHasOptional {
+        // targets
+        interface C {
+            opt?: Base
+        }
+        var c: C;
+    
+        var a: { opt?: Base; }
+        var b: typeof a = { opt: new Base() }
+    
+        // sources
+        interface D {
+            other: Base;
+        }
+        interface E {
+            other: Derived;
+        }
+        interface F {
+            other?: Derived;
+        }
+        var d: D;
+        var e: E;
+        var f: F;
+    
+        // all ok
+        c = d;
+        c = e;
+        c = f;
+        c = a;
+    
+        a = d;
+        a = e;
+        a = f;
+        a = c;
+    
+        b = d;
+        b = e;
+        b = f;
+        b = a;
+        b = c;
+    }
+    
+    module SourceHasOptional {
+        // targets
+        interface C {
+            opt: Base
+        }
+        var c: C;
+    
+        var a: { opt: Base; }
+        var b = { opt: new Base() }
+    
+        // sources
+        interface D {
+            other?: Base;
+        }
+        interface E {
+            other?: Derived;
+        }
+        interface F {
+            other: Derived;
+        }
+        var d: D;
+        var e: E;
+        var f: F;
+    
+        c = d; // error
+        ~
+!!! assignmentCompatWithObjectMembersOptionality2.ts(74,5): error TS2012: Cannot convert 'D' to 'C':
+!!! 	Type 'D' is missing property 'opt' from type 'C'.
+        c = e; // error
+        ~
+!!! assignmentCompatWithObjectMembersOptionality2.ts(75,5): error TS2012: Cannot convert 'E' to 'C':
+!!! 	Type 'E' is missing property 'opt' from type 'C'.
+        c = f; // error
+        ~
+!!! assignmentCompatWithObjectMembersOptionality2.ts(76,5): error TS2012: Cannot convert 'F' to 'C':
+!!! 	Type 'F' is missing property 'opt' from type 'C'.
+        c = a; // ok
+    
+        a = d; // error
+        ~
+!!! assignmentCompatWithObjectMembersOptionality2.ts(79,5): error TS2012: Cannot convert 'D' to '{ opt: Base; }':
+!!! 	Type 'D' is missing property 'opt' from type '{ opt: Base; }'.
+        a = e; // error
+        ~
+!!! assignmentCompatWithObjectMembersOptionality2.ts(80,5): error TS2012: Cannot convert 'E' to '{ opt: Base; }':
+!!! 	Type 'E' is missing property 'opt' from type '{ opt: Base; }'.
+        a = f; // error
+        ~
+!!! assignmentCompatWithObjectMembersOptionality2.ts(81,5): error TS2012: Cannot convert 'F' to '{ opt: Base; }':
+!!! 	Type 'F' is missing property 'opt' from type '{ opt: Base; }'.
+        a = c; // ok
+    
+        b = d; // error
+        ~
+!!! assignmentCompatWithObjectMembersOptionality2.ts(84,5): error TS2012: Cannot convert 'D' to '{ opt: Base; }':
+!!! 	Type 'D' is missing property 'opt' from type '{ opt: Base; }'.
+        b = e; // error
+        ~
+!!! assignmentCompatWithObjectMembersOptionality2.ts(85,5): error TS2012: Cannot convert 'E' to '{ opt: Base; }':
+!!! 	Type 'E' is missing property 'opt' from type '{ opt: Base; }'.
+        b = f; // error
+        ~
+!!! assignmentCompatWithObjectMembersOptionality2.ts(86,5): error TS2012: Cannot convert 'F' to '{ opt: Base; }':
+!!! 	Type 'F' is missing property 'opt' from type '{ opt: Base; }'.
+        b = a; // ok
+        b = c; // ok
+    }

@@ -1,0 +1,49 @@
+=== tests/cases/compiler/specializationsShouldNotAffectEachOther.ts ===
+
+interface Series  {
+>Series : Series
+
+    data: string[];
+>data : string[]
+}
+
+var series: Series;
+>series : Series
+>Series : Series
+
+
+function foo() {
+>foo : typeof foo
+
+    var seriesExtent = (series) => null;
+>seriesExtent : (series: any) => any
+>(series) => null : (series: any) => any
+>series : any
+
+    var series2: number[];
+>series2 : number[]
+
+>series2.map(seriesExtent) : any[]
+>series2.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>series2 : number[]
+
+    series2.map(seriesExtent);
+>map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>seriesExtent : (series: any) => any
+
+    return null;
+}
+
+
+var keyExtent2: any[] = series.data.map(function (d: string) { return d; });
+>keyExtent2 : any[]
+>series.data.map(function (d: string) { return d; }) : string[]
+>series.data.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>series.data : string[]
+>series : Series
+>data : string[]
+>map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>function (d: string) { return d; } : (d: string) => string
+>d : string
+>d : string
+

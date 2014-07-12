@@ -1,0 +1,19 @@
+==== tests/cases/compiler/derivedClassOverridesPrivateFunction1.ts (1 errors) ====
+    class BaseClass {
+        constructor() {
+            this._init();
+        }
+        private _init() {
+        }
+    }
+    class DerivedClass extends BaseClass {
+          ~~~~~~~~~~~~
+!!! derivedClassOverridesPrivateFunction1.ts(8,7): error TS2141: Class 'DerivedClass' cannot extend class 'BaseClass':
+!!! 	Types 'DerivedClass' and 'BaseClass' define property '_init' as private.
+        constructor() {
+            super();
+        }
+        private _init() {
+        }
+    }
+    new DerivedClass();

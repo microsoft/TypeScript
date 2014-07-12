@@ -1,0 +1,20 @@
+==== tests/cases/compiler/staticIndexers.ts (3 errors) ====
+    // static indexers not allowed
+    
+    class C {
+        static [x: string]: string;
+        ~~~~~~
+!!! staticIndexers.ts(4,5): error TS1055: Modifiers cannot appear here.
+    }
+    
+    class D {
+        static [x: number]: string;
+        ~~~~~~
+!!! staticIndexers.ts(8,5): error TS1055: Modifiers cannot appear here.
+    }
+    
+    class E<T> {
+        static [x: string]: T;
+        ~~~~~~
+!!! staticIndexers.ts(12,5): error TS1055: Modifiers cannot appear here.
+    }

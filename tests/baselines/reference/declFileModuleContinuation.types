@@ -1,0 +1,22 @@
+=== tests/cases/compiler/declFileModuleContinuation.ts ===
+module A.C {
+>A : A
+>C : A.C
+
+    export interface Z {
+>Z : Z
+    }
+}
+
+module A.B.C {
+>A : A
+>B : A.B
+>C : A.B.C
+
+    export class W implements A.C.Z {
+>W : W
+>A : A
+>C : A.C
+>Z : A.C.Z
+    }
+}

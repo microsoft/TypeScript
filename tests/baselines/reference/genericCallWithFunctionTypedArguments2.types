@@ -1,0 +1,161 @@
+=== tests/cases/compiler/genericCallWithFunctionTypedArguments2.ts ===
+// Generic functions used as arguments for function typed parameters are not used to make inferences from
+// Using construct signature arguments, no errors expected
+
+function foo<T>(x: new(a: T) => T) {
+>foo : typeof foo
+>T : T
+>x : new(a: T) => T
+>a : T
+>T : T
+>T : T
+
+    return new x(null);
+>new x(null) : T
+>x : new(a: T) => T
+}
+
+interface I {
+>I : I
+
+    new <T>(x: T): T;
+>T : T
+>x : T
+>T : T
+>T : T
+}
+interface I2<T> {
+>I2 : I2<T>
+>T : T
+
+    new (x: T): T;
+>x : T
+>T : T
+>T : T
+}
+var i: I;
+>i : I
+>I : I
+
+var i2: I2<string>;
+>i2 : I2<string>
+>I2 : I2<T>
+
+var a: {
+>a : new<T>(x: T) => T
+
+    new <T>(x: T): T;
+>T : T
+>x : T
+>T : T
+>T : T
+}
+
+var r = foo(i); // any
+>r : any
+>foo(i) : any
+>foo : typeof foo
+>i : I
+
+var r2 = foo<string>(i); // string 
+>r2 : string
+>foo<string>(i) : string
+>foo : typeof foo
+>i : I
+
+var r3 = foo(i2); // string
+>r3 : string
+>foo(i2) : string
+>foo : typeof foo
+>i2 : I2<string>
+
+var r3b = foo(a); // any
+>r3b : any
+>foo(a) : any
+>foo : typeof foo
+>a : new<T>(x: T) => T
+
+function foo2<T, U>(x: T, cb: new(a: T) => U) {
+>foo2 : typeof foo2
+>T : T
+>U : U
+>x : T
+>T : T
+>cb : new(a: T) => U
+>a : T
+>T : T
+>U : U
+
+    return new cb(x);
+>new cb(x) : U
+>cb : new(a: T) => U
+>x : T
+}
+
+var r4 = foo2(1, i2); // string, instantiated generic
+>r4 : string
+>foo2(1, i2) : string
+>foo2 : typeof foo2
+>i2 : I2<string>
+
+var r4b = foo2(1, a); // any
+>r4b : any
+>foo2(1, a) : any
+>foo2 : typeof foo2
+>a : new<T>(x: T) => T
+
+var r5 = foo2(1, i); // any
+>r5 : any
+>foo2(1, i) : any
+>foo2 : typeof foo2
+>i : I
+
+var r6 = foo2<string, string>('', i2); // string
+>r6 : string
+>foo2<string, string>('', i2) : string
+>foo2 : typeof foo2
+>i2 : I2<string>
+
+function foo3<T, U>(x: T, cb: new(a: T) => U, y: U) {
+>foo3 : typeof foo3
+>T : T
+>U : U
+>x : T
+>T : T
+>cb : new(a: T) => U
+>a : T
+>T : T
+>U : U
+>y : U
+>U : U
+
+    return new cb(x);
+>new cb(x) : U
+>cb : new(a: T) => U
+>x : T
+}
+
+var r7 = foo3(null, i, ''); // any
+>r7 : any
+>foo3(null, i, '') : any
+>foo3 : typeof foo3
+>i : I
+
+var r7b = foo3(null, a, ''); // any
+>r7b : any
+>foo3(null, a, '') : any
+>foo3 : typeof foo3
+>a : new<T>(x: T) => T
+
+var r8 = foo3(1, i2, 1); // {}
+>r8 : {}
+>foo3(1, i2, 1) : {}
+>foo3 : typeof foo3
+>i2 : I2<string>
+
+var r9 = foo3<string, string>('', i2, ''); // string
+>r9 : string
+>foo3<string, string>('', i2, '') : string
+>foo3 : typeof foo3
+>i2 : I2<string>
+

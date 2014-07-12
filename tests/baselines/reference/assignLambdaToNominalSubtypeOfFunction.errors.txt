@@ -1,0 +1,20 @@
+==== tests/cases/compiler/assignLambdaToNominalSubtypeOfFunction.ts (4 errors) ====
+    interface IResultCallback extends Function {
+        x: number;
+    }
+    
+    function fn(cb: IResultCallback) { }
+    
+    fn((a, b) => true);
+    ~~
+!!! assignLambdaToNominalSubtypeOfFunction.ts(7,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Type '(a: any, b: any) => boolean' is missing property 'x' from type 'IResultCallback'.
+    ~~
+!!! assignLambdaToNominalSubtypeOfFunction.ts(7,1): error TS2087: Could not select overload for 'call' expression.
+    fn(function (a, b) { return true; })
+    ~~
+!!! assignLambdaToNominalSubtypeOfFunction.ts(8,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Type '(a: any, b: any) => boolean' is missing property 'x' from type 'IResultCallback'.
+    ~~
+!!! assignLambdaToNominalSubtypeOfFunction.ts(8,1): error TS2087: Could not select overload for 'call' expression.
+    

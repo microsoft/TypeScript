@@ -1,0 +1,30 @@
+==== tests/cases/compiler/interfaceThatIndirectlyInheritsFromItself.ts (2 errors) ====
+    interface Base extends Derived2 { // error
+              ~~~~
+!!! interfaceThatIndirectlyInheritsFromItself.ts(1,11): error TS2101: Interface 'Base' is recursively referenced as a base type of itself.
+        x: string;
+    }
+    
+    interface Derived extends Base {
+        y: string;
+    }
+    
+    interface Derived2 extends Derived {
+        z: string;
+    }
+    
+    module Generic {
+        interface Base<T> extends Derived2<T> { // error
+                  ~~~~
+!!! interfaceThatIndirectlyInheritsFromItself.ts(14,15): error TS2101: Interface 'Generic.Base<T>' is recursively referenced as a base type of itself.
+            x: string;
+        }
+    
+        interface Derived<T> extends Base<T> {
+            y: string;
+        }
+    
+        interface Derived2<T> extends Derived<T> {
+            z: string;
+        }
+    }

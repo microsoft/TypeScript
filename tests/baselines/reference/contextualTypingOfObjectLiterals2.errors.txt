@@ -1,0 +1,8 @@
+==== tests/cases/compiler/contextualTypingOfObjectLiterals2.ts (1 errors) ====
+    interface Foo {
+        foo: (t: string) => string;
+    }
+    function f2(args: Foo) { }
+    f2({ foo: s => s.hmm }) // 's' should be 'string', so this should be an error
+                     ~~~
+!!! contextualTypingOfObjectLiterals2.ts(5,18): error TS2094: The property 'hmm' does not exist on value of type 'string'.

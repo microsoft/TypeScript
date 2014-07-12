@@ -1,0 +1,146 @@
+==== tests/cases/compiler/complicatedPrivacy.ts (15 errors) ====
+    module m1 {
+        export module m2 {
+    
+    
+            export function f1(c1: C1) {
+                               ~~~~~~
+!!! complicatedPrivacy.ts(5,28): error TS2040: Parameter 'c1' of exported function has or is using private type 'C1'.
+            }
+            export function f2(c2: C2) {
+            }
+    
+            export class C2 implements m3.i3 {
+                                       ~~~~~
+!!! complicatedPrivacy.ts(10,36): error TS2019: Exported class 'C2' implements private interface 'm3.i3'.
+                public get p1(arg) {
+                       ~~~
+!!! complicatedPrivacy.ts(11,20): error TS1054: 'get' accessor cannot have parameters.
+                    return new C1();
+                    ~~~~~~~~~~~~~~~~
+!!! complicatedPrivacy.ts(12,17): error TS2051: Return type of public property getter from exported class has or is using private type 'C1'.
+                }
+    
+                public set p1(arg1: C1) {
+                              ~~~~~~~~
+!!! complicatedPrivacy.ts(15,27): error TS2034: Parameter 'arg1' of public property setter from exported class has or is using private type 'C1'.
+                }
+    
+                public f55() {
+                    return "Hello world";
+                }
+            }
+        }
+    
+        export function f2(arg1: { x?: C1, y: number }) {
+                                         ~
+!!! complicatedPrivacy.ts(24,38): error TS1005: ';' expected.
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! complicatedPrivacy.ts(24,24): error TS2040: Parameter 'arg1' of exported function has or is using private type 'C1'.
+        }
+    
+        export function f3(): {
+        ~~~~~~~~~~~~~~~~~~~~~~~
+                              ~
+            (a: number) : C1;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+        } {
+    ~~~~~~~
+    ~~~~~
+!!! complicatedPrivacy.ts(27,27): error TS2058: Return type of exported function has or is using private type 'C1'.
+            return null;
+    ~~~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+!!! complicatedPrivacy.ts(27,5): error TS2058: Return type of exported function has or is using private type 'C1'.
+    
+        export function f4(arg1: 
+                           ~~~~~~
+        {
+    ~~~~~
+        [number]: C1;
+         ~~~~~~
+!!! complicatedPrivacy.ts(35,6): error TS1022: Index signature parameter must have a type annotation.
+    ~~~~~~~~~~~~~~~~~
+        }) {
+    ~~~~~
+!!! complicatedPrivacy.ts(33,24): error TS2040: Parameter 'arg1' of exported function has or is using private type 'C1'.
+        }
+    
+    
+        export function f5(arg2: {
+                           ~~~~~~~
+            new (arg1: C1) : C1
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        }) {
+    ~~~~~
+!!! complicatedPrivacy.ts(40,24): error TS2040: Parameter 'arg2' of exported function has or is using private type 'C1'.
+        }
+        module m3 {
+            function f2(f1: C1) {
+            }
+    
+            export interface i3 {
+                f55(): string;
+            }
+        }
+    
+        class C1 {
+        }
+    
+        interface i {
+            x: number;
+        }
+    
+        export class C5 implements i {
+                                   ~
+!!! complicatedPrivacy.ts(60,32): error TS2019: Exported class 'C5' implements private interface 'i'.
+            public x: number;
+        }
+    
+        export var v2: C1[];
+                   ~~~~~~~~
+!!! complicatedPrivacy.ts(64,16): error TS2027: Exported variable 'v2' has or is using private type 'C1'.
+    }
+    
+    class C2 {
+    }
+    
+    module m2 {
+        export module m3 {
+    
+            export class c_pr  implements mglo5.i5, mglo5.i6 {
+                                                          ~~
+!!! complicatedPrivacy.ts(73,55): error TS2094: The property 'i6' does not exist on value of type 'mglo5'.
+                f1() {
+                    return "Hello";
+                }
+            }
+            
+            module m4 {
+                class C {
+                }
+                module m5 {
+                    
+                    export module m6 {
+                        function f1() {
+                            return new C();
+                        }
+                    }
+                }
+            }
+    
+        }
+    }
+    
+    module mglo5 {
+        export interface i5 {
+            f1(): string;
+        }
+    
+        interface i6 {
+            f6(): number;
+        }
+    }
+    

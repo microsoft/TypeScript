@@ -1,0 +1,20 @@
+==== tests/cases/compiler/publicIndexer.ts (3 errors) ====
+    // public indexers not allowed
+    
+    class C {
+        public [x: string]: string;
+        ~~~~~~
+!!! publicIndexer.ts(4,5): error TS1055: Modifiers cannot appear here.
+    }
+    
+    class D {
+        public [x: number]: string;
+        ~~~~~~
+!!! publicIndexer.ts(8,5): error TS1055: Modifiers cannot appear here.
+    }
+    
+    class E<T> {
+        public [x: string]: T;
+        ~~~~~~
+!!! publicIndexer.ts(12,5): error TS1055: Modifiers cannot appear here.
+    }

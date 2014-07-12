@@ -1,0 +1,19 @@
+=== tests/cases/compiler/functionType.ts ===
+function salt() {}
+>salt : typeof salt
+
+salt.apply("hello", []);
+>salt.apply("hello", []) : any
+>salt.apply : (thisArg: any, argArray?: any) => any
+>salt : typeof salt
+>apply : (thisArg: any, argArray?: any) => any
+>[] : any[]
+
+(new Function("return 5"))();
+>(new Function("return 5"))() : any
+>(new Function("return 5")) : Function
+>new Function("return 5") : Function
+>Function : { prototype: Function; (...args: string[]): Function; new(...args: string[]): Function; }
+ 
+ 
+

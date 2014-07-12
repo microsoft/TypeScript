@@ -1,0 +1,36 @@
+==== tests/cases/compiler/invalidNestedModules.ts (2 errors) ====
+    module A.B.C {
+        export class Point {
+            x: number;
+            y: number;
+        }
+    }
+    
+    module A {
+        export module B {
+            export class C { // Error
+                         ~
+!!! invalidNestedModules.ts(10,22): error TS2000: Duplicate identifier 'C'. Additional locations:
+!!! 	invalidNestedModules.ts(1,12)
+                name: string;
+            }
+        }
+    }
+    
+    module M2.X {
+        export class Point {
+            x: number; y: number;
+        }
+    }
+    
+    module M2 {
+        export module X {
+            export var Point: number; // Error
+                       ~~~~~
+!!! invalidNestedModules.ts(24,20): error TS2000: Duplicate identifier 'Point'. Additional locations:
+!!! 	invalidNestedModules.ts(17,5)
+        }
+    }
+    
+    
+    

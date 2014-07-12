@@ -1,0 +1,96 @@
+==== tests/cases/compiler/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts (13 errors) ====
+    // Types with infinitely expanding recursive types are type checked nominally
+    
+    class List<T> {
+        data: T;
+        next: List<List<T>>;
+    }
+    
+    class MyList<T> {
+        data: T;
+        next: MyList<MyList<T>>;
+    }
+    
+    var list1 = new List<number>();
+    var list2 = new List<string>();
+    
+    var myList1 = new MyList<number>();
+    var myList2 = new MyList<string>();
+    
+    list1 = myList1; // error, not nominally equal
+    ~~~~~
+!!! objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(19,1): error TS2012: Cannot convert 'MyList<number>' to 'List<number>':
+!!! 	Types of property 'next' of types 'MyList<number>' and 'List<number>' are incompatible:
+!!! 		Types 'MyList<MyList<number>>' and 'List<List<number>>' originating in infinitely expanding type reference do not refer to same named type.
+    list1 = myList2; // error, type mismatch
+    ~~~~~
+!!! objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(20,1): error TS2012: Cannot convert 'MyList<string>' to 'List<number>':
+!!! 	Types of property 'data' of types 'MyList<string>' and 'List<number>' are incompatible.
+    
+    list2 = myList1; // error, not nominally equal
+    ~~~~~
+!!! objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(22,1): error TS2012: Cannot convert 'MyList<number>' to 'List<string>':
+!!! 	Types of property 'data' of types 'MyList<number>' and 'List<string>' are incompatible.
+    list2 = myList2; // error, type mismatch
+    ~~~~~
+!!! objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(23,1): error TS2012: Cannot convert 'MyList<string>' to 'List<string>':
+!!! 	Types of property 'next' of types 'MyList<string>' and 'List<string>' are incompatible:
+!!! 		Types 'MyList<MyList<string>>' and 'List<List<string>>' originating in infinitely expanding type reference do not refer to same named type.
+    
+    var rList1 = new List<List<number>>();
+    var rMyList1 = new List<MyList<number>>();
+    rList1 = rMyList1; // error, not nominally equal
+    ~~~~~~
+!!! objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(27,1): error TS2012: Cannot convert 'List<MyList<number>>' to 'List<List<number>>':
+!!! 	Types of property 'data' of types 'List<MyList<number>>' and 'List<List<number>>' are incompatible:
+!!! 		Types of property 'next' of types 'MyList<number>' and 'List<number>' are incompatible:
+!!! 			Types 'MyList<MyList<number>>' and 'List<List<number>>' originating in infinitely expanding type reference do not refer to same named type.
+    
+    function foo<T extends List<number>, U extends MyList<number>>(t: T, u: U) {
+        t = u; // error
+        ~
+!!! objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(30,5): error TS2011: Cannot convert 'U' to 'T'.
+        u = t; // error
+        ~
+!!! objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(31,5): error TS2011: Cannot convert 'T' to 'U'.
+    
+        var a: List<number>;
+        var b: MyList<number>;
+        a = t; // ok
+        a = u; // error
+        ~
+!!! objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(36,5): error TS2012: Cannot convert 'U' to 'List<number>':
+!!! 	Types of property 'next' of types 'MyList<number>' and 'List<number>' are incompatible:
+!!! 		Types 'MyList<MyList<number>>' and 'List<List<number>>' originating in infinitely expanding type reference do not refer to same named type.
+        b = t; // error
+        ~
+!!! objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(37,5): error TS2012: Cannot convert 'T' to 'MyList<number>':
+!!! 	Types of property 'next' of types 'List<number>' and 'MyList<number>' are incompatible:
+!!! 		Types 'List<List<number>>' and 'MyList<MyList<number>>' originating in infinitely expanding type reference do not refer to same named type.
+        b = u; // ok
+    }
+    
+    function foo2<T extends U, U extends MyList<number>>(t: T, u: U) {
+                  ~~~~~~~~~~~
+!!! objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(41,15): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        t = u; // error
+        ~
+!!! objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(42,5): error TS2011: Cannot convert 'U' to 'T'.
+        u = t; // was error, ok after constraint made illegal, doesn't matter
+    
+        var a: List<number>;
+        var b: MyList<number>;
+    
+        a = t; // error
+        ~
+!!! objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(48,5): error TS2012: Cannot convert 'T' to 'List<number>':
+!!! 	Types of property 'next' of types 'MyList<number>' and 'List<number>' are incompatible:
+!!! 		Types 'MyList<MyList<number>>' and 'List<List<number>>' originating in infinitely expanding type reference do not refer to same named type.
+        a = u; // error
+        ~
+!!! objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(49,5): error TS2012: Cannot convert 'U' to 'List<number>':
+!!! 	Types of property 'next' of types 'MyList<number>' and 'List<number>' are incompatible:
+!!! 		Types 'MyList<MyList<number>>' and 'List<List<number>>' originating in infinitely expanding type reference do not refer to same named type.
+        b = t; // ok
+        b = u; // ok
+    }

@@ -1,0 +1,11 @@
+==== tests/cases/compiler/detachedCommentAtStartOfFunctionBody1.ts (1 errors) ====
+    class TestFile {
+        foo(message: string): () => string {
+            /// <summary>Test summary</summary>
+            /// <param name="message" type="String" />
+            /// <returns type="Function" />
+            return () => message + this.name;
+                                        ~~~~
+!!! detachedCommentAtStartOfFunctionBody1.ts(6,37): error TS2094: The property 'name' does not exist on value of type 'TestFile'.
+        }
+    }

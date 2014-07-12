@@ -1,0 +1,10 @@
+==== tests/cases/compiler/anyDeclare.ts (1 errors) ====
+    declare var x: any;
+    module myMod {
+        var myFn;
+        function myFn() {  }
+                 ~~~~
+!!! anyDeclare.ts(4,14): error TS2000: Duplicate identifier 'myFn'. Additional locations:
+!!! 	anyDeclare.ts(3,9)
+    }
+    

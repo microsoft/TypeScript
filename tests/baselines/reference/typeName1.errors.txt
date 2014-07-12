@@ -1,0 +1,78 @@
+==== tests/cases/compiler/typeName1.ts (17 errors) ====
+    interface I {
+        k;
+    }
+    class C {
+        public eek:string;
+        static zeek:number;
+    }
+    
+    var x1:{ f(s:string):number;f(n:number):string; }=3;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! typeName1.ts(9,5): error TS2012: Cannot convert 'number' to '{ f(s: string): number; f(n: number): string; }':
+!!! 	Type 'Number' is missing property 'f' from type '{ f(s: string): number; f(n: number): string; }'.
+    var x2:{ f(s:string):number; } =3;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! typeName1.ts(10,5): error TS2012: Cannot convert 'number' to '{ f(s: string): number; }':
+!!! 	Type 'Number' is missing property 'f' from type '{ f(s: string): number; }'.
+    var x3:{ (s:string):number;(n:number):string; }=3;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! typeName1.ts(11,5): error TS2012: Cannot convert 'number' to '{ (s: string): number; (n: number): string; }':
+!!! 	Type '{ (s: string): number; (n: number): string; }' requires a call signature, but type 'Number' lacks one.
+    var x4:{ x;y;z:number;f(n:number):string;f(s:string):number; }=3;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! typeName1.ts(12,5): error TS2012: Cannot convert 'number' to '{ x: any; y: any; z: number; f(n: number): string; f(s: string): number; }':
+!!! 	Type 'Number' is missing property 'x' from type '{ x: any; y: any; z: number; f(n: number): string; f(s: string): number; }'.
+    var x5:{ (s:string):number;(n:number):string;x;y;z:number;f(n:number):string;f(s:string):number; }=3;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! typeName1.ts(13,5): error TS2012: Cannot convert 'number' to '{ x: any; y: any; z: number; f(n: number): string; f(s: string): number; (s: string): number; (n: number): string; }':
+!!! 	Type 'Number' is missing property 'x' from type '{ x: any; y: any; z: number; f(n: number): string; f(s: string): number; (s: string): number; (n: number): string; }'.
+    var x6:{ z:number;f:{(n:number):string;(s:string):number;}; }=3;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! typeName1.ts(14,5): error TS2012: Cannot convert 'number' to '{ z: number; f: { (n: number): string; (s: string): number; }; }':
+!!! 	Type 'Number' is missing property 'z' from type '{ z: number; f: { (n: number): string; (s: string): number; }; }'.
+    var x7:(s:string)=>boolean=3;
+        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! typeName1.ts(15,5): error TS2012: Cannot convert 'number' to '(s: string) => boolean':
+!!! 	Type '(s: string) => boolean' requires a call signature, but type 'Number' lacks one.
+    var x8:{ z:I;[s:string]:{ x; y; };[n:number]:{x; y;};():boolean; }=3;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! typeName1.ts(16,5): error TS2012: Cannot convert 'number' to '{ z: I; (): boolean; [s: string]: { x: any; y: any; }; [n: number]: { x: any; y: any; }; }':
+!!! 	Type 'Number' is missing property 'z' from type '{ z: I; (): boolean; [s: string]: { x: any; y: any; }; [n: number]: { x: any; y: any; }; }'.
+             ~~~
+!!! typeName1.ts(16,10): error TS2172: All named properties must be assignable to string indexer type '{ x: any; y: any; }':
+!!! 	Type 'I' is missing property 'x' from type '{ x: any; y: any; }'.
+    var x9:I=3;
+        ~~~~~~
+!!! typeName1.ts(17,5): error TS2012: Cannot convert 'number' to 'I':
+!!! 	Type 'Number' is missing property 'k' from type 'I'.
+    var x10:I[][][][]=3;
+        ~~~~~~~~~~~~~~~
+!!! typeName1.ts(18,5): error TS2012: Cannot convert 'number' to 'I[][][][]':
+!!! 	Type 'Number' is missing property 'concat' from type 'I[][][][]'.
+    var x11:{z:I;x:boolean;}[][]=3;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! typeName1.ts(19,5): error TS2012: Cannot convert 'number' to '{ z: I; x: boolean; }[][]':
+!!! 	Type 'Number' is missing property 'concat' from type '{ z: I; x: boolean; }[][]'.
+    var x12:{z:I;x:boolean;y:(s:string)=>boolean;w:{ z:I;[s:string]:{ x; y; };[n:number]:{x; y;};():boolean; };}[][]=3;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! typeName1.ts(20,5): error TS2012: Cannot convert 'number' to '{ z: I; x: boolean; y: (s: string) => boolean; w: { z: I; (): boolean; [s: string]: { x: any; y: any; }; [n: number]: { x: any; y: any; }; }; }[][]':
+!!! 	Type 'Number' is missing property 'concat' from type '{ z: I; x: boolean; y: (s: string) => boolean; w: { z: I; (): boolean; [s: string]: { x: any; y: any; }; [n: number]: { x: any; y: any; }; }; }[][]'.
+                                                     ~~~
+!!! typeName1.ts(20,50): error TS2172: All named properties must be assignable to string indexer type '{ x: any; y: any; }':
+!!! 	Type 'I' is missing property 'x' from type '{ x: any; y: any; }'.
+    var x13:{ new(): number; new(n:number):number; x: string; w: {y: number;}; (): {}; } = 3;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! typeName1.ts(21,5): error TS2012: Cannot convert 'number' to '{ x: string; w: { y: number; }; (): {}; new(): number; new(n: number): number; }':
+!!! 	Type 'Number' is missing property 'x' from type '{ x: string; w: { y: number; }; (): {}; new(): number; new(n: number): number; }'.
+    var x14:{ f(x:number):boolean; p; q; ():string; }=3;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! typeName1.ts(22,5): error TS2012: Cannot convert 'number' to '{ f(x: number): boolean; p: any; q: any; (): string; }':
+!!! 	Type 'Number' is missing property 'f' from type '{ f(x: number): boolean; p: any; q: any; (): string; }'.
+    var x15:number=C;
+        ~~~~~~~~~~~~
+!!! typeName1.ts(23,5): error TS2011: Cannot convert 'typeof C' to 'number'.
+    
+    
+    
+    

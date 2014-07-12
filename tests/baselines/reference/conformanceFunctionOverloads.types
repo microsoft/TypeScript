@@ -1,0 +1,25 @@
+=== tests/cases/compiler/conformanceFunctionOverloads.ts ===
+// Function overloads do not emit code
+No type information for this code.
+No type information for this code.// Function overload signature with optional parameter
+No type information for this code.
+No type information for this code.// Function overload signature with optional parameter
+No type information for this code.
+No type information for this code.// Function overloads with generic and non-generic overloads
+No type information for this code.
+No type information for this code.// Function overloads whose only difference is returning different unconstrained generic parameters
+No type information for this code.
+No type information for this code.// Function overloads whose only difference is returning different constrained generic parameters
+No type information for this code.
+No type information for this code.// Function overloads that differ only by type parameter constraints
+No type information for this code.
+No type information for this code.// Function overloads with matching accessibility
+No type information for this code.
+No type information for this code.// Function overloads with matching export
+No type information for this code.
+No type information for this code.// Function overloads with more params than implementation signature
+No type information for this code.
+No type information for this code.// Function overloads where return types are same infinitely recursive type reference
+No type information for this code.
+No type information for this code.
+No type information for this code.

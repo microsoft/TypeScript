@@ -1,0 +1,1 @@
+//// [genericTypeUsedWithoutTypeArguments3.js]

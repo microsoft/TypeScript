@@ -1,0 +1,10 @@
+==== tests/cases/compiler/functionOverloads22.ts (1 errors) ====
+    function foo(bar:number):{a:number;}[];
+    function foo(bar:string):{a:number; b:string;}[];
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! functionOverloads22.ts(2,1): error TS2149: Overload signature is not compatible with function definition:
+!!! 	Types of property 'pop' of types '{ a: any; b?: any; }[]' and '{ a: number; b: string; }[]' are incompatible:
+!!! 		Call signatures of types '() => { a: any; b?: any; }' and '() => { a: number; b: string; }' are incompatible:
+!!! 			Property 'b' defined as optional in type '{ a: any; b?: any; }', but is required in type '{ a: number; b: string; }'.
+    function foo(bar:any):{a:any;b?:any;}[] { return [{a:""}] }
+    

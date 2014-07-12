@@ -1,0 +1,13 @@
+==== tests/cases/compiler/typeArgInference2WithError.ts (2 errors) ====
+    interface Item {
+        name: string;
+    }
+    
+    declare function foo<T extends Item>(x?: T, y?: T): T;
+    
+    var z7 = foo("abc", 5); // Error
+             ~~~
+!!! typeArgInference2WithError.ts(7,10): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Type 'String' is missing property 'name' from type 'Item'.
+             ~~~
+!!! typeArgInference2WithError.ts(7,10): error TS2087: Could not select overload for 'call' expression.

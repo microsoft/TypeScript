@@ -1,0 +1,62 @@
+=== tests/cases/compiler/thisInLambda.ts ===
+class Foo {
+>Foo : Foo
+
+    x = "hello";
+>x : string
+
+    bar() {
+>bar : () => void
+
+        this.x; // 'this' is type 'Foo'
+>this.x : string
+>this : Foo
+>x : string
+
+        var f = () => this.x; // 'this' should be type 'Foo' as well
+>f : () => string
+>() => this.x : () => string
+>this.x : string
+>this : Foo
+>x : string
+    }
+}
+
+function myFn(a:any) { }
+>myFn : typeof myFn
+>a : any
+
+class myCls {
+>myCls : myCls
+
+    constructor () {
+        myFn(() => {
+>myFn(() => {
+            myFn(() => {
+                var x = this;
+            });
+        }) : void
+>myFn : typeof myFn
+>() => {
+            myFn(() => {
+                var x = this;
+            });
+        } : () => void
+
+            myFn(() => {
+>myFn(() => {
+                var x = this;
+            }) : void
+>myFn : typeof myFn
+>() => {
+                var x = this;
+            } : () => void
+
+                var x = this;
+>x : myCls
+>this : myCls
+
+            });
+        });
+    }
+}

@@ -1,0 +1,60 @@
+==== tests/cases/compiler/ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts (5 errors) ====
+    // all expected to be errors
+    
+    class clodule1<T>{
+    
+        id: string;
+        value: T;
+    }
+    
+    module clodule1 {
+        function f(x: T) { }
+                      ~
+!!! ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts(10,19): error TS2095: Could not find symbol 'T'.
+    }
+    
+    class clodule2<T>{
+    
+        id: string;
+        value: T;
+    }
+    
+    module clodule2 {
+        var x: T;
+               ~
+!!! ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts(20,12): error TS2095: Could not find symbol 'T'.
+    
+        class D<U extends T>{
+                          ~
+!!! ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts(22,23): error TS2095: Could not find symbol 'T'.
+            id: string;
+            value: U;
+        }
+    }
+    
+    class clodule3<T>{
+    
+        id: string;
+        value: T;
+    }
+    
+    module clodule3 {
+        export var y = { id: T };
+                             ~
+!!! ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts(35,26): error TS2095: Could not find symbol 'T'.
+    }
+    
+    class clodule4<T>{
+    
+        id: string;
+        value: T;
+    }
+    
+    module clodule4 {
+        class D {
+            name: T;
+                  ~
+!!! ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.ts(46,15): error TS2095: Could not find symbol 'T'.
+        }
+    }
+    

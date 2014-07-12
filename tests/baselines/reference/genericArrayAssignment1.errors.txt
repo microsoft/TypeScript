@@ -1,0 +1,9 @@
+==== tests/cases/compiler/genericArrayAssignment1.ts (1 errors) ====
+    var s: string[];
+    var n: number[];
+    
+    s = n;
+    ~
+!!! genericArrayAssignment1.ts(4,1): error TS2012: Cannot convert 'number[]' to 'string[]':
+!!! 	Types of property 'pop' of types 'number[]' and 'string[]' are incompatible:
+!!! 		Call signatures of types '() => number' and '() => string' are incompatible.

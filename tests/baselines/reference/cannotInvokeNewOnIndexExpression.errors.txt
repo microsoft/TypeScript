@@ -1,0 +1,4 @@
+==== tests/cases/compiler/cannotInvokeNewOnIndexExpression.ts (1 errors) ====
+    var test: any[] = new any[1];
+                          ~~~
+!!! cannotInvokeNewOnIndexExpression.ts(1,23): error TS2095: Could not find symbol 'any'.

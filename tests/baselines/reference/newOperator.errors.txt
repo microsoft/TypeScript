@@ -1,0 +1,72 @@
+==== tests/cases/compiler/newOperator.ts (11 errors) ====
+    interface ifc { }
+    // Attempting to 'new' an interface yields poor error
+    var i = new ifc();
+                ~~~
+!!! newOperator.ts(3,13): error TS2095: Could not find symbol 'ifc'.
+    
+    // Parens are optional
+    var x = new Date;
+    var y = new Date();
+    
+    // Target is not a class or var, good error
+    var t1 = new 53();
+                 ~~
+!!! newOperator.ts(10,14): error TS2083: Invalid 'new' expression.
+    var t2 = new ''();
+                 ~~
+!!! newOperator.ts(11,14): error TS2083: Invalid 'new' expression.
+    new string;
+        ~~~~~~
+!!! newOperator.ts(12,5): error TS2095: Could not find symbol 'string'.
+    
+    // Use in LHS of expression?
+    (new Date()).toString();
+    
+    // Various spacing
+    var t3 = new string[]( );
+                       ~~
+!!! newOperator.ts(18,20): error TS2068: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+                 ~~~~~~
+!!! newOperator.ts(18,14): error TS2095: Could not find symbol 'string'.
+    var t4 =
+    new
+    string
+    ~~~~~~
+!!! newOperator.ts(21,1): error TS2095: Could not find symbol 'string'.
+    [
+    ~
+        ]
+    ~~~~~
+!!! newOperator.ts(22,1): error TS2068: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+        (
+            );
+    
+    // Unresolved symbol
+    var f = new q();
+                ~
+!!! newOperator.ts(28,13): error TS2095: Could not find symbol 'q'.
+    
+    // not legal
+    var t5 = new new Date;
+                 ~~~~~~~~
+!!! newOperator.ts(31,14): error TS2083: Invalid 'new' expression.
+    
+    // Can be an expression
+    new String;
+    
+    
+    module M {
+        export class T {
+            x: number;
+        }
+    }
+    
+    class S {
+        public get xs(): M.T[] {
+            return new M.T[];
+                          ~~
+!!! newOperator.ts(45,23): error TS2068: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+        }
+    }
+    

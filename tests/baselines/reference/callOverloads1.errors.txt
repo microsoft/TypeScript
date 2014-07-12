@@ -1,0 +1,23 @@
+==== tests/cases/compiler/callOverloads1.ts (2 errors) ====
+    class Foo {    
+        bar1() { /*WScript.Echo("bar1");*/ }
+    
+        constructor(x: any) {
+            // WScript.Echo("Constructor function has executed");
+        }
+    }
+    
+    function Foo(); // error
+             ~~~
+!!! callOverloads1.ts(9,10): error TS1041: Function implementation expected.
+             ~~~
+!!! callOverloads1.ts(9,10): error TS2000: Duplicate identifier 'Foo'. Additional locations:
+!!! 	callOverloads1.ts(1,1)
+    function F1(s:string);
+    function F1(a:any) { return a;}
+    
+    var f1 = new Foo("hey");
+    
+    
+    f1.bar1();
+    Foo();

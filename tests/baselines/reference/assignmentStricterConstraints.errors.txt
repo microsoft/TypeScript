@@ -1,0 +1,12 @@
+==== tests/cases/compiler/assignmentStricterConstraints.ts (1 errors) ====
+    var f = function <T, S extends T>(x: T, y: S): void {
+                         ~~~~~~~~~~~
+!!! assignmentStricterConstraints.ts(1,22): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        x = y
+    }
+    
+    var g = function <T, S>(x: T, y: S): void { }
+    
+    g = f
+    g(1, "")
+    

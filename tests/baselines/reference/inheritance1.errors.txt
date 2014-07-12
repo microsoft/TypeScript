@@ -1,0 +1,98 @@
+==== tests/cases/compiler/inheritance1.ts (12 errors) ====
+    class Control {
+        private state: any;
+    }
+    interface SelectableControl extends Control {
+        select(): void;
+    }
+    
+    class Button extends Control implements SelectableControl {
+        select() { }
+    }
+    class TextBox extends Control {
+        select() { }
+    }
+    class ImageBase extends Control implements SelectableControl{
+          ~~~~~~~~~
+!!! inheritance1.ts(14,7): error TS2137: Class ImageBase declares interface SelectableControl but does not implement it:
+!!! 	Type 'ImageBase' is missing property 'select' from type 'SelectableControl'.
+    }
+    class Image1 extends Control {
+    }
+    class Locations implements SelectableControl {
+          ~~~~~~~~~
+!!! inheritance1.ts(18,7): error TS2137: Class Locations declares interface SelectableControl but does not implement it:
+!!! 	Type 'Locations' is missing property 'state' from type 'SelectableControl'.
+        select() { }
+    }
+    class Locations1 {
+        select() { }
+    }
+    var sc: SelectableControl;
+    var c: Control;
+    
+    var b: Button;
+    sc = b;
+    c = b;
+    b = sc;
+    b = c;
+    ~
+!!! inheritance1.ts(31,1): error TS2012: Cannot convert 'Control' to 'Button':
+!!! 	Type 'Control' is missing property 'select' from type 'Button'.
+    
+    var t: TextBox;
+    sc = t;
+    c = t;
+    t = sc;
+    t = c;
+    ~
+!!! inheritance1.ts(37,1): error TS2012: Cannot convert 'Control' to 'TextBox':
+!!! 	Type 'Control' is missing property 'select' from type 'TextBox'.
+    
+    var i: ImageBase;
+    sc = i;
+    ~~
+!!! inheritance1.ts(40,1): error TS2012: Cannot convert 'ImageBase' to 'SelectableControl':
+!!! 	Type 'ImageBase' is missing property 'select' from type 'SelectableControl'.
+    c = i;
+    i = sc;
+    i = c;
+    
+    var i1: Image1;
+    sc = i1;
+    ~~
+!!! inheritance1.ts(46,1): error TS2012: Cannot convert 'Image1' to 'SelectableControl':
+!!! 	Type 'Image1' is missing property 'select' from type 'SelectableControl'.
+    c = i1;
+    i1 = sc;
+    i1 = c;
+    
+    var l: Locations;
+    sc = l;
+    ~~
+!!! inheritance1.ts(52,1): error TS2012: Cannot convert 'Locations' to 'SelectableControl':
+!!! 	Type 'Locations' is missing property 'state' from type 'SelectableControl'.
+    c = l;
+    ~
+!!! inheritance1.ts(53,1): error TS2012: Cannot convert 'Locations' to 'Control':
+!!! 	Type 'Locations' is missing property 'state' from type 'Control'.
+    l = sc;
+    l = c;
+    ~
+!!! inheritance1.ts(55,1): error TS2012: Cannot convert 'Control' to 'Locations':
+!!! 	Type 'Control' is missing property 'select' from type 'Locations'.
+    
+    var l1: Locations1;
+    sc = l1;
+    ~~
+!!! inheritance1.ts(58,1): error TS2012: Cannot convert 'Locations1' to 'SelectableControl':
+!!! 	Type 'Locations1' is missing property 'state' from type 'SelectableControl'.
+    c = l1;
+    ~
+!!! inheritance1.ts(59,1): error TS2012: Cannot convert 'Locations1' to 'Control':
+!!! 	Type 'Locations1' is missing property 'state' from type 'Control'.
+    l1 = sc;
+    l1 = c;
+    ~~
+!!! inheritance1.ts(61,1): error TS2012: Cannot convert 'Control' to 'Locations1':
+!!! 	Type 'Control' is missing property 'select' from type 'Locations1'.

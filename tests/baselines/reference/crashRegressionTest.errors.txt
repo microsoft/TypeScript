@@ -1,0 +1,34 @@
+==== tests/cases/compiler/crashRegressionTest.ts (4 errors) ====
+    module MsPortal.Util.TemplateEngine {
+        "use strict";
+     
+        interface TemplateKeyValue {
+            [name: string]: string;
+        }
+     
+        class StringTemplate {
+            private _templateStorage: TemplateStorage;
+     
+            constructor(templateStorage: TemplateStorage) {
+                this._templateStorage = templateStorage;
+            }
+     
+            public text(value?: string): any {
+                this._templateStorage.templateSources[this._name] = value;
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! crashRegressionTest.ts(16,13): error TS2008: Value of type 'MsPortal.Util.TemplateEngine.TemplateKeyValue' is not indexable by type 'any'.
+                                                           ~~~~~
+!!! crashRegressionTest.ts(16,56): error TS2094: The property '_name' does not exist on value of type 'StringTemplate'.
+            }
+        }
+     
+        export class TemplateStorage {
+            public templateSources: TemplateKeyValue = {};
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! crashRegressionTest.ts(21,9): error TS2025: Public property 'templateSources' of exported class has or is using private type 'TemplateKeyValue'.
+            public templateData: TemplateKeyValue = {};
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! crashRegressionTest.ts(22,9): error TS2025: Public property 'templateData' of exported class has or is using private type 'TemplateKeyValue'.
+        }
+    }
+    

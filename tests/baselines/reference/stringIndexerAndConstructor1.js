@@ -1,0 +1,1 @@
+//// [stringIndexerAndConstructor1.js]

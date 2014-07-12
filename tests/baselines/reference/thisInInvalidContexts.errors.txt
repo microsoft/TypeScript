@@ -1,0 +1,63 @@
+==== tests/cases/compiler/thisInInvalidContexts.ts (7 errors) ====
+    //'this' in static member initializer
+    class ErrClass1 {
+        static t = this; // Error
+                   ~~~~
+!!! thisInInvalidContexts.ts(3,16): error TS2140: 'this' cannot be referenced in static initializers in a class body.
+    }
+    
+    class BaseErrClass {
+        constructor(t: any) { }
+    }
+    
+    class ClassWithNoInitializer extends BaseErrClass {
+        t;
+        //'this' in optional super call
+        constructor() {
+            super(this); // OK
+        }
+    }
+    
+    class ClassWithInitializer extends BaseErrClass {
+        t = 4;
+        //'this' in required super call
+        constructor() {
+            super(this); // Error
+                  ~~~~
+!!! thisInInvalidContexts.ts(22,15): error TS2097: 'this' cannot be referenced in current location.
+        }
+    }
+    
+    module M {
+        //'this' in module variable
+        var x = this; // Error
+                ~~~~
+!!! thisInInvalidContexts.ts(28,13): error TS2108: 'this' cannot be referenced within module bodies.
+    }
+    
+    //'this' as type parameter constraint
+    // function fn<T extends this >() { } // Error
+    
+    //'this' as a type argument
+    function genericFunc<T>(x: T) { }
+    genericFunc<this>(undefined);  // Should be an error
+    
+    class ErrClass3 extends this {
+                            ~~~~
+!!! thisInInvalidContexts.ts(38,25): error TS1008: Unexpected token; 'type name' expected.
+                                 ~
+!!! thisInInvalidContexts.ts(38,30): error TS1005: ';' expected.
+    
+    }
+    
+    //'this' as a computed enum value
+    enum SomeEnum {
+        A = this, // Should not be allowed
+            ~~~~
+!!! thisInInvalidContexts.ts(44,9): error TS2097: 'this' cannot be referenced in current location.
+        B = this.spaaaace // Also should not be allowed
+            ~~~~
+!!! thisInInvalidContexts.ts(45,9): error TS2097: 'this' cannot be referenced in current location.
+    }
+    
+    

@@ -1,0 +1,41 @@
+==== tests/cases/compiler/interfaceExtendingClassWithPrivates2.ts (5 errors) ====
+    class Foo {
+        private x: string;
+    }
+    
+    class Bar {
+        private x: string;
+    }
+    
+    interface I3 extends Foo, Bar { // error
+              ~~
+!!! interfaceExtendingClassWithPrivates2.ts(9,11): error TS2189: Interface 'I3' cannot simultaneously extend types 'Foo' and 'Bar':
+!!! Named properties 'x' of types 'Foo' and 'Bar' are not identical.
+    }
+    
+    interface I4 extends Foo, Bar { // error
+              ~~
+!!! interfaceExtendingClassWithPrivates2.ts(12,11): error TS2142: Interface 'I4' cannot extend class 'Bar':
+!!! 	Property 'x' defined as public in type 'I4' is defined as private in type 'Bar'.
+              ~~
+!!! interfaceExtendingClassWithPrivates2.ts(12,11): error TS2142: Interface 'I4' cannot extend class 'Foo':
+!!! 	Property 'x' defined as public in type 'I4' is defined as private in type 'Foo'.
+        x: string;
+    }
+    
+    class Baz {
+        private y: string;
+    }
+    
+    interface I5 extends Foo, Baz {
+        z: string;
+    }
+    
+    var i: I5;
+    var r: string = i.z;
+    var r2 = i.x; // error
+               ~
+!!! interfaceExtendingClassWithPrivates2.ts(26,12): error TS2107: 'Foo.x' is inaccessible.
+    var r3 = i.y; // error
+               ~
+!!! interfaceExtendingClassWithPrivates2.ts(27,12): error TS2107: 'Baz.y' is inaccessible.

@@ -1,0 +1,24 @@
+==== tests/cases/compiler/classWithoutExplicitConstructor.ts (4 errors) ====
+    class C {
+        x = 1
+        y = 'hello';
+    }
+    
+    var c = new C();
+    var c2 = new C(null); // error
+                 ~
+!!! classWithoutExplicitConstructor.ts(7,14): error TS2081: Supplied parameters do not match any signature of call target.
+                 ~
+!!! classWithoutExplicitConstructor.ts(7,14): error TS2085: Could not select overload for 'new' expression.
+    
+    class D<T extends Date> {
+        x = 2
+        y: T = null;
+    }
+    
+    var d = new D();
+    var d2 = new D(null); // error
+                 ~
+!!! classWithoutExplicitConstructor.ts(15,14): error TS2081: Supplied parameters do not match any signature of call target.
+                 ~
+!!! classWithoutExplicitConstructor.ts(15,14): error TS2085: Could not select overload for 'new' expression.

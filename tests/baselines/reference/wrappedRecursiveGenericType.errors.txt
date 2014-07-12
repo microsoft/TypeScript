@@ -1,0 +1,21 @@
+==== tests/cases/compiler/wrappedRecursiveGenericType.ts (2 errors) ====
+    interface X<T> { e: T; }
+    interface A<T> {
+        a: B<T>;
+        val: T;
+    }
+    interface B<T> {
+        b: A<X<T>>;
+        val: T;
+    }
+    var x: A<number>;
+    x.val = 5;         // val -> number
+    x.a.val = 5;       // val -> number
+    x.a.b.val = 5;     // val -> X<number> (This should be an error)
+    ~~~~~~~~~
+!!! wrappedRecursiveGenericType.ts(13,1): error TS2012: Cannot convert 'number' to 'X<number>':
+!!! 	Type 'Number' is missing property 'e' from type 'X<number>'.
+    x.a.b.a.val = 5;   // val -> X<number> (This should be an error)
+    ~~~~~~~~~~~
+!!! wrappedRecursiveGenericType.ts(14,1): error TS2012: Cannot convert 'number' to 'X<number>':
+!!! 	Type 'Number' is missing property 'e' from type 'X<number>'.

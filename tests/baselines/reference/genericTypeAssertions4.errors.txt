@@ -1,0 +1,38 @@
+==== tests/cases/compiler/genericTypeAssertions4.ts (5 errors) ====
+    class A {
+        foo() { return ""; }
+    }
+    
+    class B extends A {
+        bar() { return 1; }
+    }
+    
+    class C extends A {
+        baz() { return 1; }
+    }
+    
+    var a: A;
+    var b: B;
+    var c: C;
+    
+    function foo2<T extends A>(x: T) {
+        var y = x;
+        y = a; // error: cannot convert A to T
+        ~
+!!! genericTypeAssertions4.ts(19,5): error TS2011: Cannot convert 'A' to 'T'.
+        y = b; // error: cannot convert B to T
+        ~
+!!! genericTypeAssertions4.ts(20,5): error TS2011: Cannot convert 'B' to 'T'.
+        y = c; // error: cannot convert C to T
+        ~
+!!! genericTypeAssertions4.ts(21,5): error TS2011: Cannot convert 'C' to 'T'.
+        y = <T>a;
+        y = <T>b; // error: cannot convert B to T
+            ~~~~
+!!! genericTypeAssertions4.ts(23,9): error TS2012: Cannot convert 'B' to 'T':
+!!! 	Type 'A' is missing property 'bar' from type 'B'.
+        y = <T>c; // error: cannot convert C to T
+            ~~~~
+!!! genericTypeAssertions4.ts(24,9): error TS2012: Cannot convert 'C' to 'T':
+!!! 	Type 'A' is missing property 'baz' from type 'C'.
+    }

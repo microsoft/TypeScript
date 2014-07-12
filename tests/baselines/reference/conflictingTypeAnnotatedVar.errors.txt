@@ -1,0 +1,14 @@
+==== tests/cases/compiler/conflictingTypeAnnotatedVar.ts (4 errors) ====
+    var foo: string;
+    function foo(): number { }
+             ~~~
+!!! conflictingTypeAnnotatedVar.ts(2,10): error TS2000: Duplicate identifier 'foo'. Additional locations:
+!!! 	conflictingTypeAnnotatedVar.ts(1,5)
+                    ~~~~~~
+!!! conflictingTypeAnnotatedVar.ts(2,17): error TS2131: Function declared a non-void return type, but has no return expression.
+    function foo(): number { }
+             ~~~
+!!! conflictingTypeAnnotatedVar.ts(3,10): error TS2000: Duplicate identifier 'foo'. Additional locations:
+!!! 	conflictingTypeAnnotatedVar.ts(1,5)
+                    ~~~~~~
+!!! conflictingTypeAnnotatedVar.ts(3,17): error TS2131: Function declared a non-void return type, but has no return expression.

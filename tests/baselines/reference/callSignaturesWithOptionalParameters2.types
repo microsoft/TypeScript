@@ -1,0 +1,205 @@
+=== tests/cases/compiler/callSignaturesWithOptionalParameters2.ts ===
+// Optional parameters should be valid in all the below casts
+
+function foo(x?: number);
+>foo : typeof foo
+>x : number
+
+function foo(x?: number) { }
+>foo : typeof foo
+>x : number
+
+>foo(1) : any
+>foo : typeof foo
+
+foo(1);
+foo();
+>foo() : any
+>foo : typeof foo
+
+function foo2(x: number);
+>foo2 : typeof foo2
+>x : number
+
+function foo2(x: number, y?: number);
+>foo2 : typeof foo2
+>x : number
+>y : number
+
+function foo2(x: number, y?: number) { }
+>foo2 : typeof foo2
+>x : number
+>y : number
+
+>foo2(1) : any
+>foo2 : typeof foo2
+
+foo2(1);
+foo2(1, 2);
+>foo2(1, 2) : any
+>foo2 : typeof foo2
+
+class C {
+>C : C
+
+    foo(x?: number);
+>foo : { (x?: number): any; }
+>x : number
+
+    foo(x?: number) { }
+>foo : { (x?: number): any; }
+>x : number
+
+>foo2 : { (x: number): any; (x: number, y?: number): any; }
+
+    foo2(x: number);
+>x : number
+
+    foo2(x: number, y?: number);
+>foo2 : { (x: number): any; (x: number, y?: number): any; }
+>x : number
+>y : number
+
+    foo2(x: number, y?: number) { }
+>foo2 : { (x: number): any; (x: number, y?: number): any; }
+>x : number
+>y : number
+}
+
+var c: C;
+>c : C
+>C : C
+
+c.foo();
+>c.foo() : any
+>c.foo : { (x?: number): any; }
+>c : C
+>foo : { (x?: number): any; }
+
+c.foo(1);
+>c.foo(1) : any
+>c.foo : { (x?: number): any; }
+>c : C
+>foo : { (x?: number): any; }
+
+>c.foo2(1) : any
+>c.foo2 : { (x: number): any; (x: number, y?: number): any; }
+>c : C
+
+c.foo2(1);
+>foo2 : { (x: number): any; (x: number, y?: number): any; }
+
+c.foo2(1, 2);
+>c.foo2(1, 2) : any
+>c.foo2 : { (x: number): any; (x: number, y?: number): any; }
+>c : C
+>foo2 : { (x: number): any; (x: number, y?: number): any; }
+
+interface I {
+>I : I
+
+    (x?: number);
+>x : number
+
+    (x?: number, y?: number);
+>x : number
+>y : number
+
+    foo(x: number, y?: number);
+>foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+>x : number
+>y : number
+
+    foo(x: number, y?: number, z?: number);
+>foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+>x : number
+>y : number
+>z : number
+}
+
+var i: I;
+>i : I
+>I : I
+
+i();
+>i() : any
+>i : I
+
+i(1);
+>i(1) : any
+>i : I
+
+i(1, 2);
+>i(1, 2) : any
+>i : I
+
+i.foo(1);
+>i.foo(1) : any
+>i.foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+>i : I
+>foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+
+i.foo(1, 2);
+>i.foo(1, 2) : any
+>i.foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+>i : I
+>foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+
+i.foo(1, 2, 3);
+>i.foo(1, 2, 3) : any
+>i.foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+>i : I
+>foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+
+var a: {
+>a : { foo(x: number, y?: number): any; foo(x: number, y?: number, z?: number): any; (x?: number): any; (x?: number, y?: number): any; }
+
+    (x?: number);
+>x : number
+
+    (x?: number, y?: number);
+>x : number
+>y : number
+
+    foo(x: number, y?: number);
+>foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+>x : number
+>y : number
+
+    foo(x: number, y?: number, z?: number);
+>foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+>x : number
+>y : number
+>z : number
+}
+
+>a() : any
+>a : { foo(x: number, y?: number): any; foo(x: number, y?: number, z?: number): any; (x?: number): any; (x?: number, y?: number): any; }
+
+a();
+a(1);
+>a(1) : any
+>a : { foo(x: number, y?: number): any; foo(x: number, y?: number, z?: number): any; (x?: number): any; (x?: number, y?: number): any; }
+
+a(1, 2);
+>a(1, 2) : any
+>a : { foo(x: number, y?: number): any; foo(x: number, y?: number, z?: number): any; (x?: number): any; (x?: number, y?: number): any; }
+
+a.foo(1);
+>a.foo(1) : any
+>a.foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+>a : { foo(x: number, y?: number): any; foo(x: number, y?: number, z?: number): any; (x?: number): any; (x?: number, y?: number): any; }
+>foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+
+a.foo(1, 2);
+>a.foo(1, 2) : any
+>a.foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+>a : { foo(x: number, y?: number): any; foo(x: number, y?: number, z?: number): any; (x?: number): any; (x?: number, y?: number): any; }
+>foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+
+a.foo(1, 2, 3);
+>a.foo(1, 2, 3) : any
+>a.foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+>a : { foo(x: number, y?: number): any; foo(x: number, y?: number, z?: number): any; (x?: number): any; (x?: number, y?: number): any; }
+>foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+

@@ -1,0 +1,46 @@
+==== tests/cases/compiler/multipleInheritance.ts (3 errors) ====
+    class B1 {
+        public x;
+    }
+    
+    class B2 {
+        public x;
+    }
+    
+    class C extends B1, B2 { // duplicate member
+            ~~~~~~~~~~~~~~
+!!! multipleInheritance.ts(9,9): error TS1026: Classes can only extend a single class.
+    }
+    
+    class D1 extends B1 {
+    }
+    
+    class D2 extends B2 {
+    }
+    
+    class E extends D1, D2 { // nope, duplicate member
+            ~~~~~~~~~~~~~~
+!!! multipleInheritance.ts(18,9): error TS1026: Classes can only extend a single class.
+    }
+    
+    class N {
+        public y:number;
+    }
+    
+    class ND extends N { // any is assignable to number
+        public y;
+    }
+    
+    class Good {
+        public f:() => number = function() { return 0; }
+        public g() { return 0; }
+    }
+    
+    class Baad extends Good {
+          ~~~~
+!!! multipleInheritance.ts(34,7): error TS2141: Class 'Baad' cannot extend class 'Good':
+!!! 	Class 'Baad' defines instance member function 'f', but extended class 'Good' defines it as instance member property.
+        public f(): number { return 0; }
+        public g(n:number) { return 0; }
+    }
+    

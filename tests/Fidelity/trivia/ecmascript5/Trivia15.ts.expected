@@ -1,0 +1,36 @@
+[
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 9,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasLeadingTrivia": true,
+        "hasLeadingComment": true,
+        "hasLeadingNewLine": true,
+        "leadingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\r\n"
+            },
+            {
+                "kind": "SingleLineCommentTrivia",
+                "text": "//"
+            },
+            {
+                "kind": "NewLineTrivia",
+                "text": "\r\n"
+            },
+            {
+                "kind": "NewLineTrivia",
+                "text": "\r\n"
+            }
+        ]
+    },
+    {
+        "kind": "EndOfFileToken",
+        "width": 0,
+        "text": ""
+    }
+]

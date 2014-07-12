@@ -1,0 +1,19 @@
+==== tests/cases/compiler/typeParameterAsBaseType.ts (4 errors) ====
+    // type parameters cannot be used as base types
+    // these are all errors
+    
+    class C<T> extends T { }
+                       ~
+!!! typeParameterAsBaseType.ts(4,20): error TS2073: A class may only extend another class.
+    class C2<T, U> extends U { }
+                           ~
+!!! typeParameterAsBaseType.ts(5,24): error TS2073: A class may only extend another class.
+    
+    interface I<T> extends T { }
+                           ~
+!!! typeParameterAsBaseType.ts(7,24): error TS2075: An interface may only extend another class or interface.
+    interface I2<T, U> extends U { }
+                               ~
+!!! typeParameterAsBaseType.ts(8,28): error TS2075: An interface may only extend another class or interface.
+    
+    

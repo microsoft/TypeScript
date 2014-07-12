@@ -1,0 +1,16 @@
+==== tests/cases/compiler/undeclaredMethod.ts (1 errors) ====
+    
+    module M {
+        export class C {
+            public salt() {}
+        }
+    }
+    
+    var c:M.C = new M.C();
+    
+    c.salt();    // cool
+    c.saltbar();    // crash
+      ~~~~~~~
+!!! undeclaredMethod.ts(11,3): error TS2094: The property 'saltbar' does not exist on value of type 'M.C'.
+    
+    

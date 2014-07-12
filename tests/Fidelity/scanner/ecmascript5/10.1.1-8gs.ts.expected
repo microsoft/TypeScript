@@ -1,0 +1,221 @@
+[
+    {
+        "kind": "StringLiteral",
+        "width": 12,
+        "fullWidth": 611,
+        "text": "\"use strict\"",
+        "value": "use strict",
+        "valueText": "use strict",
+        "hasLeadingTrivia": true,
+        "hasLeadingComment": true,
+        "hasLeadingNewLine": true,
+        "leadingTrivia": [
+            {
+                "kind": "SingleLineCommentTrivia",
+                "text": "/// Copyright (c) 2012 Ecma International.  All rights reserved. "
+            },
+            {
+                "kind": "NewLineTrivia",
+                "text": "\r\n"
+            },
+            {
+                "kind": "SingleLineCommentTrivia",
+                "text": "/// Ecma International makes this code available under the terms and conditions set"
+            },
+            {
+                "kind": "NewLineTrivia",
+                "text": "\r\n"
+            },
+            {
+                "kind": "SingleLineCommentTrivia",
+                "text": "/// forth on http://hg.ecmascript.org/tests/test262/raw-file/tip/LICENSE (the "
+            },
+            {
+                "kind": "NewLineTrivia",
+                "text": "\r\n"
+            },
+            {
+                "kind": "SingleLineCommentTrivia",
+                "text": "/// \"Use Terms\").   Any redistribution of this code must retain the above "
+            },
+            {
+                "kind": "NewLineTrivia",
+                "text": "\r\n"
+            },
+            {
+                "kind": "SingleLineCommentTrivia",
+                "text": "/// copyright and this notice and otherwise comply with the Use Terms."
+            },
+            {
+                "kind": "NewLineTrivia",
+                "text": "\r\n"
+            },
+            {
+                "kind": "NewLineTrivia",
+                "text": "\r\n"
+            },
+            {
+                "kind": "MultiLineCommentTrivia",
+                "text": "/**\r\n * @path ch10/10.1/10.1.1/10.1.1-8gs.js\r\n * @description Strict Mode - Use Strict Directive Prologue is ''use strict';' which appears twice in the code\r\n * @noStrict\r\n * @negative ^((?!NotEarlyError).)*$\r\n */"
+            },
+            {
+                "kind": "NewLineTrivia",
+                "text": "\r\n"
+            },
+            {
+                "kind": "NewLineTrivia",
+                "text": "\r\n"
+            }
+        ]
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 3,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\r\n"
+            }
+        ]
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 12,
+        "text": "\"use strict\"",
+        "value": "use strict",
+        "valueText": "use strict"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 3,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\r\n"
+            }
+        ]
+    },
+    {
+        "kind": "ThrowKeyword",
+        "width": 5,
+        "fullWidth": 6,
+        "text": "throw",
+        "value": "throw",
+        "valueText": "throw",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 13,
+        "text": "NotEarlyError",
+        "value": "NotEarlyError",
+        "valueText": "NotEarlyError"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 3,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\r\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "PublicKeyword",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "public",
+        "value": "public",
+        "valueText": "public",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 3,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\r\n"
+            }
+        ]
+    },
+    {
+        "kind": "EndOfFileToken",
+        "width": 0,
+        "text": ""
+    }
+]

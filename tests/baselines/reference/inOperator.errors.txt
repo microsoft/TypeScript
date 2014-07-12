@@ -1,0 +1,15 @@
+==== tests/cases/compiler/inOperator.ts (1 errors) ====
+    var a=[];
+    
+    for (var x in a) {}
+    
+    if (3 in a) {}
+    
+    var b = '' in 0;
+                  ~
+!!! inOperator.ts(7,15): error TS2119: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
+    
+    var c: any;
+    var y: number;
+    if (y in c) { }
+    

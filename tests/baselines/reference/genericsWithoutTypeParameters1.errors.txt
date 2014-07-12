@@ -1,0 +1,64 @@
+==== tests/cases/compiler/genericsWithoutTypeParameters1.ts (15 errors) ====
+    class C<T> {
+        foo(): T { return null }
+    }
+    
+    interface I<T> {
+        bar(): T;
+    }
+    
+    var c1: C;
+            ~
+!!! genericsWithoutTypeParameters1.ts(9,9): error TS2173: Generic type references must include all type arguments.
+    var i1: I;
+            ~
+!!! genericsWithoutTypeParameters1.ts(10,9): error TS2173: Generic type references must include all type arguments.
+    var c2: C<I>;
+              ~
+!!! genericsWithoutTypeParameters1.ts(11,11): error TS2173: Generic type references must include all type arguments.
+    var i2: I<C>;
+              ~
+!!! genericsWithoutTypeParameters1.ts(12,11): error TS2173: Generic type references must include all type arguments.
+    
+    function foo(x: C, y: I) { }
+                    ~
+!!! genericsWithoutTypeParameters1.ts(14,17): error TS2173: Generic type references must include all type arguments.
+                          ~
+!!! genericsWithoutTypeParameters1.ts(14,23): error TS2173: Generic type references must include all type arguments.
+    function foo2(x: C<I>, y: I<C>) { }
+                       ~
+!!! genericsWithoutTypeParameters1.ts(15,20): error TS2173: Generic type references must include all type arguments.
+                                ~
+!!! genericsWithoutTypeParameters1.ts(15,29): error TS2173: Generic type references must include all type arguments.
+    
+    var x: { a: C } = { a: new C<number>() };
+                ~
+!!! genericsWithoutTypeParameters1.ts(17,13): error TS2173: Generic type references must include all type arguments.
+    var x2: { a: I } = { a: { bar() { return 1 } } };
+                 ~
+!!! genericsWithoutTypeParameters1.ts(18,14): error TS2173: Generic type references must include all type arguments.
+    
+    class D<T> {
+        x: C;
+           ~
+!!! genericsWithoutTypeParameters1.ts(21,8): error TS2173: Generic type references must include all type arguments.
+        y: D;
+           ~
+!!! genericsWithoutTypeParameters1.ts(22,8): error TS2173: Generic type references must include all type arguments.
+    }
+    
+    interface J<T> {
+        x: I;
+           ~
+!!! genericsWithoutTypeParameters1.ts(26,8): error TS2173: Generic type references must include all type arguments.
+        y: J;
+           ~
+!!! genericsWithoutTypeParameters1.ts(27,8): error TS2173: Generic type references must include all type arguments.
+    }
+    
+    class A<T> { }
+    function f<T>(x: T): A {
+                         ~
+!!! genericsWithoutTypeParameters1.ts(31,22): error TS2173: Generic type references must include all type arguments.
+        return null;
+    }

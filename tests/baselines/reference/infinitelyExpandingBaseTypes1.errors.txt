@@ -1,0 +1,18 @@
+==== tests/cases/compiler/infinitelyExpandingBaseTypes1.ts (1 errors) ====
+    interface A<T>
+    {
+        x : A<A<T>>
+    }
+     
+    interface B<T>
+    {
+        x : B<T>
+    }
+     
+    interface C<T> extends A<T>, B<T> { }
+              ~
+!!! infinitelyExpandingBaseTypes1.ts(11,11): error TS2189: Interface 'C' cannot simultaneously extend types 'A<T>' and 'B<T>':
+!!! Named properties 'x' of types 'A<T>' and 'B<T>' are not identical.
+    
+     
+    

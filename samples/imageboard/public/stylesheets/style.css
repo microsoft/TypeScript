@@ -1,0 +1,102 @@
+html { background-color: #f9f9f9; margin: 0; padding: 0; }
+body { margin: 0 auto; padding: 0; font-family:"Segoe UI","HelveticaNeue-Light", sans-serif; font-weight:200;}
+h1, h2, p, summary, footer, li { line-height: 170%; }
+h1, h2 { border-bottom: 1px solid #aaa; font-family:"Segoe UI Light","HelveticaNeue-UltraLight", sans-serif; font-weight:100; }
+h2 { font-size: 16pt; }
+p { margin: 1em 20px 0 20px; }
+ul { margin-top: 1em; }
+#footer { font-style: italic; color: #999; text-align: center; padding: 1em 0 2em 0; margin-top: 1em; font-size: 80%; }
+em { letter-spacing: 1px; }
+li { margin-left: 1em; }
+
+#container 
+{
+ padding: 50px;
+}
+
+a 
+{
+  font-weight: bold;
+  text-decoration: none;
+  color: #777777;
+}
+
+.imglink 
+{
+    text: none;
+}
+
+img.small
+{
+    border:0;
+    width: 200px;
+}
+
+img.large
+{
+    border:0;
+    display: block;
+    margin-left: auto;
+    margin-right: auto
+}
+
+
+.image 
+{
+  margin: 10px;
+  padding: 5px;
+  word-wrap: break-word;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #bbbbbb;
+  background-color: #ffffff;
+
+}
+
+.imagebox
+{
+  margin: 10px;
+}
+
+.commentbox
+{
+    margin: 5px -5px -5px -5px;
+    padding: 5px;
+    background-color: #eeeeee;
+}
+
+.primarysource
+{
+    font-size: 80%;
+}
+
+form
+{
+    font-size: 18px;
+}
+
+.inputtitle 
+{
+    display:block;
+    float: left;
+    width: 100px;
+}
+
+input[type="text"], textarea 
+{
+    padding: 6px 12px;
+    line-height: 1.4;
+    border: 1px solid #A4A2A2;
+    border-radius: 6px;
+}
+
+
+input.button 
+{
+    padding: 6px 12px;  
+    line-height: 1.4;
+    border: 1px solid #A4A2A2;
+    border-radius: 6px;
+    background-color: #ab2222;
+    color: #ffffff;
+}

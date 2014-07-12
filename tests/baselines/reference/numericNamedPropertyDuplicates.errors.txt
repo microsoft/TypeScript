@@ -1,0 +1,39 @@
+==== tests/cases/compiler/numericNamedPropertyDuplicates.ts (6 errors) ====
+    class C {
+        1: number;
+        1.0: number;
+        ~~~
+!!! numericNamedPropertyDuplicates.ts(3,5): error TS2000: Duplicate identifier '1.0'. Additional locations:
+!!! 	numericNamedPropertyDuplicates.ts(2,5)
+        static 2: number;
+        static 2: number;
+               ~
+!!! numericNamedPropertyDuplicates.ts(5,12): error TS2000: Duplicate identifier '2'. Additional locations:
+!!! 	numericNamedPropertyDuplicates.ts(4,5)
+    }
+    
+    interface I {
+        2: number;
+        2.: number;
+        ~~
+!!! numericNamedPropertyDuplicates.ts(10,5): error TS2000: Duplicate identifier '2.'. Additional locations:
+!!! 	numericNamedPropertyDuplicates.ts(9,5)
+    }
+    
+    var a: {
+        1: number;
+        1: number;
+        ~
+!!! numericNamedPropertyDuplicates.ts(15,5): error TS2000: Duplicate identifier '1'. Additional locations:
+!!! 	numericNamedPropertyDuplicates.ts(14,5)
+    }
+    
+    var b = {
+        2: 1
+        2: 1
+        ~
+!!! numericNamedPropertyDuplicates.ts(20,5): error TS1005: ',' expected.
+        ~~~~
+!!! numericNamedPropertyDuplicates.ts(20,5): error TS2000: Duplicate identifier '2'. Additional locations:
+!!! 	numericNamedPropertyDuplicates.ts(19,5)
+    }

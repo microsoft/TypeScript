@@ -1,0 +1,30 @@
+=== tests/cases/compiler/numberPropertyAccess.ts ===
+var x = 1;
+>x : number
+
+var a = x.toExponential();
+>a : string
+>x.toExponential() : string
+>x.toExponential : (fractionDigits?: number) => string
+>x : number
+>toExponential : (fractionDigits?: number) => string
+
+var b = x.hasOwnProperty('toFixed');
+>b : boolean
+>x.hasOwnProperty('toFixed') : boolean
+>x.hasOwnProperty : (v: string) => boolean
+>x : number
+>hasOwnProperty : (v: string) => boolean
+
+var c = x['toExponential']();
+>c : string
+>x['toExponential']() : string
+>x['toExponential'] : (fractionDigits?: number) => string
+>x : number
+
+var d = x['hasOwnProperty']('toFixed');
+>d : boolean
+>x['hasOwnProperty']('toFixed') : boolean
+>x['hasOwnProperty'] : (v: string) => boolean
+>x : number
+

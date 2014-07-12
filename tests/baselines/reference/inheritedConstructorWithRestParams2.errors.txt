@@ -1,0 +1,50 @@
+==== tests/cases/compiler/inheritedConstructorWithRestParams2.ts (6 errors) ====
+    class IBaseBase<T, U> {
+        constructor(x: U) { }
+    }
+    
+    interface IBase<T, U> extends IBaseBase<T, U> { }
+    
+    class BaseBase2 {
+        constructor(x: number) { }
+    }
+    
+    declare class BaseBase<T, U> extends BaseBase2 implements IBase<T, U> {
+        constructor(x: T, ...y: U[]);
+        constructor(x1: T, x2: T, ...y: U[]);
+        constructor(x1: T, x2: U, y: T);
+    }
+    
+    class Base extends BaseBase<string, number> {
+    }
+    
+    class Derived extends Base { }
+    
+    // Ok
+    new Derived("", "");
+    new Derived("", 3);
+    new Derived("", 3, 3);
+    new Derived("", 3, 3, 3);
+    new Derived("", 3, "");
+    new Derived("", "", 3);
+    new Derived("", "", 3, 3);
+    
+    // Errors
+    new Derived(3);
+        ~~~~~~~
+!!! inheritedConstructorWithRestParams2.ts(32,5): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Could not apply type 'string' to argument 1 which is of type 'number'.
+        ~~~~~~~
+!!! inheritedConstructorWithRestParams2.ts(32,5): error TS2085: Could not select overload for 'new' expression.
+    new Derived("", 3, "", 3);
+        ~~~~~~~
+!!! inheritedConstructorWithRestParams2.ts(33,5): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Could not apply type 'number' to argument 3 which is of type 'string'.
+        ~~~~~~~
+!!! inheritedConstructorWithRestParams2.ts(33,5): error TS2085: Could not select overload for 'new' expression.
+    new Derived("", 3, "", "");
+        ~~~~~~~
+!!! inheritedConstructorWithRestParams2.ts(34,5): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Could not apply type 'number' to argument 3 which is of type 'string'.
+        ~~~~~~~
+!!! inheritedConstructorWithRestParams2.ts(34,5): error TS2085: Could not select overload for 'new' expression.

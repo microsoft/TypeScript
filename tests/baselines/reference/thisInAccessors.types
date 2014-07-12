@@ -1,0 +1,65 @@
+=== tests/cases/compiler/thisInAccessors.ts ===
+// this capture only in getter
+class GetterOnly {
+>GetterOnly : GetterOnly
+
+    get Value() {
+>Value : string
+
+        var fn = () => this;
+>fn : () => GetterOnly
+>() => this : () => GetterOnly
+>this : GetterOnly
+
+        return '';
+    }
+    set Value(val) {
+>Value : string
+>val : string
+    }
+}
+
+// this capture only in setter
+class SetterOnly {
+>SetterOnly : SetterOnly
+
+    get Value() {
+>Value : string
+
+        return '';
+    }
+    set Value(val) {
+>Value : string
+>val : string
+
+        var fn = () => this;
+>fn : () => SetterOnly
+>() => this : () => SetterOnly
+>this : SetterOnly
+    }
+}
+
+// this capture only in both setter and getter
+class GetterAndSetter {
+>GetterAndSetter : GetterAndSetter
+
+    get Value() {
+>Value : string
+
+        var fn = () => this;
+>fn : () => GetterAndSetter
+>() => this : () => GetterAndSetter
+>this : GetterAndSetter
+
+        return '';
+    }
+    set Value(val) {
+>Value : string
+>val : string
+
+        var fn = () => this;
+>fn : () => GetterAndSetter
+>() => this : () => GetterAndSetter
+>this : GetterAndSetter
+    }
+}

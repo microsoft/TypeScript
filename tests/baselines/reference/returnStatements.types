@@ -1,0 +1,73 @@
+=== tests/cases/compiler/returnStatements.ts ===
+// all the following should be valid
+function fn1(): number { return 1; }
+>fn1 : typeof fn1
+
+function fn2(): string { return ''; }
+>fn2 : typeof fn2
+
+function fn3(): void { return undefined; }
+>fn3 : typeof fn3
+>undefined : any
+
+function fn4(): void { return; }
+>fn4 : typeof fn4
+
+function fn5(): boolean { return true; }
+>fn5 : typeof fn5
+
+function fn6(): Date { return new Date(12); }
+>fn6 : typeof fn6
+>Date : Date
+>new Date(12) : Date
+>Date : { prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; (): string; new(): Date; new(value: number): Date; new(value: string): Date; new(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; }
+
+function fn7(): any { return null; }
+>fn7 : typeof fn7
+
+function fn8(): any { return; } // OK, eq. to 'return undefined'
+>fn8 : typeof fn8
+
+interface I { id: number }
+>I : I
+>id : number
+
+class C implements I {
+>C : C
+>I : I
+
+    id: number;
+>id : number
+
+    dispose() {}
+>dispose : () => void
+}
+class D extends C {
+>D : D
+>C : C
+
+    name: string;
+>name : string
+}
+function fn10(): I { return { id: 12 }; } 
+>fn10 : typeof fn10
+>I : I
+>{ id: 12 } : { id: number; }
+>id : number
+
+function fn11(): I { return new C(); }
+>fn11 : typeof fn11
+>I : I
+>new C() : C
+>C : typeof C
+
+function fn12(): C { return new D(); }
+>fn12 : typeof fn12
+>C : C
+>new D() : D
+>D : typeof D
+
+function fn13(): C { return null; }
+>fn13 : typeof fn13
+>C : C
+

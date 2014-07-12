@@ -1,0 +1,29 @@
+==== tests/cases/compiler/propertyAndAccessorWithSameName.ts (3 errors) ====
+    class C {
+        x: number;
+        get x() { // error
+            ~
+!!! propertyAndAccessorWithSameName.ts(3,9): error TS2000: Duplicate identifier 'x'. Additional locations:
+!!! 	propertyAndAccessorWithSameName.ts(2,5)
+            return 1;
+        }
+    }
+    
+    class D {
+        x: number;
+        set x(v) { } // error
+            ~
+!!! propertyAndAccessorWithSameName.ts(10,9): error TS2000: Duplicate identifier 'x'. Additional locations:
+!!! 	propertyAndAccessorWithSameName.ts(9,5)
+    }
+    
+    class E {
+        private x: number;
+        get x() { // error
+            ~
+!!! propertyAndAccessorWithSameName.ts(15,9): error TS2000: Duplicate identifier 'x'. Additional locations:
+!!! 	propertyAndAccessorWithSameName.ts(14,5)
+            return 1;
+        }
+        set x(v) { }
+    }

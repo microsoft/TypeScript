@@ -1,0 +1,37 @@
+==== tests/cases/compiler/bestCommonTypeOfConditionalExpressions2.ts (6 errors) ====
+    // conditional expressions return the best common type of the branches plus contextual type (using the first candidate if multiple BCTs exist)
+    // these are errors
+    
+    class Base { foo: string; }
+    class Derived extends Base { bar: string; }
+    class Derived2 extends Base { baz: string; }
+    var base: Base;
+    var derived: Derived;
+    var derived2: Derived2;
+    
+    var r2 = true ? 1 : '';
+             ~~~~~~~~~~~~~
+!!! bestCommonTypeOfConditionalExpressions2.ts(11,10): error TS2226: Type of conditional '{}' must be identical to 'number' or 'string'.
+    var r9 = true ? derived : derived2;
+             ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! bestCommonTypeOfConditionalExpressions2.ts(12,10): error TS2226: Type of conditional '{}' must be identical to 'Derived' or 'Derived2'.
+    
+    function foo<T, U>(t: T, u: U) {
+        return true ? t : u;
+               ~~~~~~~~~~~~
+!!! bestCommonTypeOfConditionalExpressions2.ts(15,12): error TS2226: Type of conditional '{}' must be identical to 'T' or 'U'.
+    }
+    
+    function foo2<T extends U, U>(t: T, u: U) { // Error for referencing own type parameter
+                  ~~~~~~~~~~~
+!!! bestCommonTypeOfConditionalExpressions2.ts(18,15): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        return true ? t : u; // Ok because BCT(T, U) = U
+    }
+    
+    function foo3<T extends U, U extends V, V>(t: T, u: U) {
+                  ~~~~~~~~~~~
+!!! bestCommonTypeOfConditionalExpressions2.ts(22,15): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+                               ~~~~~~~~~~~
+!!! bestCommonTypeOfConditionalExpressions2.ts(22,28): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        return true ? t : u;
+    }

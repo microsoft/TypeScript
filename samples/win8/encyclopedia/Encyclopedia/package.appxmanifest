@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
+  <Identity Name="55019TS.Encyclopedia" Version="1.0.0.5" Publisher="CN=2D965ED7-3EF5-4803-AEC3-26E173EE9D03" />
+  <Properties>
+    <DisplayName>Encyclopedia</DisplayName>
+    <Description>Encyclopedia</Description>
+    <PublisherDisplayName>TS</PublisherDisplayName>
+    <Logo>images\ep-storelogo.png</Logo>
+  </Properties>
+  <Prerequisites>
+    <OSMinVersion>6.2</OSMinVersion>
+    <OSMaxVersionTested>6.2</OSMaxVersionTested>
+  </Prerequisites>
+  <Resources>
+    <Resource Language="en-US" />
+  </Resources>
+  <Applications>
+    <Application Id="App" StartPage="default.html">
+      <VisualElements DisplayName="Encyclopedia" Logo="images\ep-logo.png" SmallLogo="images\ep-logo-small.png" Description="Encyclopedia" ForegroundText="light" BackgroundColor="#0084FF" ToastCapable="false">
+        <DefaultTile ShowName="allLogos" WideLogo="images\ep-widetile.png" />
+        <SplashScreen Image="images\ep-splashscreen.png" BackgroundColor="#FFFFFF" />
+      </VisualElements>
+      <Extensions>
+        <Extension Category="windows.search" StartPage="default.html" />
+      </Extensions>
+    </Application>
+  </Applications>
+  <Capabilities>
+    <Capability Name="internetClient" />
+    <DeviceCapability Name="location" />
+  </Capabilities>
+</Package>

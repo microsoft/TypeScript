@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+<script src="http://d3js.org/d3.v2.js"></script>
+<script src="data.js"></script>
+<style>
+    svg {
+        font-family: "Segoe UI", sans-serif;
+    }
+    .day {
+        stroke: #ccc;
+    }
+
+    .pass {
+        fill: rgb(0, 166, 0);
+    }
+
+    .fail {
+        fill: rgb(255, 83, 0);
+    }
+
+    .hashes line {
+        stroke: #000; stroke-width: 2;
+    }
+
+    .tick {
+        stroke: #000; stroke-width: 2;
+    }
+
+    .axis path {
+        stroke: #000; stroke-width: 2;
+    }
+    body {
+        font-family: 'Segoe UI';
+    }
+</style>
+</head>
+<body>
+    <h1>Status</h1>
+    <div id="passchart"></div>
+
+    <h1>Compiler Performance</h1>
+    <div id="performanceChart"></div>
+</body>
+</html>

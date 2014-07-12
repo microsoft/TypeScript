@@ -1,0 +1,42 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 8,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "DebuggerStatement",
+                "fullWidth": 8,
+                "isIncrementallyUnusable": true,
+                "debuggerKeyword": {
+                    "kind": "DebuggerKeyword",
+                    "width": 8,
+                    "text": "debugger",
+                    "value": "debugger",
+                    "valueText": "debugger"
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 0,
+                    "text": ""
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 8
+    }
+}

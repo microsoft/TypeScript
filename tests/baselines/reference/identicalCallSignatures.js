@@ -1,0 +1,3 @@
+//// [identicalCallSignatures.js]
+
+var a;

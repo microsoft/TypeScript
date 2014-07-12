@@ -1,0 +1,1 @@
+//// [genericSignatureInheritance2.js]

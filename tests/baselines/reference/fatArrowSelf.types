@@ -1,0 +1,64 @@
+=== tests/cases/compiler/fatArrowSelf.ts ===
+module Events {
+>Events : Events
+
+    export interface ListenerCallback {
+>ListenerCallback : ListenerCallback
+
+        (value:any):void;
+>value : any
+    }
+    export class EventEmitter {
+>EventEmitter : EventEmitter
+
+         public addListener(type:string, listener:ListenerCallback) {
+>addListener : (type: string, listener: ListenerCallback) => void
+>type : string
+>listener : ListenerCallback
+>ListenerCallback : ListenerCallback
+         }
+    }
+}
+
+module Consumer {
+>Consumer : Consumer
+
+    class EventEmitterConsummer {
+>EventEmitterConsummer : EventEmitterConsummer
+
+        constructor (private emitter: Events.EventEmitter) { }
+>emitter : Events.EventEmitter
+>Events : Events
+>EventEmitter : Events.EventEmitter
+
+        private register() {
+>register : () => void
+
+            this.emitter.addListener('change', (e) => {
+>this.emitter.addListener('change', (e) => {
+                this.changed();
+            }) : void
+>this.emitter.addListener : (type: string, listener: Events.ListenerCallback) => void
+>this.emitter : Events.EventEmitter
+>this : EventEmitterConsummer
+>emitter : Events.EventEmitter
+>addListener : (type: string, listener: Events.ListenerCallback) => void
+>(e) => {
+                this.changed();
+            } : (e: any) => void
+>e : any
+
+                this.changed();
+>this.changed() : void
+>this.changed : () => void
+>this : EventEmitterConsummer
+>changed : () => void
+
+            });
+        }      
+
+        private changed() {
+>changed : () => void
+        }
+    }
+}

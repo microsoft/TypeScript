@@ -1,0 +1,527 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "diagnostics": [
+        {
+            "start": 52,
+            "length": 1,
+            "diagnosticCode": "'{0}' expected.",
+            "arguments": [
+                ";"
+            ]
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 107,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "VariableStatement",
+                "fullWidth": 107,
+                "modifiers": [],
+                "variableDeclaration": {
+                    "kind": "VariableDeclaration",
+                    "fullWidth": 104,
+                    "varKeyword": {
+                        "kind": "VarKeyword",
+                        "width": 3,
+                        "fullWidth": 4,
+                        "text": "var",
+                        "value": "var",
+                        "valueText": "var",
+                        "hasTrailingTrivia": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "text": " "
+                            }
+                        ]
+                    },
+                    "variableDeclarators": [
+                        {
+                            "kind": "VariableDeclarator",
+                            "fullWidth": 100,
+                            "propertyName": {
+                                "kind": "IdentifierName",
+                                "width": 1,
+                                "fullWidth": 2,
+                                "text": "s",
+                                "value": "s",
+                                "valueText": "s",
+                                "hasTrailingTrivia": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "text": " "
+                                    }
+                                ]
+                            },
+                            "equalsValueClause": {
+                                "kind": "EqualsValueClause",
+                                "fullWidth": 98,
+                                "equalsToken": {
+                                    "kind": "EqualsToken",
+                                    "width": 1,
+                                    "fullWidth": 2,
+                                    "text": "=",
+                                    "value": "=",
+                                    "valueText": "=",
+                                    "hasTrailingTrivia": true,
+                                    "trailingTrivia": [
+                                        {
+                                            "kind": "WhitespaceTrivia",
+                                            "text": " "
+                                        }
+                                    ]
+                                },
+                                "value": {
+                                    "kind": "InvocationExpression",
+                                    "fullWidth": 96,
+                                    "expression": {
+                                        "kind": "MemberAccessExpression",
+                                        "fullWidth": 8,
+                                        "expression": {
+                                            "kind": "IdentifierName",
+                                            "width": 1,
+                                            "text": "$",
+                                            "value": "$",
+                                            "valueText": "$"
+                                        },
+                                        "dotToken": {
+                                            "kind": "DotToken",
+                                            "width": 1,
+                                            "text": ".",
+                                            "value": ".",
+                                            "valueText": "."
+                                        },
+                                        "name": {
+                                            "kind": "IdentifierName",
+                                            "width": 6,
+                                            "text": "extend",
+                                            "value": "extend",
+                                            "valueText": "extend"
+                                        }
+                                    },
+                                    "argumentList": {
+                                        "kind": "ArgumentList",
+                                        "fullWidth": 88,
+                                        "typeArgumentList": {
+                                            "kind": "TypeArgumentList",
+                                            "fullWidth": 54,
+                                            "lessThanToken": {
+                                                "kind": "LessThanToken",
+                                                "width": 1,
+                                                "fullWidth": 2,
+                                                "text": "<",
+                                                "value": "<",
+                                                "valueText": "<",
+                                                "hasTrailingTrivia": true,
+                                                "trailingTrivia": [
+                                                    {
+                                                        "kind": "WhitespaceTrivia",
+                                                        "text": " "
+                                                    }
+                                                ]
+                                            },
+                                            "typeArguments": [
+                                                {
+                                                    "kind": "ObjectType",
+                                                    "fullWidth": 17,
+                                                    "openBraceToken": {
+                                                        "kind": "OpenBraceToken",
+                                                        "width": 1,
+                                                        "fullWidth": 2,
+                                                        "text": "{",
+                                                        "value": "{",
+                                                        "valueText": "{",
+                                                        "hasTrailingTrivia": true,
+                                                        "trailingTrivia": [
+                                                            {
+                                                                "kind": "WhitespaceTrivia",
+                                                                "text": " "
+                                                            }
+                                                        ]
+                                                    },
+                                                    "typeMembers": [
+                                                        {
+                                                            "kind": "PropertySignature",
+                                                            "fullWidth": 14,
+                                                            "propertyName": {
+                                                                "kind": "IdentifierName",
+                                                                "width": 8,
+                                                                "text": "workItem",
+                                                                "value": "workItem",
+                                                                "valueText": "workItem"
+                                                            },
+                                                            "typeAnnotation": {
+                                                                "kind": "TypeAnnotation",
+                                                                "fullWidth": 6,
+                                                                "colonToken": {
+                                                                    "kind": "ColonToken",
+                                                                    "width": 1,
+                                                                    "fullWidth": 2,
+                                                                    "text": ":",
+                                                                    "value": ":",
+                                                                    "valueText": ":",
+                                                                    "hasTrailingTrivia": true,
+                                                                    "trailingTrivia": [
+                                                                        {
+                                                                            "kind": "WhitespaceTrivia",
+                                                                            "text": " "
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                "type": {
+                                                                    "kind": "AnyKeyword",
+                                                                    "width": 3,
+                                                                    "fullWidth": 4,
+                                                                    "text": "any",
+                                                                    "value": "any",
+                                                                    "valueText": "any",
+                                                                    "hasTrailingTrivia": true,
+                                                                    "trailingTrivia": [
+                                                                        {
+                                                                            "kind": "WhitespaceTrivia",
+                                                                            "text": " "
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            }
+                                                        }
+                                                    ],
+                                                    "closeBraceToken": {
+                                                        "kind": "CloseBraceToken",
+                                                        "width": 1,
+                                                        "text": "}",
+                                                        "value": "}",
+                                                        "valueText": "}"
+                                                    }
+                                                },
+                                                {
+                                                    "kind": "CommaToken",
+                                                    "width": 1,
+                                                    "fullWidth": 2,
+                                                    "text": ",",
+                                                    "value": ",",
+                                                    "valueText": ",",
+                                                    "hasTrailingTrivia": true,
+                                                    "trailingTrivia": [
+                                                        {
+                                                            "kind": "WhitespaceTrivia",
+                                                            "text": " "
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "kind": "ObjectType",
+                                                    "fullWidth": 32,
+                                                    "openBraceToken": {
+                                                        "kind": "OpenBraceToken",
+                                                        "width": 1,
+                                                        "fullWidth": 2,
+                                                        "text": "{",
+                                                        "value": "{",
+                                                        "valueText": "{",
+                                                        "hasTrailingTrivia": true,
+                                                        "trailingTrivia": [
+                                                            {
+                                                                "kind": "WhitespaceTrivia",
+                                                                "text": " "
+                                                            }
+                                                        ]
+                                                    },
+                                                    "typeMembers": [
+                                                        {
+                                                            "kind": "PropertySignature",
+                                                            "fullWidth": 13,
+                                                            "propertyName": {
+                                                                "kind": "IdentifierName",
+                                                                "width": 8,
+                                                                "text": "workItem",
+                                                                "value": "workItem",
+                                                                "valueText": "workItem"
+                                                            },
+                                                            "typeAnnotation": {
+                                                                "kind": "TypeAnnotation",
+                                                                "fullWidth": 5,
+                                                                "colonToken": {
+                                                                    "kind": "ColonToken",
+                                                                    "width": 1,
+                                                                    "fullWidth": 2,
+                                                                    "text": ":",
+                                                                    "value": ":",
+                                                                    "valueText": ":",
+                                                                    "hasTrailingTrivia": true,
+                                                                    "trailingTrivia": [
+                                                                        {
+                                                                            "kind": "WhitespaceTrivia",
+                                                                            "text": " "
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                "type": {
+                                                                    "kind": "AnyKeyword",
+                                                                    "width": 3,
+                                                                    "text": "any",
+                                                                    "value": "any",
+                                                                    "valueText": "any"
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            "kind": "CommaToken",
+                                                            "width": 1,
+                                                            "fullWidth": 2,
+                                                            "text": ",",
+                                                            "value": ",",
+                                                            "valueText": ",",
+                                                            "hasTrailingTrivia": true,
+                                                            "trailingTrivia": [
+                                                                {
+                                                                    "kind": "WhitespaceTrivia",
+                                                                    "text": " "
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "kind": "PropertySignature",
+                                                            "fullWidth": 14,
+                                                            "propertyName": {
+                                                                "kind": "IdentifierName",
+                                                                "width": 5,
+                                                                "text": "width",
+                                                                "value": "width",
+                                                                "valueText": "width"
+                                                            },
+                                                            "typeAnnotation": {
+                                                                "kind": "TypeAnnotation",
+                                                                "fullWidth": 9,
+                                                                "colonToken": {
+                                                                    "kind": "ColonToken",
+                                                                    "width": 1,
+                                                                    "fullWidth": 2,
+                                                                    "text": ":",
+                                                                    "value": ":",
+                                                                    "valueText": ":",
+                                                                    "hasTrailingTrivia": true,
+                                                                    "trailingTrivia": [
+                                                                        {
+                                                                            "kind": "WhitespaceTrivia",
+                                                                            "text": " "
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                "type": {
+                                                                    "kind": "StringKeyword",
+                                                                    "width": 6,
+                                                                    "fullWidth": 7,
+                                                                    "text": "string",
+                                                                    "value": "string",
+                                                                    "valueText": "string",
+                                                                    "hasTrailingTrivia": true,
+                                                                    "trailingTrivia": [
+                                                                        {
+                                                                            "kind": "WhitespaceTrivia",
+                                                                            "text": " "
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            }
+                                                        }
+                                                    ],
+                                                    "closeBraceToken": {
+                                                        "kind": "CloseBraceToken",
+                                                        "width": 1,
+                                                        "text": "}",
+                                                        "value": "}",
+                                                        "valueText": "}"
+                                                    }
+                                                }
+                                            ],
+                                            "greaterThanToken": {
+                                                "kind": "GreaterThanToken",
+                                                "width": 1,
+                                                "text": ">",
+                                                "value": ">",
+                                                "valueText": ">"
+                                            }
+                                        },
+                                        "openParenToken": {
+                                            "kind": "OpenParenToken",
+                                            "width": 1,
+                                            "text": "(",
+                                            "value": "(",
+                                            "valueText": "("
+                                        },
+                                        "arguments": [
+                                            {
+                                                "kind": "ObjectLiteralExpression",
+                                                "fullWidth": 28,
+                                                "openBraceToken": {
+                                                    "kind": "OpenBraceToken",
+                                                    "width": 1,
+                                                    "fullWidth": 2,
+                                                    "text": "{",
+                                                    "value": "{",
+                                                    "valueText": "{",
+                                                    "hasTrailingTrivia": true,
+                                                    "trailingTrivia": [
+                                                        {
+                                                            "kind": "WhitespaceTrivia",
+                                                            "text": " "
+                                                        }
+                                                    ]
+                                                },
+                                                "propertyAssignments": [
+                                                    {
+                                                        "kind": "SimplePropertyAssignment",
+                                                        "fullWidth": 25,
+                                                        "propertyName": {
+                                                            "kind": "IdentifierName",
+                                                            "width": 8,
+                                                            "text": "workItem",
+                                                            "value": "workItem",
+                                                            "valueText": "workItem"
+                                                        },
+                                                        "colonToken": {
+                                                            "kind": "ColonToken",
+                                                            "width": 1,
+                                                            "fullWidth": 2,
+                                                            "text": ":",
+                                                            "value": ":",
+                                                            "valueText": ":",
+                                                            "hasTrailingTrivia": true,
+                                                            "trailingTrivia": [
+                                                                {
+                                                                    "kind": "WhitespaceTrivia",
+                                                                    "text": " "
+                                                                }
+                                                            ]
+                                                        },
+                                                        "expression": {
+                                                            "kind": "MemberAccessExpression",
+                                                            "fullWidth": 15,
+                                                            "expression": {
+                                                                "kind": "ThisKeyword",
+                                                                "width": 4,
+                                                                "text": "this",
+                                                                "value": "this",
+                                                                "valueText": "this"
+                                                            },
+                                                            "dotToken": {
+                                                                "kind": "DotToken",
+                                                                "width": 1,
+                                                                "text": ".",
+                                                                "value": ".",
+                                                                "valueText": "."
+                                                            },
+                                                            "name": {
+                                                                "kind": "IdentifierName",
+                                                                "width": 9,
+                                                                "fullWidth": 10,
+                                                                "text": "_workItem",
+                                                                "value": "_workItem",
+                                                                "valueText": "_workItem",
+                                                                "hasTrailingTrivia": true,
+                                                                "trailingTrivia": [
+                                                                    {
+                                                                        "kind": "WhitespaceTrivia",
+                                                                        "text": " "
+                                                                    }
+                                                                ]
+                                                            }
+                                                        }
+                                                    }
+                                                ],
+                                                "closeBraceToken": {
+                                                    "kind": "CloseBraceToken",
+                                                    "width": 1,
+                                                    "text": "}",
+                                                    "value": "}",
+                                                    "valueText": "}"
+                                                }
+                                            },
+                                            {
+                                                "kind": "CommaToken",
+                                                "width": 1,
+                                                "fullWidth": 2,
+                                                "text": ",",
+                                                "value": ",",
+                                                "valueText": ",",
+                                                "hasTrailingTrivia": true,
+                                                "trailingTrivia": [
+                                                    {
+                                                        "kind": "WhitespaceTrivia",
+                                                        "text": " "
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "kind": "ObjectLiteralExpression",
+                                                "fullWidth": 2,
+                                                "openBraceToken": {
+                                                    "kind": "OpenBraceToken",
+                                                    "width": 1,
+                                                    "text": "{",
+                                                    "value": "{",
+                                                    "valueText": "{"
+                                                },
+                                                "propertyAssignments": [],
+                                                "closeBraceToken": {
+                                                    "kind": "CloseBraceToken",
+                                                    "width": 1,
+                                                    "text": "}",
+                                                    "value": "}",
+                                                    "valueText": "}"
+                                                }
+                                            }
+                                        ],
+                                        "closeParenToken": {
+                                            "kind": "CloseParenToken",
+                                            "width": 1,
+                                            "text": ")",
+                                            "value": ")",
+                                            "valueText": ")"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 1,
+                    "fullWidth": 3,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";",
+                    "hasTrailingTrivia": true,
+                    "hasTrailingNewLine": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "text": "\r\n"
+                        }
+                    ]
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            107
+        ],
+        "length": 107
+    }
+}

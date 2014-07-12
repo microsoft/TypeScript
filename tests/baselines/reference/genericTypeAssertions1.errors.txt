@@ -1,0 +1,22 @@
+==== tests/cases/compiler/genericTypeAssertions1.ts (3 errors) ====
+    class A<T> { foo(x: T) { }}
+    var foo = new A<number>();
+    var r: A<string> = <A<number>>new A(); // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! genericTypeAssertions1.ts(3,5): error TS2012: Cannot convert 'A<number>' to 'A<string>':
+!!! 	Types of property 'foo' of types 'A<number>' and 'A<string>' are incompatible:
+!!! 		Call signatures of types '(x: number) => void' and '(x: string) => void' are incompatible.
+    var r2: A<number> = <A<A<number>>>foo; // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! genericTypeAssertions1.ts(4,5): error TS2012: Cannot convert 'A<A<number>>' to 'A<number>':
+!!! 	Types of property 'foo' of types 'A<A<number>>' and 'A<number>' are incompatible:
+!!! 		Call signatures of types '(x: A<number>) => void' and '(x: number) => void' are incompatible:
+!!! 			Type 'Number' is missing property 'foo' from type 'A<number>'.
+                        ~~~~~~~~~~~~~~~~~
+!!! genericTypeAssertions1.ts(4,21): error TS2012: Cannot convert 'A<number>' to 'A<A<number>>':
+!!! 	Types of property 'foo' of types 'A<number>' and 'A<A<number>>' are incompatible:
+!!! 		Call signatures of types '(x: number) => void' and '(x: A<number>) => void' are incompatible:
+!!! 			Type 'Number' is missing property 'foo' from type 'A<number>'.
+!!! 	Types of property 'foo' of types 'A<A<number>>' and 'A<number>' are incompatible:
+!!! 		Call signatures of types '(x: A<number>) => void' and '(x: number) => void' are incompatible:
+!!! 			Type 'Number' is missing property 'foo' from type 'A<number>'.

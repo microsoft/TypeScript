@@ -1,0 +1,22 @@
+=== tests/cases/compiler/namedFunctionExpressionAssignedToClassProperty.ts ===
+class Foo{
+>Foo : Foo
+
+>a : () => void
+
+       a = function bar(){
+>function bar(){
+
+       } : () => void
+>bar : () => void
+
+       }; // this shouldn't crash the compiler...
+
+       
+
+       constructor(){
+
+       }
+
+}
+

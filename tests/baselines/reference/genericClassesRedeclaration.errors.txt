@@ -1,0 +1,91 @@
+==== tests/cases/compiler/genericClassesRedeclaration.ts (5 errors) ====
+    declare module TypeScript {
+        interface IIndexable<T> {
+            [s: string]: T;
+        }
+        function createIntrinsicsObject<T>(): IIndexable<T>;
+        interface IHashTable<T> {
+            getAllKeys(): string[];
+            add(key: string, data: T): boolean;
+            addOrUpdate(key: string, data: T): boolean;
+            map(fn: (k: string, value: T, context: any) => void, context: any): void;
+            every(fn: (k: string, value: T, context: any) => void, context: any): boolean;
+            some(fn: (k: string, value: T, context: any) => void, context: any): boolean;
+            count(): number;
+            lookup(key: string): T;
+        }
+        class StringHashTable<T> implements IHashTable<T> {
+            private itemCount;
+            private table;
+            public getAllKeys(): string[];
+            public add(key: string, data: T): boolean;
+            public addOrUpdate(key: string, data: T): boolean;
+            public map(fn: (k: string, value: T, context: any) => void, context: any): void;
+            public every(fn: (k: string, value: T, context: any) => void, context: any): boolean;
+            public some(fn: (k: string, value: T, context: any) => void, context: any): boolean;
+            public count(): number;
+            public lookup(key: string): T;
+            public remove(key: string): void;
+        }
+        class IdentiferNameHashTable<T> extends StringHashTable<T> {
+                                                ~~~~~~~~~~~~~~~~~~
+!!! genericClassesRedeclaration.ts(29,45): error TS2186: Type name 'StringHashTable' in extends clause does not reference constructor function for 'TypeScript.StringHashTable<T>'.
+            public getAllKeys(): string[];
+            public add(key: string, data: T): boolean;
+            public addOrUpdate(key: string, data: T): boolean;
+            public map(fn: (k: string, value: T, context: any) => void, context: any): void;
+            public every(fn: (k: string, value: T, context: any) => void, context: any): boolean;
+            public some(fn: (k: string, value: any, context: any) => void, context: any): boolean;
+            public lookup(key: string): T;
+        }
+    }
+    
+    declare module TypeScript {
+        interface IIndexable<T> {
+            [s: string]: T;
+            ~~~~~~~~~~~~~~
+!!! genericClassesRedeclaration.ts(42,9): error TS2232: Duplicate string index signature. Additional locations:
+!!! 	genericClassesRedeclaration.ts(3,9)
+        }
+        function createIntrinsicsObject<T>(): IIndexable<T>;
+        interface IHashTable<T> {
+            getAllKeys(): string[];
+            add(key: string, data: T): boolean;
+            addOrUpdate(key: string, data: T): boolean;
+            map(fn: (k: string, value: T, context: any) => void, context: any): void;
+            every(fn: (k: string, value: T, context: any) => void, context: any): boolean;
+            some(fn: (k: string, value: T, context: any) => void, context: any): boolean;
+            count(): number;
+            lookup(key: string): T;
+        }
+        class StringHashTable<T> implements IHashTable<T> {
+              ~~~~~~~~~~~~~~~
+!!! genericClassesRedeclaration.ts(55,11): error TS2000: Duplicate identifier 'StringHashTable'. Additional locations:
+!!! 	genericClassesRedeclaration.ts(16,5)
+            private itemCount;
+            private table;
+            public getAllKeys(): string[];
+            public add(key: string, data: T): boolean;
+            public addOrUpdate(key: string, data: T): boolean;
+            public map(fn: (k: string, value: T, context: any) => void, context: any): void;
+            public every(fn: (k: string, value: T, context: any) => void, context: any): boolean;
+            public some(fn: (k: string, value: T, context: any) => void, context: any): boolean;
+            public count(): number;
+            public lookup(key: string): T;
+            public remove(key: string): void;
+        }
+        class IdentiferNameHashTable<T> extends StringHashTable<T> {
+              ~~~~~~~~~~~~~~~~~~~~~~
+!!! genericClassesRedeclaration.ts(68,11): error TS2000: Duplicate identifier 'IdentiferNameHashTable'. Additional locations:
+!!! 	genericClassesRedeclaration.ts(29,5)
+                                                ~~~~~~~~~~~~~~~~~~
+!!! genericClassesRedeclaration.ts(68,45): error TS2186: Type name 'StringHashTable' in extends clause does not reference constructor function for 'StringHashTable<T>'.
+            public getAllKeys(): string[];
+            public add(key: string, data: T): boolean;
+            public addOrUpdate(key: string, data: T): boolean;
+            public map(fn: (k: string, value: T, context: any) => void, context: any): void;
+            public every(fn: (k: string, value: T, context: any) => void, context: any): boolean;
+            public some(fn: (k: string, value: any, context: any) => void, context: any): boolean;
+            public lookup(key: string): T;
+        }
+    }

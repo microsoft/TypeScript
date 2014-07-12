@@ -1,0 +1,148 @@
+==== tests/cases/compiler/classUpdateTests.ts (16 errors) ====
+    //
+    // test codegen for instance properties
+    //
+    class A {
+        public p1 = 0;
+        private p2 = 0;
+        p3;
+    }
+    
+    class B {
+        public p1 = 0;
+        private p2 = 0;
+        p3;
+    
+        constructor() {}
+    }
+    
+    class C {
+        constructor(public p1=0, private p2=0, p3=0) {}
+    }
+    
+    //
+    // test requirements for super calls
+    //
+    class D { // NO ERROR
+        
+    }
+    
+    class E extends D { // NO ERROR
+        public p1 = 0;
+    }
+    
+    class F extends E {
+        constructor() {} // ERROR - super call required
+     ~~~~~~~~~~~
+!!! classUpdateTests.ts(34,2): error TS2105: Constructors for derived classes must contain a 'super' call.
+    }
+    
+    class G extends D {
+        public p1 = 0;
+        constructor() { super(); } // NO ERROR
+    }
+    
+    class H {
+        constructor() { super(); } // ERROR - no super call allowed
+                     ~~~~~
+!!! classUpdateTests.ts(43,18): error TS2103: 'super' cannot be referenced in non-derived classes.
+    }
+    
+    class I extends Object {
+                    ~~~~~~
+!!! classUpdateTests.ts(46,17): error TS2073: A class may only extend another class.
+        constructor() { super(); } // ERROR - no super call allowed
+                     ~~~~~
+!!! classUpdateTests.ts(47,18): error TS2103: 'super' cannot be referenced in non-derived classes.
+    }
+    
+    class J extends G {
+        constructor(public p1:number) {
+            super(); // NO ERROR
+        }
+    }
+    
+    class K extends G {
+        constructor(public p1:number) { // ERROR
+     ~~~~~~~~~~~
+!!! classUpdateTests.ts(57,2): error TS2104: A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
+            var i = 0;
+            super();
+        }
+    }
+    
+    class L extends G {
+          ~
+!!! classUpdateTests.ts(63,7): error TS2141: Class 'L' cannot extend class 'G':
+!!! 	Property 'p1' defined as private in type 'L' is defined as public in type 'G'.
+        constructor(private p1:number) {
+            super(); // NO ERROR
+        }
+    }
+    
+    class M extends G {
+          ~
+!!! classUpdateTests.ts(69,7): error TS2141: Class 'M' cannot extend class 'G':
+!!! 	Property 'p1' defined as private in type 'M' is defined as public in type 'G'.
+        constructor(private p1:number) { // ERROR
+     ~~~~~~~~~~~
+!!! classUpdateTests.ts(70,2): error TS2104: A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
+            var i = 0;
+            super();
+        }
+    }
+    
+    //
+    // test this reference in field initializers
+    //
+    class N {
+        public p1 = 0;
+        public p2 = this.p1;
+    
+        constructor() {
+            this.p2 = 0;
+        }
+    }
+    
+    //
+    // test error on property declarations within class constructors
+    //
+    class O {
+        constructor() {
+            public p1 = 0; // ERROR
+      ~~~~~~
+!!! classUpdateTests.ts(93,3): error TS1008: Unexpected token; 'statement' expected.
+        }
+    }
+    ~
+!!! classUpdateTests.ts(95,1): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.
+    
+    class P {
+        constructor() {
+            private p1 = 0; // ERROR
+      ~~~~~~~
+!!! classUpdateTests.ts(99,3): error TS1008: Unexpected token; 'statement' expected.
+        }
+    }
+    ~
+!!! classUpdateTests.ts(101,1): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.
+    
+    class Q {
+        constructor() {
+            public this.p1 = 0; // ERROR
+      ~~~~~~
+!!! classUpdateTests.ts(105,3): error TS1008: Unexpected token; 'statement' expected.
+                  ~~
+!!! classUpdateTests.ts(105,15): error TS2094: The property 'p1' does not exist on value of type 'Q'.
+        }
+    }
+    
+    class R {
+        constructor() {
+            private this.p1 = 0; // ERROR
+      ~~~~~~~
+!!! classUpdateTests.ts(111,3): error TS1008: Unexpected token; 'statement' expected.
+                   ~~
+!!! classUpdateTests.ts(111,16): error TS2094: The property 'p1' does not exist on value of type 'R'.
+        }
+    }

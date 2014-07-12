@@ -1,0 +1,17 @@
+==== tests/cases/compiler/exportAssignValueAndType.ts (1 errors) ====
+    declare module http {
+        export interface Server { openPort: number; }
+    }
+    
+    interface server {
+        (): http.Server;
+            ~~~~~~~~~~~
+!!! exportAssignValueAndType.ts(6,9): error TS2053: Return type of call signature from exported interface has or is using private type 'http.Server'.
+        startTime: Date;
+    }
+     
+    var x = 5;
+    var server = new Date();
+    export = server;
+     
+    

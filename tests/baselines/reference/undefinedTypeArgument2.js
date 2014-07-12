@@ -1,0 +1,1 @@
+//// [undefinedTypeArgument2.js]

@@ -1,0 +1,158 @@
+==== tests/cases/compiler/functionOverloadErrors.ts (19 errors) ====
+    //Function overload signature with initializer
+    function fn1(x = 3);
+                 ~~~~~
+!!! functionOverloadErrors.ts(2,14): error TS2174: Default arguments are only allowed in implementation.
+    function fn1() { }
+    
+    //Multiple function overload signatures that are identical
+    function fn2a();
+    function fn2a();
+    ~~~~~~~~~~~~~~~~
+!!! functionOverloadErrors.ts(7,1): error TS2144: Duplicate overload signature for 'fn2a'.
+    function fn2a() {
+    
+    }
+    function fn2b(n: number[]);
+    function fn2b(n: Array<number>);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! functionOverloadErrors.ts(12,1): error TS2144: Duplicate overload signature for 'fn2b'.
+    function fn2b() {
+    }
+    
+    //Multiple function overload signatures that differ only by return type
+    function fn3(x: string): string;
+    function fn3(y: string): number;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! functionOverloadErrors.ts(18,1): error TS2175: Overloads cannot differ only by return type.
+    function fn3(): any {
+        return null;
+    }
+    
+    //Function overload with rest param and another with only an optional parameter
+    function fn6(...t: any[]);
+    function fn6(x?: any);
+    function fn6() { }
+    
+    //Function overload with rest param and another with only optional parameters
+    function fn7(...t: any[]);
+    function fn7(x?: any, y?: any, z?: any);
+    function fn7() { }
+    
+    //Function overloads that differ only by type parameter name
+    function fn8<T>(n: string);
+    function fn8<S>(n: string);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! functionOverloadErrors.ts(35,1): error TS2144: Duplicate overload signature for 'fn8'.
+    function fn8() { }
+    
+    //Function overloads that differ only by type parameter name when used in parameter type annotations
+    function fn9<T>(n: T);
+    function fn9<S>(n: S);
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! functionOverloadErrors.ts(40,1): error TS2144: Duplicate overload signature for 'fn9'.
+    function fn9() { }
+    
+    //Function overloads that differ only by type parameter constraints
+    function fn10<T extends Window>();
+                            ~~~~~~
+!!! functionOverloadErrors.ts(44,25): error TS2095: Could not find symbol 'Window'.
+    function fn10<S extends Date>();
+    function fn10() { }
+    // (actually OK)
+    
+    //Function overloads that differ only by type parameter constraints where constraints are structually identical
+    function fn11<T extends Window>();
+                            ~~~~~~
+!!! functionOverloadErrors.ts(50,25): error TS2095: Could not find symbol 'Window'.
+    function fn11<S extends typeof window>();
+                                   ~~~~~~
+!!! functionOverloadErrors.ts(51,32): error TS2095: Could not find symbol 'window'.
+    function fn11() { }
+    
+    //Function overloads that differ only by type parameter constraints where constraints include infinitely recursive type reference
+    interface List<T> {
+        parents: List<List<T>>;
+    }
+    function fn12<T extends List<List<any>>>();
+    function fn12<T extends List<any>>();
+    function fn12() { }
+    
+    //Function overloads that differ by accessibility
+    class cls {
+        public f();
+        private f(s: string);
+        ~~~~~~~~~~~~~~~~~~~~~
+!!! functionOverloadErrors.ts(65,5): error TS2150: Overload signatures must all be public or private.
+        f() { }
+    
+        private g(s: string);
+        ~~~~~~~~~~~~~~~~~~~~~
+!!! functionOverloadErrors.ts(68,5): error TS2150: Overload signatures must all be public or private.
+        public g();
+        g() { }
+    }
+    
+    //Function overloads with differing export
+    module M {
+        export function fn1();
+        ~~~~~~~~~~~~~~~~~~~~~~
+!!! functionOverloadErrors.ts(75,5): error TS2151: Overload signatures must all be exported or not exported.
+        function fn1(n: string);
+        function fn1() { } 
+    
+        function fn2(n: string);
+        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! functionOverloadErrors.ts(79,5): error TS2151: Overload signatures must all be exported or not exported.
+        export function fn2();
+        export function fn2() { } 
+    }
+    
+    //Function overloads with differing ambience
+    declare function dfn1();
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! functionOverloadErrors.ts(85,1): error TS2152: Overload signatures must all be ambient or non-ambient.
+    function dfn1(s: string);
+    function dfn1() { }
+    
+    function dfn2();
+    declare function dfn2(s: string);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! functionOverloadErrors.ts(90,1): error TS2152: Overload signatures must all be ambient or non-ambient.
+    function dfn2() { }
+    
+    //Function overloads with fewer params than implementation signature
+    function fewerParams();
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! functionOverloadErrors.ts(94,1): error TS2149: Overload signature is not compatible with function definition:
+!!! 	Call signature expects 0 or fewer parameters.
+    function fewerParams(n: string) {
+    }
+    
+    //Function implementation whose parameter types are not assignable to all corresponding overload signature parameters
+    function fn13(n: string);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! functionOverloadErrors.ts(99,1): error TS2148: Overload signature is not compatible with function definition.
+    function fn13(n: number) { }
+    
+    //Function overloads where return types are not all subtype of implementation return type
+    function fn14(n: string): string;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! functionOverloadErrors.ts(103,1): error TS2148: Overload signature is not compatible with function definition.
+    function fn14() {
+        return 3;
+    }
+    
+    //Function overloads where return types are different infinitely recursive type reference
+    function fn15<T extends List<List<any>>>(): T;
+    function fn15<T extends List<any>>(): T;
+    function fn15() {
+        return undefined;
+    }
+    
+    //Function overloads which use initializer expressions
+    function initExpr(n = 13);
+                      ~~~~~~
+!!! functionOverloadErrors.ts(116,19): error TS2174: Default arguments are only allowed in implementation.
+    function initExpr() { }
+    

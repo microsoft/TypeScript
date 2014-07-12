@@ -1,0 +1,22 @@
+==== tests/cases/compiler/numericClassMembers1.ts (2 errors) ====
+    class C234 {
+      0 = 1; 
+      0.0 = 2;
+      ~~~
+!!! numericClassMembers1.ts(3,3): error TS2000: Duplicate identifier '0.0'. Additional locations:
+!!! 	numericClassMembers1.ts(2,3)
+    }
+     
+    class C235 { 
+      0.0 = 1;
+     '0' = 2;
+     ~~~
+!!! numericClassMembers1.ts(8,2): error TS2000: Duplicate identifier ''0''. Additional locations:
+!!! 	numericClassMembers1.ts(7,3)
+    }
+    
+    class C236 {
+        '0.0' = 1;
+        '0' = 2;
+    }
+    

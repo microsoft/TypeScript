@@ -1,0 +1,16 @@
+=== tests/cases/compiler/reboundBaseClassSymbol.ts ===
+interface A { a: number; }
+>A : A
+>a : number
+
+module Foo {
+>Foo : Foo
+
+    var A = 1;
+>A : number
+
+    interface B extends A { b: string; } 
+>B : B
+>A : A
+>b : string
+}

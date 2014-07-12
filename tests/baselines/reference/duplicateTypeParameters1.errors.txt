@@ -1,0 +1,5 @@
+==== tests/cases/compiler/duplicateTypeParameters1.ts (1 errors) ====
+    function A<X, X>() { }
+               ~
+!!! duplicateTypeParameters1.ts(1,12): error TS2000: Duplicate identifier 'X'.
+    

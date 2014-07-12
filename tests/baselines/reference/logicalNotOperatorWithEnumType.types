@@ -1,0 +1,73 @@
+=== tests/cases/compiler/logicalNotOperatorWithEnumType.ts ===
+// ! operator on enum type
+
+enum ENUM { 1, 2, 3 };
+>ENUM : ENUM
+
+enum ENUM1 { };
+>ENUM1 : ENUM1
+
+// enum type var
+var ResultIsBoolean1 = !ENUM;
+>ResultIsBoolean1 : boolean
+>!ENUM : boolean
+>ENUM : typeof ENUM
+
+// enum type expressions
+var ResultIsBoolean2 = !ENUM[1];
+>ResultIsBoolean2 : boolean
+>!ENUM[1] : boolean
+>ENUM[1] : ENUM
+>ENUM : typeof ENUM
+
+var ResultIsBoolean3 = !(ENUM[1] + ENUM[2]);
+>ResultIsBoolean3 : boolean
+>!(ENUM[1] + ENUM[2]) : boolean
+>(ENUM[1] + ENUM[2]) : number
+>ENUM[1] + ENUM[2] : number
+>ENUM[1] : ENUM
+>ENUM : typeof ENUM
+>ENUM[2] : ENUM
+>ENUM : typeof ENUM
+
+// multiple ! operators
+var ResultIsBoolean4 = !!ENUM;
+>ResultIsBoolean4 : boolean
+>!!ENUM : boolean
+>!ENUM : boolean
+>ENUM : typeof ENUM
+
+var ResultIsBoolean5 = !!!(ENUM[1] + ENUM[2]);
+>ResultIsBoolean5 : boolean
+>!!!(ENUM[1] + ENUM[2]) : boolean
+>!!(ENUM[1] + ENUM[2]) : boolean
+>!(ENUM[1] + ENUM[2]) : boolean
+>(ENUM[1] + ENUM[2]) : number
+>ENUM[1] + ENUM[2] : number
+>ENUM[1] : ENUM
+>ENUM : typeof ENUM
+>ENUM[2] : ENUM
+>ENUM : typeof ENUM
+
+>// miss assignment operators
+!ENUM : boolean
+
+// miss assignment operators
+!ENUM;
+>ENUM : typeof ENUM
+
+!ENUM1;
+>!ENUM1 : boolean
+>ENUM1 : typeof ENUM1
+
+!ENUM[1];
+>!ENUM[1] : boolean
+>ENUM[1] : ENUM
+>ENUM : typeof ENUM
+
+!ENUM, ENUM1;
+>!ENUM, ENUM1 : typeof ENUM1
+>!ENUM : boolean
+>ENUM : typeof ENUM
+>ENUM1 : typeof ENUM1
+

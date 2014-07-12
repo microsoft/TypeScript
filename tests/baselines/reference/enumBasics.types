@@ -1,0 +1,221 @@
+=== tests/cases/compiler/enumBasics.ts ===
+// Enum without initializers have first member = 0 and successive members = N + 1
+enum E1 {
+>E1 : E1
+
+    A,
+>A : E1
+
+    B,
+>B : E1
+
+    C
+>C : E1
+}
+
+// Enum type is a subtype of Number
+var x: number = E1.A;
+>x : number
+>E1.A : E1
+>E1 : typeof E1
+>A : E1
+
+// Enum object type is anonymous with properties of the enum type and numeric indexer
+var e = E1;
+>e : typeof E1
+>E1 : typeof E1
+
+var e: {
+>e : { A: E1; B: E1; C: E1; [n: number]: string; }
+
+    A: E1;
+>A : E1
+>E1 : E1
+
+    B: E1;
+>B : E1
+>E1 : E1
+
+    C: E1;
+>C : E1
+>E1 : E1
+
+    [n: number]: string;
+>n : number
+
+};
+var e: typeof E1;
+>e : typeof E1
+>E1 : typeof E1
+
+// Reverse mapping of enum returns string name of property 
+var s = E1[e.A];
+>s : string
+>E1[e.A] : string
+>E1 : typeof E1
+>e.A : E1
+>e : typeof E1
+>A : E1
+
+var s: string;
+>s : string
+
+
+// Enum with only constant members
+enum E2 {
+>E2 : E2
+
+    A = 1, B = 2, C = 3
+>A : E2
+>B : E2
+>C : E2
+}
+
+// Enum with only computed members
+enum E3 {
+>E3 : E3
+
+    X = 'foo'.length, Y = 4 + 3, Z = +'foo'
+>X : E3
+>'foo'.length : number
+>length : number
+>Y : E3
+>4 + 3 : number
+>Z : E3
+>+'foo' : number
+}
+
+// Enum with constant members followed by computed members
+enum E4 {
+>E4 : E4
+
+    X = 0, Y, Z = 'foo'.length
+>X : E4
+>Y : E4
+>Z : E4
+>'foo'.length : number
+>length : number
+}
+
+// Enum with > 2 constant members with no initializer for first member, non zero initializer for second element
+enum E5 {
+>E5 : E5
+
+    A,
+>A : E5
+
+    B = 3,
+>B : E5
+
+    C // 4
+>C // 4 : E5
+}
+
+enum E6 {
+>E6 : E6
+
+    A,
+>A : E6
+
+    B = 0,
+>B : E6
+
+    C // 1
+>C // 1 : E6
+}
+
+// Enum with computed member initializer of type 'any'
+enum E7 {
+>E7 : E7
+
+    A = 'foo'['foo']
+>A : E7
+>'foo'['foo'] : any
+}
+
+// Enum with computed member initializer of type number
+enum E8 {
+>E8 : E8
+
+    B = 'foo'['foo']
+>B : E8
+>'foo'['foo'] : any
+}
+
+//Enum with computed member intializer of same enum type
+enum E9 {
+>E9 : E9
+
+    A,
+>A : E9
+
+    B = A
+>B : E9
+>A : E9
+}
+
+// (refer to .js to validate)
+// Enum constant members are propagated
+var doNotPropagate = [
+>doNotPropagate : {}[]
+>[
+    E8.B, E7.A, E4.Z, E3.X, E3.Y, E3.Z
+] : {}[]
+
+    E8.B, E7.A, E4.Z, E3.X, E3.Y, E3.Z
+>E8.B : E8
+>E8 : typeof E8
+>B : E8
+>E7.A : E7
+>E7 : typeof E7
+>A : E7
+>E4.Z : E4
+>E4 : typeof E4
+>Z : E4
+>E3.X : E3
+>E3 : typeof E3
+>X : E3
+>E3.Y : E3
+>E3 : typeof E3
+>Y : E3
+>E3.Z : E3
+>E3 : typeof E3
+>Z : E3
+
+];
+// Enum computed members are not propagated
+var doPropagate = [
+>doPropagate : {}[]
+>[
+    E9.A, E9.B, E6.B, E6.C, E6.A, E5.A, E5.B, E5.C
+] : {}[]
+
+    E9.A, E9.B, E6.B, E6.C, E6.A, E5.A, E5.B, E5.C
+>E9.A : E9
+>E9 : typeof E9
+>A : E9
+>E9.B : E9
+>E9 : typeof E9
+>B : E9
+>E6.B : E6
+>E6 : typeof E6
+>B : E6
+>E6.C : E6
+>E6 : typeof E6
+>C : E6
+>E6.A : E6
+>E6 : typeof E6
+>A : E6
+>E5.A : E5
+>E5 : typeof E5
+>A : E5
+>E5.B : E5
+>E5 : typeof E5
+>B : E5
+>E5.C : E5
+>E5 : typeof E5
+>C : E5
+
+];
+
+

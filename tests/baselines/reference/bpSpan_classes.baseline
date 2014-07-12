@@ -1,0 +1,2774 @@
+
+**Pos: 0 SpanInfo: {"minChar":0,"limChar":881,"text":null}
+** Statement: module Foo.Bar {
+    "use strict";
+
+    class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+
+
+    function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+
+    var greeter = new Greeter("Hello, world!");
+    var str = greeter.greet();
+
+    function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+
+    var b = foo2("Hello", "World", "!");
+    // This is simple signle line comment
+    for (var j = 0; j < b.length; j++) {
+        b[j].greet();
+    }
+}
+**Pos: 1 SpanInfo: {"minChar":0,"limChar":881,"text":null}
+** Statement: module Foo.Bar {
+    "use strict";
+
+    class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+
+
+    function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+
+    var greeter = new Greeter("Hello, world!");
+    var str = greeter.greet();
+
+    function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+
+    var b = foo2("Hello", "World", "!");
+    // This is simple signle line comment
+    for (var j = 0; j < b.length; j++) {
+        b[j].greet();
+    }
+}
+**Pos: 2 SpanInfo: {"minChar":0,"limChar":881,"text":null}
+** Statement: module Foo.Bar {
+    "use strict";
+
+    class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+
+
+    function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+
+    var greeter = new Greeter("Hello, world!");
+    var str = greeter.greet();
+
+    function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+
+    var b = foo2("Hello", "World", "!");
+    // This is simple signle line comment
+    for (var j = 0; j < b.length; j++) {
+        b[j].greet();
+    }
+}
+**Pos: 3 SpanInfo: {"minChar":0,"limChar":881,"text":null}
+** Statement: module Foo.Bar {
+    "use strict";
+
+    class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+
+
+    function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+
+    var greeter = new Greeter("Hello, world!");
+    var str = greeter.greet();
+
+    function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+
+    var b = foo2("Hello", "World", "!");
+    // This is simple signle line comment
+    for (var j = 0; j < b.length; j++) {
+        b[j].greet();
+    }
+}
+**Pos: 4 SpanInfo: {"minChar":0,"limChar":881,"text":null}
+** Statement: module Foo.Bar {
+    "use strict";
+
+    class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+
+
+    function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+
+    var greeter = new Greeter("Hello, world!");
+    var str = greeter.greet();
+
+    function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+
+    var b = foo2("Hello", "World", "!");
+    // This is simple signle line comment
+    for (var j = 0; j < b.length; j++) {
+        b[j].greet();
+    }
+}
+**Pos: 5 SpanInfo: {"minChar":0,"limChar":881,"text":null}
+** Statement: module Foo.Bar {
+    "use strict";
+
+    class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+
+
+    function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+
+    var greeter = new Greeter("Hello, world!");
+    var str = greeter.greet();
+
+    function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+
+    var b = foo2("Hello", "World", "!");
+    // This is simple signle line comment
+    for (var j = 0; j < b.length; j++) {
+        b[j].greet();
+    }
+}
+**Pos: 6 SpanInfo: {"minChar":0,"limChar":881,"text":null}
+** Statement: module Foo.Bar {
+    "use strict";
+
+    class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+
+
+    function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+
+    var greeter = new Greeter("Hello, world!");
+    var str = greeter.greet();
+
+    function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+
+    var b = foo2("Hello", "World", "!");
+    // This is simple signle line comment
+    for (var j = 0; j < b.length; j++) {
+        b[j].greet();
+    }
+}
+**Pos: 7 SpanInfo: {"minChar":0,"limChar":881,"text":null}
+** Statement: module Foo.Bar {
+    "use strict";
+
+    class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+
+
+    function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+
+    var greeter = new Greeter("Hello, world!");
+    var str = greeter.greet();
+
+    function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+
+    var b = foo2("Hello", "World", "!");
+    // This is simple signle line comment
+    for (var j = 0; j < b.length; j++) {
+        b[j].greet();
+    }
+}
+**Pos: 8 SpanInfo: {"minChar":0,"limChar":881,"text":null}
+** Statement: module Foo.Bar {
+    "use strict";
+
+    class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+
+
+    function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+
+    var greeter = new Greeter("Hello, world!");
+    var str = greeter.greet();
+
+    function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+
+    var b = foo2("Hello", "World", "!");
+    // This is simple signle line comment
+    for (var j = 0; j < b.length; j++) {
+        b[j].greet();
+    }
+}
+**Pos: 9 SpanInfo: {"minChar":0,"limChar":881,"text":null}
+** Statement: module Foo.Bar {
+    "use strict";
+
+    class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+
+
+    function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+
+    var greeter = new Greeter("Hello, world!");
+    var str = greeter.greet();
+
+    function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+
+    var b = foo2("Hello", "World", "!");
+    // This is simple signle line comment
+    for (var j = 0; j < b.length; j++) {
+        b[j].greet();
+    }
+}
+**Pos: 10 SpanInfo: {"minChar":0,"limChar":881,"text":null}
+** Statement: module Foo.Bar {
+    "use strict";
+
+    class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+
+
+    function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+
+    var greeter = new Greeter("Hello, world!");
+    var str = greeter.greet();
+
+    function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+
+    var b = foo2("Hello", "World", "!");
+    // This is simple signle line comment
+    for (var j = 0; j < b.length; j++) {
+        b[j].greet();
+    }
+}
+**Pos: 11 SpanInfo: {"minChar":0,"limChar":881,"text":null}
+** Statement: module Foo.Bar {
+    "use strict";
+
+    class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+
+
+    function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+
+    var greeter = new Greeter("Hello, world!");
+    var str = greeter.greet();
+
+    function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+
+    var b = foo2("Hello", "World", "!");
+    // This is simple signle line comment
+    for (var j = 0; j < b.length; j++) {
+        b[j].greet();
+    }
+}
+**Pos: 12 SpanInfo: {"minChar":0,"limChar":881,"text":null}
+** Statement: module Foo.Bar {
+    "use strict";
+
+    class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+
+
+    function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+
+    var greeter = new Greeter("Hello, world!");
+    var str = greeter.greet();
+
+    function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+
+    var b = foo2("Hello", "World", "!");
+    // This is simple signle line comment
+    for (var j = 0; j < b.length; j++) {
+        b[j].greet();
+    }
+}
+**Pos: 13 SpanInfo: {"minChar":0,"limChar":881,"text":null}
+** Statement: module Foo.Bar {
+    "use strict";
+
+    class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+
+
+    function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+
+    var greeter = new Greeter("Hello, world!");
+    var str = greeter.greet();
+
+    function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+
+    var b = foo2("Hello", "World", "!");
+    // This is simple signle line comment
+    for (var j = 0; j < b.length; j++) {
+        b[j].greet();
+    }
+}
+**Pos: 14 SpanInfo: {"minChar":0,"limChar":881,"text":null}
+** Statement: module Foo.Bar {
+    "use strict";
+
+    class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+
+
+    function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+
+    var greeter = new Greeter("Hello, world!");
+    var str = greeter.greet();
+
+    function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+
+    var b = foo2("Hello", "World", "!");
+    // This is simple signle line comment
+    for (var j = 0; j < b.length; j++) {
+        b[j].greet();
+    }
+}
+**Pos: 15 SpanInfo: {"minChar":0,"limChar":881,"text":null}
+** Statement: module Foo.Bar {
+    "use strict";
+
+    class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+
+
+    function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+
+    var greeter = new Greeter("Hello, world!");
+    var str = greeter.greet();
+
+    function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+
+    var b = foo2("Hello", "World", "!");
+    // This is simple signle line comment
+    for (var j = 0; j < b.length; j++) {
+        b[j].greet();
+    }
+}
+**Pos: 16 SpanInfo: {"minChar":0,"limChar":881,"text":null}
+** Statement: module Foo.Bar {
+    "use strict";
+
+    class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+
+
+    function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+
+    var greeter = new Greeter("Hello, world!");
+    var str = greeter.greet();
+
+    function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+
+    var b = foo2("Hello", "World", "!");
+    // This is simple signle line comment
+    for (var j = 0; j < b.length; j++) {
+        b[j].greet();
+    }
+}
+**Pos: 17 SpanInfo: {"minChar":21,"limChar":33,"text":null}
+** Statement: "use strict"
+**Pos: 18 SpanInfo: {"minChar":21,"limChar":33,"text":null}
+** Statement: "use strict"
+**Pos: 19 SpanInfo: {"minChar":21,"limChar":33,"text":null}
+** Statement: "use strict"
+**Pos: 20 SpanInfo: {"minChar":21,"limChar":33,"text":null}
+** Statement: "use strict"
+**Pos: 21 SpanInfo: {"minChar":21,"limChar":33,"text":null}
+** Statement: "use strict"
+**Pos: 22 SpanInfo: {"minChar":21,"limChar":33,"text":null}
+** Statement: "use strict"
+**Pos: 23 SpanInfo: {"minChar":21,"limChar":33,"text":null}
+** Statement: "use strict"
+**Pos: 24 SpanInfo: {"minChar":21,"limChar":33,"text":null}
+** Statement: "use strict"
+**Pos: 25 SpanInfo: {"minChar":21,"limChar":33,"text":null}
+** Statement: "use strict"
+**Pos: 26 SpanInfo: {"minChar":21,"limChar":33,"text":null}
+** Statement: "use strict"
+**Pos: 27 SpanInfo: {"minChar":21,"limChar":33,"text":null}
+** Statement: "use strict"
+**Pos: 28 SpanInfo: {"minChar":21,"limChar":33,"text":null}
+** Statement: "use strict"
+**Pos: 29 SpanInfo: {"minChar":21,"limChar":33,"text":null}
+** Statement: "use strict"
+**Pos: 30 SpanInfo: {"minChar":21,"limChar":33,"text":null}
+** Statement: "use strict"
+**Pos: 31 SpanInfo: {"minChar":21,"limChar":33,"text":null}
+** Statement: "use strict"
+**Pos: 32 SpanInfo: {"minChar":21,"limChar":33,"text":null}
+** Statement: "use strict"
+**Pos: 33 SpanInfo: {"minChar":21,"limChar":33,"text":null}
+** Statement: "use strict"
+**Pos: 34 SpanInfo: {"minChar":21,"limChar":33,"text":null}
+** Statement: "use strict"
+**Pos: 35 SpanInfo: null
+** Statement: 
+**Pos: 36 SpanInfo: {"minChar":40,"limChar":200,"text":null}
+** Statement: class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+**Pos: 37 SpanInfo: {"minChar":40,"limChar":200,"text":null}
+** Statement: class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+**Pos: 38 SpanInfo: {"minChar":40,"limChar":200,"text":null}
+** Statement: class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+**Pos: 39 SpanInfo: {"minChar":40,"limChar":200,"text":null}
+** Statement: class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+**Pos: 40 SpanInfo: {"minChar":40,"limChar":200,"text":null}
+** Statement: class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+**Pos: 41 SpanInfo: {"minChar":40,"limChar":200,"text":null}
+** Statement: class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+**Pos: 42 SpanInfo: {"minChar":40,"limChar":200,"text":null}
+** Statement: class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+**Pos: 43 SpanInfo: {"minChar":40,"limChar":200,"text":null}
+** Statement: class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+**Pos: 44 SpanInfo: {"minChar":40,"limChar":200,"text":null}
+** Statement: class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+**Pos: 45 SpanInfo: {"minChar":40,"limChar":200,"text":null}
+** Statement: class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+**Pos: 46 SpanInfo: {"minChar":40,"limChar":200,"text":null}
+** Statement: class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+**Pos: 47 SpanInfo: {"minChar":40,"limChar":200,"text":null}
+** Statement: class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+**Pos: 48 SpanInfo: {"minChar":40,"limChar":200,"text":null}
+** Statement: class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+**Pos: 49 SpanInfo: {"minChar":40,"limChar":200,"text":null}
+** Statement: class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+**Pos: 50 SpanInfo: {"minChar":40,"limChar":200,"text":null}
+** Statement: class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+**Pos: 51 SpanInfo: {"minChar":40,"limChar":200,"text":null}
+** Statement: class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+**Pos: 52 SpanInfo: {"minChar":40,"limChar":200,"text":null}
+** Statement: class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+**Pos: 53 SpanInfo: {"minChar":40,"limChar":200,"text":null}
+** Statement: class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+**Pos: 54 SpanInfo: {"minChar":40,"limChar":200,"text":null}
+** Statement: class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+**Pos: 55 SpanInfo: {"minChar":40,"limChar":200,"text":null}
+** Statement: class Greeter {
+        constructor(public greeting: string) {
+        }
+
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    }
+**Pos: 56 SpanInfo: {"minChar":64,"limChar":112,"text":null}
+** Statement: constructor(public greeting: string) {
+        }
+**Pos: 57 SpanInfo: {"minChar":64,"limChar":112,"text":null}
+** Statement: constructor(public greeting: string) {
+        }
+**Pos: 58 SpanInfo: {"minChar":64,"limChar":112,"text":null}
+** Statement: constructor(public greeting: string) {
+        }
+**Pos: 59 SpanInfo: {"minChar":64,"limChar":112,"text":null}
+** Statement: constructor(public greeting: string) {
+        }
+**Pos: 60 SpanInfo: {"minChar":64,"limChar":112,"text":null}
+** Statement: constructor(public greeting: string) {
+        }
+**Pos: 61 SpanInfo: {"minChar":64,"limChar":112,"text":null}
+** Statement: constructor(public greeting: string) {
+        }
+**Pos: 62 SpanInfo: {"minChar":64,"limChar":112,"text":null}
+** Statement: constructor(public greeting: string) {
+        }
+**Pos: 63 SpanInfo: {"minChar":64,"limChar":112,"text":null}
+** Statement: constructor(public greeting: string) {
+        }
+**Pos: 64 SpanInfo: {"minChar":64,"limChar":112,"text":null}
+** Statement: constructor(public greeting: string) {
+        }
+**Pos: 65 SpanInfo: {"minChar":64,"limChar":112,"text":null}
+** Statement: constructor(public greeting: string) {
+        }
+**Pos: 66 SpanInfo: {"minChar":64,"limChar":112,"text":null}
+** Statement: constructor(public greeting: string) {
+        }
+**Pos: 67 SpanInfo: {"minChar":64,"limChar":112,"text":null}
+** Statement: constructor(public greeting: string) {
+        }
+**Pos: 68 SpanInfo: {"minChar":64,"limChar":112,"text":null}
+** Statement: constructor(public greeting: string) {
+        }
+**Pos: 69 SpanInfo: {"minChar":64,"limChar":112,"text":null}
+** Statement: constructor(public greeting: string) {
+        }
+**Pos: 70 SpanInfo: {"minChar":64,"limChar":112,"text":null}
+** Statement: constructor(public greeting: string) {
+        }
+**Pos: 71 SpanInfo: {"minChar":64,"limChar":112,"text":null}
+** Statement: constructor(public greeting: string) {
+        }
+**Pos: 72 SpanInfo: {"minChar":64,"limChar":112,"text":null}
+** Statement: constructor(public greeting: string) {
+        }
+**Pos: 73 SpanInfo: {"minChar":64,"limChar":112,"text":null}
+** Statement: constructor(public greeting: string) {
+        }
+**Pos: 74 SpanInfo: {"minChar":64,"limChar":112,"text":null}
+** Statement: constructor(public greeting: string) {
+        }
+**Pos: 75 SpanInfo: {"minChar":64,"limChar":112,"text":null}
+** Statement: constructor(public greeting: string) {
+        }
+**Pos: 76 SpanInfo: {"minChar":76,"limChar":99,"text":null}
+** Statement: public greeting: string
+**Pos: 77 SpanInfo: {"minChar":76,"limChar":99,"text":null}
+** Statement: public greeting: string
+**Pos: 78 SpanInfo: {"minChar":76,"limChar":99,"text":null}
+** Statement: public greeting: string
+**Pos: 79 SpanInfo: {"minChar":76,"limChar":99,"text":null}
+** Statement: public greeting: string
+**Pos: 80 SpanInfo: {"minChar":76,"limChar":99,"text":null}
+** Statement: public greeting: string
+**Pos: 81 SpanInfo: {"minChar":76,"limChar":99,"text":null}
+** Statement: public greeting: string
+**Pos: 82 SpanInfo: {"minChar":76,"limChar":99,"text":null}
+** Statement: public greeting: string
+**Pos: 83 SpanInfo: {"minChar":76,"limChar":99,"text":null}
+** Statement: public greeting: string
+**Pos: 84 SpanInfo: {"minChar":76,"limChar":99,"text":null}
+** Statement: public greeting: string
+**Pos: 85 SpanInfo: {"minChar":76,"limChar":99,"text":null}
+** Statement: public greeting: string
+**Pos: 86 SpanInfo: {"minChar":76,"limChar":99,"text":null}
+** Statement: public greeting: string
+**Pos: 87 SpanInfo: {"minChar":76,"limChar":99,"text":null}
+** Statement: public greeting: string
+**Pos: 88 SpanInfo: {"minChar":76,"limChar":99,"text":null}
+** Statement: public greeting: string
+**Pos: 89 SpanInfo: {"minChar":76,"limChar":99,"text":null}
+** Statement: public greeting: string
+**Pos: 90 SpanInfo: {"minChar":76,"limChar":99,"text":null}
+** Statement: public greeting: string
+**Pos: 91 SpanInfo: {"minChar":76,"limChar":99,"text":null}
+** Statement: public greeting: string
+**Pos: 92 SpanInfo: {"minChar":76,"limChar":99,"text":null}
+** Statement: public greeting: string
+**Pos: 93 SpanInfo: {"minChar":76,"limChar":99,"text":null}
+** Statement: public greeting: string
+**Pos: 94 SpanInfo: {"minChar":76,"limChar":99,"text":null}
+** Statement: public greeting: string
+**Pos: 95 SpanInfo: {"minChar":76,"limChar":99,"text":null}
+** Statement: public greeting: string
+**Pos: 96 SpanInfo: {"minChar":76,"limChar":99,"text":null}
+** Statement: public greeting: string
+**Pos: 97 SpanInfo: {"minChar":76,"limChar":99,"text":null}
+** Statement: public greeting: string
+**Pos: 98 SpanInfo: {"minChar":76,"limChar":99,"text":null}
+** Statement: public greeting: string
+**Pos: 99 SpanInfo: {"minChar":76,"limChar":99,"text":null}
+** Statement: public greeting: string
+**Pos: 100 SpanInfo: {"minChar":76,"limChar":99,"text":null}
+** Statement: public greeting: string
+**Pos: 101 SpanInfo: {"minChar":64,"limChar":112,"text":null}
+** Statement: constructor(public greeting: string) {
+        }
+**Pos: 102 SpanInfo: {"minChar":64,"limChar":112,"text":null}
+** Statement: constructor(public greeting: string) {
+        }
+**Pos: 103 SpanInfo: {"minChar":111,"limChar":112,"text":null}
+** Statement: }
+**Pos: 104 SpanInfo: {"minChar":111,"limChar":112,"text":null}
+** Statement: }
+**Pos: 105 SpanInfo: {"minChar":111,"limChar":112,"text":null}
+** Statement: }
+**Pos: 106 SpanInfo: {"minChar":111,"limChar":112,"text":null}
+** Statement: }
+**Pos: 107 SpanInfo: {"minChar":111,"limChar":112,"text":null}
+** Statement: }
+**Pos: 108 SpanInfo: {"minChar":111,"limChar":112,"text":null}
+** Statement: }
+**Pos: 109 SpanInfo: {"minChar":111,"limChar":112,"text":null}
+** Statement: }
+**Pos: 110 SpanInfo: {"minChar":111,"limChar":112,"text":null}
+** Statement: }
+**Pos: 111 SpanInfo: {"minChar":111,"limChar":112,"text":null}
+** Statement: }
+**Pos: 112 SpanInfo: {"minChar":111,"limChar":112,"text":null}
+** Statement: }
+**Pos: 113 SpanInfo: null
+** Statement: 
+**Pos: 114 SpanInfo: {"minChar":122,"limChar":194,"text":null}
+** Statement: greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+**Pos: 115 SpanInfo: {"minChar":122,"limChar":194,"text":null}
+** Statement: greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+**Pos: 116 SpanInfo: {"minChar":122,"limChar":194,"text":null}
+** Statement: greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+**Pos: 117 SpanInfo: {"minChar":122,"limChar":194,"text":null}
+** Statement: greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+**Pos: 118 SpanInfo: {"minChar":122,"limChar":194,"text":null}
+** Statement: greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+**Pos: 119 SpanInfo: {"minChar":122,"limChar":194,"text":null}
+** Statement: greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+**Pos: 120 SpanInfo: {"minChar":122,"limChar":194,"text":null}
+** Statement: greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+**Pos: 121 SpanInfo: {"minChar":122,"limChar":194,"text":null}
+** Statement: greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+**Pos: 122 SpanInfo: {"minChar":122,"limChar":194,"text":null}
+** Statement: greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+**Pos: 123 SpanInfo: {"minChar":122,"limChar":194,"text":null}
+** Statement: greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+**Pos: 124 SpanInfo: {"minChar":122,"limChar":194,"text":null}
+** Statement: greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+**Pos: 125 SpanInfo: {"minChar":122,"limChar":194,"text":null}
+** Statement: greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+**Pos: 126 SpanInfo: {"minChar":122,"limChar":194,"text":null}
+** Statement: greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+**Pos: 127 SpanInfo: {"minChar":122,"limChar":194,"text":null}
+** Statement: greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+**Pos: 128 SpanInfo: {"minChar":122,"limChar":194,"text":null}
+** Statement: greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+**Pos: 129 SpanInfo: {"minChar":122,"limChar":194,"text":null}
+** Statement: greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+**Pos: 130 SpanInfo: {"minChar":122,"limChar":194,"text":null}
+** Statement: greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+**Pos: 131 SpanInfo: {"minChar":122,"limChar":194,"text":null}
+** Statement: greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+**Pos: 132 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 133 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 134 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 135 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 136 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 137 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 138 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 139 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 140 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 141 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 142 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 143 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 144 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 145 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 146 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 147 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 148 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 149 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 150 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 151 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 152 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 153 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 154 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 155 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 156 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 157 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 158 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 159 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 160 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 161 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 162 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 163 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 164 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 165 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 166 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 167 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 168 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 169 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 170 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 171 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 172 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 173 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 174 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 175 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 176 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 177 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 178 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 179 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 180 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 181 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 182 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 183 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 184 SpanInfo: {"minChar":144,"limChar":183,"text":null}
+** Statement: return "<h1>" + this.greeting + "</h1>"
+**Pos: 185 SpanInfo: {"minChar":193,"limChar":194,"text":null}
+** Statement: }
+**Pos: 186 SpanInfo: {"minChar":193,"limChar":194,"text":null}
+** Statement: }
+**Pos: 187 SpanInfo: {"minChar":193,"limChar":194,"text":null}
+** Statement: }
+**Pos: 188 SpanInfo: {"minChar":193,"limChar":194,"text":null}
+** Statement: }
+**Pos: 189 SpanInfo: {"minChar":193,"limChar":194,"text":null}
+** Statement: }
+**Pos: 190 SpanInfo: {"minChar":193,"limChar":194,"text":null}
+** Statement: }
+**Pos: 191 SpanInfo: {"minChar":193,"limChar":194,"text":null}
+** Statement: }
+**Pos: 192 SpanInfo: {"minChar":193,"limChar":194,"text":null}
+** Statement: }
+**Pos: 193 SpanInfo: {"minChar":193,"limChar":194,"text":null}
+** Statement: }
+**Pos: 194 SpanInfo: {"minChar":193,"limChar":194,"text":null}
+** Statement: }
+**Pos: 195 SpanInfo: {"minChar":199,"limChar":200,"text":null}
+** Statement: }
+**Pos: 196 SpanInfo: {"minChar":199,"limChar":200,"text":null}
+** Statement: }
+**Pos: 197 SpanInfo: {"minChar":199,"limChar":200,"text":null}
+** Statement: }
+**Pos: 198 SpanInfo: {"minChar":199,"limChar":200,"text":null}
+** Statement: }
+**Pos: 199 SpanInfo: {"minChar":199,"limChar":200,"text":null}
+** Statement: }
+**Pos: 200 SpanInfo: {"minChar":199,"limChar":200,"text":null}
+** Statement: }
+**Pos: 201 SpanInfo: null
+** Statement: 
+**Pos: 202 SpanInfo: null
+** Statement: 
+**Pos: 203 SpanInfo: {"minChar":207,"limChar":292,"text":null}
+** Statement: function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+**Pos: 204 SpanInfo: {"minChar":207,"limChar":292,"text":null}
+** Statement: function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+**Pos: 205 SpanInfo: {"minChar":207,"limChar":292,"text":null}
+** Statement: function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+**Pos: 206 SpanInfo: {"minChar":207,"limChar":292,"text":null}
+** Statement: function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+**Pos: 207 SpanInfo: {"minChar":207,"limChar":292,"text":null}
+** Statement: function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+**Pos: 208 SpanInfo: {"minChar":207,"limChar":292,"text":null}
+** Statement: function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+**Pos: 209 SpanInfo: {"minChar":207,"limChar":292,"text":null}
+** Statement: function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+**Pos: 210 SpanInfo: {"minChar":207,"limChar":292,"text":null}
+** Statement: function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+**Pos: 211 SpanInfo: {"minChar":207,"limChar":292,"text":null}
+** Statement: function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+**Pos: 212 SpanInfo: {"minChar":207,"limChar":292,"text":null}
+** Statement: function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+**Pos: 213 SpanInfo: {"minChar":207,"limChar":292,"text":null}
+** Statement: function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+**Pos: 214 SpanInfo: {"minChar":207,"limChar":292,"text":null}
+** Statement: function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+**Pos: 215 SpanInfo: {"minChar":207,"limChar":292,"text":null}
+** Statement: function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+**Pos: 216 SpanInfo: {"minChar":207,"limChar":292,"text":null}
+** Statement: function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+**Pos: 217 SpanInfo: {"minChar":207,"limChar":292,"text":null}
+** Statement: function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+**Pos: 218 SpanInfo: {"minChar":207,"limChar":292,"text":null}
+** Statement: function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+**Pos: 219 SpanInfo: {"minChar":207,"limChar":292,"text":null}
+** Statement: function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+**Pos: 220 SpanInfo: null
+** Statement: 
+**Pos: 221 SpanInfo: null
+** Statement: 
+**Pos: 222 SpanInfo: null
+** Statement: 
+**Pos: 223 SpanInfo: null
+** Statement: 
+**Pos: 224 SpanInfo: null
+** Statement: 
+**Pos: 225 SpanInfo: null
+** Statement: 
+**Pos: 226 SpanInfo: null
+** Statement: 
+**Pos: 227 SpanInfo: null
+** Statement: 
+**Pos: 228 SpanInfo: null
+** Statement: 
+**Pos: 229 SpanInfo: null
+** Statement: 
+**Pos: 230 SpanInfo: null
+** Statement: 
+**Pos: 231 SpanInfo: null
+** Statement: 
+**Pos: 232 SpanInfo: null
+** Statement: 
+**Pos: 233 SpanInfo: null
+** Statement: 
+**Pos: 234 SpanInfo: null
+** Statement: 
+**Pos: 235 SpanInfo: null
+** Statement: 
+**Pos: 236 SpanInfo: null
+** Statement: 
+**Pos: 237 SpanInfo: {"minChar":207,"limChar":292,"text":null}
+** Statement: function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+**Pos: 238 SpanInfo: {"minChar":207,"limChar":292,"text":null}
+** Statement: function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+**Pos: 239 SpanInfo: {"minChar":207,"limChar":292,"text":null}
+** Statement: function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+**Pos: 240 SpanInfo: {"minChar":207,"limChar":292,"text":null}
+** Statement: function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+**Pos: 241 SpanInfo: {"minChar":207,"limChar":292,"text":null}
+** Statement: function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+**Pos: 242 SpanInfo: {"minChar":207,"limChar":292,"text":null}
+** Statement: function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+**Pos: 243 SpanInfo: {"minChar":207,"limChar":292,"text":null}
+** Statement: function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+**Pos: 244 SpanInfo: {"minChar":207,"limChar":292,"text":null}
+** Statement: function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+**Pos: 245 SpanInfo: {"minChar":207,"limChar":292,"text":null}
+** Statement: function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+**Pos: 246 SpanInfo: {"minChar":207,"limChar":292,"text":null}
+** Statement: function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+**Pos: 247 SpanInfo: {"minChar":207,"limChar":292,"text":null}
+** Statement: function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+**Pos: 248 SpanInfo: {"minChar":207,"limChar":292,"text":null}
+** Statement: function foo(greeting: string): Greeter {
+        return new Greeter(greeting);
+    }
+**Pos: 249 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 250 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 251 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 252 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 253 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 254 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 255 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 256 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 257 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 258 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 259 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 260 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 261 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 262 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 263 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 264 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 265 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 266 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 267 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 268 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 269 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 270 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 271 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 272 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 273 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 274 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 275 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 276 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 277 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 278 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 279 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 280 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 281 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 282 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 283 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 284 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 285 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 286 SpanInfo: {"minChar":257,"limChar":285,"text":null}
+** Statement: return new Greeter(greeting)
+**Pos: 287 SpanInfo: {"minChar":291,"limChar":292,"text":null}
+** Statement: }
+**Pos: 288 SpanInfo: {"minChar":291,"limChar":292,"text":null}
+** Statement: }
+**Pos: 289 SpanInfo: {"minChar":291,"limChar":292,"text":null}
+** Statement: }
+**Pos: 290 SpanInfo: {"minChar":291,"limChar":292,"text":null}
+** Statement: }
+**Pos: 291 SpanInfo: {"minChar":291,"limChar":292,"text":null}
+** Statement: }
+**Pos: 292 SpanInfo: {"minChar":291,"limChar":292,"text":null}
+** Statement: }
+**Pos: 293 SpanInfo: null
+** Statement: 
+**Pos: 294 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 295 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 296 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 297 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 298 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 299 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 300 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 301 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 302 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 303 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 304 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 305 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 306 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 307 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 308 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 309 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 310 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 311 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 312 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 313 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 314 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 315 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 316 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 317 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 318 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 319 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 320 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 321 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 322 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 323 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 324 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 325 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 326 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 327 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 328 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 329 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 330 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 331 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 332 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 333 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 334 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 335 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 336 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 337 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 338 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 339 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 340 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 341 SpanInfo: {"minChar":298,"limChar":340,"text":null}
+** Statement: var greeter = new Greeter("Hello, world!")
+**Pos: 342 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 343 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 344 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 345 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 346 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 347 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 348 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 349 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 350 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 351 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 352 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 353 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 354 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 355 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 356 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 357 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 358 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 359 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 360 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 361 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 362 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 363 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 364 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 365 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 366 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 367 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 368 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 369 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 370 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 371 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 372 SpanInfo: {"minChar":346,"limChar":371,"text":null}
+** Statement: var str = greeter.greet()
+**Pos: 373 SpanInfo: null
+** Statement: 
+**Pos: 374 SpanInfo: {"minChar":378,"limChar":726,"text":null}
+** Statement: function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+**Pos: 375 SpanInfo: {"minChar":378,"limChar":726,"text":null}
+** Statement: function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+**Pos: 376 SpanInfo: {"minChar":378,"limChar":726,"text":null}
+** Statement: function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+**Pos: 377 SpanInfo: {"minChar":378,"limChar":726,"text":null}
+** Statement: function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+**Pos: 378 SpanInfo: {"minChar":378,"limChar":726,"text":null}
+** Statement: function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+**Pos: 379 SpanInfo: {"minChar":378,"limChar":726,"text":null}
+** Statement: function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+**Pos: 380 SpanInfo: {"minChar":378,"limChar":726,"text":null}
+** Statement: function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+**Pos: 381 SpanInfo: {"minChar":378,"limChar":726,"text":null}
+** Statement: function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+**Pos: 382 SpanInfo: {"minChar":378,"limChar":726,"text":null}
+** Statement: function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+**Pos: 383 SpanInfo: {"minChar":378,"limChar":726,"text":null}
+** Statement: function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+**Pos: 384 SpanInfo: {"minChar":378,"limChar":726,"text":null}
+** Statement: function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+**Pos: 385 SpanInfo: {"minChar":378,"limChar":726,"text":null}
+** Statement: function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+**Pos: 386 SpanInfo: {"minChar":378,"limChar":726,"text":null}
+** Statement: function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+**Pos: 387 SpanInfo: {"minChar":378,"limChar":726,"text":null}
+** Statement: function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+**Pos: 388 SpanInfo: {"minChar":378,"limChar":726,"text":null}
+** Statement: function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+**Pos: 389 SpanInfo: {"minChar":378,"limChar":726,"text":null}
+** Statement: function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+**Pos: 390 SpanInfo: {"minChar":378,"limChar":726,"text":null}
+** Statement: function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+**Pos: 391 SpanInfo: {"minChar":378,"limChar":726,"text":null}
+** Statement: function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+**Pos: 392 SpanInfo: null
+** Statement: 
+**Pos: 393 SpanInfo: null
+** Statement: 
+**Pos: 394 SpanInfo: null
+** Statement: 
+**Pos: 395 SpanInfo: null
+** Statement: 
+**Pos: 396 SpanInfo: null
+** Statement: 
+**Pos: 397 SpanInfo: null
+** Statement: 
+**Pos: 398 SpanInfo: null
+** Statement: 
+**Pos: 399 SpanInfo: null
+** Statement: 
+**Pos: 400 SpanInfo: null
+** Statement: 
+**Pos: 401 SpanInfo: null
+** Statement: 
+**Pos: 402 SpanInfo: null
+** Statement: 
+**Pos: 403 SpanInfo: null
+** Statement: 
+**Pos: 404 SpanInfo: null
+** Statement: 
+**Pos: 405 SpanInfo: null
+** Statement: 
+**Pos: 406 SpanInfo: null
+** Statement: 
+**Pos: 407 SpanInfo: null
+** Statement: 
+**Pos: 408 SpanInfo: null
+** Statement: 
+**Pos: 409 SpanInfo: null
+** Statement: 
+**Pos: 410 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 411 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 412 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 413 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 414 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 415 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 416 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 417 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 418 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 419 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 420 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 421 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 422 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 423 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 424 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 425 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 426 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 427 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 428 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 429 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 430 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 431 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 432 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 433 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 434 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 435 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 436 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 437 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 438 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 439 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 440 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 441 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 442 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 443 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 444 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 445 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 446 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 447 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 448 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 449 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 450 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 451 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 452 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 453 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 454 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 455 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 456 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 457 SpanInfo: {"minChar":410,"limChar":456,"text":null}
+** Statement: ...restGreetings /* more greeting */: string[]
+**Pos: 458 SpanInfo: {"minChar":378,"limChar":726,"text":null}
+** Statement: function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+**Pos: 459 SpanInfo: {"minChar":378,"limChar":726,"text":null}
+** Statement: function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
+        var greeters: Greeter[] = []; /* inline block comment */
+        greeters[0] = new Greeter(greeting);
+        for (var i = 0; i < restGreetings.length; i++) {
+            greeters.push(new Greeter(restGreetings[i]));
+        }
+
+        return greeters;
+    }
+**Pos: 460 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 461 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 462 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 463 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 464 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 465 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 466 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 467 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 468 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 469 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 470 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 471 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 472 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 473 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 474 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 475 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 476 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 477 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 478 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 479 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 480 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 481 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 482 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 483 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 484 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 485 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 486 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 487 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 488 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 489 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 490 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 491 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 492 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 493 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 494 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 495 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 496 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 497 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 498 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 499 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 500 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 501 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 502 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 503 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 504 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 505 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 506 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 507 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 508 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 509 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 510 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 511 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 512 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 513 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 514 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 515 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 516 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 517 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 518 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 519 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 520 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 521 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 522 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 523 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 524 SpanInfo: {"minChar":468,"limChar":496,"text":null}
+** Statement: var greeters: Greeter[] = []
+**Pos: 525 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 526 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 527 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 528 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 529 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 530 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 531 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 532 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 533 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 534 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 535 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 536 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 537 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 538 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 539 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 540 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 541 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 542 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 543 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 544 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 545 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 546 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 547 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 548 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 549 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 550 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 551 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 552 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 553 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 554 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 555 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 556 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 557 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 558 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 559 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 560 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 561 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 562 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 563 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 564 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 565 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 566 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 567 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 568 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 569 SpanInfo: {"minChar":533,"limChar":568,"text":null}
+** Statement: greeters[0] = new Greeter(greeting)
+**Pos: 570 SpanInfo: {"minChar":583,"limChar":592,"text":null}
+** Statement: var i = 0
+**Pos: 571 SpanInfo: {"minChar":583,"limChar":592,"text":null}
+** Statement: var i = 0
+**Pos: 572 SpanInfo: {"minChar":583,"limChar":592,"text":null}
+** Statement: var i = 0
+**Pos: 573 SpanInfo: {"minChar":583,"limChar":592,"text":null}
+** Statement: var i = 0
+**Pos: 574 SpanInfo: {"minChar":583,"limChar":592,"text":null}
+** Statement: var i = 0
+**Pos: 575 SpanInfo: {"minChar":583,"limChar":592,"text":null}
+** Statement: var i = 0
+**Pos: 576 SpanInfo: {"minChar":583,"limChar":592,"text":null}
+** Statement: var i = 0
+**Pos: 577 SpanInfo: {"minChar":583,"limChar":592,"text":null}
+** Statement: var i = 0
+**Pos: 578 SpanInfo: {"minChar":583,"limChar":592,"text":null}
+** Statement: var i = 0
+**Pos: 579 SpanInfo: {"minChar":583,"limChar":592,"text":null}
+** Statement: var i = 0
+**Pos: 580 SpanInfo: {"minChar":583,"limChar":592,"text":null}
+** Statement: var i = 0
+**Pos: 581 SpanInfo: {"minChar":583,"limChar":592,"text":null}
+** Statement: var i = 0
+**Pos: 582 SpanInfo: {"minChar":583,"limChar":592,"text":null}
+** Statement: var i = 0
+**Pos: 583 SpanInfo: {"minChar":583,"limChar":592,"text":null}
+** Statement: var i = 0
+**Pos: 584 SpanInfo: {"minChar":583,"limChar":592,"text":null}
+** Statement: var i = 0
+**Pos: 585 SpanInfo: {"minChar":583,"limChar":592,"text":null}
+** Statement: var i = 0
+**Pos: 586 SpanInfo: {"minChar":583,"limChar":592,"text":null}
+** Statement: var i = 0
+**Pos: 587 SpanInfo: {"minChar":583,"limChar":592,"text":null}
+** Statement: var i = 0
+**Pos: 588 SpanInfo: {"minChar":583,"limChar":592,"text":null}
+** Statement: var i = 0
+**Pos: 589 SpanInfo: {"minChar":583,"limChar":592,"text":null}
+** Statement: var i = 0
+**Pos: 590 SpanInfo: {"minChar":583,"limChar":592,"text":null}
+** Statement: var i = 0
+**Pos: 591 SpanInfo: {"minChar":583,"limChar":592,"text":null}
+** Statement: var i = 0
+**Pos: 592 SpanInfo: {"minChar":583,"limChar":592,"text":null}
+** Statement: var i = 0
+**Pos: 593 SpanInfo: {"minChar":583,"limChar":592,"text":null}
+** Statement: var i = 0
+**Pos: 594 SpanInfo: {"minChar":594,"limChar":618,"text":null}
+** Statement: i < restGreetings.length
+**Pos: 595 SpanInfo: {"minChar":594,"limChar":618,"text":null}
+** Statement: i < restGreetings.length
+**Pos: 596 SpanInfo: {"minChar":594,"limChar":618,"text":null}
+** Statement: i < restGreetings.length
+**Pos: 597 SpanInfo: {"minChar":594,"limChar":618,"text":null}
+** Statement: i < restGreetings.length
+**Pos: 598 SpanInfo: {"minChar":594,"limChar":618,"text":null}
+** Statement: i < restGreetings.length
+**Pos: 599 SpanInfo: {"minChar":594,"limChar":618,"text":null}
+** Statement: i < restGreetings.length
+**Pos: 600 SpanInfo: {"minChar":594,"limChar":618,"text":null}
+** Statement: i < restGreetings.length
+**Pos: 601 SpanInfo: {"minChar":594,"limChar":618,"text":null}
+** Statement: i < restGreetings.length
+**Pos: 602 SpanInfo: {"minChar":594,"limChar":618,"text":null}
+** Statement: i < restGreetings.length
+**Pos: 603 SpanInfo: {"minChar":594,"limChar":618,"text":null}
+** Statement: i < restGreetings.length
+**Pos: 604 SpanInfo: {"minChar":594,"limChar":618,"text":null}
+** Statement: i < restGreetings.length
+**Pos: 605 SpanInfo: {"minChar":594,"limChar":618,"text":null}
+** Statement: i < restGreetings.length
+**Pos: 606 SpanInfo: {"minChar":594,"limChar":618,"text":null}
+** Statement: i < restGreetings.length
+**Pos: 607 SpanInfo: {"minChar":594,"limChar":618,"text":null}
+** Statement: i < restGreetings.length
+**Pos: 608 SpanInfo: {"minChar":594,"limChar":618,"text":null}
+** Statement: i < restGreetings.length
+**Pos: 609 SpanInfo: {"minChar":594,"limChar":618,"text":null}
+** Statement: i < restGreetings.length
+**Pos: 610 SpanInfo: {"minChar":594,"limChar":618,"text":null}
+** Statement: i < restGreetings.length
+**Pos: 611 SpanInfo: {"minChar":594,"limChar":618,"text":null}
+** Statement: i < restGreetings.length
+**Pos: 612 SpanInfo: {"minChar":594,"limChar":618,"text":null}
+** Statement: i < restGreetings.length
+**Pos: 613 SpanInfo: {"minChar":594,"limChar":618,"text":null}
+** Statement: i < restGreetings.length
+**Pos: 614 SpanInfo: {"minChar":594,"limChar":618,"text":null}
+** Statement: i < restGreetings.length
+**Pos: 615 SpanInfo: {"minChar":594,"limChar":618,"text":null}
+** Statement: i < restGreetings.length
+**Pos: 616 SpanInfo: {"minChar":594,"limChar":618,"text":null}
+** Statement: i < restGreetings.length
+**Pos: 617 SpanInfo: {"minChar":594,"limChar":618,"text":null}
+** Statement: i < restGreetings.length
+**Pos: 618 SpanInfo: {"minChar":594,"limChar":618,"text":null}
+** Statement: i < restGreetings.length
+**Pos: 619 SpanInfo: {"minChar":594,"limChar":618,"text":null}
+** Statement: i < restGreetings.length
+**Pos: 620 SpanInfo: {"minChar":620,"limChar":623,"text":null}
+** Statement: i++
+**Pos: 621 SpanInfo: {"minChar":620,"limChar":623,"text":null}
+** Statement: i++
+**Pos: 622 SpanInfo: {"minChar":620,"limChar":623,"text":null}
+** Statement: i++
+**Pos: 623 SpanInfo: {"minChar":620,"limChar":623,"text":null}
+** Statement: i++
+**Pos: 624 SpanInfo: {"minChar":620,"limChar":623,"text":null}
+** Statement: i++
+**Pos: 625 SpanInfo: {"minChar":620,"limChar":623,"text":null}
+** Statement: i++
+**Pos: 626 SpanInfo: {"minChar":620,"limChar":623,"text":null}
+** Statement: i++
+**Pos: 627 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 628 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 629 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 630 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 631 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 632 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 633 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 634 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 635 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 636 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 637 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 638 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 639 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 640 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 641 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 642 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 643 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 644 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 645 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 646 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 647 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 648 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 649 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 650 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 651 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 652 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 653 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 654 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 655 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 656 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 657 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 658 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 659 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 660 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 661 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 662 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 663 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 664 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 665 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 666 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 667 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 668 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 669 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 670 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 671 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 672 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 673 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 674 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 675 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 676 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 677 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 678 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 679 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 680 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 681 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 682 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 683 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 684 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 685 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 686 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 687 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 688 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 689 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 690 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 691 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 692 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 693 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 694 SpanInfo: {"minChar":639,"limChar":683,"text":null}
+** Statement: greeters.push(new Greeter(restGreetings[i]))
+**Pos: 695 SpanInfo: null
+** Statement: 
+**Pos: 696 SpanInfo: {"minChar":704,"limChar":719,"text":null}
+** Statement: return greeters
+**Pos: 697 SpanInfo: {"minChar":704,"limChar":719,"text":null}
+** Statement: return greeters
+**Pos: 698 SpanInfo: {"minChar":704,"limChar":719,"text":null}
+** Statement: return greeters
+**Pos: 699 SpanInfo: {"minChar":704,"limChar":719,"text":null}
+** Statement: return greeters
+**Pos: 700 SpanInfo: {"minChar":704,"limChar":719,"text":null}
+** Statement: return greeters
+**Pos: 701 SpanInfo: {"minChar":704,"limChar":719,"text":null}
+** Statement: return greeters
+**Pos: 702 SpanInfo: {"minChar":704,"limChar":719,"text":null}
+** Statement: return greeters
+**Pos: 703 SpanInfo: {"minChar":704,"limChar":719,"text":null}
+** Statement: return greeters
+**Pos: 704 SpanInfo: {"minChar":704,"limChar":719,"text":null}
+** Statement: return greeters
+**Pos: 705 SpanInfo: {"minChar":704,"limChar":719,"text":null}
+** Statement: return greeters
+**Pos: 706 SpanInfo: {"minChar":704,"limChar":719,"text":null}
+** Statement: return greeters
+**Pos: 707 SpanInfo: {"minChar":704,"limChar":719,"text":null}
+** Statement: return greeters
+**Pos: 708 SpanInfo: {"minChar":704,"limChar":719,"text":null}
+** Statement: return greeters
+**Pos: 709 SpanInfo: {"minChar":704,"limChar":719,"text":null}
+** Statement: return greeters
+**Pos: 710 SpanInfo: {"minChar":704,"limChar":719,"text":null}
+** Statement: return greeters
+**Pos: 711 SpanInfo: {"minChar":704,"limChar":719,"text":null}
+** Statement: return greeters
+**Pos: 712 SpanInfo: {"minChar":704,"limChar":719,"text":null}
+** Statement: return greeters
+**Pos: 713 SpanInfo: {"minChar":704,"limChar":719,"text":null}
+** Statement: return greeters
+**Pos: 714 SpanInfo: {"minChar":704,"limChar":719,"text":null}
+** Statement: return greeters
+**Pos: 715 SpanInfo: {"minChar":704,"limChar":719,"text":null}
+** Statement: return greeters
+**Pos: 716 SpanInfo: {"minChar":704,"limChar":719,"text":null}
+** Statement: return greeters
+**Pos: 717 SpanInfo: {"minChar":704,"limChar":719,"text":null}
+** Statement: return greeters
+**Pos: 718 SpanInfo: {"minChar":704,"limChar":719,"text":null}
+** Statement: return greeters
+**Pos: 719 SpanInfo: {"minChar":704,"limChar":719,"text":null}
+** Statement: return greeters
+**Pos: 720 SpanInfo: {"minChar":704,"limChar":719,"text":null}
+** Statement: return greeters
+**Pos: 721 SpanInfo: {"minChar":725,"limChar":726,"text":null}
+** Statement: }
+**Pos: 722 SpanInfo: {"minChar":725,"limChar":726,"text":null}
+** Statement: }
+**Pos: 723 SpanInfo: {"minChar":725,"limChar":726,"text":null}
+** Statement: }
+**Pos: 724 SpanInfo: {"minChar":725,"limChar":726,"text":null}
+** Statement: }
+**Pos: 725 SpanInfo: {"minChar":725,"limChar":726,"text":null}
+** Statement: }
+**Pos: 726 SpanInfo: {"minChar":725,"limChar":726,"text":null}
+** Statement: }
+**Pos: 727 SpanInfo: null
+** Statement: 
+**Pos: 728 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 729 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 730 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 731 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 732 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 733 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 734 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 735 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 736 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 737 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 738 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 739 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 740 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 741 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 742 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 743 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 744 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 745 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 746 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 747 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 748 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 749 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 750 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 751 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 752 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 753 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 754 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 755 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 756 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 757 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 758 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 759 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 760 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 761 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 762 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 763 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 764 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 765 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 766 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 767 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 768 SpanInfo: {"minChar":732,"limChar":767,"text":null}
+** Statement: var b = foo2("Hello", "World", "!")
+**Pos: 769 SpanInfo: null
+** Statement: 
+**Pos: 770 SpanInfo: null
+** Statement: 
+**Pos: 771 SpanInfo: null
+** Statement: 
+**Pos: 772 SpanInfo: null
+** Statement: 
+**Pos: 773 SpanInfo: null
+** Statement: 
+**Pos: 774 SpanInfo: null
+** Statement: 
+**Pos: 775 SpanInfo: null
+** Statement: 
+**Pos: 776 SpanInfo: null
+** Statement: 
+**Pos: 777 SpanInfo: null
+** Statement: 
+**Pos: 778 SpanInfo: null
+** Statement: 
+**Pos: 779 SpanInfo: null
+** Statement: 
+**Pos: 780 SpanInfo: null
+** Statement: 
+**Pos: 781 SpanInfo: null
+** Statement: 
+**Pos: 782 SpanInfo: null
+** Statement: 
+**Pos: 783 SpanInfo: null
+** Statement: 
+**Pos: 784 SpanInfo: null
+** Statement: 
+**Pos: 785 SpanInfo: null
+** Statement: 
+**Pos: 786 SpanInfo: null
+** Statement: 
+**Pos: 787 SpanInfo: null
+** Statement: 
+**Pos: 788 SpanInfo: null
+** Statement: 
+**Pos: 789 SpanInfo: null
+** Statement: 
+**Pos: 790 SpanInfo: null
+** Statement: 
+**Pos: 791 SpanInfo: null
+** Statement: 
+**Pos: 792 SpanInfo: null
+** Statement: 
+**Pos: 793 SpanInfo: null
+** Statement: 
+**Pos: 794 SpanInfo: null
+** Statement: 
+**Pos: 795 SpanInfo: null
+** Statement: 
+**Pos: 796 SpanInfo: null
+** Statement: 
+**Pos: 797 SpanInfo: null
+** Statement: 
+**Pos: 798 SpanInfo: null
+** Statement: 
+**Pos: 799 SpanInfo: null
+** Statement: 
+**Pos: 800 SpanInfo: null
+** Statement: 
+**Pos: 801 SpanInfo: null
+** Statement: 
+**Pos: 802 SpanInfo: null
+** Statement: 
+**Pos: 803 SpanInfo: null
+** Statement: 
+**Pos: 804 SpanInfo: null
+** Statement: 
+**Pos: 805 SpanInfo: null
+** Statement: 
+**Pos: 806 SpanInfo: null
+** Statement: 
+**Pos: 807 SpanInfo: null
+** Statement: 
+**Pos: 808 SpanInfo: null
+** Statement: 
+**Pos: 809 SpanInfo: null
+** Statement: 
+**Pos: 810 SpanInfo: null
+** Statement: 
+**Pos: 811 SpanInfo: {"minChar":820,"limChar":829,"text":null}
+** Statement: var j = 0
+**Pos: 812 SpanInfo: {"minChar":820,"limChar":829,"text":null}
+** Statement: var j = 0
+**Pos: 813 SpanInfo: {"minChar":820,"limChar":829,"text":null}
+** Statement: var j = 0
+**Pos: 814 SpanInfo: {"minChar":820,"limChar":829,"text":null}
+** Statement: var j = 0
+**Pos: 815 SpanInfo: {"minChar":820,"limChar":829,"text":null}
+** Statement: var j = 0
+**Pos: 816 SpanInfo: {"minChar":820,"limChar":829,"text":null}
+** Statement: var j = 0
+**Pos: 817 SpanInfo: {"minChar":820,"limChar":829,"text":null}
+** Statement: var j = 0
+**Pos: 818 SpanInfo: {"minChar":820,"limChar":829,"text":null}
+** Statement: var j = 0
+**Pos: 819 SpanInfo: {"minChar":820,"limChar":829,"text":null}
+** Statement: var j = 0
+**Pos: 820 SpanInfo: {"minChar":820,"limChar":829,"text":null}
+** Statement: var j = 0
+**Pos: 821 SpanInfo: {"minChar":820,"limChar":829,"text":null}
+** Statement: var j = 0
+**Pos: 822 SpanInfo: {"minChar":820,"limChar":829,"text":null}
+** Statement: var j = 0
+**Pos: 823 SpanInfo: {"minChar":820,"limChar":829,"text":null}
+** Statement: var j = 0
+**Pos: 824 SpanInfo: {"minChar":820,"limChar":829,"text":null}
+** Statement: var j = 0
+**Pos: 825 SpanInfo: {"minChar":820,"limChar":829,"text":null}
+** Statement: var j = 0
+**Pos: 826 SpanInfo: {"minChar":820,"limChar":829,"text":null}
+** Statement: var j = 0
+**Pos: 827 SpanInfo: {"minChar":820,"limChar":829,"text":null}
+** Statement: var j = 0
+**Pos: 828 SpanInfo: {"minChar":820,"limChar":829,"text":null}
+** Statement: var j = 0
+**Pos: 829 SpanInfo: {"minChar":820,"limChar":829,"text":null}
+** Statement: var j = 0
+**Pos: 830 SpanInfo: {"minChar":820,"limChar":829,"text":null}
+** Statement: var j = 0
+**Pos: 831 SpanInfo: {"minChar":831,"limChar":843,"text":null}
+** Statement: j < b.length
+**Pos: 832 SpanInfo: {"minChar":831,"limChar":843,"text":null}
+** Statement: j < b.length
+**Pos: 833 SpanInfo: {"minChar":831,"limChar":843,"text":null}
+** Statement: j < b.length
+**Pos: 834 SpanInfo: {"minChar":831,"limChar":843,"text":null}
+** Statement: j < b.length
+**Pos: 835 SpanInfo: {"minChar":831,"limChar":843,"text":null}
+** Statement: j < b.length
+**Pos: 836 SpanInfo: {"minChar":831,"limChar":843,"text":null}
+** Statement: j < b.length
+**Pos: 837 SpanInfo: {"minChar":831,"limChar":843,"text":null}
+** Statement: j < b.length
+**Pos: 838 SpanInfo: {"minChar":831,"limChar":843,"text":null}
+** Statement: j < b.length
+**Pos: 839 SpanInfo: {"minChar":831,"limChar":843,"text":null}
+** Statement: j < b.length
+**Pos: 840 SpanInfo: {"minChar":831,"limChar":843,"text":null}
+** Statement: j < b.length
+**Pos: 841 SpanInfo: {"minChar":831,"limChar":843,"text":null}
+** Statement: j < b.length
+**Pos: 842 SpanInfo: {"minChar":831,"limChar":843,"text":null}
+** Statement: j < b.length
+**Pos: 843 SpanInfo: {"minChar":831,"limChar":843,"text":null}
+** Statement: j < b.length
+**Pos: 844 SpanInfo: {"minChar":831,"limChar":843,"text":null}
+** Statement: j < b.length
+**Pos: 845 SpanInfo: {"minChar":845,"limChar":848,"text":null}
+** Statement: j++
+**Pos: 846 SpanInfo: {"minChar":845,"limChar":848,"text":null}
+** Statement: j++
+**Pos: 847 SpanInfo: {"minChar":845,"limChar":848,"text":null}
+** Statement: j++
+**Pos: 848 SpanInfo: {"minChar":845,"limChar":848,"text":null}
+** Statement: j++
+**Pos: 849 SpanInfo: {"minChar":845,"limChar":848,"text":null}
+** Statement: j++
+**Pos: 850 SpanInfo: {"minChar":845,"limChar":848,"text":null}
+** Statement: j++
+**Pos: 851 SpanInfo: {"minChar":845,"limChar":848,"text":null}
+** Statement: j++
+**Pos: 852 SpanInfo: {"minChar":860,"limChar":872,"text":null}
+** Statement: b[j].greet()
+**Pos: 853 SpanInfo: {"minChar":860,"limChar":872,"text":null}
+** Statement: b[j].greet()
+**Pos: 854 SpanInfo: {"minChar":860,"limChar":872,"text":null}
+** Statement: b[j].greet()
+**Pos: 855 SpanInfo: {"minChar":860,"limChar":872,"text":null}
+** Statement: b[j].greet()
+**Pos: 856 SpanInfo: {"minChar":860,"limChar":872,"text":null}
+** Statement: b[j].greet()
+**Pos: 857 SpanInfo: {"minChar":860,"limChar":872,"text":null}
+** Statement: b[j].greet()
+**Pos: 858 SpanInfo: {"minChar":860,"limChar":872,"text":null}
+** Statement: b[j].greet()
+**Pos: 859 SpanInfo: {"minChar":860,"limChar":872,"text":null}
+** Statement: b[j].greet()
+**Pos: 860 SpanInfo: {"minChar":860,"limChar":872,"text":null}
+** Statement: b[j].greet()
+**Pos: 861 SpanInfo: {"minChar":860,"limChar":872,"text":null}
+** Statement: b[j].greet()
+**Pos: 862 SpanInfo: {"minChar":860,"limChar":872,"text":null}
+** Statement: b[j].greet()
+**Pos: 863 SpanInfo: {"minChar":860,"limChar":872,"text":null}
+** Statement: b[j].greet()
+**Pos: 864 SpanInfo: {"minChar":860,"limChar":872,"text":null}
+** Statement: b[j].greet()
+**Pos: 865 SpanInfo: {"minChar":860,"limChar":872,"text":null}
+** Statement: b[j].greet()
+**Pos: 866 SpanInfo: {"minChar":860,"limChar":872,"text":null}
+** Statement: b[j].greet()
+**Pos: 867 SpanInfo: {"minChar":860,"limChar":872,"text":null}
+** Statement: b[j].greet()
+**Pos: 868 SpanInfo: {"minChar":860,"limChar":872,"text":null}
+** Statement: b[j].greet()
+**Pos: 869 SpanInfo: {"minChar":860,"limChar":872,"text":null}
+** Statement: b[j].greet()
+**Pos: 870 SpanInfo: {"minChar":860,"limChar":872,"text":null}
+** Statement: b[j].greet()
+**Pos: 871 SpanInfo: {"minChar":860,"limChar":872,"text":null}
+** Statement: b[j].greet()
+**Pos: 872 SpanInfo: {"minChar":860,"limChar":872,"text":null}
+** Statement: b[j].greet()
+**Pos: 873 SpanInfo: {"minChar":860,"limChar":872,"text":null}
+** Statement: b[j].greet()
+**Pos: 874 SpanInfo: {"minChar":860,"limChar":872,"text":null}
+** Statement: b[j].greet()
+**Pos: 875 SpanInfo: {"minChar":860,"limChar":872,"text":null}
+** Statement: b[j].greet()
+**Pos: 876 SpanInfo: {"minChar":860,"limChar":872,"text":null}
+** Statement: b[j].greet()
+**Pos: 877 SpanInfo: {"minChar":860,"limChar":872,"text":null}
+** Statement: b[j].greet()
+**Pos: 878 SpanInfo: {"minChar":860,"limChar":872,"text":null}
+** Statement: b[j].greet()
+**Pos: 879 SpanInfo: {"minChar":860,"limChar":872,"text":null}
+** Statement: b[j].greet()
+**Pos: 880 SpanInfo: {"minChar":880,"limChar":881,"text":null}
+** Statement: }

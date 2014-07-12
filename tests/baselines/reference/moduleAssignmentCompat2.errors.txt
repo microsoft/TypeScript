@@ -1,0 +1,18 @@
+==== tests/cases/compiler/moduleAssignmentCompat2.ts (2 errors) ====
+    module A {
+        export class C { }
+    }
+    module B {
+        export class C { }
+        export class D { }
+    }
+    
+    var a: A;
+           ~
+!!! moduleAssignmentCompat2.ts(9,8): error TS4022: Type reference cannot refer to container 'A'.
+    var b: B;
+           ~
+!!! moduleAssignmentCompat2.ts(10,8): error TS4022: Type reference cannot refer to container 'B'.
+    
+    a = b;
+    b = a; // error

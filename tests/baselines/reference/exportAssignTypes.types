@@ -1,0 +1,115 @@
+=== tests/cases/compiler/consumer.ts ===
+import iString = require('./expString');
+>iString : iString
+
+var v1: string = iString;
+>v1 : string
+>iString : string
+
+import iNumber = require('./expNumber');
+>iNumber : iNumber
+
+var v2: number = iNumber;
+>v2 : number
+>iNumber : number
+
+import iBoolean = require('./expBoolean');
+>iBoolean : iBoolean
+
+var v3: boolean = iBoolean;
+>v3 : boolean
+>iBoolean : boolean
+
+import iArray = require('./expArray');
+>iArray : iArray
+
+var v4: Array<number> = iArray;
+>v4 : number[]
+>Array : Array<T>
+>iArray : number[]
+
+import iObject = require('./expObject');
+>iObject : iObject
+
+var v5: Object = iObject;
+>v5 : Object
+>Object : Object
+>iObject : { answer: number; when: number; }
+
+import iAny = require('./expAny');
+>iAny : iAny
+
+var v6 = iAny;
+>v6 : any
+>iAny : any
+
+import iGeneric = require('./expGeneric');
+>iGeneric : iGeneric
+
+var v7: {<x>(p1: x): x} = iGeneric;
+>v7 : <x>(p1: x) => x
+>x : x
+>p1 : x
+>x : x
+>x : x
+>iGeneric : typeof iGeneric
+
+=== tests/cases/compiler/expString.ts ===
+var x = "test";
+>x : string
+
+export = x;
+>x : string
+
+=== tests/cases/compiler/expNumber.ts ===
+var x = 42;
+>x : number
+
+export = x;
+>x : number
+
+=== tests/cases/compiler/expBoolean.ts ===
+var x = true;
+>x : boolean
+
+export = x;
+>x : boolean
+
+=== tests/cases/compiler/expArray.ts ===
+var x = [1,2];
+>x : number[]
+>[1,2] : number[]
+
+export = x;
+>x : number[]
+
+=== tests/cases/compiler/expObject.ts ===
+var x = { answer: 42, when: 1776};
+>x : { answer: number; when: number; }
+>{ answer: 42, when: 1776} : { answer: number; when: number; }
+>answer : number
+>when : number
+
+export = x;
+>x : { answer: number; when: number; }
+
+=== tests/cases/compiler/expAny.ts ===
+var x;
+>x : any
+
+export = x;
+>x : any
+
+=== tests/cases/compiler/expGeneric.ts ===
+function x<T>(a: T){
+>x : typeof x
+>T : T
+>a : T
+>T : T
+
+	return a;
+>a : T
+}
+export = x;
+>x : typeof x
+

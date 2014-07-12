@@ -1,0 +1,37 @@
+==== tests/cases/compiler/implicitAnyGetAndSetAccessorWithAnyReturnType.ts (5 errors) ====
+    // these should be errors
+    class GetAndSet {
+        getAndSet = null;             // error at "getAndSet"
+        ~~~~~~~~~~~~~~~~~
+!!! implicitAnyGetAndSetAccessorWithAnyReturnType.ts(3,5): error TS7005: Variable 'getAndSet' implicitly has an 'any' type.
+        public get haveGetAndSet() {  // this should not be an error
+            return this.getAndSet;
+        }
+        
+        // this shouldn't be an error
+        public set haveGetAndSet(value) {  // error at "value"
+                                 ~~~~~
+!!! implicitAnyGetAndSetAccessorWithAnyReturnType.ts(9,30): error TS7005: Variable 'value' implicitly has an 'any' type.
+            this.getAndSet = value;
+        }
+    }
+    
+    class SetterOnly {
+        public set haveOnlySet(newXValue) {  // error at "haveOnlySet, newXValue"
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                               ~~~~~~~~~
+!!! implicitAnyGetAndSetAccessorWithAnyReturnType.ts(15,28): error TS7005: Variable 'newXValue' implicitly has an 'any' type.
+        }
+    ~~~~~
+!!! implicitAnyGetAndSetAccessorWithAnyReturnType.ts(15,5): error TS7016: 'haveOnlySet', which lacks 'get' accessor and parameter type annotation on 'set' accessor, implicitly has an 'any' type.
+    }
+    
+    class GetterOnly {
+        public get haveOnlyGet() {  // error at "haveOnlyGet"
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            return null;
+    ~~~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+!!! implicitAnyGetAndSetAccessorWithAnyReturnType.ts(20,5): error TS7010: 'haveOnlyGet', which lacks return-type annotation, implicitly has an 'any' return type.
+    }

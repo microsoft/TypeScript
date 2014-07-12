@@ -1,0 +1,78 @@
+=== tests/cases/compiler/part1.ts ===
+module Root {
+>Root : Root
+
+    export module A {
+>A : A
+
+        export interface Point {
+>Point : Point
+
+            x: number;
+>x : number
+
+            y: number;
+>y : number
+        }
+
+        export module Utils {
+>Utils : Utils
+
+            export function mirror<T extends Point>(p: T) {
+>mirror : typeof mirror
+>T : T
+>Point : Point
+>p : T
+>T : T
+
+                return { x: p.y, y: p.x };
+>{ x: p.y, y: p.x } : { x: number; y: number; }
+>x : number
+>p.y : number
+>p : T
+>y : number
+>y : number
+>p.x : number
+>p : T
+>x : number
+            }
+        }
+    }
+}
+
+=== tests/cases/compiler/part2.ts ===
+module otherRoot {
+>otherRoot : otherRoot
+
+    export module A {
+>A : A
+
+        // have to be fully qualified since in different root
+        export var Origin: Root.A.Point = { x: 0, y: 0 };
+>Origin : Root.A.Point
+>Root : Root
+>A : Root.A
+>Point : Root.A.Point
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>y : number
+
+        export module Utils {
+>Utils : Utils
+
+            export class Plane {
+>Plane : Plane
+
+                constructor(public tl: Root.A.Point, public br: Root.A.Point) { }
+>tl : Root.A.Point
+>Root : Root
+>A : Root.A
+>Point : Root.A.Point
+>br : Root.A.Point
+>Root : Root
+>A : Root.A
+>Point : Root.A.Point
+            }
+        }
+    }
+}

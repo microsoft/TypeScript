@@ -1,0 +1,33 @@
+==== tests/cases/compiler/assignmentCompatBug5.ts (8 errors) ====
+    function foo1(x: { a: number; }) { }
+    foo1({ b: 5 });
+    ~~~~
+!!! assignmentCompatBug5.ts(2,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Type '{ b: number; }' is missing property 'a' from type '{ a: number; }'.
+    ~~~~
+!!! assignmentCompatBug5.ts(2,1): error TS2087: Could not select overload for 'call' expression.
+    
+    function foo2(x: number[]) { }
+    foo2(["s", "t"]);
+    ~~~~
+!!! assignmentCompatBug5.ts(5,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Types of property 'pop' of types '{}[]' and 'number[]' are incompatible:
+!!! 		Call signatures of types '() => {}' and '() => number' are incompatible.
+    ~~~~
+!!! assignmentCompatBug5.ts(5,1): error TS2087: Could not select overload for 'call' expression.
+    
+    function foo3(x: (n: number) =>number) { };
+    foo3((s:string) => { });
+    ~~~~
+!!! assignmentCompatBug5.ts(8,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Call signatures of types '(s: string) => void' and '(n: number) => number' are incompatible.
+    ~~~~
+!!! assignmentCompatBug5.ts(8,1): error TS2087: Could not select overload for 'call' expression.
+    foo3((n) => { return; });
+    ~~~~
+!!! assignmentCompatBug5.ts(9,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Call signatures of types '(n: number) => void' and '(n: number) => number' are incompatible.
+    ~~~~
+!!! assignmentCompatBug5.ts(9,1): error TS2087: Could not select overload for 'call' expression.
+    
+    

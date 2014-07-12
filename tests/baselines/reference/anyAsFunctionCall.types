@@ -1,0 +1,23 @@
+=== tests/cases/compiler/anyAsFunctionCall.ts ===
+// any is considered an untyped function call
+// can be called except with type arguments which is an error
+
+var x: any;
+>x : any
+
+var a = x();
+>a : any
+>x() : any
+>x : any
+
+var b = x('hello');
+>b : any
+>x('hello') : any
+>x : any
+
+var c = x(x);
+>c : any
+>x(x) : any
+>x : any
+>x : any
+

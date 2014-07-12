@@ -1,0 +1,27 @@
+=== tests/cases/compiler/internalAliasInitializedModuleInsideTopLevelModuleWithExport.ts ===
+export module a {
+>a : a
+
+    export module b {
+>b : b
+
+        export class c {
+>c : c
+        }
+    }
+}
+
+export import b = a.b;
+>b : b
+>a : a
+>b : typeof b
+
+export var x: b.c = new b.c();
+>x : b.c
+>b : b
+>c : b.c
+>new b.c() : b.c
+>b.c : typeof b.c
+>b : typeof b
+>c : typeof b.c
+

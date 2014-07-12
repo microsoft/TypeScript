@@ -1,0 +1,48 @@
+==== tests/cases/compiler/invalidNumberAssignments.ts (10 errors) ====
+    var x = 1;
+    
+    var a: boolean = x;
+        ~~~~~~~~~~~~~~
+!!! invalidNumberAssignments.ts(3,5): error TS2011: Cannot convert 'number' to 'boolean'.
+    var b: string = x;
+        ~~~~~~~~~~~~~
+!!! invalidNumberAssignments.ts(4,5): error TS2011: Cannot convert 'number' to 'string'.
+    var c: void = x;
+        ~~~~~~~~~~~
+!!! invalidNumberAssignments.ts(5,5): error TS2011: Cannot convert 'number' to 'void'.
+    var d: typeof undefined = x;
+    
+    class C { foo: string; }
+    var e: C = x;
+        ~~~~~~~~
+!!! invalidNumberAssignments.ts(9,5): error TS2012: Cannot convert 'number' to 'C':
+!!! 	Type 'Number' is missing property 'foo' from type 'C'.
+    
+    interface I { bar: string; }
+    var f: I = x;
+        ~~~~~~~~
+!!! invalidNumberAssignments.ts(12,5): error TS2012: Cannot convert 'number' to 'I':
+!!! 	Type 'Number' is missing property 'bar' from type 'I'.
+    
+    var g: { baz: string } = 1;
+        ~~~~~~~~~~~~~~~~~~~~~~
+!!! invalidNumberAssignments.ts(14,5): error TS2012: Cannot convert 'number' to '{ baz: string; }':
+!!! 	Type 'Number' is missing property 'baz' from type '{ baz: string; }'.
+    var g2: { 0: number } = 1;
+        ~~~~~~~~~~~~~~~~~~~~~
+!!! invalidNumberAssignments.ts(15,5): error TS2012: Cannot convert 'number' to '{ 0: number; }':
+!!! 	Type 'Number' is missing property '0' from type '{ 0: number; }'.
+    
+    module M { export var x = 1; }
+    M = x;
+    ~
+!!! invalidNumberAssignments.ts(18,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    function i<T>(a: T) {
+        a = x;
+        ~
+!!! invalidNumberAssignments.ts(21,5): error TS2011: Cannot convert 'number' to 'T'.
+    }
+    i = x;
+    ~
+!!! invalidNumberAssignments.ts(23,1): error TS2130: Invalid left-hand side of assignment expression.

@@ -1,0 +1,224 @@
+=== tests/cases/compiler/thisInPropertyBoundDeclarations.ts ===
+class Bug {
+>Bug : Bug
+
+    private name: string;
+>name : string
+
+    private static func: Function[] = [
+>func : Function[]
+>Function : Function
+>[
+     (that: Bug, name: string) => {
+         that.foo(name);
+     }
+    ] : Function[]
+
+     (that: Bug, name: string) => {
+>(that: Bug, name: string) => {
+         that.foo(name);
+     } : (that: Bug, name: string) => void
+>that : Bug
+>Bug : Bug
+>name : string
+
+         that.foo(name);
+>that.foo(name) : void
+>that.foo : (name: string) => void
+>that : Bug
+>foo : (name: string) => void
+>name : string
+     }
+    ];
+
+    private foo(name: string) {
+>foo : (name: string) => void
+>name : string
+
+        this.name = name;
+>this.name = name : string
+>this.name : string
+>this : Bug
+>name : string
+>name : string
+    }
+}
+
+// Valid use of this in a property bound decl
+class A {
+>A : A
+
+    prop1 = function() {
+>prop1 : () => void
+>function() {
+        this;
+    } : () => void
+
+        this;
+>this : any
+
+    };
+
+>prop2 : () => void
+
+    prop2 = function() {
+>function() {
+        function inner() {
+            this;
+        }
+        () => this;
+    } : () => void
+
+        function inner() {
+>inner : () => void
+
+            this;
+>this : any
+        }
+        () => this;
+>() => this : () => any
+>this : any
+
+    };
+
+>prop3 : () => void
+
+    prop3 = () => {
+>() => {
+        function inner() {
+            this;
+        }
+    } : () => void
+
+        function inner() {
+>inner : () => void
+
+            this;
+>this : any
+        }
+    };
+
+>prop4 : { a: () => any; }
+
+    prop4 = {
+>{
+        a: function() { return this; },
+    } : { a: () => any; }
+
+        a: function() { return this; },
+>a : () => any
+>function() { return this; } : () => any
+>this : any
+
+    };
+
+>prop5 : () => { a: () => any; }
+
+    prop5 = () => {
+>() => {
+        return {
+            a: function() { return this; },
+        };
+    } : () => { a: () => any; }
+
+        return {
+>{
+            a: function() { return this; },
+        } : { a: () => any; }
+
+            a: function() { return this; },
+>a : () => any
+>function() { return this; } : () => any
+>this : any
+
+        };
+    };
+}
+
+class B {
+>B : B
+
+    prop1 = this;
+>prop1 : B
+>this : B
+
+>prop2 : () => B
+
+    prop2 = () => this;
+>() => this : () => B
+>this : B
+
+>prop3 : () => () => () => () => B
+
+    prop3 = () => () => () => () => this;
+>() => () => () => () => this : () => () => () => () => B
+>() => () => () => this : () => () => () => B
+>() => () => this : () => () => B
+>() => this : () => B
+>this : B
+
+>prop4 : string
+
+    prop4 = '  ' +
+>'  ' +
+    function() {
+    } +
+    ' ' +
+    (() => () => () => this) : string
+>'  ' +
+    function() {
+    } +
+    ' ' : string
+>'  ' +
+    function() {
+    } : string
+
+    function() {
+>function() {
+    } : () => void
+
+    } +
+    ' ' +
+    (() => () => () => this);
+>(() => () => () => this) : () => () => () => B
+>() => () => () => this : () => () => () => B
+>() => () => this : () => () => B
+>() => this : () => B
+>this : B
+
+>prop5 : { a: () => B; }
+
+    prop5 = {
+>{
+        a: () => { return this; }
+    } : { a: () => B; }
+
+        a: () => { return this; }
+>a : () => B
+>() => { return this; } : () => B
+>this : B
+
+    };
+
+>prop6 : () => { a: () => B; }
+
+    prop6 = () => {
+>() => {
+        return {
+            a: () => { return this; }
+        };
+    } : () => { a: () => B; }
+
+        return {
+>{
+            a: () => { return this; }
+        } : { a: () => B; }
+
+            a: () => { return this; }
+>a : () => B
+>() => { return this; } : () => B
+>this : B
+
+        };
+    };
+}

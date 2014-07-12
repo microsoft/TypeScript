@@ -1,0 +1,9 @@
+==== tests/cases/compiler/overloadOnConstAsTypeAnnotation.ts (3 errors) ====
+    var f: (x: 'hi') => number = ('hi') => { return 1; };
+                                        ~~
+!!! overloadOnConstAsTypeAnnotation.ts(1,37): error TS1005: ';' expected.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! overloadOnConstAsTypeAnnotation.ts(1,5): error TS2012: Cannot convert 'string' to '(x: 'hi') => number':
+!!! 	Type '(x: 'hi') => number' requires a call signature, but type 'String' lacks one.
+           ~~~~~~~~~~~~~~~~~~~
+!!! overloadOnConstAsTypeAnnotation.ts(1,8): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.

@@ -1,0 +1,1 @@
+//// [commentOnImportStatement2.js]

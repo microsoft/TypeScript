@@ -1,0 +1,9 @@
+==== tests/cases/compiler/assignmentToObject.ts (1 errors) ====
+    var a = { toString: 5 };
+    var b: {} = a;  // ok
+    var c: Object = a;  // should be error
+        ~~~~~~~~~~~~~
+!!! assignmentToObject.ts(3,5): error TS2012: Cannot convert '{ toString: number; }' to 'Object':
+!!! 	Types of property 'toString' of types '{ toString: number; }' and 'Object' are incompatible:
+!!! 		Type '() => string' requires a call signature, but type 'Number' lacks one.
+    

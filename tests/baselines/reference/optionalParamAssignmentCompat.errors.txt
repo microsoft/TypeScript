@@ -1,0 +1,15 @@
+==== tests/cases/compiler/optionalParamAssignmentCompat.ts (1 errors) ====
+    interface I1 {
+        (p1: number, p2: string): void;
+    }
+    interface I2 {
+        p1: I1;
+        m1(p1?: string): I1;
+    }
+    var i2: I2;
+    var c: I1 = i2.p1; // should be ok
+    var d: I1 = i2.m1; // should error
+        ~~~~~~~~~~~~~
+!!! optionalParamAssignmentCompat.ts(10,5): error TS2012: Cannot convert '(p1?: string) => I1' to 'I1':
+!!! 	Call signatures of types '(p1?: string) => I1' and 'I1' are incompatible.
+    

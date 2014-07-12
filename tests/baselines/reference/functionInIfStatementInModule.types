@@ -1,0 +1,14 @@
+=== tests/cases/compiler/functionInIfStatementInModule.ts ===
+ 
+module Midori
+>Midori : Midori
+{
+    if (false) {
+        function Foo(src)
+>Foo : typeof Foo
+>src : any
+        {
+        }
+    }
+}
+

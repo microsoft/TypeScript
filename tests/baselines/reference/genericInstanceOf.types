@@ -1,0 +1,31 @@
+=== tests/cases/compiler/genericInstanceOf.ts ===
+interface F {
+>F : F
+
+    (): number;
+}
+
+class C<T> {
+>C : C<T>
+>T : T
+
+    constructor(public a: T, public b: F) {}
+>a : T
+>T : T
+>b : F
+>F : F
+
+    foo() {
+>foo : () => void
+
+        if (this.a instanceof this.b) {
+>this.a instanceof this.b : boolean
+>this.a : T
+>this : C<T>
+>a : T
+>this.b : F
+>this : C<T>
+>b : F
+        }
+    }
+}

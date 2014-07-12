@@ -1,0 +1,38 @@
+{
+	"name": "typescript",
+	"author": "Microsoft Corp.",
+	"homepage": "http://typescriptlang.org/",
+	"version": "1.0.3",
+	"licenses": [
+		{
+			"type": "Apache License 2.0", 
+			"url": "http://typescript.codeplex.com/license"
+		}
+	],
+	"description": "TypeScript is a language for application scale JavaScript development",
+	"keywords": [
+		"TypeScript", 
+		"Microsoft", 
+		"compiler", 
+		"language", 
+		"javascript"
+	],
+	"bugs": {
+		"url" : "http://typescript.codeplex.com/workitem/list/basic"
+	},
+	"repository" : { 
+		"type" : "git",	
+		"url" : "https://git01.codeplex.com/typescript"  
+	},
+	"preferGlobal" : true,
+	"main" : "./bin/typescript.js",
+	"bin" : { 
+		"tsc" : "./bin/tsc" 
+	},
+	"engines" : { 
+		"node" : ">=0.8.0" 
+	},
+	"devDependencies": {
+		"jake": "latest"
+	}
+}

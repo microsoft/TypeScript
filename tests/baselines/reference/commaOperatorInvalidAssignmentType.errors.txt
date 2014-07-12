@@ -1,0 +1,31 @@
+==== tests/cases/compiler/commaOperatorInvalidAssignmentType.ts (6 errors) ====
+    var BOOLEAN: boolean;
+    var NUMBER: number;
+    var STRING: string;
+    
+    var resultIsBoolean: boolean
+    var resultIsNumber: number
+    var resultIsString: string
+    
+    //Expect errors when the results type is different form the second operand
+    resultIsBoolean = (BOOLEAN, STRING);
+    ~~~~~~~~~~~~~~~
+!!! commaOperatorInvalidAssignmentType.ts(10,1): error TS2011: Cannot convert 'string' to 'boolean'.
+    resultIsBoolean = (BOOLEAN, NUMBER);
+    ~~~~~~~~~~~~~~~
+!!! commaOperatorInvalidAssignmentType.ts(11,1): error TS2011: Cannot convert 'number' to 'boolean'.
+    
+    resultIsNumber = (NUMBER, BOOLEAN);
+    ~~~~~~~~~~~~~~
+!!! commaOperatorInvalidAssignmentType.ts(13,1): error TS2011: Cannot convert 'boolean' to 'number'.
+    resultIsNumber = (NUMBER, STRING);
+    ~~~~~~~~~~~~~~
+!!! commaOperatorInvalidAssignmentType.ts(14,1): error TS2011: Cannot convert 'string' to 'number'.
+    
+    resultIsString = (STRING, BOOLEAN);
+    ~~~~~~~~~~~~~~
+!!! commaOperatorInvalidAssignmentType.ts(16,1): error TS2011: Cannot convert 'boolean' to 'string'.
+    resultIsString = (STRING, NUMBER);
+    ~~~~~~~~~~~~~~
+!!! commaOperatorInvalidAssignmentType.ts(17,1): error TS2011: Cannot convert 'number' to 'string'.
+    

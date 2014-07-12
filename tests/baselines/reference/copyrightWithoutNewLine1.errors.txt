@@ -1,0 +1,17 @@
+==== tests/cases/compiler/copyrightWithoutNewLine1.ts (4 errors) ====
+    /*****************************
+    * (c) Copyright - Important
+    ****************************/
+    import model = require("./greeter")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! copyrightWithoutNewLine1.ts(4,1): error TS2071: Unable to resolve external module '"./greeter"'.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! copyrightWithoutNewLine1.ts(4,1): error TS2072: Module cannot be aliased to a non-module type.
+    var el = document.getElementById('content');
+             ~~~~~~~~
+!!! copyrightWithoutNewLine1.ts(5,10): error TS2095: Could not find symbol 'document'.
+    var greeter = new model.Greeter(el);
+                      ~~~~~
+!!! copyrightWithoutNewLine1.ts(6,19): error TS2095: Could not find symbol 'model'.
+    /** things */
+    greeter.start();

@@ -1,0 +1,7 @@
+==== tests/cases/compiler/classOverloadForFunction.ts (1 errors) ====
+    class foo { };
+    function foo() {}
+             ~~~
+!!! classOverloadForFunction.ts(2,10): error TS2000: Duplicate identifier 'foo'. Additional locations:
+!!! 	classOverloadForFunction.ts(1,1)
+    

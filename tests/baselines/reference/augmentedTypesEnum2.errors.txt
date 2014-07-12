@@ -1,0 +1,26 @@
+==== tests/cases/compiler/augmentedTypesEnum2.ts (2 errors) ====
+    // enum then interface
+    enum e1 { One }
+    
+    interface e1 {
+              ~~
+!!! augmentedTypesEnum2.ts(4,11): error TS2000: Duplicate identifier 'e1'. Additional locations:
+!!! 	augmentedTypesEnum2.ts(2,1)
+        foo(): void;
+    }
+    
+    // interface then enum works
+    
+    // enum then class
+    enum e2 { One };
+    class e2 { // error
+          ~~
+!!! augmentedTypesEnum2.ts(12,7): error TS2000: Duplicate identifier 'e2'. Additional locations:
+!!! 	augmentedTypesEnum2.ts(11,1)
+        foo() {
+            return 1;
+        }
+    }
+    
+    //enum then enum - covered
+    //enum then import - covered

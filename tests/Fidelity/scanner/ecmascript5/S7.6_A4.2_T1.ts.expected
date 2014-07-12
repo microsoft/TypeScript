@@ -1,0 +1,7519 @@
+[
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 288,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasLeadingTrivia": true,
+        "hasLeadingComment": true,
+        "hasLeadingNewLine": true,
+        "hasTrailingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "SingleLineCommentTrivia",
+                "text": "// Copyright 2009 the Sputnik authors.  All rights reserved."
+            },
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            },
+            {
+                "kind": "SingleLineCommentTrivia",
+                "text": "// This code is governed by the BSD license found in the LICENSE file."
+            },
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            },
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            },
+            {
+                "kind": "MultiLineCommentTrivia",
+                "text": "/**\n * Correct interpretation of RUSSIAN ALPHABET\n *\n * @path ch07/7.6/S7.6_A4.2_T1.js\n * @description Check RUSSIAN CAPITAL ALPHABET\n */"
+            },
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            },
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            },
+            {
+                "kind": "SingleLineCommentTrivia",
+                "text": "//CHECK#А-Я"
+            },
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ],
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u0410",
+        "value": "А",
+        "valueText": "А",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "А",
+        "value": "А",
+        "valueText": "А",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#А'",
+        "value": "#А",
+        "valueText": "#А"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u0411",
+        "value": "Б",
+        "valueText": "Б",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "Б",
+        "value": "Б",
+        "valueText": "Б",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#Б'",
+        "value": "#Б",
+        "valueText": "#Б"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u0412",
+        "value": "В",
+        "valueText": "В",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "В",
+        "value": "В",
+        "valueText": "В",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#В'",
+        "value": "#В",
+        "valueText": "#В"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u0413",
+        "value": "Г",
+        "valueText": "Г",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "Г",
+        "value": "Г",
+        "valueText": "Г",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#Г'",
+        "value": "#Г",
+        "valueText": "#Г"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u0414",
+        "value": "Д",
+        "valueText": "Д",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "Д",
+        "value": "Д",
+        "valueText": "Д",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#Д'",
+        "value": "#Д",
+        "valueText": "#Д"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u0415",
+        "value": "Е",
+        "valueText": "Е",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "Е",
+        "value": "Е",
+        "valueText": "Е",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#Е'",
+        "value": "#Е",
+        "valueText": "#Е"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u0416",
+        "value": "Ж",
+        "valueText": "Ж",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "Ж",
+        "value": "Ж",
+        "valueText": "Ж",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#Ж'",
+        "value": "#Ж",
+        "valueText": "#Ж"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u0417",
+        "value": "З",
+        "valueText": "З",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "З",
+        "value": "З",
+        "valueText": "З",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#З'",
+        "value": "#З",
+        "valueText": "#З"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u0418",
+        "value": "И",
+        "valueText": "И",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "И",
+        "value": "И",
+        "valueText": "И",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#И'",
+        "value": "#И",
+        "valueText": "#И"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u0419",
+        "value": "Й",
+        "valueText": "Й",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "Й",
+        "value": "Й",
+        "valueText": "Й",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#Й'",
+        "value": "#Й",
+        "valueText": "#Й"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u041A",
+        "value": "К",
+        "valueText": "К",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "К",
+        "value": "К",
+        "valueText": "К",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#К'",
+        "value": "#К",
+        "valueText": "#К"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u041B",
+        "value": "Л",
+        "valueText": "Л",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "Л",
+        "value": "Л",
+        "valueText": "Л",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#Л'",
+        "value": "#Л",
+        "valueText": "#Л"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u041C",
+        "value": "М",
+        "valueText": "М",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "М",
+        "value": "М",
+        "valueText": "М",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#М'",
+        "value": "#М",
+        "valueText": "#М"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u041D",
+        "value": "Н",
+        "valueText": "Н",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "Н",
+        "value": "Н",
+        "valueText": "Н",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#Н'",
+        "value": "#Н",
+        "valueText": "#Н"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u041E",
+        "value": "О",
+        "valueText": "О",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "О",
+        "value": "О",
+        "valueText": "О",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#О'",
+        "value": "#О",
+        "valueText": "#О"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u041F",
+        "value": "П",
+        "valueText": "П",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "П",
+        "value": "П",
+        "valueText": "П",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#П'",
+        "value": "#П",
+        "valueText": "#П"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u0420",
+        "value": "Р",
+        "valueText": "Р",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "Р",
+        "value": "Р",
+        "valueText": "Р",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#Р'",
+        "value": "#Р",
+        "valueText": "#Р"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u0421",
+        "value": "С",
+        "valueText": "С",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "С",
+        "value": "С",
+        "valueText": "С",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#С'",
+        "value": "#С",
+        "valueText": "#С"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u0422",
+        "value": "Т",
+        "valueText": "Т",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "Т",
+        "value": "Т",
+        "valueText": "Т",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#Т'",
+        "value": "#Т",
+        "valueText": "#Т"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u0423",
+        "value": "У",
+        "valueText": "У",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "У",
+        "value": "У",
+        "valueText": "У",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#У'",
+        "value": "#У",
+        "valueText": "#У"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u0424",
+        "value": "Ф",
+        "valueText": "Ф",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "Ф",
+        "value": "Ф",
+        "valueText": "Ф",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#Ф'",
+        "value": "#Ф",
+        "valueText": "#Ф"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u0425",
+        "value": "Х",
+        "valueText": "Х",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "Х",
+        "value": "Х",
+        "valueText": "Х",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#Х'",
+        "value": "#Х",
+        "valueText": "#Х"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u0426",
+        "value": "Ц",
+        "valueText": "Ц",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "Ц",
+        "value": "Ц",
+        "valueText": "Ц",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#Ц'",
+        "value": "#Ц",
+        "valueText": "#Ц"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u0427",
+        "value": "Ч",
+        "valueText": "Ч",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "Ч",
+        "value": "Ч",
+        "valueText": "Ч",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#Ч'",
+        "value": "#Ч",
+        "valueText": "#Ч"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u0428",
+        "value": "Ш",
+        "valueText": "Ш",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "Ш",
+        "value": "Ш",
+        "valueText": "Ш",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#Ш'",
+        "value": "#Ш",
+        "valueText": "#Ш"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u0429",
+        "value": "Щ",
+        "valueText": "Щ",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "Щ",
+        "value": "Щ",
+        "valueText": "Щ",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#Щ'",
+        "value": "#Щ",
+        "valueText": "#Щ"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u042A",
+        "value": "Ъ",
+        "valueText": "Ъ",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "Ъ",
+        "value": "Ъ",
+        "valueText": "Ъ",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#Ъ'",
+        "value": "#Ъ",
+        "valueText": "#Ъ"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u042B",
+        "value": "Ы",
+        "valueText": "Ы",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "Ы",
+        "value": "Ы",
+        "valueText": "Ы",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#Ы'",
+        "value": "#Ы",
+        "valueText": "#Ы"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u042C",
+        "value": "Ь",
+        "valueText": "Ь",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "Ь",
+        "value": "Ь",
+        "valueText": "Ь",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#Ь'",
+        "value": "#Ь",
+        "valueText": "#Ь"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u042D",
+        "value": "Э",
+        "valueText": "Э",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "Э",
+        "value": "Э",
+        "valueText": "Э",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#Э'",
+        "value": "#Э",
+        "valueText": "#Э"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u042E",
+        "value": "Ю",
+        "valueText": "Ю",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "Ю",
+        "value": "Ю",
+        "valueText": "Ю",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#Ю'",
+        "value": "#Ю",
+        "valueText": "#Ю"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u042F",
+        "value": "Я",
+        "valueText": "Я",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "Я",
+        "value": "Я",
+        "valueText": "Я",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#Я'",
+        "value": "#Я",
+        "valueText": "#Я"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "VarKeyword",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "var",
+        "value": "var",
+        "valueText": "var",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 7,
+        "text": "\\u0401",
+        "value": "Ё",
+        "valueText": "Ё",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EqualsToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "=",
+        "value": "=",
+        "valueText": "=",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IfKeyword",
+        "width": 2,
+        "fullWidth": 3,
+        "text": "if",
+        "value": "if",
+        "valueText": "if",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "Ё",
+        "value": "Ё",
+        "valueText": "Ё",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "ExclamationEqualsEqualsToken",
+        "width": 3,
+        "fullWidth": 4,
+        "text": "!==",
+        "value": "!==",
+        "valueText": "!==",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ")",
+        "value": ")",
+        "valueText": ")",
+        "hasTrailingTrivia": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "OpenBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "{",
+        "value": "{",
+        "valueText": "{",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "fullWidth": 8,
+        "text": "$ERROR",
+        "value": "$ERROR",
+        "valueText": "$ERROR",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": "  "
+            }
+        ]
+    },
+    {
+        "kind": "OpenParenToken",
+        "width": 1,
+        "text": "(",
+        "value": "(",
+        "valueText": "("
+    },
+    {
+        "kind": "StringLiteral",
+        "width": 4,
+        "text": "'#Ё'",
+        "value": "#Ё",
+        "valueText": "#Ё"
+    },
+    {
+        "kind": "CloseParenToken",
+        "width": 1,
+        "text": ")",
+        "value": ")",
+        "valueText": ")"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "CloseBraceToken",
+        "width": 1,
+        "fullWidth": 2,
+        "text": "}",
+        "value": "}",
+        "valueText": "}",
+        "hasTrailingTrivia": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    },
+    {
+        "kind": "EndOfFileToken",
+        "width": 0,
+        "fullWidth": 1,
+        "text": "",
+        "hasLeadingTrivia": true,
+        "hasLeadingNewLine": true,
+        "leadingTrivia": [
+            {
+                "kind": "NewLineTrivia",
+                "text": "\n"
+            }
+        ]
+    }
+]

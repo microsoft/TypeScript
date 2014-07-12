@@ -1,0 +1,44 @@
+==== tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts (12 errors) ====
+    interface I2 {
+        value: string;
+        doStuff: (t: string) => string;
+    }
+    
+    function f2(args: I2) { }
+    
+    f2({ hello: 1 }) 
+    ~~
+!!! objectLiteralFunctionArgContextualTyping2.ts(8,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Type '{ hello: number; }' is missing property 'value' from type 'I2'.
+    ~~
+!!! objectLiteralFunctionArgContextualTyping2.ts(8,1): error TS2087: Could not select overload for 'call' expression.
+    f2({ value: '' })
+    ~~
+!!! objectLiteralFunctionArgContextualTyping2.ts(9,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Type '{ value: string; }' is missing property 'doStuff' from type 'I2'.
+    ~~
+!!! objectLiteralFunctionArgContextualTyping2.ts(9,1): error TS2087: Could not select overload for 'call' expression.
+    f2({ value: '', what: 1 }) 
+    ~~
+!!! objectLiteralFunctionArgContextualTyping2.ts(10,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Type '{ value: string; what: number; }' is missing property 'doStuff' from type 'I2'.
+    ~~
+!!! objectLiteralFunctionArgContextualTyping2.ts(10,1): error TS2087: Could not select overload for 'call' expression.
+    f2({ toString: (s) => s }) 
+    ~~
+!!! objectLiteralFunctionArgContextualTyping2.ts(11,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Type '{ toString: (s: any) => any; }' is missing property 'value' from type 'I2'.
+    ~~
+!!! objectLiteralFunctionArgContextualTyping2.ts(11,1): error TS2087: Could not select overload for 'call' expression.
+    f2({ toString: (s: string) => s }) 
+    ~~
+!!! objectLiteralFunctionArgContextualTyping2.ts(12,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Type '{ toString: (s: string) => string; }' is missing property 'value' from type 'I2'.
+    ~~
+!!! objectLiteralFunctionArgContextualTyping2.ts(12,1): error TS2087: Could not select overload for 'call' expression.
+    f2({ value: '', toString: (s) => s.uhhh }) 
+    ~~
+!!! objectLiteralFunctionArgContextualTyping2.ts(13,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Type '{ value: string; toString: (s: any) => any; }' is missing property 'doStuff' from type 'I2'.
+    ~~
+!!! objectLiteralFunctionArgContextualTyping2.ts(13,1): error TS2087: Could not select overload for 'call' expression.

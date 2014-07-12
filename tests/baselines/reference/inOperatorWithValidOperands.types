@@ -1,0 +1,69 @@
+=== tests/cases/compiler/inOperatorWithValidOperands.ts ===
+var x: any;
+>x : any
+
+// valid left operands
+// the left operand is required to be of type Any, the String primitive type, or the Number primitive type
+var a1: string;
+>a1 : string
+
+var a2: number;
+>a2 : number
+
+var ra1 = x in x;
+>ra1 : boolean
+>x in x : boolean
+>x : any
+>x : any
+
+var ra2 = a1 in x;
+>ra2 : boolean
+>a1 in x : boolean
+>a1 : string
+>x : any
+
+var ra3 = a2 in x;
+>ra3 : boolean
+>a2 in x : boolean
+>a2 : number
+>x : any
+
+var ra4 = '' in x;
+>ra4 : boolean
+>'' in x : boolean
+>x : any
+
+var ra5 = 0 in x;
+>ra5 : boolean
+>0 in x : boolean
+>x : any
+
+// valid right operands
+// the right operand is required to be of type Any, an object type, or a type parameter type
+var b1: {};
+>b1 : {}
+
+var rb1 = x in b1;
+>rb1 : boolean
+>x in b1 : boolean
+>x : any
+>b1 : {}
+
+var rb2 = x in {};
+>rb2 : boolean
+>x in {} : boolean
+>x : any
+>{} : {}
+
+function foo<T>(t: T) {
+>foo : typeof foo
+>T : T
+>t : T
+>T : T
+
+    var rb3 = x in t;
+>rb3 : boolean
+>x in t : boolean
+>x : any
+>t : T
+}

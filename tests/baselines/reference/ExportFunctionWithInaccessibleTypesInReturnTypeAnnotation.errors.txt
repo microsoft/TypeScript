@@ -1,0 +1,20 @@
+==== tests/cases/compiler/ExportFunctionWithInaccessibleTypesInReturnTypeAnnotation.ts (2 errors) ====
+    module A {
+    
+        export class Point {
+            x: number;
+            y: number;
+        }
+    
+        class Line {
+            constructor(public start: Point, public end: Point) { }
+        }
+    
+        export function fromOrigin(p: Point): Line {
+                                              ~~~~
+!!! ExportFunctionWithInaccessibleTypesInReturnTypeAnnotation.ts(12,43): error TS2058: Return type of exported function has or is using private type 'Line'.
+            return new Line({ x: 0, y: 0 }, p);
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! ExportFunctionWithInaccessibleTypesInReturnTypeAnnotation.ts(13,9): error TS2058: Return type of exported function has or is using private type 'Line'.
+        }
+    }

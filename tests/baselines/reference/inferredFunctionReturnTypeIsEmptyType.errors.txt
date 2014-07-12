@@ -1,0 +1,19 @@
+==== tests/cases/compiler/inferredFunctionReturnTypeIsEmptyType.ts (1 errors) ====
+    function foo() {
+    ~~~~~~~~~~~~~~~~
+        if (true) {
+    ~~~~~~~~~~~~~~~
+            return 42;
+    ~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+        else {
+    ~~~~~~~~~~
+            return "42";
+    ~~~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+    };
+    ~
+!!! inferredFunctionReturnTypeIsEmptyType.ts(1,1): error TS2198: Could not find the best common type of types of all return statement expressions.
+    

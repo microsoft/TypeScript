@@ -1,0 +1,5 @@
+==== tests/cases/compiler/continueTarget1.ts (1 errors) ====
+    target:
+      continue target;
+      ~~~~~~~~~~~~~~~~
+!!! continueTarget1.ts(2,3): error TS2201: 'continue' statement can only be used within an enclosing iteration statement.

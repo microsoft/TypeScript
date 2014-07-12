@@ -1,0 +1,10 @@
+==== tests/cases/compiler/cloduleSplitAcrossFiles_class.ts (0 errors) ====
+    class D { }
+    
+==== tests/cases/compiler/cloduleSplitAcrossFiles_module.ts (1 errors) ====
+    module D {
+           ~
+!!! cloduleSplitAcrossFiles_module.ts(1,8): error TS2188: Module 'D' cannot merge with previous declaration of 'D' in a different file 'cloduleSplitAcrossFiles_class.ts'.
+        export var y = "hi";
+    }
+    D.y;

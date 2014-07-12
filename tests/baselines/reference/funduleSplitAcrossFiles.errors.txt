@@ -1,0 +1,10 @@
+==== tests/cases/compiler/funduleSplitAcrossFiles_function.ts (0 errors) ====
+    function D() { }
+    
+==== tests/cases/compiler/funduleSplitAcrossFiles_module.ts (1 errors) ====
+    module D {
+           ~
+!!! funduleSplitAcrossFiles_module.ts(1,8): error TS2188: Module 'D' cannot merge with previous declaration of 'D' in a different file 'funduleSplitAcrossFiles_function.ts'.
+        export var y = "hi";
+    }
+    D.y;

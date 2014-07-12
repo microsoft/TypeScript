@@ -1,0 +1,21 @@
+==== tests/cases/compiler/objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts (2 errors) ====
+    interface I {
+        (): void;
+    }
+    
+    var i: I;
+    var f: Object;
+    f = i;
+    i = f;
+    ~
+!!! objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts(8,1): error TS2012: Cannot convert 'Object' to 'I':
+!!! 	Type 'I' requires a call signature, but type 'Object' lacks one.
+    
+    var a: {
+        (): void
+    }
+    f = a;
+    a = f;
+    ~
+!!! objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts(14,1): error TS2012: Cannot convert 'Object' to '() => void':
+!!! 	Type '() => void' requires a call signature, but type 'Object' lacks one.

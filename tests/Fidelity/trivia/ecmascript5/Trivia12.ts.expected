@@ -1,0 +1,27 @@
+[
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "fullWidth": 8,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingComment": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "text": " "
+            },
+            {
+                "kind": "MultiLineCommentTrivia",
+                "text": "/*\r\n*/"
+            }
+        ]
+    },
+    {
+        "kind": "EndOfFileToken",
+        "width": 0,
+        "text": ""
+    }
+]

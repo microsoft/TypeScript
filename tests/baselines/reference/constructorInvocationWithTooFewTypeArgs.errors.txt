@@ -1,0 +1,13 @@
+==== tests/cases/compiler/constructorInvocationWithTooFewTypeArgs.ts (1 errors) ====
+    class D<T, U> {
+    
+       x: T
+    
+       y: U
+    
+    }
+     
+    var d = new D<number>();
+                ~
+!!! constructorInvocationWithTooFewTypeArgs.ts(9,13): error TS4027: Signature expected 2 type arguments, got 1 instead.
+    

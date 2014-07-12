@@ -1,0 +1,12 @@
+==== tests/cases/compiler/assignmentCompat1.ts (2 errors) ====
+    var x = {one: 1};
+    var y: {[index:string]: any};
+    
+    x = y;
+    ~
+!!! assignmentCompat1.ts(4,1): error TS2012: Cannot convert '{ [index: string]: any; }' to '{ one: number; }':
+!!! 	Type '{ [index: string]: any; }' is missing property 'one' from type '{ one: number; }'.
+    y = x;
+    ~
+!!! assignmentCompat1.ts(5,1): error TS2012: Cannot convert '{ one: number; }' to '{ [index: string]: any; }':
+!!! 	Index signatures of types '{ one: number; }' and '{ [index: string]: any; }' are incompatible.

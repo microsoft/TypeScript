@@ -1,0 +1,18 @@
+=== tests/cases/compiler/tryStatements.ts ===
+function fn() {
+>fn : typeof fn
+
+    try {
+
+    } catch (x) {
+>x : any
+
+        var x: any;
+>x : any
+    }
+
+    try { } finally { }
+
+    try { }catch(z){ } finally { }
+>z : any
+}

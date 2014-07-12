@@ -1,0 +1,6 @@
+==== tests/cases/compiler/badArrayIndex.ts (2 errors) ====
+    var results = number[];
+                         ~
+!!! badArrayIndex.ts(1,22): error TS1003: Identifier expected.
+                  ~~~~~~
+!!! badArrayIndex.ts(1,15): error TS2095: Could not find symbol 'number'.

@@ -1,0 +1,19 @@
+=== tests/cases/compiler/functionOverloads28.ts ===
+function foo():string;
+>foo : typeof foo
+
+function foo(bar:string):number;
+>foo : typeof foo
+>bar : string
+
+function foo(bar?:any):any{ return '' }
+>foo : typeof foo
+>bar : any
+
+var t:any; var x = foo(t);
+>t : any
+>x : number
+>foo(t) : number
+>foo : typeof foo
+>t : any
+

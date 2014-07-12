@@ -1,0 +1,25 @@
+=== tests/cases/compiler/foo2.ts ===
+import foo1 = require('./foo1');
+>foo1 : foo1
+
+var x: number = foo1.b();
+>x : number
+>foo1.b() : number
+>foo1.b : typeof foo1.b
+>foo1 : typeof foo1
+>b : typeof foo1.b
+
+=== tests/cases/compiler/foo1.ts ===
+
+declare module M1 {
+>M1 : M1
+
+	export var a: string; 
+>a : string
+
+	export function b(): number;
+>b : typeof b
+}
+export = M1;
+>M1 : typeof M1
+

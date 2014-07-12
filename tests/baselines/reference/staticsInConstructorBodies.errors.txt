@@ -1,0 +1,11 @@
+==== tests/cases/compiler/staticsInConstructorBodies.ts (2 errors) ====
+    class C {
+        constructor() {
+            static p1 = 0; // ERROR
+      ~~~~~~
+!!! staticsInConstructorBodies.ts(3,3): error TS1008: Unexpected token; 'statement' expected.
+            static m1() {} // ERROR
+        }
+    }
+    ~
+!!! staticsInConstructorBodies.ts(6,1): error TS1008: Unexpected token; 'module, class, interface, enum, import or statement' expected.

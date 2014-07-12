@@ -1,0 +1,28 @@
+=== tests/cases/compiler/sourceMapValidationImport.ts ===
+export module m {
+>m : m
+
+    export class c {
+>c : c
+    }
+}
+import a = m.c;
+>a : a
+>m : m
+>c : b
+
+export import b = m.c;
+>b : b
+>m : m
+>c : b
+
+var x = new a();
+>x : b
+>new a() : b
+>a : typeof b
+
+var y = new b();
+>y : b
+>new b() : b
+>b : typeof b
+

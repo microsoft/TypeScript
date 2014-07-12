@@ -1,0 +1,9 @@
+==== tests/cases/compiler/constructorAsType.ts (1 errors) ====
+    var Person:new () => {name: string;} = function () {return {name:"joe"};};
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! constructorAsType.ts(1,5): error TS2012: Cannot convert '() => { name: string; }' to 'new() => { name: string; }':
+!!! 	Type 'new() => { name: string; }' requires a construct signature, but type '() => { name: string; }' lacks one.
+    
+    var Person2:{new() : {name:string;};};
+    
+    Person = Person2;

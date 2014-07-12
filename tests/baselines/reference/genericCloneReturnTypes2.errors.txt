@@ -1,0 +1,21 @@
+==== tests/cases/compiler/genericCloneReturnTypes2.ts (1 errors) ====
+    class MyList<T> {
+        public size: number;
+        public data: T[];
+        constructor(n: number) {
+            this.size = n;
+            this.data = new Array<T>(this.size);
+        }
+        public clone() {
+            return new MyList<T>(this.size);
+        }
+    }
+    var a: MyList<string>;
+    var b: MyList<any> = a.clone(); // ok
+    var c: MyList<string> = a.clone(); // bug was there was an error on this line
+    var d: MyList<number> = a.clone(); // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! genericCloneReturnTypes2.ts(15,5): error TS2012: Cannot convert 'MyList<string>' to 'MyList<number>':
+!!! 	Types of property 'data' of types 'MyList<string>' and 'MyList<number>' are incompatible:
+!!! 		Types of property 'pop' of types 'string[]' and 'number[]' are incompatible:
+!!! 			Call signatures of types '() => string' and '() => number' are incompatible.

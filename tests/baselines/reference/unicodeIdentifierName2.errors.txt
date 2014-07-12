@@ -1,0 +1,16 @@
+==== tests/cases/compiler/unicodeIdentifierName2.ts (7 errors) ====
+    var a₁ = "hello"; alert(a₁)
+         ~
+!!! unicodeIdentifierName2.ts(1,6): error TS1001: Unexpected character "₁".
+         ~
+!!! unicodeIdentifierName2.ts(1,6): error TS1005: ',' expected.
+           ~
+!!! unicodeIdentifierName2.ts(1,8): error TS1008: Unexpected token; 'identifier' expected.
+             ~~~~~~~
+!!! unicodeIdentifierName2.ts(1,10): error TS1008: Unexpected token; 'identifier' expected.
+                             ~
+!!! unicodeIdentifierName2.ts(1,26): error TS1001: Unexpected character "₁".
+                             ~
+!!! unicodeIdentifierName2.ts(1,26): error TS1005: ',' expected.
+                      ~~~~~
+!!! unicodeIdentifierName2.ts(1,19): error TS2095: Could not find symbol 'alert'.

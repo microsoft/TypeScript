@@ -1,0 +1,17 @@
+==== tests/cases/compiler/genericDerivedTypeWithSpecializedBase2.ts (1 errors) ====
+    class A<T extends { length: number }> {
+        x: T;
+    }
+    
+    class B<U> extends A<string> {
+        y: U;
+    }
+    
+    var x: A<{ length: number; foo: number }>;
+    var y: B<number>;
+    x = y;  // error
+    ~
+!!! genericDerivedTypeWithSpecializedBase2.ts(11,1): error TS2012: Cannot convert 'B<number>' to 'A<{ length: number; foo: number; }>':
+!!! 	Types of property 'x' of types 'B<number>' and 'A<{ length: number; foo: number; }>' are incompatible:
+!!! 		Type 'String' is missing property 'foo' from type '{ length: number; foo: number; }'.
+    

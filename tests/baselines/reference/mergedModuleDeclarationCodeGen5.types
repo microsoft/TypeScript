@@ -1,0 +1,54 @@
+=== tests/cases/compiler/mergedModuleDeclarationCodeGen5.ts ===
+module M.buz.plop {
+>M : M
+>buz : M.buz
+>plop : M.buz.plop
+
+    export function doom() { }
+>doom : typeof doom
+
+    export function M() { }
+>M : typeof M
+}
+module M.buz.plop {
+>M : M
+>buz : M.buz
+>plop : M.buz.plop
+
+    function gunk() { }
+>gunk : typeof gunk
+
+    function buz() { }
+>buz : typeof buz
+
+    export class fudge { }
+>fudge : fudge
+
+    export enum plop { }
+>plop : plop
+
+    // Emit these references as follows
+    var v1 = gunk; // gunk
+>v1 : typeof gunk
+>gunk : typeof gunk
+
+    var v2 = buz; // buz
+>v2 : typeof buz
+>buz : typeof buz
+
+    export var v3 = doom; // _plop.doom
+>v3 : typeof doom
+>doom : typeof doom
+
+    export var v4 = M; // _plop.M
+>v4 : typeof M
+>M : typeof M
+
+    export var v5 = fudge; // fudge
+>v5 : typeof fudge
+>fudge : typeof fudge
+
+    export var v6 = plop; // plop
+>v6 : typeof plop
+>plop : typeof plop
+}

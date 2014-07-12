@@ -1,0 +1,12 @@
+==== tests/cases/compiler/genericCallSpecializedToTypeArg.ts (1 errors) ====
+    function dupe<T>(x: T): T {
+      return x;
+    }
+    function dupeAndGetDist<U>(x: U): U {
+      var y = dupe(x); //<-- dupe has incorrect type here
+      y.getDist();     //<-- this requires a missing constraint, but it's not caught
+        ~~~~~~~
+!!! genericCallSpecializedToTypeArg.ts(6,5): error TS2094: The property 'getDist' does not exist on value of type 'U'.
+      return y;
+    }
+    

@@ -1,0 +1,43 @@
+==== tests/cases/compiler/genericOverloadSignatures.ts (6 errors) ====
+    interface A {
+        <T>(x: T): void;
+        <T>(x: T): void;
+        ~~~~~~~~~~~~~~~
+!!! genericOverloadSignatures.ts(3,5): error TS2146: Duplicate overload call signature.
+    }
+    
+    function f<T>(a: T);
+    function f<T>(a: T);
+    ~~~~~~~~~~~~~~~~~~~~
+!!! genericOverloadSignatures.ts(7,1): error TS2144: Duplicate overload signature for 'f'.
+    function f(a) { }
+    
+    interface I2 {
+        f<T>(x: T): number;
+        f<T>(x: T): string;
+        ~~~~~~~~~~~~~~~~~~
+!!! genericOverloadSignatures.ts(12,5): error TS2175: Overloads cannot differ only by return type.
+    }
+    
+    interface I3<T> {
+        f(x: T): number;
+        f(x: T): string;
+        ~~~~~~~~~~~~~~~
+!!! genericOverloadSignatures.ts(17,5): error TS2175: Overloads cannot differ only by return type.
+    }
+    
+    class C2<T> {
+    }
+    var b: {
+        new <T>(x: T, y: string): C2<T>;
+        new <T>(x: T, y: string): C2<T>;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! genericOverloadSignatures.ts(24,5): error TS2147: Duplicate overload construct signature.
+    }
+    
+    interface D {
+        <T>(x: T): T;
+        <T>(x: T): T;
+        ~~~~~~~~~~~~
+!!! genericOverloadSignatures.ts(29,5): error TS2146: Duplicate overload call signature.
+    }

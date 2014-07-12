@@ -1,0 +1,6 @@
+==== tests/cases/compiler/continueTarget6.ts (1 errors) ====
+    while (true) {
+      continue target;
+      ~~~~~~~~~~~~~~~~
+!!! continueTarget6.ts(2,3): error TS2203: Jump target not found.
+    }

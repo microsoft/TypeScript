@@ -1,0 +1,51 @@
+==== tests/cases/compiler/defaultArgsInFunctionExpressions.ts (9 errors) ====
+    var f = function (a = 3) { return a; }; // Type should be (a?: number) => number
+    var n: number = f(4);
+    n = f();
+    var s: string = f('');
+                    ~
+!!! defaultArgsInFunctionExpressions.ts(4,17): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Could not apply type 'number' to argument 1 which is of type 'string'.
+                    ~
+!!! defaultArgsInFunctionExpressions.ts(4,17): error TS2087: Could not select overload for 'call' expression.
+    s = f();
+    ~
+!!! defaultArgsInFunctionExpressions.ts(5,1): error TS2011: Cannot convert 'number' to 'string'.
+    
+    // Type check the default argument with the type annotation
+    var f2 = function (a: string = 3) { return a; }; // Should error, but be of type (a: string) => string;
+                       ~~~~~~~~~~~~~
+!!! defaultArgsInFunctionExpressions.ts(8,20): error TS2011: Cannot convert 'number' to 'string'.
+    s = f2('');
+    s = f2();
+    n = f2();
+    ~
+!!! defaultArgsInFunctionExpressions.ts(11,1): error TS2011: Cannot convert 'string' to 'number'.
+    
+    // Contextually type the default arg with the type annotation
+    var f3 = function (a: (s: string) => any = (s) => <number>s) { };
+                                                      ~~~~~~~~~
+!!! defaultArgsInFunctionExpressions.ts(14,51): error TS2011: Cannot convert 'string' to 'number'.
+    
+    // Type check using the function's contextual type
+    var f4: (a: number) => void = function (a = "") { };
+                                            ~~~~~~
+!!! defaultArgsInFunctionExpressions.ts(17,41): error TS2011: Cannot convert 'string' to 'number'.
+    
+    // Contextually type the default arg using the function's contextual type
+    var f5: (a: (s: string) => any) => void = function (a = s => <number>s) { };
+                                                                 ~~~~~~~~~
+!!! defaultArgsInFunctionExpressions.ts(20,62): error TS2011: Cannot convert 'string' to 'number'.
+    
+    // Instantiated module
+    module T { }
+    module U {
+        export var x;
+    }
+    
+    var f6 = (t = T) => { };
+                  ~
+!!! defaultArgsInFunctionExpressions.ts(28,15): error TS2095: Could not find symbol 'T'.
+    var f7 = (t = U) => { return t; };
+    
+    f7().x;

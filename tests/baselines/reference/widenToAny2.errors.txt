@@ -1,0 +1,8 @@
+==== tests/cases/compiler/widenToAny2.ts (1 errors) ====
+    function foo3<T>(x: T[]): T {
+        return undefined;
+    }
+    var z3:number = foo3([undefined, "def"]);  // Type is any, but should be string
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! widenToAny2.ts(4,5): error TS2011: Cannot convert 'string' to 'number'.
+    

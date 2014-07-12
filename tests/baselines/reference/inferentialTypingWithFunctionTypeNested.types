@@ -1,0 +1,30 @@
+=== tests/cases/compiler/inferentialTypingWithFunctionTypeNested.ts ===
+declare function map<T, U>(x: T, f: () => { x: (s: T) => U }): U;
+>map : typeof map
+>T : T
+>U : U
+>x : T
+>T : T
+>f : () => { x: (s: T) => U; }
+>x : (s: T) => U
+>s : T
+>T : T
+>U : U
+>U : U
+
+declare function identity<V>(y: V): V;
+>identity : typeof identity
+>V : V
+>y : V
+>V : V
+>V : V
+
+var s = map("", () => { return { x: identity }; });
+>s : string
+>map("", () => { return { x: identity }; }) : string
+>map : typeof map
+>() => { return { x: identity }; } : () => { x: typeof identity; }
+>{ x: identity } : { x: typeof identity; }
+>x : typeof identity
+>identity : typeof identity
+

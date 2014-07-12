@@ -1,0 +1,68 @@
+==== tests/cases/compiler/typeMatch2.ts (6 errors) ====
+    function f1() {
+        var a = { x: 1, y: 2 };
+        a = {}; // error
+     ~
+!!! typeMatch2.ts(3,2): error TS2012: Cannot convert '{}' to '{ x: number; y: number; }':
+!!! 	Type '{}' is missing property 'x' from type '{ x: number; y: number; }'.
+        a = { x: 1 }; // error
+        ~
+!!! typeMatch2.ts(4,5): error TS2012: Cannot convert '{ x: number; }' to '{ x: number; y: number; }':
+!!! 	Type '{ x: number; }' is missing property 'y' from type '{ x: number; y: number; }'.
+        a = { x: 1, y: 2, z: 3 };
+        a = { x: 1, z: 3 };  // error
+        ~
+!!! typeMatch2.ts(6,5): error TS2012: Cannot convert '{ x: number; z: number; }' to '{ x: number; y: number; }':
+!!! 	Type '{ x: number; z: number; }' is missing property 'y' from type '{ x: number; y: number; }'.
+    }
+    
+    class Animal { private a; }
+    class Giraffe extends Animal { private g; }
+    
+    function f2() {
+        var a = new Animal();
+        var g = new Giraffe();
+        var aa = [ a, a, a ];
+        var gg = [ g, g, g ];
+        aa = gg;
+        gg = aa; // error
+        ~~
+!!! typeMatch2.ts(18,5): error TS2012: Cannot convert 'Animal[]' to 'Giraffe[]':
+!!! 	Types of property 'pop' of types 'Animal[]' and 'Giraffe[]' are incompatible:
+!!! 		Call signatures of types '() => Animal' and '() => Giraffe' are incompatible:
+!!! 			Type 'Animal' is missing property 'g' from type 'Giraffe'.
+        var xa = { f1: 5, f2: aa };
+        var xb = { f1: 5, f2: gg };
+        xa = xb; // Should be ok
+        xb = xa; // Not ok
+        ~~
+!!! typeMatch2.ts(22,5): error TS2012: Cannot convert '{ f1: number; f2: Animal[]; }' to '{ f1: number; f2: Giraffe[]; }':
+!!! 	Types of property 'f2' of types '{ f1: number; f2: Animal[]; }' and '{ f1: number; f2: Giraffe[]; }' are incompatible:
+!!! 		Types of property 'pop' of types 'Animal[]' and 'Giraffe[]' are incompatible:
+!!! 			Call signatures of types '() => Animal' and '() => Giraffe' are incompatible:
+!!! 				Type 'Animal' is missing property 'g' from type 'Giraffe'.
+    }
+    
+    function f4() {
+        var _any: any = 0;
+        var i = 5;
+        i = null; 
+        i = undefined;
+        var a = { x: 1, y: 1 };
+        a = { x: 1, y: null }; 
+        a = { x: 1, y: undefined }; 
+        a = { x: 1, y: _any }; 
+        a = { x: 1, y: _any, z:1 }; 
+        a = { x: 1 }; // error
+        ~
+!!! typeMatch2.ts(35,5): error TS2012: Cannot convert '{ x: number; }' to '{ x: number; y: number; }':
+!!! 	Type '{ x: number; }' is missing property 'y' from type '{ x: number; y: number; }'.
+        var mf = function m(n) { return false; };
+        var zf = function z(n: number) { return true; };
+        mf=zf;
+        mf(_any);
+        zf(_any);
+    }
+    
+    
+    

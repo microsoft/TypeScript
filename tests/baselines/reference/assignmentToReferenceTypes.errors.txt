@@ -1,0 +1,32 @@
+==== tests/cases/compiler/assignmentToReferenceTypes.ts (4 errors) ====
+    // Should all be allowed
+    
+    module M {
+    }
+    M = null;
+    ~
+!!! assignmentToReferenceTypes.ts(5,1): error TS2095: Could not find symbol 'M'.
+    
+    class C {
+    }
+    C = null;
+    ~
+!!! assignmentToReferenceTypes.ts(9,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    enum E {
+    }
+    E = null;
+    ~
+!!! assignmentToReferenceTypes.ts(13,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    function f() { }
+    f = null;
+    ~
+!!! assignmentToReferenceTypes.ts(16,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    var x = 1;
+    x = null;
+    
+    function g(x) {
+        x = null;
+    }

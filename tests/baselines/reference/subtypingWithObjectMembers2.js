@@ -1,0 +1,2 @@
+//// [subtypingWithObjectMembers2.js]
+

@@ -1,0 +1,35 @@
+==== tests/cases/compiler/objectLitIndexerContextualType.ts (6 errors) ====
+    interface I {
+        [s: string]: (s: string) => number;
+    }
+    
+    interface J {
+        [s: number]: (s: string) => number;
+    }
+    
+    var x: I;
+    var y: J;
+    x = {
+        s: t => t * t, // Should error
+                ~
+!!! objectLitIndexerContextualType.ts(12,13): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                    ~
+!!! objectLitIndexerContextualType.ts(12,17): error TS2112: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    };
+    x = {
+        0: t => t * t, // Should error
+                ~
+!!! objectLitIndexerContextualType.ts(15,13): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                    ~
+!!! objectLitIndexerContextualType.ts(15,17): error TS2112: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    };
+    y = {
+        s: t => t * t, // Should not error
+    };
+    y = {
+        0: t => t * t, // Should error
+                ~
+!!! objectLitIndexerContextualType.ts(21,13): error TS2113: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                    ~
+!!! objectLitIndexerContextualType.ts(21,17): error TS2112: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    };

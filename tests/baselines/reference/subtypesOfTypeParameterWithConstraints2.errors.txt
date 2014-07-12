@@ -1,0 +1,188 @@
+==== tests/cases/compiler/subtypesOfTypeParameterWithConstraints2.ts (15 errors) ====
+    // checking whether other types are subtypes of type parameters with constraints
+    
+    function f1<T extends U, U>(x: T, y: U) {
+                ~~~~~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints2.ts(3,13): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        var r = true ? x : y;
+        var r = true ? y : x;
+    }
+    
+    // V > U > T
+    function f2<T extends U, U extends V, V>(x: T, y: U, z: V) {
+                ~~~~~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints2.ts(9,13): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+                             ~~~~~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints2.ts(9,26): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        var r = true ? x : y;
+        var r = true ? y : x;
+    
+        // ok
+        var r2 = true ? z : y;
+        var r2 = true ? y : z;
+    
+        // ok
+        var r2 = true ? z : x;
+        var r2 = true ? x : z;
+    }
+    
+    // Date > U > T
+    function f3<T extends U, U extends Date>(x: T, y: U) {
+                ~~~~~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints2.ts(23,13): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        var r = true ? x : y;
+        var r = true ? y : x;
+    
+        // ok
+        var r2 = true ? x : new Date(); 
+        var r2 = true ? new Date() : x;
+    
+        // ok
+        var r3 = true ? y : new Date(); 
+        var r3 = true ? new Date() : y;
+    }
+    
+    
+    interface I1 { foo: number; }
+    class C1 { foo: number; }
+    class C2<T> { foo: T; }
+    enum E { A }
+    function f() { }
+    module f {
+        export var bar = 1;
+    }
+    class c { baz: string }
+    module c {
+        export var bar = 1;
+    }
+    
+    function f4<T extends Number>(x: T) {
+        var r0 = true ? x : null; // ok
+        var r0 = true ? null : x; // ok
+    
+        var u: typeof undefined;
+        var r0b = true ? u : x; // ok
+        var r0b = true ? x : u; // ok
+    }
+    
+    function f5<T extends Number>(x: T) {
+        var r1 = true ? 1 : x; // error
+                 ~~~~~~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints2.ts(60,14): error TS2226: Type of conditional '{}' must be identical to 'number' or 'T'.
+        var r1 = true ? x : 1; // error
+                 ~~~~~~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints2.ts(61,14): error TS2226: Type of conditional '{}' must be identical to 'T' or 'number'.
+    }
+    
+    function f6<T extends String>(x: T) {
+        var r2 = true ? '' : x; // error
+                 ~~~~~~~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints2.ts(65,14): error TS2226: Type of conditional '{}' must be identical to 'string' or 'T'.
+        var r2 = true ? x : ''; // error
+                 ~~~~~~~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints2.ts(66,14): error TS2226: Type of conditional '{}' must be identical to 'T' or 'string'.
+    }
+    
+    function f7<T extends Boolean>(x: T) {
+        var r3 = true ? true : x; // error
+                 ~~~~~~~~~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints2.ts(70,14): error TS2226: Type of conditional '{}' must be identical to 'boolean' or 'T'.
+        var r3 = true ? x : true; // error
+                 ~~~~~~~~~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints2.ts(71,14): error TS2226: Type of conditional '{}' must be identical to 'T' or 'boolean'.
+    }
+    
+    function f8<T extends Date>(x: T) {
+        var r4 = true ? new Date() : x; // ok
+        var r4 = true ? x : new Date(); // ok
+    }
+    
+    function f9<T extends RegExp>(x: T) {
+        var r5 = true ? /1/ : x; // ok
+        var r5 = true ? x : /1/; // ok
+    }
+    
+    function f10<T extends { foo: number }>(x: T) {
+        var r6 = true ? { foo: 1 } : x; // ok
+        var r6 = true ? x : { foo: 1 }; // ok
+    }
+    
+    function f11<T extends () => void>(x: T) {
+        var r7 = true ? () => { } : x; // ok
+        var r7 = true ? x : () => { }; // ok
+    }
+    
+    function f12<T extends <U>(x: U) => U>(x: T) {
+        var r8 = true ? <T>(x: T) => { return x } : x; // ok
+        var r8b = true ? x : <T>(x: T) => { return x }; // ok, type parameters not identical across declarations
+    }
+    
+    function f13<T extends I1>(x: T) {
+        var i1: I1;
+        var r9 = true ? i1 : x; // ok
+        var r9 = true ? x : i1; // ok
+    }
+    
+    function f14<T extends C1>(x: T) {
+        var c1: C1;
+        var r10 = true ? c1 : x; // ok
+        var r10 = true ? x : c1; // ok
+    }
+    
+    function f15<T extends C2<number>>(x: T) {
+        var c2: C2<number>;
+        var r12 = true ? c2 : x; // ok
+        var r12 = true ? x : c2; // ok
+    }
+    
+    function f16<T extends E>(x: T) {
+        var r13 = true ? E : x; // BUG 831833
+                  ~~~~~~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints2.ts(118,15): error TS2226: Type of conditional '{}' must be identical to 'typeof E' or 'T'.
+        var r13 = true ? x : E; // BUG 831833
+                  ~~~~~~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints2.ts(119,15): error TS2226: Type of conditional '{}' must be identical to 'T' or 'typeof E'.
+    
+        var r14 = true ? E.A : x; // BUG 831833
+                  ~~~~~~~~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints2.ts(121,15): error TS2226: Type of conditional '{}' must be identical to 'E' or 'T'.
+        var r14 = true ? x : E.A; // BUG 831833
+                  ~~~~~~~~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints2.ts(122,15): error TS2226: Type of conditional '{}' must be identical to 'T' or 'E'.
+    }
+    
+    function f17<T extends typeof f>(x: T) {
+        var af: typeof f;
+        var r15 = true ? af : x; // ok
+        var r15 = true ? x : af; // ok
+    }
+    
+    function f18<T extends typeof c>(x: T) {
+        var ac: typeof c;
+        var r16 = true ? ac : x; // ok
+        var r16 = true ? x : ac; // ok
+    }
+    
+    function f19<T>(x: T) {
+        function f17<U extends T>(a: U) {
+            var r17 = true ? x : a; // ok
+            var r17 = true ? a : x; // ok
+        }
+    
+        function f18<V extends U, U extends T>(a: V) {
+                     ~~~~~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints2.ts(143,18): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+            var r18 = true ? x : a; // ok
+            var r18 = true ? a : x; // ok
+        }
+    }
+    
+    function f20<T extends Number>(x: T) {
+        var r19 = true ? new Object() : x; // ok
+        var r19 = true ? x : new Object(); // ok
+    }
+    
+    function f21<T extends Number>(x: T) {
+        var r20 = true ? {} : x; // ok
+        var r20 = true ? x : {}; // ok
+    }

@@ -1,0 +1,7 @@
+==== tests/cases/compiler/propertyNamedPrototype.ts (1 errors) ====
+    class C {
+        prototype: number; // ok
+        static prototype: C; // error
+               ~~~~~~~~~
+!!! propertyNamedPrototype.ts(3,12): error TS2000: Duplicate identifier 'prototype'.
+    }

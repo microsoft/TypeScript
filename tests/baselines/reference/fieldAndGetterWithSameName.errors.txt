@@ -1,0 +1,8 @@
+==== tests/cases/compiler/fieldAndGetterWithSameName.ts (1 errors) ====
+    export class C {
+        x: number;
+      get x(): number { return 1; }
+          ~
+!!! fieldAndGetterWithSameName.ts(3,7): error TS2000: Duplicate identifier 'x'. Additional locations:
+!!! 	fieldAndGetterWithSameName.ts(2,5)
+    }

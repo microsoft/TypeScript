@@ -1,0 +1,12 @@
+==== tests/cases/compiler/instanceSubtypeCheck2.ts (1 errors) ====
+    class C1<T> {
+        x: C2<T>;
+    }
+    
+    class C2<T> extends C1<T> {
+          ~~
+!!! instanceSubtypeCheck2.ts(5,7): error TS2141: Class 'C2<T>' cannot extend class 'C1<T>':
+!!! 	Types of property 'x' of types 'C2<T>' and 'C1<T>' are incompatible:
+!!! 		Type 'String' is missing property 'x' from type 'C2<T>'.
+        x: string
+    }

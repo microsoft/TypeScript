@@ -1,0 +1,31 @@
+=== tests/cases/compiler/foo_1.ts ===
+import foo = require("./foo_0");
+>foo : foo
+
+if(foo.answer === 42){
+>foo.answer === 42 : boolean
+>foo.answer : number
+>foo : typeof foo
+>answer : number
+
+	var x = foo();
+>x : string
+>foo() : string
+>foo : typeof foo
+}
+
+=== tests/cases/compiler/foo_0.ts ===
+function foo() {
+>foo : typeof foo
+
+	return "test";
+}
+module foo {
+>foo : foo
+
+	export var answer = 42;
+>answer : number
+}
+export = foo;
+>foo : typeof foo
+

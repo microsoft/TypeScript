@@ -1,0 +1,22 @@
+==== tests/cases/compiler/interfaceWithStringIndexerHidingBaseTypeIndexer.ts (1 errors) ====
+    interface Base {
+        [x: string]: { a: number }
+        x: {
+            a: number; b: number;
+        }
+    }
+    
+    interface Derived extends Base {
+        [x: string]: {
+            a: number; b: number
+        };
+        // error
+        y: {
+        ~~~~
+            a: number;
+    ~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+!!! interfaceWithStringIndexerHidingBaseTypeIndexer.ts(13,5): error TS2172: All named properties must be assignable to string indexer type '{ a: number; b: number; }':
+!!! 	Type '{ a: number; }' is missing property 'b' from type '{ a: number; b: number; }'.
+    }

@@ -1,0 +1,52 @@
+==== tests/cases/compiler/privacyTypeParametersOfClass.ts (4 errors) ====
+    class privateClass {
+    }
+    
+    export class publicClass {
+    }
+    
+    // TypeParameter_0_of_exported_class_1_has_or_is_using_private_type_2
+    export class publicClassWithPrivateTypeParameters<T extends privateClass> {
+                                                      ~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyTypeParametersOfClass.ts(8,51): error TS2220: TypeParameter 'T extends privateClass' of exported class has or is using private type 'privateClass'.
+        myMethod(val: T): T { // Error
+                 ~~~~~~
+!!! privacyTypeParametersOfClass.ts(9,14): error TS2038: Parameter 'val' of public method from exported class has or is using private type 'privateClass'.
+                          ~
+!!! privacyTypeParametersOfClass.ts(9,23): error TS2056: Return type of public method from exported class has or is using private type 'privateClass'.
+            return val;
+            ~~~~~~~~~~~
+!!! privacyTypeParametersOfClass.ts(10,9): error TS2056: Return type of public method from exported class has or is using private type 'privateClass'.
+        }
+    }
+    
+    export class publicClassWithPublicTypeParameters<T extends publicClass> {
+        myMethod(val: T): T { // No Error
+            return val;
+        }
+    }
+    
+    class privateClassWithPrivateTypeParameters<T extends privateClass> {
+        myMethod(val: T): T { // No Error
+            return val;
+        }
+    }
+    
+    class privateClassWithPublicTypeParameters<T extends publicClass> {
+        myMethod(val: T): T { // No Error
+            return val;
+        }
+    }
+    
+    export class publicClassWithPublicTypeParametersWithoutExtends<T> {
+        myMethod(val: T): T { // No Error
+            return val;
+        }
+    }
+    
+    class privateClassWithPublicTypeParametersWithoutExtends<T> {
+        myMethod(val: T): T { // No Error
+            return val;
+        }
+    }
+    

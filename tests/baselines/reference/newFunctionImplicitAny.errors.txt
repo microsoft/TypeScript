@@ -1,0 +1,7 @@
+==== tests/cases/compiler/newFunctionImplicitAny.ts (1 errors) ====
+    // bug 767021: No implicit any and newing a function
+    
+    function Test() { }
+    var test = new Test();
+               ~~~~~~~~~~
+!!! newFunctionImplicitAny.ts(4,12): error TS7009: 'new' expression, which lacks a constructor signature, implicitly has an 'any' type.

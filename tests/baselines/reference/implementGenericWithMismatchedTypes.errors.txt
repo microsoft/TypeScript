@@ -1,0 +1,29 @@
+==== tests/cases/compiler/implementGenericWithMismatchedTypes.ts (2 errors) ====
+    // no errors because in the derived types the best common type for T's value is Object
+    // and that matches the original signature for assignability since we treat its T's as Object
+    
+    interface IFoo<T> {
+        foo(x: T): T;
+    }
+    class C<T> implements IFoo<T> { // error
+          ~
+!!! implementGenericWithMismatchedTypes.ts(7,7): error TS2137: Class C<T> declares interface IFoo<T> but does not implement it:
+!!! 	Types of property 'foo' of types 'C<T>' and 'IFoo<T>' are incompatible:
+!!! 		Call signatures of types '(x: string) => number' and '(x: T) => T' are incompatible.
+        foo(x: string): number {
+            return null;
+        }
+    }
+    
+    interface IFoo2<T> {
+        foo(x: T): T;
+    }
+    class C2<T> implements IFoo2<T> { // error
+          ~~
+!!! implementGenericWithMismatchedTypes.ts(16,7): error TS2137: Class C2<T> declares interface IFoo2<T> but does not implement it:
+!!! 	Types of property 'foo' of types 'C2<T>' and 'IFoo2<T>' are incompatible:
+!!! 		Call signatures of types '<string>(x: string) => number' and '(x: T) => T' are incompatible.
+        foo<string>(x: string): number {
+            return null;
+        }
+    }

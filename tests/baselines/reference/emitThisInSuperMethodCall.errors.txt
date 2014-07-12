@@ -1,0 +1,34 @@
+==== tests/cases/compiler/emitThisInSuperMethodCall.ts (3 errors) ====
+    class User {
+        sayHello() {
+        }
+    }
+    
+    class RegisteredUser extends User {
+        f() {
+            () => {
+                function inner() {
+                    super.sayHello();
+                    ~~~~~
+!!! emitThisInSuperMethodCall.ts(10,17): error TS2102: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.
+                }
+            };
+        }
+        g() {
+            function inner() {
+                () => {
+                    super.sayHello();
+                    ~~~~~
+!!! emitThisInSuperMethodCall.ts(17,17): error TS2102: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.
+                }
+            }
+        }
+        h() {
+            function inner() {
+                super.sayHello();
+                ~~~~~
+!!! emitThisInSuperMethodCall.ts(23,13): error TS2102: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.
+            }
+        }
+    }
+    

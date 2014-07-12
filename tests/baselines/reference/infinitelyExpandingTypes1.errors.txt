@@ -1,0 +1,28 @@
+==== tests/cases/compiler/infinitelyExpandingTypes1.ts (2 errors) ====
+    interface List<T> {
+        data: T;
+        next: List<T>;
+        owner: List<List<T>>;
+    }
+    
+    
+    interface MyList<T> {
+        data: T;
+        next: MyList<T>;
+        owner: MyList<MyList<T>>;
+    }
+    
+    var l: List<number>;
+    var m: MyList<number>;
+    
+    l == m; // should error
+    ~~~~~~
+!!! infinitelyExpandingTypes1.ts(17,1): error TS2009: Operator '==' cannot be applied to types 'List<number>' and 'MyList<number>'.
+    
+    var l2: List<string>;
+    
+    l == l2; // should error;
+    ~~~~~~~
+!!! infinitelyExpandingTypes1.ts(21,1): error TS2009: Operator '==' cannot be applied to types 'List<number>' and 'List<string>'.
+    
+    l == l; // should not error

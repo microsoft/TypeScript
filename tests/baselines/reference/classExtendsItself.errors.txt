@@ -1,0 +1,12 @@
+==== tests/cases/compiler/classExtendsItself.ts (3 errors) ====
+    class C extends C { } // error
+          ~
+!!! classExtendsItself.ts(1,7): error TS2100: Class 'C' is recursively referenced as a base type of itself.
+    
+    class D<T> extends D<T> { } // error
+          ~
+!!! classExtendsItself.ts(3,7): error TS2100: Class 'D<T>' is recursively referenced as a base type of itself.
+    
+    class E<T> extends E<string> { } // error
+          ~
+!!! classExtendsItself.ts(5,7): error TS2100: Class 'E<T>' is recursively referenced as a base type of itself.

@@ -1,0 +1,16 @@
+==== tests/cases/compiler/infinitelyExpandingTypeAssignability.ts (1 errors) ====
+    interface A<T> {
+       x : T
+    }
+     
+    interface B<T> extends A<B<B<B<T>>>> { }
+    
+    interface C<T> extends A<C<C<C<T>>>> { }
+     
+    var x : B<string>
+    var y : C<string> = x
+        ~~~~~~~~~~~~~~~~~
+!!! infinitelyExpandingTypeAssignability.ts(10,5): error TS2012: Cannot convert 'B<string>' to 'C<string>':
+!!! 	Types of property 'x' of types 'B<string>' and 'C<string>' are incompatible:
+!!! 		Types 'B<B<B<string>>>' and 'C<C<C<string>>>' originating in infinitely expanding type reference do not refer to same named type.
+    

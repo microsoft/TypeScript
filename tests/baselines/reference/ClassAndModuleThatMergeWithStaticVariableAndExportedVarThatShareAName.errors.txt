@@ -1,0 +1,29 @@
+==== tests/cases/compiler/ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.ts (2 errors) ====
+    class Point {
+        constructor(public x: number, public y: number) { }
+    
+        static Origin: Point = { x: 0, y: 0 };
+    }
+    
+    module Point {
+        export var Origin = ""; //expected duplicate identifier error
+                   ~~~~~~
+!!! ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.ts(8,16): error TS2000: Duplicate identifier 'Origin'. Additional locations:
+!!! 	ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.ts(4,5)
+    }
+    
+    
+    module A {
+        export class Point {
+            constructor(public x: number, public y: number) { }
+    
+            static Origin: Point = { x: 0, y: 0 };
+        }
+    
+        export module Point {
+            export var Origin = ""; //expected duplicate identifier error
+                       ~~~~~~
+!!! ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.ts(20,20): error TS2000: Duplicate identifier 'Origin'. Additional locations:
+!!! 	ClassAndModuleThatMergeWithStaticVariableAndExportedVarThatShareAName.ts(16,9)
+        }
+    }

@@ -1,0 +1,21 @@
+==== tests/cases/compiler/invalidInstantiatedModule.ts (2 errors) ====
+    module M {
+        export class Point { x: number; y: number }
+        export var Point = 1;  // Error
+                   ~~~~~
+!!! invalidInstantiatedModule.ts(3,16): error TS2000: Duplicate identifier 'Point'. Additional locations:
+!!! 	invalidInstantiatedModule.ts(2,5)
+    }
+    
+    module M2 {
+        export interface Point { x: number; y: number }
+        export var Point = 1;
+    }
+    
+    var m = M2;
+    var p: m.Point; // Error
+           ~
+!!! invalidInstantiatedModule.ts(12,8): error TS2095: Could not find symbol 'm'.
+    
+    
+     

@@ -1,0 +1,11 @@
+==== tests/cases/compiler/importDeclWithExportModifierAndExportAssignmentInAmbientContext.ts (1 errors) ====
+    declare module "m" {
+        module x {
+            interface c {
+            }
+        }
+        export import a = x.c;
+        export = x;
+        ~~~~~~~~~~~
+!!! importDeclWithExportModifierAndExportAssignmentInAmbientContext.ts(7,5): error TS1064: Export assignment not allowed in module with exported element.
+    }

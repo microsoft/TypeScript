@@ -1,0 +1,389 @@
+
+**Pos: 0 SpanInfo: {"minChar":0,"limChar":10,"text":null}
+** Statement: var x = 10
+**Pos: 1 SpanInfo: {"minChar":0,"limChar":10,"text":null}
+** Statement: var x = 10
+**Pos: 2 SpanInfo: {"minChar":0,"limChar":10,"text":null}
+** Statement: var x = 10
+**Pos: 3 SpanInfo: {"minChar":0,"limChar":10,"text":null}
+** Statement: var x = 10
+**Pos: 4 SpanInfo: {"minChar":0,"limChar":10,"text":null}
+** Statement: var x = 10
+**Pos: 5 SpanInfo: {"minChar":0,"limChar":10,"text":null}
+** Statement: var x = 10
+**Pos: 6 SpanInfo: {"minChar":0,"limChar":10,"text":null}
+** Statement: var x = 10
+**Pos: 7 SpanInfo: {"minChar":0,"limChar":10,"text":null}
+** Statement: var x = 10
+**Pos: 8 SpanInfo: {"minChar":0,"limChar":10,"text":null}
+** Statement: var x = 10
+**Pos: 9 SpanInfo: {"minChar":0,"limChar":10,"text":null}
+** Statement: var x = 10
+**Pos: 10 SpanInfo: {"minChar":0,"limChar":10,"text":null}
+** Statement: var x = 10
+**Pos: 11 SpanInfo: {"minChar":0,"limChar":10,"text":null}
+** Statement: var x = 10
+**Pos: 12 SpanInfo: {"minChar":22,"limChar":31,"text":null}
+** Statement: x = x + 1
+**Pos: 13 SpanInfo: {"minChar":22,"limChar":31,"text":null}
+** Statement: x = x + 1
+**Pos: 14 SpanInfo: {"minChar":22,"limChar":31,"text":null}
+** Statement: x = x + 1
+**Pos: 15 SpanInfo: {"minChar":22,"limChar":31,"text":null}
+** Statement: x = x + 1
+**Pos: 16 SpanInfo: {"minChar":22,"limChar":31,"text":null}
+** Statement: x = x + 1
+**Pos: 17 SpanInfo: {"minChar":22,"limChar":31,"text":null}
+** Statement: x = x + 1
+**Pos: 18 SpanInfo: {"minChar":22,"limChar":31,"text":null}
+** Statement: x = x + 1
+**Pos: 19 SpanInfo: {"minChar":22,"limChar":31,"text":null}
+** Statement: x = x + 1
+**Pos: 20 SpanInfo: {"minChar":22,"limChar":31,"text":null}
+** Statement: x = x + 1
+**Pos: 21 SpanInfo: {"minChar":22,"limChar":31,"text":null}
+** Statement: x = x + 1
+**Pos: 22 SpanInfo: {"minChar":22,"limChar":31,"text":null}
+** Statement: x = x + 1
+**Pos: 23 SpanInfo: {"minChar":22,"limChar":31,"text":null}
+** Statement: x = x + 1
+**Pos: 24 SpanInfo: {"minChar":22,"limChar":31,"text":null}
+** Statement: x = x + 1
+**Pos: 25 SpanInfo: {"minChar":22,"limChar":31,"text":null}
+** Statement: x = x + 1
+**Pos: 26 SpanInfo: {"minChar":22,"limChar":31,"text":null}
+** Statement: x = x + 1
+**Pos: 27 SpanInfo: {"minChar":22,"limChar":31,"text":null}
+** Statement: x = x + 1
+**Pos: 28 SpanInfo: {"minChar":22,"limChar":31,"text":null}
+** Statement: x = x + 1
+**Pos: 29 SpanInfo: {"minChar":22,"limChar":31,"text":null}
+** Statement: x = x + 1
+**Pos: 30 SpanInfo: {"minChar":22,"limChar":31,"text":null}
+** Statement: x = x + 1
+**Pos: 31 SpanInfo: {"minChar":22,"limChar":31,"text":null}
+** Statement: x = x + 1
+**Pos: 32 SpanInfo: {"minChar":22,"limChar":31,"text":null}
+** Statement: x = x + 1
+**Pos: 33 SpanInfo: {"minChar":22,"limChar":31,"text":null}
+** Statement: x = x + 1
+**Pos: 34 SpanInfo: {"minChar":22,"limChar":31,"text":null}
+** Statement: x = x + 1
+**Pos: 35 SpanInfo: {"minChar":35,"limChar":44,"text":null}
+** Statement: catch (e)
+**Pos: 36 SpanInfo: {"minChar":35,"limChar":44,"text":null}
+** Statement: catch (e)
+**Pos: 37 SpanInfo: {"minChar":35,"limChar":44,"text":null}
+** Statement: catch (e)
+**Pos: 38 SpanInfo: {"minChar":35,"limChar":44,"text":null}
+** Statement: catch (e)
+**Pos: 39 SpanInfo: {"minChar":35,"limChar":44,"text":null}
+** Statement: catch (e)
+**Pos: 40 SpanInfo: {"minChar":35,"limChar":44,"text":null}
+** Statement: catch (e)
+**Pos: 41 SpanInfo: {"minChar":35,"limChar":44,"text":null}
+** Statement: catch (e)
+**Pos: 42 SpanInfo: {"minChar":35,"limChar":44,"text":null}
+** Statement: catch (e)
+**Pos: 43 SpanInfo: {"minChar":35,"limChar":44,"text":null}
+** Statement: catch (e)
+**Pos: 44 SpanInfo: {"minChar":35,"limChar":44,"text":null}
+** Statement: catch (e)
+**Pos: 45 SpanInfo: {"minChar":35,"limChar":44,"text":null}
+** Statement: catch (e)
+**Pos: 46 SpanInfo: {"minChar":35,"limChar":44,"text":null}
+** Statement: catch (e)
+**Pos: 47 SpanInfo: {"minChar":51,"limChar":60,"text":null}
+** Statement: x = x - 1
+**Pos: 48 SpanInfo: {"minChar":51,"limChar":60,"text":null}
+** Statement: x = x - 1
+**Pos: 49 SpanInfo: {"minChar":51,"limChar":60,"text":null}
+** Statement: x = x - 1
+**Pos: 50 SpanInfo: {"minChar":51,"limChar":60,"text":null}
+** Statement: x = x - 1
+**Pos: 51 SpanInfo: {"minChar":51,"limChar":60,"text":null}
+** Statement: x = x - 1
+**Pos: 52 SpanInfo: {"minChar":51,"limChar":60,"text":null}
+** Statement: x = x - 1
+**Pos: 53 SpanInfo: {"minChar":51,"limChar":60,"text":null}
+** Statement: x = x - 1
+**Pos: 54 SpanInfo: {"minChar":51,"limChar":60,"text":null}
+** Statement: x = x - 1
+**Pos: 55 SpanInfo: {"minChar":51,"limChar":60,"text":null}
+** Statement: x = x - 1
+**Pos: 56 SpanInfo: {"minChar":51,"limChar":60,"text":null}
+** Statement: x = x - 1
+**Pos: 57 SpanInfo: {"minChar":51,"limChar":60,"text":null}
+** Statement: x = x - 1
+**Pos: 58 SpanInfo: {"minChar":51,"limChar":60,"text":null}
+** Statement: x = x - 1
+**Pos: 59 SpanInfo: {"minChar":51,"limChar":60,"text":null}
+** Statement: x = x - 1
+**Pos: 60 SpanInfo: {"minChar":51,"limChar":60,"text":null}
+** Statement: x = x - 1
+**Pos: 61 SpanInfo: {"minChar":51,"limChar":60,"text":null}
+** Statement: x = x - 1
+**Pos: 62 SpanInfo: {"minChar":51,"limChar":60,"text":null}
+** Statement: x = x - 1
+**Pos: 63 SpanInfo: {"minChar":51,"limChar":60,"text":null}
+** Statement: x = x - 1
+**Pos: 64 SpanInfo: {"minChar":78,"limChar":88,"text":null}
+** Statement: x = x * 10
+**Pos: 65 SpanInfo: {"minChar":78,"limChar":88,"text":null}
+** Statement: x = x * 10
+**Pos: 66 SpanInfo: {"minChar":78,"limChar":88,"text":null}
+** Statement: x = x * 10
+**Pos: 67 SpanInfo: {"minChar":78,"limChar":88,"text":null}
+** Statement: x = x * 10
+**Pos: 68 SpanInfo: {"minChar":78,"limChar":88,"text":null}
+** Statement: x = x * 10
+**Pos: 69 SpanInfo: {"minChar":78,"limChar":88,"text":null}
+** Statement: x = x * 10
+**Pos: 70 SpanInfo: {"minChar":78,"limChar":88,"text":null}
+** Statement: x = x * 10
+**Pos: 71 SpanInfo: {"minChar":78,"limChar":88,"text":null}
+** Statement: x = x * 10
+**Pos: 72 SpanInfo: {"minChar":78,"limChar":88,"text":null}
+** Statement: x = x * 10
+**Pos: 73 SpanInfo: {"minChar":78,"limChar":88,"text":null}
+** Statement: x = x * 10
+**Pos: 74 SpanInfo: {"minChar":78,"limChar":88,"text":null}
+** Statement: x = x * 10
+**Pos: 75 SpanInfo: {"minChar":78,"limChar":88,"text":null}
+** Statement: x = x * 10
+**Pos: 76 SpanInfo: {"minChar":78,"limChar":88,"text":null}
+** Statement: x = x * 10
+**Pos: 77 SpanInfo: {"minChar":78,"limChar":88,"text":null}
+** Statement: x = x * 10
+**Pos: 78 SpanInfo: {"minChar":78,"limChar":88,"text":null}
+** Statement: x = x * 10
+**Pos: 79 SpanInfo: {"minChar":78,"limChar":88,"text":null}
+** Statement: x = x * 10
+**Pos: 80 SpanInfo: {"minChar":78,"limChar":88,"text":null}
+** Statement: x = x * 10
+**Pos: 81 SpanInfo: {"minChar":78,"limChar":88,"text":null}
+** Statement: x = x * 10
+**Pos: 82 SpanInfo: {"minChar":78,"limChar":88,"text":null}
+** Statement: x = x * 10
+**Pos: 83 SpanInfo: {"minChar":78,"limChar":88,"text":null}
+** Statement: x = x * 10
+**Pos: 84 SpanInfo: {"minChar":78,"limChar":88,"text":null}
+** Statement: x = x * 10
+**Pos: 85 SpanInfo: {"minChar":78,"limChar":88,"text":null}
+** Statement: x = x * 10
+**Pos: 86 SpanInfo: {"minChar":78,"limChar":88,"text":null}
+** Statement: x = x * 10
+**Pos: 87 SpanInfo: {"minChar":78,"limChar":88,"text":null}
+** Statement: x = x * 10
+**Pos: 88 SpanInfo: {"minChar":78,"limChar":88,"text":null}
+** Statement: x = x * 10
+**Pos: 89 SpanInfo: {"minChar":78,"limChar":88,"text":null}
+** Statement: x = x * 10
+**Pos: 90 SpanInfo: {"minChar":78,"limChar":88,"text":null}
+** Statement: x = x * 10
+**Pos: 91 SpanInfo: {"minChar":78,"limChar":88,"text":null}
+** Statement: x = x * 10
+**Pos: 92 SpanInfo: {"minChar":102,"limChar":111,"text":null}
+** Statement: x = x + 1
+**Pos: 93 SpanInfo: {"minChar":102,"limChar":111,"text":null}
+** Statement: x = x + 1
+**Pos: 94 SpanInfo: {"minChar":102,"limChar":111,"text":null}
+** Statement: x = x + 1
+**Pos: 95 SpanInfo: {"minChar":102,"limChar":111,"text":null}
+** Statement: x = x + 1
+**Pos: 96 SpanInfo: {"minChar":102,"limChar":111,"text":null}
+** Statement: x = x + 1
+**Pos: 97 SpanInfo: {"minChar":102,"limChar":111,"text":null}
+** Statement: x = x + 1
+**Pos: 98 SpanInfo: {"minChar":102,"limChar":111,"text":null}
+** Statement: x = x + 1
+**Pos: 99 SpanInfo: {"minChar":102,"limChar":111,"text":null}
+** Statement: x = x + 1
+**Pos: 100 SpanInfo: {"minChar":102,"limChar":111,"text":null}
+** Statement: x = x + 1
+**Pos: 101 SpanInfo: {"minChar":102,"limChar":111,"text":null}
+** Statement: x = x + 1
+**Pos: 102 SpanInfo: {"minChar":102,"limChar":111,"text":null}
+** Statement: x = x + 1
+**Pos: 103 SpanInfo: {"minChar":102,"limChar":111,"text":null}
+** Statement: x = x + 1
+**Pos: 104 SpanInfo: {"minChar":102,"limChar":111,"text":null}
+** Statement: x = x + 1
+**Pos: 105 SpanInfo: {"minChar":102,"limChar":111,"text":null}
+** Statement: x = x + 1
+**Pos: 106 SpanInfo: {"minChar":102,"limChar":111,"text":null}
+** Statement: x = x + 1
+**Pos: 107 SpanInfo: {"minChar":102,"limChar":111,"text":null}
+** Statement: x = x + 1
+**Pos: 108 SpanInfo: {"minChar":102,"limChar":111,"text":null}
+** Statement: x = x + 1
+**Pos: 109 SpanInfo: {"minChar":102,"limChar":111,"text":null}
+** Statement: x = x + 1
+**Pos: 110 SpanInfo: {"minChar":102,"limChar":111,"text":null}
+** Statement: x = x + 1
+**Pos: 111 SpanInfo: {"minChar":102,"limChar":111,"text":null}
+** Statement: x = x + 1
+**Pos: 112 SpanInfo: {"minChar":102,"limChar":111,"text":null}
+** Statement: x = x + 1
+**Pos: 113 SpanInfo: {"minChar":117,"limChar":134,"text":null}
+** Statement: throw new Error()
+**Pos: 114 SpanInfo: {"minChar":117,"limChar":134,"text":null}
+** Statement: throw new Error()
+**Pos: 115 SpanInfo: {"minChar":117,"limChar":134,"text":null}
+** Statement: throw new Error()
+**Pos: 116 SpanInfo: {"minChar":117,"limChar":134,"text":null}
+** Statement: throw new Error()
+**Pos: 117 SpanInfo: {"minChar":117,"limChar":134,"text":null}
+** Statement: throw new Error()
+**Pos: 118 SpanInfo: {"minChar":117,"limChar":134,"text":null}
+** Statement: throw new Error()
+**Pos: 119 SpanInfo: {"minChar":117,"limChar":134,"text":null}
+** Statement: throw new Error()
+**Pos: 120 SpanInfo: {"minChar":117,"limChar":134,"text":null}
+** Statement: throw new Error()
+**Pos: 121 SpanInfo: {"minChar":117,"limChar":134,"text":null}
+** Statement: throw new Error()
+**Pos: 122 SpanInfo: {"minChar":117,"limChar":134,"text":null}
+** Statement: throw new Error()
+**Pos: 123 SpanInfo: {"minChar":117,"limChar":134,"text":null}
+** Statement: throw new Error()
+**Pos: 124 SpanInfo: {"minChar":117,"limChar":134,"text":null}
+** Statement: throw new Error()
+**Pos: 125 SpanInfo: {"minChar":117,"limChar":134,"text":null}
+** Statement: throw new Error()
+**Pos: 126 SpanInfo: {"minChar":117,"limChar":134,"text":null}
+** Statement: throw new Error()
+**Pos: 127 SpanInfo: {"minChar":117,"limChar":134,"text":null}
+** Statement: throw new Error()
+**Pos: 128 SpanInfo: {"minChar":117,"limChar":134,"text":null}
+** Statement: throw new Error()
+**Pos: 129 SpanInfo: {"minChar":117,"limChar":134,"text":null}
+** Statement: throw new Error()
+**Pos: 130 SpanInfo: {"minChar":117,"limChar":134,"text":null}
+** Statement: throw new Error()
+**Pos: 131 SpanInfo: {"minChar":117,"limChar":134,"text":null}
+** Statement: throw new Error()
+**Pos: 132 SpanInfo: {"minChar":117,"limChar":134,"text":null}
+** Statement: throw new Error()
+**Pos: 133 SpanInfo: {"minChar":117,"limChar":134,"text":null}
+** Statement: throw new Error()
+**Pos: 134 SpanInfo: {"minChar":117,"limChar":134,"text":null}
+** Statement: throw new Error()
+**Pos: 135 SpanInfo: {"minChar":117,"limChar":134,"text":null}
+** Statement: throw new Error()
+**Pos: 136 SpanInfo: {"minChar":117,"limChar":134,"text":null}
+** Statement: throw new Error()
+**Pos: 137 SpanInfo: {"minChar":117,"limChar":134,"text":null}
+** Statement: throw new Error()
+**Pos: 138 SpanInfo: {"minChar":138,"limChar":147,"text":null}
+** Statement: catch (e)
+**Pos: 139 SpanInfo: {"minChar":138,"limChar":147,"text":null}
+** Statement: catch (e)
+**Pos: 140 SpanInfo: {"minChar":138,"limChar":147,"text":null}
+** Statement: catch (e)
+**Pos: 141 SpanInfo: {"minChar":138,"limChar":147,"text":null}
+** Statement: catch (e)
+**Pos: 142 SpanInfo: {"minChar":138,"limChar":147,"text":null}
+** Statement: catch (e)
+**Pos: 143 SpanInfo: {"minChar":138,"limChar":147,"text":null}
+** Statement: catch (e)
+**Pos: 144 SpanInfo: {"minChar":138,"limChar":147,"text":null}
+** Statement: catch (e)
+**Pos: 145 SpanInfo: {"minChar":138,"limChar":147,"text":null}
+** Statement: catch (e)
+**Pos: 146 SpanInfo: {"minChar":138,"limChar":147,"text":null}
+** Statement: catch (e)
+**Pos: 147 SpanInfo: {"minChar":138,"limChar":147,"text":null}
+** Statement: catch (e)
+**Pos: 148 SpanInfo: {"minChar":154,"limChar":163,"text":null}
+** Statement: x = x - 1
+**Pos: 149 SpanInfo: {"minChar":154,"limChar":163,"text":null}
+** Statement: x = x - 1
+**Pos: 150 SpanInfo: {"minChar":154,"limChar":163,"text":null}
+** Statement: x = x - 1
+**Pos: 151 SpanInfo: {"minChar":154,"limChar":163,"text":null}
+** Statement: x = x - 1
+**Pos: 152 SpanInfo: {"minChar":154,"limChar":163,"text":null}
+** Statement: x = x - 1
+**Pos: 153 SpanInfo: {"minChar":154,"limChar":163,"text":null}
+** Statement: x = x - 1
+**Pos: 154 SpanInfo: {"minChar":154,"limChar":163,"text":null}
+** Statement: x = x - 1
+**Pos: 155 SpanInfo: {"minChar":154,"limChar":163,"text":null}
+** Statement: x = x - 1
+**Pos: 156 SpanInfo: {"minChar":154,"limChar":163,"text":null}
+** Statement: x = x - 1
+**Pos: 157 SpanInfo: {"minChar":154,"limChar":163,"text":null}
+** Statement: x = x - 1
+**Pos: 158 SpanInfo: {"minChar":154,"limChar":163,"text":null}
+** Statement: x = x - 1
+**Pos: 159 SpanInfo: {"minChar":154,"limChar":163,"text":null}
+** Statement: x = x - 1
+**Pos: 160 SpanInfo: {"minChar":154,"limChar":163,"text":null}
+** Statement: x = x - 1
+**Pos: 161 SpanInfo: {"minChar":154,"limChar":163,"text":null}
+** Statement: x = x - 1
+**Pos: 162 SpanInfo: {"minChar":154,"limChar":163,"text":null}
+** Statement: x = x - 1
+**Pos: 163 SpanInfo: {"minChar":154,"limChar":163,"text":null}
+** Statement: x = x - 1
+**Pos: 164 SpanInfo: {"minChar":154,"limChar":163,"text":null}
+** Statement: x = x - 1
+**Pos: 165 SpanInfo: {"minChar":154,"limChar":163,"text":null}
+** Statement: x = x - 1
+**Pos: 166 SpanInfo: {"minChar":154,"limChar":163,"text":null}
+** Statement: x = x - 1
+**Pos: 167 SpanInfo: {"minChar":181,"limChar":191,"text":null}
+** Statement: x = x * 10
+**Pos: 168 SpanInfo: {"minChar":181,"limChar":191,"text":null}
+** Statement: x = x * 10
+**Pos: 169 SpanInfo: {"minChar":181,"limChar":191,"text":null}
+** Statement: x = x * 10
+**Pos: 170 SpanInfo: {"minChar":181,"limChar":191,"text":null}
+** Statement: x = x * 10
+**Pos: 171 SpanInfo: {"minChar":181,"limChar":191,"text":null}
+** Statement: x = x * 10
+**Pos: 172 SpanInfo: {"minChar":181,"limChar":191,"text":null}
+** Statement: x = x * 10
+**Pos: 173 SpanInfo: {"minChar":181,"limChar":191,"text":null}
+** Statement: x = x * 10
+**Pos: 174 SpanInfo: {"minChar":181,"limChar":191,"text":null}
+** Statement: x = x * 10
+**Pos: 175 SpanInfo: {"minChar":181,"limChar":191,"text":null}
+** Statement: x = x * 10
+**Pos: 176 SpanInfo: {"minChar":181,"limChar":191,"text":null}
+** Statement: x = x * 10
+**Pos: 177 SpanInfo: {"minChar":181,"limChar":191,"text":null}
+** Statement: x = x * 10
+**Pos: 178 SpanInfo: {"minChar":181,"limChar":191,"text":null}
+** Statement: x = x * 10
+**Pos: 179 SpanInfo: {"minChar":181,"limChar":191,"text":null}
+** Statement: x = x * 10
+**Pos: 180 SpanInfo: {"minChar":181,"limChar":191,"text":null}
+** Statement: x = x * 10
+**Pos: 181 SpanInfo: {"minChar":181,"limChar":191,"text":null}
+** Statement: x = x * 10
+**Pos: 182 SpanInfo: {"minChar":181,"limChar":191,"text":null}
+** Statement: x = x * 10
+**Pos: 183 SpanInfo: {"minChar":181,"limChar":191,"text":null}
+** Statement: x = x * 10
+**Pos: 184 SpanInfo: {"minChar":181,"limChar":191,"text":null}
+** Statement: x = x * 10
+**Pos: 185 SpanInfo: {"minChar":181,"limChar":191,"text":null}
+** Statement: x = x * 10
+**Pos: 186 SpanInfo: {"minChar":181,"limChar":191,"text":null}
+** Statement: x = x * 10
+**Pos: 187 SpanInfo: {"minChar":181,"limChar":191,"text":null}
+** Statement: x = x * 10
+**Pos: 188 SpanInfo: {"minChar":181,"limChar":191,"text":null}
+** Statement: x = x * 10
+**Pos: 189 SpanInfo: {"minChar":181,"limChar":191,"text":null}
+** Statement: x = x * 10
+**Pos: 190 SpanInfo: {"minChar":181,"limChar":191,"text":null}
+** Statement: x = x * 10
+**Pos: 191 SpanInfo: {"minChar":181,"limChar":191,"text":null}
+** Statement: x = x * 10
+**Pos: 192 SpanInfo: {"minChar":181,"limChar":191,"text":null}
+** Statement: x = x * 10
+**Pos: 193 SpanInfo: {"minChar":181,"limChar":191,"text":null}
+** Statement: x = x * 10

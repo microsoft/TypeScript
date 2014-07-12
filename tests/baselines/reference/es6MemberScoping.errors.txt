@@ -1,0 +1,20 @@
+==== tests/cases/compiler/es6MemberScoping.ts (1 errors) ====
+    
+    
+    class Foo {
+        constructor(store: string) { }
+    
+        public foo() {
+            return this._store.length; 
+        }
+        public _store = store; // should be an error.
+                        ~~~~~
+!!! es6MemberScoping.ts(9,21): error TS2095: Could not find symbol 'store'.
+    }
+    
+    class Foo2 {
+     
+      static Foo2():number { return 0; } // should not be an error
+     
+    }
+    

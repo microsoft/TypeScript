@@ -1,0 +1,17 @@
+==== tests/cases/compiler/foo_2.ts (1 errors) ====
+    /// <reference path="foo_1.ts"/>
+    import foo = require("vs/foo_0");
+    var z1 = foo.x + 10;   // Should error, as declaration should win
+                 ~
+!!! foo_2.ts(3,14): error TS2094: The property 'x' does not exist on value of type 'typeof foo'.
+    var z2 = foo.y() + 10; // Should resolve
+    
+==== tests/cases/compiler/vs/foo_0.ts (0 errors) ====
+    export var x: number = 42;
+    
+==== tests/cases/compiler/foo_1.ts (0 errors) ====
+    declare module "vs/foo_0" {
+        export var y: () => number;
+    }
+    
+    

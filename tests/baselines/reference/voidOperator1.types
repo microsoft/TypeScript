@@ -1,0 +1,13 @@
+=== tests/cases/compiler/voidOperator1.ts ===
+var x: any = void 1;
+>x : any
+>void 1 : any
+
+var y: void = void 1;
+>y : void
+>void 1 : any
+
+var z = void 1;
+>z : any
+>void 1 : any
+

@@ -1,0 +1,16 @@
+==== tests/cases/compiler/rectype.ts (1 errors) ====
+    module M {
+        interface I { (i:I):I; }
+    
+        export function f(p: I) { return f };
+                          ~~~~
+!!! rectype.ts(4,23): error TS2040: Parameter 'p' of exported function has or is using private type 'I'.
+    
+        var i:I;
+    
+        f(i);
+        f(f(i));
+        f((f(f(i))));
+    }
+    
+    

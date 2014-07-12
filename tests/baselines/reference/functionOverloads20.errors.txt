@@ -1,0 +1,7 @@
+==== tests/cases/compiler/functionOverloads20.ts (1 errors) ====
+    function foo(bar:{a:number;}): number;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! functionOverloads20.ts(1,1): error TS2148: Overload signature is not compatible with function definition.
+    function foo(bar:{a:string;}): string;
+    function foo(bar:{a:any;}): string {return ""}
+    

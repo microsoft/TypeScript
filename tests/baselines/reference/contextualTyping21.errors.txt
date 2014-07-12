@@ -1,0 +1,7 @@
+==== tests/cases/compiler/contextualTyping21.ts (1 errors) ====
+    var foo:{id:number;}[] = [{id:1}]; foo = [{id:1}, 1];
+                                       ~~~
+!!! contextualTyping21.ts(1,36): error TS2012: Cannot convert '{}[]' to '{ id: number; }[]':
+!!! 	Types of property 'pop' of types '{}[]' and '{ id: number; }[]' are incompatible:
+!!! 		Call signatures of types '() => {}' and '() => { id: number; }' are incompatible:
+!!! 			Type '{}' is missing property 'id' from type '{ id: number; }'.

@@ -1,0 +1,1187 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "diagnostics": [
+        {
+            "start": 65,
+            "length": 1,
+            "diagnosticCode": "Unexpected token; '{0}' expected.",
+            "arguments": [
+                "expression"
+            ]
+        },
+        {
+            "start": 66,
+            "length": 1,
+            "diagnosticCode": "'{0}' expected.",
+            "arguments": [
+                ";"
+            ]
+        },
+        {
+            "start": 69,
+            "length": 1,
+            "diagnosticCode": "'{0}' expected.",
+            "arguments": [
+                ";"
+            ]
+        },
+        {
+            "start": 72,
+            "length": 1,
+            "diagnosticCode": "'{0}' expected.",
+            "arguments": [
+                ";"
+            ]
+        },
+        {
+            "start": 75,
+            "length": 1,
+            "diagnosticCode": "'{0}' expected.",
+            "arguments": [
+                ";"
+            ]
+        },
+        {
+            "start": 78,
+            "length": 1,
+            "diagnosticCode": "'{0}' expected.",
+            "arguments": [
+                ";"
+            ]
+        },
+        {
+            "start": 81,
+            "length": 1,
+            "diagnosticCode": "'{0}' expected.",
+            "arguments": [
+                ";"
+            ]
+        },
+        {
+            "start": 84,
+            "length": 1,
+            "diagnosticCode": "'{0}' expected.",
+            "arguments": [
+                ";"
+            ]
+        },
+        {
+            "start": 87,
+            "length": 1,
+            "diagnosticCode": "'{0}' expected.",
+            "arguments": [
+                ";"
+            ]
+        },
+        {
+            "start": 90,
+            "length": 1,
+            "diagnosticCode": "'{0}' expected.",
+            "arguments": [
+                ";"
+            ]
+        },
+        {
+            "start": 93,
+            "length": 1,
+            "diagnosticCode": "'{0}' expected.",
+            "arguments": [
+                ";"
+            ]
+        },
+        {
+            "start": 96,
+            "length": 1,
+            "diagnosticCode": "'{0}' expected.",
+            "arguments": [
+                ";"
+            ]
+        },
+        {
+            "start": 99,
+            "length": 1,
+            "diagnosticCode": "'{0}' expected.",
+            "arguments": [
+                ";"
+            ]
+        },
+        {
+            "start": 102,
+            "length": 1,
+            "diagnosticCode": "'{0}' expected.",
+            "arguments": [
+                ";"
+            ]
+        },
+        {
+            "start": 105,
+            "length": 1,
+            "diagnosticCode": "'{0}' expected.",
+            "arguments": [
+                ";"
+            ]
+        },
+        {
+            "start": 106,
+            "length": 1,
+            "diagnosticCode": "Unexpected token; '{0}' expected.",
+            "arguments": [
+                "constructor, function, accessor or variable"
+            ]
+        },
+        {
+            "start": 114,
+            "length": 1,
+            "diagnosticCode": "'{0}' expected.",
+            "arguments": [
+                ";"
+            ]
+        },
+        {
+            "start": 117,
+            "length": 1,
+            "diagnosticCode": "'{0}' expected.",
+            "arguments": [
+                ";"
+            ]
+        },
+        {
+            "start": 118,
+            "length": 1,
+            "diagnosticCode": "Unexpected token; '{0}' expected.",
+            "arguments": [
+                "constructor, function, accessor or variable"
+            ]
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 163,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ClassDeclaration",
+                "fullWidth": 163,
+                "isIncrementallyUnusable": true,
+                "modifiers": [
+                    {
+                        "kind": "ExportKeyword",
+                        "width": 6,
+                        "fullWidth": 7,
+                        "text": "export",
+                        "value": "export",
+                        "valueText": "export",
+                        "hasTrailingTrivia": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "text": " "
+                            }
+                        ]
+                    }
+                ],
+                "classKeyword": {
+                    "kind": "ClassKeyword",
+                    "width": 5,
+                    "fullWidth": 6,
+                    "text": "class",
+                    "value": "class",
+                    "valueText": "class",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "text": " "
+                        }
+                    ]
+                },
+                "identifier": {
+                    "kind": "IdentifierName",
+                    "width": 4,
+                    "fullWidth": 5,
+                    "text": "Game",
+                    "value": "Game",
+                    "valueText": "Game",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "text": " "
+                        }
+                    ]
+                },
+                "heritageClauses": [],
+                "openBraceToken": {
+                    "kind": "OpenBraceToken",
+                    "width": 1,
+                    "fullWidth": 3,
+                    "text": "{",
+                    "value": "{",
+                    "valueText": "{",
+                    "hasTrailingTrivia": true,
+                    "hasTrailingNewLine": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "text": "\r\n"
+                        }
+                    ]
+                },
+                "classElements": [
+                    {
+                        "kind": "MemberVariableDeclaration",
+                        "fullWidth": 47,
+                        "isIncrementallyUnusable": true,
+                        "modifiers": [
+                            {
+                                "kind": "PrivateKeyword",
+                                "width": 7,
+                                "fullWidth": 12,
+                                "text": "private",
+                                "value": "private",
+                                "valueText": "private",
+                                "hasLeadingTrivia": true,
+                                "hasTrailingTrivia": true,
+                                "leadingTrivia": [
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "text": "    "
+                                    }
+                                ],
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "text": " "
+                                    }
+                                ]
+                            }
+                        ],
+                        "variableDeclarator": {
+                            "kind": "VariableDeclarator",
+                            "fullWidth": 35,
+                            "isIncrementallyUnusable": true,
+                            "propertyName": {
+                                "kind": "IdentifierName",
+                                "width": 8,
+                                "fullWidth": 9,
+                                "text": "position",
+                                "value": "position",
+                                "valueText": "position",
+                                "hasTrailingTrivia": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "text": " "
+                                    }
+                                ]
+                            },
+                            "equalsValueClause": {
+                                "kind": "EqualsValueClause",
+                                "fullWidth": 26,
+                                "isIncrementallyUnusable": true,
+                                "equalsToken": {
+                                    "kind": "EqualsToken",
+                                    "width": 1,
+                                    "fullWidth": 2,
+                                    "text": "=",
+                                    "value": "=",
+                                    "valueText": "=",
+                                    "hasTrailingTrivia": true,
+                                    "trailingTrivia": [
+                                        {
+                                            "kind": "WhitespaceTrivia",
+                                            "text": " "
+                                        }
+                                    ]
+                                },
+                                "value": {
+                                    "kind": "ObjectCreationExpression",
+                                    "fullWidth": 24,
+                                    "isIncrementallyUnusable": true,
+                                    "newKeyword": {
+                                        "kind": "NewKeyword",
+                                        "width": 3,
+                                        "fullWidth": 4,
+                                        "text": "new",
+                                        "value": "new",
+                                        "valueText": "new",
+                                        "hasTrailingTrivia": true,
+                                        "trailingTrivia": [
+                                            {
+                                                "kind": "WhitespaceTrivia",
+                                                "text": " "
+                                            }
+                                        ]
+                                    },
+                                    "expression": {
+                                        "kind": "IdentifierName",
+                                        "width": 15,
+                                        "text": "DisplayPosition",
+                                        "value": "DisplayPosition",
+                                        "valueText": "DisplayPosition"
+                                    },
+                                    "argumentList": {
+                                        "kind": "ArgumentList",
+                                        "fullWidth": 5,
+                                        "isIncrementallyUnusable": true,
+                                        "openParenToken": {
+                                            "kind": "OpenParenToken",
+                                            "width": 1,
+                                            "text": "(",
+                                            "value": "(",
+                                            "valueText": "("
+                                        },
+                                        "arguments": [
+                                            {
+                                                "kind": "ArrayLiteralExpression",
+                                                "fullWidth": 1,
+                                                "isIncrementallyUnusable": true,
+                                                "openBracketToken": {
+                                                    "kind": "OpenBracketToken",
+                                                    "width": 1,
+                                                    "text": "[",
+                                                    "value": "[",
+                                                    "valueText": "["
+                                                },
+                                                "expressions": [],
+                                                "closeBracketToken": {
+                                                    "kind": "CloseBracketToken",
+                                                    "width": 0,
+                                                    "text": ""
+                                                }
+                                            }
+                                        ],
+                                        "closeParenToken": {
+                                            "kind": "CloseParenToken",
+                                            "width": 1,
+                                            "fullWidth": 3,
+                                            "text": ")",
+                                            "value": ")",
+                                            "valueText": ")",
+                                            "hasTrailingTrivia": true,
+                                            "hasTrailingSkippedText": true,
+                                            "trailingTrivia": [
+                                                {
+                                                    "kind": "SkippedTokenTrivia",
+                                                    "skippedToken": {
+                                                        "kind": "CommaToken",
+                                                        "width": 1,
+                                                        "text": ",",
+                                                        "value": ",",
+                                                        "valueText": ","
+                                                    }
+                                                },
+                                                {
+                                                    "kind": "WhitespaceTrivia",
+                                                    "text": " "
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "semicolonToken": {
+                            "kind": "SemicolonToken",
+                            "width": 0,
+                            "text": ""
+                        }
+                    },
+                    {
+                        "kind": "MemberVariableDeclaration",
+                        "fullWidth": 3,
+                        "isIncrementallyUnusable": true,
+                        "modifiers": [],
+                        "variableDeclarator": {
+                            "kind": "VariableDeclarator",
+                            "fullWidth": 3,
+                            "isIncrementallyUnusable": true,
+                            "propertyName": {
+                                "kind": "NumericLiteral",
+                                "width": 1,
+                                "fullWidth": 3,
+                                "text": "3",
+                                "value": 3,
+                                "valueText": "3",
+                                "hasTrailingTrivia": true,
+                                "hasTrailingSkippedText": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "SkippedTokenTrivia",
+                                        "skippedToken": {
+                                            "kind": "CommaToken",
+                                            "width": 1,
+                                            "text": ",",
+                                            "value": ",",
+                                            "valueText": ","
+                                        }
+                                    },
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "text": " "
+                                    }
+                                ]
+                            }
+                        },
+                        "semicolonToken": {
+                            "kind": "SemicolonToken",
+                            "width": 0,
+                            "text": ""
+                        }
+                    },
+                    {
+                        "kind": "MemberVariableDeclaration",
+                        "fullWidth": 3,
+                        "isIncrementallyUnusable": true,
+                        "modifiers": [],
+                        "variableDeclarator": {
+                            "kind": "VariableDeclarator",
+                            "fullWidth": 3,
+                            "isIncrementallyUnusable": true,
+                            "propertyName": {
+                                "kind": "NumericLiteral",
+                                "width": 1,
+                                "fullWidth": 3,
+                                "text": "3",
+                                "value": 3,
+                                "valueText": "3",
+                                "hasTrailingTrivia": true,
+                                "hasTrailingSkippedText": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "SkippedTokenTrivia",
+                                        "skippedToken": {
+                                            "kind": "CommaToken",
+                                            "width": 1,
+                                            "text": ",",
+                                            "value": ",",
+                                            "valueText": ","
+                                        }
+                                    },
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "text": " "
+                                    }
+                                ]
+                            }
+                        },
+                        "semicolonToken": {
+                            "kind": "SemicolonToken",
+                            "width": 0,
+                            "text": ""
+                        }
+                    },
+                    {
+                        "kind": "MemberVariableDeclaration",
+                        "fullWidth": 3,
+                        "isIncrementallyUnusable": true,
+                        "modifiers": [],
+                        "variableDeclarator": {
+                            "kind": "VariableDeclarator",
+                            "fullWidth": 3,
+                            "isIncrementallyUnusable": true,
+                            "propertyName": {
+                                "kind": "NumericLiteral",
+                                "width": 1,
+                                "fullWidth": 3,
+                                "text": "3",
+                                "value": 3,
+                                "valueText": "3",
+                                "hasTrailingTrivia": true,
+                                "hasTrailingSkippedText": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "SkippedTokenTrivia",
+                                        "skippedToken": {
+                                            "kind": "CommaToken",
+                                            "width": 1,
+                                            "text": ",",
+                                            "value": ",",
+                                            "valueText": ","
+                                        }
+                                    },
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "text": " "
+                                    }
+                                ]
+                            }
+                        },
+                        "semicolonToken": {
+                            "kind": "SemicolonToken",
+                            "width": 0,
+                            "text": ""
+                        }
+                    },
+                    {
+                        "kind": "MemberVariableDeclaration",
+                        "fullWidth": 3,
+                        "isIncrementallyUnusable": true,
+                        "modifiers": [],
+                        "variableDeclarator": {
+                            "kind": "VariableDeclarator",
+                            "fullWidth": 3,
+                            "isIncrementallyUnusable": true,
+                            "propertyName": {
+                                "kind": "NumericLiteral",
+                                "width": 1,
+                                "fullWidth": 3,
+                                "text": "3",
+                                "value": 3,
+                                "valueText": "3",
+                                "hasTrailingTrivia": true,
+                                "hasTrailingSkippedText": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "SkippedTokenTrivia",
+                                        "skippedToken": {
+                                            "kind": "CommaToken",
+                                            "width": 1,
+                                            "text": ",",
+                                            "value": ",",
+                                            "valueText": ","
+                                        }
+                                    },
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "text": " "
+                                    }
+                                ]
+                            }
+                        },
+                        "semicolonToken": {
+                            "kind": "SemicolonToken",
+                            "width": 0,
+                            "text": ""
+                        }
+                    },
+                    {
+                        "kind": "MemberVariableDeclaration",
+                        "fullWidth": 3,
+                        "isIncrementallyUnusable": true,
+                        "modifiers": [],
+                        "variableDeclarator": {
+                            "kind": "VariableDeclarator",
+                            "fullWidth": 3,
+                            "isIncrementallyUnusable": true,
+                            "propertyName": {
+                                "kind": "NumericLiteral",
+                                "width": 1,
+                                "fullWidth": 3,
+                                "text": "3",
+                                "value": 3,
+                                "valueText": "3",
+                                "hasTrailingTrivia": true,
+                                "hasTrailingSkippedText": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "SkippedTokenTrivia",
+                                        "skippedToken": {
+                                            "kind": "CommaToken",
+                                            "width": 1,
+                                            "text": ",",
+                                            "value": ",",
+                                            "valueText": ","
+                                        }
+                                    },
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "text": " "
+                                    }
+                                ]
+                            }
+                        },
+                        "semicolonToken": {
+                            "kind": "SemicolonToken",
+                            "width": 0,
+                            "text": ""
+                        }
+                    },
+                    {
+                        "kind": "MemberVariableDeclaration",
+                        "fullWidth": 3,
+                        "isIncrementallyUnusable": true,
+                        "modifiers": [],
+                        "variableDeclarator": {
+                            "kind": "VariableDeclarator",
+                            "fullWidth": 3,
+                            "isIncrementallyUnusable": true,
+                            "propertyName": {
+                                "kind": "NumericLiteral",
+                                "width": 1,
+                                "fullWidth": 3,
+                                "text": "0",
+                                "value": 0,
+                                "valueText": "0",
+                                "hasTrailingTrivia": true,
+                                "hasTrailingSkippedText": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "SkippedTokenTrivia",
+                                        "skippedToken": {
+                                            "kind": "CommaToken",
+                                            "width": 1,
+                                            "text": ",",
+                                            "value": ",",
+                                            "valueText": ","
+                                        }
+                                    },
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "text": " "
+                                    }
+                                ]
+                            }
+                        },
+                        "semicolonToken": {
+                            "kind": "SemicolonToken",
+                            "width": 0,
+                            "text": ""
+                        }
+                    },
+                    {
+                        "kind": "MemberVariableDeclaration",
+                        "fullWidth": 3,
+                        "isIncrementallyUnusable": true,
+                        "modifiers": [],
+                        "variableDeclarator": {
+                            "kind": "VariableDeclarator",
+                            "fullWidth": 3,
+                            "isIncrementallyUnusable": true,
+                            "propertyName": {
+                                "kind": "NumericLiteral",
+                                "width": 1,
+                                "fullWidth": 3,
+                                "text": "3",
+                                "value": 3,
+                                "valueText": "3",
+                                "hasTrailingTrivia": true,
+                                "hasTrailingSkippedText": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "SkippedTokenTrivia",
+                                        "skippedToken": {
+                                            "kind": "CommaToken",
+                                            "width": 1,
+                                            "text": ",",
+                                            "value": ",",
+                                            "valueText": ","
+                                        }
+                                    },
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "text": " "
+                                    }
+                                ]
+                            }
+                        },
+                        "semicolonToken": {
+                            "kind": "SemicolonToken",
+                            "width": 0,
+                            "text": ""
+                        }
+                    },
+                    {
+                        "kind": "MemberVariableDeclaration",
+                        "fullWidth": 3,
+                        "isIncrementallyUnusable": true,
+                        "modifiers": [],
+                        "variableDeclarator": {
+                            "kind": "VariableDeclarator",
+                            "fullWidth": 3,
+                            "isIncrementallyUnusable": true,
+                            "propertyName": {
+                                "kind": "NumericLiteral",
+                                "width": 1,
+                                "fullWidth": 3,
+                                "text": "3",
+                                "value": 3,
+                                "valueText": "3",
+                                "hasTrailingTrivia": true,
+                                "hasTrailingSkippedText": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "SkippedTokenTrivia",
+                                        "skippedToken": {
+                                            "kind": "CommaToken",
+                                            "width": 1,
+                                            "text": ",",
+                                            "value": ",",
+                                            "valueText": ","
+                                        }
+                                    },
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "text": " "
+                                    }
+                                ]
+                            }
+                        },
+                        "semicolonToken": {
+                            "kind": "SemicolonToken",
+                            "width": 0,
+                            "text": ""
+                        }
+                    },
+                    {
+                        "kind": "MemberVariableDeclaration",
+                        "fullWidth": 3,
+                        "isIncrementallyUnusable": true,
+                        "modifiers": [],
+                        "variableDeclarator": {
+                            "kind": "VariableDeclarator",
+                            "fullWidth": 3,
+                            "isIncrementallyUnusable": true,
+                            "propertyName": {
+                                "kind": "NumericLiteral",
+                                "width": 1,
+                                "fullWidth": 3,
+                                "text": "3",
+                                "value": 3,
+                                "valueText": "3",
+                                "hasTrailingTrivia": true,
+                                "hasTrailingSkippedText": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "SkippedTokenTrivia",
+                                        "skippedToken": {
+                                            "kind": "CommaToken",
+                                            "width": 1,
+                                            "text": ",",
+                                            "value": ",",
+                                            "valueText": ","
+                                        }
+                                    },
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "text": " "
+                                    }
+                                ]
+                            }
+                        },
+                        "semicolonToken": {
+                            "kind": "SemicolonToken",
+                            "width": 0,
+                            "text": ""
+                        }
+                    },
+                    {
+                        "kind": "MemberVariableDeclaration",
+                        "fullWidth": 3,
+                        "isIncrementallyUnusable": true,
+                        "modifiers": [],
+                        "variableDeclarator": {
+                            "kind": "VariableDeclarator",
+                            "fullWidth": 3,
+                            "isIncrementallyUnusable": true,
+                            "propertyName": {
+                                "kind": "NumericLiteral",
+                                "width": 1,
+                                "fullWidth": 3,
+                                "text": "3",
+                                "value": 3,
+                                "valueText": "3",
+                                "hasTrailingTrivia": true,
+                                "hasTrailingSkippedText": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "SkippedTokenTrivia",
+                                        "skippedToken": {
+                                            "kind": "CommaToken",
+                                            "width": 1,
+                                            "text": ",",
+                                            "value": ",",
+                                            "valueText": ","
+                                        }
+                                    },
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "text": " "
+                                    }
+                                ]
+                            }
+                        },
+                        "semicolonToken": {
+                            "kind": "SemicolonToken",
+                            "width": 0,
+                            "text": ""
+                        }
+                    },
+                    {
+                        "kind": "MemberVariableDeclaration",
+                        "fullWidth": 3,
+                        "isIncrementallyUnusable": true,
+                        "modifiers": [],
+                        "variableDeclarator": {
+                            "kind": "VariableDeclarator",
+                            "fullWidth": 3,
+                            "isIncrementallyUnusable": true,
+                            "propertyName": {
+                                "kind": "NumericLiteral",
+                                "width": 1,
+                                "fullWidth": 3,
+                                "text": "3",
+                                "value": 3,
+                                "valueText": "3",
+                                "hasTrailingTrivia": true,
+                                "hasTrailingSkippedText": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "SkippedTokenTrivia",
+                                        "skippedToken": {
+                                            "kind": "CommaToken",
+                                            "width": 1,
+                                            "text": ",",
+                                            "value": ",",
+                                            "valueText": ","
+                                        }
+                                    },
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "text": " "
+                                    }
+                                ]
+                            }
+                        },
+                        "semicolonToken": {
+                            "kind": "SemicolonToken",
+                            "width": 0,
+                            "text": ""
+                        }
+                    },
+                    {
+                        "kind": "MemberVariableDeclaration",
+                        "fullWidth": 3,
+                        "isIncrementallyUnusable": true,
+                        "modifiers": [],
+                        "variableDeclarator": {
+                            "kind": "VariableDeclarator",
+                            "fullWidth": 3,
+                            "isIncrementallyUnusable": true,
+                            "propertyName": {
+                                "kind": "NumericLiteral",
+                                "width": 1,
+                                "fullWidth": 3,
+                                "text": "3",
+                                "value": 3,
+                                "valueText": "3",
+                                "hasTrailingTrivia": true,
+                                "hasTrailingSkippedText": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "SkippedTokenTrivia",
+                                        "skippedToken": {
+                                            "kind": "CommaToken",
+                                            "width": 1,
+                                            "text": ",",
+                                            "value": ",",
+                                            "valueText": ","
+                                        }
+                                    },
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "text": " "
+                                    }
+                                ]
+                            }
+                        },
+                        "semicolonToken": {
+                            "kind": "SemicolonToken",
+                            "width": 0,
+                            "text": ""
+                        }
+                    },
+                    {
+                        "kind": "MemberVariableDeclaration",
+                        "fullWidth": 4,
+                        "isIncrementallyUnusable": true,
+                        "modifiers": [],
+                        "variableDeclarator": {
+                            "kind": "VariableDeclarator",
+                            "fullWidth": 4,
+                            "isIncrementallyUnusable": true,
+                            "propertyName": {
+                                "kind": "NumericLiteral",
+                                "width": 1,
+                                "fullWidth": 4,
+                                "text": "0",
+                                "value": 0,
+                                "valueText": "0",
+                                "hasTrailingTrivia": true,
+                                "hasTrailingSkippedText": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "SkippedTokenTrivia",
+                                        "skippedToken": {
+                                            "kind": "CloseBracketToken",
+                                            "width": 1,
+                                            "text": "]",
+                                            "value": "]",
+                                            "valueText": "]"
+                                        }
+                                    },
+                                    {
+                                        "kind": "SkippedTokenTrivia",
+                                        "skippedToken": {
+                                            "kind": "CommaToken",
+                                            "width": 1,
+                                            "text": ",",
+                                            "value": ",",
+                                            "valueText": ","
+                                        }
+                                    },
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "text": " "
+                                    }
+                                ]
+                            }
+                        },
+                        "semicolonToken": {
+                            "kind": "SemicolonToken",
+                            "width": 0,
+                            "text": ""
+                        }
+                    },
+                    {
+                        "kind": "MemberVariableDeclaration",
+                        "fullWidth": 8,
+                        "isIncrementallyUnusable": true,
+                        "modifiers": [],
+                        "variableDeclarator": {
+                            "kind": "VariableDeclarator",
+                            "fullWidth": 8,
+                            "isIncrementallyUnusable": true,
+                            "propertyName": {
+                                "kind": "IdentifierName",
+                                "width": 6,
+                                "fullWidth": 8,
+                                "text": "NoMove",
+                                "value": "NoMove",
+                                "valueText": "NoMove",
+                                "hasTrailingTrivia": true,
+                                "hasTrailingSkippedText": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "SkippedTokenTrivia",
+                                        "skippedToken": {
+                                            "kind": "CommaToken",
+                                            "width": 1,
+                                            "text": ",",
+                                            "value": ",",
+                                            "valueText": ","
+                                        }
+                                    },
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "text": " "
+                                    }
+                                ]
+                            }
+                        },
+                        "semicolonToken": {
+                            "kind": "SemicolonToken",
+                            "width": 0,
+                            "text": ""
+                        }
+                    },
+                    {
+                        "kind": "MemberVariableDeclaration",
+                        "fullWidth": 5,
+                        "isIncrementallyUnusable": true,
+                        "modifiers": [],
+                        "variableDeclarator": {
+                            "kind": "VariableDeclarator",
+                            "fullWidth": 5,
+                            "isIncrementallyUnusable": true,
+                            "propertyName": {
+                                "kind": "NumericLiteral",
+                                "width": 1,
+                                "fullWidth": 5,
+                                "text": "0",
+                                "value": 0,
+                                "valueText": "0",
+                                "hasTrailingTrivia": true,
+                                "hasTrailingNewLine": true,
+                                "hasTrailingSkippedText": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "SkippedTokenTrivia",
+                                        "skippedToken": {
+                                            "kind": "CloseParenToken",
+                                            "width": 1,
+                                            "text": ")",
+                                            "value": ")",
+                                            "valueText": ")"
+                                        }
+                                    },
+                                    {
+                                        "kind": "SkippedTokenTrivia",
+                                        "skippedToken": {
+                                            "kind": "SemicolonToken",
+                                            "width": 1,
+                                            "text": ";",
+                                            "value": ";",
+                                            "valueText": ";"
+                                        }
+                                    },
+                                    {
+                                        "kind": "NewLineTrivia",
+                                        "text": "\r\n"
+                                    }
+                                ]
+                            }
+                        },
+                        "semicolonToken": {
+                            "kind": "SemicolonToken",
+                            "width": 0,
+                            "text": ""
+                        }
+                    },
+                    {
+                        "kind": "MemberVariableDeclaration",
+                        "fullWidth": 41,
+                        "modifiers": [
+                            {
+                                "kind": "PrivateKeyword",
+                                "width": 7,
+                                "fullWidth": 12,
+                                "text": "private",
+                                "value": "private",
+                                "valueText": "private",
+                                "hasLeadingTrivia": true,
+                                "hasTrailingTrivia": true,
+                                "leadingTrivia": [
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "text": "    "
+                                    }
+                                ],
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "text": " "
+                                    }
+                                ]
+                            }
+                        ],
+                        "variableDeclarator": {
+                            "kind": "VariableDeclarator",
+                            "fullWidth": 26,
+                            "propertyName": {
+                                "kind": "IdentifierName",
+                                "width": 10,
+                                "text": "prevConfig",
+                                "value": "prevConfig",
+                                "valueText": "prevConfig"
+                            },
+                            "typeAnnotation": {
+                                "kind": "TypeAnnotation",
+                                "fullWidth": 16,
+                                "colonToken": {
+                                    "kind": "ColonToken",
+                                    "width": 1,
+                                    "fullWidth": 2,
+                                    "text": ":",
+                                    "value": ":",
+                                    "valueText": ":",
+                                    "hasTrailingTrivia": true,
+                                    "trailingTrivia": [
+                                        {
+                                            "kind": "WhitespaceTrivia",
+                                            "text": " "
+                                        }
+                                    ]
+                                },
+                                "type": {
+                                    "kind": "ArrayType",
+                                    "fullWidth": 14,
+                                    "type": {
+                                        "kind": "ArrayType",
+                                        "fullWidth": 12,
+                                        "type": {
+                                            "kind": "IdentifierName",
+                                            "width": 10,
+                                            "text": "SeedCoords",
+                                            "value": "SeedCoords",
+                                            "valueText": "SeedCoords"
+                                        },
+                                        "openBracketToken": {
+                                            "kind": "OpenBracketToken",
+                                            "width": 1,
+                                            "text": "[",
+                                            "value": "[",
+                                            "valueText": "["
+                                        },
+                                        "closeBracketToken": {
+                                            "kind": "CloseBracketToken",
+                                            "width": 1,
+                                            "text": "]",
+                                            "value": "]",
+                                            "valueText": "]"
+                                        }
+                                    },
+                                    "openBracketToken": {
+                                        "kind": "OpenBracketToken",
+                                        "width": 1,
+                                        "text": "[",
+                                        "value": "[",
+                                        "valueText": "["
+                                    },
+                                    "closeBracketToken": {
+                                        "kind": "CloseBracketToken",
+                                        "width": 1,
+                                        "text": "]",
+                                        "value": "]",
+                                        "valueText": "]"
+                                    }
+                                }
+                            }
+                        },
+                        "semicolonToken": {
+                            "kind": "SemicolonToken",
+                            "width": 1,
+                            "fullWidth": 3,
+                            "text": ";",
+                            "value": ";",
+                            "valueText": ";",
+                            "hasTrailingTrivia": true,
+                            "hasTrailingNewLine": true,
+                            "trailingTrivia": [
+                                {
+                                    "kind": "NewLineTrivia",
+                                    "text": "\r\n"
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "closeBraceToken": {
+                    "kind": "CloseBraceToken",
+                    "width": 1,
+                    "text": "}",
+                    "value": "}",
+                    "valueText": "}"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            21,
+            121,
+            162
+        ],
+        "length": 163
+    }
+}

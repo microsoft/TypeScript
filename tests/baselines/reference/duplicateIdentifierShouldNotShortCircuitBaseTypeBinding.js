@@ -1,0 +1,4 @@
+//// [duplicateIdentifierShouldNotShortCircuitBaseTypeBinding.ts]
+
+
+//// [duplicateIdentifierShouldNotShortCircuitBaseTypeBinding.js]

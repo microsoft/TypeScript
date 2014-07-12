@@ -1,0 +1,39 @@
+=== tests/cases/compiler/classOrder2.ts ===
+
+class A extends B {
+>A : A
+>B : B
+
+>foo : () => void
+
+  foo() { this.bar(); }
+>this.bar() : void
+>this.bar : () => void
+>this : A
+>bar : () => void
+
+}
+
+class B {
+>B : B
+
+>bar : () => void
+
+  bar() { }
+
+}
+
+
+var a = new A();
+>a : A
+>new A() : A
+>A : typeof A
+
+>a.foo() : void
+>a.foo : () => void
+>a : A
+
+a.foo();
+>foo : () => void
+
+

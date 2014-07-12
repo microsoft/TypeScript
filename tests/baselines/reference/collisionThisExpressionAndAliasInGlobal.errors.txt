@@ -1,0 +1,8 @@
+==== tests/cases/compiler/collisionThisExpressionAndAliasInGlobal.ts (1 errors) ====
+    module a {
+        export var b = 10;
+    }
+    var f = () => this;
+    import _this = a; // Error
+    ~~~~~~~~~~~~~~~~~
+!!! collisionThisExpressionAndAliasInGlobal.ts(5,1): error TS2200: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.

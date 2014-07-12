@@ -1,0 +1,19 @@
+==== tests/cases/compiler/wrappedAndRecursiveConstraints4.ts (2 errors) ====
+    class C<T extends { length: number }> {
+        constructor(x: T) { }
+        foo<U extends T>(x: U) {
+            function bar<V extends U>(x: V) {
+                return x;
+            }
+            return bar;
+        }
+    }
+    
+    var c = new C({ length: 2 });
+    var r = c.foo('');
+    var r2 = r({ length: 3, charAt: (x: number) => { '' } }); // error
+             ~
+!!! wrappedAndRecursiveConstraints4.ts(13,10): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Could not apply type 'string' to argument 1 which is of type '{ length: number; charAt: (x: number) => void; }'.
+             ~
+!!! wrappedAndRecursiveConstraints4.ts(13,10): error TS2087: Could not select overload for 'call' expression.

@@ -1,0 +1,46 @@
+=== tests/cases/compiler/objectLiteralWidened.ts ===
+// object literal properties are widened to any
+
+var x = {
+>x : { foo: any; bar: any; }
+>{
+    foo: null,
+    bar: undefined
+} : { foo: any; bar: any; }
+
+    foo: null,
+>foo : any
+
+    bar: undefined
+>bar : any
+>undefined : any
+}
+
+var y = {
+>y : { foo: any; bar: { baz: any; boo: any; }; }
+>{
+    foo: null,
+    bar: {
+        baz: null,
+        boo: undefined
+    }
+} : { foo: any; bar: { baz: any; boo: any; }; }
+
+    foo: null,
+>foo : any
+
+    bar: {
+>bar : { baz: any; boo: any; }
+>{
+        baz: null,
+        boo: undefined
+    } : { baz: any; boo: any; }
+
+        baz: null,
+>baz : any
+
+        boo: undefined
+>boo : any
+>undefined : any
+    }
+}

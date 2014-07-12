@@ -1,0 +1,218 @@
+{
+    "tokens": {
+        "0": {
+            "kind": "SemicolonToken",
+            "width": 1,
+            "fullWidth": 3,
+            "text": ";",
+            "value": ";",
+            "valueText": ";",
+            "hasTrailingTrivia": true,
+            "hasTrailingSkippedText": true,
+            "trailingTrivia": [
+                {
+                    "kind": "WhitespaceTrivia",
+                    "text": " "
+                },
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "ErrorToken",
+                        "width": 1,
+                        "text": "\\"
+                    }
+                }
+            ]
+        },
+        "1": {
+            "kind": "SemicolonToken",
+            "width": 1,
+            "fullWidth": 3,
+            "text": ";",
+            "value": ";",
+            "valueText": ";",
+            "hasTrailingTrivia": true,
+            "hasTrailingSkippedText": true,
+            "trailingTrivia": [
+                {
+                    "kind": "WhitespaceTrivia",
+                    "text": " "
+                },
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "ErrorToken",
+                        "width": 1,
+                        "text": "\\"
+                    }
+                }
+            ]
+        },
+        "2": {
+            "kind": "SemicolonToken",
+            "width": 1,
+            "fullWidth": 3,
+            "text": ";",
+            "value": ";",
+            "valueText": ";",
+            "hasTrailingTrivia": true,
+            "hasTrailingSkippedText": true,
+            "trailingTrivia": [
+                {
+                    "kind": "WhitespaceTrivia",
+                    "text": " "
+                },
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "ErrorToken",
+                        "width": 1,
+                        "text": "\\"
+                    }
+                }
+            ]
+        },
+        "3": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "tokensOnLeft": {
+        "0": null,
+        "1": {
+            "kind": "SemicolonToken",
+            "width": 1,
+            "fullWidth": 3,
+            "text": ";",
+            "value": ";",
+            "valueText": ";",
+            "hasTrailingTrivia": true,
+            "hasTrailingSkippedText": true,
+            "trailingTrivia": [
+                {
+                    "kind": "WhitespaceTrivia",
+                    "text": " "
+                },
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "ErrorToken",
+                        "width": 1,
+                        "text": "\\"
+                    }
+                }
+            ]
+        },
+        "2": {
+            "kind": "SemicolonToken",
+            "width": 1,
+            "fullWidth": 3,
+            "text": ";",
+            "value": ";",
+            "valueText": ";",
+            "hasTrailingTrivia": true,
+            "hasTrailingSkippedText": true,
+            "trailingTrivia": [
+                {
+                    "kind": "WhitespaceTrivia",
+                    "text": " "
+                },
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "ErrorToken",
+                        "width": 1,
+                        "text": "\\"
+                    }
+                }
+            ]
+        },
+        "3": {
+            "kind": "SemicolonToken",
+            "width": 1,
+            "fullWidth": 3,
+            "text": ";",
+            "value": ";",
+            "valueText": ";",
+            "hasTrailingTrivia": true,
+            "hasTrailingSkippedText": true,
+            "trailingTrivia": [
+                {
+                    "kind": "WhitespaceTrivia",
+                    "text": " "
+                },
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "ErrorToken",
+                        "width": 1,
+                        "text": "\\"
+                    }
+                }
+            ]
+        }
+    },
+    "leftToRight": [
+        {
+            "kind": "SemicolonToken",
+            "width": 1,
+            "fullWidth": 3,
+            "text": ";",
+            "value": ";",
+            "valueText": ";",
+            "hasTrailingTrivia": true,
+            "hasTrailingSkippedText": true,
+            "trailingTrivia": [
+                {
+                    "kind": "WhitespaceTrivia",
+                    "text": " "
+                },
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "ErrorToken",
+                        "width": 1,
+                        "text": "\\"
+                    }
+                }
+            ]
+        },
+        {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    ],
+    "rightToLeft": [
+        {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        },
+        {
+            "kind": "SemicolonToken",
+            "width": 1,
+            "fullWidth": 3,
+            "text": ";",
+            "value": ";",
+            "valueText": ";",
+            "hasTrailingTrivia": true,
+            "hasTrailingSkippedText": true,
+            "trailingTrivia": [
+                {
+                    "kind": "WhitespaceTrivia",
+                    "text": " "
+                },
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "ErrorToken",
+                        "width": 1,
+                        "text": "\\"
+                    }
+                }
+            ]
+        }
+    ]
+}

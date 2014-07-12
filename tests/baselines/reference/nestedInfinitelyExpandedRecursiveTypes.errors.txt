@@ -1,0 +1,22 @@
+==== tests/cases/compiler/nestedInfinitelyExpandedRecursiveTypes.ts (2 errors) ====
+    interface F<T> {
+          t: G<F<() => T>>;
+    }
+    interface G<U> {
+          t: G<G<() => U>>;
+    }
+     
+    var f: F<string>;
+    var g: G<string>;
+    f = g;
+    ~
+!!! nestedInfinitelyExpandedRecursiveTypes.ts(10,1): error TS2012: Cannot convert 'G<string>' to 'F<string>':
+!!! 	Types of property 't' of types 'G<string>' and 'F<string>' are incompatible:
+!!! 		Types 'G<G<() => string>>' and 'G<F<() => string>>' originating in infinitely expanding type reference have incompatible type arguments:
+!!! 			Types 'G<() => string>' and 'F<() => string>' originating in infinitely expanding type reference do not refer to same named type.
+    g = f;
+    ~
+!!! nestedInfinitelyExpandedRecursiveTypes.ts(11,1): error TS2012: Cannot convert 'F<string>' to 'G<string>':
+!!! 	Types of property 't' of types 'F<string>' and 'G<string>' are incompatible:
+!!! 		Types 'G<F<() => string>>' and 'G<G<() => string>>' originating in infinitely expanding type reference have incompatible type arguments:
+!!! 			Types 'F<() => string>' and 'G<() => string>' originating in infinitely expanding type reference do not refer to same named type.

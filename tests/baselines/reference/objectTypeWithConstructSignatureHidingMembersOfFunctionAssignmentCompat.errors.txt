@@ -1,0 +1,21 @@
+==== tests/cases/compiler/objectTypeWithConstructSignatureHidingMembersOfFunctionAssignmentCompat.ts (2 errors) ====
+    interface I {
+        new(): any;
+    }
+    
+    var i: I;
+    var f: Object;
+    f = i;
+    i = f;
+    ~
+!!! objectTypeWithConstructSignatureHidingMembersOfFunctionAssignmentCompat.ts(8,1): error TS2012: Cannot convert 'Object' to 'I':
+!!! 	Type 'I' requires a construct signature, but type 'Object' lacks one.
+    
+    var a: {
+        new(): any
+    }
+    f = a;
+    a = f;
+    ~
+!!! objectTypeWithConstructSignatureHidingMembersOfFunctionAssignmentCompat.ts(14,1): error TS2012: Cannot convert 'Object' to 'new() => any':
+!!! 	Type 'new() => any' requires a construct signature, but type 'Object' lacks one.

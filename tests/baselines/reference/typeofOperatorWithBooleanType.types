@@ -1,0 +1,161 @@
+=== tests/cases/compiler/typeofOperatorWithBooleanType.ts ===
+// typeof  operator on boolean type
+var BOOLEAN: boolean;
+>BOOLEAN : boolean
+
+function foo(): boolean { return true; }
+>foo : typeof foo
+
+class A {
+>A : A
+
+    public a: boolean;
+>a : boolean
+
+    static foo() { return false; }
+>foo : () => boolean
+}
+module M {
+>M : M
+
+    export var n: boolean;
+>n : boolean
+}
+
+var objA = new A();
+>objA : A
+>new A() : A
+>A : typeof A
+
+// boolean type var
+var ResultIsString1 = typeof BOOLEAN;
+>ResultIsString1 : string
+>typeof BOOLEAN : string
+>BOOLEAN : boolean
+
+// boolean type literal
+var ResultIsString2 = typeof true;
+>ResultIsString2 : string
+>typeof true : string
+
+var ResultIsString3 = typeof { x: true, y: false };
+>ResultIsString3 : string
+>typeof { x: true, y: false } : string
+>{ x: true, y: false } : { x: boolean; y: boolean; }
+>x : boolean
+>y : boolean
+
+// boolean type expressions
+var ResultIsString4 = typeof objA.a;
+>ResultIsString4 : string
+>typeof objA.a : string
+>objA.a : boolean
+>objA : A
+>a : boolean
+
+var ResultIsString5 = typeof M.n;
+>ResultIsString5 : string
+>typeof M.n : string
+>M.n : boolean
+>M : typeof M
+>n : boolean
+
+var ResultIsString6 = typeof foo();
+>ResultIsString6 : string
+>typeof foo() : string
+>foo() : boolean
+>foo : typeof foo
+
+var ResultIsString7 = typeof A.foo();
+>ResultIsString7 : string
+>typeof A.foo() : string
+>A.foo() : boolean
+>A.foo : () => boolean
+>A : typeof A
+>foo : () => boolean
+
+// multiple typeof  operator
+var ResultIsString8 = typeof typeof BOOLEAN;
+>ResultIsString8 : string
+>typeof typeof BOOLEAN : string
+>typeof BOOLEAN : string
+>BOOLEAN : boolean
+
+>// miss assignment operators
+typeof true : string
+
+// miss assignment operators
+typeof true;
+typeof BOOLEAN;
+>typeof BOOLEAN : string
+>BOOLEAN : boolean
+
+typeof foo();
+>typeof foo() : string
+>foo() : boolean
+>foo : typeof foo
+
+typeof true, false;
+>typeof true, false : boolean
+>typeof true : string
+
+typeof objA.a;
+>typeof objA.a : string
+>objA.a : boolean
+>objA : A
+>a : boolean
+
+typeof M.n;
+>typeof M.n : string
+>M.n : boolean
+>M : typeof M
+>n : boolean
+
+// use typeof in type query
+var z: boolean;
+>z : boolean
+
+var x: boolean[];
+>x : boolean[]
+
+var r: () => boolean;
+>r : () => boolean
+
+z: typeof BOOLEAN;
+>typeof BOOLEAN : string
+>BOOLEAN : boolean
+
+r: typeof foo;
+>typeof foo : string
+>foo : typeof foo
+
+var y = { a: true, b: false};
+>y : { a: boolean; b: boolean; }
+>{ a: true, b: false} : { a: boolean; b: boolean; }
+>a : boolean
+>b : boolean
+
+z: typeof y.a;
+>typeof y.a : string
+>y.a : boolean
+>y : { a: boolean; b: boolean; }
+>a : boolean
+
+z: typeof objA.a;
+>typeof objA.a : string
+>objA.a : boolean
+>objA : A
+>a : boolean
+
+z: typeof A.foo;
+>typeof A.foo : string
+>A.foo : () => boolean
+>A : typeof A
+>foo : () => boolean
+
+z: typeof M.n;
+>typeof M.n : string
+>M.n : boolean
+>M : typeof M
+>n : boolean
+

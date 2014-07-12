@@ -1,0 +1,41 @@
+==== tests/cases/compiler/callSignaturesThatDifferOnlyByReturnType.ts (6 errors) ====
+    // Each pair of signatures in these types has a signature that should cause an error. 
+    // Overloads, generic or not, that differ only by return type are an error.
+    interface I {
+        (x): number;
+        (x): void; // error
+        ~~~~~~~~~
+!!! callSignaturesThatDifferOnlyByReturnType.ts(5,5): error TS2175: Overloads cannot differ only by return type.
+        <T>(x: T): number;
+        <T>(x: T): string; // error
+        ~~~~~~~~~~~~~~~~~
+!!! callSignaturesThatDifferOnlyByReturnType.ts(7,5): error TS2175: Overloads cannot differ only by return type.
+    }
+    
+    interface I2 {
+        <T>(x: T): number;
+        <T>(x: T): string; // error
+        ~~~~~~~~~~~~~~~~~
+!!! callSignaturesThatDifferOnlyByReturnType.ts(12,5): error TS2175: Overloads cannot differ only by return type.
+    }
+    
+    interface I3<T> {
+        (x: T): number;
+        (x: T): string; // error
+        ~~~~~~~~~~~~~~
+!!! callSignaturesThatDifferOnlyByReturnType.ts(17,5): error TS2175: Overloads cannot differ only by return type.
+    }
+    
+    var a: {
+        (x, y): Object;
+        (x, y): any; // error
+        ~~~~~~~~~~~
+!!! callSignaturesThatDifferOnlyByReturnType.ts(22,5): error TS2175: Overloads cannot differ only by return type.
+    }
+    
+    var a2: {
+        <T>(x: T): number;
+        <T>(x: T): string; // error
+        ~~~~~~~~~~~~~~~~~
+!!! callSignaturesThatDifferOnlyByReturnType.ts(27,5): error TS2175: Overloads cannot differ only by return type.
+    }

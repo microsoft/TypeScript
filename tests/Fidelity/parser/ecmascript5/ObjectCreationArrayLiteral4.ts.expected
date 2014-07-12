@@ -1,0 +1,106 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 13,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullWidth": 13,
+                "expression": {
+                    "kind": "ObjectCreationExpression",
+                    "fullWidth": 12,
+                    "newKeyword": {
+                        "kind": "NewKeyword",
+                        "width": 3,
+                        "fullWidth": 4,
+                        "text": "new",
+                        "value": "new",
+                        "valueText": "new",
+                        "hasTrailingTrivia": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "text": " "
+                            }
+                        ]
+                    },
+                    "expression": {
+                        "kind": "ElementAccessExpression",
+                        "fullWidth": 6,
+                        "expression": {
+                            "kind": "IdentifierName",
+                            "width": 3,
+                            "text": "Foo",
+                            "value": "Foo",
+                            "valueText": "Foo"
+                        },
+                        "openBracketToken": {
+                            "kind": "OpenBracketToken",
+                            "width": 1,
+                            "text": "[",
+                            "value": "[",
+                            "valueText": "["
+                        },
+                        "argumentExpression": {
+                            "kind": "NumericLiteral",
+                            "width": 1,
+                            "text": "1",
+                            "value": 1,
+                            "valueText": "1"
+                        },
+                        "closeBracketToken": {
+                            "kind": "CloseBracketToken",
+                            "width": 1,
+                            "text": "]",
+                            "value": "]",
+                            "valueText": "]"
+                        }
+                    },
+                    "argumentList": {
+                        "kind": "ArgumentList",
+                        "fullWidth": 2,
+                        "openParenToken": {
+                            "kind": "OpenParenToken",
+                            "width": 1,
+                            "text": "(",
+                            "value": "(",
+                            "valueText": "("
+                        },
+                        "arguments": [],
+                        "closeParenToken": {
+                            "kind": "CloseParenToken",
+                            "width": 1,
+                            "text": ")",
+                            "value": ")",
+                            "valueText": ")"
+                        }
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 13
+    }
+}

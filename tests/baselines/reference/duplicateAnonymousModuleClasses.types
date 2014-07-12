@@ -1,0 +1,71 @@
+=== tests/cases/compiler/duplicateAnonymousModuleClasses.ts ===
+module F {
+>F : F
+
+    class Helper {
+>Helper : Helper
+
+    }
+
+}
+
+
+module F {
+>F : F
+    
+    // Should not be an error
+    class Helper {
+>Helper : Helper
+
+    }
+
+}
+
+module Foo {
+>Foo : Foo
+
+    class Helper {
+>Helper : Helper
+
+    }
+
+}
+
+
+module Foo {
+>Foo : Foo
+    
+    // Should not be an error
+    class Helper {
+>Helper : Helper
+
+    }
+
+}
+
+module Gar {
+>Gar : Gar
+
+    module Foo {
+>Foo : Foo
+
+        class Helper {
+>Helper : Helper
+
+        }
+
+    }
+
+
+    module Foo {
+>Foo : Foo
+    
+        // Should not be an error
+        class Helper {
+>Helper : Helper
+
+        }
+
+    }
+}
+

@@ -1,0 +1,252 @@
+==== tests/cases/compiler/privacyGloImport.ts (49 errors) ====
+    module m1 {
+        export module m1_M1_public {
+            export class c1 {
+            }
+            export function f1() {
+                return new c1;
+            }
+            export var v1 = c1;
+            export var v2: c1;
+        }
+    
+        module m1_M2_private {
+            export class c1 {
+            }
+            export function f1() {
+                return new c1;
+            }
+            export var v1 = c1;
+            export var v2: c1;
+        }
+    
+        declare export module "m1_M3_public" {
+                ~~~~~~
+!!! privacyGloImport.ts(22,13): error TS1029: 'export' modifier must precede 'declare' modifier.
+                              ~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(22,27): error TS2195: Ambient external module declaration must be defined in global context.
+            export function f1();
+            export class c1 {
+            }
+            export var v1: { new (): c1; };
+            export var v2: c1;
+        }
+    
+        declare module "m1_M4_private" {
+                       ~~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(30,20): error TS2195: Ambient external module declaration must be defined in global context.
+            export function f1();
+            export class c1 {
+            }
+            export var v1: { new (): c1; };
+            export var v2: c1;
+        }
+    
+        import m1_im1_private = m1_M1_public;
+        export var m1_im1_private_v1_public = m1_im1_private.c1;
+        export var m1_im1_private_v2_public = new m1_im1_private.c1();
+        export var m1_im1_private_v3_public = m1_im1_private.f1;
+        export var m1_im1_private_v4_public = m1_im1_private.f1();
+        var m1_im1_private_v1_private = m1_im1_private.c1;
+        var m1_im1_private_v2_private = new m1_im1_private.c1();
+        var m1_im1_private_v3_private = m1_im1_private.f1;
+        var m1_im1_private_v4_private = m1_im1_private.f1();
+    
+    
+        import m1_im2_private = m1_M2_private;
+        export var m1_im2_private_v1_public = m1_im2_private.c1;
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(50,16): error TS2027: Exported variable 'm1_im2_private_v1_public' has or is using private type 'm1_M2_private.c1'.
+        export var m1_im2_private_v2_public = new m1_im2_private.c1();
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(51,16): error TS2027: Exported variable 'm1_im2_private_v2_public' has or is using private type 'm1_M2_private.c1'.
+        export var m1_im2_private_v3_public = m1_im2_private.f1;
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(52,16): error TS2027: Exported variable 'm1_im2_private_v3_public' has or is using private type 'm1_M2_private.f1'.
+        export var m1_im2_private_v4_public = m1_im2_private.f1();
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(53,16): error TS2027: Exported variable 'm1_im2_private_v4_public' has or is using private type 'm1_M2_private.c1'.
+        var m1_im2_private_v1_private = m1_im2_private.c1;
+        var m1_im2_private_v2_private = new m1_im2_private.c1();
+        var m1_im2_private_v3_private = m1_im2_private.f1;
+        var m1_im2_private_v4_private = m1_im2_private.f1();
+    
+        import m1_im3_private = require("m1_M3_public");
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(59,5): error TS2136: Import declarations in an internal module cannot reference an external module.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(59,5): error TS2071: Unable to resolve external module '"m1_M3_public"'.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(59,5): error TS2072: Module cannot be aliased to a non-module type.
+        export var m1_im3_private_v1_public = m1_im3_private.c1;
+                                              ~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(60,43): error TS2095: Could not find symbol 'm1_im3_private'.
+        export var m1_im3_private_v2_public = new m1_im3_private.c1();
+                                                  ~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(61,47): error TS2095: Could not find symbol 'm1_im3_private'.
+        export var m1_im3_private_v3_public = m1_im3_private.f1;
+                                              ~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(62,43): error TS2095: Could not find symbol 'm1_im3_private'.
+        export var m1_im3_private_v4_public = m1_im3_private.f1();
+                                              ~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(63,43): error TS2095: Could not find symbol 'm1_im3_private'.
+        var m1_im3_private_v1_private = m1_im3_private.c1;
+                                        ~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(64,37): error TS2095: Could not find symbol 'm1_im3_private'.
+        var m1_im3_private_v2_private = new m1_im3_private.c1();
+                                            ~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(65,41): error TS2095: Could not find symbol 'm1_im3_private'.
+        var m1_im3_private_v3_private = m1_im3_private.f1;
+                                        ~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(66,37): error TS2095: Could not find symbol 'm1_im3_private'.
+        var m1_im3_private_v4_private = m1_im3_private.f1();
+                                        ~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(67,37): error TS2095: Could not find symbol 'm1_im3_private'.
+    
+        import m1_im4_private = require("m1_M4_private");
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(69,5): error TS2136: Import declarations in an internal module cannot reference an external module.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(69,5): error TS2071: Unable to resolve external module '"m1_M4_private"'.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(69,5): error TS2072: Module cannot be aliased to a non-module type.
+        export var m1_im4_private_v1_public = m1_im4_private.c1;
+                                              ~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(70,43): error TS2095: Could not find symbol 'm1_im4_private'.
+        export var m1_im4_private_v2_public = new m1_im4_private.c1();
+                                                  ~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(71,47): error TS2095: Could not find symbol 'm1_im4_private'.
+        export var m1_im4_private_v3_public = m1_im4_private.f1;
+                                              ~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(72,43): error TS2095: Could not find symbol 'm1_im4_private'.
+        export var m1_im4_private_v4_public = m1_im4_private.f1();
+                                              ~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(73,43): error TS2095: Could not find symbol 'm1_im4_private'.
+        var m1_im4_private_v1_private = m1_im4_private.c1;
+                                        ~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(74,37): error TS2095: Could not find symbol 'm1_im4_private'.
+        var m1_im4_private_v2_private = new m1_im4_private.c1();
+                                            ~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(75,41): error TS2095: Could not find symbol 'm1_im4_private'.
+        var m1_im4_private_v3_private = m1_im4_private.f1;
+                                        ~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(76,37): error TS2095: Could not find symbol 'm1_im4_private'.
+        var m1_im4_private_v4_private = m1_im4_private.f1();
+                                        ~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(77,37): error TS2095: Could not find symbol 'm1_im4_private'.
+    
+        // Parse error to export module
+        export import m1_im1_public = m1_M1_public;
+        export import m1_im2_public = m1_M2_private;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(81,5): error TS2182: Exported import declaration 'm1_im2_public' is assigned value with type that is using inaccessible module 'm1_M2_private'.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(81,5): error TS2185: Exported import declaration 'm1_im2_public' is assigned container that is or is using inaccessible module 'm1_M2_private'.
+        export import m1_im3_public = require("m1_M3_public");
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(82,5): error TS2136: Import declarations in an internal module cannot reference an external module.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(82,5): error TS2071: Unable to resolve external module '"m1_M3_public"'.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(82,5): error TS2072: Module cannot be aliased to a non-module type.
+        export import m1_im4_public = require("m1_M4_private");
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(83,5): error TS2136: Import declarations in an internal module cannot reference an external module.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(83,5): error TS2071: Unable to resolve external module '"m1_M4_private"'.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(83,5): error TS2072: Module cannot be aliased to a non-module type.
+    }
+    
+    module glo_M1_public {
+        export class c1 {
+        }
+        export function f1() {
+            return new c1;
+        }
+        export var v1 = c1;
+        export var v2: c1;
+    }
+    
+    declare module "glo_M2_public" {
+        export function f1();
+        export class c1 {
+        }
+        export var v1: { new (): c1; };
+        export var v2: c1;
+    }
+    
+    declare module "use_glo_M1_public" {
+        import use_glo_M1_public = glo_M1_public;
+        export var use_glo_M1_public_v1_public: { new (): use_glo_M1_public.c1; };
+        export var use_glo_M1_public_v2_public: use_glo_M1_public;
+                                                ~~~~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(107,45): error TS4022: Type reference cannot refer to container '"use_glo_M1_public".use_glo_M1_public'.
+        export var use_glo_M1_public_v3_public: ()=> use_glo_M1_public.c1;
+        var use_glo_M1_public_v1_private: { new (): use_glo_M1_public.c1; };
+        var use_glo_M1_public_v2_private: use_glo_M1_public;
+                                          ~~~~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(110,39): error TS4022: Type reference cannot refer to container '"use_glo_M1_public".use_glo_M1_public'.
+        var use_glo_M1_public_v3_private: () => use_glo_M1_public.c1;
+    
+        import use_glo_M2_public = require("glo_M2_public");
+        export var use_glo_M2_public_v1_public: { new (): use_glo_M2_public.c1; };
+        export var use_glo_M2_public_v2_public: use_glo_M2_public;
+                                                ~~~~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(115,45): error TS4022: Type reference cannot refer to container '"use_glo_M1_public".use_glo_M2_public'.
+        export var use_glo_M2_public_v3_public: () => use_glo_M2_public.c1;
+        var use_glo_M2_public_v1_private: { new (): use_glo_M2_public.c1; };
+        var use_glo_M2_public_v2_private: use_glo_M2_public;
+                                          ~~~~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(118,39): error TS4022: Type reference cannot refer to container '"use_glo_M1_public".use_glo_M2_public'.
+        var use_glo_M2_public_v3_private: () => use_glo_M2_public.c1;
+    
+        module m2 {
+            import errorImport = require("glo_M2_public");
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(122,9): error TS2136: Import declarations in an internal module cannot reference an external module.
+            import nonerrorImport = glo_M1_public;
+    
+            module m5 {
+                import m5_errorImport = require("glo_M2_public");
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(126,13): error TS2136: Import declarations in an internal module cannot reference an external module.
+                import m5_nonerrorImport = glo_M1_public;
+            }
+        }
+    }
+    
+    declare module "anotherParseError" {
+        module m2 {
+            declare module "abc" {
+            ~~~~~~~
+!!! privacyGloImport.ts(134,9): error TS1038: 'declare' modifier not allowed for code already in an ambient context.
+                           ~~~~~
+!!! privacyGloImport.ts(134,24): error TS2195: Ambient external module declaration must be defined in global context.
+            }
+        }
+    
+        module m2 {
+            module "abc2" {
+                   ~~~~~~
+!!! privacyGloImport.ts(139,16): error TS2195: Ambient external module declaration must be defined in global context.
+            }
+        }
+        module "abc3" {
+               ~~~~~~
+!!! privacyGloImport.ts(142,12): error TS2195: Ambient external module declaration must be defined in global context.
+        }
+    }
+    
+    module m2 {
+        import m3 = require("use_glo_M1_public");
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(147,5): error TS2136: Import declarations in an internal module cannot reference an external module.
+        module m4 {
+            var a = 10;
+            import m2 = require("use_glo_M1_public");
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! privacyGloImport.ts(150,9): error TS2136: Import declarations in an internal module cannot reference an external module.
+        }
+    
+    }

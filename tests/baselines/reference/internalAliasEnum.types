@@ -1,0 +1,34 @@
+=== tests/cases/compiler/internalAliasEnum.ts ===
+module a {
+>a : a
+
+    export enum weekend {
+>weekend : weekend
+
+        Friday,
+>Friday : weekend
+
+        Saturday,
+>Saturday : weekend
+
+        Sunday
+>Sunday : weekend
+    }
+}
+
+module c {
+>c : c
+
+    import b = a.weekend;
+>b : b
+>a : a
+>weekend : a.weekend
+
+    export var bVal: b = b.Sunday;
+>bVal : a.weekend
+>b : b
+>b.Sunday : a.weekend
+>b : typeof a.weekend
+>Sunday : a.weekend
+}
+

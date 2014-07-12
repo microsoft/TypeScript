@@ -1,0 +1,13 @@
+==== tests/cases/compiler/functionTypeArgumentArrayAssignment.ts (1 errors) ====
+    interface Array<T> {
+        foo: T;
+        length: number;
+     ~~~~~~
+!!! functionTypeArgumentArrayAssignment.ts(3,2): error TS2000: Duplicate identifier 'length'. Additional locations:
+!!! 	lib.d.ts(974,5)
+    }
+    
+    function map<U>() {
+    var ys: U[] = [];
+    }
+    

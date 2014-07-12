@@ -1,0 +1,10 @@
+==== tests/cases/compiler/gettersAndSettersAccessibility.ts (2 errors) ====
+    class C99 {
+        private get Baz():number { return 0; }
+                 ~~~
+!!! gettersAndSettersAccessibility.ts(2,14): error TS2127: Getter and setter accessors do not agree in visibility.
+        public set Baz(n:number) {} // error - accessors do not agree in visibility
+                ~~~
+!!! gettersAndSettersAccessibility.ts(3,13): error TS2127: Getter and setter accessors do not agree in visibility.
+    }
+    

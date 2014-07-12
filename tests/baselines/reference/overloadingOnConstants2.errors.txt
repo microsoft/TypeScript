@@ -1,0 +1,39 @@
+==== tests/cases/compiler/overloadingOnConstants2.ts (5 errors) ====
+    class C {
+       private x = 1;
+    }
+    class D extends C {}
+    class E { 
+       private y = 1;
+    }
+    function foo(x: "hi", items: string[]): D;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! overloadingOnConstants2.ts(8,1): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+    function foo(x: "bye", items: string[]): E;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! overloadingOnConstants2.ts(9,1): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+    function foo(x: string, items: string[]): C {
+       return null;
+    }
+    var a: D = foo("hi", []); // D
+    var b: E = foo("bye", []); // E 
+    var c = foo("um", []); // error
+            ~~~
+!!! overloadingOnConstants2.ts(15,9): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Could not apply type '"hi"' to argument 1 which is of type 'string'.
+            ~~~
+!!! overloadingOnConstants2.ts(15,9): error TS2087: Could not select overload for 'call' expression.
+    
+    
+    //function bar(x: "hi", items: string[]): D;
+    function bar(x: "bye", items: string[]): E;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! overloadingOnConstants2.ts(19,1): error TS2154: Specialized overload signature is not assignable to any non-specialized signature.
+    function bar(x: string, items: string[]): C;
+    function bar(x: string, items: string[]): C {
+       return null;
+    }
+    
+    var d: D = bar("hi", []); // D
+    var e: E = bar("bye", []); // E 
+    var f: C = bar("um", []); // C

@@ -1,0 +1,6 @@
+==== tests/cases/compiler/ambientExternalModuleWithRelativeModuleName.ts (1 errors) ====
+    declare module "./relativeModule" {
+                   ~~~~~~~~~~~~~~~~~~
+!!! ambientExternalModuleWithRelativeModuleName.ts(1,16): error TS2196: Ambient external module declaration cannot specify relative module name.
+        var x: string;
+    }

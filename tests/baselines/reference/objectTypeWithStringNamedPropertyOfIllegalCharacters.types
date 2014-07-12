@@ -1,0 +1,133 @@
+=== tests/cases/compiler/objectTypeWithStringNamedPropertyOfIllegalCharacters.ts ===
+class C {
+>C : C
+
+    "   ": number;
+    "a   b": string;
+    "~!@#$%^&*()_+{}|:'<>?\/.,`": number;
+    "a\a": number;
+    static "a ": number
+}
+
+var c: C;
+>c : C
+>C : C
+
+var r = c["   "];
+>r : number
+>c["   "] : number
+>c : C
+
+var r2 = c["    "];
+>r2 : any
+>c["    "] : any
+>c : C
+
+var r3 = c["a   b"];
+>r3 : string
+>c["a   b"] : string
+>c : C
+
+// BUG 817263
+var r4 = c["~!@#$%^&*()_+{}|:'<>?\/.,`"];
+>r4 : any
+>c["~!@#$%^&*()_+{}|:'<>?\/.,`"] : any
+>c : C
+
+interface I {
+>I : I
+
+    "   ": number;
+    "a   b": string;
+    "~!@#$%^&*()_+{}|:'<>?\/.,`": number;
+}
+
+var i: I;
+>i : I
+>I : I
+
+var r = i["   "];
+>r : number
+>i["   "] : number
+>i : I
+
+var r2 = i["    "];
+>r2 : any
+>i["    "] : any
+>i : I
+
+var r3 = i["a   b"];
+>r3 : string
+>i["a   b"] : string
+>i : I
+
+// BUG 817263
+var r4 = i["~!@#$%^&*()_+{}|:'<>?\/.,`"];
+>r4 : any
+>i["~!@#$%^&*()_+{}|:'<>?\/.,`"] : any
+>i : I
+
+
+var a: {
+>a : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
+
+    "   ": number;
+    "a   b": string;
+    "~!@#$%^&*()_+{}|:'<>?\/.,`": number;
+}
+
+var r = a["   "];
+>r : number
+>a["   "] : number
+>a : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
+
+var r2 = a["    "];
+>r2 : any
+>a["    "] : any
+>a : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
+
+var r3 = a["a   b"];
+>r3 : string
+>a["a   b"] : string
+>a : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
+
+// BUG 817263
+var r4 = a["~!@#$%^&*()_+{}|:'<>?\/.,`"];
+>r4 : any
+>a["~!@#$%^&*()_+{}|:'<>?\/.,`"] : any
+>a : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
+
+var b = {
+>b : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
+>{
+    "   ": 1,
+    "a   b": "",
+    "~!@#$%^&*()_+{}|:'<>?\/.,`": 1,
+} : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
+
+    "   ": 1,
+    "a   b": "",
+    "~!@#$%^&*()_+{}|:'<>?\/.,`": 1,
+}
+
+var r = b["   "];
+>r : number
+>b["   "] : number
+>b : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
+
+var r2 = b["    "];
+>r2 : any
+>b["    "] : any
+>b : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
+
+var r3 = b["a   b"];
+>r3 : string
+>b["a   b"] : string
+>b : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
+
+// BUG 817263
+var r4 = b["~!@#$%^&*()_+{}|:'<>?\/.,`"];
+>r4 : any
+>b["~!@#$%^&*()_+{}|:'<>?\/.,`"] : any
+>b : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
+

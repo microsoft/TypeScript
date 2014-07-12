@@ -1,0 +1,14 @@
+=== tests/cases/compiler/topLevelLambda2.ts ===
+function foo(x:any) {}
+>foo : typeof foo
+>x : any
+
+>foo(()=>this.window) : void
+>foo : typeof foo
+
+foo(()=>this.window);
+>()=>this.window : () => any
+>this.window : any
+>this : any
+>window : any
+

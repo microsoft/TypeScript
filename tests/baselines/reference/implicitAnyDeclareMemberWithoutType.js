@@ -1,0 +1,1 @@
+//// [implicitAnyDeclareMemberWithoutType.js]

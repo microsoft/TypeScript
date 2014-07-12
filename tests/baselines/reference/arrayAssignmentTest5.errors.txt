@@ -1,0 +1,55 @@
+==== tests/cases/compiler/arrayAssignmentTest5.ts (8 errors) ====
+    module Test {
+        interface IState {
+        }
+        interface IToken {
+            startIndex: number;
+        }
+        interface IStateToken extends IToken {
+            state: IState;
+        }
+        interface ILineTokens {
+            tokens: IToken[];
+            endState: IState;
+        }
+        interface IAction {
+        }
+        interface IMode {
+            onEnter(line:string, state:IState, offset:number):IAction;
+            tokenize(line:string, state:IState, includeStates:boolean):ILineTokens;
+        }
+        export class Bug implements IMode {
+                                    ~~~~~
+!!! arrayAssignmentTest5.ts(20,33): error TS2019: Exported class 'Bug' implements private interface 'IMode'.
+            public onEnter(line:string, state:IState, offset:number):IAction {
+                                        ~~~~~~~~~~~~
+!!! arrayAssignmentTest5.ts(21,37): error TS2038: Parameter 'state' of public method from exported class has or is using private type 'IState'.
+                                                                     ~~~~~~~
+!!! arrayAssignmentTest5.ts(21,66): error TS2056: Return type of public method from exported class has or is using private type 'IAction'.
+                var lineTokens:ILineTokens= this.tokenize(line, state, true);
+                var tokens:IStateToken[]= lineTokens.tokens;
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! arrayAssignmentTest5.ts(23,17): error TS2012: Cannot convert 'IToken[]' to 'IStateToken[]':
+!!! 	Types of property 'pop' of types 'IToken[]' and 'IStateToken[]' are incompatible:
+!!! 		Call signatures of types '() => IToken' and '() => IStateToken' are incompatible:
+!!! 			Type 'IToken' is missing property 'state' from type 'IStateToken'.
+                if (tokens.length === 0) {
+                    return this.onEnter(line, tokens, offset);        // <== this should produce an error since onEnter can not be called with (string, IStateToken[], offset)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! arrayAssignmentTest5.ts(25,17): error TS2056: Return type of public method from exported class has or is using private type 'IAction'.
+                }
+            }
+            public tokenize(line:string, state:IState, includeStates:boolean):ILineTokens {
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                         ~~~~~~~~~~~~
+!!! arrayAssignmentTest5.ts(28,38): error TS2038: Parameter 'state' of public method from exported class has or is using private type 'IState'.
+                                                                              ~~~~~~~~~~~
+!!! arrayAssignmentTest5.ts(28,75): error TS2056: Return type of public method from exported class has or is using private type 'ILineTokens'.
+                return null;
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+            }
+    ~~~~~~~~~
+!!! arrayAssignmentTest5.ts(28,9): error TS2056: Return type of public method from exported class has or is using private type 'ILineTokens'.
+        }
+    }
+    

@@ -1,0 +1,86 @@
+==== tests/cases/compiler/genericTypeReferenceWithoutTypeArgument.ts (24 errors) ====
+    // it is an error to use a generic type without type arguments
+    // all of these are errors 
+    
+    class C<T> {
+        foo: T;
+    }
+    
+    var c: C;
+           ~
+!!! genericTypeReferenceWithoutTypeArgument.ts(8,8): error TS2173: Generic type references must include all type arguments.
+    
+    var a: { x: C };
+                ~
+!!! genericTypeReferenceWithoutTypeArgument.ts(10,13): error TS2173: Generic type references must include all type arguments.
+    var b: { (x: C): C };
+                 ~
+!!! genericTypeReferenceWithoutTypeArgument.ts(11,14): error TS2173: Generic type references must include all type arguments.
+                     ~
+!!! genericTypeReferenceWithoutTypeArgument.ts(11,18): error TS2173: Generic type references must include all type arguments.
+    var d: { [x: C]: C };
+              ~~~~
+!!! genericTypeReferenceWithoutTypeArgument.ts(12,11): error TS1023: Index signature parameter type must be 'string' or 'number'.
+                 ~
+!!! genericTypeReferenceWithoutTypeArgument.ts(12,14): error TS2173: Generic type references must include all type arguments.
+                     ~
+!!! genericTypeReferenceWithoutTypeArgument.ts(12,18): error TS2173: Generic type references must include all type arguments.
+    
+    var e = (x: C) => { var y: C; return y; }
+                ~
+!!! genericTypeReferenceWithoutTypeArgument.ts(14,13): error TS2173: Generic type references must include all type arguments.
+                               ~
+!!! genericTypeReferenceWithoutTypeArgument.ts(14,28): error TS2173: Generic type references must include all type arguments.
+    
+    function f(x: C): C { var y: C; return y; }
+                  ~
+!!! genericTypeReferenceWithoutTypeArgument.ts(16,15): error TS2173: Generic type references must include all type arguments.
+                      ~
+!!! genericTypeReferenceWithoutTypeArgument.ts(16,19): error TS2173: Generic type references must include all type arguments.
+                                 ~
+!!! genericTypeReferenceWithoutTypeArgument.ts(16,30): error TS2173: Generic type references must include all type arguments.
+    
+    var g = function f(x: C): C { var y: C; return y; }
+                          ~
+!!! genericTypeReferenceWithoutTypeArgument.ts(18,23): error TS2173: Generic type references must include all type arguments.
+                              ~
+!!! genericTypeReferenceWithoutTypeArgument.ts(18,27): error TS2173: Generic type references must include all type arguments.
+                                         ~
+!!! genericTypeReferenceWithoutTypeArgument.ts(18,38): error TS2173: Generic type references must include all type arguments.
+    
+    class D extends C {
+                    ~
+!!! genericTypeReferenceWithoutTypeArgument.ts(20,17): error TS2173: Generic type references must include all type arguments.
+    }
+    
+    interface I extends C {}
+                        ~
+!!! genericTypeReferenceWithoutTypeArgument.ts(23,21): error TS2173: Generic type references must include all type arguments.
+    
+    module M {
+        export class E<T> { foo: T }
+    }
+    
+    class D2 extends M.E { }
+                     ~~~
+!!! genericTypeReferenceWithoutTypeArgument.ts(29,18): error TS2173: Generic type references must include all type arguments.
+    class D3<T extends M.E> { }
+                       ~~~
+!!! genericTypeReferenceWithoutTypeArgument.ts(30,20): error TS2173: Generic type references must include all type arguments.
+    interface I2 extends M.E { }
+                         ~~~
+!!! genericTypeReferenceWithoutTypeArgument.ts(31,22): error TS2173: Generic type references must include all type arguments.
+    
+    function h<T extends C>(x: T) { }
+                         ~
+!!! genericTypeReferenceWithoutTypeArgument.ts(33,22): error TS2173: Generic type references must include all type arguments.
+    function i<T extends M.E>(x: T) { }
+                         ~~~
+!!! genericTypeReferenceWithoutTypeArgument.ts(34,22): error TS2173: Generic type references must include all type arguments.
+    
+    var j = <C>null;
+             ~
+!!! genericTypeReferenceWithoutTypeArgument.ts(36,10): error TS2173: Generic type references must include all type arguments.
+    var k = <M.E>null;
+             ~~~
+!!! genericTypeReferenceWithoutTypeArgument.ts(37,10): error TS2173: Generic type references must include all type arguments.

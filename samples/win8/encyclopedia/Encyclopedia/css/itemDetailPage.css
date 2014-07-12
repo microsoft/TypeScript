@@ -1,0 +1,103 @@
+﻿.itemDetailPage section[role=main]
+{
+    -ms-grid-row: 2;
+    display: block;
+    height: 100%;
+    overflow-x: auto;
+    position: relative;
+    width: 100%;
+    z-index: 0;
+}
+
+    .itemDetailPage section[role=main] article
+    {
+        column-fill: auto;
+        column-gap: 80px;
+        column-width: 480px;
+        height: calc(100% - 50px);
+        margin-left: 120px;
+        width: 480px;
+    }
+
+        .itemDetailPage section[role=main] article header .win-type-x-large
+        {
+            margin-bottom: 20px;
+            margin-top: 0;
+        }
+
+        .itemDetailPage section[role=main] article header .win-type-medium
+        {
+            margin-bottom: 20px;
+            margin-top: 0;
+        }
+
+        .itemDetailPage section[role=main] article .image
+        {
+            height: 240px;
+            margin-bottom: 3px;
+            width: 460px;
+        }
+
+        .itemDetailPage section[role=main] article p
+        {
+            margin-bottom: 20px;
+            margin-right: 20px;
+            vertical-align: baseline;
+        }
+
+.itemDetailPage header[role=banner] .menu
+{
+    background-color: #FFFFFF;
+}
+
+    .itemDetailPage header[role=banner] .menu .win-command
+    {
+        color: #2A2A2A;
+        font-size: 20pt;
+        line-height: 24pt;
+        margin-bottom: 13px;
+        margin-top: 6px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+@media screen and (-ms-view-state: snapped)
+{
+    .itemDetailPage section[role=main] article
+    {
+        -ms-grid-columns: 300px 1fr;
+        -ms-grid-row: 2;
+        -ms-grid-rows: auto 60px;
+        display: -ms-grid;
+        height: 100%;
+        margin-left: 20px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        width: 300px;
+    }
+
+        .itemDetailPage section[role=main] article header .win-type-x-large
+        {
+            font-size: 11pt;
+            line-height: 15pt;
+        }
+
+        .itemDetailPage section[role=main] article .image
+        {
+            height: 140px;
+            width: 280px;
+        }
+
+        .itemDetailPage section[role=main] article .content
+        {
+            padding-bottom: 60px;
+        }
+    }
+
+@media screen and (-ms-view-state: fullscreen-portrait)
+{
+    .detailPage section[role=main] article
+    {
+        margin-left: 100px;
+    }
+}

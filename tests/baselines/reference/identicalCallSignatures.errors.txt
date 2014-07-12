@@ -1,0 +1,31 @@
+==== tests/cases/compiler/identicalCallSignatures.ts (5 errors) ====
+    // Each pair of call signatures in these types have a duplicate signature error.
+    // Identical call signatures should generate an error.
+    interface I {
+        (x): number;
+        (x: any): number;
+        ~~~~~~~~~~~~~~~~
+!!! identicalCallSignatures.ts(5,5): error TS2146: Duplicate overload call signature.
+        <T>(x: T): T;
+        <U>(x: U): U; // error
+        ~~~~~~~~~~~~
+!!! identicalCallSignatures.ts(7,5): error TS2146: Duplicate overload call signature.
+    }
+    
+    interface I2<T> {
+        (x: T): T;
+        (x: T): T; // error
+        ~~~~~~~~~
+!!! identicalCallSignatures.ts(12,5): error TS2146: Duplicate overload call signature.
+    }
+    
+    var a: {
+        (x): number;
+        (x: any): number;
+        ~~~~~~~~~~~~~~~~
+!!! identicalCallSignatures.ts(17,5): error TS2146: Duplicate overload call signature.
+        <T>(x: T): T;
+        <T>(x: T): T; // error
+        ~~~~~~~~~~~~
+!!! identicalCallSignatures.ts(19,5): error TS2146: Duplicate overload call signature.
+    }

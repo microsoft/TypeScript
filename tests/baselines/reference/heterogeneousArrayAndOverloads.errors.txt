@@ -1,0 +1,18 @@
+==== tests/cases/compiler/heterogeneousArrayAndOverloads.ts (2 errors) ====
+    class arrTest {
+        test(arg1: number[]);
+        test(arg1: string[]);
+        test(arg1: any[]) { }
+        callTest() {
+            this.test([1, 2, 3, 5]);
+            this.test(["hi"]);
+            this.test([]);
+            this.test([1, 2, "hi", 5]); // Error
+                 ~~~~
+!!! heterogeneousArrayAndOverloads.ts(9,14): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Types of property 'pop' of types '{}[]' and 'number[]' are incompatible:
+!!! 		Call signatures of types '() => {}' and '() => number' are incompatible.
+                 ~~~~
+!!! heterogeneousArrayAndOverloads.ts(9,14): error TS2087: Could not select overload for 'call' expression.
+        }
+    }

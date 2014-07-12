@@ -1,0 +1,117 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "parseOptions": {
+        "allowAutomaticSemicolonInsertion": true
+    },
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullWidth": 11,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "Block",
+                "fullWidth": 8,
+                "isIncrementallyUnusable": true,
+                "openBraceToken": {
+                    "kind": "OpenBraceToken",
+                    "width": 1,
+                    "text": "{",
+                    "value": "{",
+                    "valueText": "{"
+                },
+                "statements": [
+                    {
+                        "kind": "LabeledStatement",
+                        "fullWidth": 4,
+                        "isIncrementallyUnusable": true,
+                        "identifier": {
+                            "kind": "IdentifierName",
+                            "width": 1,
+                            "text": "a",
+                            "value": "a",
+                            "valueText": "a"
+                        },
+                        "colonToken": {
+                            "kind": "ColonToken",
+                            "width": 1,
+                            "fullWidth": 2,
+                            "text": ":",
+                            "value": ":",
+                            "valueText": ":",
+                            "hasTrailingTrivia": true,
+                            "trailingTrivia": [
+                                {
+                                    "kind": "WhitespaceTrivia",
+                                    "text": " "
+                                }
+                            ]
+                        },
+                        "statement": {
+                            "kind": "ExpressionStatement",
+                            "fullWidth": 1,
+                            "isIncrementallyUnusable": true,
+                            "expression": {
+                                "kind": "NumericLiteral",
+                                "width": 1,
+                                "text": "3",
+                                "value": 3,
+                                "valueText": "3"
+                            },
+                            "semicolonToken": {
+                                "kind": "SemicolonToken",
+                                "width": 0,
+                                "text": ""
+                            }
+                        }
+                    }
+                ],
+                "closeBraceToken": {
+                    "kind": "CloseBraceToken",
+                    "width": 1,
+                    "fullWidth": 3,
+                    "text": "}",
+                    "value": "}",
+                    "valueText": "}",
+                    "hasTrailingTrivia": true,
+                    "hasTrailingNewLine": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "text": "\r\n"
+                        }
+                    ]
+                }
+            },
+            {
+                "kind": "ExpressionStatement",
+                "fullWidth": 3,
+                "isIncrementallyUnusable": true,
+                "expression": {
+                    "kind": "RegularExpressionLiteral",
+                    "width": 3,
+                    "text": "/x/",
+                    "value": {},
+                    "valueText": "/x/"
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "width": 0,
+                    "text": ""
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            8
+        ],
+        "length": 11
+    }
+}

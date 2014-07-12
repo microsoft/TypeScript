@@ -1,0 +1,8 @@
+==== tests/cases/compiler/typeofTypeParameter.ts (1 errors) ====
+    function f<T>(x: T): T {
+        var a: typeof x;
+        var y: typeof T;
+                      ~
+!!! typeofTypeParameter.ts(3,19): error TS2095: Could not find symbol 'T'.
+        return a;
+    }

@@ -1,0 +1,15 @@
+==== tests/cases/compiler/undefinedSymbolReferencedInArrayLiteral1.ts (3 errors) ====
+    var tokens = [{ startIndex: deltaOffset }];
+                                ~~~~~~~~~~~
+!!! undefinedSymbolReferencedInArrayLiteral1.ts(1,29): error TS2095: Could not find symbol 'deltaOffset'.
+    
+    var functions = [function() {
+        [1, 2, 3].NonexistantMethod();
+                  ~~~~~~~~~~~~~~~~~
+!!! undefinedSymbolReferencedInArrayLiteral1.ts(4,15): error TS2094: The property 'NonexistantMethod' does not exist on value of type 'number[]'.
+        anotherNonExistingMethod();
+        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! undefinedSymbolReferencedInArrayLiteral1.ts(5,5): error TS2095: Could not find symbol 'anotherNonExistingMethod'.
+    }];
+    
+    

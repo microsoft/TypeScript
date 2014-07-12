@@ -1,0 +1,12 @@
+// class 
+var X8 = (function() {
+    function X8() {
+
+        // x2 BUG not in the right place at all
+        this.x2 = function foo() {
+            // does
+            return x1();
+        };
+    } 
+    return X8;
+})();

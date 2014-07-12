@@ -1,0 +1,28 @@
+==== tests/cases/compiler/memberFunctionOverloadMixingStaticAndInstance.ts (4 errors) ====
+    class C {
+        foo();
+        static foo(); // error
+               ~~~
+!!! memberFunctionOverloadMixingStaticAndInstance.ts(3,12): error TS1081: Function overload must not be static.
+    }
+    
+    class D {
+        static foo();
+        foo(); // error    
+        ~~~
+!!! memberFunctionOverloadMixingStaticAndInstance.ts(8,5): error TS1080: Function overload must be static.
+    }
+    
+    class E<T> {
+        foo(x: T);
+        static foo(x: number); // error
+               ~~~
+!!! memberFunctionOverloadMixingStaticAndInstance.ts(13,12): error TS1081: Function overload must not be static.
+    }
+    
+    class F<T> {
+        static foo(x: number);
+        foo(x: T); // error    
+        ~~~
+!!! memberFunctionOverloadMixingStaticAndInstance.ts(18,5): error TS1080: Function overload must be static.
+    }

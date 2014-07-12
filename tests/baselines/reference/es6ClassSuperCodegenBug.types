@@ -1,0 +1,24 @@
+=== tests/cases/compiler/es6ClassSuperCodegenBug.ts ===
+class A {
+>A : A
+
+	constructor(str1:string, str2:string) {}
+>str1 : string
+>str2 : string
+}
+class B extends A {
+>B : B
+>A : A
+
+    constructor() {
+	    if (true) {
+	        super('a1', 'b1');
+>super('a1', 'b1') : void
+
+	    } else {
+	        super('a2', 'b2');
+>super('a2', 'b2') : void
+	    }
+    }
+}
+

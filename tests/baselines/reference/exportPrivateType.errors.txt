@@ -1,0 +1,41 @@
+==== tests/cases/compiler/exportPrivateType.ts (5 errors) ====
+    module foo {
+        class C1 {
+            x: string;
+            y: C1;
+        }
+     
+        class C2 {
+            test() { return true; }
+        }
+     
+        interface I1 {
+            (a: string, b: string): string;
+            (x: number, y: number): I1;
+        }
+     
+        interface I2 {
+            x: string;
+            y: number;
+        }
+     
+        // None of the types are exported, so per section 10.3, should all be errors
+        export var e: C1;
+                   ~~~~~
+!!! exportPrivateType.ts(22,16): error TS2027: Exported variable 'e' has or is using private type 'C1'.
+        export var f: I1;
+                   ~~~~~
+!!! exportPrivateType.ts(23,16): error TS2027: Exported variable 'f' has or is using private type 'I1'.
+        export var g: C2;
+                   ~~~~~
+!!! exportPrivateType.ts(24,16): error TS2027: Exported variable 'g' has or is using private type 'C2'.
+        export var h: I2;
+                   ~~~~~
+!!! exportPrivateType.ts(25,16): error TS2027: Exported variable 'h' has or is using private type 'I2'.
+    }
+     
+    var y = foo.g; // Exported variable 'y' has or is using private type 'foo.C2'.
+        ~~~~~~~~~
+!!! exportPrivateType.ts(28,5): error TS2027: Exported variable 'y' has or is using private type 'foo.C2'.
+    
+    

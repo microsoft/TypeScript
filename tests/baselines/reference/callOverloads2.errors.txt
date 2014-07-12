@@ -1,0 +1,34 @@
+==== tests/cases/compiler/callOverloads2.ts (3 errors) ====
+    
+    
+    class Foo {    
+        bar1() { /*WScript.Echo("bar1");*/ }
+    
+        constructor(x: any) {
+            // WScript.Echo("Constructor function has executed");
+        }
+    }
+    
+    function Foo();
+             ~~~
+!!! callOverloads2.ts(11,10): error TS2000: Duplicate identifier 'Foo'. Additional locations:
+!!! 	callOverloads2.ts(3,1)
+    
+    function F1(s:string) {return s;}
+             ~~
+!!! callOverloads2.ts(13,10): error TS1043: Function overload name must be 'Foo'.
+    function F1(a:any) { return a;} // error -  duplicate identifier
+             ~~
+!!! callOverloads2.ts(14,10): error TS2000: Duplicate identifier 'F1'. Additional locations:
+!!! 	callOverloads2.ts(13,1)
+    
+    function Goo(s:string); // error - no implementation
+    
+    declare function Gar(s:String); // expect no error
+    
+    var f1 = new Foo("hey");
+    
+    
+    f1.bar1();
+    Foo();
+    

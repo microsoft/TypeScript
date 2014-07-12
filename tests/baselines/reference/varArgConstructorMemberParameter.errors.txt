@@ -1,0 +1,15 @@
+==== tests/cases/compiler/varArgConstructorMemberParameter.ts (1 errors) ====
+    class Foo1 {
+        constructor (...args: string[]) { }
+    }
+    
+    class Foo2 {
+        constructor (public args: string[]) { }
+    }
+    
+    class Foo3 {
+        constructor (public ...args: string[]) { }
+                            ~~~
+!!! varArgConstructorMemberParameter.ts(10,25): error TS1003: Identifier expected.
+    }
+    

@@ -1,0 +1,31 @@
+==== tests/cases/compiler/dottedModuleName.ts (5 errors) ====
+    module M {
+        export module N {
+        export function f(x:number)=>2*x;
+                                ~~
+!!! dottedModuleName.ts(3,29): error TS1008: Unexpected token; '{' expected.
+                                  ~
+!!! dottedModuleName.ts(3,31): error TS1005: '{' expected.
+        export module X.Y.Z {
+     ~~~~~~
+!!! dottedModuleName.ts(4,2): error TS1008: Unexpected token; 'statement' expected.
+            export var v2=f(v);
+                       ~
+!!! dottedModuleName.ts(5,20): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Could not apply type 'number' to argument 1 which is of type 'void'.
+                       ~
+!!! dottedModuleName.ts(5,20): error TS2087: Could not select overload for 'call' expression.
+        }
+        }
+    }
+    
+    
+    
+    module M.N {
+        export module X {
+        export module Y.Z {
+            export var v=f(10);
+        }
+        }
+    }
+    

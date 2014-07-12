@@ -1,0 +1,18 @@
+==== tests/cases/compiler/functionWithSameNameAsField.ts (2 errors) ====
+    class TestProgressBar {
+        public total: number;
+        public total(total: number) {
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            this.total = total;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            ~~~~~~~~~~
+!!! functionWithSameNameAsField.ts(4,9): error TS2012: Cannot convert 'number' to '(total: number) => TestProgressBar':
+!!! 	Type '(total: number) => TestProgressBar' requires a call signature, but type 'Number' lacks one.
+            return this;
+    ~~~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+!!! functionWithSameNameAsField.ts(3,5): error TS2000: Duplicate identifier 'total'. Additional locations:
+!!! 	functionWithSameNameAsField.ts(2,5)
+    }
+    

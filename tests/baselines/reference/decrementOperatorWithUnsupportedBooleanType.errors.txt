@@ -1,0 +1,141 @@
+==== tests/cases/compiler/decrementOperatorWithUnsupportedBooleanType.ts (43 errors) ====
+    // -- operator on boolean type
+    var BOOLEAN: boolean;
+    
+    function foo(): boolean { return true; }
+    
+    class A {
+        public a: boolean;
+        static foo() { return true; }
+    }
+    module M {
+        export var n: boolean;
+    }
+    
+    var objA = new A();
+    
+    // boolean type var
+    var ResultIsNumber1 = --BOOLEAN;
+                            ~~~~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(17,25): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    
+    var ResultIsNumber2 = BOOLEAN--;
+                          ~~~~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(19,23): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    
+    // boolean type literal
+    var ResultIsNumber3 = --true;
+                            ~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(22,25): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+                            ~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(22,25): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    var ResultIsNumber4 = --{ x: true, y: false };
+                            ~~~~~~~~~~~~~~~~~~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(23,25): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+                            ~~~~~~~~~~~~~~~~~~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(23,25): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    var ResultIsNumber5 = --{ x: true, y: (n: boolean) => { return n; } };
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(24,25): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(24,25): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    
+    var ResultIsNumber6 = true--;
+                          ~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(26,23): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+                          ~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(26,23): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    var ResultIsNumber7 = { x: true, y: false }--;
+                          ~~~~~~~~~~~~~~~~~~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(27,23): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+                          ~~~~~~~~~~~~~~~~~~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(27,23): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    var ResultIsNumber8 = { x: true, y: (n: boolean) => { return n; } }--;
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(28,23): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(28,23): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    
+    // boolean type expressions
+    var ResultIsNumber9 = --objA.a;
+                            ~~~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(31,25): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    var ResultIsNumber10 = --M.n;
+                             ~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(32,26): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    var ResultIsNumber11 = --foo();
+                             ~~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(33,26): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+                             ~~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(33,26): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    var ResultIsNumber12 = --A.foo();
+                             ~~~~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(34,26): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+                             ~~~~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(34,26): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    
+    var ResultIsNumber13 = foo()--;
+                           ~~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(36,24): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+                           ~~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(36,24): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    var ResultIsNumber14 = A.foo()--;
+                           ~~~~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(37,24): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+                           ~~~~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(37,24): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    var ResultIsNumber15 = objA.a--;
+                           ~~~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(38,24): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    var ResultIsNumber16 = M.n--;
+                           ~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(39,24): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    
+    // miss assignment operators
+    --true;
+      ~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(42,3): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+      ~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(42,3): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    --BOOLEAN;
+      ~~~~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(43,3): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    --foo();
+      ~~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(44,3): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+      ~~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(44,3): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    --objA.a;
+      ~~~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(45,3): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    --M.n;
+      ~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(46,3): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    --objA.a, M.n;
+      ~~~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(47,3): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    
+    true--;
+    ~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(49,1): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    ~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(49,1): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    BOOLEAN--;
+    ~~~~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(50,1): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    foo()--;
+    ~~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(51,1): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    ~~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(51,1): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    objA.a--;
+    ~~~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(52,1): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    M.n--;
+    ~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(53,1): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+    objA.a--, M.n--;
+    ~~~~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(54,1): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.
+              ~~~
+!!! decrementOperatorWithUnsupportedBooleanType.ts(54,11): error TS2114: The type of a unary arithmetic operation operand must be of type 'any', 'number' or an enum type.

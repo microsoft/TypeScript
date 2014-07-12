@@ -1,0 +1,26 @@
+{
+    "tokens": {
+        "0": {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    },
+    "tokensOnLeft": {
+        "0": null
+    },
+    "leftToRight": [
+        {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    ],
+    "rightToLeft": [
+        {
+            "kind": "EndOfFileToken",
+            "width": 0,
+            "text": ""
+        }
+    ]
+}

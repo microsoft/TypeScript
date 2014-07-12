@@ -1,0 +1,1 @@
+//// [interfacePropertiesWithSameName2.js]

@@ -1,0 +1,10 @@
+==== tests/cases/compiler/typeParameterHasSelfAsConstraint.ts (2 errors) ====
+    function foo<T extends T>(x: T): number {
+                 ~~~~~~~~~~~
+!!! typeParameterHasSelfAsConstraint.ts(1,14): error TS2229: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+        return x;
+               ~
+!!! typeParameterHasSelfAsConstraint.ts(2,12): error TS2011: Cannot convert 'T' to 'number'.
+    }
+     
+    

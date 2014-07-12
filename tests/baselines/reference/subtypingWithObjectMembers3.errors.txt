@@ -1,0 +1,98 @@
+==== tests/cases/compiler/subtypingWithObjectMembers3.ts (6 errors) ====
+    interface Base {
+        foo: string;
+    }
+    
+    interface Derived extends Base {
+        bar: string;
+    }
+    
+    // N and M have the same name, same accessibility, same optionality, and N is a subtype of M
+    // foo properties are valid, bar properties cause errors in the derived class declarations
+    module NotOptional {
+        interface A {
+            foo: Base;
+            bar: Derived;
+        }
+    
+        interface B extends A {
+                  ~
+!!! subtypingWithObjectMembers3.ts(17,15): error TS2143: Interface 'NotOptional.B' cannot extend interface 'NotOptional.A':
+!!! 	Types of property 'bar' of types 'B' and 'A' are incompatible:
+!!! 		Type 'Base' is missing property 'bar' from type 'Derived'.
+            foo: Derived; // ok
+            bar: Base; // error
+        }
+    
+        interface A2 {
+            1: Base;
+            2.0: Derived;
+        }
+    
+        interface B2 extends A2 {
+                  ~~
+!!! subtypingWithObjectMembers3.ts(27,15): error TS2143: Interface 'NotOptional.B2' cannot extend interface 'NotOptional.A2':
+!!! 	Types of property '2.0' of types 'B2' and 'A2' are incompatible:
+!!! 		Type 'Base' is missing property 'bar' from type 'Derived'.
+            1: Derived; // ok
+            2: Base; // error
+        }
+    
+        interface A3 {
+            '1': Base;
+            '2.0': Derived;
+        }
+    
+        interface B3 extends A3 {
+                  ~~
+!!! subtypingWithObjectMembers3.ts(37,15): error TS2143: Interface 'NotOptional.B3' cannot extend interface 'NotOptional.A3':
+!!! 	Types of property ''2.0'' of types 'B3' and 'A3' are incompatible:
+!!! 		Type 'Base' is missing property 'bar' from type 'Derived'.
+            '1': Derived; // ok
+            '2.0': Base; // error
+        }
+    }
+    
+    module Optional {
+        interface A {
+            foo?: Base;
+            bar?: Derived;
+        }
+    
+        interface B extends A {
+                  ~
+!!! subtypingWithObjectMembers3.ts(49,15): error TS2143: Interface 'Optional.B' cannot extend interface 'Optional.A':
+!!! 	Types of property 'bar' of types 'B' and 'A' are incompatible:
+!!! 		Type 'Base' is missing property 'bar' from type 'Derived'.
+            foo?: Derived; // ok
+            bar?: Base; // error
+        }
+    
+        interface A2 {
+            1?: Base;
+            2.0?: Derived;
+        }
+    
+        interface B2 extends A2 {
+                  ~~
+!!! subtypingWithObjectMembers3.ts(59,15): error TS2143: Interface 'Optional.B2' cannot extend interface 'Optional.A2':
+!!! 	Types of property '2.0' of types 'B2' and 'A2' are incompatible:
+!!! 		Type 'Base' is missing property 'bar' from type 'Derived'.
+            1?: Derived; // ok
+            2?: Base; // error
+        }
+    
+        interface A3 {
+            '1'?: Base;
+            '2.0'?: Derived;
+        }
+    
+        interface B3 extends A3 {
+                  ~~
+!!! subtypingWithObjectMembers3.ts(69,15): error TS2143: Interface 'Optional.B3' cannot extend interface 'Optional.A3':
+!!! 	Types of property ''2.0'' of types 'B3' and 'A3' are incompatible:
+!!! 		Type 'Base' is missing property 'bar' from type 'Derived'.
+            '1'?: Derived; // ok
+            '2.0'?: Base; // error
+        }
+    }

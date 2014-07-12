@@ -1,0 +1,31 @@
+=== tests/cases/compiler/assignmentCompatForEnums.ts ===
+enum TokenType { One, Two };
+>TokenType : TokenType
+>One : TokenType
+>Two : TokenType
+
+var list = {};
+>list : {}
+>{} : {}
+
+
+function returnType(): TokenType { return null; }
+>returnType : typeof returnType
+>TokenType : TokenType
+
+function foo() {
+>foo : typeof foo
+
+    var x = returnType();
+>x : TokenType
+>returnType() : TokenType
+>returnType : typeof returnType
+
+    var x: TokenType = list['one'];
+>x : TokenType
+>TokenType : TokenType
+>list['one'] : any
+>list : {}
+}
+
+

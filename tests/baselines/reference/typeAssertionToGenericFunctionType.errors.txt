@@ -1,0 +1,16 @@
+==== tests/cases/compiler/typeAssertionToGenericFunctionType.ts (4 errors) ====
+    var x = {
+        a: < <T>(x: T) => T > ((x: any) => 1),
+        b: <T>(x: T) => { x }
+    }
+    x.a<string>(1); // bug was that this caused 'Could not find symbol T' on return type T in the type assertion on x.a's definition
+      ~
+!!! typeAssertionToGenericFunctionType.ts(5,3): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Could not apply type 'string' to argument 1 which is of type 'number'.
+      ~
+!!! typeAssertionToGenericFunctionType.ts(5,3): error TS2087: Could not select overload for 'call' expression.
+    x.b<string>(); // error
+      ~
+!!! typeAssertionToGenericFunctionType.ts(6,3): error TS2081: Supplied parameters do not match any signature of call target.
+      ~
+!!! typeAssertionToGenericFunctionType.ts(6,3): error TS2087: Could not select overload for 'call' expression.

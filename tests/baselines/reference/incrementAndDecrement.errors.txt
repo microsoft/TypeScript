@@ -1,0 +1,104 @@
+==== tests/cases/compiler/incrementAndDecrement.ts (21 errors) ====
+    enum E { A, B, C };
+    var x = 4;
+    var e = E.B;
+    var a: any;
+    var w = window;
+            ~~~~~~
+!!! incrementAndDecrement.ts(5,9): error TS2095: Could not find symbol 'window'.
+    
+    // Assign to expression++
+    x++ = 4; // Error
+    ~~~
+!!! incrementAndDecrement.ts(8,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    // Assign to expression--
+    x-- = 5; // Error
+    ~~~
+!!! incrementAndDecrement.ts(11,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    // Assign to++expression
+    ++x = 4; // Error
+    ~~~
+!!! incrementAndDecrement.ts(14,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    // Assign to--expression
+    --x = 5; // Error
+    ~~~
+!!! incrementAndDecrement.ts(17,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    // Pre and postfix++ on number
+    x++;
+    x--;
+    ++x;
+    --x;
+    ++x++; // Error
+      ~~~
+!!! incrementAndDecrement.ts(24,3): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    --x--; // Error
+      ~~~
+!!! incrementAndDecrement.ts(25,3): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    ++x--; // Error
+      ~~~
+!!! incrementAndDecrement.ts(26,3): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    --x++; // Error
+      ~~~
+!!! incrementAndDecrement.ts(27,3): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    
+    // Pre and postfix++ on enum
+    e++;
+    e--;
+    ++e;
+    --e;
+    ++e++; // Error
+      ~~~
+!!! incrementAndDecrement.ts(34,3): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    --e--; // Error
+      ~~~
+!!! incrementAndDecrement.ts(35,3): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    ++e--; // Error
+      ~~~
+!!! incrementAndDecrement.ts(36,3): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    --e++; // Error
+      ~~~
+!!! incrementAndDecrement.ts(37,3): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    
+    // Pre and postfix++ on value of type 'any'
+    a++;
+    a--;
+    ++a;
+    --a;
+    ++a++; // Error
+      ~~~
+!!! incrementAndDecrement.ts(44,3): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    --a--; // Error
+      ~~~
+!!! incrementAndDecrement.ts(45,3): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    ++a--; // Error
+      ~~~
+!!! incrementAndDecrement.ts(46,3): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    --a++; // Error
+      ~~~
+!!! incrementAndDecrement.ts(47,3): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    
+    
+    // Pre and postfix++ on other types
+    w++; // Error
+    w--; // Error
+    ++w; // Error
+    --w; // Error
+    ++w++; // Error
+      ~~~
+!!! incrementAndDecrement.ts(55,3): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    --w--; // Error
+      ~~~
+!!! incrementAndDecrement.ts(56,3): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    ++w--; // Error
+      ~~~
+!!! incrementAndDecrement.ts(57,3): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    --w++; // Error
+      ~~~
+!!! incrementAndDecrement.ts(58,3): error TS2139: The operand of an increment or decrement operator must be a variable, property or indexer.
+    
+    
+    

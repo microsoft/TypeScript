@@ -1,0 +1,48 @@
+=== tests/cases/compiler/constantOverloadFunction.ts ===
+class Base { foo() { } }
+>Base : Base
+>foo : () => void
+
+class Derived1 extends Base { bar() { } }
+>Derived1 : Derived1
+>Base : Base
+>bar : () => void
+
+class Derived2 extends Base { baz() { } }
+>Derived2 : Derived2
+>Base : Base
+>baz : () => void
+
+class Derived3 extends Base { biz() { } }
+>Derived3 : Derived3
+>Base : Base
+>biz : () => void
+
+function foo(tagName: 'canvas'): Derived1;
+>foo : typeof foo
+>tagName : 'canvas'
+>Derived1 : Derived1
+
+function foo(tagName:  'div'): Derived2;
+>foo : typeof foo
+>tagName : 'div'
+>Derived2 : Derived2
+
+function foo(tagName: 'span'): Derived3;
+>foo : typeof foo
+>tagName : 'span'
+>Derived3 : Derived3
+
+function foo(tagName: string): Base;
+>foo : typeof foo
+>tagName : string
+>Base : Base
+
+function foo(tagName: any): Base {
+>foo : typeof foo
+>tagName : any
+>Base : Base
+
+    return null;
+}
+

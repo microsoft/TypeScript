@@ -1,0 +1,28 @@
+==== tests/cases/compiler/genericCallWithObjectLiteralArguments1.ts (8 errors) ====
+    function foo<T>(n: { x: T; y: T }, m: T) { return m; }
+    var x = foo({ x: 3, y: "" }, 4); // no error, x is Object, the best common type
+    // these are all errors
+    var x2 = foo<number>({ x: 3, y: "" }, 4); 
+             ~~~
+!!! genericCallWithObjectLiteralArguments1.ts(4,10): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Types of property 'y' of types '{ x: number; y: string; }' and '{ x: number; y: number; }' are incompatible.
+             ~~~
+!!! genericCallWithObjectLiteralArguments1.ts(4,10): error TS2087: Could not select overload for 'call' expression.
+    var x3 = foo<string>({ x: 3, y: "" }, 4); 
+             ~~~
+!!! genericCallWithObjectLiteralArguments1.ts(5,10): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Types of property 'x' of types '{ x: number; y: string; }' and '{ x: string; y: string; }' are incompatible.
+             ~~~
+!!! genericCallWithObjectLiteralArguments1.ts(5,10): error TS2087: Could not select overload for 'call' expression.
+    var x4 = foo<number>({ x: "", y: 4 }, "");
+             ~~~
+!!! genericCallWithObjectLiteralArguments1.ts(6,10): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Types of property 'x' of types '{ x: string; y: number; }' and '{ x: number; y: number; }' are incompatible.
+             ~~~
+!!! genericCallWithObjectLiteralArguments1.ts(6,10): error TS2087: Could not select overload for 'call' expression.
+    var x5 = foo<string>({ x: "", y: 4 }, "");
+             ~~~
+!!! genericCallWithObjectLiteralArguments1.ts(7,10): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Types of property 'y' of types '{ x: string; y: number; }' and '{ x: string; y: string; }' are incompatible.
+             ~~~
+!!! genericCallWithObjectLiteralArguments1.ts(7,10): error TS2087: Could not select overload for 'call' expression.

@@ -1,0 +1,41 @@
+==== tests/cases/compiler/assignmentToObjectAndFunction.ts (3 errors) ====
+    var errObj: Object = { toString: 0 }; // Error, incompatible toString
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! assignmentToObjectAndFunction.ts(1,5): error TS2012: Cannot convert '{ toString: number; }' to 'Object':
+!!! 	Types of property 'toString' of types '{ toString: number; }' and 'Object' are incompatible:
+!!! 		Type '() => string' requires a call signature, but type 'Number' lacks one.
+    var goodObj: Object = {
+        toString(x?) {
+            return "";
+        }
+    }; // Ok, because toString is a subtype of Object's toString
+    
+    var errFun: Function = {}; // Error for no call signature
+        ~~~~~~~~~~~~~~~~~~~~~
+!!! assignmentToObjectAndFunction.ts(8,5): error TS2012: Cannot convert '{}' to 'Function':
+!!! 	Type '{}' is missing property 'apply' from type 'Function'.
+    
+    function foo() { }
+    module foo {
+        export var boom = 0;
+    }
+    
+    var goodFundule: Function = foo; // ok
+    
+    function bar() { }
+    module bar {
+        export function apply(thisArg: string, argArray?: string) { }
+    }
+    
+    var goodFundule2: Function = bar; // ok
+    
+    function bad() { }
+    module bad {
+        export var apply = 0;
+    }
+    
+    var badFundule: Function = bad; // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! assignmentToObjectAndFunction.ts(29,5): error TS2012: Cannot convert 'typeof bad' to 'Function':
+!!! 	Types of property 'apply' of types 'typeof bad' and 'Function' are incompatible:
+!!! 		Type '(thisArg: any, argArray?: any) => any' requires a call signature, but type 'Number' lacks one.

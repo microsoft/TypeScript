@@ -1,0 +1,1 @@
+//// [conflictingMemberTypesInBases.js]

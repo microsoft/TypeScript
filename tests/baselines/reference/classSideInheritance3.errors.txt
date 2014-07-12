@@ -1,0 +1,27 @@
+==== tests/cases/compiler/classSideInheritance3.ts (2 errors) ====
+    class A {
+        constructor(public x: string) {
+        }
+    }
+    class B extends A {
+        constructor(x: string, public data: string) {
+            super(x);
+        }
+    }
+    class C extends A {
+        constructor(x: string) {
+            super(x);
+        }
+    }
+    
+    var r1: typeof A = B; // error
+        ~~~~~~~~~~~~~~~~
+!!! classSideInheritance3.ts(16,5): error TS2012: Cannot convert 'typeof B' to 'typeof A':
+!!! 	Construct signatures of types 'typeof B' and 'typeof A' are incompatible:
+!!! 		Call signature expects 1 or fewer parameters.
+    var r2: new (x: string) => A = B; // error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! classSideInheritance3.ts(17,5): error TS2012: Cannot convert 'typeof B' to 'new(x: string) => A':
+!!! 	Construct signatures of types 'typeof B' and 'new(x: string) => A' are incompatible:
+!!! 		Call signature expects 1 or fewer parameters.
+    var r3: typeof A = C; // ok

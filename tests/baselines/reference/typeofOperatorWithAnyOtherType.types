@@ -1,0 +1,283 @@
+=== tests/cases/compiler/typeofOperatorWithAnyOtherType.ts ===
+// typeof  operator on any type
+
+var ANY: any;
+>ANY : any
+
+var ANY1;
+>ANY1 : any
+
+var ANY2: any[] = ["", ""];
+>ANY2 : any[]
+>["", ""] : any[]
+
+var obj: () => {}
+>obj : () => {}
+
+var obj1 = { x: "a", y: () => { }};
+>obj1 : { x: string; y: () => void; }
+>{ x: "a", y: () => { }} : { x: string; y: () => void; }
+>x : string
+>y : () => void
+>() => { } : () => void
+
+function foo(): any {
+>foo : typeof foo
+
+    var a;
+>a : any
+
+    return a;
+>a : any
+}
+class A {
+>A : A
+
+    public a: any;
+>a : any
+
+    static foo() {
+>foo : () => any
+
+        var a;
+>a : any
+
+        return a;
+>a : any
+    }
+}
+module M {
+>M : M
+
+    export var n: any;
+>n : any
+}
+var objA = new A();
+>objA : A
+>new A() : A
+>A : typeof A
+
+// any type var
+var ResultIsString1 = typeof ANY1;
+>ResultIsString1 : string
+>typeof ANY1 : string
+>ANY1 : any
+
+var ResultIsString2 = typeof ANY2;
+>ResultIsString2 : string
+>typeof ANY2 : string
+>ANY2 : any[]
+
+var ResultIsString3 = typeof A;
+>ResultIsString3 : string
+>typeof A : string
+>A : typeof A
+
+var ResultIsString4 = typeof M;
+>ResultIsString4 : string
+>typeof M : string
+>M : typeof M
+
+var ResultIsString5 = typeof obj;
+>ResultIsString5 : string
+>typeof obj : string
+>obj : () => {}
+
+var ResultIsString6 = typeof obj1;
+>ResultIsString6 : string
+>typeof obj1 : string
+>obj1 : { x: string; y: () => void; }
+
+// any type literal
+var ResultIsString7 = typeof undefined;
+>ResultIsString7 : string
+>typeof undefined : string
+>undefined : any
+
+var ResultIsString8 = typeof null;
+>ResultIsString8 : string
+>typeof null : string
+
+var ResultIsString9 = typeof {};
+>ResultIsString9 : string
+>typeof {} : string
+>{} : {}
+
+// any type expressions
+var ResultIsString10 = typeof ANY2[0];
+>ResultIsString10 : string
+>typeof ANY2[0] : string
+>ANY2[0] : any
+>ANY2 : any[]
+
+var ResultIsString11 = typeof objA.a;
+>ResultIsString11 : string
+>typeof objA.a : string
+>objA.a : any
+>objA : A
+>a : any
+
+var ResultIsString12 = typeof obj1.x;
+>ResultIsString12 : string
+>typeof obj1.x : string
+>obj1.x : string
+>obj1 : { x: string; y: () => void; }
+>x : string
+
+var ResultIsString13 = typeof M.n;
+>ResultIsString13 : string
+>typeof M.n : string
+>M.n : any
+>M : typeof M
+>n : any
+
+var ResultIsString14 = typeof foo();
+>ResultIsString14 : string
+>typeof foo() : string
+>foo() : any
+>foo : typeof foo
+
+var ResultIsString15 = typeof A.foo();
+>ResultIsString15 : string
+>typeof A.foo() : string
+>A.foo() : any
+>A.foo : () => any
+>A : typeof A
+>foo : () => any
+
+var ResultIsString16 = typeof (ANY + ANY1);
+>ResultIsString16 : string
+>typeof (ANY + ANY1) : string
+>(ANY + ANY1) : any
+>ANY + ANY1 : any
+>ANY : any
+>ANY1 : any
+
+var ResultIsString17 = typeof (null + undefined);
+>ResultIsString17 : string
+>typeof (null + undefined) : string
+>(null + undefined) : any
+>null + undefined : any
+>undefined : any
+
+var ResultIsString18 = typeof (null + null);
+>ResultIsString18 : string
+>typeof (null + null) : string
+>(null + null) : any
+>null + null : any
+
+var ResultIsString19 = typeof (undefined + undefined);
+>ResultIsString19 : string
+>typeof (undefined + undefined) : string
+>(undefined + undefined) : any
+>undefined + undefined : any
+>undefined : any
+>undefined : any
+
+// multiple typeof  operators
+var ResultIsString20 = typeof typeof ANY;
+>ResultIsString20 : string
+>typeof typeof ANY : string
+>typeof ANY : string
+>ANY : any
+
+var ResultIsString21 = typeof typeof typeof (ANY + ANY1);
+>ResultIsString21 : string
+>typeof typeof typeof (ANY + ANY1) : string
+>typeof typeof (ANY + ANY1) : string
+>typeof (ANY + ANY1) : string
+>(ANY + ANY1) : any
+>ANY + ANY1 : any
+>ANY : any
+>ANY1 : any
+
+>// miss assignment operators
+typeof ANY : string
+
+// miss assignment operators
+typeof ANY;
+>ANY : any
+
+typeof ANY1;
+>typeof ANY1 : string
+>ANY1 : any
+
+typeof ANY2[0];
+>typeof ANY2[0] : string
+>ANY2[0] : any
+>ANY2 : any[]
+
+typeof ANY, ANY1;
+>typeof ANY, ANY1 : any
+>typeof ANY : string
+>ANY : any
+>ANY1 : any
+
+typeof obj1;
+>typeof obj1 : string
+>obj1 : { x: string; y: () => void; }
+
+typeof obj1.x;
+>typeof obj1.x : string
+>obj1.x : string
+>obj1 : { x: string; y: () => void; }
+>x : string
+
+typeof objA.a;
+>typeof objA.a : string
+>objA.a : any
+>objA : A
+>a : any
+
+typeof M.n;
+>typeof M.n : string
+>M.n : any
+>M : typeof M
+>n : any
+
+// use typeof in type query
+var z: any;
+>z : any
+
+var x: any[];
+>x : any[]
+
+var r: () => any;
+>r : () => any
+
+z: typeof ANY;
+>typeof ANY : string
+>ANY : any
+
+x: typeof ANY2;
+>typeof ANY2 : string
+>ANY2 : any[]
+
+r: typeof foo;
+>typeof foo : string
+>foo : typeof foo
+
+z: typeof objA.a;
+>typeof objA.a : string
+>objA.a : any
+>objA : A
+>a : any
+
+z: typeof A.foo;
+>typeof A.foo : string
+>A.foo : () => any
+>A : typeof A
+>foo : () => any
+
+z: typeof M.n;
+>typeof M.n : string
+>M.n : any
+>M : typeof M
+>n : any
+
+z: typeof obj1.x;
+>typeof obj1.x : string
+>obj1.x : string
+>obj1 : { x: string; y: () => void; }
+>x : string
+

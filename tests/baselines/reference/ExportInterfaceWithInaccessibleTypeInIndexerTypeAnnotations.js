@@ -1,0 +1,1 @@
+//// [ExportInterfaceWithInaccessibleTypeInIndexerTypeAnnotations.js]

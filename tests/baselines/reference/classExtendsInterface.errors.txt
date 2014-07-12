@@ -1,0 +1,13 @@
+==== tests/cases/compiler/classExtendsInterface.ts (2 errors) ====
+    interface Comparable {}
+    class A extends Comparable {}
+                    ~~~~~~~~~~
+!!! classExtendsInterface.ts(2,17): error TS2073: A class may only extend another class.
+    class B implements Comparable {}
+     
+    interface Comparable2<T> {}
+    class A2<T> extends Comparable2<T> {}
+                        ~~~~~~~~~~~~~~
+!!! classExtendsInterface.ts(6,21): error TS2073: A class may only extend another class.
+    class B2<T> implements Comparable2<T> {}
+    

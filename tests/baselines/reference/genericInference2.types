@@ -1,0 +1,102 @@
+=== tests/cases/compiler/genericInference2.ts ===
+    declare module ko { 
+>ko : ko
+
+       export interface Observable<T> { 
+>Observable : Observable<T>
+>T : T
+
+           (): T; 
+>T : T
+
+           (value: T): any; 
+>value : T
+>T : T
+
+           N: number; 
+>N : number
+
+           g: boolean; 
+>g : boolean
+
+           r: T; 
+>r : T
+>T : T
+       } 
+       export function observable<T>(value: T): Observable<T>; 
+>observable : typeof observable
+>T : T
+>value : T
+>T : T
+>Observable : Observable<T>
+>T : T
+    } 
+    var o = { 
+>o : { name: ko.Observable<string>; age: ko.Observable<number>; }
+>{ 
+       name: ko.observable("Bob"), 
+       age: ko.observable(37) 
+    } : { name: ko.Observable<string>; age: ko.Observable<number>; }
+
+       name: ko.observable("Bob"), 
+>name : ko.Observable<string>
+>ko.observable("Bob") : ko.Observable<string>
+>ko.observable : typeof ko.observable
+>ko : typeof ko
+>observable : typeof ko.observable
+
+       age: ko.observable(37) 
+>age : ko.Observable<number>
+>ko.observable(37) : ko.Observable<number>
+>ko.observable : typeof ko.observable
+>ko : typeof ko
+>observable : typeof ko.observable
+
+    }; 
+    var x_v = o.name().length;  // should be 'number'
+>x_v : number
+>o.name().length : number
+>o.name() : string
+>o.name : ko.Observable<string>
+>o : { name: ko.Observable<string>; age: ko.Observable<number>; }
+>name : ko.Observable<string>
+>length : number
+
+    var age_v = o.age();  // should be 'number'
+>age_v : number
+>o.age() : number
+>o.age : ko.Observable<number>
+>o : { name: ko.Observable<string>; age: ko.Observable<number>; }
+>age : ko.Observable<number>
+
+    var name_v = o.name("Robert");  // should be 'any'
+>name_v : any
+>o.name("Robert") : any
+>o.name : ko.Observable<string>
+>o : { name: ko.Observable<string>; age: ko.Observable<number>; }
+>name : ko.Observable<string>
+
+    var zz_v = o.name.N;  // should be 'number'
+>zz_v : number
+>o.name.N : number
+>o.name : ko.Observable<string>
+>o : { name: ko.Observable<string>; age: ko.Observable<number>; }
+>name : ko.Observable<string>
+>N : number
+
+    var yy_v = o.name.g;  // should be 'boolean'
+>yy_v : boolean
+>o.name.g : boolean
+>o.name : ko.Observable<string>
+>o : { name: ko.Observable<string>; age: ko.Observable<number>; }
+>name : ko.Observable<string>
+>g : boolean
+
+    var rr_v = o.name.r;  // should be 'string'
+>rr_v : string
+>o.name.r : string
+>o.name : ko.Observable<string>
+>o : { name: ko.Observable<string>; age: ko.Observable<number>; }
+>name : ko.Observable<string>
+>r : string
+

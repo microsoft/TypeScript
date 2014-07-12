@@ -1,0 +1,25 @@
+==== tests/cases/compiler/classMemberInitializerScoping.ts (2 errors) ====
+    var aaa = 1;
+    class CCC {
+        y: number = aaa;
+                    ~~~
+!!! classMemberInitializerScoping.ts(3,17): error TS2230: Initializer of instance member variable 'y' cannot reference identifier 'aaa' declared in the constructor.
+        static staticY: number = aaa; // This shouldnt be error
+        constructor(aaa) {
+            this.y = ''; // was: error, cannot assign string to number
+            ~~~~~~
+!!! classMemberInitializerScoping.ts(6,9): error TS2011: Cannot convert 'string' to 'number'.
+        }
+    }
+    
+    // above is equivalent to this:
+    var aaaa = 1;
+    class CCCC {
+        y: any;
+        constructor(aaaa) {
+            this.y = aaaa;
+            this.y = '';
+        }
+    }
+     
+    

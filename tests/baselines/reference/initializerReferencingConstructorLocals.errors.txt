@@ -1,0 +1,46 @@
+==== tests/cases/compiler/initializerReferencingConstructorLocals.ts (12 errors) ====
+    // Initializer expressions for instance member variables are evaluated in the scope of the class constructor body but are not permitted to reference parameters or local variables of the constructor. 
+    
+    class C {
+        a = z; // error
+            ~
+!!! initializerReferencingConstructorLocals.ts(4,9): error TS2095: Could not find symbol 'z'.
+        b: typeof z; // error
+                  ~
+!!! initializerReferencingConstructorLocals.ts(5,15): error TS2095: Could not find symbol 'z'.
+        c = this.z; // error
+                 ~
+!!! initializerReferencingConstructorLocals.ts(6,14): error TS2094: The property 'z' does not exist on value of type 'C'.
+        d: typeof this.z; // error
+                  ~~~~
+!!! initializerReferencingConstructorLocals.ts(7,15): error TS1006: Identifier expected; 'this' is a keyword.
+                       ~
+!!! initializerReferencingConstructorLocals.ts(7,20): error TS2094: The property 'z' does not exist on value of type 'C'.
+        constructor(x) {
+            z = 1;
+            ~
+!!! initializerReferencingConstructorLocals.ts(9,9): error TS2095: Could not find symbol 'z'.
+        }
+    }
+    
+    class D<T> {
+        a = z; // error
+            ~
+!!! initializerReferencingConstructorLocals.ts(14,9): error TS2095: Could not find symbol 'z'.
+        b: typeof z; // error
+                  ~
+!!! initializerReferencingConstructorLocals.ts(15,15): error TS2095: Could not find symbol 'z'.
+        c = this.z; // error
+                 ~
+!!! initializerReferencingConstructorLocals.ts(16,14): error TS2094: The property 'z' does not exist on value of type 'D<T>'.
+        d: typeof this.z; // error
+                  ~~~~
+!!! initializerReferencingConstructorLocals.ts(17,15): error TS1006: Identifier expected; 'this' is a keyword.
+                       ~
+!!! initializerReferencingConstructorLocals.ts(17,20): error TS2094: The property 'z' does not exist on value of type 'D<T>'.
+        constructor(x: T) {
+            z = 1;
+            ~
+!!! initializerReferencingConstructorLocals.ts(19,9): error TS2095: Could not find symbol 'z'.
+        }
+    }

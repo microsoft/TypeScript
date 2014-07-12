@@ -1,0 +1,16 @@
+==== tests/cases/compiler/assignToEnum.ts (4 errors) ====
+    enum A { foo, bar }
+    A = undefined;  // invalid LHS
+    ~
+!!! assignToEnum.ts(2,1): error TS2130: Invalid left-hand side of assignment expression.
+    A = A.bar;      // invalid LHS
+    ~
+!!! assignToEnum.ts(3,1): error TS2130: Invalid left-hand side of assignment expression.
+    A.foo = 1;      // invalid LHS
+    ~~~~~
+!!! assignToEnum.ts(4,1): error TS2130: Invalid left-hand side of assignment expression.
+    A.foo = A.bar;  // invalid LHS
+    ~~~~~
+!!! assignToEnum.ts(5,1): error TS2130: Invalid left-hand side of assignment expression.
+    
+    

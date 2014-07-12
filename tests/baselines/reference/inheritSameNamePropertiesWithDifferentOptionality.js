@@ -1,0 +1,1 @@
+//// [inheritSameNamePropertiesWithDifferentOptionality.js]

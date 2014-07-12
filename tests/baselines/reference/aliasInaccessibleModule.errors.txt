@@ -1,0 +1,8 @@
+==== tests/cases/compiler/aliasInaccessibleModule.ts (1 errors) ====
+    module M {
+        module N {
+        }
+        export import X = N;
+        ~~~~~~~~~~~~~~~~~~~~
+!!! aliasInaccessibleModule.ts(4,5): error TS2185: Exported import declaration 'X' is assigned container that is or is using inaccessible module 'N'.
+    }

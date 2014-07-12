@@ -1,0 +1,98 @@
+[
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "text": "m",
+        "value": "m",
+        "valueText": "m"
+    },
+    {
+        "kind": "DotToken",
+        "width": 1,
+        "text": ".",
+        "value": ".",
+        "valueText": "."
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 5,
+        "text": "index",
+        "value": "index",
+        "valueText": "index"
+    },
+    {
+        "kind": "PlusToken",
+        "width": 1,
+        "text": "+",
+        "value": "+",
+        "valueText": "+"
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "1",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "PlusToken",
+        "width": 1,
+        "text": "+",
+        "value": "+",
+        "valueText": "+"
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 1,
+        "text": "m",
+        "value": "m",
+        "valueText": "m"
+    },
+    {
+        "kind": "OpenBracketToken",
+        "width": 1,
+        "text": "[",
+        "value": "[",
+        "valueText": "["
+    },
+    {
+        "kind": "NumericLiteral",
+        "width": 1,
+        "text": "0",
+        "value": 0,
+        "valueText": "0"
+    },
+    {
+        "kind": "CloseBracketToken",
+        "width": 1,
+        "text": "]",
+        "value": "]",
+        "valueText": "]"
+    },
+    {
+        "kind": "DotToken",
+        "width": 1,
+        "text": ".",
+        "value": ".",
+        "valueText": "."
+    },
+    {
+        "kind": "IdentifierName",
+        "width": 6,
+        "text": "length",
+        "value": "length",
+        "valueText": "length"
+    },
+    {
+        "kind": "SemicolonToken",
+        "width": 1,
+        "text": ";",
+        "value": ";",
+        "valueText": ";"
+    },
+    {
+        "kind": "EndOfFileToken",
+        "width": 0,
+        "text": ""
+    }
+]

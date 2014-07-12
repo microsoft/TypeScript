@@ -1,0 +1,40 @@
+==== tests/cases/compiler/super.ts (1 errors) ====
+    class Base {
+        constructor() {
+            var x;
+        }
+        public foo() {
+            return "base";
+        }
+    
+        public bar() {
+            return "basebar";
+        }
+    }
+    
+    class Sub1 extends Base {
+        public foo() {
+            return "sub1" + super.foo() + super.bar();
+        }
+    }
+    
+    
+    class SubSub1 extends Sub1 {
+        public foo() {
+            return "subsub1" + super.foo();
+        }
+    }
+    
+    class Base2 {
+        public foo() {
+            super.foo();
+            ~~~~~
+!!! super.ts(29,9): error TS2103: 'super' cannot be referenced in non-derived classes.
+        }
+    }
+    
+    var s = new Sub1();
+    var ss = new SubSub1();
+    s.foo() + ss.foo();
+    
+    

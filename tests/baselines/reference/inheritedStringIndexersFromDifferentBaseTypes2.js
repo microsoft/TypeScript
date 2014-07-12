@@ -1,0 +1,1 @@
+//// [inheritedStringIndexersFromDifferentBaseTypes2.js]

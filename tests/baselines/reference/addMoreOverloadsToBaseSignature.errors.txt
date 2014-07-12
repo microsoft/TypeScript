@@ -1,0 +1,14 @@
+==== tests/cases/compiler/addMoreOverloadsToBaseSignature.ts (1 errors) ====
+    interface Foo {
+        f(): string;
+    }
+    
+    interface Bar extends Foo {
+              ~~~
+!!! addMoreOverloadsToBaseSignature.ts(5,11): error TS2143: Interface 'Bar' cannot extend interface 'Foo':
+!!! 	Types of property 'f' of types 'Bar' and 'Foo' are incompatible:
+!!! 		Call signatures of types '(key: string) => string' and '() => string' are incompatible:
+!!! 			Call signature expects 0 or fewer parameters.
+        f(key: string): string;
+    }
+    

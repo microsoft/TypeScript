@@ -1,0 +1,13 @@
+==== tests/cases/compiler/interfaceDeclaration6.ts (2 errors) ====
+    interface i1 { foo: number; };
+    interface i2 extends i1 { foo: number; };
+    interface i3 extends i1 { foo: string; };
+              ~~
+!!! interfaceDeclaration6.ts(3,11): error TS2143: Interface 'i3' cannot extend interface 'i1':
+!!! 	Types of property 'foo' of types 'i3' and 'i1' are incompatible.
+    interface i4 {
+     bar():any;
+     bar():any;
+     ~~~~~~~~~
+!!! interfaceDeclaration6.ts(6,2): error TS2144: Duplicate overload signature for 'bar'.
+    }

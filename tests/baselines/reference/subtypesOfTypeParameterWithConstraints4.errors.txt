@@ -1,0 +1,122 @@
+==== tests/cases/compiler/subtypesOfTypeParameterWithConstraints4.ts (18 errors) ====
+    // checking whether other types are subtypes of type parameters with constraints
+    
+    class Foo { foo: number; }
+    function f<T extends Foo, U extends Foo, V>(t: T, u: U, v: V) {
+        // error
+        var r = true ? t : u;
+                ~~~~~~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints4.ts(6,13): error TS2226: Type of conditional '{}' must be identical to 'T' or 'U'.
+        var r = true ? u : t;
+                ~~~~~~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints4.ts(7,13): error TS2226: Type of conditional '{}' must be identical to 'U' or 'T'.
+    
+        // error
+        var r2 = true ? t : v;
+                 ~~~~~~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints4.ts(10,14): error TS2226: Type of conditional '{}' must be identical to 'T' or 'V'.
+        var r2 = true ? v : t;
+                 ~~~~~~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints4.ts(11,14): error TS2226: Type of conditional '{}' must be identical to 'V' or 'T'.
+    
+        // error
+        var r3 = true ? v : u;
+                 ~~~~~~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints4.ts(14,14): error TS2226: Type of conditional '{}' must be identical to 'V' or 'U'.
+        var r3 = true ? u : v;
+                 ~~~~~~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints4.ts(15,14): error TS2226: Type of conditional '{}' must be identical to 'U' or 'V'.
+    
+        // ok
+        var r4 = true ? t : new Foo();
+        var r4 = true ? new Foo() : t;
+    
+        // ok
+        var r5 = true ? u : new Foo();
+        var r5 = true ? new Foo() : u;
+    
+        // BUG, should be error
+        var r6 = true ? v : new Foo();
+                 ~~~~~~~~~~~~~~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints4.ts(26,14): error TS2226: Type of conditional '{}' must be identical to 'V' or 'Foo'.
+        var r6 = true ? new Foo() : v;
+                 ~~~~~~~~~~~~~~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints4.ts(27,14): error TS2226: Type of conditional '{}' must be identical to 'Foo' or 'V'.
+    
+    }
+    
+    class B1<T> {
+        foo: T;
+    }
+    
+    class D1<T extends Foo, U extends Foo, V> extends B1<Foo> {
+        [x: string]: Foo;
+        foo: T; // ok
+    }
+    
+    class D2<T extends Foo, U extends Foo, V> extends B1<Foo> {
+        [x: string]: Foo;
+        foo: U; // ok
+    }
+    
+    class D3<T extends Foo, U extends Foo, V> extends B1<Foo> {
+          ~~
+!!! subtypesOfTypeParameterWithConstraints4.ts(45,7): error TS2141: Class 'D3<T, U, V>' cannot extend class 'B1<Foo>':
+!!! 	Types of property 'foo' of types 'D3<T, U, V>' and 'B1<Foo>' are incompatible:
+!!! 		Type '{}' is missing property 'foo' from type 'Foo'.
+        [x: string]: Foo;
+        foo: V; // error
+        ~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints4.ts(47,5): error TS2172: All named properties must be assignable to string indexer type 'Foo':
+!!! 	Type '{}' is missing property 'foo' from type 'Foo'.
+    }
+    
+    class D4<T extends Foo, U extends Foo, V> extends B1<T> {
+        [x: string]: T;
+        foo: T; // ok
+    }
+    
+    class D5<T extends Foo, U extends Foo, V> extends B1<T> {
+          ~~
+!!! subtypesOfTypeParameterWithConstraints4.ts(55,7): error TS2141: Class 'D5<T, U, V>' cannot extend class 'B1<T>':
+!!! 	Types of property 'foo' of types 'D5<T, U, V>' and 'B1<T>' are incompatible.
+        [x: string]: T;
+        foo: U; // error
+        ~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints4.ts(57,5): error TS2171: All named properties must be assignable to string indexer type 'T'.
+    }
+    
+    class D6<T extends Foo, U extends Foo, V> extends B1<T> {
+          ~~
+!!! subtypesOfTypeParameterWithConstraints4.ts(60,7): error TS2141: Class 'D6<T, U, V>' cannot extend class 'B1<T>':
+!!! 	Types of property 'foo' of types 'D6<T, U, V>' and 'B1<T>' are incompatible.
+        [x: string]: T;
+        foo: V; // error
+        ~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints4.ts(62,5): error TS2171: All named properties must be assignable to string indexer type 'T'.
+    }
+    
+    class D7<T extends Foo, U extends Foo, V> extends B1<U> {
+          ~~
+!!! subtypesOfTypeParameterWithConstraints4.ts(65,7): error TS2141: Class 'D7<T, U, V>' cannot extend class 'B1<U>':
+!!! 	Types of property 'foo' of types 'D7<T, U, V>' and 'B1<U>' are incompatible.
+        [x: string]: U;
+        foo: T; // error
+        ~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints4.ts(67,5): error TS2171: All named properties must be assignable to string indexer type 'U'.
+    }
+    
+    class D8<T extends Foo, U extends Foo, V> extends B1<U> {
+        [x: string]: U;
+        foo: U; // ok
+    }
+    
+    class D9<T extends Foo, U extends Foo, V> extends B1<U> {
+          ~~
+!!! subtypesOfTypeParameterWithConstraints4.ts(75,7): error TS2141: Class 'D9<T, U, V>' cannot extend class 'B1<U>':
+!!! 	Types of property 'foo' of types 'D9<T, U, V>' and 'B1<U>' are incompatible.
+        [x: string]: U;
+        foo: V; // error
+        ~~~~~~~
+!!! subtypesOfTypeParameterWithConstraints4.ts(77,5): error TS2171: All named properties must be assignable to string indexer type 'U'.
+    }

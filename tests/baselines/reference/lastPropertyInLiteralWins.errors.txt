@@ -1,0 +1,29 @@
+==== tests/cases/compiler/lastPropertyInLiteralWins.ts (4 errors) ====
+    interface Thing {
+        thunk: (str: string) => void;
+    }
+    function test(thing: Thing) {
+        thing.thunk("str");
+    }
+    test({ // Should error, as last one wins, and is wrong type
+    ~~~~
+!!! lastPropertyInLiteralWins.ts(7,1): error TS2082: Supplied parameters do not match any signature of call target:
+!!! 	Types of property 'thunk' of types '{ thunk: (str: string) => void; thunk: (num: number) => void; }' and 'Thing' are incompatible:
+!!! 		Call signatures of types '(num: number) => void' and '(str: string) => void' are incompatible.
+    ~~~~
+!!! lastPropertyInLiteralWins.ts(7,1): error TS2087: Could not select overload for 'call' expression.
+        thunk: (str: string) => {},
+        thunk: (num: number) => {}
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! lastPropertyInLiteralWins.ts(9,5): error TS2000: Duplicate identifier 'thunk'. Additional locations:
+!!! 	lastPropertyInLiteralWins.ts(8,5)
+    });
+    
+    test({ // Should be OK.  Last 'thunk' is of correct type
+        thunk: (num: number) => {},
+        thunk: (str: string) => {}
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! lastPropertyInLiteralWins.ts(14,5): error TS2000: Duplicate identifier 'thunk'. Additional locations:
+!!! 	lastPropertyInLiteralWins.ts(13,5)
+    });
+    

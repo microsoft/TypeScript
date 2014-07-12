@@ -1,0 +1,11 @@
+==== tests/cases/compiler/recursiveInheritance3.ts (1 errors) ====
+    class C implements I {
+          ~
+!!! recursiveInheritance3.ts(1,7): error TS2100: Class 'C' is recursively referenced as a base type of itself.
+        public foo(x: any) { return x; }
+        private x = 1;
+    }
+    
+    interface I extends C {
+        other(x: any): any;
+    }

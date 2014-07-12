@@ -1,0 +1,9 @@
+==== tests/cases/compiler/errorOnContextuallyTypedReturnType.ts (2 errors) ====
+    var n1: () => boolean = function () { }; // expect an error here
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! errorOnContextuallyTypedReturnType.ts(1,5): error TS2012: Cannot convert '() => void' to '() => boolean':
+!!! 	Call signatures of types '() => void' and '() => boolean' are incompatible.
+    var n2: () => boolean = function ():boolean { }; // expect an error here
+                                        ~~~~~~~
+!!! errorOnContextuallyTypedReturnType.ts(2,37): error TS2131: Function declared a non-void return type, but has no return expression.
+    

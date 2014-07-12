@@ -1,0 +1,18 @@
+==== tests/cases/compiler/derivedTypeCallingBaseImplWithOptionalParams.ts (2 errors) ====
+    interface MyInterface {
+        myMethod(...myList: any[]);
+    }
+    class MyClass implements MyInterface {
+        myMethod(myList: any[]) { // valid
+        }
+    }
+    
+    var x: MyInterface = new MyClass();
+    x.myMethod(); // should be valid, but MyClass has no implementation to handle it.
+    
+    var y: MyClass = new MyClass();
+    y.myMethod(); // error
+      ~~~~~~~~
+!!! derivedTypeCallingBaseImplWithOptionalParams.ts(13,3): error TS2081: Supplied parameters do not match any signature of call target.
+      ~~~~~~~~
+!!! derivedTypeCallingBaseImplWithOptionalParams.ts(13,3): error TS2087: Could not select overload for 'call' expression.
