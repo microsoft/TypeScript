@@ -12,7 +12,7 @@ npm install -g typescript
 
 ```shell
 tsc hello.ts
-```shell  
+```
 
 ## Documentation
 
