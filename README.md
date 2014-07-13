@@ -2,16 +2,26 @@
 
 Scalable JavaScript development with types, classes and modules.
 
-## Install
+## Installation
 
-  npm install -g typescript
+```shell
+npm install -g typescript
+```
 
 ## Usage
 
-  tsc hello.ts
-  
+```shell
+tsc hello.ts
+```shell  
 
-## Build
+## Documentation
+
+*  [Quick tutorial](http://www.typescriptlang.org/Tutorial)
+*  [Programming handbook](http://www.typescriptlang.org/Handbook)
+*  [Language specification](http://go.microsoft.com/fwlink/?LinkId=267238)
+*  [Homepage](http://www.typescriptlang.org/)
+
+## Building
 
 1.  Install Node if you haven't already (http://nodejs.org/)
 2.  Install Jake, the tool we use to build our compiler (https://github.com/mde/jake). To do this, run "npm install -g jake".
