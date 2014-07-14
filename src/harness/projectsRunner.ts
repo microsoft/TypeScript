@@ -222,7 +222,7 @@ class ProjectRunner extends RunnerBase {
                     getDefaultLibFilename: () => "lib.d.ts",
                     writeFile: writeFile,
                     getCurrentDirectory: getCurrentDirectory,
-                    getCanonicalFileName: getCanonicalFileName,
+                    getCanonicalFileName: ts.getCanonicalFileName,
                     useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames
                 };
             }

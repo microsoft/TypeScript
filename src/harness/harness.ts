@@ -556,7 +556,7 @@ module Harness {
                 },
                 getDefaultLibFilename: () => 'lib.d.ts',
                 writeFile: writeFile,
-                getCanonicalFileName: getCanonicalFileName,
+                getCanonicalFileName: ts.getCanonicalFileName,
                 useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames
             }
         }

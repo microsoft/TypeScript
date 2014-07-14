@@ -111,7 +111,7 @@ module RWC {
                         },
                         getDefaultLibFilename: () => libPath,
                         writeFile: (fn, contents) => emitterIOHost.writeFile(fn, contents, false),
-                        getCanonicalFileName: getCanonicalFileName,
+                        getCanonicalFileName: ts.getCanonicalFileName,
                         useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames
                     };
 

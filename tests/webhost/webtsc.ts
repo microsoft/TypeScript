@@ -1,4 +1,4 @@
-/// <reference path='..\..\src\compiler\prototype\tc.ts'/>
+/// <reference path='..\..\src\compiler\tc.ts'/>
 
 module TypeScript.WebTsc {
 
@@ -31,10 +31,11 @@ module TypeScript.WebTsc {
                 }
                 return s;
             },
-            writeFile(fileName: string, data: string): void {
+            writeFile(fileName: string, data: string): boolean {
                 var f = fso.CreateTextFile(fileName, true);
                 f.Write(data);
                 f.Close();
+                return true;
             },
             resolvePath(path: string): string {
                 return fso.GetAbsolutePathName(path);
