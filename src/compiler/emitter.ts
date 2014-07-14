@@ -1760,6 +1760,8 @@ module ts {
                     return emitBinaryExpression(<BinaryExpression>node);
                 case SyntaxKind.ConditionalExpression:
                     return emitConditionalExpression(<ConditionalExpression>node);
+                case SyntaxKind.OmittedExpression:
+                    return;
                 case SyntaxKind.Block:
                 case SyntaxKind.TryBlock:
                 case SyntaxKind.FinallyBlock:

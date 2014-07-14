@@ -2,4 +2,4 @@
 var v = [,,,];
 
 //// [parserArrayLiteralExpression4.js]
-var v = [, , ];
+var v = [, , , ];

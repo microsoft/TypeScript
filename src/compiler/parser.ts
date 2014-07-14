@@ -716,7 +716,7 @@ module ts {
         }
 
         // Parses a list of elements
-        function parseList<T>(kind: ParsingContext, parseElement: () => T): NodeArray<T> {
+        function parseList<T extends Node>(kind: ParsingContext, parseElement: () => T): NodeArray<T> {
             var saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
             var result = <NodeArray<T>>[];
@@ -739,7 +739,7 @@ module ts {
         }
 
         // Parses a comma delimited list of elements
-        function parseDelimitedList<T>(kind: ParsingContext, parseElement: () => T, allowTrailingComma: boolean): NodeArray<T> {
+        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T, allowTrailingComma: boolean): NodeArray<T> {
             var saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
             var result = <NodeArray<T>>[];
@@ -749,9 +749,11 @@ module ts {
             // comma.
             var errorCountBeforeParsingList = file.syntacticErrors.length;
             var commaStart = -1; // Meaning the previous token was not a comma
+            var element: T = undefined;
             while (true) {
                 if (isListElement(kind)) {
-                    result.push(parseElement());
+                    element = parseElement();
+                    result.push(element);
                     commaStart = scanner.getTokenPos();
                     if (parseOptional(SyntaxKind.CommaToken)) {
                         continue;
@@ -763,8 +765,15 @@ module ts {
                     error(Diagnostics._0_expected, ",");
                 }
                 else if (isListTerminator(kind)) {
-                    if (!allowTrailingComma && commaStart >= 0 /*meaning the last token was a comma*/) {
-                        if (file.syntacticErrors.length === errorCountBeforeParsingList) {
+                    // Check if the last token was a comma.
+                    if (commaStart >= 0) {
+                        if (allowTrailingComma) {
+                            // Check if we need to preserve a trailing comma by appending an omitted expression.
+                            if (element.kind === SyntaxKind.OmittedExpression) {
+                                result.push(<T>createNode(SyntaxKind.OmittedExpression));
+                            }
+                        }
+                        else if (file.syntacticErrors.length === errorCountBeforeParsingList) {
                             // Report a grammar error so we don't affect lookahead
                             grammarErrorAtPos(commaStart, scanner.getStartPos() - commaStart, Diagnostics.Trailing_comma_not_allowed);
                         }
@@ -799,9 +808,9 @@ module ts {
             return result;
         }
 
-        function parseBracketedList<T>(kind: ParsingContext, parseElement: () => T, startToken: SyntaxKind, endToken: SyntaxKind, allowTrailingSeparator: boolean): NodeArray<T> {
+        function parseBracketedList<T extends Node>(kind: ParsingContext, parseElement: () => T, startToken: SyntaxKind, endToken: SyntaxKind): NodeArray<T> {
             if (parseExpected(startToken)) {
-                var result = parseDelimitedList(kind, parseElement, allowTrailingSeparator);
+                var result = parseDelimitedList(kind, parseElement, /* allowTrailingSeparator */ false);
                 parseExpected(endToken);
                 return result;
             }
@@ -886,7 +895,7 @@ module ts {
         function parseTypeParameters(): NodeArray<TypeParameterDeclaration> {
             if (token === SyntaxKind.LessThanToken) {
                 var pos = getNodePos();
-                var result = parseBracketedList(ParsingContext.TypeParameters, parseTypeParameter, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken, /*allowTrailingSeparator*/ false);
+                var result = parseBracketedList(ParsingContext.TypeParameters, parseTypeParameter, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
                 if (!result.length) {
                     var start = getTokenPos(pos);
                     var length = getNodePos() - start;
@@ -946,7 +955,7 @@ module ts {
         // Because we use this for index signatures as well, we sometimes use
         // parentheses, and sometimes use brackets.
         function parseParameterList(startDelimiter: SyntaxKind, endDelimiter: SyntaxKind) {
-            return parseBracketedList(ParsingContext.Parameters, parseParameter, startDelimiter, endDelimiter, /*allowTrailingSeparator*/ false);
+            return parseBracketedList(ParsingContext.Parameters, parseParameter, startDelimiter, endDelimiter);
         }
 
         function checkParameterList(parameters: NodeArray<ParameterDeclaration>): void {
@@ -1670,7 +1679,7 @@ module ts {
         function parseTypeArguments(): NodeArray<TypeNode> {
             var typeArgumentListStart = scanner.getTokenPos();
             var errorCountBeforeTypeParameterList = file.syntacticErrors.length;
-            var result = parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken, /*allowTrailingSeparator*/ false);
+            var result = parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
             if (!result.length && file.syntacticErrors.length === errorCountBeforeTypeParameterList) {
                 grammarErrorAtPos(typeArgumentListStart, scanner.getStartPos() - typeArgumentListStart, Diagnostics.Type_argument_list_cannot_be_empty);
             }
