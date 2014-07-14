@@ -4308,7 +4308,7 @@ module ts {
                 }
             }            
             if (node.kind === SyntaxKind.GetAccessor) {
-                if (!isDeclarationContext(node) && node.body && !(checkGetterContainsSingleThrowStatement(node) || checkGetterReturnsValue(node))) {
+                if (!isInAmbientContext(node) && node.body && !(checkGetterContainsSingleThrowStatement(node) || checkGetterReturnsValue(node))) {
                     error(node.name, Diagnostics.Getters_must_return_a_value);
                 }
             }
@@ -4369,18 +4369,10 @@ module ts {
         }
 
         function isPrivateWithinAmbient(node: Node): boolean {
-            return (node.flags & NodeFlags.Private) && isAmbientContext(node);
+            return (node.flags & NodeFlags.Private) && isInAmbientContext(node);
         }
 
-        function isAmbientContext(node: Node): boolean {
-            while (node) {
-                if (node.flags & NodeFlags.Ambient) return true;
-                node = node.parent;
-            }
-            return false;
-        }
-
-        function isDeclarationContext(node: Node): boolean {
+        function isInAmbientContext(node: Node): boolean {
             while (node) {
                 if (node.flags & (NodeFlags.Ambient | NodeFlags.DeclarationFile)) return true;
                 node = node.parent;
@@ -4428,7 +4420,7 @@ module ts {
                 // is nested in an ambient context. However, do not treat members of interfaces differently
                 // based on whether the interface itself is in an ambient context. Interfaces should never
                 // be considered ambient for purposes of comparing overload attributes.
-                if (n.parent.kind !== SyntaxKind.InterfaceDeclaration && isDeclarationContext(n)) {
+                if (n.parent.kind !== SyntaxKind.InterfaceDeclaration && isInAmbientContext(n)) {
                     if (!(flags & NodeFlags.Ambient)) {
                         // It is nested in an ambient context, which means it is automatically exported
                         flags |= NodeFlags.Export;
@@ -4486,7 +4478,7 @@ module ts {
                     someNodeFlags |= currentNodeFlags;
                     allNodeFlags &= currentNodeFlags;
 
-                    var inAmbientContext = isDeclarationContext(node);
+                    var inAmbientContext = isInAmbientContext(node);
                     var inAmbientContextOrInterface = node.parent.kind === SyntaxKind.InterfaceDeclaration || node.parent.kind === SyntaxKind.TypeLiteral || inAmbientContext;
                     if (!inAmbientContextOrInterface) {
                         lastSeenNonAmbientDeclaration = node;
@@ -4590,7 +4582,7 @@ module ts {
 
         function checkCollisionWithArgumentsInGeneratedCode(node: SignatureDeclaration) {
             // no rest parameters \ declaration context \ overload - no codegen impact
-            if (!hasRestParameters(node) || isDeclarationContext(node) || !(<FunctionDeclaration>node).body) {
+            if (!hasRestParameters(node) || isInAmbientContext(node) || !(<FunctionDeclaration>node).body) {
                 return;
             }
 
@@ -4611,7 +4603,7 @@ module ts {
                 // - function has implementation (not a signature)
                 // - function has rest parameters
                 // - context is not ambient (otherwise no codegen impact)
-                if ((<FunctionDeclaration>node.parent).body && hasRestParameters(<FunctionDeclaration>node.parent) && !isDeclarationContext(node)) {
+                if ((<FunctionDeclaration>node.parent).body && hasRestParameters(<FunctionDeclaration>node.parent) && !isInAmbientContext(node)) {
                     error(node, Diagnostics.Duplicate_identifier_i_Compiler_uses_i_to_initialize_rest_parameter);                    
                 }
                 return;
@@ -4700,7 +4692,7 @@ module ts {
             // bubble up and find containing type
             var enclosingClass = <ClassDeclaration>getAncestor(node, SyntaxKind.ClassDeclaration);
             // if containing type was not found or it is ambient - exit (no codegen)
-            if (!enclosingClass || isDeclarationContext(enclosingClass)) {
+            if (!enclosingClass || isInAmbientContext(enclosingClass)) {
                 return;
             }
 
@@ -5012,7 +5004,7 @@ module ts {
             var type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
             var staticType = <ObjectType>getTypeOfSymbol(symbol);
             if (node.baseType) {
-                emitExtends = emitExtends || !isDeclarationContext(node);
+                emitExtends = emitExtends || !isInAmbientContext(node);
                 checkTypeReference(node.baseType);
             }
             if (type.baseTypes.length) {
@@ -5211,7 +5203,7 @@ module ts {
             checkNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
             var enumType = getDeclaredTypeOfSymbol(getSymbolOfNode(node));
             var autoValue = 0;
-            var ambient = isDeclarationContext(node);
+            var ambient = isInAmbientContext(node);
             forEach(node.members, member => {
                 var initializer = member.initializer;
                 if (initializer) {
@@ -5238,7 +5230,7 @@ module ts {
         function checkModuleDeclaration(node: ModuleDeclaration) {
             checkDeclarationModifiers(node);
             if (node.name.kind === SyntaxKind.StringLiteral) {
-                if (!isDeclarationContext(node)) {
+                if (!isInAmbientContext(node)) {
                     error(node, Diagnostics.Ambient_external_modules_require_a_declare_modifier);
                 }
                 if (node.parent.kind !== SyntaxKind.SourceFile || node.parent.flags & NodeFlags.ExternalModule) {
