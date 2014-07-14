@@ -130,6 +130,10 @@ var sys: System = (function () {
         var _path = require("path");
         var _os = require('os');
 
+        var platform: string = _os.platform();
+        // win32\win64 are case insensitive platforms, MacOS (darwin) by default is also case insensitive
+        var useCaseSensitiveFileNames = platform !== "win32" && platform !== "win64" && platform !== "darwin";
+
         function readFile(fileName: string): string {
             if (_fs.existsSync(fileName)) {
                 try {
@@ -171,7 +175,7 @@ var sys: System = (function () {
         return {
             args: process.argv.slice(2),
             newLine: _os.EOL,
-            useCaseSensitiveFileNames: true,
+            useCaseSensitiveFileNames: useCaseSensitiveFileNames,
             write(s: string): void {
                 process.stdout.write(s);
             },
