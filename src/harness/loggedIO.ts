@@ -190,8 +190,9 @@ module Playback {
         return areSame(left, right) || areSame(wrapper.resolvePath(left), right) || areSame(left, wrapper.resolvePath(right)) || areSame(wrapper.resolvePath(left), wrapper.resolvePath(right));
     }
 
-    function noOpReplay(name: string) {
+    function noOpReplay(name: string): boolean {
         console.log("Swallowed write operation during replay: " + name);
+        return true;
     }
 
     export function wrapSystem(underlying: System): PlaybackSystem {

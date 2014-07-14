@@ -117,47 +117,45 @@ module ts {
     }
 
     function getSourceFile(filename: string, languageVersion: ScriptTarget): SourceFile {
-        try {
-            var text = sys.readFile(filename);
-        }
-        catch (err) {
-            return undefined;
-        }
-
-        return createSourceFile(filename, text, languageVersion);
+        var text = sys.readFile(filename);
+        return text ? createSourceFile(filename, text, languageVersion) : undefined;
     }
 
     function writeFile(fileName: string, data: string) {
-        function ensureDirectoryStructure(directoryName: string) {
-            if (directoryName) {
-                if (!sys.directoryExists(directoryName)) {
-                    var parentDirectory = getDirectoryPath(directoryName);
-                    // If we arent at the root path ensure that the folder exists
-                    if (parentDirectory !== directoryName) {
-                        if (ensureDirectoryStructure(parentDirectory)) {
-                            // If parent directory was present, create the current directory
-                            try {
-                                sys.createDirectory(directoryName);
-                            }
-                            catch (e) {
-                                reportErrors([createCompilerDiagnostic(Diagnostics.Could_not_create_directory_0, [directoryName])]);
-                                return false;
-                            }
-                        }
-                    }
-                }
-            }
-            return true;
-        }
+        // TODO: Review this code for performance
 
-        // If parent directory structure is present create the file
-        if (ensureDirectoryStructure(getDirectoryPath(normalizePath(fileName)))) {
-            try {
-                sys.writeFile(fileName, data);
-            }
-            catch (e) {
-                reportErrors([createCompilerDiagnostic(Diagnostics.Could_not_write_file_0, [fileName])]);
-            }
+        //function ensureDirectoryStructure(directoryName: string) {
+        //    if (directoryName) {
+        //        if (!sys.directoryExists(directoryName)) {
+        //            var parentDirectory = getDirectoryPath(directoryName);
+        //            // If we arent at the root path ensure that the folder exists
+        //            if (parentDirectory !== directoryName) {
+        //                if (ensureDirectoryStructure(parentDirectory)) {
+        //                    // If parent directory was present, create the current directory
+        //                    try {
+        //                        sys.createDirectory(directoryName);
+        //                    }
+        //                    catch (e) {
+        //                        reportErrors([createCompilerDiagnostic(Diagnostics.Could_not_create_directory_0, [directoryName])]);
+        //                        return false;
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //    return true;
+        //}
+        //// If parent directory structure is present create the file
+        //if (ensureDirectoryStructure(getDirectoryPath(normalizePath(fileName)))) {
+        //    try {
+        //        sys.writeFile(fileName, data);
+        //    }
+        //    catch (e) {
+        //        reportErrors([createCompilerDiagnostic(Diagnostics.Could_not_write_file_0, [fileName])]);
+        //    }
+        //}
+        if (!sys.writeFile(fileName, data)) {
+            reportErrors([createCompilerDiagnostic(Diagnostics.Could_not_write_file_0, [fileName])]);
         }
     }
 
@@ -224,10 +222,10 @@ module ts {
         if (cmds.options.diagnostics) {
             reportDiagnosticCount("Files", program.getSourceFiles().length);
             reportDiagnosticCount("Lines", countLines(program));
-            reportDiagnosticCount("Nodes", checker.getNodeCount());
-            reportDiagnosticCount("Identifiers", checker.getIdentifierCount());
-            reportDiagnosticCount("Symbols", checker.getSymbolCount());
-            reportDiagnosticCount("Types", checker.getTypeCount());
+            reportDiagnosticCount("Nodes", checker ? checker.getNodeCount() : 0);
+            reportDiagnosticCount("Identifiers", checker ? checker.getIdentifierCount() : 0);
+            reportDiagnosticCount("Symbols", checker ? checker.getSymbolCount() : 0);
+            reportDiagnosticCount("Types", checker ? checker.getTypeCount() : 0);
             reportDiagnosticTime("Parse time", bindStart - parseStart);
             reportDiagnosticTime("Bind time", checkStart - bindStart);
             reportDiagnosticTime("Check time", emitStart - checkStart);

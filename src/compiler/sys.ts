@@ -1,10 +1,11 @@
 interface System {
     args: string[];
     newLine: string;
+    useCaseSensitiveFileNames: boolean;
     write(s: string): void;
     writeErr(s: string): void;
     readFile(fileName: string): string;
-    writeFile(fileName: string, data: string): void;
+    writeFile(fileName: string, data: string): boolean;
     resolvePath(path: string): string;
     fileExists(path: string): boolean;
     directoryExists(path: string): boolean;
@@ -13,12 +14,6 @@ interface System {
     getCurrentDirectory(): string;
     getMemoryUsage(): number;
     exit(exitCode?: number): void;
-    useCaseSensitiveFileNames: boolean;
-}
-
-enum ErrorCodes {
-    UnsupportedFileEncoding = 1,
-    CannotReadFile = 2,
 }
 
 declare var require: any;
@@ -27,96 +22,81 @@ declare var process: any;
 declare var global: any;
 
 var sys: System = (function () {
+
     function getWScriptSystem(): System {
+
         var fso = new ActiveXObject("Scripting.FileSystemObject");
+
+        var fileStream = new ActiveXObject("ADODB.Stream");
+        var binaryStream = new ActiveXObject("ADODB.Stream");
+
         var args: string[] = [];
         for (var i = 0; i < WScript.Arguments.length; i++) {
             args[i] = WScript.Arguments.Item(i);
         }
 
-        var fileStreamObjectPool: any[] = [];
-
-        function getFileStreamObject(): any {
-            if (fileStreamObjectPool.length > 0) {
-                return fileStreamObjectPool.pop();
+        function readFile(fileName: string): string {
+            if (fso.FileExists(fileName)) {
+                fileStream.Open();
+                try {
+                    // Load file in binary mode to ensure no byte order mark is added
+                    fileStream.Type = 1;
+                    fileStream.LoadFromFile(fileName);
+                    // Read the first two bytes into a string with no interpretation
+                    fileStream.Type = 2;
+                    fileStream.Charset = "x-ansi";
+                    var bom = fileStream.ReadText(2) || "";
+                    // Position must be at 0 before encoding can be changed
+                    fileStream.Position = 0;
+                    // [0xFF,0xFE] and [0xFE,0xFF] mean utf-16 (little or big endian), otherwise default to utf-8
+                    fileStream.Charset = bom.length >= 2 && (bom.charCodeAt(0) === 0xFF && bom.charCodeAt(1) === 0xFE || bom.charCodeAt(0) === 0xFE && bom.charCodeAt(1) === 0xFF) ? "unicode" : "utf-8";
+                    // ReadText method always strips byte order mark from resulting string
+                    var result = fileStream.ReadText();
+                    fileStream.Close();
+                    return result;
+                }
+                catch (e) {
+                    fileStream.Close();
+                }
             }
-            else {
-                return new ActiveXObject("ADODB.Stream");
-            }
+            return undefined;
         }
 
-        function releaseFileStreamObject(obj: any) {
-            fileStreamObjectPool.push(obj);
+        function writeFile(fileName: string, data: string): boolean {
+            fileStream.Open();
+            binaryStream.Open();
+            try {
+                fileStream.Type = 2;
+                fileStream.Charset = "utf-8";
+                fileStream.WriteText(data);
+                // Skip byte order mark and copy remaining text to binary stream
+                binaryStream.Type = 1;
+                fileStream.Position = 3;
+                fileStream.CopyTo(binaryStream);
+                binaryStream.SaveToFile(fileName, 2 /*overwrite*/);
+                binaryStream.Close();
+                fileStream.Close();
+                return true;
+            }
+            catch (e) {
+                binaryStream.Close();
+                fileStream.Close();
+            }
+            return false;
         }
 
         return {
             args: args,
             newLine: "\r\n",
+            useCaseSensitiveFileNames: false,
             write(s: string): void {
                 WScript.StdOut.Write(s);
             },
             writeErr(s: string): void {
                 WScript.StdErr.Write(s);
             },
-            readFile(fileName: string): string {
-                var contents: string;
-                try {
-                    // Initially just read the first two bytes of the file to see if there's a bom.
-                    var fileStream = getFileStreamObject();
-                    fileStream.Open();
-                    fileStream.Type = 2; // Text data
-
-                    // Start reading individual chars without any interpretation.  That way we can check for a byte-order-mark.
-                    fileStream.Charset = "x-ansi";
-
-                    fileStream.LoadFromFile(fileName);
-                    var byteOrderMarkSeq: string = fileStream.ReadText(2) || ""; // Read the BOM char-seq or fall back to an empty string
-                    
-                    // Position has to be at 0 before changing the encoding
-                    fileStream.Position = 0;
-                    if (byteOrderMarkSeq.charCodeAt(0) === 0xFE && byteOrderMarkSeq.charCodeAt(1) === 0xFF) {
-                        // utf16-be
-                        fileStream.Charset = "unicode";
-                    }
-                    else if (byteOrderMarkSeq.charCodeAt(0) === 0xFF && byteOrderMarkSeq.charCodeAt(1) === 0xFE) {
-                        // utf16-le
-                        fileStream.Charset = "unicode";
-                    }
-                    else if (byteOrderMarkSeq.charCodeAt(0) === 0xEF && byteOrderMarkSeq.charCodeAt(1) === 0xBB) {
-                        // utf-8
-                        fileStream.Charset = "utf-8";
-                    }
-                    else {
-                        // Always read a file as utf8 if it has no bom.
-                        fileStream.Charset = "utf-8";
-                    }
-                    contents = fileStream.ReadText(-1 /* Read from beginning to end-of-stream */);
-                    fileStream.Close();
-                    releaseFileStreamObject(fileStream);
-                }
-                catch (err) {
-                    // -2147024809 is the javascript value for 0x80070057 which is the HRESULT for 
-                    // "the parameter is incorrect".
-                    if (err.number === -2147024809) {
-                        err.code = ErrorCodes.UnsupportedFileEncoding;
-                    }
-                    else {
-                        err.code = ErrorCodes.CannotReadFile;
-                    }
-                    throw err;
-                }
-
-                return contents;
-            },
-            writeFile(fileName: string, data: string): void {
-                var textStream = getFileStreamObject();
-                textStream.Charset = "utf-8";
-                textStream.Open();
-                textStream.WriteText(data, 0 /*do not add newline*/);
-                textStream.SaveToFile(fileName, 2 /*overwrite*/);
-                textStream.Close();
-                releaseFileStreamObject(textStream);
-            },
+            readFile: readFile,
+            writeFile: writeFile,
             resolvePath(path: string): string {
                 return fso.GetAbsolutePathName(path);
             },
@@ -142,75 +122,64 @@ var sys: System = (function () {
             },
             exit(exitCode?: number): void {
                 WScript.Quit(exitCode);
-            },
-            useCaseSensitiveFileNames: false,
+            }
         };
     }
     function getNodeSystem(): System {
         var _fs = require("fs");
         var _path = require("path");
-        var _os = require("os");
-        var platform: string = _os.platform();
-        // win32\win64 are case insensitive platforms, MacOS (darwin) by default is also case insensitive
-        var useCaseSensitiveFileNames = platform !== "win32" && platform !== "win64" && platform !== "darwin";
+        var _os = require('os');
+
+        function readFile(fileName: string): string {
+            if (_fs.existsSync(fileName)) {
+                try {
+                    var buffer = _fs.readFileSync(fileName);
+                    var len = buffer.length;
+                    if (len >= 2 && buffer[0] === 0xFE && buffer[1] === 0xFF) {
+                        len &= ~1;
+                        for (var i = 0; i < len; i += 2) {
+                            var temp = buffer[i];
+                            buffer[i] = buffer[i + 1];
+                            buffer[i + 1] = temp;
+                        }
+                        return buffer.toString("utf16le", 2);
+                    }
+                    if (len >= 2 && buffer[0] === 0xFF && buffer[1] === 0xFE) {
+                        return buffer.toString("utf16le", 2);
+                    }
+                    if (len >= 3 && buffer[0] === 0xEF && buffer[1] === 0xBB && buffer[2] === 0xBF) {
+                        return buffer.toString("utf8", 3);
+                    }
+                    return buffer.toString("utf8");
+                }
+                catch (e) {
+                }
+            }
+            return undefined;
+        }
+
+        function writeFile(fileName: string, data: string): boolean {
+            try {
+                _fs.writeFileSync(fileName, data, "utf8");
+                return true;
+            }
+            catch (e) {
+            }
+            return false;
+        }
 
         return {
             args: process.argv.slice(2),
             newLine: _os.EOL,
+            useCaseSensitiveFileNames: true,
             write(s: string): void {
                 process.stdout.write(s);
             },
             writeErr(s: string): void {
                 process.stderr.write(s);
             },
-            readFile(fileName: string): string {
-                try {
-                    var buffer = _fs.readFileSync(fileName);
-
-                    // Make sure buffer got initialized and that we don't try to read into a completely empty file.
-                    if (!buffer || buffer.length === 0) {
-                        return "";
-                    }
-
-                    switch (buffer[0]) {
-                        case 0xFE:
-                            if (buffer[1] === 0xFF) {
-                                // utf16-be. Reading the buffer as big endian is not supported, so convert it to 
-                                // Little Endian first
-                                var i = 0;
-                                while ((i + 1) < buffer.length) {
-                                    var temp = buffer[i];
-                                    buffer[i] = buffer[i + 1];
-                                    buffer[i + 1] = temp;
-                                    i += 2;
-                                }
-                                return buffer.toString("utf16le", 2);
-                            }
-                            break;
-                        case 0xFF:
-                            if (buffer[1] === 0xFE) {
-                                // utf16-le
-                                return buffer.toString("utf16le", 2);
-                            }
-                            break;
-                        case 0xEF:
-                            if (buffer[1] === 0xBB) {
-                                // utf-8
-                                return buffer.toString("utf8", 3);
-                            }
-                    }
-                
-                    return buffer.toString("utf8", 0);
-                }
-                catch (err) {
-                    err.code = ErrorCodes.CannotReadFile;
-                    throw err;
-                }
-            },
-            writeFile(fileName: string, data: string): void {
-                // TODO (drosen): bring back the old environment code if necessary
-                _fs.writeFileSync(fileName, data, "utf8");
-            },
+            readFile: readFile,
+            writeFile: writeFile,
             resolvePath: function (path: string): string {
                 return _path.resolve(path);
             },
@@ -237,8 +206,7 @@ var sys: System = (function () {
             },
             exit(exitCode?: number): void {
                 process.exit(exitCode);
-            },
-            useCaseSensitiveFileNames: useCaseSensitiveFileNames,
+            }
         };
     }
     if (typeof WScript !== "undefined" && typeof ActiveXObject === "function") {
