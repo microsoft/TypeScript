@@ -101,13 +101,13 @@ var A = (function () {
         this.prop4 = {
             a: function () {
                 return this;
-            }
+            },
         };
         this.prop5 = function () {
             return {
                 a: function () {
                     return this;
-                }
+                },
             };
         };
     }

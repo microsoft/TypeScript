@@ -327,6 +327,12 @@ module ts {
         Parameters,              // Parameters in parameter list
     }
 
+    enum TrailingCommaBehavior {
+        Disallow,
+        Allow,
+        Preserve
+    }
+
     export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget): SourceFile {
         var file: SourceFile;
         var scanner: Scanner;
@@ -739,21 +745,18 @@ module ts {
         }
 
         // Parses a comma delimited list of elements
-        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T, allowTrailingComma: boolean): NodeArray<T> {
+        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T, trailingCommaBehavior: TrailingCommaBehavior): NodeArray<T> {
             var saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
             var result = <NodeArray<T>>[];
             result.pos = getNodePos();
             // Keep track of how many errors we had before the list started. If we don't see any new
-            // errors resulting from the list being malformed, we are free to complain about a trailing
-            // comma.
+            // errors resulting from the list being malformed, we are free to complain about a trailing comma.
             var errorCountBeforeParsingList = file.syntacticErrors.length;
             var commaStart = -1; // Meaning the previous token was not a comma
-            var element: T = undefined;
             while (true) {
                 if (isListElement(kind)) {
-                    element = parseElement();
-                    result.push(element);
+                    result.push(parseElement());
                     commaStart = scanner.getTokenPos();
                     if (parseOptional(SyntaxKind.CommaToken)) {
                         continue;
@@ -767,17 +770,17 @@ module ts {
                 else if (isListTerminator(kind)) {
                     // Check if the last token was a comma.
                     if (commaStart >= 0) {
-                        if (allowTrailingComma) {
-                            // Check if we need to preserve a trailing comma by appending an omitted expression.
-                            if (element.kind === SyntaxKind.OmittedExpression) {
-                                result.push(<T>createNode(SyntaxKind.OmittedExpression));
+                        if (trailingCommaBehavior === TrailingCommaBehavior.Disallow) {
+                            if (file.syntacticErrors.length === errorCountBeforeParsingList) {
+                                // Report a grammar error so we don't affect lookahead
+                                grammarErrorAtPos(commaStart, scanner.getStartPos() - commaStart, Diagnostics.Trailing_comma_not_allowed);
                             }
                         }
-                        else if (file.syntacticErrors.length === errorCountBeforeParsingList) {
-                            // Report a grammar error so we don't affect lookahead
-                            grammarErrorAtPos(commaStart, scanner.getStartPos() - commaStart, Diagnostics.Trailing_comma_not_allowed);
+                        else if (trailingCommaBehavior === TrailingCommaBehavior.Preserve) {
+                            result.push(<T>createNode(SyntaxKind.OmittedExpression));
                         }
                     }
+
                     break;
                 }
                 else {
@@ -810,7 +813,7 @@ module ts {
 
         function parseBracketedList<T extends Node>(kind: ParsingContext, parseElement: () => T, startToken: SyntaxKind, endToken: SyntaxKind): NodeArray<T> {
             if (parseExpected(startToken)) {
-                var result = parseDelimitedList(kind, parseElement, /* allowTrailingSeparator */ false);
+                var result = parseDelimitedList(kind, parseElement, TrailingCommaBehavior.Disallow);
                 parseExpected(endToken);
                 return result;
             }
@@ -1661,7 +1664,7 @@ module ts {
                     else {
                         parseExpected(SyntaxKind.OpenParenToken);
                     }
-                    callExpr.arguments = parseDelimitedList(ParsingContext.ArgumentExpressions, parseAssignmentExpression, /*allowTrailingSeparator*/ false);
+                    callExpr.arguments = parseDelimitedList(ParsingContext.ArgumentExpressions, parseAssignmentExpression, TrailingCommaBehavior.Disallow);
                     parseExpected(SyntaxKind.CloseParenToken);
                     expr = finishNode(callExpr);
                     continue;
@@ -1738,7 +1741,7 @@ module ts {
             var node = <ArrayLiteral>createNode(SyntaxKind.ArrayLiteral);
             parseExpected(SyntaxKind.OpenBracketToken);
             if (scanner.hasPrecedingLineBreak()) node.flags |= NodeFlags.MultiLine;
-            node.elements = parseDelimitedList(ParsingContext.ArrayLiteralMembers, parseArrayLiteralElement, /*allowTrailingSeparator*/ true);
+            node.elements = parseDelimitedList(ParsingContext.ArrayLiteralMembers, parseArrayLiteralElement, TrailingCommaBehavior.Preserve);
             parseExpected(SyntaxKind.CloseBracketToken);
             return finishNode(node);
         }
@@ -1772,7 +1775,7 @@ module ts {
             var node = <ObjectLiteral>createNode(SyntaxKind.ObjectLiteral);
             parseExpected(SyntaxKind.OpenBraceToken);
             if (scanner.hasPrecedingLineBreak()) node.flags |= NodeFlags.MultiLine;
-            node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralMember, /*allowTrailingSeparator*/ true);
+            node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralMember, TrailingCommaBehavior.Preserve);
             parseExpected(SyntaxKind.CloseBraceToken);
             return finishNode(node);
         }
@@ -1801,7 +1804,7 @@ module ts {
             parseExpected(SyntaxKind.NewKeyword);
             node.func = parseCallAndAccess(parsePrimaryExpression(), /* inNewExpression */ true);
             if (parseOptional(SyntaxKind.OpenParenToken) || token === SyntaxKind.LessThanToken && (node.typeArguments = tryParse(parseTypeArgumentsAndOpenParen))) {
-                node.arguments = parseDelimitedList(ParsingContext.ArgumentExpressions, parseAssignmentExpression, /*allowTrailingSeparator*/ false);
+                node.arguments = parseDelimitedList(ParsingContext.ArgumentExpressions, parseAssignmentExpression, TrailingCommaBehavior.Disallow);
                 parseExpected(SyntaxKind.CloseParenToken);
             }
             return finishNode(node);
@@ -2183,7 +2186,7 @@ module ts {
         }
 
         function parseVariableDeclarationList(flags: NodeFlags, noIn?: boolean): NodeArray<VariableDeclaration> {
-            return parseDelimitedList(ParsingContext.VariableDeclarations, () => parseVariableDeclaration(flags, noIn), /*allowTrailingSeparator*/ false);
+            return parseDelimitedList(ParsingContext.VariableDeclarations, () => parseVariableDeclaration(flags, noIn), TrailingCommaBehavior.Disallow);
         }
 
         function parseVariableStatement(pos?: number, flags?: NodeFlags): VariableStatement {
@@ -2543,7 +2546,7 @@ module ts {
             var implementsKeywordLength: number;
             if (parseOptional(SyntaxKind.ImplementsKeyword)) {
                 implementsKeywordLength = scanner.getStartPos() - implementsKeywordStart;
-                node.implementedTypes = parseDelimitedList(ParsingContext.BaseTypeReferences, parseTypeReference, /*allowTrailingSeparator*/ false);
+                node.implementedTypes = parseDelimitedList(ParsingContext.BaseTypeReferences, parseTypeReference, TrailingCommaBehavior.Disallow);
             }
             var errorCountBeforeClassBody = file.syntacticErrors.length;
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
@@ -2571,7 +2574,7 @@ module ts {
             var extendsKeywordLength: number;
             if (parseOptional(SyntaxKind.ExtendsKeyword)) {
                 extendsKeywordLength = scanner.getStartPos() - extendsKeywordStart;
-                node.baseTypes = parseDelimitedList(ParsingContext.BaseTypeReferences, parseTypeReference, /*allowTrailingSeparator*/ false);
+                node.baseTypes = parseDelimitedList(ParsingContext.BaseTypeReferences, parseTypeReference, TrailingCommaBehavior.Disallow);
             }
             var errorCountBeforeInterfaceBody = file.syntacticErrors.length;
             node.members = parseTypeLiteral().members;
@@ -2635,7 +2638,7 @@ module ts {
             parseExpected(SyntaxKind.EnumKeyword);
             node.name = parseIdentifier();
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
-                node.members = parseDelimitedList(ParsingContext.EnumMembers, parseAndCheckEnumMember, /*allowTrailingSeparator*/ true);
+                node.members = parseDelimitedList(ParsingContext.EnumMembers, parseAndCheckEnumMember, TrailingCommaBehavior.Allow);
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {

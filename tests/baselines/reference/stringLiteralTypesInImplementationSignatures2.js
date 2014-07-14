@@ -44,5 +44,5 @@ var b = {
     foo: function foo(x) {
     },
     foo: function foo(x) {
-    }
+    },
 };

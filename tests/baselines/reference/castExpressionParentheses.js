@@ -41,7 +41,7 @@ new (<any>A());
 
 //// [castExpressionParentheses.js]
 { a: 0 };
-[1, 3];
+[1, 3, ];
 "string";
 23.0;
 /regexp/g;
