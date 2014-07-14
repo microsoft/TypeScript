@@ -1134,10 +1134,6 @@
         "category": "Error",
         "code": -9999999
     },
-    "Ambient external modules require a 'declare' modifier.": {
-        "category": "Error",
-        "code": -9999999
-    },
     "Ambient external modules cannot be nested in other modules.": {
         "category": "Error",
         "code": -9999999

@@ -1,6 +1,5 @@
 ==== tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration1.ts (1 errors) ====
     module "Foo" {
-    ~~~~~~~~~~~~~~
+           ~~~~~
+!!! Only ambient modules can use quoted names.
     }
-    ~
-!!! Ambient external modules require a 'declare' modifier.

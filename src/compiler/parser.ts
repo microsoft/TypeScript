@@ -2673,6 +2673,14 @@ module ts {
             var node = <ModuleDeclaration>createNode(SyntaxKind.ModuleDeclaration, pos);
             node.flags = flags;
             node.name = parseStringLiteral();
+            if (!inAmbientContext) {
+                var errorCount = file.syntacticErrors.length;
+                // Only report this error if we have not already errored about a missing declare modifier,
+                // which would have been at or after pos
+                if (!errorCount || file.syntacticErrors[errorCount - 1].start < getTokenPos(pos)) {
+                    grammarErrorOnNode(node.name, Diagnostics.Only_ambient_modules_can_use_quoted_names);
+                }
+            }
 
             // For error recovery, just in case the user forgot the declare modifier on this ambient
             // external module, treat it as ambient anyway.

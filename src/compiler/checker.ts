@@ -5230,9 +5230,6 @@ module ts {
         function checkModuleDeclaration(node: ModuleDeclaration) {
             checkDeclarationModifiers(node);
             if (node.name.kind === SyntaxKind.StringLiteral) {
-                if (!isInAmbientContext(node)) {
-                    error(node, Diagnostics.Ambient_external_modules_require_a_declare_modifier);
-                }
                 if (node.parent.kind !== SyntaxKind.SourceFile || node.parent.flags & NodeFlags.ExternalModule) {
                     error(node, Diagnostics.Ambient_external_modules_cannot_be_nested_in_other_modules);
                 }

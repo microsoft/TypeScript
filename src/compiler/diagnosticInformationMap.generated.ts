@@ -277,7 +277,6 @@ module ts {
         Class_0_incorrectly_implements_interface_1: { code: -9999999, category: DiagnosticCategory.Error, key: "Class '{0}' incorrectly implements interface '{1}'." },
         Interface_0_incorrectly_extends_interface_1_Colon: { code: -9999999, category: DiagnosticCategory.Error, key: "Interface '{0}' incorrectly extends interface '{1}':" },
         Interface_0_incorrectly_extends_interface_1: { code: -9999999, category: DiagnosticCategory.Error, key: "Interface '{0}' incorrectly extends interface '{1}'." },
-        Ambient_external_modules_require_a_declare_modifier: { code: -9999999, category: DiagnosticCategory.Error, key: "Ambient external modules require a 'declare' modifier." },
         Ambient_external_modules_cannot_be_nested_in_other_modules: { code: -9999999, category: DiagnosticCategory.Error, key: "Ambient external modules cannot be nested in other modules." },
         Import_declarations_in_an_internal_module_cannot_reference_an_external_module: { code: -9999999, category: DiagnosticCategory.Error, key: "Import declarations in an internal module cannot reference an external module." },
         Cannot_compile_external_modules_unless_the_module_flag_is_provided: { code: -9999999, category: DiagnosticCategory.Error, key: "Cannot compile external modules unless the '--module' flag is provided." },
