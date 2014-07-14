@@ -223,9 +223,3 @@ var sys: System = (function () {
         return undefined; // Unsupported host
     }
 })();
-
-function getCanonicalFileName(fileName: string): string {
-    // if underlying system can distinguish between two files whose names differs only in cases then file name already in canonical form.
-    // otherwise use toLowerCase as a canonical form.
-    return sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
-}

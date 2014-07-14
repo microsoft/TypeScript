@@ -464,6 +464,12 @@ module ts {
         return pathLen > extLen && path.substr(pathLen - extLen, extLen) === extension;
     }
 
+    export function getCanonicalFileName(fileName: string): string {
+        // if underlying system can distinguish between two files whose names differs only in cases then file name already in canonical form.
+        // otherwise use toLowerCase as a canonical form.
+        return sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
+    }
+
     export interface ObjectAllocator {
         getNodeConstructor(kind: SyntaxKind): new () => Node;
         getSymbolConstructor(): new (flags: SymbolFlags, name: string) => Symbol;
