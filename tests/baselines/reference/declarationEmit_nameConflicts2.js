@@ -73,7 +73,7 @@ declare module X.Y.base {
 }
 declare module X.Y.base.Z {
     var f: () => void;
-    var C: typeof C;
-    var M: typeof M;
-    var E: typeof E;
+    var C: typeof base.C;
+    var M: typeof base.M;
+    var E: typeof base.E;
 }

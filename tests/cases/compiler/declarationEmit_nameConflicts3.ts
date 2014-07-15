@@ -1,4 +1,5 @@
 // @declaration: true
+// @module: commonjs
 module M {
     export interface D { }
     export module D {

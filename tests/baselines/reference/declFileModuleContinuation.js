@@ -33,6 +33,6 @@ declare module A.C {
     }
 }
 declare module A.B.C {
-    class W implments C.Z {
+    class W implments A.C.Z {
     }
 }

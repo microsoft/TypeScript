@@ -586,56 +586,102 @@ module ts {
             return (propertySymbol.valueDeclaration.flags & NodeFlags.QuestionMark) && propertySymbol.valueDeclaration.kind !== SyntaxKind.Parameter;
         }
 
-        function getAccessibleSymbol(symbol: Symbol, enclosingDeclaration: Node) {
+        function forEachSymbolTable<T>(enclosingDeclaration: Node, callback: (symbolTable: SymbolTable) => T): T {
+            var result: T;
+            for (var location = enclosingDeclaration; location; location = location.parent) {
+                // Locals of a source file are not in scope (because they get merged into the global symbol table)
+                if (location.locals && (location.kind !== SyntaxKind.SourceFile || location.flags & NodeFlags.ExternalModule)) {
+                    if (result = callback(location.locals)) {
+                        return result;
+                    }
+                }
+                switch (location.kind) {
+                    case SyntaxKind.SourceFile:
+                        if (!(location.flags & NodeFlags.ExternalModule)) {
+                            break;
+                        }
+                    case SyntaxKind.ModuleDeclaration:
+                        if (result = callback(getSymbolOfNode(location).exports)) {
+                            return result;
+                        }
+                        break;
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                        if (result = callback(getSymbolOfNode(location).members)) {
+                            return result;
+                        }
+                        break;
+                }
+            }
+
+            return callback(globals);
+        }
+
+        function getAccessibleSymbol(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags) {
             function getAccessibleSymbolFromSymbolTable(symbols: SymbolTable) {
+                function isAccessible(symbolFromSymbolTable: Symbol, resolvedAliasSymbol?: Symbol) {
+                    if (symbol === (resolvedAliasSymbol || symbolFromSymbolTable)) {
+                        // If the symbol is equivalent and doesnt need futher qualification, this symbol is accessible
+                        if (!needsQualification(symbolFromSymbolTable, enclosingDeclaration, meaning)) {
+                            return true;
+                        }
+
+                        // isAccessible is parent is accessible
+                        var accessibleParent = getAccessibleSymbol(symbolFromSymbolTable.parent, enclosingDeclaration, SymbolFlags.Namespace);
+                        return !!accessibleParent;
+                    }
+                }
+
                 // If symbol is directly available by its name in the symbol table
-                if (symbol === symbols[symbol.name]) {
+                if (isAccessible(symbols[symbol.name])) {
                     return symbol;
                 }
 
                 // Check if symbol is any of the alias
                 return forEachValue(symbols, symbolFromSymbolTable => {
                     if (symbolFromSymbolTable.flags & SymbolFlags.Import) {
-                        var resolvedImportSymbol = resolveImport(symbolFromSymbolTable);
-                        if (resolvedImportSymbol === symbol) {
+                        if (isAccessible(symbolFromSymbolTable, resolveImport(symbolFromSymbolTable))) {
                             return symbolFromSymbolTable;
                         }
                     }
                 });
-           }
-
-            var accessibleSymbol: Symbol;
-            while (enclosingDeclaration) {
-                // Locals of a source file are not in scope (because they get merged into the global symbol table)
-                if (enclosingDeclaration.locals && (enclosingDeclaration.kind !== SyntaxKind.SourceFile || enclosingDeclaration.flags & NodeFlags.ExternalModule)) {
-                    if (accessibleSymbol = getAccessibleSymbolFromSymbolTable(enclosingDeclaration.locals)) {
-                        return accessibleSymbol;
-                    }
-                }
-                switch (enclosingDeclaration.kind) {
-                    case SyntaxKind.SourceFile:
-                        if (!(enclosingDeclaration.flags & NodeFlags.ExternalModule)) {
-                            break;
-                        }
-                    case SyntaxKind.ModuleDeclaration:
-                        if (accessibleSymbol = getAccessibleSymbolFromSymbolTable(getSymbolOfNode(enclosingDeclaration).exports)) {
-                            return accessibleSymbol;
-                        }
-                        break;
-                    case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.InterfaceDeclaration:
-                        if (accessibleSymbol = getAccessibleSymbolFromSymbolTable(getSymbolOfNode(enclosingDeclaration).members)) {
-                            return accessibleSymbol;
-                        }
-                        break;
-                }
-                enclosingDeclaration = enclosingDeclaration.parent;
             }
 
-            return getAccessibleSymbolFromSymbolTable(globals);
+            if (symbol) {
+                return forEachSymbolTable(enclosingDeclaration, getAccessibleSymbolFromSymbolTable);
+            }
         }
 
-        function symbolToString(symbol: Symbol, enclosingDeclaration?: Node) {
+        function needsQualification(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags) {
+            var qualify = false;
+            forEachSymbolTable(enclosingDeclaration, symbolTable => {
+                // If symbol of this name is not available in the symbol table we are ok
+                if (!symbolTable[symbol.name]) {
+                    // Continue to the next symbol table
+                    return false;
+                }
+                // If the symbol with this name is present it should refer to the symbol
+                var symbolFromSymbolTable = symbolTable[symbol.name];
+                if (symbolFromSymbolTable === symbol) {
+                    // No need to qualify
+                    return true;
+                }
+
+                // Qualify if the symbol from symbol table has same meaning as expected
+                symbolFromSymbolTable = (symbolFromSymbolTable.flags & SymbolFlags.Import) ? resolveImport(symbolFromSymbolTable) : symbolFromSymbolTable;
+                if (symbolFromSymbolTable.flags & meaning) {
+                    qualify = true;
+                    return true;
+                }
+
+                // Continue to the next symbol table
+                return false;
+            });
+
+            return qualify
+        }
+
+        function symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
             function getSymbolName(symbol: Symbol) {
                 if (symbol.declarations && symbol.declarations.length > 0) {
                     var declaration = symbol.declarations[0];
@@ -651,12 +697,14 @@ module ts {
                 !(symbol.flags & SymbolFlags.PropertyOrAccessor & SymbolFlags.Signature & SymbolFlags.Constructor & SymbolFlags.Method & SymbolFlags.TypeParameter)) {
                 var symbolName: string;
                 while (symbol) { 
-                    var accessibleParent = getAccessibleSymbol(symbol, enclosingDeclaration);
-                    symbolName = getSymbolName(accessibleParent || symbol) + (symbolName ? ("." + symbolName) : "");
-                    if (accessibleParent) {
+                    var isFirstName = !symbolName;
+                    var meaningToLook = isFirstName ? meaning : SymbolFlags.Namespace;
+                    var accessibleSymbol = getAccessibleSymbol(symbol, enclosingDeclaration, meaningToLook);
+                    symbolName = getSymbolName(accessibleSymbol || symbol) + (isFirstName ? "" : ("." + symbolName));
+                    if (accessibleSymbol && !needsQualification(accessibleSymbol, enclosingDeclaration, meaningToLook)) {
                         break;
                     }
-                    symbol = symbol.parent;
+                    symbol = accessibleSymbol ? accessibleSymbol.parent : symbol.parent;
                 }
 
                 return symbolName;
@@ -695,7 +743,7 @@ module ts {
                     writeTypeReference(<TypeReference>type);
                 }
                 else if (type.flags & (TypeFlags.Class | TypeFlags.Interface | TypeFlags.Enum | TypeFlags.TypeParameter)) {
-                    writer.write(symbolToString(type.symbol, enclosingDeclaration));
+                    writer.write(symbolToString(type.symbol, enclosingDeclaration, SymbolFlags.Type));
                 }
                 else if (type.flags & TypeFlags.Anonymous) {
                     writeAnonymousType(<ObjectType>type, allowFunctionOrConstructorTypeLiteral);
@@ -717,7 +765,7 @@ module ts {
                     writer.write("[]");
                 }
                 else {
-                    writer.write(symbolToString(type.target.symbol, enclosingDeclaration));
+                    writer.write(symbolToString(type.target.symbol, enclosingDeclaration, SymbolFlags.Type));
                     writer.write("<");
                     for (var i = 0; i < type.typeArguments.length; i++) {
                         if (i > 0) {
@@ -751,7 +799,7 @@ module ts {
 
             function writeTypeofSymbol(type: ObjectType) {
                 writer.write("typeof ");
-                writer.write(symbolToString(type.symbol, enclosingDeclaration));
+                writer.write(symbolToString(type.symbol, enclosingDeclaration, SymbolFlags.Value));
             }
 
             function writeLiteralType(type: ObjectType, allowFunctionOrConstructorTypeLiteral: boolean) {

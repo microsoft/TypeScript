@@ -110,7 +110,7 @@ declare module M.P {
     enum D {
         f = 0,
     }
-    var v: D;
+    var v: M.D;
     var w: () => void;
     var x: () => void;
     var x: () => void;
