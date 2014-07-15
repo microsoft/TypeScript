@@ -28,4 +28,4 @@ interface Foo<T> {
 }
 export = Foo;
 //// [declFileExportAssignmentOfGenericInterface_1.d.ts]
-export declare var x: Foo<Foo<string>>;
+export declare var x: a<a<string>>;

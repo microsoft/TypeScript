@@ -586,22 +586,30 @@ module ts {
             return (propertySymbol.valueDeclaration.flags & NodeFlags.QuestionMark) && propertySymbol.valueDeclaration.kind !== SyntaxKind.Parameter;
         }
 
-        function isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node) {
-            function containsSymbol(symbols: SymbolTable) {
-                if (hasProperty(symbols, symbol.name)) {
-                    var symbolFromSymbolTable = symbols[symbol.name];
-                    if (symbol === symbolFromSymbolTable) {
-                        return true;
-                    }
-                    // TODO check if symbolFromSymbolTable is alias : and work appropriately if (symbolFromSymbolTable.flags & SymbolFlags.Import)
+        function getAccessibleSymbol(symbol: Symbol, enclosingDeclaration: Node) {
+            function getAccessibleSymbolFromSymbolTable(symbols: SymbolTable) {
+                // If symbol is directly available by its name in the symbol table
+                if (symbol === symbols[symbol.name]) {
+                    return symbol;
                 }
+
+                // Check if symbol is any of the alias
+                return forEachValue(symbols, symbolFromSymbolTable => {
+                    if (symbolFromSymbolTable.flags & SymbolFlags.Import) {
+                        var resolvedImportSymbol = resolveImport(symbolFromSymbolTable);
+                        if (resolvedImportSymbol === symbol) {
+                            return symbolFromSymbolTable;
+                        }
+                    }
+                });
            }
 
+            var accessibleSymbol: Symbol;
             while (enclosingDeclaration) {
                 // Locals of a source file are not in scope (because they get merged into the global symbol table)
                 if (enclosingDeclaration.locals && (enclosingDeclaration.kind !== SyntaxKind.SourceFile || enclosingDeclaration.flags & NodeFlags.ExternalModule)) {
-                    if (containsSymbol(enclosingDeclaration.locals)) {
-                        return true;
+                    if (accessibleSymbol = getAccessibleSymbolFromSymbolTable(enclosingDeclaration.locals)) {
+                        return accessibleSymbol;
                     }
                 }
                 switch (enclosingDeclaration.kind) {
@@ -610,21 +618,21 @@ module ts {
                             break;
                         }
                     case SyntaxKind.ModuleDeclaration:
-                        if (containsSymbol(getSymbolOfNode(enclosingDeclaration).exports)) {
-                            return true;
+                        if (accessibleSymbol = getAccessibleSymbolFromSymbolTable(getSymbolOfNode(enclosingDeclaration).exports)) {
+                            return accessibleSymbol;
                         }
                         break;
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
-                        if (containsSymbol(getSymbolOfNode(enclosingDeclaration).members)) {
-                            return true;
+                        if (accessibleSymbol = getAccessibleSymbolFromSymbolTable(getSymbolOfNode(enclosingDeclaration).members)) {
+                            return accessibleSymbol;
                         }
                         break;
                 }
                 enclosingDeclaration = enclosingDeclaration.parent;
             }
 
-            return containsSymbol(globals);
+            return getAccessibleSymbolFromSymbolTable(globals);
         }
 
         function symbolToString(symbol: Symbol, enclosingDeclaration?: Node) {
@@ -639,21 +647,22 @@ module ts {
             }
 
             // Get qualified name 
-            var symbolName = getSymbolName(symbol);
             if (enclosingDeclaration &&
                 !(symbol.flags & SymbolFlags.PropertyOrAccessor & SymbolFlags.Signature & SymbolFlags.Constructor & SymbolFlags.Method & SymbolFlags.TypeParameter)) {
-                // TODO if !symbol.parent it could be in globals or it is non exported
-                if (!isSymbolAccessible(symbol, enclosingDeclaration)) {
-                    for (var parent = symbol.parent; parent; parent = parent.parent) {
-                        symbolName = getSymbolName(parent) + "." + symbolName;
-                        if (isSymbolAccessible(parent, enclosingDeclaration)) {
-                            break;
-                        }
+                var symbolName: string;
+                while (symbol) { 
+                    var accessibleParent = getAccessibleSymbol(symbol, enclosingDeclaration);
+                    symbolName = getSymbolName(accessibleParent || symbol) + (symbolName ? ("." + symbolName) : "");
+                    if (accessibleParent) {
+                        break;
                     }
+                    symbol = symbol.parent;
                 }
+
+                return symbolName;
             }
 
-            return symbolName
+            return getSymbolName(symbol);
         }
 
         function createSingleLineTextWriter() {

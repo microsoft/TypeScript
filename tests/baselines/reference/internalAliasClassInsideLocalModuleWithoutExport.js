@@ -47,6 +47,6 @@ export declare module x {
 }
 export declare module m2 {
     module m3 {
-        var cProp: x.c;
+        var cProp: c;
     }
 }

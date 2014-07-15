@@ -36,4 +36,4 @@ export declare module x {
     }
 }
 export import xc = x.c;
-export declare var cProp: x.c;
+export declare var cProp: xc;

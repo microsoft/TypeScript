@@ -28,4 +28,4 @@ export declare class B {
 }
 //// [importDeclarationUsedAsTypeQuery_1.d.ts]
 /// <reference path='importDeclarationUsedAsTypeQuery_require.d.ts' />
-export declare var x: typeof "tests/cases/compiler/importDeclarationUsedAsTypeQuery_require";
+export declare var x: typeof a;

@@ -51,7 +51,7 @@ export declare module x {
 export declare module m2 {
     module m3 {
         export import c = x.c;
-        var cProp: x.c;
+        var cProp: c;
     }
 }
 export declare var d: x.c;
