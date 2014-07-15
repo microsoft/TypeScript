@@ -1,4 +1,4 @@
-/// <reference path="..\src\compiler\prototype\sys.ts"/>
+/// <reference path="..\src\compiler\sys.ts"/>
 module perftest {
 
     interface IOLog {

@@ -1,5 +1,5 @@
 /// <reference path="perfsys.ts"/>
-/// <reference path="..\src\compiler\prototype\tc.ts"/>
+/// <reference path="..\src\compiler\tc.ts"/>
 
 // resolve all files used in this compilation
 if (perftest.hasLogIOFlag()) {
