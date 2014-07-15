@@ -1,4 +1,4 @@
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserErrantSemicolonInClass1.ts (56 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserErrantSemicolonInClass1.ts (5 errors) ====
     class a {
         //constructor ();
         constructor (n: number);
@@ -12,137 +12,35 @@
 !!! Unexpected token. A constructor, method, accessor, or property was expected.
     
         public pv;
-        ~~~~~~
-!!! Declaration or statement expected.
-               ~~
-!!! Cannot find name 'pv'.
         public get d() {
-        ~~~~~~
-!!! Declaration or statement expected.
                    ~
-!!! ';' expected.
-                       ~
-!!! ';' expected.
-               ~~~
-!!! Cannot find name 'get'.
-                   ~
-!!! Cannot find name 'd'.
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
             return 30;
-            ~~~~~~~~~~
-!!! 'return' statement has no containing function.
         }
         public set d() {
-        ~~~~~~
-!!! Declaration or statement expected.
                    ~
-!!! ';' expected.
-                       ~
-!!! ';' expected.
-               ~~~
-!!! Cannot find name 'set'.
-                   ~
-!!! Cannot find name 'd'.
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
         }
     
         public static get p2() {
-        ~~~~~~
-!!! Declaration or statement expected.
-               ~~~~~~
-!!! Declaration or statement expected.
                           ~~
-!!! ';' expected.
-                               ~
-!!! ';' expected.
-                      ~~~
-!!! Cannot find name 'get'.
-                          ~~
-!!! Cannot find name 'p2'.
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
             return { x: 30, y: 40 };
-            ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! 'return' statement has no containing function.
         }
     
         private static d2() {
-        ~~~~~~~
-!!! Declaration or statement expected.
-                ~~~~~~
-!!! Declaration or statement expected.
-                            ~
-!!! ';' expected.
-                       ~~
-!!! Cannot find name 'd2'.
         }
         private static get p3() {
-        ~~~~~~~
-!!! Declaration or statement expected.
-                ~~~~~~
-!!! Declaration or statement expected.
                            ~~
-!!! ';' expected.
-                                ~
-!!! ';' expected.
-                       ~~~
-!!! Cannot find name 'get'.
-                           ~~
-!!! Cannot find name 'p3'.
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
             return "string";
-            ~~~~~~~~~~~~~~~~
-!!! 'return' statement has no containing function.
         }
         private pv3;
-        ~~~~~~~
-!!! Declaration or statement expected.
-                ~~~
-!!! Cannot find name 'pv3'.
     
         private foo(n: number): string;
-        ~~~~~~~
-!!! Declaration or statement expected.
-                     ~
-!!! ',' expected.
-                              ~
-!!! ';' expected.
-                ~~~
-!!! Cannot find name 'foo'.
-                    ~
-!!! Cannot find name 'n'.
-                       ~~~~~~
-!!! Cannot find name 'number'.
-                                ~~~~~~
-!!! Cannot find name 'string'.
         private foo(s: string): string;
-        ~~~~~~~
-!!! Declaration or statement expected.
-                     ~
-!!! ',' expected.
-                              ~
-!!! ';' expected.
-                ~~~
-!!! Cannot find name 'foo'.
-                    ~
-!!! Cannot find name 's'.
-                       ~~~~~~
-!!! Cannot find name 'string'.
-                                ~~~~~~
-!!! Cannot find name 'string'.
         private foo(ns: any) {
-        ~~~~~~~
-!!! Declaration or statement expected.
-                      ~
-!!! ',' expected.
-                             ~
-!!! ';' expected.
-                ~~~
-!!! Cannot find name 'foo'.
-                    ~~
-!!! Cannot find name 'ns'.
-                        ~~~
-!!! Cannot find name 'any'.
             return ns.toString();
-            ~~~~~~~~~~~~~~~~~~~~~
-!!! 'return' statement has no containing function.
         }
     }
-    ~
-!!! Declaration or statement expected.
     

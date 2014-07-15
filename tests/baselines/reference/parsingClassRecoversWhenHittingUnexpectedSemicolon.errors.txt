@@ -1,0 +1,8 @@
+==== tests/cases/compiler/parsingClassRecoversWhenHittingUnexpectedSemicolon.ts (1 errors) ====
+    class C {
+        public f() { };
+                      ~
+!!! Unexpected token. A constructor, method, accessor, or property was expected.
+        private m;
+    }
+    

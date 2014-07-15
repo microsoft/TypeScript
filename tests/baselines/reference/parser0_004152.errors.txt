@@ -1,4 +1,4 @@
-==== tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts (38 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts (34 errors) ====
     export class Game {
     ~~~~~~~~~~~~~~~~~~~
         private position = new DisplayPosition([), 3, 3, 3, 3, 3, 0, 3, 3, 3, 3, 3, 3, 0], NoMove, 0);
@@ -40,8 +40,7 @@
 !!! ';' expected.
                                                                                                      ~
 !!! Unexpected token. A constructor, method, accessor, or property was expected.
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot compile external modules unless the '--module' flag is provided.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                                ~~~~~~~~~~~~~~~
 !!! Cannot find name 'DisplayPosition'.
                                                       ~
@@ -69,14 +68,9 @@
                                                                                                    ~
 !!! Duplicate identifier '0'.
         private prevConfig: SeedCoords[][];
-        ~~~~~~~
-!!! Declaration or statement expected.
-                                       ~
-!!! Expression expected.
-                                         ~
-!!! Expression expected.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                             ~~~~~~~~~~
 !!! Cannot find name 'SeedCoords'.
     }
     ~
-!!! Declaration or statement expected.
+!!! Cannot compile external modules unless the '--module' flag is provided.
