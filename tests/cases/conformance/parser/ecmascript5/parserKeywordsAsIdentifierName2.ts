@@ -1,2 +1,2 @@
-// 'public' shoudl be marked unusable because it has a trailing /*
-//a.public /*
+// 'public' should be marked unusable, should complain on trailing /*
+a.public /*

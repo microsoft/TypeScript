@@ -662,11 +662,14 @@ module ts {
                         if (text.charCodeAt(pos + 1) === CharacterCodes.asterisk) {
                             pos += 2;
 
-                            while (pos < len) {
+                            var safeLength = len - 1; // For lookahead.
+                            var commentClosed = false;
+                            while (pos < safeLength) {
                                 var ch = text.charCodeAt(pos);
 
                                 if (ch === CharacterCodes.asterisk && text.charCodeAt(pos + 1) === CharacterCodes.slash) {
                                     pos += 2;
+                                    commentClosed = true;
                                     break;
                                 }
 
@@ -674,6 +677,11 @@ module ts {
                                     precedingLineBreak = true;
                                 }
                                 pos++;
+                            }
+
+                            if (!commentClosed) {
+                                pos++;
+                                onError(Diagnostics.Asterisk_Slash_expected);
                             }
 
                             if (onComment) {

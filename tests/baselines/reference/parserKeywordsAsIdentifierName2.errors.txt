@@ -1,0 +1,7 @@
+==== tests/cases/conformance/parser/ecmascript5/parserKeywordsAsIdentifierName2.ts (2 errors) ====
+    // 'public' should be marked unusable, should complain on trailing /*
+    a.public /*
+               
+!!! '*/' expected.
+    ~
+!!! Cannot find name 'a'.
