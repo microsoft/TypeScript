@@ -5212,7 +5212,8 @@ module ts {
         function checkEnumDeclaration(node: EnumDeclaration) {
             checkDeclarationModifiers(node);
             checkNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
-            var enumType = getDeclaredTypeOfSymbol(getSymbolOfNode(node));
+            var enumSymbol = getSymbolOfNode(node);
+            var enumType = getDeclaredTypeOfSymbol(enumSymbol);
             var autoValue = 0;
             var ambient = isInAmbientContext(node);
             forEach(node.members, member => {
@@ -5235,7 +5236,38 @@ module ts {
                     getNodeLinks(member).enumMemberValue = autoValue++;
                 }
             });
-            // TODO: Only one enum declaration can omit the initial value
+
+            // Spec 2014 - Section 9.3:
+            // It isn't possible for one enum declaration to continue the automatic numbering sequence of another,
+            // and when an enum type has multiple declarations, only one declaration is permitted to omit a value
+            // for the first member.
+            //
+            // Only perform this check once per symbol
+            var firstDeclaration = getDeclarationOfKind(enumSymbol, node.kind);
+            if (node === firstDeclaration) {
+                var seenEnumMissingInitialInitializer = false;
+                forEach(enumSymbol.declarations, declaration => {
+                    // return true if we hit a violation of the rule, false otherwise
+                    if (declaration.kind !== SyntaxKind.EnumDeclaration) {
+                        return false;
+                    }
+
+                    var enumDeclaration = <EnumDeclaration>declaration;
+                    if (!enumDeclaration.members.length) {
+                        return false;
+                    }
+
+                    var firstEnumMember = enumDeclaration.members[0];
+                    if (!firstEnumMember.initializer) {
+                        if (seenEnumMissingInitialInitializer) {
+                            error(firstEnumMember.name, Diagnostics.In_an_enum_with_multiple_declarations_only_one_declaration_can_omit_an_initializer_for_its_first_enum_element);
+                        }
+                        else {
+                            seenEnumMissingInitialInitializer = true;
+                        }
+                    }
+                });
+            }
         }
 
         function checkModuleDeclaration(node: ModuleDeclaration) {

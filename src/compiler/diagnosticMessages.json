@@ -763,6 +763,10 @@
         "category": "NoPrefix",
         "code": 4019
     },
+    "In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.": {
+        "category": "Error",
+        "code": 4024
+    },
     "Named properties '{0}' of types '{1}' and '{2}' are not identical.": {
         "category": "NoPrefix",
         "code": 4032
