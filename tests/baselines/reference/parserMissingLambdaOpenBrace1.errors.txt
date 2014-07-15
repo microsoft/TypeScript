@@ -1,4 +1,4 @@
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserMissingLambdaOpenBrace1.ts (10 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserMissingLambdaOpenBrace1.ts (9 errors) ====
     class C {
         where(filter: Iterator<T, boolean>): Query<T> {
                       ~~~~~~~~~~~~~~~~~~~~
@@ -22,8 +22,6 @@
               ~
 !!! Unexpected token. A constructor, method, accessor, or property was expected.
         }
-        ~
-!!! Declaration or statement expected.
     }
     ~
 !!! Declaration or statement expected.

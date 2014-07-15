@@ -1,4 +1,4 @@
-==== tests/cases/compiler/primitiveMembers.ts (6 errors) ====
+==== tests/cases/compiler/primitiveMembers.ts (4 errors) ====
     var x = 5;
     var r = /yo/;
     r.source;
@@ -29,13 +29,9 @@
     class baz { public bar(): void { }; }
                                       ~
 !!! Unexpected token. A constructor, method, accessor, or property was expected.
-                                        ~
-!!! Declaration or statement expected.
     class foo extends baz { public bar(){ return undefined}; }
                                                            ~
 !!! Unexpected token. A constructor, method, accessor, or property was expected.
-                                                             ~
-!!! Declaration or statement expected.
     
     
     

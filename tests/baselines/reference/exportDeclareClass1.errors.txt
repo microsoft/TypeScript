@@ -1,4 +1,4 @@
-==== tests/cases/compiler/exportDeclareClass1.ts (9 errors) ====
+==== tests/cases/compiler/exportDeclareClass1.ts (4 errors) ====
         export declare class eaC {
             static tF() { };
                         ~
@@ -6,21 +6,11 @@
                            ~
 !!! Unexpected token. A constructor, method, accessor, or property was expected.
             static tsF(param:any) { };
-            ~~~~~~
-!!! Declaration or statement expected.
-                            ~
-!!! ',' expected.
                                   ~
-!!! ';' expected.
-                   ~~~
-!!! Cannot find name 'tsF'.
-                       ~~~~~
-!!! Cannot find name 'param'.
-                             ~~~
-!!! Cannot find name 'any'.
+!!! A function implementation cannot be declared in an ambient context.
+                                     ~
+!!! Unexpected token. A constructor, method, accessor, or property was expected.
         };
-        ~
-!!! Declaration or statement expected.
     	
     	export declare class eaC2 {
             static tF();
