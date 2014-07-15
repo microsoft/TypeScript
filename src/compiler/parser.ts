@@ -795,7 +795,7 @@ module ts {
                 }
                 else {
                     error(parsingContextErrors(kind));
-                    if (token !== SyntaxKind.CommaToken && isInSomeParsingContext()) {
+                    if (isInSomeParsingContext()) {
                         break;
                     }
                     nextToken();
