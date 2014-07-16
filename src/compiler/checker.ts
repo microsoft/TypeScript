@@ -415,8 +415,13 @@ module ts {
         }
 
         function getExportAssignmentSymbol(symbol: Symbol): Symbol {
-            if (!symbol.exportAssignSymbol) {
-                var exportInformation = collectExportInformationForSourceFileOrModule(symbol);
+            checkAndStoreTypeOfExportAssignmentSymbol(symbol);
+            return symbol.exportAssignSymbol === unknownSymbol ? undefined : symbol.exportAssignSymbol;
+        }
+
+        function checkAndStoreTypeOfExportAssignmentSymbol(containerSymbol: Symbol): void {
+            if (!containerSymbol.exportAssignSymbol) {
+                var exportInformation = collectExportInformationForSourceFileOrModule(containerSymbol);
                 if (exportInformation.exportAssignments.length) {
                     if (exportInformation.exportAssignments.length > 1) {
                         // TypeScript 1.0 spec (April 2014): 11.2.4
@@ -436,9 +441,8 @@ module ts {
                         var exportSymbol = resolveName(node, node.exportName.text, meaning, Diagnostics.Cannot_find_name_0, identifierToString(node.exportName));
                     }
                 }
-                symbol.exportAssignSymbol = exportSymbol || unknownSymbol;
+                containerSymbol.exportAssignSymbol = exportSymbol || unknownSymbol;
             }
-            return symbol.exportAssignSymbol === unknownSymbol ? undefined : symbol.exportAssignSymbol;
         }
 
         function collectExportInformationForSourceFileOrModule(symbol: Symbol) {
@@ -504,8 +508,12 @@ module ts {
             var declarations = symbol.declarations;
             for (var i = 0; i < declarations.length; i++) {
                 var declaration = declarations[i];
-                if (declaration.kind === kind) return declaration;
+                if (declaration.kind === kind) {
+                    return declaration;
+                }
             }
+
+            return undefined;
         }
 
         function findConstructorDeclaration(node: ClassDeclaration): ConstructorDeclaration {
@@ -970,6 +978,12 @@ module ts {
 
         function getTypeOfAccessors(symbol: Symbol): Type {
             var links = getSymbolLinks(symbol);
+            checkAndStoreTypeOfAccessors(symbol, links);
+            return links.type;
+        }
+
+        function checkAndStoreTypeOfAccessors(symbol: Symbol, links?: SymbolLinks) {
+            links = links || getSymbolLinks(symbol);
             if (!links.type) {
                 links.type = resolvingType;
                 var getter = <AccessorDeclaration>getDeclarationOfKind(symbol, SyntaxKind.GetAccessor);
@@ -1003,7 +1017,6 @@ module ts {
                         }
                     }
                 }
-                
 
                 if (links.type === resolvingType) {
                     links.type = type;
@@ -1012,7 +1025,6 @@ module ts {
             else if (links.type === resolvingType) {
                 links.type = anyType;
             }
-            return links.type;
         }
 
         function getTypeOfFuncClassEnumModule(symbol: Symbol): Type {
@@ -4260,11 +4272,10 @@ module ts {
             checkSourceElement(node.body);
 
             var symbol = getSymbolOfNode(node);
-            var symbolLinks = getSymbolLinks(symbol);
-            var type = getTypeOfSymbol(symbol.parent);
-            if (!(symbolLinks.typeChecked)) {
+            var firstDeclaration = getDeclarationOfKind(symbol, node.kind);
+            // Only type check the symbol once
+            if (node === firstDeclaration) {
                 checkFunctionOrConstructorSymbol(symbol);
-                symbolLinks.typeChecked = true;
             }
 
             // exit early in the case of signature - super checks are not relevant to them
@@ -4383,6 +4394,7 @@ module ts {
             }
 
             checkFunctionDeclaration(node);
+            checkAndStoreTypeOfAccessors(getSymbolOfNode(node));
         }
 
         function checkTypeReference(node: TypeReferenceNode) {
@@ -4598,12 +4610,12 @@ module ts {
         function checkFunctionDeclaration(node: FunctionDeclaration) {
             checkDeclarationModifiers(node);
             checkSignatureDeclaration(node);
+
             var symbol = getSymbolOfNode(node);
-            var symbolLinks = getSymbolLinks(symbol);
-            var type = getTypeOfSymbol(symbol);
-            if (!(symbolLinks.typeChecked)) {
+            var firstDeclaration = getDeclarationOfKind(symbol, node.kind);
+            // Only type check the symbol once
+            if (node === firstDeclaration) {
                 checkFunctionOrConstructorSymbol(symbol);
-                symbolLinks.typeChecked = true;
             }
             checkSourceElement(node.body);
 
@@ -5204,15 +5216,15 @@ module ts {
             checkNameIsReserved(node.name, Diagnostics.Interface_name_cannot_be_0);
             checkTypeParameters(node.typeParameters);
             var symbol = getSymbolOfNode(node);
+            var firstInterfaceDecl = <InterfaceDeclaration>getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration);
             if (symbol.declarations.length > 1) {
-                var firstInterfaceDecl = <InterfaceDeclaration>getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration);
                 if (node !== firstInterfaceDecl && !areTypeParametersIdentical(firstInterfaceDecl.typeParameters, node.typeParameters)) {
                     error(node.name, Diagnostics.All_declarations_of_an_interface_must_have_identical_type_parameters);
                 }
             }
 
-            var links = getSymbolLinks(symbol);
-            if (!links.typeChecked) {
+            // Only check this symbol once
+            if (node === firstInterfaceDecl) {
                 var type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
                 // run subsequent checks only if first set succeeded
                 if (checkInheritedPropertiesAreIdentical(type, node.name)) {
@@ -5221,7 +5233,6 @@ module ts {
                     });
                     checkIndexConstraints(type);
                 }
-                links.typeChecked = true;
             }
             forEach(node.baseTypes, checkTypeReference);
             forEach(node.members, checkSourceElement);
@@ -5249,7 +5260,8 @@ module ts {
         function checkEnumDeclaration(node: EnumDeclaration) {
             checkDeclarationModifiers(node);
             checkNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
-            var enumType = getDeclaredTypeOfSymbol(getSymbolOfNode(node));
+            var enumSymbol = getSymbolOfNode(node);
+            var enumType = getDeclaredTypeOfSymbol(enumSymbol);
             var autoValue = 0;
             var ambient = isInAmbientContext(node);
             forEach(node.members, member => {
@@ -5272,7 +5284,38 @@ module ts {
                     getNodeLinks(member).enumMemberValue = autoValue++;
                 }
             });
-            // TODO: Only one enum declaration can omit the initial value
+
+            // Spec 2014 - Section 9.3:
+            // It isn't possible for one enum declaration to continue the automatic numbering sequence of another,
+            // and when an enum type has multiple declarations, only one declaration is permitted to omit a value
+            // for the first member.
+            //
+            // Only perform this check once per symbol
+            var firstDeclaration = getDeclarationOfKind(enumSymbol, node.kind);
+            if (node === firstDeclaration) {
+                var seenEnumMissingInitialInitializer = false;
+                forEach(enumSymbol.declarations, declaration => {
+                    // return true if we hit a violation of the rule, false otherwise
+                    if (declaration.kind !== SyntaxKind.EnumDeclaration) {
+                        return false;
+                    }
+
+                    var enumDeclaration = <EnumDeclaration>declaration;
+                    if (!enumDeclaration.members.length) {
+                        return false;
+                    }
+
+                    var firstEnumMember = enumDeclaration.members[0];
+                    if (!firstEnumMember.initializer) {
+                        if (seenEnumMissingInitialInitializer) {
+                            error(firstEnumMember.name, Diagnostics.In_an_enum_with_multiple_declarations_only_one_declaration_can_omit_an_initializer_for_its_first_enum_element);
+                        }
+                        else {
+                            seenEnumMissingInitialInitializer = true;
+                        }
+                    }
+                });
+            }
         }
 
         function checkModuleDeclaration(node: ModuleDeclaration) {
@@ -5285,11 +5328,6 @@ module ts {
                     error(node, Diagnostics.Ambient_external_module_declaration_cannot_specify_relative_module_name);
                 }
                 var symbol = getSymbolOfNode(node);
-                var links = getSymbolLinks(symbol);
-                if (!links.typeChecked) {
-                    getExportAssignmentSymbol(symbol);
-                    links.typeChecked = true;
-                }
             }
             checkSourceElement(node.body);
         }
@@ -5358,6 +5396,11 @@ module ts {
             if (container.kind === SyntaxKind.SourceFile) {
                 checkModulesEnabled(node);
             }
+            else {
+                // In a module, the immediate parent will be a block, so climb up one more parent
+                container = container.parent;
+            }
+            checkAndStoreTypeOfExportAssignmentSymbol(getSymbolOfNode(container));
         }
 
         function checkSourceElement(node: Node): void {
