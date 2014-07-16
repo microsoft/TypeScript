@@ -917,6 +917,125 @@ module ts {
             }
         }
 
+        function isDeclarationVisible(node: Declaration): boolean {
+            function isGlobalSourceFile(node: Node) {
+                return node.kind === SyntaxKind.SourceFile && !(node.flags & NodeFlags.ExternalModule);
+            }
+
+            function getExternalModule(node: Node) {
+                for (; node; node = node.parent) {
+                    if (node.kind === SyntaxKind.ModuleDeclaration) {
+                        if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral) {
+                            return node;
+                        }
+                    }
+                    else if (node.kind === SyntaxKind.SourceFile) {
+                        return (node.flags & NodeFlags.ExternalModule) ? node : null;
+                    }
+                }
+            }
+
+            function isUsedInExportAssignment(node: Node) {
+                // Get source File and see if it is external module and has export assigned symbol
+                var externalModule = getExternalModule(node);
+                if (externalModule) {
+                    // This is export assigned symbol node
+                    var externalModuleSymbol = getSymbolOfNode(externalModule);
+                    var exportAssignmentSymbol = getExportAssignmentSymbol(externalModuleSymbol);
+                    var symbolOfNode = getSymbolOfNode(node);
+                    if (exportAssignmentSymbol === symbolOfNode) {
+                        return true;
+                    }
+
+                    if (exportAssignmentSymbol && !!(exportAssignmentSymbol.flags & SymbolFlags.Import)) {
+                        // if export assigned symbol is import declaration, resolve the import
+                        var resolvedExportSymbol = resolveImport(exportAssignmentSymbol);
+                        if (resolvedExportSymbol === symbolOfNode) {
+                            return true;
+                        }
+
+                        // TODO(shkamat): Chained import assignment
+                        // eg. a should be visible too.
+                        //module m {
+                        //    export module c {
+                        //        export class c {
+                        //        }
+                        //    }
+                        //}
+                        //import a = m.c;
+                        //import b = a;
+                        //export = b;
+
+                        // Container of resolvedExportSymbol is visible
+                        return forEach(resolvedExportSymbol.declarations, declaration => {
+                            while (declaration) {
+                                if (declaration === node) {
+                                    return true;
+                                }
+                                declaration = declaration.parent;
+                            }
+                        });
+                    }
+                }
+            }
+
+            function determineIfDeclarationIsVisible() {
+                switch (node.kind) {
+                    case SyntaxKind.VariableDeclaration:
+                        if (!(node.flags & NodeFlags.Export)) {
+                            // node.parent is variable statement so look at the variable statement's parent
+                            return isGlobalSourceFile(node.parent.parent) || isUsedInExportAssignment(node);
+                        }
+                        // Exported members are visible if parent is visible
+                        return isDeclarationVisible(node.parent.parent);
+
+                    case SyntaxKind.ModuleDeclaration:
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.EnumDeclaration:
+                    case SyntaxKind.ImportDeclaration:
+                        if (!(node.flags & NodeFlags.Export)) {
+                            // TODO(shkamat): non exported aliases can be visible if they are referenced else where for value/type/namespace
+                            return isGlobalSourceFile(node.parent) || isUsedInExportAssignment(node);
+                        }
+                        // Exported members are visible if parent is visible
+                        return isDeclarationVisible(node.parent);
+
+                    case SyntaxKind.Property:
+                    case SyntaxKind.Method:
+                        if (node.flags & NodeFlags.Private) {
+                            // Private properties/methods are not visible
+                            return false;
+                        }
+                    // Public properties/methods are visible if its parents are visible, so let it fall into next case statement
+
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.ConstructSignature:
+                    case SyntaxKind.CallSignature:
+                    case SyntaxKind.IndexSignature:
+                    case SyntaxKind.Parameter:
+                    case SyntaxKind.ModuleBlock:
+                        return isDeclarationVisible(node.parent);
+
+                    // Source file is always visible
+                    case SyntaxKind.SourceFile:
+                        return true;
+
+                    default:
+                        Debug.fail("isDeclarationVisible unknown: SyntaxKind: " + SyntaxKind[node.kind]);
+                }
+            }
+
+            if (node) {
+                var links = getNodeLinks(node);
+                if (links.isVisible === undefined) {
+                    links.isVisible = determineIfDeclarationIsVisible();
+                }
+                return links.isVisible;
+            }
+        }
+
         function getApparentType(type: Type): ApparentType {
             if (type.flags & TypeFlags.TypeParameter) {
                 do {
@@ -4892,7 +5011,7 @@ module ts {
                     checkTypeAssignableTo(checkAndMarkExpression(node.initializer, type), type, node, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
                 }
             }
-            
+
             checkCollisionWithCapturedSuperVariable(node, node.name);
             if (!useTypeFromValueDeclaration) {
                 // TypeScript 1.0 spec (April 2014): 5.1
@@ -5870,22 +5989,6 @@ module ts {
             return false;
         }
 
-        function isReferencedInExportAssignment(node: Declaration): boolean {
-            var exportAssignedSymbol = getExportAssignmentSymbol(getSymbolOfNode(getContainerOfModuleElementDeclaration(node)));
-            if (exportAssignedSymbol) {
-                var symbol = getSymbolOfNode(node);
-                if (exportAssignedSymbol === symbol) {
-                    // This symbol was export assigned symbol
-                    return true;
-                }
-
-                // TODO(shkamat): if export assignment is alias, the alias target would make the node as referenced in export assignment 
-                
-            }
-
-            return false;
-        }
-
         function isImplementationOfOverload(node: FunctionDeclaration) {
             if (node.body) {
                 var symbol = getSymbolOfNode(node);
@@ -5927,7 +6030,7 @@ module ts {
                 getEnumMemberValue: getEnumMemberValue,
                 isTopLevelValueImportedViaEntityName: isTopLevelValueImportedViaEntityName,
                 shouldEmitDeclarations: shouldEmitDeclarations,
-                isReferencedInExportAssignment: isReferencedInExportAssignment,
+                isDeclarationVisible: isDeclarationVisible,
                 isImplementationOfOverload: isImplementationOfOverload,
                 writeTypeAtLocation: writeTypeAtLocation,
                 writeReturnTypeOfSignatureDeclaration: writeReturnTypeOfSignatureDeclaration
