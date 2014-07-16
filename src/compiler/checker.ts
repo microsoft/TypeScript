@@ -4118,7 +4118,7 @@ module ts {
         // DECLARATION AND STATEMENT TYPE CHECKING
 
         function checkTypeParameter(node: TypeParameterDeclaration) {
-            checkNameIsReserved(node.name, Diagnostics.Type_parameter_name_cannot_be_0);
+            checkTypeNameIsReserved(node.name, Diagnostics.Type_parameter_name_cannot_be_0);
             checkSourceElement(node.constraint);
             checkTypeParameterHasIllegalReferencesInConstraint(node);
             // TODO: Check multiple declarations are identical
@@ -5015,7 +5015,7 @@ module ts {
             }
         }
 
-        function checkNameIsReserved(name: Identifier, message: DiagnosticMessage): boolean {
+        function checkTypeNameIsReserved(name: Identifier, message: DiagnosticMessage): void {
             // TS 1.0 spec (April 2014): 3.6.1
             // The predefined type keywords are reserved and cannot be used as names of user defined types.
             switch (name.text) {
@@ -5025,7 +5025,6 @@ module ts {
                 case "string":
                 case "void":
                     error(name, message, name.text);
-                    return true;
             }
         }
 
@@ -5046,7 +5045,7 @@ module ts {
 
         function checkClassDeclaration(node: ClassDeclaration) {
             checkDeclarationModifiers(node);
-            checkNameIsReserved(node.name, Diagnostics.Class_name_cannot_be_0);
+            checkTypeNameIsReserved(node.name, Diagnostics.Class_name_cannot_be_0);
             checkTypeParameters(node.typeParameters);
             var symbol = getSymbolOfNode(node);
             var type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
@@ -5201,7 +5200,7 @@ module ts {
 
         function checkInterfaceDeclaration(node: InterfaceDeclaration) {
             checkDeclarationModifiers(node);
-            checkNameIsReserved(node.name, Diagnostics.Interface_name_cannot_be_0);
+            checkTypeNameIsReserved(node.name, Diagnostics.Interface_name_cannot_be_0);
             checkTypeParameters(node.typeParameters);
             var symbol = getSymbolOfNode(node);
             if (symbol.declarations.length > 1) {
@@ -5248,7 +5247,7 @@ module ts {
 
         function checkEnumDeclaration(node: EnumDeclaration) {
             checkDeclarationModifiers(node);
-            checkNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
+            checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
             var enumType = getDeclaredTypeOfSymbol(getSymbolOfNode(node));
             var autoValue = 0;
             var ambient = isInAmbientContext(node);
@@ -5296,16 +5295,20 @@ module ts {
 
         function checkImportDeclaration(node: ImportDeclaration) {
             checkDeclarationModifiers(node);
-            checkNameIsReserved(node.name, Diagnostics.Import_name_cannot_be_0);
             var symbol = getSymbolOfNode(node);
             var target: Symbol;
             
             if (node.entityName) {
                 target = resolveImport(symbol);
                 // Import declaration for an internal module
-                if (target !== unknownSymbol && target.flags & SymbolFlags.Value) {
-                    // Target is a value symbol, check that it can be evaluated as an expression
-                    checkExpression(node.entityName);
+                if (target !== unknownSymbol) {
+                    if (target.flags & SymbolFlags.Value) {
+                        // Target is a value symbol, check that it can be evaluated as an expression
+                        checkExpression(node.entityName);
+                    }
+                    if (target.flags & SymbolFlags.Type) {
+                        checkTypeNameIsReserved(node.name, Diagnostics.Import_name_cannot_be_0);
+                    }
                 }
             }
             else {
