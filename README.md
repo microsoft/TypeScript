@@ -23,8 +23,8 @@ tsc hello.ts
 
 ## Building
 
-1.  Install Node if you haven't already (http://nodejs.org/)
-2.  Install Jake, the tool we use to build our compiler (https://github.com/mde/jake). To do this, run "npm install -g jake".
+1.  Install [node](http://nodejs.org/) if you haven't already
+2.  Install dependencies ([Jake](https://github.com/mde/jake), [mocha](http://visionmedia.github.io/mocha/), [Chai](http://chaijs.com/) and [browserify](http://browserify.org/) the tool we use to build our compiler. To do this, run `npm install`.
 3.  To use jake, run one of the following commands: 
     - jake local - This builds the compiler. The output is in built/local in the public directory 
     - jake clean - deletes the build compiler 
