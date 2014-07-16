@@ -5,9 +5,11 @@
         }
     }
     
-==== tests/cases/conformance/internalModules/DeclarationMerging/module.ts (0 errors) ====
+==== tests/cases/conformance/internalModules/DeclarationMerging/module.ts (1 errors) ====
     module A {
         export module Point {
+                      ~~~~~
+!!! A module declaration cannot be in a different file from a class or function with which it is merged
             export var Origin = { x: 0, y: 0 };
         }
     }

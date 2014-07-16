@@ -4,12 +4,10 @@
     export = D;
     
     declare module "ext" {
-    ~~~~~~~~~~~~~~~~~~~~~~
-        export class C { }
-    ~~~~~~~~~~~~~~~~~~~~~~
-    }
-    ~
+                   ~~~~~
 !!! Ambient external modules cannot be nested in other modules.
+        export class C { }
+    }
     
     // Cannot resolve this ext module reference
     import ext = require("ext");

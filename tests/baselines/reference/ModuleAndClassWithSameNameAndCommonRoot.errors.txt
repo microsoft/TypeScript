@@ -1,0 +1,34 @@
+==== tests/cases/conformance/internalModules/DeclarationMerging/module.ts (1 errors) ====
+    module X.Y {
+        export module Point {
+                      ~~~~~
+!!! A module declaration cannot be in a different file from a class or function with which it is merged
+            export var Origin = new Point(0, 0);
+        }
+    }
+    
+==== tests/cases/conformance/internalModules/DeclarationMerging/classPoint.ts (0 errors) ====
+    module X.Y {
+        // duplicate identifier
+        export class Point {
+            constructor(x: number, y: number) {
+                this.x = x;
+                this.y = y;
+            }
+            x: number;
+            y: number;
+        }
+    }
+    
+==== tests/cases/conformance/internalModules/DeclarationMerging/simple.ts (1 errors) ====
+    module A {
+           ~
+!!! A module declaration cannot be located prior to a class or function with which it is merged
+        export var Instance = new A();
+    }
+    
+    // duplicate identifier
+    class A {
+        id: string;
+    }
+    

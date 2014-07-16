@@ -23,36 +23,24 @@
         declare export module "m1_M3_public" {
                 ~~~~~~
 !!! 'export' modifier must precede 'declare' modifier.
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            export function f1();
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            export class c1 {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~
-            }
-    ~~~~~~~~~
-            export var v1: { new (): c1; };
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            export var v2: c1;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~
-        }
-    ~~~~~
+                              ~~~~~~~~~~~~~~
 !!! Ambient external modules cannot be nested in other modules.
+            export function f1();
+            export class c1 {
+            }
+            export var v1: { new (): c1; };
+            export var v2: c1;
+        }
     
         declare module "m1_M4_private" {
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            export function f1();
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            export class c1 {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~
-            }
-    ~~~~~~~~~
-            export var v1: { new (): c1; };
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            export var v2: c1;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~
-        }
-    ~~~~~
+                       ~~~~~~~~~~~~~~~
 !!! Ambient external modules cannot be nested in other modules.
+            export function f1();
+            export class c1 {
+            }
+            export var v1: { new (): c1; };
+            export var v2: c1;
+        }
     
         import m1_im1_private = m1_M1_public;
         export var m1_im1_private_v1_public = m1_im1_private.c1;
@@ -177,24 +165,21 @@
             declare module "abc" {
             ~~~~~~~
 !!! A 'declare' modifier cannot be used in an already ambient context.
-            ~~~~~~~~~~~~~~~~~~~~~~
-            }
-    ~~~~~~~~~
+                           ~~~~~
 !!! Ambient external modules cannot be nested in other modules.
+            }
         }
     
         module m2 {
             module "abc2" {
-            ~~~~~~~~~~~~~~~
-            }
-    ~~~~~~~~~
+                   ~~~~~~
 !!! Ambient external modules cannot be nested in other modules.
+            }
         }
         module "abc3" {
-        ~~~~~~~~~~~~~~~
-        }
-    ~~~~~
+               ~~~~~~
 !!! Ambient external modules cannot be nested in other modules.
+        }
     }
     
     module m2 {
