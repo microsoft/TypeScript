@@ -273,12 +273,6 @@ module ts {
         return s.parameters.length > 0 && (s.parameters[s.parameters.length - 1].flags & NodeFlags.Rest) !== 0;
     }
 
-    export function getContainerOfModuleElementDeclaration(node: Declaration) {
-        // If the declaration is var declaration, then the parent is variable statement but we actually want the module
-        var container = node.kind === SyntaxKind.VariableDeclaration ? node.parent.parent : node.parent;
-        return container.kind == SyntaxKind.ModuleBlock ? container.parent : container;
-    }
-
     enum ParsingContext {
         SourceElements,          // Elements in source file
         ModuleElements,          // Elements in module declaration
@@ -619,14 +613,14 @@ module ts {
         }
 
         // True if positioned at the start of a list element
-        function isListElement(kind: ParsingContext): boolean {
+        function isListElement(kind: ParsingContext, inErrorRecovery: boolean): boolean {
             switch (kind) {
                 case ParsingContext.SourceElements:
                 case ParsingContext.ModuleElements:
-                    return isSourceElement();
+                    return isSourceElement(inErrorRecovery);
                 case ParsingContext.BlockStatements:
                 case ParsingContext.SwitchClauseStatements:
-                    return isStatement();
+                    return isStatement(inErrorRecovery);
                 case ParsingContext.SwitchClauses:
                     return token === SyntaxKind.CaseKeyword || token === SyntaxKind.DefaultKeyword;
                 case ParsingContext.TypeMembers:
@@ -650,6 +644,8 @@ module ts {
                 case ParsingContext.TypeArguments:
                     return isType();
             }
+
+            Debug.fail("Non-exhaustive case in 'isListElement'.");
         }
 
         // True if positioned at a list terminator
@@ -717,10 +713,12 @@ module ts {
         }
 
         // True if positioned at element or terminator of the current list or any enclosing list
-        function isInParsingContext(): boolean {
+        function isInSomeParsingContext(): boolean {
             for (var kind = 0; kind < ParsingContext.Count; kind++) {
                 if (parsingContext & (1 << kind)) {
-                    if (isListElement(kind) || isListTerminator(kind)) return true;
+                    if (isListElement(kind, /* inErrorRecovery */ true) || isListTerminator(kind)) {
+                        return true;
+                    }
                 }
             }
 
@@ -734,12 +732,12 @@ module ts {
             var result = <NodeArray<T>>[];
             result.pos = getNodePos();
             while (!isListTerminator(kind)) {
-                if (isListElement(kind)) {
+                if (isListElement(kind, /* inErrorRecovery */ false)) {
                     result.push(parseElement());
                 }
                 else {
                     error(parsingContextErrors(kind));
-                    if (isInParsingContext()) {
+                    if (isInSomeParsingContext()) {
                         break;
                     }
                     nextToken();
@@ -761,7 +759,7 @@ module ts {
             var errorCountBeforeParsingList = file.syntacticErrors.length;
             var commaStart = -1; // Meaning the previous token was not a comma
             while (true) {
-                if (isListElement(kind)) {
+                if (isListElement(kind, /* inErrorRecovery */ false)) {
                     result.push(parseElement());
                     commaStart = scanner.getTokenPos();
                     if (parseOptional(SyntaxKind.CommaToken)) {
@@ -791,7 +789,7 @@ module ts {
                 }
                 else {
                     error(parsingContextErrors(kind));
-                    if (token !== SyntaxKind.CommaToken && isInParsingContext()) {
+                    if (isInSomeParsingContext()) {
                         break;
                     }
                     nextToken();
@@ -2066,12 +2064,19 @@ module ts {
             return finishNode(node);
         }
 
-        function isStatement(): boolean {
+        function isStatement(inErrorRecovery: boolean): boolean {
             switch (token) {
+                case SyntaxKind.SemicolonToken:
+                    // If we're in error recovery, then we don't want to treat ';' as an empty statement.
+                    // The problem is that ';' can show up in far too many contexts, and if we see one 
+                    // and assume it's a statement, then we may bail out innapropriately from whatever 
+                    // we're parsing.  For example, if we have a semicolon in the middle of a class, then
+                    // we really don't want to assume the class is over and we're on a statement in the
+                    // outer module.  We just want to consume and move on.
+                    return !inErrorRecovery;
                 case SyntaxKind.OpenBraceToken:
                 case SyntaxKind.VarKeyword:
                 case SyntaxKind.FunctionKeyword:
-                case SyntaxKind.SemicolonToken:
                 case SyntaxKind.IfKeyword:
                 case SyntaxKind.DoKeyword:
                 case SyntaxKind.WhileKeyword:
@@ -2103,8 +2108,8 @@ module ts {
             }
         }
 
-        function isStatementOrFunction(): boolean {
-            return token === SyntaxKind.FunctionKeyword || isStatement();
+        function isStatementOrFunction(inErrorRecovery: boolean): boolean {
+            return token === SyntaxKind.FunctionKeyword || isStatement(inErrorRecovery);
         }
 
         function parseStatement(): Statement {
@@ -2813,8 +2818,8 @@ module ts {
             return result;
         }
 
-        function isSourceElement(): boolean {
-            return isDeclaration() || isStatement();
+        function isSourceElement(inErrorRecovery: boolean): boolean {
+            return isDeclaration() || isStatement(inErrorRecovery);
         }
 
         function parseSourceElement() {

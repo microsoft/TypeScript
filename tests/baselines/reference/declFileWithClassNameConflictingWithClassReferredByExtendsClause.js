@@ -73,12 +73,12 @@ declare module A.B.Base {
     }
 }
 declare module X.Y.base {
-    class W extends W {
+    class W extends A.B.Base.W {
         name: string;
     }
 }
 declare module X.Y.base.Z {
-    class W<TValue> extends W {
+    class W<TValue> extends base.W {
         value: boolean;
     }
 }

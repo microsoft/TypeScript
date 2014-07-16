@@ -54,4 +54,4 @@ export declare module m2 {
         var cProp: c;
     }
 }
-export declare var d: c;
+export declare var d: x.c;

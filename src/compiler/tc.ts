@@ -79,8 +79,6 @@ module ts {
     function reportErrors(errors: Diagnostic[]) {
         for (var i = 0; i < errors.length; i++) {
             var error = errors[i];
-            // TODO(jfreeman): Remove assert
-            Debug.assert(error.messageText.indexOf("{NL}") < 0);
             if (error.file) {
                 var loc = error.file.getLineAndCharacterFromPosition(error.start);
                 sys.writeErr(error.file.filename + "(" + loc.line + "," + loc.character + "): " + error.messageText + sys.newLine);

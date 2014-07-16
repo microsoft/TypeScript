@@ -1898,34 +1898,6 @@ module ts {
             writeLine();
         }
 
-        function isModuleElementExternallyVisible(node: Declaration) {
-            if (node.flags & NodeFlags.Export) {
-                // Exported member - emit this declaration
-                return true;
-            }
-
-            // If this node is in external module, check if this is export assigned 
-            var moduleDeclaration = getContainerOfModuleElementDeclaration(node);
-            if ((moduleDeclaration.flags & NodeFlags.ExternalModule) || // Source file with external module flag
-                // Ambient external module declaration
-                (moduleDeclaration.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>moduleDeclaration).name.kind === SyntaxKind.StringLiteral)) {
-                return resolver.isReferencedInExportAssignment(node);
-            }
-
-            return false;
-        }
-
-        function canEmitModuleElementDeclaration(node: Declaration) {
-            if (isModuleElementExternallyVisible(node)) {
-                // Either exported module element or is referenced in export assignment
-                return true;
-            }
-
-            // emit the declaration if this is in global scope source file
-            var moduleDeclaration = getContainerOfModuleElementDeclaration(node);
-            return moduleDeclaration.kind === SyntaxKind.SourceFile && !(moduleDeclaration.flags & NodeFlags.ExternalModule);
-        }
-
         function emitDeclarationFlags(node: Declaration) {
             if (node.flags & NodeFlags.Static) {
                 if (node.flags & NodeFlags.Private) {
@@ -1952,8 +1924,7 @@ module ts {
         }
 
         function emitImportDeclaration(node: ImportDeclaration) {
-            // TODO(shkamat): Emit if import decl is used to declare type in this context
-            if (isModuleElementExternallyVisible(node)) {
+            if (resolver.isDeclarationVisible(node)) {
                 if (node.flags & NodeFlags.Export) {
                     write("export ");
                 }
@@ -1974,7 +1945,7 @@ module ts {
         }
         
         function emitModuleDeclaration(node: ModuleDeclaration) {
-            if (canEmitModuleElementDeclaration(node)) {
+            if (resolver.isDeclarationVisible(node)) {
                 emitDeclarationFlags(node);
                 write("module ");
                 emitSourceTextOfNode(node.name);
@@ -1997,7 +1968,7 @@ module ts {
         }
 
         function emitEnumDeclaration(node: EnumDeclaration) {
-            if (canEmitModuleElementDeclaration(node)) {
+            if (resolver.isDeclarationVisible(node)) {
                 emitDeclarationFlags(node);
                 write("enum ");
                 emitSourceTextOfNode(node.name);
@@ -2060,7 +2031,7 @@ module ts {
                 }
             }
 
-            if (canEmitModuleElementDeclaration(node)) {
+            if (resolver.isDeclarationVisible(node)) {
                 emitDeclarationFlags(node);
                 write("class ");
                 emitSourceTextOfNode(node.name);
@@ -2084,7 +2055,7 @@ module ts {
         }
 
         function emitInterfaceDeclaration(node: InterfaceDeclaration) {
-            if (canEmitModuleElementDeclaration(node)) {
+            if (resolver.isDeclarationVisible(node)) {
                 emitDeclarationFlags(node);
                 write("interface ");
                 emitSourceTextOfNode(node.name);
@@ -2111,8 +2082,9 @@ module ts {
         }
 
         function emitVariableDeclaration(node: VariableDeclaration) {
-            // If we are emitting property it isnt moduleElement and doesnt need canEmitModuleElement check
-            if (node.kind !== SyntaxKind.VariableDeclaration || canEmitModuleElementDeclaration(node)) {
+            // If we are emitting property it isnt moduleElement and hence we already know it needs to be emitted
+            // so there is no check needed to see if declaration is visible
+            if (node.kind !== SyntaxKind.VariableDeclaration || resolver.isDeclarationVisible(node)) {
                 emitSourceTextOfNode(node.name);
                 // If optional property emit ?
                 if (node.kind === SyntaxKind.Property && (node.flags & NodeFlags.QuestionMark)) {
@@ -2126,7 +2098,7 @@ module ts {
         }
 
         function emitVariableStatement(node: VariableStatement) {
-            var hasDeclarationWithEmit = forEach(node.declarations, varDeclaration => canEmitModuleElementDeclaration(varDeclaration));
+            var hasDeclarationWithEmit = forEach(node.declarations, varDeclaration => resolver.isDeclarationVisible(varDeclaration));
             if (hasDeclarationWithEmit) {
                 emitDeclarationFlags(node);
                 write("var ");
@@ -2151,8 +2123,9 @@ module ts {
         }
 
         function emitFunctionDeclaration(node: FunctionDeclaration) {
-            // If we are emitting Method/Constructor it isnt moduleElement and doesnt need canEmitModuleElement check
-            if ((node.kind !== SyntaxKind.FunctionDeclaration || canEmitModuleElementDeclaration(node)) &&
+            // If we are emitting Method/Constructor it isnt moduleElement and hence already determined to be emitting
+            // so no need to verify if the declaration is visible
+            if ((node.kind !== SyntaxKind.FunctionDeclaration || resolver.isDeclarationVisible(node)) &&
                 !resolver.isImplementationOfOverload(node)) {
                 emitDeclarationFlags(node);
                 if (node.kind === SyntaxKind.FunctionDeclaration) {

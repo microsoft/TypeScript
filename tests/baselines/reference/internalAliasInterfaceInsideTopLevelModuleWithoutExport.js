@@ -19,4 +19,4 @@ export declare module a {
     interface I {
     }
 }
-export declare var x: I;
+export declare var x: b;

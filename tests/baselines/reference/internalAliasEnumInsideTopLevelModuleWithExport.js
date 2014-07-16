@@ -36,4 +36,4 @@ export declare module a {
     }
 }
 export import b = a.weekend;
-export declare var bVal: weekend;
+export declare var bVal: b;

@@ -621,7 +621,7 @@ module ts {
         getNodeCheckFlags(node: Node): NodeCheckFlags;
         getEnumMemberValue(node: EnumMember): number;
         shouldEmitDeclarations(): boolean;
-        isReferencedInExportAssignment(node: Declaration): boolean;
+        isDeclarationVisible(node: Declaration): boolean;
         isImplementationOfOverload(node: FunctionDeclaration): boolean;
         writeTypeAtLocation(location: Node, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter): void;
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter): void;
@@ -740,6 +740,7 @@ module ts {
         flags?: NodeCheckFlags;         // Set of flags specific to Node
         enumMemberValue?: number;       // Constant value of enum member
         isIllegalTypeReferenceInConstraint?: boolean; // Is type reference in constraint refers to the type parameter from the same list
+        isVisible?: boolean;            // Is this node visible 
     }
 
     export enum TypeFlags {

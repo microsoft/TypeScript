@@ -32,4 +32,4 @@ declare module "SubModule" {
 }
 //// [declFileAmbientExternalModuleWithSingleExportedModule_1.d.ts]
 /// <reference path='declFileAmbientExternalModuleWithSingleExportedModule_0.d.ts' />
-export declare var x: c;
+export declare var x: SubModule.m.m3.c;

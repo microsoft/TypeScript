@@ -6,7 +6,7 @@
 	"licenses": [
 		{
 			"type": "Apache License 2.0", 
-			"url": "http://typescript.codeplex.com/license"
+			"url": "https://github.com/Microsoft/TypeScript/blob/master/LICENSE.txt"
 		}
 	],
 	"description": "TypeScript is a language for application scale JavaScript development",
@@ -18,14 +18,14 @@
 		"javascript"
 	],
 	"bugs": {
-		"url" : "http://typescript.codeplex.com/workitem/list/basic"
+		"url" : "https://github.com/Microsoft/TypeScript/issues"
 	},
 	"repository" : { 
 		"type" : "git",	
-		"url" : "https://git01.codeplex.com/typescript"  
+		"url" : "https://github.com/Microsoft/TypeScript.git"  
 	},
 	"preferGlobal" : true,
-	"main" : "./bin/typescript.js",
+	"main" : "./bin/tc.js",
 	"bin" : { 
 		"tsc" : "./bin/tsc" 
 	},
