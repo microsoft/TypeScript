@@ -232,7 +232,9 @@ class ProjectRunner extends RunnerBase {
             if (!errors.length) {
                 var checker = program.getTypeChecker();
                 errors = checker.getDiagnostics();
-                sourceMapData = checker.emitFiles();
+                var emitResult = checker.emitFiles();
+                errors = ts.concatenate(errors, emitResult.errors);
+                sourceMapData = emitResult.sourceMaps;
 
                 // Clean up source map data that will be used in baselining
                 if (sourceMapData) {

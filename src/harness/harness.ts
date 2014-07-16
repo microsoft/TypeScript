@@ -738,7 +738,7 @@ module Harness {
                 // only emit if there weren't parse errors
                 var sourceMapData: ts.SourceMapData[];
                 if (!hadParseErrors) {
-                    sourceMapData = checker.emitFiles();
+                    sourceMapData = checker.emitFiles().sourceMaps;
                 }
 
                 var errors: MinimalDiagnostic[] = [];

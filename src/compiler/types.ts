@@ -566,7 +566,12 @@ module ts {
         /** Raw source map spans that were encoded into the sourceMapMappings*/
         sourceMapDecodedMappings: SourceMapSpan[];
     }
-    
+
+    export interface EmitResult {
+        errors: Diagnostic[];
+        sourceMaps: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
+    }
+
     export interface TypeChecker {
         getProgram(): Program;
         getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
@@ -576,7 +581,7 @@ module ts {
         getSymbolCount(): number;
         getTypeCount(): number;
         checkProgram(): void;
-        emitFiles(): SourceMapData[]; // returns list of sourceMapData if compiler emitted sourcemaps
+        emitFiles(): EmitResult;
         getSymbolOfNode(node: Node): Symbol;
         getParentOfSymbol(symbol: Symbol): Symbol;
         getTypeOfSymbol(symbol: Symbol): Type;
@@ -896,6 +901,7 @@ module ts {
     }
 
     export interface CompilerOptions {
+        charset?: string;
         codepage?: number;
         declaration?: boolean;
         diagnostics?: boolean;
@@ -1083,10 +1089,10 @@ module ts {
     }
 
     export interface CompilerHost {
-        getSourceFile(filename: string, languageVersion: ScriptTarget): SourceFile;
+        getSourceFile(filename: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
         getDefaultLibFilename(): string;
         getCancellationToken? (): CancellationToken;
-        writeFile(filename: string, data: string): void;
+        writeFile(filename: string, data: string, onError?: (message: string) => void): void;
         getCurrentDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;

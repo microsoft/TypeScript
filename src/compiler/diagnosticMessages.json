@@ -11,8 +11,6 @@
         "category": "Error",
         "code": 6003
     },
-
-
 	
     "Unrecognized escape sequence.": {
         "category": "Error",
@@ -779,13 +777,9 @@
         "category": "NoPrefix",
         "code": 5013
     },
-    "Could not write file '{0}'.": {
+    "Could not write file '{0}': {1}": {
         "category": "Error",
         "code": 5033
-    },
-    "Could not create directory '{0}'.": {
-        "category": "Error",
-        "code": 5035
     },
     "Option mapRoot cannot be specified without specifying sourcemap option.": {
         "category": "Error",

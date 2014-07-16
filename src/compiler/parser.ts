@@ -2989,7 +2989,10 @@ module ts {
             }
             else {
                 // If we haven't, read the file.
-                file = host.getSourceFile(filename, options.target);
+                file = host.getSourceFile(filename, options.target, hostErrorMessage => {
+                    errors.push(createFileDiagnostic(refFile, refStart, refLength,
+                        Diagnostics.Cannot_read_file_0_Colon_1, filename, hostErrorMessage));
+                });
                 if (file) {
                     filesByName[host.getCanonicalFileName(filename)] = file;
                     seenNoDefaultLib = seenNoDefaultLib || file.hasNoDefaultLib;
