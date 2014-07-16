@@ -1140,11 +1140,11 @@
         "category": "Error",
         "code": -9999999
     },
-	"Module declaration cannot be in different file from class or function with which it is merged": {
+	"A module declaration cannot be in a different file from a class or function with which it is merged": {
         "category": "Error",
         "code": -9999999
 	},
-	"Module declaration cannot be located prior to class or function with which it is merged": {
+	"A module declaration cannot be located prior to a class or function with which it is merged": {
         "category": "Error",
         "code": -9999999
 	},

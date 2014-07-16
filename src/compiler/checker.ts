@@ -5317,7 +5317,7 @@ module ts {
             }
         }
 
-        function getClassOrFunctionBodyDeclaration(symbol: Symbol): Declaration {
+        function getFirstNonAmbientClassOrFunctionDeclaration(symbol: Symbol): Declaration {
             var declarations = symbol.declarations;
             for (var i = 0; i < declarations.length; i++) {
                 var declaration = declarations[i];
@@ -5325,29 +5325,29 @@ module ts {
                     return declaration;
                 }
             }
-            // Return undefined
+            return undefined;
         }
 
         function checkModuleDeclaration(node: ModuleDeclaration) {
             checkDeclarationModifiers(node);
             var symbol = getSymbolOfNode(node);
             if (symbol.flags & SymbolFlags.ValueModule && symbol.declarations.length > 1 && !isInAmbientContext(node)) {
-                var classOrFunc = getClassOrFunctionBodyDeclaration(symbol);
+                var classOrFunc = getFirstNonAmbientClassOrFunctionDeclaration(symbol);
                 if (classOrFunc) {
                     if (getSourceFileOfNode(node) !== getSourceFileOfNode(classOrFunc)) {
-                        error(node, Diagnostics.Module_declaration_cannot_be_in_different_file_from_class_or_function_with_which_it_is_merged);
+                        error(node.name, Diagnostics.A_module_declaration_cannot_be_in_a_different_file_from_a_class_or_function_with_which_it_is_merged);
                     }
                     else if (node.pos < classOrFunc.pos) {
-                        error(node, Diagnostics.Module_declaration_cannot_be_located_prior_to_class_or_function_with_which_it_is_merged);
+                        error(node.name, Diagnostics.A_module_declaration_cannot_be_located_prior_to_a_class_or_function_with_which_it_is_merged);
                     }
                 }
             }
             if (node.name.kind === SyntaxKind.StringLiteral) {
                 if (node.parent.kind !== SyntaxKind.SourceFile || node.parent.flags & NodeFlags.ExternalModule) {
-                    error(node, Diagnostics.Ambient_external_modules_cannot_be_nested_in_other_modules);
+                    error(node.name, Diagnostics.Ambient_external_modules_cannot_be_nested_in_other_modules);
                 }
                 if (isExternalModuleNameRelative(node.name.text)) {
-                    error(node, Diagnostics.Ambient_external_module_declaration_cannot_specify_relative_module_name);
+                    error(node.name, Diagnostics.Ambient_external_module_declaration_cannot_specify_relative_module_name);
                 }
             }
             checkSourceElement(node.body);
