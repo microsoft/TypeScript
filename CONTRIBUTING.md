@@ -2,7 +2,7 @@
 TypeScript is currently accepting contributions in the form of bug fixes. A bug must have an issue tracking it in the issue tracker that has been approved ("Milestone == Community") by the TypeScript team. Your pull request should include a link to the bug that you are fixing. If you’ve submitted a PR for a bug, please post a comment in the bug to avoid duplication of effort.
 
 ## Contributing features
-Features (things that add new or improved functionality to TypeScript) may be accepted, but will need to first be approved (marked as “Milestone == Community” by a TypeScript coordinator with the message "Approved”) in the suggestion issue. Please include [feature] in the title of your forum post. Features with language design impact, or that are adequately satisfied with external tools, will not be accepted.
+Features (things that add new or improved functionality to TypeScript) may be accepted, but will need to first be approved (marked as "Milestone == Community" by a TypeScript coordinator with the message "Approved") in the suggestion issue. Please include [feature] in the title of your forum post. Features with language design impact, or that are adequately satisfied with external tools, will not be accepted.
 
 Design changes will not be accepted at this time. If you have a design change proposal, please post it to the Language Specification forum.
 
@@ -19,7 +19,7 @@ Your pull request should:
     * Requests need not be a single commit, but should be a linear sequence of commits (i.e. no merge commits in your PR)
 * It is desirable, but not necessary, for the tests to pass at each commit
 * Have clear commit messages 
-    * e.g. “Refactor feature”, “Fix issue”, “Add tests for issue”
+    * e.g. "Refactor feature", "Fix issue", "Add tests for issue"
 * Include adequate tests 
     * At least one test should fail in the absence of your non-test code changes. If your PR does not match this criteria, please specify why.
     * See Creating a TypeScript Compiler Test and Writing TypeScript Language Service Tests for documentation on creating tests
