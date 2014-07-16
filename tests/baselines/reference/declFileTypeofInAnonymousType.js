@@ -63,10 +63,10 @@ declare module m1 {
     }
 }
 declare var a: {
-    c: c;
+    c: m1.c;
 };
 declare var b: {
-    c: typeof c;
+    c: typeof m1.c;
     m1: typeof m1;
 };
 declare var c: {
@@ -77,10 +77,10 @@ declare var d: {
         mod: typeof m1;
     };
     mc: {
-        cl: typeof c;
+        cl: typeof m1.c;
     };
     me: {
-        en: typeof e;
+        en: typeof m1.e;
     };
-    mh: e;
+    mh: m1.e;
 };

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/declarationEmit_nameConflicts.ts] ////
 
 //// [declarationEmit_nameConflicts_1.ts]
-function f() { }
+module f { export class c { } }
 export = f;
 
 //// [declarationEmit_nameConflicts_0.ts]
@@ -51,10 +51,18 @@ export module M.Q {
 }
 
 //// [declarationEmit_nameConflicts_1.js]
-function f() {
-}
+var f;
+(function (f) {
+    var c = (function () {
+        function c() {
+        }
+        return c;
+    })();
+    f.c = c;
+})(f || (f = {}));
 module.exports = f;
 //// [declarationEmit_nameConflicts_0.js]
+var im = require('declarationEmit_nameConflicts_1');
 (function (M) {
     function f() {
     }
@@ -75,6 +83,7 @@ module.exports = f;
     M.a = M.f;
     M.b = M.C;
     M.c = N;
+    M.d = im;
 })(exports.M || (exports.M = {}));
 var M = exports.M;
 (function (M) {
@@ -127,3 +136,60 @@ var M = exports.M;
     var Q = M.Q;
 })(exports.M || (exports.M = {}));
 var M = exports.M;
+
+
+//// [declarationEmit_nameConflicts_1.d.ts]
+declare module f {
+    class c {
+    }
+}
+export = f;
+//// [declarationEmit_nameConflicts_0.d.ts]
+export declare module M {
+    function f(): void;
+    class C {
+    }
+    module N {
+        function g(): void;
+        interface I {
+        }
+    }
+    export import a = M.f;
+    export import b = M.C;
+    export import c = N;
+    export import d = im;
+}
+export declare module M.P {
+    function f(): void;
+    class C {
+    }
+    module N {
+        function g(): void;
+        interface I {
+        }
+    }
+    export import im = M.P.f;
+    var a: () => void;
+    var b: typeof M.C;
+    var c: typeof M.N;
+    var g: () => void;
+    var d: typeof M.d;
+}
+export declare module M.Q {
+    function f(): void;
+    class C {
+    }
+    module N {
+        function g(): void;
+        interface I {
+        }
+    }
+    interface b extends M.C {
+    }
+    interface I extends M.N.I {
+    }
+    module c {
+        interface I extends M.N.I {
+        }
+    }
+}

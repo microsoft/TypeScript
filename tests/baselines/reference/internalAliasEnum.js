@@ -39,5 +39,5 @@ declare module a {
     }
 }
 declare module c {
-    var bVal: weekend;
+    var bVal: b;
 }

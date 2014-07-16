@@ -1,8 +1,8 @@
 declare module "quotedm1" {
     class v {
-        c: d;
+        c: m4.d;
     }
 }
 declare module "quotedm2" {
-    var c: v;
+    var c: m1.v;
 }

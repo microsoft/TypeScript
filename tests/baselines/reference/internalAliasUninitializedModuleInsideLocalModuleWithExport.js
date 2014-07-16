@@ -31,5 +31,5 @@ export declare module a {
 }
 export declare module c {
     export import b = a.b;
-    var x: I;
+    var x: b.I;
 }
