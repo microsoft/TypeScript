@@ -1,9 +1,0 @@
-==== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration26.ts (2 errors) ====
-    class C {
-       var
-       ~~~
-!!! Unexpected token. A constructor, method, accessor, or property was expected.
-       public
-    }
-    ~
-!!! Declaration or statement expected.
