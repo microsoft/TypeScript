@@ -181,6 +181,10 @@ module ts {
             return <SourceFile>getAncestor(node, SyntaxKind.SourceFile);
         }
 
+        function isGlobalSourceFile(node: Node) {
+            return node.kind === SyntaxKind.SourceFile && !(node.flags & NodeFlags.ExternalModule);
+        }
+
         function getSymbol(symbols: SymbolTable, name: string, meaning: SymbolFlags): Symbol {
             if (meaning && hasProperty(symbols, name)) {
                 var symbol = symbols[name];
@@ -226,7 +230,7 @@ module ts {
 
             while (location) {
                 // Locals of a source file are not in scope (because they get merged into the global symbol table)
-                if (location.locals && (location.kind !== SyntaxKind.SourceFile || location.flags & NodeFlags.ExternalModule)) {
+                if (location.locals && !isGlobalSourceFile(location)) {
                     if (result = getSymbol(location.locals, name, meaning)) {
                         return returnResolvedSymbol(result);
                     }
@@ -586,11 +590,11 @@ module ts {
             return (propertySymbol.valueDeclaration.flags & NodeFlags.QuestionMark) && propertySymbol.valueDeclaration.kind !== SyntaxKind.Parameter;
         }
 
-        function forEachSymbolTable<T>(enclosingDeclaration: Node, callback: (symbolTable: SymbolTable) => T): T {
+        function forEachSymbolTableInScope<T>(enclosingDeclaration: Node, callback: (symbolTable: SymbolTable) => T): T {
             var result: T;
             for (var location = enclosingDeclaration; location; location = location.parent) {
                 // Locals of a source file are not in scope (because they get merged into the global symbol table)
-                if (location.locals && (location.kind !== SyntaxKind.SourceFile || location.flags & NodeFlags.ExternalModule)) {
+                if (location.locals && !isGlobalSourceFile(location)) {
                     if (result = callback(location.locals)) {
                         return result;
                     }
@@ -626,7 +630,7 @@ module ts {
                             return true;
                         }
 
-                        // isAccessible is parent is accessible
+                        // If symbol needs qualification, make sure that parent is accessible, if it is then this symbol is accessible too
                         var accessibleParent = getAccessibleSymbol(symbolFromSymbolTable.parent, enclosingDeclaration, SymbolFlags.Namespace);
                         return !!accessibleParent;
                     }
@@ -648,13 +652,13 @@ module ts {
             }
 
             if (symbol) {
-                return forEachSymbolTable(enclosingDeclaration, getAccessibleSymbolFromSymbolTable);
+                return forEachSymbolTableInScope(enclosingDeclaration, getAccessibleSymbolFromSymbolTable);
             }
         }
 
         function needsQualification(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags) {
             var qualify = false;
-            forEachSymbolTable(enclosingDeclaration, symbolTable => {
+            forEachSymbolTableInScope(enclosingDeclaration, symbolTable => {
                 // If symbol of this name is not available in the symbol table we are ok
                 if (!symbolTable[symbol.name]) {
                     // Continue to the next symbol table
@@ -681,6 +685,8 @@ module ts {
             return qualify
         }
 
+        // Enclosing declaration is optional when we dont want to get qualified name in the enclosing declaration scope
+        // Meaning needs to be specified if the enclosing declaration is given
         function symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
             function getSymbolName(symbol: Symbol) {
                 if (symbol.declarations && symbol.declarations.length > 0) {
@@ -694,6 +700,7 @@ module ts {
 
             // Get qualified name 
             if (enclosingDeclaration &&
+                // Properties/methods/Signatures/Constructors/TypeParameters do not need qualification
                 !(symbol.flags & SymbolFlags.PropertyOrAccessor & SymbolFlags.Signature & SymbolFlags.Constructor & SymbolFlags.Method & SymbolFlags.TypeParameter)) {
                 var symbolName: string;
                 while (symbol) { 
@@ -918,11 +925,7 @@ module ts {
         }
 
         function isDeclarationVisible(node: Declaration): boolean {
-            function isGlobalSourceFile(node: Node) {
-                return node.kind === SyntaxKind.SourceFile && !(node.flags & NodeFlags.ExternalModule);
-            }
-
-            function getExternalModule(node: Node) {
+            function getContainingExternalModule(node: Node) {
                 for (; node; node = node.parent) {
                     if (node.kind === SyntaxKind.ModuleDeclaration) {
                         if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral) {
@@ -930,14 +933,15 @@ module ts {
                         }
                     }
                     else if (node.kind === SyntaxKind.SourceFile) {
-                        return (node.flags & NodeFlags.ExternalModule) ? node : null;
+                        return (node.flags & NodeFlags.ExternalModule) ? node : undefined;
                     }
                 }
+                Debug.fail("getContainingModule cant reach here");
             }
 
             function isUsedInExportAssignment(node: Node) {
                 // Get source File and see if it is external module and has export assigned symbol
-                var externalModule = getExternalModule(node);
+                var externalModule = getContainingExternalModule(node);
                 if (externalModule) {
                     // This is export assigned symbol node
                     var externalModuleSymbol = getSymbolOfNode(externalModule);
@@ -5513,7 +5517,7 @@ module ts {
         function checkModuleDeclaration(node: ModuleDeclaration) {
             checkDeclarationModifiers(node);
             if (node.name.kind === SyntaxKind.StringLiteral) {
-                if (node.parent.kind !== SyntaxKind.SourceFile || node.parent.flags & NodeFlags.ExternalModule) {
+                if (!isGlobalSourceFile(node.parent)) {
                     error(node, Diagnostics.Ambient_external_modules_cannot_be_nested_in_other_modules);
                 }
                 if (isExternalModuleNameRelative(node.name.text)) {
@@ -5755,7 +5759,7 @@ module ts {
                 }
             }
             while (location) {
-                if (location.locals && (location.kind !== SyntaxKind.SourceFile || location.flags & NodeFlags.ExternalModule)) {
+                if (location.locals && !isGlobalSourceFile(location)) {
                     copySymbols(location.locals, meaning);
                 }
                 switch (location.kind) {
