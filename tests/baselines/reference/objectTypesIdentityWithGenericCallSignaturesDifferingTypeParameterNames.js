@@ -126,7 +126,7 @@ var C = (function () {
     return C;
 })();
 var a;
-var b = { foo: function (x) {
+var b = { foo: function foo(x) {
     return x;
 } };
 function foo1(x) {

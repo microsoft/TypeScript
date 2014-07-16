@@ -1,0 +1,5 @@
+==== tests/cases/compiler/nameCollisionsInPropertyAssignments.ts (1 errors) ====
+    var x = 1
+    var y = { x() { x++; } }; 
+                    ~
+!!! An arithmetic operand must be of type 'any', 'number' or an enum type.

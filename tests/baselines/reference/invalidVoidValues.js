@@ -46,7 +46,7 @@ var a;
 x = a;
 var b;
 x = b;
-x = { f: function () {
+x = { f: function f() {
 } };
 var M;
 (function (M) {

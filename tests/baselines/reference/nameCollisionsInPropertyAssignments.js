@@ -4,6 +4,6 @@ var y = { x() { x++; } };
 
 //// [nameCollisionsInPropertyAssignments.js]
 var x = 1;
-var y = { x: function () {
+var y = { x: function x() {
     x++;
 } };

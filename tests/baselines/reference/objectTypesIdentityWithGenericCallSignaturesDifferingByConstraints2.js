@@ -148,7 +148,7 @@ var D = (function () {
     return D;
 })();
 var a;
-var b = { foo: function (x, y) {
+var b = { foo: function foo(x, y) {
     return '';
 } };
 function foo1(x) {

@@ -51,7 +51,7 @@ function foo(x, y) {
 function foo2(x, y) {
 }
 var x = { a: new C() };
-var x2 = { a: { bar: function () {
+var x2 = { a: { bar: function bar() {
     return 1;
 } } };
 var D = (function () {

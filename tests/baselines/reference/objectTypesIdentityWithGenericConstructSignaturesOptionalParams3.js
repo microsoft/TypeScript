@@ -88,7 +88,7 @@ var C = (function () {
     return C;
 })();
 var a;
-var b = { new: function (x, y) {
+var b = { new: function new(x, y) {
     return new C(x, y);
 } };
 function foo1b(x) {

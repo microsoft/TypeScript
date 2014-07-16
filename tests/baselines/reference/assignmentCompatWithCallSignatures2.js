@@ -66,7 +66,7 @@ t = { f: function (x) { return 1; } };
 t = { f: function f() {
     return 1;
 } };
-t = { f: function (x) {
+t = { f: function f(x) {
     return '';
 } };
 a = { f: function () { return 1; } };

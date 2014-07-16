@@ -143,7 +143,7 @@ var C = (function () {
 })();
 var a;
 var b = {
-    foo: function (x) {
+    foo: function foo(x) {
         return '';
     }
 };

@@ -90,10 +90,10 @@ var h;
 x = h;
 var i;
 x = i;
-x = { f: function () {
+x = { f: function f() {
     return 1;
 } };
-x = { f: function (x) {
+x = { f: function f(x) {
     return x;
 } };
 function j(a) {

@@ -95,7 +95,7 @@ a(1);
 a.foo();
 a.foo(1);
 var b = {
-    foo: function (x) {
+    foo: function foo(x) {
         if (x === void 0) { x = 1; }
     },
     a: function foo(x, y) {

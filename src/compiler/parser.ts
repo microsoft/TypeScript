@@ -293,6 +293,12 @@ module ts {
         Count                    // Number of parsing contexts
     }
 
+    enum Tristate {
+        False,
+        True,
+        Maybe
+    }
+
     function parsingContextErrors(context: ParsingContext): DiagnosticMessage {
         switch (context) {
             case ParsingContext.SourceElements:         return Diagnostics.Declaration_or_statement_expected;
@@ -1256,6 +1262,11 @@ module ts {
             }
         }
 
+        function isExpressionStatement(): boolean {
+            // As per the gramar, neither { nor 'function' can start an expression statement.
+            return token !== SyntaxKind.OpenBraceToken && token !== SyntaxKind.FunctionKeyword && isExpression();
+        }
+
         function parseExpression(noIn?: boolean): Expression {
             var expr = parseAssignmentExpression(noIn);
             while (parseOptional(SyntaxKind.CommaToken)) {
@@ -1399,33 +1410,42 @@ module ts {
         function tryParseParenthesizedArrowFunctionExpression(): Expression {
             var pos = getNodePos();
 
-            // Note isParenthesizedArrowFunctionExpression returns true, false or undefined.
             var triState = isParenthesizedArrowFunctionExpression();
-            if (triState !== false) {
-                // If we *definitely* had an arrow function expression, then just parse one out.
-                // Otherwise we *maybe* had an arrow function and we need to *try* to parse it out
-                // (which will ensure we rollback if we fail).
-                var sig = triState === true
-                    ? parseSignatureAndArrow()
-                    : tryParse(parseSignatureAndArrow);
-
-                // If we got a signature, we're good to go.  consume the rest of this arrow function.
-                if (sig) {
-                    return parseArrowExpressionTail(pos, sig, /*noIn:*/ false);
-                }
+            if (triState === Tristate.False) {
+                // Was not a parenthesized arrow function.
+                return undefined;
             }
 
-            // Was not a parenthesized arrow function.
-            return undefined;
+            // If we *definitely* had an arrow function expression, then just parse one out.
+            if (triState === Tristate.True) {
+                var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken);
+
+                // If we have an arrow, then try to parse the body.
+                if (parseExpected(SyntaxKind.EqualsGreaterThanToken)) {
+                    return parseArrowExpressionTail(pos, sig, /*noIn:*/ false);
+                }
+                // If not, we're probably better off bailing out and returning a bogus function expression.
+                else {
+                    return makeFunctionExpression(SyntaxKind.ArrowFunction, pos, undefined, sig, createMissingNode());
+                }
+            }
+            
+            // Otherwise, *maybe* had an arrow function and we need to *try* to parse it out
+            // (which will ensure we rollback if we fail).
+            var sig = tryParse(parseSignatureAndArrow);
+            if (sig === undefined) {
+                return undefined;
+            }
+            else {
+                return parseArrowExpressionTail(pos, sig, /*noIn:*/ false);
+            }
         }
 
-        // Note: this function returns a tristate:
-        //
-        //  true        -> there is definitely a parenthesized arrow function here. 
-        //  false       -> there is definitely *not* a parenthesized arrow function here.
-        //  undefined   -> there *might* be a parenthesized arrow function here.  Speculatively 
-        //                 look ahead to be sure.
-        function isParenthesizedArrowFunctionExpression(): boolean {
+        //  True        -> There is definitely a parenthesized arrow function here. 
+        //  False       -> There is definitely *not* a parenthesized arrow function here.
+        //  Maybe       -> There *might* be a parenthesized arrow function here.
+        //                  Speculatively look ahead to be sure.
+        function isParenthesizedArrowFunctionExpression(): Tristate {
             if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
                 return lookAhead(() => {
                     var first = token;
@@ -1436,7 +1456,7 @@ module ts {
                             // that this must be an arrow function.  Note, this may be too aggressive
                             // for the "()" case.  It's not uncommon for this to appear while editing 
                             // code.  We should look to see if there's actually a => before proceeding.
-                            return true;
+                            return Tristate.True;
                         }
 
                         if (!isIdentifier()) {
@@ -1444,31 +1464,30 @@ module ts {
                             // look like a lambda.  Note: we could be a little more lenient and allow
                             // (public   or  (private.  These would not ever actually be allowed,
                             // but we could provide a good error message instead of bailing out.
-                            return false;
+                            return Tristate.False;
                         }
 
                         // This *could* be a parenthesized arrow function.  Return 'undefined' to let
                         // the caller know.
-                        return undefined;
+                        return Tristate.Maybe;
                     }
                     else {
                         Debug.assert(first === SyntaxKind.LessThanToken);
 
-                        // If we have "<" not followed by an identifier, then this definitely is not
-                        // an arrow function.
+                        // If we have "<" not followed by an identifier,
+                        // then this definitely is not an arrow function.
                         if (!isIdentifier()) {
-                            return false;
+                            return Tristate.False;
                         }
 
-                        // This *could* be a parenthesized arrow function.  Return 'undefined' to let
-                        // the caller know.
-                        return undefined;
+                        // This *could* be a parenthesized arrow function.
+                        return Tristate.Maybe;
                     }
                 });
             }
 
             // Definitely not a parenthesized arrow function.
-            return false;
+            return Tristate.False;
         }
 
         function parseSignatureAndArrow(): ParsedSignature {
@@ -1478,7 +1497,28 @@ module ts {
         }
 
         function parseArrowExpressionTail(pos: number, sig: ParsedSignature, noIn: boolean): FunctionExpression {
-            var body = token === SyntaxKind.OpenBraceToken ? parseBody() : parseAssignmentExpression(noIn);
+            var body: Expression;
+
+            if (token === SyntaxKind.OpenBraceToken) {
+                body = parseBody(/* ignoreMissingOpenBrace */ false)
+            }
+            // We didn't have a block.  However, we may be in an error situation.  For example,
+            // if the user wrote:
+            //
+            //  a => 
+            //      var v = 0;
+            //  }
+            //
+            // (i.e. they're missing the open brace).  Check to see if that's the case so we can
+            // try to recover better.  If we don't do this, then the next close curly we see may end
+            // up preemptively closing the containing construct.
+            else if (isStatement(/* inErrorRecovery */ true) && !isExpressionStatement() && token !== SyntaxKind.FunctionKeyword) {
+                body = parseBody(/* ignoreMissingOpenBrace */ true);
+            }
+            else {
+                body = parseAssignmentExpression(noIn);
+            }
+
             return makeFunctionExpression(SyntaxKind.ArrowFunction, pos, undefined, sig, body);
         }
 
@@ -1755,8 +1795,8 @@ module ts {
             node.name = parsePropertyName();
             if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
                 var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken);
-                var body = parseBody();
-                node.initializer = makeFunctionExpression(SyntaxKind.FunctionExpression, node.pos, undefined, sig, body);
+                var body = parseBody(/* ignoreMissingOpenBrace */ false);
+                node.initializer = makeFunctionExpression(SyntaxKind.FunctionExpression, node.pos, node.name, sig, body);
             }
             else {
                 parseExpected(SyntaxKind.ColonToken);
@@ -1789,7 +1829,7 @@ module ts {
             parseExpected(SyntaxKind.FunctionKeyword);
             var name = isIdentifier() ? parseIdentifier() : undefined;
             var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken);
-            var body = parseBody();
+            var body = parseBody(/* ignoreMissingOpenBrace */ false);
             return makeFunctionExpression(SyntaxKind.FunctionExpression, pos, name, sig, body);
         }
 
@@ -1816,9 +1856,9 @@ module ts {
 
         // STATEMENTS
 
-        function parseBlock(): Block {
+        function parseBlock(ignoreMissingOpenBrace: boolean): Block {
             var node = <Block>createNode(SyntaxKind.Block);
-            if (parseExpected(SyntaxKind.OpenBraceToken)) {
+            if (parseExpected(SyntaxKind.OpenBraceToken) || ignoreMissingOpenBrace) {
                 node.statements = parseList(ParsingContext.BlockStatements, parseStatement);
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
@@ -1828,8 +1868,8 @@ module ts {
             return finishNode(node);
         }
 
-        function parseBody(): Block {
-            var block = parseBlock();
+        function parseBody(ignoreMissingOpenBrace: boolean): Block {
+            var block = parseBlock(ignoreMissingOpenBrace);
             block.kind = SyntaxKind.FunctionBlock;
             return block;
         }
@@ -2016,7 +2056,7 @@ module ts {
         function parseTokenAndBlock(token: SyntaxKind, kind: SyntaxKind): Block {
             var pos = getNodePos();
             parseExpected(token);
-            var result = parseBlock();
+            var result = parseBlock(/* ignoreMissingOpenBrace */ false);
             result.kind = kind;
             result.pos = pos;
             return result;
@@ -2031,7 +2071,7 @@ module ts {
             var typeAnnotationColonLength = scanner.getTextPos() - typeAnnotationColonStart;
             var typeAnnotation = parseTypeAnnotation();
             parseExpected(SyntaxKind.CloseParenToken);
-            var result = <CatchBlock>parseBlock();
+            var result = <CatchBlock>parseBlock(/* ignoreMissingOpenBrace */ false);
             result.kind = SyntaxKind.CatchBlock;
             result.pos = pos;
             result.variable = variable;
@@ -2108,14 +2148,10 @@ module ts {
             }
         }
 
-        function isStatementOrFunction(inErrorRecovery: boolean): boolean {
-            return token === SyntaxKind.FunctionKeyword || isStatement(inErrorRecovery);
-        }
-
         function parseStatement(): Statement {
             switch (token) {
                 case SyntaxKind.OpenBraceToken:
-                    return parseBlock();
+                    return parseBlock(/* ignoreMissingOpenBrace */ false);
                 case SyntaxKind.VarKeyword:
                     return parseVariableStatement();
                 case SyntaxKind.FunctionKeyword:
@@ -2162,7 +2198,7 @@ module ts {
             var initialPosition = scanner.getTokenPos();
             var errorCountBeforeBody = file.syntacticErrors.length;
             if (token === SyntaxKind.OpenBraceToken) {
-                var body = parseBody();
+                var body = parseBody(/* ignoreMissingOpenBrace */ false);
                 if (body && inAmbientContext && file.syntacticErrors.length === errorCountBeforeBody) {
                     var diagnostic = isConstructor ? Diagnostics.A_constructor_implementation_cannot_be_declared_in_an_ambient_context : Diagnostics.A_function_implementation_cannot_be_declared_in_an_ambient_context;
                     grammarErrorAtPos(initialPosition, 1, diagnostic);
@@ -2334,7 +2370,7 @@ module ts {
             node.typeParameters = sig.typeParameters;
             node.parameters = sig.parameters;
             node.type = sig.type;
-            node.body = parseBody();
+            node.body = parseBody(/* ignoreMissingOpenBrace */ false);
             return finishNode(node);
         }
 
@@ -2358,7 +2394,7 @@ module ts {
             if (token === SyntaxKind.OpenBracketToken) {
                 return true;
             }
-
+            
             // If we were able to get any potential identifier...
             if (idToken !== undefined) {
                 // If we have a non-keyword identifier, or if we have an accessor, then it's safe to parse.
