@@ -1,16 +1,12 @@
 ==== tests/cases/compiler/ambientExternalModuleWithRelativeModuleName.ts (2 errors) ====
     declare module "./relativeModule" {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        var x: string;
-    ~~~~~~~~~~~~~~~~~~
-    }
-    ~
+                   ~~~~~~~~~~~~~~~~~~
 !!! Ambient external module declaration cannot specify relative module name.
+        var x: string;
+    }
     
     declare module ".\\relativeModule" {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        var x: string;
-    ~~~~~~~~~~~~~~~~~~
-    }
-    ~
+                   ~~~~~~~~~~~~~~~~~~~
 !!! Ambient external module declaration cannot specify relative module name.
+        var x: string;
+    }

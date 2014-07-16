@@ -5,12 +5,10 @@
                        ~~~~~~~~~~~~~~~~
 !!! Cannot find external module 'externalModule'.
     declare module "m1" {
-    ~~~~~~~~~~~~~~~~~~~~~
+                   ~~~~
+!!! Ambient external modules cannot be nested in other modules.
         import im2 = require("externalModule");
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                              ~~~~~~~~~~~~~~~~
 !!! Cannot find external module 'externalModule'.
     }
-    ~
-!!! Ambient external modules cannot be nested in other modules.
     

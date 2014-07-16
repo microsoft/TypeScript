@@ -4,21 +4,21 @@
     function m2() { }; // ok since the module is not instantiated
     
     module m2a { var y = 2; }
-    ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module declaration cannot be located prior to class or function with which it is merged
+           ~~~
+!!! A module declaration cannot be located prior to a class or function with which it is merged
     function m2a() { }; // error since the module is instantiated
     
     module m2b { export var y = 2; }
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module declaration cannot be located prior to class or function with which it is merged
+           ~~~
+!!! A module declaration cannot be located prior to a class or function with which it is merged
     function m2b() { };  // error since the module is instantiated
     
     function m2c() { }; 
     module m2c { export var y = 2; } 
     
     module m2cc { export var y = 2; }
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module declaration cannot be located prior to class or function with which it is merged
+           ~~~~
+!!! A module declaration cannot be located prior to a class or function with which it is merged
     function m2cc() { }; // error to have module first
     
     module m2d { }

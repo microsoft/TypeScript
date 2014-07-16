@@ -3,10 +3,8 @@
     
 ==== tests/cases/compiler/funduleSplitAcrossFiles_module.ts (1 errors) ====
     module D {
-    ~~~~~~~~~~
+           ~
+!!! A module declaration cannot be in a different file from a class or function with which it is merged
         export var y = "hi";
-    ~~~~~~~~~~~~~~~~~~~~~~~~
     }
-    ~
-!!! Module declaration cannot be in different file from class or function with which it is merged
     D.y;

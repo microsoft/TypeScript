@@ -18,12 +18,10 @@
 !!! Duplicate identifier 'z'.
     
         module y {
-        ~~~~~~~~~~
+               ~
+!!! A module declaration cannot be located prior to a class or function with which it is merged
             var b;
-    ~~~~~~~~~~~~~~
         }
-    ~~~~~
-!!! Module declaration cannot be located prior to class or function with which it is merged
     
         class y { } // error
     
