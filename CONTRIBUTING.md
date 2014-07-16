@@ -30,13 +30,19 @@ Your pull request should:
 
 ## Running the Tests
 To run all tests, invoke the runtests target using jake:
+
 `jake runtests`
 
 This will all tests; to run only a specific subset of tests, use:
+
 `jake runtests tests=<regex>`
+
 e.g. to run all compiler baseline tests:
+
 `jake runtests tests=compiler`
+
 or to run specifc test:tests\cases\compiler\2dArrays.ts 
+
 `jake runtests tests=2dArrays`
 
 ## Adding a Test
@@ -56,9 +62,11 @@ These files support metadata tags in the format  // @name: value . The supported
 Compiler testcases generate baselines that track the emitted .js, the errors produced by the compiler, and the type of each expression in the file. Additionally, some testcases opt in to baselining the source map output.
 
 When a change in the baselines is detected, the test will fail. To inspect changes vs the expected baselines, use
+
 `jake diff`
 
 After verifying that the changes in the baselines are correct, run
+
 `jake baseline-accept`
 
 to establish the new baselines as the desired behavior. This will change the files in tests\baselines\reference, which should be included as part of your commit. It's important to carefully validate changes in the baselines.
