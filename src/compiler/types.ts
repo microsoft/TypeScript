@@ -648,10 +648,9 @@ module ts {
         IndexSignature     = 0x00020000,  // Index signature
         TypeParameter      = 0x00040000,  // Type parameter
 
-        // Export markers (see comment in declareModuleMember in binder)
-        ExportValue        = 0x00080000,  // Exported value marker
-        ExportType         = 0x00100000,  // Exported type marker
-        ExportNamespace    = 0x00200000,  // Exported namespace marker
+        ExportValue      = 0x00080000,  // Exported value marker
+        ExportType       = 0x00100000,  // Exported type marker
+        ExportNamespace  = 0x00200000,  // Exported namespace marker
 
         Import             = 0x00400000,  // Import
         Instantiated       = 0x00800000,  // Instantiated symbol
@@ -707,7 +706,8 @@ module ts {
         exports?: SymbolTable;         // Module exports
         exportSymbol?: Symbol;         // Exported symbol associated with this symbol
         exportAssignSymbol?: Symbol;   // Symbol exported from external module
-        valueDeclaration?: Declaration // First value declaration of the symbol
+        valueDeclaration?: Declaration;// First value declaration of the symbol
+        localSymbols?: Symbol[];       // List of local symbols that contribute to the export symbol
     }
 
     export interface SymbolLinks {

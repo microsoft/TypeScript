@@ -1,4 +1,4 @@
-==== tests/cases/compiler/overloadModifiersMustAgree.ts (5 errors) ====
+==== tests/cases/compiler/overloadModifiersMustAgree.ts (4 errors) ====
     class baz {
         public foo();
                ~~~
@@ -10,10 +10,8 @@
                      ~~~
 !!! Overload signatures must all be ambient or non-ambient.
     export function bar(s: string);
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Function implementation expected.
                     ~~~
-!!! Duplicate identifier 'bar'.
+!!! Overload signatures must all be exported or not exported.
     function bar(s?: string) { }
     
     interface I {

@@ -24,7 +24,7 @@
     
     	var bar = 2;
     	    ~~~
-!!! Duplicate identifier 'bar'.
+!!! All declarations of merged declaration 'bar' must be exported or not exported.
     
     	module {
     	       ~

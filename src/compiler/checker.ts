@@ -11,6 +11,13 @@ module ts {
     var nextNodeId = 1;
     var nextMergeId = 1;
 
+    enum DeclarationSpace {
+        Unknown     = 0,
+        Type        = 1,
+        Value       = 2,
+        Namespace   = 4,
+    }
+
     export function createTypeChecker(program: Program): TypeChecker {
 
         var Symbol = objectAllocator.getSymbolConstructor();
@@ -107,6 +114,9 @@ module ts {
         function cloneSymbol(symbol: Symbol): Symbol {
             var result = createSymbol(symbol.flags | SymbolFlags.Merged, symbol.name);
             result.declarations = symbol.declarations.slice(0);
+            if (symbol.localSymbols) {
+                result.localSymbols = symbol.localSymbols.slice(0);
+            }
             result.parent = symbol.parent;
             if (symbol.valueDeclaration) result.valueDeclaration = symbol.valueDeclaration;
             if (symbol.members) result.members = cloneSymbolTable(symbol.members);
@@ -122,6 +132,12 @@ module ts {
                 forEach(source.declarations, node => {
                     target.declarations.push(node);
                 });
+                if (source.localSymbols) {
+                    if (!target.localSymbols) {
+                        target.localSymbols = [];
+                    }
+                    forEach(source.localSymbols, node => { target.localSymbols.push(node); });
+                }
                 if (source.members) {
                     if (!target.members) target.members = {};
                     extendSymbolTable(target.members, source.members);
@@ -2230,6 +2246,7 @@ module ts {
             // also transient so that we can just store data on it directly.
             var result = <TransientSymbol>createSymbol(SymbolFlags.Instantiated | SymbolFlags.Transient, symbol.name);
             result.declarations = symbol.declarations;
+            result.localSymbols = symbol.localSymbols;
             result.parent = symbol.parent;
             result.target = symbol;
             result.mapper = mapper;
@@ -2928,6 +2945,7 @@ module ts {
                     forEach(properties, p => {
                         var symbol = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient, p.name);
                         symbol.declarations = p.declarations;
+                        symbol.localSymbols = p.localSymbols;
                         symbol.parent = p.parent;
                         symbol.type = widenedTypes[index++];
                         if (p.valueDeclaration) symbol.valueDeclaration = p.valueDeclaration;
@@ -3455,6 +3473,7 @@ module ts {
                         var type = checkExpression((<PropertyDeclaration>member.declarations[0]).initializer, contextualPropType, contextualMapper);
                         var prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient, member.name);
                         prop.declarations = member.declarations;
+                        prop.localSymbols = member.localSymbols;
                         prop.parent = member.parent;
                         if (member.valueDeclaration) prop.valueDeclaration = member.valueDeclaration;
                         prop.type = type;
@@ -4730,89 +4749,104 @@ module ts {
                 return flags & flagsToCheck;
             }
 
-            function checkFlagAgreementBetweenOverloads(overloads: Declaration[], implementation: FunctionDeclaration, flagsToCheck: NodeFlags, someOverloadFlags: NodeFlags, allOverloadFlags: NodeFlags): void {
-                // Error if some overloads have a flag that is not shared by all overloads. To find the
-                // deviations, we XOR someOverloadFlags with allOverloadFlags
-                var someButNotAllOverloadFlags = someOverloadFlags ^ allOverloadFlags;
-                if (someButNotAllOverloadFlags !== 0) {
-                    // Consider the canonical set of flags to be the flags of the bodyDeclaration or the first declaration
-                    // Error on all deviations from this canonical set of flags
-                    // The caveat is that if some overloads are defined in lib.d.ts, we don't want to
-                    // report the errors on those. To achieve this, we will say that the implementation is
-                    // the canonical signature only if it is in the same container as the first overload
-                    var implementationSharesContainerWithFirstOverload = implementation !== undefined && implementation.parent === overloads[0].parent;
-                    var canonicalFlags = implementationSharesContainerWithFirstOverload
-                        ? getEffectiveFlagsForFunctionCheck(implementation)
-                        : getEffectiveFlagsForFunctionCheck(overloads[0]);
-                    forEach(overloads, o => {
-                        var deviation = getEffectiveFlagsForFunctionCheck(o) ^ canonicalFlags;
-                        if (deviation & NodeFlags.Export) {
-                            error(o.name, Diagnostics.Overload_signatures_must_all_be_exported_or_not_exported);
-                        }
-                        else if (deviation & NodeFlags.Ambient) {
-                            error(o.name, Diagnostics.Overload_signatures_must_all_be_ambient_or_non_ambient);
-                        }
-                        else if (deviation & NodeFlags.Private) {
-                            error(o.name, Diagnostics.Overload_signatures_must_all_be_public_or_private);
-                        }
-                        else if (deviation & NodeFlags.QuestionMark) {
-                            error(o.name, Diagnostics.Overload_signatures_must_all_be_optional_or_required);
-                        }
-                    });
-                }
+            function getCanonicalFlags(implementation: FunctionDeclaration, overloads: Declaration[]): NodeFlags {
+                // Consider the canonical set of flags to be the flags of the bodyDeclaration or the first declaration
+                // Error on all deviations from this canonical set of flags
+                // The caveat is that if some overloads are defined in lib.d.ts, we don't want to
+                // report the errors on those. To achieve this, we will say that the implementation is
+                // the canonical signature only if it is in the same container as the first overload
+                var implementationSharesContainerWithFirstOverload = implementation && implementation.parent === overloads[0].parent;
+
+                return implementationSharesContainerWithFirstOverload
+                    ? getEffectiveFlagsForFunctionCheck(implementation)
+                    : getEffectiveFlagsForFunctionCheck(overloads[0]);
             }
 
+            function checkFlagAgreementBetweenOverloads(overloads: Declaration[], canonicalFlags: NodeFlags): void {
+                forEach(overloads, o => {
+                    var deviation = getEffectiveFlagsForFunctionCheck(o) ^ canonicalFlags;
+                    if (deviation & NodeFlags.Export) {
+                        error(o.name, Diagnostics.Overload_signatures_must_all_be_exported_or_not_exported);
+                    }
+                    else if (deviation & NodeFlags.Ambient) {
+                        error(o.name, Diagnostics.Overload_signatures_must_all_be_ambient_or_non_ambient);
+                    }
+                    else if (deviation & NodeFlags.Private) {
+                        error(o.name, Diagnostics.Overload_signatures_must_all_be_public_or_private);
+                    }
+                    else if (deviation & NodeFlags.QuestionMark) {
+                        error(o.name, Diagnostics.Overload_signatures_must_all_be_optional_or_required);
+                    }
+                });
+            }
             var flagsToCheck: NodeFlags = NodeFlags.Export | NodeFlags.Ambient | NodeFlags.Private | NodeFlags.QuestionMark;
             var someNodeFlags: NodeFlags = 0;
             var allNodeFlags = flagsToCheck;
             var hasOverloads = false;
             var bodyDeclaration: FunctionDeclaration;
             var lastSeenNonAmbientDeclaration: FunctionDeclaration;
-            var declarations = symbol.declarations;
             var isConstructor = (symbol.flags & SymbolFlags.Constructor) !== 0;
-            for (var i = 0; i < declarations.length; i++) {
-                var node = <FunctionDeclaration>declarations[i];
-                if (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.Method || node.kind === SyntaxKind.Constructor) {
-                    var currentNodeFlags = getEffectiveFlagsForFunctionCheck(node);
-                    someNodeFlags |= currentNodeFlags;
-                    allNodeFlags &= currentNodeFlags;
 
-                    var inAmbientContext = isInAmbientContext(node);
-                    var inAmbientContextOrInterface = node.parent.kind === SyntaxKind.InterfaceDeclaration || node.parent.kind === SyntaxKind.TypeLiteral || inAmbientContext;
-                    if (!inAmbientContextOrInterface) {
-                        lastSeenNonAmbientDeclaration = node;
-                    }
+            function checkDeclarationsInSymbol(symbol: Symbol): void {
+                var declarations = symbol.declarations;
+                for (var i = 0; i < declarations.length; i++) {
+                    var node = <FunctionDeclaration>declarations[i];
+                    if (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.Method || node.kind === SyntaxKind.Constructor) {
+                        var currentNodeFlags = getEffectiveFlagsForFunctionCheck(node);
+                        someNodeFlags |= currentNodeFlags;
+                        allNodeFlags &= currentNodeFlags;
 
-                    if (node.body) {
-                        if (bodyDeclaration) {
-                            if (isConstructor) {
-                                error(node, Diagnostics.Multiple_constructor_implementations_are_not_allowed);
+                        var inAmbientContext = isInAmbientContext(node);
+                        var inAmbientContextOrInterface = node.parent.kind === SyntaxKind.InterfaceDeclaration || node.parent.kind === SyntaxKind.TypeLiteral || inAmbientContext;
+                        if (!inAmbientContextOrInterface) {
+                            lastSeenNonAmbientDeclaration = node;
+                        }
+
+                        if (node.body) {
+                            if (bodyDeclaration) {
+                                if (isConstructor) {
+                                    error(node, Diagnostics.Multiple_constructor_implementations_are_not_allowed);
+                                }
+                                else {
+                                    error(node, Diagnostics.Duplicate_function_implementation);
+                                }
                             }
                             else {
-                                error(node, Diagnostics.Duplicate_function_implementation);
+                                bodyDeclaration = node;
                             }
                         }
                         else {
-                            bodyDeclaration = node;
+                            hasOverloads = true;
                         }
                     }
+                }
+
+                if (lastSeenNonAmbientDeclaration && !lastSeenNonAmbientDeclaration.body) {
+                    if (isConstructor) {
+                        error(lastSeenNonAmbientDeclaration, Diagnostics.Constructor_implementation_expected);
+                    }
                     else {
-                        hasOverloads = true;
+                        error(lastSeenNonAmbientDeclaration, Diagnostics.Function_implementation_expected);
                     }
                 }
             }
 
-            if (lastSeenNonAmbientDeclaration && !lastSeenNonAmbientDeclaration.body) {
-                if (isConstructor) {
-                    error(lastSeenNonAmbientDeclaration, Diagnostics.Constructor_implementation_expected);
-                }
-                else {
-                    error(lastSeenNonAmbientDeclaration, Diagnostics.Function_implementation_expected);
-                }
-            }
+            forEachDeclarationInSymbol(symbol, checkDeclarationsInSymbol);
 
             if (hasOverloads) {
-                checkFlagAgreementBetweenOverloads(declarations, bodyDeclaration, flagsToCheck, someNodeFlags, allNodeFlags);
+                // Error if some overloads have a flag that is not shared by all overloads. To find the
+                // deviations, we XOR someOverloadFlags with allOverloadFlags
+                if (someNodeFlags ^ allNodeFlags) {
+                    if (symbol.localSymbols) {
+                        var canonicalFlags: NodeFlags = getCanonicalFlags(bodyDeclaration, symbol.localSymbols[0].declarations);
+                        forEach(symbol.localSymbols, s => checkFlagAgreementBetweenOverloads(s.declarations, canonicalFlags));
+                    }
+                    else {
+                        var canonicalFlags: NodeFlags = getCanonicalFlags(bodyDeclaration, symbol.declarations);
+                        checkFlagAgreementBetweenOverloads(symbol.declarations, canonicalFlags);
+                    }
+                }
+
                 if (bodyDeclaration) {
                     var signatures = getSignaturesOfSymbol(symbol);
                     var bodySignature = getSignatureFromDeclaration(bodyDeclaration);
@@ -4846,15 +4880,100 @@ module ts {
             // TODO: Check at least one return statement in non-void/any function (except single throw)
         }
 
+        function isLocalSymbolAssociatedWithExportSymbol(s: Symbol): boolean {
+            return s.exportSymbol !== undefined;
+        }
+
+        function forEachDeclarationInSymbol(s: Symbol, action: (symbol: Symbol) => void): void {
+            if (s.localSymbols) {
+                forEach(s.localSymbols, action);
+            }
+            else {
+                action(s);
+            }
+        }
+
+        function checkExportsOnMergedDeclarations(symbol: Symbol, node: Node): void {
+            if (symbol.flags & SymbolFlags.Prototype) {
+                return;
+            }
+
+            if (isLocalSymbolAssociatedWithExportSymbol(symbol)) {
+                // all local symbols will be processed during the check of export symbol.
+                return;
+            }
+
+            // this either export symbol or local without export symbol
+            // in both cases run check just once for the first symbol in the list
+            if (getDeclarationOfKind(symbol, node.kind) !== node) {
+                return;
+            }
+
+            var declarationSpace = DeclarationSpace.Unknown;
+            var flags: NodeFlags;
+            function checkDeclarationsInSymbol(symbol: Symbol): void {
+                var declarations = symbol.declarations;
+                for (var i = 0, len = declarations.length; i < len; ++i) {
+                    var currentDeclarationSpace = getDeclarationSpace(declarations[i]);
+                    var currentFlags = declarations[i].flags & NodeFlags.Export;
+                    if (declarationSpace & currentDeclarationSpace) {
+                        if (flags !== undefined) {
+                            if (currentFlags ^ flags) {
+                                error(declarations[i].name, Diagnostics.All_declarations_of_merged_declaration_0_must_be_exported_or_not_exported, symbolToString(symbol));
+                            }
+                        }
+                        else {
+                            // first declaration - initialize flags
+                            flags = 0;
+                        }
+                    }
+                    flags |= currentFlags;
+                    declarationSpace |= currentDeclarationSpace;
+                }
+            }
+
+            forEachDeclarationInSymbol(symbol, checkDeclarationsInSymbol);
+
+            function getDeclarationSpace(d: Declaration): DeclarationSpace {
+                switch (d.kind) {
+                    case SyntaxKind.InterfaceDeclaration:
+                        return DeclarationSpace.Type;
+                    case SyntaxKind.ModuleDeclaration:
+                        return isInstantiated(d) ? DeclarationSpace.Namespace | DeclarationSpace.Value : DeclarationSpace.Namespace;
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.EnumDeclaration:
+                        return DeclarationSpace.Type | DeclarationSpace.Value;
+                    case SyntaxKind.ImportDeclaration:
+                        var target = resolveImport(getSymbolOfNode(d));
+                        var space: DeclarationSpace = DeclarationSpace.Unknown;
+                        if (target.flags & SymbolFlags.Value) {
+                            space |= DeclarationSpace.Value;
+                        }
+                        if (target.flags & SymbolFlags.Type) {
+                            space |= DeclarationSpace.Type;
+                        }
+                        if (target.flags & SymbolFlags.Namespace) {
+                            space |= DeclarationSpace.Namespace;
+                        }
+                        return space;
+                    default:
+                        return DeclarationSpace.Value;
+                }
+            }
+        }
+
         function checkFunctionDeclaration(node: FunctionDeclaration) {
             checkDeclarationModifiers(node);
             checkSignatureDeclaration(node);
 
             var symbol = getSymbolOfNode(node);
-            var firstDeclaration = getDeclarationOfKind(symbol, node.kind);
-            // Only type check the symbol once
-            if (node === firstDeclaration) {
-                checkFunctionOrConstructorSymbol(symbol);
+            // all local symbols associated with export symbol will be processed during the check of export symbol.
+            if (!isLocalSymbolAssociatedWithExportSymbol(symbol)) {
+                var firstDeclaration = getDeclarationOfKind(symbol, node.kind);
+                // Only type check the symbol once
+                if (node === firstDeclaration) {
+                    checkFunctionOrConstructorSymbol(symbol);
+                }
             }
             checkSourceElement(node.body);
 
@@ -5010,6 +5129,7 @@ module ts {
             checkSourceElement(node.type);
 
             var symbol = getSymbolOfNode(node);
+            checkExportsOnMergedDeclarations(symbol, node);
 
             var typeOfValueDeclaration = getTypeOfVariableOrParameterOrProperty(symbol);
             var type: Type;
@@ -5299,6 +5419,8 @@ module ts {
             checkTypeNameIsReserved(node.name, Diagnostics.Class_name_cannot_be_0);
             checkTypeParameters(node.typeParameters);
             var symbol = getSymbolOfNode(node);
+            checkExportsOnMergedDeclarations(symbol, node);
+
             var type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
             var staticType = <ObjectType>getTypeOfSymbol(symbol);
             if (node.baseType) {
@@ -5453,7 +5575,10 @@ module ts {
             checkDeclarationModifiers(node);
             checkTypeNameIsReserved(node.name, Diagnostics.Interface_name_cannot_be_0);
             checkTypeParameters(node.typeParameters);
+
             var symbol = getSymbolOfNode(node);
+            checkExportsOnMergedDeclarations(symbol, node);
+
             var firstInterfaceDecl = <InterfaceDeclaration>getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration);
             if (symbol.declarations.length > 1) {
                 if (node !== firstInterfaceDecl && !areTypeParametersIdentical(firstInterfaceDecl.typeParameters, node.typeParameters)) {
@@ -5499,6 +5624,7 @@ module ts {
             checkDeclarationModifiers(node);
             checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
             var enumSymbol = getSymbolOfNode(node);
+            checkExportsOnMergedDeclarations(enumSymbol, node);
             var enumType = getDeclaredTypeOfSymbol(enumSymbol);
             var autoValue = 0;
             var ambient = isInAmbientContext(node);
@@ -5570,6 +5696,7 @@ module ts {
         function checkModuleDeclaration(node: ModuleDeclaration) {
             checkDeclarationModifiers(node);
             var symbol = getSymbolOfNode(node);
+            checkExportsOnMergedDeclarations(symbol, node);
             if (symbol.flags & SymbolFlags.ValueModule && symbol.declarations.length > 1 && !isInAmbientContext(node)) {
                 var classOrFunc = getFirstNonAmbientClassOrFunctionDeclaration(symbol);
                 if (classOrFunc) {
