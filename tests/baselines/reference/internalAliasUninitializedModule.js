@@ -30,5 +30,5 @@ declare module a {
     }
 }
 declare module c {
-    var x: I;
+    var x: a.b.I;
 }

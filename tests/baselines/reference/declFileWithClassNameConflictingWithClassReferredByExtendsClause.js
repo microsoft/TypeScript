@@ -73,7 +73,7 @@ declare module A.B.Base {
     }
 }
 declare module X.Y.base {
-    class W extends W {
+    class W extends A.B.Base.W {
         name: string;
     }
 }

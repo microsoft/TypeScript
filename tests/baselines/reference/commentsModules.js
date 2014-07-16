@@ -254,7 +254,7 @@ declare module m1 {
     function foo2Export(a: string): void;
     function foo3Export(): void;
 }
-declare var myvar: c;
+declare var myvar: m1.m2.c;
 declare module m2.m3 {
     class c {
     }

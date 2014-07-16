@@ -35,6 +35,6 @@ declare var d: {
         m: typeof m1;
     };
     m2: {
-        c: typeof c;
+        c: typeof m1.c;
     };
 };

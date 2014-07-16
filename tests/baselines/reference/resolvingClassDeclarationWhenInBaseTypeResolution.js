@@ -7407,474 +7407,474 @@ var caurinus;
 
 //// [resolvingClassDeclarationWhenInBaseTypeResolution.d.ts]
 declare module rionegrensis {
-    class caniventer extends nitidus<minutilla, sumatrana> {
+    class caniventer extends Lanthanum.nitidus<petrophilus.minutilla, julianae.sumatrana> {
         salomonseni(): caniventer;
-        uchidai(): xanthognathus;
-        raffrayana(): otion;
-        Uranium(): inez<inez<stolzmanni, melanops>, falconeri>;
-        nayaur(): amicus;
+        uchidai(): lavali.xanthognathus;
+        raffrayana(): lavali.otion;
+        Uranium(): minutus.inez<minutus.inez<sagitta.stolzmanni, dammermani.melanops>, trivirgatus.falconeri>;
+        nayaur(): gabriellae.amicus;
     }
-    class veraecrucis<T0, T1> extends mixtus<amicus, punicus> {
-        naso(): setulosus<punicus, coludo<bobrinskoi, melanoleuca>>;
-        vancouverensis(): ciliolabrum<oreas, peninsulae>;
-        africana(): gilbertii<linulus<lepturus, oreas>, cinereus<xanthognathus, oreas>>;
-        palliolata(): jugularis;
-        nivicola(): pallidus;
+    class veraecrucis<T0, T1> extends trivirgatus.mixtus<gabriellae.amicus, lutreolus.punicus> {
+        naso(): panamensis.setulosus<lutreolus.punicus, howi.coludo<quasiater.bobrinskoi, provocax.melanoleuca>>;
+        vancouverensis(): imperfecta.ciliolabrum<argurus.oreas, argurus.peninsulae>;
+        africana(): argurus.gilbertii<panamensis.linulus<lavali.lepturus, argurus.oreas>, sagitta.cinereus<lavali.xanthognathus, argurus.oreas>>;
+        palliolata(): Lanthanum.jugularis;
+        nivicola(): samarensis.pallidus;
     }
 }
 declare module julianae {
     class steerii {
     }
     class nudicaudus {
-        brandtii(): germaini;
-        maxwellii(): Praseodymium<jugularis, melanops>;
-        endoi(): abidi<kaiseri, wilsoni>;
-        venezuelae(): marcanoi;
-        zamicrus(): caniventer;
+        brandtii(): argurus.germaini;
+        maxwellii(): ruatanica.Praseodymium<Lanthanum.jugularis, dammermani.melanops>;
+        endoi(): panglima.abidi<dogramacii.kaiseri, lavali.wilsoni>;
+        venezuelae(): howi.marcanoi;
+        zamicrus(): rionegrensis.caniventer;
     }
     class galapagoensis {
-        isabellae(): amphibius<daphaenodon, uralensis>;
-        rueppellii(): americanus;
-        peregusna(): kaiseri;
-        gliroides(): coludo<marcanoi, wilsoni>;
-        banakrisi(): daphaenodon;
-        rozendaali(): foina;
-        stuhlmanni(): linulus<megaphyllus, megaphyllus>;
+        isabellae(): panglima.amphibius<macrorhinos.daphaenodon, patas.uralensis>;
+        rueppellii(): ruatanica.americanus;
+        peregusna(): dogramacii.kaiseri;
+        gliroides(): howi.coludo<howi.marcanoi, lavali.wilsoni>;
+        banakrisi(): macrorhinos.daphaenodon;
+        rozendaali(): lutreolus.foina;
+        stuhlmanni(): panamensis.linulus<caurinus.megaphyllus, caurinus.megaphyllus>;
     }
     class albidens<T0, T1> {
-        mattheyi(): fuscus<wilsoni, sarasinorum<jugularis, subspinosus>>;
+        mattheyi(): samarensis.fuscus<lavali.wilsoni, chrysaeolus.sarasinorum<Lanthanum.jugularis, imperfecta.subspinosus>>;
         Astatine(): steerii;
-        vincenti(): dauricus<konganensis, uralensis>;
-        hirta(): jugularis;
+        vincenti(): argurus.dauricus<macrorhinos.konganensis, patas.uralensis>;
+        hirta(): Lanthanum.jugularis;
         virginianus(): durangae;
-        macrophyllum(): marcanoi;
-        porcellus(): americanus;
+        macrophyllum(): howi.marcanoi;
+        porcellus(): ruatanica.americanus;
     }
-    class oralis<T0, T1> extends psilurus {
-        cepapi(): psilurus;
-        porteri(): thaeleri;
-        bindi(): mahaganus<amicus, amphibius<daphaenodon, uralensis>>;
-        puda(): stolzmanni;
-        mindorensis(): falconeri;
-        ignitus(): rosalia<setulosus<echinatus, steerii>, wilsoni>;
+    class oralis<T0, T1> extends caurinus.psilurus {
+        cepapi(): caurinus.psilurus;
+        porteri(): lavali.thaeleri;
+        bindi(): caurinus.mahaganus<gabriellae.amicus, panglima.amphibius<macrorhinos.daphaenodon, patas.uralensis>>;
+        puda(): sagitta.stolzmanni;
+        mindorensis(): trivirgatus.falconeri;
+        ignitus(): petrophilus.rosalia<panamensis.setulosus<gabriellae.echinatus, steerii>, lavali.wilsoni>;
         rufus(): nudicaudus;
-        monax(): subspinosus;
-        unalascensis(): inez<moojeni<amphibius<falconeri, psilurus>, echinatus>, aurata>;
-        wuchihensis(): angulatus<coludo<carolinensis, portoricensis>, minutilla>;
-        leucippe(): otion;
-        ordii(): arboreus<germaini, stolzmanni>;
-        eisentrauti(): zuluensis;
+        monax(): imperfecta.subspinosus;
+        unalascensis(): minutus.inez<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, dogramacii.aurata>;
+        wuchihensis(): howi.angulatus<howi.coludo<quasiater.carolinensis, minutus.portoricensis>, petrophilus.minutilla>;
+        leucippe(): lavali.otion;
+        ordii(): daubentonii.arboreus<argurus.germaini, sagitta.stolzmanni>;
+        eisentrauti(): rendalli.zuluensis;
     }
-    class sumatrana extends jugularis {
-        wolffsohni(): suillus<melanops, carolinensis>;
-        geata(): hector<sumatrana, bobrinskoi>;
-        awashensis(): minutilla;
-        sturdeei(): cor<jugularis, galapagoensis>;
-        pachyurus(): angulatus<aurata, gerbillus<thaeleri, carolinensis>>;
-        lyelli(): melanoleuca;
-        neohibernicus(): siberu<foina, pallidus>;
+    class sumatrana extends Lanthanum.jugularis {
+        wolffsohni(): Lanthanum.suillus<dammermani.melanops, quasiater.carolinensis>;
+        geata(): ruatanica.hector<sumatrana, quasiater.bobrinskoi>;
+        awashensis(): petrophilus.minutilla;
+        sturdeei(): lutreolus.cor<Lanthanum.jugularis, galapagoensis>;
+        pachyurus(): howi.angulatus<dogramacii.aurata, gerbillus<lavali.thaeleri, quasiater.carolinensis>>;
+        lyelli(): provocax.melanoleuca;
+        neohibernicus(): dammermani.siberu<lutreolus.foina, samarensis.pallidus>;
     }
     class gerbillus<T0, T1> {
-        pundti(): sicarius<koepckeae, psilurus>;
-        tristrami(): minutilla;
-        swarthi(): foina;
-        horsfieldii(): falconeri;
-        diazi(): lasiurus<foina, melanops>;
-        rennelli(): luctuosa;
-        maulinus(): lepturus;
-        muscina(): arboreus<minutilla, peninsulae>;
-        pelengensis(): leptoceros<psilurus, echinatus>;
-        abramus(): thaeleri;
-        reevesi(): melanoleuca;
+        pundti(): sagitta.sicarius<dogramacii.koepckeae, caurinus.psilurus>;
+        tristrami(): petrophilus.minutilla;
+        swarthi(): lutreolus.foina;
+        horsfieldii(): trivirgatus.falconeri;
+        diazi(): imperfecta.lasiurus<lutreolus.foina, dammermani.melanops>;
+        rennelli(): argurus.luctuosa;
+        maulinus(): lavali.lepturus;
+        muscina(): daubentonii.arboreus<petrophilus.minutilla, argurus.peninsulae>;
+        pelengensis(): sagitta.leptoceros<caurinus.psilurus, gabriellae.echinatus>;
+        abramus(): lavali.thaeleri;
+        reevesi(): provocax.melanoleuca;
     }
     class acariensis {
-        levicula(): lepturus;
-        minous(): dauricus<carolinensis, otion>;
-        cinereiventer(): setulosus<walkeri, otion>;
-        longicaudatus(): marmosurus<melanops, mahaganus<nudicaudus, otion>>;
-        baeodon(): netscheri<siberu<foina, pallidus>, luctuosa>;
-        soricoides(): luctuosa;
-        datae(): arboreus<melanoleuca, amphibius<daphaenodon, uralensis>>;
-        spixii(): subspinosus;
-        anakuma(): wilsoni;
-        kihaulei(): amphibius<oconnelli, konganensis>;
-        gymnura(): carolinensis;
-        olchonensis(): crenulata<falconeri, melanoleuca>;
+        levicula(): lavali.lepturus;
+        minous(): argurus.dauricus<quasiater.carolinensis, lavali.otion>;
+        cinereiventer(): panamensis.setulosus<sagitta.walkeri, lavali.otion>;
+        longicaudatus(): macrorhinos.marmosurus<dammermani.melanops, caurinus.mahaganus<nudicaudus, lavali.otion>>;
+        baeodon(): argurus.netscheri<dammermani.siberu<lutreolus.foina, samarensis.pallidus>, argurus.luctuosa>;
+        soricoides(): argurus.luctuosa;
+        datae(): daubentonii.arboreus<provocax.melanoleuca, panglima.amphibius<macrorhinos.daphaenodon, patas.uralensis>>;
+        spixii(): imperfecta.subspinosus;
+        anakuma(): lavali.wilsoni;
+        kihaulei(): panglima.amphibius<trivirgatus.oconnelli, macrorhinos.konganensis>;
+        gymnura(): quasiater.carolinensis;
+        olchonensis(): rendalli.crenulata<trivirgatus.falconeri, provocax.melanoleuca>;
     }
-    class durangae extends aurata {
-        Californium(): setulosus<punicus, melanops>;
-        Flerovium(): angulatus<minutilla, xanthognathus>;
-        phrudus(): stolzmanni;
+    class durangae extends dogramacii.aurata {
+        Californium(): panamensis.setulosus<lutreolus.punicus, dammermani.melanops>;
+        Flerovium(): howi.angulatus<petrophilus.minutilla, lavali.xanthognathus>;
+        phrudus(): sagitta.stolzmanni;
     }
 }
 declare module ruatanica {
     class hector<T0, T1> {
-        humulis(): steerii;
-        eurycerus(): linulus<Praseodymium<jugularis, melanops>, wilsoni>;
+        humulis(): julianae.steerii;
+        eurycerus(): panamensis.linulus<Praseodymium<Lanthanum.jugularis, dammermani.melanops>, lavali.wilsoni>;
     }
 }
 declare module Lanthanum {
     class suillus<T0, T1> {
-        spilosoma(): carolinensis;
-        tumbalensis(): megaphyllus;
-        anatolicus(): steerii;
+        spilosoma(): quasiater.carolinensis;
+        tumbalensis(): caurinus.megaphyllus;
+        anatolicus(): julianae.steerii;
     }
-    class nitidus<T0, T1> extends gilbertii<thaeleri, punicus> {
-        granatensis(): bobrinskoi;
-        negligens(): inez<wilsoni, wilsoni>;
-        lewisi(): oralis<xanthognathus, oreas>;
-        arge(): sarasinorum<megaphyllus, xanthognathus>;
-        dominicensis(): melanops;
-        taurus(): konganensis;
-        tonganus(): netscheri<aurata, aurata>;
-        silvatica(): moojeni<aurata, otion>;
-        midas(): xanthognathus;
-        bicornis(): kaiseri;
+    class nitidus<T0, T1> extends argurus.gilbertii<lavali.thaeleri, lutreolus.punicus> {
+        granatensis(): quasiater.bobrinskoi;
+        negligens(): minutus.inez<lavali.wilsoni, lavali.wilsoni>;
+        lewisi(): julianae.oralis<lavali.xanthognathus, argurus.oreas>;
+        arge(): chrysaeolus.sarasinorum<caurinus.megaphyllus, lavali.xanthognathus>;
+        dominicensis(): dammermani.melanops;
+        taurus(): macrorhinos.konganensis;
+        tonganus(): argurus.netscheri<dogramacii.aurata, dogramacii.aurata>;
+        silvatica(): rendalli.moojeni<dogramacii.aurata, lavali.otion>;
+        midas(): lavali.xanthognathus;
+        bicornis(): dogramacii.kaiseri;
     }
-    class megalonyx extends johorensis<megaphyllus, steerii> {
-        phillipsii(): konganensis;
-        melanogaster(): veraecrucis<falconeri, carolinensis>;
-        elaphus(): nitidus<minutilla, sumatrana>;
-        elater(): lepturus;
-        ourebi(): melanoleuca;
-        caraccioli(): ciliolabrum<nudicaudus, Praseodymium<thaeleri, acariensis>>;
-        parva(): echinatus;
-        albipes(): wattsi<melanops, megalonyx>;
+    class megalonyx extends caurinus.johorensis<caurinus.megaphyllus, julianae.steerii> {
+        phillipsii(): macrorhinos.konganensis;
+        melanogaster(): rionegrensis.veraecrucis<trivirgatus.falconeri, quasiater.carolinensis>;
+        elaphus(): nitidus<petrophilus.minutilla, julianae.sumatrana>;
+        elater(): lavali.lepturus;
+        ourebi(): provocax.melanoleuca;
+        caraccioli(): imperfecta.ciliolabrum<julianae.nudicaudus, ruatanica.Praseodymium<lavali.thaeleri, julianae.acariensis>>;
+        parva(): gabriellae.echinatus;
+        albipes(): quasiater.wattsi<dammermani.melanops, megalonyx>;
     }
     class jugularis {
-        torrei(): sodyi<oreas, daphaenodon>;
-        revoili(): wilsoni;
-        macrobullatus(): daphaenodon;
-        compactus(): stolzmanni;
-        talpinus(): nitidus<americanus, stolzmanni>;
-        stramineus(): amicus;
-        dartmouthi(): mixtus<daphaenodon, luctuosa>;
-        ogilbyi(): dauricus<oreas, carolinensis>;
-        incomtus(): nesiotes<sumatrana, carolinensis>;
-        surdaster(): Praseodymium<germaini, megaphyllus>;
-        melanorhinus(): pelurus<melanops, zuluensis>;
-        picticaudata(): inez<wattsi<carolinensis, lepturus>, kaiseri>;
-        pomona(): steerii;
-        ileile(): carolinensis;
+        torrei(): petrophilus.sodyi<argurus.oreas, macrorhinos.daphaenodon>;
+        revoili(): lavali.wilsoni;
+        macrobullatus(): macrorhinos.daphaenodon;
+        compactus(): sagitta.stolzmanni;
+        talpinus(): nitidus<ruatanica.americanus, sagitta.stolzmanni>;
+        stramineus(): gabriellae.amicus;
+        dartmouthi(): trivirgatus.mixtus<macrorhinos.daphaenodon, argurus.luctuosa>;
+        ogilbyi(): argurus.dauricus<argurus.oreas, quasiater.carolinensis>;
+        incomtus(): daubentonii.nesiotes<julianae.sumatrana, quasiater.carolinensis>;
+        surdaster(): ruatanica.Praseodymium<argurus.germaini, caurinus.megaphyllus>;
+        melanorhinus(): samarensis.pelurus<dammermani.melanops, rendalli.zuluensis>;
+        picticaudata(): minutus.inez<quasiater.wattsi<quasiater.carolinensis, lavali.lepturus>, dogramacii.kaiseri>;
+        pomona(): julianae.steerii;
+        ileile(): quasiater.carolinensis;
     }
 }
 declare module rendalli {
-    class zuluensis extends steerii {
-        telfairi(): wetmorei<megalonyx, melanoleuca>;
-        keyensis(): wattsi<carolinensis, lepturus>;
-        occasius(): gilbertii<psilurus, xanthognathus>;
-        damarensis(): galapagoensis;
-        Neptunium(): abidi<robustulus, foina>;
-        griseoflavus(): americanus;
-        thar(): oreas;
-        alborufus(): linulus<lepturus, oreas>;
-        fusicaudus(): stolzmanni;
-        gordonorum(): angulatus<americanus, germaini>;
-        ruber(): siberu<punicus, acariensis>;
-        desmarestianus(): steerii;
-        lutillus(): dolichurus<marcanoi, wilsoni>;
-        salocco(): peninsulae;
+    class zuluensis extends julianae.steerii {
+        telfairi(): argurus.wetmorei<Lanthanum.megalonyx, provocax.melanoleuca>;
+        keyensis(): quasiater.wattsi<quasiater.carolinensis, lavali.lepturus>;
+        occasius(): argurus.gilbertii<caurinus.psilurus, lavali.xanthognathus>;
+        damarensis(): julianae.galapagoensis;
+        Neptunium(): panglima.abidi<dogramacii.robustulus, lutreolus.foina>;
+        griseoflavus(): ruatanica.americanus;
+        thar(): argurus.oreas;
+        alborufus(): panamensis.linulus<lavali.lepturus, argurus.oreas>;
+        fusicaudus(): sagitta.stolzmanni;
+        gordonorum(): howi.angulatus<ruatanica.americanus, argurus.germaini>;
+        ruber(): dammermani.siberu<lutreolus.punicus, julianae.acariensis>;
+        desmarestianus(): julianae.steerii;
+        lutillus(): nigra.dolichurus<howi.marcanoi, lavali.wilsoni>;
+        salocco(): argurus.peninsulae;
     }
     class moojeni<T0, T1> {
-        floweri(): otion;
-        montosa(): ciliolabrum<megalonyx, minutilla>;
-        miletus(): sumatrana;
+        floweri(): lavali.otion;
+        montosa(): imperfecta.ciliolabrum<Lanthanum.megalonyx, petrophilus.minutilla>;
+        miletus(): julianae.sumatrana;
         heaneyi(): zuluensis;
-        marchei(): amphibius<uralensis, klossii<nudicaudus, aurata>>;
-        budini(): durangae;
-        maggietaylorae(): mixtus<amphibius<klossii<jugularis, jugularis>, subspinosus>, stolzmanni>;
-        poliocephalus(): gerbillus<durangae, melanops>;
-        zibethicus(): inez<stolzmanni, melanops>;
-        biacensis(): coludo<bobrinskoi, melanoleuca>;
+        marchei(): panglima.amphibius<patas.uralensis, gabriellae.klossii<julianae.nudicaudus, dogramacii.aurata>>;
+        budini(): julianae.durangae;
+        maggietaylorae(): trivirgatus.mixtus<panglima.amphibius<gabriellae.klossii<Lanthanum.jugularis, Lanthanum.jugularis>, imperfecta.subspinosus>, sagitta.stolzmanni>;
+        poliocephalus(): julianae.gerbillus<julianae.durangae, dammermani.melanops>;
+        zibethicus(): minutus.inez<sagitta.stolzmanni, dammermani.melanops>;
+        biacensis(): howi.coludo<quasiater.bobrinskoi, provocax.melanoleuca>;
     }
-    class crenulata<T0, T1> extends falconeri {
-        salvanius(): coludo<marcanoi, caniventer>;
-        maritimus(): americanus;
-        edax(): cor<lasiurus<marcanoi, ciliolabrum<megalonyx, minutilla>>, caniventer>;
+    class crenulata<T0, T1> extends trivirgatus.falconeri {
+        salvanius(): howi.coludo<howi.marcanoi, rionegrensis.caniventer>;
+        maritimus(): ruatanica.americanus;
+        edax(): lutreolus.cor<imperfecta.lasiurus<howi.marcanoi, imperfecta.ciliolabrum<Lanthanum.megalonyx, petrophilus.minutilla>>, rionegrensis.caniventer>;
     }
 }
 declare module trivirgatus {
     class tumidifrons<T0, T1> {
-        nivalis(): kaiseri;
-        vestitus(): xanthognathus;
-        aequatorius(): caniventer;
+        nivalis(): dogramacii.kaiseri;
+        vestitus(): lavali.xanthognathus;
+        aequatorius(): rionegrensis.caniventer;
         scherman(): oconnelli;
-        improvisum(): peninsulae;
-        cervinipes(): abidi<lepturus, psilurus>;
-        audax(): robustulus;
-        vallinus(): sicarius<wilsoni, punicus>;
+        improvisum(): argurus.peninsulae;
+        cervinipes(): panglima.abidi<lavali.lepturus, caurinus.psilurus>;
+        audax(): dogramacii.robustulus;
+        vallinus(): sagitta.sicarius<lavali.wilsoni, lutreolus.punicus>;
     }
-    class mixtus<T0, T1> extends pygmaea<oreas, fundatus<carolinensis, daphaenodon>> {
-        ochrogaster(): aurata;
-        bryophilus(): marmosurus<koepckeae, abidi<aurata, sarasinorum<megaphyllus, xanthognathus>>>;
-        liechtensteini(): zuluensis;
-        crawfordi(): coludo<steerii, gerbillus<thaeleri, carolinensis>>;
-        hypsibia(): thaeleri;
-        matacus(): fundatus<linulus<lotor<luctuosa, wilsoni>, beisa>, melanops>;
-        demidoff(): johorensis<acariensis, zuluensis>;
+    class mixtus<T0, T1> extends argurus.pygmaea<argurus.oreas, panglima.fundatus<quasiater.carolinensis, macrorhinos.daphaenodon>> {
+        ochrogaster(): dogramacii.aurata;
+        bryophilus(): macrorhinos.marmosurus<dogramacii.koepckeae, panglima.abidi<dogramacii.aurata, chrysaeolus.sarasinorum<caurinus.megaphyllus, lavali.xanthognathus>>>;
+        liechtensteini(): rendalli.zuluensis;
+        crawfordi(): howi.coludo<julianae.steerii, julianae.gerbillus<lavali.thaeleri, quasiater.carolinensis>>;
+        hypsibia(): lavali.thaeleri;
+        matacus(): panglima.fundatus<panamensis.linulus<lotor<argurus.luctuosa, lavali.wilsoni>, lavali.beisa>, dammermani.melanops>;
+        demidoff(): caurinus.johorensis<julianae.acariensis, rendalli.zuluensis>;
     }
     class lotor<T0, T1> {
-        balensis(): pallidus;
-        pullata(): veraecrucis<carolinensis, peninsulae>;
+        balensis(): samarensis.pallidus;
+        pullata(): rionegrensis.veraecrucis<quasiater.carolinensis, argurus.peninsulae>;
     }
     class falconeri {
-        cabrali(): moojeni<lasiurus<marcanoi, ciliolabrum<megalonyx, minutilla>>, arboreus<nudicaudus, steerii>>;
-        gouldi(): dolichurus<lasiurus<acariensis, coludo<oreas, marcanoi>>, uralensis>;
-        fuscicollis(): pelurus<melanops, nitidus<americanus, stolzmanni>>;
-        martiensseni(): cinereus<ciliolabrum<otion, sodyi<konganensis, psilurus>>, koepckeae>;
-        gaoligongensis(): koepckeae;
-        shawi(): inez<stolzmanni, veraecrucis<xanthognathus, bobrinskoi>>;
-        gmelini(): caniventer;
+        cabrali(): rendalli.moojeni<imperfecta.lasiurus<howi.marcanoi, imperfecta.ciliolabrum<Lanthanum.megalonyx, petrophilus.minutilla>>, daubentonii.arboreus<julianae.nudicaudus, julianae.steerii>>;
+        gouldi(): nigra.dolichurus<imperfecta.lasiurus<julianae.acariensis, howi.coludo<argurus.oreas, howi.marcanoi>>, patas.uralensis>;
+        fuscicollis(): samarensis.pelurus<dammermani.melanops, Lanthanum.nitidus<ruatanica.americanus, sagitta.stolzmanni>>;
+        martiensseni(): sagitta.cinereus<imperfecta.ciliolabrum<lavali.otion, petrophilus.sodyi<macrorhinos.konganensis, caurinus.psilurus>>, dogramacii.koepckeae>;
+        gaoligongensis(): dogramacii.koepckeae;
+        shawi(): minutus.inez<sagitta.stolzmanni, rionegrensis.veraecrucis<lavali.xanthognathus, quasiater.bobrinskoi>>;
+        gmelini(): rionegrensis.caniventer;
     }
     class oconnelli {
-        youngsoni(): thalia<uralensis, galapagoensis>;
-        terrestris(): konganensis;
-        chrysopus(): sicarius<koepckeae, sodyi<oreas, daphaenodon>>;
-        fuscomurina(): peninsulae;
-        hellwaldii(): gracilis<setulosus<walkeri, robustulus>, sodyi<oreas, daphaenodon>>;
-        aenea(): luctuosa;
-        perrini(): bobrinskoi;
-        entellus(): melanops;
-        krebsii(): veraecrucis<caniventer, durangae>;
-        cephalotes(): schlegeli;
-        molossinus(): nigricans<carolinensis, nesiotes<sumatrana, carolinensis>>;
-        luisi(): robustulus;
-        ceylonicus(): caniventer;
-        ralli(): xanthognathus;
+        youngsoni(): nigra.thalia<patas.uralensis, julianae.galapagoensis>;
+        terrestris(): macrorhinos.konganensis;
+        chrysopus(): sagitta.sicarius<dogramacii.koepckeae, petrophilus.sodyi<argurus.oreas, macrorhinos.daphaenodon>>;
+        fuscomurina(): argurus.peninsulae;
+        hellwaldii(): nigra.gracilis<panamensis.setulosus<sagitta.walkeri, dogramacii.robustulus>, petrophilus.sodyi<argurus.oreas, macrorhinos.daphaenodon>>;
+        aenea(): argurus.luctuosa;
+        perrini(): quasiater.bobrinskoi;
+        entellus(): dammermani.melanops;
+        krebsii(): rionegrensis.veraecrucis<rionegrensis.caniventer, julianae.durangae>;
+        cephalotes(): lutreolus.schlegeli;
+        molossinus(): daubentonii.nigricans<quasiater.carolinensis, daubentonii.nesiotes<julianae.sumatrana, quasiater.carolinensis>>;
+        luisi(): dogramacii.robustulus;
+        ceylonicus(): rionegrensis.caniventer;
+        ralli(): lavali.xanthognathus;
     }
 }
 declare module quasiater {
     class bobrinskoi {
-        crassicaudatus(): cahirinus<daphaenodon, luctuosa>;
-        mulatta(): oreas;
-        ansorgei(): moojeni<amphibius<falconeri, psilurus>, echinatus>;
-        Copper(): netscheri<carolinensis, kaiseri>;
+        crassicaudatus(): samarensis.cahirinus<macrorhinos.daphaenodon, argurus.luctuosa>;
+        mulatta(): argurus.oreas;
+        ansorgei(): rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>;
+        Copper(): argurus.netscheri<carolinensis, dogramacii.kaiseri>;
     }
 }
 declare module ruatanica {
-    class americanus extends ciliolabrum<germaini, foina> {
-        nasoloi(): konganensis;
-        mystacalis(): angulatus<carolinensis, stolzmanni>;
-        fardoulisi(): oconnelli;
-        tumidus(): amicus;
+    class americanus extends imperfecta.ciliolabrum<argurus.germaini, lutreolus.foina> {
+        nasoloi(): macrorhinos.konganensis;
+        mystacalis(): howi.angulatus<quasiater.carolinensis, sagitta.stolzmanni>;
+        fardoulisi(): trivirgatus.oconnelli;
+        tumidus(): gabriellae.amicus;
     }
 }
 declare module lavali {
-    class wilsoni extends nitidus<caniventer, jugularis> {
-        setiger(): thalia<uralensis, wilsoni>;
-        lorentzii(): subspinosus;
-        antisensis(): foina;
-        blossevillii(): siberu<megalonyx, kaiseri>;
-        bontanus(): caniventer;
-        caligata(): oreas;
-        franqueti(): amphibius<klossii<jugularis, jugularis>, subspinosus>;
-        roberti(): acariensis;
-        degelidus(): sarasinorum<jugularis, subspinosus>;
-        amoenus(): carolinensis;
-        kob(): lotor<oreas, beisa>;
-        csorbai(): johorensis<megaphyllus, steerii>;
-        dorsata(): echinatus;
+    class wilsoni extends Lanthanum.nitidus<rionegrensis.caniventer, Lanthanum.jugularis> {
+        setiger(): nigra.thalia<patas.uralensis, wilsoni>;
+        lorentzii(): imperfecta.subspinosus;
+        antisensis(): lutreolus.foina;
+        blossevillii(): dammermani.siberu<Lanthanum.megalonyx, dogramacii.kaiseri>;
+        bontanus(): rionegrensis.caniventer;
+        caligata(): argurus.oreas;
+        franqueti(): panglima.amphibius<gabriellae.klossii<Lanthanum.jugularis, Lanthanum.jugularis>, imperfecta.subspinosus>;
+        roberti(): julianae.acariensis;
+        degelidus(): chrysaeolus.sarasinorum<Lanthanum.jugularis, imperfecta.subspinosus>;
+        amoenus(): quasiater.carolinensis;
+        kob(): trivirgatus.lotor<argurus.oreas, beisa>;
+        csorbai(): caurinus.johorensis<caurinus.megaphyllus, julianae.steerii>;
+        dorsata(): gabriellae.echinatus;
     }
     class beisa {
     }
-    class otion extends coludo<oreas, marcanoi> {
-        bonaerensis(): melanoleuca;
-        dussumieri(): gracilis<steerii, kaiseri>;
-        osvaldoreigi(): albidens<steerii, carolinensis>;
-        grevyi(): pallidus;
+    class otion extends howi.coludo<argurus.oreas, howi.marcanoi> {
+        bonaerensis(): provocax.melanoleuca;
+        dussumieri(): nigra.gracilis<julianae.steerii, dogramacii.kaiseri>;
+        osvaldoreigi(): julianae.albidens<julianae.steerii, quasiater.carolinensis>;
+        grevyi(): samarensis.pallidus;
         hirtula(): lepturus;
-        cristatus(): luctuosa;
-        darlingtoni(): leptoceros<wilsoni, oconnelli>;
-        fontanierii(): setulosus<fuscus<wilsoni, sarasinorum<jugularis, subspinosus>>, foina>;
-        umbrosus(): marcanoi;
-        chiriquinus(): lasiurus<psilurus, psilurus>;
-        orarius(): schlegeli;
-        ilaeus(): mahaganus<acariensis, sumatrana>;
-        musschenbroekii(): falconeri;
+        cristatus(): argurus.luctuosa;
+        darlingtoni(): sagitta.leptoceros<wilsoni, trivirgatus.oconnelli>;
+        fontanierii(): panamensis.setulosus<samarensis.fuscus<wilsoni, chrysaeolus.sarasinorum<Lanthanum.jugularis, imperfecta.subspinosus>>, lutreolus.foina>;
+        umbrosus(): howi.marcanoi;
+        chiriquinus(): imperfecta.lasiurus<caurinus.psilurus, caurinus.psilurus>;
+        orarius(): lutreolus.schlegeli;
+        ilaeus(): caurinus.mahaganus<julianae.acariensis, julianae.sumatrana>;
+        musschenbroekii(): trivirgatus.falconeri;
     }
     class xanthognathus {
-        nanulus(): nigricans<subspinosus, pallidus>;
-        albigena(): sarasinorum<psilurus, bobrinskoi>;
-        onca(): stolzmanni;
-        gunnii(): himalayana<coludo<lepturus, punicus>, thalia<uralensis, robustulus>>;
-        apeco(): foina;
-        variegates(): klossii<wilsoni, nudicaudus>;
-        goudotii(): falconeri;
-        pohlei(): megalonyx;
-        ineptus(): setulosus<xanthognathus, beisa>;
-        euryotis(): moojeni<steerii, pelurus<jugularis, americanus>>;
-        maurisca(): suillus<caniventer, subspinosus>;
-        coyhaiquensis(): mahaganus<siberu<thalia<schlegeli, sumatrana>, abidi<foina, peninsulae>>, punicus>;
+        nanulus(): daubentonii.nigricans<imperfecta.subspinosus, samarensis.pallidus>;
+        albigena(): chrysaeolus.sarasinorum<caurinus.psilurus, quasiater.bobrinskoi>;
+        onca(): sagitta.stolzmanni;
+        gunnii(): minutus.himalayana<howi.coludo<lepturus, lutreolus.punicus>, nigra.thalia<patas.uralensis, dogramacii.robustulus>>;
+        apeco(): lutreolus.foina;
+        variegates(): gabriellae.klossii<wilsoni, julianae.nudicaudus>;
+        goudotii(): trivirgatus.falconeri;
+        pohlei(): Lanthanum.megalonyx;
+        ineptus(): panamensis.setulosus<xanthognathus, beisa>;
+        euryotis(): rendalli.moojeni<julianae.steerii, samarensis.pelurus<Lanthanum.jugularis, ruatanica.americanus>>;
+        maurisca(): Lanthanum.suillus<rionegrensis.caniventer, imperfecta.subspinosus>;
+        coyhaiquensis(): caurinus.mahaganus<dammermani.siberu<nigra.thalia<lutreolus.schlegeli, julianae.sumatrana>, panglima.abidi<lutreolus.foina, argurus.peninsulae>>, lutreolus.punicus>;
     }
-    class thaeleri extends oreas {
-        coromandra(): galapagoensis;
-        parvipes(): dolichurus<germaini, pallidus>;
-        sponsorius(): veraecrucis<sarasinorum<psilurus, bobrinskoi>, steerii>;
-        vates(): robustulus;
-        roosmalenorum(): koepckeae;
-        rubicola(): moojeni<caniventer, moojeni<amphibius<falconeri, psilurus>, echinatus>>;
-        ikonnikovi(): luctuosa;
-        paramicrus(): ciliolabrum<otion, sodyi<konganensis, psilurus>>;
+    class thaeleri extends argurus.oreas {
+        coromandra(): julianae.galapagoensis;
+        parvipes(): nigra.dolichurus<argurus.germaini, samarensis.pallidus>;
+        sponsorius(): rionegrensis.veraecrucis<chrysaeolus.sarasinorum<caurinus.psilurus, quasiater.bobrinskoi>, julianae.steerii>;
+        vates(): dogramacii.robustulus;
+        roosmalenorum(): dogramacii.koepckeae;
+        rubicola(): rendalli.moojeni<rionegrensis.caniventer, rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>>;
+        ikonnikovi(): argurus.luctuosa;
+        paramicrus(): imperfecta.ciliolabrum<otion, petrophilus.sodyi<macrorhinos.konganensis, caurinus.psilurus>>;
     }
-    class lepturus extends suillus<melanops, carolinensis> {
-        ferrumequinum(): netscheri<luctuosa, nudicaudus>;
-        aequalis(): cinereus<sodyi<wattsi<galapagoensis, linulus<xanthognathus, konganensis>>, minutilla>, jugularis>;
+    class lepturus extends Lanthanum.suillus<dammermani.melanops, quasiater.carolinensis> {
+        ferrumequinum(): argurus.netscheri<argurus.luctuosa, julianae.nudicaudus>;
+        aequalis(): sagitta.cinereus<petrophilus.sodyi<quasiater.wattsi<julianae.galapagoensis, panamensis.linulus<xanthognathus, macrorhinos.konganensis>>, petrophilus.minutilla>, Lanthanum.jugularis>;
     }
 }
 declare module dogramacii {
-    class robustulus extends wilsoni {
-        fossor(): inez<peninsulae, nudicaudus>;
-        humboldti(): cinereus<xanthognathus, oreas>;
-        mexicana(): konganensis;
-        martini(): oralis<steerii, lepturus>;
-        beatus(): jugularis;
-        leporina(): falconeri;
-        pearsonii(): melanops;
-        keaysi(): angulatus<beisa, zuluensis>;
-        hindei(): lasiurus<konganensis, steerii>;
+    class robustulus extends lavali.wilsoni {
+        fossor(): minutus.inez<argurus.peninsulae, julianae.nudicaudus>;
+        humboldti(): sagitta.cinereus<lavali.xanthognathus, argurus.oreas>;
+        mexicana(): macrorhinos.konganensis;
+        martini(): julianae.oralis<julianae.steerii, lavali.lepturus>;
+        beatus(): Lanthanum.jugularis;
+        leporina(): trivirgatus.falconeri;
+        pearsonii(): dammermani.melanops;
+        keaysi(): howi.angulatus<lavali.beisa, rendalli.zuluensis>;
+        hindei(): imperfecta.lasiurus<macrorhinos.konganensis, julianae.steerii>;
     }
     class koepckeae {
-        culturatus(): pelurus<arboreus<kaiseri, punicus>, sumatrana>;
+        culturatus(): samarensis.pelurus<daubentonii.arboreus<kaiseri, lutreolus.punicus>, julianae.sumatrana>;
     }
     class kaiseri {
-        bedfordiae(): carolinensis;
-        paramorum(): megalonyx;
-        rubidus(): lotor<steerii, pallidus>;
-        juninensis(): bobrinskoi;
-        marginata(): wetmorei<caniventer, leptoceros<punicus, arboreus<carolinensis, caniventer>>>;
-        Meitnerium(): Praseodymium<sumatrana, cor<jugularis, galapagoensis>>;
-        pinetorum(): caniventer;
-        hoolock(): pelurus<oreas, luctuosa>;
-        poeyi(): echinatus;
-        Thulium(): durangae;
-        patrius(): jugularis;
-        quadraticauda(): nudicaudus;
-        ater(): americanus;
+        bedfordiae(): quasiater.carolinensis;
+        paramorum(): Lanthanum.megalonyx;
+        rubidus(): trivirgatus.lotor<julianae.steerii, samarensis.pallidus>;
+        juninensis(): quasiater.bobrinskoi;
+        marginata(): argurus.wetmorei<rionegrensis.caniventer, sagitta.leptoceros<lutreolus.punicus, daubentonii.arboreus<quasiater.carolinensis, rionegrensis.caniventer>>>;
+        Meitnerium(): ruatanica.Praseodymium<julianae.sumatrana, lutreolus.cor<Lanthanum.jugularis, julianae.galapagoensis>>;
+        pinetorum(): rionegrensis.caniventer;
+        hoolock(): samarensis.pelurus<argurus.oreas, argurus.luctuosa>;
+        poeyi(): gabriellae.echinatus;
+        Thulium(): julianae.durangae;
+        patrius(): Lanthanum.jugularis;
+        quadraticauda(): julianae.nudicaudus;
+        ater(): ruatanica.americanus;
     }
     class aurata {
-        grunniens(): gracilis<pelurus<arboreus<kaiseri, punicus>, sumatrana>, americanus>;
-        howensis(): americanus;
-        karlkoopmani(): psilurus;
-        mirapitanga(): albidens<echinatus, echinatus>;
+        grunniens(): nigra.gracilis<samarensis.pelurus<daubentonii.arboreus<kaiseri, lutreolus.punicus>, julianae.sumatrana>, ruatanica.americanus>;
+        howensis(): ruatanica.americanus;
+        karlkoopmani(): caurinus.psilurus;
+        mirapitanga(): julianae.albidens<gabriellae.echinatus, gabriellae.echinatus>;
         ophiodon(): aurata;
-        landeri(): pelurus<jugularis, americanus>;
-        sonomae(): lotor<abidi<lepturus, psilurus>, koepckeae>;
-        erythromos(): johorensis<fundatus<pallidus, stolzmanni>, dolichurus<lepturus, pallidus>>;
+        landeri(): samarensis.pelurus<Lanthanum.jugularis, ruatanica.americanus>;
+        sonomae(): trivirgatus.lotor<panglima.abidi<lavali.lepturus, caurinus.psilurus>, koepckeae>;
+        erythromos(): caurinus.johorensis<panglima.fundatus<samarensis.pallidus, sagitta.stolzmanni>, nigra.dolichurus<lavali.lepturus, samarensis.pallidus>>;
     }
 }
 declare module lutreolus {
-    class schlegeli extends beisa {
-        mittendorfi(): caniventer;
-        blicki(): robustulus;
-        culionensis(): dauricus<americanus, caniventer>;
-        scrofa(): sodyi<amicus, sumatrana>;
-        fernandoni(): carolinensis;
-        Tin(): leptoceros<punicus, arboreus<carolinensis, caniventer>>;
-        marmorata(): setulosus<carolinensis, arboreus<kaiseri, punicus>>;
-        tavaratra(): nitidus<marcanoi, daphaenodon>;
-        peregrina(): nesiotes<konganensis, punicus>;
-        frontalis(): marmosurus<hector<sumatrana, pelurus<jugularis, walkeri>>, pallidus>;
-        cuniculus(): uralensis;
-        magdalenae(): gerbillus<caniventer, crenulata<zuluensis, robustulus>>;
-        andamanensis(): oralis<americanus, zuluensis>;
-        dispar(): linulus<kaiseri, portoricensis>;
+    class schlegeli extends lavali.beisa {
+        mittendorfi(): rionegrensis.caniventer;
+        blicki(): dogramacii.robustulus;
+        culionensis(): argurus.dauricus<ruatanica.americanus, rionegrensis.caniventer>;
+        scrofa(): petrophilus.sodyi<gabriellae.amicus, julianae.sumatrana>;
+        fernandoni(): quasiater.carolinensis;
+        Tin(): sagitta.leptoceros<punicus, daubentonii.arboreus<quasiater.carolinensis, rionegrensis.caniventer>>;
+        marmorata(): panamensis.setulosus<quasiater.carolinensis, daubentonii.arboreus<dogramacii.kaiseri, punicus>>;
+        tavaratra(): Lanthanum.nitidus<howi.marcanoi, macrorhinos.daphaenodon>;
+        peregrina(): daubentonii.nesiotes<macrorhinos.konganensis, punicus>;
+        frontalis(): macrorhinos.marmosurus<ruatanica.hector<julianae.sumatrana, samarensis.pelurus<Lanthanum.jugularis, sagitta.walkeri>>, samarensis.pallidus>;
+        cuniculus(): patas.uralensis;
+        magdalenae(): julianae.gerbillus<rionegrensis.caniventer, rendalli.crenulata<rendalli.zuluensis, dogramacii.robustulus>>;
+        andamanensis(): julianae.oralis<ruatanica.americanus, rendalli.zuluensis>;
+        dispar(): panamensis.linulus<dogramacii.kaiseri, minutus.portoricensis>;
     }
 }
 declare module argurus {
     class dauricus<T0, T1> {
-        chinensis(): jugularis;
-        duodecimcostatus(): xanthognathus;
-        foxi(): nesiotes<beisa, lepturus>;
-        macleayii(): sodyi<wattsi<galapagoensis, linulus<xanthognathus, konganensis>>, minutilla>;
-        darienensis(): oconnelli;
-        hardwickii(): daphaenodon;
-        albifrons(): veraecrucis<lepturus, durangae>;
-        jacobitus(): johorensis<konganensis, johorensis<peninsulae, arboreus<germaini, stolzmanni>>>;
-        guentheri(): moojeni<foina, oreas>;
-        mahomet(): ciliolabrum<germaini, foina>;
-        misionensis(): marmosurus<arboreus<carolinensis, caniventer>, echinatus>;
+        chinensis(): Lanthanum.jugularis;
+        duodecimcostatus(): lavali.xanthognathus;
+        foxi(): daubentonii.nesiotes<lavali.beisa, lavali.lepturus>;
+        macleayii(): petrophilus.sodyi<quasiater.wattsi<julianae.galapagoensis, panamensis.linulus<lavali.xanthognathus, macrorhinos.konganensis>>, petrophilus.minutilla>;
+        darienensis(): trivirgatus.oconnelli;
+        hardwickii(): macrorhinos.daphaenodon;
+        albifrons(): rionegrensis.veraecrucis<lavali.lepturus, julianae.durangae>;
+        jacobitus(): caurinus.johorensis<macrorhinos.konganensis, caurinus.johorensis<peninsulae, daubentonii.arboreus<germaini, sagitta.stolzmanni>>>;
+        guentheri(): rendalli.moojeni<lutreolus.foina, oreas>;
+        mahomet(): imperfecta.ciliolabrum<germaini, lutreolus.foina>;
+        misionensis(): macrorhinos.marmosurus<daubentonii.arboreus<quasiater.carolinensis, rionegrensis.caniventer>, gabriellae.echinatus>;
     }
 }
 declare module nigra {
     class dolichurus<T0, T1> {
-        solomonis(): abidi<carolinensis, crenulata<klossii<nudicaudus, aurata>, netscheri<inez<peninsulae, nudicaudus>, oralis<xanthognathus, oreas>>>>;
-        alfredi(): psilurus;
-        morrisi(): hector<oconnelli, cinereus<caucasica<sumatrana, oconnelli>, wattsi<galapagoensis, linulus<xanthognathus, konganensis>>>>;
-        lekaguli(): nitidus<melanops, lepturus>;
-        dimissus(): subspinosus;
-        phaeotis(): sumatrana;
-        ustus(): acariensis;
-        sagei(): marcanoi;
+        solomonis(): panglima.abidi<quasiater.carolinensis, rendalli.crenulata<gabriellae.klossii<julianae.nudicaudus, dogramacii.aurata>, argurus.netscheri<minutus.inez<argurus.peninsulae, julianae.nudicaudus>, julianae.oralis<lavali.xanthognathus, argurus.oreas>>>>;
+        alfredi(): caurinus.psilurus;
+        morrisi(): ruatanica.hector<trivirgatus.oconnelli, sagitta.cinereus<caucasica<julianae.sumatrana, trivirgatus.oconnelli>, quasiater.wattsi<julianae.galapagoensis, panamensis.linulus<lavali.xanthognathus, macrorhinos.konganensis>>>>;
+        lekaguli(): Lanthanum.nitidus<dammermani.melanops, lavali.lepturus>;
+        dimissus(): imperfecta.subspinosus;
+        phaeotis(): julianae.sumatrana;
+        ustus(): julianae.acariensis;
+        sagei(): howi.marcanoi;
     }
 }
 declare module panglima {
-    class amphibius<T0, T1> extends johorensis<nitidus<minutilla, sumatrana>, jugularis> {
-        bottegi(): marmosurus<moojeni<amphibius<falconeri, psilurus>, echinatus>, stolzmanni>;
-        jerdoni(): daphaenodon;
-        camtschatica(): pallidus;
-        spadix(): sodyi<konganensis, psilurus>;
-        luismanueli(): moojeni<sumatrana, oconnelli>;
-        aceramarcae(): arboreus<nudicaudus, steerii>;
+    class amphibius<T0, T1> extends caurinus.johorensis<Lanthanum.nitidus<petrophilus.minutilla, julianae.sumatrana>, Lanthanum.jugularis> {
+        bottegi(): macrorhinos.marmosurus<rendalli.moojeni<amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, sagitta.stolzmanni>;
+        jerdoni(): macrorhinos.daphaenodon;
+        camtschatica(): samarensis.pallidus;
+        spadix(): petrophilus.sodyi<macrorhinos.konganensis, caurinus.psilurus>;
+        luismanueli(): rendalli.moojeni<julianae.sumatrana, trivirgatus.oconnelli>;
+        aceramarcae(): daubentonii.arboreus<julianae.nudicaudus, julianae.steerii>;
     }
-    class fundatus<T0, T1> extends schlegeli {
-        crassulus(): gracilis<melanoleuca, melanoleuca>;
-        flamarioni(): lasiurus<amphibius<uralensis, klossii<nudicaudus, aurata>>, leptoceros<punicus, arboreus<carolinensis, caniventer>>>;
-        mirabilis(): marmosurus<rosalia<steerii, beisa>, lepturus>;
+    class fundatus<T0, T1> extends lutreolus.schlegeli {
+        crassulus(): nigra.gracilis<provocax.melanoleuca, provocax.melanoleuca>;
+        flamarioni(): imperfecta.lasiurus<amphibius<patas.uralensis, gabriellae.klossii<julianae.nudicaudus, dogramacii.aurata>>, sagitta.leptoceros<lutreolus.punicus, daubentonii.arboreus<quasiater.carolinensis, rionegrensis.caniventer>>>;
+        mirabilis(): macrorhinos.marmosurus<petrophilus.rosalia<julianae.steerii, lavali.beisa>, lavali.lepturus>;
     }
-    class abidi<T0, T1> extends dauricus<germaini, durangae> {
-        greyii(): oconnelli;
-        macedonicus(): minutilla;
-        galili(): cahirinus<melanops, pallidus>;
-        thierryi(): robustulus;
-        ega(): lasiurus<acariensis, coludo<oreas, marcanoi>>;
+    class abidi<T0, T1> extends argurus.dauricus<argurus.germaini, julianae.durangae> {
+        greyii(): trivirgatus.oconnelli;
+        macedonicus(): petrophilus.minutilla;
+        galili(): samarensis.cahirinus<dammermani.melanops, samarensis.pallidus>;
+        thierryi(): dogramacii.robustulus;
+        ega(): imperfecta.lasiurus<julianae.acariensis, howi.coludo<argurus.oreas, howi.marcanoi>>;
     }
 }
 declare module quasiater {
     class carolinensis {
-        concinna(): zuluensis;
-        aeneus(): marcanoi;
-        aloysiisabaudiae(): netscheri<lotor<oreas, beisa>, lepturus>;
-        tenellus(): nudicaudus;
-        andium(): beisa;
-        persephone(): fundatus<pallidus, stolzmanni>;
-        patrizii(): megalonyx;
+        concinna(): rendalli.zuluensis;
+        aeneus(): howi.marcanoi;
+        aloysiisabaudiae(): argurus.netscheri<trivirgatus.lotor<argurus.oreas, lavali.beisa>, lavali.lepturus>;
+        tenellus(): julianae.nudicaudus;
+        andium(): lavali.beisa;
+        persephone(): panglima.fundatus<samarensis.pallidus, sagitta.stolzmanni>;
+        patrizii(): Lanthanum.megalonyx;
     }
 }
 declare module minutus {
-    class himalayana<T0, T1> extends punicus {
-        simoni(): netscheri<lepturus, dauricus<oreas, carolinensis>>;
-        lobata(): pallidus;
-        rusticus(): aurata;
-        latona(): nesiotes<melanops, megalonyx>;
-        famulus(): uralensis;
-        flaviceps(): inez<oreas, fundatus<amicus, foina>>;
-        paradoxolophus(): dolichurus<schlegeli, sarasinorum<jugularis, subspinosus>>;
-        Osmium(): wilsoni;
-        vulgaris(): nitidus<lepturus, acariensis>;
-        betsileoensis(): amphibius<megaphyllus, lepturus>;
-        vespuccii(): gilbertii<klossii<konganensis, carolinensis>, melanoleuca>;
-        olympus(): megalonyx;
+    class himalayana<T0, T1> extends lutreolus.punicus {
+        simoni(): argurus.netscheri<lavali.lepturus, argurus.dauricus<argurus.oreas, quasiater.carolinensis>>;
+        lobata(): samarensis.pallidus;
+        rusticus(): dogramacii.aurata;
+        latona(): daubentonii.nesiotes<dammermani.melanops, Lanthanum.megalonyx>;
+        famulus(): patas.uralensis;
+        flaviceps(): inez<argurus.oreas, panglima.fundatus<gabriellae.amicus, lutreolus.foina>>;
+        paradoxolophus(): nigra.dolichurus<lutreolus.schlegeli, chrysaeolus.sarasinorum<Lanthanum.jugularis, imperfecta.subspinosus>>;
+        Osmium(): lavali.wilsoni;
+        vulgaris(): Lanthanum.nitidus<lavali.lepturus, julianae.acariensis>;
+        betsileoensis(): panglima.amphibius<caurinus.megaphyllus, lavali.lepturus>;
+        vespuccii(): argurus.gilbertii<gabriellae.klossii<macrorhinos.konganensis, quasiater.carolinensis>, provocax.melanoleuca>;
+        olympus(): Lanthanum.megalonyx;
     }
 }
 declare module caurinus {
-    class mahaganus<T0, T1> extends fundatus<carolinensis, daphaenodon> {
-        martiniquensis(): hector<sumatrana, marmosurus<melanops, mahaganus<nudicaudus, otion>>>;
-        devius(): pelurus<aurata, inez<inez<stolzmanni, melanops>, falconeri>>;
-        masalai(): oreas;
-        kathleenae(): dolichurus<uralensis, psilurus>;
-        simulus(): echinatus;
-        nigrovittatus(): mahaganus<echinatus, rosalia<megalonyx, abidi<kaiseri, wilsoni>>>;
-        senegalensis(): klossii<coludo<lepturus, punicus>, melanops>;
-        acticola(): luctuosa;
+    class mahaganus<T0, T1> extends panglima.fundatus<quasiater.carolinensis, macrorhinos.daphaenodon> {
+        martiniquensis(): ruatanica.hector<julianae.sumatrana, macrorhinos.marmosurus<dammermani.melanops, mahaganus<julianae.nudicaudus, lavali.otion>>>;
+        devius(): samarensis.pelurus<dogramacii.aurata, minutus.inez<minutus.inez<sagitta.stolzmanni, dammermani.melanops>, trivirgatus.falconeri>>;
+        masalai(): argurus.oreas;
+        kathleenae(): nigra.dolichurus<patas.uralensis, psilurus>;
+        simulus(): gabriellae.echinatus;
+        nigrovittatus(): mahaganus<gabriellae.echinatus, petrophilus.rosalia<Lanthanum.megalonyx, panglima.abidi<dogramacii.kaiseri, lavali.wilsoni>>>;
+        senegalensis(): gabriellae.klossii<howi.coludo<lavali.lepturus, lutreolus.punicus>, dammermani.melanops>;
+        acticola(): argurus.luctuosa;
     }
 }
 declare module macrorhinos {
     class marmosurus<T0, T1> {
-        tansaniana(): punicus;
+        tansaniana(): lutreolus.punicus;
     }
 }
 declare module howi {
-    class angulatus<T0, T1> extends stolzmanni {
+    class angulatus<T0, T1> extends sagitta.stolzmanni {
         pennatus(): marcanoi;
     }
 }
@@ -7884,118 +7884,118 @@ declare module daubentonii {
 }
 declare module nigra {
     class thalia<T0, T1> {
-        dichotomus(): carolinensis;
-        arnuxii(): linulus<lotor<luctuosa, wilsoni>, beisa>;
-        verheyeni(): xanthognathus;
-        dauuricus(): amicus;
-        tristriatus(): veraecrucis<marcanoi, linulus<megalonyx, marcanoi>>;
-        lasiura(): abidi<fuscus<wilsoni, sarasinorum<jugularis, subspinosus>>, nitidus<lepturus, acariensis>>;
-        gangetica(): luctuosa;
-        brucei(): sarasinorum<steerii, americanus>;
+        dichotomus(): quasiater.carolinensis;
+        arnuxii(): panamensis.linulus<trivirgatus.lotor<argurus.luctuosa, lavali.wilsoni>, lavali.beisa>;
+        verheyeni(): lavali.xanthognathus;
+        dauuricus(): gabriellae.amicus;
+        tristriatus(): rionegrensis.veraecrucis<howi.marcanoi, panamensis.linulus<Lanthanum.megalonyx, howi.marcanoi>>;
+        lasiura(): panglima.abidi<samarensis.fuscus<lavali.wilsoni, chrysaeolus.sarasinorum<Lanthanum.jugularis, imperfecta.subspinosus>>, Lanthanum.nitidus<lavali.lepturus, julianae.acariensis>>;
+        gangetica(): argurus.luctuosa;
+        brucei(): chrysaeolus.sarasinorum<julianae.steerii, ruatanica.americanus>;
     }
 }
 declare module sagitta {
-    class walkeri extends portoricensis {
-        maracajuensis(): cahirinus<jugularis, americanus>;
+    class walkeri extends minutus.portoricensis {
+        maracajuensis(): samarensis.cahirinus<Lanthanum.jugularis, ruatanica.americanus>;
     }
 }
 declare module minutus {
-    class inez<T0, T1> extends pelurus<germaini, durangae> {
-        vexillaris(): cahirinus<lepturus, wilsoni>;
+    class inez<T0, T1> extends samarensis.pelurus<argurus.germaini, julianae.durangae> {
+        vexillaris(): samarensis.cahirinus<lavali.lepturus, lavali.wilsoni>;
     }
 }
 declare module macrorhinos {
-    class konganensis extends lasiurus<psilurus, psilurus> {
+    class konganensis extends imperfecta.lasiurus<caurinus.psilurus, caurinus.psilurus> {
     }
 }
 declare module panamensis {
-    class linulus<T0, T1> extends hector<sumatrana, pelurus<jugularis, walkeri>> {
-        goslingi(): arboreus<amicus, kaiseri>;
-        taki(): uralensis;
-        fumosus(): moojeni<netscheri<aurata, aurata>, beisa>;
-        rufinus(): konganensis;
-        lami(): thalia<uralensis, robustulus>;
-        regina(): oconnelli;
-        nanilla(): siberu<xanthognathus, oconnelli>;
-        enganus(): sodyi<aurata, oreas>;
-        gomantongensis(): veraecrucis<psilurus, inez<zuluensis, caniventer>>;
+    class linulus<T0, T1> extends ruatanica.hector<julianae.sumatrana, samarensis.pelurus<Lanthanum.jugularis, sagitta.walkeri>> {
+        goslingi(): daubentonii.arboreus<gabriellae.amicus, dogramacii.kaiseri>;
+        taki(): patas.uralensis;
+        fumosus(): rendalli.moojeni<argurus.netscheri<dogramacii.aurata, dogramacii.aurata>, lavali.beisa>;
+        rufinus(): macrorhinos.konganensis;
+        lami(): nigra.thalia<patas.uralensis, dogramacii.robustulus>;
+        regina(): trivirgatus.oconnelli;
+        nanilla(): dammermani.siberu<lavali.xanthognathus, trivirgatus.oconnelli>;
+        enganus(): petrophilus.sodyi<dogramacii.aurata, argurus.oreas>;
+        gomantongensis(): rionegrensis.veraecrucis<caurinus.psilurus, minutus.inez<rendalli.zuluensis, rionegrensis.caniventer>>;
     }
 }
 declare module nigra {
     class gracilis<T0, T1> {
-        weddellii(): dolichurus<aurata, steerii>;
-        echinothrix(): nitidus<amphibius<megaphyllus, lepturus>, oreas>;
-        garridoi(): koepckeae;
-        rouxii(): gracilis<dauricus<konganensis, uralensis>, thalia<uralensis, galapagoensis>>;
-        aurita(): stolzmanni;
-        geoffrensis(): caniventer;
-        theresa(): marmosurus<netscheri<siberu<foina, pallidus>, luctuosa>, dolichurus<lepturus, pallidus>>;
-        melanocarpus(): albidens<siberu<foina, pallidus>, sumatrana>;
-        dubiaquercus(): robustulus;
-        pectoralis(): sumatrana;
-        apoensis(): megaphyllus;
-        grisescens(): jugularis;
-        ramirohitra(): amphibius<falconeri, echinatus>;
+        weddellii(): dolichurus<dogramacii.aurata, julianae.steerii>;
+        echinothrix(): Lanthanum.nitidus<panglima.amphibius<caurinus.megaphyllus, lavali.lepturus>, argurus.oreas>;
+        garridoi(): dogramacii.koepckeae;
+        rouxii(): gracilis<argurus.dauricus<macrorhinos.konganensis, patas.uralensis>, thalia<patas.uralensis, julianae.galapagoensis>>;
+        aurita(): sagitta.stolzmanni;
+        geoffrensis(): rionegrensis.caniventer;
+        theresa(): macrorhinos.marmosurus<argurus.netscheri<dammermani.siberu<lutreolus.foina, samarensis.pallidus>, argurus.luctuosa>, dolichurus<lavali.lepturus, samarensis.pallidus>>;
+        melanocarpus(): julianae.albidens<dammermani.siberu<lutreolus.foina, samarensis.pallidus>, julianae.sumatrana>;
+        dubiaquercus(): dogramacii.robustulus;
+        pectoralis(): julianae.sumatrana;
+        apoensis(): caurinus.megaphyllus;
+        grisescens(): Lanthanum.jugularis;
+        ramirohitra(): panglima.amphibius<trivirgatus.falconeri, gabriellae.echinatus>;
     }
 }
 declare module samarensis {
-    class pelurus<T0, T1> extends stolzmanni {
-        Palladium(): linulus<konganensis, caniventer>;
-        castanea(): netscheri<inez<peninsulae, nudicaudus>, oralis<xanthognathus, oreas>>;
-        chamek(): pygmaea<galapagoensis, melanoleuca>;
-        nigriceps(): punicus;
-        lunatus(): pelurus<jugularis, walkeri>;
-        madurae(): caniventer;
-        chinchilla(): daphaenodon;
-        eliasi(): rosalia<steerii, beisa>;
-        proditor(): setulosus<echinatus, steerii>;
-        gambianus(): wattsi<galapagoensis, linulus<xanthognathus, konganensis>>;
-        petteri(): kaiseri;
-        nusatenggara(): amphibius<lepturus, carolinensis>;
-        olitor(): veraecrucis<xanthognathus, bobrinskoi>;
+    class pelurus<T0, T1> extends sagitta.stolzmanni {
+        Palladium(): panamensis.linulus<macrorhinos.konganensis, rionegrensis.caniventer>;
+        castanea(): argurus.netscheri<minutus.inez<argurus.peninsulae, julianae.nudicaudus>, julianae.oralis<lavali.xanthognathus, argurus.oreas>>;
+        chamek(): argurus.pygmaea<julianae.galapagoensis, provocax.melanoleuca>;
+        nigriceps(): lutreolus.punicus;
+        lunatus(): pelurus<Lanthanum.jugularis, sagitta.walkeri>;
+        madurae(): rionegrensis.caniventer;
+        chinchilla(): macrorhinos.daphaenodon;
+        eliasi(): petrophilus.rosalia<julianae.steerii, lavali.beisa>;
+        proditor(): panamensis.setulosus<gabriellae.echinatus, julianae.steerii>;
+        gambianus(): quasiater.wattsi<julianae.galapagoensis, panamensis.linulus<lavali.xanthognathus, macrorhinos.konganensis>>;
+        petteri(): dogramacii.kaiseri;
+        nusatenggara(): panglima.amphibius<lavali.lepturus, quasiater.carolinensis>;
+        olitor(): rionegrensis.veraecrucis<lavali.xanthognathus, quasiater.bobrinskoi>;
     }
-    class fuscus<T0, T1> extends daphaenodon {
-        planifrons(): gracilis<nudicaudus, aurata>;
-        badia(): sumatrana;
-        prymnolopha(): walkeri;
-        natalensis(): falconeri;
-        hunteri(): durangae;
+    class fuscus<T0, T1> extends macrorhinos.daphaenodon {
+        planifrons(): nigra.gracilis<julianae.nudicaudus, dogramacii.aurata>;
+        badia(): julianae.sumatrana;
+        prymnolopha(): sagitta.walkeri;
+        natalensis(): trivirgatus.falconeri;
+        hunteri(): julianae.durangae;
         sapiens(): pallidus;
-        macrocercus(): setulosus<koepckeae, sumatrana>;
-        nimbae(): punicus;
-        suricatta(): nigricans<melanops, subspinosus>;
-        jagorii(): galapagoensis;
-        beecrofti(): stolzmanni;
-        imaizumii(): inez<gerbillus<inez<moojeni<amphibius<falconeri, psilurus>, echinatus>, aurata>, otion>, konganensis>;
-        colocolo(): bobrinskoi;
-        wolfi(): rosalia<megalonyx, abidi<kaiseri, wilsoni>>;
+        macrocercus(): panamensis.setulosus<dogramacii.koepckeae, julianae.sumatrana>;
+        nimbae(): lutreolus.punicus;
+        suricatta(): daubentonii.nigricans<dammermani.melanops, imperfecta.subspinosus>;
+        jagorii(): julianae.galapagoensis;
+        beecrofti(): sagitta.stolzmanni;
+        imaizumii(): minutus.inez<julianae.gerbillus<minutus.inez<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, dogramacii.aurata>, lavali.otion>, macrorhinos.konganensis>;
+        colocolo(): quasiater.bobrinskoi;
+        wolfi(): petrophilus.rosalia<Lanthanum.megalonyx, panglima.abidi<dogramacii.kaiseri, lavali.wilsoni>>;
     }
     class pallidus {
-        oblativa(): falconeri;
-        watersi(): wilsoni;
-        glacialis(): cinereus<caucasica<sumatrana, oconnelli>, wattsi<galapagoensis, linulus<xanthognathus, konganensis>>>;
-        viaria(): sarasinorum<xanthognathus, punicus>;
+        oblativa(): trivirgatus.falconeri;
+        watersi(): lavali.wilsoni;
+        glacialis(): sagitta.cinereus<nigra.caucasica<julianae.sumatrana, trivirgatus.oconnelli>, quasiater.wattsi<julianae.galapagoensis, panamensis.linulus<lavali.xanthognathus, macrorhinos.konganensis>>>;
+        viaria(): chrysaeolus.sarasinorum<lavali.xanthognathus, lutreolus.punicus>;
     }
     class cahirinus<T0, T1> {
-        alashanicus(): caucasica<americanus, peninsulae>;
-        flaviventer(): tumidifrons<thaeleri, arboreus<minutilla, peninsulae>>;
-        bottai(): schlegeli;
-        pinetis(): oreas;
-        saussurei(): crenulata<klossii<nudicaudus, aurata>, netscheri<inez<peninsulae, nudicaudus>, oralis<xanthognathus, oreas>>>;
+        alashanicus(): nigra.caucasica<ruatanica.americanus, argurus.peninsulae>;
+        flaviventer(): trivirgatus.tumidifrons<lavali.thaeleri, daubentonii.arboreus<petrophilus.minutilla, argurus.peninsulae>>;
+        bottai(): lutreolus.schlegeli;
+        pinetis(): argurus.oreas;
+        saussurei(): rendalli.crenulata<gabriellae.klossii<julianae.nudicaudus, dogramacii.aurata>, argurus.netscheri<minutus.inez<argurus.peninsulae, julianae.nudicaudus>, julianae.oralis<lavali.xanthognathus, argurus.oreas>>>;
     }
 }
 declare module sagitta {
-    class leptoceros<T0, T1> extends johorensis<peninsulae, arboreus<germaini, stolzmanni>> {
-        victus(): caniventer;
-        hoplomyoides(): fundatus<gerbillus<subspinosus, durangae>, gracilis<luctuosa, subspinosus>>;
-        gratiosus(): lepturus;
-        rex(): wilsoni;
-        bolami(): tumidifrons<schlegeli, americanus>;
+    class leptoceros<T0, T1> extends caurinus.johorensis<argurus.peninsulae, daubentonii.arboreus<argurus.germaini, stolzmanni>> {
+        victus(): rionegrensis.caniventer;
+        hoplomyoides(): panglima.fundatus<julianae.gerbillus<imperfecta.subspinosus, julianae.durangae>, nigra.gracilis<argurus.luctuosa, imperfecta.subspinosus>>;
+        gratiosus(): lavali.lepturus;
+        rex(): lavali.wilsoni;
+        bolami(): trivirgatus.tumidifrons<lutreolus.schlegeli, ruatanica.americanus>;
     }
 }
 declare module daubentonii {
-    class nigricans<T0, T1> extends stolzmanni {
-        woosnami(): robustulus;
+    class nigricans<T0, T1> extends sagitta.stolzmanni {
+        woosnami(): dogramacii.robustulus;
     }
 }
 declare module dammermani {
@@ -8003,123 +8003,123 @@ declare module dammermani {
     }
 }
 declare module argurus {
-    class pygmaea<T0, T1> extends moojeni<konganensis, echinatus> {
-        pajeros(): echinatus;
-        capucinus(): zuluensis;
-        cuvieri(): caniventer;
+    class pygmaea<T0, T1> extends rendalli.moojeni<macrorhinos.konganensis, gabriellae.echinatus> {
+        pajeros(): gabriellae.echinatus;
+        capucinus(): rendalli.zuluensis;
+        cuvieri(): rionegrensis.caniventer;
     }
 }
 declare module chrysaeolus {
-    class sarasinorum<T0, T1> extends psilurus {
-        belzebul(): pallidus;
-        hinpoon(): caucasica<sumatrana, oconnelli>;
-        kandti(): wattsi<jugularis, sumatrana>;
-        cynosuros(): melanops;
-        Germanium(): beisa;
-        Ununoctium(): gracilis<xanthognathus, melanoleuca>;
-        princeps(): portoricensis;
+    class sarasinorum<T0, T1> extends caurinus.psilurus {
+        belzebul(): samarensis.pallidus;
+        hinpoon(): nigra.caucasica<julianae.sumatrana, trivirgatus.oconnelli>;
+        kandti(): quasiater.wattsi<Lanthanum.jugularis, julianae.sumatrana>;
+        cynosuros(): dammermani.melanops;
+        Germanium(): lavali.beisa;
+        Ununoctium(): nigra.gracilis<lavali.xanthognathus, provocax.melanoleuca>;
+        princeps(): minutus.portoricensis;
     }
 }
 declare module argurus {
     class wetmorei<T0, T1> {
-        leucoptera(): rosalia<koepckeae, foina>;
-        ochraventer(): walkeri;
-        tephromelas(): jugularis;
-        cracens(): gilbertii<thaeleri, punicus>;
-        jamaicensis(): thalia<marcanoi, veraecrucis<falconeri, carolinensis>>;
-        gymnocaudus(): aurata;
-        mayori(): stolzmanni;
+        leucoptera(): petrophilus.rosalia<dogramacii.koepckeae, lutreolus.foina>;
+        ochraventer(): sagitta.walkeri;
+        tephromelas(): Lanthanum.jugularis;
+        cracens(): gilbertii<lavali.thaeleri, lutreolus.punicus>;
+        jamaicensis(): nigra.thalia<howi.marcanoi, rionegrensis.veraecrucis<trivirgatus.falconeri, quasiater.carolinensis>>;
+        gymnocaudus(): dogramacii.aurata;
+        mayori(): sagitta.stolzmanni;
     }
 }
 declare module argurus {
-    class oreas extends wilsoni {
-        salamonis(): xanthognathus;
-        paniscus(): Praseodymium<psilurus, xanthognathus>;
-        fagani(): oconnelli;
-        papuanus(): fundatus<carolinensis, daphaenodon>;
-        timidus(): melanops;
-        nghetinhensis(): klossii<luctuosa, steerii>;
-        barbei(): cahirinus<lepturus, carolinensis>;
+    class oreas extends lavali.wilsoni {
+        salamonis(): lavali.xanthognathus;
+        paniscus(): ruatanica.Praseodymium<caurinus.psilurus, lavali.xanthognathus>;
+        fagani(): trivirgatus.oconnelli;
+        papuanus(): panglima.fundatus<quasiater.carolinensis, macrorhinos.daphaenodon>;
+        timidus(): dammermani.melanops;
+        nghetinhensis(): gabriellae.klossii<luctuosa, julianae.steerii>;
+        barbei(): samarensis.cahirinus<lavali.lepturus, quasiater.carolinensis>;
         univittatus(): peninsulae;
     }
 }
 declare module daubentonii {
     class arboreus<T0, T1> {
-        capreolus(): crenulata<pelurus<jugularis, americanus>, wilsoni>;
-        moreni(): abidi<galapagoensis, koepckeae>;
-        hypoleucos(): gracilis<falconeri, germaini>;
-        paedulcus(): portoricensis;
-        pucheranii(): fuscus<durangae, megaphyllus>;
-        stella(): oralis<foina, carolinensis>;
-        brasiliensis(): subspinosus;
-        brevicaudata(): oconnelli;
-        vitticollis(): koepckeae;
-        huangensis(): psilurus;
-        cameroni(): rosalia<siberu<lasiurus<foina, melanops>, ciliolabrum<megalonyx, minutilla>>, psilurus>;
-        tianshanica(): marcanoi;
+        capreolus(): rendalli.crenulata<samarensis.pelurus<Lanthanum.jugularis, ruatanica.americanus>, lavali.wilsoni>;
+        moreni(): panglima.abidi<julianae.galapagoensis, dogramacii.koepckeae>;
+        hypoleucos(): nigra.gracilis<trivirgatus.falconeri, argurus.germaini>;
+        paedulcus(): minutus.portoricensis;
+        pucheranii(): samarensis.fuscus<julianae.durangae, caurinus.megaphyllus>;
+        stella(): julianae.oralis<lutreolus.foina, quasiater.carolinensis>;
+        brasiliensis(): imperfecta.subspinosus;
+        brevicaudata(): trivirgatus.oconnelli;
+        vitticollis(): dogramacii.koepckeae;
+        huangensis(): caurinus.psilurus;
+        cameroni(): petrophilus.rosalia<dammermani.siberu<imperfecta.lasiurus<lutreolus.foina, dammermani.melanops>, imperfecta.ciliolabrum<Lanthanum.megalonyx, petrophilus.minutilla>>, caurinus.psilurus>;
+        tianshanica(): howi.marcanoi;
     }
 }
 declare module patas {
     class uralensis {
-        cartilagonodus(): nitidus<caniventer, jugularis>;
-        pyrrhinus(): beisa;
-        insulans(): jugularis;
-        nigricauda(): johorensis<nitidus<minutilla, sumatrana>, jugularis>;
-        muricauda(): fundatus<foina, siberu<punicus, acariensis>>;
-        albicaudus(): stolzmanni;
-        fallax(): hector<punicus, amicus>;
-        attenuata(): marmosurus<americanus, netscheri<carolinensis, kaiseri>>;
-        megalura(): marcanoi;
-        neblina(): pelurus<daphaenodon, caniventer>;
-        citellus(): arboreus<carolinensis, caniventer>;
-        tanezumi(): lasiurus<robustulus, psilurus>;
-        albiventer(): crenulata<zuluensis, robustulus>;
+        cartilagonodus(): Lanthanum.nitidus<rionegrensis.caniventer, Lanthanum.jugularis>;
+        pyrrhinus(): lavali.beisa;
+        insulans(): Lanthanum.jugularis;
+        nigricauda(): caurinus.johorensis<Lanthanum.nitidus<petrophilus.minutilla, julianae.sumatrana>, Lanthanum.jugularis>;
+        muricauda(): panglima.fundatus<lutreolus.foina, dammermani.siberu<lutreolus.punicus, julianae.acariensis>>;
+        albicaudus(): sagitta.stolzmanni;
+        fallax(): ruatanica.hector<lutreolus.punicus, gabriellae.amicus>;
+        attenuata(): macrorhinos.marmosurus<ruatanica.americanus, argurus.netscheri<quasiater.carolinensis, dogramacii.kaiseri>>;
+        megalura(): howi.marcanoi;
+        neblina(): samarensis.pelurus<macrorhinos.daphaenodon, rionegrensis.caniventer>;
+        citellus(): daubentonii.arboreus<quasiater.carolinensis, rionegrensis.caniventer>;
+        tanezumi(): imperfecta.lasiurus<dogramacii.robustulus, caurinus.psilurus>;
+        albiventer(): rendalli.crenulata<rendalli.zuluensis, dogramacii.robustulus>;
     }
 }
 declare module provocax {
-    class melanoleuca extends wilsoni {
-        Neodymium(): marmosurus<sodyi<falconeri, bobrinskoi>, foina>;
-        baeri(): lasiurus<lepturus, americanus>;
+    class melanoleuca extends lavali.wilsoni {
+        Neodymium(): macrorhinos.marmosurus<petrophilus.sodyi<trivirgatus.falconeri, quasiater.bobrinskoi>, lutreolus.foina>;
+        baeri(): imperfecta.lasiurus<lavali.lepturus, ruatanica.americanus>;
     }
 }
 declare module sagitta {
     class sicarius<T0, T1> {
-        Chlorine(): cahirinus<gracilis<luctuosa, subspinosus>, robustulus>;
-        simulator(): marmosurus<nitidus<melanops, lepturus>, marmosurus<moojeni<amphibius<falconeri, psilurus>, echinatus>, stolzmanni>>;
+        Chlorine(): samarensis.cahirinus<nigra.gracilis<argurus.luctuosa, imperfecta.subspinosus>, dogramacii.robustulus>;
+        simulator(): macrorhinos.marmosurus<Lanthanum.nitidus<dammermani.melanops, lavali.lepturus>, macrorhinos.marmosurus<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, stolzmanni>>;
     }
 }
 declare module howi {
-    class marcanoi extends megalonyx {
-        formosae(): megalonyx;
-        dudui(): punicus;
-        leander(): nesiotes<megalonyx, portoricensis>;
-        martinsi(): aurata;
-        beatrix(): ciliolabrum<melanoleuca, amphibius<inez<moojeni<amphibius<falconeri, psilurus>, echinatus>, aurata>, ciliolabrum<carolinensis, beisa>>>;
-        griseoventer(): oreas;
-        zerda(): wattsi<oralis<steerii, lepturus>, coludo<steerii, gerbillus<thaeleri, carolinensis>>>;
-        yucatanicus(): nudicaudus;
-        nigrita(): peninsulae;
-        jouvenetae(): dauricus<germaini, durangae>;
-        indefessus(): walkeri;
-        vuquangensis(): daphaenodon;
-        Zirconium(): thaeleri;
-        hyaena(): oralis<beisa, oreas>;
+    class marcanoi extends Lanthanum.megalonyx {
+        formosae(): Lanthanum.megalonyx;
+        dudui(): lutreolus.punicus;
+        leander(): daubentonii.nesiotes<Lanthanum.megalonyx, minutus.portoricensis>;
+        martinsi(): dogramacii.aurata;
+        beatrix(): imperfecta.ciliolabrum<provocax.melanoleuca, panglima.amphibius<minutus.inez<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, dogramacii.aurata>, imperfecta.ciliolabrum<quasiater.carolinensis, lavali.beisa>>>;
+        griseoventer(): argurus.oreas;
+        zerda(): quasiater.wattsi<julianae.oralis<julianae.steerii, lavali.lepturus>, coludo<julianae.steerii, julianae.gerbillus<lavali.thaeleri, quasiater.carolinensis>>>;
+        yucatanicus(): julianae.nudicaudus;
+        nigrita(): argurus.peninsulae;
+        jouvenetae(): argurus.dauricus<argurus.germaini, julianae.durangae>;
+        indefessus(): sagitta.walkeri;
+        vuquangensis(): macrorhinos.daphaenodon;
+        Zirconium(): lavali.thaeleri;
+        hyaena(): julianae.oralis<lavali.beisa, argurus.oreas>;
     }
 }
 declare module argurus {
     class gilbertii<T0, T1> {
-        nasutus(): lepturus;
-        poecilops(): steerii;
-        sondaicus(): fuscus<peninsulae, lepturus>;
-        auriventer(): rosalia<xanthognathus, oconnelli>;
-        cherriei(): Praseodymium<jugularis, oreas>;
-        lindberghi(): inez<zuluensis, caniventer>;
-        pipistrellus(): carolinensis;
-        paranus(): punicus;
-        dubosti(): thalia<schlegeli, sumatrana>;
-        opossum(): dolichurus<lepturus, pallidus>;
-        oreopolus(): portoricensis;
-        amurensis(): arboreus<otion, konganensis>;
+        nasutus(): lavali.lepturus;
+        poecilops(): julianae.steerii;
+        sondaicus(): samarensis.fuscus<peninsulae, lavali.lepturus>;
+        auriventer(): petrophilus.rosalia<lavali.xanthognathus, trivirgatus.oconnelli>;
+        cherriei(): ruatanica.Praseodymium<Lanthanum.jugularis, oreas>;
+        lindberghi(): minutus.inez<rendalli.zuluensis, rionegrensis.caniventer>;
+        pipistrellus(): quasiater.carolinensis;
+        paranus(): lutreolus.punicus;
+        dubosti(): nigra.thalia<lutreolus.schlegeli, julianae.sumatrana>;
+        opossum(): nigra.dolichurus<lavali.lepturus, samarensis.pallidus>;
+        oreopolus(): minutus.portoricensis;
+        amurensis(): daubentonii.arboreus<lavali.otion, macrorhinos.konganensis>;
     }
 }
 declare module petrophilus {
@@ -8128,45 +8128,45 @@ declare module petrophilus {
 }
 declare module lutreolus {
     class punicus {
-        strandi(): klossii<jugularis, jugularis>;
-        lar(): mahaganus<nudicaudus, otion>;
-        erica(): koepckeae;
-        trichura(): konganensis;
-        lemniscatus(): fundatus<amicus, foina>;
-        aspalax(): linulus<xanthognathus, konganensis>;
-        marshalli(): nudicaudus;
-        Zinc(): galapagoensis;
-        monochromos(): coludo<lepturus, punicus>;
-        purinus(): hector<schlegeli, melanoleuca>;
-        ischyrus(): lepturus;
-        tenuis(): daphaenodon;
-        Helium(): acariensis;
+        strandi(): gabriellae.klossii<Lanthanum.jugularis, Lanthanum.jugularis>;
+        lar(): caurinus.mahaganus<julianae.nudicaudus, lavali.otion>;
+        erica(): dogramacii.koepckeae;
+        trichura(): macrorhinos.konganensis;
+        lemniscatus(): panglima.fundatus<gabriellae.amicus, foina>;
+        aspalax(): panamensis.linulus<lavali.xanthognathus, macrorhinos.konganensis>;
+        marshalli(): julianae.nudicaudus;
+        Zinc(): julianae.galapagoensis;
+        monochromos(): howi.coludo<lavali.lepturus, punicus>;
+        purinus(): ruatanica.hector<schlegeli, provocax.melanoleuca>;
+        ischyrus(): lavali.lepturus;
+        tenuis(): macrorhinos.daphaenodon;
+        Helium(): julianae.acariensis;
     }
 }
 declare module macrorhinos {
     class daphaenodon {
-        bredanensis(): sumatrana;
-        othus(): coludo<oreas, marcanoi>;
-        hammondi(): gerbillus<inez<moojeni<amphibius<falconeri, psilurus>, echinatus>, aurata>, otion>;
-        aureocollaris(): carolinensis;
-        flavipes(): minutilla;
-        callosus(): lotor<foina, robustulus>;
+        bredanensis(): julianae.sumatrana;
+        othus(): howi.coludo<argurus.oreas, howi.marcanoi>;
+        hammondi(): julianae.gerbillus<minutus.inez<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, dogramacii.aurata>, lavali.otion>;
+        aureocollaris(): quasiater.carolinensis;
+        flavipes(): petrophilus.minutilla;
+        callosus(): trivirgatus.lotor<lutreolus.foina, dogramacii.robustulus>;
     }
 }
 declare module sagitta {
     class cinereus<T0, T1> {
-        zunigae(): crenulata<konganensis, dolichurus<lepturus, pallidus>>;
-        microps(): nigricans<megaphyllus, wattsi<jugularis, sumatrana>>;
-        guaporensis(): arboreus<amicus, germaini>;
-        tonkeana(): fundatus<minutilla, melanops>;
-        montensis(): siberu<aurata, oconnelli>;
-        sphinx(): portoricensis;
-        glis(): wetmorei<oreas, marcanoi>;
-        dorsalis(): sodyi<luctuosa, sumatrana>;
-        fimbriatus(): melanoleuca;
-        sara(): gracilis<luctuosa, subspinosus>;
+        zunigae(): rendalli.crenulata<macrorhinos.konganensis, nigra.dolichurus<lavali.lepturus, samarensis.pallidus>>;
+        microps(): daubentonii.nigricans<caurinus.megaphyllus, quasiater.wattsi<Lanthanum.jugularis, julianae.sumatrana>>;
+        guaporensis(): daubentonii.arboreus<gabriellae.amicus, argurus.germaini>;
+        tonkeana(): panglima.fundatus<petrophilus.minutilla, dammermani.melanops>;
+        montensis(): dammermani.siberu<dogramacii.aurata, trivirgatus.oconnelli>;
+        sphinx(): minutus.portoricensis;
+        glis(): argurus.wetmorei<argurus.oreas, howi.marcanoi>;
+        dorsalis(): petrophilus.sodyi<argurus.luctuosa, julianae.sumatrana>;
+        fimbriatus(): provocax.melanoleuca;
+        sara(): nigra.gracilis<argurus.luctuosa, imperfecta.subspinosus>;
         epimelas(): stolzmanni;
-        pittieri(): fuscus<carolinensis, stolzmanni>;
+        pittieri(): samarensis.fuscus<quasiater.carolinensis, stolzmanni>;
     }
 }
 declare module nigra {
@@ -8174,253 +8174,253 @@ declare module nigra {
     }
 }
 declare module gabriellae {
-    class klossii<T0, T1> extends lasiurus<robustulus, psilurus> {
+    class klossii<T0, T1> extends imperfecta.lasiurus<dogramacii.robustulus, caurinus.psilurus> {
     }
     class amicus {
-        pirrensis(): luctuosa;
-        phaeura(): abidi<foina, peninsulae>;
-        voratus(): thaeleri;
-        satarae(): lotor<luctuosa, wilsoni>;
-        hooperi(): psilurus;
-        perrensi(): crenulata<falconeri, marcanoi>;
-        ridei(): hector<sumatrana, pelurus<jugularis, walkeri>>;
-        audeberti(): arboreus<kaiseri, punicus>;
-        Lutetium(): marmosurus<stolzmanni, thaeleri>;
-        atrox(): fuscus<oralis<steerii, lepturus>, koepckeae>;
+        pirrensis(): argurus.luctuosa;
+        phaeura(): panglima.abidi<lutreolus.foina, argurus.peninsulae>;
+        voratus(): lavali.thaeleri;
+        satarae(): trivirgatus.lotor<argurus.luctuosa, lavali.wilsoni>;
+        hooperi(): caurinus.psilurus;
+        perrensi(): rendalli.crenulata<trivirgatus.falconeri, howi.marcanoi>;
+        ridei(): ruatanica.hector<julianae.sumatrana, samarensis.pelurus<Lanthanum.jugularis, sagitta.walkeri>>;
+        audeberti(): daubentonii.arboreus<dogramacii.kaiseri, lutreolus.punicus>;
+        Lutetium(): macrorhinos.marmosurus<sagitta.stolzmanni, lavali.thaeleri>;
+        atrox(): samarensis.fuscus<julianae.oralis<julianae.steerii, lavali.lepturus>, dogramacii.koepckeae>;
     }
     class echinatus {
-        tenuipes(): coludo<daphaenodon, amphibius<daphaenodon, uralensis>>;
+        tenuipes(): howi.coludo<macrorhinos.daphaenodon, panglima.amphibius<macrorhinos.daphaenodon, patas.uralensis>>;
     }
 }
 declare module imperfecta {
     class lasiurus<T0, T1> {
-        marisae(): thaeleri;
-        fulvus(): germaini;
-        paranaensis(): koepckeae;
-        didactylus(): abidi<aurata, sarasinorum<megaphyllus, xanthognathus>>;
-        schreibersii(): gracilis<luctuosa, americanus>;
-        orii(): kaiseri;
+        marisae(): lavali.thaeleri;
+        fulvus(): argurus.germaini;
+        paranaensis(): dogramacii.koepckeae;
+        didactylus(): panglima.abidi<dogramacii.aurata, chrysaeolus.sarasinorum<caurinus.megaphyllus, lavali.xanthognathus>>;
+        schreibersii(): nigra.gracilis<argurus.luctuosa, ruatanica.americanus>;
+        orii(): dogramacii.kaiseri;
     }
     class subspinosus {
-        monticularis(): konganensis;
-        Gadolinium(): caucasica<stolzmanni, uralensis>;
-        oasicus(): johorensis<peninsulae, arboreus<germaini, stolzmanni>>;
-        paterculus(): punicus;
-        punctata(): thaeleri;
-        invictus(): stolzmanni;
-        stangeri(): minutilla;
-        siskiyou(): inez<konganensis, pallidus>;
-        welwitschii(): caniventer;
-        Polonium(): wilsoni;
-        harpia(): luctuosa;
+        monticularis(): macrorhinos.konganensis;
+        Gadolinium(): nigra.caucasica<sagitta.stolzmanni, patas.uralensis>;
+        oasicus(): caurinus.johorensis<argurus.peninsulae, daubentonii.arboreus<argurus.germaini, sagitta.stolzmanni>>;
+        paterculus(): lutreolus.punicus;
+        punctata(): lavali.thaeleri;
+        invictus(): sagitta.stolzmanni;
+        stangeri(): petrophilus.minutilla;
+        siskiyou(): minutus.inez<macrorhinos.konganensis, samarensis.pallidus>;
+        welwitschii(): rionegrensis.caniventer;
+        Polonium(): lavali.wilsoni;
+        harpia(): argurus.luctuosa;
     }
-    class ciliolabrum<T0, T1> extends robustulus {
-        leschenaultii(): dauricus<jugularis, Praseodymium<germaini, megaphyllus>>;
-        ludia(): johorensis<caniventer, punicus>;
-        sinicus(): marmosurus<daphaenodon, amicus>;
+    class ciliolabrum<T0, T1> extends dogramacii.robustulus {
+        leschenaultii(): argurus.dauricus<Lanthanum.jugularis, ruatanica.Praseodymium<argurus.germaini, caurinus.megaphyllus>>;
+        ludia(): caurinus.johorensis<rionegrensis.caniventer, lutreolus.punicus>;
+        sinicus(): macrorhinos.marmosurus<macrorhinos.daphaenodon, gabriellae.amicus>;
     }
 }
 declare module quasiater {
     class wattsi<T0, T1> {
-        lagotis(): xanthognathus;
-        hussoni(): wilsoni;
-        bilarni(): cahirinus<crenulata<wilsoni, fundatus<amicus, foina>>, koepckeae>;
-        cabrerae(): lepturus;
+        lagotis(): lavali.xanthognathus;
+        hussoni(): lavali.wilsoni;
+        bilarni(): samarensis.cahirinus<rendalli.crenulata<lavali.wilsoni, panglima.fundatus<gabriellae.amicus, lutreolus.foina>>, dogramacii.koepckeae>;
+        cabrerae(): lavali.lepturus;
     }
 }
 declare module butleri {
 }
 declare module petrophilus {
-    class sodyi<T0, T1> extends bobrinskoi {
-        saundersiae(): pallidus;
-        imberbis(): carolinensis;
-        cansdalei(): melanops;
-        Lawrencium(): dolichurus<sumatrana, subspinosus>;
-        catta(): oreas;
-        breviceps(): dauricus<aurata, melanops>;
-        transitionalis(): zuluensis;
-        heptneri(): germaini;
-        bairdii(): beisa;
+    class sodyi<T0, T1> extends quasiater.bobrinskoi {
+        saundersiae(): samarensis.pallidus;
+        imberbis(): quasiater.carolinensis;
+        cansdalei(): dammermani.melanops;
+        Lawrencium(): nigra.dolichurus<julianae.sumatrana, imperfecta.subspinosus>;
+        catta(): argurus.oreas;
+        breviceps(): argurus.dauricus<dogramacii.aurata, dammermani.melanops>;
+        transitionalis(): rendalli.zuluensis;
+        heptneri(): argurus.germaini;
+        bairdii(): lavali.beisa;
     }
 }
 declare module caurinus {
-    class megaphyllus extends lasiurus<acariensis, coludo<oreas, marcanoi>> {
-        montana(): oreas;
-        amatus(): schlegeli;
-        bucculentus(): echinatus;
-        lepida(): crenulata<wilsoni, fundatus<amicus, foina>>;
-        graecus(): kaiseri;
-        forsteri(): minutilla;
-        perotensis(): cahirinus<portoricensis, lepturus>;
-        cirrhosus(): carolinensis;
+    class megaphyllus extends imperfecta.lasiurus<julianae.acariensis, howi.coludo<argurus.oreas, howi.marcanoi>> {
+        montana(): argurus.oreas;
+        amatus(): lutreolus.schlegeli;
+        bucculentus(): gabriellae.echinatus;
+        lepida(): rendalli.crenulata<lavali.wilsoni, panglima.fundatus<gabriellae.amicus, lutreolus.foina>>;
+        graecus(): dogramacii.kaiseri;
+        forsteri(): petrophilus.minutilla;
+        perotensis(): samarensis.cahirinus<minutus.portoricensis, lavali.lepturus>;
+        cirrhosus(): quasiater.carolinensis;
     }
 }
 declare module minutus {
     class portoricensis {
-        relictus(): carolinensis;
-        aequatorianus(): klossii<nudicaudus, aurata>;
-        rhinogradoides(): cahirinus<carolinensis, durangae>;
+        relictus(): quasiater.carolinensis;
+        aequatorianus(): gabriellae.klossii<julianae.nudicaudus, dogramacii.aurata>;
+        rhinogradoides(): samarensis.cahirinus<quasiater.carolinensis, julianae.durangae>;
     }
 }
 declare module lutreolus {
     class foina {
         tarfayensis(): punicus;
-        Promethium(): pelurus<germaini, durangae>;
-        salinae(): klossii<konganensis, carolinensis>;
-        kerri(): coludo<carolinensis, portoricensis>;
-        scotti(): wattsi<konganensis, robustulus>;
-        camerunensis(): gerbillus<subspinosus, durangae>;
-        affinis(): germaini;
-        siebersi(): lotor<oreas, thalia<uralensis, wilsoni>>;
-        maquassiensis(): oconnelli;
-        layardi(): albidens<marcanoi, koepckeae>;
-        bishopi(): aurata;
-        apodemoides(): psilurus;
-        argentiventer(): mixtus<amicus, punicus>;
+        Promethium(): samarensis.pelurus<argurus.germaini, julianae.durangae>;
+        salinae(): gabriellae.klossii<macrorhinos.konganensis, quasiater.carolinensis>;
+        kerri(): howi.coludo<quasiater.carolinensis, minutus.portoricensis>;
+        scotti(): quasiater.wattsi<macrorhinos.konganensis, dogramacii.robustulus>;
+        camerunensis(): julianae.gerbillus<imperfecta.subspinosus, julianae.durangae>;
+        affinis(): argurus.germaini;
+        siebersi(): trivirgatus.lotor<argurus.oreas, nigra.thalia<patas.uralensis, lavali.wilsoni>>;
+        maquassiensis(): trivirgatus.oconnelli;
+        layardi(): julianae.albidens<howi.marcanoi, dogramacii.koepckeae>;
+        bishopi(): dogramacii.aurata;
+        apodemoides(): caurinus.psilurus;
+        argentiventer(): trivirgatus.mixtus<gabriellae.amicus, punicus>;
     }
 }
 declare module lutreolus {
-    class cor<T0, T1> extends fundatus<linulus<lotor<luctuosa, wilsoni>, beisa>, melanops> {
-        antinorii(): sodyi<carolinensis, germaini>;
-        voi(): johorensis<melanops, konganensis>;
-        mussoi(): carolinensis;
-        truncatus(): lotor<stolzmanni, foina>;
-        achates(): melanoleuca;
-        praedatrix(): angulatus<kaiseri, steerii>;
-        mzabi(): wattsi<lotor<steerii, pallidus>, inez<oconnelli, jugularis>>;
-        xanthinus(): gracilis<linulus<kaiseri, portoricensis>, marcanoi>;
-        tapoatafa(): megaphyllus;
-        castroviejoi(): jugularis;
+    class cor<T0, T1> extends panglima.fundatus<panamensis.linulus<trivirgatus.lotor<argurus.luctuosa, lavali.wilsoni>, lavali.beisa>, dammermani.melanops> {
+        antinorii(): petrophilus.sodyi<quasiater.carolinensis, argurus.germaini>;
+        voi(): caurinus.johorensis<dammermani.melanops, macrorhinos.konganensis>;
+        mussoi(): quasiater.carolinensis;
+        truncatus(): trivirgatus.lotor<sagitta.stolzmanni, foina>;
+        achates(): provocax.melanoleuca;
+        praedatrix(): howi.angulatus<dogramacii.kaiseri, julianae.steerii>;
+        mzabi(): quasiater.wattsi<trivirgatus.lotor<julianae.steerii, samarensis.pallidus>, minutus.inez<trivirgatus.oconnelli, Lanthanum.jugularis>>;
+        xanthinus(): nigra.gracilis<panamensis.linulus<dogramacii.kaiseri, minutus.portoricensis>, howi.marcanoi>;
+        tapoatafa(): caurinus.megaphyllus;
+        castroviejoi(): Lanthanum.jugularis;
     }
 }
 declare module howi {
     class coludo<T0, T1> {
-        bernhardi(): punicus;
-        isseli(): germaini;
+        bernhardi(): lutreolus.punicus;
+        isseli(): argurus.germaini;
     }
 }
 declare module argurus {
-    class germaini extends amicus {
-        sharpei(): wilsoni;
-        palmarum(): marmosurus<megalonyx, thaeleri>;
+    class germaini extends gabriellae.amicus {
+        sharpei(): lavali.wilsoni;
+        palmarum(): macrorhinos.marmosurus<Lanthanum.megalonyx, lavali.thaeleri>;
     }
 }
 declare module sagitta {
     class stolzmanni {
-        riparius(): dolichurus<koepckeae, psilurus>;
-        dhofarensis(): foina;
-        tricolor(): germaini;
-        gardneri(): xanthognathus;
-        walleri(): moojeni<sarasinorum<megaphyllus, xanthognathus>, echinatus>;
-        talpoides(): echinatus;
-        pallipes(): melanops;
-        lagurus(): beisa;
-        hipposideros(): albidens<luctuosa, echinatus>;
-        griselda(): psilurus;
-        florium(): zuluensis;
+        riparius(): nigra.dolichurus<dogramacii.koepckeae, caurinus.psilurus>;
+        dhofarensis(): lutreolus.foina;
+        tricolor(): argurus.germaini;
+        gardneri(): lavali.xanthognathus;
+        walleri(): rendalli.moojeni<chrysaeolus.sarasinorum<caurinus.megaphyllus, lavali.xanthognathus>, gabriellae.echinatus>;
+        talpoides(): gabriellae.echinatus;
+        pallipes(): dammermani.melanops;
+        lagurus(): lavali.beisa;
+        hipposideros(): julianae.albidens<argurus.luctuosa, gabriellae.echinatus>;
+        griselda(): caurinus.psilurus;
+        florium(): rendalli.zuluensis;
     }
 }
 declare module dammermani {
-    class melanops extends inez<stolzmanni, melanops> {
+    class melanops extends minutus.inez<sagitta.stolzmanni, melanops> {
         blarina(): melanops;
-        harwoodi(): veraecrucis<dolichurus<lepturus, pallidus>, wilsoni>;
-        ashaninka(): nudicaudus;
-        wiedii(): steerii;
-        godmani(): subspinosus;
-        condorensis(): ciliolabrum<pallidus, psilurus>;
-        xerophila(): abidi<portoricensis, uralensis>;
-        laminatus(): fundatus<marcanoi, fuscus<wilsoni, sarasinorum<jugularis, subspinosus>>>;
-        archeri(): marcanoi;
-        hidalgo(): inez<oconnelli, jugularis>;
-        unicolor(): schlegeli;
-        philippii(): gracilis<walkeri, stolzmanni>;
-        bocagei(): albidens<wilsoni, thaeleri>;
+        harwoodi(): rionegrensis.veraecrucis<nigra.dolichurus<lavali.lepturus, samarensis.pallidus>, lavali.wilsoni>;
+        ashaninka(): julianae.nudicaudus;
+        wiedii(): julianae.steerii;
+        godmani(): imperfecta.subspinosus;
+        condorensis(): imperfecta.ciliolabrum<samarensis.pallidus, caurinus.psilurus>;
+        xerophila(): panglima.abidi<minutus.portoricensis, patas.uralensis>;
+        laminatus(): panglima.fundatus<howi.marcanoi, samarensis.fuscus<lavali.wilsoni, chrysaeolus.sarasinorum<Lanthanum.jugularis, imperfecta.subspinosus>>>;
+        archeri(): howi.marcanoi;
+        hidalgo(): minutus.inez<trivirgatus.oconnelli, Lanthanum.jugularis>;
+        unicolor(): lutreolus.schlegeli;
+        philippii(): nigra.gracilis<sagitta.walkeri, sagitta.stolzmanni>;
+        bocagei(): julianae.albidens<lavali.wilsoni, lavali.thaeleri>;
     }
 }
 declare module argurus {
-    class peninsulae extends uralensis {
-        aitkeni(): mixtus<dauricus<aurata, melanops>, amphibius<lepturus, carolinensis>>;
-        novaeangliae(): xanthognathus;
-        olallae(): sumatrana;
-        anselli(): aurata;
-        timminsi(): konganensis;
-        sordidus(): moojeni<konganensis, echinatus>;
-        telfordi(): oconnelli;
-        cavernarum(): inez<echinatus, luctuosa>;
+    class peninsulae extends patas.uralensis {
+        aitkeni(): trivirgatus.mixtus<dauricus<dogramacii.aurata, dammermani.melanops>, panglima.amphibius<lavali.lepturus, quasiater.carolinensis>>;
+        novaeangliae(): lavali.xanthognathus;
+        olallae(): julianae.sumatrana;
+        anselli(): dogramacii.aurata;
+        timminsi(): macrorhinos.konganensis;
+        sordidus(): rendalli.moojeni<macrorhinos.konganensis, gabriellae.echinatus>;
+        telfordi(): trivirgatus.oconnelli;
+        cavernarum(): minutus.inez<gabriellae.echinatus, luctuosa>;
     }
 }
 declare module argurus {
     class netscheri<T0, T1> {
-        gravis(): caucasica<crenulata<falconeri, marcanoi>, kaiseri>;
-        ruschii(): lasiurus<marcanoi, ciliolabrum<megalonyx, minutilla>>;
-        tricuspidatus(): wilsoni;
-        fernandezi(): siberu<thalia<schlegeli, sumatrana>, abidi<foina, peninsulae>>;
-        colletti(): pallidus;
-        microbullatus(): schlegeli;
-        eburneae(): sarasinorum<konganensis, acariensis>;
-        tatei(): pygmaea<oreas, fundatus<carolinensis, daphaenodon>>;
-        millardi(): walkeri;
-        pruinosus(): falconeri;
-        delator(): netscheri<kaiseri, lepturus>;
-        nyikae(): tumidifrons<angulatus<coludo<carolinensis, portoricensis>, minutilla>, acariensis>;
-        ruemmleri(): amphibius<inez<moojeni<amphibius<falconeri, psilurus>, echinatus>, aurata>, ciliolabrum<carolinensis, beisa>>;
+        gravis(): nigra.caucasica<rendalli.crenulata<trivirgatus.falconeri, howi.marcanoi>, dogramacii.kaiseri>;
+        ruschii(): imperfecta.lasiurus<howi.marcanoi, imperfecta.ciliolabrum<Lanthanum.megalonyx, petrophilus.minutilla>>;
+        tricuspidatus(): lavali.wilsoni;
+        fernandezi(): dammermani.siberu<nigra.thalia<lutreolus.schlegeli, julianae.sumatrana>, panglima.abidi<lutreolus.foina, peninsulae>>;
+        colletti(): samarensis.pallidus;
+        microbullatus(): lutreolus.schlegeli;
+        eburneae(): chrysaeolus.sarasinorum<macrorhinos.konganensis, julianae.acariensis>;
+        tatei(): pygmaea<oreas, panglima.fundatus<quasiater.carolinensis, macrorhinos.daphaenodon>>;
+        millardi(): sagitta.walkeri;
+        pruinosus(): trivirgatus.falconeri;
+        delator(): netscheri<dogramacii.kaiseri, lavali.lepturus>;
+        nyikae(): trivirgatus.tumidifrons<howi.angulatus<howi.coludo<quasiater.carolinensis, minutus.portoricensis>, petrophilus.minutilla>, julianae.acariensis>;
+        ruemmleri(): panglima.amphibius<minutus.inez<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, dogramacii.aurata>, imperfecta.ciliolabrum<quasiater.carolinensis, lavali.beisa>>;
     }
 }
 declare module ruatanica {
-    class Praseodymium<T0, T1> extends hector<punicus, amicus> {
-        clara(): amphibius<ciliolabrum<carolinensis, beisa>, dauricus<americanus, caniventer>>;
-        spectabilis(): sodyi<caniventer, carolinensis>;
-        kamensis(): lotor<linulus<kaiseri, portoricensis>, lepturus>;
-        ruddi(): foina;
-        bartelsii(): sumatrana;
-        yerbabuenae(): siberu<lasiurus<foina, melanops>, ciliolabrum<megalonyx, minutilla>>;
-        davidi(): mixtus<melanoleuca, stolzmanni>;
-        pilirostris(): wetmorei<lasiurus<amphibius<uralensis, klossii<nudicaudus, aurata>>, leptoceros<punicus, arboreus<carolinensis, caniventer>>>, konganensis>;
-        catherinae(): lasiurus<nitidus<marcanoi, daphaenodon>, sodyi<konganensis, psilurus>>;
-        frontata(): oreas;
-        Terbium(): mahaganus<galapagoensis, luctuosa>;
-        thomensis(): inez<oreas, albidens<luctuosa, echinatus>>;
-        soricinus(): carolinensis;
+    class Praseodymium<T0, T1> extends hector<lutreolus.punicus, gabriellae.amicus> {
+        clara(): panglima.amphibius<imperfecta.ciliolabrum<quasiater.carolinensis, lavali.beisa>, argurus.dauricus<americanus, rionegrensis.caniventer>>;
+        spectabilis(): petrophilus.sodyi<rionegrensis.caniventer, quasiater.carolinensis>;
+        kamensis(): trivirgatus.lotor<panamensis.linulus<dogramacii.kaiseri, minutus.portoricensis>, lavali.lepturus>;
+        ruddi(): lutreolus.foina;
+        bartelsii(): julianae.sumatrana;
+        yerbabuenae(): dammermani.siberu<imperfecta.lasiurus<lutreolus.foina, dammermani.melanops>, imperfecta.ciliolabrum<Lanthanum.megalonyx, petrophilus.minutilla>>;
+        davidi(): trivirgatus.mixtus<provocax.melanoleuca, sagitta.stolzmanni>;
+        pilirostris(): argurus.wetmorei<imperfecta.lasiurus<panglima.amphibius<patas.uralensis, gabriellae.klossii<julianae.nudicaudus, dogramacii.aurata>>, sagitta.leptoceros<lutreolus.punicus, daubentonii.arboreus<quasiater.carolinensis, rionegrensis.caniventer>>>, macrorhinos.konganensis>;
+        catherinae(): imperfecta.lasiurus<Lanthanum.nitidus<howi.marcanoi, macrorhinos.daphaenodon>, petrophilus.sodyi<macrorhinos.konganensis, caurinus.psilurus>>;
+        frontata(): argurus.oreas;
+        Terbium(): caurinus.mahaganus<julianae.galapagoensis, argurus.luctuosa>;
+        thomensis(): minutus.inez<argurus.oreas, julianae.albidens<argurus.luctuosa, gabriellae.echinatus>>;
+        soricinus(): quasiater.carolinensis;
     }
 }
 declare module caurinus {
-    class johorensis<T0, T1> extends punicus {
-        maini(): Praseodymium<thaeleri, acariensis>;
+    class johorensis<T0, T1> extends lutreolus.punicus {
+        maini(): ruatanica.Praseodymium<lavali.thaeleri, julianae.acariensis>;
     }
 }
 declare module argurus {
     class luctuosa {
-        loriae(): moojeni<marmosurus<moojeni<amphibius<falconeri, psilurus>, echinatus>, stolzmanni>, punicus>;
+        loriae(): rendalli.moojeni<macrorhinos.marmosurus<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, sagitta.stolzmanni>, lutreolus.punicus>;
     }
 }
 declare module panamensis {
     class setulosus<T0, T1> {
-        duthieae(): mahaganus<coludo<oreas, marcanoi>, aurata>;
-        guereza(): coludo<stolzmanni, carolinensis>;
-        buselaphus(): nesiotes<lotor<abidi<lepturus, psilurus>, koepckeae>, mixtus<amicus, punicus>>;
-        nuttalli(): cinereus<netscheri<luctuosa, nudicaudus>, sarasinorum<megaphyllus, xanthognathus>>;
-        pelii(): crenulata<nitidus<caniventer, jugularis>, steerii>;
-        tunneyi(): stolzmanni;
-        lamula(): uralensis;
-        vampyrus(): oralis<foina, melanoleuca>;
+        duthieae(): caurinus.mahaganus<howi.coludo<argurus.oreas, howi.marcanoi>, dogramacii.aurata>;
+        guereza(): howi.coludo<sagitta.stolzmanni, quasiater.carolinensis>;
+        buselaphus(): daubentonii.nesiotes<trivirgatus.lotor<panglima.abidi<lavali.lepturus, caurinus.psilurus>, dogramacii.koepckeae>, trivirgatus.mixtus<gabriellae.amicus, lutreolus.punicus>>;
+        nuttalli(): sagitta.cinereus<argurus.netscheri<argurus.luctuosa, julianae.nudicaudus>, chrysaeolus.sarasinorum<caurinus.megaphyllus, lavali.xanthognathus>>;
+        pelii(): rendalli.crenulata<Lanthanum.nitidus<rionegrensis.caniventer, Lanthanum.jugularis>, julianae.steerii>;
+        tunneyi(): sagitta.stolzmanni;
+        lamula(): patas.uralensis;
+        vampyrus(): julianae.oralis<lutreolus.foina, provocax.melanoleuca>;
     }
 }
 declare module petrophilus {
     class rosalia<T0, T1> {
-        palmeri(): amphibius<coludo<daphaenodon, amphibius<daphaenodon, uralensis>>, mixtus<dauricus<aurata, melanops>, amphibius<lepturus, carolinensis>>>;
-        baeops(): nitidus<thaeleri, lepturus>;
-        ozensis(): lasiurus<fundatus<amicus, foina>, foina>;
-        creaghi(): luctuosa;
-        montivaga(): setulosus<beisa, linulus<megaphyllus, megaphyllus>>;
+        palmeri(): panglima.amphibius<howi.coludo<macrorhinos.daphaenodon, panglima.amphibius<macrorhinos.daphaenodon, patas.uralensis>>, trivirgatus.mixtus<argurus.dauricus<dogramacii.aurata, dammermani.melanops>, panglima.amphibius<lavali.lepturus, quasiater.carolinensis>>>;
+        baeops(): Lanthanum.nitidus<lavali.thaeleri, lavali.lepturus>;
+        ozensis(): imperfecta.lasiurus<panglima.fundatus<gabriellae.amicus, lutreolus.foina>, lutreolus.foina>;
+        creaghi(): argurus.luctuosa;
+        montivaga(): panamensis.setulosus<lavali.beisa, panamensis.linulus<caurinus.megaphyllus, caurinus.megaphyllus>>;
     }
 }
 declare module caurinus {
-    class psilurus extends punicus {
-        socialis(): amphibius<falconeri, psilurus>;
-        lundi(): sodyi<falconeri, bobrinskoi>;
-        araeum(): ciliolabrum<carolinensis, beisa>;
-        calamianensis(): gerbillus<thaeleri, carolinensis>;
-        petersoni(): setulosus<walkeri, robustulus>;
-        nitela(): linulus<megalonyx, marcanoi>;
+    class psilurus extends lutreolus.punicus {
+        socialis(): panglima.amphibius<trivirgatus.falconeri, psilurus>;
+        lundi(): petrophilus.sodyi<trivirgatus.falconeri, quasiater.bobrinskoi>;
+        araeum(): imperfecta.ciliolabrum<quasiater.carolinensis, lavali.beisa>;
+        calamianensis(): julianae.gerbillus<lavali.thaeleri, quasiater.carolinensis>;
+        petersoni(): panamensis.setulosus<sagitta.walkeri, dogramacii.robustulus>;
+        nitela(): panamensis.linulus<Lanthanum.megalonyx, howi.marcanoi>;
     }
 }

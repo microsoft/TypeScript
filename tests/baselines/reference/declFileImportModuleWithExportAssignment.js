@@ -46,14 +46,14 @@ declare module m2 {
     }
 }
 declare var m2: {
-    (): connectExport;
-    test1: connectModule;
-    test2(): connectModule;
+    (): m2.connectExport;
+    test1: m2.connectModule;
+    test2(): m2.connectModule;
 };
 export = m2;
 //// [declFileImportModuleWithExportAssignment_1.d.ts]
 export declare var a: {
-    (): connectExport;
-    test1: connectModule;
-    test2(): connectModule;
+    (): m2.connectExport;
+    test1: m2.connectModule;
+    test2(): m2.connectModule;
 };

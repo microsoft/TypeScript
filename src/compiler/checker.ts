@@ -586,14 +586,74 @@ module ts {
             return (propertySymbol.valueDeclaration.flags & NodeFlags.QuestionMark) && propertySymbol.valueDeclaration.kind !== SyntaxKind.Parameter;
         }
 
-        function symbolToString(symbol: Symbol) {
-            if (symbol.declarations && symbol.declarations.length > 0) {
-                var declaration = symbol.declarations[0];
-                if (declaration.name) {
-                    return identifierToString(declaration.name);
+        function isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node) {
+            function containsSymbol(symbols: SymbolTable) {
+                if (hasProperty(symbols, symbol.name)) {
+                    var symbolFromSymbolTable = symbols[symbol.name];
+                    if (symbol === symbolFromSymbolTable) {
+                        return true;
+                    }
+                    // TODO check if symbolFromSymbolTable is alias : and work appropriately if (symbolFromSymbolTable.flags & SymbolFlags.Import)
+                }
+           }
+
+            while (enclosingDeclaration) {
+                // Locals of a source file are not in scope (because they get merged into the global symbol table)
+                if (enclosingDeclaration.locals && (enclosingDeclaration.kind !== SyntaxKind.SourceFile || enclosingDeclaration.flags & NodeFlags.ExternalModule)) {
+                    if (containsSymbol(enclosingDeclaration.locals)) {
+                        return true;
+                    }
+                }
+                switch (enclosingDeclaration.kind) {
+                    case SyntaxKind.SourceFile:
+                        if (!(enclosingDeclaration.flags & NodeFlags.ExternalModule)) {
+                            break;
+                        }
+                    case SyntaxKind.ModuleDeclaration:
+                        if (containsSymbol(getSymbolOfNode(enclosingDeclaration).exports)) {
+                            return true;
+                        }
+                        break;
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                        if (containsSymbol(getSymbolOfNode(enclosingDeclaration).members)) {
+                            return true;
+                        }
+                        break;
+                }
+                enclosingDeclaration = enclosingDeclaration.parent;
+            }
+
+            return containsSymbol(globals);
+        }
+
+        function symbolToString(symbol: Symbol, enclosingDeclaration?: Node) {
+            function getSymbolName(symbol: Symbol) {
+                if (symbol.declarations && symbol.declarations.length > 0) {
+                    var declaration = symbol.declarations[0];
+                    if (declaration.name) {
+                        return identifierToString(declaration.name);
+                    }
+                }
+                return symbol.name;
+            }
+
+            // Get qualified name 
+            var symbolName = getSymbolName(symbol);
+            if (enclosingDeclaration &&
+                !(symbol.flags & SymbolFlags.PropertyOrAccessor & SymbolFlags.Signature & SymbolFlags.Constructor & SymbolFlags.Method & SymbolFlags.TypeParameter)) {
+                // TODO if !symbol.parent it could be in globals or it is non exported
+                if (!isSymbolAccessible(symbol, enclosingDeclaration)) {
+                    for (var parent = symbol.parent; parent; parent = parent.parent) {
+                        symbolName = getSymbolName(parent) + "." + symbolName;
+                        if (isSymbolAccessible(parent, enclosingDeclaration)) {
+                            break;
+                        }
+                    }
                 }
             }
-            return symbol.name;
+
+            return symbolName
         }
 
         function createSingleLineTextWriter() {
@@ -615,7 +675,6 @@ module ts {
         }
 
         function writeTypeToTextWriter(type: Type, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter) {
-            // TODO(shkamat): usage of enclosingDeclaration
             var typeStack: Type[];
             return writeType(type, /*allowFunctionOrConstructorTypeLiteral*/ true);
 
@@ -627,7 +686,7 @@ module ts {
                     writeTypeReference(<TypeReference>type);
                 }
                 else if (type.flags & (TypeFlags.Class | TypeFlags.Interface | TypeFlags.Enum | TypeFlags.TypeParameter)) {
-                    writer.write(symbolToString(type.symbol));
+                    writer.write(symbolToString(type.symbol, enclosingDeclaration));
                 }
                 else if (type.flags & TypeFlags.Anonymous) {
                     writeAnonymousType(<ObjectType>type, allowFunctionOrConstructorTypeLiteral);
@@ -649,7 +708,7 @@ module ts {
                     writer.write("[]");
                 }
                 else {
-                    writer.write(symbolToString(type.target.symbol));
+                    writer.write(symbolToString(type.target.symbol, enclosingDeclaration));
                     writer.write("<");
                     for (var i = 0; i < type.typeArguments.length; i++) {
                         if (i > 0) {
@@ -683,7 +742,7 @@ module ts {
 
             function writeTypeofSymbol(type: ObjectType) {
                 writer.write("typeof ");
-                writer.write(symbolToString(type.symbol));
+                writer.write(symbolToString(type.symbol, enclosingDeclaration));
             }
 
             function writeLiteralType(type: ObjectType, allowFunctionOrConstructorTypeLiteral: boolean) {

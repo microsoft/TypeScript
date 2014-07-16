@@ -45,7 +45,7 @@ declare module "SubModule" {
 //// [missingImportAfterModuleImport_1.d.ts]
 /// <reference path='missingImportAfterModuleImport_0.d.ts' />
 declare class MainModule {
-    SubModule: SubModule;
+    SubModule: "SubModule".SubModule;
     constructor();
 }
 export = MainModule;

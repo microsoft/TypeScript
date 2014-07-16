@@ -35,4 +35,4 @@ export declare module x {
         foo(a: number): number;
     }
 }
-export declare var cProp: c;
+export declare var cProp: x.c;

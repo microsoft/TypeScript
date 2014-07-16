@@ -39,5 +39,5 @@ export declare module a {
     }
 }
 export declare module c {
-    var x: c;
+    var x: a.b.c;
 }
