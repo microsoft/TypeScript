@@ -715,7 +715,6 @@ module ts {
         type?: Type;                   // Type of value symbol
         declaredType?: Type;           // Type of class, interface, enum, or type parameter
         mapper?: TypeMapper;           // Type mapper for instantiation alias
-        typeChecked?: boolean;         // True if symbol has been type checked
         referenced?: boolean;          // True if alias symbol has been referenced as a value
     }
 
