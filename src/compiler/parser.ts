@@ -296,7 +296,7 @@ module ts {
     enum Tristate {
         False,
         True,
-        Maybe
+        Unknown
     }
 
     function parsingContextErrors(context: ParsingContext): DiagnosticMessage {
@@ -1263,7 +1263,7 @@ module ts {
         }
 
         function isExpressionStatement(): boolean {
-            // As per the gramar, neither { nor 'function' can start an expression statement.
+            // As per the grammar, neither '{' nor 'function' can start an expression statement.
             return token !== SyntaxKind.OpenBraceToken && token !== SyntaxKind.FunctionKeyword && isExpression();
         }
 
@@ -1411,12 +1411,13 @@ module ts {
             var pos = getNodePos();
 
             var triState = isParenthesizedArrowFunctionExpression();
+
+            // It is not a parenthesized arrow function.
             if (triState === Tristate.False) {
-                // Was not a parenthesized arrow function.
                 return undefined;
             }
 
-            // If we *definitely* had an arrow function expression, then just parse one out.
+            // If we're certain that we have an arrow function expression, then just parse one out.
             if (triState === Tristate.True) {
                 var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken);
 
@@ -1426,11 +1427,11 @@ module ts {
                 }
                 // If not, we're probably better off bailing out and returning a bogus function expression.
                 else {
-                    return makeFunctionExpression(SyntaxKind.ArrowFunction, pos, undefined, sig, createMissingNode());
+                    return makeFunctionExpression(SyntaxKind.ArrowFunction, pos, /* name */ undefined, sig, createMissingNode());
                 }
             }
             
-            // Otherwise, *maybe* had an arrow function and we need to *try* to parse it out
+            // Otherwise, *maybe* we had an arrow function and we need to *try* to parse it out
             // (which will ensure we rollback if we fail).
             var sig = tryParse(parseSignatureAndArrow);
             if (sig === undefined) {
@@ -1443,7 +1444,7 @@ module ts {
 
         //  True        -> There is definitely a parenthesized arrow function here. 
         //  False       -> There is definitely *not* a parenthesized arrow function here.
-        //  Maybe       -> There *might* be a parenthesized arrow function here.
+        //  Unknown     -> There *might* be a parenthesized arrow function here.
         //                  Speculatively look ahead to be sure.
         function isParenthesizedArrowFunctionExpression(): Tristate {
             if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
@@ -1467,9 +1468,9 @@ module ts {
                             return Tristate.False;
                         }
 
-                        // This *could* be a parenthesized arrow function.  Return 'undefined' to let
-                        // the caller know.
-                        return Tristate.Maybe;
+                        // This *could* be a parenthesized arrow function.
+                        // Return Unknown to let the caller know.
+                        return Tristate.Unknown;
                     }
                     else {
                         Debug.assert(first === SyntaxKind.LessThanToken);
@@ -1481,7 +1482,7 @@ module ts {
                         }
 
                         // This *could* be a parenthesized arrow function.
-                        return Tristate.Maybe;
+                        return Tristate.Unknown;
                     }
                 });
             }
@@ -1497,29 +1498,33 @@ module ts {
         }
 
         function parseArrowExpressionTail(pos: number, sig: ParsedSignature, noIn: boolean): FunctionExpression {
-            var body: Expression;
+            var body: Node;
 
             if (token === SyntaxKind.OpenBraceToken) {
                 body = parseBody(/* ignoreMissingOpenBrace */ false)
             }
-            // We didn't have a block.  However, we may be in an error situation.  For example,
-            // if the user wrote:
-            //
-            //  a => 
-            //      var v = 0;
-            //  }
-            //
-            // (i.e. they're missing the open brace).  Check to see if that's the case so we can
-            // try to recover better.  If we don't do this, then the next close curly we see may end
-            // up preemptively closing the containing construct.
             else if (isStatement(/* inErrorRecovery */ true) && !isExpressionStatement() && token !== SyntaxKind.FunctionKeyword) {
+                // Check if we got a plain statement (i.e. no expression-statements, no functions expressions/declarations)
+                //
+                // Here we try to recover from a potential error situation in the case where the 
+                // user meant to supply a block. For example, if the user wrote:
+                //
+                //  a =>
+                //      var v = 0;
+                //  }
+                //
+                // they may be missing an open brace.  Check to see if that's the case so we can
+                // try to recover better.  If we don't do this, then the next close curly we see may end
+                // up preemptively closing the containing construct.
+                //
+                // Note: even when 'ignoreMissingOpenBrace' is passed as true, parseBody will still error.
                 body = parseBody(/* ignoreMissingOpenBrace */ true);
             }
             else {
                 body = parseAssignmentExpression(noIn);
             }
 
-            return makeFunctionExpression(SyntaxKind.ArrowFunction, pos, undefined, sig, body);
+            return makeFunctionExpression(SyntaxKind.ArrowFunction, pos, /* name */ undefined, sig, body);
         }
 
         function isAssignmentOperator(): boolean {
