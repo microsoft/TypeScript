@@ -2373,11 +2373,15 @@ module ts {
                     case SyntaxKind.LessThanToken:      // Generic Method declaration
                     case SyntaxKind.ColonToken:         // Type Annotation for declaration
                     case SyntaxKind.EqualsToken:        // Initializer for declaration
-                    case SyntaxKind.SemicolonToken:     // Declaration termination
-                    case SyntaxKind.CloseBraceToken:    // End-of-class, must be declaration.
-                    case SyntaxKind.EndOfFileToken:     // Not valid, but permitted so that it gets caught later on.
                     case SyntaxKind.QuestionToken:      // Not valid, but permitted so that it gets caught later on.
                         return true;
+                    default:
+                        // Covers
+                        //  - Semicolons     (declaration termination)
+                        //  - Closing braces (end-of-class, must be declaration)
+                        //  - End-of-files   (not valid, but permitted so that it gets caught later on)
+                        //  - Line-breaks    (enabling *automatic semicolon insertion*)
+                        return canParseSemicolon();
                 }
             }
 
