@@ -30,10 +30,10 @@ var sys: System = (function () {
         var fso = new ActiveXObject("Scripting.FileSystemObject");
 
         var fileStream = new ActiveXObject("ADODB.Stream");
-        fileStream.Type = 2;
+        fileStream.Type = 2 /*text*/;
 
         var binaryStream = new ActiveXObject("ADODB.Stream");
-        binaryStream.Type = 1;
+        binaryStream.Type = 1 /*binary*/;
 
         var args: string[] = [];
         for (var i = 0; i < WScript.Arguments.length; i++) {
