@@ -69,29 +69,33 @@ module ts {
         };
     }
 
-    export function emitFiles(resolver: EmitResolver) {
+    export function emitFiles(resolver: EmitResolver): EmitResult {
         var program = resolver.getProgram();
         var compilerHost = program.getCompilerHost();
         var compilerOptions = program.getCompilerOptions();
         var shouldEmitDeclarations = resolver.shouldEmitDeclarations();
-
         var sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap ? [] : undefined;
+        var diagnostics: Diagnostic[] = [];
+
         forEach(program.getSourceFiles(), sourceFile => {
             if (emitToOwnOutputFile(sourceFile, compilerOptions)) {
                 var jsFilePath = getOwnEmitOutputFilePath(sourceFile, program, ".js");
-                emitJavaScript(resolver, jsFilePath, sourceMapDataList, sourceFile);
+                emitJavaScript(resolver, jsFilePath, diagnostics, sourceMapDataList, sourceFile);
                 if (shouldEmitDeclarations) {
-                    emitDeclarations(resolver, jsFilePath, sourceFile);
+                    emitDeclarations(resolver, jsFilePath, diagnostics, sourceFile);
                 }
             }
         });
         if (compilerOptions.out) {
-            emitJavaScript(resolver, compilerOptions.out, sourceMapDataList);
+            emitJavaScript(resolver, compilerOptions.out, diagnostics, sourceMapDataList);
             if (shouldEmitDeclarations) {
-                emitDeclarations(resolver, compilerOptions.out);
+                emitDeclarations(resolver, compilerOptions.out, diagnostics);
             }
         }
-        return sourceMapDataList;
+        return {
+            errors: diagnostics,
+            sourceMaps: sourceMapDataList
+        };
     }
 
     interface EmitTextWriter extends TextWriter {
@@ -174,7 +178,7 @@ module ts {
         return text.substring(skipTrivia(text, node.pos), node.end);
     }
 
-    function emitJavaScript(resolver: EmitResolver, jsFilePath: string, sourceMapDataList: SourceMapData[], root?: SourceFile) {
+    function emitJavaScript(resolver: EmitResolver, jsFilePath: string, diagnostics: Diagnostic[], sourceMapDataList: SourceMapData[], root?: SourceFile) {
         var program = resolver.getProgram();
         var compilerHost = program.getCompilerHost();
         var compilerOptions = program.getCompilerOptions();
@@ -220,6 +224,12 @@ module ts {
 
         /** Sourcemap data that will get encoded */
         var sourceMapData: SourceMapData;
+
+        function writeFile(filename: string, data: string) {
+            compilerHost.writeFile(filename, data, hostErrorMessage => {
+                diagnostics.push(createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, filename, hostErrorMessage));
+            });
+        }
 
         function initializeEmitterWithSourceMaps() {
             var sourceMapDir: string; // The directory in which sourcemap will be
@@ -442,7 +452,7 @@ module ts {
             function writeJavaScriptAndSourceMapFile(emitOutput: string) {
                 // Write source map file
                 encodeLastRecordedSourceMapSpan();
-                compilerHost.writeFile(sourceMapData.sourceMapFilePath, JSON.stringify({
+                writeFile(sourceMapData.sourceMapFilePath, JSON.stringify({
                     version: 3,
                     file: sourceMapData.sourceMapFile,
                     sourceRoot: sourceMapData.sourceMapSourceRoot,
@@ -527,7 +537,7 @@ module ts {
         }
 
         function writeJavaScriptFile(emitOutput: string) {
-            compilerHost.writeFile(jsFilePath, emitOutput);
+            writeFile(jsFilePath, emitOutput);
         }
 
         function emitTokenText(tokenKind: SyntaxKind, startPos: number, emitFn?: () => void) {
@@ -1835,7 +1845,7 @@ module ts {
         writeEmittedFiles(writer.getText());
     }
 
-    function emitDeclarations(resolver: EmitResolver, jsFilePath: string, root?: SourceFile) {
+    function emitDeclarations(resolver: EmitResolver, jsFilePath: string, diagnostics: Diagnostic[], root?: SourceFile) {
         var program = resolver.getProgram();
         var compilerOptions = program.getCompilerOptions();
         var compilerHost = program.getCompilerHost();
@@ -1847,6 +1857,13 @@ module ts {
         var decreaseIndent = writer.decreaseIndent;
 
         var enclosingDeclaration: Node;
+
+        function writeFile(filename: string, data: string) {
+            compilerHost.writeFile(filename, data, hostErrorMessage => {
+                diagnostics.push(createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, filename, hostErrorMessage));
+            });
+        }
+
         function emitLines(nodes: Node[]) {
             for (var i = 0, n = nodes.length; i < n; i++) {
                 emitNode(nodes[i]);
@@ -2310,6 +2327,6 @@ module ts {
             });
         }
 
-        compilerHost.writeFile(getModuleNameFromFilename(jsFilePath) + ".d.ts", referencePathsOutput + writer.getText());
+        writeFile(getModuleNameFromFilename(jsFilePath) + ".d.ts", referencePathsOutput + writer.getText());
     }
 }

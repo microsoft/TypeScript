@@ -14,6 +14,7 @@ module ts {
     };
 
     var options: CommandLineOption[] = [
+        { name: "charset", type: "string" },
         { name: "codepage", type: "number" },
         { name: "declaration", type: "boolean" },
         { name: "diagnostics", type: "boolean" },

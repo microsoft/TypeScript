@@ -76,8 +76,6 @@ module ts {
         return count;
     }
 
-    // TODO (drosen): Make localize-friendly
-    var hasReportedErrors = false;
     function reportErrors(errors: Diagnostic[]) {
         for (var i = 0; i < errors.length; i++) {
             var error = errors[i];
@@ -90,7 +88,6 @@ module ts {
             else {
                 sys.writeErr(error.messageText + sys.newLine);
             }
-            hasReportedErrors = true;
         }
     }
 
@@ -116,61 +113,56 @@ module ts {
         reportDiagnostic(name, (time / 1000).toFixed(2) + "s");
     }
 
-    function getSourceFile(filename: string, languageVersion: ScriptTarget): SourceFile {
-        var text = sys.readFile(filename);
-        return text ? createSourceFile(filename, text, languageVersion) : undefined;
-    }
+    function createCompilerHost(options: CompilerOptions): CompilerHost {
+        var currentDirectory: string;
+        var existingDirectories: Map<boolean> = {};
 
-    function writeFile(fileName: string, data: string) {
-        // TODO: Review this code for performance
-
-        //function ensureDirectoryStructure(directoryName: string) {
-        //    if (directoryName) {
-        //        if (!sys.directoryExists(directoryName)) {
-        //            var parentDirectory = getDirectoryPath(directoryName);
-        //            // If we arent at the root path ensure that the folder exists
-        //            if (parentDirectory !== directoryName) {
-        //                if (ensureDirectoryStructure(parentDirectory)) {
-        //                    // If parent directory was present, create the current directory
-        //                    try {
-        //                        sys.createDirectory(directoryName);
-        //                    }
-        //                    catch (e) {
-        //                        reportErrors([createCompilerDiagnostic(Diagnostics.Could_not_create_directory_0, [directoryName])]);
-        //                        return false;
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //    return true;
-        //}
-        //// If parent directory structure is present create the file
-        //if (ensureDirectoryStructure(getDirectoryPath(normalizePath(fileName)))) {
-        //    try {
-        //        sys.writeFile(fileName, data);
-        //    }
-        //    catch (e) {
-        //        reportErrors([createCompilerDiagnostic(Diagnostics.Could_not_write_file_0, [fileName])]);
-        //    }
-        //}
-        if (!sys.writeFile(fileName, data)) {
-            reportErrors([createCompilerDiagnostic(Diagnostics.Could_not_write_file_0, [fileName])]);
+        function getSourceFile(filename: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile {
+            try {
+                var text = sys.readFile(filename, options.charset);
+            }
+            catch (e) {
+                if (onError) onError(e.message);
+                text = "";
+            }
+            return text !== undefined ? createSourceFile(filename, text, languageVersion) : undefined;
         }
-    }
 
-    var currentDirectory: string;
-    function getCurrentDictory() {
-        currentDirectory = currentDirectory || sys.getCurrentDirectory();
-        return currentDirectory;
-    }
+        function writeFile(fileName: string, data: string, onError?: (message: string) => void) {
 
-    function createCompilerHost(): CompilerHost {
+            function directoryExists(directoryPath: string): boolean {
+                if (hasProperty(existingDirectories, directoryPath)) {
+                    return true;
+                }
+                if (sys.directoryExists(directoryPath)) {
+                    existingDirectories[directoryPath] = true;
+                    return true;
+                }
+                return false;
+            }
+
+            function ensureDirectoriesExist(directoryPath: string) {
+                if (directoryPath.length > getRootLength(directoryPath) && !directoryExists(directoryPath)) {
+                    var parentDirectory = getDirectoryPath(directoryPath);
+                    ensureDirectoriesExist(parentDirectory);
+                    sys.createDirectory(directoryPath);
+                }
+            }
+
+            try {
+                ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
+                sys.writeFile(fileName, data);
+            }
+            catch (e) {
+                if (onError) onError(e.message);
+            }
+        }
+
         return {
             getSourceFile: getSourceFile,
             getDefaultLibFilename: () => combinePaths(getDirectoryPath(normalizePath(sys.getExecutingFilePath())), "lib.d.ts"),
             writeFile: writeFile,
-            getCurrentDirectory: getCurrentDictory,
+            getCurrentDirectory: () => currentDirectory || sys.getCurrentDirectory(),
             useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
             getCanonicalFileName: getCanonicalFileName
         };
@@ -201,7 +193,7 @@ module ts {
         }
 
         var parseStart = new Date().getTime();
-        var program = createProgram(cmds.filenames, cmds.options, createCompilerHost());
+        var program = createProgram(cmds.filenames, cmds.options, createCompilerHost(cmds.options));
         var bindStart = new Date().getTime();
         var errors = program.getDiagnostics();
         if (errors.length) {
@@ -212,10 +204,11 @@ module ts {
         else {
             var checker = program.getTypeChecker();
             var checkStart = new Date().getTime();
-            errors = checker.getDiagnostics();
+            var semanticErrors = checker.getDiagnostics();
             var emitStart = new Date().getTime();
-            checker.emitFiles();
+            var emitErrors = checker.emitFiles().errors;
             var reportStart = new Date().getTime();
+            errors = concatenate(semanticErrors, emitErrors);
         }
 
         reportErrors(errors);
@@ -232,7 +225,7 @@ module ts {
             reportDiagnosticTime("Emit time", reportStart - emitStart);
             reportDiagnosticTime("Total time", reportStart - parseStart);
         }
-        return hasReportedErrors ? 1 : 0;
+        return errors.length ? 1 : 0;
     }
 }
 
