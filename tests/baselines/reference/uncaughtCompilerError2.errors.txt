@@ -1,7 +1,9 @@
-==== tests/cases/compiler/uncaughtCompilerError2.ts (1 errors) ====
+==== tests/cases/compiler/uncaughtCompilerError2.ts (2 errors) ====
     function getObj() {
        ().toString();
          ~
 !!! '=>' expected.
+          ~~~~~~~~
+!!! Cannot find name 'toString'.
     }
     

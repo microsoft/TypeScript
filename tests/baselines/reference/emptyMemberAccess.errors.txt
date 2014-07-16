@@ -1,9 +1,11 @@
-==== tests/cases/compiler/emptyMemberAccess.ts (1 errors) ====
+==== tests/cases/compiler/emptyMemberAccess.ts (2 errors) ====
     function getObj() {
     
        ().toString();
          ~
 !!! '=>' expected.
+          ~~~~~~~~
+!!! Cannot find name 'toString'.
     
     }
      

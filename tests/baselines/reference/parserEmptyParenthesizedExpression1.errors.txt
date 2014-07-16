@@ -1,6 +1,8 @@
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserEmptyParenthesizedExpression1.ts (1 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserEmptyParenthesizedExpression1.ts (2 errors) ====
     function getObj() {
        ().toString();
          ~
 !!! '=>' expected.
+          ~~~~~~~~
+!!! Cannot find name 'toString'.
     }
