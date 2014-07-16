@@ -279,6 +279,8 @@ module ts {
         Interface_0_incorrectly_extends_interface_1: { code: -9999999, category: DiagnosticCategory.Error, key: "Interface '{0}' incorrectly extends interface '{1}'." },
         Ambient_external_modules_cannot_be_nested_in_other_modules: { code: -9999999, category: DiagnosticCategory.Error, key: "Ambient external modules cannot be nested in other modules." },
         Import_declarations_in_an_internal_module_cannot_reference_an_external_module: { code: -9999999, category: DiagnosticCategory.Error, key: "Import declarations in an internal module cannot reference an external module." },
+        Module_declaration_cannot_be_in_different_file_from_class_or_function_with_which_it_is_merged: { code: -9999999, category: DiagnosticCategory.Error, key: "Module declaration cannot be in different file from class or function with which it is merged" },
+        Module_declaration_cannot_be_located_prior_to_class_or_function_with_which_it_is_merged: { code: -9999999, category: DiagnosticCategory.Error, key: "Module declaration cannot be located prior to class or function with which it is merged" },
         Cannot_compile_external_modules_unless_the_module_flag_is_provided: { code: -9999999, category: DiagnosticCategory.Error, key: "Cannot compile external modules unless the '--module' flag is provided." },
         Import_declaration_conflicts_with_local_declaration_of_0: { code: -9999999, category: DiagnosticCategory.Error, key: "Import declaration conflicts with local declaration of '{0}'" },
         Filename_0_differs_from_already_included_filename_1_only_in_casing: { code: -9999999, category: DiagnosticCategory.Error, key: "Filename '{0}' differs from already included filename '{1}' only in casing" },

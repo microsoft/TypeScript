@@ -1,4 +1,4 @@
-==== tests/cases/compiler/nameCollisions.ts (8 errors) ====
+==== tests/cases/compiler/nameCollisions.ts (9 errors) ====
     module T {
         var x = 2;
     
@@ -18,8 +18,12 @@
 !!! Duplicate identifier 'z'.
     
         module y {
+        ~~~~~~~~~~
             var b;
+    ~~~~~~~~~~~~~~
         }
+    ~~~~~
+!!! Module declaration cannot be located prior to class or function with which it is merged
     
         class y { } // error
     

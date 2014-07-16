@@ -1140,6 +1140,14 @@
         "category": "Error",
         "code": -9999999
     },
+	"Module declaration cannot be in different file from class or function with which it is merged": {
+        "category": "Error",
+        "code": -9999999
+	},
+	"Module declaration cannot be located prior to class or function with which it is merged": {
+        "category": "Error",
+        "code": -9999999
+	},
     "Cannot compile external modules unless the '--module' flag is provided.": {
         "category": "Error",
         "code": -9999999

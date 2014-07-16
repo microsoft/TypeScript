@@ -1,0 +1,36 @@
+==== tests/cases/conformance/internalModules/DeclarationMerging/module.ts (1 errors) ====
+    module A {
+        export module Point {
+        ~~~~~~~~~~~~~~~~~~~~~
+            export var Origin = { x: 0, y: 0 };
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+!!! Module declaration cannot be in different file from class or function with which it is merged
+    }
+    
+==== tests/cases/conformance/internalModules/DeclarationMerging/function.ts (0 errors) ====
+    module A {
+        // duplicate identifier error
+        export function Point() {
+            return { x: 0, y: 0 };
+        }
+    }
+    
+==== tests/cases/conformance/internalModules/DeclarationMerging/simple.ts (1 errors) ====
+    module B {
+    
+        export module Point {
+        ~~~~~~~~~~~~~~~~~~~~~
+            export var Origin = { x: 0, y: 0 };
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+!!! Module declaration cannot be located prior to class or function with which it is merged
+    
+        // duplicate identifier error
+        export function Point() {
+            return { x: 0, y: 0 };
+        }
+    }
+    

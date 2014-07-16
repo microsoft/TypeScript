@@ -5317,8 +5317,31 @@ module ts {
             }
         }
 
+        function getClassOrFunctionBodyDeclaration(symbol: Symbol): Declaration {
+            var declarations = symbol.declarations;
+            for (var i = 0; i < declarations.length; i++) {
+                var declaration = declarations[i];
+                if ((declaration.kind === SyntaxKind.ClassDeclaration || (declaration.kind === SyntaxKind.FunctionDeclaration && (<FunctionDeclaration>declaration).body)) && !isInAmbientContext(declaration)) {
+                    return declaration;
+                }
+            }
+            // Return undefined
+        }
+
         function checkModuleDeclaration(node: ModuleDeclaration) {
             checkDeclarationModifiers(node);
+            var symbol = getSymbolOfNode(node);
+            if (symbol.flags & SymbolFlags.ValueModule && symbol.declarations.length > 1 && !isInAmbientContext(node)) {
+                var classOrFunc = getClassOrFunctionBodyDeclaration(symbol);
+                if (classOrFunc) {
+                    if (getSourceFileOfNode(node) !== getSourceFileOfNode(classOrFunc)) {
+                        error(node, Diagnostics.Module_declaration_cannot_be_in_different_file_from_class_or_function_with_which_it_is_merged);
+                    }
+                    else if (node.pos < classOrFunc.pos) {
+                        error(node, Diagnostics.Module_declaration_cannot_be_located_prior_to_class_or_function_with_which_it_is_merged);
+                    }
+                }
+            }
             if (node.name.kind === SyntaxKind.StringLiteral) {
                 if (node.parent.kind !== SyntaxKind.SourceFile || node.parent.flags & NodeFlags.ExternalModule) {
                     error(node, Diagnostics.Ambient_external_modules_cannot_be_nested_in_other_modules);
@@ -5326,7 +5349,6 @@ module ts {
                 if (isExternalModuleNameRelative(node.name.text)) {
                     error(node, Diagnostics.Ambient_external_module_declaration_cannot_specify_relative_module_name);
                 }
-                var symbol = getSymbolOfNode(node);
             }
             checkSourceElement(node.body);
         }

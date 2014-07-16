@@ -1,4 +1,4 @@
-==== tests/cases/compiler/augmentedTypesModules.ts (3 errors) ====
+==== tests/cases/compiler/augmentedTypesModules.ts (6 errors) ====
     // module then var
     module m1 { }
     var m1 = 1; // Should be allowed
@@ -30,9 +30,13 @@
     function m2() { }; // ok since the module is not instantiated
     
     module m2a { var y = 2; }
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Module declaration cannot be located prior to class or function with which it is merged
     function m2a() { }; // error since the module is instantiated
     
     module m2b { export var y = 2; }
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Module declaration cannot be located prior to class or function with which it is merged
     function m2b() { };  // error since the module is instantiated
     
     // should be errors to have function first
@@ -56,6 +60,8 @@
     class m3 { } // ok since the module is not instantiated
     
     module m3a { var y = 2; }
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Module declaration cannot be located prior to class or function with which it is merged
     class m3a { foo() { } } // error, class isn't ambient or declared before the module
     
     class m3b { foo() { } }

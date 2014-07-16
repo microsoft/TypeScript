@@ -1,0 +1,12 @@
+==== tests/cases/compiler/cloduleSplitAcrossFiles_class.ts (0 errors) ====
+    class D { }
+    
+==== tests/cases/compiler/cloduleSplitAcrossFiles_module.ts (1 errors) ====
+    module D {
+    ~~~~~~~~~~
+        export var y = "hi";
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+    }
+    ~
+!!! Module declaration cannot be in different file from class or function with which it is merged
+    D.y;
