@@ -29,7 +29,7 @@ var MyClass = (function () {
     return MyClass;
 })();
 var obj = {
-    f: function f() {
+    f: function () {
         return this.spaaace;
     }
 };

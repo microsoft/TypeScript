@@ -2,5 +2,5 @@
 var v = { 0() { } };
 
 //// [parserFunctionPropertyAssignment2.js]
-var v = { 0: function 0() {
+var v = { 0: function () {
 } };
