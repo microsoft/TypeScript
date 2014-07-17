@@ -70,7 +70,7 @@ interface I {
 interface J {
     bat(): any;
 }
-declare class D implments I, J {
+declare class D implements I, J {
     baz(): void;
     bat(): void;
     foo(): void;

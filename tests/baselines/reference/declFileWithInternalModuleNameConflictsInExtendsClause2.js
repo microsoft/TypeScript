@@ -41,7 +41,7 @@ declare module X.A.C {
     }
 }
 declare module X.A.B.C {
-    class W implments A.C.Z {
+    class W implements A.C.Z {
     }
 }
 declare module X.A.B.C {
