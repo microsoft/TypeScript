@@ -46,3 +46,7 @@ There are many ways to [contribute](https://github.com/Microsoft/TypeScript/blob
         - You can also override the host or specify a test for this command. Use host=<hostName> or tests=<testPath>. 
     - jake baseline-accept - This replaces the baseline test results with the results obtained from jake runtests. 
     - jake -T lists the above commands. 
+
+## Roadmap
+
+For details on our planned features and future direction please refer to our [roadmap](https://github.com/Microsoft/TypeScript/wiki/Roadmap).
