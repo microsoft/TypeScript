@@ -16,7 +16,6 @@ tests/cases/perf/*
 test-args.txt
 ~*.docx
 tests/baselines/local/*
-tests/baselines/reference/projectOutput/
 tests/services/baselines/local/*
 tests/baselines/prototyping/local/*
 tests/baselines/rwc/*
