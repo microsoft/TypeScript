@@ -11,13 +11,6 @@ module ts {
     var nextNodeId = 1;
     var nextMergeId = 1;
 
-    enum DeclarationSpace {
-        Unknown     = 0,
-        Type        = 1,
-        Value       = 2,
-        Namespace   = 4,
-    }
-
     export function createTypeChecker(program: Program): TypeChecker {
 
         var Symbol = objectAllocator.getSymbolConstructor();
@@ -2246,7 +2239,9 @@ module ts {
             // also transient so that we can just store data on it directly.
             var result = <TransientSymbol>createSymbol(SymbolFlags.Instantiated | SymbolFlags.Transient, symbol.name);
             result.declarations = symbol.declarations;
-            result.localSymbols = symbol.localSymbols;
+            if (symbol.localSymbols) {
+                result.localSymbols = symbol.localSymbols;
+            }
             result.parent = symbol.parent;
             result.target = symbol;
             result.mapper = mapper;
@@ -2945,7 +2940,9 @@ module ts {
                     forEach(properties, p => {
                         var symbol = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient, p.name);
                         symbol.declarations = p.declarations;
-                        symbol.localSymbols = p.localSymbols;
+                        if (p.localSymbols) {
+                            symbol.localSymbols = p.localSymbols;
+                        }
                         symbol.parent = p.parent;
                         symbol.type = widenedTypes[index++];
                         if (p.valueDeclaration) symbol.valueDeclaration = p.valueDeclaration;
@@ -3473,7 +3470,9 @@ module ts {
                         var type = checkExpression((<PropertyDeclaration>member.declarations[0]).initializer, contextualPropType, contextualMapper);
                         var prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient, member.name);
                         prop.declarations = member.declarations;
-                        prop.localSymbols = member.localSymbols;
+                        if (member.localSymbols) {
+                            prop.localSymbols = member.localSymbols;
+                        }
                         prop.parent = member.parent;
                         if (member.valueDeclaration) prop.valueDeclaration = member.valueDeclaration;
                         prop.type = type;
@@ -4831,7 +4830,7 @@ module ts {
                 }
             }
 
-            forEachDeclarationInSymbol(symbol, checkDeclarationsInSymbol);
+            forEachLocalSymbol(symbol, checkDeclarationsInSymbol);
 
             if (hasOverloads) {
                 // Error if some overloads have a flag that is not shared by all overloads. To find the
@@ -4884,7 +4883,7 @@ module ts {
             return s.exportSymbol !== undefined;
         }
 
-        function forEachDeclarationInSymbol(s: Symbol, action: (symbol: Symbol) => void): void {
+        function forEachLocalSymbol(s: Symbol, action: (symbol: Symbol) => void): void {
             if (s.localSymbols) {
                 forEach(s.localSymbols, action);
             }
@@ -4898,18 +4897,19 @@ module ts {
                 return;
             }
 
-            if (isLocalSymbolAssociatedWithExportSymbol(symbol)) {
+            if (isLocalSymbolAssociatedWithExportSymbol(symbol) || !symbol.localSymbols) {
                 // all local symbols will be processed during the check of export symbol.
+                // also symbols that just local by definition cannot have conflicting exports
                 return;
             }
 
-            // this either export symbol or local without export symbol
+            // this is definitely export symbol
             // in both cases run check just once for the first symbol in the list
             if (getDeclarationOfKind(symbol, node.kind) !== node) {
                 return;
             }
 
-            var declarationSpace = DeclarationSpace.Unknown;
+            var declarationSpace: SymbolFlags = 0;
             var flags: NodeFlags;
             function checkDeclarationsInSymbol(symbol: Symbol): void {
                 var declarations = symbol.declarations;
@@ -4932,32 +4932,24 @@ module ts {
                 }
             }
 
-            forEachDeclarationInSymbol(symbol, checkDeclarationsInSymbol);
+            forEachLocalSymbol(symbol, checkDeclarationsInSymbol);
 
-            function getDeclarationSpace(d: Declaration): DeclarationSpace {
+            function getDeclarationSpace(d: Declaration): SymbolFlags {
                 switch (d.kind) {
                     case SyntaxKind.InterfaceDeclaration:
-                        return DeclarationSpace.Type;
+                        return SymbolFlags.ExportType;
                     case SyntaxKind.ModuleDeclaration:
-                        return isInstantiated(d) ? DeclarationSpace.Namespace | DeclarationSpace.Value : DeclarationSpace.Namespace;
+                        return (<ModuleDeclaration>d).name.kind === SyntaxKind.StringLiteral || isInstantiated(d)
+                            ? SymbolFlags.ExportNamespace | SymbolFlags.ExportValue
+                            : SymbolFlags.ExportNamespace;
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.EnumDeclaration:
-                        return DeclarationSpace.Type | DeclarationSpace.Value;
+                        return SymbolFlags.ExportType | SymbolFlags.ExportValue;
                     case SyntaxKind.ImportDeclaration:
                         var target = resolveImport(getSymbolOfNode(d));
-                        var space: DeclarationSpace = DeclarationSpace.Unknown;
-                        if (target.flags & SymbolFlags.Value) {
-                            space |= DeclarationSpace.Value;
-                        }
-                        if (target.flags & SymbolFlags.Type) {
-                            space |= DeclarationSpace.Type;
-                        }
-                        if (target.flags & SymbolFlags.Namespace) {
-                            space |= DeclarationSpace.Namespace;
-                        }
-                        return space;
+                        return target.flags & (SymbolFlags.ExportNamespace | SymbolFlags.ExportType | SymbolFlags.ExportValue);
                     default:
-                        return DeclarationSpace.Value;
+                        return SymbolFlags.ExportValue;
                 }
             }
         }

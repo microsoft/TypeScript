@@ -648,9 +648,9 @@ module ts {
         IndexSignature     = 0x00020000,  // Index signature
         TypeParameter      = 0x00040000,  // Type parameter
 
-        ExportValue      = 0x00080000,  // Exported value marker
-        ExportType       = 0x00100000,  // Exported type marker
-        ExportNamespace  = 0x00200000,  // Exported namespace marker
+        ExportValue        = 0x00080000,  // Exported value marker
+        ExportType         = 0x00100000,  // Exported type marker
+        ExportNamespace    = 0x00200000,  // Exported namespace marker
 
         Import             = 0x00400000,  // Import
         Instantiated       = 0x00800000,  // Instantiated symbol

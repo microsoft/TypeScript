@@ -157,8 +157,8 @@ module ts {
                             exportSymbol.localSymbols = [];
                         }
                         exportSymbol.localSymbols.push(localSymbol);
+                        localSymbol.exportSymbol = exportSymbol;
                     }
-                    localSymbol.exportSymbol = exportSymbol;
                 }
                 else {
                     declareSymbol(container.symbol.exports, container.symbol, node, symbolKind, symbolExcludes);
