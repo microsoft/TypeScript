@@ -62,7 +62,7 @@ function dir(path: string, spec?: string, options?: any) {
                 if (options.recursive && stat.isDirectory()) {
                     paths = paths.concat(filesInFolder(folder + "/" + files[i]));
                 } else if (stat.isFile() && (!spec || files[i].match(spec))) {
-                    var relativePath = folder.substring(folder.indexOf('/typescript/') + 12);
+                    var relativePath = folder.substring(folder.indexOf('/TypeScript/') + 12);
                     paths.push(relativePath + "/" + files[i]);
                 }
             }
