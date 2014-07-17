@@ -2345,7 +2345,7 @@ module ts {
         }
 
         function checkInheritedPropertiesAreIdentical(type: InterfaceType, typeNode: Node): boolean {
-            if (!type.baseTypes.length) {
+            if (!type.baseTypes.length || type.baseTypes.length === 1) {
                 return true;
             }
 
