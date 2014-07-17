@@ -332,7 +332,7 @@ desc("Runs the tests using the built run.js file. Syntax is jake runtests. Optio
 task("runtests", ["tests", builtLocalDirectory], function() {
     cleanTestDirs();
     host = "mocha"
-    tests = process.env.test || process.env.tests;
+    tests = process.env.test || process.env.tests || process.env.t;
     var testConfigFile = 'test.config';
     if(fs.existsSync(testConfigFile)) {
         fs.unlinkSync(testConfigFile);
@@ -365,9 +365,9 @@ desc("Runs the tests using the built run.js file like 'jake runtests'. Syntax is
 task("runtests-browser", ["tests", "browserify", builtLocalDirectory], function() {
     cleanTestDirs();
     host = "node"
-    port = process.env.port || '8888';
-    browser = process.env.browser || "IE";
-    tests = process.env.test || process.env.tests;
+    port = process.env.port || process.env.p || '8888';
+    browser = process.env.browser || process.env.b || "IE";
+    tests = process.env.test || process.env.tests || process.env.t;
     var testConfigFile = 'test.config';
     if(fs.existsSync(testConfigFile)) {
         fs.unlinkSync(testConfigFile);
