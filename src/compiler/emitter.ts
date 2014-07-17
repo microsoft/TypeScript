@@ -29,7 +29,7 @@ module ts {
             return combinePaths(newDirPath, sourceFilePath);
         }
 
-        function isEmitToOwnOutputFile(sourceFile: SourceFile) {
+        function shouldEmitToOwnFile(sourceFile: SourceFile) {
             if (!(sourceFile.flags & NodeFlags.DeclarationFile)) {
                 if ((sourceFile.flags & NodeFlags.ExternalModule || !compilerOptions.out) && !fileExtensionIs(sourceFile.filename, ".js")) {
                     return true;
@@ -2207,7 +2207,7 @@ module ts {
             function writeReferencePath(referencedFile: SourceFile) {
                 var declFileName = referencedFile.flags & NodeFlags.DeclarationFile
                     ? referencedFile.filename // Declaration file, use declaration file name
-                    : isEmitToOwnOutputFile(referencedFile)
+                    : shouldEmitToOwnFile(referencedFile)
                     ? getOwnEmitOutputFilePath(referencedFile, ".d.ts") // Own output file so get the .d.ts file
                     : getModuleNameFromFilename(compilerOptions.out) + ".d.ts";// Global out file
 
@@ -2228,7 +2228,7 @@ module ts {
 
                     // All the references that are not going to be part of same file
                     if ((referencedFile.flags & NodeFlags.DeclarationFile) || // This is a declare file reference
-                        isEmitToOwnOutputFile(referencedFile) || // This is referenced file is emitting its own js file
+                        shouldEmitToOwnFile(referencedFile) || // This is referenced file is emitting its own js file
                         !addedGlobalFileReference) { // Or the global out file corresponding to this reference was not added
 
                         writeReferencePath(referencedFile);
@@ -2275,7 +2275,7 @@ module ts {
         }
 
         forEach(program.getSourceFiles(), sourceFile => {
-            if (isEmitToOwnOutputFile(sourceFile)) {
+            if (shouldEmitToOwnFile(sourceFile)) {
                 var jsFilePath = getOwnEmitOutputFilePath(sourceFile, ".js");
                 emitFile(jsFilePath, sourceFile);
             }
