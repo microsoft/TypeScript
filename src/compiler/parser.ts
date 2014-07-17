@@ -2867,7 +2867,7 @@ module ts {
                         file.hasNoDefaultLib = true;
                     }
                     else {
-                        var fullReferenceRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2\s*\/>/;
+                        var fullReferenceRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
                         var matchResult = fullReferenceRegEx.exec(comment);
                         if (!matchResult) {
                             var start = range.pos;
