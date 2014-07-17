@@ -1756,7 +1756,7 @@ module ts {
             if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
                 var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken);
                 var body = parseBody();
-                node.initializer = makeFunctionExpression(SyntaxKind.FunctionExpression, node.pos, node.name, sig, body);
+                node.initializer = makeFunctionExpression(SyntaxKind.FunctionExpression, node.pos, undefined, sig, body);
             }
             else {
                 parseExpected(SyntaxKind.ColonToken);

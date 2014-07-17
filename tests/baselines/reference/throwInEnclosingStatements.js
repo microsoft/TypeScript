@@ -88,7 +88,7 @@ var C = (function () {
 })();
 var aa = {
     id: 12,
-    biz: function biz() {
+    biz: function () {
         throw this;
     }
 };

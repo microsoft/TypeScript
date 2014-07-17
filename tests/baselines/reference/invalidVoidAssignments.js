@@ -59,5 +59,5 @@ var E;
 })(E || (E = {}));
 x = E;
 x = 0 /* A */;
-x = { f: function f() {
+x = { f: function () {
 } };
