@@ -4883,8 +4883,6 @@ module ts {
                     }
                 }
             }
-
-            // TODO (drosen): Check at least one return statement in non-void/any function (except single throw)
         }
 
         function checkFunctionDeclaration(node: FunctionDeclaration) {
