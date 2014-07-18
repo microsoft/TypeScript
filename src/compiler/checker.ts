@@ -5570,9 +5570,22 @@ module ts {
 
             var symbol = getSymbolOfNode(node);
             checkExportsOnMergedDeclarations(symbol, node);
-            
+
+            var hasMoreThanOneDeclaration: boolean;
             if (symbol.declarations.length > 1) {
-                var firstInterfaceDecl = <InterfaceDeclaration>getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration);
+                hasMoreThanOneDeclaration = true;
+            }
+            else if (symbol.localSymbols) {
+                // current symbol is export with just one exported declaration
+                // check if the local symbol (it should be there and should be just one) has more than 1 declarations.
+                Debug.assert(symbol.localSymbols.length === 1);
+                hasMoreThanOneDeclaration = symbol.localSymbols[0].declarations.length > 1;
+            }
+            if (hasMoreThanOneDeclaration) {
+                var firstInterfaceDecl = symbol.localSymbols
+                    ? <InterfaceDeclaration>forEach(symbol.localSymbols, s => getDeclarationOfKind(s, SyntaxKind.InterfaceDeclaration))
+                    : <InterfaceDeclaration>getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration);
+
                 if (node !== firstInterfaceDecl && !areTypeParametersIdentical(firstInterfaceDecl.typeParameters, node.typeParameters)) {
                     error(node.name, Diagnostics.All_declarations_of_an_interface_must_have_identical_type_parameters);
                 }
