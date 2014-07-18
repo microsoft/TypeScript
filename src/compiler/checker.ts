@@ -4833,9 +4833,8 @@ module ts {
             forEachLocalSymbol(symbol, checkDeclarationsInSymbol);
 
             if (hasOverloads) {
-                // Error if some overloads have a flag that is not shared by all overloads. To find the
-                // deviations, we XOR someOverloadFlags with allOverloadFlags
-                if (someNodeFlags ^ allNodeFlags) {
+                // Error if some overloads have a flag that is not shared by all overloads.
+                if (someNodeFlags !== allNodeFlags) {
                     if (symbol.localSymbols) {
                         var canonicalFlags: NodeFlags = getCanonicalFlags(bodyDeclaration, symbol.localSymbols[0].declarations);
                         forEach(symbol.localSymbols, s => checkFlagAgreementBetweenOverloads(s.declarations, canonicalFlags));
@@ -4909,32 +4908,28 @@ module ts {
                 return;
             }
 
-            var declarationSpace: SymbolFlags = 0;
-            var flags: NodeFlags;
+            var declarationSpaces: SymbolFlags = 0;
+            var hasExport: boolean;
             function checkDeclarationsInSymbol(symbol: Symbol): void {
                 var declarations = symbol.declarations;
                 for (var i = 0, len = declarations.length; i < len; ++i) {
-                    var currentDeclarationSpace = getDeclarationSpace(declarations[i]);
-                    var currentFlags = declarations[i].flags & NodeFlags.Export;
-                    if (declarationSpace & currentDeclarationSpace) {
-                        if (flags !== undefined) {
-                            if (currentFlags ^ flags) {
+                    var currentDeclarationSpaces = getDeclarationSpaces(declarations[i]);
+                    var currentDeclarationHasExport = (declarations[i].flags & NodeFlags.Export) !== 0;
+                    if (declarationSpaces & currentDeclarationSpaces) {
+                        if (hasExport !== undefined) {
+                            if (hasExport !== currentDeclarationHasExport) {
                                 error(declarations[i].name, Diagnostics.All_declarations_of_merged_declaration_0_must_be_exported_or_not_exported, symbolToString(symbol));
                             }
                         }
-                        else {
-                            // first declaration - initialize flags
-                            flags = 0;
-                        }
                     }
-                    flags |= currentFlags;
-                    declarationSpace |= currentDeclarationSpace;
+                    hasExport = hasExport || currentDeclarationHasExport;
+                    declarationSpaces |= currentDeclarationSpaces;
                 }
             }
 
             forEachLocalSymbol(symbol, checkDeclarationsInSymbol);
 
-            function getDeclarationSpace(d: Declaration): SymbolFlags {
+            function getDeclarationSpaces(d: Declaration): SymbolFlags {
                 switch (d.kind) {
                     case SyntaxKind.InterfaceDeclaration:
                         return SymbolFlags.ExportType;
@@ -4954,19 +4949,24 @@ module ts {
             }
         }
 
+        function runOnceForSymbol(symbol: Symbol, node: Declaration, action: (s: Symbol) => void) {
+            // all local symbols associated with export symbol will be processed during the check of export symbol.
+            if (!isLocalSymbolAssociatedWithExportSymbol(symbol)) {
+                // symbol here is either local only symbol or export symbol
+                // in both cases run action once if given declaration is a first in group
+                var firstDeclaration = getDeclarationOfKind(symbol, node.kind);
+                if (node === firstDeclaration) {
+                    action(symbol);
+                }
+            }
+        }
+
         function checkFunctionDeclaration(node: FunctionDeclaration) {
             checkDeclarationModifiers(node);
             checkSignatureDeclaration(node);
 
-            var symbol = getSymbolOfNode(node);
-            // all local symbols associated with export symbol will be processed during the check of export symbol.
-            if (!isLocalSymbolAssociatedWithExportSymbol(symbol)) {
-                var firstDeclaration = getDeclarationOfKind(symbol, node.kind);
-                // Only type check the symbol once
-                if (node === firstDeclaration) {
-                    checkFunctionOrConstructorSymbol(symbol);
-                }
-            }
+            runOnceForSymbol(getSymbolOfNode(node), node, checkFunctionOrConstructorSymbol);
+
             checkSourceElement(node.body);
 
             // If there is no body and no explicit return type, then report an error.
@@ -5570,16 +5570,15 @@ module ts {
 
             var symbol = getSymbolOfNode(node);
             checkExportsOnMergedDeclarations(symbol, node);
-
-            var firstInterfaceDecl = <InterfaceDeclaration>getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration);
+            
             if (symbol.declarations.length > 1) {
+                var firstInterfaceDecl = <InterfaceDeclaration>getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration);
                 if (node !== firstInterfaceDecl && !areTypeParametersIdentical(firstInterfaceDecl.typeParameters, node.typeParameters)) {
                     error(node.name, Diagnostics.All_declarations_of_an_interface_must_have_identical_type_parameters);
                 }
             }
 
-            // Only check this symbol once
-            if (node === firstInterfaceDecl) {
+            runOnceForSymbol(symbol, node, symbol => {
                 var type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
                 // run subsequent checks only if first set succeeded
                 if (checkInheritedPropertiesAreIdentical(type, node.name)) {
@@ -5588,7 +5587,8 @@ module ts {
                     });
                     checkIndexConstraints(type);
                 }
-            }
+            });
+
             forEach(node.baseTypes, checkTypeReference);
             forEach(node.members, checkSourceElement);
 
@@ -5647,31 +5647,33 @@ module ts {
             // for the first member.
             //
             // Only perform this check once per symbol
-            var firstDeclaration = getDeclarationOfKind(enumSymbol, node.kind);
-            if (node === firstDeclaration) {
+            runOnceForSymbol(enumSymbol, node, symbol => {
                 var seenEnumMissingInitialInitializer = false;
-                forEach(enumSymbol.declarations, declaration => {
-                    // return true if we hit a violation of the rule, false otherwise
-                    if (declaration.kind !== SyntaxKind.EnumDeclaration) {
-                        return false;
-                    }
 
-                    var enumDeclaration = <EnumDeclaration>declaration;
-                    if (!enumDeclaration.members.length) {
-                        return false;
-                    }
+                forEachLocalSymbol(symbol, localSymbol => {
+                    forEach(localSymbol.declarations, declaration => {
+                        // return true if we hit a violation of the rule, false otherwise
+                        if (declaration.kind !== SyntaxKind.EnumDeclaration) {
+                            return false;
+                        }
 
-                    var firstEnumMember = enumDeclaration.members[0];
-                    if (!firstEnumMember.initializer) {
-                        if (seenEnumMissingInitialInitializer) {
-                            error(firstEnumMember.name, Diagnostics.In_an_enum_with_multiple_declarations_only_one_declaration_can_omit_an_initializer_for_its_first_enum_element);
+                        var enumDeclaration = <EnumDeclaration>declaration;
+                        if (!enumDeclaration.members.length) {
+                            return false;
                         }
-                        else {
-                            seenEnumMissingInitialInitializer = true;
+
+                        var firstEnumMember = enumDeclaration.members[0];
+                        if (!firstEnumMember.initializer) {
+                            if (seenEnumMissingInitialInitializer) {
+                                error(firstEnumMember.name, Diagnostics.In_an_enum_with_multiple_declarations_only_one_declaration_can_omit_an_initializer_for_its_first_enum_element);
+                            }
+                            else {
+                                seenEnumMissingInitialInitializer = true;
+                            }
                         }
-                    }
+                    });
                 });
-            }
+            });
         }
 
         function getFirstNonAmbientClassOrFunctionDeclaration(symbol: Symbol): Declaration {
