@@ -2,6 +2,7 @@
     export class Game {
     ~~~~~~~~~~~~~~~~~~~
         private position = new DisplayPosition([), 3, 3, 3, 3, 3, 0, 3, 3, 3, 3, 3, 3, 0], NoMove, 0);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                                                 ~
 !!! Expression or comma expected.
                                                  ~
@@ -40,7 +41,6 @@
 !!! ';' expected.
                                                                                                      ~
 !!! Unexpected token. A constructor, method, accessor, or property was expected.
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                                ~~~~~~~~~~~~~~~
 !!! Cannot find name 'DisplayPosition'.
                                                       ~
