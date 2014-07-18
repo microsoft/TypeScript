@@ -1,0 +1,17 @@
+==== tests/cases/compiler/functionReturn.ts (1 errors) ====
+    function f0(): void { }
+    function f1() {
+        var n: any = f0();
+    }
+    function f2(): any { }
+    function f3(): string { return; }
+                   ~~~~~~
+!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
+    function f4(): string {
+        return '';
+        return;
+    }
+    function f5(): string {
+        return '';
+        return undefined;
+    }

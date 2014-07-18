@@ -1,0 +1,8 @@
+==== tests/cases/compiler/functionWithThrowButNoReturn1.ts (1 errors) ====
+    function fn(): number {
+                   ~~~~~~
+!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
+      throw new Error('NYI');
+      var t;
+    }
+    

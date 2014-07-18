@@ -1,4 +1,4 @@
-==== tests/cases/compiler/unknownSymbols1.ts (13 errors) ====
+==== tests/cases/compiler/unknownSymbols1.ts (14 errors) ====
     var x = asdf;
             ~~~~
 !!! Cannot find name 'asdf'.
@@ -9,6 +9,8 @@
     function foo(x: asdf, y: number): asdf { }
                     ~~~~
 !!! Cannot find name 'asdf'.
+                                      ~~~~
+!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
                                       ~~~~
 !!! Cannot find name 'asdf'.
     function foo2() {

@@ -1,0 +1,9 @@
+==== tests/cases/compiler/missingReturnStatement1.ts (1 errors) ====
+    class Foo {
+        foo(): number {
+               ~~~~~~
+!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
+            //return 4;
+        }
+    }
+    

@@ -1,7 +1,9 @@
-==== tests/cases/compiler/genericRecursiveImplicitConstructorErrors3.ts (7 errors) ====
+==== tests/cases/compiler/genericRecursiveImplicitConstructorErrors3.ts (8 errors) ====
     module TypeScript {
         export class MemberName <A,B,C>{
             static create<A,B,C>(arg1: any, arg2?: any, arg3?: any): MemberName {
+                                                                     ~~~~~~~~~~
+!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
                                                                      ~~~~~~~~~~
 !!! Generic type 'MemberName<A, B, C>' requires 3 type argument(s).
             }

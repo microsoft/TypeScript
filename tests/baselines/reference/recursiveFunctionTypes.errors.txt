@@ -1,4 +1,4 @@
-==== tests/cases/compiler/recursiveFunctionTypes.ts (10 errors) ====
+==== tests/cases/compiler/recursiveFunctionTypes.ts (12 errors) ====
     function fn(): typeof fn { return 1; }
                                       ~
 !!! Type 'number' is not assignable to type '() => typeof fn'.
@@ -17,7 +17,11 @@
     function f1(d: typeof f1) { }
     
     function f2(): typeof g2 { } 
+                   ~~~~~~~~~
+!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
     function g2(): typeof f2 { } 
+                   ~~~~~~~~~
+!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
     
     interface I<T> { }
     function f3(): I<typeof f3> { return f3; }

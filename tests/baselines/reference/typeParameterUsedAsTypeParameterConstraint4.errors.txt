@@ -1,4 +1,4 @@
-==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts (25 errors) ====
+==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint4.ts (29 errors) ====
     // Type parameters are in scope in their own and other type parameter lists
     // Some negative cases
     
@@ -35,8 +35,12 @@
                     ~~~~~~~~~~~
 !!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                               ~
+!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
+                                              ~
 !!! Cannot find name 'V'.
         function bar<V extends T, W extends U>(): X { // error
+                                                  ~
+!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
                                                   ~
 !!! Cannot find name 'X'.
             function baz<X extends W, Y extends V>(a: X, b: Y): T {
@@ -54,8 +58,12 @@
                   ~~~~~~~~~~~
 !!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                                ~
+!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
+                                               ~
 !!! Cannot find name 'W'.
         function bar<V extends T, W extends U>(): Y { // error
+                                                  ~
+!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
                                                   ~
 !!! Cannot find name 'Y'.
             function baz<X extends W, Y extends V>(a: X, b: Y): T {

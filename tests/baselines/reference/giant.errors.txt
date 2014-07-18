@@ -26,7 +26,7 @@
                    ~~~
 !!! Duplicate identifier 'pgF'.
                    ~~~
-!!! Getters must return a value.
+!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
         public psF(param:any) { }
         ~~~~~~
 !!! '{' expected.
@@ -40,7 +40,7 @@
                     ~~~
 !!! Duplicate identifier 'rgF'.
                     ~~~
-!!! Getters must return a value.
+!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
         private rsF(param:any) { }
         ~~~~~~~
 !!! '{' expected.
@@ -62,7 +62,7 @@
                    ~~~
 !!! Duplicate identifier 'tgF'.
                    ~~~
-!!! Getters must return a value.
+!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
     }
     ~
 !!! '{' expected.
@@ -128,7 +128,7 @@
                        ~~~
 !!! Duplicate identifier 'pgF'.
                        ~~~
-!!! Getters must return a value.
+!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
             public psF(param:any) { }
             ~~~~~~
 !!! '{' expected.
@@ -142,7 +142,7 @@
                         ~~~
 !!! Duplicate identifier 'rgF'.
                         ~~~
-!!! Getters must return a value.
+!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
             private rsF(param:any) { }
             ~~~~~~~
 !!! '{' expected.
@@ -164,7 +164,7 @@
                        ~~~
 !!! Duplicate identifier 'tgF'.
                        ~~~
-!!! Getters must return a value.
+!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
         }
         ~
 !!! '{' expected.
@@ -247,7 +247,7 @@
                        ~~~
 !!! Duplicate identifier 'pgF'.
                        ~~~
-!!! Getters must return a value.
+!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
             public psF(param:any) { }
             ~~~~~~
 !!! '{' expected.
@@ -261,7 +261,7 @@
                         ~~~
 !!! Duplicate identifier 'rgF'.
                         ~~~
-!!! Getters must return a value.
+!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
             private rsF(param:any) { }
             ~~~~~~~
 !!! '{' expected.
@@ -283,7 +283,7 @@
                        ~~~
 !!! Duplicate identifier 'tgF'.
                        ~~~
-!!! Getters must return a value.
+!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
         }
         ~
 !!! '{' expected.
@@ -456,7 +456,7 @@
                    ~~~
 !!! Duplicate identifier 'pgF'.
                    ~~~
-!!! Getters must return a value.
+!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
         public psF(param:any) { }
         ~~~~~~
 !!! '{' expected.
@@ -470,7 +470,7 @@
                     ~~~
 !!! Duplicate identifier 'rgF'.
                     ~~~
-!!! Getters must return a value.
+!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
         private rsF(param:any) { }
         ~~~~~~~
 !!! '{' expected.
@@ -492,7 +492,7 @@
                    ~~~
 !!! Duplicate identifier 'tgF'.
                    ~~~
-!!! Getters must return a value.
+!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
     }
     ~
 !!! '{' expected.
@@ -558,7 +558,7 @@
                        ~~~
 !!! Duplicate identifier 'pgF'.
                        ~~~
-!!! Getters must return a value.
+!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
             public psF(param:any) { }
             ~~~~~~
 !!! '{' expected.
@@ -572,7 +572,7 @@
                         ~~~
 !!! Duplicate identifier 'rgF'.
                         ~~~
-!!! Getters must return a value.
+!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
             private rsF(param:any) { }
             ~~~~~~~
 !!! '{' expected.
@@ -594,7 +594,7 @@
                        ~~~
 !!! Duplicate identifier 'tgF'.
                        ~~~
-!!! Getters must return a value.
+!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
         }
         ~
 !!! '{' expected.
@@ -677,7 +677,7 @@
                        ~~~
 !!! Duplicate identifier 'pgF'.
                        ~~~
-!!! Getters must return a value.
+!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
             public psF(param:any) { }
             ~~~~~~
 !!! '{' expected.
@@ -691,7 +691,7 @@
                         ~~~
 !!! Duplicate identifier 'rgF'.
                         ~~~
-!!! Getters must return a value.
+!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
             private rsF(param:any) { }
             ~~~~~~~
 !!! '{' expected.
@@ -713,7 +713,7 @@
                        ~~~
 !!! Duplicate identifier 'tgF'.
                        ~~~
-!!! Getters must return a value.
+!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
         }
         ~
 !!! '{' expected.

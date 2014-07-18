@@ -446,13 +446,17 @@
         "category": "Error",
         "code": 2119
     },
-    "Getters must return a value.": {
+    "A 'get' accessor must return a value or consist of a single 'throw' statement.": {
         "category": "Error",
         "code": 2126
     },
     "Getter and setter accessors do not agree in visibility.": {
         "category": "Error",
         "code": 2127
+    },
+    "A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.": {
+        "category": "Error",
+        "code": 2131
     },
     "Untyped function calls may not accept type arguments.": {
         "category": "Error",

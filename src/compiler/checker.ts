@@ -3932,12 +3932,10 @@ module ts {
             }
 
             // Aggregate the types of expressions within all the return statements.
-            var types: Type[] = [];
-            checkAndAggregateReturnExpressionTypes(func.body);
+            var types = checkAndAggregateReturnExpressionTypes(<Block>func.body, contextualType, contextualMapper);
 
             // Try to return the best common type if we have any return expressions.
-            if (types.length) {
-
+            if (types.length > 0) {
                 var commonType = getBestCommonType(types, /*contextualType:*/ undefined, /*candidatesOnly:*/ true);
                 if (!commonType) {
                     error(func, Diagnostics.No_best_common_type_exists_among_return_expressions);
@@ -3963,16 +3961,18 @@ module ts {
             }
 
             return voidType;
+        }
 
-            function checkAndAggregateReturnExpressionTypes(node: Node) {
+        // WARNING: This has the same semantics as forEach, in that traversal terminates
+        //          in the event that 'visitor' supplies a truthy value!
+        function visitReturnStatements<T>(body: Block, visitor: (stmt: ReturnStatement) => T): T {
+
+            return visitHelper(body);
+
+            function visitHelper(node: Node): T {
                 switch (node.kind) {
                     case SyntaxKind.ReturnStatement:
-                        var expr = (<ReturnStatement>node).expression;
-                        if (expr) {
-                            var type = checkAndMarkExpression(expr, contextualType, contextualMapper);
-                            if (!contains(types, type)) types.push(type);
-                        }
-                        break;
+                        return visitor(node);
                     case SyntaxKind.Block:
                     case SyntaxKind.FunctionBlock:
                     case SyntaxKind.IfStatement:
@@ -3989,15 +3989,77 @@ module ts {
                     case SyntaxKind.TryBlock:
                     case SyntaxKind.CatchBlock:
                     case SyntaxKind.FinallyBlock:
-                        forEachChild(node, checkAndAggregateReturnExpressionTypes);
-                        break;
+                        return forEachChild(node, visitHelper);
                 }
             }
         }
 
+        /// Returns a set of types relating to every return expression relating to a function block.
+        function checkAndAggregateReturnExpressionTypes(body: Block, contextualType?: Type, contextualMapper?: TypeMapper): Type[] {
+            var aggregatedTypes: Type[] = [];
+
+            visitReturnStatements(body, (returnStatement) => {
+                var expr = returnStatement.expression;
+                if (expr) {
+                    var type = checkAndMarkExpression(expr, contextualType, contextualMapper);
+                    if (!contains(aggregatedTypes, type)) {
+                        aggregatedTypes.push(type);
+                    }
+                }
+            });
+
+            return aggregatedTypes;
+        }
+
+        function bodyContainsReturnExpressions(funcBody: Block) {
+            return visitReturnStatements(funcBody, (returnStatement) => {
+                return returnStatement.expression !== undefined;
+            });
+        }
+
+        function bodyContainsSingleThrowStatement(body: Block) {
+            return (body.statements.length === 1) && (body.statements[0].kind === SyntaxKind.ThrowStatement)
+        }
+
+        // TypeScript Specification 1.0 (6.3) - July 2014
+        // An explicitly typed function whose return type isn't the Void or the Any type
+        // must have at least one return statement somewhere in its body.
+        // An exception to this rule is if the function implementation consists of a single 'throw' statement.
+        function checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(decl: FunctionDeclaration, returnType: Type): void {
+            // Functions that return 'void' or 'any' don't need any return expressions.
+            if (returnType === voidType || returnType === anyType) {
+                return;
+            }
+
+            // If all we have is a function signature, or an arrow function with an expression body, then there is nothing to check.
+            if (!decl.body || decl.body.kind !== SyntaxKind.FunctionBlock) {
+                return;
+            }
+
+            var bodyBlock = <Block>decl.body;
+
+            // Ensure the body has at least one return expression.
+            if (bodyContainsReturnExpressions(bodyBlock)) {
+                return;
+            }
+
+            // If there are no return expressions, then we need to check if
+            // the function body consists solely of a throw statement;
+            // this is to make an exception for unimplemented functions.
+            if (bodyContainsSingleThrowStatement(bodyBlock)) {
+                return;
+            }
+
+            // This function does not conform to the specification.
+            error(decl.type, Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_have_a_return_expression_or_consist_of_a_single_throw_statement);
+        }
+
         function checkFunctionExpression(node: FunctionExpression, contextualType?: Type, contextualMapper?: TypeMapper): Type {
             // The identityMapper object is used to indicate that function expressions are wildcards
-            if (contextualMapper === identityMapper) return anyFunctionType;
+            if (contextualMapper === identityMapper) {
+                return anyFunctionType;
+            }
+
             var type = getTypeOfSymbol(node.symbol);
             var links = getNodeLinks(node);
 
@@ -4014,6 +4076,9 @@ module ts {
                         if (signature.resolvedReturnType === resolvingType) {
                             signature.resolvedReturnType = returnType;
                         }
+                    }
+                    else {
+                        checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
                     }
                 }
                 checkSignatureDeclaration(node);
@@ -4587,28 +4652,9 @@ module ts {
         }
 
         function checkAccessorDeclaration(node: AccessorDeclaration) {
-            function checkGetterContainsSingleThrowStatement(node: AccessorDeclaration): boolean {
-                var block = <Block>node.body;
-                return block.statements.length === 1 && block.statements[0].kind === SyntaxKind.ThrowStatement;
-            }
-
-            function checkGetterReturnsValue(n: Node): boolean {
-                switch (n.kind) {
-                    case SyntaxKind.ReturnStatement:
-                        return true;
-                    // do not dive into function-like things - return statements there don't count
-                    case SyntaxKind.FunctionExpression:
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.ArrowFunction:
-                    case SyntaxKind.ObjectLiteral:
-                        return false;
-                    default:
-                        return forEachChild(n, checkGetterReturnsValue);
-                }
-            }            
             if (node.kind === SyntaxKind.GetAccessor) {
-                if (!isInAmbientContext(node) && node.body && !(checkGetterContainsSingleThrowStatement(node) || checkGetterReturnsValue(node))) {
-                    error(node.name, Diagnostics.Getters_must_return_a_value);
+                if (!isInAmbientContext(node) && node.body && !(bodyContainsReturnExpressions(<Block>node.body) || bodyContainsSingleThrowStatement(<Block>node.body))) {
+                    error(node.name, Diagnostics.A_get_accessor_must_return_a_value_or_consist_of_a_single_throw_statement);
                 }
             }
 
@@ -4838,7 +4884,7 @@ module ts {
                 }
             }
 
-            // TODO: Check at least one return statement in non-void/any function (except single throw)
+            // TODO (drosen): Check at least one return statement in non-void/any function (except single throw)
         }
 
         function checkFunctionDeclaration(node: FunctionDeclaration) {
@@ -4850,7 +4896,11 @@ module ts {
             if (node === firstDeclaration) {
                 checkFunctionOrConstructorSymbol(symbol);
             }
+
             checkSourceElement(node.body);
+            if (node.type) {
+                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
+            }
 
             // If there is no body and no explicit return type, then report an error.
             if (program.getCompilerOptions().noImplicitAny && !node.body && !node.type) {

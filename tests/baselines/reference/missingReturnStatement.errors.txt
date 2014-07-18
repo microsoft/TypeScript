@@ -1,0 +1,10 @@
+==== tests/cases/compiler/missingReturnStatement.ts (1 errors) ====
+    module Test {
+        export class Bug {
+            public foo():string {
+                         ~~~~~~
+!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
+            }
+        }    
+    }
+    

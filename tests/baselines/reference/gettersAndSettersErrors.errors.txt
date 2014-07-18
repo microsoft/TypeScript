@@ -1,4 +1,4 @@
-==== tests/cases/compiler/gettersAndSettersErrors.ts (9 errors) ====
+==== tests/cases/compiler/gettersAndSettersErrors.ts (10 errors) ====
     class C {
         public get Foo() { return "foo";} // ok
                    ~~~
@@ -16,6 +16,8 @@
         public set Goo(v:string):string {} // error - setters must not specify a return type
                    ~~~
 !!! Accessors are only available when targeting ECMAScript 5 and higher.
+                                 ~~~~~~
+!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
     }
     
     class E {

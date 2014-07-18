@@ -1,9 +1,17 @@
-==== tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts (2 errors) ====
+==== tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts (6 errors) ====
     // all the following should be error
     function fn1(): number {  }
+                    ~~~~~~
+!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
     function fn2(): string { }
+                    ~~~~~~
+!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
     function fn3(): boolean { }
+                    ~~~~~~~
+!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
     function fn4(): Date {  }
+                    ~~~~
+!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
     function fn7(): any {  } // should be valid: any includes void
     
     interface I { id: number }

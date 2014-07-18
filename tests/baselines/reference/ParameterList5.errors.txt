@@ -1,5 +1,7 @@
-==== tests/cases/compiler/ParameterList5.ts (2 errors) ====
+==== tests/cases/compiler/ParameterList5.ts (3 errors) ====
     function A(): (public B) => C {
+                  ~~~~~~~~~~~~~~~
+!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
                    ~~~~~~~~
 !!! A parameter property is only allowed in a constructor implementation.
                                 ~

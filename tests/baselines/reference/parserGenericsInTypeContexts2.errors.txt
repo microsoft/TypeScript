@@ -1,4 +1,4 @@
-==== tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts2.ts (9 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts2.ts (10 errors) ====
     class C extends A<X<T>, Y<Z<T>>> implements B<X<T>, Y<Z<T>>> {
                     ~~~~~~~~~~~~~~~~
 !!! Cannot find name 'A'.
@@ -29,6 +29,8 @@
     }
     
     function f2(): F<X<T>, Y<Z<T>>> {
+                   ~~~~~~~~~~~~~~~~
+!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
                    ~~~~~~~~~~~~~~~~
 !!! Cannot find name 'F'.
     }

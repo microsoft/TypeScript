@@ -1,5 +1,7 @@
-==== tests/cases/compiler/returnTypeParameter.ts (1 errors) ====
+==== tests/cases/compiler/returnTypeParameter.ts (2 errors) ====
     function f<T>(a: T): T { } // error, no return statement
+                         ~
+!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
     function f2<T>(a: T): T { return T; } // bug was that this satisfied the return statement requirement
                                      ~
 !!! Cannot find name 'T'.
