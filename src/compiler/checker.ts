@@ -4835,7 +4835,7 @@ module ts {
             if (hasOverloads) {
                 // Error if some overloads have a flag that is not shared by all overloads.
                 if (someNodeFlags !== allNodeFlags) {
-                    if (symbol.localSymbols) {
+                    if (isExportSymbolWithAssociatedLocalSymbols(symbol)) {
                         var canonicalFlags: NodeFlags = getCanonicalFlags(bodyDeclaration, symbol.localSymbols[0].declarations);
                         forEach(symbol.localSymbols, s => checkFlagAgreementBetweenOverloads(s.declarations, canonicalFlags));
                     }
@@ -4882,8 +4882,12 @@ module ts {
             return s.exportSymbol !== undefined;
         }
 
+        function isExportSymbolWithAssociatedLocalSymbols(s: Symbol): boolean {
+            return s.localSymbols !== undefined;
+        }
+
         function forEachLocalSymbol(s: Symbol, action: (symbol: Symbol) => void): void {
-            if (s.localSymbols) {
+            if (isExportSymbolWithAssociatedLocalSymbols(s)) {
                 forEach(s.localSymbols, action);
             }
             else {
@@ -4896,9 +4900,11 @@ module ts {
                 return;
             }
 
-            if (isLocalSymbolAssociatedWithExportSymbol(symbol) || !symbol.localSymbols) {
-                // all local symbols will be processed during the check of export symbol.
-                // also symbols that just local by definition cannot have conflicting exports
+            if (!isExportSymbolWithAssociatedLocalSymbols(symbol)) {
+                // exit early if
+                // - this is pure local symbol - they don't have exports
+                // - this is local symbol associated with export symbol, 
+                //   all such symbols will be processed during the check of export symbol
                 return;
             }
 
@@ -4908,6 +4914,8 @@ module ts {
                 return;
             }
 
+            // we use SymbolFlags.ExportValue, SymbolFlags.ExportType and SymbolFlags.ExportNamespace 
+            // to denote disjoint declarationSpaces (without making new enum type).
             var declarationSpaces: SymbolFlags = 0;
             var hasExport: boolean;
             function checkDeclarationsInSymbol(symbol: Symbol): void {
@@ -5575,7 +5583,7 @@ module ts {
             if (symbol.declarations.length > 1) {
                 hasMoreThanOneDeclaration = true;
             }
-            else if (symbol.localSymbols) {
+            else if (isExportSymbolWithAssociatedLocalSymbols(symbol)) {
                 // current symbol is export with just one exported declaration
                 // check if the local symbol (it should be there and should be just one) has more than 1 declarations.
                 Debug.assert(symbol.localSymbols.length === 1);
