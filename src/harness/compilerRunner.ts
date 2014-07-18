@@ -232,7 +232,7 @@ class CompilerBaselineRunner extends RunnerBase {
             });
 
             // Compile .d.ts files
-            it('Compiler generated .d.ts files for ' + fileName, () => {
+            it('Correct compiler generated.d.ts for ' + fileName, () => {
                 if (options.declaration && result.errors.length === 0 && result.declFilesCode.length !== result.files.length) {
                     throw new Error('There were no errors and declFiles generated did not match number of js files generated');
                 }
@@ -242,8 +242,7 @@ class CompilerBaselineRunner extends RunnerBase {
                     function getDtsFile(file: { unitName: string; content: string }) {
                         if (Harness.Compiler.isDTS(file.unitName)) {
                             return file;
-                        }
-                        else {
+                        } else {
                             var declFile = ts.forEach(result.declFilesCode,
                                 declFile => declFile.fileName === (file.unitName.substr(0, file.unitName.length - ".ts".length) + ".d.ts")
                                     ? declFile : undefined);
@@ -257,7 +256,7 @@ class CompilerBaselineRunner extends RunnerBase {
                         declResult = compileResult;
                     }, function (settings) {
                             harnessCompiler.setCompilerSettings(tcSettings);
-                        });
+                    });
                 }
             });
 
