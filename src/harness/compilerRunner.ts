@@ -118,9 +118,25 @@ class CompilerBaselineRunner extends RunnerBase {
                 otherFiles: { unitName: string; content: string }[],
                 result: Harness.Compiler.CompilerResult
                 ) {
+
                 var outputLines: string[] = [];
                 // Count up all the errors we find so we don't miss any
                 var totalErrorsReported = 0;
+                
+                function outputErrorText(error: Harness.Compiler.MinimalDiagnostic) {
+                    var errLines = RunnerBase.removeFullPaths(error.message)
+                        .split('\n')
+                        .map(s => s.length > 0 && s.charAt(s.length - 1) === '\r' ? s.substr(0, s.length - 1) : s)
+                        .filter(s => s.length > 0)
+                        .map(s => '!!! ' + s);
+                    errLines.forEach(e => outputLines.push(e));
+
+                    totalErrorsReported++;
+                }
+
+                // Report glovbal errors:
+                var globalErrors = result.errors.filter(err => !err.filename);
+                globalErrors.forEach(err => outputErrorText(err));
 
                 // 'merge' the lines of each input file with any errors associated with it
                 toBeCompiled.concat(otherFiles).forEach(inputFile => {
@@ -130,8 +146,6 @@ class CompilerBaselineRunner extends RunnerBase {
                         return errFn && errFn === inputFile.unitName;
                     });
 
-                    // Add this to the number of errors we've seen so far
-                    totalErrorsReported += fileErrors.length;
 
                     // Header
                     outputLines.push('==== ' + inputFile.unitName + ' (' + fileErrors.length + ' errors) ====');
@@ -176,12 +190,7 @@ class CompilerBaselineRunner extends RunnerBase {
                                     // Just like above, we need to do a split on a string instead of on a regex
                                     // because the JS engine does regexes wrong
 
-                                    var errLines = RunnerBase.removeFullPaths(err.message)
-                                        .split('\n')
-                                        .map(s => s.length > 0 && s.charAt(s.length - 1) === '\r' ? s.substr(0, s.length - 1) : s)
-                                        .filter(s => s.length > 0)
-                                        .map(s => '!!! ' + s);
-                                    errLines.forEach(e => outputLines.push(e));
+                                    outputErrorText(err);
                                     markedErrorCount++;
                                 }
                             }
@@ -193,8 +202,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 });
 
                 // Verify we didn't miss any errors in total
-                // NEWTODO: Re-enable this -- somehow got broken
-                // assert.equal(totalErrorsReported, result.errors.length, 'total number of errors');
+                assert.equal(totalErrorsReported, result.errors.length, 'total number of errors');
 
                 return outputLines.join('\r\n');
             }
