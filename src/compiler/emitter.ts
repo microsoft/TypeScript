@@ -31,7 +31,7 @@ module ts {
 
         function shouldEmitToOwnFile(sourceFile: SourceFile) {
             if (!(sourceFile.flags & NodeFlags.DeclarationFile)) {
-                if ((sourceFile.flags & NodeFlags.ExternalModule || !compilerOptions.out) && !fileExtensionIs(sourceFile.filename, ".js")) {
+                if ((isExternalModule(sourceFile) || !compilerOptions.out) && !fileExtensionIs(sourceFile.filename, ".js")) {
                     return true;
                 }
             }
@@ -49,7 +49,7 @@ module ts {
         }
 
         function isExternalModuleOrDeclarationFile(sourceFile: SourceFile) {
-            return !!(sourceFile.flags & (NodeFlags.ExternalModule | NodeFlags.DeclarationFile));
+            return isExternalModule(sourceFile) || (sourceFile.flags & NodeFlags.DeclarationFile) !== 0;
         }
 
         function getFirstConstructorWithBody(node: ClassDeclaration): ConstructorDeclaration {
@@ -1552,7 +1552,7 @@ module ts {
                     // preserve old compiler's behavior: emit 'var' for import declaration (even if we do not consider them referenced) when
                     // - current file is not external module
                     // - import declaration is top level and target is value imported by entity name
-                    emitImportDeclaration = !(currentSourceFile.flags & NodeFlags.ExternalModule) && resolver.isTopLevelValueImportedViaEntityName(node);
+                    emitImportDeclaration = !isExternalModule(currentSourceFile) && resolver.isTopLevelValueImportedViaEntityName(node);
                 }
 
                 if (emitImportDeclaration) {
@@ -1701,7 +1701,7 @@ module ts {
                     write("};");
                     extendsEmitted = true;
                 }
-                if (node.flags & NodeFlags.ExternalModule) {
+                if (isExternalModule(node)) {
                     if (compilerOptions.module === ModuleKind.AMD) {
                         emitAMDModule(node, startIndex);
                     }
