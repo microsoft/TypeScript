@@ -1,0 +1,7 @@
+==== tests/cases/compiler/collisionThisExpressionAndFunctionInGlobal.ts (1 errors) ====
+    function _this() { //Error
+             ~~~~~
+!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+        return 10;
+    }
+    var f = () => this;

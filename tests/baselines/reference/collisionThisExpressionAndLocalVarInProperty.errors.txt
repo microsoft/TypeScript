@@ -1,0 +1,24 @@
+==== tests/cases/compiler/collisionThisExpressionAndLocalVarInProperty.ts (2 errors) ====
+    class class1 {
+        public prop1 = {
+            doStuff: (callback) => () => {
+                var _this = 2;
+                    ~~~~~
+!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+                return callback(this);
+            }
+        }
+    }
+    
+    class class2 {
+        constructor() {
+            var _this = 2;
+                ~~~~~
+!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+        }
+        public prop1 = {
+            doStuff: (callback) => () => {
+                return callback(this);
+            }
+        }
+    }

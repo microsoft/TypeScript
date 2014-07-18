@@ -59,6 +59,7 @@ module ts {
         var mergedSymbols: Symbol[] = [];
         var symbolLinks: SymbolLinks[] = [];
         var nodeLinks: NodeLinks[] = [];
+        var potentialThisCollisions: Node[] = [];
 
         var diagnostics: Diagnostic[] = [];
         var diagnosticsModified: boolean = false;
@@ -3210,6 +3211,7 @@ module ts {
             getNodeLinks(node).resolvedSymbol = symbol;
 
             checkCollisionWithCapturedSuperVariable(node, node);
+            checkCollisionWithCapturedThisVariable(node, node);
             checkCollisionWithIndexVariableInGeneratedCode(node, node);
 
             return getTypeOfSymbol(getExportSymbolOfValueSymbolIfExported(symbol));
@@ -4436,6 +4438,7 @@ module ts {
             }
 
             checkCollisionWithCapturedSuperVariable(node, node.name);
+            checkCollisionWithCapturedThisVariable(node, node.name);
             checkCollisionWithArgumentsInGeneratedCode(node);
             if (program.getCompilerOptions().noImplicitAny && !node.type) {
                 switch (node.kind) {
@@ -4970,21 +4973,59 @@ module ts {
             }
         }
 
-        function checkCollisionWithCapturedSuperVariable(node: Node, name: Identifier) {
-            if (!(name && name.text === "_super")) {
-                return;
+        function needCollisionCheckForIdentifier(node: Node, identifier: Identifier, name: string): boolean {
+            if (!(identifier && identifier.text === name)) {
+                return false;
             }
 
             if (node.kind === SyntaxKind.Property ||
                 node.kind === SyntaxKind.Method ||
                 node.kind === SyntaxKind.GetAccessor ||
                 node.kind === SyntaxKind.SetAccessor) {
-                // it is ok to have member named '_super' - member access is always qualified
-                return;
+                // it is ok to have member named '_super' or '_this' - member access is always qualified
+                return false
+            }
+
+            if (isInAmbientContext(node)) {
+                // ambient context - no codegen impact
+                return false;
             }
 
             if (node.kind === SyntaxKind.Parameter && !(<FunctionDeclaration>node.parent).body) {
                 // just an overload - no codegen impact
+                return false;
+            }
+
+            return true;
+        }
+
+        function checkCollisionWithCapturedThisVariable(node: Node, name: Identifier): void {
+            if (!needCollisionCheckForIdentifier(node, name, "_this")) {
+                return;
+            }
+            potentialThisCollisions.push(node);
+        }
+
+        // this function will run after checking the source file so 'CaptureThis' for all nodes
+        function checkIfThisIsCapturedInEnclosingScope(node: Node): void {
+            var current = node;
+            while (current) {                
+                if (getNodeCheckFlags(current) & NodeCheckFlags.CaptureThis) {
+                    var isDeclaration = node.kind !== SyntaxKind.Identifier;
+                    if (isDeclaration) {
+                        error((<Declaration>node).name, Diagnostics.Duplicate_identifier_this_Compiler_uses_variable_declaration_this_to_capture_this_reference);
+                    }
+                    else {
+                        error(node, Diagnostics.Expression_resolves_to_variable_declaration_this_that_compiler_uses_to_capture_this_reference);
+                    }
+                    return;
+                }
+                current = current.parent;
+            }
+        }
+
+        function checkCollisionWithCapturedSuperVariable(node: Node, name: Identifier) {
+            if (!needCollisionCheckForIdentifier(node, name, "_super")) {
                 return;
             }
 
@@ -5029,6 +5070,7 @@ module ts {
             }
 
             checkCollisionWithCapturedSuperVariable(node, node.name);
+            checkCollisionWithCapturedThisVariable(node, node.name);
             if (!useTypeFromValueDeclaration) {
                 // TypeScript 1.0 spec (April 2014): 5.1
                 // Multiple declarations for the same variable name in the same declaration space are permitted,
@@ -5298,6 +5340,7 @@ module ts {
             checkDeclarationModifiers(node);
             checkTypeNameIsReserved(node.name, Diagnostics.Class_name_cannot_be_0);
             checkTypeParameters(node.typeParameters);
+            checkCollisionWithCapturedThisVariable(node, node.name);
             var symbol = getSymbolOfNode(node);
             var type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
             var staticType = <ObjectType>getTypeOfSymbol(symbol);
@@ -5498,6 +5541,7 @@ module ts {
         function checkEnumDeclaration(node: EnumDeclaration) {
             checkDeclarationModifiers(node);
             checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
+            checkCollisionWithCapturedThisVariable(node, node.name);
             var enumSymbol = getSymbolOfNode(node);
             var enumType = getDeclaredTypeOfSymbol(enumSymbol);
             var autoValue = 0;
@@ -5569,6 +5613,7 @@ module ts {
 
         function checkModuleDeclaration(node: ModuleDeclaration) {
             checkDeclarationModifiers(node);
+            checkCollisionWithCapturedThisVariable(node, node.name);
             var symbol = getSymbolOfNode(node);
             if (symbol.flags & SymbolFlags.ValueModule && symbol.declarations.length > 1 && !isInAmbientContext(node)) {
                 var classOrFunc = getFirstNonAmbientClassOrFunctionDeclaration(symbol);
@@ -5594,6 +5639,7 @@ module ts {
 
         function checkImportDeclaration(node: ImportDeclaration) {
             checkDeclarationModifiers(node);
+            checkCollisionWithCapturedThisVariable(node, node.name);
             var symbol = getSymbolOfNode(node);
             var target: Symbol;
             
@@ -5751,6 +5797,7 @@ module ts {
             var links = getNodeLinks(node);
             if (!(links.flags & NodeCheckFlags.TypeChecked)) {
                 emitExtends = false;
+                potentialThisCollisions.length = 0;
                 forEach(node.statements, checkSourceElement);
                 if (node.flags & NodeFlags.ExternalModule) {
                     var symbol = getExportAssignmentSymbol(node.symbol);
@@ -5758,6 +5805,10 @@ module ts {
                         // Mark the import as referenced so that we emit it in the final .js file.
                         getSymbolLinks(symbol).referenced = true;
                     }
+                }
+                if (potentialThisCollisions.length) {
+                    forEach(potentialThisCollisions, checkIfThisIsCapturedInEnclosingScope);
+                    potentialThisCollisions.length = 0;
                 }
                 if (emitExtends) links.flags |= NodeCheckFlags.EmitExtends;
                 links.flags |= NodeCheckFlags.TypeChecked;

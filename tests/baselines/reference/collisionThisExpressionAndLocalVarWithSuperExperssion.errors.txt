@@ -1,0 +1,23 @@
+==== tests/cases/compiler/collisionThisExpressionAndLocalVarWithSuperExperssion.ts (2 errors) ====
+    class a {
+        public foo() {
+        }
+    }
+    class b extends a {
+        public foo() {
+            var _this = 10;
+                ~~~~~
+!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+            var f = () => super.foo();
+        }
+    }
+    class b2 extends a {
+        public foo() {
+            var f = () => {
+                var _this = 10;
+                    ~~~~~
+!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+                return super.foo()
+            }
+        }
+    }
