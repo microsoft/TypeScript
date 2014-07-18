@@ -11,7 +11,7 @@ new Foo();
 //// [collisionRestParameterUnderscoreIUsage.js]
 var _i = "This is what I'd expect to see";
 var Foo = (function () {
-    function Foo(args) {
+    function Foo() {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i - 0] = arguments[_i];

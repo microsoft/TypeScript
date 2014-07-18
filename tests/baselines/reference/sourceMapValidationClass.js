@@ -20,7 +20,7 @@ class Greeter {
 
 //// [sourceMapValidationClass.js]
 var Greeter = (function () {
-    function Greeter(greeting, b) {
+    function Greeter(greeting) {
         var b = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             b[_i - 1] = arguments[_i];
