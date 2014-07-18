@@ -193,3 +193,67 @@ export declare module M.Q {
         }
     }
 }
+
+
+//// [DtsFileErrors]
+
+
+==== tests/cases/compiler/declarationEmit_nameConflicts_0.d.ts (1 errors) ====
+    export declare module M {
+        function f(): void;
+        class C {
+        }
+        module N {
+            function g(): void;
+            interface I {
+            }
+        }
+        export import a = M.f;
+        export import b = M.C;
+        export import c = N;
+        export import d = im;
+        ~~~~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'im'.
+    }
+    export declare module M.P {
+        function f(): void;
+        class C {
+        }
+        module N {
+            function g(): void;
+            interface I {
+            }
+        }
+        export import im = M.P.f;
+        var a: () => void;
+        var b: typeof M.C;
+        var c: typeof M.N;
+        var g: () => void;
+        var d: typeof M.d;
+    }
+    export declare module M.Q {
+        function f(): void;
+        class C {
+        }
+        module N {
+            function g(): void;
+            interface I {
+            }
+        }
+        interface b extends M.C {
+        }
+        interface I extends M.N.I {
+        }
+        module c {
+            interface I extends M.N.I {
+            }
+        }
+    }
+    
+==== tests/cases/compiler/declarationEmit_nameConflicts_1.d.ts (0 errors) ====
+    declare module f {
+        class c {
+        }
+    }
+    export = f;
+    

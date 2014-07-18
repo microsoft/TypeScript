@@ -26,3 +26,20 @@ export declare module a {
     }
 }
 export declare var x: b.I;
+
+
+//// [DtsFileErrors]
+
+
+==== tests/cases/compiler/internalAliasUninitializedModuleInsideTopLevelModuleWithoutExport.d.ts (1 errors) ====
+    export declare module a {
+        module b {
+            interface I {
+                foo(): any;
+            }
+        }
+    }
+    export declare var x: b.I;
+                          ~~~
+!!! Cannot find name 'b'.
+    

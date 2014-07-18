@@ -32,3 +32,22 @@ declare module a {
 declare module c {
     var x: b.I;
 }
+
+
+//// [DtsFileErrors]
+
+
+==== tests/cases/compiler/internalAliasUninitializedModule.d.ts (1 errors) ====
+    declare module a {
+        module b {
+            interface I {
+                foo(): any;
+            }
+        }
+    }
+    declare module c {
+        var x: b.I;
+               ~~~
+!!! Cannot find name 'b'.
+    }
+    

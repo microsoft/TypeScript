@@ -806,8 +806,20 @@ module Harness {
             code: string;
         }
 
-        export function stringEndsWith(str: string, end: string) {
+        function stringEndsWith(str: string, end: string) {
             return str.substr(str.length - end.length) === end;
+        }
+
+        export function isDTS(fileName: string) {
+            return stringEndsWith(fileName, '.d.ts');
+        }
+
+        export function isJS(fileName: string) {
+            return stringEndsWith(fileName, '.js');
+        }
+
+        export function isJSMap(fileName: string) {
+            return stringEndsWith(fileName, '.js.map');
         }
 
         /** Contains the code and errors of a compilation and some helper methods to check its status. */
@@ -824,13 +836,13 @@ module Harness {
 
                 fileResults.forEach(emittedFile => {
                     var fileObj = { fileName: emittedFile.fileName, code: emittedFile.file };
-                    if (stringEndsWith(emittedFile.fileName, '.d.ts')) {
+                    if (isDTS(emittedFile.fileName)) {
                         // .d.ts file, add to declFiles emit
                         this.declFilesCode.push(fileObj);
-                    } else if (stringEndsWith(emittedFile.fileName, '.js')) {
+                    } else if (isJS(emittedFile.fileName)) {
                         // .js file, add to files
                         this.files.push(fileObj);
-                    } else if (stringEndsWith(emittedFile.fileName, '.js.map')) {
+                    } else if (isJSMap(emittedFile.fileName)) {
                         this.sourceMaps.push(fileObj);
                     } else {
                         throw new Error('Unrecognized file extension for file ' + emittedFile.fileName);

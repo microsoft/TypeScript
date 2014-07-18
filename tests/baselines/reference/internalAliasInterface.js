@@ -25,3 +25,19 @@ declare module a {
 declare module c {
     var x: b;
 }
+
+
+//// [DtsFileErrors]
+
+
+==== tests/cases/compiler/internalAliasInterface.d.ts (1 errors) ====
+    declare module a {
+        interface I {
+        }
+    }
+    declare module c {
+        var x: b;
+               ~
+!!! Cannot find name 'b'.
+    }
+    
