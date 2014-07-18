@@ -49,6 +49,6 @@ declare class Derived<T> extends Base<T> {
 interface IBar<T> {
     derived: Derived<T>;
 }
-declare class Baz implments IBar<Baz> {
+declare class Baz implements IBar<Baz> {
     derived: Derived<Baz>;
 }

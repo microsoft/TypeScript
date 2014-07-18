@@ -272,7 +272,7 @@ interface i1 {
     nc_f1(): void;
     nc_l1: () => void;
 }
-declare class c1 implments i1 {
+declare class c1 implements i1 {
     i1_p1: number;
     i1_f1(): void;
     i1_l1: () => void;

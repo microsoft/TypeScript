@@ -1999,7 +1999,7 @@ module ts {
                 }
 
                 if (typeReferences) {
-                    write(isImplementsList ? " implments " : " extends ");
+                    write(isImplementsList ? " implements " : " extends ");
                     emitCommaList(typeReferences, emitTypeOfTypeReference);
                 }
             }
