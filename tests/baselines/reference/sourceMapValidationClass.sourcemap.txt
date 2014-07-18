@@ -12,7 +12,7 @@ sourceFile:sourceMapValidationClass.ts
 1 >
 2 >^^^^
 3 >    ^^^^^^^
-4 >           ^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >           ^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >class 
 3 >    Greeter
@@ -20,14 +20,12 @@ sourceFile:sourceMapValidationClass.ts
 2 >Emitted(1, 5) Source(1, 7) + SourceIndex(0)
 3 >Emitted(1, 12) Source(1, 14) + SourceIndex(0)
 ---
->>>    function Greeter(greeting, b) {
+>>>    function Greeter(greeting) {
 1->^^^^
 2 >    ^^^^^^^^^
 3 >             ^^^^^^^
 4 >                    ^
 5 >                     ^^^^^^^^
-6 >                             ^^
-7 >                               ^
 1-> {
   >    
 2 >    
@@ -35,21 +33,17 @@ sourceFile:sourceMapValidationClass.ts
 4 >                     {
   >                        constructor(public 
 5 >                     greeting: string
-6 >                             , ...
-7 >                               b: string[]
 1->Emitted(2, 5) Source(2, 5) + SourceIndex(0) name (Greeter)
 2 >Emitted(2, 14) Source(1, 7) + SourceIndex(0) name (Greeter)
 3 >Emitted(2, 21) Source(1, 14) + SourceIndex(0) name (Greeter)
 4 >Emitted(2, 22) Source(2, 24) + SourceIndex(0) name (Greeter)
 5 >Emitted(2, 30) Source(2, 40) + SourceIndex(0) name (Greeter)
-6 >Emitted(2, 32) Source(2, 45) + SourceIndex(0) name (Greeter)
-7 >Emitted(2, 33) Source(2, 56) + SourceIndex(0) name (Greeter)
 ---
 >>>        var b = [];
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
+1 >, 
 2 >        ...b: string[]
 1 >Emitted(3, 9) Source(2, 42) + SourceIndex(0) name (Greeter.constructor)
 2 >Emitted(3, 20) Source(2, 56) + SourceIndex(0) name (Greeter.constructor)

@@ -1145,10 +1145,17 @@ module ts {
                 }
             }
 
-            function emitSignatureAndBody(node: FunctionDeclaration) {
+            function emitSignatureParameters(node: FunctionDeclaration) {
                 write("(");
-                emitCommaList(node.parameters, node.parameters.length - (hasRestParameters(node) ? 1 : 0));
-                write(") {");
+                if (node) {
+                    emitCommaList(node.parameters, node.parameters.length - (hasRestParameters(node) ? 1 : 0));
+                }
+                write(")");
+            }
+
+            function emitSignatureAndBody(node: FunctionDeclaration) {
+                emitSignatureParameters(node);
+                write(" {");
                 scopeEmitStart(node);
                 increaseIndent();
                 var outPos = writer.getTextPos();
@@ -1354,11 +1361,8 @@ module ts {
                 emitStart(<Node>ctor || node);
                 write("function ");
                 emit(node.name);
-                write("(");
-                if (ctor) {
-                    emitCommaList(ctor.parameters);
-                }
-                write(") {");
+                emitSignatureParameters(ctor);
+                write(" {");
                 scopeEmitStart(node, "constructor");
                 increaseIndent();
                 if (ctor) {

@@ -68,7 +68,7 @@ declare class c6NoError {
 
 //// [collisionRestParameterClassConstructor.js]
 var c1 = (function () {
-    function c1(_i, restParameters) {
+    function c1(_i) {
         var restParameters = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             restParameters[_i - 1] = arguments[_i];
@@ -84,7 +84,7 @@ var c1NoError = (function () {
     return c1NoError;
 })();
 var c2 = (function () {
-    function c2(restParameters) {
+    function c2() {
         var restParameters = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             restParameters[_i - 0] = arguments[_i];
@@ -100,7 +100,7 @@ var c2NoError = (function () {
     return c2NoError;
 })();
 var c3 = (function () {
-    function c3(_i, restParameters) {
+    function c3(_i) {
         var restParameters = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             restParameters[_i - 1] = arguments[_i];
@@ -118,7 +118,7 @@ var c3NoError = (function () {
     return c3NoError;
 })();
 var c5 = (function () {
-    function c5(_i, rest) {
+    function c5(_i) {
         var rest = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             rest[_i - 1] = arguments[_i];

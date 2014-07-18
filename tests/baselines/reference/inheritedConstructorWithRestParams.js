@@ -22,7 +22,7 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 var Base = (function () {
-    function Base(a) {
+    function Base() {
         var a = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             a[_i - 0] = arguments[_i];

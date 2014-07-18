@@ -112,7 +112,7 @@ var ConstructorWithParameters = (function () {
 })();
 exports.ConstructorWithParameters = ConstructorWithParameters;
 var ConstructorWithRestParamters = (function () {
-    function ConstructorWithRestParamters(a, rests) {
+    function ConstructorWithRestParamters(a) {
         var rests = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             rests[_i - 1] = arguments[_i];
@@ -170,7 +170,7 @@ var GlobalConstructorWithParameters = (function () {
     return GlobalConstructorWithParameters;
 })();
 var GlobalConstructorWithRestParamters = (function () {
-    function GlobalConstructorWithRestParamters(a, rests) {
+    function GlobalConstructorWithRestParamters(a) {
         var rests = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             rests[_i - 1] = arguments[_i];
