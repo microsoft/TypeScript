@@ -49,6 +49,7 @@ class CompilerBaselineRunner extends RunnerBase {
             var createNewInstance = false;
 
             var lastUnit = units[units.length - 1];
+            var rootDir = lastUnit.originalFilePath.indexOf('conformance') === -1 ? 'tests/cases/compiler/' : lastUnit.originalFilePath.substring(0, lastUnit.originalFilePath.lastIndexOf('/')) + '/';
 
             var result: Harness.Compiler.CompilerResult;
             var options: ts.CompilerOptions;
@@ -57,6 +58,10 @@ class CompilerBaselineRunner extends RunnerBase {
             // equivalent to other files on the file system not directly passed to the compiler (ie things that are referenced by other files)
             var otherFiles: { unitName: string; content: string }[];
             var harnessCompiler: Harness.Compiler.HarnessCompiler;
+
+            var declToBeCompiled: { unitName: string; content: string }[] = [];
+            var declOtherFiles: { unitName: string; content: string }[] = [];
+            var declResult: Harness.Compiler.CompilerResult;
 
             var createNewInstance = false;
 
@@ -67,7 +72,6 @@ class CompilerBaselineRunner extends RunnerBase {
                 // otherwise, assume all files are just meant to be in the same compilation session without explicit references to one another.
                 toBeCompiled = [];
                 otherFiles = [];
-                var rootDir = lastUnit.originalFilePath.indexOf('conformance') === -1 ? 'tests/cases/compiler/' : lastUnit.originalFilePath.substring(0, lastUnit.originalFilePath.lastIndexOf('/')) + '/';
                 if (/require\(/.test(lastUnit.content) || /reference\spath/.test(lastUnit.content)) {
                     toBeCompiled.push({ unitName: rootDir + lastUnit.name, content: lastUnit.content });
                     units.forEach(unit => {
@@ -114,94 +118,106 @@ class CompilerBaselineRunner extends RunnerBase {
                 }
             });
 
+            function getErrorBaseline(toBeCompiled: { unitName: string; content: string }[],
+                otherFiles: { unitName: string; content: string }[],
+                result: Harness.Compiler.CompilerResult
+                ) {
+
+                var outputLines: string[] = [];
+                // Count up all the errors we find so we don't miss any
+                var totalErrorsReported = 0;
+                
+                function outputErrorText(error: Harness.Compiler.MinimalDiagnostic) {
+                    var errLines = RunnerBase.removeFullPaths(error.message)
+                        .split('\n')
+                        .map(s => s.length > 0 && s.charAt(s.length - 1) === '\r' ? s.substr(0, s.length - 1) : s)
+                        .filter(s => s.length > 0)
+                        .map(s => '!!! ' + s);
+                    errLines.forEach(e => outputLines.push(e));
+
+                    totalErrorsReported++;
+                }
+
+                // Report glovbal errors:
+                var globalErrors = result.errors.filter(err => !err.filename);
+                globalErrors.forEach(err => outputErrorText(err));
+
+                // 'merge' the lines of each input file with any errors associated with it
+                toBeCompiled.concat(otherFiles).forEach(inputFile => {
+                    // Filter down to the errors in the file
+                    var fileErrors = result.errors.filter(e => {
+                        var errFn = e.filename;
+                        return errFn && errFn === inputFile.unitName;
+                    });
+
+
+                    // Header
+                    outputLines.push('==== ' + inputFile.unitName + ' (' + fileErrors.length + ' errors) ====');
+
+                    // Make sure we emit something for every error
+                    var markedErrorCount = 0;
+                    // For each line, emit the line followed by any error squiggles matching this line
+                    // Note: IE JS engine incorrectly handles consecutive delimiters here when using RegExp split, so
+                    // we have to string-based splitting instead and try to figure out the delimiting chars
+
+                    var lineStarts = ts.getLineStarts(inputFile.content);
+                    var lines = inputFile.content.split('\n');
+                    lines.forEach((line, lineIndex) => {
+                        if (line.length > 0 && line.charAt(line.length - 1) === '\r') {
+                            line = line.substr(0, line.length - 1);
+                        }
+
+                        var thisLineStart = lineStarts[lineIndex];
+                        var nextLineStart: number;
+                        // On the last line of the file, fake the next line start number so that we handle errors on the last character of the file correctly
+                        if (lineIndex === lines.length - 1) {
+                            nextLineStart = inputFile.content.length;
+                        } else {
+                            nextLineStart = lineStarts[lineIndex + 1];
+                        }
+                        // Emit this line from the original file
+                        outputLines.push('    ' + line);
+                        fileErrors.forEach(err => {
+                            // Does any error start or continue on to this line? Emit squiggles
+                            if ((err.end >= thisLineStart) && ((err.start < nextLineStart) || (lineIndex === lines.length - 1))) {
+                                // How many characters from the start of this line the error starts at (could be positive or negative)
+                                var relativeOffset = err.start - thisLineStart;
+                                // How many characters of the error are on this line (might be longer than this line in reality)
+                                var length = (err.end - err.start) - Math.max(0, thisLineStart - err.start);
+                                // Calculate the start of the squiggle
+                                var squiggleStart = Math.max(0, relativeOffset);
+                                // TODO/REVIEW: this doesn't work quite right in the browser if a multi file test has files whose names are just the right length relative to one another
+                                outputLines.push('    ' + line.substr(0, squiggleStart).replace(/[^\s]/g, ' ') + new Array(Math.min(length, line.length - squiggleStart) + 1).join('~'));
+
+                                // If the error ended here, or we're at the end of the file, emit its message
+                                if ((lineIndex === lines.length - 1) || nextLineStart > err.end) {
+                                    // Just like above, we need to do a split on a string instead of on a regex
+                                    // because the JS engine does regexes wrong
+
+                                    outputErrorText(err);
+                                    markedErrorCount++;
+                                }
+                            }
+                        });
+                    });
+
+                    // Verify we didn't miss any errors in this file
+                    assert.equal(markedErrorCount, fileErrors.length, 'count of errors in ' + inputFile.unitName);
+                });
+
+                // Verify we didn't miss any errors in total
+                assert.equal(totalErrorsReported, result.errors.length, 'total number of errors');
+
+                return outputLines.join('\r\n');
+            }
+
             // check errors
             it('Correct errors for ' + fileName, () => {
                 if (this.errors) {
                     Harness.Baseline.runBaseline('Correct errors for ' + fileName, justName.replace(/\.ts$/, '.errors.txt'), (): string => {
                         if (result.errors.length === 0) return null;
 
-                        var outputLines: string[] = [];
-                        // Count up all the errors we find so we don't miss any
-                        var totalErrorsReported = 0;
-
-                        // 'merge' the lines of each input file with any errors associated with it
-                        toBeCompiled.concat(otherFiles).forEach(inputFile => {
-                            // Filter down to the errors in the file
-                            // TODO/REVIEW: this doesn't work quite right in the browser if a multi file test has files whose names are just the right length relative to one another
-                            var fileErrors = result.errors.filter(e => {
-                                var errFn = e.filename;
-                                return errFn && errFn.indexOf(inputFile.unitName) === errFn.length - inputFile.unitName.length;
-                            });
-
-                            // Add this to the number of errors we've seen so far
-                            totalErrorsReported += fileErrors.length;
-
-                            // Header
-                            outputLines.push('==== ' + inputFile.unitName + ' (' + fileErrors.length + ' errors) ====');
-
-                            // Make sure we emit something for every error
-                            var markedErrorCount = 0;
-                            // For each line, emit the line followed by any error squiggles matching this line
-                            // Note: IE JS engine incorrectly handles consecutive delimiters here when using RegExp split, so
-                            // we have to string-based splitting instead and try to figure out the delimiting chars
-                            
-                            // var fileLineMap = TypeScript.LineMap1.fromString(inputFile.content);
-                            var lines = inputFile.content.split('\n');
-                            var currentLineStart = 0;
-                            lines.forEach((line, lineIndex) => {
-                                if (line.length > 0 && line.charAt(line.length - 1) === '\r') {
-                                    line = line.substr(0, line.length - 1);
-                                }
-
-                                var thisLineStart = currentLineStart; //fileLineMap.getLineStartPosition(lineIndex);
-                                var nextLineStart: number;
-                                // On the last line of the file, fake the next line start number so that we handle errors on the last character of the file correctly
-                                if (lineIndex === lines.length - 1) {
-                                    nextLineStart = inputFile.content.length;
-                                } else {
-                                    nextLineStart = currentLineStart + line.length + 1; //fileLineMap.getLineStartPosition(lineIndex + 1);
-                                }
-                                // Emit this line from the original file
-                                outputLines.push('    ' + line);
-                                fileErrors.forEach(err => {
-                                    // Does any error start or continue on to this line? Emit squiggles
-                                    if ((err.end >= thisLineStart) && ((err.start < nextLineStart) || (lineIndex === lines.length - 1))) {
-                                        // How many characters from the start of this line the error starts at (could be positive or negative)
-                                        var relativeOffset = err.start - thisLineStart;
-                                        // How many characters of the error are on this line (might be longer than this line in reality)
-                                        var length = (err.end - err.start) - Math.max(0, thisLineStart - err.start);
-                                        // Calculate the start of the squiggle
-                                        var squiggleStart = Math.max(0, relativeOffset);
-                                        // TODO/REVIEW: this doesn't work quite right in the browser if a multi file test has files whose names are just the right length relative to one another
-                                        outputLines.push('    ' + line.substr(0, squiggleStart).replace(/[^\s]/g, ' ') + new Array(Math.min(length, line.length - squiggleStart) + 1).join('~'));
-                                        
-                                        // If the error ended here, or we're at the end of the file, emit its message
-                                        if ((lineIndex === lines.length - 1) || nextLineStart > err.end) {
-                                            // Just like above, we need to do a split on a string instead of on a regex
-                                            // because the JS engine does regexes wrong
-
-                                            var errLines = RunnerBase.removeFullPaths(err.message)
-                                                .split('\n')
-                                                .map(s => s.length > 0 && s.charAt(s.length - 1) === '\r' ? s.substr(0, s.length - 1) : s)
-                                                .filter(s => s.length > 0)
-                                                .map(s => '!!! ' + s);
-                                            errLines.forEach(e => outputLines.push(e));
-                                            markedErrorCount++;
-                                        }
-                                    }
-                                });
-                                currentLineStart += line.length + 1; // +1 for the \n character
-                            });
-
-                            // Verify we didn't miss any errors in this file
-                            assert.equal(markedErrorCount, fileErrors.length, 'count of errors in ' + inputFile.unitName);
-                        });
-
-                        // Verify we didn't miss any errors in total
-                        // NEWTODO: Re-enable this -- somehow got broken
-                        // assert.equal(totalErrorsReported, result.errors.length, 'total number of errors');
-
-                        return outputLines.join('\r\n');
+                        return getErrorBaseline(toBeCompiled, otherFiles, result);
                     });
                 }
             });
@@ -215,49 +231,35 @@ class CompilerBaselineRunner extends RunnerBase {
                 }
             });
 
-            /*
-            it(".d.ts compiles without error", () => {
+            // Compile .d.ts files
+            it('Correct compiler generated.d.ts for ' + fileName, () => {
+                if (options.declaration && result.errors.length === 0 && result.declFilesCode.length !== result.files.length) {
+                    throw new Error('There were no errors and declFiles generated did not match number of js files generated');
+                }
+
                 // if the .d.ts is non-empty, confirm it compiles correctly as well
-                if (this.decl && result.declFilesCode.length > 0 && result.errors.length === 0) {
-
-                    var declErrors: string[] = undefined;
-
-                    var declOtherFiles: { unitName: string; content: string }[] = [];
-
-                    // use other files if it is dts
-                    for (var i = 0; i < otherFiles.length; i++) {
-                        if (TypeScript.isDTSFile(otherFiles[i].unitName)) {
-                            declOtherFiles.push(otherFiles[i]);
+                if (options.declaration && result.errors.length === 0 && result.declFilesCode.length > 0) {
+                    function getDtsFile(file: { unitName: string; content: string }) {
+                        if (Harness.Compiler.isDTS(file.unitName)) {
+                            return file;
+                        } else {
+                            var declFile = ts.forEach(result.declFilesCode,
+                                declFile => declFile.fileName === (file.unitName.substr(0, file.unitName.length - ".ts".length) + ".d.ts")
+                                    ? declFile : undefined);
+                            return { unitName: rootDir + Harness.Path.getFileName(declFile.fileName), content: declFile.code };
                         }
                     }
 
-                    for (var i = 0; i < result.declFilesCode.length; i++) {
-                        var declCode = result.declFilesCode[i];
-                        // don't want to use the fullpath for the unitName or the file won't be resolved correctly
-                        // TODO: wrong path for conformance tests?
-
-                        var declFile = { unitName: 'tests/cases/compiler/' + Harness.getFileName(declCode.fileName), content: declCode.code };
-                        if (i != result.declFilesCode.length - 1) {
-                            declOtherFiles.push(declFile);
-                        }
-                    }
-
-                    harnessCompiler.compileFiles(
-                        [declFile],
-                        declOtherFiles,
-                        (result) => {
-                            declErrors = result.errors.map(err => err.message + "\r\n");
-                        },
-                        function (settings) {
+                    ts.forEach(toBeCompiled, file => { declToBeCompiled.push(getDtsFile(file)); });
+                    ts.forEach(otherFiles, file => { declOtherFiles.push(getDtsFile(file)); });
+                    harnessCompiler.compileFiles(declToBeCompiled, declOtherFiles, function (compileResult) {
+                        declResult = compileResult;
+                    }, function (settings) {
                             harnessCompiler.setCompilerSettings(tcSettings);
-                        });
-
-                    if (declErrors && declErrors.length) {
-                        throw new Error('.d.ts file output of ' + fileName + ' did not compile. Errors: ' + declErrors.map(err => JSON.stringify(err)).join('\r\n'));
-                    }
+                    });
                 }
             });
-            */
+
 
             it('Correct JS output for ' + fileName, () => {
                 if (!ts.fileExtensionIs(lastUnit.name, '.d.ts') && this.emit) {
@@ -291,6 +293,12 @@ class CompilerBaselineRunner extends RunnerBase {
                                 jsCode += '//// [' + Harness.Path.getFileName(result.declFilesCode[i].fileName) + ']\r\n';
                                 jsCode += result.declFilesCode[i].code;
                             }
+                        }
+
+                        if (declResult && declResult.errors.length) {
+                            jsCode += '\r\n\r\n//// [DtsFileErrors]\r\n';
+                            jsCode += '\r\n\r\n';
+                            jsCode += getErrorBaseline(declToBeCompiled, declOtherFiles, declResult);
                         }
 
                         if (jsCode.length > 0) {

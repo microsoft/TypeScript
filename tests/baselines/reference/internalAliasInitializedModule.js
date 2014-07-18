@@ -41,3 +41,21 @@ declare module a {
 declare module c {
     var x: b.c;
 }
+
+
+//// [DtsFileErrors]
+
+
+==== tests/cases/compiler/internalAliasInitializedModule.d.ts (1 errors) ====
+    declare module a {
+        module b {
+            class c {
+            }
+        }
+    }
+    declare module c {
+        var x: b.c;
+               ~~~
+!!! Cannot find name 'b'.
+    }
+    

@@ -1,3 +1,11 @@
+!!! Cannot find global type 'Array'.
+!!! Cannot find global type 'Boolean'.
+!!! Cannot find global type 'Function'.
+!!! Cannot find global type 'IArguments'.
+!!! Cannot find global type 'Number'.
+!!! Cannot find global type 'Object'.
+!!! Cannot find global type 'RegExp'.
+!!! Cannot find global type 'String'.
 ==== tests/cases/compiler/typeCheckTypeArgument.ts (6 errors) ====
     /// <reference no-default-lib="true"/>
     

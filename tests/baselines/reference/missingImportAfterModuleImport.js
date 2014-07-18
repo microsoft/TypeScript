@@ -49,3 +49,28 @@ declare class MainModule {
     constructor();
 }
 export = MainModule;
+
+
+//// [DtsFileErrors]
+
+
+==== tests/cases/compiler/missingImportAfterModuleImport_1.d.ts (1 errors) ====
+    /// <reference path='missingImportAfterModuleImport_0.d.ts' />
+    declare class MainModule {
+        SubModule: SubModule;
+                   ~~~~~~~~~
+!!! Cannot find name 'SubModule'.
+        constructor();
+    }
+    export = MainModule;
+    
+==== tests/cases/compiler/missingImportAfterModuleImport_0.d.ts (0 errors) ====
+    declare module "SubModule" {
+        class SubModule {
+            static StaticVar: number;
+            InstanceVar: number;
+            constructor();
+        }
+        export = SubModule;
+    }
+    

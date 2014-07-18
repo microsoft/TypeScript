@@ -36,3 +36,20 @@ export declare module a {
     }
 }
 export declare var bVal: b;
+
+
+//// [DtsFileErrors]
+
+
+==== tests/cases/compiler/internalAliasEnumInsideTopLevelModuleWithoutExport.d.ts (1 errors) ====
+    export declare module a {
+        enum weekend {
+            Friday = 0,
+            Saturday = 1,
+            Sunday = 2,
+        }
+    }
+    export declare var bVal: b;
+                             ~
+!!! Cannot find name 'b'.
+    

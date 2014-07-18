@@ -30,13 +30,10 @@
     var x = 42;
     export = x;
     
-==== tests/cases/conformance/externalModules/expBoolean.ts (1 errors) ====
+==== tests/cases/conformance/externalModules/expBoolean.ts (0 errors) ====
     var x = true;
     export = x;
-      ~~~~~~~~~
     
-    
-!!! Cannot compile external modules unless the '--module' flag is provided.
 ==== tests/cases/conformance/externalModules/expArray.ts (0 errors) ====
     var x = [1,2];
     export = x;
@@ -49,12 +46,9 @@
     var x;
     export = x;
     
-==== tests/cases/conformance/externalModules/expGeneric.ts (1 errors) ====
+==== tests/cases/conformance/externalModules/expGeneric.ts (0 errors) ====
     function x<T>(a: T){
-                    ~~~~
     	return a;
-    ~~~~~~
-!!! Cannot compile external modules unless the '--module' flag is provided.
     }
     export = x;
     

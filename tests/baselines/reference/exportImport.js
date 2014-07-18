@@ -47,3 +47,22 @@ declare class Widget1 {
 export import w = require('./w1');
 //// [consumer.d.ts]
 export declare function w(): Widget1;
+
+
+//// [DtsFileErrors]
+
+
+==== tests/cases/compiler/consumer.d.ts (1 errors) ====
+    export declare function w(): Widget1;
+                                 ~~~~~~~
+!!! Cannot find name 'Widget1'.
+    
+==== tests/cases/compiler/w1.d.ts (0 errors) ====
+    export = Widget1;
+    declare class Widget1 {
+        name: string;
+    }
+    
+==== tests/cases/compiler/exporter.d.ts (0 errors) ====
+    export import w = require('./w1');
+    

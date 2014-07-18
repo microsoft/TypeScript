@@ -82,3 +82,41 @@ declare module M {
         m3(): C;
     }
 }
+
+
+//// [DtsFileErrors]
+
+
+==== tests/cases/compiler/declInput-2.d.ts (5 errors) ====
+    declare module M {
+        class E {
+        }
+        interface I1 {
+        }
+        class D {
+            private c;
+            m1: number;
+            m2: string;
+            m22: C;
+                 ~
+!!! Cannot find name 'C'.
+            m23: E;
+            m24: I1;
+            m25: I2;
+                 ~~
+!!! Cannot find name 'I2'.
+            m232(): E;
+            m242(): I1;
+            m252(): I2;
+                    ~~
+!!! Cannot find name 'I2'.
+            m26(i: I1): void;
+            m262(i: I2): void;
+                    ~~
+!!! Cannot find name 'I2'.
+            m3(): C;
+                  ~
+!!! Cannot find name 'C'.
+        }
+    }
+    

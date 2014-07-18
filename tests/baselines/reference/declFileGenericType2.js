@@ -113,3 +113,45 @@ declare module templa.dom.mvc.composite {
         constructor();
     }
 }
+
+
+//// [DtsFileErrors]
+
+
+==== tests/cases/compiler/declFileGenericType2.d.ts (6 errors) ====
+    declare module templa.mvc {
+    }
+    declare module templa.mvc {
+    }
+    declare module templa.mvc {
+    }
+    declare module templa.mvc.composite {
+    }
+    declare module templa.dom.mvc {
+        interface IElementController<ModelType extends templa.mvc.IModel> extends templa.mvc.IController<ModelType> {
+                                                       ~~~~~~~~~~~~~~~~~
+!!! Module 'templa.mvc' has no exported member 'IModel'.
+                                                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Module 'templa.mvc' has no exported member 'IController'.
+        }
+    }
+    declare module templa.dom.mvc {
+        class AbstractElementController<ModelType extends templa.mvc.IModel> extends templa.mvc.AbstractController<ModelType> implements IElementController<ModelType> {
+                                                          ~~~~~~~~~~~~~~~~~
+!!! Module 'templa.mvc' has no exported member 'IModel'.
+                                                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Module 'templa.mvc' has no exported member 'AbstractController'.
+            constructor();
+        }
+    }
+    declare module templa.dom.mvc.composite {
+        class AbstractCompositeElementController<ModelType extends templa.mvc.composite.ICompositeControllerModel> extends AbstractElementController<ModelType> {
+                                                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Module 'templa.mvc.composite' has no exported member 'ICompositeControllerModel'.
+            _controllers: templa.mvc.IController<templa.mvc.IModel>[];
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Module 'templa.mvc' has no exported member 'IController'.
+            constructor();
+        }
+    }
+    

@@ -175,18 +175,18 @@ class ProjectRunner extends RunnerBase {
                     // we need to instead create files that can live in the project reference folder
                     // but make sure extension of these files matches with the filename the compiler asked to write
                     diskRelativeName = "diskFile" + nonSubfolderDiskFiles++ +
-                    (Harness.Compiler.stringEndsWith(filename, ".d.ts") ? ".d.ts" :
-                    Harness.Compiler.stringEndsWith(filename, ".js") ? ".js" : ".js.map");
+                    (Harness.Compiler.isDTS(filename) ? ".d.ts" :
+                    Harness.Compiler.isJS(filename) ? ".js" : ".js.map");
                 }
 
-                if (Harness.Compiler.stringEndsWith(filename, ".js")) {
+                if (Harness.Compiler.isJS(filename)) {
                     // Make sure if there is URl we have it cleaned up
                     var indexOfSourceMapUrl = data.lastIndexOf("//# sourceMappingURL=");
                     if (indexOfSourceMapUrl != -1) {
                         data = data.substring(0, indexOfSourceMapUrl + 21) + cleanProjectUrl(data.substring(indexOfSourceMapUrl + 21));
                     }
                 }
-                else if (Harness.Compiler.stringEndsWith(filename, ".js.map")) {
+                else if (Harness.Compiler.isJSMap(filename)) {
                     // Make sure sources list is cleaned
                     var sourceMapData = JSON.parse(data);
                     for (var i = 0; i < sourceMapData.sources.length; i++) {
@@ -332,7 +332,7 @@ class ProjectRunner extends RunnerBase {
                         it('SourceMapRecord for (' + moduleNameToString(compilerResult.moduleKind) + '): ' + testCaseFileName, () => {
                             Harness.Baseline.runBaseline('SourceMapRecord for (' + moduleNameToString(compilerResult.moduleKind) + '): ' + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + '.sourcemap.txt', () => {
                                 return Harness.SourceMapRecoder.getSourceMapRecord(compilerResult.sourceMapData, compilerResult.program,
-                                    ts.filter(compilerResult.outputFiles, outputFile => Harness.Compiler.stringEndsWith(outputFile.emittedFileName, ".js")));
+                                    ts.filter(compilerResult.outputFiles, outputFile => Harness.Compiler.isJS(outputFile.emittedFileName)));
                             });
                         });
                     }
