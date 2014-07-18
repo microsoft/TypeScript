@@ -552,7 +552,11 @@ module ts {
             }
 
             function emitLines(nodes: Node[]) {
-                for (var i = 0; i < nodes.length; i++) {
+                emitLinesStartingAt(nodes, /*startIndex*/ 0);
+            }
+
+            function emitLinesStartingAt(nodes: Node[], startIndex: number): void {
+                for (var i = startIndex; i < nodes.length; i++) {
                     writeLine();
                     emit(nodes[i]);
                 }
@@ -1594,7 +1598,7 @@ module ts {
                 });
             }
 
-            function emitAMDModule(node: SourceFile) {
+            function emitAMDModule(node: SourceFile, startIndex: number) {
                 var imports = getExternalImportDeclarations(node);
                 writeLine();
                 write("define([\"require\", \"exports\"");
@@ -1615,7 +1619,7 @@ module ts {
                 write(") {");
                 increaseIndent();
                 emitCaptureThisForNodeIfNecessary(node);
-                emitLines(node.statements);
+                emitLinesStartingAt(node.statements, startIndex);
                 var exportName = resolver.getExportAssignmentName(node);
                 if (exportName) {
                     writeLine();
@@ -1633,9 +1637,9 @@ module ts {
                 write("});");
             }
 
-            function emitCommonJSModule(node: SourceFile) {
+            function emitCommonJSModule(node: SourceFile, startIndex: number) {
                 emitCaptureThisForNodeIfNecessary(node);
-                emitLines(node.statements);
+                emitLinesStartingAt(node.statements, startIndex);
                 var exportName = resolver.getExportAssignmentName(node);
                 if (exportName) {
                     writeLine();
@@ -1650,8 +1654,25 @@ module ts {
                 }
             }
 
+            function isDirectivePrologue(n: Statement): boolean {
+                return n.kind === SyntaxKind.ExpressionStatement && (<ExpressionStatement>n).expression.kind === SyntaxKind.StringLiteral;
+            }
+
             function emitSourceFile(node: SourceFile) {
                 currentSourceFile = node;
+                var startIndex = 0;
+                for (; startIndex < node.statements.length; ++startIndex) {
+                    // emit prologue directives prior to __extends
+                    if (isDirectivePrologue(node.statements[startIndex])) {
+                        if (startIndex > 0) {
+                            writeLine();
+                        }
+                        emit(node.statements[startIndex]);
+                    }
+                    else {
+                        break;
+                    }
+                }
                 if (!extendsEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitExtends) {
                     writeLine();
                     write("var __extends = this.__extends || function (d, b) {");
@@ -1671,15 +1692,15 @@ module ts {
                 }
                 if (node.flags & NodeFlags.ExternalModule) {
                     if (compilerOptions.module === ModuleKind.AMD) {
-                        emitAMDModule(node);
+                        emitAMDModule(node, startIndex);
                     }
                     else {
-                        emitCommonJSModule(node);
+                        emitCommonJSModule(node, startIndex);
                     }
                 }
                 else {
                     emitCaptureThisForNodeIfNecessary(node);
-                    emitLines(node.statements);
+                    emitLinesStartingAt(node.statements, startIndex);
                 }
             }
 
