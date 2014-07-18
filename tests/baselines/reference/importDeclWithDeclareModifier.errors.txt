@@ -6,10 +6,10 @@
     declare export import a = x.c;
     ~~~~~~~
 !!! A 'declare' modifier cannot be used with an import declaration.
-            ~~~~~~
-!!! 'export' modifier must precede 'declare' modifier.
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Cannot compile external modules unless the '--module' flag is provided.
+            ~~~~~~
+!!! 'export' modifier must precede 'declare' modifier.
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Module 'x' has no exported member 'c'.
     var b: a;
