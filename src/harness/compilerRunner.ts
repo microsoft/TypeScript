@@ -59,6 +59,10 @@ class CompilerBaselineRunner extends RunnerBase {
             var otherFiles: { unitName: string; content: string }[];
             var harnessCompiler: Harness.Compiler.HarnessCompiler;
 
+            var declToBeCompiled: { unitName: string; content: string }[] = [];
+            var declOtherFiles: { unitName: string; content: string }[] = [];
+            var declResult: Harness.Compiler.CompilerResult;
+
             var createNewInstance = false;
 
             before(() => {
@@ -227,41 +231,41 @@ class CompilerBaselineRunner extends RunnerBase {
                 }
             });
 
+            // Compile .d.ts files
+            it('Compiler generated .d.ts files for ' + fileName, () => {
+                if (options.declaration && result.errors.length === 0 && result.declFilesCode.length !== result.files.length) {
+                    throw new Error('There were no errors and declFiles generated did not match number of js files generated');
+                }
+
+                // if the .d.ts is non-empty, confirm it compiles correctly as well
+                if (options.declaration && result.errors.length === 0 && result.declFilesCode.length > 0) {
+                    function getDtsFile(file: { unitName: string; content: string }) {
+                        if (Harness.Compiler.isDTS(file.unitName)) {
+                            return file;
+                        }
+                        else {
+                            var declFile = ts.forEach(result.declFilesCode,
+                                declFile => declFile.fileName === (file.unitName.substr(0, file.unitName.length - ".ts".length) + ".d.ts")
+                                    ? declFile : undefined);
+                            return { unitName: rootDir + Harness.Path.getFileName(declFile.fileName), content: declFile.code };
+                        }
+                    }
+
+                    ts.forEach(toBeCompiled, file => { declToBeCompiled.push(getDtsFile(file)); });
+                    ts.forEach(otherFiles, file => { declOtherFiles.push(getDtsFile(file)); });
+                    harnessCompiler.compileFiles(declToBeCompiled, declOtherFiles, function (compileResult) {
+                        declResult = compileResult;
+                    }, function (settings) {
+                            harnessCompiler.setCompilerSettings(tcSettings);
+                        });
+                }
+            });
+
+
             it('Correct JS output for ' + fileName, () => {
                 if (!ts.fileExtensionIs(lastUnit.name, '.d.ts') && this.emit) {
                     if (result.files.length === 0 && result.errors.length === 0) {
                         throw new Error('Expected at least one js file to be emitted or at least one error to be created.');
-                    }
-
-                    if (options.declaration && result.errors.length === 0 && result.declFilesCode.length !== result.files.length) {
-                        throw new Error('There were no errors and declFiles generated did not match number of js files generated');
-                    }
-
-                    var declToBeCompiled: { unitName: string; content: string }[] = [];
-                    var declOtherFiles: { unitName: string; content: string }[] = [];
-                    var declResult: Harness.Compiler.CompilerResult;
-
-                    // if the .d.ts is non-empty, confirm it compiles correctly as well
-                    if (options.declaration && result.errors.length === 0 && result.declFilesCode.length > 0) {
-                        function getDtsFile(file: { unitName: string; content: string }) {
-                            if (Harness.Compiler.isDTS(file.unitName)) {
-                                return file;
-                            }
-                            else {
-                                var declFile = ts.forEach(result.declFilesCode,
-                                    declFile => declFile.fileName === (file.unitName.substr(0, file.unitName.length - ".ts".length) + ".d.ts")
-                                        ? declFile : undefined);
-                                return { unitName: rootDir + Harness.Path.getFileName(declFile.fileName), content: declFile.code };
-                            }
-                        }
-
-                        ts.forEach(toBeCompiled, file => { declToBeCompiled.push(getDtsFile(file)); });
-                        ts.forEach(otherFiles, file => { declOtherFiles.push(getDtsFile(file)); });
-                        harnessCompiler.compileFiles(declToBeCompiled, declOtherFiles, function (compileResult) {
-                            declResult = compileResult;
-                        }, function (settings) {
-                                harnessCompiler.setCompilerSettings(tcSettings);
-                        });
                     }
 
                     // check js output
