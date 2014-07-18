@@ -54,7 +54,6 @@ module ts {
         var stringLiteralTypes: Map<StringLiteralType> = {};
 
         var emitExtends = false;
-        var modulesVerified = false;
 
         var mergedSymbols: Symbol[] = [];
         var symbolLinks: SymbolLinks[] = [];
@@ -4509,7 +4508,6 @@ module ts {
 
         function checkConstructorDeclaration(node: ConstructorDeclaration) {
             // TODO
-            checkDeclarationModifiers(node);
             checkSignatureDeclaration(node);
             checkSourceElement(node.body);
 
@@ -4682,12 +4680,6 @@ module ts {
             return false;
         }
 
-        function checkDeclarationModifiers(node: Node) {
-            if (node.flags & NodeFlags.Export && node.parent.kind === SyntaxKind.SourceFile) {
-                checkModulesEnabled(node);
-            }
-        }
-
         function checkSpecializedSignatureDeclaration(signatureDeclarationNode: SignatureDeclaration): void {
             var signature = getSignatureFromDeclaration(signatureDeclarationNode);
             if (!signature.hasStringLiterals) {
@@ -4850,7 +4842,6 @@ module ts {
         }
 
         function checkFunctionDeclaration(node: FunctionDeclaration) {
-            checkDeclarationModifiers(node);
             checkSignatureDeclaration(node);
 
             var symbol = getSymbolOfNode(node);
@@ -5082,7 +5073,6 @@ module ts {
         }
 
         function checkVariableStatement(node: VariableStatement) {
-            checkDeclarationModifiers(node);
             forEach(node.declarations, checkVariableDeclaration);
         }
 
@@ -5337,7 +5327,6 @@ module ts {
         }
 
         function checkClassDeclaration(node: ClassDeclaration) {
-            checkDeclarationModifiers(node);
             checkTypeNameIsReserved(node.name, Diagnostics.Class_name_cannot_be_0);
             checkTypeParameters(node.typeParameters);
             checkCollisionWithCapturedThisVariable(node, node.name);
@@ -5493,7 +5482,6 @@ module ts {
         }
 
         function checkInterfaceDeclaration(node: InterfaceDeclaration) {
-            checkDeclarationModifiers(node);
             checkTypeNameIsReserved(node.name, Diagnostics.Interface_name_cannot_be_0);
             checkTypeParameters(node.typeParameters);
             var symbol = getSymbolOfNode(node);
@@ -5539,7 +5527,6 @@ module ts {
         }
 
         function checkEnumDeclaration(node: EnumDeclaration) {
-            checkDeclarationModifiers(node);
             checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
             checkCollisionWithCapturedThisVariable(node, node.name);
             var enumSymbol = getSymbolOfNode(node);
@@ -5612,7 +5599,6 @@ module ts {
         }
 
         function checkModuleDeclaration(node: ModuleDeclaration) {
-            checkDeclarationModifiers(node);
             checkCollisionWithCapturedThisVariable(node, node.name);
             var symbol = getSymbolOfNode(node);
             if (symbol.flags & SymbolFlags.ValueModule && symbol.declarations.length > 1 && !isInAmbientContext(node)) {
@@ -5638,7 +5624,6 @@ module ts {
         }
 
         function checkImportDeclaration(node: ImportDeclaration) {
-            checkDeclarationModifiers(node);
             checkCollisionWithCapturedThisVariable(node, node.name);
             var symbol = getSymbolOfNode(node);
             var target: Symbol;
@@ -5660,7 +5645,6 @@ module ts {
                 // Import declaration for an external module
                 if (node.parent.kind === SyntaxKind.SourceFile) {
                     // Parent is a source file, check that external modules are enabled
-                    checkModulesEnabled(node);
                     target = resolveImport(symbol);
                 }
                 else if (node.parent.kind === SyntaxKind.ModuleBlock && (<ModuleDeclaration>node.parent.parent).name.kind === SyntaxKind.StringLiteral) {
@@ -5691,20 +5675,10 @@ module ts {
                 }
             }
         }
-        
-        function checkModulesEnabled(node: Node) {
-            if (!modulesVerified) {
-                if (!program.getCompilerOptions().module) {
-                    error(node, Diagnostics.Cannot_compile_external_modules_unless_the_module_flag_is_provided);
-                }
-                modulesVerified = true;
-            }
-        }
 
         function checkExportAssignment(node: ExportAssignment) {
             var container = node.parent;
             if (container.kind === SyntaxKind.SourceFile) {
-                checkModulesEnabled(node);
             }
             else {
                 // In a module, the immediate parent will be a block, so climb up one more parent

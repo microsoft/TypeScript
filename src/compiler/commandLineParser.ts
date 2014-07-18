@@ -45,7 +45,8 @@ module ts {
     export function parseCommandLine(commandLine: string[]): ParsedCommandLine {
         // Set default compiler option values
         var options: CompilerOptions = {
-            target: ScriptTarget.ES3
+            target: ScriptTarget.ES3,
+            module: ModuleKind.None
         };
         var filenames: string[] = [];
         var errors: Diagnostic[] = [];
