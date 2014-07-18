@@ -1,0 +1,3 @@
+interface ICancellationToken {
+    isCancellationRequested(): boolean;
+}
