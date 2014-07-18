@@ -1145,7 +1145,7 @@ module ts {
                 }
             }
 
-            function emitSigatureParamters(node: FunctionDeclaration) {
+            function emitSignatureParameters(node: FunctionDeclaration) {
                 write("(");
                 if (node) {
                     emitCommaList(node.parameters, node.parameters.length - (hasRestParameters(node) ? 1 : 0));
@@ -1154,7 +1154,7 @@ module ts {
             }
 
             function emitSignatureAndBody(node: FunctionDeclaration) {
-                emitSigatureParamters(node);
+                emitSignatureParameters(node);
                 write(" {");
                 scopeEmitStart(node);
                 increaseIndent();
@@ -1361,7 +1361,7 @@ module ts {
                 emitStart(<Node>ctor || node);
                 write("function ");
                 emit(node.name);
-                emitSigatureParamters(ctor);
+                emitSignatureParameters(ctor);
                 write(" {");
                 scopeEmitStart(node, "constructor");
                 increaseIndent();
