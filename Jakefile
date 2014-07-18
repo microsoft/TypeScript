@@ -288,7 +288,7 @@ var refRwcBaseline = "tests/baselines/rwc/reference/";
 desc("Builds the test infrastructure using the built compiler");
 task("tests", ["local", run].concat(libraryTargets));
 
-function exec(cmd) {
+function exec(cmd, completeHandler) {
     var ex = jake.createExec([cmd]);
     // Add listeners for output and error
     ex.addListener("stdout", function(output) {
@@ -298,6 +298,9 @@ function exec(cmd) {
         process.stderr.write(error);
     });
     ex.addListener("cmdEnd", function() {
+        if (completeHandler) {
+            completeHandler();
+        }
         complete();
     });
     try{
@@ -328,6 +331,12 @@ function writeTestConfigFile(tests, testConfigFile) {
     fs.writeFileSync('test.config', testConfigContents);    
 }
 
+function deleteTemporaryProjectOutput() {
+    if (fs.existsSync(localBaseline + "projectOutput/")) {
+        jake.rmRf(localBaseline + "projectOutput/");
+    }
+}
+
 desc("Runs the tests using the built run.js file. Syntax is jake runtests. Optional parameters 'host=', 'tests=[regex], reporter=[list|spec|json|<more>]'.");
 task("runtests", ["tests", builtLocalDirectory], function() {
     cleanTestDirs();
@@ -347,7 +356,7 @@ task("runtests", ["tests", builtLocalDirectory], function() {
     reporter = process.env.reporter || process.env.r || 'dot';
     var cmd = host + " -R " + reporter + tests + colors + ' ' + run;
     console.log(cmd);
-    exec(cmd)
+    exec(cmd, deleteTemporaryProjectOutput);
 }, {async: true});
 
 // Browser tests
