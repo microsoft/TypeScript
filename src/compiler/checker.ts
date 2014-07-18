@@ -5678,9 +5678,7 @@ module ts {
 
         function checkExportAssignment(node: ExportAssignment) {
             var container = node.parent;
-            if (container.kind === SyntaxKind.SourceFile) {
-            }
-            else {
+            if (container.kind !== SyntaxKind.SourceFile) {
                 // In a module, the immediate parent will be a block, so climb up one more parent
                 container = container.parent;
             }
