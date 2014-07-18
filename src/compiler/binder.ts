@@ -168,7 +168,7 @@ module ts {
                     declareModuleMember(node, symbolKind, symbolExcludes);
                     break;
                 case SyntaxKind.SourceFile:
-                    if (container.flags & NodeFlags.ExternalModule) {
+                    if (isExternalModule(<SourceFile>container)) {
                         declareModuleMember(node, symbolKind, symbolExcludes);
                         break;
                     }
@@ -323,7 +323,7 @@ module ts {
                     bindDeclaration(<Declaration>node, SymbolFlags.Import, SymbolFlags.ImportExcludes);
                     break;
                 case SyntaxKind.SourceFile:
-                    if (node.flags & NodeFlags.ExternalModule) {
+                    if (isExternalModule(<SourceFile>node)) {
                         bindAnonymousDeclaration(node, SymbolFlags.ValueModule, '"' + getModuleNameFromFilename((<SourceFile>node).filename) + '"');
                         break;
                     }

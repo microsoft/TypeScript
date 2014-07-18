@@ -85,6 +85,19 @@ module ts {
         return flattenDiagnosticChain(file, start, length, messageChain);
     }
 
+    export function getErrorSpanForNode(node: Node): TextRange {
+        var errorSpan: TextRange;
+        switch (node.kind) {
+            // This list is a work in progress. Add missing node kinds to improve their error
+            // spans.
+        }
+        return errorSpan && errorSpan.pos < errorSpan.end ? errorSpan : node;
+    }
+
+    export function isExternalModule(file: SourceFile): boolean {
+        return file.externalModuleIndicator !== undefined;
+    }
+
     // Invokes a callback for each child of the given node. The 'cbNode' callback is invoked for all child nodes
     // stored in properties. If a 'cbNodes' callback is specified, it is invoked for embedded arrays; otherwise,
     // embedded arrays are flattened and the 'cbNode' callback is invoked for each element. If a callback returns
@@ -371,8 +384,9 @@ module ts {
         // words, this function is called once we have already parsed the node, and are just
         // applying some stricter checks on that node.
         function grammarErrorOnNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
-            var start = skipTrivia(file.text, node.pos);
-            var length = node.end - start;
+            var span = getErrorSpanForNode(node);
+            var start = skipTrivia(file.text, span.pos);
+            var length = span.end - start;
 
             file.syntacticErrors.push(createFileDiagnostic(file, start, length, message, arg0, arg1, arg2));
         }
@@ -1793,8 +1807,8 @@ module ts {
             return makeFunctionExpression(SyntaxKind.FunctionExpression, pos, name, sig, body);
         }
 
-        function makeFunctionExpression(kind: SyntaxKind, pos: number, name: Identifier, sig: ParsedSignature, body: Node) {
-            var node = <FunctionDeclaration>createNode(kind, pos);
+        function makeFunctionExpression(kind: SyntaxKind, pos: number, name: Identifier, sig: ParsedSignature, body: Node): FunctionExpression {
+            var node = <FunctionExpression>createNode(kind, pos);
             node.name = name;
             node.typeParameters = sig.typeParameters;
             node.parameters = sig.parameters;
@@ -2898,10 +2912,13 @@ module ts {
             };
         }
 
-        function isExternalModule() {
-            return forEach(file.statements, node => node.flags & NodeFlags.Export ||
-                node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).externalModuleName ||
-                node.kind === SyntaxKind.ExportAssignment ? true : false);
+        function getExternalModuleIndicator() {
+            return forEach(file.statements, node =>
+                node.flags & NodeFlags.Export
+                || node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).externalModuleName
+                || node.kind === SyntaxKind.ExportAssignment
+                ? node
+                : undefined);
         }
 
         scanner = createScanner(languageVersion, sourceText, scanError, onComment);
@@ -2920,7 +2937,7 @@ module ts {
         file.referencedFiles = referenceComments.referencedFiles;
         file.amdDependencies = referenceComments.amdDependencies;
         file.statements = parseList(ParsingContext.SourceElements, parseSourceElement);
-        if (isExternalModule()) file.flags |= NodeFlags.ExternalModule;
+        file.externalModuleIndicator = getExternalModuleIndicator();
         file.nodeCount = nodeCount;
         file.identifierCount = identifierCount;
         return file;
@@ -3089,12 +3106,21 @@ module ts {
                 return;
             }
 
+            var firstExternalModule = forEach(files, f => isExternalModule(f) ? f : undefined);
+            if (firstExternalModule && options.module === ModuleKind.None) {
+                // We cannot use createDiagnosticFromNode because nodes do not have parents yet
+                var externalModuleIndicatorNode = firstExternalModule.externalModuleIndicator;
+                var errorStart = skipTrivia(firstExternalModule.text, externalModuleIndicatorNode.pos);
+                var errorLength = externalModuleIndicatorNode.end - errorStart;
+                errors.push(createFileDiagnostic(firstExternalModule, errorStart, errorLength, Diagnostics.Cannot_compile_external_modules_unless_the_module_flag_is_provided));
+            }
+
             // there has to be common source directory if user specified --outdir || --sourcRoot
             // if user specified --mapRoot, there needs to be common source directory if there would be multiple files being emitted
             if (options.outDir || // there is --outDir specified
                 options.sourceRoot || // there is --sourceRoot specified
                 (options.mapRoot &&  // there is --mapRoot Specified and there would be multiple js files generated
-                (!options.out || !!filter(files, sourceFile => !!(sourceFile.flags & NodeFlags.ExternalModule)).length))) {
+                (!options.out || firstExternalModule !== undefined))) {
 
                 var commonPathComponents: string[];
                 forEach(files, sourceFile => {

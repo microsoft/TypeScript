@@ -229,7 +229,6 @@ module ts {
         MultiLine        = 0x00000080,  // Multi-line array or object literal
         Synthetic        = 0x00000100,  // Synthetic node (for full fidelity)
         DeclarationFile  = 0x00000200,  // Node is a .d.ts file
-        ExternalModule   = 0x00000400,  // Node is an external module
 
         Modifier = Export | Ambient | Public | Private | Static
     }
@@ -336,7 +335,9 @@ module ts {
         whenFalse: Expression;
     }
 
-    export interface FunctionExpression extends Expression, FunctionDeclaration { }
+    export interface FunctionExpression extends Expression, FunctionDeclaration {
+        body: Node; // Required, whereas the member inherited from FunctionDeclaration is optional
+    }
 
     // The text property of a LiteralExpression stores the interpreted value of the literal in text form. For a StringLiteral
     // this means quotes have been removed and escapes have been converted to actual characters. For a NumericLiteral, the
@@ -514,6 +515,7 @@ module ts {
         syntacticErrors: Diagnostic[];
         semanticErrors: Diagnostic[];
         hasNoDefaultLib: boolean;
+        externalModuleIndicator: Node; // The first node that causes this file to be an external module
         nodeCount: number;
         identifierCount: number;
         symbolCount: number;
