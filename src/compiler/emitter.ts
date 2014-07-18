@@ -88,7 +88,7 @@ module ts {
             };
         }
 
-        function createTextWriter(): EmitTextWriter {
+        function createTextWriter(writeSymbol: (symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags)=> void): EmitTextWriter {
             var output = "";
             var indent = 0;
             var lineStart = true;
@@ -135,6 +135,7 @@ module ts {
 
             return {
                 write: write,
+                writeSymbol: writeSymbol,
                 writeLiteral: writeLiteral,
                 writeLine: writeLine,
                 increaseIndent: () => indent++,
@@ -162,7 +163,7 @@ module ts {
         }
 
         function emitJavaScript(jsFilePath: string, root?: SourceFile) {
-            var writer = createTextWriter();
+            var writer = createTextWriter(writeSymbol);
             var write = writer.write;
             var writeLine = writer.writeLine;
             var increaseIndent = writer.increaseIndent;
@@ -203,6 +204,8 @@ module ts {
 
             /** Sourcemap data that will get encoded */
             var sourceMapData: SourceMapData;
+
+            function writeSymbol(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags) { }
 
             function initializeEmitterWithSourceMaps() {
                 var sourceMapDir: string; // The directory in which sourcemap will be
@@ -1844,13 +1847,18 @@ module ts {
         }
 
         function emitDeclarations(jsFilePath: string, root?: SourceFile) {
-            var writer = createTextWriter();
+            var writer = createTextWriter(writeSymbol);
             var write = writer.write;
             var writeLine = writer.writeLine;
             var increaseIndent = writer.increaseIndent;
             var decreaseIndent = writer.decreaseIndent;
 
             var enclosingDeclaration: Node;
+
+            function writeSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
+                // TODO(shkamat): Report error if the symbol is not accessible
+                resolver.writeSymbol(symbol, enclosingDeclaration, meaning, writer);
+            }
 
             function emitLines(nodes: Node[]) {
                 for (var i = 0, n = nodes.length; i < n; i++) {
