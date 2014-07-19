@@ -1,6 +1,6 @@
 ==== tests/cases/compiler/conditionalExpression1.ts (2 errors) ====
     var x: boolean = (true ? 1 : ""); // should be an error
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~
 !!! Type '{}' is not assignable to type 'boolean'.
                       ~~~~~~~~~~~~~
 !!! No best common type exists between 'number' and 'string'.

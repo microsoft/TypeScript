@@ -2,19 +2,15 @@
     
     
         export class LoggerAdapter implements ILogger {
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                     ~~~~~~~~~~~~~
+!!! Cannot compile external modules unless the '--module' flag is provided.
                                               ~~~~~~~
 !!! Cannot find name 'ILogger'.
             constructor (public logger: ILogger) { 
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                                         ~~~~~~~
 !!! Cannot find name 'ILogger'.
                 this._information = this.logger.information();
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                      ~~~~~~~~~~~~
 !!! Property '_information' does not exist on type 'LoggerAdapter'.
             }
-    ~~~~~~~~~
         }
-    ~~~~~
-!!! Cannot compile external modules unless the '--module' flag is provided.

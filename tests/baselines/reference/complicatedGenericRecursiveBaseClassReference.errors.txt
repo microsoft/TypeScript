@@ -1,11 +1,9 @@
 ==== tests/cases/compiler/complicatedGenericRecursiveBaseClassReference.ts (2 errors) ====
     class S18<B, A, C> extends S18<A[], { S19: A; (): A }[], C[]>
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    {
-    ~
-    }
-    ~
+          ~~~
 !!! Type 'S18<B, A, C>' recursively references itself as a base type.
+    {
+    }
     (new S18(123)).S18 = 0;
      ~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.

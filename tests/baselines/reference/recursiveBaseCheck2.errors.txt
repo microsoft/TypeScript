@@ -1,10 +1,9 @@
 ==== tests/cases/compiler/recursiveBaseCheck2.ts (1 errors) ====
     declare module Box2D.Collision.Shapes {
         export class b2CircleShape extends b2Shape {
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        }
-    ~~~~~
+                     ~~~~~~~~~~~~~
 !!! Type 'b2CircleShape' recursively references itself as a base type.
+        }
         export class b2Shape extends Box2D.Collision.Shapes.b2CircleShape {
         }
     }

@@ -34,7 +34,7 @@
     var m = [1, 2, 3, 4, 5];
     // Should yield an implicit 'any' error.
     var n = [[]] || [];
-        ~~~~~~~~~~~~~~
+        ~
 !!! Variable 'n' implicitly has an 'any[][]' type.
     
     for (n[idx++] in m);

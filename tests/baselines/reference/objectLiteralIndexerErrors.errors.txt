@@ -12,7 +12,7 @@
     var c: any;
     
     var o1: { [s: string]: A;[n: number]: B; } = { x: b, 0: a }; // both indexers are A
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~
 !!! Type '{ [x: string]: A; [x: number]: A; 0: A; x: B; }' is not assignable to type '{ [x: string]: A; [x: number]: B; }':
 !!!   Index signatures are incompatible:
 !!!     Type 'A' is not assignable to type 'B':

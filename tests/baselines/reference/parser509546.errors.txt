@@ -1,9 +1,7 @@
 ==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509546.ts (1 errors) ====
     export class Logger { 
-    ~~~~~~~~~~~~~~~~~~~~~~
-         public
-    ~~~~~~~~~~~
-    }
-    ~
+                 ~~~~~~
 !!! Cannot compile external modules unless the '--module' flag is provided.
+         public
+    }
     

@@ -10,7 +10,7 @@
         return null;
     }
     var a: D = foo("hi", []);
-        ~~~~~~~~~~~~~~~~~~~~
+        ~
 !!! Type '(x: "hi", items: string[]) => typeof foo' is not assignable to type 'D':
 !!!   Property 'x' is missing in type '(x: "hi", items: string[]) => typeof foo'.
     

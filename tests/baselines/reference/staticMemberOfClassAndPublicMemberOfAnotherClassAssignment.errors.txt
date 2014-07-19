@@ -21,7 +21,7 @@
     a = C;
     
     var b: B = new C(); // error name is missing
-        ~~~~~~~~~~~~~~
+        ~
 !!! Type 'C' is not assignable to type 'B':
 !!!   Property 'name' is missing in type 'C'.
     b = B; // error name is missing

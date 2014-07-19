@@ -19,7 +19,7 @@
     }
     var myVar: myInt;
     var strArray: string[] = [myVar.voidFn()];
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~
 !!! Type 'void[]' is not assignable to type 'string[]':
 !!!   Type 'void' is not assignable to type 'string'.
     

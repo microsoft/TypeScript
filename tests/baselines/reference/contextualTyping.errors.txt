@@ -233,6 +233,6 @@
     interface A { x: string; }
     interface B extends A { }
     var x: B = { };
-        ~~~~~~~~~~
+        ~
 !!! Type '{}' is not assignable to type 'B':
 !!!   Property 'x' is missing in type '{}'.

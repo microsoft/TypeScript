@@ -9,7 +9,7 @@
     var parsers: Parsers;
     var c: ParserFunc = parsers.raw; // ok!
     var d: ParserFunc = parsers.readline; // not ok
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~
 !!! Type '(delimiter?: string) => ParserFunc' is not assignable to type 'ParserFunc':
 !!!   Types of parameters 'delimiter' and 'eventEmitter' are incompatible:
 !!!     Type 'string' is not assignable to type 'number'.

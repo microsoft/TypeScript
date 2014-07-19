@@ -18,7 +18,7 @@
             ~~~~~
 !!! Accessors are only available when targeting ECMAScript 5 and higher.
             var _super = 10; // Should be error
-                ~~~~~~~~~~~
+                ~~~~~~
 !!! Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
             return 10;
         }
@@ -26,7 +26,7 @@
             ~~~~~
 !!! Accessors are only available when targeting ECMAScript 5 and higher.
             var _super = 10; // Should be error
-                ~~~~~~~~~~~
+                ~~~~~~
 !!! Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
         }
     }
@@ -36,7 +36,7 @@
 !!! Accessors are only available when targeting ECMAScript 5 and higher.
             var x = () => {
                 var _super = 10; // Should be error
-                    ~~~~~~~~~~~
+                    ~~~~~~
 !!! Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
             }
             return 10;
@@ -46,7 +46,7 @@
 !!! Accessors are only available when targeting ECMAScript 5 and higher.
             var x = () => {
                 var _super = 10; // Should be error
-                    ~~~~~~~~~~~
+                    ~~~~~~
 !!! Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
             }
         }

@@ -1,8 +1,9 @@
 ==== tests/cases/compiler/dontShowCompilerGeneratedMembers.ts (5 errors) ====
     var f: {
-        ~~~~
+        ~
+!!! Type 'number' is not assignable to type '{ <>(): any; x: number; }':
+!!!   Property 'x' is missing in type 'Number'.
         x: number;
-    ~~~~~~~~~~~~~~
         <-
         ~
 !!! Type parameter list cannot be empty.
@@ -10,9 +11,6 @@
 !!! '(' expected.
          ~
 !!! Type parameter declaration expected.
-    ~~~~~~
-!!! Type 'number' is not assignable to type '{ <>(): any; x: number; }':
-!!!   Property 'x' is missing in type 'Number'.
     };
     ~
 !!! Expression expected.

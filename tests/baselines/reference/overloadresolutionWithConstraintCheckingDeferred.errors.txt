@@ -13,7 +13,7 @@
     declare function foo(arg: (x: B) => any): number;
     
     var result: number = foo(x => new G(x)); // No error, returns number
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~
 !!! Type 'string' is not assignable to type 'number'.
                                   ~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.

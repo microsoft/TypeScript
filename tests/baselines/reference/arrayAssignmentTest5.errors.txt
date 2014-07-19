@@ -22,7 +22,7 @@
             public onEnter(line:string, state:IState, offset:number):IAction {
                 var lineTokens:ILineTokens= this.tokenize(line, state, true);
                 var tokens:IStateToken[]= lineTokens.tokens;
-                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    ~~~~~~
 !!! Type 'IToken[]' is not assignable to type 'IStateToken[]':
 !!!   Type 'IToken' is not assignable to type 'IStateToken':
 !!!     Property 'state' is missing in type 'IToken'.

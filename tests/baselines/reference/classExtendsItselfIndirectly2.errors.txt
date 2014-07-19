@@ -1,6 +1,6 @@
 ==== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly2.ts (2 errors) ====
     class C extends N.E { foo: string; } // error
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          ~
 !!! Type 'C' recursively references itself as a base type.
     
     module M {
@@ -14,7 +14,7 @@
     
     module O {
         class C2<T> extends Q.E2<T> { foo: T; } // error
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+              ~~
 !!! Type 'C2<T>' recursively references itself as a base type.
     
         module P {

@@ -26,7 +26,7 @@
     declare var x:O.I;
     
     var e:string=x.g(new O.A()); // matches overload but bad assignment
-        ~~~~~~~~~~~~~~~~~~~~~~~
+        ~
 !!! Type 'C' is not assignable to type 'string'.
     var y:string=x.f(3); // good
     y=x.f("nope"); // can't assign number to string

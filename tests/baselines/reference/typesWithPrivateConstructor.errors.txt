@@ -9,7 +9,7 @@
     
     var c = new C();
     var r: () => void = c.constructor;
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~
 !!! Type 'Function' is not assignable to type '() => void'.
     
     class C2 {

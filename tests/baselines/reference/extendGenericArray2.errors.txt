@@ -7,5 +7,5 @@
     
     var arr: string[] = [];
     var y: number = arr.x;
-        ~~~~~~~~~~~~~~~~~
+        ~
 !!! Type 'string' is not assignable to type 'number'.

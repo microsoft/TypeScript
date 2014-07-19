@@ -34,11 +34,11 @@
     
     // Highlights the difference between array literals and object literals
     var arr: string[] = [3, null]; // not assignable because null is not widened. BCT is {}
-        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~
 !!! Type 'number[]' is not assignable to type 'string[]':
 !!!   Type 'number' is not assignable to type 'string'.
     var obj: { [x: string]: string; } = { x: 3, y: null }; // assignable because null is widened, and therefore BCT is any
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~
 !!! Type '{ [x: string]: number; x: number; y: null; }' is not assignable to type '{ [x: string]: string; }':
 !!!   Index signatures are incompatible:
 !!!     Type 'number' is not assignable to type 'string'.

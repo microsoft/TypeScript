@@ -1,21 +1,18 @@
 ==== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts (8 errors) ====
     interface Foo extends Foo { // error
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    }
-    ~
+              ~~~
 !!! Type 'Foo' recursively references itself as a base type.
+    }
     
     interface Foo2<T> extends Foo2<T> { // error
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    }
-    ~
+              ~~~~
 !!! Type 'Foo2<T>' recursively references itself as a base type.
+    }
     
     interface Foo3<T> extends Foo3<string> { // error
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    }
-    ~
+              ~~~~
 !!! Type 'Foo3<T>' recursively references itself as a base type.
+    }
     
     interface Bar implements Bar { // error
                   ~~~~~~~~~~

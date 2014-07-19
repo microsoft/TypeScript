@@ -12,5 +12,5 @@
     
     var c = new C<number>();
     var r: string = c.x;
-        ~~~~~~~~~~~~~~~
+        ~
 !!! Type 'A<number>' is not assignable to type 'string'.

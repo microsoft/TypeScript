@@ -26,6 +26,6 @@
         var d = r2[1];
         var e = r2['1'];
         var u: U = r2[1]; // ok
-            ~~~~~~~~~~~~
+            ~
 !!! Type 'T' is not assignable to type 'U'.
     }

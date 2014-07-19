@@ -1,8 +1,8 @@
 ==== tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts (34 errors) ====
     export class Game {
-    ~~~~~~~~~~~~~~~~~~~
+                 ~~~~
+!!! Cannot compile external modules unless the '--module' flag is provided.
         private position = new DisplayPosition([), 3, 3, 3, 3, 3, 0, 3, 3, 3, 3, 3, 3, 0], NoMove, 0);
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                                                 ~
 !!! Expression or comma expected.
                                                  ~
@@ -68,9 +68,6 @@
                                                                                                    ~
 !!! Duplicate identifier '0'.
         private prevConfig: SeedCoords[][];
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                             ~~~~~~~~~~
 !!! Cannot find name 'SeedCoords'.
     }
-    ~
-!!! Cannot compile external modules unless the '--module' flag is provided.
