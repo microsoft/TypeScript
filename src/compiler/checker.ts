@@ -5994,12 +5994,9 @@ module ts {
         }
 
         function isUniqueLocalName(name: string, container: Node): boolean {
-            name = escapeIdentifier(name);
-            if (container.locals) {
-                for (var node = container; isNodeParentedBy(node, container); node = node.nextLocals) {
-                    if (hasProperty(node.locals, name) && node.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue)) {
-                        return false;
-                    }
+            for (var node = container; isNodeParentedBy(node, container); node = node.nextContainer) {
+                if (node.locals && hasProperty(node.locals, name) && node.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue)) {
+                    return false;
                 }
             }
             return true;
@@ -6008,11 +6005,12 @@ module ts {
         function getLocalNameOfContainer(container: Declaration): string {
             var links = getNodeLinks(container);
             if (!links.localModuleName) {
-                var name = container.name.text ? unescapeIdentifier(container.name.text) : "M";
-                while (!isUniqueLocalName(name, container)) {
-                    name = "_" + name;
+                var prefix = "";
+                var name = unescapeIdentifier(container.name.text);
+                while (!isUniqueLocalName(escapeIdentifier(prefix + name), container)) {
+                    prefix += "_";
                 }
-                links.localModuleName = name;
+                links.localModuleName = prefix + getSourceTextOfNode(container.name);
             }
             return links.localModuleName;
         }
