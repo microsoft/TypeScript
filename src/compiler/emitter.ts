@@ -1854,10 +1854,30 @@ module ts {
             var decreaseIndent = writer.decreaseIndent;
 
             var enclosingDeclaration: Node;
+            var reportedDeclarationError = false;
+
+            var getSymbolVisibilityDiagnosticMessage: (symbolAccesibilityResult: SymbolAccessiblityResult) => {
+                errorNode: Node;
+                diagnosticMessage: DiagnosticMessage;
+                typeName: Identifier
+            }
 
             function writeSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
-                // TODO(shkamat): Report error if the symbol is not accessible
-                resolver.writeSymbol(symbol, enclosingDeclaration, meaning, writer);
+                var symbolAccesibilityResult = resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning);
+                    // TODO(shkamat): Since we dont have error reporting for all the cases as yet we have this check on handler being present
+                if (!getSymbolVisibilityDiagnosticMessage || symbolAccesibilityResult.accessibility === SymbolAccessibility.Accessible) {
+                    resolver.writeSymbol(symbol, enclosingDeclaration, meaning, writer);
+                }
+                else {
+                    // Report error
+                    reportedDeclarationError = true;
+                    var errorInfo = getSymbolVisibilityDiagnosticMessage(symbolAccesibilityResult);
+                    diagnostics.push(createDiagnosticForNode(errorInfo.errorNode,
+                        errorInfo.diagnosticMessage,
+                        getSourceTextOfLocalNode(errorInfo.typeName),
+                        symbolAccesibilityResult.errorSymbolName,
+                        symbolAccesibilityResult.errorModuleName));
+                }
             }
 
             function emitLines(nodes: Node[]) {
@@ -2296,7 +2316,11 @@ module ts {
                 });
             }
 
-            writeFile(getModuleNameFromFilename(jsFilePath) + ".d.ts", referencePathsOutput + writer.getText());
+            // TODO(shkamat): Should we not write any declaration file if any of them can produce error, 
+            // or should we just not write this file like we are doing now
+            if (!reportedDeclarationError) {
+                writeFile(getModuleNameFromFilename(jsFilePath) + ".d.ts", referencePathsOutput + writer.getText());
+            }
         }
 
         var shouldEmitDeclarations = resolver.shouldEmitDeclarations();

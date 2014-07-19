@@ -611,6 +611,18 @@ module ts {
         WriteArrayAsGenericType     = 0x00000001,  // Declarations
     }
 
+    export enum SymbolAccessibility {
+        Accessible,
+        NotAccessible,
+        CannotBeNamed
+    }
+
+    export interface SymbolAccessiblityResult {
+        accessibility: SymbolAccessibility;
+        errorSymbolName?: string // Optional symbol name that results in error
+        errorModuleName?: string // If the symbol is not visibile from module, module's name
+    }
+
     export interface EmitResolver {
         getProgram(): Program;
         getModuleObjectName(node: ModuleDeclaration): string;
@@ -627,7 +639,7 @@ module ts {
         writeTypeAtLocation(location: Node, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter): void;
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter): void;
         writeSymbol(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags, writer: TextWriter): void;
-        isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): boolean;
+        isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
     }
 
     export enum SymbolFlags {

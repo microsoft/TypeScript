@@ -645,7 +645,7 @@ module ts {
                 }
 
                 // If symbol is directly available by its name in the symbol table
-                if (isAccessible(symbols[symbol.name])) {
+                if (hasProperty(symbols, symbol.name) && isAccessible(symbols[symbol.name])) {
                     return symbol;
                 }
 
@@ -668,7 +668,7 @@ module ts {
             var qualify = false;
             forEachSymbolTableInScope(enclosingDeclaration, symbolTable => {
                 // If symbol of this name is not available in the symbol table we are ok
-                if (!symbolTable[symbol.name]) {
+                if (!hasProperty(symbolTable, symbol.name)) {
                     // Continue to the next symbol table
                     return false;
                 }
@@ -693,8 +693,36 @@ module ts {
             return qualify
         }
 
-        function isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): boolean {
-            // TODO(shkamat): Actual implementation
+        function isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult {
+            if (symbol && enclosingDeclaration && !(symbol.flags & SymbolFlags.TypeParameter)) {
+                var initialSymbol = symbol;
+                var meaningToLook = meaning;
+                while (symbol) {
+                    // Symbol is accessible if it by itself is accessible
+                    var accessibleSymbol = getAccessibleSymbol(symbol, enclosingDeclaration, meaningToLook);
+                    if (accessibleSymbol) {
+                        if (forEach(accessibleSymbol.declarations, declaration => !isDeclarationVisible(declaration))) {
+                            return {
+                                accessibility: SymbolAccessibility.NotAccessible,
+                                errorSymbolName: symbolToString(initialSymbol, enclosingDeclaration, meaning),
+                                errorModuleName: symbol !== initialSymbol ? symbolToString(symbol, enclosingDeclaration, SymbolFlags.Namespace) : undefined
+                            };
+                        }
+                        return { accessibility: SymbolAccessibility.Accessible };
+                    }
+
+                    meaningToLook = SymbolFlags.Namespace;
+                    symbol = symbol.parent;
+                }
+
+                // This is a local symbol that cannot be named
+                return {
+                    accessibility: SymbolAccessibility.CannotBeNamed,
+                    errorSymbolName: symbolToString(initialSymbol, enclosingDeclaration, meaning),
+                };
+            }
+
+            return { accessibility: SymbolAccessibility.Accessible };
         }
 
         // Enclosing declaration is optional when we dont want to get qualified name in the enclosing declaration scope
