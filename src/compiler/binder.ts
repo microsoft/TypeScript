@@ -31,8 +31,8 @@ module ts {
 
         var parent: Node;
         var container: Declaration;
+        var lastContainer: Declaration;
         var symbolCount = 0;
-        var lastLocals: Declaration;
         var Symbol = objectAllocator.getSymbolConstructor();
 
         if (!file.locals) {
@@ -163,12 +163,23 @@ module ts {
             }
         }
 
-        // All nodes with locals are kept on a linked list in declaration order. This list is used by the getLocalNameOfContainer function
+        // All container nodes are kept on a linked list in declaration order. This list is used by the getLocalNameOfContainer function
         // in the type checker to validate that the local name used for a container is unique.
-        function initializeLocals(node: Declaration) {
-            node.locals = {};
-            if (lastLocals) lastLocals.nextLocals = node;
-            lastLocals = node;
+        function bindChildren(node: Declaration, symbolKind: SymbolFlags) {
+            if (symbolKind & SymbolFlags.HasLocals) {
+                node.locals = {};
+            }
+            var saveParent = parent;
+            var saveContainer = container;
+            parent = node;
+            if (symbolKind & SymbolFlags.IsContainer) {
+                container = node;
+                if (lastContainer) lastContainer.nextContainer = container;
+                lastContainer = container;
+            }
+            forEachChild(node, bind);
+            container = saveContainer;
+            parent = saveParent;
         }
 
         function bindDeclaration(node: Declaration, symbolKind: SymbolFlags, symbolExcludes: SymbolFlags) {
@@ -207,14 +218,7 @@ module ts {
                     declareSymbol(container.symbol.exports, container.symbol, node, symbolKind, symbolExcludes);
                     break;
             }
-            if (symbolKind & SymbolFlags.HasLocals) initializeLocals(node);
-            var saveParent = parent;
-            var saveContainer = container;
-            parent = node;
-            if (symbolKind & SymbolFlags.IsContainer) container = node;
-            forEachChild(node, bind);
-            container = saveContainer;
-            parent = saveParent;
+            bindChildren(node, symbolKind);
         }
 
         function bindConstructorDeclaration(node: ConstructorDeclaration) {
@@ -241,14 +245,7 @@ module ts {
         function bindAnonymousDeclaration(node: Node, symbolKind: SymbolFlags, name: string) {
             var symbol = createSymbol(symbolKind, name);
             addDeclarationToSymbol(symbol, node, symbolKind);
-            if (symbolKind & SymbolFlags.HasLocals) initializeLocals(node);
-            var saveParent = parent;
-            var saveContainer = container;
-            parent = node;
-            container = node;
-            forEachChild(node, bind);
-            container = saveContainer;
-            parent = saveParent;
+            bindChildren(node, symbolKind);
         }
 
         function bindCatchVariableDeclaration(node: CatchBlock) {

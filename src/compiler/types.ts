@@ -240,7 +240,7 @@ module ts {
         parent?: Node;                // Parent node (initialized by binding)
         symbol?: Symbol;              // Symbol declared by node (initialized by binding)
         locals?: SymbolTable;         // Locals associated with node (initialized by binding)
-        nextLocals?: Node;            // Next node in declaration order with locals (initialized by binding)
+        nextContainer?: Node;         // Next container in declaration order (initialized by binding)
     }
 
     export interface NodeArray<T> extends Array<T>, TextRange { }
@@ -691,7 +691,7 @@ module ts {
 
         ExportHasLocal = Function | Class | Enum | ValueModule,
 
-        HasLocals  = Function | Enum | Module | Method | Constructor | Accessor | Signature,
+        HasLocals  = Function | Module | Method | Constructor | Accessor | Signature,
         HasExports = Class | Enum | Module,
         HasMembers = Class | Interface | TypeLiteral | ObjectLiteral,
 
