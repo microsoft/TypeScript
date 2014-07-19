@@ -127,49 +127,30 @@
     
     // error
     var b: { [x: string]: string; } = {
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~
+!!! Type '{ [x: string]: {}; 1.0: string; 2.0: number; a: string; b: number; c: () => void; "d": string; "e": number; "3.0": string; "4.0": number; f: MyString; X: string; foo: () => string; }' is not assignable to type '{ [x: string]: string; }':
+!!!   Index signatures are incompatible:
+!!!     Type '{}' is not assignable to type 'string'.
         a: '',
-    ~~~~~~~~~~
         b: 1, 
-    ~~~~~~~~~~
         c: () => { }, 
-    ~~~~~~~~~~~~~~~~~~
         "d": '', 
-    ~~~~~~~~~~~~~
         "e": 1, 
-    ~~~~~~~~~~~~
         1.0: '',
-    ~~~~~~~~~~~~
         2.0: 1, 
-    ~~~~~~~~~~~~
         "3.0": '', 
-    ~~~~~~~~~~~~~~~
         "4.0": 1, 
-    ~~~~~~~~~~~~~~
         f: <MyString>null, 
-    ~~~~~~~~~~~~~~~~~~~~~~~
-    
     
         get X() { 
             ~
 !!! Accessors are only available when targeting ECMAScript 5 and higher.
-    ~~~~~~~~~~~~~~
             return '';
-    ~~~~~~~~~~~~~~~~~~
         },
-    ~~~~~~
         set X(v) { }, 
             ~
 !!! Accessors are only available when targeting ECMAScript 5 and higher.
-    ~~~~~~~~~~~~~~~~~~
         foo() { 
-    ~~~~~~~~~~~~
             return '';
-    ~~~~~~~~~~~~~~~~~~
         }
-    ~~~~~
     }
-    ~
-!!! Type '{ [x: string]: {}; 1.0: string; 2.0: number; a: string; b: number; c: () => void; "d": string; "e": number; "3.0": string; "4.0": number; f: MyString; X: string; foo: () => string; }' is not assignable to type '{ [x: string]: string; }':
-!!!   Index signatures are incompatible:
-!!!     Type '{}' is not assignable to type 'string'.

@@ -1,9 +1,8 @@
 ==== tests/cases/conformance/parser/ecmascript5/ExportAssignments/parserExportAssignment7.ts (3 errors) ====
     export class C {
-    ~~~~~~~~~~~~~~~~
-    }
-    ~
+                 ~
 !!! Cannot compile external modules unless the '--module' flag is provided.
+    }
     
     export = B;
     ~~~~~~~~~~~

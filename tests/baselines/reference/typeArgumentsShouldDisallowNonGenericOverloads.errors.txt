@@ -9,8 +9,8 @@
     var y: string = foo("hi"); // return type should be 'string'
     
     var w: string = foo<string>("hi"); // should error
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~
 !!! Type 'number' is not assignable to type 'string'.
     var z: number = foo("hi"); // should error
-        ~~~~~~~~~~~~~~~~~~~~~
+        ~
 !!! Type 'string' is not assignable to type 'number'.

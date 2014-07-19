@@ -1,6 +1,6 @@
 ==== tests/cases/compiler/recursiveBaseCheck6.ts (2 errors) ====
     class S18<A> extends S18<{ S19: A; }>{ }
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          ~~~
 !!! Type 'S18<A>' recursively references itself as a base type.
     (new S18()).blah;
                 ~~~~

@@ -2,34 +2,34 @@
     var x = '';
     
     var a: boolean = x;
-        ~~~~~~~~~~~~~~
+        ~
 !!! Type 'string' is not assignable to type 'boolean'.
     var b: number = x;
-        ~~~~~~~~~~~~~
+        ~
 !!! Type 'string' is not assignable to type 'number'.
     var c: void = x;
-        ~~~~~~~~~~~
+        ~
 !!! Type 'string' is not assignable to type 'void'.
     var d: typeof undefined = x;
     
     class C { foo: string; }
     var e: C = x;
-        ~~~~~~~~
+        ~
 !!! Type 'string' is not assignable to type 'C':
 !!!   Property 'foo' is missing in type 'String'.
     
     interface I { bar: string; }
     var f: I = x;
-        ~~~~~~~~
+        ~
 !!! Type 'string' is not assignable to type 'I':
 !!!   Property 'bar' is missing in type 'String'.
     
     var g: { baz: string } = 1;
-        ~~~~~~~~~~~~~~~~~~~~~~
+        ~
 !!! Type 'number' is not assignable to type '{ baz: string; }':
 !!!   Property 'baz' is missing in type 'Number'.
     var g2: { 0: number } = 1;
-        ~~~~~~~~~~~~~~~~~~~~~
+        ~~
 !!! Type 'number' is not assignable to type '{ 0: number; }':
 !!!   Property '0' is missing in type 'Number'.
     
@@ -49,5 +49,5 @@
     
     enum E { A }
     var j: E = x;
-        ~~~~~~~~
+        ~
 !!! Type 'string' is not assignable to type 'E'.

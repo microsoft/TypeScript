@@ -5,7 +5,7 @@
     
     // x should not be an optional property
     var v: C = {}; // Should fail
-        ~~~~~~~~~
+        ~
 !!! Type '{}' is not assignable to type 'C':
 !!!   Property 'x' is missing in type '{}'.
     var v2: { x? }

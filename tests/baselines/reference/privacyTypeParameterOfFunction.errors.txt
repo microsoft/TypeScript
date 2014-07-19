@@ -3,10 +3,9 @@
     }
     
     export class publicClass {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~
-    }
-    ~
+                 ~~~~~~~~~~~
 !!! Cannot compile external modules unless the '--module' flag is provided.
+    }
     
     export interface publicInterfaceWithPrivateTypeParameters {
         // TypeParameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_private_type_1

@@ -1,6 +1,6 @@
 ==== tests/cases/compiler/objectLitStructuralTypeMismatch.ts (1 errors) ====
     // Shouldn't compile
     var x: { a: number; } = { b: 5 };
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~
 !!! Type '{ b: number; }' is not assignable to type '{ a: number; }':
 !!!   Property 'a' is missing in type '{ b: number; }'.

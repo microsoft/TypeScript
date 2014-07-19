@@ -2,10 +2,8 @@
     "use strict";
     
     export class Logger { 
-    ~~~~~~~~~~~~~~~~~~~~~~
-         public
-    ~~~~~~~~~~~
-    }
-    ~
+                 ~~~~~~
 !!! Cannot compile external modules unless the '--module' flag is provided.
+         public
+    }
     

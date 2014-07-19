@@ -16,11 +16,11 @@
     
     var d: D = new D();
     var r: string = d.foo;
-        ~~~~~~~~~~~~~~~~~
+        ~
 !!! Type 'number' is not assignable to type 'string'.
     var r2: number = d.foo;
     
     var r3: string = d.bar();
     var r4: number = d.bar();
-        ~~~~~~~~~~~~~~~~~~~~
+        ~~
 !!! Type 'string' is not assignable to type 'number'.

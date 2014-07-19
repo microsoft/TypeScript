@@ -47,14 +47,11 @@
     
     // error
     var b: { [x: string]: A } = {
-        ~~~~~~~~~~~~~~~~~~~~~~~~~
-        a: A,
-    ~~~~~~~~~
-        b: B
-    ~~~~~~~~
-    }
-    ~
+        ~
 !!! Type '{ [x: string]: typeof A; a: typeof A; b: typeof B; }' is not assignable to type '{ [x: string]: A; }':
 !!!   Index signatures are incompatible:
 !!!     Type 'typeof A' is not assignable to type 'A':
 !!!       Property 'foo' is missing in type 'typeof A'.
+        a: A,
+        b: B
+    }

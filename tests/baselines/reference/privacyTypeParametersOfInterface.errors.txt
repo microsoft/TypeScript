@@ -3,10 +3,9 @@
     }
     
     export class publicClass {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~
-    }
-    ~
+                 ~~~~~~~~~~~
 !!! Cannot compile external modules unless the '--module' flag is provided.
+    }
     
     class privateClassT<T> {
     }

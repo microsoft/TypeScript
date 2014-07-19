@@ -24,24 +24,24 @@
     var x: WStatic = W;
     var y: typeof W = W;
     var z: number = W; // error
-        ~~~~~~~~~~~~~
+        ~
 !!! Type 'typeof W' is not assignable to type 'number'.
     var a: number = W.a;
     var b: typeof W = W.a; // error
-        ~~~~~~~~~~~~~~~~~
+        ~
 !!! Type 'W' is not assignable to type 'typeof W':
 !!!   Property 'a' is missing in type 'Number'.
     var c: typeof W.a = W.a;
     var d: typeof W = 3; // error
-        ~~~~~~~~~~~~~~~
+        ~
 !!! Type 'number' is not assignable to type 'typeof W'.
     var e: typeof W.a = 4;
     var f: WStatic = W.a; // error
-        ~~~~~~~~~~~~~~~~
+        ~
 !!! Type 'W' is not assignable to type 'WStatic':
 !!!   Property 'a' is missing in type 'Number'.
     var g: WStatic = 5; // error
-        ~~~~~~~~~~~~~~
+        ~
 !!! Type 'number' is not assignable to type 'WStatic'.
     var h: W = 3;
     var i: W = W.a;

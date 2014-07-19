@@ -1,6 +1,6 @@
 ==== tests/cases/compiler/forInStatement4.ts (1 errors) ====
     var expr: any;
     for (var a: number in expr) {
-             ~~~~~~~~~
+             ~
 !!! Variable declarations of a 'for' statement cannot use a type annotation.
     }

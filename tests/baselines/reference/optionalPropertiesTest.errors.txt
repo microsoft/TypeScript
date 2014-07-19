@@ -27,11 +27,11 @@
     interface i4 { M?: number; };
     
     var test1: i1 = {};
-        ~~~~~~~~~~~~~~
+        ~~~~~
 !!! Type '{}' is not assignable to type 'i1':
 !!!   Property 'M' is missing in type '{}'.
     var test2: i3 = {};
-        ~~~~~~~~~~~~~~
+        ~~~~~
 !!! Type '{}' is not assignable to type 'i3':
 !!!   Property 'M' is missing in type '{}'.
     var test3: i2 = {};

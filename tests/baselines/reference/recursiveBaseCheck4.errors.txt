@@ -1,6 +1,6 @@
 ==== tests/cases/compiler/recursiveBaseCheck4.ts (2 errors) ====
     class M<T> extends M<string> { }
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          ~
 !!! Type 'M<T>' recursively references itself as a base type.
     (new M).blah;
             ~~~~

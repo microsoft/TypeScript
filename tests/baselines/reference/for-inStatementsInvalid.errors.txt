@@ -15,7 +15,7 @@
 !!! Variable declarations of a 'for' statement must be of types 'string' or 'any'.
     
     for (var idx : number in {}) { }
-             ~~~~~~~~~~~~
+             ~~~
 !!! Variable declarations of a 'for' statement cannot use a type annotation.
     
     function fn(): void { }
