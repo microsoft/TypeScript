@@ -1104,5 +1104,6 @@ module ts {
         getCurrentDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
+        getNewLine(): string;
     }
 }

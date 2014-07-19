@@ -88,12 +88,12 @@ module ts {
         return createFileDiagnostic(file, start, length, message, arg0, arg1, arg2);
     }
 
-    export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): Diagnostic {
+    export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain, newLine: string): Diagnostic {
         node = getErrorSpanForNode(node);
         var file = getSourceFileOfNode(node);
         var start = skipTrivia(file.text, node.pos);
         var length = node.end - start;
-        return flattenDiagnosticChain(file, start, length, messageChain);
+        return flattenDiagnosticChain(file, start, length, messageChain, newLine);
     }
 
     export function getErrorSpanForNode(node: Node): Node {

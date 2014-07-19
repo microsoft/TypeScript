@@ -214,7 +214,7 @@ module ts {
         }
     }
 
-    export function flattenDiagnosticChain(file: SourceFile, start: number, length: number, diagnosticChain: DiagnosticMessageChain): Diagnostic {
+    export function flattenDiagnosticChain(file: SourceFile, start: number, length: number, diagnosticChain: DiagnosticMessageChain, newLine: string): Diagnostic {
         var code = diagnosticChain.code;
         var category = diagnosticChain.category;
         var messageText = "";
@@ -222,7 +222,7 @@ module ts {
         var indent = 0;
         while (diagnosticChain) {
             if (indent) {
-                messageText += sys.newLine;
+                messageText += newLine;
                 
                 for (var i = 0; i < indent; i++) {
                     messageText += "  ";
