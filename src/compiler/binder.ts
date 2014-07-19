@@ -33,7 +33,6 @@ module ts {
         var container: Declaration;
         var lastContainer: Declaration;
         var symbolCount = 0;
-        var lastLocals: Declaration;
         var Symbol = objectAllocator.getSymbolConstructor();
 
         if (!file.locals) {
