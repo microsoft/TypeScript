@@ -1,8 +1,8 @@
 ==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser618973.ts (2 errors) ====
     export export class Foo {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
            ~~~~~~
 !!! 'export' modifier already seen.
-    ~~~~~~~~~~~~~~~~~~~~~~~~~
       public Bar() {
     ~~~~~~~~~~~~~~~~
       }

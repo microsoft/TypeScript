@@ -618,6 +618,7 @@ module Harness {
 
                 options = options || { noResolve: false };
                 options.target = options.target || ts.ScriptTarget.ES3;
+                options.module = options.module || ts.ModuleKind.None;
 
                 if (settingsCallback) {
                     settingsCallback(null);
@@ -717,7 +718,7 @@ module Harness {
                 var filemap: { [name: string]: ts.SourceFile; } = {};
                 var register = (file: { unitName: string; content: string; }) => {
                     var filename = Path.switchToForwardSlashes(file.unitName);
-                    filemap[filename] = ts.createSourceFile(filename, file.content, options.target || ts.ScriptTarget.ES3);
+                    filemap[filename] = ts.createSourceFile(filename, file.content, options.target);
                 };
                 inputFiles.forEach(register);
                 otherFiles.forEach(register);
