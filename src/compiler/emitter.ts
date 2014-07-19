@@ -1158,6 +1158,11 @@ module ts {
                 write(" {");
                 scopeEmitStart(node);
                 increaseIndent();
+
+                var startIndex = 0;
+                if (node.body.kind === SyntaxKind.FunctionBlock) {
+                    startIndex = emitDirectivePrologues((<Block>node.body).statements, /*startWithNewLine*/ true);
+                }
                 var outPos = writer.getTextPos();
                 emitCaptureThisForNodeIfNecessary(node);
                 emitDefaultValueAssignments(node);
@@ -1176,7 +1181,7 @@ module ts {
                 }
                 else {
                     if (node.body.kind === SyntaxKind.FunctionBlock) {
-                        emitLines((<Block>node.body).statements);
+                        emitLinesStartingAt((<Block>node.body).statements, startIndex);
                     }
                     else {
                         writeLine();
@@ -1658,25 +1663,27 @@ module ts {
                 }
             }
 
-            function isDirectivePrologue(n: Statement): boolean {
-                return n.kind === SyntaxKind.ExpressionStatement && (<ExpressionStatement>n).expression.kind === SyntaxKind.StringLiteral;
+            function emitDirectivePrologues(statements: Statement[], startWithNewLine: boolean): number {
+                for (var i = 0; i < statements.length; ++i) {
+                    if (statements[i].kind === SyntaxKind.ExpressionStatement &&
+                        (<ExpressionStatement>statements[i]).expression.kind === SyntaxKind.StringLiteral) {
+                        if (startWithNewLine || i > 0) {
+                            writeLine();
+                        }
+                        emit(statements[i]);
+                    }
+                    else {
+                        // return index of the first non prologue directive
+                        return i;
+                    }
+                }
+                return statements.length;
             }
 
             function emitSourceFile(node: SourceFile) {
                 currentSourceFile = node;
-                var startIndex = 0;
-                for (; startIndex < node.statements.length; ++startIndex) {
-                    // emit prologue directives prior to __extends
-                    if (isDirectivePrologue(node.statements[startIndex])) {
-                        if (startIndex > 0) {
-                            writeLine();
-                        }
-                        emit(node.statements[startIndex]);
-                    }
-                    else {
-                        break;
-                    }
-                }
+                // emit prologue directives prior to __extends
+                var startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
                 if (!extendsEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitExtends) {
                     writeLine();
                     write("var __extends = this.__extends || function (d, b) {");

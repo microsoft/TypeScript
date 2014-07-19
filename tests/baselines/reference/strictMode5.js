@@ -20,18 +20,18 @@ function bar(x: number = 10) {
 
 //// [strictMode5.js]
 function foo() {
+    "use strict";
     var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         args[_i - 0] = arguments[_i];
     }
-    "use strict";
 }
 var A = (function () {
     function A() {
     }
     A.prototype.m = function () {
-        var _this = this;
         "use strict";
+        var _this = this;
         var v = function () {
             return _this.n();
         };
@@ -41,6 +41,6 @@ var A = (function () {
     return A;
 })();
 function bar(x) {
-    if (x === void 0) { x = 10; }
     "use strict";
+    if (x === void 0) { x = 10; }
 }
