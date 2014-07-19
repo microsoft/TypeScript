@@ -35,32 +35,7 @@ module TypeScript.Services {
         }
 
         public getDefaultCompilationSettings(): ts.CompilerOptions {
-            // Set "ES5" target by default for language service
-            return {
-                target: ts.ScriptTarget.ES5
-            }
-        }
-
-        public dumpMemory(): string {
-            if (!debugObjectHost || !debugObjectHost.Debug || !debugObjectHost.Debug.dumpHeap) {
-                throw new Error(TypeScript.getDiagnosticMessage(TypeScript.DiagnosticCode.This_version_of_the_Javascript_runtime_does_not_support_the_0_function, ['Debug.dumpHeap()']));
-            }
-
-            var objects = debugObjectHost.Debug.dumpHeap(2);
-            var totalSize = 0;
-            for (var i = 0; i < objects.length; i++) {
-                totalSize += objects[i].size;
-            }
-
-            return "There are " + objects.length + " object(s) accessible from 'global', for a total of " + totalSize + " byte(s).";
-        }
-
-        public getMemoryInfo(): any[] {
-            if (!debugObjectHost || !debugObjectHost.Debug || !debugObjectHost.Debug.getMemoryInfo) {
-                throw new Error(TypeScript.getDiagnosticMessage(TypeScript.DiagnosticCode.This_version_of_the_Javascript_runtime_does_not_support_the_0_function, ['Debug.getMemoryInfo()']));
-            }
-
-            return debugObjectHost.Debug.getMemoryInfo();
+            return getDefaultCompilerOptions();
         }
 
         public collectGarbage(): void {
