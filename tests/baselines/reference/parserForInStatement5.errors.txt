@@ -1,6 +1,6 @@
 ==== tests/cases/conformance/parser/ecmascript5/Statements/parserForInStatement5.ts (2 errors) ====
     for (var a: number in X) {
-             ~~~~~~~~~
+             ~
 !!! Variable declarations of a 'for' statement cannot use a type annotation.
                           ~
 !!! Cannot find name 'X'.

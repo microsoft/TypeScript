@@ -39,12 +39,10 @@
     }
     
     var a:I4 = function(){ 
-        ~~~~~~~~~~~~~~~~~~~
-        return new C2();
-    ~~~~~~~~~~~~~~~~~~~~
-    }
-    ~
+        ~
 !!! Type '() => C2' is not assignable to type 'I4'.
+        return new C2();
+    }
     new a();
     
     /*var b:I4 = C2;

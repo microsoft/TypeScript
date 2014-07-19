@@ -1,6 +1,6 @@
 ==== tests/cases/compiler/assignmentCompatBug2.ts (5 errors) ====
     var b2: { b: number;} = { a: 0 }; // error
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~
 !!! Type '{ a: number; }' is not assignable to type '{ b: number; }':
 !!!   Property 'b' is missing in type '{ a: number; }'.
     

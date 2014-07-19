@@ -14,19 +14,15 @@
     var f = () => { };
     
     var v1: {
-        ~~~~~
-        [n: number]: Foo
-    ~~~~~~~~~~~~~~~~~~~~
-    } = o; // Should be allowed
-    ~~~~~
+        ~~
 !!! Type '{}' is not assignable to type '{ [x: number]: Foo; }':
 !!!   Index signature is missing in type '{}'.
+        [n: number]: Foo
+    } = o; // Should be allowed
     
     var v2: {
-        ~~~~~
-        [n: number]: Bar
-    ~~~~~~~~~~~~~~~~~~~~
-    } = f; // Should be allowed
-    ~~~~~
+        ~~
 !!! Type '() => void' is not assignable to type '{ [x: number]: Bar; }':
 !!!   Index signature is missing in type '() => void'.
+        [n: number]: Bar
+    } = f; // Should be allowed

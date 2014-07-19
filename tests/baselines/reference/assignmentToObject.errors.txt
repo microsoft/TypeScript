@@ -2,7 +2,7 @@
     var a = { toString: 5 };
     var b: {} = a;  // ok
     var c: Object = a;  // should be error
-        ~~~~~~~~~~~~~
+        ~
 !!! Type '{ toString: number; }' is not assignable to type 'Object':
 !!!   Types of property 'toString' are incompatible:
 !!!     Type 'number' is not assignable to type '() => string'.

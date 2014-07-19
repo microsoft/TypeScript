@@ -1,33 +1,20 @@
 ==== tests/cases/conformance/internalModules/DeclarationMerging/part1.ts (1 errors) ====
     export module A {
-    ~~~~~~~~~~~~~~~~~
+                  ~
+!!! Cannot compile external modules unless the '--module' flag is provided.
         export interface Point {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             x: number;
-    ~~~~~~~~~~~~~~~~~~
             y: number;
-    ~~~~~~~~~~~~~~~~~~
         }
-    ~~~~~
-    
     
         export module Utils {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~
             export function mirror<T extends Point>(p: T) {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 return { x: p.y, y: p.x };
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             }
-    ~~~~~~~~~
         }
-    ~~~~~
-    
     
         export var Origin: Point = { x: 0, y: 0 };
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     }
-    ~
-!!! Cannot compile external modules unless the '--module' flag is provided.
     
 ==== tests/cases/conformance/internalModules/DeclarationMerging/part2.ts (3 errors) ====
     export module A {

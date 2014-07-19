@@ -71,6 +71,7 @@ module ts {
     }
 
     export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): Diagnostic {
+        node = getErrorSpanForNode(node);
         var file = getSourceFileOfNode(node);
         var start = skipTrivia(file.text, node.pos);
         var length = node.end - start;
@@ -79,17 +80,26 @@ module ts {
     }
 
     export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): Diagnostic {
+        node = getErrorSpanForNode(node);
         var file = getSourceFileOfNode(node);
         var start = skipTrivia(file.text, node.pos);
         var length = node.end - start;
         return flattenDiagnosticChain(file, start, length, messageChain);
     }
 
-    export function getErrorSpanForNode(node: Node): TextRange {
-        var errorSpan: TextRange;
+    export function getErrorSpanForNode(node: Node): Node {
+        var errorSpan: Node;
         switch (node.kind) {
             // This list is a work in progress. Add missing node kinds to improve their error
             // spans.
+            case SyntaxKind.VariableDeclaration:
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.ModuleDeclaration:
+            case SyntaxKind.EnumDeclaration:
+            case SyntaxKind.EnumMember:
+                errorSpan = (<Declaration>node).name;
+                break;
         }
         return errorSpan && errorSpan.pos < errorSpan.end ? errorSpan : node;
     }
@@ -3109,9 +3119,9 @@ module ts {
             var firstExternalModule = forEach(files, f => isExternalModule(f) ? f : undefined);
             if (firstExternalModule && options.module === ModuleKind.None) {
                 // We cannot use createDiagnosticFromNode because nodes do not have parents yet
-                var externalModuleIndicatorNode = firstExternalModule.externalModuleIndicator;
-                var errorStart = skipTrivia(firstExternalModule.text, externalModuleIndicatorNode.pos);
-                var errorLength = externalModuleIndicatorNode.end - errorStart;
+                var externalModuleErrorSpan = getErrorSpanForNode(firstExternalModule.externalModuleIndicator);
+                var errorStart = skipTrivia(firstExternalModule.text, externalModuleErrorSpan.pos);
+                var errorLength = externalModuleErrorSpan.end - errorStart;
                 errors.push(createFileDiagnostic(firstExternalModule, errorStart, errorLength, Diagnostics.Cannot_compile_external_modules_unless_the_module_flag_is_provided));
             }
 

@@ -4,7 +4,7 @@
     
     var x: typeof foo0 = {};
     var y: {M2: Object} = foo0;
-        ~~~~~~~~~~~~~~~~~~~~~~
+        ~
 !!! Type 'typeof "tests/cases/conformance/externalModules/foo_0"' is not assignable to type '{ M2: Object; }':
 !!!   Property 'M2' is missing in type 'typeof "tests/cases/conformance/externalModules/foo_0"'.
     

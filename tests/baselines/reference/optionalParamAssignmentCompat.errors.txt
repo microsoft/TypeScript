@@ -9,7 +9,7 @@
     var i2: I2;
     var c: I1 = i2.p1; // should be ok
     var d: I1 = i2.m1; // should error
-        ~~~~~~~~~~~~~
+        ~
 !!! Type '(p1?: string) => I1' is not assignable to type 'I1':
 !!!   Types of parameters 'p1' and 'p1' are incompatible:
 !!!     Type 'string' is not assignable to type 'number'.

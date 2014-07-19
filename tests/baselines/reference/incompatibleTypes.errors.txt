@@ -89,7 +89,7 @@
     }
     
     var o1: { a: { a: string; }; b: string; } = { e: 0, f: 0 };
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~
 !!! Type '{ e: number; f: number; }' is not assignable to type '{ a: { a: string; }; b: string; }':
 !!!   Property 'a' is missing in type '{ e: number; f: number; }'.
     
@@ -98,10 +98,10 @@
     
     
     var i1c1: { (): string; } = 5;
-        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~
 !!! Type 'number' is not assignable to type '() => string'.
     
     var fp1: () =>any = a => 0;
-        ~~~~~~~~~~~~~~~~~~~~~~
+        ~~~
 !!! Type '(a: any) => number' is not assignable to type '() => any'.
     

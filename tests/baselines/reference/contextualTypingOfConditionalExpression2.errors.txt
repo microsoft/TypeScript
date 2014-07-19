@@ -10,7 +10,7 @@
     }
     
     var x2: (a: A) => void = true ? (a: C) => a.foo : (b: number) => { };
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~
 !!! Type '{}' is not assignable to type '(a: A) => void'.
                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! No best common type exists between '(a: A) => void', '(a: C) => number', and '(b: number) => void'.

@@ -8,7 +8,7 @@
     class b extends Foo {
         public foo() {
             var _super = 10; // Should be error 
-                ~~~~~~~~~~~
+                ~~~~~~
 !!! Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
         }
     }
@@ -16,7 +16,7 @@
         public foo() {
             var x = () => {
                 var _super = 10; // Should be error
-                    ~~~~~~~~~~~
+                    ~~~~~~
 !!! Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
             }
         }

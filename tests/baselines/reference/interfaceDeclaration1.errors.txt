@@ -25,12 +25,10 @@
     }
     
     interface I5 extends I5 { 
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~
-        foo():void;
-    ~~~~~~~~~~~~~~~
-    }
-    ~
+              ~~
 !!! Type 'I5' recursively references itself as a base type.
+        foo():void;
+    }
     
     interface I6 {
     	():void;
@@ -51,7 +49,7 @@
     }
     
     interface i8 extends i9 { }
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+              ~~
 !!! Type 'i8' recursively references itself as a base type.
     interface i9 extends i8 { }
     

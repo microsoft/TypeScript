@@ -12,7 +12,7 @@
         public prop2 = {
             doStuff: () => {
                 var _super = 10; // Should be error 
-                    ~~~~~~~~~~~
+                    ~~~~~~
 !!! Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
             }
         }

@@ -1,10 +1,10 @@
 ==== tests/cases/compiler/implicitAnyFunctionInvocationWithAnyArguements.ts (7 errors) ====
     // this should be errors
     var arg0 = null;  // error at "arg0"
-        ~~~~~~~~~~~
+        ~~~~
 !!! Variable 'arg0' implicitly has an 'any' type.
     var anyArray = [null, undefined];  // error at array literal
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~
 !!! Variable 'anyArray' implicitly has an 'any[]' type.
     var objL: { v; w; }             // error at "y,z"
                 ~~

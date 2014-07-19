@@ -2,7 +2,7 @@
     var v = 3;
     var v2: typeof v;
     var v3: string = v2; // Not assignment compatible
-        ~~~~~~~~~~~~~~~
+        ~~
 !!! Type 'number' is not assignable to type 'string'.
     
     interface I<T> { x: T; }

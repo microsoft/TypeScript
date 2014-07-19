@@ -3,6 +3,6 @@
         return undefined;
     }
     var z3:number = foo3([undefined, "def"]);  // Type is any, but should be string
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~
 !!! Type 'string' is not assignable to type 'number'.
     

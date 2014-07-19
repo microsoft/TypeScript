@@ -1,10 +1,9 @@
 ==== tests/cases/compiler/recursiveBaseCheck.ts (1 errors) ====
     declare module Module {
         class C extends D {
-        ~~~~~~~~~~~~~~~~~~~
-        }
-    ~~~~~
+              ~
 !!! Type 'C' recursively references itself as a base type.
+        }
         export class B extends Module.C {
         }
         export class A extends Module.B {

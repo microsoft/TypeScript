@@ -45,19 +45,19 @@
     var arr_c3: C3[] = [];
     
     var i1_error: I1 = []; // should be an error - is
-        ~~~~~~~~~~~~~~~~~
+        ~~~~~~~~
 !!! Type 'undefined[]' is not assignable to type 'I1':
 !!!   Property 'IM1' is missing in type 'undefined[]'.
     var c1_error: C1 = []; // should be an error - is
-        ~~~~~~~~~~~~~~~~~
+        ~~~~~~~~
 !!! Type 'undefined[]' is not assignable to type 'C1':
 !!!   Property 'IM1' is missing in type 'undefined[]'.
     var c2_error: C2 = []; // should be an error - is
-        ~~~~~~~~~~~~~~~~~
+        ~~~~~~~~
 !!! Type 'undefined[]' is not assignable to type 'C2':
 !!!   Property 'C2M1' is missing in type 'undefined[]'.
     var c3_error: C3 = []; // should be an error - is
-        ~~~~~~~~~~~~~~~~~
+        ~~~~~~~~
 !!! Type 'undefined[]' is not assignable to type 'C3':
 !!!   Property 'CM3M1' is missing in type 'undefined[]'.
     

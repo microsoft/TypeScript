@@ -1,7 +1,7 @@
 ==== tests/cases/compiler/forIn.ts (2 errors) ====
     var arr = null;
     for (var i:number in arr) { // error
-             ~~~~~~~~
+             ~
 !!! Variable declarations of a 'for' statement cannot use a type annotation.
         var x1 = arr[i];
         var y1 = arr[i];

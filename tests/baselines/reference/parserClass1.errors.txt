@@ -1,22 +1,14 @@
 ==== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClass1.ts (2 errors) ====
         export class NullLogger implements ILogger {
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                     ~~~~~~~~~~
+!!! Cannot compile external modules unless the '--module' flag is provided.
                                            ~~~~~~~
 !!! Cannot find name 'ILogger'.
             public information(): boolean { return false; }
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             public debug(): boolean { return false; }
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             public warning(): boolean { return false; }
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             public error(): boolean { return false; }
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             public fatal(): boolean { return false; }
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             public log(s: string): void {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             }
-    ~~~~~~~~~
         }
-    ~~~~~
-!!! Cannot compile external modules unless the '--module' flag is provided.

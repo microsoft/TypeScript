@@ -1,6 +1,6 @@
 ==== tests/cases/compiler/errorOnContextuallyTypedReturnType.ts (1 errors) ====
     var n1: () => boolean = function () { }; // expect an error here
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~
 !!! Type '() => void' is not assignable to type '() => boolean':
 !!!   Type 'void' is not assignable to type 'boolean'.
     var n2: () => boolean = function ():boolean { }; // expect an error here

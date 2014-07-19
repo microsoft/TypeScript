@@ -2,11 +2,9 @@
     
     
         export enum SignatureFlags {
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    ~~~~~~~~~~~~~~
+!!! Cannot compile external modules unless the '--module' flag is provided.
             ,
-    ~~~~~~~~~
             ~
 !!! Enum member expected.
         }
-    ~~~~~
-!!! Cannot compile external modules unless the '--module' flag is provided.
