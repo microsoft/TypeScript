@@ -81,17 +81,17 @@ module TypeScript.Services {
                 return;
             }
 
-            var item = new NavigateToItem();
-            item.name = name;
-            item.kind = kind;
-            item.matchKind = MatchKind.exact;
-            item.fileName = this.fileName;
-            item.kindModifiers = this.getKindModifiers(modifiers);
-            item.minChar = start(node);
-            item.limChar = end(node);
-            item.containerName = this.nameStack.join(".");
-            item.containerKind = this.kindStack.length === 0 ? "" : TypeScript.ArrayUtilities.last(this.kindStack);
-
+            var item: NavigateToItem = {
+                name: name,
+                kind: kind,
+                matchKind: MatchKind.exact,
+                fileName: this.fileName,
+                kindModifiers: this.getKindModifiers(modifiers),
+                minChar: start(node),
+                limChar: end(node),
+                containerName: this.nameStack.join("."),
+                containerKind: this.kindStack.length === 0 ? "" : TypeScript.ArrayUtilities.last(this.kindStack),
+            };
             this.currentScope.items[key] = item;
             this.currentScope.itemNames.push(key);
         }
@@ -104,7 +104,10 @@ module TypeScript.Services {
             Debug.assert(item !== undefined);
 
             var start = TypeScript.start(node);
-            var span = new SpanInfo(start, start + width(node));
+            var span: SpanInfo = {
+                minChar: start,
+                limChar: start + width(node)
+            };
 
 
             if (item.additionalSpans) {

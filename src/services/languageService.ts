@@ -78,7 +78,7 @@ module TypeScript.Services {
 
         getEmitOutput(fileName: string): TypeScript.EmitOutput;
 
-        getSyntaxTree(fileName: string): TypeScript.SyntaxTree;
+        //getSyntaxTree(fileName: string): TypeScript.SyntaxTree;
 
         dispose(): void;
     }
@@ -87,31 +87,24 @@ module TypeScript.Services {
         logger.log("*INTERNAL ERROR* - Exception in typescript services: " + err.message);
     }
 
-    export class ReferenceEntry {
-        public fileName: string = ""
-        public minChar: number = -1;
-        public limChar: number = -1;
-        public isWriteAccess: boolean = false;
-
-        constructor(fileName: string, minChar: number, limChar: number, isWriteAccess: boolean) {
-            this.fileName = fileName;
-            this.minChar = minChar;
-            this.limChar = limChar;
-            this.isWriteAccess = isWriteAccess;
-        }
+    export interface ReferenceEntry {
+        fileName: string;
+        minChar: number;
+        limChar: number;
+        isWriteAccess: boolean;
     }
 
-    export class NavigateToItem {
-        public name: string = "";
-        public kind: string = "";            // see ScriptElementKind
-        public kindModifiers: string = "";   // see ScriptElementKindModifier, comma separated
-        public matchKind: string = "";
-        public fileName: string = "";
-        public minChar: number = -1;
-        public limChar: number = -1;
-        public additionalSpans: SpanInfo[] = null;
-        public containerName: string = "";
-        public containerKind: string = "";  // see ScriptElementKind
+    export interface NavigateToItem {
+        name: string;
+        kind: string;            // see ScriptElementKind
+        kindModifiers: string;   // see ScriptElementKindModifier, comma separated
+        matchKind: string;
+        fileName: string;
+        minChar: number;
+        limChar: number;
+        additionalSpans?: SpanInfo[];
+        containerName: string;
+        containerKind: string;  // see ScriptElementKind
     }
 
     export class TextEdit {
@@ -169,73 +162,69 @@ module TypeScript.Services {
         }
     }
 
-    export class DefinitionInfo {
-        constructor(
-            public fileName: string,
-            public minChar: number,
-            public limChar: number,
-            public kind: string,
-            public name: string,
-            public containerKind: string,
-            public containerName: string) {
-        }
+    export interface DefinitionInfo {
+        fileName: string;
+        minChar: number;
+        limChar: number;
+        kind: string;
+        name: string;
+        containerKind: string;
+        containerName: string;
     }
 
-    export class TypeInfo {
-        constructor(
-            public memberName: TypeScript.MemberName,
-            public docComment: string,
-            public fullSymbolName: string,
-            public kind: string,
-            public minChar: number,
-            public limChar: number) {
-        }
+    export interface TypeInfo {
+        memberName: TypeScript.MemberName;
+        docComment: string;
+        fullSymbolName: string;
+        kind: string;
+        minChar: number;
+        limChar: number;
     }
 
-    export class SpanInfo {
-        constructor(public minChar: number, public limChar: number, public text: string = null) {
-        }
+    export interface SpanInfo {
+        minChar: number;
+        limChar: number;
+        // text?: string;
     }
 
-    export class SignatureInfo {
-        public actual: ActualSignatureInfo;
-        public formal: FormalSignatureItemInfo[] = []; // Formal signatures
-        public activeFormal: number; // Index of the "best match" formal signature
+    export interface SignatureInfo {
+        actual: ActualSignatureInfo;
+        formal: FormalSignatureItemInfo[]; // Formal signatures
+        activeFormal: number; // Index of the "best match" formal signature
     }
 
-    export class FormalSignatureItemInfo {
-        public signatureInfo: string;
-        public typeParameters: FormalTypeParameterInfo[] = [];
-        public parameters: FormalParameterInfo[] = [];   // Array of parameters
-        public docComment: string; // Help for the signature
+    export interface FormalSignatureItemInfo {
+        signatureInfo: string;
+        typeParameters: FormalTypeParameterInfo[];
+        parameters: FormalParameterInfo[];   // Array of parameters
+        docComment: string; // Help for the signature
     }
 
-    export class FormalTypeParameterInfo {
-        public name: string;        // Type parameter name
-        public docComment: string;  // Comments that contain help for the parameter
-        public minChar: number;     // minChar for parameter info in the formal signature info string
-        public limChar: number;     // lim char for parameter info in the formal signature info string
+    export interface FormalTypeParameterInfo {
+        name: string;        // Type parameter name
+        docComment: string;  // Comments that contain help for the parameter
+        minChar: number;     // minChar for parameter info in the formal signature info string
+        limChar: number;     // lim char for parameter info in the formal signature info string
     }
 
-    export class FormalParameterInfo {
-        public name: string;        // Parameter name
-        public isVariable: boolean; // true if parameter is var args
-        public docComment: string;  // Comments that contain help for the parameter
-        public minChar: number;     // minChar for parameter info in the formal signature info string
-        public limChar: number;     // lim char for parameter info in the formal signature info string
+    export interface FormalParameterInfo {
+        name: string;        // Parameter name
+        isVariable: boolean; // true if parameter is var args
+        docComment: string;  // Comments that contain help for the parameter
+        minChar: number;     // minChar for parameter info in the formal signature info string
+        limChar: number;     // lim char for parameter info in the formal signature info string
     }
 
-    export class ActualSignatureInfo {
-        public parameterMinChar: number;
-        public parameterLimChar: number;
-        public currentParameterIsTypeParameter: boolean; // current parameter is a type argument or a normal argument
-        public currentParameter: number;        // Index of active parameter in "parameters" or "typeParamters" array
+    export interface ActualSignatureInfo {
+        parameterMinChar: number;
+        parameterLimChar: number;
+        currentParameterIsTypeParameter: boolean; // current parameter is a type argument or a normal argument
+        currentParameter: number;        // Index of active parameter in "parameters" or "typeParamters" array
     }
 
-    export class CompletionInfo {
-        public maybeInaccurate = false;
-        public isMemberCompletion = false;
-        public entries: CompletionEntry[] = [];
+    export interface CompletionInfo {
+        isMemberCompletion: boolean;
+        entries: CompletionEntry[];
     }
 
     export interface CompletionEntry {
@@ -254,6 +243,7 @@ module TypeScript.Services {
     }
 
 
+    // TODO: move these to enums
     export class ScriptElementKind {
         static unknown = "";
 

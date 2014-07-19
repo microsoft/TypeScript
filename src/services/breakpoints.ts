@@ -10,7 +10,10 @@ module TypeScript.Services.Breakpoints {
         }
 
         if (childElements.length == 0) {
-            return new SpanInfo(TypeScript.start(parentElement), TypeScript.end(parentElement));
+            return {
+                minChar: TypeScript.start(parentElement),
+                limChar: TypeScript.end(parentElement)
+            };
         }
 
         var start: number;
@@ -25,11 +28,17 @@ module TypeScript.Services.Breakpoints {
             }
         }
 
-        return new SpanInfo(start, end);
+        return {
+            minChar: start,
+            limChar: end
+        };
     }
 
     function createBreakpointSpanInfoWithLimChar(startElement: TypeScript.ISyntaxElement, limChar: number): SpanInfo {
-        return new SpanInfo(start(startElement), limChar);
+        return {
+            minChar: start(startElement),
+            limChar: limChar
+        };
     }
 
     class BreakpointResolver {
