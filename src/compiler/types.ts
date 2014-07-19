@@ -240,6 +240,7 @@ module ts {
         parent?: Node;                // Parent node (initialized by binding)
         symbol?: Symbol;              // Symbol declared by node (initialized by binding)
         locals?: SymbolTable;         // Locals associated with node (initialized by binding)
+        nextLocals?: Node;            // Next node in declaration order with locals (initialized by binding)
     }
 
     export interface NodeArray<T> extends Array<T>, TextRange { }
@@ -614,7 +615,7 @@ module ts {
 
     export interface EmitResolver {
         getProgram(): Program;
-        getModuleObjectName(node: ModuleDeclaration): string;
+        getLocalNameOfContainer(container: Declaration): string;
         getExpressionNamePrefix(node: Identifier): string;
         getPropertyAccessSubstitution(node: PropertyAccess): string;
         getExportAssignmentName(node: SourceFile): string;
@@ -690,7 +691,7 @@ module ts {
 
         ExportHasLocal = Function | Class | Enum | ValueModule,
 
-        HasLocals  = Function | Module | Method | Constructor | Accessor | Signature,
+        HasLocals  = Function | Enum | Module | Method | Constructor | Accessor | Signature,
         HasExports = Class | Enum | Module,
         HasMembers = Class | Interface | TypeLiteral | ObjectLiteral,
 
@@ -742,7 +743,8 @@ module ts {
         flags?: NodeCheckFlags;         // Set of flags specific to Node
         enumMemberValue?: number;       // Constant value of enum member
         isIllegalTypeReferenceInConstraint?: boolean; // Is type reference in constraint refers to the type parameter from the same list
-        isVisible?: boolean;            // Is this node visible 
+        isVisible?: boolean;            // Is this node visible
+        localModuleName?: string;       // Local name for module instance
     }
 
     export enum TypeFlags {

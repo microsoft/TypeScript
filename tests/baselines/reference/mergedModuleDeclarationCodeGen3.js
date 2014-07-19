@@ -19,14 +19,14 @@ var my;
     var data = my.data;
 })(my || (my = {}));
 var my;
-(function (my) {
-    (function (data) {
-        (function (foo) {
+(function (_my) {
+    (function (_data) {
+        (function (_foo) {
             function data(my, foo) {
-                data.buz();
+                _data.buz();
             }
-        })(data.foo || (data.foo = {}));
-        var foo = data.foo;
-    })(my.data || (my.data = {}));
-    var data = my.data;
+        })(_data.foo || (_data.foo = {}));
+        var foo = _data.foo;
+    })(_my.data || (_my.data = {}));
+    var data = _my.data;
 })(my || (my = {}));
