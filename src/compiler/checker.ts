@@ -6049,6 +6049,49 @@ module ts {
             Debug.fail("getLocalNameForSymbol failed");
         }
 
+        function isNodeParentedBy(node: Node, parent: Node): boolean {
+            while (node) {
+                if (node === parent) return true;
+                node = node.parent;
+            }
+            return false;
+        }
+
+        function isUniqueLocalName(name: string, container: Node): boolean {
+            name = escapeIdentifier(name);
+            if (container.locals) {
+                for (var node = container; isNodeParentedBy(node, container); node = node.nextLocals) {
+                    if (hasProperty(node.locals, name) && node.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue)) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        function getLocalNameOfContainer(container: Declaration): string {
+            var links = getNodeLinks(container);
+            if (!links.localModuleName) {
+                var name = container.name.text ? unescapeIdentifier(container.name.text) : "M";
+                while (!isUniqueLocalName(name, container)) {
+                    name = "_" + name;
+                }
+                links.localModuleName = name;
+            }
+            return links.localModuleName;
+        }
+
+        function getLocalNameForSymbol(symbol: Symbol, location: Node): string {
+            var node = location;
+            while (node) {
+                if ((node.kind === SyntaxKind.ModuleDeclaration || node.kind === SyntaxKind.EnumDeclaration) && getSymbolOfNode(node) === symbol) {
+                    return getLocalNameOfContainer(node);
+                }
+                node = node.parent;
+            }
+            Debug.fail("getLocalNameForSymbol failed");
+        }
+
         function getExpressionNamePrefix(node: Identifier): string {
             var symbol = getNodeLinks(node).resolvedSymbol;
             if (symbol) {
