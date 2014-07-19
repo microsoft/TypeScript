@@ -21,24 +21,24 @@ module M {
 
 //// [collisionCodeGenModuleWithFunctionChildren.js]
 var M;
-(function (M) {
-    M.x = 3;
+(function (_M) {
+    _M.x = 3;
     function fn(M, p) {
-        if (p === void 0) { p = M.x; }
+        if (p === void 0) { p = _M.x; }
     }
 })(M || (M = {}));
 var M;
-(function (M) {
+(function (_M) {
     function fn2() {
         var M;
-        var p = M.x;
+        var p = _M.x;
     }
 })(M || (M = {}));
 var M;
-(function (M) {
+(function (_M) {
     function fn3() {
         function M() {
-            var p = M.x;
+            var p = _M.x;
         }
     }
 })(M || (M = {}));

@@ -32,6 +32,7 @@ module ts {
         var parent: Node;
         var container: Declaration;
         var symbolCount = 0;
+        var lastLocals: Declaration;
         var Symbol = objectAllocator.getSymbolConstructor();
 
         if (!file.locals) {
@@ -162,6 +163,14 @@ module ts {
             }
         }
 
+        // All nodes with locals are kept on a linked list in declaration order. This list is used by the getLocalNameOfContainer function
+        // in the type checker to validate that the local name used for a container is unique.
+        function initializeLocals(node: Declaration) {
+            node.locals = {};
+            if (lastLocals) lastLocals.nextLocals = node;
+            lastLocals = node;
+        }
+
         function bindDeclaration(node: Declaration, symbolKind: SymbolFlags, symbolExcludes: SymbolFlags) {
             switch (container.kind) {
                 case SyntaxKind.ModuleDeclaration:
@@ -198,7 +207,7 @@ module ts {
                     declareSymbol(container.symbol.exports, container.symbol, node, symbolKind, symbolExcludes);
                     break;
             }
-            if (symbolKind & SymbolFlags.HasLocals) node.locals = {};
+            if (symbolKind & SymbolFlags.HasLocals) initializeLocals(node);
             var saveParent = parent;
             var saveContainer = container;
             parent = node;
@@ -232,7 +241,7 @@ module ts {
         function bindAnonymousDeclaration(node: Node, symbolKind: SymbolFlags, name: string) {
             var symbol = createSymbol(symbolKind, name);
             addDeclarationToSymbol(symbol, node, symbolKind);
-            if (symbolKind & SymbolFlags.HasLocals) node.locals = {};
+            if (symbolKind & SymbolFlags.HasLocals) initializeLocals(node);
             var saveParent = parent;
             var saveContainer = container;
             parent = node;

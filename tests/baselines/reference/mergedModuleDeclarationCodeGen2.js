@@ -22,11 +22,11 @@ var my;
     var data = my.data;
 })(my || (my = {}));
 var my;
-(function (my) {
-    (function (data) {
+(function (_my) {
+    (function (_data) {
         function data(my) {
-            data.foo.buz();
+            _data.foo.buz();
         }
-    })(my.data || (my.data = {}));
-    var data = my.data;
+    })(_my.data || (_my.data = {}));
+    var data = _my.data;
 })(my || (my = {}));

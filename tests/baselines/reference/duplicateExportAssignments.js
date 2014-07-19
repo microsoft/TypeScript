@@ -56,8 +56,8 @@ var y = (function () {
 module.exports = x;
 //// [foo3.js]
 var x;
-(function (x) {
-    x.x = 10;
+(function (_x) {
+    _x.x = 10;
 })(x || (x = {}));
 var y = (function () {
     function y() {

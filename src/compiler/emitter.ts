@@ -1043,7 +1043,7 @@ module ts {
                 emitStart(node.name);
                 if (node.flags & NodeFlags.Export) {
                     var container = getContainingModule(node);
-                    write(container ? resolver.getModuleObjectName(container) : "exports");
+                    write(container ? resolver.getLocalNameOfContainer(container) : "exports");
                     write(".");
                 }
                 emitNode(node.name);
@@ -1439,16 +1439,18 @@ module ts {
                 writeLine();
                 emitStart(node);
                 write("(function (");
-                emit(node.name);
+                emitStart(node.name);
+                write(resolver.getLocalNameOfContainer(node));
+                emitEnd(node.name);
                 write(") {");
                 increaseIndent();
                 scopeEmitStart(node);
                 forEach(node.members, member => {
                     writeLine();
                     emitStart(member);
-                    emitNode(node.name);
+                    write(resolver.getLocalNameOfContainer(node));
                     write("[");
-                    emitNode(node.name);
+                    write(resolver.getLocalNameOfContainer(node));
                     write("[");
                     emitQuotedIdentifier(member.name);
                     write("] = ");
@@ -1504,7 +1506,9 @@ module ts {
                 }
                 emitStart(node);
                 write("(function (");
-                emit(node.name);
+                emitStart(node.name);
+                write(resolver.getLocalNameOfContainer(node));
+                emitEnd(node.name);
                 write(") ");
                 if (node.body.kind === SyntaxKind.ModuleBlock) {
                     emit(node.body);

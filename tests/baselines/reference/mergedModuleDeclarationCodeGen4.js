@@ -19,7 +19,7 @@ module superContain {
 //// [mergedModuleDeclarationCodeGen4.js]
 var superContain;
 (function (superContain) {
-    (function (contain) {
+    (function (_contain) {
         (function (my) {
             (function (buz) {
                 (function (data) {
@@ -30,21 +30,21 @@ var superContain;
                 var data = buz.data;
             })(my.buz || (my.buz = {}));
             var buz = my.buz;
-        })(contain.my || (contain.my = {}));
-        var my = contain.my;
-        (function (my) {
-            (function (buz) {
-                (function (data) {
+        })(_contain.my || (_contain.my = {}));
+        var my = _contain.my;
+        (function (_my) {
+            (function (_buz) {
+                (function (_data) {
                     function bar(contain, my, buz, data) {
-                        data.foo();
+                        _data.foo();
                     }
-                    data.bar = bar;
-                })(buz.data || (buz.data = {}));
-                var data = buz.data;
-            })(my.buz || (my.buz = {}));
-            var buz = my.buz;
-        })(contain.my || (contain.my = {}));
-        var my = contain.my;
+                    _data.bar = bar;
+                })(_buz.data || (_buz.data = {}));
+                var data = _buz.data;
+            })(_my.buz || (_my.buz = {}));
+            var buz = _my.buz;
+        })(_contain.my || (_contain.my = {}));
+        var my = _contain.my;
     })(superContain.contain || (superContain.contain = {}));
     var contain = superContain.contain;
 })(superContain || (superContain = {}));

@@ -112,7 +112,7 @@ var __extends = this.__extends || function (d, b) {
 var Sample;
 (function (Sample) {
     (function (Actions) {
-        (function (Thing) {
+        (function (_Thing) {
             (function (Find) {
                 var StartFindAction = (function () {
                     function StartFindAction() {
@@ -126,8 +126,8 @@ var Sample;
                     return StartFindAction;
                 })();
                 Find.StartFindAction = StartFindAction;
-            })(Thing.Find || (Thing.Find = {}));
-            var Find = Thing.Find;
+            })(_Thing.Find || (_Thing.Find = {}));
+            var Find = _Thing.Find;
         })(Actions.Thing || (Actions.Thing = {}));
         var Thing = Actions.Thing;
     })(Sample.Actions || (Sample.Actions = {}));

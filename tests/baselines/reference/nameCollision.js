@@ -48,7 +48,7 @@ module D {
 
 //// [nameCollision.js]
 var A;
-(function (A) {
+(function (__A) {
     var A = 12;
     var _A = '';
 })(A || (A = {}));
@@ -57,7 +57,7 @@ var B;
     var A = 12;
 })(B || (B = {}));
 var B;
-(function (B) {
+(function (_B) {
     var B = (function () {
         function B() {
         }
@@ -65,29 +65,29 @@ var B;
     })();
 })(B || (B = {}));
 var X;
-(function (X) {
+(function (_X) {
     var X = 13;
-    (function (Y) {
+    (function (_Y) {
         var Y = 13;
-        (function (Z) {
+        (function (_Z) {
             var X = 12;
             var Y = 12;
             var Z = 12;
-        })(Y.Z || (Y.Z = {}));
-        var Z = Y.Z;
-    })(X.Y || (X.Y = {}));
-    var Y = X.Y;
+        })(_Y.Z || (_Y.Z = {}));
+        var Z = _Y.Z;
+    })(_X.Y || (_X.Y = {}));
+    var Y = _X.Y;
 })(X || (X = {}));
 var Y;
-(function (Y) {
-    (function (Y) {
+(function (_Y) {
+    (function (_Y) {
         (function (Y) {
             Y[Y["Red"] = 0] = "Red";
             Y[Y["Blue"] = 1] = "Blue";
-        })(Y.Y || (Y.Y = {}));
-        var Y = Y.Y;
-    })(Y.Y || (Y.Y = {}));
-    var Y = Y.Y;
+        })(_Y.Y || (_Y.Y = {}));
+        var Y = _Y.Y;
+    })(_Y.Y || (_Y.Y = {}));
+    var Y = _Y.Y;
 })(Y || (Y = {}));
 var D;
 (function (D) {

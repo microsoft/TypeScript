@@ -18,13 +18,13 @@ module C {
 
 //// [importedModuleAddToGlobal.js]
 var B;
-(function (B) {
+(function (_B) {
     var B = (function () {
         function B() {
         }
         return B;
     })();
-    B.B = B;
+    _B.B = B;
 })(B || (B = {}));
 var C;
 (function (C) {
