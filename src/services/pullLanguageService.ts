@@ -31,7 +31,10 @@ module TypeScript.Services {
 
     export function getDefaultCompilerOptions(): ts.CompilerOptions {
         // Set "ES5" target by default for language service
-        return { target: ts.ScriptTarget.ES5 };
+        return {
+            target: ts.ScriptTarget.ES5,
+            module: ts.ModuleKind.None,
+        };
     }
 
     // Cache host information about scripts. Should be refreshed 
@@ -442,6 +445,7 @@ module TypeScript.Services {
                 getCancellationToken: () => this.cancellationToken,
                 getCanonicalFileName: (filename) => this.useCaseSensitivefilenames ? filename : filename.toLowerCase(),
                 useCaseSensitiveFileNames: () => this.useCaseSensitivefilenames,
+                getNewLine: ()=> "\n",
                 // Need something that doesn't depend on sys.ts here
                 getDefaultLibFilename: (): string => {
                     throw Error("TOD:: getDefaultLibfilename");
@@ -466,9 +470,6 @@ module TypeScript.Services {
             //       2. compilation settings are identical
 
             // Now, remove any files from the compiler that are no longer in the host.
-            var oldDocumentsByName = this.documentsByName;
-            this.documentsByName = {};
-
             var oldProgram = this.program;
             if (oldProgram) {
                 var oldSettings = this.program.getCompilerOptions();
@@ -481,6 +482,7 @@ module TypeScript.Services {
                     var filename = oldSourceFiles[i].filename;
                     if (!this.hostCache.contains(filename) || changesInCompilationSettingsAffectSyntax) {
                         this.documentRegistry.releaseDocument(filename, oldSettings);
+                        delete this.documentsByName[filename];
                     }
                 }
             }
@@ -497,7 +499,7 @@ module TypeScript.Services {
                 var isOpen = this.hostCache.isOpen(filename);
                 var scriptSnapshot = this.hostCache.getScriptSnapshot(filename);
 
-                var document: Document = oldDocumentsByName[filename];
+                var document: Document = this.documentsByName[filename];
                 if (document) {
                     //
                     // If the document is the same, assume no update
@@ -622,7 +624,7 @@ module TypeScript.Services {
                     return ast;
             }
         }
-        getNameOrDottedNameSpan(filename: string, startPos: number, endPos: number) {
+        getNameOrDottedNameSpan(filename: string, startPos: number, endPos: number): SpanInfo {
             filename = TypeScript.switchToForwardSlashes(filename);
 
             var node = this.getTypeInfoEligiblePath(filename, startPos, false);
@@ -638,8 +640,10 @@ module TypeScript.Services {
                 }
             }
 
-            var spanInfo = new SpanInfo(start(node), end(node));
-            return spanInfo;
+            return {
+                minChar: start(node),
+                limChar: end(node)
+            };
         }
         getBreakpointStatementAtPosition(filename: string, position: number) {
             // doesn't use compiler - no need to synchronize with host
