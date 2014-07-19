@@ -4025,18 +4025,18 @@ module ts {
         // An explicitly typed function whose return type isn't the Void or the Any type
         // must have at least one return statement somewhere in its body.
         // An exception to this rule is if the function implementation consists of a single 'throw' statement.
-        function checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(decl: FunctionDeclaration, returnType: Type): void {
+        function checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(func: FunctionDeclaration, returnType: Type): void {
             // Functions that return 'void' or 'any' don't need any return expressions.
             if (returnType === voidType || returnType === anyType) {
                 return;
             }
 
             // If all we have is a function signature, or an arrow function with an expression body, then there is nothing to check.
-            if (!decl.body || decl.body.kind !== SyntaxKind.FunctionBlock) {
+            if (!func.body || func.body.kind !== SyntaxKind.FunctionBlock) {
                 return;
             }
 
-            var bodyBlock = <Block>decl.body;
+            var bodyBlock = <Block>func.body;
 
             // Ensure the body has at least one return expression.
             if (bodyContainsReturnExpressions(bodyBlock)) {
@@ -4051,7 +4051,7 @@ module ts {
             }
 
             // This function does not conform to the specification.
-            error(decl.type, Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_have_a_return_expression_or_consist_of_a_single_throw_statement);
+            error(func.type, Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_have_a_return_expression_or_consist_of_a_single_throw_statement);
         }
 
         function checkFunctionExpression(node: FunctionExpression, contextualType?: Type, contextualMapper?: TypeMapper): Type {
