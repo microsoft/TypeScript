@@ -1,0 +1,105 @@
+==== tests/cases/compiler/privacyInterfaceExtendsClauseDeclFile_externalModule.ts (5 errors) ====
+    
+    export module publicModule {
+        export interface publicInterfaceInPublicModule {
+        }
+    
+        interface privateInterfaceInPublicModule {
+        }
+    
+        interface privateInterfaceImplementingPublicInterfaceInModule extends publicInterfaceInPublicModule {
+        }
+        interface privateInterfaceImplementingPrivateInterfaceInModule extends privateInterfaceInPublicModule {
+        }
+        export interface publicInterfaceImplementingPublicInterfaceInModule extends publicInterfaceInPublicModule {
+        }
+        export interface publicInterfaceImplementingPrivateInterfaceInModule extends privateInterfaceInPublicModule { // Should error
+                                                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Extends clause of exported interface 'publicInterfaceImplementingPrivateInterfaceInModule' has or is using private name 'privateInterfaceInPublicModule'.
+        }
+    
+        interface privateInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
+        }
+        export interface publicInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule { // Should error
+                                                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Extends clause of exported interface 'publicInterfaceImplementingFromPrivateModuleInterface' has or is using name 'privateModule.publicInterfaceInPrivateModule' from private module 'privateModule'.
+        }
+    
+        export interface publicInterfaceImplementingPrivateAndPublicInterface extends privateInterfaceInPublicModule, publicInterfaceInPublicModule { // Should error
+                                                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Extends clause of exported interface 'publicInterfaceImplementingPrivateAndPublicInterface' has or is using private name 'privateInterfaceInPublicModule'.
+        }
+    }
+    
+    module privateModule {
+        export interface publicInterfaceInPrivateModule {
+    
+        }
+    
+        interface privateInterfaceInPrivateModule {
+        }
+    
+        interface privateInterfaceImplementingPublicInterfaceInModule extends publicInterfaceInPrivateModule {
+        }
+        interface privateInterfaceImplementingPrivateInterfaceInModule extends privateInterfaceInPrivateModule {
+        }
+        export interface publicInterfaceImplementingPublicInterfaceInModule extends publicInterfaceInPrivateModule {
+        }
+        export interface publicInterfaceImplementingPrivateInterfaceInModule extends privateInterfaceInPrivateModule {
+        }
+    
+        interface privateInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
+        }
+        export interface publicInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
+        }
+    }
+    
+    export interface publicInterface {
+    
+    }
+    
+    interface privateInterface {
+    }
+    
+    interface privateInterfaceImplementingPublicInterface extends publicInterface {
+    }
+    interface privateInterfaceImplementingPrivateInterfaceInModule extends privateInterface {
+    }
+    export interface publicInterfaceImplementingPublicInterface extends publicInterface {
+    }
+    export interface publicInterfaceImplementingPrivateInterface extends privateInterface { // Should error
+                                                                         ~~~~~~~~~~~~~~~~
+!!! Extends clause of exported interface 'publicInterfaceImplementingPrivateInterface' has or is using private name 'privateInterface'.
+    }
+    
+    interface privateInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
+    }
+    export interface publicInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule { // Should error
+                                                                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Extends clause of exported interface 'publicInterfaceImplementingFromPrivateModuleInterface' has or is using name 'privateModule.publicInterfaceInPrivateModule' from private module 'privateModule'.
+    }
+    
+==== tests/cases/compiler/privacyInterfaceExtendsClauseDeclFile_GlobalFile.ts (1 errors) ====
+    module publicModuleInGlobal {
+        export interface publicInterfaceInPublicModule {
+        }
+    
+        interface privateInterfaceInPublicModule {
+        }
+    
+        interface privateInterfaceImplementingPublicInterfaceInModule extends publicInterfaceInPublicModule {
+        }
+        interface privateInterfaceImplementingPrivateInterfaceInModule extends privateInterfaceInPublicModule {
+        }
+        export interface publicInterfaceImplementingPublicInterfaceInModule extends publicInterfaceInPublicModule {
+        }
+        export interface publicInterfaceImplementingPrivateInterfaceInModule extends privateInterfaceInPublicModule { // Should error
+                                                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Extends clause of exported interface 'publicInterfaceImplementingPrivateInterfaceInModule' has or is using private name 'privateInterfaceInPublicModule'.
+        }
+    }
+    interface publicInterfaceInGlobal {
+    }
+    interface publicInterfaceImplementingPublicInterfaceInGlobal extends publicInterfaceInGlobal {
+    }
+    

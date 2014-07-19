@@ -2027,6 +2027,54 @@ module ts {
 
             function emitHeritageClause(typeReferences: TypeReferenceNode[], isImplementsList: boolean) {
                 function emitTypeOfTypeReference(node: Node) {
+                    function getHeritageClauseVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
+                        var diagnosticMessage: DiagnosticMessage;
+                        if (node.parent.kind === SyntaxKind.ClassDeclaration) {
+                            // Class
+                            if (symbolAccesibilityResult.accessibility == SymbolAccessibility.NotAccessible) {
+                                if (symbolAccesibilityResult.errorModuleName) {
+                                    // Module is inaccessible
+                                    diagnosticMessage = isImplementsList ?
+                                    Diagnostics.Implements_clause_of_exported_class_0_has_or_is_using_name_1_from_private_module_2 :
+                                    Diagnostics.Extends_clause_of_exported_class_0_has_or_is_using_name_1_from_private_module_2;
+                                }
+                                else {
+                                    // Class or Interface implemented/extended is inaccessible
+                                    diagnosticMessage = isImplementsList ?
+                                    Diagnostics.Implements_clause_of_exported_class_0_has_or_is_using_private_name_1 :
+                                    Diagnostics.Extends_clause_of_exported_class_0_has_or_is_using_private_name_1;
+                                }
+                            }
+                            else {
+                                // CannotBeNamed
+                                // TODO(shkamat): CannotBeNamed error needs to be handled
+                            }
+                        }
+                        else {
+                            // Interface
+                            if (symbolAccesibilityResult.accessibility == SymbolAccessibility.NotAccessible) {
+                                if (symbolAccesibilityResult.errorModuleName) {
+                                    // Module is inaccessible
+                                    diagnosticMessage = Diagnostics.Extends_clause_of_exported_interface_0_has_or_is_using_name_1_from_private_module_2;
+                                }
+                                else {
+                                    // interface is inaccessible
+                                    diagnosticMessage = Diagnostics.Extends_clause_of_exported_interface_0_has_or_is_using_private_name_1;
+                                }
+                            }
+                            else {
+                                // CannotBeNamed
+                                // TODO(shkamat): CannotBeNamed error needs to be handled
+                            }
+                        }
+
+                        return {
+                            diagnosticMessage: diagnosticMessage,
+                            errorNode: node,
+                            typeName: (<Declaration>node.parent).name
+                        }
+                    }
+                    getSymbolVisibilityDiagnosticMessage = getHeritageClauseVisibilityError;
                     resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.WriteArrayAsGenericType, writer);
                 }
 

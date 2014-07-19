@@ -390,6 +390,30 @@
         "category": "Error",
         "code": 2000
     },
+    "Extends clause of exported class '{0}' has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2018
+    },
+    "Implements clause of exported class '{0}' has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2019
+    },
+    "Extends clause of exported interface '{0}' has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2020
+    },
+    "Extends clause of exported class '{0}' has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2021
+    },
+    "Implements clause of exported class '{0}' has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2022
+    },
+    "Extends clause of exported interface '{0}' has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2023
+    },
     "'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.": {
         "category": "Error",
         "code": 2068
