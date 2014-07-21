@@ -3963,13 +3963,13 @@ module ts {
             return voidType;
         }
 
-        // WARNING: This has the same semantics as forEach, in that traversal terminates
-        //          in the event that 'visitor' supplies a truthy value!
-        function visitReturnStatements<T>(body: Block, visitor: (stmt: ReturnStatement) => T): T {
+        // WARNING: This has the same semantics as the forEach family of functions,
+        //          in that traversal terminates in the event that 'visitor' supplies a truthy value.
+        function forEachReturnStatement<T>(body: Block, visitor: (stmt: ReturnStatement) => T): T {
 
-            return visitHelper(body);
+            return traverse(body);
 
-            function visitHelper(node: Node): T {
+            function traverse(node: Node): T {
                 switch (node.kind) {
                     case SyntaxKind.ReturnStatement:
                         return visitor(node);
@@ -3989,7 +3989,7 @@ module ts {
                     case SyntaxKind.TryBlock:
                     case SyntaxKind.CatchBlock:
                     case SyntaxKind.FinallyBlock:
-                        return forEachChild(node, visitHelper);
+                        return forEachChild(node, traverse);
                 }
             }
         }
@@ -3998,7 +3998,7 @@ module ts {
         function checkAndAggregateReturnExpressionTypes(body: Block, contextualType?: Type, contextualMapper?: TypeMapper): Type[] {
             var aggregatedTypes: Type[] = [];
 
-            visitReturnStatements(body, (returnStatement) => {
+            forEachReturnStatement(body, (returnStatement) => {
                 var expr = returnStatement.expression;
                 if (expr) {
                     var type = checkAndMarkExpression(expr, contextualType, contextualMapper);
@@ -4011,9 +4011,9 @@ module ts {
             return aggregatedTypes;
         }
 
-        function bodyContainsReturnExpressions(funcBody: Block) {
-            return visitReturnStatements(funcBody, (returnStatement) => {
-                return returnStatement.expression !== undefined;
+        function bodyContainsAReturnStatement(funcBody: Block) {
+            return forEachReturnStatement(funcBody, (returnStatement) => {
+                return true;
             });
         }
 
@@ -4039,7 +4039,7 @@ module ts {
             var bodyBlock = <Block>func.body;
 
             // Ensure the body has at least one return expression.
-            if (bodyContainsReturnExpressions(bodyBlock)) {
+            if (bodyContainsAReturnStatement(bodyBlock)) {
                 return;
             }
 
@@ -4653,7 +4653,7 @@ module ts {
 
         function checkAccessorDeclaration(node: AccessorDeclaration) {
             if (node.kind === SyntaxKind.GetAccessor) {
-                if (!isInAmbientContext(node) && node.body && !(bodyContainsReturnExpressions(<Block>node.body) || bodyContainsSingleThrowStatement(<Block>node.body))) {
+                if (!isInAmbientContext(node) && node.body && !(bodyContainsAReturnStatement(<Block>node.body) || bodyContainsSingleThrowStatement(<Block>node.body))) {
                     error(node.name, Diagnostics.A_get_accessor_must_return_a_value_or_consist_of_a_single_throw_statement);
                 }
             }
