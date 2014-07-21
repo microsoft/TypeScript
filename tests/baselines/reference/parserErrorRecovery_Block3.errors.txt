@@ -2,12 +2,12 @@
     class C  {
         private a(): boolean {
                      ~~~~~~~
-!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
+!!! A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
     
         private b(): boolean {
         ~~~~~~~
 !!! Statement expected.
                      ~~~~~~~
-!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
+!!! A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
         }
     }

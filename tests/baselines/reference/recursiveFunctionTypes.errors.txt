@@ -18,10 +18,10 @@
     
     function f2(): typeof g2 { } 
                    ~~~~~~~~~
-!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
+!!! A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
     function g2(): typeof f2 { } 
                    ~~~~~~~~~
-!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
+!!! A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
     
     interface I<T> { }
     function f3(): I<typeof f3> { return f3; }

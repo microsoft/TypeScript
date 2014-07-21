@@ -35,12 +35,12 @@
                     ~~~~~~~~~~~
 !!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                               ~
-!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
+!!! A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
                                               ~
 !!! Cannot find name 'V'.
         function bar<V extends T, W extends U>(): X { // error
                                                   ~
-!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
+!!! A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
                                                   ~
 !!! Cannot find name 'X'.
             function baz<X extends W, Y extends V>(a: X, b: Y): T {
@@ -58,12 +58,12 @@
                   ~~~~~~~~~~~
 !!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                                ~
-!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
+!!! A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
                                                ~
 !!! Cannot find name 'W'.
         function bar<V extends T, W extends U>(): Y { // error
                                                   ~
-!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
+!!! A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
                                                   ~
 !!! Cannot find name 'Y'.
             function baz<X extends W, Y extends V>(a: X, b: Y): T {

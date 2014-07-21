@@ -2,7 +2,7 @@
     
     function f1(): string {
                    ~~~~~~
-!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
+!!! A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
         // errors because there are no return statements
     }
     
@@ -66,7 +66,7 @@
     
     function f14(): number {
                     ~~~~~~
-!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
+!!! A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
         // Not fine, since we can *only* consist of a single throw statement
         // if no return statements are present but we are annotated.
         throw undefined;

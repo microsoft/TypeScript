@@ -4051,7 +4051,7 @@ module ts {
             }
 
             // This function does not conform to the specification.
-            error(func.type, Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_have_a_return_expression_or_consist_of_a_single_throw_statement);
+            error(func.type, Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value_or_consist_of_a_single_throw_statement);
         }
 
         function checkFunctionExpression(node: FunctionExpression, contextualType?: Type, contextualMapper?: TypeMapper): Type {

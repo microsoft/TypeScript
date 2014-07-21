@@ -4,9 +4,9 @@
              ~~~
 !!! Duplicate identifier 'foo'.
                     ~~~~~~
-!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
+!!! A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
     function foo(): number { }
              ~~~
 !!! Duplicate identifier 'foo'.
                     ~~~~~~
-!!! A function whose declared type is neither 'void' nor 'any' must have a 'return' expression or consist of a single 'throw' statement.
+!!! A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
