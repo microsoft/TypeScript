@@ -3796,7 +3796,7 @@ module ts {
                 }
                 return checkUntypedCall(node);
             }
-            // If FuncExpr’s apparent type(section 3.8.1) is a function type, the call is a typed function call.
+            // If FuncExpr's apparent type(section 3.8.1) is a function type, the call is a typed function call.
             // TypeScript employs overload resolution in typed function calls in order to support functions
             // with multiple call signatures.
             if (!signatures.length) {
@@ -3828,7 +3828,7 @@ module ts {
                 return checkUntypedCall(node);
             }
 
-            // If ConstructExpr’s apparent type(section 3.8.1) is an object type with one or
+            // If ConstructExpr's apparent type(section 3.8.1) is an object type with one or
             // more construct signatures, the expression is processed in the same manner as a
             // function call, but using the construct signatures as the initial set of candidate
             // signatures for overload resolution.The result type of the function call becomes
@@ -3849,7 +3849,7 @@ module ts {
                 return checkCall(node, constructSignatures);
             }
 
-            // If ConstructExpr’s apparent type is an object type with no construct signatures but
+            // If ConstructExpr's apparent type is an object type with no construct signatures but
             // one or more call signatures, the expression is processed as a function call. A compile-time
             // error occurs if the result of the function call is not Void. The type of the result of the
             // operation is Any.
@@ -6032,12 +6032,49 @@ module ts {
 
         // Emitter support
 
-        function getModuleObjectName(node: ModuleDeclaration): string {
-            return getSourceTextOfNode(node.name);
-        }
-
         function isExternalModule(symbol: Symbol): boolean {
             return symbol.flags & SymbolFlags.ValueModule && symbol.declarations.length === 1 && symbol.declarations[0].kind === SyntaxKind.SourceFile;
+        }
+
+        function isNodeParentedBy(node: Node, parent: Node): boolean {
+            while (node) {
+                if (node === parent) return true;
+                node = node.parent;
+            }
+            return false;
+        }
+
+        function isUniqueLocalName(name: string, container: Node): boolean {
+            for (var node = container; isNodeParentedBy(node, container); node = node.nextContainer) {
+                if (node.locals && hasProperty(node.locals, name) && node.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function getLocalNameOfContainer(container: Declaration): string {
+            var links = getNodeLinks(container);
+            if (!links.localModuleName) {
+                var prefix = "";
+                var name = unescapeIdentifier(container.name.text);
+                while (!isUniqueLocalName(escapeIdentifier(prefix + name), container)) {
+                    prefix += "_";
+                }
+                links.localModuleName = prefix + getSourceTextOfNode(container.name);
+            }
+            return links.localModuleName;
+        }
+
+        function getLocalNameForSymbol(symbol: Symbol, location: Node): string {
+            var node = location;
+            while (node) {
+                if ((node.kind === SyntaxKind.ModuleDeclaration || node.kind === SyntaxKind.EnumDeclaration) && getSymbolOfNode(node) === symbol) {
+                    return getLocalNameOfContainer(node);
+                }
+                node = node.parent;
+            }
+            Debug.fail("getLocalNameForSymbol failed");
         }
 
         function getExpressionNamePrefix(node: Identifier): string {
@@ -6049,15 +6086,11 @@ module ts {
                 // kind of entity. SymbolFlags.ExportHasLocal encompasses all the kinds that we
                 // do NOT prefix.
                 var exportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
-                var isExportedSymbolFoundInLocalScope = exportSymbol !== symbol;
-                var shouldEmitExportWithoutPrefix = (exportSymbol.flags & SymbolFlags.ExportHasLocal) !== 0;
-                if (isExportedSymbolFoundInLocalScope && !shouldEmitExportWithoutPrefix) {
+                if (symbol !== exportSymbol && !(exportSymbol.flags & SymbolFlags.ExportHasLocal)) {
                     symbol = exportSymbol;
                 }
-
-                // symbol will have a parent if it is an export symbol
                 if (symbol.parent) {
-                    return isExternalModule(symbol.parent) ? "exports" : symbolToString(symbol.parent);
+                    return isExternalModule(symbol.parent) ? "exports" : getLocalNameForSymbol(getParentOfSymbol(symbol), node.parent);
                 }
             }
         }
@@ -6144,7 +6177,7 @@ module ts {
         function invokeEmitter() {
             var resolver: EmitResolver = {
                 getProgram: () => program,
-                getModuleObjectName: getModuleObjectName,
+                getLocalNameOfContainer: getLocalNameOfContainer,
                 getExpressionNamePrefix: getExpressionNamePrefix,
                 getPropertyAccessSubstitution: getPropertyAccessSubstitution,
                 getExportAssignmentName: getExportAssignmentName,

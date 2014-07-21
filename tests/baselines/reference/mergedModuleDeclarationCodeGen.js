@@ -17,10 +17,10 @@ export module X {
 
 //// [mergedModuleDeclarationCodeGen.js]
 (function (X) {
-    (function (Y) {
+    (function (_Y) {
         var A = (function () {
             function A(Y) {
-                new Y.B();
+                new _Y.B();
             }
             return A;
         })();

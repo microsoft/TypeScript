@@ -10,7 +10,7 @@ var foo = new m1.c1();
 
 //// [collisionCodeGenModuleWithPrivateMember.js]
 var m1;
-(function (m1) {
+(function (_m1) {
     var m1 = (function () {
         function m1() {
         }
@@ -22,6 +22,6 @@ var m1;
         }
         return c1;
     })();
-    m1.c1 = c1;
+    _m1.c1 = c1;
 })(m1 || (m1 = {}));
 var foo = new m1.c1();
