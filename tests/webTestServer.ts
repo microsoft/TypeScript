@@ -54,6 +54,8 @@ function dir(path: string, spec?: string, options?: any) {
     function filesInFolder(folder: string): string[] {
         var folder = switchToForwardSlashes(folder);
         var paths: string[] = [];
+        // Everything after the current directory is relative
+        var baseDirectoryLength = process.cwd().length + 1;
 
         try {
             var files = fs.readdirSync(folder);
@@ -62,7 +64,7 @@ function dir(path: string, spec?: string, options?: any) {
                 if (options.recursive && stat.isDirectory()) {
                     paths = paths.concat(filesInFolder(folder + "/" + files[i]));
                 } else if (stat.isFile() && (!spec || files[i].match(spec))) {
-                    var relativePath = folder.substring(folder.indexOf('/TypeScript/') + 12);
+                    var relativePath = folder.substring(baseDirectoryLength);
                     paths.push(relativePath + "/" + files[i]);
                 }
             }
