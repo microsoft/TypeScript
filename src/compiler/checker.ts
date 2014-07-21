@@ -5006,7 +5006,7 @@ module ts {
             potentialThisCollisions.push(node);
         }
 
-        // this function will run after checking the source file so 'CaptureThis' for all nodes
+        // this function will run after checking the source file so 'CaptureThis' is correct for all nodes
         function checkIfThisIsCapturedInEnclosingScope(node: Node): void {
             var current = node;
             while (current) {                
