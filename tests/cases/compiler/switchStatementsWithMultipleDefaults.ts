@@ -22,6 +22,10 @@ switch (x) {
                 break;
             case 10000:
                 x /= x;
-            default:
+            default:    // Error, third 'default' clause
+            def\u0061ult: // Error, fourth 'default' clause.
+            // Errors on fifth-seventh
+            default: return;
+            default: default:
         }
 }

@@ -2065,9 +2065,12 @@ module ts {
             parseExpected(SyntaxKind.CloseBraceToken);
 
             // Error on duplicate 'default' clauses.
-            var defaultClauses = filter(node.clauses, clause => clause.kind === SyntaxKind.DefaultClause);
-            for (var i = 1, len = defaultClauses.length; i < len; i++) {
-                grammarErrorOnNode(defaultClauses[i], Diagnostics.A_default_clause_cannot_appear_more_than_once_in_a_switch_statement);
+            var defaultClauses: CaseOrDefaultClause[] = filter(node.clauses, clause => clause.kind === SyntaxKind.DefaultClause);
+            for (var i = 1, n = defaultClauses.length; i < n; i++) {
+                var clause = defaultClauses[i];
+                var start = skipTrivia(file.text, clause.pos);
+                var end = clause.statements.length > 0 ? clause.statements[0].pos : clause.end;
+                grammarErrorAtPos(start, end - start, Diagnostics.A_default_clause_cannot_appear_more_than_once_in_a_switch_statement);
             }
 
             return finishNode(node);
