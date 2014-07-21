@@ -1,4 +1,4 @@
-==== tests/cases/compiler/collisionThisExpressionAndLocalVarInAccessors.ts (4 errors) ====
+==== tests/cases/compiler/collisionThisExpressionAndLocalVarInAccessors.ts (8 errors) ====
     class class1 {
         get a(): number {
             ~
@@ -6,6 +6,8 @@
             var x2 = {
                 doStuff: (callback) => () => {
                     var _this = 2;
+                        ~~~~~
+!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
                     return callback(this);
                 }
             }
@@ -18,6 +20,8 @@
             var x2 = {
                 doStuff: (callback) => () => {
                     var _this = 2;
+                        ~~~~~
+!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
                     return callback(this);
                 }
             }
@@ -30,6 +34,8 @@
             ~
 !!! Accessors are only available when targeting ECMAScript 5 and higher.
             var _this = 2;
+                ~~~~~
+!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
             var x2 = {
                 doStuff: (callback) => () => {
                     return callback(this);
@@ -42,6 +48,8 @@
             ~
 !!! Accessors are only available when targeting ECMAScript 5 and higher.
             var _this = 2;
+                ~~~~~
+!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
             var x2 = {
                 doStuff: (callback) => () => {
                     return callback(this);

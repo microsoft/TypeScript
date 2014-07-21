@@ -1,0 +1,8 @@
+==== tests/cases/compiler/collisionThisExpressionAndModuleInGlobal.ts (1 errors) ====
+    module _this { //Error
+           ~~~~~
+!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+        class c {
+        }
+    }
+    var f = () => this;

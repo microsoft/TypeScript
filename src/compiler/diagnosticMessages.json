@@ -534,9 +534,17 @@
         "category": "Error",
         "code": 2197
     },
+    "Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.": {
+        "category": "Error",
+        "code": 2200
+    },
     "Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.": {
         "category": "Error",
         "code": 2205
+    },
+    "Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.": {
+        "category": "Error",
+        "code": 2206
     },
     "Expression resolves to '_super' that compiler uses to capture base class reference.": {
         "category": "Error",
