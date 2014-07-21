@@ -19,7 +19,9 @@ module ts {
         if (array) {
             var len = array.length;
             for (var i = 0; i < len; i++) {
-                if (array[i] === value) return true;
+                if (array[i] === value) {
+                    return true;
+                }
             }
         }
         return false;
@@ -29,7 +31,9 @@ module ts {
         if (array) {
             var len = array.length;
             for (var i = 0; i < len; i++) {
-                if (array[i] === value) return i;
+                if (array[i] === value) {
+                    return i;
+                }
             }
         }
         return -1;
@@ -41,7 +45,9 @@ module ts {
             result = [];
             for (var i = 0, len = array.length; i < len; i++) {
                 var item = array[i];
-                if (f(item)) result.push(item);
+                if (f(item)) {
+                    result.push(item);
+                }
             }
         }
         return result;

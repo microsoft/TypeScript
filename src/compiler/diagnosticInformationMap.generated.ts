@@ -98,6 +98,7 @@ module ts {
         Type_expected: { code: -9999999, category: DiagnosticCategory.Error, key: "Type expected." },
         A_constructor_implementation_cannot_be_declared_in_an_ambient_context: { code: 1111, category: DiagnosticCategory.Error, key: "A constructor implementation cannot be declared in an ambient context." },
         A_class_member_cannot_be_declared_optional: { code: 1112, category: DiagnosticCategory.Error, key: "A class member cannot be declared optional." },
+        A_default_clause_cannot_appear_more_than_once_in_a_switch_statement: { code: 1113, category: DiagnosticCategory.Error, key: "A 'default' clause cannot appear more than once in a 'switch' statement." },
         Duplicate_identifier_0: { code: 2000, category: DiagnosticCategory.Error, key: "Duplicate identifier '{0}'." },
         new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead: { code: 2068, category: DiagnosticCategory.Error, key: "'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead." },
         Multiple_constructor_implementations_are_not_allowed: { code: 2070, category: DiagnosticCategory.Error, key: "Multiple constructor implementations are not allowed." },
