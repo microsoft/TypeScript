@@ -6008,16 +6008,16 @@ module ts {
             return symbol.flags & SymbolFlags.ValueModule && symbol.declarations.length === 1 && symbol.declarations[0].kind === SyntaxKind.SourceFile;
         }
 
-        function isNodeParentedBy(node: Node, parent: Node): boolean {
+        function isNodeDescendentOf(node: Node, ancestor: Node): boolean {
             while (node) {
-                if (node === parent) return true;
+                if (node === ancestor) return true;
                 node = node.parent;
             }
             return false;
         }
 
         function isUniqueLocalName(name: string, container: Node): boolean {
-            for (var node = container; isNodeParentedBy(node, container); node = node.nextContainer) {
+            for (var node = container; isNodeDescendentOf(node, container); node = node.nextContainer) {
                 if (node.locals && hasProperty(node.locals, name) && node.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue)) {
                     return false;
                 }
