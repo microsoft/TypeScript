@@ -2,17 +2,6 @@
 
 [TypeScript](http://www.typescriptlang.org/) is a language for application-scale JavaScript. TypeScript adds optional types, classes, and modules to JavaScript. TypeScript supports tools for large-scale JavaScript applications for any browser, for any host, on any OS. TypeScript compiles to readable, standards-based JavaScript. Try it out at the [playground](http://www.typescriptlang.org/Playground), and stay up to date via [our blog](http://blogs.msdn.com/typescript) and [twitter account](https://twitter.com/typescriptlang).
 
-## Installation
-
-```shell
-npm install -g typescript
-```
-
-## Usage
-
-```shell
-tsc hello.ts
-```
 
 ## Contribute
 
@@ -34,18 +23,49 @@ There are many ways to [contribute](https://github.com/Microsoft/TypeScript/blob
 
 ## Building
 
-1.  Install [node](http://nodejs.org/) if you haven't already
-2.  Install dependencies ([Jake](https://github.com/mde/jake), [mocha](http://visionmedia.github.io/mocha/), [Chai](http://chaijs.com/) and [browserify](http://browserify.org/) the tool we use to build our compiler. To do this, run `npm install`.
-3.  To use jake, run one of the following commands: 
-    - jake local - This builds the compiler. The output is in built/local in the public directory 
-    - jake clean - deletes the build compiler 
-    - jake LKG - This replaces the LKG (last known good) version of the compiler with the built one.
-        - This is a bootstrapping step to be executed whenever the built compiler reaches a stable state.
-    - jake tests - This builds the test infrastructure, using the built compiler. 
-    - jake runtests - This runs the tests, using the built compiler and built test infrastructure. 
-        - You can also override the host or specify a test for this command. Use host=<hostName> or tests=<testPath>. 
-    - jake baseline-accept - This replaces the baseline test results with the results obtained from jake runtests. 
-    - jake -T lists the above commands. 
+In order to build the TypeScript compiler, ensure that you have [Git](http://git-scm.com/downloads) and [Node.js]((http://nodejs.org/) installed.
+
+Clone a copy of the repo:
+
+```
+git clone https://github.com/Microsoft/TypeScript.git
+```
+
+Change to the TypeScript directory:
+
+```
+cd TypeScript
+```
+
+Install Jake tools and dev dependencies:
+
+```
+npm install -g jake
+npm install
+```
+
+Use one of the following to build and test:
+
+```
+jake local           # Build the compiler into built/local 
+jake clean           # Delete the built compiler 
+jake LKG             # Replace the last known good with the built one.
+                     # Bootstrapping step to be executed when the built compiler reaches a stable state.
+jake tests           # Build the test infrastructure using the built compiler. 
+jake runtests        # Run tests using the built compiler and test infrastructure. 
+                     # You can override the host or specify a test for this command. 
+                     # Use host=<hostName> or tests=<testPath>. 
+jake baseline-accept # This replaces the baseline test results with the results obtained from jake runtests. 
+jake -T              # List the above commands. 
+```
+
+
+## Usage
+
+```shell
+node built/local/tc.js hello.ts
+```
+
 
 ## Roadmap
 
