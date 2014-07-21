@@ -766,7 +766,7 @@ module ts {
             return false;
         }
 
-        // Parses a list of elements
+        // Parses a semicolon-delimited list of elements
         function parseList<T extends Node>(kind: ParsingContext, parseElement: () => T): NodeArray<T> {
             var saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
@@ -789,7 +789,7 @@ module ts {
             return result;
         }
 
-        // Parses a comma delimited list of elements
+        // Parses a comma-delimited list of elements
         function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T, trailingCommaBehavior: TrailingCommaBehavior): NodeArray<T> {
             var saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
@@ -2063,6 +2063,16 @@ module ts {
             parseExpected(SyntaxKind.OpenBraceToken);
             node.clauses = parseList(ParsingContext.SwitchClauses, parseCaseOrDefaultClause);
             parseExpected(SyntaxKind.CloseBraceToken);
+
+            // Error on duplicate 'default' clauses.
+            var defaultClauses: CaseOrDefaultClause[] = filter(node.clauses, clause => clause.kind === SyntaxKind.DefaultClause);
+            for (var i = 1, n = defaultClauses.length; i < n; i++) {
+                var clause = defaultClauses[i];
+                var start = skipTrivia(file.text, clause.pos);
+                var end = clause.statements.length > 0 ? clause.statements[0].pos : clause.end;
+                grammarErrorAtPos(start, end - start, Diagnostics.A_default_clause_cannot_appear_more_than_once_in_a_switch_statement);
+            }
+
             return finishNode(node);
         }
 

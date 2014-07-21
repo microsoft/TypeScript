@@ -1,0 +1,48 @@
+==== tests/cases/compiler/switchStatementsWithMultipleDefaults.ts (8 errors) ====
+    
+    var x = 10;
+    
+    switch (x) {
+        case 1:
+        case 2:
+        default:    // No issues.
+            break;
+        default:    // Error; second 'default' clause.
+        ~~~~~~~~
+!!! A 'default' clause cannot appear more than once in a 'switch' statement.
+        default:    // Error; third 'default' clause.
+        ~~~~~~~~
+!!! A 'default' clause cannot appear more than once in a 'switch' statement.
+        case 3:
+            x *= x;
+    }
+    
+    switch (x) {
+        default:    // No issues.
+            break;
+        case 100:
+            switch (x * x) {
+                default:    // No issues.
+                default:    // Error; second 'default' clause.
+                ~~~~~~~~
+!!! A 'default' clause cannot appear more than once in a 'switch' statement.
+                    break;
+                case 10000:
+                    x /= x;
+                default:    // Error, third 'default' clause
+                ~~~~~~~~
+!!! A 'default' clause cannot appear more than once in a 'switch' statement.
+                def\u0061ult: // Error, fourth 'default' clause.
+                ~~~~~~~~~~~~~
+!!! A 'default' clause cannot appear more than once in a 'switch' statement.
+                // Errors on fifth-seventh
+                default: return;
+                ~~~~~~~~
+!!! A 'default' clause cannot appear more than once in a 'switch' statement.
+                default: default:
+                ~~~~~~~~
+!!! A 'default' clause cannot appear more than once in a 'switch' statement.
+                         ~~~~~~~~
+!!! A 'default' clause cannot appear more than once in a 'switch' statement.
+            }
+    }
