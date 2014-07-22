@@ -564,8 +564,122 @@ module TypeScript.Services {
         getCompletionEntryDetails(filename: string, position: number, entryName: string) {
             return undefined;
         }
-        getTypeAtPosition(filename: string, position: number) {
-            return undefined;
+
+        private getNodeAtPosition(sourceFile: ts.SourceFile, position: number) {
+            var current: ts.Node = sourceFile;
+            outer: while (true) {
+                // find the child that has this
+                for (var i = 0, n = current.getChildCount(); i < n; i++) {
+                    var child = current.getChildAt(i);
+                    if (ts.getTokenPosOfNode(child) <= position && position < child.end) {
+                        current = child;
+                        continue outer;
+                    }
+                    if (child.end > position) break;
+                }
+                return current;
+            }
+        }
+
+        getEnclosingDeclaration(node: ts.Node): ts.Node {
+            while (true) {
+                node = node.parent;
+                if (!node) {
+                    return node;
+                }
+                switch (node.kind) {
+                    case ts.SyntaxKind.Method:
+                    case ts.SyntaxKind.FunctionDeclaration:
+                    case ts.SyntaxKind.FunctionExpression:
+                    case ts.SyntaxKind.GetAccessor:
+                    case ts.SyntaxKind.SetAccessor:
+                    case ts.SyntaxKind.ClassDeclaration:
+                    case ts.SyntaxKind.InterfaceDeclaration:
+                    case ts.SyntaxKind.EnumDeclaration:
+                    case ts.SyntaxKind.ModuleDeclaration:
+                        return node;
+                }
+            }
+        }
+    
+
+        getSymbolKind(symbol: ts.Symbol): string {
+            var flags = symbol.getFlags();
+            if (flags & ts.SymbolFlags.Module) return ScriptElementKind.moduleElement;
+            if (flags & ts.SymbolFlags.Class) return ScriptElementKind.classElement;
+            if (flags & ts.SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
+            if (flags & ts.SymbolFlags.Enum) return ScriptElementKind.enumElement;
+            if (flags & ts.SymbolFlags.Variable) return ScriptElementKind.variableElement;
+            if (flags & ts.SymbolFlags.Function) return ScriptElementKind.functionElement;
+            if (flags & ts.SymbolFlags.GetAccessor) return ScriptElementKind.memberGetAccessorElement;
+            if (flags & ts.SymbolFlags.SetAccessor) return ScriptElementKind.memberSetAccessorElement;
+            if (flags & ts.SymbolFlags.Method) return ScriptElementKind.memberFunctionElement;
+            if (flags & ts.SymbolFlags.Property) return ScriptElementKind.memberVariableElement;
+            if (flags & ts.SymbolFlags.IndexSignature) return ScriptElementKind.indexSignatureElement;
+            if (flags & ts.SymbolFlags.ConstructSignature) return ScriptElementKind.constructSignatureElement;
+            if (flags & ts.SymbolFlags.CallSignature) return ScriptElementKind.callSignatureElement;
+            if (flags & ts.SymbolFlags.Constructor) return ScriptElementKind.constructorImplementationElement;
+            if (flags & ts.SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
+            if (flags & ts.SymbolFlags.EnumMember) return ScriptElementKind.variableElement;
+            return ScriptElementKind.unknown;
+        }
+
+        getTypeKind(type: ts.Type): string {
+            var flags = type.getFlags();
+            if (flags & ts.TypeFlags.Enum) return ScriptElementKind.enumElement;
+            if (flags & ts.TypeFlags.Class) return ScriptElementKind.classElement;
+            if (flags & ts.TypeFlags.Interface) return ScriptElementKind.interfaceElement;
+            if (flags & ts.TypeFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
+            if (flags & ts.TypeFlags.Intrinsic) return ScriptElementKind.primitiveType;
+            if (flags & ts.TypeFlags.StringLiteral) return ScriptElementKind.primitiveType;
+            return ScriptElementKind.unknown;
+        }
+
+        getTypeAtPosition(filename: string, position: number): TypeInfo {
+            this.synchronizeHostData();
+
+            filename = TypeScript.switchToForwardSlashes(filename);
+            var document = this.documentsByName[filename];
+            var node = this.getNodeAtPosition(document.sourceFile(), position);
+            if (!node) return undefined;
+            
+            switch (node.kind) {
+                // A declaration
+                case ts.SyntaxKind.Identifier:
+                    if (node.parent.kind === ts.SyntaxKind.CallExpression || node.parent.kind === ts.SyntaxKind.NewExpression) {
+                        // TODO: handle new and call expressions
+                    }
+
+                    var symbol = this.typeChecker. getSymbolOfIdentifier(<ts.Identifier>node);
+                    Debug.assert(symbol, "getTypeAtPosition: Could not find symbol for node");
+                    var type = this.typeChecker.getTypeOfSymbol(symbol);
+
+                    return {
+                        memberName: new MemberNameString(this.typeChecker.typeToString(type)),
+                        docComment: "",
+                        fullSymbolName: this.typeChecker.symbolToString(symbol, this.getEnclosingDeclaration(node)),
+                        kind: this.getSymbolKind(symbol),
+                        minChar: node.pos,
+                        limChar: node.end
+                    };
+
+                // An Expression
+                case ts.SyntaxKind.ThisKeyword:
+                case ts.SyntaxKind.QualifiedName:
+                case ts.SyntaxKind.SuperKeyword:
+                case ts.SyntaxKind.StringLiteral:
+                    var type = this.typeChecker.getTypeOfExpression(node);
+                    Debug.assert(type, "getTypeAtPosition: Could not find type for node");
+                    return {
+                        memberName: new MemberNameString(""),
+                        docComment: "",
+                        fullSymbolName: this.typeChecker.typeToString(type, this.getEnclosingDeclaration(node)),
+                        kind: this.getTypeKind(type),
+                        minChar: node.pos,
+                        limChar: node.end
+                    };
+                    break;
+            }
         }
         getSignatureAtPosition(filename: string, position: number) {
             return undefined;
@@ -588,7 +702,6 @@ module TypeScript.Services {
         getEmitOutput(filename: string) {
             return undefined;
         }
-
 
         private getTypeInfoEligiblePath(filename: string, position: number, isConstructorValidPosition: boolean) {
             var sourceUnit = this._syntaxTreeCache.getCurrentFileSyntaxTree(filename).sourceUnit();

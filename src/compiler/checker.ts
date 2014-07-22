@@ -739,10 +739,10 @@ module ts {
             };
         }
 
-        function typeToString(type: Type, flags?: TypeFormatFlags): string {
+        function typeToString(type: Type, enclosingDeclaration?:Node, flags?: TypeFormatFlags): string {
             var stringWriter = createSingleLineTextWriter();
             // TODO(shkamat): typeToString should take enclosingDeclaration as input, once we have implemented enclosingDeclaration
-            writeTypeToTextWriter(type, /*enclosingDeclaration*/ null, flags, stringWriter);
+            writeTypeToTextWriter(type, enclosingDeclaration, flags, stringWriter);
             return stringWriter.getText();
         }
 
@@ -1379,7 +1379,7 @@ module ts {
                                 type.baseTypes.push(baseType);
                             }
                             else {
-                                error(declaration, Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, TypeFormatFlags.WriteArrayAsGenericType));
+                                error(declaration, Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType));
                             }
                         }
                         else {
@@ -1420,7 +1420,7 @@ module ts {
                                         type.baseTypes.push(baseType);
                                     }
                                     else {
-                                        error(declaration, Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, TypeFormatFlags.WriteArrayAsGenericType));
+                                        error(declaration, Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType));
                                     }
                                 }
                                 else {
@@ -1987,7 +1987,7 @@ module ts {
                                 type = createTypeReference(<GenericType>type, map(node.typeArguments, t => getTypeFromTypeNode(t)));
                             }
                             else {
-                                error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeToString(type, TypeFormatFlags.WriteArrayAsGenericType), typeParameters.length);
+                                error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType), typeParameters.length);
                                 type = undefined;
                             }
                         }
@@ -6194,7 +6194,12 @@ module ts {
         function getSymbolOfIdentifier(identifier: Identifier) {
             if (isExpression(identifier)) {
                 if (isRightSideOfQualifiedName()) {
-                    // TODO
+                    var node = <QualifiedName>identifier.parent;
+                    var symbol = getNodeLinks(node).resolvedSymbol;
+                    if (!symbol) {
+                        checkPropertyAccess(node);
+                    }
+                    return getNodeLinks(node).resolvedSymbol;
                 }
                 return resolveEntityName(identifier, identifier, SymbolFlags.Value);
             }
@@ -6425,7 +6430,11 @@ module ts {
             getReturnTypeOfSignature: getReturnTypeOfSignature,
             resolveEntityName: resolveEntityName,
             getSymbolsInScope: getSymbolsInScope,
-            getSymbolOfIdentifier: getSymbolOfIdentifier
+            getSymbolOfIdentifier: getSymbolOfIdentifier,
+            getTypeOfExpression: checkExpression,
+            typeToString: typeToString,
+            symbolToString: symbolToString,
+            writeTypeToTextWriter: writeTypeToTextWriter
         };
         return checker;
     }

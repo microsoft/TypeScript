@@ -599,6 +599,10 @@ module ts {
         resolveEntityName(location: Node, name: EntityName, meaning: SymbolFlags): Symbol;
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolOfIdentifier(identifier: Identifier): Symbol;
+        getTypeOfExpression(node: Expression, contextualType?: Type, contextualMapper?: TypeMapper): Type;
+        typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
+        symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
+        writeTypeToTextWriter(type: Type, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter): void;
     }
 
     export interface TextWriter {
