@@ -3675,6 +3675,7 @@ module ts {
         function instantiateSignatureInContextOf(signature: Signature, contextualSignature: Signature, contextualMapper: TypeMapper): Signature {
             var context = createInferenceContext(signature.typeParameters);
             forEachMatchingParameterType(contextualSignature, signature, (source, target) => {
+                // Type parameters from outer context referenced by source type are fixed by instantiation of the source type
                 inferTypes(context, instantiateType(source, contextualMapper), target);
             });
             return getSignatureInstantiation(signature, getInferredTypes(context));
