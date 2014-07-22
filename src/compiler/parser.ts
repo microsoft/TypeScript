@@ -865,12 +865,12 @@ module ts {
             return createMissingList<T>();
         }
 
-        function parseEntityName(): EntityName {
+        function parseEntityName(allowReservedWords?: boolean): EntityName {
             var entity: EntityName = parseIdentifier();
             while (parseOptional(SyntaxKind.DotToken)) {
                 var node = <QualifiedName>createNode(SyntaxKind.QualifiedName, entity.pos);
                 node.left = entity;
-                node.right = parseIdentifier();
+                node.right = allowReservedWords ? parseIdentifierName() : parseIdentifier();
                 entity = finishNode(node);
             }
             return entity;
@@ -909,7 +909,7 @@ module ts {
         function parseTypeQuery(): TypeQueryNode {
             var node = <TypeQueryNode>createNode(SyntaxKind.TypeQuery);
             parseExpected(SyntaxKind.TypeOfKeyword);
-            node.exprName = parseEntityName();
+            node.exprName = parseEntityName(/*allowReservedWords*/ true);
             return finishNode(node);
         }
 
