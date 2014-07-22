@@ -37,5 +37,8 @@
 		"mocha" : "latest",
 		"chai" : "latest",
 		"browserify" : "latest"
+	},
+	"scripts": {
+		"test": "jake runtests"
 	}
 }
