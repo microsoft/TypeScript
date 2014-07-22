@@ -1445,6 +1445,7 @@ module ts {
         function tryParseParenthesizedArrowFunctionExpression(): Expression {
             var pos = getNodePos();
 
+            // Whether we are certain that we should parse an arrow expression.
             var triState = isParenthesizedArrowFunctionExpression();
 
             // It is not a parenthesized arrow function.
@@ -1457,11 +1458,12 @@ module ts {
                 var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken);
 
                 // If we have an arrow, then try to parse the body.
-                if (parseExpected(SyntaxKind.EqualsGreaterThanToken)) {
-                    return parseArrowExpressionTail(pos, sig, /*noIn:*/ false);
+                // Even if not, try to parse if we have an opening brace, just in case we're in an error state.
+                if (parseExpected(SyntaxKind.EqualsGreaterThanToken) || token === SyntaxKind.OpenBraceToken) {
+                    return parseArrowExpressionTail(pos, sig, /* noIn: */ false);
                 }
-                // If not, we're probably better off bailing out and returning a bogus function expression.
                 else {
+                    // If not, we're probably better off bailing out and returning a bogus function expression.
                     return makeFunctionExpression(SyntaxKind.ArrowFunction, pos, /* name */ undefined, sig, createMissingNode());
                 }
             }
@@ -1477,29 +1479,44 @@ module ts {
             }
         }
 
-        //  True        -> There is definitely a parenthesized arrow function here. 
-        //  False       -> There is definitely *not* a parenthesized arrow function here.
+        //  True        -> We definitely expect a parenthesized arrow function here.
+        //  False       -> There *cannot* be a parenthesized arrow function here.
         //  Unknown     -> There *might* be a parenthesized arrow function here.
-        //                  Speculatively look ahead to be sure.
+        //                 Speculatively look ahead to be sure, and rollback if not.
         function isParenthesizedArrowFunctionExpression(): Tristate {
             if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
                 return lookAhead(() => {
                     var first = token;
-                    nextToken();
+                    var second = nextToken();
+
                     if (first === SyntaxKind.OpenParenToken) {
-                        if (token === SyntaxKind.CloseParenToken || token === SyntaxKind.DotDotDotToken) {
-                            // Simple cases.  if we see ()   or   (...   then presume that presume 
-                            // that this must be an arrow function.  Note, this may be too aggressive
-                            // for the "()" case.  It's not uncommon for this to appear while editing 
-                            // code.  We should look to see if there's actually a => before proceeding.
+                        if (second === SyntaxKind.CloseParenToken) {
+                            // Simple cases: "() =>", "(): ", and  "() {".
+                            // This is an arrow function with no parameters.
+                            // The last one is not actually an arrow function,
+                            // but this is probably what the user intended.
+                            var third = nextToken();
+                            switch (third) {
+                                case SyntaxKind.EqualsGreaterThanToken:
+                                case SyntaxKind.ColonToken:
+                                case SyntaxKind.OpenBraceToken:
+                                    return Tristate.True;
+                                default:
+                                    return Tristate.False;
+                            }
+                        }
+
+                        // Simple case: "(..."
+                        // This is an arrow function with a rest parameter.
+                        if (second === SyntaxKind.DotDotDotToken) {
                             return Tristate.True;
                         }
 
+                        // We had "(" not followed by an identifier. This definitely doesn't
+                        // look like a lambda. Note: we could be a little more lenient and allow
+                        // "(public" or "(private". These would not ever actually be allowed,
+                        // but we could provide a good error message instead of bailing out.
                         if (!isIdentifier()) {
-                            // We had "(" not followed by an identifier.  This definitely doesn't 
-                            // look like a lambda.  Note: we could be a little more lenient and allow
-                            // (public   or  (private.  These would not ever actually be allowed,
-                            // but we could provide a good error message instead of bailing out.
                             return Tristate.False;
                         }
 
