@@ -481,6 +481,10 @@
         "category": "Error",
         "code": 2134
     },
+    "All symbols within a 'with' block will be resolved to 'any'.": {
+        "category": "Error",
+        "code": 2135
+    },
     "The operand of an increment or decrement operator must be a variable, property or indexer.": {
         "category": "Error",
         "code": 2139

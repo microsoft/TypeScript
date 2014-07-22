@@ -1,13 +1,11 @@
-==== tests/cases/compiler/withStatement.ts (2 errors) ====
+==== tests/cases/compiler/withStatement.ts (1 errors) ====
     declare var ooo:any;
     
     with (ooo.eee.oo.ah_ah.ting.tang.walla.walla) { // error
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! All symbols within a 'with' block will be resolved to 'any'.
         bing = true; // no error
-        ~~~~
-!!! Cannot find name 'bing'.
         bang = true; // no error
-        ~~~~
-!!! Cannot find name 'bang'.
         
         function bar() {}
     

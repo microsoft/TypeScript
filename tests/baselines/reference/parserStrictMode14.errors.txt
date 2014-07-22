@@ -2,5 +2,5 @@
     "use strict";
     with (a) {
           ~
-!!! Cannot find name 'a'.
+!!! All symbols within a 'with' block will be resolved to 'any'.
     }

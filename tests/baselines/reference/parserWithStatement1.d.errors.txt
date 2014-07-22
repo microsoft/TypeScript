@@ -3,5 +3,5 @@
     ~~~~
 !!! Statements are not allowed in ambient contexts.
           ~~~
-!!! Cannot find name 'foo'.
+!!! All symbols within a 'with' block will be resolved to 'any'.
     }

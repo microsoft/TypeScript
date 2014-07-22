@@ -1,4 +1,4 @@
-==== tests/cases/compiler/ambientWithStatements.ts (14 errors) ====
+==== tests/cases/compiler/ambientWithStatements.ts (15 errors) ====
     declare module M {
         break;
         ~~~~~
@@ -52,5 +52,7 @@
         with (x) {
         ~~~~
 !!! Statements are not allowed in ambient contexts.
+              ~
+!!! All symbols within a 'with' block will be resolved to 'any'.
         }
     }

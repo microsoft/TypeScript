@@ -5195,8 +5195,7 @@ module ts {
         }
 
         function checkWithStatement(node: WithStatement) {
-            checkExpression(node.expression);
-            checkSourceElement(node.statement);
+            error(node.expression, Diagnostics.All_symbols_within_a_with_block_will_be_resolved_to_any);
         }
 
         function checkSwitchStatement(node: SwitchStatement) {
