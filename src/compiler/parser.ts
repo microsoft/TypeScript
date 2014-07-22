@@ -1624,7 +1624,12 @@ module ts {
             parameter.name = identifier;
             finishNode(parameter);
 
-            var signature = <ParsedSignature> { parameters: [parameter] };
+            var parameters = <NodeArray<ParameterDeclaration>>[];
+            parameters.push(parameter);
+            parameters.pos = parameter.pos;
+            parameters.end = parameter.end;
+
+            var signature = <ParsedSignature> { parameters: parameters };
 
             return parseArrowExpressionTail(identifier.pos, signature, /*noIn:*/ false);
         }
