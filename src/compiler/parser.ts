@@ -766,7 +766,7 @@ module ts {
             return false;
         }
 
-        // Parses a semicolon-delimited list of elements
+        // Parses a list of elements
         function parseList<T extends Node>(kind: ParsingContext, parseElement: () => T): NodeArray<T> {
             var saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
