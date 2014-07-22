@@ -4,5 +4,5 @@
            ~~~
 !!! A 'get' accessor cannot have parameters.
            ~~~
-!!! Getters must return a value.
+!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
     }

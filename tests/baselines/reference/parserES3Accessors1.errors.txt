@@ -4,5 +4,5 @@
             ~~~
 !!! Accessors are only available when targeting ECMAScript 5 and higher.
             ~~~
-!!! Getters must return a value.
+!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
     }
