@@ -17,6 +17,9 @@ var LKGDirectory = "bin/";
 var copyright = "CopyrightNotice.txt";
 var thirdParty = "ThirdPartyNoticeText.txt";
 
+// add node_modules to path so we don't need global modules, prefer the modules by adding them first
+process.env.path = path.resolve("./node_modules/.bin/") + path.delimiter + process.env.path;
+
 var compilerSources = [
     "core.ts",
     "sys.ts",
