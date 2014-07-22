@@ -3075,8 +3075,9 @@ module ts {
                         inferFromProperties(source, target);
                         inferFromSignatures(source, target, SignatureKind.Call);
                         inferFromSignatures(source, target, SignatureKind.Construct);
-                        inferFromIndexTypes(source, target, IndexKind.String);
-                        inferFromIndexTypes(source, target, IndexKind.Number);
+                        inferFromIndexTypes(source, target, IndexKind.String, IndexKind.String);
+                        inferFromIndexTypes(source, target, IndexKind.Number, IndexKind.Number);
+                        inferFromIndexTypes(source, target, IndexKind.String, IndexKind.Number);
                         depth--;
                     }
                 }
@@ -3109,10 +3110,10 @@ module ts {
                 inferFromTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
             }
 
-            function inferFromIndexTypes(source: Type, target: Type, kind: IndexKind) {
-                var targetIndexType = getIndexTypeOfType(target, kind);
+            function inferFromIndexTypes(source: Type, target: Type, sourceKind: IndexKind, targetKind: IndexKind) {
+                var targetIndexType = getIndexTypeOfType(target, targetKind);
                 if (targetIndexType) {
-                    var sourceIndexType = getIndexTypeOfType(source, kind);
+                    var sourceIndexType = getIndexTypeOfType(source, sourceKind);
                     if (sourceIndexType) {
                         inferFromTypes(sourceIndexType, targetIndexType);
                     }
