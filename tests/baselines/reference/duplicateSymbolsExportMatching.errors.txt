@@ -25,11 +25,11 @@
         interface I { }
         export interface I { } // error
                          ~
-!!! Duplicate identifier 'I'.
+!!! All declarations of merged declaration 'I' must be exported or not exported.
         export interface E { }
         interface E { } // error
                   ~
-!!! Duplicate identifier 'E'.
+!!! All declarations of merged declaration 'E' must be exported or not exported.
     }
     
     // Should report error only once for instantiated module
@@ -39,7 +39,7 @@
         }
         export module inst { // one error
                       ~~~~
-!!! Duplicate identifier 'inst'.
+!!! All declarations of merged declaration 'inst' must be exported or not exported.
             var t;
         }
     }
@@ -49,20 +49,20 @@
         var v: string;
         export var v: string; // one error (visibility)
                    ~
-!!! Duplicate identifier 'v'.
+!!! All declarations of merged declaration 'v' must be exported or not exported.
         var w: number;
         export var w: string; // two errors (visibility and type mismatch)
                    ~
-!!! Duplicate identifier 'w'.
+!!! All declarations of merged declaration 'w' must be exported or not exported.
     }
     
     module M {
         module F {
+               ~
+!!! A module declaration cannot be located prior to a class or function with which it is merged
             var t;
         }
         export function F() { } // Only one error for duplicate identifier (don't consider visibility)
-                        ~
-!!! Duplicate identifier 'F'.
     }
     
     module M {
@@ -70,7 +70,7 @@
         module C { }
         export module C { // Two visibility errors (one for the clodule symbol, and one for the merged container symbol)
                       ~
-!!! Duplicate identifier 'C'.
+!!! All declarations of merged declaration 'C' must be exported or not exported.
             var t;
         }
     }
@@ -79,4 +79,4 @@
     interface D { }
     export interface D { }
                      ~
-!!! Duplicate identifier 'D'.
+!!! All declarations of merged declaration 'D' must be exported or not exported.

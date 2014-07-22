@@ -126,40 +126,47 @@ module ts {
         function declareModuleMember(node: Declaration, symbolKind: SymbolFlags, symbolExcludes: SymbolFlags) {
             // Exported module members are given 2 symbols: A local symbol that is classified with an ExportValue,
             // ExportType, or ExportContainer flag, and an associated export symbol with all the correct flags set
-            // on it. There are 2 main reasons:
-            //
-            //   1. We treat locals and exports of the same name as mutually exclusive within a container. 
-            //      That means the binder will issue a Duplicate Identifier error if you mix locals and exports
-            //      with the same name in the same container.
-            //      TODO: Make this a more specific error and decouple it from the exclusion logic.
+            // on it. Reasons:
+            //   1. During name resolution i.e for types we need to distingush local and exported symbols.
+            //      All members are added to the exported one so local should never be returned.
             //   2. When we checkIdentifier in the checker, we set its resolved symbol to the local symbol,
             //      but return the export symbol (by calling getExportSymbolOfValueSymbolIfExported). That way
             //      when the emitter comes back to it, it knows not to qualify the name if it was found in a containing scope.
+            // Exported members will share local symbol with non-exported members
             var exportKind = 0;
-            var exportExcludes = 0;
             if (symbolKind & SymbolFlags.Value) {
                 exportKind |= SymbolFlags.ExportValue;
-                exportExcludes |= SymbolFlags.Value;
             }
             if (symbolKind & SymbolFlags.Type) {
                 exportKind |= SymbolFlags.ExportType;
-                exportExcludes |= SymbolFlags.Type;
             }
             if (symbolKind & SymbolFlags.Namespace) {
                 exportKind |= SymbolFlags.ExportNamespace;
-                exportExcludes |= SymbolFlags.Namespace;
             }
             if (node.flags & NodeFlags.Export || (node.kind !== SyntaxKind.ImportDeclaration && isAmbientContext(container))) {
                 if (exportKind) {
-                    var local = declareSymbol(container.locals, undefined, node, exportKind, exportExcludes);
-                    local.exportSymbol = declareSymbol(container.symbol.exports, container.symbol, node, symbolKind, symbolExcludes);
+                    var exportSymbol = declareSymbol(container.symbol.exports, container.symbol, node, symbolKind, symbolExcludes);
+                    var localSymbol = declareSymbol(container.locals, undefined, node, exportKind, symbolExcludes);
+                    node.symbol = exportSymbol;
+                    // export function foo(); // 1
+                    // export function foo() {} // 2
+                    // at (1) we'll create two symbols: local and exported and link then together
+                    // at (2) the same symbols will be returned as exported and local.
+                    // make sure that local symbol is added to the list of local symbols just once.
+                    if (!localSymbol.exportSymbol) {
+                        if (!exportSymbol.localSymbols) {
+                            exportSymbol.localSymbols = [];
+                        }
+                        exportSymbol.localSymbols.push(localSymbol);
+                        localSymbol.exportSymbol = exportSymbol;
+                    }
                 }
                 else {
                     declareSymbol(container.symbol.exports, container.symbol, node, symbolKind, symbolExcludes);
                 }
             }
             else {
-                declareSymbol(container.locals, undefined, node, symbolKind, symbolExcludes | exportKind);
+                declareSymbol(container.locals, undefined, node, symbolKind, symbolExcludes);
             }
         }
 

@@ -22,7 +22,7 @@
         declare var d1, d2;
         var b2;
             ~~
-!!! Duplicate identifier 'b2'.
+!!! All declarations of merged declaration 'b2' must be exported or not exported.
     
         declare var v1;
     }

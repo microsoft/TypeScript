@@ -107,6 +107,9 @@ module ts {
         function cloneSymbol(symbol: Symbol): Symbol {
             var result = createSymbol(symbol.flags | SymbolFlags.Merged, symbol.name);
             result.declarations = symbol.declarations.slice(0);
+            if (symbol.localSymbols) {
+                result.localSymbols = symbol.localSymbols.slice(0);
+            }
             result.parent = symbol.parent;
             if (symbol.valueDeclaration) result.valueDeclaration = symbol.valueDeclaration;
             if (symbol.members) result.members = cloneSymbolTable(symbol.members);
@@ -122,6 +125,12 @@ module ts {
                 forEach(source.declarations, node => {
                     target.declarations.push(node);
                 });
+                if (source.localSymbols) {
+                    if (!target.localSymbols) {
+                        target.localSymbols = [];
+                    }
+                    forEach(source.localSymbols, node => { target.localSymbols.push(node); });
+                }
                 if (source.members) {
                     if (!target.members) target.members = {};
                     extendSymbolTable(target.members, source.members);
@@ -2230,6 +2239,9 @@ module ts {
             // also transient so that we can just store data on it directly.
             var result = <TransientSymbol>createSymbol(SymbolFlags.Instantiated | SymbolFlags.Transient, symbol.name);
             result.declarations = symbol.declarations;
+            if (symbol.localSymbols) {
+                result.localSymbols = symbol.localSymbols;
+            }
             result.parent = symbol.parent;
             result.target = symbol;
             result.mapper = mapper;
@@ -2928,6 +2940,9 @@ module ts {
                     forEach(properties, p => {
                         var symbol = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient, p.name);
                         symbol.declarations = p.declarations;
+                        if (p.localSymbols) {
+                            symbol.localSymbols = p.localSymbols;
+                        }
                         symbol.parent = p.parent;
                         symbol.type = widenedTypes[index++];
                         if (p.valueDeclaration) symbol.valueDeclaration = p.valueDeclaration;
@@ -3461,6 +3476,9 @@ module ts {
                         var type = checkExpression((<PropertyDeclaration>member.declarations[0]).initializer, contextualPropType, contextualMapper);
                         var prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient, member.name);
                         prop.declarations = member.declarations;
+                        if (member.localSymbols) {
+                            prop.localSymbols = member.localSymbols;
+                        }
                         prop.parent = member.parent;
                         if (member.valueDeclaration) prop.valueDeclaration = member.valueDeclaration;
                         prop.type = type;
@@ -4765,89 +4783,103 @@ module ts {
                 return flags & flagsToCheck;
             }
 
-            function checkFlagAgreementBetweenOverloads(overloads: Declaration[], implementation: FunctionDeclaration, flagsToCheck: NodeFlags, someOverloadFlags: NodeFlags, allOverloadFlags: NodeFlags): void {
-                // Error if some overloads have a flag that is not shared by all overloads. To find the
-                // deviations, we XOR someOverloadFlags with allOverloadFlags
-                var someButNotAllOverloadFlags = someOverloadFlags ^ allOverloadFlags;
-                if (someButNotAllOverloadFlags !== 0) {
-                    // Consider the canonical set of flags to be the flags of the bodyDeclaration or the first declaration
-                    // Error on all deviations from this canonical set of flags
-                    // The caveat is that if some overloads are defined in lib.d.ts, we don't want to
-                    // report the errors on those. To achieve this, we will say that the implementation is
-                    // the canonical signature only if it is in the same container as the first overload
-                    var implementationSharesContainerWithFirstOverload = implementation !== undefined && implementation.parent === overloads[0].parent;
-                    var canonicalFlags = implementationSharesContainerWithFirstOverload
-                        ? getEffectiveFlagsForFunctionCheck(implementation)
-                        : getEffectiveFlagsForFunctionCheck(overloads[0]);
-                    forEach(overloads, o => {
-                        var deviation = getEffectiveFlagsForFunctionCheck(o) ^ canonicalFlags;
-                        if (deviation & NodeFlags.Export) {
-                            error(o.name, Diagnostics.Overload_signatures_must_all_be_exported_or_not_exported);
-                        }
-                        else if (deviation & NodeFlags.Ambient) {
-                            error(o.name, Diagnostics.Overload_signatures_must_all_be_ambient_or_non_ambient);
-                        }
-                        else if (deviation & NodeFlags.Private) {
-                            error(o.name, Diagnostics.Overload_signatures_must_all_be_public_or_private);
-                        }
-                        else if (deviation & NodeFlags.QuestionMark) {
-                            error(o.name, Diagnostics.Overload_signatures_must_all_be_optional_or_required);
-                        }
-                    });
-                }
+            function getCanonicalFlags(implementation: FunctionDeclaration, overloads: Declaration[]): NodeFlags {
+                // Consider the canonical set of flags to be the flags of the bodyDeclaration or the first declaration
+                // Error on all deviations from this canonical set of flags
+                // The caveat is that if some overloads are defined in lib.d.ts, we don't want to
+                // report the errors on those. To achieve this, we will say that the implementation is
+                // the canonical signature only if it is in the same container as the first overload
+                var implementationSharesContainerWithFirstOverload = implementation && implementation.parent === overloads[0].parent;
+
+                return implementationSharesContainerWithFirstOverload
+                    ? getEffectiveFlagsForFunctionCheck(implementation)
+                    : getEffectiveFlagsForFunctionCheck(overloads[0]);
             }
 
+            function checkFlagAgreementBetweenOverloads(overloads: Declaration[], canonicalFlags: NodeFlags): void {
+                forEach(overloads, o => {
+                    var deviation = getEffectiveFlagsForFunctionCheck(o) ^ canonicalFlags;
+                    if (deviation & NodeFlags.Export) {
+                        error(o.name, Diagnostics.Overload_signatures_must_all_be_exported_or_not_exported);
+                    }
+                    else if (deviation & NodeFlags.Ambient) {
+                        error(o.name, Diagnostics.Overload_signatures_must_all_be_ambient_or_non_ambient);
+                    }
+                    else if (deviation & NodeFlags.Private) {
+                        error(o.name, Diagnostics.Overload_signatures_must_all_be_public_or_private);
+                    }
+                    else if (deviation & NodeFlags.QuestionMark) {
+                        error(o.name, Diagnostics.Overload_signatures_must_all_be_optional_or_required);
+                    }
+                });
+            }
             var flagsToCheck: NodeFlags = NodeFlags.Export | NodeFlags.Ambient | NodeFlags.Private | NodeFlags.QuestionMark;
             var someNodeFlags: NodeFlags = 0;
             var allNodeFlags = flagsToCheck;
             var hasOverloads = false;
             var bodyDeclaration: FunctionDeclaration;
             var lastSeenNonAmbientDeclaration: FunctionDeclaration;
-            var declarations = symbol.declarations;
             var isConstructor = (symbol.flags & SymbolFlags.Constructor) !== 0;
-            for (var i = 0; i < declarations.length; i++) {
-                var node = <FunctionDeclaration>declarations[i];
-                if (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.Method || node.kind === SyntaxKind.Constructor) {
-                    var currentNodeFlags = getEffectiveFlagsForFunctionCheck(node);
-                    someNodeFlags |= currentNodeFlags;
-                    allNodeFlags &= currentNodeFlags;
 
-                    var inAmbientContext = isInAmbientContext(node);
-                    var inAmbientContextOrInterface = node.parent.kind === SyntaxKind.InterfaceDeclaration || node.parent.kind === SyntaxKind.TypeLiteral || inAmbientContext;
-                    if (!inAmbientContextOrInterface) {
-                        lastSeenNonAmbientDeclaration = node;
-                    }
+            function checkDeclarationsInSymbol(symbol: Symbol): void {
+                var declarations = symbol.declarations;
+                for (var i = 0; i < declarations.length; i++) {
+                    var node = <FunctionDeclaration>declarations[i];
+                    if (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.Method || node.kind === SyntaxKind.Constructor) {
+                        var currentNodeFlags = getEffectiveFlagsForFunctionCheck(node);
+                        someNodeFlags |= currentNodeFlags;
+                        allNodeFlags &= currentNodeFlags;
 
-                    if (node.body) {
-                        if (bodyDeclaration) {
-                            if (isConstructor) {
-                                error(node, Diagnostics.Multiple_constructor_implementations_are_not_allowed);
+                        var inAmbientContext = isInAmbientContext(node);
+                        var inAmbientContextOrInterface = node.parent.kind === SyntaxKind.InterfaceDeclaration || node.parent.kind === SyntaxKind.TypeLiteral || inAmbientContext;
+                        if (!inAmbientContextOrInterface) {
+                            lastSeenNonAmbientDeclaration = node;
+                        }
+
+                        if (node.body) {
+                            if (bodyDeclaration) {
+                                if (isConstructor) {
+                                    error(node, Diagnostics.Multiple_constructor_implementations_are_not_allowed);
+                                }
+                                else {
+                                    error(node, Diagnostics.Duplicate_function_implementation);
+                                }
                             }
                             else {
-                                error(node, Diagnostics.Duplicate_function_implementation);
+                                bodyDeclaration = node;
                             }
                         }
                         else {
-                            bodyDeclaration = node;
+                            hasOverloads = true;
                         }
                     }
+                }
+
+                if (lastSeenNonAmbientDeclaration && !lastSeenNonAmbientDeclaration.body) {
+                    if (isConstructor) {
+                        error(lastSeenNonAmbientDeclaration, Diagnostics.Constructor_implementation_expected);
+                    }
                     else {
-                        hasOverloads = true;
+                        error(lastSeenNonAmbientDeclaration, Diagnostics.Function_implementation_expected);
                     }
                 }
             }
 
-            if (lastSeenNonAmbientDeclaration && !lastSeenNonAmbientDeclaration.body) {
-                if (isConstructor) {
-                    error(lastSeenNonAmbientDeclaration, Diagnostics.Constructor_implementation_expected);
-                }
-                else {
-                    error(lastSeenNonAmbientDeclaration, Diagnostics.Function_implementation_expected);
-                }
-            }
+            forEachLocalSymbol(symbol, checkDeclarationsInSymbol);
 
             if (hasOverloads) {
-                checkFlagAgreementBetweenOverloads(declarations, bodyDeclaration, flagsToCheck, someNodeFlags, allNodeFlags);
+                // Error if some overloads have a flag that is not shared by all overloads.
+                if (someNodeFlags !== allNodeFlags) {
+                    if (isExportSymbolWithAssociatedLocalSymbols(symbol)) {
+                        var canonicalFlags: NodeFlags = getCanonicalFlags(bodyDeclaration, symbol.localSymbols[0].declarations);
+                        forEach(symbol.localSymbols, s => checkFlagAgreementBetweenOverloads(s.declarations, canonicalFlags));
+                    }
+                    else {
+                        var canonicalFlags: NodeFlags = getCanonicalFlags(bodyDeclaration, symbol.declarations);
+                        checkFlagAgreementBetweenOverloads(symbol.declarations, canonicalFlags);
+                    }
+                }
+
                 if (bodyDeclaration) {
                     var signatures = getSignaturesOfSymbol(symbol);
                     var bodySignature = getSignatureFromDeclaration(bodyDeclaration);
@@ -4881,15 +4913,102 @@ module ts {
             // TODO: Check at least one return statement in non-void/any function (except single throw)
         }
 
+        function isLocalSymbolAssociatedWithExportSymbol(s: Symbol): boolean {
+            return s.exportSymbol !== undefined;
+        }
+
+        function isExportSymbolWithAssociatedLocalSymbols(s: Symbol): boolean {
+            return s.localSymbols !== undefined;
+        }
+
+        function forEachLocalSymbol(s: Symbol, action: (symbol: Symbol) => void): void {
+            if (isExportSymbolWithAssociatedLocalSymbols(s)) {
+                forEach(s.localSymbols, action);
+            }
+            else {
+                action(s);
+            }
+        }
+
+        function checkExportsOnMergedDeclarations(symbol: Symbol, node: Node): void {
+            if (symbol.flags & SymbolFlags.Prototype) {
+                return;
+            }
+
+            if (!isExportSymbolWithAssociatedLocalSymbols(symbol)) {
+                // exit early if
+                // - this is pure local symbol - they don't have exports
+                // - this is local symbol associated with export symbol, 
+                //   all such symbols will be processed during the check of export symbol
+                return;
+            }
+
+            // this is definitely export symbol
+            // in both cases run check just once for the first symbol in the list
+            if (getDeclarationOfKind(symbol, node.kind) !== node) {
+                return;
+            }
+
+            // we use SymbolFlags.ExportValue, SymbolFlags.ExportType and SymbolFlags.ExportNamespace 
+            // to denote disjoint declarationSpaces (without making new enum type).
+            var declarationSpaces: SymbolFlags = 0;
+            var hasExport: boolean;
+            function checkDeclarationsInSymbol(symbol: Symbol): void {
+                var declarations = symbol.declarations;
+                for (var i = 0, len = declarations.length; i < len; ++i) {
+                    var currentDeclarationSpaces = getDeclarationSpaces(declarations[i]);
+                    var currentDeclarationHasExport = (declarations[i].flags & NodeFlags.Export) !== 0;
+                    if (declarationSpaces & currentDeclarationSpaces) {
+                        if (hasExport !== undefined) {
+                            if (hasExport !== currentDeclarationHasExport) {
+                                error(declarations[i].name, Diagnostics.All_declarations_of_merged_declaration_0_must_be_exported_or_not_exported, symbolToString(symbol));
+                            }
+                        }
+                    }
+                    hasExport = hasExport || currentDeclarationHasExport;
+                    declarationSpaces |= currentDeclarationSpaces;
+                }
+            }
+
+            forEachLocalSymbol(symbol, checkDeclarationsInSymbol);
+
+            function getDeclarationSpaces(d: Declaration): SymbolFlags {
+                switch (d.kind) {
+                    case SyntaxKind.InterfaceDeclaration:
+                        return SymbolFlags.ExportType;
+                    case SyntaxKind.ModuleDeclaration:
+                        return (<ModuleDeclaration>d).name.kind === SyntaxKind.StringLiteral || isInstantiated(d)
+                            ? SymbolFlags.ExportNamespace | SymbolFlags.ExportValue
+                            : SymbolFlags.ExportNamespace;
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.EnumDeclaration:
+                        return SymbolFlags.ExportType | SymbolFlags.ExportValue;
+                    case SyntaxKind.ImportDeclaration:
+                        var target = resolveImport(getSymbolOfNode(d));
+                        return target.flags & (SymbolFlags.ExportNamespace | SymbolFlags.ExportType | SymbolFlags.ExportValue);
+                    default:
+                        return SymbolFlags.ExportValue;
+                }
+            }
+        }
+
+        function runOnceForSymbol(symbol: Symbol, node: Declaration, action: (s: Symbol) => void) {
+            // all local symbols associated with export symbol will be processed during the check of export symbol.
+            if (!isLocalSymbolAssociatedWithExportSymbol(symbol)) {
+                // symbol here is either local only symbol or export symbol
+                // in both cases run action once if given declaration is a first in group
+                var firstDeclaration = getDeclarationOfKind(symbol, node.kind);
+                if (node === firstDeclaration) {
+                    action(symbol);
+                }
+            }
+        }
+
         function checkFunctionDeclaration(node: FunctionDeclaration) {
             checkSignatureDeclaration(node);
 
-            var symbol = getSymbolOfNode(node);
-            var firstDeclaration = getDeclarationOfKind(symbol, node.kind);
-            // Only type check the symbol once
-            if (node === firstDeclaration) {
-                checkFunctionOrConstructorSymbol(symbol);
-            }
+            runOnceForSymbol(getSymbolOfNode(node), node, checkFunctionOrConstructorSymbol);
+
             checkSourceElement(node.body);
 
             // If there is no body and no explicit return type, then report an error.
@@ -5082,6 +5201,7 @@ module ts {
             checkSourceElement(node.type);
 
             var symbol = getSymbolOfNode(node);
+            checkExportsOnMergedDeclarations(symbol, node);
 
             var typeOfValueDeclaration = getTypeOfVariableOrParameterOrProperty(symbol);
             var type: Type;
@@ -5371,6 +5491,8 @@ module ts {
             checkTypeParameters(node.typeParameters);
             checkCollisionWithCapturedThisVariable(node, node.name);
             var symbol = getSymbolOfNode(node);
+            checkExportsOnMergedDeclarations(symbol, node);
+
             var type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
             var staticType = <ObjectType>getTypeOfSymbol(symbol);
             if (node.baseType) {
@@ -5524,16 +5646,31 @@ module ts {
         function checkInterfaceDeclaration(node: InterfaceDeclaration) {
             checkTypeNameIsReserved(node.name, Diagnostics.Interface_name_cannot_be_0);
             checkTypeParameters(node.typeParameters);
+
             var symbol = getSymbolOfNode(node);
-            var firstInterfaceDecl = <InterfaceDeclaration>getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration);
+            checkExportsOnMergedDeclarations(symbol, node);
+
+            var hasMoreThanOneDeclaration: boolean;
             if (symbol.declarations.length > 1) {
+                hasMoreThanOneDeclaration = true;
+            }
+            else if (isExportSymbolWithAssociatedLocalSymbols(symbol)) {
+                // current symbol is export with just one exported declaration
+                // check if the local symbol (it should be there and should be just one) has more than 1 declarations.
+                Debug.assert(symbol.localSymbols.length === 1);
+                hasMoreThanOneDeclaration = symbol.localSymbols[0].declarations.length > 1;
+            }
+            if (hasMoreThanOneDeclaration) {
+                var firstInterfaceDecl = symbol.localSymbols
+                    ? <InterfaceDeclaration>forEach(symbol.localSymbols, s => getDeclarationOfKind(s, SyntaxKind.InterfaceDeclaration))
+                    : <InterfaceDeclaration>getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration);
+
                 if (node !== firstInterfaceDecl && !areTypeParametersIdentical(firstInterfaceDecl.typeParameters, node.typeParameters)) {
                     error(node.name, Diagnostics.All_declarations_of_an_interface_must_have_identical_type_parameters);
                 }
             }
 
-            // Only check this symbol once
-            if (node === firstInterfaceDecl) {
+            runOnceForSymbol(symbol, node, symbol => {
                 var type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
                 // run subsequent checks only if first set succeeded
                 if (checkInheritedPropertiesAreIdentical(type, node.name)) {
@@ -5542,7 +5679,8 @@ module ts {
                     });
                     checkIndexConstraints(type);
                 }
-            }
+            });
+
             forEach(node.baseTypes, checkTypeReference);
             forEach(node.members, checkSourceElement);
 
@@ -5570,6 +5708,7 @@ module ts {
             checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
             checkCollisionWithCapturedThisVariable(node, node.name);
             var enumSymbol = getSymbolOfNode(node);
+            checkExportsOnMergedDeclarations(enumSymbol, node);
             var enumType = getDeclaredTypeOfSymbol(enumSymbol);
             var autoValue = 0;
             var ambient = isInAmbientContext(node);
@@ -5600,31 +5739,33 @@ module ts {
             // for the first member.
             //
             // Only perform this check once per symbol
-            var firstDeclaration = getDeclarationOfKind(enumSymbol, node.kind);
-            if (node === firstDeclaration) {
+            runOnceForSymbol(enumSymbol, node, symbol => {
                 var seenEnumMissingInitialInitializer = false;
-                forEach(enumSymbol.declarations, declaration => {
-                    // return true if we hit a violation of the rule, false otherwise
-                    if (declaration.kind !== SyntaxKind.EnumDeclaration) {
-                        return false;
-                    }
 
-                    var enumDeclaration = <EnumDeclaration>declaration;
-                    if (!enumDeclaration.members.length) {
-                        return false;
-                    }
+                forEachLocalSymbol(symbol, localSymbol => {
+                    forEach(localSymbol.declarations, declaration => {
+                        // return true if we hit a violation of the rule, false otherwise
+                        if (declaration.kind !== SyntaxKind.EnumDeclaration) {
+                            return false;
+                        }
 
-                    var firstEnumMember = enumDeclaration.members[0];
-                    if (!firstEnumMember.initializer) {
-                        if (seenEnumMissingInitialInitializer) {
-                            error(firstEnumMember.name, Diagnostics.In_an_enum_with_multiple_declarations_only_one_declaration_can_omit_an_initializer_for_its_first_enum_element);
+                        var enumDeclaration = <EnumDeclaration>declaration;
+                        if (!enumDeclaration.members.length) {
+                            return false;
                         }
-                        else {
-                            seenEnumMissingInitialInitializer = true;
+
+                        var firstEnumMember = enumDeclaration.members[0];
+                        if (!firstEnumMember.initializer) {
+                            if (seenEnumMissingInitialInitializer) {
+                                error(firstEnumMember.name, Diagnostics.In_an_enum_with_multiple_declarations_only_one_declaration_can_omit_an_initializer_for_its_first_enum_element);
+                            }
+                            else {
+                                seenEnumMissingInitialInitializer = true;
+                            }
                         }
-                    }
+                    });
                 });
-            }
+            });
         }
 
         function getFirstNonAmbientClassOrFunctionDeclaration(symbol: Symbol): Declaration {
@@ -5641,6 +5782,7 @@ module ts {
         function checkModuleDeclaration(node: ModuleDeclaration) {
             checkCollisionWithCapturedThisVariable(node, node.name);
             var symbol = getSymbolOfNode(node);
+            checkExportsOnMergedDeclarations(symbol, node);
             if (symbol.flags & SymbolFlags.ValueModule && symbol.declarations.length > 1 && !isInAmbientContext(node)) {
                 var classOrFunc = getFirstNonAmbientClassOrFunctionDeclaration(symbol);
                 if (classOrFunc) {
