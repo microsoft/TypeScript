@@ -407,12 +407,10 @@ module ts {
     }
 
     export interface DoStatement extends IterationStatement {
-        statement: Statement;
         expression: Expression;
     }
 
     export interface WhileStatement extends IterationStatement {
-        statement: Statement;
         expression: Expression;
     }
 
@@ -421,14 +419,12 @@ module ts {
         initializer?: Expression;
         condition?: Expression;
         iterator?: Expression;
-        statement: Statement;
     }
 
     export interface ForInStatement extends IterationStatement {
         declaration?: VariableDeclaration;
         variable?: Expression;
         expression: Expression;
-        statement: Statement;
     }
 
     export interface BreakOrContinueStatement extends Statement {

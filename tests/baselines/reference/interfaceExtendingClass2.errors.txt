@@ -19,8 +19,8 @@
                 return 1;
                 ~~~~~~
 !!! Property or signature expected.
-                ~~~~~~~~~
-!!! 'return' statement has no containing function.
+                ~~~~~~
+!!! A 'return' statement can only be used within a function body.
             };
             ~
 !!! Declaration or statement expected.

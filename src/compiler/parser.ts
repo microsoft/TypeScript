@@ -394,13 +394,17 @@ module ts {
 
         var lookAheadMode = LookAheadMode.NotLookingAhead;
         var inAmbientContext = false;
+        var inModuleBody = false;
         var inFunctionBody = false;
         var inSwitchStatement = ControlBlockContext.NotNested;
         var inIterationStatement = ControlBlockContext.NotNested;
 
         var labelledStatementInfo = (() => {
+            // TODO(jfreeman): Implement a data structure for tracking labels
             var functionBoundarySentinel = <LabelledStatement>{};
             var labelledStatementStack: LabelledStatement[];
+
+            // TODO(jfreeman): Fill in these stubs
             return {
                 getLength: (): number => 0,
                 enqueueFunctionBoundary: () => { },
@@ -2072,10 +2076,54 @@ module ts {
 
         function parseBreakOrContinueStatement(kind: SyntaxKind): BreakOrContinueStatement {
             var node = <BreakOrContinueStatement>createNode(kind);
+            var errorCountBeforeStatement = file.syntacticErrors.length;
+            var keywordStart = scanner.getTokenPos();
+            var keywordLength = scanner.getTextPos() - keywordStart;
             parseExpected(kind === SyntaxKind.BreakStatement ? SyntaxKind.BreakKeyword : SyntaxKind.ContinueKeyword);
             if (!isSemicolon()) node.label = parseIdentifier();
             parseSemicolon();
+
+            // In an ambient context, we will already give an error for having a statement.
+            if (!inAmbientContext && errorCountBeforeStatement === file.syntacticErrors.length) {
+                if (!node.label) {
+                    checkAnonymousBreakOrContinueStatement(kind, keywordStart, keywordLength);
+                }
+            }
             return finishNode(node);
+        }
+
+        function checkAnonymousBreakOrContinueStatement(kind: SyntaxKind, errorStart: number, errorLength: number): void {
+            if (kind === SyntaxKind.BreakStatement) {
+                if (inIterationStatement === ControlBlockContext.Nested
+                    || inSwitchStatement === ControlBlockContext.Nested) {
+                    return;
+                }
+                else if (inIterationStatement === ControlBlockContext.NotNested
+                    && inSwitchStatement === ControlBlockContext.NotNested) {
+                    grammarErrorAtPos(errorStart, errorLength,
+                        Diagnostics.A_break_statement_can_only_be_used_within_an_enclosing_iteration_or_switch_statement);
+                    return;
+                }
+                // Fall through
+            }
+            else if (kind === SyntaxKind.ContinueStatement) {
+                if (inIterationStatement === ControlBlockContext.Nested) {
+                    return;
+                }
+                else if (inIterationStatement === ControlBlockContext.NotNested) {
+                    grammarErrorAtPos(errorStart, errorLength,
+                        Diagnostics.A_continue_statement_can_only_be_used_within_an_enclosing_iteration_statement);
+                    return;
+                }
+                // Fall through
+            }
+            else {
+                Debug.fail("checkAnonymousBreakOrContinueStatement");
+            }
+
+            Debug.assert(inIterationStatement === ControlBlockContext.CrossingFunctionBoundary
+                || inSwitchStatement === ControlBlockContext.CrossingFunctionBoundary);
+            grammarErrorAtPos(errorStart, errorLength, Diagnostics.Jump_target_cannot_cross_function_boundary);
         }
 
         function parseReturnStatement(): ReturnStatement {
@@ -2088,7 +2136,7 @@ module ts {
             if (!isSemicolon()) node.expression = parseExpression();
             parseSemicolon();
 
-            if (!inFunctionBody && errorCountBeforeReturnStatement === file.syntacticErrors.length) {
+            if (!inFunctionBody && !inModuleBody && errorCountBeforeReturnStatement === file.syntacticErrors.length) {
                 grammarErrorAtPos(returnTokenStart, returnTokenLength, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
             }
             return finishNode(node);
@@ -2827,7 +2875,11 @@ module ts {
         function parseModuleBody(): Block {
             var node = <Block>createNode(SyntaxKind.ModuleBlock);
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
+                var saveInModuleBody = inModuleBody;
+                inModuleBody = true;
                 node.statements = parseList(ParsingContext.ModuleElements, parseModuleElement);
+                inModuleBody = saveInModuleBody;
+
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {

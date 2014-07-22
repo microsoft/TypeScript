@@ -1,5 +1,7 @@
-==== tests/cases/conformance/parser/ecmascript5/Statements/parserWithStatement2.ts (1 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/Statements/parserWithStatement2.ts (2 errors) ====
     with (1)
           ~
 !!! All symbols within a 'with' block will be resolved to 'any'.
       return;
+      ~~~~~~
+!!! A 'return' statement can only be used within a function body.

@@ -5276,9 +5276,6 @@ module ts {
                         }
                     }
                 }
-                else {
-                    error(node, Diagnostics.return_statement_has_no_containing_function);
-                }
             }
         }
 

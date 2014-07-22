@@ -1,22 +1,13 @@
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserStatementIsNotAMemberVariableDeclaration1.ts (1 errors) ====
     return {
-    ~~~~~~~~
-    
+    ~~~~~~
+!!! A 'return' statement can only be used within a function body.
     
       "set": function (key, value) {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    
     
         // 'private' should not be considered a member variable here.
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         private[key] = value;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~
-    
     
       }
-    ~~~
-    
     
     };
-    ~~
-!!! 'return' statement has no containing function.
