@@ -1,9 +1,11 @@
-==== tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts (8 errors) ====
+==== tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts (10 errors) ====
     
     // Arrow function used in with statement
     with (window) {
           ~~~~~~
 !!! All symbols within a 'with' block will be resolved to 'any'.
+          ~~~~~~
+!!! Cannot find name 'window'.
         var p = () => this;
     }
     
@@ -53,6 +55,8 @@
         with (window) {
               ~~~~~~
 !!! All symbols within a 'with' block will be resolved to 'any'.
+              ~~~~~~
+!!! Cannot find name 'window'.
             var p = () => this;
         }
     

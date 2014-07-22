@@ -1,6 +1,8 @@
-==== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode14.ts (1 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode14.ts (2 errors) ====
     "use strict";
     with (a) {
           ~
 !!! All symbols within a 'with' block will be resolved to 'any'.
+          ~
+!!! Cannot find name 'a'.
     }
