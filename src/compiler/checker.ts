@@ -2978,6 +2978,33 @@ module ts {
             return type;
         }
 
+        function forEachMatchingParameterType(source: Signature, target: Signature, callback: (s: Type, t: Type) => void) {
+            var sourceMax = source.parameters.length;
+            var targetMax = target.parameters.length;
+            var count: number;
+            if (source.hasRestParameter && target.hasRestParameter) {
+                count = sourceMax > targetMax ? sourceMax : targetMax;
+                sourceMax--;
+                targetMax--;
+            }
+            else if (source.hasRestParameter) {
+                sourceMax--;
+                count = targetMax;
+            }
+            else if (target.hasRestParameter) {
+                targetMax--;
+                count = sourceMax;
+            }
+            else {
+                count = sourceMax < targetMax ? sourceMax : targetMax;
+            }
+            for (var i = 0; i < count; i++) {
+                var s = i < sourceMax ? getTypeOfSymbol(source.parameters[i]) : getRestTypeOfSignature(source);
+                var t = i < targetMax ? getTypeOfSymbol(target.parameters[i]) : getRestTypeOfSignature(target);
+                callback(s, t);
+            }
+        }
+
         function createInferenceContext(typeParameters: TypeParameter[]): InferenceContext {
             var inferences: Type[][] = [];
             for (var i = 0; i < typeParameters.length; i++) inferences.push([]);
@@ -3073,35 +3100,12 @@ module ts {
                 var targetLen = targetSignatures.length;
                 var len = sourceLen < targetLen ? sourceLen : targetLen;
                 for (var i = 0; i < len; i++) {
-                    inferFromParameters(getErasedSignature(sourceSignatures[sourceLen - len + i]), getErasedSignature(targetSignatures[targetLen - len + i]));
+                    inferFromSignature(getErasedSignature(sourceSignatures[sourceLen - len + i]), getErasedSignature(targetSignatures[targetLen - len + i]));
                 }
             }
 
-            function inferFromParameters(source: Signature, target: Signature) {
-                var sourceMax = source.parameters.length;
-                var targetMax = target.parameters.length;
-                var checkCount: number;
-                if (!source.hasRestParameter && !target.hasRestParameter) {
-                    checkCount = sourceMax < targetMax ? sourceMax : targetMax;
-                }
-                else if (source.hasRestParameter) {
-                    sourceMax--;
-                    checkCount = targetMax;
-                }
-                else if (target.hasRestParameter) {
-                    targetMax--;
-                    checkCount = sourceMax;
-                }
-                else {
-                    checkCount = sourceMax > targetMax ? sourceMax : targetMax;
-                    sourceMax--;
-                    targetMax--;
-                }
-                for (var i = 0; i < checkCount; i++) {
-                    var s = i < sourceMax ? getTypeOfSymbol(source.parameters[i]) : getRestTypeOfSignature(source);
-                    var t = i < targetMax ? getTypeOfSymbol(target.parameters[i]) : getRestTypeOfSignature(target);
-                    inferFromTypes(s, t);
-                }
+            function inferFromSignature(source: Signature, target: Signature) {
+                forEachMatchingParameterType(source, target, inferFromTypes);
                 inferFromTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
             }
 
@@ -3655,6 +3659,41 @@ module ts {
             return result;
         }
 
+        // If type has a single call signature and no other members, return that signature. Otherwise, return undefined.
+        function getSingleCallSignature(type: Type): Signature {
+            if (type.flags & TypeFlags.ObjectType) {
+                var resolved = resolveObjectTypeMembers(<ObjectType>type);
+                if (resolved.callSignatures.length === 1 && resolved.constructSignatures.length === 0 &&
+                    resolved.properties.length === 0 && !resolved.stringIndexType && !resolved.numberIndexType) {
+                    return resolved.callSignatures[0];
+                }
+            }
+            return undefined;
+        }
+
+        // Instantiate a generic signature in the context of a non-generic signature (section 3.8.5 in TypeScript spec)
+        function instantiateSignatureInContextOf(signature: Signature, contextualSignature: Signature, contextualMapper: TypeMapper): Signature {
+            var context = createInferenceContext(signature.typeParameters);
+            forEachMatchingParameterType(contextualSignature, signature, (source, target) => {
+                // Type parameters from outer context referenced by source type are fixed by instantiation of the source type
+                inferTypes(context, instantiateType(source, contextualMapper), target);
+            });
+            return getSignatureInstantiation(signature, getInferredTypes(context));
+        }
+
+        // Inferentially type an expression by a contextual parameter type (section 4.12.2 in TypeScript spec)
+        function inferentiallyTypeExpession(expr: Expression, contextualType: Type, contextualMapper: TypeMapper): Type {
+            var type = checkExpression(expr, contextualType, contextualMapper);
+            var signature = getSingleCallSignature(type);
+            if (signature && signature.typeParameters) {
+                var contextualSignature = getSingleCallSignature(contextualType);
+                if (contextualSignature && !contextualSignature.typeParameters) {
+                    type = getOrCreateTypeFromSignature(instantiateSignatureInContextOf(signature, contextualSignature, contextualMapper));
+                }
+            }
+            return type;
+        }
+
         function inferTypeArguments(signature: Signature, args: Expression[], excludeArgument?: boolean[]): Type[] {
             var typeParameters = signature.typeParameters;
             var context = createInferenceContext(typeParameters);
@@ -3663,7 +3702,7 @@ module ts {
             for (var i = 0; i < args.length; i++) {
                 if (!excludeArgument || excludeArgument[i] === undefined) {
                     var parameterType = getTypeAtPosition(signature, i);
-                    inferTypes(context, checkExpression(args[i], parameterType, mapper), parameterType);
+                    inferTypes(context, inferentiallyTypeExpession(args[i], parameterType, mapper), parameterType);
                 }
             }
             // Next, infer from those context sensitive arguments that are no longer excluded
@@ -3671,7 +3710,7 @@ module ts {
                 for (var i = 0; i < args.length; i++) {
                     if (excludeArgument[i] === false) {
                         var parameterType = getTypeAtPosition(signature, i);
-                        inferTypes(context, checkExpression(args[i], parameterType, mapper), parameterType);
+                        inferTypes(context, inferentiallyTypeExpession(args[i], parameterType, mapper), parameterType);
                     }
                 }
             }
