@@ -402,17 +402,21 @@ module ts {
         elseStatement?: Statement;
     }
 
-    export interface DoStatement extends Statement {
+    export interface IterationStatement extends Statement {
+        statement: Statement;
+    }
+
+    export interface DoStatement extends IterationStatement {
         statement: Statement;
         expression: Expression;
     }
 
-    export interface WhileStatement extends Statement {
+    export interface WhileStatement extends IterationStatement {
         statement: Statement;
         expression: Expression;
     }
 
-    export interface ForStatement extends Statement {
+    export interface ForStatement extends IterationStatement {
         declarations?: NodeArray<VariableDeclaration>;
         initializer?: Expression;
         condition?: Expression;
@@ -420,7 +424,7 @@ module ts {
         statement: Statement;
     }
 
-    export interface ForInStatement extends Statement {
+    export interface ForInStatement extends IterationStatement {
         declaration?: VariableDeclaration;
         variable?: Expression;
         expression: Expression;

@@ -348,11 +348,11 @@
         "category": "Error",
         "code": 1103
     },
-    "'continue' statement can only be used within an enclosing iteration statement.": {
+    "A 'continue' statement can only be used within an enclosing iteration statement.": {
         "category": "Error",
         "code": 1104
     },
-    "'break' statement can only be used within an enclosing iteration or switch statement.": {
+    "A 'break' statement can only be used within an enclosing iteration or switch statement.": {
         "category": "Error",
         "code": 1105
     },
@@ -364,7 +364,7 @@
         "category": "Error",
         "code": 1107
     },
-    "'return' statement must be contained within a function body.": {
+    "A 'return' statement can only be used within a function body.": {
         "category": "Error",
         "code": 1108
     },
@@ -1092,10 +1092,6 @@
         "code": -9999999
     },
     "Function implementation expected.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "'return' statement has no containing function.": {
         "category": "Error",
         "code": -9999999
     },

@@ -373,6 +373,14 @@ module ts {
         Preserve
     }
 
+    // Tracks whether we nested (directly or indirectly) in a certain control block.
+    // Used for validating break and continue statements.
+    enum ControlBlockContext {
+        NotNested,
+        Nested,
+        CrossingFunctionBoundary
+    }
+
     export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget): SourceFile {
         var file: SourceFile;
         var scanner: Scanner;
@@ -386,6 +394,19 @@ module ts {
 
         var lookAheadMode = LookAheadMode.NotLookingAhead;
         var inAmbientContext = false;
+        var inFunctionBody = false;
+        var inSwitchStatement = ControlBlockContext.NotNested;
+        var inIterationStatement = ControlBlockContext.NotNested;
+
+        var labelledStatementInfo = (() => {
+            var functionBoundarySentinel = <LabelledStatement>{};
+            var labelledStatementStack: LabelledStatement[];
+            return {
+                getLength: (): number => 0,
+                enqueueFunctionBoundary: () => { },
+                resetStack: (length: number) => { }
+            };
+        })();
 
         function getLineAndCharacterlFromSourcePosition(position: number) {
             if (!lineStarts) {
@@ -1914,8 +1935,29 @@ module ts {
         }
 
         function parseBody(ignoreMissingOpenBrace: boolean): Block {
+            var saveInFunctionBody = inFunctionBody;
+            var saveInSwitchStatement = inSwitchStatement;
+            var saveInIterationStatement = inIterationStatement;
+
+            inFunctionBody = true;
+            if (inSwitchStatement === ControlBlockContext.Nested) {
+                inSwitchStatement = ControlBlockContext.CrossingFunctionBoundary;
+            }
+            if (inIterationStatement === ControlBlockContext.Nested) {
+                inIterationStatement = ControlBlockContext.CrossingFunctionBoundary;
+            }
+
+            var labelStackLength = labelledStatementInfo.getLength();
+            labelledStatementInfo.enqueueFunctionBoundary();
+
             var block = parseBlock(ignoreMissingOpenBrace);
             block.kind = SyntaxKind.FunctionBlock;
+
+            labelledStatementInfo.resetStack(labelStackLength);
+            inFunctionBody = saveInFunctionBody;
+            inSwitchStatement = saveInSwitchStatement;
+            inIterationStatement = saveInIterationStatement;
+
             return block;
         }
 
@@ -1939,7 +1981,12 @@ module ts {
         function parseDoStatement(): DoStatement {
             var node = <DoStatement>createNode(SyntaxKind.DoStatement);
             parseExpected(SyntaxKind.DoKeyword);
+
+            var saveInIterationStatement = inIterationStatement;
+            inIterationStatement = ControlBlockContext.Nested;
             node.statement = parseStatement();
+            inIterationStatement = saveInIterationStatement;
+
             parseExpected(SyntaxKind.WhileKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
             node.expression = parseExpression();
@@ -1959,7 +2006,12 @@ module ts {
             parseExpected(SyntaxKind.OpenParenToken);
             node.expression = parseExpression();
             parseExpected(SyntaxKind.CloseParenToken);
+
+            var saveInIterationStatement = inIterationStatement;
+            inIterationStatement = ControlBlockContext.Nested;
             node.statement = parseStatement();
+            inIterationStatement = saveInIterationStatement;
+
             return finishNode(node);
         }
 
@@ -1978,6 +2030,7 @@ module ts {
                     var varOrInit = parseExpression(true);
                 }
             }
+            var forOrForInStatement: IterationStatement;
             if (parseOptional(SyntaxKind.InKeyword)) {
                 var forInStat = <ForInStatement>createNode(SyntaxKind.ForInStatement, pos);
                 if (declarations) {
@@ -1991,8 +2044,7 @@ module ts {
                 }
                 forInStat.expression = parseExpression();
                 parseExpected(SyntaxKind.CloseParenToken);
-                forInStat.statement = parseStatement();
-                return finishNode(forInStat);
+                forOrForInStatement = forInStat;
             }
             else {
                 var forStat = <ForStatement>createNode(SyntaxKind.ForStatement, pos);
@@ -2007,9 +2059,15 @@ module ts {
                     forStat.iterator = parseExpression();
                 }
                 parseExpected(SyntaxKind.CloseParenToken);
-                forStat.statement = parseStatement();
-                return finishNode(forStat);
+                forOrForInStatement = forStat;
             }
+
+            var saveInIterationStatement = inIterationStatement;
+            inIterationStatement = ControlBlockContext.Nested;
+            forOrForInStatement.statement = parseStatement();
+            inIterationStatement = saveInIterationStatement;
+
+            return finishNode(forOrForInStatement);
         }
 
         function parseBreakOrContinueStatement(kind: SyntaxKind): BreakOrContinueStatement {
@@ -2022,9 +2080,17 @@ module ts {
 
         function parseReturnStatement(): ReturnStatement {
             var node = <ReturnStatement>createNode(SyntaxKind.ReturnStatement);
+            var errorCountBeforeReturnStatement = file.syntacticErrors.length;
+            var returnTokenStart = scanner.getTokenPos();
+            var returnTokenLength = scanner.getTextPos() - returnTokenStart;
+
             parseExpected(SyntaxKind.ReturnKeyword);
             if (!isSemicolon()) node.expression = parseExpression();
             parseSemicolon();
+
+            if (!inFunctionBody && errorCountBeforeReturnStatement === file.syntacticErrors.length) {
+                grammarErrorAtPos(returnTokenStart, returnTokenLength, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
+            }
             return finishNode(node);
         }
 
@@ -2066,7 +2132,12 @@ module ts {
             node.expression = parseExpression();
             parseExpected(SyntaxKind.CloseParenToken);
             parseExpected(SyntaxKind.OpenBraceToken);
+
+            var saveInSwitchStatement = inSwitchStatement;
+            inSwitchStatement = ControlBlockContext.Nested;
             node.clauses = parseList(ParsingContext.SwitchClauses, parseCaseOrDefaultClause);
+            inSwitchStatement = saveInSwitchStatement;
+
             parseExpected(SyntaxKind.CloseBraceToken);
 
             // Error on duplicate 'default' clauses.
