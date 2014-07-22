@@ -241,6 +241,7 @@ module ts {
         symbol?: Symbol;              // Symbol declared by node (initialized by binding)
         locals?: SymbolTable;         // Locals associated with node (initialized by binding)
         nextContainer?: Node;         // Next container in declaration order (initialized by binding)
+        localSymbol?: Symbol;         // Local symbol declared by node (initialized by binding only for exported nodes)
     }
 
     export interface NodeArray<T> extends Array<T>, TextRange { }
@@ -697,6 +698,7 @@ module ts {
 
         IsContainer = HasLocals | HasExports | HasMembers,
         PropertyOrAccessor      = Property | Accessor,
+        Export                  = ExportNamespace | ExportType | ExportValue,
     }
 
     export interface Symbol {

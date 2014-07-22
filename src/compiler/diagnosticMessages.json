@@ -518,6 +518,10 @@
         "category": "Error",
         "code": 2190
     },
+    "All declarations of merged declaration '{0}' must be exported or not exported.": {
+        "category": "Error",
+        "code": 2192
+    },
     "'super' cannot be referenced in constructor arguments.":{
         "category": "Error",
         "code": 2193
