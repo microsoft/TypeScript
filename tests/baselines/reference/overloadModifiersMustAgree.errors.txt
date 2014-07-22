@@ -13,7 +13,7 @@
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Function implementation expected.
                     ~~~
-!!! Duplicate identifier 'bar'.
+!!! Overload signatures must all be exported or not exported.
     function bar(s?: string) { }
     
     interface I {
