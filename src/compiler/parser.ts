@@ -1445,7 +1445,7 @@ module ts {
         function tryParseParenthesizedArrowFunctionExpression(): Expression {
             var pos = getNodePos();
 
-            // Whether we are certain that we should parse an arrow expression.
+            // Indicates whether we are certain that we should parse an arrow expression.
             var triState = isParenthesizedArrowFunctionExpression();
 
             // It is not a parenthesized arrow function.
@@ -1470,11 +1470,12 @@ module ts {
             
             // Otherwise, *maybe* we had an arrow function and we need to *try* to parse it out
             // (which will ensure we rollback if we fail).
-            var sig = tryParse(parseSignatureAndArrow);
+            var sig = tryParse(parseSignatureIfArrowOrBraceFollows);
             if (sig === undefined) {
                 return undefined;
             }
             else {
+                parseExpected(SyntaxKind.EqualsGreaterThanToken);
                 return parseArrowExpressionTail(pos, sig, /*noIn:*/ false);
             }
         }
@@ -1512,8 +1513,9 @@ module ts {
                             return Tristate.True;
                         }
 
-                        // We had "(" not followed by an identifier. This definitely doesn't
-                        // look like a lambda. Note: we could be a little more lenient and allow
+                        // If we had "(" followed by something that's not an identifier,
+                        // then this definitely doesn't look like a lambda.
+                        // Note: we could be a little more lenient and allow
                         // "(public" or "(private". These would not ever actually be allowed,
                         // but we could provide a good error message instead of bailing out.
                         if (!isIdentifier()) {
@@ -1543,10 +1545,12 @@ module ts {
             return Tristate.False;
         }
 
-        function parseSignatureAndArrow(): ParsedSignature {
+        function parseSignatureIfArrowOrBraceFollows(): ParsedSignature {
             var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken);
-            parseExpected(SyntaxKind.EqualsGreaterThanToken);
-            return sig;
+            if (token === SyntaxKind.EqualsGreaterThanToken || token === SyntaxKind.OpenBraceToken) {
+                return sig;
+            }
+            return undefined;
         }
 
         function parseArrowExpressionTail(pos: number, sig: ParsedSignature, noIn: boolean): FunctionExpression {

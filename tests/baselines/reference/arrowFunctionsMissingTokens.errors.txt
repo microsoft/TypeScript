@@ -1,4 +1,4 @@
-==== tests/cases/compiler/arrowFunctionsMissingTokens.ts (39 errors) ====
+==== tests/cases/compiler/arrowFunctionsMissingTokens.ts (31 errors) ====
     
     module missingArrowsWithCurly {
         var a = () { };
@@ -11,31 +11,15 @@
     
         var c = (x) { };
                     ~
-!!! ',' expected.
-                 ~
-!!! Cannot find name 'x'.
+!!! '=>' expected.
     
         var d = (x: number, y: string) { };
-                  ~
-!!! ')' expected.
-                                     ~
-!!! ',' expected.
                                        ~
-!!! Variable declaration expected.
-                 ~
-!!! Cannot find name 'x'.
+!!! '=>' expected.
     
         var e = (x: number, y: string): void { };
-                  ~
-!!! ')' expected.
-                                     ~
-!!! ',' expected.
-                                      ~
-!!! Variable declaration expected.
-                                        ~~~~
-!!! Variable declaration expected.
-                 ~
-!!! Cannot find name 'x'.
+                                             ~
+!!! '=>' expected.
     }
     
     module missingCurliesWithArrow {

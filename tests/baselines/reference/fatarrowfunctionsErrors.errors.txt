@@ -1,4 +1,4 @@
-==== tests/cases/compiler/fatarrowfunctionsErrors.ts (25 errors) ====
+==== tests/cases/compiler/fatarrowfunctionsErrors.ts (18 errors) ====
     foo((...Far:any[])=>{return 0;})
     ~~~
 !!! Cannot find name 'foo'.
@@ -39,25 +39,11 @@
                       ~
 !!! '=>' expected.
     var x2 = (a:number) :void {};
-               ~
-!!! ')' expected.
-                      ~
-!!! ',' expected.
-                        ~
-!!! Variable declaration expected.
-                         ~~~~
-!!! Variable declaration expected.
-              ~
-!!! Cannot find name 'a'.
+                              ~
+!!! '=>' expected.
     var x3 = (a:number) {};
-               ~
-!!! ')' expected.
-                      ~
-!!! ',' expected.
                         ~
-!!! Variable declaration expected.
-              ~
-!!! Cannot find name 'a'.
+!!! '=>' expected.
     var x4= (...a: any[]) { };
                           ~
 !!! '=>' expected.
