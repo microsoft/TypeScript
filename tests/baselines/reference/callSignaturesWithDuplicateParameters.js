@@ -72,7 +72,7 @@ var C = (function () {
 })();
 var a;
 var b = {
-    foo: function foo(x, x) {
+    foo: function (x, x) {
     },
     a: function foo(x, x) {
     },

@@ -32,7 +32,7 @@ var badFundule: Function = bad; // error
 //// [assignmentToObjectAndFunction.js]
 var errObj = { toString: 0 };
 var goodObj = {
-    toString: function toString(x) {
+    toString: function (x) {
         return "";
     }
 };

@@ -96,7 +96,7 @@ var C = (function () {
     return C;
 })();
 var a;
-var b = { new: function new(x) {
+var b = { new: function (x) {
     return null;
 } };
 function foo1b(x) {
