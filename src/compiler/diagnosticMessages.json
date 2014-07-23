@@ -356,10 +356,6 @@
         "category": "Error",
         "code": 1105
     },
-    "Jump target not found.": {
-        "category": "Error",
-        "code": 1106
-    },
     "Jump target cannot cross function boundary.": {
         "category": "Error",
         "code": 1107
@@ -387,6 +383,18 @@
     "A 'default' clause cannot appear more than once in a 'switch' statement.": {
         "category": "Error",
         "code": 1113
+    },
+    "Duplicate label '{0}'": {
+        "category": "Error",
+        "code": 1114
+    },
+    "A 'continue' statement can only jump to a label of an enclosing iteration statement.": {
+        "category": "Error",
+        "code": 1115
+    },
+    "A 'break' statement can only jump to a label of an enclosing statement.": {
+        "category": "Error",
+        "code": 1116
     },
 
     "Duplicate identifier '{0}'.": {

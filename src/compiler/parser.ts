@@ -401,13 +401,17 @@ module ts {
         var labelledStatementInfo = (() => {
             // TODO(jfreeman): Implement a data structure for tracking labels
             var functionBoundarySentinel = <LabelledStatement>{};
-            var labelledStatementStack: LabelledStatement[];
+            var currentLabelSet: Identifier[];
+            var labelSetStack: Identifier[][];
+            var isIterationStack: boolean[];
 
             // TODO(jfreeman): Fill in these stubs
             return {
-                pushLabelledStatement: (statement: LabelledStatement) => { },
+                addLabel: (label: Identifier) => { },
+                pushCurrentLabelSet: (isIterationStatement: boolean) => { },
                 pushFunctionBoundary: () => { },
-                pop: () => { }
+                pop: () => { },
+                labelExists: (label: Identifier, requireIterationStatement: boolean): boolean => false,
             };
         })();
 
@@ -2082,7 +2086,10 @@ module ts {
 
             // In an ambient context, we will already give an error for having a statement.
             if (!inAmbientContext && errorCountBeforeStatement === file.syntacticErrors.length) {
-                if (!node.label) {
+                if (node.label) {
+                    checkBreakOrContinueStatementWithLabel(node.label, kind);
+                }
+                else {
                     checkAnonymousBreakOrContinueStatement(kind, keywordStart, keywordLength);
                 }
             }
@@ -2121,6 +2128,22 @@ module ts {
             Debug.assert(inIterationStatement === ControlBlockContext.CrossingFunctionBoundary
                 || inSwitchStatement === ControlBlockContext.CrossingFunctionBoundary);
             grammarErrorAtPos(errorStart, errorLength, Diagnostics.Jump_target_cannot_cross_function_boundary);
+        }
+
+        function checkBreakOrContinueStatementWithLabel(label: Identifier, kind: SyntaxKind): void {
+            if (labelledStatementInfo.labelExists(label, /*requireIterationStatement*/ kind === SyntaxKind.ContinueStatement)) {
+                return;
+            }
+
+            if (kind === SyntaxKind.ContinueStatement) {
+                grammarErrorOnNode(label, Diagnostics.A_continue_statement_can_only_jump_to_a_label_of_an_enclosing_iteration_statement);
+            }
+            else if (kind === SyntaxKind.BreakStatement) {
+                grammarErrorOnNode(label, Diagnostics.A_break_statement_can_only_jump_to_a_label_of_an_enclosing_statement);
+            }
+            else {
+                Debug.fail("checkBreakOrContinueStatementWithLabel");
+            }
         }
 
         function parseReturnStatement(): ReturnStatement {
@@ -2261,11 +2284,34 @@ module ts {
             return finishNode(node);
         }
 
+        function isIterationStatementStart(): boolean {
+            return token === SyntaxKind.WhileKeyword || token === SyntaxKind.DoKeyword || token === SyntaxKind.ForKeyword;
+        }
+
+        function parseStatementWithLabelSet(): Statement {
+            labelledStatementInfo.pushCurrentLabelSet(isIterationStatementStart());
+            var statement = parseStatement();
+            labelledStatementInfo.pop();
+            return statement;
+        }
+
+        function isLabel(): boolean {
+            return isIdentifier() && lookAhead(() => nextToken() === SyntaxKind.ColonToken);
+        }
+
         function parseLabelledStatement(): LabelledStatement {
             var node = <LabelledStatement>createNode(SyntaxKind.LabelledStatement);
             node.label = parseIdentifier();
             parseExpected(SyntaxKind.ColonToken);
-            node.statement = parseStatement();
+
+            if (labelledStatementInfo.labelExists(node.label, /*requireIterationStatement*/ false)) {
+                grammarErrorOnNode(node.label, Diagnostics.Duplicate_label_0);
+            }
+            labelledStatementInfo.addLabel(node.label);
+
+            // We only want to call parseStatementWithLabelSet when the label set is complete
+            // Therefore, keep parsing labels until we know we're done.
+            node.statement = isLabel() ? parseLabelledStatement() : parseStatementWithLabelSet();
             return finishNode(node);
         }
 
@@ -2355,7 +2401,7 @@ module ts {
                 case SyntaxKind.DebuggerKeyword:
                     return parseDebuggerStatement();
                 default:
-                    if (isIdentifier() && lookAhead(() => nextToken() === SyntaxKind.ColonToken)) {
+                    if (isLabel()) {
                         return parseLabelledStatement();
                     }
                     return parseExpressionStatement();
