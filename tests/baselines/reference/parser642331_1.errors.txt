@@ -1,0 +1,9 @@
+==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser642331_1.ts (1 errors) ====
+    "use strict";
+    
+    class test {
+        constructor (static) { }
+                     ~~~~~~
+!!! Identifier expected.
+    }
+    

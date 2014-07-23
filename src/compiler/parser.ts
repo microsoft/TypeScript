@@ -119,6 +119,21 @@ module ts {
         return file.externalModuleIndicator !== undefined;
     }
 
+    export function isPrologueDirective(node: Node): boolean {
+        return node.kind === SyntaxKind.ExpressionStatement && (<ExpressionStatement>node).expression.kind === SyntaxKind.StringLiteral;
+    }
+
+    function isEvalOrArgumentsIdentifier(node: Node): boolean {
+        return node.kind === SyntaxKind.Identifier &&
+            (<Identifier>node).text &&
+            ((<Identifier>node).text === "eval" || (<Identifier>node).text === "arguments")
+    }
+
+    /// Should be called only on prologue directives (isPrologueDirective(node) should be true)
+    function isUseStrictPrologueDirective(node: Node): boolean {
+        return (<Identifier>(<ExpressionStatement>node).expression).text === "use strict";
+    }
+
     // Invokes a callback for each child of the given node. The 'cbNode' callback is invoked for all child nodes
     // stored in properties. If a 'cbNodes' callback is specified, it is invoked for embedded arrays; otherwise,
     // embedded arrays are flattened and the 'cbNode' callback is invoked for each element. If a callback returns
@@ -383,6 +398,7 @@ module ts {
         var identifierCount = 0;
         var nodeCount = 0;
         var lineStarts: number[];
+        var isInStrictMode = false;
 
         var lookAheadMode = LookAheadMode.NotLookingAhead;
         var inAmbientContext = false;
@@ -417,6 +433,13 @@ module ts {
 
             file.syntacticErrors.push(createFileDiagnostic(file, start, length, message, arg0, arg1, arg2));
         }
+
+        function reportInvalidUseInStrictMode(node: Identifier): void {
+            // identifierToString cannot be used here since it uses backreference to 'parent' that is not yet set
+            var name = sourceText.substring(skipTrivia(sourceText, node.pos), node.end);
+            grammarErrorOnNode(node, Diagnostics.Invalid_use_of_0_in_strict_mode, name);
+        }
+
 
         function grammarErrorAtPos(start: number, length: number, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
             file.syntacticErrors.push(createFileDiagnostic(file, start, length, message, arg0, arg1, arg2));
@@ -522,7 +545,7 @@ module ts {
         }
 
         function isIdentifier(): boolean {
-            return token === SyntaxKind.Identifier || token > SyntaxKind.LastReservedWord;
+            return token === SyntaxKind.Identifier || (isInStrictMode ? token > SyntaxKind.LastFutureReservedWord : token > SyntaxKind.LastReservedWord);
         }
 
         function isSemicolon(): boolean {
@@ -767,14 +790,27 @@ module ts {
         }
 
         // Parses a list of elements
-        function parseList<T extends Node>(kind: ParsingContext, parseElement: () => T): NodeArray<T> {
+        function parseList<T extends Node>(kind: ParsingContext, checkForStrictMode: boolean, parseElement: () => T): NodeArray<T> {
             var saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
             var result = <NodeArray<T>>[];
             result.pos = getNodePos();
+            var saveIsInStrictMode = isInStrictMode;
             while (!isListTerminator(kind)) {
                 if (isListElement(kind, /* inErrorRecovery */ false)) {
-                    result.push(parseElement());
+                    var element = parseElement();
+                    result.push(element);
+                    if (!isInStrictMode && checkForStrictMode) {
+                        if (isPrologueDirective(element)) {
+                            if (isUseStrictPrologueDirective(element)) {
+                                isInStrictMode = true;
+                                checkForStrictMode = false;
+                            }
+                        }
+                        else {
+                            checkForStrictMode = false;
+                        }
+                    }
                 }
                 else {
                     error(parsingContextErrors(kind));
@@ -784,6 +820,7 @@ module ts {
                     nextToken();
                 }
             }
+            isInStrictMode = saveIsInStrictMode;
             result.end = getNodeEnd();
             parsingContext = saveParsingContext;
             return result;
@@ -968,6 +1005,18 @@ module ts {
                 node.flags |= NodeFlags.Rest;
             }
             node.name = parseIdentifier();
+            if (node.name.kind === SyntaxKind.Missing && node.flags === 0 && isModifier(token)) {
+                // in cases like
+                // 'use strict' 
+                // function foo(static)
+                // isParameter('static') === true, because of isModifier('static')
+                // however 'static' is not a legal identifier in a strict mode.
+                // so result of this function will be ParameterDeclaration (flags = 0, name = missing, type = undefined, initializer = undefined)
+                // and current token will not change => parsing of the enclosing parameter list will last till the end of time (or OOM)
+                // to avoid this we'll advance cursor to the next token.
+                nextToken();
+            }
+
             if (parseOptional(SyntaxKind.QuestionToken)) {
                 node.flags |= NodeFlags.QuestionMark;
             }
@@ -1012,8 +1061,16 @@ module ts {
 
             for (var i = 0; i < parameterCount; i++) {
                 var parameter = parameters[i];
-
-                if (parameter.flags & NodeFlags.Rest) {
+                // It is a SyntaxError if the Identifier "eval" or the Identifier "arguments" occurs as the 
+                // Identifier in a PropertySetParameterList of a PropertyAssignment that is contained in strict code 
+                // or if its FunctionBody is strict code(11.1.5).
+                // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a 
+                // strict mode FunctionDeclaration or FunctionExpression(13.1) 
+                if (isInStrictMode && isEvalOrArgumentsIdentifier(parameter.name)) {
+                    reportInvalidUseInStrictMode(parameter.name);
+                    return;
+                }
+                else if (parameter.flags & NodeFlags.Rest) {
                     if (i !== (parameterCount - 1)) {
                         grammarErrorOnNode(parameter.name, Diagnostics.A_rest_parameter_must_be_last_in_a_parameter_list);
                         return;
@@ -1170,7 +1227,7 @@ module ts {
         function parseTypeLiteral(): TypeLiteralNode {
             var node = <TypeLiteralNode>createNode(SyntaxKind.TypeLiteral);
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
-                node.members = parseList(ParsingContext.TypeMembers, parseTypeMember);
+                node.members = parseList(ParsingContext.TypeMembers, /*checkForStrictMode*/ false, parseTypeMember);
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
@@ -1360,6 +1417,11 @@ module ts {
             // If the expression was a LHS expression, and we  have an assignment operator, then 
             // we're in '2' or '3'.  Consume the assignement and return.
             if (isLeftHandSideExpression(expr) && isAssignmentOperator()) {
+                if (isInStrictMode && isEvalOrArgumentsIdentifier(expr)) {
+                    // ECMA 262 (Annex C) The identifier eval or arguments may not appear as the LeftHandSideExpression of an 
+                    // Assignment operator(11.13) or of a PostfixExpression(11.3)
+                    reportInvalidUseInStrictMode(<Identifier>expr);
+                }
                 var operator = token;
                 nextToken();
                 return makeBinaryExpression(expr, operator, parseAssignmentExpression(noIn));
@@ -1659,6 +1721,19 @@ module ts {
                     var operator = token;
                     nextToken();
                     var operand = parseUnaryExpression();
+                    if (isInStrictMode) {
+                        // The identifier eval or arguments may not appear as the LeftHandSideExpression of an 
+                        // Assignment operator(11.13) or of a PostfixExpression(11.3) or as the UnaryExpression 
+                        // operated upon by a Prefix Increment(11.4.4) or a Prefix Decrement(11.4.5) operator
+                        if ((token === SyntaxKind.PlusPlusToken || token === SyntaxKind.MinusMinusToken) && isEvalOrArgumentsIdentifier(operand)) {
+                            reportInvalidUseInStrictMode(<Identifier>operand);
+                        }
+                        else if (token === SyntaxKind.DeleteKeyword && operand.kind === SyntaxKind.Identifier) {
+                            // When a delete operator occurs within strict mode code, a SyntaxError is thrown if its 
+                            // UnaryExpression is a direct reference to a variable, function argument, or function name
+                            grammarErrorOnNode(operand, Diagnostics.delete_cannot_be_called_on_an_identifier_in_strict_mode);
+                        }
+                    }
                     return makeUnaryExpression(SyntaxKind.PrefixOperator, pos, operator, operand);
                 case SyntaxKind.LessThanToken:
                     return parseTypeAssertion();
@@ -1680,6 +1755,12 @@ module ts {
 
             Debug.assert(isLeftHandSideExpression(expr));
             if ((token === SyntaxKind.PlusPlusToken || token === SyntaxKind.MinusMinusToken) && !scanner.hasPrecedingLineBreak()) {
+                // The identifier eval or arguments may not appear as the LeftHandSideExpression of an 
+                // Assignment operator(11.13) or of a PostfixExpression(11.3) or as the UnaryExpression 
+                // operated upon by a Prefix Increment(11.4.4) or a Prefix Decrement(11.4.5) operator. 
+                if (isInStrictMode && isEvalOrArgumentsIdentifier(expr)) {
+                    reportInvalidUseInStrictMode(<Identifier>expr);
+                }
                 var operator = token;
                 nextToken();
                 expr = makeUnaryExpression(SyntaxKind.PostfixOperator, expr.pos, operator, expr);
@@ -1866,6 +1947,23 @@ module ts {
             if (scanner.hasPrecedingLineBreak()) node.flags |= NodeFlags.MultiLine;
             node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralMember, TrailingCommaBehavior.Preserve);
             parseExpected(SyntaxKind.CloseBraceToken);
+            if (isInStrictMode) {
+                var seen: Map<boolean> = {};
+                forEach(node.properties, (p: Node) => {
+                    // ECMA-262 11.1.5 Object Initialiser 
+                    // If previous is not undefined then throw a SyntaxError exception if any of the following conditions are true
+                    // a.This production is contained in strict code and IsDataDescriptor(previous) is true and IsDataDescriptor(propId.descriptor) is true. 
+                    if (p.kind === SyntaxKind.PropertyAssignment) {
+                        var name = (<PropertyDeclaration>p).name;
+                        if (hasProperty(seen, name.text)) {
+                            grammarErrorOnNode(name, Diagnostics.Object_literal_cannot_contain_more_than_one_property_with_the_same_name_in_the_strict_mode);
+                        }
+                        else {
+                            seen[name.text] = true;
+                        }
+                    }
+                });
+            }
             return finishNode(node);
         }
 
@@ -1875,6 +1973,11 @@ module ts {
             var name = isIdentifier() ? parseIdentifier() : undefined;
             var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken);
             var body = parseBody(/* ignoreMissingOpenBrace */ false);
+            if (name && isInStrictMode && isEvalOrArgumentsIdentifier(name)) {
+                // It is a SyntaxError to use within strict mode code the identifiers eval or arguments as the 
+                // Identifier of a FunctionDeclaration or FunctionExpression or as a formal parameter name(13.1)
+                reportInvalidUseInStrictMode(name);
+            }
             return makeFunctionExpression(SyntaxKind.FunctionExpression, pos, name, sig, body);
         }
 
@@ -1901,10 +2004,10 @@ module ts {
 
         // STATEMENTS
 
-        function parseBlock(ignoreMissingOpenBrace: boolean): Block {
+        function parseBlock(ignoreMissingOpenBrace: boolean, checkForStrictMode: boolean): Block {
             var node = <Block>createNode(SyntaxKind.Block);
             if (parseExpected(SyntaxKind.OpenBraceToken) || ignoreMissingOpenBrace) {
-                node.statements = parseList(ParsingContext.BlockStatements, parseStatement);
+                node.statements = parseList(ParsingContext.BlockStatements,checkForStrictMode, parseStatement);
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
@@ -1914,7 +2017,7 @@ module ts {
         }
 
         function parseBody(ignoreMissingOpenBrace: boolean): Block {
-            var block = parseBlock(ignoreMissingOpenBrace);
+            var block = parseBlock(ignoreMissingOpenBrace, /*checkForStrictMode*/ true);
             block.kind = SyntaxKind.FunctionBlock;
             return block;
         }
@@ -2035,7 +2138,13 @@ module ts {
             node.expression = parseExpression();
             parseExpected(SyntaxKind.CloseParenToken);
             node.statement = parseStatement();
-            return finishNode(node);
+            node = finishNode(node);
+            if (isInStrictMode) {
+                // Strict mode code may not include a WithStatement. The occurrence of a WithStatement in such 
+                // a context is an SyntaxError(12.10)
+                grammarErrorOnNode(node, Diagnostics.with_statements_are_not_allowed_in_strict_mode);
+            }
+            return node;
         }
 
         function parseCaseClause(): CaseOrDefaultClause {
@@ -2043,7 +2152,7 @@ module ts {
             parseExpected(SyntaxKind.CaseKeyword);
             node.expression = parseExpression();
             parseExpected(SyntaxKind.ColonToken);
-            node.statements = parseList(ParsingContext.SwitchClauseStatements, parseStatement);
+            node.statements = parseList(ParsingContext.SwitchClauseStatements, /*checkForStrictMode*/ false, parseStatement);
             return finishNode(node);
         }
 
@@ -2051,7 +2160,7 @@ module ts {
             var node = <CaseOrDefaultClause>createNode(SyntaxKind.DefaultClause);
             parseExpected(SyntaxKind.DefaultKeyword);
             parseExpected(SyntaxKind.ColonToken);
-            node.statements = parseList(ParsingContext.SwitchClauseStatements, parseStatement);
+            node.statements = parseList(ParsingContext.SwitchClauseStatements, /*checkForStrictMode*/ false, parseStatement);
             return finishNode(node);
         }
 
@@ -2066,7 +2175,7 @@ module ts {
             node.expression = parseExpression();
             parseExpected(SyntaxKind.CloseParenToken);
             parseExpected(SyntaxKind.OpenBraceToken);
-            node.clauses = parseList(ParsingContext.SwitchClauses, parseCaseOrDefaultClause);
+            node.clauses = parseList(ParsingContext.SwitchClauses, /*checkForStrictMode*/ false, parseCaseOrDefaultClause);
             parseExpected(SyntaxKind.CloseBraceToken);
 
             // Error on duplicate 'default' clauses.
@@ -2111,7 +2220,7 @@ module ts {
         function parseTokenAndBlock(token: SyntaxKind, kind: SyntaxKind): Block {
             var pos = getNodePos();
             parseExpected(token);
-            var result = parseBlock(/* ignoreMissingOpenBrace */ false);
+            var result = parseBlock(/* ignoreMissingOpenBrace */ false, /*checkForStrictMode*/ false);
             result.kind = kind;
             result.pos = pos;
             return result;
@@ -2126,13 +2235,18 @@ module ts {
             var typeAnnotationColonLength = scanner.getTextPos() - typeAnnotationColonStart;
             var typeAnnotation = parseTypeAnnotation();
             parseExpected(SyntaxKind.CloseParenToken);
-            var result = <CatchBlock>parseBlock(/* ignoreMissingOpenBrace */ false);
+            var result = <CatchBlock>parseBlock(/* ignoreMissingOpenBrace */ false, /*checkForStrictMode*/ false);
             result.kind = SyntaxKind.CatchBlock;
             result.pos = pos;
             result.variable = variable;
 
             if (typeAnnotation) {
                 errorAtPos(typeAnnotationColonStart, typeAnnotationColonLength, Diagnostics.Catch_clause_parameter_cannot_have_a_type_annotation);
+            }
+            if (isInStrictMode && isEvalOrArgumentsIdentifier(variable)) {
+                // It is a SyntaxError if a TryStatement with a Catch occurs within strict code and the Identifier of the 
+                // Catch production is eval or arguments
+                reportInvalidUseInStrictMode(variable);
             }
             return result;
         }
@@ -2206,7 +2320,7 @@ module ts {
         function parseStatement(): Statement {
             switch (token) {
                 case SyntaxKind.OpenBraceToken:
-                    return parseBlock(/* ignoreMissingOpenBrace */ false);
+                    return parseBlock(/* ignoreMissingOpenBrace */ false, /*checkForStrictMode*/ false);
                 case SyntaxKind.VarKeyword:
                     return parseVariableStatement();
                 case SyntaxKind.FunctionKeyword:
@@ -2284,6 +2398,11 @@ module ts {
             if (inAmbientContext && node.initializer && errorCountBeforeVariableDeclaration === file.syntacticErrors.length) {
                 grammarErrorAtPos(initializerStart, initializerFirstTokenLength, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
             }
+            if (isInStrictMode && isEvalOrArgumentsIdentifier(node.name)) {
+                // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code 
+                // and its Identifier is eval or arguments 
+                reportInvalidUseInStrictMode(node.name);
+            }
             return finishNode(node);
         }
 
@@ -2314,6 +2433,11 @@ module ts {
             node.parameters = sig.parameters;
             node.type = sig.type;
             node.body = parseAndCheckFunctionBody(/*isConstructor*/ false);
+            if (isInStrictMode && isEvalOrArgumentsIdentifier(node.name)) {
+                // It is a SyntaxError to use within strict mode code the identifiers eval or arguments as the 
+                // Identifier of a FunctionDeclaration or FunctionExpression or as a formal parameter name(13.1)
+                reportInvalidUseInStrictMode(node.name);
+            }
             return finishNode(node);
         }
 
@@ -2656,7 +2780,7 @@ module ts {
             }
             var errorCountBeforeClassBody = file.syntacticErrors.length;
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
-                node.members = parseList(ParsingContext.ClassMembers, parseClassMemberDeclaration);
+                node.members = parseList(ParsingContext.ClassMembers, /*checkForStrictMode*/ false, parseClassMemberDeclaration);
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
@@ -2756,7 +2880,7 @@ module ts {
         function parseModuleBody(): Block {
             var node = <Block>createNode(SyntaxKind.ModuleBlock);
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
-                node.statements = parseList(ParsingContext.ModuleElements, parseModuleElement);
+                node.statements = parseList(ParsingContext.ModuleElements, /*checkForStrictMode*/ false, parseModuleElement);
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
@@ -3013,7 +3137,7 @@ module ts {
         var referenceComments = processReferenceComments(); 
         file.referencedFiles = referenceComments.referencedFiles;
         file.amdDependencies = referenceComments.amdDependencies;
-        file.statements = parseList(ParsingContext.SourceElements, parseSourceElement);
+        file.statements = parseList(ParsingContext.SourceElements, /*checkForStrictMode*/ true, parseSourceElement);
         file.externalModuleIndicator = getExternalModuleIndicator();
         file.nodeCount = nodeCount;
         file.identifierCount = identifierCount;
