@@ -18,7 +18,7 @@
 /// <reference path='..\compiler\sys.ts' />
 /// <reference path='external\mocha.d.ts'/>
 /// <reference path='external\chai.d.ts'/>
-///<reference path='sourceMapRecorder.ts'/>
+/// <reference path='sourceMapRecorder.ts'/>
 
 // this will work in the browser via browserify
 var _chai: typeof chai = require('chai');
@@ -568,6 +568,9 @@ module Harness {
 
             private lastErrors: MinimalDiagnostic[];
 
+            // save this away so we can reset the newline value after any tests that change it
+            private originalNewline = sys.newLine;
+
             public reset() {
                 this.inputFiles = [];
                 this.settings = [];
@@ -598,7 +601,7 @@ module Harness {
                 this.inputFiles.push(file);
             }
 
-            public compile(options?: ts.CompilerOptions) {
+            public setCompilerOptions(options?: ts.CompilerOptions) {
                 this.compileOptions = options || { noResolve: false };
             }
 
@@ -623,6 +626,10 @@ module Harness {
                 if (settingsCallback) {
                     settingsCallback(null);
                 }
+
+                // always use \r\n for newlines unless the test specifies otherwise
+                // this ensures baseline consistency across Windows and *nix but still lets us test both \n and \r\n
+                sys.newLine = '\r\n';
 
                 this.settings.forEach(setting => {
                     switch (setting.flag.toLowerCase()) {
@@ -692,6 +699,10 @@ module Harness {
                         case 'declaration':
                             options.declaration = !!setting.value;
                             break;
+                        case 'newline':
+                        case 'newlines':
+                            sys.newLine = setting.value;
+                            break;
 
                         case 'mapsourcefiles':
                         case 'maproot':
@@ -740,6 +751,7 @@ module Harness {
                 var sourceMapData: ts.SourceMapData[];
                 if (!hadParseErrors) {
                     sourceMapData = checker.emitFiles().sourceMaps;
+                    sys.newLine = this.originalNewline;
                 }
 
                 var errors: MinimalDiagnostic[] = [];
@@ -753,6 +765,8 @@ module Harness {
                 // Covert the source Map data into the baseline
                 result.updateSourceMapRecord(program, sourceMapData);
                 onComplete(result);
+
+                sys.newLine = this.originalNewline;
                 return options;
             }
         }
@@ -851,7 +865,7 @@ module Harness {
                 });
 
                 this.errors = errors;
-                this.sourceMapRecord = sourceMapRecordLines.join('\r\n');
+                this.sourceMapRecord = sourceMapRecordLines.join('\n');
             }
 
             public updateSourceMapRecord(program: ts.Program, sourceMapData: ts.SourceMapData[]) {
@@ -891,7 +905,7 @@ module Harness {
         var optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
 
         // List of allowed metadata names
-        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outDir", "noimplicitany", "noresolve"];
+        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outDir", "noimplicitany", "noresolve", "newline", "newlines"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 

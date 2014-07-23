@@ -1,4 +1,5 @@
 // @sourcemap: true
+// @newline: \n
 // DEFAULT INTERFACES
 interface IFoo {
     n: number;
