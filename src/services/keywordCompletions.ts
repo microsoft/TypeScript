@@ -53,15 +53,18 @@ module TypeScript.Services {
             "with",
         ];
 
-        private static keywordCompletions: ResolvedCompletionEntry[] = null;
+        private static keywordCompletions: CompletionEntry[] = null;
 
-        public static getKeywordCompltions(): ResolvedCompletionEntry[]{
+        public static getKeywordCompltions(): CompletionEntry[]{
             if (KeywordCompletions.keywordCompletions === null) {
-                var completions: ResolvedCompletionEntry[] = [];
+                var completions: CompletionEntry[] = [];
                 for (var i = 0, n = KeywordCompletions.keywords.length; i < n; i++) {
                     var keyword = KeywordCompletions.keywords[i];
-                    var entry = new ResolvedCompletionEntry(/*name*/ keyword, ScriptElementKind.keyword, ScriptElementKindModifier.none, /*type*/null, /*fullName*/ keyword, /*docComment*/ null);
-                    completions.push(entry);
+                    completions.push({
+                        name: keyword,
+                        kind: ScriptElementKind.keyword,
+                        kindModifiers: ScriptElementKindModifier.none
+                    });
                 }
 
                 KeywordCompletions.keywordCompletions = completions;

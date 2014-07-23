@@ -7,6 +7,15 @@
 /// <reference path="..\compiler\checker.ts"/>
 
 module TypeScript.Services {
+    interface CompletionSession {
+        filename: string;           // the file where the completion was requested
+        position: number;           // position in the file where the completion was requested
+        entries: CompletionEntry[]; // entries for this completion
+        symbols: ts.Map<ts.Symbol>; // symbols by entry name map
+        location: ts.Node;          // the node where the completion was requested
+        typeChecker: ts.TypeChecker;// the typeChecker used to generate this completion
+    }
+
     // Information about a specific host file.
     class HostFileInformation {
         private _sourceText: TypeScript.IScriptSnapshot;
@@ -420,6 +429,7 @@ module TypeScript.Services {
         private documentsByName: ts.Map<Document> = {};
         private documentRegistry: IDocumentRegistry
         private cancellationToken: CancellationToken;
+        private activeCompletionSession: CompletionSession;
 
         constructor(public host: ILanguageServiceHost, documentRegistry: IDocumentRegistry) {
             this.logger = this.host;
@@ -558,11 +568,206 @@ module TypeScript.Services {
             this.synchronizeHostData();
             return this.program.getGlobalDiagnostics();
         }
+
+        private getCompletionEntriesFromSymbols(symbols: ts.Symbol[], session:CompletionSession): void {
+            ts.forEach(symbols, (symbol) => {
+                var entry = this.createCompletionEntry(symbol);
+                if (entry) {
+                    session.entries.push(entry);
+                    session.symbols[entry.name] = symbol;
+                }
+            });
+        }
+
+        private createCompletionEntry(symbol: ts.Symbol): CompletionEntry {
+            // Try to get a valid display name for this symbol, if we could not find one, then ignore it. 
+            // We would like to only show things that can be added after a dot, so for instance numeric properties can
+            // not be accessed with a dot (a.1 <- invalid)
+            var displayName = CompletionHelpers.getValidCompletionEntryDisplayName(symbol.getName(), this.program.getCompilerOptions().target);
+            if (!displayName) {
+                return undefined;
+            }
+
+            var declarations = symbol.getDeclarations();
+            var firstDeclaration = [0];
+            return {
+                name: displayName,
+                kind: this.getSymbolKind(symbol),
+                kindModifiers: declarations ? this.getNodeModifiers(declarations[0]) : ScriptElementKindModifier.none
+            };
+        }
+
         getCompletionsAtPosition(filename: string, position: number, isMemberCompletion: boolean) {
-            return undefined;
+            this.synchronizeHostData();
+
+            filename = TypeScript.switchToForwardSlashes(filename);
+
+            var document = this.documentsByName[filename];
+            var sourceUnit = document.sourceUnit();
+
+            if (CompletionHelpers.isCompletionListBlocker(document.syntaxTree().sourceUnit(), position)) {
+                this.logger.log("Returning an empty list because completion was blocked.");
+                return null;
+            }
+
+            var node = TypeScript.ASTHelpers.getAstAtPosition(sourceUnit, position, /*useTrailingTriviaAsLimChar*/ true, /*forceInclusive*/ true);
+
+            if (node && node.kind() === TypeScript.SyntaxKind.IdentifierName &&
+                start(node) === end(node)) {
+                // Ignore missing name nodes
+                node = node.parent;
+            }
+
+            var isRightOfDot = false;
+            if (node &&
+                node.kind() === TypeScript.SyntaxKind.MemberAccessExpression &&
+                end((<TypeScript.MemberAccessExpressionSyntax>node).expression) < position) {
+
+                isRightOfDot = true;
+                node = (<TypeScript.MemberAccessExpressionSyntax>node).expression;
+            }
+            else if (node &&
+                node.kind() === TypeScript.SyntaxKind.QualifiedName &&
+                end((<TypeScript.QualifiedNameSyntax>node).left) < position) {
+
+                isRightOfDot = true;
+                node = (<TypeScript.QualifiedNameSyntax>node).left;
+            }
+            else if (node && node.parent &&
+                node.kind() === TypeScript.SyntaxKind.IdentifierName &&
+                node.parent.kind() === TypeScript.SyntaxKind.MemberAccessExpression &&
+                (<TypeScript.MemberAccessExpressionSyntax>node.parent).name === node) {
+
+                isRightOfDot = true;
+                node = (<TypeScript.MemberAccessExpressionSyntax>node.parent).expression;
+            }
+            else if (node && node.parent &&
+                node.kind() === TypeScript.SyntaxKind.IdentifierName &&
+                node.parent.kind() === TypeScript.SyntaxKind.QualifiedName &&
+                (<TypeScript.QualifiedNameSyntax>node.parent).right === node) {
+
+                isRightOfDot = true;
+                node = (<TypeScript.QualifiedNameSyntax>node.parent).left;
+            }
+
+            // TODO: this is a hack for now, we need a proper walking mechanism to verify that we have the correct node
+            var mappedNode = this.getNodeAtPosition(document.sourceFile(), end(node) - 1);
+
+            Debug.assert(mappedNode, "Could not map a Fidelity node to an AST node");
+
+            // Get the completions
+            this.activeCompletionSession = {
+                filename: filename,
+                position: position,
+                entries: [],
+                symbols: {},
+                location: mappedNode,
+                typeChecker: this.typeChecker
+            };
+
+            // Right of dot member completion list
+            if (isRightOfDot) {
+                var type: ts.Type = this.typeChecker.getTypeOfExpression(mappedNode);
+                if (!type) {
+                    return undefined;
+                }
+
+                var symbols = type.getApparentProperties();
+                isMemberCompletion = true;
+                this.getCompletionEntriesFromSymbols(symbols, this.activeCompletionSession);
+            }
+            else {
+                var containingObjectLiteral = CompletionHelpers.getContainingObjectLiteralApplicableForCompletion(document.syntaxTree().sourceUnit(), position);
+
+                // Object literal expression, look up possible property names from contextual type
+                if (containingObjectLiteral) {
+                    var searchPosition = Math.min(position, end(containingObjectLiteral));
+                    var path = TypeScript.ASTHelpers.getAstAtPosition(sourceUnit, searchPosition);
+                    // Get the object literal node
+
+                    while (node && node.kind() !== TypeScript.SyntaxKind.ObjectLiteralExpression) {
+                        node = node.parent;
+                    }
+
+                    if (!node || node.kind() !== TypeScript.SyntaxKind.ObjectLiteralExpression) {
+                        // AST Path look up did not result in the same node as Fidelity Syntax Tree look up.
+                        // Once we remove AST this will no longer be a problem.
+                        return null;
+                    }
+
+                    isMemberCompletion = true;
+
+                    //// Try to get the object members form contextual typing
+                    //var contextualMembers = this.compiler.getContextualMembersFromAST(node, document);
+                    //if (contextualMembers && contextualMembers.symbols && contextualMembers.symbols.length > 0) {
+                    //    // get existing members
+                    //    var existingMembers = this.compiler.getVisibleMemberSymbolsFromAST(node, document);
+
+                    //    // Add filtterd items to the completion list
+                    //    this.getCompletionEntriesFromSymbols({
+                    //        symbols: CompletionHelpers.filterContextualMembersList(contextualMembers.symbols, existingMembers, filename, position),
+                    //        enclosingScopeSymbol: contextualMembers.enclosingScopeSymbol
+                    //    }, entries);
+                    //}
+                }
+                // Get scope memebers
+                else {
+                    isMemberCompletion = false;
+                    /// TODO filter meaning based on the current context
+                    var symbolMeanings = ts.SymbolFlags.Type | ts.SymbolFlags.Value | ts.SymbolFlags.Namespace;
+                    var symbols = this.typeChecker.getSymbolsInScope(mappedNode, symbolMeanings);
+
+                    this.getCompletionEntriesFromSymbols(symbols, this.activeCompletionSession);
+                }
+            }
+
+            // Add keywords if this is not a member completion list
+            if (!isMemberCompletion) {
+                Array.prototype.push.apply(this.activeCompletionSession.entries, KeywordCompletions.getKeywordCompltions());
+            }
+
+            return {
+                isMemberCompletion: isMemberCompletion,
+                entries: this.activeCompletionSession.entries
+            };
         }
         getCompletionEntryDetails(filename: string, position: number, entryName: string) {
-            return undefined;
+            // Note: No need to call synchronizeHostData, as we have captured all the data we need
+            //       in the getCompletionsAtPosition erlier
+            filename = TypeScript.switchToForwardSlashes(filename);
+
+            var session = this.activeCompletionSession;
+
+            // Ensure that the current active completion session is still valid for this request
+            if (!session || session.filename !== filename || session.position !== position) {
+                return undefined;
+            }
+
+            var symbol = this.activeCompletionSession.symbols[entryName];
+            if (symbol) {
+                var type = session.typeChecker.getTypeOfSymbol(symbol);
+                Debug.assert(type, "Could not find type for symbol");
+                var completionEntry = this.createCompletionEntry(symbol);
+                return {
+                    name: entryName,
+                    kind: completionEntry.kind,
+                    kindModifiers: completionEntry.kindModifiers,
+                    type: session.typeChecker.typeToString(type, session.location),
+                    fullSymbolName: this.typeChecker.symbolToString(symbol, session.location),
+                    docComment: ""
+                };
+            }
+            else {
+                // No symbol, it is a keyword
+                return {
+                    name: entryName,
+                    kind: ScriptElementKind.keyword,
+                    kindModifiers: ScriptElementKindModifier.none,
+                    type: undefined,
+                    fullSymbolName: entryName,
+                    docComment: undefined
+                };
+            }
         }
 
         private getNodeAtPosition(sourceFile: ts.SourceFile, position: number) {
@@ -581,7 +786,7 @@ module TypeScript.Services {
             }
         }
 
-        getEnclosingDeclaration(node: ts.Node): ts.Node {
+        private getEnclosingDeclaration(node: ts.Node): ts.Node {
             while (true) {
                 node = node.parent;
                 if (!node) {
@@ -601,10 +806,10 @@ module TypeScript.Services {
                 }
             }
         }
-    
 
         getSymbolKind(symbol: ts.Symbol): string {
             var flags = symbol.getFlags();
+
             if (flags & ts.SymbolFlags.Module) return ScriptElementKind.moduleElement;
             if (flags & ts.SymbolFlags.Class) return ScriptElementKind.classElement;
             if (flags & ts.SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
@@ -621,18 +826,34 @@ module TypeScript.Services {
             if (flags & ts.SymbolFlags.Constructor) return ScriptElementKind.constructorImplementationElement;
             if (flags & ts.SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
             if (flags & ts.SymbolFlags.EnumMember) return ScriptElementKind.variableElement;
+
             return ScriptElementKind.unknown;
         }
 
         getTypeKind(type: ts.Type): string {
             var flags = type.getFlags();
+
             if (flags & ts.TypeFlags.Enum) return ScriptElementKind.enumElement;
             if (flags & ts.TypeFlags.Class) return ScriptElementKind.classElement;
             if (flags & ts.TypeFlags.Interface) return ScriptElementKind.interfaceElement;
             if (flags & ts.TypeFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
             if (flags & ts.TypeFlags.Intrinsic) return ScriptElementKind.primitiveType;
             if (flags & ts.TypeFlags.StringLiteral) return ScriptElementKind.primitiveType;
+
             return ScriptElementKind.unknown;
+        }
+
+        getNodeModifiers(node: ts.Node): string {
+            var flags = node.flags;
+            var result: string[] = [];
+
+            if (flags & ts.NodeFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
+            if (flags & ts.NodeFlags.Public) result.push(ScriptElementKindModifier.publicMemberModifier);
+            if (flags & ts.NodeFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
+            if (flags & ts.NodeFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
+            if (ts.isInAmbientContext(node)) result.push(ScriptElementKindModifier.ambientModifier);
+
+            return result.length > 0 ? result.join(',') : ScriptElementKindModifier.none;
         }
 
         getTypeAtPosition(filename: string, position: number): TypeInfo {

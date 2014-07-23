@@ -63,7 +63,33 @@ module ts {
         var diagnostics: Diagnostic[] = [];
         var diagnosticsModified: boolean = false;
 
-        var checker: TypeChecker;
+        var checker: TypeChecker = {
+            getProgram: () => program,
+            getDiagnostics: getDiagnostics,
+            getGlobalDiagnostics: getGlobalDiagnostics,
+            getNodeCount: () => sum(program.getSourceFiles(), "nodeCount"),
+            getIdentifierCount: () => sum(program.getSourceFiles(), "identifierCount"),
+            getSymbolCount: () => sum(program.getSourceFiles(), "symbolCount"),
+            getTypeCount: () => typeCount,
+            checkProgram: checkProgram,
+            emitFiles: invokeEmitter,
+            getSymbolOfNode: getSymbolOfNode,
+            getParentOfSymbol: getParentOfSymbol,
+            getTypeOfSymbol: getTypeOfSymbol,
+            getDeclaredTypeOfSymbol: getDeclaredTypeOfSymbol,
+            getPropertiesOfType: getPropertiesOfType,
+            getSignaturesOfType: getSignaturesOfType,
+            getIndexTypeOfType: getIndexTypeOfType,
+            getReturnTypeOfSignature: getReturnTypeOfSignature,
+            resolveEntityName: resolveEntityName,
+            getSymbolsInScope: getSymbolsInScope,
+            getSymbolOfIdentifier: getSymbolOfIdentifier,
+            getTypeOfExpression: getTypeOfExpression,
+            typeToString: typeToString,
+            symbolToString: symbolToString,
+            writeTypeToTextWriter: writeTypeToTextWriter,
+            getAugmentedPropertiesOfApparentType: getAugmentedPropertiesOfApparentType
+        };
 
         function addDiagnostic(diagnostic: Diagnostic) {
             diagnostics.push(diagnostic);
@@ -4784,14 +4810,6 @@ module ts {
             return (node.flags & NodeFlags.Private) && isInAmbientContext(node);
         }
 
-        function isInAmbientContext(node: Node): boolean {
-            while (node) {
-                if (node.flags & (NodeFlags.Ambient | NodeFlags.DeclarationFile)) return true;
-                node = node.parent;
-            }
-            return false;
-        }
-
         function checkSpecializedSignatureDeclaration(signatureDeclarationNode: SignatureDeclaration): void {
             var signature = getSignatureFromDeclaration(signatureDeclarationNode);
             if (!signature.hasStringLiterals) {
@@ -6191,9 +6209,14 @@ module ts {
             return false;
         }
 
+        function isRightSideOfQualifiedName(node: Node) {
+            return (node.parent.kind === SyntaxKind.QualifiedName || node.parent.kind === SyntaxKind.PropertyAccess) &&
+                (<QualifiedName>node.parent).right === node;
+        }
+
         function getSymbolOfIdentifier(identifier: Identifier) {
             if (isExpression(identifier)) {
-                if (isRightSideOfQualifiedName()) {
+                if (isRightSideOfQualifiedName(identifier)) {
                     var node = <QualifiedName>identifier.parent;
                     var symbol = getNodeLinks(node).resolvedSymbol;
                     if (!symbol) {
@@ -6207,16 +6230,58 @@ module ts {
                 return getSymbolOfNode(identifier.parent);
             }
             if (isTypeReferenceIdentifier(identifier)) {
-                var entityName = isRightSideOfQualifiedName() ? identifier.parent : identifier;
+                var entityName = isRightSideOfQualifiedName(identifier) ? identifier.parent : identifier;
                 var meaning = entityName.parent.kind === SyntaxKind.TypeReference ? SymbolFlags.Type : SymbolFlags.Namespace;
                 return resolveEntityName(entityName, entityName, meaning);
             }
-            function isRightSideOfQualifiedName() {
-                return (identifier.parent.kind === SyntaxKind.QualifiedName || identifier.parent.kind === SyntaxKind.PropertyAccess) &&
-                    (<QualifiedName>identifier.parent).right === identifier;
-            }
         }
 
+        function getTypeOfExpression(node: Node) {
+            if (isExpression(node)) {
+                while (isRightSideOfQualifiedName(node)) {
+                  node = node.parent;
+                }
+                 return <Type>getApparentType(checkExpression(node));
+            }
+            return unknownType;
+        }
+
+        function getAugmentedPropertiesOfApparentType(type: Type): Symbol[]{
+            var apparentType = getApparentType(type);
+
+            if (apparentType.flags & TypeFlags.ObjectType) {
+                // Augment the apprent type with Function and Object memeber as applicaple
+                var propertiesByName: Map<Symbol> = {};
+                var results: Symbol[] = [];
+
+                forEach(getPropertiesOfType(apparentType), (s) => {
+                    propertiesByName[s.name] = s;
+                    results.push(s);
+                });
+
+                var resolved = resolveObjectTypeMembers(<ObjectType>type);
+                forEachValue(resolved.members, (s) => {
+                    if (symbolIsValue(s) && !propertiesByName[s.name]) {
+                        propertiesByName[s.name] = s;
+                        results.push(s);
+                    }
+                });
+
+                if (resolved === anyFunctionType || resolved.callSignatures.length || resolved.constructSignatures.length) {
+                    forEach(getPropertiesOfType(globalFunctionType), (s) => {
+                        if (!propertiesByName[s.name]) {
+                            propertiesByName[s.name] = s;
+                            results.push(s);
+                        }
+                    });
+                }
+
+                return results;
+            }
+            else {
+                return getPropertiesOfType(<Type>apparentType);
+            }
+        }
         // Emitter support
 
         function isExternalModuleSymbol(symbol: Symbol): boolean {
@@ -6410,32 +6475,7 @@ module ts {
         }
 
         initializeTypeChecker();
-        checker = {
-            getProgram: () => program,
-            getDiagnostics: getDiagnostics,
-            getGlobalDiagnostics: getGlobalDiagnostics,
-            getNodeCount: () => sum(program.getSourceFiles(), "nodeCount"),
-            getIdentifierCount: () => sum(program.getSourceFiles(), "identifierCount"),
-            getSymbolCount: () => sum(program.getSourceFiles(), "symbolCount"),
-            getTypeCount: () => typeCount,
-            checkProgram: checkProgram,
-            emitFiles: invokeEmitter,
-            getSymbolOfNode: getSymbolOfNode,
-            getParentOfSymbol: getParentOfSymbol,
-            getTypeOfSymbol: getTypeOfSymbol,
-            getDeclaredTypeOfSymbol: getDeclaredTypeOfSymbol,
-            getPropertiesOfType: getPropertiesOfType,
-            getSignaturesOfType: getSignaturesOfType,
-            getIndexTypeOfType: getIndexTypeOfType,
-            getReturnTypeOfSignature: getReturnTypeOfSignature,
-            resolveEntityName: resolveEntityName,
-            getSymbolsInScope: getSymbolsInScope,
-            getSymbolOfIdentifier: getSymbolOfIdentifier,
-            getTypeOfExpression: checkExpression,
-            typeToString: typeToString,
-            symbolToString: symbolToString,
-            writeTypeToTextWriter: writeTypeToTextWriter
-        };
+
         return checker;
     }
 }

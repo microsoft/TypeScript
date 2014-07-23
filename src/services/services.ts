@@ -28,6 +28,7 @@ module ts {
         getFlags(): TypeFlags;
         getSymbol(): Symbol;
         getProperties(): Symbol[];
+        getApparentProperties(): Symbol[];
         getCallSignatures(): Signature[];
         getConstructSignatures(): Signature[];
         getStringIndexType(): Type;
@@ -212,6 +213,9 @@ module ts {
         }
         getProperties(): Symbol[] {
             return this.checker.getPropertiesOfType(this);
+        }
+        getApparentProperties(): Symbol[]{
+            return this.checker.getAugmentedPropertiesOfApparentType(this);
         }
         getCallSignatures(): Signature[] {
             return this.checker.getSignaturesOfType(this, SignatureKind.Call);

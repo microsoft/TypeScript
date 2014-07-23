@@ -327,6 +327,14 @@ module ts {
         return s.parameters.length > 0 && (s.parameters[s.parameters.length - 1].flags & NodeFlags.Rest) !== 0;
     }
 
+    export function isInAmbientContext(node: Node): boolean {
+        while (node) {
+            if (node.flags & (NodeFlags.Ambient | NodeFlags.DeclarationFile)) return true;
+            node = node.parent;
+        }
+        return false;
+    }
+
     enum ParsingContext {
         SourceElements,          // Elements in source file
         ModuleElements,          // Elements in module declaration

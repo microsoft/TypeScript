@@ -603,6 +603,7 @@ module ts {
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
         writeTypeToTextWriter(type: Type, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter): void;
+        getAugmentedPropertiesOfApparentType(type: Type): Symbol[];
     }
 
     export interface TextWriter {

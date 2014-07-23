@@ -34,6 +34,8 @@
 /// <reference path='Breakpoints.ts' />
 /// <reference path='indentation.ts' />
 /// <reference path='formatting\formatting.ts' />
+/// <reference path='completionHelpers.ts' />
+/// <reference path='keywordCompletions.ts' />
 
 
 /// <reference path='compiler\document.ts' />

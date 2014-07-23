@@ -9,46 +9,46 @@ module TypeScript.Services {
             return new TextSpan(start(ast), width(ast));
         }
 
-        private static symbolDeclarationIntersectsPosition(symbol: PullSymbol, fileName: string, position: number) {
-            var decl = symbol.getDeclarations()[0];
-            if (decl.fileName() === fileName && this.getSpan(decl.ast()).intersectsWithPosition(position)) {
-                // This is the symbol declaration from the given position in the file
-                return true;
-            }
+        //private static symbolDeclarationIntersectsPosition(symbol: PullSymbol, fileName: string, position: number) {
+        //    var decl = symbol.getDeclarations()[0];
+        //    if (decl.fileName() === fileName && this.getSpan(decl.ast()).intersectsWithPosition(position)) {
+        //        // This is the symbol declaration from the given position in the file
+        //        return true;
+        //    }
 
-            return false;
-        }
+        //    return false;
+        //}
 
-        public static filterContextualMembersList(contextualMemberSymbols: TypeScript.PullSymbol[], existingMembers: TypeScript.PullVisibleSymbolsInfo, fileName: string, position: number): TypeScript.PullSymbol[] {
-            if (!existingMembers || !existingMembers.symbols || existingMembers.symbols.length === 0) {
-                return contextualMemberSymbols;
-            }
+        //public static filterContextualMembersList(contextualMemberSymbols: TypeScript.PullSymbol[], existingMembers: TypeScript.PullVisibleSymbolsInfo, fileName: string, position: number): TypeScript.PullSymbol[] {
+        //    if (!existingMembers || !existingMembers.symbols || existingMembers.symbols.length === 0) {
+        //        return contextualMemberSymbols;
+        //    }
 
-            var existingMemberSymbols = existingMembers.symbols;
-            var existingMemberNames = TypeScript.createIntrinsicsObject<boolean>();
-            for (var i = 0, n = existingMemberSymbols.length; i < n; i++) {
-                if (this.symbolDeclarationIntersectsPosition(existingMemberSymbols[i], fileName, position)) {
-                    // If this is the current item we are editing right now, do not filter it out
-                    continue;
-                }
+        //    var existingMemberSymbols = existingMembers.symbols;
+        //    var existingMemberNames = TypeScript.createIntrinsicsObject<boolean>();
+        //    for (var i = 0, n = existingMemberSymbols.length; i < n; i++) {
+        //        if (this.symbolDeclarationIntersectsPosition(existingMemberSymbols[i], fileName, position)) {
+        //            // If this is the current item we are editing right now, do not filter it out
+        //            continue;
+        //        }
 
-                existingMemberNames[TypeScript.stripStartAndEndQuotes(existingMemberSymbols[i].getDisplayName())] = true;
-            }
+        //        existingMemberNames[TypeScript.stripStartAndEndQuotes(existingMemberSymbols[i].getDisplayName())] = true;
+        //    }
 
-            var filteredMembers: TypeScript.PullSymbol[] = [];
-            for (var j = 0, m = contextualMemberSymbols.length; j < m; j++) {
-                var contextualMemberSymbol = contextualMemberSymbols[j];
-                if (!existingMemberNames[TypeScript.stripStartAndEndQuotes(contextualMemberSymbol.getDisplayName())]) {
-                    if (this.symbolDeclarationIntersectsPosition(contextualMemberSymbol, fileName, position)) {
-                        // If this contextual member symbol was created as part of editing the current position, do not use it
-                        continue;
-                    }
-                    filteredMembers.push(contextualMemberSymbol);
-                }
-            }
+        //    var filteredMembers: TypeScript.PullSymbol[] = [];
+        //    for (var j = 0, m = contextualMemberSymbols.length; j < m; j++) {
+        //        var contextualMemberSymbol = contextualMemberSymbols[j];
+        //        if (!existingMemberNames[TypeScript.stripStartAndEndQuotes(contextualMemberSymbol.getDisplayName())]) {
+        //            if (this.symbolDeclarationIntersectsPosition(contextualMemberSymbol, fileName, position)) {
+        //                // If this contextual member symbol was created as part of editing the current position, do not use it
+        //                continue;
+        //            }
+        //            filteredMembers.push(contextualMemberSymbol);
+        //        }
+        //    }
 
-            return filteredMembers;
-        }
+        //    return filteredMembers;
+        //}
 
         public static isCompletionListBlocker(sourceUnit: TypeScript.SourceUnitSyntax, position: number): boolean {
             // We shouldn't be getting a possition that is outside the file because
@@ -173,7 +173,7 @@ module TypeScript.Services {
             return false;
         }
 
-        public static getValidCompletionEntryDisplayName(displayName: string): string {
+        public static getValidCompletionEntryDisplayName(displayName: string, target: ts.ScriptTarget): string {
             if (displayName && displayName.length > 0) {
                 var firstChar = displayName.charCodeAt(0);
                 if (firstChar === TypeScript.CharacterCodes.singleQuote || firstChar === TypeScript.CharacterCodes.doubleQuote) {
@@ -182,7 +182,7 @@ module TypeScript.Services {
                     displayName = TypeScript.stripStartAndEndQuotes(displayName);
                 }
 
-                if (TypeScript.Scanner.isValidIdentifier(TypeScript.SimpleText.fromString(displayName), TypeScript.LanguageVersion.EcmaScript5)) {
+                if (TypeScript.Scanner.isValidIdentifier(TypeScript.SimpleText.fromString(displayName), target)) {
                     return displayName;
                 }
             }
