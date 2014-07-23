@@ -2978,6 +2978,33 @@ module ts {
             return type;
         }
 
+        function forEachMatchingParameterType(source: Signature, target: Signature, callback: (s: Type, t: Type) => void) {
+            var sourceMax = source.parameters.length;
+            var targetMax = target.parameters.length;
+            var count: number;
+            if (source.hasRestParameter && target.hasRestParameter) {
+                count = sourceMax > targetMax ? sourceMax : targetMax;
+                sourceMax--;
+                targetMax--;
+            }
+            else if (source.hasRestParameter) {
+                sourceMax--;
+                count = targetMax;
+            }
+            else if (target.hasRestParameter) {
+                targetMax--;
+                count = sourceMax;
+            }
+            else {
+                count = sourceMax < targetMax ? sourceMax : targetMax;
+            }
+            for (var i = 0; i < count; i++) {
+                var s = i < sourceMax ? getTypeOfSymbol(source.parameters[i]) : getRestTypeOfSignature(source);
+                var t = i < targetMax ? getTypeOfSymbol(target.parameters[i]) : getRestTypeOfSignature(target);
+                callback(s, t);
+            }
+        }
+
         function createInferenceContext(typeParameters: TypeParameter[]): InferenceContext {
             var inferences: Type[][] = [];
             for (var i = 0; i < typeParameters.length; i++) inferences.push([]);
@@ -3048,8 +3075,9 @@ module ts {
                         inferFromProperties(source, target);
                         inferFromSignatures(source, target, SignatureKind.Call);
                         inferFromSignatures(source, target, SignatureKind.Construct);
-                        inferFromIndexTypes(source, target, IndexKind.String);
-                        inferFromIndexTypes(source, target, IndexKind.Number);
+                        inferFromIndexTypes(source, target, IndexKind.String, IndexKind.String);
+                        inferFromIndexTypes(source, target, IndexKind.Number, IndexKind.Number);
+                        inferFromIndexTypes(source, target, IndexKind.String, IndexKind.Number);
                         depth--;
                     }
                 }
@@ -3073,42 +3101,19 @@ module ts {
                 var targetLen = targetSignatures.length;
                 var len = sourceLen < targetLen ? sourceLen : targetLen;
                 for (var i = 0; i < len; i++) {
-                    inferFromParameters(getErasedSignature(sourceSignatures[sourceLen - len + i]), getErasedSignature(targetSignatures[targetLen - len + i]));
+                    inferFromSignature(getErasedSignature(sourceSignatures[sourceLen - len + i]), getErasedSignature(targetSignatures[targetLen - len + i]));
                 }
             }
 
-            function inferFromParameters(source: Signature, target: Signature) {
-                var sourceMax = source.parameters.length;
-                var targetMax = target.parameters.length;
-                var checkCount: number;
-                if (!source.hasRestParameter && !target.hasRestParameter) {
-                    checkCount = sourceMax < targetMax ? sourceMax : targetMax;
-                }
-                else if (source.hasRestParameter) {
-                    sourceMax--;
-                    checkCount = targetMax;
-                }
-                else if (target.hasRestParameter) {
-                    targetMax--;
-                    checkCount = sourceMax;
-                }
-                else {
-                    checkCount = sourceMax > targetMax ? sourceMax : targetMax;
-                    sourceMax--;
-                    targetMax--;
-                }
-                for (var i = 0; i < checkCount; i++) {
-                    var s = i < sourceMax ? getTypeOfSymbol(source.parameters[i]) : getRestTypeOfSignature(source);
-                    var t = i < targetMax ? getTypeOfSymbol(target.parameters[i]) : getRestTypeOfSignature(target);
-                    inferFromTypes(s, t);
-                }
+            function inferFromSignature(source: Signature, target: Signature) {
+                forEachMatchingParameterType(source, target, inferFromTypes);
                 inferFromTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
             }
 
-            function inferFromIndexTypes(source: Type, target: Type, kind: IndexKind) {
-                var targetIndexType = getIndexTypeOfType(target, kind);
+            function inferFromIndexTypes(source: Type, target: Type, sourceKind: IndexKind, targetKind: IndexKind) {
+                var targetIndexType = getIndexTypeOfType(target, targetKind);
                 if (targetIndexType) {
-                    var sourceIndexType = getIndexTypeOfType(source, kind);
+                    var sourceIndexType = getIndexTypeOfType(source, sourceKind);
                     if (sourceIndexType) {
                         inferFromTypes(sourceIndexType, targetIndexType);
                     }
@@ -3655,6 +3660,41 @@ module ts {
             return result;
         }
 
+        // If type has a single call signature and no other members, return that signature. Otherwise, return undefined.
+        function getSingleCallSignature(type: Type): Signature {
+            if (type.flags & TypeFlags.ObjectType) {
+                var resolved = resolveObjectTypeMembers(<ObjectType>type);
+                if (resolved.callSignatures.length === 1 && resolved.constructSignatures.length === 0 &&
+                    resolved.properties.length === 0 && !resolved.stringIndexType && !resolved.numberIndexType) {
+                    return resolved.callSignatures[0];
+                }
+            }
+            return undefined;
+        }
+
+        // Instantiate a generic signature in the context of a non-generic signature (section 3.8.5 in TypeScript spec)
+        function instantiateSignatureInContextOf(signature: Signature, contextualSignature: Signature, contextualMapper: TypeMapper): Signature {
+            var context = createInferenceContext(signature.typeParameters);
+            forEachMatchingParameterType(contextualSignature, signature, (source, target) => {
+                // Type parameters from outer context referenced by source type are fixed by instantiation of the source type
+                inferTypes(context, instantiateType(source, contextualMapper), target);
+            });
+            return getSignatureInstantiation(signature, getInferredTypes(context));
+        }
+
+        // Inferentially type an expression by a contextual parameter type (section 4.12.2 in TypeScript spec)
+        function inferentiallyTypeExpession(expr: Expression, contextualType: Type, contextualMapper: TypeMapper): Type {
+            var type = checkExpression(expr, contextualType, contextualMapper);
+            var signature = getSingleCallSignature(type);
+            if (signature && signature.typeParameters) {
+                var contextualSignature = getSingleCallSignature(contextualType);
+                if (contextualSignature && !contextualSignature.typeParameters) {
+                    type = getOrCreateTypeFromSignature(instantiateSignatureInContextOf(signature, contextualSignature, contextualMapper));
+                }
+            }
+            return type;
+        }
+
         function inferTypeArguments(signature: Signature, args: Expression[], excludeArgument?: boolean[]): Type[] {
             var typeParameters = signature.typeParameters;
             var context = createInferenceContext(typeParameters);
@@ -3663,7 +3703,7 @@ module ts {
             for (var i = 0; i < args.length; i++) {
                 if (!excludeArgument || excludeArgument[i] === undefined) {
                     var parameterType = getTypeAtPosition(signature, i);
-                    inferTypes(context, checkExpression(args[i], parameterType, mapper), parameterType);
+                    inferTypes(context, inferentiallyTypeExpession(args[i], parameterType, mapper), parameterType);
                 }
             }
             // Next, infer from those context sensitive arguments that are no longer excluded
@@ -3671,7 +3711,7 @@ module ts {
                 for (var i = 0; i < args.length; i++) {
                     if (excludeArgument[i] === false) {
                         var parameterType = getTypeAtPosition(signature, i);
-                        inferTypes(context, checkExpression(args[i], parameterType, mapper), parameterType);
+                        inferTypes(context, inferentiallyTypeExpession(args[i], parameterType, mapper), parameterType);
                     }
                 }
             }
@@ -3932,12 +3972,10 @@ module ts {
             }
 
             // Aggregate the types of expressions within all the return statements.
-            var types: Type[] = [];
-            checkAndAggregateReturnExpressionTypes(func.body);
+            var types = checkAndAggregateReturnExpressionTypes(<Block>func.body, contextualType, contextualMapper);
 
             // Try to return the best common type if we have any return expressions.
-            if (types.length) {
-
+            if (types.length > 0) {
                 var commonType = getBestCommonType(types, /*contextualType:*/ undefined, /*candidatesOnly:*/ true);
                 if (!commonType) {
                     error(func, Diagnostics.No_best_common_type_exists_among_return_expressions);
@@ -3963,16 +4001,18 @@ module ts {
             }
 
             return voidType;
+        }
 
-            function checkAndAggregateReturnExpressionTypes(node: Node) {
+        // WARNING: This has the same semantics as the forEach family of functions,
+        //          in that traversal terminates in the event that 'visitor' supplies a truthy value.
+        function forEachReturnStatement<T>(body: Block, visitor: (stmt: ReturnStatement) => T): T {
+
+            return traverse(body);
+
+            function traverse(node: Node): T {
                 switch (node.kind) {
                     case SyntaxKind.ReturnStatement:
-                        var expr = (<ReturnStatement>node).expression;
-                        if (expr) {
-                            var type = checkAndMarkExpression(expr, contextualType, contextualMapper);
-                            if (!contains(types, type)) types.push(type);
-                        }
-                        break;
+                        return visitor(node);
                     case SyntaxKind.Block:
                     case SyntaxKind.FunctionBlock:
                     case SyntaxKind.IfStatement:
@@ -3989,15 +4029,77 @@ module ts {
                     case SyntaxKind.TryBlock:
                     case SyntaxKind.CatchBlock:
                     case SyntaxKind.FinallyBlock:
-                        forEachChild(node, checkAndAggregateReturnExpressionTypes);
-                        break;
+                        return forEachChild(node, traverse);
                 }
             }
         }
 
+        /// Returns a set of types relating to every return expression relating to a function block.
+        function checkAndAggregateReturnExpressionTypes(body: Block, contextualType?: Type, contextualMapper?: TypeMapper): Type[] {
+            var aggregatedTypes: Type[] = [];
+
+            forEachReturnStatement(body, returnStatement => {
+                var expr = returnStatement.expression;
+                if (expr) {
+                    var type = checkAndMarkExpression(expr, contextualType, contextualMapper);
+                    if (!contains(aggregatedTypes, type)) {
+                        aggregatedTypes.push(type);
+                    }
+                }
+            });
+
+            return aggregatedTypes;
+        }
+
+        function bodyContainsAReturnStatement(funcBody: Block) {
+            return forEachReturnStatement(funcBody, returnStatement => {
+                return true;
+            });
+        }
+
+        function bodyContainsSingleThrowStatement(body: Block) {
+            return (body.statements.length === 1) && (body.statements[0].kind === SyntaxKind.ThrowStatement)
+        }
+
+        // TypeScript Specification 1.0 (6.3) - July 2014
+        // An explicitly typed function whose return type isn't the Void or the Any type
+        // must have at least one return statement somewhere in its body.
+        // An exception to this rule is if the function implementation consists of a single 'throw' statement.
+        function checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(func: FunctionDeclaration, returnType: Type): void {
+            // Functions that return 'void' or 'any' don't need any return expressions.
+            if (returnType === voidType || returnType === anyType) {
+                return;
+            }
+
+            // If all we have is a function signature, or an arrow function with an expression body, then there is nothing to check.
+            if (!func.body || func.body.kind !== SyntaxKind.FunctionBlock) {
+                return;
+            }
+
+            var bodyBlock = <Block>func.body;
+
+            // Ensure the body has at least one return expression.
+            if (bodyContainsAReturnStatement(bodyBlock)) {
+                return;
+            }
+
+            // If there are no return expressions, then we need to check if
+            // the function body consists solely of a throw statement;
+            // this is to make an exception for unimplemented functions.
+            if (bodyContainsSingleThrowStatement(bodyBlock)) {
+                return;
+            }
+
+            // This function does not conform to the specification.
+            error(func.type, Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value_or_consist_of_a_single_throw_statement);
+        }
+
         function checkFunctionExpression(node: FunctionExpression, contextualType?: Type, contextualMapper?: TypeMapper): Type {
             // The identityMapper object is used to indicate that function expressions are wildcards
-            if (contextualMapper === identityMapper) return anyFunctionType;
+            if (contextualMapper === identityMapper) {
+                return anyFunctionType;
+            }
+
             var type = getTypeOfSymbol(node.symbol);
             var links = getNodeLinks(node);
 
@@ -4014,6 +4116,9 @@ module ts {
                         if (signature.resolvedReturnType === resolvingType) {
                             signature.resolvedReturnType = returnType;
                         }
+                    }
+                    else {
+                        checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
                     }
                 }
                 checkSignatureDeclaration(node);
@@ -4587,28 +4692,9 @@ module ts {
         }
 
         function checkAccessorDeclaration(node: AccessorDeclaration) {
-            function checkGetterContainsSingleThrowStatement(node: AccessorDeclaration): boolean {
-                var block = <Block>node.body;
-                return block.statements.length === 1 && block.statements[0].kind === SyntaxKind.ThrowStatement;
-            }
-
-            function checkGetterReturnsValue(n: Node): boolean {
-                switch (n.kind) {
-                    case SyntaxKind.ReturnStatement:
-                        return true;
-                    // do not dive into function-like things - return statements there don't count
-                    case SyntaxKind.FunctionExpression:
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.ArrowFunction:
-                    case SyntaxKind.ObjectLiteral:
-                        return false;
-                    default:
-                        return forEachChild(n, checkGetterReturnsValue);
-                }
-            }            
             if (node.kind === SyntaxKind.GetAccessor) {
-                if (!isInAmbientContext(node) && node.body && !(checkGetterContainsSingleThrowStatement(node) || checkGetterReturnsValue(node))) {
-                    error(node.name, Diagnostics.Getters_must_return_a_value);
+                if (!isInAmbientContext(node) && node.body && !(bodyContainsAReturnStatement(<Block>node.body) || bodyContainsSingleThrowStatement(<Block>node.body))) {
+                    error(node.name, Diagnostics.A_get_accessor_must_return_a_value_or_consist_of_a_single_throw_statement);
                 }
             }
 
@@ -4837,8 +4923,6 @@ module ts {
                     }
                 }
             }
-
-            // TODO: Check at least one return statement in non-void/any function (except single throw)
         }
 
         function checkFunctionDeclaration(node: FunctionDeclaration) {
@@ -4850,7 +4934,11 @@ module ts {
             if (node === firstDeclaration) {
                 checkFunctionOrConstructorSymbol(symbol);
             }
+
             checkSourceElement(node.body);
+            if (node.type) {
+                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
+            }
 
             // If there is no body and no explicit return type, then report an error.
             if (program.getCompilerOptions().noImplicitAny && !node.body && !node.type) {
@@ -5255,7 +5343,7 @@ module ts {
                     // for interfaces property and indexer might be inherited from different bases
                     // check if any base class already has both property and indexer.
                     // check should be performed only if 'type' is the first type that brings property\indexer together
-                    var someBaseClassHasBothPropertyAndIndexer = forEach((<InterfaceType>type).baseTypes, (base) => getPropertyOfType(base, prop.name) && getIndexTypeOfType(base, indexKind));
+                    var someBaseClassHasBothPropertyAndIndexer = forEach((<InterfaceType>type).baseTypes, base => getPropertyOfType(base, prop.name) && getIndexTypeOfType(base, indexKind));
                     errorNode = someBaseClassHasBothPropertyAndIndexer ? undefined : type.symbol.declarations[0];
                 }
 

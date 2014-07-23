@@ -2,6 +2,6 @@
     class C {
       get foo() { }
           ~~~
-!!! Getters must return a value.
+!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
       set foo(a) { }
     }

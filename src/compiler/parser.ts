@@ -766,7 +766,7 @@ module ts {
             return false;
         }
 
-        // Parses a semicolon-delimited list of elements
+        // Parses a list of elements
         function parseList<T extends Node>(kind: ParsingContext, parseElement: () => T): NodeArray<T> {
             var saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
@@ -1070,7 +1070,7 @@ module ts {
             return finishNode(node);
         }
 
-        function checkIndexSignature(node: SignatureDeclaration, indexerStart: number, indexerLength: number): boolean {
+        function checkIndexSignature(node: SignatureDeclaration, indexerStart: number, indexerLength: number): void {
             var parameter = node.parameters[0];
             if (node.parameters.length !== 1) {
                 var arityDiagnostic = Diagnostics.An_index_signature_must_have_exactly_one_parameter
