@@ -1836,7 +1836,12 @@ module ts {
             if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
                 var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken);
                 var body = parseBody(/* ignoreMissingOpenBrace */ false);
-                node.initializer = makeFunctionExpression(SyntaxKind.FunctionExpression, node.pos, node.name, sig, body);
+                // do not propagate property name as name for function expression
+                // for scenarios like 
+                // var x = 1;
+                // var y = { x() { } } 
+                // otherwise this will bring y.x into the scope of x which is incorrect
+                node.initializer = makeFunctionExpression(SyntaxKind.FunctionExpression, node.pos, undefined, sig, body);
             }
             else {
                 parseExpected(SyntaxKind.ColonToken);
