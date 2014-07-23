@@ -1,0 +1,8 @@
+==== tests/cases/compiler/overloadResolutionOnDefaultConstructor1.ts (1 errors) ====
+    class Bar {
+        public clone() {
+            return new Bar(0);
+                   ~~~~~~~~~~
+!!! Supplied parameters do not match any signature of call target.
+        }
+    }

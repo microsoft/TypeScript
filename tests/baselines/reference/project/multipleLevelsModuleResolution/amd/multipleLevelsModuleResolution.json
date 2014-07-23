@@ -1,0 +1,20 @@
+{
+    "scenario": "MultipleLevel module resolution",
+    "projectRoot": "tests/cases/projects/MultipleLevels",
+    "inputFiles": [
+        "root.ts"
+    ],
+    "resolvedInputFiles": [
+        "root.ts",
+        "B/B.ts",
+        "A/A.ts",
+        "A/AA/AA.ts",
+        "lib.d.ts"
+    ],
+    "emittedFiles": [
+        "A/A.js",
+        "A/AA/AA.js",
+        "B/B.js",
+        "root.js"
+    ]
+}

@@ -1,0 +1,4 @@
+==== tests/cases/compiler/logicalNotExpression1.ts (1 errors) ====
+    !foo;
+     ~~~
+!!! Cannot find name 'foo'.
