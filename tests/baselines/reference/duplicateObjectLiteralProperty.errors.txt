@@ -1,4 +1,4 @@
-==== tests/cases/compiler/duplicateObjectLiteralProperty.ts (8 errors) ====
+==== tests/cases/compiler/duplicateObjectLiteralProperty.ts (9 errors) ====
     var x = {
         a: 1,
         b: true, // OK
@@ -29,6 +29,8 @@
         get a() { return 0; }
             ~
 !!! Accessors are only available when targeting ECMAScript 5 and higher.
+            ~
+!!! An object literal cannot have multiple get/set accessors with the same name.
             ~
 !!! Duplicate identifier 'a'.
     };

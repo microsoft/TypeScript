@@ -1,4 +1,4 @@
-==== tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName.ts (13 errors) ====
+==== tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName.ts (14 errors) ====
     class C {
         get x() { return 1; }
             ~
@@ -43,6 +43,8 @@
         get x() {
             ~
 !!! Accessors are only available when targeting ECMAScript 5 and higher.
+            ~
+!!! An object literal cannot have multiple get/set accessors with the same name.
             ~
 !!! Duplicate identifier 'x'.
             return 1;

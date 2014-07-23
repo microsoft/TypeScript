@@ -131,6 +131,7 @@ module ts {
 
     /// Should be called only on prologue directives (isPrologueDirective(node) should be true)
     function isUseStrictPrologueDirective(node: Node): boolean {
+        Debug.assert(isPrologueDirective(node));
         return (<Identifier>(<ExpressionStatement>node).expression).text === "use strict";
     }
 
@@ -1416,7 +1417,7 @@ module ts {
 
             // Now see if we might be in cases '2' or '3'.
             // If the expression was a LHS expression, and we  have an assignment operator, then 
-            // we're in '2' or '3'.  Consume the assignement and return.
+            // we're in '2' or '3'.  Consume the assignment and return.
             if (isLeftHandSideExpression(expr) && isAssignmentOperator()) {
                 if (isInStrictMode && isEvalOrArgumentsIdentifier(expr)) {
                     // ECMA 262 (Annex C) The identifier eval or arguments may not appear as the LeftHandSideExpression of an 
@@ -1948,23 +1949,61 @@ module ts {
             if (scanner.hasPrecedingLineBreak()) node.flags |= NodeFlags.MultiLine;
             node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralMember, TrailingCommaBehavior.Preserve);
             parseExpected(SyntaxKind.CloseBraceToken);
-            if (isInStrictMode) {
-                var seen: Map<boolean> = {};
-                forEach(node.properties, (p: Node) => {
-                    // ECMA-262 11.1.5 Object Initialiser 
-                    // If previous is not undefined then throw a SyntaxError exception if any of the following conditions are true
-                    // a.This production is contained in strict code and IsDataDescriptor(previous) is true and IsDataDescriptor(propId.descriptor) is true. 
-                    if (p.kind === SyntaxKind.PropertyAssignment) {
-                        var name = (<PropertyDeclaration>p).name;
-                        if (hasProperty(seen, name.text)) {
-                            grammarErrorOnNode(name, Diagnostics.Object_literal_cannot_contain_more_than_one_property_with_the_same_name_in_the_strict_mode);
-                        }
-                        else {
-                            seen[name.text] = true;
+
+            var seen: Map<SymbolFlags> = {};
+            var Property    = 1;
+            var GetAccessor = 2;
+            var SetAccesor = 4;
+            var GetOrSetAccessor = GetAccessor | SetAccesor;
+            forEach(node.properties, (p: Declaration) => {
+                if (p.kind === SyntaxKind.OmittedExpression) {
+                    return;
+                }
+                // ECMA-262 11.1.5 Object Initialiser 
+                // If previous is not undefined then throw a SyntaxError exception if any of the following conditions are true
+                // a.This production is contained in strict code and IsDataDescriptor(previous) is true and 
+                // IsDataDescriptor(propId.descriptor) is true.
+                //    b.IsDataDescriptor(previous) is true and IsAccessorDescriptor(propId.descriptor) is true.
+                //    c.IsAccessorDescriptor(previous) is true and IsDataDescriptor(propId.descriptor) is true.
+                //    d.IsAccessorDescriptor(previous) is true and IsAccessorDescriptor(propId.descriptor) is true 
+                // and either both previous and propId.descriptor have[[Get]] fields or both previous and propId.descriptor have[[Set]] fields 
+                var currentKind: number;
+                if (p.kind === SyntaxKind.PropertyAssignment) {
+                    currentKind = Property;
+                }
+                else if (p.kind === SyntaxKind.GetAccessor) {
+                    currentKind = GetAccessor;
+                }
+                else if (p.kind === SyntaxKind.SetAccessor) {
+                    currentKind = SetAccesor;
+                }
+                else {
+                    Debug.fail("Unexpected syntax kind:" + SyntaxKind[p.kind]);
+                }
+
+                if (!hasProperty(seen, p.name.text)) {
+                    seen[p.name.text] = currentKind;
+                }
+                else {
+                    var existingKind = seen[p.name.text];
+                    if (currentKind === Property && existingKind === Property) {
+                        if (isInStrictMode) {
+                            grammarErrorOnNode(p.name, Diagnostics.An_object_literal_cannot_have_multiple_properties_with_the_same_name_in_strict_mode);
                         }
                     }
-                });
-            }
+                    else if ((currentKind & GetOrSetAccessor) && (existingKind & GetOrSetAccessor)) {
+                        if (existingKind !== GetOrSetAccessor && currentKind !== existingKind) {
+                            seen[p.name.text] = currentKind | existingKind;
+                        }
+                        else {
+                            grammarErrorOnNode(p.name, Diagnostics.An_object_literal_cannot_have_multiple_get_Slashset_accessors_with_the_same_name);
+                        }
+                    }
+                    else {
+                        grammarErrorOnNode(p.name, Diagnostics.An_object_literal_cannot_have_property_and_accessor_with_the_same_name);
+                    }
+                }
+            });
             return finishNode(node);
         }
 
@@ -2134,7 +2173,9 @@ module ts {
 
         function parseWithStatement(): WithStatement {
             var node = <WithStatement>createNode(SyntaxKind.WithStatement);
+            var startPos = scanner.getTokenPos();
             parseExpected(SyntaxKind.WithKeyword);
+            var endPos = scanner.getStartPos();
             parseExpected(SyntaxKind.OpenParenToken);
             node.expression = parseExpression();
             parseExpected(SyntaxKind.CloseParenToken);
@@ -2142,8 +2183,8 @@ module ts {
             node = finishNode(node);
             if (isInStrictMode) {
                 // Strict mode code may not include a WithStatement. The occurrence of a WithStatement in such 
-                // a context is an SyntaxError(12.10)
-                grammarErrorOnNode(node, Diagnostics.with_statements_are_not_allowed_in_strict_mode);
+                // a context is an 
+                grammarErrorAtPos(startPos, endPos - startPos, Diagnostics.with_statements_are_not_allowed_in_strict_mode) 
             }
             return node;
         }

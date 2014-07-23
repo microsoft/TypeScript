@@ -4,7 +4,7 @@
       x: 1,
       x: 2
       ~
-!!! Object literal cannot contain more than one property with the same name in the strict mode.
+!!! An object literal cannot have multiple properties with the same name in strict mode.
       ~
 !!! Duplicate identifier 'x'.
     }
