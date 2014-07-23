@@ -103,9 +103,8 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-var _this = this;
 with (window) {
-    var p = function () { return _this; };
+    var p = function () { return this; };
 }
 var Base = (function () {
     function Base(n) {
@@ -137,9 +136,8 @@ var M;
 })(M || (M = {}));
 var M2;
 (function (M2) {
-    var _this = this;
     with (window) {
-        var p = function () { return _this; };
+        var p = function () { return this; };
     }
     var Base = (function () {
         function Base(n) {

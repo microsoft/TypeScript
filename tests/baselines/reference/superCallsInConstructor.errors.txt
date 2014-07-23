@@ -1,4 +1,4 @@
-==== tests/cases/compiler/superCallsInConstructor.ts (2 errors) ====
+==== tests/cases/compiler/superCallsInConstructor.ts (1 errors) ====
     class C {
         foo() {}
         bar() {}
@@ -11,13 +11,11 @@
     class Derived extends Base {
         constructor() {
             with(new C()) {
+                 ~~~~~~~
+!!! All symbols within a 'with' block will be resolved to 'any'.
                 foo();
-                ~~~
-!!! Cannot find name 'foo'.
                 super();
                 bar();
-                ~~~
-!!! Cannot find name 'bar'.
             }
     
             try {} catch(e) { super(); }
