@@ -865,7 +865,8 @@ module ts {
             return createMissingList<T>();
         }
 
-        function parseEntityName(allowReservedWords?: boolean): EntityName {
+        // The allowReservedWords parameter controls whether reserved words are permitted after the first dot
+        function parseEntityName(allowReservedWords: boolean): EntityName {
             var entity: EntityName = parseIdentifier();
             while (parseOptional(SyntaxKind.DotToken)) {
                 var node = <QualifiedName>createNode(SyntaxKind.QualifiedName, entity.pos);
@@ -899,7 +900,7 @@ module ts {
 
         function parseTypeReference(): TypeReferenceNode {
             var node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference);
-            node.typeName = parseEntityName();
+            node.typeName = parseEntityName(/*allowReservedWords*/ false);
             if (!scanner.hasPrecedingLineBreak() && token === SyntaxKind.LessThanToken) {
                 node.typeArguments = parseTypeArguments();
             }
@@ -2815,7 +2816,7 @@ module ts {
             parseExpected(SyntaxKind.ImportKeyword);
             node.name = parseIdentifier();
             parseExpected(SyntaxKind.EqualsToken);
-            var entityName = parseEntityName();
+            var entityName = parseEntityName(/*allowReservedWords*/ false);
             if (entityName.kind === SyntaxKind.Identifier && (<Identifier>entityName).text === "require" && parseOptional(SyntaxKind.OpenParenToken)) {
                 node.externalModuleName = parseStringLiteral();
                 parseExpected(SyntaxKind.CloseParenToken);
