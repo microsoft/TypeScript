@@ -1,4 +1,4 @@
-==== tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts (41 errors) ====
+==== tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts (59 errors) ====
     
     // Multiple properties with the same name
     var e1 = { a: 0, a: 0 };
@@ -59,56 +59,92 @@
     // Accessor and property with the same name
     var f1 = { a: 0, get a() { return 0; } };
                          ~
+!!! An object literal cannot have property and accessor with the same name.
+                         ~
 !!! Duplicate identifier 'a'.
     var f2 = { a: '', get a() { return ''; } };
+                          ~
+!!! An object literal cannot have property and accessor with the same name.
                           ~
 !!! Duplicate identifier 'a'.
     var f3 = { a: 0, get a() { return ''; } };
                          ~
+!!! An object literal cannot have property and accessor with the same name.
+                         ~
 !!! Duplicate identifier 'a'.
     var f4 = { a: true, get a() { return false; } };
+                            ~
+!!! An object literal cannot have property and accessor with the same name.
                             ~
 !!! Duplicate identifier 'a'.
     var f5 = { a: {}, get a() { return {}; } };
                           ~
+!!! An object literal cannot have property and accessor with the same name.
+                          ~
 !!! Duplicate identifier 'a'.
     var f6 = { a: 0, get 'a'() { return 0; } };
+                         ~~~
+!!! An object literal cannot have property and accessor with the same name.
                          ~~~
 !!! Duplicate identifier ''a''.
     var f7 = { 'a': 0, get a() { return 0; } };
                            ~
+!!! An object literal cannot have property and accessor with the same name.
+                           ~
 !!! Duplicate identifier 'a'.
     var f8 = { 'a': 0, get "a"() { return 0; } };
+                           ~~~
+!!! An object literal cannot have property and accessor with the same name.
                            ~~~
 !!! Duplicate identifier '"a"'.
     var f9 = { 'a': 0, get 'a'() { return 0; } };
                            ~~~
+!!! An object literal cannot have property and accessor with the same name.
+                           ~~~
 !!! Duplicate identifier ''a''.
     var f10 = { "a": 0, get 'a'() { return 0; } };
+                            ~~~
+!!! An object literal cannot have property and accessor with the same name.
                             ~~~
 !!! Duplicate identifier ''a''.
     var f11 = { 1.0: 0, get '1'() { return 0; } };
                             ~~~
+!!! An object literal cannot have property and accessor with the same name.
+                            ~~~
 !!! Duplicate identifier ''1''.
     var f12 = { 0: 0, get 0() { return 0; } };
+                          ~
+!!! An object literal cannot have property and accessor with the same name.
                           ~
 !!! Duplicate identifier '0'.
     var f13 = { 0: 0, get 0() { return 0; } };
                           ~
+!!! An object literal cannot have property and accessor with the same name.
+                          ~
 !!! Duplicate identifier '0'.
     var f14 = { 0: 0, get 0x0() { return 0; } };
+                          ~~~
+!!! An object literal cannot have property and accessor with the same name.
                           ~~~
 !!! Duplicate identifier '0x0'.
     var f14 = { 0: 0, get 000() { return 0; } };
                           ~~~
+!!! An object literal cannot have property and accessor with the same name.
+                          ~~~
 !!! Duplicate identifier '000'.
     var f15 = { "100": 0, get 1e2() { return 0; } };
+                              ~~~
+!!! An object literal cannot have property and accessor with the same name.
                               ~~~
 !!! Duplicate identifier '1e2'.
     var f16 = { 0x20: 0, get 3.2e1() { return 0; } };
                              ~~~~~
+!!! An object literal cannot have property and accessor with the same name.
+                             ~~~~~
 !!! Duplicate identifier '3.2e1'.
     var f17 = { a: 0, get b() { return 1; }, get a() { return 0; } };
+                                                 ~
+!!! An object literal cannot have property and accessor with the same name.
                                                  ~
 !!! Duplicate identifier 'a'.
     
