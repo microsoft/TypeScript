@@ -1,4 +1,4 @@
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts (23 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts (15 errors) ====
     declare module ng {
         interfaceICompiledExpression {
                                      ~
@@ -6,24 +6,8 @@
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Cannot find name 'interfaceICompiledExpression'.
             (context: any, locals?: any): any;
-                    ~
-!!! ')' expected.
-                                  ~
-!!! Expression expected.
-                                       ~
-!!! ';' expected.
-                                        ~
-!!! Statement expected.
-             ~~~~~~~
-!!! Cannot find name 'context'.
-                      ~~~
-!!! Cannot find name 'any'.
-                           ~~~~~~
-!!! Cannot find name 'locals'.
-                                    ~~~
-!!! Cannot find name 'any'.
-                                          ~~~
-!!! Cannot find name 'any'.
+                                             ~
+!!! '=>' expected.
             assign(context: any, value: any): any;
                           ~
 !!! ',' expected.

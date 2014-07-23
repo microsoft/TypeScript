@@ -1448,12 +1448,10 @@ module ts {
             // Indicates whether we are certain that we should parse an arrow expression.
             var triState = isParenthesizedArrowFunctionExpression();
 
-            // It is not a parenthesized arrow function.
             if (triState === Tristate.False) {
                 return undefined;
             }
 
-            // If we're certain that we have an arrow function expression, then just parse one out.
             if (triState === Tristate.True) {
                 var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken);
 
@@ -1468,8 +1466,8 @@ module ts {
                 }
             }
             
-            // Otherwise, *maybe* we had an arrow function and we need to *try* to parse it out
-            // (which will ensure we rollback if we fail).
+            // *Maybe* we had an arrow function and we need to try to parse it out,
+            // rolling back and trying other parses if we fail.
             var sig = tryParse(parseSignatureIfArrowOrBraceFollows);
             if (sig === undefined) {
                 return undefined;
@@ -1522,6 +1520,12 @@ module ts {
                             return Tristate.False;
                         }
 
+                        // If we have something like "(a:", then we must have a
+                        // type-annotated parameter in an arrow function expression.
+                        if (nextToken() === SyntaxKind.ColonToken) {
+                            return Tristate.True;
+                        }
+
                         // This *could* be a parenthesized arrow function.
                         // Return Unknown to let the caller know.
                         return Tristate.Unknown;
@@ -1547,9 +1551,19 @@ module ts {
 
         function parseSignatureIfArrowOrBraceFollows(): ParsedSignature {
             var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken);
+
+            // Parsing a signature isn't enough.
+            // Parenthesized arrow signatures often look like other valid expressions.
+            // For instance:
+            //  - "(x = 10)" is an assignment expression parsed as a signature with a default parameter value.
+            //  - "(x,y)" is a comma expression parsed as a signature with two parameters.
+            //  - "a ? (b): c" will have "(b):" parsed as a signature with a return type annotation.
+            //
+            // So we need just a bit of lookahead to ensure that it can only be a signature.
             if (token === SyntaxKind.EqualsGreaterThanToken || token === SyntaxKind.OpenBraceToken) {
                 return sig;
             }
+
             return undefined;
         }
 
