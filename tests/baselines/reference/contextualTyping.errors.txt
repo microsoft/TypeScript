@@ -235,3 +235,4 @@
     var x: B = { };
         ~
 !!! Type '{}' is not assignable to type 'B':\n  Property 'x' is missing in type '{}'.
+    

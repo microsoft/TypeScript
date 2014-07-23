@@ -568,9 +568,6 @@ module Harness {
 
             private lastErrors: MinimalDiagnostic[];
 
-            // save this away so we can reset the newline value after any tests that change it
-            private originalNewline = sys.newLine;
-
             public reset() {
                 this.inputFiles = [];
                 this.settings = [];
@@ -629,7 +626,7 @@ module Harness {
 
                 // always use \r\n for newlines unless the test specifies otherwise
                 // this ensures baseline consistency across Windows and *nix but still lets us test both \n and \r\n
-                sys.newLine = '\r\n';
+                //sys.newLine = '\r\n';
 
                 this.settings.forEach(setting => {
                     switch (setting.flag.toLowerCase()) {
@@ -751,7 +748,6 @@ module Harness {
                 var sourceMapData: ts.SourceMapData[];
                 if (!hadParseErrors) {
                     sourceMapData = checker.emitFiles().sourceMaps;
-                    sys.newLine = this.originalNewline;
                 }
 
                 var errors: MinimalDiagnostic[] = [];
@@ -766,7 +762,7 @@ module Harness {
                 result.updateSourceMapRecord(program, sourceMapData);
                 onComplete(result);
 
-                sys.newLine = this.originalNewline;
+                sys.newLine = '\r\n';
                 return options;
             }
         }
@@ -1133,7 +1129,7 @@ module Harness {
         return filePath.indexOf('lib.d.ts') >= 0 || filePath.indexOf('lib.core.d.ts') >= 0;
     }
 
-    if (Error) (<any>Error).stackTraceLimit = 100;
+    if (Error) (<any>Error).stackTraceLimit = 1;
 }
 
 // TODO: not sure why Utils.evalFile isn't working with this, eventually will concat it like old compiler instead of eval
