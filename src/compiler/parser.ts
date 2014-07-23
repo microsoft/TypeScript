@@ -394,7 +394,6 @@ module ts {
 
         var lookAheadMode = LookAheadMode.NotLookingAhead;
         var inAmbientContext = false;
-        var inModuleBody = false;
         var inFunctionBody = false;
         var inSwitchStatement = ControlBlockContext.NotNested;
         var inIterationStatement = ControlBlockContext.NotNested;
@@ -406,9 +405,9 @@ module ts {
 
             // TODO(jfreeman): Fill in these stubs
             return {
-                getLength: (): number => 0,
-                enqueueFunctionBoundary: () => { },
-                resetStack: (length: number) => { }
+                pushLabelledStatement: (statement: LabelledStatement) => { },
+                pushFunctionBoundary: () => { },
+                pop: () => { }
             };
         })();
 
@@ -1950,14 +1949,12 @@ module ts {
             if (inIterationStatement === ControlBlockContext.Nested) {
                 inIterationStatement = ControlBlockContext.CrossingFunctionBoundary;
             }
-
-            var labelStackLength = labelledStatementInfo.getLength();
-            labelledStatementInfo.enqueueFunctionBoundary();
+            labelledStatementInfo.pushFunctionBoundary();
 
             var block = parseBlock(ignoreMissingOpenBrace);
             block.kind = SyntaxKind.FunctionBlock;
 
-            labelledStatementInfo.resetStack(labelStackLength);
+            labelledStatementInfo.pop();
             inFunctionBody = saveInFunctionBody;
             inSwitchStatement = saveInSwitchStatement;
             inIterationStatement = saveInIterationStatement;
@@ -2136,7 +2133,8 @@ module ts {
             if (!isSemicolon()) node.expression = parseExpression();
             parseSemicolon();
 
-            if (!inFunctionBody && !inModuleBody && errorCountBeforeReturnStatement === file.syntacticErrors.length) {
+            // In an ambient context, we will already give an error for having a statement.
+            if (!inFunctionBody && !inAmbientContext && errorCountBeforeReturnStatement === file.syntacticErrors.length) {
                 grammarErrorAtPos(returnTokenStart, returnTokenLength, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
             }
             return finishNode(node);
@@ -2875,11 +2873,7 @@ module ts {
         function parseModuleBody(): Block {
             var node = <Block>createNode(SyntaxKind.ModuleBlock);
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
-                var saveInModuleBody = inModuleBody;
-                inModuleBody = true;
                 node.statements = parseList(ParsingContext.ModuleElements, parseModuleElement);
-                inModuleBody = saveInModuleBody;
-
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
