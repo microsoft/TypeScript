@@ -104,4 +104,7 @@ if (runners.length === 0) {
     // runners.push(new GeneratedFourslashRunner());
 }
 
+// force the newLine to be the same as windows when running tests
+sys.newLine = '\r\n';
+
 runTests(runners);
