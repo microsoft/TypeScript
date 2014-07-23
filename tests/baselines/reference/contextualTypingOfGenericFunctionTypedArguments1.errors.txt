@@ -17,7 +17,11 @@
     var r5 = _.forEach<number>(c2, f); 
              ~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Type 'string' is not assignable to type 'Date':
+!!!     Property 'toDateString' is missing in type 'String'.
     var r6 = _.forEach<number>(c2, (x) => { return x.toFixed() }); 
              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Type 'string' is not assignable to type 'Date':
+!!!     Property 'toDateString' is missing in type 'String'.
     

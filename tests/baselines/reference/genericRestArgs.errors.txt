@@ -15,3 +15,4 @@
     var a2Gc = makeArrayG<any[]>(1, ""); // error
                ~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Property 'concat' is missing in type 'Number'.

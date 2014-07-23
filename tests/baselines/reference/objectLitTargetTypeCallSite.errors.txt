@@ -6,3 +6,5 @@
     process({a:true,b:"y"});
     ~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Types of property 'a' are incompatible:
+!!!     Type 'boolean' is not assignable to type 'number'.

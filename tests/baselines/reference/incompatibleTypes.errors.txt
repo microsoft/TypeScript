@@ -63,6 +63,9 @@
     if1(c1);
     ~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Types of property 'p1' are incompatible:
+!!!     Type '() => string' is not assignable to type '(s: string) => number':
+!!!       Type 'string' is not assignable to type 'number'.
     
     
     function of1(n: { a: { a: string; }; b: string; }): number;
@@ -72,6 +75,7 @@
     of1({ e: 0, f: 0 });
     ~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Property 'c' is missing in type '{ e: number; f: number; }'.
     
     interface IMap {
      [key:string]:string;

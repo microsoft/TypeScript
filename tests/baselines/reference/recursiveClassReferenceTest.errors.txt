@@ -102,6 +102,7 @@
     			return new State(self);
     			       ~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Property 'getInitialState' is missing in type 'Window'.
     		}
     
     

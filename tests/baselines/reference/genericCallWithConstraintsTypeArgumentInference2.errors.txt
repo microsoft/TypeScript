@@ -14,4 +14,5 @@
     var r4 = foo<Date, Date>(1); // error
              ~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Property 'toDateString' is missing in type 'Number'.
     var r5 = foo<Date, Date>(new Date()); // no error

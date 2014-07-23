@@ -3629,8 +3629,8 @@ module ts {
                 (!node.typeArguments || signature.typeParameters && node.typeArguments.length === signature.typeParameters.length);
         }
 
-        // The candidate list is in reverse order of declaration, except that groups of signatures with the same parent are
-        // kept in declaration order.
+        // The candidate list orders groups in reverse, but within a group,
+        // signatures are kept in declaration order.
         function collectCandidates(node: CallExpression, signatures: Signature[]): Signature[] {
             var result: Signature[] = [];
             var lastParent: Node;
@@ -3693,7 +3693,7 @@ module ts {
             return result;
         }
 
-        function isApplicableSignature(node: CallExpression, signature: Signature, relation: Map<boolean>, excludeArgument: boolean[]) {
+        function checkSignatureIsApplicable(node: CallExpression, signature: Signature, relation: Map<boolean>, excludeArgument: boolean[], errMessage?: DiagnosticMessage) {
             if (node.arguments) {
                 for (var i = 0; i < node.arguments.length; i++) {
                     var arg = node.arguments[i];
@@ -3701,7 +3701,15 @@ module ts {
                     var argType = arg.kind === SyntaxKind.StringLiteral ?
                         getStringLiteralType(<LiteralExpression>arg) :
                         checkExpression(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
-                    if (!isTypeRelatedTo(argType, paramType, relation)) return false;
+
+                    // When errMessage is given, we actually want to error on a type mismatch.
+                    var typeIsRelated = errMessage ?
+                        checkTypeRelatedTo(argType, paramType, relation, node, /* chainedMessage */ errMessage, /* terminalMessage */ errMessage) :
+                        isTypeRelatedTo(argType, paramType, relation);
+
+                    if (!typeIsRelated) {
+                        return false;
+                    }
                 }
             }
             return true;
@@ -3724,7 +3732,7 @@ module ts {
             }
             var relation = candidates.length === 1 ? assignableRelation : subtypeRelation;
             while (true) {
-                for (var i = 0; i < candidates.length; i++) {
+                for (var i = 0, n = candidates.length; i < n; i++) {
                     while (true) {
                         var candidate = candidates[i];
                         if (candidate.typeParameters) {
@@ -3733,7 +3741,17 @@ module ts {
                                 inferTypeArguments(candidate, args, excludeArgument);
                             candidate = getSignatureInstantiation(candidate, typeArguments);
                         }
-                        if (!isApplicableSignature(node, candidate, relation, excludeArgument)) break;
+
+                        // On the last signature, we supply 'checkSignatureIsApplicable' with an error message
+                        // to make it elaborate on any assignment compatibility issues we may run into.
+                        var errMsg = (relation === assignableRelation && i === n - 1) ?
+                            Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target :
+                            undefined;
+
+                        if (!checkSignatureIsApplicable(node, candidate, relation, excludeArgument, errMsg)) {
+                            break;
+                        }
+
                         var index = excludeArgument ? indexOf(excludeArgument, true) : -1;
                         if (index < 0) {
                             return getReturnTypeOfSignature(candidate);
@@ -3741,10 +3759,12 @@ module ts {
                         excludeArgument[index] = false;
                     }
                 }
-                if (relation === assignableRelation) break;
+                if (relation === assignableRelation) {
+                    break;
+                }
                 relation = assignableRelation;
             }
-            error(node, Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);
+
             return checkErrorCall(node);
         }
 

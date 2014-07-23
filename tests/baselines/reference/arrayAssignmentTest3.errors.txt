@@ -13,5 +13,6 @@
     var xx = new a(null, 7, new B());
              ~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Property 'concat' is missing in type 'B'.
     
     

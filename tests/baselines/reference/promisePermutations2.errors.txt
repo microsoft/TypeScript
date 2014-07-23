@@ -74,6 +74,9 @@
     var s3d = s3.then(testFunction3P, testFunction3, testFunction3).then(testFunction3, testFunction3, testFunction3); // Should error
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Types of parameters 'x' and 'value' are incompatible:
+!!!     Type 'number' is not assignable to type 'IPromise<number>':
+!!!       Property 'then' is missing in type 'Number'.
     
     var r4: IPromise<string>;
     var sIPromise: (x: any) => IPromise<string>;
@@ -81,17 +84,25 @@
     var r4a = r4.then(testFunction4, testFunction4, testFunction4); // error
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Types of parameters 'x' and 'value' are incompatible:
+!!!     Type 'number' is not assignable to type 'string'.
     var r4b = r4.then(sIPromise, testFunction4, testFunction4).then(sIPromise, testFunction4, testFunction4); // ok
     var s4: Promise<string>;
     var s4a = s4.then(testFunction4, testFunction4, testFunction4); // error
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Types of parameters 'x' and 'value' are incompatible:
+!!!     Type 'number' is not assignable to type 'string'.
     var s4b = s4.then(testFunction4P, testFunction4P, testFunction4P); // error 
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Types of parameters 'x' and 'value' are incompatible:
+!!!     Type 'number' is not assignable to type 'string'.
     var s4c = s4.then(testFunction4P, testFunction4, testFunction4); // error
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Types of parameters 'x' and 'value' are incompatible:
+!!!     Type 'number' is not assignable to type 'string'.
     var s4d = s4.then(sIPromise, testFunction4P, testFunction4).then(sIPromise, testFunction4P, testFunction4); 
     
     var r5: IPromise<string>;
@@ -132,17 +143,25 @@
     var r7a = r7.then(testFunction7, testFunction7, testFunction7); // error
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Types of parameters 'cb' and 'value' are incompatible:
+!!!     Type '<T>(a: T) => T' is not assignable to type 'string'.
     var r7b = r7.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
     var s7: Promise<string>;
     var s7a = r7.then(testFunction7, testFunction7, testFunction7); // error
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Types of parameters 'cb' and 'value' are incompatible:
+!!!     Type '<T>(a: T) => T' is not assignable to type 'string'.
     var s7b = r7.then(testFunction7P, testFunction7P, testFunction7P); // error
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Types of parameters 'cb' and 'value' are incompatible:
+!!!     Type '<T>(a: T) => T' is not assignable to type 'string'.
     var s7c = r7.then(testFunction7P, testFunction7, testFunction7); // error
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Types of parameters 'cb' and 'value' are incompatible:
+!!!     Type '<T>(a: T) => T' is not assignable to type 'string'.
     var s7d = r7.then(sPromise, sPromise, sPromise).then(sPromise, sPromise, sPromise); // ok?
     
     var r8: IPromise<number>;
@@ -208,12 +227,23 @@
     var s11a = s11.then(testFunction11, testFunction11, testFunction11); // ok
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Type 'IPromise<number>' is not assignable to type 'IPromise<string>':
+!!!     Type 'number' is not assignable to type 'string'.
     var s11b = s11.then(testFunction11P, testFunction11P, testFunction11P); // ok
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Type 'Promise<number>' is not assignable to type 'Promise<string>':
+!!!     Type 'number' is not assignable to type 'string'.
     var s11c = s11.then(testFunction11P, testFunction11, testFunction11); // ok
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Type 'Promise<number>' is not assignable to type 'IPromise<string>':
+!!!     Types of property 'then' are incompatible:
+!!!       Type '<U>(success?: (value: number) => U, error?: (error: any) => U, progress?: (progress: any) => void) => Promise<U>' is not assignable to type '{ <U>(success?: (value: string) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: string) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }':
+!!!         Types of parameters 'success' and 'success' are incompatible:
+!!!           Type '(value: number) => any' is not assignable to type '(value: string) => IPromise<any>':
+!!!             Types of parameters 'value' and 'value' are incompatible:
+!!!               Type 'number' is not assignable to type 'string'.
     
     var r12 = testFunction12(x => x);
     var r12a = r12.then(testFunction12, testFunction12, testFunction12); // ok

@@ -9,6 +9,9 @@
     var x111 = foo([{a:"s"}]); // error - does not match any signature
                ~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Type '{ a: string; }' is not assignable to type '{ a: boolean; }':
+!!!     Types of property 'a' are incompatible:
+!!!       Type 'string' is not assignable to type 'boolean'.
     var x1111 = foo([{a:null}]); // works - ambiguous call is resolved to be the first in the overload set so this returns a string
     
     
@@ -22,6 +25,8 @@
     var x4 = foo2({a:"s"}); // error
              ~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Types of property 'a' are incompatible:
+!!!     Type 'string' is not assignable to type 'boolean'.
     
     
     function foo4(bar:{a:number;}):number;
@@ -30,3 +35,5 @@
     var x = foo4({a:true}); // error
             ~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Types of property 'a' are incompatible:
+!!!     Type 'boolean' is not assignable to type 'string'.

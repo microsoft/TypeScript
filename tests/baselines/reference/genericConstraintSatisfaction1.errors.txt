@@ -7,4 +7,6 @@
     x.f({s: 1})
     ~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Types of property 's' are incompatible:
+!!!     Type 'number' is not assignable to type 'string'.
     

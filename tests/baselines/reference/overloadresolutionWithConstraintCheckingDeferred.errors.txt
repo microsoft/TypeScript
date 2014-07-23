@@ -21,6 +21,9 @@
     var result2: number = foo(x => new G<typeof x>(x)); // No error, returns number
                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Types of parameters 'x' and 'x' are incompatible:
+!!!     Type 'D' is not assignable to type 'B':
+!!!       Property 'x' is missing in type 'D'.
                                          ~~~~~~~~
 !!! Type 'D' does not satisfy the constraint 'A'.
     
@@ -35,4 +38,7 @@
     });
     ~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Types of parameters 'x' and 'x' are incompatible:
+!!!     Type 'D' is not assignable to type 'B':
+!!!       Property 'x' is missing in type 'D'.
     

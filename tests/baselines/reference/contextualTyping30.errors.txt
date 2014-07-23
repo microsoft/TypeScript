@@ -2,3 +2,4 @@
     function foo(param:number[]){}; foo([1, "a"]);
                                     ~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Type '{}' is not assignable to type 'number'.

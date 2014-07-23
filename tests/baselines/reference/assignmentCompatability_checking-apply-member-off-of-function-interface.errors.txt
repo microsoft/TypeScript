@@ -44,6 +44,7 @@
     fn({});
     ~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Property 'apply' is missing in type '{}'.
     
     
     // Should work

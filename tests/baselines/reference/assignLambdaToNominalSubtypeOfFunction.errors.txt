@@ -8,6 +8,7 @@
     fn((a, b) => true);
     ~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Property 'x' is missing in type '{}'.
     fn(function (a, b) { return true; })
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
