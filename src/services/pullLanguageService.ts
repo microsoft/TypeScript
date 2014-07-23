@@ -50,18 +50,18 @@ module TypeScript.Services {
     // at each language service public entry point, since we don't know when 
     // set of scripts handled by the host changes.
     class HostCache {
-        private _filenameToEntry: TypeScript.StringHashTable<HostFileInformation>;
+        private _filenameToEntry: ts.Map<HostFileInformation>;
         private _compilationSettings: ts.CompilerOptions;
 
         constructor(host: ILanguageServiceHost) {
             // script id => script index
-            this._filenameToEntry = new TypeScript.StringHashTable<HostFileInformation>();
+            this._filenameToEntry = {};
 
             var filenames = host.getScriptFileNames();
             for (var i = 0, n = filenames.length; i < n; i++) {
                 var filename = filenames[i];
-                this._filenameToEntry.add(TypeScript.switchToForwardSlashes(filename), new HostFileInformation(
-                    filename, host, host.getScriptVersion(filename), host.getScriptIsOpen(filename), host.getScriptByteOrderMark(filename)));
+                this._filenameToEntry[TypeScript.switchToForwardSlashes(filename)] = new HostFileInformation(
+                    filename, host, host.getScriptVersion(filename), host.getScriptIsOpen(filename), host.getScriptByteOrderMark(filename));
             }
 
             this._compilationSettings = host.getCompilationSettings() || getDefaultCompilerOptions();
@@ -72,35 +72,39 @@ module TypeScript.Services {
         }
 
         public contains(filename: string): boolean {
-            return this._filenameToEntry.lookup(TypeScript.switchToForwardSlashes(filename)) !== null;
+            return !!this._filenameToEntry[TypeScript.switchToForwardSlashes(filename)];
         }
 
         public getHostfilename(filename: string) {
-            var hostCacheEntry = this._filenameToEntry.lookup(TypeScript.switchToForwardSlashes(filename));
+            var hostCacheEntry = this._filenameToEntry[TypeScript.switchToForwardSlashes(filename)];
             if (hostCacheEntry) {
                 return hostCacheEntry.filename;
             }
             return filename;
         }
 
-        public getfilenames(): string[] {
-            return this._filenameToEntry.getAllKeys();
+        public getfilenames(): string[]{
+            var fileNames: string[] = [];
+            for (var id in this._filenameToEntry) {
+                fileNames.push(id);
+            }
+            return fileNames;
         }
 
         public getVersion(filename: string): number {
-            return this._filenameToEntry.lookup(TypeScript.switchToForwardSlashes(filename)).version;
+            return this._filenameToEntry[TypeScript.switchToForwardSlashes(filename)].version;
         }
 
         public isOpen(filename: string): boolean {
-            return this._filenameToEntry.lookup(TypeScript.switchToForwardSlashes(filename)).isOpen;
+            return this._filenameToEntry[TypeScript.switchToForwardSlashes(filename)].isOpen;
         }
 
         public getByteOrderMark(filename: string): TypeScript.ByteOrderMark {
-            return this._filenameToEntry.lookup(TypeScript.switchToForwardSlashes(filename)).byteOrderMark;
+            return this._filenameToEntry[TypeScript.switchToForwardSlashes(filename)].byteOrderMark;
         }
 
         public getScriptSnapshot(filename: string): TypeScript.IScriptSnapshot {
-            return this._filenameToEntry.lookup(TypeScript.switchToForwardSlashes(filename)).getScriptSnapshot();
+            return this._filenameToEntry[TypeScript.switchToForwardSlashes(filename)].getScriptSnapshot();
         }
 
         public getScriptTextChangeRangeSinceVersion(filename: string, lastKnownVersion: number): TypeScript.TextChangeRange {
@@ -325,17 +329,17 @@ module TypeScript.Services {
     }
 
     export class DocumentRegistry implements IDocumentRegistry {
-        private buckets: IIndexable<StringHashTable<DocumentRegistryEntry>> = {};
+        private buckets: ts.Map<ts.Map<DocumentRegistryEntry>> = {};
 
         private getKeyFromCompilationSettings(settings: ts.CompilerOptions): string {
             return "_" + ts.ScriptTarget[settings.target]; //  + "|" + settings.propagateEnumConstants.toString()
         }
 
-        private getBucketForCompilationSettings(settings: ts.CompilerOptions, createIfMissing: boolean): StringHashTable<DocumentRegistryEntry> {
+        private getBucketForCompilationSettings(settings: ts.CompilerOptions, createIfMissing: boolean): ts.Map<DocumentRegistryEntry> {
             var key = this.getKeyFromCompilationSettings(settings);
             var bucket = this.buckets[key];
             if (!bucket && createIfMissing) {
-                this.buckets[key] = bucket = new StringHashTable<DocumentRegistryEntry>();
+                this.buckets[key] = bucket = {};
             }
             return bucket;
         }
@@ -343,14 +347,15 @@ module TypeScript.Services {
         public reportStats() {
             var bucketInfoArray = Object.keys(this.buckets).filter(name => name && name.charAt(0) === '_').map(name => {
                 var entries = this.buckets[name];
-                var documents = entries.getAllKeys().map((name) => {
-                    var entry = entries.lookup(name);
-                    return {
-                        name: name,
+                var documents = [];
+                for (var i in entries) {
+                    var entry = entries[i];
+                    documents.push({
+                        name: i,
                         refCount: entry.refCount,
                         references: entry.owners.slice(0)
-                    };
-                });
+                    });
+                }
                 documents.sort((x, y) => y.refCount - x.refCount);
                 return { bucket: name, documents: documents }
             });
@@ -367,12 +372,12 @@ module TypeScript.Services {
             referencedFiles: string[]= []): TypeScript.Document {
 
             var bucket = this.getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
-            var entry = bucket.lookup(filename);
+            var entry = bucket[filename];
             if (!entry) {
                 var document = Document.create(compilationSettings, filename, scriptSnapshot, byteOrderMark, version, isOpen, referencedFiles);
 
                 entry = new DocumentRegistryEntry(document);
-                bucket.add(filename, entry);
+                bucket[filename] = entry;
             }
             entry.refCount++;
 
@@ -391,7 +396,7 @@ module TypeScript.Services {
 
             var bucket = this.getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ false);
             Debug.assert(bucket);
-            var entry = bucket.lookup(filename);
+            var entry = bucket[filename];
             Debug.assert(entry);
 
             if (entry.document.isOpen === isOpen && entry.document.version === version) {
@@ -406,12 +411,12 @@ module TypeScript.Services {
             var bucket = this.getBucketForCompilationSettings(compilationSettings, false);
             Debug.assert(bucket);
 
-            var entry = bucket.lookup(filename);
+            var entry = bucket[filename];
             entry.refCount--;
 
             Debug.assert(entry.refCount >= 0);
             if (entry.refCount === 0) {
-                bucket.remove(filename);
+                delete bucket[filename];
             }
         }
     }

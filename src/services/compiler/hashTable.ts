@@ -43,145 +43,145 @@ module TypeScript {
         return new BlockIntrinsics<T>();
     }
 
-    export interface IHashTable<T> {
-        getAllKeys(): string[];
-        add(key: string, data: T): boolean;
-        addOrUpdate(key: string, data: T): boolean;
-        map(fn: (k: string, value: T, context: any) => void , context: any): void;
-        every(fn: (k: string, value: T, context: any) => void , context: any): boolean;
-        some(fn: (k: string, value: T, context: any) => void , context: any): boolean;
-        count(): number;
-        lookup(key: string): T;
-    }
+    //export interface IHashTable<T> {
+    //    getAllKeys(): string[];
+    //    add(key: string, data: T): boolean;
+    //    addOrUpdate(key: string, data: T): boolean;
+    //    map(fn: (k: string, value: T, context: any) => void , context: any): void;
+    //    every(fn: (k: string, value: T, context: any) => void , context: any): boolean;
+    //    some(fn: (k: string, value: T, context: any) => void , context: any): boolean;
+    //    count(): number;
+    //    lookup(key: string): T;
+    //}
 
-    export class StringHashTable<T> implements IHashTable<T> {
-        private itemCount = 0;
-        private table: IIndexable<T> = createIntrinsicsObject<T>();
+    //export class StringHashTable<T> implements IHashTable<T> {
+    //    private itemCount = 0;
+    //    private table: IIndexable<T> = createIntrinsicsObject<T>();
 
-        public getAllKeys(): string[] {
-            var result: string[] = [];
+    //    public getAllKeys(): string[] {
+    //        var result: string[] = [];
 
-            for (var k in this.table) {
-                if (this.table[k] !== undefined) {
-                    result.push(k);
-                }
-            }
+    //        for (var k in this.table) {
+    //            if (this.table[k] !== undefined) {
+    //                result.push(k);
+    //            }
+    //        }
 
-            return result;
-        }
+    //        return result;
+    //    }
 
-        public add(key: string, data: T): boolean {
-            if (this.table[key] !== undefined) {
-                return false;
-            }
+    //    public add(key: string, data: T): boolean {
+    //        if (this.table[key] !== undefined) {
+    //            return false;
+    //        }
 
-            this.table[key] = data;
-            this.itemCount++;
-            return true;
-        }
+    //        this.table[key] = data;
+    //        this.itemCount++;
+    //        return true;
+    //    }
 
-        public addOrUpdate(key: string, data: T): boolean {
-            if (this.table[key] !== undefined) {
-                this.table[key] = data;
-                return false;
-            }
+    //    public addOrUpdate(key: string, data: T): boolean {
+    //        if (this.table[key] !== undefined) {
+    //            this.table[key] = data;
+    //            return false;
+    //        }
 
-            this.table[key] = data;
-            this.itemCount++;
-            return true;
-        }
+    //        this.table[key] = data;
+    //        this.itemCount++;
+    //        return true;
+    //    }
 
-        public map(fn: (k: string, value: T, context: any) => void , context: any) {
-            for (var k in this.table) {
-                var data = this.table[k];
+    //    public map(fn: (k: string, value: T, context: any) => void , context: any) {
+    //        for (var k in this.table) {
+    //            var data = this.table[k];
 
-                if (data !== undefined) {
-                    fn(k, this.table[k], context);
-                }
-            }
-        }
+    //            if (data !== undefined) {
+    //                fn(k, this.table[k], context);
+    //            }
+    //        }
+    //    }
 
-        public every(fn: (k: string, value: T, context: any) => void , context: any) {
-            for (var k in this.table) {
-                var data = this.table[k];
+    //    public every(fn: (k: string, value: T, context: any) => void , context: any) {
+    //        for (var k in this.table) {
+    //            var data = this.table[k];
 
-                if (data !== undefined) {
-                    if (!fn(k, this.table[k], context)) {
-                        return false;
-                    }
-                }
-            }
+    //            if (data !== undefined) {
+    //                if (!fn(k, this.table[k], context)) {
+    //                    return false;
+    //                }
+    //            }
+    //        }
 
-            return true;
-        }
+    //        return true;
+    //    }
 
-        public some(fn: (k: string, value: T, context: any) => void , context: any) {
-            for (var k in this.table) {
-                var data = this.table[k];
+    //    public some(fn: (k: string, value: T, context: any) => void , context: any) {
+    //        for (var k in this.table) {
+    //            var data = this.table[k];
 
-                if (data !== undefined) {
-                    if (fn(k, this.table[k], context)) {
-                        return true;
-                    }
-                }
-            }
+    //            if (data !== undefined) {
+    //                if (fn(k, this.table[k], context)) {
+    //                    return true;
+    //                }
+    //            }
+    //        }
 
-            return false;
-        }
+    //        return false;
+    //    }
 
-        public count(): number {
-            return this.itemCount;
-        }
+    //    public count(): number {
+    //        return this.itemCount;
+    //    }
 
-        public lookup(key: string) : T {
-            var data = this.table[key];
-            return data === undefined ? null : data;
-        }
+    //    public lookup(key: string) : T {
+    //        var data = this.table[key];
+    //        return data === undefined ? null : data;
+    //    }
 
-        public remove(key: string): void {
-            if (this.table[key] !== undefined) {
-                this.table[key] = undefined;
-                this.itemCount--;
-            }
-        }
-    }
+    //    public remove(key: string): void {
+    //        if (this.table[key] !== undefined) {
+    //            this.table[key] = undefined;
+    //            this.itemCount--;
+    //        }
+    //    }
+    //}
 
 
-    export class IdentiferNameHashTable<T> extends StringHashTable<T> {
-        public getAllKeys(): string[]{
-            var result: string[] = [];
+    //export class IdentiferNameHashTable<T> extends StringHashTable<T> {
+    //    public getAllKeys(): string[]{
+    //        var result: string[] = [];
 
-            super.map((k, v, c) => {
-                if (v !== undefined) {
-                    result.push(k.substring(1));
-                }
-            }, null);
+    //        super.map((k, v, c) => {
+    //            if (v !== undefined) {
+    //                result.push(k.substring(1));
+    //            }
+    //        }, null);
 
-            return result;
-        }
+    //        return result;
+    //    }
 
-        public add(key: string, data: T): boolean {
-            return super.add("#" + key, data);
-        }
+    //    public add(key: string, data: T): boolean {
+    //        return super.add("#" + key, data);
+    //    }
 
-        public addOrUpdate(key: string, data: T): boolean {
-            return super.addOrUpdate("#" + key, data);
-        }
+    //    public addOrUpdate(key: string, data: T): boolean {
+    //        return super.addOrUpdate("#" + key, data);
+    //    }
 
-        public map(fn: (k: string, value: T, context: any) => void , context: any) {
-            return super.map((k, v, c) => fn(k.substring(1), v, c), context);
-        }
+    //    public map(fn: (k: string, value: T, context: any) => void , context: any) {
+    //        return super.map((k, v, c) => fn(k.substring(1), v, c), context);
+    //    }
 
-        public every(fn: (k: string, value: T, context: any) => void , context: any) {
-            return super.every((k, v, c) => fn(k.substring(1), v, c), context);
-        }
+    //    public every(fn: (k: string, value: T, context: any) => void , context: any) {
+    //        return super.every((k, v, c) => fn(k.substring(1), v, c), context);
+    //    }
 
-        public some(fn: (k: string, value: any, context: any) => void , context: any) {
-            return super.some((k, v, c) => fn(k.substring(1), v, c), context);
-        }
+    //    public some(fn: (k: string, value: any, context: any) => void , context: any) {
+    //        return super.some((k, v, c) => fn(k.substring(1), v, c), context);
+    //    }
 
-        public lookup(key: string): T {
-            return super.lookup("#" + key);
-        }
-    }
+    //    public lookup(key: string): T {
+    //        return super.lookup("#" + key);
+    //    }
+    //}
 }
