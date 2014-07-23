@@ -388,7 +388,10 @@
         "category": "Error",
         "code": 1113
     },
-
+    "Object literal cannot contain more than one property with the same name in the strict mode.": {
+        "category": "Error",
+        "code": 1114
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2000

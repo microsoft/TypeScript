@@ -1,5 +1,7 @@
-==== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode5.ts (1 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode5.ts (2 errors) ====
     "use strict";
     eval += 1;
+    ~~~~
+!!! Invalid use of 'eval' in strict mode.
     ~~~~~~~~~
 !!! Operator '+=' cannot be applied to types '(x: string) => any' and 'number'.

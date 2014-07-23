@@ -1,0 +1,10 @@
+==== tests/cases/compiler/duplicatePropertiesInStrictMode.ts (2 errors) ====
+    "use strict";
+    var x = {
+      x: 1,
+      x: 2
+      ~
+!!! Object literal cannot contain more than one property with the same name in the strict mode.
+      ~
+!!! Duplicate identifier 'x'.
+    }

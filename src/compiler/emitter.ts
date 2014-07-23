@@ -1669,8 +1669,7 @@ module ts {
 
             function emitDirectivePrologues(statements: Statement[], startWithNewLine: boolean): number {
                 for (var i = 0; i < statements.length; ++i) {
-                    if (statements[i].kind === SyntaxKind.ExpressionStatement &&
-                        (<ExpressionStatement>statements[i]).expression.kind === SyntaxKind.StringLiteral) {
+                    if (isPrologueDirective(statements[i])) {
                         if (startWithNewLine || i > 0) {
                             writeLine();
                         }
