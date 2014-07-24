@@ -66,12 +66,9 @@ module TypeScript {
         FailedToGenerateDeclarationsBecauseOfSemanticErrors
     }
 
-    export class EmitOutput {
-        public outputFiles: OutputFile[] = [];
-        public emitOutputResult: EmitOutputResult;
-        constructor(emitOutputResult = EmitOutputResult.Succeeded) {
-            this.emitOutputResult = emitOutputResult;
-        }
+    export interface EmitOutput {
+        outputFiles: OutputFile[];
+        emitOutputResult: EmitOutputResult;
     }
 
     export enum OutputFileType {
@@ -87,13 +84,12 @@ module TypeScript {
         Utf16LittleEndian = 3,
     }
 
-    export class OutputFile {
-        constructor(public name: string,
-            public writeByteOrderMark: boolean,
-            public text: string,
-            public fileType: OutputFileType,
-            public sourceMapOutput: any = null) {
-        }
+    export interface OutputFile {
+        name: string;
+        writeByteOrderMark: boolean;
+        text: string;
+        fileType: OutputFileType;
+        sourceMapOutput: any;
     }
 
     export interface ICancellationToken {
