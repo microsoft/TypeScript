@@ -23,15 +23,14 @@ module TypeScript.Services {
     //
     export interface LanguageServiceHost extends TypeScript.Logger, TypeScript.IReferenceResolverHost {
         getCompilationSettings(): ts.CompilerOptions;
-
         getScriptFileNames(): string[];
         getScriptVersion(fileName: string): number;
         getScriptIsOpen(fileName: string): boolean;
-        getScriptByteOrderMark(fileName: string): TypeScript.ByteOrderMark;
+        getScriptByteOrderMark(fileName: string): ts.ByteOrderMark;
         getScriptSnapshot(fileName: string): TypeScript.IScriptSnapshot;
         getDiagnosticsObject(): TypeScript.Services.ILanguageServicesDiagnostics;
         getLocalizedDiagnosticMessages(): any;
-        getCancellationToken(): ICancellationToken;
+        getCancellationToken(): ts.CancellationToken;
     }
 
     //
@@ -76,7 +75,7 @@ module TypeScript.Services {
         getFormattingEditsOnPaste(fileName: string, minChar: number, limChar: number, options: FormatCodeOptions): TextEdit[];
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextEdit[];
 
-        getEmitOutput(fileName: string): TypeScript.EmitOutput;
+        getEmitOutput(fileName: string): EmitOutput;
 
         //getSyntaxTree(fileName: string): TypeScript.SyntaxTree;
 
@@ -242,6 +241,31 @@ module TypeScript.Services {
         docComment: string;
     }
 
+    export enum EmitOutputResult {
+        Succeeded,
+        FailedBecauseOfSyntaxErrors,
+        FailedBecauseOfCompilerOptionsErrors,
+        FailedToGenerateDeclarationsBecauseOfSemanticErrors
+    }
+
+    export interface EmitOutput {
+        outputFiles: OutputFile[];
+        emitOutputResult: EmitOutputResult;
+    }
+
+    export enum OutputFileType {
+        JavaScript,
+        SourceMap,
+        Declaration
+    }
+
+    export interface OutputFile {
+        name: string;
+        writeByteOrderMark: boolean;
+        text: string;
+        fileType: OutputFileType;
+        sourceMapOutput: any;
+    }
 
     // TODO: move these to enums
     export class ScriptElementKind {

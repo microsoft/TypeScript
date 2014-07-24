@@ -21,7 +21,7 @@ module TypeScript.Services {
         filename: string;
         version: number;
         isOpen: boolean;
-        byteOrderMark: TypeScript.ByteOrderMark;
+        byteOrderMark: ts.ByteOrderMark;
         _sourceText?: TypeScript.IScriptSnapshot;
     }
 
@@ -31,6 +31,40 @@ module TypeScript.Services {
             target: ts.ScriptTarget.ES5,
             module: ts.ModuleKind.None,
         };
+    }
+
+    export function compareDataObjects(dst: any, src: any): boolean {
+        for (var e in dst) {
+            if (typeof dst[e] === "object") {
+                if (!compareDataObjects(dst[e], src[e]))
+                    return false;
+            }
+            else if (typeof dst[e] !== "function") {
+                if (dst[e] !== src[e])
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    export class OperationCanceledException { }
+
+    class CancellationToken {
+
+        public static None: CancellationToken = new CancellationToken(null)
+
+        constructor(private cancellationToken: ts.CancellationToken) {
+        }
+
+        public isCancellationRequested() {
+            return this.cancellationToken && this.cancellationToken.isCancellationRequested();
+        }
+
+        public throwIfCancellationRequested(): void {
+            if (this.isCancellationRequested()) {
+                throw new OperationCanceledException();
+            }
+        }
     }
 
     // Cache host information about scripts. Should be refreshed 
@@ -90,7 +124,7 @@ module TypeScript.Services {
             return this._filenameToEntry[TypeScript.switchToForwardSlashes(filename)].isOpen;
         }
 
-        public getByteOrderMark(filename: string): TypeScript.ByteOrderMark {
+        public getByteOrderMark(filename: string): ts.ByteOrderMark {
             return this._filenameToEntry[TypeScript.switchToForwardSlashes(filename)].byteOrderMark;
         }
 
@@ -270,7 +304,7 @@ module TypeScript.Services {
             filename: string,
             compilationSettings: ts.CompilerOptions,
             scriptSnapshot: IScriptSnapshot,
-            byteOrderMark: ByteOrderMark,
+            byteOrderMark: ts.ByteOrderMark,
             version: number,
             isOpen: boolean,
             referencedFiles: string[]): TypeScript.Document;
@@ -326,7 +360,7 @@ module TypeScript.Services {
             filename: string,
             compilationSettings: ts.CompilerOptions,
             scriptSnapshot: IScriptSnapshot,
-            byteOrderMark: ByteOrderMark,
+            byteOrderMark: ts.ByteOrderMark,
             version: number,
             isOpen: boolean,
             referencedFiles: string[]= []): TypeScript.Document {

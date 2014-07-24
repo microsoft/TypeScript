@@ -54,7 +54,7 @@ module TypeScript.Services {
         getParentDirectory(path: string): string;
         getDiagnosticsObject(): ILanguageServicesDiagnostics;
         getLocalizedDiagnosticMessages(): string;
-        getCancellationToken(): TypeScript.ICancellationToken
+        getCancellationToken(): ts.CancellationToken;
     }
 
     //
@@ -344,7 +344,7 @@ module TypeScript.Services {
             return this.shimHost.getScriptIsOpen(fileName);
         }
 
-        public getScriptByteOrderMark(fileName: string): TypeScript.ByteOrderMark {
+        public getScriptByteOrderMark(fileName: string): ts.ByteOrderMark {
             return this.shimHost.getScriptByteOrderMark(fileName);
         }
 
@@ -366,7 +366,7 @@ module TypeScript.Services {
             }
         }
 
-        public getCancellationToken(): ICancellationToken {
+        public getCancellationToken(): ts.CancellationToken {
             return this.shimHost.getCancellationToken();
         }
 

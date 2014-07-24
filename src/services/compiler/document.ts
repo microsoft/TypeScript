@@ -18,7 +18,7 @@ module TypeScript {
                     public filename: string,
                     public referencedFiles: string[],
                     private _scriptSnapshot: IScriptSnapshot,
-                    public byteOrderMark: ByteOrderMark,
+                    public byteOrderMark: ts.ByteOrderMark,
                     public version: number,
                     public isOpen: boolean,
                     private _syntaxTree: SyntaxTree,
@@ -144,7 +144,7 @@ module TypeScript {
             return new Document(this.compilationSettings, this.filename, this.referencedFiles, scriptSnapshot, this.byteOrderMark, version, isOpen, newSyntaxTree, /*soruceFile*/ null);
         }
 
-        public static create(compilationSettings: ts.CompilerOptions, fileName: string, scriptSnapshot: IScriptSnapshot, byteOrderMark: ByteOrderMark, version: number, isOpen: boolean, referencedFiles: string[]): Document {
+        public static create(compilationSettings: ts.CompilerOptions, fileName: string, scriptSnapshot: IScriptSnapshot, byteOrderMark: ts.ByteOrderMark, version: number, isOpen: boolean, referencedFiles: string[]): Document {
             return new Document(compilationSettings, fileName, referencedFiles, scriptSnapshot, byteOrderMark, version, isOpen, /*syntaxTree:*/ null, /*soruceFile*/ null);
         }
     }

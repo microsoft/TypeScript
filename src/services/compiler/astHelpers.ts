@@ -16,6 +16,10 @@
 ///<reference path='references.ts' />
 
 module TypeScript.ASTHelpers {
+
+
+    var sentinelEmptyArray = [];
+
     //export function scriptIsElided(sourceUnit: SourceUnitSyntax): boolean {
     //    return isDTSFile(sourceUnit.syntaxTree.fileName()) || moduleMembersAreElided(sourceUnit.moduleElements);
     //}
