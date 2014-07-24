@@ -80,6 +80,13 @@ module TypeScript {
         Declaration
     }
 
+    export enum ByteOrderMark {
+        None = 0,
+        Utf8 = 1,
+        Utf16BigEndian = 2,
+        Utf16LittleEndian = 3,
+    }
+
     export class OutputFile {
         constructor(public name: string,
             public writeByteOrderMark: boolean,
