@@ -20,32 +20,14 @@
 /// <reference path='text\references.ts' />
 /// <reference path='syntax\references.ts' />
 
-/// <reference path='syntax\incrementalParser.ts' />
-
-/// <reference path='classifier.ts' />
-/// <reference path='languageService.ts' />
-/// <reference path='pullLanguageService.ts' />
 /// <reference path='shims.ts' />
 
-/// <reference path='outliningElementsCollector.ts' />
-/// <reference path='GetScriptLexicalStructureWalker.ts' />
-/// <reference path='BraceMatcher.ts' />
-/// <reference path='Breakpoints.ts' />
-/// <reference path='indentation.ts' />
-/// <reference path='formatting\formatting.ts' />
-/// <reference path='completionHelpers.ts' />
-/// <reference path='keywordCompletions.ts' />
-
-
-/// <reference path='compiler\document.ts' />
 /// <reference path='compiler\diagnostics.ts' />
 /// <reference path='compiler\hashTable.ts' />
-/// <reference path='compiler\base64.ts' />
 /// <reference path='compiler\pathUtils.ts' />
 /// <reference path='compiler\referenceResolution.ts' />
 /// <reference path='compiler\precompile.ts' />
 /// <reference path='compiler\bloomFilter.ts' />
-/// <reference path='compiler\flags.ts' />
 /// <reference path='compiler\types.ts' />
 /// <reference path='compiler\ast.ts' />
 /// <reference path='compiler\astWalker.ts' />
