@@ -46,7 +46,6 @@
 /// <reference path='compiler\referenceResolution.ts' />
 /// <reference path='compiler\precompile.ts' />
 /// <reference path='compiler\bloomFilter.ts' />
-/// <reference path='compiler\settings.ts' />
 /// <reference path='compiler\flags.ts' />
 /// <reference path='compiler\types.ts' />
 /// <reference path='compiler\ast.ts' />

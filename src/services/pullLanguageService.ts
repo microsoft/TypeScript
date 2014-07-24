@@ -480,8 +480,14 @@ module TypeScript.Services {
             var oldProgram = this.program;
             if (oldProgram) {
                 var oldSettings = this.program.getCompilerOptions();
+
+                // If the language version changed, then that affects what types of things we parse. So
+                // we have to dump all syntax trees.
+                // TODO: handle propagateEnumConstants
+                var settingsChangeAffectsSyntax = oldSettings.target !== compilationSettings.target;
+
                 var changesInCompilationSettingsAffectSyntax =
-                    oldSettings && compilationSettings && !compareDataObjects(oldSettings, compilationSettings) && settingsChangeAffectsSyntax(oldSettings, compilationSettings);
+                    oldSettings && compilationSettings && !compareDataObjects(oldSettings, compilationSettings) && settingsChangeAffectsSyntax;
                 var oldSourceFiles = this.program.getSourceFiles();
 
                 for (var i = 0, n = oldSourceFiles.length; i < n; i++) {
