@@ -785,9 +785,9 @@ module TypeScript.Services {
     class ClassifierShimObject extends ShimBase implements ClassifierShim {
         public classifier: Classifier;
 
-        constructor(factory: ShimFactory, public host: IClassifierHost) {
+        constructor(factory: ShimFactory, public host: Logger) {
             super(factory);
-            this.classifier = new Classifier(this.host);
+            this.classifier = createClassifier(this.host);
         }
 
         /// COLORIZATION
@@ -846,20 +846,10 @@ module TypeScript.Services {
         private _shims: Shim[] = [];
         private documentRegistry: DocumentRegistry = new DocumentRegistry();
 
-        public createPullLanguageService(host: LanguageServiceHost): LanguageService {
-            try {
-                return createLanguageService(host, this.documentRegistry);
-            }
-            catch (err) {
-                logInternalError(host, err);
-                throw err;
-            }
-        }
-
         public createLanguageServiceShim(host: LanguageServiceShimHost): LanguageServiceShim {
             try {
                 var hostAdapter = new LanguageServiceShimHostAdapter(host);
-                var pullLanguageService = this.createPullLanguageService(hostAdapter);
+                var pullLanguageService = createLanguageService(hostAdapter, this.documentRegistry);
                 return new LanguageServiceShimObject(this, host, pullLanguageService);
             }
             catch (err) {
@@ -868,32 +858,12 @@ module TypeScript.Services {
             }
         }
 
-        public createClassifier(host: IClassifierHost): Classifier {
-            try {
-                return new Classifier(host);
-            }
-            catch (err) {
-                logInternalError(host, err);
-                throw err;
-            }
-        }
-
-        public createClassifierShim(host: IClassifierHost): ClassifierShim {
+        public createClassifierShim(host: Logger): ClassifierShim {
             try {
                 return new ClassifierShimObject(this, host);
             }
             catch (err) {
                 logInternalError(host, err);
-                throw err;
-            }
-        }
-
-        public createCoreServices(host: ICoreServicesHost): CoreServices {
-            try {
-                return new CoreServices(host);
-            }
-            catch (err) {
-                logInternalError(host.logger, err);
                 throw err;
             }
         }

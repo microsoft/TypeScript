@@ -35,32 +35,45 @@ module TypeScript.Services {
         RegExpLiteral,
     }
 
-    var noRegexTable: boolean[] = [];
-    noRegexTable[TypeScript.SyntaxKind.IdentifierName] = true;
-    noRegexTable[TypeScript.SyntaxKind.StringLiteral] = true;
-    noRegexTable[TypeScript.SyntaxKind.NumericLiteral] = true;
-    noRegexTable[TypeScript.SyntaxKind.RegularExpressionLiteral] = true;
-    noRegexTable[TypeScript.SyntaxKind.ThisKeyword] = true;
-    noRegexTable[TypeScript.SyntaxKind.PlusPlusToken] = true;
-    noRegexTable[TypeScript.SyntaxKind.MinusMinusToken] = true;
-    noRegexTable[TypeScript.SyntaxKind.CloseParenToken] = true;
-    noRegexTable[TypeScript.SyntaxKind.CloseBracketToken] = true;
-    noRegexTable[TypeScript.SyntaxKind.CloseBraceToken] = true;
-    noRegexTable[TypeScript.SyntaxKind.TrueKeyword] = true;
-    noRegexTable[TypeScript.SyntaxKind.FalseKeyword] = true;
+    export interface ClassificationResult {
+        finalLexState: EndOfLineState;
+        entries: ClassificationInfo[];
+    }
 
-    export class Classifier {
-        private scanner: TypeScript.Scanner.IScanner;
-        private lastDiagnosticKey: string = null;
-        private reportDiagnostic = (position: number, fullWidth: number, key: string, args: any[]) => {
-            this.lastDiagnosticKey = key;
+    export interface ClassificationInfo {
+        length: number;
+        classification: TokenClass;
+    }
+
+    export interface Classifier {
+        getClassificationsForLine(text: string, lexState: EndOfLineState): ClassificationResult;
+    }
+
+    export function createClassifier(host: Logger): Classifier {
+        var scanner: TypeScript.Scanner.IScanner;
+        var lastDiagnosticKey: string = null;
+        var noRegexTable: boolean[];
+        var reportDiagnostic = (position: number, fullWidth: number, key: string, args: any[]) => {
+            lastDiagnosticKey = key;
         };
 
-        constructor(public host: IClassifierHost) {
+        if (!noRegexTable) {
+            noRegexTable= [];
+            noRegexTable[TypeScript.SyntaxKind.IdentifierName] = true;
+            noRegexTable[TypeScript.SyntaxKind.StringLiteral] = true;
+            noRegexTable[TypeScript.SyntaxKind.NumericLiteral] = true;
+            noRegexTable[TypeScript.SyntaxKind.RegularExpressionLiteral] = true;
+            noRegexTable[TypeScript.SyntaxKind.ThisKeyword] = true;
+            noRegexTable[TypeScript.SyntaxKind.PlusPlusToken] = true;
+            noRegexTable[TypeScript.SyntaxKind.MinusMinusToken] = true;
+            noRegexTable[TypeScript.SyntaxKind.CloseParenToken] = true;
+            noRegexTable[TypeScript.SyntaxKind.CloseBracketToken] = true;
+            noRegexTable[TypeScript.SyntaxKind.CloseBraceToken] = true;
+            noRegexTable[TypeScript.SyntaxKind.TrueKeyword] = true;
+            noRegexTable[TypeScript.SyntaxKind.FalseKeyword] = true;
         }
 
-        /// COLORIZATION
-        public getClassificationsForLine(text: string, lexState: EndOfLineState): ClassificationResult {
+        function getClassificationsForLine(text: string, lexState: EndOfLineState): ClassificationResult {
             var offset = 0;
             if (lexState !== EndOfLineState.Start) {
                 // If we're in a string literal, then prepend: "\
@@ -81,34 +94,38 @@ module TypeScript.Services {
                 offset = 3;
             }
 
-            var result = new ClassificationResult();
+            var result = {
+                finalLexState: EndOfLineState.Start,
+                entries: []
+            };
+
             var simpleText = TypeScript.SimpleText.fromString(text);
-            this.scanner = Scanner.createScanner(ts.ScriptTarget.ES5, simpleText, this.reportDiagnostic);
+            scanner = Scanner.createScanner(ts.ScriptTarget.ES5, simpleText, reportDiagnostic);
 
             var lastTokenKind = TypeScript.SyntaxKind.None;
             var token: ISyntaxToken = null;
             do {
-                this.lastDiagnosticKey = null;
+                lastDiagnosticKey = null;
 
-                token = this.scanner.scan(!noRegexTable[lastTokenKind]);
+                token = scanner.scan(!noRegexTable[lastTokenKind]);
                 lastTokenKind = token.kind();
 
-                this.processToken(text, simpleText, offset, token, result);
+                processToken(text, simpleText, offset, token, result);
             }
             while (token.kind() !== SyntaxKind.EndOfFileToken);
 
-            this.lastDiagnosticKey = null;
+            lastDiagnosticKey = null;
             return result;
         }
 
-        private processToken(text: string, simpleText: ISimpleText, offset: number, token: TypeScript.ISyntaxToken, result: ClassificationResult): void {
-            this.processTriviaList(text, offset, token.leadingTrivia(simpleText), result);
-            this.addResult(text, offset, result, width(token), token.kind());
-            this.processTriviaList(text, offset, token.trailingTrivia(simpleText), result);
+        function processToken(text: string, simpleText: ISimpleText, offset: number, token: TypeScript.ISyntaxToken, result: ClassificationResult): void {
+            processTriviaList(text, offset, token.leadingTrivia(simpleText), result);
+            addResult(text, offset, result, width(token), token.kind());
+            processTriviaList(text, offset, token.trailingTrivia(simpleText), result);
 
             if (fullEnd(token) >= text.length) {
                 // We're at the end.
-                if (this.lastDiagnosticKey === TypeScript.DiagnosticCode.AsteriskSlash_expected) {
+                if (lastDiagnosticKey === TypeScript.DiagnosticCode.AsteriskSlash_expected) {
                     result.finalLexState = EndOfLineState.InMultiLineCommentTrivia;
                     return;
                 }
@@ -118,22 +135,22 @@ module TypeScript.Services {
                     if (tokenText.length > 0 && tokenText.charCodeAt(tokenText.length - 1) === TypeScript.CharacterCodes.backslash) {
                         var quoteChar = tokenText.charCodeAt(0);
                         result.finalLexState = quoteChar === TypeScript.CharacterCodes.doubleQuote
-                            ? EndOfLineState.InDoubleQuoteStringLiteral
-                            : EndOfLineState.InSingleQuoteStringLiteral;
+                        ? EndOfLineState.InDoubleQuoteStringLiteral
+                        : EndOfLineState.InSingleQuoteStringLiteral;
                         return;
                     }
                 }
             }
         }
 
-        private processTriviaList(text: string, offset: number, triviaList: TypeScript.ISyntaxTriviaList, result: ClassificationResult): void {
+        function processTriviaList(text: string, offset: number, triviaList: TypeScript.ISyntaxTriviaList, result: ClassificationResult): void {
             for (var i = 0, n = triviaList.count(); i < n; i++) {
                 var trivia = triviaList.syntaxTriviaAt(i);
-                this.addResult(text, offset, result, trivia.fullWidth(), trivia.kind());
+                addResult(text, offset, result, trivia.fullWidth(), trivia.kind());
             }
         }
 
-        private addResult(text: string, offset: number, result: ClassificationResult, length: number, kind: TypeScript.SyntaxKind): void {
+        function addResult(text: string, offset: number, result: ClassificationResult, length: number, kind: TypeScript.SyntaxKind): void {
             if (length > 0) {
                 // If this is the first classification we're adding to the list, then remove any 
                 // offset we have if we were continuing a construct from the previous line.
@@ -141,16 +158,16 @@ module TypeScript.Services {
                     length -= offset;
                 }
 
-                result.entries.push(new ClassificationInfo(length, this.classFromKind(kind)));
+                result.entries.push({ length: length, classification: classFromKind(kind) });
             }
         }
 
-        private classFromKind(kind: TypeScript.SyntaxKind) {
+        function classFromKind(kind: TypeScript.SyntaxKind) {
             if (TypeScript.SyntaxFacts.isAnyKeyword(kind)) {
                 return TokenClass.Keyword;
             }
             else if (TypeScript.SyntaxFacts.isBinaryExpressionOperatorToken(kind) ||
-                     TypeScript.SyntaxFacts.isPrefixUnaryExpressionOperatorToken(kind)) {
+                TypeScript.SyntaxFacts.isPrefixUnaryExpressionOperatorToken(kind)) {
                 return TokenClass.Operator;
             }
             else if (TypeScript.SyntaxFacts.isAnyPunctuation(kind)) {
@@ -174,21 +191,9 @@ module TypeScript.Services {
                     return TokenClass.Identifier;
             }
         }
-    }
 
-    export interface IClassifierHost extends TypeScript.Logger {
-    }
-
-    export class ClassificationResult {
-        public finalLexState: EndOfLineState = EndOfLineState.Start;
-        public entries: ClassificationInfo[] = [];
-
-        constructor() {
-        }
-    }
-
-    export class ClassificationInfo {
-        constructor(public length: number, public classification: TokenClass) {
-        }
+        return {
+            getClassificationsForLine: getClassificationsForLine
+        };
     }
 }
