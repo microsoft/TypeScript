@@ -369,7 +369,7 @@ task("runtests", ["tests", builtLocalDirectory], function() {
 
 desc("Generates code coverage data via instanbul")
 task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
-	var cmd = "istanbul cover node_modules/mocha/bin/_mocha -- " + run;
+	var cmd = "istanbul cover node_modules/mocha/bin/_mocha -- -R dot " + run;
 	console.log(cmd);
 	exec(cmd);	
 }, { async: true });
