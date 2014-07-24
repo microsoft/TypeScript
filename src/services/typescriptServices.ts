@@ -22,7 +22,6 @@
 
 /// <reference path='syntax\incrementalParser.ts' />
 
-/// <reference path='coreServices.ts' />
 /// <reference path='classifier.ts' />
 /// <reference path='languageService.ts' />
 /// <reference path='pullLanguageService.ts' />

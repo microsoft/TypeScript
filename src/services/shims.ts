@@ -14,9 +14,8 @@
 //
 
 ///<reference path='typescriptServices.ts' />
-
+var debugObjectHost = (<any>this);
 module TypeScript.Services {
-
     export interface IScriptSnapshotShim {
         // Get's a portion of the script snapshot specified by [start, end).  
         getText(start: number, end: number): string;
@@ -805,17 +804,12 @@ module TypeScript.Services {
     }
 
     class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
-        public logger: TypeScript.Logger;
-        public services: CoreServices;
-
-        constructor(factory: ShimFactory, public host: ICoreServicesHost) {
+        constructor(factory: ShimFactory, public host: Logger) {
             super(factory);
-            this.logger = this.host.logger;
-            this.services = new CoreServices(this.host);
         }
 
         private forwardJSONCall(actionDescription: string, action: () => any): any {
-            return forwardJSONCall(this.logger, actionDescription, action);
+            return forwardJSONCall(this.host, actionDescription, action);
         }
 
         ///
@@ -825,7 +819,7 @@ module TypeScript.Services {
             return this.forwardJSONCall(
                 "getPreProcessedFileInfo(\"" + fileName + "\")",
                 () => {
-                    var result = this.services.getPreProcessedFileInfo(fileName, sourceText);
+                    var result = TypeScript.preProcessFile(fileName, sourceText);
                     return result;
                 });
         }
@@ -837,7 +831,7 @@ module TypeScript.Services {
             return this.forwardJSONCall(
                 "getDefaultCompilationSettings()",
                 () => {
-                    return compilerOptionsToCompilationSettings(this.services.getDefaultCompilationSettings());
+                    return compilerOptionsToCompilationSettings(getDefaultCompilerOptions());
                 });
         }
     }
@@ -868,12 +862,12 @@ module TypeScript.Services {
             }
         }
 
-        public createCoreServicesShim(host: ICoreServicesHost): CoreServicesShim {
+        public createCoreServicesShim(host: Logger): CoreServicesShim {
             try {
                 return new CoreServicesShimObject(this, host);
             }
             catch (err) {
-                logInternalError(host.logger, err);
+                logInternalError(host, err);
                 throw err;
             }
         }
