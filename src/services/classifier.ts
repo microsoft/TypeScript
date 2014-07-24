@@ -176,7 +176,7 @@ module TypeScript.Services {
         }
     }
 
-    export interface IClassifierHost extends TypeScript.ILogger {
+    export interface IClassifierHost extends TypeScript.Logger {
     }
 
     export class ClassificationResult {

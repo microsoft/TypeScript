@@ -21,7 +21,7 @@ module TypeScript.Services {
     //
     // Public interface of the host of a language service instance.
     //
-    export interface ILanguageServiceHost extends TypeScript.ILogger, TypeScript.IReferenceResolverHost {
+    export interface LanguageServiceHost extends TypeScript.Logger, TypeScript.IReferenceResolverHost {
         getCompilationSettings(): ts.CompilerOptions;
 
         getScriptFileNames(): string[];
@@ -38,7 +38,7 @@ module TypeScript.Services {
     // Public services of a language service instance associated
     // with a language service host instance
     //
-    export interface ILanguageService {
+    export interface LanguageService {
         // Note: refresh is a no-op now.  It is only around for back compat purposes.
         refresh(): void;
 
@@ -83,7 +83,7 @@ module TypeScript.Services {
         dispose(): void;
     }
 
-    export function logInternalError(logger: TypeScript.ILogger, err: Error) {
+    export function logInternalError(logger: TypeScript.Logger, err: Error) {
         logger.log("*INTERNAL ERROR* - Exception in typescript services: " + err.message);
     }
 

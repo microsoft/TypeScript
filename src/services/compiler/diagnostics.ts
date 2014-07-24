@@ -16,7 +16,7 @@
 ///<reference path='references.ts' />
 
 module TypeScript {
-    export interface ILogger {
+    export interface Logger {
         information(): boolean;
         debug(): boolean;
         warning(): boolean;
@@ -25,7 +25,7 @@ module TypeScript {
         log(s: string): void;
     }
 
-    export class NullLogger implements ILogger {
+    export class NullLogger implements Logger {
         public information(): boolean { return false; }
         public debug(): boolean { return false; }
         public warning(): boolean { return false; }
@@ -35,7 +35,7 @@ module TypeScript {
         }
     }
 
-    export function timeFunction(logger: ILogger, funcDescription: string, func: () => any): any {
+    export function timeFunction(logger: Logger, funcDescription: string, func: () => any): any {
         var start = (new Date()).getTime();
         var result = func();
         var end = (new Date()).getTime();

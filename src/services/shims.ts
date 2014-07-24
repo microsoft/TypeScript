@@ -38,7 +38,7 @@ module TypeScript.Services {
     //
     // Public interface of the host of a language service shim instance.
     //
-    export interface ILanguageServiceShimHost extends TypeScript.ILogger {
+    export interface ILanguageServiceShimHost extends TypeScript.Logger {
         getCompilationSettings(): string;
 
         // Returns a JSON encoded value of the type:
@@ -79,7 +79,7 @@ module TypeScript.Services {
     }
 
     export interface ILanguageServiceShim extends IShim {
-        languageService: TypeScript.Services.ILanguageService;
+        languageService: TypeScript.Services.LanguageService;
 
         dispose(dummy: any): void;
 
@@ -283,7 +283,7 @@ module TypeScript.Services {
         }
     }
 
-    export class LanguageServiceShimHostAdapter implements TypeScript.Services.ILanguageServiceHost {
+    export class LanguageServiceShimHostAdapter implements TypeScript.Services.LanguageServiceHost {
         constructor(private shimHost: ILanguageServiceShimHost) {
         }
 
@@ -389,7 +389,7 @@ module TypeScript.Services {
         }
     }
 
-    export function simpleForwardCall(logger: TypeScript.ILogger, actionDescription: string, action: () =>any): any {
+    export function simpleForwardCall(logger: TypeScript.Logger, actionDescription: string, action: () =>any): any {
         logger.log(actionDescription);
         var start = Date.now();
         var result = action();
@@ -405,7 +405,7 @@ module TypeScript.Services {
         return result;
     }
 
-    export function forwardJSONCall(logger: TypeScript.ILogger, actionDescription: string, action: () =>any): string {
+    export function forwardJSONCall(logger: TypeScript.Logger, actionDescription: string, action: () =>any): string {
         try {
             var result = simpleForwardCall(logger, actionDescription, action);
             return JSON.stringify({ result: result });
@@ -421,11 +421,11 @@ module TypeScript.Services {
     }
 
     export class LanguageServiceShim extends ShimBase implements ILanguageServiceShim {
-        private logger: TypeScript.ILogger;
+        private logger: TypeScript.Logger;
 
         constructor(factory: IShimFactory,
                     private host: ILanguageServiceShimHost,
-                    public languageService: TypeScript.Services.ILanguageService) {
+                    public languageService: TypeScript.Services.LanguageService) {
             super(factory);
             this.logger = this.host;
         }
@@ -802,7 +802,7 @@ module TypeScript.Services {
     }
 
     export class CoreServicesShim extends ShimBase {
-        public logger: TypeScript.ILogger;
+        public logger: TypeScript.Logger;
         public services: TypeScript.Services.CoreServices;
 
         constructor(factory: IShimFactory, public host: TypeScript.Services.ICoreServicesHost) {

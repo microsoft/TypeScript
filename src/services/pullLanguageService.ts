@@ -40,7 +40,7 @@ module TypeScript.Services {
         private _filenameToEntry: ts.Map<HostFileInformation>;
         private _compilationSettings: ts.CompilerOptions;
 
-        constructor(private host: ILanguageServiceHost) {
+        constructor(private host: LanguageServiceHost) {
             // script id => script index
             this._filenameToEntry = {};
 
@@ -123,7 +123,7 @@ module TypeScript.Services {
         private _currentFileSyntaxTree: TypeScript.SyntaxTree = null;
         private _currentFileScriptSnapshot: TypeScript.IScriptSnapshot = null;
 
-        constructor(private _host: ILanguageServiceHost) {
+        constructor(private _host: LanguageServiceHost) {
             this._hostCache = new HostCache(_host);
         }
 
@@ -381,8 +381,8 @@ module TypeScript.Services {
         }
     }
 
-    export function createLanguageService(host: ILanguageServiceHost, documentRegistry: IDocumentRegistry) :ILanguageService{
-        var logger: TypeScript.ILogger = host;
+    export function createLanguageService(host: LanguageServiceHost, documentRegistry: IDocumentRegistry) :LanguageService{
+        var logger: TypeScript.Logger = host;
         var _syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         var formattingRulesProvider: Formatting.RulesProvider;
         var hostCache: HostCache; // A cache of all the information about the files on the host side.

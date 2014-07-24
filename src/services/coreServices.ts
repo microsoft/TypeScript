@@ -23,7 +23,7 @@ var debugObjectHost = (<any>this);
 module TypeScript.Services {
 
     export interface ICoreServicesHost {
-        logger: TypeScript.ILogger;
+        logger: TypeScript.Logger;
     }
 
     export class CoreServices {

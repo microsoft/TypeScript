@@ -22,7 +22,7 @@ module TypeScript.Services.Formatting {
         private activeRules: Rule[];
         private rulesMap: RulesMap;
 
-        constructor(private logger: TypeScript.ILogger) {
+        constructor(private logger: TypeScript.Logger) {
             this.globalRules = new Rules();
         }
 

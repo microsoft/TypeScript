@@ -160,7 +160,7 @@ module TypeScript.Services {
         private _shims: IShim[] = [];
         private documentRegistry: DocumentRegistry = new DocumentRegistry();
 
-        public createPullLanguageService(host: TypeScript.Services.ILanguageServiceHost): TypeScript.Services.ILanguageService {
+        public createPullLanguageService(host: TypeScript.Services.LanguageServiceHost): TypeScript.Services.LanguageService {
             try {
                 return TypeScript.Services.createLanguageService(host, this.documentRegistry);
             }
