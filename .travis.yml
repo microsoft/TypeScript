@@ -1,15 +1,14 @@
 language: node_js
 
 node_js:
-  - "0.10"
+- '0.10'
 
-before_script:
-   npm install -g codeclimate-test-reporter
-
-addons:
-   code_climate:
-      repo_token:
-         secure: "SYZ0M6RB+z7PybYG3+BDqhEfGn+2jy+jmHEWf3idO0QJ92H00+l1LjZbblh+XpeD5csPR0rJq/s3LkqCQEC8OJTJ+PRMmccv3FG8EkhtGFc9ugvPmmAyj/MUr87pE7J87mupZMJnVsNWI/bKskoM3941z8/eucskKyC5mXjXOdo="
+before_script: npm install -g codeclimate-test-reporter
 
 after_script:
-   - cat coverage/lcov.info | codeclimate
+- cat coverage/lcov.info | codeclimate
+
+addons:
+  code_climate:
+    repo_token:
+       secure: E0+mP3C7FJoltiGlzrrB7QpQmNITUqbHnK2VT5tHpiCVlfBCyQ9gvx7kBnMVCpk4DsEyj84L3ymrKmqILaCo21qxn72vac8nwBTsySDadpPfzsGYhV9h9WjUM5nv4HdBBjWX/Qgn2vBwL+zdQ18iL/WjtIxPd054u/CptMisyMc=
