@@ -19,7 +19,7 @@
 /// <reference path='compiler\precompile.ts' />
 var debugObjectHost = (<any>this);
 module TypeScript.Services {
-    export interface IScriptSnapshotShim {
+    export interface ScriptSnapshotShim {
         // Get's a portion of the script snapshot specified by [start, end).  
         getText(start: number, end: number): string;
 
@@ -49,7 +49,7 @@ module TypeScript.Services {
         getScriptVersion(fileName: string): number;
         getScriptIsOpen(fileName: string): boolean;
         getScriptByteOrderMark(fileName: string): number;
-        getScriptSnapshot(fileName: string): IScriptSnapshotShim;
+        getScriptSnapshot(fileName: string): ScriptSnapshotShim;
         resolveRelativePath(path: string, directory: string): string;
         fileExists(path: string): boolean;
         directoryExists(path: string): boolean;
@@ -256,7 +256,7 @@ module TypeScript.Services {
     class ScriptSnapshotShimAdapter implements TypeScript.IScriptSnapshot {
         private lineStartPositions: number[] = null;
 
-        constructor(private scriptSnapshotShim: IScriptSnapshotShim) {
+        constructor(private scriptSnapshotShim: ScriptSnapshotShim) {
         }
 
         public getText(start: number, end: number): string {
