@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-///<reference path='..\typescriptServices.ts' />
+///<reference path='..\services.ts' />
 ///<reference path='textSnapshot.ts' />
 ///<reference path='textSnapshotLine.ts' />
 ///<reference path='snapshotPoint.ts' />

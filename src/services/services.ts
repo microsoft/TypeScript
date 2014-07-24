@@ -13,6 +13,19 @@
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='completionHelpers.ts' />
 /// <reference path='keywordCompletions.ts' />
+/// <reference path='compiler\bloomFilter.ts' />
+
+/// <reference path='core\references.ts' />
+/// <reference path='resources\references.ts' />
+/// <reference path='text\references.ts' />
+/// <reference path='syntax\references.ts' />
+/// <reference path='compiler\diagnostics.ts' />
+/// <reference path='compiler\hashTable.ts' />
+/// <reference path='compiler\ast.ts' />
+/// <reference path='compiler\astWalker.ts' />
+/// <reference path='compiler\asthelpers.ts' />
+/// <reference path='compiler\types.ts' />
+/// <reference path='compiler\pathUtils.ts' />
 
 module ts {
 
@@ -450,7 +463,7 @@ module TypeScript.Services {
     //
     // Public interface of the host of a language service instance.
     //
-    export interface LanguageServiceHost extends TypeScript.Logger, TypeScript.IReferenceResolverHost {
+    export interface LanguageServiceHost extends TypeScript.Logger {
         getCompilationSettings(): ts.CompilerOptions;
         getScriptFileNames(): string[];
         getScriptVersion(fileName: string): number;

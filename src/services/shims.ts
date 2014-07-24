@@ -13,7 +13,10 @@
 // limitations under the License.
 //
 
-///<reference path='typescriptServices.ts' />
+/// <reference path='services.ts' />
+
+/// <reference path='compiler\pathUtils.ts' />
+/// <reference path='compiler\precompile.ts' />
 var debugObjectHost = (<any>this);
 module TypeScript.Services {
     export interface IScriptSnapshotShim {
