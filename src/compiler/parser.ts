@@ -385,6 +385,14 @@ module ts {
         CrossingFunctionBoundary
     }
 
+    interface LabelledStatementInfo {
+        addLabel(label: Identifier): void;
+        pushCurrentLabelSet(isIterationStatement: boolean): void;
+        pushFunctionBoundary(): void;
+        pop(): void;
+        nodeIsNestedInLabel(label: Identifier, requireIterationStatement: boolean, stopAtFunctionBoundary: boolean): ControlBlockContext;
+    }
+
     export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget): SourceFile {
         var file: SourceFile;
         var scanner: Scanner;
@@ -402,8 +410,7 @@ module ts {
         var inSwitchStatement = ControlBlockContext.NotNested;
         var inIterationStatement = ControlBlockContext.NotNested;
 
-        var labelledStatementInfo = (() => {
-            // TODO(jfreeman): Implement a data structure for tracking labels
+        var labelledStatementInfo: LabelledStatementInfo = (() => {
             var functionBoundarySentinel: StringSet = {};
             var currentLabelSet: StringSet;
             var labelSetStack: StringSet[];
