@@ -36,9 +36,11 @@
 		"jake" : "latest",
 		"mocha" : "latest",
 		"chai" : "latest",
-		"browserify" : "latest"
+		"browserify" : "latest",
+		"istanbul": "latest",
+		"codeclimate-test-reporter": "latest"
 	},
 	"scripts": {
-		"test": "jake runtests"
+		"test": "jake generate-code-coverage"
 	}
 }

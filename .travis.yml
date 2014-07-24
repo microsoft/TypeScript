@@ -1,3 +1,15 @@
 language: node_js
+
 node_js:
   - "0.10"
+
+before_script:
+   npm install -g codeclimate-test-reporter
+
+addons:
+   code_climate:
+      repo_token:
+         secure: "SYZ0M6RB+z7PybYG3+BDqhEfGn+2jy+jmHEWf3idO0QJ92H00+l1LjZbblh+XpeD5csPR0rJq/s3LkqCQEC8OJTJ+PRMmccv3FG8EkhtGFc9ugvPmmAyj/MUr87pE7J87mupZMJnVsNWI/bKskoM3941z8/eucskKyC5mXjXOdo="
+
+after_script:
+   - cat coverage/lcov.info | codeclimate
