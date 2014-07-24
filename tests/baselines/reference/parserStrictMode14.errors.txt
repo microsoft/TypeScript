@@ -1,4 +1,4 @@
-==== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode14.ts (2 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode14.ts (3 errors) ====
     "use strict";
     with (a) {
     ~~~~
