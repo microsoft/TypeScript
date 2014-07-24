@@ -14,7 +14,6 @@
 //
 
 ///<reference path='references.ts' />
-///<reference path='diagnosticServices.ts' />
 
 module TypeScript.Services {
 
@@ -28,7 +27,6 @@ module TypeScript.Services {
         getScriptIsOpen(fileName: string): boolean;
         getScriptByteOrderMark(fileName: string): ts.ByteOrderMark;
         getScriptSnapshot(fileName: string): TypeScript.IScriptSnapshot;
-        getDiagnosticsObject(): TypeScript.Services.ILanguageServicesDiagnostics;
         getLocalizedDiagnosticMessages(): any;
         getCancellationToken(): ts.CancellationToken;
     }

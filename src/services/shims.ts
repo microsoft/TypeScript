@@ -52,7 +52,6 @@ module TypeScript.Services {
         fileExists(path: string): boolean;
         directoryExists(path: string): boolean;
         getParentDirectory(path: string): string;
-        getDiagnosticsObject(): ILanguageServicesDiagnostics;
         getLocalizedDiagnosticMessages(): string;
         getCancellationToken(): ts.CancellationToken;
     }
@@ -346,10 +345,6 @@ module TypeScript.Services {
 
         public getScriptByteOrderMark(fileName: string): ts.ByteOrderMark {
             return this.shimHost.getScriptByteOrderMark(fileName);
-        }
-
-        public getDiagnosticsObject(): ILanguageServicesDiagnostics {
-            return this.shimHost.getDiagnosticsObject();
         }
 
         public getLocalizedDiagnosticMessages(): any {
