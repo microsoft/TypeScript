@@ -1,6 +1,8 @@
-==== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode8.ts (1 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode8.ts (2 errors) ====
     "use strict";
     function eval() {
+             ~~~~
+!!! Invalid use of 'eval' in strict mode.
              ~~~~
 !!! Overload signatures must all be ambient or non-ambient.
     }

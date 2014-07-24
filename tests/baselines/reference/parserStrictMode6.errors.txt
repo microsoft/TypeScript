@@ -1,5 +1,7 @@
-==== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode6.ts (1 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode6.ts (2 errors) ====
     "use strict";
     eval++;
+    ~~~~
+!!! Invalid use of 'eval' in strict mode.
     ~~~~
 !!! An arithmetic operand must be of type 'any', 'number' or an enum type.
