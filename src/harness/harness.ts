@@ -624,10 +624,6 @@ module Harness {
                     settingsCallback(null);
                 }
 
-                // always use \r\n for newlines unless the test specifies otherwise
-                // this ensures baseline consistency across Windows and *nix but still lets us test both \n and \r\n
-                //sys.newLine = '\r\n';
-
                 this.settings.forEach(setting => {
                     switch (setting.flag.toLowerCase()) {
                         // "filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outDir", "noimplicitany", "noresolve"
@@ -762,6 +758,7 @@ module Harness {
                 result.updateSourceMapRecord(program, sourceMapData);
                 onComplete(result);
 
+                // reset what newline means in case the last test changed it
                 sys.newLine = '\r\n';
                 return options;
             }
