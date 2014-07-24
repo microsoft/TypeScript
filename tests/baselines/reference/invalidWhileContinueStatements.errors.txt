@@ -1,20 +1,24 @@
-==== tests/cases/conformance/statements/continueStatements/invalidWhileContinueStatements.ts (1 errors) ====
+==== tests/cases/conformance/statements/continueStatements/invalidWhileContinueStatements.ts (6 errors) ====
     // All errors
     
     // naked continue not allowed
     continue;
-    ~~~~~~~~
+    ~~~~~~~~~
 !!! A 'continue' statement can only be used within an enclosing iteration statement.
     
     // non-existent label
     ONE:
     while (true) continue TWO;
+                 ~~~~~~~~~~~~~
+!!! A 'continue' statement can only jump to a label of an enclosing iteration statement.
     
     // continue from inside function
     TWO:
     while (true){
         var x = () => {
             continue TWO;
+            ~~~~~~~~~~~~~
+!!! Jump target cannot cross function boundary.
         }
     }
     
@@ -22,12 +26,16 @@
     while (true) {
         var fn = function () {
             continue THREE;
+            ~~~~~~~~~~~~~~~
+!!! Jump target cannot cross function boundary.
         }
     }
     
     // continue forward
     while (true) {
         continue FIVE;
+        ~~~~~~~~~~~~~~
+!!! A 'continue' statement can only jump to a label of an enclosing iteration statement.
         FIVE:
         while (true) { }
     }
@@ -38,4 +46,6 @@
     
     while (true) {
         continue NINE;
+        ~~~~~~~~~~~~~~
+!!! A 'continue' statement can only jump to a label of an enclosing iteration statement.
     }

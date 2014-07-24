@@ -1,20 +1,24 @@
-==== tests/cases/conformance/statements/breakStatements/invalidDoWhileBreakStatements.ts (1 errors) ====
+==== tests/cases/conformance/statements/breakStatements/invalidDoWhileBreakStatements.ts (6 errors) ====
     // All errors
     
     // naked break not allowed
     break;
-    ~~~~~
+    ~~~~~~
 !!! A 'break' statement can only be used within an enclosing iteration or switch statement.
     
     // non-existent label
     ONE:
     do break TWO; while (true)
+       ~~~~~~~~~~
+!!! A 'break' statement can only jump to a label of an enclosing statement.
     
     // break from inside function
     TWO:
     do {
         var x = () => {
             break TWO;
+            ~~~~~~~~~~
+!!! Jump target cannot cross function boundary.
         }
     }while (true)
     
@@ -22,12 +26,16 @@
     do {
         var fn = function () {
             break THREE;
+            ~~~~~~~~~~~~
+!!! Jump target cannot cross function boundary.
         }
     }while (true)
     
     // break forward
     do {
         break FIVE;
+        ~~~~~~~~~~~
+!!! A 'break' statement can only jump to a label of an enclosing statement.
         FIVE:
         do { } while (true)
     }while (true)
@@ -38,4 +46,6 @@
     
     do {
         break NINE;
+        ~~~~~~~~~~~
+!!! A 'break' statement can only jump to a label of an enclosing statement.
     }while (true)

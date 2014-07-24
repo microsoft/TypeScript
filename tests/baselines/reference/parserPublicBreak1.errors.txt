@@ -2,6 +2,6 @@
     public break;
     ~~~~~~
 !!! Declaration or statement expected.
-           ~~~~~
+           ~~~~~~
 !!! A 'break' statement can only be used within an enclosing iteration or switch statement.
     

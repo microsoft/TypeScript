@@ -1,4 +1,0 @@
-do {
-  break;
-}
-while (true);

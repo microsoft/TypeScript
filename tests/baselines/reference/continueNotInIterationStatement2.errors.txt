@@ -1,8 +1,0 @@
-==== tests/cases/compiler/continueNotInIterationStatement2.ts (1 errors) ====
-    while (true) {
-      function f() {
-        continue;
-        ~~~~~~~~
-!!! Jump target cannot cross function boundary.
-      }
-    }

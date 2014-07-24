@@ -1,20 +1,24 @@
-==== tests/cases/conformance/statements/continueStatements/invalidForInContinueStatements.ts (1 errors) ====
+==== tests/cases/conformance/statements/continueStatements/invalidForInContinueStatements.ts (6 errors) ====
     // All errors
     
     // naked continue not allowed
     continue;
-    ~~~~~~~~
+    ~~~~~~~~~
 !!! A 'continue' statement can only be used within an enclosing iteration statement.
     
     // non-existent label
     ONE:
     for (var x in {}) continue TWO;
+                      ~~~~~~~~~~~~~
+!!! A 'continue' statement can only jump to a label of an enclosing iteration statement.
     
     // continue from inside function
     TWO:
     for (var x in {}) {
         var fn = () => {
             continue TWO;
+            ~~~~~~~~~~~~~
+!!! Jump target cannot cross function boundary.
         }
     }
     
@@ -22,12 +26,16 @@
     for (var x in {}) {
         var fn = function () {
             continue THREE;
+            ~~~~~~~~~~~~~~~
+!!! Jump target cannot cross function boundary.
         }
     }
     
     // continue forward
     for (var x in {}) {
         continue FIVE;
+        ~~~~~~~~~~~~~~
+!!! A 'continue' statement can only jump to a label of an enclosing iteration statement.
         FIVE:
         for (var x in {}) { }
     }
@@ -38,4 +46,6 @@
     
     for (var x in {}) {
         continue NINE;
+        ~~~~~~~~~~~~~~
+!!! A 'continue' statement can only jump to a label of an enclosing iteration statement.
     }

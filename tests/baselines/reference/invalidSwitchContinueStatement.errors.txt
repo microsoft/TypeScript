@@ -4,7 +4,7 @@
     switch (12) {
         case 5:
             continue;
-            ~~~~~~~~
+            ~~~~~~~~~
 !!! A 'continue' statement can only be used within an enclosing iteration statement.
     }
     
