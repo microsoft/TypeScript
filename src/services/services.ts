@@ -303,160 +303,6 @@ module ts {
     initializeServices();
 }
 
-module TypeScript.Services {
-    export interface IncrementalParse {
-        (oldSyntaxTree: SyntaxTree, textChangeRange: TextChangeRange, newText: ISimpleText): SyntaxTree
-    }
-
-
-    export class Document {
-        private _bloomFilter: BloomFilter = null;
-
-        // By default, our Document class doesn't support incremental update of its contents.
-        // However, we enable other layers (like teh services layer) to inject the capability
-        // into us by setting this function.
-        public static incrementalParse: IncrementalParse = null;
-
-        constructor(private compilationSettings: ts.CompilerOptions,
-            public filename: string,
-            public referencedFiles: string[],
-            private _scriptSnapshot: IScriptSnapshot,
-            public byteOrderMark: ts.ByteOrderMark,
-            public version: number,
-            public isOpen: boolean,
-            private _syntaxTree: SyntaxTree,
-            private _soruceFile: ts.SourceFile) {
-        }
-
-        public isDeclareFile(): boolean {
-            return isDTSFile(this.filename);
-        }
-
-        public sourceUnit(): SourceUnitSyntax {
-            // If we don't have a script, create one from our parse tree.
-            return this.syntaxTree().sourceUnit();
-        }
-
-        public diagnostics(): Diagnostic[] {
-            return this.syntaxTree().diagnostics();
-        }
-
-        public lineMap(): LineMap {
-            return this.syntaxTree().lineMap();
-        }
-
-        public syntaxTree(): SyntaxTree {
-            if (!this._syntaxTree) {
-                var start = new Date().getTime();
-
-                this._syntaxTree = Parser.parse(
-                    this.filename, SimpleText.fromScriptSnapshot(this._scriptSnapshot), this.compilationSettings.target, this.isDeclareFile());
-
-                var time = new Date().getTime() - start;
-
-                //TypeScript.syntaxTreeParseTime += time;
-            }
-
-            return this._syntaxTree;
-        }
-
-        public sourceFile(): ts.SourceFile {
-            if (!this._soruceFile) {
-                var start = new Date().getTime();
-
-                this._soruceFile = ts.createSourceFile(this.filename, this._scriptSnapshot.getText(0, this._scriptSnapshot.getLength()), this.compilationSettings.target);
-
-                var time = new Date().getTime() - start;
-
-                //TypeScript.astParseTime += time;
-            }
-
-            return this._soruceFile;
-        }
-
-        public bloomFilter(): BloomFilter {
-            if (!this._bloomFilter) {
-                var identifiers = createIntrinsicsObject<boolean>();
-                var pre = function (cur: TypeScript.ISyntaxElement) {
-                    if (ASTHelpers.isValidAstNode(cur)) {
-                        if (cur.kind() === SyntaxKind.IdentifierName) {
-                            var nodeText = tokenValueText((<TypeScript.ISyntaxToken>cur));
-
-                            identifiers[nodeText] = true;
-                        }
-                    }
-                };
-
-                TypeScript.getAstWalkerFactory().simpleWalk(this.sourceUnit(), pre, null, identifiers);
-
-                var identifierCount = 0;
-                for (var name in identifiers) {
-                    if (identifiers[name]) {
-                        identifierCount++;
-                    }
-                }
-
-                this._bloomFilter = new BloomFilter(identifierCount);
-                this._bloomFilter.addKeys(identifiers);
-            }
-            return this._bloomFilter;
-        }
-
-        // Returns true if this file should get emitted into its own unique output file.  
-        // Otherwise, it should be written into a single output file along with the rest of hte
-        // documents in the compilation.
-        public emitToOwnOutputFile(): boolean {
-            // If we haven't specified an output file in our settings, then we're definitely 
-            // emitting to our own file.  Also, if we're an external module, then we're 
-            // definitely emitting to our own file.
-            return !this.compilationSettings.out || this.syntaxTree().isExternalModule();
-        }
-
-        public update(scriptSnapshot: IScriptSnapshot, version: number, isOpen: boolean, textChangeRange: TextChangeRange): Document {
-            // See if we are currently holding onto a syntax tree.  We may not be because we're 
-            // either a closed file, or we've just been lazy and haven't had to create the syntax
-            // tree yet.  Access the field instead of the method so we don't accidently realize
-            // the old syntax tree.
-            var oldSyntaxTree = this._syntaxTree;
-
-            if (textChangeRange !== null && Debug.shouldAssert(AssertionLevel.Normal)) {
-                var oldText = this._scriptSnapshot;
-                var newText = scriptSnapshot;
-
-                TypeScript.Debug.assert((oldText.getLength() - textChangeRange.span().length() + textChangeRange.newLength()) === newText.getLength());
-
-                if (Debug.shouldAssert(AssertionLevel.VeryAggressive)) {
-                    var oldTextPrefix = oldText.getText(0, textChangeRange.span().start());
-                    var newTextPrefix = newText.getText(0, textChangeRange.span().start());
-                    TypeScript.Debug.assert(oldTextPrefix === newTextPrefix);
-
-                    var oldTextSuffix = oldText.getText(textChangeRange.span().end(), oldText.getLength());
-                    var newTextSuffix = newText.getText(textChangeRange.newSpan().end(), newText.getLength());
-                    TypeScript.Debug.assert(oldTextSuffix === newTextSuffix);
-                }
-            }
-
-            var text = SimpleText.fromScriptSnapshot(scriptSnapshot);
-
-            // If we don't have a text change, or we don't have an old syntax tree, then do a full
-            // parse.  Otherwise, do an incremental parse.
-            var newSyntaxTree = textChangeRange === null || oldSyntaxTree === null || Document.incrementalParse === null
-                ? TypeScript.Parser.parse(this.filename, text, this.compilationSettings.target, TypeScript.isDTSFile(this.filename))
-                : Document.incrementalParse(oldSyntaxTree, textChangeRange, text);
-
-            return new Document(this.compilationSettings, this.filename, this.referencedFiles, scriptSnapshot, this.byteOrderMark, version, isOpen, newSyntaxTree, /*soruceFile*/ null);
-        }
-
-        public static create(compilationSettings: ts.CompilerOptions, fileName: string, scriptSnapshot: IScriptSnapshot, byteOrderMark: ts.ByteOrderMark, version: number, isOpen: boolean, referencedFiles: string[]): Document {
-            return new Document(compilationSettings, fileName, referencedFiles, scriptSnapshot, byteOrderMark, version, isOpen, /*syntaxTree:*/ null, /*soruceFile*/ null);
-        }
-    }
-}
-
-module TypeScript.Services {
-    // Inject support for incremental parsing to the core compiler Document class.
-    Document.incrementalParse = IncrementalParser.parse;
-}
 
 module TypeScript.Services {
 
@@ -708,6 +554,62 @@ module TypeScript.Services {
         sourceMapOutput: any;
     }
 
+    export enum EndOfLineState {
+        Start,
+        InMultiLineCommentTrivia,
+        InSingleQuoteStringLiteral,
+        InDoubleQuoteStringLiteral,
+    }
+
+    export enum TokenClass {
+        Punctuation,
+        Keyword,
+        Operator,
+        Comment,
+        Whitespace,
+        Identifier,
+        NumberLiteral,
+        StringLiteral,
+        RegExpLiteral,
+    }
+
+    export interface ClassificationResult {
+        finalLexState: EndOfLineState;
+        entries: ClassificationInfo[];
+    }
+
+    export interface ClassificationInfo {
+        length: number;
+        classification: TokenClass;
+    }
+
+    export interface Classifier {
+        getClassificationsForLine(text: string, lexState: EndOfLineState): ClassificationResult;
+    }
+
+    export interface IDocumentRegistry {
+        acquireDocument(
+            filename: string,
+            compilationSettings: ts.CompilerOptions,
+            scriptSnapshot: IScriptSnapshot,
+            byteOrderMark: ts.ByteOrderMark,
+            version: number,
+            isOpen: boolean,
+            referencedFiles: string[]): Document;
+
+        updateDocument(
+            document: Document,
+            filename: string,
+            compilationSettings: ts.CompilerOptions,
+            scriptSnapshot: IScriptSnapshot,
+            version: number,
+            isOpen: boolean,
+            textChangeRange: TextChangeRange
+            ): Document;
+
+        releaseDocument(filename: string, compilationSettings: ts.CompilerOptions): void
+    }
+    
     // TODO: move these to enums
     export class ScriptElementKind {
         static unknown = "";
@@ -797,192 +699,156 @@ module TypeScript.Services {
         static warning = "warning";
         static message = "message";
     }
-}
 
-module TypeScript.Services {
-    export enum EndOfLineState {
-        Start,
-        InMultiLineCommentTrivia,
-        InSingleQuoteStringLiteral,
-        InDoubleQuoteStringLiteral,
+    interface IncrementalParse {
+        (oldSyntaxTree: SyntaxTree, textChangeRange: TextChangeRange, newText: ISimpleText): SyntaxTree
     }
 
-    export enum TokenClass {
-        Punctuation,
-        Keyword,
-        Operator,
-        Comment,
-        Whitespace,
-        Identifier,
-        NumberLiteral,
-        StringLiteral,
-        RegExpLiteral,
-    }
+    export class Document {
+        private _bloomFilter: BloomFilter = null;
 
-    export interface ClassificationResult {
-        finalLexState: EndOfLineState;
-        entries: ClassificationInfo[];
-    }
+        // By default, our Document class doesn't support incremental update of its contents.
+        // However, we enable other layers (like teh services layer) to inject the capability
+        // into us by setting this function.
+        public static incrementalParse: IncrementalParse = IncrementalParser.parse;
 
-    export interface ClassificationInfo {
-        length: number;
-        classification: TokenClass;
-    }
-
-    export interface Classifier {
-        getClassificationsForLine(text: string, lexState: EndOfLineState): ClassificationResult;
-    }
-
-    export function createClassifier(host: Logger): Classifier {
-        var scanner: TypeScript.Scanner.IScanner;
-        var lastDiagnosticKey: string = null;
-        var noRegexTable: boolean[];
-        var reportDiagnostic = (position: number, fullWidth: number, key: string, args: any[]) => {
-            lastDiagnosticKey = key;
-        };
-
-        if (!noRegexTable) {
-            noRegexTable = [];
-            noRegexTable[TypeScript.SyntaxKind.IdentifierName] = true;
-            noRegexTable[TypeScript.SyntaxKind.StringLiteral] = true;
-            noRegexTable[TypeScript.SyntaxKind.NumericLiteral] = true;
-            noRegexTable[TypeScript.SyntaxKind.RegularExpressionLiteral] = true;
-            noRegexTable[TypeScript.SyntaxKind.ThisKeyword] = true;
-            noRegexTable[TypeScript.SyntaxKind.PlusPlusToken] = true;
-            noRegexTable[TypeScript.SyntaxKind.MinusMinusToken] = true;
-            noRegexTable[TypeScript.SyntaxKind.CloseParenToken] = true;
-            noRegexTable[TypeScript.SyntaxKind.CloseBracketToken] = true;
-            noRegexTable[TypeScript.SyntaxKind.CloseBraceToken] = true;
-            noRegexTable[TypeScript.SyntaxKind.TrueKeyword] = true;
-            noRegexTable[TypeScript.SyntaxKind.FalseKeyword] = true;
+        constructor(private compilationSettings: ts.CompilerOptions,
+            public filename: string,
+            public referencedFiles: string[],
+            private _scriptSnapshot: IScriptSnapshot,
+            public byteOrderMark: ts.ByteOrderMark,
+            public version: number,
+            public isOpen: boolean,
+            private _syntaxTree: SyntaxTree,
+            private _soruceFile: ts.SourceFile) {
         }
 
-        function getClassificationsForLine(text: string, lexState: EndOfLineState): ClassificationResult {
-            var offset = 0;
-            if (lexState !== EndOfLineState.Start) {
-                // If we're in a string literal, then prepend: "\
-                // (and a newline).  That way when we lex we'll think we're still in a string literal.
-                //
-                // If we're in a multiline comment, then prepend: /*
-                // (and a newline).  That way when we lex we'll think we're still in a multiline comment.
-                if (lexState === EndOfLineState.InDoubleQuoteStringLiteral) {
-                    text = '"\\\n' + text;
-                }
-                else if (lexState === EndOfLineState.InSingleQuoteStringLiteral) {
-                    text = "'\\\n" + text;
-                }
-                else if (lexState === EndOfLineState.InMultiLineCommentTrivia) {
-                    text = "/*\n" + text;
-                }
-
-                offset = 3;
-            }
-
-            var result = {
-                finalLexState: EndOfLineState.Start,
-                entries: []
-            };
-
-            var simpleText = TypeScript.SimpleText.fromString(text);
-            scanner = Scanner.createScanner(ts.ScriptTarget.ES5, simpleText, reportDiagnostic);
-
-            var lastTokenKind = TypeScript.SyntaxKind.None;
-            var token: ISyntaxToken = null;
-            do {
-                lastDiagnosticKey = null;
-
-                token = scanner.scan(!noRegexTable[lastTokenKind]);
-                lastTokenKind = token.kind();
-
-                processToken(text, simpleText, offset, token, result);
-            }
-            while (token.kind() !== SyntaxKind.EndOfFileToken);
-
-            lastDiagnosticKey = null;
-            return result;
+        public isDeclareFile(): boolean {
+            return isDTSFile(this.filename);
         }
 
-        function processToken(text: string, simpleText: ISimpleText, offset: number, token: TypeScript.ISyntaxToken, result: ClassificationResult): void {
-            processTriviaList(text, offset, token.leadingTrivia(simpleText), result);
-            addResult(text, offset, result, width(token), token.kind());
-            processTriviaList(text, offset, token.trailingTrivia(simpleText), result);
+        public sourceUnit(): SourceUnitSyntax {
+            // If we don't have a script, create one from our parse tree.
+            return this.syntaxTree().sourceUnit();
+        }
 
-            if (fullEnd(token) >= text.length) {
-                // We're at the end.
-                if (lastDiagnosticKey === TypeScript.DiagnosticCode.AsteriskSlash_expected) {
-                    result.finalLexState = EndOfLineState.InMultiLineCommentTrivia;
-                    return;
-                }
+        public diagnostics(): Diagnostic[] {
+            return this.syntaxTree().diagnostics();
+        }
 
-                if (token.kind() === TypeScript.SyntaxKind.StringLiteral) {
-                    var tokenText = token.text();
-                    if (tokenText.length > 0 && tokenText.charCodeAt(tokenText.length - 1) === TypeScript.CharacterCodes.backslash) {
-                        var quoteChar = tokenText.charCodeAt(0);
-                        result.finalLexState = quoteChar === TypeScript.CharacterCodes.doubleQuote
-                        ? EndOfLineState.InDoubleQuoteStringLiteral
-                        : EndOfLineState.InSingleQuoteStringLiteral;
-                        return;
+        public lineMap(): LineMap {
+            return this.syntaxTree().lineMap();
+        }
+
+        public syntaxTree(): SyntaxTree {
+            if (!this._syntaxTree) {
+                var start = new Date().getTime();
+
+                this._syntaxTree = Parser.parse(
+                    this.filename, SimpleText.fromScriptSnapshot(this._scriptSnapshot), this.compilationSettings.target, this.isDeclareFile());
+
+                var time = new Date().getTime() - start;
+
+                //TypeScript.syntaxTreeParseTime += time;
+            }
+
+            return this._syntaxTree;
+        }
+
+        public sourceFile(): ts.SourceFile {
+            if (!this._soruceFile) {
+                var start = new Date().getTime();
+
+                this._soruceFile = ts.createSourceFile(this.filename, this._scriptSnapshot.getText(0, this._scriptSnapshot.getLength()), this.compilationSettings.target);
+
+                var time = new Date().getTime() - start;
+
+                //TypeScript.astParseTime += time;
+            }
+
+            return this._soruceFile;
+        }
+
+        public bloomFilter(): BloomFilter {
+            if (!this._bloomFilter) {
+                var identifiers = createIntrinsicsObject<boolean>();
+                var pre = function (cur: TypeScript.ISyntaxElement) {
+                    if (ASTHelpers.isValidAstNode(cur)) {
+                        if (cur.kind() === SyntaxKind.IdentifierName) {
+                            var nodeText = tokenValueText((<TypeScript.ISyntaxToken>cur));
+
+                            identifiers[nodeText] = true;
+                        }
+                    }
+                };
+
+                TypeScript.getAstWalkerFactory().simpleWalk(this.sourceUnit(), pre, null, identifiers);
+
+                var identifierCount = 0;
+                for (var name in identifiers) {
+                    if (identifiers[name]) {
+                        identifierCount++;
                     }
                 }
+
+                this._bloomFilter = new BloomFilter(identifierCount);
+                this._bloomFilter.addKeys(identifiers);
             }
+            return this._bloomFilter;
         }
 
-        function processTriviaList(text: string, offset: number, triviaList: TypeScript.ISyntaxTriviaList, result: ClassificationResult): void {
-            for (var i = 0, n = triviaList.count(); i < n; i++) {
-                var trivia = triviaList.syntaxTriviaAt(i);
-                addResult(text, offset, result, trivia.fullWidth(), trivia.kind());
-            }
+        // Returns true if this file should get emitted into its own unique output file.  
+        // Otherwise, it should be written into a single output file along with the rest of hte
+        // documents in the compilation.
+        public emitToOwnOutputFile(): boolean {
+            // If we haven't specified an output file in our settings, then we're definitely 
+            // emitting to our own file.  Also, if we're an external module, then we're 
+            // definitely emitting to our own file.
+            return !this.compilationSettings.out || this.syntaxTree().isExternalModule();
         }
 
-        function addResult(text: string, offset: number, result: ClassificationResult, length: number, kind: TypeScript.SyntaxKind): void {
-            if (length > 0) {
-                // If this is the first classification we're adding to the list, then remove any 
-                // offset we have if we were continuing a construct from the previous line.
-                if (result.entries.length === 0) {
-                    length -= offset;
+        public update(scriptSnapshot: IScriptSnapshot, version: number, isOpen: boolean, textChangeRange: TextChangeRange): Document {
+            // See if we are currently holding onto a syntax tree.  We may not be because we're 
+            // either a closed file, or we've just been lazy and haven't had to create the syntax
+            // tree yet.  Access the field instead of the method so we don't accidently realize
+            // the old syntax tree.
+            var oldSyntaxTree = this._syntaxTree;
+
+            if (textChangeRange !== null && Debug.shouldAssert(AssertionLevel.Normal)) {
+                var oldText = this._scriptSnapshot;
+                var newText = scriptSnapshot;
+
+                TypeScript.Debug.assert((oldText.getLength() - textChangeRange.span().length() + textChangeRange.newLength()) === newText.getLength());
+
+                if (Debug.shouldAssert(AssertionLevel.VeryAggressive)) {
+                    var oldTextPrefix = oldText.getText(0, textChangeRange.span().start());
+                    var newTextPrefix = newText.getText(0, textChangeRange.span().start());
+                    TypeScript.Debug.assert(oldTextPrefix === newTextPrefix);
+
+                    var oldTextSuffix = oldText.getText(textChangeRange.span().end(), oldText.getLength());
+                    var newTextSuffix = newText.getText(textChangeRange.newSpan().end(), newText.getLength());
+                    TypeScript.Debug.assert(oldTextSuffix === newTextSuffix);
                 }
-
-                result.entries.push({ length: length, classification: classFromKind(kind) });
             }
+
+            var text = SimpleText.fromScriptSnapshot(scriptSnapshot);
+
+            // If we don't have a text change, or we don't have an old syntax tree, then do a full
+            // parse.  Otherwise, do an incremental parse.
+            var newSyntaxTree = textChangeRange === null || oldSyntaxTree === null || Document.incrementalParse === null
+                ? TypeScript.Parser.parse(this.filename, text, this.compilationSettings.target, TypeScript.isDTSFile(this.filename))
+                : Document.incrementalParse(oldSyntaxTree, textChangeRange, text);
+
+            return new Document(this.compilationSettings, this.filename, this.referencedFiles, scriptSnapshot, this.byteOrderMark, version, isOpen, newSyntaxTree, /*soruceFile*/ null);
         }
 
-        function classFromKind(kind: TypeScript.SyntaxKind) {
-            if (TypeScript.SyntaxFacts.isAnyKeyword(kind)) {
-                return TokenClass.Keyword;
-            }
-            else if (TypeScript.SyntaxFacts.isBinaryExpressionOperatorToken(kind) ||
-                TypeScript.SyntaxFacts.isPrefixUnaryExpressionOperatorToken(kind)) {
-                return TokenClass.Operator;
-            }
-            else if (TypeScript.SyntaxFacts.isAnyPunctuation(kind)) {
-                return TokenClass.Punctuation;
-            }
-
-            switch (kind) {
-                case TypeScript.SyntaxKind.WhitespaceTrivia:
-                    return TokenClass.Whitespace;
-                case TypeScript.SyntaxKind.MultiLineCommentTrivia:
-                case TypeScript.SyntaxKind.SingleLineCommentTrivia:
-                    return TokenClass.Comment;
-                case TypeScript.SyntaxKind.NumericLiteral:
-                    return TokenClass.NumberLiteral;
-                case TypeScript.SyntaxKind.StringLiteral:
-                    return TokenClass.StringLiteral;
-                case TypeScript.SyntaxKind.RegularExpressionLiteral:
-                    return TokenClass.RegExpLiteral;
-                case TypeScript.SyntaxKind.IdentifierName:
-                default:
-                    return TokenClass.Identifier;
-            }
+        public static create(compilationSettings: ts.CompilerOptions, fileName: string, scriptSnapshot: IScriptSnapshot, byteOrderMark: ts.ByteOrderMark, version: number, isOpen: boolean, referencedFiles: string[]): Document {
+            return new Document(compilationSettings, fileName, referencedFiles, scriptSnapshot, byteOrderMark, version, isOpen, /*syntaxTree:*/ null, /*soruceFile*/ null);
         }
-
-        return {
-            getClassificationsForLine: getClassificationsForLine
-        };
     }
-}
 
-module TypeScript.Services {
+     /// Language Service
+
     interface CompletionSession {
         filename: string;           // the file where the completion was requested
         position: number;           // position in the file where the completion was requested
@@ -990,6 +856,13 @@ module TypeScript.Services {
         symbols: ts.Map<ts.Symbol>; // symbols by entry name map
         location: ts.Node;          // the node where the completion was requested
         typeChecker: ts.TypeChecker;// the typeChecker used to generate this completion
+    }
+
+    interface FormattingOptions {
+        useTabs: boolean;
+        spacesPerTab: number;
+        indentSpaces: number;
+        newLineCharacter: string;
     }
 
     // Information about a specific host file.
@@ -1261,41 +1134,11 @@ module TypeScript.Services {
         }
     }
 
-    interface FormattingOptions {
-        useTabs: boolean;
-        spacesPerTab: number;
-        indentSpaces: number;
-        newLineCharacter: string;
-    }
-
     class DocumentRegistryEntry {
         public refCount: number = 0;
         public owners: string[] = [];
         constructor(public document: Document) {
         }
-    }
-
-    export interface IDocumentRegistry {
-        acquireDocument(
-            filename: string,
-            compilationSettings: ts.CompilerOptions,
-            scriptSnapshot: IScriptSnapshot,
-            byteOrderMark: ts.ByteOrderMark,
-            version: number,
-            isOpen: boolean,
-            referencedFiles: string[]): Document;
-
-        updateDocument(
-            document: Document,
-            filename: string,
-            compilationSettings: ts.CompilerOptions,
-            scriptSnapshot: IScriptSnapshot,
-            version: number,
-            isOpen: boolean,
-            textChangeRange: TextChangeRange
-            ): Document;
-
-        releaseDocument(filename: string, compilationSettings: ts.CompilerOptions): void
     }
 
     export class DocumentRegistry implements IDocumentRegistry {
@@ -2061,6 +1904,156 @@ module TypeScript.Services {
             getFormattingEditsOnPaste: getFormattingEditsOnPaste,
             getFormattingEditsAfterKeystroke: getFormattingEditsAfterKeystroke,
             getEmitOutput: (filename) => undefined,
+        };
+    }
+
+    /// Classifier
+
+    export function createClassifier(host: Logger): Classifier {
+        var scanner: TypeScript.Scanner.IScanner;
+        var lastDiagnosticKey: string = null;
+        var noRegexTable: boolean[];
+        var reportDiagnostic = (position: number, fullWidth: number, key: string, args: any[]) => {
+            lastDiagnosticKey = key;
+        };
+
+        if (!noRegexTable) {
+            noRegexTable = [];
+            noRegexTable[TypeScript.SyntaxKind.IdentifierName] = true;
+            noRegexTable[TypeScript.SyntaxKind.StringLiteral] = true;
+            noRegexTable[TypeScript.SyntaxKind.NumericLiteral] = true;
+            noRegexTable[TypeScript.SyntaxKind.RegularExpressionLiteral] = true;
+            noRegexTable[TypeScript.SyntaxKind.ThisKeyword] = true;
+            noRegexTable[TypeScript.SyntaxKind.PlusPlusToken] = true;
+            noRegexTable[TypeScript.SyntaxKind.MinusMinusToken] = true;
+            noRegexTable[TypeScript.SyntaxKind.CloseParenToken] = true;
+            noRegexTable[TypeScript.SyntaxKind.CloseBracketToken] = true;
+            noRegexTable[TypeScript.SyntaxKind.CloseBraceToken] = true;
+            noRegexTable[TypeScript.SyntaxKind.TrueKeyword] = true;
+            noRegexTable[TypeScript.SyntaxKind.FalseKeyword] = true;
+        }
+
+        function getClassificationsForLine(text: string, lexState: EndOfLineState): ClassificationResult {
+            var offset = 0;
+            if (lexState !== EndOfLineState.Start) {
+                // If we're in a string literal, then prepend: "\
+                // (and a newline).  That way when we lex we'll think we're still in a string literal.
+                //
+                // If we're in a multiline comment, then prepend: /*
+                // (and a newline).  That way when we lex we'll think we're still in a multiline comment.
+                if (lexState === EndOfLineState.InDoubleQuoteStringLiteral) {
+                    text = '"\\\n' + text;
+                }
+                else if (lexState === EndOfLineState.InSingleQuoteStringLiteral) {
+                    text = "'\\\n" + text;
+                }
+                else if (lexState === EndOfLineState.InMultiLineCommentTrivia) {
+                    text = "/*\n" + text;
+                }
+
+                offset = 3;
+            }
+
+            var result = {
+                finalLexState: EndOfLineState.Start,
+                entries: []
+            };
+
+            var simpleText = TypeScript.SimpleText.fromString(text);
+            scanner = Scanner.createScanner(ts.ScriptTarget.ES5, simpleText, reportDiagnostic);
+
+            var lastTokenKind = TypeScript.SyntaxKind.None;
+            var token: ISyntaxToken = null;
+            do {
+                lastDiagnosticKey = null;
+
+                token = scanner.scan(!noRegexTable[lastTokenKind]);
+                lastTokenKind = token.kind();
+
+                processToken(text, simpleText, offset, token, result);
+            }
+            while (token.kind() !== SyntaxKind.EndOfFileToken);
+
+            lastDiagnosticKey = null;
+            return result;
+        }
+
+        function processToken(text: string, simpleText: ISimpleText, offset: number, token: TypeScript.ISyntaxToken, result: ClassificationResult): void {
+            processTriviaList(text, offset, token.leadingTrivia(simpleText), result);
+            addResult(text, offset, result, width(token), token.kind());
+            processTriviaList(text, offset, token.trailingTrivia(simpleText), result);
+
+            if (fullEnd(token) >= text.length) {
+                // We're at the end.
+                if (lastDiagnosticKey === TypeScript.DiagnosticCode.AsteriskSlash_expected) {
+                    result.finalLexState = EndOfLineState.InMultiLineCommentTrivia;
+                    return;
+                }
+
+                if (token.kind() === TypeScript.SyntaxKind.StringLiteral) {
+                    var tokenText = token.text();
+                    if (tokenText.length > 0 && tokenText.charCodeAt(tokenText.length - 1) === TypeScript.CharacterCodes.backslash) {
+                        var quoteChar = tokenText.charCodeAt(0);
+                        result.finalLexState = quoteChar === TypeScript.CharacterCodes.doubleQuote
+                        ? EndOfLineState.InDoubleQuoteStringLiteral
+                        : EndOfLineState.InSingleQuoteStringLiteral;
+                        return;
+                    }
+                }
+            }
+        }
+
+        function processTriviaList(text: string, offset: number, triviaList: TypeScript.ISyntaxTriviaList, result: ClassificationResult): void {
+            for (var i = 0, n = triviaList.count(); i < n; i++) {
+                var trivia = triviaList.syntaxTriviaAt(i);
+                addResult(text, offset, result, trivia.fullWidth(), trivia.kind());
+            }
+        }
+
+        function addResult(text: string, offset: number, result: ClassificationResult, length: number, kind: TypeScript.SyntaxKind): void {
+            if (length > 0) {
+                // If this is the first classification we're adding to the list, then remove any 
+                // offset we have if we were continuing a construct from the previous line.
+                if (result.entries.length === 0) {
+                    length -= offset;
+                }
+
+                result.entries.push({ length: length, classification: classFromKind(kind) });
+            }
+        }
+
+        function classFromKind(kind: TypeScript.SyntaxKind) {
+            if (TypeScript.SyntaxFacts.isAnyKeyword(kind)) {
+                return TokenClass.Keyword;
+            }
+            else if (TypeScript.SyntaxFacts.isBinaryExpressionOperatorToken(kind) ||
+                TypeScript.SyntaxFacts.isPrefixUnaryExpressionOperatorToken(kind)) {
+                return TokenClass.Operator;
+            }
+            else if (TypeScript.SyntaxFacts.isAnyPunctuation(kind)) {
+                return TokenClass.Punctuation;
+            }
+
+            switch (kind) {
+                case TypeScript.SyntaxKind.WhitespaceTrivia:
+                    return TokenClass.Whitespace;
+                case TypeScript.SyntaxKind.MultiLineCommentTrivia:
+                case TypeScript.SyntaxKind.SingleLineCommentTrivia:
+                    return TokenClass.Comment;
+                case TypeScript.SyntaxKind.NumericLiteral:
+                    return TokenClass.NumberLiteral;
+                case TypeScript.SyntaxKind.StringLiteral:
+                    return TokenClass.StringLiteral;
+                case TypeScript.SyntaxKind.RegularExpressionLiteral:
+                    return TokenClass.RegExpLiteral;
+                case TypeScript.SyntaxKind.IdentifierName:
+                default:
+                    return TokenClass.Identifier;
+            }
+        }
+
+        return {
+            getClassificationsForLine: getClassificationsForLine
         };
     }
 }
