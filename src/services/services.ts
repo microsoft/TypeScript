@@ -305,10 +305,19 @@ module ts {
 
 
 module TypeScript.Services {
+    export interface Logger {
+        information(): boolean;
+        debug(): boolean;
+        warning(): boolean;
+        error(): boolean;
+        fatal(): boolean;
+        log(s: string): void;
+    }
+
     //
     // Public interface of the host of a language service instance.
     //
-    export interface LanguageServiceHost extends TypeScript.Logger {
+    export interface LanguageServiceHost extends Logger {
         getCompilationSettings(): ts.CompilerOptions;
         getScriptFileNames(): string[];
         getScriptVersion(fileName: string): number;
@@ -1201,7 +1210,6 @@ module TypeScript.Services {
     }
 
     export function createLanguageService(host: LanguageServiceHost, documentRegistry: IDocumentRegistry): LanguageService {
-        var logger: TypeScript.Logger = host;
         var _syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         var formattingRulesProvider: Formatting.RulesProvider;
         var hostCache: HostCache; // A cache of all the information about the files on the host side.
@@ -1386,7 +1394,7 @@ module TypeScript.Services {
             var sourceUnit = document.sourceUnit();
 
             if (CompletionHelpers.isCompletionListBlocker(document.syntaxTree().sourceUnit(), position)) {
-                logger.log("Returning an empty list because completion was blocked.");
+                host.log("Returning an empty list because completion was blocked.");
                 return null;
             }
 
@@ -1793,7 +1801,7 @@ module TypeScript.Services {
         function getFormattingManager(filename: string, options: FormatCodeOptions) {
             // Ensure rules are initialized and up to date wrt to formatting options
             if (formattingRulesProvider == null) {
-                formattingRulesProvider = new TypeScript.Services.Formatting.RulesProvider(logger);
+                formattingRulesProvider = new TypeScript.Services.Formatting.RulesProvider(host);
             }
 
             formattingRulesProvider.ensureUpToDate(options);

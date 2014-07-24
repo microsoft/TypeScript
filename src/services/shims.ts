@@ -40,7 +40,7 @@ module TypeScript.Services {
     //
     // Public interface of the host of a language service shim instance.
     //
-    export interface LanguageServiceShimHost extends TypeScript.Logger {
+    export interface LanguageServiceShimHost extends Logger {
         getCompilationSettings(): string;
 
         // Returns a JSON encoded value of the type:
@@ -249,7 +249,7 @@ module TypeScript.Services {
         return settings;
     }
 
-    function logInternalError(logger: TypeScript.Logger, err: Error) {
+    function logInternalError(logger: Logger, err: Error) {
         logger.log("*INTERNAL ERROR* - Exception in typescript services: " + err.message);
     }
 
@@ -389,7 +389,7 @@ module TypeScript.Services {
         }
     }
 
-    function simpleForwardCall(logger: TypeScript.Logger, actionDescription: string, action: () => any): any {
+    function simpleForwardCall(logger: Logger, actionDescription: string, action: () => any): any {
         logger.log(actionDescription);
         var start = Date.now();
         var result = action();
@@ -405,7 +405,7 @@ module TypeScript.Services {
         return result;
     }
 
-    function forwardJSONCall(logger: TypeScript.Logger, actionDescription: string, action: () => any): string {
+    function forwardJSONCall(logger: Logger, actionDescription: string, action: () => any): string {
         try {
             var result = simpleForwardCall(logger, actionDescription, action);
             return JSON.stringify({ result: result });
@@ -430,7 +430,7 @@ module TypeScript.Services {
     }
 
     class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim {
-        private logger: TypeScript.Logger;
+        private logger: Logger;
 
         constructor(factory: ShimFactory,
             private host: LanguageServiceShimHost,
