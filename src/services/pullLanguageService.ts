@@ -113,7 +113,7 @@ module TypeScript.Services {
         }
     }
 
-    export class SyntaxTreeCache {
+    class SyntaxTreeCache {
         private _hostCache: HostCache;
 
         // For our syntactic only features, we also keep a cache of the syntax tree for the 
@@ -286,38 +286,6 @@ module TypeScript.Services {
             ): TypeScript.Document;
 
         releaseDocument(filename: string, compilationSettings: ts.CompilerOptions): void
-    }
-
-    export class NonCachingDocumentRegistry implements IDocumentRegistry {
-
-        public static Instance: IDocumentRegistry = new NonCachingDocumentRegistry();
-
-        public acquireDocument(
-            filename: string,
-            compilationSettings: ts.CompilerOptions,
-            scriptSnapshot: IScriptSnapshot,
-            byteOrderMark: ByteOrderMark,
-            version: number,
-            isOpen: boolean,
-            referencedFiles: string[]= []): TypeScript.Document {
-            return Document.create(compilationSettings, filename, scriptSnapshot, byteOrderMark, version, isOpen, referencedFiles);
-        }
-
-        public updateDocument(
-            document: Document,
-            filename: string,
-            compilationSettings: ts.CompilerOptions,
-            scriptSnapshot: IScriptSnapshot,
-            version: number,
-            isOpen: boolean,
-            textChangeRange: TextChangeRange
-            ): TypeScript.Document {
-            return document.update(scriptSnapshot, version, isOpen, textChangeRange);
-        }
-
-        public releaseDocument(filename: string, compilationSettings: ts.CompilerOptions): void {
-            // no op since this class doesn't cache anything
-        }
     }
 
     export class DocumentRegistry implements IDocumentRegistry {
