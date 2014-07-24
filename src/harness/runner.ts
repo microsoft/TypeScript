@@ -31,15 +31,14 @@ function runTests(runners: RunnerBase[]) {
     }
 }
 
-var runners: RunnerBase[] = [];
+var runners: RunnerBase[] = []
+  , reverse: boolean = false
+  , iterations: number = 1;
 global.runners = runners;
-var reverse: boolean = false;
-var iterations: number = 1;
-
 // users can define tests to run in mytest.config that will override cmd line args, otherwise use cmd line args (test.config), otherwise no options
-var mytestconfig = 'mytest.config';
-var testconfig = 'test.config';
-var testConfigFile =
+var mytestconfig = 'mytest.config'
+  , testconfig = 'test.config'
+  , testConfigFile =
     Harness.IO.fileExists(mytestconfig) ? Harness.IO.readFile(mytestconfig) :
     (Harness.IO.fileExists(testconfig) ? Harness.IO.readFile(testconfig) : '')
 
