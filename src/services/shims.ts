@@ -249,6 +249,10 @@ module TypeScript.Services {
         return settings;
     }
 
+    function logInternalError(logger: TypeScript.Logger, err: Error) {
+        logger.log("*INTERNAL ERROR* - Exception in typescript services: " + err.message);
+    }
+
     class ScriptSnapshotShimAdapter implements TypeScript.IScriptSnapshot {
         private lineStartPositions: number[] = null;
 

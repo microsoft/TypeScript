@@ -368,10 +368,6 @@ module TypeScript.Services {
         dispose(): void;
     }
 
-    export function logInternalError(logger: TypeScript.Logger, err: Error) {
-        logger.log("*INTERNAL ERROR* - Exception in typescript services: " + err.message);
-    }
-
     export interface ReferenceEntry {
         fileName: string;
         minChar: number;
