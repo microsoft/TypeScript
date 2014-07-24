@@ -801,6 +801,7 @@ module ts {
                 if (isListElement(kind, /* inErrorRecovery */ false)) {
                     var element = parseElement();
                     result.push(element);
+                    // test elements only if we are not already in strict mode
                     if (!isInStrictMode && checkForStrictMode) {
                         if (isPrologueDirective(element)) {
                             if (isUseStrictPrologueDirective(element)) {
