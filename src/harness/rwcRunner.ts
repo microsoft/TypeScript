@@ -143,7 +143,7 @@ module RWC {
                     harnessCompiler.addInputFile({ unitName: resolvedPath, content: content });
                 });
 
-                harnessCompiler.compile();
+                harnessCompiler.setCompilerOptions();
 
                 // Emit the results
                 harnessCompiler.emitAll(emitterIOHost);
