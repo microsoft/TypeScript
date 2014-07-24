@@ -18,7 +18,7 @@
 module TypeScript.Services.Formatting {
     export class Rules {
         public getRuleName(rule: Rule) {
-            var o: IIndexable<any> = <any>this;
+            var o: ts.Map<any> = <any>this;
             for (var name in o) {
                 if (o[name] === rule) {
                     return name;

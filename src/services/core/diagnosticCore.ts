@@ -1,7 +1,7 @@
 ///<reference path='references.ts' />
 
 module TypeScript {
-    export var LocalizedDiagnosticMessages: IIndexable<any> = null;
+    export var LocalizedDiagnosticMessages: ts.Map<any> = null;
 
     export class Location {
         private _fileName: string;
@@ -120,7 +120,7 @@ module TypeScript {
         // TODO: We need to expose an extensibility point on our hosts to have them tell us what 
         // they want the newline string to be.  That way we can get the correct result regardless
         // of which host we use
-        return Environment ? Environment.newLine : "\r\n";
+        return sys.newLine ? sys.newLine : "\r\n";
     }
 
     function getLargestIndex(diagnostic: string): number {

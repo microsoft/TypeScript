@@ -2,9 +2,9 @@
 ///<reference path='references.ts' />
 module TypeScript.Services {
     interface LexicalScope {
-        items: TypeScript.IIndexable<NavigateToItem>;
+        items: ts.Map<NavigateToItem>;
         itemNames: string[];
-        childScopes: TypeScript.IIndexable<LexicalScope>;
+        childScopes: ts.Map<LexicalScope>;
         childScopeNames: string[];
     }
 

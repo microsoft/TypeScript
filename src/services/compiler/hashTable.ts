@@ -39,7 +39,7 @@ module TypeScript {
         }
     }
 
-    export function createIntrinsicsObject<T>(): IIndexable<T> {
+    export function createIntrinsicsObject<T>(): ts.Map<T> {
         return new BlockIntrinsics<T>();
     }
 
