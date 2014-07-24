@@ -624,7 +624,7 @@ module Harness {
                     settingsCallback(null);
                 }
 
-                this.settings.forEach(setting => {
+                    this.settings.forEach(setting => {
                     switch (setting.flag.toLowerCase()) {
                         // "filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outDir", "noimplicitany", "noresolve"
                         case "module":
@@ -858,7 +858,7 @@ module Harness {
                 });
 
                 this.errors = errors;
-                this.sourceMapRecord = sourceMapRecordLines.join('\n');
+                this.sourceMapRecord = sourceMapRecordLines.join('\r\n');
             }
 
             public updateSourceMapRecord(program: ts.Program, sourceMapData: ts.SourceMapData[]) {
