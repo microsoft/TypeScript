@@ -115,8 +115,11 @@ module TypeScript.Services.Formatting {
             //
             // TODO: Change the ILanguageService interface to return TextEditInfo (with start, and length) instead of TextEdit (with minChar and limChar)
             formattingEdits.forEach((item) => {
-                var edit = new TypeScript.Services.TextEdit(item.position, item.position + item.length, item.replaceWith);
-                result.push(edit);
+                result.push({
+                    minChar: item.position,
+                    limChar: item.position + item.length,
+                    text: item.replaceWith
+                });
             });
 
             return result;

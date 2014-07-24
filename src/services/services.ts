@@ -305,7 +305,6 @@ module ts {
 
 
 module TypeScript.Services {
-
     //
     // Public interface of the host of a language service instance.
     //
@@ -393,59 +392,28 @@ module TypeScript.Services {
         containerKind: string;  // see ScriptElementKind
     }
 
-    export class TextEdit {
-        constructor(public minChar: number, public limChar: number, public text: string) {
-        }
-
-        static createInsert(pos: number, text: string): TextEdit {
-            return new TextEdit(pos, pos, text);
-        }
-        static createDelete(minChar: number, limChar: number): TextEdit {
-            return new TextEdit(minChar, limChar, "");
-        }
-        static createReplace(minChar: number, limChar: number, text: string): TextEdit {
-            return new TextEdit(minChar, limChar, text);
-        }
+    export interface TextEdit {
+        minChar: number;
+        limChar: number;
+        text: string;
     }
 
-    export class EditorOptions {
-        public IndentSize: number = 4;
-        public TabSize: number = 4;
-        public NewLineCharacter: string = "\r\n";
-        public ConvertTabsToSpaces: boolean = true;
-
-        public static clone(objectToClone: EditorOptions): EditorOptions {
-            var editorOptions = new EditorOptions();
-            editorOptions.IndentSize = objectToClone.IndentSize;
-            editorOptions.TabSize = objectToClone.TabSize;
-            editorOptions.NewLineCharacter = objectToClone.NewLineCharacter;
-            editorOptions.ConvertTabsToSpaces = objectToClone.ConvertTabsToSpaces;
-            return editorOptions;
-        }
+    export interface EditorOptions {
+        IndentSize: number;
+        TabSize: number;
+        NewLineCharacter: string;
+        ConvertTabsToSpaces: boolean;
     }
 
-    export class FormatCodeOptions extends EditorOptions {
-        public InsertSpaceAfterCommaDelimiter: boolean = true;
-        public InsertSpaceAfterSemicolonInForStatements: boolean = true;
-        public InsertSpaceBeforeAndAfterBinaryOperators: boolean = true;
-        public InsertSpaceAfterKeywordsInControlFlowStatements: boolean = true;
-        public InsertSpaceAfterFunctionKeywordForAnonymousFunctions: boolean = false;
-        public InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean = false;
-        public PlaceOpenBraceOnNewLineForFunctions: boolean = false;
-        public PlaceOpenBraceOnNewLineForControlBlocks: boolean = false;
-
-        public static clone(objectToClone: FormatCodeOptions): FormatCodeOptions {
-            var formatCodeOptions = <FormatCodeOptions>EditorOptions.clone(objectToClone);
-            formatCodeOptions.InsertSpaceAfterCommaDelimiter = objectToClone.InsertSpaceAfterCommaDelimiter;
-            formatCodeOptions.InsertSpaceAfterSemicolonInForStatements = objectToClone.InsertSpaceAfterSemicolonInForStatements;
-            formatCodeOptions.InsertSpaceBeforeAndAfterBinaryOperators = objectToClone.InsertSpaceBeforeAndAfterBinaryOperators;
-            formatCodeOptions.InsertSpaceAfterKeywordsInControlFlowStatements = objectToClone.InsertSpaceAfterKeywordsInControlFlowStatements;
-            formatCodeOptions.InsertSpaceAfterFunctionKeywordForAnonymousFunctions = objectToClone.InsertSpaceAfterFunctionKeywordForAnonymousFunctions;
-            formatCodeOptions.InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis = objectToClone.InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis;
-            formatCodeOptions.PlaceOpenBraceOnNewLineForFunctions = objectToClone.PlaceOpenBraceOnNewLineForFunctions;
-            formatCodeOptions.PlaceOpenBraceOnNewLineForControlBlocks = objectToClone.PlaceOpenBraceOnNewLineForControlBlocks;
-            return formatCodeOptions;
-        }
+    export interface FormatCodeOptions extends EditorOptions {
+        InsertSpaceAfterCommaDelimiter: boolean;
+        InsertSpaceAfterSemicolonInForStatements: boolean;
+        InsertSpaceBeforeAndAfterBinaryOperators: boolean;
+        InsertSpaceAfterKeywordsInControlFlowStatements: boolean;
+        InsertSpaceAfterFunctionKeywordForAnonymousFunctions: boolean;
+        InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
+        PlaceOpenBraceOnNewLineForFunctions: boolean;
+        PlaceOpenBraceOnNewLineForControlBlocks: boolean;
     }
 
     export interface DefinitionInfo {
@@ -609,7 +577,7 @@ module TypeScript.Services {
 
         releaseDocument(filename: string, compilationSettings: ts.CompilerOptions): void
     }
-    
+
     // TODO: move these to enums
     export class ScriptElementKind {
         static unknown = "";
@@ -700,7 +668,7 @@ module TypeScript.Services {
         static message = "message";
     }
 
-    interface IncrementalParse {
+    export interface IncrementalParse {
         (oldSyntaxTree: SyntaxTree, textChangeRange: TextChangeRange, newText: ISimpleText): SyntaxTree
     }
 
@@ -847,7 +815,7 @@ module TypeScript.Services {
         }
     }
 
-     /// Language Service
+    /// Language Service
 
     interface CompletionSession {
         filename: string;           // the file where the completion was requested
@@ -872,6 +840,12 @@ module TypeScript.Services {
         isOpen: boolean;
         byteOrderMark: ts.ByteOrderMark;
         _sourceText?: TypeScript.IScriptSnapshot;
+    }
+
+    interface DocumentRegistryEntry {
+        document: Document;
+        refCount: number;
+        owners: string[];
     }
 
     export function getDefaultCompilerOptions(): ts.CompilerOptions {
@@ -1134,13 +1108,6 @@ module TypeScript.Services {
         }
     }
 
-    class DocumentRegistryEntry {
-        public refCount: number = 0;
-        public owners: string[] = [];
-        constructor(public document: Document) {
-        }
-    }
-
     export class DocumentRegistry implements IDocumentRegistry {
         private buckets: ts.Map<ts.Map<DocumentRegistryEntry>> = {};
 
@@ -1189,8 +1156,11 @@ module TypeScript.Services {
             if (!entry) {
                 var document = Document.create(compilationSettings, filename, scriptSnapshot, byteOrderMark, version, isOpen, referencedFiles);
 
-                entry = new DocumentRegistryEntry(document);
-                bucket[filename] = entry;
+                bucket[filename] = entry = {
+                    document: document,
+                    refCount: 0,
+                    owners: []
+                };
             }
             entry.refCount++;
 
