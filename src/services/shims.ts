@@ -263,7 +263,7 @@ module TypeScript.Services {
             return this.scriptSnapshotShim.getLength();
         }
 
-        public getLineStartPositions(): number[]{
+        public getLineStartPositions(): number[] {
             if (this.lineStartPositions == null) {
                 this.lineStartPositions = JSON.parse(this.scriptSnapshotShim.getLineStartPositions());
             }
@@ -389,7 +389,7 @@ module TypeScript.Services {
         }
     }
 
-    export function simpleForwardCall(logger: TypeScript.Logger, actionDescription: string, action: () =>any): any {
+    export function simpleForwardCall(logger: TypeScript.Logger, actionDescription: string, action: () => any): any {
         logger.log(actionDescription);
         var start = Date.now();
         var result = action();
@@ -405,7 +405,7 @@ module TypeScript.Services {
         return result;
     }
 
-    export function forwardJSONCall(logger: TypeScript.Logger, actionDescription: string, action: () =>any): string {
+    export function forwardJSONCall(logger: TypeScript.Logger, actionDescription: string, action: () => any): string {
         try {
             var result = simpleForwardCall(logger, actionDescription, action);
             return JSON.stringify({ result: result });
@@ -424,13 +424,13 @@ module TypeScript.Services {
         private logger: TypeScript.Logger;
 
         constructor(factory: IShimFactory,
-                    private host: ILanguageServiceShimHost,
-                    public languageService: TypeScript.Services.LanguageService) {
+            private host: ILanguageServiceShimHost,
+            public languageService: TypeScript.Services.LanguageService) {
             super(factory);
             this.logger = this.host;
         }
 
-        public forwardJSONCall(actionDescription: string, action: () =>any): string {
+        public forwardJSONCall(actionDescription: string, action: () => any): string {
             return TypeScript.Services.forwardJSONCall(this.logger, actionDescription, action);
         }
 
@@ -487,7 +487,7 @@ module TypeScript.Services {
 
         private realizeDiagnosticWithFileName(diagnostic: ts.Diagnostic): { fileName: string; message: string; start: number; length: number; category: string; } {
             return {
-                fileName:diagnostic.file.filename,
+                fileName: diagnostic.file.filename,
                 message: diagnostic.messageText,
                 start: diagnostic.start,
                 length: diagnostic.length,
@@ -540,7 +540,7 @@ module TypeScript.Services {
         // in the active file.
         public getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): string {
             return this.forwardJSONCall(
-                "getNameOrDottedNameSpan(\"" + fileName + "\", " + startPos + ", "  + endPos + ")",
+                "getNameOrDottedNameSpan(\"" + fileName + "\", " + startPos + ", " + endPos + ")",
                 () => {
                     var spanInfo = this.languageService.getNameOrDottedNameSpan(fileName, startPos, endPos);
                     return spanInfo;
@@ -811,7 +811,7 @@ module TypeScript.Services {
             this.services = new TypeScript.Services.CoreServices(this.host);
         }
 
-        private forwardJSONCall(actionDescription: string, action: () =>any): any {
+        private forwardJSONCall(actionDescription: string, action: () => any): any {
             return TypeScript.Services.forwardJSONCall(this.logger, actionDescription, action);
         }
 
@@ -838,4 +838,99 @@ module TypeScript.Services {
                 });
         }
     }
+
+    export class TypeScriptServicesFactory implements IShimFactory {
+        private _shims: IShim[] = [];
+        private documentRegistry: DocumentRegistry = new DocumentRegistry();
+
+        public createPullLanguageService(host: TypeScript.Services.LanguageServiceHost): TypeScript.Services.LanguageService {
+            try {
+                return TypeScript.Services.createLanguageService(host, this.documentRegistry);
+            }
+            catch (err) {
+                TypeScript.Services.logInternalError(host, err);
+                throw err;
+            }
+        }
+
+        public createLanguageServiceShim(host: ILanguageServiceShimHost): ILanguageServiceShim {
+            try {
+                var hostAdapter = new LanguageServiceShimHostAdapter(host);
+                var pullLanguageService = this.createPullLanguageService(hostAdapter);
+                return new LanguageServiceShim(this, host, pullLanguageService);
+            }
+            catch (err) {
+                TypeScript.Services.logInternalError(host, err);
+                throw err;
+            }
+        }
+
+        public createClassifier(host: TypeScript.Services.IClassifierHost): TypeScript.Services.Classifier {
+            try {
+                return new TypeScript.Services.Classifier(host);
+            }
+            catch (err) {
+                TypeScript.Services.logInternalError(host, err);
+                throw err;
+            }
+        }
+
+        public createClassifierShim(host: TypeScript.Services.IClassifierHost): ClassifierShim {
+            try {
+                return new ClassifierShim(this, host);
+            }
+            catch (err) {
+                TypeScript.Services.logInternalError(host, err);
+                throw err;
+            }
+        }
+
+        public createCoreServices(host: TypeScript.Services.ICoreServicesHost): TypeScript.Services.CoreServices {
+            try {
+                return new TypeScript.Services.CoreServices(host);
+            }
+            catch (err) {
+                TypeScript.Services.logInternalError(host.logger, err);
+                throw err;
+            }
+        }
+
+        public createCoreServicesShim(host: TypeScript.Services.ICoreServicesHost): CoreServicesShim {
+            try {
+                return new CoreServicesShim(this, host);
+            }
+            catch (err) {
+                TypeScript.Services.logInternalError(host.logger, err);
+                throw err;
+            }
+        }
+
+        public close(): void {
+            // Forget all the registered shims
+            this._shims = [];
+            this.documentRegistry = new DocumentRegistry();
+        }
+
+        public registerShim(shim: IShim): void {
+            this._shims.push(shim);
+        }
+
+        public unregisterShim(shim: IShim): void {
+            for (var i = 0, n = this._shims.length; i < n; i++) {
+                if (this._shims[i] === shim) {
+                    delete this._shims[i];
+                    return;
+                }
+            }
+
+            throw TypeScript.Errors.invalidOperation();
+        }
+    }
 }
+
+
+/// TODO: this is used by VS, clean this up on both sides of the interfrace
+module Services {
+    export var TypeScriptServicesFactory = TypeScript.Services.TypeScriptServicesFactory;
+}
+
