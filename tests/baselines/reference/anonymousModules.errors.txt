@@ -1,4 +1,4 @@
-==== tests/cases/compiler/anonymousModules.ts (12 errors) ====
+==== tests/cases/compiler/anonymousModules.ts (13 errors) ====
     module {
            ~
 !!! ';' expected.
@@ -18,13 +18,15 @@
     		export var bar = 1;
     		~~~~~~
 !!! Statement expected.
+    		           ~~~
+!!! Individual declarations in a merged declaration bar must be all exported or all local.
     	}
     	~
 !!! Declaration or statement expected.
     
     	var bar = 2;
     	    ~~~
-!!! All declarations of merged declaration 'bar' must be exported or not exported.
+!!! Individual declarations in a merged declaration bar must be all exported or all local.
     
     	module {
     	       ~

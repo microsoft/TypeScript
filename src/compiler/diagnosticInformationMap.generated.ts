@@ -137,7 +137,7 @@ module ts {
         A_signature_with_an_implementation_cannot_use_a_string_literal_type: { code: 2163, category: DiagnosticCategory.Error, key: "A signature with an implementation cannot use a string literal type." },
         Interface_0_cannot_simultaneously_extend_types_1_and_2_Colon: { code: 2189, category: DiagnosticCategory.Error, key: "Interface '{0}' cannot simultaneously extend types '{1}' and '{2}':" },
         Initializer_of_parameter_0_cannot_reference_identifier_1_declared_after_it: { code: 2190, category: DiagnosticCategory.Error, key: "Initializer of parameter '{0}' cannot reference identifier '{1}' declared after it." },
-        All_declarations_of_merged_declaration_0_must_be_exported_or_not_exported: { code: 2192, category: DiagnosticCategory.Error, key: "All declarations of merged declaration '{0}' must be exported or not exported." },
+        Individual_declarations_in_a_merged_declaration_0_must_be_all_exported_or_all_local: { code: 2192, category: DiagnosticCategory.Error, key: "Individual declarations in a merged declaration {0} must be all exported or all local." },
         super_cannot_be_referenced_in_constructor_arguments: { code: 2193, category: DiagnosticCategory.Error, key: "'super' cannot be referenced in constructor arguments." },
         Return_type_of_constructor_signature_must_be_assignable_to_the_instance_type_of_the_class: { code: 2194, category: DiagnosticCategory.Error, key: "Return type of constructor signature must be assignable to the instance type of the class" },
         Ambient_external_module_declaration_cannot_specify_relative_module_name: { code: 2196, category: DiagnosticCategory.Error, key: "Ambient external module declaration cannot specify relative module name." },

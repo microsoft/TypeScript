@@ -1,4 +1,4 @@
-==== tests/cases/compiler/duplicateSymbolsExportMatching.ts (9 errors) ====
+==== tests/cases/compiler/duplicateSymbolsExportMatching.ts (18 errors) ====
     module M {
         export interface E { }
         interface I { }
@@ -23,23 +23,29 @@
     
     module N2 {
         interface I { }
+                  ~
+!!! Individual declarations in a merged declaration I must be all exported or all local.
         export interface I { } // error
                          ~
-!!! All declarations of merged declaration 'I' must be exported or not exported.
+!!! Individual declarations in a merged declaration I must be all exported or all local.
         export interface E { }
+                         ~
+!!! Individual declarations in a merged declaration E must be all exported or all local.
         interface E { } // error
                   ~
-!!! All declarations of merged declaration 'E' must be exported or not exported.
+!!! Individual declarations in a merged declaration E must be all exported or all local.
     }
     
     // Should report error only once for instantiated module
     module M {
         module inst {
+               ~~~~
+!!! Individual declarations in a merged declaration inst must be all exported or all local.
             var t;
         }
         export module inst { // one error
                       ~~~~
-!!! All declarations of merged declaration 'inst' must be exported or not exported.
+!!! Individual declarations in a merged declaration inst must be all exported or all local.
             var t;
         }
     }
@@ -47,38 +53,50 @@
     // Variables of the same / different type
     module M2 {
         var v: string;
+            ~
+!!! Individual declarations in a merged declaration v must be all exported or all local.
         export var v: string; // one error (visibility)
                    ~
-!!! All declarations of merged declaration 'v' must be exported or not exported.
+!!! Individual declarations in a merged declaration v must be all exported or all local.
         var w: number;
+            ~
+!!! Individual declarations in a merged declaration w must be all exported or all local.
         export var w: string; // two errors (visibility and type mismatch)
                    ~
-!!! All declarations of merged declaration 'w' must be exported or not exported.
+!!! Individual declarations in a merged declaration w must be all exported or all local.
     }
     
     module M {
         module F {
                ~
 !!! A module declaration cannot be located prior to a class or function with which it is merged
+               ~
+!!! Individual declarations in a merged declaration F must be all exported or all local.
             var t;
         }
         export function F() { } // Only one error for duplicate identifier (don't consider visibility)
                         ~
-!!! All declarations of merged declaration 'F' must be exported or not exported.
+!!! Individual declarations in a merged declaration F must be all exported or all local.
     }
     
     module M {
         class C { }
+              ~
+!!! Individual declarations in a merged declaration C must be all exported or all local.
         module C { }
+               ~
+!!! Individual declarations in a merged declaration C must be all exported or all local.
         export module C { // Two visibility errors (one for the clodule symbol, and one for the merged container symbol)
                       ~
-!!! All declarations of merged declaration 'C' must be exported or not exported.
+!!! Individual declarations in a merged declaration C must be all exported or all local.
             var t;
         }
     }
     
     // Top level
     interface D { }
+              ~
+!!! Individual declarations in a merged declaration D must be all exported or all local.
     export interface D { }
                      ~
-!!! All declarations of merged declaration 'D' must be exported or not exported.
+!!! Individual declarations in a merged declaration D must be all exported or all local.

@@ -4941,28 +4941,34 @@ module ts {
                 }
             }
 
+            // run the check only for the first declaration in the list
             if (getDeclarationOfKind(symbol, node.kind) !== node) {
                 return;
             }
 
             // we use SymbolFlags.ExportValue, SymbolFlags.ExportType and SymbolFlags.ExportNamespace 
             // to denote disjoint declarationSpaces (without making new enum type).
-            var declarationSpaces: SymbolFlags = 0;
-            var hasExport: boolean;
-
-            var declarations = symbol.declarations;
-            for (var i = 0, len = declarations.length; i < len; ++i) {
-                var currentDeclarationSpaces = getDeclarationSpaces(declarations[i]);
-                var currentDeclarationHasExport = (declarations[i].flags & NodeFlags.Export) !== 0;
-                if (declarationSpaces & currentDeclarationSpaces) {
-                    if (hasExport !== undefined) {
-                        if (hasExport !== currentDeclarationHasExport) {
-                            error(declarations[i].name, Diagnostics.All_declarations_of_merged_declaration_0_must_be_exported_or_not_exported, symbolToString(symbol));
-                        }
-                    }
+            var exportedDeclarationSpaces: SymbolFlags = 0;
+            var nonExportedDeclarationSpaces: SymbolFlags = 0;
+            forEach(symbol.declarations, d => {
+                var declarationSpaces = getDeclarationSpaces(d);
+                if (d.flags & NodeFlags.Export) {
+                    exportedDeclarationSpaces |= declarationSpaces;
                 }
-                hasExport = hasExport || currentDeclarationHasExport;
-                declarationSpaces |= currentDeclarationSpaces;
+                else {
+                    nonExportedDeclarationSpaces |= declarationSpaces;
+                }
+            });
+
+            var commonDeclarationSpace = exportedDeclarationSpaces & nonExportedDeclarationSpaces
+
+            if (commonDeclarationSpace) {
+                // declaration spaces for exported and non-exported declarations intersect
+                forEach(symbol.declarations, d => {
+                    if (getDeclarationSpaces(d) & commonDeclarationSpace) {
+                        error(d.name, Diagnostics.Individual_declarations_in_a_merged_declaration_0_must_be_all_exported_or_all_local, identifierToString(d.name));
+                    }
+                });
             }
 
             function getDeclarationSpaces(d: Declaration): SymbolFlags {
@@ -4977,8 +4983,10 @@ module ts {
                     case SyntaxKind.EnumDeclaration:
                         return SymbolFlags.ExportType | SymbolFlags.ExportValue;
                     case SyntaxKind.ImportDeclaration:
+                        var result: SymbolFlags = 0;
                         var target = resolveImport(getSymbolOfNode(d));
-                        return target.flags & SymbolFlags.Export;
+                        forEach(target.declarations, d => { result |= getDeclarationSpaces(d); } ) 
+                        return result;
                     default:
                         return SymbolFlags.ExportValue;
                 }
@@ -5000,10 +5008,10 @@ module ts {
                 checkFunctionOrConstructorSymbol(localSymbol);
             }
 
-            if (symbol !== localSymbol) {
-                // here we'll check exported side of the symbol
-                Debug.assert(symbol.parent);
+            if (symbol.parent) {
+                // run check once for the first declaration
                 if (getDeclarationOfKind(symbol, node.kind) === node) {
+                    // run check on export symbol to check that modifiers agree across all exported declarations
                     checkFunctionOrConstructorSymbol(symbol);
                 }
             }
