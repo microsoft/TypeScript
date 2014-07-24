@@ -17,25 +17,12 @@ module TypeScript.Services {
     }
 
     // Information about a specific host file.
-    class HostFileInformation {
-        private _sourceText: TypeScript.IScriptSnapshot;
-
-        constructor(
-            public filename: string,
-            private host: ILanguageServiceHost,
-            public version: number,
-            public isOpen: boolean,
-            public byteOrderMark: TypeScript.ByteOrderMark) {
-            this._sourceText = null;
-        }
-
-        public getScriptSnapshot(): TypeScript.IScriptSnapshot {
-            if (this._sourceText === null) {
-                this._sourceText = this.host.getScriptSnapshot(this.filename);
-            }
-
-            return this._sourceText;
-        }
+    interface HostFileInformation {
+        filename: string;
+        version: number;
+        isOpen: boolean;
+        byteOrderMark: TypeScript.ByteOrderMark;
+        _sourceText?: TypeScript.IScriptSnapshot;
     }
 
     export function getDefaultCompilerOptions(): ts.CompilerOptions {
@@ -53,15 +40,19 @@ module TypeScript.Services {
         private _filenameToEntry: ts.Map<HostFileInformation>;
         private _compilationSettings: ts.CompilerOptions;
 
-        constructor(host: ILanguageServiceHost) {
+        constructor(private host: ILanguageServiceHost) {
             // script id => script index
             this._filenameToEntry = {};
 
             var filenames = host.getScriptFileNames();
             for (var i = 0, n = filenames.length; i < n; i++) {
                 var filename = filenames[i];
-                this._filenameToEntry[TypeScript.switchToForwardSlashes(filename)] = new HostFileInformation(
-                    filename, host, host.getScriptVersion(filename), host.getScriptIsOpen(filename), host.getScriptByteOrderMark(filename));
+                this._filenameToEntry[TypeScript.switchToForwardSlashes(filename)] = {
+                    filename: filename,
+                    version: host.getScriptVersion(filename),
+                    isOpen: host.getScriptIsOpen(filename),
+                    byteOrderMark: host.getScriptByteOrderMark(filename)
+                };
             }
 
             this._compilationSettings = host.getCompilationSettings() || getDefaultCompilerOptions();
@@ -83,7 +74,7 @@ module TypeScript.Services {
             return filename;
         }
 
-        public getfilenames(): string[]{
+        public getfilenames(): string[] {
             var fileNames: string[] = [];
             for (var id in this._filenameToEntry) {
                 fileNames.push(id);
@@ -104,7 +95,11 @@ module TypeScript.Services {
         }
 
         public getScriptSnapshot(filename: string): TypeScript.IScriptSnapshot {
-            return this._filenameToEntry[TypeScript.switchToForwardSlashes(filename)].getScriptSnapshot();
+            var file = this._filenameToEntry[TypeScript.switchToForwardSlashes(filename)];
+            if (!file._sourceText) {
+                file._sourceText = this.host.getScriptSnapshot(file.filename);
+            }
+            return file._sourceText;
         }
 
         public getScriptTextChangeRangeSinceVersion(filename: string, lastKnownVersion: number): TypeScript.TextChangeRange {
@@ -256,14 +251,11 @@ module TypeScript.Services {
         }
     }
 
-    class FormattingOptions {
-        constructor(public useTabs: boolean,
-            public spacesPerTab: number,
-            public indentSpaces: number,
-            public newLineCharacter: string) {
-        }
-
-        public static defaultOptions = new FormattingOptions(/*useTabs:*/ false, /*spacesPerTab:*/ 4, /*indentSpaces:*/ 4, /*newLineCharacter*/ "\r\n");
+    interface FormattingOptions {
+        useTabs: boolean;
+        spacesPerTab: number;
+        indentSpaces: number;
+        newLineCharacter: string;
     }
 
     class DocumentRegistryEntry {
