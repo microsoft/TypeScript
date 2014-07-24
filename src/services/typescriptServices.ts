@@ -129,29 +129,10 @@ module TypeScript {
         }
         return true;
     }
-
-    export var version = "1.0.3.0";
-    export var fileResolutionTime = 0;
-    export var fileResolutionIOTime = 0;
-    export var fileResolutionScanImportsTime = 0;
-    export var fileResolutionImportFileSearchTime = 0;
-    export var fileResolutionGetDefaultLibraryTime = 0;
 }
 
 
 module TypeScript.Services {
-    export function copyDataObject(dst: any, src: any): any {
-        for (var e in dst) {
-            if (typeof dst[e] == "object") {
-                copyDataObject(dst[e], src[e]);
-            }
-            else if (typeof dst[e] != "function") {
-                dst[e] = src[e];
-            }
-        }
-        return dst;
-    }
-
     export class TypeScriptServicesFactory implements IShimFactory {
         private _shims: IShim[] = [];
         private documentRegistry: DocumentRegistry = new DocumentRegistry();

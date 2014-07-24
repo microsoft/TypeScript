@@ -156,7 +156,7 @@ module TypeScript {
                 }
                 while (parentDirectory);
 
-                TypeScript.fileResolutionImportFileSearchTime += new Date().getTime() - start;
+                //TypeScript.fileResolutionImportFileSearchTime += new Date().getTime() - start;
 
                 if (!searchFilePath) {
                     // Cannot find file import, do not reprot an error, the typeChecker will report it later on
@@ -179,7 +179,7 @@ module TypeScript {
                 var start = new Date().getTime();
                 var scriptSnapshot = this.host.getScriptSnapshot(normalizedPath);
                 var totalTime = new Date().getTime() - start;
-                TypeScript.fileResolutionIOTime += totalTime;
+                //TypeScript.fileResolutionIOTime += totalTime;
 
                 var lineMap = LineMap1.fromScriptSnapshot(scriptSnapshot);
                 var preprocessedFileInformation = TypeScript.preProcessFile(normalizedPath, scriptSnapshot);

@@ -127,7 +127,7 @@ module TypeScript {
         }
 
         var totalTime = new Date().getTime() - start;
-        TypeScript.fileResolutionScanImportsTime += totalTime;
+        //TypeScript.fileResolutionScanImportsTime += totalTime;
     }
 
     function processTripleSlashDirectives(fileName: string, text: ISimpleText, firstToken: ISyntaxToken): ITripleSlashDirectiveProperties {
