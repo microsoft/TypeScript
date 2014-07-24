@@ -162,7 +162,7 @@ module TypeScript.Services {
 
         public createPullLanguageService(host: TypeScript.Services.ILanguageServiceHost): TypeScript.Services.ILanguageService {
             try {
-                return new TypeScript.Services.LanguageService(host, this.documentRegistry);
+                return TypeScript.Services.createLanguageService(host, this.documentRegistry);
             }
             catch (err) {
                 TypeScript.Services.logInternalError(host, err);

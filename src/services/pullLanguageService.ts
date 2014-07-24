@@ -381,46 +381,37 @@ module TypeScript.Services {
         }
     }
 
-    export class LanguageService implements ILanguageService {
-        private logger: TypeScript.ILogger;
-        private _syntaxTreeCache: SyntaxTreeCache;
-        private formattingRulesProvider: Formatting.RulesProvider;
+    export function createLanguageService(host: ILanguageServiceHost, documentRegistry: IDocumentRegistry) :ILanguageService{
+        var logger: TypeScript.ILogger = host;
+        var _syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
+        var formattingRulesProvider: Formatting.RulesProvider;
+        var hostCache: HostCache; // A cache of all the information about the files on the host side.
+        var program: ts.Program;
+        var typeChecker: ts.TypeChecker;
+        var useCaseSensitivefilenames = false;
+        var documentsByName: ts.Map<Document> = {};
+        var documentRegistry = documentRegistry;
+        var cancellationToken = new CancellationToken(host.getCancellationToken());
+        var activeCompletionSession: CompletionSession;
 
-        // A cache of all the information about the files on the host side.
-        private hostCache: HostCache = null;
-        private program: ts.Program;
-        private typeChecker: ts.TypeChecker;
-        private useCaseSensitivefilenames = false;
-        private documentsByName: ts.Map<Document> = {};
-        private documentRegistry: IDocumentRegistry
-        private cancellationToken: CancellationToken;
-        private activeCompletionSession: CompletionSession;
-
-        constructor(public host: ILanguageServiceHost, documentRegistry: IDocumentRegistry) {
-            this.logger = this.host;
-            this.cancellationToken = new CancellationToken(this.host.getCancellationToken());
-            this.documentRegistry = documentRegistry;
-            this._syntaxTreeCache = new SyntaxTreeCache(this.host);
-
-            // Check if the localized messages json is set, otherwise query the host for it
-            if (!TypeScript.LocalizedDiagnosticMessages) {
-                TypeScript.LocalizedDiagnosticMessages = this.host.getLocalizedDiagnosticMessages();
-            }
+        // Check if the localized messages json is set, otherwise query the host for it
+        if (!TypeScript.LocalizedDiagnosticMessages) {
+            TypeScript.LocalizedDiagnosticMessages = host.getLocalizedDiagnosticMessages();
         }
 
-        private createCompilerHost(): ts.CompilerHost {
+        function createCompilerHost(): ts.CompilerHost {
             return {
                 getSourceFile: (filename, languageVersion) => {
-                    var document = this.documentsByName[filename];
+                    var document = documentsByName[filename];
 
                     Debug.assert(!!document, "document can not be undefined");
 
                     return document.sourceFile();
                 },
-                getCancellationToken: () => this.cancellationToken,
-                getCanonicalFileName: (filename) => this.useCaseSensitivefilenames ? filename : filename.toLowerCase(),
-                useCaseSensitiveFileNames: () => this.useCaseSensitivefilenames,
-                getNewLine: ()=> "\n",
+                getCancellationToken: () => cancellationToken,
+                getCanonicalFileName: (filename) => useCaseSensitivefilenames ? filename : filename.toLowerCase(),
+                useCaseSensitiveFileNames: () => useCaseSensitivefilenames,
+                getNewLine: () => "\n",
                 // Need something that doesn't depend on sys.ts here
                 getDefaultLibFilename: (): string => {
                     throw Error("TOD:: getDefaultLibfilename");
@@ -434,20 +425,20 @@ module TypeScript.Services {
             };
         }
 
-        private synchronizeHostData(): void {
+        function synchronizeHostData(): void {
             // Reset the cache at start of every refresh
-            this.hostCache = new HostCache(this.host);
+            hostCache = new HostCache(host);
 
-            var compilationSettings = this.hostCache.compilationSettings();
+            var compilationSettings = hostCache.compilationSettings();
 
             // TODO: check if we need to create a new compiler to start with
             //       1. files are identical
             //       2. compilation settings are identical
 
             // Now, remove any files from the compiler that are no longer in the host.
-            var oldProgram = this.program;
+            var oldProgram = program;
             if (oldProgram) {
-                var oldSettings = this.program.getCompilerOptions();
+                var oldSettings = program.getCompilerOptions();
 
                 // If the language version changed, then that affects what types of things we parse. So
                 // we have to dump all syntax trees.
@@ -456,14 +447,14 @@ module TypeScript.Services {
 
                 var changesInCompilationSettingsAffectSyntax =
                     oldSettings && compilationSettings && !compareDataObjects(oldSettings, compilationSettings) && settingsChangeAffectsSyntax;
-                var oldSourceFiles = this.program.getSourceFiles();
+                var oldSourceFiles = program.getSourceFiles();
 
                 for (var i = 0, n = oldSourceFiles.length; i < n; i++) {
-                    this.cancellationToken.throwIfCancellationRequested();
+                    cancellationToken.throwIfCancellationRequested();
                     var filename = oldSourceFiles[i].filename;
-                    if (!this.hostCache.contains(filename) || changesInCompilationSettingsAffectSyntax) {
-                        this.documentRegistry.releaseDocument(filename, oldSettings);
-                        delete this.documentsByName[filename];
+                    if (!hostCache.contains(filename) || changesInCompilationSettingsAffectSyntax) {
+                        documentRegistry.releaseDocument(filename, oldSettings);
+                        delete documentsByName[filename];
                     }
                 }
             }
@@ -471,16 +462,16 @@ module TypeScript.Services {
             // Now, for every file the host knows about, either add the file (if the compiler
             // doesn't know about it.).  Or notify the compiler about any changes (if it does
             // know about it.)
-            var hostfilenames = this.hostCache.getfilenames();
+            var hostfilenames = hostCache.getfilenames();
 
             for (var i = 0, n = hostfilenames.length; i < n; i++) {
                 var filename = hostfilenames[i];
 
-                var version = this.hostCache.getVersion(filename);
-                var isOpen = this.hostCache.isOpen(filename);
-                var scriptSnapshot = this.hostCache.getScriptSnapshot(filename);
+                var version = hostCache.getVersion(filename);
+                var isOpen = hostCache.isOpen(filename);
+                var scriptSnapshot = hostCache.getScriptSnapshot(filename);
 
-                var document: Document = this.documentsByName[filename];
+                var document: Document = documentsByName[filename];
                 if (document) {
                     //
                     // If the document is the same, assume no update
@@ -497,64 +488,53 @@ module TypeScript.Services {
                     // new text buffer).
                     var textChangeRange: TextChangeRange = null;
                     if (document.isOpen && isOpen) {
-                        textChangeRange = this.hostCache.getScriptTextChangeRangeSinceVersion(filename, document.version);
+                        textChangeRange = hostCache.getScriptTextChangeRangeSinceVersion(filename, document.version);
                     }
 
-                    document = this.documentRegistry.updateDocument(document, filename, compilationSettings, scriptSnapshot, version, isOpen, textChangeRange);
+                    document = documentRegistry.updateDocument(document, filename, compilationSettings, scriptSnapshot, version, isOpen, textChangeRange);
                 }
                 else {
-                    document = this.documentRegistry.acquireDocument(filename, compilationSettings, scriptSnapshot, this.hostCache.getByteOrderMark(filename), version, isOpen, []);
+                    document = documentRegistry.acquireDocument(filename, compilationSettings, scriptSnapshot, hostCache.getByteOrderMark(filename), version, isOpen, []);
                 }
 
                 // Remeber the new document
-                this.documentsByName[filename] = document;
+                documentsByName[filename] = document;
             }
 
             // Now create a new compiler
-            this.program = ts.createProgram(hostfilenames, compilationSettings, this.createCompilerHost());
-            this.typeChecker = this.program.getTypeChecker();
+            program = ts.createProgram(hostfilenames, compilationSettings, createCompilerHost());
+            typeChecker = program.getTypeChecker();
         }
 
-        dispose(): void {
-            if (this.program) {
-                ts.forEach(this.program.getSourceFiles(),
-                    (f) => this.documentRegistry.releaseDocument(f.filename, this.program.getCompilerOptions()));
+        function dispose(): void {
+            if (program) {
+                ts.forEach(program.getSourceFiles(),
+                    (f) => documentRegistry.releaseDocument(f.filename, program.getCompilerOptions()));
             }
         }
 
-        refresh() {
-            // No-op.  Only kept around for compatability with the interface we shipped.
-        }
-        cleanupSemanticCache() { }
-
-        getSyntacticDiagnostics(filename: string) {
-            this.synchronizeHostData();
-            return this.program.getDiagnostics(this.program.getSourceFile(filename));
-        }
-        getSemanticDiagnostics(filename: string) {
-            this.synchronizeHostData();
-            return this.typeChecker.getDiagnostics(this.program.getSourceFile(filename));
-        }
-        getCompilerOptionsDiagnostics() {
-            this.synchronizeHostData();
-            return this.program.getGlobalDiagnostics();
+        /// Diagnostics
+        function getSyntacticDiagnostics(filename: string) {
+            synchronizeHostData();
+            return program.getDiagnostics(program.getSourceFile(filename));
         }
 
-        private getCompletionEntriesFromSymbols(symbols: ts.Symbol[], session:CompletionSession): void {
-            ts.forEach(symbols, (symbol) => {
-                var entry = this.createCompletionEntry(symbol);
-                if (entry) {
-                    session.entries.push(entry);
-                    session.symbols[entry.name] = symbol;
-                }
-            });
+        function getSemanticDiagnostics(filename: string) {
+            synchronizeHostData();
+            return typeChecker.getDiagnostics(program.getSourceFile(filename));
         }
 
-        private createCompletionEntry(symbol: ts.Symbol): CompletionEntry {
+        function getCompilerOptionsDiagnostics() {
+            synchronizeHostData();
+            return program.getGlobalDiagnostics();
+        }
+
+        /// Completion
+        function createCompletionEntry(symbol: ts.Symbol): CompletionEntry {
             // Try to get a valid display name for this symbol, if we could not find one, then ignore it. 
             // We would like to only show things that can be added after a dot, so for instance numeric properties can
             // not be accessed with a dot (a.1 <- invalid)
-            var displayName = CompletionHelpers.getValidCompletionEntryDisplayName(symbol.getName(), this.program.getCompilerOptions().target);
+            var displayName = CompletionHelpers.getValidCompletionEntryDisplayName(symbol.getName(), program.getCompilerOptions().target);
             if (!displayName) {
                 return undefined;
             }
@@ -563,21 +543,31 @@ module TypeScript.Services {
             var firstDeclaration = [0];
             return {
                 name: displayName,
-                kind: this.getSymbolKind(symbol),
-                kindModifiers: declarations ? this.getNodeModifiers(declarations[0]) : ScriptElementKindModifier.none
+                kind: getSymbolKind(symbol),
+                kindModifiers: declarations ? getNodeModifiers(declarations[0]) : ScriptElementKindModifier.none
             };
         }
 
-        getCompletionsAtPosition(filename: string, position: number, isMemberCompletion: boolean) {
-            this.synchronizeHostData();
+        function getCompletionsAtPosition(filename: string, position: number, isMemberCompletion: boolean) {
+            function getCompletionEntriesFromSymbols(symbols: ts.Symbol[], session: CompletionSession): void {
+                ts.forEach(symbols, (symbol) => {
+                    var entry = createCompletionEntry(symbol);
+                    if (entry) {
+                        session.entries.push(entry);
+                        session.symbols[entry.name] = symbol;
+                    }
+                });
+            }
+
+            synchronizeHostData();
 
             filename = TypeScript.switchToForwardSlashes(filename);
 
-            var document = this.documentsByName[filename];
+            var document = documentsByName[filename];
             var sourceUnit = document.sourceUnit();
 
             if (CompletionHelpers.isCompletionListBlocker(document.syntaxTree().sourceUnit(), position)) {
-                this.logger.log("Returning an empty list because completion was blocked.");
+                logger.log("Returning an empty list because completion was blocked.");
                 return null;
             }
 
@@ -622,30 +612,30 @@ module TypeScript.Services {
             }
 
             // TODO: this is a hack for now, we need a proper walking mechanism to verify that we have the correct node
-            var mappedNode = this.getNodeAtPosition(document.sourceFile(), end(node) - 1);
+            var mappedNode = getNodeAtPosition(document.sourceFile(), end(node) - 1);
 
             Debug.assert(mappedNode, "Could not map a Fidelity node to an AST node");
 
             // Get the completions
-            this.activeCompletionSession = {
+            activeCompletionSession = {
                 filename: filename,
                 position: position,
                 entries: [],
                 symbols: {},
                 location: mappedNode,
-                typeChecker: this.typeChecker
+                typeChecker: typeChecker
             };
 
             // Right of dot member completion list
             if (isRightOfDot) {
-                var type: ts.Type = this.typeChecker.getTypeOfExpression(mappedNode);
+                var type: ts.Type = typeChecker.getTypeOfExpression(mappedNode);
                 if (!type) {
                     return undefined;
                 }
 
                 var symbols = type.getApparentProperties();
                 isMemberCompletion = true;
-                this.getCompletionEntriesFromSymbols(symbols, this.activeCompletionSession);
+                getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
             }
             else {
                 var containingObjectLiteral = CompletionHelpers.getContainingObjectLiteralApplicableForCompletion(document.syntaxTree().sourceUnit(), position);
@@ -669,13 +659,13 @@ module TypeScript.Services {
                     isMemberCompletion = true;
 
                     //// Try to get the object members form contextual typing
-                    //var contextualMembers = this.compiler.getContextualMembersFromAST(node, document);
+                    //var contextualMembers = compiler.getContextualMembersFromAST(node, document);
                     //if (contextualMembers && contextualMembers.symbols && contextualMembers.symbols.length > 0) {
                     //    // get existing members
-                    //    var existingMembers = this.compiler.getVisibleMemberSymbolsFromAST(node, document);
+                    //    var existingMembers = compiler.getVisibleMemberSymbolsFromAST(node, document);
 
                     //    // Add filtterd items to the completion list
-                    //    this.getCompletionEntriesFromSymbols({
+                    //    getCompletionEntriesFromSymbols({
                     //        symbols: CompletionHelpers.filterContextualMembersList(contextualMembers.symbols, existingMembers, filename, position),
                     //        enclosingScopeSymbol: contextualMembers.enclosingScopeSymbol
                     //    }, entries);
@@ -686,45 +676,46 @@ module TypeScript.Services {
                     isMemberCompletion = false;
                     /// TODO filter meaning based on the current context
                     var symbolMeanings = ts.SymbolFlags.Type | ts.SymbolFlags.Value | ts.SymbolFlags.Namespace;
-                    var symbols = this.typeChecker.getSymbolsInScope(mappedNode, symbolMeanings);
+                    var symbols = typeChecker.getSymbolsInScope(mappedNode, symbolMeanings);
 
-                    this.getCompletionEntriesFromSymbols(symbols, this.activeCompletionSession);
+                    getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
                 }
             }
 
             // Add keywords if this is not a member completion list
             if (!isMemberCompletion) {
-                Array.prototype.push.apply(this.activeCompletionSession.entries, KeywordCompletions.getKeywordCompltions());
+                Array.prototype.push.apply(activeCompletionSession.entries, KeywordCompletions.getKeywordCompltions());
             }
 
             return {
                 isMemberCompletion: isMemberCompletion,
-                entries: this.activeCompletionSession.entries
+                entries: activeCompletionSession.entries
             };
         }
-        getCompletionEntryDetails(filename: string, position: number, entryName: string) {
+
+        function getCompletionEntryDetails(filename: string, position: number, entryName: string) {
             // Note: No need to call synchronizeHostData, as we have captured all the data we need
             //       in the getCompletionsAtPosition erlier
             filename = TypeScript.switchToForwardSlashes(filename);
 
-            var session = this.activeCompletionSession;
+            var session = activeCompletionSession;
 
             // Ensure that the current active completion session is still valid for this request
             if (!session || session.filename !== filename || session.position !== position) {
                 return undefined;
             }
 
-            var symbol = this.activeCompletionSession.symbols[entryName];
+            var symbol = activeCompletionSession.symbols[entryName];
             if (symbol) {
                 var type = session.typeChecker.getTypeOfSymbol(symbol);
                 Debug.assert(type, "Could not find type for symbol");
-                var completionEntry = this.createCompletionEntry(symbol);
+                var completionEntry = createCompletionEntry(symbol);
                 return {
                     name: entryName,
                     kind: completionEntry.kind,
                     kindModifiers: completionEntry.kindModifiers,
                     type: session.typeChecker.typeToString(type, session.location),
-                    fullSymbolName: this.typeChecker.symbolToString(symbol, session.location),
+                    fullSymbolName: typeChecker.symbolToString(symbol, session.location),
                     docComment: ""
                 };
             }
@@ -741,7 +732,7 @@ module TypeScript.Services {
             }
         }
 
-        private getNodeAtPosition(sourceFile: ts.SourceFile, position: number) {
+        function getNodeAtPosition(sourceFile: ts.SourceFile, position: number) {
             var current: ts.Node = sourceFile;
             outer: while (true) {
                 // find the child that has this
@@ -757,7 +748,7 @@ module TypeScript.Services {
             }
         }
 
-        private getEnclosingDeclaration(node: ts.Node): ts.Node {
+        function getEnclosingDeclaration(node: ts.Node): ts.Node {
             while (true) {
                 node = node.parent;
                 if (!node) {
@@ -778,7 +769,7 @@ module TypeScript.Services {
             }
         }
 
-        getSymbolKind(symbol: ts.Symbol): string {
+        function getSymbolKind(symbol: ts.Symbol): string {
             var flags = symbol.getFlags();
 
             if (flags & ts.SymbolFlags.Module) return ScriptElementKind.moduleElement;
@@ -801,7 +792,7 @@ module TypeScript.Services {
             return ScriptElementKind.unknown;
         }
 
-        getTypeKind(type: ts.Type): string {
+        function getTypeKind(type: ts.Type): string {
             var flags = type.getFlags();
 
             if (flags & ts.TypeFlags.Enum) return ScriptElementKind.enumElement;
@@ -814,7 +805,7 @@ module TypeScript.Services {
             return ScriptElementKind.unknown;
         }
 
-        getNodeModifiers(node: ts.Node): string {
+        function getNodeModifiers(node: ts.Node): string {
             var flags = node.flags;
             var result: string[] = [];
 
@@ -827,12 +818,13 @@ module TypeScript.Services {
             return result.length > 0 ? result.join(',') : ScriptElementKindModifier.none;
         }
 
-        getTypeAtPosition(filename: string, position: number): TypeInfo {
-            this.synchronizeHostData();
+        /// QuickInfo
+        function getTypeAtPosition(filename: string, position: number): TypeInfo {
+            synchronizeHostData();
 
             filename = TypeScript.switchToForwardSlashes(filename);
-            var document = this.documentsByName[filename];
-            var node = this.getNodeAtPosition(document.sourceFile(), position);
+            var document = documentsByName[filename];
+            var node = getNodeAtPosition(document.sourceFile(), position);
             if (!node) return undefined;
             
             switch (node.kind) {
@@ -842,15 +834,15 @@ module TypeScript.Services {
                         // TODO: handle new and call expressions
                     }
 
-                    var symbol = this.typeChecker. getSymbolOfIdentifier(<ts.Identifier>node);
+                    var symbol = typeChecker. getSymbolOfIdentifier(<ts.Identifier>node);
                     Debug.assert(symbol, "getTypeAtPosition: Could not find symbol for node");
-                    var type = this.typeChecker.getTypeOfSymbol(symbol);
+                    var type = typeChecker.getTypeOfSymbol(symbol);
 
                     return {
-                        memberName: new MemberNameString(this.typeChecker.typeToString(type)),
+                        memberName: new MemberNameString(typeChecker.typeToString(type)),
                         docComment: "",
-                        fullSymbolName: this.typeChecker.symbolToString(symbol, this.getEnclosingDeclaration(node)),
-                        kind: this.getSymbolKind(symbol),
+                        fullSymbolName: typeChecker.symbolToString(symbol, getEnclosingDeclaration(node)),
+                        kind: getSymbolKind(symbol),
                         minChar: node.pos,
                         limChar: node.end
                     };
@@ -860,79 +852,65 @@ module TypeScript.Services {
                 case ts.SyntaxKind.QualifiedName:
                 case ts.SyntaxKind.SuperKeyword:
                 case ts.SyntaxKind.StringLiteral:
-                    var type = this.typeChecker.getTypeOfExpression(node);
+                    var type = typeChecker.getTypeOfExpression(node);
                     Debug.assert(type, "getTypeAtPosition: Could not find type for node");
                     return {
                         memberName: new MemberNameString(""),
                         docComment: "",
-                        fullSymbolName: this.typeChecker.typeToString(type, this.getEnclosingDeclaration(node)),
-                        kind: this.getTypeKind(type),
+                        fullSymbolName: typeChecker.typeToString(type, getEnclosingDeclaration(node)),
+                        kind: getTypeKind(type),
                         minChar: node.pos,
                         limChar: node.end
                     };
                     break;
             }
         }
-        getSignatureAtPosition(filename: string, position: number) {
-            return undefined;
-        }
-        getDefinitionAtPosition(filename: string, position: number) {
-            return [];
-        }
-        getReferencesAtPosition(filename: string, position: number) {
-            return [];
-        }
-        getOccurrencesAtPosition(filename: string, position: number) {
-            return [];
-        }
-        getImplementorsAtPosition(filename: string, position: number) {
-            return [];
-        }
-        getNavigateToItems(searchValue: string) {
-            return [];
-        }
-        getEmitOutput(filename: string) {
-            return undefined;
+
+        /// Syntactic features
+        function getSyntaxTree(filename: string): TypeScript.SyntaxTree {
+            filename = TypeScript.switchToForwardSlashes(filename);
+            return _syntaxTreeCache.getCurrentFileSyntaxTree(filename);
         }
 
-        private getTypeInfoEligiblePath(filename: string, position: number, isConstructorValidPosition: boolean) {
-            var sourceUnit = this._syntaxTreeCache.getCurrentFileSyntaxTree(filename).sourceUnit();
+        function getNameOrDottedNameSpan(filename: string, startPos: number, endPos: number): SpanInfo {
+            function getTypeInfoEligiblePath(filename: string, position: number, isConstructorValidPosition: boolean) {
+                var sourceUnit = _syntaxTreeCache.getCurrentFileSyntaxTree(filename).sourceUnit();
 
-            var ast = TypeScript.ASTHelpers.getAstAtPosition(sourceUnit, position, /*useTrailingTriviaAsLimChar*/ false, /*forceInclusive*/ true);
-            if (ast === null) {
-                return null;
-            }
-
-            if (ast.kind() === SyntaxKind.ParameterList && ast.parent.kind() === SyntaxKind.CallSignature && ast.parent.parent.kind() === SyntaxKind.ConstructorDeclaration) {
-                ast = ast.parent.parent;
-            }
-
-            switch (ast.kind()) {
-                default:
+                var ast = TypeScript.ASTHelpers.getAstAtPosition(sourceUnit, position, /*useTrailingTriviaAsLimChar*/ false, /*forceInclusive*/ true);
+                if (ast === null) {
                     return null;
-                case TypeScript.SyntaxKind.ConstructorDeclaration:
-                    var constructorAST = <TypeScript.ConstructorDeclarationSyntax>ast;
-                    if (!isConstructorValidPosition || !(position >= start(constructorAST) && position <= start(constructorAST) + "constructor".length)) {
+                }
+
+                if (ast.kind() === SyntaxKind.ParameterList && ast.parent.kind() === SyntaxKind.CallSignature && ast.parent.parent.kind() === SyntaxKind.ConstructorDeclaration) {
+                    ast = ast.parent.parent;
+                }
+
+                switch (ast.kind()) {
+                    default:
                         return null;
-                    }
-                    else {
+                    case TypeScript.SyntaxKind.ConstructorDeclaration:
+                        var constructorAST = <TypeScript.ConstructorDeclarationSyntax>ast;
+                        if (!isConstructorValidPosition || !(position >= start(constructorAST) && position <= start(constructorAST) + "constructor".length)) {
+                            return null;
+                        }
+                        else {
+                            return ast;
+                        }
+                    case TypeScript.SyntaxKind.FunctionDeclaration:
+                        return null;
+                    case TypeScript.SyntaxKind.MemberAccessExpression:
+                    case TypeScript.SyntaxKind.QualifiedName:
+                    case TypeScript.SyntaxKind.SuperKeyword:
+                    case TypeScript.SyntaxKind.StringLiteral:
+                    case TypeScript.SyntaxKind.ThisKeyword:
+                    case TypeScript.SyntaxKind.IdentifierName:
                         return ast;
-                    }
-                case TypeScript.SyntaxKind.FunctionDeclaration:
-                    return null;
-                case TypeScript.SyntaxKind.MemberAccessExpression:
-                case TypeScript.SyntaxKind.QualifiedName:
-                case TypeScript.SyntaxKind.SuperKeyword:
-                case TypeScript.SyntaxKind.StringLiteral:
-                case TypeScript.SyntaxKind.ThisKeyword:
-                case TypeScript.SyntaxKind.IdentifierName:
-                    return ast;
+                }
             }
-        }
-        getNameOrDottedNameSpan(filename: string, startPos: number, endPos: number): SpanInfo {
+
             filename = TypeScript.switchToForwardSlashes(filename);
 
-            var node = this.getTypeInfoEligiblePath(filename, startPos, false);
+            var node = getTypeInfoEligiblePath(filename, startPos, false);
             if (!node)  return null;
 
             while (node) {
@@ -950,93 +928,129 @@ module TypeScript.Services {
                 limChar: end(node)
             };
         }
-        getBreakpointStatementAtPosition(filename: string, position: number) {
+
+        function getBreakpointStatementAtPosition(filename: string, position: number) {
             // doesn't use compiler - no need to synchronize with host
             filename = TypeScript.switchToForwardSlashes(filename);
 
-            var syntaxtree = this.getSyntaxTree(filename);
+            var syntaxtree = getSyntaxTree(filename);
             return TypeScript.Services.Breakpoints.getBreakpointLocation(syntaxtree, position);
         }
-        getScriptLexicalStructure(filename: string) {
+
+        function getScriptLexicalStructure(filename: string) {
             filename = TypeScript.switchToForwardSlashes(filename);
-            var syntaxTree = this.getSyntaxTree(filename);
+            var syntaxTree = getSyntaxTree(filename);
             var items: NavigateToItem[] = [];
             GetScriptLexicalStructureWalker.getListsOfAllScriptLexicalStructure(items, filename, syntaxTree.sourceUnit());
             return items;
         }
-        getOutliningRegions(filename: string) {
+
+        function getOutliningRegions(filename: string) {
             // doesn't use compiler - no need to synchronize with host
             filename = TypeScript.switchToForwardSlashes(filename);
-            var syntaxTree = this.getSyntaxTree(filename);
+            var syntaxTree = getSyntaxTree(filename);
             return OutliningElementsCollector.collectElements(syntaxTree.sourceUnit());
         }
-        getBraceMatchingAtPosition(filename: string, position: number) {
+
+        function getBraceMatchingAtPosition(filename: string, position: number) {
             filename = TypeScript.switchToForwardSlashes(filename);
-            var syntaxTree = this.getSyntaxTree(filename);
+            var syntaxTree = getSyntaxTree(filename);
             return BraceMatcher.getMatchSpans(syntaxTree, position);
         }
-        getIndentationAtPosition(filename: string, position: number, editorOptions: EditorOptions) {
+
+        function getIndentationAtPosition(filename: string, position: number, editorOptions: EditorOptions) {
             filename = TypeScript.switchToForwardSlashes(filename);
 
-            var syntaxTree = this.getSyntaxTree(filename);
+            var syntaxTree = getSyntaxTree(filename);
 
-            var scriptSnapshot = this._syntaxTreeCache.getCurrentScriptSnapshot(filename);
+            var scriptSnapshot = _syntaxTreeCache.getCurrentScriptSnapshot(filename);
             var scriptText = TypeScript.SimpleText.fromScriptSnapshot(scriptSnapshot);
             var textSnapshot = new TypeScript.Services.Formatting.TextSnapshot(scriptText);
             var options = new FormattingOptions(!editorOptions.ConvertTabsToSpaces, editorOptions.TabSize, editorOptions.IndentSize, editorOptions.NewLineCharacter)
 
             return TypeScript.Services.Formatting.SingleTokenIndenter.getIndentationAmount(position, syntaxTree.sourceUnit(), textSnapshot, options);
         }
-        getFormattingEditsForRange(filename: string, minChar: number, limChar: number, options: FormatCodeOptions): TextEdit[] {
+
+        function getFormattingManager(filename: string, options: FormatCodeOptions) {
+            // Ensure rules are initialized and up to date wrt to formatting options
+            if (formattingRulesProvider == null) {
+                formattingRulesProvider = new TypeScript.Services.Formatting.RulesProvider(logger);
+            }
+
+            formattingRulesProvider.ensureUpToDate(options);
+
+            // Get the Syntax Tree
+            var syntaxTree = getSyntaxTree(filename);
+
+            // Convert IScriptSnapshot to ITextSnapshot
+            var scriptSnapshot = _syntaxTreeCache.getCurrentScriptSnapshot(filename);
+            var scriptText = TypeScript.SimpleText.fromScriptSnapshot(scriptSnapshot);
+            var textSnapshot = new TypeScript.Services.Formatting.TextSnapshot(scriptText);
+
+            var manager = new TypeScript.Services.Formatting.FormattingManager(syntaxTree, textSnapshot, formattingRulesProvider, options);
+
+            return manager;
+        }
+
+        function getFormattingEditsForRange(filename: string, minChar: number, limChar: number, options: FormatCodeOptions): TextEdit[] {
             filename = TypeScript.switchToForwardSlashes(filename);
 
-            var manager = this.getFormattingManager(filename, options);
+            var manager = getFormattingManager(filename, options);
             return manager.formatSelection(minChar, limChar);
         }
-        getFormattingEditsForDocument(filename: string, minChar: number, limChar: number, options: FormatCodeOptions): TextEdit[] {
+
+        function getFormattingEditsForDocument(filename: string, minChar: number, limChar: number, options: FormatCodeOptions): TextEdit[] {
             filename = TypeScript.switchToForwardSlashes(filename);
 
-            var manager = this.getFormattingManager(filename, options);
+            var manager = getFormattingManager(filename, options);
             return manager.formatDocument(minChar, limChar);
         }
-        getFormattingEditsOnPaste(filename: string, minChar: number, limChar: number, options: FormatCodeOptions): TextEdit[] {
+
+        function getFormattingEditsOnPaste(filename: string, minChar: number, limChar: number, options: FormatCodeOptions): TextEdit[] {
             filename = TypeScript.switchToForwardSlashes(filename);
 
-            var manager = this.getFormattingManager(filename, options);
+            var manager = getFormattingManager(filename, options);
             return manager.formatOnPaste(minChar, limChar);
         }
-        getFormattingEditsAfterKeystroke(filename: string, position: number, key: string, options: FormatCodeOptions): TextEdit[] {
+
+        function getFormattingEditsAfterKeystroke(filename: string, position: number, key: string, options: FormatCodeOptions): TextEdit[] {
             filename = TypeScript.switchToForwardSlashes(filename);
 
-            var manager = this.getFormattingManager(filename, options);
+            var manager = getFormattingManager(filename, options);
             if (key === "}")  return manager.formatOnClosingCurlyBrace(position);
             else if (key === ";")  return manager.formatOnSemicolon(position);
             else if (key === "\n") return manager.formatOnEnter(position);
             else return [];
         }
-        private getFormattingManager(filename: string, options: FormatCodeOptions) {
-            // Ensure rules are initialized and up to date wrt to formatting options
-            if (this.formattingRulesProvider == null) {
-                this.formattingRulesProvider = new TypeScript.Services.Formatting.RulesProvider(this.logger);
-            }
 
-            this.formattingRulesProvider.ensureUpToDate(options);
 
-            // Get the Syntax Tree
-            var syntaxTree = this.getSyntaxTree(filename);
-
-            // Convert IScriptSnapshot to ITextSnapshot
-            var scriptSnapshot = this._syntaxTreeCache.getCurrentScriptSnapshot(filename);
-            var scriptText = TypeScript.SimpleText.fromScriptSnapshot(scriptSnapshot);
-            var textSnapshot = new TypeScript.Services.Formatting.TextSnapshot(scriptText);
-
-            var manager = new TypeScript.Services.Formatting.FormattingManager(syntaxTree, textSnapshot, this.formattingRulesProvider, options);
-
-            return manager;
-        }
-        getSyntaxTree(filename: string): TypeScript.SyntaxTree {
-            filename = TypeScript.switchToForwardSlashes(filename);
-            return this._syntaxTreeCache.getCurrentFileSyntaxTree(filename);
-        }
+        return {
+            dispose: dispose,
+            refresh: () => { },
+            cleanupSemanticCache: () => { },
+            getSyntacticDiagnostics: getSyntacticDiagnostics,
+            getSemanticDiagnostics: getSemanticDiagnostics,
+            getCompilerOptionsDiagnostics: getCompilerOptionsDiagnostics,
+            getCompletionsAtPosition: getCompletionsAtPosition,
+            getCompletionEntryDetails: getCompletionEntryDetails,
+            getTypeAtPosition: getTypeAtPosition,
+            getSignatureAtPosition: (filename, position) => undefined,
+            getDefinitionAtPosition: (filename, position) => [],
+            getReferencesAtPosition: (filename, position) => [],
+            getOccurrencesAtPosition: (filename, position) => [],
+            getImplementorsAtPosition: (filename, position) => [],
+            getNameOrDottedNameSpan: getNameOrDottedNameSpan,
+            getBreakpointStatementAtPosition: getBreakpointStatementAtPosition,
+            getNavigateToItems: (searchValue) => [],
+            getScriptLexicalStructure: getScriptLexicalStructure,
+            getOutliningRegions: getOutliningRegions,
+            getBraceMatchingAtPosition: getBraceMatchingAtPosition,
+            getIndentationAtPosition: getIndentationAtPosition,
+            getFormattingEditsForRange: getFormattingEditsForRange,
+            getFormattingEditsForDocument: getFormattingEditsForDocument,
+            getFormattingEditsOnPaste: getFormattingEditsOnPaste,
+            getFormattingEditsAfterKeystroke: getFormattingEditsAfterKeystroke,
+            getEmitOutput: (filename) => undefined,
+        };
     }
 }
