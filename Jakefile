@@ -306,6 +306,10 @@ function exec(cmd, completeHandler) {
         }
         complete();
     });
+    ex.addListener("error", function(e, status) {
+    	process.stderr.write(status);
+    	process.stderr.write(e);
+    })
     try{
         ex.run();	
     } catch(e) {
