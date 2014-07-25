@@ -4038,7 +4038,7 @@ module ts {
         function checkAndAggregateReturnExpressionTypes(body: Block, contextualType?: Type, contextualMapper?: TypeMapper): Type[] {
             var aggregatedTypes: Type[] = [];
 
-            forEachReturnStatement(body, (returnStatement) => {
+            forEachReturnStatement(body, returnStatement => {
                 var expr = returnStatement.expression;
                 if (expr) {
                     var type = checkAndMarkExpression(expr, contextualType, contextualMapper);
@@ -4052,7 +4052,7 @@ module ts {
         }
 
         function bodyContainsAReturnStatement(funcBody: Block) {
-            return forEachReturnStatement(funcBody, (returnStatement) => {
+            return forEachReturnStatement(funcBody, returnStatement => {
                 return true;
             });
         }
@@ -5284,7 +5284,7 @@ module ts {
 
         function checkWithStatement(node: WithStatement) {
             checkExpression(node.expression);
-            checkSourceElement(node.statement);
+            error(node.expression, Diagnostics.All_symbols_within_a_with_block_will_be_resolved_to_any);
         }
 
         function checkSwitchStatement(node: SwitchStatement) {
@@ -5343,7 +5343,7 @@ module ts {
                     // for interfaces property and indexer might be inherited from different bases
                     // check if any base class already has both property and indexer.
                     // check should be performed only if 'type' is the first type that brings property\indexer together
-                    var someBaseClassHasBothPropertyAndIndexer = forEach((<InterfaceType>type).baseTypes, (base) => getPropertyOfType(base, prop.name) && getIndexTypeOfType(base, indexKind));
+                    var someBaseClassHasBothPropertyAndIndexer = forEach((<InterfaceType>type).baseTypes, base => getPropertyOfType(base, prop.name) && getIndexTypeOfType(base, indexKind));
                     errorNode = someBaseClassHasBothPropertyAndIndexer ? undefined : type.symbol.declarations[0];
                 }
 

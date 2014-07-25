@@ -1,0 +1,10 @@
+==== tests/cases/compiler/functionExpressionInWithBlock.ts (1 errors) ====
+    function x() {
+     with({}) {
+          ~~
+!!! All symbols within a 'with' block will be resolved to 'any'.
+      function f() {
+       () => this;
+      }
+     }
+    }

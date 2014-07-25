@@ -123,6 +123,7 @@ module ts {
         Setters_cannot_return_a_value: { code: 2122, category: DiagnosticCategory.Error, key: "Setters cannot return a value." },
         Invalid_left_hand_side_of_assignment_expression: { code: 2130, category: DiagnosticCategory.Error, key: "Invalid left-hand side of assignment expression." },
         Subsequent_variable_declarations_must_have_the_same_type_Variable_0_must_be_of_type_1_but_here_has_type_2: { code: 2134, category: DiagnosticCategory.Error, key: "Subsequent variable declarations must have the same type.  Variable '{0}' must be of type '{1}', but here has type '{2}'." },
+        All_symbols_within_a_with_block_will_be_resolved_to_any: { code: 2135, category: DiagnosticCategory.Error, key: "All symbols within a 'with' block will be resolved to 'any'." },
         The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_property_or_indexer: { code: 2139, category: DiagnosticCategory.Error, key: "The operand of an increment or decrement operator must be a variable, property or indexer." },
         Overload_signatures_must_all_be_public_or_private: { code: 2150, category: DiagnosticCategory.Error, key: "Overload signatures must all be public or private." },
         Overload_signatures_must_all_be_exported_or_not_exported: { code: 2151, category: DiagnosticCategory.Error, key: "Overload signatures must all be exported or not exported." },
