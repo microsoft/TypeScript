@@ -4928,15 +4928,17 @@ module ts {
         function checkExportsOnMergedDeclarations(node: Node) {
             var symbol: Symbol;
 
-            // if node.localSymbol  !== undefined - this node has both export and local symbol.
-            // local symbol includes all declarations (that can be both exported and non exported)
+            // Exports should be checked only if enclosing module contains both exported and non exported declarations.
+            // In case if all declarations are non-exported check is unnecesary.
+
+            // if localSymbol is defined on node then node itself is exported - check is required
             var symbol = node.localSymbol;
             if (!symbol) {
-                // current declaration is not exported.
-                // pick a symbol for it and check if it contains any exported declaration
+                // local symbol is undefined => this declaration is non-exported.
+                // however symbol might contain other declarations that are exported
                 symbol = getSymbolOfNode(node);
                 if (!(symbol.flags & SymbolFlags.Export)) {
-                    // this is a pure local symbol - no need to check anything
+                    // this is a pure local symbol (all declarations are non-exported) - no need to check anything
                     return;
                 }
             }
