@@ -33,6 +33,9 @@
             x=x.sort(CompareYeux); // parameter mismatch
               ~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Types of parameters 'a' and 'a' are incompatible:
+!!!     Type 'IFrenchEye' is not assignable to type 'IEye':
+!!!       Property 'color' is missing in type 'IFrenchEye'.
             // type of z inferred from specialized array type
             var z=x.sort(CompareEyes); // ok
     

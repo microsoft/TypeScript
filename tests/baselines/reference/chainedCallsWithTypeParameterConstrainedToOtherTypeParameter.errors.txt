@@ -20,3 +20,4 @@
     (new Chain(new A)).then(a => new B).then(b => new C).then(c => new B).then(b => new A);
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Type 'B' is not assignable to type 'C'.

@@ -9,18 +9,24 @@
     f2({ hello: 1 }) 
     ~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Property 'value' is missing in type '{ hello: number; }'.
     f2({ value: '' })
     ~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Property 'doStuff' is missing in type '{ value: string; }'.
     f2({ value: '', what: 1 }) 
     ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Property 'doStuff' is missing in type '{ value: string; what: number; }'.
     f2({ toString: (s) => s }) 
     ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Property 'value' is missing in type '{ toString: {}; }'.
     f2({ toString: (s: string) => s }) 
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Property 'value' is missing in type '{ toString: (s: string) => string; }'.
     f2({ value: '', toString: (s) => s.uhhh }) 
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Property 'doStuff' is missing in type '{ value: string; toString: {}; }'.

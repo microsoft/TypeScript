@@ -16,4 +16,5 @@
     Biz(new Foo());
     ~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Index signature is missing in type 'Foo'.
     

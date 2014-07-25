@@ -5,4 +5,6 @@
     var x = foo([{}]);
             ~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Type '{}' is not assignable to type '{ a: boolean; }':
+!!!     Property 'a' is missing in type '{}'.
     

@@ -29,6 +29,10 @@
     foo(arr); // Error because of no contextual type
     ~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Type '{}' is not assignable to type 'IAnimal':
+!!!     Property 'name' is missing in type '{}'.
     bar(arr); // Error because of no contextual type
     ~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Index signatures are incompatible:
+!!!     Type '{}' is not assignable to type 'IAnimal'.

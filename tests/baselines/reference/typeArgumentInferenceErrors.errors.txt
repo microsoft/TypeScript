@@ -10,16 +10,22 @@
     someGenerics4<string, number>('', (x: string) => ''); // Error
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Types of parameters 'x' and 'x' are incompatible:
+!!!     Type 'string' is not assignable to type 'number'.
     
     // 2 parameter generic call with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
     function someGenerics5<U, T>(n: T, f: (x: U) => void) { }
     someGenerics5<number, string>('', (x: string) => ''); // Error
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Types of parameters 'x' and 'x' are incompatible:
+!!!     Type 'string' is not assignable to type 'number'.
     
     // Generic call with multiple arguments of function types that each have parameters of the same generic type
     function someGenerics6<A>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) { }
     someGenerics6<number>((n: number) => n, (n: string) => n, (n: number) => n); // Error
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Types of parameters 'n' and 'b' are incompatible:
+!!!     Type 'string' is not assignable to type 'number'.
     

@@ -8,3 +8,4 @@
     var z7 = foo("abc", 5); // Error
              ~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Property 'name' is missing in type 'String'.

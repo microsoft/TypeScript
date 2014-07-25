@@ -3,18 +3,23 @@
     foo1({ b: 5 });
     ~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Property 'a' is missing in type '{ b: number; }'.
     
     function foo2(x: number[]) { }
     foo2(["s", "t"]);
     ~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Type 'string' is not assignable to type 'number'.
     
     function foo3(x: (n: number) =>number) { };
     foo3((s:string) => { });
     ~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Types of parameters 's' and 'n' are incompatible:
+!!!     Type 'string' is not assignable to type 'number'.
     foo3((n) => { return; });
     ~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Type 'void' is not assignable to type 'number'.
     
     

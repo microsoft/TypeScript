@@ -35,4 +35,5 @@
     foo2(a2); // should error
     ~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Private property 'name' cannot be reimplemented.
     

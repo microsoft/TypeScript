@@ -29,6 +29,8 @@
         var r7 = foo2((a: T) => a, (b: T) => b); // error
                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Types of parameters 'a' and 'x' are incompatible:
+!!!     Type 'T' is not assignable to type 'Date'.
         var r7b = foo2((a) => a, (b) => b); // valid, T is inferred to be Date
     }
     
@@ -43,3 +45,4 @@
     var r7 = foo3(E.A, (x) => E.A, (x) => F.A); // error
              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Type 'F' is not assignable to type 'E'.

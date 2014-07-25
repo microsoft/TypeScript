@@ -8,7 +8,9 @@
     foo(() => g);
     ~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Type '(x: string) => string' is not assignable to type 'string'.
     foo(x);
     ~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Type '(x: string) => string' is not assignable to type 'string'.
     

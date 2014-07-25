@@ -5,4 +5,7 @@
     var x = foo([{a:'bar'}]);
             ~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
+!!!   Type '{ a: string; }' is not assignable to type '{ a: boolean; }':
+!!!     Types of property 'a' are incompatible:
+!!!       Type 'string' is not assignable to type 'boolean'.
     
