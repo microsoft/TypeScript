@@ -18,7 +18,7 @@
 /// <reference path='compiler\pathUtils.ts' />
 /// <reference path='compiler\precompile.ts' />
 var debugObjectHost = (<any>this);
-module TypeScript.Services {
+module ts {
     export interface ScriptSnapshotShim {
         // Get's a portion of the script snapshot specified by [start, end).  
         getText(start: number, end: number): string;
@@ -904,7 +904,7 @@ module TypeScript.Services {
 
 
 /// TODO: this is used by VS, clean this up on both sides of the interfrace
-module Services {
-    export var TypeScriptServicesFactory = TypeScriptServicesFactory;
+module TypeScript.Services {
+    export var TypeScriptServicesFactory = ts.TypeScriptServicesFactory;
 }
 

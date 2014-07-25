@@ -53,17 +53,17 @@ module TypeScript.Services {
             "with",
         ];
 
-        private static keywordCompletions: CompletionEntry[] = null;
+        private static keywordCompletions: ts.CompletionEntry[] = null;
 
-        public static getKeywordCompltions(): CompletionEntry[]{
+        public static getKeywordCompltions(): ts.CompletionEntry[]{
             if (KeywordCompletions.keywordCompletions === null) {
-                var completions: CompletionEntry[] = [];
+                var completions: ts.CompletionEntry[] = [];
                 for (var i = 0, n = KeywordCompletions.keywords.length; i < n; i++) {
                     var keyword = KeywordCompletions.keywords[i];
                     completions.push({
                         name: keyword,
-                        kind: ScriptElementKind.keyword,
-                        kindModifiers: ScriptElementKindModifier.none
+                        kind: ts.ScriptElementKind.keyword,
+                        kindModifiers: ts.ScriptElementKindModifier.none
                     });
                 }
 

@@ -18,7 +18,7 @@
 module TypeScript.Services.Formatting {
     export class RulesProvider {
         private globalRules: Rules;
-        private options: TypeScript.Services.FormatCodeOptions;
+        private options: ts.FormatCodeOptions;
         private activeRules: Rule[];
         private rulesMap: RulesMap;
 
@@ -38,8 +38,8 @@ module TypeScript.Services.Formatting {
             return this.rulesMap;
         }
 
-        public ensureUpToDate(options: TypeScript.Services.FormatCodeOptions) {
-            if (this.options == null || !compareDataObjects(this.options, options)) {
+        public ensureUpToDate(options: ts.FormatCodeOptions) {
+            if (this.options == null || !ts.compareDataObjects(this.options, options)) {
                 var activeRules: Rule[] = TypeScript.timeFunction(this.logger, "RulesProvider: createActiveRules()", () => { return this.createActiveRules(options); });
                 var rulesMap: RulesMap = TypeScript.timeFunction(this.logger, "RulesProvider: RulesMap.create()", () => { return RulesMap.create(activeRules); });
 
@@ -49,7 +49,7 @@ module TypeScript.Services.Formatting {
             }
         }
 
-        private createActiveRules(options: TypeScript.Services.FormatCodeOptions): Rule[] {
+        private createActiveRules(options: ts.FormatCodeOptions): Rule[] {
             var rules = this.globalRules.HighPriorityCommonRules.slice(0);
 
             if (options.InsertSpaceAfterCommaDelimiter) {

@@ -280,31 +280,6 @@ module ts {
         }
     }
 
-    function initializeServices() {
-        objectAllocator = {
-            getNodeConstructor: kind => {
-                function Node() {
-                }
-                var proto = new NodeObject();
-                proto.kind = kind;
-                proto.pos = 0;
-                proto.end = 0;
-                proto.flags = 0;
-                proto.parent = undefined;
-                Node.prototype = proto;
-                return <any>Node;
-            },
-            getSymbolConstructor: () => SymbolObject,
-            getTypeConstructor: () => TypeObject,
-            getSignatureConstructor: () => SignatureObject,
-        };
-    }
-
-    initializeServices();
-}
-
-
-module TypeScript.Services {
     export interface Logger {
         information(): boolean;
         debug(): boolean;
@@ -363,7 +338,7 @@ module TypeScript.Services {
 
         getOutliningRegions(fileName: string): TypeScript.TextSpan[];
         getBraceMatchingAtPosition(fileName: string, position: number): TypeScript.TextSpan[];
-        getIndentationAtPosition(fileName: string, position: number, options: TypeScript.Services.EditorOptions): number;
+        getIndentationAtPosition(fileName: string, position: number, options: EditorOptions): number;
 
         getFormattingEditsForRange(fileName: string, minChar: number, limChar: number, options: FormatCodeOptions): TextEdit[];
         getFormattingEditsForDocument(fileName: string, minChar: number, limChar: number, options: FormatCodeOptions): TextEdit[];
@@ -431,8 +406,14 @@ module TypeScript.Services {
         containerName: string;
     }
 
+    export interface MemberName {
+        prefix: string;
+        suffix: string;
+        text: string;
+    }
+
     export interface TypeInfo {
-        memberName: TypeScript.MemberName;
+        memberName: MemberName;
         docComment: string;
         fullSymbolName: string;
         kind: string;
@@ -564,7 +545,7 @@ module TypeScript.Services {
         acquireDocument(
             filename: string,
             compilationSettings: ts.CompilerOptions,
-            scriptSnapshot: IScriptSnapshot,
+            scriptSnapshot: TypeScript.IScriptSnapshot,
             byteOrderMark: ts.ByteOrderMark,
             version: number,
             isOpen: boolean,
@@ -574,10 +555,10 @@ module TypeScript.Services {
             document: Document,
             filename: string,
             compilationSettings: ts.CompilerOptions,
-            scriptSnapshot: IScriptSnapshot,
+            scriptSnapshot: TypeScript.IScriptSnapshot,
             version: number,
             isOpen: boolean,
-            textChangeRange: TextChangeRange
+            textChangeRange: TypeScript.TextChangeRange
             ): Document;
 
         releaseDocument(filename: string, compilationSettings: ts.CompilerOptions): void
@@ -666,59 +647,52 @@ module TypeScript.Services {
         static prefix = "prefix";
     }
 
-    export class DiagnosticCategory {
-        static none = "";
-        static error = "error";
-        static warning = "warning";
-        static message = "message";
-    }
-
     export interface IncrementalParse {
-        (oldSyntaxTree: SyntaxTree, textChangeRange: TextChangeRange, newText: ISimpleText): SyntaxTree
+        (oldSyntaxTree: TypeScript.SyntaxTree, textChangeRange: TypeScript.TextChangeRange, newText: TypeScript.ISimpleText): TypeScript.SyntaxTree
     }
 
     export class Document {
-        private _bloomFilter: BloomFilter = null;
+        private _bloomFilter: TypeScript.BloomFilter = null;
 
         // By default, our Document class doesn't support incremental update of its contents.
         // However, we enable other layers (like teh services layer) to inject the capability
         // into us by setting this function.
-        public static incrementalParse: IncrementalParse = IncrementalParser.parse;
+        public static incrementalParse: IncrementalParse = TypeScript.IncrementalParser.parse;
 
         constructor(private compilationSettings: ts.CompilerOptions,
             public filename: string,
             public referencedFiles: string[],
-            private _scriptSnapshot: IScriptSnapshot,
+            private _scriptSnapshot: TypeScript.IScriptSnapshot,
             public byteOrderMark: ts.ByteOrderMark,
             public version: number,
             public isOpen: boolean,
-            private _syntaxTree: SyntaxTree,
+            private _syntaxTree: TypeScript.SyntaxTree,
             private _soruceFile: ts.SourceFile) {
         }
 
         public isDeclareFile(): boolean {
-            return isDTSFile(this.filename);
+            return TypeScript.isDTSFile(this.filename);
         }
 
-        public sourceUnit(): SourceUnitSyntax {
+        public sourceUnit(): TypeScript.SourceUnitSyntax {
             // If we don't have a script, create one from our parse tree.
             return this.syntaxTree().sourceUnit();
         }
 
-        public diagnostics(): Diagnostic[] {
-            return this.syntaxTree().diagnostics();
-        }
+        //public diagnostics(): Diagnostic[] {
+        //    return this.syntaxTree().diagnostics();
+        //}
 
-        public lineMap(): LineMap {
+        public lineMap(): TypeScript.LineMap {
             return this.syntaxTree().lineMap();
         }
 
-        public syntaxTree(): SyntaxTree {
+        public syntaxTree(): TypeScript.SyntaxTree {
             if (!this._syntaxTree) {
                 var start = new Date().getTime();
 
-                this._syntaxTree = Parser.parse(
-                    this.filename, SimpleText.fromScriptSnapshot(this._scriptSnapshot), this.compilationSettings.target, this.isDeclareFile());
+                this._syntaxTree = TypeScript.Parser.parse(
+                    this.filename, TypeScript.SimpleText.fromScriptSnapshot(this._scriptSnapshot), this.compilationSettings.target, this.isDeclareFile());
 
                 var time = new Date().getTime() - start;
 
@@ -742,13 +716,13 @@ module TypeScript.Services {
             return this._soruceFile;
         }
 
-        public bloomFilter(): BloomFilter {
+        public bloomFilter(): TypeScript.BloomFilter {
             if (!this._bloomFilter) {
-                var identifiers = createIntrinsicsObject<boolean>();
+                var identifiers = TypeScript.createIntrinsicsObject<boolean>();
                 var pre = function (cur: TypeScript.ISyntaxElement) {
-                    if (ASTHelpers.isValidAstNode(cur)) {
-                        if (cur.kind() === SyntaxKind.IdentifierName) {
-                            var nodeText = tokenValueText((<TypeScript.ISyntaxToken>cur));
+                    if (TypeScript.ASTHelpers.isValidAstNode(cur)) {
+                        if (cur.kind() === TypeScript.SyntaxKind.IdentifierName) {
+                            var nodeText = TypeScript.tokenValueText((<TypeScript.ISyntaxToken>cur));
 
                             identifiers[nodeText] = true;
                         }
@@ -764,7 +738,7 @@ module TypeScript.Services {
                     }
                 }
 
-                this._bloomFilter = new BloomFilter(identifierCount);
+                this._bloomFilter = new TypeScript.BloomFilter(identifierCount);
                 this._bloomFilter.addKeys(identifiers);
             }
             return this._bloomFilter;
@@ -780,7 +754,7 @@ module TypeScript.Services {
             return !this.compilationSettings.out || this.syntaxTree().isExternalModule();
         }
 
-        public update(scriptSnapshot: IScriptSnapshot, version: number, isOpen: boolean, textChangeRange: TextChangeRange): Document {
+        public update(scriptSnapshot: TypeScript.IScriptSnapshot, version: number, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): Document {
             // See if we are currently holding onto a syntax tree.  We may not be because we're 
             // either a closed file, or we've just been lazy and haven't had to create the syntax
             // tree yet.  Access the field instead of the method so we don't accidently realize
@@ -804,7 +778,7 @@ module TypeScript.Services {
                 }
             }
 
-            var text = SimpleText.fromScriptSnapshot(scriptSnapshot);
+            var text = TypeScript.SimpleText.fromScriptSnapshot(scriptSnapshot);
 
             // If we don't have a text change, or we don't have an old syntax tree, then do a full
             // parse.  Otherwise, do an incremental parse.
@@ -815,7 +789,7 @@ module TypeScript.Services {
             return new Document(this.compilationSettings, this.filename, this.referencedFiles, scriptSnapshot, this.byteOrderMark, version, isOpen, newSyntaxTree, /*soruceFile*/ null);
         }
 
-        public static create(compilationSettings: ts.CompilerOptions, fileName: string, scriptSnapshot: IScriptSnapshot, byteOrderMark: ts.ByteOrderMark, version: number, isOpen: boolean, referencedFiles: string[]): Document {
+        public static create(compilationSettings: ts.CompilerOptions, fileName: string, scriptSnapshot: TypeScript.IScriptSnapshot, byteOrderMark: ts.ByteOrderMark, version: number, isOpen: boolean, referencedFiles: string[]): Document {
             return new Document(compilationSettings, fileName, referencedFiles, scriptSnapshot, byteOrderMark, version, isOpen, /*syntaxTree:*/ null, /*soruceFile*/ null);
         }
     }
@@ -1015,7 +989,7 @@ module TypeScript.Services {
             return this._currentFileSyntaxTree;
         }
 
-        public getCurrentScriptSnapshot(filename: string): IScriptSnapshot {
+        public getCurrentScriptSnapshot(filename: string): TypeScript.IScriptSnapshot {
             // update _currentFileScriptSnapshot as a part of 'getCurrentFileSyntaxTree' call
             this.getCurrentFileSyntaxTree(filename);
             return this._currentFileScriptSnapshot;
@@ -1042,8 +1016,8 @@ module TypeScript.Services {
                 return this.createSyntaxTree(filename, scriptSnapshot);
             }
 
-            var nextSyntaxTree = IncrementalParser.parse(
-                previousSyntaxTree, editRange, SimpleText.fromScriptSnapshot(scriptSnapshot));
+            var nextSyntaxTree = TypeScript.IncrementalParser.parse(
+                previousSyntaxTree, editRange, TypeScript.SimpleText.fromScriptSnapshot(scriptSnapshot));
 
             this.ensureInvariants(filename, editRange, nextSyntaxTree, this._currentFileScriptSnapshot, scriptSnapshot);
 
@@ -1106,7 +1080,7 @@ module TypeScript.Services {
                 // Ok, the trees looked good.  So at least our incremental parser agrees with the 
                 // normal parser.  Now, verify that the incremental tree matches the contents of the 
                 // script snapshot.
-                var incrementalTreeText = fullText(incrementalTree.sourceUnit());
+                var incrementalTreeText = TypeScript.fullText(incrementalTree.sourceUnit());
                 var actualSnapshotText = newScriptSnapshot.getText(0, newScriptSnapshot.getLength());
                 Debug.assert(incrementalTreeText === actualSnapshotText, 'Expected full texts to be equal');
             }
@@ -1150,7 +1124,7 @@ module TypeScript.Services {
         public acquireDocument(
             filename: string,
             compilationSettings: ts.CompilerOptions,
-            scriptSnapshot: IScriptSnapshot,
+            scriptSnapshot: TypeScript.IScriptSnapshot,
             byteOrderMark: ts.ByteOrderMark,
             version: number,
             isOpen: boolean,
@@ -1176,10 +1150,10 @@ module TypeScript.Services {
             document: Document,
             filename: string,
             compilationSettings: ts.CompilerOptions,
-            scriptSnapshot: IScriptSnapshot,
+            scriptSnapshot: TypeScript.IScriptSnapshot,
             version: number,
             isOpen: boolean,
-            textChangeRange: TextChangeRange
+            textChangeRange: TypeScript.TextChangeRange
             ): Document {
 
             var bucket = this.getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ false);
@@ -1211,7 +1185,7 @@ module TypeScript.Services {
 
     export function createLanguageService(host: LanguageServiceHost, documentRegistry: IDocumentRegistry): LanguageService {
         var _syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
-        var formattingRulesProvider: Formatting.RulesProvider;
+        var formattingRulesProvider: TypeScript.Services.Formatting.RulesProvider;
         var hostCache: HostCache; // A cache of all the information about the files on the host side.
         var program: ts.Program;
         var typeChecker: ts.TypeChecker;
@@ -1313,7 +1287,7 @@ module TypeScript.Services {
                     // file was closed, then we always want to reparse.  This is so our tree doesn't keep 
                     // the old buffer alive that represented the file on disk (as the host has moved to a 
                     // new text buffer).
-                    var textChangeRange: TextChangeRange = null;
+                    var textChangeRange: TypeScript.TextChangeRange = null;
                     if (document.isOpen && isOpen) {
                         textChangeRange = hostCache.getScriptTextChangeRangeSinceVersion(filename, document.version);
                     }
@@ -1361,7 +1335,7 @@ module TypeScript.Services {
             // Try to get a valid display name for this symbol, if we could not find one, then ignore it. 
             // We would like to only show things that can be added after a dot, so for instance numeric properties can
             // not be accessed with a dot (a.1 <- invalid)
-            var displayName = CompletionHelpers.getValidCompletionEntryDisplayName(symbol.getName(), program.getCompilerOptions().target);
+            var displayName = TypeScript.Services.CompletionHelpers.getValidCompletionEntryDisplayName(symbol.getName(), program.getCompilerOptions().target);
             if (!displayName) {
                 return undefined;
             }
@@ -1393,7 +1367,7 @@ module TypeScript.Services {
             var document = documentsByName[filename];
             var sourceUnit = document.sourceUnit();
 
-            if (CompletionHelpers.isCompletionListBlocker(document.syntaxTree().sourceUnit(), position)) {
+            if (TypeScript.Services.CompletionHelpers.isCompletionListBlocker(document.syntaxTree().sourceUnit(), position)) {
                 host.log("Returning an empty list because completion was blocked.");
                 return null;
             }
@@ -1401,7 +1375,7 @@ module TypeScript.Services {
             var node = TypeScript.ASTHelpers.getAstAtPosition(sourceUnit, position, /*useTrailingTriviaAsLimChar*/ true, /*forceInclusive*/ true);
 
             if (node && node.kind() === TypeScript.SyntaxKind.IdentifierName &&
-                start(node) === end(node)) {
+                TypeScript.start(node) === TypeScript.end(node)) {
                 // Ignore missing name nodes
                 node = node.parent;
             }
@@ -1409,14 +1383,14 @@ module TypeScript.Services {
             var isRightOfDot = false;
             if (node &&
                 node.kind() === TypeScript.SyntaxKind.MemberAccessExpression &&
-                end((<TypeScript.MemberAccessExpressionSyntax>node).expression) < position) {
+                TypeScript.end((<TypeScript.MemberAccessExpressionSyntax>node).expression) < position) {
 
                 isRightOfDot = true;
                 node = (<TypeScript.MemberAccessExpressionSyntax>node).expression;
             }
             else if (node &&
                 node.kind() === TypeScript.SyntaxKind.QualifiedName &&
-                end((<TypeScript.QualifiedNameSyntax>node).left) < position) {
+                TypeScript.end((<TypeScript.QualifiedNameSyntax>node).left) < position) {
 
                 isRightOfDot = true;
                 node = (<TypeScript.QualifiedNameSyntax>node).left;
@@ -1439,7 +1413,7 @@ module TypeScript.Services {
             }
 
             // TODO: this is a hack for now, we need a proper walking mechanism to verify that we have the correct node
-            var mappedNode = getNodeAtPosition(document.sourceFile(), end(node) - 1);
+            var mappedNode = getNodeAtPosition(document.sourceFile(), TypeScript.end(node) - 1);
 
             Debug.assert(mappedNode, "Could not map a Fidelity node to an AST node");
 
@@ -1465,11 +1439,11 @@ module TypeScript.Services {
                 getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
             }
             else {
-                var containingObjectLiteral = CompletionHelpers.getContainingObjectLiteralApplicableForCompletion(document.syntaxTree().sourceUnit(), position);
+                var containingObjectLiteral = TypeScript.Services.CompletionHelpers.getContainingObjectLiteralApplicableForCompletion(document.syntaxTree().sourceUnit(), position);
 
                 // Object literal expression, look up possible property names from contextual type
                 if (containingObjectLiteral) {
-                    var searchPosition = Math.min(position, end(containingObjectLiteral));
+                    var searchPosition = Math.min(position, TypeScript.end(containingObjectLiteral));
                     var path = TypeScript.ASTHelpers.getAstAtPosition(sourceUnit, searchPosition);
                     // Get the object literal node
 
@@ -1511,7 +1485,7 @@ module TypeScript.Services {
 
             // Add keywords if this is not a member completion list
             if (!isMemberCompletion) {
-                Array.prototype.push.apply(activeCompletionSession.entries, KeywordCompletions.getKeywordCompltions());
+                Array.prototype.push.apply(activeCompletionSession.entries, TypeScript.Services.KeywordCompletions.getKeywordCompltions());
             }
 
             return {
@@ -1666,7 +1640,7 @@ module TypeScript.Services {
                     var type = typeChecker.getTypeOfSymbol(symbol);
 
                     return {
-                        memberName: new MemberNameString(typeChecker.typeToString(type)),
+                        memberName: new TypeScript.MemberNameString(typeChecker.typeToString(type)),
                         docComment: "",
                         fullSymbolName: typeChecker.symbolToString(symbol, getEnclosingDeclaration(node)),
                         kind: getSymbolKind(symbol),
@@ -1682,7 +1656,7 @@ module TypeScript.Services {
                     var type = typeChecker.getTypeOfExpression(node);
                     Debug.assert(type, "getTypeAtPosition: Could not find type for node");
                     return {
-                        memberName: new MemberNameString(""),
+                        memberName: new TypeScript.MemberNameString(""),
                         docComment: "",
                         fullSymbolName: typeChecker.typeToString(type, getEnclosingDeclaration(node)),
                         kind: getTypeKind(type),
@@ -1708,7 +1682,7 @@ module TypeScript.Services {
                     return null;
                 }
 
-                if (ast.kind() === SyntaxKind.ParameterList && ast.parent.kind() === SyntaxKind.CallSignature && ast.parent.parent.kind() === SyntaxKind.ConstructorDeclaration) {
+                if (ast.kind() === TypeScript.SyntaxKind.ParameterList && ast.parent.kind() === TypeScript.SyntaxKind.CallSignature && ast.parent.parent.kind() === TypeScript.SyntaxKind.ConstructorDeclaration) {
                     ast = ast.parent.parent;
                 }
 
@@ -1717,7 +1691,7 @@ module TypeScript.Services {
                         return null;
                     case TypeScript.SyntaxKind.ConstructorDeclaration:
                         var constructorAST = <TypeScript.ConstructorDeclarationSyntax>ast;
-                        if (!isConstructorValidPosition || !(position >= start(constructorAST) && position <= start(constructorAST) + "constructor".length)) {
+                        if (!isConstructorValidPosition || !(position >= TypeScript.start(constructorAST) && position <= TypeScript.start(constructorAST) + "constructor".length)) {
                             return null;
                         }
                         else {
@@ -1751,8 +1725,8 @@ module TypeScript.Services {
             }
 
             return {
-                minChar: start(node),
-                limChar: end(node)
+                minChar: TypeScript.start(node),
+                limChar: TypeScript.end(node)
             };
         }
 
@@ -1768,7 +1742,7 @@ module TypeScript.Services {
             filename = TypeScript.switchToForwardSlashes(filename);
             var syntaxTree = getSyntaxTree(filename);
             var items: NavigateToItem[] = [];
-            GetScriptLexicalStructureWalker.getListsOfAllScriptLexicalStructure(items, filename, syntaxTree.sourceUnit());
+            TypeScript.Services.GetScriptLexicalStructureWalker.getListsOfAllScriptLexicalStructure(items, filename, syntaxTree.sourceUnit());
             return items;
         }
 
@@ -1776,13 +1750,13 @@ module TypeScript.Services {
             // doesn't use compiler - no need to synchronize with host
             filename = TypeScript.switchToForwardSlashes(filename);
             var syntaxTree = getSyntaxTree(filename);
-            return OutliningElementsCollector.collectElements(syntaxTree.sourceUnit());
+            return TypeScript.Services.OutliningElementsCollector.collectElements(syntaxTree.sourceUnit());
         }
 
         function getBraceMatchingAtPosition(filename: string, position: number) {
             filename = TypeScript.switchToForwardSlashes(filename);
             var syntaxTree = getSyntaxTree(filename);
-            return BraceMatcher.getMatchSpans(syntaxTree, position);
+            return TypeScript.Services.BraceMatcher.getMatchSpans(syntaxTree, position);
         }
 
         function getIndentationAtPosition(filename: string, position: number, editorOptions: EditorOptions) {
@@ -1793,7 +1767,7 @@ module TypeScript.Services {
             var scriptSnapshot = _syntaxTreeCache.getCurrentScriptSnapshot(filename);
             var scriptText = TypeScript.SimpleText.fromScriptSnapshot(scriptSnapshot);
             var textSnapshot = new TypeScript.Services.Formatting.TextSnapshot(scriptText);
-            var options = new FormattingOptions(!editorOptions.ConvertTabsToSpaces, editorOptions.TabSize, editorOptions.IndentSize, editorOptions.NewLineCharacter)
+            var options = new TypeScript.FormattingOptions(!editorOptions.ConvertTabsToSpaces, editorOptions.TabSize, editorOptions.IndentSize, editorOptions.NewLineCharacter)
 
             return TypeScript.Services.Formatting.SingleTokenIndenter.getIndentationAmount(position, syntaxTree.sourceUnit(), textSnapshot, options);
         }
@@ -1934,10 +1908,10 @@ module TypeScript.Services {
             };
 
             var simpleText = TypeScript.SimpleText.fromString(text);
-            scanner = Scanner.createScanner(ts.ScriptTarget.ES5, simpleText, reportDiagnostic);
+            scanner = TypeScript.Scanner.createScanner(ts.ScriptTarget.ES5, simpleText, reportDiagnostic);
 
             var lastTokenKind = TypeScript.SyntaxKind.None;
-            var token: ISyntaxToken = null;
+            var token: TypeScript.ISyntaxToken = null;
             do {
                 lastDiagnosticKey = null;
 
@@ -1946,18 +1920,18 @@ module TypeScript.Services {
 
                 processToken(text, simpleText, offset, token, result);
             }
-            while (token.kind() !== SyntaxKind.EndOfFileToken);
+            while (token.kind() !== TypeScript.SyntaxKind.EndOfFileToken);
 
             lastDiagnosticKey = null;
             return result;
         }
 
-        function processToken(text: string, simpleText: ISimpleText, offset: number, token: TypeScript.ISyntaxToken, result: ClassificationResult): void {
+        function processToken(text: string, simpleText: TypeScript.ISimpleText, offset: number, token: TypeScript.ISyntaxToken, result: ClassificationResult): void {
             processTriviaList(text, offset, token.leadingTrivia(simpleText), result);
-            addResult(text, offset, result, width(token), token.kind());
+            addResult(text, offset, result, TypeScript.width(token), token.kind());
             processTriviaList(text, offset, token.trailingTrivia(simpleText), result);
 
-            if (fullEnd(token) >= text.length) {
+            if (TypeScript.fullEnd(token) >= text.length) {
                 // We're at the end.
                 if (lastDiagnosticKey === TypeScript.DiagnosticCode.AsteriskSlash_expected) {
                     result.finalLexState = EndOfLineState.InMultiLineCommentTrivia;
@@ -2030,4 +2004,26 @@ module TypeScript.Services {
             getClassificationsForLine: getClassificationsForLine
         };
     }
+
+    function initializeServices() {
+        objectAllocator = {
+            getNodeConstructor: kind => {
+                function Node() {
+                }
+                var proto = new NodeObject();
+                proto.kind = kind;
+                proto.pos = 0;
+                proto.end = 0;
+                proto.flags = 0;
+                proto.parent = undefined;
+                Node.prototype = proto;
+                return <any>Node;
+            },
+            getSymbolConstructor: () => SymbolObject,
+            getTypeConstructor: () => TypeObject,
+            getSignatureConstructor: () => SignatureObject,
+        };
+    }
+
+    initializeServices();
 }
