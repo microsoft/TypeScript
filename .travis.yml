@@ -6,7 +6,7 @@ node_js:
 before_script: npm install -g codeclimate-test-reporter
 
 after_script:
-- cat coverage/lcov.info | codeclimate
+- CODECLIMATE_REPO_TOKEN=852ac5362c8cc38c07ca5adc0f94c20c6c79bd78e17933dc284598a65338656 cat coverage/lcov.info | codeclimate
 
 addons:
   code_climate:
