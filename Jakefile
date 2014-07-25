@@ -18,7 +18,12 @@ var copyright = "CopyrightNotice.txt";
 var thirdParty = "ThirdPartyNoticeText.txt";
 
 // add node_modules to path so we don't need global modules, prefer the modules by adding them first
-process.env.path = path.resolve("./node_modules/.bin/") + path.delimiter + process.env.path;
+var nodeModulesPathPrefix = path.resolve("./node_modules/.bin/") + path.delimiter;
+if (process.env.path !== undefined) {
+   process.env.path = nodeModulesPathPrefix + process.env.path;
+} else if (process.env.PATH !== undefined) {
+   process.env.PATH = nodeModulesPathPrefix + process.env.PATH;
+}
 
 var compilerSources = [
     "core.ts",
