@@ -125,7 +125,11 @@ var sys: System = (function () {
                 return 0;
             },
             exit(exitCode?: number): void {
-                WScript.Quit(exitCode);
+                try {
+                    WScript.Quit(exitCode);
+                }
+                catch (e) {
+                }
             }
         };
     }
