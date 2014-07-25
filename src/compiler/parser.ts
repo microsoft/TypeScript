@@ -410,8 +410,14 @@ module ts {
         var inSwitchStatement = ControlBlockContext.NotNested;
         var inIterationStatement = ControlBlockContext.NotNested;
 
+        // The following is a state machine that tracks what labels are in our current parsing
+        // context. So if we are parsing a node that is nested (arbitrarily deeply) in a label,
+        // it will be tracked in this data structure. It is used for checking break/continue
+        // statements, and checking for duplicate labels.
         var labelledStatementInfo: LabelledStatementInfo = (() => {
-            var functionBoundarySentinel: StringSet = {};
+            // These are initialized on demand because labels are rare, so it is usually
+            // not even necessary to allocate these.
+            var functionBoundarySentinel: StringSet;
             var currentLabelSet: StringSet;
             var labelSetStack: StringSet[];
             var isIterationStack: boolean[];
@@ -435,9 +441,12 @@ module ts {
             }
 
             function pushFunctionBoundary(): void {
-                if (!labelSetStack && !isIterationStack) {
-                    labelSetStack = [];
-                    isIterationStack = [];
+                if (!functionBoundarySentinel) {
+                    functionBoundarySentinel = {};
+                    if (!labelSetStack && !isIterationStack) {
+                        labelSetStack = [];
+                        isIterationStack = [];
+                    }
                 }
                 Debug.assert(currentLabelSet === undefined);
                 labelSetStack.push(functionBoundarySentinel);
@@ -496,7 +505,6 @@ module ts {
                 return ControlBlockContext.NotNested;
             }
 
-            // TODO(jfreeman): Fill in these stubs
             return {
                 addLabel: addLabel,
                 pushCurrentLabelSet: pushCurrentLabelSet,
@@ -2128,34 +2136,34 @@ module ts {
             }
             var forOrForInStatement: IterationStatement;
             if (parseOptional(SyntaxKind.InKeyword)) {
-                var forInStat = <ForInStatement>createNode(SyntaxKind.ForInStatement, pos);
+                var forInStatement = <ForInStatement>createNode(SyntaxKind.ForInStatement, pos);
                 if (declarations) {
                     if (declarations.length > 1) {
                         error(Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement);
                     }
-                    forInStat.declaration = declarations[0];
+                    forInStatement.declaration = declarations[0];
                 }
                 else {
-                    forInStat.variable = varOrInit;
+                    forInStatement.variable = varOrInit;
                 }
-                forInStat.expression = parseExpression();
+                forInStatement.expression = parseExpression();
                 parseExpected(SyntaxKind.CloseParenToken);
-                forOrForInStatement = forInStat;
+                forOrForInStatement = forInStatement;
             }
             else {
-                var forStat = <ForStatement>createNode(SyntaxKind.ForStatement, pos);
-                if (declarations) forStat.declarations = declarations;
-                if (varOrInit) forStat.initializer = varOrInit;
+                var forStatement = <ForStatement>createNode(SyntaxKind.ForStatement, pos);
+                if (declarations) forStatement.declarations = declarations;
+                if (varOrInit) forStatement.initializer = varOrInit;
                 parseExpected(SyntaxKind.SemicolonToken);
                 if (token !== SyntaxKind.SemicolonToken && token !== SyntaxKind.CloseParenToken) {
-                    forStat.condition = parseExpression();
+                    forStatement.condition = parseExpression();
                 }
                 parseExpected(SyntaxKind.SemicolonToken);
                 if (token !== SyntaxKind.CloseParenToken) {
-                    forStat.iterator = parseExpression();
+                    forStatement.iterator = parseExpression();
                 }
                 parseExpected(SyntaxKind.CloseParenToken);
-                forOrForInStatement = forStat;
+                forOrForInStatement = forStatement;
             }
 
             var saveInIterationStatement = inIterationStatement;
@@ -2182,13 +2190,13 @@ module ts {
                     checkBreakOrContinueStatementWithLabel(node);
                 }
                 else {
-                    checkAnonymousBreakOrContinueStatement(node);
+                    checkBareBreakOrContinueStatement(node);
                 }
             }
             return node;
         }
 
-        function checkAnonymousBreakOrContinueStatement(node: BreakOrContinueStatement): void {
+        function checkBareBreakOrContinueStatement(node: BreakOrContinueStatement): void {
             if (node.kind === SyntaxKind.BreakStatement) {
                 if (inIterationStatement === ControlBlockContext.Nested
                     || inSwitchStatement === ControlBlockContext.Nested) {
