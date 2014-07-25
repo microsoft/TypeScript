@@ -11,7 +11,6 @@
 /// <reference path='Breakpoints.ts' />
 /// <reference path='indentation.ts' />
 /// <reference path='formatting\formatting.ts' />
-/// <reference path='completionHelpers.ts' />
 /// <reference path='compiler\bloomFilter.ts' />
 
 /// <reference path='core\references.ts' />
@@ -1192,8 +1191,8 @@ module ts {
         var documentsByName: ts.Map<Document> = {};
         var documentRegistry = documentRegistry;
         var cancellationToken = new CancellationToken(host.getCancellationToken());
-        var activeCompletionSession: CompletionSession;
-        var keywordCompletions = getKeywordCompletionEntries();
+        var activeCompletionSession: CompletionSession;         // The current active completion session, used to get the completion entry details
+        var keywordCompletions = getKeywordCompletionEntries(); // A cache of completion entries for keywords, these do not change between sessions
 
         // Check if the localized messages json is set, otherwise query the host for it
         if (!TypeScript.LocalizedDiagnosticMessages) {
@@ -1331,11 +1330,28 @@ module ts {
         }
 
         /// Completion
+        function getValidCompletionEntryDisplayName(displayName: string, target: ts.ScriptTarget): string {
+            if (displayName && displayName.length > 0) {
+                var firstChar = displayName.charCodeAt(0);
+                if (firstChar === TypeScript.CharacterCodes.singleQuote || firstChar === TypeScript.CharacterCodes.doubleQuote) {
+                    // If the user entered name for the symbol was quoted, removing the quotes is not enough, as the name could be an
+                    // invalid identifer name. We need to check if whatever was inside the quotes is actually a valid identifier name.
+                    displayName = TypeScript.stripStartAndEndQuotes(displayName);
+                }
+
+                if (TypeScript.Scanner.isValidIdentifier(TypeScript.SimpleText.fromString(displayName), target)) {
+                    return displayName;
+                }
+            }
+
+            return undefined;
+        }
+
         function createCompletionEntry(symbol: ts.Symbol): CompletionEntry {
             // Try to get a valid display name for this symbol, if we could not find one, then ignore it. 
             // We would like to only show things that can be added after a dot, so for instance numeric properties can
             // not be accessed with a dot (a.1 <- invalid)
-            var displayName = TypeScript.Services.CompletionHelpers.getValidCompletionEntryDisplayName(symbol.getName(), program.getCompilerOptions().target);
+            var displayName = getValidCompletionEntryDisplayName(symbol.getName(), program.getCompilerOptions().target);
             if (!displayName) {
                 return undefined;
             }
@@ -1391,6 +1407,129 @@ module ts {
                 });
             }
 
+            function isCompletionListBlocker(sourceUnit: TypeScript.SourceUnitSyntax, position: number): boolean {
+                // We shouldn't be getting a possition that is outside the file because
+                // isEntirelyInsideComment can't handle when the position is out of bounds, 
+                // callers should be fixed, however we should be resiliant to bad inputs
+                // so we return true (this position is a blocker for getting completions)
+                if (position < 0 || position > TypeScript.fullWidth(sourceUnit)) {
+                    return true;
+                }
+
+                // This method uses Fidelity completely. Some information can be reached using the AST, but not everything.
+                return TypeScript.Syntax.isEntirelyInsideComment(sourceUnit, position) ||
+                    TypeScript.Syntax.isEntirelyInStringOrRegularExpressionLiteral(sourceUnit, position) ||
+                    isIdentifierDefinitionLocation(sourceUnit, position) ||
+                    isRightOfIllegalDot(sourceUnit, position);
+            }
+
+            function getContainingObjectLiteralApplicableForCompletion(sourceUnit: TypeScript.SourceUnitSyntax, position: number): TypeScript.ISyntaxElement {
+                // The locations in an object literal expression that are applicable for completion are property name definition locations.
+                var previousToken = getNonIdentifierCompleteTokenOnLeft(sourceUnit, position);
+
+                if (previousToken) {
+                    var parent = previousToken.parent;
+
+                    switch (previousToken.kind()) {
+                        case TypeScript.SyntaxKind.OpenBraceToken:  // var x = { |
+                        case TypeScript.SyntaxKind.CommaToken:      // var x = { a: 0, |
+                            if (parent && parent.kind() === TypeScript.SyntaxKind.SeparatedList) {
+                                parent = parent.parent;
+                            }
+
+                            if (parent && parent.kind() === TypeScript.SyntaxKind.ObjectLiteralExpression) {
+                                return parent;
+                            }
+
+                            break;
+                    }
+                }
+
+                return undefined;
+            }
+
+            function isIdentifierDefinitionLocation(sourceUnit: TypeScript.SourceUnitSyntax, position: number): boolean {
+                var positionedToken = getNonIdentifierCompleteTokenOnLeft(sourceUnit, position);
+
+                if (positionedToken) {
+                    var containingNodeKind = TypeScript.Syntax.containingNode(positionedToken) && TypeScript.Syntax.containingNode(positionedToken).kind();
+                    switch (positionedToken.kind()) {
+                        case TypeScript.SyntaxKind.CommaToken:
+                            return containingNodeKind === TypeScript.SyntaxKind.ParameterList ||
+                                containingNodeKind === TypeScript.SyntaxKind.VariableDeclaration ||
+                                containingNodeKind === TypeScript.SyntaxKind.EnumDeclaration;           // enum { foo, |
+
+                        case TypeScript.SyntaxKind.OpenParenToken:
+                            return containingNodeKind === TypeScript.SyntaxKind.ParameterList ||
+                                containingNodeKind === TypeScript.SyntaxKind.CatchClause;
+
+                        case TypeScript.SyntaxKind.OpenBraceToken:
+                            return containingNodeKind === TypeScript.SyntaxKind.EnumDeclaration;        // enum { |
+
+                        case TypeScript.SyntaxKind.PublicKeyword:
+                        case TypeScript.SyntaxKind.PrivateKeyword:
+                        case TypeScript.SyntaxKind.StaticKeyword:
+                        case TypeScript.SyntaxKind.DotDotDotToken:
+                            return containingNodeKind === TypeScript.SyntaxKind.Parameter;
+
+                        case TypeScript.SyntaxKind.ClassKeyword:
+                        case TypeScript.SyntaxKind.ModuleKeyword:
+                        case TypeScript.SyntaxKind.EnumKeyword:
+                        case TypeScript.SyntaxKind.InterfaceKeyword:
+                        case TypeScript.SyntaxKind.FunctionKeyword:
+                        case TypeScript.SyntaxKind.VarKeyword:
+                        case TypeScript.SyntaxKind.GetKeyword:
+                        case TypeScript.SyntaxKind.SetKeyword:
+                            return true;
+                    }
+
+                    // Previous token may have been a keyword that was converted to an identifier.
+                    switch (positionedToken.text()) {
+                        case "class":
+                        case "interface":
+                        case "enum":
+                        case "module":
+                            return true;
+                    }
+                }
+
+                return false;
+            }
+
+            function getNonIdentifierCompleteTokenOnLeft(sourceUnit: TypeScript.SourceUnitSyntax, position: number): TypeScript.ISyntaxToken {
+                var positionedToken = TypeScript.Syntax.findCompleteTokenOnLeft(sourceUnit, position, /*includeSkippedTokens*/true);
+
+                if (positionedToken && position === TypeScript.end(positionedToken) && positionedToken.kind() == TypeScript.SyntaxKind.EndOfFileToken) {
+                    // EndOfFile token is not intresting, get the one before it
+                    positionedToken = TypeScript. previousToken(positionedToken, /*includeSkippedTokens*/true);
+                }
+
+                if (positionedToken && position === TypeScript.end(positionedToken) && positionedToken.kind() === TypeScript.SyntaxKind.IdentifierName) {
+                    // The caret is at the end of an identifier, the decession to provide completion depends on the previous token
+                    positionedToken = TypeScript.previousToken(positionedToken, /*includeSkippedTokens*/true);
+                }
+
+                return positionedToken;
+            }
+
+            function isRightOfIllegalDot(sourceUnit: TypeScript.SourceUnitSyntax, position: number): boolean {
+                var positionedToken = getNonIdentifierCompleteTokenOnLeft(sourceUnit, position);
+
+                if (positionedToken) {
+                    switch (positionedToken.kind()) {
+                        case TypeScript.SyntaxKind.DotToken:
+                            var leftOfDotPositionedToken = TypeScript.previousToken(positionedToken, /*includeSkippedTokens*/true);
+                            return leftOfDotPositionedToken && leftOfDotPositionedToken.kind() === TypeScript.SyntaxKind.NumericLiteral;
+
+                        case TypeScript.SyntaxKind.NumericLiteral:
+                            var text = positionedToken.text();
+                            return text.charAt(text.length - 1) === ".";
+                    }
+                }
+
+                return false;
+            }
+
             synchronizeHostData();
 
             filename = TypeScript.switchToForwardSlashes(filename);
@@ -1398,7 +1537,7 @@ module ts {
             var document = documentsByName[filename];
             var sourceUnit = document.sourceUnit();
 
-            if (TypeScript.Services.CompletionHelpers.isCompletionListBlocker(document.syntaxTree().sourceUnit(), position)) {
+            if (isCompletionListBlocker(document.syntaxTree().sourceUnit(), position)) {
                 host.log("Returning an empty list because completion was blocked.");
                 return null;
             }
@@ -1470,7 +1609,7 @@ module ts {
                 getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
             }
             else {
-                var containingObjectLiteral = TypeScript.Services.CompletionHelpers.getContainingObjectLiteralApplicableForCompletion(document.syntaxTree().sourceUnit(), position);
+                var containingObjectLiteral = getContainingObjectLiteralApplicableForCompletion(document.syntaxTree().sourceUnit(), position);
 
                 // Object literal expression, look up possible property names from contextual type
                 if (containingObjectLiteral) {
@@ -1498,7 +1637,7 @@ module ts {
 
                     //    // Add filtterd items to the completion list
                     //    getCompletionEntriesFromSymbols({
-                    //        symbols: CompletionHelpers.filterContextualMembersList(contextualMembers.symbols, existingMembers, filename, position),
+                    //        symbols: filterContextualMembersList(contextualMembers.symbols, existingMembers, filename, position),
                     //        enclosingScopeSymbol: contextualMembers.enclosingScopeSymbol
                     //    }, entries);
                     //}
