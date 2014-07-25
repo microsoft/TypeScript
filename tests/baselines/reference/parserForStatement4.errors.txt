@@ -3,7 +3,7 @@
          ~
 !!! Cannot find name 'a'.
          ~~~~~
-!!! Variable declarations of a 'for' statement must be of types 'string' or 'any'.
+!!! Left hand side of a 'for' statement must be of type 'string' or 'any'.
                   ~
 !!! Cannot find name 'b'.
     }

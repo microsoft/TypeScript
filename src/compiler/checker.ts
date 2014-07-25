@@ -5214,7 +5214,7 @@ module ts {
             if (node.declaration) {
                 checkVariableDeclaration(node.declaration);
                 if (node.declaration.type) {
-                    error(node.declaration, Diagnostics.Variable_declarations_of_a_for_statement_cannot_use_a_type_annotation);
+                    error(node.declaration, Diagnostics.Left_hand_side_of_a_for_statement_cannot_use_a_type_annotation);
                 }
             }
 
@@ -5225,7 +5225,7 @@ module ts {
             if (node.variable) {
                 var exprType = checkExpression(node.variable);
                 if (exprType !== anyType && exprType !== stringType) {
-                    error(node.variable, Diagnostics.Variable_declarations_of_a_for_statement_must_be_of_types_string_or_any);
+                    error(node.variable, Diagnostics.Left_hand_side_of_a_for_statement_must_be_of_type_string_or_any);
                 }
                 else {
                     // run check only former check succeeded to avoid cascading errors
