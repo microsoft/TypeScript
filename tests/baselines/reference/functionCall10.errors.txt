@@ -2,10 +2,10 @@
     function foo(...a:number[]){};
     foo(0, 1); 
     foo('foo'); 
-    ~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+        ~~~~~
+!!! Argument type 'string' is not assignable to parameter type 'number'.
     foo();
     foo(1, 'bar');
-    ~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+           ~~~~~
+!!! Argument type 'string' is not assignable to parameter type 'number'.
     

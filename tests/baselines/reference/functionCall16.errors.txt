@@ -1,15 +1,15 @@
 ==== tests/cases/compiler/functionCall16.ts (3 errors) ====
     function foo(a:string, b?:string, ...c:number[]){}
     foo('foo', 1); 
-    ~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+               ~
+!!! Argument type 'number' is not assignable to parameter type 'string'.
     foo('foo'); 
     foo('foo', 'bar'); 
     foo();
     ~~~~~
 !!! Supplied parameters do not match any signature of call target.
     foo(1, 'bar');
-    ~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+        ~
+!!! Argument type 'number' is not assignable to parameter type 'string'.
     foo('foo', 'bar', 3);
     

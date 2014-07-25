@@ -18,8 +18,8 @@
     var a: D = foo("hi", []); // D
     var b: E = foo("bye", []); // E 
     var c = foo("um", []); // error
-            ~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                ~~~~
+!!! Argument type 'string' is not assignable to parameter type '"bye"'.
     
     
     //function bar(x: "hi", items: string[]): D;

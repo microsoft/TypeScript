@@ -9,19 +9,15 @@
     function instrumentFile(covFileDir: string, covFileName: string, originalFilePath: string) {
         fs.readFile(originalFilePath, () => {       
             readdir(covFileDir, () => {
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                ~~~~~~~
             } , (error: Error, files: {}[]) => {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~
+!!! Argument type '() => void' is not assignable to parameter type '(stat: unknown, name: string) => boolean'.
                     files.forEach((file) => {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                         var fullPath = join(IDoNotExist);
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                                             ~~~~~~~~~~~
 !!! Cannot find name 'IDoNotExist'.
                     } );
-    ~~~~~~~~~~~~~~~~~~~~
                 } );
-    ~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
         } );
     }

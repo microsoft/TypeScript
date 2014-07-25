@@ -6,8 +6,8 @@
             var result = cb(this.value);
             // should get a fresh type parameter which each then call
             var z = this.then(x => result)/*S*/.then(x => "abc")/*Function*/.then(x => x.length)/*number*/; // Should error on "abc" because it is not a Function
-                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                                                     ~~~~~~~~~~
+!!! Argument type '(x: S) => string' is not assignable to parameter type '(x: S) => Function'.
             return new Chain2(result);
         }
     }

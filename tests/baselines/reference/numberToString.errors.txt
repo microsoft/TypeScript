@@ -10,7 +10,7 @@
     
     f1(3);
     f2(3); // error no coercion to string
-    ~~~~~
-!!! Supplied parameters do not match any signature of call target.
+       ~
+!!! Argument type 'number' is not assignable to parameter type 'string'.
     f2(3+""); // ok + operator promotes
     

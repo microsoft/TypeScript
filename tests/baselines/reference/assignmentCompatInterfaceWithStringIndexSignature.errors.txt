@@ -14,6 +14,6 @@
     function Biz(map: IHandlerMap) { }
     
     Biz(new Foo());
-    ~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+        ~~~~~~~~~
+!!! Argument type 'Foo' is not assignable to parameter type 'IHandlerMap'.
     

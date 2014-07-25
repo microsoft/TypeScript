@@ -78,109 +78,109 @@
     var sIPromise: (x: any) => IPromise<string>;
     var sPromise: (x: any) => Promise<string>;
     var r4a = r4.then(testFunction4, testFunction4, testFunction4); // error
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                      ~~~~~~~~~~~~~
+!!! Argument type '(x: number, y?: string) => IPromise<string>' is not assignable to parameter type '(value: string) => IPromise<string>'.
     var r4b = r4.then(sIPromise, testFunction4, testFunction4).then(sIPromise, testFunction4, testFunction4); // ok
     var s4: Promise<string>;
     var s4a = s4.then(testFunction4, testFunction4, testFunction4); // error
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                      ~~~~~~~~~~~~~
+!!! Argument type '(x: number, y?: string) => IPromise<string>' is not assignable to parameter type '(value: string) => IPromise<string>'.
     var s4b = s4.then(testFunction4P, testFunction4P, testFunction4P); // error 
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                      ~~~~~~~~~~~~~~
+!!! Argument type '(x: number, y?: string) => Promise<string>' is not assignable to parameter type '(value: string) => Promise<string>'.
     var s4c = s4.then(testFunction4P, testFunction4, testFunction4); // error
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                      ~~~~~~~~~~~~~~
+!!! Argument type '(x: number, y?: string) => Promise<string>' is not assignable to parameter type '(value: string) => IPromise<string>'.
     var s4d = s4.then(sIPromise, testFunction4P, testFunction4).then(sIPromise, testFunction4P, testFunction4); 
     
     var r5: IPromise<string>;
     var r5a = r5.then(testFunction5, testFunction5, testFunction5); // error
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                      ~~~~~~~~~~~~~
+!!! Argument type '(x: number, cb: (a: string) => string) => IPromise<string>' is not assignable to parameter type '(value: string) => IPromise<string>'.
     var r5b = r5.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
     var s5: Promise<string>;
     var s5a = s5.then(testFunction5, testFunction5, testFunction5); // error
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                      ~~~~~~~~~~~~~
+!!! Argument type '(x: number, cb: (a: string) => string) => IPromise<string>' is not assignable to parameter type '(value: string) => IPromise<string>'.
     var s5b = s5.then(testFunction5P, testFunction5P, testFunction5P); // error
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                      ~~~~~~~~~~~~~~
+!!! Argument type '(x: number, cb: (a: string) => string) => Promise<string>' is not assignable to parameter type '(value: string) => Promise<string>'.
     var s5c = s5.then(testFunction5P, testFunction5, testFunction5); // error
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                      ~~~~~~~~~~~~~~
+!!! Argument type '(x: number, cb: (a: string) => string) => Promise<string>' is not assignable to parameter type '(value: string) => IPromise<string>'.
     var s5d = s5.then(sPromise, sPromise, sPromise).then(sIPromise, sIPromise, sIPromise); // ok
     
     var r6: IPromise<string>;
     var r6a = r6.then(testFunction6, testFunction6, testFunction6); // error
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                      ~~~~~~~~~~~~~
+!!! Argument type '(x: number, cb: <T>(a: T) => T) => IPromise<string>' is not assignable to parameter type '(value: string) => IPromise<string>'.
     var r6b = r6.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
     var s6: Promise<string>;
     var s6a = s6.then(testFunction6, testFunction6, testFunction6); // error
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                      ~~~~~~~~~~~~~
+!!! Argument type '(x: number, cb: <T>(a: T) => T) => IPromise<string>' is not assignable to parameter type '(value: string) => IPromise<string>'.
     var s6b = s6.then(testFunction6P, testFunction6P, testFunction6P); // error
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                      ~~~~~~~~~~~~~~
+!!! Argument type '(x: number, cb: <T>(a: T) => T) => Promise<string>' is not assignable to parameter type '(value: string) => Promise<string>'.
     var s6c = s6.then(testFunction6P, testFunction6, testFunction6); // error
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                      ~~~~~~~~~~~~~~
+!!! Argument type '(x: number, cb: <T>(a: T) => T) => Promise<string>' is not assignable to parameter type '(value: string) => IPromise<string>'.
     var s6d = s6.then(sPromise, sPromise, sPromise).then(sIPromise, sIPromise, sIPromise); // ok
     
     var r7: IPromise<string>;
     var r7a = r7.then(testFunction7, testFunction7, testFunction7); // error
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                      ~~~~~~~~~~~~~
+!!! Argument type '(cb: <T>(a: T) => T) => IPromise<string>' is not assignable to parameter type '(value: string) => IPromise<string>'.
     var r7b = r7.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
     var s7: Promise<string>;
     var s7a = r7.then(testFunction7, testFunction7, testFunction7); // error
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                      ~~~~~~~~~~~~~
+!!! Argument type '(cb: <T>(a: T) => T) => IPromise<string>' is not assignable to parameter type '(value: string) => IPromise<string>'.
     var s7b = r7.then(testFunction7P, testFunction7P, testFunction7P); // error
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                      ~~~~~~~~~~~~~~
+!!! Argument type '(cb: <T>(a: T) => T) => Promise<string>' is not assignable to parameter type '(value: string) => Promise<string>'.
     var s7c = r7.then(testFunction7P, testFunction7, testFunction7); // error
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                      ~~~~~~~~~~~~~~
+!!! Argument type '(cb: <T>(a: T) => T) => Promise<string>' is not assignable to parameter type '(value: string) => IPromise<string>'.
     var s7d = r7.then(sPromise, sPromise, sPromise).then(sPromise, sPromise, sPromise); // ok?
     
     var r8: IPromise<number>;
     var nIPromise: (x: any) => IPromise<number>;
     var nPromise: (x: any) => Promise<number>;
     var r8a = r8.then(testFunction8, testFunction8, testFunction8); // error
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                      ~~~~~~~~~~~~~
+!!! Argument type '<T>(x: T, cb: (a: T) => T) => IPromise<T>' is not assignable to parameter type '(value: number) => IPromise<number>'.
     var r8b = r8.then(nIPromise, nIPromise, nIPromise).then(nIPromise, nIPromise, nIPromise); // ok
     var s8: Promise<number>;
     var s8a = s8.then(testFunction8, testFunction8, testFunction8); // error
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                      ~~~~~~~~~~~~~
+!!! Argument type '<T>(x: T, cb: (a: T) => T) => IPromise<T>' is not assignable to parameter type '(value: number) => IPromise<number>'.
     var s8b = s8.then(testFunction8P, testFunction8P, testFunction8P); // error
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                      ~~~~~~~~~~~~~~
+!!! Argument type '<T>(x: T, cb: (a: T) => T) => Promise<T>' is not assignable to parameter type '(value: number) => Promise<number>'.
     var s8c = s8.then(testFunction8P, testFunction8, testFunction8); // error
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                      ~~~~~~~~~~~~~~
+!!! Argument type '<T>(x: T, cb: (a: T) => T) => Promise<T>' is not assignable to parameter type '(value: number) => IPromise<any>'.
     var s8d = s8.then(nIPromise, nIPromise, nIPromise).then(nIPromise, nIPromise, nIPromise); // ok
     
     var r9: IPromise<number>;
     var r9a = r9.then(testFunction9, testFunction9, testFunction9); // error
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                      ~~~~~~~~~~~~~
+!!! Argument type '<T>(x: T, cb: <U>(a: U) => U) => IPromise<T>' is not assignable to parameter type '(value: number) => IPromise<number>'.
     var r9b = r9.then(sIPromise, sIPromise, sIPromise); // ok
     var r9c = r9.then(nIPromise, nIPromise, nIPromise); // ok
     var r9d = r9.then(testFunction, sIPromise, nIPromise); // ok
     var r9e = r9.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
     var s9: Promise<number>;
     var s9a = s9.then(testFunction9, testFunction9, testFunction9); // error
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                      ~~~~~~~~~~~~~
+!!! Argument type '<T>(x: T, cb: <U>(a: U) => U) => IPromise<T>' is not assignable to parameter type '(value: number) => IPromise<number>'.
     var s9b = s9.then(testFunction9P, testFunction9P, testFunction9P); // error
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                      ~~~~~~~~~~~~~~
+!!! Argument type '<T>(x: T, cb: <U>(a: U) => U) => Promise<T>' is not assignable to parameter type '(value: number) => Promise<number>'.
     var s9c = s9.then(testFunction9P, testFunction9, testFunction9); // error
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                      ~~~~~~~~~~~~~~
+!!! Argument type '<T>(x: T, cb: <U>(a: U) => U) => Promise<T>' is not assignable to parameter type '(value: number) => IPromise<any>'.
     var s9d = s9.then(sPromise, sPromise, sPromise); // ok
     var s9e = s9.then(nPromise, nPromise, nPromise); // ok
     var s9f = s9.then(testFunction, sIPromise, nIPromise); // ok
@@ -205,8 +205,8 @@
     var r11a = r11.then(testFunction11, testFunction11, testFunction11); // ok
     var s11: Promise<number>;
     var s11a = s11.then(testFunction11, testFunction11, testFunction11); // ok
-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                        ~~~~~~~~~~~~~~
+!!! Argument type '{ (x: number): IPromise<number>; (x: string): IPromise<string>; }' is not assignable to parameter type '(value: number) => IPromise<string>'.
     var s11b = s11.then(testFunction11P, testFunction11P, testFunction11P); // ok
     var s11c = s11.then(testFunction11P, testFunction11, testFunction11); // ok
     

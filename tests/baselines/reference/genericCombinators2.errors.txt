@@ -14,8 +14,8 @@
     var c2: Collection<number, string>;
     var rf1 = (x: number, y: string) => { return x.toFixed() };
     var r5a = _.map<number, string, Date>(c2, (x, y) => { return x.toFixed() });
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Argument type '(x: number, y: string) => string' is not assignable to parameter type '(x: number, y: string) => Date'.
     var r5b = _.map<number, string, Date>(c2, rf1);
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                                              ~~~
+!!! Argument type '(x: number, y: string) => string' is not assignable to parameter type '(x: number, y: string) => Date'.

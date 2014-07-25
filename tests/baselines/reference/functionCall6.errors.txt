@@ -2,8 +2,8 @@
     function foo(a:string){}; 
     foo('bar');
     foo(2);
-    ~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+        ~
+!!! Argument type 'number' is not assignable to parameter type 'string'.
     foo('foo', 'bar');
     ~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.

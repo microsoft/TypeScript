@@ -15,9 +15,9 @@
     // errors on all 3 lines, bug was that r5 was the only line with errors
     var f = (x: number) => { return x.toFixed() };
     var r5 = _.forEach<number>(c2, f); 
-             ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                                   ~
+!!! Argument type '(x: number) => string' is not assignable to parameter type '(x: number) => Date'.
     var r6 = _.forEach<number>(c2, (x) => { return x.toFixed() }); 
-             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Argument type '(x: number) => string' is not assignable to parameter type '(x: number) => Date'.
     

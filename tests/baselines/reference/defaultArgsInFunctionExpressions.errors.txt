@@ -3,8 +3,8 @@
     var n: number = f(4);
     n = f();
     var s: string = f('');
-                    ~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                      ~~
+!!! Argument type 'string' is not assignable to parameter type 'number'.
     s = f();
     ~
 !!! Type 'number' is not assignable to type 'string'.

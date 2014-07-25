@@ -1,20 +1,22 @@
 ==== tests/cases/compiler/assignmentCompatBug5.ts (4 errors) ====
     function foo1(x: { a: number; }) { }
     foo1({ b: 5 });
-    ~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+         ~~~~~~~~
+!!! Argument type '{ b: number; }' is not assignable to parameter type '{ a: number; }'.
+!!!   Property 'a' is missing in type '{ b: number; }'.
     
     function foo2(x: number[]) { }
     foo2(["s", "t"]);
-    ~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+         ~~~~~~~~~~
+!!! Argument type 'string[]' is not assignable to parameter type 'number[]'.
+!!!   Type 'string' is not assignable to type 'number'.
     
     function foo3(x: (n: number) =>number) { };
     foo3((s:string) => { });
-    ~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+         ~~~~~~~~~~~~~~~~~
+!!! Argument type '(s: string) => void' is not assignable to parameter type '(n: number) => number'.
     foo3((n) => { return; });
-    ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+         ~~~~~~~~~~~~~~~~~~
+!!! Argument type '(n: number) => void' is not assignable to parameter type '(n: number) => number'.
     
     

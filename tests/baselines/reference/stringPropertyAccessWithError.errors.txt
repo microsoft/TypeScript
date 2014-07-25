@@ -1,5 +1,5 @@
 ==== tests/cases/conformance/types/primitives/string/stringPropertyAccessWithError.ts (1 errors) ====
     var x = '';
     var d = x['charAt']('invalid'); // error
-            ~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                        ~~~~~~~~~
+!!! Argument type 'string' is not assignable to parameter type 'number'.

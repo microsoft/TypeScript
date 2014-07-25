@@ -34,8 +34,8 @@
          static g(t: typeof C.g){ }
     }
     C.g(3); // error
-    ~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+        ~
+!!! Argument type 'number' is not assignable to parameter type '(t: typeof g) => void'.
     
     var f4: () => typeof f4;
     f4 = 3; // error
@@ -52,8 +52,8 @@
     ~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
     f6(""); // ok (function takes an any param)
-    ~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+       ~~
+!!! Argument type 'string' is not assignable to parameter type '{ (): typeof f6; (a: typeof f6): () => number; }'.
     f6(); // ok
     
     declare function f7(): typeof f7;
@@ -65,6 +65,6 @@
     ~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
     f7(""); // ok (function takes an any param)
-    ~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+       ~~
+!!! Argument type 'string' is not assignable to parameter type '{ (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }'.
     f7(); // ok

@@ -3634,9 +3634,8 @@ module ts {
                 (!node.typeArguments || signature.typeParameters && node.typeArguments.length === signature.typeParameters.length);
         }
 
-        // The candidate list is in reverse order of declaration, except that groups of signatures with the same parent are
-        // kept in declaration order.
-        function collectCandidates(node: CallExpression, signatures: Signature[]): Signature[] {
+        // The candidate list orders groups in reverse, but within a group signatures are kept in declaration order
+        function collectCandidates(node: CallExpression, signatures: Signature[]): Signature[]{
             var result: Signature[] = [];
             var lastParent: Node;
             var pos: number;
@@ -3733,15 +3732,22 @@ module ts {
             return result;
         }
 
-        function isApplicableSignature(node: CallExpression, signature: Signature, relation: Map<boolean>, excludeArgument: boolean[]) {
+        function checkApplicableSignature(node: CallExpression, signature: Signature, relation: Map<boolean>, excludeArgument: boolean[], reportErrors: boolean) {
             if (node.arguments) {
                 for (var i = 0; i < node.arguments.length; i++) {
                     var arg = node.arguments[i];
                     var paramType = getTypeAtPosition(signature, i);
-                    var argType = arg.kind === SyntaxKind.StringLiteral ?
+                    // String literals get string literal types unless we're reporting errors
+                    var argType = arg.kind === SyntaxKind.StringLiteral && !reportErrors ?
                         getStringLiteralType(<LiteralExpression>arg) :
                         checkExpression(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
-                    if (!isTypeRelatedTo(argType, paramType, relation)) return false;
+                    // Use argument expression as error location when reporting errors
+                    var isValidArgument = checkTypeRelatedTo(argType, paramType, relation, reportErrors ? arg : undefined,
+                        Diagnostics.Argument_type_0_is_not_assignable_to_parameter_type_1,
+                        Diagnostics.Argument_type_0_is_not_assignable_to_parameter_type_1);
+                    if (!isValidArgument) {
+                        return false;
+                    }
                 }
             }
             return true;
@@ -3773,7 +3779,9 @@ module ts {
                                 inferTypeArguments(candidate, args, excludeArgument);
                             candidate = getSignatureInstantiation(candidate, typeArguments);
                         }
-                        if (!isApplicableSignature(node, candidate, relation, excludeArgument)) break;
+                        if (!checkApplicableSignature(node, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
+                            break;
+                        }
                         var index = excludeArgument ? indexOf(excludeArgument, true) : -1;
                         if (index < 0) {
                             return getReturnTypeOfSignature(candidate);
@@ -3781,10 +3789,14 @@ module ts {
                         excludeArgument[index] = false;
                     }
                 }
-                if (relation === assignableRelation) break;
+                if (relation === assignableRelation) {
+                    break;
+                }
                 relation = assignableRelation;
             }
-            error(node, Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);
+            // No signatures were applicable. Now report errors based on the last applicable signature with
+            // no arguments excluded from assignability checks.
+            checkApplicableSignature(node, candidate, relation, undefined, /*reportErrors*/ true);
             return checkErrorCall(node);
         }
 

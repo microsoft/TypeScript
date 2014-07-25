@@ -12,8 +12,8 @@
     
     // Errors
     new Derived("", 3);
-    ~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                    ~
+!!! Argument type 'number' is not assignable to parameter type 'string'.
     new Derived(3);
-    ~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                ~
+!!! Argument type 'number' is not assignable to parameter type 'string'.

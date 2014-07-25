@@ -43,8 +43,8 @@
     ~
 !!! Type 'C' is not assignable to type 'string'.
     z=x.h(2,2); // no match
-      ~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+            ~
+!!! Argument type 'number' is not assignable to parameter type 'string'.
     z=x.h("hello",0); // good
     
     var v=x.g;

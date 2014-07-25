@@ -17,7 +17,7 @@
     var v1 = numberMapToArray(numberMap);  // Ok
     var v1 = numberMapToArray(stringMap);  // Ok
     var v1 = stringMapToArray(numberMap);  // Error expected here
-             ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                              ~~~~~~~~~
+!!! Argument type 'NumberMap<Function>' is not assignable to parameter type 'StringMap<{}>'.
     var v1 = stringMapToArray(stringMap);  // Ok
     

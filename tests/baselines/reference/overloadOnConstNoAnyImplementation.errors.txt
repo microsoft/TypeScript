@@ -12,8 +12,8 @@
         cb(hm);
         cb('uh');
         cb(1); // error
-        ~~~~~
-!!! Supplied parameters do not match any signature of call target.
+           ~
+!!! Argument type 'number' is not assignable to parameter type 'string'.
     }
     
     var cb: (number) => number = (x: number) => 1;

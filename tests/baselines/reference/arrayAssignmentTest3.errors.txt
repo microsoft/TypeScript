@@ -11,7 +11,7 @@
     
     
     var xx = new a(null, 7, new B());
-             ~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                            ~~~~~~~
+!!! Argument type 'B' is not assignable to parameter type 'B[]'.
     
     

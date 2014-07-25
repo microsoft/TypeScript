@@ -61,8 +61,8 @@
     var c1: C1;
     var c2: C2;
     if1(c1);
-    ~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+        ~~
+!!! Argument type 'C1' is not assignable to parameter type 'IFoo2'.
     
     
     function of1(n: { a: { a: string; }; b: string; }): number;
@@ -70,8 +70,9 @@
     function of1(a: any) { return null; }
     
     of1({ e: 0, f: 0 });
-    ~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+        ~~~~~~~~~~~~~~
+!!! Argument type '{ e: number; f: number; }' is not assignable to parameter type '{ c: { b: string; }; d: string; }'.
+!!!   Property 'c' is missing in type '{ e: number; f: number; }'.
     
     interface IMap {
      [key:string]:string;

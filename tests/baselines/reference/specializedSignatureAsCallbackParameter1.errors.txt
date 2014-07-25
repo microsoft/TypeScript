@@ -6,10 +6,10 @@
     }
     // both are errors
     x3(1, (x: string) => 1); 
-    ~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+       ~
+!!! Argument type 'number' is not assignable to parameter type 'string'.
     x3(1, (x: 'hm') => 1); 
-    ~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+       ~
+!!! Argument type 'number' is not assignable to parameter type 'string'.
           ~~~~~~~~~~~~~~
 !!! A signature with an implementation cannot use a string literal type.

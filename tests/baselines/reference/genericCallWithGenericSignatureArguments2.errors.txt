@@ -13,11 +13,11 @@
         var r7 = foo((a: T) => a, (b: T) => b); // T => T
         // BUG 835518
         var r9 = r7(new Date()); // should be ok
-                 ~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                    ~~~~~~~~~~
+!!! Argument type 'Date' is not assignable to parameter type 'T'.
         var r10 = r7(1); // error
-                  ~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                     ~
+!!! Argument type 'number' is not assignable to parameter type 'T'.
     }
     
     function foo2<T extends Date>(a: (x: T) => T, b: (x: T) => T) {
@@ -27,8 +27,8 @@
     
     function other3<T extends RegExp>(x: T) {
         var r7 = foo2((a: T) => a, (b: T) => b); // error
-                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                      ~~~~~~~~~~~
+!!! Argument type '(a: T) => T' is not assignable to parameter type '(x: Date) => Date'.
         var r7b = foo2((a) => a, (b) => b); // valid, T is inferred to be Date
     }
     
@@ -41,5 +41,5 @@
     }
     
     var r7 = foo3(E.A, (x) => E.A, (x) => F.A); // error
-             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                                   ~~~~~~~~~~
+!!! Argument type '(x: E) => F' is not assignable to parameter type '(x: E) => E'.

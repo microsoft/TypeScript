@@ -4,8 +4,8 @@
         b: <T>(x: T) => { x }
     }
     x.a<string>(1); // bug was that this caused 'Could not find symbol T' on return type T in the type assertion on x.a's definition
-    ~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                ~
+!!! Argument type 'number' is not assignable to parameter type 'string'.
     x.b<string>(); // error
     ~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.

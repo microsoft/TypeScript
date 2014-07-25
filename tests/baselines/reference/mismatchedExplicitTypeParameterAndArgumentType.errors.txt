@@ -9,8 +9,9 @@
     var r5 = map<any, any>([1, ""], (x) => x.toString());
     var r6 = map<Object, Object>([1, ""], (x) => x.toString());
     var r7 = map<number, string>([1, ""], (x) => x.toString()); // error
-             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                                 ~~~~~~~
+!!! Argument type '{}[]' is not assignable to parameter type 'number[]'.
+!!!   Type '{}' is not assignable to type 'number'.
     var r7b = map<number>([1, ""], (x) => x.toString()); // error
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.

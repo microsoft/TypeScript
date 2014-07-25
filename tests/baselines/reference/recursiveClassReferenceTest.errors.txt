@@ -100,8 +100,8 @@
     		// scenario 2
     		public getInitialState(): IState {
     			return new State(self);
-    			       ~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+    			                 ~~~~
+!!! Argument type 'Window' is not assignable to parameter type 'IMode'.
     		}
     
     
