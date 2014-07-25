@@ -112,7 +112,8 @@ module RWC {
                         getDefaultLibFilename: () => libPath,
                         writeFile: (fn, contents) => emitterIOHost.writeFile(fn, contents, false),
                         getCanonicalFileName: ts.getCanonicalFileName,
-                        useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames
+                        useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
+                        getNewLine: () => sys.newLine
                     };
 
                     var resolvedProgram = ts.createProgram(opts.filenames, opts.options, host);

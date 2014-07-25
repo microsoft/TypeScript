@@ -223,7 +223,8 @@ class ProjectRunner extends RunnerBase {
                     writeFile: writeFile,
                     getCurrentDirectory: getCurrentDirectory,
                     getCanonicalFileName: ts.getCanonicalFileName,
-                    useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames
+                    useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
+                    getNewLine:()=> sys.newLine
                 };
             }
 
