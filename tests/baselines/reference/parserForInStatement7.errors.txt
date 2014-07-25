@@ -3,7 +3,7 @@
                                               ~
 !!! Only a single variable declaration is allowed in a 'for...in' statement.
              ~
-!!! Variable declarations of a 'for' statement cannot use a type annotation.
+!!! The left-hand side of a 'for...in' statement cannot use a type annotation.
                                               ~
 !!! Cannot find name 'X'.
     }

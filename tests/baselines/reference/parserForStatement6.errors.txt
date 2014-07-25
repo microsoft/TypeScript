@@ -3,7 +3,7 @@
          ~~~
 !!! Cannot find name 'foo'.
          ~~~~~
-!!! Variable declarations of a 'for' statement must be of types 'string' or 'any'.
+!!! The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
                   ~
 !!! Cannot find name 'b'.
     }

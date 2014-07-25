@@ -2,5 +2,5 @@
     var expr: any;
     for (var a: number in expr) {
              ~
-!!! Variable declarations of a 'for' statement cannot use a type annotation.
+!!! The left-hand side of a 'for...in' statement cannot use a type annotation.
     }

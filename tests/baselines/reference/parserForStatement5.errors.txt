@@ -1,7 +1,7 @@
 ==== tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement5.ts (2 errors) ====
     for ({} in b) {
          ~~
-!!! Variable declarations of a 'for' statement must be of types 'string' or 'any'.
+!!! The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
                ~
 !!! Cannot find name 'b'.
     }
