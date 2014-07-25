@@ -816,7 +816,7 @@ module ts {
         version: number;
         isOpen: boolean;
         byteOrderMark: ts.ByteOrderMark;
-        _sourceText?: TypeScript.IScriptSnapshot;
+        sourceText?: TypeScript.IScriptSnapshot;
     }
 
     interface DocumentRegistryEntry {
@@ -871,17 +871,17 @@ module ts {
     // at each language service public entry point, since we don't know when 
     // set of scripts handled by the host changes.
     class HostCache {
-        private _filenameToEntry: ts.Map<HostFileInformation>;
+        private filenameToEntry: ts.Map<HostFileInformation>;
         private _compilationSettings: ts.CompilerOptions;
 
         constructor(private host: LanguageServiceHost) {
             // script id => script index
-            this._filenameToEntry = {};
+            this.filenameToEntry = {};
 
             var filenames = host.getScriptFileNames();
             for (var i = 0, n = filenames.length; i < n; i++) {
                 var filename = filenames[i];
-                this._filenameToEntry[TypeScript.switchToForwardSlashes(filename)] = {
+                this.filenameToEntry[TypeScript.switchToForwardSlashes(filename)] = {
                     filename: filename,
                     version: host.getScriptVersion(filename),
                     isOpen: host.getScriptIsOpen(filename),
@@ -897,11 +897,11 @@ module ts {
         }
 
         public contains(filename: string): boolean {
-            return !!this._filenameToEntry[TypeScript.switchToForwardSlashes(filename)];
+            return !!this.filenameToEntry[TypeScript.switchToForwardSlashes(filename)];
         }
 
         public getHostfilename(filename: string) {
-            var hostCacheEntry = this._filenameToEntry[TypeScript.switchToForwardSlashes(filename)];
+            var hostCacheEntry = this.filenameToEntry[TypeScript.switchToForwardSlashes(filename)];
             if (hostCacheEntry) {
                 return hostCacheEntry.filename;
             }
@@ -910,30 +910,30 @@ module ts {
 
         public getfilenames(): string[] {
             var fileNames: string[] = [];
-            for (var id in this._filenameToEntry) {
+            for (var id in this.filenameToEntry) {
                 fileNames.push(id);
             }
             return fileNames;
         }
 
         public getVersion(filename: string): number {
-            return this._filenameToEntry[TypeScript.switchToForwardSlashes(filename)].version;
+            return this.filenameToEntry[TypeScript.switchToForwardSlashes(filename)].version;
         }
 
         public isOpen(filename: string): boolean {
-            return this._filenameToEntry[TypeScript.switchToForwardSlashes(filename)].isOpen;
+            return this.filenameToEntry[TypeScript.switchToForwardSlashes(filename)].isOpen;
         }
 
         public getByteOrderMark(filename: string): ts.ByteOrderMark {
-            return this._filenameToEntry[TypeScript.switchToForwardSlashes(filename)].byteOrderMark;
+            return this.filenameToEntry[TypeScript.switchToForwardSlashes(filename)].byteOrderMark;
         }
 
         public getScriptSnapshot(filename: string): TypeScript.IScriptSnapshot {
-            var file = this._filenameToEntry[TypeScript.switchToForwardSlashes(filename)];
-            if (!file._sourceText) {
-                file._sourceText = this.host.getScriptSnapshot(file.filename);
+            var file = this.filenameToEntry[TypeScript.switchToForwardSlashes(filename)];
+            if (!file.sourceText) {
+                file.sourceText = this.host.getScriptSnapshot(file.filename);
             }
-            return file._sourceText;
+            return file.sourceText;
         }
 
         public getScriptTextChangeRangeSinceVersion(filename: string, lastKnownVersion: number): TypeScript.TextChangeRange {
@@ -948,49 +948,49 @@ module ts {
     }
 
     class SyntaxTreeCache {
-        private _hostCache: HostCache;
+        private hostCache: HostCache;
 
         // For our syntactic only features, we also keep a cache of the syntax tree for the 
         // currently edited file.  
-        private _currentfilename: string = "";
-        private _currentFileVersion: number = -1;
-        private _currentFileSyntaxTree: TypeScript.SyntaxTree = null;
-        private _currentFileScriptSnapshot: TypeScript.IScriptSnapshot = null;
+        private currentfilename: string = "";
+        private currentFileVersion: number = -1;
+        private currentFileSyntaxTree: TypeScript.SyntaxTree = null;
+        private currentFileScriptSnapshot: TypeScript.IScriptSnapshot = null;
 
-        constructor(private _host: LanguageServiceHost) {
-            this._hostCache = new HostCache(_host);
+        constructor(private host: LanguageServiceHost) {
+            this.hostCache = new HostCache(host);
         }
 
         public getCurrentFileSyntaxTree(filename: string): TypeScript.SyntaxTree {
-            this._hostCache = new HostCache(this._host);
+            this.hostCache = new HostCache(this.host);
 
-            var version = this._hostCache.getVersion(filename);
+            var version = this.hostCache.getVersion(filename);
             var syntaxTree: TypeScript.SyntaxTree = null;
 
-            if (this._currentFileSyntaxTree === null || this._currentfilename !== filename) {
-                var scriptSnapshot = this._hostCache.getScriptSnapshot(filename);
+            if (this.currentFileSyntaxTree === null || this.currentfilename !== filename) {
+                var scriptSnapshot = this.hostCache.getScriptSnapshot(filename);
                 syntaxTree = this.createSyntaxTree(filename, scriptSnapshot);
             }
-            else if (this._currentFileVersion !== version) {
-                var scriptSnapshot = this._hostCache.getScriptSnapshot(filename);
-                syntaxTree = this.updateSyntaxTree(filename, scriptSnapshot, this._currentFileSyntaxTree, this._currentFileVersion);
+            else if (this.currentFileVersion !== version) {
+                var scriptSnapshot = this.hostCache.getScriptSnapshot(filename);
+                syntaxTree = this.updateSyntaxTree(filename, scriptSnapshot, this.currentFileSyntaxTree, this.currentFileVersion);
             }
 
             if (syntaxTree !== null) {
                 // All done, ensure state is up to date
-                this._currentFileScriptSnapshot = scriptSnapshot;
-                this._currentFileVersion = version;
-                this._currentfilename = filename;
-                this._currentFileSyntaxTree = syntaxTree;
+                this.currentFileScriptSnapshot = scriptSnapshot;
+                this.currentFileVersion = version;
+                this.currentfilename = filename;
+                this.currentFileSyntaxTree = syntaxTree;
             }
 
-            return this._currentFileSyntaxTree;
+            return this.currentFileSyntaxTree;
         }
 
         public getCurrentScriptSnapshot(filename: string): TypeScript.IScriptSnapshot {
-            // update _currentFileScriptSnapshot as a part of 'getCurrentFileSyntaxTree' call
+            // update currentFileScriptSnapshot as a part of 'getCurrentFileSyntaxTree' call
             this.getCurrentFileSyntaxTree(filename);
-            return this._currentFileScriptSnapshot;
+            return this.currentFileScriptSnapshot;
         }
 
         private createSyntaxTree(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot): TypeScript.SyntaxTree {
@@ -1005,7 +1005,7 @@ module ts {
         }
 
         private updateSyntaxTree(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, previousSyntaxTree: TypeScript.SyntaxTree, previousFileVersion: number): TypeScript.SyntaxTree {
-            var editRange = this._hostCache.getScriptTextChangeRangeSinceVersion(filename, previousFileVersion);
+            var editRange = this.hostCache.getScriptTextChangeRangeSinceVersion(filename, previousFileVersion);
 
             // Debug.assert(newLength >= 0);
 
@@ -1017,7 +1017,7 @@ module ts {
             var nextSyntaxTree = TypeScript.IncrementalParser.parse(
                 previousSyntaxTree, editRange, TypeScript.SimpleText.fromScriptSnapshot(scriptSnapshot));
 
-            this.ensureInvariants(filename, editRange, nextSyntaxTree, this._currentFileScriptSnapshot, scriptSnapshot);
+            this.ensureInvariants(filename, editRange, nextSyntaxTree, this.currentFileScriptSnapshot, scriptSnapshot);
 
             return nextSyntaxTree;
         }
@@ -1182,7 +1182,7 @@ module ts {
     }
 
     export function createLanguageService(host: LanguageServiceHost, documentRegistry: IDocumentRegistry): LanguageService {
-        var _syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
+        var syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         var formattingRulesProvider: TypeScript.Services.Formatting.RulesProvider;
         var hostCache: HostCache; // A cache of all the information about the files on the host side.
         var program: ts.Program;
@@ -1840,12 +1840,12 @@ module ts {
         /// Syntactic features
         function getSyntaxTree(filename: string): TypeScript.SyntaxTree {
             filename = TypeScript.switchToForwardSlashes(filename);
-            return _syntaxTreeCache.getCurrentFileSyntaxTree(filename);
+            return syntaxTreeCache.getCurrentFileSyntaxTree(filename);
         }
 
         function getNameOrDottedNameSpan(filename: string, startPos: number, endPos: number): SpanInfo {
             function getTypeInfoEligiblePath(filename: string, position: number, isConstructorValidPosition: boolean) {
-                var sourceUnit = _syntaxTreeCache.getCurrentFileSyntaxTree(filename).sourceUnit();
+                var sourceUnit = syntaxTreeCache.getCurrentFileSyntaxTree(filename).sourceUnit();
 
                 var ast = TypeScript.ASTHelpers.getAstAtPosition(sourceUnit, position, /*useTrailingTriviaAsLimChar*/ false, /*forceInclusive*/ true);
                 if (ast === null) {
@@ -1934,7 +1934,7 @@ module ts {
 
             var syntaxTree = getSyntaxTree(filename);
 
-            var scriptSnapshot = _syntaxTreeCache.getCurrentScriptSnapshot(filename);
+            var scriptSnapshot = syntaxTreeCache.getCurrentScriptSnapshot(filename);
             var scriptText = TypeScript.SimpleText.fromScriptSnapshot(scriptSnapshot);
             var textSnapshot = new TypeScript.Services.Formatting.TextSnapshot(scriptText);
             var options = new TypeScript.FormattingOptions(!editorOptions.ConvertTabsToSpaces, editorOptions.TabSize, editorOptions.IndentSize, editorOptions.NewLineCharacter)
@@ -1954,7 +1954,7 @@ module ts {
             var syntaxTree = getSyntaxTree(filename);
 
             // Convert IScriptSnapshot to ITextSnapshot
-            var scriptSnapshot = _syntaxTreeCache.getCurrentScriptSnapshot(filename);
+            var scriptSnapshot = syntaxTreeCache.getCurrentScriptSnapshot(filename);
             var scriptText = TypeScript.SimpleText.fromScriptSnapshot(scriptSnapshot);
             var textSnapshot = new TypeScript.Services.Formatting.TextSnapshot(scriptText);
 
