@@ -3348,9 +3348,15 @@ module ts {
             var flags = parseAndCheckModifiers(modifierContext);
 
             if (token === SyntaxKind.ExportKeyword) {
+                var modifiersEnd = scanner.getStartPos();
                 nextToken();
                 if (parseOptional(SyntaxKind.EqualsToken)) {
-                    return parseExportAssignmentTail(pos);
+                    var exportAssignmentTail = parseExportAssignmentTail(pos);
+                    if (flags !== 0 && errorCountBeforeModifiers === file.syntacticErrors.length) {
+                        var modifiersStart = skipTrivia(sourceText, pos);
+                        grammarErrorAtPos(modifiersStart, modifiersEnd - modifiersStart, Diagnostics.An_export_assignment_cannot_have_modifiers);
+                    }
+                    return exportAssignmentTail;
                 }
             }
 
