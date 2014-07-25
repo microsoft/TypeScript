@@ -41,7 +41,7 @@ module missingCurliesWithArrow {
     }
 }
 
-module ceci_nEst_pas_une_arrow_function {
+module ce_nEst_pas_une_arrow_function {
     var a = ();
 
     var b = (): void;

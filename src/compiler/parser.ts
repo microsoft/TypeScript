@@ -1468,13 +1468,13 @@ module ts {
             
             // *Maybe* we had an arrow function and we need to try to parse it out,
             // rolling back and trying other parses if we fail.
-            var sig = tryParse(parseSignatureIfArrowOrBraceFollows);
-            if (sig === undefined) {
-                return undefined;
-            }
-            else {
+            var sig = tryParseSignatureIfArrowOrBraceFollows();
+            if (sig) {
                 parseExpected(SyntaxKind.EqualsGreaterThanToken);
                 return parseArrowExpressionTail(pos, sig, /*noIn:*/ false);
+            }
+            else {
+                return undefined;
             }
         }
 
@@ -1549,22 +1549,24 @@ module ts {
             return Tristate.False;
         }
 
-        function parseSignatureIfArrowOrBraceFollows(): ParsedSignature {
-            var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken);
+        function tryParseSignatureIfArrowOrBraceFollows(): ParsedSignature {
+            return tryParse(() => {
+                var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken);
 
-            // Parsing a signature isn't enough.
-            // Parenthesized arrow signatures often look like other valid expressions.
-            // For instance:
-            //  - "(x = 10)" is an assignment expression parsed as a signature with a default parameter value.
-            //  - "(x,y)" is a comma expression parsed as a signature with two parameters.
-            //  - "a ? (b): c" will have "(b):" parsed as a signature with a return type annotation.
-            //
-            // So we need just a bit of lookahead to ensure that it can only be a signature.
-            if (token === SyntaxKind.EqualsGreaterThanToken || token === SyntaxKind.OpenBraceToken) {
-                return sig;
-            }
+                // Parsing a signature isn't enough.
+                // Parenthesized arrow signatures often look like other valid expressions.
+                // For instance:
+                //  - "(x = 10)" is an assignment expression parsed as a signature with a default parameter value.
+                //  - "(x,y)" is a comma expression parsed as a signature with two parameters.
+                //  - "a ? (b): c" will have "(b):" parsed as a signature with a return type annotation.
+                //
+                // So we need just a bit of lookahead to ensure that it can only be a signature.
+                if (token === SyntaxKind.EqualsGreaterThanToken || token === SyntaxKind.OpenBraceToken) {
+                    return sig;
+                }
 
-            return undefined;
+                return undefined;
+            });
         }
 
         function parseArrowExpressionTail(pos: number, sig: ParsedSignature, noIn: boolean): FunctionExpression {
