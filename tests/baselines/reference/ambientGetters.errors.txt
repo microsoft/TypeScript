@@ -1,11 +1,9 @@
-==== tests/cases/compiler/ambientGetters.ts (3 errors) ====
+==== tests/cases/compiler/ambientGetters.ts (2 errors) ====
     
     declare class A {
         get length() : number;
-                             ~
-!!! '{' expected.
-                       ~~~~~~
-!!! A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
+            ~~~~~~
+!!! An accessor cannot be declared in an ambient context.
     }
     
     declare class B {
