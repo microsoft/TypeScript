@@ -24,28 +24,28 @@
     module N2 {
         interface I { }
                   ~
-!!! Individual declarations in a merged declaration I must be all exported or all local.
+!!! Individual declarations in merged declaration I must be all exported or all local.
         export interface I { } // error
                          ~
-!!! Individual declarations in a merged declaration I must be all exported or all local.
+!!! Individual declarations in merged declaration I must be all exported or all local.
         export interface E { }
                          ~
-!!! Individual declarations in a merged declaration E must be all exported or all local.
+!!! Individual declarations in merged declaration E must be all exported or all local.
         interface E { } // error
                   ~
-!!! Individual declarations in a merged declaration E must be all exported or all local.
+!!! Individual declarations in merged declaration E must be all exported or all local.
     }
     
     // Should report error only once for instantiated module
     module M {
         module inst {
                ~~~~
-!!! Individual declarations in a merged declaration inst must be all exported or all local.
+!!! Individual declarations in merged declaration inst must be all exported or all local.
             var t;
         }
         export module inst { // one error
                       ~~~~
-!!! Individual declarations in a merged declaration inst must be all exported or all local.
+!!! Individual declarations in merged declaration inst must be all exported or all local.
             var t;
         }
     }
@@ -54,16 +54,16 @@
     module M2 {
         var v: string;
             ~
-!!! Individual declarations in a merged declaration v must be all exported or all local.
+!!! Individual declarations in merged declaration v must be all exported or all local.
         export var v: string; // one error (visibility)
                    ~
-!!! Individual declarations in a merged declaration v must be all exported or all local.
+!!! Individual declarations in merged declaration v must be all exported or all local.
         var w: number;
             ~
-!!! Individual declarations in a merged declaration w must be all exported or all local.
+!!! Individual declarations in merged declaration w must be all exported or all local.
         export var w: string; // two errors (visibility and type mismatch)
                    ~
-!!! Individual declarations in a merged declaration w must be all exported or all local.
+!!! Individual declarations in merged declaration w must be all exported or all local.
     }
     
     module M {
@@ -71,24 +71,24 @@
                ~
 !!! A module declaration cannot be located prior to a class or function with which it is merged
                ~
-!!! Individual declarations in a merged declaration F must be all exported or all local.
+!!! Individual declarations in merged declaration F must be all exported or all local.
             var t;
         }
         export function F() { } // Only one error for duplicate identifier (don't consider visibility)
                         ~
-!!! Individual declarations in a merged declaration F must be all exported or all local.
+!!! Individual declarations in merged declaration F must be all exported or all local.
     }
     
     module M {
         class C { }
               ~
-!!! Individual declarations in a merged declaration C must be all exported or all local.
+!!! Individual declarations in merged declaration C must be all exported or all local.
         module C { }
                ~
-!!! Individual declarations in a merged declaration C must be all exported or all local.
+!!! Individual declarations in merged declaration C must be all exported or all local.
         export module C { // Two visibility errors (one for the clodule symbol, and one for the merged container symbol)
                       ~
-!!! Individual declarations in a merged declaration C must be all exported or all local.
+!!! Individual declarations in merged declaration C must be all exported or all local.
             var t;
         }
     }
@@ -96,7 +96,7 @@
     // Top level
     interface D { }
               ~
-!!! Individual declarations in a merged declaration D must be all exported or all local.
+!!! Individual declarations in merged declaration D must be all exported or all local.
     export interface D { }
                      ~
-!!! Individual declarations in a merged declaration D must be all exported or all local.
+!!! Individual declarations in merged declaration D must be all exported or all local.

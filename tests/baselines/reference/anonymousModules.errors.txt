@@ -19,14 +19,14 @@
     		~~~~~~
 !!! Statement expected.
     		           ~~~
-!!! Individual declarations in a merged declaration bar must be all exported or all local.
+!!! Individual declarations in merged declaration bar must be all exported or all local.
     	}
     	~
 !!! Declaration or statement expected.
     
     	var bar = 2;
     	    ~~~
-!!! Individual declarations in a merged declaration bar must be all exported or all local.
+!!! Individual declarations in merged declaration bar must be all exported or all local.
     
     	module {
     	       ~

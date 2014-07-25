@@ -5,10 +5,15 @@ declare module M {
      function foo();
 }
 
+declare module M1 {
+     export interface Foo {}
+     interface Foo {}
+}
+
 module A {
-	interface X {x}
-	export module X {}
-	interface X {y}
+     interface X {x}
+     export module X {}
+     interface X {y}
 }
 
 //// [mixedExports.js]

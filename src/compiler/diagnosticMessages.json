@@ -540,7 +540,7 @@
         "category": "Error",
         "code": 2190
     },
-    "Individual declarations in a merged declaration {0} must be all exported or all local.": {
+    "Individual declarations in merged declaration {0} must be all exported or all local.": {
         "category": "Error",
         "code": 2192
     },
