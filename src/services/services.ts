@@ -539,7 +539,7 @@ module ts {
         getClassificationsForLine(text: string, lexState: EndOfLineState): ClassificationResult;
     }
 
-    export interface IDocumentRegistry {
+    export interface DocumentRegistry {
         acquireDocument(
             filename: string,
             compilationSettings: ts.CompilerOptions,
@@ -1085,25 +1085,25 @@ module ts {
         }
     }
 
-    export class DocumentRegistry implements IDocumentRegistry {
-        private buckets: ts.Map<ts.Map<DocumentRegistryEntry>> = {};
+    export function createDocumentRegistry(): DocumentRegistry {
+        var buckets: ts.Map<ts.Map<DocumentRegistryEntry>> = {};
 
-        private getKeyFromCompilationSettings(settings: ts.CompilerOptions): string {
+        function getKeyFromCompilationSettings(settings: ts.CompilerOptions): string {
             return "_" + ts.ScriptTarget[settings.target]; //  + "|" + settings.propagateEnumConstants.toString()
         }
 
-        private getBucketForCompilationSettings(settings: ts.CompilerOptions, createIfMissing: boolean): ts.Map<DocumentRegistryEntry> {
-            var key = this.getKeyFromCompilationSettings(settings);
-            var bucket = this.buckets[key];
+        function getBucketForCompilationSettings(settings: ts.CompilerOptions, createIfMissing: boolean): ts.Map<DocumentRegistryEntry> {
+            var key = getKeyFromCompilationSettings(settings);
+            var bucket = buckets[key];
             if (!bucket && createIfMissing) {
-                this.buckets[key] = bucket = {};
+                buckets[key] = bucket = {};
             }
             return bucket;
         }
 
-        public reportStats() {
-            var bucketInfoArray = Object.keys(this.buckets).filter(name => name && name.charAt(0) === '_').map(name => {
-                var entries = this.buckets[name];
+        function reportStats() {
+            var bucketInfoArray = Object.keys(buckets).filter(name => name && name.charAt(0) === '_').map(name => {
+                var entries = buckets[name];
                 var documents = [];
                 for (var i in entries) {
                     var entry = entries[i];
@@ -1119,7 +1119,7 @@ module ts {
             return JSON.stringify(bucketInfoArray, null, 2);
         }
 
-        public acquireDocument(
+        function acquireDocument(
             filename: string,
             compilationSettings: ts.CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
@@ -1128,7 +1128,7 @@ module ts {
             isOpen: boolean,
             referencedFiles: string[]= []): Document {
 
-            var bucket = this.getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
+            var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
             var entry = bucket[filename];
             if (!entry) {
                 var document = Document.create(compilationSettings, filename, scriptSnapshot, byteOrderMark, version, isOpen, referencedFiles);
@@ -1144,7 +1144,7 @@ module ts {
             return entry.document;
         }
 
-        public updateDocument(
+        function updateDocument(
             document: Document,
             filename: string,
             compilationSettings: ts.CompilerOptions,
@@ -1154,7 +1154,7 @@ module ts {
             textChangeRange: TypeScript.TextChangeRange
             ): Document {
 
-            var bucket = this.getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ false);
+            var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ false);
             Debug.assert(bucket);
             var entry = bucket[filename];
             Debug.assert(entry);
@@ -1167,8 +1167,8 @@ module ts {
             return entry.document;
         }
 
-        public releaseDocument(filename: string, compilationSettings: ts.CompilerOptions): void {
-            var bucket = this.getBucketForCompilationSettings(compilationSettings, false);
+        function releaseDocument(filename: string, compilationSettings: ts.CompilerOptions): void {
+            var bucket = getBucketForCompilationSettings(compilationSettings, false);
             Debug.assert(bucket);
 
             var entry = bucket[filename];
@@ -1179,9 +1179,16 @@ module ts {
                 delete bucket[filename];
             }
         }
+
+        return {
+            acquireDocument: acquireDocument,
+            updateDocument: updateDocument,
+            releaseDocument: releaseDocument,
+            reportStats: reportStats
+        };
     }
 
-    export function createLanguageService(host: LanguageServiceHost, documentRegistry: IDocumentRegistry): LanguageService {
+    export function createLanguageService(host: LanguageServiceHost, documentRegistry: DocumentRegistry): LanguageService {
         var syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         var formattingRulesProvider: TypeScript.Services.Formatting.RulesProvider;
         var hostCache: HostCache; // A cache of all the information about the files on the host side.

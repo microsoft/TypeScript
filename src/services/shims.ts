@@ -17,7 +17,9 @@
 
 /// <reference path='compiler\pathUtils.ts' />
 /// <reference path='compiler\precompile.ts' />
-var debugObjectHost = (<any>this);
+
+var debugObjectHost = (<any>this);
+
 module ts {
     export interface ScriptSnapshotShim {
         // Get's a portion of the script snapshot specified by [start, end).  
@@ -845,7 +847,7 @@ module ts {
 
     export class TypeScriptServicesFactory implements ShimFactory {
         private _shims: Shim[] = [];
-        private documentRegistry: DocumentRegistry = new DocumentRegistry();
+        private documentRegistry: DocumentRegistry = createDocumentRegistry();
 
         public createLanguageServiceShim(host: LanguageServiceShimHost): LanguageServiceShim {
             try {
@@ -882,7 +884,7 @@ module ts {
         public close(): void {
             // Forget all the registered shims
             this._shims = [];
-            this.documentRegistry = new DocumentRegistry();
+            this.documentRegistry = createDocumentRegistry();
         }
 
         public registerShim(shim: Shim): void {
