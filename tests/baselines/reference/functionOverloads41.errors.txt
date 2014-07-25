@@ -4,7 +4,7 @@
     function foo(bar:{a:any;}[]):any{ return bar }
     var x = foo([{}]);
                 ~~~~
-!!! Argument type '{}[]' is not assignable to parameter type '{ a: boolean; }[]'.
+!!! Argument of type '{}[]' is not assignable to parameter of type '{ a: boolean; }[]'.
 !!!   Type '{}' is not assignable to type '{ a: boolean; }':
 !!!     Property 'a' is missing in type '{}'.
     

@@ -4,4 +4,4 @@
     function foo(bar?: string): any { return "" };
     var x = foo(5);
                 ~
-!!! Argument type 'number' is not assignable to parameter type 'string'.
+!!! Argument of type 'number' is not assignable to parameter of type 'string'.

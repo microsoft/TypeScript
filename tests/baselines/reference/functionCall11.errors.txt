@@ -7,7 +7,7 @@
 !!! Supplied parameters do not match any signature of call target.
     foo(1, 'bar');
         ~
-!!! Argument type 'number' is not assignable to parameter type 'string'.
+!!! Argument of type 'number' is not assignable to parameter of type 'string'.
     foo('foo', 1, 'bar');
     ~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.

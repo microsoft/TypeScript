@@ -22,7 +22,7 @@
 !!! Duplicate identifier 'thunk'.
     });
     ~
-!!! Argument type '{ thunk: (num: number) => void; }' is not assignable to parameter type 'Thing'.
+!!! Argument of type '{ thunk: (num: number) => void; }' is not assignable to parameter of type 'Thing'.
 !!!   Types of property 'thunk' are incompatible:
 !!!     Type '(num: number) => void' is not assignable to type '(str: string) => void':
 !!!       Types of parameters 'num' and 'str' are incompatible:

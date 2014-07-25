@@ -1,5 +1,5 @@
 ==== tests/cases/compiler/contextualTyping30.ts (1 errors) ====
     function foo(param:number[]){}; foo([1, "a"]);
                                         ~~~~~~~~
-!!! Argument type '{}[]' is not assignable to parameter type 'number[]'.
+!!! Argument of type '{}[]' is not assignable to parameter of type 'number[]'.
 !!!   Type '{}' is not assignable to type 'number'.

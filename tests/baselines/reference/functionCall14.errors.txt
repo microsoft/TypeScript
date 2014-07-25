@@ -5,6 +5,6 @@
     foo();
     foo(1, 'bar');
         ~
-!!! Argument type 'number' is not assignable to parameter type 'string'.
+!!! Argument of type 'number' is not assignable to parameter of type 'string'.
     foo('foo', 1, 3);
     

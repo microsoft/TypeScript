@@ -26,6 +26,6 @@
 !!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         var r5 = foo<T, U>(c, d); // error
                            ~
-!!! Argument type 'C' is not assignable to parameter type 'T'.
+!!! Argument of type 'C' is not assignable to parameter of type 'T'.
     }
     

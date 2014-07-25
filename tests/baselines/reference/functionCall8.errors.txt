@@ -6,6 +6,6 @@
 !!! Supplied parameters do not match any signature of call target.
     foo(4);
         ~
-!!! Argument type 'number' is not assignable to parameter type 'string'.
+!!! Argument of type 'number' is not assignable to parameter of type 'string'.
     foo();
     

@@ -7,10 +7,10 @@
     
     fn((a, b) => true);
        ~~~~~~~~~~~~~~
-!!! Argument type '(a: any, b: any) => boolean' is not assignable to parameter type 'IResultCallback'.
+!!! Argument of type '(a: any, b: any) => boolean' is not assignable to parameter of type 'IResultCallback'.
 !!!   Property 'x' is missing in type '(a: any, b: any) => boolean'.
     fn(function (a, b) { return true; })
        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Argument type '(a: any, b: any) => boolean' is not assignable to parameter type 'IResultCallback'.
+!!! Argument of type '(a: any, b: any) => boolean' is not assignable to parameter of type 'IResultCallback'.
 !!!   Property 'x' is missing in type '(a: any, b: any) => boolean'.
     

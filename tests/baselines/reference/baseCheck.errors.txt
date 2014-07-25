@@ -27,7 +27,7 @@
 !!! 'this' cannot be referenced in current location.
     class F extends C { constructor(public z: number) { super("hello", this.z) } } // first param type
                                                               ~~~~~~~
-!!! Argument type 'string' is not assignable to parameter type 'number'.
+!!! Argument of type 'string' is not assignable to parameter of type 'number'.
                                                                        ~~~~
 !!! 'this' cannot be referenced in current location.
     

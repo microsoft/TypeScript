@@ -62,7 +62,7 @@
     var c2: C2;
     if1(c1);
         ~~
-!!! Argument type 'C1' is not assignable to parameter type 'IFoo2'.
+!!! Argument of type 'C1' is not assignable to parameter of type 'IFoo2'.
     
     
     function of1(n: { a: { a: string; }; b: string; }): number;
@@ -71,7 +71,7 @@
     
     of1({ e: 0, f: 0 });
         ~~~~~~~~~~~~~~
-!!! Argument type '{ e: number; f: number; }' is not assignable to parameter type '{ c: { b: string; }; d: string; }'.
+!!! Argument of type '{ e: number; f: number; }' is not assignable to parameter of type '{ c: { b: string; }; d: string; }'.
 !!!   Property 'c' is missing in type '{ e: number; f: number; }'.
     
     interface IMap {

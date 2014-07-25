@@ -16,11 +16,11 @@
         ~~~~~~
 !!! Type 'string' is not assignable to type 'number'.
                                         ~
-!!! Argument type 'D' is not assignable to parameter type 'A'.
+!!! Argument of type 'D' is not assignable to parameter of type 'A'.
     
     var result2: number = foo(x => new G<typeof x>(x)); // No error, returns number
                               ~~~~~~~~~~~~~~~~~~~~~~~
-!!! Argument type '(x: D) => G<D>' is not assignable to parameter type '(x: B) => any'.
+!!! Argument of type '(x: D) => G<D>' is not assignable to parameter of type '(x: B) => any'.
                                          ~~~~~~~~
 !!! Type 'D' does not satisfy the constraint 'A'.
     
@@ -34,5 +34,5 @@
     ~~~~~~~~~~~~~
     });
     ~
-!!! Argument type '(x: D) => G<D>' is not assignable to parameter type '(x: B) => any'.
+!!! Argument of type '(x: D) => G<D>' is not assignable to parameter of type '(x: B) => any'.
     

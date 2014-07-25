@@ -9,5 +9,5 @@
         test("expects boolean instead of string"); // should not error - "test" should not expect a boolean
         test(true); // should error - string expected
              ~~~~
-!!! Argument type 'boolean' is not assignable to parameter type 'string'.
+!!! Argument of type 'boolean' is not assignable to parameter of type 'string'.
     }

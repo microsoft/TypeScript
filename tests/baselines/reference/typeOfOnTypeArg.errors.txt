@@ -7,5 +7,5 @@
     
     fill(32);
          ~~
-!!! Argument type 'number' is not assignable to parameter type '{ '': number; }'.
+!!! Argument of type 'number' is not assignable to parameter of type '{ '': number; }'.
     

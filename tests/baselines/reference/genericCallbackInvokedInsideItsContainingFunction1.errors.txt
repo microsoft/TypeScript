@@ -5,7 +5,7 @@
 !!! Supplied parameters do not match any signature of call target.
         var r2 = f(1);
                    ~
-!!! Argument type 'number' is not assignable to parameter type 'T'.
+!!! Argument of type 'number' is not assignable to parameter of type 'T'.
         var r3 = f<any>(null);
                  ~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
@@ -22,7 +22,7 @@
     
         var r12 = f(y);
                     ~
-!!! Argument type 'U' is not assignable to parameter type 'T'.
+!!! Argument of type 'U' is not assignable to parameter of type 'T'.
         var r22 = f<number>(y);
                   ~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.

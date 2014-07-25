@@ -11,6 +11,6 @@
     f1(3);
     f2(3); // error no coercion to string
        ~
-!!! Argument type 'number' is not assignable to parameter type 'string'.
+!!! Argument of type 'number' is not assignable to parameter of type 'string'.
     f2(3+""); // ok + operator promotes
     

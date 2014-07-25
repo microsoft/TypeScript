@@ -36,18 +36,18 @@
     var result="";
     result+=x.f(x,3,3); // bad first param
                 ~
-!!! Argument type 'C' is not assignable to parameter type 'string'.
+!!! Argument of type 'C' is not assignable to parameter of type 'string'.
     result+=x.f(3,"hello",3); // bad second param
                 ~
-!!! Argument type 'number' is not assignable to parameter type 'string'.
+!!! Argument of type 'number' is not assignable to parameter of type 'string'.
     result+=x.f("hello",3,3,3,3,3); // ok
     result+=x.f("hello"); // ok varargs length 0
     result+=x.fonly(3); // ok conversion
                     ~
-!!! Argument type 'number' is not assignable to parameter type 'string'.
+!!! Argument of type 'number' is not assignable to parameter of type 'string'.
     result+=x.fonly(x); // bad param
                     ~
-!!! Argument type 'C' is not assignable to parameter type 'string'.
+!!! Argument of type 'C' is not assignable to parameter of type 'string'.
     result+=x.fonly("a"); // ok 
     result+=x.fonly("a","b","c","d"); //ok 
     

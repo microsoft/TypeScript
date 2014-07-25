@@ -8,7 +8,7 @@
     var x11 = foo([{a:0}]); // works
     var x111 = foo([{a:"s"}]); // error - does not match any signature
                    ~~~~~~~~~
-!!! Argument type '{ a: string; }[]' is not assignable to parameter type '{ a: boolean; }[]'.
+!!! Argument of type '{ a: string; }[]' is not assignable to parameter of type '{ a: boolean; }[]'.
 !!!   Type '{ a: string; }' is not assignable to type '{ a: boolean; }':
 !!!     Types of property 'a' are incompatible:
 !!!       Type 'string' is not assignable to type 'boolean'.
@@ -24,7 +24,7 @@
     var x3 = foo2({a:true}); // works
     var x4 = foo2({a:"s"}); // error
                   ~~~~~~~
-!!! Argument type '{ a: string; }' is not assignable to parameter type '{ a: boolean; }'.
+!!! Argument of type '{ a: string; }' is not assignable to parameter of type '{ a: boolean; }'.
 !!!   Types of property 'a' are incompatible:
 !!!     Type 'string' is not assignable to type 'boolean'.
     
@@ -34,6 +34,6 @@
     function foo4(bar:{a:any;}):any{ return bar };
     var x = foo4({a:true}); // error
                  ~~~~~~~~
-!!! Argument type '{ a: boolean; }' is not assignable to parameter type '{ a: string; }'.
+!!! Argument of type '{ a: boolean; }' is not assignable to parameter of type '{ a: string; }'.
 !!!   Types of property 'a' are incompatible:
 !!!     Type 'boolean' is not assignable to type 'string'.

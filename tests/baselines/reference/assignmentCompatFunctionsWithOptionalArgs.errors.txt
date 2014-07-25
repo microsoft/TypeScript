@@ -6,10 +6,10 @@
     foo({ id: 1234, name: "hello" });  // Ok
     foo({ id: 1234, name: false });    // Error, name of wrong type
         ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Argument type '{ id: number; name: boolean; }' is not assignable to parameter type '{ id: number; name?: string; }'.
+!!! Argument of type '{ id: number; name: boolean; }' is not assignable to parameter of type '{ id: number; name?: string; }'.
 !!!   Types of property 'name' are incompatible:
 !!!     Type 'boolean' is not assignable to type 'string'.
     foo({ name: "hello" });            // Error, id required but missing
         ~~~~~~~~~~~~~~~~~
-!!! Argument type '{ name: string; }' is not assignable to parameter type '{ id: number; name?: string; }'.
+!!! Argument of type '{ name: string; }' is not assignable to parameter of type '{ id: number; name?: string; }'.
 !!!   Property 'id' is missing in type '{ name: string; }'.

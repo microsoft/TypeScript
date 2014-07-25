@@ -15,7 +15,7 @@
     var rf1 = (x: number, y: string) => { return x.toFixed() };
     var r5a = _.map<number, string, Date>(c2, (x, y) => { return x.toFixed() });
                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Argument type '(x: number, y: string) => string' is not assignable to parameter type '(x: number, y: string) => Date'.
+!!! Argument of type '(x: number, y: string) => string' is not assignable to parameter of type '(x: number, y: string) => Date'.
     var r5b = _.map<number, string, Date>(c2, rf1);
                                               ~~~
-!!! Argument type '(x: number, y: string) => string' is not assignable to parameter type '(x: number, y: string) => Date'.
+!!! Argument of type '(x: number, y: string) => string' is not assignable to parameter of type '(x: number, y: string) => Date'.

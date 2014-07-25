@@ -31,7 +31,7 @@
     
     	 	super.add(listener);
     	 	          ~~~~~~~~
-!!! Argument type '(items: unknown) => void' is not assignable to parameter type '() => any'.
+!!! Argument of type '(items: unknown) => void' is not assignable to parameter of type '() => any'.
     
     	}
     

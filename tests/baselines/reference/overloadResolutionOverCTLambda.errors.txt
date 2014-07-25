@@ -2,4 +2,4 @@
     function foo(b: (item: number) => boolean) { }
     foo(a => a); // can not convert (number)=>bool to (number)=>number
         ~~~~~~
-!!! Argument type '(a: number) => number' is not assignable to parameter type '(item: number) => boolean'.
+!!! Argument of type '(a: number) => number' is not assignable to parameter of type '(item: number) => boolean'.

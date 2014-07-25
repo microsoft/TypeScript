@@ -19,7 +19,7 @@
     var b: E = foo("bye", []); // E 
     var c = foo("um", []); // error
                 ~~~~
-!!! Argument type 'string' is not assignable to parameter type '"bye"'.
+!!! Argument of type 'string' is not assignable to parameter of type '"bye"'.
     
     
     //function bar(x: "hi", items: string[]): D;

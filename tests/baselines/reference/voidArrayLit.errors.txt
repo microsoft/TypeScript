@@ -4,5 +4,5 @@
     function foo(s:string) {}
     foo((()=>{})()); // error
         ~~~~~~~~~~
-!!! Argument type 'void' is not assignable to parameter type 'string'.
+!!! Argument of type 'void' is not assignable to parameter of type 'string'.
     

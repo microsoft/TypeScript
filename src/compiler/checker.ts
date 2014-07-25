@@ -3743,8 +3743,8 @@ module ts {
                         checkExpression(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
                     // Use argument expression as error location when reporting errors
                     var isValidArgument = checkTypeRelatedTo(argType, paramType, relation, reportErrors ? arg : undefined,
-                        Diagnostics.Argument_type_0_is_not_assignable_to_parameter_type_1,
-                        Diagnostics.Argument_type_0_is_not_assignable_to_parameter_type_1);
+                        Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1,
+                        Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1);
                     if (!isValidArgument) {
                         return false;
                     }

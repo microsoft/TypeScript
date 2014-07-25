@@ -2,7 +2,7 @@
     function foo(a:string, b?:string, ...c:number[]){}
     foo('foo', 1); 
                ~
-!!! Argument type 'number' is not assignable to parameter type 'string'.
+!!! Argument of type 'number' is not assignable to parameter of type 'string'.
     foo('foo'); 
     foo('foo', 'bar'); 
     foo();
@@ -10,6 +10,6 @@
 !!! Supplied parameters do not match any signature of call target.
     foo(1, 'bar');
         ~
-!!! Argument type 'number' is not assignable to parameter type 'string'.
+!!! Argument of type 'number' is not assignable to parameter of type 'string'.
     foo('foo', 'bar', 3);
     

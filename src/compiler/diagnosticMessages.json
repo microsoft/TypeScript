@@ -753,7 +753,7 @@
         "category": "Error",
         "code": 3035
     },
-    "Argument type '{0}' is not assignable to parameter type '{1}'.": {
+    "Argument of type '{0}' is not assignable to parameter of type '{1}'.": {
         "category": "Error",
         "code": 3036
     },

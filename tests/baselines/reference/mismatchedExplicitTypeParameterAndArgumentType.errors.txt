@@ -10,7 +10,7 @@
     var r6 = map<Object, Object>([1, ""], (x) => x.toString());
     var r7 = map<number, string>([1, ""], (x) => x.toString()); // error
                                  ~~~~~~~
-!!! Argument type '{}[]' is not assignable to parameter type 'number[]'.
+!!! Argument of type '{}[]' is not assignable to parameter of type 'number[]'.
 !!!   Type '{}' is not assignable to type 'number'.
     var r7b = map<number>([1, ""], (x) => x.toString()); // error
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

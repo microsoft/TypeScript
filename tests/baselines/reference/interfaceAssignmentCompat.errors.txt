@@ -32,7 +32,7 @@
     
             x=x.sort(CompareYeux); // parameter mismatch
                      ~~~~~~~~~~~
-!!! Argument type '(a: IFrenchEye, b: IFrenchEye) => number' is not assignable to parameter type '(a: IEye, b: IEye) => number'.
+!!! Argument of type '(a: IFrenchEye, b: IFrenchEye) => number' is not assignable to parameter of type '(a: IEye, b: IEye) => number'.
             // type of z inferred from specialized array type
             var z=x.sort(CompareEyes); // ok
     

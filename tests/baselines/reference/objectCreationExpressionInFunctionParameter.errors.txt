@@ -5,7 +5,7 @@
     }
     function foo(x = new A(123)) { //should error, 123 is not string
                            ~~~
-!!! Argument type 'number' is not assignable to parameter type 'string'.
+!!! Argument of type 'number' is not assignable to parameter of type 'string'.
     }}
      ~
 !!! Declaration or statement expected.

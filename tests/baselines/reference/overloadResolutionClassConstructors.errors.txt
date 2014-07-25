@@ -27,7 +27,7 @@
     // No candidate overloads found
     new fn1({}); // Error
             ~~
-!!! Argument type '{}' is not assignable to parameter type 'number'.
+!!! Argument of type '{}' is not assignable to parameter of type 'number'.
     
     // Generic and non - generic overload where generic overload is the only candidate when called with type arguments
     class fn2<T> {
@@ -81,14 +81,14 @@
     new fn4<string, number>('', 3);
     new fn4<string, number>(3, ''); // Error
                             ~
-!!! Argument type 'number' is not assignable to parameter type 'string'.
+!!! Argument of type 'number' is not assignable to parameter of type 'string'.
     new fn4<number, string>('', 3); // Error
             ~~~~~~
 !!! Type 'number' does not satisfy the constraint 'string'.
                     ~~~~~~
 !!! Type 'string' does not satisfy the constraint 'number'.
                             ~~
-!!! Argument type 'string' is not assignable to parameter type 'number'.
+!!! Argument of type 'string' is not assignable to parameter of type 'number'.
     new fn4<number, string>(3, ''); // Error
             ~~~~~~
 !!! Type 'number' does not satisfy the constraint 'string'.
@@ -99,10 +99,10 @@
     new fn4('', 3);
     new fn4(3, ''); // Error
             ~
-!!! Argument type 'number' is not assignable to parameter type 'string'.
+!!! Argument of type 'number' is not assignable to parameter of type 'string'.
     new fn4(3, undefined); // Error
             ~
-!!! Argument type 'number' is not assignable to parameter type 'string'.
+!!! Argument of type 'number' is not assignable to parameter of type 'string'.
     new fn4('', null);
     
     // Generic overloads with constraints called with type arguments that do not satisfy the constraints
@@ -115,10 +115,10 @@
     // Generic overloads with constraints called without type arguments but with types that do not satisfy the constraints
     new fn4(true, null); // Error
             ~~~~
-!!! Argument type 'boolean' is not assignable to parameter type 'string'.
+!!! Argument of type 'boolean' is not assignable to parameter of type 'string'.
     new fn4(null, true); // Error
                   ~~~~
-!!! Argument type 'boolean' is not assignable to parameter type 'number'.
+!!! Argument of type 'boolean' is not assignable to parameter of type 'number'.
     
     // Non - generic overloads where contextual typing of function arguments has errors
     class fn5 {

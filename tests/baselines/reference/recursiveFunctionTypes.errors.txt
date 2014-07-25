@@ -35,7 +35,7 @@
     }
     C.g(3); // error
         ~
-!!! Argument type 'number' is not assignable to parameter type '(t: typeof g) => void'.
+!!! Argument of type 'number' is not assignable to parameter of type '(t: typeof g) => void'.
     
     var f4: () => typeof f4;
     f4 = 3; // error
@@ -53,7 +53,7 @@
 !!! Supplied parameters do not match any signature of call target.
     f6(""); // ok (function takes an any param)
        ~~
-!!! Argument type 'string' is not assignable to parameter type '{ (): typeof f6; (a: typeof f6): () => number; }'.
+!!! Argument of type 'string' is not assignable to parameter of type '{ (): typeof f6; (a: typeof f6): () => number; }'.
     f6(); // ok
     
     declare function f7(): typeof f7;
@@ -66,5 +66,5 @@
 !!! Supplied parameters do not match any signature of call target.
     f7(""); // ok (function takes an any param)
        ~~
-!!! Argument type 'string' is not assignable to parameter type '{ (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }'.
+!!! Argument of type 'string' is not assignable to parameter of type '{ (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }'.
     f7(); // ok

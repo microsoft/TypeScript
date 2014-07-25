@@ -8,17 +8,17 @@
     
     f2({ hello: 1 }) // error 
        ~~~~~~~~~~~~
-!!! Argument type '{ hello: number; }' is not assignable to parameter type 'I'.
+!!! Argument of type '{ hello: number; }' is not assignable to parameter of type 'I'.
 !!!   Property 'value' is missing in type '{ hello: number; }'.
     f2({ value: '' }) // missing toString satisfied by Object's member
     f2({ value: '', what: 1 }) // missing toString satisfied by Object's member
     f2({ toString: (s) => s }) // error, missing property value from ArgsString
        ~~~~~~~~~~~~~~~~~~~~~~
-!!! Argument type '{ toString: (s: string) => string; }' is not assignable to parameter type 'I'.
+!!! Argument of type '{ toString: (s: string) => string; }' is not assignable to parameter of type 'I'.
 !!!   Property 'value' is missing in type '{ toString: (s: string) => string; }'.
     f2({ toString: (s: string) => s }) // error, missing property value from ArgsString
        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Argument type '{ toString: (s: string) => string; }' is not assignable to parameter type 'I'.
+!!! Argument of type '{ toString: (s: string) => string; }' is not assignable to parameter of type 'I'.
 !!!   Property 'value' is missing in type '{ toString: (s: string) => string; }'.
     f2({ value: '', toString: (s) => s.uhhh }) // error
                                        ~~~~

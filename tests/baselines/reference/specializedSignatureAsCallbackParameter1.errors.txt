@@ -7,9 +7,9 @@
     // both are errors
     x3(1, (x: string) => 1); 
        ~
-!!! Argument type 'number' is not assignable to parameter type 'string'.
+!!! Argument of type 'number' is not assignable to parameter of type 'string'.
     x3(1, (x: 'hm') => 1); 
        ~
-!!! Argument type 'number' is not assignable to parameter type 'string'.
+!!! Argument of type 'number' is not assignable to parameter of type 'string'.
           ~~~~~~~~~~~~~~
 !!! A signature with an implementation cannot use a string literal type.

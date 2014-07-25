@@ -5,7 +5,7 @@
     var a1Gc = makeArrayG<Object>(1, ""); 
     var a1Gd = makeArrayG<number>(1, ""); // error
                                      ~~
-!!! Argument type 'string' is not assignable to parameter type 'number'.
+!!! Argument of type 'string' is not assignable to parameter of type 'number'.
     
     function makeArrayGOpt<T>(item1?: T, item2?: T, item3?: T) {
         return [item1, item2, item3];
@@ -14,4 +14,4 @@
     var a2Gb = makeArrayG<any>(1, "");
     var a2Gc = makeArrayG<any[]>(1, ""); // error
                                  ~
-!!! Argument type 'number' is not assignable to parameter type 'any[]'.
+!!! Argument of type 'number' is not assignable to parameter of type 'any[]'.

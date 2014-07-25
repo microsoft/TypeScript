@@ -5,11 +5,11 @@
             // these two should give the same error
             this.test([1, 2, "hi", 5, ]);
                       ~~~~~~~~~~~~~~~~~
-!!! Argument type '{}[]' is not assignable to parameter type 'number[]'.
+!!! Argument of type '{}[]' is not assignable to parameter of type 'number[]'.
 !!!   Type '{}' is not assignable to type 'number'.
             this.test([1, 2, "hi", 5]); 
                       ~~~~~~~~~~~~~~~
-!!! Argument type '{}[]' is not assignable to parameter type 'number[]'.
+!!! Argument of type '{}[]' is not assignable to parameter of type 'number[]'.
 !!!   Type '{}' is not assignable to type 'number'.
         }
     }

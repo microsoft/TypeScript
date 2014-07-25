@@ -18,6 +18,6 @@
     var v1 = numberMapToArray(stringMap);  // Ok
     var v1 = stringMapToArray(numberMap);  // Error expected here
                               ~~~~~~~~~
-!!! Argument type 'NumberMap<Function>' is not assignable to parameter type 'StringMap<{}>'.
+!!! Argument of type 'NumberMap<Function>' is not assignable to parameter of type 'StringMap<{}>'.
     var v1 = stringMapToArray(stringMap);  // Ok
     

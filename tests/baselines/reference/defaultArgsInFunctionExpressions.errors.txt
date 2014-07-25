@@ -4,7 +4,7 @@
     n = f();
     var s: string = f('');
                       ~~
-!!! Argument type 'string' is not assignable to parameter type 'number'.
+!!! Argument of type 'string' is not assignable to parameter of type 'number'.
     s = f();
     ~
 !!! Type 'number' is not assignable to type 'string'.

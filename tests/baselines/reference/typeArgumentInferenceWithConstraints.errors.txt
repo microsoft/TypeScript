@@ -20,7 +20,7 @@
     someGenerics1(3, 4); // Valid
     someGenerics1<string, number>(3, 4); // Error
                                   ~
-!!! Argument type 'number' is not assignable to parameter type 'string'.
+!!! Argument of type 'number' is not assignable to parameter of type 'string'.
     someGenerics1<number, {}>(3, 4); // Error
     someGenerics1<number, number>(3, 4);
     
@@ -51,7 +51,7 @@
     someGenerics4<string, number>('', () => 3);
     someGenerics4<string, number>('', (x: string) => ''); // Error
                                       ~~~~~~~~~~~~~~~~~
-!!! Argument type '(x: string) => string' is not assignable to parameter type '(x: number) => void'.
+!!! Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
     someGenerics4<string, number>(null, null);
     
     // 2 parameter generic call with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
@@ -60,7 +60,7 @@
     someGenerics5<number, string>('', () => 3);
     someGenerics5<number, string>('', (x: string) => ''); // Error
                                       ~~~~~~~~~~~~~~~~~
-!!! Argument type '(x: string) => string' is not assignable to parameter type '(x: number) => void'.
+!!! Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
     someGenerics5<string, number>(null, null); // Error
                   ~~~~~~
 !!! Type 'string' does not satisfy the constraint 'number'.
@@ -71,7 +71,7 @@
     someGenerics6<number>(n => n, n => n, n => n);
     someGenerics6<number>((n: number) => n, (n: string) => n, (n: number) => n); // Error
                                             ~~~~~~~~~~~~~~~~
-!!! Argument type '(n: string) => string' is not assignable to parameter type '(b: number) => number'.
+!!! Argument of type '(n: string) => string' is not assignable to parameter of type '(b: number) => number'.
     someGenerics6<number>((n: number) => n, (n: number) => n, (n: number) => n);
     
     // Generic call with multiple arguments of function types that each have parameters of different generic type
@@ -84,7 +84,7 @@
     function someGenerics8<T extends string>(n: T): T { return n; }
     var x = someGenerics8<string>(someGenerics7); // Error
                                   ~~~~~~~~~~~~~
-!!! Argument type '<A, B extends string, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void' is not assignable to parameter type 'string'.
+!!! Argument of type '<A, B extends string, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void' is not assignable to parameter of type 'string'.
     x<string, string, string>(null, null, null); // Error
     
     // Generic call with multiple parameters of generic type passed arguments with no best common type

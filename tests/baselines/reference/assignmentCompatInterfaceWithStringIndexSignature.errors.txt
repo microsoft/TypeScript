@@ -15,5 +15,5 @@
     
     Biz(new Foo());
         ~~~~~~~~~
-!!! Argument type 'Foo' is not assignable to parameter type 'IHandlerMap'.
+!!! Argument of type 'Foo' is not assignable to parameter of type 'IHandlerMap'.
     

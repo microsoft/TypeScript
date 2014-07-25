@@ -4,4 +4,4 @@
     function foo(bar: any): any { return bar };
     var x = foo(true);
                 ~~~~
-!!! Argument type 'boolean' is not assignable to parameter type 'number'.
+!!! Argument of type 'boolean' is not assignable to parameter of type 'number'.

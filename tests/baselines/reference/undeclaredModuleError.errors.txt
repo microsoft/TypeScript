@@ -12,7 +12,7 @@
                                 ~~~~~~~
             } , (error: Error, files: {}[]) => {
     ~~~~~~~~~
-!!! Argument type '() => void' is not assignable to parameter type '(stat: unknown, name: string) => boolean'.
+!!! Argument of type '() => void' is not assignable to parameter of type '(stat: unknown, name: string) => boolean'.
                     files.forEach((file) => {
                         var fullPath = join(IDoNotExist);
                                             ~~~~~~~~~~~

@@ -101,7 +101,7 @@
     		public getInitialState(): IState {
     			return new State(self);
     			                 ~~~~
-!!! Argument type 'Window' is not assignable to parameter type 'IMode'.
+!!! Argument of type 'Window' is not assignable to parameter of type 'IMode'.
     		}
     
     

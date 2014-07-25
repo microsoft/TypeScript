@@ -2,21 +2,21 @@
     function foo1(x: { a: number; }) { }
     foo1({ b: 5 });
          ~~~~~~~~
-!!! Argument type '{ b: number; }' is not assignable to parameter type '{ a: number; }'.
+!!! Argument of type '{ b: number; }' is not assignable to parameter of type '{ a: number; }'.
 !!!   Property 'a' is missing in type '{ b: number; }'.
     
     function foo2(x: number[]) { }
     foo2(["s", "t"]);
          ~~~~~~~~~~
-!!! Argument type 'string[]' is not assignable to parameter type 'number[]'.
+!!! Argument of type 'string[]' is not assignable to parameter of type 'number[]'.
 !!!   Type 'string' is not assignable to type 'number'.
     
     function foo3(x: (n: number) =>number) { };
     foo3((s:string) => { });
          ~~~~~~~~~~~~~~~~~
-!!! Argument type '(s: string) => void' is not assignable to parameter type '(n: number) => number'.
+!!! Argument of type '(s: string) => void' is not assignable to parameter of type '(n: number) => number'.
     foo3((n) => { return; });
          ~~~~~~~~~~~~~~~~~~
-!!! Argument type '(n: number) => void' is not assignable to parameter type '(n: number) => number'.
+!!! Argument of type '(n: number) => void' is not assignable to parameter of type '(n: number) => number'.
     
     

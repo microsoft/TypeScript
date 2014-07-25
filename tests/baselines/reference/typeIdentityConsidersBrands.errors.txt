@@ -34,5 +34,5 @@
 !!!   Private property 'name' cannot be reimplemented.
     foo2(a2); // should error
          ~~
-!!! Argument type 'Y_1' is not assignable to parameter type 'X_1'.
+!!! Argument of type 'Y_1' is not assignable to parameter of type 'X_1'.
     

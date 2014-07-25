@@ -3,9 +3,9 @@
     foo(0, 1); 
     foo('foo'); 
         ~~~~~
-!!! Argument type 'string' is not assignable to parameter type 'number'.
+!!! Argument of type 'string' is not assignable to parameter of type 'number'.
     foo();
     foo(1, 'bar');
            ~~~~~
-!!! Argument type 'string' is not assignable to parameter type 'number'.
+!!! Argument of type 'string' is not assignable to parameter of type 'number'.
     

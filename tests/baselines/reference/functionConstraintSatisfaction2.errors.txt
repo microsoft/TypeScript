@@ -5,7 +5,7 @@
     
     foo(1);
         ~
-!!! Argument type 'number' is not assignable to parameter type 'Function'.
+!!! Argument of type 'number' is not assignable to parameter of type 'Function'.
     foo(() => { }, 1);
     ~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
@@ -29,41 +29,41 @@
     
     var r = foo2(new Function());
                  ~~~~~~~~~~~~~~
-!!! Argument type 'Function' is not assignable to parameter type '(x: string) => string'.
+!!! Argument of type 'Function' is not assignable to parameter of type '(x: string) => string'.
     var r2 = foo2((x: string[]) => x);
                   ~~~~~~~~~~~~~~~~~~
-!!! Argument type '(x: string[]) => string[]' is not assignable to parameter type '(x: string) => string'.
+!!! Argument of type '(x: string[]) => string[]' is not assignable to parameter of type '(x: string) => string'.
     var r6 = foo2(C);
                   ~
-!!! Argument type 'typeof C' is not assignable to parameter type '(x: string) => string'.
+!!! Argument of type 'typeof C' is not assignable to parameter of type '(x: string) => string'.
     var r7 = foo2(b);
                   ~
-!!! Argument type 'new (x: string) => string' is not assignable to parameter type '(x: string) => string'.
+!!! Argument of type 'new (x: string) => string' is not assignable to parameter of type '(x: string) => string'.
     var r8 = foo2(<U>(x: U) => x); // no error expected
     var r11 = foo2(<U, V>(x: U, y: V) => x);
                    ~~~~~~~~~~~~~~~~~~~~~~~
-!!! Argument type '<U, V>(x: U, y: V) => U' is not assignable to parameter type '(x: string) => string'.
+!!! Argument of type '<U, V>(x: U, y: V) => U' is not assignable to parameter of type '(x: string) => string'.
     var r13 = foo2(C2);
                    ~~
-!!! Argument type 'typeof C2' is not assignable to parameter type '(x: string) => string'.
+!!! Argument of type 'typeof C2' is not assignable to parameter of type '(x: string) => string'.
     var r14 = foo2(b2);
                    ~~
-!!! Argument type 'new <T>(x: T) => T' is not assignable to parameter type '(x: string) => string'.
+!!! Argument of type 'new <T>(x: T) => T' is not assignable to parameter of type '(x: string) => string'.
     
     interface F2 extends Function { foo: string; }
     var f2: F2;
     var r16 = foo2(f2);
                    ~~
-!!! Argument type 'F2' is not assignable to parameter type '(x: string) => string'.
+!!! Argument of type 'F2' is not assignable to parameter of type '(x: string) => string'.
     
     function fff<T extends { (): void }, U extends T>(x: T, y: U) {
                                          ~~~~~~~~~~~
 !!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         foo2(x);
              ~
-!!! Argument type 'T' is not assignable to parameter type '(x: string) => string'.
+!!! Argument of type 'T' is not assignable to parameter of type '(x: string) => string'.
         foo2(y);
              ~
-!!! Argument type 'U' is not assignable to parameter type '(x: string) => string'.
+!!! Argument of type 'U' is not assignable to parameter of type '(x: string) => string'.
     }
     

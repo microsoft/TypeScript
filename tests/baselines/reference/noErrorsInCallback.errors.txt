@@ -4,10 +4,10 @@
     }
     var one = new Bar({}); // Error
                       ~~
-!!! Argument type '{}' is not assignable to parameter type 'string'.
+!!! Argument of type '{}' is not assignable to parameter of type 'string'.
     [].forEach(() => {
         var two = new Bar({}); // No error?
                           ~~
-!!! Argument type '{}' is not assignable to parameter type 'string'.
+!!! Argument of type '{}' is not assignable to parameter of type 'string'.
     });
      
