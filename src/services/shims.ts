@@ -52,10 +52,6 @@ module ts {
         getScriptIsOpen(fileName: string): boolean;
         getScriptByteOrderMark(fileName: string): number;
         getScriptSnapshot(fileName: string): ScriptSnapshotShim;
-        resolveRelativePath(path: string, directory: string): string;
-        fileExists(path: string): boolean;
-        directoryExists(path: string): boolean;
-        getParentDirectory(path: string): string;
         getLocalizedDiagnosticMessages(): string;
         getCancellationToken(): CancellationToken;
     }
@@ -371,23 +367,6 @@ module ts {
 
         public getCancellationToken(): CancellationToken {
             return this.shimHost.getCancellationToken();
-        }
-
-        // IReferenceResolverHost methods
-        public resolveRelativePath(path: string, directory: string): string {
-            return this.shimHost.resolveRelativePath(path, directory);
-        }
-
-        public fileExists(path: string): boolean {
-            return this.shimHost.fileExists(path);
-        }
-
-        public directoryExists(path: string): boolean {
-            return this.shimHost.directoryExists(path);
-        }
-
-        public getParentDirectory(path: string): string {
-            return this.shimHost.getParentDirectory(path);
         }
     }
 
