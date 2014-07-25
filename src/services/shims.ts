@@ -57,7 +57,7 @@ module ts {
         directoryExists(path: string): boolean;
         getParentDirectory(path: string): string;
         getLocalizedDiagnosticMessages(): string;
-        getCancellationToken(): ts.CancellationToken;
+        getCancellationToken(): CancellationToken;
     }
 
     //
@@ -176,43 +176,43 @@ module ts {
         codepage?: number;
     }
 
-    function languageVersionToScriptTarget(languageVersion: LanguageVersion): ts.ScriptTarget {
+    function languageVersionToScriptTarget(languageVersion: LanguageVersion): ScriptTarget {
         switch (languageVersion) {
-            case LanguageVersion.EcmaScript3: return ts.ScriptTarget.ES3;
-            case LanguageVersion.EcmaScript5: return ts.ScriptTarget.ES5;
+            case LanguageVersion.EcmaScript3: return ScriptTarget.ES3;
+            case LanguageVersion.EcmaScript5: return ScriptTarget.ES5;
             default: throw Error("unsuported LanguageVersion value: " + languageVersion);
         }
     }
 
-    function moduleGenTargetToModuleKind(moduleGenTarget: ModuleGenTarget): ts.ModuleKind {
+    function moduleGenTargetToModuleKind(moduleGenTarget: ModuleGenTarget): ModuleKind {
         switch (moduleGenTarget) {
-            case ModuleGenTarget.Asynchronous: return ts.ModuleKind.AMD;
-            case ModuleGenTarget.Synchronous: return ts.ModuleKind.CommonJS;
-            case ModuleGenTarget.Unspecified: return ts.ModuleKind.None;
+            case ModuleGenTarget.Asynchronous: return ModuleKind.AMD;
+            case ModuleGenTarget.Synchronous: return ModuleKind.CommonJS;
+            case ModuleGenTarget.Unspecified: return ModuleKind.None;
             default: throw Error("unsuported ModuleGenTarget value: " + moduleGenTarget);
         }
     }
 
-    function scriptTargetTolanguageVersion(scriptTarget: ts.ScriptTarget): LanguageVersion {
+    function scriptTargetTolanguageVersion(scriptTarget: ScriptTarget): LanguageVersion {
         switch (scriptTarget) {
-            case ts.ScriptTarget.ES3: return LanguageVersion.EcmaScript3;
-            case ts.ScriptTarget.ES5: return LanguageVersion.EcmaScript5;
+            case ScriptTarget.ES3: return LanguageVersion.EcmaScript3;
+            case ScriptTarget.ES5: return LanguageVersion.EcmaScript5;
             default: throw Error("unsuported ScriptTarget value: " + scriptTarget);
         }
     }
 
-    function moduleKindToModuleGenTarget(moduleKind: ts.ModuleKind): ModuleGenTarget {
+    function moduleKindToModuleGenTarget(moduleKind: ModuleKind): ModuleGenTarget {
         switch (moduleKind) {
-            case ts.ModuleKind.AMD: return ModuleGenTarget.Asynchronous;
-            case ts.ModuleKind.CommonJS: return ModuleGenTarget.Synchronous;
-            case ts.ModuleKind.None: return ModuleGenTarget.Unspecified;
+            case ModuleKind.AMD: return ModuleGenTarget.Asynchronous;
+            case ModuleKind.CommonJS: return ModuleGenTarget.Synchronous;
+            case ModuleKind.None: return ModuleGenTarget.Unspecified;
             default: throw Error("unsuported ModuleKind value: " + moduleKind);
         }
     }
 
-    function compilationSettingsToCompilerOptions(settings: CompilationSettings): ts.CompilerOptions {
+    function compilationSettingsToCompilerOptions(settings: CompilationSettings): CompilerOptions {
         // TODO: we should not be converting, but use options all the way
-        var options: ts.CompilerOptions = {};
+        var options: CompilerOptions = {};
         //options.propagateEnumConstants = settings.propagateEnumConstants;
         options.removeComments = settings.removeComments;
         options.noResolve = settings.noResolve;
@@ -231,7 +231,7 @@ module ts {
         return options;
     }
 
-    function compilerOptionsToCompilationSettings(options: ts.CompilerOptions): CompilationSettings {
+    function compilerOptionsToCompilationSettings(options: CompilerOptions): CompilationSettings {
         var settings: CompilationSettings = {};
         //options.propagateEnumConstants = settings.propagateEnumConstants;
         settings.removeComments = options.removeComments;
@@ -317,13 +317,13 @@ module ts {
             this.shimHost.log(s);
         }
 
-        public getCompilationSettings(): ts.CompilerOptions {
+        public getCompilationSettings(): CompilerOptions {
             var settingsJson = this.shimHost.getCompilationSettings();
             if (settingsJson == null || settingsJson == "") {
                 throw Error("LanguageServiceShimHostAdapter.getCompilationSettings: empty compilationSettings");
                 return null;
             }
-            var options = compilationSettingsToCompilerOptions(<ts.CompilerOptions>JSON.parse(<any>settingsJson));
+            var options = compilationSettingsToCompilerOptions(<CompilerOptions>JSON.parse(<any>settingsJson));
 
             /// TODO: this should be pushed into VS.
             /// We can not ask the LS instance to resolve, as this will lead to asking the host about files it does not know about,
@@ -351,7 +351,7 @@ module ts {
             return this.shimHost.getScriptIsOpen(fileName);
         }
 
-        public getScriptByteOrderMark(fileName: string): ts.ByteOrderMark {
+        public getScriptByteOrderMark(fileName: string): ByteOrderMark {
             return this.shimHost.getScriptByteOrderMark(fileName);
         }
 
@@ -369,7 +369,7 @@ module ts {
             }
         }
 
-        public getCancellationToken(): ts.CancellationToken {
+        public getCancellationToken(): CancellationToken {
             return this.shimHost.getCancellationToken();
         }
 
@@ -486,24 +486,24 @@ module ts {
         /// SQUIGGLES
         ///
 
-        private static realizeDiagnostic(diagnostic: ts.Diagnostic): { message: string; start: number; length: number; category: string; } {
+        private static realizeDiagnostic(diagnostic: Diagnostic): { message: string; start: number; length: number; category: string; } {
             return {
                 message: diagnostic.messageText,
                 start: diagnostic.start,
                 length: diagnostic.length,
                 /// TODO: no need for the tolowerCase call
-                category: ts.DiagnosticCategory[diagnostic.category].toLowerCase()
+                category: DiagnosticCategory[diagnostic.category].toLowerCase()
             };
         }
 
-        private realizeDiagnosticWithFileName(diagnostic: ts.Diagnostic): { fileName: string; message: string; start: number; length: number; category: string; } {
+        private realizeDiagnosticWithFileName(diagnostic: Diagnostic): { fileName: string; message: string; start: number; length: number; category: string; } {
             return {
                 fileName: diagnostic.file.filename,
                 message: diagnostic.messageText,
                 start: diagnostic.start,
                 length: diagnostic.length,
                 /// TODO: no need for the tolowerCase call
-                category: ts.DiagnosticCategory[diagnostic.category].toLowerCase()
+                category: DiagnosticCategory[diagnostic.category].toLowerCase()
             };
         }
 

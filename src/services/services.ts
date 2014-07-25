@@ -291,14 +291,14 @@ module ts {
     // Public interface of the host of a language service instance.
     //
     export interface LanguageServiceHost extends Logger {
-        getCompilationSettings(): ts.CompilerOptions;
+        getCompilationSettings(): CompilerOptions;
         getScriptFileNames(): string[];
         getScriptVersion(fileName: string): number;
         getScriptIsOpen(fileName: string): boolean;
-        getScriptByteOrderMark(fileName: string): ts.ByteOrderMark;
+        getScriptByteOrderMark(fileName: string): ByteOrderMark;
         getScriptSnapshot(fileName: string): TypeScript.IScriptSnapshot;
         getLocalizedDiagnosticMessages(): any;
-        getCancellationToken(): ts.CancellationToken;
+        getCancellationToken(): CancellationToken;
     }
 
     //
@@ -311,9 +311,9 @@ module ts {
 
         cleanupSemanticCache(): void;
 
-        getSyntacticDiagnostics(fileName: string): ts.Diagnostic[];
-        getSemanticDiagnostics(fileName: string): ts.Diagnostic[];
-        getCompilerOptionsDiagnostics(): ts.Diagnostic[];
+        getSyntacticDiagnostics(fileName: string): Diagnostic[];
+        getSemanticDiagnostics(fileName: string): Diagnostic[];
+        getCompilerOptionsDiagnostics(): Diagnostic[];
 
         getCompletionsAtPosition(fileName: string, position: number, isMemberCompletion: boolean): CompletionInfo;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails;
@@ -542,9 +542,9 @@ module ts {
     export interface DocumentRegistry {
         acquireDocument(
             filename: string,
-            compilationSettings: ts.CompilerOptions,
+            compilationSettings: CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
-            byteOrderMark: ts.ByteOrderMark,
+            byteOrderMark: ByteOrderMark,
             version: number,
             isOpen: boolean,
             referencedFiles: string[]): Document;
@@ -552,14 +552,14 @@ module ts {
         updateDocument(
             document: Document,
             filename: string,
-            compilationSettings: ts.CompilerOptions,
+            compilationSettings: CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
             version: number,
             isOpen: boolean,
             textChangeRange: TypeScript.TextChangeRange
             ): Document;
 
-        releaseDocument(filename: string, compilationSettings: ts.CompilerOptions): void
+        releaseDocument(filename: string, compilationSettings: CompilerOptions): void
     }
 
     // TODO: move these to enums
@@ -651,12 +651,12 @@ module ts {
 
     export interface Document {
         getFilename(): string;
-        getByteOrderMark(): ts.ByteOrderMark;
+        getByteOrderMark(): ByteOrderMark;
         getVersion(): number;
         isOpen(): boolean;
         getSourceUnit(): TypeScript.SourceUnitSyntax;
         getSyntaxTree(): TypeScript.SyntaxTree;
-        getSourceFile(): ts.SourceFile;
+        getSourceFile(): SourceFile;
         getBloomFilter(): TypeScript.BloomFilter;
         update(scriptSnapshot: TypeScript.IScriptSnapshot, version: number, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): Document;
     }
@@ -664,20 +664,20 @@ module ts {
     class DocumentObject implements Document {
         private bloomFilter: TypeScript.BloomFilter = null;
 
-        // By default, our Document class doesn't support incremental update of its contents.
+        // By default, our Document class doesn't support incremental update of its conten
         // However, we enable other layers (like teh services layer) to inject the capability
         // into us by setting this function.
         public static incrementalParse: IncrementalParse = TypeScript.IncrementalParser.parse;
 
-        constructor(private compilationSettings: ts.CompilerOptions,
+        constructor(private compilationSettings: CompilerOptions,
             public filename: string,
             public referencedFiles: string[],
             private scriptSnapshot: TypeScript.IScriptSnapshot,
-            public byteOrderMark: ts.ByteOrderMark,
+            public byteOrderMark: ByteOrderMark,
             public version: number,
             public _isOpen: boolean,
             private syntaxTree: TypeScript.SyntaxTree,
-            private soruceFile: ts.SourceFile) {
+            private soruceFile: SourceFile) {
         }
 
         public getFilename(): string {
@@ -723,11 +723,11 @@ module ts {
             return this.syntaxTree;
         }
 
-        public getSourceFile(): ts.SourceFile {
+        public getSourceFile(): SourceFile {
             if (!this.soruceFile) {
                 var start = new Date().getTime();
 
-                this.soruceFile = ts.createSourceFile(this.filename, this.scriptSnapshot.getText(0, this.scriptSnapshot.getLength()), this.compilationSettings.target);
+                this.soruceFile = createSourceFile(this.filename, this.scriptSnapshot.getText(0, this.scriptSnapshot.getLength()), this.compilationSettings.target);
 
                 var time = new Date().getTime() - start;
 
@@ -811,7 +811,7 @@ module ts {
         }
     }
 
-    function createDocument(compilationSettings: ts.CompilerOptions, fileName: string, scriptSnapshot: TypeScript.IScriptSnapshot, byteOrderMark: ts.ByteOrderMark, version: number, isOpen: boolean, referencedFiles: string[]): Document {
+    function createDocument(compilationSettings: CompilerOptions, fileName: string, scriptSnapshot: TypeScript.IScriptSnapshot, byteOrderMark: ByteOrderMark, version: number, isOpen: boolean, referencedFiles: string[]): Document {
         return new DocumentObject(compilationSettings, fileName, referencedFiles, scriptSnapshot, byteOrderMark, version, isOpen, /*syntaxTree:*/ null, /*soruceFile*/ null);
     }
 
@@ -821,9 +821,9 @@ module ts {
         filename: string;           // the file where the completion was requested
         position: number;           // position in the file where the completion was requested
         entries: CompletionEntry[]; // entries for this completion
-        symbols: ts.Map<ts.Symbol>; // symbols by entry name map
-        location: ts.Node;          // the node where the completion was requested
-        typeChecker: ts.TypeChecker;// the typeChecker used to generate this completion
+        symbols: Map<Symbol>; // symbols by entry name map
+        location: Node;          // the node where the completion was requested
+        typeChecker: TypeChecker;// the typeChecker used to generate this completion
     }
 
     interface FormattingOptions {
@@ -838,7 +838,7 @@ module ts {
         filename: string;
         version: number;
         isOpen: boolean;
-        byteOrderMark: ts.ByteOrderMark;
+        byteOrderMark: ByteOrderMark;
         sourceText?: TypeScript.IScriptSnapshot;
     }
 
@@ -848,11 +848,11 @@ module ts {
         owners: string[];
     }
 
-    export function getDefaultCompilerOptions(): ts.CompilerOptions {
+    export function getDefaultCompilerOptions(): CompilerOptions {
         // Set "ES5" target by default for language service
         return {
-            target: ts.ScriptTarget.ES5,
-            module: ts.ModuleKind.None,
+            target: ScriptTarget.ES5,
+            module: ModuleKind.None,
         };
     }
 
@@ -872,11 +872,11 @@ module ts {
 
     export class OperationCanceledException { }
 
-    class CancellationToken {
+    class CancellationTokenObject {
 
-        public static None: CancellationToken = new CancellationToken(null)
+        public static None: CancellationTokenObject = new CancellationTokenObject(null)
 
-        constructor(private cancellationToken: ts.CancellationToken) {
+        constructor(private cancellationToken: CancellationToken) {
         }
 
         public isCancellationRequested() {
@@ -890,12 +890,12 @@ module ts {
         }
     }
 
-    // Cache host information about scripts. Should be refreshed 
+    // Cache host information about scrip Should be refreshed 
     // at each language service public entry point, since we don't know when 
     // set of scripts handled by the host changes.
     class HostCache {
-        private filenameToEntry: ts.Map<HostFileInformation>;
-        private _compilationSettings: ts.CompilerOptions;
+        private filenameToEntry: Map<HostFileInformation>;
+        private _compilationSettings: CompilerOptions;
 
         constructor(private host: LanguageServiceHost) {
             // script id => script index
@@ -947,7 +947,7 @@ module ts {
             return this.filenameToEntry[TypeScript.switchToForwardSlashes(filename)].isOpen;
         }
 
-        public getByteOrderMark(filename: string): ts.ByteOrderMark {
+        public getByteOrderMark(filename: string): ByteOrderMark {
             return this.filenameToEntry[TypeScript.switchToForwardSlashes(filename)].byteOrderMark;
         }
 
@@ -1109,13 +1109,13 @@ module ts {
     }
 
     export function createDocumentRegistry(): DocumentRegistry {
-        var buckets: ts.Map<ts.Map<DocumentRegistryEntry>> = {};
+        var buckets: Map<Map<DocumentRegistryEntry>> = {};
 
-        function getKeyFromCompilationSettings(settings: ts.CompilerOptions): string {
-            return "_" + ts.ScriptTarget[settings.target]; //  + "|" + settings.propagateEnumConstants.toString()
+        function getKeyFromCompilationSettings(settings: CompilerOptions): string {
+            return "_" + ScriptTarget[settings.target]; //  + "|" + settings.propagateEnumConstantoString()
         }
 
-        function getBucketForCompilationSettings(settings: ts.CompilerOptions, createIfMissing: boolean): ts.Map<DocumentRegistryEntry> {
+        function getBucketForCompilationSettings(settings: CompilerOptions, createIfMissing: boolean): Map<DocumentRegistryEntry> {
             var key = getKeyFromCompilationSettings(settings);
             var bucket = buckets[key];
             if (!bucket && createIfMissing) {
@@ -1144,9 +1144,9 @@ module ts {
 
         function acquireDocument(
             filename: string,
-            compilationSettings: ts.CompilerOptions,
+            compilationSettings: CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
-            byteOrderMark: ts.ByteOrderMark,
+            byteOrderMark: ByteOrderMark,
             version: number,
             isOpen: boolean,
             referencedFiles: string[]= []): Document {
@@ -1170,7 +1170,7 @@ module ts {
         function updateDocument(
             document: Document,
             filename: string,
-            compilationSettings: ts.CompilerOptions,
+            compilationSettings: CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
             version: number,
             isOpen: boolean,
@@ -1190,7 +1190,7 @@ module ts {
             return entry.document;
         }
 
-        function releaseDocument(filename: string, compilationSettings: ts.CompilerOptions): void {
+        function releaseDocument(filename: string, compilationSettings: CompilerOptions): void {
             var bucket = getBucketForCompilationSettings(compilationSettings, false);
             Debug.assert(bucket);
 
@@ -1215,12 +1215,12 @@ module ts {
         var syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         var formattingRulesProvider: TypeScript.Services.Formatting.RulesProvider;
         var hostCache: HostCache; // A cache of all the information about the files on the host side.
-        var program: ts.Program;
-        var typeChecker: ts.TypeChecker;
+        var program: Program;
+        var typeChecker: TypeChecker;
         var useCaseSensitivefilenames = false;
-        var documentsByName: ts.Map<Document> = {};
+        var documentsByName: Map<Document> = {};
         var documentRegistry = documentRegistry;
-        var cancellationToken = new CancellationToken(host.getCancellationToken());
+        var cancellationToken = new CancellationTokenObject(host.getCancellationToken());
         var activeCompletionSession: CompletionSession;         // The current active completion session, used to get the completion entry details
         var keywordCompletions = getKeywordCompletionEntries(); // A cache of completion entries for keywords, these do not change between sessions
 
@@ -1229,7 +1229,7 @@ module ts {
             TypeScript.LocalizedDiagnosticMessages = host.getLocalizedDiagnosticMessages();
         }
 
-        function createCompilerHost(): ts.CompilerHost {
+        function createCompilerHost(): CompilerHost {
             return {
                 getSourceFile: (filename, languageVersion) => {
                     var document = documentsByName[filename];
@@ -1332,13 +1332,13 @@ module ts {
             }
 
             // Now create a new compiler
-            program = ts.createProgram(hostfilenames, compilationSettings, createCompilerHost());
+            program = createProgram(hostfilenames, compilationSettings, createCompilerHost());
             typeChecker = program.getTypeChecker();
         }
 
         function dispose(): void {
             if (program) {
-                ts.forEach(program.getSourceFiles(),
+                forEach(program.getSourceFiles(),
                     (f) => documentRegistry.releaseDocument(f.filename, program.getCompilerOptions()));
             }
         }
@@ -1360,7 +1360,7 @@ module ts {
         }
 
         /// Completion
-        function getValidCompletionEntryDisplayName(displayName: string, target: ts.ScriptTarget): string {
+        function getValidCompletionEntryDisplayName(displayName: string, target: ScriptTarget): string {
             if (displayName && displayName.length > 0) {
                 var firstChar = displayName.charCodeAt(0);
                 if (firstChar === TypeScript.CharacterCodes.singleQuote || firstChar === TypeScript.CharacterCodes.doubleQuote) {
@@ -1377,7 +1377,7 @@ module ts {
             return undefined;
         }
 
-        function createCompletionEntry(symbol: ts.Symbol): CompletionEntry {
+        function createCompletionEntry(symbol: Symbol): CompletionEntry {
             // Try to get a valid display name for this symbol, if we could not find one, then ignore it. 
             // We would like to only show things that can be added after a dot, so for instance numeric properties can
             // not be accessed with a dot (a.1 <- invalid)
@@ -1427,8 +1427,8 @@ module ts {
         }
 
         function getCompletionsAtPosition(filename: string, position: number, isMemberCompletion: boolean) {
-            function getCompletionEntriesFromSymbols(symbols: ts.Symbol[], session: CompletionSession): void {
-                ts.forEach(symbols, (symbol) => {
+            function getCompletionEntriesFromSymbols(symbols: Symbol[], session: CompletionSession): void {
+                forEach(symbols, (symbol) => {
                     var entry = createCompletionEntry(symbol);
                     if (entry) {
                         session.entries.push(entry);
@@ -1629,7 +1629,7 @@ module ts {
 
             // Right of dot member completion list
             if (isRightOfDot) {
-                var type: ts.Type = typeChecker.getTypeOfExpression(mappedNode);
+                var type: Type = typeChecker.getTypeOfExpression(mappedNode);
                 if (!type) {
                     return undefined;
                 }
@@ -1676,7 +1676,7 @@ module ts {
                 else {
                     isMemberCompletion = false;
                     /// TODO filter meaning based on the current context
-                    var symbolMeanings = ts.SymbolFlags.Type | ts.SymbolFlags.Value | ts.SymbolFlags.Namespace;
+                    var symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace;
                     var symbols = typeChecker.getSymbolsInScope(mappedNode, symbolMeanings);
 
                     getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
@@ -1733,13 +1733,13 @@ module ts {
             }
         }
 
-        function getNodeAtPosition(sourceFile: ts.SourceFile, position: number) {
-            var current: ts.Node = sourceFile;
+        function getNodeAtPosition(sourceFile: SourceFile, position: number) {
+            var current: Node = sourceFile;
             outer: while (true) {
                 // find the child that has this
                 for (var i = 0, n = current.getChildCount(); i < n; i++) {
                     var child = current.getChildAt(i);
-                    if (ts.getTokenPosOfNode(child) <= position && position < child.end) {
+                    if (getTokenPosOfNode(child) <= position && position < child.end) {
                         current = child;
                         continue outer;
                     }
@@ -1749,72 +1749,72 @@ module ts {
             }
         }
 
-        function getEnclosingDeclaration(node: ts.Node): ts.Node {
+        function getEnclosingDeclaration(node: Node): Node {
             while (true) {
                 node = node.parent;
                 if (!node) {
                     return node;
                 }
                 switch (node.kind) {
-                    case ts.SyntaxKind.Method:
-                    case ts.SyntaxKind.FunctionDeclaration:
-                    case ts.SyntaxKind.FunctionExpression:
-                    case ts.SyntaxKind.GetAccessor:
-                    case ts.SyntaxKind.SetAccessor:
-                    case ts.SyntaxKind.ClassDeclaration:
-                    case ts.SyntaxKind.InterfaceDeclaration:
-                    case ts.SyntaxKind.EnumDeclaration:
-                    case ts.SyntaxKind.ModuleDeclaration:
+                    case SyntaxKind.Method:
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.FunctionExpression:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.EnumDeclaration:
+                    case SyntaxKind.ModuleDeclaration:
                         return node;
                 }
             }
         }
 
-        function getSymbolKind(symbol: ts.Symbol): string {
+        function getSymbolKind(symbol: Symbol): string {
             var flags = symbol.getFlags();
 
-            if (flags & ts.SymbolFlags.Module) return ScriptElementKind.moduleElement;
-            if (flags & ts.SymbolFlags.Class) return ScriptElementKind.classElement;
-            if (flags & ts.SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
-            if (flags & ts.SymbolFlags.Enum) return ScriptElementKind.enumElement;
-            if (flags & ts.SymbolFlags.Variable) return ScriptElementKind.variableElement;
-            if (flags & ts.SymbolFlags.Function) return ScriptElementKind.functionElement;
-            if (flags & ts.SymbolFlags.GetAccessor) return ScriptElementKind.memberGetAccessorElement;
-            if (flags & ts.SymbolFlags.SetAccessor) return ScriptElementKind.memberSetAccessorElement;
-            if (flags & ts.SymbolFlags.Method) return ScriptElementKind.memberFunctionElement;
-            if (flags & ts.SymbolFlags.Property) return ScriptElementKind.memberVariableElement;
-            if (flags & ts.SymbolFlags.IndexSignature) return ScriptElementKind.indexSignatureElement;
-            if (flags & ts.SymbolFlags.ConstructSignature) return ScriptElementKind.constructSignatureElement;
-            if (flags & ts.SymbolFlags.CallSignature) return ScriptElementKind.callSignatureElement;
-            if (flags & ts.SymbolFlags.Constructor) return ScriptElementKind.constructorImplementationElement;
-            if (flags & ts.SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
-            if (flags & ts.SymbolFlags.EnumMember) return ScriptElementKind.variableElement;
+            if (flags & SymbolFlags.Module) return ScriptElementKind.moduleElement;
+            if (flags & SymbolFlags.Class) return ScriptElementKind.classElement;
+            if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
+            if (flags & SymbolFlags.Enum) return ScriptElementKind.enumElement;
+            if (flags & SymbolFlags.Variable) return ScriptElementKind.variableElement;
+            if (flags & SymbolFlags.Function) return ScriptElementKind.functionElement;
+            if (flags & SymbolFlags.GetAccessor) return ScriptElementKind.memberGetAccessorElement;
+            if (flags & SymbolFlags.SetAccessor) return ScriptElementKind.memberSetAccessorElement;
+            if (flags & SymbolFlags.Method) return ScriptElementKind.memberFunctionElement;
+            if (flags & SymbolFlags.Property) return ScriptElementKind.memberVariableElement;
+            if (flags & SymbolFlags.IndexSignature) return ScriptElementKind.indexSignatureElement;
+            if (flags & SymbolFlags.ConstructSignature) return ScriptElementKind.constructSignatureElement;
+            if (flags & SymbolFlags.CallSignature) return ScriptElementKind.callSignatureElement;
+            if (flags & SymbolFlags.Constructor) return ScriptElementKind.constructorImplementationElement;
+            if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
+            if (flags & SymbolFlags.EnumMember) return ScriptElementKind.variableElement;
 
             return ScriptElementKind.unknown;
         }
 
-        function getTypeKind(type: ts.Type): string {
+        function getTypeKind(type: Type): string {
             var flags = type.getFlags();
 
-            if (flags & ts.TypeFlags.Enum) return ScriptElementKind.enumElement;
-            if (flags & ts.TypeFlags.Class) return ScriptElementKind.classElement;
-            if (flags & ts.TypeFlags.Interface) return ScriptElementKind.interfaceElement;
-            if (flags & ts.TypeFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
-            if (flags & ts.TypeFlags.Intrinsic) return ScriptElementKind.primitiveType;
-            if (flags & ts.TypeFlags.StringLiteral) return ScriptElementKind.primitiveType;
+            if (flags & TypeFlags.Enum) return ScriptElementKind.enumElement;
+            if (flags & TypeFlags.Class) return ScriptElementKind.classElement;
+            if (flags & TypeFlags.Interface) return ScriptElementKind.interfaceElement;
+            if (flags & TypeFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
+            if (flags & TypeFlags.Intrinsic) return ScriptElementKind.primitiveType;
+            if (flags & TypeFlags.StringLiteral) return ScriptElementKind.primitiveType;
 
             return ScriptElementKind.unknown;
         }
 
-        function getNodeModifiers(node: ts.Node): string {
+        function getNodeModifiers(node: Node): string {
             var flags = node.flags;
             var result: string[] = [];
 
-            if (flags & ts.NodeFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
-            if (flags & ts.NodeFlags.Public) result.push(ScriptElementKindModifier.publicMemberModifier);
-            if (flags & ts.NodeFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
-            if (flags & ts.NodeFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
-            if (ts.isInAmbientContext(node)) result.push(ScriptElementKindModifier.ambientModifier);
+            if (flags & NodeFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
+            if (flags & NodeFlags.Public) result.push(ScriptElementKindModifier.publicMemberModifier);
+            if (flags & NodeFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
+            if (flags & NodeFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
+            if (isInAmbientContext(node)) result.push(ScriptElementKindModifier.ambientModifier);
 
             return result.length > 0 ? result.join(',') : ScriptElementKindModifier.none;
         }
@@ -1830,12 +1830,12 @@ module ts {
 
             switch (node.kind) {
                 // A declaration
-                case ts.SyntaxKind.Identifier:
-                    if (node.parent.kind === ts.SyntaxKind.CallExpression || node.parent.kind === ts.SyntaxKind.NewExpression) {
+                case SyntaxKind.Identifier:
+                    if (node.parent.kind === SyntaxKind.CallExpression || node.parent.kind === SyntaxKind.NewExpression) {
                         // TODO: handle new and call expressions
                     }
 
-                    var symbol = typeChecker.getSymbolOfIdentifier(<ts.Identifier>node);
+                    var symbol = typeChecker.getSymbolOfIdentifier(<Identifier>node);
                     Debug.assert(symbol, "getTypeAtPosition: Could not find symbol for node");
                     var type = typeChecker.getTypeOfSymbol(symbol);
 
@@ -1849,10 +1849,10 @@ module ts {
                     };
 
                 // An Expression
-                case ts.SyntaxKind.ThisKeyword:
-                case ts.SyntaxKind.QualifiedName:
-                case ts.SyntaxKind.SuperKeyword:
-                case ts.SyntaxKind.StringLiteral:
+                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.QualifiedName:
+                case SyntaxKind.SuperKeyword:
+                case SyntaxKind.StringLiteral:
                     var type = typeChecker.getTypeOfExpression(node);
                     Debug.assert(type, "getTypeAtPosition: Could not find type for node");
                     return {
@@ -2108,7 +2108,7 @@ module ts {
             };
 
             var simpleText = TypeScript.SimpleText.fromString(text);
-            scanner = TypeScript.Scanner.createScanner(ts.ScriptTarget.ES5, simpleText, reportDiagnostic);
+            scanner = TypeScript.Scanner.createScanner(ScriptTarget.ES5, simpleText, reportDiagnostic);
 
             var lastTokenKind = TypeScript.SyntaxKind.None;
             var token: TypeScript.ISyntaxToken = null;
