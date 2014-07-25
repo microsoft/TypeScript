@@ -31,8 +31,8 @@
             x[2]={ color:Color.Green };
     
             x=x.sort(CompareYeux); // parameter mismatch
-              ~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                     ~~~~~~~~~~~
+!!! Argument of type '(a: IFrenchEye, b: IFrenchEye) => number' is not assignable to parameter of type '(a: IEye, b: IEye) => number'.
             // type of z inferred from specialized array type
             var z=x.sort(CompareEyes); // ok
     

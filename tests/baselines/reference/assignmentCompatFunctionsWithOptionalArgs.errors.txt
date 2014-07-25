@@ -5,8 +5,11 @@
     foo({ id: 1234 });                 // Ok
     foo({ id: 1234, name: "hello" });  // Ok
     foo({ id: 1234, name: false });    // Error, name of wrong type
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Argument of type '{ id: number; name: boolean; }' is not assignable to parameter of type '{ id: number; name?: string; }'.
+!!!   Types of property 'name' are incompatible:
+!!!     Type 'boolean' is not assignable to type 'string'.
     foo({ name: "hello" });            // Error, id required but missing
-    ~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+        ~~~~~~~~~~~~~~~~~
+!!! Argument of type '{ name: string; }' is not assignable to parameter of type '{ id: number; name?: string; }'.
+!!!   Property 'id' is missing in type '{ name: string; }'.

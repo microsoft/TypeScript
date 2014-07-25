@@ -33,8 +33,8 @@
 !!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         var r4 = foo(c, d);
         var r5 = foo<T, U>(c, d); // error
-                 ~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                           ~
+!!! Argument of type 'C' is not assignable to parameter of type 'T'.
     }
     
     

@@ -6,6 +6,6 @@
     } 
     
     fill(32);
-    ~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+         ~~
+!!! Argument of type 'number' is not assignable to parameter of type '{ '': number; }'.
     

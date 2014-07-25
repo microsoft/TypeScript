@@ -15,17 +15,17 @@
     var result: number = foo(x => new G(x)); // No error, returns number
         ~~~~~~
 !!! Type 'string' is not assignable to type 'number'.
-                                  ~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                                        ~
+!!! Argument of type 'D' is not assignable to parameter of type 'A'.
     
     var result2: number = foo(x => new G<typeof x>(x)); // No error, returns number
-                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                              ~~~~~~~~~~~~~~~~~~~~~~~
+!!! Argument of type '(x: D) => G<D>' is not assignable to parameter of type '(x: B) => any'.
                                          ~~~~~~~~
 !!! Type 'D' does not satisfy the constraint 'A'.
     
     var result3: string = foo(x => { // returns string because the C overload is picked
-                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         var y: G<typeof x>; // error that C does not satisfy constraint
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                ~~~~~~~~~~~
@@ -33,6 +33,6 @@
         return y;
     ~~~~~~~~~~~~~
     });
-    ~~
-!!! Supplied parameters do not match any signature of call target.
+    ~
+!!! Argument of type '(x: D) => G<D>' is not assignable to parameter of type '(x: B) => any'.
     

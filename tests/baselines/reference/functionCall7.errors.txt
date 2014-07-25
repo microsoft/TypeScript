@@ -7,8 +7,8 @@
     ~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.
     foo(4);
-    ~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+        ~
+!!! Argument of type 'number' is not assignable to parameter of type 'c1'.
     foo();
     ~~~~~
 !!! Supplied parameters do not match any signature of call target.

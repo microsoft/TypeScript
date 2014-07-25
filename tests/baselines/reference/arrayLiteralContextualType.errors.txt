@@ -27,8 +27,9 @@
     
     var arr = [new Giraffe(), new Elephant()];
     foo(arr); // Error because of no contextual type
-    ~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+        ~~~
+!!! Argument of type '{}[]' is not assignable to parameter of type 'IAnimal[]'.
+!!!   Type '{}' is not assignable to type 'IAnimal'.
     bar(arr); // Error because of no contextual type
-    ~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+        ~~~
+!!! Argument of type '{}[]' is not assignable to parameter of type '{ [x: number]: IAnimal; }'.

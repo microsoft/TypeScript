@@ -2,6 +2,6 @@
     function foo1(val: string) {
     }
     function foo3(x = foo1(123)) { //should error, 123 is not string
-                      ~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                           ~~~
+!!! Argument of type 'number' is not assignable to parameter of type 'string'.
     }

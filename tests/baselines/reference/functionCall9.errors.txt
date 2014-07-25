@@ -3,8 +3,8 @@
     foo('foo', 1); 
     foo('foo'); 
     foo('foo','bar');
-    ~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+              ~~~~~
+!!! Argument of type 'string' is not assignable to parameter of type 'number'.
     foo('foo', 1, 'bar');
     ~~~~~~~~~~~~~~~~~~~~
 !!! Supplied parameters do not match any signature of call target.

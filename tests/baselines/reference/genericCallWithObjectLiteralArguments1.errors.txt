@@ -3,14 +3,22 @@
     var x = foo({ x: 3, y: "" }, 4); // no error, x is Object, the best common type
     // these are all errors
     var x2 = foo<number>({ x: 3, y: "" }, 4); 
-             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                         ~~~~~~~~~~~~~~~
+!!! Argument of type '{ x: number; y: string; }' is not assignable to parameter of type '{ x: number; y: number; }'.
+!!!   Types of property 'y' are incompatible:
+!!!     Type 'string' is not assignable to type 'number'.
     var x3 = foo<string>({ x: 3, y: "" }, 4); 
-             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                         ~~~~~~~~~~~~~~~
+!!! Argument of type '{ x: number; y: string; }' is not assignable to parameter of type '{ x: string; y: string; }'.
+!!!   Types of property 'x' are incompatible:
+!!!     Type 'number' is not assignable to type 'string'.
     var x4 = foo<number>({ x: "", y: 4 }, "");
-             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                         ~~~~~~~~~~~~~~~
+!!! Argument of type '{ x: string; y: number; }' is not assignable to parameter of type '{ x: number; y: number; }'.
+!!!   Types of property 'x' are incompatible:
+!!!     Type 'string' is not assignable to type 'number'.
     var x5 = foo<string>({ x: "", y: 4 }, "");
-             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                         ~~~~~~~~~~~~~~~
+!!! Argument of type '{ x: string; y: number; }' is not assignable to parameter of type '{ x: string; y: string; }'.
+!!!   Types of property 'y' are incompatible:
+!!!     Type 'number' is not assignable to type 'string'.

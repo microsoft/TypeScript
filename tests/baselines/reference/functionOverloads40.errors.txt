@@ -3,6 +3,9 @@
     function foo(bar:{a:boolean;}[]):number;
     function foo(bar:{a:any;}[]):any{ return bar }
     var x = foo([{a:'bar'}]);
-            ~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                ~~~~~~~~~~~
+!!! Argument of type '{ a: string; }[]' is not assignable to parameter of type '{ a: boolean; }[]'.
+!!!   Type '{ a: string; }' is not assignable to type '{ a: boolean; }':
+!!!     Types of property 'a' are incompatible:
+!!!       Type 'string' is not assignable to type 'boolean'.
     

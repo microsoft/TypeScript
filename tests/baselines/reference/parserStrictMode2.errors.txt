@@ -12,5 +12,5 @@
     static();
     ~~~~~~
 !!! Declaration or statement expected.
-            ~
-!!! '=>' expected.
+           ~
+!!! Expression expected.

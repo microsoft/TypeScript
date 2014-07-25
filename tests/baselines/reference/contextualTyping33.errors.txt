@@ -1,4 +1,5 @@
 ==== tests/cases/compiler/contextualTyping33.ts (1 errors) ====
     function foo(param: {():number; (i:number):number; }[]) { }; foo([function(){return 1;}, function(){return "foo"}]);
-                                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Argument of type '{}[]' is not assignable to parameter of type '{ (): number; (i: number): number; }[]'.
+!!!   Type '{}' is not assignable to type '{ (): number; (i: number): number; }'.

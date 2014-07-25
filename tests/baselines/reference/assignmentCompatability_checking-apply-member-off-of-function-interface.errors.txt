@@ -33,17 +33,18 @@
     
     // Should Fail
     fn('');
-    ~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+       ~~
+!!! Argument of type 'string' is not assignable to parameter of type 'Applicable'.
     fn(['']);
-    ~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+       ~~~~
+!!! Argument of type 'string[]' is not assignable to parameter of type 'Applicable'.
     fn(4);
-    ~~~~~
-!!! Supplied parameters do not match any signature of call target.
+       ~
+!!! Argument of type 'number' is not assignable to parameter of type 'Applicable'.
     fn({});
-    ~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+       ~~
+!!! Argument of type '{}' is not assignable to parameter of type 'Applicable'.
+!!!   Property 'apply' is missing in type '{}'.
     
     
     // Should work

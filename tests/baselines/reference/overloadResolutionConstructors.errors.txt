@@ -26,8 +26,8 @@
     
     // No candidate overloads found
     new fn1({}); // Error
-    ~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+            ~~
+!!! Argument of type '{}' is not assignable to parameter of type 'number'.
     
     // Generic and non - generic overload where generic overload is the only candidate when called with type arguments
     interface fn2 {
@@ -44,8 +44,8 @@
     
     // Generic and non - generic overload where non - generic overload is the only candidate when called with type arguments
     new fn2<Date>('', 0); // Error
-    ~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                  ~~
+!!! Argument of type 'string' is not assignable to parameter of type 'number'.
     
     // Generic and non - generic overload where non - generic overload is the only candidate when called without type arguments
     new fn2('', 0); // OK
@@ -82,19 +82,19 @@
     
     new fn4<string, number>('', 3);
     new fn4<string, number>(3, ''); // Error
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
             ~~~~~~
 !!! Type 'string' does not satisfy the constraint 'number'.
                     ~~~~~~
 !!! Type 'number' does not satisfy the constraint 'string'.
+                            ~
+!!! Argument of type 'number' is not assignable to parameter of type 'string'.
     new fn4<number, string>('', 3); // Error
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
             ~~~~~~
 !!! Type 'number' does not satisfy the constraint 'string'.
                     ~~~~~~
 !!! Type 'string' does not satisfy the constraint 'number'.
+                            ~~
+!!! Argument of type 'string' is not assignable to parameter of type 'number'.
     new fn4<number, string>(3, ''); 
             ~~~~~~
 !!! Type 'number' does not satisfy the constraint 'string'.
@@ -116,11 +116,11 @@
     
     // Generic overloads with constraints called without type arguments but with types that do not satisfy the constraints
     new fn4(true, null); // Error
-    ~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+            ~~~~
+!!! Argument of type 'boolean' is not assignable to parameter of type 'number'.
     new fn4(null, true); // Error
-    ~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                  ~~~~
+!!! Argument of type 'boolean' is not assignable to parameter of type 'string'.
     
     // Non - generic overloads where contextual typing of function arguments has errors
     interface fn5 {

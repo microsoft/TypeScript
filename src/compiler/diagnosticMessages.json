@@ -772,7 +772,10 @@
         "category": "Error",
         "code": 3035
     },
-
+    "Argument of type '{0}' is not assignable to parameter of type '{1}'.": {
+        "category": "Error",
+        "code": 3036
+    },
 
 
     "Index signature is missing in type '{0}'.": {

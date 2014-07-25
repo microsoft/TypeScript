@@ -24,8 +24,8 @@
     var someGenerics1: someGenerics1;
     new someGenerics1(3, 4);
     new someGenerics1<string, number>(3, 4); // Error
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                                      ~
+!!! Argument of type 'number' is not assignable to parameter of type 'string'.
     new someGenerics1<number, {}>(3, 4);
     
     // Generic call with argument of function type whose parameter is of type parameter type
@@ -64,8 +64,8 @@
     new someGenerics4(4, () => null);
     new someGenerics4<string, number>('', () => 3);
     new someGenerics4<string, number>('', (x: string) => ''); // Error
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                                          ~~~~~~~~~~~~~~~~~
+!!! Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
     new someGenerics4<string, number>(null, null);
     
     // 2 parameter generic call with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
@@ -76,8 +76,8 @@
     new someGenerics5(4, () => null);
     new someGenerics5<number, string>('', () => 3);
     new someGenerics5<number, string>('', (x: string) => ''); // Error
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                                          ~~~~~~~~~~~~~~~~~
+!!! Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
     new someGenerics5<string, number>(null, null);
     
     // Generic call with multiple arguments of function types that each have parameters of the same generic type
@@ -88,8 +88,8 @@
     new someGenerics6(n => n, n => n, n => n);
     new someGenerics6<number>(n => n, n => n, n => n);
     new someGenerics6<number>((n: number) => n, (n: string) => n, (n: number) => n); // Error
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                                                ~~~~~~~~~~~~~~~~
+!!! Argument of type '(n: string) => string' is not assignable to parameter of type '(b: number) => number'.
     new someGenerics6<number>((n: number) => n, (n: number) => n, (n: number) => n);
     
     // Generic call with multiple arguments of function types that each have parameters of different generic type

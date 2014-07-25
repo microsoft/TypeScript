@@ -6,13 +6,13 @@
             var s: S;
             // Ok to go down the chain, but error to climb up the chain
             (new Chain(t)).then(tt => s).then(ss => t);
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                                              ~~~~~~~
+!!! Argument of type '(ss: S) => T' is not assignable to parameter of type '(x: S) => S'.
     
             // But error to try to climb up the chain
             (new Chain(s)).then(ss => t);
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                                ~~~~~~~
+!!! Argument of type '(ss: S) => T' is not assignable to parameter of type '(x: S) => S'.
     
             // Staying at T or S should be fine
             (new Chain(t)).then(tt => t).then(tt => t).then(tt => t);

@@ -13,7 +13,7 @@
     });
     
     test({ // Should be OK.  Last 'thunk' is of correct type
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         thunk: (num: number) => {},
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         thunk: (str: string) => {}
@@ -21,6 +21,10 @@
         ~~~~~
 !!! Duplicate identifier 'thunk'.
     });
-    ~~
-!!! Supplied parameters do not match any signature of call target.
+    ~
+!!! Argument of type '{ thunk: (num: number) => void; }' is not assignable to parameter of type 'Thing'.
+!!!   Types of property 'thunk' are incompatible:
+!!!     Type '(num: number) => void' is not assignable to type '(str: string) => void':
+!!!       Types of parameters 'num' and 'str' are incompatible:
+!!!         Type 'number' is not assignable to type 'string'.
     

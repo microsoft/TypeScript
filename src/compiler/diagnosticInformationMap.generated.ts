@@ -195,6 +195,7 @@ module ts {
         Specialized_overload_signature_is_not_assignable_to_any_non_specialized_signature: { code: 3033, category: DiagnosticCategory.Error, key: "Specialized overload signature is not assignable to any non-specialized signature." },
         Duplicate_function_implementation: { code: 3034, category: DiagnosticCategory.Error, key: "Duplicate function implementation." },
         Overload_signature_is_not_compatible_with_function_implementation: { code: 3035, category: DiagnosticCategory.Error, key: "Overload signature is not compatible with function implementation." },
+        Argument_of_type_0_is_not_assignable_to_parameter_of_type_1: { code: 3036, category: DiagnosticCategory.Error, key: "Argument of type '{0}' is not assignable to parameter of type '{1}'." },
         Index_signature_is_missing_in_type_0: { code: 4003, category: DiagnosticCategory.Error, key: "Index signature is missing in type '{0}'." },
         Index_signatures_are_incompatible_Colon: { code: 4004, category: DiagnosticCategory.Error, key: "Index signatures are incompatible:" },
         Class_0_defines_instance_member_accessor_1_but_extended_class_2_defines_it_as_instance_member_function: { code: 4016, category: DiagnosticCategory.NoPrefix, key: "Class '{0}' defines instance member accessor '{1}', but extended class '{2}' defines it as instance member function." },

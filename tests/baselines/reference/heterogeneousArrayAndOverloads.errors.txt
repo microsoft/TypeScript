@@ -8,7 +8,8 @@
             this.test(["hi"]);
             this.test([]);
             this.test([1, 2, "hi", 5]); // Error
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+                      ~~~~~~~~~~~~~~~
+!!! Argument of type '{}[]' is not assignable to parameter of type 'string[]'.
+!!!   Type '{}' is not assignable to type 'string'.
         }
     }

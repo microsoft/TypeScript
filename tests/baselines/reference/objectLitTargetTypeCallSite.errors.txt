@@ -4,5 +4,7 @@
     }
     
     process({a:true,b:"y"});
-    ~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+            ~~~~~~~~~~~~~~
+!!! Argument of type '{ a: boolean; b: string; }' is not assignable to parameter of type '{ a: number; b: string; }'.
+!!!   Types of property 'a' are incompatible:
+!!!     Type 'boolean' is not assignable to type 'number'.

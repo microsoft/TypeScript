@@ -33,6 +33,6 @@
 !!! Type 'X_1' is not assignable to type 'Y_1':
 !!!   Private property 'name' cannot be reimplemented.
     foo2(a2); // should error
-    ~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+         ~~
+!!! Argument of type 'Y_1' is not assignable to parameter of type 'X_1'.
     
