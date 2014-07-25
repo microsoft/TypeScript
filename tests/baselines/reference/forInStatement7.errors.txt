@@ -3,5 +3,5 @@
     var expr: any;
     for (a in expr) {
          ~
-!!! Left hand side of a 'for' statement must be of type 'string' or 'any'.
+!!! The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
     }

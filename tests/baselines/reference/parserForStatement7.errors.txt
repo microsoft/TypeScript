@@ -1,7 +1,7 @@
 ==== tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement7.ts (3 errors) ====
     for (new foo() in b) {
          ~~~~~~~~~
-!!! Left hand side of a 'for' statement must be of type 'string' or 'any'.
+!!! The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
              ~~~
 !!! Cannot find name 'foo'.
                       ~

@@ -448,11 +448,11 @@
         "category": "Error",
         "code": 2114
     },
-    "Left hand side of a 'for' statement cannot use a type annotation.": {
+    "The left-hand side of a 'for...in' statement cannot use a type annotation.": {
         "category": "Error",
         "code": 2115
     },
-    "Left hand side of a 'for' statement must be of type 'string' or 'any'.": {
+    "The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.": {
         "category": "Error",
         "code": 2116
     },
