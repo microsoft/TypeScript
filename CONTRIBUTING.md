@@ -4,7 +4,7 @@ TypeScript is currently accepting contributions in the form of bug fixes. A bug 
 ## Contributing features
 Features (things that add new or improved functionality to TypeScript) may be accepted, but will need to first be approved (marked as "Milestone == Community" by a TypeScript coordinator with the message "Approved") in the suggestion issue. Features with language design impact, or that are adequately satisfied with external tools, will not be accepted.
 
-Design changes will not be accepted at this time. If you have a design change proposal, please log a suggesion issue.
+Design changes will not be accepted at this time. If you have a design change proposal, please log a suggestion issue.
 
 ## Legal
 You will need to complete a Contributor License Agreement (CLA). Briefly, this agreement testifies that you are granting us permission to use the submitted change according to the terms of the project's license, and that the work being submitted is under appropriate copyright.
