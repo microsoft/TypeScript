@@ -12,7 +12,6 @@
 /// <reference path='indentation.ts' />
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='completionHelpers.ts' />
-/// <reference path='keywordCompletions.ts' />
 /// <reference path='compiler\bloomFilter.ts' />
 
 /// <reference path='core\references.ts' />
@@ -1194,6 +1193,7 @@ module ts {
         var documentRegistry = documentRegistry;
         var cancellationToken = new CancellationToken(host.getCancellationToken());
         var activeCompletionSession: CompletionSession;
+        var keywordCompletions = getKeywordCompletionEntries();
 
         // Check if the localized messages json is set, otherwise query the host for it
         if (!TypeScript.LocalizedDiagnosticMessages) {
@@ -1349,6 +1349,37 @@ module ts {
             };
         }
 
+        function getKeywordCompletionEntries(): CompletionEntry[] {
+            var keywords = [
+                "break",
+                "case", "catch", "class", "constructor", "continue",
+                "debugger", "declare", "default", "delete", "do",
+                "else", "enum", "export", "extends",
+                "false", "finally", "for", "function",
+                "get",
+                "if","implements", "import", "in", "instanceof", "interface",
+                "module",
+                "new", "null",
+                "private", "public",
+                "require","return",
+                "set", "static", "super", "switch",
+                "this", "throw", "true", "try", "typeof",
+                "var",
+                "while","with",
+            ];
+
+            var result = [];
+            forEach(keywords, (keyword) => {
+                result.push({
+                    name: keyword,
+                    kind: ScriptElementKind.keyword,
+                    kindModifiers: ScriptElementKindModifier.none
+                });
+            });
+
+            return result;
+        }
+
         function getCompletionsAtPosition(filename: string, position: number, isMemberCompletion: boolean) {
             function getCompletionEntriesFromSymbols(symbols: ts.Symbol[], session: CompletionSession): void {
                 ts.forEach(symbols, (symbol) => {
@@ -1485,7 +1516,7 @@ module ts {
 
             // Add keywords if this is not a member completion list
             if (!isMemberCompletion) {
-                Array.prototype.push.apply(activeCompletionSession.entries, TypeScript.Services.KeywordCompletions.getKeywordCompltions());
+                Array.prototype.push.apply(activeCompletionSession.entries, keywordCompletions);
             }
 
             return {
