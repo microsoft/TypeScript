@@ -1,10 +1,6 @@
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ParameterLists/parserErrorRecovery_ParameterList5.ts (4 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ParameterLists/parserErrorRecovery_ParameterList5.ts (2 errors) ====
     (a:number => { }
-      ~
-!!! ')' expected.
               ~~
-!!! ';' expected.
-     ~
-!!! Cannot find name 'a'.
-       ~~~~~~
-!!! Cannot find name 'number'.
+!!! ',' expected.
+                 ~
+!!! ')' expected.

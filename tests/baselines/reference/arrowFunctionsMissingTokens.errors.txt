@@ -1,0 +1,115 @@
+==== tests/cases/compiler/arrowFunctionsMissingTokens.ts (24 errors) ====
+    
+    module missingArrowsWithCurly {
+        var a = () { };
+                   ~
+!!! '=>' expected.
+    
+        var b = (): void { }
+                         ~
+!!! '=>' expected.
+    
+        var c = (x) { };
+                    ~
+!!! '=>' expected.
+    
+        var d = (x: number, y: string) { };
+                                       ~
+!!! '=>' expected.
+    
+        var e = (x: number, y: string): void { };
+                                             ~
+!!! '=>' expected.
+    }
+    
+    module missingCurliesWithArrow {
+        module withStatement {
+            var a = () => var k = 10;};
+                          ~~~
+!!! '{' expected.
+    
+            var b = (): void => var k = 10;}
+                                ~~~
+!!! '{' expected.
+    
+            var c = (x) => var k = 10;};
+                           ~~~
+!!! '{' expected.
+    
+            var d = (x: number, y: string) => var k = 10;};
+                                              ~~~
+!!! '{' expected.
+    
+            var e = (x: number, y: string): void => var k = 10;};
+                                                    ~~~
+!!! '{' expected.
+    
+            var f = () => var k = 10;}
+                          ~~~
+!!! '{' expected.
+        }
+    
+        module withoutStatement {
+            var a = () => };
+                          ~
+!!! Expression expected.
+    
+            var b = (): void => }
+                                ~
+!!! Expression expected.
+    
+            var c = (x) => };
+                           ~
+!!! Expression expected.
+    
+            var d = (x: number, y: string) => };
+                                              ~
+!!! Expression expected.
+    
+            var e = (x: number, y: string): void => };
+                                                    ~
+!!! Expression expected.
+    
+            var f = () => }
+                          ~
+!!! Expression expected.
+        }
+        ~
+!!! Declaration or statement expected.
+    }
+    ~
+!!! Declaration or statement expected.
+    
+    module ce_nEst_pas_une_arrow_function {
+        var a = ();
+                 ~
+!!! Expression expected.
+    
+        var b = (): void;
+                        ~
+!!! '=>' expected.
+    
+        var c = (x);
+                 ~
+!!! Cannot find name 'x'.
+    
+        var d = (x: number, y: string);
+                                      ~
+!!! '=>' expected.
+    
+        var e = (x: number, y: string): void;
+                                            ~
+!!! '=>' expected.
+    }
+    
+    module okay {
+        var a = () => { };
+    
+        var b = (): void => { }
+    
+        var c = (x) => { };
+    
+        var d = (x: number, y: string) => { };
+    
+        var e = (x: number, y: string): void => { };
+    }
