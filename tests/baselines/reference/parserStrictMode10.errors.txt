@@ -1,0 +1,6 @@
+==== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode10.ts (1 errors) ====
+    "use strict";
+    function f(eval) {
+               ~~~~
+!!! Invalid use of 'eval' in strict mode.
+    }

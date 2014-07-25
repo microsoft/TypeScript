@@ -5,6 +5,8 @@ module ts {
         [index: string]: T;
     }
 
+    export interface StringSet extends Map<any> { }
+
     export function forEach<T, U>(array: T[], callback: (element: T) => U): U {
         var result: U;
         if (array) {

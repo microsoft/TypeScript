@@ -367,6 +367,13 @@ task("runtests", ["tests", builtLocalDirectory], function() {
     exec(cmd, deleteTemporaryProjectOutput);
 }, {async: true});
 
+desc("Generates code coverage data via instanbul")
+task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
+	var cmd = "istanbul cover node_modules/mocha/bin/_mocha -- -R dot " + run;
+	console.log(cmd);
+	exec(cmd);	
+}, { async: true });
+
 // Browser tests
 var nodeServerOutFile = 'tests/webTestServer.js'
 var nodeServerInFile = 'tests/webTestServer.ts'

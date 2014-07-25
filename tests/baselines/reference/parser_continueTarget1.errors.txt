@@ -1,0 +1,5 @@
+==== tests/cases/conformance/parser/ecmascript5/Statements/ContinueStatements/parser_continueTarget1.ts (1 errors) ====
+    target:
+      continue target;
+      ~~~~~~~~~~~~~~~~
+!!! A 'continue' statement can only jump to a label of an enclosing iteration statement.

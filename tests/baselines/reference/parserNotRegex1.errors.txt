@@ -4,6 +4,6 @@
 !!! Cannot find name 'a'.
       {
         return true;
-        ~~~~~~~~~~~~
-!!! 'return' statement has no containing function.
+        ~~~~~~
+!!! A 'return' statement can only be used within a function body.
       }

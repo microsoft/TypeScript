@@ -2,8 +2,8 @@
     declare class foo();
                      ~
 !!! '{' expected.
-                       ~
-!!! '=>' expected.
+                      ~
+!!! Expression expected.
     function foo() {}
              ~~~
 !!! Duplicate identifier 'foo'.

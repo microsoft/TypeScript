@@ -1,2 +1,0 @@
-target:
-  continue target;

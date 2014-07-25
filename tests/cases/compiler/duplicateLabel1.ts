@@ -1,4 +1,0 @@
-target:
-target:
-while (true) {
-}

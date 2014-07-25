@@ -26,8 +26,8 @@
 !!! Cannot find name 'baz'.
     
             return this.bar; // doesn't get rewritten to Foo.bar.
-            ~~~~~~~~~~~~~~~~
-!!! 'return' statement has no containing function.
+            ~~~~~~
+!!! A 'return' statement can only be used within a function body.
     
         }
     

@@ -624,7 +624,7 @@ module Harness {
                     settingsCallback(null);
                 }
 
-                    this.settings.forEach(setting => {
+                this.settings.forEach(setting => {
                     switch (setting.flag.toLowerCase()) {
                         // "filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outDir", "noimplicitany", "noresolve"
                         case "module":
@@ -692,6 +692,7 @@ module Harness {
                         case 'declaration':
                             options.declaration = !!setting.value;
                             break;
+
                         case 'newline':
                         case 'newlines':
                             sys.newLine = setting.value;

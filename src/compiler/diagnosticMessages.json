@@ -348,23 +348,19 @@
         "category": "Error",
         "code": 1103
     },
-    "'continue' statement can only be used within an enclosing iteration statement.": {
+    "A 'continue' statement can only be used within an enclosing iteration statement.": {
         "category": "Error",
         "code": 1104
     },
-    "'break' statement can only be used within an enclosing iteration or switch statement.": {
+    "A 'break' statement can only be used within an enclosing iteration or switch statement.": {
         "category": "Error",
         "code": 1105
-    },
-    "Jump target not found.": {
-        "category": "Error",
-        "code": 1106
     },
     "Jump target cannot cross function boundary.": {
         "category": "Error",
         "code": 1107
     },
-    "'return' statement must be contained within a function body.": {
+    "A 'return' statement can only be used within a function body.": {
         "category": "Error",
         "code": 1108
     },
@@ -388,7 +384,30 @@
         "category": "Error",
         "code": 1113
     },
-
+    "Duplicate label '{0}'": {
+        "category": "Error",
+        "code": 1114
+    },
+    "A 'continue' statement can only jump to a label of an enclosing iteration statement.": {
+        "category": "Error",
+        "code": 1115
+    },
+    "A 'break' statement can only jump to a label of an enclosing statement.": {
+        "category": "Error",
+        "code": 1116
+    },
+    "An object literal cannot have multiple properties with the same name in strict mode.": {
+        "category": "Error",
+        "code": 1117
+    },
+    "An object literal cannot have multiple get/set accessors with the same name.": {
+        "category": "Error",
+        "code": 1118
+    },
+    "An object literal cannot have property and accessor with the same name.": {
+        "category": "Error",
+        "code": 1119
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2000
@@ -1095,10 +1114,6 @@
         "code": -9999999
     },
     "Function implementation expected.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "'return' statement has no containing function.": {
         "category": "Error",
         "code": -9999999
     },

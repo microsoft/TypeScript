@@ -215,7 +215,9 @@ module ts {
         FirstReservedWord = BreakKeyword,
         LastReservedWord = WithKeyword,
         FirstKeyword = BreakKeyword,
-        LastKeyword = StringKeyword
+        LastKeyword = StringKeyword,
+        FirstFutureReservedWord = ImplementsKeyword,
+        LastFutureReservedWord = YieldKeyword
     }
 
     export enum NodeFlags {
@@ -402,29 +404,29 @@ module ts {
         elseStatement?: Statement;
     }
 
-    export interface DoStatement extends Statement {
+    export interface IterationStatement extends Statement {
         statement: Statement;
+    }
+
+    export interface DoStatement extends IterationStatement {
         expression: Expression;
     }
 
-    export interface WhileStatement extends Statement {
-        statement: Statement;
+    export interface WhileStatement extends IterationStatement {
         expression: Expression;
     }
 
-    export interface ForStatement extends Statement {
+    export interface ForStatement extends IterationStatement {
         declarations?: NodeArray<VariableDeclaration>;
         initializer?: Expression;
         condition?: Expression;
         iterator?: Expression;
-        statement: Statement;
     }
 
-    export interface ForInStatement extends Statement {
+    export interface ForInStatement extends IterationStatement {
         declaration?: VariableDeclaration;
         variable?: Expression;
         expression: Expression;
-        statement: Statement;
     }
 
     export interface BreakOrContinueStatement extends Statement {

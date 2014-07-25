@@ -55,6 +55,10 @@ module ts {
         return skipTrivia(getSourceFileOfNode(node).text, node.pos);
     }
 
+    export function getSourceTextOfNodeFromSourceText(sourceText: string, node: Node): string {
+        return sourceText.substring(skipTrivia(sourceText, node.pos), node.end);
+    }
+
     export function getSourceTextOfNode(node: Node): string {
         var text = getSourceFileOfNode(node).text;
         return text.substring(skipTrivia(text, node.pos), node.end);
@@ -117,6 +121,22 @@ module ts {
 
     export function isExternalModule(file: SourceFile): boolean {
         return file.externalModuleIndicator !== undefined;
+    }
+
+    export function isPrologueDirective(node: Node): boolean {
+        return node.kind === SyntaxKind.ExpressionStatement && (<ExpressionStatement>node).expression.kind === SyntaxKind.StringLiteral;
+    }
+
+    function isEvalOrArgumentsIdentifier(node: Node): boolean {
+        return node.kind === SyntaxKind.Identifier &&
+            (<Identifier>node).text &&
+            ((<Identifier>node).text === "eval" || (<Identifier>node).text === "arguments")
+    }
+
+    /// Should be called only on prologue directives (isPrologueDirective(node) should be true)
+    function isUseStrictPrologueDirective(node: Node): boolean {
+        Debug.assert(isPrologueDirective(node));
+        return (<Identifier>(<ExpressionStatement>node).expression).text === "use strict";
     }
 
     // Invokes a callback for each child of the given node. The 'cbNode' callback is invoked for all child nodes
@@ -373,6 +393,22 @@ module ts {
         Preserve
     }
 
+    // Tracks whether we nested (directly or indirectly) in a certain control block.
+    // Used for validating break and continue statements.
+    enum ControlBlockContext {
+        NotNested,
+        Nested,
+        CrossingFunctionBoundary
+    }
+
+    interface LabelledStatementInfo {
+        addLabel(label: Identifier): void;
+        pushCurrentLabelSet(isIterationStatement: boolean): void;
+        pushFunctionBoundary(): void;
+        pop(): void;
+        nodeIsNestedInLabel(label: Identifier, requireIterationStatement: boolean, stopAtFunctionBoundary: boolean): ControlBlockContext;
+    }
+
     export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget): SourceFile {
         var file: SourceFile;
         var scanner: Scanner;
@@ -383,9 +419,117 @@ module ts {
         var identifierCount = 0;
         var nodeCount = 0;
         var lineStarts: number[];
+        var isInStrictMode = false;
 
         var lookAheadMode = LookAheadMode.NotLookingAhead;
         var inAmbientContext = false;
+        var inFunctionBody = false;
+        var inSwitchStatement = ControlBlockContext.NotNested;
+        var inIterationStatement = ControlBlockContext.NotNested;
+
+        // The following is a state machine that tracks what labels are in our current parsing
+        // context. So if we are parsing a node that is nested (arbitrarily deeply) in a label,
+        // it will be tracked in this data structure. It is used for checking break/continue
+        // statements, and checking for duplicate labels.
+        var labelledStatementInfo: LabelledStatementInfo = (() => {
+            // These are initialized on demand because labels are rare, so it is usually
+            // not even necessary to allocate these.
+            var functionBoundarySentinel: StringSet;
+            var currentLabelSet: StringSet;
+            var labelSetStack: StringSet[];
+            var isIterationStack: boolean[];
+
+            function addLabel(label: Identifier): void {
+                if (!currentLabelSet) {
+                    currentLabelSet = {};
+                }
+                currentLabelSet[label.text] = true;
+            }
+
+            function pushCurrentLabelSet(isIterationStatement: boolean): void {
+                if (!labelSetStack && !isIterationStack) {
+                    labelSetStack = [];
+                    isIterationStack = [];
+                }
+                Debug.assert(currentLabelSet !== undefined);
+                labelSetStack.push(currentLabelSet);
+                isIterationStack.push(isIterationStatement);
+                currentLabelSet = undefined;
+            }
+
+            function pushFunctionBoundary(): void {
+                if (!functionBoundarySentinel) {
+                    functionBoundarySentinel = {};
+                    if (!labelSetStack && !isIterationStack) {
+                        labelSetStack = [];
+                        isIterationStack = [];
+                    }
+                }
+                Debug.assert(currentLabelSet === undefined);
+                labelSetStack.push(functionBoundarySentinel);
+
+                // It does not matter what we push here, since we will never ask if a function boundary
+                // is an iteration statement
+                isIterationStack.push(false);
+            }
+
+            function pop(): void {
+                // Assert that we are in a "pushed" state
+                Debug.assert(labelSetStack.length && isIterationStack.length && currentLabelSet === undefined);
+                labelSetStack.pop();
+                isIterationStack.pop();
+            }
+
+            function nodeIsNestedInLabel(label: Identifier, requireIterationStatement: boolean, stopAtFunctionBoundary: boolean): ControlBlockContext {
+                if (!requireIterationStatement && currentLabelSet && hasProperty(currentLabelSet, label.text)) {
+                    return ControlBlockContext.Nested;
+                }
+
+                if (!labelSetStack) {
+                    return ControlBlockContext.NotNested;
+                }
+
+                // We want to start searching for the label at the lowest point in the tree,
+                // and climb up from there. So we start at the end of the labelSetStack array.
+                var crossedFunctionBoundary = false;
+                for (var i = labelSetStack.length - 1; i >= 0; i--) {
+                    var labelSet = labelSetStack[i];
+                    // Not allowed to cross function boundaries, so stop if we encounter one
+                    if (labelSet === functionBoundarySentinel) {
+                        if (stopAtFunctionBoundary) {
+                            break;
+                        }
+                        else {
+                            crossedFunctionBoundary = true;
+                            continue;
+                        }
+                    }
+                    
+                    // If we require an iteration statement, only search in the current
+                    // statement if it is an iteration statement
+                    if (requireIterationStatement && isIterationStack[i] === false) {
+                        continue;
+                    }
+
+                    if (hasProperty(labelSet, label.text)) {
+                        return crossedFunctionBoundary ? ControlBlockContext.CrossingFunctionBoundary : ControlBlockContext.Nested;
+                    }
+                }
+
+                // This is a bit of a misnomer. If the caller passed true for stopAtFunctionBoundary,
+                // there actually may be an enclosing label across a function boundary, but we will
+                // just return NotNested
+                return ControlBlockContext.NotNested;
+            }
+
+            return {
+                addLabel: addLabel,
+                pushCurrentLabelSet: pushCurrentLabelSet,
+                pushFunctionBoundary: pushFunctionBoundary,
+                pop: pop,
+                nodeIsNestedInLabel: nodeIsNestedInLabel,
+            };
+        })();
 
         function getLineAndCharacterlFromSourcePosition(position: number) {
             if (!lineStarts) {
@@ -417,6 +561,13 @@ module ts {
 
             file.syntacticErrors.push(createFileDiagnostic(file, start, length, message, arg0, arg1, arg2));
         }
+
+        function reportInvalidUseInStrictMode(node: Identifier): void {
+            // identifierToString cannot be used here since it uses backreference to 'parent' that is not yet set
+            var name = sourceText.substring(skipTrivia(sourceText, node.pos), node.end);
+            grammarErrorOnNode(node, Diagnostics.Invalid_use_of_0_in_strict_mode, name);
+        }
+
 
         function grammarErrorAtPos(start: number, length: number, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
             file.syntacticErrors.push(createFileDiagnostic(file, start, length, message, arg0, arg1, arg2));
@@ -522,7 +673,7 @@ module ts {
         }
 
         function isIdentifier(): boolean {
-            return token === SyntaxKind.Identifier || token > SyntaxKind.LastReservedWord;
+            return token === SyntaxKind.Identifier || (isInStrictMode ? token > SyntaxKind.LastFutureReservedWord : token > SyntaxKind.LastReservedWord);
         }
 
         function isSemicolon(): boolean {
@@ -767,14 +918,28 @@ module ts {
         }
 
         // Parses a list of elements
-        function parseList<T extends Node>(kind: ParsingContext, parseElement: () => T): NodeArray<T> {
+        function parseList<T extends Node>(kind: ParsingContext, checkForStrictMode: boolean, parseElement: () => T): NodeArray<T> {
             var saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
             var result = <NodeArray<T>>[];
             result.pos = getNodePos();
+            var saveIsInStrictMode = isInStrictMode;
             while (!isListTerminator(kind)) {
                 if (isListElement(kind, /* inErrorRecovery */ false)) {
-                    result.push(parseElement());
+                    var element = parseElement();
+                    result.push(element);
+                    // test elements only if we are not already in strict mode
+                    if (!isInStrictMode && checkForStrictMode) {
+                        if (isPrologueDirective(element)) {
+                            if (isUseStrictPrologueDirective(element)) {
+                                isInStrictMode = true;
+                                checkForStrictMode = false;
+                            }
+                        }
+                        else {
+                            checkForStrictMode = false;
+                        }
+                    }
                 }
                 else {
                     error(parsingContextErrors(kind));
@@ -784,6 +949,7 @@ module ts {
                     nextToken();
                 }
             }
+            isInStrictMode = saveIsInStrictMode;
             result.end = getNodeEnd();
             parsingContext = saveParsingContext;
             return result;
@@ -969,6 +1135,18 @@ module ts {
                 node.flags |= NodeFlags.Rest;
             }
             node.name = parseIdentifier();
+            if (node.name.kind === SyntaxKind.Missing && node.flags === 0 && isModifier(token)) {
+                // in cases like
+                // 'use strict' 
+                // function foo(static)
+                // isParameter('static') === true, because of isModifier('static')
+                // however 'static' is not a legal identifier in a strict mode.
+                // so result of this function will be ParameterDeclaration (flags = 0, name = missing, type = undefined, initializer = undefined)
+                // and current token will not change => parsing of the enclosing parameter list will last till the end of time (or OOM)
+                // to avoid this we'll advance cursor to the next token.
+                nextToken();
+            }
+
             if (parseOptional(SyntaxKind.QuestionToken)) {
                 node.flags |= NodeFlags.QuestionMark;
             }
@@ -1013,8 +1191,16 @@ module ts {
 
             for (var i = 0; i < parameterCount; i++) {
                 var parameter = parameters[i];
-
-                if (parameter.flags & NodeFlags.Rest) {
+                // It is a SyntaxError if the Identifier "eval" or the Identifier "arguments" occurs as the 
+                // Identifier in a PropertySetParameterList of a PropertyAssignment that is contained in strict code 
+                // or if its FunctionBody is strict code(11.1.5).
+                // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a 
+                // strict mode FunctionDeclaration or FunctionExpression(13.1) 
+                if (isInStrictMode && isEvalOrArgumentsIdentifier(parameter.name)) {
+                    reportInvalidUseInStrictMode(parameter.name);
+                    return;
+                }
+                else if (parameter.flags & NodeFlags.Rest) {
                     if (i !== (parameterCount - 1)) {
                         grammarErrorOnNode(parameter.name, Diagnostics.A_rest_parameter_must_be_last_in_a_parameter_list);
                         return;
@@ -1171,7 +1357,7 @@ module ts {
         function parseTypeLiteral(): TypeLiteralNode {
             var node = <TypeLiteralNode>createNode(SyntaxKind.TypeLiteral);
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
-                node.members = parseList(ParsingContext.TypeMembers, parseTypeMember);
+                node.members = parseList(ParsingContext.TypeMembers, /*checkForStrictMode*/ false, parseTypeMember);
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
@@ -1359,8 +1545,13 @@ module ts {
 
             // Now see if we might be in cases '2' or '3'.
             // If the expression was a LHS expression, and we  have an assignment operator, then 
-            // we're in '2' or '3'.  Consume the assignement and return.
+            // we're in '2' or '3'.  Consume the assignment and return.
             if (isLeftHandSideExpression(expr) && isAssignmentOperator()) {
+                if (isInStrictMode && isEvalOrArgumentsIdentifier(expr)) {
+                    // ECMA 262 (Annex C) The identifier eval or arguments may not appear as the LeftHandSideExpression of an 
+                    // Assignment operator(11.13) or of a PostfixExpression(11.3)
+                    reportInvalidUseInStrictMode(<Identifier>expr);
+                }
                 var operator = token;
                 nextToken();
                 return makeBinaryExpression(expr, operator, parseAssignmentExpression(noIn));
@@ -1446,62 +1637,85 @@ module ts {
         function tryParseParenthesizedArrowFunctionExpression(): Expression {
             var pos = getNodePos();
 
+            // Indicates whether we are certain that we should parse an arrow expression.
             var triState = isParenthesizedArrowFunctionExpression();
 
-            // It is not a parenthesized arrow function.
             if (triState === Tristate.False) {
                 return undefined;
             }
 
-            // If we're certain that we have an arrow function expression, then just parse one out.
             if (triState === Tristate.True) {
                 var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken);
 
                 // If we have an arrow, then try to parse the body.
-                if (parseExpected(SyntaxKind.EqualsGreaterThanToken)) {
-                    return parseArrowExpressionTail(pos, sig, /*noIn:*/ false);
+                // Even if not, try to parse if we have an opening brace, just in case we're in an error state.
+                if (parseExpected(SyntaxKind.EqualsGreaterThanToken) || token === SyntaxKind.OpenBraceToken) {
+                    return parseArrowExpressionTail(pos, sig, /* noIn: */ false);
                 }
-                // If not, we're probably better off bailing out and returning a bogus function expression.
                 else {
+                    // If not, we're probably better off bailing out and returning a bogus function expression.
                     return makeFunctionExpression(SyntaxKind.ArrowFunction, pos, /* name */ undefined, sig, createMissingNode());
                 }
             }
             
-            // Otherwise, *maybe* we had an arrow function and we need to *try* to parse it out
-            // (which will ensure we rollback if we fail).
-            var sig = tryParse(parseSignatureAndArrow);
-            if (sig === undefined) {
-                return undefined;
+            // *Maybe* we had an arrow function and we need to try to parse it out,
+            // rolling back and trying other parses if we fail.
+            var sig = tryParseSignatureIfArrowOrBraceFollows();
+            if (sig) {
+                parseExpected(SyntaxKind.EqualsGreaterThanToken);
+                return parseArrowExpressionTail(pos, sig, /*noIn:*/ false);
             }
             else {
-                return parseArrowExpressionTail(pos, sig, /*noIn:*/ false);
+                return undefined;
             }
         }
 
-        //  True        -> There is definitely a parenthesized arrow function here. 
-        //  False       -> There is definitely *not* a parenthesized arrow function here.
+        //  True        -> We definitely expect a parenthesized arrow function here.
+        //  False       -> There *cannot* be a parenthesized arrow function here.
         //  Unknown     -> There *might* be a parenthesized arrow function here.
-        //                  Speculatively look ahead to be sure.
+        //                 Speculatively look ahead to be sure, and rollback if not.
         function isParenthesizedArrowFunctionExpression(): Tristate {
             if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
                 return lookAhead(() => {
                     var first = token;
-                    nextToken();
+                    var second = nextToken();
+
                     if (first === SyntaxKind.OpenParenToken) {
-                        if (token === SyntaxKind.CloseParenToken || token === SyntaxKind.DotDotDotToken) {
-                            // Simple cases.  if we see ()   or   (...   then presume that presume 
-                            // that this must be an arrow function.  Note, this may be too aggressive
-                            // for the "()" case.  It's not uncommon for this to appear while editing 
-                            // code.  We should look to see if there's actually a => before proceeding.
+                        if (second === SyntaxKind.CloseParenToken) {
+                            // Simple cases: "() =>", "(): ", and  "() {".
+                            // This is an arrow function with no parameters.
+                            // The last one is not actually an arrow function,
+                            // but this is probably what the user intended.
+                            var third = nextToken();
+                            switch (third) {
+                                case SyntaxKind.EqualsGreaterThanToken:
+                                case SyntaxKind.ColonToken:
+                                case SyntaxKind.OpenBraceToken:
+                                    return Tristate.True;
+                                default:
+                                    return Tristate.False;
+                            }
+                        }
+
+                        // Simple case: "(..."
+                        // This is an arrow function with a rest parameter.
+                        if (second === SyntaxKind.DotDotDotToken) {
                             return Tristate.True;
                         }
 
+                        // If we had "(" followed by something that's not an identifier,
+                        // then this definitely doesn't look like a lambda.
+                        // Note: we could be a little more lenient and allow
+                        // "(public" or "(private". These would not ever actually be allowed,
+                        // but we could provide a good error message instead of bailing out.
                         if (!isIdentifier()) {
-                            // We had "(" not followed by an identifier.  This definitely doesn't 
-                            // look like a lambda.  Note: we could be a little more lenient and allow
-                            // (public   or  (private.  These would not ever actually be allowed,
-                            // but we could provide a good error message instead of bailing out.
                             return Tristate.False;
+                        }
+
+                        // If we have something like "(a:", then we must have a
+                        // type-annotated parameter in an arrow function expression.
+                        if (nextToken() === SyntaxKind.ColonToken) {
+                            return Tristate.True;
                         }
 
                         // This *could* be a parenthesized arrow function.
@@ -1527,10 +1741,24 @@ module ts {
             return Tristate.False;
         }
 
-        function parseSignatureAndArrow(): ParsedSignature {
-            var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken);
-            parseExpected(SyntaxKind.EqualsGreaterThanToken);
-            return sig;
+        function tryParseSignatureIfArrowOrBraceFollows(): ParsedSignature {
+            return tryParse(() => {
+                var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken);
+
+                // Parsing a signature isn't enough.
+                // Parenthesized arrow signatures often look like other valid expressions.
+                // For instance:
+                //  - "(x = 10)" is an assignment expression parsed as a signature with a default parameter value.
+                //  - "(x,y)" is a comma expression parsed as a signature with two parameters.
+                //  - "a ? (b): c" will have "(b):" parsed as a signature with a return type annotation.
+                //
+                // So we need just a bit of lookahead to ensure that it can only be a signature.
+                if (token === SyntaxKind.EqualsGreaterThanToken || token === SyntaxKind.OpenBraceToken) {
+                    return sig;
+                }
+
+                return undefined;
+            });
         }
 
         function parseArrowExpressionTail(pos: number, sig: ParsedSignature, noIn: boolean): FunctionExpression {
@@ -1660,6 +1888,19 @@ module ts {
                     var operator = token;
                     nextToken();
                     var operand = parseUnaryExpression();
+                    if (isInStrictMode) {
+                        // The identifier eval or arguments may not appear as the LeftHandSideExpression of an 
+                        // Assignment operator(11.13) or of a PostfixExpression(11.3) or as the UnaryExpression 
+                        // operated upon by a Prefix Increment(11.4.4) or a Prefix Decrement(11.4.5) operator
+                        if ((token === SyntaxKind.PlusPlusToken || token === SyntaxKind.MinusMinusToken) && isEvalOrArgumentsIdentifier(operand)) {
+                            reportInvalidUseInStrictMode(<Identifier>operand);
+                        }
+                        else if (token === SyntaxKind.DeleteKeyword && operand.kind === SyntaxKind.Identifier) {
+                            // When a delete operator occurs within strict mode code, a SyntaxError is thrown if its 
+                            // UnaryExpression is a direct reference to a variable, function argument, or function name
+                            grammarErrorOnNode(operand, Diagnostics.delete_cannot_be_called_on_an_identifier_in_strict_mode);
+                        }
+                    }
                     return makeUnaryExpression(SyntaxKind.PrefixOperator, pos, operator, operand);
                 case SyntaxKind.LessThanToken:
                     return parseTypeAssertion();
@@ -1681,6 +1922,12 @@ module ts {
 
             Debug.assert(isLeftHandSideExpression(expr));
             if ((token === SyntaxKind.PlusPlusToken || token === SyntaxKind.MinusMinusToken) && !scanner.hasPrecedingLineBreak()) {
+                // The identifier eval or arguments may not appear as the LeftHandSideExpression of an 
+                // Assignment operator(11.13) or of a PostfixExpression(11.3) or as the UnaryExpression 
+                // operated upon by a Prefix Increment(11.4.4) or a Prefix Decrement(11.4.5) operator. 
+                if (isInStrictMode && isEvalOrArgumentsIdentifier(expr)) {
+                    reportInvalidUseInStrictMode(<Identifier>expr);
+                }
                 var operator = token;
                 nextToken();
                 expr = makeUnaryExpression(SyntaxKind.PostfixOperator, expr.pos, operator, expr);
@@ -1867,6 +2114,61 @@ module ts {
             if (scanner.hasPrecedingLineBreak()) node.flags |= NodeFlags.MultiLine;
             node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralMember, TrailingCommaBehavior.Preserve);
             parseExpected(SyntaxKind.CloseBraceToken);
+
+            var seen: Map<SymbolFlags> = {};
+            var Property    = 1;
+            var GetAccessor = 2;
+            var SetAccesor = 4;
+            var GetOrSetAccessor = GetAccessor | SetAccesor;
+            forEach(node.properties, (p: Declaration) => {
+                if (p.kind === SyntaxKind.OmittedExpression) {
+                    return;
+                }
+                // ECMA-262 11.1.5 Object Initialiser 
+                // If previous is not undefined then throw a SyntaxError exception if any of the following conditions are true
+                // a.This production is contained in strict code and IsDataDescriptor(previous) is true and 
+                // IsDataDescriptor(propId.descriptor) is true.
+                //    b.IsDataDescriptor(previous) is true and IsAccessorDescriptor(propId.descriptor) is true.
+                //    c.IsAccessorDescriptor(previous) is true and IsDataDescriptor(propId.descriptor) is true.
+                //    d.IsAccessorDescriptor(previous) is true and IsAccessorDescriptor(propId.descriptor) is true 
+                // and either both previous and propId.descriptor have[[Get]] fields or both previous and propId.descriptor have[[Set]] fields 
+                var currentKind: number;
+                if (p.kind === SyntaxKind.PropertyAssignment) {
+                    currentKind = Property;
+                }
+                else if (p.kind === SyntaxKind.GetAccessor) {
+                    currentKind = GetAccessor;
+                }
+                else if (p.kind === SyntaxKind.SetAccessor) {
+                    currentKind = SetAccesor;
+                }
+                else {
+                    Debug.fail("Unexpected syntax kind:" + SyntaxKind[p.kind]);
+                }
+
+                if (!hasProperty(seen, p.name.text)) {
+                    seen[p.name.text] = currentKind;
+                }
+                else {
+                    var existingKind = seen[p.name.text];
+                    if (currentKind === Property && existingKind === Property) {
+                        if (isInStrictMode) {
+                            grammarErrorOnNode(p.name, Diagnostics.An_object_literal_cannot_have_multiple_properties_with_the_same_name_in_strict_mode);
+                        }
+                    }
+                    else if ((currentKind & GetOrSetAccessor) && (existingKind & GetOrSetAccessor)) {
+                        if (existingKind !== GetOrSetAccessor && currentKind !== existingKind) {
+                            seen[p.name.text] = currentKind | existingKind;
+                        }
+                        else {
+                            grammarErrorOnNode(p.name, Diagnostics.An_object_literal_cannot_have_multiple_get_Slashset_accessors_with_the_same_name);
+                        }
+                    }
+                    else {
+                        grammarErrorOnNode(p.name, Diagnostics.An_object_literal_cannot_have_property_and_accessor_with_the_same_name);
+                    }
+                }
+            });
             return finishNode(node);
         }
 
@@ -1876,6 +2178,11 @@ module ts {
             var name = isIdentifier() ? parseIdentifier() : undefined;
             var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken);
             var body = parseBody(/* ignoreMissingOpenBrace */ false);
+            if (name && isInStrictMode && isEvalOrArgumentsIdentifier(name)) {
+                // It is a SyntaxError to use within strict mode code the identifiers eval or arguments as the 
+                // Identifier of a FunctionDeclaration or FunctionExpression or as a formal parameter name(13.1)
+                reportInvalidUseInStrictMode(name);
+            }
             return makeFunctionExpression(SyntaxKind.FunctionExpression, pos, name, sig, body);
         }
 
@@ -1902,10 +2209,10 @@ module ts {
 
         // STATEMENTS
 
-        function parseBlock(ignoreMissingOpenBrace: boolean): Block {
+        function parseBlock(ignoreMissingOpenBrace: boolean, checkForStrictMode: boolean): Block {
             var node = <Block>createNode(SyntaxKind.Block);
             if (parseExpected(SyntaxKind.OpenBraceToken) || ignoreMissingOpenBrace) {
-                node.statements = parseList(ParsingContext.BlockStatements, parseStatement);
+                node.statements = parseList(ParsingContext.BlockStatements,checkForStrictMode, parseStatement);
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
@@ -1915,8 +2222,27 @@ module ts {
         }
 
         function parseBody(ignoreMissingOpenBrace: boolean): Block {
-            var block = parseBlock(ignoreMissingOpenBrace);
+            var saveInFunctionBody = inFunctionBody;
+            var saveInSwitchStatement = inSwitchStatement;
+            var saveInIterationStatement = inIterationStatement;
+
+            inFunctionBody = true;
+            if (inSwitchStatement === ControlBlockContext.Nested) {
+                inSwitchStatement = ControlBlockContext.CrossingFunctionBoundary;
+            }
+            if (inIterationStatement === ControlBlockContext.Nested) {
+                inIterationStatement = ControlBlockContext.CrossingFunctionBoundary;
+            }
+            labelledStatementInfo.pushFunctionBoundary();
+
+            var block = parseBlock(ignoreMissingOpenBrace, /*checkForStrictMode*/ true);
             block.kind = SyntaxKind.FunctionBlock;
+
+            labelledStatementInfo.pop();
+            inFunctionBody = saveInFunctionBody;
+            inSwitchStatement = saveInSwitchStatement;
+            inIterationStatement = saveInIterationStatement;
+
             return block;
         }
 
@@ -1940,7 +2266,12 @@ module ts {
         function parseDoStatement(): DoStatement {
             var node = <DoStatement>createNode(SyntaxKind.DoStatement);
             parseExpected(SyntaxKind.DoKeyword);
+
+            var saveInIterationStatement = inIterationStatement;
+            inIterationStatement = ControlBlockContext.Nested;
             node.statement = parseStatement();
+            inIterationStatement = saveInIterationStatement;
+
             parseExpected(SyntaxKind.WhileKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
             node.expression = parseExpression();
@@ -1960,7 +2291,12 @@ module ts {
             parseExpected(SyntaxKind.OpenParenToken);
             node.expression = parseExpression();
             parseExpected(SyntaxKind.CloseParenToken);
+
+            var saveInIterationStatement = inIterationStatement;
+            inIterationStatement = ControlBlockContext.Nested;
             node.statement = parseStatement();
+            inIterationStatement = saveInIterationStatement;
+
             return finishNode(node);
         }
 
@@ -1979,64 +2315,161 @@ module ts {
                     var varOrInit = parseExpression(true);
                 }
             }
+            var forOrForInStatement: IterationStatement;
             if (parseOptional(SyntaxKind.InKeyword)) {
-                var forInStat = <ForInStatement>createNode(SyntaxKind.ForInStatement, pos);
+                var forInStatement = <ForInStatement>createNode(SyntaxKind.ForInStatement, pos);
                 if (declarations) {
                     if (declarations.length > 1) {
                         error(Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement);
                     }
-                    forInStat.declaration = declarations[0];
+                    forInStatement.declaration = declarations[0];
                 }
                 else {
-                    forInStat.variable = varOrInit;
+                    forInStatement.variable = varOrInit;
                 }
-                forInStat.expression = parseExpression();
+                forInStatement.expression = parseExpression();
                 parseExpected(SyntaxKind.CloseParenToken);
-                forInStat.statement = parseStatement();
-                return finishNode(forInStat);
+                forOrForInStatement = forInStatement;
             }
             else {
-                var forStat = <ForStatement>createNode(SyntaxKind.ForStatement, pos);
-                if (declarations) forStat.declarations = declarations;
-                if (varOrInit) forStat.initializer = varOrInit;
+                var forStatement = <ForStatement>createNode(SyntaxKind.ForStatement, pos);
+                if (declarations) forStatement.declarations = declarations;
+                if (varOrInit) forStatement.initializer = varOrInit;
                 parseExpected(SyntaxKind.SemicolonToken);
                 if (token !== SyntaxKind.SemicolonToken && token !== SyntaxKind.CloseParenToken) {
-                    forStat.condition = parseExpression();
+                    forStatement.condition = parseExpression();
                 }
                 parseExpected(SyntaxKind.SemicolonToken);
                 if (token !== SyntaxKind.CloseParenToken) {
-                    forStat.iterator = parseExpression();
+                    forStatement.iterator = parseExpression();
                 }
                 parseExpected(SyntaxKind.CloseParenToken);
-                forStat.statement = parseStatement();
-                return finishNode(forStat);
+                forOrForInStatement = forStatement;
             }
+
+            var saveInIterationStatement = inIterationStatement;
+            inIterationStatement = ControlBlockContext.Nested;
+            forOrForInStatement.statement = parseStatement();
+            inIterationStatement = saveInIterationStatement;
+
+            return finishNode(forOrForInStatement);
         }
 
         function parseBreakOrContinueStatement(kind: SyntaxKind): BreakOrContinueStatement {
             var node = <BreakOrContinueStatement>createNode(kind);
+            var errorCountBeforeStatement = file.syntacticErrors.length;
+            var keywordStart = scanner.getTokenPos();
+            var keywordLength = scanner.getTextPos() - keywordStart;
             parseExpected(kind === SyntaxKind.BreakStatement ? SyntaxKind.BreakKeyword : SyntaxKind.ContinueKeyword);
             if (!isSemicolon()) node.label = parseIdentifier();
             parseSemicolon();
-            return finishNode(node);
+            finishNode(node);
+
+            // In an ambient context, we will already give an error for having a statement.
+            if (!inAmbientContext && errorCountBeforeStatement === file.syntacticErrors.length) {
+                if (node.label) {
+                    checkBreakOrContinueStatementWithLabel(node);
+                }
+                else {
+                    checkBareBreakOrContinueStatement(node);
+                }
+            }
+            return node;
+        }
+
+        function checkBareBreakOrContinueStatement(node: BreakOrContinueStatement): void {
+            if (node.kind === SyntaxKind.BreakStatement) {
+                if (inIterationStatement === ControlBlockContext.Nested
+                    || inSwitchStatement === ControlBlockContext.Nested) {
+                    return;
+                }
+                else if (inIterationStatement === ControlBlockContext.NotNested
+                    && inSwitchStatement === ControlBlockContext.NotNested) {
+                    grammarErrorOnNode(node, Diagnostics.A_break_statement_can_only_be_used_within_an_enclosing_iteration_or_switch_statement);
+                    return;
+                }
+                // Fall through
+            }
+            else if (node.kind === SyntaxKind.ContinueStatement) {
+                if (inIterationStatement === ControlBlockContext.Nested) {
+                    return;
+                }
+                else if (inIterationStatement === ControlBlockContext.NotNested) {
+                    grammarErrorOnNode(node, Diagnostics.A_continue_statement_can_only_be_used_within_an_enclosing_iteration_statement);
+                    return;
+                }
+                // Fall through
+            }
+            else {
+                Debug.fail("checkAnonymousBreakOrContinueStatement");
+            }
+
+            Debug.assert(inIterationStatement === ControlBlockContext.CrossingFunctionBoundary
+                || inSwitchStatement === ControlBlockContext.CrossingFunctionBoundary);
+            grammarErrorOnNode(node, Diagnostics.Jump_target_cannot_cross_function_boundary);
+        }
+
+        function checkBreakOrContinueStatementWithLabel(node: BreakOrContinueStatement): void {
+            // For error specificity, if the label is not found, we want to distinguish whether it is because
+            // it crossed a function boundary or it was simply not found. To do this, we pass false for
+            // stopAtFunctionBoundary.
+            var nodeIsNestedInLabel = labelledStatementInfo.nodeIsNestedInLabel(node.label,
+                /*requireIterationStatement*/ node.kind === SyntaxKind.ContinueStatement,
+                /*stopAtFunctionBoundary*/ false);
+            if (nodeIsNestedInLabel === ControlBlockContext.Nested) {
+                return;
+            }
+
+            if (nodeIsNestedInLabel === ControlBlockContext.CrossingFunctionBoundary) {
+                grammarErrorOnNode(node, Diagnostics.Jump_target_cannot_cross_function_boundary);
+                return;
+            }
+
+            // It is NotNested
+            if (node.kind === SyntaxKind.ContinueStatement) {
+                grammarErrorOnNode(node, Diagnostics.A_continue_statement_can_only_jump_to_a_label_of_an_enclosing_iteration_statement);
+            }
+            else if (node.kind === SyntaxKind.BreakStatement) {
+                grammarErrorOnNode(node, Diagnostics.A_break_statement_can_only_jump_to_a_label_of_an_enclosing_statement);
+            }
+            else {
+                Debug.fail("checkBreakOrContinueStatementWithLabel");
+            }
         }
 
         function parseReturnStatement(): ReturnStatement {
             var node = <ReturnStatement>createNode(SyntaxKind.ReturnStatement);
+            var errorCountBeforeReturnStatement = file.syntacticErrors.length;
+            var returnTokenStart = scanner.getTokenPos();
+            var returnTokenLength = scanner.getTextPos() - returnTokenStart;
+
             parseExpected(SyntaxKind.ReturnKeyword);
             if (!isSemicolon()) node.expression = parseExpression();
             parseSemicolon();
+
+            // In an ambient context, we will already give an error for having a statement.
+            if (!inFunctionBody && !inAmbientContext && errorCountBeforeReturnStatement === file.syntacticErrors.length) {
+                grammarErrorAtPos(returnTokenStart, returnTokenLength, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
+            }
             return finishNode(node);
         }
 
         function parseWithStatement(): WithStatement {
             var node = <WithStatement>createNode(SyntaxKind.WithStatement);
+            var startPos = scanner.getTokenPos();
             parseExpected(SyntaxKind.WithKeyword);
+            var endPos = scanner.getStartPos();
             parseExpected(SyntaxKind.OpenParenToken);
             node.expression = parseExpression();
             parseExpected(SyntaxKind.CloseParenToken);
             node.statement = parseStatement();
-            return finishNode(node);
+            node = finishNode(node);
+            if (isInStrictMode) {
+                // Strict mode code may not include a WithStatement. The occurrence of a WithStatement in such 
+                // a context is an 
+                grammarErrorAtPos(startPos, endPos - startPos, Diagnostics.with_statements_are_not_allowed_in_strict_mode) 
+            }
+            return node;
         }
 
         function parseCaseClause(): CaseOrDefaultClause {
@@ -2044,7 +2477,7 @@ module ts {
             parseExpected(SyntaxKind.CaseKeyword);
             node.expression = parseExpression();
             parseExpected(SyntaxKind.ColonToken);
-            node.statements = parseList(ParsingContext.SwitchClauseStatements, parseStatement);
+            node.statements = parseList(ParsingContext.SwitchClauseStatements, /*checkForStrictMode*/ false, parseStatement);
             return finishNode(node);
         }
 
@@ -2052,7 +2485,7 @@ module ts {
             var node = <CaseOrDefaultClause>createNode(SyntaxKind.DefaultClause);
             parseExpected(SyntaxKind.DefaultKeyword);
             parseExpected(SyntaxKind.ColonToken);
-            node.statements = parseList(ParsingContext.SwitchClauseStatements, parseStatement);
+            node.statements = parseList(ParsingContext.SwitchClauseStatements, /*checkForStrictMode*/ false, parseStatement);
             return finishNode(node);
         }
 
@@ -2067,7 +2500,12 @@ module ts {
             node.expression = parseExpression();
             parseExpected(SyntaxKind.CloseParenToken);
             parseExpected(SyntaxKind.OpenBraceToken);
-            node.clauses = parseList(ParsingContext.SwitchClauses, parseCaseOrDefaultClause);
+
+            var saveInSwitchStatement = inSwitchStatement;
+            inSwitchStatement = ControlBlockContext.Nested;
+            node.clauses = parseList(ParsingContext.SwitchClauses, /*checkForStrictMode*/ false, parseCaseOrDefaultClause);
+            inSwitchStatement = saveInSwitchStatement;
+
             parseExpected(SyntaxKind.CloseBraceToken);
 
             // Error on duplicate 'default' clauses.
@@ -2112,7 +2550,7 @@ module ts {
         function parseTokenAndBlock(token: SyntaxKind, kind: SyntaxKind): Block {
             var pos = getNodePos();
             parseExpected(token);
-            var result = parseBlock(/* ignoreMissingOpenBrace */ false);
+            var result = parseBlock(/* ignoreMissingOpenBrace */ false, /*checkForStrictMode*/ false);
             result.kind = kind;
             result.pos = pos;
             return result;
@@ -2127,13 +2565,18 @@ module ts {
             var typeAnnotationColonLength = scanner.getTextPos() - typeAnnotationColonStart;
             var typeAnnotation = parseTypeAnnotation();
             parseExpected(SyntaxKind.CloseParenToken);
-            var result = <CatchBlock>parseBlock(/* ignoreMissingOpenBrace */ false);
+            var result = <CatchBlock>parseBlock(/* ignoreMissingOpenBrace */ false, /*checkForStrictMode*/ false);
             result.kind = SyntaxKind.CatchBlock;
             result.pos = pos;
             result.variable = variable;
 
             if (typeAnnotation) {
                 errorAtPos(typeAnnotationColonStart, typeAnnotationColonLength, Diagnostics.Catch_clause_parameter_cannot_have_a_type_annotation);
+            }
+            if (isInStrictMode && isEvalOrArgumentsIdentifier(variable)) {
+                // It is a SyntaxError if a TryStatement with a Catch occurs within strict code and the Identifier of the 
+                // Catch production is eval or arguments
+                reportInvalidUseInStrictMode(variable);
             }
             return result;
         }
@@ -2145,11 +2588,34 @@ module ts {
             return finishNode(node);
         }
 
+        function isIterationStatementStart(): boolean {
+            return token === SyntaxKind.WhileKeyword || token === SyntaxKind.DoKeyword || token === SyntaxKind.ForKeyword;
+        }
+
+        function parseStatementWithLabelSet(): Statement {
+            labelledStatementInfo.pushCurrentLabelSet(isIterationStatementStart());
+            var statement = parseStatement();
+            labelledStatementInfo.pop();
+            return statement;
+        }
+
+        function isLabel(): boolean {
+            return isIdentifier() && lookAhead(() => nextToken() === SyntaxKind.ColonToken);
+        }
+
         function parseLabelledStatement(): LabelledStatement {
             var node = <LabelledStatement>createNode(SyntaxKind.LabelledStatement);
             node.label = parseIdentifier();
             parseExpected(SyntaxKind.ColonToken);
-            node.statement = parseStatement();
+
+            if (labelledStatementInfo.nodeIsNestedInLabel(node.label, /*requireIterationStatement*/ false, /*stopAtFunctionBoundary*/ true)) {
+                grammarErrorOnNode(node.label, Diagnostics.Duplicate_label_0, getSourceTextOfNodeFromSourceText(sourceText, node.label));
+            }
+            labelledStatementInfo.addLabel(node.label);
+
+            // We only want to call parseStatementWithLabelSet when the label set is complete
+            // Therefore, keep parsing labels until we know we're done.
+            node.statement = isLabel() ? parseLabelledStatement() : parseStatementWithLabelSet();
             return finishNode(node);
         }
 
@@ -2207,7 +2673,7 @@ module ts {
         function parseStatement(): Statement {
             switch (token) {
                 case SyntaxKind.OpenBraceToken:
-                    return parseBlock(/* ignoreMissingOpenBrace */ false);
+                    return parseBlock(/* ignoreMissingOpenBrace */ false, /*checkForStrictMode*/ false);
                 case SyntaxKind.VarKeyword:
                     return parseVariableStatement();
                 case SyntaxKind.FunctionKeyword:
@@ -2239,7 +2705,7 @@ module ts {
                 case SyntaxKind.DebuggerKeyword:
                     return parseDebuggerStatement();
                 default:
-                    if (isIdentifier() && lookAhead(() => nextToken() === SyntaxKind.ColonToken)) {
+                    if (isLabel()) {
                         return parseLabelledStatement();
                     }
                     return parseExpressionStatement();
@@ -2285,6 +2751,11 @@ module ts {
             if (inAmbientContext && node.initializer && errorCountBeforeVariableDeclaration === file.syntacticErrors.length) {
                 grammarErrorAtPos(initializerStart, initializerFirstTokenLength, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
             }
+            if (isInStrictMode && isEvalOrArgumentsIdentifier(node.name)) {
+                // It is a SyntaxError if a VariableDeclaration or VariableDeclarationNoIn occurs within strict code 
+                // and its Identifier is eval or arguments 
+                reportInvalidUseInStrictMode(node.name);
+            }
             return finishNode(node);
         }
 
@@ -2315,6 +2786,11 @@ module ts {
             node.parameters = sig.parameters;
             node.type = sig.type;
             node.body = parseAndCheckFunctionBody(/*isConstructor*/ false);
+            if (isInStrictMode && isEvalOrArgumentsIdentifier(node.name)) {
+                // It is a SyntaxError to use within strict mode code the identifiers eval or arguments as the 
+                // Identifier of a FunctionDeclaration or FunctionExpression or as a formal parameter name(13.1)
+                reportInvalidUseInStrictMode(node.name);
+            }
             return finishNode(node);
         }
 
@@ -2657,7 +3133,7 @@ module ts {
             }
             var errorCountBeforeClassBody = file.syntacticErrors.length;
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
-                node.members = parseList(ParsingContext.ClassMembers, parseClassMemberDeclaration);
+                node.members = parseList(ParsingContext.ClassMembers, /*checkForStrictMode*/ false, parseClassMemberDeclaration);
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
@@ -2757,7 +3233,7 @@ module ts {
         function parseModuleBody(): Block {
             var node = <Block>createNode(SyntaxKind.ModuleBlock);
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
-                node.statements = parseList(ParsingContext.ModuleElements, parseModuleElement);
+                node.statements = parseList(ParsingContext.ModuleElements, /*checkForStrictMode*/ false, parseModuleElement);
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
@@ -3014,7 +3490,7 @@ module ts {
         var referenceComments = processReferenceComments(); 
         file.referencedFiles = referenceComments.referencedFiles;
         file.amdDependencies = referenceComments.amdDependencies;
-        file.statements = parseList(ParsingContext.SourceElements, parseSourceElement);
+        file.statements = parseList(ParsingContext.SourceElements, /*checkForStrictMode*/ true, parseSourceElement);
         file.externalModuleIndicator = getExternalModuleIndicator();
         file.nodeCount = nodeCount;
         file.identifierCount = identifierCount;

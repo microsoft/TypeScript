@@ -1,0 +1,50 @@
+==== tests/cases/conformance/statements/breakStatements/invalidForBreakStatements.ts (6 errors) ====
+    // All errors
+    
+    // naked break not allowed
+    break;
+    ~~~~~~
+!!! A 'break' statement can only be used within an enclosing iteration or switch statement.
+    
+    // non-existent label
+    ONE:
+    for(;;) break TWO;
+            ~~~~~~~~~~
+!!! A 'break' statement can only jump to a label of an enclosing statement.
+    
+    // break from inside function
+    TWO:
+    for(;;) {
+        var x = () => {
+            break TWO;
+            ~~~~~~~~~~
+!!! Jump target cannot cross function boundary.
+        }
+    }
+    
+    THREE:
+    for(;;) {
+        var fn = function () {
+            break THREE;
+            ~~~~~~~~~~~~
+!!! Jump target cannot cross function boundary.
+        }
+    }
+    
+    // break forward
+    for(;;) {
+        break FIVE;
+        ~~~~~~~~~~~
+!!! A 'break' statement can only jump to a label of an enclosing statement.
+        FIVE:
+        for (; ;) { }
+    }
+    // label on non-loop statement
+    NINE:
+    var y = 12;
+    
+    for(;;) {
+        break NINE;
+        ~~~~~~~~~~~
+!!! A 'break' statement can only jump to a label of an enclosing statement.
+    }
