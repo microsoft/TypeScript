@@ -3832,16 +3832,15 @@ module ts {
             // but we are not including call signatures that may have been added to the Object or
             // Function interface, since they have none by default. This is a bit of a leap of faith
             // that the user will not add any.
-            var signatures = getSignaturesOfType(apparentType, SignatureKind.Call);
+            var callSignatures = getSignaturesOfType(apparentType, SignatureKind.Call);
 
             var constructSignatures = getSignaturesOfType(apparentType, SignatureKind.Construct);
             // TS 1.0 spec: 4.12
-            // If FuncExpr is of type Any, or of an object type that has no call signatures but is a
-            // subtype of the Function interface, the call is an untyped function call. In an untyped
-            // function call no TypeArgs are permitted, Args can be any argument list, no contextual
+            // If FuncExpr is of type Any, or of an object type that has no call or construct signatures
+            // but is a subtype of the Function interface, the call is an untyped function call. In an
+            // untyped function call no TypeArgs are permitted, Args can be any argument list, no contextual
             // types are provided for the argument expressions, and the result is always of type Any.
-            // NOTE (not in spec yet): permit untyped call only if type has no both call and construct signatures
-            if ((funcType === anyType) || (!signatures.length && !constructSignatures.length && isTypeAssignableTo(funcType, globalFunctionType))) {
+            if ((funcType === anyType) || (!callSignatures.length && !constructSignatures.length && isTypeAssignableTo(funcType, globalFunctionType))) {
                 if (node.typeArguments) {
                     error(node, Diagnostics.Untyped_function_calls_may_not_accept_type_arguments);
                 }
@@ -3850,7 +3849,7 @@ module ts {
             // If FuncExpr's apparent type(section 3.8.1) is a function type, the call is a typed function call.
             // TypeScript employs overload resolution in typed function calls in order to support functions
             // with multiple call signatures.
-            if (!signatures.length) {
+            if (!callSignatures.length) {
                 if (constructSignatures.length) {
                     error(node, Diagnostics.Value_of_type_0_is_not_callable_Did_you_mean_to_include_new, typeToString(funcType));
                 }
@@ -3859,7 +3858,7 @@ module ts {
                 }
                 return checkErrorCall(node);
             }
-            return checkCall(node, signatures);
+            return checkCall(node, callSignatures);
         }
 
         function checkNewExpression(node: NewExpression): Type {
