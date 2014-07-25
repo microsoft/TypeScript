@@ -429,25 +429,21 @@ module Harness {
 
 
 module Harness {
-    var typescriptServiceFileName = "typescriptServices.js";
-    // Services files are exported because we need to eval them at global scope in order for them to be available everywhere
-    export var typescriptServiceFile: string;
-
-    var tcServicesFilename = "services.js";
+    var tcServicesFilename = "typescriptServices.js";
 
     export var libFolder: string;
     switch (Utils.getExecutionEnvironment()) {
         case Utils.ExecutionEnvironment.CScript:
             libFolder = Path.filePath(global['WScript'].ScriptFullName);
-            tcServicesFilename = "built/local/services.js";
+            tcServicesFilename = "built/local/typescriptServices.js";
             break;
         case Utils.ExecutionEnvironment.Node:
             libFolder = (__dirname + '/');
-            tcServicesFilename = "built/local/services.js";
+            tcServicesFilename = "built/local/typescriptServices.js";
             break;
         case Utils.ExecutionEnvironment.Browser:
             libFolder = "bin/";
-            tcServicesFilename = "built/local/services.js";
+            tcServicesFilename = "built/local/typescriptServices.js";
             break;
         default:
             throw new Error('Unknown context');
