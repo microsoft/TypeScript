@@ -227,4 +227,4 @@ module ts {
     }
 }
 
-ts.executeCommandLine(sys.args);
+process.exit(ts.executeCommandLine(sys.args));
