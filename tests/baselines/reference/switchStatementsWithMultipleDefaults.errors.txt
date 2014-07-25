@@ -1,4 +1,4 @@
-==== tests/cases/compiler/switchStatementsWithMultipleDefaults.ts (8 errors) ====
+==== tests/cases/compiler/switchStatementsWithMultipleDefaults.ts (9 errors) ====
     
     var x = 10;
     
@@ -39,6 +39,8 @@
                 default: return;
                 ~~~~~~~~
 !!! A 'default' clause cannot appear more than once in a 'switch' statement.
+                         ~~~~~~
+!!! A 'return' statement can only be used within a function body.
                 default: default:
                 ~~~~~~~~
 !!! A 'default' clause cannot appear more than once in a 'switch' statement.

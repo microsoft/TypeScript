@@ -55,6 +55,10 @@ module ts {
         return skipTrivia(getSourceFileOfNode(node).text, node.pos);
     }
 
+    export function getSourceTextOfNodeFromSourceText(sourceText: string, node: Node): string {
+        return sourceText.substring(skipTrivia(sourceText, node.pos), node.end);
+    }
+
     export function getSourceTextOfNode(node: Node): string {
         var text = getSourceFileOfNode(node).text;
         return text.substring(skipTrivia(text, node.pos), node.end);
@@ -389,6 +393,22 @@ module ts {
         Preserve
     }
 
+    // Tracks whether we nested (directly or indirectly) in a certain control block.
+    // Used for validating break and continue statements.
+    enum ControlBlockContext {
+        NotNested,
+        Nested,
+        CrossingFunctionBoundary
+    }
+
+    interface LabelledStatementInfo {
+        addLabel(label: Identifier): void;
+        pushCurrentLabelSet(isIterationStatement: boolean): void;
+        pushFunctionBoundary(): void;
+        pop(): void;
+        nodeIsNestedInLabel(label: Identifier, requireIterationStatement: boolean, stopAtFunctionBoundary: boolean): ControlBlockContext;
+    }
+
     export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget): SourceFile {
         var file: SourceFile;
         var scanner: Scanner;
@@ -403,6 +423,113 @@ module ts {
 
         var lookAheadMode = LookAheadMode.NotLookingAhead;
         var inAmbientContext = false;
+        var inFunctionBody = false;
+        var inSwitchStatement = ControlBlockContext.NotNested;
+        var inIterationStatement = ControlBlockContext.NotNested;
+
+        // The following is a state machine that tracks what labels are in our current parsing
+        // context. So if we are parsing a node that is nested (arbitrarily deeply) in a label,
+        // it will be tracked in this data structure. It is used for checking break/continue
+        // statements, and checking for duplicate labels.
+        var labelledStatementInfo: LabelledStatementInfo = (() => {
+            // These are initialized on demand because labels are rare, so it is usually
+            // not even necessary to allocate these.
+            var functionBoundarySentinel: StringSet;
+            var currentLabelSet: StringSet;
+            var labelSetStack: StringSet[];
+            var isIterationStack: boolean[];
+
+            function addLabel(label: Identifier): void {
+                if (!currentLabelSet) {
+                    currentLabelSet = {};
+                }
+                currentLabelSet[label.text] = true;
+            }
+
+            function pushCurrentLabelSet(isIterationStatement: boolean): void {
+                if (!labelSetStack && !isIterationStack) {
+                    labelSetStack = [];
+                    isIterationStack = [];
+                }
+                Debug.assert(currentLabelSet !== undefined);
+                labelSetStack.push(currentLabelSet);
+                isIterationStack.push(isIterationStatement);
+                currentLabelSet = undefined;
+            }
+
+            function pushFunctionBoundary(): void {
+                if (!functionBoundarySentinel) {
+                    functionBoundarySentinel = {};
+                    if (!labelSetStack && !isIterationStack) {
+                        labelSetStack = [];
+                        isIterationStack = [];
+                    }
+                }
+                Debug.assert(currentLabelSet === undefined);
+                labelSetStack.push(functionBoundarySentinel);
+
+                // It does not matter what we push here, since we will never ask if a function boundary
+                // is an iteration statement
+                isIterationStack.push(false);
+            }
+
+            function pop(): void {
+                // Assert that we are in a "pushed" state
+                Debug.assert(labelSetStack.length && isIterationStack.length && currentLabelSet === undefined);
+                labelSetStack.pop();
+                isIterationStack.pop();
+            }
+
+            function nodeIsNestedInLabel(label: Identifier, requireIterationStatement: boolean, stopAtFunctionBoundary: boolean): ControlBlockContext {
+                if (!requireIterationStatement && currentLabelSet && hasProperty(currentLabelSet, label.text)) {
+                    return ControlBlockContext.Nested;
+                }
+
+                if (!labelSetStack) {
+                    return ControlBlockContext.NotNested;
+                }
+
+                // We want to start searching for the label at the lowest point in the tree,
+                // and climb up from there. So we start at the end of the labelSetStack array.
+                var crossedFunctionBoundary = false;
+                for (var i = labelSetStack.length - 1; i >= 0; i--) {
+                    var labelSet = labelSetStack[i];
+                    // Not allowed to cross function boundaries, so stop if we encounter one
+                    if (labelSet === functionBoundarySentinel) {
+                        if (stopAtFunctionBoundary) {
+                            break;
+                        }
+                        else {
+                            crossedFunctionBoundary = true;
+                            continue;
+                        }
+                    }
+                    
+                    // If we require an iteration statement, only search in the current
+                    // statement if it is an iteration statement
+                    if (requireIterationStatement && isIterationStack[i] === false) {
+                        continue;
+                    }
+
+                    if (hasProperty(labelSet, label.text)) {
+                        return crossedFunctionBoundary ? ControlBlockContext.CrossingFunctionBoundary : ControlBlockContext.Nested;
+                    }
+                }
+
+                // This is a bit of a misnomer. If the caller passed true for stopAtFunctionBoundary,
+                // there actually may be an enclosing label across a function boundary, but we will
+                // just return NotNested
+                return ControlBlockContext.NotNested;
+            }
+
+            return {
+                addLabel: addLabel,
+                pushCurrentLabelSet: pushCurrentLabelSet,
+                pushFunctionBoundary: pushFunctionBoundary,
+                pop: pop,
+                nodeIsNestedInLabel: nodeIsNestedInLabel,
+            };
+        })();
 
         function getLineAndCharacterlFromSourcePosition(position: number) {
             if (!lineStarts) {
@@ -2058,8 +2185,27 @@ module ts {
         }
 
         function parseBody(ignoreMissingOpenBrace: boolean): Block {
+            var saveInFunctionBody = inFunctionBody;
+            var saveInSwitchStatement = inSwitchStatement;
+            var saveInIterationStatement = inIterationStatement;
+
+            inFunctionBody = true;
+            if (inSwitchStatement === ControlBlockContext.Nested) {
+                inSwitchStatement = ControlBlockContext.CrossingFunctionBoundary;
+            }
+            if (inIterationStatement === ControlBlockContext.Nested) {
+                inIterationStatement = ControlBlockContext.CrossingFunctionBoundary;
+            }
+            labelledStatementInfo.pushFunctionBoundary();
+
             var block = parseBlock(ignoreMissingOpenBrace, /*checkForStrictMode*/ true);
             block.kind = SyntaxKind.FunctionBlock;
+
+            labelledStatementInfo.pop();
+            inFunctionBody = saveInFunctionBody;
+            inSwitchStatement = saveInSwitchStatement;
+            inIterationStatement = saveInIterationStatement;
+
             return block;
         }
 
@@ -2083,7 +2229,12 @@ module ts {
         function parseDoStatement(): DoStatement {
             var node = <DoStatement>createNode(SyntaxKind.DoStatement);
             parseExpected(SyntaxKind.DoKeyword);
+
+            var saveInIterationStatement = inIterationStatement;
+            inIterationStatement = ControlBlockContext.Nested;
             node.statement = parseStatement();
+            inIterationStatement = saveInIterationStatement;
+
             parseExpected(SyntaxKind.WhileKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
             node.expression = parseExpression();
@@ -2103,7 +2254,12 @@ module ts {
             parseExpected(SyntaxKind.OpenParenToken);
             node.expression = parseExpression();
             parseExpected(SyntaxKind.CloseParenToken);
+
+            var saveInIterationStatement = inIterationStatement;
+            inIterationStatement = ControlBlockContext.Nested;
             node.statement = parseStatement();
+            inIterationStatement = saveInIterationStatement;
+
             return finishNode(node);
         }
 
@@ -2122,53 +2278,142 @@ module ts {
                     var varOrInit = parseExpression(true);
                 }
             }
+            var forOrForInStatement: IterationStatement;
             if (parseOptional(SyntaxKind.InKeyword)) {
-                var forInStat = <ForInStatement>createNode(SyntaxKind.ForInStatement, pos);
+                var forInStatement = <ForInStatement>createNode(SyntaxKind.ForInStatement, pos);
                 if (declarations) {
                     if (declarations.length > 1) {
                         error(Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement);
                     }
-                    forInStat.declaration = declarations[0];
+                    forInStatement.declaration = declarations[0];
                 }
                 else {
-                    forInStat.variable = varOrInit;
+                    forInStatement.variable = varOrInit;
                 }
-                forInStat.expression = parseExpression();
+                forInStatement.expression = parseExpression();
                 parseExpected(SyntaxKind.CloseParenToken);
-                forInStat.statement = parseStatement();
-                return finishNode(forInStat);
+                forOrForInStatement = forInStatement;
             }
             else {
-                var forStat = <ForStatement>createNode(SyntaxKind.ForStatement, pos);
-                if (declarations) forStat.declarations = declarations;
-                if (varOrInit) forStat.initializer = varOrInit;
+                var forStatement = <ForStatement>createNode(SyntaxKind.ForStatement, pos);
+                if (declarations) forStatement.declarations = declarations;
+                if (varOrInit) forStatement.initializer = varOrInit;
                 parseExpected(SyntaxKind.SemicolonToken);
                 if (token !== SyntaxKind.SemicolonToken && token !== SyntaxKind.CloseParenToken) {
-                    forStat.condition = parseExpression();
+                    forStatement.condition = parseExpression();
                 }
                 parseExpected(SyntaxKind.SemicolonToken);
                 if (token !== SyntaxKind.CloseParenToken) {
-                    forStat.iterator = parseExpression();
+                    forStatement.iterator = parseExpression();
                 }
                 parseExpected(SyntaxKind.CloseParenToken);
-                forStat.statement = parseStatement();
-                return finishNode(forStat);
+                forOrForInStatement = forStatement;
             }
+
+            var saveInIterationStatement = inIterationStatement;
+            inIterationStatement = ControlBlockContext.Nested;
+            forOrForInStatement.statement = parseStatement();
+            inIterationStatement = saveInIterationStatement;
+
+            return finishNode(forOrForInStatement);
         }
 
         function parseBreakOrContinueStatement(kind: SyntaxKind): BreakOrContinueStatement {
             var node = <BreakOrContinueStatement>createNode(kind);
+            var errorCountBeforeStatement = file.syntacticErrors.length;
+            var keywordStart = scanner.getTokenPos();
+            var keywordLength = scanner.getTextPos() - keywordStart;
             parseExpected(kind === SyntaxKind.BreakStatement ? SyntaxKind.BreakKeyword : SyntaxKind.ContinueKeyword);
             if (!isSemicolon()) node.label = parseIdentifier();
             parseSemicolon();
-            return finishNode(node);
+            finishNode(node);
+
+            // In an ambient context, we will already give an error for having a statement.
+            if (!inAmbientContext && errorCountBeforeStatement === file.syntacticErrors.length) {
+                if (node.label) {
+                    checkBreakOrContinueStatementWithLabel(node);
+                }
+                else {
+                    checkBareBreakOrContinueStatement(node);
+                }
+            }
+            return node;
+        }
+
+        function checkBareBreakOrContinueStatement(node: BreakOrContinueStatement): void {
+            if (node.kind === SyntaxKind.BreakStatement) {
+                if (inIterationStatement === ControlBlockContext.Nested
+                    || inSwitchStatement === ControlBlockContext.Nested) {
+                    return;
+                }
+                else if (inIterationStatement === ControlBlockContext.NotNested
+                    && inSwitchStatement === ControlBlockContext.NotNested) {
+                    grammarErrorOnNode(node, Diagnostics.A_break_statement_can_only_be_used_within_an_enclosing_iteration_or_switch_statement);
+                    return;
+                }
+                // Fall through
+            }
+            else if (node.kind === SyntaxKind.ContinueStatement) {
+                if (inIterationStatement === ControlBlockContext.Nested) {
+                    return;
+                }
+                else if (inIterationStatement === ControlBlockContext.NotNested) {
+                    grammarErrorOnNode(node, Diagnostics.A_continue_statement_can_only_be_used_within_an_enclosing_iteration_statement);
+                    return;
+                }
+                // Fall through
+            }
+            else {
+                Debug.fail("checkAnonymousBreakOrContinueStatement");
+            }
+
+            Debug.assert(inIterationStatement === ControlBlockContext.CrossingFunctionBoundary
+                || inSwitchStatement === ControlBlockContext.CrossingFunctionBoundary);
+            grammarErrorOnNode(node, Diagnostics.Jump_target_cannot_cross_function_boundary);
+        }
+
+        function checkBreakOrContinueStatementWithLabel(node: BreakOrContinueStatement): void {
+            // For error specificity, if the label is not found, we want to distinguish whether it is because
+            // it crossed a function boundary or it was simply not found. To do this, we pass false for
+            // stopAtFunctionBoundary.
+            var nodeIsNestedInLabel = labelledStatementInfo.nodeIsNestedInLabel(node.label,
+                /*requireIterationStatement*/ node.kind === SyntaxKind.ContinueStatement,
+                /*stopAtFunctionBoundary*/ false);
+            if (nodeIsNestedInLabel === ControlBlockContext.Nested) {
+                return;
+            }
+
+            if (nodeIsNestedInLabel === ControlBlockContext.CrossingFunctionBoundary) {
+                grammarErrorOnNode(node, Diagnostics.Jump_target_cannot_cross_function_boundary);
+                return;
+            }
+
+            // It is NotNested
+            if (node.kind === SyntaxKind.ContinueStatement) {
+                grammarErrorOnNode(node, Diagnostics.A_continue_statement_can_only_jump_to_a_label_of_an_enclosing_iteration_statement);
+            }
+            else if (node.kind === SyntaxKind.BreakStatement) {
+                grammarErrorOnNode(node, Diagnostics.A_break_statement_can_only_jump_to_a_label_of_an_enclosing_statement);
+            }
+            else {
+                Debug.fail("checkBreakOrContinueStatementWithLabel");
+            }
         }
 
         function parseReturnStatement(): ReturnStatement {
             var node = <ReturnStatement>createNode(SyntaxKind.ReturnStatement);
+            var errorCountBeforeReturnStatement = file.syntacticErrors.length;
+            var returnTokenStart = scanner.getTokenPos();
+            var returnTokenLength = scanner.getTextPos() - returnTokenStart;
+
             parseExpected(SyntaxKind.ReturnKeyword);
             if (!isSemicolon()) node.expression = parseExpression();
             parseSemicolon();
+
+            // In an ambient context, we will already give an error for having a statement.
+            if (!inFunctionBody && !inAmbientContext && errorCountBeforeReturnStatement === file.syntacticErrors.length) {
+                grammarErrorAtPos(returnTokenStart, returnTokenLength, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
+            }
             return finishNode(node);
         }
 
@@ -2218,7 +2463,12 @@ module ts {
             node.expression = parseExpression();
             parseExpected(SyntaxKind.CloseParenToken);
             parseExpected(SyntaxKind.OpenBraceToken);
+
+            var saveInSwitchStatement = inSwitchStatement;
+            inSwitchStatement = ControlBlockContext.Nested;
             node.clauses = parseList(ParsingContext.SwitchClauses, /*checkForStrictMode*/ false, parseCaseOrDefaultClause);
+            inSwitchStatement = saveInSwitchStatement;
+
             parseExpected(SyntaxKind.CloseBraceToken);
 
             // Error on duplicate 'default' clauses.
@@ -2301,11 +2551,34 @@ module ts {
             return finishNode(node);
         }
 
+        function isIterationStatementStart(): boolean {
+            return token === SyntaxKind.WhileKeyword || token === SyntaxKind.DoKeyword || token === SyntaxKind.ForKeyword;
+        }
+
+        function parseStatementWithLabelSet(): Statement {
+            labelledStatementInfo.pushCurrentLabelSet(isIterationStatementStart());
+            var statement = parseStatement();
+            labelledStatementInfo.pop();
+            return statement;
+        }
+
+        function isLabel(): boolean {
+            return isIdentifier() && lookAhead(() => nextToken() === SyntaxKind.ColonToken);
+        }
+
         function parseLabelledStatement(): LabelledStatement {
             var node = <LabelledStatement>createNode(SyntaxKind.LabelledStatement);
             node.label = parseIdentifier();
             parseExpected(SyntaxKind.ColonToken);
-            node.statement = parseStatement();
+
+            if (labelledStatementInfo.nodeIsNestedInLabel(node.label, /*requireIterationStatement*/ false, /*stopAtFunctionBoundary*/ true)) {
+                grammarErrorOnNode(node.label, Diagnostics.Duplicate_label_0, getSourceTextOfNodeFromSourceText(sourceText, node.label));
+            }
+            labelledStatementInfo.addLabel(node.label);
+
+            // We only want to call parseStatementWithLabelSet when the label set is complete
+            // Therefore, keep parsing labels until we know we're done.
+            node.statement = isLabel() ? parseLabelledStatement() : parseStatementWithLabelSet();
             return finishNode(node);
         }
 
@@ -2395,7 +2668,7 @@ module ts {
                 case SyntaxKind.DebuggerKeyword:
                     return parseDebuggerStatement();
                 default:
-                    if (isIdentifier() && lookAhead(() => nextToken() === SyntaxKind.ColonToken)) {
+                    if (isLabel()) {
                         return parseLabelledStatement();
                     }
                     return parseExpressionStatement();

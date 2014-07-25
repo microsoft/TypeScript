@@ -1,6 +1,0 @@
-==== tests/cases/compiler/continueInIterationStatement4.ts (1 errors) ====
-    for (var i in something) {
-                  ~~~~~~~~~
-!!! Cannot find name 'something'.
-      continue;
-    }

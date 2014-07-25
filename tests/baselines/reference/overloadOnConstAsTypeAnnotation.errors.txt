@@ -2,7 +2,7 @@
     var f: (x: 'hi') => number = ('hi') => { return 1; };
                                         ~~
 !!! ';' expected.
+                                             ~~~~~~
+!!! A 'return' statement can only be used within a function body.
            ~~~~~~~~~~~~~~~~~~~
 !!! Specialized overload signature is not assignable to any non-specialized signature.
-                                             ~~~~~~~~~
-!!! 'return' statement has no containing function.

@@ -1,0 +1,11 @@
+==== tests/cases/conformance/parser/ecmascript5/Statements/ContinueStatements/parser_continueTarget5.ts (1 errors) ====
+    target:
+    while (true) {
+      function f() {
+        while (true) {
+          continue target;
+          ~~~~~~~~~~~~~~~~
+!!! Jump target cannot cross function boundary.
+        }
+      }
+    }
