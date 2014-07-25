@@ -43,9 +43,10 @@ module ts {
 
         var globals: SymbolTable = {};
 
+        var globalArrayTypeSymbolLinks: SymbolLinks;
+
         var globalObjectType: ObjectType;
         var globalFunctionType: ObjectType;
-        var globalArrayType: ObjectType;
         var globalStringType: ObjectType;
         var globalNumberType: ObjectType;
         var globalBooleanType: ObjectType;
@@ -773,7 +774,7 @@ module ts {
             }
 
             function writeTypeReference(type: TypeReference) {
-                if (type.target === globalArrayType && !(flags & TypeFormatFlags.WriteArrayAsGenericType)) {
+                if (type.target === globalArrayTypeSymbolLinks.declaredType && !(flags & TypeFormatFlags.WriteArrayAsGenericType)) {
                     // If we are writing array element type the arrow style signatures are not allowed as 
                     // we need to surround it by curlies, eg. { (): T; }[]; as () => T[] would mean something different
                     writeType(type.typeArguments[0], /*allowFunctionOrConstructorTypeLiteral*/ false);
@@ -1805,7 +1806,7 @@ module ts {
         function getRestTypeOfSignature(signature: Signature): Type {
             if (signature.hasRestParameter) {
                 var type = getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]);
-                if (type.flags & TypeFlags.Reference && (<TypeReference>type).target === globalArrayType) {
+                if (type.flags & TypeFlags.Reference && (<TypeReference>type).target === globalArrayTypeSymbolLinks.declaredType) {
                     return (<TypeReference>type).typeArguments[0];
                 }
             }
@@ -2016,8 +2017,11 @@ module ts {
             return links.resolvedType;
         }
 
-        function getGlobalType(name: string, arity: number = 0): ObjectType {
+        function resolveGlobalTypeSymbol(name: string): Symbol {
+            return resolveName(undefined, name, SymbolFlags.Type, Diagnostics.Cannot_find_global_type_0, name);
+        }
 
+        function resolveGlobalType(symbol: Symbol, arity: number): ObjectType {
             function getTypeDeclaration(symbol: Symbol): Declaration {
                 var declarations = symbol.declarations;
                 for (var i = 0; i < declarations.length; i++) {
@@ -2032,8 +2036,6 @@ module ts {
                     }
                 }
             }
-
-            var symbol = resolveName(undefined, name, SymbolFlags.Type, Diagnostics.Cannot_find_global_type_0, name);
             if (!symbol) {
                 return emptyObjectType;
             }
@@ -2049,7 +2051,12 @@ module ts {
             return <ObjectType>type;
         }
 
+        function getGlobalType(name: string, arity: number = 0): ObjectType {
+            return resolveGlobalType(resolveGlobalTypeSymbol(name), arity);
+        }
+
         function createArrayType(elementType: Type): Type {
+            var globalArrayType = globalArrayTypeSymbolLinks.declaredType;
             return globalArrayType !== emptyObjectType ? createTypeReference(<GenericType>globalArrayType, [elementType]) : emptyObjectType;
         }
 
@@ -2944,7 +2951,7 @@ module ts {
         }
 
         function isArrayType(type: Type): boolean {
-            return type.flags & TypeFlags.Reference && (<TypeReference>type).target === globalArrayType;
+            return type.flags & TypeFlags.Reference && (<TypeReference>type).target === globalArrayTypeSymbolLinks.declaredType;
         }
 
         function getInnermostTypeOfNestedArrayTypes(type: Type): Type {
@@ -6282,9 +6289,24 @@ module ts {
             getSymbolLinks(unknownSymbol).type = unknownType;
             globals[undefinedSymbol.name] = undefinedSymbol;
             // Initialize special types
+            // Initialize array type. 
+            // Note:
+            // if user code extends Array type so extension contains signatures that involve arrays (sample below)
+            // then just calling getGlobalType(Array) will try to access globalArrayType before it is initialized
+            // to handle this instead of storing Array as type we store SymbolLinks for Array symbol and access type as links.declaredType.
+            // interface Array<T> { (): any[] }
+            // 
+            var globalArraySymbol = resolveGlobalTypeSymbol("Array");
+            if (!globalArraySymbol) {
+                globalArrayTypeSymbolLinks = { declaredType: emptyObjectType };
+            }
+            else {
+                globalArrayTypeSymbolLinks = getSymbolLinks(globalArraySymbol);
+                globalArrayTypeSymbolLinks.declaredType = resolveGlobalType(globalArraySymbol, 1);
+            }
+
             globalObjectType = getGlobalType("Object");
             globalFunctionType = getGlobalType("Function");
-            globalArrayType = getGlobalType("Array", 1);
             globalStringType = getGlobalType("String");
             globalNumberType = getGlobalType("Number");
             globalBooleanType = getGlobalType("Boolean");

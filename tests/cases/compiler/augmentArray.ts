@@ -1,0 +1,3 @@
+interface Array<T> {
+    (): any[];
+}
