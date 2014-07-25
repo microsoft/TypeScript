@@ -18,7 +18,7 @@
 /// <reference path='..\compiler\sys.ts' />
 /// <reference path='external\mocha.d.ts'/>
 /// <reference path='external\chai.d.ts'/>
-///<reference path='sourceMapRecorder.ts'/>
+/// <reference path='sourceMapRecorder.ts'/>
 
 // this will work in the browser via browserify
 var _chai: typeof chai = require('chai');
@@ -598,7 +598,7 @@ module Harness {
                 this.inputFiles.push(file);
             }
 
-            public compile(options?: ts.CompilerOptions) {
+            public setCompilerOptions(options?: ts.CompilerOptions) {
                 this.compileOptions = options || { noResolve: false };
             }
 
@@ -693,6 +693,11 @@ module Harness {
                             options.declaration = !!setting.value;
                             break;
 
+                        case 'newline':
+                        case 'newlines':
+                            sys.newLine = setting.value;
+                            break;
+
                         case 'mapsourcefiles':
                         case 'maproot':
                         case 'generatedeclarationfiles':
@@ -753,6 +758,9 @@ module Harness {
                 // Covert the source Map data into the baseline
                 result.updateSourceMapRecord(program, sourceMapData);
                 onComplete(result);
+
+                // reset what newline means in case the last test changed it
+                sys.newLine = '\r\n';
                 return options;
             }
         }
@@ -891,7 +899,7 @@ module Harness {
         var optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
 
         // List of allowed metadata names
-        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outDir", "noimplicitany", "noresolve"];
+        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outDir", "noimplicitany", "noresolve", "newline", "newlines"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 
@@ -1119,7 +1127,7 @@ module Harness {
         return filePath.indexOf('lib.d.ts') >= 0 || filePath.indexOf('lib.core.d.ts') >= 0;
     }
 
-    if (Error) (<any>Error).stackTraceLimit = 100;
+    if (Error) (<any>Error).stackTraceLimit = 1;
 }
 
 // TODO: not sure why Utils.evalFile isn't working with this, eventually will concat it like old compiler instead of eval

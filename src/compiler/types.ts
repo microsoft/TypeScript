@@ -215,7 +215,9 @@ module ts {
         FirstReservedWord = BreakKeyword,
         LastReservedWord = WithKeyword,
         FirstKeyword = BreakKeyword,
-        LastKeyword = StringKeyword
+        LastKeyword = StringKeyword,
+        FirstFutureReservedWord = ImplementsKeyword,
+        LastFutureReservedWord = YieldKeyword
     }
 
     export enum NodeFlags {

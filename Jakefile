@@ -306,6 +306,11 @@ function exec(cmd, completeHandler) {
         }
         complete();
     });
+    ex.addListener("error", function(e, status) {
+    	process.stderr.write(status);
+    	process.stderr.write(e);
+    	complete();
+    })
     try{
         ex.run();	
     } catch(e) {
@@ -361,6 +366,13 @@ task("runtests", ["tests", builtLocalDirectory], function() {
     console.log(cmd);
     exec(cmd, deleteTemporaryProjectOutput);
 }, {async: true});
+
+desc("Generates code coverage data via instanbul")
+task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
+	var cmd = "istanbul cover node_modules/mocha/bin/_mocha -- -R dot " + run;
+	console.log(cmd);
+	exec(cmd);	
+}, { async: true });
 
 // Browser tests
 var nodeServerOutFile = 'tests/webTestServer.js'

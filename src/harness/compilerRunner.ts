@@ -89,7 +89,7 @@ class CompilerBaselineRunner extends RunnerBase {
                     result = compileResult;
                 }, function (settings) {
                         harnessCompiler.setCompilerSettings(tcSettings);
-                    });
+                });
             });
 
             beforeEach(() => {

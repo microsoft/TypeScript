@@ -396,7 +396,18 @@
         "category": "Error",
         "code": 1116
     },
-
+    "An object literal cannot have multiple properties with the same name in strict mode.": {
+        "category": "Error",
+        "code": 1117
+    },
+    "An object literal cannot have multiple get/set accessors with the same name.": {
+        "category": "Error",
+        "code": 1118
+    },
+    "An object literal cannot have property and accessor with the same name.": {
+        "category": "Error",
+        "code": 1119
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2000
