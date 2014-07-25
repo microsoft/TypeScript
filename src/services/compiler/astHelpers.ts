@@ -18,7 +18,7 @@
 module TypeScript.ASTHelpers {
 
 
-    var sentinelEmptyArray = [];
+    var sentinelEmptyArray: any[] = [];
 
     //export function scriptIsElided(sourceUnit: SourceUnitSyntax): boolean {
     //    return isDTSFile(sourceUnit.syntaxTree.fileName()) || moduleMembersAreElided(sourceUnit.moduleElements);

@@ -645,7 +645,7 @@ module ts {
         static prefix = "prefix";
     }
 
-    export interface IncrementalParse {
+    interface IncrementalParse {
         (oldSyntaxTree: TypeScript.SyntaxTree, textChangeRange: TypeScript.TextChangeRange, newText: TypeScript.ISimpleText): TypeScript.SyntaxTree
     }
 
@@ -1127,7 +1127,7 @@ module ts {
         function reportStats() {
             var bucketInfoArray = Object.keys(buckets).filter(name => name && name.charAt(0) === '_').map(name => {
                 var entries = buckets[name];
-                var documents = [];
+                var documents: { name: string; refCount: number; references: string[]; }[] = [];
                 for (var i in entries) {
                     var entry = entries[i];
                     documents.push({
@@ -1414,7 +1414,7 @@ module ts {
                 "while","with",
             ];
 
-            var result = [];
+            var result: CompletionEntry[] = [];
             forEach(keywords, (keyword) => {
                 result.push({
                     name: keyword,
@@ -2035,7 +2035,7 @@ module ts {
             getCompletionsAtPosition: getCompletionsAtPosition,
             getCompletionEntryDetails: getCompletionEntryDetails,
             getTypeAtPosition: getTypeAtPosition,
-            getSignatureAtPosition: (filename, position) => undefined,
+            getSignatureAtPosition: (filename, position): SignatureInfo => undefined,
             getDefinitionAtPosition: (filename, position) => [],
             getReferencesAtPosition: (filename, position) => [],
             getOccurrencesAtPosition: (filename, position) => [],
@@ -2051,7 +2051,7 @@ module ts {
             getFormattingEditsForDocument: getFormattingEditsForDocument,
             getFormattingEditsOnPaste: getFormattingEditsOnPaste,
             getFormattingEditsAfterKeystroke: getFormattingEditsAfterKeystroke,
-            getEmitOutput: (filename) => undefined,
+            getEmitOutput: (filename): EmitOutput => undefined,
         };
     }
 
@@ -2102,7 +2102,7 @@ module ts {
                 offset = 3;
             }
 
-            var result = {
+            var result: ClassificationResult = {
                 finalLexState: EndOfLineState.Start,
                 entries: []
             };
