@@ -2059,6 +2059,10 @@ module ts {
             if (!links.resolvedType) {
                 var arrayType = globalArrayType;
                 if (!arrayType) {
+                    // if user code contains augmentation for Array type that includes call\construct signatures with arrays as parameter\return types,
+                    // then we might step here then during initialization of the global Array type when globalArrayType is not yet set.
+                    // CODE: interface Array<T> { (): number[] }
+                    // in this case just resolve name 'Array' again and get declared type of symbol
                     var arrayTypeSymbol = resolveName(node, "Array", SymbolFlags.Type, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
                     Debug.assert(arrayTypeSymbol);
                     arrayType = getDeclaredTypeOfSymbol(arrayTypeSymbol);
