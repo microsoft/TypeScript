@@ -8,7 +8,7 @@ var compilerDirectory = "src/compiler/";
 var servicesDirectory = "src/services/";
 var harnessDirectory = "src/harness/";
 var libraryDirectory = "src/lib/";
-var scriptsDirectory = "scripts/"
+var scriptsDirectory = "scripts/";
 
 var builtDirectory = "built/";
 var builtLocalDirectory = "built/local/";
