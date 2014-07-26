@@ -2049,9 +2049,10 @@ module ts {
             return <ObjectType>type;
         }
 
+        // arrayType argument is used as a backup in case if globalArrayType is not defined
         function createArrayType(elementType: Type, arrayType?: ObjectType): Type {
-            var type = globalArrayType || arrayType;
-            return type !== emptyObjectType ? createTypeReference(<GenericType>type, [elementType]) : emptyObjectType;
+            var rootType = globalArrayType || arrayType;
+            return rootType !== emptyObjectType ? createTypeReference(<GenericType>rootType, [elementType]) : emptyObjectType;
         }
 
         function getTypeFromArrayTypeNode(node: ArrayTypeNode): Type {
@@ -2062,7 +2063,9 @@ module ts {
                     // if user code contains augmentation for Array type that includes call\construct signatures with arrays as parameter\return types,
                     // then we might step here then during initialization of the global Array type when globalArrayType is not yet set.
                     // CODE: interface Array<T> { (): number[] }
-                    // in this case just resolve name 'Array' again and get declared type of symbol
+                    // in this case just resolve name 'Array' again and get declared type of symbol.
+                    // this type is the one that eventually should be set as 'globalArrayType'.
+                    // NOTE: this is specific to signatures since got signatures we realize parameter\return types.
                     var arrayTypeSymbol = resolveName(node, "Array", SymbolFlags.Type, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
                     Debug.assert(arrayTypeSymbol);
                     arrayType = getDeclaredTypeOfSymbol(arrayTypeSymbol);
