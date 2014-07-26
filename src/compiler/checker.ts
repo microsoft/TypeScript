@@ -2049,14 +2049,29 @@ module ts {
             return <ObjectType>type;
         }
 
-        function createArrayType(elementType: Type): Type {
-            return globalArrayType !== emptyObjectType ? createTypeReference(<GenericType>globalArrayType, [elementType]) : emptyObjectType;
+        // arrayType argument is used as a backup in case if globalArrayType is not defined
+        function createArrayType(elementType: Type, arrayType?: ObjectType): Type {
+            var rootType = globalArrayType || arrayType;
+            return rootType !== emptyObjectType ? createTypeReference(<GenericType>rootType, [elementType]) : emptyObjectType;
         }
 
         function getTypeFromArrayTypeNode(node: ArrayTypeNode): Type {
             var links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = createArrayType(getTypeFromTypeNode(node.elementType));
+                var arrayType = globalArrayType;
+                if (!arrayType) {
+                    // if user code contains augmentation for Array type that includes call\construct signatures with arrays as parameter\return types,
+                    // then we might step here then during initialization of the global Array type when globalArrayType is not yet set.
+                    // CODE: interface Array<T> { (): number[] }
+                    // in this case just resolve name 'Array' again and get declared type of symbol.
+                    // this type is the one that eventually should be set as 'globalArrayType'.
+                    // NOTE: this is specific to signatures since got signatures we realize parameter\return types.
+                    var arrayTypeSymbol = resolveName(node, "Array", SymbolFlags.Type, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+                    Debug.assert(arrayTypeSymbol);
+                    arrayType = getDeclaredTypeOfSymbol(arrayTypeSymbol);
+                    Debug.assert(arrayType);
+                }
+                links.resolvedType = createArrayType(getTypeFromTypeNode(node.elementType), arrayType);
             }
             return links.resolvedType;
         }
@@ -6281,9 +6296,9 @@ module ts {
             getSymbolLinks(unknownSymbol).type = unknownType;
             globals[undefinedSymbol.name] = undefinedSymbol;
             // Initialize special types
+            globalArrayType = getGlobalType("Array", 1);
             globalObjectType = getGlobalType("Object");
             globalFunctionType = getGlobalType("Function");
-            globalArrayType = getGlobalType("Array", 1);
             globalStringType = getGlobalType("String");
             globalNumberType = getGlobalType("Number");
             globalBooleanType = getGlobalType("Boolean");
