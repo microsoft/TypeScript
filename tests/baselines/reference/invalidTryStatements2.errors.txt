@@ -1,4 +1,4 @@
-==== tests/cases/conformance/statements/tryStatements/invalidTryStatements2.ts (2 errors) ====
+==== tests/cases/conformance/statements/tryStatements/invalidTryStatements2.ts (6 errors) ====
     function fn() {
         try {
         } catch { // syntax error, missing '(x)'
@@ -10,5 +10,32 @@
         ~~~~~
 !!! A 'catch' clause must be preceded by a 'try' statement.
     
-        finally{ } // error missing try
+        finally{ } // potential error; can be absorbed by the 'catch'
+    }
+    
+    function fn2() {
+        finally { } // error missing try
+        ~~~~~~~
+!!! A 'finally' block must be preceded by a 'try' statement.
+        catch (x) { } // error missing try
+        ~~~~~
+!!! A 'catch' clause must be preceded by a 'try' statement.
+    
+        // no error
+        try {
+        }
+        finally {
+        }
+    
+        // error missing try
+        finally {
+        ~~~~~~~
+!!! A 'finally' block must be preceded by a 'try' statement.
+        }
+    
+        // error missing try
+        catch (x) {
+        ~~~~~
+!!! A 'catch' clause must be preceded by a 'try' statement.
+        }
     }
