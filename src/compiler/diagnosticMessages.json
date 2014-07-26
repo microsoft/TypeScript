@@ -408,6 +408,10 @@
         "category": "Error",
         "code": 1119
     },
+    "An export assignment cannot have modifiers.": {
+        "category": "Error",
+        "code": 1120
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2000
