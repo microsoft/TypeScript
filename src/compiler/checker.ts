@@ -5720,6 +5720,13 @@ module ts {
             checkSourceElement(node.body);
         }
 
+        function getFirstIdentifier(node: EntityName): Identifier {
+            while (node.kind === SyntaxKind.QualifiedName) {
+                node = (<QualifiedName>node).left;
+            }
+            return <Identifier>node;
+        }
+
         function checkImportDeclaration(node: ImportDeclaration) {
             checkCollisionWithCapturedThisVariable(node, node.name);
             var symbol = getSymbolOfNode(node);
@@ -5730,8 +5737,15 @@ module ts {
                 // Import declaration for an internal module
                 if (target !== unknownSymbol) {
                     if (target.flags & SymbolFlags.Value) {
-                        // Target is a value symbol, check that it can be evaluated as an expression
-                        checkExpression(node.entityName);
+                        // Target is a value symbol, check that it is not hidden by a local declaration with the same name and
+                        // ensure it can be evaluated as an expression
+                        var moduleName = getFirstIdentifier(node.entityName);
+                        if (resolveEntityName(node, moduleName, SymbolFlags.Value | SymbolFlags.Namespace).flags & SymbolFlags.Namespace) {
+                            checkExpression(node.entityName);
+                        }
+                        else {
+                            error(moduleName, Diagnostics.Module_0_is_hidden_by_a_local_declaration_with_the_same_name, identifierToString(moduleName));
+                        }
                     }
                     if (target.flags & SymbolFlags.Type) {
                         checkTypeNameIsReserved(node.name, Diagnostics.Import_name_cannot_be_0);
@@ -5741,7 +5755,6 @@ module ts {
             else {
                 // Import declaration for an external module
                 if (node.parent.kind === SyntaxKind.SourceFile) {
-                    // Parent is a source file, check that external modules are enabled
                     target = resolveImport(symbol);
                 }
                 else if (node.parent.kind === SyntaxKind.ModuleBlock && (<ModuleDeclaration>node.parent.parent).name.kind === SyntaxKind.StringLiteral) {
