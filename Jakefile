@@ -367,7 +367,9 @@ task("runtests", ["tests", builtLocalDirectory], function() {
     colors = colors ? ' --no-colors ' : ''
     tests = tests ? ' -g ' + tests : '';
     reporter = process.env.reporter || process.env.r || 'dot';
-    var cmd = host + " -R " + reporter + tests + colors + ' ' + run;
+    // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
+    // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
+    var cmd = host + " -R " + reporter + tests + colors + ' --timeout 3000 ' + run;
     console.log(cmd);
     exec(cmd, deleteTemporaryProjectOutput);
 }, {async: true});
