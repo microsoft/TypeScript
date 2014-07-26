@@ -1,4 +1,4 @@
-==== tests/cases/conformance/statements/tryStatements/invalidTryStatements2.ts (4 errors) ====
+==== tests/cases/conformance/statements/tryStatements/invalidTryStatements2.ts (2 errors) ====
     function fn() {
         try {
         } catch { // syntax error, missing '(x)'
@@ -8,11 +8,7 @@
     
         catch(x) { } // error missing try
         ~~~~~
-!!! Statement expected.
-                 ~
-!!! '=>' expected.
+!!! A 'catch' clause must be preceded by a 'try' statement.
     
         finally{ } // error missing try
-        ~~~~~~~
-!!! Statement expected.
     }

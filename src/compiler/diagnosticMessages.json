@@ -632,6 +632,15 @@
         "category": "Error",
         "code": 2246
     },
+    "A 'catch' clause must be preceded by a 'try' statement.": {
+        "category": "Error",
+        "code": 2249
+    },
+    "A 'finally' block must be preceded by a 'try' statement.": {
+        "category": "Error",
+        "code": 2250
+    },
+
     "Circular definition of import alias '{0}'.": {
         "category": "Error",
         "code": 3000
