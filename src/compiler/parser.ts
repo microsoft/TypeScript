@@ -676,11 +676,6 @@ module ts {
             return token === SyntaxKind.Identifier || (isInStrictMode ? token > SyntaxKind.LastFutureReservedWord : token > SyntaxKind.LastReservedWord);
         }
 
-        function isSemicolon(): boolean {
-            // True if real or automatic semicolon
-            return token === SyntaxKind.SemicolonToken || token === SyntaxKind.CloseBraceToken || scanner.hasPrecedingLineBreak();
-        }
-
         function parseExpected(t: SyntaxKind): boolean {
             if (token === t) {
                 nextToken();
@@ -2361,7 +2356,7 @@ module ts {
             var keywordStart = scanner.getTokenPos();
             var keywordLength = scanner.getTextPos() - keywordStart;
             parseExpected(kind === SyntaxKind.BreakStatement ? SyntaxKind.BreakKeyword : SyntaxKind.ContinueKeyword);
-            if (!isSemicolon()) node.label = parseIdentifier();
+            if (!canParseSemicolon()) node.label = parseIdentifier();
             parseSemicolon();
             finishNode(node);
 
@@ -2444,7 +2439,7 @@ module ts {
             var returnTokenLength = scanner.getTextPos() - returnTokenStart;
 
             parseExpected(SyntaxKind.ReturnKeyword);
-            if (!isSemicolon()) node.expression = parseExpression();
+            if (!canParseSemicolon()) node.expression = parseExpression();
             parseSemicolon();
 
             // In an ambient context, we will already give an error for having a statement.
@@ -2727,7 +2722,7 @@ module ts {
                 }
                 return body;
             }
-            if (isSemicolon()) {
+            if (canParseSemicolon()) {
                 parseSemicolon();
                 return undefined;
             }
