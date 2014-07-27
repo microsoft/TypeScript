@@ -8,7 +8,7 @@
     
         catch(x) { } // error missing try
         ~~~~~
-!!! A 'catch' clause must be preceded by a 'try' statement.
+!!! 'try' expected.
     
         finally{ } // potential error; can be absorbed by the 'catch'
     }
@@ -16,10 +16,10 @@
     function fn2() {
         finally { } // error missing try
         ~~~~~~~
-!!! A 'finally' block must be preceded by a 'try' statement.
+!!! 'try' expected.
         catch (x) { } // error missing try
         ~~~~~
-!!! A 'catch' clause must be preceded by a 'try' statement.
+!!! 'try' expected.
     
         // no error
         try {
@@ -30,12 +30,12 @@
         // error missing try
         finally {
         ~~~~~~~
-!!! A 'finally' block must be preceded by a 'try' statement.
+!!! 'try' expected.
         }
     
         // error missing try
         catch (x) {
         ~~~~~
-!!! A 'catch' clause must be preceded by a 'try' statement.
+!!! 'try' expected.
         }
     }

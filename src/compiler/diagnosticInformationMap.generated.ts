@@ -160,8 +160,6 @@ module ts {
         Constructor_implementation_expected: { code: 2240, category: DiagnosticCategory.Error, key: "Constructor implementation expected." },
         An_export_assignment_cannot_be_used_in_a_module_with_other_exported_elements: { code: 2245, category: DiagnosticCategory.Error, key: "An export assignment cannot be used in a module with other exported elements." },
         A_parameter_property_is_only_allowed_in_a_constructor_implementation: { code: 2246, category: DiagnosticCategory.Error, key: "A parameter property is only allowed in a constructor implementation." },
-        A_catch_clause_must_be_preceded_by_a_try_statement: { code: 2249, category: DiagnosticCategory.Error, key: "A 'catch' clause must be preceded by a 'try' statement." },
-        A_finally_block_must_be_preceded_by_a_try_statement: { code: 2250, category: DiagnosticCategory.Error, key: "A 'finally' block must be preceded by a 'try' statement." },
         Circular_definition_of_import_alias_0: { code: 3000, category: DiagnosticCategory.Error, key: "Circular definition of import alias '{0}'." },
         Cannot_find_name_0: { code: 3001, category: DiagnosticCategory.Error, key: "Cannot find name '{0}'." },
         Module_0_has_no_exported_member_1: { code: 3002, category: DiagnosticCategory.Error, key: "Module '{0}' has no exported member '{1}'." },

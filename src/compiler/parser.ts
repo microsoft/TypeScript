@@ -2542,35 +2542,6 @@ module ts {
             return finishNode(node);
         }
 
-        // This function is used for parsing 'catch'/'finally' blocks
-        // in spite of them missing a 'try' statement.
-        function parseCatchOrFinallyBlocksMissingTryStatement(): TryStatement {
-
-            Debug.assert(token === SyntaxKind.CatchKeyword || token === SyntaxKind.FinallyKeyword,
-                "'parseCatchOrFinallyBlocksMissingTryStatement' should only be called when the current token is a 'catch' or 'finally' keyword.");
-
-            // We're just going to return a bogus TryStatement.
-            var node = <TryStatement>createNode(SyntaxKind.TryStatement);
-            node.tryBlock = <Block>createNode(SyntaxKind.Block);
-            node.tryBlock.statements = createMissingList<Statement>();
-
-            if (token === SyntaxKind.CatchKeyword) {
-                error(Diagnostics.A_catch_clause_must_be_preceded_by_a_try_statement);
-                node.catchBlock = parseCatchBlock();
-            }
-
-            if (token === SyntaxKind.FinallyKeyword) {
-                // Only report an error on the 'finally' block if we haven't on the 'catch' block.
-                if (node.catchBlock === undefined) {
-                    error(Diagnostics.A_finally_block_must_be_preceded_by_a_try_statement);
-                }
-
-                node.finallyBlock = parseTokenAndBlock(SyntaxKind.FinallyKeyword, SyntaxKind.FinallyBlock);
-            }
-
-            return finishNode(node);
-        }
-
         function parseTokenAndBlock(token: SyntaxKind, kind: SyntaxKind): Block {
             var pos = getNodePos();
             parseExpected(token);
@@ -2733,10 +2704,10 @@ module ts {
                 case SyntaxKind.ThrowKeyword:
                     return parseThrowStatement();
                 case SyntaxKind.TryKeyword:
-                    return parseTryStatement();
+                // Include the next two for error recovery.
                 case SyntaxKind.CatchKeyword:
                 case SyntaxKind.FinallyKeyword:
-                    return parseCatchOrFinallyBlocksMissingTryStatement();
+                    return parseTryStatement();
                 case SyntaxKind.DebuggerKeyword:
                     return parseDebuggerStatement();
                 default:
