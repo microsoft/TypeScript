@@ -136,30 +136,27 @@ module ts {
             //      but return the export symbol (by calling getExportSymbolOfValueSymbolIfExported). That way
             //      when the emitter comes back to it, it knows not to qualify the name if it was found in a containing scope.
             var exportKind = 0;
-            var exportExcludes = 0;
             if (symbolKind & SymbolFlags.Value) {
                 exportKind |= SymbolFlags.ExportValue;
-                exportExcludes |= SymbolFlags.Value;
             }
             if (symbolKind & SymbolFlags.Type) {
                 exportKind |= SymbolFlags.ExportType;
-                exportExcludes |= SymbolFlags.Type;
             }
             if (symbolKind & SymbolFlags.Namespace) {
                 exportKind |= SymbolFlags.ExportNamespace;
-                exportExcludes |= SymbolFlags.Namespace;
             }
             if (node.flags & NodeFlags.Export || (node.kind !== SyntaxKind.ImportDeclaration && isAmbientContext(container))) {
                 if (exportKind) {
-                    var local = declareSymbol(container.locals, undefined, node, exportKind, exportExcludes);
+                    var local = declareSymbol(container.locals, undefined, node, exportKind, symbolExcludes);
                     local.exportSymbol = declareSymbol(container.symbol.exports, container.symbol, node, symbolKind, symbolExcludes);
+                    node.localSymbol = local;
                 }
                 else {
                     declareSymbol(container.symbol.exports, container.symbol, node, symbolKind, symbolExcludes);
                 }
             }
             else {
-                declareSymbol(container.locals, undefined, node, symbolKind, symbolExcludes | exportKind);
+                declareSymbol(container.locals, undefined, node, symbolKind, symbolExcludes);
             }
         }
 

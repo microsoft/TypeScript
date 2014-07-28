@@ -1,10 +1,12 @@
-==== tests/cases/compiler/multivar.ts (1 errors) ====
+==== tests/cases/compiler/multivar.ts (2 errors) ====
     var a,b,c;
     var x=1,y=2,z=3;
     
     module m2 {
     
         export var a, b2: number = 10, b;
+                      ~~
+!!! Individual declarations in merged declaration b2 must be all exported or all local.
         var m1;
         var a2, b22: number = 10, b222;
         var m3;
@@ -22,7 +24,7 @@
         declare var d1, d2;
         var b2;
             ~~
-!!! Duplicate identifier 'b2'.
+!!! Individual declarations in merged declaration b2 must be all exported or all local.
     
         declare var v1;
     }

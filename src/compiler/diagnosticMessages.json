@@ -552,6 +552,10 @@
         "category": "Error",
         "code": 2190
     },
+    "Individual declarations in merged declaration {0} must be all exported or all local.": {
+        "category": "Error",
+        "code": 2192
+    },
     "'super' cannot be referenced in constructor arguments.":{
         "category": "Error",
         "code": 2193
