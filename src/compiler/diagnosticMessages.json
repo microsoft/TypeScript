@@ -1197,6 +1197,10 @@
         "category": "Error",
         "code": -9999999
     },
+	"Module '{0}' is hidden by a local declaration with the same name": {
+        "category": "Error",
+        "code": -9999999
+	},
     "Filename '{0}' differs from already included filename '{1}' only in casing": {
         "category": "Error",
         "code": -9999999

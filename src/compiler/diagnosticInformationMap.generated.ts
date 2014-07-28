@@ -294,6 +294,7 @@ module ts {
         A_module_declaration_cannot_be_located_prior_to_a_class_or_function_with_which_it_is_merged: { code: -9999999, category: DiagnosticCategory.Error, key: "A module declaration cannot be located prior to a class or function with which it is merged" },
         Cannot_compile_external_modules_unless_the_module_flag_is_provided: { code: -9999999, category: DiagnosticCategory.Error, key: "Cannot compile external modules unless the '--module' flag is provided." },
         Import_declaration_conflicts_with_local_declaration_of_0: { code: -9999999, category: DiagnosticCategory.Error, key: "Import declaration conflicts with local declaration of '{0}'" },
+        Module_0_is_hidden_by_a_local_declaration_with_the_same_name: { code: -9999999, category: DiagnosticCategory.Error, key: "Module '{0}' is hidden by a local declaration with the same name" },
         Filename_0_differs_from_already_included_filename_1_only_in_casing: { code: -9999999, category: DiagnosticCategory.Error, key: "Filename '{0}' differs from already included filename '{1}' only in casing" },
         Argument_for_module_option_must_be_commonjs_or_amd: { code: -9999999, category: DiagnosticCategory.Error, key: "Argument for '--module' option must be 'commonjs' or 'amd'." },
         Argument_for_target_option_must_be_es3_or_es5: { code: -9999999, category: DiagnosticCategory.Error, key: "Argument for '--target' option must be 'es3' or 'es5'." },
