@@ -527,7 +527,7 @@ module ts {
                 pushCurrentLabelSet: pushCurrentLabelSet,
                 pushFunctionBoundary: pushFunctionBoundary,
                 pop: pop,
-                nodeIsNestedInLabel: nodeIsNestedInLabel,
+                nodeIsNestedInLabel: nodeIsNestedInLabel
             };
         })();
 
@@ -951,7 +951,7 @@ module ts {
         }
 
         // Parses a comma-delimited list of elements
-        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T, trailingCommaBehavior: TrailingCommaBehavior): NodeArray<T> {
+        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T, trailingCommaBehavior: TrailingCommaBehavior, trailingCommaMessage?: DiagnosticMessage): NodeArray<T> {
             var saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
             var result = <NodeArray<T>>[];
@@ -979,7 +979,7 @@ module ts {
                         if (trailingCommaBehavior === TrailingCommaBehavior.Disallow) {
                             if (file.syntacticErrors.length === errorCountBeforeParsingList) {
                                 // Report a grammar error so we don't affect lookahead
-                                grammarErrorAtPos(commaStart, scanner.getStartPos() - commaStart, Diagnostics.Trailing_comma_not_allowed);
+                                grammarErrorAtPos(commaStart, scanner.getStartPos() - commaStart, trailingCommaMessage || Diagnostics.Trailing_comma_not_allowed);
                             }
                         }
                         else if (trailingCommaBehavior === TrailingCommaBehavior.Preserve) {
@@ -2106,14 +2106,27 @@ module ts {
         function parseObjectLiteral(): ObjectLiteral {
             var node = <ObjectLiteral>createNode(SyntaxKind.ObjectLiteral);
             parseExpected(SyntaxKind.OpenBraceToken);
-            if (scanner.hasPrecedingLineBreak()) node.flags |= NodeFlags.MultiLine;
-            node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralMember, TrailingCommaBehavior.Allow);
+
+            if (scanner.hasPrecedingLineBreak()) {
+                node.flags |= NodeFlags.MultiLine;
+            }
+
+            // ES3 actually does not preserve a trailing comma in an object literal, however, we'd like to preserve it in ES5.
+            var trailingCommaBehavior: TrailingCommaBehavior = TrailingCommaBehavior.Preserve;
+            var trailingCommaMessage: DiagnosticMessage = undefined;
+
+            if (languageVersion === ScriptTarget.ES3) {
+                trailingCommaBehavior = TrailingCommaBehavior.Disallow;
+                trailingCommaMessage = Diagnostics.Trailing_comma_not_allowed_when_targeting_ECMAScript_3;
+            }
+
+            node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralMember, trailingCommaBehavior, trailingCommaMessage);
             parseExpected(SyntaxKind.CloseBraceToken);
 
             var seen: Map<SymbolFlags> = {};
             var Property    = 1;
             var GetAccessor = 2;
-            var SetAccesor = 4;
+            var SetAccesor  = 4;
             var GetOrSetAccessor = GetAccessor | SetAccesor;
             forEach(node.properties, (p: Declaration) => {
                 if (p.kind === SyntaxKind.OmittedExpression) {
@@ -3508,7 +3521,7 @@ module ts {
         var commonSourceDirectory: string;
 
         forEach(rootNames, name => processRootFile(name, false));
-        if (!seenNoDefaultLib) processRootFile(host.getDefaultLibFilename(), true);
+        if (!seenNoDefaultLib) { processRootFile(host.getDefaultLibFilename(), true); }
         verifyCompilerOptions();
         errors.sort(compareDiagnostics);
         program = {
@@ -3519,7 +3532,7 @@ module ts {
             getDiagnostics: getDiagnostics,
             getGlobalDiagnostics: getGlobalDiagnostics,
             getTypeChecker: () => createTypeChecker(program),
-            getCommonSourceDirectory: () => commonSourceDirectory,
+            getCommonSourceDirectory: () => commonSourceDirectory
         };
         return program;
 

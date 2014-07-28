@@ -135,7 +135,7 @@ module ts {
         ">>>=": SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken,
         "&=": SyntaxKind.AmpersandEqualsToken,
         "|=": SyntaxKind.BarEqualsToken,
-        "^=": SyntaxKind.CaretEqualsToken,
+        "^=": SyntaxKind.CaretEqualsToken
     };
 
     /*

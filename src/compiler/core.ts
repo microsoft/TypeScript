@@ -507,7 +507,7 @@ module ts {
                 pos: 0,
                 end: 0,
                 flags: 0,
-                parent: undefined,
+                parent: undefined
             };
             return <any>Node;
         },

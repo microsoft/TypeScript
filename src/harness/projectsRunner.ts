@@ -255,7 +255,7 @@ class ProjectRunner extends RunnerBase {
                 sourceMapData: sourceMapData,
                 outputFiles: outputFiles,
                 errors: errors,
-                nonSubfolderDiskFiles: nonSubfolderDiskFiles,
+                nonSubfolderDiskFiles: nonSubfolderDiskFiles
             };
         }
 

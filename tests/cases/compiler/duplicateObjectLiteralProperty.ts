@@ -5,7 +5,7 @@ var x = {
     \u0061: "ss", // Duplicate
     a: {
         c: 1,
-        "c": 56, // Duplicate
+        "c": 56 // Duplicate
     }
 };
 

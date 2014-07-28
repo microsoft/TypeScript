@@ -25,7 +25,7 @@ var a: {
 
 var b = {
     foo(x: 'hi') { },
-    foo(x: 'a') { },
+    foo(x: 'a') { }
 }
 
 

@@ -40,7 +40,7 @@ module Harness.SourceMapRecoder {
                 emittedColumn: 1,
                 sourceLine: 1,
                 sourceColumn: 1,
-                sourceIndex: 0,
+                sourceIndex: 0
             };
             errorDecodeOfEncodedMapping = undefined;
         }

@@ -8,7 +8,7 @@ var Person = makeClass(
         */ 
        initialize: function(name) { 
            this.name = name; 
-       }, 
+       }
    } 
 );
 

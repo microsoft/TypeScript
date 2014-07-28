@@ -6,7 +6,7 @@ module m1 {
 }
 var d = {
     m1: { m: m1 },
-    m2: { c: m1.c },
+    m2: { c: m1.c }
 };
 
 //// [declFileModuleAssignmentInObjectLiteralProperty.js]

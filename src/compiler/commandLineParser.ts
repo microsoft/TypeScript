@@ -10,7 +10,7 @@ module ts {
         "m": "module",
         "o": "out",
         "t": "target",
-        "v": "version",
+        "v": "version"
     };
 
     var options: CommandLineOption[] = [

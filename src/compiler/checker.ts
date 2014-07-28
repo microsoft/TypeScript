@@ -3026,7 +3026,7 @@ module ts {
             return {
                 typeParameters: typeParameters,
                 inferences: inferences,
-                inferredTypes: new Array(typeParameters.length),
+                inferredTypes: new Array(typeParameters.length)
             };
         }
 

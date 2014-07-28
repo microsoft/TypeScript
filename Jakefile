@@ -204,7 +204,7 @@ compileFile(processDiagnosticMessagesJs,
             [processDiagnosticMessagesTs],
             [processDiagnosticMessagesTs],
             [],
-            false);
+            /* useBuiltCompiler */ false);
 
 // The generated diagnostics map; built for the compiler and for the 'generate-diagnostics' task
 file(diagnosticInfoMapTs, [processDiagnosticMessagesJs, diagnosticMessagesJson], function () {

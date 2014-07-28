@@ -12,7 +12,7 @@
         ~
 !!! Duplicate identifier 'a'.
             c: 1,
-            "c": 56, // Duplicate
+            "c": 56 // Duplicate
             ~~~
 !!! Duplicate identifier '"c"'.
         }
