@@ -424,6 +424,7 @@ module FourSlash {
             this.scenarioActions.push('<CheckErrorList ExpectedNumOfErrors="' + expected + '" />');
 
             if (actual !== expected) {
+                this.printErrorLog(false, errors);
                 var errorMsg = "Actual number of errors (" + actual + ") does not match expected number (" + expected + ")";
                 Harness.IO.log(errorMsg);
                 throw new Error(errorMsg);
@@ -1894,7 +1895,6 @@ module FourSlash {
             { unitName: fileName, content: Harness.IO.readFile(fileName) }
         ];
         harnessCompiler.addInputFiles(filesToAdd);
-        harnessCompiler.compile();
 
         var emitterIOHost: Harness.Compiler.IEmitterIOHost = {
             writeFile: (path: string, contents: string, writeByteOrderMark: boolean) => fsOutput.Write(contents),
