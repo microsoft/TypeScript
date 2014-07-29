@@ -110,7 +110,7 @@ var bigObject = {
     var: 0,
     void: 0,
     while: 0,
-    with: 0,
+    with: 0
 };
 
 interface bigInterface {
@@ -380,7 +380,7 @@ var bigObject = {
     var: 0,
     void: 0,
     while: 0,
-    with: 0,
+    with: 0
 };
 var bigClass = (function () {
     function bigClass() {

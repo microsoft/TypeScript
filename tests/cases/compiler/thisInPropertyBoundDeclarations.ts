@@ -32,12 +32,12 @@ class A {
     };
 
     prop4 = {
-        a: function() { return this; },
+        a: function() { return this; }
     };
 
     prop5 = () => {
         return {
-            a: function() { return this; },
+            a: function() { return this; }
         };
     };
 }

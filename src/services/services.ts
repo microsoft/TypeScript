@@ -411,7 +411,7 @@ module ts {
 
         return {
             getSyntacticDiagnostics: getSyntacticDiagnostics,
-            getSemanticDiagnostics: getSemanticDiagnostics,
+            getSemanticDiagnostics: getSemanticDiagnostics
         };
     }
 
@@ -431,7 +431,7 @@ module ts {
             },
             getSymbolConstructor: () => SymbolObject,
             getTypeConstructor: () => TypeObject,
-            getSignatureConstructor: () => SignatureObject,
+            getSignatureConstructor: () => SignatureObject
         };
     }
 

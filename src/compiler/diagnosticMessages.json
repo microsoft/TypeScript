@@ -408,6 +408,11 @@
         "category": "Error",
         "code": 1119
     },
+    "Trailing comma not allowed in object literals when targeting ECMAScript 3.": {
+        "category": "Error",
+        "code": 1112
+    },
+
     "An export assignment cannot have modifiers.": {
         "category": "Error",
         "code": 1120

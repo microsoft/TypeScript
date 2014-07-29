@@ -47,7 +47,7 @@
         foo(x: 'hi') { },
         ~~~~~~~~~~~~~~~~
 !!! A signature with an implementation cannot use a string literal type.
-        foo(x: 'a') { },
+        foo(x: 'a') { }
         ~~~
 !!! Duplicate identifier 'foo'.
     }

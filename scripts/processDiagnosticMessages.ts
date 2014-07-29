@@ -55,19 +55,24 @@ function buildInfoFileOutput(messageTable: InputDiagnosticMessageTable, nameMap:
         'module ts {\r\n' +
         '    export var Diagnostics = {\r\n';
     var names = Utilities.getObjectKeys(messageTable);
+
     for (var i = 0; i < names.length; i++) {
         var name = names[i];
         var diagnosticDetails = messageTable[name];
+
+        if (i > 0) {
+            result += ',\r\n';
+        }
 
         result +=
         '        ' + convertPropertyName(nameMap[name]) +
         ': { code: ' + diagnosticDetails.code +
         ', category: DiagnosticCategory.' + diagnosticDetails.category +
         ', key: "' + name.replace('"', '\\"') +
-        '" },\r\n';
+        '" }';
     }
 
-    result += '    };\r\n}';
+    result += '};\r\n}';
 
     return result;
 }
@@ -96,7 +101,7 @@ function convertPropertyName(origName: string): string {
 module NameGenerator {
     export function ensureUniqueness(
         names: string[],
-        isFixed: boolean[]= names.map(() => false),
+        isFixed: boolean[] = names.map(() => false),
         isCaseSensitive: boolean = true): string[] {
 
         var names = names.map(x => x);

@@ -10,6 +10,6 @@
             */ 
            initialize: function(name) { 
                this.name = name; 
-           }, 
+           }
        } 
     );

@@ -3,6 +3,8 @@
 
 ///<reference path='typescript.ts' />
 
+// @target: es5
+
 module TypeScript {
 
     export class BlockIntrinsics {

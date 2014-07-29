@@ -16,7 +16,7 @@
     b3 = {
         f: (n) => { return 0; },
         g: (s) => { return 0; },
-        m: 0,
+        m: 0
     }; // ok
     
     b3 = {
@@ -24,7 +24,7 @@
 !!! Type '{ f: (n: number) => number; g: (s: string) => number; }' is not assignable to type '{ f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }':
 !!!   Property 'm' is missing in type '{ f: (n: number) => number; g: (s: string) => number; }'.
         f: (n) => { return 0; },
-        g: (s) => { return 0; },
+        g: (s) => { return 0; }
     }; // error
     
     b3 = {
@@ -32,7 +32,7 @@
 !!! Type '{ f: (n: number) => number; m: number; }' is not assignable to type '{ f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }':
 !!!   Property 'g' is missing in type '{ f: (n: number) => number; m: number; }'.
         f: (n) => { return 0; },
-        m: 0,
+        m: 0
     }; // error
     
     b3 = {
@@ -40,7 +40,7 @@
         g: (s) => { return 0; },
         m: 0,
         n: 0,
-        k: (a) =>{ return null; },
+        k: (a) =>{ return null; }
     }; // ok
     
     b3 = {
@@ -50,5 +50,5 @@
         f: (n) => { return 0; },
         g: (s) => { return 0; },
         n: 0,
-        k: (a) =>{ return null; },
+        k: (a) =>{ return null; }
     }; // error
