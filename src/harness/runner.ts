@@ -97,9 +97,8 @@ if (runners.length === 0) {
     }
 
     //// language services
-    // TODO: Re-enable Fourslash runner
-    // runners.push(new FourslashRunner());
-    // runners.push(new GeneratedFourslashRunner());
+    runners.push(new FourslashRunner());
+    //runners.push(new GeneratedFourslashRunner());
 }
 
 sys.newLine = '\r\n';
