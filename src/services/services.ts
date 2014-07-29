@@ -6,9 +6,9 @@
 
 /// <reference path='syntax\incrementalParser.ts' />
 /// <reference path='outliningElementsCollector.ts' />
-/// <reference path='GetScriptLexicalStructureWalker.ts' />
-/// <reference path='BraceMatcher.ts' />
-/// <reference path='Breakpoints.ts' />
+/// <reference path='getScriptLexicalStructureWalker.ts' />
+/// <reference path='braceMatcher.ts' />
+/// <reference path='breakpoints.ts' />
 /// <reference path='indentation.ts' />
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='compiler\bloomFilter.ts' />
@@ -21,7 +21,7 @@
 /// <reference path='compiler\hashTable.ts' />
 /// <reference path='compiler\ast.ts' />
 /// <reference path='compiler\astWalker.ts' />
-/// <reference path='compiler\asthelpers.ts' />
+/// <reference path='compiler\astHelpers.ts' />
 /// <reference path='compiler\types.ts' />
 /// <reference path='compiler\pathUtils.ts' />
 
