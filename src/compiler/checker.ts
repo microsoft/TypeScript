@@ -5042,7 +5042,7 @@ module ts {
             }
 
             checkSourceElement(node.body);
-            if (node.type) {
+            if (node.type && !isAccessor(node.kind)) {
                 checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
             }
 

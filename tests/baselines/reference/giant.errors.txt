@@ -374,34 +374,34 @@
 !!! A function implementation cannot be declared in an ambient context.
             public get pgF()
                        ~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
 !!! Duplicate identifier 'pgF'.
             public psF(param:any) { }
-            ~~~~~~
-!!! '{' expected.
                                   ~
 !!! A function implementation cannot be declared in an ambient context.
             public set psF(param:any)
                        ~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
 !!! Duplicate identifier 'psF'.
             private rgF() { }
-            ~~~~~~~
-!!! '{' expected.
                           ~
 !!! A function implementation cannot be declared in an ambient context.
             private get rgF()
                         ~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+                        ~~~
 !!! Duplicate identifier 'rgF'.
             private rsF(param:any) { }
-            ~~~~~~~
-!!! '{' expected.
                                    ~
 !!! A function implementation cannot be declared in an ambient context.
             private set rsF(param:any)
                         ~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+                        ~~~
 !!! Duplicate identifier 'rsF'.
             static tV;
-            ~~~~~~
-!!! '{' expected.
             static tF() { }
                         ~
 !!! A function implementation cannot be declared in an ambient context.
@@ -410,18 +410,18 @@
 !!! A function implementation cannot be declared in an ambient context.
             static set tsF(param:any)
                        ~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
 !!! Duplicate identifier 'tsF'.
             static tgF() { }
-            ~~~~~~
-!!! '{' expected.
                          ~
 !!! A function implementation cannot be declared in an ambient context.
             static get tgF()
                        ~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
 !!! Duplicate identifier 'tgF'.
         }
-        ~
-!!! '{' expected.
         export declare module eaM {
             var V;
             function F() { };
@@ -804,34 +804,34 @@
 !!! A function implementation cannot be declared in an ambient context.
             public get pgF()
                        ~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
 !!! Duplicate identifier 'pgF'.
             public psF(param:any) { }
-            ~~~~~~
-!!! '{' expected.
                                   ~
 !!! A function implementation cannot be declared in an ambient context.
             public set psF(param:any)
                        ~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
 !!! Duplicate identifier 'psF'.
             private rgF() { }
-            ~~~~~~~
-!!! '{' expected.
                           ~
 !!! A function implementation cannot be declared in an ambient context.
             private get rgF()
                         ~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+                        ~~~
 !!! Duplicate identifier 'rgF'.
             private rsF(param:any) { }
-            ~~~~~~~
-!!! '{' expected.
                                    ~
 !!! A function implementation cannot be declared in an ambient context.
             private set rsF(param:any)
                         ~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+                        ~~~
 !!! Duplicate identifier 'rsF'.
             static tV;
-            ~~~~~~
-!!! '{' expected.
             static tF() { }
                         ~
 !!! A function implementation cannot be declared in an ambient context.
@@ -840,18 +840,18 @@
 !!! A function implementation cannot be declared in an ambient context.
             static set tsF(param:any)
                        ~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
 !!! Duplicate identifier 'tsF'.
             static tgF() { }
-            ~~~~~~
-!!! '{' expected.
                          ~
 !!! A function implementation cannot be declared in an ambient context.
             static get tgF()
                        ~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+                       ~~~
 !!! Duplicate identifier 'tgF'.
         }
-        ~
-!!! '{' expected.
         export declare module eaM {
             var V;
             function F() { };
@@ -894,34 +894,34 @@
 !!! A function implementation cannot be declared in an ambient context.
         public get pgF()
                    ~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+                   ~~~
 !!! Duplicate identifier 'pgF'.
         public psF(param:any) { }
-        ~~~~~~
-!!! '{' expected.
                               ~
 !!! A function implementation cannot be declared in an ambient context.
         public set psF(param:any)
                    ~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+                   ~~~
 !!! Duplicate identifier 'psF'.
         private rgF() { }
-        ~~~~~~~
-!!! '{' expected.
                       ~
 !!! A function implementation cannot be declared in an ambient context.
         private get rgF()
                     ~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+                    ~~~
 !!! Duplicate identifier 'rgF'.
         private rsF(param:any) { }
-        ~~~~~~~
-!!! '{' expected.
                                ~
 !!! A function implementation cannot be declared in an ambient context.
         private set rsF(param:any)
                     ~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+                    ~~~
 !!! Duplicate identifier 'rsF'.
         static tV;
-        ~~~~~~
-!!! '{' expected.
         static tF() { }
                     ~
 !!! A function implementation cannot be declared in an ambient context.
@@ -930,18 +930,18 @@
 !!! A function implementation cannot be declared in an ambient context.
         static set tsF(param:any)
                    ~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+                   ~~~
 !!! Duplicate identifier 'tsF'.
         static tgF() { }
-        ~~~~~~
-!!! '{' expected.
                      ~
 !!! A function implementation cannot be declared in an ambient context.
         static get tgF()
                    ~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+                   ~~~
 !!! Duplicate identifier 'tgF'.
     }
-    ~
-!!! '{' expected.
     export declare module eaM {
         var V;
         function F() { };

@@ -2897,7 +2897,16 @@ module ts {
             node.typeParameters = sig.typeParameters;
             node.parameters = sig.parameters;
             node.type = sig.type;
-            node.body = parseBody(/* ignoreMissingOpenBrace */ false);
+
+            // A common error is to try to declare an accessor in an ambient class.
+            if (inAmbientContext && canParseSemicolon()) {
+                parseSemicolon();
+                node.body = createMissingNode();
+            }
+            else {
+                node.body = parseBody(/* ignoreMissingOpenBrace */ false);
+            }
+
             return finishNode(node);
         }
 
