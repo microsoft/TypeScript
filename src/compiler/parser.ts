@@ -3521,7 +3521,9 @@ module ts {
         var commonSourceDirectory: string;
 
         forEach(rootNames, name => processRootFile(name, false));
-        if (!seenNoDefaultLib) { processRootFile(host.getDefaultLibFilename(), true); }
+        if (!seenNoDefaultLib) {
+            processRootFile(host.getDefaultLibFilename(), true);
+        }
         verifyCompilerOptions();
         errors.sort(compareDiagnostics);
         program = {

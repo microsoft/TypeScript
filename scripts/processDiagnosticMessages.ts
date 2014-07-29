@@ -56,24 +56,16 @@ function buildInfoFileOutput(messageTable: InputDiagnosticMessageTable, nameMap:
         '    export var Diagnostics = {\r\n';
     var names = Utilities.getObjectKeys(messageTable);
 
-    if (names.length > 0) {
-        var name = names[0];
-        var diagnosticDetails = messageTable[name];
-
-        result +=
-        '        ' + convertPropertyName(nameMap[name]) +
-        ': { code: ' + diagnosticDetails.code +
-        ', category: DiagnosticCategory.' + diagnosticDetails.category +
-        ', key: "' + name.replace('"', '\\"') +
-        '" }';
-    }
-
-    for (var i = 1; i < names.length; i++) {
+    for (var i = 0; i < names.length; i++) {
         var name = names[i];
         var diagnosticDetails = messageTable[name];
 
+        if (i > 0) {
+            result += ',\r\n';
+        }
+
         result +=
-        ',\r\n        ' + convertPropertyName(nameMap[name]) +
+        '        ' + convertPropertyName(nameMap[name]) +
         ': { code: ' + diagnosticDetails.code +
         ', category: DiagnosticCategory.' + diagnosticDetails.category +
         ', key: "' + name.replace('"', '\\"') +
