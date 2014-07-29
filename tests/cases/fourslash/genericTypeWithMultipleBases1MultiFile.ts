@@ -20,4 +20,4 @@
 goTo.marker();
 verify.completionListContains('watch', '() => void');
 verify.completionListContains('moveUp', '() => void');
-verify.completionListContains('family', 'TModel');
+verify.completionListContains('family', 'number');
