@@ -189,11 +189,6 @@ module ts {
             cmds.errors.push(createCompilerDiagnostic(Diagnostics.No_input_files_specified));
         }
 
-        if (cmds.errors.length) {
-            reportDiagnostics(cmds.errors);
-            return 1;
-        }
-
         if (cmds.options.version) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, version));
             return 0;
@@ -201,6 +196,11 @@ module ts {
 
         if (cmds.filenames.length === 0 || cmds.options.help) {
             // TODO (drosen): Usage.
+        }
+
+        if (cmds.errors.length) {
+            reportDiagnostics(cmds.errors);
+            return 1;
         }
 
         var parseStart = new Date().getTime();
