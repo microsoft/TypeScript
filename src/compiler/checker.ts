@@ -87,7 +87,6 @@ module ts {
             getTypeOfExpression: getTypeOfExpression,
             typeToString: typeToString,
             symbolToString: symbolToString,
-            writeTypeToTextWriter: writeTypeToTextWriter,
             getAugmentedPropertiesOfApparentType: getAugmentedPropertiesOfApparentType
         };
 
