@@ -145,11 +145,8 @@ module TypeScript {
     }
 
     export function getLocalizedText(diagnosticKey: string, args: any[]): string {
-        if (LocalizedDiagnosticMessages) {
-            //Debug.assert(LocalizedDiagnosticMessages.hasOwnProperty(diagnosticKey));
-        }
-
-        var diagnosticMessageText: string = LocalizedDiagnosticMessages ? LocalizedDiagnosticMessages[diagnosticKey] : diagnosticKey;
+        
+        var diagnosticMessageText: string = diagnosticKey;
         Debug.assert(diagnosticMessageText !== undefined && diagnosticMessageText !== null);
 
         var actualCount = args ? args.length : 0;

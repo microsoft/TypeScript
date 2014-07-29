@@ -173,6 +173,8 @@ module ts {
     }
 
     function languageVersionToScriptTarget(languageVersion: LanguageVersion): ScriptTarget {
+        if (typeof languageVersion === "undefined") return undefined;
+
         switch (languageVersion) {
             case LanguageVersion.EcmaScript3: return ScriptTarget.ES3;
             case LanguageVersion.EcmaScript5: return ScriptTarget.ES5;
@@ -181,6 +183,8 @@ module ts {
     }
 
     function moduleGenTargetToModuleKind(moduleGenTarget: ModuleGenTarget): ModuleKind {
+        if (typeof moduleGenTarget === "undefined") return undefined;
+
         switch (moduleGenTarget) {
             case ModuleGenTarget.Asynchronous: return ModuleKind.AMD;
             case ModuleGenTarget.Synchronous: return ModuleKind.CommonJS;
@@ -190,6 +194,8 @@ module ts {
     }
 
     function scriptTargetTolanguageVersion(scriptTarget: ScriptTarget): LanguageVersion {
+        if (typeof scriptTarget === "undefined") return undefined;
+
         switch (scriptTarget) {
             case ScriptTarget.ES3: return LanguageVersion.EcmaScript3;
             case ScriptTarget.ES5: return LanguageVersion.EcmaScript5;
@@ -198,6 +204,8 @@ module ts {
     }
 
     function moduleKindToModuleGenTarget(moduleKind: ModuleKind): ModuleGenTarget {
+        if (typeof moduleKind === "undefined") return undefined;
+
         switch (moduleKind) {
             case ModuleKind.AMD: return ModuleGenTarget.Asynchronous;
             case ModuleKind.CommonJS: return ModuleGenTarget.Synchronous;

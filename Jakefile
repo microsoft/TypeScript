@@ -62,19 +62,17 @@ var servicesSources = [
 var harnessSources = [
     "harness.ts",
     "sourceMapRecorder.ts",
-// TODO Re-enable
-//    "harnessLanguageService.ts",
-//    "fourslash.ts",
-    "runner.ts",
+    "harnessLanguageService.ts",
+    "fourslash.ts",
     "external/json2.ts",
     "runnerbase.ts",
     "compilerRunner.ts",
     "typeWriter.ts",
-// TODO Re-enable fourslash and project tests
-//    "fourslashRunner.ts",
+    "fourslashRunner.ts",
     "projectsRunner.ts",
     "unittestrunner.ts",
     "rwcRunner.ts",
+    "runner.ts"
 ].map(function (f) {
     return path.join(harnessDirectory, f);
 });

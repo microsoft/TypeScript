@@ -811,7 +811,7 @@ module ts {
         }
     }
 
-    function createDocument(compilationSettings: CompilerOptions, fileName: string, scriptSnapshot: TypeScript.IScriptSnapshot, byteOrderMark: ByteOrderMark, version: number, isOpen: boolean, referencedFiles: string[]): Document {
+    export function createDocument(compilationSettings: CompilerOptions, fileName: string, scriptSnapshot: TypeScript.IScriptSnapshot, byteOrderMark: ByteOrderMark, version: number, isOpen: boolean, referencedFiles: string[]): Document {
         return new DocumentObject(compilationSettings, fileName, referencedFiles, scriptSnapshot, byteOrderMark, version, isOpen, /*syntaxTree:*/ null, /*soruceFile*/ null);
     }
 
@@ -1339,7 +1339,7 @@ module ts {
         function dispose(): void {
             if (program) {
                 forEach(program.getSourceFiles(),
-                    (f) => documentRegistry.releaseDocument(f.filename, program.getCompilerOptions()));
+                    (f) => { documentRegistry.releaseDocument(f.filename, program.getCompilerOptions()); });
             }
         }
 

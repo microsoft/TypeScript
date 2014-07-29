@@ -134,6 +134,14 @@ module ts {
         return result;
     }
 
+    export function forEachKey<T, U>(map: Map<T>, callback: (key: string) => U): U {
+        var result: U;
+        for (var id in map) {
+            if (result = callback(id)) break;
+        }
+        return result;
+    }
+
     export function mapToArray<T>(map: Map<T>): T[] {
         var result: T[] = [];
         for (var id in map) result.push(map[id]);
