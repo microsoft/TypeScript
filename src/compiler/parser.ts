@@ -2117,7 +2117,7 @@ module ts {
 
             if (languageVersion === ScriptTarget.ES3) {
                 trailingCommaBehavior = TrailingCommaBehavior.Disallow;
-                trailingCommaMessage = Diagnostics.Trailing_comma_not_allowed_when_targeting_ECMAScript_3;
+                trailingCommaMessage = Diagnostics.Trailing_comma_not_allowed_in_object_literals_when_targeting_ECMAScript_3;
             }
 
             node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralMember, trailingCommaBehavior, trailingCommaMessage);

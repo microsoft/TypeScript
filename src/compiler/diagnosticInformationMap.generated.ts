@@ -104,7 +104,7 @@ module ts {
         An_object_literal_cannot_have_multiple_properties_with_the_same_name_in_strict_mode: { code: 1117, category: DiagnosticCategory.Error, key: "An object literal cannot have multiple properties with the same name in strict mode." },
         An_object_literal_cannot_have_multiple_get_Slashset_accessors_with_the_same_name: { code: 1118, category: DiagnosticCategory.Error, key: "An object literal cannot have multiple get/set accessors with the same name." },
         An_object_literal_cannot_have_property_and_accessor_with_the_same_name: { code: 1119, category: DiagnosticCategory.Error, key: "An object literal cannot have property and accessor with the same name." },
-        Trailing_comma_not_allowed_when_targeting_ECMAScript_3: { code: 1112, category: DiagnosticCategory.Error, key: "Trailing comma not allowed when targeting ECMAScript 3." },
+        Trailing_comma_not_allowed_in_object_literals_when_targeting_ECMAScript_3: { code: 1112, category: DiagnosticCategory.Error, key: "Trailing comma not allowed in object literals when targeting ECMAScript 3." },
         An_export_assignment_cannot_have_modifiers: { code: 1120, category: DiagnosticCategory.Error, key: "An export assignment cannot have modifiers." },
         Duplicate_identifier_0: { code: 2000, category: DiagnosticCategory.Error, key: "Duplicate identifier '{0}'." },
         new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead: { code: 2068, category: DiagnosticCategory.Error, key: "'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead." },

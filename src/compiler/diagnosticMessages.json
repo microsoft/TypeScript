@@ -408,7 +408,7 @@
         "category": "Error",
         "code": 1119
     },
-    "Trailing comma not allowed when targeting ECMAScript 3.": {
+    "Trailing comma not allowed in object literals when targeting ECMAScript 3.": {
         "category": "Error",
         "code": 1112
     },
