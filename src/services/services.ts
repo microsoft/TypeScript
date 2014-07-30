@@ -32,8 +32,12 @@ module ts {
         getChildCount(): number;
         getChildAt(index: number): Node;
         getChildren(): Node[];
+        getStart(): number;
+        getFullStart(): number;
+        getEnd(): number;
+        getWidth(): number;
         getFullWidth(): number;
-        getTriviaWidth(): number;
+        getLeadingTriviaWidth(): number;
         getFullText(): string;
         getFirstToken(): Node;
         getLastToken(): Node;
@@ -91,16 +95,28 @@ module ts {
             return <SourceFile>node;
         }
 
-        public getTextPos(): number {
+        public getStart(): number {
             return getTokenPosOfNode(this);
         }
-    
-        public getFullWidth(): number {
-            return this.end - this.pos;
+
+        public getFullStart(): number {
+            return this.pos;
         }
 
-        public getTriviaWidth(): number {
-            return getTokenPosOfNode(this) - this.pos;
+        public getEnd(): number {
+            return this.end;
+        }
+
+        public getWidth(): number {
+            return this.getStart() - this.getEnd();
+        }
+
+        public getFullWidth(): number {
+            return this.end - this.getFullStart();
+        }
+
+        public getLeadingTriviaWidth(): number {
+            return this.getStart() - this.pos;
         }
 
         public getFullText(): string {
@@ -919,40 +935,48 @@ module ts {
             return this._compilationSettings;
         }
 
+        public getEntry(filename: string): HostFileInformation {
+            filename = TypeScript.switchToForwardSlashes(filename);
+            return lookUp(this.filenameToEntry, filename);
+        }
+
         public contains(filename: string): boolean {
-            return !!this.filenameToEntry[TypeScript.switchToForwardSlashes(filename)];
+            return !!this.getEntry(filename);
         }
 
         public getHostfilename(filename: string) {
-            var hostCacheEntry = this.filenameToEntry[TypeScript.switchToForwardSlashes(filename)];
+            var hostCacheEntry = this.getEntry(filename);
             if (hostCacheEntry) {
                 return hostCacheEntry.filename;
             }
             return filename;
         }
 
-        public getfilenames(): string[] {
+        public getFilenames(): string[] {
             var fileNames: string[] = [];
-            for (var id in this.filenameToEntry) {
-                fileNames.push(id);
-            }
+
+            forEachKey(this.filenameToEntry, key => {
+                if (hasProperty(this.filenameToEntry, key))
+                    fileNames.push(key);
+            });
+
             return fileNames;
         }
 
         public getVersion(filename: string): number {
-            return this.filenameToEntry[TypeScript.switchToForwardSlashes(filename)].version;
+            return this.getEntry(filename).version;
         }
 
         public isOpen(filename: string): boolean {
-            return this.filenameToEntry[TypeScript.switchToForwardSlashes(filename)].isOpen;
+            return this.getEntry(filename).isOpen;
         }
 
         public getByteOrderMark(filename: string): ByteOrderMark {
-            return this.filenameToEntry[TypeScript.switchToForwardSlashes(filename)].byteOrderMark;
+            return this.getEntry(filename).byteOrderMark;
         }
 
         public getScriptSnapshot(filename: string): TypeScript.IScriptSnapshot {
-            var file = this.filenameToEntry[TypeScript.switchToForwardSlashes(filename)];
+            var file = this.getEntry(filename);
             if (!file.sourceText) {
                 file.sourceText = this.host.getScriptSnapshot(file.filename);
             }
@@ -1117,7 +1141,7 @@ module ts {
 
         function getBucketForCompilationSettings(settings: CompilerOptions, createIfMissing: boolean): Map<DocumentRegistryEntry> {
             var key = getKeyFromCompilationSettings(settings);
-            var bucket = buckets[key];
+            var bucket = lookUp(buckets, key);
             if (!bucket && createIfMissing) {
                 buckets[key] = bucket = {};
             }
@@ -1126,7 +1150,7 @@ module ts {
 
         function reportStats() {
             var bucketInfoArray = Object.keys(buckets).filter(name => name && name.charAt(0) === '_').map(name => {
-                var entries = buckets[name];
+                var entries = lookUp(buckets, name);
                 var documents: { name: string; refCount: number; references: string[]; }[] = [];
                 for (var i in entries) {
                     var entry = entries[i];
@@ -1152,7 +1176,7 @@ module ts {
             referencedFiles: string[]= []): Document {
 
             var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
-            var entry = bucket[filename];
+            var entry = lookUp(bucket, filename);
             if (!entry) {
                 var document = createDocument(compilationSettings, filename, scriptSnapshot, byteOrderMark, version, isOpen, referencedFiles);
 
@@ -1179,7 +1203,7 @@ module ts {
 
             var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ false);
             Debug.assert(bucket);
-            var entry = bucket[filename];
+            var entry = lookUp(bucket, filename);
             Debug.assert(entry);
 
             if (entry.document.isOpen() === isOpen && entry.document.getVersion() === version) {
@@ -1194,7 +1218,7 @@ module ts {
             var bucket = getBucketForCompilationSettings(compilationSettings, false);
             Debug.assert(bucket);
 
-            var entry = bucket[filename];
+            var entry = lookUp(bucket, filename);
             entry.refCount--;
 
             Debug.assert(entry.refCount >= 0);
@@ -1229,10 +1253,14 @@ module ts {
             TypeScript.LocalizedDiagnosticMessages = host.getLocalizedDiagnosticMessages();
         }
 
+        function getDocument(filename: string): Document {
+            return lookUp(documentsByName, filename);
+        }
+
         function createCompilerHost(): CompilerHost {
             return {
                 getSourceFile: (filename, languageVersion) => {
-                    var document = documentsByName[filename];
+                    var document = getDocument(filename);
 
                     Debug.assert(!!document, "document can not be undefined");
 
@@ -1241,7 +1269,7 @@ module ts {
                 getCancellationToken: () => cancellationToken,
                 getCanonicalFileName: (filename) => useCaseSensitivefilenames ? filename : filename.toLowerCase(),
                 useCaseSensitiveFileNames: () => useCaseSensitivefilenames,
-                getNewLine: () => "\n",
+                getNewLine: () => "\r\n",
                 // Need something that doesn't depend on sys.ts here
                 getDefaultLibFilename: (): string => {
                     throw Error("TOD:: getDefaultLibfilename");
@@ -1292,7 +1320,7 @@ module ts {
             // Now, for every file the host knows about, either add the file (if the compiler
             // doesn't know about it.).  Or notify the compiler about any changes (if it does
             // know about it.)
-            var hostfilenames = hostCache.getfilenames();
+            var hostfilenames = hostCache.getFilenames();
 
             for (var i = 0, n = hostfilenames.length; i < n; i++) {
                 var filename = hostfilenames[i];
@@ -1301,7 +1329,7 @@ module ts {
                 var isOpen = hostCache.isOpen(filename);
                 var scriptSnapshot = hostCache.getScriptSnapshot(filename);
 
-                var document: Document = documentsByName[filename];
+                var document: Document = getDocument(filename);
                 if (document) {
                     //
                     // If the document is the same, assume no update
@@ -1564,7 +1592,7 @@ module ts {
 
             filename = TypeScript.switchToForwardSlashes(filename);
 
-            var document = documentsByName[filename];
+            var document = getDocument(filename);
             var sourceUnit = document.getSourceUnit();
 
             if (isCompletionListBlocker(document.getSyntaxTree().sourceUnit(), position)) {
@@ -1706,7 +1734,7 @@ module ts {
                 return undefined;
             }
 
-            var symbol = activeCompletionSession.symbols[entryName];
+            var symbol = lookUp(activeCompletionSession.symbols, entryName);
             if (symbol) {
                 var type = session.typeChecker.getTypeOfSymbol(symbol);
                 Debug.assert(type, "Could not find type for symbol");
@@ -1739,7 +1767,7 @@ module ts {
                 // find the child that has this
                 for (var i = 0, n = current.getChildCount(); i < n; i++) {
                     var child = current.getChildAt(i);
-                    if (getTokenPosOfNode(child) <= position && position < child.end) {
+                    if (child.getStart() <= position && position < child.getEnd()) {
                         current = child;
                         continue outer;
                     }
@@ -1824,7 +1852,7 @@ module ts {
             synchronizeHostData();
 
             filename = TypeScript.switchToForwardSlashes(filename);
-            var document = documentsByName[filename];
+            var document = getDocument(filename);
             var node = getNodeAtPosition(document.getSourceFile(), position);
             if (!node) return undefined;
 

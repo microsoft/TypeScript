@@ -34,7 +34,7 @@ module TypeScript.Services {
             var parentScope = this.currentScope;
             this.parentScopes.push(parentScope);
 
-            var scope = parentScope.childScopes[key];
+            var scope = ts.lookUp(parentScope.childScopes, key);
             if (!scope) {
                 scope = this.createScope()
                 parentScope.childScopes[key] = scope;
@@ -76,7 +76,7 @@ module TypeScript.Services {
         private createItem(node: TypeScript.ISyntaxNode, modifiers: ISyntaxToken[], kind: string, name: string): void {
             var key = kind + "+" + name;
 
-            if (this.currentScope.items[key] !== undefined) {
+            if (ts.lookUp(this.currentScope.items, key) !== undefined) {
                 this.addAdditionalSpan(node, key);
                 return;
             }
@@ -100,7 +100,7 @@ module TypeScript.Services {
             node: TypeScript.ISyntaxNode,
             key: string) {
 
-            var item = this.currentScope.items[key]
+            var item = ts.lookUp(this.currentScope.items, key);
             Debug.assert(item !== undefined);
 
             var start = TypeScript.start(node);

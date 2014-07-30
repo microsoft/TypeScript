@@ -331,7 +331,7 @@ module ts {
 
             /// TODO: this should be pushed into VS.
             /// We can not ask the LS instance to resolve, as this will lead to asking the host about files it does not know about,
-            /// something it is not desinged to handle. for now make sure we never get a noresolve=true.
+            /// something it is not desinged to handle. for now make sure we never get a "noresolve == false".
             /// This value should not matter, as the host runs resolution logic independentlly
             options.noResolve = true;
 

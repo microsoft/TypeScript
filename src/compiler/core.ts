@@ -142,6 +142,10 @@ module ts {
         return result;
     }
 
+    export function lookUp<T>(map: Map<T>, key: string): T {
+        return hasProperty(map, key) ? map[key] : undefined;
+    }
+
     export function mapToArray<T>(map: Map<T>): T[] {
         var result: T[] = [];
         for (var id in map) result.push(map[id]);

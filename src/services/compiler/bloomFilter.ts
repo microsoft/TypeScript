@@ -83,7 +83,7 @@ module TypeScript {
 
         public addKeys(keys: ts.Map<any>) {
             for (var name in keys) {
-                if (keys[name]) {
+                if (ts.lookUp(keys, name)) {
                     this.add(name);
                 }
             }
