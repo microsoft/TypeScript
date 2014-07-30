@@ -843,6 +843,11 @@
         "code": 5039
     },
 
+    "Version {0}": {
+       "category": "Message",
+       "code": 6029
+   },
+
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

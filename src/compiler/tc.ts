@@ -9,6 +9,8 @@
 /// <reference path="commandLineParser.ts"/>
 
 module ts {
+    export var version = "1.1.0.0";
+
     /// Checks to see if the locale is in the appropriate format,
     /// and if it is, attempt to set the appropriate language.
     function validateLocaleAndSetLanguage(locale: string, errors: Diagnostic[]): boolean {
@@ -76,39 +78,47 @@ module ts {
         return count;
     }
 
-    function reportErrors(errors: Diagnostic[]) {
+    function reportDiagnostic(error: Diagnostic) {
+        if (error.file) {
+            var loc = error.file.getLineAndCharacterFromPosition(error.start);
+            sys.writeErr(error.file.filename + "(" + loc.line + "," + loc.character + "): " + error.messageText + sys.newLine);
+        }
+        else {
+            sys.writeErr(error.messageText + sys.newLine);
+        }
+    }
+
+    function reportDiagnostics(errors: Diagnostic[]) {
         for (var i = 0; i < errors.length; i++) {
-            var error = errors[i];
-            if (error.file) {
-                var loc = error.file.getLineAndCharacterFromPosition(error.start);
-                sys.writeErr(error.file.filename + "(" + loc.line + "," + loc.character + "): " + error.messageText + sys.newLine);
-            }
-            else {
-                sys.writeErr(error.messageText + sys.newLine);
-            }
+            reportDiagnostic(errors[i]);
         }
     }
 
     function padLeft(s: string, length: number) {
-        while (s.length < length) s = " " + s;
+        while (s.length < length) {
+            s = " " + s;
+        }
         return s;
     }
 
     function padRight(s: string, length: number) {
-        while (s.length < length) s = s + " ";
+        while (s.length < length) {
+            s = s + " ";
+        }
+
         return s;
     }
 
-    function reportDiagnostic(name: string, value: string) {
+    function reportStatisticalValue(name: string, value: string) {
         sys.writeErr(padRight(name + ":", 12) + padLeft(value.toString(), 10) + sys.newLine);
     }
 
-    function reportDiagnosticCount(name: string, count: number) {
-        reportDiagnostic(name, "" + count);
+    function reportCountStatistic(name: string, count: number) {
+        reportStatisticalValue(name, "" + count);
     }
 
-    function reportDiagnosticTime(name: string, time: number) {
-        reportDiagnostic(name, (time / 1000).toFixed(2) + "s");
+    function reportTimeStatistic(name: string, time: number) {
+        reportStatisticalValue(name, (time / 1000).toFixed(2) + "s");
     }
 
     function createCompilerHost(options: CompilerOptions): CompilerHost {
@@ -120,7 +130,9 @@ module ts {
                 var text = sys.readFile(filename, options.charset);
             }
             catch (e) {
-                if (onError) onError(e.message);
+                if (onError) {
+                    onError(e.message);
+                }
                 text = "";
             }
             return text !== undefined ? createSourceFile(filename, text, languageVersion) : undefined;
@@ -168,25 +180,26 @@ module ts {
 
     export function executeCommandLine(args: string[]): number {
         var cmds = parseCommandLine(args);
+
+        if (cmds.options.locale) {
+            validateLocaleAndSetLanguage(cmds.options.locale, cmds.errors);
+        }
+
         if (cmds.filenames.length === 0 && !(cmds.options.help || cmds.options.version)) {
             cmds.errors.push(createCompilerDiagnostic(Diagnostics.No_input_files_specified));
         }
 
         if (cmds.options.version) {
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, version));
+            return 0;
         }
 
         if (cmds.filenames.length === 0 || cmds.options.help) {
             // TODO (drosen): Usage.
         }
 
-        // If a locale has been set but fails to load, act as if it was never specified,
-        // but collect the errors to report along the way.
-        if (cmds.options.locale) {
-            validateLocaleAndSetLanguage(cmds.options.locale, cmds.errors);
-        }
-
         if (cmds.errors.length) {
-            reportErrors(cmds.errors);
+            reportDiagnostics(cmds.errors);
             return 1;
         }
 
@@ -209,19 +222,19 @@ module ts {
             errors = concatenate(semanticErrors, emitErrors);
         }
 
-        reportErrors(errors);
+        reportDiagnostics(errors);
         if (cmds.options.diagnostics) {
-            reportDiagnosticCount("Files", program.getSourceFiles().length);
-            reportDiagnosticCount("Lines", countLines(program));
-            reportDiagnosticCount("Nodes", checker ? checker.getNodeCount() : 0);
-            reportDiagnosticCount("Identifiers", checker ? checker.getIdentifierCount() : 0);
-            reportDiagnosticCount("Symbols", checker ? checker.getSymbolCount() : 0);
-            reportDiagnosticCount("Types", checker ? checker.getTypeCount() : 0);
-            reportDiagnosticTime("Parse time", bindStart - parseStart);
-            reportDiagnosticTime("Bind time", checkStart - bindStart);
-            reportDiagnosticTime("Check time", emitStart - checkStart);
-            reportDiagnosticTime("Emit time", reportStart - emitStart);
-            reportDiagnosticTime("Total time", reportStart - parseStart);
+            reportCountStatistic("Files", program.getSourceFiles().length);
+            reportCountStatistic("Lines", countLines(program));
+            reportCountStatistic("Nodes", checker ? checker.getNodeCount() : 0);
+            reportCountStatistic("Identifiers", checker ? checker.getIdentifierCount() : 0);
+            reportCountStatistic("Symbols", checker ? checker.getSymbolCount() : 0);
+            reportCountStatistic("Types", checker ? checker.getTypeCount() : 0);
+            reportTimeStatistic("Parse time", bindStart - parseStart);
+            reportTimeStatistic("Bind time", checkStart - bindStart);
+            reportTimeStatistic("Check time", emitStart - checkStart);
+            reportTimeStatistic("Emit time", reportStart - emitStart);
+            reportTimeStatistic("Total time", reportStart - parseStart);
         }
         return errors.length ? 1 : 0;
     }

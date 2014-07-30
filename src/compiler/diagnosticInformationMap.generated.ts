@@ -212,6 +212,7 @@ module ts {
         Could_not_write_file_0_Colon_1: { code: 5033, category: DiagnosticCategory.Error, key: "Could not write file '{0}': {1}" },
         Option_mapRoot_cannot_be_specified_without_specifying_sourcemap_option: { code: 5038, category: DiagnosticCategory.Error, key: "Option mapRoot cannot be specified without specifying sourcemap option." },
         Option_sourceRoot_cannot_be_specified_without_specifying_sourcemap_option: { code: 5039, category: DiagnosticCategory.Error, key: "Option sourceRoot cannot be specified without specifying sourcemap option." },
+        Version_0: { code: 6029, category: DiagnosticCategory.Message, key: "Version {0}" },
         Variable_0_implicitly_has_an_1_type: { code: 7005, category: DiagnosticCategory.Error, key: "Variable '{0}' implicitly has an '{1}' type." },
         Parameter_0_implicitly_has_an_1_type: { code: 7006, category: DiagnosticCategory.Error, key: "Parameter '{0}' implicitly has an '{1}' type." },
         Member_0_implicitly_has_an_1_type: { code: 7008, category: DiagnosticCategory.Error, key: "Member '{0}' implicitly has an '{1}' type." },
