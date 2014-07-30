@@ -5,8 +5,8 @@
             return ns.toString();
         }
         private foo(s: string): string;
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Function implementation expected.
+                ~~~
+!!! Function implementation is missing.
     }
     
     class e {
@@ -15,6 +15,6 @@
         }
         private foo(s: string): string;
         private foo(n: number): string;
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Function implementation expected.
+                ~~~
+!!! Function implementation is missing.
     }

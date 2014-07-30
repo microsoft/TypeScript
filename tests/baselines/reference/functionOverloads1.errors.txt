@@ -1,0 +1,6 @@
+==== tests/cases/compiler/functionOverloads1.ts (1 errors) ====
+    function foo();
+             ~~~
+!!! Function implementation is missing.
+    1+1;
+    function foo():string { return "a" }

@@ -1,9 +1,9 @@
 ==== tests/cases/compiler/ClassDeclaration14.ts (2 errors) ====
     class C {
        foo();
-       ~~~~~~
-!!! Function implementation expected.
+       ~~~
+!!! Function implementation is missing.
        constructor();
        ~~~~~~~~~~~~~~
-!!! Constructor implementation expected.
+!!! Constructor implementation is missing.
     }

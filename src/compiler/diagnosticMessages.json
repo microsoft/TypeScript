@@ -623,8 +623,12 @@
     "Expression resolves to variable declaration '_i' that compiler uses to initialize rest parameter.": {
         "category": "Error",
         "code": 2235
-	},
-    "Constructor implementation expected.": {
+    },
+    "Function implementation name must be '{0}'.": {
+        "category": "Error",
+        "code": 2239
+    },
+    "Constructor implementation is missing.": {
         "category": "Error",
         "code": 2240
     },
@@ -635,6 +639,14 @@
     "A parameter property is only allowed in a constructor implementation.": {
         "category": "Error",
         "code": 2246
+    },
+    "Function overload must be static.": {
+        "category": "Error",
+        "code": 2247
+    },
+    "Function overload must not be static.": {
+        "category": "Error",
+        "code": 2248
     },
     "Circular definition of import alias '{0}'.": {
         "category": "Error",
@@ -900,7 +912,6 @@
         "category": "Error",
         "code": 7020
     },
-
     "Variable declaration list cannot be empty.": {
         "category": "Error",
         "code": -9999999
@@ -1121,7 +1132,7 @@
         "category": "Error",
         "code": -9999999
     },
-    "Function implementation expected.": {
+    "Function implementation is missing.": {
         "category": "Error",
         "code": -9999999
     },

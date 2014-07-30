@@ -5,10 +5,10 @@
     }
     class List<U> implements IList<U> {
         data(): U;
-        ~~~~~~~~~~
-!!! Function implementation expected.
+        ~~~~
+!!! Function implementation is missing.
         next(): string;
-        ~~~~~~~~~~~~~~~
-!!! Function implementation expected.
+        ~~~~
+!!! Function implementation is missing.
     }
     

@@ -1,4 +1,4 @@
 ==== tests/cases/compiler/functionOverloads3.ts (1 errors) ====
     function foo():string;
-    ~~~~~~~~~~~~~~~~~~~~~~
-!!! Function implementation expected.
+             ~~~
+!!! Function implementation is missing.

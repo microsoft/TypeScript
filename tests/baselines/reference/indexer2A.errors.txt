@@ -3,8 +3,8 @@
     class IDirectChildrenMap {
         // Decided to enforce a semicolon after declarations
         hasOwnProperty(objectId: number): boolean
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Function implementation expected.
+        ~~~~~~~~~~~~~~
+!!! Function implementation is missing.
         [objectId: number]: IHeapObjectProperty[]
     }
     var directChildrenMap = <IDirectChildrenMap>{}; 

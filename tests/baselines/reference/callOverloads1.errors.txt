@@ -8,8 +8,8 @@
     }
     
     function Foo(); // error
-    ~~~~~~~~~~~~~~~
-!!! Function implementation expected.
+             ~~~
+!!! Function implementation is missing.
              ~~~
 !!! Duplicate identifier 'Foo'.
     function F1(s:string);

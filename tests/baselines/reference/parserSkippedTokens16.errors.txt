@@ -11,8 +11,8 @@
     function Foo      () #   { }
                          
 !!! Invalid character.
-    ~~~~~~~~~~~~~~~~~~~~
-!!! Function implementation expected.
+             ~~~
+!!! Function implementation is missing.
     4+:5
       ~
 !!! Expression expected.

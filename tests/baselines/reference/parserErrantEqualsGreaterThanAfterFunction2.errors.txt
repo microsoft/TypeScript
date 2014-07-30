@@ -2,8 +2,8 @@
     function f(p: A) => p;
                      ~~
 !!! Block or ';' expected.
-    ~~~~~~~~~~~~~~~~
-!!! Function implementation expected.
+             ~
+!!! Function implementation is missing.
                   ~
 !!! Cannot find name 'A'.
                         ~
