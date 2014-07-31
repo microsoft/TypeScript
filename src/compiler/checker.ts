@@ -305,7 +305,7 @@ module ts {
                     case SyntaxKind.CatchBlock:
                         var id = (<CatchBlock>location).variable;
                         if (name === id.text) {
-                            return returnResolvedSymbol((<CatchBlock>location).variable.symbol);
+                            return returnResolvedSymbol(location.symbol);
                         }
                         break;
                 }
@@ -1080,122 +1080,87 @@ module ts {
         }
 
         function getTypeOfVariableDeclaration(declaration: VariableDeclaration): Type {
-            var type: Type;
-
-            if (declaration.parent.kind === SyntaxKind.CatchBlock || declaration.parent.kind === SyntaxKind.ForInStatement) {
-                type = anyType;
+            // A variable declared in a for..in statement is always of type any
+            if (declaration.parent.kind === SyntaxKind.ForInStatement) {
+                return anyType;
             }
-            else if (declaration.type) {
-                type = getTypeFromTypeNode(declaration.type);
+            // Use type from type annotation if one is present
+            if (declaration.type) {
+                return getTypeFromTypeNode(declaration.type);
             }
-            else {
-                // TypeScript 1.0 spec (April 2014):
-                // If only one accessor includes a type annotation, the other behaves as if it had the same type annotation.
-                // If neither accessor includes a type annotation, the inferred return type of the get accessor becomes the parameter type of the set accessor.
-                if (declaration.kind === SyntaxKind.Parameter && declaration.parent.kind === SyntaxKind.SetAccessor) {
+            if (declaration.kind === SyntaxKind.Parameter) {
+                var func = <FunctionDeclaration>declaration.parent;
+                // For a parameter of a set accessor, use the type of the get accessor if one is present
+                if (func.kind === SyntaxKind.SetAccessor) {
                     var getter = <AccessorDeclaration>getDeclarationOfKind(declaration.parent.symbol, SyntaxKind.GetAccessor);
                     if (getter) {
-                        //getReturnTypeOfSignature will check both type annotation and return type inferred from body
-                        type = getReturnTypeOfSignature(getSignatureFromDeclaration(getter));
+                        return getReturnTypeOfSignature(getSignatureFromDeclaration(getter));
                     }
                 }
-
-                var unwidenedType: Type;
-
-                if (!type) {
-                    if (declaration.initializer) {
-                        unwidenedType = checkAndMarkExpression(declaration.initializer);
-                        type = getWidenedType(unwidenedType);
-                    }
-                    else if (declaration.flags & NodeFlags.Rest) {
-                        type = createArrayType(anyType);
-                    }
-                    else {
-                        type = anyType;
-                    }
-                }
-
-                if (program.getCompilerOptions().noImplicitAny && shouldReportNoImplicitAnyOnVariableOrParameterOrProperty(declaration, type, unwidenedType)) {
-                    reportNoImplicitAnyOnVariableOrParameterOrProperty(declaration, type);
+                // Use contextual parameter type if one is available
+                var type = getContextuallyTypedParameterType(declaration);
+                if (type) {
+                    return type;
                 }
             }
+            // Use the type of the initializer expression if one is present
+            if (declaration.initializer) {
+                var unwidenedType = checkAndMarkExpression(declaration.initializer);
+                var type = getWidenedType(unwidenedType);
+                return type !== unwidenedType ? checkImplicitAny(type) : type;
+            }
+            // Rest parameter defaults to type any[]
+            if (declaration.flags & NodeFlags.Rest) {
+                return checkImplicitAny(createArrayType(anyType));
+            }
+            // Other parameters default to type any
+            return checkImplicitAny(anyType);
 
-            return type;
-
-            function shouldReportNoImplicitAnyOnVariableOrParameterOrProperty(declaration: VariableDeclaration, type: Type, unwidenedType: Type): boolean {
-                // If we attempted to widen, the resulting type has to be a different.
-                if (type === unwidenedType) {
-                    return false;
+            function checkImplicitAny(type: Type): Type {
+                if (!program.getCompilerOptions().noImplicitAny) {
+                    return type;
                 }
-
                 // We need to have ended up with 'any', 'any[]', 'any[][]', etc.
                 if (getInnermostTypeOfNestedArrayTypes(type) !== anyType) {
-                    return false;
+                    return type;
                 }
-
                 // Ignore privates within ambient contexts; they exist purely for documentative purposes to avoid name clashing.
                 // (e.g. privates within .d.ts files do not expose type information)
                 if (isPrivateWithinAmbient(declaration) || (declaration.kind === SyntaxKind.Parameter && isPrivateWithinAmbient(declaration.parent))) {
-                    return false;
+                    return type;
                 }
-
-                return true;
-            }
-
-            function reportNoImplicitAnyOnVariableOrParameterOrProperty(declaration: VariableDeclaration, type: Type): void {
-                var varName = identifierToString(declaration.name);
-                var typeName = typeToString(type);
-
                 switch (declaration.kind) {
-                    case SyntaxKind.VariableDeclaration:
-                        error(declaration, Diagnostics.Variable_0_implicitly_has_an_1_type, varName, typeName)
-                        break;
-
                     case SyntaxKind.Property:
-                        error(declaration, Diagnostics.Member_0_implicitly_has_an_1_type, varName, typeName)
+                        var diagnostic = Diagnostics.Member_0_implicitly_has_an_1_type;
                         break;
-
                     case SyntaxKind.Parameter:
-                        var funcDeclaration = <FunctionDeclaration>declaration.parent;
-
-                        // If this is a rest parameter, we should have widened specifically to 'any[]'.
-                        if (declaration.flags & NodeFlags.Rest) {
-                            error(declaration, Diagnostics.Rest_parameter_0_implicitly_has_an_any_type, varName)
-                        }
-                        else {
-                            error(declaration, Diagnostics.Parameter_0_implicitly_has_an_1_type, varName, typeName)
-                        }
-
+                        var diagnostic = declaration.flags & NodeFlags.Rest ?
+                            Diagnostics.Rest_parameter_0_implicitly_has_an_any_type :
+                            Diagnostics.Parameter_0_implicitly_has_an_1_type;
                         break;
-
                     default:
-                        Debug.fail("Received a '" + SyntaxKind[declaration.kind] + "', but expected '" +
-                            SyntaxKind[SyntaxKind.VariableDeclaration] + "', '" +
-                            SyntaxKind[SyntaxKind.Property] + "', or '" +
-                            SyntaxKind[SyntaxKind.Parameter] + "'.\r\n");
+                        var diagnostic = Diagnostics.Variable_0_implicitly_has_an_1_type;
                 }
+                error(declaration, diagnostic, identifierToString(declaration.name), typeToString(type));
+                return type;
             }
-
         }
 
         function getTypeOfVariableOrParameterOrProperty(symbol: Symbol): Type {
             var links = getSymbolLinks(symbol);
             if (!links.type) {
+                // Handle prototype property
                 if (symbol.flags & SymbolFlags.Prototype) {
                     return links.type = getTypeOfPrototypeProperty(symbol);
                 }
-                var declaration = <VariableDeclaration>symbol.valueDeclaration;
-                if (declaration.kind === SyntaxKind.Parameter && !declaration.type) {
-                    var parent = declaration.parent;
-                    if (parent.kind === SyntaxKind.FunctionExpression || parent.kind === SyntaxKind.ArrowFunction) {
-                        assignContextualTypes(<FunctionExpression>parent);
-                        if (links.type) {
-                            return links.type;
-                        }
-                    }
+                // Handle catch clause variables
+                var declaration = symbol.valueDeclaration;
+                if (declaration.kind === SyntaxKind.CatchBlock) {
+                    return links.type = anyType;
                 }
+                // Handle variable, parameter or property
                 links.type = resolvingType;
-                var type = getTypeOfVariableDeclaration(<VariableDeclaration>symbol.valueDeclaration);
+                var type = getTypeOfVariableDeclaration(<VariableDeclaration>declaration);
                 if (links.type === resolvingType) {
                     links.type = type;
                 }
@@ -1207,7 +1172,7 @@ module ts {
         }
 
         function getSetAccessorTypeAnnotationNode(accessor: AccessorDeclaration): TypeNode {
-            return accessor && accessor.parameters.length > 0  && accessor.parameters[0].type;
+            return accessor && accessor.parameters.length > 0 && accessor.parameters[0].type;
         }
 
         function getAnnotatedAccessorType(accessor: AccessorDeclaration): Type {
@@ -3445,8 +3410,22 @@ module ts {
         }
 
         function getTypeOfExpression(node: Expression): Type {
-            // TODO: Return type cached in NodeLinks
+            // TODO: Optimize by caching type in NodeLinks?
             return checkExpression(node);
+        }
+
+        // Return contextual type of parameter or undefined if no contextual type is available
+        function getContextuallyTypedParameterType(parameter: VariableDeclaration): Type {
+            var func = <FunctionDeclaration>parameter.parent;
+            if (func.kind === SyntaxKind.FunctionExpression || func.kind === SyntaxKind.ArrowFunction) {
+                if (isContextSensitiveExpression(func)) {
+                    var signature = getContextualSignature(func);
+                    if (signature) {
+                        return getTypeAtPosition(signature, indexOf(func.parameters, parameter));
+                    }
+                }
+            }
+            return undefined;
         }
 
         function getContextualTypeForInitializerExpression(node: Expression): Type {
@@ -3456,18 +3435,7 @@ module ts {
                     return getTypeFromTypeNode(declaration.type);
                 }
                 if (declaration.kind === SyntaxKind.Parameter) {
-                    var func = <FunctionDeclaration>declaration.parent;
-                    if (func.kind === SyntaxKind.FunctionExpression || func.kind === SyntaxKind.ArrowFunction) {
-                        if (isContextSensitiveExpression(func)) {
-                            var type = getContextualType(func);
-                            if (type) {
-                                var signature = getContextualSignature(type);
-                                if (signature) {
-                                    return getTypeAtPosition(signature, indexOf(func.parameters, declaration));
-                                }
-                            }
-                        }
-                    }
+                    return getContextuallyTypedParameterType(declaration);
                 }
             }
             return undefined;
@@ -3483,12 +3451,9 @@ module ts {
                 }
                 // Otherwise, if the containing function is contextually typed by a function type with exactly one call signature
                 // and that call signature is non-generic, return statements are contextually typed by the return type of the signature
-                var type = getContextualType(func);
-                if (type) {
-                    var signature = getContextualSignature(type);
-                    if (signature) {
-                        return getReturnTypeOfSignature(signature);
-                    }
+                var signature = getContextualSignature(func);
+                if (signature) {
+                    return getReturnTypeOfSignature(signature);
                 }
             }
             return undefined;
@@ -3574,6 +3539,20 @@ module ts {
                     return getContextualTypeForElementExpression(node);
                 case SyntaxKind.ConditionalExpression:
                     return getContextualTypeForConditionalOperand(node);
+            }
+            return undefined;
+        }
+
+        function getContextualSignature(node: Expression): Signature {
+            var type = getContextualType(node);
+            if (type) {
+                var signatures = getSignaturesOfType(type, SignatureKind.Call);
+                if (signatures.length === 1) {
+                    var signature = signatures[0];
+                    if (!signature.typeParameters) {
+                        return signature;
+                    }
+                }
             }
             return undefined;
         }
@@ -4104,45 +4083,10 @@ module ts {
             return targetType;
         }
 
-        function getContextualSignature(contextualType: Type) {
-            if (contextualType) {
-                var signatures = getSignaturesOfType(contextualType, SignatureKind.Call);
-                if (signatures.length === 1) {
-                    var signature = signatures[0];
-                    if (!signature.typeParameters) {
-                        return signature;
-                    }
-                }
-            }
-        }
-
         function getTypeAtPosition(signature: Signature, pos: number): Type {
             return signature.hasRestParameter ?
                 pos < signature.parameters.length - 1 ? getTypeOfSymbol(signature.parameters[pos]) : getRestTypeOfSignature(signature) :
                 pos < signature.parameters.length ? getTypeOfSymbol(signature.parameters[pos]) : anyType;
-        }
-
-        function assignContextualTypes(node: FunctionExpression, contextualMapper?: TypeMapper) {
-            var links = getNodeLinks(node);
-            if (!(links.flags & NodeCheckFlags.ContextAssigned)) {
-                var contextualSignature = getContextualSignature(getContextualType(node));
-                if (!(links.flags & NodeCheckFlags.ContextAssigned)) {
-                    links.flags |= NodeCheckFlags.ContextAssigned;
-                    if (contextualSignature) {
-                        var signature = getSignaturesOfType(getTypeOfSymbol(node.symbol), SignatureKind.Call)[0];
-                        if (!node.typeParameters && !forEach(node.parameters, p => p.type)) {
-                            assignContextualParameterTypes(signature, contextualSignature, contextualMapper || identityMapper);
-                        }
-                        if (!node.type) {
-                            signature.resolvedReturnType = resolvingType;
-                            var returnType = getReturnTypeFromBody(node, contextualMapper);
-                            if (signature.resolvedReturnType === resolvingType) {
-                                signature.resolvedReturnType = returnType;
-                            }
-                        }
-                    }
-                }
-            }
         }
 
         function assignContextualParameterTypes(signature: Signature, context: Signature, mapper: TypeMapper) {
@@ -4303,10 +4247,32 @@ module ts {
             if (contextualMapper === identityMapper) {
                 return anyFunctionType;
             }
-            var type = getTypeOfSymbol(node.symbol);
             var links = getNodeLinks(node);
+            var type = getTypeOfSymbol(node.symbol);
+            // Check if function expression is contextually typed and assign parameter types if so
+            if (!(links.flags & NodeCheckFlags.ContextChecked)) {
+                var contextualSignature = getContextualSignature(node);
+                // If a type check is started at a function expression that is an argument of a function call, obtaining the
+                // contextual type may recursively get back to here during overload resolution of the call. If so, we will have
+                // already assigned contextual types.
+                if (!(links.flags & NodeCheckFlags.ContextChecked)) {
+                    links.flags |= NodeCheckFlags.ContextChecked;
+                    if (contextualSignature) {
+                        var signature = getSignaturesOfType(type, SignatureKind.Call)[0];
+                        if (isContextSensitiveExpression(node)) {
+                            assignContextualParameterTypes(signature, contextualSignature, contextualMapper || identityMapper);
+                        }
+                        if (!node.type) {
+                            signature.resolvedReturnType = resolvingType;
+                            var returnType = getReturnTypeFromBody(node, contextualMapper);
+                            if (signature.resolvedReturnType === resolvingType) {
+                                signature.resolvedReturnType = returnType;
+                            }
+                        }
+                    }
+                }
+            }
             if (!(links.flags & NodeCheckFlags.TypeChecked)) {
-                assignContextualTypes(node, contextualMapper);
                 checkSignatureDeclaration(node);
                 if (node.type) {
                     checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
@@ -4591,9 +4557,10 @@ module ts {
         }
 
         function checkExpressionWithContextualType(node: Expression, contextualType: Type, contextualMapper?: TypeMapper): Type {
+            var saveContextualType = node.contextualType;
             node.contextualType = contextualType;
             var result = checkExpression(node, contextualMapper);
-            node.contextualType = undefined;
+            node.contextualType = saveContextualType;
             return result;
         }
 
