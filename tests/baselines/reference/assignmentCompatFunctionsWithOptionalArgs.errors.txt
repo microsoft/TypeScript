@@ -1,7 +1,7 @@
 ==== tests/cases/compiler/assignmentCompatFunctionsWithOptionalArgs.ts (3 errors) ====
     function foo(x: { id: number; name?: string; }): void;
              ~~~
-!!! Function implementation is missing.
+!!! Function implementation is missing or not immediately following the declaration.
     foo({ id: 1234 });                 // Ok
     foo({ id: 1234, name: "hello" });  // Ok
     foo({ id: 1234, name: false });    // Error, name of wrong type

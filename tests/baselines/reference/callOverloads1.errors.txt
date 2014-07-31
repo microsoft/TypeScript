@@ -9,7 +9,7 @@
     
     function Foo(); // error
              ~~~
-!!! Function implementation is missing.
+!!! Function implementation is missing or not immediately following the declaration.
              ~~~
 !!! Duplicate identifier 'Foo'.
     function F1(s:string);

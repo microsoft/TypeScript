@@ -5,4 +5,4 @@
 !!! Function implementation name must be 'foo'.
     function foo(x, y);
              ~~~
-!!! Function implementation is missing.
+!!! Function implementation is missing or not immediately following the declaration.

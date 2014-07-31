@@ -1,4 +1,4 @@
 ==== tests/cases/conformance/parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration3.ts (1 errors) ====
     function foo();
              ~~~
-!!! Function implementation is missing.
+!!! Function implementation is missing or not immediately following the declaration.

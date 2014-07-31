@@ -3,7 +3,7 @@
         foo();
         static foo(); // error
                ~~~
-!!! Function implementation is missing.
+!!! Function implementation is missing or not immediately following the declaration.
                ~~~
 !!! Function overload must not be static.
     }
@@ -12,7 +12,7 @@
         static foo();
         foo(); // error    
         ~~~
-!!! Function implementation is missing.
+!!! Function implementation is missing or not immediately following the declaration.
         ~~~
 !!! Function overload must be static.
     }
@@ -21,7 +21,7 @@
         foo(x: T);
         static foo(x: number); // error
                ~~~
-!!! Function implementation is missing.
+!!! Function implementation is missing or not immediately following the declaration.
                ~~~
 !!! Function overload must not be static.
     }
@@ -30,7 +30,7 @@
         static foo(x: number);
         foo(x: T); // error    
         ~~~
-!!! Function implementation is missing.
+!!! Function implementation is missing or not immediately following the declaration.
         ~~~
 !!! Function overload must be static.
     }

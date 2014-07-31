@@ -2,7 +2,7 @@
     class C {
        foo();
        ~~~
-!!! Function implementation is missing.
+!!! Function implementation is missing or not immediately following the declaration.
        constructor();
        ~~~~~~~~~~~~~~
 !!! Constructor implementation is missing.

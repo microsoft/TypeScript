@@ -15,10 +15,10 @@
 !!! Cannot compile external modules unless the '--module' flag is provided.
     		public getDay():number;
     		       ~~~~~~
-!!! Function implementation is missing.
+!!! Function implementation is missing or not immediately following the declaration.
     		public getXDate():number;
     		       ~~~~~~~~
-!!! Function implementation is missing.
+!!! Function implementation is missing or not immediately following the declaration.
     		// etc.
     
     	    // Called as a function
@@ -38,7 +38,7 @@
     	    
     	    static parse(string: string): number;
     	           ~~~~~
-!!! Function implementation is missing.
+!!! Function implementation is missing or not immediately following the declaration.
     	    static UTC(year: number, month: number): number;
     	    static UTC(year: number, month: number, date: number): number;
     	    static UTC(year: number, month: number, date: number, hours: number): number;
@@ -46,11 +46,11 @@
     	    static UTC(year: number, month: number, date: number, hours: number, minutes: number, seconds: number): number;
     	    static UTC(year: number, month: number, date: number, hours: number, minutes: number, seconds: number,
     	           ~~~
-!!! Function implementation is missing.
+!!! Function implementation is missing or not immediately following the declaration.
     		         ms: number): number;
     	    static now(): number;
     	           ~~~
-!!! Function implementation is missing.
+!!! Function implementation is missing or not immediately following the declaration.
         }
     }
     ~

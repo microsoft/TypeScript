@@ -279,7 +279,7 @@ module ts {
         Types_of_parameters_0_and_1_are_incompatible_Colon: { code: -9999999, category: DiagnosticCategory.Error, key: "Types of parameters '{0}' and '{1}' are incompatible:" },
         Unknown_identifier_0: { code: -9999999, category: DiagnosticCategory.Error, key: "Unknown identifier '{0}'." },
         Property_0_is_inaccessible: { code: -9999999, category: DiagnosticCategory.Error, key: "Property '{0}' is inaccessible." },
-        Function_implementation_is_missing: { code: -9999999, category: DiagnosticCategory.Error, key: "Function implementation is missing." },
+        Function_implementation_is_missing_or_not_immediately_following_the_declaration: { code: -9999999, category: DiagnosticCategory.Error, key: "Function implementation is missing or not immediately following the declaration." },
         Property_0_of_type_1_is_not_assignable_to_string_index_type_2: { code: -9999999, category: DiagnosticCategory.Error, key: "Property '{0}' of type '{1}' is not assignable to string index type '{2}'." },
         Property_0_of_type_1_is_not_assignable_to_numeric_index_type_2: { code: -9999999, category: DiagnosticCategory.Error, key: "Property '{0}' of type '{1}' is not assignable to numeric index type '{2}'." },
         Numeric_index_type_0_is_not_assignable_to_string_index_type_1: { code: -9999999, category: DiagnosticCategory.Error, key: "Numeric index type '{0}' is not assignable to string index type '{1}'." },

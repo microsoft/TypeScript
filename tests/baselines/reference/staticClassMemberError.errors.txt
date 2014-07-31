@@ -11,7 +11,7 @@
     // just want to make sure this one doesn't crash the compiler
     function Foo();
              ~~~
-!!! Function implementation is missing.
+!!! Function implementation is missing or not immediately following the declaration.
     class Foo {
           ~~~
 !!! Duplicate identifier 'Foo'.

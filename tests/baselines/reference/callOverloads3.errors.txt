@@ -5,7 +5,7 @@
 !!! Cannot find name 'Foo'.
     function Foo(s:string):Foo;
              ~~~
-!!! Function implementation is missing.
+!!! Function implementation is missing or not immediately following the declaration.
                            ~~~
 !!! Cannot find name 'Foo'.
     class Foo {    

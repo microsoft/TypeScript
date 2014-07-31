@@ -24,7 +24,7 @@
             ~
 !!! Unexpected token. A constructor, method, accessor, or property was expected.
         ~
-!!! Function implementation is missing.
+!!! Function implementation is missing or not immediately following the declaration.
     }
     
     interface I2<T> {
@@ -42,7 +42,7 @@
             ~
 !!! Unexpected token. A constructor, method, accessor, or property was expected.
         ~
-!!! Function implementation is missing.
+!!! Function implementation is missing or not immediately following the declaration.
     }
     
     

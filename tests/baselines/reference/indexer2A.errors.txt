@@ -4,7 +4,7 @@
         // Decided to enforce a semicolon after declarations
         hasOwnProperty(objectId: number): boolean
         ~~~~~~~~~~~~~~
-!!! Function implementation is missing.
+!!! Function implementation is missing or not immediately following the declaration.
         [objectId: number]: IHeapObjectProperty[]
     }
     var directChildrenMap = <IDirectChildrenMap>{}; 

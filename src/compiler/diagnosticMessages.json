@@ -1132,7 +1132,7 @@
         "category": "Error",
         "code": -9999999
     },
-    "Function implementation is missing.": {
+    "Function implementation is missing or not immediately following the declaration.": {
         "category": "Error",
         "code": -9999999
     },

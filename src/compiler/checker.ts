@@ -4909,7 +4909,7 @@ module ts {
                     error(errorNode, Diagnostics.Constructor_implementation_is_missing);
                 }
                 else {
-                    error(errorNode, Diagnostics.Function_implementation_is_missing);
+                    error(errorNode, Diagnostics.Function_implementation_is_missing_or_not_immediately_following_the_declaration);
                 }
             }
 

@@ -5,7 +5,7 @@
     	                           ~~
 !!! Block or ';' expected.
     	                ~
-!!! Function implementation is missing.
+!!! Function implementation is missing or not immediately following the declaration.
     	                               ~
 !!! Cannot find name 'x'.
     	export module X.Y.Z {

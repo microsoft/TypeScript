@@ -22,7 +22,7 @@
     
     function Goo(s:string); // error - no implementation
              ~~~
-!!! Function implementation is missing.
+!!! Function implementation is missing or not immediately following the declaration.
     
     declare function Gar(s:String); // expect no error
     

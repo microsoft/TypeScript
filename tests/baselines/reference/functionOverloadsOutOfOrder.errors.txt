@@ -6,7 +6,7 @@
         }
         private foo(s: string): string;
                 ~~~
-!!! Function implementation is missing.
+!!! Function implementation is missing or not immediately following the declaration.
     }
     
     class e {
@@ -16,5 +16,5 @@
         private foo(s: string): string;
         private foo(n: number): string;
                 ~~~
-!!! Function implementation is missing.
+!!! Function implementation is missing or not immediately following the declaration.
     }
