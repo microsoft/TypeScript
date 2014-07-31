@@ -552,6 +552,10 @@
         "category": "Error",
         "code": 2190
     },
+    "Individual declarations in merged declaration {0} must be all exported or all local.": {
+        "category": "Error",
+        "code": 2192
+    },
     "'super' cannot be referenced in constructor arguments.":{
         "category": "Error",
         "code": 2193
@@ -619,8 +623,12 @@
     "Expression resolves to variable declaration '_i' that compiler uses to initialize rest parameter.": {
         "category": "Error",
         "code": 2235
-	},
-    "Constructor implementation expected.": {
+    },
+    "Function implementation name must be '{0}'.": {
+        "category": "Error",
+        "code": 2239
+    },
+    "Constructor implementation is missing.": {
         "category": "Error",
         "code": 2240
     },
@@ -632,7 +640,14 @@
         "category": "Error",
         "code": 2246
     },
-
+    "Function overload must be static.": {
+        "category": "Error",
+        "code": 2247
+    },
+    "Function overload must not be static.": {
+        "category": "Error",
+        "code": 2248
+    },
     "Circular definition of import alias '{0}'.": {
         "category": "Error",
         "code": 3000
@@ -840,6 +855,11 @@
         "code": 5039
     },
 
+    "Version {0}": {
+       "category": "Message",
+       "code": 6029
+   },
+
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -897,7 +917,6 @@
         "category": "Error",
         "code": 7020
     },
-
     "Variable declaration list cannot be empty.": {
         "category": "Error",
         "code": -9999999
@@ -1118,7 +1137,7 @@
         "category": "Error",
         "code": -9999999
     },
-    "Function implementation expected.": {
+    "Function implementation is missing or not immediately following the declaration.": {
         "category": "Error",
         "code": -9999999
     },
@@ -1198,6 +1217,10 @@
         "category": "Error",
         "code": -9999999
     },
+	"Module '{0}' is hidden by a local declaration with the same name": {
+        "category": "Error",
+        "code": -9999999
+	},
     "Filename '{0}' differs from already included filename '{1}' only in casing": {
         "category": "Error",
         "code": -9999999

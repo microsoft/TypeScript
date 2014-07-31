@@ -2106,14 +2106,20 @@ module ts {
         function parseObjectLiteral(): ObjectLiteral {
             var node = <ObjectLiteral>createNode(SyntaxKind.ObjectLiteral);
             parseExpected(SyntaxKind.OpenBraceToken);
-            if (scanner.hasPrecedingLineBreak()) node.flags |= NodeFlags.MultiLine;
-            node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralMember, TrailingCommaBehavior.Preserve);
+            if (scanner.hasPrecedingLineBreak()) {
+                node.flags |= NodeFlags.MultiLine;
+            }
+
+            // ES3 itself does not accept a trailing comma in an object literal, however, we'd like to preserve it in ES5.
+            var trailingCommaBehavior = languageVersion === ScriptTarget.ES3 ? TrailingCommaBehavior.Allow : TrailingCommaBehavior.Preserve;
+
+            node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralMember, trailingCommaBehavior);
             parseExpected(SyntaxKind.CloseBraceToken);
 
             var seen: Map<SymbolFlags> = {};
             var Property    = 1;
             var GetAccessor = 2;
-            var SetAccesor = 4;
+            var SetAccesor =  4;
             var GetOrSetAccessor = GetAccessor | SetAccesor;
             forEach(node.properties, (p: Declaration) => {
                 if (p.kind === SyntaxKind.OmittedExpression) {
@@ -2908,7 +2914,16 @@ module ts {
             node.typeParameters = sig.typeParameters;
             node.parameters = sig.parameters;
             node.type = sig.type;
-            node.body = parseBody(/* ignoreMissingOpenBrace */ false);
+
+            // A common error is to try to declare an accessor in an ambient class.
+            if (inAmbientContext && canParseSemicolon()) {
+                parseSemicolon();
+                node.body = createMissingNode();
+            }
+            else {
+                node.body = parseBody(/* ignoreMissingOpenBrace */ false);
+            }
+
             return finishNode(node);
         }
 

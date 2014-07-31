@@ -1,8 +1,10 @@
-==== tests/cases/compiler/classWithOverloadImplementationOfWrongName2.ts (1 errors) ====
+==== tests/cases/compiler/classWithOverloadImplementationOfWrongName2.ts (2 errors) ====
     class C {
         foo(): string;
         bar(x): any { }
+        ~~~
+!!! Function implementation name must be 'foo'.
         foo(x): number;
-        ~~~~~~~~~~~~~~~
-!!! Function implementation expected.
+        ~~~
+!!! Function implementation is missing or not immediately following the declaration.
     }

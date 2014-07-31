@@ -50,7 +50,7 @@ b3 = {
     g: function (s) {
         return 0;
     },
-    m: 0,
+    m: 0
 };
 b3 = {
     f: function (n) {
@@ -58,13 +58,13 @@ b3 = {
     },
     g: function (s) {
         return 0;
-    },
+    }
 };
 b3 = {
     f: function (n) {
         return 0;
     },
-    m: 0,
+    m: 0
 };
 b3 = {
     f: function (n) {
@@ -77,7 +77,7 @@ b3 = {
     n: 0,
     k: function (a) {
         return null;
-    },
+    }
 };
 b3 = {
     f: function (n) {
@@ -89,5 +89,5 @@ b3 = {
     n: 0,
     k: function (a) {
         return null;
-    },
+    }
 };
