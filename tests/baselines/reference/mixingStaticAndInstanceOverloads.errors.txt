@@ -1,35 +1,39 @@
-==== tests/cases/compiler/mixingStaticAndInstanceOverloads.ts (4 errors) ====
+==== tests/cases/compiler/mixingStaticAndInstanceOverloads.ts (6 errors) ====
     class C1 {
         // ERROR
         foo1(n: number);
         foo1(s: string);
-        ~~~~~~~~~~~~~~~~
-!!! Function implementation expected.
         static foo1(a) { }
+               ~~~~
+!!! Function overload must not be static.
     }
     class C2 {
         // ERROR
         static foo2(n: number);
         static foo2(s: string);
-        ~~~~~~~~~~~~~~~~~~~~~~~
-!!! Function implementation expected.
         foo2(a) { }
+        ~~~~
+!!! Function overload must be static.
     }
     class C3 {
         // ERROR
         foo3(n: number);
         static foo3(s: string);
-        ~~~~~~~~~~~~~~~~~~~~~~~
-!!! Function implementation expected.
+               ~~~~
+!!! Function overload must not be static.
         foo3(a) { }
+        ~~~~
+!!! Function overload must be static.
     }
     class C4 {
         // ERROR
         static foo4(n: number);
         foo4(s: string);
-        ~~~~~~~~~~~~~~~~
-!!! Function implementation expected.
+        ~~~~
+!!! Function overload must be static.
         static foo4(a) { }
+               ~~~~
+!!! Function overload must not be static.
     }
     class C5 {
         // OK

@@ -1,7 +1,7 @@
 ==== tests/cases/conformance/parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration6.ts (1 errors) ====
     {
         function foo();
-        ~~~~~~~~~~~~~~~
-!!! Function implementation expected.
         function bar() { }
+                 ~~~
+!!! Function implementation name must be 'foo'.
     }

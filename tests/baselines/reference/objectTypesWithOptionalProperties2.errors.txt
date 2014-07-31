@@ -23,8 +23,8 @@
 !!! Block or ';' expected.
             ~
 !!! Unexpected token. A constructor, method, accessor, or property was expected.
-        ~~~
-!!! Function implementation expected.
+        ~
+!!! Function implementation is missing or not immediately following the declaration.
     }
     
     interface I2<T> {
@@ -41,8 +41,8 @@
 !!! Block or ';' expected.
             ~
 !!! Unexpected token. A constructor, method, accessor, or property was expected.
-        ~~~
-!!! Function implementation expected.
+        ~
+!!! Function implementation is missing or not immediately following the declaration.
     }
     
     

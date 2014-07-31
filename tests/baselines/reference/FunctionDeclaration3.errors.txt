@@ -1,4 +1,4 @@
 ==== tests/cases/compiler/FunctionDeclaration3.ts (1 errors) ====
     function foo();
-    ~~~~~~~~~~~~~~~
-!!! Function implementation expected.
+             ~~~
+!!! Function implementation is missing or not immediately following the declaration.

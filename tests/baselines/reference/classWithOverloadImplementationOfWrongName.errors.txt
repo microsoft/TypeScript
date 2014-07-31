@@ -2,7 +2,7 @@
     class C {
         foo(): string;
         foo(x): number;
-        ~~~~~~~~~~~~~~~
-!!! Function implementation expected.
         bar(x): any { }
+        ~~~
+!!! Function implementation name must be 'foo'.
     }
