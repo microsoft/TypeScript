@@ -5,9 +5,9 @@ interface System {
     newLine: string;
     useCaseSensitiveFileNames: boolean;
     write(s: string): void;
-    writeErr(s: string): void;
     readFile(fileName: string, encoding?: string): string;
     writeFile(fileName: string, data: string): void;
+    watchFile?(fileName: string, callback: (fileName: string) => void): FileWatcher;
     resolvePath(path: string): string;
     fileExists(path: string): boolean;
     directoryExists(path: string): boolean;
@@ -16,6 +16,10 @@ interface System {
     getCurrentDirectory(): string;
     getMemoryUsage(): number;
     exit(exitCode?: number): void;
+}
+
+interface FileWatcher {
+    close(): void;
 }
 
 declare var require: any;
@@ -187,6 +191,18 @@ var sys: System = (function () {
             },
             readFile: readFile,
             writeFile: writeFile,
+            watchFile: (fileName, callback) => {
+                // watchFile polls a file every 250ms, picking up file notifications.
+                _fs.watchFile(fileName, { persistent: true, interval: 250 }, fileChanged);
+
+                return {
+                    close() { _fs.unwatchFile(fileName, fileChanged); }
+                };
+
+                function fileChanged() {
+                    callback(fileName);
+                };
+            },
             resolvePath: function (path: string): string {
                 return _path.resolve(path);
             },

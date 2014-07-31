@@ -830,6 +830,10 @@
         "category": "NoPrefix",
         "code": 4032
     },
+    "The current host does not support the '{0}' option.": {
+        "category": "Error",
+        "code": 5001
+    },
     "Cannot find the common subdirectory path for the input files.": {
         "category": "Error",
         "code": 5009
@@ -854,12 +858,18 @@
         "category": "Error",
         "code": 5039
     },
-
     "Version {0}": {
        "category": "Message",
        "code": 6029
-   },
-
+    },
+    "File Changed. Compiling.": {
+        "category": "Message",
+        "code": 6032
+    },
+    "Compile complete. Listening for changed files.": {
+        "category": "Message",
+        "code": 6042
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

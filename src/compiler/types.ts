@@ -928,6 +928,7 @@ module ts {
         sourceRoot?: string;
         target?: ScriptTarget;
         version?: boolean;
+        watch?: boolean;
 
         [option: string]: any;
     }
