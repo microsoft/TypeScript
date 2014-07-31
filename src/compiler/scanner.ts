@@ -831,34 +831,46 @@ module ts {
             if (token === SyntaxKind.SlashToken || token === SyntaxKind.SlashEqualsToken) {
                 var p = tokenPos + 1;
                 var inEscape = false;
-                var inClass = false;
+                var inCharacterClass = false;
                 while (true) {
+                    // If we've hit EOF without closing off the regex,
+                    // simply return the token we originally parsed.
                     if (p >= len) {
                         return token;
                     }
+
                     var ch = text.charCodeAt(p);
+
+                    // Line breaks are not permissible in the middle of a RegExp.
                     if (isLineBreak(ch)) {
                         return token;
                     }
+                    
                     if (inEscape) {
+                        // Parsing an escape character;
+                        // reset the flag and just advance to the next char.
                         inEscape = false;
                     }
-                    else if (ch === CharacterCodes.slash) {
+                    else if (ch === CharacterCodes.slash && !inCharacterClass) {
+                        // A slash within a character class is permissible,
+                        // but in general it signals the end of the regexp literal.
                         break;
                     }
                     else if (ch === CharacterCodes.openBracket) {
-                        inClass = true;
+                        inCharacterClass = true;
                     }
                     else if (ch === CharacterCodes.backslash) {
                         inEscape = true;
                     }
                     else if (ch === CharacterCodes.closeBracket) {
-                        inClass = false;
+                        inCharacterClass = false;
                     }
                     p++;
                 }
                 p++;
-                while (isIdentifierPart(text.charCodeAt(p))) p++;
+                while (isIdentifierPart(text.charCodeAt(p))) {
+                    p++;
+                }
                 pos = p;
                 tokenValue = text.substring(tokenPos, pos);
                 token = SyntaxKind.RegularExpressionLiteral;
