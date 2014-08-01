@@ -348,6 +348,7 @@ function deleteTemporaryProjectOutput() {
     }
 }
 
+var testTimeout = 5000;
 desc("Runs the tests using the built run.js file. Syntax is jake runtests. Optional parameters 'host=', 'tests=[regex], reporter=[list|spec|json|<more>]'.");
 task("runtests", ["tests", builtLocalDirectory], function() {
     cleanTestDirs();
@@ -367,14 +368,14 @@ task("runtests", ["tests", builtLocalDirectory], function() {
     reporter = process.env.reporter || process.env.r || 'dot';
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
-    var cmd = host + " -R " + reporter + tests + colors + ' --timeout 3000 ' + run;
+    var cmd = host + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
     console.log(cmd);
     exec(cmd, deleteTemporaryProjectOutput);
 }, {async: true});
 
 desc("Generates code coverage data via instanbul")
 task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
-	var cmd = "istanbul cover node_modules/mocha/bin/_mocha -- -R dot " + run;
+	var cmd = 'istanbul cover node_modules/mocha/bin/_mocha -- -R min -t ' + testTimeout + ' ' + run;
 	console.log(cmd);
 	exec(cmd);	
 }, { async: true });
