@@ -6198,7 +6198,7 @@ module ts {
         // True if the given identifier is part of a type reference
         function isTypeReferenceIdentifier(identifier: Identifier): boolean {
             var node: Node = identifier;
-            while (node.parent && node.parent.kind === SyntaxKind.QualifiedName) node = node.parent;
+            if (node.parent && node.parent.kind === SyntaxKind.QualifiedName) node = node.parent;
             return node.parent && node.parent.kind === SyntaxKind.TypeReference;
         }
 

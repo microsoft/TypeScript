@@ -108,7 +108,7 @@ module ts {
         }
 
         public getWidth(): number {
-            return this.getStart() - this.getEnd();
+            return this.getEnd() - this.getStart();
         }
 
         public getFullWidth(): number {
@@ -1235,6 +1235,16 @@ module ts {
         };
     }
 
+    // A cache of completion entries for keywords, these do not change between sessions
+    var keywordCompletions:CompletionEntry[] = [];
+    for (var i = SyntaxKind.FirstKeyword; i <= SyntaxKind.LastKeyword; i++) {
+        keywordCompletions.push({
+            name: tokenToString(i),
+            kind: ScriptElementKind.keyword,
+            kindModifiers: ScriptElementKindModifier.none
+        });
+    }
+
     export function createLanguageService(host: LanguageServiceHost, documentRegistry: DocumentRegistry): LanguageService {
         var syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         var formattingRulesProvider: TypeScript.Services.Formatting.RulesProvider;
@@ -1246,7 +1256,6 @@ module ts {
         var documentRegistry = documentRegistry;
         var cancellationToken = new CancellationTokenObject(host.getCancellationToken());
         var activeCompletionSession: CompletionSession;         // The current active completion session, used to get the completion entry details
-        var keywordCompletions = getKeywordCompletionEntries(); // A cache of completion entries for keywords, these do not change between sessions
 
         // Check if the localized messages json is set, otherwise query the host for it
         if (!TypeScript.LocalizedDiagnosticMessages) {
@@ -1301,7 +1310,8 @@ module ts {
                 // If the language version changed, then that affects what types of things we parse. So
                 // we have to dump all syntax trees.
                 // TODO: handle propagateEnumConstants
-                var settingsChangeAffectsSyntax = oldSettings.target !== compilationSettings.target;
+                // TODO: is module still needed
+                var settingsChangeAffectsSyntax = oldSettings.target !== compilationSettings.target || oldSettings.module !== compilationSettings.module;
 
                 var changesInCompilationSettingsAffectSyntax =
                     oldSettings && compilationSettings && !compareDataObjects(oldSettings, compilationSettings) && settingsChangeAffectsSyntax;
@@ -1421,37 +1431,6 @@ module ts {
                 kind: getSymbolKind(symbol),
                 kindModifiers: declarations ? getNodeModifiers(declarations[0]) : ScriptElementKindModifier.none
             };
-        }
-
-        function getKeywordCompletionEntries(): CompletionEntry[] {
-            var keywords = [
-                "break",
-                "case", "catch", "class", "constructor", "continue",
-                "debugger", "declare", "default", "delete", "do",
-                "else", "enum", "export", "extends",
-                "false", "finally", "for", "function",
-                "get",
-                "if","implements", "import", "in", "instanceof", "interface",
-                "module",
-                "new", "null",
-                "private", "public",
-                "require","return",
-                "set", "static", "super", "switch",
-                "this", "throw", "true", "try", "typeof",
-                "var",
-                "while","with",
-            ];
-
-            var result: CompletionEntry[] = [];
-            forEach(keywords, (keyword) => {
-                result.push({
-                    name: keyword,
-                    kind: ScriptElementKind.keyword,
-                    kindModifiers: ScriptElementKindModifier.none
-                });
-            });
-
-            return result;
         }
 
         function getCompletionsAtPosition(filename: string, position: number, isMemberCompletion: boolean) {
