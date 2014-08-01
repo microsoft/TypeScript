@@ -11,7 +11,7 @@ class FourslashRunner extends RunnerBase {
 
     public initializeTests() {
         if (this.tests.length === 0) {
-            this.tests = this.enumerateFiles(this.basePath);
+            this.tests = this.enumerateFiles(this.basePath, /\.ts/i);
         }
 
         describe("fourslash tests", () => {
