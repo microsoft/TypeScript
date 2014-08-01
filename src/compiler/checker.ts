@@ -11,6 +11,11 @@ module ts {
     var nextNodeId = 1;
     var nextMergeId = 1;
 
+    // Unknown symbol can survive across different type checking sessions (e.g. in the language service)
+    // We do use referential comparison to know if a symbol is the unknown symbol. creating a new symbol
+    // every time would defy that purpose. So we need to have a single object to represent the "unknown" symbol.
+    var unknownSymbol: Symbol;
+
     export function createTypeChecker(program: Program): TypeChecker {
 
         var Symbol = objectAllocator.getSymbolConstructor();
@@ -24,8 +29,11 @@ module ts {
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
         var argumentsSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "arguments");
-        var unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
         var resolvingSymbol = createSymbol(SymbolFlags.Transient, "__resolving__");
+
+        if (!unknownSymbol) {
+            unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
+        }
 
         var anyType = createIntrinsicType(TypeFlags.Any, "any");
         var stringType = createIntrinsicType(TypeFlags.String, "string");
@@ -78,6 +86,7 @@ module ts {
             getTypeOfSymbol: getTypeOfSymbol,
             getDeclaredTypeOfSymbol: getDeclaredTypeOfSymbol,
             getPropertiesOfType: getPropertiesOfType,
+            getPropertyOfType: getPropertyOfType,
             getSignaturesOfType: getSignaturesOfType,
             getIndexTypeOfType: getIndexTypeOfType,
             getReturnTypeOfSignature: getReturnTypeOfSignature,
@@ -6277,7 +6286,7 @@ module ts {
                     }
                     return getNodeLinks(node).resolvedSymbol;
                 }
-                return resolveEntityName(identifier, identifier, SymbolFlags.Value);
+                return resolveName(identifier, identifier.text, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
             }
             if (isDeclarationIdentifier(identifier)) {
                 return getSymbolOfNode(identifier.parent);

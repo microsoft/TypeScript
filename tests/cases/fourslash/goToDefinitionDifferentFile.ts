@@ -5,7 +5,7 @@
 /////*remoteFunctionDefinition*/function remoteFunction() { }
 /////*remoteClassDefinition*/class remoteClass { }
 /////*remoteInterfaceDefinition*/interface remoteInterface{ }
-////module /*remoteModuleDefinition*/remoteModule{ export var foo = 1;}
+/////*remoteModuleDefinition*/module remoteModule{ export var foo = 1;}
 
 // @Filename: goToDefinitionDifferentFile_Consumption.ts
 /////*remoteVariableReference*/remoteVariable = 1;

@@ -53,6 +53,7 @@ module ts {
         getFlags(): TypeFlags;
         getSymbol(): Symbol;
         getProperties(): Symbol[];
+        getProperty(propertyName: string): Symbol;
         getApparentProperties(): Symbol[];
         getCallSignatures(): Signature[];
         getConstructSignatures(): Signature[];
@@ -250,6 +251,9 @@ module ts {
         }
         getProperties(): Symbol[] {
             return this.checker.getPropertiesOfType(this);
+        }
+        getProperty(propertyName: string): Symbol {
+            return this.checker.getPropertyOfType(this, propertyName);
         }
         getApparentProperties(): Symbol[]{
             return this.checker.getAugmentedPropertiesOfApparentType(this);
@@ -643,6 +647,8 @@ module ts {
         static typeParameterElement = "type parameter";
 
         static primitiveType = "primitive type";
+
+        static label = "label";
     }
 
     export class ScriptElementKindModifier {
@@ -1384,12 +1390,18 @@ module ts {
         /// Diagnostics
         function getSyntacticDiagnostics(filename: string) {
             synchronizeHostData();
-            return program.getDiagnostics(program.getSourceFile(filename));
+
+            filename = TypeScript.switchToForwardSlashes(filename);
+
+            return program.getDiagnostics(getDocument(filename).getSourceFile());
         }
 
         function getSemanticDiagnostics(filename: string) {
             synchronizeHostData();
-            return typeChecker.getDiagnostics(program.getSourceFile(filename));
+
+            filename = TypeScript.switchToForwardSlashes(filename)
+
+            return typeChecker.getDiagnostics(getDocument(filename).getSourceFile());
         }
 
         function getCompilerOptionsDiagnostics() {
@@ -1756,7 +1768,7 @@ module ts {
             }
         }
 
-        function getEnclosingDeclaration(node: Node): Node {
+        function getContainerNode(node: Node): Node {
             while (true) {
                 node = node.parent;
                 if (!node) {
@@ -1849,7 +1861,7 @@ module ts {
                     return {
                         memberName: new TypeScript.MemberNameString(typeChecker.typeToString(type)),
                         docComment: "",
-                        fullSymbolName: typeChecker.symbolToString(symbol, getEnclosingDeclaration(node)),
+                        fullSymbolName: typeChecker.symbolToString(symbol, getContainerNode(node)),
                         kind: getSymbolKind(symbol),
                         minChar: node.pos,
                         limChar: node.end
@@ -1865,13 +1877,228 @@ module ts {
                     return {
                         memberName: new TypeScript.MemberNameString(""),
                         docComment: "",
-                        fullSymbolName: typeChecker.typeToString(type, getEnclosingDeclaration(node)),
+                        fullSymbolName: typeChecker.typeToString(type, getContainerNode(node)),
                         kind: getTypeKind(type),
                         minChar: node.pos,
                         limChar: node.end
                     };
                     break;
             }
+        }
+
+        /// Goto definition
+        function getDefinitionAtPosition(filename: string, position: number): DefinitionInfo[]{
+            function getTargetLabel(statement: BreakOrContinueStatement, labelName: string): Identifier {
+                var current = statement.parent;
+                while (current) {
+                    switch (current.kind) {
+                        case SyntaxKind.FunctionDeclaration:
+                        case SyntaxKind.Method:
+                        case SyntaxKind.Constructor:
+                        case SyntaxKind.GetAccessor:
+                        case SyntaxKind.SetAccessor:
+                        case SyntaxKind.FunctionExpression:
+                        case SyntaxKind.ArrowFunction:
+                        case SyntaxKind.ModuleDeclaration:
+                        case SyntaxKind.ClassDeclaration:
+                            // Label targets can not be accorss function boundries, so do not walk any further
+                            return undefined;
+                        case SyntaxKind.LabelledStatement:
+                            if ((<LabelledStatement>current).label.text === labelName) {
+                                return (<LabelledStatement>current).label;
+                            }
+                            break;
+                    }
+                    current = current.parent;
+                }
+                return undefined;
+            }
+
+            function isJumpStatementTarget(node: Node): boolean {
+                return node.kind === SyntaxKind.Identifier &&
+                    (node.parent.kind === SyntaxKind.BreakStatement || node.parent.kind === SyntaxKind.ContinueStatement) &&
+                    (<BreakOrContinueStatement>node.parent).label === node;
+            }
+
+            function isCallExpressionTarget(node: Node): boolean {
+                if (node.parent.kind === SyntaxKind.PropertyAccess && (<PropertyAccess>node.parent).right === node)
+                    node = node.parent;
+                return node.parent.kind === SyntaxKind.CallExpression && (<CallExpression>node.parent).func === node;
+            }
+
+            function isNewExpressionTarget(node: Node): boolean {
+                if (node.parent.kind === SyntaxKind.PropertyAccess && (<PropertyAccess>node.parent).right === node)
+                    node = node.parent;
+                return node.parent.kind === SyntaxKind.NewExpression && (<CallExpression>node.parent).func === node;
+            }
+
+            function isFunctionDeclaration(node: Node): boolean {
+                switch (node.kind) {
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.Method:
+                    case SyntaxKind.FunctionExpression:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                    case SyntaxKind.ArrowFunction:
+                        return true;
+                }
+                return false;
+            }
+
+            function isNameOfFunctionDeclaration(node: Node): boolean {
+                return node.kind === SyntaxKind.Identifier &&
+                    isFunctionDeclaration(node.parent) && (<FunctionDeclaration>node.parent).name === node;
+            }
+
+            function getDefinitionInfo(node: Node, symbolKind: string, symbolName: string, containerName: string): DefinitionInfo {
+                return {
+                    fileName: node.getSourceFile().filename,
+                    minChar: node.getStart(),
+                    limChar: node.getEnd(),
+                    kind: symbolKind,
+                    name: symbolName,
+                    containerName: containerName,
+                    containerKind: undefined
+                };
+            }
+
+            function tryAddSignature(signatureDeclarations: Declaration[], selectConstructors: boolean, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
+                var declarations: Declaration[] = [];
+                var definition: Declaration;
+
+                forEach(signatureDeclarations, d => {
+                    if ((selectConstructors && d.kind === SyntaxKind.Constructor) ||
+                        (!selectConstructors && (d.kind === SyntaxKind.FunctionDeclaration || d.kind === SyntaxKind.Method))) {
+                        declarations.push(d);
+                        if ((<FunctionDeclaration>d).body) definition = d;
+                    }
+                });
+
+                if (definition) {
+                    result.push(getDefinitionInfo(definition, symbolKind, symbolName, containerName));
+                    return true;
+                }
+                else if (declarations.length) {
+                    result.push(getDefinitionInfo(declarations[declarations.length - 1], symbolKind, symbolName, containerName));
+                    return true;
+                }
+
+                return false
+            }
+
+            function tryAddConstructSignature(symbol: Symbol, location: Node, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
+                // Applicaple only if we are:in a new expression, or we are on a constructor declaration
+                // and in either case the symbol has a construct signature definition, i.e.class
+                if (isNewExpressionTarget(location) || location.kind === SyntaxKind.ConstructorKeyword) {
+                    if (symbol.flags & SymbolFlags.Class) {
+                        var classDeclaration = <ClassDeclaration>symbol.getDeclarations()[0];
+                        Debug.assert(classDeclaration && classDeclaration.kind === SyntaxKind.ClassDeclaration);
+
+                        return tryAddSignature(classDeclaration.members, /*selectConstructors*/ true, symbolKind, symbolName, containerName, result);
+                    }
+                }
+                return false;
+            }
+
+            function tryAddCallSignature(symbol: Symbol, location: Node, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
+                if (isCallExpressionTarget(location) || isNewExpressionTarget(location) || isNameOfFunctionDeclaration(location)) {
+                    return tryAddSignature(symbol.declarations, /*selectConstructors*/ false, symbolKind, symbolName, containerName, result);
+                }
+                return false;
+            }
+
+            synchronizeHostData();
+
+            filename = TypeScript.switchToForwardSlashes(filename);
+            var document = getDocument(filename);
+
+            var node = getNodeAtPosition(document.getSourceFile(), position);
+            if (!node) {
+                return undefined;
+            }
+
+            // Labels
+            if (isJumpStatementTarget(node)) {
+                var labelName = (<Identifier>node).text;
+                var label = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
+                return label ? [getDefinitionInfo(label, ScriptElementKind.label, labelName, /*containerName*/ undefined)] : undefined;
+            }
+
+            /// Trible slash reference comments
+            var comment = forEach(document.getSourceFile().referencedFiles, r => (r.pos <= position && position < r.end) ? r : undefined);
+            if (comment) {
+                var targetFilename = normalizePath(combinePaths(getDirectoryPath(filename), comment.filename));
+                if (program.getSourceFile(targetFilename)) {
+                    return [{
+                        fileName: targetFilename, minChar: 0, limChar: 0,
+                        kind: ScriptElementKind.scriptElement,
+                        name: comment.filename, containerName: undefined, containerKind: undefined
+                    }];
+                }
+                return undefined;
+            }
+
+            var symbol: Symbol;
+
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                    symbol = typeChecker.getSymbolOfIdentifier(<Identifier>node);
+                    break;
+
+                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.SuperKeyword:
+                    var type = typeChecker.getTypeOfExpression(node);
+                    symbol = type.getSymbol();
+                    break;
+
+                case SyntaxKind.ConstructorKeyword:
+                    // constructor keyword for an overload, should take us to the definition if it exist
+                    var container = getContainerNode(node);
+                    if (container && container.kind === SyntaxKind.ClassDeclaration) {
+                        symbol = (<ClassDeclaration>container).symbol;
+                    }
+                    break;
+
+                case SyntaxKind.StringLiteral:
+                    // Property access
+                    if (node.parent.kind === SyntaxKind.IndexedAccess && (<IndexedAccess>node.parent).index === node) {
+                        var objectType = typeChecker.getTypeOfExpression((<IndexedAccess>node.parent).object);
+                        Debug.assert(objectType);
+                        symbol = objectType.getProperty((<LiteralExpression>node).text);
+                    }
+                    // External module name in an import declaration
+                    else if (node.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent).externalModuleName === node) {
+                        var importSymbol = typeChecker.getSymbolOfNode(node.parent);
+                        var moduleType = typeChecker.getTypeOfSymbol(importSymbol);
+                        symbol = moduleType ? moduleType.symbol : undefined;
+                    }
+                    break;
+            }
+
+            // Could not find a symbol e.g. node is string or number keyword,
+            // or the symbol was an internal symbol (transient) e.g. undefined symbol
+            if (!symbol || symbol.flags & SymbolFlags.Transient) {
+                return undefined;
+            }
+
+            var result: DefinitionInfo[] = [];
+
+            var declarations = symbol.getDeclarations();
+            var symbolName = typeChecker.symbolToString(symbol, node);
+            var symbolKind = getSymbolKind(symbol);
+            var containerSymbol = symbol.parent;
+            var containerName = containerSymbol ? typeChecker.symbolToString(containerSymbol, node) : "";
+            var containerKind = containerSymbol ? getSymbolKind(symbol) : "";
+
+            if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
+                !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
+                // Just add all the declarations. 
+                forEach(declarations, declaration => {
+                    result.push(getDefinitionInfo(declaration, symbolKind, symbolName, containerName));
+                });
+            }
+
+            return result;
         }
 
         /// Syntactic features
@@ -2043,7 +2270,7 @@ module ts {
             getCompletionEntryDetails: getCompletionEntryDetails,
             getTypeAtPosition: getTypeAtPosition,
             getSignatureAtPosition: (filename, position): SignatureInfo => undefined,
-            getDefinitionAtPosition: (filename, position) => [],
+            getDefinitionAtPosition: getDefinitionAtPosition,
             getReferencesAtPosition: (filename, position) => [],
             getOccurrencesAtPosition: (filename, position) => [],
             getImplementorsAtPosition: (filename, position) => [],
