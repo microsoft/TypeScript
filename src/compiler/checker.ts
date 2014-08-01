@@ -6205,9 +6205,9 @@ module ts {
         }
 
         // True if the given identifier is part of a type reference
-        function isTypeReferenceIdentifier(identifier: Identifier): boolean {
-            var node: Node = identifier;
-            if (node.parent && node.parent.kind === SyntaxKind.QualifiedName) node = node.parent;
+        function isTypeReferenceIdentifier(entityName: EntityName): boolean {
+            var node: Node = entityName;
+            while (node.parent && node.parent.kind === SyntaxKind.QualifiedName) node = node.parent;
             return node.parent && node.parent.kind === SyntaxKind.TypeReference;
         }
 
@@ -6271,39 +6271,56 @@ module ts {
             return false;
         }
 
-        function isRightSideOfQualifiedName(node: Node) {
+        function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {
             return (node.parent.kind === SyntaxKind.QualifiedName || node.parent.kind === SyntaxKind.PropertyAccess) &&
                 (<QualifiedName>node.parent).right === node;
         }
 
         function getSymbolOfIdentifier(identifier: Identifier) {
-            if (isExpression(identifier)) {
-                if (isRightSideOfQualifiedName(identifier)) {
-                    var node = <QualifiedName>identifier.parent;
-                    var symbol = getNodeLinks(node).resolvedSymbol;
-                    if (!symbol) {
-                        checkPropertyAccess(node);
-                    }
-                    return getNodeLinks(node).resolvedSymbol;
-                }
-                return resolveName(identifier, identifier.text, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
-            }
             if (isDeclarationIdentifier(identifier)) {
                 return getSymbolOfNode(identifier.parent);
             }
-            if (isTypeReferenceIdentifier(identifier)) {
-                var entityName = isRightSideOfQualifiedName(identifier) ? identifier.parent : identifier;
+
+            var entityName: Node = identifier;
+            while (isRightSideOfQualifiedNameOrPropertyAccess(entityName))
+                entityName = entityName.parent;
+
+            if (isExpression(entityName)) {
+                if (entityName.kind === SyntaxKind.Identifier) {
+                    // Include Import in the meaning, this ensures that we do not follow aliases to where they point and instead
+                    // return the alias symbol.
+                    var meaning: SymbolFlags = SymbolFlags.Value | SymbolFlags.Import;
+                    return resolveEntityName(entityName, entityName, meaning);
+                }
+                else if (entityName.kind === SyntaxKind.QualifiedName || entityName.kind === SyntaxKind.PropertyAccess) {
+                    var symbol = getNodeLinks(entityName).resolvedSymbol;
+                    if (!symbol) {
+                        checkPropertyAccess(<PropertyAccess>entityName);
+                    }
+                    return getNodeLinks(entityName).resolvedSymbol;
+                }
+                else {
+                    // Missing identifier
+                    return;
+                }
+            }
+            else if (isTypeReferenceIdentifier(entityName)) {
                 var meaning = entityName.parent.kind === SyntaxKind.TypeReference ? SymbolFlags.Type : SymbolFlags.Namespace;
+                // Include Import in the meaning, this ensures that we do not follow aliases to where they point and instead
+                // return the alias symbol.
+                meaning |= SymbolFlags.Import;
                 return resolveEntityName(entityName, entityName, meaning);
             }
+
+            Debug.fail("identifier is neither at a type nor value position");
         }
 
         function getTypeOfExpression(node: Node) {
             if (isExpression(node)) {
-                while (isRightSideOfQualifiedName(node)) {
+                while (isRightSideOfQualifiedNameOrPropertyAccess(node)) {
                   node = node.parent;
                 }
-                 return <Type>getApparentType(checkExpression(node));
+                return <Type>getApparentType(checkExpression(node));
             }
             return unknownType;
         }
@@ -6344,6 +6361,7 @@ module ts {
                 return getPropertiesOfType(<Type>apparentType);
             }
         }
+
         // Emitter support
 
         function isExternalModuleSymbol(symbol: Symbol): boolean {
