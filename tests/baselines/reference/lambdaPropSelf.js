@@ -26,8 +26,8 @@ module M {
 //// [lambdaPropSelf.js]
 var Person = (function () {
     function Person(name, children) {
-        this.name = name;
         var _this = this;
+        this.name = name;
         this.addChild = function () { return _this.children.push("New child"); };
         this.children = ko.observableArray(children);
     }

@@ -58,9 +58,9 @@ var Derived2 = (function (_super) {
 var Derived3 = (function (_super) {
     __extends(Derived3, _super);
     function Derived3(a) {
+        var _this = this;
         _super.call(this, function () { return _this; });
         this.a = a;
-        var _this = this;
     }
     return Derived3;
 })(Base);
