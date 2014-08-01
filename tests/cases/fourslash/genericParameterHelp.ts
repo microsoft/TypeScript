@@ -27,7 +27,7 @@
 ////class Bar<T> extends testClass</*type3*/
 ////var x : testClass<,, /*type4*/any>;
 
-// goTo.marker("1");
+goTo.marker("1");
 // verify.currentSignatureParamterCountIs(3);
 // verify.currentSignatureHelpIs("testFunction<T extends IFoo, U, M extends IFoo>(a: T, b: U, c: M): M");
 
