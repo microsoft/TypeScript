@@ -226,7 +226,8 @@ module FourSlash {
                 });
             }
 
-            // NEWTODO: Re-implement commented-out section
+            // NEWTODO: Re-implement commented-out section
+
             //harnessCompiler.addInputFiles(inputFiles);
             //try {
             //    var resolvedFiles = harnessCompiler.resolve();
@@ -246,8 +247,15 @@ module FourSlash {
             //    harnessCompiler.reset();
             //}
 
-            /// NEWTODO: For now do not resolve, just use the input files            inputFiles.forEach(file => {                if (!Harness.isLibraryFile(file.unitName)) {                    this.languageServiceShimHost.addScript(file.unitName, file.content);                }            });
-            this.languageServiceShimHost.addScript('lib.d.ts', Harness.Compiler.libTextMinimal);
+            /// NEWTODO: For now do not resolve, just use the input files
+            inputFiles.forEach(file => {
+                if (!Harness.isLibraryFile(file.unitName)) {
+                    this.languageServiceShimHost.addScript(file.unitName, file.content);
+                }
+            });
+
+            this.languageServiceShimHost.addScript('lib.d.ts', Harness.Compiler.libTextMinimal);
+
 
             // Sneak into the language service and get its compiler so we can examine the syntax trees
             this.languageService = this.languageServiceShimHost.getLanguageService().languageService;
@@ -1875,6 +1883,9 @@ module FourSlash {
         xmlData.push(xml);
     }
 
+    // Cache these between executions so we don't have to re-parse them for every test
+    var fourslashSourceFile: ts.SourceFile = undefined;
+    var libdtsSourceFile: ts.SourceFile = undefined;
     export function runFourSlashTestContent(content: string, fileName: string): TestXmlData {
         // Parse out the files and their metadata
         var testData = parseTestData(content, fileName);
@@ -1882,34 +1893,27 @@ module FourSlash {
         currentTestState = new TestState(testData);
 
         var result = '';
-        var tsFn = 'tests/cases/fourslash/fourslash.ts';
+        var fourslashFilename = 'fourslash.ts';
+        var tsFn = 'tests/cases/fourslash/' + fourslashFilename;
+        fourslashSourceFile = fourslashSourceFile || ts.createSourceFile(tsFn, Harness.IO.readFile(tsFn), ts.ScriptTarget.ES5);
+        libdtsSourceFile = libdtsSourceFile || ts.createSourceFile('lib.d.ts', Harness.Compiler.libTextMinimal, ts.ScriptTarget.ES3);
 
-        fsOutput.reset();
-        fsErrors.reset();
+        var files: { [filename: string]: ts.SourceFile; } = {};
+        files[fourslashFilename] = fourslashSourceFile;
+        files[fileName] = ts.createSourceFile(fileName, content, ts.ScriptTarget.ES5);
+        files['lib.d.ts'] = libdtsSourceFile;
 
-        var harnessCompiler = Harness.Compiler.getCompiler();
-        harnessCompiler.reset();
+        var host = Harness.Compiler.createCompilerHost(files, (fn, contents) => result = contents);
+        var program = ts.createProgram([fileName, fourslashFilename], {}, host);
+        var checker = ts.createTypeChecker(program);
+        checker.checkProgram();
 
-        var filesToAdd = [
-            { unitName: tsFn, content: Harness.IO.readFile(tsFn) },
-            { unitName: fileName, content: Harness.IO.readFile(fileName) }
-        ];
-        harnessCompiler.addInputFiles(filesToAdd);
-
-        var emitterIOHost: Harness.Compiler.IEmitterIOHost = {
-            writeFile: (path: string, contents: string, writeByteOrderMark: boolean) => fsOutput.Write(contents),
-            resolvePath: (s: string) => s
+        var errs = checker.getDiagnostics(files[fileName]);
+        if (errs.length > 0) {
+            throw new Error('Error compiling ' + fileName + ': ' + errs.map(e => e.messageText).join('\r\n'));
         }
-
-        harnessCompiler.emitAll(emitterIOHost);
-        fsOutput.Close();
-        fsErrors.Close();
-
-        if (fsErrors.lines.length > 0) {
-            throw new Error('Error compiling ' + fileName + ': ' + fsErrors.lines.join('\r\n'));
-        }
-
-        result = fsOutput.lines.join('\r\n');
+        checker.emitFiles();
+        result = result || ''; // Might have an empty fourslash file
 
         // Compile and execute the test
         try {
@@ -1917,8 +1921,6 @@ module FourSlash {
         } catch (err) {
             // Debugging: FourSlash.currentTestState.printCurrentFileState();
             throw err;
-        } finally {
-            harnessCompiler.reset();
         }
 
         var xmlData = currentTestState.getTestXmlData();
