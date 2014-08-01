@@ -1,6 +1,8 @@
-==== tests/cases/compiler/functionOverloadImplementationOfWrongName2.ts (1 errors) ====
+==== tests/cases/compiler/functionOverloadImplementationOfWrongName2.ts (2 errors) ====
     function foo(x);
     function bar() { }
+             ~~~
+!!! Function implementation name must be 'foo'.
     function foo(x, y);
-    ~~~~~~~~~~~~~~~~~~~
-!!! Function implementation expected.
+             ~~~
+!!! Function implementation is missing or not immediately following the declaration.

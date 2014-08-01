@@ -32,9 +32,9 @@
     }
     
     function over();
-    ~~~~~~~~~~~~~~~~
-!!! Function implementation expected.
     function overrr() {
+             ~~~~~~
+!!! Function implementation name must be 'over'.
     
     }
     

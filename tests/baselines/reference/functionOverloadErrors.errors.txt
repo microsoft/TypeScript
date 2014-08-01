@@ -1,4 +1,4 @@
-==== tests/cases/conformance/functions/functionOverloadErrors.ts (15 errors) ====
+==== tests/cases/conformance/functions/functionOverloadErrors.ts (14 errors) ====
     //Function overload signature with initializer
     function fn1(x = 3);
                  ~~~~~
@@ -86,8 +86,6 @@
     //Function overloads with differing export
     module M {
         export function fn1();
-        ~~~~~~~~~~~~~~~~~~~~~~
-!!! Function implementation expected.
                         ~~~
 !!! Overload signatures must all be exported or not exported.
         function fn1(n: string);

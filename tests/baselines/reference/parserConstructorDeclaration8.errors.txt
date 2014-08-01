@@ -5,5 +5,5 @@
                         ~
 !!! '(' expected.
       ~~~~~~~~~~~~~~~~~~~
-!!! Constructor implementation expected.
+!!! Constructor implementation is missing.
     }

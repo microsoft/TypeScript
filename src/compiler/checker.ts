@@ -4889,47 +4889,101 @@ module ts {
             var hasOverloads = false;
             var bodyDeclaration: FunctionDeclaration;
             var lastSeenNonAmbientDeclaration: FunctionDeclaration;
+            var previousDeclaration: FunctionDeclaration;
+
             var declarations = symbol.declarations;
             var isConstructor = (symbol.flags & SymbolFlags.Constructor) !== 0;
+
+            function reportImplementationExpectedError(node: FunctionDeclaration): void {
+                var seen = false;
+                var subsequentNode = forEachChild(node.parent, c => {
+                    if (seen) {
+                        return c;
+                    }
+                    else {
+                        seen = c === node;
+                    }
+                });
+                if (subsequentNode) {
+                    if (subsequentNode.kind === node.kind) {
+                        var errorNode: Node = (<FunctionDeclaration>subsequentNode).name || subsequentNode;
+                        if (node.name && (<FunctionDeclaration>subsequentNode).name && node.name.text === (<FunctionDeclaration>subsequentNode).name.text) {
+                            // the only situation when this is possible (same kind\same name but different symbol) - mixed static and instance class members
+                            Debug.assert(node.kind === SyntaxKind.Method);
+                            Debug.assert((node.flags & NodeFlags.Static) !== (subsequentNode.flags & NodeFlags.Static));
+                            var diagnostic = node.flags & NodeFlags.Static ? Diagnostics.Function_overload_must_be_static : Diagnostics.Function_overload_must_not_be_static;
+                            error(errorNode, diagnostic);
+                            return;
+                        }
+                        else if ((<FunctionDeclaration>subsequentNode).body) {
+                            error(errorNode, Diagnostics.Function_implementation_name_must_be_0, identifierToString(node.name));
+                            return;
+                        }
+                    }
+                }
+                var errorNode: Node = node.name || node;
+                if (isConstructor) {
+                    error(errorNode, Diagnostics.Constructor_implementation_is_missing);
+                }
+                else {
+                    error(errorNode, Diagnostics.Function_implementation_is_missing_or_not_immediately_following_the_declaration);
+                }
+            }
+
+            // when checking exported function declarations across modules check only duplicate implementations
+            // names and consistensy of modifiers are verified when we check local symbol
+            var isExportSymbolInsideModule = symbol.parent && symbol.parent.flags & SymbolFlags.Module;
             for (var i = 0; i < declarations.length; i++) {
                 var node = <FunctionDeclaration>declarations[i];
+                var inAmbientContext = isInAmbientContext(node);
+                var inAmbientContextOrInterface = node.parent.kind === SyntaxKind.InterfaceDeclaration || node.parent.kind === SyntaxKind.TypeLiteral || inAmbientContext;
+                if (inAmbientContextOrInterface) {
+                    // check if declarations are consecutive only if they are non-ambient
+                    // 1. ambient declarations can be interleaved
+                    // i.e. this is legal
+                    //     declare function foo();
+                    //     declare function bar();
+                    //     declare function foo();
+                    // 2. mixing ambient and non-ambient declarations is a separate error that will be reported - do not want to report an extra one
+                    previousDeclaration = undefined;
+                }
+
                 if (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.Method || node.kind === SyntaxKind.Constructor) {
                     var currentNodeFlags = getEffectiveDeclarationFlags(node, flagsToCheck);
                     someNodeFlags |= currentNodeFlags;
                     allNodeFlags &= currentNodeFlags;
 
-                    var inAmbientContext = isInAmbientContext(node);
-                    var inAmbientContextOrInterface = node.parent.kind === SyntaxKind.InterfaceDeclaration || node.parent.kind === SyntaxKind.TypeLiteral || inAmbientContext;
-                    if (!inAmbientContextOrInterface) {
-                        lastSeenNonAmbientDeclaration = node;
+                    if (node.body && bodyDeclaration) {
+                        if (isConstructor) {
+                            error(node, Diagnostics.Multiple_constructor_implementations_are_not_allowed);
+                        }
+                        else {
+                            error(node, Diagnostics.Duplicate_function_implementation);
+                        }
+                    }
+                    else if (!isExportSymbolInsideModule && previousDeclaration && previousDeclaration.parent === node.parent && previousDeclaration.end !== node.pos) {
+                        reportImplementationExpectedError(previousDeclaration);
                     }
 
                     if (node.body) {
-                        if (bodyDeclaration) {
-                            if (isConstructor) {
-                                error(node, Diagnostics.Multiple_constructor_implementations_are_not_allowed);
-                            }
-                            else {
-                                error(node, Diagnostics.Duplicate_function_implementation);
-                            }
-                        }
-                        else {
+                        if (!bodyDeclaration) {
                             bodyDeclaration = node;
                         }
                     }
                     else {
                         hasOverloads = true;
                     }
+
+                    previousDeclaration = node;
+
+                    if (!inAmbientContextOrInterface) {
+                        lastSeenNonAmbientDeclaration = node;
+                    }
                 }
             }
 
-            if (lastSeenNonAmbientDeclaration && !lastSeenNonAmbientDeclaration.body) {
-                if (isConstructor) {
-                    error(lastSeenNonAmbientDeclaration, Diagnostics.Constructor_implementation_expected);
-                }
-                else {
-                    error(lastSeenNonAmbientDeclaration, Diagnostics.Function_implementation_expected);
-                }
+            if (!isExportSymbolInsideModule && lastSeenNonAmbientDeclaration && !lastSeenNonAmbientDeclaration.body) {
+                reportImplementationExpectedError(lastSeenNonAmbientDeclaration);
             }
 
             if (hasOverloads) {
@@ -5002,7 +5056,7 @@ module ts {
                 }
             });
 
-            var commonDeclarationSpace = exportedDeclarationSpaces & nonExportedDeclarationSpaces
+            var commonDeclarationSpace = exportedDeclarationSpaces & nonExportedDeclarationSpaces;
 
             if (commonDeclarationSpace) {
                 // declaration spaces for exported and non-exported declarations intersect

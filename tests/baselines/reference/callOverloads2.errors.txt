@@ -10,19 +10,19 @@
     }
     
     function Foo();
-    ~~~~~~~~~~~~~~~
-!!! Function implementation expected.
              ~~~
 !!! Duplicate identifier 'Foo'.
     
     function F1(s:string) {return s;}
+             ~~
+!!! Function implementation name must be 'Foo'.
     function F1(a:any) { return a;} // error -  duplicate identifier
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Duplicate function implementation.
     
     function Goo(s:string); // error - no implementation
-    ~~~~~~~~~~~~~~~~~~~~~~~
-!!! Function implementation expected.
+             ~~~
+!!! Function implementation is missing or not immediately following the declaration.
     
     declare function Gar(s:String); // expect no error
     

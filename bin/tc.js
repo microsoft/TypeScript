@@ -226,6 +226,7 @@ var ts;
         Could_not_write_file_0_Colon_1: { code: 5033, category: 1 /* Error */, key: "Could not write file '{0}': {1}" },
         Option_mapRoot_cannot_be_specified_without_specifying_sourcemap_option: { code: 5038, category: 1 /* Error */, key: "Option mapRoot cannot be specified without specifying sourcemap option." },
         Option_sourceRoot_cannot_be_specified_without_specifying_sourcemap_option: { code: 5039, category: 1 /* Error */, key: "Option sourceRoot cannot be specified without specifying sourcemap option." },
+        Version_0: { code: 6029, category: 2 /* Message */, key: "Version {0}" },
         Variable_0_implicitly_has_an_1_type: { code: 7005, category: 1 /* Error */, key: "Variable '{0}' implicitly has an '{1}' type." },
         Parameter_0_implicitly_has_an_1_type: { code: 7006, category: 1 /* Error */, key: "Parameter '{0}' implicitly has an '{1}' type." },
         Member_0_implicitly_has_an_1_type: { code: 7008, category: 1 /* Error */, key: "Member '{0}' implicitly has an '{1}' type." },
@@ -3846,9 +3847,11 @@ var ts;
         function parseObjectLiteral() {
             var node = createNode(128 /* ObjectLiteral */);
             parseExpected(5 /* OpenBraceToken */);
-            if (scanner.hasPrecedingLineBreak())
+            if (scanner.hasPrecedingLineBreak()) {
                 node.flags |= 128 /* MultiLine */;
-            node.properties = parseDelimitedList(11 /* ObjectLiteralMembers */, parseObjectLiteralMember, 2 /* Preserve */);
+            }
+            var trailingCommaBehavior = languageVersion === 0 /* ES3 */ ? 1 /* Allow */ : 2 /* Preserve */;
+            node.properties = parseDelimitedList(11 /* ObjectLiteralMembers */, parseObjectLiteralMember, trailingCommaBehavior);
             parseExpected(6 /* CloseBraceToken */);
             var seen = {};
             var Property = 1;
@@ -4518,7 +4521,13 @@ var ts;
             node.typeParameters = sig.typeParameters;
             node.parameters = sig.parameters;
             node.type = sig.type;
-            node.body = parseBody(false);
+            if (inAmbientContext && canParseSemicolon()) {
+                parseSemicolon();
+                node.body = createMissingNode();
+            }
+            else {
+                node.body = parseBody(false);
+            }
             return finishNode(node);
         }
         function isClassMemberStart() {
@@ -11647,7 +11656,7 @@ var ts;
                 }
             }
             checkSourceElement(node.body);
-            if (node.type) {
+            if (node.type && !isAccessor(node.kind)) {
                 checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
             }
             if (program.getCompilerOptions().noImplicitAny && !node.body && !node.type) {
@@ -12890,6 +12899,7 @@ var ts;
 })(ts || (ts = {}));
 var ts;
 (function (ts) {
+    ts.version = "1.1.0.0";
     function validateLocaleAndSetLanguage(locale, errors) {
         var matchResult = /^([a-z]+)([_\-]([a-z]+))?$/.exec(locale.toLowerCase());
         if (!matchResult) {
@@ -12938,36 +12948,40 @@ var ts;
         });
         return count;
     }
-    function reportErrors(errors) {
+    function reportDiagnostic(error) {
+        if (error.file) {
+            var loc = error.file.getLineAndCharacterFromPosition(error.start);
+            sys.writeErr(error.file.filename + "(" + loc.line + "," + loc.character + "): " + error.messageText + sys.newLine);
+        }
+        else {
+            sys.writeErr(error.messageText + sys.newLine);
+        }
+    }
+    function reportDiagnostics(errors) {
         for (var i = 0; i < errors.length; i++) {
-            var error = errors[i];
-            if (error.file) {
-                var loc = error.file.getLineAndCharacterFromPosition(error.start);
-                sys.writeErr(error.file.filename + "(" + loc.line + "," + loc.character + "): " + error.messageText + sys.newLine);
-            }
-            else {
-                sys.writeErr(error.messageText + sys.newLine);
-            }
+            reportDiagnostic(errors[i]);
         }
     }
     function padLeft(s, length) {
-        while (s.length < length)
+        while (s.length < length) {
             s = " " + s;
+        }
         return s;
     }
     function padRight(s, length) {
-        while (s.length < length)
+        while (s.length < length) {
             s = s + " ";
+        }
         return s;
     }
-    function reportDiagnostic(name, value) {
+    function reportStatisticalValue(name, value) {
         sys.writeErr(padRight(name + ":", 12) + padLeft(value.toString(), 10) + sys.newLine);
     }
-    function reportDiagnosticCount(name, count) {
-        reportDiagnostic(name, "" + count);
+    function reportCountStatistic(name, count) {
+        reportStatisticalValue(name, "" + count);
     }
-    function reportDiagnosticTime(name, time) {
-        reportDiagnostic(name, (time / 1000).toFixed(2) + "s");
+    function reportTimeStatistic(name, time) {
+        reportStatisticalValue(name, (time / 1000).toFixed(2) + "s");
     }
     function createCompilerHost(options) {
         var currentDirectory;
@@ -12977,8 +12991,9 @@ var ts;
                 var text = sys.readFile(filename, options.charset);
             }
             catch (e) {
-                if (onError)
+                if (onError) {
                     onError(e.message);
+                }
                 text = "";
             }
             return text !== undefined ? ts.createSourceFile(filename, text, languageVersion) : undefined;
@@ -13021,18 +13036,20 @@ var ts;
     }
     function executeCommandLine(args) {
         var cmds = ts.parseCommandLine(args);
+        if (cmds.options.locale) {
+            validateLocaleAndSetLanguage(cmds.options.locale, cmds.errors);
+        }
         if (cmds.filenames.length === 0 && !(cmds.options.help || cmds.options.version)) {
             cmds.errors.push(ts.createCompilerDiagnostic(ts.Diagnostics.No_input_files_specified));
         }
         if (cmds.options.version) {
+            reportDiagnostic(ts.createCompilerDiagnostic(ts.Diagnostics.Version_0, ts.version));
+            return 0;
         }
         if (cmds.filenames.length === 0 || cmds.options.help) {
         }
-        if (cmds.options.locale) {
-            validateLocaleAndSetLanguage(cmds.options.locale, cmds.errors);
-        }
         if (cmds.errors.length) {
-            reportErrors(cmds.errors);
+            reportDiagnostics(cmds.errors);
             return 1;
         }
         var parseStart = new Date().getTime();
@@ -13053,19 +13070,19 @@ var ts;
             var reportStart = new Date().getTime();
             errors = ts.concatenate(semanticErrors, emitErrors);
         }
-        reportErrors(errors);
+        reportDiagnostics(errors);
         if (cmds.options.diagnostics) {
-            reportDiagnosticCount("Files", program.getSourceFiles().length);
-            reportDiagnosticCount("Lines", countLines(program));
-            reportDiagnosticCount("Nodes", checker ? checker.getNodeCount() : 0);
-            reportDiagnosticCount("Identifiers", checker ? checker.getIdentifierCount() : 0);
-            reportDiagnosticCount("Symbols", checker ? checker.getSymbolCount() : 0);
-            reportDiagnosticCount("Types", checker ? checker.getTypeCount() : 0);
-            reportDiagnosticTime("Parse time", bindStart - parseStart);
-            reportDiagnosticTime("Bind time", checkStart - bindStart);
-            reportDiagnosticTime("Check time", emitStart - checkStart);
-            reportDiagnosticTime("Emit time", reportStart - emitStart);
-            reportDiagnosticTime("Total time", reportStart - parseStart);
+            reportCountStatistic("Files", program.getSourceFiles().length);
+            reportCountStatistic("Lines", countLines(program));
+            reportCountStatistic("Nodes", checker ? checker.getNodeCount() : 0);
+            reportCountStatistic("Identifiers", checker ? checker.getIdentifierCount() : 0);
+            reportCountStatistic("Symbols", checker ? checker.getSymbolCount() : 0);
+            reportCountStatistic("Types", checker ? checker.getTypeCount() : 0);
+            reportTimeStatistic("Parse time", bindStart - parseStart);
+            reportTimeStatistic("Bind time", checkStart - bindStart);
+            reportTimeStatistic("Check time", emitStart - checkStart);
+            reportTimeStatistic("Emit time", reportStart - emitStart);
+            reportTimeStatistic("Total time", reportStart - parseStart);
         }
         return errors.length ? 1 : 0;
     }
