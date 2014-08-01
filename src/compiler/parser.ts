@@ -88,12 +88,12 @@ module ts {
         return createFileDiagnostic(file, start, length, message, arg0, arg1, arg2);
     }
 
-    export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): Diagnostic {
+    export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain, newLine: string): Diagnostic {
         node = getErrorSpanForNode(node);
         var file = getSourceFileOfNode(node);
         var start = skipTrivia(file.text, node.pos);
         var length = node.end - start;
-        return flattenDiagnosticChain(file, start, length, messageChain);
+        return flattenDiagnosticChain(file, start, length, messageChain, newLine);
     }
 
     export function getErrorSpanForNode(node: Node): Node {
@@ -325,6 +325,14 @@ module ts {
 
     export function hasRestParameters(s: SignatureDeclaration): boolean {
         return s.parameters.length > 0 && (s.parameters[s.parameters.length - 1].flags & NodeFlags.Rest) !== 0;
+    }
+
+    export function isInAmbientContext(node: Node): boolean {
+        while (node) {
+            if (node.flags & (NodeFlags.Ambient | NodeFlags.DeclarationFile)) return true;
+            node = node.parent;
+        }
+        return false;
     }
 
     enum ParsingContext {
@@ -1624,7 +1632,12 @@ module ts {
             parameter.name = identifier;
             finishNode(parameter);
 
-            var signature = <ParsedSignature> { parameters: [parameter] };
+            var parameters = <NodeArray<ParameterDeclaration>>[];
+            parameters.push(parameter);
+            parameters.pos = parameter.pos;
+            parameters.end = parameter.end;
+
+            var signature = <ParsedSignature> { parameters: parameters };
 
             return parseArrowExpressionTail(identifier.pos, signature, /*noIn:*/ false);
         }

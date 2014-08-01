@@ -4,7 +4,7 @@
 ////val<U>(f: (t: T) => U): Int<U>;
 ////}
 ////declare var v1: Int<string>;
-////var /*1*/v2: Int<number> = v1/*2*/;
+////var /*1*/v2/*2*/: Int<number> = v1;
 
 goTo.eof();
 verify.errorExistsBetweenMarkers("1", "2");

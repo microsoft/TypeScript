@@ -174,7 +174,8 @@ module ts {
             writeFile: writeFile,
             getCurrentDirectory: () => currentDirectory || (currentDirectory = sys.getCurrentDirectory()),
             useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
-            getCanonicalFileName: getCanonicalFileName
+            getCanonicalFileName: getCanonicalFileName,
+            getNewLine: () => sys.newLine
         };
     }
 

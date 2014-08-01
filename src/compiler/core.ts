@@ -134,6 +134,18 @@ module ts {
         return result;
     }
 
+    export function forEachKey<T, U>(map: Map<T>, callback: (key: string) => U): U {
+        var result: U;
+        for (var id in map) {
+            if (result = callback(id)) break;
+        }
+        return result;
+    }
+
+    export function lookUp<T>(map: Map<T>, key: string): T {
+        return hasProperty(map, key) ? map[key] : undefined;
+    }
+
     export function mapToArray<T>(map: Map<T>): T[] {
         var result: T[] = [];
         for (var id in map) result.push(map[id]);
@@ -214,7 +226,7 @@ module ts {
         }
     }
 
-    export function flattenDiagnosticChain(file: SourceFile, start: number, length: number, diagnosticChain: DiagnosticMessageChain): Diagnostic {
+    export function flattenDiagnosticChain(file: SourceFile, start: number, length: number, diagnosticChain: DiagnosticMessageChain, newLine: string): Diagnostic {
         var code = diagnosticChain.code;
         var category = diagnosticChain.category;
         var messageText = "";
@@ -222,7 +234,7 @@ module ts {
         var indent = 0;
         while (diagnosticChain) {
             if (indent) {
-                messageText += sys.newLine;
+                messageText += newLine;
                 
                 for (var i = 0; i < indent; i++) {
                     messageText += "  ";

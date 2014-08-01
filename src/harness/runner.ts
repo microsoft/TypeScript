@@ -62,12 +62,10 @@ if (testConfigFile !== '') {
                 runners.push(new ProjectRunner());
                 break;
             case 'fourslash':
-                // TODO: Re-enable Fourslash tests
-                // runners.push(new FourslashRunner());
+                runners.push(new FourslashRunner());
                 break;
             case 'fourslash-generated':
-                // TODO: Re-enable Fourslash tests
-                // runners.push(new GeneratedFourslashRunner());
+                 runners.push(new GeneratedFourslashRunner());
                 break;
             case 'unittests':
                 runners.push(new UnitTestRunner(UnittestTestType.Compiler));
@@ -99,9 +97,8 @@ if (runners.length === 0) {
     }
 
     //// language services
-    // TODO: Re-enable Fourslash runner
-    // runners.push(new FourslashRunner());
-    // runners.push(new GeneratedFourslashRunner());
+    runners.push(new FourslashRunner());
+    //runners.push(new GeneratedFourslashRunner());
 }
 
 sys.newLine = '\r\n';

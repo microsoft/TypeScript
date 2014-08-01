@@ -63,7 +63,32 @@ module ts {
         var diagnostics: Diagnostic[] = [];
         var diagnosticsModified: boolean = false;
 
-        var checker: TypeChecker;
+        var checker: TypeChecker = {
+            getProgram: () => program,
+            getDiagnostics: getDiagnostics,
+            getGlobalDiagnostics: getGlobalDiagnostics,
+            getNodeCount: () => sum(program.getSourceFiles(), "nodeCount"),
+            getIdentifierCount: () => sum(program.getSourceFiles(), "identifierCount"),
+            getSymbolCount: () => sum(program.getSourceFiles(), "symbolCount"),
+            getTypeCount: () => typeCount,
+            checkProgram: checkProgram,
+            emitFiles: invokeEmitter,
+            getSymbolOfNode: getSymbolOfNode,
+            getParentOfSymbol: getParentOfSymbol,
+            getTypeOfSymbol: getTypeOfSymbol,
+            getDeclaredTypeOfSymbol: getDeclaredTypeOfSymbol,
+            getPropertiesOfType: getPropertiesOfType,
+            getSignaturesOfType: getSignaturesOfType,
+            getIndexTypeOfType: getIndexTypeOfType,
+            getReturnTypeOfSignature: getReturnTypeOfSignature,
+            resolveEntityName: resolveEntityName,
+            getSymbolsInScope: getSymbolsInScope,
+            getSymbolOfIdentifier: getSymbolOfIdentifier,
+            getTypeOfExpression: getTypeOfExpression,
+            typeToString: typeToString,
+            symbolToString: symbolToString,
+            getAugmentedPropertiesOfApparentType: getAugmentedPropertiesOfApparentType
+        };
 
         function addDiagnostic(diagnostic: Diagnostic) {
             diagnostics.push(diagnostic);
@@ -739,10 +764,10 @@ module ts {
             };
         }
 
-        function typeToString(type: Type, flags?: TypeFormatFlags): string {
+        function typeToString(type: Type, enclosingDeclaration?:Node, flags?: TypeFormatFlags): string {
             var stringWriter = createSingleLineTextWriter();
             // TODO(shkamat): typeToString should take enclosingDeclaration as input, once we have implemented enclosingDeclaration
-            writeTypeToTextWriter(type, /*enclosingDeclaration*/ null, flags, stringWriter);
+            writeTypeToTextWriter(type, enclosingDeclaration, flags, stringWriter);
             return stringWriter.getText();
         }
 
@@ -1379,7 +1404,7 @@ module ts {
                                 type.baseTypes.push(baseType);
                             }
                             else {
-                                error(declaration, Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, TypeFormatFlags.WriteArrayAsGenericType));
+                                error(declaration, Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType));
                             }
                         }
                         else {
@@ -1420,7 +1445,7 @@ module ts {
                                         type.baseTypes.push(baseType);
                                     }
                                     else {
-                                        error(declaration, Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, TypeFormatFlags.WriteArrayAsGenericType));
+                                        error(declaration, Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType));
                                     }
                                 }
                                 else {
@@ -1987,7 +2012,7 @@ module ts {
                                 type = createTypeReference(<GenericType>type, map(node.typeArguments, t => getTypeFromTypeNode(t)));
                             }
                             else {
-                                error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeToString(type, TypeFormatFlags.WriteArrayAsGenericType), typeParameters.length);
+                                error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType), typeParameters.length);
                                 type = undefined;
                             }
                         }
@@ -2387,7 +2412,7 @@ module ts {
 
                             var errorInfo = chainDiagnosticMessages(undefined, Diagnostics.Named_properties_0_of_types_1_and_2_are_not_identical, prop.name, typeName1, typeName2);
                             errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Interface_0_cannot_simultaneously_extend_types_1_and_2_Colon, typeToString(type), typeName1, typeName2);
-                            addDiagnostic(createDiagnosticForNodeFromMessageChain(typeNode, errorInfo));
+                            addDiagnostic(createDiagnosticForNodeFromMessageChain(typeNode, errorInfo, program.getCompilerHost().getNewLine()));
                         }
                     }
                 }
@@ -2434,7 +2459,7 @@ module ts {
                 error(errorNode, Diagnostics.Excessive_stack_depth_comparing_types_0_and_1, typeToString(source), typeToString(target));
             }
             else if (errorInfo) {
-                addDiagnostic(createDiagnosticForNodeFromMessageChain(errorNode, errorInfo));
+                addDiagnostic(createDiagnosticForNodeFromMessageChain(errorNode, errorInfo, program.getCompilerHost().getNewLine()));
             }
             return result;
 
@@ -4784,14 +4809,6 @@ module ts {
             return (node.flags & NodeFlags.Private) && isInAmbientContext(node);
         }
 
-        function isInAmbientContext(node: Node): boolean {
-            while (node) {
-                if (node.flags & (NodeFlags.Ambient | NodeFlags.DeclarationFile)) return true;
-                node = node.parent;
-            }
-            return false;
-        }
-
         function checkSpecializedSignatureDeclaration(signatureDeclarationNode: SignatureDeclaration): void {
             var signature = getSignatureFromDeclaration(signatureDeclarationNode);
             if (!signature.hasStringLiterals) {
@@ -6181,7 +6198,7 @@ module ts {
         // True if the given identifier is part of a type reference
         function isTypeReferenceIdentifier(identifier: Identifier): boolean {
             var node: Node = identifier;
-            while (node.parent && node.parent.kind === SyntaxKind.QualifiedName) node = node.parent;
+            if (node.parent && node.parent.kind === SyntaxKind.QualifiedName) node = node.parent;
             return node.parent && node.parent.kind === SyntaxKind.TypeReference;
         }
 
@@ -6245,10 +6262,20 @@ module ts {
             return false;
         }
 
+        function isRightSideOfQualifiedName(node: Node) {
+            return (node.parent.kind === SyntaxKind.QualifiedName || node.parent.kind === SyntaxKind.PropertyAccess) &&
+                (<QualifiedName>node.parent).right === node;
+        }
+
         function getSymbolOfIdentifier(identifier: Identifier) {
             if (isExpression(identifier)) {
-                if (isRightSideOfQualifiedName()) {
-                    // TODO
+                if (isRightSideOfQualifiedName(identifier)) {
+                    var node = <QualifiedName>identifier.parent;
+                    var symbol = getNodeLinks(node).resolvedSymbol;
+                    if (!symbol) {
+                        checkPropertyAccess(node);
+                    }
+                    return getNodeLinks(node).resolvedSymbol;
                 }
                 return resolveEntityName(identifier, identifier, SymbolFlags.Value);
             }
@@ -6256,16 +6283,58 @@ module ts {
                 return getSymbolOfNode(identifier.parent);
             }
             if (isTypeReferenceIdentifier(identifier)) {
-                var entityName = isRightSideOfQualifiedName() ? identifier.parent : identifier;
+                var entityName = isRightSideOfQualifiedName(identifier) ? identifier.parent : identifier;
                 var meaning = entityName.parent.kind === SyntaxKind.TypeReference ? SymbolFlags.Type : SymbolFlags.Namespace;
                 return resolveEntityName(entityName, entityName, meaning);
             }
-            function isRightSideOfQualifiedName() {
-                return (identifier.parent.kind === SyntaxKind.QualifiedName || identifier.parent.kind === SyntaxKind.PropertyAccess) &&
-                    (<QualifiedName>identifier.parent).right === identifier;
-            }
         }
 
+        function getTypeOfExpression(node: Node) {
+            if (isExpression(node)) {
+                while (isRightSideOfQualifiedName(node)) {
+                  node = node.parent;
+                }
+                 return <Type>getApparentType(checkExpression(node));
+            }
+            return unknownType;
+        }
+
+        function getAugmentedPropertiesOfApparentType(type: Type): Symbol[]{
+            var apparentType = getApparentType(type);
+
+            if (apparentType.flags & TypeFlags.ObjectType) {
+                // Augment the apprent type with Function and Object memeber as applicaple
+                var propertiesByName: Map<Symbol> = {};
+                var results: Symbol[] = [];
+
+                forEach(getPropertiesOfType(apparentType), (s) => {
+                    propertiesByName[s.name] = s;
+                    results.push(s);
+                });
+
+                var resolved = resolveObjectTypeMembers(<ObjectType>type);
+                forEachValue(resolved.members, (s) => {
+                    if (symbolIsValue(s) && !propertiesByName[s.name]) {
+                        propertiesByName[s.name] = s;
+                        results.push(s);
+                    }
+                });
+
+                if (resolved === anyFunctionType || resolved.callSignatures.length || resolved.constructSignatures.length) {
+                    forEach(getPropertiesOfType(globalFunctionType), (s) => {
+                        if (!propertiesByName[s.name]) {
+                            propertiesByName[s.name] = s;
+                            results.push(s);
+                        }
+                    });
+                }
+
+                return results;
+            }
+            else {
+                return getPropertiesOfType(<Type>apparentType);
+            }
+        }
         // Emitter support
 
         function isExternalModuleSymbol(symbol: Symbol): boolean {
@@ -6459,28 +6528,7 @@ module ts {
         }
 
         initializeTypeChecker();
-        checker = {
-            getProgram: () => program,
-            getDiagnostics: getDiagnostics,
-            getGlobalDiagnostics: getGlobalDiagnostics,
-            getNodeCount: () => sum(program.getSourceFiles(), "nodeCount"),
-            getIdentifierCount: () => sum(program.getSourceFiles(), "identifierCount"),
-            getSymbolCount: () => sum(program.getSourceFiles(), "symbolCount"),
-            getTypeCount: () => typeCount,
-            checkProgram: checkProgram,
-            emitFiles: invokeEmitter,
-            getSymbolOfNode: getSymbolOfNode,
-            getParentOfSymbol: getParentOfSymbol,
-            getTypeOfSymbol: getTypeOfSymbol,
-            getDeclaredTypeOfSymbol: getDeclaredTypeOfSymbol,
-            getPropertiesOfType: getPropertiesOfType,
-            getSignaturesOfType: getSignaturesOfType,
-            getIndexTypeOfType: getIndexTypeOfType,
-            getReturnTypeOfSignature: getReturnTypeOfSignature,
-            resolveEntityName: resolveEntityName,
-            getSymbolsInScope: getSymbolsInScope,
-            getSymbolOfIdentifier: getSymbolOfIdentifier
-        };
+
         return checker;
     }
 }

@@ -62,19 +62,17 @@ var servicesSources = [
 var harnessSources = [
     "harness.ts",
     "sourceMapRecorder.ts",
-// TODO Re-enable
-//    "harnessLanguageService.ts",
-//    "fourslash.ts",
-    "runner.ts",
+    "harnessLanguageService.ts",
+    "fourslash.ts",
     "external/json2.ts",
     "runnerbase.ts",
     "compilerRunner.ts",
     "typeWriter.ts",
-// TODO Re-enable fourslash and project tests
-//    "fourslashRunner.ts",
+    "fourslashRunner.ts",
     "projectsRunner.ts",
     "unittestrunner.ts",
     "rwcRunner.ts",
+    "runner.ts"
 ].map(function (f) {
     return path.join(harnessDirectory, f);
 });
@@ -233,7 +231,7 @@ task("generate-diagnostics", [diagnosticInfoMapTs])
 var tcFile = path.join(builtLocalDirectory, "tc.js");
 compileFile(tcFile, compilerSources, [builtLocalDirectory, copyright].concat(compilerSources), [copyright], /*useBuiltCompiler:*/ false);
 
-var tcServicesFile = path.join(builtLocalDirectory, "services.js");
+var tcServicesFile = path.join(builtLocalDirectory, "typescriptServices.js");
 compileFile(tcServicesFile, servicesSources, [builtLocalDirectory, copyright].concat(servicesSources), [copyright], /*useBuiltCompiler:*/ true);
 
 // Local target to build the compiler and services

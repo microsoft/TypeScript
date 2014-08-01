@@ -599,6 +599,10 @@ module ts {
         resolveEntityName(location: Node, name: EntityName, meaning: SymbolFlags): Symbol;
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolOfIdentifier(identifier: Identifier): Symbol;
+        getTypeOfExpression(node: Expression, contextualType?: Type, contextualMapper?: TypeMapper): Type;
+        typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
+        symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
+        getAugmentedPropertiesOfApparentType(type: Type): Symbol[];
     }
 
     export interface TextWriter {
@@ -1104,5 +1108,13 @@ module ts {
         getCurrentDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
+        getNewLine(): string;
+    }
+
+    export enum ByteOrderMark {
+        None = 0,
+        Utf8 = 1,
+        Utf16BigEndian = 2,
+        Utf16LittleEndian = 3,
     }
 }
