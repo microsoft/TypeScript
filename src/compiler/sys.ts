@@ -199,7 +199,11 @@ var sys: System = (function () {
                     close() { _fs.unwatchFile(fileName, fileChanged); }
                 };
 
-                function fileChanged() {
+                function fileChanged(curr:any, prev:any) {
+                    if (+curr.mtime <= +prev.mtime) {
+                        return;
+                    }
+
                     callback(fileName);
                 };
             },
