@@ -185,17 +185,18 @@ module ts {
             validateLocaleAndSetLanguage(commandLine.options.locale, commandLine.errors);
         }
 
-        if (commandLine.filenames.length === 0 && !(commandLine.options.help || commandLine.options.version)) {
-            commandLine.errors.push(createCompilerDiagnostic(Diagnostics.No_input_files_specified));
-        }
-
         if (commandLine.options.version) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, version));
             sys.exit(0);
         }
 
-        if (commandLine.filenames.length === 0 || commandLine.options.help) {
+        if (commandLine.options.help) {
             // TODO (drosen): Usage.
+            sys.exit(0);
+        }
+
+        if (commandLine.filenames.length === 0) {
+            commandLine.errors.push(createCompilerDiagnostic(Diagnostics.No_input_files_specified));
         }
 
         if (commandLine.errors.length) {
