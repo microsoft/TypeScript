@@ -2072,6 +2072,10 @@ module ts {
                         var moduleType = typeChecker.getTypeOfSymbol(importSymbol);
                         symbol = moduleType ? moduleType.symbol : undefined;
                     }
+                    // External module name in an ambient declaration
+                    else if (node.parent.kind === SyntaxKind.ModuleDeclaration) {
+                        symbol = typeChecker.getSymbolOfNode(node.parent);
+                    }
                     break;
             }
 
