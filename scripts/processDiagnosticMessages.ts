@@ -94,10 +94,7 @@ function convertPropertyName(origName: string): string {
 }
 
 module NameGenerator {
-    export function ensureUniqueness(
-        names: string[],
-        isFixed: boolean[]= names.map(() => false),
-        isCaseSensitive: boolean = true): string[] {
+    export function ensureUniqueness(names: string[], isFixed: boolean[] = names.map(() => false), isCaseSensitive: boolean = false): string[] {
 
         var names = names.map(x => x);
         ensureUniquenessInPlace(names, isFixed, isCaseSensitive);
@@ -133,7 +130,7 @@ module NameGenerator {
             while (true) {
                 var newName = name + suffix++;
 
-                if (proposedNames.some((name) => Utilities.stringEquals(name, newName, isCaseSensitive))) {
+                if (!proposedNames.some((name) => Utilities.stringEquals(name, newName, isCaseSensitive))) {
                     proposedNames[collisionIndex] = newName;
                     break;
                 }
@@ -144,7 +141,7 @@ module NameGenerator {
 
 module Utilities {
     /// Return a list of all indices where a string occurs.
-    export function collectMatchingIndices(name: string, proposedNames: string[], isCaseSensitive: boolean = true): number[] {
+    export function collectMatchingIndices(name: string, proposedNames: string[], isCaseSensitive: boolean = false): number[] {
         var matchingIndices: number[] = [];
 
         for (var i = 0; i < proposedNames.length; i++) {
@@ -156,8 +153,8 @@ module Utilities {
         return matchingIndices;
     }
 
-    export function stringEquals(s1: string, s2: string, caseSensitive: boolean = true): boolean {
-        if (!caseSensitive) {
+    export function stringEquals(s1: string, s2: string, caseSensitive: boolean = false): boolean {
+        if (caseSensitive) {
             s1 = s1.toLowerCase();
             s2 = s2.toLowerCase();
         }

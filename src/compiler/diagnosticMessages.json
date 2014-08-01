@@ -858,13 +858,137 @@
         "category": "Error",
         "code": 5039
     },
+    "Concatenate and emit output to single file.": {
+        "category": "Message",
+        "code": 6001
+    },
+    "Generates corresponding {0} file.": {
+        "category": "Message",
+        "code": 6002
+    },
+    "Specifies the location where debugger should locate map files instead of generated locations.": {
+        "category": "Message",
+        "code": 6003
+    },
+    "Specifies the location where debugger should locate TypeScript files instead of source locations.": {
+        "category": "Message",
+        "code": 6004
+    },
+    "Watch input files.": {
+        "category": "Message",
+        "code": 6005
+    },
+    "Redirect output structure to the directory.": {
+        "category": "Message",
+        "code": 6006
+    },
+    "Do not emit comments to output.": {
+        "category": "Message",
+        "code": 6009
+    },
+    "Skip resolution and preprocessing.": {
+        "category": "Message",
+        "code": 6010
+    },
+    "Specify ECMAScript target version: '{0}' (default), or '{1}'": {
+        "category": "Message",
+        "code": 6015
+    },
+    "Specify module code generation: '{0}' or '{1}'": {
+        "category": "Message",
+        "code": 6016
+    },
+    "Print this message.": {
+        "category": "Message",
+        "code": 6017
+    },
+    "Print the compiler's version: {0}": {
+        "category": "Message",
+        "code": 6019
+    },
+    "Allow use of deprecated '{0}' keyword when referencing an external module.": {
+        "category": "Message",
+        "code": 6021
+    },
+    "Specify locale for errors and messages. For example '{0}' or '{1}'": {
+        "category": "Message",
+        "code": 6022
+    },
+    "Syntax:   {0}": {
+        "category": "Message",
+        "code": 6023
+    },
+    "options": {
+        "category": "Message",
+        "code": 6024
+    },
+    "file": {
+        "category": "Message",
+        "code": 6025
+    },
+    "Examples:": {
+        "category": "Message",
+        "code": 6026
+    },
+    "Options:": {
+        "category": "Message",
+        "code": 6027
+    },
+    "Insert command line options and files from a file.": {
+        "category": "Message",
+        "code": 6028
+    },
     "Version {0}": {
-       "category": "Message",
-       "code": 6029
+        "category": "Message",
+        "code": 6029
+    },
+    "Insert command line options and files from a file.": {
+        "category": "Message",
+        "code": 6030
+    },
+    "Use the '{0}' flag to see options.": {
+        "category": "Message",
+        "code": 6031
     },
     "File Changed. Compiling.": {
         "category": "Message",
         "code": 6032
+    },
+    "STRING": {
+        "category": "Message",
+        "code": 6033
+    },
+    "KIND": {
+        "category": "Message",
+        "code": 6034
+    },
+    "FILE": {
+        "category": "Message",
+        "code": 6035
+    },
+    "VERSION": {
+        "category": "Message",
+        "code": 6036
+    },
+    "LOCATION": {
+        "category": "Message",
+        "code": 6037
+    },
+    "DIRECTORY": {
+        "category": "Message",
+        "code": 6038
+    },
+    "NUMBER": {
+        "category": "Message",
+        "code": 6039
+    },
+    "Specify the codepage to use when opening source files.": {
+        "category": "Message",
+        "code": 6040
+    },
+    "Additional locations:": {
+        "category": "Message",
+        "code": 6041
     },
     "Compile complete. Listening for changed files.": {
         "category": "Message",

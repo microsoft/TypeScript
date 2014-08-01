@@ -199,6 +199,8 @@ var processDiagnosticMessagesTs = path.join(scriptsDirectory, "processDiagnostic
 var diagnosticMessagesJson = path.join(compilerDirectory, "diagnosticMessages.json");
 var diagnosticInfoMapTs = path.join(compilerDirectory, "diagnosticInformationMap.generated.ts");
 
+file(processDiagnosticMessagesTs)
+
 // processDiagnosticMessages script
 compileFile(processDiagnosticMessagesJs,
             [processDiagnosticMessagesTs],
