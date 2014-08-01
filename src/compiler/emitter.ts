@@ -1371,6 +1371,7 @@ module ts {
                 write(" {");
                 scopeEmitStart(node, "constructor");
                 increaseIndent();
+                emitCaptureThisForNodeIfNecessary(node);
                 if (ctor) {
                     emitDefaultValueAssignments(ctor);
                     emitRestParameter(ctor);
@@ -1390,8 +1391,7 @@ module ts {
                         write("_super.apply(this, arguments);");
                         emitEnd(node.baseType);
                     }
-                }
-                emitCaptureThisForNodeIfNecessary(node);
+                }                
                 emitMemberAssignments(node, /*nonstatic*/0);
                 if (ctor) {
                     var statements: Node[] = (<Block>ctor.body).statements;

@@ -33,8 +33,8 @@ class Test1 {
 //// [classMemberInitializerWithLamdaScoping.js]
 var Test = (function () {
     function Test(field) {
-        this.field = field;
         var _this = this;
+        this.field = field;
         this.messageHandler = function () {
             var field = _this.field;
             console.log(field);
