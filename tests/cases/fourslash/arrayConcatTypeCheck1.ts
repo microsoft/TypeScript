@@ -10,18 +10,18 @@
 
 edit.disableFormatting();
 
-goTo.marker(1);
+goTo.marker('1');
 
 edit.deleteAtCaret(9);
 
-goTo.marker(3);
+goTo.marker('3');
 
 edit.deleteAtCaret(7);
 
-goTo.marker(2);
+goTo.marker('2');
 
 edit.deleteAtCaret(7);
 
-goTo.marker(4);
+goTo.marker('4');
 diagnostics.validateTypesAtPositions(43);
 
