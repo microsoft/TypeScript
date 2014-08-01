@@ -26,7 +26,7 @@
 //// {| "itemName": "ABC", "kind": "module", "parentName": "" |}module ABC {
 ////     export var {| "itemName": "x", "kind": "var" |}x = 3;
 //// }
-debugger;
+
 verify.getScriptLexicalStructureListCount(12);
 test.markers().forEach(marker => {
     if (marker.data) {
