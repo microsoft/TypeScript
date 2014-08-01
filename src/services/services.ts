@@ -1901,7 +1901,7 @@ module ts {
                         case SyntaxKind.ArrowFunction:
                         case SyntaxKind.ModuleDeclaration:
                         case SyntaxKind.ClassDeclaration:
-                            // Label targets can not be accorss function boundries, so do not walk any further
+                            // Label targets cannot be across function boundaries, so do not walk any further
                             return undefined;
                         case SyntaxKind.LabelledStatement:
                             if ((<LabelledStatement>current).label.text === labelName) {
@@ -1987,8 +1987,8 @@ module ts {
             }
 
             function tryAddConstructSignature(symbol: Symbol, location: Node, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
-                // Applicaple only if we are:in a new expression, or we are on a constructor declaration
-                // and in either case the symbol has a construct signature definition, i.e.class
+                // Applicable only if we are in a new expression, or we are on a constructor declaration
+                // and in either case the symbol has a construct signature definition, i.e. class
                 if (isNewExpressionTarget(location) || location.kind === SyntaxKind.ConstructorKeyword) {
                     if (symbol.flags & SymbolFlags.Class) {
                         var classDeclaration = <ClassDeclaration>symbol.getDeclarations()[0];
@@ -2024,7 +2024,7 @@ module ts {
                 return label ? [getDefinitionInfo(label, ScriptElementKind.label, labelName, /*containerName*/ undefined)] : undefined;
             }
 
-            /// Trible slash reference comments
+            /// Triple slash reference comments
             var comment = forEach(document.getSourceFile().referencedFiles, r => (r.pos <= position && position < r.end) ? r : undefined);
             if (comment) {
                 var targetFilename = normalizePath(combinePaths(getDirectoryPath(filename), comment.filename));

@@ -11,8 +11,8 @@ module ts {
     var nextNodeId = 1;
     var nextMergeId = 1;
 
-    // Unknown symbol can survive across different type checking sessions (e.g. in the language service)
-    // We do use referential comparison to know if a symbol is the unknown symbol. creating a new symbol
+    // unknownSymbol can survive across different type checking sessions (e.g. in the language service)
+    // We use referential comparison to know if a symbol is the unknown symbol; creating a new symbol
     // every time would defy that purpose. So we need to have a single object to represent the "unknown" symbol.
     var unknownSymbol: Symbol;
 
