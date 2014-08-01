@@ -56,6 +56,7 @@ module ts {
 
         var stringLiteralTypes: Map<StringLiteralType> = {};
 
+        var fullTypeCheck = false;
         var emitExtends = false;
 
         var mergedSymbols: Symbol[] = [];
@@ -4272,7 +4273,7 @@ module ts {
                     }
                 }
             }
-            if (!(links.flags & NodeCheckFlags.TypeChecked)) {
+            if (fullTypeCheck && !(links.flags & NodeCheckFlags.TypeChecked)) {
                 checkSignatureDeclaration(node);
                 if (node.type) {
                     checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
@@ -6019,9 +6020,12 @@ module ts {
             }
         }
 
+        // Fully type check a source file and collect the relevant diagnostics. The fullTypeCheck flag is true during this
+        // operation, but otherwise is false when the compiler is used by the language service.
         function checkSourceFile(node: SourceFile) {
             var links = getNodeLinks(node);
             if (!(links.flags & NodeCheckFlags.TypeChecked)) {
+                fullTypeCheck = true;
                 emitExtends = false;
                 potentialThisCollisions.length = 0;
                 forEach(node.statements, checkSourceElement);
@@ -6038,6 +6042,7 @@ module ts {
                 }
                 if (emitExtends) links.flags |= NodeCheckFlags.EmitExtends;
                 links.flags |= NodeCheckFlags.TypeChecked;
+                fullTypeCheck = false;
             }
         }
 
