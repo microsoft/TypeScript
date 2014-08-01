@@ -2080,8 +2080,8 @@ module ts {
             }
 
             // Could not find a symbol e.g. node is string or number keyword,
-            // or the symbol was an internal symbol (transient) e.g. undefined symbol
-            if (!symbol || symbol.flags & SymbolFlags.Transient) {
+            // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol
+            if (!symbol || !(symbol.getDeclarations())) {
                 return undefined;
             }
 
