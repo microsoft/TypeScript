@@ -443,13 +443,15 @@ module ts {
             return moduleSymbol;
         }
 
-        function getExportAssignmentSymbol(symbol: Symbol): Symbol {
+        function getExportAssignmentSymbol(symbol: Symbol): Symbol {            
             checkTypeOfExportAssignmentSymbol(symbol);
-            return symbol.exportAssignSymbol === unknownSymbol ? undefined : symbol.exportAssignSymbol;
+            var symbolLinks = getSymbolLinks(symbol);
+            return symbolLinks.exportAssignSymbol === unknownSymbol ? undefined : symbolLinks.exportAssignSymbol;
         }
 
         function checkTypeOfExportAssignmentSymbol(containerSymbol: Symbol): void {
-            if (!containerSymbol.exportAssignSymbol) {
+            var symbolLinks = getSymbolLinks(containerSymbol);
+            if (!symbolLinks.exportAssignSymbol) {
                 var exportInformation = collectExportInformationForSourceFileOrModule(containerSymbol);
                 if (exportInformation.exportAssignments.length) {
                     if (exportInformation.exportAssignments.length > 1) {
@@ -470,7 +472,7 @@ module ts {
                         var exportSymbol = resolveName(node, node.exportName.text, meaning, Diagnostics.Cannot_find_name_0, identifierToString(node.exportName));
                     }
                 }
-                containerSymbol.exportAssignSymbol = exportSymbol || unknownSymbol;
+                symbolLinks.exportAssignSymbol = exportSymbol || unknownSymbol;
             }
         }
 
