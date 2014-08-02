@@ -1865,6 +1865,14 @@ declare var Window: {
     new(): Window;
 }
 
+interface FormData {
+    append(name: any, value: any, blobName?: string): void;
+}
+declare var FormData: {
+    prototype: FormData;
+    new (form?:HTMLFormElement): FormData;
+}
+
 interface NavigatorID {
     appVersion: string;
     appName: string;
@@ -10194,14 +10202,6 @@ declare var MSManipulationEvent: {
     MS_MANIPULATION_STATE_PRESELECT: number;
     MS_MANIPULATION_STATE_DRAGGING: number;
     MS_MANIPULATION_STATE_CANCELLED: number;
-}
-
-interface FormData {
-    append(name: any, value: any, blobName?: string): void;
-}
-declare var FormData: {
-    prototype: FormData;
-    new(): FormData;
 }
 
 interface HTMLDataListElement extends HTMLElement {
