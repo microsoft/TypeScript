@@ -717,7 +717,6 @@ module ts {
         members?: SymbolTable;         // Class, interface or literal instance members
         exports?: SymbolTable;         // Module exports
         exportSymbol?: Symbol;         // Exported symbol associated with this symbol
-        exportAssignSymbol?: Symbol;   // Symbol exported from external module
         valueDeclaration?: Declaration // First value declaration of the symbol
     }
 
@@ -727,6 +726,7 @@ module ts {
         declaredType?: Type;           // Type of class, interface, enum, or type parameter
         mapper?: TypeMapper;           // Type mapper for instantiation alias
         referenced?: boolean;          // True if alias symbol has been referenced as a value
+        exportAssignSymbol?: Symbol;   // Symbol exported from external module
     }
 
     export interface TransientSymbol extends Symbol, SymbolLinks { }
