@@ -1157,6 +1157,11 @@ interface ArrayBuffer {
       * Read-only. The length of the ArrayBuffer (in bytes).
       */
     byteLength: number;
+
+    /**
+      * Returns a section of an ArrayBuffer.
+      */
+    slice(begin:number, end?:number): ArrayBuffer;
 }
 
 declare var ArrayBuffer: {
@@ -3824,6 +3829,32 @@ interface Window extends EventTarget, MSEventAttachmentTarget, WindowLocalStorag
 declare var Window: {
     prototype: Window;
     new(): Window;
+}
+
+interface FormData {
+    append(name: any, value: any, blobName?: string): void;
+}
+declare var FormData: {
+    prototype: FormData;
+    new (form?: HTMLFormElement): FormData;
+}
+
+interface SourceBuffer extends EventTarget {
+    updating: boolean;
+    appendWindowStart: number;
+    appendWindowEnd: number;
+    buffered: TimeRanges;
+    timestampOffset: number;
+    audioTracks: AudioTrackList;
+    appendBuffer(data: ArrayBufferView): void;
+    appendBuffer(data: ArrayBuffer): void;
+    remove(start: number, end: number): void;
+    abort(): void;
+    appendStream(stream: MSStream, maxSize?: number): void;
+}
+declare var SourceBuffer: {
+    prototype: SourceBuffer;
+    new(): SourceBuffer;
 }
 
 interface NavigatorID {
@@ -12157,14 +12188,6 @@ declare var MSManipulationEvent: {
     MS_MANIPULATION_STATE_CANCELLED: number;
 }
 
-interface FormData {
-    append(name: any, value: any, blobName?: string): void;
-}
-declare var FormData: {
-    prototype: FormData;
-    new(): FormData;
-}
-
 interface HTMLDataListElement extends HTMLElement {
     options: HTMLCollection;
 }
@@ -12581,23 +12604,6 @@ declare var NavigationEvent: {
 
 interface RandomSource {
     getRandomValues(array: ArrayBufferView): ArrayBufferView;
-}
-
-interface SourceBuffer extends EventTarget {
-    updating: boolean;
-    appendWindowStart: number;
-    appendWindowEnd: number;
-    buffered: TimeRanges;
-    timestampOffset: number;
-    audioTracks: AudioTrackList;
-    appendBuffer(data: ArrayBuffer): void;
-    remove(start: number, end: number): void;
-    abort(): void;
-    appendStream(stream: MSStream, maxSize?: number): void;
-}
-declare var SourceBuffer: {
-    prototype: SourceBuffer;
-    new(): SourceBuffer;
 }
 
 interface MSInputMethodContext extends EventTarget {
