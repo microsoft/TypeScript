@@ -273,13 +273,12 @@ module ts {
 
         function recompile(changedFiles: Map<boolean>) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Compiling));
-            // Remove all the watchers, since we may not be watching every file
-            // specified since the last recompilation cycle.
+            // Remove all the watchers, as we may not be watching every file
+            // specified since the last compilation cycle.
             removeWatchers(program);
 
-            // Release the old program.
+            // Gets us syntactically correct files from the last compilation.
             var getUnmodifiedSourceFile = program.getSourceFile;
-            program = undefined;
 
             // We create a new compiler host for this compilation cycle.
             // This new host is effectively the same except that 'getSourceFile'
