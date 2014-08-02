@@ -1865,28 +1865,12 @@ module ts {
 
         /// Goto definition
         function getDefinitionAtPosition(filename: string, position: number): DefinitionInfo[]{
-            function getTargetLabel(statement: BreakOrContinueStatement, labelName: string): Identifier {
-                var current = statement.parent;
-                while (current) {
-                    switch (current.kind) {
-                        case SyntaxKind.FunctionDeclaration:
-                        case SyntaxKind.Method:
-                        case SyntaxKind.Constructor:
-                        case SyntaxKind.GetAccessor:
-                        case SyntaxKind.SetAccessor:
-                        case SyntaxKind.FunctionExpression:
-                        case SyntaxKind.ArrowFunction:
-                        case SyntaxKind.ModuleDeclaration:
-                        case SyntaxKind.ClassDeclaration:
-                            // Label targets cannot be across function boundaries, so do not walk any further
-                            return undefined;
-                        case SyntaxKind.LabelledStatement:
-                            if ((<LabelledStatement>current).label.text === labelName) {
-                                return (<LabelledStatement>current).label;
-                            }
-                            break;
+            function getTargetLabel(node: Node, labelName: string): Identifier {
+                while (node) {
+                    if (node.kind === SyntaxKind.LabelledStatement && (<LabelledStatement>node).label.text === labelName) {
+                        return (<LabelledStatement>node).label;
                     }
-                    current = current.parent;
+                    node = node.parent;
                 }
                 return undefined;
             }
