@@ -231,7 +231,7 @@ module ts {
 
         // Compile the program the first time and watch all given/referenced files.
         var program = compile(commandLine, compilerHost).program;
-        reportDiagnostic(createCompilerDiagnostic(Diagnostics.Compile_complete_Listening_for_changed_files));
+        reportDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
         addWatchers(program);
         return;
 
@@ -272,11 +272,14 @@ module ts {
         }
 
         function recompile(changedFiles: Map<boolean>) {
-            var oldProgram = program;
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_Changed_Compiling));
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Compiling));
             // Remove all the watchers, since we may not be watching every file
             // specified since the last recompilation cycle.
-            removeWatchers(oldProgram);
+            removeWatchers(program);
+
+            // Release the old program.
+            var getUnmodifiedSourceFile = program.getSourceFile;
+            program = undefined;
 
             // We create a new compiler host for this compilation cycle.
             // This new host is effectively the same except that 'getSourceFile'
@@ -285,7 +288,7 @@ module ts {
             var newCompilerHost = clone(compilerHost);
             newCompilerHost.getSourceFile = (fileName, languageVersion, onError) => {
                 if (!hasProperty(changedFiles, fileName)) {
-                    var sourceFile = oldProgram.getSourceFile(fileName);
+                    var sourceFile = getUnmodifiedSourceFile(fileName);
                     if (sourceFile) {
                         return sourceFile;
                     }
@@ -295,7 +298,7 @@ module ts {
             };
 
             program = compile(commandLine, newCompilerHost).program;
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Compile_complete_Listening_for_changed_files));
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
             addWatchers(program);
         }
     }

@@ -862,11 +862,11 @@
        "category": "Message",
        "code": 6029
     },
-    "File Changed. Compiling.": {
+    "File change detected. Compiling...": {
         "category": "Message",
         "code": 6032
     },
-    "Compile complete. Listening for changed files.": {
+    "Compilation complete. Watching for file changes.": {
         "category": "Message",
         "code": 6042
     },
