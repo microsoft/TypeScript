@@ -92,7 +92,7 @@ module ts {
             getReturnTypeOfSignature: getReturnTypeOfSignature,
             resolveEntityName: resolveEntityName,
             getSymbolsInScope: getSymbolsInScope,
-            getSymbolOfIdentifier: getSymbolOfIdentifier,
+            getSymbolOfIdentifierLikeNode: getSymbolOfIdentifierLikeNode,
             getTypeOfExpression: getTypeOfExpression,
             typeToString: typeToString,
             symbolToString: symbolToString,
@@ -6311,8 +6311,49 @@ module ts {
                 meaning |= SymbolFlags.Import;
                 return resolveEntityName(entityName, entityName, meaning);
             }
+        }
 
-            Debug.fail("identifier is neither at a type nor value position");
+        function getSymbolOfIdentifierLikeNode(node: Node) {
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                    return getSymbolOfIdentifier(<Identifier>node);
+                    break;
+
+                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.SuperKeyword:
+                    var type = checkExpression(node);
+                    return type.symbol;
+                    
+                case SyntaxKind.ConstructorKeyword:
+                    // constructor keyword for an overload, should take us to the definition if it exist
+                    var constructorDeclaration = node.parent;
+                    if (constructorDeclaration && constructorDeclaration.kind === SyntaxKind.Constructor) {
+                        return (<ClassDeclaration>constructorDeclaration.parent).symbol;
+                    }
+                    return undefined;
+
+                case SyntaxKind.StringLiteral:
+                    // Property access
+                    if (node.parent.kind === SyntaxKind.IndexedAccess && (<IndexedAccess>node.parent).index === node) {
+                        var objectType = checkExpression((<IndexedAccess>node.parent).object);
+                        if (objectType === unknownType) return undefined;
+                        var apparentType = getApparentType(objectType);
+                        if (<Type>apparentType === unknownType) return undefined;
+                        return getPropertyOfApparentType(apparentType, (<LiteralExpression>node).text);
+                    }
+                    // External module name in an import declaration
+                    else if (node.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent).externalModuleName === node) {
+                        var importSymbol = getSymbolOfNode(node.parent);
+                        var moduleType = getTypeOfSymbol(importSymbol);
+                        return moduleType ? moduleType.symbol : undefined;
+                    }
+                    // External module name in an ambient declaration
+                    else if (node.parent.kind === SyntaxKind.ModuleDeclaration) {
+                        return getSymbolOfNode(node.parent);
+                    }
+                    break;
+            }
+            return undefined;
         }
 
         function getTypeOfExpression(node: Node) {

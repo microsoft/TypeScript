@@ -1847,43 +1847,20 @@ module ts {
             var node = getNodeAtPosition(document.getSourceFile(), position);
             if (!node) return undefined;
 
-            switch (node.kind) {
-                // A declaration
-                case SyntaxKind.Identifier:
-                    if (node.parent.kind === SyntaxKind.CallExpression || node.parent.kind === SyntaxKind.NewExpression) {
-                        // TODO: handle new and call expressions
-                    }
-
-                    var symbol = typeChecker.getSymbolOfIdentifier(<Identifier>node);
-                    Debug.assert(symbol, "getTypeAtPosition: Could not find symbol for node");
-                    var type = typeChecker.getTypeOfSymbol(symbol);
-
-                    return {
-                        memberName: new TypeScript.MemberNameString(typeChecker.typeToString(type)),
-                        docComment: "",
-                        fullSymbolName: typeChecker.symbolToString(symbol, getContainerNode(node)),
-                        kind: getSymbolKind(symbol),
-                        minChar: node.pos,
-                        limChar: node.end
-                    };
-
-                // An Expression
-                case SyntaxKind.ThisKeyword:
-                case SyntaxKind.QualifiedName:
-                case SyntaxKind.SuperKeyword:
-                case SyntaxKind.StringLiteral:
-                    var type = typeChecker.getTypeOfExpression(node);
-                    Debug.assert(type, "getTypeAtPosition: Could not find type for node");
-                    return {
-                        memberName: new TypeScript.MemberNameString(""),
-                        docComment: "",
-                        fullSymbolName: typeChecker.typeToString(type, getContainerNode(node)),
-                        kind: getTypeKind(type),
-                        minChar: node.pos,
-                        limChar: node.end
-                    };
-                    break;
+            var symbol = typeChecker.getSymbolOfIdentifierLikeNode(node);
+            var type = symbol && typeChecker.getTypeOfSymbol(symbol);
+            if (type) {
+                return {
+                    memberName: new TypeScript.MemberNameString(typeChecker.typeToString(type)),
+                    docComment: "",
+                    fullSymbolName: typeChecker.symbolToString(symbol, getContainerNode(node)),
+                    kind: getSymbolKind(symbol),
+                    minChar: node.pos,
+                    limChar: node.end
+                };
             }
+
+            return undefined;
         }
 
         /// Goto definition
@@ -2038,46 +2015,7 @@ module ts {
                 return undefined;
             }
 
-            var symbol: Symbol;
-
-            switch (node.kind) {
-                case SyntaxKind.Identifier:
-                    symbol = typeChecker.getSymbolOfIdentifier(<Identifier>node);
-                    break;
-
-                case SyntaxKind.ThisKeyword:
-                case SyntaxKind.SuperKeyword:
-                    var type = typeChecker.getTypeOfExpression(node);
-                    symbol = type.getSymbol();
-                    break;
-
-                case SyntaxKind.ConstructorKeyword:
-                    // constructor keyword for an overload, should take us to the definition if it exist
-                    var container = getContainerNode(node);
-                    if (container && container.kind === SyntaxKind.ClassDeclaration) {
-                        symbol = (<ClassDeclaration>container).symbol;
-                    }
-                    break;
-
-                case SyntaxKind.StringLiteral:
-                    // Property access
-                    if (node.parent.kind === SyntaxKind.IndexedAccess && (<IndexedAccess>node.parent).index === node) {
-                        var objectType = typeChecker.getTypeOfExpression((<IndexedAccess>node.parent).object);
-                        Debug.assert(objectType);
-                        symbol = objectType.getProperty((<LiteralExpression>node).text);
-                    }
-                    // External module name in an import declaration
-                    else if (node.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent).externalModuleName === node) {
-                        var importSymbol = typeChecker.getSymbolOfNode(node.parent);
-                        var moduleType = typeChecker.getTypeOfSymbol(importSymbol);
-                        symbol = moduleType ? moduleType.symbol : undefined;
-                    }
-                    // External module name in an ambient declaration
-                    else if (node.parent.kind === SyntaxKind.ModuleDeclaration) {
-                        symbol = typeChecker.getSymbolOfNode(node.parent);
-                    }
-                    break;
-            }
+            var symbol = typeChecker.getSymbolOfIdentifierLikeNode(node);
 
             // Could not find a symbol e.g. node is string or number keyword,
             // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol
