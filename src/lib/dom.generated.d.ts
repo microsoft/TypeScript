@@ -1870,7 +1870,25 @@ interface FormData {
 }
 declare var FormData: {
     prototype: FormData;
-    new (form?:HTMLFormElement): FormData;
+    new (form?: HTMLFormElement): FormData;
+}
+
+interface SourceBuffer extends EventTarget {
+    updating: boolean;
+    appendWindowStart: number;
+    appendWindowEnd: number;
+    buffered: TimeRanges;
+    timestampOffset: number;
+    audioTracks: AudioTrackList;
+    appendBuffer(data: ArrayBufferView): void;
+    appendBuffer(data: ArrayBuffer): void;
+    remove(start: number, end: number): void;
+    abort(): void;
+    appendStream(stream: MSStream, maxSize?: number): void;
+}
+declare var SourceBuffer: {
+    prototype: SourceBuffer;
+    new(): SourceBuffer;
 }
 
 interface NavigatorID {
@@ -10620,23 +10638,6 @@ declare var NavigationEvent: {
 
 interface RandomSource {
     getRandomValues(array: ArrayBufferView): ArrayBufferView;
-}
-
-interface SourceBuffer extends EventTarget {
-    updating: boolean;
-    appendWindowStart: number;
-    appendWindowEnd: number;
-    buffered: TimeRanges;
-    timestampOffset: number;
-    audioTracks: AudioTrackList;
-    appendBuffer(data: ArrayBuffer): void;
-    remove(start: number, end: number): void;
-    abort(): void;
-    appendStream(stream: MSStream, maxSize?: number): void;
-}
-declare var SourceBuffer: {
-    prototype: SourceBuffer;
-    new(): SourceBuffer;
 }
 
 interface MSInputMethodContext extends EventTarget {
