@@ -953,7 +953,10 @@ module ts {
     export interface CommandLineOption {
         name: string;
         type: any;
-        error?: DiagnosticMessage;
+        shortName?: string;
+        description?: DiagnosticMessage;
+        paramName?: DiagnosticMessage;  // The name to be used for a non-boolean option's parameter.
+        error?: DiagnosticMessage;      // The error given when the argument does not fit a customized 'type'.
     }
 
     export enum CharacterCodes {

@@ -862,7 +862,7 @@
         "category": "Message",
         "code": 6001
     },
-    "Generates corresponding {0} file.": {
+    "Generates corresponding '.d.ts' file.": {
         "category": "Message",
         "code": 6002
     },
@@ -890,11 +890,11 @@
         "category": "Message",
         "code": 6010
     },
-    "Specify ECMAScript target version: '{0}' (default), or '{1}'": {
+    "Specify ECMAScript target version: 'ES3' (default), or 'ES5'": {
         "category": "Message",
         "code": 6015
     },
-    "Specify module code generation: '{0}' or '{1}'": {
+    "Specify module code generation: 'commonjs' or 'amd'": {
         "category": "Message",
         "code": 6016
     },
@@ -902,7 +902,7 @@
         "category": "Message",
         "code": 6017
     },
-    "Print the compiler's version: {0}": {
+    "Print the compiler's version.": {
         "category": "Message",
         "code": 6019
     },
@@ -914,7 +914,7 @@
         "category": "Message",
         "code": 6022
     },
-    "Syntax:   {0}": {
+    "Syntax: {0}": {
         "category": "Message",
         "code": 6023
     },
@@ -926,7 +926,7 @@
         "category": "Message",
         "code": 6025
     },
-    "Examples:": {
+    "Examples: {0}": {
         "category": "Message",
         "code": 6026
     },
@@ -994,11 +994,54 @@
         "category": "Message",
         "code": 6042
     },
+    "Generates corresponding '.map' file.": {
+        "category": "Message",
+        "code": 6043
+    },
+    "Compiler option '{0}' expects an argument.": {
+        "category": "Error",
+        "code": 6044
+    },
+    "Unterminated quoted string in response file '{0}'.": {
+        "category": "Error",
+        "code": 6045
+    },
+    "Argument for '--module' option must be 'commonjs' or 'amd'.": {
+        "category": "Error",
+        "code": 6045
+    },
+    "Argument for '--target' option must be 'es3' or 'es5'.": {
+        "category": "Error",
+        "code": 6046
+    },
+    "Locale must be of the form <language> or <language>-<territory>. For example '{0}' or '{1}'.": {
+        "category": "Error",
+        "code": 6047
+    },
+    "Unsupported locale '{0}'.": {
+        "category": "Error",
+        "code": 6048
+    },
+    "Unable to open file '{0}'.": {
+        "category": "Error",
+        "code": 6049
+    },
+    "Corrupted locale file {0}.": {
+        "category": "Error",
+        "code": 6050
+    },
+    "No input files specified.": {
+        "category": "Error",
+        "code": 6051
+    },
+    "Warn on expressions and declarations with an implied 'any' type.": {
+        "category": "Message",
+        "code": 7004
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
     },
-
     "Parameter '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7006
@@ -1356,42 +1399,6 @@
         "code": -9999999
 	},
     "Filename '{0}' differs from already included filename '{1}' only in casing": {
-        "category": "Error",
-        "code": -9999999
-    },
-     "Argument for '--module' option must be 'commonjs' or 'amd'.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Argument for '--target' option must be 'es3' or 'es5'.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Compiler option '{0}' expects an argument.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Unterminated quoted string in response file '{0}'.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Locale must be of the form <language> or <language>-<territory>. For example '{0}' or '{1}'.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Unsupported locale {0}.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Unable to open file {0}.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Corrupted locale file {0}.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "No input files specified.": {
         "category": "Error",
         "code": -9999999
     }

@@ -78,19 +78,24 @@ module ts {
         return count;
     }
 
-    function reportDiagnostic(error: Diagnostic) {
-        if (error.file) {
-            var loc = error.file.getLineAndCharacterFromPosition(error.start);
-            sys.write(error.file.filename + "(" + loc.line + "," + loc.character + "): " + error.messageText + sys.newLine);
+    function getDiagnosticText(message: DiagnosticMessage, ...args: any[]): string {
+        var diagnostic: Diagnostic = createCompilerDiagnostic.apply(undefined, arguments);
+        return diagnostic.messageText;
+    }
+
+    function reportDiagnostic(diagnostic: Diagnostic) {
+        if (diagnostic.file) {
+            var loc = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);
+            sys.write(diagnostic.file.filename + "(" + loc.line + "," + loc.character + "): " + diagnostic.messageText + sys.newLine);
         }
         else {
-            sys.write(error.messageText + sys.newLine);
+            sys.write(diagnostic.messageText + sys.newLine);
         }
     }
 
-    function reportDiagnostics(errors: Diagnostic[]) {
-        for (var i = 0; i < errors.length; i++) {
-            reportDiagnostic(errors[i]);
+    function reportDiagnostics(diagnostics: Diagnostic[]) {
+        for (var i = 0; i < diagnostics.length; i++) {
+            reportDiagnostic(diagnostics[i]);
         }
     }
 
@@ -179,29 +184,33 @@ module ts {
     }
 
     export function executeCommandLine(args: string[]): void {
+        var exitCode = 0;
         var commandLine = parseCommandLine(args);
 
         if (commandLine.options.locale) {
             validateLocaleAndSetLanguage(commandLine.options.locale, commandLine.errors);
         }
 
+        // Report all errors at this point, even if there are none.
+        if (commandLine.errors.length > 0) {
+            reportDiagnostics(commandLine.errors);
+            exitCode = 1;
+        }
+
         if (commandLine.options.version) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, version));
-            sys.exit(0);
+            sys.exit(exitCode);
         }
 
-        if (commandLine.options.help) {
-            // TODO (drosen): Usage.
-            sys.exit(0);
+        if (commandLine.options.help || commandLine.filenames.length === 0) {
+            printVersion();
+            printHelp();
+            sys.exit(exitCode);
         }
 
-        if (commandLine.filenames.length === 0) {
-            commandLine.errors.push(createCompilerDiagnostic(Diagnostics.No_input_files_specified));
-        }
-
-        if (commandLine.errors.length) {
-            reportDiagnostics(commandLine.errors);
-            sys.exit(1);
+        // If we encountered an error before we even started compiling, just bail out.
+        if (exitCode !== 0) {
+            sys.exit(exitCode);
         }
 
         var defaultCompilerHost = createCompilerHost(commandLine.options);
@@ -337,6 +346,105 @@ module ts {
 
         return { program: program, errors: errors };
 
+    }
+
+    function printVersion() {
+        sys.write(getDiagnosticText(Diagnostics.Version_0, version) + sys.newLine);
+    }
+
+    function printHelp() {
+        var output = "";
+
+        // We want to align our "syntax" and "examples" commands to a certain margin.
+        var syntaxLength = getDiagnosticText(Diagnostics.Syntax_Colon_0, "").length
+        var examplesLength = getDiagnosticText(Diagnostics.Examples_Colon_0, "").length
+        var marginLength = Math.max(syntaxLength, examplesLength);
+
+        // Build up the syntactic skeleton.
+        var syntax = makePadding(marginLength - syntaxLength);
+        syntax += "tsc [" + getDiagnosticText(Diagnostics.options) + "] [" + getDiagnosticText(Diagnostics.file) + " ...]";
+
+        output += getDiagnosticText(Diagnostics.Syntax_Colon_0, syntax);
+        output += sys.newLine + sys.newLine;
+
+        // Build up the examples.
+        var padding = makePadding(marginLength);
+        output += getDiagnosticText(Diagnostics.Examples_Colon_0, makePadding(marginLength - examplesLength) + "tsc hello.ts") + sys.newLine;
+        output += padding + "tsc --out foo.js foo.ts" + sys.newLine;
+        output += padding + "tsc @args.txt" + sys.newLine;
+        output += sys.newLine;
+
+        // Sort our options by their command names, (e.g. "--noImplicitAny" comes before "--watch")
+        output += getDiagnosticText(Diagnostics.Options_Colon) + sys.newLine;
+
+        var optsList = optionDeclarations.slice().sort((a, b) => {
+            var aName = a.name.toLowerCase();
+            var bName = b.name.toLowerCase();
+            return compareValues(aName, bName);
+        });
+
+        // We want our descriptions to align at the same column in our output,
+        // so we keep track of the longest option usage string.
+        var marginLength = 0;
+        var usageColumn: string[] = []; // Things like "-d, --declaration" go in here.
+        var descriptionColumn: string[] = [];
+
+        for (var i = 0; i < optsList.length; i++) {
+            var option = optsList[i];
+
+            // If an option lacks a description,
+            // it is not officially supported.
+            if (!option.description) {
+                continue;
+            }
+
+            var usageText = " ";
+            if (option.shortName) {
+                usageText += "-" + option.shortName;
+                usageText += getParamName(option);
+                usageText += ", ";
+            }
+
+            usageText += "--" + option.name;
+            usageText += getParamName(option);
+
+            usageColumn.push(usageText);
+            descriptionColumn.push(getDiagnosticText(option.description));
+
+            // Set the new margin for the description column if necessary.
+            if (usageText.length > marginLength) {
+                marginLength = usageText.length;
+            }
+        }
+
+        // Special case that can't fit in the loop.
+        var usageText = " @<" + getDiagnosticText(Diagnostics.file) + ">";
+        usageColumn.push(usageText);
+        descriptionColumn.push(getDiagnosticText(Diagnostics.Insert_command_line_options_and_files_from_a_file));
+        if (usageText.length > marginLength) {
+            marginLength = usageText.length;
+        }
+
+        // Print out each row, aligning all the descriptions on the same column.
+        for (var i = 0; i < usageColumn.length; i++) {
+            var usage = usageColumn[i];
+            var description = descriptionColumn[i];
+            output += usage + makePadding(marginLength - usage.length + 2) + description + sys.newLine;
+        }
+
+        sys.write(output);
+        return;
+
+        function getParamName(option: CommandLineOption) {
+            if (option.paramName !== undefined) {
+                return " " + getDiagnosticText(option.paramName);
+            }
+            return "";
+        }
+
+        function makePadding(paddingLength: number): string {
+            return Array(paddingLength + 1).join(" ");
+        }
     }
 }
 

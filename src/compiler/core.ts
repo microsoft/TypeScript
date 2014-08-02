@@ -247,7 +247,7 @@ module ts {
         };
     }
 
-    function compareValues(a: any, b: any): number {
+    export function compareValues<T>(a: T, b: T): number {
         if (a === b) return 0;
         if (a === undefined) return -1;
         if (b === undefined) return 1;
