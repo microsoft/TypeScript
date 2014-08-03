@@ -114,7 +114,11 @@ module ts {
     }
 
     export function isEmpty<T>(map: Map<T>) {
-        for (var id in map) return false;
+        for (var id in map) {
+            if (hasProperty(map, id)) {
+                return false;
+            }
+        }
         return true;
     }
 

@@ -3527,7 +3527,6 @@ module ts {
     }
 
     export function createProgram(rootNames: string[], options: CompilerOptions, host: CompilerHost): Program {
-
         var program: Program;
         var files: SourceFile[] = [];
         var filesByName: Map<SourceFile> = {};
@@ -3536,7 +3535,9 @@ module ts {
         var commonSourceDirectory: string;
 
         forEach(rootNames, name => processRootFile(name, false));
-        if (!seenNoDefaultLib) processRootFile(host.getDefaultLibFilename(), true);
+        if (!seenNoDefaultLib) {
+            processRootFile(host.getDefaultLibFilename(), true);
+        }
         verifyCompilerOptions();
         errors.sort(compareDiagnostics);
         program = {
@@ -3627,7 +3628,7 @@ module ts {
 
         function processReferencedFiles(file: SourceFile, basePath: string) {
             forEach(file.referencedFiles, ref => {
-                processSourceFile(normalizePath(combinePaths(basePath, ref.filename)), false, file, ref.pos, ref.end);
+                processSourceFile(normalizePath(combinePaths(basePath, ref.filename)), /* isDefaultLib */ false, file, ref.pos, ref.end);
             });
         }
 
@@ -3640,9 +3641,14 @@ module ts {
                         var searchPath = basePath;
                         while (true) {
                             var searchName = normalizePath(combinePaths(searchPath, moduleName));
-                            if (findModuleSourceFile(searchName + ".ts", nameLiteral) || findModuleSourceFile(searchName + ".d.ts", nameLiteral)) break;
+                            if (findModuleSourceFile(searchName + ".ts", nameLiteral) || findModuleSourceFile(searchName + ".d.ts", nameLiteral)) {
+                                break;
+                            }
+
                             var parentPath = getDirectoryPath(searchPath);
-                            if (parentPath === searchPath) break;
+                            if (parentPath === searchPath) {
+                                break;
+                            }
                             searchPath = parentPath;
                         }
                     }

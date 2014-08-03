@@ -81,10 +81,10 @@ module ts {
     function reportDiagnostic(error: Diagnostic) {
         if (error.file) {
             var loc = error.file.getLineAndCharacterFromPosition(error.start);
-            sys.writeErr(error.file.filename + "(" + loc.line + "," + loc.character + "): " + error.messageText + sys.newLine);
+            sys.write(error.file.filename + "(" + loc.line + "," + loc.character + "): " + error.messageText + sys.newLine);
         }
         else {
-            sys.writeErr(error.messageText + sys.newLine);
+            sys.write(error.messageText + sys.newLine);
         }
     }
 
@@ -110,7 +110,7 @@ module ts {
     }
 
     function reportStatisticalValue(name: string, value: string) {
-        sys.writeErr(padRight(name + ":", 12) + padLeft(value.toString(), 10) + sys.newLine);
+        sys.write(padRight(name + ":", 12) + padLeft(value.toString(), 10) + sys.newLine);
     }
 
     function reportCountStatistic(name: string, count: number) {
@@ -179,33 +179,133 @@ module ts {
         };
     }
 
-    export function executeCommandLine(args: string[]): number {
-        var cmds = parseCommandLine(args);
+    export function executeCommandLine(args: string[]): void {
+        var commandLine = parseCommandLine(args);
 
-        if (cmds.options.locale) {
-            validateLocaleAndSetLanguage(cmds.options.locale, cmds.errors);
+        if (commandLine.options.locale) {
+            validateLocaleAndSetLanguage(commandLine.options.locale, commandLine.errors);
         }
 
-        if (cmds.filenames.length === 0 && !(cmds.options.help || cmds.options.version)) {
-            cmds.errors.push(createCompilerDiagnostic(Diagnostics.No_input_files_specified));
-        }
-
-        if (cmds.options.version) {
+        if (commandLine.options.version) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, version));
-            return 0;
+            sys.exit(0);
         }
 
-        if (cmds.filenames.length === 0 || cmds.options.help) {
+        if (commandLine.options.help) {
             // TODO (drosen): Usage.
+            sys.exit(0);
         }
 
-        if (cmds.errors.length) {
-            reportDiagnostics(cmds.errors);
-            return 1;
+        if (commandLine.filenames.length === 0) {
+            commandLine.errors.push(createCompilerDiagnostic(Diagnostics.No_input_files_specified));
         }
 
+        if (commandLine.errors.length) {
+            reportDiagnostics(commandLine.errors);
+            sys.exit(1);
+        }
+
+        var defaultCompilerHost = createCompilerHost(commandLine.options);
+
+        if (commandLine.options.watch) {
+            if (!sys.watchFile) {
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"));
+                sys.exit(1);
+            }
+
+            watchProgram(commandLine, defaultCompilerHost);
+        }
+        else {
+            sys.exit(compile(commandLine, defaultCompilerHost).errors.length > 0 ? 1 : 0);
+        }
+    }
+
+    /**
+     * Compiles the program once, and then watches all given and referenced files for changes.
+     * Upon detecting a file change, watchProgram will queue up file modification events for the next
+     * 250ms and then perform a recompilation. The reasoning is that in some cases, an editor can
+     * save all files at once, and we'd like to just perform a single recompilation.
+     */
+    function watchProgram(commandLine: ParsedCommandLine, compilerHost: CompilerHost): void {
+        var watchers: Map<FileWatcher> = {};
+        var updatedFiles: Map<boolean> = {};
+
+        // Compile the program the first time and watch all given/referenced files.
+        var program = compile(commandLine, compilerHost).program;
+        reportDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
+        addWatchers(program);
+        return;
+
+        function addWatchers(program: Program) {
+            forEach(program.getSourceFiles(), f => {
+                var filename = f.filename;
+                watchers[filename] = sys.watchFile(filename, fileUpdated);
+            });
+        }
+
+        function removeWatchers(program: Program) {
+            forEach(program.getSourceFiles(), f => {
+                var filename = f.filename;
+                if (hasProperty(watchers, filename)) {
+                    watchers[filename].close();
+                }
+            });
+
+            watchers = {};
+        }
+
+        // Fired off whenever a file is changed.
+        function fileUpdated(filename: string) {
+            var firstNotification = isEmpty(updatedFiles);
+
+            updatedFiles[filename] = true;
+
+            // Only start this off when the first file change comes in,
+            // so that we can batch up all further changes.
+            if (firstNotification) {
+                setTimeout(() => {
+                    var changedFiles = updatedFiles;
+                    updatedFiles = {};
+
+                    recompile(changedFiles);
+                }, 250);
+            }
+        }
+
+        function recompile(changedFiles: Map<boolean>) {
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Compiling));
+            // Remove all the watchers, as we may not be watching every file
+            // specified since the last compilation cycle.
+            removeWatchers(program);
+
+            // Gets us syntactically correct files from the last compilation.
+            var getUnmodifiedSourceFile = program.getSourceFile;
+
+            // We create a new compiler host for this compilation cycle.
+            // This new host is effectively the same except that 'getSourceFile'
+            // will try to reuse the SourceFiles from the last compilation cycle
+            // so long as they were not modified.
+            var newCompilerHost = clone(compilerHost);
+            newCompilerHost.getSourceFile = (fileName, languageVersion, onError) => {
+                if (!hasProperty(changedFiles, fileName)) {
+                    var sourceFile = getUnmodifiedSourceFile(fileName);
+                    if (sourceFile) {
+                        return sourceFile;
+                    }
+                }
+
+                return compilerHost.getSourceFile(fileName, languageVersion, onError);
+            };
+
+            program = compile(commandLine, newCompilerHost).program;
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
+            addWatchers(program);
+        }
+    }
+
+    function compile(commandLine: ParsedCommandLine, compilerHost: CompilerHost) {
         var parseStart = new Date().getTime();
-        var program = createProgram(cmds.filenames, cmds.options, createCompilerHost(cmds.options));
+        var program = createProgram(commandLine.filenames, commandLine.options, compilerHost);
         var bindStart = new Date().getTime();
         var errors = program.getDiagnostics();
         if (errors.length) {
@@ -224,7 +324,7 @@ module ts {
         }
 
         reportDiagnostics(errors);
-        if (cmds.options.diagnostics) {
+        if (commandLine.options.diagnostics) {
             reportCountStatistic("Files", program.getSourceFiles().length);
             reportCountStatistic("Lines", countLines(program));
             reportCountStatistic("Nodes", checker ? checker.getNodeCount() : 0);
@@ -237,8 +337,10 @@ module ts {
             reportTimeStatistic("Emit time", reportStart - emitStart);
             reportTimeStatistic("Total time", reportStart - parseStart);
         }
-        return errors.length ? 1 : 0;
+
+        return { program: program, errors: errors };
+
     }
 }
 
-sys.exit(ts.executeCommandLine(sys.args));
+ts.executeCommandLine(sys.args);
