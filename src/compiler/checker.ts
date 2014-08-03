@@ -1108,27 +1108,28 @@ module ts {
             if (declaration.initializer) {
                 var unwidenedType = checkAndMarkExpression(declaration.initializer);
                 var type = getWidenedType(unwidenedType);
-                return type !== unwidenedType ? checkImplicitAny(type) : type;
+                if (type !== unwidenedType) {
+                    checkImplicitAny(type);
+                }
+                return type;
             }
-            // Rest parameter defaults to type any[]
-            if (declaration.flags & NodeFlags.Rest) {
-                return checkImplicitAny(createArrayType(anyType));
-            }
-            // Other parameters default to type any
-            return checkImplicitAny(anyType);
+            // Rest parameters default to type any[], other parameters default to type any
+            var type = declaration.flags & NodeFlags.Rest ? createArrayType(anyType) : anyType;
+            checkImplicitAny(type);
+            return type;
 
-            function checkImplicitAny(type: Type): Type {
+            function checkImplicitAny(type: Type) {
                 if (!program.getCompilerOptions().noImplicitAny) {
-                    return type;
+                    return;
                 }
                 // We need to have ended up with 'any', 'any[]', 'any[][]', etc.
                 if (getInnermostTypeOfNestedArrayTypes(type) !== anyType) {
-                    return type;
+                    return;
                 }
                 // Ignore privates within ambient contexts; they exist purely for documentative purposes to avoid name clashing.
                 // (e.g. privates within .d.ts files do not expose type information)
                 if (isPrivateWithinAmbient(declaration) || (declaration.kind === SyntaxKind.Parameter && isPrivateWithinAmbient(declaration.parent))) {
-                    return type;
+                    return;
                 }
                 switch (declaration.kind) {
                     case SyntaxKind.Property:
@@ -1143,7 +1144,6 @@ module ts {
                         var diagnostic = Diagnostics.Variable_0_implicitly_has_an_1_type;
                 }
                 error(declaration, diagnostic, identifierToString(declaration.name), typeToString(type));
-                return type;
             }
         }
 
