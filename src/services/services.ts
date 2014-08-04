@@ -1215,7 +1215,6 @@ module ts {
         var program: Program;
         var typeChecker: TypeChecker;
         var useCaseSensitivefilenames = false;
-        var documentsByName: Map<SourceFile> = {};
         var documentRegistry = documentRegistry;
         var cancellationToken = new CancellationTokenObject(host.getCancellationToken());
         var activeCompletionSession: CompletionSession;         // The current active completion session, used to get the completion entry details
@@ -1226,7 +1225,8 @@ module ts {
         }
 
         function getSourceFile(filename: string): SourceFile {
-            return lookUp(documentsByName, filename);
+            Debug.assert(!!program, "'getSoruceFile(filename)' is called before 'program' is initialized, consider calling 'synchronizeHostData()' first");
+            return program.getSourceFile(filename);
         }
 
         function createCompilerHost(): CompilerHost {
@@ -1285,7 +1285,6 @@ module ts {
                     var filename = oldSourceFiles[i].filename;
                     if (!hostCache.contains(filename) || changesInCompilationSettingsAffectSyntax) {
                         documentRegistry.releaseDocument(filename, oldSettings);
-                        delete documentsByName[filename];
                     }
                 }
             }
@@ -1327,9 +1326,6 @@ module ts {
                 else {
                     sourceFile = documentRegistry.acquireDocument(filename, compilationSettings, scriptSnapshot, hostCache.getByteOrderMark(filename), version, isOpen, []);
                 }
-
-                // Remeber the new sourceFile
-                documentsByName[filename] = sourceFile;
             }
 
             // Now create a new compiler
