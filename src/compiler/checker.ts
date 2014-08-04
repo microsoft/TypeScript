@@ -3437,11 +3437,6 @@ module ts {
             return unknownType;
         }
 
-        function getTypeOfExpression(node: Expression): Type {
-            // TODO: Optimize by caching type in NodeLinks?
-            return checkExpression(node);
-        }
-
         // Return contextual type of parameter or undefined if no contextual type is available
         function getContextuallyTypedParameterType(parameter: ParameterDeclaration): Type {
             var func = <FunctionDeclaration>parameter.parent;
@@ -3502,13 +3497,13 @@ module ts {
             var operator = binaryExpression.operator;
             if (operator >= SyntaxKind.FirstAssignment && operator <= SyntaxKind.LastAssignment) {
                 if (node === binaryExpression.right) {
-                    return getTypeOfExpression(binaryExpression.left);
+                    return checkExpression(binaryExpression.left);
                 }
             }
             else if (operator === SyntaxKind.BarBarToken) {
                 var type = getContextualType(binaryExpression);
                 if (!type && node === binaryExpression.right) {
-                    type = getTypeOfExpression(binaryExpression.left);
+                    type = checkExpression(binaryExpression.left);
                 }
                 return type;
             }
