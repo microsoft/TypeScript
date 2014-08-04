@@ -392,7 +392,7 @@ module ts {
             // the old syntax tree.
             var oldSyntaxTree = this.syntaxTree;
 
-            if (textChangeRange !== null && Debug.shouldAssert(AssertionLevel.Normal)) {
+            if (textChangeRange && Debug.shouldAssert(AssertionLevel.Normal)) {
                 var oldText = this.scriptSnapshot;
                 var newText = scriptSnapshot;
 
@@ -413,7 +413,7 @@ module ts {
 
             // If we don't have a text change, or we don't have an old syntax tree, then do a full
             // parse.  Otherwise, do an incremental parse.
-            var newSyntaxTree = textChangeRange === null || oldSyntaxTree === null
+            var newSyntaxTree = !textChangeRange || !oldSyntaxTree
                 ? TypeScript.Parser.parse(this.filename, text, this.languageVersion, TypeScript.isDTSFile(this.filename))
                 : TypeScript.IncrementalParser.parse(oldSyntaxTree, textChangeRange, text);
 
