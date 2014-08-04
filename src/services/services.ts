@@ -1221,7 +1221,7 @@ module ts {
         var program: Program;
         var typeChecker: TypeChecker;
         var useCaseSensitivefilenames = false;
-        var documentsByName: Map<SourceFile> = {};
+        var sourceFilesByName: Map<SourceFile> = {};
         var documentRegistry = documentRegistry;
         var cancellationToken = new CancellationTokenObject(host.getCancellationToken());
         var activeCompletionSession: CompletionSession;         // The current active completion session, used to get the completion entry details
@@ -1232,7 +1232,7 @@ module ts {
         }
 
         function getSourceFile(filename: string): SourceFile {
-            return lookUp(documentsByName, filename);
+            return lookUp(sourceFilesByName, filename);
         }
 
         function createCompilerHost(): CompilerHost {
@@ -1291,7 +1291,7 @@ module ts {
                     var filename = oldSourceFiles[i].filename;
                     if (!hostCache.contains(filename) || changesInCompilationSettingsAffectSyntax) {
                         documentRegistry.releaseDocument(filename, oldSettings);
-                        delete documentsByName[filename];
+                        delete sourceFilesByName[filename];
                     }
                 }
             }
@@ -1335,7 +1335,7 @@ module ts {
                 }
 
                 // Remeber the new sourceFile
-                documentsByName[filename] = sourceFile;
+                sourceFilesByName[filename] = sourceFile;
             }
 
             // Now create a new compiler
@@ -1810,7 +1810,7 @@ module ts {
             var node = getNodeAtPosition(sourceFile.getSourceFile(), position);
             if (!node) return undefined;
 
-            var symbol = typeChecker.getSymbolOfIdentifierLikeNode(node);
+            var symbol = typeChecker.getSymbolInfo(node);
             var type = symbol && typeChecker.getTypeOfSymbol(symbol);
             if (type) {
                 return {
@@ -1962,7 +1962,7 @@ module ts {
                 return undefined;
             }
 
-            var symbol = typeChecker.getSymbolOfIdentifierLikeNode(node);
+            var symbol = typeChecker.getSymbolInfo(node);
 
             // Could not find a symbol e.g. node is string or number keyword,
             // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol

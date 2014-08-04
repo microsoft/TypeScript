@@ -88,7 +88,7 @@ module ts {
             getReturnTypeOfSignature: getReturnTypeOfSignature,
             resolveEntityName: resolveEntityName,
             getSymbolsInScope: getSymbolsInScope,
-            getSymbolOfIdentifierLikeNode: getSymbolOfIdentifierLikeNode,
+            getSymbolInfo: getSymbolInfo,
             getTypeOfExpression: getTypeOfExpression,
             typeToString: typeToString,
             symbolToString: symbolToString,
@@ -6437,7 +6437,7 @@ module ts {
             }
         }
 
-        function getSymbolOfIdentifierLikeNode(node: Node) {
+        function getSymbolInfo(node: Node) {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     return getSymbolOfIdentifier(<Identifier>node);
