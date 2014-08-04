@@ -544,7 +544,7 @@ module Harness {
                     } else {
                         var lib = 'lib.d.ts';
                         if (fn.substr(fn.length - lib.length) === lib) {
-                            return filemap[fn] = ts.createSourceFile('lib.d.ts', libTextMinimal, languageVersion);
+                            return filemap[fn] = ts.createSourceFile('lib.d.ts', libTextMinimal, languageVersion, ts.ByteOrderMark.None);
                         }
                         // Don't throw here -- the compiler might be looking for a test that actually doesn't exist as part of the TC
                         return null;
@@ -720,7 +720,7 @@ module Harness {
                 var filemap: { [name: string]: ts.SourceFile; } = {};
                 var register = (file: { unitName: string; content: string; }) => {
                     var filename = Path.switchToForwardSlashes(file.unitName);
-                    filemap[filename] = ts.createSourceFile(filename, file.content, options.target);
+                    filemap[filename] = ts.createSourceFile(filename, file.content, options.target, ts.ByteOrderMark.None);
                 };
                 inputFiles.forEach(register);
                 otherFiles.forEach(register);

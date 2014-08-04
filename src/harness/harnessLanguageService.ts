@@ -147,20 +147,19 @@ module Harness.LanguageService {
             scriptSnapshot: TypeScript.IScriptSnapshot,
             byteOrderMark: ts.ByteOrderMark,
             version: number,
-            isOpen: boolean,
-            referencedFiles: string[]= []): ts.Document {
-            return ts.createDocument(compilationSettings, fileName, scriptSnapshot, byteOrderMark, version, isOpen, referencedFiles);
+            isOpen: boolean): ts.SourceFile {
+            return ts.createSourceFile(fileName, scriptSnapshot.getText(0, scriptSnapshot.getLength()), compilationSettings.target, byteOrderMark, version, isOpen);
         }
 
         public updateDocument(
-            document: ts.Document,
+            document: ts.SourceFile,
             fileName: string,
             compilationSettings: ts.CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
             version: number,
             isOpen: boolean,
             textChangeRange: TypeScript.TextChangeRange
-            ): ts.Document {
+            ): ts.SourceFile {
             return document.update(scriptSnapshot, version, isOpen, textChangeRange);
         }
 

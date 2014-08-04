@@ -525,6 +525,10 @@ module ts {
         nodeCount: number;
         identifierCount: number;
         symbolCount: number;
+        byteOrderMark: ByteOrderMark;
+        isOpen: boolean;
+        version: number;
+        languageVersion: ScriptTarget;
     }
 
     export interface Program {
