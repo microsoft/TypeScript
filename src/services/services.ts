@@ -696,7 +696,7 @@ module ts {
             referencedFiles: string[]): SourceFile;
 
         updateDocument(
-            document: SourceFile,
+            soruceFile: SourceFile,
             filename: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
@@ -823,7 +823,7 @@ module ts {
     }
 
     interface DocumentRegistryEntry {
-        document: SourceFile;
+        sourceFile: SourceFile;
         refCount: number;
         owners: string[];
     }
@@ -1115,17 +1115,17 @@ module ts {
         function reportStats() {
             var bucketInfoArray = Object.keys(buckets).filter(name => name && name.charAt(0) === '_').map(name => {
                 var entries = lookUp(buckets, name);
-                var documents: { name: string; refCount: number; references: string[]; }[] = [];
+                var soruceFiles: { name: string; refCount: number; references: string[]; }[] = [];
                 for (var i in entries) {
                     var entry = entries[i];
-                    documents.push({
+                    soruceFiles.push({
                         name: i,
                         refCount: entry.refCount,
                         references: entry.owners.slice(0)
                     });
                 }
-                documents.sort((x, y) => y.refCount - x.refCount);
-                return { bucket: name, documents: documents }
+                soruceFiles.sort((x, y) => y.refCount - x.refCount);
+                return { bucket: name, sourceFiles: soruceFiles }
             });
             return JSON.stringify(bucketInfoArray, null, 2);
         }
@@ -1141,21 +1141,21 @@ module ts {
             var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
             var entry = lookUp(bucket, filename);
             if (!entry) {
-                var document = createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), compilationSettings.target, byteOrderMark, version, isOpen);
+                var sourceFile = createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), compilationSettings.target, byteOrderMark, version, isOpen);
 
                 bucket[filename] = entry = {
-                    document: document,
+                    sourceFile: sourceFile,
                     refCount: 0,
                     owners: []
                 };
             }
             entry.refCount++;
 
-            return entry.document;
+            return entry.sourceFile;
         }
 
         function updateDocument(
-            document: SourceFile,
+            sourceFile: SourceFile,
             filename: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
@@ -1169,12 +1169,12 @@ module ts {
             var entry = lookUp(bucket, filename);
             Debug.assert(entry);
 
-            if (entry.document.isOpen === isOpen && entry.document.version === version) {
-                return entry.document;
+            if (entry.sourceFile.isOpen === isOpen && entry.sourceFile.version === version) {
+                return entry.sourceFile;
             }
 
-            entry.document = entry.document.update(scriptSnapshot, version, isOpen, textChangeRange);
-            return entry.document;
+            entry.sourceFile = entry.sourceFile.update(scriptSnapshot, version, isOpen, textChangeRange);
+            return entry.sourceFile;
         }
 
         function releaseDocument(filename: string, compilationSettings: CompilerOptions): void {
@@ -1225,18 +1225,18 @@ module ts {
             TypeScript.LocalizedDiagnosticMessages = host.getLocalizedDiagnosticMessages();
         }
 
-        function getDocument(filename: string): SourceFile {
+        function getSourceFile(filename: string): SourceFile {
             return lookUp(documentsByName, filename);
         }
 
         function createCompilerHost(): CompilerHost {
             return {
                 getSourceFile: (filename, languageVersion) => {
-                    var document = getDocument(filename);
+                    var sourceFile = getSourceFile(filename);
 
-                    Debug.assert(!!document, "document can not be undefined");
+                    Debug.assert(!!sourceFile, "sourceFile can not be undefined");
 
-                    return document.getSourceFile();
+                    return sourceFile.getSourceFile();
                 },
                 getCancellationToken: () => cancellationToken,
                 getCanonicalFileName: (filename) => useCaseSensitivefilenames ? filename : filename.toLowerCase(),
@@ -1302,12 +1302,12 @@ module ts {
                 var isOpen = hostCache.isOpen(filename);
                 var scriptSnapshot = hostCache.getScriptSnapshot(filename);
 
-                var document: SourceFile = getDocument(filename);
-                if (document) {
+                var sourceFile: SourceFile = getSourceFile(filename);
+                if (sourceFile) {
                     //
-                    // If the document is the same, assume no update
+                    // If the sourceFile is the same, assume no update
                     //
-                    if (document.version === version && document.isOpen === isOpen) {
+                    if (sourceFile.version === version && sourceFile.isOpen === isOpen) {
                         continue;
                     }
 
@@ -1318,18 +1318,18 @@ module ts {
                     // the old buffer alive that represented the file on disk (as the host has moved to a 
                     // new text buffer).
                     var textChangeRange: TypeScript.TextChangeRange = null;
-                    if (document.isOpen && isOpen) {
-                        textChangeRange = hostCache.getScriptTextChangeRangeSinceVersion(filename, document.version);
+                    if (sourceFile.isOpen && isOpen) {
+                        textChangeRange = hostCache.getScriptTextChangeRangeSinceVersion(filename, sourceFile.version);
                     }
 
-                    document = documentRegistry.updateDocument(document, filename, compilationSettings, scriptSnapshot, version, isOpen, textChangeRange);
+                    sourceFile = documentRegistry.updateDocument(sourceFile, filename, compilationSettings, scriptSnapshot, version, isOpen, textChangeRange);
                 }
                 else {
-                    document = documentRegistry.acquireDocument(filename, compilationSettings, scriptSnapshot, hostCache.getByteOrderMark(filename), version, isOpen, []);
+                    sourceFile = documentRegistry.acquireDocument(filename, compilationSettings, scriptSnapshot, hostCache.getByteOrderMark(filename), version, isOpen, []);
                 }
 
-                // Remeber the new document
-                documentsByName[filename] = document;
+                // Remeber the new sourceFile
+                documentsByName[filename] = sourceFile;
             }
 
             // Now create a new compiler
@@ -1534,10 +1534,10 @@ module ts {
 
             filename = TypeScript.switchToForwardSlashes(filename);
 
-            var document = getDocument(filename);
-            var sourceUnit = document.getSourceUnit();
+            var sourceFile = getSourceFile(filename);
+            var sourceUnit = sourceFile.getSourceUnit();
 
-            if (isCompletionListBlocker(document.getSyntaxTree().sourceUnit(), position)) {
+            if (isCompletionListBlocker(sourceFile.getSyntaxTree().sourceUnit(), position)) {
                 host.log("Returning an empty list because completion was blocked.");
                 return null;
             }
@@ -1583,7 +1583,7 @@ module ts {
             }
 
             // TODO: this is a hack for now, we need a proper walking mechanism to verify that we have the correct node
-            var mappedNode = getNodeAtPosition(document.getSourceFile(), TypeScript.end(node) - 1);
+            var mappedNode = getNodeAtPosition(sourceFile.getSourceFile(), TypeScript.end(node) - 1);
 
             Debug.assert(mappedNode, "Could not map a Fidelity node to an AST node");
 
@@ -1609,7 +1609,7 @@ module ts {
                 getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
             }
             else {
-                var containingObjectLiteral = getContainingObjectLiteralApplicableForCompletion(document.getSyntaxTree().sourceUnit(), position);
+                var containingObjectLiteral = getContainingObjectLiteralApplicableForCompletion(sourceFile.getSyntaxTree().sourceUnit(), position);
 
                 // Object literal expression, look up possible property names from contextual type
                 if (containingObjectLiteral) {
@@ -1794,8 +1794,8 @@ module ts {
             synchronizeHostData();
 
             filename = TypeScript.switchToForwardSlashes(filename);
-            var document = getDocument(filename);
-            var node = getNodeAtPosition(document.getSourceFile(), position);
+            var sourceFile = getSourceFile(filename);
+            var node = getNodeAtPosition(sourceFile.getSourceFile(), position);
             if (!node) return undefined;
 
             switch (node.kind) {
