@@ -1,8 +1,10 @@
-==== tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts (7 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts (13 errors) ====
     var v = <T>() => 1;
     var v = <T>a;
              ~
 !!! Cannot find name 'T'.
+               ~
+!!! Cannot find name 'a'.
     
     var v = <T>(a) => 1;
         ~
@@ -17,9 +19,19 @@
     var v = <T>(a);
              ~
 !!! Cannot find name 'T'.
+                ~
+!!! Cannot find name 'a'.
     var v = <T>(a, b);
              ~
 !!! Cannot find name 'T'.
+                ~
+!!! Cannot find name 'a'.
+                   ~
+!!! Cannot find name 'b'.
     var v = <T>(a = 1, b = 2);
              ~
 !!! Cannot find name 'T'.
+                ~
+!!! Cannot find name 'a'.
+                       ~
+!!! Cannot find name 'b'.

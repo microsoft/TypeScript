@@ -320,7 +320,9 @@ module ts {
         text: string;
     }
 
-    export interface Expression extends Node { }
+    export interface Expression extends Node {
+        contextualType?: Type;  // Used to temporarily assign a contextual type during overload resolution
+    }
 
     export interface UnaryExpression extends Expression {
         operator: SyntaxKind;
@@ -523,6 +525,10 @@ module ts {
         nodeCount: number;
         identifierCount: number;
         symbolCount: number;
+        byteOrderMark: ByteOrderMark;
+        isOpen: boolean;
+        version: number;
+        languageVersion: ScriptTarget;
     }
 
     export interface Program {
@@ -718,7 +724,6 @@ module ts {
         members?: SymbolTable;         // Class, interface or literal instance members
         exports?: SymbolTable;         // Module exports
         exportSymbol?: Symbol;         // Exported symbol associated with this symbol
-        exportAssignSymbol?: Symbol;   // Symbol exported from external module
         valueDeclaration?: Declaration // First value declaration of the symbol
     }
 
@@ -728,6 +733,7 @@ module ts {
         declaredType?: Type;           // Type of class, interface, enum, or type parameter
         mapper?: TypeMapper;           // Type mapper for instantiation alias
         referenced?: boolean;          // True if alias symbol has been referenced as a value
+        exportAssignSymbol?: Symbol;   // Symbol exported from external module
     }
 
     export interface TransientSymbol extends Symbol, SymbolLinks { }
@@ -737,17 +743,18 @@ module ts {
     }
 
     export enum NodeCheckFlags {
-        TypeChecked   = 0x00000001,  // Node has been type checked
-        LexicalThis   = 0x00000002,  // Lexical 'this' reference
-        CaptureThis   = 0x00000004,  // Lexical 'this' used in body
-        EmitExtends   = 0x00000008,  // Emit __extends
-        SuperInstance = 0x00000010,  // Instance 'super' reference
-        SuperStatic   = 0x00000020,  // Static 'super' reference
+        TypeChecked    = 0x00000001,  // Node has been type checked
+        LexicalThis    = 0x00000002,  // Lexical 'this' reference
+        CaptureThis    = 0x00000004,  // Lexical 'this' used in body
+        EmitExtends    = 0x00000008,  // Emit __extends
+        SuperInstance  = 0x00000010,  // Instance 'super' reference
+        SuperStatic    = 0x00000020,  // Static 'super' reference
+        ContextChecked = 0x00000040,  // Contextual types have been assigned
     }
 
     export interface NodeLinks {
         resolvedType?: Type;            // Cached type of type node
-        resolvedSignature?: Signature;  // Cached signature of signature node
+        resolvedSignature?: Signature;  // Cached signature of signature node or call expression
         resolvedSymbol?: Symbol;        // Cached name resolution result
         flags?: NodeCheckFlags;         // Set of flags specific to Node
         enumMemberValue?: number;       // Constant value of enum member
@@ -933,6 +940,7 @@ module ts {
         sourceRoot?: string;
         target?: ScriptTarget;
         version?: boolean;
+        watch?: boolean;
 
         [option: string]: any;
     }

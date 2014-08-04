@@ -11,9 +11,10 @@ module ts {
         "o": "out",
         "t": "target",
         "v": "version",
+        "w": "watch",
     };
 
-    var options: CommandLineOption[] = [
+    var optionDeclarations: CommandLineOption[] = [
         { name: "charset", type: "string" },
         { name: "codepage", type: "number" },
         { name: "declaration", type: "boolean" },
@@ -32,14 +33,15 @@ module ts {
         { name: "sourceMap", type: "boolean" },
         { name: "sourceRoot", type: "string" },
         { name: "target", type: { "es3": ScriptTarget.ES3, "es5": ScriptTarget.ES5 }, error: Diagnostics.Argument_for_target_option_must_be_es3_or_es5 },
-        { name: "version", type: "boolean" }
+        { name: "version", type: "boolean" },
+        { name: "watch", type: "boolean" }
     ];
 
     // Map command line switches to compiler options' property descriptors. Keys must be lower case spellings of command line switches.
     // The 'name' property specifies the property name in the CompilerOptions type. The 'type' property specifies the type of the option.
-    var optionDeclarations: Map<CommandLineOption> = {};
-    forEach(options, option => {
-        optionDeclarations[option.name.toLowerCase()] = option;
+    var optionMap: Map<CommandLineOption> = {};
+    forEach(optionDeclarations, option => {
+        optionMap[option.name.toLowerCase()] = option;
     });
 
     export function parseCommandLine(commandLine: string[]): ParsedCommandLine {
@@ -73,8 +75,8 @@ module ts {
                         s = shortOptionNames[s];
                     }
 
-                    if (hasProperty(optionDeclarations, s)) {
-                        var opt = optionDeclarations[s];
+                    if (hasProperty(optionMap, s)) {
+                        var opt = optionMap[s];
 
                         // Check to see if no argument was provided (e.g. "--locale" is the last command-line argument).
                         if (!args[i] && opt.type !== "boolean") {

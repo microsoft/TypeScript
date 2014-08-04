@@ -36,9 +36,9 @@ var M;
 (function (M) {
     var C = (function () {
         function C(c1, c2, c3) {
+            var _this = this;
             this.c1 = c1;
             this.c2 = c2;
-            var _this = this;
             this.x = C.y + this.c1 + this.c2 + c3;
             this.g = function (v) { return C.f(_this.x + C.y + v + _this.c1 + _this.c2 + C.pub); };
         }

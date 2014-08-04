@@ -13,6 +13,6 @@
 
 edit.disableFormatting();
 
-goTo.marker(1);
+goTo.marker('1');
 
 //edit.insert("\nimport I1 = module(\"exportEqualsInterface_A\");\n");

@@ -11,7 +11,7 @@
 
 edit.disableFormatting();
 
-goTo.marker(1);
+goTo.marker('1');
 
 edit.insert(", 'world'");
 diagnostics.validateTypesAtPositions(78);

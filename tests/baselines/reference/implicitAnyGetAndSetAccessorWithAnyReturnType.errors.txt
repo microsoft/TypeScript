@@ -1,4 +1,4 @@
-==== tests/cases/compiler/implicitAnyGetAndSetAccessorWithAnyReturnType.ts (9 errors) ====
+==== tests/cases/compiler/implicitAnyGetAndSetAccessorWithAnyReturnType.ts (8 errors) ====
     // these should be errors
     class GetAndSet {
         getAndSet = null;             // error at "getAndSet"
@@ -14,8 +14,6 @@
         public set haveGetAndSet(value) {  // error at "value"
                    ~~~~~~~~~~~~~
 !!! Accessors are only available when targeting ECMAScript 5 and higher.
-                                 ~~~~~
-!!! Parameter 'value' implicitly has an 'any' type.
             this.getAndSet = value;
         }
     }

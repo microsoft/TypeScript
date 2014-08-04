@@ -417,7 +417,7 @@ module ts {
         nodeIsNestedInLabel(label: Identifier, requireIterationStatement: boolean, stopAtFunctionBoundary: boolean): ControlBlockContext;
     }
 
-    export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget): SourceFile {
+    export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, byteOrderMark: ByteOrderMark, version: number = 0, isOpen: boolean = false): SourceFile {
         var file: SourceFile;
         var scanner: Scanner;
         var token: SyntaxKind;
@@ -3523,11 +3523,14 @@ module ts {
         file.externalModuleIndicator = getExternalModuleIndicator();
         file.nodeCount = nodeCount;
         file.identifierCount = identifierCount;
+        file.version = version;
+        file.byteOrderMark = byteOrderMark;
+        file.isOpen = isOpen;
+        file.languageVersion = languageVersion;
         return file;
     }
 
     export function createProgram(rootNames: string[], options: CompilerOptions, host: CompilerHost): Program {
-
         var program: Program;
         var files: SourceFile[] = [];
         var filesByName: Map<SourceFile> = {};
@@ -3536,7 +3539,9 @@ module ts {
         var commonSourceDirectory: string;
 
         forEach(rootNames, name => processRootFile(name, false));
-        if (!seenNoDefaultLib) processRootFile(host.getDefaultLibFilename(), true);
+        if (!seenNoDefaultLib) {
+            processRootFile(host.getDefaultLibFilename(), true);
+        }
         verifyCompilerOptions();
         errors.sort(compareDiagnostics);
         program = {
@@ -3627,7 +3632,7 @@ module ts {
 
         function processReferencedFiles(file: SourceFile, basePath: string) {
             forEach(file.referencedFiles, ref => {
-                processSourceFile(normalizePath(combinePaths(basePath, ref.filename)), false, file, ref.pos, ref.end);
+                processSourceFile(normalizePath(combinePaths(basePath, ref.filename)), /* isDefaultLib */ false, file, ref.pos, ref.end);
             });
         }
 
@@ -3640,9 +3645,14 @@ module ts {
                         var searchPath = basePath;
                         while (true) {
                             var searchName = normalizePath(combinePaths(searchPath, moduleName));
-                            if (findModuleSourceFile(searchName + ".ts", nameLiteral) || findModuleSourceFile(searchName + ".d.ts", nameLiteral)) break;
+                            if (findModuleSourceFile(searchName + ".ts", nameLiteral) || findModuleSourceFile(searchName + ".d.ts", nameLiteral)) {
+                                break;
+                            }
+
                             var parentPath = getDirectoryPath(searchPath);
-                            if (parentPath === searchPath) break;
+                            if (parentPath === searchPath) {
+                                break;
+                            }
                             searchPath = parentPath;
                         }
                     }

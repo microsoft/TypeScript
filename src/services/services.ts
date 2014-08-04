@@ -68,6 +68,13 @@ module ts {
         getReturnType(): Type;
     }
 
+    export interface SourceFile {
+        getSourceUnit(): TypeScript.SourceUnitSyntax;
+        getSyntaxTree(): TypeScript.SyntaxTree;
+        getBloomFilter(): TypeScript.BloomFilter;
+        update(scriptSnapshot: TypeScript.IScriptSnapshot, version: number, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile;
+    }
+
     var scanner: Scanner = createScanner(ScriptTarget.ES5);
 
     var emptyArray: any [] = [];
@@ -82,7 +89,6 @@ module ts {
     }
 
     class NodeObject implements Node {
-
         public kind: SyntaxKind;
         public pos: number;
         public end: number;
@@ -295,6 +301,130 @@ module ts {
         }
         getReturnType(): Type {
             return this.checker.getReturnTypeOfSignature(this);
+        }
+    }
+
+     var incrementalParse: IncrementalParse = TypeScript.IncrementalParser.parse;
+
+    class SourceFileObject extends NodeObject implements SourceFile {
+        public filename: string;
+        public text: string;
+        public getLineAndCharacterFromPosition(position: number): { line: number; character: number } { return null; }
+        public amdDependencies: string[];
+        public referencedFiles: FileReference[];
+        public syntacticErrors: Diagnostic[];
+        public semanticErrors: Diagnostic[];
+        public hasNoDefaultLib: boolean;
+        public externalModuleIndicator: Node; // The first node that causes this file to be an external module
+        public nodeCount: number;
+        public identifierCount: number;
+        public symbolCount: number;
+        public statements: NodeArray<Statement>;
+        public byteOrderMark: ByteOrderMark;
+        public version: number;
+        public isOpen: boolean;
+        public languageVersion: ScriptTarget;
+
+        private bloomFilter: TypeScript.BloomFilter;
+        private syntaxTree: TypeScript.SyntaxTree;
+        private scriptSnapshot: TypeScript.IScriptSnapshot;
+
+        public getSourceUnit(): TypeScript.SourceUnitSyntax {
+            // If we don't have a script, create one from our parse tree.
+            return this.getSyntaxTree().sourceUnit();
+        }
+
+        public getLineMap(): TypeScript.LineMap {
+            return this.getSyntaxTree().lineMap();
+        }
+
+        public getSyntaxTree(): TypeScript.SyntaxTree {
+            if (!this.syntaxTree) {
+                var start = new Date().getTime();
+
+                this.syntaxTree = TypeScript.Parser.parse(
+                    this.filename, TypeScript.SimpleText.fromScriptSnapshot(this.scriptSnapshot), this.languageVersion, this.isDeclareFile());
+
+                var time = new Date().getTime() - start;
+
+                //TypeScript.syntaxTreeParseTime += time;
+            }
+
+            return this.syntaxTree;
+        }
+
+        private isDeclareFile(): boolean {
+            return TypeScript.isDTSFile(this.filename);
+        }
+
+        public getBloomFilter(): TypeScript.BloomFilter {
+            if (!this.bloomFilter) {
+                var identifiers = TypeScript.createIntrinsicsObject<boolean>();
+                var pre = function (cur: TypeScript.ISyntaxElement) {
+                    if (TypeScript.ASTHelpers.isValidAstNode(cur)) {
+                        if (cur.kind() === TypeScript.SyntaxKind.IdentifierName) {
+                            var nodeText = TypeScript.tokenValueText((<TypeScript.ISyntaxToken>cur));
+
+                            identifiers[nodeText] = true;
+                        }
+                    }
+                };
+
+                TypeScript.getAstWalkerFactory().simpleWalk(this.getSourceUnit(), pre, null, identifiers);
+
+                var identifierCount = 0;
+                for (var name in identifiers) {
+                    if (identifiers[name]) {
+                        identifierCount++;
+                    }
+                }
+
+                this.bloomFilter = new TypeScript.BloomFilter(identifierCount);
+                this.bloomFilter.addKeys(identifiers);
+            }
+            return this.bloomFilter;
+        }
+
+        public update(scriptSnapshot: TypeScript.IScriptSnapshot, version: number, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile {
+            // See if we are currently holding onto a syntax tree.  We may not be because we're 
+            // either a closed file, or we've just been lazy and haven't had to create the syntax
+            // tree yet.  Access the field instead of the method so we don't accidently realize
+            // the old syntax tree.
+            var oldSyntaxTree = this.syntaxTree;
+
+            if (textChangeRange !== null && Debug.shouldAssert(AssertionLevel.Normal)) {
+                var oldText = this.scriptSnapshot;
+                var newText = scriptSnapshot;
+
+                TypeScript.Debug.assert((oldText.getLength() - textChangeRange.span().length() + textChangeRange.newLength()) === newText.getLength());
+
+                if (Debug.shouldAssert(AssertionLevel.VeryAggressive)) {
+                    var oldTextPrefix = oldText.getText(0, textChangeRange.span().start());
+                    var newTextPrefix = newText.getText(0, textChangeRange.span().start());
+                    TypeScript.Debug.assert(oldTextPrefix === newTextPrefix);
+
+                    var oldTextSuffix = oldText.getText(textChangeRange.span().end(), oldText.getLength());
+                    var newTextSuffix = newText.getText(textChangeRange.newSpan().end(), newText.getLength());
+                    TypeScript.Debug.assert(oldTextSuffix === newTextSuffix);
+                }
+            }
+
+            var text = TypeScript.SimpleText.fromScriptSnapshot(scriptSnapshot);
+
+            // If we don't have a text change, or we don't have an old syntax tree, then do a full
+            // parse.  Otherwise, do an incremental parse.
+            var newSyntaxTree = textChangeRange === null || oldSyntaxTree === null
+                ? TypeScript.Parser.parse(this.filename, text, this.languageVersion, TypeScript.isDTSFile(this.filename))
+                : TypeScript.IncrementalParser.parse(oldSyntaxTree, textChangeRange, text);
+
+            return SourceFileObject.createSourceFileObject(this.languageVersion, this.filename, scriptSnapshot, this.byteOrderMark, version, isOpen, newSyntaxTree);
+        }
+
+        public static createSourceFileObject(languageVersion: ScriptTarget, filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, byteOrderMark: ByteOrderMark, version: number, isOpen: boolean, syntaxTree: TypeScript.SyntaxTree) {
+            var newSoruceFile = <SourceFileObject><any>createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), languageVersion, byteOrderMark, version, isOpen);
+            newSoruceFile.scriptSnapshot = scriptSnapshot;
+            newSoruceFile.syntaxTree = syntaxTree;
+            return newSoruceFile;
         }
     }
 
@@ -567,17 +697,17 @@ module ts {
             byteOrderMark: ByteOrderMark,
             version: number,
             isOpen: boolean,
-            referencedFiles: string[]): Document;
+            referencedFiles: string[]): SourceFile;
 
         updateDocument(
-            document: Document,
+            soruceFile: SourceFile,
             filename: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
             version: number,
             isOpen: boolean,
             textChangeRange: TypeScript.TextChangeRange
-            ): Document;
+            ): SourceFile;
 
         releaseDocument(filename: string, compilationSettings: CompilerOptions): void
     }
@@ -671,172 +801,6 @@ module ts {
         (oldSyntaxTree: TypeScript.SyntaxTree, textChangeRange: TypeScript.TextChangeRange, newText: TypeScript.ISimpleText): TypeScript.SyntaxTree
     }
 
-    export interface Document {
-        getFilename(): string;
-        getByteOrderMark(): ByteOrderMark;
-        getVersion(): number;
-        isOpen(): boolean;
-        getSourceUnit(): TypeScript.SourceUnitSyntax;
-        getSyntaxTree(): TypeScript.SyntaxTree;
-        getSourceFile(): SourceFile;
-        getBloomFilter(): TypeScript.BloomFilter;
-        update(scriptSnapshot: TypeScript.IScriptSnapshot, version: number, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): Document;
-    }
-
-    class DocumentObject implements Document {
-        private bloomFilter: TypeScript.BloomFilter = null;
-
-        // By default, our Document class doesn't support incremental update of its conten
-        // However, we enable other layers (like teh services layer) to inject the capability
-        // into us by setting this function.
-        public static incrementalParse: IncrementalParse = TypeScript.IncrementalParser.parse;
-
-        constructor(private compilationSettings: CompilerOptions,
-            public filename: string,
-            public referencedFiles: string[],
-            private scriptSnapshot: TypeScript.IScriptSnapshot,
-            public byteOrderMark: ByteOrderMark,
-            public version: number,
-            public _isOpen: boolean,
-            private syntaxTree: TypeScript.SyntaxTree,
-            private soruceFile: SourceFile) {
-        }
-
-        public getFilename(): string {
-            return this.filename;
-        }
-
-        public getVersion(): number {
-            return this.version;
-        }
-
-        public isOpen(): boolean {
-            return this._isOpen;
-        }
-
-        public getByteOrderMark(): ByteOrderMark {
-            return this.byteOrderMark;
-        }
-        public isDeclareFile(): boolean {
-            return TypeScript.isDTSFile(this.filename);
-        }
-
-        public getSourceUnit(): TypeScript.SourceUnitSyntax {
-            // If we don't have a script, create one from our parse tree.
-            return this.getSyntaxTree().sourceUnit();
-        }
-
-        public getLineMap(): TypeScript.LineMap {
-            return this.getSyntaxTree().lineMap();
-        }
-
-        public getSyntaxTree(): TypeScript.SyntaxTree {
-            if (!this.syntaxTree) {
-                var start = new Date().getTime();
-
-                this.syntaxTree = TypeScript.Parser.parse(
-                    this.filename, TypeScript.SimpleText.fromScriptSnapshot(this.scriptSnapshot), this.compilationSettings.target, this.isDeclareFile());
-
-                var time = new Date().getTime() - start;
-
-                //TypeScript.syntaxTreeParseTime += time;
-            }
-
-            return this.syntaxTree;
-        }
-
-        public getSourceFile(): SourceFile {
-            if (!this.soruceFile) {
-                var start = new Date().getTime();
-
-                this.soruceFile = createSourceFile(this.filename, this.scriptSnapshot.getText(0, this.scriptSnapshot.getLength()), this.compilationSettings.target);
-
-                var time = new Date().getTime() - start;
-
-                //TypeScript.astParseTime += time;
-            }
-
-            return this.soruceFile;
-        }
-
-        public getBloomFilter(): TypeScript.BloomFilter {
-            if (!this.bloomFilter) {
-                var identifiers = TypeScript.createIntrinsicsObject<boolean>();
-                var pre = function (cur: TypeScript.ISyntaxElement) {
-                    if (TypeScript.ASTHelpers.isValidAstNode(cur)) {
-                        if (cur.kind() === TypeScript.SyntaxKind.IdentifierName) {
-                            var nodeText = TypeScript.tokenValueText((<TypeScript.ISyntaxToken>cur));
-
-                            identifiers[nodeText] = true;
-                        }
-                    }
-                };
-
-                TypeScript.getAstWalkerFactory().simpleWalk(this.getSourceUnit(), pre, null, identifiers);
-
-                var identifierCount = 0;
-                for (var name in identifiers) {
-                    if (identifiers[name]) {
-                        identifierCount++;
-                    }
-                }
-
-                this.bloomFilter = new TypeScript.BloomFilter(identifierCount);
-                this.bloomFilter.addKeys(identifiers);
-            }
-            return this.bloomFilter;
-        }
-
-        // Returns true if this file should get emitted into its own unique output file.  
-        // Otherwise, it should be written into a single output file along with the rest of hte
-        // documents in the compilation.
-        public emitToOwnOutputFile(): boolean {
-            // If we haven't specified an output file in our settings, then we're definitely 
-            // emitting to our own file.  Also, if we're an external module, then we're 
-            // definitely emitting to our own file.
-            return !this.compilationSettings.out || this.getSyntaxTree().isExternalModule();
-        }
-
-        public update(scriptSnapshot: TypeScript.IScriptSnapshot, version: number, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): Document {
-            // See if we are currently holding onto a syntax tree.  We may not be because we're 
-            // either a closed file, or we've just been lazy and haven't had to create the syntax
-            // tree yet.  Access the field instead of the method so we don't accidently realize
-            // the old syntax tree.
-            var oldSyntaxTree = this.syntaxTree;
-
-            if (textChangeRange !== null && Debug.shouldAssert(AssertionLevel.Normal)) {
-                var oldText = this.scriptSnapshot;
-                var newText = scriptSnapshot;
-
-                TypeScript.Debug.assert((oldText.getLength() - textChangeRange.span().length() + textChangeRange.newLength()) === newText.getLength());
-
-                if (Debug.shouldAssert(AssertionLevel.VeryAggressive)) {
-                    var oldTextPrefix = oldText.getText(0, textChangeRange.span().start());
-                    var newTextPrefix = newText.getText(0, textChangeRange.span().start());
-                    TypeScript.Debug.assert(oldTextPrefix === newTextPrefix);
-
-                    var oldTextSuffix = oldText.getText(textChangeRange.span().end(), oldText.getLength());
-                    var newTextSuffix = newText.getText(textChangeRange.newSpan().end(), newText.getLength());
-                    TypeScript.Debug.assert(oldTextSuffix === newTextSuffix);
-                }
-            }
-
-            var text = TypeScript.SimpleText.fromScriptSnapshot(scriptSnapshot);
-
-            // If we don't have a text change, or we don't have an old syntax tree, then do a full
-            // parse.  Otherwise, do an incremental parse.
-            var newSyntaxTree = textChangeRange === null || oldSyntaxTree === null || DocumentObject.incrementalParse === null
-                ? TypeScript.Parser.parse(this.filename, text, this.compilationSettings.target, TypeScript.isDTSFile(this.filename))
-                : DocumentObject.incrementalParse(oldSyntaxTree, textChangeRange, text);
-
-            return new DocumentObject(this.compilationSettings, this.filename, this.referencedFiles, scriptSnapshot, this.byteOrderMark, version, isOpen, newSyntaxTree, /*soruceFile*/ null);
-        }
-    }
-
-    export function createDocument(compilationSettings: CompilerOptions, fileName: string, scriptSnapshot: TypeScript.IScriptSnapshot, byteOrderMark: ByteOrderMark, version: number, isOpen: boolean, referencedFiles: string[]): Document {
-        return new DocumentObject(compilationSettings, fileName, referencedFiles, scriptSnapshot, byteOrderMark, version, isOpen, /*syntaxTree:*/ null, /*soruceFile*/ null);
-    }
-
     /// Language Service
 
     interface CompletionSession {
@@ -865,7 +829,7 @@ module ts {
     }
 
     interface DocumentRegistryEntry {
-        document: Document;
+        sourceFile: SourceFile;
         refCount: number;
         owners: string[];
     }
@@ -1157,17 +1121,17 @@ module ts {
         function reportStats() {
             var bucketInfoArray = Object.keys(buckets).filter(name => name && name.charAt(0) === '_').map(name => {
                 var entries = lookUp(buckets, name);
-                var documents: { name: string; refCount: number; references: string[]; }[] = [];
+                var soruceFiles: { name: string; refCount: number; references: string[]; }[] = [];
                 for (var i in entries) {
                     var entry = entries[i];
-                    documents.push({
+                    soruceFiles.push({
                         name: i,
                         refCount: entry.refCount,
                         references: entry.owners.slice(0)
                     });
                 }
-                documents.sort((x, y) => y.refCount - x.refCount);
-                return { bucket: name, documents: documents }
+                soruceFiles.sort((x, y) => y.refCount - x.refCount);
+                return { bucket: name, sourceFiles: soruceFiles }
             });
             return JSON.stringify(bucketInfoArray, null, 2);
         }
@@ -1178,46 +1142,45 @@ module ts {
             scriptSnapshot: TypeScript.IScriptSnapshot,
             byteOrderMark: ByteOrderMark,
             version: number,
-            isOpen: boolean,
-            referencedFiles: string[]= []): Document {
+            isOpen: boolean): SourceFile {
 
             var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
             var entry = lookUp(bucket, filename);
             if (!entry) {
-                var document = createDocument(compilationSettings, filename, scriptSnapshot, byteOrderMark, version, isOpen, referencedFiles);
+                var sourceFile = createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), compilationSettings.target, byteOrderMark, version, isOpen);
 
                 bucket[filename] = entry = {
-                    document: document,
+                    sourceFile: sourceFile,
                     refCount: 0,
                     owners: []
                 };
             }
             entry.refCount++;
 
-            return entry.document;
+            return entry.sourceFile;
         }
 
         function updateDocument(
-            document: Document,
+            sourceFile: SourceFile,
             filename: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
             version: number,
             isOpen: boolean,
             textChangeRange: TypeScript.TextChangeRange
-            ): Document {
+            ): SourceFile {
 
             var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ false);
             Debug.assert(bucket);
             var entry = lookUp(bucket, filename);
             Debug.assert(entry);
 
-            if (entry.document.isOpen() === isOpen && entry.document.getVersion() === version) {
-                return entry.document;
+            if (entry.sourceFile.isOpen === isOpen && entry.sourceFile.version === version) {
+                return entry.sourceFile;
             }
 
-            entry.document = entry.document.update(scriptSnapshot, version, isOpen, textChangeRange);
-            return entry.document;
+            entry.sourceFile = entry.sourceFile.update(scriptSnapshot, version, isOpen, textChangeRange);
+            return entry.sourceFile;
         }
 
         function releaseDocument(filename: string, compilationSettings: CompilerOptions): void {
@@ -1258,7 +1221,6 @@ module ts {
         var program: Program;
         var typeChecker: TypeChecker;
         var useCaseSensitivefilenames = false;
-        var documentsByName: Map<Document> = {};
         var documentRegistry = documentRegistry;
         var cancellationToken = new CancellationTokenObject(host.getCancellationToken());
         var activeCompletionSession: CompletionSession;         // The current active completion session, used to get the completion entry details
@@ -1268,18 +1230,19 @@ module ts {
             TypeScript.LocalizedDiagnosticMessages = host.getLocalizedDiagnosticMessages();
         }
 
-        function getDocument(filename: string): Document {
-            return lookUp(documentsByName, filename);
+        function getSourceFile(filename: string): SourceFile {
+            Debug.assert(!!program, "'getSoruceFile(filename)' is called before 'program' is initialized, consider calling 'synchronizeHostData()' first");
+            return program.getSourceFile(filename);
         }
 
         function createCompilerHost(): CompilerHost {
             return {
                 getSourceFile: (filename, languageVersion) => {
-                    var document = getDocument(filename);
+                    var sourceFile = getSourceFile(filename);
 
-                    Debug.assert(!!document, "document can not be undefined");
+                    Debug.assert(!!sourceFile, "sourceFile can not be undefined");
 
-                    return document.getSourceFile();
+                    return sourceFile.getSourceFile();
                 },
                 getCancellationToken: () => cancellationToken,
                 getCanonicalFileName: (filename) => useCaseSensitivefilenames ? filename : filename.toLowerCase(),
@@ -1328,7 +1291,6 @@ module ts {
                     var filename = oldSourceFiles[i].filename;
                     if (!hostCache.contains(filename) || changesInCompilationSettingsAffectSyntax) {
                         documentRegistry.releaseDocument(filename, oldSettings);
-                        delete documentsByName[filename];
                     }
                 }
             }
@@ -1345,12 +1307,12 @@ module ts {
                 var isOpen = hostCache.isOpen(filename);
                 var scriptSnapshot = hostCache.getScriptSnapshot(filename);
 
-                var document: Document = getDocument(filename);
-                if (document) {
+                var sourceFile: SourceFile = getSourceFile(filename);
+                if (sourceFile) {
                     //
-                    // If the document is the same, assume no update
+                    // If the sourceFile is the same, assume no update
                     //
-                    if (document.getVersion() === version && document.isOpen() === isOpen) {
+                    if (sourceFile.version === version && sourceFile.isOpen === isOpen) {
                         continue;
                     }
 
@@ -1361,18 +1323,15 @@ module ts {
                     // the old buffer alive that represented the file on disk (as the host has moved to a 
                     // new text buffer).
                     var textChangeRange: TypeScript.TextChangeRange = null;
-                    if (document.isOpen && isOpen) {
-                        textChangeRange = hostCache.getScriptTextChangeRangeSinceVersion(filename, document.getVersion());
+                    if (sourceFile.isOpen && isOpen) {
+                        textChangeRange = hostCache.getScriptTextChangeRangeSinceVersion(filename, sourceFile.version);
                     }
 
-                    document = documentRegistry.updateDocument(document, filename, compilationSettings, scriptSnapshot, version, isOpen, textChangeRange);
+                    sourceFile = documentRegistry.updateDocument(sourceFile, filename, compilationSettings, scriptSnapshot, version, isOpen, textChangeRange);
                 }
                 else {
-                    document = documentRegistry.acquireDocument(filename, compilationSettings, scriptSnapshot, hostCache.getByteOrderMark(filename), version, isOpen, []);
+                    sourceFile = documentRegistry.acquireDocument(filename, compilationSettings, scriptSnapshot, hostCache.getByteOrderMark(filename), version, isOpen, []);
                 }
-
-                // Remeber the new document
-                documentsByName[filename] = document;
             }
 
             // Now create a new compiler
@@ -1583,10 +1542,10 @@ module ts {
 
             filename = TypeScript.switchToForwardSlashes(filename);
 
-            var document = getDocument(filename);
-            var sourceUnit = document.getSourceUnit();
+            var sourceFile = getSourceFile(filename);
+            var sourceUnit = sourceFile.getSourceUnit();
 
-            if (isCompletionListBlocker(document.getSyntaxTree().sourceUnit(), position)) {
+            if (isCompletionListBlocker(sourceFile.getSyntaxTree().sourceUnit(), position)) {
                 host.log("Returning an empty list because completion was blocked.");
                 return null;
             }
@@ -1632,7 +1591,7 @@ module ts {
             }
 
             // TODO: this is a hack for now, we need a proper walking mechanism to verify that we have the correct node
-            var mappedNode = getNodeAtPosition(document.getSourceFile(), TypeScript.end(node) - 1);
+            var mappedNode = getNodeAtPosition(sourceFile.getSourceFile(), TypeScript.end(node) - 1);
 
             Debug.assert(mappedNode, "Could not map a Fidelity node to an AST node");
 
@@ -1658,7 +1617,7 @@ module ts {
                 getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
             }
             else {
-                var containingObjectLiteral = getContainingObjectLiteralApplicableForCompletion(document.getSyntaxTree().sourceUnit(), position);
+                var containingObjectLiteral = getContainingObjectLiteralApplicableForCompletion(sourceFile.getSyntaxTree().sourceUnit(), position);
 
                 // Object literal expression, look up possible property names from contextual type
                 if (containingObjectLiteral) {
@@ -1843,8 +1802,8 @@ module ts {
             synchronizeHostData();
 
             filename = TypeScript.switchToForwardSlashes(filename);
-            var document = getDocument(filename);
-            var node = getNodeAtPosition(document.getSourceFile(), position);
+            var sourceFile = getSourceFile(filename);
+            var node = getNodeAtPosition(sourceFile.getSourceFile(), position);
             if (!node) return undefined;
 
             var symbol = typeChecker.getSymbolOfIdentifierLikeNode(node);
@@ -2370,7 +2329,7 @@ module ts {
             getNodeConstructor: kind => {
                 function Node() {
                 }
-                var proto = new NodeObject();
+                var proto = kind === SyntaxKind.SourceFile ? new SourceFileObject() : new NodeObject();
                 proto.kind = kind;
                 proto.pos = 0;
                 proto.end = 0;
