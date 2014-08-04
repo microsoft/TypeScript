@@ -535,7 +535,7 @@ module ts {
                 pushCurrentLabelSet: pushCurrentLabelSet,
                 pushFunctionBoundary: pushFunctionBoundary,
                 pop: pop,
-                nodeIsNestedInLabel: nodeIsNestedInLabel,
+                nodeIsNestedInLabel: nodeIsNestedInLabel
             };
         })();
 
