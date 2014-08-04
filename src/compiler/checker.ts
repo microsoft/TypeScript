@@ -3416,7 +3416,7 @@ module ts {
         }
 
         // Return contextual type of parameter or undefined if no contextual type is available
-        function getContextuallyTypedParameterType(parameter: VariableDeclaration): Type {
+        function getContextuallyTypedParameterType(parameter: ParameterDeclaration): Type {
             var func = <FunctionDeclaration>parameter.parent;
             if (func.kind === SyntaxKind.FunctionExpression || func.kind === SyntaxKind.ArrowFunction) {
                 if (isContextSensitiveExpression(func)) {

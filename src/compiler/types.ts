@@ -320,7 +320,7 @@ module ts {
     }
 
     export interface Expression extends Node {
-        contextualType?: Type;
+        contextualType?: Type;  // Used to temporarily assign a contextual type during overload resolution
     }
 
     export interface UnaryExpression extends Expression {
