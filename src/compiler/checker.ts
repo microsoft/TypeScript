@@ -722,7 +722,7 @@ module ts {
                 return false;
             });
 
-            return qualify
+            return qualify;
         }
 
         // Enclosing declaration is optional when we dont want to get qualified name in the enclosing declaration scope
@@ -3973,7 +3973,7 @@ module ts {
                 return resolveErrorCall(node);
             }
             
-            var apparentType = getApparentType(funcType)
+            var apparentType = getApparentType(funcType);
             if (<Type>apparentType === unknownType) {
                 // handler cases when funcType is type parameter with invalid constraint
                 // Another error was already reported
@@ -4230,7 +4230,7 @@ module ts {
         }
 
         function bodyContainsSingleThrowStatement(body: Block) {
-            return (body.statements.length === 1) && (body.statements[0].kind === SyntaxKind.ThrowStatement)
+            return (body.statements.length === 1) && (body.statements[0].kind === SyntaxKind.ThrowStatement);
         }
 
         // TypeScript Specification 1.0 (6.3) - July 2014
@@ -4809,7 +4809,7 @@ module ts {
             }
 
             function isSuperCallExpression(n: Node): boolean {
-                return n.kind === SyntaxKind.CallExpression && (<CallExpression>n).func.kind === SyntaxKind.SuperKeyword
+                return n.kind === SyntaxKind.CallExpression && (<CallExpression>n).func.kind === SyntaxKind.SuperKeyword;
             }
 
             function containsSuperCall(n: Node): boolean {
@@ -5210,7 +5210,7 @@ module ts {
                     case SyntaxKind.ImportDeclaration:
                         var result: SymbolFlags = 0;
                         var target = resolveImport(getSymbolOfNode(d));
-                        forEach(target.declarations, d => { result |= getDeclarationSpaces(d); } ) 
+                        forEach(target.declarations, d => { result |= getDeclarationSpaces(d); } );
                         return result;
                     default:
                         return SymbolFlags.ExportValue;
@@ -5221,7 +5221,7 @@ module ts {
         function checkFunctionDeclaration(node: FunctionDeclaration) {
             checkSignatureDeclaration(node);
 
-            var symbol = getSymbolOfNode(node)
+            var symbol = getSymbolOfNode(node);
             // first we want to check the local symbol that contain this declaration
             // - if node.localSymbol !== undefined - this is current declaration is exported and localSymbol points to the local symbol
             // - if node.localSymbol === undefined - this node is non-exported so we can just pick the result of getSymbolOfNode
@@ -5368,7 +5368,7 @@ module ts {
                 node.kind === SyntaxKind.GetAccessor ||
                 node.kind === SyntaxKind.SetAccessor) {
                 // it is ok to have member named '_super' or '_this' - member access is always qualified
-                return false
+                return false;
             }
 
             if (isInAmbientContext(node)) {
