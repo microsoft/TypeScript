@@ -4117,16 +4117,12 @@ module ts {
             for (var i = 0; i < len; i++) {
                 var parameter = signature.parameters[i];
                 var links = getSymbolLinks(parameter);
-                if (!links.type) {
-                    links.type = instantiateType(getTypeAtPosition(context, i), mapper);
-                }
+                links.type = instantiateType(getTypeAtPosition(context, i), mapper);
             }
             if (signature.hasRestParameter && context.hasRestParameter && signature.parameters.length >= context.parameters.length) {
                 var parameter = signature.parameters[signature.parameters.length - 1];
                 var links = getSymbolLinks(parameter);
-                if (!links.type) {
-                    links.type = instantiateType(getTypeOfSymbol(context.parameters[context.parameters.length - 1]), mapper);
-                }
+                links.type = instantiateType(getTypeOfSymbol(context.parameters[context.parameters.length - 1]), mapper);
             }
         }
 
