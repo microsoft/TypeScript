@@ -9,10 +9,12 @@
 /// <reference path="commandLineParser.ts"/>
 
 module ts {
-    export var version = "1.1.0.0";
+    var version = "1.1.0.0";
 
-    /// Checks to see if the locale is in the appropriate format,
-    /// and if it is, attempt to set the appropriate language.
+    /**
+     * Checks to see if the locale is in the appropriate format,
+     * and if it is, attempts to set the appropriate language.
+     */
     function validateLocaleAndSetLanguage(locale: string, errors: Diagnostic[]): boolean {
         var matchResult = /^([a-z]+)([_\-]([a-z]+))?$/.exec(locale.toLowerCase());
 
@@ -367,21 +369,18 @@ module ts {
         output += getDiagnosticText(Diagnostics.Syntax_Colon_0, syntax);
         output += sys.newLine + sys.newLine;
 
-        // Build up the examples.
+        // Build up the list of examples.
         var padding = makePadding(marginLength);
         output += getDiagnosticText(Diagnostics.Examples_Colon_0, makePadding(marginLength - examplesLength) + "tsc hello.ts") + sys.newLine;
         output += padding + "tsc --out foo.js foo.ts" + sys.newLine;
         output += padding + "tsc @args.txt" + sys.newLine;
         output += sys.newLine;
 
-        // Sort our options by their command names, (e.g. "--noImplicitAny" comes before "--watch")
         output += getDiagnosticText(Diagnostics.Options_Colon) + sys.newLine;
 
-        var optsList = optionDeclarations.slice().sort((a, b) => {
-            var aName = a.name.toLowerCase();
-            var bName = b.name.toLowerCase();
-            return compareValues(aName, bName);
-        });
+        // Sort our options by their names, (e.g. "--noImplicitAny" comes before "--watch")
+        var optsList = optionDeclarations.slice();
+        optsList.sort((a, b) => compareValues(a.name.toLowerCase(), b.name.toLowerCase()));
 
         // We want our descriptions to align at the same column in our output,
         // so we keep track of the longest option usage string.
