@@ -4824,12 +4824,25 @@ module ts {
                 return;
             }
 
+            var symbol = getSymbolOfNode(signatureDeclarationNode);
             // TypeScript 1.0 spec (April 2014): 3.7.2.4
             // Every specialized call or construct signature in an object type must be assignable
             // to at least one non-specialized call or construct signature in the same object type
-            var signaturesOfSymbol = getSignaturesOfSymbol(getSymbolOfNode(signatureDeclarationNode));
-            for (var i = 0; i < signaturesOfSymbol.length; i++) {
-                var otherSignature = signaturesOfSymbol[i];
+            var signaturesToCheck: Signature[];
+            // Unnamed (call\construct) signatures in interfaces are inherited and not shadowed so examining just node symbol won't give complete answer.
+            // Use declaring type to obtain full list of signatures.
+            if (!signatureDeclarationNode.name && signatureDeclarationNode.parent && signatureDeclarationNode.parent.kind === SyntaxKind.InterfaceDeclaration) {
+                Debug.assert(signatureDeclarationNode.kind === SyntaxKind.CallSignature || signatureDeclarationNode.kind === SyntaxKind.ConstructSignature);
+                var signatureKind = signatureDeclarationNode.kind === SyntaxKind.CallSignature ? SignatureKind.Call : SignatureKind.Construct;
+                var containingSymbol = getSymbolOfNode(signatureDeclarationNode.parent);
+                var containingType = getDeclaredTypeOfSymbol(containingSymbol);
+                signaturesToCheck = getSignaturesOfType(containingType, signatureKind);            }
+            else {
+                signaturesToCheck = getSignaturesOfSymbol(getSymbolOfNode(signatureDeclarationNode));
+            }
+
+            for (var i = 0; i < signaturesToCheck.length; i++) {
+                var otherSignature = signaturesToCheck[i];
                 if (!otherSignature.hasStringLiterals && isSignatureAssignableTo(signature, otherSignature)) {
                     return;
                 }
