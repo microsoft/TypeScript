@@ -1264,21 +1264,48 @@ module ts {
             };
         }
 
+        function sourceFileUpToDate(sourceFile: SourceFile): boolean {
+            return sourceFile && sourceFile.version === hostCache.getVersion(sourceFile.filename) && sourceFile.isOpen === hostCache.isOpen(sourceFile.filename);
+        }
+
+        function programUpToDate(): boolean {
+            // If we haven't create a program yet, then it is not up-to-date
+            if (!program) {
+                return false;
+            }
+
+            // If number of files in the program do not match, it is not up-to-date
+            var hostFilenames = hostCache.getFilenames();
+            if (program.getSourceFiles().length !== hostFilenames.length) {
+                return false;
+            }
+
+            // If any file is not up-to-date, then the whole program is not up-to-date
+            for (var i = 0, n = hostFilenames.length; i < n; i++) {
+                if (!sourceFileUpToDate(program.getSourceFile(hostFilenames[i]))) {
+                    return false;
+                }
+            }
+
+            // If the compilation settings do no match, then the program is not up-to-date
+            return compareDataObjects(program.getCompilerOptions(), hostCache.compilationSettings());
+        }
+
         function synchronizeHostData(): void {
             // Reset the cache at start of every refresh
             hostCache = new HostCache(host);
 
+            // If the program is already up-to-date, we can reuse it
+            if (programUpToDate()) {
+                return;
+            }
+            
             var compilationSettings = hostCache.compilationSettings();
-
-            // TODO: check if we need to create a new compiler to start with
-            //       1. files are identical
-            //       2. compilation settings are identical
 
             // Now, remove any files from the compiler that are no longer in the host.
             var oldProgram = program;
             if (oldProgram) {
                 var oldSettings = program.getCompilerOptions();
-
                 // If the language version changed, then that affects what types of things we parse. So
                 // we have to dump all syntax trees.
                 // TODO: handle propagateEnumConstants
@@ -1303,7 +1330,6 @@ module ts {
             // doesn't know about it.).  Or notify the compiler about any changes (if it does
             // know about it.)
             var hostfilenames = hostCache.getFilenames();
-
             for (var i = 0, n = hostfilenames.length; i < n; i++) {
                 var filename = hostfilenames[i];
 
@@ -1316,7 +1342,7 @@ module ts {
                     //
                     // If the sourceFile is the same, assume no update
                     //
-                    if (sourceFile.version === version && sourceFile.isOpen === isOpen) {
+                    if (sourceFileUpToDate(sourceFile)) {
                         continue;
                     }
 
