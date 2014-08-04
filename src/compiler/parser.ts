@@ -417,7 +417,7 @@ module ts {
         nodeIsNestedInLabel(label: Identifier, requireIterationStatement: boolean, stopAtFunctionBoundary: boolean): ControlBlockContext;
     }
 
-    export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget): SourceFile {
+    export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, byteOrderMark: ByteOrderMark, version: number = 0, isOpen: boolean = false): SourceFile {
         var file: SourceFile;
         var scanner: Scanner;
         var token: SyntaxKind;
@@ -3523,6 +3523,10 @@ module ts {
         file.externalModuleIndicator = getExternalModuleIndicator();
         file.nodeCount = nodeCount;
         file.identifierCount = identifierCount;
+        file.version = version;
+        file.byteOrderMark = byteOrderMark;
+        file.isOpen = isOpen;
+        file.languageVersion = languageVersion;
         return file;
     }
 

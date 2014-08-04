@@ -9,11 +9,11 @@
 
 goTo.marker('functionOverloadReference1');
 goTo.definition();
-verify.caretAtMarker('functionOverload1');
+verify.caretAtMarker('functionOverloadDefinition');
 
 goTo.marker('functionOverloadReference2');
 goTo.definition();
-verify.caretAtMarker('functionOverload2');
+verify.caretAtMarker('functionOverloadDefinition');
 
 goTo.marker('functionOverload');
 goTo.definition();

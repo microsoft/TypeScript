@@ -4,7 +4,7 @@
 /////*localFunctionDefinition*/function localFunction() { }
 /////*localClassDefinition*/class localClass { }
 /////*localInterfaceDefinition*/interface localInterface{ }
-////module /*localModuleDefinition*/localModule{ export var foo = 1;}
+/////*localModuleDefinition*/module localModule{ export var foo = 1;}
 ////
 ////
 /////*localVariableReference*/localVariable = 1;

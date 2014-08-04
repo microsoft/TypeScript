@@ -7,7 +7,7 @@
 ////    /*staticMethodDefinition*/static method();
 ////    /*instanceMethodDefinition*/public method();
 ////}
-/////
+////
 /////*ambientVariableReference*/ambientVar = 1;
 /////*ambientFunctionReference*/ambientFunction();
 ////var ambientClassVariable = new /*constructorReference*/ambientClass();

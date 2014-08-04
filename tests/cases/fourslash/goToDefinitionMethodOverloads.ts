@@ -1,11 +1,11 @@
 /// <reference path='fourslash.ts' />
 
 ////class MethodOverload {
-////    /*staticMethodOverload1*/static method();
-////    /*staticMethodOverload2*/static method(foo: string);
+////    static me/*staticMethodOverload1*/thod();
+////    static me/*staticMethodOverload2*/thod(foo: string);
 /////*staticMethodDefinition*/static method(foo?: any) { }
-////    /*instanceMethodOverload1*/public method(): any;
-////    /*instanceMethodOverload2*/public method(foo: string);
+////    public met/*instanceMethodOverload1*/hod(): any;
+////    public met/*instanceMethodOverload2*/hod(foo: string);
 /////*instanceMethodDefinition*/public method(foo?: any) { return "foo" }
 ////}
 
@@ -20,19 +20,19 @@
 
 goTo.marker('staticMethodReference1');
 goTo.definition();
-verify.caretAtMarker('staticMethodOverload1');
+verify.caretAtMarker('staticMethodDefinition');
 
 goTo.marker('staticMethodReference2');
 goTo.definition();
-verify.caretAtMarker('staticMethodOverload2');
+verify.caretAtMarker('staticMethodDefinition');
 
 goTo.marker('instanceMethodReference1');
 goTo.definition();
-verify.caretAtMarker('instanceMethodOverload1');
+verify.caretAtMarker('instanceMethodDefinition');
 
 goTo.marker('instanceMethodReference2');
 goTo.definition();
-verify.caretAtMarker('instanceMethodOverload2');
+verify.caretAtMarker('instanceMethodDefinition');
 
 goTo.marker('staticMethodOverload1');
 goTo.definition();

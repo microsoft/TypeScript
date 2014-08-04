@@ -135,7 +135,7 @@ module ts {
                 }
                 text = "";
             }
-            return text !== undefined ? createSourceFile(filename, text, languageVersion) : undefined;
+            return text !== undefined ? createSourceFile(filename, text, languageVersion, ByteOrderMark.None) : undefined;
         }
 
         function writeFile(fileName: string, data: string, onError?: (message: string) => void) {

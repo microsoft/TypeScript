@@ -1,9 +1,10 @@
 /// <reference path='fourslash.ts'/>
 
-//// 
+// @Filename: a.ts
 //// //MyFile Comments
 //// //more comments
-//// /// <reference path="so/**/mePath.ts" />
+//// /// <reference path="so/*unknownFile*/mePath.ts" />
+//// /// <reference path="b/*knownFile*/.ts" />
 ////
 //// class clsInOverload {
 ////     static fnOverload();
@@ -12,5 +13,12 @@
 //// }
 ////
 
-goTo.marker();
+// @Filename: b.ts
+/////*fileB*/
+
+goTo.marker("unknownFile");
 verify.not.definitionLocationExists();
+
+goTo.marker("knownFile");
+goTo.definition();
+verify.caretAtMarker('fileB');
