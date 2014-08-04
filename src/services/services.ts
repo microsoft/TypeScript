@@ -1352,7 +1352,7 @@ module ts {
 
             filename = TypeScript.switchToForwardSlashes(filename);
 
-            return program.getDiagnostics(getDocument(filename).getSourceFile());
+            return program.getDiagnostics(getSourceFile(filename).getSourceFile());
         }
 
         function getSemanticDiagnostics(filename: string) {
@@ -1360,7 +1360,7 @@ module ts {
 
             filename = TypeScript.switchToForwardSlashes(filename)
 
-            return typeChecker.getDiagnostics(getDocument(filename).getSourceFile());
+            return typeChecker.getDiagnostics(getSourceFile(filename).getSourceFile());
         }
 
         function getCompilerOptionsDiagnostics() {
@@ -1930,9 +1930,9 @@ module ts {
             synchronizeHostData();
 
             filename = TypeScript.switchToForwardSlashes(filename);
-            var document = getDocument(filename);
+            var sourceFile = getSourceFile(filename);
 
-            var node = getNodeAtPosition(document.getSourceFile(), position);
+            var node = getNodeAtPosition(sourceFile.getSourceFile(), position);
             if (!node) {
                 return undefined;
             }
@@ -1945,7 +1945,7 @@ module ts {
             }
 
             /// Triple slash reference comments
-            var comment = forEach(document.getSourceFile().referencedFiles, r => (r.pos <= position && position < r.end) ? r : undefined);
+            var comment = forEach(sourceFile.getSourceFile().referencedFiles, r => (r.pos <= position && position < r.end) ? r : undefined);
             if (comment) {
                 var targetFilename = normalizePath(combinePaths(getDirectoryPath(filename), comment.filename));
                 if (program.getSourceFile(targetFilename)) {
