@@ -227,7 +227,7 @@ module ts {
             code: message.code,
 
             next: details
-        }
+        };
     }
 
     export function flattenDiagnosticChain(file: SourceFile, start: number, length: number, diagnosticChain: DiagnosticMessageChain, newLine: string): Diagnostic {
