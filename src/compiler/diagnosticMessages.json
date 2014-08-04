@@ -440,6 +440,38 @@
         "category": "Error",
         "code": 2023
     },
+    "Public static property '{0}' of exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2024
+    },
+    "Public property '{0}' of exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2025
+    },
+    "Property '{0}' of exported interface has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2026
+    },
+    "Exported variable '{0}' has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2027
+    },
+    "Public static property '{0}' of exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2028
+    },
+    "Public property '{0}' of exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2029
+    },
+    "Property '{0}' of exported interface has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2030
+    },
+    "Exported variable '{0}' has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2031
+    },
    "Type parameter '{0}' of constructor signature from exported interface has or is using private name '{1}'.": {
         "category": "Error",
         "code": 2208

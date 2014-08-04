@@ -2082,7 +2082,7 @@ module ts {
                             diagnosticMessage: diagnosticMessage,
                             errorNode: node,
                             typeName: node.name
-                        }
+                        };
                     }
 
                     emitSourceTextOfNode(node.name);
@@ -2160,7 +2160,7 @@ module ts {
                             diagnosticMessage: diagnosticMessage,
                             errorNode: node,
                             typeName: (<Declaration>node.parent).name
-                        }
+                        };
                     }
                 }
             }
@@ -2237,8 +2237,44 @@ module ts {
                     }
                     if (!(node.flags & NodeFlags.Private)) {
                         write(": ");
+                        getSymbolVisibilityDiagnosticMessage = getVariableDeclarationTypeVisibilityError;
                         resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.None, writer);
+                        // TODO(shkamat) This is just till we get rest of the error reporting up
+                        getSymbolVisibilityDiagnosticMessage = undefined;
                     }
+                }
+
+                function getVariableDeclarationTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
+                    // TODO(shkamat) Cannot access name errors
+                    var diagnosticMessage: DiagnosticMessage;
+                    if (node.kind === SyntaxKind.VariableDeclaration) {
+                        diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                        Diagnostics.Exported_variable_0_has_or_is_using_name_1_from_private_module_2 :
+                        Diagnostics.Exported_variable_0_has_or_is_using_private_name_1;
+                    }
+                    else {
+                        if (node.parent.flags & NodeFlags.Static) {
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_private_name_1;
+                        }
+                        else if (node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            Diagnostics.Public_property_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Public_property_0_of_exported_class_has_or_is_using_private_name_1;
+                        }
+                        else {
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            Diagnostics.Property_0_of_exported_interface_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Property_0_of_exported_interface_has_or_is_using_private_name_1;
+                        }
+                    }
+
+                    return {
+                        diagnosticMessage: diagnosticMessage,
+                        errorNode: node,
+                        typeName: node.name
+                    };
                 }
             }
 
@@ -2469,6 +2505,11 @@ module ts {
         if (compilerOptions.out) {
             emitFile(compilerOptions.out);
         }
+
+        // Sort and make the unique list of diagnostics
+        diagnostics.sort(compareDiagnostics);
+        diagnostics = deduplicateSortedDiagnostics(diagnostics);
+
         return {
             errors: diagnostics,
             sourceMaps: sourceMapDataList
