@@ -13,7 +13,7 @@
     
     export interface publicInterfaceWithPrivateTypeParameters<T extends privateClass> { // Error
                                                               ~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of exported interface has or is using private name 'privateClass'.
+!!! Type parameter 'T' of exported interface has or is using private name 'privateClass'.
         myMethod(val: T): T;
         myMethod0(): publicClassT<T>;
         myMethod1(): privateClassT<privateClass>; 
@@ -62,7 +62,7 @@
     
     export interface publicInterfaceWithPrivateModuleTypeParameterConstraints<T extends privateModule.publicClassInPrivateModule> { // Error
                                                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of exported interface has or is using name 'privateModule.publicClassInPrivateModule' from private module 'privateModule'.
+!!! Type parameter 'T' of exported interface has or is using name 'privateModule.publicClassInPrivateModule' from private module 'privateModule'.
     }
     
     interface privateInterfaceWithPrivateModuleTypeParameterConstraints<T extends privateModule.publicClassInPrivateModule> { // Error
@@ -83,7 +83,7 @@
     
         export interface publicInterfaceWithPrivateTypeParameters<T extends privateClassInPublicModule> { // Error
                                                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of exported interface has or is using private name 'privateClassInPublicModule'.
+!!! Type parameter 'T' of exported interface has or is using private name 'privateClassInPublicModule'.
             myMethod(val: T): T;
             myMethod0(): publicClassInPublicModuleT<T>;
             myMethod1(): privateClassInPublicModuleT<privateClassInPublicModule>;
@@ -131,7 +131,7 @@
     
         export interface publicInterfaceWithPrivateModuleTypeParameterConstraints<T extends privateModule.publicClassInPrivateModule> { // Error
                                                                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of exported interface has or is using name 'privateModule.publicClassInPrivateModule' from private module 'privateModule'.
+!!! Type parameter 'T' of exported interface has or is using name 'privateModule.publicClassInPrivateModule' from private module 'privateModule'.
         }
     
         interface privateInterfaceWithPrivateModuleTypeParameterConstraints<T extends privateModule.publicClassInPrivateModule> { // Error

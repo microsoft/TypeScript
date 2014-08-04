@@ -414,67 +414,67 @@
         "category": "Error",
         "code": 2023
     },
-   "TypeParameter '{0}' of constructor signature from exported interface has or is using private name '{1}'.": {
+   "Type parameter '{0}' of constructor signature from exported interface has or is using private name '{1}'.": {
         "category": "Error",
         "code": 2208
     },
-    "TypeParameter '{0}' of call signature from exported interface has or is using private name '{1}'.": {
+    "Type parameter '{0}' of call signature from exported interface has or is using private name '{1}'.": {
         "category": "Error",
         "code": 2209
     },
-    "TypeParameter '{0}' of public static method from exported class has or is using private name '{1}'.": {
+    "Type parameter '{0}' of public static method from exported class has or is using private name '{1}'.": {
         "category": "Error",
         "code": 2210
     },
-    "TypeParameter '{0}' of public method from exported class has or is using private name '{1}'.": {
+    "Type parameter '{0}' of public method from exported class has or is using private name '{1}'.": {
         "category": "Error",
         "code": 2211
     },
-    "TypeParameter '{0}' of method from exported interface has or is using private name '{1}'.": {
+    "Type parameter '{0}' of method from exported interface has or is using private name '{1}'.": {
         "category": "Error",
         "code": 2212
     },
-    "TypeParameter '{0}' of exported function has or is using private name '{1}'.": {
+    "Type parameter '{0}' of exported function has or is using private name '{1}'.": {
         "category": "Error",
         "code": 2213
     },
-    "TypeParameter '{0}' of constructor signature from exported interface has or is using name '{1}' from private module '{2}'.": {
+    "Type parameter '{0}' of constructor signature from exported interface has or is using name '{1}' from private module '{2}'.": {
         "category": "Error",
         "code": 2214
     },
-    "TypeParameter '{0}' of call signature from exported interface has or is using name '{1}' from private module '{2}'.": {
+    "Type parameter '{0}' of call signature from exported interface has or is using name '{1}' from private module '{2}'.": {
         "category": "Error",
         "code": 2215
     },
-    "TypeParameter '{0}' of public static method from exported class has or is using name '{1}' from private module '{2}'.": {
+    "Type parameter '{0}' of public static method from exported class has or is using name '{1}' from private module '{2}'.": {
         "category": "Error",
         "code": 2216
     },
-    "TypeParameter '{0}' of public method from exported class has or is using name '{1}' from private module '{2}'.": {
+    "Type parameter '{0}' of public method from exported class has or is using name '{1}' from private module '{2}'.": {
         "category": "Error",
         "code": 2217
     },
-    "TypeParameter '{0}' of method from exported interface has or is using name '{1}' from private module '{2}'.": {
+    "Type parameter '{0}' of method from exported interface has or is using name '{1}' from private module '{2}'.": {
         "category": "Error",
         "code": 2218
     },
-    "TypeParameter '{0}' of exported function has or is using name '{1}' from private module '{2}'.": {
+    "Type parameter '{0}' of exported function has or is using name '{1}' from private module '{2}'.": {
         "category": "Error",
         "code": 2219
     },
-    "TypeParameter '{0}' of exported class has or is using private name '{1}'.": {
+    "Type parameter '{0}' of exported class has or is using private name '{1}'.": {
         "category": "Error",
         "code": 2220
     },
-    "TypeParameter '{0}' of exported interface has or is using private name '{1}'.": {
+    "Type parameter '{0}' of exported interface has or is using private name '{1}'.": {
         "category": "Error",
         "code": 2221
     },
-    "TypeParameter '{0}' of exported class has or is using name '{1}' from private module '{2}'.": {
+    "Type parameter '{0}' of exported class has or is using name '{1}' from private module '{2}'.": {
         "category": "Error",
         "code": 2222
     },
-    "TypeParameter '{0}' of exported interface has or is using name '{1}' from private module '{2}'.": {
+    "Type parameter '{0}' of exported interface has or is using name '{1}' from private module '{2}'.": {
         "category": "Error",
         "code": 2223
     },

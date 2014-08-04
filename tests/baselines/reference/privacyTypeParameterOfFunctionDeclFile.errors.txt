@@ -1,4 +1,4 @@
-==== tests/cases/compiler/privacyTypeParameterOfFunctionDeclFile.ts (28 errors) ====
+==== tests/cases/compiler/privacyTypeParameterOfFunctionDeclFile.ts (24 errors) ====
     class privateClass {
     }
     
@@ -8,13 +8,13 @@
     export interface publicInterfaceWithPrivateTypeParameters {
         new <T extends privateClass>(): privateClass;  // Error
              ~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of constructor signature from exported interface has or is using private name 'privateClass'.
+!!! Type parameter 'T' of constructor signature from exported interface has or is using private name 'privateClass'.
         <T extends privateClass>(): privateClass;  // Error
          ~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of call signature from exported interface has or is using private name 'privateClass'.
+!!! Type parameter 'T' of call signature from exported interface has or is using private name 'privateClass'.
         myMethod<T extends privateClass>(): privateClass;  // Error
                  ~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of method from exported interface has or is using private name 'privateClass'.
+!!! Type parameter 'T' of method from exported interface has or is using private name 'privateClass'.
     }
     
     export interface publicInterfaceWithPublicTypeParameters {
@@ -38,19 +38,15 @@
     export class publicClassWithWithPrivateTypeParameters {
         static myPublicStaticMethod<T extends privateClass>() {  // Error
                                     ~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of public static method from exported class has or is using private name 'privateClass'.
+!!! Type parameter 'T' of public static method from exported class has or is using private name 'privateClass'.
         }
         private static myPrivateStaticMethod<T extends privateClass>() {
-                                             ~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of public static method from exported class has or is using private name 'privateClass'.
         }
         myPublicMethod<T extends privateClass>() {  // Error
                        ~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of public method from exported class has or is using private name 'privateClass'.
+!!! Type parameter 'T' of public method from exported class has or is using private name 'privateClass'.
         }
         private myPrivateMethod<T extends privateClass>() {
-                                ~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of public method from exported class has or is using private name 'privateClass'.
         }
     }
     
@@ -89,7 +85,7 @@
     
     export function publicFunctionWithPrivateTypeParameters<T extends privateClass>() {  // Error
                                                             ~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of exported function has or is using private name 'privateClass'.
+!!! Type parameter 'T' of exported function has or is using private name 'privateClass'.
     }
     
     export function publicFunctionWithPublicTypeParameters<T extends publicClass>() {
@@ -143,27 +139,27 @@
     export interface publicInterfaceWithPrivatModuleTypeParameters {
         new <T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of constructor signature from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! Type parameter 'T' of constructor signature from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
         <T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of call signature from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! Type parameter 'T' of call signature from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
         myMethod<T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of method from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! Type parameter 'T' of method from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
     }
     export class publicClassWithWithPrivateModuleTypeParameters {
         static myPublicStaticMethod<T extends privateModule.publicClass>() {  // Error
                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of public static method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! Type parameter 'T' of public static method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
         }
         myPublicMethod<T extends privateModule.publicClass>() {  // Error
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of public method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! Type parameter 'T' of public method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
         }
     }
     export function publicFunctionWithPrivateMopduleTypeParameters<T extends privateModule.publicClass>() {  // Error
                                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of exported function has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! Type parameter 'T' of exported function has or is using name 'privateModule.publicClass' from private module 'privateModule'.
     }
     
     
@@ -192,13 +188,13 @@
         export interface publicInterfaceWithPrivateTypeParameters {
             new <T extends privateClass>(): privateClass;  // Error
                  ~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of constructor signature from exported interface has or is using private name 'privateClass'.
+!!! Type parameter 'T' of constructor signature from exported interface has or is using private name 'privateClass'.
             <T extends privateClass>(): privateClass;  // Error
              ~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of call signature from exported interface has or is using private name 'privateClass'.
+!!! Type parameter 'T' of call signature from exported interface has or is using private name 'privateClass'.
             myMethod<T extends privateClass>(): privateClass;  // Error
                      ~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of method from exported interface has or is using private name 'privateClass'.
+!!! Type parameter 'T' of method from exported interface has or is using private name 'privateClass'.
         }
     
         export interface publicInterfaceWithPublicTypeParameters {
@@ -222,19 +218,15 @@
         export class publicClassWithWithPrivateTypeParameters {
             static myPublicStaticMethod<T extends privateClass>() {  // Error
                                         ~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of public static method from exported class has or is using private name 'privateClass'.
+!!! Type parameter 'T' of public static method from exported class has or is using private name 'privateClass'.
             }
             private static myPrivateStaticMethod<T extends privateClass>() {
-                                                 ~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of public static method from exported class has or is using private name 'privateClass'.
             }
             myPublicMethod<T extends privateClass>() {  // Error
                            ~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of public method from exported class has or is using private name 'privateClass'.
+!!! Type parameter 'T' of public method from exported class has or is using private name 'privateClass'.
             }
             private myPrivateMethod<T extends privateClass>() {
-                                    ~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of public method from exported class has or is using private name 'privateClass'.
             }
         }
     
@@ -273,7 +265,7 @@
     
         export function publicFunctionWithPrivateTypeParameters<T extends privateClass>() {  // Error
                                                                 ~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of exported function has or is using private name 'privateClass'.
+!!! Type parameter 'T' of exported function has or is using private name 'privateClass'.
         }
     
         export function publicFunctionWithPublicTypeParameters<T extends publicClass>() {
@@ -327,27 +319,27 @@
         export interface publicInterfaceWithPrivatModuleTypeParameters {
             new <T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of constructor signature from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! Type parameter 'T' of constructor signature from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
             <T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of call signature from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! Type parameter 'T' of call signature from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
             myMethod<T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of method from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! Type parameter 'T' of method from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
         }
         export class publicClassWithWithPrivateModuleTypeParameters {
             static myPublicStaticMethod<T extends privateModule.publicClass>() {  // Error
                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of public static method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! Type parameter 'T' of public static method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
             }
             myPublicMethod<T extends privateModule.publicClass>() {  // Error
                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of public method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! Type parameter 'T' of public method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
             }
         }
         export function publicFunctionWithPrivateMopduleTypeParameters<T extends privateModule.publicClass>() {  // Error
                                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! TypeParameter 'T' of exported function has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! Type parameter 'T' of exported function has or is using name 'privateModule.publicClass' from private module 'privateModule'.
         }
     
     
