@@ -2665,6 +2665,10 @@ module ts {
                 case SyntaxKind.ThrowKeyword:
                 case SyntaxKind.TryKeyword:
                 case SyntaxKind.DebuggerKeyword:
+                // 'catch' and 'finally' do not actually indicate that the code is part of a statement,
+                // however, we say they are here so that we may gracefully parse them and error later.
+                case SyntaxKind.CatchKeyword:
+                case SyntaxKind.FinallyKeyword:
                     return true;
                 case SyntaxKind.InterfaceKeyword:
                 case SyntaxKind.ClassKeyword:
@@ -2672,13 +2676,17 @@ module ts {
                 case SyntaxKind.EnumKeyword:
                     // When followed by an identifier, these do not start a statement but might
                     // instead be following declarations
-                    if (isDeclaration()) return false;
+                    if (isDeclaration()) {
+                        return false;
+                    }
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.PrivateKeyword:
                 case SyntaxKind.StaticKeyword:
                     // When followed by an identifier or keyword, these do not start a statement but
                     // might instead be following type members
-                    if (lookAhead(() => nextToken() >= SyntaxKind.Identifier)) return false;
+                    if (lookAhead(() => nextToken() >= SyntaxKind.Identifier)) {
+                        return false;
+                    }
                 default:
                     return isExpression();
             }
@@ -2715,6 +2723,9 @@ module ts {
                 case SyntaxKind.ThrowKeyword:
                     return parseThrowStatement();
                 case SyntaxKind.TryKeyword:
+                // Include the next two for error recovery.
+                case SyntaxKind.CatchKeyword:
+                case SyntaxKind.FinallyKeyword:
                     return parseTryStatement();
                 case SyntaxKind.DebuggerKeyword:
                     return parseDebuggerStatement();

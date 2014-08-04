@@ -1,6 +1,8 @@
-==== tests/cases/conformance/parser/ecmascript5/MissingTokens/parserMissingToken1.ts (2 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/MissingTokens/parserMissingToken1.ts (3 errors) ====
     a / finally
         ~~~~~~~
 !!! Expression expected.
+               
+!!! '{' expected.
     ~
 !!! Cannot find name 'a'.
