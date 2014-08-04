@@ -6441,7 +6441,6 @@ module ts {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     return getSymbolOfIdentifier(<Identifier>node);
-                    break;
 
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.SuperKeyword:

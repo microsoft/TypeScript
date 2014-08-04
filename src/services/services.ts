@@ -1131,7 +1131,10 @@ module ts {
                     });
                 }
                 soruceFiles.sort((x, y) => y.refCount - x.refCount);
-                return { bucket: name, sourceFiles: soruceFiles }
+                return {
+                    bucket: name,
+                    sourceFiles: soruceFiles
+                };
             });
             return JSON.stringify(bucketInfoArray, null, 2);
         }
@@ -1907,7 +1910,7 @@ module ts {
                     return true;
                 }
 
-                return false
+                return false;
             }
 
             function tryAddConstructSignature(symbol: Symbol, location: Node, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
