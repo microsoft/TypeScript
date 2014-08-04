@@ -1270,16 +1270,21 @@ module ts {
 
         function programUpToDate(): boolean {
             // If we haven't create a program yet, then it is not up-to-date
-            if (!program) return false;
+            if (!program) {
+                return false;
+            }
 
             // If number of files in the program do not match, it is not up-to-date
             var hostFilenames = hostCache.getFilenames();
-            if (program.getSourceFiles().length !== hostFilenames.length) return false;
+            if (program.getSourceFiles().length !== hostFilenames.length) {
+                return false;
+            }
 
             // If any file is not up-to-date, then the whole program is not up-to-date
             for (var i = 0, n = hostFilenames.length; i < n; i++) {
-                if (!sourceFileUpToDate(program.getSourceFile(hostFilenames[i])))
+                if (!sourceFileUpToDate(program.getSourceFile(hostFilenames[i]))) {
                     return false;
+                }
             }
 
             // If the compilation settings do no match, then the program is not up-to-date
