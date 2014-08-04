@@ -1,4 +1,4 @@
-==== tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration3.ts (3 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration3.ts (4 errors) ====
     function runTests() {
         var outfile = new Harness.Compiler.WriterAggregator()
                           ~~~~~~~
@@ -8,6 +8,8 @@
 !!! Cannot find name 'Harness'.
           , compiler = <TypeScript.TypeScriptCompiler>new TypeScript.TypeScriptCompiler(outerr)
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'TypeScript'.
+                                                          ~~~~~~~~~~
 !!! Cannot find name 'TypeScript'.
           , code;
     }
