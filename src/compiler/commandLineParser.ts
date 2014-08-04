@@ -34,7 +34,7 @@ module ts {
         { name: "sourceRoot", type: "string" },
         { name: "target", type: { "es3": ScriptTarget.ES3, "es5": ScriptTarget.ES5 }, error: Diagnostics.Argument_for_target_option_must_be_es3_or_es5 },
         { name: "version", type: "boolean" },
-        { name: "watch", type: "boolean" },
+        { name: "watch", type: "boolean" }
     ];
 
     // Map command line switches to compiler options' property descriptors. Keys must be lower case spellings of command line switches.
