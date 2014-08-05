@@ -336,7 +336,7 @@ module TypeScript.Scanner {
         var scanner = createScannerInternal(languageVersion, text, reportDiagnostic);
         return {
             setIndex: scanner.setIndex,
-            scan: scanner.scan,
+            scan: scanner.scan
         };
     }
 
@@ -1443,7 +1443,7 @@ module TypeScript.Scanner {
             setIndex: setIndex,
             scan: scan,
             fillTokenInfo: fillTokenInfo,
-            scanTrivia: scanTrivia,
+            scanTrivia: scanTrivia
         };
     }
 
@@ -1672,7 +1672,7 @@ module TypeScript.Scanner {
             tokenDiagnostics: tokenDiagnostics,
             release: release,
             absolutePosition: absolutePosition,
-            resetToPosition: resetToPosition,
+            resetToPosition: resetToPosition
         };
     }
 }

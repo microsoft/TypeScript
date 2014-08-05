@@ -107,7 +107,7 @@ module TypeScript.SyntaxFacts {
         "|=": SyntaxKind.BarEqualsToken,
         "^=": SyntaxKind.CaretEqualsToken,
         "/": SyntaxKind.SlashToken,
-        "/=": SyntaxKind.SlashEqualsToken,
+        "/=": SyntaxKind.SlashEqualsToken
     };
 
     var kindToText = new Array<string>();
