@@ -1299,7 +1299,7 @@ module ts {
             if (programUpToDate()) {
                 return;
             }
-            
+
             var compilationSettings = hostCache.compilationSettings();
 
             // Now, remove any files from the compiler that are no longer in the host.
@@ -1370,6 +1370,15 @@ module ts {
             // Now create a new compiler
             program = createProgram(hostfilenames, compilationSettings, createCompilerHost());
             typeChecker = program.getTypeChecker();
+        }
+
+        /// Clean up any semantic caches that are not needed. 
+        /// The host can call this method if it wants to jettison unused memory.
+        /// We will just dump the typeChecker and recreate a new one. this should have the effect of destroying all the semantic caches.
+        function cleanupSemanticCache(): void {
+            if (program) {
+                typeChecker = program.getTypeChecker();
+            }
         }
 
         function dispose(): void {
@@ -2180,7 +2189,7 @@ module ts {
         return {
             dispose: dispose,
             refresh: () => { },
-            cleanupSemanticCache: () => { },
+            cleanupSemanticCache: cleanupSemanticCache,
             getSyntacticDiagnostics: getSyntacticDiagnostics,
             getSemanticDiagnostics: getSemanticDiagnostics,
             getCompilerOptionsDiagnostics: getCompilerOptionsDiagnostics,
