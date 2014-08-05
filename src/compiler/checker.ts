@@ -726,6 +726,7 @@ module ts {
         }
 
         function isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult {
+            var aliasesToMakeVisible: ImportDeclaration[];
             if (symbol && enclosingDeclaration && !(symbol.flags & SymbolFlags.TypeParameter)) {
                 var initialSymbol = symbol;
                 var meaningToLook = meaning;
@@ -733,14 +734,14 @@ module ts {
                     // Symbol is accessible if it by itself is accessible
                     var accessibleSymbol = getAccessibleSymbol(symbol, enclosingDeclaration, meaningToLook);
                     if (accessibleSymbol) {
-                        if (forEach(accessibleSymbol.declarations, declaration => !isDeclarationVisible(declaration))) {
+                        if (forEach(accessibleSymbol.declarations, declaration => !getIsDeclarationVisible(declaration))) {
                             return {
                                 accessibility: SymbolAccessibility.NotAccessible,
                                 errorSymbolName: symbolToString(initialSymbol, enclosingDeclaration, meaning),
-                                errorModuleName: symbol !== initialSymbol ? symbolToString(symbol, enclosingDeclaration, SymbolFlags.Namespace) : undefined
+                                errorModuleName: symbol !== initialSymbol ? symbolToString(symbol, enclosingDeclaration, SymbolFlags.Namespace) : undefined,
                             };
                         }
-                        return { accessibility: SymbolAccessibility.Accessible };
+                        return { accessibility: SymbolAccessibility.Accessible, aliasesToMakeVisible: aliasesToMakeVisible };
                     }
 
                     // TODO(shkamat): Handle static method of class
@@ -769,6 +770,32 @@ module ts {
             }
 
             return { accessibility: SymbolAccessibility.Accessible };
+
+            function getIsDeclarationVisible(declaration: Declaration) {
+                if (!isDeclarationVisible(declaration)) {
+                    // Mark the unexported alias as visible if its parent is visible 
+                    // because these kind of aliases can be used to name types in declaration file
+                    if (declaration.kind === SyntaxKind.ImportDeclaration &&
+                        !(declaration.flags & NodeFlags.Export) &&
+                        isDeclarationVisible(declaration.parent)) {
+                        getNodeLinks(declaration).isVisible = true;
+                        if (aliasesToMakeVisible) {
+                            if (!contains(aliasesToMakeVisible, declaration)) {
+                                aliasesToMakeVisible.push(declaration);
+                            }
+                        }
+                        else {
+                            aliasesToMakeVisible = [declaration];
+                        }
+                        return true;
+                    }
+
+                    // Declaration is not visible
+                    return false;
+                }
+
+                return true;
+            }
         }
 
         // Enclosing declaration is optional when we dont want to get qualified name in the enclosing declaration scope
@@ -1091,7 +1118,6 @@ module ts {
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.ImportDeclaration:
                         if (!(node.flags & NodeFlags.Export)) {
-                            // TODO(shkamat): non exported aliases can be visible if they are referenced else where for value/type/namespace
                             return isGlobalSourceFile(node.parent) || isUsedInExportAssignment(node);
                         }
                         // Exported members are visible if parent is visible
@@ -1125,7 +1151,7 @@ module ts {
             if (node) {
                 var links = getNodeLinks(node);
                 if (links.isVisible === undefined) {
-                    links.isVisible = determineIfDeclarationIsVisible();
+                    links.isVisible = !!determineIfDeclarationIsVisible();
                 }
                 return links.isVisible;
             }

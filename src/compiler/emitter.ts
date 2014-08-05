@@ -9,6 +9,7 @@ module ts {
         getTextPos(): number;
         getLine(): number;
         getColumn(): number;
+        getIndent(): number;
     }
 
     var indentStrings: string[] = [];
@@ -141,6 +142,7 @@ module ts {
                 writeLine: writeLine,
                 increaseIndent: () => indent++,
                 decreaseIndent: () => indent--,
+                getIndent: () => indent,
                 getTextPos: () => output.length,
                 getLine: () => lineCount + 1,
                 getColumn: () => lineStart ? indent * 4 + 1 : output.length - linePos + 1,
@@ -1867,6 +1869,13 @@ module ts {
             var enclosingDeclaration: Node;
             var reportedDeclarationError = false;
 
+            var aliasDeclarationEmitInfo: {
+                declaration: ImportDeclaration;
+                outputPos: number;
+                indent: number;
+                asynchronousOutput?: string; // If the output for alias was written asynchronously, the corresponding output
+            }[] = [];
+
             var getSymbolVisibilityDiagnosticMessage: (symbolAccesibilityResult: SymbolAccessiblityResult) => {
                 errorNode: Node;
                 diagnosticMessage: DiagnosticMessage;
@@ -1875,9 +1884,25 @@ module ts {
 
             function writeSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
                 var symbolAccesibilityResult = resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning);
-                    // TODO(shkamat): Since we dont have error reporting for all the cases as yet we have this check on handler being present
+                // TODO(shkamat): Since we dont have error reporting for all the cases as yet we have this check on handler being present
                 if (!getSymbolVisibilityDiagnosticMessage || symbolAccesibilityResult.accessibility === SymbolAccessibility.Accessible) {
                     resolver.writeSymbol(symbol, enclosingDeclaration, meaning, writer);
+
+                    // write the aliases
+                    if (symbolAccesibilityResult && symbolAccesibilityResult.aliasesToMakeVisible) {
+                        var oldWriter = writer;
+                        forEach(symbolAccesibilityResult.aliasesToMakeVisible.sort(), aliasToWrite => {
+                            var aliasEmitInfo = forEach(aliasDeclarationEmitInfo, declEmitInfo => declEmitInfo.declaration === aliasToWrite ? declEmitInfo : undefined);
+                            writer = createTextWriter(writeSymbol);
+                            for (var declarationIndent = aliasEmitInfo.indent; declarationIndent; declarationIndent--) {
+                                writer.increaseIndent();
+                            }
+
+                            writeImportDeclaration(aliasToWrite);
+                            aliasEmitInfo.asynchronousOutput = writer.getText();
+                        });
+                        writer = oldWriter;
+                    }
                 }
                 else {
                     // Report error
@@ -1951,24 +1976,37 @@ module ts {
             }
 
             function emitImportDeclaration(node: ImportDeclaration) {
-                if (resolver.isDeclarationVisible(node)) {
-                    if (node.flags & NodeFlags.Export) {
-                        write("export ");
-                    }
-                    write("import ");
-                    emitSourceTextOfNode(node.name);
-                    write(" = ");
-                    if (node.entityName) {
-                        emitSourceTextOfNode(node.entityName);
-                        write(";");
-                    }
-                    else {
-                        write("require(");
-                        emitSourceTextOfNode(node.externalModuleName);
-                        write(");");
-                    }
-                    writeLine();
+                var nodeEmitInfo = {
+                    declaration: node,
+                    outputPos: writer.getTextPos(),
+                    indent: writer.getIndent(),
+                    hasWritten: resolver.isDeclarationVisible(node)
+                };
+                aliasDeclarationEmitInfo.push(nodeEmitInfo);
+                if (nodeEmitInfo.hasWritten) {
+                    writeImportDeclaration(node);
                 }
+            }
+
+            function writeImportDeclaration(node: ImportDeclaration) {
+                // note usage of writer. methods instead of aliases created, just to make sure we are using 
+                // correct writer especially to handle asynchronous alias writing
+                if (node.flags & NodeFlags.Export) {
+                    writer.write("export ");
+                }
+                writer.write("import ");
+                writer.write(getSourceTextOfLocalNode(node.name));
+                writer.write(" = ");
+                if (node.entityName) {
+                    writer.write(getSourceTextOfLocalNode(node.entityName));
+                    writer.write(";");
+                }
+                else {
+                    writer.write("require(");
+                    writer.write(getSourceTextOfLocalNode(node.externalModuleName));
+                    writer.write(");");
+                }
+                writer.writeLine();
             }
 
             function emitModuleDeclaration(node: ModuleDeclaration) {
@@ -2484,7 +2522,19 @@ module ts {
             // TODO(shkamat): Should we not write any declaration file if any of them can produce error, 
             // or should we just not write this file like we are doing now
             if (!reportedDeclarationError) {
-                writeFile(getModuleNameFromFilename(jsFilePath) + ".d.ts", referencePathsOutput + writer.getText());
+                var declarationOutput = referencePathsOutput;
+                var synchronousDeclarationOutput = writer.getText();
+                // apply additions
+                var appliedSyncOutputPos = 0;
+                forEach(aliasDeclarationEmitInfo, aliasEmitInfo => {
+                    if (aliasEmitInfo.asynchronousOutput) {
+                        declarationOutput += synchronousDeclarationOutput.substring(appliedSyncOutputPos, aliasEmitInfo.outputPos);
+                        declarationOutput += aliasEmitInfo.asynchronousOutput;
+                        appliedSyncOutputPos = aliasEmitInfo.outputPos;
+                    }
+                });
+                declarationOutput += synchronousDeclarationOutput.substring(appliedSyncOutputPos);
+                writeFile(getModuleNameFromFilename(jsFilePath) + ".d.ts", declarationOutput);
             }
         }
 
