@@ -3580,12 +3580,12 @@ module ts {
             return filter(errors, e => !e.file);
         }
 
-        function addExtension(filename: string, extension: string): string {
-            return getBaseFilename(filename).indexOf(".") >= 0 ? filename : filename + extension;
+        function hasExtension(filename: string): boolean {
+            return getBaseFilename(filename).indexOf(".") >= 0;
         }
 
         function processRootFile(filename: string, isDefaultLib: boolean) {
-            processSourceFile(normalizePath(addExtension(filename, ".ts")), isDefaultLib);
+            processSourceFile(normalizePath(filename), isDefaultLib);
         }
 
         function processSourceFile(filename: string, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number) {
@@ -3593,11 +3593,18 @@ module ts {
                 var start = refPos;
                 var length = refEnd - refPos;
             }
-            if (!fileExtensionIs(filename, ".ts")) {
-                errors.push(createFileDiagnostic(refFile, start, length, Diagnostics.File_0_must_have_extension_ts_or_d_ts, filename));
+            if (hasExtension(filename)) {
+                if (!fileExtensionIs(filename, ".ts")) {
+                    errors.push(createFileDiagnostic(refFile, start, length, Diagnostics.File_0_must_have_extension_ts_or_d_ts, filename));
+                }
+                else if (!findSourceFile(filename, isDefaultLib, refFile, refPos, refEnd)) {
+                    errors.push(createFileDiagnostic(refFile, start, length, Diagnostics.File_0_not_found, filename));
+                }
             }
-            else if (!findSourceFile(filename, isDefaultLib, refFile, refPos, refEnd)) {
-                errors.push(createFileDiagnostic(refFile, start, length, Diagnostics.File_0_not_found, filename));
+            else {
+                if (!(findSourceFile(filename + ".ts", isDefaultLib, refFile, refPos, refEnd) || findSourceFile(filename + ".d.ts", isDefaultLib, refFile, refPos, refEnd))) {
+                    errors.push(createFileDiagnostic(refFile, start, length, Diagnostics.File_0_not_found, filename + ".ts"));
+                }
             }
         }
 
