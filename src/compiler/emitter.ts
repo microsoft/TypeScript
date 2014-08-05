@@ -22,6 +22,7 @@ module ts {
         var compilerOptions = program.getCompilerOptions();
         var sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap ? [] : undefined;
         var diagnostics: Diagnostic[] = [];
+        var newLine = program.getCompilerHost().getNewLine();
 
         function getSourceFilePathInNewDir(newDirPath: string, sourceFile: SourceFile) {
             var sourceFilePath = getNormalizedPathFromPathCompoments(getNormalizedPathComponents(sourceFile.filename, compilerHost.getCurrentDirectory()));
@@ -126,7 +127,7 @@ module ts {
 
             function writeLine() {
                 if (!lineStart) {
-                    output += sys.newLine;
+                    output += newLine;
                     lineCount++;
                     linePos = output.length;
                     lineStart = true;
@@ -1370,6 +1371,7 @@ module ts {
                 write(" {");
                 scopeEmitStart(node, "constructor");
                 increaseIndent();
+                emitCaptureThisForNodeIfNecessary(node);
                 if (ctor) {
                     emitDefaultValueAssignments(ctor);
                     emitRestParameter(ctor);
@@ -1389,8 +1391,7 @@ module ts {
                         write("_super.apply(this, arguments);");
                         emitEnd(node.baseType);
                     }
-                }
-                emitCaptureThisForNodeIfNecessary(node);
+                }                
                 emitMemberAssignments(node, /*nonstatic*/0);
                 if (ctor) {
                     var statements: Node[] = (<Block>ctor.body).statements;
@@ -2252,7 +2253,7 @@ module ts {
                     compilerHost.getCurrentDirectory(),
                 /*isAbsolutePathAnUrl*/ false);
 
-                referencePathsOutput += "/// <reference path='" + declFileName + "' />" + sys.newLine;
+                referencePathsOutput += "/// <reference path='" + declFileName + "' />" + newLine;
             }
 
             if (root) {

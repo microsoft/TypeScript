@@ -947,7 +947,7 @@
         "category": "Message",
         "code": 6031
     },
-    "File Changed. Compiling.": {
+    "File change detected. Compiling...": {
         "category": "Message",
         "code": 6032
     },
@@ -987,7 +987,7 @@
         "category": "Message",
         "code": 6041
     },
-    "Compile complete. Listening for changed files.": {
+    "Compilation complete. Watching for file changes.": {
         "category": "Message",
         "code": 6042
     },

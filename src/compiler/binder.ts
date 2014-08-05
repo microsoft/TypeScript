@@ -171,8 +171,13 @@ module ts {
             parent = node;
             if (symbolKind & SymbolFlags.IsContainer) {
                 container = node;
-                if (lastContainer) lastContainer.nextContainer = container;
-                lastContainer = container;
+                // If container is not on container list, add it to the list
+                if (lastContainer !== container && !container.nextContainer) {
+                    if (lastContainer) {
+                        lastContainer.nextContainer = container;
+                    }
+                    lastContainer = container;
+                }
             }
             forEachChild(node, bind);
             container = saveContainer;
@@ -247,7 +252,7 @@ module ts {
 
         function bindCatchVariableDeclaration(node: CatchBlock) {
             var symbol = createSymbol(SymbolFlags.Variable, node.variable.text || "__missing");
-            addDeclarationToSymbol(symbol, node.variable, SymbolFlags.Variable);
+            addDeclarationToSymbol(symbol, node, SymbolFlags.Variable);
             var saveParent = parent;
             parent = node;
             forEachChild(node, bind);

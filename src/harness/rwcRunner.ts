@@ -107,12 +107,13 @@ module RWC {
                             catch (e) {
                                 // Leave fileContents undefined;
                             }
-                            return ts.createSourceFile(fileName, fileContents, languageVersion);
+                            return ts.createSourceFile(fileName, fileContents, languageVersion, ts.ByteOrderMark.None);
                         },
                         getDefaultLibFilename: () => libPath,
                         writeFile: (fn, contents) => emitterIOHost.writeFile(fn, contents, false),
                         getCanonicalFileName: ts.getCanonicalFileName,
-                        useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames
+                        useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
+                        getNewLine: () => sys.newLine
                     };
 
                     var resolvedProgram = ts.createProgram(opts.filenames, opts.options, host);

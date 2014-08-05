@@ -88,12 +88,12 @@ module ts {
         return createFileDiagnostic(file, start, length, message, arg0, arg1, arg2);
     }
 
-    export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): Diagnostic {
+    export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain, newLine: string): Diagnostic {
         node = getErrorSpanForNode(node);
         var file = getSourceFileOfNode(node);
         var start = skipTrivia(file.text, node.pos);
         var length = node.end - start;
-        return flattenDiagnosticChain(file, start, length, messageChain);
+        return flattenDiagnosticChain(file, start, length, messageChain, newLine);
     }
 
     export function getErrorSpanForNode(node: Node): Node {
@@ -130,7 +130,7 @@ module ts {
     function isEvalOrArgumentsIdentifier(node: Node): boolean {
         return node.kind === SyntaxKind.Identifier &&
             (<Identifier>node).text &&
-            ((<Identifier>node).text === "eval" || (<Identifier>node).text === "arguments")
+            ((<Identifier>node).text === "eval" || (<Identifier>node).text === "arguments");
     }
 
     /// Should be called only on prologue directives (isPrologueDirective(node) should be true)
@@ -327,6 +327,14 @@ module ts {
         return s.parameters.length > 0 && (s.parameters[s.parameters.length - 1].flags & NodeFlags.Rest) !== 0;
     }
 
+    export function isInAmbientContext(node: Node): boolean {
+        while (node) {
+            if (node.flags & (NodeFlags.Ambient | NodeFlags.DeclarationFile)) return true;
+            node = node.parent;
+        }
+        return false;
+    }
+
     enum ParsingContext {
         SourceElements,          // Elements in source file
         ModuleElements,          // Elements in module declaration
@@ -409,7 +417,7 @@ module ts {
         nodeIsNestedInLabel(label: Identifier, requireIterationStatement: boolean, stopAtFunctionBoundary: boolean): ControlBlockContext;
     }
 
-    export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget): SourceFile {
+    export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, byteOrderMark: ByteOrderMark, version: number = 0, isOpen: boolean = false): SourceFile {
         var file: SourceFile;
         var scanner: Scanner;
         var token: SyntaxKind;
@@ -1255,7 +1263,7 @@ module ts {
         function checkIndexSignature(node: SignatureDeclaration, indexerStart: number, indexerLength: number): void {
             var parameter = node.parameters[0];
             if (node.parameters.length !== 1) {
-                var arityDiagnostic = Diagnostics.An_index_signature_must_have_exactly_one_parameter
+                var arityDiagnostic = Diagnostics.An_index_signature_must_have_exactly_one_parameter;
                 if (parameter) {
                     grammarErrorOnNode(parameter.name, arityDiagnostic);
                 }
@@ -1624,7 +1632,12 @@ module ts {
             parameter.name = identifier;
             finishNode(parameter);
 
-            var signature = <ParsedSignature> { parameters: [parameter] };
+            var parameters = <NodeArray<ParameterDeclaration>>[];
+            parameters.push(parameter);
+            parameters.pos = parameter.pos;
+            parameters.end = parameter.end;
+
+            var signature = <ParsedSignature> { parameters: parameters };
 
             return parseArrowExpressionTail(identifier.pos, signature, /*noIn:*/ false);
         }
@@ -1760,7 +1773,7 @@ module ts {
             var body: Node;
 
             if (token === SyntaxKind.OpenBraceToken) {
-                body = parseBody(/* ignoreMissingOpenBrace */ false)
+                body = parseBody(/* ignoreMissingOpenBrace */ false);
             }
             else if (isStatement(/* inErrorRecovery */ true) && !isExpressionStatement() && token !== SyntaxKind.FunctionKeyword) {
                 // Check if we got a plain statement (i.e. no expression-statements, no functions expressions/declarations)
@@ -2468,7 +2481,7 @@ module ts {
             if (isInStrictMode) {
                 // Strict mode code may not include a WithStatement. The occurrence of a WithStatement in such 
                 // a context is an 
-                grammarErrorAtPos(startPos, endPos - startPos, Diagnostics.with_statements_are_not_allowed_in_strict_mode) 
+                grammarErrorAtPos(startPos, endPos - startPos, Diagnostics.with_statements_are_not_allowed_in_strict_mode);
             }
             return node;
         }
@@ -2652,6 +2665,10 @@ module ts {
                 case SyntaxKind.ThrowKeyword:
                 case SyntaxKind.TryKeyword:
                 case SyntaxKind.DebuggerKeyword:
+                // 'catch' and 'finally' do not actually indicate that the code is part of a statement,
+                // however, we say they are here so that we may gracefully parse them and error later.
+                case SyntaxKind.CatchKeyword:
+                case SyntaxKind.FinallyKeyword:
                     return true;
                 case SyntaxKind.InterfaceKeyword:
                 case SyntaxKind.ClassKeyword:
@@ -2659,13 +2676,17 @@ module ts {
                 case SyntaxKind.EnumKeyword:
                     // When followed by an identifier, these do not start a statement but might
                     // instead be following declarations
-                    if (isDeclaration()) return false;
+                    if (isDeclaration()) {
+                        return false;
+                    }
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.PrivateKeyword:
                 case SyntaxKind.StaticKeyword:
                     // When followed by an identifier or keyword, these do not start a statement but
                     // might instead be following type members
-                    if (lookAhead(() => nextToken() >= SyntaxKind.Identifier)) return false;
+                    if (lookAhead(() => nextToken() >= SyntaxKind.Identifier)) {
+                        return false;
+                    }
                 default:
                     return isExpression();
             }
@@ -2702,6 +2723,9 @@ module ts {
                 case SyntaxKind.ThrowKeyword:
                     return parseThrowStatement();
                 case SyntaxKind.TryKeyword:
+                // Include the next two for error recovery.
+                case SyntaxKind.CatchKeyword:
+                case SyntaxKind.FinallyKeyword:
                     return parseTryStatement();
                 case SyntaxKind.DebuggerKeyword:
                     return parseDebuggerStatement();
@@ -2971,7 +2995,7 @@ module ts {
             var lastStaticModifierStart: number;
             var lastStaticModifierLength: number;
             var lastDeclareModifierStart: number;
-            var lastDeclareModifierLength: number
+            var lastDeclareModifierLength: number;
             var lastPrivateModifierStart: number;
             var lastPrivateModifierLength: number;
 
@@ -3267,7 +3291,7 @@ module ts {
                         grammarErrorOnNode(s, Diagnostics.An_export_assignment_cannot_be_used_in_an_internal_module);
                     }
                     else if (s.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>s).externalModuleName) {
-                        grammarErrorOnNode(s, Diagnostics.Import_declarations_in_an_internal_module_cannot_reference_an_external_module)
+                        grammarErrorOnNode(s, Diagnostics.Import_declarations_in_an_internal_module_cannot_reference_an_external_module);
                     }
                 });
             }
@@ -3469,7 +3493,7 @@ module ts {
                 }
                 else {
                     var amdDependencyRegEx = /^\/\/\/\s*<amd-dependency\s+path\s*=\s*('|")(.+?)\1/gim;
-                    var amdDependencyMatchResult = amdDependencyRegEx.exec(comment)
+                    var amdDependencyMatchResult = amdDependencyRegEx.exec(comment);
                     if (amdDependencyMatchResult) {
                         amdDependencies.push(amdDependencyMatchResult[2]);
                     }
@@ -3510,6 +3534,10 @@ module ts {
         file.externalModuleIndicator = getExternalModuleIndicator();
         file.nodeCount = nodeCount;
         file.identifierCount = identifierCount;
+        file.version = version;
+        file.byteOrderMark = byteOrderMark;
+        file.isOpen = isOpen;
+        file.languageVersion = languageVersion;
         return file;
     }
 
@@ -3622,7 +3650,7 @@ module ts {
         function processImportedModules(file: SourceFile, basePath: string) {
             forEach(file.statements, node => {
                 if (node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).externalModuleName) {
-                    var nameLiteral = (<ImportDeclaration>node).externalModuleName
+                    var nameLiteral = (<ImportDeclaration>node).externalModuleName;
                     var moduleName = nameLiteral.text;
                     if (moduleName) {
                         var searchPath = basePath;
@@ -3661,7 +3689,7 @@ module ts {
                                 }
                             }
                         }
-                    })
+                    });
                 }
             });
 

@@ -1,8 +1,0 @@
-==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser596700.ts (3 errors) ====
-    var regex2 = /[a-z/]$/i;
-                       ~
-!!! ',' expected.
-                         ~
-!!! '=' expected.
-                          ~
-!!! Cannot find name 'i'.

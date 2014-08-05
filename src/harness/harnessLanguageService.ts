@@ -1,10 +1,13 @@
-﻿module Harness.LanguageService {
+﻿/// <reference path='..\services\services.ts' />
+/// <reference path='..\services\shims.ts' />
+
+module Harness.LanguageService {
     export class ScriptInfo {
         public version: number = 1;
         public editRanges: { length: number; textChangeRange: TypeScript.TextChangeRange; }[] = [];
         public lineMap: TypeScript.LineMap = null;
 
-        constructor(public fileName: string, public content: string, public isOpen = true, public byteOrderMark: TypeScript.ByteOrderMark = TypeScript.ByteOrderMark.None) {
+        constructor(public fileName: string, public content: string, public isOpen = true, public byteOrderMark: ts.ByteOrderMark = ts.ByteOrderMark.None) {
             this.setContent(content);
         }
 
@@ -51,7 +54,7 @@
         }
     }
 
-    class ScriptSnapshotShim implements TypeScript.Services.IScriptSnapshotShim {
+    class ScriptSnapshotShim implements ts.ScriptSnapshotShim {
         private lineMap: TypeScript.LineMap = null;
         private textSnapshot: string;
         private version: number;
@@ -77,9 +80,8 @@
             return JSON.stringify(this.lineMap.lineStarts());
         }
 
-        public getChangeRange(oldScript: TypeScript.Services.IScriptSnapshotShim): string {
-            var oldShim = <ScriptSnapshotShim>oldScript;
-            var range = this.scriptInfo.getTextChangeRangeBetweenVersions(oldShim.version, this.version);
+        public getTextChangeRangeSinceVersion(scriptVersion: number): string {
+            var range = this.scriptInfo.getTextChangeRangeBetweenVersions(scriptVersion, this.version);
             if (range === null) {
                 return null;
             }
@@ -88,14 +90,90 @@
         }
     }
 
-    export class TypeScriptLS implements TypeScript.Services.ILanguageServiceShimHost {
-        IO = TypeScript.Environment ? TypeScript.Environment : Network.getEnvironment();
-        private ls: TypeScript.Services.ILanguageServiceShim = null;
+    class CancellationToken {
+        public static None: CancellationToken = new CancellationToken(null)
+
+        constructor(private cancellationToken: ts.CancellationToken) {
+        }
+
+        public isCancellationRequested() {
+            return this.cancellationToken && this.cancellationToken.isCancellationRequested();
+        }
+    }
+
+    class ScriptSnapshotShimAdapter implements TypeScript.IScriptSnapshot {
+        private lineStartPositions: number[] = null;
+        constructor(private scriptSnapshotShim: ts.ScriptSnapshotShim) {}
+        getText(start: number, end: number): string {return this.scriptSnapshotShim.getText(start, end);}
+        getLength(): number {return this.scriptSnapshotShim.getLength();}
+        getLineStartPositions(): number[] { return JSON.parse(this.scriptSnapshotShim.getLineStartPositions()); }
+        getTextChangeRangeSinceVersion(scriptVersion: number): TypeScript.TextChangeRange {
+            var encoded = this.scriptSnapshotShim.getTextChangeRangeSinceVersion(scriptVersion);
+            if (encoded == null) {
+                return null;
+            }
+
+            var decoded: { span: { start: number; length: number; }; newLength: number; } = JSON.parse(encoded);
+            return new TypeScript.TextChangeRange(
+                new TypeScript.TextSpan(decoded.span.start, decoded.span.length), decoded.newLength);
+        }
+    }
+
+    class LanguageServiceShimHostAdapter implements ts.LanguageServiceHost {
+        constructor(private shimHost: ts.LanguageServiceShimHost) { }
+        information(): boolean { return this.shimHost.information(); }
+        debug(): boolean { return this.shimHost.debug(); }
+        warning(): boolean { return this.shimHost.warning();}
+        error(): boolean { return this.shimHost.error(); }
+        fatal(): boolean { return this.shimHost.fatal(); }
+        log(s: string): void { this.shimHost.log(s); }
+        getCompilationSettings(): ts.CompilerOptions { return JSON.parse(this.shimHost.getCompilationSettings()); }
+        getScriptFileNames(): string[] { return JSON.parse(this.shimHost.getScriptFileNames());}
+        getScriptSnapshot(fileName: string): TypeScript.IScriptSnapshot { return new ScriptSnapshotShimAdapter(this.shimHost.getScriptSnapshot(fileName));}
+        getScriptVersion(fileName: string): number { return this.shimHost.getScriptVersion(fileName);}
+        getScriptIsOpen(fileName: string): boolean { return this.shimHost.getScriptIsOpen(fileName); }
+        getScriptByteOrderMark(fileName: string): ts.ByteOrderMark { return this.shimHost.getScriptByteOrderMark(fileName);}
+        getLocalizedDiagnosticMessages(): any { JSON.parse(this.shimHost.getLocalizedDiagnosticMessages());}
+        getCancellationToken(): ts.CancellationToken { return this.shimHost.getCancellationToken(); }
+    }
+
+    export class NonCachingDocumentRegistry implements ts.DocumentRegistry {
+
+        public static Instance: ts.DocumentRegistry = new NonCachingDocumentRegistry();
+
+        public acquireDocument(
+            fileName: string,
+            compilationSettings: ts.CompilerOptions,
+            scriptSnapshot: TypeScript.IScriptSnapshot,
+            byteOrderMark: ts.ByteOrderMark,
+            version: number,
+            isOpen: boolean): ts.SourceFile {
+            return ts.createSourceFile(fileName, scriptSnapshot.getText(0, scriptSnapshot.getLength()), compilationSettings.target, byteOrderMark, version, isOpen);
+        }
+
+        public updateDocument(
+            document: ts.SourceFile,
+            fileName: string,
+            compilationSettings: ts.CompilerOptions,
+            scriptSnapshot: TypeScript.IScriptSnapshot,
+            version: number,
+            isOpen: boolean,
+            textChangeRange: TypeScript.TextChangeRange
+            ): ts.SourceFile {
+            return document.update(scriptSnapshot, version, isOpen, textChangeRange);
+        }
+
+        public releaseDocument(fileName: string, compilationSettings: ts.CompilerOptions): void {
+            // no op since this class doesn't cache anything
+        }
+    }
+    export class TypeScriptLS implements ts.LanguageServiceShimHost {
+        private ls: ts.LanguageServiceShim = null;
         public newLS: ts.LanguageService;
 
-        private fileNameToScript = new TypeScript.StringHashTable<ScriptInfo>();
+        private fileNameToScript: ts.Map<ScriptInfo> = {};
 
-        constructor(private cancellationToken: TypeScript.ICancellationToken = TypeScript.CancellationToken.None) {
+        constructor(private cancellationToken: ts.CancellationToken = CancellationToken.None) {
         }
 
         public addDefaultLibrary() {
@@ -107,17 +185,16 @@
         }
 
         public addFile(fileName: string) {
-            var code = Harness.Environment.readFile(fileName);
+            var code = Harness.IO.readFile(fileName);
             this.addScript(fileName, code);
         }
 
         private getScriptInfo(fileName: string): ScriptInfo {
-            return this.fileNameToScript.lookup(fileName);
+            return this.fileNameToScript[fileName];
         }
 
         public addScript(fileName: string, content: string) {
-            var script = new ScriptInfo(fileName, content);
-            this.fileNameToScript.add(fileName, script);
+            this.fileNameToScript[fileName] = new ScriptInfo(fileName, content);
         }
 
         public updateScript(fileName: string, content: string) {
@@ -155,91 +232,64 @@
         }
 
         //////////////////////////////////////////////////////////////////////
-        // ILanguageServiceShimHost implementation
+        // LanguageServiceShimHost implementation
         //
 
         /// Returns json for Tools.CompilationSettings
         public getCompilationSettings(): string {
-            return ""; // i.e. default settings
+            return JSON.stringify({}); // i.e. default settings
         }
 
-        public getCancellationToken(): TypeScript.ICancellationToken {
+        public getCancellationToken(): ts.CancellationToken {
             return this.cancellationToken;
         }
 
         public getScriptFileNames(): string {
-            return JSON.stringify(this.fileNameToScript.getAllKeys());
+            var fileNames: string[] = [];
+            ts.forEachKey(this.fileNameToScript, (fileName) => { fileNames.push(fileName); });
+            return JSON.stringify(fileNames);
         }
 
-        public getScriptSnapshot(fileName: string): TypeScript.Services.IScriptSnapshotShim {
+        public getScriptSnapshot(fileName: string): ts.ScriptSnapshotShim {
             return new ScriptSnapshotShim(this.getScriptInfo(fileName));
         }
 
-        public getScriptVersion(fileName: string): string {
-            return this.getScriptInfo(fileName).version.toString();
+        public getScriptVersion(fileName: string): number {
+            return this.getScriptInfo(fileName).version;
         }
 
         public getScriptIsOpen(fileName: string): boolean {
             return this.getScriptInfo(fileName).isOpen;
         }
 
-        public getScriptByteOrderMark(fileName: string): TypeScript.ByteOrderMark {
+        public getScriptByteOrderMark(fileName: string): ts.ByteOrderMark {
             return this.getScriptInfo(fileName).byteOrderMark;
         }
 
-        public getDiagnosticsObject(): TypeScript.Services.ILanguageServicesDiagnostics {
-            return new LanguageServicesDiagnostics("");
-        }
-
         public getLocalizedDiagnosticMessages(): string {
-            return "";
-        }
-
-        public fileExists(s: string) {
-            return this.IO.fileExists(s);
-        }
-
-        public directoryExists(s: string) {
-            return this.IO.directoryExists(s);
-        }
-
-        public resolveRelativePath(path: string, directory: string): string {
-            if (TypeScript.isRooted(path) || !directory) {
-                return this.IO.absolutePath(path);
-            }
-            else {
-                return this.IO.absolutePath(TypeScript.IOUtils.combine(directory, path));
-            }
-        }
-
-        public getParentDirectory(path: string): string {
-            return this.IO.directoryName(path);
+            return JSON.stringify({});
         }
 
         /** Return a new instance of the language service shim, up-to-date wrt to typecheck.
          *  To access the non-shim (i.e. actual) language service, use the "ls.languageService" property.
          */
-        public getLanguageService(): TypeScript.Services.ILanguageServiceShim {
+        public getLanguageService(): ts.LanguageServiceShim {
             var ls = new TypeScript.Services.TypeScriptServicesFactory().createLanguageServiceShim(this);
             this.ls = ls;
-            var hostAdapter = new ts.LanguageServiceShimHostAdapter(this);
-            this.newLS = ts.createLanguageService(hostAdapter);
+            var hostAdapter = new LanguageServiceShimHostAdapter(this);
+
+            this.newLS = ts.createLanguageService(hostAdapter, NonCachingDocumentRegistry.Instance);
             return ls;
         }
 
         /** Parse file given its source text */
         public parseSourceText(fileName: string, sourceText: TypeScript.IScriptSnapshot): TypeScript.SourceUnitSyntax {
-            var compilationSettings = new TypeScript.CompilationSettings();
-            compilationSettings.codeGenTarget = TypeScript.LanguageVersion.EcmaScript5;
-
-            var settings = TypeScript.ImmutableCompilationSettings.fromCompilationSettings(compilationSettings);
-            var parseOptions = settings.codeGenTarget();
-            return TypeScript.Parser.parse(fileName, TypeScript.SimpleText.fromScriptSnapshot(sourceText), parseOptions, TypeScript.isDTSFile(fileName)).sourceUnit();
+            return TypeScript.Parser.parse(fileName, TypeScript.SimpleText.fromScriptSnapshot(sourceText), ts.ScriptTarget.ES5, TypeScript.isDTSFile(fileName)).sourceUnit();
         }
 
         /** Parse a file on disk given its fileName */
         public parseFile(fileName: string) {
-            var sourceText = TypeScript.ScriptSnapshot.fromString(this.IO.readFile(fileName, /*codepage:*/ null).contents)
+            var sourceText = TypeScript.ScriptSnapshot.fromString(Harness.IO.readFile(fileName))
             return this.parseSourceText(fileName, sourceText);
         }
 
@@ -248,7 +298,7 @@
          * @param col 1 based index
         */
         public lineColToPosition(fileName: string, line: number, col: number): number {
-            var script: ScriptInfo = this.fileNameToScript.lookup(fileName);
+            var script: ScriptInfo = this.fileNameToScript[fileName];
             assert.isNotNull(script);
             assert.isTrue(line >= 1);
             assert.isTrue(col >= 1);
@@ -261,7 +311,7 @@
          * @param col 0 based index
         */
         public positionToZeroBasedLineCol(fileName: string, position: number): TypeScript.ILineAndCharacter {
-            var script: ScriptInfo = this.fileNameToScript.lookup(fileName);
+            var script: ScriptInfo = this.fileNameToScript[fileName];
             assert.isNotNull(script);
 
             var result = script.lineMap.getLineAndCharacterFromPosition(position);
@@ -272,10 +322,10 @@
         }
 
         /** Verify that applying edits to sourceFileName result in the content of the file baselineFileName */
-        public checkEdits(sourceFileName: string, baselineFileName: string, edits: TypeScript.Services.TextChange[]) {
-            var script = Utils.readFile(sourceFileName);
-            var formattedScript = this.applyEdits(script.contents, edits);
-            var baseline = Utils.readFile(baselineFileName).contents;
+        public checkEdits(sourceFileName: string, baselineFileName: string, edits: ts.TextEdit[]) {
+            var script = Harness.IO.readFile(sourceFileName);
+            var formattedScript = this.applyEdits(script, edits);
+            var baseline = Harness.IO.readFile(baselineFileName);
 
             function noDiff(text1: string, text2: string) {
                 text1 = text1.replace(/^\s+|\s+$/g, "").replace(/\r\n?/g, "\n");
@@ -301,26 +351,26 @@
 
 
         /** Apply an array of text edits to a string, and return the resulting string. */
-        public applyEdits(content: string, edits: TypeScript.Services.TextChange[]): string {
+        public applyEdits(content: string, edits: ts.TextEdit[]): string {
             var result = content;
             edits = this.normalizeEdits(edits);
 
             for (var i = edits.length - 1; i >= 0; i--) {
                 var edit = edits[i];
-                var prefix = result.substring(0, edit.span.start());
-                var middle = edit.newText;
-                var suffix = result.substring(edit.span.end());
+                var prefix = result.substring(0, edit.minChar);
+                var middle = edit.text;
+                var suffix = result.substring(edit.limChar);
                 result = prefix + middle + suffix;
             }
             return result;
         }
 
         /** Normalize an array of edits by removing overlapping entries and sorting entries on the minChar position. */
-        private normalizeEdits(edits: TypeScript.Services.TextChange[]): TypeScript.Services.TextChange[] {
-            var result: TypeScript.Services.TextChange[] = [];
+        private normalizeEdits(edits: ts.TextEdit[]): ts.TextEdit[] {
+            var result: ts.TextEdit[] = [];
 
-            function mapEdits(edits: TypeScript.Services.TextChange[]): { edit: TypeScript.Services.TextChange; index: number; }[] {
-                var result: { edit: TypeScript.Services.TextChange; index: number; }[] = [];
+            function mapEdits(edits: ts.TextEdit[]): { edit: ts.TextEdit; index: number; }[] {
+                var result: { edit: ts.TextEdit; index: number; }[] = [];
                 for (var i = 0; i < edits.length; i++) {
                     result.push({ edit: edits[i], index: i });
                 }
@@ -328,7 +378,7 @@
             }
 
             var temp = mapEdits(edits).sort(function (a, b) {
-                var result = a.edit.span.start() - b.edit.span.start();
+                var result = a.edit.minChar - b.edit.limChar;
                 if (result === 0)
                     result = a.index - b.index;
                 return result;
@@ -347,7 +397,7 @@
                 }
                 var nextEdit = temp[next].edit;
 
-                var gap = nextEdit.span.start() - currentEdit.span.end();
+                var gap = nextEdit.minChar - currentEdit.limChar;
 
                 // non-overlapping edits
                 if (gap >= 0) {
@@ -359,7 +409,7 @@
 
                 // overlapping edits: for now, we only support ignoring an next edit 
                 // entirely contained in the current edit.
-                if (currentEdit.span.end() >= nextEdit.span.end()) {
+                if (currentEdit.minChar >= nextEdit.limChar) {
                     next++;
                     continue;
                 }
@@ -370,16 +420,6 @@
 
             return result;
         }
-    }
-
-    export class LanguageServicesDiagnostics implements TypeScript.Services.ILanguageServicesDiagnostics {
-
-        constructor(private destination: string) { }
-
-        public log(content: string): void {
-            //Imitates the LanguageServicesDiagnostics object when not in Visual Studio
-        }
-
     }
 }
  

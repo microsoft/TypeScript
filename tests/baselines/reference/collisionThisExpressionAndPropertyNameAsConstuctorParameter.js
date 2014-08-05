@@ -47,8 +47,8 @@ var Foo2 = (function () {
 })();
 var Foo3 = (function () {
     function Foo3(_this) {
-        this._this = _this;
         var _this = this;
+        this._this = _this;
         var lambda = function () {
             return function (x) { return _this; };
         };
@@ -66,8 +66,8 @@ var Foo4 = (function () {
 })();
 var Foo5 = (function () {
     function Foo5(_this) {
-        this._this = _this;
         var _this = this;
+        this._this = _this;
         var lambda = function () {
             return function (x) { return _this; };
         };
