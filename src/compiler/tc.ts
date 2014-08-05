@@ -375,7 +375,7 @@ module ts {
 
         // Sort our options by their names, (e.g. "--noImplicitAny" comes before "--watch")
         var optsList = optionDeclarations.slice();
-        optsList.sort((a, b) => compareValues(a.name.toLowerCase(), b.name.toLowerCase()));
+        optsList.sort((a, b) => compareValues<string>(a.name.toLowerCase(), b.name.toLowerCase()));
 
         // We want our descriptions to align at the same column in our output,
         // so we keep track of the longest option usage string.
