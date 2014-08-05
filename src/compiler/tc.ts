@@ -186,33 +186,28 @@ module ts {
     }
 
     export function executeCommandLine(args: string[]): void {
-        var exitCode = 0;
         var commandLine = parseCommandLine(args);
 
         if (commandLine.options.locale) {
             validateLocaleAndSetLanguage(commandLine.options.locale, commandLine.errors);
         }
 
-        // Report all errors at this point, even if there are none.
+        // If there are any errors due to command line parsing and/or
+        // setting up localization, report them and quit.
         if (commandLine.errors.length > 0) {
             reportDiagnostics(commandLine.errors);
-            exitCode = 1;
+            sys.exit(1);
         }
 
         if (commandLine.options.version) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, version));
-            sys.exit(exitCode);
+            sys.exit(0);
         }
 
         if (commandLine.options.help || commandLine.filenames.length === 0) {
             printVersion();
             printHelp();
-            sys.exit(exitCode);
-        }
-
-        // If we encountered an error before we even started compiling, just bail out.
-        if (exitCode !== 0) {
-            sys.exit(exitCode);
+            sys.exit(0);
         }
 
         var defaultCompilerHost = createCompilerHost(commandLine.options);
@@ -411,18 +406,14 @@ module ts {
             descriptionColumn.push(getDiagnosticText(option.description));
 
             // Set the new margin for the description column if necessary.
-            if (usageText.length > marginLength) {
-                marginLength = usageText.length;
-            }
+            marginLength = Math.max(usageText.length, marginLength);
         }
 
         // Special case that can't fit in the loop.
         var usageText = " @<" + getDiagnosticText(Diagnostics.file) + ">";
         usageColumn.push(usageText);
         descriptionColumn.push(getDiagnosticText(Diagnostics.Insert_command_line_options_and_files_from_a_file));
-        if (usageText.length > marginLength) {
-            marginLength = usageText.length;
-        }
+        marginLength = Math.max(usageText.length, marginLength);
 
         // Print out each row, aligning all the descriptions on the same column.
         for (var i = 0; i < usageColumn.length; i++) {
