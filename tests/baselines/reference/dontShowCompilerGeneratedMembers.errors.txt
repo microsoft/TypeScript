@@ -8,9 +8,9 @@
         ~
 !!! Type parameter list cannot be empty.
          ~
-!!! '(' expected.
-         ~
 !!! Type parameter declaration expected.
+         ~
+!!! '(' expected.
     };
     ~
 !!! Expression expected.
