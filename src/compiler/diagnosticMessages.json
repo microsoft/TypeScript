@@ -934,10 +934,7 @@
         "category": "Message",
         "code": 6027
     },
-    "Insert command line options and files from a file.": {
-        "category": "Message",
-        "code": 6028
-    },
+
     "Version {0}": {
         "category": "Message",
         "code": 6029
