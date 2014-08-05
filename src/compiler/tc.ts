@@ -197,32 +197,33 @@ module ts {
         // setting up localization, report them and quit.
         if (commandLine.errors.length > 0) {
             reportDiagnostics(commandLine.errors);
-            sys.exit(1);
+            return sys.exit(1);
         }
 
         if (commandLine.options.version) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, version));
-            sys.exit(0);
+            return sys.exit(0);
         }
 
         if (commandLine.options.help || commandLine.filenames.length === 0) {
             printVersion();
             printHelp();
-            sys.exit(0);
+            return sys.exit(0);
         }
 
         var defaultCompilerHost = createCompilerHost(commandLine.options);
-
+        
         if (commandLine.options.watch) {
             if (!sys.watchFile) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"));
-                sys.exit(1);
+                return sys.exit(1);
             }
 
             watchProgram(commandLine, defaultCompilerHost);
         }
         else {
-            sys.exit(compile(commandLine, defaultCompilerHost).errors.length > 0 ? 1 : 0);
+            var result = compile(commandLine, defaultCompilerHost).errors.length > 0 ? 1 : 0;
+            return sys.exit(result);
         }
     }
 
