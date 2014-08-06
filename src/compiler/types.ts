@@ -613,6 +613,7 @@ module ts {
 
     export interface TextWriter {
         write(s: string): void;
+        writeSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
         writeLine(): void;
         increaseIndent(): void;
         decreaseIndent(): void;
@@ -624,6 +625,18 @@ module ts {
 
         /** writes Array<T> instead T[]  */
         WriteArrayAsGenericType     = 0x00000001,  // Declarations
+    }
+
+    export enum SymbolAccessibility {
+        Accessible,
+        NotAccessible,
+        CannotBeNamed
+    }
+
+    export interface SymbolAccessiblityResult {
+        accessibility: SymbolAccessibility;
+        errorSymbolName?: string // Optional symbol name that results in error
+        errorModuleName?: string // If the symbol is not visibile from module, module's name
     }
 
     export interface EmitResolver {
@@ -641,6 +654,8 @@ module ts {
         isImplementationOfOverload(node: FunctionDeclaration): boolean;
         writeTypeAtLocation(location: Node, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter): void;
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter): void;
+        writeSymbol(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags, writer: TextWriter): void;
+        isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
     }
 
     export enum SymbolFlags {
@@ -964,8 +979,11 @@ module ts {
 
     export interface CommandLineOption {
         name: string;
-        type: any;
-        error?: DiagnosticMessage;
+        type: any;                          // "string", "number", "boolean", or an object literal mapping named values to actual values
+        shortName?: string;                 // A short pneumonic for convenience - for instance, 'h' can be used in place of 'help'.
+        description?: DiagnosticMessage;    // The message describing what the command line switch does
+        paramName?: DiagnosticMessage;      // The name to be used for a non-boolean option's parameter.
+        error?: DiagnosticMessage;          // The error given when the argument does not fit a customized 'type'.
     }
 
     export enum CharacterCodes {

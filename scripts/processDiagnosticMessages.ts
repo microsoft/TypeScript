@@ -39,7 +39,7 @@ function main(): void {
 function buildUniqueNameMap(names: string[]): IIndexable<string> {
     var nameMap: IIndexable<string> = {};
 
-    var uniqueNames = NameGenerator.ensureUniqueness(names, /*isFixed */ undefined, /* isCaseSensitive */ false);
+    var uniqueNames = NameGenerator.ensureUniqueness(names, /* isCaseSensitive */ false, /* isFixed */ undefined);
 
     for (var i = 0; i < names.length; i++) {
         nameMap[names[i]] = uniqueNames[i];
@@ -94,17 +94,17 @@ function convertPropertyName(origName: string): string {
 }
 
 module NameGenerator {
-    export function ensureUniqueness(
-        names: string[],
-        isFixed: boolean[]= names.map(() => false),
-        isCaseSensitive: boolean = true): string[] {
+    export function ensureUniqueness(names: string[], isCaseSensitive: boolean, isFixed?: boolean[]): string[]{
+        if (!isFixed) {
+            isFixed = names.map(() => false)
+        }
 
-        var names = names.map(x => x);
-        ensureUniquenessInPlace(names, isFixed, isCaseSensitive);
+        var names = names.slice();
+        ensureUniquenessInPlace(names, isCaseSensitive, isFixed);
         return names;
     }
 
-    function ensureUniquenessInPlace(names: string[], isFixed: boolean[], isCaseSensitive: boolean): void {
+    function ensureUniquenessInPlace(names: string[], isCaseSensitive: boolean, isFixed: boolean[]): void {
         for (var i = 0; i < names.length; i++) {
             var name = names[i];
             var collisionIndices = Utilities.collectMatchingIndices(name, names, isCaseSensitive);
@@ -131,9 +131,12 @@ module NameGenerator {
             }
 
             while (true) {
-                var newName = name + suffix++;
+                var newName = name + suffix;
+                suffix++;
 
-                if (proposedNames.some((name) => Utilities.stringEquals(name, newName, isCaseSensitive))) {
+                // Check if we've synthesized a unique name, and if so
+                // replace the conflicting name with the new one.
+                if (!proposedNames.some(name => Utilities.stringEquals(name, newName, isCaseSensitive))) {
                     proposedNames[collisionIndex] = newName;
                     break;
                 }
@@ -144,7 +147,7 @@ module NameGenerator {
 
 module Utilities {
     /// Return a list of all indices where a string occurs.
-    export function collectMatchingIndices(name: string, proposedNames: string[], isCaseSensitive: boolean = true): number[] {
+    export function collectMatchingIndices(name: string, proposedNames: string[], isCaseSensitive: boolean): number[] {
         var matchingIndices: number[] = [];
 
         for (var i = 0; i < proposedNames.length; i++) {
@@ -156,8 +159,8 @@ module Utilities {
         return matchingIndices;
     }
 
-    export function stringEquals(s1: string, s2: string, caseSensitive: boolean = true): boolean {
-        if (!caseSensitive) {
+    export function stringEquals(s1: string, s2: string, caseSensitive: boolean): boolean {
+        if (caseSensitive) {
             s1 = s1.toLowerCase();
             s2 = s2.toLowerCase();
         }
