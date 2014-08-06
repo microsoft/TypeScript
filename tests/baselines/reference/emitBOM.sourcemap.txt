@@ -1,19 +1,19 @@
 ===================================================================
-JsFile: generateBOM.js
-mapUrl: generateBOM.js.map
+JsFile: emitBOM.js
+mapUrl: emitBOM.js.map
 sourceRoot: 
-sources: generateBOM.ts
+sources: emitBOM.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/generateBOM.js
-sourceFile:generateBOM.ts
+emittedFile:tests/cases/compiler/emitBOM.js
+sourceFile:emitBOM.ts
 -------------------------------------------------------------------
 >>>var x;
 1 >
 2 >^^^^
 3 >    ^
 4 >     ^
-5 >      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >// JS and d.ts output should have a BOM but not the sourcemap
   >
@@ -25,4 +25,4 @@ sourceFile:generateBOM.ts
 3 >Emitted(1, 6) Source(3, 6) + SourceIndex(0)
 4 >Emitted(1, 7) Source(3, 7) + SourceIndex(0)
 ---
->>>//# sourceMappingURL=generateBOM.js.map
+>>>//# sourceMappingURL=emitBOM.js.map
