@@ -14,6 +14,7 @@
     "emittedFiles": [
         "m1.js",
         "m1.d.ts",
-        "test.js"
+        "test.js",
+        "test.d.ts"
     ]
 }

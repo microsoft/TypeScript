@@ -15,3 +15,15 @@ x.foo();
 //// [internalAliasUninitializedModuleInsideTopLevelModuleWithoutExport.js]
 exports.x;
 exports.x.foo();
+
+
+//// [internalAliasUninitializedModuleInsideTopLevelModuleWithoutExport.d.ts]
+export declare module a {
+    module b {
+        interface I {
+            foo(): any;
+        }
+    }
+}
+import b = a.b;
+export declare var x: b.I;

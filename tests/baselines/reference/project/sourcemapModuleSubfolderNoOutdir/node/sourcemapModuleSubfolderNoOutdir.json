@@ -17,6 +17,7 @@
         "ref/m1.js",
         "ref/m1.d.ts",
         "test.js.map",
-        "test.js"
+        "test.js",
+        "test.d.ts"
     ]
 }

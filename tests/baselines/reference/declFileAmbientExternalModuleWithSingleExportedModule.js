@@ -30,3 +30,27 @@ declare module "SubModule" {
         }
     }
 }
+//// [declFileAmbientExternalModuleWithSingleExportedModule_1.d.ts]
+/// <reference path='declFileAmbientExternalModuleWithSingleExportedModule_0.d.ts' />
+import SubModule = require('SubModule');
+export declare var x: SubModule.m.m3.c;
+
+
+//// [DtsFileErrors]
+
+
+==== tests/cases/compiler/declFileAmbientExternalModuleWithSingleExportedModule_1.d.ts (1 errors) ====
+    /// <reference path='declFileAmbientExternalModuleWithSingleExportedModule_0.d.ts' />
+    import SubModule = require('SubModule');
+    export declare var x: SubModule.m.m3.c;
+                          ~~~~~~~~~~~~~~~~
+!!! Module '"SubModule".m.m3' has no exported member 'c'.
+    
+==== tests/cases/compiler/declFileAmbientExternalModuleWithSingleExportedModule_0.d.ts (0 errors) ====
+    declare module "SubModule" {
+        module m {
+            module m3 {
+            }
+        }
+    }
+    

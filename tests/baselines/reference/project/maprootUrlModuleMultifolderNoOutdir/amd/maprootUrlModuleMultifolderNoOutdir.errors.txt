@@ -1,2 +1,0 @@
-test.ts(13,12): Exported variable 'a2' has or is using name 'm1.m1_c1' from private module 'm1'.
-test.ts(14,12): Exported variable 'a3' has or is using name 'm2.m2_c1' from private module 'm2'.

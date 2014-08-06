@@ -29,3 +29,16 @@ var c;
     var b = a.b;
     c.x = new b.c();
 })(c || (c = {}));
+
+
+//// [internalAliasInitializedModule.d.ts]
+declare module a {
+    module b {
+        class c {
+        }
+    }
+}
+declare module c {
+    import b = a.b;
+    var x: b.c;
+}

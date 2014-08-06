@@ -1,1 +1,0 @@
-test.ts(12,12): Exported variable 'a2' has or is using name 'm1.m1_c1' from private module 'm1'.

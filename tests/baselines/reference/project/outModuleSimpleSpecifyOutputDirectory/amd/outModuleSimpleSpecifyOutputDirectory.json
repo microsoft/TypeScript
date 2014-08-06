@@ -15,6 +15,7 @@
     "emittedFiles": [
         "outdir/simple/m1.js",
         "outdir/simple/m1.d.ts",
-        "outdir/simple/test.js"
+        "outdir/simple/test.js",
+        "outdir/simple/test.d.ts"
     ]
 }

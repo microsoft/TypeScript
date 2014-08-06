@@ -29,3 +29,16 @@ var a = exports.a;
     c.x = new b.c();
 })(exports.c || (exports.c = {}));
 var c = exports.c;
+
+
+//// [internalAliasInitializedModuleInsideLocalModuleWithoutExport.d.ts]
+export declare module a {
+    module b {
+        class c {
+        }
+    }
+}
+export declare module c {
+    import b = a.b;
+    var x: b.c;
+}

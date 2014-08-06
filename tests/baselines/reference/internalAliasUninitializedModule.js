@@ -19,3 +19,17 @@ var c;
     c.x;
     c.x.foo();
 })(c || (c = {}));
+
+
+//// [internalAliasUninitializedModule.d.ts]
+declare module a {
+    module b {
+        interface I {
+            foo(): any;
+        }
+    }
+}
+declare module c {
+    import b = a.b;
+    var x: b.I;
+}

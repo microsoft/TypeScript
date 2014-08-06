@@ -14,6 +14,7 @@
     "emittedFiles": [
         "fncOnly_m4.js",
         "fncOnly_m4.d.ts",
-        "useModule.js"
+        "useModule.js",
+        "useModule.d.ts"
     ]
 }

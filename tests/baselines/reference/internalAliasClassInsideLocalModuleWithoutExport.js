@@ -37,3 +37,17 @@ var x = exports.x;
     var m3 = m2.m3;
 })(exports.m2 || (exports.m2 = {}));
 var m2 = exports.m2;
+
+
+//// [internalAliasClassInsideLocalModuleWithoutExport.d.ts]
+export declare module x {
+    class c {
+        foo(a: number): number;
+    }
+}
+export declare module m2 {
+    module m3 {
+        import c = x.c;
+        var cProp: c;
+    }
+}

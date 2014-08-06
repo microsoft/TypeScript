@@ -12,3 +12,12 @@ export var x: b;
 define(["require", "exports"], function (require, exports) {
     exports.x;
 });
+
+
+//// [internalAliasInterfaceInsideTopLevelModuleWithoutExport.d.ts]
+export declare module a {
+    interface I {
+    }
+}
+import b = a.I;
+export declare var x: b;

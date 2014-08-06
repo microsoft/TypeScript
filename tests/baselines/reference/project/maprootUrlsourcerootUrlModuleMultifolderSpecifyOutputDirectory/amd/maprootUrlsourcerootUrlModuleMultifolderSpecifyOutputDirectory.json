@@ -24,6 +24,7 @@
         "outdir/simple/outputdir_module_multifolder_ref/m2.js",
         "outdir/simple/outputdir_module_multifolder_ref/m2.d.ts",
         "outdir/simple/outputdir_module_multifolder/test.js.map",
-        "outdir/simple/outputdir_module_multifolder/test.js"
+        "outdir/simple/outputdir_module_multifolder/test.js",
+        "outdir/simple/outputdir_module_multifolder/test.d.ts"
     ]
 }

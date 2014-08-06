@@ -26,3 +26,14 @@ define(["require", "exports"], function (require, exports) {
     var b = a.b;
     exports.x = new b.c();
 });
+
+
+//// [internalAliasInitializedModuleInsideTopLevelModuleWithoutExport.d.ts]
+export declare module a {
+    module b {
+        class c {
+        }
+    }
+}
+import b = a.b;
+export declare var x: b.c;

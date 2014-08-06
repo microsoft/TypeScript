@@ -17,3 +17,14 @@ define(["require", "exports"], function (require, exports) {
     })(exports.c || (exports.c = {}));
     var c = exports.c;
 });
+
+
+//// [internalAliasInterfaceInsideLocalModuleWithoutExport.d.ts]
+export declare module a {
+    interface I {
+    }
+}
+export declare module c {
+    import b = a.I;
+    var x: b;
+}

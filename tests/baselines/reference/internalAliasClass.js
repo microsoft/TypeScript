@@ -24,3 +24,14 @@ var c;
     var b = a.c;
     c.x = new b();
 })(c || (c = {}));
+
+
+//// [internalAliasClass.d.ts]
+declare module a {
+    class c {
+    }
+}
+declare module c {
+    import b = a.c;
+    var x: b;
+}

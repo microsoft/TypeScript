@@ -19,3 +19,17 @@ export module c {
     c.x.foo();
 })(exports.c || (exports.c = {}));
 var c = exports.c;
+
+
+//// [internalAliasUninitializedModuleInsideLocalModuleWithoutExport.d.ts]
+export declare module a {
+    module b {
+        interface I {
+            foo(): any;
+        }
+    }
+}
+export declare module c {
+    import b = a.b;
+    var x: b.I;
+}
