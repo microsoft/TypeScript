@@ -25,10 +25,8 @@ interface ProjectRunnerTestCaseResolutionInfo extends ProjectRunnerTestCase {
     emittedFiles: string[]; // List of files that wre emitted by the compiler
 }
 
-interface BatchCompileProjectTestCaseEmittedFile {
+interface BatchCompileProjectTestCaseEmittedFile extends Harness.Compiler.GeneratedFile {
     emittedFileName: string;
-    code: string;
-    fileName: string;
 }
 
 interface BatchCompileProjectTestCaseResult {
@@ -209,7 +207,7 @@ class ProjectRunner extends RunnerBase {
                 ensureDirectoryStructure(ts.getDirectoryPath(ts.normalizePath(outputFilePath)));
                 sys.writeFile(outputFilePath, data, writeByteOrderMark);
 
-                outputFiles.push({ emittedFileName: filename, code: data, fileName: diskRelativeName });
+                outputFiles.push({ emittedFileName: filename, code: data, fileName: diskRelativeName, writeByteOrderMark: writeByteOrderMark });
             }
 
             function getCurrentDirectory() {

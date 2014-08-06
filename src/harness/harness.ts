@@ -712,6 +712,10 @@ module Harness {
                             // Not supported yet
                             break;
 
+                        case 'generatebom':
+                            options.generateBOM = !!setting.value;
+                            break;
+
                         default:
                             throw new Error('Unsupported compiler setting ' + setting.flag);
                     }
@@ -725,13 +729,10 @@ module Harness {
                 inputFiles.forEach(register);
                 otherFiles.forEach(register);
 
-                var fileOutputs: {
-                    fileName: string;
-                    file: string;
-                }[] = [];
+                var fileOutputs: GeneratedFile[] = [];
 
                 var programFiles = inputFiles.map(file => file.unitName);
-                var program = ts.createProgram(programFiles, options, createCompilerHost(filemap, (fn, contents) => fileOutputs.push({ fileName: fn, file: contents })));
+                var program = ts.createProgram(programFiles, options, createCompilerHost(filemap, (fn, contents, writeByteOrderMark) => fileOutputs.push({ fileName: fn, code: contents, writeByteOrderMark: writeByteOrderMark })));
 
                 var hadParseErrors = program.getDiagnostics().length > 0;
 
@@ -810,6 +811,7 @@ module Harness {
         export interface GeneratedFile {
             fileName: string;
             code: string;
+            writeByteOrderMark: boolean;
         }
 
         function stringEndsWith(str: string, end: string) {
@@ -837,19 +839,18 @@ module Harness {
             public sourceMapRecord: string;
 
             /** @param fileResults an array of strings for the fileName and an ITextWriter with its code */
-            constructor(fileResults: { fileName: string; file: string; }[], errors: MinimalDiagnostic[], sourceMapRecordLines: string[]) {
+            constructor(fileResults: GeneratedFile[], errors: MinimalDiagnostic[], sourceMapRecordLines: string[]) {
                 var lines: string[] = [];
 
                 fileResults.forEach(emittedFile => {
-                    var fileObj = { fileName: emittedFile.fileName, code: emittedFile.file };
                     if (isDTS(emittedFile.fileName)) {
                         // .d.ts file, add to declFiles emit
-                        this.declFilesCode.push(fileObj);
+                        this.declFilesCode.push(emittedFile);
                     } else if (isJS(emittedFile.fileName)) {
                         // .js file, add to files
-                        this.files.push(fileObj);
+                        this.files.push(emittedFile);
                     } else if (isJSMap(emittedFile.fileName)) {
-                        this.sourceMaps.push(fileObj);
+                        this.sourceMaps.push(emittedFile);
                     } else {
                         throw new Error('Unrecognized file extension for file ' + emittedFile.fileName);
                     }
@@ -896,7 +897,7 @@ module Harness {
         var optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
 
         // List of allowed metadata names
-        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outDir", "noimplicitany", "noresolve", "newline", "newlines"];
+        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outDir", "noimplicitany", "noresolve", "newline", "newlines", "generatebom"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 
