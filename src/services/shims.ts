@@ -169,7 +169,7 @@ module ts {
         useCaseSensitiveFileResolution?: boolean;
         gatherDiagnostics?: boolean;
         codepage?: number;
-        generateBom?: boolean;
+        emitBOM?: boolean;
     }
 
     function languageVersionToScriptTarget(languageVersion: LanguageVersion): ScriptTarget {
@@ -232,7 +232,7 @@ module ts {
         options.declaration = settings.generateDeclarationFiles;
         //options.useCaseSensitiveFileResolution = settings.useCaseSensitiveFileResolution;
         options.codepage = settings.codepage;
-        options.generateBOM = settings.generateBom;
+        options.emitBOM = settings.emitBOM;
         return options;
     }
 
@@ -253,7 +253,7 @@ module ts {
         settings.generateDeclarationFiles = options.declaration;
         // settings.useCaseSensitiveFileResolution = options.useCaseSensitiveFileResolution;
         settings.codepage = options.codepage;
-        settings.generateBom = options.generateBOM;
+        settings.emitBOM = options.emitBOM;
         return settings;
     }
 

@@ -90,7 +90,6 @@ var sys: System = (function () {
                 else {
                     fileStream.Position = 3;
                 }
-                fileStream.Position = 3;
                 fileStream.CopyTo(binaryStream);
                 binaryStream.SaveToFile(fileName, 2 /*overwrite*/);
             }

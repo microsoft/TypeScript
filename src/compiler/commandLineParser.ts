@@ -24,7 +24,7 @@ module ts {
             type: "boolean",
         },
         {
-            name: "generateBOM", 
+            name: "emitBOM", 
             type: "boolean"
         },
         {

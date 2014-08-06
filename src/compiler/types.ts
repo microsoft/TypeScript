@@ -939,7 +939,7 @@ module ts {
         codepage?: number;
         declaration?: boolean;
         diagnostics?: boolean;
-        generateBOM?: boolean;
+        emitBOM?: boolean;
         help?: boolean;
         locale?: string;
         mapRoot?: string;

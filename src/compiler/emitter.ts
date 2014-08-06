@@ -1854,7 +1854,7 @@ module ts {
             }
 
             writeLine();
-            writeEmittedFiles(writer.getText(), /*writeByteOrderMark*/ compilerOptions.generateBOM);
+            writeEmittedFiles(writer.getText(), /*writeByteOrderMark*/ compilerOptions.emitBOM);
         }
 
         function emitDeclarations(jsFilePath: string, root?: SourceFile) {
@@ -2448,7 +2448,7 @@ module ts {
             // TODO(shkamat): Should we not write any declaration file if any of them can produce error, 
             // or should we just not write this file like we are doing now
             if (!reportedDeclarationError) {
-                writeFile(getModuleNameFromFilename(jsFilePath) + ".d.ts", referencePathsOutput + writer.getText(), compilerOptions.generateBOM);
+                writeFile(getModuleNameFromFilename(jsFilePath) + ".d.ts", referencePathsOutput + writer.getText(), compilerOptions.emitBOM);
             }
         }
 

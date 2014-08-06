@@ -712,8 +712,8 @@ module Harness {
                             // Not supported yet
                             break;
 
-                        case 'generatebom':
-                            options.generateBOM = !!setting.value;
+                        case 'emitbom':
+                            options.emitBOM = !!setting.value;
                             break;
 
                         default:
@@ -897,7 +897,7 @@ module Harness {
         var optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
 
         // List of allowed metadata names
-        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outDir", "noimplicitany", "noresolve", "newline", "newlines", "generatebom"];
+        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outDir", "noimplicitany", "noresolve", "newline", "newlines", "emitbom"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 
