@@ -711,6 +711,20 @@ module ts {
                         return { accessibility: SymbolAccessibility.Accessible };
                     }
 
+                    // TODO(shkamat): Handle static method of class
+
+                    // If we havent got the accessible symbol doesnt mean the symbol is actually inaccessible. 
+                    // It could be qualified symbol and hence verify the path
+                    // eg:
+                    // module m {
+                    //     export class c {
+                    //     }
+                    // }
+                    // var x: typeof m.c
+                    // In the above example when we start with checking if typeof m.c symbol is accessible,
+                    // we are going to see if c can be accessed in scope directly. 
+                    // But it cant, hence the accessible is going to be undefined, but that doesnt mean m.c is accessible
+                    // It is accessible if the parent m is accessible because then m.c can be accessed through qualification
                     meaningToLook = SymbolFlags.Namespace;
                     symbol = symbol.parent;
                 }
