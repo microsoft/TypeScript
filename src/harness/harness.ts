@@ -534,7 +534,7 @@ module Harness {
         export var libText = IO.readFile(libFolder + "lib.d.ts");
         export var libTextMinimal = IO.readFile('bin/lib.core.d.ts');
 
-        export function createCompilerHost(filemap: { [filename: string]: ts.SourceFile; }, writeFile: (fn: string, contents: string) => void): ts.CompilerHost {
+        export function createCompilerHost(filemap: { [filename: string]: ts.SourceFile; }, writeFile: (fn: string, contents: string, writeByteOrderMark:boolean) => void): ts.CompilerHost {
             return {
                 getCurrentDirectory: sys.getCurrentDirectory,
                 getCancellationToken: (): any => undefined,

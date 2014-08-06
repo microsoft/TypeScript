@@ -924,6 +924,7 @@ module ts {
         codepage?: number;
         declaration?: boolean;
         diagnostics?: boolean;
+        generateBOM?: boolean;
         help?: boolean;
         locale?: string;
         mapRoot?: string;
@@ -1112,7 +1113,7 @@ module ts {
         getSourceFile(filename: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
         getDefaultLibFilename(): string;
         getCancellationToken? (): CancellationToken;
-        writeFile(filename: string, data: string, onError?: (message: string) => void): void;
+        writeFile(filename: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
         getCurrentDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;

@@ -1245,7 +1245,7 @@ module ts {
                 getDefaultLibFilename: (): string => {
                     throw Error("TOD:: getDefaultLibfilename");
                 },
-                writeFile: (filename, data) => {
+                writeFile: (filename, data, writeByteOrderMark) => {
                     throw Error("TODO: write file");
                 },
                 getCurrentDirectory: (): string => {

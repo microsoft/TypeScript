@@ -6,7 +6,7 @@ interface System {
     useCaseSensitiveFileNames: boolean;
     write(s: string): void;
     readFile(fileName: string, encoding?: string): string;
-    writeFile(fileName: string, data: string): void;
+    writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void;
     watchFile?(fileName: string, callback: (fileName: string) => void): FileWatcher;
     resolvePath(path: string): string;
     fileExists(path: string): boolean;
@@ -75,14 +75,21 @@ var sys: System = (function () {
             }
         }
 
-        function writeFile(fileName: string, data: string): void {
+        function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
             fileStream.Open();
             binaryStream.Open();
             try {
                 // Write characters in UTF-8 encoding
                 fileStream.Charset = "utf-8";
                 fileStream.WriteText(data);
-                // Skip byte order mark and copy remaining data to binary stream
+                // If we don't want the BOM, then skip it by setting the starting location to 3 (size of BOM).
+                // If not, start from position 0, as the BOM will be added automatically when charset==utf8.
+                if (writeByteOrderMark) {
+                    fileStream.Position = 0;
+                }
+                else {
+                    fileStream.Position = 3;
+                }
                 fileStream.Position = 3;
                 fileStream.CopyTo(binaryStream);
                 binaryStream.SaveToFile(fileName, 2 /*overwrite*/);
@@ -175,7 +182,12 @@ var sys: System = (function () {
             return buffer.toString("utf8");
         }
 
-        function writeFile(fileName: string, data: string): void {
+        function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
+            // If a BOM is required, emit one
+            if (writeByteOrderMark) {
+                data = '\uFEFF' + data;
+            }
+
             _fs.writeFileSync(fileName, data, "utf8");
         }
 

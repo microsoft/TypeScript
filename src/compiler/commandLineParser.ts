@@ -19,6 +19,7 @@ module ts {
         { name: "codepage", type: "number" },
         { name: "declaration", type: "boolean" },
         { name: "diagnostics", type: "boolean" },
+        { name: "generateBOM", type: "boolean" },
         { name: "help", type: "boolean" },
         { name: "locale", type: "string" },
         { name: "mapRoot", type: "string" },

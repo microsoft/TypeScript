@@ -164,7 +164,7 @@ class ProjectRunner extends RunnerBase {
                 return sourceFile;
             }
 
-            function writeFile(filename: string, data: string) {
+            function writeFile(filename: string, data: string, writeByteOrderMark: boolean) {
                 var diskFileName = ts.isRootedDiskPath(filename)
                     ? filename
                     : ts.normalizeSlashes(testCase.projectRoot) + "/" + ts.normalizeSlashes(filename);
@@ -207,7 +207,7 @@ class ProjectRunner extends RunnerBase {
                     }
                 }
                 ensureDirectoryStructure(ts.getDirectoryPath(ts.normalizePath(outputFilePath)));
-                sys.writeFile(outputFilePath, data);
+                sys.writeFile(outputFilePath, data, writeByteOrderMark);
 
                 outputFiles.push({ emittedFileName: filename, code: data, fileName: diskRelativeName });
             }
