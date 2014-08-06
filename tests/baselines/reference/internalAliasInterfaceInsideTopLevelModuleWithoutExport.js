@@ -12,25 +12,3 @@ export var x: b;
 define(["require", "exports"], function (require, exports) {
     exports.x;
 });
-
-
-//// [internalAliasInterfaceInsideTopLevelModuleWithoutExport.d.ts]
-export declare module a {
-    interface I {
-    }
-}
-export declare var x: b;
-
-
-//// [DtsFileErrors]
-
-
-==== tests/cases/compiler/internalAliasInterfaceInsideTopLevelModuleWithoutExport.d.ts (1 errors) ====
-    export declare module a {
-        interface I {
-        }
-    }
-    export declare var x: b;
-                          ~
-!!! Cannot find name 'b'.
-    

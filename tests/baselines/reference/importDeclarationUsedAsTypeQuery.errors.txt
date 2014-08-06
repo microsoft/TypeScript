@@ -1,0 +1,12 @@
+==== tests/cases/compiler/importDeclarationUsedAsTypeQuery_1.ts (1 errors) ====
+    ///<reference path='importDeclarationUsedAsTypeQuery_require.ts'/>
+    import a = require('importDeclarationUsedAsTypeQuery_require');
+    export var x: typeof a;
+               ~
+!!! Exported variable 'x' has or is using private name 'a'.
+    
+==== tests/cases/compiler/importDeclarationUsedAsTypeQuery_require.ts (0 errors) ====
+    export class B {
+        id: number;
+    }
+    

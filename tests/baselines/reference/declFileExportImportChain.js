@@ -73,34 +73,3 @@ import b = require("declFileExportImportChain_b");
 export = b;
 //// [declFileExportImportChain_c.d.ts]
 export import b1 = require("declFileExportImportChain_b1");
-//// [declFileExportImportChain_d.d.ts]
-export declare var x: m1.m2.c1;
-
-
-//// [DtsFileErrors]
-
-
-==== tests/cases/compiler/declFileExportImportChain_d.d.ts (1 errors) ====
-    export declare var x: m1.m2.c1;
-                          ~~~~~~~~
-!!! Cannot find name 'm1'.
-    
-==== tests/cases/compiler/declFileExportImportChain_a.d.ts (0 errors) ====
-    declare module m1 {
-        module m2 {
-            class c1 {
-            }
-        }
-    }
-    export = m1;
-    
-==== tests/cases/compiler/declFileExportImportChain_b.d.ts (0 errors) ====
-    export import a = require("declFileExportImportChain_a");
-    
-==== tests/cases/compiler/declFileExportImportChain_b1.d.ts (0 errors) ====
-    import b = require("declFileExportImportChain_b");
-    export = b;
-    
-==== tests/cases/compiler/declFileExportImportChain_c.d.ts (0 errors) ====
-    export import b1 = require("declFileExportImportChain_b1");
-    

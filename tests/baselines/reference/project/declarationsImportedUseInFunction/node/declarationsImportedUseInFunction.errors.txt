@@ -1,0 +1,1 @@
+useModule.ts(2,12): Exported variable 'useFncOnly_m4_f4' has or is using name 'fncOnly_m4.d' from private module 'fncOnly_m4'.

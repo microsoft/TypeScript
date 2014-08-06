@@ -1,0 +1,14 @@
+==== tests/cases/compiler/internalAliasClassInsideTopLevelModuleWithoutExport.ts (1 errors) ====
+    export module x {
+        export class c {
+            foo(a: number) {
+                return a;
+            }
+        }
+    }
+    
+    import xc = x.c;
+    export var cProp = new xc();
+               ~~~~~
+!!! Exported variable 'cProp' has or is using private name 'xc'.
+    var cReturnVal = cProp.foo(10);

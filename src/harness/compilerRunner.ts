@@ -289,7 +289,7 @@ class CompilerBaselineRunner extends RunnerBase {
 
                         if (result.declFilesCode.length > 0) {
                             jsCode += '\r\n\r\n';
-                            for (var i = 0; i < result.files.length; i++) {
+                            for (var i = 0; i < result.declFilesCode.length; i++) {
                                 jsCode += '//// [' + Harness.Path.getFileName(result.declFilesCode[i].fileName) + ']\r\n';
                                 jsCode += result.declFilesCode[i].code;
                             }

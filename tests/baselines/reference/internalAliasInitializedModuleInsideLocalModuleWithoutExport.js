@@ -29,33 +29,3 @@ var a = exports.a;
     c.x = new b.c();
 })(exports.c || (exports.c = {}));
 var c = exports.c;
-
-
-//// [internalAliasInitializedModuleInsideLocalModuleWithoutExport.d.ts]
-export declare module a {
-    module b {
-        class c {
-        }
-    }
-}
-export declare module c {
-    var x: b.c;
-}
-
-
-//// [DtsFileErrors]
-
-
-==== tests/cases/compiler/internalAliasInitializedModuleInsideLocalModuleWithoutExport.d.ts (1 errors) ====
-    export declare module a {
-        module b {
-            class c {
-            }
-        }
-    }
-    export declare module c {
-        var x: b.c;
-               ~~~
-!!! Cannot find name 'b'.
-    }
-    

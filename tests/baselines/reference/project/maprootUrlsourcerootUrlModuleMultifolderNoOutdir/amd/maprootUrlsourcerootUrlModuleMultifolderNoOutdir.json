@@ -23,7 +23,6 @@
         "../outputdir_module_multifolder_ref/m2.js",
         "../outputdir_module_multifolder_ref/m2.d.ts",
         "test.js.map",
-        "test.js",
-        "test.d.ts"
+        "test.js"
     ]
 }

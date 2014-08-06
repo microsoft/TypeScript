@@ -1,0 +1,12 @@
+==== tests/cases/compiler/internalAliasInitializedModuleInsideTopLevelModuleWithoutExport.ts (1 errors) ====
+    export module a {
+        export module b {
+            export class c {
+            }
+        }
+    }
+    
+    import b = a.b;
+    export var x: b.c = new b.c();
+               ~
+!!! Exported variable 'x' has or is using name 'b.c' from private module 'b'.

@@ -28,35 +28,3 @@ var c;
     var b = a.weekend;
     c.bVal = 2 /* Sunday */;
 })(c || (c = {}));
-
-
-//// [internalAliasEnum.d.ts]
-declare module a {
-    enum weekend {
-        Friday = 0,
-        Saturday = 1,
-        Sunday = 2,
-    }
-}
-declare module c {
-    var bVal: b;
-}
-
-
-//// [DtsFileErrors]
-
-
-==== tests/cases/compiler/internalAliasEnum.d.ts (1 errors) ====
-    declare module a {
-        enum weekend {
-            Friday = 0,
-            Saturday = 1,
-            Sunday = 2,
-        }
-    }
-    declare module c {
-        var bVal: b;
-                  ~
-!!! Cannot find name 'b'.
-    }
-    

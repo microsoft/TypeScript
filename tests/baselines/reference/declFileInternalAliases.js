@@ -32,37 +32,3 @@ var m2;
     m2.x = m.c;
     m2.d = new m2.x();
 })(m2 || (m2 = {}));
-
-
-//// [declFileInternalAliases.d.ts]
-declare module m {
-    class c {
-    }
-}
-declare module m1 {
-    var d: x;
-}
-declare module m2 {
-    export import x = m.c;
-    var d: x;
-}
-
-
-//// [DtsFileErrors]
-
-
-==== tests/cases/compiler/declFileInternalAliases.d.ts (1 errors) ====
-    declare module m {
-        class c {
-        }
-    }
-    declare module m1 {
-        var d: x;
-               ~
-!!! Cannot find name 'x'.
-    }
-    declare module m2 {
-        export import x = m.c;
-        var d: x;
-    }
-    

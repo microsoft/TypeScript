@@ -1,0 +1,2 @@
+useModule.ts(4,9): Property 'c' of exported interface has or is using name 'm4.d' from private module 'm4'.
+useModule.ts(10,16): Exported variable 'c' has or is using name 'm1.v' from private module 'm1'.

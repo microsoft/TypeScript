@@ -26,29 +26,3 @@ define(["require", "exports"], function (require, exports) {
     var b = a.b;
     exports.x = new b.c();
 });
-
-
-//// [internalAliasInitializedModuleInsideTopLevelModuleWithoutExport.d.ts]
-export declare module a {
-    module b {
-        class c {
-        }
-    }
-}
-export declare var x: b.c;
-
-
-//// [DtsFileErrors]
-
-
-==== tests/cases/compiler/internalAliasInitializedModuleInsideTopLevelModuleWithoutExport.d.ts (1 errors) ====
-    export declare module a {
-        module b {
-            class c {
-            }
-        }
-    }
-    export declare var x: b.c;
-                          ~~~
-!!! Cannot find name 'b'.
-    

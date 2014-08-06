@@ -1,0 +1,16 @@
+==== tests/cases/compiler/declFileImportedTypeUseInTypeArgPosition.ts (1 errors) ====
+    class List<T> { }
+    declare module 'mod1' {
+        class Foo {
+        }
+    }
+    
+    declare module 'moo' {
+        import x = require('mod1');
+        export var p: List<x.Foo>;
+                   ~
+!!! Exported variable 'p' has or is using name 'x.Foo' from private module 'x'.
+    }
+    
+    
+    

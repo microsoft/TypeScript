@@ -1,0 +1,24 @@
+==== tests/cases/compiler/missingImportAfterModuleImport_1.ts (1 errors) ====
+    ///<reference path='missingImportAfterModuleImport_0.ts'/>
+    import SubModule = require('SubModule');
+    class MainModule {
+        // public static SubModule: SubModule;
+        public SubModule: SubModule;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Property 'SubModule' of exported interface has or is using private name 'SubModule'.
+        constructor() { }
+    }
+    export = MainModule;
+    
+    
+==== tests/cases/compiler/missingImportAfterModuleImport_0.ts (0 errors) ====
+    
+    declare module "SubModule" {
+        class SubModule {
+            public static StaticVar: number;
+            public InstanceVar: number;
+            constructor();
+        }
+        export = SubModule;
+    }
+    

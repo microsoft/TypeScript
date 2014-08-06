@@ -1,0 +1,18 @@
+==== tests/cases/compiler/internalAliasClassInsideLocalModuleWithoutExport.ts (1 errors) ====
+    export module x {
+        export class c {
+            foo(a: number) {
+                return a;
+            }
+        }
+    }
+    
+    export module m2 {
+        export module m3 {
+            import c = x.c;
+            export var cProp = new c();
+                       ~~~~~
+!!! Exported variable 'cProp' has or is using private name 'c'.
+            var cReturnVal = cProp.foo(10);
+        }
+    }

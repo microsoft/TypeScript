@@ -1,0 +1,13 @@
+==== tests/cases/compiler/declFileExportAssignmentOfGenericInterface_1.ts (1 errors) ====
+    import a = require('declFileExportAssignmentOfGenericInterface_0');
+    export var x: a<a<string>>;
+               ~
+!!! Exported variable 'x' has or is using private name 'a'.
+    x.a;
+==== tests/cases/compiler/declFileExportAssignmentOfGenericInterface_0.ts (0 errors) ====
+    
+    interface Foo<T> {
+        a: string;
+    }
+    export = Foo;
+    

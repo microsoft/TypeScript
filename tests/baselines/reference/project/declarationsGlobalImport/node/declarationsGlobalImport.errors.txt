@@ -1,0 +1,3 @@
+useModule.ts(2,12): Exported variable 'useGlo_m4_x4' has or is using name 'glo_m4.d' from private module 'glo_m4'.
+useModule.ts(3,12): Exported variable 'useGlo_m4_d4' has or is using name 'glo_m4.d' from private module 'glo_m4'.
+useModule.ts(4,12): Exported variable 'useGlo_m4_f4' has or is using name 'glo_m4.d' from private module 'glo_m4'.

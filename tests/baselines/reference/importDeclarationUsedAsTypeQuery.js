@@ -26,22 +26,3 @@ exports.x;
 export declare class B {
     id: number;
 }
-//// [importDeclarationUsedAsTypeQuery_1.d.ts]
-/// <reference path='importDeclarationUsedAsTypeQuery_require.d.ts' />
-export declare var x: typeof a;
-
-
-//// [DtsFileErrors]
-
-
-==== tests/cases/compiler/importDeclarationUsedAsTypeQuery_1.d.ts (1 errors) ====
-    /// <reference path='importDeclarationUsedAsTypeQuery_require.d.ts' />
-    export declare var x: typeof a;
-                                 ~
-!!! Cannot find name 'a'.
-    
-==== tests/cases/compiler/importDeclarationUsedAsTypeQuery_require.d.ts (0 errors) ====
-    export declare class B {
-        id: number;
-    }
-    

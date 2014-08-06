@@ -1,0 +1,9 @@
+useModule.ts(2,12): Exported variable 'x4' has or is using name 'm4.d' from private module 'm4'.
+useModule.ts(3,12): Exported variable 'd4' has or is using name 'm4.d' from private module 'm4'.
+useModule.ts(4,12): Exported variable 'f4' has or is using name 'm4.d' from private module 'm4'.
+useModule.ts(7,16): Exported variable 'x2' has or is using name 'm4.d' from private module 'm4'.
+useModule.ts(8,16): Exported variable 'd2' has or is using name 'm4.d' from private module 'm4'.
+useModule.ts(9,16): Exported variable 'f2' has or is using name 'm4.d' from private module 'm4'.
+useModule.ts(18,12): Exported variable 'useMultiImport_m4_x4' has or is using name 'm4.d' from private module 'm4'.
+useModule.ts(19,12): Exported variable 'useMultiImport_m4_d4' has or is using name 'm4.d' from private module 'm4'.
+useModule.ts(20,12): Exported variable 'useMultiImport_m4_f4' has or is using name 'm4.d' from private module 'm4'.

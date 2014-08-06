@@ -1,0 +1,11 @@
+==== tests/cases/compiler/internalAliasInterfaceInsideTopLevelModuleWithoutExport.ts (1 errors) ====
+    export module a {
+        export interface I {
+        }
+    }
+    
+    import b = a.I;
+    export var x: b;
+               ~
+!!! Exported variable 'x' has or is using private name 'b'.
+    

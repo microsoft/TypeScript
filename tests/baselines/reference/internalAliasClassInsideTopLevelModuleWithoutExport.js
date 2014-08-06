@@ -27,27 +27,3 @@ var x = exports.x;
 var xc = x.c;
 exports.cProp = new xc();
 var cReturnVal = exports.cProp.foo(10);
-
-
-//// [internalAliasClassInsideTopLevelModuleWithoutExport.d.ts]
-export declare module x {
-    class c {
-        foo(a: number): number;
-    }
-}
-export declare var cProp: xc;
-
-
-//// [DtsFileErrors]
-
-
-==== tests/cases/compiler/internalAliasClassInsideTopLevelModuleWithoutExport.d.ts (1 errors) ====
-    export declare module x {
-        class c {
-            foo(a: number): number;
-        }
-    }
-    export declare var cProp: xc;
-                              ~~
-!!! Cannot find name 'xc'.
-    

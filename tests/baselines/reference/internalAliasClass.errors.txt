@@ -1,0 +1,12 @@
+==== tests/cases/compiler/internalAliasClass.ts (1 errors) ====
+    module a {
+        export class c {
+        }
+    }
+    
+    module c {
+        import b = a.c;
+        export var x: b = new b();
+                   ~
+!!! Exported variable 'x' has or is using private name 'b'.
+    }

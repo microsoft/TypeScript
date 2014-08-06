@@ -28,35 +28,3 @@ var a = exports.a;
     c.bVal = 2 /* Sunday */;
 })(exports.c || (exports.c = {}));
 var c = exports.c;
-
-
-//// [internalAliasEnumInsideLocalModuleWithoutExport.d.ts]
-export declare module a {
-    enum weekend {
-        Friday = 0,
-        Saturday = 1,
-        Sunday = 2,
-    }
-}
-export declare module c {
-    var bVal: b;
-}
-
-
-//// [DtsFileErrors]
-
-
-==== tests/cases/compiler/internalAliasEnumInsideLocalModuleWithoutExport.d.ts (1 errors) ====
-    export declare module a {
-        enum weekend {
-            Friday = 0,
-            Saturday = 1,
-            Sunday = 2,
-        }
-    }
-    export declare module c {
-        var bVal: b;
-                  ~
-!!! Cannot find name 'b'.
-    }
-    

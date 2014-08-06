@@ -1,0 +1,15 @@
+==== tests/cases/compiler/internalAliasUninitializedModuleInsideTopLevelModuleWithoutExport.ts (1 errors) ====
+    export module a {
+        export module b {
+            export interface I {
+                foo();
+            }
+        }
+    }
+    
+    import b = a.b;
+    export var x: b.I;
+               ~
+!!! Exported variable 'x' has or is using name 'b.I' from private module 'b'.
+    x.foo();
+    

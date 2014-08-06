@@ -17,7 +17,6 @@
         "m4.d.ts",
         "m5.js",
         "m5.d.ts",
-        "useModule.js",
-        "useModule.d.ts"
+        "useModule.js"
     ]
 }

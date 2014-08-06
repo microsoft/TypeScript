@@ -1,0 +1,29 @@
+==== tests/cases/compiler/declFileImportModuleWithExportAssignment_1.ts (2 errors) ====
+    /**This is on import declaration*/
+    import a1 = require("declFileImportModuleWithExportAssignment_0");
+    export var a = a1;
+               ~
+!!! Exported variable 'a' has or is using name 'a1.connectExport' from private module 'a1'.
+               ~
+!!! Exported variable 'a' has or is using name 'a1.connectModule' from private module 'a1'.
+    a.test1(null, null, null);
+    
+==== tests/cases/compiler/declFileImportModuleWithExportAssignment_0.ts (0 errors) ====
+    
+    module m2 {
+        export interface connectModule {
+            (res, req, next): void;
+        }
+        export interface connectExport {
+            use: (mod: connectModule) => connectExport;
+            listen: (port: number) => void;
+        }
+    
+    }
+    var m2: {
+        (): m2.connectExport;
+        test1: m2.connectModule;
+        test2(): m2.connectModule;
+    };
+    export = m2;
+    
