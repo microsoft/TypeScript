@@ -152,14 +152,30 @@ module ts {
 
     export function mapToArray<T>(map: Map<T>): T[] {
         var result: T[] = [];
-        for (var id in map) result.push(map[id]);
+
+        for (var id in map) {
+            result.push(map[id]);
+        }
+
         return result;
     }
 
-    export function arrayToMap<T>(array: T[], f: (value: T) => string): Map<T> {
+    /**
+     * Creates a map from the elements of an array.
+     *
+     * @param array the array of input elements.
+     * @param makeKey a function that produces a key for a given element.
+     *
+     * This function makes no effort to avoid collisions; if any two elements produce
+     * the same key with the given 'makeKey' function, then the element with the higher
+     * index in the array will be the one associated with the produced key.
+     */
+    export function arrayToMap<T>(array: T[], makeKey: (value: T) => string): Map<T> {
         var result: Map<T> = {};
 
-        forEach(array, value => { result[f(value)] = value });
+        forEach(array, value => {
+            result[makeKey(value)] = value
+        });
 
         return result;
     }
