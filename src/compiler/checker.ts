@@ -3793,21 +3793,40 @@ module ts {
         }
 
         // The candidate list orders groups in reverse, but within a group signatures are kept in declaration order
+        // A nit here is that we reorder only signatures that belong to the same symbol,
+        // so order how inherited signatures are processed is still preserved.
+        // interface A { (x: string): void }
+        // interface B { (x: 'foo'): string }
+        // var b: B;
+        // b('foo') // <- here overloads should be processed as [(x:'foo'): string, (x: string): void]
         function collectCandidates(node: CallExpression, signatures: Signature[]): Signature[]{
             var result: Signature[] = [];
             var lastParent: Node;
+            var lastSymbol: Symbol;
+            var cutoffPos: number = 0;
             var pos: number;
             for (var i = 0; i < signatures.length; i++) {
                 var signature = signatures[i];
                 if (isCandidateSignature(node, signature)) {
-                    var parent = signature.declaration ? signature.declaration.parent : undefined;
-                    if (lastParent && parent === lastParent) {
-                        pos++;
+                    var symbol = signature.declaration && getSymbolOfNode(signature.declaration);
+                    var parent = signature.declaration && signature.declaration.parent;
+                    if (!lastSymbol || symbol === lastSymbol) {                        
+                        if (lastParent && parent === lastParent) {
+                            pos++;
+                        }
+                        else {
+                            lastParent = parent;
+                            pos = cutoffPos;
+                        }
                     }
                     else {
+                        // current declaration belongs to a different symbol
+                        // set cutoffPos so reorderings in the future won't change result set from 0 to cutoffPos
+                        pos = cutoffPos = result.length;
                         lastParent = parent;
-                        pos = 0;
                     }
+                    lastSymbol = symbol;
+
                     for (var j = result.length; j > pos; j--) {
                         result[j] = result[j - 1];
                     }
