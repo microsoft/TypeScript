@@ -50,7 +50,6 @@ module ts {
         getScriptFileNames(): string;
         getScriptVersion(fileName: string): number;
         getScriptIsOpen(fileName: string): boolean;
-        getScriptByteOrderMark(fileName: string): number;
         getScriptSnapshot(fileName: string): ScriptSnapshotShim;
         getLocalizedDiagnosticMessages(): string;
         getCancellationToken(): CancellationToken;
@@ -353,10 +352,6 @@ module ts {
 
         public getScriptIsOpen(fileName: string): boolean {
             return this.shimHost.getScriptIsOpen(fileName);
-        }
-
-        public getScriptByteOrderMark(fileName: string): ByteOrderMark {
-            return this.shimHost.getScriptByteOrderMark(fileName);
         }
 
         public getLocalizedDiagnosticMessages(): any {

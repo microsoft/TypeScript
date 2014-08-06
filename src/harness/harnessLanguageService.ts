@@ -7,7 +7,7 @@ module Harness.LanguageService {
         public editRanges: { length: number; textChangeRange: TypeScript.TextChangeRange; }[] = [];
         public lineMap: TypeScript.LineMap = null;
 
-        constructor(public fileName: string, public content: string, public isOpen = true, public byteOrderMark: ts.ByteOrderMark = ts.ByteOrderMark.None) {
+        constructor(public fileName: string, public content: string, public isOpen = true) {
             this.setContent(content);
         }
 
@@ -132,7 +132,6 @@ module Harness.LanguageService {
         getScriptSnapshot(fileName: string): TypeScript.IScriptSnapshot { return new ScriptSnapshotShimAdapter(this.shimHost.getScriptSnapshot(fileName));}
         getScriptVersion(fileName: string): number { return this.shimHost.getScriptVersion(fileName);}
         getScriptIsOpen(fileName: string): boolean { return this.shimHost.getScriptIsOpen(fileName); }
-        getScriptByteOrderMark(fileName: string): ts.ByteOrderMark { return this.shimHost.getScriptByteOrderMark(fileName);}
         getLocalizedDiagnosticMessages(): any { JSON.parse(this.shimHost.getLocalizedDiagnosticMessages());}
         getCancellationToken(): ts.CancellationToken { return this.shimHost.getCancellationToken(); }
     }
@@ -145,10 +144,9 @@ module Harness.LanguageService {
             fileName: string,
             compilationSettings: ts.CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
-            byteOrderMark: ts.ByteOrderMark,
             version: number,
             isOpen: boolean): ts.SourceFile {
-            return ts.createSourceFile(fileName, scriptSnapshot.getText(0, scriptSnapshot.getLength()), compilationSettings.target, byteOrderMark, version, isOpen);
+            return ts.createSourceFile(fileName, scriptSnapshot.getText(0, scriptSnapshot.getLength()), compilationSettings.target, version, isOpen);
         }
 
         public updateDocument(
@@ -260,10 +258,6 @@ module Harness.LanguageService {
 
         public getScriptIsOpen(fileName: string): boolean {
             return this.getScriptInfo(fileName).isOpen;
-        }
-
-        public getScriptByteOrderMark(fileName: string): ts.ByteOrderMark {
-            return this.getScriptInfo(fileName).byteOrderMark;
         }
 
         public getLocalizedDiagnosticMessages(): string {

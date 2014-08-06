@@ -139,7 +139,7 @@ class ProjectRunner extends RunnerBase {
             function getSourceFile(filename: string, languageVersion: ts.ScriptTarget): ts.SourceFile {
                 var sourceFile: ts.SourceFile = undefined;
                 if (filename === 'lib.d.ts') {
-                    sourceFile = ts.createSourceFile('lib.d.ts', Harness.Compiler.libTextMinimal, languageVersion, ts.ByteOrderMark.None);
+                    sourceFile = ts.createSourceFile('lib.d.ts', Harness.Compiler.libTextMinimal, languageVersion);
                 }
                 else {
                     assert.isTrue(!ts.filter(readInputFiles, sourceFile => sourceFile.filename == filename).length, "Compiler trying to read same file again: " + filename);
@@ -154,7 +154,7 @@ class ProjectRunner extends RunnerBase {
                     }
 
                     if (text !== undefined) {
-                        sourceFile = ts.createSourceFile(filename, text, languageVersion, ts.ByteOrderMark.None);
+                        sourceFile = ts.createSourceFile(filename, text, languageVersion);
                     }
                 }
 

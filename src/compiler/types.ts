@@ -525,7 +525,6 @@ module ts {
         nodeCount: number;
         identifierCount: number;
         symbolCount: number;
-        byteOrderMark: ByteOrderMark;
         isOpen: boolean;
         version: number;
         languageVersion: ScriptTarget;
@@ -1118,12 +1117,5 @@ module ts {
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
-    }
-
-    export enum ByteOrderMark {
-        None = 0,
-        Utf8 = 1,
-        Utf16BigEndian = 2,
-        Utf16LittleEndian = 3,
     }
 }
