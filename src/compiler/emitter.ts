@@ -2291,12 +2291,12 @@ module ts {
                         Diagnostics.Exported_variable_0_has_or_is_using_private_name_1;
                     }
                     else {
-                        if (node.parent.flags & NodeFlags.Static) {
+                        if (node.flags & NodeFlags.Static) {
                             diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
                             Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
                             Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_private_name_1;
                         }
-                        else if (node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
+                        else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
                             diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
                             Diagnostics.Public_property_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
                             Diagnostics.Public_property_0_of_exported_class_has_or_is_using_private_name_1;

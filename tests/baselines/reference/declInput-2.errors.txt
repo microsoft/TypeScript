@@ -10,12 +10,12 @@
             public m2: string;
             public m22: C; // don't generate
             ~~~~~~~~~~~~~~
-!!! Property 'm22' of exported interface has or is using private name 'C'.
+!!! Public property 'm22' of exported class has or is using private name 'C'.
             public m23: E;
             public m24: I1;
             public m25: I2; // don't generate
             ~~~~~~~~~~~~~~~
-!!! Property 'm25' of exported interface has or is using private name 'I2'.
+!!! Public property 'm25' of exported class has or is using private name 'I2'.
             public m232(): E { return null;}
             public m242(): I1 { return null; }
             public m252(): I2 { return null; } // don't generate
