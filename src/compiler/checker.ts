@@ -1104,24 +1104,21 @@ module ts {
             function determineIfDeclarationIsVisible() {
                 switch (node.kind) {
                     case SyntaxKind.VariableDeclaration:
-                        if (!(node.flags & NodeFlags.Export)) {
-                            // node.parent is variable statement so look at the variable statement's parent
-                            return isGlobalSourceFile(node.parent.parent) || isUsedInExportAssignment(node);
-                        }
-                        // Exported members are visible if parent is visible
-                        return isDeclarationVisible(node.parent.parent);
-
                     case SyntaxKind.ModuleDeclaration:
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.ImportDeclaration:
-                        if (!(node.flags & NodeFlags.Export)) {
-                            return isGlobalSourceFile(node.parent) || isUsedInExportAssignment(node);
+                        // In case of variable declaration, node.parent is variable statement so look at the variable statement's parent
+                        var parent = node.kind === SyntaxKind.VariableDeclaration ? node.parent.parent : node.parent;
+                        // If the node is not exported or it is not ambient module element (except import declaration)
+                        if (!(node.flags & NodeFlags.Export) &&
+                            !(node.kind !== SyntaxKind.ImportDeclaration && parent.kind !== SyntaxKind.SourceFile && isInAmbientContext(parent))) {
+                            return isGlobalSourceFile(parent) || isUsedInExportAssignment(node);
                         }
-                        // Exported members are visible if parent is visible
-                        return isDeclarationVisible(node.parent);
+                        // Exported members/ambient module elements (exception import declaraiton) are visible if parent is visible
+                        return isDeclarationVisible(parent);
 
                     case SyntaxKind.Property:
                     case SyntaxKind.Method:

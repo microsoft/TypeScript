@@ -25,25 +25,10 @@ var List = (function () {
 declare class List<T> {
 }
 declare module 'mod1' {
+    class Foo {
+    }
 }
 declare module 'moo' {
     import x = require('mod1');
     var p: List<x.Foo>;
 }
-
-
-//// [DtsFileErrors]
-
-
-==== tests/cases/compiler/declFileImportedTypeUseInTypeArgPosition.d.ts (1 errors) ====
-    declare class List<T> {
-    }
-    declare module 'mod1' {
-    }
-    declare module 'moo' {
-        import x = require('mod1');
-        var p: List<x.Foo>;
-                    ~~~~~
-!!! Module ''mod1'' has no exported member 'Foo'.
-    }
-    
