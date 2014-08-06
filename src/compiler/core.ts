@@ -156,6 +156,14 @@ module ts {
         return result;
     }
 
+    export function arrayToMap<T>(array: T[], f: (value: T) => string): Map<T> {
+        var result: Map<T> = {};
+
+        forEach(array, value => { result[f(value)] = value });
+
+        return result;
+    }
+
     function formatStringFromArgs(text: string, args: { [index: number]: any; }, baseIndex?: number): string {
         baseIndex = baseIndex || 0;
 
