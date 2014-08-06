@@ -4,8 +4,8 @@
 var x;
 
 //// [generateBOM.js]
-﻿var x;
+ï»¿var x;
 //# sourceMappingURL=generateBOM.js.map
 
 //// [generateBOM.d.ts]
-﻿declare var x: any;
+ï»¿declare var x: any;

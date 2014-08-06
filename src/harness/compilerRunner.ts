@@ -119,7 +119,7 @@ class CompilerBaselineRunner extends RunnerBase {
             });
 
             function getByteOrderMarkText(file: Harness.Compiler.GeneratedFile): string {
-                return file.writeByteOrderMark ? String.fromCharCode(ts.CharacterCodes.byteOrderMark) : '';
+                return file.writeByteOrderMark ? "\u00EF\u00BB\u00BF" : "";
             }
 
             function getErrorBaseline(toBeCompiled: { unitName: string; content: string }[],
