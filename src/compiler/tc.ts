@@ -277,11 +277,10 @@ module ts {
             // specified since the last compilation cycle.
             removeWatchers(program);
 
-            // Gets us syntactically correct files from the last compilation.
-            var oldSourceFiles = arrayToMap(program.getSourceFiles(), file => getCanonicalName(file.filename));
-
-            // No longer using the old program.
-            program = undefined;
+            // Reuse source files from the last compilation so long as they weren't changed.
+            var oldSourceFiles = arrayToMap(
+                filter(program.getSourceFiles(), file => !hasProperty(changedFiles, getCanonicalName(file.filename))),
+                file => getCanonicalName(file.filename));
 
             // We create a new compiler host for this compilation cycle.
             // This new host is effectively the same except that 'getSourceFile'
@@ -291,11 +290,9 @@ module ts {
             newCompilerHost.getSourceFile = (fileName, languageVersion, onError) => {
                 fileName = getCanonicalName(fileName);
 
-                if (!hasProperty(changedFiles, fileName)) {
-                    var sourceFile = lookUp(oldSourceFiles, fileName);
-                    if (sourceFile) {
-                        return sourceFile;
-                    }
+                var sourceFile = lookUp(oldSourceFiles, fileName);
+                if (sourceFile) {
+                    return sourceFile;
                 }
 
                 return compilerHost.getSourceFile(fileName, languageVersion, onError);
