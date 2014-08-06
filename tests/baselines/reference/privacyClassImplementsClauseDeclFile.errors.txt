@@ -1,0 +1,105 @@
+==== tests/cases/compiler/privacyClassImplementsClauseDeclFile_externalModule.ts (5 errors) ====
+    
+    export module publicModule {
+        export interface publicInterfaceInPublicModule {
+        }
+    
+        interface privateInterfaceInPublicModule {
+        }
+    
+        class privateClassImplementingPublicInterfaceInModule implements publicInterfaceInPublicModule {
+        }
+        class privateClassImplementingPrivateInterfaceInModule implements privateInterfaceInPublicModule {
+        }
+        export class publicClassImplementingPublicInterfaceInModule implements publicInterfaceInPublicModule {
+        }
+        export class publicClassImplementingPrivateInterfaceInModule implements privateInterfaceInPublicModule { // Should error
+                                                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Implements clause of exported class 'publicClassImplementingPrivateInterfaceInModule' has or is using private name 'privateInterfaceInPublicModule'.
+        }
+    
+        class privateClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule {
+        }
+        export class publicClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule { // Should error
+                                                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Implements clause of exported class 'publicClassImplementingFromPrivateModuleInterface' has or is using name 'privateModule.publicInterfaceInPrivateModule' from private module 'privateModule'.
+        }
+    
+        export class publicClassImplementingPrivateAndPublicInterface implements privateInterfaceInPublicModule, publicInterfaceInPublicModule { // Should error
+                                                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Implements clause of exported class 'publicClassImplementingPrivateAndPublicInterface' has or is using private name 'privateInterfaceInPublicModule'.
+        }
+    }
+    
+    module privateModule {
+        export interface publicInterfaceInPrivateModule {
+    
+        }
+    
+        interface privateInterfaceInPrivateModule {
+        }
+    
+        class privateClassImplementingPublicInterfaceInModule implements publicInterfaceInPrivateModule {
+        }
+        class privateClassImplementingPrivateInterfaceInModule implements privateInterfaceInPrivateModule {
+        }
+        export class publicClassImplementingPublicInterfaceInModule implements publicInterfaceInPrivateModule {
+        }
+        export class publicClassImplementingPrivateInterfaceInModule implements privateInterfaceInPrivateModule { 
+        }
+    
+        class privateClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule {
+        }
+        export class publicClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule {
+        }
+    }
+    
+    export interface publicInterface {
+    
+    }
+    
+    interface privateInterface {
+    }
+    
+    class privateClassImplementingPublicInterface implements publicInterface {
+    }
+    class privateClassImplementingPrivateInterfaceInModule implements privateInterface {
+    }
+    export class publicClassImplementingPublicInterface implements publicInterface {
+    }
+    export class publicClassImplementingPrivateInterface implements privateInterface { // Should error
+                                                                    ~~~~~~~~~~~~~~~~
+!!! Implements clause of exported class 'publicClassImplementingPrivateInterface' has or is using private name 'privateInterface'.
+    }
+    
+    class privateClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule {
+    }
+    export class publicClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule { // Should error
+                                                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Implements clause of exported class 'publicClassImplementingFromPrivateModuleInterface' has or is using name 'privateModule.publicInterfaceInPrivateModule' from private module 'privateModule'.
+    }
+    
+==== tests/cases/compiler/privacyClassImplementsClauseDeclFile_GlobalFile.ts (1 errors) ====
+    module publicModuleInGlobal {
+        export interface publicInterfaceInPublicModule {
+        }
+    
+        interface privateInterfaceInPublicModule {
+        }
+    
+        class privateClassImplementingPublicInterfaceInModule implements publicInterfaceInPublicModule {
+        }
+        class privateClassImplementingPrivateInterfaceInModule implements privateInterfaceInPublicModule {
+        }
+        export class publicClassImplementingPublicInterfaceInModule implements publicInterfaceInPublicModule {
+        }
+        export class publicClassImplementingPrivateInterfaceInModule implements privateInterfaceInPublicModule { // Should error
+                                                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Implements clause of exported class 'publicClassImplementingPrivateInterfaceInModule' has or is using private name 'privateInterfaceInPublicModule'.
+        }
+    }
+    interface publicInterfaceInGlobal {
+    }
+    class publicClassImplementingPublicInterfaceInGlobal implements publicInterfaceInGlobal {
+    }
+    

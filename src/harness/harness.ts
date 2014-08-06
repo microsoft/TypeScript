@@ -739,13 +739,13 @@ module Harness {
                 checker.checkProgram();
 
                 // only emit if there weren't parse errors
-                var sourceMapData: ts.SourceMapData[];
+                var emitResult: ts.EmitResult;
                 if (!hadParseErrors) {
-                    sourceMapData = checker.emitFiles().sourceMaps;
+                    emitResult = checker.emitFiles();
                 }
 
                 var errors: MinimalDiagnostic[] = [];
-                program.getDiagnostics().concat(checker.getDiagnostics()).forEach(err => {
+                program.getDiagnostics().concat(checker.getDiagnostics()).concat(emitResult ? emitResult.errors : []).forEach(err => {
                     // TODO: new compiler formats errors after this point to add . and newlines so we'll just do it manually for now
                     errors.push({ filename: err.file && err.file.filename, start: err.start, end: err.start + err.length, line: 0, character: 0, message: err.messageText });
                 });
@@ -753,7 +753,7 @@ module Harness {
 
                 var result = new CompilerResult(fileOutputs, errors, []);
                 // Covert the source Map data into the baseline
-                result.updateSourceMapRecord(program, sourceMapData);
+                result.updateSourceMapRecord(program, emitResult ? emitResult.sourceMaps : undefined);
                 onComplete(result);
 
                 // reset what newline means in case the last test changed it

@@ -416,6 +416,94 @@
         "category": "Error",
         "code": 2000
     },
+    "Extends clause of exported class '{0}' has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2018
+    },
+    "Implements clause of exported class '{0}' has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2019
+    },
+    "Extends clause of exported interface '{0}' has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2020
+    },
+    "Extends clause of exported class '{0}' has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2021
+    },
+    "Implements clause of exported class '{0}' has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2022
+    },
+    "Extends clause of exported interface '{0}' has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2023
+    },
+   "Type parameter '{0}' of constructor signature from exported interface has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2208
+    },
+    "Type parameter '{0}' of call signature from exported interface has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2209
+    },
+    "Type parameter '{0}' of public static method from exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2210
+    },
+    "Type parameter '{0}' of public method from exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2211
+    },
+    "Type parameter '{0}' of method from exported interface has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2212
+    },
+    "Type parameter '{0}' of exported function has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2213
+    },
+    "Type parameter '{0}' of constructor signature from exported interface has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2214
+    },
+    "Type parameter '{0}' of call signature from exported interface has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2215
+    },
+    "Type parameter '{0}' of public static method from exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2216
+    },
+    "Type parameter '{0}' of public method from exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2217
+    },
+    "Type parameter '{0}' of method from exported interface has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2218
+    },
+    "Type parameter '{0}' of exported function has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2219
+    },
+    "Type parameter '{0}' of exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2220
+    },
+    "Type parameter '{0}' of exported interface has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2221
+    },
+    "Type parameter '{0}' of exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2222
+    },
+    "Type parameter '{0}' of exported interface has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2223
+    },
     "'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.": {
         "category": "Error",
         "code": 2068

@@ -614,6 +614,7 @@ module ts {
 
     export interface TextWriter {
         write(s: string): void;
+        writeSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
         writeLine(): void;
         increaseIndent(): void;
         decreaseIndent(): void;
@@ -625,6 +626,18 @@ module ts {
 
         /** writes Array<T> instead T[]  */
         WriteArrayAsGenericType     = 0x00000001,  // Declarations
+    }
+
+    export enum SymbolAccessibility {
+        Accessible,
+        NotAccessible,
+        CannotBeNamed
+    }
+
+    export interface SymbolAccessiblityResult {
+        accessibility: SymbolAccessibility;
+        errorSymbolName?: string // Optional symbol name that results in error
+        errorModuleName?: string // If the symbol is not visibile from module, module's name
     }
 
     export interface EmitResolver {
@@ -642,6 +655,8 @@ module ts {
         isImplementationOfOverload(node: FunctionDeclaration): boolean;
         writeTypeAtLocation(location: Node, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter): void;
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter): void;
+        writeSymbol(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags, writer: TextWriter): void;
+        isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
     }
 
     export enum SymbolFlags {
