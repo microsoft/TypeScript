@@ -245,14 +245,14 @@ module ts {
 
         function addWatchers(program: Program) {
             forEach(program.getSourceFiles(), f => {
-                var filename = f.filename;
+                var filename = getCanonicalName(f.filename);
                 watchers[filename] = sys.watchFile(filename, fileUpdated);
             });
         }
 
         function removeWatchers(program: Program) {
             forEach(program.getSourceFiles(), f => {
-                var filename = f.filename;
+                var filename = getCanonicalName(f.filename);
                 if (hasProperty(watchers, filename)) {
                     watchers[filename].close();
                 }
@@ -264,8 +264,7 @@ module ts {
         // Fired off whenever a file is changed.
         function fileUpdated(filename: string) {
             var firstNotification = isEmpty(updatedFiles);
-
-            updatedFiles[filename] = true;
+            updatedFiles[getCanonicalName(filename)] = true;
 
             // Only start this off when the first file change comes in,
             // so that we can batch up all further changes.
@@ -285,8 +284,10 @@ module ts {
             // specified since the last compilation cycle.
             removeWatchers(program);
 
-            // Gets us syntactically correct files from the last compilation.
-            var getUnmodifiedSourceFile = program.getSourceFile;
+            // Reuse source files from the last compilation so long as they weren't changed.
+            var oldSourceFiles = arrayToMap(
+                filter(program.getSourceFiles(), file => !hasProperty(changedFiles, getCanonicalName(file.filename))),
+                file => getCanonicalName(file.filename));
 
             // We create a new compiler host for this compilation cycle.
             // This new host is effectively the same except that 'getSourceFile'
@@ -294,11 +295,11 @@ module ts {
             // so long as they were not modified.
             var newCompilerHost = clone(compilerHost);
             newCompilerHost.getSourceFile = (fileName, languageVersion, onError) => {
-                if (!hasProperty(changedFiles, fileName)) {
-                    var sourceFile = getUnmodifiedSourceFile(fileName);
-                    if (sourceFile) {
-                        return sourceFile;
-                    }
+                fileName = getCanonicalName(fileName);
+
+                var sourceFile = lookUp(oldSourceFiles, fileName);
+                if (sourceFile) {
+                    return sourceFile;
                 }
 
                 return compilerHost.getSourceFile(fileName, languageVersion, onError);
@@ -307,6 +308,10 @@ module ts {
             program = compile(commandLine, newCompilerHost).program;
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
             addWatchers(program);
+        }
+
+        function getCanonicalName(fileName: string) {
+            return compilerHost.getCanonicalFileName(fileName);
         }
     }
 
