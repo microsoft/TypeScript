@@ -12,37 +12,13 @@
         "code": 6003
     },
 	
-    "Unrecognized escape sequence.": {
-        "category": "Error",
-        "code": 1000
-    },
-    "Unexpected character {0}.": {
-        "category": "Error",
-        "code": 1001
-    },
-    "Missing close quote character.": {
-        "category": "Error",
-        "code": 1002
-    },
     "Identifier expected.": {
         "category": "Error",
         "code": 1003
     },
-    "'{0}' keyword expected.": {
-        "category": "Error",
-        "code": 1004
-    },
     "'{0}' expected.": {
         "category": "Error",
         "code": 1005
-    },
-    "Identifier expected; '{0}' is a keyword.": {
-        "category": "Error",
-        "code": 1006
-    },
-    "Automatic semicolon insertion not allowed.": {
-        "category": "Error",
-        "code": 1007
     },
     "Trailing comma not allowed.": {
         "category": "Error",
@@ -51,10 +27,6 @@
     "'*/' expected.": {
         "category": "Error",
         "code": 1010
-    },
-    "'public' or 'private' modifier must precede 'static'.": {
-        "category": "Error",
-        "code": 1011
     },
     "Unexpected token.": {
         "category": "Error",
@@ -104,22 +76,6 @@
         "category": "Error",
         "code": 1023
     },
-    "'extends' clause already seen.": {
-        "category": "Error",
-        "code": 1024
-    },
-    "'extends' clause must precede 'implements' clause.": {
-        "category": "Error",
-        "code": 1025
-    },
-    "Classes can only extend a single class.": {
-        "category": "Error",
-        "code": 1026
-    },
-    "'implements' clause already seen.": {
-        "category": "Error",
-        "code": 1027
-    },
     "Accessibility modifier already seen.": {
         "category": "Error",
         "code": 1028
@@ -135,14 +91,6 @@
     "'{0}' modifier cannot appear on a class element.": {
         "category": "Error",
         "code": 1031
-    },
-    "Interface declaration cannot have 'implements' clause.": {
-        "category": "Error",
-        "code": 1032
-    },
-    "'super' invocation cannot have type arguments.": {
-        "category": "Error",
-        "code": 1034
     },
     "Only ambient modules can use quoted names.": {
         "category": "Error",
@@ -204,10 +152,6 @@
         "category": "Error",
         "code": 1054
     },
-    "Modifiers cannot appear here.": {
-        "category": "Error",
-        "code": 1055
-    },
     "Accessors are only available when targeting ECMAScript 5 and higher.": {
         "category": "Error",
         "code": 1056
@@ -224,10 +168,6 @@
         "category": "Error",
         "code": 1066
     },
-    "module, class, interface, enum, import or statement": {
-        "category": "NoPrefix",
-        "code": 1067
-    },
     "Unexpected token. A constructor, method, accessor, or property was expected." : {
         "category": "Error",
         "code": 1068
@@ -236,29 +176,13 @@
         "category": "NoPrefix",
         "code": 1069
     },
-    "case or default clause": {
-        "category": "NoPrefix",
-        "code": 1070
-    },
     "identifier": {
         "category": "NoPrefix",
         "code": 1071
     },
-    "call, construct, index, property or function signature": {
-        "category": "NoPrefix",
-        "code": 1072
-    },
     "expression": {
         "category": "NoPrefix",
         "code": 1073
-    },
-    "type name": {
-        "category": "NoPrefix",
-        "code": 1074
-    },
-    "property or accessor": {
-        "category": "NoPrefix",
-        "code": 1075
     },
     "parameter": {
         "category": "NoPrefix",
@@ -275,10 +199,6 @@
     "A 'declare' modifier cannot be used with an import declaration.": {
         "category": "Error",
         "code": 1079
-    },
-    "Invalid 'reference' directive syntax.": {
-        "category": "Error",
-        "code": 1084
     },
     "Octal literals are not available when targeting ECMAScript 5 and higher.": {
         "category": "Error",
@@ -978,10 +898,6 @@
         "category": "Message",
         "code": 6009
     },
-    "Skip resolution and preprocessing.": {
-        "category": "Message",
-        "code": 6010
-    },
     "Specify ECMAScript target version: 'ES3' (default), or 'ES5'": {
         "category": "Message",
         "code": 6015
@@ -997,14 +913,6 @@
     "Print the compiler's version.": {
         "category": "Message",
         "code": 6019
-    },
-    "Allow use of deprecated '{0}' keyword when referencing an external module.": {
-        "category": "Message",
-        "code": 6021
-    },
-    "Specify locale for errors and messages. For example '{0}' or '{1}'": {
-        "category": "Message",
-        "code": 6022
     },
     "Syntax: {0}": {
         "category": "Message",
@@ -1035,17 +943,9 @@
         "category": "Message",
         "code": 6030
     },
-    "Use the '{0}' flag to see options.": {
-        "category": "Message",
-        "code": 6031
-    },
     "File change detected. Compiling...": {
         "category": "Message",
         "code": 6032
-    },
-    "STRING": {
-        "category": "Message",
-        "code": 6033
     },
     "KIND": {
         "category": "Message",
@@ -1066,18 +966,6 @@
     "DIRECTORY": {
         "category": "Message",
         "code": 6038
-    },
-    "NUMBER": {
-        "category": "Message",
-        "code": 6039
-    },
-    "Specify the codepage to use when opening source files.": {
-        "category": "Message",
-        "code": 6040
-    },
-    "Additional locations:": {
-        "category": "Message",
-        "code": 6041
     },
     "Compilation complete. Watching for file changes.": {
         "category": "Message",
@@ -1119,10 +1007,6 @@
         "category": "Error",
         "code": 6050
     },
-    "No input files specified.": {
-        "category": "Error",
-        "code": 6051
-    },
     "Warn on expressions and declarations with an implied 'any' type.": {
         "category": "Message",
         "code": 7004
@@ -1154,14 +1038,6 @@
     "Construct signature, which lacks return-type annotation, implicitly has an 'any' return type.": {
         "category": "Error",
         "code": 7013
-    },
-    "Lambda function, which lacks return-type annotation, implicitly has an '{0}' return type.": {
-        "category": "Error",
-        "code": 7014
-    },
-    "Array literal implicitly has an '{0}' type.": {
-        "category": "Error",
-        "code": 7015
     },
     "Property '{0}' implicitly has type 'any', because its 'set' accessor lacks a type annotation.": {
         "category": "Error",
@@ -1263,14 +1139,6 @@
         "category": "Error",
         "code": -9999999
     },
-    "'=>' not preceded by parameter list.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Invalid assignment target.": {
-        "category": "Error",
-        "code": -9999999
-    },
     "'super' must be followed by argument list or member access.": {
         "category": "Error",
         "code": -9999999
@@ -1288,10 +1156,6 @@
         "code": -9999999
     },
     "Modifiers not permitted on index signature members.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Class member declaration expected.": {
         "category": "Error",
         "code": -9999999
     },
@@ -1372,10 +1236,6 @@
         "code": -9999999
     },
     "Types of parameters '{0}' and '{1}' are incompatible:": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Unknown identifier '{0}'.": {
         "category": "Error",
         "code": -9999999
     },
