@@ -946,23 +946,187 @@
         "category": "Error",
         "code": 5039
     },
+    "Concatenate and emit output to single file.": {
+        "category": "Message",
+        "code": 6001
+    },
+    "Generates corresponding '.d.ts' file.": {
+        "category": "Message",
+        "code": 6002
+    },
+    "Specifies the location where debugger should locate map files instead of generated locations.": {
+        "category": "Message",
+        "code": 6003
+    },
+    "Specifies the location where debugger should locate TypeScript files instead of source locations.": {
+        "category": "Message",
+        "code": 6004
+    },
+    "Watch input files.": {
+        "category": "Message",
+        "code": 6005
+    },
+    "Redirect output structure to the directory.": {
+        "category": "Message",
+        "code": 6006
+    },
+    "Do not emit comments to output.": {
+        "category": "Message",
+        "code": 6009
+    },
+    "Skip resolution and preprocessing.": {
+        "category": "Message",
+        "code": 6010
+    },
+    "Specify ECMAScript target version: 'ES3' (default), or 'ES5'": {
+        "category": "Message",
+        "code": 6015
+    },
+    "Specify module code generation: 'commonjs' or 'amd'": {
+        "category": "Message",
+        "code": 6016
+    },
+    "Print this message.": {
+        "category": "Message",
+        "code": 6017
+    },
+    "Print the compiler's version.": {
+        "category": "Message",
+        "code": 6019
+    },
+    "Allow use of deprecated '{0}' keyword when referencing an external module.": {
+        "category": "Message",
+        "code": 6021
+    },
+    "Specify locale for errors and messages. For example '{0}' or '{1}'": {
+        "category": "Message",
+        "code": 6022
+    },
+    "Syntax: {0}": {
+        "category": "Message",
+        "code": 6023
+    },
+    "options": {
+        "category": "Message",
+        "code": 6024
+    },
+    "file": {
+        "category": "Message",
+        "code": 6025
+    },
+    "Examples: {0}": {
+        "category": "Message",
+        "code": 6026
+    },
+    "Options:": {
+        "category": "Message",
+        "code": 6027
+    },
+
     "Version {0}": {
-       "category": "Message",
-       "code": 6029
+        "category": "Message",
+        "code": 6029
+    },
+    "Insert command line options and files from a file.": {
+        "category": "Message",
+        "code": 6030
+    },
+    "Use the '{0}' flag to see options.": {
+        "category": "Message",
+        "code": 6031
     },
     "File change detected. Compiling...": {
         "category": "Message",
         "code": 6032
     },
+    "STRING": {
+        "category": "Message",
+        "code": 6033
+    },
+    "KIND": {
+        "category": "Message",
+        "code": 6034
+    },
+    "FILE": {
+        "category": "Message",
+        "code": 6035
+    },
+    "VERSION": {
+        "category": "Message",
+        "code": 6036
+    },
+    "LOCATION": {
+        "category": "Message",
+        "code": 6037
+    },
+    "DIRECTORY": {
+        "category": "Message",
+        "code": 6038
+    },
+    "NUMBER": {
+        "category": "Message",
+        "code": 6039
+    },
+    "Specify the codepage to use when opening source files.": {
+        "category": "Message",
+        "code": 6040
+    },
+    "Additional locations:": {
+        "category": "Message",
+        "code": 6041
+    },
     "Compilation complete. Watching for file changes.": {
         "category": "Message",
         "code": 6042
+    },
+    "Generates corresponding '.map' file.": {
+        "category": "Message",
+        "code": 6043
+    },
+    "Compiler option '{0}' expects an argument.": {
+        "category": "Error",
+        "code": 6044
+    },
+    "Unterminated quoted string in response file '{0}'.": {
+        "category": "Error",
+        "code": 6045
+    },
+    "Argument for '--module' option must be 'commonjs' or 'amd'.": {
+        "category": "Error",
+        "code": 6045
+    },
+    "Argument for '--target' option must be 'es3' or 'es5'.": {
+        "category": "Error",
+        "code": 6046
+    },
+    "Locale must be of the form <language> or <language>-<territory>. For example '{0}' or '{1}'.": {
+        "category": "Error",
+        "code": 6047
+    },
+    "Unsupported locale '{0}'.": {
+        "category": "Error",
+        "code": 6048
+    },
+    "Unable to open file '{0}'.": {
+        "category": "Error",
+        "code": 6049
+    },
+    "Corrupted locale file {0}.": {
+        "category": "Error",
+        "code": 6050
+    },
+    "No input files specified.": {
+        "category": "Error",
+        "code": 6051
+    },
+    "Warn on expressions and declarations with an implied 'any' type.": {
+        "category": "Message",
+        "code": 7004
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
     },
-
     "Parameter '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7006
@@ -1320,42 +1484,6 @@
         "code": -9999999
 	},
     "Filename '{0}' differs from already included filename '{1}' only in casing": {
-        "category": "Error",
-        "code": -9999999
-    },
-     "Argument for '--module' option must be 'commonjs' or 'amd'.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Argument for '--target' option must be 'es3' or 'es5'.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Compiler option '{0}' expects an argument.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Unterminated quoted string in response file '{0}'.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Locale must be of the form <language> or <language>-<territory>. For example '{0}' or '{1}'.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Unsupported locale {0}.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Unable to open file {0}.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Corrupted locale file {0}.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "No input files specified.": {
         "category": "Error",
         "code": -9999999
     }
