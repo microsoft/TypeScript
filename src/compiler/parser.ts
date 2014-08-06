@@ -1056,7 +1056,23 @@ module ts {
             var node = <LiteralExpression>createNode(token);
             node.text = scanner.getTokenValue();
             nextToken();
-            return finishNode(node);
+            finishNode(node);
+            
+            // Octal literals are not allowed in strict mode or ES5
+            if (node.kind === SyntaxKind.NumericLiteral && (isInStrictMode || languageVersion >= ScriptTarget.ES5)) {
+                var numberLiteralSource = getSourceTextOfNodeFromSourceText(sourceText, node);
+                // This regex checks if the number is written in octal
+                if (/0[0-7]+/.test(numberLiteralSource)) {
+                    if (isInStrictMode) {
+                        grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode);
+                    }
+                    else {
+                        grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher);
+                    }
+                }
+            }
+
+            return node;
         }
 
         function parseStringLiteral(): LiteralExpression {
