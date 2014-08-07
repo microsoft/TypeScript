@@ -472,6 +472,62 @@
         "category": "Error",
         "code": 2031
     },
+    "Parameter '{0}' of constructor from exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2032
+    },
+    "Parameter '{0}' of constructor signature from exported interface has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2035
+    },
+    "Parameter '{0}' of call signature from exported interface has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2036
+    },
+    "Parameter '{0}' of public static method from exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2037
+    },
+    "Parameter '{0}' of public method from exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2038
+    },
+    "Parameter '{0}' of method from exported interface has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2039
+    },
+    "Parameter '{0}' of exported function has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2040
+    },
+    "Parameter '{0}' of constructor from exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2041
+    },
+    "Parameter '{0}' of constructor signature from exported interface has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2044
+    },
+    "Parameter '{0}' of call signature from exported interface has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2045
+    },
+    "Parameter '{0}' of public static method from exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2046
+    },
+    "Parameter '{0}' of public method from exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2047
+    },
+    "Parameter '{0}' of method from exported interface has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2048
+    },
+    "Parameter '{0}' of exported function has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2049
+    },
    "Type parameter '{0}' of constructor signature from exported interface has or is using private name '{1}'.": {
         "category": "Error",
         "code": 2208

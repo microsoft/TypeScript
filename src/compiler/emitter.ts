@@ -1908,11 +1908,13 @@ module ts {
                     // Report error
                     reportedDeclarationError = true;
                     var errorInfo = getSymbolVisibilityDiagnosticMessage(symbolAccesibilityResult);
-                    diagnostics.push(createDiagnosticForNode(errorInfo.errorNode,
-                        errorInfo.diagnosticMessage,
-                        getSourceTextOfLocalNode(errorInfo.typeName),
-                        symbolAccesibilityResult.errorSymbolName,
-                        symbolAccesibilityResult.errorModuleName));
+                    if (errorInfo) {
+                        diagnostics.push(createDiagnosticForNode(errorInfo.errorNode,
+                            errorInfo.diagnosticMessage,
+                            getSourceTextOfLocalNode(errorInfo.typeName),
+                            symbolAccesibilityResult.errorSymbolName,
+                            symbolAccesibilityResult.errorModuleName));
+                    }
                 }
             }
 
@@ -2290,7 +2292,8 @@ module ts {
                         Diagnostics.Exported_variable_0_has_or_is_using_name_1_from_private_module_2 :
                         Diagnostics.Exported_variable_0_has_or_is_using_private_name_1;
                     }
-                    else {
+                    // This check is to ensure we dont report error on constructor parameter property as that error would be reported during parameter emit
+                    else if (node.kind === SyntaxKind.Property) {
                         if (node.flags & NodeFlags.Static) {
                             diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
                             Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
@@ -2308,11 +2311,11 @@ module ts {
                         }
                     }
 
-                    return {
+                    return diagnosticMessage !== undefined ? {
                         diagnosticMessage: diagnosticMessage,
                         errorNode: node,
                         typeName: node.name
-                    };
+                    } : undefined;
                 }
             }
 
@@ -2408,7 +2411,67 @@ module ts {
 
                 if (!(node.parent.flags & NodeFlags.Private)) {
                     write(": ");
+                    getSymbolVisibilityDiagnosticMessage = getParameterDeclarationTypeVisibilityError;
                     resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.None, writer);
+                    // TODO(shkamat) This is just till we get rest of the error reporting up
+                    getSymbolVisibilityDiagnosticMessage = undefined;
+                }
+
+                function getParameterDeclarationTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
+                    // TODO(shkamat) Cannot access name errors
+                    var diagnosticMessage: DiagnosticMessage;
+                    switch (node.parent.kind) {
+                        case SyntaxKind.Constructor:
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            Diagnostics.Parameter_0_of_constructor_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Parameter_0_of_constructor_from_exported_class_has_or_is_using_private_name_1;
+                            break;
+
+                        case SyntaxKind.ConstructSignature:
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            Diagnostics.Parameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Parameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_private_name_1;
+                            break;
+
+                        case SyntaxKind.CallSignature:
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            Diagnostics.Parameter_0_of_call_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Parameter_0_of_call_signature_from_exported_interface_has_or_is_using_private_name_1;
+                            break;
+
+                        case SyntaxKind.Method:
+                            if (node.parent.flags & NodeFlags.Static) {
+                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                                Diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                                Diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_private_name_1;
+                            }
+                            else if (node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
+                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                                Diagnostics.Parameter_0_of_public_method_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                                Diagnostics.Parameter_0_of_public_method_from_exported_class_has_or_is_using_private_name_1;
+                            }
+                            else {
+                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                                Diagnostics.Parameter_0_of_method_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
+                                Diagnostics.Parameter_0_of_method_from_exported_interface_has_or_is_using_private_name_1;
+                            }
+                            break;
+
+                        case SyntaxKind.FunctionDeclaration:
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            Diagnostics.Parameter_0_of_exported_function_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Parameter_0_of_exported_function_has_or_is_using_private_name_1;
+                            break;
+
+                        default:
+                            Debug.fail("This is unknown parent for parameter: " + SyntaxKind[node.parent.kind]);
+                    }
+
+                    return {
+                        diagnosticMessage: diagnosticMessage,
+                        errorNode: node,
+                        typeName: node.name
+                    };
                 }
             }
 
