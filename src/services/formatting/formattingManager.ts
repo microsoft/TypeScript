@@ -22,7 +22,7 @@ module TypeScript.Services.Formatting {
         constructor(private syntaxTree: SyntaxTree, private snapshot: ITextSnapshot, private rulesProvider: RulesProvider, editorOptions: ts.EditorOptions) {
             //
             // TODO: convert to use FormattingOptions instead of EditorOptions
-            this.options = new FormattingOptions(!editorOptions.ConvertTabsToSpaces, editorOptions.TabSize, editorOptions.IndentSize, editorOptions.NewLineCharacter)
+            this.options = new FormattingOptions(!editorOptions.ConvertTabsToSpaces, editorOptions.TabSize, editorOptions.IndentSize, editorOptions.NewLineCharacter);
         }
 
         public formatSelection(minChar: number, limChar: number): ts.TextEdit[] {

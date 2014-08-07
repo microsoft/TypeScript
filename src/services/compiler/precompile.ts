@@ -150,7 +150,7 @@ module TypeScript {
         var noDefaultLib = false;
         var diagnostics: Diagnostic[] = [];
         var referencedFiles: IFileReference[] = [];
-        var lineMap = text.lineMap()
+        var lineMap = text.lineMap();
 
         for (var i = 0, n = leadingTrivia.count(); i < n; i++) {
             var trivia = leadingTrivia.syntaxTriviaAt(i);

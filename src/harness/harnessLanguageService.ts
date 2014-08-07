@@ -91,7 +91,7 @@ module Harness.LanguageService {
     }
 
     class CancellationToken {
-        public static None: CancellationToken = new CancellationToken(null)
+        public static None: CancellationToken = new CancellationToken(null);
 
         constructor(private cancellationToken: ts.CancellationToken) {
         }
@@ -283,7 +283,7 @@ module Harness.LanguageService {
 
         /** Parse a file on disk given its fileName */
         public parseFile(fileName: string) {
-            var sourceText = TypeScript.ScriptSnapshot.fromString(Harness.IO.readFile(fileName))
+            var sourceText = TypeScript.ScriptSnapshot.fromString(Harness.IO.readFile(fileName));
             return this.parseSourceText(fileName, sourceText);
         }
 

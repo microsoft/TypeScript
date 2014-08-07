@@ -365,7 +365,7 @@ class CompilerBaselineRunner extends RunnerBase {
                             walker.results.forEach(result => {
                                 var formattedLine = result.identifierName + " : " + result.type;
                                 if (!typeMap[file.unitName]) {
-                                    typeMap[file.unitName] = {}
+                                    typeMap[file.unitName] = {};
                                 }
 
                                 var typeInfo = [formattedLine];
@@ -386,7 +386,7 @@ class CompilerBaselineRunner extends RunnerBase {
                                 walker.results.forEach(result => {
                                     var formattedLine = result.identifierName + " : " + result.type;
                                     if (!typeMap[file.unitName]) {
-                                        typeMap[file.unitName] = {}
+                                        typeMap[file.unitName] = {};
                                     } else {
                                         typeLines.push('No type information for this code.');
                                     }
