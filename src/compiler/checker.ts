@@ -3796,7 +3796,7 @@ module ts {
         // A nit here is that we reorder only signatures that belong to the same symbol,
         // so order how inherited signatures are processed is still preserved.
         // interface A { (x: string): void }
-        // interface B { (x: 'foo'): string }
+        // interface B extends A { (x: 'foo'): string }
         // var b: B;
         // b('foo') // <- here overloads should be processed as [(x:'foo'): string, (x: string): void]
         function collectCandidates(node: CallExpression, signatures: Signature[]): Signature[]{
