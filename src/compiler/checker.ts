@@ -1064,29 +1064,30 @@ module ts {
                     // This is export assigned symbol node
                     var externalModuleSymbol = getSymbolOfNode(externalModule);
                     var exportAssignmentSymbol = getExportAssignmentSymbol(externalModuleSymbol);
+                    var resolvedExportSymbol: Symbol;
                     var symbolOfNode = getSymbolOfNode(node);
-                    if (exportAssignmentSymbol === symbolOfNode) {
+                    if (isSymbolUsedInExportAssignment(symbolOfNode)) {
+                        return true;
+                    }
+
+                    // if symbolOfNode is import declaration, resolve the symbol declaration and check
+                    if (symbolOfNode.flags & SymbolFlags.Import) {
+                        return isSymbolUsedInExportAssignment(resolveImport(symbolOfNode));
+                    }
+                }
+
+                // Check if the symbol is used in export assignment
+                function isSymbolUsedInExportAssignment(symbol: Symbol) {
+                    if (exportAssignmentSymbol === symbol) {
                         return true;
                     }
 
                     if (exportAssignmentSymbol && !!(exportAssignmentSymbol.flags & SymbolFlags.Import)) {
                         // if export assigned symbol is import declaration, resolve the import
-                        var resolvedExportSymbol = resolveImport(exportAssignmentSymbol);
-                        if (resolvedExportSymbol === symbolOfNode) {
+                        resolvedExportSymbol = resolvedExportSymbol || resolveImport(exportAssignmentSymbol);
+                        if (resolvedExportSymbol === symbol) {
                             return true;
                         }
-
-                        // TODO(shkamat): Chained import assignment
-                        // eg. a should be visible too.
-                        //module m {
-                        //    export module c {
-                        //        export class c {
-                        //        }
-                        //    }
-                        //}
-                        //import a = m.c;
-                        //import b = a;
-                        //export = b;
 
                         // Container of resolvedExportSymbol is visible
                         return forEach(resolvedExportSymbol.declarations, declaration => {
