@@ -118,6 +118,10 @@ class CompilerBaselineRunner extends RunnerBase {
                 }
             });
 
+            function getByteOrderMarkText(file: Harness.Compiler.GeneratedFile): string {
+                return file.writeByteOrderMark ? "\u00EF\u00BB\u00BF" : "";
+            }
+
             function getErrorBaseline(toBeCompiled: { unitName: string; content: string }[],
                 otherFiles: { unitName: string; content: string }[],
                 result: Harness.Compiler.CompilerResult
@@ -282,6 +286,7 @@ class CompilerBaselineRunner extends RunnerBase {
                         var jsCode = '';
                         for (var i = 0; i < result.files.length; i++) {
                             jsCode += '//// [' + Harness.Path.getFileName(result.files[i].fileName) + ']\r\n';
+                            jsCode += getByteOrderMarkText(result.files[i]);
                             jsCode += result.files[i].code;
                             // Re-enable this if we want to do another comparison of old vs new compiler baselines
                             // jsCode += SyntacticCleaner.clean(result.files[i].code);
@@ -291,6 +296,7 @@ class CompilerBaselineRunner extends RunnerBase {
                             jsCode += '\r\n\r\n';
                             for (var i = 0; i < result.files.length; i++) {
                                 jsCode += '//// [' + Harness.Path.getFileName(result.declFilesCode[i].fileName) + ']\r\n';
+                                jsCode += getByteOrderMarkText(result.declFilesCode[i]);
                                 jsCode += result.declFilesCode[i].code;
                             }
                         }
@@ -320,6 +326,7 @@ class CompilerBaselineRunner extends RunnerBase {
                         var sourceMapCode = '';
                         for (var i = 0; i < result.sourceMaps.length; i++) {
                             sourceMapCode += '//// [' + Harness.Path.getFileName(result.sourceMaps[i].fileName) + ']\r\n';
+                            sourceMapCode += getByteOrderMarkText(result.sourceMaps[i]);
                             sourceMapCode += result.sourceMaps[i].code;
                         }
 

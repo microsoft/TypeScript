@@ -24,6 +24,10 @@ module ts {
             type: "boolean",
         },
         {
+            name: "emitBOM", 
+            type: "boolean"
+        },
+        {
             name: "help",
             shortName: "h",
             type: "boolean",

@@ -525,7 +525,6 @@ module ts {
         nodeCount: number;
         identifierCount: number;
         symbolCount: number;
-        byteOrderMark: ByteOrderMark;
         isOpen: boolean;
         version: number;
         languageVersion: ScriptTarget;
@@ -940,6 +939,7 @@ module ts {
         codepage?: number;
         declaration?: boolean;
         diagnostics?: boolean;
+        emitBOM?: boolean;
         help?: boolean;
         locale?: string;
         mapRoot?: string;
@@ -1131,17 +1131,10 @@ module ts {
         getSourceFile(filename: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
         getDefaultLibFilename(): string;
         getCancellationToken? (): CancellationToken;
-        writeFile(filename: string, data: string, onError?: (message: string) => void): void;
+        writeFile(filename: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
         getCurrentDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
-    }
-
-    export enum ByteOrderMark {
-        None = 0,
-        Utf8 = 1,
-        Utf16BigEndian = 2,
-        Utf16LittleEndian = 3,
     }
 }
