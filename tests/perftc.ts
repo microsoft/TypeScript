@@ -8,13 +8,14 @@ if (perftest.hasLogIOFlag()) {
     var compilerHost: ts.CompilerHost = {
         getSourceFile: (s, v) => {
             var content = perftest.readFile(s);
-            return content !== undefined ? ts.createSourceFile(s, content, v) : undefined;
+            return content !== undefined ? ts.createSourceFile(s, content, v, ts.ByteOrderMark.Utf8) : undefined;
         },
         getDefaultLibFilename: () => ts.combinePaths(ts.getDirectoryPath(ts.normalizePath(perftest.getExecutingFilePath())), "lib.d.ts"),
         writeFile: (f: string, content: string) => { throw new Error("Unexpected operation: writeFile"); },
         getCurrentDirectory: () => perftest.getCurrentDirectory(),
-        getCanonicalFileName: getCanonicalFileName,
-        useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames
+        getCanonicalFileName: ts.getCanonicalFileName,
+        useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
+        getNewLine: () => sys.newLine
     };
 
     var commandLine = ts.parseCommandLine(perftest.getArgsWithoutLogIOFlag());
@@ -26,5 +27,4 @@ else {
     var io = perftest.prepare();
     ts.executeCommandLine(perftest.getArgsWithoutIOLogFile());
     perftest.write(io.getOut());
-    perftest.writeErr(io.getErr());
 }
