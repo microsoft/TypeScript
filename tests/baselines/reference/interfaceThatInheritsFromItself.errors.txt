@@ -1,4 +1,4 @@
-==== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts (8 errors) ====
+==== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts (5 errors) ====
     interface Foo extends Foo { // error
               ~~~
 !!! Type 'Foo' recursively references itself as a base type.
@@ -16,15 +16,9 @@
     
     interface Bar implements Bar { // error
                   ~~~~~~~~~~
-!!! '{' expected.
-                             ~~~
-!!! ';' expected.
-                                 ~
-!!! ';' expected.
-                  ~~~~~~~~~~
-!!! Cannot find name 'implements'.
-                             ~~~
-!!! Cannot find name 'Bar'.
+!!! An interface declaration cannot have an 'implements' clause.
+              ~~~
+!!! Type 'Bar' recursively references itself as a base type.
     }
     
     

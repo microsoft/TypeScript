@@ -136,7 +136,7 @@
         "category": "Error",
         "code": 1031
     },
-    "Interface declaration cannot have 'implements' clause.": {
+    "An interface declaration cannot have an 'implements' clause.": {
         "category": "Error",
         "code": 1032
     },
