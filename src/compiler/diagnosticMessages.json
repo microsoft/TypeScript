@@ -172,30 +172,6 @@
         "category": "Error",
         "code": 1068
     },
-    "statement": {
-        "category": "NoPrefix",
-        "code": 1069
-    },
-    "identifier": {
-        "category": "NoPrefix",
-        "code": 1071
-    },
-    "expression": {
-        "category": "NoPrefix",
-        "code": 1073
-    },
-    "parameter": {
-        "category": "NoPrefix",
-        "code": 1076
-    },
-    "type": {
-        "category": "NoPrefix",
-        "code": 1077
-    },
-    "type parameter": {
-        "category": "NoPrefix",
-        "code": 1078
-    },
     "A 'declare' modifier cannot be used with an import declaration.": {
         "category": "Error",
         "code": 1079
