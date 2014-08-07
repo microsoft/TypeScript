@@ -1884,8 +1884,7 @@ module ts {
 
             function writeSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
                 var symbolAccesibilityResult = resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning);
-                // TODO(shkamat): Since we dont have error reporting for all the cases as yet we have this check on handler being present
-                if (!getSymbolVisibilityDiagnosticMessage || symbolAccesibilityResult.accessibility === SymbolAccessibility.Accessible) {
+                if (symbolAccesibilityResult.accessibility === SymbolAccessibility.Accessible) {
                     resolver.writeSymbol(symbol, enclosingDeclaration, meaning, writer);
 
                     // write the aliases
@@ -2139,8 +2138,6 @@ module ts {
                         write(" extends ");
                         getSymbolVisibilityDiagnosticMessage = getTypeParameterConstraintVisibilityError;
                         resolver.writeTypeAtLocation(node.constraint, enclosingDeclaration, TypeFormatFlags.None, writer);
-                        // TODO(shkamat) This is just till we get rest of the error reporting up
-                        getSymbolVisibilityDiagnosticMessage = undefined; 
                     }
                 }
 
@@ -2160,8 +2157,6 @@ module ts {
                 function emitTypeOfTypeReference(node: Node) {
                     getSymbolVisibilityDiagnosticMessage = getHeritageClauseVisibilityError;
                     resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.WriteArrayAsGenericType, writer);
-                    // TODO(shkamat) This is just till we get rest of the error reporting up
-                    getSymbolVisibilityDiagnosticMessage = undefined; 
 
                     function getHeritageClauseVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
                         var diagnosticMessage: DiagnosticMessage;
@@ -2287,8 +2282,6 @@ module ts {
                         write(": ");
                         getSymbolVisibilityDiagnosticMessage = getVariableDeclarationTypeVisibilityError;
                         resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.None, writer);
-                        // TODO(shkamat) This is just till we get rest of the error reporting up
-                        getSymbolVisibilityDiagnosticMessage = undefined;
                     }
                 }
 
@@ -2345,10 +2338,50 @@ module ts {
                     emitSourceTextOfNode(node.name);
                     if (!(node.flags & NodeFlags.Private)) {
                         write(": ");
+                        getSymbolVisibilityDiagnosticMessage = getAccessorDeclarationTypeVisibilityError;
                         resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.None, writer);
                     }
                     write(";");
                     writeLine();
+                }
+
+                function getAccessorDeclarationTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
+                    // TODO(shkamat) Cannot access name errors
+                    var diagnosticMessage: DiagnosticMessage;
+                    if (node.kind === SyntaxKind.SetAccessor) {
+                        if (node.parent.flags & NodeFlags.Static) {
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            Diagnostics.Parameter_0_of_public_static_property_setter_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Parameter_0_of_public_static_property_setter_from_exported_class_has_or_is_using_private_name_1;
+                        }
+                        else {
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            Diagnostics.Parameter_0_of_public_property_setter_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Parameter_0_of_public_property_setter_from_exported_class_has_or_is_using_private_name_1;
+                        }
+                        return {
+                            diagnosticMessage: diagnosticMessage,
+                            errorNode: node.parameters[0],
+                            typeName: node.name
+                        };
+                    }
+                    else {
+                        if (node.flags & NodeFlags.Static) {
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            Diagnostics.Return_type_of_public_static_property_getter_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
+                            Diagnostics.Return_type_of_public_static_property_getter_from_exported_class_has_or_is_using_private_name_0;
+                        }
+                        else {
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            Diagnostics.Return_type_of_public_property_getter_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
+                            Diagnostics.Return_type_of_public_property_getter_from_exported_class_has_or_is_using_private_name_0;
+                        }
+                        return {
+                            diagnosticMessage: diagnosticMessage,
+                            errorNode: node.name,
+                            typeName: undefined
+                        };
+                    }
                 }
             }
 
@@ -2404,8 +2437,6 @@ module ts {
                     write(": ");
                     getSymbolVisibilityDiagnosticMessage = getReturnTypeVisibilityError;
                     resolver.writeReturnTypeOfSignatureDeclaration(node, enclosingDeclaration, TypeFormatFlags.None, writer);
-                    // TODO(shkamat) This is just till we get rest of the error reporting up
-                    getSymbolVisibilityDiagnosticMessage = undefined;
                 }
                 write(";");
                 writeLine();
@@ -2481,8 +2512,6 @@ module ts {
                     write(": ");
                     getSymbolVisibilityDiagnosticMessage = getParameterDeclarationTypeVisibilityError;
                     resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.None, writer);
-                    // TODO(shkamat) This is just till we get rest of the error reporting up
-                    getSymbolVisibilityDiagnosticMessage = undefined;
                 }
 
                 function getParameterDeclarationTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {

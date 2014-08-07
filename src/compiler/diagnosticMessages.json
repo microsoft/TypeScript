@@ -476,6 +476,14 @@
         "category": "Error",
         "code": 2032
     },
+    "Parameter '{0}' of public static property setter from exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2033
+    },
+    "Parameter '{0}' of public property setter from exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2034
+    },
     "Parameter '{0}' of constructor signature from exported interface has or is using private name '{1}'.": {
         "category": "Error",
         "code": 2035
@@ -504,6 +512,14 @@
         "category": "Error",
         "code": 2041
     },
+    "Parameter '{0}' of public static property setter from exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2042
+    },
+    "Parameter '{0}' of public property setter from exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2043
+    },
     "Parameter '{0}' of constructor signature from exported interface has or is using name '{1}' from private module '{2}'.": {
         "category": "Error",
         "code": 2044
@@ -527,6 +543,14 @@
     "Parameter '{0}' of exported function has or is using name '{1}' from private module '{2}'.": {
         "category": "Error",
         "code": 2049
+    },
+    "Return type of public static property getter from exported class has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 2050
+    },
+    "Return type of public property getter from exported class has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 2051
     },
     "Return type of constructor signature from exported interface has or is using private name '{0}'.": {
         "category": "Error",
@@ -555,6 +579,14 @@
     "Return type of exported function has or is using private name '{0}'.": {
         "category": "Error",
         "code": 2058
+    },
+    "Return type of public static property getter from exported class has or is using name '{0}' from private module '{1}'.": {
+        "category": "Error",
+        "code": 2059
+    },
+    "Return type of public property getter from exported class has or is using name '{0}' from private module '{1}'.": {
+        "category": "Error",
+        "code": 2060
     },
     "Return type of constructor signature from exported interface has or is using name '{0}' from private module '{1}'.": {
         "category": "Error",
