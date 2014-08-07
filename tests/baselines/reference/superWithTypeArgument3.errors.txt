@@ -8,7 +8,7 @@
         constructor() {
             super<T>();
                  ~
-!!! 'super' must be followed by argument list or member access.
+!!! 'super' must be followed by an argument list or member access.
         }
         bar() {
             super.bar<T>(null);

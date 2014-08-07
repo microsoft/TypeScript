@@ -12,6 +12,10 @@
         "code": 6003
     },
 	
+    "Unterminated string literal.": {
+        "category": "Error",
+        "code": 1002
+    },
     "Identifier expected.": {
         "category": "Error",
         "code": 1003
@@ -76,6 +80,22 @@
         "category": "Error",
         "code": 1023
     },
+    "A class or interface declaration can only have one 'extends' clause.": {
+        "category": "Error",
+        "code": 1024
+    },
+    "An 'extends' clause must precede am 'implements' clause.": {
+        "category": "Error",
+        "code": 1025
+    },
+    "A class can only extend a single class.": {
+        "category": "Error",
+        "code": 1026
+    },
+    "A class declaration can only have one 'implements' clause.": {
+        "category": "Error",
+        "code": 1027
+    },
     "Accessibility modifier already seen.": {
         "category": "Error",
         "code": 1028
@@ -91,6 +111,14 @@
     "'{0}' modifier cannot appear on a class element.": {
         "category": "Error",
         "code": 1031
+    },
+    "An interface declaration cannot have an 'implements' clause.": {
+        "category": "Error",
+        "code": 1032
+    },
+    "'super' must be followed by an argument list or member access.": {
+        "category": "Error",
+        "code": 1034
     },
     "Only ambient modules can use quoted names.": {
         "category": "Error",
@@ -175,6 +203,10 @@
     "A 'declare' modifier cannot be used with an import declaration.": {
         "category": "Error",
         "code": 1079
+    },
+    "Invalid reference comment.": {
+        "category": "Error",
+        "code": 1084
     },
     "Octal literals are not available when targeting ECMAScript 5 and higher.": {
         "category": "Error",
@@ -831,7 +863,7 @@
         "code": 5012
     },
     "Unsupported file encoding.": {
-        "category": "NoPrefix",
+        "category": "Error",
         "code": 5013
     },
     "Could not write file '{0}': {1}": {
@@ -1051,10 +1083,6 @@
         "category": "Error",
         "code": -9999999
     },
-    "Unterminated string constant.": {
-        "category": "Error",
-        "code": -9999999
-    },
     "Invalid character.": {
         "category": "Error",
         "code": -9999999
@@ -1115,10 +1143,6 @@
         "category": "Error",
         "code": -9999999
     },
-    "'super' must be followed by argument list or member access.": {
-        "category": "Error",
-        "code": -9999999
-    },
     "Line break not permitted here.": {
         "category": "Error",
         "code": -9999999
@@ -1136,10 +1160,6 @@
         "code": -9999999
     },
     "Declaration expected.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Invalid reference comment.": {
         "category": "Error",
         "code": -9999999
     },

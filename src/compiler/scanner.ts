@@ -515,7 +515,7 @@ module ts {
                 }
                 if (isLineBreak(ch)) {
                     result += text.substring(start, pos);
-                    error(Diagnostics.Unterminated_string_constant);
+                    error(Diagnostics.Unterminated_string_literal);
                     break;
                 }
                 pos++;

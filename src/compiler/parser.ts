@@ -1944,7 +1944,7 @@ module ts {
                 primaryExpression.kind === SyntaxKind.SuperKeyword && token !== SyntaxKind.OpenParenToken && token !== SyntaxKind.DotToken;
 
             if (illegalUsageOfSuperKeyword) {
-                error(Diagnostics.super_must_be_followed_by_argument_list_or_member_access);
+                error(Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
             }
 
             var expr = parseCallAndAccess(primaryExpression, /* inNewExpression */ false);
