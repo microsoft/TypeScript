@@ -300,7 +300,7 @@ module ts {
         return ch >= CharacterCodes._0 && ch <= CharacterCodes._9;
     }
 
-    function isOctalDigit(ch: number): boolean {
+    export function isOctalDigit(ch: number): boolean {
         return ch >= CharacterCodes._0 && ch <= CharacterCodes._7;
     }
 
