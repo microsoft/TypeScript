@@ -1,4 +1,4 @@
-/// <reference path='..\..\src\compiler\tc.ts'/>
+/// <reference path='..\..\src\compiler\tsc.ts'/>
 
 module TypeScript.WebTsc {
 

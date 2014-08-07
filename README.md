@@ -63,7 +63,7 @@ jake -T              # List the above commands.
 ## Usage
 
 ```shell
-node built/local/tc.js hello.ts
+node built/local/tsc.js hello.ts
 ```
 
 
