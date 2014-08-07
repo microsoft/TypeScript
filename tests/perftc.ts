@@ -8,7 +8,7 @@ if (perftest.hasLogIOFlag()) {
     var compilerHost: ts.CompilerHost = {
         getSourceFile: (s, v) => {
             var content = perftest.readFile(s);
-            return content !== undefined ? ts.createSourceFile(s, content, v, ts.ByteOrderMark.Utf8) : undefined;
+            return content !== undefined ? ts.createSourceFile(s, content, v) : undefined;
         },
         getDefaultLibFilename: () => ts.combinePaths(ts.getDirectoryPath(ts.normalizePath(perftest.getExecutingFilePath())), "lib.d.ts"),
         writeFile: (f: string, content: string) => { throw new Error("Unexpected operation: writeFile"); },
