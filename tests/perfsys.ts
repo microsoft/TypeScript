@@ -8,13 +8,11 @@ module perftest {
 
     export interface IO {
         getOut(): string;
-        getErr(): string;
     }
 
     export var readFile = sys.readFile;
     var writeFile = sys.writeFile;
     export var write = sys.write;
-    export var writeErr = sys.writeErr;
     var resolvePath = sys.resolvePath;
     export var getExecutingFilePath = sys.getExecutingFilePath;
     export var getCurrentDirectory = sys.getCurrentDirectory;
@@ -22,12 +20,12 @@ module perftest {
     var args = sys.args;
 
     // augment sys so first ts.executeCommandLine call will be finish silently
-    sys.writeErr = (s: string) => { };
+    sys.write = (s: string) => { };
     sys.args = []
 
     export function restoreSys() {
         sys.args = args;
-        sys.writeErr = writeErr;
+        sys.write = write;
     }
 
     export function hasLogIOFlag() {
@@ -96,11 +94,9 @@ module perftest {
         var err: string = "";
 
         sys.write = (s: string) => { out += s; };
-        sys.writeErr = (s: string) => { err += s; };
 
         return {
             getOut: () => out,
-            getErr: () => err
         };
     }
 }
