@@ -142,10 +142,10 @@ module ts {
                 }
                 text = "";
             }
-            return text !== undefined ? createSourceFile(filename, text, languageVersion, ByteOrderMark.None) : undefined;
+            return text !== undefined ? createSourceFile(filename, text, languageVersion) : undefined;
         }
 
-        function writeFile(fileName: string, data: string, onError?: (message: string) => void) {
+        function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
 
             function directoryExists(directoryPath: string): boolean {
                 if (hasProperty(existingDirectories, directoryPath)) {
@@ -168,7 +168,7 @@ module ts {
 
             try {
                 ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
-                sys.writeFile(fileName, data);
+                sys.writeFile(fileName, data, writeByteOrderMark);
             }
             catch (e) {
                 if (onError) onError(e.message);

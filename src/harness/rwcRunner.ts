@@ -107,7 +107,7 @@ module RWC {
                             catch (e) {
                                 // Leave fileContents undefined;
                             }
-                            return ts.createSourceFile(fileName, fileContents, languageVersion, ts.ByteOrderMark.None);
+                            return ts.createSourceFile(fileName, fileContents, languageVersion);
                         },
                         getDefaultLibFilename: () => libPath,
                         writeFile: (fn, contents) => emitterIOHost.writeFile(fn, contents, false),

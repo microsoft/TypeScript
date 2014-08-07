@@ -157,8 +157,8 @@ module ts {
             return text.substring(skipTrivia(text, node.pos), node.end);
         }
 
-        function writeFile(filename: string, data: string) {
-            compilerHost.writeFile(filename, data, hostErrorMessage => {
+        function writeFile(filename: string, data: string, writeByteOrderMark: boolean) {
+            compilerHost.writeFile(filename, data, writeByteOrderMark, hostErrorMessage => {
                 diagnostics.push(createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, filename, hostErrorMessage));
             });
         }
@@ -426,7 +426,7 @@ module ts {
                     sourceMapNameIndices.pop();
                 };
 
-                function writeJavaScriptAndSourceMapFile(emitOutput: string) {
+                function writeJavaScriptAndSourceMapFile(emitOutput: string, writeByteOrderMark: boolean) {
                     // Write source map file
                     encodeLastRecordedSourceMapSpan();
                     writeFile(sourceMapData.sourceMapFilePath, JSON.stringify({
@@ -436,11 +436,11 @@ module ts {
                         sources: sourceMapData.sourceMapSources,
                         names: sourceMapData.sourceMapNames,
                         mappings: sourceMapData.sourceMapMappings
-                    }));
+                    }), /*writeByteOrderMark*/ false);
                     sourceMapDataList.push(sourceMapData);
 
                     // Write sourcemap url to the js file and write the js file
-                    writeJavaScriptFile(emitOutput + "//# sourceMappingURL=" + sourceMapData.jsSourceMappingURL);
+                    writeJavaScriptFile(emitOutput + "//# sourceMappingURL=" + sourceMapData.jsSourceMappingURL, writeByteOrderMark);
                 }
 
                 // Initialize source map data
@@ -513,8 +513,8 @@ module ts {
                 scopeEmitEnd = recordScopeNameEnd;
             }
 
-            function writeJavaScriptFile(emitOutput: string) {
-                writeFile(jsFilePath, emitOutput);
+            function writeJavaScriptFile(emitOutput: string, writeByteOrderMark: boolean) {
+                writeFile(jsFilePath, emitOutput, writeByteOrderMark);
             }
 
             function emitTokenText(tokenKind: SyntaxKind, startPos: number, emitFn?: () => void) {
@@ -1854,7 +1854,7 @@ module ts {
             }
 
             writeLine();
-            writeEmittedFiles(writer.getText());
+            writeEmittedFiles(writer.getText(), /*writeByteOrderMark*/ compilerOptions.emitBOM);
         }
 
         function emitDeclarations(jsFilePath: string, root?: SourceFile) {
@@ -2448,7 +2448,7 @@ module ts {
             // TODO(shkamat): Should we not write any declaration file if any of them can produce error, 
             // or should we just not write this file like we are doing now
             if (!reportedDeclarationError) {
-                writeFile(getModuleNameFromFilename(jsFilePath) + ".d.ts", referencePathsOutput + writer.getText());
+                writeFile(getModuleNameFromFilename(jsFilePath) + ".d.ts", referencePathsOutput + writer.getText(), compilerOptions.emitBOM);
             }
         }
 

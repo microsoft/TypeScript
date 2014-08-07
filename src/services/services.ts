@@ -320,7 +320,6 @@ module ts {
         public identifierCount: number;
         public symbolCount: number;
         public statements: NodeArray<Statement>;
-        public byteOrderMark: ByteOrderMark;
         public version: number;
         public isOpen: boolean;
         public languageVersion: ScriptTarget;
@@ -417,11 +416,11 @@ module ts {
                 ? TypeScript.Parser.parse(this.filename, text, this.languageVersion, TypeScript.isDTSFile(this.filename))
                 : TypeScript.IncrementalParser.parse(oldSyntaxTree, textChangeRange, text);
 
-            return SourceFileObject.createSourceFileObject(this.languageVersion, this.filename, scriptSnapshot, this.byteOrderMark, version, isOpen, newSyntaxTree);
+            return SourceFileObject.createSourceFileObject(this.languageVersion, this.filename, scriptSnapshot, version, isOpen, newSyntaxTree);
         }
 
-        public static createSourceFileObject(languageVersion: ScriptTarget, filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, byteOrderMark: ByteOrderMark, version: number, isOpen: boolean, syntaxTree: TypeScript.SyntaxTree) {
-            var newSoruceFile = <SourceFileObject><any>createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), languageVersion, byteOrderMark, version, isOpen);
+        public static createSourceFileObject(languageVersion: ScriptTarget, filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, version: number, isOpen: boolean, syntaxTree: TypeScript.SyntaxTree) {
+            var newSoruceFile = <SourceFileObject><any>createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), languageVersion, version, isOpen);
             newSoruceFile.scriptSnapshot = scriptSnapshot;
             newSoruceFile.syntaxTree = syntaxTree;
             return newSoruceFile;
@@ -445,7 +444,6 @@ module ts {
         getScriptFileNames(): string[];
         getScriptVersion(fileName: string): number;
         getScriptIsOpen(fileName: string): boolean;
-        getScriptByteOrderMark(fileName: string): ByteOrderMark;
         getScriptSnapshot(fileName: string): TypeScript.IScriptSnapshot;
         getLocalizedDiagnosticMessages(): any;
         getCancellationToken(): CancellationToken;
@@ -694,7 +692,6 @@ module ts {
             filename: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
-            byteOrderMark: ByteOrderMark,
             version: number,
             isOpen: boolean,
             referencedFiles: string[]): SourceFile;
@@ -824,7 +821,6 @@ module ts {
         filename: string;
         version: number;
         isOpen: boolean;
-        byteOrderMark: ByteOrderMark;
         sourceText?: TypeScript.IScriptSnapshot;
     }
 
@@ -893,8 +889,7 @@ module ts {
                 this.filenameToEntry[TypeScript.switchToForwardSlashes(filename)] = {
                     filename: filename,
                     version: host.getScriptVersion(filename),
-                    isOpen: host.getScriptIsOpen(filename),
-                    byteOrderMark: host.getScriptByteOrderMark(filename)
+                    isOpen: host.getScriptIsOpen(filename)
                 };
             }
 
@@ -939,10 +934,6 @@ module ts {
 
         public isOpen(filename: string): boolean {
             return this.getEntry(filename).isOpen;
-        }
-
-        public getByteOrderMark(filename: string): ByteOrderMark {
-            return this.getEntry(filename).byteOrderMark;
         }
 
         public getScriptSnapshot(filename: string): TypeScript.IScriptSnapshot {
@@ -1143,14 +1134,13 @@ module ts {
             filename: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
-            byteOrderMark: ByteOrderMark,
             version: number,
             isOpen: boolean): SourceFile {
 
             var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
             var entry = lookUp(bucket, filename);
             if (!entry) {
-                var sourceFile = createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), compilationSettings.target, byteOrderMark, version, isOpen);
+                var sourceFile = createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), compilationSettings.target, version, isOpen);
 
                 bucket[filename] = entry = {
                     sourceFile: sourceFile,
@@ -1255,7 +1245,7 @@ module ts {
                 getDefaultLibFilename: (): string => {
                     throw Error("TOD:: getDefaultLibfilename");
                 },
-                writeFile: (filename, data) => {
+                writeFile: (filename, data, writeByteOrderMark) => {
                     throw Error("TODO: write file");
                 },
                 getCurrentDirectory: (): string => {
@@ -1360,7 +1350,7 @@ module ts {
                     sourceFile = documentRegistry.updateDocument(sourceFile, filename, compilationSettings, scriptSnapshot, version, isOpen, textChangeRange);
                 }
                 else {
-                    sourceFile = documentRegistry.acquireDocument(filename, compilationSettings, scriptSnapshot, hostCache.getByteOrderMark(filename), version, isOpen, []);
+                    sourceFile = documentRegistry.acquireDocument(filename, compilationSettings, scriptSnapshot, version, isOpen, []);
                 }
 
                 // Remeber the new sourceFile

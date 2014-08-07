@@ -534,7 +534,7 @@ module Harness {
         export var libText = IO.readFile(libFolder + "lib.d.ts");
         export var libTextMinimal = IO.readFile('bin/lib.core.d.ts');
 
-        export function createCompilerHost(filemap: { [filename: string]: ts.SourceFile; }, writeFile: (fn: string, contents: string) => void): ts.CompilerHost {
+        export function createCompilerHost(filemap: { [filename: string]: ts.SourceFile; }, writeFile: (fn: string, contents: string, writeByteOrderMark:boolean) => void): ts.CompilerHost {
             return {
                 getCurrentDirectory: sys.getCurrentDirectory,
                 getCancellationToken: (): any => undefined,
@@ -544,7 +544,7 @@ module Harness {
                     } else {
                         var lib = 'lib.d.ts';
                         if (fn.substr(fn.length - lib.length) === lib) {
-                            return filemap[fn] = ts.createSourceFile('lib.d.ts', libTextMinimal, languageVersion, ts.ByteOrderMark.None);
+                            return filemap[fn] = ts.createSourceFile('lib.d.ts', libTextMinimal, languageVersion);
                         }
                         // Don't throw here -- the compiler might be looking for a test that actually doesn't exist as part of the TC
                         return null;
@@ -712,6 +712,10 @@ module Harness {
                             // Not supported yet
                             break;
 
+                        case 'emitbom':
+                            options.emitBOM = !!setting.value;
+                            break;
+
                         default:
                             throw new Error('Unsupported compiler setting ' + setting.flag);
                     }
@@ -720,18 +724,15 @@ module Harness {
                 var filemap: { [name: string]: ts.SourceFile; } = {};
                 var register = (file: { unitName: string; content: string; }) => {
                     var filename = Path.switchToForwardSlashes(file.unitName);
-                    filemap[filename] = ts.createSourceFile(filename, file.content, options.target, ts.ByteOrderMark.None);
+                    filemap[filename] = ts.createSourceFile(filename, file.content, options.target);
                 };
                 inputFiles.forEach(register);
                 otherFiles.forEach(register);
 
-                var fileOutputs: {
-                    fileName: string;
-                    file: string;
-                }[] = [];
+                var fileOutputs: GeneratedFile[] = [];
 
                 var programFiles = inputFiles.map(file => file.unitName);
-                var program = ts.createProgram(programFiles, options, createCompilerHost(filemap, (fn, contents) => fileOutputs.push({ fileName: fn, file: contents })));
+                var program = ts.createProgram(programFiles, options, createCompilerHost(filemap, (fn, contents, writeByteOrderMark) => fileOutputs.push({ fileName: fn, code: contents, writeByteOrderMark: writeByteOrderMark })));
 
                 var hadParseErrors = program.getDiagnostics().length > 0;
 
@@ -810,6 +811,7 @@ module Harness {
         export interface GeneratedFile {
             fileName: string;
             code: string;
+            writeByteOrderMark: boolean;
         }
 
         function stringEndsWith(str: string, end: string) {
@@ -837,19 +839,18 @@ module Harness {
             public sourceMapRecord: string;
 
             /** @param fileResults an array of strings for the fileName and an ITextWriter with its code */
-            constructor(fileResults: { fileName: string; file: string; }[], errors: MinimalDiagnostic[], sourceMapRecordLines: string[]) {
+            constructor(fileResults: GeneratedFile[], errors: MinimalDiagnostic[], sourceMapRecordLines: string[]) {
                 var lines: string[] = [];
 
                 fileResults.forEach(emittedFile => {
-                    var fileObj = { fileName: emittedFile.fileName, code: emittedFile.file };
                     if (isDTS(emittedFile.fileName)) {
                         // .d.ts file, add to declFiles emit
-                        this.declFilesCode.push(fileObj);
+                        this.declFilesCode.push(emittedFile);
                     } else if (isJS(emittedFile.fileName)) {
                         // .js file, add to files
-                        this.files.push(fileObj);
+                        this.files.push(emittedFile);
                     } else if (isJSMap(emittedFile.fileName)) {
-                        this.sourceMaps.push(fileObj);
+                        this.sourceMaps.push(emittedFile);
                     } else {
                         throw new Error('Unrecognized file extension for file ' + emittedFile.fileName);
                     }
@@ -896,7 +897,7 @@ module Harness {
         var optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
 
         // List of allowed metadata names
-        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outDir", "noimplicitany", "noresolve", "newline", "newlines"];
+        var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outDir", "noimplicitany", "noresolve", "newline", "newlines", "emitbom"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 

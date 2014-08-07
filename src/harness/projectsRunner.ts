@@ -25,10 +25,8 @@ interface ProjectRunnerTestCaseResolutionInfo extends ProjectRunnerTestCase {
     emittedFiles: string[]; // List of files that wre emitted by the compiler
 }
 
-interface BatchCompileProjectTestCaseEmittedFile {
+interface BatchCompileProjectTestCaseEmittedFile extends Harness.Compiler.GeneratedFile {
     emittedFileName: string;
-    code: string;
-    fileName: string;
 }
 
 interface BatchCompileProjectTestCaseResult {
@@ -139,7 +137,7 @@ class ProjectRunner extends RunnerBase {
             function getSourceFile(filename: string, languageVersion: ts.ScriptTarget): ts.SourceFile {
                 var sourceFile: ts.SourceFile = undefined;
                 if (filename === 'lib.d.ts') {
-                    sourceFile = ts.createSourceFile('lib.d.ts', Harness.Compiler.libTextMinimal, languageVersion, ts.ByteOrderMark.None);
+                    sourceFile = ts.createSourceFile('lib.d.ts', Harness.Compiler.libTextMinimal, languageVersion);
                 }
                 else {
                     assert.isTrue(!ts.filter(readInputFiles, sourceFile => sourceFile.filename == filename).length, "Compiler trying to read same file again: " + filename);
@@ -154,7 +152,7 @@ class ProjectRunner extends RunnerBase {
                     }
 
                     if (text !== undefined) {
-                        sourceFile = ts.createSourceFile(filename, text, languageVersion, ts.ByteOrderMark.None);
+                        sourceFile = ts.createSourceFile(filename, text, languageVersion);
                     }
                 }
 
@@ -164,7 +162,7 @@ class ProjectRunner extends RunnerBase {
                 return sourceFile;
             }
 
-            function writeFile(filename: string, data: string) {
+            function writeFile(filename: string, data: string, writeByteOrderMark: boolean) {
                 var diskFileName = ts.isRootedDiskPath(filename)
                     ? filename
                     : ts.normalizeSlashes(testCase.projectRoot) + "/" + ts.normalizeSlashes(filename);
@@ -207,9 +205,9 @@ class ProjectRunner extends RunnerBase {
                     }
                 }
                 ensureDirectoryStructure(ts.getDirectoryPath(ts.normalizePath(outputFilePath)));
-                sys.writeFile(outputFilePath, data);
+                sys.writeFile(outputFilePath, data, writeByteOrderMark);
 
-                outputFiles.push({ emittedFileName: filename, code: data, fileName: diskRelativeName });
+                outputFiles.push({ emittedFileName: filename, code: data, fileName: diskRelativeName, writeByteOrderMark: writeByteOrderMark });
             }
 
             function getCurrentDirectory() {
