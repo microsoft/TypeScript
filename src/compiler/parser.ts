@@ -1062,6 +1062,11 @@ module ts {
             if (node.kind === SyntaxKind.NumericLiteral && (isInStrictMode || languageVersion >= ScriptTarget.ES5)) {
                 var numberLiteralSource = getSourceTextOfNodeFromSourceText(sourceText, node);
                 // This regex checks if the number is written in octal
+                // Note that theoretically would match literals like 009, which is not octal. But because
+                // of how the scanner separates the tokens, we would never get a token like this. Instead,
+                // we would get 00 and 9 as two separate tokens.
+                // We also do not need to check for negatives because any prefix operator would be part of a
+                // parent unary expression.
                 if (/0[0-7]+/.test(numberLiteralSource)) {
                     if (isInStrictMode) {
                         grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode);
