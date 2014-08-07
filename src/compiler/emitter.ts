@@ -1879,7 +1879,7 @@ module ts {
             var getSymbolVisibilityDiagnosticMessage: (symbolAccesibilityResult: SymbolAccessiblityResult) => {
                 errorNode: Node;
                 diagnosticMessage: DiagnosticMessage;
-                typeName: Identifier
+                typeName?: Identifier
             }
 
             function writeSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
@@ -1909,11 +1909,19 @@ module ts {
                     reportedDeclarationError = true;
                     var errorInfo = getSymbolVisibilityDiagnosticMessage(symbolAccesibilityResult);
                     if (errorInfo) {
-                        diagnostics.push(createDiagnosticForNode(errorInfo.errorNode,
-                            errorInfo.diagnosticMessage,
-                            getSourceTextOfLocalNode(errorInfo.typeName),
-                            symbolAccesibilityResult.errorSymbolName,
-                            symbolAccesibilityResult.errorModuleName));
+                        if (errorInfo.typeName) {
+                            diagnostics.push(createDiagnosticForNode(errorInfo.errorNode,
+                                errorInfo.diagnosticMessage,
+                                getSourceTextOfLocalNode(errorInfo.typeName),
+                                symbolAccesibilityResult.errorSymbolName,
+                                symbolAccesibilityResult.errorModuleName));
+                        }
+                        else {
+                            diagnostics.push(createDiagnosticForNode(errorInfo.errorNode,
+                                errorInfo.diagnosticMessage,
+                                symbolAccesibilityResult.errorSymbolName,
+                                symbolAccesibilityResult.errorModuleName));
+                        }
                     }
                 }
             }
@@ -2394,10 +2402,70 @@ module ts {
                 // If this is not a constructor and is not private, emit the return type
                 if (node.kind !== SyntaxKind.Constructor && !(node.flags & NodeFlags.Private)) {
                     write(": ");
+                    getSymbolVisibilityDiagnosticMessage = getReturnTypeVisibilityError;
                     resolver.writeReturnTypeOfSignatureDeclaration(node, enclosingDeclaration, TypeFormatFlags.None, writer);
+                    // TODO(shkamat) This is just till we get rest of the error reporting up
+                    getSymbolVisibilityDiagnosticMessage = undefined;
                 }
                 write(";");
                 writeLine();
+
+                function getReturnTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
+                    // TODO(shkamat) Cannot access name errors
+                    var diagnosticMessage: DiagnosticMessage;
+                    switch (node.kind) {
+                        case SyntaxKind.ConstructSignature:
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            Diagnostics.Return_type_of_constructor_signature_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
+                            Diagnostics.Return_type_of_constructor_signature_from_exported_interface_has_or_is_using_private_name_0;
+                            break;
+
+                        case SyntaxKind.CallSignature:
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            Diagnostics.Return_type_of_call_signature_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
+                            Diagnostics.Return_type_of_call_signature_from_exported_interface_has_or_is_using_private_name_0;
+                            break;
+
+                        case SyntaxKind.IndexSignature:
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            Diagnostics.Return_type_of_index_signature_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
+                            Diagnostics.Return_type_of_index_signature_from_exported_interface_has_or_is_using_private_name_0;
+                            break;
+
+                        case SyntaxKind.Method:
+                            if (node.flags & NodeFlags.Static) {
+                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                                Diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
+                                Diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_private_name_0;
+                            }
+                            else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
+                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                                Diagnostics.Return_type_of_public_method_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
+                                Diagnostics.Return_type_of_public_method_from_exported_class_has_or_is_using_private_name_0;
+                            }
+                            else {
+                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                                Diagnostics.Return_type_of_method_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
+                                Diagnostics.Return_type_of_method_from_exported_interface_has_or_is_using_private_name_0;
+                            }
+                            break;
+
+                        case SyntaxKind.FunctionDeclaration:
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            Diagnostics.Return_type_of_exported_function_has_or_is_using_name_0_from_private_module_1 :
+                            Diagnostics.Return_type_of_exported_function_has_or_is_using_private_name_0;
+                            break;
+
+                        default:
+                            Debug.fail("This is unknown kind for signature: " + SyntaxKind[node.kind]);
+                    }
+
+                    return {
+                        diagnosticMessage: diagnosticMessage,
+                        errorNode: <Node>node.name || node,
+                    };
+                }
+
             }
 
             function emitParameterDeclaration(node: ParameterDeclaration) {

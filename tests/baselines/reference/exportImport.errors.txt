@@ -1,0 +1,16 @@
+==== tests/cases/compiler/consumer.ts (1 errors) ====
+    import e = require('./exporter');
+    
+    export function w(): e.w { // Should be OK
+                    ~
+!!! Return type of exported function has or is using private name 'Widget1'.
+        return new e.w();
+    }
+==== tests/cases/compiler/w1.ts (0 errors) ====
+    
+    export = Widget1
+    class Widget1 { name = 'one'; }
+    
+==== tests/cases/compiler/exporter.ts (0 errors) ====
+    export import w = require('./w1');
+    

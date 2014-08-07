@@ -528,6 +528,62 @@
         "category": "Error",
         "code": 2049
     },
+    "Return type of constructor signature from exported interface has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 2052
+    },
+    "Return type of call signature from exported interface has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 2053
+    },
+    "Return type of index signature from exported interface has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 2054
+    },
+    "Return type of public static method from exported class has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 2055
+    },
+    "Return type of public method from exported class has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 2056
+    },
+    "Return type of method from exported interface has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 2057
+    },
+    "Return type of exported function has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 2058
+    },
+    "Return type of constructor signature from exported interface has or is using name '{0}' from private module '{1}'.": {
+        "category": "Error",
+        "code": 2061
+    },
+    "Return type of call signature from exported interface has or is using name '{0}' from private module '{1}'.": {
+        "category": "Error",
+        "code": 2062
+    },
+    "Return type of index signature from exported interface has or is using name '{0}' from private module '{1}'.": {
+        "category": "Error",
+        "code": 2063
+    },
+    "Return type of public static method from exported class has or is using name '{0}' from private module '{1}'.": {
+        "category": "Error",
+        "code": 2064
+    },
+    "Return type of public method from exported class has or is using name '{0}' from private module '{1}'.": {
+        "category": "Error",
+        "code": 2065
+    },
+    "Return type of method from exported interface has or is using name '{0}' from private module '{1}'.": {
+        "category": "Error",
+        "code": 2066
+    },
+    "Return type of exported function has or is using name '{0}' from private module '{1}'.": {
+        "category": "Error",
+        "code": 2067
+    },
    "Type parameter '{0}' of constructor signature from exported interface has or is using private name '{1}'.": {
         "category": "Error",
         "code": 2208
