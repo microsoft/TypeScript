@@ -61,30 +61,3 @@ export = Math;
 //// [Drawing.d.ts]
 export import Math = require('Math/Math');
 //// [consumer.d.ts]
-
-
-//// [DtsFileErrors]
-
-
-==== tests/cases/compiler/consumer.d.ts (0 errors) ====
-    
-==== tests/cases/compiler/Drawing.d.ts (1 errors) ====
-    export import Math = require('Math/Math');
-                                 ~~~~~~~~~~~
-!!! Cannot find external module 'Math/Math'.
-    
-==== tests/cases/compiler/Math.d.ts (1 errors) ====
-    import Adder = require('Math/Adder');
-                           ~~~~~~~~~~~~
-!!! Cannot find external module 'Math/Adder'.
-    declare var Math: {
-        Adder: typeof Adder;
-    };
-    export = Math;
-    
-==== tests/cases/compiler/Adder.d.ts (0 errors) ====
-    declare class Adder {
-        add(a: number, b: number): void;
-    }
-    export = Adder;
-    

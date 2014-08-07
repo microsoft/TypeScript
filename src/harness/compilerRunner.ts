@@ -246,7 +246,7 @@ class CompilerBaselineRunner extends RunnerBase {
                             var declFile = ts.forEach(result.declFilesCode,
                                 declFile => declFile.fileName === (file.unitName.substr(0, file.unitName.length - ".ts".length) + ".d.ts")
                                     ? declFile : undefined);
-                            return { unitName: rootDir + Harness.Path.getFileName(declFile.fileName), content: declFile.code };
+                            return { unitName: declFile.fileName, content: declFile.code };
                         }
                     }
 
