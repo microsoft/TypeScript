@@ -27,3 +27,11 @@ var thingy = {
     me: "A"
 };
 foo("IN " + thingy.me + "!");
+
+
+//// [unusedImportDeclaration_testerB.d.ts]
+declare class TesterB {
+    me: string;
+}
+export = TesterB;
+//// [unusedImportDeclaration_testerA.d.ts]

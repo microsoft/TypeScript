@@ -1,4 +1,5 @@
 //@module: amd
+//@declaration: true
 export = Foo;
 
 interface Foo<T> {

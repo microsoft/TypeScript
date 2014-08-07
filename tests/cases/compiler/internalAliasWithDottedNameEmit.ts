@@ -1,3 +1,4 @@
+// @declaration: true
 module a.b.c {
       export var d;
 }

@@ -23,3 +23,21 @@ var M;
     var R = N;
     M.X = R;
 })(M || (M = {}));
+
+
+//// [aliasInaccessibleModule2.d.ts]
+declare module M {
+    export import X = R;
+}
+
+
+//// [DtsFileErrors]
+
+
+==== tests/cases/compiler/aliasInaccessibleModule2.d.ts (1 errors) ====
+    declare module M {
+        export import X = R;
+        ~~~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'R'.
+    }
+    
