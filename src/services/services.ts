@@ -659,7 +659,6 @@ module ts {
         InMultiLineCommentTrivia,
         InSingleQuoteStringLiteral,
         InDoubleQuoteStringLiteral,
-        EndingWithKeyword,
         EndingWithDotToken,
     }
 
@@ -2243,9 +2242,6 @@ module ts {
                 case EndOfLineState.EndingWithDotToken:
                     lastToken = SyntaxKind.DotToken;
                     break;
-                case EndOfLineState.EndingWithKeyword:
-                    lastToken = SyntaxKind.FirstKeyword;
-                    break;
             }
 
             var result: ClassificationResult = {
@@ -2264,7 +2260,7 @@ module ts {
                         token = SyntaxKind.RegularExpressionLiteral;
                     }
                 }
-                else if (isKeyword(token) && (isKeyword(lastToken) || lastToken === SyntaxKind.DotToken)) {
+                else if (lastToken === SyntaxKind.DotToken) {
                     token = SyntaxKind.Identifier;
                 }
 
@@ -2315,9 +2311,6 @@ module ts {
                     }
                     else if (token === SyntaxKind.DotToken) {
                         result.finalLexState = EndOfLineState.EndingWithDotToken;
-                    }
-                    else if (isKeyword(token)) {
-                        result.finalLexState = EndOfLineState.EndingWithKeyword;
                     }
                 }
             }

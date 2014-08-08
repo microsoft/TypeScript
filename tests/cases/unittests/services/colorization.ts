@@ -222,16 +222,6 @@ describe('Colorization', function () {
             verifyClassification(results.tuples[2], 3, ts.TokenClass.Identifier);
         });
 
-        it("classifies keyword after a keyword", function () {
-            var results = getClassifications("module string", ts.EndOfLineState.Start);
-            verifyClassification(results.tuples[2], 6, ts.TokenClass.Identifier);
-        });
-
-        it("reports correct state with a line ending in a keyword", function () {
-            var results = getClassifications("module", ts.EndOfLineState.Start);
-            assert.equal(results.finalEndOfLineState, ts.EndOfLineState.EndingWithKeyword);
-        });
-
         it("classifies keyword after a dot on previous line", function () {
             var results = getClassifications("var", ts.EndOfLineState.EndingWithDotToken);
 
