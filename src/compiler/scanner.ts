@@ -676,9 +676,8 @@ module ts {
                         if (text.charCodeAt(pos + 1) === CharacterCodes.asterisk) {
                             pos += 2;
 
-                            var safeLength = len - 1; // For lookahead.
                             var commentClosed = false;
-                            while (pos < safeLength) {
+                            while (pos < len) {
                                 var ch = text.charCodeAt(pos);
 
                                 if (ch === CharacterCodes.asterisk && text.charCodeAt(pos + 1) === CharacterCodes.slash) {
@@ -694,7 +693,6 @@ module ts {
                             }
 
                             if (!commentClosed) {
-                                pos++;
                                 error(Diagnostics.Asterisk_Slash_expected);
                             }
 
