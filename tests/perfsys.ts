@@ -16,11 +16,13 @@ module perftest {
     var resolvePath = sys.resolvePath;
     export var getExecutingFilePath = sys.getExecutingFilePath;
     export var getCurrentDirectory = sys.getCurrentDirectory;
+    var exit = sys.exit;
 
     var args = sys.args;
 
     // augment sys so first ts.executeCommandLine call will be finish silently
     sys.write = (s: string) => { };
+    sys.exit = (code: number) => { };
     sys.args = []
 
     export function restoreSys() {
@@ -88,10 +90,9 @@ module perftest {
             return path
         }
 
-        sys.writeFile = (path: string, data: string) => { };
+        sys.writeFile = (path: string, data: string) => { };        
 
         var out: string = "";
-        var err: string = "";
 
         sys.write = (s: string) => { out += s; };
 

@@ -50,7 +50,7 @@ module TypeScript.Services {
                     var secondSymbolDecl = secondSymbol.getDeclarations()[0];
 
                     var firstParentDecl = firstSymbolDecl.getParentDecl();
-                    var secondParentDecl = secondSymbolDecl.getParentDecl()
+                    var secondParentDecl = secondSymbolDecl.getParentDecl();
 
                     if (firstParentDecl.kind === TypeScript.PullElementKind.ObjectLiteral &&
                         secondParentDecl.kind === TypeScript.PullElementKind.ObjectLiteral) {

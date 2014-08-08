@@ -26,7 +26,7 @@ module TypeScript.Services.Formatting {
         }
 
         static create1(left: SyntaxKind, right: SyntaxKind): RuleDescriptor {
-            return RuleDescriptor.create4(Shared.TokenRange.FromToken(left), Shared.TokenRange.FromToken(right))
+            return RuleDescriptor.create4(Shared.TokenRange.FromToken(left), Shared.TokenRange.FromToken(right));
         }
 
         static create2(left: Shared.TokenRange, right: SyntaxKind): RuleDescriptor {

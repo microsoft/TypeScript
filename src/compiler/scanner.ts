@@ -300,6 +300,10 @@ module ts {
         return ch >= CharacterCodes._0 && ch <= CharacterCodes._9;
     }
 
+    export function isOctalDigit(ch: number): boolean {
+        return ch >= CharacterCodes._0 && ch <= CharacterCodes._7;
+    }
+
     export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boolean): number {
         while (true) {
             var ch = text.charCodeAt(pos);
@@ -360,7 +364,9 @@ module ts {
         var precedingLineBreak: boolean;
 
         function error(message: DiagnosticMessage): void {
-            if (onError) onError(message);
+            if (onError) {
+                onError(message);
+            }
         }
 
         function isIdentifierStart(ch: number): boolean {
@@ -396,6 +402,14 @@ module ts {
                 }
             }
             return +(text.substring(start, end));
+        }
+
+        function scanOctalDigits(): number {
+            var start = pos;
+            while (isOctalDigit(text.charCodeAt(pos))) {
+                pos++;
+            }
+            return +(text.substring(start, pos));
         }
 
         function scanHexDigits(count: number, exact?: boolean): number {
@@ -681,7 +695,7 @@ module ts {
 
                             if (!commentClosed) {
                                 pos++;
-                                onError(Diagnostics.Asterisk_Slash_expected);
+                                error(Diagnostics.Asterisk_Slash_expected);
                             }
 
                             if (onComment) {
@@ -708,6 +722,14 @@ module ts {
                             tokenValue = "" + value;
                             return SyntaxKind.NumericLiteral;
                         }
+                        // Try to parse as an octal
+                        if (pos + 1 < len && isOctalDigit(text.charCodeAt(pos + 1))) {
+                            tokenValue = "" + scanOctalDigits();
+                            return SyntaxKind.NumericLiteral;
+                        }
+                        // This fall-through is a deviation from the EcmaScript grammar. The grammar says that a leading zero
+                        // can only be followed by an octal digit, a dot, or the end of the number literal. However, we are being
+                        // permissive and allowing decimal digits of the form 08* and 09* (which many browsers also do).
                     case CharacterCodes._1:
                     case CharacterCodes._2:
                     case CharacterCodes._3:

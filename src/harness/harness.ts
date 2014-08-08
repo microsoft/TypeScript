@@ -107,7 +107,7 @@ module Utils {
             } else {
                 return cache[key] = f.apply(this, arguments);
             }
-        })
+        });
     }
 }
 
@@ -555,7 +555,7 @@ module Harness {
                 getCanonicalFileName: ts.getCanonicalFileName,
                 useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
                 getNewLine: ()=> sys.newLine
-            }
+            };
         }
 
         export class HarnessCompiler {
@@ -1018,7 +1018,7 @@ module Harness {
             }
         }
 
-        var fileCache: { [idx: string]: boolean } = {}
+        var fileCache: { [idx: string]: boolean } = {};
         function generateActual(actualFilename: string, generateContent: () => string): string {
             // For now this is written using TypeScript, because sys is not available when running old test cases.
             // But we need to move to sys once we have
@@ -1083,8 +1083,8 @@ module Harness {
             var lineEndingSensitive = opts && opts.LineEndingSensitive;
 
             if (!lineEndingSensitive) {
-                expected = expected.replace(/\r\n?/g, '\n')
-                actual = actual.replace(/\r\n?/g, '\n')
+                expected = expected.replace(/\r\n?/g, '\n');
+                actual = actual.replace(/\r\n?/g, '\n');
             }
 
             return { expected: expected, actual: actual };

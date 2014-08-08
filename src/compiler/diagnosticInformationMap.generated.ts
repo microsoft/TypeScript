@@ -105,6 +105,7 @@ module ts {
         An_object_literal_cannot_have_multiple_get_Slashset_accessors_with_the_same_name: { code: 1118, category: DiagnosticCategory.Error, key: "An object literal cannot have multiple get/set accessors with the same name." },
         An_object_literal_cannot_have_property_and_accessor_with_the_same_name: { code: 1119, category: DiagnosticCategory.Error, key: "An object literal cannot have property and accessor with the same name." },
         An_export_assignment_cannot_have_modifiers: { code: 1120, category: DiagnosticCategory.Error, key: "An export assignment cannot have modifiers." },
+        Octal_literals_are_not_allowed_in_strict_mode: { code: 1121, category: DiagnosticCategory.Error, key: "Octal literals are not allowed in strict mode." },
         Duplicate_identifier_0: { code: 2000, category: DiagnosticCategory.Error, key: "Duplicate identifier '{0}'." },
         Extends_clause_of_exported_class_0_has_or_is_using_private_name_1: { code: 2018, category: DiagnosticCategory.Error, key: "Extends clause of exported class '{0}' has or is using private name '{1}'." },
         Implements_clause_of_exported_class_0_has_or_is_using_private_name_1: { code: 2019, category: DiagnosticCategory.Error, key: "Implements clause of exported class '{0}' has or is using private name '{1}'." },

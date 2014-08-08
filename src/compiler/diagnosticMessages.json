@@ -412,6 +412,10 @@
         "category": "Error",
         "code": 1120
     },
+    "Octal literals are not allowed in strict mode.": {
+        "category": "Error",
+        "code": 1121
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2000
