@@ -1882,6 +1882,21 @@ module ts {
                 typeName?: Identifier
             }
 
+            function writeAsychronousImportDeclarations(importDeclarations: ImportDeclaration[]) {
+                var oldWriter = writer;
+                forEach(importDeclarations.sort(), aliasToWrite => {
+                    var aliasEmitInfo = forEach(aliasDeclarationEmitInfo, declEmitInfo => declEmitInfo.declaration === aliasToWrite ? declEmitInfo : undefined);
+                    writer = createTextWriter(writeSymbol);
+                    for (var declarationIndent = aliasEmitInfo.indent; declarationIndent; declarationIndent--) {
+                        writer.increaseIndent();
+                    }
+
+                    writeImportDeclaration(aliasToWrite);
+                    aliasEmitInfo.asynchronousOutput = writer.getText();
+                });
+                writer = oldWriter;
+            }
+
             function writeSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
                 var symbolAccesibilityResult = resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning);
                 if (symbolAccesibilityResult.accessibility === SymbolAccessibility.Accessible) {
@@ -1889,18 +1904,7 @@ module ts {
 
                     // write the aliases
                     if (symbolAccesibilityResult && symbolAccesibilityResult.aliasesToMakeVisible) {
-                        var oldWriter = writer;
-                        forEach(symbolAccesibilityResult.aliasesToMakeVisible.sort(), aliasToWrite => {
-                            var aliasEmitInfo = forEach(aliasDeclarationEmitInfo, declEmitInfo => declEmitInfo.declaration === aliasToWrite ? declEmitInfo : undefined);
-                            writer = createTextWriter(writeSymbol);
-                            for (var declarationIndent = aliasEmitInfo.indent; declarationIndent; declarationIndent--) {
-                                writer.increaseIndent();
-                            }
-
-                            writeImportDeclaration(aliasToWrite);
-                            aliasEmitInfo.asynchronousOutput = writer.getText();
-                        });
-                        writer = oldWriter;
+                        writeAsychronousImportDeclarations(symbolAccesibilityResult.aliasesToMakeVisible);
                     }
                 }
                 else {
@@ -2007,6 +2011,7 @@ module ts {
                 writer.write(getSourceTextOfLocalNode(node.name));
                 writer.write(" = ");
                 if (node.entityName) {
+                    checkEntityNameAccessible();
                     writer.write(getSourceTextOfLocalNode(node.entityName));
                     writer.write(";");
                 }
@@ -2016,6 +2021,24 @@ module ts {
                     writer.write(");");
                 }
                 writer.writeLine();
+
+                function checkEntityNameAccessible() {
+                    var symbolAccesibilityResult = resolver.isImportDeclarationEntityNameReferenceDeclarationVisibile(node.entityName);
+                    if (symbolAccesibilityResult.accessibility === SymbolAccessibility.Accessible) {
+                        // write the aliases
+                        if (symbolAccesibilityResult.aliasesToMakeVisible) {
+                            writeAsychronousImportDeclarations(symbolAccesibilityResult.aliasesToMakeVisible);
+                        }
+                    }
+                    else {
+                        // Report error
+                        reportedDeclarationError = true;
+                        diagnostics.push(createDiagnosticForNode(node,
+                            Diagnostics.Import_declaration_0_is_using_private_name_1,
+                            getSourceTextOfLocalNode(node.name),
+                            symbolAccesibilityResult.errorSymbolName));
+                    }
+                }
             }
 
             function emitModuleDeclaration(node: ModuleDeclaration) {

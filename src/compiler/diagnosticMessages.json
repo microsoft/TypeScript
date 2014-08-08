@@ -616,6 +616,10 @@
         "category": "Error",
         "code": 2067
     },
+    "Import declaration '{0}' is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2181
+    },
    "Type parameter '{0}' of constructor signature from exported interface has or is using private name '{1}'.": {
         "category": "Error",
         "code": 2208
