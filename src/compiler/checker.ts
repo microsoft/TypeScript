@@ -661,38 +661,52 @@ module ts {
             return callback(globals);
         }
 
-        function getAccessibleSymbol(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags) {
-            function getAccessibleSymbolFromSymbolTable(symbols: SymbolTable) {
+        function getAccessibleSymbolChain(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): Symbol[] {
+            function getAccessibleSymbolChainFromSymbolTable(symbols: SymbolTable): Symbol[]{
+                function canQualifySymbol(symbolFromSymbolTable: Symbol, meaning: SymbolFlags) {
+                    // If the symbol is equivalent and doesnt need futher qualification, this symbol is accessible
+                    if (!needsQualification(symbolFromSymbolTable, enclosingDeclaration, meaning)) {
+                        return true;
+                    }
+
+                    // If symbol needs qualification, make sure that parent is accessible, if it is then this symbol is accessible too
+                    var accessibleParent = getAccessibleSymbolChain(symbolFromSymbolTable.parent, enclosingDeclaration, SymbolFlags.Namespace);
+                    return !!accessibleParent;
+                }
+
                 function isAccessible(symbolFromSymbolTable: Symbol, resolvedAliasSymbol?: Symbol) {
                     if (symbol === (resolvedAliasSymbol || symbolFromSymbolTable)) {
-                        // If the symbol is equivalent and doesnt need futher qualification, this symbol is accessible
-                        if (!needsQualification(symbolFromSymbolTable, enclosingDeclaration, meaning)) {
-                            return true;
-                        }
-
-                        // If symbol needs qualification, make sure that parent is accessible, if it is then this symbol is accessible too
-                        var accessibleParent = getAccessibleSymbol(symbolFromSymbolTable.parent, enclosingDeclaration, SymbolFlags.Namespace);
-                        return !!accessibleParent;
+                        // if symbolfrom symbolTable or alias resolution matches the symbol, 
+                        // check the symbol can be qualified, it is only then this symbol is accessible
+                        return canQualifySymbol(symbolFromSymbolTable, meaning);
                     }
                 }
 
                 // If symbol is directly available by its name in the symbol table
                 if (isAccessible(lookUp(symbols, symbol.name))) {
-                    return symbol;
+                    return [symbol];
                 }
 
                 // Check if symbol is any of the alias
                 return forEachValue(symbols, symbolFromSymbolTable => {
                     if (symbolFromSymbolTable.flags & SymbolFlags.Import) {
+                        var resolvedImportedSymbol = resolveImport(symbolFromSymbolTable);
                         if (isAccessible(symbolFromSymbolTable, resolveImport(symbolFromSymbolTable))) {
-                            return symbolFromSymbolTable;
+                            return [symbolFromSymbolTable];
+                        }
+
+                        // Look in the exported members, if we can find accessibleSymbolChain, symbol is accessible using this chain
+                        // but only if the symbolFromSymbolTable can be qualified
+                        var accessibleSymbolsFromExports = resolvedImportedSymbol.exports ? getAccessibleSymbolChainFromSymbolTable(resolvedImportedSymbol.exports): undefined;
+                        if (accessibleSymbolsFromExports && canQualifySymbol(symbolFromSymbolTable, SymbolFlags.Namespace)) {
+                            return [symbolFromSymbolTable].concat(accessibleSymbolsFromExports);
                         }
                     }
                 });
             }
 
             if (symbol) {
-                return forEachSymbolTableInScope(enclosingDeclaration, getAccessibleSymbolFromSymbolTable);
+                return forEachSymbolTableInScope(enclosingDeclaration, getAccessibleSymbolChainFromSymbolTable);
             }
         }
 
@@ -732,9 +746,9 @@ module ts {
                 var meaningToLook = meaning;
                 while (symbol) {
                     // Symbol is accessible if it by itself is accessible
-                    var accessibleSymbol = getAccessibleSymbol(symbol, enclosingDeclaration, meaningToLook);
-                    if (accessibleSymbol) {
-                        if (forEach(accessibleSymbol.declarations, declaration => !getIsDeclarationVisible(declaration))) {
+                    var accessibleSymbolChain = getAccessibleSymbolChain(symbol, enclosingDeclaration, meaningToLook);
+                    if (accessibleSymbolChain) {
+                        if (forEach(accessibleSymbolChain[0].declarations, declaration => !getIsDeclarationVisible(declaration))) {
                             return {
                                 accessibility: SymbolAccessibility.NotAccessible,
                                 errorSymbolName: symbolToString(initialSymbol, enclosingDeclaration, meaning),
@@ -819,12 +833,13 @@ module ts {
                 while (symbol) { 
                     var isFirstName = !symbolName;
                     var meaningToLook = isFirstName ? meaning : SymbolFlags.Namespace;
-                    var accessibleSymbol = getAccessibleSymbol(symbol, enclosingDeclaration, meaningToLook);
-                    symbolName = getSymbolName(accessibleSymbol || symbol) + (isFirstName ? "" : ("." + symbolName));
-                    if (accessibleSymbol && !needsQualification(accessibleSymbol, enclosingDeclaration, meaningToLook)) {
+                    var accessibleSymbolChain = getAccessibleSymbolChain(symbol, enclosingDeclaration, meaningToLook);
+                    var currentSymbolName = accessibleSymbolChain ? ts.map(accessibleSymbolChain, accessibleSymbol => getSymbolName(accessibleSymbol)).join(".") : getSymbolName(symbol);
+                    symbolName = currentSymbolName + (isFirstName ? "" : ("." + symbolName));
+                    if (accessibleSymbolChain && !needsQualification(accessibleSymbolChain[0], enclosingDeclaration, accessibleSymbolChain.length === 1 ? meaningToLook : SymbolFlags.Namespace)) {
                         break;
                     }
-                    symbol = accessibleSymbol ? accessibleSymbol.parent : symbol.parent;
+                    symbol = accessibleSymbolChain ? accessibleSymbolChain[0].parent : symbol.parent;
                 }
 
                 return symbolName;

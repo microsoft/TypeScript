@@ -186,10 +186,10 @@ export declare module M.Q {
     }
     interface b extends M.C {
     }
-    interface I extends M.N.I {
+    interface I extends M.c.I {
     }
     module c {
-        interface I extends M.N.I {
+        interface I extends M.c.I {
         }
     }
 }
@@ -242,10 +242,10 @@ export declare module M.Q {
         }
         interface b extends M.C {
         }
-        interface I extends M.N.I {
+        interface I extends M.c.I {
         }
         module c {
-            interface I extends M.N.I {
+            interface I extends M.c.I {
             }
         }
     }
