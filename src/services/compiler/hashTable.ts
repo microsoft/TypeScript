@@ -16,7 +16,7 @@
 ///<reference path='references.ts' />
 
 module TypeScript {
-    var proto = "__proto__"
+    var proto = "__proto__";
 
     class BlockIntrinsics<T> {
         public prototype: T = undefined;

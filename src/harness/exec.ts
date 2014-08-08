@@ -32,7 +32,7 @@ class WindowsScriptHostExec implements IExec {
             var process = shell.Exec(fileName + ' ' + cmdLineArgs.join(' '));
         } catch(e) {
             result.stderr = e.message;
-            result.exitCode = 1
+            result.exitCode = 1;
             handleResult(result);
             return;
         }

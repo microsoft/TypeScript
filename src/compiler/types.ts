@@ -635,8 +635,8 @@ module ts {
 
     export interface SymbolAccessiblityResult {
         accessibility: SymbolAccessibility;
-        errorSymbolName?: string // Optional symbol name that results in error
-        errorModuleName?: string // If the symbol is not visibile from module, module's name
+        errorSymbolName?: string; // Optional symbol name that results in error
+        errorModuleName?: string; // If the symbol is not visibile from module, module's name
     }
 
     export interface EmitResolver {

@@ -466,7 +466,7 @@ module FourSlash {
                 this.assertItemInCompletionList(members.entries, symbol, type, docComment, fullSymbolName, kind);
             }
             else {
-                throw new Error("Expected a member list, but none was provided")
+                throw new Error("Expected a member list, but none was provided");
             }
         }
 
@@ -2040,7 +2040,7 @@ module FourSlash {
             globalOptions: opts,
             files: files,
             ranges: ranges
-        }
+        };
     }
 
     enum State {

@@ -41,7 +41,7 @@ var mytestconfig = 'mytest.config';
 var testconfig = 'test.config';
 var testConfigFile =
     Harness.IO.fileExists(mytestconfig) ? Harness.IO.readFile(mytestconfig) :
-    (Harness.IO.fileExists(testconfig) ? Harness.IO.readFile(testconfig) : '')
+    (Harness.IO.fileExists(testconfig) ? Harness.IO.readFile(testconfig) : '');
 
 if (testConfigFile !== '') {
     // TODO: not sure why this is crashing mocha

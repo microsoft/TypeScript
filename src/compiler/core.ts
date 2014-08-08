@@ -174,7 +174,7 @@ module ts {
         var result: Map<T> = {};
 
         forEach(array, value => {
-            result[makeKey(value)] = value
+            result[makeKey(value)] = value;
         });
 
         return result;

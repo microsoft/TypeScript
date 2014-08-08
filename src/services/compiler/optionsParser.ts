@@ -155,7 +155,7 @@ module TypeScript {
 
             config.name = name;
             config.short = short;
-            config.flag = true
+            config.flag = true;
 
         this.options.push(config);
         }
