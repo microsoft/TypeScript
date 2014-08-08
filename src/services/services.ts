@@ -420,10 +420,10 @@ module ts {
         }
 
         public static createSourceFileObject(languageVersion: ScriptTarget, filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, version: number, isOpen: boolean, syntaxTree: TypeScript.SyntaxTree) {
-            var newSoruceFile = <SourceFileObject><any>createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), languageVersion, version, isOpen);
-            newSoruceFile.scriptSnapshot = scriptSnapshot;
-            newSoruceFile.syntaxTree = syntaxTree;
-            return newSoruceFile;
+            var newSourceFile = <SourceFileObject><any>createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), languageVersion, version, isOpen);
+            newSourceFile.scriptSnapshot = scriptSnapshot;
+            newSourceFile.syntaxTree = syntaxTree;
+            return newSourceFile;
         }
     }
 
@@ -697,7 +697,7 @@ module ts {
             referencedFiles: string[]): SourceFile;
 
         updateDocument(
-            soruceFile: SourceFile,
+            sourceFile: SourceFile,
             filename: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
@@ -1112,19 +1112,19 @@ module ts {
         function reportStats() {
             var bucketInfoArray = Object.keys(buckets).filter(name => name && name.charAt(0) === '_').map(name => {
                 var entries = lookUp(buckets, name);
-                var soruceFiles: { name: string; refCount: number; references: string[]; }[] = [];
+                var sourceFiles: { name: string; refCount: number; references: string[]; }[] = [];
                 for (var i in entries) {
                     var entry = entries[i];
-                    soruceFiles.push({
+                    sourceFiles.push({
                         name: i,
                         refCount: entry.refCount,
                         references: entry.owners.slice(0)
                     });
                 }
-                soruceFiles.sort((x, y) => y.refCount - x.refCount);
+                sourceFiles.sort((x, y) => y.refCount - x.refCount);
                 return {
                     bucket: name,
-                    sourceFiles: soruceFiles
+                    sourceFiles: sourceFiles
                 };
             });
             return JSON.stringify(bucketInfoArray, null, 2);
