@@ -1,34 +1,13 @@
 ///<reference path="harness.ts" />
 ///<reference path="runnerbase.ts" />
 
-enum UnittestTestType {
-    Compiler,
-    LanguageService,
-    Services,
-}
-
 class UnitTestRunner extends RunnerBase {
-    constructor(public testType: UnittestTestType) {
+    constructor() {
         super();
     }
 
     public initializeTests() {
-        switch (this.testType) {
-            case UnittestTestType.Compiler:
-                this.tests = this.enumerateFiles('tests/cases/unittests/compiler');
-                break;
-            case UnittestTestType.LanguageService:
-                this.tests = this.enumerateFiles('tests/cases/unittests/ls');
-                break;
-            case UnittestTestType.Services:
-                this.tests = this.enumerateFiles('tests/cases/unittests/services', /colorization.ts/);
-                break;
-            default:
-                if (this.tests.length === 0) {
-                    throw new Error('Unsupported test cases: ' + this.testType);
-                }
-                break;
-        }
+        this.tests = this.enumerateFiles('tests/cases/unittests/services');
 
         var outfile = new Harness.Compiler.WriterAggregator()
         var outerr = new Harness.Compiler.WriterAggregator();
@@ -63,7 +42,8 @@ class UnitTestRunner extends RunnerBase {
                 after: after,
                 Harness: Harness,
                 IO: Harness.IO,
-                ts:ts
+                ts: ts,
+                TypeScript: TypeScript
                 // FourSlash: FourSlash
             };
         }
