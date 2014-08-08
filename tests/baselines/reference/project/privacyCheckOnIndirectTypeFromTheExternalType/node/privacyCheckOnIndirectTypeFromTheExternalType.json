@@ -5,10 +5,10 @@
         "test.ts"
     ],
     "resolvedInputFiles": [
-        "test.ts",
-        "externalModule.ts",
+        "lib.d.ts",
         "indirectExternalModule.ts",
-        "lib.d.ts"
+        "externalModule.ts",
+        "test.ts"
     ],
     "emittedFiles": [
         "indirectExternalModule.js",

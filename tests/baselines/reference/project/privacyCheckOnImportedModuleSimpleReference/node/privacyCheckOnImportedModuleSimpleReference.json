@@ -5,10 +5,10 @@
         "test.ts"
     ],
     "resolvedInputFiles": [
-        "test.ts",
+        "lib.d.ts",
         "mExported.ts",
         "mNonExported.ts",
-        "lib.d.ts"
+        "test.ts"
     ],
     "emittedFiles": [
         "mExported.js",
