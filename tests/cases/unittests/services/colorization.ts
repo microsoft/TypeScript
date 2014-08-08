@@ -28,14 +28,20 @@ describe('Colorization', function () {
         var classResult = myclassifier.getClassificationsForLine(code, initialEndOfLineState).split('\n');
         var tuples: Classification[] = [];
         var i = 0;
+        var computedLength = 0;
 
         for (; i < classResult.length - 1; i += 2) {
-            tuples[i / 2] = {
+            var t = tuples[i / 2] = {
                 length: parseInt(classResult[i]),
                 class: parseInt(classResult[i + 1])
             };
+
+            assert.isTrue(t.length > 0, "Result length should be greater than 0, got :" + t.length);
+            computedLength += t.length;
         }
         var finalEndOfLineState = classResult[classResult.length - 1];
+
+        assert.equal(computedLength, code.length, "Expected accumilative length of all entries to match the length of the source. expected: " + code.length + ", but got: " + computedLength);
 
         return {
             tuples: tuples,
@@ -207,6 +213,31 @@ describe('Colorization', function () {
             assert.equal(results.tuples.length, 1);
             verifyClassification(results.tuples[0], 3, ts.TokenClass.Comment);
             assert.equal(results.finalEndOfLineState, ts.EndOfLineState.InMultiLineCommentTrivia);
+        });
+    });
+
+    describe("test cases for colorizing keywords", function () {
+        it("classifies keyword after a dot", function () {
+            var results = getClassifications("a.var", ts.EndOfLineState.Start);
+            verifyClassification(results.tuples[2], 3, ts.TokenClass.Identifier);
+        });
+
+        it("classifies keyword after a keyword", function () {
+            var results = getClassifications("module string", ts.EndOfLineState.Start);
+            verifyClassification(results.tuples[2], 6, ts.TokenClass.Identifier);
+        });
+
+        it("reports correct state with a line ending in a keyword", function () {
+            var results = getClassifications("module", ts.EndOfLineState.Start);
+            assert.equal(results.finalEndOfLineState, ts.EndOfLineState.EndingWithKeyword);
+        });
+
+        it("classifies keyword after a dot on previous line", function () {
+            var results = getClassifications("var", ts.EndOfLineState.EndingWithDotToken);
+
+            assert.equal(results.tuples.length, 1);
+            verifyClassification(results.tuples[0], 3, ts.TokenClass.Identifier);
+            assert.equal(results.finalEndOfLineState, ts.EndOfLineState.Start);
         });
     });
 });

@@ -659,6 +659,8 @@ module ts {
         InMultiLineCommentTrivia,
         InSingleQuoteStringLiteral,
         InDoubleQuoteStringLiteral,
+        EndingWithKeyword,
+        EndingWithDotToken,
     }
 
     export enum TokenClass {
@@ -2217,25 +2219,33 @@ module ts {
         function getClassificationsForLine(text: string, lexState: EndOfLineState): ClassificationResult {
             var offset = 0;
             var lastTokenOrCommentEnd = 0;
-            var inMultiLineComment = false;
+            var lastToken = SyntaxKind.Unknown;
+            var inUnterminatedMultiLineComment = false;
 
-            if (lexState !== EndOfLineState.Start) {
-                // If we're in a string literal, then prepend: "\
-                // (and a newline).  That way when we lex we'll think we're still in a string literal.
-                //
-                // If we're in a multiline comment, then prepend: /*
-                // (and a newline).  That way when we lex we'll think we're still in a multiline comment.
-                if (lexState === EndOfLineState.InDoubleQuoteStringLiteral) {
+            // If we're in a string literal, then prepend: "\
+            // (and a newline).  That way when we lex we'll think we're still in a string literal.
+            //
+            // If we're in a multiline comment, then prepend: /*
+            // (and a newline).  That way when we lex we'll think we're still in a multiline comment.
+            switch (lexState) {
+                case EndOfLineState.InDoubleQuoteStringLiteral:
                     text = '"\\\n' + text;
-                }
-                else if (lexState === EndOfLineState.InSingleQuoteStringLiteral) {
+                    offset = 3;
+                    break;
+                case EndOfLineState.InSingleQuoteStringLiteral:
                     text = "'\\\n" + text;
-                }
-                else if (lexState === EndOfLineState.InMultiLineCommentTrivia) {
+                    offset = 3;
+                    break;
+                case EndOfLineState.InMultiLineCommentTrivia:
                     text = "/*\n" + text;
-                }
-
-                offset = 3;
+                    offset = 3;
+                    break;
+                case EndOfLineState.EndingWithDotToken:
+                    lastToken = SyntaxKind.DotToken;
+                    break;
+                case EndOfLineState.EndingWithKeyword:
+                    lastToken = SyntaxKind.FirstKeyword;
+                    break;
             }
 
             var result: ClassificationResult = {
@@ -2245,17 +2255,17 @@ module ts {
 
             scanner = createScanner(ScriptTarget.ES5, text, onError, processComment);
 
-            var lastToken = SyntaxKind.Unknown;
             var token = SyntaxKind.Unknown;
             do {
-                inMultiLineComment = false;
-
                 token = scanner.scan();
 
                 if ((token === SyntaxKind.SlashToken || token === SyntaxKind.SlashEqualsToken) && !noRegexTable[lastToken]) {
                     if (scanner.reScanSlashToken() === SyntaxKind.RegularExpressionLiteral) {
                         token = SyntaxKind.RegularExpressionLiteral;
                     }
+                }
+                else if (isKeyword(token) && (isKeyword(lastToken) || lastToken === SyntaxKind.DotToken)) {
+                    token = SyntaxKind.Identifier;
                 }
 
                 lastToken = token;
@@ -2268,7 +2278,7 @@ module ts {
 
 
             function onError(message: DiagnosticMessage): void {
-                inMultiLineComment = message.key === Diagnostics.Asterisk_Slash_expected.key;
+                inUnterminatedMultiLineComment = message.key === Diagnostics.Asterisk_Slash_expected.key;
             }
 
             function processComment(start: number, end: number) {
@@ -2291,20 +2301,23 @@ module ts {
 
                 if (end >= text.length) {
                     // We're at the end.
-                    if (inMultiLineComment) {
+                    if (inUnterminatedMultiLineComment) {
                         result.finalLexState = EndOfLineState.InMultiLineCommentTrivia;
-                        return;
                     }
-
-                    if (token === SyntaxKind.StringLiteral) {
+                    else if (token === SyntaxKind.StringLiteral) {
                         var tokenText = scanner.getTokenText();
                         if (tokenText.length > 0 && tokenText.charCodeAt(tokenText.length - 1) === CharacterCodes.backslash) {
                             var quoteChar = tokenText.charCodeAt(0);
                             result.finalLexState = quoteChar === CharacterCodes.doubleQuote
                                 ? EndOfLineState.InDoubleQuoteStringLiteral
                                 : EndOfLineState.InSingleQuoteStringLiteral;
-                            return;
                         }
+                    }
+                    else if (token === SyntaxKind.DotToken) {
+                        result.finalLexState = EndOfLineState.EndingWithDotToken;
+                    }
+                    else if (isKeyword(token)) {
+                        result.finalLexState = EndOfLineState.EndingWithKeyword;
                     }
                 }
             }
@@ -2331,8 +2344,8 @@ module ts {
             }
         }
 
-        function isBinaryExpressionOperatorToken(tokenKind: SyntaxKind): boolean {
-            switch (tokenKind) {
+        function isBinaryExpressionOperatorToken(token: SyntaxKind): boolean {
+            switch (token) {
                 case SyntaxKind.AsteriskToken:
                 case SyntaxKind.SlashToken:
                 case SyntaxKind.PercentToken:
@@ -2374,8 +2387,8 @@ module ts {
             }
         }
 
-        function isPrefixUnaryExpressionOperatorToken(tokenKind: SyntaxKind): boolean {
-            switch (tokenKind) {
+        function isPrefixUnaryExpressionOperatorToken(token: SyntaxKind): boolean {
+            switch (token) {
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.MinusToken:
                 case SyntaxKind.TildeToken:
@@ -2388,18 +2401,22 @@ module ts {
             }
         }
 
-        function classFromKind(kind: SyntaxKind) {
-            if (kind >= SyntaxKind.FirstKeyword && kind <= SyntaxKind.LastKeyword) {
+        function isKeyword(token: SyntaxKind): boolean {
+            return token >= SyntaxKind.FirstKeyword && token <= SyntaxKind.LastKeyword;
+        }
+
+        function classFromKind(token: SyntaxKind) {
+            if (isKeyword(token)) {
                 return TokenClass.Keyword;
             }
-            else if (isBinaryExpressionOperatorToken(kind) || isPrefixUnaryExpressionOperatorToken(kind)) {
+            else if (isBinaryExpressionOperatorToken(token) || isPrefixUnaryExpressionOperatorToken(token)) {
                 return TokenClass.Operator;
             }
-            else if (kind >= SyntaxKind.FirstPunctuation && kind <= SyntaxKind.LastPunctuation) {
+            else if (token >= SyntaxKind.FirstPunctuation && token <= SyntaxKind.LastPunctuation) {
                 return TokenClass.Punctuation;
             }
 
-            switch (kind) {
+            switch (token) {
                 case SyntaxKind.NumericLiteral:
                     return TokenClass.NumberLiteral;
                 case SyntaxKind.StringLiteral:
