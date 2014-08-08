@@ -1,0 +1,10 @@
+==== tests/cases/compiler/privacyCheckTypeOfFunction.ts (2 errors) ====
+    function foo() {
+    }
+    export var x: typeof foo;
+               ~
+!!! Exported variable 'x' has or is using private name 'foo'.
+    export var b = foo;
+               ~
+!!! Exported variable 'b' has or is using private name 'foo'.
+    

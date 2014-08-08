@@ -111,7 +111,7 @@ declare module M.P {
         f = 0,
     }
     var v: M.D;
-    var w: () => void;
-    var x: () => void;
-    var x: () => void;
+    var w: typeof D.f;
+    var x: typeof C.f;
+    var x: typeof C.f;
 }

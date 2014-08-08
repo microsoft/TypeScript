@@ -28,7 +28,6 @@ export module M.P {
         export interface I { }
     }
     export import im = M.P.f;
-    // Bug 887180: Invalid .d.ts when an aliased entity is referenced, and a different entity is closer in scope
     export var a = M.a; // emitted incorrectly as typeof f
     export var b = M.b; // ok
     export var c = M.c; // ok
@@ -170,10 +169,10 @@ export declare module M.P {
         }
     }
     export import im = M.P.f;
-    var a: () => void;
+    var a: typeof M.f;
     var b: typeof M.C;
     var c: typeof M.N;
-    var g: () => void;
+    var g: typeof c.g;
     var d: typeof M.d;
 }
 export declare module M.Q {

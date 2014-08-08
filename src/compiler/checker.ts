@@ -942,9 +942,12 @@ module ts {
                     writeTypeofSymbol(type);
                 }
                 // Use 'typeof T' for types of functions and methods that circularly reference themselves
-                // TODO(shkamat): correct the usuage of typeof function - always on functions that are visible
-                else if (type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && typeStack && contains(typeStack, type)) {
+                else if (shouldWriteTypeOfFunctionSymbol()) {
                     writeTypeofSymbol(type);
+                }
+                else if (typeStack && contains(typeStack, type)) {
+                    // Recursive usage, use any
+                    writer.write("any");
                 }
                 else {
                     if (!typeStack) {
@@ -953,6 +956,23 @@ module ts {
                     typeStack.push(type);
                     writeLiteralType(type, allowFunctionOrConstructorTypeLiteral);
                     typeStack.pop();
+                }
+
+                function shouldWriteTypeOfFunctionSymbol() {
+                    if (type.symbol) {
+                        var isStaticMethodSymbol = !!(type.symbol.flags & SymbolFlags.Method &&  // typeof static method
+                            ts.forEach(type.symbol.declarations, declaration => declaration.flags & NodeFlags.Static));
+                        var isNonLocalFunctionSymbol = !!(type.symbol.flags & SymbolFlags.Function) &&
+                            (type.symbol.parent || // is exported function symbol
+                            ts.forEach(type.symbol.declarations, declaration =>
+                                declaration.parent.kind === SyntaxKind.SourceFile || declaration.parent.kind === SyntaxKind.ModuleBlock));
+
+                        if (isStaticMethodSymbol || isNonLocalFunctionSymbol) {
+                            // typeof is allowed only for static/non local functions
+                            return !!(flags & TypeFormatFlags.UseTypeOfFunction) || // use typeof if format flags specify it
+                                (typeStack && contains(typeStack, type)); // it is type of the symbol uses itself recursively
+                        }
+                    }
                 }
             }
 

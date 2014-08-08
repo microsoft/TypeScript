@@ -2160,7 +2160,7 @@ module ts {
                     if (node.constraint && (node.parent.kind !== SyntaxKind.Method || !(node.parent.flags & NodeFlags.Private))) {
                         write(" extends ");
                         getSymbolVisibilityDiagnosticMessage = getTypeParameterConstraintVisibilityError;
-                        resolver.writeTypeAtLocation(node.constraint, enclosingDeclaration, TypeFormatFlags.None, writer);
+                        resolver.writeTypeAtLocation(node.constraint, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
                     }
                 }
 
@@ -2179,7 +2179,7 @@ module ts {
 
                 function emitTypeOfTypeReference(node: Node) {
                     getSymbolVisibilityDiagnosticMessage = getHeritageClauseVisibilityError;
-                    resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.WriteArrayAsGenericType, writer);
+                    resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.WriteArrayAsGenericType | TypeFormatFlags.UseTypeOfFunction, writer);
 
                     function getHeritageClauseVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
                         var diagnosticMessage: DiagnosticMessage;
@@ -2304,7 +2304,7 @@ module ts {
                     if (!(node.flags & NodeFlags.Private)) {
                         write(": ");
                         getSymbolVisibilityDiagnosticMessage = getVariableDeclarationTypeVisibilityError;
-                        resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.None, writer);
+                        resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
                     }
                 }
 
@@ -2362,7 +2362,7 @@ module ts {
                     if (!(node.flags & NodeFlags.Private)) {
                         write(": ");
                         getSymbolVisibilityDiagnosticMessage = getAccessorDeclarationTypeVisibilityError;
-                        resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.None, writer);
+                        resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
                     }
                     write(";");
                     writeLine();
@@ -2459,7 +2459,7 @@ module ts {
                 if (node.kind !== SyntaxKind.Constructor && !(node.flags & NodeFlags.Private)) {
                     write(": ");
                     getSymbolVisibilityDiagnosticMessage = getReturnTypeVisibilityError;
-                    resolver.writeReturnTypeOfSignatureDeclaration(node, enclosingDeclaration, TypeFormatFlags.None, writer);
+                    resolver.writeReturnTypeOfSignatureDeclaration(node, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
                 }
                 write(";");
                 writeLine();
@@ -2534,7 +2534,7 @@ module ts {
                 if (!(node.parent.flags & NodeFlags.Private)) {
                     write(": ");
                     getSymbolVisibilityDiagnosticMessage = getParameterDeclarationTypeVisibilityError;
-                    resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.None, writer);
+                    resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
                 }
 
                 function getParameterDeclarationTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {

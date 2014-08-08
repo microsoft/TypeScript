@@ -31,4 +31,4 @@ export declare module a {
 }
 export import b = a.foo;
 export declare var bVal: number;
-export declare var bVal2: (x: number) => number;
+export declare var bVal2: typeof b;
