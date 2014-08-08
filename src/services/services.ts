@@ -693,8 +693,7 @@ module ts {
             compilationSettings: CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
             version: number,
-            isOpen: boolean,
-            referencedFiles: string[]): SourceFile;
+            isOpen: boolean): SourceFile;
 
         updateDocument(
             soruceFile: SourceFile,
@@ -1350,7 +1349,7 @@ module ts {
                     sourceFile = documentRegistry.updateDocument(sourceFile, filename, compilationSettings, scriptSnapshot, version, isOpen, textChangeRange);
                 }
                 else {
-                    sourceFile = documentRegistry.acquireDocument(filename, compilationSettings, scriptSnapshot, version, isOpen, []);
+                    sourceFile = documentRegistry.acquireDocument(filename, compilationSettings, scriptSnapshot, version, isOpen);
                 }
 
                 // Remeber the new sourceFile

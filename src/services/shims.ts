@@ -837,8 +837,8 @@ module ts {
         public createLanguageServiceShim(host: LanguageServiceShimHost): LanguageServiceShim {
             try {
                 var hostAdapter = new LanguageServiceShimHostAdapter(host);
-                var pullLanguageService = createLanguageService(hostAdapter, this.documentRegistry);
-                return new LanguageServiceShimObject(this, host, pullLanguageService);
+                var languageService = createLanguageService(hostAdapter, this.documentRegistry);
+                return new LanguageServiceShimObject(this, host, languageService);
             }
             catch (err) {
                 logInternalError(host, err);
