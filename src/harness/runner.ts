@@ -99,6 +99,9 @@ if (runners.length === 0) {
     //// language services
     runners.push(new FourslashRunner());
     //runners.push(new GeneratedFourslashRunner());
+
+    // unittests
+    runners.push(new UnitTestRunner(UnittestTestType.Services));
 }
 
 sys.newLine = '\r\n';

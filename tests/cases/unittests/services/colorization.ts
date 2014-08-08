@@ -1,198 +1,194 @@
-﻿///<reference path='_project.ts'/>
-
-interface Classification {
+﻿interface Classification {
     length: number;
-    class2: TypeScript.TokenClass;
+    class: ts.TokenClass;
 }
 
 interface ClassiferResult {
     tuples: Classification[];
-    finalLexState: TypeScript.LexState;
+    finalEndOfLineState: ts.EndOfLineState;
 }
 
 var TokenClassNames = {};
-TokenClassNames[TypeScript.TokenClass.Punctuation] = "Punctuation";
-TokenClassNames[TypeScript.TokenClass.Keyword] = "Keyword";
-TokenClassNames[TypeScript.TokenClass.Operator] = "Operator";
-TokenClassNames[TypeScript.TokenClass.Comment] = "Comment";
-TokenClassNames[TypeScript.TokenClass.Whitespace] = "Whitespace";
-TokenClassNames[TypeScript.TokenClass.Identifier] = "Identifier";
-TokenClassNames[TypeScript.TokenClass.NumberLiteral] = "NumberLiteral";
-TokenClassNames[TypeScript.TokenClass.StringLiteral] = "StringLiteral";
-TokenClassNames[TypeScript.TokenClass.RegExpLiteral] = "RegExpLiteral";
+TokenClassNames[ts.TokenClass.Punctuation] = "Punctuation";
+TokenClassNames[ts.TokenClass.Keyword] = "Keyword";
+TokenClassNames[ts.TokenClass.Operator] = "Operator";
+TokenClassNames[ts.TokenClass.Comment] = "Comment";
+TokenClassNames[ts.TokenClass.Whitespace] = "Whitespace";
+TokenClassNames[ts.TokenClass.Identifier] = "Identifier";
+TokenClassNames[ts.TokenClass.NumberLiteral] = "NumberLiteral";
+TokenClassNames[ts.TokenClass.StringLiteral] = "StringLiteral";
+TokenClassNames[ts.TokenClass.RegExpLiteral] = "RegExpLiteral";
 
 
-describe('Colorization', function() {
-    var mytypescriptLS = new Harness.TypeScriptLS();
-    var myls = mytypescriptLS.getLanguageService();
-    
-    var myclassifier = new Services.ClassifierShim(myls.host);
-    
-    function getClassifications(code: string, initialLexState?: TypeScript.LexState = TypeScript.LexState.Start): ClassiferResult {
-        var classResult = myclassifier.getClassificationsForLine(code, initialLexState).split('\n');
+describe('Colorization', function () {
+    var mytypescriptLS = new Harness.LanguageService.TypeScriptLS();
+    var myclassifier = mytypescriptLS.getClassifier();
+
+    function getClassifications(code: string, initialEndOfLineState: ts.EndOfLineState = ts.EndOfLineState.Start): ClassiferResult {
+        var classResult = myclassifier.getClassificationsForLine(code, initialEndOfLineState).split('\n');
         var tuples: Classification[] = [];
         var i = 0;
 
         for (; i < classResult.length - 1; i += 2) {
             tuples[i / 2] = {
                 length: parseInt(classResult[i]),
-                class2: parseInt(classResult[i + 1])
+                class: parseInt(classResult[i + 1])
             };
         }
-        var finalLexState = classResult[classResult.length - 1];
+        var finalEndOfLineState = classResult[classResult.length - 1];
 
         return {
             tuples: tuples,
-            finalLexState: parseInt(finalLexState)
+            finalEndOfLineState: parseInt(finalEndOfLineState)
         };
     }
 
     function verifyClassification(classification: Classification, expectedLength: number, expectedClass: number) {
-        assert.notNull(classification);
-        assert.is(classification.length === expectedLength, "Classification length does not match expected. Expected: " + expectedLength + ", Actual: " + classification.length);
-        assert.is(classification.class2 === expectedClass, "Classification class does not match expected. Expected: " + TokenClassNames[expectedClass] + ", Actual: " + TokenClassNames[classification.class2]);
+        assert.isNotNull(classification);
+        assert.equal(classification.length, expectedLength, "Classification length does not match expected. Expected: " + expectedLength + ", Actual: " + classification.length);
+        assert.equal(classification.class, expectedClass, "Classification class does not match expected. Expected: " + TokenClassNames[expectedClass] + ", Actual: " + TokenClassNames[classification.class]);
     }
-    
-    describe("test cases for colorization", function() {
+
+    describe("test cases for colorization", function () {
         var results = getClassifications('var x:string = "foo"; //Hello');
 
-        it("checks for a keyword", function() {
-            verifyClassification(results.tuples[0], 3, TypeScript.TokenClass.Keyword);
+        it("checks for a keyword", function () {
+            verifyClassification(results.tuples[0], 3, ts.TokenClass.Keyword);
         });
 
-        it("checks for a whitespace", function() {
-            verifyClassification(results.tuples[1], 4, TypeScript.TokenClass.Whitespace);
+        it("checks for a whitespace", function () {
+            verifyClassification(results.tuples[1], 1, ts.TokenClass.Whitespace);
         });
 
-        it("checks for a identifier", function() {
-            verifyClassification(results.tuples[2], 5, TypeScript.TokenClass.Identifier);
+        it("checks for a identifier", function () {
+            verifyClassification(results.tuples[2], 1, ts.TokenClass.Identifier);
         });
 
-        it("checks for an punctuation", function() {
-            verifyClassification(results.tuples[3], 6, TypeScript.TokenClass.Punctuation);
-        });
-        
-        it("checks for a operator", function() {
-            verifyClassification(results.tuples[6], 14, TypeScript.TokenClass.Operator);
+        it("checks for an punctuation", function () {
+            verifyClassification(results.tuples[3], 1, ts.TokenClass.Punctuation);
         });
 
-        it("checks for a string literal", function() {
-            verifyClassification(results.tuples[8], 20, TypeScript.TokenClass.StringLiteral);
+        it("checks for a operator", function () {
+            verifyClassification(results.tuples[6], 1, ts.TokenClass.Operator);
         });
 
-        it("checks for a comment", function() {
-            verifyClassification(results.tuples[11], 29, TypeScript.TokenClass.Comment);
+        it("checks for a string literal", function () {
+            verifyClassification(results.tuples[8], 5, ts.TokenClass.StringLiteral);
+        });
+
+        it("checks for a comment", function () {
+            verifyClassification(results.tuples[11], 7, ts.TokenClass.Comment);
         });
     });
 
-    describe("test comment colorization after a divide operator", function() {
+    describe("test comment colorization after a divide operator", function () {
         var results = getClassifications('1 / 1 // comment');
 
-        it("checks for a number literal", function() {
-            verifyClassification(results.tuples[0], 1, TypeScript.TokenClass.NumberLiteral);
+        it("checks for a number literal", function () {
+            verifyClassification(results.tuples[0], 1, ts.TokenClass.NumberLiteral);
         });
 
-        it("checks for a whitespace", function() {
-            verifyClassification(results.tuples[1], 2, TypeScript.TokenClass.Whitespace);
+        it("checks for a whitespace", function () {
+            verifyClassification(results.tuples[1], 1, ts.TokenClass.Whitespace);
         });
 
-        it("checks for a operator", function() {
-            verifyClassification(results.tuples[2], 3, TypeScript.TokenClass.Operator);
+        it("checks for a operator", function () {
+            verifyClassification(results.tuples[2], 1, ts.TokenClass.Operator);
         });
 
-        it("checks for a whitespace", function() {
-            verifyClassification(results.tuples[3], 4, TypeScript.TokenClass.Whitespace);
+        it("checks for a whitespace", function () {
+            verifyClassification(results.tuples[3], 1, ts.TokenClass.Whitespace);
         });
 
-        it("checks for a number literal", function() {
-            verifyClassification(results.tuples[4], 5, TypeScript.TokenClass.NumberLiteral);
+        it("checks for a number literal", function () {
+            verifyClassification(results.tuples[4], 1, ts.TokenClass.NumberLiteral);
         });
 
-        it("checks for a whitespace", function() {
-            verifyClassification(results.tuples[5], 6, TypeScript.TokenClass.Whitespace);
+        it("checks for a whitespace", function () {
+            verifyClassification(results.tuples[5], 1, ts.TokenClass.Whitespace);
         });
 
-        it("checks for a comment", function() {
-            verifyClassification(results.tuples[6], 16, TypeScript.TokenClass.Comment);
+        it("checks for a comment", function () {
+            verifyClassification(results.tuples[6], 10, ts.TokenClass.Comment);
         });
     });
 
-    describe("test literal colorization after a divide operator", function() {
+    describe("test literal colorization after a divide operator", function () {
         var results = getClassifications('1 / 2, 1 / 2');
 
-        it("checks for a number literal", function() {
-            verifyClassification(results.tuples[0], 1, TypeScript.TokenClass.NumberLiteral);
+        it("checks for a number literal", function () {
+            verifyClassification(results.tuples[0], 1, ts.TokenClass.NumberLiteral);
         });
 
-        it("checks for a whitespace", function() {
-            verifyClassification(results.tuples[1], 2, TypeScript.TokenClass.Whitespace);
+        it("checks for a whitespace", function () {
+            verifyClassification(results.tuples[1], 1, ts.TokenClass.Whitespace);
         });
 
-        it("checks for a operator", function() {
-            verifyClassification(results.tuples[2], 3, TypeScript.TokenClass.Operator);
+        it("checks for a operator", function () {
+            verifyClassification(results.tuples[2], 1, ts.TokenClass.Operator);
         });
 
-        it("checks for a whitespace", function() {
-            verifyClassification(results.tuples[3], 4, TypeScript.TokenClass.Whitespace);
+        it("checks for a whitespace", function () {
+            verifyClassification(results.tuples[3], 1, ts.TokenClass.Whitespace);
         });
 
-        it("checks for a number literal", function() {
-            verifyClassification(results.tuples[4], 5, TypeScript.TokenClass.NumberLiteral);
+        it("checks for a number literal", function () {
+            verifyClassification(results.tuples[4], 1, ts.TokenClass.NumberLiteral);
         });
 
-        it("checks for a operator", function() {
-            verifyClassification(results.tuples[5], 6, TypeScript.TokenClass.Operator);
+        it("checks for a operator", function () {
+            verifyClassification(results.tuples[5], 1, ts.TokenClass.Operator);
         });
 
-        it("checks for a whitespace", function() {
-            verifyClassification(results.tuples[6], 7, TypeScript.TokenClass.Whitespace);
+        it("checks for a whitespace", function () {
+            verifyClassification(results.tuples[6], 1, ts.TokenClass.Whitespace);
         });
 
-        it("checks for a number literal", function() {
-            verifyClassification(results.tuples[7], 8, TypeScript.TokenClass.NumberLiteral);
+        it("checks for a number literal", function () {
+            verifyClassification(results.tuples[7], 1, ts.TokenClass.NumberLiteral);
         });
 
-        it("checks for a whitespace", function() {
-            verifyClassification(results.tuples[8], 9, TypeScript.TokenClass.Whitespace);
+        it("checks for a whitespace", function () {
+            verifyClassification(results.tuples[8], 1, ts.TokenClass.Whitespace);
         });
 
-        it("checks for a operator", function() {
-            verifyClassification(results.tuples[9], 10, TypeScript.TokenClass.Operator);
+        it("checks for a operator", function () {
+            verifyClassification(results.tuples[9], 1, ts.TokenClass.Operator);
         });
 
-        it("checks for a whitespace", function() {
-            verifyClassification(results.tuples[10], 11, TypeScript.TokenClass.Whitespace);
+        it("checks for a whitespace", function () {
+            verifyClassification(results.tuples[10], 1, ts.TokenClass.Whitespace);
         });
 
-        it("checks for a number literal", function() {
-            verifyClassification(results.tuples[11], 12, TypeScript.TokenClass.NumberLiteral);
+        it("checks for a number literal", function () {
+            verifyClassification(results.tuples[11], 1, ts.TokenClass.NumberLiteral);
         });
 
     });
 
-    describe("test cases for colorizing multi-line string", function() {
-        it("classifies first line correctelly", function() {
-            var results = getClassifications("'line1\\\n", TypeScript.LexState.Start);
+    describe("test cases for colorizing multi-line string", function () {
+        it("classifies first line correctelly", function () {
+            var results = getClassifications("'line1\\", ts.EndOfLineState.Start);
 
             assert.equal(results.tuples.length, 1);
-            verifyClassification(results.tuples[0], 8, TypeScript.TokenClass.StringLiteral);
-            assert.equal(results.finalLexState, TypeScript.LexState.InMultilineSingleQuoteString);
+            verifyClassification(results.tuples[0], 7, ts.TokenClass.StringLiteral);
+            assert.equal(results.finalEndOfLineState, ts.EndOfLineState.InSingleQuoteStringLiteral);
         });
 
-        it("classifies second line correctelly", function() {
-            var results = getClassifications("\\\n", TypeScript.LexState.InMultilineSingleQuoteString);
+        it("classifies second line correctelly", function () {
+            var results = getClassifications("\\", ts.EndOfLineState.InDoubleQuoteStringLiteral);
 
             assert.equal(results.tuples.length, 1);
-            verifyClassification(results.tuples[0], 2, TypeScript.TokenClass.StringLiteral);
-            assert.equal(results.finalLexState, TypeScript.LexState.InMultilineSingleQuoteString);
+            verifyClassification(results.tuples[0], 1, ts.TokenClass.StringLiteral);
+            assert.equal(results.finalEndOfLineState, ts.EndOfLineState.InDoubleQuoteStringLiteral);
         });
 
-        it("classifies third line correctelly", function() {
-            var results = getClassifications("'", TypeScript.LexState.InMultilineSingleQuoteString);
+        it("classifies third line correctelly", function () {
+            var results = getClassifications("'", ts.EndOfLineState.InSingleQuoteStringLiteral);
 
             assert.equal(results.tuples.length, 1);
-            verifyClassification(results.tuples[0], 1, TypeScript.TokenClass.StringLiteral);
-            assert.equal(results.finalLexState, TypeScript.LexState.Start);
+            verifyClassification(results.tuples[0], 1, ts.TokenClass.StringLiteral);
+            assert.equal(results.finalEndOfLineState, ts.EndOfLineState.Start);
         });
     });
 });

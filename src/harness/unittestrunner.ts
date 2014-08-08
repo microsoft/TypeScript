@@ -8,7 +8,7 @@ enum UnittestTestType {
 }
 
 class UnitTestRunner extends RunnerBase {
-    constructor(public testType?: UnittestTestType) {
+    constructor(public testType: UnittestTestType) {
         super();
     }
 
@@ -19,6 +19,9 @@ class UnitTestRunner extends RunnerBase {
                 break;
             case UnittestTestType.LanguageService:
                 this.tests = this.enumerateFiles('tests/cases/unittests/ls');
+                break;
+            case UnittestTestType.Services:
+                this.tests = this.enumerateFiles('tests/cases/unittests/services', /colorization.ts/);
                 break;
             default:
                 if (this.tests.length === 0) {
@@ -38,7 +41,7 @@ class UnitTestRunner extends RunnerBase {
         });
         harnessCompiler.addInputFiles(toBeAdded);
         harnessCompiler.setCompilerOptions({ noResolve: true });
-        
+
         var stdout = new Harness.Compiler.EmitterIOHost();
         var emitDiagnostics = harnessCompiler.emitAll(stdout);
         var results = stdout.toArray();
@@ -59,7 +62,8 @@ class UnitTestRunner extends RunnerBase {
                 before: before,
                 after: after,
                 Harness: Harness,
-                IO: Harness.IO
+                IO: Harness.IO,
+                ts:ts
                 // FourSlash: FourSlash
             };
         }
