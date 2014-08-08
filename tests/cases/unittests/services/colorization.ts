@@ -191,4 +191,22 @@ describe('Colorization', function () {
             assert.equal(results.finalEndOfLineState, ts.EndOfLineState.Start);
         });
     });
+
+    describe("test cases for colorizing unterminted multi-line comment", function () {
+        it("unterminated multi-line comment correctelly", function () {
+            var results = getClassifications("/*", ts.EndOfLineState.Start);
+
+            assert.equal(results.tuples.length, 1);
+            verifyClassification(results.tuples[0], 2, ts.TokenClass.Comment);
+            assert.equal(results.finalEndOfLineState, ts.EndOfLineState.InMultiLineCommentTrivia);
+        });
+
+        it("unterminated multi-line comment with trailing space correctelly", function () {
+            var results = getClassifications("/* ", ts.EndOfLineState.Start);
+
+            assert.equal(results.tuples.length, 1);
+            verifyClassification(results.tuples[0], 3, ts.TokenClass.Comment);
+            assert.equal(results.finalEndOfLineState, ts.EndOfLineState.InMultiLineCommentTrivia);
+        });
+    });
 });
