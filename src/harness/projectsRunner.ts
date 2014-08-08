@@ -310,6 +310,14 @@ class ProjectRunner extends RunnerBase {
                 }
             }
 
+            var inputFiles = ts.map(ts.filter(compilerResult.program.getSourceFiles(),
+                sourceFile => sourceFile.filename !== "lib.d.ts"),
+                sourceFile => {
+                    return { unitName: sourceFile.filename, content: sourceFile.text };
+                });
+            var diagnostics = ts.map(compilerResult.errors, error => Harness.Compiler.getMinimalDiagnostic(error));
+            errors += sys.newLine + sys.newLine + Harness.Compiler.getErrorBaseline(inputFiles, diagnostics);
+
             return errors;
         }
 

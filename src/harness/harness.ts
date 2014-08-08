@@ -747,7 +747,7 @@ module Harness {
                 var errors: MinimalDiagnostic[] = [];
                 program.getDiagnostics().concat(checker.getDiagnostics()).concat(emitResult ? emitResult.errors : []).forEach(err => {
                     // TODO: new compiler formats errors after this point to add . and newlines so we'll just do it manually for now
-                    errors.push({ filename: err.file && err.file.filename, start: err.start, end: err.start + err.length, line: 0, character: 0, message: err.messageText });
+                    errors.push(getMinimalDiagnostic(err));
                 });
                 this.lastErrors = errors;
 
@@ -760,6 +760,102 @@ module Harness {
                 sys.newLine = '\r\n';
                 return options;
             }
+        }
+
+        export function getMinimalDiagnostic(err: ts.Diagnostic): MinimalDiagnostic {
+            return { filename: err.file && err.file.filename, start: err.start, end: err.start + err.length, line: 0, character: 0, message: err.messageText };
+        }
+
+        export function getErrorBaseline(inputFiles: { unitName: string; content: string }[],
+            diagnostics: MinimalDiagnostic[]
+            ) {
+
+            var outputLines: string[] = [];
+            // Count up all the errors we find so we don't miss any
+            var totalErrorsReported = 0;
+
+            function outputErrorText(error: Harness.Compiler.MinimalDiagnostic) {
+                var errLines = RunnerBase.removeFullPaths(error.message)
+                    .split('\n')
+                    .map(s => s.length > 0 && s.charAt(s.length - 1) === '\r' ? s.substr(0, s.length - 1) : s)
+                    .filter(s => s.length > 0)
+                    .map(s => '!!! ' + s);
+                errLines.forEach(e => outputLines.push(e));
+
+                totalErrorsReported++;
+            }
+
+            // Report glovbal errors:
+            var globalErrors = diagnostics.filter(err => !err.filename);
+            globalErrors.forEach(err => outputErrorText(err));
+
+            // 'merge' the lines of each input file with any errors associated with it
+            inputFiles.forEach(inputFile => {
+                // Filter down to the errors in the file
+                var fileErrors = diagnostics.filter(e => {
+                    var errFn = e.filename;
+                    return errFn && errFn === inputFile.unitName;
+                });
+
+
+                // Header
+                outputLines.push('==== ' + inputFile.unitName + ' (' + fileErrors.length + ' errors) ====');
+
+                // Make sure we emit something for every error
+                var markedErrorCount = 0;
+                // For each line, emit the line followed by any error squiggles matching this line
+                // Note: IE JS engine incorrectly handles consecutive delimiters here when using RegExp split, so
+                // we have to string-based splitting instead and try to figure out the delimiting chars
+
+                var lineStarts = ts.getLineStarts(inputFile.content);
+                var lines = inputFile.content.split('\n');
+                lines.forEach((line, lineIndex) => {
+                    if (line.length > 0 && line.charAt(line.length - 1) === '\r') {
+                        line = line.substr(0, line.length - 1);
+                    }
+
+                    var thisLineStart = lineStarts[lineIndex];
+                    var nextLineStart: number;
+                    // On the last line of the file, fake the next line start number so that we handle errors on the last character of the file correctly
+                    if (lineIndex === lines.length - 1) {
+                        nextLineStart = inputFile.content.length;
+                    } else {
+                        nextLineStart = lineStarts[lineIndex + 1];
+                    }
+                    // Emit this line from the original file
+                    outputLines.push('    ' + line);
+                    fileErrors.forEach(err => {
+                        // Does any error start or continue on to this line? Emit squiggles
+                        if ((err.end >= thisLineStart) && ((err.start < nextLineStart) || (lineIndex === lines.length - 1))) {
+                            // How many characters from the start of this line the error starts at (could be positive or negative)
+                            var relativeOffset = err.start - thisLineStart;
+                            // How many characters of the error are on this line (might be longer than this line in reality)
+                            var length = (err.end - err.start) - Math.max(0, thisLineStart - err.start);
+                            // Calculate the start of the squiggle
+                            var squiggleStart = Math.max(0, relativeOffset);
+                            // TODO/REVIEW: this doesn't work quite right in the browser if a multi file test has files whose names are just the right length relative to one another
+                            outputLines.push('    ' + line.substr(0, squiggleStart).replace(/[^\s]/g, ' ') + new Array(Math.min(length, line.length - squiggleStart) + 1).join('~'));
+
+                            // If the error ended here, or we're at the end of the file, emit its message
+                            if ((lineIndex === lines.length - 1) || nextLineStart > err.end) {
+                                // Just like above, we need to do a split on a string instead of on a regex
+                                // because the JS engine does regexes wrong
+
+                                outputErrorText(err);
+                                markedErrorCount++;
+                            }
+                        }
+                    });
+                });
+
+                // Verify we didn't miss any errors in this file
+                assert.equal(markedErrorCount, fileErrors.length, 'count of errors in ' + inputFile.unitName);
+            });
+
+            // Verify we didn't miss any errors in total
+            assert.equal(totalErrorsReported, diagnostics.length, 'total number of errors');
+
+            return outputLines.join('\r\n');
         }
 
         /* TODO: Delete?

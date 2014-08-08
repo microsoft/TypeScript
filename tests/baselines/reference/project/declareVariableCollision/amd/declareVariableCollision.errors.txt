@@ -1,1 +1,22 @@
 in2.d.ts(1,8): Duplicate identifier 'a'.
+
+
+==== decl.d.ts (0 errors) ====
+    // bug 535531: duplicate identifier error reported for "import" declarations in separate files
+    
+    declare module A
+    {
+    
+        class MyRoot { }
+    
+        export module B
+        {
+            class MyClass{ }
+        }
+    }
+==== in1.d.ts (0 errors) ====
+    import a = A;
+==== in2.d.ts (1 errors) ====
+    import a = A;
+           ~
+!!! Duplicate identifier 'a'.
