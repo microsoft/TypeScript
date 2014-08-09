@@ -1241,6 +1241,53 @@ module ts {
         };
     }
 
+    /// Helpers
+    function getTargetLabel(node: Node, labelName: string): Identifier {
+        while (node) {
+            if (node.kind === SyntaxKind.LabelledStatement && (<LabelledStatement>node).label.text === labelName) {
+                return (<LabelledStatement>node).label;
+            }
+            node = node.parent;
+        }
+        return undefined;
+    }
+
+    function isJumpStatementTarget(node: Node): boolean {
+        return node.kind === SyntaxKind.Identifier &&
+            (node.parent.kind === SyntaxKind.BreakStatement || node.parent.kind === SyntaxKind.ContinueStatement) &&
+            (<BreakOrContinueStatement>node.parent).label === node;
+    }
+
+    function isCallExpressionTarget(node: Node): boolean {
+        if (node.parent.kind === SyntaxKind.PropertyAccess && (<PropertyAccess>node.parent).right === node)
+            node = node.parent;
+        return node.parent.kind === SyntaxKind.CallExpression && (<CallExpression>node.parent).func === node;
+    }
+
+    function isNewExpressionTarget(node: Node): boolean {
+        if (node.parent.kind === SyntaxKind.PropertyAccess && (<PropertyAccess>node.parent).right === node)
+            node = node.parent;
+        return node.parent.kind === SyntaxKind.NewExpression && (<CallExpression>node.parent).func === node;
+    }
+
+    function isFunctionDeclaration(node: Node): boolean {
+        switch (node.kind) {
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.Method:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.ArrowFunction:
+                return true;
+        }
+        return false;
+    }
+
+    function isNameOfFunctionDeclaration(node: Node): boolean {
+        return node.kind === SyntaxKind.Identifier &&
+            isFunctionDeclaration(node.parent) && (<FunctionDeclaration>node.parent).name === node;
+    }
+
     // A cache of completion entries for keywords, these do not change between sessions
     var keywordCompletions:CompletionEntry[] = [];
     for (var i = SyntaxKind.FirstKeyword; i <= SyntaxKind.LastKeyword; i++) {
@@ -1910,52 +1957,6 @@ module ts {
 
         /// Goto definition
         function getDefinitionAtPosition(filename: string, position: number): DefinitionInfo[]{
-            function getTargetLabel(node: Node, labelName: string): Identifier {
-                while (node) {
-                    if (node.kind === SyntaxKind.LabelledStatement && (<LabelledStatement>node).label.text === labelName) {
-                        return (<LabelledStatement>node).label;
-                    }
-                    node = node.parent;
-                }
-                return undefined;
-            }
-
-            function isJumpStatementTarget(node: Node): boolean {
-                return node.kind === SyntaxKind.Identifier &&
-                    (node.parent.kind === SyntaxKind.BreakStatement || node.parent.kind === SyntaxKind.ContinueStatement) &&
-                    (<BreakOrContinueStatement>node.parent).label === node;
-            }
-
-            function isCallExpressionTarget(node: Node): boolean {
-                if (node.parent.kind === SyntaxKind.PropertyAccess && (<PropertyAccess>node.parent).right === node)
-                    node = node.parent;
-                return node.parent.kind === SyntaxKind.CallExpression && (<CallExpression>node.parent).func === node;
-            }
-
-            function isNewExpressionTarget(node: Node): boolean {
-                if (node.parent.kind === SyntaxKind.PropertyAccess && (<PropertyAccess>node.parent).right === node)
-                    node = node.parent;
-                return node.parent.kind === SyntaxKind.NewExpression && (<CallExpression>node.parent).func === node;
-            }
-
-            function isFunctionDeclaration(node: Node): boolean {
-                switch (node.kind) {
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.Method:
-                    case SyntaxKind.FunctionExpression:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                    case SyntaxKind.ArrowFunction:
-                        return true;
-                }
-                return false;
-            }
-
-            function isNameOfFunctionDeclaration(node: Node): boolean {
-                return node.kind === SyntaxKind.Identifier &&
-                    isFunctionDeclaration(node.parent) && (<FunctionDeclaration>node.parent).name === node;
-            }
-
             function getDefinitionInfo(node: Node, symbolKind: string, symbolName: string, containerName: string): DefinitionInfo {
                 return {
                     fileName: node.getSourceFile().filename,
