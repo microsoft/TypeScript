@@ -2378,3 +2378,8 @@ module ts {
 
     initializeServices();
 }
+
+// Export API for NodeJS consumption
+if (typeof module !== "undefined" && module.exports) {
+    module.exports = ts;
+}
