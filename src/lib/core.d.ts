@@ -302,13 +302,13 @@ interface String {
       * Matches a string with a regular expression, and returns an array containing the results of that search.
       * @param regexp A variable name or string literal containing the regular expression pattern and flags.
       */
-    match(regexp: string): string[];
+    match(regexp: string): RegExpMatchArray;
 
     /** 
       * Matches a string with a regular expression, and returns an array containing the results of that search.
       * @param regexp A regular expression object that contains the regular expression pattern and applicable flags. 
       */
-    match(regexp: RegExp): string[];
+    match(regexp: RegExp): RegExpMatchArray;
 
     /**
       * Replaces text in a string, using a regular expression or search string.
@@ -775,11 +775,15 @@ declare var Date: {
     now(): number;
 }
 
+interface RegExpMatchArray extends Array<string> {
+    index?: number;
+    input?: string;
+}
+
 interface RegExpExecArray extends Array<string> {
     index: number;
     input: string;
 }
-
 
 interface RegExp {
     /** 
