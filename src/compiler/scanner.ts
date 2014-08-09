@@ -384,7 +384,6 @@ module ts {
                     var nextChar = text.charCodeAt(pos + 1);
                     if (nextChar === CharacterCodes.slash || nextChar === CharacterCodes.asterisk) {
                         var startPos = pos;
-                        var comment: string = undefined;
                         pos += 2;
                         if (nextChar === CharacterCodes.slash) {
                             while (pos < text.length) {
