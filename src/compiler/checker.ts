@@ -661,6 +661,11 @@ module ts {
             return callback(globals);
         }
 
+        function getQualifiedLeftMeaning(rightMeaning: SymbolFlags) {
+            // If we are looking in value space, the parent meaning is value, other wise it is namespace
+            return rightMeaning === SymbolFlags.Value ? SymbolFlags.Value : SymbolFlags.Namespace;
+        }
+
         function getAccessibleSymbolChain(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): Symbol[] {
             function getAccessibleSymbolChainFromSymbolTable(symbols: SymbolTable): Symbol[] {
                 function canQualifySymbol(symbolFromSymbolTable: Symbol, meaning: SymbolFlags) {
@@ -670,7 +675,7 @@ module ts {
                     }
 
                     // If symbol needs qualification, make sure that parent is accessible, if it is then this symbol is accessible too
-                    var accessibleParent = getAccessibleSymbolChain(symbolFromSymbolTable.parent, enclosingDeclaration, SymbolFlags.Namespace);
+                    var accessibleParent = getAccessibleSymbolChain(symbolFromSymbolTable.parent, enclosingDeclaration, getQualifiedLeftMeaning(meaning));
                     return !!accessibleParent;
                 }
 
@@ -698,7 +703,7 @@ module ts {
                         // Look in the exported members, if we can find accessibleSymbolChain, symbol is accessible using this chain
                         // but only if the symbolFromSymbolTable can be qualified
                         var accessibleSymbolsFromExports = resolvedImportedSymbol.exports ? getAccessibleSymbolChainFromSymbolTable(resolvedImportedSymbol.exports) : undefined;
-                        if (accessibleSymbolsFromExports && canQualifySymbol(symbolFromSymbolTable, SymbolFlags.Namespace)) {
+                        if (accessibleSymbolsFromExports && canQualifySymbol(symbolFromSymbolTable, getQualifiedLeftMeaning(meaning))) {
                             return [symbolFromSymbolTable].concat(accessibleSymbolsFromExports);
                         }
                     }
@@ -758,8 +763,6 @@ module ts {
                         return { accessibility: SymbolAccessibility.Accessible, aliasesToMakeVisible: hasAccessibleDeclarations.aliasesToMakeVisible };
                     }
 
-                    // TODO(shkamat): Handle static method of class
-
                     // If we havent got the accessible symbol doesnt mean the symbol is actually inaccessible. 
                     // It could be qualified symbol and hence verify the path
                     // eg:
@@ -772,7 +775,7 @@ module ts {
                     // we are going to see if c can be accessed in scope directly. 
                     // But it cant, hence the accessible is going to be undefined, but that doesnt mean m.c is accessible
                     // It is accessible if the parent m is accessible because then m.c can be accessed through qualification
-                    meaningToLook = SymbolFlags.Namespace;
+                    meaningToLook = getQualifiedLeftMeaning(meaning);
                     symbol = symbol.parent;
                 }
 
@@ -851,14 +854,14 @@ module ts {
                 var symbolName: string;
                 while (symbol) {
                     var isFirstName = !symbolName;
-                    var meaningToLook = isFirstName ? meaning : SymbolFlags.Namespace;
-                    var accessibleSymbolChain = getAccessibleSymbolChain(symbol, enclosingDeclaration, meaningToLook);
+                    var accessibleSymbolChain = getAccessibleSymbolChain(symbol, enclosingDeclaration, meaning);
                     var currentSymbolName = accessibleSymbolChain ? ts.map(accessibleSymbolChain, accessibleSymbol => getSymbolName(accessibleSymbol)).join(".") : getSymbolName(symbol);
                     symbolName = currentSymbolName + (isFirstName ? "" : ("." + symbolName));
-                    if (accessibleSymbolChain && !needsQualification(accessibleSymbolChain[0], enclosingDeclaration, accessibleSymbolChain.length === 1 ? meaningToLook : SymbolFlags.Namespace)) {
+                    if (accessibleSymbolChain && !needsQualification(accessibleSymbolChain[0], enclosingDeclaration, accessibleSymbolChain.length === 1 ? meaning : getQualifiedLeftMeaning(meaning))) {
                         break;
                     }
                     symbol = accessibleSymbolChain ? accessibleSymbolChain[0].parent : symbol.parent;
+                    meaning = getQualifiedLeftMeaning(meaning);
                 }
 
                 return symbolName;

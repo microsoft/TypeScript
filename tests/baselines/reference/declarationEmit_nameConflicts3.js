@@ -20,7 +20,6 @@ module M.P {
     export enum D {
         f
     }
-    // Bug 887180
     export var v: M.D; // ok
     export var w = M.D.f; // error, should be typeof M.D.f
     export var x = M.C.f; // error, should be typeof M.C.f
@@ -111,7 +110,7 @@ declare module M.P {
         f = 0,
     }
     var v: M.D;
-    var w: typeof D.f;
-    var x: typeof C.f;
-    var x: typeof C.f;
+    var w: typeof M.D.f;
+    var x: typeof M.C.f;
+    var x: typeof M.C.f;
 }
