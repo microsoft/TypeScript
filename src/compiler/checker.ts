@@ -681,9 +681,11 @@ module ts {
 
                 function isAccessible(symbolFromSymbolTable: Symbol, resolvedAliasSymbol?: Symbol) {
                     if (symbol === (resolvedAliasSymbol || symbolFromSymbolTable)) {
-                        // if symbolfrom symbolTable or alias resolution matches the symbol, 
+                        // if the symbolFromSymbolTable is not external module (it could be if it was determined as ambient external module and would be in globals table)
+                        // and if symbolfrom symbolTable or alias resolution matches the symbol, 
                         // check the symbol can be qualified, it is only then this symbol is accessible
-                        return canQualifySymbol(symbolFromSymbolTable, meaning);
+                        return !forEach(symbolFromSymbolTable.declarations, declaration => hasExternalModuleSymbol(declaration)) &&
+                            canQualifySymbol(symbolFromSymbolTable, meaning);
                     }
                 }
 
@@ -779,14 +781,42 @@ module ts {
                     symbol = symbol.parent;
                 }
 
-                // This is a local symbol that cannot be named
+                // This could be a symbol that is not exported in the external module 
+                // or it could be a symbol from different external module that is not aliased and hence cannot be named
+                var symbolExternalModule = forEach(initialSymbol.declarations, declaration => getExternalModuleContainer(declaration));
+                if (symbolExternalModule) {
+                    var enclosingExternalModule = getExternalModuleContainer(enclosingDeclaration);
+                    if (symbolExternalModule !== enclosingExternalModule) {
+                        // name from different external module that is not visibile
+                        return {
+                            accessibility: SymbolAccessibility.CannotBeNamed,
+                            errorSymbolName: symbolToString(initialSymbol, enclosingDeclaration, meaning),
+                            errorModuleName: symbolToString(symbolExternalModule)
+                        };
+                    }
+                }
+
+                // Just a local name that is not accessible
                 return {
-                    accessibility: SymbolAccessibility.CannotBeNamed,
+                    accessibility: SymbolAccessibility.NotAccessible,
                     errorSymbolName: symbolToString(initialSymbol, enclosingDeclaration, meaning),
                 };
             }
 
             return { accessibility: SymbolAccessibility.Accessible };
+
+            function getExternalModuleContainer(declaration: Declaration) {
+                for (; declaration; declaration = declaration.parent) {
+                    if (hasExternalModuleSymbol(declaration)) {
+                        return getSymbolOfNode(declaration);
+                    }
+                }
+            }
+        }
+
+        function hasExternalModuleSymbol(declaration: Declaration) {
+            return (declaration.kind === SyntaxKind.ModuleDeclaration && declaration.name.kind === SyntaxKind.StringLiteral) ||
+                (declaration.kind === SyntaxKind.SourceFile && isExternalModule(<SourceFile>declaration));
         }
 
         function hasVisibleDeclarations(symbol: Symbol): { aliasesToMakeVisible?: ImportDeclaration[]; } {
@@ -855,7 +885,18 @@ module ts {
                 while (symbol) {
                     var isFirstName = !symbolName;
                     var accessibleSymbolChain = getAccessibleSymbolChain(symbol, enclosingDeclaration, meaning);
-                    var currentSymbolName = accessibleSymbolChain ? ts.map(accessibleSymbolChain, accessibleSymbol => getSymbolName(accessibleSymbol)).join(".") : getSymbolName(symbol);
+
+                    var currentSymbolName: string;
+                    if (accessibleSymbolChain) {
+                        currentSymbolName = ts.map(accessibleSymbolChain, accessibleSymbol => getSymbolName(accessibleSymbol)).join(".");
+                    }
+                    else {
+                        // If we didnt find accessible symbol chain for this symbol, break if this is external module
+                        if (!isFirstName && ts.forEach(symbol.declarations, declaration => hasExternalModuleSymbol(declaration))) {
+                            break;
+                        }
+                        currentSymbolName = getSymbolName(symbol);
+                    }
                     symbolName = currentSymbolName + (isFirstName ? "" : ("." + symbolName));
                     if (accessibleSymbolChain && !needsQualification(accessibleSymbolChain[0], enclosingDeclaration, accessibleSymbolChain.length === 1 ? meaning : getQualifiedLeftMeaning(meaning))) {
                         break;
