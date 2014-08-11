@@ -950,6 +950,7 @@ module ts {
         noResolve?: boolean;
         out?: string;
         outDir?: string;
+        outExt?: string;
         removeComments?: boolean;
         sourceMap?: boolean;
         sourceRoot?: string;
