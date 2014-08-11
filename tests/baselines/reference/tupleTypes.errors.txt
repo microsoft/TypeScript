@@ -1,0 +1,89 @@
+==== tests/cases/compiler/tupleTypes.ts (9 errors) ====
+    var v1: [];  // Error
+            ~~
+!!! Type argument list cannot be empty.
+    var v2: [number];
+    var v3: [number, string];
+    var v4: [number, [string, string]];
+    
+    var t: [number, string];
+    var t0 = t[0];   // number
+    var t0: number;
+    var t1 = t[1];   // string
+    var t1: string;
+    var t2 = t[2];   // {}
+    var t2: {};
+    
+    t = [];               // Error
+    ~
+!!! Type '[]' is not assignable to type '[number, string]':
+!!!   Property '0' is missing in type '[]'.
+    t = [1];              // Error
+    ~
+!!! Type '[number]' is not assignable to type '[number, string]':
+!!!   Property '1' is missing in type '[number]'.
+    t = [1, "hello"];     // Ok
+    t = ["hello", 1];     // Error
+    ~
+!!! Type '[string, number]' is not assignable to type '[number, string]':
+!!!   Types of property '0' are incompatible:
+!!!     Type 'string' is not assignable to type 'number'.
+    t = [1, "hello", 2];  // Ok
+    
+    var tf: [string, (x: string) => number] = ["hello", x => x.length];
+    
+    declare function ff<T, U>(a: T, b: [T, (x: T) => U]): U;
+    var ff1 = ff("hello", ["foo", x => x.length]);
+    var ff1: number;
+    
+    function tuple2<T0, T1>(item0: T0, item1: T1): [T0, T1]{
+        return [item0, item1];
+    }
+    
+    var tt = tuple2(1, "string");
+    var tt0 = tt[0];
+    var tt0: number;
+    var tt1 = tt[1];
+    var tt1: string;
+    var tt2 = tt[2];
+    var tt2: {};
+    
+    tt = tuple2(1, undefined);
+    tt = [1, undefined];
+    tt = [undefined, undefined];
+    tt = [];  // Error
+    ~~
+!!! Type '[]' is not assignable to type '[number, string]'.
+    
+    var a: number[];
+    var a1: [number, string];
+    var a2: [number, number];
+    var a3: [number, {}];
+    a = a1;   // Error
+    ~
+!!! Type '[number, string]' is not assignable to type 'number[]':
+!!!   Types of property 'concat' are incompatible:
+!!!     Type '{ <U extends {}[]>(...items: U[]): {}[]; (...items: {}[]): {}[]; }' is not assignable to type '{ <U extends number[]>(...items: U[]): number[]; (...items: number[]): number[]; }':
+!!!       Type '{}[]' is not assignable to type 'number[]':
+!!!         Type '{}' is not assignable to type 'number'.
+    a = a2;
+    a = a3;   // Error
+    ~
+!!! Type '[number, {}]' is not assignable to type 'number[]':
+!!!   Types of property 'concat' are incompatible:
+!!!     Type '{ <U extends {}[]>(...items: U[]): {}[]; (...items: {}[]): {}[]; }' is not assignable to type '{ <U extends number[]>(...items: U[]): number[]; (...items: number[]): number[]; }':
+!!!       Type '{}[]' is not assignable to type 'number[]':
+!!!         Type '{}' is not assignable to type 'number'.
+    a1 = a2;  // Error
+    ~~
+!!! Type '[number, number]' is not assignable to type '[number, string]':
+!!!   Types of property '1' are incompatible:
+!!!     Type 'number' is not assignable to type 'string'.
+    a1 = a3;  // Error
+    ~~
+!!! Type '[number, {}]' is not assignable to type '[number, string]':
+!!!   Types of property '1' are incompatible:
+!!!     Type '{}' is not assignable to type 'string'.
+    a3 = a1;
+    a3 = a2;
+    

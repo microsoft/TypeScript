@@ -625,7 +625,8 @@ module ts {
             //  }
             //
             // x is an optional parameter, but it is a required property.
-            return propertySymbol.valueDeclaration && propertySymbol.valueDeclaration.flags & NodeFlags.QuestionMark &&
+            return propertySymbol.valueDeclaration &&
+                propertySymbol.valueDeclaration.flags & NodeFlags.QuestionMark &&
                 propertySymbol.valueDeclaration.kind !== SyntaxKind.Parameter;
         }
 
@@ -2069,7 +2070,7 @@ module ts {
                         if (type.flags & (TypeFlags.Class | TypeFlags.Interface) && type.flags & TypeFlags.Reference) {
                             var typeParameters = (<InterfaceType>type).typeParameters;
                             if (node.typeArguments && node.typeArguments.length === typeParameters.length) {
-                                type = createTypeReference(<GenericType>type, map(node.typeArguments, t => getTypeFromTypeNode(t)));
+                                type = createTypeReference(<GenericType>type, map(node.typeArguments, getTypeFromTypeNode));
                             }
                             else {
                                 error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType), typeParameters.length);
@@ -2168,7 +2169,7 @@ module ts {
         function getTypeFromTupleTypeNode(node: TupleTypeNode): Type {
             var links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = createTupleType(map(node.elementTypes, t => getTypeFromTypeNode(t)));
+                links.resolvedType = createTupleType(map(node.elementTypes, getTypeFromTypeNode));
             }
             return links.resolvedType;
         }
