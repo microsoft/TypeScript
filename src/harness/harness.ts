@@ -434,15 +434,15 @@ module Harness {
     export var libFolder: string;
     switch (Utils.getExecutionEnvironment()) {
         case Utils.ExecutionEnvironment.CScript:
-            libFolder = Path.filePath(global['WScript'].ScriptFullName);
+            libFolder = "built/local/";
             tcServicesFilename = "built/local/typescriptServices.js";
             break;
         case Utils.ExecutionEnvironment.Node:
-            libFolder = (__dirname + '/');
+            libFolder = "built/local/";
             tcServicesFilename = "built/local/typescriptServices.js";
             break;
         case Utils.ExecutionEnvironment.Browser:
-            libFolder = "bin/";
+            libFolder = "built/local/";
             tcServicesFilename = "built/local/typescriptServices.js";
             break;
         default:
@@ -531,8 +531,8 @@ module Harness {
             }
         }
 
-        export var libText = IO.readFile(libFolder + "lib.d.ts");
-        export var libTextMinimal = IO.readFile('bin/lib.core.d.ts');
+        export var defaultLibFileName = 'lib.d.ts';
+        export var defaultLibSourceFile = ts.createSourceFile(defaultLibFileName, IO.readFile(libFolder + 'lib.core.d.ts'), /*languageVersion*/ ts.ScriptTarget.ES5);
 
         export function createCompilerHost(filemap: { [filename: string]: ts.SourceFile; }, writeFile: (fn: string, contents: string, writeByteOrderMark:boolean) => void): ts.CompilerHost {
             return {
@@ -542,15 +542,15 @@ module Harness {
                     if (fn in filemap) {
                         return filemap[fn];
                     } else {
-                        var lib = 'lib.d.ts';
-                        if (fn.substr(fn.length - lib.length) === lib) {
-                            return filemap[fn] = ts.createSourceFile('lib.d.ts', libTextMinimal, languageVersion);
+                        var lib = defaultLibFileName;
+                        if (fn === defaultLibFileName) {
+                            return defaultLibSourceFile;
                         }
                         // Don't throw here -- the compiler might be looking for a test that actually doesn't exist as part of the TC
                         return null;
                     }
                 },
-                getDefaultLibFilename: () => 'lib.d.ts',
+                getDefaultLibFilename: () => defaultLibFileName,
                 writeFile: writeFile,
                 getCanonicalFileName: ts.getCanonicalFileName,
                 useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
