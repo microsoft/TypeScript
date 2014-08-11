@@ -2462,7 +2462,8 @@ module ts {
 
         forEach(program.getSourceFiles(), sourceFile => {
             if (shouldEmitToOwnFile(sourceFile)) {
-                var jsFilePath = getOwnEmitOutputFilePath(sourceFile, ".js");
+                var jsFileExt = compilerOptions.outExt || ".js";
+                var jsFilePath = getOwnEmitOutputFilePath(sourceFile, jsFileExt);
                 emitFile(jsFilePath, sourceFile);
             }
         });

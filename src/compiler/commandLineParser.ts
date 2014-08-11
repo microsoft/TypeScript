@@ -84,6 +84,10 @@ module ts {
             paramType: Diagnostics.DIRECTORY,
         },
         {
+            name: "outExt",
+            type: "string",
+        },
+        {
             name: "removeComments",
             type: "boolean",
             description: Diagnostics.Do_not_emit_comments_to_output,
