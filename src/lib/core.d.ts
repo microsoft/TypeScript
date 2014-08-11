@@ -302,13 +302,13 @@ interface String {
       * Matches a string with a regular expression, and returns an array containing the results of that search.
       * @param regexp A variable name or string literal containing the regular expression pattern and flags.
       */
-    match(regexp: string): string[];
+    match(regexp: string): RegExpMatchArray;
 
     /** 
       * Matches a string with a regular expression, and returns an array containing the results of that search.
       * @param regexp A regular expression object that contains the regular expression pattern and applicable flags. 
       */
-    match(regexp: RegExp): string[];
+    match(regexp: RegExp): RegExpMatchArray;
 
     /**
       * Replaces text in a string, using a regular expression or search string.
@@ -775,38 +775,15 @@ declare var Date: {
     now(): number;
 }
 
-interface RegExpExecArray {
-    [index: number]: string;
-    length: number;
-
-    index: number;
-    input: string;
-
-    toString(): string;
-    toLocaleString(): string;
-    concat(...items: string[][]): string[];
-    join(separator?: string): string;
-    pop(): string;
-    push(...items: string[]): number;
-    reverse(): string[];
-    shift(): string;
-    slice(start?: number, end?: number): string[];
-    sort(compareFn?: (a: string, b: string) => number): string[];
-    splice(start: number): string[];
-    splice(start: number, deleteCount: number, ...items: string[]): string[];
-    unshift(...items: string[]): number;
-
-    indexOf(searchElement: string, fromIndex?: number): number;
-    lastIndexOf(searchElement: string, fromIndex?: number): number;
-    every(callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any): boolean;
-    some(callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any): boolean;
-    forEach(callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any): void;
-    map(callbackfn: (value: string, index: number, array: string[]) => any, thisArg?: any): any[];
-    filter(callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any): string[];
-    reduce(callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: string[]) => any, initialValue?: any): any;
-    reduceRight(callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: string[]) => any, initialValue?: any): any;
+interface RegExpMatchArray extends Array<string> {
+    index?: number;
+    input?: string;
 }
 
+interface RegExpExecArray extends Array<string> {
+    index: number;
+    input: string;
+}
 
 interface RegExp {
     /** 
