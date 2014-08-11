@@ -482,7 +482,7 @@ module ts {
         getNavigateToItems(searchValue: string): NavigateToItem[];
         getScriptLexicalStructure(fileName: string): NavigateToItem[];
 
-        getOutliningRegions(fileName: string): TypeScript.TextSpan[];
+        getOutliningRegions(fileName: string): OutliningSpan[];
         getBraceMatchingAtPosition(fileName: string, position: number): TypeScript.TextSpan[];
         getIndentationAtPosition(fileName: string, position: number, options: EditorOptions): number;
 
@@ -2148,7 +2148,7 @@ module ts {
             return items;
         }
 
-        function getOutliningRegions(filename: string) {
+        function getOutliningRegions(filename: string): OutliningSpan[] {
             // doesn't use compiler - no need to synchronize with host
             filename = TypeScript.switchToForwardSlashes(filename);
             var sourceFile = getCurrentSourceFile(filename);

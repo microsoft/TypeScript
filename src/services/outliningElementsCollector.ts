@@ -16,18 +16,44 @@
 ///<reference path='references.ts' />
 
 module ts {
-    export module OutliningElementsCollector {
-        export function collectElements(sourceFile: SourceFile): TypeScript.TextSpan[] {
-            var elements: TypeScript.TextSpan[] = [];
 
-            function addOutlineRange(startElement: Node, endElement: Node) {
-                if (startElement && endElement) {
-                    // Push the new range
-                    elements.push(TypeScript.TextSpan.fromBounds(startElement.pos, endElement.end));
+    export interface OutliningSpan {
+        /** 
+         * @param textSpan The span of the document to actually collapse.
+         * @param hintSpan The span of the document to display when the user hovers over the 
+         *       collapsed span.
+         * @param bannerText The text to display in the editor for the collapsed region.
+         * @param autoCollapse Whether or not this region should be automatically collapsed when 
+         *        the 'Collapse to Definitions' command is invoked.
+         */
+        textSpan: TypeScript.TextSpan;
+        hintSpan: TypeScript.TextSpan;
+        bannerText: string;
+        autoCollapse: boolean;
+    }
+
+    export module OutliningElementsCollector {
+        export function collectElements(sourceFile: SourceFile): OutliningSpan[] {
+            var elements: OutliningSpan[] = [];
+
+            function addOutlineRange(node: Node, startElement: Node, endElement: Node) {
+                if (node && startElement && endElement) {
+                    var span: OutliningSpan = {
+                        textSpan: TypeScript.TextSpan.fromBounds(startElement.pos, endElement.end),
+                        hintSpan: TypeScript.TextSpan.fromBounds(node.getFullStart(), node.end),
+                        bannerText: "...",
+                        autoCollapse: false
+                    };
+                    elements.push(span);
                 }
             }
 
-            function walk(n: Node) {
+            var depth = 0;
+            var maxDepth = 10;
+            function walk(n: Node): void {
+                if (depth >= maxDepth) {
+                    return;
+                }
                 switch (n.kind) {
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
@@ -36,7 +62,7 @@ module ts {
                     case SyntaxKind.ObjectLiteral:
                         var openBrace = forEach(n.getChildren(), c => c.kind === SyntaxKind.OpenBraceToken && c);
                         var closeBrace = forEach(n.getChildren(), c => c.kind === SyntaxKind.CloseBraceToken && c);
-                        addOutlineRange(openBrace, closeBrace);
+                        addOutlineRange(n, openBrace, closeBrace);
                         break;
                     case SyntaxKind.Constructor:
                     case SyntaxKind.FunctionDeclaration:
@@ -47,11 +73,13 @@ module ts {
                         if (body) {
                             var openBrace = forEach(body.getChildren(), c => c.kind === SyntaxKind.OpenBraceToken && c);
                             var closeBrace = forEach(body.getChildren(), c => c.kind === SyntaxKind.CloseBraceToken && c);
-                            addOutlineRange(openBrace, closeBrace);
+                            addOutlineRange(n, openBrace, closeBrace);
                         }
                         break;
                 }
+                depth++;
                 forEachChild(n, walk);
+                depth--;
             }
 
             walk(sourceFile);
