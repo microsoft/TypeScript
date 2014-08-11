@@ -15,95 +15,47 @@
 
 ///<reference path='references.ts' />
 
-module TypeScript.Services {
-    export class OutliningElementsCollector extends TypeScript.DepthLimitedWalker {
-        // The maximum depth for collecting spans; this will cause us to miss deeply nested function/modules spans, 
-        // but will guarantee performance will not be closely tied to tree depth.
-        private static MaximumDepth: number = 10;
-        private inObjectLiteralExpression: boolean = false;
+module ts {
+    export module OutliningElementsCollector {
+        export function collectElements(sourceFile: SourceFile): TypeScript.TextSpan[] {
+            var elements: TypeScript.TextSpan[] = [];
 
-        private elements: TypeScript.TextSpan[] = [];
-
-        constructor() {
-            super(OutliningElementsCollector.MaximumDepth);
-        }
-
-        public visitClassDeclaration(node: TypeScript.ClassDeclarationSyntax): void {
-            this.addOutlineRange(node, node.openBraceToken, node.closeBraceToken);
-            super.visitClassDeclaration(node);
-        }
-
-        public visitInterfaceDeclaration(node: TypeScript.InterfaceDeclarationSyntax): void {
-            this.addOutlineRange(node, node.body.openBraceToken, node.body.closeBraceToken);
-            super.visitInterfaceDeclaration(node);
-        }
-
-        public visitModuleDeclaration(node: TypeScript.ModuleDeclarationSyntax): void {
-            this.addOutlineRange(node, node.openBraceToken, node.closeBraceToken);
-            super.visitModuleDeclaration(node);
-        }
-
-        public visitEnumDeclaration(node: TypeScript.EnumDeclarationSyntax): void {
-            this.addOutlineRange(node, node.openBraceToken, node.closeBraceToken);
-            super.visitEnumDeclaration(node);
-        }
-
-        public visitFunctionDeclaration(node: TypeScript.FunctionDeclarationSyntax): void {
-            this.addOutlineRange(node, node.block, node.block);
-            super.visitFunctionDeclaration(node);
-        }
-
-        public visitFunctionExpression(node: TypeScript.FunctionExpressionSyntax): void {
-            this.addOutlineRange(node, node.block, node.block);
-            super.visitFunctionExpression(node);
-        }
-
-        public visitConstructorDeclaration(node: TypeScript.ConstructorDeclarationSyntax): void {
-            this.addOutlineRange(node, node.block, node.block);
-            super.visitConstructorDeclaration(node);
-        }
-
-        public visitMemberFunctionDeclaration(node: TypeScript.MemberFunctionDeclarationSyntax): void {
-            this.addOutlineRange(node, node.block, node.block);
-            super.visitMemberFunctionDeclaration(node);
-        }
-
-        public visitGetAccessor(node: TypeScript.GetAccessorSyntax): void {
-            if (!this.inObjectLiteralExpression) {
-                this.addOutlineRange(node, node.block, node.block);
+            function addOutlineRange(startElement: Node, endElement: Node) {
+                if (startElement && endElement) {
+                    // Push the new range
+                    elements.push(TypeScript.TextSpan.fromBounds(startElement.pos, endElement.end));
+                }
             }
-            super.visitGetAccessor(node);
-        }
 
-        public visitSetAccessor(node: TypeScript.SetAccessorSyntax): void {
-            if (!this.inObjectLiteralExpression) {
-                this.addOutlineRange(node, node.block, node.block);
+            function walk(n: Node) {
+                switch (n.kind) {
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.ModuleDeclaration:
+                    case SyntaxKind.EnumDeclaration:
+                    case SyntaxKind.ObjectLiteral:
+                        var openBrace = forEach(n.getChildren(), c => c.kind === SyntaxKind.OpenBraceToken && c);
+                        var closeBrace = forEach(n.getChildren(), c => c.kind === SyntaxKind.CloseBraceToken && c);
+                        addOutlineRange(openBrace, closeBrace);
+                        break;
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.Method:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                        var body = (<FunctionDeclaration>n).body;
+                        if (body) {
+                            var openBrace = forEach(body.getChildren(), c => c.kind === SyntaxKind.OpenBraceToken && c);
+                            var closeBrace = forEach(body.getChildren(), c => c.kind === SyntaxKind.CloseBraceToken && c);
+                            addOutlineRange(openBrace, closeBrace);
+                        }
+                        break;
+                }
+                forEachChild(n, walk);
             }
-            super.visitSetAccessor(node);
-        }
 
-        public visitObjectLiteralExpression(node: TypeScript.ObjectLiteralExpressionSyntax): void {
-            var savedInObjectLiteralExpression = this.inObjectLiteralExpression;
-            this.inObjectLiteralExpression = true;
-            super.visitObjectLiteralExpression(node);
-            this.inObjectLiteralExpression = savedInObjectLiteralExpression;
-        }
-
-        private addOutlineRange(node: TypeScript.ISyntaxNode, startElement: TypeScript.ISyntaxNodeOrToken, endElement: TypeScript.ISyntaxNodeOrToken) {
-            if (startElement && endElement && !isShared(startElement) && !isShared(endElement)) {
-                // Compute the position
-                var start = TypeScript.start(startElement);
-                var end = TypeScript.end(endElement);
-
-                // Push the new range
-                this.elements.push(TypeScript.TextSpan.fromBounds(start, end));
-            }
-        }
-
-        public static collectElements(node: TypeScript.SourceUnitSyntax): TypeScript.TextSpan[] {
-            var collector = new OutliningElementsCollector();
-            visitNodeOrToken(collector, node);
-            return collector.elements;
+            walk(sourceFile);
+            return elements;
         }
     }
 }
