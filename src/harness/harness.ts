@@ -609,7 +609,7 @@ module Harness {
 
             public compileFiles(inputFiles: { unitName: string; content: string }[],
                 otherFiles: { unitName: string; content?: string }[],
-                onComplete: (result: CompilerResult, program: ts.Program, checker: ts.TypeChecker) => void,
+                onComplete: (result: CompilerResult, checker: ts.TypeChecker) => void,
                 settingsCallback?: (settings: ts.CompilerOptions) => void,
                 options?: ts.CompilerOptions) {
 
@@ -755,7 +755,7 @@ module Harness {
                 var result = new CompilerResult(fileOutputs, errors, []);
                 // Covert the source Map data into the baseline
                 result.updateSourceMapRecord(program, emitResult ? emitResult.sourceMaps : undefined);
-                onComplete(result, program, checker);
+                onComplete(result, checker);
 
                 // reset what newline means in case the last test changed it
                 sys.newLine = '\r\n';

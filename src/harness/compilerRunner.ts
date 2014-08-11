@@ -52,7 +52,6 @@ class CompilerBaselineRunner extends RunnerBase {
             var rootDir = lastUnit.originalFilePath.indexOf('conformance') === -1 ? 'tests/cases/compiler/' : lastUnit.originalFilePath.substring(0, lastUnit.originalFilePath.lastIndexOf('/')) + '/';
 
             var result: Harness.Compiler.CompilerResult;
-            var program: ts.Program;
             var checker: ts.TypeChecker;
             var options: ts.CompilerOptions;
             // equivalent to the files that will be passed on the command line
@@ -87,10 +86,9 @@ class CompilerBaselineRunner extends RunnerBase {
                     });
                 }
 
-                options = harnessCompiler.compileFiles(toBeCompiled, otherFiles, function (compileResult, _program, _checker) {
+                options = harnessCompiler.compileFiles(toBeCompiled, otherFiles, function (compileResult, _checker) {
                     result = compileResult;
-                    // The program and checker will be used by typeWriter
-                    program = _program;
+                    // The checker will be used by typeWriter
                     checker = _checker;
                 }, function (settings) {
                         harnessCompiler.setCompilerSettings(tcSettings);
@@ -262,7 +260,7 @@ class CompilerBaselineRunner extends RunnerBase {
                         var allFiles = toBeCompiled.concat(otherFiles);
                         var typeLines: string[] = [];
                         var typeMap: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
-                        var walker = new TypeWriterWalker(program, checker);
+                        var walker = new TypeWriterWalker(checker);
                         allFiles.forEach(file => {
                             var codeLines = file.content.split('\n');
                             walker.getTypes(file.unitName).forEach(result => {
