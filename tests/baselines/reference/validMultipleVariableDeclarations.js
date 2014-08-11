@@ -40,6 +40,7 @@ var a: typeof a;
 
 
 //// [validMultipleVariableDeclarations.js]
+// all expected to be valid
 var x;
 var x = 2;
 if (true) {

@@ -119,6 +119,7 @@ define(["require", "exports"], function (require, exports) {
                     function ClassA() {
                     }
                     ClassA.prototype.AisIn1_1_1 = function () {
+                        // Try all qualified names of this type
                         var a1;
                         a1.AisIn1_1_1();
                         var a2;
@@ -127,12 +128,15 @@ define(["require", "exports"], function (require, exports) {
                         a3.AisIn1_1_1();
                         var a4;
                         a4.AisIn1_1_1();
+                        // Two variants of qualifying a peer type
                         var b1;
                         b1.BisIn1_1_1();
                         var b2;
                         b2.BisIn1_1_1();
+                        // Type only accessible from the root
                         var c1;
                         c1.AisIn1_2_2();
+                        // Interface reference
                         var d1;
                         d1.XisIn1_1_1();
                         var d2;
@@ -145,6 +149,8 @@ define(["require", "exports"], function (require, exports) {
                     function ClassB() {
                     }
                     ClassB.prototype.BisIn1_1_1 = function () {
+                        /** Exactly the same as above in AisIn1_1_1 **/
+                        // Try all qualified names of this type
                         var a1;
                         a1.AisIn1_1_1();
                         var a2;
@@ -153,14 +159,17 @@ define(["require", "exports"], function (require, exports) {
                         a3.AisIn1_1_1();
                         var a4;
                         a4.AisIn1_1_1();
+                        // Two variants of qualifying a peer type
                         var b1;
                         b1.BisIn1_1_1();
                         var b2;
                         b2.BisIn1_1_1();
+                        // Type only accessible from the root
                         var c1;
                         c1.AisIn1_2_2();
                         var c2;
                         c2.AisIn2_3();
+                        // Interface reference
                         var d1;
                         d1.XisIn1_1_1();
                         var d2;
@@ -172,6 +181,7 @@ define(["require", "exports"], function (require, exports) {
                 var NonExportedClassQ = (function () {
                     function NonExportedClassQ() {
                         function QQ() {
+                            /* Sampling of stuff from AisIn1_1_1 */
                             var a4;
                             a4.AisIn1_1_1();
                             var c1;
@@ -195,6 +205,7 @@ define(["require", "exports"], function (require, exports) {
                         a3.AisIn1_1_1();
                         var a4;
                         a4.AisIn1_1_1();
+                        // Interface reference
                         var d2;
                         d2.XisIn1_1_1();
                     }

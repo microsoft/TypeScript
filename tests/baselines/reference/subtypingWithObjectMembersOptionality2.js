@@ -34,6 +34,7 @@ var b: { Foo?: Derived; }
 var r = true ? a : b; // error
 
 //// [subtypingWithObjectMembersOptionality2.js]
+// object literal case
 var a;
 var b;
 var r = true ? a : b;

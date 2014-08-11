@@ -62,6 +62,7 @@ delete objA.a;
 delete M.n;
 
 //// [deleteOperatorWithAnyOtherType.js]
+// delete  operator on any type
 var ANY;
 var ANY1;
 var ANY2 = ["", ""];
@@ -86,14 +87,17 @@ var M;
     M.n;
 })(M || (M = {}));
 var objA = new A();
+// any type var
 var ResultIsBoolean1 = delete ANY1;
 var ResultIsBoolean2 = delete ANY2;
 var ResultIsBoolean3 = delete A;
 var ResultIsBoolean4 = delete M;
 var ResultIsBoolean5 = delete obj;
 var ResultIsBoolean6 = delete obj1;
+// any type literal
 var ResultIsBoolean7 = delete undefined;
 var ResultIsBoolean8 = delete null;
+// any type expressions
 var ResultIsBoolean9 = delete ANY2[0];
 var ResultIsBoolean10 = delete obj1.x;
 var ResultIsBoolean11 = delete obj1.y;
@@ -105,6 +109,7 @@ var ResultIsBoolean16 = delete (ANY + ANY1);
 var ResultIsBoolean17 = delete (null + undefined);
 var ResultIsBoolean18 = delete (null + null);
 var ResultIsBoolean19 = delete (undefined + undefined);
+// multiple delete  operators
 var ResultIsBoolean20 = delete delete ANY;
 var ResultIsBoolean21 = delete delete delete (ANY + ANY1);
 delete ANY;

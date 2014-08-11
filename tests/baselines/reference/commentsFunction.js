@@ -32,9 +32,13 @@ function fooWithParameters(a, b) {
     var d = a;
 }
 fooWithParameters("a", 10);
+/** fooFunc
+ * comment
+ */
 var fooFunc = function FooFunctionValue(b) {
     return b;
 };
+/// lamdaFoo var comment
 var lambdaFoo = function (a, b) { return a + b; };
 var lambddaNoVarComment = function (a, b) { return a * b; };
 lambdaFoo(10, 20);

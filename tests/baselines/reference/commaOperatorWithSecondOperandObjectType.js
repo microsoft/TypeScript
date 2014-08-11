@@ -55,6 +55,7 @@ BOOLEAN, OBJECT;
 NUMBER, OBJECT;
 STRING, OBJECT;
 OBJECT, OBJECT;
+//Return type is Object
 var resultIsObject1 = (ANY, OBJECT);
 var resultIsObject2 = (BOOLEAN, OBJECT);
 var resultIsObject3 = (NUMBER, OBJECT);

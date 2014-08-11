@@ -86,10 +86,12 @@ var C = (function () {
     }
     C.prototype.f = function () {
         var x;
+        // BUG 823818
         var a = x['foo']();
         return a + x.foo();
     };
     C.prototype.g = function (x) {
+        // BUG 823818
         var a = x['foo']();
         return a + x.foo();
     };
@@ -103,10 +105,12 @@ var r2b = i.foo['foo']();
 var a;
 var r3 = a().foo();
 var r3b = a()['foo']();
+// parameter supplied for type argument inference for U
 var r3c = a(new B()).foo();
 var r3d = a(new B())['foo']();
 var b = {
     foo: function (x) {
+        // BUG 823818
         var a = x['foo']();
         return a + x.foo();
     }

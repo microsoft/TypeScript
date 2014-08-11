@@ -45,6 +45,7 @@ undefined === function (): number {
 
 
 //// [functionImplementationErrors.js]
+// FunctionExpression with no return type annotation with multiple return statements with unrelated types
 var f1 = function () {
     return '';
     return 3;
@@ -57,6 +58,7 @@ var f3 = function () {
     return '';
     return 3;
 };
+// FunctionExpression with no return type annotation with return branch of number[] and other of string[]
 var f4 = function () {
     if (true) {
         return [''];

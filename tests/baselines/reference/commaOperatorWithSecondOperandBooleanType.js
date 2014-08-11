@@ -46,6 +46,7 @@ BOOLEAN, BOOLEAN;
 NUMBER, BOOLEAN;
 STRING, BOOLEAN;
 OBJECT, BOOLEAN;
+//Return type is boolean
 var resultIsBoolean1 = (ANY, BOOLEAN);
 var resultIsBoolean2 = (BOOLEAN, BOOLEAN);
 var resultIsBoolean3 = (NUMBER, BOOLEAN);

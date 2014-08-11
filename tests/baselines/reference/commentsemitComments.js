@@ -89,9 +89,11 @@ declare var x;
 
 
 //// [commentsemitComments.js]
+/** Variable comments*/
 var myVariable = 10;
 function foo(p) {
 }
+/** variable with function type comment*/
 var fooVar;
 foo(50);
 fooVar();
@@ -117,7 +119,9 @@ var c = (function () {
     };
     return c;
 })();
+/**instance comment*/
 var i = new c();
+/**interface instance comments*/
 var i1_i;
 var m1;
 (function (m1) {

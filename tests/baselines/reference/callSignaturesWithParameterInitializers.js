@@ -89,6 +89,7 @@ i();
 i(1);
 i.foo(1);
 i.foo(1, 2);
+// these are errors
 var a;
 a();
 a(1);

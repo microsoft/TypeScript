@@ -49,6 +49,8 @@ module D {
 //// [nameCollision.js]
 var A;
 (function (__A) {
+    // these 2 statements force an underscore before the 'A' 
+    // in the generated function call.
     var A = 12;
     var _A = '';
 })(A || (A = {}));

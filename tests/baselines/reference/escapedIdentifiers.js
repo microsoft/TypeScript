@@ -120,6 +120,17 @@ l\u0061bel4:
     } 
 
 //// [escapedIdentifiers.js]
+/*
+    0 .. \u0030
+    9 .. \u0039
+
+    A .. \u0041
+    Z .. \u005a
+
+    a .. \u0061
+    z .. \u00za
+*/
+// var decl
 var \u0061 = 1;
 a++;
 \u0061++;

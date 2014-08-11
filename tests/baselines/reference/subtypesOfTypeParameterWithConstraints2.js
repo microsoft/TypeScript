@@ -165,16 +165,20 @@ function f1(x, y) {
 function f2(x, y, z) {
     var r = true ? x : y;
     var r = true ? y : x;
+    // ok
     var r2 = true ? z : y;
     var r2 = true ? y : z;
+    // ok
     var r2 = true ? z : x;
     var r2 = true ? x : z;
 }
 function f3(x, y) {
     var r = true ? x : y;
     var r = true ? y : x;
+    // ok
     var r2 = true ? x : new Date();
     var r2 = true ? new Date() : x;
+    // ok
     var r3 = true ? y : new Date();
     var r3 = true ? new Date() : y;
 }

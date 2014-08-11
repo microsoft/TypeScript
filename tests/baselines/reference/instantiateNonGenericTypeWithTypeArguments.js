@@ -31,4 +31,5 @@ var r = new Foo();
 var f;
 var r2 = new f();
 var a;
+// BUG 790977
 var r2 = new a();

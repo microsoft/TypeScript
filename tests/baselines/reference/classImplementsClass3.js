@@ -44,6 +44,7 @@ var C2 = (function (_super) {
     }
     return C2;
 })(A);
+// no errors
 var c;
 var c2;
 c = c2;

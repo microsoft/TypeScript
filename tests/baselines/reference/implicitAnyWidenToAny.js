@@ -28,6 +28,7 @@ var obj1 = anyReturnFunc();
 
 
 //// [implicitAnyWidenToAny.js]
+// these should be errors
 var x = null;
 var x1 = undefined;
 var widenArray = [null, undefined];

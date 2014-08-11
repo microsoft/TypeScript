@@ -44,15 +44,28 @@ var n4: (x: number) => string;
 n4 = z2;
 
 //// [commentsVarDecl.js]
+/** Variable comments*/
 var myVariable = 10;
+/** This is another variable comment*/
 var anotherVariable = 30;
+// shouldn't appear
 var aVar = "";
+/** this is multiline comment
+  * All these variables are of number type */
 var anotherAnotherVariable = 70;
+/** Triple slash multiline comment*/
+/** another line in the comment*/
+/** comment line 2*/
 var x = 70;
 x = myVariable;
+/** triple slash comment1*/
+/** jsdocstyle comment - only this comment should be in .d.ts file*/
 var n = 30;
+/** var deckaration with comment on type as well*/
 var y = 20;
+/// var deckaration with comment on type as well
 var yy = 20;
+/** comment2 */
 var z = function (x, y) { return x + y; };
 var z2;
 var x2 = z2;

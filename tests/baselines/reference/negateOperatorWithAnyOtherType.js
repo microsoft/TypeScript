@@ -54,6 +54,7 @@ var ResultIsNumber15 = -(ANY - ANY1);
 -M.n;
 
 //// [negateOperatorWithAnyOtherType.js]
+// - operator on any type
 var ANY;
 var ANY1;
 var ANY2 = ["", ""];
@@ -78,14 +79,17 @@ var M;
     M.n;
 })(M || (M = {}));
 var objA = new A();
+// any type var
 var ResultIsNumber1 = -ANY1;
 var ResultIsNumber2 = -ANY2;
 var ResultIsNumber3 = -A;
 var ResultIsNumber4 = -M;
 var ResultIsNumber5 = -obj;
 var ResultIsNumber6 = -obj1;
+// any type literal
 var ResultIsNumber7 = -undefined;
 var ResultIsNumber = -null;
+// any type expressions
 var ResultIsNumber8 = -ANY2[0];
 var ResultIsNumber9 = -obj1.x;
 var ResultIsNumber10 = -obj1.y;

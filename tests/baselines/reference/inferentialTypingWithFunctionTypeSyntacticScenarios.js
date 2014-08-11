@@ -35,12 +35,14 @@ s = map("", ("", identity));
 
 //// [inferentialTypingWithFunctionTypeSyntacticScenarios.js]
 var s;
+// dotted name
 var dottedIdentity = { x: identity };
 s = map("", dottedIdentity.x);
 s = map("", dottedIdentity['x']);
 s = map("", (function () { return identity; })());
 var ic;
 s = map("", new ic());
+// assignment
 var t;
 s = map("", t = identity);
 s = map("", identity);

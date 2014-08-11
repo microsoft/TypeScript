@@ -49,6 +49,7 @@ objA.a--;
 M.n--;
 
 //// [decrementOperatorWithAnyOtherType.js]
+// -- operator on any type
 var ANY;
 var ANY1;
 var ANY2 = ["", ""];
@@ -63,10 +64,12 @@ var M;
     M.n;
 })(M || (M = {}));
 var objA = new A();
+// any type var
 var ResultIsNumber1 = --ANY;
 var ResultIsNumber2 = --ANY1;
 var ResultIsNumber3 = ANY1--;
 var ResultIsNumber4 = ANY1--;
+// expressions
 var ResultIsNumber5 = --ANY2[0];
 var ResultIsNumber6 = --obj.x;
 var ResultIsNumber7 = --obj.y;

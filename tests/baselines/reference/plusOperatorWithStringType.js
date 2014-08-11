@@ -41,6 +41,7 @@ var ResultIsNumber12 = +STRING.charAt(0);
 +objA.a,M.n;
 
 //// [plusOperatorWithStringType.js]
+// + operator on string type
 var STRING;
 var STRING1 = ["", "abc"];
 function foo() {
@@ -59,13 +60,16 @@ var M;
     M.n;
 })(M || (M = {}));
 var objA = new A();
+// string type var
 var ResultIsNumber1 = +STRING;
 var ResultIsNumber2 = +STRING1;
+// string type literal
 var ResultIsNumber3 = +"";
 var ResultIsNumber4 = +{ x: "", y: "" };
 var ResultIsNumber5 = +{ x: "", y: function (s) {
     return s;
 } };
+// string type expressions
 var ResultIsNumber6 = +objA.a;
 var ResultIsNumber7 = +M.n;
 var ResultIsNumber8 = +STRING1[0];

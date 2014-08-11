@@ -17,6 +17,7 @@ var r6 = r5();
 var r6b = new r5(); // error
 
 //// [arrayTypeOfFunctionTypes.js]
+// valid uses of arrays of function types
 var x;
 var r = x[1];
 var r2 = r();

@@ -55,6 +55,7 @@ var a;
 var b;
 true ? a : b;
 var result1 = true ? a : b;
+//Be contextually typed and and bct is not identical
 var result2 = true ? a : b;
 var result3 = true ? a : b;
 var result4 = true ? function (m) { return m.propertyX1; } : function (n) { return n.propertyX2; };

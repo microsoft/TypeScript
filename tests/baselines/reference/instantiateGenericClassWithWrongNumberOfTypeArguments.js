@@ -28,4 +28,5 @@ var D = (function () {
     }
     return D;
 })();
+// BUG 794238
 var d = new D();

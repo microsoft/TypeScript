@@ -77,6 +77,7 @@ var r3 = f2({ x: new Derived(), y: new Derived2() });
 function f3(y, x) {
     return y(null);
 }
+// all ok - T gets fixed too early, but then defaults to Base and everything works out
 var r4 = f3(function (x) { return x; }, new Base());
 var r5 = f3(function (x) { return x; }, new Derived());
 var r6 = f3(function (x) { return x; }, null);

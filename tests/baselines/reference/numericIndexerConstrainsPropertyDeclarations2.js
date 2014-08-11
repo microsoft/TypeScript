@@ -76,6 +76,7 @@ var Foo = (function () {
     return Foo;
 })();
 var a;
+// error
 var b = {
     1.0: new A(),
     2.0: new B(),

@@ -68,8 +68,10 @@ var M;
 (function (M) {
     var a;
     var r1 = a.foo;
+    // BUG 856491
     var r2 = a.bar;
     var b;
     var r3 = b.foo;
+    // BUG 856491
     var r4 = b.bar;
 })(M || (M = {}));

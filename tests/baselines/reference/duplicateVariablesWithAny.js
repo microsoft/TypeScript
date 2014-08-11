@@ -18,6 +18,7 @@ var z: any;
 var z; // ok
 
 //// [duplicateVariablesWithAny.js]
+// They should have to be the same even when one of the types is 'any'
 var x;
 var x = 2;
 var y = "";

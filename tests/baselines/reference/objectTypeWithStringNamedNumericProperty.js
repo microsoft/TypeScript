@@ -143,6 +143,7 @@ var r3 = c[1.];
 var r5 = c['1..'];
 var r6 = c['1.0'];
 var r3 = c[1.0];
+// BUG 823822
 var r7 = i[-1];
 var r7 = i[-1.0];
 var r8 = i["-1.0"];
@@ -161,6 +162,7 @@ var r3 = c[1.];
 var r5 = i['1..'];
 var r6 = i['1.0'];
 var r3 = c[1.0];
+// BUG 823822
 var r7 = i[-1];
 var r7 = i[-1.0];
 var r8 = i["-1.0"];
@@ -179,6 +181,7 @@ var r3 = c[1.];
 var r5 = a['1..'];
 var r6 = a['1.0'];
 var r3 = c[1.0];
+// BUG 823822
 var r7 = i[-1];
 var r7 = i[-1.0];
 var r8 = i["-1.0"];
@@ -206,6 +209,7 @@ var r3 = c[1.];
 var r5 = b['1..'];
 var r6 = b['1.0'];
 var r3 = c[1.0];
+// BUG 823822
 var r7 = i[-1];
 var r7 = i[-1.0];
 var r8 = i["-1.0"];

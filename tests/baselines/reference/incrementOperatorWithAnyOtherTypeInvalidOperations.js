@@ -70,6 +70,7 @@ ANY2++;
 ++ANY2[0]++;
 
 //// [incrementOperatorWithAnyOtherTypeInvalidOperations.js]
+// ++ operator on any type
 var ANY1;
 var ANY2 = [1, 2];
 var obj;
@@ -93,6 +94,7 @@ var M;
     M.n;
 })(M || (M = {}));
 var objA = new A();
+// any type var
 var ResultIsNumber1 = ++ANY2;
 var ResultIsNumber2 = ++A;
 var ResultIsNumber3 = ++M;
@@ -103,12 +105,14 @@ var ResultIsNumber7 = A++;
 var ResultIsNumber8 = M++;
 var ResultIsNumber9 = obj++;
 var ResultIsNumber10 = obj1++;
+// any type literal
 var ResultIsNumber11 = ++{};
 var ResultIsNumber12 = ++null;
 var ResultIsNumber13 = ++undefined;
 var ResultIsNumber14 = null++;
 var ResultIsNumber15 = {}++;
 var ResultIsNumber16 = undefined++;
+// any type expressions
 var ResultIsNumber17 = ++foo();
 var ResultIsNumber18 = ++A.foo();
 var ResultIsNumber19 = ++(null + undefined);

@@ -64,6 +64,9 @@ var a = function () {
     return new C2();
 };
 new a();
+/*var b:I4 = C2;
+new b();
+*/
 var c;
 c[5];
 c["foo"];

@@ -166,10 +166,13 @@ var a9e = someGenerics9(undefined, { x: 6, z: new Date() }, { x: 6, y: '' });
 var a9e;
 var a9f = someGenerics9(undefined, { x: 6, z: new Date() }, { x: 6, y: '' });
 var a9f;
+// Generic call with multiple parameters of generic type passed arguments with a single best common type
 var a9d = someGenerics9({ x: 3 }, { x: 6 }, { x: 6 });
 var a9d;
+// Generic call with multiple parameters of generic type where one argument is of type 'any'
 var anyVar;
 var a = someGenerics9(7, anyVar, 4);
 var a;
+// Generic call with multiple parameters of generic type where one argument is [] and the other is not 'any'
 var arr = someGenerics9([], null, undefined);
 var arr;

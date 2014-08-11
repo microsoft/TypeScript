@@ -47,6 +47,7 @@ function foo(a, b) {
     var r;
     return r;
 }
+//var r1 = foo((x: number) => 1, (x: string) => ''); // error
 var r1b = foo(function (x) { return 1; }, function (x) { return ''; });
 var r2 = foo(function (x) { return null; }, function (x) { return ''; });
 var r3 = foo(function (x) { return 1; }, function (x) { return null; });

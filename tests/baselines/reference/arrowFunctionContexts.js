@@ -120,6 +120,7 @@ var Derived = (function (_super) {
     return Derived;
 })(Base);
 window.setTimeout(function () { return null; }, 100);
+// Arrow function as value in array literal
 var obj = function (n) { return ''; };
 var obj;
 var arr = [function (n) { return ''; }];
@@ -153,6 +154,7 @@ var M2;
         return Derived;
     })(Base);
     window.setTimeout(function () { return null; }, 100);
+    // Arrow function as value in array literal
     var obj = function (n) { return ''; };
     var obj;
     var arr = [function (n) { return ''; }];
@@ -168,12 +170,14 @@ var M2;
         var b = function (s) { return s; };
     })(M || (M = {}));
 })(M2 || (M2 = {}));
+// <Identifier>(ParamList) => { ... } is a generic arrow function
 var generic1 = function (n) { return [n]; };
 var generic1;
 var generic2 = function (n) {
     return [n];
 };
 var generic2;
+// <Identifier> ((ParamList) => { ... } ) is a type assertion to an arrow function
 var asserted1 = (function (n) { return [n]; });
 var asserted1;
 var asserted2 = (function (n) {

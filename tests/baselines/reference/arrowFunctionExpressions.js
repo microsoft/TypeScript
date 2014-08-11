@@ -89,16 +89,19 @@ function tryCatchFn() {
 
 
 //// [arrowFunctionExpressions.js]
+// ArrowFormalParameters => AssignmentExpression is equivalent to ArrowFormalParameters => { return AssignmentExpression; }
 var a = function (p) { return p.length; };
 var a = function (p) {
     return p.length;
 };
+// Identifier => Block is equivalent to(Identifier) => Block
 var b = function (j) {
     return 0;
 };
 var b = function (j) {
     return 0;
 };
+// Identifier => AssignmentExpression is equivalent to(Identifier) => AssignmentExpression
 var c;
 var d = function (n) { return c = n; };
 var d = function (n) { return c = n; };
@@ -116,6 +119,7 @@ var MyClass = (function () {
     };
     return MyClass;
 })();
+// Arrow function used in arrow function
 var arrrr = function () { return function (m) { return function () { return function (n) { return m + n; }; }; }; };
 var e = arrrr()(3)()(4);
 var e;
@@ -135,6 +139,7 @@ function outerFn() {
         var p;
     }
 }
+// Arrow function used in nested function in arrow function
 var f = function (n) {
     function fn(x) {
         return function () { return n + x; };

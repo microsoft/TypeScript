@@ -34,6 +34,7 @@ function singleton(x) {
     return [x];
 }
 var xs = [1, 2, 3];
+// Have compiler check that we get the correct types
 var v1;
 var v1 = xs.map(identity);
 var v1 = map(xs, identity);

@@ -50,6 +50,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// none of these function calls should be allowed
 var x = function () {
     return;
 };

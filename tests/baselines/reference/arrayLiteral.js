@@ -16,6 +16,7 @@ var y2: number[] = [1, 2];
 var y2: number[] = new Array<number>();
 
 //// [arrayLiteral.js]
+// valid uses of array literals
 var x = [];
 var x = new Array(1);
 var y = [1];

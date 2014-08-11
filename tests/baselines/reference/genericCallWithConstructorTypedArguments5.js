@@ -31,6 +31,7 @@ function foo(arg) {
 }
 var arg;
 var r = foo(arg);
+// more args not allowed
 var arg2;
 var r2 = foo(arg2);
 var arg3;
@@ -38,6 +39,7 @@ var r3 = foo(arg3);
 function foo2(arg) {
     return new arg.cb(null, null);
 }
+// fewer args ok
 var r4 = foo(arg);
 var arg4;
 var r6 = foo(arg4);

@@ -26,11 +26,13 @@ function fn2(x4: number) {
 
 //// [assignmentLHSIsReference.js]
 var value;
+// identifiers: variable and parameter
 var x1;
 x1 = value;
 function fn1(x2) {
     x2 = value;
 }
+// property accesses
 var x3;
 x3.a = value;
 x3['a'] = value;

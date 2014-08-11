@@ -58,6 +58,7 @@ c2.func5 = c2.func4;
 
 
 //// [functionLiterals.js]
+// PropName<TypeParamList>(ParamList):ReturnType is equivalent to PropName: { <TypeParamList>(ParamList): ReturnType }
 var b;
 b.func1 = b.func2;
 b.func1 = b.func3;
@@ -68,6 +69,7 @@ b.func3 = b.func2;
 var c;
 c.func4 = c.func5;
 c.func5 = c.func4;
+// generic versions
 var b2;
 b2.func1 = b2.func2;
 b2.func1 = b2.func3;

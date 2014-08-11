@@ -956,9 +956,12 @@ _.range(1, 11);
 _.range(0, 30, 5);
 _.range(0, 30, 5);
 _.range(0);
+///////////////////////////////////////////////////////////////////////////////////////
 var func = function (greeting) {
     return greeting + ': ' + this.name;
 };
+// need a second var otherwise typescript thinks func signature is the above func type,
+// instead of the newly returned _bind => func type.
 var func2 = _.bind(func, { name: 'moe' }, 'hi');
 func2();
 var buttonView = {
@@ -1059,6 +1062,7 @@ _.isNaN(undefined);
 _.isNull(null);
 _.isNull(undefined);
 _.isUndefined(null.missingVariable);
+///////////////////////////////////////////////////////////////////////////////////////
 var underscore = _.noConflict();
 var moe2 = { name: 'moe' };
 moe2 === _.identity(moe);

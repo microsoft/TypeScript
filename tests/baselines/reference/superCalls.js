@@ -50,6 +50,7 @@ var Derived = (function (_super) {
     function Derived(q) {
         _super.call(this, '');
         this.q = q;
+        //type of super call expression is void
         var p = _super.call(this, '');
         var p = v();
     }

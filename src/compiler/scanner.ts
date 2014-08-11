@@ -359,9 +359,9 @@ module ts {
     // between the given position and the next line break are returned. The return value is an array containing a TextRange for each
     // comment. Single-line comment ranges include the the beginning '//' characters but not the ending line break. Multi-line comment
     // ranges include the beginning '/* and ending '*/' characters. The return value is undefined if no comments were found.
-    function getCommentRanges(text: string, pos: number, trailing: boolean): TextRange[] {
-        var result: TextRange[];
-        var collecting = trailing;
+    function getCommentRanges(text: string, pos: number, trailing: boolean): Comment[] {
+        var result: Comment[];
+        var collecting = trailing || pos === 0;
         while (true) {
             var ch = text.charCodeAt(pos);
             switch (ch) {
@@ -373,6 +373,9 @@ module ts {
                         return result;
                     }
                     collecting = true;
+                    if (result && result.length) {
+                        result[result.length - 1].hasTrailingNewLine = true;
+                    }
                     continue;
                 case CharacterCodes.tab:
                 case CharacterCodes.verticalTab:
@@ -411,6 +414,9 @@ module ts {
                     break;
                 default:
                     if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch) || isLineBreak(ch))) {
+                        if (result && result.length && isLineBreak(ch)) {
+                            result[result.length - 1].hasTrailingNewLine = true;
+                        }
                         pos++;
                         continue;
                     }

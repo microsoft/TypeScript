@@ -31,12 +31,14 @@ var a;
 var b;
 var c;
 var d;
+// null + boolean/Object
 var r1 = null + a;
 var r2 = null + b;
 var r3 = null + c;
 var r4 = a + null;
 var r5 = b + null;
 var r6 = null + c;
+// other cases
 var r7 = null + d;
 var r8 = null + true;
 var r9 = null + { a: '' };

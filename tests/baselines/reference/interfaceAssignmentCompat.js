@@ -76,6 +76,7 @@ var M;
         x[1] = { color: 1 /* Blue */ };
         x[2] = { color: 0 /* Green */ };
         x = x.sort(CompareYeux);
+        // type of z inferred from specialized array type
         var z = x.sort(CompareEyes);
         for (var i = 0, len = z.length; i < len; i++) {
             result += ((Color._map[z[i].color]) + "\r\n");

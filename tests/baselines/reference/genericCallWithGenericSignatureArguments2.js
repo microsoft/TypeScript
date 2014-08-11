@@ -44,6 +44,7 @@ function foo(a, b) {
 var r1 = foo(function (x) { return 1; }, function (x) { return ''; });
 function other2(x) {
     var r7 = foo(function (a) { return a; }, function (b) { return b; });
+    // BUG 835518
     var r9 = r7(new Date());
     var r10 = r7(1);
 }

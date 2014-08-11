@@ -138,6 +138,7 @@ function fn2() {
 }
 var d = fn2(0, undefined);
 var d;
+// Generic and non - generic overload where generic overload is the only candidate when called without type arguments
 var s = fn2(0, '');
 fn2('', 0);
 fn2('', 0);
@@ -148,6 +149,7 @@ var s = fn3(3);
 var s = fn3('', 3, '');
 var n = fn3(5, 5, 5);
 var n;
+// Generic overloads with differing arity called with type arguments matching each overload type parameter count
 var s = fn3(4);
 var s = fn3('', '', '');
 var n = fn3('', '', 3);

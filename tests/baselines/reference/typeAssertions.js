@@ -56,6 +56,7 @@ function fn2(t) {
 fn1(fn2(4));
 var a;
 var s;
+// Type assertion of non - unary expression
 var a = "" + 4;
 var s = "" + 4;
 var SomeBase = (function () {
@@ -75,6 +76,7 @@ var SomeOther = (function () {
     }
     return SomeOther;
 })();
+// Type assertion should check for assignability in either direction
 var someBase = new SomeBase();
 var someDerived = new SomeDerived();
 var someOther = new SomeOther();

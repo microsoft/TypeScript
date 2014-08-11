@@ -100,6 +100,7 @@ new m7.m8.m9.c();
 //// [commentsModules.js]
 var m1;
 (function (m1) {
+    /** b's comment*/
     m1.b;
     function foo() {
         return m1.b;
@@ -112,6 +113,7 @@ var m1;
         })();
         m2.c = c;
         ;
+        /** i*/
         m2.i = new c();
     })(m1.m2 || (m1.m2 = {}));
     var m2 = m1.m2;

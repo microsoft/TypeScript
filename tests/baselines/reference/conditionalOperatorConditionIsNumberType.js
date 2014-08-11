@@ -59,6 +59,7 @@ var resultIsObject3 = foo() / array[1] ? exprIsObject1 : exprIsObject2;
 
 
 //// [conditionalOperatorConditionIsNumberType.js]
+//Cond ? Expr1 : Expr2,  Cond is of number type, Expr1 and Expr2 have the same type
 var condNumber;
 var exprAny1;
 var exprBoolean1;
@@ -90,6 +91,7 @@ var array = [1, 2, 3];
 "string".length ? exprNumber1 : exprNumber2;
 foo() ? exprString1 : exprString2;
 foo() / array[1] ? exprIsObject1 : exprIsObject2;
+//Results shoud be same as Expr1 and Expr2
 var resultIsAny1 = condNumber ? exprAny1 : exprAny2;
 var resultIsBoolean1 = condNumber ? exprBoolean1 : exprBoolean2;
 var resultIsNumber1 = condNumber ? exprNumber1 : exprNumber2;

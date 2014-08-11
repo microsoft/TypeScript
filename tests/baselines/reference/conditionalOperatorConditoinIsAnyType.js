@@ -57,6 +57,7 @@ var resultIsObject3 = x.doSomeThing() ? exprIsObject1 : exprIsObject2;
 
 
 //// [conditionalOperatorConditoinIsAnyType.js]
+//Cond ? Expr1 : Expr2,  Cond is of any type, Expr1 and Expr2 have the same type
 var condAny;
 var x;
 var exprAny1;
@@ -84,6 +85,7 @@ x("x") ? exprBoolean1 : exprBoolean2;
 x(x) ? exprNumber1 : exprNumber2;
 x("x") ? exprString1 : exprString2;
 x.doSomeThing() ? exprIsObject1 : exprIsObject2;
+//Results shoud be same as Expr1 and Expr2
 var resultIsAny1 = condAny ? exprAny1 : exprAny2;
 var resultIsBoolean1 = condAny ? exprBoolean1 : exprBoolean2;
 var resultIsNumber1 = condAny ? exprNumber1 : exprNumber2;

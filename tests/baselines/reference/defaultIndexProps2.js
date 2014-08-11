@@ -23,6 +23,7 @@ var Foo = (function () {
     return Foo;
 })();
 var f = new Foo();
+// WScript.Echo(f[0]);
 var o = { v: "Yo2" };
 1[0];
 var q = "s"[0];

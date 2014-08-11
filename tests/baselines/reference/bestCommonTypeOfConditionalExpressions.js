@@ -33,6 +33,8 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// conditional expressions return the best common type of the branches plus contextual type (using the first candidate if multiple BCTs exist)
+// no errors expected here
 var a;
 var b;
 var Base = (function () {

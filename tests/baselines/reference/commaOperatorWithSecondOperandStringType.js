@@ -49,6 +49,7 @@ BOOLEAN, STRING;
 NUMBER, STRING;
 STRING, STRING;
 OBJECT, STRING;
+//Return type is string
 var resultIsString1 = (ANY, STRING);
 var resultIsString2 = (BOOLEAN, STRING);
 var resultIsString3 = (NUMBER, STRING);

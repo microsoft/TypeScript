@@ -594,6 +594,8 @@ var c;
 var d;
 var e;
 var f;
+// All of the below should be an error unless otherwise noted
+// operator *
 var r1a1 = a * a;
 var r1a2 = a * b;
 var r1a3 = a * c;
@@ -642,6 +644,7 @@ var r1h3 = c * 1 /* b */;
 var r1h4 = d * 1 /* b */;
 var r1h5 = e * 1 /* b */;
 var r1h6 = f * 1 /* b */;
+// operator /
 var r2a1 = a / a;
 var r2a2 = a / b;
 var r2a3 = a / c;
@@ -690,6 +693,7 @@ var r2h3 = c / 1 /* b */;
 var r2h4 = d / 1 /* b */;
 var r2h5 = e / 1 /* b */;
 var r2h6 = f / 1 /* b */;
+// operator %
 var r3a1 = a % a;
 var r3a2 = a % b;
 var r3a3 = a % c;
@@ -738,6 +742,7 @@ var r3h3 = c % 1 /* b */;
 var r3h4 = d % 1 /* b */;
 var r3h5 = e % 1 /* b */;
 var r3h6 = f % 1 /* b */;
+// operator -
 var r4a1 = a - a;
 var r4a2 = a - b;
 var r4a3 = a - c;
@@ -786,6 +791,7 @@ var r4h3 = c - 1 /* b */;
 var r4h4 = d - 1 /* b */;
 var r4h5 = e - 1 /* b */;
 var r4h6 = f - 1 /* b */;
+// operator <<
 var r5a1 = a << a;
 var r5a2 = a << b;
 var r5a3 = a << c;
@@ -834,6 +840,7 @@ var r5h3 = c << 1 /* b */;
 var r5h4 = d << 1 /* b */;
 var r5h5 = e << 1 /* b */;
 var r5h6 = f << 1 /* b */;
+// operator >>
 var r6a1 = a >> a;
 var r6a2 = a >> b;
 var r6a3 = a >> c;
@@ -882,6 +889,7 @@ var r6h3 = c >> 1 /* b */;
 var r6h4 = d >> 1 /* b */;
 var r6h5 = e >> 1 /* b */;
 var r6h6 = f >> 1 /* b */;
+// operator >>>
 var r7a1 = a >>> a;
 var r7a2 = a >>> b;
 var r7a3 = a >>> c;
@@ -930,6 +938,7 @@ var r7h3 = c >>> 1 /* b */;
 var r7h4 = d >>> 1 /* b */;
 var r7h5 = e >>> 1 /* b */;
 var r7h6 = f >>> 1 /* b */;
+// operator &
 var r8a1 = a & a;
 var r8a2 = a & b;
 var r8a3 = a & c;
@@ -978,6 +987,7 @@ var r8h3 = c & 1 /* b */;
 var r8h4 = d & 1 /* b */;
 var r8h5 = e & 1 /* b */;
 var r8h6 = f & 1 /* b */;
+// operator ^
 var r9a1 = a ^ a;
 var r9a2 = a ^ b;
 var r9a3 = a ^ c;
@@ -1026,6 +1036,7 @@ var r9h3 = c ^ 1 /* b */;
 var r9h4 = d ^ 1 /* b */;
 var r9h5 = e ^ 1 /* b */;
 var r9h6 = f ^ 1 /* b */;
+// operator |
 var r10a1 = a | a;
 var r10a2 = a | b;
 var r10a3 = a | c;

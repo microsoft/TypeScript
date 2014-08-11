@@ -51,6 +51,7 @@ var M;
             (function (plop) {
             })(_plop.plop || (_plop.plop = {}));
             var plop = _plop.plop;
+            // Emit these references as follows
             var v1 = gunk;
             var v2 = buz;
             _plop.v3 = _plop.doom;

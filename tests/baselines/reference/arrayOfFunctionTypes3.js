@@ -27,6 +27,7 @@ var r6 = z2[0];
 var r7 = r6(''); // any not string
 
 //// [arrayOfFunctionTypes3.js]
+// valid uses of arrays of function types
 var x = [function () { return 1; }, function () {
 }];
 var r2 = x[0]();

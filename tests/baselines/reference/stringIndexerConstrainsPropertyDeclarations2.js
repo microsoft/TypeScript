@@ -70,6 +70,7 @@ var Foo = (function () {
     return Foo;
 })();
 var a;
+// error
 var b = {
     a: A,
     b: B

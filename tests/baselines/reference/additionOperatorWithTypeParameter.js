@@ -52,6 +52,7 @@ function foo(t, u) {
     var e;
     var g;
     var f;
+    // type parameter as left operand
     var r1 = t + a;
     var r2 = t + b;
     var r3 = t + c;
@@ -59,6 +60,7 @@ function foo(t, u) {
     var r5 = t + e;
     var r6 = t + g;
     var r7 = t + f;
+    // type parameter as right operand
     var r8 = a + t;
     var r9 = b + t;
     var r10 = c + t;
@@ -66,6 +68,7 @@ function foo(t, u) {
     var r12 = e + t;
     var r13 = g + t;
     var r14 = f + t;
+    // other cases
     var r15 = t + null;
     var r16 = t + undefined;
     var r17 = t + t;

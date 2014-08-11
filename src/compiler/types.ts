@@ -512,6 +512,10 @@ module ts {
         filename: string;
     }
 
+    export interface Comment extends TextRange {
+        hasTrailingNewLine?: boolean;
+    }
+
     export interface SourceFile extends Block {
         filename: string;
         text: string;

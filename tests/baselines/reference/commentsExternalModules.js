@@ -64,6 +64,7 @@ var newVar2 = new extMod.m4.m2.c();
 //// [commentsExternalModules_0.js]
 define(["require", "exports"], function (require, exports) {
     (function (m1) {
+        /** b's comment*/
         m1.b;
         function foo() {
             return m1.b;
@@ -76,6 +77,7 @@ define(["require", "exports"], function (require, exports) {
             })();
             m2.c = c;
             ;
+            /** i*/
             m2.i = new c();
         })(m1.m2 || (m1.m2 = {}));
         var m2 = m1.m2;
@@ -88,6 +90,7 @@ define(["require", "exports"], function (require, exports) {
     m1.fooExport();
     var myvar = new m1.m2.c();
     (function (m4) {
+        /** b's comment */
         m4.b;
         function foo() {
             return m4.b;
@@ -100,6 +103,7 @@ define(["require", "exports"], function (require, exports) {
             })();
             m2.c = c;
             ;
+            /** i */
             m2.i = new c();
         })(m4.m2 || (m4.m2 = {}));
         var m2 = m4.m2;

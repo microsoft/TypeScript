@@ -131,14 +131,17 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// FunctionExpression with no return type annotation and no return statement returns void
 var v = function () {
 }();
+// FunctionExpression f with no return type annotation and directly references f in its body returns any
 var a = function f() {
     return f;
 };
 var a = function f() {
     return f();
 };
+// FunctionExpression f with no return type annotation and indirectly references f in its body returns any
 var a = function f() {
     var x = f;
     return x;
@@ -160,23 +163,29 @@ function rec4() {
 var n;
 var n = rec3();
 var n = rec4();
+// FunctionExpression with no return type annotation and returns a number
 var n = function () {
     return 3;
 }();
+// FunctionExpression with no return type annotation and returns null
 var nu = null;
 var nu = function () {
     return null;
 }();
+// FunctionExpression with no return type annotation and returns undefined
 var un = undefined;
 var un = function () {
     return undefined;
 }();
+// FunctionExpression with no return type annotation and returns a type parameter type
 var n = function (x) {
     return x;
 }(4);
+// FunctionExpression with no return type annotation and returns a constrained type parameter type
 var n = function (x) {
     return x;
 }(4);
+// FunctionExpression with no return type annotation with multiple return statements with identical types
 var n = function () {
     return 3;
     return 5;
@@ -198,6 +207,7 @@ var b = function () {
     return new Base();
     return new Derived();
 }();
+// FunctionExpression with no return type annotation with multiple return statements with one a recursive call
 var a = function f() {
     return new Base();
     return new Derived();

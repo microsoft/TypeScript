@@ -135,6 +135,7 @@ var Errors;
     })(Base);
     var WithNonGenericSignaturesInBaseType;
     (function (WithNonGenericSignaturesInBaseType) {
+        // target type with non-generic call signatures
         var a2;
         var a7;
         var a8;
@@ -178,10 +179,12 @@ var Errors;
     })(WithNonGenericSignaturesInBaseType || (WithNonGenericSignaturesInBaseType = {}));
     var WithGenericSignaturesInBaseType;
     (function (WithGenericSignaturesInBaseType) {
+        // target type has generic call signature
         var a2;
         var b2;
         a2 = b2;
         b2 = a2;
+        // target type has generic call signature
         var a3;
         var b3;
         a3 = b3;

@@ -30,6 +30,7 @@ var CCC = (function () {
     CCC.staticY = aaa;
     return CCC;
 })();
+// above is equivalent to this:
 var aaaa = 1;
 var CCCC = (function () {
     function CCCC(aaaa) {

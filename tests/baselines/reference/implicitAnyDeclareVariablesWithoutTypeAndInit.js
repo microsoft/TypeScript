@@ -12,11 +12,13 @@ declare var bar2: any;
 var x1: any; var y1 = new x1;
 
 //// [implicitAnyDeclareVariablesWithoutTypeAndInit.js]
+// this should be an error
 var x;
 function func(k) {
 }
 ;
 func(x);
+// this shouldn't be an error
 var bar = 3;
 var bar1;
 var x1;

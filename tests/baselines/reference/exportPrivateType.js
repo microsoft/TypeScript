@@ -46,6 +46,7 @@ var foo;
         };
         return C2;
     })();
+    // None of the types are exported, so per section 10.3, should all be errors
     foo.e;
     foo.f;
     foo.g;

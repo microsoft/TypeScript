@@ -10,6 +10,7 @@ module ts {
         getLine(): number;
         getColumn(): number;
         getIndent(): number;
+        isLineStart(): boolean;
     }
 
     var indentStrings: string[] = [];
@@ -146,7 +147,8 @@ module ts {
                 getTextPos: () => output.length,
                 getLine: () => lineCount + 1,
                 getColumn: () => lineStart ? indent * 4 + 1 : output.length - linePos + 1,
-                getText: () => output
+                getText: () => output,
+                isLineStart: () => lineStart
             };
         }
 
@@ -177,14 +179,24 @@ module ts {
             /** write emitted output to disk*/
             var writeEmittedFiles = writeJavaScriptFile;
 
+            /** Emit leading comments of the declaration */
+            var emitLeadingComments = compilerOptions.removeComments ? function (declaration: Declaration) {
+            } : emitLeadingDeclarationComments;
+
+            /** Emit Trailing comments of the declaration */
+            var emitTrailingComments = compilerOptions.removeComments ? function (declaration: Declaration) {
+            } : emitTrailingDeclarationComments;
+
+            var writeComment = writeCommentRange;
+
             /** Emit a node */
             var emit = emitNode;
 
             /** Called just before starting emit of a node */
-            var emitStart = function (node: Node) { }
+            var emitStart = function (node: Node) { };
 
             /** Called once the emit of the node is done */
-            var emitEnd = function (node: Node) { }
+            var emitEnd = function (node: Node) { };
 
             /** Emit the text for the given token that comes after startPos
               * This by default writes the text provided with the given tokenKind 
@@ -428,6 +440,12 @@ module ts {
                     sourceMapNameIndices.pop();
                 };
 
+                function writeCommentRangeWithMap(comment: Comment) {
+                    recordSourceMapSpan(comment.pos);
+                    writeCommentRange(comment);
+                    recordSourceMapSpan(comment.end);
+                }
+
                 function writeJavaScriptAndSourceMapFile(emitOutput: string, writeByteOrderMark: boolean) {
                     // Write source map file
                     encodeLastRecordedSourceMapSpan();
@@ -513,6 +531,7 @@ module ts {
                 emitNewSourceFileStart = recordNewSourceFileStart;
                 scopeEmitStart = recordScopeNameOfNode;
                 scopeEmitEnd = recordScopeNameEnd;
+                writeComment = writeCommentRangeWithMap;
             }
 
             function writeJavaScriptFile(emitOutput: string, writeByteOrderMark: boolean) {
@@ -1057,14 +1076,18 @@ module ts {
             }
 
             function emitVariableDeclaration(node: VariableDeclaration) {
+                emitLeadingComments(node);
                 emitModuleMemberName(node);
                 emitOptional(" = ", node.initializer);
+                emitTrailingComments(node);
             }
 
             function emitVariableStatement(node: VariableStatement) {
+                emitLeadingComments(node);
                 if (!(node.flags & NodeFlags.Export)) write("var ");
                 emitCommaList(node.declarations);
                 write(";");
+                emitTrailingComments(node);
             }
 
             function emitParameter(node: ParameterDeclaration) {
@@ -1838,6 +1861,30 @@ module ts {
                     case SyntaxKind.SourceFile:
                         return emitSourceFile(<SourceFile>node);
                 }
+            }
+
+            function writeCommentRange(comment: Comment) {
+                writer.writeLiteral(currentSourceFile.text.substring(comment.pos, comment.end));
+            }
+
+            function emitComments(comments: Comment[]) {
+                forEach(comments, comment => {
+                    writeComment(comment);
+                    if (comment.hasTrailingNewLine) {
+                        writer.writeLine();
+                    } else {
+                        writer.write(" ");
+                    }
+                });
+            }
+
+            function emitLeadingDeclarationComments(node: Declaration) {
+                var leadingComments = getLeadingComments(currentSourceFile.text, node.pos);
+                emitComments(leadingComments);
+            }
+
+            function emitTrailingDeclarationComments(node: Declaration) {
+                var trailingComments = getTrailingComments(currentSourceFile.text, node.end);
             }
 
             if (compilerOptions.sourceMap) {

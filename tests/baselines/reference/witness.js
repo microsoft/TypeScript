@@ -141,6 +141,7 @@ var qq: any;
 
 
 //// [witness.js]
+// Initializers
 var varInit = varInit;
 var pInit;
 function fn(pInit) {
@@ -166,26 +167,31 @@ function fnReturn2() {
     return fnReturn2;
 }
 var fnr2 = fnReturn2();
+// Comma
 var co1 = (co1, 3);
 var co1;
 var co2 = (3, 4, co2);
 var co2;
 var co3 = (co1, co2, co3, co1);
 var co3;
+// Assignment
 var as1 = (as1 = 2);
 var as1;
 var as2 = (as2 = as2 = 2);
 var as2;
+// Conditional
 var cnd1 = cnd1 ? 0 : 1;
 var cnd1;
 var cnd2 = cnd1 ? cnd1 ? '' : "" : '';
 var cnd2;
+// ||
 var or1 = or1 || '';
 var or1;
 var or2 = '' || or2;
 var or2;
 var or3 = or3 || or3;
 var or3;
+// &&
 var and1 = and1 && '';
 var and1;
 var and2 = '' && and2;
@@ -229,6 +235,7 @@ function fn5() {
     return new a(fn5);
 }
 var fn5r = fn5();
+// Property access
 var propAcc1 = {
     m: propAcc1.m
 };

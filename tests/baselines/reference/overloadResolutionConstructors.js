@@ -136,12 +136,14 @@ var SomeDerived3 = (function (_super) {
     return SomeDerived3;
 })(SomeBase);
 var fn1;
+// Ambiguous call picks the first overload in declaration order
 var s = new fn1(undefined);
 var s;
 new fn1({});
 var fn2;
 var d = new fn2(0, undefined);
 var d;
+// Generic and non - generic overload where generic overload is the only candidate when called without type arguments
 var s = new fn2(0, '');
 new fn2('', 0);
 new fn2('', 0);
@@ -150,6 +152,7 @@ var s = new fn3(3);
 var s = new fn3('', 3, '');
 var n = new fn3(5, 5, 5);
 var n;
+// Generic overloads with differing arity called with type arguments matching each overload type parameter count
 var s = new fn3(4);
 var s = new fn3('', '', '');
 var n = new fn3('', '', 3);

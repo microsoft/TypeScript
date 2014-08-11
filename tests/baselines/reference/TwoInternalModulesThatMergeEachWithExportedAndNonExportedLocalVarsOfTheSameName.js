@@ -56,6 +56,7 @@ var A;
 //// [part2.js]
 var A;
 (function (A) {
+    // not a collision, since we don't export
     var Origin = "0,0";
     (function (Utils) {
         var Plane = (function () {
@@ -70,6 +71,7 @@ var A;
     var Utils = A.Utils;
 })(A || (A = {}));
 //// [part3.js]
+// test the merging actually worked
 var o;
 var o;
 var o = A.Origin;

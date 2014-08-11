@@ -65,6 +65,7 @@ var M;
 (function (M) {
     M.Point = 1;
 })(M || (M = {}));
+// primary expression
 var m;
 var m = M;
 var a1;
@@ -86,6 +87,7 @@ var M2;
 })(M2 || (M2 = {}));
 var m2;
 var m2 = M2;
+// static side of the class
 var a2;
 var a2 = m2.Point;
 var a2 = M2.Point;

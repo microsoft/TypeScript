@@ -36,6 +36,7 @@ var newC2 = new C(<any>[], null)
 
 
 //// [implicitAnyFunctionInvocationWithAnyArguements.js]
+// this should be errors
 var arg0 = null;
 var anyArray = [null, undefined];
 var objL;

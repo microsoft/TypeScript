@@ -138,6 +138,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// type of an array is the best common type of its elements (plus its contextual type if it exists)
 var a = [1, ''];
 var b = [1, null];
 var c = [1, '', null];
@@ -189,6 +190,7 @@ var Derived;
 })(Derived || (Derived = {}));
 var WithContextualType;
 (function (WithContextualType) {
+    // no errors
     var a = [derived, derived2];
     var b = [null];
     var c = [];

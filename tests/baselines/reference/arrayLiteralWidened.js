@@ -15,6 +15,7 @@ var c = [[[null]],[undefined]]
 
 
 //// [arrayLiteralWidened.js]
+// array literals are widened upon assignment according to their element type
 var a = [];
 var a = [null, null];
 var a = [undefined, undefined];

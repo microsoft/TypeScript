@@ -227,6 +227,7 @@ var b;
 var c;
 var d;
 var e;
+// operator <
 var r1a1 = a < b;
 var r1a1 = a < c;
 var r1a1 = a < d;
@@ -247,6 +248,7 @@ var r1e1 = e < a;
 var r1e1 = e < b;
 var r1e1 = e < c;
 var r1e1 = e < d;
+// operator >
 var r2a1 = a > b;
 var r2a1 = a > c;
 var r2a1 = a > d;
@@ -267,6 +269,7 @@ var r2e1 = e > a;
 var r2e1 = e > b;
 var r2e1 = e > c;
 var r2e1 = e > d;
+// operator <=
 var r3a1 = a <= b;
 var r3a1 = a <= c;
 var r3a1 = a <= d;
@@ -287,6 +290,7 @@ var r3e1 = e <= a;
 var r3e1 = e <= b;
 var r3e1 = e <= c;
 var r3e1 = e <= d;
+// operator >=
 var r4a1 = a >= b;
 var r4a1 = a >= c;
 var r4a1 = a >= d;
@@ -307,6 +311,7 @@ var r4e1 = e >= a;
 var r4e1 = e >= b;
 var r4e1 = e >= c;
 var r4e1 = e >= d;
+// operator ==
 var r5a1 = a == b;
 var r5a1 = a == c;
 var r5a1 = a == d;
@@ -327,6 +332,7 @@ var r5e1 = e == a;
 var r5e1 = e == b;
 var r5e1 = e == c;
 var r5e1 = e == d;
+// operator !=
 var r6a1 = a != b;
 var r6a1 = a != c;
 var r6a1 = a != d;
@@ -347,6 +353,7 @@ var r6e1 = e != a;
 var r6e1 = e != b;
 var r6e1 = e != c;
 var r6e1 = e != d;
+// operator ===
 var r7a1 = a === b;
 var r7a1 = a === c;
 var r7a1 = a === d;
@@ -367,6 +374,7 @@ var r7e1 = e === a;
 var r7e1 = e === b;
 var r7e1 = e === c;
 var r7e1 = e === d;
+// operator !==
 var r8a1 = a !== b;
 var r8a1 = a !== c;
 var r8a1 = a !== d;

@@ -16,6 +16,7 @@ var C = (function () {
     }
     return C;
 })();
+// x should not be an optional property
 var v = {};
 var v2;
 v = v2;

@@ -82,6 +82,7 @@ function foo<T, U/* extends T*/, V/* extends U*/>(t: T, u: U, v: V) {
 var a;
 var b;
 function foo(t, u, v) {
+    // errors
     var ra1 = t < u;
     var ra2 = t > u;
     var ra3 = t <= u;
@@ -114,6 +115,7 @@ function foo(t, u, v) {
     var rd6 = v != t;
     var rd7 = v === t;
     var rd8 = v !== t;
+    // ok
     var re1 = t < a;
     var re2 = t > a;
     var re3 = t <= a;

@@ -216,6 +216,7 @@ define(["require", "exports"], function (require, exports) {
         var im_private_f_private = m_private.f_private;
         var im_private_v_private = m_private.v_private;
         var im_private_mi_private = m_private.mi_private;
+        // Usage of above decls
         var privateUse_im_private_c_private = new im_private_c_private();
         import_public.publicUse_im_private_c_private = new im_private_c_private();
         var privateUse_im_private_e_private = 0 /* Happy */;
@@ -235,6 +236,7 @@ define(["require", "exports"], function (require, exports) {
         var im_private_f_public = m_public.f_public;
         var im_private_v_public = m_public.v_public;
         var im_private_mi_public = m_public.mi_public;
+        // Usage of above decls
         var privateUse_im_private_c_public = new im_private_c_public();
         import_public.publicUse_im_private_c_public = new im_private_c_public();
         var privateUse_im_private_e_public = 0 /* Happy */;
@@ -258,6 +260,7 @@ define(["require", "exports"], function (require, exports) {
         var im_private_f_private = m_private.f_private;
         var im_private_v_private = m_private.v_private;
         var im_private_mi_private = m_private.mi_private;
+        // Usage of above decls
         var privateUse_im_private_c_private = new im_private_c_private();
         import_private.publicUse_im_private_c_private = new im_private_c_private();
         var privateUse_im_private_e_private = 0 /* Happy */;
@@ -277,6 +280,7 @@ define(["require", "exports"], function (require, exports) {
         var im_private_f_public = m_public.f_public;
         var im_private_v_public = m_public.v_public;
         var im_private_mi_public = m_public.mi_public;
+        // Usage of above decls
         var privateUse_im_private_c_public = new im_private_c_public();
         import_private.publicUse_im_private_c_public = new im_private_c_public();
         var privateUse_im_private_e_public = 0 /* Happy */;

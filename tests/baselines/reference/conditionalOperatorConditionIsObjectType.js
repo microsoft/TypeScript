@@ -59,6 +59,7 @@ var resultIsObject3 = condObject.valueOf() ? exprIsObject1 : exprIsObject2;
 
 
 //// [conditionalOperatorConditionIsObjectType.js]
+//Cond ? Expr1 : Expr2,  Cond is of object type, Expr1 and Expr2 have the same type
 var condObject;
 var exprAny1;
 var exprBoolean1;
@@ -94,6 +95,7 @@ new Date() ? exprBoolean1 : exprBoolean2;
 new C() ? exprNumber1 : exprNumber2;
 C.doIt() ? exprString1 : exprString2;
 condObject.valueOf() ? exprIsObject1 : exprIsObject2;
+//Results shoud be same as Expr1 and Expr2
 var resultIsAny1 = condObject ? exprAny1 : exprAny2;
 var resultIsBoolean1 = condObject ? exprBoolean1 : exprBoolean2;
 var resultIsNumber1 = condObject ? exprNumber1 : exprNumber2;

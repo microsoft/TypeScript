@@ -37,6 +37,7 @@ func<any>();
 
 
 //// [functionCalls.js]
+// Invoke function call on value of type 'any' with no type arguments
 var anyVar;
 anyVar(0);
 anyVar('');
@@ -50,6 +51,8 @@ subFunc();
 subFunc(0);
 subFunc('');
 subFunc();
+// Invoke function call on value of type Function with no call signatures with type arguments
+// These should be errors
 var func;
 func(0);
 func('');

@@ -69,6 +69,7 @@ exports.im_public_mi_private = require("privacyTopLevelAmbientExternalModuleImpo
 exports.im_public_mu_private = require("privacyTopLevelAmbientExternalModuleImportWithExport_require1");
 exports.im_public_mi_public = require("m");
 exports.im_public_mu_public = require("m2");
+// Usage of privacy error imports
 var privateUse_im_public_mi_private = new exports.im_public_mi_private.c_public();
 exports.publicUse_im_public_mi_private = new exports.im_public_mi_private.c_public();
 var privateUse_im_public_mu_private = new exports.im_public_mu_private.c_public();

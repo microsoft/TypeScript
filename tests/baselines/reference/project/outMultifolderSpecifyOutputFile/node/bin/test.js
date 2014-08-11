@@ -18,6 +18,8 @@ var m2_instance1 = new m2_c1();
 function m2_f1() {
     return m2_instance1;
 }
+/// <reference path='ref/m1.ts'/>
+/// <reference path='../outputdir_multifolder_ref/m2.ts'/>
 var a1 = 10;
 var c1 = (function () {
     function c1() {

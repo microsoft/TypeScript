@@ -25,5 +25,7 @@ var A;
         Day[Day["Tuesday"] = 1] = "Tuesday";
     })(Day || (Day = {}));
 })(A || (A = {}));
+// not an error since exported
 var a = 0 /* Red */;
+// error not exported
 var b = A.Day.Monday;

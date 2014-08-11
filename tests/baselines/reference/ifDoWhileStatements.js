@@ -302,6 +302,7 @@ while (new D()) {
 }
 do {
 } while (new D());
+// references
 var a = true;
 if (a) {
 }

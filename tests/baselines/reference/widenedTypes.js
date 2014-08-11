@@ -40,5 +40,6 @@ var y;
 var u = [3, (y = null)];
 u[3] = "";
 var ob = { x: "" };
+// Highlights the difference between array literals and object literals
 var arr = [3, null];
 var obj = { x: 3, y: null };

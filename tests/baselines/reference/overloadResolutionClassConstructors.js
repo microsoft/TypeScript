@@ -147,6 +147,7 @@ var fn2 = (function () {
     return fn2;
 })();
 var d = new fn2(0, undefined);
+// Generic and non - generic overload where generic overload is the only candidate when called without type arguments
 var s = new fn2(0, '');
 new fn2('', 0);
 new fn2('', 0);
