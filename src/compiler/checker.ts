@@ -56,6 +56,7 @@ module ts {
         var globalBooleanType: ObjectType;
         var globalRegExpType: ObjectType;
 
+        var tupleTypes: Map<TupleType> = {};
         var stringLiteralTypes: Map<StringLiteralType> = {};
 
         var fullTypeCheck = false;
@@ -619,15 +620,13 @@ module ts {
         }
 
         function isOptionalProperty(propertySymbol: Symbol): boolean {
-            if (propertySymbol.flags & SymbolFlags.Prototype) {
-                return false;
-            }
             //  class C {
             //      constructor(public x?) { }
             //  }
             //
             // x is an optional parameter, but it is a required property.
-            return (propertySymbol.valueDeclaration.flags & NodeFlags.QuestionMark) && propertySymbol.valueDeclaration.kind !== SyntaxKind.Parameter;
+            return propertySymbol.valueDeclaration && propertySymbol.valueDeclaration.flags & NodeFlags.QuestionMark &&
+                propertySymbol.valueDeclaration.kind !== SyntaxKind.Parameter;
         }
 
         function forEachSymbolTableInScope<T>(enclosingDeclaration: Node, callback: (symbolTable: SymbolTable) => T): T {
@@ -843,6 +842,9 @@ module ts {
                 else if (type.flags & (TypeFlags.Class | TypeFlags.Interface | TypeFlags.Enum | TypeFlags.TypeParameter)) {
                     writer.writeSymbol(type.symbol, enclosingDeclaration, SymbolFlags.Type);
                 }
+                else if (type.flags & TypeFlags.Tuple) {
+                    writeTupleType(<TupleType>type);
+                }
                 else if (type.flags & TypeFlags.Anonymous) {
                     writeAnonymousType(<ObjectType>type, allowFunctionOrConstructorTypeLiteral);
                 }
@@ -852,6 +854,15 @@ module ts {
                 else {
                     // Should never get here
                     writer.write("{ ... }");
+                }
+            }
+
+            function writeTypeList(types: Type[]) {
+                for (var i = 0; i < types.length; i++) {
+                    if (i > 0) {
+                        writer.write(", ");
+                    }
+                    writeType(types[i], /*allowFunctionOrConstructorTypeLiteral*/ true);
                 }
             }
 
@@ -865,14 +876,15 @@ module ts {
                 else {
                     writer.writeSymbol(type.target.symbol, enclosingDeclaration, SymbolFlags.Type);
                     writer.write("<");
-                    for (var i = 0; i < type.typeArguments.length; i++) {
-                        if (i > 0) {
-                            writer.write(", ");
-                        }
-                        writeType(type.typeArguments[i], /*allowFunctionOrConstructorTypeLiteral*/ true);
-                    }
+                    writeTypeList(type.typeArguments);
                     writer.write(">");
                 }
+            }
+
+            function writeTupleType(type: TupleType) {
+                writer.write("[");
+                writeTypeList(type.elementTypes);
+                writer.write("]");
             }
 
             function writeAnonymousType(type: ObjectType, allowFunctionOrConstructorTypeLiteral: boolean) {
@@ -1649,6 +1661,23 @@ module ts {
             return [createSignature(undefined, classType.typeParameters, emptyArray, classType, 0, false, false)];
         }
 
+        function createTupleTypeMemberSymbols(memberTypes: Type[]): SymbolTable {
+            var members: SymbolTable = {};
+            for (var i = 0; i < memberTypes.length; i++) {
+                var symbol = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "" + i);
+                symbol.type = memberTypes[i];
+                members[i] = symbol;
+            }
+            return members;
+        }
+
+        function resolveTupleTypeMembers(type: TupleType) {
+            var arrayType = resolveObjectTypeMembers(createArrayType(getBestCommonType(type.elementTypes)));
+            var members = createTupleTypeMemberSymbols(type.elementTypes);
+            addInheritedMembers(members, arrayType.properties);
+            setObjectTypeMembers(type, members, arrayType.callSignatures, arrayType.constructSignatures, arrayType.stringIndexType, arrayType.numberIndexType);
+        }
+
         function resolveAnonymousTypeMembers(type: ObjectType) {
             var symbol = type.symbol;
             var members = emptySymbols;
@@ -1681,6 +1710,9 @@ module ts {
                 }
                 else if (type.flags & TypeFlags.Anonymous) {
                     resolveAnonymousTypeMembers(<ObjectType>type);
+                }
+                else if (type.flags & TypeFlags.Tuple) {
+                    resolveTupleTypeMembers(<TupleType>type);
                 }
                 else {
                     resolveTypeReferenceMembers(<TypeReference>type);
@@ -2123,6 +2155,24 @@ module ts {
             return links.resolvedType;
         }
 
+        function createTupleType(elementTypes: Type[]) {
+            var id = getTypeListId(elementTypes);
+            var type = tupleTypes[id];
+            if (!type) {
+                type = tupleTypes[id] = <TupleType>createObjectType(TypeFlags.Tuple);
+                type.elementTypes = elementTypes;
+            }
+            return type;
+        }
+
+        function getTypeFromTupleTypeNode(node: TupleTypeNode): Type {
+            var links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                links.resolvedType = createTupleType(map(node.elementTypes, t => getTypeFromTypeNode(t)));
+            }
+            return links.resolvedType;
+        }
+
         function getTypeFromTypeLiteralNode(node: TypeLiteralNode): Type {
             var links = getNodeLinks(node);
             if (!links.resolvedType) {
@@ -2172,6 +2222,8 @@ module ts {
                     return getTypeFromTypeQueryNode(<TypeQueryNode>node);
                 case SyntaxKind.ArrayType:
                     return getTypeFromArrayTypeNode(<ArrayTypeNode>node);
+                case SyntaxKind.TupleType:
+                    return getTypeFromTupleTypeNode(<TupleTypeNode>node);
                 case SyntaxKind.TypeLiteral:
                     return getTypeFromTypeLiteralNode(<TypeLiteralNode>node);
                 default:
@@ -2326,6 +2378,9 @@ module ts {
                 }
                 if (type.flags & TypeFlags.Reference) {
                     return createTypeReference((<TypeReference>type).target, instantiateList((<TypeReference>type).typeArguments, mapper, instantiateType));
+                }
+                if (type.flags & TypeFlags.Tuple) {
+                    return createTupleType(instantiateList((<TupleType>type).elementTypes, mapper, instantiateType));
                 }
             }
             return type;
@@ -3015,20 +3070,16 @@ module ts {
             while (isArrayType(type)) {
                 type = (<GenericType>type).typeArguments[0];
             }
-
             return type;
         }
 
         function getWidenedTypeOfArrayLiteral(type: Type): Type {
             var elementType = (<TypeReference>type).typeArguments[0];
             var widenedType = getWidenedType(elementType);
-
             type = elementType !== widenedType ? createArrayType(widenedType) : type;
-
             return type;
         }
 
-        /* If we are widening on a literal, then we may need to the 'node' parameter for reporting purposes */
         function getWidenedType(type: Type): Type {
             if (type.flags & (TypeFlags.Undefined | TypeFlags.Null)) {
                 return anyType;
@@ -3125,9 +3176,9 @@ module ts {
                         inferFromTypes(sourceTypes[i], targetTypes[i]);
                     }
                 }
-                else if (source.flags & TypeFlags.ObjectType && (target.flags & TypeFlags.Reference || (target.flags & TypeFlags.Anonymous) &&
-                    target.symbol && target.symbol.flags & (SymbolFlags.Method | SymbolFlags.TypeLiteral))) {
-                    // If source is an object type, and target is a type reference, the type of a method, or a type literal, infer from members
+                else if (source.flags & TypeFlags.ObjectType && (target.flags & (TypeFlags.Reference | TypeFlags.Tuple) ||
+                    (target.flags & TypeFlags.Anonymous) && target.symbol && target.symbol.flags & (SymbolFlags.Method | SymbolFlags.TypeLiteral))) {
+                    // If source is an object type, and target is a type reference, a tuple type, the type of a method, or a type literal, infer from members
                     if (!isInProcess(source, target) && isWithinDepthLimit(source, sourceStack) && isWithinDepthLimit(target, targetStack)) {
                         if (depth === 0) {
                             sourceStack = [];
@@ -3574,7 +3625,19 @@ module ts {
         function getContextualTypeForElementExpression(node: Expression): Type {
             var arrayLiteral = <ArrayLiteral>node.parent;
             var type = getContextualType(arrayLiteral);
-            return type ? getIndexTypeOfType(type, IndexKind.Number) : undefined;
+            if (type) {
+                if (type.flags & TypeFlags.Tuple) {
+                    var index = indexOf(arrayLiteral.elements, node);
+                    if (index >= 0) {
+                        var prop = getPropertyOfType(type, "" + index);
+                        if (prop) {
+                            return getTypeOfSymbol(prop);
+                        }
+                    }
+                }
+                return getIndexTypeOfType(type, IndexKind.Number);
+            }
+            return undefined;
         }
 
         function getContextualTypeForConditionalOperand(node: Expression): Type {
@@ -3633,17 +3696,23 @@ module ts {
         }
 
         function checkArrayLiteral(node: ArrayLiteral, contextualMapper?: TypeMapper): Type {
+            var contextualType = getContextualType(node);
+            var isTupleLiteral = contextualType && (contextualType.flags & TypeFlags.Tuple) !== 0;
             var elementTypes: Type[] = [];
             forEach(node.elements, element => {
-                if (element.kind !== SyntaxKind.OmittedExpression) {
-                    var type = checkExpression(element, contextualMapper);
-                    if (!contains(elementTypes, type)) elementTypes.push(type);
+                var type = element.kind !== SyntaxKind.OmittedExpression ? checkExpression(element, contextualMapper) : undefinedType;
+                if (isTupleLiteral || !contains(elementTypes, type)) {
+                    elementTypes.push(type);
                 }
             });
-            var contextualType = isInferentialContext(contextualMapper) ? undefined : getContextualType(node);
-            var contextualElementType = contextualType && getIndexTypeOfType(contextualType, IndexKind.Number);
+            if (isTupleLiteral) {
+                return createTupleType(elementTypes);
+            }
+            var contextualElementType = contextualType && !isInferentialContext(contextualMapper) ? getIndexTypeOfType(contextualType, IndexKind.Number) : undefined;
             var elementType = getBestCommonType(elementTypes, contextualElementType, true);
-            if (!elementType) elementType = elementTypes.length ? emptyObjectType : undefinedType;
+            if (!elementType) {
+                elementType = elementTypes.length ? emptyObjectType : undefinedType;
+            }
             return createArrayType(elementType);
         }
 
@@ -3711,11 +3780,11 @@ module ts {
         }
 
         function getDeclarationKindFromSymbol(s: Symbol) {
-            return s.flags & SymbolFlags.Prototype ? SyntaxKind.Property : s.valueDeclaration.kind;
+            return s.valueDeclaration ? s.valueDeclaration.kind : SyntaxKind.Property;
         }
 
         function getDeclarationFlagsFromSymbol(s: Symbol) {
-            return s.flags & SymbolFlags.Prototype ? NodeFlags.Public | NodeFlags.Static : s.valueDeclaration.flags;
+            return s.valueDeclaration ? s.valueDeclaration.flags : s.flags & SymbolFlags.Prototype ? NodeFlags.Public | NodeFlags.Static : 0;
         }
 
         function checkPropertyAccess(node: PropertyAccess) {
@@ -4991,7 +5060,11 @@ module ts {
         }
 
         function checkArrayType(node: ArrayTypeNode) {
-            getTypeFromArrayTypeNode(node);
+            checkSourceElement(node.elementType);
+        }
+
+        function checkTupleType(node: TupleTypeNode) {
+            forEach(node.elementTypes, checkSourceElement);
         }
 
         function isPrivateWithinAmbient(node: Node): boolean {
@@ -6197,6 +6270,8 @@ module ts {
                     return checkTypeLiteral(<TypeLiteralNode>node);
                 case SyntaxKind.ArrayType:
                     return checkArrayType(<ArrayTypeNode>node);
+                case SyntaxKind.TupleType:
+                    return checkTupleType(<TupleTypeNode>node);
                 case SyntaxKind.FunctionDeclaration:
                     return checkFunctionDeclaration(<FunctionDeclaration>node);
                 case SyntaxKind.Block:
