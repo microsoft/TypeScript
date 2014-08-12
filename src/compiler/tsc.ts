@@ -362,8 +362,8 @@ module ts {
         var output = "";
 
         // We want to align our "syntax" and "examples" commands to a certain margin.
-        var syntaxLength = getDiagnosticText(Diagnostics.Syntax_Colon_0, "").length
-        var examplesLength = getDiagnosticText(Diagnostics.Examples_Colon_0, "").length
+        var syntaxLength = getDiagnosticText(Diagnostics.Syntax_Colon_0, "").length;
+        var examplesLength = getDiagnosticText(Diagnostics.Examples_Colon_0, "").length;
         var marginLength = Math.max(syntaxLength, examplesLength);
 
         // Build up the syntactic skeleton.

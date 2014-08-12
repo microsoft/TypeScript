@@ -420,10 +420,10 @@ module ts {
         }
 
         public static createSourceFileObject(languageVersion: ScriptTarget, filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, version: number, isOpen: boolean, syntaxTree: TypeScript.SyntaxTree) {
-            var newSoruceFile = <SourceFileObject><any>createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), languageVersion, version, isOpen);
-            newSoruceFile.scriptSnapshot = scriptSnapshot;
-            newSoruceFile.syntaxTree = syntaxTree;
-            return newSoruceFile;
+            var newSourceFile = <SourceFileObject><any>createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), languageVersion, version, isOpen);
+            newSourceFile.scriptSnapshot = scriptSnapshot;
+            newSourceFile.syntaxTree = syntaxTree;
+            return newSourceFile;
         }
     }
 
@@ -482,7 +482,7 @@ module ts {
         getNavigateToItems(searchValue: string): NavigateToItem[];
         getScriptLexicalStructure(fileName: string): NavigateToItem[];
 
-        getOutliningRegions(fileName: string): TypeScript.TextSpan[];
+        getOutliningRegions(fileName: string): OutliningSpan[];
         getBraceMatchingAtPosition(fileName: string, position: number): TypeScript.TextSpan[];
         getIndentationAtPosition(fileName: string, position: number, options: EditorOptions): number;
 
@@ -697,7 +697,7 @@ module ts {
             referencedFiles: string[]): SourceFile;
 
         updateDocument(
-            soruceFile: SourceFile,
+            sourceFile: SourceFile,
             filename: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
@@ -962,6 +962,7 @@ module ts {
         // currently edited file.  
         private currentfilename: string = "";
         private currentFileVersion: number = -1;
+        private currentSourceFile: SourceFile = null;
         private currentFileSyntaxTree: TypeScript.SyntaxTree = null;
         private currentFileScriptSnapshot: TypeScript.IScriptSnapshot = null;
 
@@ -969,30 +970,69 @@ module ts {
             this.hostCache = new HostCache(host);
         }
 
-        public getCurrentFileSyntaxTree(filename: string): TypeScript.SyntaxTree {
+        private initialize(filename: string) {
+            // ensure that both source file and syntax tree are either initialized or not initialized
+            Debug.assert(!!this.currentFileSyntaxTree === !!this.currentSourceFile);
             this.hostCache = new HostCache(this.host);
 
             var version = this.hostCache.getVersion(filename);
             var syntaxTree: TypeScript.SyntaxTree = null;
+            var sourceFile: SourceFile;
 
             if (this.currentFileSyntaxTree === null || this.currentfilename !== filename) {
                 var scriptSnapshot = this.hostCache.getScriptSnapshot(filename);
                 syntaxTree = this.createSyntaxTree(filename, scriptSnapshot);
+                sourceFile = createSourceFileFromScriptSnapshot(filename, scriptSnapshot, getDefaultCompilerOptions(), version, /*isOpen*/ true);
+
+                fixupParentReferences(sourceFile);
             }
             else if (this.currentFileVersion !== version) {
                 var scriptSnapshot = this.hostCache.getScriptSnapshot(filename);
                 syntaxTree = this.updateSyntaxTree(filename, scriptSnapshot, this.currentFileSyntaxTree, this.currentFileVersion);
+
+                var editRange = this.hostCache.getScriptTextChangeRangeSinceVersion(filename, this.currentFileVersion);
+                sourceFile = !editRange 
+                    ? createSourceFileFromScriptSnapshot(filename, scriptSnapshot, getDefaultCompilerOptions(), version, /*isOpen*/ true)
+                    : this.currentSourceFile.update(scriptSnapshot, version, /*isOpen*/ true, editRange);
+
+                fixupParentReferences(sourceFile);
             }
 
             if (syntaxTree !== null) {
+                Debug.assert(sourceFile);
                 // All done, ensure state is up to date
                 this.currentFileScriptSnapshot = scriptSnapshot;
                 this.currentFileVersion = version;
                 this.currentfilename = filename;
                 this.currentFileSyntaxTree = syntaxTree;
+                this.currentSourceFile = sourceFile;
             }
 
+            function fixupParentReferences(sourceFile: SourceFile) {
+                // normally parent references are set during binding.
+                // however here SourceFile data is used only for syntactic features so running the whole binding process is an overhead.
+                // walk over the nodes and set parent references
+                var parent: Node = sourceFile;
+                function walk(n: Node): void {
+                    n.parent = parent;
+
+                    var saveParent = parent;
+                    parent = n;
+                    forEachChild(n, walk);
+                    parent = saveParent;
+                }
+                forEachChild(sourceFile, walk);
+            }
+        }
+
+        public getCurrentFileSyntaxTree(filename: string): TypeScript.SyntaxTree {
+            this.initialize(filename);
             return this.currentFileSyntaxTree;
+        }
+
+        public getCurrentSourceFile(filename: string): SourceFile {
+            this.initialize(filename);
+            return this.currentSourceFile;
         }
 
         public getCurrentScriptSnapshot(filename: string): TypeScript.IScriptSnapshot {
@@ -1093,6 +1133,10 @@ module ts {
         }
     }
 
+    function createSourceFileFromScriptSnapshot(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, settings: CompilerOptions, version: number, isOpen: boolean) {
+        return createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), settings.target, version, isOpen);
+    }
+
     export function createDocumentRegistry(): DocumentRegistry {
         var buckets: Map<Map<DocumentRegistryEntry>> = {};
 
@@ -1112,19 +1156,19 @@ module ts {
         function reportStats() {
             var bucketInfoArray = Object.keys(buckets).filter(name => name && name.charAt(0) === '_').map(name => {
                 var entries = lookUp(buckets, name);
-                var soruceFiles: { name: string; refCount: number; references: string[]; }[] = [];
+                var sourceFiles: { name: string; refCount: number; references: string[]; }[] = [];
                 for (var i in entries) {
                     var entry = entries[i];
-                    soruceFiles.push({
+                    sourceFiles.push({
                         name: i,
                         refCount: entry.refCount,
                         references: entry.owners.slice(0)
                     });
                 }
-                soruceFiles.sort((x, y) => y.refCount - x.refCount);
+                sourceFiles.sort((x, y) => y.refCount - x.refCount);
                 return {
                     bucket: name,
-                    sourceFiles: soruceFiles
+                    sourceFiles: sourceFiles
                 };
             });
             return JSON.stringify(bucketInfoArray, null, 2);
@@ -1140,7 +1184,7 @@ module ts {
             var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
             var entry = lookUp(bucket, filename);
             if (!entry) {
-                var sourceFile = createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), compilationSettings.target, version, isOpen);
+                var sourceFile = createSourceFileFromScriptSnapshot(filename, scriptSnapshot, compilationSettings, version, isOpen);
 
                 bucket[filename] = entry = {
                     sourceFile: sourceFile,
@@ -2024,6 +2068,12 @@ module ts {
             return syntaxTreeCache.getCurrentFileSyntaxTree(filename);
         }
 
+        function getCurrentSourceFile(filename: string): SourceFile {
+            filename = TypeScript.switchToForwardSlashes(filename);
+            var currentSourceFile = syntaxTreeCache.getCurrentSourceFile(filename);
+            return currentSourceFile;
+        }
+
         function getNameOrDottedNameSpan(filename: string, startPos: number, endPos: number): SpanInfo {
             function getTypeInfoEligiblePath(filename: string, position: number, isConstructorValidPosition: boolean) {
                 var sourceUnit = syntaxTreeCache.getCurrentFileSyntaxTree(filename).sourceUnit();
@@ -2097,11 +2147,11 @@ module ts {
             return items;
         }
 
-        function getOutliningRegions(filename: string) {
+        function getOutliningRegions(filename: string): OutliningSpan[] {
             // doesn't use compiler - no need to synchronize with host
             filename = TypeScript.switchToForwardSlashes(filename);
-            var syntaxTree = getSyntaxTree(filename);
-            return TypeScript.Services.OutliningElementsCollector.collectElements(syntaxTree.sourceUnit());
+            var sourceFile = getCurrentSourceFile(filename);
+            return OutliningElementsCollector.collectElements(sourceFile);
         }
 
         function getBraceMatchingAtPosition(filename: string, position: number) {

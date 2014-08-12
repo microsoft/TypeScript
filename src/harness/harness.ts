@@ -107,7 +107,7 @@ module Utils {
             } else {
                 return cache[key] = f.apply(this, arguments);
             }
-        })
+        });
     }
 }
 
@@ -434,15 +434,15 @@ module Harness {
     export var libFolder: string;
     switch (Utils.getExecutionEnvironment()) {
         case Utils.ExecutionEnvironment.CScript:
-            libFolder = Path.filePath(global['WScript'].ScriptFullName);
+            libFolder = "built/local/";
             tcServicesFilename = "built/local/typescriptServices.js";
             break;
         case Utils.ExecutionEnvironment.Node:
-            libFolder = (__dirname + '/');
+            libFolder = "built/local/";
             tcServicesFilename = "built/local/typescriptServices.js";
             break;
         case Utils.ExecutionEnvironment.Browser:
-            libFolder = "bin/";
+            libFolder = "built/local/";
             tcServicesFilename = "built/local/typescriptServices.js";
             break;
         default:
@@ -531,8 +531,8 @@ module Harness {
             }
         }
 
-        export var libText = IO.readFile(libFolder + "lib.d.ts");
-        export var libTextMinimal = IO.readFile('bin/lib.core.d.ts');
+        export var defaultLibFileName = 'lib.d.ts';
+        export var defaultLibSourceFile = ts.createSourceFile(defaultLibFileName, IO.readFile(libFolder + 'lib.core.d.ts'), /*languageVersion*/ ts.ScriptTarget.ES5);
 
         export function createCompilerHost(filemap: { [filename: string]: ts.SourceFile; }, writeFile: (fn: string, contents: string, writeByteOrderMark:boolean) => void): ts.CompilerHost {
             return {
@@ -542,20 +542,20 @@ module Harness {
                     if (fn in filemap) {
                         return filemap[fn];
                     } else {
-                        var lib = 'lib.d.ts';
-                        if (fn.substr(fn.length - lib.length) === lib) {
-                            return filemap[fn] = ts.createSourceFile('lib.d.ts', libTextMinimal, languageVersion);
+                        var lib = defaultLibFileName;
+                        if (fn === defaultLibFileName) {
+                            return defaultLibSourceFile;
                         }
                         // Don't throw here -- the compiler might be looking for a test that actually doesn't exist as part of the TC
                         return null;
                     }
                 },
-                getDefaultLibFilename: () => 'lib.d.ts',
+                getDefaultLibFilename: () => defaultLibFileName,
                 writeFile: writeFile,
                 getCanonicalFileName: ts.getCanonicalFileName,
                 useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
                 getNewLine: ()=> sys.newLine
-            }
+            };
         }
 
         export class HarnessCompiler {
@@ -1018,7 +1018,7 @@ module Harness {
             }
         }
 
-        var fileCache: { [idx: string]: boolean } = {}
+        var fileCache: { [idx: string]: boolean } = {};
         function generateActual(actualFilename: string, generateContent: () => string): string {
             // For now this is written using TypeScript, because sys is not available when running old test cases.
             // But we need to move to sys once we have
@@ -1083,8 +1083,8 @@ module Harness {
             var lineEndingSensitive = opts && opts.LineEndingSensitive;
 
             if (!lineEndingSensitive) {
-                expected = expected.replace(/\r\n?/g, '\n')
-                actual = actual.replace(/\r\n?/g, '\n')
+                expected = expected.replace(/\r\n?/g, '\n');
+                actual = actual.replace(/\r\n?/g, '\n');
             }
 
             return { expected: expected, actual: actual };

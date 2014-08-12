@@ -91,7 +91,7 @@ module Harness.LanguageService {
     }
 
     class CancellationToken {
-        public static None: CancellationToken = new CancellationToken(null)
+        public static None: CancellationToken = new CancellationToken(null);
 
         constructor(private cancellationToken: ts.CancellationToken) {
         }
@@ -175,7 +175,7 @@ module Harness.LanguageService {
         }
 
         public addDefaultLibrary() {
-            this.addScript("lib.d.ts", Harness.Compiler.libText);
+            this.addScript(Harness.Compiler.defaultLibFileName, Harness.Compiler.defaultLibSourceFile.text);
         }
 
         public getHostIdentifier(): string {
@@ -283,7 +283,7 @@ module Harness.LanguageService {
 
         /** Parse a file on disk given its fileName */
         public parseFile(fileName: string) {
-            var sourceText = TypeScript.ScriptSnapshot.fromString(Harness.IO.readFile(fileName))
+            var sourceText = TypeScript.ScriptSnapshot.fromString(Harness.IO.readFile(fileName));
             return this.parseSourceText(fileName, sourceText);
         }
 

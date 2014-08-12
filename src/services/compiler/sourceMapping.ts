@@ -94,9 +94,9 @@ module TypeScript {
             var expectedAst = this.mappingLevel.pop();
             if (ast !== expectedAst) {
                 var expectedAstInfo: any = (<any>expectedAst).kind ? SyntaxKind[(<any>expectedAst).kind] : [expectedAst.start(), expectedAst.end()];
-                var astInfo: any = (<any>ast).kind ? SyntaxKind[(<any>ast).kind] : [ast.start(), ast.end()]
+                var astInfo: any = (<any>ast).kind ? SyntaxKind[(<any>ast).kind] : [ast.start(), ast.end()];
                 Debug.fail(
-                    "Provided ast is not the expected ISyntaxElement, Expected: " + expectedAstInfo + " Given: " + astInfo)
+                    "Provided ast is not the expected ISyntaxElement, Expected: " + expectedAstInfo + " Given: " + astInfo);
 
             }
         }

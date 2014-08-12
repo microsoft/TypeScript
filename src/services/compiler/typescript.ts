@@ -131,7 +131,7 @@ module TypeScript {
 
     export class CancellationToken {
 
-        public static None: CancellationToken = new CancellationToken(null)
+        public static None: CancellationToken = new CancellationToken(null);
 
         constructor(private cancellationToken: ICancellationToken) {
         }
@@ -237,7 +237,7 @@ module TypeScript {
                     };
                 });
                 documents.sort((x, y) => y.refCount - x.refCount);
-                return { bucket: name, documents: documents }
+                return { bucket: name, documents: documents };
             });
             return JSON.stringify(bucketInfoArray, null, 2);
         }
@@ -705,7 +705,7 @@ module TypeScript {
         //
 
         public getSyntacticDiagnostics(fileName: string): Diagnostic[] {
-            fileName = TypeScript.switchToForwardSlashes(fileName)
+            fileName = TypeScript.switchToForwardSlashes(fileName);
             return this.getDocument(fileName).diagnostics();
         }
 
@@ -724,7 +724,7 @@ module TypeScript {
             var document = this.getDocument(fileName);
 
             var startTime = (new Date()).getTime();
-            PullTypeResolver.typeCheck(this.compilationSettings(), this.semanticInfoChain, document)
+            PullTypeResolver.typeCheck(this.compilationSettings(), this.semanticInfoChain, document);
             var endTime = (new Date()).getTime();
 
             typeCheckTime += endTime - startTime;
@@ -1464,7 +1464,7 @@ module TypeScript {
                 // shared emitter (and we'll take care of it after all the files are done.
                 this._sharedEmitter = this.compiler._emitDocument(
                     document, this._emitOptions,
-                    outputFiles => { this._current = CompileResult.fromOutputFiles(outputFiles) },
+                    outputFiles => { this._current = CompileResult.fromOutputFiles(outputFiles); },
                     this._sharedEmitter);
                 return true;
             }

@@ -56,7 +56,7 @@
             var v3:K1.I3[]=v1;
                 ~~
 !!! Type 'I4' is not assignable to type 'I3[]':
-!!!   Property 'concat' is missing in type 'I4'.
+!!!   Property 'length' is missing in type 'I4'.
             var v4:()=>K1.I3=v1;
                 ~~
 !!! Type 'I4' is not assignable to type '() => I3'.
