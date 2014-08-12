@@ -931,7 +931,6 @@ module ts {
         Warning,
         Error,
         Message,
-        NoPrefix
     }
 
     export interface CompilerOptions {

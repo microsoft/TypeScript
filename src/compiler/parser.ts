@@ -3501,7 +3501,7 @@ module ts {
                         if (!matchResult) {
                             var start = range.pos;
                             var length = range.end - start;
-                            errorAtPos(start, length, Diagnostics.Invalid_reference_comment);
+                            errorAtPos(start, length, Diagnostics.Invalid_reference_directive_syntax);
                         }
                         else {
                             referencedFiles.push({

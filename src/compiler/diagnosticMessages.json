@@ -84,7 +84,7 @@
         "category": "Error",
         "code": 1024
     },
-    "An 'extends' clause must precede am 'implements' clause.": {
+    "An 'extends' clause must precede an 'implements' clause.": {
         "category": "Error",
         "code": 1025
     },
@@ -204,7 +204,7 @@
         "category": "Error",
         "code": 1079
     },
-    "Invalid reference comment.": {
+    "Invalid 'reference' directive syntax.": {
         "category": "Error",
         "code": 1084
     },
@@ -827,19 +827,19 @@
         "code": 4004
     },
     "Class '{0}' defines instance member accessor '{1}', but extended class '{2}' defines it as instance member function.": {
-        "category": "NoPrefix",
+        "category": "Error",
         "code": 4016
     },
     "Class '{0}' defines instance member property '{1}', but extended class '{2}' defines it as instance member function.": {
-        "category": "NoPrefix",
+        "category": "Error",
         "code": 4017
     },
     "Class '{0}' defines instance member function '{1}', but extended class '{2}' defines it as instance member accessor.": {
-        "category": "NoPrefix",
+        "category": "Error",
         "code": 4018
     },
     "Class '{0}' defines instance member function '{1}', but extended class '{2}' defines it as instance member property.": {
-        "category": "NoPrefix",
+        "category": "Error",
         "code": 4019
     },
     "In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.": {
@@ -847,7 +847,7 @@
         "code": 4024
     },
     "Named properties '{0}' of types '{1}' and '{2}' are not identical.": {
-        "category": "NoPrefix",
+        "category": "Error",
         "code": 4032
     },
     "The current host does not support the '{0}' option.": {
