@@ -40,7 +40,7 @@ module ts {
                 if (node && startElement && endElement) {
                     var span: OutliningSpan = {
                         textSpan: TypeScript.TextSpan.fromBounds(startElement.pos, endElement.end),
-                        hintSpan: TypeScript.TextSpan.fromBounds(node.getFullStart(), node.end),
+                        hintSpan: TypeScript.TextSpan.fromBounds(node.pos, node.end),
                         bannerText: "...",
                         autoCollapse: false
                     };

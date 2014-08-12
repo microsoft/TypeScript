@@ -1014,9 +1014,8 @@ module ts {
                 // walk over the nodes and set parent references
                 var parent: Node = sourceFile;
                 function walk(n: Node): void {
-                    if (parent) {
-                        n.parent = parent;
-                    }
+                    n.parent = parent;
+
                     var saveParent = parent;
                     parent = n;
                     forEachChild(n, walk);
