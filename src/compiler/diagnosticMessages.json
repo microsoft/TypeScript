@@ -1291,10 +1291,6 @@
         "category": "Error",
         "code": -9999999
     },
-    "Enum member must have initializer.": {
-        "category": "Error",
-        "code": -9999999
-    },
     "Ambient external modules cannot be nested in other modules.": {
         "category": "Error",
         "code": -9999999
