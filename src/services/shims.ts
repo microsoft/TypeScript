@@ -726,7 +726,10 @@ module ts {
                 "getOutliningRegions(\"" + fileName + "\")",
                 () => {
                     var items = this.languageService.getOutliningRegions(fileName);
-                    return items;
+                    // return just the part of data that language service v2 can understand
+                    // language service v2 will use the entire OutliningSpan
+                    var spans = forEach(items, i => i.textSpan);
+                    return spans;
                 });
         }
 
