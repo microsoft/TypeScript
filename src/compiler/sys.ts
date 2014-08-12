@@ -106,9 +106,6 @@ var sys: System = (function () {
             write(s: string): void {
                 WScript.StdOut.Write(s);
             },
-            writeErr(s: string): void {
-                WScript.StdErr.Write(s);
-            },
             readFile: readFile,
             writeFile: writeFile,
             resolvePath(path: string): string {
@@ -195,10 +192,8 @@ var sys: System = (function () {
             newLine: _os.EOL,
             useCaseSensitiveFileNames: useCaseSensitiveFileNames,
             write(s: string): void {
-                process.stdout.write(s);
-            },
-            writeErr(s: string): void {
-                process.stderr.write(s);
+               // 1 is a standard descriptor for stdout
+               _fs.writeSync(1, s);
             },
             readFile: readFile,
             writeFile: writeFile,
