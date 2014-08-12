@@ -12,4 +12,4 @@
 !!! Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '{ one: boolean[]; }':
 !!!   Types of property 'one' are incompatible:
 !!!     Type 'number' is not assignable to type 'boolean[]':
-!!!       Property 'concat' is missing in type 'Number'.
+!!!       Property 'length' is missing in type 'Number'.

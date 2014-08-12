@@ -46,15 +46,15 @@
     var x10:I[][][][]=3;
         ~~~
 !!! Type 'number' is not assignable to type 'I[][][][]':
-!!!   Property 'concat' is missing in type 'Number'.
+!!!   Property 'length' is missing in type 'Number'.
     var x11:{z:I;x:boolean;}[][]=3;
         ~~~
 !!! Type 'number' is not assignable to type '{ z: I; x: boolean; }[][]':
-!!!   Property 'concat' is missing in type 'Number'.
+!!!   Property 'length' is missing in type 'Number'.
     var x12:{z:I;x:boolean;y:(s:string)=>boolean;w:{ z:I;[s:string]:{ x; y; };[n:number]:{x; y;};():boolean; };}[][]=3;
         ~~~
 !!! Type 'number' is not assignable to type '{ z: I; x: boolean; y: (s: string) => boolean; w: { (): boolean; [x: string]: { x: any; y: any; }; [x: number]: { x: any; y: any; }; z: I; }; }[][]':
-!!!   Property 'concat' is missing in type 'Number'.
+!!!   Property 'length' is missing in type 'Number'.
     var x13:{ new(): number; new(n:number):number; x: string; w: {y: number;}; (): {}; } = 3;
         ~~~
 !!! Type 'number' is not assignable to type '{ (): {}; new (): number; new (n: number): number; x: string; w: { y: number; }; }':
