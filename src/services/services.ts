@@ -2073,6 +2073,70 @@ module ts {
             return result;
         }
 
+        /// Find references
+        function getReferencesAtPosition(filename: string, position: number): ReferenceEntry[] {
+
+            synchronizeHostData();
+
+            filename = TypeScript.switchToForwardSlashes(filename);
+            var sourceFile = getSourceFile(filename);
+
+            var node = getNodeAtPosition(sourceFile.getSourceFile(), position);
+            if (!node) {
+                return undefined;
+            }
+
+            // Labels
+            if (isJumpStatementTarget(node)) {
+                var labelName = (<Identifier>node).text;
+                var label = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
+
+                /// TODO handel labels
+                return undefined;
+            }
+
+            var symbol = typeChecker.getSymbolInfo(node);
+
+            // Could not find a symbol e.g. node is string or number keyword,
+            // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol
+            if (!symbol || !(symbol.getDeclarations())) {
+                return undefined;
+            }
+
+            var result: ReferenceEntry[];
+
+            var symbolName = symbol.getName();
+
+            var scope = getSymbolScope(symbol, node);
+
+            if (scope) {
+                result = [];
+                getReferencesInNode(scope, symbol, result);
+            }
+            else {
+                forEach(program.getSourceFiles(), (sourceFile) => {
+                    cancellationToken.throwIfCancellationRequested();
+
+                    if (sourceFile.getBloomFilter().probablyContains(symbolName)) {
+                        if (!result) result = [];
+                        getReferencesInNode(sourceFile, symbol, result);
+                    }
+                });
+            }
+
+            return result;
+
+            function getSymbolScope(symbol: Symbol, node: Node): Node {
+                /// TODO: find the enclosing scope
+                return undefined;
+            }
+
+            function getReferencesInNode(container: Node, symbol: Symbol, result: ReferenceEntry[]): void {
+                return undefined;
+            }
+        }
+
+
         /// Syntactic features
         function getSyntaxTree(filename: string): TypeScript.SyntaxTree {
             filename = TypeScript.switchToForwardSlashes(filename);
@@ -2249,7 +2313,7 @@ module ts {
             getTypeAtPosition: getTypeAtPosition,
             getSignatureAtPosition: (filename, position): SignatureInfo => undefined,
             getDefinitionAtPosition: getDefinitionAtPosition,
-            getReferencesAtPosition: (filename, position) => [],
+            getReferencesAtPosition: getReferencesAtPosition,
             getOccurrencesAtPosition: (filename, position) => [],
             getImplementorsAtPosition: (filename, position) => [],
             getNameOrDottedNameSpan: getNameOrDottedNameSpan,
