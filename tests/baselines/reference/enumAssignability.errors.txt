@@ -68,7 +68,7 @@
         var m: number[] = e;
             ~
 !!! Type 'E' is not assignable to type 'number[]':
-!!!   Property 'concat' is missing in type 'Number'.
+!!!   Property 'length' is missing in type 'Number'.
         var n: { foo: string } = e;
             ~
 !!! Type 'E' is not assignable to type '{ foo: string; }':

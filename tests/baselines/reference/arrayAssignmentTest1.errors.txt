@@ -128,25 +128,25 @@
     arr_any = f1; // should be an error - is
     ~~~~~~~
 !!! Type '() => C1' is not assignable to type 'any[]':
-!!!   Property 'concat' is missing in type '() => C1'.
+!!!   Property 'push' is missing in type '() => C1'.
     arr_any = o1; // should be an error - is
     ~~~~~~~
 !!! Type '{ one: number; }' is not assignable to type 'any[]':
-!!!   Property 'concat' is missing in type '{ one: number; }'.
+!!!   Property 'length' is missing in type '{ one: number; }'.
     arr_any = a1; // should be ok - is
     arr_any = c1; // should be an error - is
     ~~~~~~~
 !!! Type 'C1' is not assignable to type 'any[]':
-!!!   Property 'concat' is missing in type 'C1'.
+!!!   Property 'length' is missing in type 'C1'.
     arr_any = c2; // should be an error - is
     ~~~~~~~
 !!! Type 'C2' is not assignable to type 'any[]':
-!!!   Property 'concat' is missing in type 'C2'.
+!!!   Property 'length' is missing in type 'C2'.
     arr_any = c3; // should be an error - is
     ~~~~~~~
 !!! Type 'C3' is not assignable to type 'any[]':
-!!!   Property 'concat' is missing in type 'C3'.
+!!!   Property 'length' is missing in type 'C3'.
     arr_any = i1; // should be an error - is
     ~~~~~~~
 !!! Type 'I1' is not assignable to type 'any[]':
-!!!   Property 'concat' is missing in type 'I1'.
+!!!   Property 'length' is missing in type 'I1'.

@@ -942,10 +942,23 @@ declare var JSON: JSON;
 
 interface Array<T> {
     /**
+      * Gets or sets the length of the array. This is a number one higher than the highest element defined in an array.
+      */
+    length: number;
+    /**
       * Returns a string representation of an array.
       */
     toString(): string;
     toLocaleString(): string;
+    /**
+      * Appends new elements to an array, and returns the new length of the array.
+      * @param items New elements of the Array.
+      */
+    push(...items: T[]): number;
+    /**
+      * Removes the last element from an array and returns it.
+      */
+    pop(): T;
     /**
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
@@ -961,15 +974,6 @@ interface Array<T> {
       * @param separator A string used to separate one element of an array from the next in the resulting String. If omitted, the array elements are separated with a comma.
       */
     join(separator?: string): string;
-    /**
-      * Removes the last element from an array and returns it.
-      */
-    pop(): T;
-    /**
-      * Appends new elements to an array, and returns the new length of the array.
-      * @param items New elements of the Array.
-      */
-    push(...items: T[]): number;
     /**
       * Reverses the elements in an Array. 
       */
@@ -1085,11 +1089,6 @@ interface Array<T> {
       * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
       */
     reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
-
-    /**
-      * Gets or sets the length of the array. This is a number one higher than the highest element defined in an array.
-      */
-    length: number;
 
     [n: number]: T;
 }
