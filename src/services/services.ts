@@ -493,7 +493,7 @@ module ts {
 
         getEmitOutput(fileName: string): EmitOutput;
 
-        //getSyntaxTree(fileName: string): TypeScript.SyntaxTree;
+        getSyntaxTree(fileName: string): TypeScript.SyntaxTree;
 
         dispose(): void;
     }
@@ -2203,6 +2203,7 @@ module ts {
             getFormattingEditsOnPaste: getFormattingEditsOnPaste,
             getFormattingEditsAfterKeystroke: getFormattingEditsAfterKeystroke,
             getEmitOutput: (filename): EmitOutput => undefined,
+            getSyntaxTree: getSyntaxTree,
         };
     }
 
