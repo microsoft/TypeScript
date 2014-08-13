@@ -22,19 +22,43 @@ class TypeWriterWalker {
     }
 
     private visitNode(node: ts.Node): void {
-        if (node.kind === ts.SyntaxKind.Identifier) {
-            var identifier = <ts.Identifier>node;
-            if (!this.isLabel(identifier)) {
-                var type = this.getTypeOfIdentifier(identifier);
-                this.log(node, type);
-            }
+        switch (node.kind) {
+            // Should always log expressions that are not tokens
+            // Also, always log the "this" keyword
+            // TODO: Ideally we should log all expressions, but to compare to the
+            // old typeWriter baselines, suppress tokens
+            case ts.SyntaxKind.ThisKeyword:
+            case ts.SyntaxKind.RegularExpressionLiteral:
+            case ts.SyntaxKind.ArrayLiteral:
+            case ts.SyntaxKind.ObjectLiteral:
+            case ts.SyntaxKind.PropertyAccess:
+            case ts.SyntaxKind.IndexedAccess:
+            case ts.SyntaxKind.CallExpression:
+            case ts.SyntaxKind.NewExpression:
+            case ts.SyntaxKind.TypeAssertion:
+            case ts.SyntaxKind.ParenExpression:
+            case ts.SyntaxKind.FunctionExpression:
+            case ts.SyntaxKind.ArrowFunction:
+            case ts.SyntaxKind.PrefixOperator:
+            case ts.SyntaxKind.PostfixOperator:
+            case ts.SyntaxKind.BinaryExpression:
+            case ts.SyntaxKind.ConditionalExpression:
+                this.log(node, this.getTypeOfNode(node));
+                break;
+
+            // Should not change expression status (maybe expressions)
+            // TODO: Again, ideally should log number and string literals too,
+            // but to be consistent with the old typeWriter, just log identifiers
+            case ts.SyntaxKind.Identifier:
+                var identifier = <ts.Identifier>node;
+                if (!this.isLabel(identifier)) {
+                    var type = this.getTypeOfNode(identifier);
+                    this.log(node, type);
+                }
+                break;
         }
-        else if (node.kind === ts.SyntaxKind.ThisKeyword) {
-            this.log(node, undefined);
-        }
-        else {
-            ts.forEachChild(node, child => this.visitNode(child));
-        }
+
+        ts.forEachChild(node, child => this.visitNode(child));
     }
 
     private isLabel(identifier: ts.Identifier): boolean {
@@ -63,10 +87,8 @@ class TypeWriterWalker {
         });
     }
 
-    private getTypeOfIdentifier(node: ts.Identifier): ts.Type {
-        var identifierSymbol = this.checker.getSymbolInfo(node);
-        ts.Debug.assert(identifierSymbol, "symbol doesn't exist");
-        var type = this.checker.getTypeOfSymbol(identifierSymbol);
+    private getTypeOfNode(node: ts.Node): ts.Type {
+        var type = this.checker.getTypeOfNode(node, /*apparentType*/ false);
         ts.Debug.assert(type, "type doesn't exist");
         return type;
     }
