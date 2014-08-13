@@ -152,7 +152,7 @@ class ProjectRunner extends RunnerBase {
                     }
 
                     if (text !== undefined) {
-                        sourceFile = ts.createSourceFile(filename, text, languageVersion);
+                        sourceFile = ts.createSourceFile(filename, text, languageVersion, /*version:*/ "0");
                     }
                 }
 
