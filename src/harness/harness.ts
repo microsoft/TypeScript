@@ -736,7 +736,7 @@ module Harness {
 
                 var hadParseErrors = program.getDiagnostics().length > 0;
 
-                var checker = program.getTypeChecker();
+                var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
                 checker.checkProgram();
 
                 // only emit if there weren't parse errors

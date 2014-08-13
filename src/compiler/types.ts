@@ -537,7 +537,7 @@ module ts {
         getCompilerHost(): CompilerHost;
         getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getGlobalDiagnostics(): Diagnostic[];
-        getTypeChecker(): TypeChecker;
+        getTypeChecker(fullTypeCheckMode: boolean): TypeChecker;
         getCommonSourceDirectory(): string;
     }
 

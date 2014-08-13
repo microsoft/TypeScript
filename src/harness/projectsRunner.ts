@@ -229,7 +229,7 @@ class ProjectRunner extends RunnerBase {
             var program = ts.createProgram(testCase.inputFiles, createCompilerOptions(), createCompilerHost());
             var errors = program.getDiagnostics();
             if (!errors.length) {
-                var checker = program.getTypeChecker();
+                var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
                 errors = checker.getDiagnostics();
                 var emitResult = checker.emitFiles();
                 errors = ts.concatenate(errors, emitResult.errors);
