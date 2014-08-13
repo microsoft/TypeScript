@@ -12,16 +12,13 @@
 ////    }
 ////
 ////    constructor() {
-////        this.n/*2*/ = 4;
+////        this./*2*/n = 4;
 ////    }
 ////
 ////    public bar2() {
 ////        var n = 12;
 ////    }
 ////}
-
-// this line triggers a semantic/syntactic error check, remove line when 788570 is fixed
-edit.insert('');
 
 goTo.marker("1");
 verify.referencesCountIs(3);

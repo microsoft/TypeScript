@@ -3,7 +3,7 @@
 ////var x;
 ////var n;
 ////
-////function n(x: number, n/*1*/: number) {
+////function n(x: number, /*1*/n: number) {
 ////    /*2*/n = 32;
 ////    x = n;
 ////}
