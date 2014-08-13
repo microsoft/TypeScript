@@ -2123,7 +2123,7 @@ module ts {
                 return getLabelReferencesInNode(labelScope, labelName);
             }
 
-            var symbol = typeChecker.getSymbolInfo(node);
+            var symbol = typeInfoResolver.getSymbolInfo(node);
 
             // Could not find a symbol e.g. unknown identifier
             if (!symbol) {
@@ -2253,7 +2253,7 @@ module ts {
                             return;
                         }
 
-                        var symbol = typeChecker.getSymbolInfo(node);
+                        var symbol = typeInfoResolver.getSymbolInfo(node);
 
                         // Could not find a symbol e.g. node is string or number keyword,
                         // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol
@@ -2261,14 +2261,14 @@ module ts {
                             return;
                         }
 
-                        if (compareSymbolsForLexicalIdentity(searchSymbol, symbol)) {
+                        if (compareSymbolsForLexicalIdentity(searchSymbol, symbol, node)) {
                             result.push(getReferenceEntry(node));
                         }
                     });
                 }
             }
 
-            function compareSymbolsForLexicalIdentity(firstSymbol: Symbol, secondSymbol: Symbol): boolean {
+            function compareSymbolsForLexicalIdentity(searchSymbol: Symbol, symbol: Symbol, node: Node): boolean {
                 //// Unwrap modules so that we're always referring to the variable.
                 //if (!firstSymbol.isAlias() && firstSymbol.isContainer()) {
                 //    var containerForFirstSymbol = (<TypeScript.PullContainerSymbol>firstSymbol);
@@ -2384,7 +2384,12 @@ module ts {
                 //    }
                 //}
 
-                return firstSymbol === secondSymbol;
+                var searchSymbolTarget = typeInfoResolver.getRootSymbol(searchSymbol);
+                var symbolTarget = typeInfoResolver.getRootSymbol(symbol);
+
+                if (searchSymbolTarget === symbolTarget) {
+                    return true;
+                }
             }
 
             function getReferenceEntry(node: Node): ReferenceEntry {

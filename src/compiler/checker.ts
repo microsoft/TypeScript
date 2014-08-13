@@ -51,7 +51,8 @@ module ts {
             getTypeOfExpression: getTypeOfExpression,
             typeToString: typeToString,
             symbolToString: symbolToString,
-            getAugmentedPropertiesOfApparentType: getAugmentedPropertiesOfApparentType
+            getAugmentedPropertiesOfApparentType: getAugmentedPropertiesOfApparentType,
+            getRootSymbol: getRootSymbol
         };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
@@ -3118,6 +3119,7 @@ module ts {
                         symbol.declarations = p.declarations;
                         symbol.parent = p.parent;
                         symbol.type = widenedTypes[index++];
+                        symbol.target = p;
                         if (p.valueDeclaration) symbol.valueDeclaration = p.valueDeclaration;
                         members[symbol.name] = symbol;
                     });
@@ -3790,6 +3792,7 @@ module ts {
                         prop.parent = member.parent;
                         if (member.valueDeclaration) prop.valueDeclaration = member.valueDeclaration;
                         prop.type = type;
+                        prop.target = member;
                         member = prop;
                     }
                     else {
@@ -6670,6 +6673,10 @@ module ts {
             else {
                 return getPropertiesOfType(<Type>apparentType);
             }
+        }
+
+        function getRootSymbol(symbol: Symbol) {
+            return (symbol.flags & SymbolFlags.Transient) ? getSymbolLinks(symbol).target : symbol;
         }
 
         // Emitter support
