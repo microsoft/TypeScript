@@ -1903,7 +1903,7 @@ module FourSlash {
         files[Harness.Compiler.defaultLibFileName] = Harness.Compiler.defaultLibSourceFile;
 
         var host = Harness.Compiler.createCompilerHost(files, (fn, contents) => result = contents);
-        var program = ts.createProgram([fileName, fourslashFilename], {}, host);
+        var program = ts.createProgram([fourslashFilename, fileName], { out: "fourslashTestOutput.js" }, host);
         var checker = ts.createTypeChecker(program);
         checker.checkProgram();
 

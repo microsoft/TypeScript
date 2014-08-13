@@ -420,10 +420,10 @@ module ts {
                 ? TypeScript.Parser.parse(this.filename, text, this.languageVersion, TypeScript.isDTSFile(this.filename))
                 : TypeScript.IncrementalParser.parse(oldSyntaxTree, textChangeRange, text);
 
-            return SourceFileObject.createSourceFileObject(this.languageVersion, this.filename, scriptSnapshot, version, isOpen, newSyntaxTree);
+            return SourceFileObject.createSourceFileObject(this.filename, scriptSnapshot, this.languageVersion, version, isOpen, newSyntaxTree);
         }
 
-        public static createSourceFileObject(languageVersion: ScriptTarget, filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, version: string, isOpen: boolean, syntaxTree: TypeScript.SyntaxTree) {
+        public static createSourceFileObject(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, languageVersion: ScriptTarget, version: string, isOpen: boolean, syntaxTree?: TypeScript.SyntaxTree) {
             var newSourceFile = <SourceFileObject><any>createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), languageVersion, version, isOpen);
             newSourceFile.scriptSnapshot = scriptSnapshot;
             newSourceFile.syntaxTree = syntaxTree;
@@ -1068,7 +1068,7 @@ module ts {
             var nextSyntaxTree = TypeScript.IncrementalParser.parse(
                 previousSyntaxTree, editRange, TypeScript.SimpleText.fromScriptSnapshot(scriptSnapshot));
 
-            this.ensureInvariants(filename, editRange, nextSyntaxTree, this.getCurrentScriptSnapshot(filename), scriptSnapshot);
+            this.ensureInvariants(filename, editRange, nextSyntaxTree, previousScriptSnapshot, scriptSnapshot);
 
             return nextSyntaxTree;
         }
@@ -1137,7 +1137,7 @@ module ts {
     }
 
     function createSourceFileFromScriptSnapshot(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, settings: CompilerOptions, version: string, isOpen: boolean) {
-        return createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), settings.target, version, isOpen);
+        return SourceFileObject.createSourceFileObject(filename, scriptSnapshot, settings.target, version, isOpen);
     }
 
     export function createDocumentRegistry(): DocumentRegistry {

@@ -63,10 +63,10 @@
 ////}|] /* even more */
 ////
 ////// object literals
-////var x = [|{
+////var x =[|{
 ////  a:1,
 ////  b:2,
-////  get foo() [|{
+////  get foo()[| {
 ////    return 1;
 ////  }|]
 ////}|]
