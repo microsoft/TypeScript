@@ -217,7 +217,9 @@ module ts {
         FirstKeyword = BreakKeyword,
         LastKeyword = StringKeyword,
         FirstFutureReservedWord = ImplementsKeyword,
-        LastFutureReservedWord = YieldKeyword
+        LastFutureReservedWord = YieldKeyword,
+        FirstTypeNode = TypeReference,
+        LastTypeNode = ArrayType
     }
 
     export enum NodeFlags {
@@ -593,19 +595,16 @@ module ts {
         getTypeCount(): number;
         checkProgram(): void;
         emitFiles(): EmitResult;
-        getSymbolOfNode(node: Node): Symbol;
         getParentOfSymbol(symbol: Symbol): Symbol;
         getTypeOfSymbol(symbol: Symbol): Type;
-        getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
         getPropertyOfType(type: Type, propetyName: string): Symbol;
         getSignaturesOfType(type: Type, kind: SignatureKind): Signature[];
         getIndexTypeOfType(type: Type, kind: IndexKind): Type;
         getReturnTypeOfSignature(signature: Signature): Type;
-        resolveEntityName(location: Node, name: EntityName, meaning: SymbolFlags): Symbol;
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolInfo(node: Node): Symbol;
-        getTypeOfExpression(node: Expression, contextualType?: Type, contextualMapper?: TypeMapper): Type;
+        getTypeOfNode(node: Node): Type;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
         getAugmentedPropertiesOfApparentType(type: Type): Symbol[];
