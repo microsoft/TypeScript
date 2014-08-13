@@ -180,7 +180,7 @@ module FourSlashInterface {
         }
 
         public referencesCountIs(count: number) {
-            FourSlash.currentTestState.verifyReferencesCountIs(count);
+            FourSlash.currentTestState.verifyReferencesCountIs(count, false);
         }
 
         public implementorsCountIs(count: number) {
@@ -483,6 +483,14 @@ module FourSlashInterface {
 
         public printScriptLexicalStructureItems() {
             FourSlash.currentTestState.printScriptLexicalStructureItems();
+        }
+
+        public printReferences() {
+            FourSlash.currentTestState.printReferences();
+        }
+
+        public printContext() {
+            FourSlash.currentTestState.printContext();
         }
     }
 
