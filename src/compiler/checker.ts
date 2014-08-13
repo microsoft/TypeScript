@@ -3549,6 +3549,10 @@ module ts {
             return undefined;
         }
 
+        // In a variable, parameter or property declaration with a type annotation, the contextual type of an initializer
+        // expression is the type of the variable, parameter or property. In a parameter declaration of a contextually
+        // typed function expression, the contextual type of an initializer expression is the contextual type of the
+        // parameter.
         function getContextualTypeForInitializerExpression(node: Expression): Type {
             var declaration = <VariableDeclaration>node.parent;
             if (node === declaration.initializer) {
@@ -3580,6 +3584,7 @@ module ts {
             return undefined;
         }
 
+        // In a typed function call, an argument expression is contextually typed by the type of the corresponding parameter.
         function getContextualTypeForArgument(node: Expression): Type {
             var callExpression = <CallExpression>node.parent;
             var argIndex = indexOf(callExpression.arguments, node);
@@ -3594,11 +3599,14 @@ module ts {
             var binaryExpression = <BinaryExpression>node.parent;
             var operator = binaryExpression.operator;
             if (operator >= SyntaxKind.FirstAssignment && operator <= SyntaxKind.LastAssignment) {
+                // In an assignment expression, the right operand is contextually typed by the type of the left operand.
                 if (node === binaryExpression.right) {
                     return checkExpression(binaryExpression.left);
                 }
             }
             else if (operator === SyntaxKind.BarBarToken) {
+                // When an || expression has a contextual type, the operands are contextually typed by that type. When an ||
+                // expression has no contextual type, the right operand is contextually typed by the type of the left operand.
                 var type = getContextualType(binaryExpression);
                 if (!type && node === binaryExpression.right) {
                     type = checkExpression(binaryExpression.left);
@@ -3608,6 +3616,9 @@ module ts {
             return undefined;
         }
 
+        // In an object literal contextually typed by a type T, the contextual type of a property assignment is the type of
+        // the matching property in T, if one exists. Otherwise, it is the type of the numeric index signature in T, if one
+        // exists. Otherwise, it is the type of the string index signature in T, if one exists.
         function getContextualTypeForPropertyExpression(node: Expression): Type {
             var declaration = <PropertyDeclaration>node.parent;
             var objectLiteral = <ObjectLiteral>declaration.parent;
@@ -3623,17 +3634,18 @@ module ts {
             return undefined;
         }
 
+        // In an array literal contextually typed by a type T, the contextual type of an element expression is the corresponding
+        // tuple element type in T, if one exists and T is a tuple type. Otherwise, it is the type of the numeric index signature
+        // in T, if one exists.
         function getContextualTypeForElementExpression(node: Expression): Type {
             var arrayLiteral = <ArrayLiteral>node.parent;
             var type = getContextualType(arrayLiteral);
             if (type) {
                 if (type.flags & TypeFlags.Tuple) {
                     var index = indexOf(arrayLiteral.elements, node);
-                    if (index >= 0) {
-                        var prop = getPropertyOfType(type, "" + index);
-                        if (prop) {
-                            return getTypeOfSymbol(prop);
-                        }
+                    var prop = getPropertyOfType(type, "" + index);
+                    if (prop) {
+                        return getTypeOfSymbol(prop);
                     }
                 }
                 return getIndexTypeOfType(type, IndexKind.Number);
@@ -3641,11 +3653,14 @@ module ts {
             return undefined;
         }
 
+        // In a contextually typed conditional expression, the true/false expressions are contextually typed by the same type.
         function getContextualTypeForConditionalOperand(node: Expression): Type {
             var conditional = <ConditionalExpression>node.parent;
             return node === conditional.whenTrue || node === conditional.whenFalse ? getContextualType(conditional) : undefined; 
         }
 
+        // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
+        // be "pushed" onto a node using the contextualType property.
         function getContextualType(node: Expression): Type {
             if (node.contextualType) {
                 return node.contextualType;
@@ -3780,6 +3795,8 @@ module ts {
             }
         }
 
+        // If a symbol is a synthesized symbol with no value declaration, we assume it is a property. Example of this are the synthesized
+        // '.prototype' property as well as synthesized tuple index properties.
         function getDeclarationKindFromSymbol(s: Symbol) {
             return s.valueDeclaration ? s.valueDeclaration.kind : SyntaxKind.Property;
         }
