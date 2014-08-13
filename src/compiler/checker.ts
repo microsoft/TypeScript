@@ -6544,6 +6544,11 @@ module ts {
         }
 
         // True if the given identifier, string literal, or number literal is the name of a declaration node
+        function isTypeDeclarationName(name: Node): boolean {
+            return name.kind == SyntaxKind.Identifier && isTypeDeclaration(name.parent);
+        }
+
+        // True if the given identifier, string literal, or number literal is the name of a declaration node
         function isDeclarationName(name: Node): boolean {
             if (name.kind !== SyntaxKind.Identifier && name.kind !== SyntaxKind.StringLiteral && name.kind !== SyntaxKind.NumericLiteral) {
                 return false;
@@ -6559,6 +6564,16 @@ module ts {
             }
 
             return false;
+        }
+
+        function isTypeDeclaration(node: Node): boolean {
+            switch (node.kind) {
+                case SyntaxKind.TypeParameter:
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.EnumDeclaration:
+                    return true;
+            }
         }
 
         function isDeclaration(node: Node): boolean {
@@ -6817,17 +6832,35 @@ module ts {
                 return getTypeFromTypeNode(<TypeNode>node);
             }
 
+            if (isTypeDeclaration(node)) {
+                // In this case, we call getSymbolOfNode instead of getSymbolInfo because it is a declaration
+                var symbol = getSymbolOfNode(node);
+                return getDeclaredTypeOfSymbol(symbol);
+            }
+
+            if (isTypeDeclarationName(node)) {
+                var symbol = getSymbolInfo(node);
+                return getDeclaredTypeOfSymbol(symbol);
+            }
+
             if (isDeclaration(node)) {
                 // In this case, we call getSymbolOfNode instead of getSymbolInfo because it is a declaration
                 var symbol = getSymbolOfNode(node);
                 return getTypeOfSymbol(symbol);
             }
 
-            var isExportAssignment = node.kind === SyntaxKind.Identifier && node.parent.kind === SyntaxKind.ExportAssignment;
-            if (isDeclarationName(node) || isExportAssignment) {
+            if (isDeclarationName(node)) {
                 var symbol = getSymbolInfo(node);
                 return getTypeOfSymbol(symbol);
             }
+
+            if (node.kind === SyntaxKind.Identifier && node.parent.kind === SyntaxKind.ExportAssignment) {
+                var symbol = getSymbolInfo(node);
+                var declaredType = getDeclaredTypeOfSymbol(symbol);
+                return declaredType !== unknownType ? declaredType : getTypeOfSymbol(symbol);
+            }
+
+            Debug.fail("Unhandled case in getTypeOfNode");
         }
 
         function getTypeOfExpression(expr: Expression): Type {
