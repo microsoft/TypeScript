@@ -1,7 +1,7 @@
 ==== tests/cases/compiler/tupleTypes.ts (9 errors) ====
     var v1: [];  // Error
             ~~
-!!! Type argument list cannot be empty.
+!!! A tuple type element list cannot be empty.
     var v2: [number];
     var v3: [number, string];
     var v4: [number, [string, string]];
