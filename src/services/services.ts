@@ -1264,7 +1264,7 @@ module ts {
             (<LabelledStatement>node.parent).label === node;
     }
 
-    function isLabel(node: Node): boolean {
+    function isLabelName(node: Node): boolean {
         return isLabelOfLabeledStatement(node) || isJumpStatementTarget(node);
     }
 
@@ -1881,6 +1881,7 @@ module ts {
                     return node;
                 }
                 switch (node.kind) {
+                    case SyntaxKind.SourceFile:
                     case SyntaxKind.Method:
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.FunctionExpression:
@@ -2105,12 +2106,21 @@ module ts {
             }
 
             // Labels
-            if (isLabel(node)) {
+            if (isLabelName(node)) {
                 var labelName = (<Identifier>node).text;
-                var labelDefinition = isJumpStatementTarget(node) ? getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text) : node;
 
-                /// TODO handel labels
-                return undefined;
+                var labelScope: Node;
+
+                if (isJumpStatementTarget(node)) {
+                    var labelDefinition = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
+                    labelScope = labelDefinition ? labelDefinition.parent : getContainerNode(node);
+                }
+                else {
+                    // it is a label definition and not a target, the scope is the labeledStatement
+                    labelScope = node.parent;
+                }
+
+                return getLabelReferencesInNode(labelScope, labelName);
             }
 
             var symbol = typeChecker.getSymbolInfo(node);
@@ -2190,6 +2200,23 @@ module ts {
                 }
 
                 return positions;
+            }
+
+            function getLabelReferencesInNode(container: Node, labelName: string): ReferenceEntry[] {
+                var result: ReferenceEntry[] = [];
+                var sourceFile = container.getSourceFile();
+                var possiblePositions = getPossibleSymbolReferencePositions(sourceFile, labelName, container.getStart(), container.getEnd());
+                if (possiblePositions && possiblePositions.length > 0) {
+                    possiblePositions.forEach(position => {
+                        cancellationToken.throwIfCancellationRequested();
+
+                        var node = getNodeAtPosition(sourceFile, position);
+                        if (node && isLabelName(node) && node.getWidth() === labelName.length) {
+                            result.push(getReferenceEntry(node));
+                        }
+                    });
+                }
+                return result;
             }
 
             function getReferencesInNode(container: Node, searchSymbol: Symbol, result: ReferenceEntry[]): void {
