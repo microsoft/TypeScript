@@ -36,11 +36,11 @@ module ts {
         export function collectElements(sourceFile: SourceFile): OutliningSpan[] {
             var elements: OutliningSpan[] = [];
 
-            function addOutlineRange(node: Node, startElement: Node, endElement: Node) {
-                if (node && startElement && endElement) {
+            function addOutlineRange(hintSpanNode: Node, startElement: Node, endElement: Node) {
+                if (hintSpanNode && startElement && endElement) {
                     var span: OutliningSpan = {
                         textSpan: TypeScript.TextSpan.fromBounds(startElement.pos, endElement.end),
-                        hintSpan: TypeScript.TextSpan.fromBounds(node.getStart(), node.end),
+                        hintSpan: TypeScript.TextSpan.fromBounds(hintSpanNode.getStart(), hintSpanNode.end),
                         bannerText: "...",
                         autoCollapse: false
                     };
@@ -49,32 +49,30 @@ module ts {
             }
 
             var depth = 0;
-            var maxDepth = 10;
+            var maxDepth = 20;
             function walk(n: Node): void {
-                if (depth >= maxDepth) {
+                if (depth > maxDepth) {
                     return;
                 }
                 switch (n.kind) {
+                    case SyntaxKind.Block:
+                    case SyntaxKind.FunctionBlock:
+                    case SyntaxKind.ModuleBlock:
+                    case SyntaxKind.TryBlock:
+                    case SyntaxKind.TryBlock:
+                    case SyntaxKind.CatchBlock:
+                    case SyntaxKind.FinallyBlock:
+                        var openBrace = forEach(n.getChildren(), c => c.kind === SyntaxKind.OpenBraceToken && c);
+                        var closeBrace = forEach(n.getChildren(), c => c.kind === SyntaxKind.CloseBraceToken && c);
+                        addOutlineRange(n.parent, openBrace, closeBrace);
+                        break;
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
-                    case SyntaxKind.ModuleDeclaration:
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.ObjectLiteral:
                         var openBrace = forEach(n.getChildren(), c => c.kind === SyntaxKind.OpenBraceToken && c);
                         var closeBrace = forEach(n.getChildren(), c => c.kind === SyntaxKind.CloseBraceToken && c);
                         addOutlineRange(n, openBrace, closeBrace);
-                        break;
-                    case SyntaxKind.Constructor:
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.Method:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                        var body = (<FunctionDeclaration>n).body;
-                        if (body) {
-                            var openBrace = forEach(body.getChildren(), c => c.kind === SyntaxKind.OpenBraceToken && c);
-                            var closeBrace = forEach(body.getChildren(), c => c.kind === SyntaxKind.CloseBraceToken && c);
-                            addOutlineRange(n, openBrace, closeBrace);
-                        }
                         break;
                 }
                 depth++;
