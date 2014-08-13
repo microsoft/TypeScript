@@ -6820,9 +6820,9 @@ module ts {
             return undefined;
         }
 
-        function getTypeOfNode(node: Node): Type {
+        function getTypeOfNode(node: Node, apparentType: boolean): Type {
             if (isExpression(node)) {
-                return getTypeOfExpression(<Expression>node);
+                return getTypeOfExpression(<Expression>node, apparentType);
             }
             if (isTypeNode(node)) {
                 if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName) {
@@ -6863,11 +6863,12 @@ module ts {
             Debug.fail("Unhandled case in getTypeOfNode");
         }
 
-        function getTypeOfExpression(expr: Expression): Type {
+        function getTypeOfExpression(expr: Expression, apparentType: boolean): Type {
             if (isRightSideOfQualifiedNameOrPropertyAccess(expr)) {
                 expr = expr.parent;
             }
-            return <Type>getApparentType(checkExpression(expr));
+            var type = checkExpression(expr);
+            return apparentType ? getApparentType(type) : type;
         }
 
         function getAugmentedPropertiesOfApparentType(type: Type): Symbol[]{

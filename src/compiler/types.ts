@@ -604,7 +604,7 @@ module ts {
         getReturnTypeOfSignature(signature: Signature): Type;
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolInfo(node: Node): Symbol;
-        getTypeOfNode(node: Node): Type;
+        getTypeOfNode(node: Node, apparentType: boolean): Type;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
         getAugmentedPropertiesOfApparentType(type: Type): Symbol[];
