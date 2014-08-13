@@ -1402,7 +1402,7 @@ module ts {
             var startErrorCount = file.syntacticErrors.length;
             node.elementTypes = parseBracketedList(ParsingContext.TupleElementTypes, parseType, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
             if (!node.elementTypes.length && file.syntacticErrors.length === startErrorCount) {
-                grammarErrorAtPos(startTokenPos, scanner.getStartPos() - startTokenPos, Diagnostics.Type_argument_list_cannot_be_empty);
+                grammarErrorAtPos(startTokenPos, scanner.getStartPos() - startTokenPos, Diagnostics.A_tuple_type_element_list_cannot_be_empty);
             }
             return finishNode(node);
         }

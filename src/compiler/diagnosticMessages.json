@@ -416,6 +416,10 @@
         "category": "Error",
         "code": 1121
     },
+    "A tuple type element list cannot be empty.": {
+        "category": "Error",
+        "code": 1122
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2000
