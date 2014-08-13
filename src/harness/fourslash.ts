@@ -254,7 +254,7 @@ module FourSlash {
                 }
             });
 
-            this.languageServiceShimHost.addScript('lib.d.ts', Harness.Compiler.libTextMinimal);
+            this.languageServiceShimHost.addDefaultLibrary();
 
 
             // Sneak into the language service and get its compiler so we can examine the syntax trees
@@ -1419,8 +1419,8 @@ module FourSlash {
             for (var i = 0; i < spans.length; i++) {
                 var expectedSpan = spans[i];
                 var actualSpan = actual[i];
-                if (expectedSpan.start !== actualSpan.start() || expectedSpan.end !== actualSpan.end()) {
-                    throw new Error('verifyOutliningSpans failed - span ' + (i + 1) + ' expected: (' + expectedSpan.start + ',' + expectedSpan.end + '),  actual: (' + actualSpan.start() + ',' + actualSpan.end() + ')');
+                if (expectedSpan.start !== actualSpan.textSpan.start() || expectedSpan.end !== actualSpan.textSpan.end()) {
+                    throw new Error('verifyOutliningSpans failed - span ' + (i + 1) + ' expected: (' + expectedSpan.start + ',' + expectedSpan.end + '),  actual: (' + actualSpan.textSpan.start() + ',' + actualSpan.textSpan.end() + ')');
                 }
             }
         }
@@ -1467,7 +1467,7 @@ module FourSlash {
             var referenceLanguageService = referenceLanguageServiceShim.languageService;
 
             // Add lib.d.ts to the reference language service
-            referenceLanguageServiceShimHost.addScript('lib.d.ts', Harness.Compiler.libTextMinimal);
+            referenceLanguageServiceShimHost.addDefaultLibrary();
 
             for (var i = 0; i < this.testData.files.length; i++) {
                 var file = this.testData.files[i];
@@ -1885,7 +1885,7 @@ module FourSlash {
 
     // Cache these between executions so we don't have to re-parse them for every test
     var fourslashSourceFile: ts.SourceFile = undefined;
-    var libdtsSourceFile: ts.SourceFile = undefined;
+
     export function runFourSlashTestContent(content: string, fileName: string): TestXmlData {
         // Parse out the files and their metadata
         var testData = parseTestData(content, fileName);
@@ -1896,15 +1896,14 @@ module FourSlash {
         var fourslashFilename = 'fourslash.ts';
         var tsFn = 'tests/cases/fourslash/' + fourslashFilename;
         fourslashSourceFile = fourslashSourceFile || ts.createSourceFile(tsFn, Harness.IO.readFile(tsFn), ts.ScriptTarget.ES5, /*version*/ 0, /*isOpen*/ false);
-        libdtsSourceFile = libdtsSourceFile || ts.createSourceFile('lib.d.ts', Harness.Compiler.libTextMinimal, ts.ScriptTarget.ES3, /*version*/ 0, /*isOpen*/ false);
 
         var files: { [filename: string]: ts.SourceFile; } = {};
         files[fourslashFilename] = fourslashSourceFile;
         files[fileName] = ts.createSourceFile(fileName, content, ts.ScriptTarget.ES5, /*version*/ 0, /*isOpen*/ false);
-        files['lib.d.ts'] = libdtsSourceFile;
+        files[Harness.Compiler.defaultLibFileName] = Harness.Compiler.defaultLibSourceFile;
 
         var host = Harness.Compiler.createCompilerHost(files, (fn, contents) => result = contents);
-        var program = ts.createProgram([fileName, fourslashFilename], {}, host);
+        var program = ts.createProgram([fourslashFilename, fileName], { out: "fourslashTestOutput.js" }, host);
         var checker = ts.createTypeChecker(program);
         checker.checkProgram();
 

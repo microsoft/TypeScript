@@ -46,6 +46,8 @@ module ts {
 
         var globals: SymbolTable = {};
 
+        var globalArraySymbol: Symbol;
+
         var globalObjectType: ObjectType;
         var globalFunctionType: ObjectType;
         var globalArrayType: ObjectType;
@@ -56,7 +58,6 @@ module ts {
 
         var stringLiteralTypes: Map<StringLiteralType> = {};
 
-        var fullTypeCheck = false;
         var emitExtends = false;
 
         var mergedSymbols: Symbol[] = [];
@@ -616,8 +617,6 @@ module ts {
                 members, callSignatures, constructSignatures, stringIndexType, numberIndexType);
         }
 
-        // Takes a VariableDeclaration because it could be an exported var from a module (VariableDeclaration),
-        // a class or object type property (PropertyDeclaration), or a parameter property (ParameterDeclaration)
         function isOptionalProperty(propertySymbol: Symbol): boolean {
             if (propertySymbol.flags & SymbolFlags.Prototype) {
                 return false;
@@ -2069,7 +2068,7 @@ module ts {
             return links.resolvedType;
         }
 
-        function getGlobalType(name: string, arity: number = 0): ObjectType {
+        function getTypeOfGlobalSymbol(symbol: Symbol, arity: number): ObjectType {
 
             function getTypeDeclaration(symbol: Symbol): Declaration {
                 var declarations = symbol.declarations;
@@ -2079,14 +2078,11 @@ module ts {
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.InterfaceDeclaration:
                         case SyntaxKind.EnumDeclaration:
-                        case SyntaxKind.TypeLiteral:
-                        case SyntaxKind.FunctionDeclaration:
                             return declaration;
                     }
                 }
             }
 
-            var symbol = resolveName(undefined, name, SymbolFlags.Type, Diagnostics.Cannot_find_global_type_0, name);
             if (!symbol) {
                 return emptyObjectType;
             }
@@ -2102,29 +2098,26 @@ module ts {
             return <ObjectType>type;
         }
 
-        // arrayType argument is used as a backup in case if globalArrayType is not defined
-        function createArrayType(elementType: Type, arrayType?: ObjectType): Type {
-            var rootType = globalArrayType || arrayType;
-            return rootType !== emptyObjectType ? createTypeReference(<GenericType>rootType, [elementType]) : emptyObjectType;
+        function getGlobalSymbol(name: string): Symbol {
+            return resolveName(undefined, name, SymbolFlags.Type, Diagnostics.Cannot_find_global_type_0, name);
+        }
+
+        function getGlobalType(name: string): ObjectType {
+            return getTypeOfGlobalSymbol(getGlobalSymbol(name), 0);
+        }
+
+        function createArrayType(elementType: Type): Type {
+            // globalArrayType will be undefined if we get here during creation of the Array type. This for example happens if
+            // user code augments the Array type with call or construct signatures that have an array type as the return type.
+            // We instead use globalArraySymbol to obtain the (not yet fully constructed) Array type.
+            var arrayType = globalArrayType || getDeclaredTypeOfSymbol(globalArraySymbol);
+            return arrayType !== emptyObjectType ? createTypeReference(<GenericType>arrayType, [elementType]) : emptyObjectType;
         }
 
         function getTypeFromArrayTypeNode(node: ArrayTypeNode): Type {
             var links = getNodeLinks(node);
             if (!links.resolvedType) {
-                var arrayType = globalArrayType;
-                if (!arrayType) {
-                    // if user code contains augmentation for Array type that includes call\construct signatures with arrays as parameter\return types,
-                    // then we might step here then during initialization of the global Array type when globalArrayType is not yet set.
-                    // CODE: interface Array<T> { (): number[] }
-                    // in this case just resolve name 'Array' again and get declared type of symbol.
-                    // this type is the one that eventually should be set as 'globalArrayType'.
-                    // NOTE: this is specific to signatures since got signatures we realize parameter\return types.
-                    var arrayTypeSymbol = resolveName(node, "Array", SymbolFlags.Type, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
-                    Debug.assert(arrayTypeSymbol);
-                    arrayType = getDeclaredTypeOfSymbol(arrayTypeSymbol);
-                    Debug.assert(arrayType);
-                }
-                links.resolvedType = createArrayType(getTypeFromTypeNode(node.elementType), arrayType);
+                links.resolvedType = createArrayType(getTypeFromTypeNode(node.elementType));
             }
             return links.resolvedType;
         }
@@ -4362,7 +4355,7 @@ module ts {
                     }
                 }
             }
-            if (fullTypeCheck && !(links.flags & NodeCheckFlags.TypeChecked)) {
+            if (!(links.flags & NodeCheckFlags.TypeChecked)) {
                 checkSignatureDeclaration(node);
                 if (node.type) {
                     checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
@@ -6260,7 +6253,6 @@ module ts {
         function checkSourceFile(node: SourceFile) {
             var links = getNodeLinks(node);
             if (!(links.flags & NodeCheckFlags.TypeChecked)) {
-                fullTypeCheck = true;
                 emitExtends = false;
                 potentialThisCollisions.length = 0;
                 forEach(node.statements, checkSourceElement);
@@ -6277,7 +6269,6 @@ module ts {
                 }
                 if (emitExtends) links.flags |= NodeCheckFlags.EmitExtends;
                 links.flags |= NodeCheckFlags.TypeChecked;
-                fullTypeCheck = false;
             }
         }
 
@@ -6791,7 +6782,8 @@ module ts {
             getSymbolLinks(unknownSymbol).type = unknownType;
             globals[undefinedSymbol.name] = undefinedSymbol;
             // Initialize special types
-            globalArrayType = getGlobalType("Array", 1);
+            globalArraySymbol = getGlobalSymbol("Array");
+            globalArrayType = getTypeOfGlobalSymbol(globalArraySymbol, 1);
             globalObjectType = getGlobalType("Object");
             globalFunctionType = getGlobalType("Function");
             globalStringType = getGlobalType("String");

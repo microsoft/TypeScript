@@ -35,7 +35,7 @@ var compilerSources = [
     "checker.ts",
     "emitter.ts",
     "commandLineParser.ts",
-    "tc.ts",
+    "tsc.ts",
     "diagnosticInformationMap.generated.ts"
 ].map(function (f) {
     return path.join(compilerDirectory, f);
@@ -134,7 +134,7 @@ var useDebugMode = false;
 function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile) {
     file(outFile, prereqs, function() {
         var dir = useBuiltCompiler ? builtLocalDirectory : LKGDirectory;
-        var compilerFilename = "tc.js";
+        var compilerFilename = "tsc.js";
         var options = "-removeComments --module commonjs -noImplicitAny "; //" -propagateEnumConstants "
         
         var cmd = (process.env.host || process.env.TYPESCRIPT_HOST || "node") + " " + dir + compilerFilename + " " + options + " ";
@@ -230,15 +230,15 @@ task("generate-diagnostics", [diagnosticInfoMapTs])
 
 
 // Local target to build the compiler and services
-var tcFile = path.join(builtLocalDirectory, "tc.js");
-compileFile(tcFile, compilerSources, [builtLocalDirectory, copyright].concat(compilerSources), [copyright], /*useBuiltCompiler:*/ false);
+var tscFile = path.join(builtLocalDirectory, "tsc.js");
+compileFile(tscFile, compilerSources, [builtLocalDirectory, copyright].concat(compilerSources), [copyright], /*useBuiltCompiler:*/ false);
 
-var tcServicesFile = path.join(builtLocalDirectory, "typescriptServices.js");
-compileFile(tcServicesFile, servicesSources, [builtLocalDirectory, copyright].concat(servicesSources), [copyright], /*useBuiltCompiler:*/ true);
+var servicesFile = path.join(builtLocalDirectory, "typescriptServices.js");
+compileFile(servicesFile, servicesSources, [builtLocalDirectory, copyright].concat(servicesSources), [copyright], /*useBuiltCompiler:*/ true);
 
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");
-task("local", ["generate-diagnostics", "lib", tcFile, tcServicesFile]);
+task("local", ["generate-diagnostics", "lib", tscFile, servicesFile]);
 
 
 // Local target to build the compiler and services
@@ -261,7 +261,7 @@ task("clean", function() {
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
 task("LKG", libraryTargets, function() {
-    var expectedFiles = [tcFile, tcServicesFile].concat(libraryTargets);
+    var expectedFiles = [tscFile, servicesFile].concat(libraryTargets);
     var missingFiles = expectedFiles.filter(function (f) {
         return !fs.existsSync(f);
     });
@@ -285,7 +285,7 @@ directory(builtLocalDirectory);
 
 // Task to build the tests infrastructure using the built compiler
 var run = path.join(builtLocalDirectory, "run.js");
-compileFile(run, harnessSources, [builtLocalDirectory, tcFile].concat(libraryTargets).concat(harnessSources), [], /*useBuiltCompiler:*/ true);
+compileFile(run, harnessSources, [builtLocalDirectory, tscFile].concat(libraryTargets).concat(harnessSources), [], /*useBuiltCompiler:*/ true);
 
 var localBaseline = "tests/baselines/local/";
 var refBaseline = "tests/baselines/reference/";
@@ -385,7 +385,7 @@ task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
 // Browser tests
 var nodeServerOutFile = 'tests/webTestServer.js'
 var nodeServerInFile = 'tests/webTestServer.ts'
-compileFile(nodeServerOutFile, [nodeServerInFile], [builtLocalDirectory, tcFile], [], true, true);
+compileFile(nodeServerOutFile, [nodeServerInFile], [builtLocalDirectory, tscFile], [], true, true);
 
 desc("Runs browserify on run.js to produce a file suitable for running tests in the browser");
 task("browserify", ["tests", builtLocalDirectory, nodeServerOutFile], function() {
@@ -460,7 +460,7 @@ task("baseline-accept-rwc", function() {
 // Webhost
 var webhostPath = "tests/webhost/webtsc.ts";
 var webhostJsPath = "tests/webhost/webtsc.js";
-compileFile(webhostJsPath, [webhostPath], [tcFile, webhostPath].concat(libraryTargets), [], true);
+compileFile(webhostJsPath, [webhostPath], [tscFile, webhostPath].concat(libraryTargets), [], true);
 
 desc("Builds the tsc web host");
 task("webhost", [webhostJsPath], function() {
@@ -468,8 +468,8 @@ task("webhost", [webhostJsPath], function() {
 });
 
 // Perf compiler
-var perftcPath = "tests/perftc.ts";
-var perftcJsPath = "built/local/perftc.js";
-compileFile(perftcJsPath, [perftcPath], [tcFile, perftcPath, "tests/perfsys.ts"].concat(libraryTargets), [], true);
+var perftscPath = "tests/perftsc.ts";
+var perftscJsPath = "built/local/perftsc.js";
+compileFile(perftscJsPath, [perftscPath], [tscFile, perftscPath, "tests/perfsys.ts"].concat(libraryTargets), [], true);
 desc("Builds augmented version of the compiler for perf tests");
-task("perftc", [perftcJsPath]);
+task("perftsc", [perftscJsPath]);

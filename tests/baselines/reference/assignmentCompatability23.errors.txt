@@ -12,7 +12,4 @@
 !!! Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '{ two: boolean[]; }':
 !!!   Types of property 'two' are incompatible:
 !!!     Type 'string' is not assignable to type 'boolean[]':
-!!!       Types of property 'concat' are incompatible:
-!!!         Type '(...strings: string[]) => string' is not assignable to type '{ <U extends boolean[]>(...items: U[]): boolean[]; (...items: boolean[]): boolean[]; }':
-!!!           Types of parameters 'strings' and 'items' are incompatible:
-!!!             Type 'string' is not assignable to type 'boolean'.
+!!!       Property 'push' is missing in type 'String'.
