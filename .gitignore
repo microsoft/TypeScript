@@ -35,3 +35,4 @@ tests/*.d.ts
 *.config
 scripts/debug.bat
 scripts/run.bat
+coverage/
