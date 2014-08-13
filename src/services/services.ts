@@ -2219,6 +2219,22 @@ module ts {
                 return result;
             }
 
+            function isValidReferencePosition(node: Node, searchSymbol: Symbol): boolean {
+                if (node) {
+                    var searchSymbolName = searchSymbol.getName();
+
+                    // Compare the length so we filter out strict superstrings of the symbol we are looking for
+                    if (node.kind === SyntaxKind.Identifier && node.getWidth() === searchSymbolName.length) {
+                        return true;
+                    }
+                    else if (isIndexOfStringIndexAccess(node) && node.getWidth() === searchSymbolName.length + 2) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
             function getReferencesInNode(container: Node, searchSymbol: Symbol, result: ReferenceEntry[]): void {
                 var searchSymbolName = searchSymbol.getName();
 
@@ -2233,10 +2249,7 @@ module ts {
                         // Each position we're searching for should be at the start of an identifier.  
                         var node = getNodeAtPosition(sourceFile, position);
 
-                        ///TODO: handle string properties
-
-                        // Compare the length so we filter out strict superstrings of the symbol we are looking for
-                        if (!node || node.kind !== SyntaxKind.Identifier || node.getWidth() !== searchSymbolName.length) {
+                        if (!isValidReferencePosition(node, searchSymbol)) {
                             return;
                         }
 
