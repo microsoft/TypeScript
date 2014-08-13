@@ -11,6 +11,10 @@ module ts {
     var nextNodeId = 1;
     var nextMergeId = 1;
 
+    /// fullTypeCheck denotes if this instance of the typechecker will be used to get semantic diagnostics.
+    /// If fullTypeCheck === true - then typechecker should do every possible check to produce all errors
+    /// If fullTypeCheck === false - typechecker can shortcut and skip checks that only produce errors.
+    /// NOTE: checks that somehow affects decisions being made during typechecking should be executed in both cases.
     export function createTypeChecker(program: Program, fullTypeCheck: boolean): TypeChecker {
 
         var Symbol = objectAllocator.getSymbolConstructor();
@@ -6322,7 +6326,9 @@ module ts {
             forEach(program.getSourceFiles(), checkSourceFile);
         }
 
-        function getSortedDiagnostics(): Diagnostic[] {
+        function getSortedDiagnostics(): Diagnostic[]{
+            Debug.assert(fullTypeCheck, "diagnostics are available only in the full typecheck mode");
+
             if (diagnosticsModified) {
                 diagnostics.sort(compareDiagnostics);
                 diagnostics = deduplicateSortedDiagnostics(diagnostics);
@@ -6331,7 +6337,8 @@ module ts {
             return diagnostics;
         }
 
-        function getDiagnostics(sourceFile?: SourceFile): Diagnostic[] {
+        function getDiagnostics(sourceFile?: SourceFile): Diagnostic[]{
+
             if (sourceFile) {
                 checkSourceFile(sourceFile);
                 return filter(getSortedDiagnostics(), d => d.file === sourceFile);
