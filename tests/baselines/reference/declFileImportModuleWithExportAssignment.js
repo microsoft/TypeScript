@@ -53,6 +53,7 @@ declare var m2: {
 };
 export = m2;
 //// [declFileImportModuleWithExportAssignment_1.d.ts]
+/**This is on import declaration*/
 import a1 = require("declFileImportModuleWithExportAssignment_0");
 export declare var a: {
     (): a1.connectExport;

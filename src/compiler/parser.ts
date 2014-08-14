@@ -139,6 +139,35 @@ module ts {
         return (<Identifier>(<ExpressionStatement>node).expression).text === "use strict";
     }
 
+    export function getJsDocComments(node: Declaration, sourceFileOfNode: SourceFile) {
+        var comments: Comment[];
+        if (node.kind === SyntaxKind.Parameter) {
+            // First check if the parameter was written like so:
+            //      (
+            //          /** blah */ a,
+            //          /** blah */ b);
+            comments = getLeadingComments(sourceFileOfNode.text, node.pos);
+            if (!comments) {
+                // Now check if it was written like so:
+                //      (/** blah */ a, /** blah */ b);
+                // In this case, the comment will belong to the preceding token.
+                comments = getTrailingComments(sourceFileOfNode.text, node.pos);
+            }
+        }
+        else {
+            comments = getLeadingComments(sourceFileOfNode.text, node.pos);
+        }
+
+        return filter(comments, comment => isJsDocComment(comment));
+
+        function isJsDocComment(comment: Comment) {
+            // js doc is if comment is starting with /** but not if it is /**/
+            return sourceFileOfNode.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
+                sourceFileOfNode.text.charCodeAt(comment.pos + 2) === CharacterCodes.asterisk &&
+                sourceFileOfNode.text.charCodeAt(comment.pos + 3) !== CharacterCodes.slash;
+        }
+    }
+
     // Invokes a callback for each child of the given node. The 'cbNode' callback is invoked for all child nodes
     // stored in properties. If a 'cbNodes' callback is specified, it is invoked for embedded arrays; otherwise,
     // embedded arrays are flattened and the 'cbNode' callback is invoked for each element. If a callback returns

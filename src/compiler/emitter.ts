@@ -167,6 +167,21 @@ module ts {
             });
         }
 
+        function emitComments(comments: Comment[], writer: EmitTextWriter, writeComment: (comment: Comment, writer: EmitTextWriter) => void) {
+            forEach(comments, comment => {
+                writeComment(comment, writer);
+                if (comment.hasTrailingNewLine) {
+                    writer.writeLine();
+                } else {
+                    writer.write(" ");
+                }
+            });
+        }
+
+        function writeCommentRange(comment: Comment, writer: EmitTextWriter) {
+            writer.writeLiteral(currentSourceFile.text.substring(comment.pos, comment.end));
+        }
+
         function emitJavaScript(jsFilePath: string, root?: SourceFile) {
             var writer = createTextWriter(writeSymbol);
             var write = writer.write;
@@ -440,9 +455,9 @@ module ts {
                     sourceMapNameIndices.pop();
                 };
 
-                function writeCommentRangeWithMap(comment: Comment) {
+                function writeCommentRangeWithMap(comment: Comment, writer: EmitTextWriter) {
                     recordSourceMapSpan(comment.pos);
-                    writeCommentRange(comment);
+                    writeCommentRange(comment, writer);
                     recordSourceMapSpan(comment.end);
                 }
 
@@ -1908,24 +1923,9 @@ module ts {
                 }
             }
 
-            function writeCommentRange(comment: Comment) {
-                writer.writeLiteral(currentSourceFile.text.substring(comment.pos, comment.end));
-            }
-
-            function emitComments(comments: Comment[]) {
-                forEach(comments, comment => {
-                    writeComment(comment);
-                    if (comment.hasTrailingNewLine) {
-                        writer.writeLine();
-                    } else {
-                        writer.write(" ");
-                    }
-                });
-            }
-
             function emitLeadingDeclarationComments(node: Declaration) {
                 var leadingComments = getLeadingComments(currentSourceFile.text, node.pos);
-                emitComments(leadingComments);
+                emitComments(leadingComments, writer, writeComment);
             }
 
             function emitTrailingDeclarationComments(node: Declaration) {
@@ -1960,6 +1960,8 @@ module ts {
 
             var enclosingDeclaration: Node;
             var reportedDeclarationError = false;
+
+            var emitJsDocComments = compilerOptions.removeComments ? function (declaration: Declaration) { } : writeJsDocComments;
 
             var aliasDeclarationEmitInfo: {
                 declaration: ImportDeclaration;
@@ -2038,6 +2040,11 @@ module ts {
                 }
             }
 
+            function writeJsDocComments(declaration: Declaration) {
+                var jsDocComments = getJsDocComments(declaration, currentSourceFile);
+                emitComments(jsDocComments, writer, writeCommentRange);
+            }
+
             function emitSourceTextOfNode(node: Node) {
                 write(getSourceTextOfLocalNode(node));
             }
@@ -2096,6 +2103,7 @@ module ts {
             function writeImportDeclaration(node: ImportDeclaration) {
                 // note usage of writer. methods instead of aliases created, just to make sure we are using 
                 // correct writer especially to handle asynchronous alias writing
+                emitJsDocComments(node);
                 if (node.flags & NodeFlags.Export) {
                     writer.write("export ");
                 }
