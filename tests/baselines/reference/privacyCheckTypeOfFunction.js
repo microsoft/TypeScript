@@ -10,8 +10,3 @@ function foo() {
 }
 exports.x;
 exports.b = foo;
-
-
-//// [privacyCheckTypeOfFunction.d.ts]
-export declare var x: () => void;
-export declare var b: () => void;

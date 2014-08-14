@@ -73,3 +73,6 @@ import b = require("declFileExportImportChain_b");
 export = b;
 //// [declFileExportImportChain_c.d.ts]
 export import b1 = require("declFileExportImportChain_b1");
+//// [declFileExportImportChain_d.d.ts]
+import c = require("declFileExportImportChain_c");
+export declare var x: c.b1.a.m2.c1;
