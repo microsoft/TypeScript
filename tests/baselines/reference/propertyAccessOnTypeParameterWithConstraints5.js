@@ -92,6 +92,7 @@ var b = {
         var a = x['foo']();
         return a + x.notHere();
     },
+    // BUG 794164
     bar: b.foo(1).notHere()
 };
 var r4 = b.foo(new B());

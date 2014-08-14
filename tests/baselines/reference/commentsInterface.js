@@ -91,6 +91,7 @@ var i3_i;
 i3_i = {
     f: function (a) { return "Hello" + a; },
     l: this.f,
+    /** own x*/
     x: this.f(10),
     nc_x: this.l(this.x),
     nc_f: this.f,

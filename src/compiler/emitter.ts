@@ -716,9 +716,11 @@ module ts {
             }
 
             function emitPropertyAssignment(node: PropertyDeclaration) {
+                emitLeadingComments(node);
                 emit(node.name);
                 write(": ");
                 emit(node.initializer);
+                emitTrailingComments(node);
             }
 
             function emitPropertyAccess(node: PropertyAccess) {
