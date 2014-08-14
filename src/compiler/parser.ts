@@ -141,7 +141,7 @@ module ts {
 
     export function getJsDocComments(node: Declaration, sourceFileOfNode: SourceFile) {
         var comments: Comment[];
-        if (node.kind === SyntaxKind.Parameter) {
+        if (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) {
             // First check if the parameter was written like so:
             //      (
             //          /** blah */ a,

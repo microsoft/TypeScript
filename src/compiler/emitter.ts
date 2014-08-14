@@ -2258,6 +2258,7 @@ module ts {
                         };
                     }
 
+                    emitJsDocComments(node);
                     emitSourceTextOfNode(node.name);
                     // If there is constraint present and this is not a type parameter of the private method emit the constraint
                     if (node.constraint && (node.parent.kind !== SyntaxKind.Method || !(node.parent.flags & NodeFlags.Private))) {
