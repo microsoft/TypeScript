@@ -152,6 +152,7 @@ declare var fooVar: () => void;
 /**class comment*/
 declare class c {
     constructor();
+    /** property comment */
     b: number;
     myFoo(): number;
     prop1: number;
@@ -165,6 +166,7 @@ interface i1 {
     new (b: string): any;
     [a: number]: string;
     myFoo(a: number): string;
+    /** prop*/
     prop: string;
 }
 declare var i1_i: i1;

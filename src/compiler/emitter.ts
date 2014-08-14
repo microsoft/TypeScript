@@ -2380,6 +2380,7 @@ module ts {
             }
 
             function emitPropertyDeclaration(node: PropertyDeclaration) {
+                emitJsDocComments(node);
                 emitDeclarationFlags(node);
                 emitVariableDeclaration(node);
                 write(";");

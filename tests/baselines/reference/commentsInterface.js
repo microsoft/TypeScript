@@ -113,7 +113,9 @@ interface nc_i1 {
 declare var nc_i1_i: nc_i1;
 /** this is interface 2 with memebers*/
 interface i2 {
+    /** this is x*/
     x: number;
+    /** this is foo*/
     foo: (b: number) => string;
     [i: string]: any;
     new (i: i1): any;
@@ -141,8 +143,10 @@ declare var i2_i_fnfoo_r: string;
 declare var i2_i_nc_fnfoo: (b: number) => string;
 declare var i2_i_nc_fnfoo_r: string;
 interface i3 {
+    /** Comment i3 x*/
     x: number;
     f(a: number): string;
+    /** i3 l*/
     l: (b: number) => string;
     nc_x: number;
     nc_f(a: number): string;
