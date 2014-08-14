@@ -274,7 +274,9 @@ declare function f4(a: number): number;
 /** this is signature 4 - with string parameter*/
 declare function f4(b: string): number;
 interface i1 {
+    /**this signature 1*/
     (a: number): number;
+    /**this is signature 2*/
     (b: string): number;
     /** foo 1*/
     foo(a: number): number;
@@ -294,19 +296,25 @@ interface i1 {
     /** foo4 any */
     foo4(c: any): any;
     new (a: string): any;
+    /** new 1*/
     new (b: number): any;
 }
 declare var i1_i: i1;
 interface i2 {
     new (a: string): any;
+    /** new 2*/
     new (b: number): any;
     (a: number): number;
+    /**this is signature 2*/
     (b: string): number;
 }
 declare var i2_i: i2;
 interface i3 {
+    /** new 1*/
     new (a: string): any;
+    /** new 2*/
     new (b: number): any;
+    /**this is signature 1*/
     (a: number): number;
     (b: string): number;
 }

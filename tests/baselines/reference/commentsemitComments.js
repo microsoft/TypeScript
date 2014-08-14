@@ -172,8 +172,11 @@ declare class c {
 declare var i: c;
 /** interface comments*/
 interface i1 {
+    /** caller comments*/
     (a: number): number;
+    /** new comments*/
     new (b: string): any;
+    /**indexer property*/
     [a: number]: string;
     /** function property;*/
     myFoo(a: number): string;

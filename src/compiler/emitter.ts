@@ -2543,11 +2543,16 @@ module ts {
             }
 
             function emitConstructSignatureDeclaration(node: SignatureDeclaration) {
+                emitJsDocComments(node);
                 write("new ");
                 emitSignatureDeclaration(node);
             }
 
             function emitSignatureDeclaration(node: SignatureDeclaration) {
+                if (node.kind === SyntaxKind.CallSignature || node.kind === SyntaxKind.IndexSignature) {
+                    // Only index and call signatures are emitted directly, so emit their js doc comments, rest will do that in their own functions
+                    emitJsDocComments(node);
+                }
                 emitTypeParameters(node.typeParameters);
                 if (node.kind === SyntaxKind.IndexSignature) {
                     write("[");

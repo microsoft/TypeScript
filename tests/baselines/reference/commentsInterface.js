@@ -117,11 +117,14 @@ interface i2 {
     x: number;
     /** this is foo*/
     foo: (b: number) => string;
+    /** this is indexer*/
     [i: string]: any;
+    /**new method*/
     new (i: i1): any;
     nc_x: number;
     nc_foo: (b: number) => string;
     [i: number]: number;
+    /** this is call signature*/
     (a: number, b: number): number;
     /** this is fnfoo*/
     fnfoo(b: number): string;
