@@ -6,9 +6,9 @@
     ],
     "mapRoot": "../mapFiles",
     "resolvedInputFiles": [
-        "test.ts",
+        "lib.d.ts",
         "m1.ts",
-        "lib.d.ts"
+        "test.ts"
     ],
     "emittedFiles": []
 }

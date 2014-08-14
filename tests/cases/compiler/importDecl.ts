@@ -55,7 +55,6 @@ export module m1 {
 
 //Emit global only usage
 import glo_m4 = require("importDecl_require1");
-export var useGlo_m4_x4 = glo_m4.x;
 export var useGlo_m4_d4 = glo_m4.d;
 export var useGlo_m4_f4 = glo_m4.foo();
 

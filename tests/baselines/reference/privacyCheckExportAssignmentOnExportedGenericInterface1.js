@@ -11,3 +11,14 @@ export = Foo;
 //// [privacyCheckExportAssignmentOnExportedGenericInterface1.js]
 var Foo;
 module.exports = Foo;
+
+
+//// [privacyCheckExportAssignmentOnExportedGenericInterface1.d.ts]
+declare module Foo {
+    interface A<T> {
+    }
+}
+interface Foo<T> {
+}
+declare var Foo: new () => Foo.A<Foo<string>>;
+export = Foo;

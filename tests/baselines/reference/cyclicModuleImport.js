@@ -20,3 +20,24 @@ declare module "MainModule" {
 
 
 //// [cyclicModuleImport.js]
+
+
+//// [cyclicModuleImport.d.ts]
+declare module "SubModule" {
+    import MainModule = require('MainModule');
+    class SubModule {
+        static StaticVar: number;
+        InstanceVar: number;
+        main: MainModule;
+        constructor();
+    }
+    export = SubModule;
+}
+declare module "MainModule" {
+    import SubModule = require('SubModule');
+    class MainModule {
+        SubModule: SubModule;
+        constructor();
+    }
+    export = MainModule;
+}

@@ -26,3 +26,12 @@ define(["require", "exports"], function (require, exports) {
     })();
     exports.B = B;
 });
+
+
+//// [privacyCheckOnTypeParameterReferenceInConstructorParameter.d.ts]
+export declare class A<T1> {
+    constructor(callback: (self: A<T1>) => void);
+}
+export declare class B<T2> {
+    constructor(parent: T2);
+}

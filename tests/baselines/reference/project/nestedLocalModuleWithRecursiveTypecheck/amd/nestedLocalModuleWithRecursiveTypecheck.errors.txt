@@ -1,1 +1,18 @@
 test1.ts(3,2): Import declarations in an internal module cannot reference an external module.
+
+
+==== test1.ts (1 errors) ====
+    module myModule {
+     
+     import foo = require("test2");
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Import declarations in an internal module cannot reference an external module.
+    
+     //console.log(foo.$);
+    
+     var z = foo.Yo.y();
+    
+    }
+    
+    export var x = 0;
+    

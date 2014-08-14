@@ -1,4 +1,5 @@
 //@module: commonjs
+//@declaration: true
 // @Filename: unusedImportDeclaration_testerB.ts
 class TesterB {
     me: string;

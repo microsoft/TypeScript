@@ -55,7 +55,6 @@ export module m1 {
 
 //Emit global only usage
 import glo_m4 = require("importDecl_require1");
-export var useGlo_m4_x4 = glo_m4.x;
 export var useGlo_m4_d4 = glo_m4.d;
 export var useGlo_m4_f4 = glo_m4.foo();
 
@@ -150,7 +149,6 @@ exports.f4 = m4.foo();
 })(exports.m1 || (exports.m1 = {}));
 var m1 = exports.m1;
 var glo_m4 = require("importDecl_require1");
-exports.useGlo_m4_x4 = glo_m4.x;
 exports.useGlo_m4_d4 = glo_m4.d;
 exports.useGlo_m4_f4 = glo_m4.foo();
 var fncOnly_m4 = require("importDecl_require2");
@@ -168,3 +166,57 @@ var multiImport_m4 = require("importDecl_require");
 exports.useMultiImport_m4_x4 = multiImport_m4.x;
 exports.useMultiImport_m4_d4 = multiImport_m4.d;
 exports.useMultiImport_m4_f4 = multiImport_m4.foo();
+
+
+//// [importDecl_require.d.ts]
+export declare class d {
+    foo: string;
+}
+export declare var x: d;
+export declare function foo(): d;
+//// [importDecl_require1.d.ts]
+export declare class d {
+    bar: string;
+}
+export declare function foo(): d;
+//// [importDecl_require2.d.ts]
+export declare class d {
+    baz: string;
+}
+export declare var x: d;
+export declare function foo(): d;
+//// [importDecl_require3.d.ts]
+export declare class d {
+    bing: string;
+}
+export declare var x: d;
+export declare function foo(): d;
+//// [importDecl_require4.d.ts]
+import m4 = require("importDecl_require");
+export declare function foo2(): m4.d;
+//// [importDecl_1.d.ts]
+/// <reference path='importDecl_require.d.ts' />
+/// <reference path='importDecl_require1.d.ts' />
+/// <reference path='importDecl_require2.d.ts' />
+/// <reference path='importDecl_require3.d.ts' />
+/// <reference path='importDecl_require4.d.ts' />
+import m4 = require("importDecl_require");
+export declare var x4: m4.d;
+export declare var d4: typeof m4.d;
+export declare var f4: m4.d;
+export declare module m1 {
+    var x2: m4.d;
+    var d2: typeof m4.d;
+    var f2: m4.d;
+}
+import glo_m4 = require("importDecl_require1");
+export declare var useGlo_m4_d4: typeof glo_m4.d;
+export declare var useGlo_m4_f4: glo_m4.d;
+import fncOnly_m4 = require("importDecl_require2");
+export declare var useFncOnly_m4_f4: fncOnly_m4.d;
+export declare module usePrivate_m4_m1 {
+}
+export declare var d: m4.d;
+export declare var useMultiImport_m4_x4: m4.d;
+export declare var useMultiImport_m4_d4: typeof m4.d;
+export declare var useMultiImport_m4_f4: m4.d;
