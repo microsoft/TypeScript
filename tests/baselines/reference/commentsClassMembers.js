@@ -475,19 +475,23 @@ cProperties_i.nc_p2 = cProperties_i.nc_p1;
 declare class c1 {
     /** p1 is property of c1*/
     p1: number;
+    /** sum with property*/
     p2(b: number): number;
     /** getter property*/
     /** setter property*/
     p3: number;
     /** pp1 is property of c1*/
     private pp1;
+    /** sum with property*/
     private pp2(b);
     /** getter property*/
     /** setter property*/
     private pp3;
+    /** Constructor method*/
     constructor();
     /** s1 is static property of c1*/
     static s1: number;
+    /** static sum with property*/
     static s2(b: number): number;
     /** static getter property*/
     /** setter property*/
@@ -512,18 +516,21 @@ declare class c1 {
     static a_s3: number;
     /** p1 is property of c1 */
     b_p1: number;
+    /** sum with property */
     b_p2(b: number): number;
     /** getter property */
     /** setter property */
     b_p3: number;
     /** pp1 is property of c1 */
     private b_pp1;
+    /** sum with property */
     private b_pp2(b);
     /** getter property */
     /** setter property */
     private b_pp3;
     /** s1 is static property of c1 */
     static b_s1: number;
+    /** static sum with property */
     static b_s2(b: number): number;
     /** static getter property 
     */

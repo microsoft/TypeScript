@@ -294,25 +294,77 @@ var NoQuickInfoClass = (function () {
 //// [commentsCommentParsing.d.ts]
 declare function simple(): void;
 declare function multiLine(): void;
+/** this is eg of single line jsdoc style comment */
 declare function jsDocSingleLine(): void;
+/** this is multiple line jsdoc stule comment
+*New line1
+*New Line2*/
 declare function jsDocMultiLine(): void;
+/** this is multiple line jsdoc stule comment
+*New line1
+*New Line2*/
+/** Shoul mege this line as well
+* and this too*/ /** Another this one too*/
 declare function jsDocMultiLineMerge(): void;
+/** jsdoc comment */
 declare function jsDocMixedComments1(): void;
+/** jsdoc comment */ /*** another jsDocComment*/
 declare function jsDocMixedComments2(): void;
+/** jsdoc comment */ /*** another jsDocComment*/
 declare function jsDocMixedComments3(): void;
+/** jsdoc comment */ /*** another jsDocComment*/
 declare function jsDocMixedComments4(): void;
+/** jsdoc comment */ /*** another jsDocComment*/
 declare function jsDocMixedComments5(): void;
+/*** another jsDocComment*/
+/** jsdoc comment */
 declare function jsDocMixedComments6(): void;
 declare function noHelpComment1(): void;
 declare function noHelpComment2(): void;
 declare function noHelpComment3(): void;
+/** Adds two integers and returns the result
+  * @param {number} a first number
+  * @param b second number
+  */
 declare function sum(a: number, b: number): number;
+/** This is multiplication function*/
+/** @param */
+/** @param a first number*/
+/** @param b */
+/** @param c {
+ @param d @anotherTag*/
+/** @param e LastParam @anotherTag*/
 declare function multiply(a: number, b: number, c?: number, d?: any, e?: any): void;
+/** fn f1 with number
+* @param { string} b about b
+*/
 declare function f1(a: number): any;
 declare function f1(b: string): any;
+/** This is subtract function
+@param { a
+*@param { number | } b this is about b
+@param { { () => string; } } c this is optional param c
+@param { { () => string; } d this is optional param d
+@param { { () => string; } } e this is optional param e
+@param { { { () => string; } } f this is optional param f
+*/
 declare function subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string): void;
+/** this is square function
+@paramTag { number } a this is input number of paramTag
+@param { number } a this is input number
+@returnType { number } it is return type
+*/
 declare function square(a: number): number;
+/** this is divide function
+@param { number} a this is a
+@paramTag { number } g this is optional param g
+@param { number} b this is b
+*/
 declare function divide(a: number, b: number): void;
+/** this is jsdoc style function with param tag as well as inline parameter help
+*@param a it is first parameter
+*@param c it is third parameter
+*/
 declare function jsDocParamTest(a: number, b: number, c: number, d: number): number;
 declare class NoQuickInfoClass {
 }

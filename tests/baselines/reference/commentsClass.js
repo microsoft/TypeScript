@@ -137,12 +137,14 @@ declare class c2 {
 declare var i2: c2;
 declare var i2_c: typeof c2;
 declare class c3 {
+    /** Constructor comment*/
     constructor();
 }
 declare var i3: c3;
 declare var i3_c: typeof c3;
 /** Class comment*/
 declare class c4 {
+    /** Constructor comment*/
     constructor();
 }
 declare var i4: c4;
@@ -170,6 +172,8 @@ declare var i7_c: typeof c7;
 declare class c8 {
     /** s1 comment */
     static s1: number;
+    /** constructor comment 
+    */
     constructor();
 }
 declare var i8: c8;

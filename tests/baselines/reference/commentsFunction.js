@@ -49,7 +49,9 @@ lambddaNoVarComment(10, 20);
 
 
 //// [commentsFunction.d.ts]
+/** This comment should appear for foo*/
 declare function foo(): void;
+/** This is comment for function signature*/
 declare function fooWithParameters(a: string, b: number): void;
 /** fooFunc
  * comment

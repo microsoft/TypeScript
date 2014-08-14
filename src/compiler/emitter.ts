@@ -2523,6 +2523,7 @@ module ts {
                 // so no need to verify if the declaration is visible
                 if ((node.kind !== SyntaxKind.FunctionDeclaration || resolver.isDeclarationVisible(node)) &&
                     !resolver.isImplementationOfOverload(node)) {
+                    emitJsDocComments(node);
                     emitDeclarationFlags(node);
                     if (node.kind === SyntaxKind.FunctionDeclaration) {
                         write("function ");

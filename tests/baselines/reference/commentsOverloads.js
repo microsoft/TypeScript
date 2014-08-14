@@ -261,27 +261,37 @@ var c5_i_2 = new c5("hello");
 
 
 //// [commentsOverloads.d.ts]
+/** this is signature 1*/
 declare function f1(a: number): number;
 declare function f1(b: string): number;
 declare function f2(a: number): number;
+/** this is signature 2*/
 declare function f2(b: string): number;
 declare function f3(a: number): number;
 declare function f3(b: string): number;
+/** this is signature 4 - with number parameter*/
 declare function f4(a: number): number;
+/** this is signature 4 - with string parameter*/
 declare function f4(b: string): number;
 interface i1 {
     (a: number): number;
     (b: string): number;
+    /** foo 1*/
     foo(a: number): number;
+    /** foo 2*/
     foo(b: string): number;
     foo(arr: number[]): number;
+    /** foo 4 */
     foo(arr: string[]): number;
     foo2(a: number): number;
+    /** foo2 2*/
     foo2(b: string): number;
     foo3(a: number): number;
     foo3(b: string): number;
+    /** foo4 1*/
     foo4(a: number): number;
     foo4(b: string): number;
+    /** foo4 any */
     foo4(c: any): any;
     new (a: string): any;
     new (b: number): any;
@@ -310,13 +320,19 @@ interface i4 {
 declare class c {
     prop1(a: number): number;
     prop1(b: string): number;
+    /** prop2 1*/
     prop2(a: number): number;
     prop2(b: string): number;
     prop3(a: number): number;
+    /** prop3 2*/
     prop3(b: string): number;
+    /** prop4 1*/
     prop4(a: number): number;
+    /** prop4 2*/
     prop4(b: string): number;
+    /** prop5 1*/
     prop5(a: number): number;
+    /** prop5 2*/
     prop5(b: string): number;
 }
 declare class c1 {
@@ -324,19 +340,25 @@ declare class c1 {
     constructor(b: string);
 }
 declare class c2 {
+    /** c2 1*/
     constructor(a: number);
     constructor(b: string);
 }
 declare class c3 {
     constructor(a: number);
+    /** c3 2*/
     constructor(b: string);
 }
 declare class c4 {
+    /** c4 1*/
     constructor(a: number);
+    /** c4 2*/
     constructor(b: string);
 }
 declare class c5 {
+    /** c5 1*/
     constructor(a: number);
+    /** c5 2*/
     constructor(b: string);
 }
 declare var c_i: c;

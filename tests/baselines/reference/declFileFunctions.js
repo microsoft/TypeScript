@@ -122,13 +122,17 @@ function globalfooWithOverloads(a) {
 
 
 //// [declFileFunctions_0.d.ts]
+/** This comment should appear for foo*/
 export declare function foo(): void;
+/** This is comment for function signature*/
 export declare function fooWithParameters(a: string, b: number): void;
 export declare function fooWithRestParameters(a: string, ...rests: string[]): string;
 export declare function fooWithOverloads(a: string): string;
 export declare function fooWithOverloads(a: number): number;
 //// [declFileFunctions_1.d.ts]
+/** This comment should appear for foo*/
 declare function globalfoo(): void;
+/** This is comment for function signature*/
 declare function globalfooWithParameters(a: string, b: number): void;
 declare function globalfooWithRestParameters(a: string, ...rests: string[]): string;
 declare function globalfooWithOverloads(a: string): string;

@@ -123,6 +123,7 @@ interface i2 {
     nc_foo: (b: number) => string;
     [i: number]: number;
     (a: number, b: number): number;
+    /** this is fnfoo*/
     fnfoo(b: number): string;
     nc_fnfoo(b: number): string;
     nc_y: number;
@@ -145,6 +146,7 @@ declare var i2_i_nc_fnfoo_r: string;
 interface i3 {
     /** Comment i3 x*/
     x: number;
+    /** Function i3 f*/
     f(a: number): string;
     /** i3 l*/
     l: (b: number) => string;

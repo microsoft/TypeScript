@@ -148,19 +148,24 @@ var m1;
 //// [commentsemitComments.d.ts]
 /** Variable comments*/
 declare var myVariable: number;
+/** function comments*/
 declare function foo(p: number): void;
 /** variable with function type comment*/
 declare var fooVar: () => void;
 /**class comment*/
 declare class c {
+    /** constructor comment*/
     constructor();
     /** property comment */
     b: number;
+    /** function comment */
     myFoo(): number;
     /** getter comment*/
     /** setter comment*/
     prop1: number;
+    /** overload signature1*/
     foo1(a: number): string;
+    /** Overload signature 2*/
     foo1(b: string): string;
 }
 /**instance comment*/
@@ -170,6 +175,7 @@ interface i1 {
     (a: number): number;
     new (b: string): any;
     [a: number]: string;
+    /** function property;*/
     myFoo(a: number): string;
     /** prop*/
     prop: string;

@@ -272,6 +272,7 @@ i2_i = i3_i;
 interface i1 {
     /** i1_p1*/
     i1_p1: number;
+    /** i1_f1*/
     i1_f1(): void;
     /** i1_l1*/
     i1_l1: () => void;
@@ -294,11 +295,13 @@ declare class c1 implements i1 {
     i1_nc_l1: () => void;
     /** c1_p1*/
     p1: number;
+    /** c1_f1*/
     f1(): void;
     /** c1_l1*/
     l1: () => void;
     /** c1_nc_p1*/
     nc_p1: number;
+    /** c1_nc_f1*/
     nc_f1(): void;
     /** c1_nc_l1*/
     nc_l1: () => void;
@@ -308,6 +311,7 @@ declare var c1_i: c1;
 declare class c2 {
     /** c2 c2_p1*/
     c2_p1: number;
+    /** c2 c2_f1*/
     c2_f1(): void;
     /** c2 c2_prop*/
     c2_prop: number;
@@ -316,18 +320,21 @@ declare class c2 {
     c2_nc_prop: number;
     /** c2 p1*/
     p1: number;
+    /** c2 f1*/
     f1(): void;
     /** c2 prop*/
     prop: number;
     nc_p1: number;
     nc_f1(): void;
     nc_prop: number;
+    /** c2 constructor*/
     constructor(a: number);
 }
 declare class c3 extends c2 {
     constructor();
     /** c3 p1*/
     p1: number;
+    /** c3 f1*/
     f1(): void;
     /** c3 prop*/
     prop: number;
@@ -343,6 +350,7 @@ declare var c4_i: c4;
 interface i2 {
     /** i2_p1*/
     i2_p1: number;
+    /** i2_f1*/
     i2_f1(): void;
     /** i2_l1*/
     i2_l1: () => void;
@@ -351,6 +359,7 @@ interface i2 {
     i2_nc_l1: () => void;
     /** i2 p1*/
     p1: number;
+    /** i2 f1*/
     f1(): void;
     /** i2 l1*/
     l1: () => void;
@@ -361,6 +370,9 @@ interface i2 {
 interface i3 extends i2 {
     /** i3 p1 */
     p1: number;
+    /**
+    * i3 f1
+    */
     f1(): void;
     /** i3 l1*/
     l1: () => void;

@@ -283,8 +283,12 @@ declare module m1 {
         /** i*/
         var i: c;
     }
+    /** exported function*/
     function fooExport(): number;
     function foo2Export(a: string): void;
+    /** foo3Export
+     * comment
+     */
     function foo3Export(): void;
 }
 declare var myvar: m1.m2.c;

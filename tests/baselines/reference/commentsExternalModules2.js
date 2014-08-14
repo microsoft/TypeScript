@@ -150,6 +150,7 @@ export declare module m1 {
         /** i*/
         var i: c;
     }
+    /** exported function*/
     function fooExport(): number;
 }
 /** Module comment */
@@ -165,6 +166,7 @@ export declare module m4 {
         /** i */
         var i: c;
     }
+    /** exported function */
     function fooExport(): number;
 }
 //// [commentsExternalModules_1.d.ts]
