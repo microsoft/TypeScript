@@ -2143,6 +2143,7 @@ module ts {
 
             function emitModuleDeclaration(node: ModuleDeclaration) {
                 if (resolver.isDeclarationVisible(node)) {
+                    emitJsDocComments(node);
                     emitDeclarationFlags(node);
                     write("module ");
                     emitSourceTextOfNode(node.name);

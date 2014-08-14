@@ -66,6 +66,7 @@ new multiM.c();
 
 
 //// [commentsMultiModuleSingleFile.d.ts]
+/** this is multi declare module*/
 declare module multiM {
     class b {
     }

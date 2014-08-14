@@ -166,6 +166,7 @@ interface i1 {
     prop: string;
 }
 declare var i1_i: i1;
+/** this is module comment*/
 declare module m1 {
     class b {
         x: number;
