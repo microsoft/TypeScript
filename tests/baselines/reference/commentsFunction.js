@@ -53,7 +53,7 @@ lambddaNoVarComment(10, 20);
 declare function foo(): void;
 /** This is comment for function signature*/
 declare function fooWithParameters(/** this is comment about a*/ a: string, /** this is comment for b*/
-b: number): void;
+    b: number): void;
 /** fooFunc
  * comment
  */

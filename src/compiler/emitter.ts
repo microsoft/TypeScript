@@ -2260,7 +2260,9 @@ module ts {
                         };
                     }
 
+                    increaseIndent();
                     emitJsDocComments(node);
+                    decreaseIndent();
                     emitSourceTextOfNode(node.name);
                     // If there is constraint present and this is not a type parameter of the private method emit the constraint
                     if (node.constraint && (node.parent.kind !== SyntaxKind.Method || !(node.parent.flags & NodeFlags.Private))) {
@@ -2647,6 +2649,7 @@ module ts {
             }
 
             function emitParameterDeclaration(node: ParameterDeclaration) {
+                increaseIndent();
                 emitJsDocComments(node);
                 if (node.flags & NodeFlags.Rest) {
                     write("...");
@@ -2655,6 +2658,7 @@ module ts {
                 if (node.initializer || (node.flags & NodeFlags.QuestionMark)) {
                     write("?");
                 }
+                decreaseIndent();
 
                 if (!(node.parent.flags & NodeFlags.Private)) {
                     write(": ");

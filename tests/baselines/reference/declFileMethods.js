@@ -355,7 +355,7 @@ export declare class c1 {
     foo(): void;
     /** This is comment for function signature*/
     fooWithParameters(/** this is comment about a*/ a: string, /** this is comment for b*/
-    b: number): void;
+        b: number): void;
     fooWithRestParameters(a: string, ...rests: string[]): string;
     fooWithOverloads(a: string): string;
     fooWithOverloads(a: number): number;
@@ -363,7 +363,7 @@ export declare class c1 {
     private privateFoo();
     /** This is comment for function signature*/
     private privateFooWithParameters(/** this is comment about a*/ a, /** this is comment for b*/
-    b);
+        b);
     private privateFooWithRestParameters(a, ...rests);
     private privateFooWithOverloads(a);
     private privateFooWithOverloads(a);
@@ -371,7 +371,7 @@ export declare class c1 {
     static staticFoo(): void;
     /** This is comment for function signature*/
     static staticFooWithParameters(/** this is comment about a*/ a: string, /** this is comment for b*/
-    b: number): void;
+        b: number): void;
     static staticFooWithRestParameters(a: string, ...rests: string[]): string;
     static staticFooWithOverloads(a: string): string;
     static staticFooWithOverloads(a: number): number;
@@ -379,7 +379,7 @@ export declare class c1 {
     private static privateStaticFoo();
     /** This is comment for function signature*/
     private static privateStaticFooWithParameters(/** this is comment about a*/ a, /** this is comment for b*/
-    b);
+        b);
     private static privateStaticFooWithRestParameters(a, ...rests);
     private static privateStaticFooWithOverloads(a);
     private static privateStaticFooWithOverloads(a);
@@ -389,7 +389,7 @@ export interface I1 {
     foo(): string;
     /** This is comment for function signature*/
     fooWithParameters(/** this is comment about a*/ a: string, /** this is comment for b*/
-    b: number): void;
+        b: number): void;
     fooWithRestParameters(a: string, ...rests: string[]): string;
     fooWithOverloads(a: string): string;
     fooWithOverloads(a: number): number;
@@ -400,7 +400,7 @@ declare class c2 {
     foo(): void;
     /** This is comment for function signature*/
     fooWithParameters(/** this is comment about a*/ a: string, /** this is comment for b*/
-    b: number): void;
+        b: number): void;
     fooWithRestParameters(a: string, ...rests: string[]): string;
     fooWithOverloads(a: string): string;
     fooWithOverloads(a: number): number;
@@ -408,7 +408,7 @@ declare class c2 {
     private privateFoo();
     /** This is comment for function signature*/
     private privateFooWithParameters(/** this is comment about a*/ a, /** this is comment for b*/
-    b);
+        b);
     private privateFooWithRestParameters(a, ...rests);
     private privateFooWithOverloads(a);
     private privateFooWithOverloads(a);
@@ -416,7 +416,7 @@ declare class c2 {
     static staticFoo(): void;
     /** This is comment for function signature*/
     static staticFooWithParameters(/** this is comment about a*/ a: string, /** this is comment for b*/
-    b: number): void;
+        b: number): void;
     static staticFooWithRestParameters(a: string, ...rests: string[]): string;
     static staticFooWithOverloads(a: string): string;
     static staticFooWithOverloads(a: number): number;
@@ -424,7 +424,7 @@ declare class c2 {
     private static privateStaticFoo();
     /** This is comment for function signature*/
     private static privateStaticFooWithParameters(/** this is comment about a*/ a, /** this is comment for b*/
-    b);
+        b);
     private static privateStaticFooWithRestParameters(a, ...rests);
     private static privateStaticFooWithOverloads(a);
     private static privateStaticFooWithOverloads(a);
@@ -434,7 +434,7 @@ interface I2 {
     foo(): string;
     /** This is comment for function signature*/
     fooWithParameters(/** this is comment about a*/ a: string, /** this is comment for b*/
-    b: number): void;
+        b: number): void;
     fooWithRestParameters(a: string, ...rests: string[]): string;
     fooWithOverloads(a: string): string;
     fooWithOverloads(a: number): number;
