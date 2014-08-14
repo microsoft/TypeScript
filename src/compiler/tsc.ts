@@ -337,14 +337,14 @@ module ts {
 
         reportDiagnostics(errors);
         if (commandLine.options.diagnostics) {
-            var memoryUsed = sys.getMemoryUsage();
+            var memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
             reportCountStatistic("Files", program.getSourceFiles().length);
             reportCountStatistic("Lines", countLines(program));
             reportCountStatistic("Nodes", checker ? checker.getNodeCount() : 0);
             reportCountStatistic("Identifiers", checker ? checker.getIdentifierCount() : 0);
             reportCountStatistic("Symbols", checker ? checker.getSymbolCount() : 0);
             reportCountStatistic("Types", checker ? checker.getTypeCount() : 0);
-            if (memoryUsed) {
+            if (memoryUsed >= 0) {
                 reportStatisticalValue("Memory used", Math.round(memoryUsed / 1000) + "K");
             }
             reportTimeStatistic("Parse time", bindStart - parseStart);

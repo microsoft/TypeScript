@@ -14,7 +14,7 @@ interface System {
     createDirectory(directoryName: string): void;
     getExecutingFilePath(): string;
     getCurrentDirectory(): string;
-    getMemoryUsage(): number;
+    getMemoryUsage?(): number;
     exit(exitCode?: number): void;
 }
 
@@ -127,9 +127,6 @@ var sys: System = (function () {
             },
             getCurrentDirectory() {
                 return new ActiveXObject("WScript.Shell").CurrentDirectory;
-            },
-            getMemoryUsage() {
-                return 0;
             },
             exit(exitCode?: number): void {
                 try {
