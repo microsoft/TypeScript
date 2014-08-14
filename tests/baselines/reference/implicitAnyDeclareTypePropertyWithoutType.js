@@ -24,7 +24,7 @@ var C = (function () {
     return C;
 })();
 // this should be an error
-var x// error at "y,z" ;// error at "y,z" 
+var x;// error at "y,z" 
 var x1;// error at "z1"  
 var x11;// error at "new" 
 var x2;// error at "y2" 

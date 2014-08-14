@@ -68,7 +68,7 @@ var Derived3 = (function (_super) {
     function Derived3() {
         var r = function () {
             _super.call(this);
-        }// error // error ;// error 
+        };// error 
     }
     return Derived3;
 })(Base2);

@@ -1094,6 +1094,7 @@ module ts {
                 emitLeadingComments(node);
                 emitModuleMemberName(node);
                 emitOptional(" = ", node.initializer);
+                var variableStatement = <VariableStatement>node.parent;
                 emitTrailingComments(node);
             }
 
@@ -1935,8 +1936,11 @@ module ts {
             }
 
             function emitTrailingDeclarationComments(node: Declaration) {
-                var trailingComments = getTrailingComments(currentSourceFile.text, node.end);
-                emitComments(trailingComments, writer, writeComment);
+                // Emit the trailing declaration comments only if the parent's end doesnt match
+                if (node.parent.kind === SyntaxKind.SourceFile || node.end !== node.parent.end) {
+                    var trailingComments = getTrailingComments(currentSourceFile.text, node.end);
+                    emitComments(trailingComments, writer, writeComment);
+                }
             }
 
             if (compilerOptions.sourceMap) {

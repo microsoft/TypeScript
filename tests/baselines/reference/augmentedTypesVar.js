@@ -46,7 +46,7 @@ function x2() {
 }// should be an error 
 var x3 = 1;
 var x3 = function () {
-}// should be an error // should be an error ;// should be an error 
+};// should be an error 
 // var then class
 var x4 = 1;
 var x4 = (function () {

@@ -51,7 +51,7 @@ function y2() {
 function y2a() {
 }
 var y2a = function () {
-}// error // error ;// error 
+};// error 
 // function then class
 function y3() {
 }

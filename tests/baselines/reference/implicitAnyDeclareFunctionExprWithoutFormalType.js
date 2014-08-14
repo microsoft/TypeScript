@@ -22,7 +22,7 @@ var lambda10 = function temp1() { return 5; }
 var lambda = function (l1) {
 };// Error at "l1" 
 var lambd2 = function (ll1, ll2) {
-}// Error at "ll1" // Error at "ll1" ;// Error at "ll1" 
+};// Error at "ll1" 
 var lamda3 = function myLambda3(myParam) {
 };
 var lamda4 = function () {

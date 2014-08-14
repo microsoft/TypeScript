@@ -54,7 +54,7 @@ var e3;
     e3[e3["One"] = 0] = "One";
 })(e3 || (e3 = {}));
 var e3 = function () {
-}// error // error ;// error 
+};// error 
 // enum then class
 var e4;
 (function (e4) {
