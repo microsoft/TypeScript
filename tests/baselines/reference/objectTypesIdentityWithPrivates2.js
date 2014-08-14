@@ -45,6 +45,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// object types are identical structurally
 var C = (function () {
     function C() {
     }

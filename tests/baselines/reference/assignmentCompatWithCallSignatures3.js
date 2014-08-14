@@ -106,6 +106,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// these are all permitted with the current rules, since we do not do contextual signature instantiation
 var Base = (function () {
     function Base() {
     }

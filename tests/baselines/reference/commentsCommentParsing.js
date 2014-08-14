@@ -283,6 +283,7 @@ function divide(a, b) {
 function jsDocParamTest(a, b, c, d) {
     return a + b + c + d;
 }
+/**/
 var NoQuickInfoClass = (function () {
     function NoQuickInfoClass() {
     }

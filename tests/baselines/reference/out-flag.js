@@ -17,6 +17,8 @@ class MyClass
 }
 
 //// [out-flag.js]
+//// @out: bin\
+// my class comments
 var MyClass = (function () {
     function MyClass() {
     }

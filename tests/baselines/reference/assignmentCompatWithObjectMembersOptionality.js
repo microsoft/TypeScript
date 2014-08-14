@@ -95,6 +95,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// Derived member is not optional but base member is, should be ok
 var Base = (function () {
     function Base() {
     }

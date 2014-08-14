@@ -54,6 +54,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+//Cond ? Expr1 : Expr2,  Expr1 and Expr2 have identical best common type
 var X = (function () {
     function X() {
     }

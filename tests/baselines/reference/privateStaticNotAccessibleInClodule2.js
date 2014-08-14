@@ -21,6 +21,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// Any attempt to access a private property member outside the class body that contains its declaration results in a compile-time error.
 var C = (function () {
     function C() {
     }

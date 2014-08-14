@@ -78,6 +78,7 @@ var classTypeArray;
 var context1 = [{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }];
 var context2 = [{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }];
 var context2;
+// Contextual type C with numeric index signature of type Base makes array literal of Derived have type Base[]
 var Base = (function () {
     function Base() {
     }

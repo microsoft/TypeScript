@@ -52,6 +52,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// String indexer providing a constraint of a user defined type
 var A = (function () {
     function A() {
     }

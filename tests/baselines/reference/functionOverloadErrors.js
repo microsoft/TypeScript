@@ -142,6 +142,7 @@ function fn11() {
 }
 function fn12() {
 }
+//Function overloads that differ by accessibility
 var cls = (function () {
     function cls() {
     }

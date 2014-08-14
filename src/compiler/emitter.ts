@@ -1401,10 +1401,13 @@ module ts {
 
             function emitClassDeclaration(node: ClassDeclaration) {
                 var ctor = getFirstConstructorWithBody(node);
+                emitLeadingComments(node);
                 write("var ");
                 emit(node.name);
                 write(" = (function (");
-                if (node.baseType) write("_super");
+                if (node.baseType) {
+                    write("_super");
+                }
                 write(") {");
                 increaseIndent();
                 scopeEmitStart(node);
@@ -1417,6 +1420,9 @@ module ts {
                     emitEnd(node.baseType);
                 }
                 writeLine();
+                if (ctor) {
+                    emitLeadingComments(ctor);
+                }
                 emitStart(<Node>ctor || node);
                 write("function ");
                 emit(node.name);
@@ -1456,6 +1462,9 @@ module ts {
                 emitToken(SyntaxKind.CloseBraceToken, ctor ? (<Block>ctor.body).statements.end : node.members.end);
                 scopeEmitEnd();
                 emitEnd(<Node>ctor || node);
+                if (ctor) {
+                    emitTrailingComments(ctor);
+                }
                 emitMemberFunctions(node);
                 emitMemberAssignments(node, NodeFlags.Static);
                 writeLine();
@@ -1485,6 +1494,7 @@ module ts {
                     emitEnd(node);
                     write(";");
                 }
+                emitTrailingComments(node);
             }
 
             function emitEnumDeclaration(node: EnumDeclaration) {

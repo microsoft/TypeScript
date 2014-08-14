@@ -60,6 +60,8 @@ var B;
 })(B || (B = {}));
 var B;
 (function (_B) {
+    // re-opened module with colliding name
+    // this should add an underscore.
     var B = (function () {
         function B() {
         }

@@ -7,6 +7,7 @@ class test {
 
 
 //// [constructorStaticParamName.js]
+// static as constructor parameter name should only give error if 'use strict'
 var test = (function () {
     function test(static) {
     }

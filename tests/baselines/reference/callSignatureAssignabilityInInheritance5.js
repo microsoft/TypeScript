@@ -55,6 +55,8 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// checking subtype relations for function types as it relates to contextual signature instantiation
+// same as subtypingWithCallSignatures2 just with an extra level of indirection in the inheritance chain
 var Base = (function () {
     function Base() {
     }

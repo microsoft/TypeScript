@@ -106,6 +106,7 @@ var __extends = this.__extends || function (d, b) {
 with (window) {
     var p = function () { return this; };
 }
+// Arrow function as argument to super call
 var Base = (function () {
     function Base(n) {
     }
@@ -140,6 +141,7 @@ var M2;
     with (window) {
         var p = function () { return this; };
     }
+    // Arrow function as argument to super call
     var Base = (function () {
         function Base(n) {
         }

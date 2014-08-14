@@ -40,6 +40,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// Derived member is private, base member is not causes errors
 var Base = (function () {
     function Base() {
     }

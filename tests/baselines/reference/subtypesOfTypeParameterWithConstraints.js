@@ -174,6 +174,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// checking whether other types are subtypes of type parameters with constraints
 var C3 = (function () {
     function C3() {
     }
@@ -207,6 +208,9 @@ var D4 = (function (_super) {
     }
     return D4;
 })(C3);
+// V > U > T
+// test if T is subtype of T, U, V
+// should all work
 var D5 = (function (_super) {
     __extends(D5, _super);
     function D5() {
@@ -228,6 +232,8 @@ var D7 = (function (_super) {
     }
     return D7;
 })(C3);
+// test if U is a subtype of T, U, V
+// only a subtype of V and itself
 var D8 = (function (_super) {
     __extends(D8, _super);
     function D8() {
@@ -249,6 +255,8 @@ var D10 = (function (_super) {
     }
     return D10;
 })(C3);
+// test if V is a subtype of T, U, V
+// only a subtype of itself
 var D11 = (function (_super) {
     __extends(D11, _super);
     function D11() {
@@ -270,6 +278,9 @@ var D13 = (function (_super) {
     }
     return D13;
 })(C3);
+// Date > V > U > T
+// test if T is subtype of T, U, V, Date
+// should all work
 var D14 = (function (_super) {
     __extends(D14, _super);
     function D14() {
@@ -298,6 +309,8 @@ var D17 = (function (_super) {
     }
     return D17;
 })(C3);
+// test if U is a subtype of T, U, V, Date
+// only a subtype of V, Date and itself
 var D18 = (function (_super) {
     __extends(D18, _super);
     function D18() {
@@ -326,6 +339,8 @@ var D21 = (function (_super) {
     }
     return D21;
 })(C3);
+// test if V is a subtype of T, U, V, Date
+// only a subtype of itself and Date
 var D22 = (function (_super) {
     __extends(D22, _super);
     function D22() {
@@ -354,6 +369,8 @@ var D25 = (function (_super) {
     }
     return D25;
 })(C3);
+// test if Date is a subtype of T, U, V, Date
+// only a subtype of itself
 var D26 = (function (_super) {
     __extends(D26, _super);
     function D26() {

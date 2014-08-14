@@ -77,6 +77,7 @@ function foo15(x: C<number>); // ok
 function foo15(x: any) { }
 
 //// [objectTypesIdentityWithConstructSignaturesDifferingParamCounts.js]
+// object types are identical structurally
 var B = (function () {
     function B(x, y) {
         return null;

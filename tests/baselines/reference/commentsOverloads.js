@@ -236,11 +236,13 @@ var c3 = (function () {
     return c3;
 })();
 var c4 = (function () {
+    /** c4 3 */
     function c4(aorb) {
     }
     return c4;
 })();
 var c5 = (function () {
+    /** c5 implementation*/
     function c5(aorb) {
     }
     return c5;

@@ -68,6 +68,7 @@ var _modes;
 var editor;
 (function (editor) {
     var i;
+    // If you just use p1:modes, the compiler accepts it - should be an error
     var Bug = (function () {
         function Bug(p1, p2) {
         }

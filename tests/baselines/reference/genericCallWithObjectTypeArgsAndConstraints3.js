@@ -44,6 +44,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// Generic call with constraints infering type parameter from object member properties
 var Base = (function () {
     function Base() {
     }

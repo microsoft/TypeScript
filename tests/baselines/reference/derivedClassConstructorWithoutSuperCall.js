@@ -39,6 +39,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// derived class constructors must contain a super call
 var Base = (function () {
     function Base() {
     }

@@ -1502,6 +1502,7 @@ sourceFile:typeResolution.ts
 4 >                             ^^^
 5 >                                ^^^^^^^^^^^^^^^^^^^^^^^^
 6 >                                                        ^
+7 >                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >            export module 
 3 >                SubSubModule1
@@ -1571,20 +1572,29 @@ sourceFile:typeResolution.ts
 5 >Emitted(85, 57) Source(59, 10) + SourceIndex(0) name (TopLevelModule1.SubModule1)
 6 >Emitted(85, 58) Source(59, 10) + SourceIndex(0) name (TopLevelModule1.SubModule1)
 ---
->>>            var ClassA = (function () {
-1 >^^^^^^^^^^^^
-2 >            ^^^^
-3 >                ^^^^^^
-4 >                      ^^^^^^^^^^^^^^->
-1 >
+>>>            // Should have no effect on S1.SS1.ClassA above because it is not exported
+1->^^^^^^^^^^^^
+2 >            
+3 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
   >        
   >        // Should have no effect on S1.SS1.ClassA above because it is not exported
   >        
-2 >            class 
-3 >                ClassA
-1 >Emitted(86, 13) Source(62, 9) + SourceIndex(0) name (TopLevelModule1.SubModule1)
-2 >Emitted(86, 17) Source(62, 15) + SourceIndex(0) name (TopLevelModule1.SubModule1)
-3 >Emitted(86, 23) Source(62, 21) + SourceIndex(0) name (TopLevelModule1.SubModule1)
+2 >            
+3 >            // Should have no effect on S1.SS1.ClassA above because it is not exported
+1->Emitted(86, 13) Source(62, 9) + SourceIndex(0) name (TopLevelModule1.SubModule1)
+2 >Emitted(86, 13) Source(61, 9) + SourceIndex(0) name (TopLevelModule1.SubModule1)
+3 >Emitted(86, 87) Source(61, 83) + SourceIndex(0) name (TopLevelModule1.SubModule1)
+---
+>>>            var ClassA = (function () {
+1 >^^^^^^^^^^^^^^^^
+2 >                ^^^^^^
+3 >                      ^^^^^^^^^^^^^^->
+1 >
+  >        class 
+2 >                ClassA
+1 >Emitted(87, 17) Source(62, 15) + SourceIndex(0) name (TopLevelModule1.SubModule1)
+2 >Emitted(87, 23) Source(62, 21) + SourceIndex(0) name (TopLevelModule1.SubModule1)
 ---
 >>>                function ClassA() {
 1->^^^^^^^^^^^^^^^^
@@ -1595,9 +1605,9 @@ sourceFile:typeResolution.ts
   >            
 2 >                
 3 >                         ClassA
-1->Emitted(87, 17) Source(63, 13) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA)
-2 >Emitted(87, 26) Source(62, 15) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA)
-3 >Emitted(87, 32) Source(62, 21) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA)
+1->Emitted(88, 17) Source(63, 13) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA)
+2 >Emitted(88, 26) Source(62, 15) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA)
+3 >Emitted(88, 32) Source(62, 21) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA)
 ---
 >>>                    function AA() {
 1->^^^^^^^^^^^^^^^^^^^^
@@ -1609,9 +1619,9 @@ sourceFile:typeResolution.ts
   >                
 2 >                    function 
 3 >                             AA
-1->Emitted(88, 21) Source(64, 17) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor)
-2 >Emitted(88, 30) Source(64, 26) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor)
-3 >Emitted(88, 32) Source(64, 28) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor)
+1->Emitted(89, 21) Source(64, 17) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor)
+2 >Emitted(89, 30) Source(64, 26) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor)
+3 >Emitted(89, 32) Source(64, 28) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor)
 ---
 >>>                        var a2;
 1->^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1624,10 +1634,10 @@ sourceFile:typeResolution.ts
 2 >                        var 
 3 >                            a2: SubSubModule1.ClassA
 4 >                              ;
-1->Emitted(89, 25) Source(65, 21) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-2 >Emitted(89, 29) Source(65, 25) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-3 >Emitted(89, 31) Source(65, 49) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-4 >Emitted(89, 32) Source(65, 50) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+1->Emitted(90, 25) Source(65, 21) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+2 >Emitted(90, 29) Source(65, 25) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+3 >Emitted(90, 31) Source(65, 49) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+4 >Emitted(90, 32) Source(65, 50) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
 ---
 >>>                        a2.AisIn1_1_1();
 1->^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1642,12 +1652,12 @@ sourceFile:typeResolution.ts
 4 >                           AisIn1_1_1
 5 >                                     ()
 6 >                                       ;
-1->Emitted(90, 25) Source(65, 51) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-2 >Emitted(90, 27) Source(65, 53) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-3 >Emitted(90, 28) Source(65, 54) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-4 >Emitted(90, 38) Source(65, 64) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-5 >Emitted(90, 40) Source(65, 66) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-6 >Emitted(90, 41) Source(65, 67) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+1->Emitted(91, 25) Source(65, 51) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+2 >Emitted(91, 27) Source(65, 53) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+3 >Emitted(91, 28) Source(65, 54) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+4 >Emitted(91, 38) Source(65, 64) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+5 >Emitted(91, 40) Source(65, 66) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+6 >Emitted(91, 41) Source(65, 67) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
 ---
 >>>                        var a3;
 1 >^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1660,10 +1670,10 @@ sourceFile:typeResolution.ts
 2 >                        var 
 3 >                            a3: SubModule1.SubSubModule1.ClassA
 4 >                              ;
-1 >Emitted(91, 25) Source(66, 21) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-2 >Emitted(91, 29) Source(66, 25) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-3 >Emitted(91, 31) Source(66, 60) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-4 >Emitted(91, 32) Source(66, 61) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+1 >Emitted(92, 25) Source(66, 21) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+2 >Emitted(92, 29) Source(66, 25) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+3 >Emitted(92, 31) Source(66, 60) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+4 >Emitted(92, 32) Source(66, 61) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
 ---
 >>>                        a3.AisIn1_1_1();
 1->^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1678,12 +1688,12 @@ sourceFile:typeResolution.ts
 4 >                           AisIn1_1_1
 5 >                                     ()
 6 >                                       ;
-1->Emitted(92, 25) Source(66, 62) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-2 >Emitted(92, 27) Source(66, 64) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-3 >Emitted(92, 28) Source(66, 65) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-4 >Emitted(92, 38) Source(66, 75) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-5 >Emitted(92, 40) Source(66, 77) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-6 >Emitted(92, 41) Source(66, 78) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+1->Emitted(93, 25) Source(66, 62) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+2 >Emitted(93, 27) Source(66, 64) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+3 >Emitted(93, 28) Source(66, 65) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+4 >Emitted(93, 38) Source(66, 75) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+5 >Emitted(93, 40) Source(66, 77) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+6 >Emitted(93, 41) Source(66, 78) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
 ---
 >>>                        var a4;
 1 >^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1696,10 +1706,10 @@ sourceFile:typeResolution.ts
 2 >                        var 
 3 >                            a4: TopLevelModule1.SubModule1.SubSubModule1.ClassA
 4 >                              ;
-1 >Emitted(93, 25) Source(67, 21) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-2 >Emitted(93, 29) Source(67, 25) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-3 >Emitted(93, 31) Source(67, 76) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-4 >Emitted(93, 32) Source(67, 77) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+1 >Emitted(94, 25) Source(67, 21) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+2 >Emitted(94, 29) Source(67, 25) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+3 >Emitted(94, 31) Source(67, 76) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+4 >Emitted(94, 32) Source(67, 77) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
 ---
 >>>                        a4.AisIn1_1_1();
 1->^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1715,12 +1725,12 @@ sourceFile:typeResolution.ts
 4 >                           AisIn1_1_1
 5 >                                     ()
 6 >                                       ;
-1->Emitted(94, 25) Source(67, 78) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-2 >Emitted(94, 27) Source(67, 80) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-3 >Emitted(94, 28) Source(67, 81) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-4 >Emitted(94, 38) Source(67, 91) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-5 >Emitted(94, 40) Source(67, 93) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-6 >Emitted(94, 41) Source(67, 94) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+1->Emitted(95, 25) Source(67, 78) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+2 >Emitted(95, 27) Source(67, 80) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+3 >Emitted(95, 28) Source(67, 81) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+4 >Emitted(95, 38) Source(67, 91) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+5 >Emitted(95, 40) Source(67, 93) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+6 >Emitted(95, 41) Source(67, 94) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
 ---
 >>>                        // Interface reference
 1->^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1732,9 +1742,9 @@ sourceFile:typeResolution.ts
   >                    
 2 >                        
 3 >                        // Interface reference
-1->Emitted(95, 25) Source(70, 21) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-2 >Emitted(95, 25) Source(69, 21) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-3 >Emitted(95, 47) Source(69, 43) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+1->Emitted(96, 25) Source(70, 21) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+2 >Emitted(96, 25) Source(69, 21) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+3 >Emitted(96, 47) Source(69, 43) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
 ---
 >>>                        var d2;
 1 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1745,9 +1755,9 @@ sourceFile:typeResolution.ts
   >                    var 
 2 >                            d2: SubSubModule1.InterfaceX
 3 >                              ;
-1 >Emitted(96, 29) Source(70, 25) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-2 >Emitted(96, 31) Source(70, 53) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-3 >Emitted(96, 32) Source(70, 54) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+1 >Emitted(97, 29) Source(70, 25) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+2 >Emitted(97, 31) Source(70, 53) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+3 >Emitted(97, 32) Source(70, 54) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
 ---
 >>>                        d2.XisIn1_1_1();
 1->^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1762,12 +1772,12 @@ sourceFile:typeResolution.ts
 4 >                           XisIn1_1_1
 5 >                                     ()
 6 >                                       ;
-1->Emitted(97, 25) Source(70, 55) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-2 >Emitted(97, 27) Source(70, 57) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-3 >Emitted(97, 28) Source(70, 58) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-4 >Emitted(97, 38) Source(70, 68) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-5 >Emitted(97, 40) Source(70, 70) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-6 >Emitted(97, 41) Source(70, 71) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+1->Emitted(98, 25) Source(70, 55) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+2 >Emitted(98, 27) Source(70, 57) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+3 >Emitted(98, 28) Source(70, 58) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+4 >Emitted(98, 38) Source(70, 68) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+5 >Emitted(98, 40) Source(70, 70) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+6 >Emitted(98, 41) Source(70, 71) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
 ---
 >>>                    }
 1 >^^^^^^^^^^^^^^^^^^^^
@@ -1775,8 +1785,8 @@ sourceFile:typeResolution.ts
 1 >
   >                
 2 >                    }
-1 >Emitted(98, 21) Source(71, 17) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
-2 >Emitted(98, 22) Source(71, 18) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+1 >Emitted(99, 21) Source(71, 17) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
+2 >Emitted(99, 22) Source(71, 18) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor.AA)
 ---
 >>>                }
 1 >^^^^^^^^^^^^^^^^
@@ -1785,8 +1795,8 @@ sourceFile:typeResolution.ts
 1 >
   >            
 2 >                }
-1 >Emitted(99, 17) Source(72, 13) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor)
-2 >Emitted(99, 18) Source(72, 14) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor)
+1 >Emitted(100, 17) Source(72, 13) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor)
+2 >Emitted(100, 18) Source(72, 14) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA.constructor)
 ---
 >>>                return ClassA;
 1->^^^^^^^^^^^^^^^^
@@ -1794,8 +1804,8 @@ sourceFile:typeResolution.ts
 1->
   >        
 2 >                }
-1->Emitted(100, 17) Source(73, 9) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA)
-2 >Emitted(100, 30) Source(73, 10) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA)
+1->Emitted(101, 17) Source(73, 9) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA)
+2 >Emitted(101, 30) Source(73, 10) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA)
 ---
 >>>            })();
 1 >^^^^^^^^^^^^
@@ -1818,10 +1828,10 @@ sourceFile:typeResolution.ts
   >                             }
   >                         }
   >                     }
-1 >Emitted(101, 13) Source(73, 9) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA)
-2 >Emitted(101, 14) Source(73, 10) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA)
-3 >Emitted(101, 14) Source(62, 9) + SourceIndex(0) name (TopLevelModule1.SubModule1)
-4 >Emitted(101, 18) Source(73, 10) + SourceIndex(0) name (TopLevelModule1.SubModule1)
+1 >Emitted(102, 13) Source(73, 9) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA)
+2 >Emitted(102, 14) Source(73, 10) + SourceIndex(0) name (TopLevelModule1.SubModule1.ClassA)
+3 >Emitted(102, 14) Source(62, 9) + SourceIndex(0) name (TopLevelModule1.SubModule1)
+4 >Emitted(102, 18) Source(73, 10) + SourceIndex(0) name (TopLevelModule1.SubModule1)
 ---
 >>>        })(TopLevelModule1.SubModule1 || (TopLevelModule1.SubModule1 = {}));
 1->^^^^^^^^
@@ -1911,13 +1921,13 @@ sourceFile:typeResolution.ts
   >                                                                                }
   >                                                                            }
   >                                                                        }
-1->Emitted(102, 9) Source(74, 5) + SourceIndex(0) name (TopLevelModule1.SubModule1)
-2 >Emitted(102, 10) Source(74, 6) + SourceIndex(0) name (TopLevelModule1.SubModule1)
-3 >Emitted(102, 12) Source(2, 19) + SourceIndex(0) name (TopLevelModule1)
-4 >Emitted(102, 38) Source(2, 29) + SourceIndex(0) name (TopLevelModule1)
-5 >Emitted(102, 43) Source(2, 19) + SourceIndex(0) name (TopLevelModule1)
-6 >Emitted(102, 69) Source(2, 29) + SourceIndex(0) name (TopLevelModule1)
-7 >Emitted(102, 77) Source(74, 6) + SourceIndex(0) name (TopLevelModule1)
+1->Emitted(103, 9) Source(74, 5) + SourceIndex(0) name (TopLevelModule1.SubModule1)
+2 >Emitted(103, 10) Source(74, 6) + SourceIndex(0) name (TopLevelModule1.SubModule1)
+3 >Emitted(103, 12) Source(2, 19) + SourceIndex(0) name (TopLevelModule1)
+4 >Emitted(103, 38) Source(2, 29) + SourceIndex(0) name (TopLevelModule1)
+5 >Emitted(103, 43) Source(2, 19) + SourceIndex(0) name (TopLevelModule1)
+6 >Emitted(103, 69) Source(2, 29) + SourceIndex(0) name (TopLevelModule1)
+7 >Emitted(103, 77) Source(74, 6) + SourceIndex(0) name (TopLevelModule1)
 ---
 >>>        var SubModule1 = TopLevelModule1.SubModule1;
 1 >^^^^^^^^
@@ -2004,12 +2014,12 @@ sourceFile:typeResolution.ts
   >                                 }
   >                             }
 6 >                                                   
-1 >Emitted(103, 9) Source(2, 5) + SourceIndex(0) name (TopLevelModule1)
-2 >Emitted(103, 13) Source(2, 19) + SourceIndex(0) name (TopLevelModule1)
-3 >Emitted(103, 23) Source(2, 29) + SourceIndex(0) name (TopLevelModule1)
-4 >Emitted(103, 26) Source(2, 19) + SourceIndex(0) name (TopLevelModule1)
-5 >Emitted(103, 52) Source(74, 6) + SourceIndex(0) name (TopLevelModule1)
-6 >Emitted(103, 53) Source(74, 6) + SourceIndex(0) name (TopLevelModule1)
+1 >Emitted(104, 9) Source(2, 5) + SourceIndex(0) name (TopLevelModule1)
+2 >Emitted(104, 13) Source(2, 19) + SourceIndex(0) name (TopLevelModule1)
+3 >Emitted(104, 23) Source(2, 29) + SourceIndex(0) name (TopLevelModule1)
+4 >Emitted(104, 26) Source(2, 19) + SourceIndex(0) name (TopLevelModule1)
+5 >Emitted(104, 52) Source(74, 6) + SourceIndex(0) name (TopLevelModule1)
+6 >Emitted(104, 53) Source(74, 6) + SourceIndex(0) name (TopLevelModule1)
 ---
 >>>        (function (SubModule2) {
 1 >^^^^^^^^
@@ -2025,11 +2035,11 @@ sourceFile:typeResolution.ts
 3 >                   SubModule2
 4 >                              
 5 >                               {
-1 >Emitted(104, 9) Source(76, 5) + SourceIndex(0) name (TopLevelModule1)
-2 >Emitted(104, 20) Source(76, 19) + SourceIndex(0) name (TopLevelModule1)
-3 >Emitted(104, 30) Source(76, 29) + SourceIndex(0) name (TopLevelModule1)
-4 >Emitted(104, 32) Source(76, 30) + SourceIndex(0) name (TopLevelModule1)
-5 >Emitted(104, 33) Source(76, 31) + SourceIndex(0) name (TopLevelModule1)
+1 >Emitted(105, 9) Source(76, 5) + SourceIndex(0) name (TopLevelModule1)
+2 >Emitted(105, 20) Source(76, 19) + SourceIndex(0) name (TopLevelModule1)
+3 >Emitted(105, 30) Source(76, 29) + SourceIndex(0) name (TopLevelModule1)
+4 >Emitted(105, 32) Source(76, 30) + SourceIndex(0) name (TopLevelModule1)
+5 >Emitted(105, 33) Source(76, 31) + SourceIndex(0) name (TopLevelModule1)
 ---
 >>>            (function (SubSubModule2) {
 1->^^^^^^^^^^^^
@@ -2037,32 +2047,41 @@ sourceFile:typeResolution.ts
 3 >                       ^^^^^^^^^^^^^
 4 >                                    ^^
 5 >                                      ^
-6 >                                       ^^^^^->
+6 >                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >        
 2 >            export module 
 3 >                       SubSubModule2
 4 >                                     
 5 >                                      {
-1->Emitted(105, 13) Source(77, 9) + SourceIndex(0) name (TopLevelModule1.SubModule2)
-2 >Emitted(105, 24) Source(77, 23) + SourceIndex(0) name (TopLevelModule1.SubModule2)
-3 >Emitted(105, 37) Source(77, 36) + SourceIndex(0) name (TopLevelModule1.SubModule2)
-4 >Emitted(105, 39) Source(77, 37) + SourceIndex(0) name (TopLevelModule1.SubModule2)
-5 >Emitted(105, 40) Source(77, 38) + SourceIndex(0) name (TopLevelModule1.SubModule2)
+1->Emitted(106, 13) Source(77, 9) + SourceIndex(0) name (TopLevelModule1.SubModule2)
+2 >Emitted(106, 24) Source(77, 23) + SourceIndex(0) name (TopLevelModule1.SubModule2)
+3 >Emitted(106, 37) Source(77, 36) + SourceIndex(0) name (TopLevelModule1.SubModule2)
+4 >Emitted(106, 39) Source(77, 37) + SourceIndex(0) name (TopLevelModule1.SubModule2)
+5 >Emitted(106, 40) Source(77, 38) + SourceIndex(0) name (TopLevelModule1.SubModule2)
 ---
->>>                var ClassA = (function () {
+>>>                // No code here since these are the mirror of the above calls
 1->^^^^^^^^^^^^^^^^
-2 >                ^^^^
-3 >                    ^^^^^^
-4 >                          ^^^^^^^^^^^^^^->
+2 >                
+3 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
   >            // No code here since these are the mirror of the above calls
   >            
-2 >                export class 
-3 >                    ClassA
-1->Emitted(106, 17) Source(79, 13) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
-2 >Emitted(106, 21) Source(79, 26) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
-3 >Emitted(106, 27) Source(79, 32) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+2 >                
+3 >                // No code here since these are the mirror of the above calls
+1->Emitted(107, 17) Source(79, 13) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+2 >Emitted(107, 17) Source(78, 13) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+3 >Emitted(107, 78) Source(78, 74) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+---
+>>>                var ClassA = (function () {
+1 >^^^^^^^^^^^^^^^^^^^^
+2 >                    ^^^^^^
+3 >                          ^^^^^^^^^^^^^^->
+1 >
+  >            export class 
+2 >                    ClassA
+1 >Emitted(108, 21) Source(79, 26) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+2 >Emitted(108, 27) Source(79, 32) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
 ---
 >>>                    function ClassA() {
 1->^^^^^^^^^^^^^^^^^^^^
@@ -2071,9 +2090,9 @@ sourceFile:typeResolution.ts
 1->
 2 >                    export class 
 3 >                             ClassA
-1->Emitted(107, 21) Source(79, 13) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA)
-2 >Emitted(107, 30) Source(79, 26) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA)
-3 >Emitted(107, 36) Source(79, 32) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA)
+1->Emitted(109, 21) Source(79, 13) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA)
+2 >Emitted(109, 30) Source(79, 26) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA)
+3 >Emitted(109, 36) Source(79, 32) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA)
 ---
 >>>                    }
 1 >^^^^^^^^^^^^^^^^^^^^
@@ -2081,8 +2100,8 @@ sourceFile:typeResolution.ts
 3 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 > { public AisIn1_2_2() { } 
 2 >                    }
-1 >Emitted(108, 21) Source(79, 59) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA.constructor)
-2 >Emitted(108, 22) Source(79, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA.constructor)
+1 >Emitted(110, 21) Source(79, 59) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA.constructor)
+2 >Emitted(110, 22) Source(79, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA.constructor)
 ---
 >>>                    ClassA.prototype.AisIn1_2_2 = function () {
 1->^^^^^^^^^^^^^^^^^^^^
@@ -2091,9 +2110,9 @@ sourceFile:typeResolution.ts
 1->
 2 >                    AisIn1_2_2
 3 >                                               
-1->Emitted(109, 21) Source(79, 42) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA)
-2 >Emitted(109, 48) Source(79, 52) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA)
-3 >Emitted(109, 51) Source(79, 35) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA)
+1->Emitted(111, 21) Source(79, 42) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA)
+2 >Emitted(111, 48) Source(79, 52) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA)
+3 >Emitted(111, 51) Source(79, 35) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA)
 ---
 >>>                    };
 1 >^^^^^^^^^^^^^^^^^^^^
@@ -2101,16 +2120,16 @@ sourceFile:typeResolution.ts
 3 >                     ^^^^^^^^^^^^^^->
 1 >public AisIn1_2_2() { 
 2 >                    }
-1 >Emitted(110, 21) Source(79, 57) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA.AisIn1_2_2)
-2 >Emitted(110, 22) Source(79, 58) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA.AisIn1_2_2)
+1 >Emitted(112, 21) Source(79, 57) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA.AisIn1_2_2)
+2 >Emitted(112, 22) Source(79, 58) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA.AisIn1_2_2)
 ---
 >>>                    return ClassA;
 1->^^^^^^^^^^^^^^^^^^^^
 2 >                    ^^^^^^^^^^^^^
 1-> 
 2 >                    }
-1->Emitted(111, 21) Source(79, 59) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA)
-2 >Emitted(111, 34) Source(79, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA)
+1->Emitted(113, 21) Source(79, 59) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA)
+2 >Emitted(113, 34) Source(79, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA)
 ---
 >>>                })();
 1 >^^^^^^^^^^^^^^^^
@@ -2122,10 +2141,10 @@ sourceFile:typeResolution.ts
 2 >                }
 3 >                 
 4 >                 export class ClassA { public AisIn1_2_2() { } }
-1 >Emitted(112, 17) Source(79, 59) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA)
-2 >Emitted(112, 18) Source(79, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA)
-3 >Emitted(112, 18) Source(79, 13) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
-4 >Emitted(112, 22) Source(79, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+1 >Emitted(114, 17) Source(79, 59) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA)
+2 >Emitted(114, 18) Source(79, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassA)
+3 >Emitted(114, 18) Source(79, 13) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+4 >Emitted(114, 22) Source(79, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
 ---
 >>>                SubSubModule2.ClassA = ClassA;
 1->^^^^^^^^^^^^^^^^
@@ -2138,11 +2157,11 @@ sourceFile:typeResolution.ts
 3 >                                    
 4 >                                       ClassA { public AisIn1_2_2() { } }
 5 >                                             
-1->Emitted(113, 17) Source(79, 26) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
-2 >Emitted(113, 37) Source(79, 32) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
-3 >Emitted(113, 40) Source(79, 26) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
-4 >Emitted(113, 46) Source(79, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
-5 >Emitted(113, 47) Source(79, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+1->Emitted(115, 17) Source(79, 26) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+2 >Emitted(115, 37) Source(79, 32) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+3 >Emitted(115, 40) Source(79, 26) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+4 >Emitted(115, 46) Source(79, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+5 >Emitted(115, 47) Source(79, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
 ---
 >>>                var ClassB = (function () {
 1 >^^^^^^^^^^^^^^^^
@@ -2153,9 +2172,9 @@ sourceFile:typeResolution.ts
   >            
 2 >                export class 
 3 >                    ClassB
-1 >Emitted(114, 17) Source(80, 13) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
-2 >Emitted(114, 21) Source(80, 26) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
-3 >Emitted(114, 27) Source(80, 32) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+1 >Emitted(116, 17) Source(80, 13) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+2 >Emitted(116, 21) Source(80, 26) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+3 >Emitted(116, 27) Source(80, 32) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
 ---
 >>>                    function ClassB() {
 1->^^^^^^^^^^^^^^^^^^^^
@@ -2164,9 +2183,9 @@ sourceFile:typeResolution.ts
 1->
 2 >                    export class 
 3 >                             ClassB
-1->Emitted(115, 21) Source(80, 13) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB)
-2 >Emitted(115, 30) Source(80, 26) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB)
-3 >Emitted(115, 36) Source(80, 32) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB)
+1->Emitted(117, 21) Source(80, 13) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB)
+2 >Emitted(117, 30) Source(80, 26) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB)
+3 >Emitted(117, 36) Source(80, 32) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB)
 ---
 >>>                    }
 1 >^^^^^^^^^^^^^^^^^^^^
@@ -2174,8 +2193,8 @@ sourceFile:typeResolution.ts
 3 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 > { public BisIn1_2_2() { } 
 2 >                    }
-1 >Emitted(116, 21) Source(80, 59) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB.constructor)
-2 >Emitted(116, 22) Source(80, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB.constructor)
+1 >Emitted(118, 21) Source(80, 59) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB.constructor)
+2 >Emitted(118, 22) Source(80, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB.constructor)
 ---
 >>>                    ClassB.prototype.BisIn1_2_2 = function () {
 1->^^^^^^^^^^^^^^^^^^^^
@@ -2184,9 +2203,9 @@ sourceFile:typeResolution.ts
 1->
 2 >                    BisIn1_2_2
 3 >                                               
-1->Emitted(117, 21) Source(80, 42) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB)
-2 >Emitted(117, 48) Source(80, 52) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB)
-3 >Emitted(117, 51) Source(80, 35) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB)
+1->Emitted(119, 21) Source(80, 42) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB)
+2 >Emitted(119, 48) Source(80, 52) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB)
+3 >Emitted(119, 51) Source(80, 35) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB)
 ---
 >>>                    };
 1 >^^^^^^^^^^^^^^^^^^^^
@@ -2194,16 +2213,16 @@ sourceFile:typeResolution.ts
 3 >                     ^^^^^^^^^^^^^^->
 1 >public BisIn1_2_2() { 
 2 >                    }
-1 >Emitted(118, 21) Source(80, 57) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB.BisIn1_2_2)
-2 >Emitted(118, 22) Source(80, 58) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB.BisIn1_2_2)
+1 >Emitted(120, 21) Source(80, 57) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB.BisIn1_2_2)
+2 >Emitted(120, 22) Source(80, 58) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB.BisIn1_2_2)
 ---
 >>>                    return ClassB;
 1->^^^^^^^^^^^^^^^^^^^^
 2 >                    ^^^^^^^^^^^^^
 1-> 
 2 >                    }
-1->Emitted(119, 21) Source(80, 59) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB)
-2 >Emitted(119, 34) Source(80, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB)
+1->Emitted(121, 21) Source(80, 59) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB)
+2 >Emitted(121, 34) Source(80, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB)
 ---
 >>>                })();
 1 >^^^^^^^^^^^^^^^^
@@ -2215,10 +2234,10 @@ sourceFile:typeResolution.ts
 2 >                }
 3 >                 
 4 >                 export class ClassB { public BisIn1_2_2() { } }
-1 >Emitted(120, 17) Source(80, 59) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB)
-2 >Emitted(120, 18) Source(80, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB)
-3 >Emitted(120, 18) Source(80, 13) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
-4 >Emitted(120, 22) Source(80, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+1 >Emitted(122, 17) Source(80, 59) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB)
+2 >Emitted(122, 18) Source(80, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassB)
+3 >Emitted(122, 18) Source(80, 13) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+4 >Emitted(122, 22) Source(80, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
 ---
 >>>                SubSubModule2.ClassB = ClassB;
 1->^^^^^^^^^^^^^^^^
@@ -2231,11 +2250,11 @@ sourceFile:typeResolution.ts
 3 >                                    
 4 >                                       ClassB { public BisIn1_2_2() { } }
 5 >                                             
-1->Emitted(121, 17) Source(80, 26) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
-2 >Emitted(121, 37) Source(80, 32) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
-3 >Emitted(121, 40) Source(80, 26) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
-4 >Emitted(121, 46) Source(80, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
-5 >Emitted(121, 47) Source(80, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+1->Emitted(123, 17) Source(80, 26) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+2 >Emitted(123, 37) Source(80, 32) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+3 >Emitted(123, 40) Source(80, 26) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+4 >Emitted(123, 46) Source(80, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+5 >Emitted(123, 47) Source(80, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
 ---
 >>>                var ClassC = (function () {
 1 >^^^^^^^^^^^^^^^^
@@ -2246,9 +2265,9 @@ sourceFile:typeResolution.ts
   >            
 2 >                export class 
 3 >                    ClassC
-1 >Emitted(122, 17) Source(81, 13) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
-2 >Emitted(122, 21) Source(81, 26) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
-3 >Emitted(122, 27) Source(81, 32) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+1 >Emitted(124, 17) Source(81, 13) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+2 >Emitted(124, 21) Source(81, 26) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+3 >Emitted(124, 27) Source(81, 32) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
 ---
 >>>                    function ClassC() {
 1->^^^^^^^^^^^^^^^^^^^^
@@ -2257,9 +2276,9 @@ sourceFile:typeResolution.ts
 1->
 2 >                    export class 
 3 >                             ClassC
-1->Emitted(123, 21) Source(81, 13) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC)
-2 >Emitted(123, 30) Source(81, 26) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC)
-3 >Emitted(123, 36) Source(81, 32) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC)
+1->Emitted(125, 21) Source(81, 13) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC)
+2 >Emitted(125, 30) Source(81, 26) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC)
+3 >Emitted(125, 36) Source(81, 32) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC)
 ---
 >>>                    }
 1 >^^^^^^^^^^^^^^^^^^^^
@@ -2267,8 +2286,8 @@ sourceFile:typeResolution.ts
 3 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 > { public CisIn1_2_2() { } 
 2 >                    }
-1 >Emitted(124, 21) Source(81, 59) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC.constructor)
-2 >Emitted(124, 22) Source(81, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC.constructor)
+1 >Emitted(126, 21) Source(81, 59) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC.constructor)
+2 >Emitted(126, 22) Source(81, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC.constructor)
 ---
 >>>                    ClassC.prototype.CisIn1_2_2 = function () {
 1->^^^^^^^^^^^^^^^^^^^^
@@ -2277,9 +2296,9 @@ sourceFile:typeResolution.ts
 1->
 2 >                    CisIn1_2_2
 3 >                                               
-1->Emitted(125, 21) Source(81, 42) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC)
-2 >Emitted(125, 48) Source(81, 52) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC)
-3 >Emitted(125, 51) Source(81, 35) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC)
+1->Emitted(127, 21) Source(81, 42) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC)
+2 >Emitted(127, 48) Source(81, 52) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC)
+3 >Emitted(127, 51) Source(81, 35) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC)
 ---
 >>>                    };
 1 >^^^^^^^^^^^^^^^^^^^^
@@ -2287,16 +2306,16 @@ sourceFile:typeResolution.ts
 3 >                     ^^^^^^^^^^^^^^->
 1 >public CisIn1_2_2() { 
 2 >                    }
-1 >Emitted(126, 21) Source(81, 57) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC.CisIn1_2_2)
-2 >Emitted(126, 22) Source(81, 58) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC.CisIn1_2_2)
+1 >Emitted(128, 21) Source(81, 57) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC.CisIn1_2_2)
+2 >Emitted(128, 22) Source(81, 58) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC.CisIn1_2_2)
 ---
 >>>                    return ClassC;
 1->^^^^^^^^^^^^^^^^^^^^
 2 >                    ^^^^^^^^^^^^^
 1-> 
 2 >                    }
-1->Emitted(127, 21) Source(81, 59) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC)
-2 >Emitted(127, 34) Source(81, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC)
+1->Emitted(129, 21) Source(81, 59) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC)
+2 >Emitted(129, 34) Source(81, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC)
 ---
 >>>                })();
 1 >^^^^^^^^^^^^^^^^
@@ -2308,10 +2327,10 @@ sourceFile:typeResolution.ts
 2 >                }
 3 >                 
 4 >                 export class ClassC { public CisIn1_2_2() { } }
-1 >Emitted(128, 17) Source(81, 59) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC)
-2 >Emitted(128, 18) Source(81, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC)
-3 >Emitted(128, 18) Source(81, 13) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
-4 >Emitted(128, 22) Source(81, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+1 >Emitted(130, 17) Source(81, 59) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC)
+2 >Emitted(130, 18) Source(81, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2.ClassC)
+3 >Emitted(130, 18) Source(81, 13) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+4 >Emitted(130, 22) Source(81, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
 ---
 >>>                SubSubModule2.ClassC = ClassC;
 1->^^^^^^^^^^^^^^^^
@@ -2325,11 +2344,11 @@ sourceFile:typeResolution.ts
 3 >                                    
 4 >                                       ClassC { public CisIn1_2_2() { } }
 5 >                                             
-1->Emitted(129, 17) Source(81, 26) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
-2 >Emitted(129, 37) Source(81, 32) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
-3 >Emitted(129, 40) Source(81, 26) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
-4 >Emitted(129, 46) Source(81, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
-5 >Emitted(129, 47) Source(81, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+1->Emitted(131, 17) Source(81, 26) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+2 >Emitted(131, 37) Source(81, 32) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+3 >Emitted(131, 40) Source(81, 26) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+4 >Emitted(131, 46) Source(81, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+5 >Emitted(131, 47) Source(81, 60) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
 ---
 >>>            })(SubModule2.SubSubModule2 || (SubModule2.SubSubModule2 = {}));
 1->^^^^^^^^^^^^^^^^
@@ -2358,14 +2377,14 @@ sourceFile:typeResolution.ts
   >                                                                                export interface InterfaceY { YisIn1_2_2(); }
   >                                                                                interface NonExportedInterfaceQ { }
   >                                                                            }
-1->Emitted(130, 17) Source(83, 48) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
-2 >Emitted(130, 13) Source(84, 9) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
-3 >Emitted(130, 14) Source(84, 10) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
-4 >Emitted(130, 16) Source(77, 23) + SourceIndex(0) name (TopLevelModule1.SubModule2)
-5 >Emitted(130, 40) Source(77, 36) + SourceIndex(0) name (TopLevelModule1.SubModule2)
-6 >Emitted(130, 45) Source(77, 23) + SourceIndex(0) name (TopLevelModule1.SubModule2)
-7 >Emitted(130, 69) Source(77, 36) + SourceIndex(0) name (TopLevelModule1.SubModule2)
-8 >Emitted(130, 77) Source(84, 10) + SourceIndex(0) name (TopLevelModule1.SubModule2)
+1->Emitted(132, 17) Source(83, 48) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+2 >Emitted(132, 13) Source(84, 9) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+3 >Emitted(132, 14) Source(84, 10) + SourceIndex(0) name (TopLevelModule1.SubModule2.SubSubModule2)
+4 >Emitted(132, 16) Source(77, 23) + SourceIndex(0) name (TopLevelModule1.SubModule2)
+5 >Emitted(132, 40) Source(77, 36) + SourceIndex(0) name (TopLevelModule1.SubModule2)
+6 >Emitted(132, 45) Source(77, 23) + SourceIndex(0) name (TopLevelModule1.SubModule2)
+7 >Emitted(132, 69) Source(77, 36) + SourceIndex(0) name (TopLevelModule1.SubModule2)
+8 >Emitted(132, 77) Source(84, 10) + SourceIndex(0) name (TopLevelModule1.SubModule2)
 ---
 >>>            var SubSubModule2 = SubModule2.SubSubModule2;
 1 >^^^^^^^^^^^^
@@ -2388,12 +2407,12 @@ sourceFile:typeResolution.ts
   >                                            interface NonExportedInterfaceQ { }
   >                                        }
 6 >                                                        
-1 >Emitted(131, 13) Source(77, 9) + SourceIndex(0) name (TopLevelModule1.SubModule2)
-2 >Emitted(131, 17) Source(77, 23) + SourceIndex(0) name (TopLevelModule1.SubModule2)
-3 >Emitted(131, 30) Source(77, 36) + SourceIndex(0) name (TopLevelModule1.SubModule2)
-4 >Emitted(131, 33) Source(77, 23) + SourceIndex(0) name (TopLevelModule1.SubModule2)
-5 >Emitted(131, 57) Source(84, 10) + SourceIndex(0) name (TopLevelModule1.SubModule2)
-6 >Emitted(131, 58) Source(84, 10) + SourceIndex(0) name (TopLevelModule1.SubModule2)
+1 >Emitted(133, 13) Source(77, 9) + SourceIndex(0) name (TopLevelModule1.SubModule2)
+2 >Emitted(133, 17) Source(77, 23) + SourceIndex(0) name (TopLevelModule1.SubModule2)
+3 >Emitted(133, 30) Source(77, 36) + SourceIndex(0) name (TopLevelModule1.SubModule2)
+4 >Emitted(133, 33) Source(77, 23) + SourceIndex(0) name (TopLevelModule1.SubModule2)
+5 >Emitted(133, 57) Source(84, 10) + SourceIndex(0) name (TopLevelModule1.SubModule2)
+6 >Emitted(133, 58) Source(84, 10) + SourceIndex(0) name (TopLevelModule1.SubModule2)
 ---
 >>>        })(TopLevelModule1.SubModule2 || (TopLevelModule1.SubModule2 = {}));
 1->^^^^^^^^^^^^
@@ -2426,14 +2445,14 @@ sourceFile:typeResolution.ts
   >                                                                            
   >                                                                            export interface InterfaceY { YisIn1_2(); }
   >                                                                        }
-1->Emitted(132, 13) Source(86, 52) + SourceIndex(0) name (TopLevelModule1.SubModule2)
-2 >Emitted(132, 9) Source(87, 5) + SourceIndex(0) name (TopLevelModule1.SubModule2)
-3 >Emitted(132, 10) Source(87, 6) + SourceIndex(0) name (TopLevelModule1.SubModule2)
-4 >Emitted(132, 12) Source(76, 19) + SourceIndex(0) name (TopLevelModule1)
-5 >Emitted(132, 38) Source(76, 29) + SourceIndex(0) name (TopLevelModule1)
-6 >Emitted(132, 43) Source(76, 19) + SourceIndex(0) name (TopLevelModule1)
-7 >Emitted(132, 69) Source(76, 29) + SourceIndex(0) name (TopLevelModule1)
-8 >Emitted(132, 77) Source(87, 6) + SourceIndex(0) name (TopLevelModule1)
+1->Emitted(134, 13) Source(86, 52) + SourceIndex(0) name (TopLevelModule1.SubModule2)
+2 >Emitted(134, 9) Source(87, 5) + SourceIndex(0) name (TopLevelModule1.SubModule2)
+3 >Emitted(134, 10) Source(87, 6) + SourceIndex(0) name (TopLevelModule1.SubModule2)
+4 >Emitted(134, 12) Source(76, 19) + SourceIndex(0) name (TopLevelModule1)
+5 >Emitted(134, 38) Source(76, 29) + SourceIndex(0) name (TopLevelModule1)
+6 >Emitted(134, 43) Source(76, 19) + SourceIndex(0) name (TopLevelModule1)
+7 >Emitted(134, 69) Source(76, 29) + SourceIndex(0) name (TopLevelModule1)
+8 >Emitted(134, 77) Source(87, 6) + SourceIndex(0) name (TopLevelModule1)
 ---
 >>>        var SubModule2 = TopLevelModule1.SubModule2;
 1 >^^^^^^^^
@@ -2459,12 +2478,12 @@ sourceFile:typeResolution.ts
   >                                 export interface InterfaceY { YisIn1_2(); }
   >                             }
 6 >                                                   
-1 >Emitted(133, 9) Source(76, 5) + SourceIndex(0) name (TopLevelModule1)
-2 >Emitted(133, 13) Source(76, 19) + SourceIndex(0) name (TopLevelModule1)
-3 >Emitted(133, 23) Source(76, 29) + SourceIndex(0) name (TopLevelModule1)
-4 >Emitted(133, 26) Source(76, 19) + SourceIndex(0) name (TopLevelModule1)
-5 >Emitted(133, 52) Source(87, 6) + SourceIndex(0) name (TopLevelModule1)
-6 >Emitted(133, 53) Source(87, 6) + SourceIndex(0) name (TopLevelModule1)
+1 >Emitted(135, 9) Source(76, 5) + SourceIndex(0) name (TopLevelModule1)
+2 >Emitted(135, 13) Source(76, 19) + SourceIndex(0) name (TopLevelModule1)
+3 >Emitted(135, 23) Source(76, 29) + SourceIndex(0) name (TopLevelModule1)
+4 >Emitted(135, 26) Source(76, 19) + SourceIndex(0) name (TopLevelModule1)
+5 >Emitted(135, 52) Source(87, 6) + SourceIndex(0) name (TopLevelModule1)
+6 >Emitted(135, 53) Source(87, 6) + SourceIndex(0) name (TopLevelModule1)
 ---
 >>>        var ClassA = (function () {
 1 >^^^^^^^^
@@ -2476,9 +2495,9 @@ sourceFile:typeResolution.ts
   >    
 2 >        class 
 3 >            ClassA
-1 >Emitted(134, 9) Source(89, 5) + SourceIndex(0) name (TopLevelModule1)
-2 >Emitted(134, 13) Source(89, 11) + SourceIndex(0) name (TopLevelModule1)
-3 >Emitted(134, 19) Source(89, 17) + SourceIndex(0) name (TopLevelModule1)
+1 >Emitted(136, 9) Source(89, 5) + SourceIndex(0) name (TopLevelModule1)
+2 >Emitted(136, 13) Source(89, 11) + SourceIndex(0) name (TopLevelModule1)
+3 >Emitted(136, 19) Source(89, 17) + SourceIndex(0) name (TopLevelModule1)
 ---
 >>>            function ClassA() {
 1->^^^^^^^^^^^^
@@ -2487,9 +2506,9 @@ sourceFile:typeResolution.ts
 1->
 2 >            class 
 3 >                     ClassA
-1->Emitted(135, 13) Source(89, 5) + SourceIndex(0) name (TopLevelModule1.ClassA)
-2 >Emitted(135, 22) Source(89, 11) + SourceIndex(0) name (TopLevelModule1.ClassA)
-3 >Emitted(135, 28) Source(89, 17) + SourceIndex(0) name (TopLevelModule1.ClassA)
+1->Emitted(137, 13) Source(89, 5) + SourceIndex(0) name (TopLevelModule1.ClassA)
+2 >Emitted(137, 22) Source(89, 11) + SourceIndex(0) name (TopLevelModule1.ClassA)
+3 >Emitted(137, 28) Source(89, 17) + SourceIndex(0) name (TopLevelModule1.ClassA)
 ---
 >>>            }
 1 >^^^^^^^^^^^^
@@ -2499,8 +2518,8 @@ sourceFile:typeResolution.ts
   >        public AisIn1() { }
   >    
 2 >            }
-1 >Emitted(136, 13) Source(91, 5) + SourceIndex(0) name (TopLevelModule1.ClassA.constructor)
-2 >Emitted(136, 14) Source(91, 6) + SourceIndex(0) name (TopLevelModule1.ClassA.constructor)
+1 >Emitted(138, 13) Source(91, 5) + SourceIndex(0) name (TopLevelModule1.ClassA.constructor)
+2 >Emitted(138, 14) Source(91, 6) + SourceIndex(0) name (TopLevelModule1.ClassA.constructor)
 ---
 >>>            ClassA.prototype.AisIn1 = function () {
 1->^^^^^^^^^^^^
@@ -2509,9 +2528,9 @@ sourceFile:typeResolution.ts
 1->
 2 >            AisIn1
 3 >                                   
-1->Emitted(137, 13) Source(90, 16) + SourceIndex(0) name (TopLevelModule1.ClassA)
-2 >Emitted(137, 36) Source(90, 22) + SourceIndex(0) name (TopLevelModule1.ClassA)
-3 >Emitted(137, 39) Source(90, 9) + SourceIndex(0) name (TopLevelModule1.ClassA)
+1->Emitted(139, 13) Source(90, 16) + SourceIndex(0) name (TopLevelModule1.ClassA)
+2 >Emitted(139, 36) Source(90, 22) + SourceIndex(0) name (TopLevelModule1.ClassA)
+3 >Emitted(139, 39) Source(90, 9) + SourceIndex(0) name (TopLevelModule1.ClassA)
 ---
 >>>            };
 1 >^^^^^^^^^^^^
@@ -2519,8 +2538,8 @@ sourceFile:typeResolution.ts
 3 >             ^^^^^^^^^^^^^^->
 1 >public AisIn1() { 
 2 >            }
-1 >Emitted(138, 13) Source(90, 27) + SourceIndex(0) name (TopLevelModule1.ClassA.AisIn1)
-2 >Emitted(138, 14) Source(90, 28) + SourceIndex(0) name (TopLevelModule1.ClassA.AisIn1)
+1 >Emitted(140, 13) Source(90, 27) + SourceIndex(0) name (TopLevelModule1.ClassA.AisIn1)
+2 >Emitted(140, 14) Source(90, 28) + SourceIndex(0) name (TopLevelModule1.ClassA.AisIn1)
 ---
 >>>            return ClassA;
 1->^^^^^^^^^^^^
@@ -2528,8 +2547,8 @@ sourceFile:typeResolution.ts
 1->
   >    
 2 >            }
-1->Emitted(139, 13) Source(91, 5) + SourceIndex(0) name (TopLevelModule1.ClassA)
-2 >Emitted(139, 26) Source(91, 6) + SourceIndex(0) name (TopLevelModule1.ClassA)
+1->Emitted(141, 13) Source(91, 5) + SourceIndex(0) name (TopLevelModule1.ClassA)
+2 >Emitted(141, 26) Source(91, 6) + SourceIndex(0) name (TopLevelModule1.ClassA)
 ---
 >>>        })();
 1 >^^^^^^^^
@@ -2543,10 +2562,10 @@ sourceFile:typeResolution.ts
 4 >         class ClassA {
   >                 public AisIn1() { }
   >             }
-1 >Emitted(140, 9) Source(91, 5) + SourceIndex(0) name (TopLevelModule1.ClassA)
-2 >Emitted(140, 10) Source(91, 6) + SourceIndex(0) name (TopLevelModule1.ClassA)
-3 >Emitted(140, 10) Source(89, 5) + SourceIndex(0) name (TopLevelModule1)
-4 >Emitted(140, 14) Source(91, 6) + SourceIndex(0) name (TopLevelModule1)
+1 >Emitted(142, 9) Source(91, 5) + SourceIndex(0) name (TopLevelModule1.ClassA)
+2 >Emitted(142, 10) Source(91, 6) + SourceIndex(0) name (TopLevelModule1.ClassA)
+3 >Emitted(142, 10) Source(89, 5) + SourceIndex(0) name (TopLevelModule1)
+4 >Emitted(142, 14) Source(91, 6) + SourceIndex(0) name (TopLevelModule1)
 ---
 >>>        var NotExportedModule;
 1->^^^^^^^^
@@ -2566,10 +2585,10 @@ sourceFile:typeResolution.ts
 4 >                              {
   >                                     export class ClassA { }
   >                                 }
-1->Emitted(141, 9) Source(97, 5) + SourceIndex(0) name (TopLevelModule1)
-2 >Emitted(141, 13) Source(97, 12) + SourceIndex(0) name (TopLevelModule1)
-3 >Emitted(141, 30) Source(97, 29) + SourceIndex(0) name (TopLevelModule1)
-4 >Emitted(141, 31) Source(99, 6) + SourceIndex(0) name (TopLevelModule1)
+1->Emitted(143, 9) Source(97, 5) + SourceIndex(0) name (TopLevelModule1)
+2 >Emitted(143, 13) Source(97, 12) + SourceIndex(0) name (TopLevelModule1)
+3 >Emitted(143, 30) Source(97, 29) + SourceIndex(0) name (TopLevelModule1)
+4 >Emitted(143, 31) Source(99, 6) + SourceIndex(0) name (TopLevelModule1)
 ---
 >>>        (function (NotExportedModule) {
 1->^^^^^^^^
@@ -2583,11 +2602,11 @@ sourceFile:typeResolution.ts
 3 >                   NotExportedModule
 4 >                                     
 5 >                                      {
-1->Emitted(142, 9) Source(97, 5) + SourceIndex(0) name (TopLevelModule1)
-2 >Emitted(142, 20) Source(97, 12) + SourceIndex(0) name (TopLevelModule1)
-3 >Emitted(142, 37) Source(97, 29) + SourceIndex(0) name (TopLevelModule1)
-4 >Emitted(142, 39) Source(97, 30) + SourceIndex(0) name (TopLevelModule1)
-5 >Emitted(142, 40) Source(97, 31) + SourceIndex(0) name (TopLevelModule1)
+1->Emitted(144, 9) Source(97, 5) + SourceIndex(0) name (TopLevelModule1)
+2 >Emitted(144, 20) Source(97, 12) + SourceIndex(0) name (TopLevelModule1)
+3 >Emitted(144, 37) Source(97, 29) + SourceIndex(0) name (TopLevelModule1)
+4 >Emitted(144, 39) Source(97, 30) + SourceIndex(0) name (TopLevelModule1)
+5 >Emitted(144, 40) Source(97, 31) + SourceIndex(0) name (TopLevelModule1)
 ---
 >>>            var ClassA = (function () {
 1->^^^^^^^^^^^^
@@ -2598,9 +2617,9 @@ sourceFile:typeResolution.ts
   >        
 2 >            export class 
 3 >                ClassA
-1->Emitted(143, 13) Source(98, 9) + SourceIndex(0) name (TopLevelModule1.NotExportedModule)
-2 >Emitted(143, 17) Source(98, 22) + SourceIndex(0) name (TopLevelModule1.NotExportedModule)
-3 >Emitted(143, 23) Source(98, 28) + SourceIndex(0) name (TopLevelModule1.NotExportedModule)
+1->Emitted(145, 13) Source(98, 9) + SourceIndex(0) name (TopLevelModule1.NotExportedModule)
+2 >Emitted(145, 17) Source(98, 22) + SourceIndex(0) name (TopLevelModule1.NotExportedModule)
+3 >Emitted(145, 23) Source(98, 28) + SourceIndex(0) name (TopLevelModule1.NotExportedModule)
 ---
 >>>                function ClassA() {
 1->^^^^^^^^^^^^^^^^
@@ -2609,9 +2628,9 @@ sourceFile:typeResolution.ts
 1->
 2 >                export class 
 3 >                         ClassA
-1->Emitted(144, 17) Source(98, 9) + SourceIndex(0) name (TopLevelModule1.NotExportedModule.ClassA)
-2 >Emitted(144, 26) Source(98, 22) + SourceIndex(0) name (TopLevelModule1.NotExportedModule.ClassA)
-3 >Emitted(144, 32) Source(98, 28) + SourceIndex(0) name (TopLevelModule1.NotExportedModule.ClassA)
+1->Emitted(146, 17) Source(98, 9) + SourceIndex(0) name (TopLevelModule1.NotExportedModule.ClassA)
+2 >Emitted(146, 26) Source(98, 22) + SourceIndex(0) name (TopLevelModule1.NotExportedModule.ClassA)
+3 >Emitted(146, 32) Source(98, 28) + SourceIndex(0) name (TopLevelModule1.NotExportedModule.ClassA)
 ---
 >>>                }
 1 >^^^^^^^^^^^^^^^^
@@ -2619,16 +2638,16 @@ sourceFile:typeResolution.ts
 3 >                 ^^^^^^^^^^^^^^->
 1 > { 
 2 >                }
-1 >Emitted(145, 17) Source(98, 31) + SourceIndex(0) name (TopLevelModule1.NotExportedModule.ClassA.constructor)
-2 >Emitted(145, 18) Source(98, 32) + SourceIndex(0) name (TopLevelModule1.NotExportedModule.ClassA.constructor)
+1 >Emitted(147, 17) Source(98, 31) + SourceIndex(0) name (TopLevelModule1.NotExportedModule.ClassA.constructor)
+2 >Emitted(147, 18) Source(98, 32) + SourceIndex(0) name (TopLevelModule1.NotExportedModule.ClassA.constructor)
 ---
 >>>                return ClassA;
 1->^^^^^^^^^^^^^^^^
 2 >                ^^^^^^^^^^^^^
 1->
 2 >                }
-1->Emitted(146, 17) Source(98, 31) + SourceIndex(0) name (TopLevelModule1.NotExportedModule.ClassA)
-2 >Emitted(146, 30) Source(98, 32) + SourceIndex(0) name (TopLevelModule1.NotExportedModule.ClassA)
+1->Emitted(148, 17) Source(98, 31) + SourceIndex(0) name (TopLevelModule1.NotExportedModule.ClassA)
+2 >Emitted(148, 30) Source(98, 32) + SourceIndex(0) name (TopLevelModule1.NotExportedModule.ClassA)
 ---
 >>>            })();
 1 >^^^^^^^^^^^^
@@ -2640,10 +2659,10 @@ sourceFile:typeResolution.ts
 2 >            }
 3 >             
 4 >             export class ClassA { }
-1 >Emitted(147, 13) Source(98, 31) + SourceIndex(0) name (TopLevelModule1.NotExportedModule.ClassA)
-2 >Emitted(147, 14) Source(98, 32) + SourceIndex(0) name (TopLevelModule1.NotExportedModule.ClassA)
-3 >Emitted(147, 14) Source(98, 9) + SourceIndex(0) name (TopLevelModule1.NotExportedModule)
-4 >Emitted(147, 18) Source(98, 32) + SourceIndex(0) name (TopLevelModule1.NotExportedModule)
+1 >Emitted(149, 13) Source(98, 31) + SourceIndex(0) name (TopLevelModule1.NotExportedModule.ClassA)
+2 >Emitted(149, 14) Source(98, 32) + SourceIndex(0) name (TopLevelModule1.NotExportedModule.ClassA)
+3 >Emitted(149, 14) Source(98, 9) + SourceIndex(0) name (TopLevelModule1.NotExportedModule)
+4 >Emitted(149, 18) Source(98, 32) + SourceIndex(0) name (TopLevelModule1.NotExportedModule)
 ---
 >>>            NotExportedModule.ClassA = ClassA;
 1->^^^^^^^^^^^^
@@ -2657,11 +2676,11 @@ sourceFile:typeResolution.ts
 3 >                                    
 4 >                                       ClassA { }
 5 >                                             
-1->Emitted(148, 13) Source(98, 22) + SourceIndex(0) name (TopLevelModule1.NotExportedModule)
-2 >Emitted(148, 37) Source(98, 28) + SourceIndex(0) name (TopLevelModule1.NotExportedModule)
-3 >Emitted(148, 40) Source(98, 22) + SourceIndex(0) name (TopLevelModule1.NotExportedModule)
-4 >Emitted(148, 46) Source(98, 32) + SourceIndex(0) name (TopLevelModule1.NotExportedModule)
-5 >Emitted(148, 47) Source(98, 32) + SourceIndex(0) name (TopLevelModule1.NotExportedModule)
+1->Emitted(150, 13) Source(98, 22) + SourceIndex(0) name (TopLevelModule1.NotExportedModule)
+2 >Emitted(150, 37) Source(98, 28) + SourceIndex(0) name (TopLevelModule1.NotExportedModule)
+3 >Emitted(150, 40) Source(98, 22) + SourceIndex(0) name (TopLevelModule1.NotExportedModule)
+4 >Emitted(150, 46) Source(98, 32) + SourceIndex(0) name (TopLevelModule1.NotExportedModule)
+5 >Emitted(150, 47) Source(98, 32) + SourceIndex(0) name (TopLevelModule1.NotExportedModule)
 ---
 >>>        })(NotExportedModule || (NotExportedModule = {}));
 1->^^^^^^^^
@@ -2682,13 +2701,13 @@ sourceFile:typeResolution.ts
 7 >                                                   {
   >                                                          export class ClassA { }
   >                                                      }
-1->Emitted(149, 9) Source(99, 5) + SourceIndex(0) name (TopLevelModule1.NotExportedModule)
-2 >Emitted(149, 10) Source(99, 6) + SourceIndex(0) name (TopLevelModule1.NotExportedModule)
-3 >Emitted(149, 12) Source(97, 12) + SourceIndex(0) name (TopLevelModule1)
-4 >Emitted(149, 29) Source(97, 29) + SourceIndex(0) name (TopLevelModule1)
-5 >Emitted(149, 34) Source(97, 12) + SourceIndex(0) name (TopLevelModule1)
-6 >Emitted(149, 51) Source(97, 29) + SourceIndex(0) name (TopLevelModule1)
-7 >Emitted(149, 59) Source(99, 6) + SourceIndex(0) name (TopLevelModule1)
+1->Emitted(151, 9) Source(99, 5) + SourceIndex(0) name (TopLevelModule1.NotExportedModule)
+2 >Emitted(151, 10) Source(99, 6) + SourceIndex(0) name (TopLevelModule1.NotExportedModule)
+3 >Emitted(151, 12) Source(97, 12) + SourceIndex(0) name (TopLevelModule1)
+4 >Emitted(151, 29) Source(97, 29) + SourceIndex(0) name (TopLevelModule1)
+5 >Emitted(151, 34) Source(97, 12) + SourceIndex(0) name (TopLevelModule1)
+6 >Emitted(151, 51) Source(97, 29) + SourceIndex(0) name (TopLevelModule1)
+7 >Emitted(151, 59) Source(99, 6) + SourceIndex(0) name (TopLevelModule1)
 ---
 >>>    })(exports.TopLevelModule1 || (exports.TopLevelModule1 = {}));
 1->^^^^
@@ -2805,13 +2824,13 @@ sourceFile:typeResolution.ts
   >                                                                  export class ClassA { }
   >                                                              }
   >                                                          }
-1->Emitted(150, 5) Source(100, 1) + SourceIndex(0) name (TopLevelModule1)
-2 >Emitted(150, 6) Source(100, 2) + SourceIndex(0) name (TopLevelModule1)
-3 >Emitted(150, 8) Source(1, 15) + SourceIndex(0)
-4 >Emitted(150, 31) Source(1, 30) + SourceIndex(0)
-5 >Emitted(150, 36) Source(1, 15) + SourceIndex(0)
-6 >Emitted(150, 59) Source(1, 30) + SourceIndex(0)
-7 >Emitted(150, 67) Source(100, 2) + SourceIndex(0)
+1->Emitted(152, 5) Source(100, 1) + SourceIndex(0) name (TopLevelModule1)
+2 >Emitted(152, 6) Source(100, 2) + SourceIndex(0) name (TopLevelModule1)
+3 >Emitted(152, 8) Source(1, 15) + SourceIndex(0)
+4 >Emitted(152, 31) Source(1, 30) + SourceIndex(0)
+5 >Emitted(152, 36) Source(1, 15) + SourceIndex(0)
+6 >Emitted(152, 59) Source(1, 30) + SourceIndex(0)
+7 >Emitted(152, 67) Source(100, 2) + SourceIndex(0)
 ---
 >>>    var TopLevelModule1 = exports.TopLevelModule1;
 1 >^^^^
@@ -2925,12 +2944,12 @@ sourceFile:typeResolution.ts
   >                              }
   >                          }
 6 >                                                 
-1 >Emitted(151, 5) Source(1, 1) + SourceIndex(0)
-2 >Emitted(151, 9) Source(1, 15) + SourceIndex(0)
-3 >Emitted(151, 24) Source(1, 30) + SourceIndex(0)
-4 >Emitted(151, 27) Source(1, 15) + SourceIndex(0)
-5 >Emitted(151, 50) Source(100, 2) + SourceIndex(0)
-6 >Emitted(151, 51) Source(100, 2) + SourceIndex(0)
+1 >Emitted(153, 5) Source(1, 1) + SourceIndex(0)
+2 >Emitted(153, 9) Source(1, 15) + SourceIndex(0)
+3 >Emitted(153, 24) Source(1, 30) + SourceIndex(0)
+4 >Emitted(153, 27) Source(1, 15) + SourceIndex(0)
+5 >Emitted(153, 50) Source(100, 2) + SourceIndex(0)
+6 >Emitted(153, 51) Source(100, 2) + SourceIndex(0)
 ---
 >>>    var TopLevelModule2;
 1 >^^^^
@@ -2950,10 +2969,10 @@ sourceFile:typeResolution.ts
   >                               }
   >                           }
   >                       }
-1 >Emitted(152, 5) Source(102, 1) + SourceIndex(0)
-2 >Emitted(152, 9) Source(102, 8) + SourceIndex(0)
-3 >Emitted(152, 24) Source(102, 23) + SourceIndex(0)
-4 >Emitted(152, 25) Source(108, 2) + SourceIndex(0)
+1 >Emitted(154, 5) Source(102, 1) + SourceIndex(0)
+2 >Emitted(154, 9) Source(102, 8) + SourceIndex(0)
+3 >Emitted(154, 24) Source(102, 23) + SourceIndex(0)
+4 >Emitted(154, 25) Source(108, 2) + SourceIndex(0)
 ---
 >>>    (function (TopLevelModule2) {
 1->^^^^
@@ -2966,11 +2985,11 @@ sourceFile:typeResolution.ts
 3 >               TopLevelModule2
 4 >                               
 5 >                                {
-1->Emitted(153, 5) Source(102, 1) + SourceIndex(0)
-2 >Emitted(153, 16) Source(102, 8) + SourceIndex(0)
-3 >Emitted(153, 31) Source(102, 23) + SourceIndex(0)
-4 >Emitted(153, 33) Source(102, 24) + SourceIndex(0)
-5 >Emitted(153, 34) Source(102, 25) + SourceIndex(0)
+1->Emitted(155, 5) Source(102, 1) + SourceIndex(0)
+2 >Emitted(155, 16) Source(102, 8) + SourceIndex(0)
+3 >Emitted(155, 31) Source(102, 23) + SourceIndex(0)
+4 >Emitted(155, 33) Source(102, 24) + SourceIndex(0)
+5 >Emitted(155, 34) Source(102, 25) + SourceIndex(0)
 ---
 >>>        (function (SubModule3) {
 1 >^^^^^^^^
@@ -2985,11 +3004,11 @@ sourceFile:typeResolution.ts
 3 >                   SubModule3
 4 >                              
 5 >                               {
-1 >Emitted(154, 9) Source(103, 5) + SourceIndex(0) name (TopLevelModule2)
-2 >Emitted(154, 20) Source(103, 19) + SourceIndex(0) name (TopLevelModule2)
-3 >Emitted(154, 30) Source(103, 29) + SourceIndex(0) name (TopLevelModule2)
-4 >Emitted(154, 32) Source(103, 30) + SourceIndex(0) name (TopLevelModule2)
-5 >Emitted(154, 33) Source(103, 31) + SourceIndex(0) name (TopLevelModule2)
+1 >Emitted(156, 9) Source(103, 5) + SourceIndex(0) name (TopLevelModule2)
+2 >Emitted(156, 20) Source(103, 19) + SourceIndex(0) name (TopLevelModule2)
+3 >Emitted(156, 30) Source(103, 29) + SourceIndex(0) name (TopLevelModule2)
+4 >Emitted(156, 32) Source(103, 30) + SourceIndex(0) name (TopLevelModule2)
+5 >Emitted(156, 33) Source(103, 31) + SourceIndex(0) name (TopLevelModule2)
 ---
 >>>            var ClassA = (function () {
 1->^^^^^^^^^^^^
@@ -3000,9 +3019,9 @@ sourceFile:typeResolution.ts
   >        
 2 >            export class 
 3 >                ClassA
-1->Emitted(155, 13) Source(104, 9) + SourceIndex(0) name (TopLevelModule2.SubModule3)
-2 >Emitted(155, 17) Source(104, 22) + SourceIndex(0) name (TopLevelModule2.SubModule3)
-3 >Emitted(155, 23) Source(104, 28) + SourceIndex(0) name (TopLevelModule2.SubModule3)
+1->Emitted(157, 13) Source(104, 9) + SourceIndex(0) name (TopLevelModule2.SubModule3)
+2 >Emitted(157, 17) Source(104, 22) + SourceIndex(0) name (TopLevelModule2.SubModule3)
+3 >Emitted(157, 23) Source(104, 28) + SourceIndex(0) name (TopLevelModule2.SubModule3)
 ---
 >>>                function ClassA() {
 1->^^^^^^^^^^^^^^^^
@@ -3011,9 +3030,9 @@ sourceFile:typeResolution.ts
 1->
 2 >                export class 
 3 >                         ClassA
-1->Emitted(156, 17) Source(104, 9) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA)
-2 >Emitted(156, 26) Source(104, 22) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA)
-3 >Emitted(156, 32) Source(104, 28) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA)
+1->Emitted(158, 17) Source(104, 9) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA)
+2 >Emitted(158, 26) Source(104, 22) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA)
+3 >Emitted(158, 32) Source(104, 28) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA)
 ---
 >>>                }
 1 >^^^^^^^^^^^^^^^^
@@ -3023,8 +3042,8 @@ sourceFile:typeResolution.ts
   >            public AisIn2_3() { }
   >        
 2 >                }
-1 >Emitted(157, 17) Source(106, 9) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA.constructor)
-2 >Emitted(157, 18) Source(106, 10) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA.constructor)
+1 >Emitted(159, 17) Source(106, 9) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA.constructor)
+2 >Emitted(159, 18) Source(106, 10) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA.constructor)
 ---
 >>>                ClassA.prototype.AisIn2_3 = function () {
 1->^^^^^^^^^^^^^^^^
@@ -3033,9 +3052,9 @@ sourceFile:typeResolution.ts
 1->
 2 >                AisIn2_3
 3 >                                         
-1->Emitted(158, 17) Source(105, 20) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA)
-2 >Emitted(158, 42) Source(105, 28) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA)
-3 >Emitted(158, 45) Source(105, 13) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA)
+1->Emitted(160, 17) Source(105, 20) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA)
+2 >Emitted(160, 42) Source(105, 28) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA)
+3 >Emitted(160, 45) Source(105, 13) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA)
 ---
 >>>                };
 1 >^^^^^^^^^^^^^^^^
@@ -3043,8 +3062,8 @@ sourceFile:typeResolution.ts
 3 >                 ^^^^^^^^^^^^^^->
 1 >public AisIn2_3() { 
 2 >                }
-1 >Emitted(159, 17) Source(105, 33) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA.AisIn2_3)
-2 >Emitted(159, 18) Source(105, 34) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA.AisIn2_3)
+1 >Emitted(161, 17) Source(105, 33) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA.AisIn2_3)
+2 >Emitted(161, 18) Source(105, 34) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA.AisIn2_3)
 ---
 >>>                return ClassA;
 1->^^^^^^^^^^^^^^^^
@@ -3052,8 +3071,8 @@ sourceFile:typeResolution.ts
 1->
   >        
 2 >                }
-1->Emitted(160, 17) Source(106, 9) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA)
-2 >Emitted(160, 30) Source(106, 10) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA)
+1->Emitted(162, 17) Source(106, 9) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA)
+2 >Emitted(162, 30) Source(106, 10) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA)
 ---
 >>>            })();
 1 >^^^^^^^^^^^^
@@ -3067,10 +3086,10 @@ sourceFile:typeResolution.ts
 4 >             export class ClassA {
   >                         public AisIn2_3() { }
   >                     }
-1 >Emitted(161, 13) Source(106, 9) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA)
-2 >Emitted(161, 14) Source(106, 10) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA)
-3 >Emitted(161, 14) Source(104, 9) + SourceIndex(0) name (TopLevelModule2.SubModule3)
-4 >Emitted(161, 18) Source(106, 10) + SourceIndex(0) name (TopLevelModule2.SubModule3)
+1 >Emitted(163, 13) Source(106, 9) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA)
+2 >Emitted(163, 14) Source(106, 10) + SourceIndex(0) name (TopLevelModule2.SubModule3.ClassA)
+3 >Emitted(163, 14) Source(104, 9) + SourceIndex(0) name (TopLevelModule2.SubModule3)
+4 >Emitted(163, 18) Source(106, 10) + SourceIndex(0) name (TopLevelModule2.SubModule3)
 ---
 >>>            SubModule3.ClassA = ClassA;
 1->^^^^^^^^^^^^
@@ -3086,11 +3105,11 @@ sourceFile:typeResolution.ts
   >                                            public AisIn2_3() { }
   >                                        }
 5 >                                      
-1->Emitted(162, 13) Source(104, 22) + SourceIndex(0) name (TopLevelModule2.SubModule3)
-2 >Emitted(162, 30) Source(104, 28) + SourceIndex(0) name (TopLevelModule2.SubModule3)
-3 >Emitted(162, 33) Source(104, 22) + SourceIndex(0) name (TopLevelModule2.SubModule3)
-4 >Emitted(162, 39) Source(106, 10) + SourceIndex(0) name (TopLevelModule2.SubModule3)
-5 >Emitted(162, 40) Source(106, 10) + SourceIndex(0) name (TopLevelModule2.SubModule3)
+1->Emitted(164, 13) Source(104, 22) + SourceIndex(0) name (TopLevelModule2.SubModule3)
+2 >Emitted(164, 30) Source(104, 28) + SourceIndex(0) name (TopLevelModule2.SubModule3)
+3 >Emitted(164, 33) Source(104, 22) + SourceIndex(0) name (TopLevelModule2.SubModule3)
+4 >Emitted(164, 39) Source(106, 10) + SourceIndex(0) name (TopLevelModule2.SubModule3)
+5 >Emitted(164, 40) Source(106, 10) + SourceIndex(0) name (TopLevelModule2.SubModule3)
 ---
 >>>        })(TopLevelModule2.SubModule3 || (TopLevelModule2.SubModule3 = {}));
 1->^^^^^^^^
@@ -3112,13 +3131,13 @@ sourceFile:typeResolution.ts
   >                                                                                public AisIn2_3() { }
   >                                                                            }
   >                                                                        }
-1->Emitted(163, 9) Source(107, 5) + SourceIndex(0) name (TopLevelModule2.SubModule3)
-2 >Emitted(163, 10) Source(107, 6) + SourceIndex(0) name (TopLevelModule2.SubModule3)
-3 >Emitted(163, 12) Source(103, 19) + SourceIndex(0) name (TopLevelModule2)
-4 >Emitted(163, 38) Source(103, 29) + SourceIndex(0) name (TopLevelModule2)
-5 >Emitted(163, 43) Source(103, 19) + SourceIndex(0) name (TopLevelModule2)
-6 >Emitted(163, 69) Source(103, 29) + SourceIndex(0) name (TopLevelModule2)
-7 >Emitted(163, 77) Source(107, 6) + SourceIndex(0) name (TopLevelModule2)
+1->Emitted(165, 9) Source(107, 5) + SourceIndex(0) name (TopLevelModule2.SubModule3)
+2 >Emitted(165, 10) Source(107, 6) + SourceIndex(0) name (TopLevelModule2.SubModule3)
+3 >Emitted(165, 12) Source(103, 19) + SourceIndex(0) name (TopLevelModule2)
+4 >Emitted(165, 38) Source(103, 29) + SourceIndex(0) name (TopLevelModule2)
+5 >Emitted(165, 43) Source(103, 19) + SourceIndex(0) name (TopLevelModule2)
+6 >Emitted(165, 69) Source(103, 29) + SourceIndex(0) name (TopLevelModule2)
+7 >Emitted(165, 77) Source(107, 6) + SourceIndex(0) name (TopLevelModule2)
 ---
 >>>        var SubModule3 = TopLevelModule2.SubModule3;
 1 >^^^^^^^^
@@ -3137,12 +3156,12 @@ sourceFile:typeResolution.ts
   >                                 }
   >                             }
 6 >                                                   
-1 >Emitted(164, 9) Source(103, 5) + SourceIndex(0) name (TopLevelModule2)
-2 >Emitted(164, 13) Source(103, 19) + SourceIndex(0) name (TopLevelModule2)
-3 >Emitted(164, 23) Source(103, 29) + SourceIndex(0) name (TopLevelModule2)
-4 >Emitted(164, 26) Source(103, 19) + SourceIndex(0) name (TopLevelModule2)
-5 >Emitted(164, 52) Source(107, 6) + SourceIndex(0) name (TopLevelModule2)
-6 >Emitted(164, 53) Source(107, 6) + SourceIndex(0) name (TopLevelModule2)
+1 >Emitted(166, 9) Source(103, 5) + SourceIndex(0) name (TopLevelModule2)
+2 >Emitted(166, 13) Source(103, 19) + SourceIndex(0) name (TopLevelModule2)
+3 >Emitted(166, 23) Source(103, 29) + SourceIndex(0) name (TopLevelModule2)
+4 >Emitted(166, 26) Source(103, 19) + SourceIndex(0) name (TopLevelModule2)
+5 >Emitted(166, 52) Source(107, 6) + SourceIndex(0) name (TopLevelModule2)
+6 >Emitted(166, 53) Source(107, 6) + SourceIndex(0) name (TopLevelModule2)
 ---
 >>>    })(TopLevelModule2 || (TopLevelModule2 = {}));
 1 >^^^^
@@ -3166,13 +3185,13 @@ sourceFile:typeResolution.ts
   >                                                  }
   >                                              }
   >                                          }
-1 >Emitted(165, 5) Source(108, 1) + SourceIndex(0) name (TopLevelModule2)
-2 >Emitted(165, 6) Source(108, 2) + SourceIndex(0) name (TopLevelModule2)
-3 >Emitted(165, 8) Source(102, 8) + SourceIndex(0)
-4 >Emitted(165, 23) Source(102, 23) + SourceIndex(0)
-5 >Emitted(165, 28) Source(102, 8) + SourceIndex(0)
-6 >Emitted(165, 43) Source(102, 23) + SourceIndex(0)
-7 >Emitted(165, 51) Source(108, 2) + SourceIndex(0)
+1 >Emitted(167, 5) Source(108, 1) + SourceIndex(0) name (TopLevelModule2)
+2 >Emitted(167, 6) Source(108, 2) + SourceIndex(0) name (TopLevelModule2)
+3 >Emitted(167, 8) Source(102, 8) + SourceIndex(0)
+4 >Emitted(167, 23) Source(102, 23) + SourceIndex(0)
+5 >Emitted(167, 28) Source(102, 8) + SourceIndex(0)
+6 >Emitted(167, 43) Source(102, 23) + SourceIndex(0)
+7 >Emitted(167, 51) Source(108, 2) + SourceIndex(0)
 ---
 >>>});
 >>>//# sourceMappingURL=typeResolution.js.map

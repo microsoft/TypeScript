@@ -39,6 +39,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// the constructor function itself does not need to be a subtype of the base type constructor function
 var Base = (function () {
     function Base(x) {
     }
@@ -53,6 +54,7 @@ var Derived = (function (_super) {
 })(Base);
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
+    // ok, not enforcing assignability relation on this
     function Derived2(x) {
         _super.call(this, x);
         return 1;

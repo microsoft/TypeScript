@@ -77,6 +77,7 @@ var D = (function (_super) {
 var r2 = D;
 var d = new D();
 var d2 = new D(1);
+// specialized base class
 var D2 = (function (_super) {
     __extends(D2, _super);
     function D2() {

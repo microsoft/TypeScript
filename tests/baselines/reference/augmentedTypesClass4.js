@@ -5,6 +5,7 @@ class c3 { public bar() { } } // error
 
 
 //// [augmentedTypesClass4.js]
+//// class then class
 var c3 = (function () {
     function c3() {
     }

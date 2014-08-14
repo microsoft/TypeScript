@@ -99,12 +99,14 @@ class GlobalConstructorWithParameterInitializer {
 
 //// [declFileConstructors_0.js]
 var SimpleConstructor = (function () {
+    /** This comment should appear for foo*/
     function SimpleConstructor() {
     }
     return SimpleConstructor;
 })();
 exports.SimpleConstructor = SimpleConstructor;
 var ConstructorWithParameters = (function () {
+    /** This is comment for function signature*/
     function ConstructorWithParameters(a, /** this is comment for b*/
         b) {
         var d = a;
@@ -160,11 +162,13 @@ var ConstructorWithParameterInitializer = (function () {
 exports.ConstructorWithParameterInitializer = ConstructorWithParameterInitializer;
 //// [declFileConstructors_1.js]
 var GlobalSimpleConstructor = (function () {
+    /** This comment should appear for foo*/
     function GlobalSimpleConstructor() {
     }
     return GlobalSimpleConstructor;
 })();
 var GlobalConstructorWithParameters = (function () {
+    /** This is comment for function signature*/
     function GlobalConstructorWithParameters(a, /** this is comment for b*/
         b) {
         var d = a;

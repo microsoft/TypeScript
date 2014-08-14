@@ -23,6 +23,7 @@ var r7: string = C.f();
 var r8: string = C.g();
 
 //// [classWithPrivateProperty.js]
+// accessing any private outside the class is an error
 var C = (function () {
     function C() {
         this.a = '';

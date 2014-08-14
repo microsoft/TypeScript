@@ -72,6 +72,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// checking assignment compat for function types. No errors in this file
 var Base = (function () {
     function Base() {
     }

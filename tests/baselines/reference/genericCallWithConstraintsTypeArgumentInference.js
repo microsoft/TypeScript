@@ -114,6 +114,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// Basic type inference with generic calls and constraints, no errors expected
 var Base = (function () {
     function Base() {
     }

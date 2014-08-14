@@ -178,6 +178,7 @@ var i1_i;
 var c1_i = new c1();
 i1_i = c1_i;
 var c2 = (function () {
+    /** c2 constructor*/
     function c2(a) {
         this.c2_p1 = a;
     }

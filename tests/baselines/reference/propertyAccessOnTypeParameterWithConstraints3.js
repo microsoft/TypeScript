@@ -63,6 +63,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// generic types should behave as if they have properties of their constraint type
 var A = (function () {
     function A() {
     }

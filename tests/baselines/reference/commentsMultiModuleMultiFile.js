@@ -39,6 +39,7 @@ new multiM.d();
 //// [commentsMultiModuleMultiFile_0.js]
 define(["require", "exports"], function (require, exports) {
     (function (multiM) {
+        /// class b comment
         var b = (function () {
             function b() {
             }
@@ -48,12 +49,14 @@ define(["require", "exports"], function (require, exports) {
     })(exports.multiM || (exports.multiM = {}));
     var multiM = exports.multiM;
     (function (multiM) {
+        /** class c comment*/
         var c = (function () {
             function c() {
             }
             return c;
         })();
         multiM.c = c;
+        // class e comment
         var e = (function () {
             function e() {
             }
@@ -68,12 +71,14 @@ define(["require", "exports"], function (require, exports) {
 //// [commentsMultiModuleMultiFile_1.js]
 define(["require", "exports"], function (require, exports) {
     (function (multiM) {
+        /** class d comment*/
         var d = (function () {
             function d() {
             }
             return d;
         })();
         multiM.d = d;
+        /// class f comment
         var f = (function () {
             function f() {
             }

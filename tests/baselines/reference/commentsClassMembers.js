@@ -216,7 +216,9 @@ cProperties_i.nc_p2 = cProperties_i.nc_p1;
 
 
 //// [commentsClassMembers.js]
+/** This is comment for c1*/
 var c1 = (function () {
+    /** Constructor method*/
     function c1() {
     }
     /** sum with property*/

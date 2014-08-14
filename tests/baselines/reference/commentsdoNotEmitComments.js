@@ -98,7 +98,9 @@ function foo(p) {
 var fooVar;
 foo(50);
 fooVar();
+/**class comment*/
 var c = (function () {
+    /** constructor comment*/
     function c() {
         /** property comment */
         this.b = 10;
@@ -131,6 +133,7 @@ var i = new c();
 var i1_i;
 var m1;
 (function (m1) {
+    /** class b */
     var b = (function () {
         function b(x) {
             this.x = x;

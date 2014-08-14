@@ -27,6 +27,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// subclassing is not transitive when you can remove required parameters and add optional parameters
 var C = (function () {
     function C() {
     }

@@ -87,6 +87,7 @@ declare class c6NoError {
 }
 
 //// [collisionArgumentsClassConstructor.js]
+// Constructors
 var c1 = (function () {
     function c1(i) {
         var arguments = [];

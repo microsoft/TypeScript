@@ -149,6 +149,7 @@ moduleType1.baz1 = 3;
 moduleType\u0031.baz1 = 3;
 moduleType2.baz2 = 3;
 moduleType\u0032.baz2 = 3;
+// classes
 var classType1 = (function () {
     function classType1() {
     }
@@ -175,6 +176,7 @@ var interfaceType2Object1 = { bar2: 0 };
 interfaceType2Object1.bar2 = 2;
 var interfaceType2Object2 = { bar2: 0 };
 interfaceType2Object2.bar2 = 2;
+// arguments
 var testClass = (function () {
     function testClass() {
     }
@@ -186,6 +188,7 @@ var testClass = (function () {
     };
     return testClass;
 })();
+// constructors
 var constructorTestClass = (function () {
     function constructorTestClass(arg1, arg\u0032, arg\u0033, arg4) {
         this.arg1 = arg1;

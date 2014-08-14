@@ -55,6 +55,7 @@ var publicClass = (function () {
     return publicClass;
 })();
 exports.publicClass = publicClass;
+// TypeParameter_0_of_exported_class_1_has_or_is_using_private_type_2
 var publicClassWithPrivateTypeParameters = (function () {
     function publicClassWithPrivateTypeParameters() {
     }

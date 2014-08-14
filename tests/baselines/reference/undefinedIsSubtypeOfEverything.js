@@ -128,6 +128,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// undefined is a subtype of every other types, no errors expected below
 var Base = (function () {
     function Base() {
     }
@@ -292,6 +293,9 @@ var D15 = (function (_super) {
     }
     return D15;
 })(Base);
+//class D15<T, U extends T> extends Base {
+//    foo: U;
+//}
 var D16 = (function (_super) {
     __extends(D16, _super);
     function D16() {

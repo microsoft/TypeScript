@@ -39,7 +39,9 @@ var dist = p.getDist();
 //// [sourceMap-FileWithComments.js]
 var Shapes;
 (function (Shapes) {
+    // Class
     var Point = (function () {
+        // Constructor
         function Point(x, y) {
             this.x = x;
             this.y = y;

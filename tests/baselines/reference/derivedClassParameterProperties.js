@@ -101,6 +101,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// ordering of super calls in derived constructors matters depending on other class contents
 var Base = (function () {
     function Base() {
     }
@@ -179,6 +180,7 @@ var Derived8 = (function (_super) {
     }
     return Derived8;
 })(Base);
+// generic cases of Derived7 and Derived8
 var Base2 = (function () {
     function Base2() {
     }

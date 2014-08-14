@@ -11,6 +11,7 @@ export module outerModule.InnerModule {
 define(["require", "exports"], function (require, exports) {
     (function (outerModule) {
         (function (InnerModule) {
+            /// class b comment
             var b = (function () {
                 function b() {
                 }

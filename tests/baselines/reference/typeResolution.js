@@ -196,6 +196,7 @@ define(["require", "exports"], function (require, exports) {
                 })();
             })(SubModule1.SubSubModule1 || (SubModule1.SubSubModule1 = {}));
             var SubSubModule1 = SubModule1.SubSubModule1;
+            // Should have no effect on S1.SS1.ClassA above because it is not exported
             var ClassA = (function () {
                 function ClassA() {
                     function AA() {
@@ -216,6 +217,7 @@ define(["require", "exports"], function (require, exports) {
         var SubModule1 = TopLevelModule1.SubModule1;
         (function (SubModule2) {
             (function (SubSubModule2) {
+                // No code here since these are the mirror of the above calls
                 var ClassA = (function () {
                     function ClassA() {
                     }

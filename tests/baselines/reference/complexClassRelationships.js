@@ -54,6 +54,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// There should be no errors in this file
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {

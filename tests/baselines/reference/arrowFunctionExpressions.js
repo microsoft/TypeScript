@@ -106,6 +106,8 @@ var c;
 var d = function (n) { return c = n; };
 var d = function (n) { return c = n; };
 var d;
+// Arrow function used in class member initializer
+// Arrow function used in class member function
 var MyClass = (function () {
     function MyClass() {
         var _this = this;

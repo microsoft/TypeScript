@@ -218,6 +218,7 @@ function fnArg2() {
     return overload1(fnArg2);
 }
 var t = fnArg2();
+// New operator
 var C = (function () {
     function C() {
     }
@@ -249,6 +250,7 @@ var M2;
     var y = M2.x;
     var y;
 })(M2 || (M2 = {}));
+// Property access of class instance type
 var C2 = (function () {
     function C2() {
         this.n = this.n;
@@ -257,6 +259,7 @@ var C2 = (function () {
 })();
 var c2inst = new C2().n;
 var c2inst;
+// Constructor function property access
 var C3 = (function () {
     function C3() {
     }

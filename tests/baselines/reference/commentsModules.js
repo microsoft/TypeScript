@@ -107,6 +107,7 @@ var m1;
         return m1.b;
     }
     (function (m2) {
+        /** class comment;*/
         var c = (function () {
             function c() {
             }
@@ -144,6 +145,7 @@ var myvar = new m1.m2.c();
 var m2;
 (function (m2) {
     (function (m3) {
+        /** Exported class comment*/
         var c = (function () {
             function c() {
             }
@@ -158,6 +160,7 @@ var m3;
 (function (m3) {
     (function (m4) {
         (function (m5) {
+            /** Exported class comment*/
             var c = (function () {
                 function c() {
                 }
@@ -175,6 +178,7 @@ var m4;
     (function (m5) {
         (function (m6) {
             (function (m7) {
+                /** Exported class comment*/
                 var c = (function () {
                     function c() {
                     }
@@ -194,6 +198,7 @@ var m5;
     (function (m6) {
         (function (m7) {
             (function (m8) {
+                /** Exported class comment*/
                 var c = (function () {
                     function c() {
                     }
@@ -212,6 +217,7 @@ var m6;
 (function (m6) {
     (function (m7) {
         (function (m8) {
+            /** Exported class comment*/
             var c = (function () {
                 function c() {
                 }
@@ -228,17 +234,20 @@ var m7;
 (function (m7) {
     (function (m8) {
         (function (m9) {
+            /** Exported class comment*/
             var c = (function () {
                 function c() {
                 }
                 return c;
             })();
             m9.c = c;
+            /** class d */
             var d = (function () {
                 function d() {
                 }
                 return d;
             })();
+            // class e
             var e = (function () {
                 function e() {
                 }

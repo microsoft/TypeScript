@@ -31,6 +31,8 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// conditional expressions return the best common type of the branches plus contextual type (using the first candidate if multiple BCTs exist)
+// these are errors
 var Base = (function () {
     function Base() {
     }

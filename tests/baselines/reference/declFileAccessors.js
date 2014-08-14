@@ -102,6 +102,7 @@ class c2 {
 }
 
 //// [declFileAccessors_0.js]
+/** This is comment for c1*/
 var c1 = (function () {
     function c1() {
     }
@@ -184,6 +185,7 @@ var c1 = (function () {
 })();
 exports.c1 = c1;
 //// [declFileAccessors_1.js]
+/** This is comment for c2 - the global class*/
 var c2 = (function () {
     function c2() {
     }

@@ -47,6 +47,7 @@ function v() {
 }
 var Derived = (function (_super) {
     __extends(Derived, _super);
+    //super call in class constructor of derived type
     function Derived(q) {
         _super.call(this, '');
         this.q = q;

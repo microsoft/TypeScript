@@ -8,6 +8,7 @@ class c4 { public foo() { } }
 enum c4 { One } // error
 
 //// [augmentedTypesClass.js]
+//// class then var
 var c1 = (function () {
     function c1() {
     }
@@ -16,6 +17,7 @@ var c1 = (function () {
     return c1;
 })();
 var c1 = 1;
+//// class then enum
 var c4 = (function () {
     function c4() {
     }

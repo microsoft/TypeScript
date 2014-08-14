@@ -43,6 +43,7 @@ var Foo;
 })(Foo || (Foo = {}));
 var Foo;
 (function (Foo) {
+    // Should not be an error
     var Helper = (function () {
         function Helper() {
         }

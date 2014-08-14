@@ -51,6 +51,7 @@ export var publicUse_im_public_mi_public = new im_public_mi_public.c_private();
 //// [privacyTopLevelAmbientExternalModuleImportWithExport_require2.js]
 //// [privacyTopLevelAmbientExternalModuleImportWithExport_require3.js]
 //// [privacyTopLevelAmbientExternalModuleImportWithExport_require.js]
+// Public elements
 var c_public = (function () {
     function c_public() {
     }

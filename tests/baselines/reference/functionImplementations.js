@@ -192,6 +192,7 @@ var n = function () {
     return 3;
     return 5;
 }();
+// FunctionExpression with no return type annotation with multiple return statements with subtype relation between returns
 var Base = (function () {
     function Base() {
     }

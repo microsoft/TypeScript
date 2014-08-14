@@ -17,6 +17,8 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// type parameters cannot be used as base types
+// these are all errors
 var C = (function (_super) {
     __extends(C, _super);
     function C() {

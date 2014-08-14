@@ -112,6 +112,7 @@ module TargetIsPublic {
 //// [assignmentCompatWithObjectMembersAccessibility.js]
 var TargetIsPublic;
 (function (TargetIsPublic) {
+    // targets
     var Base = (function () {
         function Base() {
         }
@@ -120,6 +121,7 @@ var TargetIsPublic;
     var a;
     var b;
     var i;
+    // sources
     var D = (function () {
         function D() {
         }
@@ -156,6 +158,7 @@ var TargetIsPublic;
 })(TargetIsPublic || (TargetIsPublic = {}));
 var TargetIsPublic;
 (function (TargetIsPublic) {
+    // targets
     var Base = (function () {
         function Base() {
         }
@@ -164,6 +167,7 @@ var TargetIsPublic;
     var a;
     var b;
     var i;
+    // sources
     var D = (function () {
         function D() {
         }

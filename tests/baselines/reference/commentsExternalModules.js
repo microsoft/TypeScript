@@ -71,6 +71,7 @@ define(["require", "exports"], function (require, exports) {
             return m1.b;
         }
         (function (m2) {
+            /** class comment;*/
             var c = (function () {
                 function c() {
                 }
@@ -100,6 +101,7 @@ define(["require", "exports"], function (require, exports) {
             return m4.b;
         }
         (function (m2) {
+            /** class comment; */
             var c = (function () {
                 function c() {
                 }

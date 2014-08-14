@@ -76,6 +76,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// checking subtype relations for function types as it relates to contextual signature instantiation
 var Base = (function () {
     function Base() {
     }

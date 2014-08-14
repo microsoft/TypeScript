@@ -23,6 +23,10 @@ undefined instanceof undefined;
 
 
 //// [instanceofOperator.js]
+// Spec:
+// The instanceof operator requires the left operand to be of type Any or an object type, and the right 
+// operand to be of type Any or a subtype of the ‘Function’ interface type. The result is always of the 
+// Boolean primitive type.
 var Object = (function () {
     function Object() {
     }

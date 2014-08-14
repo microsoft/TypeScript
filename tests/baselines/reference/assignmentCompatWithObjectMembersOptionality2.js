@@ -96,6 +96,8 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// M is optional and S contains no property with the same name as M
+// N is optional and T contains no property with the same name as N
 var Base = (function () {
     function Base() {
     }

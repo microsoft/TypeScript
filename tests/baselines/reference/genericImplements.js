@@ -33,6 +33,7 @@ var B = (function () {
     return B;
 })();
 ;
+// OK
 var X = (function () {
     function X() {
     }
@@ -41,6 +42,7 @@ var X = (function () {
     };
     return X;
 })();
+// OK
 var Y = (function () {
     function Y() {
     }
@@ -49,6 +51,7 @@ var Y = (function () {
     };
     return Y;
 })();
+// OK
 var Z = (function () {
     function Z() {
     }

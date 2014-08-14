@@ -40,6 +40,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// subtyping when property names do not match
 var Base = (function () {
     function Base() {
     }

@@ -4,6 +4,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+/// <reference path="li'b/class'A.ts" />
 var ClassC = (function (_super) {
     __extends(ClassC, _super);
     function ClassC() {

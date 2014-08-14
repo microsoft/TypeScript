@@ -53,6 +53,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// automatic constructors with a class hieararchy of depth > 2
 var Base = (function () {
     function Base(x) {
         this.a = 1;

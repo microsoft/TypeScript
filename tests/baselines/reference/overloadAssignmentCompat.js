@@ -39,6 +39,7 @@ function foo():string { return "a" };
 
 
 //// [overloadAssignmentCompat.js]
+// ok - overload signatures are assignment compatible with their implementation
 var Accessor = (function () {
     function Accessor() {
     }

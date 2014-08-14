@@ -67,6 +67,7 @@ declare class c6NoError {
 }
 
 //// [collisionRestParameterClassConstructor.js]
+// Constructors
 var c1 = (function () {
     function c1(_i) {
         var restParameters = [];

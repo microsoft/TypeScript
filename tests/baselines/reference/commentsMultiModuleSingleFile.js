@@ -27,12 +27,14 @@ new multiM.c();
 //// [commentsMultiModuleSingleFile.js]
 var multiM;
 (function (multiM) {
+    /** class b*/
     var b = (function () {
         function b() {
         }
         return b;
     })();
     multiM.b = b;
+    // class d
     var d = (function () {
         function d() {
         }
@@ -42,12 +44,14 @@ var multiM;
 })(multiM || (multiM = {}));
 var multiM;
 (function (multiM) {
+    /** class c comment*/
     var c = (function () {
         function c() {
         }
         return c;
     })();
     multiM.c = c;
+    /// class e
     var e = (function () {
         function e() {
         }
