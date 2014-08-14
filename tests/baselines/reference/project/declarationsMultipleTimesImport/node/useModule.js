@@ -11,6 +11,7 @@ exports.f4 = m4.foo();
     var f3 = m4.foo();
 })(exports.m1 || (exports.m1 = {}));
 var m1 = exports.m1;
+// Do not emit multiple used import statements
 var multiImport_m4 = require("m4");
 exports.useMultiImport_m4_x4 = multiImport_m4.x;
 exports.useMultiImport_m4_d4 = multiImport_m4.d;

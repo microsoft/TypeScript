@@ -212,6 +212,7 @@ var m_private;
 })(exports.m_public || (exports.m_public = {}));
 var m_public = exports.m_public;
 (function (import_public) {
+    // Privacy errors - importing private elements
     import_public.im_public_c_private = m_private.c_private;
     import_public.im_public_e_private = m_private.e_private;
     import_public.im_public_f_private = m_private.f_private;
@@ -232,6 +233,7 @@ var m_public = exports.m_public;
     import_public.publicUse_im_public_mi_private = new import_public.im_public_mi_private.c();
     var privateUse_im_public_mu_private;
     import_public.publicUse_im_public_mu_private;
+    // No Privacy errors - importing public elements
     import_public.im_public_c_public = m_public.c_public;
     import_public.im_public_e_public = m_public.e_public;
     import_public.im_public_f_public = m_public.f_public;
@@ -256,6 +258,7 @@ var m_public = exports.m_public;
 var import_public = exports.import_public;
 var import_private;
 (function (import_private) {
+    // No Privacy errors - importing private elements
     import_private.im_private_c_private = m_private.c_private;
     import_private.im_private_e_private = m_private.e_private;
     import_private.im_private_f_private = m_private.f_private;
@@ -276,6 +279,7 @@ var import_private;
     import_private.publicUse_im_private_mi_private = new import_private.im_private_mi_private.c();
     var privateUse_im_private_mu_private;
     import_private.publicUse_im_private_mu_private;
+    // No privacy Error - importing public elements
     import_private.im_private_c_public = m_public.c_public;
     import_private.im_private_e_public = m_public.e_public;
     import_private.im_private_f_public = m_public.f_public;

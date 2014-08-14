@@ -128,6 +128,7 @@ exports.createWidget1 = createWidget1;
 })(exports.SpecializedWidget || (exports.SpecializedWidget = {}));
 var SpecializedWidget = exports.SpecializedWidget;
 //// [privacyCannotNameVarTypeDeclFile_exporter.js]
+///<reference path='privacyCannotNameVarTypeDeclFile_GlobalWidgets.ts'/>
 var Widgets = require("privacyCannotNameVarTypeDeclFile_Widgets");
 var Widgets1 = require("GlobalWidgets");
 function createExportedWidget1() {

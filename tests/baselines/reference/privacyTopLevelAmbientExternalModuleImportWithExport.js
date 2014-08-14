@@ -66,6 +66,9 @@ var c_public = (function () {
 })();
 exports.c_public = c_public;
 //// [privacyTopLevelAmbientExternalModuleImportWithExport_core.js]
+///<reference path='privacyTopLevelAmbientExternalModuleImportWithExport_require2.ts'/>
+///<reference path='privacyTopLevelAmbientExternalModuleImportWithExport_require3.ts'/>
+// Privacy errors - importing private elements
 exports.im_public_mi_private = require("privacyTopLevelAmbientExternalModuleImportWithExport_require");
 exports.im_public_mu_private = require("privacyTopLevelAmbientExternalModuleImportWithExport_require1");
 exports.im_public_mi_public = require("m");

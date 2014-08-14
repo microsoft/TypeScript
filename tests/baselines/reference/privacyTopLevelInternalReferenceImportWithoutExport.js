@@ -160,6 +160,7 @@ define(["require", "exports"], function (require, exports) {
         var mi_public = m_public.mi_public;
     })(exports.m_public || (exports.m_public = {}));
     var m_public = exports.m_public;
+    // No Privacy errors - importing private elements
     var im_private_c_private = m_private.c_private;
     var im_private_e_private = m_private.e_private;
     var im_private_f_private = m_private.f_private;
@@ -180,6 +181,7 @@ define(["require", "exports"], function (require, exports) {
     exports.publicUse_im_private_mi_private = new im_private_mi_private.c();
     var privateUse_im_private_mu_private;
     exports.publicUse_im_private_mu_private;
+    // No Privacy errors - importing public elements
     var im_private_c_public = m_public.c_public;
     var im_private_e_public = m_public.e_public;
     var im_private_f_public = m_public.f_public;

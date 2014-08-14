@@ -1633,16 +1633,19 @@ module ts {
                     if (node.externalModuleName && node.parent.kind === SyntaxKind.SourceFile && compilerOptions.module === ModuleKind.AMD) {
                         if (node.flags & NodeFlags.Export) {
                             writeLine();
+                            emitLeadingComments(node);
                             emitStart(node);
                             emitModuleMemberName(node);
                             write(" = ");
                             emit(node.name);
                             write(";");
                             emitEnd(node);
+                            emitTrailingComments(node);
                         }
                     }
                     else {
                         writeLine();
+                        emitLeadingComments(node);
                         emitStart(node);
                         if (!(node.flags & NodeFlags.Export)) write("var ");
                         emitModuleMemberName(node);
@@ -1659,6 +1662,7 @@ module ts {
                         }
                         write(";");
                         emitEnd(node);
+                        emitTrailingComments(node);
                     }
                 }
             }
