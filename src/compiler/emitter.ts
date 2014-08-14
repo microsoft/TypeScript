@@ -195,12 +195,10 @@ module ts {
             var writeEmittedFiles = writeJavaScriptFile;
 
             /** Emit leading comments of the declaration */
-            var emitLeadingComments = compilerOptions.removeComments ? function (declaration: Declaration) {
-            } : emitLeadingDeclarationComments;
+            var emitLeadingComments = compilerOptions.removeComments ? (d: Declaration) => { } : emitLeadingDeclarationComments;
 
             /** Emit Trailing comments of the declaration */
-            var emitTrailingComments = compilerOptions.removeComments ? function (declaration: Declaration) {
-            } : emitTrailingDeclarationComments;
+            var emitTrailingComments = compilerOptions.removeComments ? (d: Declaration) => { } : emitTrailingDeclarationComments;
 
             var writeComment = writeCommentRange;
 
@@ -1415,7 +1413,6 @@ module ts {
             }
 
             function emitClassDeclaration(node: ClassDeclaration) {
-                var ctor = getFirstConstructorWithBody(node);
                 emitLeadingComments(node);
                 write("var ");
                 emit(node.name);
@@ -1435,51 +1432,7 @@ module ts {
                     emitEnd(node.baseType);
                 }
                 writeLine();
-                if (ctor) {
-                    emitLeadingComments(ctor);
-                }
-                emitStart(<Node>ctor || node);
-                write("function ");
-                emit(node.name);
-                emitSignatureParameters(ctor);
-                write(" {");
-                scopeEmitStart(node, "constructor");
-                increaseIndent();
-                emitCaptureThisForNodeIfNecessary(node);
-                if (ctor) {
-                    emitDefaultValueAssignments(ctor);
-                    emitRestParameter(ctor);
-                    if (node.baseType) {
-                        var superCall = findInitialSuperCall(ctor);
-                        if (superCall) {
-                            writeLine();
-                            emit(superCall);
-                        }
-                    }
-                    emitParameterPropertyAssignments(ctor);
-                }
-                else {
-                    if (node.baseType) {
-                        writeLine();
-                        emitStart(node.baseType);
-                        write("_super.apply(this, arguments);");
-                        emitEnd(node.baseType);
-                    }
-                }                
-                emitMemberAssignments(node, /*nonstatic*/0);
-                if (ctor) {
-                    var statements: Node[] = (<Block>ctor.body).statements;
-                    if (superCall) statements = statements.slice(1);
-                    emitLines(statements);
-                }
-                decreaseIndent();
-                writeLine();
-                emitToken(SyntaxKind.CloseBraceToken, ctor ? (<Block>ctor.body).statements.end : node.members.end);
-                scopeEmitEnd();
-                emitEnd(<Node>ctor || node);
-                if (ctor) {
-                    emitTrailingComments(ctor);
-                }
+                emitConstructorOfClass();
                 emitMemberFunctions(node);
                 emitMemberAssignments(node, NodeFlags.Static);
                 writeLine();
@@ -1510,6 +1463,55 @@ module ts {
                     write(";");
                 }
                 emitTrailingComments(node);
+
+                function emitConstructorOfClass() {
+                    var ctor = getFirstConstructorWithBody(node);
+                    if (ctor) {
+                        emitLeadingComments(ctor);
+                    }
+                    emitStart(<Node>ctor || node);
+                    write("function ");
+                    emit(node.name);
+                    emitSignatureParameters(ctor);
+                    write(" {");
+                    scopeEmitStart(node, "constructor");
+                    increaseIndent();
+                    emitCaptureThisForNodeIfNecessary(node);
+                    if (ctor) {
+                        emitDefaultValueAssignments(ctor);
+                        emitRestParameter(ctor);
+                        if (node.baseType) {
+                            var superCall = findInitialSuperCall(ctor);
+                            if (superCall) {
+                                writeLine();
+                                emit(superCall);
+                            }
+                        }
+                        emitParameterPropertyAssignments(ctor);
+                    }
+                    else {
+                        if (node.baseType) {
+                            writeLine();
+                            emitStart(node.baseType);
+                            write("_super.apply(this, arguments);");
+                            emitEnd(node.baseType);
+                        }
+                    }
+                    emitMemberAssignments(node, /*nonstatic*/0);
+                    if (ctor) {
+                        var statements: Node[] = (<Block>ctor.body).statements;
+                        if (superCall) statements = statements.slice(1);
+                        emitLines(statements);
+                    }
+                    decreaseIndent();
+                    writeLine();
+                    emitToken(SyntaxKind.CloseBraceToken, ctor ? (<Block>ctor.body).statements.end : node.members.end);
+                    scopeEmitEnd();
+                    emitEnd(<Node>ctor || node);
+                    if (ctor) {
+                        emitTrailingComments(ctor);
+                    }
+                }
             }
 
             function emitEnumDeclaration(node: EnumDeclaration) {
@@ -1530,28 +1532,7 @@ module ts {
                 write(") {");
                 increaseIndent();
                 scopeEmitStart(node);
-                forEach(node.members, member => {
-                    writeLine();
-                    emitLeadingComments(member);
-                    emitStart(member);
-                    write(resolver.getLocalNameOfContainer(node));
-                    write("[");
-                    write(resolver.getLocalNameOfContainer(node));
-                    write("[");
-                    emitQuotedIdentifier(member.name);
-                    write("] = ");
-                    if (member.initializer) {
-                        emit(member.initializer);
-                    }
-                    else {
-                        write(resolver.getEnumMemberValue(member).toString());
-                    }
-                    write("] = ");
-                    emitQuotedIdentifier(member.name);
-                    emitEnd(member);
-                    write(";");
-                    emitTrailingComments(member);
-                });
+                emitEnumMemberDeclarations();
                 decreaseIndent();
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end);
@@ -1573,6 +1554,31 @@ module ts {
                     write(";");
                 }
                 emitTrailingComments(node);
+
+                function emitEnumMemberDeclarations() {
+                    forEach(node.members, member => {
+                        writeLine();
+                        emitLeadingComments(member);
+                        emitStart(member);
+                        write(resolver.getLocalNameOfContainer(node));
+                        write("[");
+                        write(resolver.getLocalNameOfContainer(node));
+                        write("[");
+                        emitQuotedIdentifier(member.name);
+                        write("] = ");
+                        if (member.initializer) {
+                            emit(member.initializer);
+                        }
+                        else {
+                            write(resolver.getEnumMemberValue(member).toString());
+                        }
+                        write("] = ");
+                        emitQuotedIdentifier(member.name);
+                        emitEnd(member);
+                        write(";");
+                        emitTrailingComments(member);
+                    });
+                }
             }
 
             function getInnerMostModuleDeclarationFromDottedModule(moduleDeclaration: ModuleDeclaration): ModuleDeclaration {
