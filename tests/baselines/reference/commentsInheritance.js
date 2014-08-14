@@ -268,6 +268,7 @@ i2_i = i3_i;
 
 
 //// [commentsInheritance.d.ts]
+/** i1 is interface with properties*/
 interface i1 {
     i1_p1: number;
     i1_f1(): void;

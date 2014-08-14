@@ -2360,6 +2360,7 @@ module ts {
 
             function emitInterfaceDeclaration(node: InterfaceDeclaration) {
                 if (resolver.isDeclarationVisible(node)) {
+                    emitJsDocComments(node);
                     emitDeclarationFlags(node);
                     write("interface ");
                     emitSourceTextOfNode(node.name);

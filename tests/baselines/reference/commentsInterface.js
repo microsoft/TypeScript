@@ -104,12 +104,14 @@ i3_i.nc_l(10);
 
 
 //// [commentsInterface.d.ts]
+/** this is interface 1*/
 interface i1 {
 }
 declare var i1_i: i1;
 interface nc_i1 {
 }
 declare var nc_i1_i: nc_i1;
+/** this is interface 2 with memebers*/
 interface i2 {
     x: number;
     foo: (b: number) => string;

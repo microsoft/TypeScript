@@ -159,6 +159,7 @@ declare class c {
     foo1(b: string): string;
 }
 declare var i: c;
+/** interface comments*/
 interface i1 {
     (a: number): number;
     new (b: string): any;
