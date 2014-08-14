@@ -26,6 +26,7 @@ x = 1 /* FancyPink */;
 
 
 //// [commentsEnums.d.ts]
+/** Enum of colors*/
 declare enum Colors {
     Cornflower = 0,
     FancyPink = 1,

@@ -2167,6 +2167,7 @@ module ts {
 
             function emitEnumDeclaration(node: EnumDeclaration) {
                 if (resolver.isDeclarationVisible(node)) {
+                    emitJsDocComments(node);
                     emitDeclarationFlags(node);
                     write("enum ");
                     emitSourceTextOfNode(node.name);
