@@ -2041,8 +2041,10 @@ module ts {
             }
 
             function writeJsDocComments(declaration: Declaration) {
-                var jsDocComments = getJsDocComments(declaration, currentSourceFile);
-                emitComments(jsDocComments, writer, writeCommentRange);
+                if (declaration) {
+                    var jsDocComments = getJsDocComments(declaration, currentSourceFile);
+                    emitComments(jsDocComments, writer, writeCommentRange);
+                }
             }
 
             function emitSourceTextOfNode(node: Node) {
@@ -2459,6 +2461,8 @@ module ts {
             function emitAccessorDeclaration(node: AccessorDeclaration) {
                 var accessors = getAllAccessorDeclarations(<ClassDeclaration>node.parent, node);
                 if (node === accessors.firstAccessor) {
+                    emitJsDocComments(accessors.getAccessor);
+                    emitJsDocComments(accessors.setAccessor);
                     emitDeclarationFlags(node);
                     emitSourceTextOfNode(node.name);
                     if (!(node.flags & NodeFlags.Private)) {

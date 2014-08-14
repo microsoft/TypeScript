@@ -157,6 +157,8 @@ declare class c {
     /** property comment */
     b: number;
     myFoo(): number;
+    /** getter comment*/
+    /** setter comment*/
     prop1: number;
     foo1(a: number): string;
     foo1(b: string): string;

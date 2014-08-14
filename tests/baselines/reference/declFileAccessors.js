@@ -271,8 +271,14 @@ var c2 = (function () {
 //// [declFileAccessors_0.d.ts]
 /** This is comment for c1*/
 export declare class c1 {
+    /** getter property*/
+    /** setter property*/
     p3: number;
+    /** private getter property*/
+    /** private setter property*/
     private pp3;
+    /** static getter property*/
+    /** setter property*/
     static s3: number;
     nc_p3: number;
     private nc_pp3;
@@ -283,8 +289,14 @@ export declare class c1 {
 //// [declFileAccessors_1.d.ts]
 /** This is comment for c2 - the global class*/
 declare class c2 {
+    /** getter property*/
+    /** setter property*/
     p3: number;
+    /** private getter property*/
+    /** private setter property*/
     private pp3;
+    /** static getter property*/
+    /** setter property*/
     static s3: number;
     nc_p3: number;
     private nc_pp3;

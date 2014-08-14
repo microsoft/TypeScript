@@ -309,6 +309,7 @@ declare class c2 {
     /** c2 c2_p1*/
     c2_p1: number;
     c2_f1(): void;
+    /** c2 c2_prop*/
     c2_prop: number;
     c2_nc_p1: number;
     c2_nc_f1(): void;
@@ -316,6 +317,7 @@ declare class c2 {
     /** c2 p1*/
     p1: number;
     f1(): void;
+    /** c2 prop*/
     prop: number;
     nc_p1: number;
     nc_f1(): void;
@@ -327,6 +329,7 @@ declare class c3 extends c2 {
     /** c3 p1*/
     p1: number;
     f1(): void;
+    /** c3 prop*/
     prop: number;
     nc_p1: number;
     nc_f1(): void;
