@@ -1157,9 +1157,11 @@ module ts {
             }
 
             function emitAccessor(node: AccessorDeclaration) {
+                emitLeadingComments(node);
                 write(node.kind === SyntaxKind.GetAccessor ? "get " : "set ");
                 emit(node.name);
                 emitSignatureAndBody(node);
+                emitTrailingComments(node);
             }
 
             function emitFunctionDeclaration(node: FunctionDeclaration) {
@@ -1353,21 +1355,25 @@ module ts {
                             increaseIndent();
                             if (accessors.getAccessor) {
                                 writeLine();
+                                emitLeadingComments(accessors.getAccessor);
                                 write("get: ");
                                 emitStart(accessors.getAccessor);
                                 write("function ");
                                 emitSignatureAndBody(accessors.getAccessor);
                                 emitEnd(accessors.getAccessor);
                                 write(",");
+                                emitTrailingComments(accessors.getAccessor);
                             }
                             if (accessors.setAccessor) {
                                 writeLine();
+                                emitLeadingComments(accessors.setAccessor);
                                 write("set: ");
                                 emitStart(accessors.setAccessor);
                                 write("function ");
                                 emitSignatureAndBody(accessors.setAccessor);
                                 emitEnd(accessors.setAccessor);
                                 write(",");
+                                emitTrailingComments(accessors.setAccessor);
                             }
                             writeLine();
                             write("enumerable: true,");

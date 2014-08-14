@@ -181,6 +181,7 @@ var c2 = (function () {
     c2.prototype.c2_f1 = function () {
     };
     Object.defineProperty(c2.prototype, "c2_prop", {
+        /** c2 c2_prop*/
         get: function () {
             return 10;
         },
@@ -199,6 +200,7 @@ var c2 = (function () {
     c2.prototype.f1 = function () {
     };
     Object.defineProperty(c2.prototype, "prop", {
+        /** c2 prop*/
         get: function () {
             return 10;
         },
@@ -224,6 +226,7 @@ var c3 = (function (_super) {
     c3.prototype.f1 = function () {
     };
     Object.defineProperty(c3.prototype, "prop", {
+        /** c3 prop*/
         get: function () {
             return 10;
         },

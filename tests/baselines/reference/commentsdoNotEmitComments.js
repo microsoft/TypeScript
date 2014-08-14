@@ -105,9 +105,11 @@ var c = (function () {
         return this.b;
     };
     Object.defineProperty(c.prototype, "prop1", {
+        /** getter comment*/
         get: function () {
             return this.b;
         },
+        /** setter comment*/
         set: function (val) {
             this.b = val;
         },

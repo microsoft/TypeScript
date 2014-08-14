@@ -106,27 +106,33 @@ var c1 = (function () {
     function c1() {
     }
     Object.defineProperty(c1.prototype, "p3", {
+        /** getter property*/
         get: function () {
             return 10;
         },
+        /** setter property*/
         set: function (value) {
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(c1.prototype, "pp3", {
+        /** private getter property*/
         get: function () {
             return 10;
         },
+        /** private setter property*/
         set: function (value) {
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(c1, "s3", {
+        /** static getter property*/
         get: function () {
             return 10;
         },
+        /** setter property*/
         set: function (value) {
         },
         enumerable: true,
@@ -160,6 +166,7 @@ var c1 = (function () {
         configurable: true
     });
     Object.defineProperty(c1.prototype, "onlyGetter", {
+        // Only getter property
         get: function () {
             return 10;
         },
@@ -167,6 +174,7 @@ var c1 = (function () {
         configurable: true
     });
     Object.defineProperty(c1.prototype, "onlySetter", {
+        // Only setter property
         set: function (value) {
         },
         enumerable: true,
@@ -180,27 +188,33 @@ var c2 = (function () {
     function c2() {
     }
     Object.defineProperty(c2.prototype, "p3", {
+        /** getter property*/
         get: function () {
             return 10;
         },
+        /** setter property*/
         set: function (value) {
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(c2.prototype, "pp3", {
+        /** private getter property*/
         get: function () {
             return 10;
         },
+        /** private setter property*/
         set: function (value) {
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(c2, "s3", {
+        /** static getter property*/
         get: function () {
             return 10;
         },
+        /** setter property*/
         set: function (value) {
         },
         enumerable: true,
@@ -234,6 +248,7 @@ var c2 = (function () {
         configurable: true
     });
     Object.defineProperty(c2.prototype, "onlyGetter", {
+        // Only getter property
         get: function () {
             return 10;
         },
@@ -241,6 +256,7 @@ var c2 = (function () {
         configurable: true
     });
     Object.defineProperty(c2.prototype, "onlySetter", {
+        // Only setter property
         set: function (value) {
         },
         enumerable: true,
