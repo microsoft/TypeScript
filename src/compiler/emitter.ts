@@ -1498,6 +1498,7 @@ module ts {
             }
 
             function emitEnumDeclaration(node: EnumDeclaration) {
+                emitLeadingComments(node);
                 if (!(node.flags & NodeFlags.Export)) {
                     emitStart(node);
                     write("var ");
@@ -1516,6 +1517,7 @@ module ts {
                 scopeEmitStart(node);
                 forEach(node.members, member => {
                     writeLine();
+                    emitLeadingComments(member);
                     emitStart(member);
                     write(resolver.getLocalNameOfContainer(node));
                     write("[");
@@ -1533,6 +1535,7 @@ module ts {
                     emitQuotedIdentifier(member.name);
                     emitEnd(member);
                     write(";");
+                    emitTrailingComments(member);
                 });
                 decreaseIndent();
                 writeLine();
@@ -1554,6 +1557,7 @@ module ts {
                     emitEnd(node);
                     write(";");
                 }
+                emitTrailingComments(node);
             }
 
             function getInnerMostModuleDeclarationFromDottedModule(moduleDeclaration: ModuleDeclaration): ModuleDeclaration {

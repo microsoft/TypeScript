@@ -81,6 +81,7 @@ var doPropagate = [
 
 
 //// [enumBasics.js]
+// Enum without initializers have first member = 0 and successive members = N + 1
 var E1;
 (function (E1) {
     E1[E1["A"] = 0] = "A";
@@ -96,24 +97,28 @@ var e;
 // Reverse mapping of enum returns string name of property 
 var s = E1[0 /* A */];
 var s;
+// Enum with only constant members
 var E2;
 (function (E2) {
     E2[E2["A"] = 1] = "A";
     E2[E2["B"] = 2] = "B";
     E2[E2["C"] = 3] = "C";
 })(E2 || (E2 = {}));
+// Enum with only computed members
 var E3;
 (function (E3) {
     E3[E3["X"] = 'foo'.length] = "X";
     E3[E3["Y"] = 4 + 3] = "Y";
     E3[E3["Z"] = +'foo'] = "Z";
 })(E3 || (E3 = {}));
+// Enum with constant members followed by computed members
 var E4;
 (function (E4) {
     E4[E4["X"] = 0] = "X";
     E4[E4["Y"] = 1] = "Y";
     E4[E4["Z"] = 'foo'.length] = "Z";
 })(E4 || (E4 = {}));
+// Enum with > 2 constant members with no initializer for first member, non zero initializer for second element
 var E5;
 (function (E5) {
     E5[E5["A"] = 0] = "A";
@@ -126,14 +131,17 @@ var E6;
     E6[E6["B"] = 0] = "B";
     E6[E6["C"] = 1] = "C";
 })(E6 || (E6 = {}));
+// Enum with computed member initializer of type 'any'
 var E7;
 (function (E7) {
     E7[E7["A"] = 'foo'['foo']] = "A";
 })(E7 || (E7 = {}));
+// Enum with computed member initializer of type number
 var E8;
 (function (E8) {
     E8[E8["B"] = 'foo'['foo']] = "B";
 })(E8 || (E8 = {}));
+//Enum with computed member intializer of same enum type
 var E9;
 (function (E9) {
     E9[E9["A"] = 0] = "A";

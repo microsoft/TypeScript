@@ -55,6 +55,7 @@ module Others {
 }
 
 //// [enumAssignability.js]
+// enums assignable to number, any, Object, errors unless otherwise noted
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";

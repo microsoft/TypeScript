@@ -22,6 +22,7 @@ var ResultIsBoolean5 = !!!(ENUM[1] + ENUM[2]);
 !ENUM, ENUM1;
 
 //// [logicalNotOperatorWithEnumType.js]
+// ! operator on enum type
 var ENUM;
 (function (ENUM) {
     ENUM[ENUM["1"] = 0] = "1";

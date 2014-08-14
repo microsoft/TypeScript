@@ -19,6 +19,7 @@ var ResultIsNumber4 = +(ENUM[0] + ENUM1[1]);
 +ENUM, ENUM1;
 
 //// [plusOperatorWithEnumType.js]
+// + operator on enum type
 var ENUM;
 (function (ENUM) {
 })(ENUM || (ENUM = {}));

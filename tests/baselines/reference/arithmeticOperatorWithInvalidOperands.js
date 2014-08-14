@@ -582,6 +582,8 @@ var r10h5 = e | E.b;
 var r10h6 = f | E.b;
 
 //// [arithmeticOperatorWithInvalidOperands.js]
+// these operators require their operands to be of type Any, the Number primitive type, or
+// an enum type
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";

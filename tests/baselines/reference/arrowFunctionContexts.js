@@ -126,6 +126,7 @@ var obj = function (n) { return ''; };
 var obj;
 var arr = [function (n) { return ''; }];
 var arr;
+// Arrow function as enum value
 var E;
 (function (E) {
     E[E["x"] = function () { return 4; }] = "x";
@@ -161,6 +162,7 @@ var M2;
     var obj;
     var arr = [function (n) { return ''; }];
     var arr;
+    // Arrow function as enum value
     var E;
     (function (E) {
         E[E["x"] = function () { return 4; }] = "x";

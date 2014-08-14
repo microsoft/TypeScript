@@ -151,6 +151,7 @@ var rj11 = b | E.b;
 var rj12 = 1 | E.b;
 
 //// [arithmeticOperatorWithEnum.js]
+// operands of an enum type are treated as having the primitive type Number.
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";

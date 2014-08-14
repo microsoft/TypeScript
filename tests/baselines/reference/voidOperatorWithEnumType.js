@@ -23,6 +23,7 @@ void ENUM1[1];
 void ENUM, ENUM1;
 
 //// [voidOperatorWithEnumType.js]
+// void  operator on enum type
 var ENUM;
 (function (ENUM) {
 })(ENUM || (ENUM = {}));

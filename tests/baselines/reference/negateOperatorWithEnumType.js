@@ -18,6 +18,7 @@ var ResultIsNumber3 = -(ENUM1[1] + ENUM1[2]);
 -ENUM, ENUM1;
 
 //// [negateOperatorWithEnumType.js]
+// - operator on enum type
 var ENUM;
 (function (ENUM) {
 })(ENUM || (ENUM = {}));

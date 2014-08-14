@@ -19,6 +19,7 @@ var ResultIsNumber4 = ~~~(ENUM1[1] + ENUM1[2]);
 ~ENUM1[1], ~ENUM1[2];
 
 //// [bitwiseNotOperatorWithEnumType.js]
+// ~ operator on enum type
 var ENUM1;
 (function (ENUM1) {
     ENUM1[ENUM1["1"] = 0] = "1";

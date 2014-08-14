@@ -23,6 +23,7 @@ delete ENUM1[1];
 delete ENUM, ENUM1;
 
 //// [deleteOperatorWithEnumType.js]
+// delete  operator on enum type
 var ENUM;
 (function (ENUM) {
 })(ENUM || (ENUM = {}));

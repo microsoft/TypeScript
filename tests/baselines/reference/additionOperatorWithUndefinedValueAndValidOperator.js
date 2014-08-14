@@ -31,6 +31,7 @@ var r15 = d + undefined;
 var r16 = '' + undefined;
 
 //// [additionOperatorWithUndefinedValueAndValidOperator.js]
+// If one operand is the null or undefined value, it is treated as having the type of the other operand.
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";

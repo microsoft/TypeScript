@@ -13,6 +13,7 @@ var ResultIsNumber2 = ENUM1[1]--;
 ENUM1[1]--;
 
 //// [decrementOperatorWithEnumType.js]
+// -- operator on enum type
 var ENUM1;
 (function (ENUM1) {
     ENUM1[ENUM1["1"] = 0] = "1";
