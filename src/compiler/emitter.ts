@@ -1306,6 +1306,7 @@ module ts {
                 forEach(node.members, member => {
                     if (member.kind === SyntaxKind.Property && (member.flags & NodeFlags.Static) === staticFlag && (<PropertyDeclaration>member).initializer) {
                         writeLine();
+                        emitLeadingComments(member);
                         emitStart(member);
                         emitStart((<PropertyDeclaration>member).name);
                         if (staticFlag) {
@@ -1320,6 +1321,7 @@ module ts {
                         emit((<PropertyDeclaration>member).initializer);
                         write(";");
                         emitEnd(member);
+                        emitTrailingComments(member);
                     }
                 });
             }

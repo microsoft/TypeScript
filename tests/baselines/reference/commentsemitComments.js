@@ -100,6 +100,7 @@ foo(50);
 fooVar();
 var c = (function () {
     function c() {
+        /** property comment */
         this.b = 10;
     }
     /** function comment */
