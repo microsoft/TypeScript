@@ -609,7 +609,8 @@ module ts {
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
         getAugmentedPropertiesOfApparentType(type: Type): Symbol[];
-        getRootSymbol(symbol:Symbol): Symbol;
+        getRootSymbol(symbol: Symbol): Symbol;
+        getContextualType(node: Node): Type;
     }
 
     export interface TextWriter {

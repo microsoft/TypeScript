@@ -52,7 +52,8 @@ module ts {
             typeToString: typeToString,
             symbolToString: symbolToString,
             getAugmentedPropertiesOfApparentType: getAugmentedPropertiesOfApparentType,
-            getRootSymbol: getRootSymbol
+            getRootSymbol: getRootSymbol,
+            getContextualType: getContextualType
         };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");

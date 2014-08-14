@@ -1298,6 +1298,11 @@ module ts {
             isFunctionDeclaration(node.parent) && (<FunctionDeclaration>node.parent).name === node;
     }
 
+    function isNameOfPropertyAssignment(node: Node): boolean {
+        return (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.StringLiteral) &&
+            node.parent.kind === SyntaxKind.PropertyAssignment && (<PropertyDeclaration>node.parent).name === node;
+    }
+
     function isIndexOfStringIndexAccess(node: Node): boolean {
         return node.kind === SyntaxKind.StringLiteral && node.parent.kind === SyntaxKind.IndexedAccess && (<IndexedAccess>node.parent).index === node;
     }
@@ -2143,7 +2148,7 @@ module ts {
 
             if (scope) {
                 result = [];
-                getReferencesInNode(scope, symbol, result);
+                getReferencesInNode(scope, symbol, node, result);
             }
             else {
                 var symbolName = symbol.getName();
@@ -2153,7 +2158,7 @@ module ts {
 
                     if (sourceFile.getBloomFilter().probablyContains(symbolName)) {
                         if (!result) result = [];
-                        getReferencesInNode(sourceFile, symbol, result);
+                        getReferencesInNode(sourceFile, symbol, node, result);
                     }
                 });
             }
@@ -2235,161 +2240,92 @@ module ts {
                 return false;
             }
 
-            function getReferencesInNode(container: Node, searchSymbol: Symbol, result: ReferenceEntry[]): void {
+            function getReferencesInNode(container: Node, searchSymbol: Symbol, searchLocation: Node, result: ReferenceEntry[]): void {
                 var searchSymbolName = searchSymbol.getName();
 
                 var sourceFile = container.getSourceFile();
 
                 var possiblePositions = getPossibleSymbolReferencePositions(sourceFile, searchSymbolName, container.getStart(), container.getEnd());
                 if (possiblePositions && possiblePositions.length > 0) {
+                    // Build the set of symbols to search for, initially it has only the current symbol
+                    var searchSymbols = popluateSearchSymbolSet(searchSymbol, searchLocation);
 
                     possiblePositions.forEach(position => {
                         cancellationToken.throwIfCancellationRequested();
 
                         // Each position we're searching for should be at the start of an identifier.  
-                        var node = getNodeAtPosition(sourceFile, position);
+                        var referenceLocation = getNodeAtPosition(sourceFile, position);
 
-                        if (!isValidReferencePosition(node, searchSymbol)) {
+                        if (!isValidReferencePosition(referenceLocation, searchSymbol)) {
                             return;
                         }
 
-                        var symbol = typeInfoResolver.getSymbolInfo(node);
+                        var referenceSymbol = typeInfoResolver.getSymbolInfo(referenceLocation);
 
                         // Could not find a symbol e.g. node is string or number keyword,
                         // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol
-                        if (!symbol || !(symbol.getDeclarations())) {
+                        if (!referenceSymbol || !(referenceSymbol.getDeclarations())) {
                             return;
                         }
 
-                        if (compareSymbolsForLexicalIdentity(searchSymbol, symbol, node)) {
-                            result.push(getReferenceEntry(node));
+                        if (compareSymbolsForLexicalIdentity(searchSymbols, referenceSymbol, referenceLocation)) {
+                            result.push(getReferenceEntry(referenceLocation));
                         }
                     });
                 }
             }
 
-            function compareSymbolsForLexicalIdentity(searchSymbol: Symbol, symbol: Symbol, node: Node): boolean {
-                //// Unwrap modules so that we're always referring to the variable.
-                //if (!firstSymbol.isAlias() && firstSymbol.isContainer()) {
-                //    var containerForFirstSymbol = (<TypeScript.PullContainerSymbol>firstSymbol);
-                //    if (containerForFirstSymbol.getInstanceSymbol()) {
-                //        firstSymbol = containerForFirstSymbol.getInstanceSymbol();
-                //    }
-                //}
+            function popluateSearchSymbolSet(symbol: Symbol, location: Node): Symbol[]{
+                // The search set contains at least the current symbol
+                var result = [symbol];
 
-                //if (!secondSymbol.isAlias() && secondSymbol.isContainer()) {
-                //    var containerForSecondSymbol = (<TypeScript.PullContainerSymbol>secondSymbol);
-                //    if (containerForSecondSymbol.getInstanceSymbol()) {
-                //        secondSymbol = containerForSecondSymbol.getInstanceSymbol();
-                //    }
-                //}
+                // If the symbol is an instantiation from a another symbol (e.g. widened symbol) , add the root the list
+                var rootSymbol = typeChecker.getRootSymbol(symbol);
+                if (rootSymbol && rootSymbol !== symbol) {
+                    result.push(rootSymbol);
+                }
 
-                //if (firstSymbol.kind === secondSymbol.kind) {
-                //    if (firstSymbol === secondSymbol) {
-                //        return true;
-                //    }
+                // If the location is in a context sensitive location (i.e. in an object literal) try
+                // to get a contextual type for it, and add the property symbol from the contextual
+                // type to the search set
+                if (isNameOfPropertyAssignment(location)) {
+                    var symbolFromContextualType = getSymbolFromContextualType(location);
+                    if (symbolFromContextualType) result.push(symbolFromContextualType);
+                }
 
-                //    // If we have two variables and they have the same name and the same parent, then 
-                //    // they are the same symbol.
-                //    if (firstSymbol.kind === TypeScript.PullElementKind.Variable &&
-                //        firstSymbol.name === secondSymbol.name &&
-                //        firstSymbol.getDeclarations() && firstSymbol.getDeclarations().length >= 1 &&
-                //        secondSymbol.getDeclarations() && secondSymbol.getDeclarations().length >= 1) {
+                // TODO: add base class and interface definitions and overwritten properties/methods
 
-                //        var firstSymbolDecl = firstSymbol.getDeclarations()[0];
-                //        var secondSymbolDecl = secondSymbol.getDeclarations()[0];
+                return result;
+            }
 
-                //        return firstSymbolDecl.getParentDecl() === secondSymbolDecl.getParentDecl();
-                //    }
-
-                //    // If we have two properties that belong to an object literal, then we need ot see
-                //    // if they came from teh same object literal ast.
-                //    if (firstSymbol.kind === TypeScript.PullElementKind.Property &&
-                //        firstSymbol.name === secondSymbol.name &&
-                //        firstSymbol.getDeclarations() && firstSymbol.getDeclarations().length >= 1 &&
-                //        secondSymbol.getDeclarations() && secondSymbol.getDeclarations().length >= 1) {
-
-                //        var firstSymbolDecl = firstSymbol.getDeclarations()[0];
-                //        var secondSymbolDecl = secondSymbol.getDeclarations()[0];
-
-                //        var firstParentDecl = firstSymbolDecl.getParentDecl();
-                //        var secondParentDecl = secondSymbolDecl.getParentDecl()
-
-                //    if (firstParentDecl.kind === TypeScript.PullElementKind.ObjectLiteral &&
-                //            secondParentDecl.kind === TypeScript.PullElementKind.ObjectLiteral) {
-
-                //            return firstParentDecl.ast() === secondParentDecl.ast();
-                //        }
-                //    }
-
-                //    // check if we are dealing with the implementation of interface method or a method override
-                //    if (firstSymbol.name === secondSymbol.name) {
-                //        // at this point firstSymbol.kind === secondSymbol.kind so we can pick any of those
-                //        switch (firstSymbol.kind) {
-                //            case PullElementKind.Property:
-                //            case PullElementKind.Method:
-                //            case PullElementKind.GetAccessor:
-                //            case PullElementKind.SetAccessor:
-                //                // these kinds can only be defined in types
-                //                var t1 = <PullTypeSymbol>firstSymbol.getContainer();
-                //                var t2 = <PullTypeSymbol>secondSymbol.getContainer();
-                //                t1._resolveDeclaredSymbol();
-                //                t2._resolveDeclaredSymbol();
-
-                //                return t1.hasBase(t2) || t2.hasBase(t1);
-                //                break;
-                //        }
-                //    }
-
-                //    return false;
-                //}
-                //else {
-                //    switch (firstSymbol.kind) {
-                //        case TypeScript.PullElementKind.Class: {
-                //            return this.checkSymbolsForDeclarationEquality(firstSymbol, secondSymbol);
-                //        }
-                //        case TypeScript.PullElementKind.Property: {
-                //            if (firstSymbol.isAccessor()) {
-                //                var getterSymbol = (<TypeScript.PullAccessorSymbol>firstSymbol).getGetter();
-                //                var setterSymbol = (<TypeScript.PullAccessorSymbol>firstSymbol).getSetter();
-
-                //                if (getterSymbol && getterSymbol === secondSymbol) {
-                //                    return true;
-                //                }
-
-                //                if (setterSymbol && setterSymbol === secondSymbol) {
-                //                    return true;
-                //                }
-                //            }
-                //            return false;
-                //        }
-                //        case TypeScript.PullElementKind.Function: {
-                //            if (secondSymbol.isAccessor()) {
-                //                var getterSymbol = (<TypeScript.PullAccessorSymbol>secondSymbol).getGetter();
-                //                var setterSymbol = (<TypeScript.PullAccessorSymbol>secondSymbol).getSetter();
-
-                //                if (getterSymbol && getterSymbol === firstSymbol) {
-                //                    return true;
-                //                }
-
-                //                if (setterSymbol && setterSymbol === firstSymbol) {
-                //                    return true;
-                //                }
-                //            }
-                //            return false;
-                //        }
-                //        case TypeScript.PullElementKind.ConstructorMethod: {
-                //            return this.checkSymbolsForDeclarationEquality(firstSymbol, secondSymbol);
-                //        }
-                //    }
-                //}
-
-                var searchSymbolTarget = typeInfoResolver.getRootSymbol(searchSymbol);
-                var symbolTarget = typeInfoResolver.getRootSymbol(symbol);
-
-                if (searchSymbolTarget === symbolTarget) {
+            function compareSymbolsForLexicalIdentity(searchSymbols: Symbol[], referenceSymbol: Symbol, referenceLocation: Node): boolean {
+                var referenceSymbolTarget = typeChecker.getRootSymbol(referenceSymbol);
+                if (searchSymbols.indexOf(referenceSymbolTarget) >= 0) {
                     return true;
                 }
+
+                // If the reference location is in an object literal, try to get the contextual type for the 
+                // object literal, lookup the property symbol in the contextual type, and use this symbol to
+                // compare to our searchSymbol
+                if (isNameOfPropertyAssignment(referenceLocation)) {
+                    var symbolFromContextualType = getSymbolFromContextualType(referenceLocation);
+                    if (searchSymbols.indexOf(symbolFromContextualType) >= 0) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            function getSymbolFromContextualType(node: Node): Symbol {
+                if (isNameOfPropertyAssignment(node)) {
+                    var objectLiteral = node.parent.parent;
+                    var contextualType = typeChecker.getContextualType(objectLiteral);
+                    if (contextualType) {
+                        return typeChecker.getPropertyOfType(contextualType, (<Identifier>node).text);
+                    }
+                }
+                return undefined;
             }
 
             function getReferenceEntry(node: Node): ReferenceEntry {
