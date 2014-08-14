@@ -118,16 +118,16 @@ interface i2 {
     /** this is foo*/
     foo: (b: number) => string;
     /** this is indexer*/
-    [i: string]: any;
+    [/**string param*/ i: string]: any;
     /**new method*/
-    new (i: i1): any;
+    new (/** param*/ i: i1): any;
     nc_x: number;
     nc_foo: (b: number) => string;
     [i: number]: number;
     /** this is call signature*/
-    (a: number, b: number): number;
+    (/**paramhelp a*/ a: number, /**paramhelp b*/ b: number): number;
     /** this is fnfoo*/
-    fnfoo(b: number): string;
+    fnfoo(/**param help*/ b: number): string;
     nc_fnfoo(b: number): string;
     nc_y: number;
 }
@@ -150,7 +150,7 @@ interface i3 {
     /** Comment i3 x*/
     x: number;
     /** Function i3 f*/
-    f(a: number): string;
+    f(/**number parameter*/ a: number): string;
     /** i3 l*/
     l: (b: number) => string;
     nc_x: number;

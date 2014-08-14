@@ -149,7 +149,7 @@ var m1;
 /** Variable comments*/
 declare var myVariable: number;
 /** function comments*/
-declare function foo(p: number): void;
+declare function foo(/** parameter comment*/ p: number): void;
 /** variable with function type comment*/
 declare var fooVar: () => void;
 /**class comment*/

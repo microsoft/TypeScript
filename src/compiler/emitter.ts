@@ -2647,6 +2647,7 @@ module ts {
             }
 
             function emitParameterDeclaration(node: ParameterDeclaration) {
+                emitJsDocComments(node);
                 if (node.flags & NodeFlags.Rest) {
                     write("...");
                 }

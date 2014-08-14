@@ -262,7 +262,7 @@ var c5_i_2 = new c5("hello");
 
 //// [commentsOverloads.d.ts]
 /** this is signature 1*/
-declare function f1(a: number): number;
+declare function f1(/**param a*/ a: number): number;
 declare function f1(b: string): number;
 declare function f2(a: number): number;
 /** this is signature 2*/
@@ -270,12 +270,12 @@ declare function f2(b: string): number;
 declare function f3(a: number): number;
 declare function f3(b: string): number;
 /** this is signature 4 - with number parameter*/
-declare function f4(a: number): number;
+declare function f4(/**param a*/ a: number): number;
 /** this is signature 4 - with string parameter*/
 declare function f4(b: string): number;
 interface i1 {
     /**this signature 1*/
-    (a: number): number;
+    (/**param a*/ a: number): number;
     /**this is signature 2*/
     (b: string): number;
     /** foo 1*/

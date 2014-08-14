@@ -285,7 +285,7 @@ declare module m1 {
     }
     /** exported function*/
     function fooExport(): number;
-    function foo2Export(a: string): void;
+    function foo2Export(/**hm*/ a: string): void;
     /** foo3Export
      * comment
      */
