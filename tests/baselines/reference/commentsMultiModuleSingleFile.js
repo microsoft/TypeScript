@@ -68,12 +68,14 @@ new multiM.c();
 //// [commentsMultiModuleSingleFile.d.ts]
 /** this is multi declare module*/
 declare module multiM {
+    /** class b*/
     class b {
     }
     class d {
     }
 }
 declare module multiM {
+    /** class c comment*/
     class c {
     }
     class e {

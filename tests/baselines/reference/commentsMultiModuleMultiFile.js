@@ -102,6 +102,7 @@ export declare module multiM {
 }
 /** thi is multi module 2*/
 export declare module multiM {
+    /** class c comment*/
     class c {
     }
     class e {
@@ -110,6 +111,7 @@ export declare module multiM {
 //// [commentsMultiModuleMultiFile_1.d.ts]
 /** this is multi module 3 comment*/
 export declare module multiM {
+    /** class d comment*/
     class d {
     }
     class f {

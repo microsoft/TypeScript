@@ -276,6 +276,7 @@ declare module m1 {
     var b: number;
     /** m2 comments*/
     module m2 {
+        /** class comment;*/
         class c {
         }
         var i: c;
@@ -287,17 +288,20 @@ declare module m1 {
 declare var myvar: m1.m2.c;
 /** module comment of m2.m3*/
 declare module m2.m3 {
+    /** Exported class comment*/
     class c {
     }
 }
 /** module comment of m3.m4.m5*/
 declare module m3.m4.m5 {
+    /** Exported class comment*/
     class c {
     }
 }
 /** module comment of m4.m5.m6*/
 declare module m4.m5.m6 {
     module m7 {
+        /** Exported class comment*/
         class c {
         }
     }
@@ -306,12 +310,14 @@ declare module m4.m5.m6 {
 declare module m5.m6.m7 {
     /** module m8 comment*/
     module m8 {
+        /** Exported class comment*/
         class c {
         }
     }
 }
 declare module m6.m7 {
     module m8 {
+        /** Exported class comment*/
         class c {
         }
     }
@@ -319,6 +325,7 @@ declare module m6.m7 {
 declare module m7.m8 {
     /** module m9 comment*/
     module m9 {
+        /** Exported class comment*/
         class c {
         }
         class e {

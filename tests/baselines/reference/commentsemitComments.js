@@ -149,6 +149,7 @@ var m1;
 declare var myVariable: number;
 declare function foo(p: number): void;
 declare var fooVar: () => void;
+/**class comment*/
 declare class c {
     constructor();
     b: number;
@@ -168,6 +169,7 @@ interface i1 {
 declare var i1_i: i1;
 /** this is module comment*/
 declare module m1 {
+    /** class b */
     class b {
         x: number;
         constructor(x: number);

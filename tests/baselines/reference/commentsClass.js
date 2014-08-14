@@ -131,6 +131,7 @@ var i8_c = c8;
 
 
 //// [commentsClass.d.ts]
+/** This is class c2 without constuctor*/
 declare class c2 {
 }
 declare var i2: c2;
@@ -140,11 +141,13 @@ declare class c3 {
 }
 declare var i3: c3;
 declare var i3_c: typeof c3;
+/** Class comment*/
 declare class c4 {
     constructor();
 }
 declare var i4: c4;
 declare var i4_c: typeof c4;
+/** Class with statics*/
 declare class c5 {
     static s1: number;
 }
@@ -162,6 +165,8 @@ declare class c7 {
 }
 declare var i7: c7;
 declare var i7_c: typeof c7;
+/** class with statics and constructor
+ */
 declare class c8 {
     static s1: number;
     constructor();

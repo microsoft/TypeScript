@@ -269,6 +269,7 @@ var c2 = (function () {
 
 
 //// [declFileAccessors_0.d.ts]
+/** This is comment for c1*/
 export declare class c1 {
     p3: number;
     private pp3;
@@ -280,6 +281,7 @@ export declare class c1 {
     onlySetter: number;
 }
 //// [declFileAccessors_1.d.ts]
+/** This is comment for c2 - the global class*/
 declare class c2 {
     p3: number;
     private pp3;

@@ -143,6 +143,7 @@ export declare module m1 {
     var b: number;
     /** m2 comments*/
     module m2 {
+        /** class comment;*/
         class c {
         }
         var i: c;
@@ -155,6 +156,7 @@ export declare module m4 {
     /** m2 comments
     */
     module m2 {
+        /** class comment; */
         class c {
         }
         var i: c;

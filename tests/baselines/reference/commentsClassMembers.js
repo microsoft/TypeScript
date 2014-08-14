@@ -471,6 +471,7 @@ cProperties_i.nc_p2 = cProperties_i.nc_p1;
 
 
 //// [commentsClassMembers.d.ts]
+/** This is comment for c1*/
 declare class c1 {
     p1: number;
     p2(b: number): number;

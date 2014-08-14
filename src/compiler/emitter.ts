@@ -2335,6 +2335,7 @@ module ts {
                 }
 
                 if (resolver.isDeclarationVisible(node)) {
+                    emitJsDocComments(node);
                     emitDeclarationFlags(node);
                     write("class ");
                     emitSourceTextOfNode(node.name);
