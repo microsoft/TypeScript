@@ -9,7 +9,6 @@ module X.Y.base {
 }
 
 module X.Y.base.Z {
-    // Bug 887180
     export var f = X.Y.base.f; // Should be base.f
     export var C = X.Y.base.C; // Should be base.C
     export var M = X.Y.base.M; // Should be base.M
@@ -72,7 +71,7 @@ declare module X.Y.base {
     }
 }
 declare module X.Y.base.Z {
-    var f: () => void;
+    var f: typeof base.f;
     var C: typeof base.C;
     var M: typeof base.M;
     var E: typeof base.E;

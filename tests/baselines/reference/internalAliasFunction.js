@@ -33,6 +33,7 @@ declare module a {
     function foo(x: number): number;
 }
 declare module c {
+    import b = a.foo;
     var bVal: number;
-    var bVal2: (x: number) => number;
+    var bVal2: typeof b;
 }
