@@ -1884,7 +1884,7 @@ module ts {
 
             function writeAsychronousImportDeclarations(importDeclarations: ImportDeclaration[]) {
                 var oldWriter = writer;
-                forEach(importDeclarations.sort(), aliasToWrite => {
+                forEach(importDeclarations, aliasToWrite => {
                     var aliasEmitInfo = forEach(aliasDeclarationEmitInfo, declEmitInfo => declEmitInfo.declaration === aliasToWrite ? declEmitInfo : undefined);
                     writer = createTextWriter(writeSymbol);
                     for (var declarationIndent = aliasEmitInfo.indent; declarationIndent; declarationIndent--) {
