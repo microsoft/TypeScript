@@ -281,7 +281,7 @@ module Harness.LanguageService {
         }
 
         /** Verify that applying edits to sourceFileName result in the content of the file baselineFileName */
-        public checkEdits(sourceFileName: string, baselineFileName: string, edits: ts.TextEdit[]) {
+        public checkEdits(sourceFileName: string, baselineFileName: string, edits: ts.TextChange[]) {
             var script = Harness.IO.readFile(sourceFileName);
             var formattedScript = this.applyEdits(script, edits);
             var baseline = Harness.IO.readFile(baselineFileName);
@@ -310,26 +310,26 @@ module Harness.LanguageService {
 
 
         /** Apply an array of text edits to a string, and return the resulting string. */
-        public applyEdits(content: string, edits: ts.TextEdit[]): string {
+        public applyEdits(content: string, edits: ts.TextChange[]): string {
             var result = content;
             edits = this.normalizeEdits(edits);
 
             for (var i = edits.length - 1; i >= 0; i--) {
                 var edit = edits[i];
-                var prefix = result.substring(0, edit.minChar);
-                var middle = edit.text;
-                var suffix = result.substring(edit.limChar);
+                var prefix = result.substring(0, edit.span.start());
+                var middle = edit.newText;
+                var suffix = result.substring(edit.span.end());
                 result = prefix + middle + suffix;
             }
             return result;
         }
 
         /** Normalize an array of edits by removing overlapping entries and sorting entries on the minChar position. */
-        private normalizeEdits(edits: ts.TextEdit[]): ts.TextEdit[] {
-            var result: ts.TextEdit[] = [];
+        private normalizeEdits(edits: ts.TextChange[]): ts.TextChange[] {
+            var result: ts.TextChange[] = [];
 
-            function mapEdits(edits: ts.TextEdit[]): { edit: ts.TextEdit; index: number; }[] {
-                var result: { edit: ts.TextEdit; index: number; }[] = [];
+            function mapEdits(edits: ts.TextChange[]): { edit: ts.TextChange; index: number; }[] {
+                var result: { edit: ts.TextChange; index: number; }[] = [];
                 for (var i = 0; i < edits.length; i++) {
                     result.push({ edit: edits[i], index: i });
                 }
@@ -337,7 +337,7 @@ module Harness.LanguageService {
             }
 
             var temp = mapEdits(edits).sort(function (a, b) {
-                var result = a.edit.minChar - b.edit.limChar;
+                var result = a.edit.span.start() - b.edit.span.start();
                 if (result === 0)
                     result = a.index - b.index;
                 return result;
@@ -356,7 +356,7 @@ module Harness.LanguageService {
                 }
                 var nextEdit = temp[next].edit;
 
-                var gap = nextEdit.minChar - currentEdit.limChar;
+                var gap = nextEdit.span.start() - currentEdit.span.end();
 
                 // non-overlapping edits
                 if (gap >= 0) {
@@ -365,10 +365,10 @@ module Harness.LanguageService {
                     next++;
                     continue;
                 }
-
+ 
                 // overlapping edits: for now, we only support ignoring an next edit 
                 // entirely contained in the current edit.
-                if (currentEdit.minChar >= nextEdit.limChar) {
+                if (currentEdit.span.end() >= nextEdit.span.end()) {
                     next++;
                     continue;
                 }
