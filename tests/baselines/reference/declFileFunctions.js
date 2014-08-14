@@ -63,7 +63,8 @@ function globalfooWithOverloads(a: any): any {
 function foo() {
 }
 exports.foo = foo;
-function fooWithParameters(a, b) {
+function fooWithParameters(a, /** this is comment for b*/
+    b) {
     var d = a;
 }
 exports.fooWithParameters = fooWithParameters;
@@ -81,7 +82,8 @@ function fooWithOverloads(a) {
 exports.fooWithOverloads = fooWithOverloads;
 function nonExportedFoo() {
 }
-function nonExportedFooWithParameters(a, b) {
+function nonExportedFooWithParameters(a, /** this is comment for b*/
+    b) {
     var d = a;
 }
 function nonExportedFooWithRestParameters(a) {
@@ -97,7 +99,8 @@ function nonExportedFooWithOverloads(a) {
 //// [declFileFunctions_1.js]
 function globalfoo() {
 }
-function globalfooWithParameters(a, b) {
+function globalfooWithParameters(a, /** this is comment for b*/
+    b) {
     var d = a;
 }
 function globalfooWithRestParameters(a) {

@@ -1091,7 +1091,9 @@ module ts {
             }
 
             function emitParameter(node: ParameterDeclaration) {
+                emitLeadingComments(node);
                 emit(node.name);
+                emitTrailingComments(node);
             }
 
             function emitDefaultValueAssignments(node: FunctionDeclaration) {
@@ -1119,11 +1121,13 @@ module ts {
                     var restIndex = node.parameters.length - 1;
                     var restParam = node.parameters[restIndex];
                     writeLine();
+                    emitLeadingComments(restParam);
                     emitStart(restParam);
                     write("var ");
                     emitNode(restParam.name);
                     write(" = [];");
                     emitEnd(restParam);
+                    emitTrailingComments(restParam);
                     writeLine();
                     write("for (");
                     emitStart(restParam);
@@ -1177,7 +1181,9 @@ module ts {
             function emitSignatureParameters(node: FunctionDeclaration) {
                 write("(");
                 if (node) {
+                    increaseIndent();
                     emitCommaList(node.parameters, node.parameters.length - (hasRestParameters(node) ? 1 : 0));
+                    decreaseIndent();
                 }
                 write(")");
             }

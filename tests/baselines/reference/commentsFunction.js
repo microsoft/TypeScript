@@ -28,7 +28,8 @@ lambddaNoVarComment(10, 20);
 function foo() {
 }
 foo();
-function fooWithParameters(a, b) {
+function fooWithParameters(a, /** this is comment for b*/
+    b) {
     var d = a;
 }
 fooWithParameters("a", 10);

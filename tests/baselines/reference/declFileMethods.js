@@ -196,7 +196,8 @@ var c1 = (function () {
     }
     c1.prototype.foo = function () {
     };
-    c1.prototype.fooWithParameters = function (a, b) {
+    c1.prototype.fooWithParameters = function (a, /** this is comment for b*/
+        b) {
         var d = a;
     };
     c1.prototype.fooWithRestParameters = function (a) {
@@ -211,7 +212,8 @@ var c1 = (function () {
     };
     c1.prototype.privateFoo = function () {
     };
-    c1.prototype.privateFooWithParameters = function (a, b) {
+    c1.prototype.privateFooWithParameters = function (a, /** this is comment for b*/
+        b) {
         var d = a;
     };
     c1.prototype.privateFooWithRestParameters = function (a) {
@@ -226,7 +228,8 @@ var c1 = (function () {
     };
     c1.staticFoo = function () {
     };
-    c1.staticFooWithParameters = function (a, b) {
+    c1.staticFooWithParameters = function (a, /** this is comment for b*/
+        b) {
         var d = a;
     };
     c1.staticFooWithRestParameters = function (a) {
@@ -241,7 +244,8 @@ var c1 = (function () {
     };
     c1.privateStaticFoo = function () {
     };
-    c1.privateStaticFooWithParameters = function (a, b) {
+    c1.privateStaticFooWithParameters = function (a, /** this is comment for b*/
+        b) {
         var d = a;
     };
     c1.privateStaticFooWithRestParameters = function (a) {
@@ -263,7 +267,8 @@ var c2 = (function () {
     }
     c2.prototype.foo = function () {
     };
-    c2.prototype.fooWithParameters = function (a, b) {
+    c2.prototype.fooWithParameters = function (a, /** this is comment for b*/
+        b) {
         var d = a;
     };
     c2.prototype.fooWithRestParameters = function (a) {
@@ -278,7 +283,8 @@ var c2 = (function () {
     };
     c2.prototype.privateFoo = function () {
     };
-    c2.prototype.privateFooWithParameters = function (a, b) {
+    c2.prototype.privateFooWithParameters = function (a, /** this is comment for b*/
+        b) {
         var d = a;
     };
     c2.prototype.privateFooWithRestParameters = function (a) {
@@ -293,7 +299,8 @@ var c2 = (function () {
     };
     c2.staticFoo = function () {
     };
-    c2.staticFooWithParameters = function (a, b) {
+    c2.staticFooWithParameters = function (a, /** this is comment for b*/
+        b) {
         var d = a;
     };
     c2.staticFooWithRestParameters = function (a) {
@@ -308,7 +315,8 @@ var c2 = (function () {
     };
     c2.privateStaticFoo = function () {
     };
-    c2.privateStaticFooWithParameters = function (a, b) {
+    c2.privateStaticFooWithParameters = function (a, /** this is comment for b*/
+        b) {
         var d = a;
     };
     c2.privateStaticFooWithRestParameters = function (a) {

@@ -105,7 +105,8 @@ var SimpleConstructor = (function () {
 })();
 exports.SimpleConstructor = SimpleConstructor;
 var ConstructorWithParameters = (function () {
-    function ConstructorWithParameters(a, b) {
+    function ConstructorWithParameters(a, /** this is comment for b*/
+        b) {
         var d = a;
     }
     return ConstructorWithParameters;
@@ -164,7 +165,8 @@ var GlobalSimpleConstructor = (function () {
     return GlobalSimpleConstructor;
 })();
 var GlobalConstructorWithParameters = (function () {
-    function GlobalConstructorWithParameters(a, b) {
+    function GlobalConstructorWithParameters(a, /** this is comment for b*/
+        b) {
         var d = a;
     }
     return GlobalConstructorWithParameters;
