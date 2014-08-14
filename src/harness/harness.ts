@@ -695,6 +695,10 @@ module Harness {
                             sys.newLine = setting.value;
                             break;
 
+                        case 'comments':
+                            options.removeComments = setting.value === 'false';
+                            break;
+
                         case 'mapsourcefiles':
                         case 'maproot':
                         case 'generatedeclarationfiles':
@@ -702,7 +706,6 @@ module Harness {
                         case 'gatherDiagnostics':
                         case 'codepage':
                         case 'createFileLog':
-                        case 'comments':
                         case 'filename':
                         case 'propagateenumconstants':
                         case 'removecomments':

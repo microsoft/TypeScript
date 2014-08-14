@@ -89,52 +89,38 @@ declare var x;
 
 
 //// [commentsdoNotEmitComments.js]
-/** Variable comments*/
 var myVariable = 10;
-/** function comments*/
 function foo(p) {
 }
-/** variable with function type comment*/
 var fooVar;
 foo(50);
 fooVar();
-/**class comment*/
 var c = (function () {
-    /** constructor comment*/
     function c() {
-        /** property comment */
         this.b = 10;
     }
-    /** function comment */
     c.prototype.myFoo = function () {
         return this.b;
     };
     Object.defineProperty(c.prototype, "prop1", {
-        /** getter comment*/
         get: function () {
             return this.b;
         },
-        /** setter comment*/
         set: function (val) {
             this.b = val;
         },
         enumerable: true,
         configurable: true
     });
-    /** overload implementation signature*/
     c.prototype.foo1 = function (aOrb) {
         return aOrb.toString();
     };
     return c;
 })();
-/**instance comment*/
 var i = new c();
-/**interface instance comments*/
 var i1_i;
-/** this is module comment*/
 var m1;
 (function (m1) {
-    /** class b */
     var b = (function () {
         function b(x) {
             this.x = x;
@@ -166,7 +152,6 @@ interface i1 {
     prop: string;
 }
 declare var i1_i: i1;
-/** this is module comment*/
 declare module m1 {
     class b {
         x: number;
