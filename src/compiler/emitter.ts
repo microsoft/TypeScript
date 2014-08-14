@@ -10,12 +10,18 @@ module ts {
         getLine(): number;
         getColumn(): number;
         getIndent(): number;
-        isLineStart(): boolean;
     }
 
-    var indentStrings: string[] = [];
+    var indentStrings: string[] = ["", "    "];
     function getIndentString(level: number) {
-        return indentStrings[level] || (indentStrings[level] = level === 0 ? "" : getIndentString(level - 1) + "    ");
+        if (indentStrings[level] === undefined) {
+            indentStrings[level] = getIndentString(level - 1) + indentStrings[1];
+        }
+        return indentStrings[level];
+    }
+
+    function getIndentSize() {
+        return indentStrings[1].length;
     }
 
     export function emitFiles(resolver: EmitResolver): EmitResult {
@@ -148,7 +154,6 @@ module ts {
                 getLine: () => lineCount + 1,
                 getColumn: () => lineStart ? indent * 4 + 1 : output.length - linePos + 1,
                 getText: () => output,
-                isLineStart: () => lineStart
             };
         }
 
@@ -179,7 +184,137 @@ module ts {
         }
 
         function writeCommentRange(comment: Comment, writer: EmitTextWriter) {
-            writer.writeLiteral(currentSourceFile.text.substring(comment.pos, comment.end));
+            if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
+                var firstCommentLineAndCharacter = currentSourceFile.getLineAndCharacterFromPosition(comment.pos);
+                var firstCommentLineIndent: number;
+                var writeNewLine: boolean;
+                for (var pos = comment.pos, currentLine = firstCommentLineAndCharacter.line; pos < comment.end; currentLine++) {
+                    var nextLineStart = currentSourceFile.getPositionFromLineAndCharacter(currentLine + 1, /*character*/1);
+
+                    if (pos !== comment.pos) {
+                        // If we are not emitting first line, we need to adjust the indent
+                        if (writeNewLine) {
+                            writer.writeLine();
+                        }
+
+                        if (firstCommentLineIndent === undefined) {
+                            firstCommentLineIndent = calculateIndent(currentSourceFile.getPositionFromLineAndCharacter(firstCommentLineAndCharacter.line, /*character*/1),
+                                comment.pos);
+                        }
+                        var deltaIndent = calculateIndent(pos, nextLineStart) - firstCommentLineIndent;
+                        if (deltaIndent < 0) {
+                            // we need to decrease indent to get the desired effect
+                            // Comment is left indented to first line
+                            // eg
+                            // module m {
+                            //         /* this is line 1
+                            //    * line 
+                            //   More left indented comment */
+                            //     class c { }
+                            // }
+
+                            // Spaces to emit = indentSize - (numberof spaces in lastDeltaIndent) (in above eg (4 - 5%4) = 3)
+                            var spacesToEmit = (deltaIndent % getIndentSize()); // This is negative of spaces to emit = -1 in above case
+                            if (spacesToEmit) {
+                                spacesToEmit += getIndentSize(); // Adjust the delta with the indentSize (4 - 1) = 3
+                            }
+
+                            // Change in delta indent = deltaIndent / indentSize, we will change the delta to upper integer value
+                            // In above eg. 5/4 = 1.75 so change the indent two times
+                            var changeInIndent = (-deltaIndent / getIndentSize());
+
+                            // If we cant go back as much as we want to, go to left most position
+                            if (changeInIndent > writer.getIndent()) {
+                                changeInIndent = writer.getIndent();
+                                spacesToEmit = 0;
+                            }
+
+                            // Decrease the chaneInIndent number of times
+                            for (var i = 0; i < changeInIndent; i++) {
+                                writer.decreaseIndent();
+                            }
+
+                            // Emit either delta spaces or indentSizeSpaces
+                            emitSpaces(spacesToEmit, writeNewLine);
+
+                            // Write the comment line text
+                            writeNewLine = writeTrimmedCurrentLine(pos, nextLineStart);
+
+                            // Revert the indent
+                            for (var i = 0; i < changeInIndent; i++) {
+                                writer.increaseIndent();
+                            }
+                        } else {
+                            // Comment is right indented to first line
+                            // eg
+                            // module m {
+                            //     /* this is line 1
+                            //      * line 
+                            //            More right indented comment */
+                            //     class c { }
+                            // }
+                            // In above eg for line 2 in the comment, the delta is single space and hence emit that and emit the trimmed line
+                            // but the third line has delta of 7 spaces and hence emit those spaces before emitting the trimmed line
+                            emitSpaces(deltaIndent, writeNewLine);
+                            writeNewLine = writeTrimmedCurrentLine(pos, nextLineStart);
+                        }
+                    }
+                    else {
+                        // First comment line, emit as it is
+                        writeNewLine = writeTrimmedCurrentLine(pos, nextLineStart);
+                    }
+
+                    pos = nextLineStart;
+                }
+            }
+            else {
+                // Single line comment of styly //....
+                writer.write(currentSourceFile.text.substring(comment.pos, comment.end));
+            }
+
+            function emitSpaces(count: number, writeNewLine: boolean) {
+                if (!writeNewLine) {
+                    // If we didnot use WriteLine but instead used writeLiteral to writeNewLine, then we need to make sure we emit indent correctly
+                    writer.write(getIndentString(writer.getIndent()));
+                }
+
+                // Write spaces
+                while (count) {
+                    writer.write(" ");
+                    count--;
+                }
+            }
+
+            // Returns true if writer should write new line before emitting next line of comment
+            function writeTrimmedCurrentLine(pos: number, nextLineStart: number) {
+                var currentLineText = currentSourceFile.text.substring(pos, Math.min(comment.end, nextLineStart - 1)).replace(/^\s+|\s+$/g, '');
+                if (currentLineText) {
+                    // trimmed forward and ending spaces text
+                    writer.write(currentLineText);
+                    return true;
+                }
+                else {
+                    // Empty string - make sure we write empty line
+                    writer.writeLiteral(sys.newLine);
+                }
+            }
+
+            function calculateIndent(pos: number, end: number) {
+                var currentLineIndent = 0;
+                while (pos < end && isWhiteSpace(currentSourceFile.text.charCodeAt(pos))) {
+                    pos++;
+                    if (currentSourceFile.text.charCodeAt(pos) === CharacterCodes.tab) {
+                        // Tabs = size of the indent
+                        currentLineIndent += getIndentSize();
+                    }
+                    else {
+                        // Single space
+                        currentLineIndent++;
+                    }
+                }
+
+                return currentLineIndent;
+            }
         }
 
         function emitJavaScript(jsFilePath: string, root?: SourceFile) {

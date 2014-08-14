@@ -520,6 +520,7 @@ module ts {
         filename: string;
         text: string;
         getLineAndCharacterFromPosition(position: number): { line: number; character: number };
+        getPositionFromLineAndCharacter(line: number, character: number): number;
         amdDependencies: string[];
         referencedFiles: FileReference[];
         syntacticErrors: Diagnostic[];
