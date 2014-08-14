@@ -626,6 +626,8 @@ module ts {
 
         /** writes Array<T> instead T[]  */
         WriteArrayAsGenericType     = 0x00000001,  // Declarations
+
+        UseTypeOfFunction           = 0x00000002,  // instead of writing signature type of function use typeof
     }
 
     export enum SymbolAccessibility {
