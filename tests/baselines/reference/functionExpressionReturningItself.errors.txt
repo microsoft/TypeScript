@@ -1,4 +1,0 @@
-==== tests/cases/compiler/functionExpressionReturningItself.ts (1 errors) ====
-    var x = function somefn() { return somefn; };
-        ~
-!!! Exported variable 'x' has or is using private name 'somefn'.

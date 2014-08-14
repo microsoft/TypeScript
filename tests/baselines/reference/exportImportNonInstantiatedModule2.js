@@ -37,3 +37,6 @@ interface Widget1 {
 }
 //// [exporter.d.ts]
 export import w = require('./w1');
+//// [consumer.d.ts]
+import e = require('./exporter');
+export declare function w(): e.w;
