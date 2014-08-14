@@ -6596,7 +6596,7 @@ module ts {
                 case SyntaxKind.SuperKeyword:
                     var type = checkExpression(node);
                     return type.symbol;
-                    
+
                 case SyntaxKind.ConstructorKeyword:
                     // constructor keyword for an overload, should take us to the definition if it exist
                     var constructorDeclaration = node.parent;
@@ -6606,23 +6606,63 @@ module ts {
                     return undefined;
 
                 case SyntaxKind.StringLiteral:
-                    // Property access
-                    if (node.parent.kind === SyntaxKind.IndexedAccess && (<IndexedAccess>node.parent).index === node) {
-                        var objectType = checkExpression((<IndexedAccess>node.parent).object);
-                        if (objectType === unknownType) return undefined;
-                        var apparentType = getApparentType(objectType);
-                        if (<Type>apparentType === unknownType) return undefined;
-                        return getPropertyOfApparentType(apparentType, (<LiteralExpression>node).text);
+                    switch (node.parent.kind) {
+                        // index access
+                        case SyntaxKind.IndexedAccess:
+                            if ((<IndexedAccess>node.parent).index === node) {
+                                var objectType = checkExpression((<IndexedAccess>node.parent).object);
+                                if (objectType === unknownType) return undefined;
+                                var apparentType = getApparentType(objectType);
+                                if (<Type>apparentType === unknownType) return undefined;
+                                return getPropertyOfApparentType(apparentType, (<LiteralExpression>node).text);
+                            }
+                            break;
+
+                        // External module name in an import declaration
+                        case SyntaxKind.ImportDeclaration:
+                            if ((<ImportDeclaration>node.parent).externalModuleName === node) {
+                                var importSymbol = getSymbolOfNode(node.parent);
+                                var moduleType = getTypeOfSymbol(importSymbol);
+                                return moduleType ? moduleType.symbol : undefined;
+                            }
+                            break;
+
+                        // External module name in an ambient declaration
+                        case SyntaxKind.ModuleDeclaration:
+                        // Property with name as string literal
+                        case SyntaxKind.Property:
+                        case SyntaxKind.PropertyAssignment:
+                        // Enum member with string name
+                        case SyntaxKind.EnumMember:
+                            if ((<Declaration>node.parent).name === node) {
+                                return getSymbolOfNode(node.parent);
+                            }
+                            break;
                     }
-                    // External module name in an import declaration
-                    else if (node.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent).externalModuleName === node) {
-                        var importSymbol = getSymbolOfNode(node.parent);
-                        var moduleType = getTypeOfSymbol(importSymbol);
-                        return moduleType ? moduleType.symbol : undefined;
-                    }
-                    // External module name in an ambient declaration
-                    else if (node.parent.kind === SyntaxKind.ModuleDeclaration) {
-                        return getSymbolOfNode(node.parent);
+                    break;
+
+                case SyntaxKind.NumericLiteral:
+                    switch (node.parent.kind) {
+                        // index access
+                        case SyntaxKind.IndexedAccess:
+                            if ((<IndexedAccess>node.parent).index === node) {
+                                var objectType = checkExpression((<IndexedAccess>node.parent).object);
+                                if (objectType === unknownType) return undefined;
+                                var apparentType = getApparentType(objectType);
+                                if (<Type>apparentType === unknownType) return undefined;
+                                return getPropertyOfApparentType(apparentType, (<LiteralExpression>node).text);
+                            }
+                            break;
+
+                        // Property with name as numeric literal
+                        case SyntaxKind.Property:
+                        case SyntaxKind.PropertyAssignment:
+                        // Enum member with numeric name
+                        case SyntaxKind.EnumMember:
+                            if ((<Declaration>node.parent).name === node) {
+                                return getSymbolOfNode(node.parent);
+                            }
+                            break;
                     }
                     break;
             }

@@ -356,12 +356,44 @@ module ts {
             return TypeScript.isDTSFile(this.filename);
         }
 
+        private static isNameOfPropertyDeclaration(node: TypeScript.ISyntaxElement): boolean {
+            if (node.kind() !== TypeScript.SyntaxKind.IdentifierName && node.kind() !== TypeScript.SyntaxKind.StringLiteral && node.kind() !== TypeScript.SyntaxKind.NumericLiteral) {
+                return false;
+            }
+
+            switch (node.parent.kind()) {
+                case TypeScript.SyntaxKind.VariableDeclarator:
+                    return (<TypeScript.VariableDeclaratorSyntax>node.parent).propertyName === node;
+
+                case TypeScript.SyntaxKind.PropertySignature:
+                    return (<TypeScript.PropertySignatureSyntax>node.parent).propertyName === node;
+
+                case TypeScript.SyntaxKind.SimplePropertyAssignment:
+                    return (<TypeScript.SimplePropertyAssignmentSyntax>node.parent).propertyName === node;
+
+                case TypeScript.SyntaxKind.EnumElement:
+                    return (<TypeScript.EnumElementSyntax>node.parent).propertyName === node;
+
+                case TypeScript.SyntaxKind.ModuleDeclaration:
+                    return (<TypeScript.ModuleDeclarationSyntax>node.parent).name === node;
+            }
+
+            return false;
+        }
+
+        private static isElementAccessLiteralIndexer(node: TypeScript.ISyntaxElement): boolean {
+            return (node.kind() === TypeScript.SyntaxKind.StringLiteral || node.kind() === TypeScript.SyntaxKind.NumericLiteral) &&
+                node.parent.kind() === TypeScript.SyntaxKind.ElementAccessExpression && (<TypeScript.ElementAccessExpressionSyntax> node.parent).argumentExpression === node;
+        }
+
         public getBloomFilter(): TypeScript.BloomFilter {
             if (!this.bloomFilter) {
                 var identifiers = TypeScript.createIntrinsicsObject<boolean>();
                 var pre = function (cur: TypeScript.ISyntaxElement) {
                     if (TypeScript.ASTHelpers.isValidAstNode(cur)) {
-                        if (cur.kind() === TypeScript.SyntaxKind.IdentifierName) {
+                        if (cur.kind() === TypeScript.SyntaxKind.IdentifierName ||
+                            SourceFileObject.isNameOfPropertyDeclaration(cur) ||
+                            SourceFileObject.isElementAccessLiteralIndexer(cur)) {
                             var nodeText = TypeScript.tokenValueText((<TypeScript.ISyntaxToken>cur));
 
                             identifiers[nodeText] = true;
@@ -1299,12 +1331,43 @@ module ts {
     }
 
     function isNameOfPropertyAssignment(node: Node): boolean {
-        return (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.StringLiteral) &&
+        return (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NumericLiteral) &&
             node.parent.kind === SyntaxKind.PropertyAssignment && (<PropertyDeclaration>node.parent).name === node;
     }
 
-    function isIndexOfStringIndexAccess(node: Node): boolean {
-        return node.kind === SyntaxKind.StringLiteral && node.parent.kind === SyntaxKind.IndexedAccess && (<IndexedAccess>node.parent).index === node;
+    function isNameOfPropertyDeclaration(node: Node): boolean {
+        if (node.kind !== SyntaxKind.Identifier && node.kind !== SyntaxKind.StringLiteral && node.kind !== SyntaxKind.NumericLiteral) {
+            return false;
+        }
+
+        switch (node.parent.kind) {
+            case SyntaxKind.TypeParameter:
+            case SyntaxKind.Parameter:
+            case SyntaxKind.VariableDeclaration:
+            case SyntaxKind.Property:
+            case SyntaxKind.PropertyAssignment:
+            case SyntaxKind.EnumMember:
+            case SyntaxKind.Method:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.EnumDeclaration:
+            case SyntaxKind.ModuleDeclaration:
+            case SyntaxKind.ImportDeclaration:
+                return (<Declaration>node.parent).name === node;
+            case SyntaxKind.CatchBlock:
+                return (<CatchBlock>node.parent).variable === node;
+        }
+
+        return false;
+    }
+
+    function isLiteralIndexOfIndexAccess(node: Node): boolean {
+        return (node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NumericLiteral) &&
+            node.parent.kind === SyntaxKind.IndexedAccess && (<IndexedAccess>node.parent).index === node;
     }
 
     // A cache of completion entries for keywords, these do not change between sessions
@@ -2106,7 +2169,8 @@ module ts {
                 return undefined;
             }
 
-            if (node.kind !== SyntaxKind.Identifier && node.kind !== SyntaxKind.Constructor && !isIndexOfStringIndexAccess(node)) {
+            if (node.kind !== SyntaxKind.Identifier && node.kind !== SyntaxKind.Constructor &&
+                !isLiteralIndexOfIndexAccess(node) && !isNameOfPropertyDeclaration(node)) {
                 return undefined;
             }
 
@@ -2229,11 +2293,21 @@ module ts {
                     var searchSymbolName = searchSymbol.getName();
 
                     // Compare the length so we filter out strict superstrings of the symbol we are looking for
-                    if (node.kind === SyntaxKind.Identifier && node.getWidth() === searchSymbolName.length) {
-                        return true;
-                    }
-                    else if (isIndexOfStringIndexAccess(node) && node.getWidth() === searchSymbolName.length + 2) {
-                        return true;
+                    switch (node.kind) {
+                        case SyntaxKind.Identifier:
+                            return node.getWidth() === searchSymbolName.length;
+
+                        case SyntaxKind.StringLiteral:
+                            if (isLiteralIndexOfIndexAccess(node) || isNameOfPropertyDeclaration(node)) {
+                                return node.getWidth() === searchSymbolName.length + 2;
+                            }
+                            break;
+
+                        case SyntaxKind.NumericLiteral:
+                            if (isLiteralIndexOfIndexAccess(node) || isNameOfPropertyDeclaration(node)) {
+                                return node.getWidth() === searchSymbolName.length;
+                            }
+                            break;
                     }
                 }
 
