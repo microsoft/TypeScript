@@ -916,6 +916,54 @@
         "category": "Error",
         "code": 2248
     },
+    "Public static property '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 2249
+    },
+    "Public property '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 2250
+    },
+    "Exported variable '{0}' has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 2251
+    },
+    "Parameter '{0}' of constructor from exported class has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 2252
+    },
+    "Parameter '{0}' of public static method from exported class has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 2253
+    },
+    "Parameter '{0}' of public method from exported class has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 2254
+    },
+    "Parameter '{0}' of exported function has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 2255
+    },
+    "Return type of public static property getter from exported class has or is using name '{0}' from external module {1} but cannot be named.": {
+        "category": "Error",
+        "code": 2256
+    },
+    "Return type of public property getter from exported class has or is using name '{0}' from external module {1} but cannot be named.": {
+        "category": "Error",
+        "code": 2257
+    },
+    "Return type of public static method from exported class has or is using name '{0}' from external module {1} but cannot be named.": {
+        "category": "Error",
+        "code": 2258
+    },
+    "Return type of public method from exported class has or is using name '{0}' from external module {1} but cannot be named.": {
+        "category": "Error",
+        "code": 2259
+    },
+    "Return type of exported function has or is using name '{0}' from external module {1} but cannot be named.": {
+        "category": "Error",
+        "code": 2260
+    },
     "Circular definition of import alias '{0}'.": {
         "category": "Error",
         "code": 3000
