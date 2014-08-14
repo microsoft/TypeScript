@@ -14,6 +14,6 @@ var c2 = (function () {
     return c2;
 })();
 function c2() {
-}// error 
+} // error 
 var c2 = function () {
 };

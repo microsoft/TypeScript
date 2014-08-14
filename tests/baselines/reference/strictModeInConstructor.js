@@ -94,7 +94,7 @@ var D = (function (_super) {
     __extends(D, _super);
     function D() {
         this.s = 9;
-        var x = 1;// Error 
+        var x = 1; // Error 
         _super.call(this);
         "use strict";
     }
@@ -121,7 +121,7 @@ var Cs = (function (_super) {
 var Ds = (function (_super) {
     __extends(Ds, _super);
     function Ds() {
-        var x = 1;// no Error 
+        var x = 1; // no Error 
         _super.call(this);
         "use strict";
     }

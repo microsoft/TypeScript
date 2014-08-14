@@ -19,4 +19,4 @@ function outer() {
     }
     return inner(0);
 }
-var x = outer();// should work 
+var x = outer(); // should work 

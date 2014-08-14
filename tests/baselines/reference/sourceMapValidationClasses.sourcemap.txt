@@ -436,15 +436,15 @@ sourceFile:sourceMapValidationClasses.ts
 2 >Emitted(22, 55) Source(21, 83) + SourceIndex(0) name (Foo.Bar.foo2)
 ---
 >>>            }
->>>            var greeters = [];/* inline block comment */ 
+>>>            var greeters = []; /* inline block comment */ 
 1 >^^^^^^^^^^^^
 2 >            ^^^^
 3 >                ^^^^^^^^
 4 >                        ^^^
 5 >                           ^^
-6 >                             ^
-7 >                              ^^^^^^^^^^^^^^^^^^^^^^^^^^
-8 >                                                        ^
+6 >                             ^^
+7 >                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+8 >                                                         ^
 1 >) {
   >        
 2 >            var 
@@ -452,16 +452,16 @@ sourceFile:sourceMapValidationClasses.ts
 4 >                        : Greeter[] = 
 5 >                           []
 6 >                             ; 
-7 >                              /* inline block comment */
-8 >                                                        
+7 >                               /* inline block comment */
+8 >                                                         
 1 >Emitted(24, 13) Source(22, 9) + SourceIndex(0) name (Foo.Bar.foo2)
 2 >Emitted(24, 17) Source(22, 13) + SourceIndex(0) name (Foo.Bar.foo2)
 3 >Emitted(24, 25) Source(22, 21) + SourceIndex(0) name (Foo.Bar.foo2)
 4 >Emitted(24, 28) Source(22, 35) + SourceIndex(0) name (Foo.Bar.foo2)
 5 >Emitted(24, 30) Source(22, 37) + SourceIndex(0) name (Foo.Bar.foo2)
-6 >Emitted(24, 31) Source(22, 39) + SourceIndex(0) name (Foo.Bar.foo2)
-7 >Emitted(24, 57) Source(22, 65) + SourceIndex(0) name (Foo.Bar.foo2)
-8 >Emitted(24, 58) Source(22, 38) + SourceIndex(0) name (Foo.Bar.foo2)
+6 >Emitted(24, 32) Source(22, 39) + SourceIndex(0) name (Foo.Bar.foo2)
+7 >Emitted(24, 58) Source(22, 65) + SourceIndex(0) name (Foo.Bar.foo2)
+8 >Emitted(24, 59) Source(22, 38) + SourceIndex(0) name (Foo.Bar.foo2)
 ---
 >>>            greeters[0] = new Greeter(greeting);
 1 >^^^^^^^^^^^^

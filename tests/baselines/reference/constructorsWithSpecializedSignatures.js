@@ -53,6 +53,6 @@ var D = (function () {
 // overloads are ok
 var D2 = (function () {
     function D2(x) {
-    }// error 
+    } // error 
     return D2;
 })();

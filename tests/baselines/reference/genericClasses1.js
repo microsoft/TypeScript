@@ -14,7 +14,7 @@ var C = (function () {
     return C;
 })();
 var v1 = new C();
-var y = v1.x;// should be 'string' 
+var y = v1.x; // should be 'string' 
 
 
 //// [genericClasses1.d.ts]

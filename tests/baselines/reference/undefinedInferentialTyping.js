@@ -9,4 +9,4 @@ var a = f([], 3); // should be number
 function f(arr, elemnt) {
     return null;
 }
-var a = f([], 3);// should be number 
+var a = f([], 3); // should be number 

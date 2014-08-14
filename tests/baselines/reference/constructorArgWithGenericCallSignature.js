@@ -29,4 +29,4 @@ var Test;
 })(Test || (Test = {}));
 var func;
 Test.F(func);
-var test = new Test.MyClass(func);// Should be OK 
+var test = new Test.MyClass(func); // Should be OK 

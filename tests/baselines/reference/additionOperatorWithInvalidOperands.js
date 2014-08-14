@@ -70,7 +70,7 @@ var r2 = a + b;
 var r3 = a + c;
 // number + every type except any and string
 var r4 = b + a;
-var r5 = b + b;// number + number is valid 
+var r5 = b + b; // number + number is valid 
 var r6 = b + c;
 // object + every type except any and string
 var r7 = c + a;

@@ -16,5 +16,5 @@ var Clod = (function () {
 })();
 var Clod;
 (function (Clod) {
-    var p = x;// x isn't in scope here 
+    var p = x; // x isn't in scope here 
 })(Clod || (Clod = {}));

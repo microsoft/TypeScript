@@ -15,5 +15,5 @@ var Outer;
     (function (Inner) {
         Inner.m;
     })(Inner || (Inner = {}));
-    Outer.f;// Since we dont unwind inner any more, it is error here 
+    Outer.f; // Since we dont unwind inner any more, it is error here 
 })(Outer || (Outer = {}));

@@ -23,6 +23,6 @@ var E;
 ;
 var c = +0 /* some */;
 // also allowed, used to be errors
-var x = +"3";//should be valid 
-var y = -"3";// should be valid 
-var z = ~"3";// should be valid 
+var x = +"3"; //should be valid 
+var y = -"3"; // should be valid 
+var z = ~"3"; // should be valid 

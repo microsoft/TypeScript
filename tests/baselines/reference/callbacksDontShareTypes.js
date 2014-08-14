@@ -27,7 +27,7 @@ var rf1 = function (x) {
 var r1a = _.map(c2, function (x) {
     return x.toFixed();
 });
-var r1b = _.map(c2, rf1);// this line should not cause the following 2 to have errors  
+var r1b = _.map(c2, rf1); // this line should not cause the following 2 to have errors  
 var r5a = _.map(c2, function (x) {
     return x.toFixed();
 });

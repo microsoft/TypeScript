@@ -30,14 +30,14 @@ var foo = (function () {
     foo.fnOverload = function () {
     };
     foo.fnOverload = function (foo) {
-    };// error 
+    }; // error 
     return foo;
 })();
 var bar = (function () {
     function bar() {
     }
     bar.fnOverload = function (foo) {
-    };// no error 
+    }; // no error 
     return bar;
 })();
 var X = (function () {

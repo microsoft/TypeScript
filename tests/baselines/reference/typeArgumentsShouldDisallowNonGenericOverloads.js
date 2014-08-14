@@ -15,7 +15,7 @@ var z: number = foo("hi"); // should error
 function foo(a) {
     return "hi";
 }
-var x = foo("hi");// return type should be 'number' 
-var y = foo("hi");// return type should be 'string' 
-var w = foo("hi");// should error 
-var z = foo("hi");// should error 
+var x = foo("hi"); // return type should be 'number' 
+var y = foo("hi"); // return type should be 'string' 
+var w = foo("hi"); // should error 
+var z = foo("hi"); // should error 

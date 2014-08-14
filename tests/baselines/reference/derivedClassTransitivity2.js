@@ -41,7 +41,7 @@ var D = (function (_super) {
         _super.apply(this, arguments);
     }
     D.prototype.foo = function (x) {
-    };// ok to drop parameters 
+    }; // ok to drop parameters 
     return D;
 })(C);
 var E = (function (_super) {
@@ -50,7 +50,7 @@ var E = (function (_super) {
         _super.apply(this, arguments);
     }
     E.prototype.foo = function (x, y) {
-    };// ok to add optional parameters 
+    }; // ok to add optional parameters 
     return E;
 })(D);
 var c;

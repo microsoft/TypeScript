@@ -37,9 +37,9 @@ var Sammy;
     Sammy.x = 1;
 })(Sammy || (Sammy = {}));
 var $;
-var instanceOfClassSammy = new $.sammy();// should be error 
-var r1 = instanceOfClassSammy.foo();// r1 is string 
+var instanceOfClassSammy = new $.sammy(); // should be error 
+var r1 = instanceOfClassSammy.foo(); // r1 is string 
 var r2 = $.sammy.foo();
-var r3 = $.sammy.bar();// error 
-var r4 = $.sammy.x;// error 
+var r3 = $.sammy.bar(); // error 
+var r4 = $.sammy.x; // error 
 Sammy.bar();

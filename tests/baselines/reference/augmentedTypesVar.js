@@ -43,17 +43,17 @@ var x1 = 2;
 // var then function
 var x2 = 1;
 function x2() {
-}// should be an error 
+} // should be an error 
 var x3 = 1;
 var x3 = function () {
-};// should be an error 
+}; // should be an error 
 // var then class
 var x4 = 1;
 var x4 = (function () {
     function x4() {
     }
     return x4;
-})();// error 
+})(); // error 
 var x4a = 1;
 var x4a = (function () {
     function x4a() {
@@ -61,22 +61,22 @@ var x4a = (function () {
     x4a.prototype.foo = function () {
     };
     return x4a;
-})();// error 
+})(); // error 
 // var then enum
 var x5 = 1;
 var x5;
 (function (x5) {
     x5[x5["One"] = 0] = "One";
-})(x5 || (x5 = {}));// error 
+})(x5 || (x5 = {})); // error 
 // var then module
 var x6 = 1;
 var x6a = 1;
 var x6a;
 (function (x6a) {
     var y = 2;
-})(x6a || (x6a = {}));// error since instantiated 
+})(x6a || (x6a = {})); // error since instantiated 
 var x6b = 1;
 var x6b;
 (function (x6b) {
     x6b.y = 2;
-})(x6b || (x6b = {}));// error 
+})(x6b || (x6b = {})); // error 

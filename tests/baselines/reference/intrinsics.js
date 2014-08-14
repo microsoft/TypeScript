@@ -16,7 +16,7 @@ class Foo<__proto__> { }
 var foo: (__proto__: number) => void;
 
 //// [intrinsics.js]
-var hasOwnProperty;// Error 
+var hasOwnProperty; // Error 
 var m1;
 (function (m1) {
     m1.__proto__;

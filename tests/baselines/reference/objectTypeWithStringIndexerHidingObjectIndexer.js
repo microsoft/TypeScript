@@ -33,7 +33,7 @@ var r4: string = o2[''];
 
 //// [objectTypeWithStringIndexerHidingObjectIndexer.js]
 var o = {};
-var r = o[''];// should be Object 
+var r = o['']; // should be Object 
 var C = (function () {
     function C() {
     }

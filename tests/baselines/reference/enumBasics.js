@@ -123,13 +123,13 @@ var E5;
 (function (E5) {
     E5[E5["A"] = 0] = "A";
     E5[E5["B"] = 3] = "B";
-    E5[E5["C"] = 4] = "C";// 4 
+    E5[E5["C"] = 4] = "C"; // 4 
 })(E5 || (E5 = {}));
 var E6;
 (function (E6) {
     E6[E6["A"] = 0] = "A";
     E6[E6["B"] = 0] = "B";
-    E6[E6["C"] = 1] = "C";// 1 
+    E6[E6["C"] = 1] = "C"; // 1 
 })(E6 || (E6 = {}));
 // Enum with computed member initializer of type 'any'
 var E7;

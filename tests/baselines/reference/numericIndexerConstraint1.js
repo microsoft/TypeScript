@@ -13,4 +13,4 @@ var Foo = (function () {
     return Foo;
 })();
 var x;
-var result = x["one"];// error 
+var result = x["one"]; // error 

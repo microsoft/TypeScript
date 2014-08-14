@@ -41,7 +41,7 @@ var X = (function () {
         return undefined;
     };
     return X;
-})();// { f: () => { b; } } 
+})(); // { f: () => { b; } } 
 // OK
 var Y = (function () {
     function Y() {
@@ -50,7 +50,7 @@ var Y = (function () {
         return undefined;
     };
     return Y;
-})();// { f: () => { a; } } 
+})(); // { f: () => { a; } } 
 // OK
 var Z = (function () {
     function Z() {
@@ -59,4 +59,4 @@ var Z = (function () {
         return undefined;
     };
     return Z;
-})();// { f: <T>() => T }  
+})(); // { f: <T>() => T }  

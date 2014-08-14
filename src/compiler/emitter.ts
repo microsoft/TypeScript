@@ -1939,6 +1939,10 @@ module ts {
                 // Emit the trailing declaration comments only if the parent's end doesnt match
                 if (node.parent.kind === SyntaxKind.SourceFile || node.end !== node.parent.end) {
                     var trailingComments = getTrailingComments(currentSourceFile.text, node.end);
+                    if (trailingComments && trailingComments.length) {
+                        // Trailing comments are emitting on same line, so write a space between comment
+                        writer.write(" ");
+                    }
                     emitComments(trailingComments, writer, writeComment);
                 }
             }

@@ -23,4 +23,4 @@ var Bar = (function (_super) {
         _super.apply(this, arguments);
     }
     return Bar;
-})(Foo);// Valid 
+})(Foo); // Valid 

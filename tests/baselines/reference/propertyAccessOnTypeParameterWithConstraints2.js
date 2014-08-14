@@ -112,11 +112,11 @@ var C = (function () {
     }
     C.prototype.f = function () {
         var x;
-        var a = x['foo']();// should be string 
+        var a = x['foo'](); // should be string 
         return a + x.foo();
     };
     C.prototype.g = function (x) {
-        var a = x['foo']();// should be string 
+        var a = x['foo'](); // should be string 
         return a + x.foo();
     };
     return C;
@@ -154,7 +154,7 @@ var r3c = a(aB, aB).foo();
 var r3d = a(aB, aB)['foo']();
 var b = {
     foo: function (x, y) {
-        var a = x['foo']();// should be string 
+        var a = x['foo'](); // should be string 
         return a + x.foo();
     }
 };
@@ -164,4 +164,4 @@ var b = {
 //        return a + x.foo();
 //    }
 //}
-var r4 = b.foo(aB, aB);// no inferences for T so constraint isn't satisfied, error 
+var r4 = b.foo(aB, aB); // no inferences for T so constraint isn't satisfied, error 

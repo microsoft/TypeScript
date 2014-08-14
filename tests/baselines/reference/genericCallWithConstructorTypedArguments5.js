@@ -31,18 +31,18 @@ function foo(arg) {
     return new arg.cb(null);
 }
 var arg;
-var r = foo(arg);// {} 
+var r = foo(arg); // {} 
 // more args not allowed
 var arg2;
-var r2 = foo(arg2);// error 
+var r2 = foo(arg2); // error 
 var arg3;
-var r3 = foo(arg3);// error 
+var r3 = foo(arg3); // error 
 function foo2(arg) {
     return new arg.cb(null, null);
 }
 // fewer args ok
-var r4 = foo(arg);// {} 
+var r4 = foo(arg); // {} 
 var arg4;
-var r6 = foo(arg4);// string 
+var r6 = foo(arg4); // string 
 var arg5;
-var r7 = foo(arg5);// string 
+var r7 = foo(arg5); // string 

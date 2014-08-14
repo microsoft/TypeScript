@@ -18,7 +18,7 @@ class Foo{
 var Foo = (function () {
     function Foo() {
         this.a = function bar() {
-        };// this shouldn't crash the compiler... 
+        }; // this shouldn't crash the compiler... 
     }
     return Foo;
 })();

@@ -32,7 +32,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();// error 
+})(); // error 
 var C2 = (function (_super) {
     __extends(C2, _super);
     function C2() {

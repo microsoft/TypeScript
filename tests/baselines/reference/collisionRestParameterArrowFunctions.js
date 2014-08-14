@@ -19,18 +19,18 @@ var f1 = function (_i) {
     for (var _i = 1; _i < arguments.length; _i++) {
         restParameters[_i - 1] = arguments[_i];
     }
-    var _i = 10;// no error 
+    var _i = 10; // no error 
 };
 var f1NoError = function (_i) {
-    var _i = 10;// no error 
+    var _i = 10; // no error 
 };
 var f2 = function () {
     var restParameters = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         restParameters[_i - 0] = arguments[_i];
     }
-    var _i = 10;// No Error 
+    var _i = 10; // No Error 
 };
 var f2NoError = function () {
-    var _i = 10;// no error 
+    var _i = 10; // no error 
 };

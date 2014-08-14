@@ -71,5 +71,5 @@ var ValidClass = (function () {
 })();
 var vcInstance = new ValidClass();
 var viInstance = vcInstance;
-var x1;// x1: string 
-var x2;// x2: string 
+var x1; // x1: string 
+var x2; // x2: string 

@@ -14,7 +14,7 @@ function dupe(x) {
     return x;
 }
 function dupeAndGetDist(x) {
-    var y = dupe(x);//<-- dupe has incorrect type here 
+    var y = dupe(x); //<-- dupe has incorrect type here 
     y.getDist();
     return y;
 }

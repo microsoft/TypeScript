@@ -123,14 +123,14 @@ var Derived = (function (_super) {
 window.setTimeout(function () { return null; }, 100);
 // Arrow function as value in array literal
 var obj = function (n) { return ''; };
-var obj;// OK 
+var obj; // OK 
 var arr = [function (n) { return ''; }];
-var arr;// Incorrect error here (bug 829597) 
+var arr; // Incorrect error here (bug 829597) 
 // Arrow function as enum value
 var E;
 (function (E) {
     E[E["x"] = function () { return 4; }] = "x";
-    E[E["y"] = (function () { return _this; }).length] = "y";// error, can't use this in enum 
+    E[E["y"] = (function () { return _this; }).length] = "y"; // error, can't use this in enum 
 })(E || (E = {}));
 // Arrow function as module variable initializer
 var M;
@@ -161,9 +161,9 @@ var M2;
     window.setTimeout(function () { return null; }, 100);
     // Arrow function as value in array literal
     var obj = function (n) { return ''; };
-    var obj;// OK 
+    var obj; // OK 
     var arr = [function (n) { return ''; }];
-    var arr;// Incorrect error here (bug 829597) 
+    var arr; // Incorrect error here (bug 829597) 
     // Arrow function as enum value
     var E;
     (function (E) {
@@ -179,7 +179,7 @@ var M2;
 })(M2 || (M2 = {}));
 // <Identifier>(ParamList) => { ... } is a generic arrow function
 var generic1 = function (n) { return [n]; };
-var generic1;// Incorrect error, Bug 829597 
+var generic1; // Incorrect error, Bug 829597 
 var generic2 = function (n) {
     return [n];
 };

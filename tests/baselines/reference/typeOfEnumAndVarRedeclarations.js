@@ -20,6 +20,6 @@ var E;
     E[E["b"] = 1] = "b";
 })(E || (E = {}));
 var x = E;
-var x;// Shouldnt error 
+var x; // Shouldnt error 
 var y = E;
-var y;// two errors: the types are not identical and duplicate signatures 
+var y; // two errors: the types are not identical and duplicate signatures 

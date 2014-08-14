@@ -72,7 +72,7 @@ var editor;
     // If you just use p1:modes, the compiler accepts it - should be an error
     var Bug = (function () {
         function Bug(p1, p2) {
-        }// should be an error on p2 - it's not exported 
+        } // should be an error on p2 - it's not exported 
         Bug.prototype.foo = function (p1) {
         };
         return Bug;
@@ -84,7 +84,7 @@ var editor2;
     var i;
     var Bug = (function () {
         function Bug(p1, p2) {
-        }// no error here, since modesOuter is declared externally 
+        } // no error here, since modesOuter is declared externally 
         return Bug;
     })();
     var Foo;

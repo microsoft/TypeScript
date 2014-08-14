@@ -16,6 +16,6 @@ module C {
 var c: C; // error
 
 //// [moduleWithNoValuesAsType.js]
-var a;// error 
-var b;// error 
-var c;// error 
+var a; // error 
+var b; // error 
+var c; // error 

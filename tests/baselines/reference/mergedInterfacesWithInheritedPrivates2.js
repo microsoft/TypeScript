@@ -63,5 +63,5 @@ var E = (function (_super) {
     return E;
 })(C2);
 var a;
-var r = a.x;// error 
-var r2 = a.w;// error 
+var r = a.x; // error 
+var r2 = a.w; // error 

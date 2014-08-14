@@ -17,7 +17,7 @@ module Query {
 
 
 //// [privacyCheckAnonymousFunctionParameter.js]
-exports.x = 1;// Makes this an external module 
+exports.x = 1; // Makes this an external module 
 var Query;
 (function (Query) {
     function fromDoWhile(doWhile) {

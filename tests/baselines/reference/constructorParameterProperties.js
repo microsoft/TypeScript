@@ -27,7 +27,7 @@ var C = (function () {
 })();
 var c;
 var r = c.y;
-var r2 = c.x;// error 
+var r2 = c.x; // error 
 var D = (function () {
     function D(a, x) {
         this.x = x;
@@ -36,5 +36,5 @@ var D = (function () {
 })();
 var d;
 var r = d.y;
-var r2 = d.x;// error 
-var r3 = d.a;// error 
+var r2 = d.x; // error 
+var r3 = d.a; // error 

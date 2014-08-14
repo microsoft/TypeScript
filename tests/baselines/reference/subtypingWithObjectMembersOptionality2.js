@@ -37,4 +37,4 @@ var r = true ? a : b; // error
 // object literal case
 var a;
 var b;
-var r = true ? a : b;// error 
+var r = true ? a : b; // error 

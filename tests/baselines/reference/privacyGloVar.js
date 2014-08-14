@@ -101,11 +101,11 @@ var m1;
             this.C3_v11_private = new C1_public();
             this.C3_v12_public = new C1_public();
             this.C3_v13_private = new C2_private();
-            this.C3_v14_public = new C2_private();// error 
+            this.C3_v14_public = new C2_private(); // error 
             this.C3_v21_private = new C1_public();
             this.C3_v22_public = new C1_public();
             this.C3_v23_private = new C2_private();
-            this.C3_v24_public = new C2_private();// error 
+            this.C3_v24_public = new C2_private(); // error 
         }
         return C3_public;
     })();
@@ -126,15 +126,15 @@ var m1;
     var m1_v1_private;
     m1.m1_v2_public;
     var m1_v3_private;
-    m1.m1_v4_public;// error 
+    m1.m1_v4_public; // error 
     var m1_v11_private = new C1_public();
     m1.m1_v12_public = new C1_public();
     var m1_v13_private = new C2_private();
-    m1.m1_v14_public = new C2_private();//error  
+    m1.m1_v14_public = new C2_private(); //error  
     var m1_v21_private = new C1_public();
     m1.m1_v22_public = new C1_public();
     var m1_v23_private = new C2_private();
-    m1.m1_v24_public = new C2_private();// error 
+    m1.m1_v24_public = new C2_private(); // error 
 })(m1 || (m1 = {}));
 var glo_C1_public = (function () {
     function glo_C1_public() {

@@ -160,7 +160,7 @@ var aa = obj.x;
 // Dotted property access of property that exists on value's apparent type
 var bb = obj.hasOwnProperty;
 // Dotted property access of property that doesn't exist on value's apparent type
-var cc = obj.qqq;// error 
+var cc = obj.qqq; // error 
 // Bracket notation property access using string literal value on type with property of that literal name
 var dd = obj['literal property'];
 var dd;
@@ -186,7 +186,7 @@ var jj;
 var kk = numIndex['what'];
 var kk;
 // Bracket notation property access using value of other type on type with numeric index signature and no string index signature
-var ll = numIndex[window];// Error 
+var ll = numIndex[window]; // Error 
 // Bracket notation property access using string value on type with string index signature and no numeric index signature
 var mm = strIndex['N'];
 var mm;
@@ -214,7 +214,7 @@ var ss;
 var tt = noIndex[null];
 var tt;
 // Bracket notation property access using values of other types on type with no index signatures
-var uu = noIndex[window];// Error 
+var uu = noIndex[window]; // Error 
 // Bracket notation property access using numeric value on type with numeric index signature and string index signature
 var vv = noIndex[32];
 var vv;
@@ -231,4 +231,4 @@ var yy;
 var zz = bothIndex['1.0'];
 var zz;
 // Bracket notation property access using value of other type on type with numeric index signature and no string index signature and string index signature
-var zzzz = bothIndex[window];// Error 
+var zzzz = bothIndex[window]; // Error 

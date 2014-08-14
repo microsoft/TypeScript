@@ -88,12 +88,12 @@ var C = (function () {
     C.prototype.f = function () {
         var x;
         // BUG 823818
-        var a = x['foo']();// should be string 
+        var a = x['foo'](); // should be string 
         return a + x.foo();
     };
     C.prototype.g = function (x) {
         // BUG 823818
-        var a = x['foo']();// should be string 
+        var a = x['foo'](); // should be string 
         return a + x.foo();
     };
     return C;
@@ -104,16 +104,16 @@ var i;
 var r2 = i.foo.foo();
 var r2b = i.foo['foo']();
 var a;
-var r3 = a().foo();// error, no inferences for U so it doesn't satisfy constraint 
+var r3 = a().foo(); // error, no inferences for U so it doesn't satisfy constraint 
 var r3b = a()['foo']();
 // parameter supplied for type argument inference for U
-var r3c = a(new B()).foo();// valid call to an invalid function, U is inferred as B, which has a foo 
-var r3d = a(new B())['foo']();// valid call to an invalid function, U is inferred as B, which has a foo 
+var r3c = a(new B()).foo(); // valid call to an invalid function, U is inferred as B, which has a foo 
+var r3d = a(new B())['foo'](); // valid call to an invalid function, U is inferred as B, which has a foo 
 var b = {
     foo: function (x) {
         // BUG 823818
-        var a = x['foo']();// should be string 
+        var a = x['foo'](); // should be string 
         return a + x.foo();
     }
 };
-var r4 = b.foo(new B());// valid call to an invalid function 
+var r4 = b.foo(new B()); // valid call to an invalid function 

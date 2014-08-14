@@ -31,7 +31,7 @@ var y: Foo2;
 //// [propertyIdentityWithPrivacyMismatch_1.js]
 define(["require", "exports"], function (require, exports) {
     var x;
-    var x;// Should be error (mod1.Foo !== mod2.Foo) 
+    var x; // Should be error (mod1.Foo !== mod2.Foo) 
     var Foo1 = (function () {
         function Foo1() {
         }

@@ -18,4 +18,4 @@ var a = new x();
 var b = new x('hello');
 var c = new x(x);
 // grammar allows this for constructors
-var d = new x(x);// no error 
+var d = new x(x); // no error 

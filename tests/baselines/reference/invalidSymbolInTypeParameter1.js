@@ -6,5 +6,5 @@ function test() {
 
 //// [invalidSymbolInTypeParameter1.js]
 function test() {
-    var cats = new Array();// WAWA is not a valid type 
+    var cats = new Array(); // WAWA is not a valid type 
 }

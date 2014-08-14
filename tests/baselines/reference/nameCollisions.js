@@ -64,7 +64,7 @@ var T;
     (function (z) {
         var t;
     })(z || (z = {}));
-    var z;// error 
+    var z; // error 
     var y;
     (function (y) {
         var b;
@@ -73,14 +73,14 @@ var T;
         function y() {
         }
         return y;
-    })();// error 
+    })(); // error 
     var w;
     var f;
     function f() {
-    }//error 
+    } //error 
     function f2() {
     }
-    var f2;// error 
+    var f2; // error 
     var i;
     var C = (function () {
         function C() {
@@ -88,14 +88,14 @@ var T;
         return C;
     })();
     function C() {
-    }// error 
+    } // error 
     function C2() {
     }
     var C2 = (function () {
         function C2() {
         }
         return C2;
-    })();// error 
+    })(); // error 
     function fi() {
     }
     var cli = (function () {
@@ -107,5 +107,5 @@ var T;
         function cli2() {
         }
         return cli2;
-    })();// error 
+    })(); // error 
 })(T || (T = {}));

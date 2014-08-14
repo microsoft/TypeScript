@@ -25,12 +25,12 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-var _super = 10;// No Error 
+var _super = 10; // No Error 
 var Foo = (function () {
     function Foo() {
     }
     Foo.prototype.x = function () {
-        var _super = 10;// No error 
+        var _super = 10; // No error 
     };
     return Foo;
 })();
@@ -40,7 +40,7 @@ var b = (function (_super) {
         _super.apply(this, arguments);
     }
     b.prototype.foo = function () {
-        var _super = 10;// Should be error  
+        var _super = 10; // Should be error  
     };
     return b;
 })(Foo);
@@ -51,7 +51,7 @@ var c = (function (_super) {
     }
     c.prototype.foo = function () {
         var x = function () {
-            var _super = 10;// Should be error 
+            var _super = 10; // Should be error 
         };
     };
     return c;

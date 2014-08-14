@@ -46,7 +46,7 @@ function foo(x, y) {
 function foo2() {
     return asdf;
 }
-var z = x;// should be an error 
+var z = x; // should be an error 
 var C = (function () {
     function C() {
     }
@@ -69,7 +69,7 @@ var C4 = (function (_super) {
     }
     return C4;
 })(C3);
-var x2 = this.asdf;// no error, this is any 
+var x2 = this.asdf; // no error, this is any 
 var C5 = (function () {
     function C5() {
         this.asdf = asdf;

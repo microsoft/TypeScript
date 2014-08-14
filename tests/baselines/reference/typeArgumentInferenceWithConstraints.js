@@ -173,7 +173,7 @@ someGenerics7(function (n) { return n; }, function (n) { return n; }, function (
 function someGenerics8(n) {
     return n;
 }
-var x = someGenerics8(someGenerics7);// Error 
+var x = someGenerics8(someGenerics7); // Error 
 x(null, null, null);
 // Generic call with multiple parameters of generic type passed arguments with no best common type
 function someGenerics9(a, b, c) {

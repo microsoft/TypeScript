@@ -24,13 +24,13 @@ var x;
 x.foo(1);
 var f = function (x) {
     return x.foo(1);
-};// error 
+}; // error 
 var f2 = function (x) {
     return x.foo(1);
-};// error 
+}; // error 
 var f3 = function (x) {
     return x.foo(1);
-};// error 
+}; // error 
 var f4 = function (x) {
     return x.foo(1);
-};// no error 
+}; // no error 
