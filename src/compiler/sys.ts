@@ -234,7 +234,9 @@ var sys: System = (function () {
                 return (<any>process).cwd();
             },
             getMemoryUsage() {
-                global.gc();
+                if (global.gc) {
+                    global.gc();
+                }
                 return process.memoryUsage().heapUsed;
             },
             exit(exitCode?: number): void {
