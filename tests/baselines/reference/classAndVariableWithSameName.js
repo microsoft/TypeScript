@@ -16,7 +16,7 @@ var C = (function () {
     }
     return C;
 })();
-var C = '';
+var C = '';// error 
 var M;
 (function (M) {
     var D = (function () {
@@ -24,5 +24,5 @@ var M;
         }
         return D;
     })();
-    var D = 1;
+    var D = 1;// error 
 })(M || (M = {}));

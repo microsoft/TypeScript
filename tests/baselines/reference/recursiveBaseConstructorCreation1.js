@@ -27,4 +27,4 @@ var C2 = (function (_super) {
     }
     return C2;
 })(C1);
-var x = new C2();
+var x = new C2();// Valid 

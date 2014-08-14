@@ -129,7 +129,7 @@ arr_c3 = arr_i1_2;
 arr_any = f1;
 arr_any = function () {
     return null;
-};
+}// should be an error - is ;
 arr_any = o1;
 arr_any = a1;
 arr_any = c1;

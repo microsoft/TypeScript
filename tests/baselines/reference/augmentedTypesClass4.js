@@ -19,4 +19,4 @@ var c3 = (function () {
     c3.prototype.bar = function () {
     };
     return c3;
-})();
+})();// error 

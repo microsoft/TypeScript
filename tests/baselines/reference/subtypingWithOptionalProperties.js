@@ -17,5 +17,5 @@ function f(a) {
     var b = a;
     return b;
 }
-var r = f({ s: new Object() });
+var r = f({ s: new Object() });// ok 
 r.s && r.s.toFixed();

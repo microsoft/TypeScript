@@ -35,7 +35,7 @@ var C = (function (_super) {
         _super.apply(this, arguments);
     }
     return C;
-})(N.E);
+})(N.E);// error 
 var M;
 (function (M) {
     var D = (function (_super) {
@@ -66,7 +66,7 @@ var O;
             _super.apply(this, arguments);
         }
         return C2;
-    })(Q.E2);
+    })(Q.E2);// error 
     var P;
     (function (P) {
         var D2 = (function (_super) {

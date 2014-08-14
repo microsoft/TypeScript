@@ -17,9 +17,9 @@ var M;
 (function (M) {
     M.a = 1;
 })(M || (M = {}));
-var p;
-var m = M;
-var m2 = M;
-var x1 = M.a;
-var x2 = m.a;
-var q;
+var p;// Used as ModuleName 
+var m = M;// Used as TypeName and PrimaryExpression (error on TypeName) 
+var m2 = M;// Used as PrimaryExpression in TypeQuery 
+var x1 = M.a;// Used as PrimaryExpression 
+var x2 = m.a;// Same as M.a 
+var q;// Error 

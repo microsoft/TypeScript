@@ -15,8 +15,8 @@ numberI = fun();
 //// [typeofSimple.js]
 var v = 3;
 var v2;
-var v3 = v2;
-var numberJ;
+var v3 = v2;// Not assignment compatible 
+var numberJ;//Error, cannot reference type in typeof 
 var numberI;
 var fun;
 numberI = fun();

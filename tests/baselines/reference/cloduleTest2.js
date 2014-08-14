@@ -43,7 +43,7 @@ var T1;
     (function (m3d) {
         m3d.y = 2;
     })(m3d || (m3d = {}));
-    var r = new m3d();
+    var r = new m3d();// error 
 })(T1 || (T1 = {}));
 var T2;
 (function (T2) {
@@ -51,7 +51,7 @@ var T2;
     (function (m3d) {
         m3d.y = 2;
     })(m3d || (m3d = {}));
-    var r = new m3d();
+    var r = new m3d();// error 
 })(T2 || (T2 = {}));
 var T3;
 (function (T3) {
@@ -79,5 +79,5 @@ var m3d;
 (function (m3d) {
     m3d.y = 2;
 })(m3d || (m3d = {}));
-var r = new m3d();
-var r2 = new m4d();
+var r = new m3d();// error 
+var r2 = new m4d();// error 

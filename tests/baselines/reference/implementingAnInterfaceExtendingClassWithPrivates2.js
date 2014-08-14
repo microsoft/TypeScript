@@ -179,8 +179,8 @@ var M2;
     })(Foo);
     var b;
     var r1 = b.z;
-    var r2 = b.x;
-    var r3 = b.y;
+    var r2 = b.x;// error 
+    var r3 = b.y;// error 
     var Bar2 = (function (_super) {
         __extends(Bar2, _super);
         function Bar2() {

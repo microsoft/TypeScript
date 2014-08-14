@@ -37,4 +37,4 @@ var A;
 //// [test.js]
 var p;
 var p = A.Point.Origin;
-var p = new A.Point(0, 0);
+var p = new A.Point(0, 0);// unexpected error here, bug 840000 

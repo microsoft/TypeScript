@@ -27,6 +27,6 @@ var MyList = (function () {
     return MyList;
 })();
 var a;
-var b = a.clone();
-var c = a.clone();
-var d = a.clone();
+var b = a.clone();// ok 
+var c = a.clone();// bug was there was an error on this line 
+var d = a.clone();// error 

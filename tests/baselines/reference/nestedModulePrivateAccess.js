@@ -12,6 +12,6 @@ var a;
     var x;
     var b;
     (function (b) {
-        var y = x;
+        var y = x;// should not be an error 
     })(b || (b = {}));
 })(a || (a = {}));

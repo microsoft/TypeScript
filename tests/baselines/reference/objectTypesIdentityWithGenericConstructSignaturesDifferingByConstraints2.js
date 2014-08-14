@@ -111,7 +111,7 @@ var D = (function () {
 var a;
 var b = { new: function (x, y) {
     return '';
-} };
+} };// not a construct signature, function called new 
 function foo1b(x) {
 }
 function foo1c(x) {

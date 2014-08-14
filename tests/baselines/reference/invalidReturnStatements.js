@@ -37,7 +37,7 @@ function fn3() {
 function fn4() {
 }
 function fn7() {
-}
+}// should be valid: any includes void 
 var C = (function () {
     function C() {
     }

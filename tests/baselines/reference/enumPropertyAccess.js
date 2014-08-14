@@ -20,8 +20,8 @@ var Colors;
     Colors[Colors["Red"] = 0] = "Red";
     Colors[Colors["Green"] = 1] = "Green";
 })(Colors || (Colors = {}));
-var x = 0 /* Red */;
-var p = x.Green;
+var x = 0 /* Red */;// type of 'x' should be 'Colors' 
+var p = x.Green;// error 
 x.toFixed();
 // Now with generics
 function fill(f) {

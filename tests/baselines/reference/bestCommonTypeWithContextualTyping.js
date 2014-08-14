@@ -25,7 +25,7 @@ var e;
 // All of these should pass. Neither type is a supertype of the other, but the RHS should
 // always use Ellement in these examples (not Contextual). Because Ellement is assignable
 // to Contextual, no errors.
-var arr = [e];
-var obj = { s: e };
-var conditional = null ? e : e;
-var contextualOr = e || e;
+var arr = [e];// Ellement[] 
+var obj = { s: e };// { s: Ellement; [s: string]: Ellement } 
+var conditional = null ? e : e;// Ellement 
+var contextualOr = e || e;// Ellement 

@@ -46,4 +46,4 @@ var Bar = (function (_super) {
         });
     }
     return Bar;
-})(Foo);
+})(Foo);// error, if types are applied correctly 

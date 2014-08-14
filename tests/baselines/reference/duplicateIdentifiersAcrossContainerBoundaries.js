@@ -60,7 +60,7 @@ var M;
         }
         return I;
     })();
-    M.I = I;
+    M.I = I;// error 
 })(M || (M = {}));
 var M;
 (function (M) {
@@ -75,7 +75,7 @@ var M;
         }
         return f;
     })();
-    M.f = f;
+    M.f = f;// error 
 })(M || (M = {}));
 var M;
 (function (M) {
@@ -89,7 +89,7 @@ var M;
         }
         return g;
     })();
-    M.g = g;
+    M.g = g;// no error 
 })(M || (M = {}));
 var M;
 (function (M) {
@@ -103,7 +103,7 @@ var M;
 var M;
 (function (M) {
     function C() {
-    }
+    }// no error 
 })(M || (M = {}));
 var M;
 (function (M) {
@@ -111,7 +111,7 @@ var M;
 })(M || (M = {}));
 var M;
 (function (M) {
-    M.v = 3;
+    M.v = 3;// error for redeclaring var in a different parent 
 })(M || (M = {}));
 var Foo = (function () {
     function Foo() {
@@ -120,7 +120,7 @@ var Foo = (function () {
 })();
 var Foo;
 (function (Foo) {
-    Foo.x;
+    Foo.x;// error for redeclaring var in a different parent 
 })(Foo || (Foo = {}));
 var N;
 (function (N) {

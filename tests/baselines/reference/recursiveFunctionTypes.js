@@ -48,8 +48,8 @@ f7(); // ok
 function fn() {
     return 1;
 }
-var x = fn;
-var y = fn;
+var x = fn;// error 
+var y = fn;// ok 
 var f;
 var g;
 function f1(d) {
@@ -61,7 +61,7 @@ function g2() {
 function f3() {
     return f3;
 }
-var a = f3;
+var a = f3;// error 
 var C = (function () {
     function C() {
     }

@@ -28,9 +28,9 @@ var G = (function () {
     }
     return G;
 })();
-var result = foo(function (x) { return new G(x); });
-var result2 = foo(function (x) { return new G(x); });
+var result = foo(function (x) { return new G(x); });// No error, returns number 
+var result2 = foo(function (x) { return new G(x); });// No error, returns number 
 var result3 = foo(function (x) {
-    var y;
+    var y;// error that C does not satisfy constraint 
     return y;
 });

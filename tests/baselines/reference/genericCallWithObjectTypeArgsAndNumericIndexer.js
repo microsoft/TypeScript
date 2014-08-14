@@ -43,7 +43,7 @@ var a;
 var r = foo(a);
 function other(arg) {
     var b;
-    var r2 = foo(b);
+    var r2 = foo(b);// T 
 }
 function other2(arg) {
     var b;

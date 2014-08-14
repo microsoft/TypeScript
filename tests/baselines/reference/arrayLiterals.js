@@ -53,9 +53,9 @@ var __extends = this.__extends || function (d, b) {
 };
 // Empty array literal with no contextual type has type Undefined[]
 var arr1 = [[], [1], ['']];
-var arr1;
+var arr1;// Bug 825172: Error ({}[] does not match {}[]), but should be OK 
 var arr2 = [[null], [1], ['']];
-var arr2;
+var arr2;// Bug 825172: Error ({}[] does not match {}[]), but should be OK 
 // Array literal with elements of only EveryType E has type E[]
 var stringArrArr = [[''], [""]];
 var stringArrArr;
@@ -71,13 +71,13 @@ var C = (function () {
     return C;
 })();
 var classArr = [new C(), new C()];
-var classArr;
+var classArr;// Should be OK 
 var classTypeArray = [C, C, C];
-var classTypeArray;
+var classTypeArray;// Should OK, not be a parse error 
 // Contextual type C with numeric index signature makes array literal of EveryType E of type BCT(E,C)[]
 var context1 = [{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }];
 var context2 = [{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }];
-var context2;
+var context2;// Should be OK 
 // Contextual type C with numeric index signature of type Base makes array literal of Derived have type Base[]
 var Base = (function () {
     function Base() {

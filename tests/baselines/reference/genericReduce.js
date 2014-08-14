@@ -22,6 +22,6 @@ n1.x = "fail";
 n1.toExponential(2);
 n2.x = "fail";
 n2.toExponential(2);
-var n3 = b.reduce(function (x, y) { return x + y; }, "");
+var n3 = b.reduce(function (x, y) { return x + y; }, "");// Initial value is of type string 
 n3.toExponential(2);
 n3.charAt(0);

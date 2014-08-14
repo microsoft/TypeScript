@@ -43,4 +43,4 @@ var M;
     var g1 = new G();
     g1.bar(null).foo();
 })(M || (M = {}));
-var g2 = new G();
+var g2 = new G()// was: error Type reference cannot refer to container 'M.C'. ;// was: error Type reference cannot refer to container 'M.C'. 

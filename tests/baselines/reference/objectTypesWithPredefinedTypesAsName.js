@@ -34,7 +34,7 @@ var bool = (function () {
     function bool() {
     }
     return bool;
-})();
+})();// not a predefined type anymore 
 var string = (function () {
     function string() {
     }

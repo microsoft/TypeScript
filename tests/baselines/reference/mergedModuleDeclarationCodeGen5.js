@@ -52,12 +52,12 @@ var M;
             })(_plop.plop || (_plop.plop = {}));
             var plop = _plop.plop;
             // Emit these references as follows
-            var v1 = gunk;
-            var v2 = buz;
-            _plop.v3 = _plop.doom;
-            _plop.v4 = _plop.M;
-            _plop.v5 = fudge;
-            _plop.v6 = plop;
+            var v1 = gunk;// gunk 
+            var v2 = buz;// buz 
+            _plop.v3 = _plop.doom;// _plop.doom 
+            _plop.v4 = _plop.M;// _plop.M 
+            _plop.v5 = fudge;// fudge 
+            _plop.v6 = plop;// plop 
         })(_buz.plop || (_buz.plop = {}));
         var plop = _buz.plop;
     })(M.buz || (M.buz = {}));

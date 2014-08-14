@@ -25,4 +25,4 @@ var x: foo.A = foo.bar("hello"); // foo.A should be ok but foo.bar should be err
 //// [aliasOnMergedModuleInterface_1.js]
 var z;
 z.bar("hello");
-var x = foo.bar("hello");
+var x = foo.bar("hello");// foo.A should be ok but foo.bar should be error 

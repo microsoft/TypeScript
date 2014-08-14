@@ -40,17 +40,17 @@ function foo(x, y) {
 }
 var a;
 var b;
-var r = foo(a, b);
-var r2 = foo(b, a);
+var r = foo(a, b);// { x: number; y?: number; }; 
+var r2 = foo(b, a);// { x: number; z?: number; }; 
 var x;
 var y;
-var r3 = foo(a, x);
-var r4 = foo(x, a);
-var r5 = foo(a, y);
-var r5 = foo(y, a);
-var r6 = foo(x, y);
-var r6 = foo(y, x);
+var r3 = foo(a, x);// { x: number; y?: number; }; 
+var r4 = foo(x, a);// { x: number; }; 
+var r5 = foo(a, y);// { x?: number; }; 
+var r5 = foo(y, a);// { x?: number; }; 
+var r6 = foo(x, y);// { x?: number; }; 
+var r6 = foo(y, x);// { x?: number; }; 
 var s1;
 var s2;
-var r7 = foo(s1, s2);
-var r8 = foo(s2, s1);
+var r7 = foo(s1, s2);// (x: Object) => string; 
+var r8 = foo(s2, s1);// (x: string) => string; 

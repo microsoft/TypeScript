@@ -36,4 +36,4 @@ var A;
     })(A.B || (A.B = {}));
     var B = A.B;
 })(A || (A = {}));
-var b;
+var b;// ok 

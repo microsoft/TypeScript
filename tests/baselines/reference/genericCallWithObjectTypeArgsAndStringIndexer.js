@@ -44,15 +44,15 @@ var a;
 var r = foo(a);
 function other(arg) {
     var b;
-    var r2 = foo(b);
+    var r2 = foo(b);// T 
 }
 function other2(arg) {
     var b;
     var r2 = foo(b);
-    var d = r2['hm'];
+    var d = r2['hm'];// ok 
 }
 function other3(arg) {
     var b;
     var r2 = foo(b);
-    var d = r2['hm'];
+    var d = r2['hm'];// ok 
 }

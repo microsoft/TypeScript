@@ -37,9 +37,9 @@ try {
 catch (e) {
     var x;
     function x() {
-    }
+    }// error 
     function e() {
-    }
+    }// error 
     var p;
-    var p;
+    var p;// error 
 }

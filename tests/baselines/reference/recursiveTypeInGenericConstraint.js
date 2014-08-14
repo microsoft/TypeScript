@@ -29,4 +29,4 @@ var D = (function () {
     }
     return D;
 })();
-var c1 = new Foo();
+var c1 = new Foo();// ok, circularity in assignment compat check causes success 

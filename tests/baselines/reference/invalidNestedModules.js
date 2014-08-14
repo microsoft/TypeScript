@@ -72,7 +72,7 @@ var M2;
 var M2;
 (function (M2) {
     (function (X) {
-        X.Point;
+        X.Point;// Error 
     })(M2.X || (M2.X = {}));
     var X = M2.X;
 })(M2 || (M2 = {}));

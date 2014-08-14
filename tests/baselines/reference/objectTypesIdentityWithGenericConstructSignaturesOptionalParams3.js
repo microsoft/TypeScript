@@ -93,7 +93,7 @@ var C = (function () {
 var a;
 var b = { new: function (x, y) {
     return new C(x, y);
-} };
+} };// not a construct signature, function called new 
 function foo1b(x) {
 }
 function foo1c(x) {

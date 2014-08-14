@@ -22,7 +22,7 @@ var C = (function () {
     };
     C.bar = function (x) {
         C.bar = function () {
-        };
+        }// error ;
         C.bar = function (x) { return x; };
         C.bar = function (x) { return 1; };
         return 1;

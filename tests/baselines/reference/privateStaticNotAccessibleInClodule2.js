@@ -36,5 +36,5 @@ var D = (function (_super) {
 })(C);
 var D;
 (function (D) {
-    D.y = D.bar;
+    D.y = D.bar;// error 
 })(D || (D = {}));

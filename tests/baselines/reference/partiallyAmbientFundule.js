@@ -6,4 +6,4 @@ function foo () { } // Legal, because module is ambient
 
 //// [partiallyAmbientFundule.js]
 function foo() {
-}
+}// Legal, because module is ambient 

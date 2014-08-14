@@ -1930,6 +1930,7 @@ module ts {
 
             function emitTrailingDeclarationComments(node: Declaration) {
                 var trailingComments = getTrailingComments(currentSourceFile.text, node.end);
+                emitComments(trailingComments, writer, writeComment);
             }
 
             if (compilerOptions.sourceMap) {

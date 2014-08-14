@@ -28,7 +28,7 @@ class D {
 var x = 1;
 var C = (function () {
     function C(x) {
-        this.b = x;
+        this.b = x;// error, evaluated in scope of constructor, cannot reference x 
         x = 2;
     }
     return C;
@@ -36,7 +36,7 @@ var C = (function () {
 var y = 1;
 var D = (function () {
     function D(x) {
-        this.b = y;
+        this.b = y;// error, evaluated in scope of constructor, cannot reference y 
         var y = "";
     }
     return D;

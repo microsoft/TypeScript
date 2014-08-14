@@ -70,9 +70,9 @@ var M;
     var a;
     var r1 = a.foo;
     // BUG 856491
-    var r2 = a.bar;
+    var r2 = a.bar;// any, should be number 
     var b;
     var r3 = b.foo;
     // BUG 856491
-    var r4 = b.bar;
+    var r4 = b.bar;// any, should be string 
 })(M || (M = {}));

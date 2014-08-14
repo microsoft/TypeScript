@@ -70,11 +70,11 @@ e = f;
 f = e;
 e = 1;
 f = 1;
-var x = e;
+var x = e;// ok 
 x = f;
 var Others;
 (function (Others) {
-    var a = e;
+    var a = e;// ok 
     var C = (function () {
         function C() {
         }
@@ -82,11 +82,11 @@ var Others;
     })();
     var ac;
     var ai;
-    var b = e;
+    var b = e;// ok 
     var c = e;
     var d = e;
     var ee = e;
-    var f = e;
+    var f = e;// ok 
     var g = e;
     var h = e;
     var i = e;

@@ -37,12 +37,12 @@ var newC2 = new C(<any>[], null)
 
 //// [implicitAnyFunctionInvocationWithAnyArguements.js]
 // this should be errors
-var arg0 = null;
-var anyArray = [null, undefined];
-var objL;
+var arg0 = null;// error at "arg0" 
+var anyArray = [null, undefined];// error at array literal 
+var objL// error at "y,z" ;// error at "y,z" 
 var funcL;
 function temp1(arg1) {
-}
+}// error at "temp1" 
 function testFunctionExprC(subReplace) {
 }
 function testFunctionExprC2(eq) {

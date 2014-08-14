@@ -436,30 +436,35 @@ sourceFile:sourceMapValidationClasses.ts
 2 >Emitted(22, 55) Source(21, 83) + SourceIndex(0) name (Foo.Bar.foo2)
 ---
 >>>            }
->>>            var greeters = [];
+>>>            var greeters = [];/* inline block comment */ 
 1 >^^^^^^^^^^^^
 2 >            ^^^^
 3 >                ^^^^^^^^
 4 >                        ^^^
 5 >                           ^^
 6 >                             ^
-7 >                              ^^^^^^^^^^^^^^^^^^^->
+7 >                              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+8 >                                                        ^
 1 >) {
   >        
 2 >            var 
 3 >                greeters
 4 >                        : Greeter[] = 
 5 >                           []
-6 >                             ;
+6 >                             ; 
+7 >                              /* inline block comment */
+8 >                                                        
 1 >Emitted(24, 13) Source(22, 9) + SourceIndex(0) name (Foo.Bar.foo2)
 2 >Emitted(24, 17) Source(22, 13) + SourceIndex(0) name (Foo.Bar.foo2)
 3 >Emitted(24, 25) Source(22, 21) + SourceIndex(0) name (Foo.Bar.foo2)
 4 >Emitted(24, 28) Source(22, 35) + SourceIndex(0) name (Foo.Bar.foo2)
 5 >Emitted(24, 30) Source(22, 37) + SourceIndex(0) name (Foo.Bar.foo2)
-6 >Emitted(24, 31) Source(22, 38) + SourceIndex(0) name (Foo.Bar.foo2)
+6 >Emitted(24, 31) Source(22, 39) + SourceIndex(0) name (Foo.Bar.foo2)
+7 >Emitted(24, 57) Source(22, 65) + SourceIndex(0) name (Foo.Bar.foo2)
+8 >Emitted(24, 58) Source(22, 38) + SourceIndex(0) name (Foo.Bar.foo2)
 ---
 >>>            greeters[0] = new Greeter(greeting);
-1->^^^^^^^^^^^^
+1 >^^^^^^^^^^^^
 2 >            ^^^^^^^^
 3 >                    ^
 4 >                     ^
@@ -472,7 +477,7 @@ sourceFile:sourceMapValidationClasses.ts
 11>                                              ^
 12>                                               ^
 13>                                                ^^^^^^^^^^^^^->
-1-> /* inline block comment */
+1 > /* inline block comment */
   >        
 2 >            greeters
 3 >                    [
@@ -485,7 +490,7 @@ sourceFile:sourceMapValidationClasses.ts
 10>                                      greeting
 11>                                              )
 12>                                               ;
-1->Emitted(25, 13) Source(23, 9) + SourceIndex(0) name (Foo.Bar.foo2)
+1 >Emitted(25, 13) Source(23, 9) + SourceIndex(0) name (Foo.Bar.foo2)
 2 >Emitted(25, 21) Source(23, 17) + SourceIndex(0) name (Foo.Bar.foo2)
 3 >Emitted(25, 22) Source(23, 18) + SourceIndex(0) name (Foo.Bar.foo2)
 4 >Emitted(25, 23) Source(23, 19) + SourceIndex(0) name (Foo.Bar.foo2)

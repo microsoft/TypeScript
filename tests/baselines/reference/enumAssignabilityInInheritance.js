@@ -115,9 +115,9 @@ var E;
 (function (E) {
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
-var r = foo(0 /* A */);
-var r2 = foo(1);
-var r3 = foo(null);
+var r = foo(0 /* A */);// E 
+var r2 = foo(1);// number 
+var r3 = foo(null);// any 
 var r4 = foo2(0 /* A */);
 var r4 = foo3(0 /* A */);
 var r4 = foo4(0 /* A */);

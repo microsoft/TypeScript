@@ -9,4 +9,4 @@ var z3:number = foo3([undefined, "def"]);  // Type is any, but should be string
 function foo3(x) {
     return undefined;
 }
-var z3 = foo3([undefined, "def"]);
+var z3 = foo3([undefined, "def"]);// Type is any, but should be string 

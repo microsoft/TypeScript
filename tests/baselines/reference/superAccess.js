@@ -34,9 +34,9 @@ var MyDerived = (function (_super) {
         _super.apply(this, arguments);
     }
     MyDerived.prototype.foo = function () {
-        var l3 = _super.prototype.S1;
-        var l4 = _super.prototype.S2;
-        var l5 = _super.prototype.f.call(this);
+        var l3 = _super.prototype.S1;// Expected => Error: Only public instance methods of the base class are accessible via the 'super' keyword 
+        var l4 = _super.prototype.S2;// Expected => Error: Only public instance methods of the base class are accessible via the 'super' keyword 
+        var l5 = _super.prototype.f.call(this);// Expected => Error: Only public instance methods of the base class are accessible via the 'super' keyword 
     };
     return MyDerived;
 })(MyBase);
