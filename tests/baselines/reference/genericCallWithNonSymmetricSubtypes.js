@@ -32,6 +32,8 @@ var r7 = foo(s1, s2); // (x: Object) => string;
 var r8 = foo(s2, s1); // (x: string) => string;
 
 //// [genericCallWithNonSymmetricSubtypes.js]
+// generic type argument inference where inference leads to two candidates that are both supertypes of all candidates
+// we choose the first candidate so the result is dependent on the order of the arguments provided
 function foo(x, y) {
     var r;
     return r;

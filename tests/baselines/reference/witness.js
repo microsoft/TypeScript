@@ -158,6 +158,7 @@ var InitClass = (function () {
     };
     return InitClass;
 })();
+// Return type
 function fnReturn1() {
     return fnReturn1();
 }
@@ -198,11 +199,13 @@ var and2 = '' && and2;
 var and2;
 var and3 = and3 && and3;
 var and3;
+// function call return type
 function fnCall() {
     return fnCall();
 }
 var fnCallResult = fnCall();
 var fnCallResult;
+// Call argument
 function fnArg1(x, y) {
     var x;
     fnArg1(fnArg1, 0);

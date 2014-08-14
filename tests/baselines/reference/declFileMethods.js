@@ -194,8 +194,10 @@ interface I2 {
 var c1 = (function () {
     function c1() {
     }
+    /** This comment should appear for foo*/
     c1.prototype.foo = function () {
     };
+    /** This is comment for function signature*/
     c1.prototype.fooWithParameters = function (a, /** this is comment for b*/
         b) {
         var d = a;
@@ -210,8 +212,10 @@ var c1 = (function () {
     c1.prototype.fooWithOverloads = function (a) {
         return a;
     };
+    /** This comment should appear for privateFoo*/
     c1.prototype.privateFoo = function () {
     };
+    /** This is comment for function signature*/
     c1.prototype.privateFooWithParameters = function (a, /** this is comment for b*/
         b) {
         var d = a;
@@ -226,8 +230,10 @@ var c1 = (function () {
     c1.prototype.privateFooWithOverloads = function (a) {
         return a;
     };
+    /** This comment should appear for static foo*/
     c1.staticFoo = function () {
     };
+    /** This is comment for function signature*/
     c1.staticFooWithParameters = function (a, /** this is comment for b*/
         b) {
         var d = a;
@@ -242,8 +248,10 @@ var c1 = (function () {
     c1.staticFooWithOverloads = function (a) {
         return a;
     };
+    /** This comment should appear for privateStaticFoo*/
     c1.privateStaticFoo = function () {
     };
+    /** This is comment for function signature*/
     c1.privateStaticFooWithParameters = function (a, /** this is comment for b*/
         b) {
         var d = a;
@@ -265,8 +273,10 @@ exports.c1 = c1;
 var c2 = (function () {
     function c2() {
     }
+    /** This comment should appear for foo*/
     c2.prototype.foo = function () {
     };
+    /** This is comment for function signature*/
     c2.prototype.fooWithParameters = function (a, /** this is comment for b*/
         b) {
         var d = a;
@@ -281,8 +291,10 @@ var c2 = (function () {
     c2.prototype.fooWithOverloads = function (a) {
         return a;
     };
+    /** This comment should appear for privateFoo*/
     c2.prototype.privateFoo = function () {
     };
+    /** This is comment for function signature*/
     c2.prototype.privateFooWithParameters = function (a, /** this is comment for b*/
         b) {
         var d = a;
@@ -297,8 +309,10 @@ var c2 = (function () {
     c2.prototype.privateFooWithOverloads = function (a) {
         return a;
     };
+    /** This comment should appear for static foo*/
     c2.staticFoo = function () {
     };
+    /** This is comment for function signature*/
     c2.staticFooWithParameters = function (a, /** this is comment for b*/
         b) {
         var d = a;
@@ -313,8 +327,10 @@ var c2 = (function () {
     c2.staticFooWithOverloads = function (a) {
         return a;
     };
+    /** This comment should appear for privateStaticFoo*/
     c2.privateStaticFoo = function () {
     };
+    /** This is comment for function signature*/
     c2.privateStaticFooWithParameters = function (a, /** this is comment for b*/
         b) {
         var d = a;

@@ -37,6 +37,8 @@ function other<T, U>(t: T, u: U) {
 }
 
 //// [genericCallWithFunctionTypedArguments.js]
+// Generic functions used as arguments for function typed parameters are not used to make inferences from
+// Using function arguments, no errors expected
 function foo(x) {
     return x(null);
 }

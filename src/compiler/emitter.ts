@@ -1166,11 +1166,18 @@ module ts {
 
             function emitFunctionDeclaration(node: FunctionDeclaration) {
                 if (!node.body) return;
+                if (node.kind !== SyntaxKind.Method) {
+                    // Methods will emit the comments as part of emitting method declaration
+                    emitLeadingComments(node);
+                }
                 write("function ");
                 if (node.kind === SyntaxKind.FunctionDeclaration || (node.kind === SyntaxKind.FunctionExpression && node.name)) {
                     emit(node.name);
                 }
                 emitSignatureAndBody(node);
+                if (node.kind !== SyntaxKind.Method) {
+                    emitTrailingComments(node);
+                }
             }
 
             function emitCaptureThisForNodeIfNecessary(node: Node): void {
@@ -1322,6 +1329,7 @@ module ts {
                     if (member.kind === SyntaxKind.Method) {
                         if (!(<MethodDeclaration>member).body) return;
                         writeLine();
+                        emitLeadingComments(member);
                         emitStart(member);
                         emitStart((<MethodDeclaration>member).name);
                         emitNode(node.name);
@@ -1336,6 +1344,7 @@ module ts {
                         emitEnd(member);
                         emitEnd(member);
                         write(";");
+                        emitTrailingComments(member);
                     }
                     else if (member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor) {
                         var accessors = getAllAccessorDeclarations(node, <AccessorDeclaration>member);

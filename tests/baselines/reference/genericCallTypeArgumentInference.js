@@ -92,6 +92,7 @@ var r10 = i.foo7(''); // {}
 var r11 = i.foo8(); // {}
 
 //// [genericCallTypeArgumentInference.js]
+// Basic type inference with generic calls, no errors expected
 function foo(t) {
     return t;
 }

@@ -27,6 +27,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// all the following should be error
 function fn1() {
 }
 function fn2() {

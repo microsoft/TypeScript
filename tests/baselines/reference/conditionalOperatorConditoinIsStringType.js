@@ -81,6 +81,7 @@ condString ? exprIsObject1 : exprIsObject2;
 'c' ? exprNumber1 : exprNumber2;
 'string' ? exprString1 : exprString2;
 "  " ? exprIsObject1 : exprIsObject2;
+//Cond is a string type expression
 function foo() {
     return "string";
 }

@@ -180,6 +180,7 @@ function f1(aOrb) {
 }
 f1("hello");
 f1(10);
+/** this is f2 var comment*/
 function f2(aOrb) {
     return 10;
 }
@@ -213,6 +214,7 @@ var c = (function () {
     c.prototype.prop4 = function (aorb) {
         return 10;
     };
+    /** Prop5 implementaion*/
     c.prototype.prop5 = function (aorb) {
         return 10;
     };

@@ -157,6 +157,7 @@ var c;
 (function (c) {
     c.bar = 1;
 })(c || (c = {}));
+// errors throughout
 function f2(x, y) {
     var r0 = true ? x : null;
     var r0 = true ? null : x;

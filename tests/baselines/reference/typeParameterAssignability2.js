@@ -73,6 +73,7 @@ function foo6<T extends U, U, V>(t: T, u: U, v: V) {
 }
 
 //// [typeParameterAssignability2.js]
+// type parameters are not assignable to one another unless directly or indirectly constrained to one another
 function foo(t, u) {
     t = u;
     u = t;
@@ -104,6 +105,7 @@ function foo4(t, u, v) {
     d = u;
     d = v;
 }
+// same as foo4 with different type parameter ordering
 function foo5(t, u, v) {
     t = u;
     t = v;

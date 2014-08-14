@@ -219,6 +219,7 @@ cProperties_i.nc_p2 = cProperties_i.nc_p1;
 var c1 = (function () {
     function c1() {
     }
+    /** sum with property*/
     c1.prototype.p2 = function (b) {
         return this.p1 + b;
     };
@@ -234,6 +235,7 @@ var c1 = (function () {
         enumerable: true,
         configurable: true
     });
+    /** sum with property*/
     c1.prototype.pp2 = function (b) {
         return this.p1 + b;
     };
@@ -249,6 +251,7 @@ var c1 = (function () {
         enumerable: true,
         configurable: true
     });
+    /** static sum with property*/
     c1.s2 = function (b) {
         return c1.s1 + b;
     };
@@ -303,6 +306,7 @@ var c1 = (function () {
         enumerable: true,
         configurable: true
     });
+    // sum with property
     c1.prototype.a_p2 = function (b) {
         return this.a_p1 + b;
     };
@@ -318,6 +322,7 @@ var c1 = (function () {
         enumerable: true,
         configurable: true
     });
+    // sum with property
     c1.prototype.a_pp2 = function (b) {
         return this.a_p1 + b;
     };
@@ -333,6 +338,7 @@ var c1 = (function () {
         enumerable: true,
         configurable: true
     });
+    // static sum with property
     c1.a_s2 = function (b) {
         return c1.a_s1 + b;
     };
@@ -348,6 +354,7 @@ var c1 = (function () {
         enumerable: true,
         configurable: true
     });
+    /** sum with property */
     c1.prototype.b_p2 = function (b) {
         return this.b_p1 + b;
     };
@@ -363,6 +370,7 @@ var c1 = (function () {
         enumerable: true,
         configurable: true
     });
+    /** sum with property */
     c1.prototype.b_pp2 = function (b) {
         return this.b_p1 + b;
     };
@@ -378,6 +386,7 @@ var c1 = (function () {
         enumerable: true,
         configurable: true
     });
+    /** static sum with property */
     c1.b_s2 = function (b) {
         return c1.b_s1 + b;
     };

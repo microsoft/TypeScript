@@ -195,6 +195,7 @@ var Sample;
                     function Mode() {
                         _super.apply(this, arguments);
                     }
+                    // scenario 2
                     Mode.prototype.getInitialState = function () {
                         return new State(self);
                     };

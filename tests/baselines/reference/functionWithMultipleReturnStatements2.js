@@ -92,6 +92,8 @@ function f12() {
 }
 
 //// [functionWithMultipleReturnStatements2.js]
+// return type of a function with multiple returns is the BCT of each return statement
+// no errors expected here
 function f1() {
     if (true) {
         return 1;
@@ -143,6 +145,7 @@ function f6(x) {
 //}
 var a;
 var b;
+// returns typeof a
 function f9() {
     if (true) {
         return a;
@@ -151,6 +154,7 @@ function f9() {
         return b;
     }
 }
+// returns typeof b
 function f10() {
     if (true) {
         return b;
@@ -159,6 +163,7 @@ function f10() {
         return a;
     }
 }
+// returns number => void
 function f11() {
     if (true) {
         return function (x) {
@@ -169,6 +174,7 @@ function f11() {
         };
     }
 }
+// returns Object => void
 function f12() {
     if (true) {
         return function (x) {

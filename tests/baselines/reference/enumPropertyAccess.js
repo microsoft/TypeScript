@@ -23,6 +23,7 @@ var Colors;
 var x = 0 /* Red */;
 var p = x.Green;
 x.toFixed();
+// Now with generics
 function fill(f) {
     f.Green;
     f.toFixed();

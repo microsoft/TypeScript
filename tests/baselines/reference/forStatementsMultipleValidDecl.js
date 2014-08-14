@@ -40,6 +40,7 @@ for (var x = 2;;) {
 }
 for (var x = undefined;;) {
 }
+// new declaration space, making redeclaring x as a string valid
 function declSpace() {
     for (var x = 'this is a string';;) {
     }

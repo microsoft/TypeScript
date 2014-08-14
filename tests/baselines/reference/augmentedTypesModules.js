@@ -139,6 +139,7 @@ var m2b;
 function m2b() {
 }
 ;
+// should be errors to have function first
 function m2c() {
 }
 ;

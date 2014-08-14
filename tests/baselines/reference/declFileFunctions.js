@@ -60,9 +60,11 @@ function globalfooWithOverloads(a: any): any {
 }
 
 //// [declFileFunctions_0.js]
+/** This comment should appear for foo*/
 function foo() {
 }
 exports.foo = foo;
+/** This is comment for function signature*/
 function fooWithParameters(a, /** this is comment for b*/
     b) {
     var d = a;
@@ -80,8 +82,10 @@ function fooWithOverloads(a) {
     return a;
 }
 exports.fooWithOverloads = fooWithOverloads;
+/** This comment should appear for nonExportedFoo*/
 function nonExportedFoo() {
 }
+/** This is comment for function signature*/
 function nonExportedFooWithParameters(a, /** this is comment for b*/
     b) {
     var d = a;
@@ -97,8 +101,10 @@ function nonExportedFooWithOverloads(a) {
     return a;
 }
 //// [declFileFunctions_1.js]
+/** This comment should appear for foo*/
 function globalfoo() {
 }
+/** This is comment for function signature*/
 function globalfooWithParameters(a, /** this is comment for b*/
     b) {
     var d = a;

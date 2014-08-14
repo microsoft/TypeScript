@@ -81,6 +81,7 @@ condNumber ? exprIsObject1 : exprIsObject2;
 0.123456789 ? exprNumber1 : exprNumber2;
 -10000000000000 ? exprString1 : exprString2;
 1000000000000 ? exprIsObject1 : exprIsObject2;
+//Cond is a number type expression
 function foo() {
     return 1;
 }

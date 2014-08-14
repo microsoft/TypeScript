@@ -25,9 +25,11 @@ lambdaFoo(10, 20);
 lambddaNoVarComment(10, 20);
 
 //// [commentsFunction.js]
+/** This comment should appear for foo*/
 function foo() {
 }
 foo();
+/** This is comment for function signature*/
 function fooWithParameters(a, /** this is comment for b*/
     b) {
     var d = a;

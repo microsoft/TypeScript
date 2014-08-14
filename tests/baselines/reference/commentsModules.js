@@ -102,6 +102,7 @@ var m1;
 (function (m1) {
     /** b's comment*/
     m1.b;
+    /** foo's comment*/
     function foo() {
         return m1.b;
     }
@@ -117,16 +118,24 @@ var m1;
         m2.i = new c();
     })(m1.m2 || (m1.m2 = {}));
     var m2 = m1.m2;
+    /** exported function*/
     function fooExport() {
         return foo();
     }
     m1.fooExport = fooExport;
+    // shouldn't appear
     function foo2Export(a) {
     }
     m1.foo2Export = foo2Export;
+    /** foo3Export
+     * comment
+     */
     function foo3Export() {
     }
     m1.foo3Export = foo3Export;
+    /** foo4Export
+     * comment
+     */
     function foo4Export() {
     }
 })(m1 || (m1 = {}));

@@ -93,14 +93,17 @@ var d = new anyCtor;
 var d;
 // Construct expression where constructor is of type 'any' with > 1 arg
 var d = new anyCtor1(undefined);
+// Construct expression of type where apparent type has a construct signature with 0 arguments
 function newFn1(s) {
     var p = new s;
     var p;
 }
+// Construct expression of type where apparent type has a construct signature with 1 arguments
 function newFn2(s) {
     var p = new s(32);
     var p;
 }
+// Construct expression of void returning function
 function fnVoid() {
 }
 var t = new fnVoid();

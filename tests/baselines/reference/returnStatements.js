@@ -31,6 +31,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// all the following should be valid
 function fn1() {
     return 1;
 }

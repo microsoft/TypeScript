@@ -66,6 +66,7 @@ define(["require", "exports"], function (require, exports) {
     (function (m1) {
         /** b's comment*/
         m1.b;
+        /** foo's comment*/
         function foo() {
             return m1.b;
         }
@@ -81,6 +82,7 @@ define(["require", "exports"], function (require, exports) {
             m2.i = new c();
         })(m1.m2 || (m1.m2 = {}));
         var m2 = m1.m2;
+        /** exported function*/
         function fooExport() {
             return foo();
         }
@@ -92,6 +94,8 @@ define(["require", "exports"], function (require, exports) {
     (function (m4) {
         /** b's comment */
         m4.b;
+        /** foo's comment
+    */
         function foo() {
             return m4.b;
         }
@@ -107,6 +111,7 @@ define(["require", "exports"], function (require, exports) {
             m2.i = new c();
         })(m4.m2 || (m4.m2 = {}));
         var m2 = m4.m2;
+        /** exported function */
         function fooExport() {
             return foo();
         }

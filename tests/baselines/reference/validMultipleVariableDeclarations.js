@@ -49,6 +49,7 @@ if (true) {
     }
 }
 var x = undefined;
+// new declaration space, making redeclaring x as a string valid
 function declSpace() {
     var x = 'this is a string';
 }

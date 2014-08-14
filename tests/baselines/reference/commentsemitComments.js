@@ -91,6 +91,7 @@ declare var x;
 //// [commentsemitComments.js]
 /** Variable comments*/
 var myVariable = 10;
+/** function comments*/
 function foo(p) {
 }
 /** variable with function type comment*/
@@ -101,6 +102,7 @@ var c = (function () {
     function c() {
         this.b = 10;
     }
+    /** function comment */
     c.prototype.myFoo = function () {
         return this.b;
     };
@@ -116,6 +118,7 @@ var c = (function () {
         enumerable: true,
         configurable: true
     });
+    /** overload implementation signature*/
     c.prototype.foo1 = function (aOrb) {
         return aOrb.toString();
     };

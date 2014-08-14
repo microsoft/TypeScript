@@ -158,10 +158,12 @@ function f21<T extends Number>(x: T) {
 }
 
 //// [subtypesOfTypeParameterWithConstraints2.js]
+// checking whether other types are subtypes of type parameters with constraints
 function f1(x, y) {
     var r = true ? x : y;
     var r = true ? y : x;
 }
+// V > U > T
 function f2(x, y, z) {
     var r = true ? x : y;
     var r = true ? y : x;
@@ -172,6 +174,7 @@ function f2(x, y, z) {
     var r2 = true ? z : x;
     var r2 = true ? x : z;
 }
+// Date > U > T
 function f3(x, y) {
     var r = true ? x : y;
     var r = true ? y : x;

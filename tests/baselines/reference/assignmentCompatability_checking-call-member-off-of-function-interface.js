@@ -36,6 +36,7 @@ x = '';
 x = [''];
 x = 4;
 x = {};
+// Should work
 function f() {
 }
 ;

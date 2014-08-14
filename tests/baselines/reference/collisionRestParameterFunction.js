@@ -34,6 +34,7 @@ declare function f6(_i: number); // no codegen no error
 declare function f6(_i: string); // no codegen no error
 
 //// [collisionRestParameterFunction.js]
+// Functions
 function f1(_i) {
     var restParameters = [];
     for (var _i = 1; _i < arguments.length; _i++) {

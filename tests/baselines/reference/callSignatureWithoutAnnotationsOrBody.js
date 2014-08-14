@@ -20,6 +20,7 @@ var r4 = a();
 var r5 = a.f();
 
 //// [callSignatureWithoutAnnotationsOrBody.js]
+// Call signatures without a return type annotation and function body return 'any'
 function foo(x) {
 }
 var r = foo(1);

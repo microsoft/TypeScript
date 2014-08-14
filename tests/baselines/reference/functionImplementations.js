@@ -146,6 +146,7 @@ var a = function f() {
     var x = f;
     return x;
 };
+// Two mutually recursive function implementations with no return type annotations
 function rec1() {
     return rec2();
 }
@@ -154,6 +155,7 @@ function rec2() {
 }
 var a = rec1();
 var a = rec2();
+// Two mutually recursive function implementations with return type annotation in one
 function rec3() {
     return rec4();
 }
@@ -216,25 +218,32 @@ var a = function f() {
 undefined === function () {
     throw undefined;
 };
+// Type of 'this' in function implementation is 'any'
 function thisFunc() {
     var x = this;
     var x;
 }
+// Function signature with optional parameter, no type annotation and initializer has initializer's type
 function opt1(n) {
     if (n === void 0) { n = 4; }
     var m = n;
     var m;
 }
+// Function signature with optional parameter, no type annotation and initializer has initializer's widened type
 function opt2(n) {
     if (n === void 0) { n = { x: null, y: undefined }; }
     var m = n;
     var m;
 }
+// Function signature with initializer referencing other parameter to the left
 function opt3(n, m) {
     if (m === void 0) { m = n; }
     var y = m;
     var y;
 }
+// Function signature with optional parameter has correct codegen 
+// (tested above)
+// FunctionExpression with non -void return type annotation return with no expression
 function f6() {
     return;
 }

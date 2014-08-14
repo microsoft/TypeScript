@@ -14,6 +14,10 @@ function foo() {
 
 //// [stradac.js]
 var x = 10;
+// C++-style comment
+/*
+    C-Style comment
+    */
 function foo() {
     x++;
 }

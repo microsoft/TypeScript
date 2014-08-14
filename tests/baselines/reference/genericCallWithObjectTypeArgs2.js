@@ -58,6 +58,7 @@ var Derived2 = (function (_super) {
     }
     return Derived2;
 })(Base);
+// returns {}[]
 function f(a) {
     return [a.x, a.y];
 }

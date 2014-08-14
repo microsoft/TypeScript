@@ -23,6 +23,7 @@ var r7 = foo({ cb: () => '' }); // string
 
 
 //// [genericCallWithFunctionTypedArguments5.js]
+// Generic call with parameter of object type with member of function type of n args passed object whose associated member is call signature with n+1 args
 function foo(arg) {
     return arg.cb(null);
 }

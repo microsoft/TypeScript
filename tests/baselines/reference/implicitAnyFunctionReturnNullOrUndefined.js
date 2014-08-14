@@ -25,6 +25,7 @@ undefinedWidenFunction();
 
 
 //// [implicitAnyFunctionReturnNullOrUndefined.js]
+// this should be an error
 function nullWidenFunction() {
     return null;
 }
@@ -42,6 +43,7 @@ var C = (function () {
     };
     return C;
 })();
+// this should not be an error
 function foo1() {
     return null;
 }
