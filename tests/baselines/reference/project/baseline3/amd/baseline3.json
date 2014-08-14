@@ -7,8 +7,8 @@
     "baselineCheck": true,
     "runTest": true,
     "resolvedInputFiles": [
-        "nestedModule.ts",
-        "lib.d.ts"
+        "lib.d.ts",
+        "nestedModule.ts"
     ],
     "emittedFiles": [
         "nestedModule.js"

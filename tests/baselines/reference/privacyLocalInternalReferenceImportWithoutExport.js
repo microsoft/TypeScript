@@ -293,3 +293,115 @@ define(["require", "exports"], function (require, exports) {
         import_private.publicUse_im_private_mu_public;
     })(import_private || (import_private = {}));
 });
+
+
+//// [privacyLocalInternalReferenceImportWithoutExport.d.ts]
+export declare module m_public {
+    class c_public {
+    }
+    enum e_public {
+        Happy = 0,
+        Grumpy = 1,
+    }
+    function f_public(): c_public;
+    var v_public: number;
+    interface i_public {
+    }
+    module mi_public {
+        class c {
+        }
+    }
+    module mu_public {
+        interface i {
+        }
+    }
+}
+export declare module import_public {
+    import im_private_c_private = m_private.c_private;
+    import im_private_e_private = m_private.e_private;
+    import im_private_i_private = m_private.i_private;
+    import im_private_mi_private = m_private.mi_private;
+    import im_private_mu_private = m_private.mu_private;
+    var publicUse_im_private_c_private: im_private_c_private;
+    var publicUse_im_private_e_private: im_private_e_private;
+    var publicUse_im_private_f_private: im_private_c_private;
+    var publicUse_im_private_v_private: im_private_c_private;
+    var publicUse_im_private_i_private: im_private_i_private;
+    var publicUse_im_private_mi_private: im_private_mi_private.c;
+    var publicUse_im_private_mu_private: im_private_mu_private.i;
+    import im_private_c_public = m_public.c_public;
+    import im_private_e_public = m_public.e_public;
+    import im_private_i_public = m_public.i_public;
+    import im_private_mi_public = m_public.mi_public;
+    import im_private_mu_public = m_public.mu_public;
+    var publicUse_im_private_c_public: im_private_c_public;
+    var publicUse_im_private_e_public: im_private_e_public;
+    var publicUse_im_private_f_public: im_private_c_public;
+    var publicUse_im_private_v_public: number;
+    var publicUse_im_private_i_public: im_private_i_public;
+    var publicUse_im_private_mi_public: im_private_mi_public.c;
+    var publicUse_im_private_mu_public: im_private_mu_public.i;
+}
+
+
+//// [DtsFileErrors]
+
+
+==== tests/cases/compiler/privacyLocalInternalReferenceImportWithoutExport.d.ts (5 errors) ====
+    export declare module m_public {
+        class c_public {
+        }
+        enum e_public {
+            Happy = 0,
+            Grumpy = 1,
+        }
+        function f_public(): c_public;
+        var v_public: number;
+        interface i_public {
+        }
+        module mi_public {
+            class c {
+            }
+        }
+        module mu_public {
+            interface i {
+            }
+        }
+    }
+    export declare module import_public {
+        import im_private_c_private = m_private.c_private;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'm_private'.
+        import im_private_e_private = m_private.e_private;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'm_private'.
+        import im_private_i_private = m_private.i_private;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'm_private'.
+        import im_private_mi_private = m_private.mi_private;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'm_private'.
+        import im_private_mu_private = m_private.mu_private;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Cannot find name 'm_private'.
+        var publicUse_im_private_c_private: im_private_c_private;
+        var publicUse_im_private_e_private: im_private_e_private;
+        var publicUse_im_private_f_private: im_private_c_private;
+        var publicUse_im_private_v_private: im_private_c_private;
+        var publicUse_im_private_i_private: im_private_i_private;
+        var publicUse_im_private_mi_private: im_private_mi_private.c;
+        var publicUse_im_private_mu_private: im_private_mu_private.i;
+        import im_private_c_public = m_public.c_public;
+        import im_private_e_public = m_public.e_public;
+        import im_private_i_public = m_public.i_public;
+        import im_private_mi_public = m_public.mi_public;
+        import im_private_mu_public = m_public.mu_public;
+        var publicUse_im_private_c_public: im_private_c_public;
+        var publicUse_im_private_e_public: im_private_e_public;
+        var publicUse_im_private_f_public: im_private_c_public;
+        var publicUse_im_private_v_public: number;
+        var publicUse_im_private_i_public: im_private_i_public;
+        var publicUse_im_private_mi_public: im_private_mi_public.c;
+        var publicUse_im_private_mu_public: im_private_mu_public.i;
+    }
+    

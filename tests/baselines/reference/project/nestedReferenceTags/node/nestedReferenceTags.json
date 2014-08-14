@@ -5,10 +5,10 @@
         "main.ts"
     ],
     "resolvedInputFiles": [
-        "main.ts",
+        "lib.d.ts",
         "lib/classA.ts",
         "lib/classB.ts",
-        "lib.d.ts"
+        "main.ts"
     ],
     "emittedFiles": [
         "lib/classA.js",
