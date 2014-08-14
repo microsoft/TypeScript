@@ -137,6 +137,7 @@ a++;
 var b = 1;
 b++;
 \u0062++;
+// modules
 var moduleType1;
 (function (moduleType1) {
     moduleType1.baz1;

@@ -244,6 +244,7 @@ var propAcc1 = {
     m: propAcc1.m
 };
 var propAcc1;
+// Property access of module member
 var M2;
 (function (M2) {
     M2.x = M2.x;

@@ -37,6 +37,7 @@ var p: IPoint = new Shapes.Point(3, 4);
 var dist = p.getDist();
 
 //// [sourceMap-FileWithComments.js]
+// Module
 var Shapes;
 (function (Shapes) {
     // Class

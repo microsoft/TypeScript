@@ -1569,6 +1569,7 @@ module ts {
 
             function emitModuleDeclaration(node: ModuleDeclaration) {
                 if (!isInstantiated(node)) return;
+                emitLeadingComments(node);
                 if (!(node.flags & NodeFlags.Export)) {
                     emitStart(node);
                     write("var ");
@@ -1615,6 +1616,7 @@ module ts {
                     emitEnd(node);
                     write(";");
                 }
+                emitTrailingComments(node);
             }
 
             function emitImportDeclaration(node: ImportDeclaration) {

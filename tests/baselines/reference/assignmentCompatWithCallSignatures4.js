@@ -105,6 +105,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// These are mostly permitted with the current loose rules. All ok unless otherwise noted.
 var Errors;
 (function (Errors) {
     var Base = (function () {

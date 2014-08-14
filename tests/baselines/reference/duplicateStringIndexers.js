@@ -35,6 +35,7 @@ module test {
 
 
 //// [duplicateStringIndexers.js]
+// it is an error to have duplicate index signatures of the same kind in a type
 var test;
 (function (test) {
     var C = (function () {

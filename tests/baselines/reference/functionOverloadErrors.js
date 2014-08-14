@@ -152,6 +152,7 @@ var cls = (function () {
     };
     return cls;
 })();
+//Function overloads with differing export
 var M;
 (function (M) {
     function fn1() {

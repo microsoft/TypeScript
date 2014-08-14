@@ -118,6 +118,7 @@ var Bar3 = (function (_super) {
     }
     return Bar3;
 })(Foo);
+// another level of indirection
 var M;
 (function (M) {
     var Foo = (function () {
@@ -154,6 +155,7 @@ var M;
         return Bar3;
     })(Foo);
 })(M || (M = {}));
+// two levels of privates
 var M2;
 (function (M2) {
     var Foo = (function () {

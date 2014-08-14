@@ -6,6 +6,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// class inheritance to ensure __extends is emitted
 var m;
 (function (m) {
     var base = (function () {

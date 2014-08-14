@@ -61,6 +61,7 @@ var p3 = m3.Color.Blue;
 
 
 //// [instantiatedModule.js]
+// adding the var makes this an instantiated module
 var M;
 (function (M) {
     M.Point = 1;
@@ -73,6 +74,8 @@ var a1 = M.Point;
 var a1 = m.Point;
 var p1;
 var p1;
+// making the point a class instead of an interface 
+// makes this an instantiated mmodule
 var M2;
 (function (M2) {
     var Point = (function () {

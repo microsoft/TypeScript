@@ -74,6 +74,7 @@ var D = (function () {
 })();
 var a;
 var r = a.a;
+// generic interfaces in a module
 var M;
 (function (M) {
     var C = (function () {

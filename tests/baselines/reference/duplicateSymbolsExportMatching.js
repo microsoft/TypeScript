@@ -67,6 +67,7 @@ export interface D { }
 
 //// [duplicateSymbolsExportMatching.js]
 define(["require", "exports"], function (require, exports) {
+    // Should report error only once for instantiated module
     var M;
     (function (M) {
         var inst;
@@ -78,6 +79,7 @@ define(["require", "exports"], function (require, exports) {
         })(M.inst || (M.inst = {}));
         var inst = M.inst;
     })(M || (M = {}));
+    // Variables of the same / different type
     var M2;
     (function (M2) {
         var v;

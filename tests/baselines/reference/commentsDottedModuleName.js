@@ -9,6 +9,7 @@ export module outerModule.InnerModule {
 
 //// [commentsDottedModuleName.js]
 define(["require", "exports"], function (require, exports) {
+    /** this is multi declare module*/
     (function (outerModule) {
         (function (InnerModule) {
             /// class b comment

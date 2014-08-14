@@ -132,11 +132,13 @@ var E;
     E[E["x"] = function () { return 4; }] = "x";
     E[E["y"] = (function () { return _this; }).length] = "y";
 })(E || (E = {}));
+// Arrow function as module variable initializer
 var M;
 (function (M) {
     M.a = function (s) { return ''; };
     var b = function (s) { return s; };
 })(M || (M = {}));
+// Repeat above for module members that are functions? (necessary to redo all of them?)
 var M2;
 (function (M2) {
     with (window) {
@@ -168,6 +170,7 @@ var M2;
         E[E["x"] = function () { return 4; }] = "x";
         E[E["y"] = (function () { return _this; }).length] = "y";
     })(E || (E = {}));
+    // Arrow function as module variable initializer
     var M;
     (function (M) {
         M.a = function (s) { return ''; };

@@ -223,6 +223,7 @@ var glo_M1_public;
 })(glo_M1_public || (glo_M1_public = {}));
 var m2;
 (function (m2) {
+    //import m3 = require("use_glo_M1_public");
     var m4;
     (function (m4) {
         var a = 10;

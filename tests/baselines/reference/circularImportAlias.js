@@ -26,6 +26,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// expected no error
 var B;
 (function (B) {
     B.a = A;

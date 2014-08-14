@@ -98,6 +98,7 @@ module m7.m8 {
 new m7.m8.m9.c();
 
 //// [commentsModules.js]
+/** Module comment*/
 var m1;
 (function (m1) {
     /** b's comment*/
@@ -106,6 +107,7 @@ var m1;
     function foo() {
         return m1.b;
     }
+    /** m2 comments*/
     (function (m2) {
         /** class comment;*/
         var c = (function () {
@@ -142,6 +144,7 @@ var m1;
 })(m1 || (m1 = {}));
 m1.fooExport();
 var myvar = new m1.m2.c();
+/** module comment of m2.m3*/
 var m2;
 (function (m2) {
     (function (m3) {
@@ -156,6 +159,7 @@ var m2;
     var m3 = m2.m3;
 })(m2 || (m2 = {}));
 new m2.m3.c();
+/** module comment of m3.m4.m5*/
 var m3;
 (function (m3) {
     (function (m4) {
@@ -173,6 +177,7 @@ var m3;
     var m4 = m3.m4;
 })(m3 || (m3 = {}));
 new m3.m4.m5.c();
+/** module comment of m4.m5.m6*/
 var m4;
 (function (m4) {
     (function (m5) {
@@ -193,10 +198,12 @@ var m4;
     var m5 = m4.m5;
 })(m4 || (m4 = {}));
 new m4.m5.m6.m7.c();
+/** module comment of m5.m6.m7*/
 var m5;
 (function (m5) {
     (function (m6) {
         (function (m7) {
+            /** module m8 comment*/
             (function (m8) {
                 /** Exported class comment*/
                 var c = (function () {
@@ -233,6 +240,7 @@ new m6.m7.m8.c();
 var m7;
 (function (m7) {
     (function (m8) {
+        /** module m9 comment*/
         (function (m9) {
             /** Exported class comment*/
             var c = (function () {

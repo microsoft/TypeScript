@@ -153,6 +153,7 @@ module import_private {
 }
 
 //// [privacyLocalInternalReferenceImportWithExport.js]
+// private elements
 var m_private;
 (function (m_private) {
     var c_private = (function () {
@@ -181,6 +182,7 @@ var m_private;
     })(m_private.mi_private || (m_private.mi_private = {}));
     var mi_private = m_private.mi_private;
 })(m_private || (m_private = {}));
+// Public elements
 (function (m_public) {
     var c_public = (function () {
         function c_public() {

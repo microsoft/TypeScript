@@ -93,6 +93,8 @@ var Y;
     })(_Y.Y || (_Y.Y = {}));
     var Y = _Y.Y;
 })(Y || (Y = {}));
+// no collision, since interface doesn't
+// generate code.
 var D;
 (function (D) {
     D.E = 'hello';

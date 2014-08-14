@@ -98,6 +98,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// members N and M of types S and T have the same name, same accessibility, same optionality, and N is not assignable M
 var OnlyDerived;
 (function (OnlyDerived) {
     var Base = (function () {

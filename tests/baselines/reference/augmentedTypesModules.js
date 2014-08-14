@@ -258,10 +258,12 @@ var m4d;
 (function (m4d) {
     m4d[m4d["One"] = 0] = "One";
 })(m4d || (m4d = {}));
+//// module then module
 var m5;
 (function (m5) {
     m5.y = 2;
 })(m5 || (m5 = {}));
+// module then import
 var m6;
 (function (m6) {
     m6.y = 2;

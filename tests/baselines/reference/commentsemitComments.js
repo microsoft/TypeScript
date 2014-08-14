@@ -131,6 +131,7 @@ var c = (function () {
 var i = new c();
 /**interface instance comments*/
 var i1_i;
+/** this is module comment*/
 var m1;
 (function (m1) {
     /** class b */

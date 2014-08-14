@@ -140,6 +140,7 @@ var SubE3 = (function (_super) {
     };
     return SubE3;
 })(Base3);
+// Case 4
 var Base4;
 (function (Base4) {
     var Sub4 = (function () {

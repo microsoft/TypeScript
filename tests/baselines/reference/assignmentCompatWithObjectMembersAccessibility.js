@@ -110,6 +110,7 @@ module TargetIsPublic {
 }
 
 //// [assignmentCompatWithObjectMembersAccessibility.js]
+// members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
 var TargetIsPublic;
 (function (TargetIsPublic) {
     // targets

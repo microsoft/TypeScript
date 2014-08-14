@@ -478,6 +478,13 @@ var m2;
     glo_M1_public.v2;
 })(exports.glo_M1_public || (exports.glo_M1_public = {}));
 var glo_M1_public = exports.glo_M1_public;
+//export declare module "glo_M2_public" {
+//    export function f1();
+//    export class c1 {
+//    }
+//    export var v1: { new (): c1; };
+//    export var v2: c1;
+//}
 (function (glo_M3_private) {
     var c1 = (function () {
         function c1() {
@@ -513,14 +520,90 @@ var glo_im3_private_v3_private = glo_im3_private.f1;
 var glo_im3_private_v4_private = glo_im3_private.f1();
 exports.glo_im1_public = glo_M1_public;
 exports.glo_im2_public = glo_M3_private;
+//export import glo_im3_public = require("glo_M2_public");
+//export import glo_im4_public = require("glo_M4_private");
+//export declare module "use_glo_M1_public" {
+//    import use_glo_M1_public = glo_M1_public;
+//    export var use_glo_M1_public_v1_public: { new (): use_glo_M1_public.c1; };
+//    export var use_glo_M1_public_v2_public: use_glo_M1_public;
+//    export var use_glo_M1_public_v3_public: () => use_glo_M1_public.c1;
+//    var use_glo_M1_public_v1_private: { new (): use_glo_M1_public.c1; };
+//    var use_glo_M1_public_v2_private: use_glo_M1_public;
+//    var use_glo_M1_public_v3_private: () => use_glo_M1_public.c1;
+//    import use_glo_M2_public = require("glo_M2_public");
+//    export var use_glo_M2_public_v1_public: { new (): use_glo_M2_public.c1; };
+//    export var use_glo_M2_public_v2_public: use_glo_M2_public;
+//    export var use_glo_M2_public_v3_public: () => use_glo_M2_public.c1;
+//    var use_glo_M2_public_v1_private: { new (): use_glo_M2_public.c1; };
+//    var use_glo_M2_public_v2_private: use_glo_M2_public;
+//    var use_glo_M2_public_v3_private: () => use_glo_M2_public.c1;
+//    module m2 {
+//        import errorImport = require("glo_M2_public");
+//        import nonerrorImport = glo_M1_public;
+//        module m5 {
+//            import m5_errorImport = require("glo_M2_public");
+//            import m5_nonerrorImport = glo_M1_public;
+//        }
+//    }
+//}
+//declare module "use_glo_M3_private" {
+//    import use_glo_M3_private = glo_M3_private;
+//    export var use_glo_M3_private_v1_public: { new (): use_glo_M3_private.c1; };
+//    export var use_glo_M3_private_v2_public: use_glo_M3_private;
+//    export var use_glo_M3_private_v3_public: () => use_glo_M3_private.c1;
+//    var use_glo_M3_private_v1_private: { new (): use_glo_M3_private.c1; };
+//    var use_glo_M3_private_v2_private: use_glo_M3_private;
+//    var use_glo_M3_private_v3_private: () => use_glo_M3_private.c1;
+//    import use_glo_M4_private = require("glo_M4_private");
+//    export var use_glo_M4_private_v1_public: { new (): use_glo_M4_private.c1; };
+//    export var use_glo_M4_private_v2_public: use_glo_M4_private;
+//    export var use_glo_M4_private_v3_public: () => use_glo_M4_private.c1;
+//    var use_glo_M4_private_v1_private: { new (): use_glo_M4_private.c1; };
+//    var use_glo_M4_private_v2_private: use_glo_M4_private;
+//    var use_glo_M4_private_v3_private: () => use_glo_M4_private.c1;
+//    module m2 {
+//        import errorImport = require("glo_M4_private");
+//        import nonerrorImport = glo_M3_private;
+//        module m5 {
+//            import m5_errorImport = require("glo_M4_private");
+//            import m5_nonerrorImport = glo_M3_private;
+//        }
+//    }
+//}
+//declare module "anotherParseError" {
+//    module m2 {
+//        declare module "abc" {
+//        }
+//    }
+//    module m2 {
+//        module "abc2" {
+//        }
+//    }
+//    module "abc3" {
+//    }
+//}
+//declare export module "anotherParseError2" {
+//    module m2 {
+//        declare module "abc" {
+//        }
+//    }
+//    module m2 {
+//        module "abc2" {
+//        }
+//    }
+//    module "abc3" {
+//    }
+//}
 var m2;
 (function (m2) {
+    //import m3 = require("use_glo_M1_public");
     var m4;
     (function (m4) {
         var a = 10;
     })(m4 || (m4 = {}));
 })(m2 || (m2 = {}));
 (function (m3) {
+    //import m3 = require("use_glo_M1_public");
     var m4;
     (function (m4) {
         var a = 10;

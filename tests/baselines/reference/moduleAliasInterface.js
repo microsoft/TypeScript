@@ -65,6 +65,7 @@ var _modes;
     })();
     _modes.Mode = Mode;
 })(_modes || (_modes = {}));
+// _modes. // produces an internal error - please implement in derived class
 var editor;
 (function (editor) {
     var i;
