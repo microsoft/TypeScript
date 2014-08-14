@@ -2182,6 +2182,7 @@ module ts {
             }
 
             function emitEnumMemberDeclaration(node: EnumMember) {
+                emitJsDocComments(node);
                 emitSourceTextOfNode(node.name);
                 var enumMemberValue = resolver.getEnumMemberValue(node);
                 if (enumMemberValue !== undefined) {
