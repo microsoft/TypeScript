@@ -273,12 +273,14 @@ new m7.m8.m9.c();
 //// [commentsModules.d.ts]
 /** Module comment*/
 declare module m1 {
+    /** b's comment*/
     var b: number;
     /** m2 comments*/
     module m2 {
         /** class comment;*/
         class c {
         }
+        /** i*/
         var i: c;
     }
     function fooExport(): number;

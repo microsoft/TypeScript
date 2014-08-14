@@ -2447,6 +2447,7 @@ module ts {
             function emitVariableStatement(node: VariableStatement) {
                 var hasDeclarationWithEmit = forEach(node.declarations, varDeclaration => resolver.isDeclarationVisible(varDeclaration));
                 if (hasDeclarationWithEmit) {
+                    emitJsDocComments(node);
                     emitDeclarationFlags(node);
                     write("var ");
                     emitCommaList(node.declarations, emitVariableDeclaration);

@@ -146,8 +146,10 @@ var m1;
 
 
 //// [commentsemitComments.d.ts]
+/** Variable comments*/
 declare var myVariable: number;
 declare function foo(p: number): void;
+/** variable with function type comment*/
 declare var fooVar: () => void;
 /**class comment*/
 declare class c {
@@ -159,6 +161,7 @@ declare class c {
     foo1(a: number): string;
     foo1(b: string): string;
 }
+/**instance comment*/
 declare var i: c;
 /** interface comments*/
 interface i1 {
@@ -169,6 +172,7 @@ interface i1 {
     /** prop*/
     prop: string;
 }
+/**interface instance comments*/
 declare var i1_i: i1;
 /** this is module comment*/
 declare module m1 {

@@ -140,18 +140,21 @@ define(["require", "exports", "commentsExternalModules2_0"], function (require, 
 //// [commentsExternalModules2_0.d.ts]
 /** Module comment*/
 export declare module m1 {
+    /** b's comment*/
     var b: number;
     /** m2 comments*/
     module m2 {
         /** class comment;*/
         class c {
         }
+        /** i*/
         var i: c;
     }
     function fooExport(): number;
 }
 /** Module comment */
 export declare module m4 {
+    /** b's comment */
     var b: number;
     /** m2 comments
     */
@@ -159,6 +162,7 @@ export declare module m4 {
         /** class comment; */
         class c {
         }
+        /** i */
         var i: c;
     }
     function fooExport(): number;
