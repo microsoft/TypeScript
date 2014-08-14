@@ -91,6 +91,7 @@ module ts {
             getSymbolsInScope: getSymbolsInScope,
             getSymbolInfo: getSymbolInfo,
             getTypeOfNode: getTypeOfNode,
+            getApparentType: getApparentType,
             typeToString: typeToString,
             symbolToString: symbolToString,
             getAugmentedPropertiesOfApparentType: getAugmentedPropertiesOfApparentType
@@ -6820,9 +6821,9 @@ module ts {
             return undefined;
         }
 
-        function getTypeOfNode(node: Node, apparentType: boolean): Type {
+        function getTypeOfNode(node: Node): Type {
             if (isExpression(node)) {
-                return getTypeOfExpression(<Expression>node, apparentType);
+                return getTypeOfExpression(<Expression>node);
             }
             if (isTypeNode(node)) {
                 if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName) {
@@ -6863,12 +6864,11 @@ module ts {
             Debug.fail("Unhandled case in getTypeOfNode");
         }
 
-        function getTypeOfExpression(expr: Expression, apparentType: boolean): Type {
+        function getTypeOfExpression(expr: Expression): Type {
             if (isRightSideOfQualifiedNameOrPropertyAccess(expr)) {
                 expr = expr.parent;
             }
-            var type = checkExpression(expr);
-            return apparentType ? getApparentType(type) : type;
+            return checkExpression(expr);
         }
 
         function getAugmentedPropertiesOfApparentType(type: Type): Symbol[]{

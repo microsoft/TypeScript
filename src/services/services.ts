@@ -1693,7 +1693,7 @@ module ts {
 
             // Right of dot member completion list
             if (isRightOfDot) {
-                var type: Type = typeInfoResolver.getTypeOfNode(mappedNode, /*apparentType*/ true);
+                var type: Type = typeInfoResolver.getApparentType(typeInfoResolver.getTypeOfNode(mappedNode));
                 if (!type) {
                     return undefined;
                 }
