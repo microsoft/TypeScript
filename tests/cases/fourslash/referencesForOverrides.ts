@@ -73,12 +73,12 @@
 
 // References to a field declared in a base class.
 goTo.marker("1");
-verify.referencesCountIs(2);
+verify.referencesCountIs(3);
 
 // References to a field declared in a base interface.
 goTo.marker("2");
-verify.referencesCountIs(2);
+verify.referencesCountIs(3);
 
 // References to a field declared in a chain of base class and interfaces.
 goTo.marker("3");
-verify.referencesCountIs(2);
+verify.referencesCountIs(6);

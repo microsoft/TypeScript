@@ -2322,14 +2322,12 @@ module ts {
                 var possiblePositions = getPossibleSymbolReferencePositions(sourceFile, searchSymbolName, container.getStart(), container.getEnd());
                 if (possiblePositions && possiblePositions.length > 0) {
                     // Build the set of symbols to search for, initially it has only the current symbol
-                    var searchSymbols = popluateSearchSymbolSet(searchSymbol, searchLocation);
+                    var searchSymbols = populateSearchSymbolSet(searchSymbol, searchLocation);
 
                     possiblePositions.forEach(position => {
                         cancellationToken.throwIfCancellationRequested();
 
-                        // Each position we're searching for should be at the start of an identifier.  
                         var referenceLocation = getNodeAtPosition(sourceFile, position);
-
                         if (!isValidReferencePosition(referenceLocation, searchSymbol)) {
                             return;
                         }
@@ -2342,14 +2340,14 @@ module ts {
                             return;
                         }
 
-                        if (compareSymbolsForLexicalIdentity(searchSymbols, referenceSymbol, referenceLocation)) {
+                        if (isRelatableToSearchSet(searchSymbols, referenceSymbol, referenceLocation)) {
                             result.push(getReferenceEntry(referenceLocation));
                         }
                     });
                 }
             }
 
-            function popluateSearchSymbolSet(symbol: Symbol, location: Node): Symbol[]{
+            function populateSearchSymbolSet(symbol: Symbol, location: Node): Symbol[]{
                 // The search set contains at least the current symbol
                 var result = [symbol];
 
@@ -2363,17 +2361,52 @@ module ts {
                 // to get a contextual type for it, and add the property symbol from the contextual
                 // type to the search set
                 if (isNameOfPropertyAssignment(location)) {
-                    var symbolFromContextualType = getSymbolFromContextualType(location);
+                    var symbolFromContextualType = getPropertySymbolFromContextualType(location);
                     if (symbolFromContextualType) result.push(symbolFromContextualType);
                 }
 
-                // TODO: add base class and interface definitions and overwritten properties/methods
+                // Add symbol of properties/methods of the same name in base classes and implemented interfaces definitions
+                if (symbol.parent && symbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                    getPropertySymbolsFromBaseTypes(symbol.parent, symbol.getName(), result);
+                }
 
                 return result;
             }
 
-            function compareSymbolsForLexicalIdentity(searchSymbols: Symbol[], referenceSymbol: Symbol, referenceLocation: Node): boolean {
+            function getPropertySymbolsFromBaseTypes(symbol: Symbol, propertyName: string, result: Symbol[]): void {
+                if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                    forEach(symbol.getDeclarations(), declaration => {
+                        if (declaration.kind === SyntaxKind.ClassDeclaration) {
+                            getPropertySymbolFromTypeReference((<ClassDeclaration>declaration).baseType);
+                            forEach((<ClassDeclaration>declaration).implementedTypes, getPropertySymbolFromTypeReference);
+                        }
+                        else if (declaration.kind === SyntaxKind.InterfaceDeclaration) {
+                            forEach((<InterfaceDeclaration>declaration).baseTypes, getPropertySymbolFromTypeReference);
+                        }
+                    });
+                }
+                return;
+
+                function getPropertySymbolFromTypeReference(typeReference: TypeReferenceNode) {
+                    if (typeReference) {
+                        // TODO: move to getTypeOfNode instead
+                        var typeReferenceSymbol = typeChecker.getSymbolInfo(typeReference.typeName);
+                        if (typeReferenceSymbol) {
+                            var propertySymbol = typeReferenceSymbol.members[propertyName];
+                            if (propertySymbol) result.push(typeReferenceSymbol.members[propertyName]);
+
+                            // Visit the typeReference as well to see if it directelly or indirectelly use that property
+                            getPropertySymbolsFromBaseTypes(typeReferenceSymbol, propertyName, result);
+                        }
+                    }
+                }
+            }
+
+            function isRelatableToSearchSet(searchSymbols: Symbol[], referenceSymbol: Symbol, referenceLocation: Node): boolean {
+                // Unwrap symbols to get to the root (e.g. triansient symbols as a result of widenning)
                 var referenceSymbolTarget = typeChecker.getRootSymbol(referenceSymbol);
+
+                // if it is in the list, then we are done
                 if (searchSymbols.indexOf(referenceSymbolTarget) >= 0) {
                     return true;
                 }
@@ -2382,16 +2415,24 @@ module ts {
                 // object literal, lookup the property symbol in the contextual type, and use this symbol to
                 // compare to our searchSymbol
                 if (isNameOfPropertyAssignment(referenceLocation)) {
-                    var symbolFromContextualType = getSymbolFromContextualType(referenceLocation);
+                    var symbolFromContextualType = getPropertySymbolFromContextualType(referenceLocation);
                     if (searchSymbols.indexOf(symbolFromContextualType) >= 0) {
                         return true;
                     }
                 }
 
+                // Finally, try all properties with the same name in any type the containing type extened or implemented, and 
+                // see if any is in the list
+                if (referenceSymbol.parent && referenceSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                    var result: Symbol[] = [];
+                    getPropertySymbolsFromBaseTypes(referenceSymbol.parent, referenceSymbol.getName(), result);
+                    return forEach(result, s => searchSymbols.indexOf(s) >= 0);
+                }
+
                 return false;
             }
 
-            function getSymbolFromContextualType(node: Node): Symbol {
+            function getPropertySymbolFromContextualType(node: Node): Symbol {
                 if (isNameOfPropertyAssignment(node)) {
                     var objectLiteral = node.parent.parent;
                     var contextualType = typeChecker.getContextualType(objectLiteral);
