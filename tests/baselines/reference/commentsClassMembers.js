@@ -227,7 +227,7 @@ var c1 = (function () {
     /** sum with property*/
     c1.prototype.p2 = function (b) {
         return this.p1 + b;
-    }; /* trailing comment of method*/ 
+    }; /* trailing comment of method*/
     Object.defineProperty(c1.prototype, "p3", {
         /** getter property*/
         get: function () {
@@ -266,11 +266,11 @@ var c1 = (function () {
         /** static getter property*/
         get: function () {
             return c1.s2(c1.s1);
-        } /*trailing comment 1 getter*/ ,
+        } /*trailing comment 1 getter*/,
         /** setter property*/
         set: function (value) {
             c1.s1 = c1.s2(value);
-        } /*trailing comment 2 */ /*setter*/ ,
+        } /*trailing comment 2 */ /*setter*/,
         enumerable: true,
         configurable: true
     });
@@ -437,7 +437,7 @@ c1.nc_s3 = i1_s_ncprop;
 var i1_c = c1;
 var cProperties = (function () {
     function cProperties() {
-        this.x = 10; /*trailing comment for property*/ 
+        this.x = 10; /*trailing comment for property*/
         this.y = 10; // trailing comment of // style
     }
     Object.defineProperty(cProperties.prototype, "p1", {
@@ -467,7 +467,7 @@ var cProperties = (function () {
     Object.defineProperty(cProperties.prototype, "nc_p2", {
         set: function (value) {
             this.val = value;
-        } /* trailing comment of setter only*/ ,
+        } /* trailing comment of setter only*/,
         enumerable: true,
         configurable: true
     });

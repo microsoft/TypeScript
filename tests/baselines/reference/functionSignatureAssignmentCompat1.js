@@ -15,4 +15,4 @@ var e: ParserFunc = parsers.readline(); // ok
 var parsers;
 var c = parsers.raw; // ok!
 var d = parsers.readline; // not ok
-var e = parsers.readline(); // ok 
+var e = parsers.readline(); // ok

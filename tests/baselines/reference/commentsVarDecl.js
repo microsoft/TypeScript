@@ -52,12 +52,12 @@ var anotherVariable = 30;
 var aVar = "";
 /** this is multiline comment
   * All these variables are of number type */
-var anotherAnotherVariable = 70; /* these are multiple trailing comments */ /* multiple trailing comments */ 
+var anotherAnotherVariable = 70; /* these are multiple trailing comments */ /* multiple trailing comments */
 /** Triple slash multiline comment*/
 /** another line in the comment*/
 /** comment line 2*/
 var x = 70; /* multiline trailing comment 
-this is multiline trailing comment */ 
+this is multiline trailing comment */
 x = myVariable;
 /** triple slash comment1*/
 /** jsdocstyle comment - only this comment should be in .d.ts file*/

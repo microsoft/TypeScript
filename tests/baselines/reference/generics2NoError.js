@@ -20,7 +20,7 @@ var v4: G<G<A, B>, C>;         // Ok
 //// [generics2NoError.js]
 var v1; // Ok
 var v2; // Ok, equivalent to G<A, C>
-var v4; // Ok 
+var v4; // Ok
 
 
 //// [generics2NoError.d.ts]

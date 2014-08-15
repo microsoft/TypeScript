@@ -167,13 +167,22 @@ module ts {
             });
         }
 
-        function emitComments(comments: Comment[], writer: EmitTextWriter, writeComment: (comment: Comment, writer: EmitTextWriter) => void) {
+        function emitComments(comments: Comment[], trailingSeparator: boolean, writer: EmitTextWriter, writeComment: (comment: Comment, writer: EmitTextWriter) => void) {
+            var emitLeadingSpace = !trailingSeparator;
             forEach(comments, comment => {
+                if (emitLeadingSpace) {
+                    writer.write(" ");
+                    emitLeadingSpace = false;
+                }
                 writeComment(comment, writer);
                 if (comment.hasTrailingNewLine) {
                     writer.writeLine();
-                } else {
+                } else if (trailingSeparator) {
                     writer.write(" ");
+                }
+                else {
+                    // Emit leading space to separate comment during next comment emit
+                    emitLeadingSpace = true;
                 }
             });
         }
@@ -1941,18 +1950,16 @@ module ts {
             function emitLeadingDeclarationComments(node: Declaration) {
                 var leadingComments = getLeadingComments(currentSourceFile.text, node.pos);
                 emitNewLineBeforeLeadingComments(node, leadingComments, writer);
-                emitComments(leadingComments, writer, writeComment);
+                // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
+                emitComments(leadingComments, /*trailingSeparator*/ true, writer, writeComment);
             }
 
             function emitTrailingDeclarationComments(node: Declaration) {
                 // Emit the trailing declaration comments only if the parent's end doesnt match
                 if (node.parent.kind === SyntaxKind.SourceFile || node.end !== node.parent.end) {
                     var trailingComments = getTrailingComments(currentSourceFile.text, node.end);
-                    if (trailingComments && trailingComments.length) {
-                        // Trailing comments are emitting on same line, so write a space between comment
-                        writer.write(" ");
-                    }
-                    emitComments(trailingComments, writer, writeComment);
+                    // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
+                    emitComments(trailingComments, /*trailingSeparator*/ false, writer, writeComment);
                 }
             }
 
@@ -2068,7 +2075,8 @@ module ts {
                 if (declaration) {
                     var jsDocComments = getJsDocComments(declaration, currentSourceFile);
                     emitNewLineBeforeLeadingComments(declaration, jsDocComments, writer);
-                    emitComments(jsDocComments, writer, writeCommentRange);
+                    // jsDoc comments are emitted at /*leading comment1 */space/*leading comment*/space
+                    emitComments(jsDocComments, /*trailingSeparator*/ true, writer, writeCommentRange);
                 }
             }
 

@@ -24,4 +24,4 @@ var C = (function (_super) {
         _super.apply(this, arguments);
     }
     return C;
-})(x); // error, could not find symbol xs 
+})(x); // error, could not find symbol xs

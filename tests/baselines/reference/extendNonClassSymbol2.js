@@ -22,4 +22,4 @@ var C = (function (_super) {
         _super.apply(this, arguments);
     }
     return C;
-})(Foo); // error, could not find symbol Foo 
+})(Foo); // error, could not find symbol Foo

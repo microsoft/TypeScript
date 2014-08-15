@@ -22,4 +22,4 @@ var E;
 var x = E;
 var x; // Shouldnt error
 var y = E;
-var y; // two errors: the types are not identical and duplicate signatures 
+var y; // two errors: the types are not identical and duplicate signatures

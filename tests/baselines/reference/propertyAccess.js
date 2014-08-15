@@ -231,4 +231,4 @@ var yy;
 var zz = bothIndex['1.0'];
 var zz;
 // Bracket notation property access using value of other type on type with numeric index signature and no string index signature and string index signature
-var zzzz = bothIndex[window]; // Error 
+var zzzz = bothIndex[window]; // Error

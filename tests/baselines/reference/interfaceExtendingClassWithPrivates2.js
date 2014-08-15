@@ -46,4 +46,4 @@ var Baz = (function () {
 var i;
 var r = i.z;
 var r2 = i.x; // error
-var r3 = i.y; // error 
+var r3 = i.y; // error

@@ -116,4 +116,4 @@ var b = {
         return a + x.foo();
     }
 };
-var r4 = b.foo(new B()); // valid call to an invalid function 
+var r4 = b.foo(new B()); // valid call to an invalid function

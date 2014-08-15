@@ -164,4 +164,4 @@ var b = {
 //        return a + x.foo();
 //    }
 //}
-var r4 = b.foo(aB, aB); // no inferences for T so constraint isn't satisfied, error 
+var r4 = b.foo(aB, aB); // no inferences for T so constraint isn't satisfied, error

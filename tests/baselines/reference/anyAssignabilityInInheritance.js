@@ -135,4 +135,4 @@ var CC;
 })(CC || (CC = {}));
 var r3 = foo3(a); // any
 var r3 = foo3(a); // any
-var r3 = foo3(a); // any 
+var r3 = foo3(a); // any

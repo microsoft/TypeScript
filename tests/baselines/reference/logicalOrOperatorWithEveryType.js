@@ -243,4 +243,4 @@ var rf6 = a6 || undefined; // enum      || undefined is E
 var rf7 = a7 || undefined; // object    || undefined is object
 var rf8 = a8 || undefined; // array     || undefined is array
 var rf9 = null || undefined; // null      || undefined is any
-var rf10 = undefined || undefined; // undefined || undefined is any 
+var rf10 = undefined || undefined; // undefined || undefined is any

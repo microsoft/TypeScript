@@ -336,4 +336,4 @@ exports.glo_v14_public = new glo_C2_private(); // error
 var glo_v21_private = new glo_C1_public();
 exports.glo_v22_public = new glo_C1_public();
 var glo_v23_private = new glo_C2_private();
-exports.glo_v24_public = new glo_C2_private(); // error 
+exports.glo_v24_public = new glo_C2_private(); // error

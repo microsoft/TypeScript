@@ -42,4 +42,4 @@ u[3] = "";
 var ob = { x: "" };
 // Highlights the difference between array literals and object literals
 var arr = [3, null]; // not assignable because null is not widened. BCT is {}
-var obj = { x: 3, y: null }; // assignable because null is widened, and therefore BCT is any 
+var obj = { x: 3, y: null }; // assignable because null is widened, and therefore BCT is any

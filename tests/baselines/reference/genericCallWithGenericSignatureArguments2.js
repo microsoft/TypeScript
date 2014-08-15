@@ -70,4 +70,4 @@ function foo3(x, a, b) {
     var r;
     return r;
 }
-var r7 = foo3(0 /* A */, function (x) { return 0 /* A */; }, function (x) { return 0 /* A */; }); // error 
+var r7 = foo3(0 /* A */, function (x) { return 0 /* A */; }, function (x) { return 0 /* A */; }); // error

@@ -40,7 +40,7 @@ lambdaFoo = (a, b) => a * b; // This is trailing comment that will not get emitt
 //// [commentsFunction.js]
 /** This comment should appear for foo*/
 function foo() {
-} /* trailing comment of function */ 
+} /* trailing comment of function */
 foo();
 /** This is comment for function signature*/
 function fooWithParameters(a, 
@@ -61,9 +61,9 @@ var lambddaNoVarComment = function (a, b) { return a * b; };
 lambdaFoo(10, 20);
 lambddaNoVarComment(10, 20);
 function blah(a /* multiline trailing comment 
-multiline */ ) {
+multiline */) {
 }
-function blah2(a /* single line multiple trailing comments */ /* second */ ) {
+function blah2(a /* single line multiple trailing comments */ /* second */) {
 }
 function blah3(a // trailing commen single line
     ) {

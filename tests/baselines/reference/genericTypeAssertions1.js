@@ -14,4 +14,4 @@ var A = (function () {
 })();
 var foo = new A();
 var r = new A(); // error
-var r2 = foo; // error 
+var r2 = foo; // error

@@ -33,4 +33,4 @@ var D = (function () {
     return D;
 })();
 var d = new D();
-var d2 = new D(null); // error 
+var d2 = new D(null); // error

@@ -53,4 +53,4 @@ var r6 = foo(y, x); // { x?: number; };
 var s1;
 var s2;
 var r7 = foo(s1, s2); // (x: Object) => string;
-var r8 = foo(s2, s1); // (x: string) => string; 
+var r8 = foo(s2, s1); // (x: string) => string;

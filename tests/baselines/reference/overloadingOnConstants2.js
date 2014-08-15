@@ -64,4 +64,4 @@ function bar(x, items) {
 }
 var d = bar("hi", []); // D
 var e = bar("bye", []); // E 
-var f = bar("um", []); // C 
+var f = bar("um", []); // C

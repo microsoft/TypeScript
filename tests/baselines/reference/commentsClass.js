@@ -79,14 +79,14 @@ var c3 = (function () {
     function c3() {
     } // trailing comment of constructor
     return c3;
-})(); /* trailing comment 2 */ 
+})(); /* trailing comment 2 */
 var i3 = new c3();
 var i3_c = c3;
 /** Class comment*/
 var c4 = (function () {
     /** Constructor comment*/
     function c4() {
-    } /* trailing comment of constructor 2*/ 
+    } /* trailing comment of constructor 2*/
     return c4;
 })();
 var i4 = new c4();

@@ -59,4 +59,4 @@ var bad;
 (function (bad) {
     bad.apply = 0;
 })(bad || (bad = {}));
-var badFundule = bad; // error 
+var badFundule = bad; // error

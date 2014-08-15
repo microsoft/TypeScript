@@ -7,4 +7,4 @@ function f(a) {
 } // error, no return statement
 function f2(a) {
     return T;
-} // bug was that this satisfied the return statement requirement 
+} // bug was that this satisfied the return statement requirement

@@ -18,4 +18,4 @@ function foo(a) {
 var x = foo("hi"); // return type should be 'number'
 var y = foo("hi"); // return type should be 'string'
 var w = foo("hi"); // should error
-var z = foo("hi"); // should error 
+var z = foo("hi"); // should error

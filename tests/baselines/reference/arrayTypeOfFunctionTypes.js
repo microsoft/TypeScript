@@ -29,4 +29,4 @@ var r4b = new r3(); // error
 var x3;
 var r5 = x2[1];
 var r6 = r5();
-var r6b = new r5(); // error 
+var r6b = new r5(); // error

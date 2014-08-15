@@ -69,4 +69,4 @@ function f2(a) {
 }
 var r3 = f2({ x: new Derived(), y: new Derived2() }); // Derived => Derived2
 var i;
-var r4 = f2(i); // Base => Derived 
+var r4 = f2(i); // Base => Derived

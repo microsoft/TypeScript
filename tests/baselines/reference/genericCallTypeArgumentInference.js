@@ -157,4 +157,4 @@ var r7 = i.foo4('', true); // string
 var r8 = i.foo5(true, 1); // boolean
 var r9 = i.foo6(); // {}
 var r10 = i.foo7(''); // {}
-var r11 = i.foo8(); // {} 
+var r11 = i.foo8(); // {}

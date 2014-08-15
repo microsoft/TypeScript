@@ -32,4 +32,4 @@ var E = (function (_super) {
         _super.apply(this, arguments);
     }
     return E;
-})(E); // error 
+})(E); // error

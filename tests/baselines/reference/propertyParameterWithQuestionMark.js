@@ -20,4 +20,4 @@ var C = (function () {
 var v = {}; // Should fail
 var v2;
 v = v2;
-var v3 = new C; // Should succeed 
+var v3 = new C; // Should succeed

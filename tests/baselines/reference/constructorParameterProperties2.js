@@ -46,4 +46,4 @@ var E = (function () {
     return E;
 })();
 var e;
-var r3 = e.y; // error 
+var r3 = e.y; // error

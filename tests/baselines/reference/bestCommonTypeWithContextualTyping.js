@@ -28,4 +28,4 @@ var e;
 var arr = [e]; // Ellement[]
 var obj = { s: e }; // { s: Ellement; [s: string]: Ellement }
 var conditional = null ? e : e; // Ellement
-var contextualOr = e || e; // Ellement 
+var contextualOr = e || e; // Ellement

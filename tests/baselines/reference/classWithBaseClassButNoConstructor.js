@@ -97,4 +97,4 @@ var D3 = (function (_super) {
 })(Base2);
 var r4 = D3;
 var d5 = new D(); // error
-var d6 = new D(1); // ok 
+var d6 = new D(1); // ok

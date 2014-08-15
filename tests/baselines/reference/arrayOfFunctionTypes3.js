@@ -50,4 +50,4 @@ var b2;
 var c2;
 var z2 = [a2, b2, c2];
 var r6 = z2[0];
-var r7 = r6(''); // any not string 
+var r7 = r6(''); // any not string

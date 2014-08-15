@@ -108,4 +108,4 @@ var D2 = (function (_super) {
 })(D);
 var d = new D2(); // error
 var d2 = new D2(new Date()); // error
-var d3 = new D2(new Date(), new Date()); // ok 
+var d3 = new D2(new Date(), new Date()); // ok

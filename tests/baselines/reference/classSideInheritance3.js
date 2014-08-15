@@ -48,4 +48,4 @@ var C = (function (_super) {
 })(A);
 var r1 = B; // error
 var r2 = B; // error
-var r3 = C; // ok 
+var r3 = C; // ok

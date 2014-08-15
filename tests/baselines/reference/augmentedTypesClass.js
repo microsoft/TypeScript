@@ -28,4 +28,4 @@ var c4 = (function () {
 var c4;
 (function (c4) {
     c4[c4["One"] = 0] = "One";
-})(c4 || (c4 = {})); // error 
+})(c4 || (c4 = {})); // error

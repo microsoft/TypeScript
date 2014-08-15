@@ -4,4 +4,4 @@ var d = x['charAt']('invalid'); // error
 
 //// [stringPropertyAccessWithError.js]
 var x = '';
-var d = x['charAt']('invalid'); // error 
+var d = x['charAt']('invalid'); // error

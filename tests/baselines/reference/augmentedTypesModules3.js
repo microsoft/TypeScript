@@ -22,4 +22,4 @@ var m3a = (function () {
     m3a.prototype.foo = function () {
     };
     return m3a;
-})(); // error, class isn't ambient or declared before the module 
+})(); // error, class isn't ambient or declared before the module

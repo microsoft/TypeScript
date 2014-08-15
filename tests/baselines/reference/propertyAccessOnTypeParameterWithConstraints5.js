@@ -95,4 +95,4 @@ var b = {
     // BUG 794164
     bar: b.foo(1).notHere()
 };
-var r4 = b.foo(new B()); // error after constraints above made illegal, doesn't matter 
+var r4 = b.foo(new B()); // error after constraints above made illegal, doesn't matter

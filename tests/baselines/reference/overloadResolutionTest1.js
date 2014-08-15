@@ -45,4 +45,4 @@ function foo4(bar) {
     return bar;
 }
 ;
-var x = foo4({ a: true }); // error 
+var x = foo4({ a: true }); // error

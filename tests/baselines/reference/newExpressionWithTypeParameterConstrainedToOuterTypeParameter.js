@@ -7,4 +7,4 @@ var y = new i(""); // y should be string
 
 //// [newExpressionWithTypeParameterConstrainedToOuterTypeParameter.js]
 var i;
-var y = new i(""); // y should be string 
+var y = new i(""); // y should be string

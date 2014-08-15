@@ -29,4 +29,4 @@ function makeArrayGOpt(item1, item2, item3) {
 }
 var a2Ga = makeArrayGOpt(1, "");
 var a2Gb = makeArrayG(1, "");
-var a2Gc = makeArrayG(1, ""); // error 
+var a2Gc = makeArrayG(1, ""); // error

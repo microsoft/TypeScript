@@ -80,4 +80,4 @@ var m3d;
     m3d.y = 2;
 })(m3d || (m3d = {}));
 var r = new m3d(); // error
-var r2 = new m4d(); // error 
+var r2 = new m4d(); // error

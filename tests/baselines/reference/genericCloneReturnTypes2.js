@@ -29,4 +29,4 @@ var MyList = (function () {
 var a;
 var b = a.clone(); // ok
 var c = a.clone(); // bug was there was an error on this line
-var d = a.clone(); // error 
+var d = a.clone(); // error

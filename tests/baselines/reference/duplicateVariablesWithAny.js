@@ -31,4 +31,4 @@ var N;
     var y; //error
 })(N || (N = {}));
 var z;
-var z; // ok 
+var z; // ok

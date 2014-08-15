@@ -67,4 +67,4 @@ function foo3(x, cb, y) {
 var r7 = foo3(null, i, ''); // any
 var r7b = foo3(null, a, ''); // any
 var r8 = foo3(1, i2, 1); // {}
-var r9 = foo3('', i2, ''); // string 
+var r9 = foo3('', i2, ''); // string

@@ -44,4 +44,4 @@ var r2 = x.apply;
 var r2b = x.call;
 var r2c = x.arguments;
 var r2d = x.data;
-var r2e = x['hm']; // should be Object 
+var r2e = x['hm']; // should be Object

@@ -157,7 +157,7 @@ var m2;
         m3.c = c;
     })(m2.m3 || (m2.m3 = {}));
     var m3 = m2.m3;
-})(m2 || (m2 = {})); /* trailing dotted module comment*/ 
+})(m2 || (m2 = {})); /* trailing dotted module comment*/
 new m2.m3.c();
 /** module comment of m3.m4.m5*/
 var m3;
@@ -191,7 +191,7 @@ var m4;
                 })();
                 m7.c = c;
             })(m6.m7 || (m6.m7 = {}));
-            var m7 = m6.m7; /* trailing inner module */ /* multiple comments*/ 
+            var m7 = m6.m7; /* trailing inner module */ /* multiple comments*/
         })(m5.m6 || (m5.m6 = {}));
         var m6 = m5.m6;
     })(m4.m5 || (m4.m5 = {}));

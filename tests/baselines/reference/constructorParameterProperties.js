@@ -37,4 +37,4 @@ var D = (function () {
 var d;
 var r = d.y;
 var r2 = d.x; // error
-var r3 = d.a; // error 
+var r3 = d.a; // error

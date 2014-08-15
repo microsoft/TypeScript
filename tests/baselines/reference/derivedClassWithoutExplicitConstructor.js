@@ -66,4 +66,4 @@ var D = (function (_super) {
     return D;
 })(Base2);
 var d = new D(); // error
-var d2 = new D(new Date()); // ok 
+var d2 = new D(new Date()); // ok

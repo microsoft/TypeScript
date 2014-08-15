@@ -24,7 +24,7 @@ var C = (function () {
 var v1;
 var y = v1.x; // should be 'string'
 var w = v1.y.a; // should be 'string'
-var z = v1.z.a; // should be 'number' 
+var z = v1.z.a; // should be 'number'
 
 
 //// [genericClasses2.d.ts]

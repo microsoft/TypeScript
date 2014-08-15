@@ -64,4 +64,4 @@ var r9 = foo2(null, function (x) { return ''; }, function (x) { return ''; }); /
 var r10 = foo2(null, function (x) { return ''; }, function (x) { return ''; }); // Object => Object
 var x;
 var r11 = foo2(x, function (a1) { return function (n) { return 1; }; }, function (a2) { return 2; }); // {} => {}
-var r12 = foo2(x, function (a1) { return function (n) { return 1; }; }, function (a2) { return 2; }); // (string => boolean) => {} 
+var r12 = foo2(x, function (a1) { return function (n) { return 1; }; }, function (a2) { return 2; }); // (string => boolean) => {}

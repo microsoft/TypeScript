@@ -33,4 +33,4 @@ function foo6(x, y, z) {
 } // error
 function foo7(x, y) {
     if (y === void 0) { y = x; }
-} // should be ok 
+} // should be ok

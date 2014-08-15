@@ -56,4 +56,4 @@ var xs = [list, myList]; // {}[]
 var ys = [list, list2]; // {}[]
 var zs = [list, null]; // List<number>[]
 var myDerivedList;
-var as = [list, myDerivedList]; // List<number>[] 
+var as = [list, myDerivedList]; // List<number>[]

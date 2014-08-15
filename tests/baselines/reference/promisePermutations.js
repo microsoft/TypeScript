@@ -276,4 +276,4 @@ var r12a = r12.then(testFunction12, testFunction12, testFunction12); // ok
 var s12 = testFunction12(function (x) { return x; });
 var s12a = s12.then(testFunction12, testFunction12, testFunction12); // ok
 var s12b = s12.then(testFunction12P, testFunction12P, testFunction12P); // ok
-var s12c = s12.then(testFunction12P, testFunction12, testFunction12); // ok 
+var s12c = s12.then(testFunction12P, testFunction12, testFunction12); // ok
