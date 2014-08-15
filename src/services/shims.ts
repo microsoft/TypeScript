@@ -615,8 +615,7 @@ module ts {
                 "getIndentationAtPosition('" + fileName + "', " + position + ")",
                 () => {
                     var localOptions: EditorOptions = JSON.parse(options);
-                    var columnOffset = this.languageService.getIndentationAtPosition(fileName, position, localOptions);
-                    return { value: columnOffset };
+                    return this.languageService.getIndentationAtPosition(fileName, position, localOptions);
                 });
         }
 
