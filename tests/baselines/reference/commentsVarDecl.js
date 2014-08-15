@@ -1,7 +1,7 @@
 //// [commentsVarDecl.ts]
 
 /** Variable comments*/
-var myVariable = 10;
+var myVariable = 10; // This trailing Comment1
 
 /** This is another variable comment*/
 var anotherVariable = 30;
@@ -11,13 +11,13 @@ var aVar = "";
 
 /** this is multiline comment
   * All these variables are of number type */
-var anotherAnotherVariable = 70;
+var anotherAnotherVariable = 70; /* these are multiple trailing comments */ /* multiple trailing comments */
 
 /** Triple slash multiline comment*/
 /** another line in the comment*/
 /** comment line 2*/
-var x = 70;
-
+var x = 70; /* multiline trailing comment 
+this is multiline trailing comment */
 /** Triple slash comment on the assignement shouldnt be in .d.ts file*/
 x = myVariable;
 
@@ -45,18 +45,19 @@ n4 = z2;
 
 //// [commentsVarDecl.js]
 /** Variable comments*/
-var myVariable = 10;
+var myVariable = 10; // This trailing Comment1 
 /** This is another variable comment*/
 var anotherVariable = 30;
 // shouldn't appear
 var aVar = "";
 /** this is multiline comment
   * All these variables are of number type */
-var anotherAnotherVariable = 70;
+var anotherAnotherVariable = 70; /* these are multiple trailing comments */ /* multiple trailing comments */ 
 /** Triple slash multiline comment*/
 /** another line in the comment*/
 /** comment line 2*/
-var x = 70;
+var x = 70; /* multiline trailing comment 
+this is multiline trailing comment */ 
 x = myVariable;
 /** triple slash comment1*/
 /** jsdocstyle comment - only this comment should be in .d.ts file*/
