@@ -80,9 +80,8 @@ module Harness.LanguageService {
             return JSON.stringify(this.lineMap.lineStarts());
         }
 
-        public getChangeRange(oldScript: ts.ScriptSnapshotShim): string {
-            var oldShim = <ScriptSnapshotShim>oldScript;
-            var range = this.scriptInfo.getTextChangeRangeBetweenVersions(oldShim.version, this.version);
+        public getTextChangeRangeSinceVersion(scriptVersion: number): string {
+            var range = this.scriptInfo.getTextChangeRangeBetweenVersions(scriptVersion, this.version);
             if (range === null) {
                 return null;
             }
@@ -102,14 +101,50 @@ module Harness.LanguageService {
         }
     }
 
+    class ScriptSnapshotShimAdapter implements TypeScript.IScriptSnapshot {
+        private lineStartPositions: number[] = null;
+        constructor(private scriptSnapshotShim: ts.ScriptSnapshotShim) {}
+        getText(start: number, end: number): string {return this.scriptSnapshotShim.getText(start, end);}
+        getLength(): number {return this.scriptSnapshotShim.getLength();}
+        getLineStartPositions(): number[] { return JSON.parse(this.scriptSnapshotShim.getLineStartPositions()); }
+        getTextChangeRangeSinceVersion(scriptVersion: number): TypeScript.TextChangeRange {
+            var encoded = this.scriptSnapshotShim.getTextChangeRangeSinceVersion(scriptVersion);
+            if (encoded == null) {
+                return null;
+            }
+
+            var decoded: { span: { start: number; length: number; }; newLength: number; } = JSON.parse(encoded);
+            return new TypeScript.TextChangeRange(
+                new TypeScript.TextSpan(decoded.span.start, decoded.span.length), decoded.newLength);
+        }
+    }
+
+    class LanguageServiceShimHostAdapter implements ts.LanguageServiceHost {
+        constructor(private shimHost: ts.LanguageServiceShimHost) { }
+        information(): boolean { return this.shimHost.information(); }
+        debug(): boolean { return this.shimHost.debug(); }
+        warning(): boolean { return this.shimHost.warning();}
+        error(): boolean { return this.shimHost.error(); }
+        fatal(): boolean { return this.shimHost.fatal(); }
+        log(s: string): void { this.shimHost.log(s); }
+        getCompilationSettings(): ts.CompilerOptions { return JSON.parse(this.shimHost.getCompilationSettings()); }
+        getScriptFileNames(): string[] { return JSON.parse(this.shimHost.getScriptFileNames());}
+        getScriptSnapshot(fileName: string): TypeScript.IScriptSnapshot { return new ScriptSnapshotShimAdapter(this.shimHost.getScriptSnapshot(fileName));}
+        getScriptVersion(fileName: string): number { return this.shimHost.getScriptVersion(fileName);}
+        getScriptIsOpen(fileName: string): boolean { return this.shimHost.getScriptIsOpen(fileName); }
+        getLocalizedDiagnosticMessages(): any { JSON.parse(this.shimHost.getLocalizedDiagnosticMessages());}
+        getCancellationToken(): ts.CancellationToken { return this.shimHost.getCancellationToken(); }
+    }
+
     export class NonCachingDocumentRegistry implements ts.DocumentRegistry {
+
         public static Instance: ts.DocumentRegistry = new NonCachingDocumentRegistry();
 
         public acquireDocument(
             fileName: string,
             compilationSettings: ts.CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
-            version: string,
+            version: number,
             isOpen: boolean): ts.SourceFile {
             return ts.createSourceFile(fileName, scriptSnapshot.getText(0, scriptSnapshot.getLength()), compilationSettings.target, version, isOpen);
         }
@@ -119,7 +154,7 @@ module Harness.LanguageService {
             fileName: string,
             compilationSettings: ts.CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
-            version: string,
+            version: number,
             isOpen: boolean,
             textChangeRange: TypeScript.TextChangeRange
             ): ts.SourceFile {
@@ -217,8 +252,8 @@ module Harness.LanguageService {
             return new ScriptSnapshotShim(this.getScriptInfo(fileName));
         }
 
-        public getScriptVersion(fileName: string): string {
-            return this.getScriptInfo(fileName).version.toString();
+        public getScriptVersion(fileName: string): number {
+            return this.getScriptInfo(fileName).version;
         }
 
         public getScriptIsOpen(fileName: string): boolean {
@@ -235,7 +270,7 @@ module Harness.LanguageService {
         public getLanguageService(): ts.LanguageServiceShim {
             var ls = new TypeScript.Services.TypeScriptServicesFactory().createLanguageServiceShim(this);
             this.ls = ls;
-            var hostAdapter = new ts.LanguageServiceShimHostAdapter(this);
+            var hostAdapter = new LanguageServiceShimHostAdapter(this);
 
             this.newLS = ts.createLanguageService(hostAdapter, NonCachingDocumentRegistry.Instance);
             return ls;
