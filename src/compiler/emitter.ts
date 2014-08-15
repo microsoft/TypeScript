@@ -5,6 +5,7 @@
 
 module ts {
     interface EmitTextWriter extends TextWriter {
+        rawWrite(s: string): void;
         writeLiteral(s: string): void;
         getTextPos(): number;
         getLine(): number;
@@ -114,6 +115,15 @@ module ts {
                 }
             }
 
+            function rawWrite(s: string) {
+                if (s !== undefined) {
+                    if (lineStart) {
+                        lineStart = false;
+                    }
+                    output += s;
+                }
+            }
+
             function writeLiteral(s: string) {
                 if (s && s.length) {
                     write(s);
@@ -145,6 +155,7 @@ module ts {
             return {
                 write: write,
                 writeSymbol: writeSymbol,
+                rawWrite: rawWrite,
                 writeLiteral: writeLiteral,
                 writeLine: writeLine,
                 increaseIndent: () => indent++,
@@ -152,7 +163,7 @@ module ts {
                 getIndent: () => indent,
                 getTextPos: () => output.length,
                 getLine: () => lineCount + 1,
-                getColumn: () => lineStart ? indent * 4 + 1 : output.length - linePos + 1,
+                getColumn: () => lineStart ? indent * getIndentSize() + 1 : output.length - linePos + 1,
                 getText: () => output,
             };
         }
@@ -187,86 +198,55 @@ module ts {
             if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
                 var firstCommentLineAndCharacter = currentSourceFile.getLineAndCharacterFromPosition(comment.pos);
                 var firstCommentLineIndent: number;
-                var writeNewLine: boolean;
                 for (var pos = comment.pos, currentLine = firstCommentLineAndCharacter.line; pos < comment.end; currentLine++) {
                     var nextLineStart = currentSourceFile.getPositionFromLineAndCharacter(currentLine + 1, /*character*/1);
 
                     if (pos !== comment.pos) {
-                        // If we are not emitting first line, we need to adjust the indent
-                        if (writeNewLine) {
-                            writer.writeLine();
-                        }
-
+                        // If we are not emitting first line, we need to write the spaces to adjust the alignment
                         if (firstCommentLineIndent === undefined) {
                             firstCommentLineIndent = calculateIndent(currentSourceFile.getPositionFromLineAndCharacter(firstCommentLineAndCharacter.line, /*character*/1),
                                 comment.pos);
                         }
 
-                        // Number of spacings this comment line differs from first comment line
-                        var deltaIndentSpacing = calculateIndent(pos, nextLineStart) - firstCommentLineIndent;
-                        if (deltaIndentSpacing < 0) {
-                            // we need to decrease indent to get the desired effect
-                            // Comment is left indented to first line
-                            // eg
-                            // module m {
-                            //         /* this is line 1
-                            //    * line 
-                            //   More left indented comment */
-                            //     class c { }
-                            // }
+                        // These are number of spaces writer is going to write at current indent
+                        var currentWriterIndentSpacing = writer.getIndent() * getIndentSize();
 
-                            // Spaces to emit = indentSize - (numberof spaces in lastDeltaIndent) (in above eg (4 - 5%4) = 3)
-                            var spacesToEmit = (deltaIndentSpacing % getIndentSize()); // This is negative of spaces to emit = -1 in above case
-                            if (spacesToEmit) {
-                                spacesToEmit += getIndentSize(); // Adjust the delta with the indentSize (4 - 1) = 3
+                        // Number of spaces we want to be writing
+                        // eg: Assume writer indent
+                        // module m {
+                        //         /* starts at character 9 this is line 1
+                        //    * starts at character pos 4 line                        --1  = 8 - 8 + 3
+                        //   More left indented comment */                            --2  = 8 - 8 + 2
+                        //     class c { }
+                        // }
+                        // module m {
+                        //     /* this is line 1 -- Assume current writer indent 8
+                        //      * line                                                --3 = 8 - 4 + 5 
+                        //            More right indented comment */                  --4 = 8 - 4 + 11
+                        //     class c { }
+                        // }
+                        var spacesToEmit = currentWriterIndentSpacing - firstCommentLineIndent + calculateIndent(pos, nextLineStart); 
+                        if (spacesToEmit > 0) {
+                            var numberOfSingleSpacesToEmit = spacesToEmit % getIndentSize();
+                            var indentSizeSpaceString = getIndentString((spacesToEmit - numberOfSingleSpacesToEmit) / getIndentSize());
+
+                            // Write indent size string ( in eg 1: = "", 2: "" , 3: string with 8 spaces 4: string with 12 spaces
+                            writer.rawWrite(indentSizeSpaceString);
+
+                            // Emit the single spaces (in eg: 1: 3 spaces, 2: 2 spaces, 3: 1 space, 4: 3 spaces)
+                            while (numberOfSingleSpacesToEmit) {
+                                writer.rawWrite(" ");
+                                numberOfSingleSpacesToEmit--;
                             }
-
-                            // This is number of times indent needs to be decremented before writing comment line text 
-                            // and same number of times the indent needs to be increased
-                            // It = deltaIndentSpacing / indentSize, we will change this to upper integer value
-                            // In above eg. 5/4 = 1.75 so change the indent two times (decrease 2 times, write text and then increase 2 times)
-                            var indentChangeCount = (-deltaIndentSpacing / getIndentSize());
-
-                            // If we cant go back as much as we want to, go to left most position
-                            if (indentChangeCount > writer.getIndent()) {
-                                indentChangeCount = writer.getIndent();
-                                spacesToEmit = 0;
-                            }
-
-                            // Decrease the indentChangeCount number of times
-                            for (var i = 0; i < indentChangeCount; i++) {
-                                writer.decreaseIndent();
-                            }
-
-                            // Emit the spaces to maintain deltaIndentSpacing
-                            emitSpaces(spacesToEmit, writeNewLine);
-
-                            // Write the comment line text
-                            writeNewLine = writeTrimmedCurrentLine(pos, nextLineStart);
-
-                            // Revert the indent
-                            for (var i = 0; i < indentChangeCount; i++) {
-                                writer.increaseIndent();
-                            }
-                        } else {
-                            // Comment is right indented to first line
-                            // eg
-                            // module m {
-                            //     /* this is line 1
-                            //      * line 
-                            //            More right indented comment */
-                            //     class c { }
-                            // }
-                            // In above eg for line 2 in the comment, the delta is single space and hence emit that and emit the trimmed line
-                            // but the third line has delta of 7 spaces and hence emit those spaces before emitting the trimmed line
-                            emitSpaces(deltaIndentSpacing, writeNewLine);
-                            writeNewLine = writeTrimmedCurrentLine(pos, nextLineStart);
+                        }
+                        else {
+                            // No spaces to emit write empty string
+                            writer.rawWrite("");
                         }
                     }
-                    else {
-                        // First comment line, emit as it is
-                        writeNewLine = writeTrimmedCurrentLine(pos, nextLineStart);
-                    }
+
+                    // Write the comment line text
+                    writeTrimmedCurrentLine(pos, nextLineStart);
 
                     pos = nextLineStart;
                 }
@@ -276,26 +256,15 @@ module ts {
                 writer.write(currentSourceFile.text.substring(comment.pos, comment.end));
             }
 
-            function emitSpaces(count: number, writeNewLine: boolean) {
-                if (!writeNewLine) {
-                    // If we didnot use WriteLine but instead used writeLiteral to writeNewLine, then we need to make sure we emit indent correctly
-                    writer.write(getIndentString(writer.getIndent()));
-                }
-
-                // Write spaces
-                while (count) {
-                    writer.write(" ");
-                    count--;
-                }
-            }
-
-            // Returns true if writer should write new line before emitting next line of comment
             function writeTrimmedCurrentLine(pos: number, nextLineStart: number) {
-                var currentLineText = currentSourceFile.text.substring(pos, Math.min(comment.end, nextLineStart - 1)).replace(/^\s+|\s+$/g, '');
+                var end = Math.min(comment.end, nextLineStart - 1);
+                var currentLineText = currentSourceFile.text.substring(pos, end).replace(/^\s+|\s+$/g, '');
                 if (currentLineText) {
                     // trimmed forward and ending spaces text
                     writer.write(currentLineText);
-                    return true;
+                    if (end !== comment.end) {
+                        writer.writeLine();
+                    }
                 }
                 else {
                     // Empty string - make sure we write empty line
