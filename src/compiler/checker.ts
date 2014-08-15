@@ -6704,7 +6704,13 @@ module ts {
                     if (parent.kind === SyntaxKind.TypeQuery) {
                         return false;
                     }
-                    if (isTypeNode(parent)) {
+                    // Do not recursively call isTypeNode on the parent. In the example:
+                    //
+                    //     var a: A.B.C;
+                    //
+                    // Calling isTypeNode would consider the qualified name A.B a type node. Only C or
+                    // A.B.C is a type node.
+                    if (node.kind >= SyntaxKind.FirstTypeNode && node.kind <= SyntaxKind.LastTypeNode) {
                         return true;
                     }
                     switch (parent.kind) {
