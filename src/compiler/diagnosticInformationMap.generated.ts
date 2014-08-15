@@ -2,9 +2,6 @@
 /// <reference path="types.ts" />
 module ts {
     export var Diagnostics = {
-        Unknown_compiler_option_0: { code: 6001, category: DiagnosticCategory.Error, key: "Unknown compiler option '{0}'." },
-        File_0_not_found: { code: 6002, category: DiagnosticCategory.Error, key: "File '{0}' not found." },
-        File_0_must_have_extension_ts_or_d_ts: { code: 6003, category: DiagnosticCategory.Error, key: "File '{0}' must have extension '.ts' or '.d.ts'." },
         Unrecognized_escape_sequence: { code: 1000, category: DiagnosticCategory.Error, key: "Unrecognized escape sequence." },
         Unexpected_character_0: { code: 1001, category: DiagnosticCategory.Error, key: "Unexpected character {0}." },
         Missing_close_quote_character: { code: 1002, category: DiagnosticCategory.Error, key: "Missing close quote character." },
@@ -339,6 +336,9 @@ module ts {
         Unable_to_open_file_0: { code: 6049, category: DiagnosticCategory.Error, key: "Unable to open file '{0}'." },
         Corrupted_locale_file_0: { code: 6050, category: DiagnosticCategory.Error, key: "Corrupted locale file {0}." },
         No_input_files_specified: { code: 6051, category: DiagnosticCategory.Error, key: "No input files specified." },
+        Unknown_compiler_option_0: { code: 6052, category: DiagnosticCategory.Error, key: "Unknown compiler option '{0}'." },
+        File_0_not_found: { code: 6053, category: DiagnosticCategory.Error, key: "File '{0}' not found." },
+        File_0_must_have_extension_ts_or_d_ts: { code: 6054, category: DiagnosticCategory.Error, key: "File '{0}' must have extension '.ts' or '.d.ts'." },
         Warn_on_expressions_and_declarations_with_an_implied_any_type: { code: 7004, category: DiagnosticCategory.Message, key: "Warn on expressions and declarations with an implied 'any' type." },
         Variable_0_implicitly_has_an_1_type: { code: 7005, category: DiagnosticCategory.Error, key: "Variable '{0}' implicitly has an '{1}' type." },
         Parameter_0_implicitly_has_an_1_type: { code: 7006, category: DiagnosticCategory.Error, key: "Parameter '{0}' implicitly has an '{1}' type." },
@@ -354,6 +354,8 @@ module ts {
         Object_literal_s_property_0_implicitly_has_an_1_type: { code: 7018, category: DiagnosticCategory.Error, key: "Object literal's property '{0}' implicitly has an '{1}' type." },
         Rest_parameter_0_implicitly_has_an_any_type: { code: 7019, category: DiagnosticCategory.Error, key: "Rest parameter '{0}' implicitly has an 'any[]' type." },
         Call_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type: { code: 7020, category: DiagnosticCategory.Error, key: "Call signature, which lacks return-type annotation, implicitly has an 'any' return type." },
+        You_must_rename_an_identifier: { code: 8000, category: DiagnosticCategory.Error, key: "You must rename an identifier." },
+        You_cannot_rename_this_element: { code: 8001, category: DiagnosticCategory.Error, key: "You cannot rename this element." },
         Variable_declaration_list_cannot_be_empty: { code: -9999999, category: DiagnosticCategory.Error, key: "Variable declaration list cannot be empty." },
         Digit_expected: { code: -9999999, category: DiagnosticCategory.Error, key: "Digit expected." },
         Hexadecimal_digit_expected: { code: -9999999, category: DiagnosticCategory.Error, key: "Hexadecimal digit expected." },

@@ -1,17 +1,4 @@
-{
-    "Unknown compiler option '{0}'.": {
-        "category": "Error",
-        "code": 6001
-    },
-    "File '{0}' not found.": {
-        "category": "Error",
-        "code": 6002
-    },
-    "File '{0}' must have extension '.ts' or '.d.ts'.": {
-        "category": "Error",
-        "code": 6003
-    },
-	
+{	
     "Unrecognized escape sequence.": {
         "category": "Error",
         "code": 1000
@@ -1178,6 +1165,7 @@
         "category": "Error",
         "code": 5039
     },
+
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001
@@ -1254,7 +1242,6 @@
         "category": "Message",
         "code": 6027
     },
-
     "Version {0}": {
         "category": "Message",
         "code": 6029
@@ -1351,6 +1338,18 @@
         "category": "Error",
         "code": 6051
     },
+    "Unknown compiler option '{0}'.": {
+        "category": "Error",
+        "code": 6052
+    },
+    "File '{0}' not found.": {
+        "category": "Error",
+        "code": 6053
+    },
+    "File '{0}' must have extension '.ts' or '.d.ts'.": {
+        "category": "Error",
+        "code": 6054
+    },
     "Warn on expressions and declarations with an implied 'any' type.": {
         "category": "Message",
         "code": 7004
@@ -1410,6 +1409,14 @@
     "Call signature, which lacks return-type annotation, implicitly has an 'any' return type.": {
         "category": "Error",
         "code": 7020
+    },
+    "You must rename an identifier.": {
+        "category": "Error",
+        "code": 8000
+    },
+    "You cannot rename this element.": {
+        "category": "Error",
+        "code": 8001
     },
     "Variable declaration list cannot be empty.": {
         "category": "Error",

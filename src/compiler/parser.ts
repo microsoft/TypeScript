@@ -9,7 +9,7 @@ module ts {
     export function getNodeConstructor(kind: SyntaxKind): new () => Node {
         return nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind));
     }
-
+ 
     function createRootNode(kind: SyntaxKind, pos: number, end: number, flags: NodeFlags): Node {
         var node = new (getNodeConstructor(kind))();
         node.pos = pos;
