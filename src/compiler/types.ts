@@ -526,7 +526,7 @@ module ts {
         identifierCount: number;
         symbolCount: number;
         isOpen: boolean;
-        version: string;
+        version: number;
         languageVersion: ScriptTarget;
     }
 
