@@ -265,6 +265,7 @@ module ts {
     }
 
     export function getPositionFromLineAndCharacter(lineStarts: number[], line: number, character: number): number {
+        Debug.assert(line > 0);
         return lineStarts[line - 1] + character - 1;
     }
 

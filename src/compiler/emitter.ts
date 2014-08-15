@@ -201,8 +201,10 @@ module ts {
                             firstCommentLineIndent = calculateIndent(currentSourceFile.getPositionFromLineAndCharacter(firstCommentLineAndCharacter.line, /*character*/1),
                                 comment.pos);
                         }
-                        var deltaIndent = calculateIndent(pos, nextLineStart) - firstCommentLineIndent;
-                        if (deltaIndent < 0) {
+
+                        // Number of spacings this comment line differs from first comment line
+                        var deltaIndentSpacing = calculateIndent(pos, nextLineStart) - firstCommentLineIndent;
+                        if (deltaIndentSpacing < 0) {
                             // we need to decrease indent to get the desired effect
                             // Comment is left indented to first line
                             // eg
@@ -214,34 +216,36 @@ module ts {
                             // }
 
                             // Spaces to emit = indentSize - (numberof spaces in lastDeltaIndent) (in above eg (4 - 5%4) = 3)
-                            var spacesToEmit = (deltaIndent % getIndentSize()); // This is negative of spaces to emit = -1 in above case
+                            var spacesToEmit = (deltaIndentSpacing % getIndentSize()); // This is negative of spaces to emit = -1 in above case
                             if (spacesToEmit) {
                                 spacesToEmit += getIndentSize(); // Adjust the delta with the indentSize (4 - 1) = 3
                             }
 
-                            // Change in delta indent = deltaIndent / indentSize, we will change the delta to upper integer value
-                            // In above eg. 5/4 = 1.75 so change the indent two times
-                            var changeInIndent = (-deltaIndent / getIndentSize());
+                            // This is number of times indent needs to be decremented before writing comment line text 
+                            // and same number of times the indent needs to be increased
+                            // It = deltaIndentSpacing / indentSize, we will change this to upper integer value
+                            // In above eg. 5/4 = 1.75 so change the indent two times (decrease 2 times, write text and then increase 2 times)
+                            var indentChangeCount = (-deltaIndentSpacing / getIndentSize());
 
                             // If we cant go back as much as we want to, go to left most position
-                            if (changeInIndent > writer.getIndent()) {
-                                changeInIndent = writer.getIndent();
+                            if (indentChangeCount > writer.getIndent()) {
+                                indentChangeCount = writer.getIndent();
                                 spacesToEmit = 0;
                             }
 
-                            // Decrease the chaneInIndent number of times
-                            for (var i = 0; i < changeInIndent; i++) {
+                            // Decrease the indentChangeCount number of times
+                            for (var i = 0; i < indentChangeCount; i++) {
                                 writer.decreaseIndent();
                             }
 
-                            // Emit either delta spaces or indentSizeSpaces
+                            // Emit the spaces to maintain deltaIndentSpacing
                             emitSpaces(spacesToEmit, writeNewLine);
 
                             // Write the comment line text
                             writeNewLine = writeTrimmedCurrentLine(pos, nextLineStart);
 
                             // Revert the indent
-                            for (var i = 0; i < changeInIndent; i++) {
+                            for (var i = 0; i < indentChangeCount; i++) {
                                 writer.increaseIndent();
                             }
                         } else {
@@ -255,7 +259,7 @@ module ts {
                             // }
                             // In above eg for line 2 in the comment, the delta is single space and hence emit that and emit the trimmed line
                             // but the third line has delta of 7 spaces and hence emit those spaces before emitting the trimmed line
-                            emitSpaces(deltaIndent, writeNewLine);
+                            emitSpaces(deltaIndentSpacing, writeNewLine);
                             writeNewLine = writeTrimmedCurrentLine(pos, nextLineStart);
                         }
                     }
