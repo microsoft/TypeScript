@@ -36,7 +36,7 @@ module ts {
         //  { span: { start: number; length: number }; newLength: number }
         //
         // Or null value if there was no change.
-        getChangeRange(oldSnapshot: ScriptSnapshotShim): string;
+        getTextChangeRangeSinceVersion(scriptVersion: number): string;
     }
 
     //
@@ -48,7 +48,7 @@ module ts {
         // Returns a JSON encoded value of the type:
         // string[]
         getScriptFileNames(): string;
-        getScriptVersion(fileName: string): string;
+        getScriptVersion(fileName: string): number;
         getScriptIsOpen(fileName: string): boolean;
         getScriptSnapshot(fileName: string): ScriptSnapshotShim;
         getLocalizedDiagnosticMessages(): string;
@@ -86,44 +86,51 @@ module ts {
         getTypeAtPosition(fileName: string, position: number): string;
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): string;
         getBreakpointStatementAtPosition(fileName: string, position: number): string;
-        getSignatureAtPosition(fileName: string, position: number): string;
+
+        getSignatureHelpItems(fileName: string, position: number): string;
+        getSignatureHelpCurrentArgumentState(fileName: string, position: number, applicableSpanStart: number): string;
 
         // Returns a JSON encoded value of the type:
-        // { fileName: string; minChar: number; limChar: number; kind: string; name: string; containerKind: string; containerName: string }
+        // { canRename: boolean, localizedErrorMessage: string, displayName: string, fullDisplayName: string, kind: string, kindModifiers: string, triggerSpan: { start; length } }
+        getRenameInfo(fileName: string, position: number): string;
+
+        // Returns a JSON encoded value of the type:
+        // { fileName: string; textSpan: { start: number; length: number}; kind: string; name: string; containerKind: string; containerName: string }
         //
         // Or null value if no definition can be found.
         getDefinitionAtPosition(fileName: string, position: number): string;
 
         // Returns a JSON encoded value of the type:
-        // { fileName: string; minChar: number; limChar: number; isWriteAccess: boolean }[]
+        // { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
         getReferencesAtPosition(fileName: string, position: number): string;
 
         // Returns a JSON encoded value of the type:
-        // { fileName: string; minChar: number; limChar: number; isWriteAccess: boolean }[]
+        // { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
         getOccurrencesAtPosition(fileName: string, position: number): string;
 
         // Returns a JSON encoded value of the type:
-        // { fileName: string; minChar: number; limChar: number; isWriteAccess: boolean }[]
+        // { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
         getImplementorsAtPosition(fileName: string, position: number): string;
 
         // Returns a JSON encoded value of the type:
-        // { name: string; kind: string; kindModifiers: string; containerName: string; containerKind: string; matchKind: string; fileName: string; minChar: number; limChar: number; } [] = [];
+        // { name: string; kind: string; kindModifiers: string; containerName: string; containerKind: string; matchKind: string; fileName: string; textSpan: { start: number; length: number}; } [] = [];
         getNavigateToItems(searchValue: string): string;
 
         // Returns a JSON encoded value of the type:
-        // { name: string; kind: string; kindModifiers: string; containerName: string; containerKind: string; matchKind: string; fileName: string; minChar: number; limChar: number; } [] = [];
-        getScriptLexicalStructure(fileName: string): string;
+        // { text: string; kind: string; kindModifiers: string; bolded: boolean; grayed: boolean; indent: number; spans: { start: number; length: number; }[]; childItems: <recursive use of this type>[] } [] = [];
+        getNavigationBarItems(fileName: string): string;
 
         // Returns a JSON encoded value of the type:
-        // { name: string; kind: string; kindModifiers: string; containerName: string; containerKind: string; matchKind: string; fileName: string; minChar: number; limChar: number; } [] = [];
-        getOutliningRegions(fileName: string): string;
+        // { textSpan: { start: number, length: number }; hintSpan: { start: number, length: number }; bannerText: string; autoCollapse: boolean } [] = [];
+        getOutliningSpans(fileName: string): string;
+
+        getTodoComments(fileName: string, todoCommentDescriptors: string): string;
 
         getBraceMatchingAtPosition(fileName: string, position: number): string;
         getIndentationAtPosition(fileName: string, position: number, options: string/*Services.EditorOptions*/): string;
 
-        getFormattingEditsForRange(fileName: string, minChar: number, limChar: number, options: string/*Services.FormatCodeOptions*/): string;
-        getFormattingEditsForDocument(fileName: string, minChar: number, limChar: number, options: string/*Services.FormatCodeOptions*/): string;
-        getFormattingEditsOnPaste(fileName: string, minChar: number, limChar: number, options: string/*Services.FormatCodeOptions*/): string;
+        getFormattingEditsForRange(fileName: string, start: number, end: number, options: string/*Services.FormatCodeOptions*/): string;
+        getFormattingEditsForDocument(fileName: string, options: string/*Services.FormatCodeOptions*/): string;
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: string/*Services.FormatCodeOptions*/): string;
 
         getEmitOutput(fileName: string): string;
@@ -283,9 +290,8 @@ module ts {
             return this.lineStartPositions;
         }
 
-        public getChangeRange(oldSnapshot: TypeScript.IScriptSnapshot): TypeScript.TextChangeRange {
-            var oldSnapshotShim = <ScriptSnapshotShimAdapter>oldSnapshot;
-            var encoded = this.scriptSnapshotShim.getChangeRange(oldSnapshotShim.scriptSnapshotShim);
+        public getTextChangeRangeSinceVersion(scriptVersion: number): TypeScript.TextChangeRange {
+            var encoded = this.scriptSnapshotShim.getTextChangeRangeSinceVersion(scriptVersion);
             if (encoded == null) {
                 return null;
             }
@@ -296,7 +302,7 @@ module ts {
         }
     }
 
-    export class LanguageServiceShimHostAdapter implements LanguageServiceHost {
+    class LanguageServiceShimHostAdapter implements LanguageServiceHost {
         constructor(private shimHost: LanguageServiceShimHost) {
         }
 
@@ -350,7 +356,7 @@ module ts {
             return new ScriptSnapshotShimAdapter(this.shimHost.getScriptSnapshot(fileName));
         }
 
-        public getScriptVersion(fileName: string): string {
+        public getScriptVersion(fileName: string): number {
             return this.shimHost.getScriptVersion(fileName);
         }
 
@@ -456,7 +462,6 @@ module ts {
             this.forwardJSONCall(
                 "refresh(" + throwOnError + ")",
                 () => {
-                    this.languageService.refresh();
                     return <any>null;
                 });
         }
@@ -469,8 +474,6 @@ module ts {
                     return <any>null;
                 });
         }
-        /// SQUIGGLES
-        ///
 
         private static realizeDiagnostic(diagnostic: Diagnostic): { message: string; start: number; length: number; category: string; } {
             return {
@@ -495,7 +498,7 @@ module ts {
 
         public getSyntacticDiagnostics(fileName: string): string {
             return this.forwardJSONCall(
-                "getSyntacticDiagnostics(\"" + fileName + "\")",
+                "getSyntacticDiagnostics('" + fileName + "')",
                 () => {
                     var errors = this.languageService.getSyntacticDiagnostics(fileName);
                     return errors.map(LanguageServiceShimObject.realizeDiagnostic);
@@ -504,7 +507,7 @@ module ts {
 
         public getSemanticDiagnostics(fileName: string): string {
             return this.forwardJSONCall(
-                "getSemanticDiagnostics(\"" + fileName + "\")",
+                "getSemanticDiagnostics('" + fileName + "')",
                 () => {
                     var errors = this.languageService.getSemanticDiagnostics(fileName);
                     return errors.map(LanguageServiceShimObject.realizeDiagnostic);
@@ -525,7 +528,7 @@ module ts {
         /// in the active file.
         public getTypeAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "getTypeAtPosition(\"" + fileName + "\", " + position + ")",
+                "getTypeAtPosition('" + fileName + "', " + position + ")",
                 () => {
                     var typeInfo = this.languageService.getTypeAtPosition(fileName, position);
                     return typeInfo;
@@ -537,7 +540,7 @@ module ts {
         // in the active file.
         public getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): string {
             return this.forwardJSONCall(
-                "getNameOrDottedNameSpan(\"" + fileName + "\", " + startPos + ", " + endPos + ")",
+                "getNameOrDottedNameSpan('" + fileName + "', " + startPos + ", " + endPos + ")",
                 () => {
                     var spanInfo = this.languageService.getNameOrDottedNameSpan(fileName, startPos, endPos);
                     return spanInfo;
@@ -548,7 +551,7 @@ module ts {
         /// Computes span information of statement at the requested position in the active file.
         public getBreakpointStatementAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "getBreakpointStatementAtPosition(\"" + fileName + "\", " + position + ")",
+                "getBreakpointStatementAtPosition('" + fileName + "', " + position + ")",
                 () => {
                     var spanInfo = this.languageService.getBreakpointStatementAtPosition(fileName, position);
                     return spanInfo;
@@ -556,32 +559,49 @@ module ts {
         }
 
         /// SIGNATUREHELP
-        /// Computes a string representation of the signatures at the requested position
-        /// in the active file.
-        public getSignatureAtPosition(fileName: string, position: number): string {
+
+        public getSignatureHelpItems(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "getSignatureAtPosition(\"" + fileName + "\", " + position + ")",
+                "getSignatureHelpItems('" + fileName + "', " + position + ")",
                 () => {
-                    var signatureInfo = this.languageService.getSignatureAtPosition(fileName, position);
+                    var signatureInfo = this.languageService.getSignatureHelpItems(fileName, position);
                     return signatureInfo;
                 });
         }
+
+        public getSignatureHelpCurrentArgumentState(fileName: string, position: number, applicableSpanStart: number): string {
+            return this.forwardJSONCall(
+                "getSignatureHelpCurrentArgumentState('" + fileName + "', " + position + ", " + applicableSpanStart + ")",
+                () => {
+                    var signatureInfo = this.languageService.getSignatureHelpItems(fileName, position);
+                    return signatureInfo;
+                });
+        }
+
 
         /// GOTO DEFINITION
         /// Computes the definition location and file for the symbol
         /// at the requested position. 
         public getDefinitionAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "getDefinitionAtPosition(\"" + fileName + "\", " + position + ")",
+                "getDefinitionAtPosition('" + fileName + "', " + position + ")",
                 () => {
                     return this.languageService.getDefinitionAtPosition(fileName, position);
+                });
+        }
+
+        public getRenameInfo(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                "getRenameInfo('" + fileName + "', " + position + ")",
+                () => {
+                    return this.languageService.getRenameInfo(fileName, position);
                 });
         }
 
         /// GET BRACE MATCHING
         public getBraceMatchingAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "getBraceMatchingAtPosition(\"" + fileName + "\", " + position + ")",
+                "getBraceMatchingAtPosition('" + fileName + "', " + position + ")",
                 () => {
                     var textRanges = this.languageService.getBraceMatchingAtPosition(fileName, position);
                     return textRanges;
@@ -591,7 +611,7 @@ module ts {
         /// GET SMART INDENT
         public getIndentationAtPosition(fileName: string, position: number, options: string /*Services.EditorOptions*/): string {
             return this.forwardJSONCall(
-                "getIndentationAtPosition(\"" + fileName + "\", " + position + ")",
+                "getIndentationAtPosition('" + fileName + "', " + position + ")",
                 () => {
                     var localOptions: EditorOptions = JSON.parse(options);
                     var columnOffset = this.languageService.getIndentationAtPosition(fileName, position, localOptions);
@@ -605,7 +625,7 @@ module ts {
         ///  Each reference is a "fileindex min lim" sub-string.
         public getReferencesAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "getReferencesAtPosition(\"" + fileName + "\", " + position + ")",
+                "getReferencesAtPosition('" + fileName + "', " + position + ")",
                 () => {
                     return this.languageService.getReferencesAtPosition(fileName, position);
                 });
@@ -613,7 +633,7 @@ module ts {
 
         public getOccurrencesAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "getOccurrencesAtPosition(\"" + fileName + "\", " + position + ")",
+                "getOccurrencesAtPosition('" + fileName + "', " + position + ")",
                 () => {
                     return this.languageService.getOccurrencesAtPosition(fileName, position);
                 });
@@ -622,7 +642,7 @@ module ts {
         /// GET IMPLEMENTORS
         public getImplementorsAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "getImplementorsAtPosition(\"" + fileName + "\", " + position + ")",
+                "getImplementorsAtPosition('" + fileName + "', " + position + ")",
                 () => {
                     return this.languageService.getImplementorsAtPosition(fileName, position);
                 });
@@ -635,7 +655,7 @@ module ts {
         /// list if requested.
         public getCompletionsAtPosition(fileName: string, position: number, isMemberCompletion: boolean) {
             return this.forwardJSONCall(
-                "getCompletionsAtPosition(\"" + fileName + "\", " + position + ", " + isMemberCompletion + ")",
+                "getCompletionsAtPosition('" + fileName + "', " + position + ", " + isMemberCompletion + ")",
                 () => {
                     var completion = this.languageService.getCompletionsAtPosition(fileName, position, isMemberCompletion);
                     return completion;
@@ -645,52 +665,38 @@ module ts {
         /// Get a string based representation of a completion list entry details
         public getCompletionEntryDetails(fileName: string, position: number, entryName: string) {
             return this.forwardJSONCall(
-                "getCompletionEntryDetails(\"" + fileName + "\", " + position + ", " + entryName + ")",
+                "getCompletionEntryDetails('" + fileName + "', " + position + ", " + entryName + ")",
                 () => {
                     var details = this.languageService.getCompletionEntryDetails(fileName, position, entryName);
                     return details;
                 });
         }
 
-        /// FORMAT SELECTION
-        public getFormattingEditsForRange(fileName: string, minChar: number, limChar: number, options: string/*Services.FormatCodeOptions*/): string {
+        public getFormattingEditsForRange(fileName: string, start: number, end: number, options: string/*Services.FormatCodeOptions*/): string {
             return this.forwardJSONCall(
-                "getFormattingEditsForRange(\"" + fileName + "\", " + minChar + ", " + limChar + ")",
+                "getFormattingEditsForRange('" + fileName + "', " + start + ", " + end + ")",
                 () => {
-                    var localOptions: FormatCodeOptions = JSON.parse(options);
-                    var edits = this.languageService.getFormattingEditsForRange(fileName, minChar, limChar, localOptions);
+                    var localOptions: ts.FormatCodeOptions = JSON.parse(options);
+                    var edits = this.languageService.getFormattingEditsForRange(fileName, start, end, localOptions);
                     return edits;
                 });
         }
 
-        /// FORMAT DOCUMENT
-        public getFormattingEditsForDocument(fileName: string, minChar: number, limChar: number, options: string/*Services.FormatCodeOptions*/): string {
+        public getFormattingEditsForDocument(fileName: string, options: string/*Services.FormatCodeOptions*/): string {
             return this.forwardJSONCall(
-                "getFormattingEditsForDocument(\"" + fileName + "\", " + minChar + ", " + limChar + ")",
+                "getFormattingEditsForDocument('" + fileName + "')",
                 () => {
-                    var localOptions: FormatCodeOptions = JSON.parse(options);
-                    var edits = this.languageService.getFormattingEditsForDocument(fileName, minChar, limChar, localOptions);
+                    var localOptions: ts.FormatCodeOptions = JSON.parse(options);
+                    var edits = this.languageService.getFormattingEditsForDocument(fileName, localOptions);
                     return edits;
                 });
         }
 
-        /// FORMAT ON PASTE
-        public getFormattingEditsOnPaste(fileName: string, minChar: number, limChar: number, options: string/*Services.FormatCodeOptions*/): string {
-            return this.forwardJSONCall(
-                "getFormattingEditsOnPaste(\"" + fileName + "\", " + minChar + ", " + limChar + ")",
-                () => {
-                    var localOptions: FormatCodeOptions = JSON.parse(options);
-                    var edits = this.languageService.getFormattingEditsOnPaste(fileName, minChar, limChar, localOptions);
-                    return edits;
-                });
-        }
-
-        /// FORMAT
         public getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: string/*Services.FormatCodeOptions*/): string {
             return this.forwardJSONCall(
-                "getFormattingEditsAfterKeystroke(\"" + fileName + "\", " + position + ", \"" + key + "\")",
+                "getFormattingEditsAfterKeystroke('" + fileName + "', " + position + ", '" + key + "')",
                 () => {
-                    var localOptions: FormatCodeOptions = JSON.parse(options);
+                    var localOptions: ts.FormatCodeOptions = JSON.parse(options);
                     var edits = this.languageService.getFormattingEditsAfterKeystroke(fileName, position, key, localOptions);
                     return edits;
                 });
@@ -700,82 +706,48 @@ module ts {
         ///  Return a list of symbols that are interesting to navigate to
         public getNavigateToItems(searchValue: string): string {
             return this.forwardJSONCall(
-                "getNavigateToItems(\"" + searchValue + "\")",
+                "getNavigateToItems('" + searchValue + "')",
                 () => {
                     var items = this.languageService.getNavigateToItems(searchValue);
-                    var result = this._navigateToItemsToString(items);
-                    return result;
+                    return items;
                 });
         }
 
-        // GET SCRIPT LEXICAL STRUCTURE
-        //
-        public getScriptLexicalStructure(fileName: string): string {
+        public getNavigationBarItems(fileName: string): string {
             return this.forwardJSONCall(
-                "getScriptLexicalStructure(\"" + fileName + "\")",
+                "getNavigationBarItems('" + fileName + "')",
                 () => {
-                    var items = this.languageService.getScriptLexicalStructure(fileName);
-                    var result = this._navigateToItemsToString(items);
-                    return result;
+                    var items = this.languageService.getNavigationBarItems(fileName);
+                    return items;
                 });
         }
 
-        // GET OUTLINING REGIONS
-        //
-        public getOutliningRegions(fileName: string): string {
+        public getOutliningSpans(fileName: string): string {
             return this.forwardJSONCall(
-                "getOutliningRegions(\"" + fileName + "\")",
+                "getOutliningSpans('" + fileName + "')",
                 () => {
-                    var items = this.languageService.getOutliningRegions(fileName);
-                    // return just the part of data that language service v2 can understand
-                    // language service v2 will use the entire OutliningSpan
-                    var spans = map(items, i => i.textSpan);
-                    return spans;
+                    var items = this.languageService.getOutliningSpans(fileName);
+                    return items;
+                });
+        }
+
+        public getTodoComments(fileName: string, descriptors: string): string {
+            return this.forwardJSONCall(
+                "getTodoComments('" + fileName + "')",
+                () => {
+                    var items = this.languageService.getTodoComments(fileName, JSON.parse(descriptors));
+                    return items;
                 });
         }
 
         /// Emit
         public getEmitOutput(fileName: string): string {
             return this.forwardJSONCall(
-                "getEmitOutput(\"" + fileName + "\")",
+                "getEmitOutput('" + fileName + "')",
                 () => {
                     var output = this.languageService.getEmitOutput(fileName);
                     return output;
                 });
-        }
-
-        private _navigateToItemsToString(items: NavigateToItem[]): any {
-            var result: {
-                name: string;
-                kind: string;
-                kindModifiers: string;
-                containerName: string;
-                containerKind: string;
-                matchKind: string;
-                fileName: string;
-                minChar: number;
-                limChar: number;
-                additionalSpans?: { start: number; end: number; }[];
-            }[] = [];
-
-            for (var i = 0; i < items.length; i++) {
-                var item = items[i];
-
-                result.push({
-                    name: item.name,
-                    kind: item.kind,
-                    kindModifiers: item.kindModifiers,
-                    containerName: item.containerName,
-                    containerKind: item.containerKind,
-                    matchKind: item.matchKind,
-                    fileName: item.fileName,
-                    minChar: item.minChar,
-                    limChar: item.limChar,
-                    additionalSpans: item.additionalSpans ? item.additionalSpans.map(i => { return { start: i.minChar, end: i.limChar }; }) : undefined
-                });
-            }
-
-            return result;
         }
     }
 
@@ -815,7 +787,7 @@ module ts {
         ///
         public getPreProcessedFileInfo(fileName: string, sourceText: TypeScript.IScriptSnapshot): string {
             return this.forwardJSONCall(
-                "getPreProcessedFileInfo(\"" + fileName + "\")",
+                "getPreProcessedFileInfo('" + fileName + "')",
                 () => {
                     var result = TypeScript.preProcessFile(fileName, sourceText);
                     return result;
