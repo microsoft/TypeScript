@@ -1,4 +1,4 @@
-//@module: amd
+//@module: commonjs
 // @target: ES5
 // @declaration: true
 // @comments: true
