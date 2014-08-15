@@ -198,7 +198,7 @@ class cProperties {
     /** getter only property*/
     public get p1() {
         return this.val;
-    }
+    } // trailing comment of only getter
     public get nc_p1() {
         return this.val;
     }
@@ -208,7 +208,10 @@ class cProperties {
     }
     public set nc_p2(value: number) {
         this.val = value;
-    }
+    } /* trailing comment of setter only*/
+
+    public x = 10; /*trailing comment for property*/
+    private y = 10; // trailing comment of // style
 }
 var cProperties_i = new cProperties();
 cProperties_i.p2 = cProperties_i.p1;
@@ -434,12 +437,15 @@ c1.nc_s3 = i1_s_ncprop;
 var i1_c = c1;
 var cProperties = (function () {
     function cProperties() {
+        this.x = 10; /*trailing comment for property*/ 
+        this.y = 10; // trailing comment of // style
     }
     Object.defineProperty(cProperties.prototype, "p1", {
         /** getter only property*/
         get: function () {
             return this.val;
-        },
+        } // trailing comment of only getter
+        ,
         enumerable: true,
         configurable: true
     });
@@ -461,7 +467,7 @@ var cProperties = (function () {
     Object.defineProperty(cProperties.prototype, "nc_p2", {
         set: function (value) {
             this.val = value;
-        },
+        } /* trailing comment of setter only*/ ,
         enumerable: true,
         configurable: true
     });
@@ -566,5 +572,7 @@ declare class cProperties {
     /**setter only property*/
     p2: number;
     nc_p2: number;
+    x: number;
+    private y;
 }
 declare var cProperties_i: cProperties;

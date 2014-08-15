@@ -200,7 +200,7 @@ class cProperties {
     /** getter only property*/
     public get p1() {
         return this.val;
-    }
+    } // trailing comment of only getter
     public get nc_p1() {
         return this.val;
     }
@@ -210,7 +210,10 @@ class cProperties {
     }
     public set nc_p2(value: number) {
         this.val = value;
-    }
+    } /* trailing comment of setter only*/
+
+    public x = 10; /*trailing comment for property*/
+    private y = 10; // trailing comment of // style
 }
 var cProperties_i = new cProperties();
 cProperties_i.p2 = cProperties_i.p1;
