@@ -6,7 +6,7 @@ enum Colors {
     Cornflower /* blue */,
     /** Fancy name for 'pink'*/
     FancyPink
-}
+} // trailing comment
 var x = Colors.Cornflower;
 x = Colors.FancyPink;
 
@@ -20,7 +20,7 @@ var Colors;
     Colors[Colors["Cornflower"] = 0] = "Cornflower"; /* blue */ 
     /** Fancy name for 'pink'*/
     Colors[Colors["FancyPink"] = 1] = "FancyPink";
-})(Colors || (Colors = {}));
+})(Colors || (Colors = {})); // trailing comment
 var x = 0 /* Cornflower */;
 x = 1 /* FancyPink */;
 
