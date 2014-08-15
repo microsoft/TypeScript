@@ -24,6 +24,6 @@ var D = (function () {
     function D() {
     }
     D.prototype.x = function (v) {
-    }; // error 
+    }; // error
     return D;
 })();

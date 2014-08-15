@@ -16,7 +16,7 @@ var c1 = (function () {
     };
     return c1;
 })();
-var c1 = 1; // error 
+var c1 = 1; // error
 //// class then enum
 var c4 = (function () {
     function c4() {

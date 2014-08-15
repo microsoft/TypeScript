@@ -119,7 +119,7 @@ var r8 = true ? function (x) {
 } : null;
 var r8b = true ? null : function (x) {
     return x;
-}; // type parameters not identical across declarations 
+}; // type parameters not identical across declarations
 var i1;
 var r9 = true ? i1 : null;
 var r9 = true ? null : i1;

@@ -385,12 +385,14 @@ module ts {
                     continue;
                 case CharacterCodes.slash:
                     var nextChar = text.charCodeAt(pos + 1);
+                    var hasTrailingNewLine = false;
                     if (nextChar === CharacterCodes.slash || nextChar === CharacterCodes.asterisk) {
                         var startPos = pos;
                         pos += 2;
                         if (nextChar === CharacterCodes.slash) {
                             while (pos < text.length) {
                                 if (isLineBreak(text.charCodeAt(pos))) {
+                                    hasTrailingNewLine = true;
                                     break;
                                 }
                                 pos++;
@@ -407,7 +409,7 @@ module ts {
                         }
                         if (collecting) {
                             if (!result) result = [];
-                            result.push({ pos: startPos, end: pos });
+                            result.push({ pos: startPos, end: pos, hasTrailingNewLine: hasTrailingNewLine });
                         }
                         continue;
                     }

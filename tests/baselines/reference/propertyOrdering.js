@@ -26,14 +26,14 @@ class Bar {
 //// [propertyOrdering.js]
 var Foo = (function () {
     function Foo(store) {
-        this._store = store; // no repro if this is first line in class body 
+        this._store = store; // no repro if this is first line in class body
     }
     Foo.prototype.foo = function () {
         return this._store.length;
     };
     Foo.prototype.bar = function () {
         return this.store;
-    }; // should be an error 
+    }; // should be an error
     return Foo;
 })();
 var Bar = (function () {

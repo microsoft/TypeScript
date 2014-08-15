@@ -73,6 +73,6 @@ var D = (function () {
     return D;
 })();
 var c;
-var r = c.foo(1); // error 
+var r = c.foo(1); // error
 var d;
 var r2 = d.foo(2); // error 

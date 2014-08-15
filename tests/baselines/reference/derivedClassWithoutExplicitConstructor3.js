@@ -79,8 +79,8 @@ var Derived2 = (function (_super) {
     }
     return Derived2;
 })(Derived);
-var r = new Derived(); // error 
-var r2 = new Derived2(1); // error 
+var r = new Derived(); // error
+var r2 = new Derived2(1); // error
 var r3 = new Derived('', '');
 var Base2 = (function () {
     function Base2(x) {
@@ -106,6 +106,6 @@ var D2 = (function (_super) {
     }
     return D2;
 })(D);
-var d = new D2(); // error 
-var d2 = new D2(new Date()); // error 
+var d = new D2(); // error
+var d2 = new D2(new Date()); // error
 var d3 = new D2(new Date(), new Date()); // ok 

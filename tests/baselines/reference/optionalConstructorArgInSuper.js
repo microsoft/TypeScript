@@ -31,6 +31,6 @@ var Derived = (function (_super) {
     }
     return Derived;
 })(Base);
-var d = new Derived(); // bug caused an error here, couldn't select overload 
+var d = new Derived(); // bug caused an error here, couldn't select overload
 var d2;
 d2.foo();

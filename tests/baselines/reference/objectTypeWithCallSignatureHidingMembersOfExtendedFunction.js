@@ -38,7 +38,7 @@ var r1 = i.apply;
 var r1b = i.call;
 var r1c = i.arguments;
 var r1d = i.data;
-var r1e = i['hm']; // should be Object 
+var r1e = i['hm']; // should be Object
 var x;
 var r2 = x.apply;
 var r2b = x.call;

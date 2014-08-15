@@ -7,7 +7,7 @@ foo((()=>{})()); // error
 
 //// [voidArrayLit.js]
 var va = [(function () {
-})()]; // ok 
+})()]; // ok
 (function () {
 })();
 function foo(s) {

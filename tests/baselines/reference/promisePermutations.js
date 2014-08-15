@@ -196,84 +196,84 @@ var s3d = s3.then(testFunction3P, testFunction3, testFunction3).then(testFunctio
 var r4;
 var sIPromise;
 var sPromise;
-var r4a = r4.then(testFunction4, testFunction4, testFunction4); // error 
-var r4b = r4.then(sIPromise, testFunction4, testFunction4).then(sIPromise, testFunction4, testFunction4); // ok 
+var r4a = r4.then(testFunction4, testFunction4, testFunction4); // error
+var r4b = r4.then(sIPromise, testFunction4, testFunction4).then(sIPromise, testFunction4, testFunction4); // ok
 var s4;
-var s4a = s4.then(testFunction4, testFunction4, testFunction4); // error 
-var s4b = s4.then(testFunction4P, testFunction4P, testFunction4P); // error  
-var s4c = s4.then(testFunction4P, testFunction4, testFunction4); // error 
+var s4a = s4.then(testFunction4, testFunction4, testFunction4); // error
+var s4b = s4.then(testFunction4P, testFunction4P, testFunction4P); // error 
+var s4c = s4.then(testFunction4P, testFunction4, testFunction4); // error
 var s4d = s4.then(sIPromise, testFunction4P, testFunction4).then(sIPromise, testFunction4P, testFunction4);
 var r5;
-var r5a = r5.then(testFunction5, testFunction5, testFunction5); // error 
-var r5b = r5.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok 
+var r5a = r5.then(testFunction5, testFunction5, testFunction5); // error
+var r5b = r5.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
 var s5;
-var s5a = s5.then(testFunction5, testFunction5, testFunction5); // error 
-var s5b = s5.then(testFunction5P, testFunction5P, testFunction5P); // error 
-var s5c = s5.then(testFunction5P, testFunction5, testFunction5); // error 
-var s5d = s5.then(sPromise, sPromise, sPromise).then(sIPromise, sIPromise, sIPromise); // ok 
+var s5a = s5.then(testFunction5, testFunction5, testFunction5); // error
+var s5b = s5.then(testFunction5P, testFunction5P, testFunction5P); // error
+var s5c = s5.then(testFunction5P, testFunction5, testFunction5); // error
+var s5d = s5.then(sPromise, sPromise, sPromise).then(sIPromise, sIPromise, sIPromise); // ok
 var r6;
-var r6a = r6.then(testFunction6, testFunction6, testFunction6); // error 
-var r6b = r6.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok 
+var r6a = r6.then(testFunction6, testFunction6, testFunction6); // error
+var r6b = r6.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
 var s6;
-var s6a = s6.then(testFunction6, testFunction6, testFunction6); // error 
-var s6b = s6.then(testFunction6P, testFunction6P, testFunction6P); // error 
-var s6c = s6.then(testFunction6P, testFunction6, testFunction6); // error 
-var s6d = s6.then(sPromise, sPromise, sPromise).then(sIPromise, sIPromise, sIPromise); // ok 
+var s6a = s6.then(testFunction6, testFunction6, testFunction6); // error
+var s6b = s6.then(testFunction6P, testFunction6P, testFunction6P); // error
+var s6c = s6.then(testFunction6P, testFunction6, testFunction6); // error
+var s6d = s6.then(sPromise, sPromise, sPromise).then(sIPromise, sIPromise, sIPromise); // ok
 var r7;
-var r7a = r7.then(testFunction7, testFunction7, testFunction7); // error 
-var r7b = r7.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok 
+var r7a = r7.then(testFunction7, testFunction7, testFunction7); // error
+var r7b = r7.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
 var s7;
-var s7a = r7.then(testFunction7, testFunction7, testFunction7); // error 
-var s7b = r7.then(testFunction7P, testFunction7P, testFunction7P); // error 
-var s7c = r7.then(testFunction7P, testFunction7, testFunction7); // error 
-var s7d = r7.then(sPromise, sPromise, sPromise).then(sPromise, sPromise, sPromise); // ok? 
+var s7a = r7.then(testFunction7, testFunction7, testFunction7); // error
+var s7b = r7.then(testFunction7P, testFunction7P, testFunction7P); // error
+var s7c = r7.then(testFunction7P, testFunction7, testFunction7); // error
+var s7d = r7.then(sPromise, sPromise, sPromise).then(sPromise, sPromise, sPromise); // ok?
 var r8;
 var nIPromise;
 var nPromise;
-var r8a = r8.then(testFunction8, testFunction8, testFunction8); // error 
-var r8b = r8.then(nIPromise, nIPromise, nIPromise).then(nIPromise, nIPromise, nIPromise); // ok 
+var r8a = r8.then(testFunction8, testFunction8, testFunction8); // error
+var r8b = r8.then(nIPromise, nIPromise, nIPromise).then(nIPromise, nIPromise, nIPromise); // ok
 var s8;
-var s8a = s8.then(testFunction8, testFunction8, testFunction8); // error 
-var s8b = s8.then(testFunction8P, testFunction8P, testFunction8P); // error 
-var s8c = s8.then(testFunction8P, testFunction8, testFunction8); // error 
-var s8d = s8.then(nIPromise, nIPromise, nIPromise).then(nIPromise, nIPromise, nIPromise); // ok 
+var s8a = s8.then(testFunction8, testFunction8, testFunction8); // error
+var s8b = s8.then(testFunction8P, testFunction8P, testFunction8P); // error
+var s8c = s8.then(testFunction8P, testFunction8, testFunction8); // error
+var s8d = s8.then(nIPromise, nIPromise, nIPromise).then(nIPromise, nIPromise, nIPromise); // ok
 var r9;
-var r9a = r9.then(testFunction9, testFunction9, testFunction9); // error 
-var r9b = r9.then(sIPromise, sIPromise, sIPromise); // ok 
-var r9c = r9.then(nIPromise, nIPromise, nIPromise); // ok 
-var r9d = r9.then(testFunction, sIPromise, nIPromise); // ok 
-var r9e = r9.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok 
+var r9a = r9.then(testFunction9, testFunction9, testFunction9); // error
+var r9b = r9.then(sIPromise, sIPromise, sIPromise); // ok
+var r9c = r9.then(nIPromise, nIPromise, nIPromise); // ok
+var r9d = r9.then(testFunction, sIPromise, nIPromise); // ok
+var r9e = r9.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
 var s9;
-var s9a = s9.then(testFunction9, testFunction9, testFunction9); // error 
-var s9b = s9.then(testFunction9P, testFunction9P, testFunction9P); // error 
-var s9c = s9.then(testFunction9P, testFunction9, testFunction9); // error 
-var s9d = s9.then(sPromise, sPromise, sPromise); // ok 
-var s9e = s9.then(nPromise, nPromise, nPromise); // ok 
-var s9f = s9.then(testFunction, sIPromise, nIPromise); // ok 
-var s9g = s9.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok 
+var s9a = s9.then(testFunction9, testFunction9, testFunction9); // error
+var s9b = s9.then(testFunction9P, testFunction9P, testFunction9P); // error
+var s9c = s9.then(testFunction9P, testFunction9, testFunction9); // error
+var s9d = s9.then(sPromise, sPromise, sPromise); // ok
+var s9e = s9.then(nPromise, nPromise, nPromise); // ok
+var s9f = s9.then(testFunction, sIPromise, nIPromise); // ok
+var s9g = s9.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
 var r10 = testFunction10(function (x) { return x; });
-var r10a = r10.then(testFunction10, testFunction10, testFunction10); // ok 
-var r10b = r10.then(sIPromise, sIPromise, sIPromise); // ok 
-var r10c = r10.then(nIPromise, nIPromise, nIPromise); // ok 
-var r10d = r10.then(testFunction, sIPromise, nIPromise); // ok 
-var r10e = r10.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok 
+var r10a = r10.then(testFunction10, testFunction10, testFunction10); // ok
+var r10b = r10.then(sIPromise, sIPromise, sIPromise); // ok
+var r10c = r10.then(nIPromise, nIPromise, nIPromise); // ok
+var r10d = r10.then(testFunction, sIPromise, nIPromise); // ok
+var r10e = r10.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
 var s10 = testFunction10P(function (x) { return x; });
-var s10a = s10.then(testFunction10, testFunction10, testFunction10); // ok 
-var s10b = s10.then(testFunction10P, testFunction10P, testFunction10P); // ok 
-var s10c = s10.then(testFunction10P, testFunction10, testFunction10); // ok 
-var s10d = s10.then(sPromise, sPromise, sPromise); // ok 
-var s10e = s10.then(nIPromise, nPromise, nIPromise); // ok 
-var s10f = s10.then(testFunctionP, sIPromise, nIPromise); // ok 
-var s10g = s10.then(testFunctionP, nIPromise, sIPromise).then(sPromise, sIPromise, sIPromise); // ok 
+var s10a = s10.then(testFunction10, testFunction10, testFunction10); // ok
+var s10b = s10.then(testFunction10P, testFunction10P, testFunction10P); // ok
+var s10c = s10.then(testFunction10P, testFunction10, testFunction10); // ok
+var s10d = s10.then(sPromise, sPromise, sPromise); // ok
+var s10e = s10.then(nIPromise, nPromise, nIPromise); // ok
+var s10f = s10.then(testFunctionP, sIPromise, nIPromise); // ok
+var s10g = s10.then(testFunctionP, nIPromise, sIPromise).then(sPromise, sIPromise, sIPromise); // ok
 var r11;
-var r11a = r11.then(testFunction11, testFunction11, testFunction11); // ok 
+var r11a = r11.then(testFunction11, testFunction11, testFunction11); // ok
 var s11;
-var s11a = s11.then(testFunction11, testFunction11, testFunction11); // ok 
-var s11b = s11.then(testFunction11P, testFunction11P, testFunction11P); // ok 
-var s11c = s11.then(testFunction11P, testFunction11, testFunction11); // ok 
+var s11a = s11.then(testFunction11, testFunction11, testFunction11); // ok
+var s11b = s11.then(testFunction11P, testFunction11P, testFunction11P); // ok
+var s11c = s11.then(testFunction11P, testFunction11, testFunction11); // ok
 var r12 = testFunction12(function (x) { return x; });
-var r12a = r12.then(testFunction12, testFunction12, testFunction12); // ok 
+var r12a = r12.then(testFunction12, testFunction12, testFunction12); // ok
 var s12 = testFunction12(function (x) { return x; });
-var s12a = s12.then(testFunction12, testFunction12, testFunction12); // ok 
-var s12b = s12.then(testFunction12P, testFunction12P, testFunction12P); // ok 
+var s12a = s12.then(testFunction12, testFunction12, testFunction12); // ok
+var s12b = s12.then(testFunction12P, testFunction12P, testFunction12P); // ok
 var s12c = s12.then(testFunction12P, testFunction12, testFunction12); // ok 

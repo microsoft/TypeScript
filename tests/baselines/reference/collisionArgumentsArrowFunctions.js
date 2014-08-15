@@ -22,25 +22,25 @@ var f1 = function (i) {
     for (var _i = 1; _i < arguments.length; _i++) {
         arguments[_i - 1] = arguments[_i];
     }
-    var arguments; // no error 
+    var arguments; // no error
 };
 var f12 = function (arguments) {
     var rest = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         rest[_i - 1] = arguments[_i];
     }
-    var arguments = 10; // no error 
+    var arguments = 10; // no error
 };
 var f1NoError = function (arguments) {
-    var arguments = 10; // no error 
+    var arguments = 10; // no error
 };
 var f2 = function () {
     var restParameters = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         restParameters[_i - 0] = arguments[_i];
     }
-    var arguments = 10; // No Error 
+    var arguments = 10; // No Error
 };
 var f2NoError = function () {
-    var arguments = 10; // no error 
+    var arguments = 10; // no error
 };

@@ -142,7 +142,7 @@ var qq: any;
 
 //// [witness.js]
 // Initializers
-var varInit = varInit; // any 
+var varInit = varInit; // any
 var pInit;
 function fn(pInit) {
     if (pInit === void 0) { pInit = pInit; }
@@ -217,7 +217,7 @@ function overload1() {
 function fnArg2() {
     return overload1(fnArg2);
 }
-var t = fnArg2(); // t: should be 'any', but is 'string' 
+var t = fnArg2(); // t: should be 'any', but is 'string'
 // New operator
 var C = (function () {
     function C() {
@@ -238,7 +238,7 @@ function fn5() {
     var a;
     return new a(fn5);
 }
-var fn5r = fn5(); // fn5r: should be 'any', but is 'number' 
+var fn5r = fn5(); // fn5r: should be 'any', but is 'number'
 // Property access
 var propAcc1 = {
     m: propAcc1.m
@@ -254,7 +254,7 @@ var M2;
 // Property access of class instance type
 var C2 = (function () {
     function C2() {
-        this.n = this.n; // n: any 
+        this.n = this.n; // n: any
     }
     return C2;
 })();

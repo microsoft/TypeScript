@@ -35,7 +35,7 @@ f7().x;
 var f = function (a) {
     if (a === void 0) { a = 3; }
     return a;
-}; // Type should be (a?: number) => number 
+}; // Type should be (a?: number) => number
 var n = f(4);
 n = f();
 var s = f('');
@@ -44,7 +44,7 @@ s = f();
 var f2 = function (a) {
     if (a === void 0) { a = 3; }
     return a;
-}; // Should error, but be of type (a: string) => string; 
+}; // Should error, but be of type (a: string) => string;
 s = f2('');
 s = f2();
 n = f2();

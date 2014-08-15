@@ -25,7 +25,7 @@ var E = (function () {
 var H = (function (_super) {
     __extends(H, _super);
     function H() {
-        var x = _super.call(this, 5); // Should be of type void, not E. 
+        var x = _super.call(this, 5); // Should be of type void, not E.
         x = 5;
     }
     return H;

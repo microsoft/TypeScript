@@ -74,7 +74,7 @@ var C = (function () {
     }
     C.prototype.f = function () {
         var x;
-        var a = x['foo'](); // should be string 
+        var a = x['foo'](); // should be string
         return a + x.foo() + x.notHere();
     };
     return C;
@@ -89,7 +89,7 @@ var r3 = a().notHere();
 var r3b = a()['foo']();
 var b = {
     foo: function (x) {
-        var a = x['foo'](); // should be string 
+        var a = x['foo'](); // should be string
         return a + x.notHere();
     },
     // BUG 794164

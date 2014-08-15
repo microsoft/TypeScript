@@ -9,7 +9,7 @@ class C implements I {
 //// [implementPublicPropertyAsPrivate.js]
 var C = (function () {
     function C() {
-        this.x = 0; // should raise error at class decl 
+        this.x = 0; // should raise error at class decl
     }
     return C;
 })();

@@ -23,8 +23,8 @@ var N=new f();  // ok with void fn
 function f() {
     var x = 1;
 }
-var y = f(); // error void fn 
-var why = f(); // error void fn 
+var y = f(); // error void fn
+var why = f(); // error void fn
 var w;
 w = f();
 var C = (function () {
@@ -34,5 +34,5 @@ var C = (function () {
     };
     return C;
 })();
-var z = new C().g(); // error void fn 
-var N = new f(); // ok with void fn 
+var z = new C().g(); // error void fn
+var N = new f(); // ok with void fn

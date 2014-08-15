@@ -36,7 +36,7 @@ var p: M2.X.Point;
 var A;
 (function (A) {
     (function (B) {
-        var Point = { x: 0, y: 0 }; // bug 832088: could not find module 'C' 
+        var Point = { x: 0, y: 0 }; // bug 832088: could not find module 'C'
     })(A.B || (A.B = {}));
     var B = A.B;
 })(A || (A = {}));

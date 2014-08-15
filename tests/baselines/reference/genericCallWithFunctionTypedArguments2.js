@@ -50,21 +50,21 @@ function foo(x) {
 var i;
 var i2;
 var a;
-var r = foo(i); // any 
-var r2 = foo(i); // string  
-var r3 = foo(i2); // string 
-var r3b = foo(a); // any 
+var r = foo(i); // any
+var r2 = foo(i); // string 
+var r3 = foo(i2); // string
+var r3b = foo(a); // any
 function foo2(x, cb) {
     return new cb(x);
 }
-var r4 = foo2(1, i2); // string, instantiated generic 
-var r4b = foo2(1, a); // any 
-var r5 = foo2(1, i); // any 
-var r6 = foo2('', i2); // string 
+var r4 = foo2(1, i2); // string, instantiated generic
+var r4b = foo2(1, a); // any
+var r5 = foo2(1, i); // any
+var r6 = foo2('', i2); // string
 function foo3(x, cb, y) {
     return new cb(x);
 }
-var r7 = foo3(null, i, ''); // any 
-var r7b = foo3(null, a, ''); // any 
-var r8 = foo3(1, i2, 1); // {} 
+var r7 = foo3(null, i, ''); // any
+var r7b = foo3(null, a, ''); // any
+var r8 = foo3(1, i2, 1); // {}
 var r9 = foo3('', i2, ''); // string 

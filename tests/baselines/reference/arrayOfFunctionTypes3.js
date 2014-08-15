@@ -43,7 +43,7 @@ var b;
 var c;
 var z = [a, b, c];
 var r4 = z[0];
-var r5 = r4(''); // any not string 
+var r5 = r4(''); // any not string
 var r5b = r4(1);
 var a2;
 var b2;

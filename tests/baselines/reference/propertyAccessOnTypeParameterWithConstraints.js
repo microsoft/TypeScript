@@ -42,7 +42,7 @@ var C = (function () {
     }
     C.prototype.f = function () {
         var x;
-        var a = x['getDate'](); // number 
+        var a = x['getDate'](); // number
         return a + x.getDate();
     };
     return C;
@@ -56,7 +56,7 @@ var r3 = a().getDate();
 var r3b = a()['getDate']();
 var b = {
     foo: function (x) {
-        var a = x['getDate'](); // number 
+        var a = x['getDate'](); // number
         return a + x.getDate();
     }
 };

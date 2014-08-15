@@ -27,6 +27,6 @@ var B = (function (_super) {
     return B;
 })(A);
 var a = new A();
-var b1 = new B(); // no error 
-var b2 = new B(); // no error 
-var b3 = new B(); // error, could not select overload for 'new' expression 
+var b1 = new B(); // no error
+var b2 = new B(); // no error
+var b3 = new B(); // error, could not select overload for 'new' expression

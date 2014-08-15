@@ -16,10 +16,10 @@ var v7: G;                     // Error, no type arguments
 
 
 //// [generics1.js]
-var v1; // Ok 
-var v2; // Ok, equivalent to G<A, C> 
-var v3; // Error, A not valid argument for U 
-var v4; // Ok 
-var v5; // Error, any does not satisfy constraint B 
-var v6; // Error, wrong number of arguments 
-var v7; // Error, no type arguments 
+var v1; // Ok
+var v2; // Ok, equivalent to G<A, C>
+var v3; // Error, A not valid argument for U
+var v4; // Ok
+var v5; // Error, any does not satisfy constraint B
+var v6; // Error, wrong number of arguments
+var v7; // Error, no type arguments

@@ -19,5 +19,5 @@ var C = (function () {
 })();
 var C;
 (function (C) {
-    C.y = C.bar; // error 
+    C.y = C.bar; // error
 })(C || (C = {}));

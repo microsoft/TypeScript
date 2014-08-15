@@ -46,6 +46,6 @@ var C = (function (_super) {
     }
     return C;
 })(A);
-var r1 = B; // error 
-var r2 = B; // error 
+var r1 = B; // error
+var r2 = B; // error
 var r3 = C; // ok 

@@ -28,9 +28,9 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [foo_1.js]
 define(["require", "exports"], function (require, exports) {
-    var answer = 42; // No exports 
+    var answer = 42; // No exports
 });
 //// [foo_2.js]
 define(["require", "exports", "./foo_1"], function (require, exports, foo) {
-    var x = foo; // Cause a runtime dependency 
+    var x = foo; // Cause a runtime dependency
 });

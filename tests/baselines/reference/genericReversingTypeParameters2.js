@@ -22,5 +22,5 @@ var BiMap = (function () {
     return BiMap;
 })();
 var b = new BiMap();
-var i = b.inverse(); // used to get the type wrong here. 
+var i = b.inverse(); // used to get the type wrong here.
 var r2b = i.get(1);

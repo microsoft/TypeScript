@@ -24,4 +24,4 @@ try {
 }
 catch (ex1) {
 }
-var x = ex1; // should error 
+var x = ex1; // should error

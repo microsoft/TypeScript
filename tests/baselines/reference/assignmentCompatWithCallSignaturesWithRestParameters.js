@@ -46,7 +46,7 @@ var a4: (x?: number, y?: string, ...z: number[]) => number;
     a4 = (x: number, ...args: string[]) => 1;  // error, rest params have type mismatch
 
 //// [assignmentCompatWithCallSignaturesWithRestParameters.js]
-var a; // ok, same number of required params 
+var a; // ok, same number of required params
 a = function () { return 1; };
 a = function () {
     var args = [];

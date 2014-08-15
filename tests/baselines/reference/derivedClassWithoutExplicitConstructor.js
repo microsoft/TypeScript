@@ -48,7 +48,7 @@ var Derived = (function (_super) {
     }
     return Derived;
 })(Base);
-var r = new Derived(); // error 
+var r = new Derived(); // error
 var r2 = new Derived(1);
 var Base2 = (function () {
     function Base2(x) {
@@ -65,5 +65,5 @@ var D = (function (_super) {
     }
     return D;
 })(Base2);
-var d = new D(); // error 
+var d = new D(); // error
 var d2 = new D(new Date()); // ok 

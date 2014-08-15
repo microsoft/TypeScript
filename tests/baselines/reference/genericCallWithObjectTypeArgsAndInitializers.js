@@ -14,23 +14,23 @@ function foo7<T, U extends T, V extends U>(x: V, y: U = x) { } // should be ok
 function foo(x) {
     if (x === void 0) { x = null; }
     return x;
-} // ok 
+} // ok
 function foo2(x) {
     if (x === void 0) { x = undefined; }
     return x;
-} // ok 
+} // ok
 function foo3(x) {
     if (x === void 0) { x = 1; }
-} // error 
+} // error
 function foo4(x, y) {
     if (y === void 0) { y = x; }
-} // error 
+} // error
 function foo5(x, y) {
     if (y === void 0) { y = x; }
-} // ok 
+} // ok
 function foo6(x, y, z) {
     if (z === void 0) { z = y; }
-} // error 
+} // error
 function foo7(x, y) {
     if (y === void 0) { y = x; }
 } // should be ok 

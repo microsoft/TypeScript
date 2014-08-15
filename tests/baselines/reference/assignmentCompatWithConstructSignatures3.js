@@ -199,7 +199,7 @@ b15 = a15;
 var b16;
 a16 = b16;
 b16 = a16;
-var b17; // ok 
+var b17; // ok
 a17 = b17;
 b17 = a17;
 var b18;

@@ -50,7 +50,7 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        var x = 1; // should not error 
+        var x = 1; // should not error
         _super.call(this);
     }
     B.s = 9;
@@ -60,7 +60,7 @@ var C = (function (_super) {
     __extends(C, _super);
     function C() {
         this.p = 10;
-        var x = 1; // should error 
+        var x = 1; // should error
     }
     return C;
 })(A);
@@ -68,7 +68,7 @@ var D = (function (_super) {
     __extends(D, _super);
     function D() {
         this.p = 11;
-        var x = 1; // should error 
+        var x = 1; // should error
     }
     return D;
 })(A);
@@ -76,7 +76,7 @@ var E = (function (_super) {
     __extends(E, _super);
     function E() {
         this.p = 12;
-        var x = 1; // should error 
+        var x = 1; // should error
     }
     return E;
 })(A);

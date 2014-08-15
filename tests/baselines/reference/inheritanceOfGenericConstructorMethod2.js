@@ -55,7 +55,7 @@ var N;
     })(M.C2);
     N.D2 = D2;
 })(N || (N = {}));
-var c = new M.C2(); // no error 
-var n = new N.D1(); // no error 
-var n2 = new N.D2(); // error 
-var n3 = new N.D2(); // no error, D2<any> 
+var c = new M.C2(); // no error
+var n = new N.D1(); // no error
+var n2 = new N.D2(); // error
+var n3 = new N.D2(); // no error, D2<any>

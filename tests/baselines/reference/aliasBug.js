@@ -46,7 +46,7 @@ var provide = foo;
 var booz = foo.bar.baz;
 var p = new provide.Provide();
 function use() {
-    var p1; // error here, but should be okay 
+    var p1; // error here, but should be okay
     var p2;
     var p3;
     var p22 = new provide.Provide();

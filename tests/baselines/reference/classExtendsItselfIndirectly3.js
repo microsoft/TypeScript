@@ -31,7 +31,7 @@ var C = (function (_super) {
         _super.apply(this, arguments);
     }
     return C;
-})(E); // error 
+})(E); // error
 //// [classExtendsItselfIndirectly_file2.js]
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -73,7 +73,7 @@ var C2 = (function (_super) {
         _super.apply(this, arguments);
     }
     return C2;
-})(E2); // error 
+})(E2); // error
 //// [classExtendsItselfIndirectly_file5.js]
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];

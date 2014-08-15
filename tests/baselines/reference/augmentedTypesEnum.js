@@ -41,20 +41,20 @@ var e1111;
 (function (e1111) {
     e1111[e1111["One"] = 0] = "One";
 })(e1111 || (e1111 = {}));
-var e1111 = 1; // error 
+var e1111 = 1; // error
 // enum then function
 var e2;
 (function (e2) {
     e2[e2["One"] = 0] = "One";
 })(e2 || (e2 = {}));
 function e2() {
-} // error 
+} // error
 var e3;
 (function (e3) {
     e3[e3["One"] = 0] = "One";
 })(e3 || (e3 = {}));
 var e3 = function () {
-}; // error 
+}; // error
 // enum then class
 var e4;
 (function (e4) {
@@ -66,7 +66,7 @@ var e4 = (function () {
     e4.prototype.foo = function () {
     };
     return e4;
-})(); // error 
+})(); // error
 // enum then enum
 var e5;
 (function (e5) {
@@ -83,7 +83,7 @@ var e5a;
 var e5a;
 (function (e5a) {
     e5a[e5a["One"] = 0] = "One";
-})(e5a || (e5a = {})); // error 
+})(e5a || (e5a = {})); // error
 // enum then internal module
 var e6;
 (function (e6) {
@@ -96,7 +96,7 @@ var e6a;
 var e6a;
 (function (e6a) {
     var y = 2;
-})(e6a || (e6a = {})); // should be error 
+})(e6a || (e6a = {})); // should be error
 var e6b;
 (function (e6b) {
     e6b[e6b["One"] = 0] = "One";
@@ -104,4 +104,4 @@ var e6b;
 var e6b;
 (function (e6b) {
     e6b.y = 2;
-})(e6b || (e6b = {})); // should be error 
+})(e6b || (e6b = {})); // should be error

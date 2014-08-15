@@ -19,8 +19,8 @@ var C = (function () {
         this.data2 = data2;
     }
     C.prototype.create = function () {
-        var x = new this.data(); // no error 
-        var x2 = new this.data2(); // was error, shouldn't be 
+        var x = new this.data(); // no error
+        var x2 = new this.data2(); // was error, shouldn't be
     };
     return C;
 })();

@@ -28,10 +28,10 @@ undefinedWidenFunction();
 // this should be an error
 function nullWidenFunction() {
     return null;
-} // error at "nullWidenFunction" 
+} // error at "nullWidenFunction"
 function undefinedWidenFunction() {
     return undefined;
-} // error at "undefinedWidenFunction" 
+} // error at "undefinedWidenFunction"
 var C = (function () {
     function C() {
     }

@@ -93,13 +93,13 @@ var M;
     var a;
     var r1 = a.foo;
     // BUG 856491
-    var r2 = a.bar; // any, should be number 
+    var r2 = a.bar; // any, should be number
     // BUG 856491
-    var r3 = a.baz; // any, should be boolean 
+    var r3 = a.baz; // any, should be boolean
     var b;
     var r4 = b.foo;
     // BUG 856491
-    var r5 = b.bar; // any, should be number 
+    var r5 = b.bar; // any, should be number
     // BUG 856491
-    var r6 = b.baz; // any, should be boolean 
+    var r6 = b.baz; // any, should be boolean
 })(M || (M = {}));

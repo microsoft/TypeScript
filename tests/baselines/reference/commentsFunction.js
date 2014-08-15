@@ -24,6 +24,17 @@ var lambddaNoVarComment = /** this is lambda multiplication*/ (/**param a*/a: nu
 lambdaFoo(10, 20);
 lambddaNoVarComment(10, 20);
 
+function blah(a: string /* multiline trailing comment 
+multiline */) {
+}
+
+function blah2(a: string /* single line multiple trailing comments */ /* second */) {
+}
+
+function blah3(a: string // trailing commen single line
+    ) {
+}
+
 //// [commentsFunction.js]
 /** This comment should appear for foo*/
 function foo() {
@@ -47,6 +58,14 @@ var lambdaFoo = function (a, b) { return a + b; };
 var lambddaNoVarComment = function (a, b) { return a * b; };
 lambdaFoo(10, 20);
 lambddaNoVarComment(10, 20);
+function blah(a /* multiline trailing comment 
+multiline */ ) {
+}
+function blah2(a /* single line multiple trailing comments */ /* second */ ) {
+}
+function blah3(a // trailing commen single line
+    ) {
+}
 
 
 //// [commentsFunction.d.ts]
@@ -61,3 +80,6 @@ declare function fooWithParameters(/** this is comment about a*/ a: string, /** 
 declare var fooFunc: (b: string) => string;
 declare var lambdaFoo: (a: number, b: number) => number;
 declare var lambddaNoVarComment: (a: number, b: number) => number;
+declare function blah(a: string): void;
+declare function blah2(a: string): void;
+declare function blah3(a: string): void;

@@ -20,7 +20,7 @@ var C = (function () {
     };
     return C;
 })();
-var c1; // error 
-var i1; // error 
-var c2; // should be an error 
-var i2; // should be an error 
+var c1; // error
+var i1; // error
+var c2; // should be an error
+var i2; // should be an error

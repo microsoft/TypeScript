@@ -13,5 +13,5 @@ var d: I1 = i2.m1; // should error
 
 //// [optionalParamAssignmentCompat.js]
 var i2;
-var c = i2.p1; // should be ok 
-var d = i2.m1; // should error 
+var c = i2.p1; // should be ok
+var d = i2.m1; // should error

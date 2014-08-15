@@ -58,7 +58,7 @@ var r1 = x();
 var y = x;
 var r2 = y();
 var c;
-var r3 = c(); // should be an error 
+var r3 = c(); // should be an error
 var C = (function () {
     function C() {
         this.prototype = null;
@@ -70,18 +70,18 @@ var C = (function () {
     return C;
 })();
 var c2;
-var r4 = c2(); // should be an error 
+var r4 = c2(); // should be an error
 var C2 = (function (_super) {
     __extends(C2, _super);
     function C2() {
         _super.apply(this, arguments);
     }
     return C2;
-})(Function); // error 
+})(Function); // error
 var c3;
-var r5 = c3(); // error 
+var r5 = c3(); // error
 var z;
-var r6 = z(1); // error 
+var r6 = z(1); // error
 var c4;
 c4(1);
 var c5;

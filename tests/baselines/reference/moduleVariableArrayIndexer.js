@@ -9,5 +9,5 @@ module Bar {
 var Bar;
 (function (Bar) {
     Bar.a = 1;
-    var t = undefined[Bar.a][Bar.a]; // CG: var t = undefined[Bar.a][a]; 
+    var t = undefined[Bar.a][Bar.a]; // CG: var t = undefined[Bar.a][a];
 })(Bar || (Bar = {}));

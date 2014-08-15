@@ -71,10 +71,10 @@ var O;
     })(B);
     O.C = C;
 })(O || (O = {}));
-var e = x.g(new O.A()); // matches overload but bad assignment 
-var y = x.f(3); // good 
+var e = x.g(new O.A()); // matches overload but bad assignment
+var y = x.f(3); // good
 y = x.f("nope");
-var z = x.g(x.g(3, 3)); // good 
+var z = x.g(x.g(3, 3)); // good
 z = x.g(2, 2, 2);
 z = x.g();
 z = x.g(new O.B());

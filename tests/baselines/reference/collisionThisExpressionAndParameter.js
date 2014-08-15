@@ -98,7 +98,7 @@ var Foo = (function () {
     function Foo() {
     }
     Foo.prototype.x = function () {
-        var _this = 10; // Local var. No this capture in x(), so no conflict. 
+        var _this = 10; // Local var. No this capture in x(), so no conflict.
         function inner(_this) {
             var _this = this;
             return function (x) { return _this; };
@@ -117,7 +117,7 @@ var Foo = (function () {
         };
     };
     Foo.prototype.x1 = function () {
-        var _this = 10; // Local var. No this capture in x(), so no conflict. 
+        var _this = 10; // Local var. No this capture in x(), so no conflict.
         function inner(_this) {
         }
     };

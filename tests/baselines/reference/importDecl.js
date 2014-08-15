@@ -140,7 +140,7 @@ exports.foo2 = foo2;
 ///<reference path='importDecl_require2.ts'/>
 ///<reference path='importDecl_require3.ts'/>
 ///<reference path='importDecl_require4.ts'/>
-var m4 = require("importDecl_require"); // Emit used 
+var m4 = require("importDecl_require"); // Emit used
 exports.x4 = m4.x;
 exports.d4 = m4.d;
 exports.f4 = m4.foo();
@@ -172,7 +172,7 @@ var usePrivate_m4_m1 = exports.usePrivate_m4_m1;
 var m5 = require("importDecl_require4");
 exports.d = m5.foo2();
 // Do not emit multiple used import statements
-var multiImport_m4 = require("importDecl_require"); // Emit used 
+var multiImport_m4 = require("importDecl_require"); // Emit used
 exports.useMultiImport_m4_x4 = multiImport_m4.x;
 exports.useMultiImport_m4_d4 = multiImport_m4.d;
 exports.useMultiImport_m4_f4 = multiImport_m4.foo();

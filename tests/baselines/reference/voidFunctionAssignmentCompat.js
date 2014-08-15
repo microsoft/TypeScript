@@ -44,19 +44,19 @@ execVoid(function () {
 var fra = function () {
     return function () {
     };
-}; // should work 
+}; // should work
 var frv = function () {
     return function () {
         return 0;
     };
-}; // should work 
+}; // should work
 var fra3 = (function () {
     return function (v) {
         return v;
     };
-})(); // should work 
+})(); // should work
 var frv3 = (function () {
     return function () {
         return 0;
     };
-})(); // should work 
+})(); // should work

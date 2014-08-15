@@ -74,13 +74,13 @@ var c1 = (function () {
         for (var _i = 1; _i < arguments.length; _i++) {
             restParameters[_i - 1] = arguments[_i];
         }
-        var _i = 10; // no error 
+        var _i = 10; // no error
     }
     return c1;
 })();
 var c1NoError = (function () {
     function c1NoError(_i) {
-        var _i = 10; // no error 
+        var _i = 10; // no error
     }
     return c1NoError;
 })();
@@ -90,13 +90,13 @@ var c2 = (function () {
         for (var _i = 0; _i < arguments.length; _i++) {
             restParameters[_i - 0] = arguments[_i];
         }
-        var _i = 10; // no error 
+        var _i = 10; // no error
     }
     return c2;
 })();
 var c2NoError = (function () {
     function c2NoError() {
-        var _i = 10; // no error 
+        var _i = 10; // no error
     }
     return c2NoError;
 })();
@@ -107,14 +107,14 @@ var c3 = (function () {
             restParameters[_i - 1] = arguments[_i];
         }
         this._i = _i;
-        var _i = 10; // no error 
+        var _i = 10; // no error
     }
     return c3;
 })();
 var c3NoError = (function () {
     function c3NoError(_i) {
         this._i = _i;
-        var _i = 10; // no error 
+        var _i = 10; // no error
     }
     return c3NoError;
 })();
@@ -124,13 +124,13 @@ var c5 = (function () {
         for (var _i = 1; _i < arguments.length; _i++) {
             rest[_i - 1] = arguments[_i];
         }
-        var _i; // no error 
+        var _i; // no error
     }
     return c5;
 })();
 var c5NoError = (function () {
     function c5NoError(_i) {
-        var _i; // no error 
+        var _i; // no error
     }
     return c5NoError;
 })();

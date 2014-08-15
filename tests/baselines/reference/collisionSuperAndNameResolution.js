@@ -19,7 +19,7 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 var console;
-var _super = 10; // No error 
+var _super = 10; // No error
 var base = (function () {
     function base() {
     }

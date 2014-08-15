@@ -25,9 +25,9 @@ var o = {
     name: ko.observable("Bob"),
     age: ko.observable(37)
 };
-var x_v = o.name().length; // should be 'number' 
-var age_v = o.age(); // should be 'number' 
-var name_v = o.name("Robert"); // should be 'any' 
-var zz_v = o.name.N; // should be 'number' 
-var yy_v = o.name.g; // should be 'boolean' 
+var x_v = o.name().length; // should be 'number'
+var age_v = o.age(); // should be 'number'
+var name_v = o.name("Robert"); // should be 'any'
+var zz_v = o.name.N; // should be 'number'
+var yy_v = o.name.g; // should be 'boolean'
 var rr_v = o.name.r; // should be 'string' 

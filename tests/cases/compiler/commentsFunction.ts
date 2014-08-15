@@ -25,3 +25,14 @@ var lambdaFoo = /** this is lambda comment*/ (/**param a*/a: number, /**param b*
 var lambddaNoVarComment = /** this is lambda multiplication*/ (/**param a*/a: number, /**param b*/b: number) => a * b;
 lambdaFoo(10, 20);
 lambddaNoVarComment(10, 20);
+
+function blah(a: string /* multiline trailing comment 
+multiline */) {
+}
+
+function blah2(a: string /* single line multiple trailing comments */ /* second */) {
+}
+
+function blah3(a: string // trailing commen single line
+    ) {
+}

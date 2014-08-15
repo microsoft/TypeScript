@@ -46,10 +46,10 @@ var X;
     (function (Y) {
         (function (base) {
             (function (Z) {
-                Z.f = X.Y.base.f; // Should be base.f 
-                Z.C = X.Y.base.C; // Should be base.C 
-                Z.M = X.Y.base.M; // Should be base.M 
-                Z.E = X.Y.base.E; // Should be base.E 
+                Z.f = X.Y.base.f; // Should be base.f
+                Z.C = X.Y.base.C; // Should be base.C
+                Z.M = X.Y.base.M; // Should be base.M
+                Z.E = X.Y.base.E; // Should be base.E
             })(base.Z || (base.Z = {}));
             var Z = base.Z;
         })(Y.base || (Y.base = {}));

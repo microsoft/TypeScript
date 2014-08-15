@@ -45,7 +45,7 @@ n4 = z2;
 
 //// [commentsVarDecl.js]
 /** Variable comments*/
-var myVariable = 10; // This trailing Comment1 
+var myVariable = 10; // This trailing Comment1
 /** This is another variable comment*/
 var anotherVariable = 30;
 // shouldn't appear

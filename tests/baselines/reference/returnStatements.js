@@ -55,7 +55,7 @@ function fn7() {
 }
 function fn8() {
     return;
-} // OK, eq. to 'return undefined' 
+} // OK, eq. to 'return undefined'
 var C = (function () {
     function C() {
     }

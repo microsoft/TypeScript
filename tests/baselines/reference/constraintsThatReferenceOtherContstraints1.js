@@ -20,4 +20,4 @@ var Bar = (function () {
     }
     return Bar;
 })();
-var x; // Error 2 Type '{ a: string; b: number; }' does not satisfy the constraint 'T' for type  
+var x; // Error 2 Type '{ a: string; b: number; }' does not satisfy the constraint 'T' for type 

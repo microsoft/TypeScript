@@ -37,7 +37,7 @@ var C = (function () {
     }
     C.prototype.f = function () {
         var x;
-        var a = x['toString'](); // should be string 
+        var a = x['toString'](); // should be string
         return a + x.toString();
     };
     return C;
@@ -51,7 +51,7 @@ var r3 = a().toString();
 var r3b = a()['toString']();
 var b = {
     foo: function (x) {
-        var a = x['toString'](); // should be string 
+        var a = x['toString'](); // should be string
         return a + x.toString();
     }
 };

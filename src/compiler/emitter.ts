@@ -1204,13 +1204,13 @@ module ts {
             }
 
             function emitSignatureParameters(node: FunctionDeclaration) {
+                increaseIndent();
                 write("(");
                 if (node) {
-                    increaseIndent();
                     emitCommaList(node.parameters, node.parameters.length - (hasRestParameters(node) ? 1 : 0));
-                    decreaseIndent();
                 }
                 write(")");
+                decreaseIndent();
             }
 
             function emitSignatureAndBody(node: FunctionDeclaration) {
@@ -1386,8 +1386,8 @@ module ts {
                                 write("function ");
                                 emitSignatureAndBody(accessors.getAccessor);
                                 emitEnd(accessors.getAccessor);
-                                write(",");
                                 emitTrailingComments(accessors.getAccessor);
+                                write(",");
                             }
                             if (accessors.setAccessor) {
                                 writeLine();
@@ -1397,8 +1397,8 @@ module ts {
                                 write("function ");
                                 emitSignatureAndBody(accessors.setAccessor);
                                 emitEnd(accessors.setAccessor);
-                                write(",");
                                 emitTrailingComments(accessors.setAccessor);
+                                write(",");
                             }
                             writeLine();
                             write("enumerable: true,");

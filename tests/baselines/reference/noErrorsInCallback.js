@@ -15,7 +15,7 @@ var Bar = (function () {
     }
     return Bar;
 })();
-var one = new Bar({}); // Error 
+var one = new Bar({}); // Error
 [].forEach(function () {
-    var two = new Bar({}); // No error? 
+    var two = new Bar({}); // No error?
 });

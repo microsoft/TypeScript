@@ -27,7 +27,7 @@ var CCC = (function () {
         this.y = aaa;
         this.y = '';
     }
-    CCC.staticY = aaa; // This shouldnt be error 
+    CCC.staticY = aaa; // This shouldnt be error
     return CCC;
 })();
 // above is equivalent to this:
