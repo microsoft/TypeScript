@@ -76,7 +76,8 @@ export interface IConstructSignature {
 }
 export interface IConstructSignatureWithParameters {
     /** This is comment for function signature*/
-    new (/** this is comment about a*/ a: string, /** this is comment for b*/
+    new (/** this is comment about a*/ a: string, 
+        /** this is comment for b*/
         b: number): any;
 }
 export interface IConstructSignatureWithRestParameters {
@@ -100,7 +101,8 @@ interface IGlobalConstructSignature {
 }
 interface IGlobalConstructSignatureWithParameters {
     /** This is comment for function signature*/
-    new (/** this is comment about a*/ a: string, /** this is comment for b*/
+    new (/** this is comment about a*/ a: string, 
+        /** this is comment for b*/
         b: number): any;
 }
 interface IGlobalConstructSignatureWithRestParameters {

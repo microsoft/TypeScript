@@ -75,7 +75,8 @@ lambdaFoo = function (a, b) { return a * b; };
 /** This comment should appear for foo*/
 declare function foo(): void;
 /** This is comment for function signature*/
-declare function fooWithParameters(/** this is comment about a*/ a: string, /** this is comment for b*/
+declare function fooWithParameters(/** this is comment about a*/ a: string, 
+    /** this is comment for b*/
     b: number): void;
 /** fooFunc
  * comment

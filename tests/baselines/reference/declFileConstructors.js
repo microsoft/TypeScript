@@ -226,7 +226,8 @@ export declare class SimpleConstructor {
 }
 export declare class ConstructorWithParameters {
     /** This is comment for function signature*/
-    constructor(/** this is comment about a*/ a: string, /** this is comment for b*/
+    constructor(/** this is comment about a*/ a: string, 
+        /** this is comment for b*/
         b: number);
 }
 export declare class ConstructorWithRestParamters {
@@ -259,7 +260,8 @@ declare class GlobalSimpleConstructor {
 }
 declare class GlobalConstructorWithParameters {
     /** This is comment for function signature*/
-    constructor(/** this is comment about a*/ a: string, /** this is comment for b*/
+    constructor(/** this is comment about a*/ a: string, 
+        /** this is comment for b*/
         b: number);
 }
 declare class GlobalConstructorWithRestParamters {
