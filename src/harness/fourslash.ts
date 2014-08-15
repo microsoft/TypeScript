@@ -1410,6 +1410,25 @@ module FourSlash {
             }
         }
 
+        public verifyTodoComments(descriptors: string[], spans: TextSpan[]) {
+            var actual = this.languageService.getTodoComments(this.activeFile.fileName,
+                descriptors.map(d => new ts.TodoCommentDescriptor(d, 0)));
+
+            if (actual.length !== spans.length) {
+                throw new Error('verifyTodoComments failed - expected total spans to be ' + spans.length + ', but was ' + actual.length);
+            }
+
+            for (var i = 0; i < spans.length; i++) {
+                var expectedSpan = spans[i];
+                var actualComment = actual[i];
+                var actualCommentSpan = new TypeScript.TextSpan(actualComment.position, actualComment.message.length);
+
+                if (expectedSpan.start !== actualCommentSpan.start() || expectedSpan.end !== actualCommentSpan.end()) {
+                    throw new Error('verifyOutliningSpans failed - span ' + (i + 1) + ' expected: (' + expectedSpan.start + ',' + expectedSpan.end + '),  actual: (' + actualCommentSpan.start() + ',' + actualCommentSpan.end() + ')');
+                }
+            }
+        }
+
         public verifyMatchingBracePosition(bracePosition: number, expectedMatchPosition: number) {
             this.taoInvalidReason = 'verifyMatchingBracePosition NYI';
 
