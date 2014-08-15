@@ -13,11 +13,11 @@ class c1 {
     /** getter property*/
     public get p3() {
         return this.p2(this.p1);
-    }
+    }// trailing comment Getter
     /** setter property*/
     public set p3(/** this is value*/value: number) {
         this.p1 = this.p2(value);
-    }
+    }// trailing comment Setter
     /** pp1 is property of c1*/
     private pp1: number;
     /** sum with property*/
@@ -44,11 +44,11 @@ class c1 {
     /** static getter property*/
     static get s3() {
         return c1.s2(c1.s1);
-    }
+    } /*trailing comment 1 getter*/
     /** setter property*/
     static set s3( /** this is value*/value: number) {
         c1.s1 = c1.s2(value);
-    }
+    }/*trailing comment 2 */ /*setter*/
     public nc_p1: number;
     public nc_p2(b: number) {
         return this.nc_p1 + b;
