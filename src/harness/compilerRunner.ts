@@ -257,7 +257,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 // NEWTODO: Type baselines
                 if (result.errors.length === 0) {
                     Harness.Baseline.runBaseline('Correct expression types for ' + fileName, justName.replace(/\.ts/, '.types'), () => {
-                        var allFiles = toBeCompiled.concat(otherFiles);
+                        var allFiles = toBeCompiled.concat(otherFiles).filter(file => !!checker.getProgram().getSourceFile(file.unitName));
                         var typeLines: string[] = [];
                         var typeMap: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
                         var walker = new TypeWriterWalker(checker);
