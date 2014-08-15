@@ -26,7 +26,6 @@
 /// <reference path='compiler\pathUtils.ts' />
 
 module ts {
-
     export interface Node {
         getSourceFile(): SourceFile;
         getChildCount(): number;
@@ -72,7 +71,8 @@ module ts {
         getSourceUnit(): TypeScript.SourceUnitSyntax;
         getSyntaxTree(): TypeScript.SyntaxTree;
         getBloomFilter(): TypeScript.BloomFilter;
-        update(scriptSnapshot: TypeScript.IScriptSnapshot, version: number, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile;
+        getScriptSnapshot(): TypeScript.IScriptSnapshot;
+        update(scriptSnapshot: TypeScript.IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile;
     }
 
     var scanner: Scanner = createScanner(ScriptTarget.ES5);
@@ -320,7 +320,7 @@ module ts {
         public identifierCount: number;
         public symbolCount: number;
         public statements: NodeArray<Statement>;
-        public version: number;
+        public version: string;
         public isOpen: boolean;
         public languageVersion: ScriptTarget;
 
@@ -331,6 +331,10 @@ module ts {
         public getSourceUnit(): TypeScript.SourceUnitSyntax {
             // If we don't have a script, create one from our parse tree.
             return this.getSyntaxTree().sourceUnit();
+        }
+
+        public getScriptSnapshot(): TypeScript.IScriptSnapshot {
+            return this.scriptSnapshot;
         }
 
         public getLineMap(): TypeScript.LineMap {
@@ -384,7 +388,7 @@ module ts {
             return this.bloomFilter;
         }
 
-        public update(scriptSnapshot: TypeScript.IScriptSnapshot, version: number, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile {
+        public update(scriptSnapshot: TypeScript.IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile {
             // See if we are currently holding onto a syntax tree.  We may not be because we're 
             // either a closed file, or we've just been lazy and haven't had to create the syntax
             // tree yet.  Access the field instead of the method so we don't accidently realize
@@ -419,7 +423,7 @@ module ts {
             return SourceFileObject.createSourceFileObject(this.filename, scriptSnapshot, this.languageVersion, version, isOpen, newSyntaxTree);
         }
 
-        public static createSourceFileObject(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, languageVersion: ScriptTarget, version: number, isOpen: boolean, syntaxTree?: TypeScript.SyntaxTree) {
+        public static createSourceFileObject(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, languageVersion: ScriptTarget, version: string, isOpen: boolean, syntaxTree?: TypeScript.SyntaxTree) {
             var newSourceFile = <SourceFileObject><any>createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), languageVersion, version, isOpen);
             newSourceFile.scriptSnapshot = scriptSnapshot;
             newSourceFile.syntaxTree = syntaxTree;
@@ -442,7 +446,7 @@ module ts {
     export interface LanguageServiceHost extends Logger {
         getCompilationSettings(): CompilerOptions;
         getScriptFileNames(): string[];
-        getScriptVersion(fileName: string): number;
+        getScriptVersion(fileName: string): string;
         getScriptIsOpen(fileName: string): boolean;
         getScriptSnapshot(fileName: string): TypeScript.IScriptSnapshot;
         getLocalizedDiagnosticMessages(): any;
@@ -755,7 +759,7 @@ module ts {
             filename: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
-            version: number,
+            version: string,
             isOpen: boolean,
             referencedFiles: string[]): SourceFile;
 
@@ -764,7 +768,7 @@ module ts {
             filename: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
-            version: number,
+            version: string,
             isOpen: boolean,
             textChangeRange: TypeScript.TextChangeRange
             ): SourceFile;
@@ -882,7 +886,7 @@ module ts {
     // Information about a specific host file.
     interface HostFileInformation {
         filename: string;
-        version: number;
+        version: string;
         isOpen: boolean;
         sourceText?: TypeScript.IScriptSnapshot;
     }
@@ -991,7 +995,7 @@ module ts {
             return fileNames;
         }
 
-        public getVersion(filename: string): number {
+        public getVersion(filename: string): string {
             return this.getEntry(filename).version;
         }
 
@@ -1007,14 +1011,14 @@ module ts {
             return file.sourceText;
         }
 
-        public getScriptTextChangeRangeSinceVersion(filename: string, lastKnownVersion: number): TypeScript.TextChangeRange {
+        public getChangeRange(filename: string, lastKnownVersion: string, oldScriptSnapshot: TypeScript.IScriptSnapshot): TypeScript.TextChangeRange {
             var currentVersion = this.getVersion(filename);
             if (lastKnownVersion === currentVersion) {
                 return TypeScript.TextChangeRange.unchanged; // "No changes"
             }
 
             var scriptSnapshot = this.getScriptSnapshot(filename);
-            return scriptSnapshot.getTextChangeRangeSinceVersion(lastKnownVersion);
+            return scriptSnapshot.getChangeRange(oldScriptSnapshot);
         }
     }
 
@@ -1023,11 +1027,10 @@ module ts {
 
         // For our syntactic only features, we also keep a cache of the syntax tree for the 
         // currently edited file.  
-        private currentfilename: string = "";
-        private currentFileVersion: number = -1;
+        private currentFilename: string = "";
+        private currentFileVersion: string = null;
         private currentSourceFile: SourceFile = null;
         private currentFileSyntaxTree: TypeScript.SyntaxTree = null;
-        private currentFileScriptSnapshot: TypeScript.IScriptSnapshot = null;
 
         constructor(private host: LanguageServiceHost) {
             this.hostCache = new HostCache(host);
@@ -1042,7 +1045,7 @@ module ts {
             var syntaxTree: TypeScript.SyntaxTree = null;
             var sourceFile: SourceFile;
 
-            if (this.currentFileSyntaxTree === null || this.currentfilename !== filename) {
+            if (this.currentFileSyntaxTree === null || this.currentFilename !== filename) {
                 var scriptSnapshot = this.hostCache.getScriptSnapshot(filename);
                 syntaxTree = this.createSyntaxTree(filename, scriptSnapshot);
                 sourceFile = createSourceFileFromScriptSnapshot(filename, scriptSnapshot, getDefaultCompilerOptions(), version, /*isOpen*/ true);
@@ -1051,9 +1054,10 @@ module ts {
             }
             else if (this.currentFileVersion !== version) {
                 var scriptSnapshot = this.hostCache.getScriptSnapshot(filename);
-                syntaxTree = this.updateSyntaxTree(filename, scriptSnapshot, this.currentFileSyntaxTree, this.currentFileVersion);
+                syntaxTree = this.updateSyntaxTree(filename, scriptSnapshot,
+                    this.currentSourceFile.getScriptSnapshot(), this.currentFileSyntaxTree, this.currentFileVersion);
 
-                var editRange = this.hostCache.getScriptTextChangeRangeSinceVersion(filename, this.currentFileVersion);
+                var editRange = this.hostCache.getChangeRange(filename, this.currentFileVersion, this.currentSourceFile.getScriptSnapshot());
                 sourceFile = !editRange 
                     ? createSourceFileFromScriptSnapshot(filename, scriptSnapshot, getDefaultCompilerOptions(), version, /*isOpen*/ true)
                     : this.currentSourceFile.update(scriptSnapshot, version, /*isOpen*/ true, editRange);
@@ -1064,9 +1068,8 @@ module ts {
             if (syntaxTree !== null) {
                 Debug.assert(sourceFile);
                 // All done, ensure state is up to date
-                this.currentFileScriptSnapshot = scriptSnapshot;
                 this.currentFileVersion = version;
-                this.currentfilename = filename;
+                this.currentFilename = filename;
                 this.currentFileSyntaxTree = syntaxTree;
                 this.currentSourceFile = sourceFile;
             }
@@ -1101,7 +1104,7 @@ module ts {
         public getCurrentScriptSnapshot(filename: string): TypeScript.IScriptSnapshot {
             // update currentFileScriptSnapshot as a part of 'getCurrentFileSyntaxTree' call
             this.getCurrentFileSyntaxTree(filename);
-            return this.currentFileScriptSnapshot;
+            return this.getCurrentSourceFile(filename).getScriptSnapshot();
         }
 
         private createSyntaxTree(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot): TypeScript.SyntaxTree {
@@ -1115,8 +1118,8 @@ module ts {
             return syntaxTree;
         }
 
-        private updateSyntaxTree(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, previousSyntaxTree: TypeScript.SyntaxTree, previousFileVersion: number): TypeScript.SyntaxTree {
-            var editRange = this.hostCache.getScriptTextChangeRangeSinceVersion(filename, previousFileVersion);
+        private updateSyntaxTree(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, previousScriptSnapshot: TypeScript.IScriptSnapshot, previousSyntaxTree: TypeScript.SyntaxTree, previousFileVersion: string): TypeScript.SyntaxTree {
+            var editRange = this.hostCache.getChangeRange(filename, previousFileVersion, previousScriptSnapshot);
 
             // Debug.assert(newLength >= 0);
 
@@ -1128,7 +1131,7 @@ module ts {
             var nextSyntaxTree = TypeScript.IncrementalParser.parse(
                 previousSyntaxTree, editRange, TypeScript.SimpleText.fromScriptSnapshot(scriptSnapshot));
 
-            this.ensureInvariants(filename, editRange, nextSyntaxTree, this.currentFileScriptSnapshot, scriptSnapshot);
+            this.ensureInvariants(filename, editRange, nextSyntaxTree, previousScriptSnapshot, scriptSnapshot);
 
             return nextSyntaxTree;
         }
@@ -1196,7 +1199,7 @@ module ts {
         }
     }
 
-    function createSourceFileFromScriptSnapshot(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, settings: CompilerOptions, version: number, isOpen: boolean) {
+    function createSourceFileFromScriptSnapshot(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, settings: CompilerOptions, version: string, isOpen: boolean) {
         return SourceFileObject.createSourceFileObject(filename, scriptSnapshot, settings.target, version, isOpen);
     }
 
@@ -1241,7 +1244,7 @@ module ts {
             filename: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
-            version: number,
+            version: string,
             isOpen: boolean): SourceFile {
 
             var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
@@ -1265,7 +1268,7 @@ module ts {
             filename: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
-            version: number,
+            version: string,
             isOpen: boolean,
             textChangeRange: TypeScript.TextChangeRange
             ): SourceFile {
@@ -1451,7 +1454,7 @@ module ts {
                     // new text buffer).
                     var textChangeRange: TypeScript.TextChangeRange = null;
                     if (sourceFile.isOpen && isOpen) {
-                        textChangeRange = hostCache.getScriptTextChangeRangeSinceVersion(filename, sourceFile.version);
+                        textChangeRange = hostCache.getChangeRange(filename, sourceFile.version, sourceFile.getScriptSnapshot());
                     }
 
                     sourceFile = documentRegistry.updateDocument(sourceFile, filename, compilationSettings, scriptSnapshot, version, isOpen, textChangeRange);

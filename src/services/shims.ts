@@ -36,7 +36,7 @@ module ts {
         //  { span: { start: number; length: number }; newLength: number }
         //
         // Or null value if there was no change.
-        getTextChangeRangeSinceVersion(scriptVersion: number): string;
+        getChangeRange(oldSnapshot: ScriptSnapshotShim): string;
     }
 
     //
@@ -48,7 +48,7 @@ module ts {
         // Returns a JSON encoded value of the type:
         // string[]
         getScriptFileNames(): string;
-        getScriptVersion(fileName: string): number;
+        getScriptVersion(fileName: string): string;
         getScriptIsOpen(fileName: string): boolean;
         getScriptSnapshot(fileName: string): ScriptSnapshotShim;
         getLocalizedDiagnosticMessages(): string;
@@ -290,8 +290,9 @@ module ts {
             return this.lineStartPositions;
         }
 
-        public getTextChangeRangeSinceVersion(scriptVersion: number): TypeScript.TextChangeRange {
-            var encoded = this.scriptSnapshotShim.getTextChangeRangeSinceVersion(scriptVersion);
+        public getChangeRange(oldSnapshot: TypeScript.IScriptSnapshot): TypeScript.TextChangeRange {
+            var oldSnapshotShim = <ScriptSnapshotShimAdapter>oldSnapshot;
+            var encoded = this.scriptSnapshotShim.getChangeRange(oldSnapshotShim.scriptSnapshotShim);
             if (encoded == null) {
                 return null;
             }
@@ -302,7 +303,7 @@ module ts {
         }
     }
 
-    class LanguageServiceShimHostAdapter implements LanguageServiceHost {
+    export class LanguageServiceShimHostAdapter implements LanguageServiceHost {
         constructor(private shimHost: LanguageServiceShimHost) {
         }
 
@@ -356,7 +357,7 @@ module ts {
             return new ScriptSnapshotShimAdapter(this.shimHost.getScriptSnapshot(fileName));
         }
 
-        public getScriptVersion(fileName: string): number {
+        public getScriptVersion(fileName: string): string {
             return this.shimHost.getScriptVersion(fileName);
         }
 
