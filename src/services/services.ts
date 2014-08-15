@@ -2282,6 +2282,10 @@ module ts {
             return [];
         }
 
+        function escapeRegExp(str: string): string {
+            return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+        }
+
         function getTodoCommentsRegExp(descriptors: TodoCommentDescriptor[]): RegExp {
             // NOTE: ?:  means 'non-capture group'.  It allows us to have groups without having to
             // filter them out later in the final result array.
@@ -2315,7 +2319,7 @@ module ts {
             // Note that the outermost group is *not* a capture group, but the innermost groups
             // *are* capture groups.  By capturing the inner literals we can determine after 
             // matching which descriptor we are dealing with.
-            var literals = "(?:" + descriptors.map(d => "(" + this.escapeRegExp(d.text) + ")").join("|") + ")";
+            var literals = "(?:" + descriptors.map(d => "(" + escapeRegExp(d.text) + ")").join("|") + ")";
 
             // After matching a descriptor literal, the following regexp matches the rest of the 
             // text up to the end of the line (or */).
@@ -2343,21 +2347,22 @@ module ts {
         function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
             fileName = TypeScript.switchToForwardSlashes(fileName);
 
-            var syntaxTree = this.compiler.getDocument(fileName).syntaxTree();
-            this.cancellationToken.throwIfCancellationRequested();
+            var sourceFile = getCurrentSourceFile(fileName);
+            var syntaxTree = sourceFile.getSyntaxTree();
+            cancellationToken.throwIfCancellationRequested();
 
             var text = syntaxTree.text;
             var fileContents = text.substr(0, text.length());
-            this.cancellationToken.throwIfCancellationRequested();
+            cancellationToken.throwIfCancellationRequested();
 
             var result: TodoComment[] = [];
 
             if (descriptors.length > 0) {
-                var regExp = this.getTodoCommentsRegExp(descriptors);
+                var regExp = getTodoCommentsRegExp(descriptors);
 
                 var matchArray: RegExpExecArray;
                 while (matchArray = regExp.exec(fileContents)) {
-                    this.cancellationToken.throwIfCancellationRequested();
+                    cancellationToken.throwIfCancellationRequested();
 
                     // If we got a match, here is what the match array will look like.  Say the source text is:
                     //
@@ -2394,7 +2399,7 @@ module ts {
 
                     // Looks to be within the trivia.  See if we can find hte comment containing it.
                     var triviaList = matchPosition < TypeScript.start(token) ? token.leadingTrivia(syntaxTree.text) : token.trailingTrivia(syntaxTree.text);
-                    var trivia = this.findContainingComment(triviaList, matchPosition);
+                    var trivia = findContainingComment(triviaList, matchPosition);
                     if (trivia === null) {
                         continue;
                     }
@@ -2409,7 +2414,7 @@ module ts {
 
                     // We don't want to match something like 'TODOBY', so we make sure a non 
                     // letter/digit follows the match.
-                    if (this.isLetterOrDigit(fileContents.charCodeAt(matchPosition + descriptor.text.length))) {
+                    if (isLetterOrDigit(fileContents.charCodeAt(matchPosition + descriptor.text.length))) {
                         continue;
                     }
 
@@ -2419,6 +2424,12 @@ module ts {
             }
 
             return result;
+        }
+
+        function isLetterOrDigit(char: number): boolean {
+            return (char >= TypeScript.CharacterCodes.a && char <= TypeScript.CharacterCodes.z) ||
+                (char >= TypeScript.CharacterCodes.A && char <= TypeScript.CharacterCodes.Z) ||
+                (char >= TypeScript.CharacterCodes._0 && char <= TypeScript.CharacterCodes._9);
         }
 
         function findContainingComment(triviaList: TypeScript.ISyntaxTriviaList, position: number): TypeScript.ISyntaxTrivia {
