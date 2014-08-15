@@ -25,21 +25,6 @@ export declare module a {
     }
 }
 export declare module c {
+    import b = a.I;
     var x: b;
 }
-
-
-//// [DtsFileErrors]
-
-
-==== tests/cases/compiler/internalAliasInterfaceInsideLocalModuleWithoutExport.d.ts (1 errors) ====
-    export declare module a {
-        interface I {
-        }
-    }
-    export declare module c {
-        var x: b;
-               ~
-!!! Cannot find name 'b'.
-    }
-    

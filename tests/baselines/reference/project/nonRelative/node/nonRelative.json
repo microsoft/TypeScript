@@ -6,12 +6,12 @@
     ],
     "baselineCheck": true,
     "resolvedInputFiles": [
-        "consume.ts",
+        "lib.d.ts",
         "decl.ts",
-        "lib/foo/a.ts",
         "lib/foo/b.ts",
+        "lib/foo/a.ts",
         "lib/bar/a.ts",
-        "lib.d.ts"
+        "consume.ts"
     ],
     "emittedFiles": [
         "decl.js",

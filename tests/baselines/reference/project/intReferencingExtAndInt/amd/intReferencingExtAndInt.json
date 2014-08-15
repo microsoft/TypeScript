@@ -5,8 +5,8 @@
         "internal2.ts"
     ],
     "resolvedInputFiles": [
-        "internal2.ts",
-        "lib.d.ts"
+        "lib.d.ts",
+        "internal2.ts"
     ],
     "emittedFiles": []
 }

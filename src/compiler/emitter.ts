@@ -9,6 +9,7 @@ module ts {
         getTextPos(): number;
         getLine(): number;
         getColumn(): number;
+        getIndent(): number;
     }
 
     var indentStrings: string[] = [];
@@ -141,6 +142,7 @@ module ts {
                 writeLine: writeLine,
                 increaseIndent: () => indent++,
                 decreaseIndent: () => indent--,
+                getIndent: () => indent,
                 getTextPos: () => output.length,
                 getLine: () => lineCount + 1,
                 getColumn: () => lineStart ? indent * 4 + 1 : output.length - linePos + 1,
@@ -1867,27 +1869,63 @@ module ts {
             var enclosingDeclaration: Node;
             var reportedDeclarationError = false;
 
+            var aliasDeclarationEmitInfo: {
+                declaration: ImportDeclaration;
+                outputPos: number;
+                indent: number;
+                asynchronousOutput?: string; // If the output for alias was written asynchronously, the corresponding output
+            }[] = [];
+
             var getSymbolVisibilityDiagnosticMessage: (symbolAccesibilityResult: SymbolAccessiblityResult) => {
                 errorNode: Node;
                 diagnosticMessage: DiagnosticMessage;
-                typeName: Identifier
+                typeName?: Identifier
+            }
+
+            function writeAsychronousImportDeclarations(importDeclarations: ImportDeclaration[]) {
+                var oldWriter = writer;
+                forEach(importDeclarations, aliasToWrite => {
+                    var aliasEmitInfo = forEach(aliasDeclarationEmitInfo, declEmitInfo => declEmitInfo.declaration === aliasToWrite ? declEmitInfo : undefined);
+                    writer = createTextWriter(writeSymbol);
+                    for (var declarationIndent = aliasEmitInfo.indent; declarationIndent; declarationIndent--) {
+                        writer.increaseIndent();
+                    }
+
+                    writeImportDeclaration(aliasToWrite);
+                    aliasEmitInfo.asynchronousOutput = writer.getText();
+                });
+                writer = oldWriter;
             }
 
             function writeSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
                 var symbolAccesibilityResult = resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning);
-                    // TODO(shkamat): Since we dont have error reporting for all the cases as yet we have this check on handler being present
-                if (!getSymbolVisibilityDiagnosticMessage || symbolAccesibilityResult.accessibility === SymbolAccessibility.Accessible) {
+                if (symbolAccesibilityResult.accessibility === SymbolAccessibility.Accessible) {
                     resolver.writeSymbol(symbol, enclosingDeclaration, meaning, writer);
+
+                    // write the aliases
+                    if (symbolAccesibilityResult && symbolAccesibilityResult.aliasesToMakeVisible) {
+                        writeAsychronousImportDeclarations(symbolAccesibilityResult.aliasesToMakeVisible);
+                    }
                 }
                 else {
                     // Report error
                     reportedDeclarationError = true;
                     var errorInfo = getSymbolVisibilityDiagnosticMessage(symbolAccesibilityResult);
-                    diagnostics.push(createDiagnosticForNode(errorInfo.errorNode,
-                        errorInfo.diagnosticMessage,
-                        getSourceTextOfLocalNode(errorInfo.typeName),
-                        symbolAccesibilityResult.errorSymbolName,
-                        symbolAccesibilityResult.errorModuleName));
+                    if (errorInfo) {
+                        if (errorInfo.typeName) {
+                            diagnostics.push(createDiagnosticForNode(errorInfo.errorNode,
+                                errorInfo.diagnosticMessage,
+                                getSourceTextOfLocalNode(errorInfo.typeName),
+                                symbolAccesibilityResult.errorSymbolName,
+                                symbolAccesibilityResult.errorModuleName));
+                        }
+                        else {
+                            diagnostics.push(createDiagnosticForNode(errorInfo.errorNode,
+                                errorInfo.diagnosticMessage,
+                                symbolAccesibilityResult.errorSymbolName,
+                                symbolAccesibilityResult.errorModuleName));
+                        }
+                    }
                 }
             }
 
@@ -1951,23 +1989,55 @@ module ts {
             }
 
             function emitImportDeclaration(node: ImportDeclaration) {
-                if (resolver.isDeclarationVisible(node)) {
-                    if (node.flags & NodeFlags.Export) {
-                        write("export ");
-                    }
-                    write("import ");
-                    emitSourceTextOfNode(node.name);
-                    write(" = ");
-                    if (node.entityName) {
-                        emitSourceTextOfNode(node.entityName);
-                        write(";");
+                var nodeEmitInfo = {
+                    declaration: node,
+                    outputPos: writer.getTextPos(),
+                    indent: writer.getIndent(),
+                    hasWritten: resolver.isDeclarationVisible(node)
+                };
+                aliasDeclarationEmitInfo.push(nodeEmitInfo);
+                if (nodeEmitInfo.hasWritten) {
+                    writeImportDeclaration(node);
+                }
+            }
+
+            function writeImportDeclaration(node: ImportDeclaration) {
+                // note usage of writer. methods instead of aliases created, just to make sure we are using 
+                // correct writer especially to handle asynchronous alias writing
+                if (node.flags & NodeFlags.Export) {
+                    writer.write("export ");
+                }
+                writer.write("import ");
+                writer.write(getSourceTextOfLocalNode(node.name));
+                writer.write(" = ");
+                if (node.entityName) {
+                    checkEntityNameAccessible();
+                    writer.write(getSourceTextOfLocalNode(node.entityName));
+                    writer.write(";");
+                }
+                else {
+                    writer.write("require(");
+                    writer.write(getSourceTextOfLocalNode(node.externalModuleName));
+                    writer.write(");");
+                }
+                writer.writeLine();
+
+                function checkEntityNameAccessible() {
+                    var symbolAccesibilityResult = resolver.isImportDeclarationEntityNameReferenceDeclarationVisibile(node.entityName);
+                    if (symbolAccesibilityResult.accessibility === SymbolAccessibility.Accessible) {
+                        // write the aliases
+                        if (symbolAccesibilityResult.aliasesToMakeVisible) {
+                            writeAsychronousImportDeclarations(symbolAccesibilityResult.aliasesToMakeVisible);
+                        }
                     }
                     else {
-                        write("require(");
-                        emitSourceTextOfNode(node.externalModuleName);
-                        write(");");
+                        // Report error
+                        reportedDeclarationError = true;
+                        diagnostics.push(createDiagnosticForNode(node,
+                            Diagnostics.Import_declaration_0_is_using_private_name_1,
+                            getSourceTextOfLocalNode(node.name),
+                            symbolAccesibilityResult.errorSymbolName));
                     }
-                    writeLine();
                 }
             }
 
@@ -2023,7 +2093,7 @@ module ts {
             function emitTypeParameters(typeParameters: TypeParameterDeclaration[]) {
                 function emitTypeParameter(node: TypeParameterDeclaration) {
                     function getTypeParameterConstraintVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
-                        // TODO(shkamat) Cannot access name errors
+                        // Type parameter constraints are named by user so we should always be able to name it
                         var diagnosticMessage: DiagnosticMessage;
                         switch (node.parent.kind) {
                             case SyntaxKind.ClassDeclaration:
@@ -2082,7 +2152,7 @@ module ts {
                             diagnosticMessage: diagnosticMessage,
                             errorNode: node,
                             typeName: node.name
-                        }
+                        };
                     }
 
                     emitSourceTextOfNode(node.name);
@@ -2090,9 +2160,7 @@ module ts {
                     if (node.constraint && (node.parent.kind !== SyntaxKind.Method || !(node.parent.flags & NodeFlags.Private))) {
                         write(" extends ");
                         getSymbolVisibilityDiagnosticMessage = getTypeParameterConstraintVisibilityError;
-                        resolver.writeTypeAtLocation(node.constraint, enclosingDeclaration, TypeFormatFlags.None, writer);
-                        // TODO(shkamat) This is just till we get rest of the error reporting up
-                        getSymbolVisibilityDiagnosticMessage = undefined; 
+                        resolver.writeTypeAtLocation(node.constraint, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
                     }
                 }
 
@@ -2111,48 +2179,34 @@ module ts {
 
                 function emitTypeOfTypeReference(node: Node) {
                     getSymbolVisibilityDiagnosticMessage = getHeritageClauseVisibilityError;
-                    resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.WriteArrayAsGenericType, writer);
-                    // TODO(shkamat) This is just till we get rest of the error reporting up
-                    getSymbolVisibilityDiagnosticMessage = undefined; 
+                    resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.WriteArrayAsGenericType | TypeFormatFlags.UseTypeOfFunction, writer);
 
                     function getHeritageClauseVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
                         var diagnosticMessage: DiagnosticMessage;
+                        // Heritage clause is written by user so it can always be named
                         if (node.parent.kind === SyntaxKind.ClassDeclaration) {
                             // Class
-                            if (symbolAccesibilityResult.accessibility == SymbolAccessibility.NotAccessible) {
-                                if (symbolAccesibilityResult.errorModuleName) {
-                                    // Module is inaccessible
-                                    diagnosticMessage = isImplementsList ?
-                                    Diagnostics.Implements_clause_of_exported_class_0_has_or_is_using_name_1_from_private_module_2 :
-                                    Diagnostics.Extends_clause_of_exported_class_0_has_or_is_using_name_1_from_private_module_2;
-                                }
-                                else {
-                                    // Class or Interface implemented/extended is inaccessible
-                                    diagnosticMessage = isImplementsList ?
-                                    Diagnostics.Implements_clause_of_exported_class_0_has_or_is_using_private_name_1 :
-                                    Diagnostics.Extends_clause_of_exported_class_0_has_or_is_using_private_name_1;
-                                }
+                            if (symbolAccesibilityResult.errorModuleName) {
+                                // Module is inaccessible
+                                diagnosticMessage = isImplementsList ?
+                                Diagnostics.Implements_clause_of_exported_class_0_has_or_is_using_name_1_from_private_module_2 :
+                                Diagnostics.Extends_clause_of_exported_class_0_has_or_is_using_name_1_from_private_module_2;
                             }
                             else {
-                                // CannotBeNamed
-                                // TODO(shkamat): CannotBeNamed error needs to be handled
+                                // Class or Interface implemented/extended is inaccessible
+                                diagnosticMessage = isImplementsList ?
+                                Diagnostics.Implements_clause_of_exported_class_0_has_or_is_using_private_name_1 :
+                                Diagnostics.Extends_clause_of_exported_class_0_has_or_is_using_private_name_1;
                             }
                         }
                         else {
-                            // Interface
-                            if (symbolAccesibilityResult.accessibility == SymbolAccessibility.NotAccessible) {
-                                if (symbolAccesibilityResult.errorModuleName) {
-                                    // Module is inaccessible
-                                    diagnosticMessage = Diagnostics.Extends_clause_of_exported_interface_0_has_or_is_using_name_1_from_private_module_2;
-                                }
-                                else {
-                                    // interface is inaccessible
-                                    diagnosticMessage = Diagnostics.Extends_clause_of_exported_interface_0_has_or_is_using_private_name_1;
-                                }
+                            if (symbolAccesibilityResult.errorModuleName) {
+                                // Module is inaccessible
+                                diagnosticMessage = Diagnostics.Extends_clause_of_exported_interface_0_has_or_is_using_name_1_from_private_module_2;
                             }
                             else {
-                                // CannotBeNamed
-                                // TODO(shkamat): CannotBeNamed error needs to be handled
+                                // interface is inaccessible
+                                diagnosticMessage = Diagnostics.Extends_clause_of_exported_interface_0_has_or_is_using_private_name_1;
                             }
                         }
 
@@ -2160,7 +2214,7 @@ module ts {
                             diagnosticMessage: diagnosticMessage,
                             errorNode: node,
                             typeName: (<Declaration>node.parent).name
-                        }
+                        };
                     }
                 }
             }
@@ -2237,8 +2291,49 @@ module ts {
                     }
                     if (!(node.flags & NodeFlags.Private)) {
                         write(": ");
-                        resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.None, writer);
+                        getSymbolVisibilityDiagnosticMessage = getVariableDeclarationTypeVisibilityError;
+                        resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
                     }
+                }
+
+                function getVariableDeclarationTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
+                    var diagnosticMessage: DiagnosticMessage;
+                    if (node.kind === SyntaxKind.VariableDeclaration) {
+                        diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                        symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                        Diagnostics.Exported_variable_0_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                        Diagnostics.Exported_variable_0_has_or_is_using_name_1_from_private_module_2 :
+                        Diagnostics.Exported_variable_0_has_or_is_using_private_name_1;
+                    }
+                    // This check is to ensure we dont report error on constructor parameter property as that error would be reported during parameter emit
+                    else if (node.kind === SyntaxKind.Property) {
+                        if (node.flags & NodeFlags.Static) {
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                            Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                            Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_private_name_1;
+                        }
+                        else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                            Diagnostics.Public_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                            Diagnostics.Public_property_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Public_property_0_of_exported_class_has_or_is_using_private_name_1;
+                        }
+                        else {
+                            // Interfaces cannot have types that cannot be named
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            Diagnostics.Property_0_of_exported_interface_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Property_0_of_exported_interface_has_or_is_using_private_name_1;
+                        }
+                    }
+
+                    return diagnosticMessage !== undefined ? {
+                        diagnosticMessage: diagnosticMessage,
+                        errorNode: node,
+                        typeName: node.name
+                    } : undefined;
                 }
             }
 
@@ -2260,10 +2355,54 @@ module ts {
                     emitSourceTextOfNode(node.name);
                     if (!(node.flags & NodeFlags.Private)) {
                         write(": ");
-                        resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.None, writer);
+                        getSymbolVisibilityDiagnosticMessage = getAccessorDeclarationTypeVisibilityError;
+                        resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
                     }
                     write(";");
                     writeLine();
+                }
+
+                function getAccessorDeclarationTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
+                    var diagnosticMessage: DiagnosticMessage;
+                    if (node.kind === SyntaxKind.SetAccessor) {
+                        // Setters have to have type named and cannot infer it so, the type should always be named
+                        if (node.parent.flags & NodeFlags.Static) {
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            Diagnostics.Parameter_0_of_public_static_property_setter_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Parameter_0_of_public_static_property_setter_from_exported_class_has_or_is_using_private_name_1;
+                        }
+                        else {
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            Diagnostics.Parameter_0_of_public_property_setter_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Parameter_0_of_public_property_setter_from_exported_class_has_or_is_using_private_name_1;
+                        }
+                        return {
+                            diagnosticMessage: diagnosticMessage,
+                            errorNode: node.parameters[0],
+                            typeName: node.name
+                        };
+                    }
+                    else {
+                        if (node.flags & NodeFlags.Static) {
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                            Diagnostics.Return_type_of_public_static_property_getter_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
+                            Diagnostics.Return_type_of_public_static_property_getter_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
+                            Diagnostics.Return_type_of_public_static_property_getter_from_exported_class_has_or_is_using_private_name_0;
+                        }
+                        else {
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                            Diagnostics.Return_type_of_public_property_getter_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
+                            Diagnostics.Return_type_of_public_property_getter_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
+                            Diagnostics.Return_type_of_public_property_getter_from_exported_class_has_or_is_using_private_name_0;
+                        }
+                        return {
+                            diagnosticMessage: diagnosticMessage,
+                            errorNode: node.name,
+                            typeName: undefined
+                        };
+                    }
                 }
             }
 
@@ -2317,10 +2456,76 @@ module ts {
                 // If this is not a constructor and is not private, emit the return type
                 if (node.kind !== SyntaxKind.Constructor && !(node.flags & NodeFlags.Private)) {
                     write(": ");
-                    resolver.writeReturnTypeOfSignatureDeclaration(node, enclosingDeclaration, TypeFormatFlags.None, writer);
+                    getSymbolVisibilityDiagnosticMessage = getReturnTypeVisibilityError;
+                    resolver.writeReturnTypeOfSignatureDeclaration(node, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
                 }
                 write(";");
                 writeLine();
+
+                function getReturnTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
+                    var diagnosticMessage: DiagnosticMessage;
+                    switch (node.kind) {
+                        case SyntaxKind.ConstructSignature:
+                            // Interfaces cannot have return types that cannot be named
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ? 
+                            Diagnostics.Return_type_of_constructor_signature_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
+                            Diagnostics.Return_type_of_constructor_signature_from_exported_interface_has_or_is_using_private_name_0;
+                            break;
+
+                        case SyntaxKind.CallSignature:
+                            // Interfaces cannot have return types that cannot be named
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            Diagnostics.Return_type_of_call_signature_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
+                            Diagnostics.Return_type_of_call_signature_from_exported_interface_has_or_is_using_private_name_0;
+                            break;
+
+                        case SyntaxKind.IndexSignature:
+                            // Interfaces cannot have return types that cannot be named
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            Diagnostics.Return_type_of_index_signature_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
+                            Diagnostics.Return_type_of_index_signature_from_exported_interface_has_or_is_using_private_name_0;
+                            break;
+
+                        case SyntaxKind.Method:
+                            if (node.flags & NodeFlags.Static) {
+                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                                symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                                Diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
+                                Diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
+                                Diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_private_name_0;
+                            }
+                            else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
+                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                                symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                                Diagnostics.Return_type_of_public_method_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
+                                Diagnostics.Return_type_of_public_method_from_exported_class_has_or_is_using_name_0_from_private_module_1 :
+                                Diagnostics.Return_type_of_public_method_from_exported_class_has_or_is_using_private_name_0;
+                            }
+                            else {
+                                // Interfaces cannot have return types that cannot be named
+                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                                Diagnostics.Return_type_of_method_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
+                                Diagnostics.Return_type_of_method_from_exported_interface_has_or_is_using_private_name_0;
+                            }
+                            break;
+
+                        case SyntaxKind.FunctionDeclaration:
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                            Diagnostics.Return_type_of_exported_function_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
+                            Diagnostics.Return_type_of_exported_function_has_or_is_using_name_0_from_private_module_1 :
+                            Diagnostics.Return_type_of_exported_function_has_or_is_using_private_name_0;
+                            break;
+
+                        default:
+                            Debug.fail("This is unknown kind for signature: " + SyntaxKind[node.kind]);
+                    }
+
+                    return {
+                        diagnosticMessage: diagnosticMessage,
+                        errorNode: <Node>node.name || node,
+                    };
+                }
             }
 
             function emitParameterDeclaration(node: ParameterDeclaration) {
@@ -2334,7 +2539,75 @@ module ts {
 
                 if (!(node.parent.flags & NodeFlags.Private)) {
                     write(": ");
-                    resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.None, writer);
+                    getSymbolVisibilityDiagnosticMessage = getParameterDeclarationTypeVisibilityError;
+                    resolver.writeTypeAtLocation(node, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
+                }
+
+                function getParameterDeclarationTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult) {
+                    var diagnosticMessage: DiagnosticMessage;
+                    switch (node.parent.kind) {
+                        case SyntaxKind.Constructor:
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                            Diagnostics.Parameter_0_of_constructor_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                            Diagnostics.Parameter_0_of_constructor_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Parameter_0_of_constructor_from_exported_class_has_or_is_using_private_name_1;
+                            break;
+
+                        case SyntaxKind.ConstructSignature:
+                            // Interfaces cannot have parameter types that cannot be named
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            Diagnostics.Parameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Parameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_private_name_1;
+                            break;
+
+                        case SyntaxKind.CallSignature:
+                            // Interfaces cannot have parameter types that cannot be named
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            Diagnostics.Parameter_0_of_call_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Parameter_0_of_call_signature_from_exported_interface_has_or_is_using_private_name_1;
+                            break;
+
+                        case SyntaxKind.Method:
+                            if (node.parent.flags & NodeFlags.Static) {
+                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                                symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                                Diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                                Diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                                Diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_private_name_1;
+                            }
+                            else if (node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
+                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                                symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                                Diagnostics.Parameter_0_of_public_method_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                                Diagnostics.Parameter_0_of_public_method_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
+                                Diagnostics.Parameter_0_of_public_method_from_exported_class_has_or_is_using_private_name_1;
+                            }
+                            else {
+                                // Interfaces cannot have parameter types that cannot be named
+                                diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                                Diagnostics.Parameter_0_of_method_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
+                                Diagnostics.Parameter_0_of_method_from_exported_interface_has_or_is_using_private_name_1;
+                            }
+                            break;
+
+                        case SyntaxKind.FunctionDeclaration:
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
+                            Diagnostics.Parameter_0_of_exported_function_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
+                            Diagnostics.Parameter_0_of_exported_function_has_or_is_using_name_1_from_private_module_2 :
+                            Diagnostics.Parameter_0_of_exported_function_has_or_is_using_private_name_1;
+                            break;
+
+                        default:
+                            Debug.fail("This is unknown parent for parameter: " + SyntaxKind[node.parent.kind]);
+                    }
+
+                    return {
+                        diagnosticMessage: diagnosticMessage,
+                        errorNode: node,
+                        typeName: node.name
+                    };
                 }
             }
 
@@ -2448,7 +2721,19 @@ module ts {
             // TODO(shkamat): Should we not write any declaration file if any of them can produce error, 
             // or should we just not write this file like we are doing now
             if (!reportedDeclarationError) {
-                writeFile(getModuleNameFromFilename(jsFilePath) + ".d.ts", referencePathsOutput + writer.getText(), compilerOptions.emitBOM);
+                var declarationOutput = referencePathsOutput;
+                var synchronousDeclarationOutput = writer.getText();
+                // apply additions
+                var appliedSyncOutputPos = 0;
+                forEach(aliasDeclarationEmitInfo, aliasEmitInfo => {
+                    if (aliasEmitInfo.asynchronousOutput) {
+                        declarationOutput += synchronousDeclarationOutput.substring(appliedSyncOutputPos, aliasEmitInfo.outputPos);
+                        declarationOutput += aliasEmitInfo.asynchronousOutput;
+                        appliedSyncOutputPos = aliasEmitInfo.outputPos;
+                    }
+                });
+                declarationOutput += synchronousDeclarationOutput.substring(appliedSyncOutputPos);
+                writeFile(getModuleNameFromFilename(jsFilePath) + ".d.ts", declarationOutput, compilerOptions.emitBOM);
             }
         }
 
@@ -2469,6 +2754,11 @@ module ts {
         if (compilerOptions.out) {
             emitFile(compilerOptions.out);
         }
+
+        // Sort and make the unique list of diagnostics
+        diagnostics.sort(compareDiagnostics);
+        diagnostics = deduplicateSortedDiagnostics(diagnostics);
+
         return {
             errors: diagnostics,
             sourceMaps: sourceMapDataList

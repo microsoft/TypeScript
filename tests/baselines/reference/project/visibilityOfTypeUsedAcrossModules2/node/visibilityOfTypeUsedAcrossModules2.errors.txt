@@ -1,2 +1,12 @@
 main.ts(2,1): File 'nonExistingFile1.ts' not found.
 main.ts(3,1): File 'nonExistingFile2.ts' not found.
+
+
+==== main.ts (2 errors) ====
+    /// <reference path="main.ts" />
+    /// <reference path="nonExistingFile1.ts" />
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! File 'nonExistingFile1.ts' not found.
+    /// <reference path="nonExistingFile2.ts" />
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! File 'nonExistingFile2.ts' not found.

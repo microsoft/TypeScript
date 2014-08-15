@@ -32,21 +32,6 @@ declare module a {
     }
 }
 declare module c {
+    import b = a.c;
     var x: b;
 }
-
-
-//// [DtsFileErrors]
-
-
-==== tests/cases/compiler/internalAliasClass.d.ts (1 errors) ====
-    declare module a {
-        class c {
-        }
-    }
-    declare module c {
-        var x: b;
-               ~
-!!! Cannot find name 'b'.
-    }
-    

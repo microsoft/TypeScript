@@ -47,25 +47,7 @@ export declare module x {
 }
 export declare module m2 {
     module m3 {
+        import c = x.c;
         var cProp: c;
     }
 }
-
-
-//// [DtsFileErrors]
-
-
-==== tests/cases/compiler/internalAliasClassInsideLocalModuleWithoutExport.d.ts (1 errors) ====
-    export declare module x {
-        class c {
-            foo(a: number): number;
-        }
-    }
-    export declare module m2 {
-        module m3 {
-            var cProp: c;
-                       ~
-!!! Cannot find name 'c'.
-        }
-    }
-    

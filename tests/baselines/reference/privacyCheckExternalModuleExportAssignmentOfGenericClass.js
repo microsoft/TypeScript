@@ -22,3 +22,17 @@ var Foo = (function () {
 })();
 module.exports = Foo;
 //// [privacyCheckExternalModuleExportAssignmentOfGenericClass_1.js]
+
+
+//// [privacyCheckExternalModuleExportAssignmentOfGenericClass_0.d.ts]
+export = Foo;
+declare class Foo<A> {
+    a: A;
+    constructor(a: A);
+}
+//// [privacyCheckExternalModuleExportAssignmentOfGenericClass_1.d.ts]
+import Foo = require("privacyCheckExternalModuleExportAssignmentOfGenericClass_0");
+export = Bar;
+interface Bar {
+    foo: Foo<number>;
+}

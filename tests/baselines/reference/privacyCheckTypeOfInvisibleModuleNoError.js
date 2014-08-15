@@ -17,21 +17,3 @@ var Outer;
     })(Inner || (Inner = {}));
     Outer.f;
 })(Outer || (Outer = {}));
-
-
-//// [privacyCheckTypeOfInvisibleModuleNoError.d.ts]
-declare module Outer {
-    var f: typeof Inner;
-}
-
-
-//// [DtsFileErrors]
-
-
-==== tests/cases/compiler/privacyCheckTypeOfInvisibleModuleNoError.d.ts (1 errors) ====
-    declare module Outer {
-        var f: typeof Inner;
-                      ~~~~~
-!!! Cannot find name 'Inner'.
-    }
-    
