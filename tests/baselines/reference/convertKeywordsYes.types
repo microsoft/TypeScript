@@ -1,0 +1,936 @@
+=== tests/cases/compiler/convertKeywordsYes.ts ===
+// reserved ES5 future in strict mode
+
+var constructor = 0;
+>constructor : number
+
+var any = 0;
+>any : number
+
+var boolean = 0;
+>boolean : number
+
+var implements = 0;
+>implements : number
+
+var interface = 0;
+>interface : number
+
+var let = 0;
+>let : number
+
+var module = 0;
+>module : number
+
+var number = 0;
+>number : number
+
+var package = 0;
+>package : number
+
+var private = 0;
+>private : number
+
+var protected = 0;
+>protected : number
+
+var public = 0;
+>public : number
+
+var set = 0;
+>set : number
+
+var static = 0;
+>static : number
+
+var string = 0;
+>string : number
+
+var get = 0;
+>get : number
+
+var yield = 0;
+>yield : number
+
+var declare = 0;
+>declare : number
+
+function bigGeneric<
+>bigGeneric : <constructor, implements, interface, let, module, package, private, protected, public, set, static, get, yield, declare>(c: constructor, a: any, b2: boolean, i: implements, i2: interface, l: let, m: module, n: number, p: package, p2: private, p3: protected, p4: public, s: set, s2: static, s3: string, g: get, y: yield, d: declare) => void
+
+    constructor,
+>constructor : constructor
+
+    implements ,
+>implements : implements
+
+    interface ,
+>interface : interface
+
+    let,
+>let : let
+
+    module ,
+>module : module
+
+    package,
+>package : package
+
+    private ,
+>private : private
+
+    protected,
+>protected : protected
+
+    public ,
+>public : public
+
+    set ,
+>set : set
+
+    static ,
+>static : static
+
+    get ,
+>get : get
+
+    yield,
+>yield : yield
+
+    declare
+>declare : declare
+
+    >(c: constructor,
+>c : constructor
+>constructor : constructor
+
+    a: any,
+>a : any
+
+    b2: boolean,
+>b2 : boolean
+
+    i: implements ,
+>i : implements
+>implements : implements
+
+    i2: interface ,
+>i2 : interface
+>interface : interface
+
+    l: let,
+>l : let
+>let : let
+
+    m: module ,
+>m : module
+>module : module
+
+    n: number,
+>n : number
+
+    p: package,
+>p : package
+>package : package
+
+    p2: private ,
+>p2 : private
+>private : private
+
+    p3: protected,
+>p3 : protected
+>protected : protected
+
+    p4: public ,
+>p4 : public
+>public : public
+
+    s: set ,
+>s : set
+>set : set
+
+    s2: static ,
+>s2 : static
+>static : static
+
+    s3: string,
+>s3 : string
+
+    g: get ,
+>g : get
+>get : get
+
+    y: yield,
+>y : yield
+>yield : yield
+
+    d: declare ) { }
+>d : declare
+>declare : declare
+
+var bigObject = {
+>bigObject : { constructor: number; any: number; boolean: number; implements: number; interface: number; let: number; module: number; number: number; package: number; private: number; protected: number; public: number; set: number; static: number; string: number; get: number; yield: number; break: number; case: number; catch: number; class: number; continue: number; const: number; debugger: number; declare: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; }
+>{
+    constructor: 0,
+    any: 0,
+    boolean: 0,
+    implements: 0,
+    interface: 0,
+    let: 0,
+    module: 0,
+    number: 0,
+    package: 0,
+    private: 0,
+    protected: 0,
+    public: 0,
+    set: 0,
+    static: 0,
+    string: 0,
+    get: 0,
+    yield: 0,
+    break: 0,
+    case: 0,
+    catch: 0,
+    class: 0,
+    continue: 0,
+    const: 0,
+
+    debugger: 0,
+    declare: 0,
+    default: 0,
+    delete: 0,
+    do: 0,
+    else: 0,
+    enum: 0,
+    export: 0,
+    extends: 0,
+    false: 0,
+    finally: 0,
+    for: 0,
+    function: 0,
+    if: 0,
+
+    import: 0,
+    in: 0,
+    instanceof: 0,
+    new: 0,
+    null: 0,
+    return: 0,
+    super: 0,
+    switch: 0,
+    this: 0,
+    throw: 0,
+    true: 0,
+    try: 0,
+    typeof: 0,
+    var: 0,
+    void: 0,
+    while: 0,
+    with: 0,
+} : { constructor: number; any: number; boolean: number; implements: number; interface: number; let: number; module: number; number: number; package: number; private: number; protected: number; public: number; set: number; static: number; string: number; get: number; yield: number; break: number; case: number; catch: number; class: number; continue: number; const: number; debugger: number; declare: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; }
+
+    constructor: 0,
+>constructor : number
+
+    any: 0,
+>any : number
+
+    boolean: 0,
+>boolean : number
+
+    implements: 0,
+>implements : number
+
+    interface: 0,
+>interface : number
+
+    let: 0,
+>let : number
+
+    module: 0,
+>module : number
+
+    number: 0,
+>number : number
+
+    package: 0,
+>package : number
+
+    private: 0,
+>private : number
+
+    protected: 0,
+>protected : number
+
+    public: 0,
+>public : number
+
+    set: 0,
+>set : number
+
+    static: 0,
+>static : number
+
+    string: 0,
+>string : number
+
+    get: 0,
+>get : number
+
+    yield: 0,
+>yield : number
+
+    break: 0,
+>break : number
+
+    case: 0,
+>case : number
+
+    catch: 0,
+>catch : number
+
+    class: 0,
+>class : number
+
+    continue: 0,
+>continue : number
+
+    const: 0,
+>const : number
+
+    debugger: 0,
+>debugger : number
+
+    declare: 0,
+>declare : number
+
+    default: 0,
+>default : number
+
+    delete: 0,
+>delete : number
+
+    do: 0,
+>do : number
+
+    else: 0,
+>else : number
+
+    enum: 0,
+>enum : number
+
+    export: 0,
+>export : number
+
+    extends: 0,
+>extends : number
+
+    false: 0,
+>false : number
+
+    finally: 0,
+>finally : number
+
+    for: 0,
+>for : number
+
+    function: 0,
+>function : number
+
+    if: 0,
+>if : number
+
+    import: 0,
+>import : number
+
+    in: 0,
+>in : number
+
+    instanceof: 0,
+>instanceof : number
+
+    new: 0,
+>new : number
+
+    null: 0,
+>null : number
+
+    return: 0,
+>return : number
+
+    super: 0,
+>super : number
+
+    switch: 0,
+>switch : number
+
+    this: 0,
+>this : number
+
+    throw: 0,
+>throw : number
+
+    true: 0,
+>true : number
+
+    try: 0,
+>try : number
+
+    typeof: 0,
+>typeof : number
+
+    var: 0,
+>var : number
+
+    void: 0,
+>void : number
+
+    while: 0,
+>while : number
+
+    with: 0,
+>with : number
+
+};
+
+interface bigInterface {
+>bigInterface : bigInterface
+
+    constructor;
+>constructor : any
+
+    any;
+>any : any
+
+    boolean;
+>boolean : any
+
+    implements;
+>implements : any
+
+    interface;
+>interface : any
+
+    let;
+>let : any
+
+    module;
+>module : any
+
+    number;
+>number : any
+
+    package;
+>package : any
+
+    private;
+>private : any
+
+    protected;
+>protected : any
+
+    public;
+>public : any
+
+    set;
+>set : any
+
+    static;
+>static : any
+
+    string;
+>string : any
+
+    get;
+>get : any
+
+    yield;
+>yield : any
+
+    break;
+>break : any
+
+    case;
+>case : any
+
+    catch;
+>catch : any
+
+    class;
+>class : any
+
+    continue;
+>continue : any
+
+    const;
+>const : any
+
+    debugger;
+>debugger : any
+
+    declare;
+>declare : any
+
+    default;
+>default : any
+
+    delete;
+>delete : any
+
+    do;
+>do : any
+
+    else;
+>else : any
+
+    enum;
+>enum : any
+
+    export;
+>export : any
+
+    extends;
+>extends : any
+
+    false;
+>false : any
+
+    finally;
+>finally : any
+
+    for;
+>for : any
+
+    function;
+>function : any
+
+    if;
+>if : any
+
+    import;
+>import : any
+
+    in;
+>in : any
+
+    instanceof;
+>instanceof : any
+
+    new;
+>new : any
+
+    null;
+>null : any
+
+    return;
+>return : any
+
+    super;
+>super : any
+
+    switch;
+>switch : any
+
+    this;
+>this : any
+
+    throw;
+>throw : any
+
+    true;
+>true : any
+
+    try;
+>try : any
+
+    typeof;
+>typeof : any
+
+    var;
+>var : any
+
+    void;
+>void : any
+
+    while;
+>while : any
+
+    with;
+>with : any
+}
+
+class bigClass {
+>bigClass : bigClass
+
+    public "constructor" = 0;
+    public any = 0;
+>any : number
+
+    public boolean = 0;
+>boolean : number
+
+    public implements = 0;
+>implements : number
+
+    public interface = 0;
+>interface : number
+
+    public let = 0;
+>let : number
+
+    public module = 0;
+>module : number
+
+    public number = 0;
+>number : number
+
+    public package = 0;
+>package : number
+
+    public private = 0;
+>private : number
+
+    public protected = 0;
+>protected : number
+
+    public public = 0;
+>public : number
+
+    public set = 0;
+>set : number
+
+    public static = 0;
+>static : number
+
+    public string = 0;
+>string : number
+
+    public get = 0;
+>get : number
+
+    public yield = 0;
+>yield : number
+
+    public break = 0;
+>break : number
+
+    public case = 0;
+>case : number
+
+    public catch = 0;
+>catch : number
+
+    public class = 0;
+>class : number
+
+    public continue = 0;
+>continue : number
+
+    public const = 0;
+>const : number
+
+    public debugger = 0;
+>debugger : number
+
+    public declare = 0;
+>declare : number
+
+    public default = 0;
+>default : number
+
+    public delete = 0;
+>delete : number
+
+    public do = 0;
+>do : number
+
+    public else = 0;
+>else : number
+
+    public enum = 0;
+>enum : number
+
+    public export = 0;
+>export : number
+
+    public extends = 0;
+>extends : number
+
+    public false = 0;
+>false : number
+
+    public finally = 0;
+>finally : number
+
+    public for = 0;
+>for : number
+
+    public function = 0;
+>function : number
+
+    public if = 0;
+>if : number
+
+    public import = 0;
+>import : number
+
+    public in = 0;
+>in : number
+
+    public instanceof = 0;
+>instanceof : number
+
+    public new = 0;
+>new : number
+
+    public null = 0;
+>null : number
+
+    public return = 0;
+>return : number
+
+    public super = 0;
+>super : number
+
+    public switch = 0;
+>switch : number
+
+    public this = 0;
+>this : number
+
+    public throw = 0;
+>throw : number
+
+    public true = 0;
+>true : number
+
+    public try = 0;
+>try : number
+
+    public typeof = 0;
+>typeof : number
+
+    public var = 0;
+>var : number
+
+    public void = 0;
+>void : number
+
+    public while = 0;
+>while : number
+
+    public with = 0;
+>with : number
+}
+
+enum bigEnum {
+>bigEnum : bigEnum
+
+    constructor,
+>constructor : bigEnum
+
+    any,
+>any : bigEnum
+
+    boolean,
+>boolean : bigEnum
+
+    implements,
+>implements : bigEnum
+
+    interface,
+>interface : bigEnum
+
+    let,
+>let : bigEnum
+
+    module,
+>module : bigEnum
+
+    number,
+>number : bigEnum
+
+    package,
+>package : bigEnum
+
+    private,
+>private : bigEnum
+
+    protected,
+>protected : bigEnum
+
+    public,
+>public : bigEnum
+
+    set,
+>set : bigEnum
+
+    static,
+>static : bigEnum
+
+    string,
+>string : bigEnum
+
+    get,
+>get : bigEnum
+
+    yield,
+>yield : bigEnum
+
+    break,
+>break : bigEnum
+
+    case,
+>case : bigEnum
+
+    catch,
+>catch : bigEnum
+
+    class,
+>class : bigEnum
+
+    continue,
+>continue : bigEnum
+
+    const,
+>const : bigEnum
+
+    debugger,
+>debugger : bigEnum
+
+    declare,
+>declare : bigEnum
+
+    default,
+>default : bigEnum
+
+    delete,
+>delete : bigEnum
+
+    do,
+>do : bigEnum
+
+    else,
+>else : bigEnum
+
+    enum,
+>enum : bigEnum
+
+    export,
+>export : bigEnum
+
+    extends,
+>extends : bigEnum
+
+    false,
+>false : bigEnum
+
+    finally,
+>finally : bigEnum
+
+    for,
+>for : bigEnum
+
+    function,
+>function : bigEnum
+
+    if,
+>if : bigEnum
+
+    import,
+>import : bigEnum
+
+    in,
+>in : bigEnum
+
+    instanceof,
+>instanceof : bigEnum
+
+    new,
+>new : bigEnum
+
+    null,
+>null : bigEnum
+
+    return,
+>return : bigEnum
+
+    super,
+>super : bigEnum
+
+    switch,
+>switch : bigEnum
+
+    this,
+>this : bigEnum
+
+    throw,
+>throw : bigEnum
+
+    true,
+>true : bigEnum
+
+    try,
+>try : bigEnum
+
+    typeof,
+>typeof : bigEnum
+
+    var,
+>var : bigEnum
+
+    void,
+>void : bigEnum
+
+    while,
+>while : bigEnum
+
+    with,
+>with : bigEnum
+}
+
+module bigModule {
+>bigModule : typeof bigModule
+
+    class constructor { }
+>constructor : constructor
+
+    class implements { }
+>implements : implements
+
+    class interface { }
+>interface : interface
+
+    class let { }
+>let : let
+
+    class module { }
+>module : module
+
+    class package { }
+>package : package
+
+    class private { }
+>private : private
+
+    class protected { }
+>protected : protected
+
+    class public { }
+>public : public
+
+    class set { }
+>set : set
+
+    class static { }
+>static : static
+
+    class get { }
+>get : get
+
+    class yield { }
+>yield : yield
+
+    class declare { }
+>declare : declare
+}

@@ -1,0 +1,23 @@
+=== tests/cases/compiler/recursiveClassInstantiationsWithDefaultConstructors.ts ===
+var a = new TypeScript2.MemberNameArray()
+>a : MemberNameArray
+>new TypeScript2.MemberNameArray() : MemberNameArray
+>TypeScript2.MemberNameArray : typeof MemberNameArray
+>TypeScript2 : typeof TypeScript2
+>MemberNameArray : typeof MemberNameArray
+
+module TypeScript2 {
+>TypeScript2 : typeof TypeScript2
+
+export class MemberName {
+>MemberName : MemberName
+
+public prefix: string = "";
+>prefix : string
+}
+export class MemberNameArray extends MemberName {
+>MemberNameArray : MemberNameArray
+>MemberName : MemberName
+}
+}
+

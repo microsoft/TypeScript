@@ -1,0 +1,18 @@
+=== tests/cases/conformance/statements/tryStatements/tryStatements.ts ===
+function fn() {
+>fn : () => void
+
+    try {
+
+    } catch (x) {
+>x : any
+
+        var x: any;
+>x : any
+    }
+
+    try { } finally { }
+
+    try { }catch(z){ } finally { }
+>z : any
+}

@@ -1,0 +1,12 @@
+=== tests/cases/compiler/ambientFundule.ts ===
+declare function f();
+>f : typeof f
+
+declare module f { var x }
+>f : typeof f
+>x : any
+
+declare function f(x);
+>f : typeof f
+>x : any
+

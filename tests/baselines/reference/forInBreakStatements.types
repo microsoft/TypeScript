@@ -1,0 +1,70 @@
+=== tests/cases/conformance/statements/breakStatements/forInBreakStatements.ts ===
+for(var x in {}) {
+>x : any
+>{} : {}
+
+    break;
+}
+
+ONE:
+for(var x in {}) {
+>x : any
+>{} : {}
+
+    break ONE;
+}
+
+TWO:
+THREE:
+for(var x in {}) {
+>x : any
+>{} : {}
+
+    break THREE;
+}
+
+FOUR:
+for(var x in {}) {
+>x : any
+>{} : {}
+
+    FIVE:
+    for(var x in {}) {
+>x : any
+>{} : {}
+
+        break FOUR;
+    }
+}
+
+for(var x in {}) {
+>x : any
+>{} : {}
+
+    SIX:
+    for(var x in {}) break SIX;
+>x : any
+>{} : {}
+}
+
+SEVEN:
+for (var x in {}) for (var x in {}) for (var x in {}) break SEVEN;
+>x : any
+>{} : {}
+>x : any
+>{} : {}
+>x : any
+>{} : {}
+
+EIGHT:
+for (var x in {}){
+>x : any
+>{} : {}
+
+    var fn = function () { }
+>fn : () => void
+>function () { } : () => void
+
+    break EIGHT;
+}
+

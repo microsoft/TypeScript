@@ -1,0 +1,26 @@
+=== tests/cases/compiler/library_StringSlice.ts ===
+// String.prototype.slice can have zero, one, or two arguments
+String.prototype.slice();
+>String.prototype.slice() : string
+>String.prototype.slice : (start?: number, end?: number) => string
+>String.prototype : String
+>String : { (value?: any): string; new (value?: any): String; prototype: String; fromCharCode(...codes: number[]): string; }
+>prototype : String
+>slice : (start?: number, end?: number) => string
+
+String.prototype.slice(0);
+>String.prototype.slice(0) : string
+>String.prototype.slice : (start?: number, end?: number) => string
+>String.prototype : String
+>String : { (value?: any): string; new (value?: any): String; prototype: String; fromCharCode(...codes: number[]): string; }
+>prototype : String
+>slice : (start?: number, end?: number) => string
+
+String.prototype.slice(0,1);
+>String.prototype.slice(0,1) : string
+>String.prototype.slice : (start?: number, end?: number) => string
+>String.prototype : String
+>String : { (value?: any): string; new (value?: any): String; prototype: String; fromCharCode(...codes: number[]): string; }
+>prototype : String
+>slice : (start?: number, end?: number) => string
+

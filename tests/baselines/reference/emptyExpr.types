@@ -1,0 +1,5 @@
+=== tests/cases/compiler/emptyExpr.ts ===
+[{},]
+>[{},] : {}[]
+>{} : {}
+

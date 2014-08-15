@@ -1,0 +1,20 @@
+=== tests/cases/compiler/strictMode3.ts ===
+"use strict";
+
+class A {
+>A : A
+}
+
+class B extends A {
+>B : B
+>A : A
+}
+
+function foo() {
+>foo : () => any
+
+    return this.window;
+>this.window : any
+>this : any
+>window : any
+}

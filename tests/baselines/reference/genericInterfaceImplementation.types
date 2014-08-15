@@ -1,0 +1,42 @@
+=== tests/cases/compiler/genericInterfaceImplementation.ts ===
+interface IOption<A> {
+>IOption : IOption<A>
+>A : A
+
+    get(): A;
+>get : () => A
+>A : A
+
+    flatten<B>(): IOption<B>;
+>flatten : <B>() => IOption<B>
+>B : B
+>IOption : IOption
+>B : B
+}
+
+class None<T> implements IOption<T>{
+>None : None<T>
+>T : T
+>IOption : IOption
+>T : T
+
+    get(): T {
+>get : () => T
+>T : T
+
+        throw null;
+    }
+
+    flatten<U>() : IOption<U> {
+>flatten : <U>() => IOption<U>
+>U : U
+>IOption : IOption
+>U : U
+
+        return new None<U>();
+>new None<U>() : None<U>
+>None : typeof None
+>U : U
+    }
+}
+

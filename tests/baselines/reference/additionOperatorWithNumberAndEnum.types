@@ -1,0 +1,67 @@
+=== tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNumberAndEnum.ts ===
+enum E { a, b }
+>E : E
+>a : E
+>b : E
+
+var a: number;
+>a : number
+
+var b: E;
+>b : E
+>E : E
+
+var r1 = a + a;
+>r1 : number
+>a + a : number
+>a : number
+>a : number
+
+var r2 = a + b;
+>r2 : number
+>a + b : number
+>a : number
+>b : E
+
+var r3 = b + a;
+>r3 : number
+>b + a : number
+>b : E
+>a : number
+
+var r4 = b + b;
+>r4 : number
+>b + b : number
+>b : E
+>b : E
+
+var r5 = 0 + a;
+>r5 : number
+>0 + a : number
+>a : number
+
+var r6 = E.a + 0;
+>r6 : number
+>E.a + 0 : number
+>E.a : E
+>E : typeof E
+>a : E
+
+var r7 = E.a + E.b;
+>r7 : number
+>E.a + E.b : number
+>E.a : E
+>E : typeof E
+>a : E
+>E.b : E
+>E : typeof E
+>b : E
+
+var r8 = E['a'] + E['b'];
+>r8 : number
+>E['a'] + E['b'] : number
+>E['a'] : E
+>E : typeof E
+>E['b'] : E
+>E : typeof E
+

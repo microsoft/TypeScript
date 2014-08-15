@@ -1,0 +1,31 @@
+=== tests/cases/compiler/promises.ts ===
+interface Promise<T> {
+>Promise : Promise<T>
+>T : T
+
+    then<U>(success?: (value: T) => U): Promise<U>;
+>then : { <U>(success?: (value: T) => U): Promise<U>; <U>(success?: (value: T) => Promise<U>): Promise<U>; }
+>U : U
+>success : (value: T) => U
+>value : T
+>T : T
+>U : U
+>Promise : Promise
+>U : U
+
+    then<U>(success?: (value: T) => Promise<U>): Promise<U>;
+>then : { <U>(success?: (value: T) => U): Promise<U>; <U>(success?: (value: T) => Promise<U>): Promise<U>; }
+>U : U
+>success : (value: T) => Promise<U>
+>value : T
+>T : T
+>Promise : Promise
+>U : U
+>Promise : Promise
+>U : U
+
+    value: T;
+>value : T
+>T : T
+}
+

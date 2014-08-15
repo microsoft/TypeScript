@@ -1,0 +1,14 @@
+=== tests/cases/compiler/enumCodeGenNewLines1.ts ===
+enum foo {
+>foo : foo
+
+  b = 1,
+>b : foo
+
+  c = 2,
+>c : foo
+
+  d = 3
+>d : foo
+}
+

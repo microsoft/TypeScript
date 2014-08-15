@@ -1,0 +1,19 @@
+=== tests/cases/compiler/collisionExportsRequireAndEnum.ts ===
+export enum require { // Error
+>require : require
+
+    _thisVal1,
+>_thisVal1 : require
+
+    _thisVal2,
+>_thisVal2 : require
+}
+export enum exports { // Error
+>exports : exports
+
+    _thisVal1,
+>_thisVal1 : exports
+
+    _thisVal2,
+>_thisVal2 : exports
+}

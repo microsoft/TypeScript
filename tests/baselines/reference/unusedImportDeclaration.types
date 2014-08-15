@@ -1,0 +1,38 @@
+=== tests/cases/compiler/unusedImportDeclaration_testerA.ts ===
+import B = require("unusedImportDeclaration_testerB");
+>B : typeof TesterB
+
+var thingy: B = {
+>thingy : TesterB
+>B : B
+>{
+    me: "A"
+} : { me: string; }
+
+    me: "A"
+>me : string
+
+};
+declare function foo(a: string): void;
+>foo : (a: string) => void
+>a : string
+
+foo("IN " + thingy.me + "!");
+>foo("IN " + thingy.me + "!") : void
+>foo : (a: string) => void
+>"IN " + thingy.me + "!" : string
+>"IN " + thingy.me : string
+>thingy.me : string
+>thingy : TesterB
+>me : string
+
+=== tests/cases/compiler/unusedImportDeclaration_testerB.ts ===
+class TesterB {
+>TesterB : TesterB
+
+    me: string;
+>me : string
+}
+export = TesterB;
+>TesterB : TesterB
+

@@ -1,0 +1,97 @@
+=== tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts ===
+module A {
+>A : typeof A
+
+    export class Point {
+>Point : Point
+
+        x: number;
+>x : number
+
+        y: number;
+>y : number
+    }
+}
+
+module A {
+>A : typeof A
+
+    class Point {
+>Point : Point
+
+        fromCarthesian(p: A.Point) {
+>fromCarthesian : (p: Point) => { x: number; y: number; }
+>p : Point
+>A : A
+>Point : Point
+
+            return { x: p.x, y: p.y };
+>{ x: p.x, y: p.y } : { x: number; y: number; }
+>x : number
+>p.x : number
+>p : Point
+>x : number
+>y : number
+>p.y : number
+>p : Point
+>y : number
+        }
+    }
+}
+
+// ensure merges as expected
+var p: { x: number; y: number; };
+>p : { x: number; y: number; }
+>x : number
+>y : number
+
+var p: A.Point;
+>p : { x: number; y: number; }
+>A : A
+>Point : Point
+
+module X.Y.Z {
+>X : typeof X
+>Y : typeof Y
+>Z : typeof Z
+
+    export class Line {
+>Line : Line
+
+        length: number;
+>length : number
+    }
+}
+
+module X {
+>X : typeof X
+
+    export module Y {
+>Y : typeof Y
+
+        export module Z {
+>Z : typeof Z
+
+            class Line {
+>Line : Line
+
+                name: string;
+>name : string
+            }
+        }
+    }
+}
+
+// ensure merges as expected
+var l: { length: number; }
+>l : { length: number; }
+>length : number
+
+var l: X.Y.Z.Line;
+>l : { length: number; }
+>X : X
+>Y : Y
+>Z : Z
+>Line : Line
+
+

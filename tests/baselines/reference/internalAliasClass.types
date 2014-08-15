@@ -1,0 +1,23 @@
+=== tests/cases/compiler/internalAliasClass.ts ===
+module a {
+>a : typeof a
+
+    export class c {
+>c : c
+    }
+}
+
+module c {
+>c : typeof c
+
+    import b = a.c;
+>b : typeof c
+>a : c
+>c : c
+
+    export var x: b = new b();
+>x : c
+>b : b
+>new b() : c
+>b : typeof c
+}

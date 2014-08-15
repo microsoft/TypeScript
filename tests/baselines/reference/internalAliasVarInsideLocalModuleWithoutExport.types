@@ -1,0 +1,21 @@
+=== tests/cases/compiler/internalAliasVarInsideLocalModuleWithoutExport.ts ===
+export module a {
+>a : typeof a
+
+    export var x = 10;
+>x : number
+}
+
+export module c {
+>c : typeof c
+
+    import b = a.x;
+>b : number
+>a : number
+>x : number
+
+    export var bVal = b;
+>bVal : number
+>b : number
+}
+

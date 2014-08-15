@@ -1,0 +1,16 @@
+=== tests/cases/compiler/B.ts ===
+import a = require('A');
+>a : typeof "tests/cases/compiler/A"
+
+import A = a.A;
+>A : typeof A
+>a : A
+>A : A
+
+export = A;
+>A : A
+
+=== tests/cases/compiler/A.ts ===
+export class A {
+>A : A
+}

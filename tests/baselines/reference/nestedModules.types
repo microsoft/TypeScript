@@ -1,0 +1,83 @@
+=== tests/cases/conformance/internalModules/moduleDeclarations/nestedModules.ts ===
+module A.B.C {
+>A : typeof A
+>B : typeof B
+>C : C
+
+    export interface Point {
+>Point : Point
+
+        x: number;
+>x : number
+
+        y: number;
+>y : number
+    }
+}
+
+module A {
+>A : typeof A
+
+    export module B {
+>B : typeof B
+
+        var Point: C.Point = { x: 0, y: 0 }; // bug 832088: could not find module 'C'
+>Point : Point
+>C : C
+>Point : Point
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>y : number
+    }
+}
+
+module M2.X {
+>M2 : typeof M2
+>X : typeof X
+
+    export interface Point {
+>Point : Point
+
+        x: number; y: number;
+>x : number
+>y : number
+    }
+}
+
+module M2 {
+>M2 : typeof M2
+
+    export module X {
+>X : typeof X
+
+        export var Point: number;
+>Point : number
+    }
+}
+
+var m = M2.X;
+>m : typeof X
+>M2.X : typeof X
+>M2 : typeof M2
+>X : typeof X
+
+var point: number;
+>point : number
+
+var point = m.Point;
+>point : number
+>m.Point : number
+>m : typeof X
+>Point : number
+
+var p: { x: number; y: number; }
+>p : { x: number; y: number; }
+>x : number
+>y : number
+
+var p: M2.X.Point;
+>p : { x: number; y: number; }
+>M2 : M2
+>X : X
+>Point : Point
+

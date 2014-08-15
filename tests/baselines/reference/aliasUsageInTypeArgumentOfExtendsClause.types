@@ -1,0 +1,53 @@
+=== tests/cases/compiler/aliasUsageInTypeArgumentOfExtendsClause_main.ts ===
+import Backbone = require("aliasUsageInTypeArgumentOfExtendsClause_backbone");
+>Backbone : typeof "tests/cases/compiler/aliasUsageInTypeArgumentOfExtendsClause_backbone"
+
+import moduleA = require("aliasUsageInTypeArgumentOfExtendsClause_moduleA");
+>moduleA : typeof "tests/cases/compiler/aliasUsageInTypeArgumentOfExtendsClause_moduleA"
+
+interface IHasVisualizationModel {
+>IHasVisualizationModel : IHasVisualizationModel
+
+    VisualizationModel: typeof Backbone.Model;
+>VisualizationModel : typeof Model
+>Backbone : typeof "tests/cases/compiler/aliasUsageInTypeArgumentOfExtendsClause_backbone"
+>Model : typeof Model
+}
+class C<T extends IHasVisualizationModel> {
+>C : C<T>
+>T : T
+>IHasVisualizationModel : IHasVisualizationModel
+
+    x: T;
+>x : T
+>T : T
+}
+class D extends C<IHasVisualizationModel> {
+>D : D
+>C : C
+>IHasVisualizationModel : IHasVisualizationModel
+
+    x = moduleA;
+>x : typeof "tests/cases/compiler/aliasUsageInTypeArgumentOfExtendsClause_moduleA"
+>moduleA : typeof "tests/cases/compiler/aliasUsageInTypeArgumentOfExtendsClause_moduleA"
+}
+=== tests/cases/compiler/aliasUsageInTypeArgumentOfExtendsClause_backbone.ts ===
+export class Model {
+>Model : Model
+
+    public someData: string;
+>someData : string
+}
+
+=== tests/cases/compiler/aliasUsageInTypeArgumentOfExtendsClause_moduleA.ts ===
+import Backbone = require("aliasUsageInTypeArgumentOfExtendsClause_backbone");
+>Backbone : typeof "tests/cases/compiler/aliasUsageInTypeArgumentOfExtendsClause_backbone"
+
+export class VisualizationModel extends Backbone.Model {
+>VisualizationModel : VisualizationModel
+>Backbone : Backbone
+>Model : Model
+
+    // interesting stuff here
+}
+

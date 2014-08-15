@@ -1,0 +1,24 @@
+=== tests/cases/compiler/namespaces2.ts ===
+module A {
+>A : typeof A
+
+    export module B {
+>B : typeof B
+
+        export class C { }
+>C : C
+    }
+}
+
+var c: A.B.C = new A.B.C();
+>c : C
+>A : A
+>B : B
+>C : C
+>new A.B.C() : C
+>A.B.C : typeof C
+>A.B : typeof B
+>A : typeof A
+>B : typeof B
+>C : typeof C
+

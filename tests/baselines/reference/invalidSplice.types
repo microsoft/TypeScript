@@ -1,0 +1,8 @@
+=== tests/cases/compiler/invalidSplice.ts ===
+var arr = [].splice(0,3,4,5);
+>arr : any[]
+>[].splice(0,3,4,5) : any[]
+>[].splice : { (start: number): any[]; (start: number, deleteCount: number, ...items: any[]): any[]; }
+>[] : undefined[]
+>splice : { (start: number): any[]; (start: number, deleteCount: number, ...items: any[]): any[]; }
+

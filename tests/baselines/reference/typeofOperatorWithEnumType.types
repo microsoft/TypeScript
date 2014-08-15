@@ -1,0 +1,88 @@
+=== tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithEnumType.ts ===
+// typeof  operator on enum type
+
+enum ENUM { };
+>ENUM : ENUM
+
+enum ENUM1 { 1, 2, "" };
+>ENUM1 : ENUM1
+
+// enum type var
+var ResultIsString1 = typeof ENUM;
+>ResultIsString1 : string
+>typeof ENUM : string
+>ENUM : typeof ENUM
+
+var ResultIsString2 = typeof ENUM1;
+>ResultIsString2 : string
+>typeof ENUM1 : string
+>ENUM1 : typeof ENUM1
+
+// enum type expressions
+var ResultIsString3 = typeof ENUM1[0];
+>ResultIsString3 : string
+>typeof ENUM1[0] : string
+>ENUM1[0] : string
+>ENUM1 : typeof ENUM1
+
+var ResultIsString4 = typeof (ENUM[0] + ENUM1[1]);
+>ResultIsString4 : string
+>typeof (ENUM[0] + ENUM1[1]) : string
+>(ENUM[0] + ENUM1[1]) : string
+>ENUM[0] + ENUM1[1] : string
+>ENUM[0] : string
+>ENUM : typeof ENUM
+>ENUM1[1] : ENUM1
+>ENUM1 : typeof ENUM1
+
+// multiple typeof  operators
+var ResultIsString5 = typeof typeof ENUM;
+>ResultIsString5 : string
+>typeof typeof ENUM : string
+>typeof ENUM : string
+>ENUM : typeof ENUM
+
+var ResultIsString6 = typeof typeof typeof (ENUM[0] + ENUM1[1]);
+>ResultIsString6 : string
+>typeof typeof typeof (ENUM[0] + ENUM1[1]) : string
+>typeof typeof (ENUM[0] + ENUM1[1]) : string
+>typeof (ENUM[0] + ENUM1[1]) : string
+>(ENUM[0] + ENUM1[1]) : string
+>ENUM[0] + ENUM1[1] : string
+>ENUM[0] : string
+>ENUM : typeof ENUM
+>ENUM1[1] : ENUM1
+>ENUM1 : typeof ENUM1
+
+// miss assignment operators
+typeof ENUM;
+>typeof ENUM : string
+>ENUM : typeof ENUM
+
+typeof ENUM1;
+>typeof ENUM1 : string
+>ENUM1 : typeof ENUM1
+
+typeof ENUM1[1];
+>typeof ENUM1[1] : string
+>ENUM1[1] : ENUM1
+>ENUM1 : typeof ENUM1
+
+typeof ENUM, ENUM1;
+>typeof ENUM, ENUM1 : typeof ENUM1
+>typeof ENUM : string
+>ENUM : typeof ENUM
+>ENUM1 : typeof ENUM1
+
+// use typeof in type query
+enum z { };
+>z : z
+
+z: typeof ENUM;
+>typeof ENUM : string
+>ENUM : typeof ENUM
+
+z: typeof ENUM1;
+>typeof ENUM1 : string
+>ENUM1 : typeof ENUM1
+

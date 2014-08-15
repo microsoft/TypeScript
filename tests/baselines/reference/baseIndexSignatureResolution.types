@@ -1,0 +1,50 @@
+=== tests/cases/compiler/baseIndexSignatureResolution.ts ===
+class Base { private a: string; }
+>Base : Base
+>a : string
+
+class Derived extends Base { private b: string; }
+>Derived : Derived
+>Base : Base
+>b : string
+
+// Note - commmenting "extends Foo" prevents the error
+interface Foo {
+>Foo : Foo
+
+    [i: number]: Base;
+>i : number
+>Base : Base
+}
+interface FooOf<TBase extends Base> extends Foo {
+>FooOf : FooOf<TBase>
+>TBase : TBase
+>Base : Base
+>Foo : Foo
+
+    [i: number]: TBase;
+>i : number
+>TBase : TBase
+}
+var x: FooOf<Derived> = null;
+>x : FooOf<Derived>
+>FooOf : FooOf
+>Derived : Derived
+
+var y: Derived = x[0];
+>y : Derived
+>Derived : Derived
+>x[0] : Derived
+>x : FooOf<Derived>
+
+/*
+// Note - the equivalent for normal interface methods works fine:
+interface A {
+    foo(): Base;
+}
+interface B<TBase extends Base> extends A {
+    foo(): TBase;
+}
+var b: B<Derived> = null;
+var z: Derived = b.foo();
+*/
