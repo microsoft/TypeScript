@@ -924,6 +924,11 @@ module ts {
             }
 
             function emitIfStatement(node: IfStatement) {
+                // emit comments only if this is not else if statement as else if will take care of emitting the leading/trailing comments
+                if (node.parent.kind !== SyntaxKind.IfStatement || (<IfStatement>node.parent).elseStatement !== node) {
+                    emitLeadingComments(node);
+                }
+                emitLeadingComments(node);
                 var endPos = emitToken(SyntaxKind.IfKeyword, node.pos);
                 write(" ");
                 endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
@@ -932,6 +937,7 @@ module ts {
                 emitEmbeddedStatement(node.thenStatement);
                 if (node.elseStatement) {
                     writeLine();
+                    emitLeadingComments(node.elseStatement);
                     emitToken(SyntaxKind.ElseKeyword, node.thenStatement.end);
                     if (node.elseStatement.kind === SyntaxKind.IfStatement) {
                         write(" ");
@@ -941,6 +947,7 @@ module ts {
                         emitEmbeddedStatement(node.elseStatement);
                     }
                 }
+                emitTrailingComments(node);
             }
 
             function emitDoStatement(node: DoStatement) {
