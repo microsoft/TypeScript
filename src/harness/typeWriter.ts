@@ -77,13 +77,14 @@ class TypeWriterWalker {
         var actualPos = ts.skipTrivia(this.currentSourceFile.text, node.pos);
         var lineAndCharacter = this.currentSourceFile.getLineAndCharacterFromPosition(actualPos);
         var name = ts.getSourceTextOfNodeFromSourceText(this.currentSourceFile.text, node);
+        var isUnkownType = (<ts.IntrinsicType>type).intrinsicName === "unknown";
         
         this.results.push({
             line: lineAndCharacter.line - 1,
             column: lineAndCharacter.character,
             syntaxKind: ts.SyntaxKind[node.kind],
             identifierName: name,
-            type: this.checker.typeToString(type)
+            type: isUnkownType ? name : this.checker.typeToString(type)
         });
     }
 

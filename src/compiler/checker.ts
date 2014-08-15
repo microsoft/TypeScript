@@ -6737,6 +6737,21 @@ module ts {
             return false;
         }
 
+        function isInRightSideOfImportOrExportAssignment(node: EntityName) {
+            while (node.parent.kind === SyntaxKind.QualifiedName) {
+                node = node.parent;
+            }
+
+            if (node.parent.kind === SyntaxKind.ImportDeclaration) {
+                return (<ImportDeclaration>node.parent).entityName === node;
+            }
+            if (node.parent.kind === SyntaxKind.ExportAssignment) {
+                return (<ExportAssignment>node.parent).exportName === node;
+            }
+
+            return false;
+        }
+
         function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {
             return (node.parent.kind === SyntaxKind.QualifiedName || node.parent.kind === SyntaxKind.PropertyAccess) &&
                 (<QualifiedName>node.parent).right === node;
@@ -6745,6 +6760,11 @@ module ts {
         function getSymbolOfIdentifier(identifier: Identifier) {
             if (isDeclarationName(identifier)) {
                 return getSymbolOfNode(identifier.parent);
+            }
+
+            if (identifier.parent.kind === SyntaxKind.ExportAssignment) {
+                return resolveEntityName(/*location*/ identifier.parent.parent, identifier,
+                    /*all meanings*/ SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Import);
             }
 
             var entityName: Node = identifier;
@@ -6855,13 +6875,23 @@ module ts {
                 return getTypeOfSymbol(symbol);
             }
 
-            if (node.kind === SyntaxKind.Identifier && node.parent.kind === SyntaxKind.ExportAssignment) {
-                var symbol = getSymbolInfo(node);
+            if (isInRightSideOfImportOrExportAssignment(node)) {
+                var symbol: Symbol;
+                if (node.parent.kind === SyntaxKind.ExportAssignment) {
+                    symbol = getSymbolInfo(node);
+                }
+                else {
+                    // It is an import statement
+                    while (node.kind !== SyntaxKind.ImportDeclaration) {
+                        node = node.parent;
+                    }
+                    symbol = getSymbolOfNode(node);
+                }
                 var declaredType = getDeclaredTypeOfSymbol(symbol);
                 return declaredType !== unknownType ? declaredType : getTypeOfSymbol(symbol);
             }
 
-            Debug.fail("Unhandled case in getTypeOfNode");
+            return unknownType;
         }
 
         function getTypeOfExpression(expr: Expression): Type {
