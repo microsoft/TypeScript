@@ -218,6 +218,7 @@ var N;
     }
     N.F2 = F2;
 })(N || (N = {}));
+// literals
 if (true) {
 }
 while (true) {
