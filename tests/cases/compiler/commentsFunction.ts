@@ -4,14 +4,14 @@
 
 /** This comment should appear for foo*/
 function foo() {
-}
+} /* trailing comment of function */
 foo();
 /** This is comment for function signature*/
 function fooWithParameters(/** this is comment about a*/a: string,
     /** this is comment for b*/
     b: number) {
     var d = a;
-}
+} // trailing comment of function
 fooWithParameters("a", 10);
 /** fooFunc
  * comment
@@ -36,3 +36,5 @@ function blah2(a: string /* single line multiple trailing comments */ /* second 
 function blah3(a: string // trailing commen single line
     ) {
 }
+
+lambdaFoo = (a, b) => a * b; // This is trailing comment that will not get emitted since we are not emitting statement comments yet

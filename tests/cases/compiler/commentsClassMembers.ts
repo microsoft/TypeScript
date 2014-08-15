@@ -9,7 +9,7 @@ class c1 {
     /** sum with property*/
     public p2(/** number to add*/b: number) {
         return this.p1 + b;
-    }
+    } /* trailing comment of method*/
     /** getter property*/
     public get p3() {
         return this.p2(this.p1);
@@ -23,7 +23,7 @@ class c1 {
     /** sum with property*/
     private pp2(/** number to add*/b: number) {
         return this.p1 + b;
-    }
+    } // trailing comment of method
     /** getter property*/
     private get pp3() {
         return this.pp2(this.pp1);
