@@ -25,6 +25,34 @@ module ts {
 
         var emptyArray: any[] = [];
         var emptySymbols: SymbolTable = {};
+        
+        var checker: TypeChecker = {
+            getProgram: () => program,
+            getDiagnostics: getDiagnostics,
+            getGlobalDiagnostics: getGlobalDiagnostics,
+            getNodeCount: () => sum(program.getSourceFiles(), "nodeCount"),
+            getIdentifierCount: () => sum(program.getSourceFiles(), "identifierCount"),
+            getSymbolCount: () => sum(program.getSourceFiles(), "symbolCount"),
+            getTypeCount: () => typeCount,
+            checkProgram: checkProgram,
+            emitFiles: invokeEmitter,
+            getSymbolOfNode: getSymbolOfNode,
+            getParentOfSymbol: getParentOfSymbol,
+            getTypeOfSymbol: getTypeOfSymbol,
+            getDeclaredTypeOfSymbol: getDeclaredTypeOfSymbol,
+            getPropertiesOfType: getPropertiesOfType,
+            getPropertyOfType: getPropertyOfType,
+            getSignaturesOfType: getSignaturesOfType,
+            getIndexTypeOfType: getIndexTypeOfType,
+            getReturnTypeOfSignature: getReturnTypeOfSignature,
+            resolveEntityName: resolveEntityName,
+            getSymbolsInScope: getSymbolsInScope,
+            getSymbolInfo: getSymbolInfo,
+            getTypeOfExpression: getTypeOfExpression,
+            typeToString: typeToString,
+            symbolToString: symbolToString,
+            getAugmentedPropertiesOfApparentType: getAugmentedPropertiesOfApparentType
+        };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
         var argumentsSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "arguments");
@@ -70,34 +98,6 @@ module ts {
 
         var diagnostics: Diagnostic[] = [];
         var diagnosticsModified: boolean = false;
-
-        var checker: TypeChecker = {
-            getProgram: () => program,
-            getDiagnostics: getDiagnostics,
-            getGlobalDiagnostics: getGlobalDiagnostics,
-            getNodeCount: () => sum(program.getSourceFiles(), "nodeCount"),
-            getIdentifierCount: () => sum(program.getSourceFiles(), "identifierCount"),
-            getSymbolCount: () => sum(program.getSourceFiles(), "symbolCount"),
-            getTypeCount: () => typeCount,
-            checkProgram: checkProgram,
-            emitFiles: invokeEmitter,
-            getSymbolOfNode: getSymbolOfNode,
-            getParentOfSymbol: getParentOfSymbol,
-            getTypeOfSymbol: getTypeOfSymbol,
-            getDeclaredTypeOfSymbol: getDeclaredTypeOfSymbol,
-            getPropertiesOfType: getPropertiesOfType,
-            getPropertyOfType: getPropertyOfType,
-            getSignaturesOfType: getSignaturesOfType,
-            getIndexTypeOfType: getIndexTypeOfType,
-            getReturnTypeOfSignature: getReturnTypeOfSignature,
-            resolveEntityName: resolveEntityName,
-            getSymbolsInScope: getSymbolsInScope,
-            getSymbolInfo: getSymbolInfo,
-            getTypeOfExpression: getTypeOfExpression,
-            typeToString: typeToString,
-            symbolToString: symbolToString,
-            getAugmentedPropertiesOfApparentType: getAugmentedPropertiesOfApparentType
-        };
 
         function addDiagnostic(diagnostic: Diagnostic) {
             diagnostics.push(diagnostic);
