@@ -1932,6 +1932,11 @@ module ts {
 
             function emitLeadingDeclarationComments(node: Declaration) {
                 var leadingComments = getLeadingComments(currentSourceFile.text, node.pos);
+                // If the leading comments start on different line than the start of node, write new line
+                if (leadingComments && leadingComments.length && node.pos !== leadingComments[0].pos &&
+                    currentSourceFile.getLineAndCharacterFromPosition(node.pos).line !== currentSourceFile.getLineAndCharacterFromPosition(leadingComments[0].pos).line) {
+                    writer.writeLine();
+                }
                 emitComments(leadingComments, writer, writeComment);
             }
 

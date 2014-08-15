@@ -107,7 +107,8 @@ var SimpleConstructor = (function () {
 exports.SimpleConstructor = SimpleConstructor;
 var ConstructorWithParameters = (function () {
     /** This is comment for function signature*/
-    function ConstructorWithParameters(a, /** this is comment for b*/
+    function ConstructorWithParameters(a, 
+        /** this is comment for b*/
         b) {
         var d = a;
     }
@@ -169,7 +170,8 @@ var GlobalSimpleConstructor = (function () {
 })();
 var GlobalConstructorWithParameters = (function () {
     /** This is comment for function signature*/
-    function GlobalConstructorWithParameters(a, /** this is comment for b*/
+    function GlobalConstructorWithParameters(a, 
+        /** this is comment for b*/
         b) {
         var d = a;
     }
