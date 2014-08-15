@@ -1954,14 +1954,17 @@ module ts {
             }
 
             function emitLeadingDeclarationComments(node: Node) {
-                var leadingComments = getLeadingComments(currentSourceFile.text, node.pos);
-                emitNewLineBeforeLeadingComments(node, leadingComments, writer);
-                // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
-                emitComments(leadingComments, /*trailingSeparator*/ true, writer, writeComment);
+                // Emit the leading comments only if the parent's pos doesnt match because parent should take care of emitting these comments
+                if (node.parent.kind === SyntaxKind.SourceFile || node.pos !== node.parent.pos) {
+                    var leadingComments = getLeadingComments(currentSourceFile.text, node.pos);
+                    emitNewLineBeforeLeadingComments(node, leadingComments, writer);
+                    // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
+                    emitComments(leadingComments, /*trailingSeparator*/ true, writer, writeComment);
+                }
             }
 
             function emitTrailingDeclarationComments(node: Node) {
-                // Emit the trailing declaration comments only if the parent's end doesnt match
+                // Emit the trailing comments only if the parent's end doesnt match
                 if (node.parent.kind === SyntaxKind.SourceFile || node.end !== node.parent.end) {
                     var trailingComments = getTrailingComments(currentSourceFile.text, node.end);
                     // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
