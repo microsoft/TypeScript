@@ -3582,7 +3582,7 @@ module ts {
             getCompilerHost: () => host,
             getDiagnostics: getDiagnostics,
             getGlobalDiagnostics: getGlobalDiagnostics,
-            getTypeChecker: () => createTypeChecker(program),
+            getTypeChecker: fullTypeCheckMode => createTypeChecker(program, fullTypeCheckMode),
             getCommonSourceDirectory: () => commonSourceDirectory,
         };
         return program;

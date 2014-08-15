@@ -11,7 +11,11 @@ module ts {
     var nextNodeId = 1;
     var nextMergeId = 1;
 
-    export function createTypeChecker(program: Program): TypeChecker {
+    /// fullTypeCheck denotes if this instance of the typechecker will be used to get semantic diagnostics.
+    /// If fullTypeCheck === true - then typechecker should do every possible check to produce all errors
+    /// If fullTypeCheck === false - typechecker can shortcut and skip checks that only produce errors.
+    /// NOTE: checks that somehow affects decisions being made during typechecking should be executed in both cases.
+    export function createTypeChecker(program: Program, fullTypeCheck: boolean): TypeChecker {
 
         var Symbol = objectAllocator.getSymbolConstructor();
         var Type = objectAllocator.getTypeConstructor();
@@ -57,7 +61,6 @@ module ts {
         var globalRegExpType: ObjectType;
 
         var stringLiteralTypes: Map<StringLiteralType> = {};
-
         var emitExtends = false;
 
         var mergedSymbols: Symbol[] = [];
@@ -1319,7 +1322,7 @@ module ts {
             return type;
 
             function checkImplicitAny(type: Type) {
-                if (!program.getCompilerOptions().noImplicitAny) {
+                if (!fullTypeCheck || !program.getCompilerOptions().noImplicitAny) {
                     return;
                 }
                 // We need to have ended up with 'any', 'any[]', 'any[][]', etc.
@@ -4067,7 +4070,7 @@ module ts {
                 var typeArgNode = typeArguments[i];
                 var typeArgument = getTypeFromTypeNode(typeArgNode);
                 var constraint = getConstraintOfTypeParameter(typeParameters[i]);
-                if (constraint) {
+                if (constraint && fullTypeCheck) {
                     checkTypeAssignableTo(typeArgument, constraint, typeArgNode, Diagnostics.Type_0_does_not_satisfy_the_constraint_1_Colon, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
                 }
                 result.push(typeArgument);
@@ -4283,7 +4286,7 @@ module ts {
         function checkTypeAssertion(node: TypeAssertion): Type {
             var exprType = checkExpression(node.operand);
             var targetType = getTypeFromTypeNode(node.type);
-            if (targetType !== unknownType) {
+            if (fullTypeCheck && targetType !== unknownType) {
                 var widenedType = getWidenedType(exprType);
                 if (!(isTypeAssignableTo(exprType, targetType) || isTypeAssignableTo(targetType, widenedType))) {
                     checkTypeAssignableTo(targetType, widenedType, node, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other_Colon, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
@@ -4317,7 +4320,7 @@ module ts {
                 var unwidenedType = checkAndMarkExpression(func.body, contextualMapper);
                 var widenedType = getWidenedType(unwidenedType);
 
-                if (program.getCompilerOptions().noImplicitAny && widenedType !== unwidenedType && getInnermostTypeOfNestedArrayTypes(widenedType) === anyType) {
+                if (fullTypeCheck && program.getCompilerOptions().noImplicitAny && widenedType !== unwidenedType && getInnermostTypeOfNestedArrayTypes(widenedType) === anyType) {
                     error(func, Diagnostics.Function_expression_which_lacks_return_type_annotation_implicitly_has_an_0_return_type, typeToString(widenedType));
                 }
 
@@ -4339,7 +4342,7 @@ module ts {
                 var widenedType = getWidenedType(commonType);
 
                 // Check and report for noImplicitAny if the best common type implicitly gets widened to an 'any'/arrays-of-'any' type.
-                if (program.getCompilerOptions().noImplicitAny && widenedType !== commonType && getInnermostTypeOfNestedArrayTypes(widenedType) === anyType) {
+                if (fullTypeCheck && program.getCompilerOptions().noImplicitAny && widenedType !== commonType && getInnermostTypeOfNestedArrayTypes(widenedType) === anyType) {
                     var typeName = typeToString(widenedType);
 
                     if (func.name) {
@@ -4419,6 +4422,10 @@ module ts {
         // must have at least one return statement somewhere in its body.
         // An exception to this rule is if the function implementation consists of a single 'throw' statement.
         function checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(func: FunctionDeclaration, returnType: Type): void {
+            if (!fullTypeCheck) {
+                return;
+            }
+
             // Functions that return 'void' or 'any' don't need any return expressions.
             if (returnType === voidType || returnType === anyType) {
                 return;
@@ -4477,7 +4484,7 @@ module ts {
                     }
                 }
             }
-            if (!(links.flags & NodeCheckFlags.TypeChecked)) {
+            if (fullTypeCheck && !(links.flags & NodeCheckFlags.TypeChecked)) {
                 checkSignatureDeclaration(node);
                 if (node.type) {
                     checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
@@ -4722,7 +4729,7 @@ module ts {
             }
 
             function checkAssignmentOperator(valueType: Type): void {
-                if (operator >= SyntaxKind.FirstAssignment && operator <= SyntaxKind.LastAssignment) {
+                if (fullTypeCheck && operator >= SyntaxKind.FirstAssignment && operator <= SyntaxKind.LastAssignment) {
                     // TypeScript 1.0 spec (April 2014): 4.17
                     // An assignment of the form
                     //    VarExpr = ValueExpr
@@ -4836,28 +4843,32 @@ module ts {
         // DECLARATION AND STATEMENT TYPE CHECKING
 
         function checkTypeParameter(node: TypeParameterDeclaration) {
-            checkTypeNameIsReserved(node.name, Diagnostics.Type_parameter_name_cannot_be_0);
             checkSourceElement(node.constraint);
-            checkTypeParameterHasIllegalReferencesInConstraint(node);
+            if (fullTypeCheck) {
+                checkTypeParameterHasIllegalReferencesInConstraint(node);
+                checkTypeNameIsReserved(node.name, Diagnostics.Type_parameter_name_cannot_be_0);
+            }
             // TODO: Check multiple declarations are identical
         }
 
         function checkParameter(parameterDeclaration: ParameterDeclaration) {
             checkVariableDeclaration(parameterDeclaration);
 
-            checkCollisionWithIndexVariableInGeneratedCode(parameterDeclaration, parameterDeclaration.name);
+            if (fullTypeCheck) {
+                checkCollisionWithIndexVariableInGeneratedCode(parameterDeclaration, parameterDeclaration.name);
 
-            if (parameterDeclaration.flags & (NodeFlags.Public | NodeFlags.Private) && !(parameterDeclaration.parent.kind === SyntaxKind.Constructor && (<ConstructorDeclaration>parameterDeclaration.parent).body)) {
-                error(parameterDeclaration, Diagnostics.A_parameter_property_is_only_allowed_in_a_constructor_implementation);
-            }
-            if (parameterDeclaration.flags & NodeFlags.Rest) {
-                if (!isArrayType(getTypeOfSymbol(parameterDeclaration.symbol))) {
-                    error(parameterDeclaration, Diagnostics.A_rest_parameter_must_be_of_an_array_type);
+                if (parameterDeclaration.flags & (NodeFlags.Public | NodeFlags.Private) && !(parameterDeclaration.parent.kind === SyntaxKind.Constructor && (<ConstructorDeclaration>parameterDeclaration.parent).body)) {
+                    error(parameterDeclaration, Diagnostics.A_parameter_property_is_only_allowed_in_a_constructor_implementation);
                 }
-            }
-            else {
-                if (parameterDeclaration.initializer && !(<FunctionDeclaration>parameterDeclaration.parent).body) {
-                    error(parameterDeclaration, Diagnostics.A_parameter_initializer_is_only_allowed_in_a_function_or_constructor_implementation);
+                if (parameterDeclaration.flags & NodeFlags.Rest) {
+                    if (!isArrayType(getTypeOfSymbol(parameterDeclaration.symbol))) {
+                        error(parameterDeclaration, Diagnostics.A_rest_parameter_must_be_of_an_array_type);
+                    }
+                }
+                else {
+                    if (parameterDeclaration.initializer && !(<FunctionDeclaration>parameterDeclaration.parent).body) {
+                        error(parameterDeclaration, Diagnostics.A_parameter_initializer_is_only_allowed_in_a_function_or_constructor_implementation);
+                    }
                 }
             }
 
@@ -4901,18 +4912,19 @@ module ts {
             if (node.type) {
                 checkSourceElement(node.type);
             }
-
-            checkCollisionWithCapturedSuperVariable(node, node.name);
-            checkCollisionWithCapturedThisVariable(node, node.name);
-            checkCollisionWithArgumentsInGeneratedCode(node);
-            if (program.getCompilerOptions().noImplicitAny && !node.type) {
-                switch (node.kind) {
-                    case SyntaxKind.ConstructSignature:
-                        error(node, Diagnostics.Construct_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type);
-                        break;
-                    case SyntaxKind.CallSignature:
-                        error(node, Diagnostics.Call_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type);
-                        break;
+            if (fullTypeCheck) {
+                checkCollisionWithCapturedSuperVariable(node, node.name);
+                checkCollisionWithCapturedThisVariable(node, node.name);
+                checkCollisionWithArgumentsInGeneratedCode(node);
+                if (program.getCompilerOptions().noImplicitAny && !node.type) {
+                    switch (node.kind) {
+                        case SyntaxKind.ConstructSignature:
+                            error(node, Diagnostics.Construct_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type);
+                            break;
+                        case SyntaxKind.CallSignature:
+                            error(node, Diagnostics.Call_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type);
+                            break;
+                    }
                 }
             }
 
@@ -4989,6 +5001,10 @@ module ts {
                 return;
             }
 
+            if (!fullTypeCheck) {
+                return;
+            }
+
             function isSuperCallExpression(n: Node): boolean {
                 return n.kind === SyntaxKind.CallExpression && (<CallExpression>n).func.kind === SyntaxKind.SuperKeyword;
             }
@@ -5053,29 +5069,31 @@ module ts {
         }
 
         function checkAccessorDeclaration(node: AccessorDeclaration) {
-            if (node.kind === SyntaxKind.GetAccessor) {
-                if (!isInAmbientContext(node) && node.body && !(bodyContainsAReturnStatement(<Block>node.body) || bodyContainsSingleThrowStatement(<Block>node.body))) {
-                    error(node.name, Diagnostics.A_get_accessor_must_return_a_value_or_consist_of_a_single_throw_statement);
-                }
-            }
-
-            // TypeScript 1.0 spec (April 2014): 8.4.3
-            // Accessors for the same member name must specify the same accessibility.
-            var otherKind = node.kind === SyntaxKind.GetAccessor ? SyntaxKind.SetAccessor : SyntaxKind.GetAccessor;
-            var otherAccessor = <AccessorDeclaration>getDeclarationOfKind(node.symbol, otherKind);
-            if (otherAccessor) {
-                var visibilityFlags = NodeFlags.Private | NodeFlags.Public;
-                if (((node.flags & visibilityFlags) !== (otherAccessor.flags & visibilityFlags))) {
-                    error(node.name, Diagnostics.Getter_and_setter_accessors_do_not_agree_in_visibility);
+            if (fullTypeCheck) {
+                if (node.kind === SyntaxKind.GetAccessor) {
+                    if (!isInAmbientContext(node) && node.body && !(bodyContainsAReturnStatement(<Block>node.body) || bodyContainsSingleThrowStatement(<Block>node.body))) {
+                        error(node.name, Diagnostics.A_get_accessor_must_return_a_value_or_consist_of_a_single_throw_statement);
+                    }
                 }
 
-                var thisType = getAnnotatedAccessorType(node);
-                var otherType = getAnnotatedAccessorType(otherAccessor);
-                // TypeScript 1.0 spec (April 2014): 4.5
-                // If both accessors include type annotations, the specified types must be identical.
-                if (thisType && otherType) {
-                    if (!isTypeIdenticalTo(thisType, otherType)) {
-                        error(node, Diagnostics.get_and_set_accessor_must_have_the_same_type);
+                // TypeScript 1.0 spec (April 2014): 8.4.3
+                // Accessors for the same member name must specify the same accessibility.
+                var otherKind = node.kind === SyntaxKind.GetAccessor ? SyntaxKind.SetAccessor : SyntaxKind.GetAccessor;
+                var otherAccessor = <AccessorDeclaration>getDeclarationOfKind(node.symbol, otherKind);
+                if (otherAccessor) {
+                    var visibilityFlags = NodeFlags.Private | NodeFlags.Public;
+                    if (((node.flags & visibilityFlags) !== (otherAccessor.flags & visibilityFlags))) {
+                        error(node.name, Diagnostics.Getter_and_setter_accessors_do_not_agree_in_visibility);
+                    }
+
+                    var thisType = getAnnotatedAccessorType(node);
+                    var otherType = getAnnotatedAccessorType(otherAccessor);
+                    // TypeScript 1.0 spec (April 2014): 4.5
+                    // If both accessors include type annotations, the specified types must be identical.
+                    if (thisType && otherType) {
+                        if (!isTypeIdenticalTo(thisType, otherType)) {
+                            error(node, Diagnostics.get_and_set_accessor_must_have_the_same_type);
+                        }
                     }
                 }
             }
@@ -5092,7 +5110,7 @@ module ts {
                 for (var i = 0; i < len; i++) {
                     checkSourceElement(node.typeArguments[i]);
                     var constraint = getConstraintOfTypeParameter((<TypeReference>type).target.typeParameters[i]);
-                    if (constraint) {
+                    if (fullTypeCheck && constraint) {
                         var typeArgument = (<TypeReference>type).typeArguments[i];
                         checkTypeAssignableTo(typeArgument, constraint, node, Diagnostics.Type_0_does_not_satisfy_the_constraint_1_Colon, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
                     }
@@ -5106,9 +5124,11 @@ module ts {
 
         function checkTypeLiteral(node: TypeLiteralNode) {
             forEach(node.members, checkSourceElement);
-            var type = getTypeFromTypeLiteralNode(node);
-            checkIndexConstraints(type);
-            checkTypeForDuplicateIndexSignatures(node);
+            if (fullTypeCheck) {
+                var type = getTypeFromTypeLiteralNode(node);
+                checkIndexConstraints(type);
+                checkTypeForDuplicateIndexSignatures(node);
+            }
         }
 
         function checkArrayType(node: ArrayTypeNode) {
@@ -5120,6 +5140,9 @@ module ts {
         }
 
         function checkSpecializedSignatureDeclaration(signatureDeclarationNode: SignatureDeclaration): void {
+            if (!fullTypeCheck) {
+                return;
+            }
             var signature = getSignatureFromDeclaration(signatureDeclarationNode);
             if (!signature.hasStringLiterals) {
                 return;
@@ -5173,7 +5196,10 @@ module ts {
             return flags & flagsToCheck;
         }
 
-        function checkFunctionOrConstructorSymbol(symbol: Symbol) {
+        function checkFunctionOrConstructorSymbol(symbol: Symbol): void {
+            if (!fullTypeCheck) {
+                return;
+            }
 
             function checkFlagAgreementBetweenOverloads(overloads: Declaration[], implementation: FunctionDeclaration, flagsToCheck: NodeFlags, someOverloadFlags: NodeFlags, allOverloadFlags: NodeFlags): void {
                 // Error if some overloads have a flag that is not shared by all overloads. To find the
@@ -5343,7 +5369,11 @@ module ts {
             }
         }
 
-        function checkExportsOnMergedDeclarations(node: Node) {
+        function checkExportsOnMergedDeclarations(node: Node): void {
+            if (!fullTypeCheck) {
+                return;
+            }
+
             var symbol: Symbol;
 
             // Exports should be checked only if enclosing module contains both exported and non exported declarations.
@@ -5413,7 +5443,7 @@ module ts {
             }
         }
 
-        function checkFunctionDeclaration(node: FunctionDeclaration) {
+        function checkFunctionDeclaration(node: FunctionDeclaration): void {
             checkSignatureDeclaration(node);
 
             var symbol = getSymbolOfNode(node);
@@ -5442,7 +5472,7 @@ module ts {
             }
 
             // If there is no body and no explicit return type, then report an error.
-            if (program.getCompilerOptions().noImplicitAny && !node.body && !node.type) {
+            if (fullTypeCheck && program.getCompilerOptions().noImplicitAny && !node.body && !node.type) {
                 // Ignore privates within ambient contexts; they exist purely for documentative purposes to avoid name clashing.
                 // (e.g. privates within .d.ts files do not expose type information)
                 if (!isPrivateWithinAmbient(node)) {
@@ -5629,36 +5659,38 @@ module ts {
 
         function checkVariableDeclaration(node: VariableDeclaration) {
             checkSourceElement(node.type);
-
             checkExportsOnMergedDeclarations(node);
 
-            var symbol = getSymbolOfNode(node);
-            
-            var typeOfValueDeclaration = getTypeOfVariableOrParameterOrProperty(symbol);
-            var type: Type;
-            var useTypeFromValueDeclaration = node === symbol.valueDeclaration;
-            if (useTypeFromValueDeclaration) {
-                type = typeOfValueDeclaration;
-            }
-            else {
-                type = getTypeOfVariableDeclaration(node);
-            }
+            if (fullTypeCheck) {
+                var symbol = getSymbolOfNode(node);
 
-            if (node.initializer) {
-                if (!(getNodeLinks(node.initializer).flags & NodeCheckFlags.TypeChecked)) {
-                    // Use default messages
-                    checkTypeAssignableTo(checkAndMarkExpression(node.initializer), type, node, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
+                var typeOfValueDeclaration = getTypeOfVariableOrParameterOrProperty(symbol);
+                var type: Type;
+                var useTypeFromValueDeclaration = node === symbol.valueDeclaration;
+                if (useTypeFromValueDeclaration) {
+                    type = typeOfValueDeclaration;
                 }
-            }
+                else {
+                    type = getTypeOfVariableDeclaration(node);
+                }
 
-            checkCollisionWithCapturedSuperVariable(node, node.name);
-            checkCollisionWithCapturedThisVariable(node, node.name);
-            if (!useTypeFromValueDeclaration) {
-                // TypeScript 1.0 spec (April 2014): 5.1
-                // Multiple declarations for the same variable name in the same declaration space are permitted,
-                // provided that each declaration associates the same type with the variable.
-                if (typeOfValueDeclaration !== unknownType && type !== unknownType && !isTypeIdenticalTo(typeOfValueDeclaration, type)) {
-                    error(node.name, Diagnostics.Subsequent_variable_declarations_must_have_the_same_type_Variable_0_must_be_of_type_1_but_here_has_type_2, identifierToString(node.name), typeToString(typeOfValueDeclaration), typeToString(type));
+
+                if (node.initializer) {
+                    if (!(getNodeLinks(node.initializer).flags & NodeCheckFlags.TypeChecked)) {
+                        // Use default messages
+                        checkTypeAssignableTo(checkAndMarkExpression(node.initializer), type, node, /*chainedMessage*/ undefined, /*terminalMessage*/ undefined);
+                    }
+                }
+
+                checkCollisionWithCapturedSuperVariable(node, node.name);
+                checkCollisionWithCapturedThisVariable(node, node.name);
+                if (!useTypeFromValueDeclaration) {
+                    // TypeScript 1.0 spec (April 2014): 5.1
+                    // Multiple declarations for the same variable name in the same declaration space are permitted,
+                    // provided that each declaration associates the same type with the variable.
+                    if (typeOfValueDeclaration !== unknownType && type !== unknownType && !isTypeIdenticalTo(typeOfValueDeclaration, type)) {
+                        error(node.name, Diagnostics.Subsequent_variable_declarations_must_have_the_same_type_Variable_0_must_be_of_type_1_but_here_has_type_2, identifierToString(node.name), typeToString(typeOfValueDeclaration), typeToString(type));
+                    }
                 }
             }
         }
@@ -5790,7 +5822,7 @@ module ts {
         function checkSwitchStatement(node: SwitchStatement) {
             var expressionType = checkExpression(node.expression);
             forEach(node.clauses, clause => {
-                if (clause.expression) {
+                if (fullTypeCheck && clause.expression) {
                     // TypeScript 1.0 spec (April 2014):5.9
                     // In a 'switch' statement, each 'case' expression must be of a type that is assignable to or from the type of the 'switch' expression.
                     var caseType = checkExpression(clause.expression);
@@ -5905,9 +5937,12 @@ module ts {
                 for (var i = 0; i < typeParameterDeclarations.length; i++) {
                     var node = typeParameterDeclarations[i];
                     checkTypeParameter(node);
-                    for (var j = 0; j < i; j++) {
-                        if (typeParameterDeclarations[j].symbol === node.symbol) {
-                            error(node.name, Diagnostics.Duplicate_identifier_0, identifierToString(node.name));
+
+                    if (fullTypeCheck) {
+                        for (var j = 0; j < i; j++) {
+                            if (typeParameterDeclarations[j].symbol === node.symbol) {
+                                error(node.name, Diagnostics.Duplicate_identifier_0, identifierToString(node.name));
+                            }
                         }
                     }
                 }
@@ -5927,39 +5962,45 @@ module ts {
                 checkTypeReference(node.baseType);
             }
             if (type.baseTypes.length) {
-                var baseType = type.baseTypes[0];
-                checkTypeAssignableTo(type, baseType, node.name, Diagnostics.Class_0_incorrectly_extends_base_class_1_Colon, Diagnostics.Class_0_incorrectly_extends_base_class_1);
-                var staticBaseType = getTypeOfSymbol(baseType.symbol);
-                checkTypeAssignableTo(staticType, getTypeWithoutConstructors(staticBaseType), node.name,
-                    Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1_Colon, Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
-                if (baseType.symbol !== resolveEntityName(node, node.baseType.typeName, SymbolFlags.Value)) {
-                    error(node.baseType, Diagnostics.Type_name_0_in_extends_clause_does_not_reference_constructor_function_for_0, typeToString(baseType));
+                if (fullTypeCheck) {
+                    var baseType = type.baseTypes[0];
+                    checkTypeAssignableTo(type, baseType, node.name, Diagnostics.Class_0_incorrectly_extends_base_class_1_Colon, Diagnostics.Class_0_incorrectly_extends_base_class_1);
+                    var staticBaseType = getTypeOfSymbol(baseType.symbol);
+                    checkTypeAssignableTo(staticType, getTypeWithoutConstructors(staticBaseType), node.name,
+                        Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1_Colon, Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
+                    if (baseType.symbol !== resolveEntityName(node, node.baseType.typeName, SymbolFlags.Value)) {
+                        error(node.baseType, Diagnostics.Type_name_0_in_extends_clause_does_not_reference_constructor_function_for_0, typeToString(baseType));
+                    }
+
+                    checkKindsOfPropertyMemberOverrides(type, baseType);
                 }
                 
                 // Check that base type can be evaluated as expression
                 checkExpression(node.baseType.typeName);
-
-                checkKindsOfPropertyMemberOverrides(type, baseType);
             }
             if (node.implementedTypes) {
                 forEach(node.implementedTypes, typeRefNode => {
                     checkTypeReference(typeRefNode);
-                    var t = getTypeFromTypeReferenceNode(typeRefNode);
-                    if (t !== unknownType) {
-                        var declaredType = (t.flags & TypeFlags.Reference) ? (<TypeReference>t).target : t;
-                        if (declaredType.flags & (TypeFlags.Class | TypeFlags.Interface)) {
-                            checkTypeAssignableTo(type, t, node.name, Diagnostics.Class_0_incorrectly_implements_interface_1_Colon, Diagnostics.Class_0_incorrectly_implements_interface_1);
-                        }
-                        else {
-                            error(typeRefNode, Diagnostics.A_class_may_only_implement_another_class_or_interface);
+                    if (fullTypeCheck) {
+                        var t = getTypeFromTypeReferenceNode(typeRefNode);
+                        if (t !== unknownType) {
+                            var declaredType = (t.flags & TypeFlags.Reference) ? (<TypeReference>t).target : t;
+                            if (declaredType.flags & (TypeFlags.Class | TypeFlags.Interface)) {
+                                checkTypeAssignableTo(type, t, node.name, Diagnostics.Class_0_incorrectly_implements_interface_1_Colon, Diagnostics.Class_0_incorrectly_implements_interface_1);
+                            }
+                            else {
+                                error(typeRefNode, Diagnostics.A_class_may_only_implement_another_class_or_interface);
+                            }
                         }
                     }
                 });
             }
-            checkIndexConstraints(type);
-            forEach(node.members, checkSourceElement);
 
-            checkTypeForDuplicateIndexSignatures(node);
+            forEach(node.members, checkSourceElement);
+            if (fullTypeCheck) {
+                checkIndexConstraints(type);
+                checkTypeForDuplicateIndexSignatures(node);
+            }
         }
 
         function getTargetSymbol(s: Symbol) {
@@ -6071,32 +6112,37 @@ module ts {
         }
 
         function checkInterfaceDeclaration(node: InterfaceDeclaration) {
-            checkTypeNameIsReserved(node.name, Diagnostics.Interface_name_cannot_be_0);
             checkTypeParameters(node.typeParameters);
-            checkExportsOnMergedDeclarations(node);
-            var symbol = getSymbolOfNode(node);
-            var firstInterfaceDecl = <InterfaceDeclaration>getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration);
-            if (symbol.declarations.length > 1) {
-                if (node !== firstInterfaceDecl && !areTypeParametersIdentical(firstInterfaceDecl.typeParameters, node.typeParameters)) {
-                    error(node.name, Diagnostics.All_declarations_of_an_interface_must_have_identical_type_parameters);
-                }
-            }
+            if (fullTypeCheck) {
+                checkTypeNameIsReserved(node.name, Diagnostics.Interface_name_cannot_be_0);
 
-            // Only check this symbol once
-            if (node === firstInterfaceDecl) {
-                var type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
-                // run subsequent checks only if first set succeeded
-                if (checkInheritedPropertiesAreIdentical(type, node.name)) {
-                    forEach(type.baseTypes, baseType => {
-                        checkTypeAssignableTo(type, baseType, node.name, Diagnostics.Interface_0_incorrectly_extends_interface_1_Colon, Diagnostics.Interface_0_incorrectly_extends_interface_1);
-                    });
-                    checkIndexConstraints(type);
+                checkExportsOnMergedDeclarations(node);
+                var symbol = getSymbolOfNode(node);
+                var firstInterfaceDecl = <InterfaceDeclaration>getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration);
+                if (symbol.declarations.length > 1) {
+                    if (node !== firstInterfaceDecl && !areTypeParametersIdentical(firstInterfaceDecl.typeParameters, node.typeParameters)) {
+                        error(node.name, Diagnostics.All_declarations_of_an_interface_must_have_identical_type_parameters);
+                    }
+                }
+
+                // Only check this symbol once
+                if (node === firstInterfaceDecl) {
+                    var type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
+                    // run subsequent checks only if first set succeeded
+                    if (checkInheritedPropertiesAreIdentical(type, node.name)) {
+                        forEach(type.baseTypes, baseType => {
+                            checkTypeAssignableTo(type, baseType, node.name, Diagnostics.Interface_0_incorrectly_extends_interface_1_Colon, Diagnostics.Interface_0_incorrectly_extends_interface_1);
+                        });
+                        checkIndexConstraints(type);
+                    }
                 }
             }
             forEach(node.baseTypes, checkTypeReference);
             forEach(node.members, checkSourceElement);
 
-            checkTypeForDuplicateIndexSignatures(node);
+            if (fullTypeCheck) {
+                checkTypeForDuplicateIndexSignatures(node);
+            }
         }
 
         function getConstantValue(node: Expression): number {
@@ -6117,6 +6163,9 @@ module ts {
         }
 
         function checkEnumDeclaration(node: EnumDeclaration) {
+            if (!fullTypeCheck) {
+                return;
+            }
             checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
             checkCollisionWithCapturedThisVariable(node, node.name);
             checkExportsOnMergedDeclarations(node);
@@ -6190,26 +6239,28 @@ module ts {
         }
 
         function checkModuleDeclaration(node: ModuleDeclaration) {
-            checkCollisionWithCapturedThisVariable(node, node.name);
-            checkExportsOnMergedDeclarations(node);
-            var symbol = getSymbolOfNode(node);
-            if (symbol.flags & SymbolFlags.ValueModule && symbol.declarations.length > 1 && !isInAmbientContext(node)) {
-                var classOrFunc = getFirstNonAmbientClassOrFunctionDeclaration(symbol);
-                if (classOrFunc) {
-                    if (getSourceFileOfNode(node) !== getSourceFileOfNode(classOrFunc)) {
-                        error(node.name, Diagnostics.A_module_declaration_cannot_be_in_a_different_file_from_a_class_or_function_with_which_it_is_merged);
-                    }
-                    else if (node.pos < classOrFunc.pos) {
-                        error(node.name, Diagnostics.A_module_declaration_cannot_be_located_prior_to_a_class_or_function_with_which_it_is_merged);
+            if (fullTypeCheck) {
+                checkCollisionWithCapturedThisVariable(node, node.name);
+                checkExportsOnMergedDeclarations(node);
+                var symbol = getSymbolOfNode(node);
+                if (symbol.flags & SymbolFlags.ValueModule && symbol.declarations.length > 1 && !isInAmbientContext(node)) {
+                    var classOrFunc = getFirstNonAmbientClassOrFunctionDeclaration(symbol);
+                    if (classOrFunc) {
+                        if (getSourceFileOfNode(node) !== getSourceFileOfNode(classOrFunc)) {
+                            error(node.name, Diagnostics.A_module_declaration_cannot_be_in_a_different_file_from_a_class_or_function_with_which_it_is_merged);
+                        }
+                        else if (node.pos < classOrFunc.pos) {
+                            error(node.name, Diagnostics.A_module_declaration_cannot_be_located_prior_to_a_class_or_function_with_which_it_is_merged);
+                        }
                     }
                 }
-            }
-            if (node.name.kind === SyntaxKind.StringLiteral) {
-                if (!isGlobalSourceFile(node.parent)) {
-                    error(node.name, Diagnostics.Ambient_external_modules_cannot_be_nested_in_other_modules);
-                }
-                if (isExternalModuleNameRelative(node.name.text)) {
-                    error(node.name, Diagnostics.Ambient_external_module_declaration_cannot_specify_relative_module_name);
+                if (node.name.kind === SyntaxKind.StringLiteral) {
+                    if (!isGlobalSourceFile(node.parent)) {
+                        error(node.name, Diagnostics.Ambient_external_modules_cannot_be_nested_in_other_modules);
+                    }
+                    if (isExternalModuleNameRelative(node.name.text)) {
+                        error(node.name, Diagnostics.Ambient_external_module_declaration_cannot_specify_relative_module_name);
+                    }
                 }
             }
             checkSourceElement(node.body);
@@ -6370,8 +6421,7 @@ module ts {
             }
         }
 
-        // Fully type check a source file and collect the relevant diagnostics. The fullTypeCheck flag is true during this
-        // operation, but otherwise is false when the compiler is used by the language service.
+        // Fully type check a source file and collect the relevant diagnostics.
         function checkSourceFile(node: SourceFile) {
             var links = getNodeLinks(node);
             if (!(links.flags & NodeCheckFlags.TypeChecked)) {
@@ -6398,7 +6448,9 @@ module ts {
             forEach(program.getSourceFiles(), checkSourceFile);
         }
 
-        function getSortedDiagnostics(): Diagnostic[] {
+        function getSortedDiagnostics(): Diagnostic[]{
+            Debug.assert(fullTypeCheck, "diagnostics are available only in the full typecheck mode");
+
             if (diagnosticsModified) {
                 diagnostics.sort(compareDiagnostics);
                 diagnostics = deduplicateSortedDiagnostics(diagnostics);
@@ -6407,7 +6459,8 @@ module ts {
             return diagnostics;
         }
 
-        function getDiagnostics(sourceFile?: SourceFile): Diagnostic[] {
+        function getDiagnostics(sourceFile?: SourceFile): Diagnostic[]{
+
             if (sourceFile) {
                 checkSourceFile(sourceFile);
                 return filter(getSortedDiagnostics(), d => d.file === sourceFile);

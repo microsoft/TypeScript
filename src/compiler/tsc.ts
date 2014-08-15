@@ -326,7 +326,7 @@ module ts {
             var reportStart = bindStart;
         }
         else {
-            var checker = program.getTypeChecker();
+            var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
             var checkStart = new Date().getTime();
             var semanticErrors = checker.getDiagnostics();
             var emitStart = new Date().getTime();
