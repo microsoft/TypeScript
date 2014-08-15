@@ -37,6 +37,7 @@ var DebugClass = (function () {
         i++;
         i++;
         i++;
+        // End Debugger Test Code
         return true;
     };
     return DebugClass;

@@ -13,7 +13,7 @@ f2(3+""); // ok + operator promotes
 
 //// [numberToString.js]
 function f1(n) {
-    return n;
+    return n; // error return type mismatch
 }
 function f2(s) {
 }

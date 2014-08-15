@@ -212,10 +212,10 @@ module ts {
             var writeEmittedFiles = writeJavaScriptFile;
 
             /** Emit leading comments of the declaration */
-            var emitLeadingComments = compilerOptions.removeComments ? (d: Declaration) => { } : emitLeadingDeclarationComments;
+            var emitLeadingComments = compilerOptions.removeComments ? (d: Node) => { } : emitLeadingDeclarationComments;
 
             /** Emit Trailing comments of the declaration */
-            var emitTrailingComments = compilerOptions.removeComments ? (d: Declaration) => { } : emitTrailingDeclarationComments;
+            var emitTrailingComments = compilerOptions.removeComments ? (d: Node) => { } : emitTrailingDeclarationComments;
 
             var writeComment = writeCommentRange;
 
@@ -1009,9 +1009,11 @@ module ts {
             }
 
             function emitReturnStatement(node: ReturnStatement) {
+                emitLeadingComments(node);
                 emitToken(SyntaxKind.ReturnKeyword, node.pos);
                 emitOptional(" ", node.expression);
                 write(";");
+                emitTrailingComments(node);
             }
 
             function emitWithStatement(node: WhileStatement) {
@@ -1947,14 +1949,14 @@ module ts {
                 }
             }
 
-            function emitLeadingDeclarationComments(node: Declaration) {
+            function emitLeadingDeclarationComments(node: Node) {
                 var leadingComments = getLeadingComments(currentSourceFile.text, node.pos);
                 emitNewLineBeforeLeadingComments(node, leadingComments, writer);
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
                 emitComments(leadingComments, /*trailingSeparator*/ true, writer, writeComment);
             }
 
-            function emitTrailingDeclarationComments(node: Declaration) {
+            function emitTrailingDeclarationComments(node: Node) {
                 // Emit the trailing declaration comments only if the parent's end doesnt match
                 if (node.parent.kind === SyntaxKind.SourceFile || node.end !== node.parent.end) {
                     var trailingComments = getTrailingComments(currentSourceFile.text, node.end);

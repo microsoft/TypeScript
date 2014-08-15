@@ -29,7 +29,7 @@ var Foo = (function () {
         this._store = store; // no repro if this is first line in class body
     }
     Foo.prototype.foo = function () {
-        return this._store.length;
+        return this._store.length; // shouldn't be an error
     };
     Foo.prototype.bar = function () {
         return this.store;
@@ -41,7 +41,7 @@ var Bar = (function () {
         this._store = store;
     }
     Bar.prototype.foo = function () {
-        return this._store.length;
+        return this._store.length; // shouldn't be an error
     };
     return Bar;
 })();

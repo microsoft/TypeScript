@@ -45,7 +45,7 @@ var C = (function () {
 })();
 var D = (function () {
     function D() {
-        return 1;
+        return 1; // error
     }
     return D;
 })();
@@ -57,7 +57,7 @@ var E = (function () {
 })();
 var F = (function () {
     function F() {
-        return { x: 1 };
+        return { x: 1 }; // error
     }
     return F;
 })();

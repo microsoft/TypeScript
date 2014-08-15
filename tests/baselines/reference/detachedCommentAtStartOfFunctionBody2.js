@@ -15,6 +15,9 @@ var TestFile = (function () {
     }
     TestFile.prototype.foo = function (message) {
         var _this = this;
+        /// <summary>Test summary</summary>
+        /// <param name="message" type="String" />
+        /// <returns type="Function" />
         return function () { return message + _this.name; };
     };
     return TestFile;

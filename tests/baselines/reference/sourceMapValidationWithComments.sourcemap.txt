@@ -237,7 +237,7 @@ sourceFile:sourceMapValidationWithComments.ts
 2 >        ^
 3 >         ^^
 4 >           ^
-5 >            ^^^^^^^^^->
+5 >            ^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >        
 2 >        i
@@ -248,14 +248,28 @@ sourceFile:sourceMapValidationWithComments.ts
 3 >Emitted(15, 12) Source(15, 12) + SourceIndex(0) name (DebugClass.debugFunc)
 4 >Emitted(15, 13) Source(15, 13) + SourceIndex(0) name (DebugClass.debugFunc)
 ---
->>>        return true;
+>>>        // End Debugger Test Code
 1->^^^^^^^^
+2 >        
+3 >        ^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+  >        // End Debugger Test Code
+  >
+  >
+  >        
+2 >        
+3 >        // End Debugger Test Code
+1->Emitted(16, 9) Source(19, 9) + SourceIndex(0) name (DebugClass.debugFunc)
+2 >Emitted(16, 9) Source(16, 9) + SourceIndex(0) name (DebugClass.debugFunc)
+3 >Emitted(16, 34) Source(16, 34) + SourceIndex(0) name (DebugClass.debugFunc)
+---
+>>>        return true;
+1 >^^^^^^^^
 2 >        ^^^^^^
 3 >              ^
 4 >               ^^^^
 5 >                   ^
-1->
-  >        // End Debugger Test Code
+1 >
   >
   >
   >        
@@ -263,11 +277,11 @@ sourceFile:sourceMapValidationWithComments.ts
 3 >               
 4 >               true
 5 >                   ;
-1->Emitted(16, 9) Source(19, 9) + SourceIndex(0) name (DebugClass.debugFunc)
-2 >Emitted(16, 15) Source(19, 15) + SourceIndex(0) name (DebugClass.debugFunc)
-3 >Emitted(16, 16) Source(19, 16) + SourceIndex(0) name (DebugClass.debugFunc)
-4 >Emitted(16, 20) Source(19, 20) + SourceIndex(0) name (DebugClass.debugFunc)
-5 >Emitted(16, 21) Source(19, 21) + SourceIndex(0) name (DebugClass.debugFunc)
+1 >Emitted(17, 9) Source(19, 9) + SourceIndex(0) name (DebugClass.debugFunc)
+2 >Emitted(17, 15) Source(19, 15) + SourceIndex(0) name (DebugClass.debugFunc)
+3 >Emitted(17, 16) Source(19, 16) + SourceIndex(0) name (DebugClass.debugFunc)
+4 >Emitted(17, 20) Source(19, 20) + SourceIndex(0) name (DebugClass.debugFunc)
+5 >Emitted(17, 21) Source(19, 21) + SourceIndex(0) name (DebugClass.debugFunc)
 ---
 >>>    };
 1 >^^^^
@@ -276,8 +290,8 @@ sourceFile:sourceMapValidationWithComments.ts
 1 >
   >    
 2 >    }
-1 >Emitted(17, 5) Source(20, 5) + SourceIndex(0) name (DebugClass.debugFunc)
-2 >Emitted(17, 6) Source(20, 6) + SourceIndex(0) name (DebugClass.debugFunc)
+1 >Emitted(18, 5) Source(20, 5) + SourceIndex(0) name (DebugClass.debugFunc)
+2 >Emitted(18, 6) Source(20, 6) + SourceIndex(0) name (DebugClass.debugFunc)
 ---
 >>>    return DebugClass;
 1->^^^^
@@ -285,8 +299,8 @@ sourceFile:sourceMapValidationWithComments.ts
 1->
   >
 2 >    }
-1->Emitted(18, 5) Source(21, 1) + SourceIndex(0) name (DebugClass)
-2 >Emitted(18, 22) Source(21, 2) + SourceIndex(0) name (DebugClass)
+1->Emitted(19, 5) Source(21, 1) + SourceIndex(0) name (DebugClass)
+2 >Emitted(19, 22) Source(21, 2) + SourceIndex(0) name (DebugClass)
 ---
 >>>})();
 1 >
@@ -318,9 +332,9 @@ sourceFile:sourceMapValidationWithComments.ts
   >         return true;
   >     }
   > }
-1 >Emitted(19, 1) Source(21, 1) + SourceIndex(0) name (DebugClass)
-2 >Emitted(19, 2) Source(21, 2) + SourceIndex(0) name (DebugClass)
-3 >Emitted(19, 2) Source(1, 1) + SourceIndex(0)
-4 >Emitted(19, 6) Source(21, 2) + SourceIndex(0)
+1 >Emitted(20, 1) Source(21, 1) + SourceIndex(0) name (DebugClass)
+2 >Emitted(20, 2) Source(21, 2) + SourceIndex(0) name (DebugClass)
+3 >Emitted(20, 2) Source(1, 1) + SourceIndex(0)
+4 >Emitted(20, 6) Source(21, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationWithComments.js.map

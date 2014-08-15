@@ -32,7 +32,7 @@ function getMaxWidth(elementNames) {
         return !e.isDisabled;
     });
     var widths = enabled.map(function (e) {
-        return e.xyxyxyx;
+        return e.xyxyxyx; // error expected here
     });
     var maxWidth = widths.reduce(function (a, b) {
         return a > b ? a : b;

@@ -22,7 +22,7 @@ var Foo = (function () {
         function inner() {
             var _this = this;
             console.log(_this);
-            return function (x) { return _this; };
+            return function (x) { return _this; }; // New scope.  So should inject new _this capture into function inner
         }
     };
     return Foo;

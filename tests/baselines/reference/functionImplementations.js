@@ -214,7 +214,7 @@ var b = function () {
 var a = function f() {
     return new Base();
     return new Derived();
-    return f();
+    return f(); // ?
 }();
 undefined === function () {
     throw undefined;

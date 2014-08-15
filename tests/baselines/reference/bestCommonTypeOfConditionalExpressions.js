@@ -75,5 +75,5 @@ var r8 = true ? function (x) {
 var r10 = true ? derived : derived2; // no error since we use the contextual type in BCT
 var r11 = true ? base : derived2;
 function foo5(t, u) {
-    return true ? t : u;
+    return true ? t : u; // BCT is Object
 }

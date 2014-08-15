@@ -101,19 +101,19 @@ var Foo = (function () {
         var _this = 10; // Local var. No this capture in x(), so no conflict.
         function inner(_this) {
             var _this = this;
-            return function (x) { return _this; };
+            return function (x) { return _this; }; // New scope.  So should inject new _this capture into function inner
         }
     };
     Foo.prototype.y = function () {
         var _this = this;
         var lamda = function (_this) {
-            return function (x) { return _this; };
+            return function (x) { return _this; }; // New scope.  So should inject new _this capture
         };
     };
     Foo.prototype.z = function (_this) {
         var _this = this;
         var lambda = function () {
-            return function (x) { return _this; };
+            return function (x) { return _this; }; // New scope.  So should inject new _this capture
         };
     };
     Foo.prototype.x1 = function () {
@@ -160,7 +160,7 @@ var Foo3 = (function () {
     Foo3.prototype.z = function (_this) {
         var _this = this;
         var lambda = function () {
-            return function (x) { return _this; };
+            return function (x) { return _this; }; // New scope.  So should inject new _this capture
         };
     };
     return Foo3;

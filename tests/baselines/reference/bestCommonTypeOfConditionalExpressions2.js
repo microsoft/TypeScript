@@ -61,7 +61,7 @@ function foo(t, u) {
     return true ? t : u;
 }
 function foo2(t, u) {
-    return true ? t : u;
+    return true ? t : u; // Ok because BCT(T, U) = U
 }
 function foo3(t, u) {
     return true ? t : u;

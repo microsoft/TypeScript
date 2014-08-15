@@ -252,6 +252,7 @@ var Editor;
                 return null;
             }
             else if (entry.isHead) {
+                // Can't remove the head of a list!
                 return null;
             }
             else {
