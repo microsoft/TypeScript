@@ -96,6 +96,7 @@ var ResultIsString11 = typeof (NUMBER + NUMBER);
 // multiple typeof  operators
 var ResultIsString12 = typeof typeof NUMBER;
 var ResultIsString13 = typeof typeof typeof (NUMBER + NUMBER);
+// miss assignment operators
 typeof 1;
 typeof NUMBER;
 typeof NUMBER1;

@@ -32,6 +32,7 @@ fn(a => { });
 
 //// [assignmentCompatability_checking-call-member-off-of-function-interface.js]
 var x;
+// Should fail
 x = '';
 x = [''];
 x = 4;
@@ -43,9 +44,11 @@ function f() {
 x = f;
 function fn(c) {
 }
+// Should Fail
 fn('');
 fn(['']);
 fn(4);
 fn({});
+// Should work
 fn(function (a) {
 });

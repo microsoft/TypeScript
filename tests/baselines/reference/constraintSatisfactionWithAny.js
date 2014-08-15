@@ -67,10 +67,12 @@ function foo4(x) {
 var a;
 foo(a);
 foo2(a);
+//foo3(a);
 foo4(a);
 var b;
 foo(b);
 foo2(b);
+//foo3<any>(b);
 foo4(b);
 //function foo5<T extends String, U extends T>(x: T, y: U): T { return null; }
 //foo5(a, a);

@@ -53,6 +53,7 @@ t = s;
 t = a2;
 a = s;
 a = a2;
+// errors
 t = function () { return 1; };
 t = function (x) {
     return '';
@@ -63,6 +64,7 @@ a = function (x) {
 };
 var s2;
 var a3;
+// these are errors
 t = s2;
 t = a3;
 t = function (x) { return 1; };

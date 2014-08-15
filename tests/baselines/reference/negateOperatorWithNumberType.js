@@ -77,6 +77,7 @@ var ResultIsNumber8 = -NUMBER1[0];
 var ResultIsNumber9 = -foo();
 var ResultIsNumber10 = -A.foo();
 var ResultIsNumber11 = -(NUMBER - NUMBER);
+// miss assignment operators
 -1;
 -NUMBER;
 -NUMBER1;

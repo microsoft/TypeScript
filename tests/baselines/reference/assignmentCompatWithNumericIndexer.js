@@ -58,10 +58,10 @@ var A = (function () {
 var a;
 var b;
 a = b;
-b = a;
+b = a; // error
 var b2;
 a = b2;
-b2 = a;
+b2 = a; // error
 var Generics;
 (function (Generics) {
     var A = (function () {
@@ -79,13 +79,13 @@ var Generics;
     function foo() {
         var a;
         var b;
-        a = b;
-        b = a;
+        a = b; // error
+        b = a; // error
         var b2;
-        a = b2;
-        b2 = a;
+        a = b2; // error
+        b2 = a; // error
         var b3;
-        a = b3;
-        b3 = a;
+        a = b3; // ok
+        b3 = a; // ok
     }
 })(Generics || (Generics = {}));

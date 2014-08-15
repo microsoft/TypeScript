@@ -31,7 +31,7 @@ var Foo = (function (_super) {
         _super.apply(this, arguments);
     }
     Foo.prototype.x = function () {
-        console.log(_super);
+        console.log(_super); // Error as this doesnt not resolve to user defined _super
     };
     return Foo;
 })(base);

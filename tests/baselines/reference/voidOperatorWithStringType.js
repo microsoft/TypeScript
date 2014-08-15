@@ -84,6 +84,7 @@ var ResultIsAny12 = void STRING.charAt(0);
 // multiple void  operators
 var ResultIsAny13 = void void STRING;
 var ResultIsAny14 = void void void (STRING + STRING);
+// miss assignment operators
 void "";
 void STRING;
 void STRING1;

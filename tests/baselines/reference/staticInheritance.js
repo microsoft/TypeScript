@@ -35,4 +35,4 @@ var B = (function (_super) {
     }
     return B;
 })(A);
-doThing(B);
+doThing(B); //OK

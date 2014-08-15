@@ -114,6 +114,7 @@ var ResultIsNumber19 = STRING1[0]--;
 var ResultIsNumber20 = foo()--;
 var ResultIsNumber21 = A.foo()--;
 var ResultIsNumber22 = (STRING + STRING)--;
+// miss assignment operators
 --"";
 --STRING;
 --STRING1;

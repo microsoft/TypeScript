@@ -112,6 +112,7 @@ var ResultIsBoolean19 = delete (undefined + undefined);
 // multiple delete  operators
 var ResultIsBoolean20 = delete delete ANY;
 var ResultIsBoolean21 = delete delete delete (ANY + ANY1);
+// miss assignment operators
 delete ANY;
 delete ANY1;
 delete ANY2[0];

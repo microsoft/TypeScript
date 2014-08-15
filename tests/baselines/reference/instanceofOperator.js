@@ -34,8 +34,10 @@ var Object = (function () {
 })();
 var obj;
 4 instanceof null;
+// Error and should be error
 obj instanceof 4;
 Object instanceof obj;
+// Error on left hand side
 null instanceof null;
 obj instanceof Object;
 undefined instanceof undefined;

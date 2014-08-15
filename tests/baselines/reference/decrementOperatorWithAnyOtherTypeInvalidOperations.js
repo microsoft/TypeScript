@@ -130,6 +130,7 @@ var ResultIsNumber27 = (null + null)--;
 var ResultIsNumber28 = (undefined + undefined)--;
 var ResultIsNumber29 = obj1.x--;
 var ResultIsNumber30 = obj1.y--;
+// miss assignment operators
 --ANY2;
 ANY2--;
 --ANY1--;

@@ -68,16 +68,19 @@ var exprBoolean2;
 var exprNumber2;
 var exprString2;
 var exprIsObject2;
+//Cond is a boolean type variable
 condBoolean ? exprAny1 : exprAny2;
 condBoolean ? exprBoolean1 : exprBoolean2;
 condBoolean ? exprNumber1 : exprNumber2;
 condBoolean ? exprString1 : exprString2;
 condBoolean ? exprIsObject1 : exprIsObject2;
+//Cond is a boolean type literal
 true ? exprAny1 : exprAny2;
 false ? exprBoolean1 : exprBoolean2;
 true ? exprNumber1 : exprNumber2;
 false ? exprString1 : exprString2;
 true ? exprIsObject1 : exprIsObject2;
+//Cond is a boolean type expression
 !true ? exprAny1 : exprAny2;
 typeof "123" == "string" ? exprBoolean1 : exprBoolean2;
 2 > 1 ? exprNumber1 : exprNumber2;

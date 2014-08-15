@@ -13,4 +13,4 @@ g = h // ok
 //// [assignmentCompatWithGenericCallSignatures3.js]
 var g;
 var h;
-g = h;
+g = h; // ok

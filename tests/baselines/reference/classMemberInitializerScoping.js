@@ -25,7 +25,7 @@ var aaa = 1;
 var CCC = (function () {
     function CCC(aaa) {
         this.y = aaa;
-        this.y = '';
+        this.y = ''; // was: error, cannot assign string to number
     }
     CCC.staticY = aaa; // This shouldnt be error
     return CCC;

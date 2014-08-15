@@ -73,11 +73,11 @@ var O;
 })(O || (O = {}));
 var e = x.g(new O.A()); // matches overload but bad assignment
 var y = x.f(3); // good
-y = x.f("nope");
+y = x.f("nope"); // can't assign number to string
 var z = x.g(x.g(3, 3)); // good
-z = x.g(2, 2, 2);
-z = x.g();
-z = x.g(new O.B());
-z = x.h(2, 2);
-z = x.h("hello", 0);
+z = x.g(2, 2, 2); // no match
+z = x.g(); // no match
+z = x.g(new O.B()); // ambiguous (up and down conversion)
+z = x.h(2, 2); // no match
+z = x.h("hello", 0); // good
 var v = x.g;

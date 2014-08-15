@@ -84,6 +84,7 @@ var ResultIsAny11 = void (NUMBER + NUMBER);
 // multiple void  operators
 var ResultIsAny12 = void void NUMBER;
 var ResultIsAny13 = void void void (NUMBER + NUMBER);
+// miss assignment operators
 void 1;
 void NUMBER;
 void NUMBER1;

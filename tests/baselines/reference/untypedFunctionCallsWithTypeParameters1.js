@@ -85,4 +85,4 @@ var r6 = z(1); // error
 var c4;
 c4(1);
 var c5;
-c5(1);
+c5(1); // error

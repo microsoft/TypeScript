@@ -44,6 +44,7 @@ var ResultIsAny4 = void (ENUM[0] + ENUM1[1]);
 // multiple void  operators
 var ResultIsAny5 = void void ENUM;
 var ResultIsAny6 = void void void (ENUM[0] + ENUM1[1]);
+// miss assignment operators
 void ENUM;
 void ENUM1;
 void ENUM1[1];

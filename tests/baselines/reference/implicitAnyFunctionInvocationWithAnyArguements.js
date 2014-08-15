@@ -54,6 +54,7 @@ function testObjLiteral(objLit) {
 function testFuncLiteral(funcLit) {
 }
 ;
+// this should not be an error
 testFunctionExprC2(function (v1, v2) { return 1; });
 testObjLiteral(objL);
 testFuncLiteral(funcL);

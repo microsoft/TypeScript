@@ -216,6 +216,7 @@ var a = function f() {
     return new Derived();
     return f(); // ?
 }();
+// FunctionExpression with non -void return type annotation with a single throw statement
 undefined === function () {
     throw undefined;
 };

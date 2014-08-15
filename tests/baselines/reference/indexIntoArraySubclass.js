@@ -7,4 +7,4 @@ r = 0; //error
 //// [indexIntoArraySubclass.js]
 var x2;
 var r = x2[0]; // string
-r = 0;
+r = 0; //error

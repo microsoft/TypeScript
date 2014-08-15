@@ -43,6 +43,7 @@ var BOOLEAN;
 var NUMBER;
 var STRING;
 var OBJECT;
+//The second operand type is any
 ANY, ANY;
 BOOLEAN, ANY;
 NUMBER, ANY;

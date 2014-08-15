@@ -27,7 +27,7 @@ var Foo = (function () {
     }
     Foo.prototype.bar = function () {
         var _this = this;
-        this.x;
+        this.x; // 'this' is type 'Foo'
         var f = function () { return _this.x; }; // 'this' should be type 'Foo' as well
         var p = this.y;
         return this;

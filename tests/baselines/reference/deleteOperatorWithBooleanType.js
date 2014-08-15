@@ -69,6 +69,7 @@ var ResultIsBoolean6 = delete foo();
 var ResultIsBoolean7 = delete A.foo();
 // multiple delete  operator
 var ResultIsBoolean8 = delete delete BOOLEAN;
+// miss assignment operators
 delete true;
 delete BOOLEAN;
 delete foo();

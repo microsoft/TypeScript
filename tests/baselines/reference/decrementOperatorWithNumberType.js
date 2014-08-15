@@ -62,6 +62,7 @@ var ResultIsNumber4 = --M.n;
 var ResultIsNumber5 = objA.a--;
 var ResultIsNumber6 = M.n--;
 var ResultIsNumber7 = NUMBER1[0]--;
+// miss assignment operators
 --NUMBER;
 --NUMBER1[0];
 --objA.a;

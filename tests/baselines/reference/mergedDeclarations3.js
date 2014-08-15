@@ -83,7 +83,7 @@ var M;
         foo.z = 1;
     })(foo || (foo = {}));
 })(M || (M = {}));
-M.foo();
-M.foo.x;
-M.foo.y;
-M.foo.z;
+M.foo(); // ok
+M.foo.x; // error
+M.foo.y; // ok
+M.foo.z; // error

@@ -105,6 +105,7 @@ var ResultIsNumber16 = +(ANY + ANY1);
 var ResultIsNumber17 = +(null + undefined);
 var ResultIsNumber18 = +(null + null);
 var ResultIsNumber19 = +(undefined + undefined);
+// miss assignment operators
 +ANY;
 +ANY1;
 +ANY2[0];

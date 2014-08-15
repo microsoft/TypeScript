@@ -22,9 +22,9 @@ var Colors;
 })(Colors || (Colors = {}));
 var x = 0 /* Red */; // type of 'x' should be 'Colors'
 var p = x.Green; // error
-x.toFixed();
+x.toFixed(); // ok
 // Now with generics
 function fill(f) {
-    f.Green;
-    f.toFixed();
+    f.Green; // error
+    f.toFixed(); // ok
 }

@@ -15,6 +15,6 @@ function dupe(x) {
 }
 function dupeAndGetDist(x) {
     var y = dupe(x); //<-- dupe has incorrect type here
-    y.getDist();
+    y.getDist(); //<-- this requires a missing constraint, but it's not caught
     return y;
 }

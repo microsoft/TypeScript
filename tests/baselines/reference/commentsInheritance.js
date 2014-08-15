@@ -176,6 +176,7 @@ var c1 = (function () {
 })();
 var i1_i;
 var c1_i = new c1();
+// assign to interface
 i1_i = c1_i;
 var c2 = (function () {
     /** c2 constructor*/
@@ -253,6 +254,7 @@ var c3 = (function (_super) {
 })(c2);
 var c2_i = new c2(10);
 var c3_i = new c3();
+// assign
 c2_i = c3_i;
 var c4 = (function (_super) {
     __extends(c4, _super);
@@ -264,6 +266,7 @@ var c4 = (function (_super) {
 var c4_i = new c4(10);
 var i2_i;
 var i3_i;
+// assign to interface
 i2_i = i3_i;
 
 

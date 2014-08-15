@@ -20,5 +20,6 @@ b = a;
 //// [assignmentCompatWithGenericCallSignatures2.js]
 var a;
 var b;
+// Both ok
 a = b;
 b = a;

@@ -69,6 +69,7 @@ var ResultIsAny6 = void foo();
 var ResultIsAny7 = void A.foo();
 // multiple void  operator
 var ResultIsAny8 = void void BOOLEAN;
+// miss assignment operators
 void true;
 void BOOLEAN;
 void foo();

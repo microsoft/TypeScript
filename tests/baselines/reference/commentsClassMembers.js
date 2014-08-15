@@ -406,6 +406,7 @@ var c1 = (function () {
         /** setter property 
     */
         set: function (value) {
+            /** setter */
             c1.b_s1 = c1.b_s2(value);
         },
         enumerable: true,

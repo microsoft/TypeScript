@@ -26,7 +26,7 @@ function f() {
 var y = f(); // error void fn
 var why = f(); // error void fn
 var w;
-w = f();
+w = f(); // error void fn
 var C = (function () {
     function C() {
     }

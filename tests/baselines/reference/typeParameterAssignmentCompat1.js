@@ -23,7 +23,7 @@ class C<T> {
 function f() {
     var x;
     var y;
-    x = y;
+    x = y; // should be an error
     return x;
 }
 var C = (function () {
@@ -32,7 +32,7 @@ var C = (function () {
     C.prototype.f = function () {
         var x;
         var y;
-        x = y;
+        x = y; // should be an error
         return x;
     };
     return C;

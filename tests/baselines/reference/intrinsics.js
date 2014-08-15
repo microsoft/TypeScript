@@ -26,7 +26,7 @@ var m1;
         return C;
     })();
 })(m1 || (m1 = {}));
-__proto__ = 0;
+__proto__ = 0; // Error, __proto__ not defined
 m1.__proto__ = 0;
 var Foo = (function () {
     function Foo() {

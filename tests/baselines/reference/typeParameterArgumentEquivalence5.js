@@ -11,6 +11,6 @@ function foo<T,U>() {
 function foo() {
     var x;
     var y;
-    x = y;
-    y = x;
+    x = y; // Should be an error
+    y = x; // Shound be an error
 }

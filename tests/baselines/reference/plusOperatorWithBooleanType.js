@@ -64,6 +64,7 @@ var ResultIsNumber4 = +objA.a;
 var ResultIsNumber5 = +M.n;
 var ResultIsNumber6 = +foo();
 var ResultIsNumber7 = +A.foo();
+// miss assignment operators
 +true;
 +BOOLEAN;
 +foo();

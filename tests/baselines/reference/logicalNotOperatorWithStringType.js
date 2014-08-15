@@ -84,6 +84,7 @@ var ResultIsBoolean12 = !STRING.charAt(0);
 // multiple ! operator
 var ResultIsBoolean13 = !!STRING;
 var ResultIsBoolean14 = !!!(STRING + STRING);
+// miss assignment operators
 !"";
 !STRING;
 !STRING1;

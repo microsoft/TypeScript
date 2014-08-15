@@ -111,7 +111,7 @@ var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived(y) {
         var a = 1;
-        _super.call(this);
+        _super.call(this); // ok
     }
     return Derived;
 })(Base);
@@ -120,14 +120,14 @@ var Derived2 = (function (_super) {
     function Derived2(y) {
         this.y = y;
         var a = 1;
-        _super.call(this);
+        _super.call(this); // error
     }
     return Derived2;
 })(Base);
 var Derived3 = (function (_super) {
     __extends(Derived3, _super);
     function Derived3(y) {
-        _super.call(this);
+        _super.call(this); // ok
         this.y = y;
         var a = 1;
     }
@@ -138,14 +138,14 @@ var Derived4 = (function (_super) {
     function Derived4(y) {
         this.a = 1;
         var b = 2;
-        _super.call(this);
+        _super.call(this); // error
     }
     return Derived4;
 })(Base);
 var Derived5 = (function (_super) {
     __extends(Derived5, _super);
     function Derived5(y) {
-        _super.call(this);
+        _super.call(this); // ok
         this.a = 1;
         var b = 2;
     }
@@ -156,7 +156,7 @@ var Derived6 = (function (_super) {
     function Derived6(y) {
         this.a = 1;
         var b = 2;
-        _super.call(this);
+        _super.call(this); // ok
     }
     return Derived6;
 })(Base);
@@ -166,14 +166,14 @@ var Derived7 = (function (_super) {
         this.a = 1;
         this.a = 3;
         this.b = 3;
-        _super.call(this);
+        _super.call(this); // error
     }
     return Derived7;
 })(Base);
 var Derived8 = (function (_super) {
     __extends(Derived8, _super);
     function Derived8(y) {
-        _super.call(this);
+        _super.call(this); // ok
         this.a = 1;
         this.a = 3;
         this.b = 3;
@@ -192,14 +192,14 @@ var Derived9 = (function (_super) {
         this.a = 1;
         this.a = 3;
         this.b = 3;
-        _super.call(this);
+        _super.call(this); // error
     }
     return Derived9;
 })(Base2);
 var Derived10 = (function (_super) {
     __extends(Derived10, _super);
     function Derived10(y) {
-        _super.call(this);
+        _super.call(this); // ok
         this.a = 1;
         this.a = 3;
         this.b = 3;

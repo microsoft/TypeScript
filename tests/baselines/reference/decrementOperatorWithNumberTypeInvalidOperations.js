@@ -87,6 +87,7 @@ var ResultIsNumber11 = --(NUMBER + NUMBER);
 var ResultIsNumber12 = foo()--;
 var ResultIsNumber13 = A.foo()--;
 var ResultIsNumber14 = (NUMBER + NUMBER)--;
+// miss assignment operator
 --1;
 --NUMBER1;
 --foo();

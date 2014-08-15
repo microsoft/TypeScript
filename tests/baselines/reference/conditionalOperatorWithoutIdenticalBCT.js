@@ -54,6 +54,8 @@ var B = (function (_super) {
 var x;
 var a;
 var b;
+//Expect to have compiler errors
+//Be not contextually typed
 true ? a : b;
 var result1 = true ? a : b;
 //Be contextually typed and and bct is not identical

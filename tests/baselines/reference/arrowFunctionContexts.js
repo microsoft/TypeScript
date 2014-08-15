@@ -120,6 +120,7 @@ var Derived = (function (_super) {
     }
     return Derived;
 })(Base);
+// Arrow function as function argument
 window.setTimeout(function () { return null; }, 100);
 // Arrow function as value in array literal
 var obj = function (n) { return ''; };
@@ -158,6 +159,7 @@ var M2;
         }
         return Derived;
     })(Base);
+    // Arrow function as function argument
     window.setTimeout(function () { return null; }, 100);
     // Arrow function as value in array literal
     var obj = function (n) { return ''; };

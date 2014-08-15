@@ -37,4 +37,7 @@ function blah3(a: string // trailing commen single line
     ) {
 }
 
-lambdaFoo = (a, b) => a * b; // This is trailing comment that will not get emitted since we are not emitting statement comments yet
+lambdaFoo = (a, b) => a * b; // This is trailing comment
+
+/*leading comment*/() => 0; // Needs to be wrapped in parens to be a valid expression (not declaration)
+/*leading comment*/(() => 0); //trailing comment

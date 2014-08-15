@@ -49,6 +49,7 @@ var ResultIsString4 = typeof (ENUM[0] + ENUM1[1]);
 // multiple typeof  operators
 var ResultIsString5 = typeof typeof ENUM;
 var ResultIsString6 = typeof typeof typeof (ENUM[0] + ENUM1[1]);
+// miss assignment operators
 typeof ENUM;
 typeof ENUM1;
 typeof ENUM1[1];

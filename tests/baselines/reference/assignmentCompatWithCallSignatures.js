@@ -66,6 +66,7 @@ a = function (x) {
 };
 var s2;
 var a3;
+// these are errors
 t = s2;
 t = a3;
 t = function (x) { return 1; };

@@ -27,7 +27,7 @@ var obj: { [x: string]: string; } = { x: 3, y: null }; // assignable because nul
 //// [widenedTypes.js]
 null instanceof (function () {
 });
-({}) instanceof null;
+({}) instanceof null; // Ok because null is a subtype of function
 null in {};
 "" in null;
 for (var a in null) {

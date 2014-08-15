@@ -9,8 +9,8 @@ foo((()=>{})()); // error
 var va = [(function () {
 })()]; // ok
 (function () {
-})();
+})(); // ok
 function foo(s) {
 }
 foo((function () {
-})());
+})()); // error

@@ -917,10 +917,12 @@ module ts {
 
             function emitExpressionStatement(node: ExpressionStatement) {
                 var isArrowExpression = node.expression.kind === SyntaxKind.ArrowFunction;
+                emitLeadingComments(node);
                 if (isArrowExpression) write("(");
                 emit(node.expression);
                 if (isArrowExpression) write(")");
                 write(";");
+                emitTrailingComments(node);
             }
 
             function emitIfStatement(node: IfStatement) {

@@ -50,6 +50,7 @@ var CLASS = (function () {
     }
     return CLASS;
 })();
+//The second operand type is Object
 ANY, OBJECT;
 BOOLEAN, OBJECT;
 NUMBER, OBJECT;
@@ -61,6 +62,7 @@ var resultIsObject2 = (BOOLEAN, OBJECT);
 var resultIsObject3 = (NUMBER, OBJECT);
 var resultIsObject4 = (STRING, OBJECT);
 var resultIsObject5 = (OBJECT, OBJECT);
+//Literal and expression
 null, OBJECT;
 ANY = null, OBJECT;
 true, {};

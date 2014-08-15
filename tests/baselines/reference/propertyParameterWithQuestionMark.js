@@ -19,5 +19,5 @@ var C = (function () {
 // x should not be an optional property
 var v = {}; // Should fail
 var v2;
-v = v2;
+v = v2; // Should fail
 var v3 = new C; // Should succeed

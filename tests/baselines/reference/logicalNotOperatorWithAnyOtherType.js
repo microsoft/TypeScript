@@ -110,6 +110,7 @@ var ResultIsBoolean19 = !(undefined + undefined);
 // multiple ! operators
 var ResultIsBoolean20 = !!ANY;
 var ResultIsBoolean21 = !!!(ANY + ANY1);
+// miss assignment operators
 !ANY;
 !ANY1;
 !ANY2[0];

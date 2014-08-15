@@ -80,8 +80,11 @@ var B = (function (_super) {
 var x;
 var a;
 var b;
+//Cond ? Expr1 : Expr2,  Expr1 is supertype
+//Be Not contextually typed
 true ? x : a;
 var result1 = true ? x : a;
+//Expr1 and Expr2 are literals
 true ? {} : 1;
 true ? { a: 1 } : { a: 2, b: 'string' };
 var result2 = true ? {} : 1;
@@ -89,8 +92,11 @@ var result3 = true ? { a: 1 } : { a: 2, b: 'string' };
 //Contextually typed
 var resultIsX1 = true ? x : a;
 var result4 = true ? function (m) { return m.propertyX; } : function (n) { return n.propertyA; };
+//Cond ? Expr1 : Expr2,  Expr2 is supertype
+//Be Not contextually typed
 true ? a : x;
 var result5 = true ? a : x;
+//Expr1 and Expr2 are literals
 true ? 1 : {};
 true ? { a: 2, b: 'string' } : { a: 1 };
 var result6 = true ? 1 : {};

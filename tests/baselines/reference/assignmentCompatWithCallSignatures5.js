@@ -111,35 +111,35 @@ var a16;
 var a17;
 var a18;
 var b;
-a = b;
-b = a;
+a = b; // ok
+b = a; // ok
 var b2;
-a2 = b2;
-b2 = a2;
+a2 = b2; // ok
+b2 = a2; // ok
 var b3;
-a3 = b3;
-b3 = a3;
+a3 = b3; // ok
+b3 = a3; // ok
 var b4;
-a4 = b4;
-b4 = a4;
+a4 = b4; // ok
+b4 = a4; // ok
 var b5;
-a5 = b5;
-b5 = a5;
+a5 = b5; // ok
+b5 = a5; // ok
 var b6;
-a6 = b6;
-b6 = a6;
+a6 = b6; // ok
+b6 = a6; // ok
 var b11;
-a11 = b11;
-b11 = a11;
+a11 = b11; // ok
+b11 = a11; // ok
 var b15;
-a15 = b15;
-b15 = a15;
+a15 = b15; // ok, T = U, T = V
+b15 = a15; // ok
 var b16;
-a15 = b16;
-b15 = a16;
+a15 = b16; // ok
+b15 = a16; // ok
 var b17;
-a17 = b17;
-b17 = a17;
+a17 = b17; // ok
+b17 = a17; // ok
 var b18;
-a18 = b18;
-b18 = a18;
+a18 = b18; // ok
+b18 = a18; // ok

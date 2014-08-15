@@ -71,11 +71,13 @@ var exprBoolean2;
 var exprNumber2;
 var exprString2;
 var exprIsObject2;
+//Cond is a string type variable
 condString ? exprAny1 : exprAny2;
 condString ? exprBoolean1 : exprBoolean2;
 condString ? exprNumber1 : exprNumber2;
 condString ? exprString1 : exprString2;
 condString ? exprIsObject1 : exprIsObject2;
+//Cond is a string type literal
 "" ? exprAny1 : exprAny2;
 "string" ? exprBoolean1 : exprBoolean2;
 'c' ? exprNumber1 : exprNumber2;

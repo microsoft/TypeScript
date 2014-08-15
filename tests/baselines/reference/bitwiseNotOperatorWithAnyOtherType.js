@@ -113,6 +113,7 @@ var ResultIsNumber18 = ~(undefined + undefined);
 // multiple ~ operators
 var ResultIsNumber19 = ~~ANY;
 var ResultIsNumber20 = ~~~(ANY + ANY1);
+//miss assignment operators
 ~ANY;
 ~ANY1;
 ~ANY2[0];

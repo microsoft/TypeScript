@@ -35,7 +35,10 @@ function blah3(a: string // trailing commen single line
     ) {
 }
 
-lambdaFoo = (a, b) => a * b; // This is trailing comment that will not get emitted since we are not emitting statement comments yet
+lambdaFoo = (a, b) => a * b; // This is trailing comment
+
+/*leading comment*/() => 0; // Needs to be wrapped in parens to be a valid expression (not declaration)
+/*leading comment*/(() => 0); //trailing comment
 
 //// [commentsFunction.js]
 /** This comment should appear for foo*/
@@ -68,7 +71,10 @@ function blah2(a /* single line multiple trailing comments */ /* second */) {
 function blah3(a // trailing commen single line
     ) {
 }
-lambdaFoo = function (a, b) { return a * b; };
+lambdaFoo = function (a, b) { return a * b; }; // This is trailing comment
+/*leading comment*/ (
+/*leading comment*/ function () { return 0; }); // Needs to be wrapped in parens to be a valid expression (not declaration)
+/*leading comment*/ (function () { return 0; }); //trailing comment
 
 
 //// [commentsFunction.d.ts]

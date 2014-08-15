@@ -96,6 +96,7 @@ var ResultIsNumber13 = foo()++;
 var ResultIsNumber14 = A.foo()++;
 var ResultIsNumber15 = objA.a++;
 var ResultIsNumber16 = M.n++;
+// miss assignment operators
 ++true;
 ++BOOLEAN;
 ++foo();

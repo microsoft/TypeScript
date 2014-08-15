@@ -13,4 +13,4 @@ declare class C { constructor(value: number); }
 //// [callOnInstance.js]
 var s1 = D(); // OK
 var s2 = (new D(1))();
-(new C(1))();
+(new C(1))(); // Error for calling an instance

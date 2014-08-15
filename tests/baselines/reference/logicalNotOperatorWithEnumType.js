@@ -42,6 +42,7 @@ var ResultIsBoolean3 = !(ENUM[1] + ENUM[2]);
 // multiple ! operators
 var ResultIsBoolean4 = !!ENUM;
 var ResultIsBoolean5 = !!!(ENUM[1] + ENUM[2]);
+// miss assignment operators
 !ENUM;
 !ENUM1;
 !ENUM[1];

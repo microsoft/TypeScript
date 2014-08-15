@@ -41,6 +41,7 @@ var BOOLEAN;
 var NUMBER;
 var STRING;
 var OBJECT;
+//The second operand type is boolean
 ANY, BOOLEAN;
 BOOLEAN, BOOLEAN;
 NUMBER, BOOLEAN;
@@ -52,6 +53,7 @@ var resultIsBoolean2 = (BOOLEAN, BOOLEAN);
 var resultIsBoolean3 = (NUMBER, BOOLEAN);
 var resultIsBoolean4 = (STRING, BOOLEAN);
 var resultIsBoolean5 = (OBJECT, BOOLEAN);
+//Literal and expression
 null, BOOLEAN;
 ANY = undefined, BOOLEAN;
 1, true;

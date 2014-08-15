@@ -80,6 +80,8 @@ function f6(n) {
 function f7(n, m) {
     if (n === void 0) { n = m; }
 }
+// FunctionExpression with non -void return type annotation with a throw, no return, and other code
+// Should be error but isn't
 undefined === function () {
     throw undefined;
     var x = 4;

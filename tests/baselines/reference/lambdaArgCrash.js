@@ -44,9 +44,12 @@ var __extends = this.__extends || function (d, b) {
 var Event = (function () {
     function Event() {
         this._listeners = [];
+        // TODO: remove
         this._listeners = [];
     }
     Event.prototype.add = function (listener) {
+        /// <summary>Registers a new listener for the event.</summary>
+        /// <param name="listener">The callback function to register.</param>
         this._listeners.push(listener);
     };
     return Event;

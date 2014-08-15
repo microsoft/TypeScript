@@ -56,5 +56,6 @@ function fooBar() {
 function fooFoo() {
     return 5;
 }
+// this should not be an error as the error is raised by expr above
 nullWidenFunction();
 undefinedWidenFunction();

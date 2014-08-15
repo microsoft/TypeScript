@@ -29,7 +29,7 @@ var x = 1;
 var C = (function () {
     function C(x) {
         this.b = x; // error, evaluated in scope of constructor, cannot reference x
-        x = 2;
+        x = 2; // error, x is string
     }
     return C;
 })();

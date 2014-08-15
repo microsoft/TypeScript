@@ -44,6 +44,7 @@ var ResultIsBoolean4 = delete (ENUM[0] + ENUM1[1]);
 // multiple delete  operators
 var ResultIsBoolean5 = delete delete ENUM;
 var ResultIsBoolean6 = delete delete delete (ENUM[0] + ENUM1[1]);
+// miss assignment operators
 delete ENUM;
 delete ENUM1;
 delete ENUM1[1];

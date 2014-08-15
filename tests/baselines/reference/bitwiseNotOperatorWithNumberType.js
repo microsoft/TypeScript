@@ -83,6 +83,7 @@ var ResultIsNumber11 = ~(NUMBER + NUMBER);
 // multiple ~ operators
 var ResultIsNumber12 = ~~NUMBER;
 var ResultIsNumber13 = ~~~(NUMBER + NUMBER);
+// miss assignment operators
 ~NUMBER;
 ~NUMBER1;
 ~foo();

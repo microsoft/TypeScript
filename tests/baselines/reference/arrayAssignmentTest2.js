@@ -123,16 +123,17 @@ var arr_i1_2 = [];
 var arr_c1_2 = [];
 var arr_c2_2 = [];
 var arr_c3 = [];
-arr_c3 = arr_c2_2;
-arr_c3 = arr_c1_2;
-arr_c3 = arr_i1_2;
-arr_any = f1;
+// "clean up error" occurs at this point
+arr_c3 = arr_c2_2; // should be an error - is
+arr_c3 = arr_c1_2; // should be an error - is
+arr_c3 = arr_i1_2; // should be an error - is
+arr_any = f1; // should be an error - is
 arr_any = function () {
     return null;
-};
-arr_any = o1;
-arr_any = a1;
-arr_any = c1;
-arr_any = c2;
-arr_any = c3;
-arr_any = i1;
+}; // should be an error - is
+arr_any = o1; // should be an error - is
+arr_any = a1; // should be ok - is
+arr_any = c1; // should be an error - is
+arr_any = c2; // should be an error - is
+arr_any = c3; // should be an error - is
+arr_any = i1; // should be an error - is

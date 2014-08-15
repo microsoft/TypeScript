@@ -141,6 +141,7 @@ var Sample;
                 function FindWidget(codeThing) {
                     this.codeThing = codeThing;
                     this.domNode = null;
+                    // scenario 1
                     codeThing.addWidget("addWidget", this);
                 }
                 FindWidget.prototype.gar = function (runner) {

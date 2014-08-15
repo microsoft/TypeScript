@@ -77,6 +77,7 @@ var ResultIsNumber9 = +foo();
 var ResultIsNumber10 = +A.foo();
 var ResultIsNumber11 = +(STRING + STRING);
 var ResultIsNumber12 = +STRING.charAt(0);
+// miss assignment operators
 +"";
 +STRING;
 +STRING1;

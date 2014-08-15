@@ -70,16 +70,19 @@ var exprBoolean2;
 var exprNumber2;
 var exprString2;
 var exprIsObject2;
+//Cond is an any type variable
 condAny ? exprAny1 : exprAny2;
 condAny ? exprBoolean1 : exprBoolean2;
 condAny ? exprNumber1 : exprNumber2;
 condAny ? exprString1 : exprString2;
 condAny ? exprIsObject1 : exprIsObject2;
+//Cond is an any type literal
 null ? exprAny1 : exprAny2;
 null ? exprBoolean1 : exprBoolean2;
 undefined ? exprNumber1 : exprNumber2;
 [null, undefined] ? exprString1 : exprString2;
 [null, undefined] ? exprIsObject1 : exprIsObject2;
+//Cond is an any type expression
 x.doSomeThing() ? exprAny1 : exprAny2;
 x("x") ? exprBoolean1 : exprBoolean2;
 x(x) ? exprNumber1 : exprNumber2;

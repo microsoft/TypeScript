@@ -26,8 +26,8 @@ module Generics {
 //// [assignmentCompatWithStringIndexer3.js]
 var a;
 var b1;
-a = b1;
-b1 = a;
+a = b1; // error
+b1 = a; // error
 var Generics;
 (function (Generics) {
     var A = (function () {
@@ -38,7 +38,7 @@ var Generics;
     function foo() {
         var a;
         var b;
-        a = b;
-        b = a;
+        a = b; // error
+        b = a; // error
     }
 })(Generics || (Generics = {}));

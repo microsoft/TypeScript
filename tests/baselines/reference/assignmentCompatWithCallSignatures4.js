@@ -154,8 +154,8 @@ var Errors;
         a7 = b7;
         b7 = a7;
         var b8;
-        a8 = b8;
-        b8 = a8;
+        a8 = b8; // error, { foo: number } and Base are incompatible
+        b8 = a8; // error, { foo: number } and Base are incompatible
         var b10;
         a10 = b10;
         b10 = a10;

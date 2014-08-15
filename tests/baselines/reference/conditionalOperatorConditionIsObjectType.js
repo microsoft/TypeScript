@@ -80,16 +80,19 @@ var C = (function () {
     return C;
 })();
 ;
+//Cond is an object type variable
 condObject ? exprAny1 : exprAny2;
 condObject ? exprBoolean1 : exprBoolean2;
 condObject ? exprNumber1 : exprNumber2;
 condObject ? exprString1 : exprString2;
 condObject ? exprIsObject1 : exprIsObject2;
+//Cond is an object type literal
 (function (a) { return a.length; }) ? exprAny1 : exprAny2;
 (function (a) { return a.length; }) ? exprBoolean1 : exprBoolean2;
 ({}) ? exprNumber1 : exprNumber2;
 ({ a: 1, b: "s" }) ? exprString1 : exprString2;
 ({ a: 1, b: "s" }) ? exprIsObject1 : exprIsObject2;
+//Cond is an object type expression
 foo() ? exprAny1 : exprAny2;
 new Date() ? exprBoolean1 : exprBoolean2;
 new C() ? exprNumber1 : exprNumber2;

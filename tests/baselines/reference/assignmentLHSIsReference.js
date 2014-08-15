@@ -36,6 +36,7 @@ function fn1(x2) {
 var x3;
 x3.a = value;
 x3['a'] = value;
+// parentheses, the contained expression is reference
 (x1) = value;
 function fn2(x4) {
     (x4) = value;

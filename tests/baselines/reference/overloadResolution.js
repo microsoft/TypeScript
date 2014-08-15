@@ -132,7 +132,8 @@ function fn1() {
 }
 var s = fn1(undefined);
 var s;
-fn1({});
+// No candidate overloads found
+fn1({}); // Error
 function fn2() {
     return undefined;
 }
@@ -140,8 +141,10 @@ var d = fn2(0, undefined);
 var d;
 // Generic and non - generic overload where generic overload is the only candidate when called without type arguments
 var s = fn2(0, '');
-fn2('', 0);
-fn2('', 0);
+// Generic and non - generic overload where non - generic overload is the only candidate when called with type arguments
+fn2('', 0); // Error
+// Generic and non - generic overload where non - generic overload is the only candidate when called without type arguments
+fn2('', 0); // OK
 function fn3() {
     return null;
 }
@@ -153,20 +156,24 @@ var n;
 var s = fn3(4);
 var s = fn3('', '', '');
 var n = fn3('', '', 3);
-fn3();
+// Generic overloads with differing arity called with type argument count that doesn't match any overload
+fn3(); // Error
 function fn4() {
 }
 fn4('', 3);
+fn4(3, ''); // Error
+fn4('', 3); // Error
 fn4(3, '');
-fn4('', 3);
-fn4(3, '');
+// Generic overloads with constraints called without type arguments but with types that satisfy the constraints
 fn4('', 3);
 fn4(3, '');
 fn4(3, undefined);
 fn4('', null);
-fn4(null, null);
-fn4(true, null);
-fn4(null, true);
+// Generic overloads with constraints called with type arguments that do not satisfy the constraints
+fn4(null, null); // Error
+// Generic overloads with constraints called without type arguments but with types that do not satisfy the constraints
+fn4(true, null); // Error
+fn4(null, true); // Error
 function fn5() {
     return undefined;
 }

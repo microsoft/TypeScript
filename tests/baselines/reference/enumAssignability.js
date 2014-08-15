@@ -68,10 +68,10 @@ var e = 0 /* A */;
 var f = 0 /* B */;
 e = f;
 f = e;
-e = 1;
-f = 1;
+e = 1; // ok
+f = 1; // ok
 var x = e; // ok
-x = f;
+x = f; // ok
 var Others;
 (function (Others) {
     var a = e; // ok

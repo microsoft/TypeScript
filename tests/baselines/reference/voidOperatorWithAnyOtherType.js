@@ -110,6 +110,7 @@ var ResultIsAny19 = void (undefined + undefined);
 // multiple void  operators
 var ResultIsAny20 = void void ANY;
 var ResultIsAny21 = void void void (ANY + ANY1);
+// miss assignment operators
 void ANY;
 void ANY1;
 void ANY2[0];

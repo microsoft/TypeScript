@@ -125,6 +125,7 @@ var ResultIsString19 = typeof (undefined + undefined);
 // multiple typeof  operators
 var ResultIsString20 = typeof typeof ANY;
 var ResultIsString21 = typeof typeof typeof (ANY + ANY1);
+// miss assignment operators
 typeof ANY;
 typeof ANY1;
 typeof ANY2[0];

@@ -37,8 +37,10 @@ var Derived = (function (_super) {
     }
     return Derived;
 })(Base);
+// Ok
 new Derived("", "");
 new Derived("");
 new Derived();
+// Errors
 new Derived("", 3);
 new Derived(3);

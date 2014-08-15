@@ -84,6 +84,7 @@ var ResultIsBoolean11 = !(NUMBER + NUMBER);
 // multiple ! operator
 var ResultIsBoolean12 = !!NUMBER;
 var ResultIsBoolean13 = !!!(NUMBER + NUMBER);
+// miss assignment operators
 !1;
 !NUMBER;
 !NUMBER1;

@@ -69,6 +69,7 @@ var ResultIsBoolean6 = !foo();
 var ResultIsBoolean7 = !A.foo();
 // multiple ! operators
 var ResultIsBoolean = !!BOOLEAN;
+// miss assignment operators
 !true;
 !BOOLEAN;
 !foo();

@@ -84,6 +84,7 @@ var ResultIsBoolean11 = delete (NUMBER + NUMBER);
 // multiple delete  operator
 var ResultIsBoolean12 = delete delete NUMBER;
 var ResultIsBoolean13 = delete delete delete (NUMBER + NUMBER);
+// miss assignment operators
 delete 1;
 delete NUMBER;
 delete NUMBER1;

@@ -153,7 +153,9 @@ var obj = {
     'literal property': 100
 };
 var anyVar = {};
+// Assign to a property access
 obj.y = 4;
+// Property access on value of type 'any'
 anyVar.x = anyVar.y = obj.x = anyVar.z;
 // Dotted property access of property that exists
 var aa = obj.x;

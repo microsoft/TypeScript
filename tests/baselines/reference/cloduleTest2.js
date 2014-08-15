@@ -61,8 +61,8 @@ var T3;
     })(m3d || (m3d = {}));
     var r = new m3d();
     r.foo();
-    r.bar();
-    r.y;
+    r.bar(); // error
+    r.y; // error
 })(T3 || (T3 = {}));
 var T4;
 (function (T4) {
@@ -72,8 +72,8 @@ var T4;
     })(m3d || (m3d = {}));
     var r = new m3d();
     r.foo();
-    r.bar();
-    r.y;
+    r.bar(); // error
+    r.y; // error
 })(T4 || (T4 = {}));
 var m3d;
 (function (m3d) {

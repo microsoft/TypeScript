@@ -98,6 +98,7 @@ var ResultIsNumber12 = -M.n;
 var ResultIsNumber13 = -foo();
 var ResultIsNumber14 = -A.foo();
 var ResultIsNumber15 = -(ANY - ANY1);
+// miss assignment operators
 -ANY;
 -ANY1;
 -ANY2[0];

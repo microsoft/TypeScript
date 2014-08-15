@@ -81,6 +81,7 @@ var ResultIsString6 = typeof foo();
 var ResultIsString7 = typeof A.foo();
 // multiple typeof  operator
 var ResultIsString8 = typeof typeof BOOLEAN;
+// miss assignment operators
 typeof true;
 typeof BOOLEAN;
 typeof foo();
