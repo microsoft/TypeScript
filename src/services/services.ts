@@ -1259,7 +1259,8 @@ module ts {
         // this checker is used to answer all LS questions except errors 
         var typeInfoResolver: TypeChecker;
         // the sole purpose of this checkes is to reutrn semantic diagnostics
-        var fullTypeCheckChecker: TypeChecker;
+        // creation is deferred - use getFullTypeCheckChecker to get instance
+        var fullTypeCheckChecker_doNotAccessDirectly: TypeChecker;
         var useCaseSensitivefilenames = false;
         var sourceFilesByName: Map<SourceFile> = {};
         var documentRegistry = documentRegistry;
@@ -1273,6 +1274,10 @@ module ts {
 
         function getSourceFile(filename: string): SourceFile {
             return lookUp(sourceFilesByName, filename);
+        }
+
+        function getFullTypeCheckChecker() {
+            return fullTypeCheckChecker_doNotAccessDirectly || (fullTypeCheckChecker_doNotAccessDirectly = program.getTypeChecker(/*fullTypeCheck*/ true));
         }
 
         function createCompilerHost(): CompilerHost {
@@ -1407,7 +1412,7 @@ module ts {
             // Now create a new compiler
             program = createProgram(hostfilenames, compilationSettings, createCompilerHost());
             typeInfoResolver = program.getTypeChecker(/*fullTypeCheckMode*/ false);
-            fullTypeCheckChecker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
+            fullTypeCheckChecker_doNotAccessDirectly = undefined;
         }
 
         /// Clean up any semantic caches that are not needed. 
@@ -1416,7 +1421,7 @@ module ts {
         function cleanupSemanticCache(): void {
             if (program) {
                 typeInfoResolver = program.getTypeChecker(/*fullTypeCheckMode*/ false);
-                fullTypeCheckChecker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
+                fullTypeCheckChecker_doNotAccessDirectly = undefined;
             }
         }
 
@@ -1441,7 +1446,7 @@ module ts {
 
             filename = TypeScript.switchToForwardSlashes(filename)
 
-            return fullTypeCheckChecker.getDiagnostics(getSourceFile(filename));
+            return getFullTypeCheckChecker().getDiagnostics(getSourceFile(filename));
         }
 
         function getCompilerOptionsDiagnostics() {
