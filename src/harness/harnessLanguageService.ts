@@ -175,7 +175,7 @@ module Harness.LanguageService {
         }
 
         public addDefaultLibrary() {
-            this.addScript("lib.d.ts", Harness.Compiler.libText);
+            this.addScript(Harness.Compiler.defaultLibFileName, Harness.Compiler.defaultLibSourceFile.text);
         }
 
         public getHostIdentifier(): string {

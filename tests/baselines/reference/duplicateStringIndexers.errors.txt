@@ -1,138 +1,47 @@
-==== tests/cases/conformance/types/members/duplicateStringIndexers.ts (52 errors) ====
+==== tests/cases/conformance/types/members/duplicateStringIndexers.ts (6 errors) ====
     // it is an error to have duplicate index signatures of the same kind in a type
     
-    interface Number {
-        [x: string]: string;
-        ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'toExponential' of type '(fractionDigits?: number) => string' is not assignable to string index type 'string'.
-        ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'toFixed' of type '(fractionDigits?: number) => string' is not assignable to string index type 'string'.
-        ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'toPrecision' of type '(precision?: number) => string' is not assignable to string index type 'string'.
-        ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'toString' of type '(radix?: number) => string' is not assignable to string index type 'string'.
-        [x: string]: string;
-        ~~~~~~~~~~~~~~~~~~~~
+    module test {
+        interface Number {
+            [x: string]: string;
+            [x: string]: string;
+            ~~~~~~~~~~~~~~~~~~~~
 !!! Duplicate string index signature.
-    }
+        }
     
-    interface String {
-        [x: string]: string;
-        ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'charAt' of type '(pos: number) => string' is not assignable to string index type 'string'.
-        ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'charCodeAt' of type '(index: number) => number' is not assignable to string index type 'string'.
-        ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'concat' of type '(...strings: string[]) => string' is not assignable to string index type 'string'.
-        ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'indexOf' of type '(searchString: string, position?: number) => number' is not assignable to string index type 'string'.
-        ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'lastIndexOf' of type '(searchString: string, position?: number) => number' is not assignable to string index type 'string'.
-        ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'length' of type 'number' is not assignable to string index type 'string'.
-        ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'localeCompare' of type '(that: string) => number' is not assignable to string index type 'string'.
-        ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'match' of type '{ (regexp: string): string[]; (regexp: RegExp): string[]; }' is not assignable to string index type 'string'.
-        ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'replace' of type '{ (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }' is not assignable to string index type 'string'.
-        ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'search' of type '{ (regexp: string): number; (regexp: RegExp): number; }' is not assignable to string index type 'string'.
-        ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'slice' of type '(start?: number, end?: number) => string' is not assignable to string index type 'string'.
-        ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'split' of type '{ (separator: string, limit?: number): string[]; (separator: RegExp, limit?: number): string[]; }' is not assignable to string index type 'string'.
-        ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'substr' of type '(from: number, length?: number) => string' is not assignable to string index type 'string'.
-        ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'substring' of type '(start: number, end?: number) => string' is not assignable to string index type 'string'.
-        ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'toLocaleLowerCase' of type '() => string' is not assignable to string index type 'string'.
-        ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'toLocaleUpperCase' of type '() => string' is not assignable to string index type 'string'.
-        ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'toLowerCase' of type '() => string' is not assignable to string index type 'string'.
-        ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'toString' of type '() => string' is not assignable to string index type 'string'.
-        ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'toUpperCase' of type '() => string' is not assignable to string index type 'string'.
-        ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'trim' of type '() => string' is not assignable to string index type 'string'.
-        [x: string]: string;
-        ~~~~~~~~~~~~~~~~~~~~
+        interface String {
+            [x: string]: string;
+            [x: string]: string;
+            ~~~~~~~~~~~~~~~~~~~~
 !!! Duplicate string index signature.
-    }
+        }
     
-    interface Array<T> {
-        [x: string]: T;
-        ~~~~~~~~~~~~~~~
-!!! Property 'concat' of type '{ <U extends T[]>(...items: U[]): T[]; (...items: T[]): T[]; }' is not assignable to string index type 'T'.
-        ~~~~~~~~~~~~~~~
-!!! Property 'every' of type '(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any) => boolean' is not assignable to string index type 'T'.
-        ~~~~~~~~~~~~~~~
-!!! Property 'filter' of type '(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any) => T[]' is not assignable to string index type 'T'.
-        ~~~~~~~~~~~~~~~
-!!! Property 'forEach' of type '(callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any) => void' is not assignable to string index type 'T'.
-        ~~~~~~~~~~~~~~~
-!!! Property 'indexOf' of type '(searchElement: T, fromIndex?: number) => number' is not assignable to string index type 'T'.
-        ~~~~~~~~~~~~~~~
-!!! Property 'join' of type '(separator?: string) => string' is not assignable to string index type 'T'.
-        ~~~~~~~~~~~~~~~
-!!! Property 'lastIndexOf' of type '(searchElement: T, fromIndex?: number) => number' is not assignable to string index type 'T'.
-        ~~~~~~~~~~~~~~~
-!!! Property 'length' of type 'number' is not assignable to string index type 'T'.
-        ~~~~~~~~~~~~~~~
-!!! Property 'map' of type '<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]' is not assignable to string index type 'T'.
-        ~~~~~~~~~~~~~~~
-!!! Property 'pop' of type '() => T' is not assignable to string index type 'T'.
-        ~~~~~~~~~~~~~~~
-!!! Property 'push' of type '(...items: T[]) => number' is not assignable to string index type 'T'.
-        ~~~~~~~~~~~~~~~
-!!! Property 'reduce' of type '{ (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }' is not assignable to string index type 'T'.
-        ~~~~~~~~~~~~~~~
-!!! Property 'reduceRight' of type '{ (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }' is not assignable to string index type 'T'.
-        ~~~~~~~~~~~~~~~
-!!! Property 'reverse' of type '() => T[]' is not assignable to string index type 'T'.
-        ~~~~~~~~~~~~~~~
-!!! Property 'shift' of type '() => T' is not assignable to string index type 'T'.
-        ~~~~~~~~~~~~~~~
-!!! Property 'slice' of type '(start?: number, end?: number) => T[]' is not assignable to string index type 'T'.
-        ~~~~~~~~~~~~~~~
-!!! Property 'some' of type '(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any) => boolean' is not assignable to string index type 'T'.
-        ~~~~~~~~~~~~~~~
-!!! Property 'sort' of type '(compareFn?: (a: T, b: T) => number) => T[]' is not assignable to string index type 'T'.
-        ~~~~~~~~~~~~~~~
-!!! Property 'splice' of type '{ (start: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }' is not assignable to string index type 'T'.
-        ~~~~~~~~~~~~~~~
-!!! Property 'toLocaleString' of type '() => string' is not assignable to string index type 'T'.
-        ~~~~~~~~~~~~~~~
-!!! Property 'toString' of type '() => string' is not assignable to string index type 'T'.
-        ~~~~~~~~~~~~~~~
-!!! Property 'unshift' of type '(...items: T[]) => number' is not assignable to string index type 'T'.
-        [x: string]: T;
-        ~~~~~~~~~~~~~~~
+        interface Array<T> {
+            [x: string]: T;
+            [x: string]: T;
+            ~~~~~~~~~~~~~~~
 !!! Duplicate string index signature.
-    }
+        }
     
-    class C {
-        [x: string]: string;
-        [x: string]: string;
-        ~~~~~~~~~~~~~~~~~~~~
+        class C {
+            [x: string]: string;
+            [x: string]: string;
+            ~~~~~~~~~~~~~~~~~~~~
 !!! Duplicate string index signature.
-    }
+        }
     
-    interface I {
-        [x: string]: string;
-        [x: string]: string;
-        ~~~~~~~~~~~~~~~~~~~~
+        interface I {
+            [x: string]: string;
+            [x: string]: string;
+            ~~~~~~~~~~~~~~~~~~~~
 !!! Duplicate string index signature.
-    }
+        }
     
-    var a: {
-        [x: string]: string;
-        [x: string]: string;
-        ~~~~~~~~~~~~~~~~~~~~
+        var a: {
+            [x: string]: string;
+            [x: string]: string;
+            ~~~~~~~~~~~~~~~~~~~~
 !!! Duplicate string index signature.
+        }
     }
-    
     

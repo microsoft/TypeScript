@@ -6,10 +6,10 @@
     ],
     "runTest": true,
     "resolvedInputFiles": [
-        "app.ts",
-        "main/consume.ts",
+        "lib.d.ts",
         "decl.ts",
-        "lib.d.ts"
+        "main/consume.ts",
+        "app.ts"
     ],
     "emittedFiles": [
         "decl.js",

@@ -10,6 +10,6 @@
 !!! Type '(...x: number[]) => void' is not assignable to type '(x: number[], y: string) => void':
 !!!   Types of parameters 'x' and 'x' are incompatible:
 !!!     Type 'number' is not assignable to type 'number[]':
-!!!       Property 'concat' is missing in type 'Number'.
+!!!       Property 'length' is missing in type 'Number'.
     n([4], 'foo');
     

@@ -6,10 +6,10 @@
     ],
     "baselineCheck": true,
     "resolvedInputFiles": [
-        "useModule.ts",
-        "m5.ts",
+        "lib.d.ts",
         "m4.ts",
-        "lib.d.ts"
+        "m5.ts",
+        "useModule.ts"
     ],
     "emittedFiles": [
         "m4.js",

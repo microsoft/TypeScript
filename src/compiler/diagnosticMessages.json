@@ -448,6 +448,186 @@
         "category": "Error",
         "code": 2023
     },
+    "Public static property '{0}' of exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2024
+    },
+    "Public property '{0}' of exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2025
+    },
+    "Property '{0}' of exported interface has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2026
+    },
+    "Exported variable '{0}' has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2027
+    },
+    "Public static property '{0}' of exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2028
+    },
+    "Public property '{0}' of exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2029
+    },
+    "Property '{0}' of exported interface has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2030
+    },
+    "Exported variable '{0}' has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2031
+    },
+    "Parameter '{0}' of constructor from exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2032
+    },
+    "Parameter '{0}' of public static property setter from exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2033
+    },
+    "Parameter '{0}' of public property setter from exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2034
+    },
+    "Parameter '{0}' of constructor signature from exported interface has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2035
+    },
+    "Parameter '{0}' of call signature from exported interface has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2036
+    },
+    "Parameter '{0}' of public static method from exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2037
+    },
+    "Parameter '{0}' of public method from exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2038
+    },
+    "Parameter '{0}' of method from exported interface has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2039
+    },
+    "Parameter '{0}' of exported function has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2040
+    },
+    "Parameter '{0}' of constructor from exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2041
+    },
+    "Parameter '{0}' of public static property setter from exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2042
+    },
+    "Parameter '{0}' of public property setter from exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2043
+    },
+    "Parameter '{0}' of constructor signature from exported interface has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2044
+    },
+    "Parameter '{0}' of call signature from exported interface has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2045
+    },
+    "Parameter '{0}' of public static method from exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2046
+    },
+    "Parameter '{0}' of public method from exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2047
+    },
+    "Parameter '{0}' of method from exported interface has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2048
+    },
+    "Parameter '{0}' of exported function has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 2049
+    },
+    "Return type of public static property getter from exported class has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 2050
+    },
+    "Return type of public property getter from exported class has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 2051
+    },
+    "Return type of constructor signature from exported interface has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 2052
+    },
+    "Return type of call signature from exported interface has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 2053
+    },
+    "Return type of index signature from exported interface has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 2054
+    },
+    "Return type of public static method from exported class has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 2055
+    },
+    "Return type of public method from exported class has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 2056
+    },
+    "Return type of method from exported interface has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 2057
+    },
+    "Return type of exported function has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 2058
+    },
+    "Return type of public static property getter from exported class has or is using name '{0}' from private module '{1}'.": {
+        "category": "Error",
+        "code": 2059
+    },
+    "Return type of public property getter from exported class has or is using name '{0}' from private module '{1}'.": {
+        "category": "Error",
+        "code": 2060
+    },
+    "Return type of constructor signature from exported interface has or is using name '{0}' from private module '{1}'.": {
+        "category": "Error",
+        "code": 2061
+    },
+    "Return type of call signature from exported interface has or is using name '{0}' from private module '{1}'.": {
+        "category": "Error",
+        "code": 2062
+    },
+    "Return type of index signature from exported interface has or is using name '{0}' from private module '{1}'.": {
+        "category": "Error",
+        "code": 2063
+    },
+    "Return type of public static method from exported class has or is using name '{0}' from private module '{1}'.": {
+        "category": "Error",
+        "code": 2064
+    },
+    "Return type of public method from exported class has or is using name '{0}' from private module '{1}'.": {
+        "category": "Error",
+        "code": 2065
+    },
+    "Return type of method from exported interface has or is using name '{0}' from private module '{1}'.": {
+        "category": "Error",
+        "code": 2066
+    },
+    "Return type of exported function has or is using name '{0}' from private module '{1}'.": {
+        "category": "Error",
+        "code": 2067
+    },
+    "Import declaration '{0}' is using private name '{1}'.": {
+        "category": "Error",
+        "code": 2181
+    },
    "Type parameter '{0}' of constructor signature from exported interface has or is using private name '{1}'.": {
         "category": "Error",
         "code": 2208
@@ -743,6 +923,54 @@
     "Function overload must not be static.": {
         "category": "Error",
         "code": 2248
+    },
+    "Public static property '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 2249
+    },
+    "Public property '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 2250
+    },
+    "Exported variable '{0}' has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 2251
+    },
+    "Parameter '{0}' of constructor from exported class has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 2252
+    },
+    "Parameter '{0}' of public static method from exported class has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 2253
+    },
+    "Parameter '{0}' of public method from exported class has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 2254
+    },
+    "Parameter '{0}' of exported function has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 2255
+    },
+    "Return type of public static property getter from exported class has or is using name '{0}' from external module {1} but cannot be named.": {
+        "category": "Error",
+        "code": 2256
+    },
+    "Return type of public property getter from exported class has or is using name '{0}' from external module {1} but cannot be named.": {
+        "category": "Error",
+        "code": 2257
+    },
+    "Return type of public static method from exported class has or is using name '{0}' from external module {1} but cannot be named.": {
+        "category": "Error",
+        "code": 2258
+    },
+    "Return type of public method from exported class has or is using name '{0}' from external module {1} but cannot be named.": {
+        "category": "Error",
+        "code": 2259
+    },
+    "Return type of exported function has or is using name '{0}' from external module {1} but cannot be named.": {
+        "category": "Error",
+        "code": 2260
     },
     "Circular definition of import alias '{0}'.": {
         "category": "Error",

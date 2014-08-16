@@ -5,8 +5,8 @@
         "test1.ts"
     ],
     "resolvedInputFiles": [
-        "test1.ts",
-        "lib.d.ts"
+        "lib.d.ts",
+        "test1.ts"
     ],
     "emittedFiles": []
 }

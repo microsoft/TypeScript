@@ -58,6 +58,8 @@ var A;
 
 //// [declFileWithExtendsClauseThatHasItsContainerNameConflict.d.ts]
 declare module A.B.C {
+    class B {
+    }
 }
 declare module A.B {
     class EventManager {

@@ -6,10 +6,10 @@
     ],
     "runTest": true,
     "resolvedInputFiles": [
-        "a.ts",
-        "c.ts",
+        "lib.d.ts",
         "b.ts",
-        "lib.d.ts"
+        "c.ts",
+        "a.ts"
     ],
     "emittedFiles": [
         "b.js",

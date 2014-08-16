@@ -12,4 +12,4 @@
 !!! Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '{ two: any[]; }':
 !!!   Types of property 'two' are incompatible:
 !!!     Type 'string' is not assignable to type 'any[]':
-!!!       Property 'join' is missing in type 'String'.
+!!!       Property 'push' is missing in type 'String'.

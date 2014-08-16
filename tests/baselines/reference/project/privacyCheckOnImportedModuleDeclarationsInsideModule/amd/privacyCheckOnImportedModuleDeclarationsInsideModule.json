@@ -6,8 +6,8 @@
     ],
     "baselineCheck": true,
     "resolvedInputFiles": [
-        "testGlo.ts",
-        "lib.d.ts"
+        "lib.d.ts",
+        "testGlo.ts"
     ],
     "emittedFiles": []
 }

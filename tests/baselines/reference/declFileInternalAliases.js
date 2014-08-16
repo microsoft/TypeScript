@@ -40,29 +40,10 @@ declare module m {
     }
 }
 declare module m1 {
+    import x = m.c;
     var d: x;
 }
 declare module m2 {
     export import x = m.c;
     var d: x;
 }
-
-
-//// [DtsFileErrors]
-
-
-==== tests/cases/compiler/declFileInternalAliases.d.ts (1 errors) ====
-    declare module m {
-        class c {
-        }
-    }
-    declare module m1 {
-        var d: x;
-               ~
-!!! Cannot find name 'x'.
-    }
-    declare module m2 {
-        export import x = m.c;
-        var d: x;
-    }
-    

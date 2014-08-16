@@ -12,7 +12,4 @@
 !!! Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '{ two: number[]; }':
 !!!   Types of property 'two' are incompatible:
 !!!     Type 'string' is not assignable to type 'number[]':
-!!!       Types of property 'concat' are incompatible:
-!!!         Type '(...strings: string[]) => string' is not assignable to type '{ <U extends number[]>(...items: U[]): number[]; (...items: number[]): number[]; }':
-!!!           Types of parameters 'strings' and 'items' are incompatible:
-!!!             Type 'string' is not assignable to type 'number'.
+!!!       Property 'push' is missing in type 'String'.

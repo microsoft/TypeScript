@@ -326,7 +326,7 @@ module ts {
             var reportStart = bindStart;
         }
         else {
-            var checker = program.getTypeChecker();
+            var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
             var checkStart = new Date().getTime();
             var semanticErrors = checker.getDiagnostics();
             var emitStart = new Date().getTime();
@@ -337,12 +337,16 @@ module ts {
 
         reportDiagnostics(errors);
         if (commandLine.options.diagnostics) {
+            var memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
             reportCountStatistic("Files", program.getSourceFiles().length);
             reportCountStatistic("Lines", countLines(program));
             reportCountStatistic("Nodes", checker ? checker.getNodeCount() : 0);
             reportCountStatistic("Identifiers", checker ? checker.getIdentifierCount() : 0);
             reportCountStatistic("Symbols", checker ? checker.getSymbolCount() : 0);
             reportCountStatistic("Types", checker ? checker.getTypeCount() : 0);
+            if (memoryUsed >= 0) {
+                reportStatisticalValue("Memory used", Math.round(memoryUsed / 1000) + "K");
+            }
             reportTimeStatistic("Parse time", bindStart - parseStart);
             reportTimeStatistic("Bind time", checkStart - bindStart);
             reportTimeStatistic("Check time", emitStart - checkStart);

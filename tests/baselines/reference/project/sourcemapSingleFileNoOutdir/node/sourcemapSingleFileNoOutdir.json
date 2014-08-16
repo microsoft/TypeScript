@@ -8,8 +8,8 @@
     "declaration": true,
     "baselineCheck": true,
     "resolvedInputFiles": [
-        "test.ts",
-        "lib.d.ts"
+        "lib.d.ts",
+        "test.ts"
     ],
     "emittedFiles": [
         "test.js.map",

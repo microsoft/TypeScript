@@ -14,7 +14,7 @@ interface System {
     createDirectory(directoryName: string): void;
     getExecutingFilePath(): string;
     getCurrentDirectory(): string;
-    getMemoryUsage(): number;
+    getMemoryUsage?(): number;
     exit(exitCode?: number): void;
 }
 
@@ -106,9 +106,6 @@ var sys: System = (function () {
             write(s: string): void {
                 WScript.StdOut.Write(s);
             },
-            writeErr(s: string): void {
-                WScript.StdErr.Write(s);
-            },
             readFile: readFile,
             writeFile: writeFile,
             resolvePath(path: string): string {
@@ -130,9 +127,6 @@ var sys: System = (function () {
             },
             getCurrentDirectory() {
                 return new ActiveXObject("WScript.Shell").CurrentDirectory;
-            },
-            getMemoryUsage() {
-                return 0;
             },
             exit(exitCode?: number): void {
                 try {
@@ -195,10 +189,8 @@ var sys: System = (function () {
             newLine: _os.EOL,
             useCaseSensitiveFileNames: useCaseSensitiveFileNames,
             write(s: string): void {
-                process.stdout.write(s);
-            },
-            writeErr(s: string): void {
-                process.stderr.write(s);
+               // 1 is a standard descriptor for stdout
+               _fs.writeSync(1, s);
             },
             readFile: readFile,
             writeFile: writeFile,
@@ -239,7 +231,9 @@ var sys: System = (function () {
                 return (<any>process).cwd();
             },
             getMemoryUsage() {
-                global.gc();
+                if (global.gc) {
+                    global.gc();
+                }
                 return process.memoryUsage().heapUsed;
             },
             exit(exitCode?: number): void {
