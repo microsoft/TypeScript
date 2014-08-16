@@ -780,7 +780,7 @@ module ts {
                     // But it cant, hence the accessible is going to be undefined, but that doesnt mean m.c is accessible
                     // It is accessible if the parent m is accessible because then m.c can be accessed through qualification
                     meaningToLook = getQualifiedLeftMeaning(meaning);
-                    symbol = symbol.parent;
+                    symbol = getParentOfSymbol(symbol);
                 }
 
                 // This could be a symbol that is not exported in the external module 
@@ -903,7 +903,7 @@ module ts {
                     if (accessibleSymbolChain && !needsQualification(accessibleSymbolChain[0], enclosingDeclaration, accessibleSymbolChain.length === 1 ? meaning : getQualifiedLeftMeaning(meaning))) {
                         break;
                     }
-                    symbol = accessibleSymbolChain ? accessibleSymbolChain[0].parent : symbol.parent;
+                    symbol = getParentOfSymbol(accessibleSymbolChain ? accessibleSymbolChain[0] : symbol);
                     meaning = getQualifiedLeftMeaning(meaning);
                 }
 
