@@ -3190,9 +3190,16 @@ module ts {
             // TODO(jfreeman): Parse arbitrary sequence of heritage clauses and error for order and duplicates
             var extendsKeywordStart = scanner.getTokenPos();
             var extendsKeywordLength: number;
-            if (parseOptional(SyntaxKind.ExtendsKeyword)) {
+
+            var readImplementsKeyword: boolean; // A common mistake is to use "implements" instead of "extends" when extending an interface.
+
+            if (parseOptional(SyntaxKind.ExtendsKeyword) || (readImplementsKeyword = parseOptional(SyntaxKind.ImplementsKeyword))) {
                 extendsKeywordLength = scanner.getStartPos() - extendsKeywordStart;
                 node.baseTypes = parseDelimitedList(ParsingContext.BaseTypeReferences, parseTypeReference, TrailingCommaBehavior.Disallow);
+
+                if (readImplementsKeyword) {
+                    grammarErrorAtPos(extendsKeywordStart, extendsKeywordLength, Diagnostics.An_interface_declaration_cannot_have_an_implements_clause);
+                }
             }
             var errorCountBeforeInterfaceBody = file.syntacticErrors.length;
             node.members = parseTypeLiteral().members;

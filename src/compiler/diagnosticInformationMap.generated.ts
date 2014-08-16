@@ -36,7 +36,7 @@ module ts {
         _0_modifier_must_precede_1_modifier: { code: 1029, category: DiagnosticCategory.Error, key: "'{0}' modifier must precede '{1}' modifier." },
         _0_modifier_already_seen: { code: 1030, category: DiagnosticCategory.Error, key: "'{0}' modifier already seen." },
         _0_modifier_cannot_appear_on_a_class_element: { code: 1031, category: DiagnosticCategory.Error, key: "'{0}' modifier cannot appear on a class element." },
-        Interface_declaration_cannot_have_implements_clause: { code: 1032, category: DiagnosticCategory.Error, key: "Interface declaration cannot have 'implements' clause." },
+        An_interface_declaration_cannot_have_an_implements_clause: { code: 1032, category: DiagnosticCategory.Error, key: "An interface declaration cannot have an 'implements' clause." },
         super_invocation_cannot_have_type_arguments: { code: 1034, category: DiagnosticCategory.Error, key: "'super' invocation cannot have type arguments." },
         Only_ambient_modules_can_use_quoted_names: { code: 1035, category: DiagnosticCategory.Error, key: "Only ambient modules can use quoted names." },
         Statements_are_not_allowed_in_ambient_contexts: { code: 1036, category: DiagnosticCategory.Error, key: "Statements are not allowed in ambient contexts." },

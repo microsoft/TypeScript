@@ -1,13 +1,7 @@
-==== tests/cases/conformance/parser/ecmascript5/InterfaceDeclarations/parserInterfaceDeclaration2.ts (5 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/InterfaceDeclarations/parserInterfaceDeclaration2.ts (2 errors) ====
     interface I implements A {
                 ~~~~~~~~~~
-!!! '{' expected.
-                           ~
-!!! ';' expected.
-                             ~
-!!! ';' expected.
-                ~~~~~~~~~~
-!!! Cannot find name 'implements'.
+!!! An interface declaration cannot have an 'implements' clause.
                            ~
 !!! Cannot find name 'A'.
     }
