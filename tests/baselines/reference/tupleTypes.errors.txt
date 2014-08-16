@@ -62,18 +62,16 @@
     a = a1;   // Error
     ~
 !!! Type '[number, string]' is not assignable to type 'number[]':
-!!!   Types of property 'concat' are incompatible:
-!!!     Type '{ <U extends {}[]>(...items: U[]): {}[]; (...items: {}[]): {}[]; }' is not assignable to type '{ <U extends number[]>(...items: U[]): number[]; (...items: number[]): number[]; }':
-!!!       Type '{}[]' is not assignable to type 'number[]':
-!!!         Type '{}' is not assignable to type 'number'.
+!!!   Types of property 'pop' are incompatible:
+!!!     Type '() => {}' is not assignable to type '() => number':
+!!!       Type '{}' is not assignable to type 'number'.
     a = a2;
     a = a3;   // Error
     ~
 !!! Type '[number, {}]' is not assignable to type 'number[]':
-!!!   Types of property 'concat' are incompatible:
-!!!     Type '{ <U extends {}[]>(...items: U[]): {}[]; (...items: {}[]): {}[]; }' is not assignable to type '{ <U extends number[]>(...items: U[]): number[]; (...items: number[]): number[]; }':
-!!!       Type '{}[]' is not assignable to type 'number[]':
-!!!         Type '{}' is not assignable to type 'number'.
+!!!   Types of property 'pop' are incompatible:
+!!!     Type '() => {}' is not assignable to type '() => number':
+!!!       Type '{}' is not assignable to type 'number'.
     a1 = a2;  // Error
     ~~
 !!! Type '[number, number]' is not assignable to type '[number, string]':
