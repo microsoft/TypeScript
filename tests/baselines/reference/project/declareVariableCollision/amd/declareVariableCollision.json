@@ -7,10 +7,10 @@
         "in2.d.ts"
     ],
     "resolvedInputFiles": [
+        "lib.d.ts",
         "decl.d.ts",
         "in1.d.ts",
-        "in2.d.ts",
-        "lib.d.ts"
+        "in2.d.ts"
     ],
     "emittedFiles": []
 }

@@ -5,9 +5,9 @@
         "main/consume.ts"
     ],
     "resolvedInputFiles": [
-        "main/consume.ts",
+        "lib.d.ts",
         "decl.d.ts",
-        "lib.d.ts"
+        "main/consume.ts"
     ],
     "emittedFiles": [
         "main/consume.js"

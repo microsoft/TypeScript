@@ -14,7 +14,7 @@ interface System {
     createDirectory(directoryName: string): void;
     getExecutingFilePath(): string;
     getCurrentDirectory(): string;
-    getMemoryUsage(): number;
+    getMemoryUsage?(): number;
     exit(exitCode?: number): void;
 }
 
@@ -128,9 +128,6 @@ var sys: System = (function () {
             getCurrentDirectory() {
                 return new ActiveXObject("WScript.Shell").CurrentDirectory;
             },
-            getMemoryUsage() {
-                return 0;
-            },
             exit(exitCode?: number): void {
                 try {
                     WScript.Quit(exitCode);
@@ -234,7 +231,9 @@ var sys: System = (function () {
                 return (<any>process).cwd();
             },
             getMemoryUsage() {
-                global.gc();
+                if (global.gc) {
+                    global.gc();
+                }
                 return process.memoryUsage().heapUsed;
             },
             exit(exitCode?: number): void {

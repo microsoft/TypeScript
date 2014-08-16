@@ -26,6 +26,7 @@
 /// <reference path='compiler\pathUtils.ts' />
 
 module ts {
+
     export interface Node {
         getSourceFile(): SourceFile;
         getChildCount(): number;
@@ -71,8 +72,7 @@ module ts {
         getSourceUnit(): TypeScript.SourceUnitSyntax;
         getSyntaxTree(): TypeScript.SyntaxTree;
         getBloomFilter(): TypeScript.BloomFilter;
-        getScriptSnapshot(): TypeScript.IScriptSnapshot;
-        update(scriptSnapshot: TypeScript.IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile;
+        update(scriptSnapshot: TypeScript.IScriptSnapshot, version: number, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile;
     }
 
     var scanner: Scanner = createScanner(ScriptTarget.ES5);
@@ -320,7 +320,7 @@ module ts {
         public identifierCount: number;
         public symbolCount: number;
         public statements: NodeArray<Statement>;
-        public version: string;
+        public version: number;
         public isOpen: boolean;
         public languageVersion: ScriptTarget;
 
@@ -331,10 +331,6 @@ module ts {
         public getSourceUnit(): TypeScript.SourceUnitSyntax {
             // If we don't have a script, create one from our parse tree.
             return this.getSyntaxTree().sourceUnit();
-        }
-
-        public getScriptSnapshot(): TypeScript.IScriptSnapshot {
-            return this.scriptSnapshot;
         }
 
         public getLineMap(): TypeScript.LineMap {
@@ -388,7 +384,7 @@ module ts {
             return this.bloomFilter;
         }
 
-        public update(scriptSnapshot: TypeScript.IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile {
+        public update(scriptSnapshot: TypeScript.IScriptSnapshot, version: number, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile {
             // See if we are currently holding onto a syntax tree.  We may not be because we're 
             // either a closed file, or we've just been lazy and haven't had to create the syntax
             // tree yet.  Access the field instead of the method so we don't accidently realize
@@ -423,7 +419,7 @@ module ts {
             return SourceFileObject.createSourceFileObject(this.filename, scriptSnapshot, this.languageVersion, version, isOpen, newSyntaxTree);
         }
 
-        public static createSourceFileObject(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, languageVersion: ScriptTarget, version: string, isOpen: boolean, syntaxTree?: TypeScript.SyntaxTree) {
+        public static createSourceFileObject(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, languageVersion: ScriptTarget, version: number, isOpen: boolean, syntaxTree?: TypeScript.SyntaxTree) {
             var newSourceFile = <SourceFileObject><any>createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), languageVersion, version, isOpen);
             newSourceFile.scriptSnapshot = scriptSnapshot;
             newSourceFile.syntaxTree = syntaxTree;
@@ -446,7 +442,7 @@ module ts {
     export interface LanguageServiceHost extends Logger {
         getCompilationSettings(): CompilerOptions;
         getScriptFileNames(): string[];
-        getScriptVersion(fileName: string): string;
+        getScriptVersion(fileName: string): number;
         getScriptIsOpen(fileName: string): boolean;
         getScriptSnapshot(fileName: string): TypeScript.IScriptSnapshot;
         getLocalizedDiagnosticMessages(): any;
@@ -696,7 +692,7 @@ module ts {
             filename: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
-            version: string,
+            version: number,
             isOpen: boolean,
             referencedFiles: string[]): SourceFile;
 
@@ -705,7 +701,7 @@ module ts {
             filename: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
-            version: string,
+            version: number,
             isOpen: boolean,
             textChangeRange: TypeScript.TextChangeRange
             ): SourceFile;
@@ -823,7 +819,7 @@ module ts {
     // Information about a specific host file.
     interface HostFileInformation {
         filename: string;
-        version: string;
+        version: number;
         isOpen: boolean;
         sourceText?: TypeScript.IScriptSnapshot;
     }
@@ -932,7 +928,7 @@ module ts {
             return fileNames;
         }
 
-        public getVersion(filename: string): string {
+        public getVersion(filename: string): number {
             return this.getEntry(filename).version;
         }
 
@@ -948,14 +944,14 @@ module ts {
             return file.sourceText;
         }
 
-        public getChangeRange(filename: string, lastKnownVersion: string, oldScriptSnapshot: TypeScript.IScriptSnapshot): TypeScript.TextChangeRange {
+        public getScriptTextChangeRangeSinceVersion(filename: string, lastKnownVersion: number): TypeScript.TextChangeRange {
             var currentVersion = this.getVersion(filename);
             if (lastKnownVersion === currentVersion) {
                 return TypeScript.TextChangeRange.unchanged; // "No changes"
             }
 
             var scriptSnapshot = this.getScriptSnapshot(filename);
-            return scriptSnapshot.getChangeRange(oldScriptSnapshot);
+            return scriptSnapshot.getTextChangeRangeSinceVersion(lastKnownVersion);
         }
     }
 
@@ -964,10 +960,11 @@ module ts {
 
         // For our syntactic only features, we also keep a cache of the syntax tree for the 
         // currently edited file.  
-        private currentFilename: string = "";
-        private currentFileVersion: string = null;
+        private currentfilename: string = "";
+        private currentFileVersion: number = -1;
         private currentSourceFile: SourceFile = null;
         private currentFileSyntaxTree: TypeScript.SyntaxTree = null;
+        private currentFileScriptSnapshot: TypeScript.IScriptSnapshot = null;
 
         constructor(private host: LanguageServiceHost) {
             this.hostCache = new HostCache(host);
@@ -982,7 +979,7 @@ module ts {
             var syntaxTree: TypeScript.SyntaxTree = null;
             var sourceFile: SourceFile;
 
-            if (this.currentFileSyntaxTree === null || this.currentFilename !== filename) {
+            if (this.currentFileSyntaxTree === null || this.currentfilename !== filename) {
                 var scriptSnapshot = this.hostCache.getScriptSnapshot(filename);
                 syntaxTree = this.createSyntaxTree(filename, scriptSnapshot);
                 sourceFile = createSourceFileFromScriptSnapshot(filename, scriptSnapshot, getDefaultCompilerOptions(), version, /*isOpen*/ true);
@@ -991,10 +988,9 @@ module ts {
             }
             else if (this.currentFileVersion !== version) {
                 var scriptSnapshot = this.hostCache.getScriptSnapshot(filename);
-                syntaxTree = this.updateSyntaxTree(filename, scriptSnapshot,
-                    this.currentSourceFile.getScriptSnapshot(), this.currentFileSyntaxTree, this.currentFileVersion);
+                syntaxTree = this.updateSyntaxTree(filename, scriptSnapshot, this.currentFileSyntaxTree, this.currentFileVersion);
 
-                var editRange = this.hostCache.getChangeRange(filename, this.currentFileVersion, this.currentSourceFile.getScriptSnapshot());
+                var editRange = this.hostCache.getScriptTextChangeRangeSinceVersion(filename, this.currentFileVersion);
                 sourceFile = !editRange 
                     ? createSourceFileFromScriptSnapshot(filename, scriptSnapshot, getDefaultCompilerOptions(), version, /*isOpen*/ true)
                     : this.currentSourceFile.update(scriptSnapshot, version, /*isOpen*/ true, editRange);
@@ -1005,8 +1001,9 @@ module ts {
             if (syntaxTree !== null) {
                 Debug.assert(sourceFile);
                 // All done, ensure state is up to date
+                this.currentFileScriptSnapshot = scriptSnapshot;
                 this.currentFileVersion = version;
-                this.currentFilename = filename;
+                this.currentfilename = filename;
                 this.currentFileSyntaxTree = syntaxTree;
                 this.currentSourceFile = sourceFile;
             }
@@ -1041,7 +1038,7 @@ module ts {
         public getCurrentScriptSnapshot(filename: string): TypeScript.IScriptSnapshot {
             // update currentFileScriptSnapshot as a part of 'getCurrentFileSyntaxTree' call
             this.getCurrentFileSyntaxTree(filename);
-            return this.getCurrentSourceFile(filename).getScriptSnapshot();
+            return this.currentFileScriptSnapshot;
         }
 
         private createSyntaxTree(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot): TypeScript.SyntaxTree {
@@ -1055,8 +1052,8 @@ module ts {
             return syntaxTree;
         }
 
-        private updateSyntaxTree(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, previousScriptSnapshot: TypeScript.IScriptSnapshot, previousSyntaxTree: TypeScript.SyntaxTree, previousFileVersion: string): TypeScript.SyntaxTree {
-            var editRange = this.hostCache.getChangeRange(filename, previousFileVersion, previousScriptSnapshot);
+        private updateSyntaxTree(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, previousSyntaxTree: TypeScript.SyntaxTree, previousFileVersion: number): TypeScript.SyntaxTree {
+            var editRange = this.hostCache.getScriptTextChangeRangeSinceVersion(filename, previousFileVersion);
 
             // Debug.assert(newLength >= 0);
 
@@ -1068,7 +1065,7 @@ module ts {
             var nextSyntaxTree = TypeScript.IncrementalParser.parse(
                 previousSyntaxTree, editRange, TypeScript.SimpleText.fromScriptSnapshot(scriptSnapshot));
 
-            this.ensureInvariants(filename, editRange, nextSyntaxTree, previousScriptSnapshot, scriptSnapshot);
+            this.ensureInvariants(filename, editRange, nextSyntaxTree, this.currentFileScriptSnapshot, scriptSnapshot);
 
             return nextSyntaxTree;
         }
@@ -1136,7 +1133,7 @@ module ts {
         }
     }
 
-    function createSourceFileFromScriptSnapshot(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, settings: CompilerOptions, version: string, isOpen: boolean) {
+    function createSourceFileFromScriptSnapshot(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, settings: CompilerOptions, version: number, isOpen: boolean) {
         return SourceFileObject.createSourceFileObject(filename, scriptSnapshot, settings.target, version, isOpen);
     }
 
@@ -1181,7 +1178,7 @@ module ts {
             filename: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
-            version: string,
+            version: number,
             isOpen: boolean): SourceFile {
 
             var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
@@ -1205,7 +1202,7 @@ module ts {
             filename: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
-            version: string,
+            version: number,
             isOpen: boolean,
             textChangeRange: TypeScript.TextChangeRange
             ): SourceFile {
@@ -1259,7 +1256,11 @@ module ts {
         var formattingRulesProvider: TypeScript.Services.Formatting.RulesProvider;
         var hostCache: HostCache; // A cache of all the information about the files on the host side.
         var program: Program;
-        var typeChecker: TypeChecker;
+        // this checker is used to answer all LS questions except errors 
+        var typeInfoResolver: TypeChecker;
+        // the sole purpose of this checkes is to reutrn semantic diagnostics
+        // creation is deferred - use getFullTypeCheckChecker to get instance
+        var fullTypeCheckChecker_doNotAccessDirectly: TypeChecker;
         var useCaseSensitivefilenames = false;
         var sourceFilesByName: Map<SourceFile> = {};
         var documentRegistry = documentRegistry;
@@ -1273,6 +1274,10 @@ module ts {
 
         function getSourceFile(filename: string): SourceFile {
             return lookUp(sourceFilesByName, filename);
+        }
+
+        function getFullTypeCheckChecker() {
+            return fullTypeCheckChecker_doNotAccessDirectly || (fullTypeCheckChecker_doNotAccessDirectly = program.getTypeChecker(/*fullTypeCheck*/ true));
         }
 
         function createCompilerHost(): CompilerHost {
@@ -1391,7 +1396,7 @@ module ts {
                     // new text buffer).
                     var textChangeRange: TypeScript.TextChangeRange = null;
                     if (sourceFile.isOpen && isOpen) {
-                        textChangeRange = hostCache.getChangeRange(filename, sourceFile.version, sourceFile.getScriptSnapshot());
+                        textChangeRange = hostCache.getScriptTextChangeRangeSinceVersion(filename, sourceFile.version);
                     }
 
                     sourceFile = documentRegistry.updateDocument(sourceFile, filename, compilationSettings, scriptSnapshot, version, isOpen, textChangeRange);
@@ -1406,7 +1411,8 @@ module ts {
 
             // Now create a new compiler
             program = createProgram(hostfilenames, compilationSettings, createCompilerHost());
-            typeChecker = program.getTypeChecker();
+            typeInfoResolver = program.getTypeChecker(/*fullTypeCheckMode*/ false);
+            fullTypeCheckChecker_doNotAccessDirectly = undefined;
         }
 
         /// Clean up any semantic caches that are not needed. 
@@ -1414,7 +1420,8 @@ module ts {
         /// We will just dump the typeChecker and recreate a new one. this should have the effect of destroying all the semantic caches.
         function cleanupSemanticCache(): void {
             if (program) {
-                typeChecker = program.getTypeChecker();
+                typeInfoResolver = program.getTypeChecker(/*fullTypeCheckMode*/ false);
+                fullTypeCheckChecker_doNotAccessDirectly = undefined;
             }
         }
 
@@ -1439,7 +1446,7 @@ module ts {
 
             filename = TypeScript.switchToForwardSlashes(filename)
 
-            return typeChecker.getDiagnostics(getSourceFile(filename).getSourceFile());
+            return getFullTypeCheckChecker().getDiagnostics(getSourceFile(filename));
         }
 
         function getCompilerOptionsDiagnostics() {
@@ -1681,12 +1688,12 @@ module ts {
                 entries: [],
                 symbols: {},
                 location: mappedNode,
-                typeChecker: typeChecker
+                typeChecker: typeInfoResolver
             };
 
             // Right of dot member completion list
             if (isRightOfDot) {
-                var type: Type = typeChecker.getTypeOfExpression(mappedNode);
+                var type: Type = typeInfoResolver.getTypeOfExpression(mappedNode);
                 if (!type) {
                     return undefined;
                 }
@@ -1734,7 +1741,7 @@ module ts {
                     isMemberCompletion = false;
                     /// TODO filter meaning based on the current context
                     var symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace;
-                    var symbols = typeChecker.getSymbolsInScope(mappedNode, symbolMeanings);
+                    var symbols = typeInfoResolver.getSymbolsInScope(mappedNode, symbolMeanings);
 
                     getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
                 }
@@ -1773,7 +1780,7 @@ module ts {
                     kind: completionEntry.kind,
                     kindModifiers: completionEntry.kindModifiers,
                     type: session.typeChecker.typeToString(type, session.location),
-                    fullSymbolName: typeChecker.symbolToString(symbol, session.location),
+                    fullSymbolName: typeInfoResolver.symbolToString(symbol, session.location),
                     docComment: ""
                 };
             }
@@ -1885,13 +1892,13 @@ module ts {
             var node = getNodeAtPosition(sourceFile.getSourceFile(), position);
             if (!node) return undefined;
 
-            var symbol = typeChecker.getSymbolInfo(node);
-            var type = symbol && typeChecker.getTypeOfSymbol(symbol);
+            var symbol = typeInfoResolver.getSymbolInfo(node);
+            var type = symbol && typeInfoResolver.getTypeOfSymbol(symbol);
             if (type) {
                 return {
-                    memberName: new TypeScript.MemberNameString(typeChecker.typeToString(type)),
+                    memberName: new TypeScript.MemberNameString(typeInfoResolver.typeToString(type)),
                     docComment: "",
-                    fullSymbolName: typeChecker.symbolToString(symbol, getContainerNode(node)),
+                    fullSymbolName: typeInfoResolver.symbolToString(symbol, getContainerNode(node)),
                     kind: getSymbolKind(symbol),
                     minChar: node.pos,
                     limChar: node.end
@@ -2037,7 +2044,7 @@ module ts {
                 return undefined;
             }
 
-            var symbol = typeChecker.getSymbolInfo(node);
+            var symbol = typeInfoResolver.getSymbolInfo(node);
 
             // Could not find a symbol e.g. node is string or number keyword,
             // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol
@@ -2048,10 +2055,10 @@ module ts {
             var result: DefinitionInfo[] = [];
 
             var declarations = symbol.getDeclarations();
-            var symbolName = typeChecker.symbolToString(symbol, node);
+            var symbolName = typeInfoResolver.symbolToString(symbol, node);
             var symbolKind = getSymbolKind(symbol);
             var containerSymbol = symbol.parent;
-            var containerName = containerSymbol ? typeChecker.symbolToString(containerSymbol, node) : "";
+            var containerName = containerSymbol ? typeInfoResolver.symbolToString(containerSymbol, node) : "";
             var containerKind = containerSymbol ? getSymbolKind(symbol) : "";
 
             if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&

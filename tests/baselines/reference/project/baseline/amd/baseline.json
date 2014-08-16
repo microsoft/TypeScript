@@ -7,9 +7,9 @@
     "baselineCheck": true,
     "runTest": true,
     "resolvedInputFiles": [
-        "emit.ts",
+        "lib.d.ts",
         "decl.ts",
-        "lib.d.ts"
+        "emit.ts"
     ],
     "emittedFiles": [
         "decl.js",

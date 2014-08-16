@@ -6,10 +6,10 @@
     ],
     "baselineCheck": true,
     "resolvedInputFiles": [
-        "commands.ts",
+        "lib.d.ts",
         "fs.ts",
         "server.ts",
-        "lib.d.ts"
+        "commands.ts"
     ],
     "emittedFiles": [
         "fs.js",

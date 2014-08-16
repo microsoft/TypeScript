@@ -39,23 +39,6 @@ export declare module a {
     }
 }
 export declare module c {
+    import b = a.b;
     var x: b.c;
 }
-
-
-//// [DtsFileErrors]
-
-
-==== tests/cases/compiler/internalAliasInitializedModuleInsideLocalModuleWithoutExport.d.ts (1 errors) ====
-    export declare module a {
-        module b {
-            class c {
-            }
-        }
-    }
-    export declare module c {
-        var x: b.c;
-               ~~~
-!!! Cannot find name 'b'.
-    }
-    

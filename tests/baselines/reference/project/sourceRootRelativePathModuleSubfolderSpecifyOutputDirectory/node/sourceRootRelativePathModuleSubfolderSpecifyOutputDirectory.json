@@ -10,9 +10,9 @@
     "declaration": true,
     "baselineCheck": true,
     "resolvedInputFiles": [
-        "test.ts",
+        "lib.d.ts",
         "ref/m1.ts",
-        "lib.d.ts"
+        "test.ts"
     ],
     "emittedFiles": [
         "outdir/simple/ref/m1.js.map",

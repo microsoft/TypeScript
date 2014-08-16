@@ -1895,16 +1895,16 @@ module FourSlash {
         var result = '';
         var fourslashFilename = 'fourslash.ts';
         var tsFn = 'tests/cases/fourslash/' + fourslashFilename;
-        fourslashSourceFile = fourslashSourceFile || ts.createSourceFile(tsFn, Harness.IO.readFile(tsFn), ts.ScriptTarget.ES5, /*version*/ "0", /*isOpen*/ false);
+        fourslashSourceFile = fourslashSourceFile || ts.createSourceFile(tsFn, Harness.IO.readFile(tsFn), ts.ScriptTarget.ES5, /*version*/ 0, /*isOpen*/ false);
 
         var files: { [filename: string]: ts.SourceFile; } = {};
         files[fourslashFilename] = fourslashSourceFile;
-        files[fileName] = ts.createSourceFile(fileName, content, ts.ScriptTarget.ES5, /*version*/ "0", /*isOpen*/ false);
+        files[fileName] = ts.createSourceFile(fileName, content, ts.ScriptTarget.ES5, /*version*/ 0, /*isOpen*/ false);
         files[Harness.Compiler.defaultLibFileName] = Harness.Compiler.defaultLibSourceFile;
 
         var host = Harness.Compiler.createCompilerHost(files, (fn, contents) => result = contents);
         var program = ts.createProgram([fourslashFilename, fileName], { out: "fourslashTestOutput.js" }, host);
-        var checker = ts.createTypeChecker(program);
+        var checker = ts.createTypeChecker(program, /*fullTypeCheckMode*/ true);
         checker.checkProgram();
 
         var errs = checker.getDiagnostics(files[fileName]);
