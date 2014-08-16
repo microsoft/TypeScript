@@ -16,8 +16,8 @@
     
     t = [];               // Error
     ~
-!!! Type '[]' is not assignable to type '[number, string]':
-!!!   Property '0' is missing in type '[]'.
+!!! Type '{}[]' is not assignable to type '[number, string]':
+!!!   Property '0' is missing in type '{}[]'.
     t = [1];              // Error
     ~
 !!! Type '[number]' is not assignable to type '[number, string]':
@@ -53,7 +53,7 @@
     tt = [undefined, undefined];
     tt = [];  // Error
     ~~
-!!! Type '[]' is not assignable to type '[number, string]'.
+!!! Type '{}[]' is not assignable to type '[number, string]'.
     
     var a: number[];
     var a1: [number, string];

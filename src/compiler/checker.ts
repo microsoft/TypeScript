@@ -3758,19 +3758,17 @@ module ts {
             return undefined;
         }
 
-        // In an array literal contextually typed by a type T, the contextual type of an element expression is the corresponding
-        // tuple element type in T, if one exists and T is a tuple type. Otherwise, it is the type of the numeric index signature
-        // in T, if one exists.
+        // In an array literal contextually typed by a type T, the contextual type of an element expression at index N is
+        // the type of the property with the numeric name N in T, if one exists. Otherwise, it is the type of the numeric
+        // index signature in T, if one exists.
         function getContextualTypeForElementExpression(node: Expression): Type {
             var arrayLiteral = <ArrayLiteral>node.parent;
             var type = getContextualType(arrayLiteral);
             if (type) {
-                if (type.flags & TypeFlags.Tuple) {
-                    var index = indexOf(arrayLiteral.elements, node);
-                    var prop = getPropertyOfType(type, "" + index);
-                    if (prop) {
-                        return getTypeOfSymbol(prop);
-                    }
+                var index = indexOf(arrayLiteral.elements, node);
+                var prop = getPropertyOfType(type, "" + index);
+                if (prop) {
+                    return getTypeOfSymbol(prop);
                 }
                 return getIndexTypeOfType(type, IndexKind.Number);
             }
@@ -3837,21 +3835,24 @@ module ts {
 
         function checkArrayLiteral(node: ArrayLiteral, contextualMapper?: TypeMapper): Type {
             var contextualType = getContextualType(node);
-            var isTupleLiteral = contextualType && (contextualType.flags & TypeFlags.Tuple) !== 0;
+            var elements = node.elements;
             var elementTypes: Type[] = [];
-            forEach(node.elements, element => {
-                var type = element.kind !== SyntaxKind.OmittedExpression ? checkExpression(element, contextualMapper) : undefinedType;
-                if (isTupleLiteral || !contains(elementTypes, type)) {
-                    elementTypes.push(type);
+            var isTupleLiteral: boolean = false;
+            for (var i = 0; i < elements.length; i++) {
+                if (contextualType && getPropertyOfType(contextualType, "" + i)) {
+                    isTupleLiteral = true;
                 }
-            });
+                var element = elements[i];
+                var type = element.kind !== SyntaxKind.OmittedExpression ? checkExpression(element, contextualMapper) : undefinedType;
+                elementTypes.push(type);
+            }
             if (isTupleLiteral) {
                 return createTupleType(elementTypes);
             }
             var contextualElementType = contextualType && !isInferentialContext(contextualMapper) ? getIndexTypeOfType(contextualType, IndexKind.Number) : undefined;
-            var elementType = getBestCommonType(elementTypes, contextualElementType, true);
+            var elementType = getBestCommonType(uniqueElements(elementTypes), contextualElementType, true);
             if (!elementType) {
-                elementType = elementTypes.length ? emptyObjectType : undefinedType;
+                elementType = elements.length ? emptyObjectType : undefinedType;
             }
             return createArrayType(elementType);
         }
