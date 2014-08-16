@@ -432,11 +432,6 @@ module ts {
     }
 
     export interface Logger {
-        information(): boolean;
-        debug(): boolean;
-        warning(): boolean;
-        error(): boolean;
-        fatal(): boolean;
         log(s: string): void;
     }
 

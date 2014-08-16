@@ -307,26 +307,6 @@ module ts {
         constructor(private shimHost: LanguageServiceShimHost) {
         }
 
-        public information(): boolean {
-            return this.shimHost.information();
-        }
-
-        public debug(): boolean {
-            return this.shimHost.debug();
-        }
-
-        public warning(): boolean {
-            return this.shimHost.warning();
-        }
-
-        public error(): boolean {
-            return this.shimHost.error();
-        }
-
-        public fatal(): boolean {
-            return this.shimHost.fatal();
-        }
-
         public log(s: string): void {
             this.shimHost.log(s);
         }
