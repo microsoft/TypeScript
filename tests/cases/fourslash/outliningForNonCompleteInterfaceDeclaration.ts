@@ -3,4 +3,4 @@
 ////interface I[||]
 
 // should not crash
-verify.outliningSpansInCurrentFile(test.ranges());
+verify.outliningSpansInCurrentFile([]);

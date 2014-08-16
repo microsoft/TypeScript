@@ -5,11 +5,11 @@
         "root.ts"
     ],
     "resolvedInputFiles": [
-        "root.ts",
-        "B/B.ts",
+        "lib.d.ts",
         "A/A.ts",
         "A/AA/AA.ts",
-        "lib.d.ts"
+        "B/B.ts",
+        "root.ts"
     ],
     "emittedFiles": [
         "A/A.js",

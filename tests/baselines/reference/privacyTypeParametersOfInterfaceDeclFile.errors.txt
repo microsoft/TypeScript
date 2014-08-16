@@ -1,4 +1,4 @@
-==== tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts (4 errors) ====
+==== tests/cases/compiler/privacyTypeParametersOfInterfaceDeclFile.ts (20 errors) ====
     class privateClass {
     }
     
@@ -17,8 +17,16 @@
         myMethod(val: T): T;
         myMethod0(): publicClassT<T>;
         myMethod1(): privateClassT<privateClass>; 
+        ~~~~~~~~~
+!!! Return type of method from exported interface has or is using private name 'privateClass'.
+        ~~~~~~~~~
+!!! Return type of method from exported interface has or is using private name 'privateClassT'.
         myMethod2(): privateClassT<publicClass>;
+        ~~~~~~~~~
+!!! Return type of method from exported interface has or is using private name 'privateClassT'.
         myMethod3(): publicClassT<privateClass>;
+        ~~~~~~~~~
+!!! Return type of method from exported interface has or is using private name 'privateClass'.
         myMethod4(): publicClassT<publicClass>; 
     }
     
@@ -26,8 +34,16 @@
         myMethod(val: T): T;
         myMethod0(): publicClassT<T>
         myMethod1(): privateClassT<privateClass>;
+        ~~~~~~~~~
+!!! Return type of method from exported interface has or is using private name 'privateClass'.
+        ~~~~~~~~~
+!!! Return type of method from exported interface has or is using private name 'privateClassT'.
         myMethod2(): privateClassT<publicClass>;
+        ~~~~~~~~~
+!!! Return type of method from exported interface has or is using private name 'privateClassT'.
         myMethod3(): publicClassT<privateClass>;
+        ~~~~~~~~~
+!!! Return type of method from exported interface has or is using private name 'privateClass'.
         myMethod4(): publicClassT<publicClass>;
     }
     
@@ -87,8 +103,16 @@
             myMethod(val: T): T;
             myMethod0(): publicClassInPublicModuleT<T>;
             myMethod1(): privateClassInPublicModuleT<privateClassInPublicModule>;
+            ~~~~~~~~~
+!!! Return type of method from exported interface has or is using private name 'privateClassInPublicModule'.
+            ~~~~~~~~~
+!!! Return type of method from exported interface has or is using private name 'privateClassInPublicModuleT'.
             myMethod2(): privateClassInPublicModuleT<publicClassInPublicModule>;
+            ~~~~~~~~~
+!!! Return type of method from exported interface has or is using private name 'privateClassInPublicModuleT'.
             myMethod3(): publicClassInPublicModuleT<privateClassInPublicModule>;
+            ~~~~~~~~~
+!!! Return type of method from exported interface has or is using private name 'privateClassInPublicModule'.
             myMethod4(): publicClassInPublicModuleT<publicClassInPublicModule>;
         }
     
@@ -96,8 +120,16 @@
             myMethod(val: T): T;
             myMethod0(): publicClassInPublicModuleT<T>
             myMethod1(): privateClassInPublicModuleT<privateClassInPublicModule>;
+            ~~~~~~~~~
+!!! Return type of method from exported interface has or is using private name 'privateClassInPublicModule'.
+            ~~~~~~~~~
+!!! Return type of method from exported interface has or is using private name 'privateClassInPublicModuleT'.
             myMethod2(): privateClassInPublicModuleT<publicClassInPublicModule>;
+            ~~~~~~~~~
+!!! Return type of method from exported interface has or is using private name 'privateClassInPublicModuleT'.
             myMethod3(): publicClassInPublicModuleT<privateClassInPublicModule>;
+            ~~~~~~~~~
+!!! Return type of method from exported interface has or is using private name 'privateClassInPublicModule'.
             myMethod4(): publicClassInPublicModuleT<publicClassInPublicModule>;
         }
     

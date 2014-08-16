@@ -7,9 +7,9 @@
     "declaration": true,
     "baselineCheck": true,
     "resolvedInputFiles": [
-        "m'ain.ts",
+        "lib.d.ts",
         "li'b/class'A.ts",
-        "lib.d.ts"
+        "m'ain.ts"
     ],
     "emittedFiles": [
         "li'b/class'A.js",

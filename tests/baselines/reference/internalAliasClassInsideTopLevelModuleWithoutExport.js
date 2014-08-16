@@ -35,19 +35,5 @@ export declare module x {
         foo(a: number): number;
     }
 }
+import xc = x.c;
 export declare var cProp: xc;
-
-
-//// [DtsFileErrors]
-
-
-==== tests/cases/compiler/internalAliasClassInsideTopLevelModuleWithoutExport.d.ts (1 errors) ====
-    export declare module x {
-        class c {
-            foo(a: number): number;
-        }
-    }
-    export declare var cProp: xc;
-                              ~~
-!!! Cannot find name 'xc'.
-    

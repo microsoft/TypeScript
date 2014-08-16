@@ -6,9 +6,9 @@
     ],
     "baselineCheck": true,
     "resolvedInputFiles": [
-        "consumer.ts",
+        "lib.d.ts",
         "ref.d.ts",
-        "lib.d.ts"
+        "consumer.ts"
     ],
     "emittedFiles": [
         "consumer.js"

@@ -6,9 +6,9 @@
         "b.ts"
     ],
     "resolvedInputFiles": [
+        "lib.d.ts",
         "a.ts",
-        "b.ts",
-        "lib.d.ts"
+        "b.ts"
     ],
     "emittedFiles": [
         "a.js",

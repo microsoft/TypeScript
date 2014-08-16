@@ -5,10 +5,10 @@
         "app.ts"
     ],
     "resolvedInputFiles": [
-        "app.ts",
-        "A/a.ts",
+        "lib.d.ts",
         "A/b.ts",
-        "lib.d.ts"
+        "A/a.ts",
+        "app.ts"
     ],
     "emittedFiles": [
         "A/b.js",

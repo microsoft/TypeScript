@@ -537,7 +537,7 @@ module ts {
         getCompilerHost(): CompilerHost;
         getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getGlobalDiagnostics(): Diagnostic[];
-        getTypeChecker(): TypeChecker;
+        getTypeChecker(fullTypeCheckMode: boolean): TypeChecker;
         getCommonSourceDirectory(): string;
     }
 
@@ -625,6 +625,8 @@ module ts {
 
         /** writes Array<T> instead T[]  */
         WriteArrayAsGenericType     = 0x00000001,  // Declarations
+
+        UseTypeOfFunction           = 0x00000002,  // instead of writing signature type of function use typeof
     }
 
     export enum SymbolAccessibility {
@@ -635,8 +637,9 @@ module ts {
 
     export interface SymbolAccessiblityResult {
         accessibility: SymbolAccessibility;
-        errorSymbolName?: string; // Optional symbol name that results in error
-        errorModuleName?: string; // If the symbol is not visibile from module, module's name
+        errorSymbolName?: string // Optional symbol name that results in error
+        errorModuleName?: string // If the symbol is not visibile from module, module's name
+        aliasesToMakeVisible?: ImportDeclaration[]; // aliases that need to have this symbol visible
     }
 
     export interface EmitResolver {
@@ -656,6 +659,7 @@ module ts {
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: TextWriter): void;
         writeSymbol(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags, writer: TextWriter): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
+        isImportDeclarationEntityNameReferenceDeclarationVisibile(entityName: EntityName): SymbolAccessiblityResult;
     }
 
     export enum SymbolFlags {
