@@ -734,9 +734,9 @@ module ts {
     class ClassifierShimObject extends ShimBase implements ClassifierShim {
         public classifier: Classifier;
 
-        constructor(factory: ShimFactory, public host: Logger) {
+        constructor(factory: ShimFactory, public logger: Logger) {
             super(factory);
-            this.classifier = createClassifier(this.host);
+            this.classifier = createClassifier(this.logger);
         }
 
         /// COLORIZATION
@@ -754,12 +754,12 @@ module ts {
     }
 
     class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
-        constructor(factory: ShimFactory, public host: Logger) {
+        constructor(factory: ShimFactory, public logger: Logger) {
             super(factory);
         }
 
         private forwardJSONCall(actionDescription: string, action: () => any): any {
-            return forwardJSONCall(this.host, actionDescription, action);
+            return forwardJSONCall(this.logger, actionDescription, action);
         }
 
         ///
@@ -802,22 +802,22 @@ module ts {
             }
         }
 
-        public createClassifierShim(host: Logger): ClassifierShim {
+        public createClassifierShim(logger: Logger): ClassifierShim {
             try {
-                return new ClassifierShimObject(this, host);
+            return new ClassifierShimObject(this, logger);
             }
             catch (err) {
-                logInternalError(host, err);
+                logInternalError(logger, err);
                 throw err;
             }
         }
 
-        public createCoreServicesShim(host: Logger): CoreServicesShim {
+        public createCoreServicesShim(logger: Logger): CoreServicesShim {
             try {
-                return new CoreServicesShimObject(this, host);
+            return new CoreServicesShimObject(this, logger);
             }
             catch (err) {
-                logInternalError(host, err);
+                logInternalError(logger, err);
                 throw err;
             }
         }

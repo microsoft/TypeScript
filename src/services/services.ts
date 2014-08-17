@@ -2472,7 +2472,7 @@ module ts {
 
     /// Classifier
 
-    export function createClassifier(host: Logger): Classifier {
+    export function createClassifier(logger: Logger): Classifier {
         var scanner: TypeScript.Scanner.IScanner;
         var lastDiagnosticKey: string = null;
         var noRegexTable: boolean[];
