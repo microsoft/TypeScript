@@ -804,7 +804,7 @@ module ts {
 
         public createClassifierShim(logger: Logger): ClassifierShim {
             try {
-            return new ClassifierShimObject(this, logger);
+                return new ClassifierShimObject(this, logger);
             }
             catch (err) {
                 logInternalError(logger, err);
@@ -814,7 +814,7 @@ module ts {
 
         public createCoreServicesShim(logger: Logger): CoreServicesShim {
             try {
-            return new CoreServicesShimObject(this, logger);
+                return new CoreServicesShimObject(this, logger);
             }
             catch (err) {
                 logInternalError(logger, err);
