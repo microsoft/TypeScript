@@ -217,7 +217,9 @@ module ts {
         FirstKeyword = BreakKeyword,
         LastKeyword = StringKeyword,
         FirstFutureReservedWord = ImplementsKeyword,
-        LastFutureReservedWord = YieldKeyword
+        LastFutureReservedWord = YieldKeyword,
+        FirstPunctuation= OpenBraceToken,
+        LastPunctuation = CaretEqualsToken
     }
 
     export enum NodeFlags {
