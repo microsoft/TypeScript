@@ -2365,7 +2365,7 @@ module ts {
                 var result = [symbol];
 
                 // If the symbol is an instantiation from a another symbol (e.g. widened symbol) , add the root the list
-                var rootSymbol = typeChecker.getRootSymbol(symbol);
+                var rootSymbol = typeInfoResolver.getRootSymbol(symbol);
                 if (rootSymbol && rootSymbol !== symbol) {
                     result.push(rootSymbol);
                 }
@@ -2403,7 +2403,7 @@ module ts {
                 function getPropertySymbolFromTypeReference(typeReference: TypeReferenceNode) {
                     if (typeReference) {
                         // TODO: move to getTypeOfNode instead
-                        var typeReferenceSymbol = typeChecker.getSymbolInfo(typeReference.typeName);
+                        var typeReferenceSymbol = typeInfoResolver.getSymbolInfo(typeReference.typeName);
                         if (typeReferenceSymbol) {
                             var propertySymbol = typeReferenceSymbol.members[propertyName];
                             if (propertySymbol) result.push(typeReferenceSymbol.members[propertyName]);
@@ -2417,7 +2417,7 @@ module ts {
 
             function isRelatableToSearchSet(searchSymbols: Symbol[], referenceSymbol: Symbol, referenceLocation: Node): boolean {
                 // Unwrap symbols to get to the root (e.g. triansient symbols as a result of widenning)
-                var referenceSymbolTarget = typeChecker.getRootSymbol(referenceSymbol);
+                var referenceSymbolTarget = typeInfoResolver.getRootSymbol(referenceSymbol);
 
                 // if it is in the list, then we are done
                 if (searchSymbols.indexOf(referenceSymbolTarget) >= 0) {
@@ -2448,9 +2448,9 @@ module ts {
             function getPropertySymbolFromContextualType(node: Node): Symbol {
                 if (isNameOfPropertyAssignment(node)) {
                     var objectLiteral = node.parent.parent;
-                    var contextualType = typeChecker.getContextualType(objectLiteral);
+                    var contextualType = typeInfoResolver.getContextualType(objectLiteral);
                     if (contextualType) {
-                        return typeChecker.getPropertyOfType(contextualType, (<Identifier>node).text);
+                        return typeInfoResolver.getPropertyOfType(contextualType, (<Identifier>node).text);
                     }
                 }
                 return undefined;
