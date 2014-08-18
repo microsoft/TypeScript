@@ -1924,7 +1924,7 @@ module ts {
                 primaryExpression.kind === SyntaxKind.SuperKeyword && token !== SyntaxKind.OpenParenToken && token !== SyntaxKind.DotToken;
 
             if (illegalUsageOfSuperKeyword) {
-                error(Diagnostics.super_must_be_followed_by_argument_list_or_member_access);
+                error(Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
             }
 
             var expr = parseCallAndAccess(primaryExpression, /* inNewExpression */ false);
@@ -1977,13 +1977,12 @@ module ts {
                     var indexedAccess = <IndexedAccess>createNode(SyntaxKind.IndexedAccess, expr.pos);
                     indexedAccess.object = expr;
 
-                    // It's not uncommon for a user to write: "new Type[]".  Check for that common pattern
-                    // and report a better error message.
+                    // It's not uncommon for a user to write: "new Type[]".
+                    // Check for that common pattern and report a better error message.
                     if (inNewExpression && parseOptional(SyntaxKind.CloseBracketToken)) {
                         indexedAccess.index = createMissingNode();
                         grammarErrorAtPos(bracketStart, scanner.getStartPos() - bracketStart, Diagnostics.new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead);
                     }
-                    // Otherwise parse the indexed access normally.
                     else {
                         indexedAccess.index = parseExpression();
                         parseExpected(SyntaxKind.CloseBracketToken);
@@ -3481,7 +3480,7 @@ module ts {
                         if (!matchResult) {
                             var start = range.pos;
                             var length = range.end - start;
-                            errorAtPos(start, length, Diagnostics.Invalid_reference_comment);
+                            errorAtPos(start, length, Diagnostics.Invalid_reference_directive_syntax);
                         }
                         else {
                             referencedFiles.push({

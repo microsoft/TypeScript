@@ -9,9 +9,9 @@
     
     function Foo(); // error
              ~~~
-!!! Function implementation is missing or not immediately following the declaration.
-             ~~~
 !!! Duplicate identifier 'Foo'.
+             ~~~
+!!! Function implementation is missing or not immediately following the declaration.
     function F1(s:string);
     function F1(a:any) { return a;}
     

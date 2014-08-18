@@ -76,19 +76,19 @@
     class Derived extends C {
         constructor() { super(); super = value; }
                                        ~
-!!! 'super' must be followed by argument list or member access.
+!!! 'super' must be followed by an argument list or member access.
                                  ~~~~~
 !!! Invalid left-hand side of assignment expression.
     
         foo() { super = value }
                       ~
-!!! 'super' must be followed by argument list or member access.
+!!! 'super' must be followed by an argument list or member access.
                 ~~~~~
 !!! Invalid left-hand side of assignment expression.
     
         static sfoo() { super = value; }
                               ~
-!!! 'super' must be followed by argument list or member access.
+!!! 'super' must be followed by an argument list or member access.
                         ~~~~~
 !!! Invalid left-hand side of assignment expression.
     }
