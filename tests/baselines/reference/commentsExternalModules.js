@@ -99,12 +99,12 @@ define(["require", "exports"], function (require, exports) {
         /** b's comment */
         m4.b;
         /** foo's comment
-    */
+        */
         function foo() {
             return m4.b;
         }
         /** m2 comments
-    */
+        */
         (function (m2) {
             /** class comment; */
             var c = (function () {

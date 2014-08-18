@@ -120,7 +120,7 @@ var i7_c = c7;
 /** class with statics and constructor
  */
 var c8 = (function () {
-    /** constructor comment 
+    /** constructor comment
     */
     function c8() {
     }
@@ -172,7 +172,7 @@ declare var i7_c: typeof c7;
 declare class c8 {
     /** s1 comment */
     static s1: number;
-    /** constructor comment 
+    /** constructor comment
     */
     constructor();
 }

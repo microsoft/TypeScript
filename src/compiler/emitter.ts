@@ -5,17 +5,24 @@
 
 module ts {
     interface EmitTextWriter extends TextWriter {
+        rawWrite(s: string): void;
         writeLiteral(s: string): void;
         getTextPos(): number;
         getLine(): number;
         getColumn(): number;
         getIndent(): number;
-        isLineStart(): boolean;
     }
 
-    var indentStrings: string[] = [];
+    var indentStrings: string[] = ["", "    "];
     function getIndentString(level: number) {
-        return indentStrings[level] || (indentStrings[level] = level === 0 ? "" : getIndentString(level - 1) + "    ");
+        if (indentStrings[level] === undefined) {
+            indentStrings[level] = getIndentString(level - 1) + indentStrings[1];
+        }
+        return indentStrings[level];
+    }
+
+    function getIndentSize() {
+        return indentStrings[1].length;
     }
 
     export function emitFiles(resolver: EmitResolver): EmitResult {
@@ -108,6 +115,15 @@ module ts {
                 }
             }
 
+            function rawWrite(s: string) {
+                if (s !== undefined) {
+                    if (lineStart) {
+                        lineStart = false;
+                    }
+                    output += s;
+                }
+            }
+
             function writeLiteral(s: string) {
                 if (s && s.length) {
                     write(s);
@@ -139,6 +155,7 @@ module ts {
             return {
                 write: write,
                 writeSymbol: writeSymbol,
+                rawWrite: rawWrite,
                 writeLiteral: writeLiteral,
                 writeLine: writeLine,
                 increaseIndent: () => indent++,
@@ -146,9 +163,8 @@ module ts {
                 getIndent: () => indent,
                 getTextPos: () => output.length,
                 getLine: () => lineCount + 1,
-                getColumn: () => lineStart ? indent * 4 + 1 : output.length - linePos + 1,
+                getColumn: () => lineStart ? indent * getIndentSize() + 1 : output.length - linePos + 1,
                 getText: () => output,
-                isLineStart: () => lineStart
             };
         }
 
@@ -196,7 +212,99 @@ module ts {
         }
 
         function writeCommentRange(comment: Comment, writer: EmitTextWriter) {
-            writer.writeLiteral(currentSourceFile.text.substring(comment.pos, comment.end));
+            if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
+                var firstCommentLineAndCharacter = currentSourceFile.getLineAndCharacterFromPosition(comment.pos);
+                var firstCommentLineIndent: number;
+                for (var pos = comment.pos, currentLine = firstCommentLineAndCharacter.line; pos < comment.end; currentLine++) {
+                    var nextLineStart = currentSourceFile.getPositionFromLineAndCharacter(currentLine + 1, /*character*/1);
+
+                    if (pos !== comment.pos) {
+                        // If we are not emitting first line, we need to write the spaces to adjust the alignment
+                        if (firstCommentLineIndent === undefined) {
+                            firstCommentLineIndent = calculateIndent(currentSourceFile.getPositionFromLineAndCharacter(firstCommentLineAndCharacter.line, /*character*/1),
+                                comment.pos);
+                        }
+
+                        // These are number of spaces writer is going to write at current indent
+                        var currentWriterIndentSpacing = writer.getIndent() * getIndentSize();
+
+                        // Number of spaces we want to be writing
+                        // eg: Assume writer indent
+                        // module m {
+                        //         /* starts at character 9 this is line 1
+                        //    * starts at character pos 4 line                        --1  = 8 - 8 + 3
+                        //   More left indented comment */                            --2  = 8 - 8 + 2
+                        //     class c { }
+                        // }
+                        // module m {
+                        //     /* this is line 1 -- Assume current writer indent 8
+                        //      * line                                                --3 = 8 - 4 + 5 
+                        //            More right indented comment */                  --4 = 8 - 4 + 11
+                        //     class c { }
+                        // }
+                        var spacesToEmit = currentWriterIndentSpacing - firstCommentLineIndent + calculateIndent(pos, nextLineStart); 
+                        if (spacesToEmit > 0) {
+                            var numberOfSingleSpacesToEmit = spacesToEmit % getIndentSize();
+                            var indentSizeSpaceString = getIndentString((spacesToEmit - numberOfSingleSpacesToEmit) / getIndentSize());
+
+                            // Write indent size string ( in eg 1: = "", 2: "" , 3: string with 8 spaces 4: string with 12 spaces
+                            writer.rawWrite(indentSizeSpaceString);
+
+                            // Emit the single spaces (in eg: 1: 3 spaces, 2: 2 spaces, 3: 1 space, 4: 3 spaces)
+                            while (numberOfSingleSpacesToEmit) {
+                                writer.rawWrite(" ");
+                                numberOfSingleSpacesToEmit--;
+                            }
+                        }
+                        else {
+                            // No spaces to emit write empty string
+                            writer.rawWrite("");
+                        }
+                    }
+
+                    // Write the comment line text
+                    writeTrimmedCurrentLine(pos, nextLineStart);
+
+                    pos = nextLineStart;
+                }
+            }
+            else {
+                // Single line comment of styly //....
+                writer.write(currentSourceFile.text.substring(comment.pos, comment.end));
+            }
+
+            function writeTrimmedCurrentLine(pos: number, nextLineStart: number) {
+                var end = Math.min(comment.end, nextLineStart - 1);
+                var currentLineText = currentSourceFile.text.substring(pos, end).replace(/^\s+|\s+$/g, '');
+                if (currentLineText) {
+                    // trimmed forward and ending spaces text
+                    writer.write(currentLineText);
+                    if (end !== comment.end) {
+                        writer.writeLine();
+                    }
+                }
+                else {
+                    // Empty string - make sure we write empty line
+                    writer.writeLiteral(sys.newLine);
+                }
+            }
+
+            function calculateIndent(pos: number, end: number) {
+                var currentLineIndent = 0;
+                while (pos < end && isWhiteSpace(currentSourceFile.text.charCodeAt(pos))) {
+                    pos++;
+                    if (currentSourceFile.text.charCodeAt(pos) === CharacterCodes.tab) {
+                        // Tabs = size of the indent
+                        currentLineIndent += getIndentSize();
+                    }
+                    else {
+                        // Single space
+                        currentLineIndent++;
+                    }
+                }
+
+                return currentLineIndent;
+            }
         }
 
         function emitJavaScript(jsFilePath: string, root?: SourceFile) {

@@ -62,7 +62,7 @@ var Shapes;
     }
     Shapes.foo = foo;
     /**  comment after function
-    * this is another comment 
+    * this is another comment
     */
     var b = 10;
 })(Shapes || (Shapes = {}));

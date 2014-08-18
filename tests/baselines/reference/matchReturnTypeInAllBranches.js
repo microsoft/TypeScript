@@ -46,7 +46,7 @@ var IceCreamMonster = (function () {
         this.name = name;
     }
     /**
-* Tells the IceCreamMonster to eat their ice cre    am!    
+* Tells the IceCreamMonster to eat their ice cre    am!
 *
 * @param {number} amount The amount of ice cream to e    at.
 * @return {boolean} True if ice cream remains, false if there is no more ice cream le    ft.

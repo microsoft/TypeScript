@@ -398,13 +398,13 @@ var c1 = (function () {
         return c1.b_s1 + b;
     };
     Object.defineProperty(c1, "b_s3", {
-        /** static getter property 
-    */
+        /** static getter property
+        */
         get: function () {
             return c1.s2(c1.s1);
         },
-        /** setter property 
-    */
+        /** setter property
+        */
         set: function (value) {
             /** setter */
             c1.b_s1 = c1.b_s2(value);
@@ -541,9 +541,9 @@ declare class c1 {
     static b_s1: number;
     /** static sum with property */
     static b_s2(b: number): number;
-    /** static getter property 
+    /** static getter property
     */
-    /** setter property 
+    /** setter property
     */
     static b_s3: number;
 }
