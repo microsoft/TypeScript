@@ -1370,6 +1370,12 @@ module ts {
             node.parent.kind === SyntaxKind.IndexedAccess && (<IndexedAccess>node.parent).index === node;
     }
 
+    enum SearchMeaning {
+        Value = 0x1,
+        Type = 0x2,
+        Namespace = 0x4
+    }
+
     // A cache of completion entries for keywords, these do not change between sessions
     var keywordCompletions:CompletionEntry[] = [];
     for (var i = SyntaxKind.FirstKeyword; i <= SyntaxKind.LastKeyword; i++) {
@@ -2208,11 +2214,14 @@ module ts {
 
             var result: ReferenceEntry[];
 
+            // Compute the meaning from the location and the symbol it references
+            var searchMeaning = getIntersectingMeaningFromDeclaration(getMeaningFromLocation(node), symbol.getDeclarations());
+
             var scope = getSymbolScope(symbol, node);
 
             if (scope) {
                 result = [];
-                getReferencesInNode(scope, symbol, node, result);
+                getReferencesInNode(scope, symbol, node, searchMeaning, result);
             }
             else {
                 var symbolName = symbol.getName();
@@ -2222,7 +2231,7 @@ module ts {
 
                     if (sourceFile.getBloomFilter().probablyContains(symbolName)) {
                         if (!result) result = [];
-                        getReferencesInNode(sourceFile, symbol, node, result);
+                        getReferencesInNode(sourceFile, symbol, node, searchMeaning, result);
                     }
                 });
             }
@@ -2314,7 +2323,7 @@ module ts {
                 return false;
             }
 
-            function getReferencesInNode(container: Node, searchSymbol: Symbol, searchLocation: Node, result: ReferenceEntry[]): void {
+            function getReferencesInNode(container: Node, searchSymbol: Symbol, searchLocation: Node, searchMeaning: SearchMeaning, result: ReferenceEntry[]): void {
                 var searchSymbolName = searchSymbol.getName();
 
                 var sourceFile = container.getSourceFile();
@@ -2329,6 +2338,10 @@ module ts {
 
                         var referenceLocation = getNodeAtPosition(sourceFile, position);
                         if (!isValidReferencePosition(referenceLocation, searchSymbol)) {
+                            return;
+                        }
+
+                        if (!(getMeaningFromLocation(referenceLocation) & searchMeaning)) {
                             return;
                         }
 
@@ -2347,7 +2360,7 @@ module ts {
                 }
             }
 
-            function populateSearchSymbolSet(symbol: Symbol, location: Node): Symbol[]{
+            function populateSearchSymbolSet(symbol: Symbol, location: Node): Symbol[] {
                 // The search set contains at least the current symbol
                 var result = [symbol];
 
@@ -2452,6 +2465,120 @@ module ts {
                 };
             }
 
+            function getMeaningFromDeclaration(node: Declaration): SearchMeaning {
+                switch (node.kind) {
+                    case SyntaxKind.Parameter:
+                    case SyntaxKind.VariableDeclaration:
+                    case SyntaxKind.Property:
+                    case SyntaxKind.PropertyAssignment:
+                    case SyntaxKind.EnumMember:
+                    case SyntaxKind.Method:
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.FunctionExpression:
+                    case SyntaxKind.ArrowFunction:
+                    case SyntaxKind.CatchBlock:
+                        return SearchMeaning.Value;
+
+                    case SyntaxKind.TypeParameter:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.TypeLiteral:
+                        return SearchMeaning.Type;
+
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.EnumDeclaration:
+                        return SearchMeaning.Value | SearchMeaning.Type;
+
+                    case SyntaxKind.ModuleDeclaration:
+                        if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral) {
+                            return SearchMeaning.Namespace | SearchMeaning.Value;
+                        }
+                        else if (isInstantiated(node)) {
+                            return SearchMeaning.Namespace | SearchMeaning.Value;
+                        }
+                        else {
+                            return SearchMeaning.Namespace;
+                        }
+                        break;
+
+                    case SyntaxKind.ImportDeclaration:
+                        return SearchMeaning.Value | SearchMeaning.Type | SearchMeaning.Namespace;
+                }
+                Debug.fail("Unkown declaration type");
+            }
+
+            function isTypeReference(node: Node): boolean {
+                if (node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node)
+                    node = node.parent;
+
+                return node.parent.kind === SyntaxKind.TypeReference;
+            }
+
+            function isNamespaceReference(node: Node): boolean {
+                var root = node;
+                var isLastClause = true;
+                if (root.parent.kind === SyntaxKind.QualifiedName) {
+                    while (root.parent && root.parent.kind === SyntaxKind.QualifiedName)
+                        root = root.parent;
+
+                    isLastClause = (<QualifiedName>root).right === node;
+                }
+
+                return root.parent.kind === SyntaxKind.TypeReference && !isLastClause;
+            }
+
+            function getMeaningFromLocation(node: Node): SearchMeaning {
+                if (isDeclarationIdentifier(<Identifier>node)) {
+                    return getMeaningFromDeclaration(node.parent);
+                }
+                else if (isTypeReference(node)) {
+                    return SearchMeaning.Type;
+                }
+                else if (isNamespaceReference(node)) {
+                    return SearchMeaning.Namespace;
+                }
+                else {
+                    return SearchMeaning.Value;
+                }
+            }
+
+            /// Given an initial searchMeaning, extracted from a location, widen the search scope based on the declarations
+            /// of the corresponding symbol. e.g. if we are searching for "Foo" in value position, but "Foo" references a class
+            /// then we need to widen the search to include type positions as well.
+            /// On the contrary, if we are searching for "Bar" in type position and we trace bar to an interface, and an uninstantiated
+            /// module, we want to keep the search limited to only types, as the two declarations (interface and uninstantiated module)
+            /// do not intersect in any of the three spaces.
+            function getIntersectingMeaningFromDeclaration(initialMeaning: SearchMeaning, declarations: Declaration[]): SearchMeaning {
+                var meaning = initialMeaning;
+                var incomplete = true;
+                if (declarations) {
+                    do {
+                        // The result is order-sensitive, for instance if initialMeaning === Namespace, and declarations = [class, instantiated module]
+                        // we need to consider both as they initialMeaning intersects with the module in the namespace space, and the module
+                        // intersects with the class in the value space.
+                        // To achieve that we will keep iterating until the result stabilizes.
+
+                        // Remeber the last meaning
+                        var lastIterationMeaning = meaning;
+
+                        for (var i = 0, n = declarations.length; i < n; i++) {
+                            var declarationMeaning = getMeaningFromDeclaration(declarations[i]);
+
+                            if (declarationMeaning & meaning) {
+                                searchMeaning |= declarationMeaning;
+                            }
+                        }
+
+                        // meaning becomes the old one
+                        meaning = searchMeaning;
+
+                    } while (meaning !== lastIterationMeaning);
+                }
+                return meaning;
+            }
+
             /// A node is considedered a writeAccess iff it is a name of a declaration or a target of an assignment
             function isWriteAccess(node: Node): boolean {
                 if (node.kind === SyntaxKind.Identifier && isDeclarationIdentifier(<Identifier>node)) {
@@ -2486,7 +2613,6 @@ module ts {
                 }
             }
         }
-
 
         /// Syntactic features
         function getSyntaxTree(filename: string): TypeScript.SyntaxTree {
