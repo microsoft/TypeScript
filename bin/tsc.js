@@ -1035,9 +1035,8 @@ var ts;
                         }
                         if (text.charCodeAt(pos + 1) === 42 /* asterisk */) {
                             pos += 2;
-                            var safeLength = len - 1;
                             var commentClosed = false;
-                            while (pos < safeLength) {
+                            while (pos < len) {
                                 var ch = text.charCodeAt(pos);
                                 if (ch === 42 /* asterisk */ && text.charCodeAt(pos + 1) === 47 /* slash */) {
                                     pos += 2;
@@ -1050,7 +1049,6 @@ var ts;
                                 pos++;
                             }
                             if (!commentClosed) {
-                                pos++;
                                 error(ts.Diagnostics.Asterisk_Slash_expected);
                             }
                             if (onComment) {
@@ -1478,6 +1476,8 @@ var ts;
         SyntaxKind[SyntaxKind["LastKeyword"] = SyntaxKind.StringKeyword] = "LastKeyword";
         SyntaxKind[SyntaxKind["FirstFutureReservedWord"] = SyntaxKind.ImplementsKeyword] = "FirstFutureReservedWord";
         SyntaxKind[SyntaxKind["LastFutureReservedWord"] = SyntaxKind.YieldKeyword] = "LastFutureReservedWord";
+        SyntaxKind[SyntaxKind["FirstPunctuation"] = SyntaxKind.OpenBraceToken] = "FirstPunctuation";
+        SyntaxKind[SyntaxKind["LastPunctuation"] = SyntaxKind.CaretEqualsToken] = "LastPunctuation";
     })(ts.SyntaxKind || (ts.SyntaxKind = {}));
     var SyntaxKind = ts.SyntaxKind;
     (function (NodeFlags) {
@@ -8685,7 +8685,7 @@ var ts;
                         return { accessibility: 0 /* Accessible */, aliasesToMakeVisible: hasAccessibleDeclarations.aliasesToMakeVisible };
                     }
                     meaningToLook = getQualifiedLeftMeaning(meaning);
-                    symbol = symbol.parent;
+                    symbol = getParentOfSymbol(symbol);
                 }
                 var symbolExternalModule = ts.forEach(initialSymbol.declarations, function (declaration) { return getExternalModuleContainer(declaration); });
                 if (symbolExternalModule) {
@@ -8776,7 +8776,7 @@ var ts;
                     if (accessibleSymbolChain && !needsQualification(accessibleSymbolChain[0], enclosingDeclaration, accessibleSymbolChain.length === 1 ? meaning : getQualifiedLeftMeaning(meaning))) {
                         break;
                     }
-                    symbol = accessibleSymbolChain ? accessibleSymbolChain[0].parent : symbol.parent;
+                    symbol = getParentOfSymbol(accessibleSymbolChain ? accessibleSymbolChain[0] : symbol);
                     meaning = getQualifiedLeftMeaning(meaning);
                 }
                 return symbolName;

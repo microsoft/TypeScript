@@ -1035,9 +1035,8 @@ var ts;
                         }
                         if (text.charCodeAt(pos + 1) === 42 /* asterisk */) {
                             pos += 2;
-                            var safeLength = len - 1;
                             var commentClosed = false;
-                            while (pos < safeLength) {
+                            while (pos < len) {
                                 var ch = text.charCodeAt(pos);
                                 if (ch === 42 /* asterisk */ && text.charCodeAt(pos + 1) === 47 /* slash */) {
                                     pos += 2;
@@ -1050,7 +1049,6 @@ var ts;
                                 pos++;
                             }
                             if (!commentClosed) {
-                                pos++;
                                 error(ts.Diagnostics.Asterisk_Slash_expected);
                             }
                             if (onComment) {
@@ -1478,6 +1476,8 @@ var ts;
         SyntaxKind[SyntaxKind["LastKeyword"] = SyntaxKind.StringKeyword] = "LastKeyword";
         SyntaxKind[SyntaxKind["FirstFutureReservedWord"] = SyntaxKind.ImplementsKeyword] = "FirstFutureReservedWord";
         SyntaxKind[SyntaxKind["LastFutureReservedWord"] = SyntaxKind.YieldKeyword] = "LastFutureReservedWord";
+        SyntaxKind[SyntaxKind["FirstPunctuation"] = SyntaxKind.OpenBraceToken] = "FirstPunctuation";
+        SyntaxKind[SyntaxKind["LastPunctuation"] = SyntaxKind.CaretEqualsToken] = "LastPunctuation";
     })(ts.SyntaxKind || (ts.SyntaxKind = {}));
     var SyntaxKind = ts.SyntaxKind;
     (function (NodeFlags) {
@@ -8685,7 +8685,7 @@ var ts;
                         return { accessibility: 0 /* Accessible */, aliasesToMakeVisible: hasAccessibleDeclarations.aliasesToMakeVisible };
                     }
                     meaningToLook = getQualifiedLeftMeaning(meaning);
-                    symbol = symbol.parent;
+                    symbol = getParentOfSymbol(symbol);
                 }
                 var symbolExternalModule = ts.forEach(initialSymbol.declarations, function (declaration) { return getExternalModuleContainer(declaration); });
                 if (symbolExternalModule) {
@@ -8776,7 +8776,7 @@ var ts;
                     if (accessibleSymbolChain && !needsQualification(accessibleSymbolChain[0], enclosingDeclaration, accessibleSymbolChain.length === 1 ? meaning : getQualifiedLeftMeaning(meaning))) {
                         break;
                     }
-                    symbol = accessibleSymbolChain ? accessibleSymbolChain[0].parent : symbol.parent;
+                    symbol = getParentOfSymbol(accessibleSymbolChain ? accessibleSymbolChain[0] : symbol);
                     meaning = getQualifiedLeftMeaning(meaning);
                 }
                 return symbolName;
@@ -30648,6 +30648,7 @@ var ts;
         EndOfLineState[EndOfLineState["InMultiLineCommentTrivia"] = 1] = "InMultiLineCommentTrivia";
         EndOfLineState[EndOfLineState["InSingleQuoteStringLiteral"] = 2] = "InSingleQuoteStringLiteral";
         EndOfLineState[EndOfLineState["InDoubleQuoteStringLiteral"] = 3] = "InDoubleQuoteStringLiteral";
+        EndOfLineState[EndOfLineState["EndingWithDotToken"] = 4] = "EndingWithDotToken";
     })(ts.EndOfLineState || (ts.EndOfLineState = {}));
     var EndOfLineState = ts.EndOfLineState;
     (function (TokenClass) {
@@ -31112,7 +31113,7 @@ var ts;
                     sourceFile = documentRegistry.updateDocument(sourceFile, filename, compilationSettings, scriptSnapshot, version, isOpen, textChangeRange);
                 }
                 else {
-                    sourceFile = documentRegistry.acquireDocument(filename, compilationSettings, scriptSnapshot, version, isOpen, []);
+                    sourceFile = documentRegistry.acquireDocument(filename, compilationSettings, scriptSnapshot, version, isOpen);
                 }
                 sourceFilesByName[filename] = sourceFile;
             }
@@ -31788,113 +31789,184 @@ var ts;
     ts.createLanguageService = createLanguageService;
     function createClassifier(host) {
         var scanner;
-        var lastDiagnosticKey = null;
         var noRegexTable;
-        var reportDiagnostic = function (position, fullWidth, key, args) {
-            lastDiagnosticKey = key;
-        };
         if (!noRegexTable) {
             noRegexTable = [];
-            noRegexTable[11 /* IdentifierName */] = true;
-            noRegexTable[14 /* StringLiteral */] = true;
-            noRegexTable[13 /* NumericLiteral */] = true;
-            noRegexTable[12 /* RegularExpressionLiteral */] = true;
-            noRegexTable[35 /* ThisKeyword */] = true;
-            noRegexTable[93 /* PlusPlusToken */] = true;
-            noRegexTable[94 /* MinusMinusToken */] = true;
-            noRegexTable[73 /* CloseParenToken */] = true;
-            noRegexTable[75 /* CloseBracketToken */] = true;
-            noRegexTable[71 /* CloseBraceToken */] = true;
-            noRegexTable[37 /* TrueKeyword */] = true;
-            noRegexTable[24 /* FalseKeyword */] = true;
+            noRegexTable[55 /* Identifier */] = true;
+            noRegexTable[3 /* StringLiteral */] = true;
+            noRegexTable[2 /* NumericLiteral */] = true;
+            noRegexTable[4 /* RegularExpressionLiteral */] = true;
+            noRegexTable[83 /* ThisKeyword */] = true;
+            noRegexTable[29 /* PlusPlusToken */] = true;
+            noRegexTable[30 /* MinusMinusToken */] = true;
+            noRegexTable[8 /* CloseParenToken */] = true;
+            noRegexTable[10 /* CloseBracketToken */] = true;
+            noRegexTable[6 /* CloseBraceToken */] = true;
+            noRegexTable[85 /* TrueKeyword */] = true;
+            noRegexTable[70 /* FalseKeyword */] = true;
         }
         function getClassificationsForLine(text, lexState) {
             var offset = 0;
-            if (lexState !== 0 /* Start */) {
-                if (lexState === 3 /* InDoubleQuoteStringLiteral */) {
+            var lastTokenOrCommentEnd = 0;
+            var lastToken = 0 /* Unknown */;
+            var inUnterminatedMultiLineComment = false;
+            switch (lexState) {
+                case 3 /* InDoubleQuoteStringLiteral */:
                     text = '"\\\n' + text;
-                }
-                else if (lexState === 2 /* InSingleQuoteStringLiteral */) {
+                    offset = 3;
+                    break;
+                case 2 /* InSingleQuoteStringLiteral */:
                     text = "'\\\n" + text;
-                }
-                else if (lexState === 1 /* InMultiLineCommentTrivia */) {
+                    offset = 3;
+                    break;
+                case 1 /* InMultiLineCommentTrivia */:
                     text = "/*\n" + text;
-                }
-                offset = 3;
+                    offset = 3;
+                    break;
+                case 4 /* EndingWithDotToken */:
+                    lastToken = 11 /* DotToken */;
+                    break;
             }
             var result = {
                 finalLexState: 0 /* Start */,
                 entries: []
             };
-            var simpleText = TypeScript.SimpleText.fromString(text);
-            scanner = TypeScript.Scanner.createScanner(1 /* ES5 */, simpleText, reportDiagnostic);
-            var lastTokenKind = 0 /* None */;
-            var token = null;
+            scanner = ts.createScanner(1 /* ES5 */, text, onError, processComment);
+            var token = 0 /* Unknown */;
             do {
-                lastDiagnosticKey = null;
-                token = scanner.scan(!noRegexTable[lastTokenKind]);
-                lastTokenKind = token.kind();
-                processToken(text, simpleText, offset, token, result);
-            } while (token.kind() !== 10 /* EndOfFileToken */);
-            lastDiagnosticKey = null;
-            return result;
-        }
-        function processToken(text, simpleText, offset, token, result) {
-            processTriviaList(text, offset, token.leadingTrivia(simpleText), result);
-            addResult(text, offset, result, TypeScript.width(token), token.kind());
-            processTriviaList(text, offset, token.trailingTrivia(simpleText), result);
-            if (TypeScript.fullEnd(token) >= text.length) {
-                if (lastDiagnosticKey === TypeScript.DiagnosticCode.AsteriskSlash_expected) {
-                    result.finalLexState = 1 /* InMultiLineCommentTrivia */;
-                    return;
+                token = scanner.scan();
+                if ((token === 27 /* SlashToken */ || token === 47 /* SlashEqualsToken */) && !noRegexTable[lastToken]) {
+                    if (scanner.reScanSlashToken() === 4 /* RegularExpressionLiteral */) {
+                        token = 4 /* RegularExpressionLiteral */;
+                    }
                 }
-                if (token.kind() === 14 /* StringLiteral */) {
-                    var tokenText = token.text();
-                    if (tokenText.length > 0 && tokenText.charCodeAt(tokenText.length - 1) === 92 /* backslash */) {
-                        var quoteChar = tokenText.charCodeAt(0);
-                        result.finalLexState = quoteChar === 34 /* doubleQuote */ ? 3 /* InDoubleQuoteStringLiteral */ : 2 /* InSingleQuoteStringLiteral */;
-                        return;
+                else if (lastToken === 11 /* DotToken */) {
+                    token = 55 /* Identifier */;
+                }
+                lastToken = token;
+                processToken();
+            } while (token !== 1 /* EndOfFileToken */);
+            return result;
+            function onError(message) {
+                inUnterminatedMultiLineComment = message.key === ts.Diagnostics.Asterisk_Slash_expected.key;
+            }
+            function processComment(start, end) {
+                addLeadingWhiteSpace(start, end);
+                addResult(end - start, 3 /* Comment */);
+            }
+            function processToken() {
+                var start = scanner.getTokenPos();
+                var end = scanner.getTextPos();
+                addLeadingWhiteSpace(start, end);
+                addResult(end - start, classFromKind(token));
+                if (end >= text.length) {
+                    if (inUnterminatedMultiLineComment) {
+                        result.finalLexState = 1 /* InMultiLineCommentTrivia */;
+                    }
+                    else if (token === 3 /* StringLiteral */) {
+                        var tokenText = scanner.getTokenText();
+                        if (tokenText.length > 0 && tokenText.charCodeAt(tokenText.length - 1) === 92 /* backslash */) {
+                            var quoteChar = tokenText.charCodeAt(0);
+                            result.finalLexState = quoteChar === 34 /* doubleQuote */ ? 3 /* InDoubleQuoteStringLiteral */ : 2 /* InSingleQuoteStringLiteral */;
+                        }
+                    }
+                    else if (token === 11 /* DotToken */) {
+                        result.finalLexState = 4 /* EndingWithDotToken */;
                     }
                 }
             }
-        }
-        function processTriviaList(text, offset, triviaList, result) {
-            for (var i = 0, n = triviaList.count(); i < n; i++) {
-                var trivia = triviaList.syntaxTriviaAt(i);
-                addResult(text, offset, result, trivia.fullWidth(), trivia.kind());
-            }
-        }
-        function addResult(text, offset, result, length, kind) {
-            if (length > 0) {
-                if (result.entries.length === 0) {
-                    length -= offset;
+            function addLeadingWhiteSpace(start, end) {
+                if (start > lastTokenOrCommentEnd) {
+                    addResult(start - lastTokenOrCommentEnd, 4 /* Whitespace */);
                 }
-                result.entries.push({ length: length, classification: classFromKind(kind) });
+                lastTokenOrCommentEnd = end;
+            }
+            function addResult(length, classification) {
+                if (length > 0) {
+                    if (result.entries.length === 0) {
+                        length -= offset;
+                    }
+                    result.entries.push({ length: length, classification: classification });
+                }
             }
         }
-        function classFromKind(kind) {
-            if (TypeScript.SyntaxFacts.isAnyKeyword(kind)) {
+        function isBinaryExpressionOperatorToken(token) {
+            switch (token) {
+                case 26 /* AsteriskToken */:
+                case 27 /* SlashToken */:
+                case 28 /* PercentToken */:
+                case 24 /* PlusToken */:
+                case 25 /* MinusToken */:
+                case 31 /* LessThanLessThanToken */:
+                case 32 /* GreaterThanGreaterThanToken */:
+                case 33 /* GreaterThanGreaterThanGreaterThanToken */:
+                case 15 /* LessThanToken */:
+                case 16 /* GreaterThanToken */:
+                case 17 /* LessThanEqualsToken */:
+                case 18 /* GreaterThanEqualsToken */:
+                case 77 /* InstanceOfKeyword */:
+                case 76 /* InKeyword */:
+                case 19 /* EqualsEqualsToken */:
+                case 20 /* ExclamationEqualsToken */:
+                case 21 /* EqualsEqualsEqualsToken */:
+                case 22 /* ExclamationEqualsEqualsToken */:
+                case 34 /* AmpersandToken */:
+                case 36 /* CaretToken */:
+                case 35 /* BarToken */:
+                case 39 /* AmpersandAmpersandToken */:
+                case 40 /* BarBarToken */:
+                case 53 /* BarEqualsToken */:
+                case 52 /* AmpersandEqualsToken */:
+                case 54 /* CaretEqualsToken */:
+                case 49 /* LessThanLessThanEqualsToken */:
+                case 50 /* GreaterThanGreaterThanEqualsToken */:
+                case 51 /* GreaterThanGreaterThanGreaterThanEqualsToken */:
+                case 44 /* PlusEqualsToken */:
+                case 45 /* MinusEqualsToken */:
+                case 46 /* AsteriskEqualsToken */:
+                case 47 /* SlashEqualsToken */:
+                case 48 /* PercentEqualsToken */:
+                case 43 /* EqualsToken */:
+                case 14 /* CommaToken */:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+        function isPrefixUnaryExpressionOperatorToken(token) {
+            switch (token) {
+                case 24 /* PlusToken */:
+                case 25 /* MinusToken */:
+                case 38 /* TildeToken */:
+                case 37 /* ExclamationToken */:
+                case 29 /* PlusPlusToken */:
+                case 30 /* MinusMinusToken */:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+        function isKeyword(token) {
+            return token >= ts.SyntaxKind.FirstKeyword && token <= ts.SyntaxKind.LastKeyword;
+        }
+        function classFromKind(token) {
+            if (isKeyword(token)) {
                 return 1 /* Keyword */;
             }
-            else if (TypeScript.SyntaxFacts.isBinaryExpressionOperatorToken(kind) || TypeScript.SyntaxFacts.isPrefixUnaryExpressionOperatorToken(kind)) {
+            else if (isBinaryExpressionOperatorToken(token) || isPrefixUnaryExpressionOperatorToken(token)) {
                 return 2 /* Operator */;
             }
-            else if (TypeScript.SyntaxFacts.isAnyPunctuation(kind)) {
+            else if (token >= ts.SyntaxKind.FirstPunctuation && token <= ts.SyntaxKind.LastPunctuation) {
                 return 0 /* Punctuation */;
             }
-            switch (kind) {
-                case 4 /* WhitespaceTrivia */:
-                    return 4 /* Whitespace */;
-                case 6 /* MultiLineCommentTrivia */:
-                case 7 /* SingleLineCommentTrivia */:
-                    return 3 /* Comment */;
-                case 13 /* NumericLiteral */:
+            switch (token) {
+                case 2 /* NumericLiteral */:
                     return 6 /* NumberLiteral */;
-                case 14 /* StringLiteral */:
+                case 3 /* StringLiteral */:
                     return 7 /* StringLiteral */;
-                case 12 /* RegularExpressionLiteral */:
+                case 4 /* RegularExpressionLiteral */:
                     return 8 /* RegExpLiteral */;
-                case 11 /* IdentifierName */:
+                case 55 /* Identifier */:
                 default:
                     return 5 /* Identifier */;
             }
@@ -32572,8 +32644,8 @@ var ts;
         TypeScriptServicesFactory.prototype.createLanguageServiceShim = function (host) {
             try {
                 var hostAdapter = new LanguageServiceShimHostAdapter(host);
-                var pullLanguageService = ts.createLanguageService(hostAdapter, this.documentRegistry);
-                return new LanguageServiceShimObject(this, host, pullLanguageService);
+                var languageService = ts.createLanguageService(hostAdapter, this.documentRegistry);
+                return new LanguageServiceShimObject(this, host, languageService);
             }
             catch (err) {
                 logInternalError(host, err);
