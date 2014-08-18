@@ -12,8 +12,8 @@ var v = {
 //// [commentsOnObjectLiteral4.js]
 var v = {
     /**
-  * @type {number}
-  */
+     * @type {number}
+     */
     get bar() {
         return this._bar;
     }

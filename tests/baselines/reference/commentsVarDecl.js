@@ -56,7 +56,7 @@ var anotherAnotherVariable = 70; /* these are multiple trailing comments */ /* m
 /** Triple slash multiline comment*/
 /** another line in the comment*/
 /** comment line 2*/
-var x = 70; /* multiline trailing comment 
+var x = 70; /* multiline trailing comment
 this is multiline trailing comment */
 /** Triple slash comment on the assignement shouldnt be in .d.ts file*/
 x = myVariable;
