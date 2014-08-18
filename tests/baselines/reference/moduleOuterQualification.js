@@ -14,4 +14,10 @@ declare module outer {
 
 //// [moduleOuterQualification.d.ts]
 declare module outer {
+    interface Beta {
+    }
+    module inner {
+        interface Beta extends outer.Beta {
+        }
+    }
 }

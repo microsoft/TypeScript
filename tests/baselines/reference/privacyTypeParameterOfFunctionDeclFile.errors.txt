@@ -1,4 +1,4 @@
-==== tests/cases/compiler/privacyTypeParameterOfFunctionDeclFile.ts (24 errors) ====
+==== tests/cases/compiler/privacyTypeParameterOfFunctionDeclFile.ts (36 errors) ====
     class privateClass {
     }
     
@@ -7,12 +7,18 @@
     
     export interface publicInterfaceWithPrivateTypeParameters {
         new <T extends privateClass>(): privateClass;  // Error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Return type of constructor signature from exported interface has or is using private name 'privateClass'.
              ~~~~~~~~~~~~~~~~~~~~~~
 !!! Type parameter 'T' of constructor signature from exported interface has or is using private name 'privateClass'.
         <T extends privateClass>(): privateClass;  // Error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Return type of call signature from exported interface has or is using private name 'privateClass'.
          ~~~~~~~~~~~~~~~~~~~~~~
 !!! Type parameter 'T' of call signature from exported interface has or is using private name 'privateClass'.
         myMethod<T extends privateClass>(): privateClass;  // Error
+        ~~~~~~~~
+!!! Return type of method from exported interface has or is using private name 'privateClass'.
                  ~~~~~~~~~~~~~~~~~~~~~~
 !!! Type parameter 'T' of method from exported interface has or is using private name 'privateClass'.
     }
@@ -138,12 +144,18 @@
     
     export interface publicInterfaceWithPrivatModuleTypeParameters {
         new <T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Return type of constructor signature from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Type parameter 'T' of constructor signature from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
         <T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Return type of call signature from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Type parameter 'T' of call signature from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
         myMethod<T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
+        ~~~~~~~~
+!!! Return type of method from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Type parameter 'T' of method from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
     }
@@ -187,12 +199,18 @@
     
         export interface publicInterfaceWithPrivateTypeParameters {
             new <T extends privateClass>(): privateClass;  // Error
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Return type of constructor signature from exported interface has or is using private name 'privateClass'.
                  ~~~~~~~~~~~~~~~~~~~~~~
 !!! Type parameter 'T' of constructor signature from exported interface has or is using private name 'privateClass'.
             <T extends privateClass>(): privateClass;  // Error
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Return type of call signature from exported interface has or is using private name 'privateClass'.
              ~~~~~~~~~~~~~~~~~~~~~~
 !!! Type parameter 'T' of call signature from exported interface has or is using private name 'privateClass'.
             myMethod<T extends privateClass>(): privateClass;  // Error
+            ~~~~~~~~
+!!! Return type of method from exported interface has or is using private name 'privateClass'.
                      ~~~~~~~~~~~~~~~~~~~~~~
 !!! Type parameter 'T' of method from exported interface has or is using private name 'privateClass'.
         }
@@ -318,12 +336,18 @@
     
         export interface publicInterfaceWithPrivatModuleTypeParameters {
             new <T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Return type of constructor signature from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Type parameter 'T' of constructor signature from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
             <T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Return type of call signature from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Type parameter 'T' of call signature from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
             myMethod<T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
+            ~~~~~~~~
+!!! Return type of method from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Type parameter 'T' of method from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
         }

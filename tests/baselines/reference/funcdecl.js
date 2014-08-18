@@ -134,29 +134,26 @@ var f2 = function () {
 
 //// [funcdecl.d.ts]
 declare function simpleFunc(): string;
-declare var simpleFuncVar: () => string;
+declare var simpleFuncVar: typeof simpleFunc;
 declare function anotherFuncNoReturn(): void;
-declare var anotherFuncNoReturnVar: () => void;
+declare var anotherFuncNoReturnVar: typeof anotherFuncNoReturn;
 declare function withReturn(): string;
-declare var withReturnVar: () => string;
+declare var withReturnVar: typeof withReturn;
 declare function withParams(a: string): string;
-declare var withparamsVar: (a: string) => string;
+declare var withparamsVar: typeof withParams;
 declare function withMultiParams(a: number, b: any, c: Object): number;
-declare var withMultiParamsVar: (a: number, b: any, c: Object) => number;
+declare var withMultiParamsVar: typeof withMultiParams;
 declare function withOptionalParams(a?: string): void;
-declare var withOptionalParamsVar: (a?: string) => void;
+declare var withOptionalParamsVar: typeof withOptionalParams;
 declare function withInitializedParams(a: string, b0: any, b?: number, c?: string): void;
-declare var withInitializedParamsVar: (a: string, b0: any, b?: number, c?: string) => void;
+declare var withInitializedParamsVar: typeof withInitializedParams;
 declare function withOptionalInitializedParams(a: string, c?: string): void;
-declare var withOptionalInitializedParamsVar: (a: string, c?: string) => void;
+declare var withOptionalInitializedParamsVar: typeof withOptionalInitializedParams;
 declare function withRestParams(a: string, ...myRestParameter: number[]): number[];
-declare var withRestParamsVar: (a: string, ...myRestParameter: number[]) => number[];
+declare var withRestParamsVar: typeof withRestParams;
 declare function overload1(n: number): string;
 declare function overload1(s: string): string;
-declare var withOverloadSignature: {
-    (n: number): string;
-    (s: string): string;
-};
+declare var withOverloadSignature: typeof overload1;
 declare function f(n: () => void): void;
 declare module m2 {
     function foo(n: () => void): void;

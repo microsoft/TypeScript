@@ -1554,11 +1554,11 @@ module ts {
             // Note: for ease of implementation we treat productions '2' and '3' as the same thing. 
             // (i.e. they're both BinaryExpressions with an assignment operator in it).
 
-            // First, check if we have production '4' (an arrow function).  Note that if we do, we
-            // must *not* recurse for productsion 1, 2 or 3. An ArrowFunction is not a 
-            // LeftHandSideExpression, nor does it start a ConditionalExpression.  So we are done 
+            // First, check if we have an arrow function (production '4') that starts with a parenthesized
+            // parameter list. If we do, we must *not* recurse for productsion 1, 2 or 3. An ArrowFunction is
+            // not a  LeftHandSideExpression, nor does it start a ConditionalExpression.  So we are done 
             // with AssignmentExpression if we see one.
-            var arrowExpression = tryParseArrowFunctionExpression();
+            var arrowExpression = tryParseParenthesizedArrowFunctionExpression();
             if (arrowExpression) {
                 return arrowExpression;
             }
@@ -1566,6 +1566,13 @@ module ts {
             // Now try to handle the rest of the cases.  First, see if we can parse out up to and
             // including a conditional expression.
             var expr = parseConditionalExpression(noIn);
+
+            // To avoid a look-ahead, we did not handle the case of an arrow function with a single un-parenthesized
+            // parameter ('x => ...') above. We handle it here by checking if the parsed expression was a single
+            // identifier and the current token is an arrow.
+            if (expr.kind === SyntaxKind.Identifier && token === SyntaxKind.EqualsGreaterThanToken) {
+                return parseSimpleArrowFunctionExpression(<Identifier>expr);
+            }
 
             // Now see if we might be in cases '2' or '3'.
             // If the expression was a LHS expression, and we  have an assignment operator, then 
@@ -1613,39 +1620,7 @@ module ts {
             return false;
         }
 
-        function tryParseArrowFunctionExpression(): Expression {
-            return isSimpleArrowFunctionExpression()
-                ? parseSimpleArrowFunctionExpression()
-                : tryParseParenthesizedArrowFunctionExpression();
-        }
-
-        function isSimpleArrowFunctionExpression(): boolean {
-            if (token === SyntaxKind.EqualsGreaterThanToken) {
-                // ERROR RECOVERY TWEAK:
-                // If we see a standalone => try to parse it as an arrow function expression as that's
-                // likely whatthe user intended to write.
-                return true;
-            }
-
-            if (token === SyntaxKind.Identifier) {
-                // if we see:    a => 
-                // then this is clearly an arrow function expression.
-                return lookAhead(() => {
-                    return nextToken() === SyntaxKind.EqualsGreaterThanToken;
-                });
-            }
-
-            // Definitely not a simple arrow function expression.
-            return false;
-        }
-
-        function parseSimpleArrowFunctionExpression(): Expression {
-            Debug.assert(token === SyntaxKind.Identifier || token === SyntaxKind.EqualsGreaterThanToken);
-
-            // Get the identifier for the simple arrow.  If one isn't there then we'll report a useful
-            // message that it is missing.
-            var identifier = parseIdentifier();
-
+        function parseSimpleArrowFunctionExpression(identifier: Identifier): Expression {
             Debug.assert(token === SyntaxKind.EqualsGreaterThanToken, "parseSimpleArrowFunctionExpression should only have been called if we had a =>");
             parseExpected(SyntaxKind.EqualsGreaterThanToken);
 
@@ -1664,14 +1639,14 @@ module ts {
         }
 
         function tryParseParenthesizedArrowFunctionExpression(): Expression {
-            var pos = getNodePos();
-
             // Indicates whether we are certain that we should parse an arrow expression.
             var triState = isParenthesizedArrowFunctionExpression();
 
             if (triState === Tristate.False) {
                 return undefined;
             }
+
+            var pos = getNodePos();
 
             if (triState === Tristate.True) {
                 var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken);
@@ -1765,7 +1740,12 @@ module ts {
                     }
                 });
             }
-
+            if (token === SyntaxKind.EqualsGreaterThanToken) {
+                // ERROR RECOVERY TWEAK:
+                // If we see a standalone => try to parse it as an arrow function expression as that's
+                // likely whatthe user intended to write.
+                return Tristate.True;
+            }
             // Definitely not a parenthesized arrow function.
             return Tristate.False;
         }
@@ -3582,7 +3562,7 @@ module ts {
             getCompilerHost: () => host,
             getDiagnostics: getDiagnostics,
             getGlobalDiagnostics: getGlobalDiagnostics,
-            getTypeChecker: () => createTypeChecker(program),
+            getTypeChecker: fullTypeCheckMode => createTypeChecker(program, fullTypeCheckMode),
             getCommonSourceDirectory: () => commonSourceDirectory,
         };
         return program;

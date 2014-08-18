@@ -5,8 +5,8 @@
         "decl.ts"
     ],
     "resolvedInputFiles": [
-        "decl.ts",
-        "lib.d.ts"
+        "lib.d.ts",
+        "decl.ts"
     ],
     "emittedFiles": [
         "decl.js"

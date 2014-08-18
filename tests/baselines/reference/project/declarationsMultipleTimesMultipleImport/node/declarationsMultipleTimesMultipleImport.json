@@ -7,10 +7,10 @@
     "declaration": true,
     "baselineCheck": true,
     "resolvedInputFiles": [
-        "useModule.ts",
+        "lib.d.ts",
         "m4.ts",
         "m5.ts",
-        "lib.d.ts"
+        "useModule.ts"
     ],
     "emittedFiles": [
         "m4.js",
