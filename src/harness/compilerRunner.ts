@@ -39,8 +39,9 @@ class CompilerBaselineRunner extends RunnerBase {
 
     public checkTestCodeOutput(fileName: string) {
         describe('compiler tests for ' + fileName, () => {
-            // strips the fileName from the path.
-            var justName = fileName.replace(/^.*[\\\/]/, '');
+            // Mocha holds onto the closure environment of the describe callback even after the test is done.
+            // Everything declared here should be cleared out in the "after" callback.
+            var justName = fileName.replace(/^.*[\\\/]/, ''); // strips the fileName from the path.
             var content = Harness.IO.readFile(fileName);
             var testCaseContent = Harness.TestCaseParser.makeUnitsFromTest(content, fileName);
 
@@ -120,6 +121,27 @@ class CompilerBaselineRunner extends RunnerBase {
                     });
                     createNewInstance = false;
                 }
+            });
+
+            after(() => {
+                // Mocha holds onto the closure environment of the describe callback even after the test is done.
+                // Therefore we have to clean out large objects after the test is done.
+                justName = undefined;
+                content = undefined;
+                testCaseContent = undefined;
+                units = undefined;
+                tcSettings = undefined;
+                lastUnit = undefined;
+                rootDir = undefined;
+                result = undefined;
+                checker = undefined;
+                options = undefined;
+                toBeCompiled = undefined;
+                otherFiles = undefined;
+                harnessCompiler = undefined;
+                declToBeCompiled = undefined;
+                declOtherFiles = undefined;
+                declResult = undefined;
             });
 
             function getByteOrderMarkText(file: Harness.Compiler.GeneratedFile): string {
