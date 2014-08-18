@@ -25,6 +25,32 @@ module ts {
 
         var emptyArray: any[] = [];
         var emptySymbols: SymbolTable = {};
+        
+        var checker: TypeChecker = {
+            getProgram: () => program,
+            getDiagnostics: getDiagnostics,
+            getGlobalDiagnostics: getGlobalDiagnostics,
+            getNodeCount: () => sum(program.getSourceFiles(), "nodeCount"),
+            getIdentifierCount: () => sum(program.getSourceFiles(), "identifierCount"),
+            getSymbolCount: () => sum(program.getSourceFiles(), "symbolCount"),
+            getTypeCount: () => typeCount,
+            checkProgram: checkProgram,
+            emitFiles: invokeEmitter,
+            getParentOfSymbol: getParentOfSymbol,
+            getTypeOfSymbol: getTypeOfSymbol,
+            getPropertiesOfType: getPropertiesOfType,
+            getPropertyOfType: getPropertyOfType,
+            getSignaturesOfType: getSignaturesOfType,
+            getIndexTypeOfType: getIndexTypeOfType,
+            getReturnTypeOfSignature: getReturnTypeOfSignature,
+            getSymbolsInScope: getSymbolsInScope,
+            getSymbolInfo: getSymbolInfo,
+            getTypeOfNode: getTypeOfNode,
+            getApparentType: getApparentType,
+            typeToString: typeToString,
+            symbolToString: symbolToString,
+            getAugmentedPropertiesOfApparentType: getAugmentedPropertiesOfApparentType
+        };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
         var argumentsSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "arguments");
@@ -70,32 +96,6 @@ module ts {
 
         var diagnostics: Diagnostic[] = [];
         var diagnosticsModified: boolean = false;
-
-        var checker: TypeChecker = {
-            getProgram: () => program,
-            getDiagnostics: getDiagnostics,
-            getGlobalDiagnostics: getGlobalDiagnostics,
-            getNodeCount: () => sum(program.getSourceFiles(), "nodeCount"),
-            getIdentifierCount: () => sum(program.getSourceFiles(), "identifierCount"),
-            getSymbolCount: () => sum(program.getSourceFiles(), "symbolCount"),
-            getTypeCount: () => typeCount,
-            checkProgram: checkProgram,
-            emitFiles: invokeEmitter,
-            getParentOfSymbol: getParentOfSymbol,
-            getTypeOfSymbol: getTypeOfSymbol,
-            getPropertiesOfType: getPropertiesOfType,
-            getPropertyOfType: getPropertyOfType,
-            getSignaturesOfType: getSignaturesOfType,
-            getIndexTypeOfType: getIndexTypeOfType,
-            getReturnTypeOfSignature: getReturnTypeOfSignature,
-            getSymbolsInScope: getSymbolsInScope,
-            getSymbolInfo: getSymbolInfo,
-            getTypeOfNode: getTypeOfNode,
-            getApparentType: getApparentType,
-            typeToString: typeToString,
-            symbolToString: symbolToString,
-            getAugmentedPropertiesOfApparentType: getAugmentedPropertiesOfApparentType
-        };
 
         function addDiagnostic(diagnostic: Diagnostic) {
             diagnostics.push(diagnostic);
@@ -778,7 +778,7 @@ module ts {
                     // But it cant, hence the accessible is going to be undefined, but that doesnt mean m.c is accessible
                     // It is accessible if the parent m is accessible because then m.c can be accessed through qualification
                     meaningToLook = getQualifiedLeftMeaning(meaning);
-                    symbol = symbol.parent;
+                    symbol = getParentOfSymbol(symbol);
                 }
 
                 // This could be a symbol that is not exported in the external module 
@@ -901,7 +901,7 @@ module ts {
                     if (accessibleSymbolChain && !needsQualification(accessibleSymbolChain[0], enclosingDeclaration, accessibleSymbolChain.length === 1 ? meaning : getQualifiedLeftMeaning(meaning))) {
                         break;
                     }
-                    symbol = accessibleSymbolChain ? accessibleSymbolChain[0].parent : symbol.parent;
+                    symbol = getParentOfSymbol(accessibleSymbolChain ? accessibleSymbolChain[0] : symbol);
                     meaning = getQualifiedLeftMeaning(meaning);
                 }
 

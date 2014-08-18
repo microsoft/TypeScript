@@ -38,7 +38,7 @@ module ts {
     }
 
     function trySetLanguageAndTerritory(language: string, territory: string, errors: Diagnostic[]): boolean {
-        var compilerFilePath = sys.getExecutingFilePath();
+        var compilerFilePath = normalizePath(sys.getExecutingFilePath());
         var containingDirectoryPath = getDirectoryPath(compilerFilePath);
 
         var filePath = combinePaths(containingDirectoryPath, language);
@@ -62,7 +62,7 @@ module ts {
             return false;
         }
         try {
-            localizedDiagnosticMessages = JSON.parse(fileContents);
+            ts.localizedDiagnosticMessages = JSON.parse(fileContents);
         }
         catch (e) {
             errors.push(createCompilerDiagnostic(Diagnostics.Corrupted_locale_file_0, filePath));
