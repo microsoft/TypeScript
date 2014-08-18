@@ -1,5 +1,4 @@
 === tests/cases/compiler/declarationEmit_nameConflictsWithAlias.ts ===
-// Bug 887180
 export module C { export interface I { } }
 >C : C
 >I : I

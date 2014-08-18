@@ -1,7 +1,7 @@
 === tests/cases/compiler/functionExpressionReturningItself.ts ===
 var x = function somefn() { return somefn; };
->x : () => typeof somefn
->function somefn() { return somefn; } : () => typeof somefn
->somefn : () => typeof somefn
->somefn : () => typeof somefn
+>x : () => any
+>function somefn() { return somefn; } : () => any
+>somefn : () => any
+>somefn : () => any
 
