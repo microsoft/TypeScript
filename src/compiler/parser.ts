@@ -1977,13 +1977,12 @@ module ts {
                     var indexedAccess = <IndexedAccess>createNode(SyntaxKind.IndexedAccess, expr.pos);
                     indexedAccess.object = expr;
 
-                    // It's not uncommon for a user to write: "new Type[]".  Check for that common pattern
-                    // and report a better error message.
+                    // It's not uncommon for a user to write: "new Type[]".
+                    // Check for that common pattern and report a better error message.
                     if (inNewExpression && parseOptional(SyntaxKind.CloseBracketToken)) {
                         indexedAccess.index = createMissingNode();
                         grammarErrorAtPos(bracketStart, scanner.getStartPos() - bracketStart, Diagnostics.new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead);
                     }
-                    // Otherwise parse the indexed access normally.
                     else {
                         indexedAccess.index = parseExpression();
                         parseExpected(SyntaxKind.CloseBracketToken);
