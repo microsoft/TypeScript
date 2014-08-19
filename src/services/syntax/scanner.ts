@@ -38,13 +38,15 @@ module TypeScript.Scanner {
     //   _packedFullStartAndInfo:
     //
     // 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 000x    <-- has leading trivia
-    // 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 00x0    <-- has trailing trivia
-    // 0000 0000 0000 0000 0000 0000 0000 0000 00xx xxxx xxxx xxxx xxxx xxxx xxxx xx00    <-- full start
+    // 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 00x0    <-- has leading comment (implies has leading trivia)
+    // 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0x00    <-- has trailing trivia
+    // 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 x000    <-- has trailing comment (implies has trailing trivia)
+    // 0000 0000 0000 0000 0000 0000 0000 0000 00xx xxxx xxxx xxxx xxxx xxxx xxxx 0000    <-- full start
     // ^                                         ^                                   ^
     // |                                         |                                   |
     // Bit 64                                    Bit 30                              Bit 1
     //
-    // This gives us 28 bits for the start of the token.  At 256MB That's more than enough for
+    // This gives us 26 bits for the start of the token.  At 64MB That's more than enough for
     // any codebase.
     //
     //   _packedFullWidthAndKind:
@@ -58,31 +60,31 @@ module TypeScript.Scanner {
     // This gives us 23bit for width (or 8MB of width which should be enough for any codebase).
 
     enum ScannerConstants {
-        LargeTokenFullStartShift           = 2,
+        LargeTokenFullStartShift           = 4,
         LargeTokenFullWidthShift           = 7,
+        LargeTokenLeadingTriviaBitMask     = 0x01, // 00000001
+        LargeTokenLeadingCommentBitMask    = 0x02, // 00000010
+        LargeTokenTrailingTriviaBitMask    = 0x04, // 00000100
+        LargeTokenTrailingCommentBitMask   = 0x08, // 00001000
+        LargeTokenTriviaBitMask            = 0x0F, // 00001111
 
         FixedWidthTokenFullStartShift      = 7,
+        FixedWidthTokenMaxFullStart        = 0x7FFFFF, // 23 ones.
 
         SmallTokenFullWidthShift           = 7,
         SmallTokenFullStartShift           = 12,
+        SmallTokenMaxFullStart             = 0x3FFFF,  // 18 ones.
+        SmallTokenMaxFullWidth             = 0x1F,     // 5 ones
+        SmallTokenFullWidthMask            = 0x1F, // 00011111
 
         KindMask                           = 0x7F, // 01111111
         IsVariableWidthMask                = 0x80, // 10000000
-
-        LargeTokenLeadingTriviaBitMask     = 0x01, // 00000001
-        LargeTokenTrailingTriviaBitMask    = 0x02, // 00000010
-
-        SmallTokenFullWidthMask            = 0x1F, // 00011111
-
-        FixedWidthTokenMaxFullStart        = 0x7FFFFF, // 23 ones.
-        SmallTokenMaxFullStart             = 0x3FFFF,  // 18 ones.
-        SmallTokenMaxFullWidth             = 0x1F,     // 5 ones
     }
 
     // Make sure our math works for packing/unpacking large fullStarts.
-    Debug.assert(largeTokenUnpackFullStart(largeTokenPackFullStartAndInfo(1 << 28, 1, 1)) === (1 << 28));
-    Debug.assert(largeTokenUnpackFullStart(largeTokenPackFullStartAndInfo(3 << 27, 0, 1)) === (3 << 27));
-    Debug.assert(largeTokenUnpackFullStart(largeTokenPackFullStartAndInfo(10 << 25, 1, 0)) === (10 << 25));
+    Debug.assert(largeTokenUnpackFullStart(largeTokenPackFullStartAndInfo(1 << 26, 3)) === (1 << 26));
+    Debug.assert(largeTokenUnpackFullStart(largeTokenPackFullStartAndInfo(3 << 25, 1)) === (3 << 25));
+    Debug.assert(largeTokenUnpackFullStart(largeTokenPackFullStartAndInfo(10 << 23, 2)) === (10 << 23));
 
     function fixedWidthTokenPackData(fullStart: number, kind: SyntaxKind) {
         return (fullStart << ScannerConstants.FixedWidthTokenFullStartShift) | kind;
@@ -94,8 +96,8 @@ module TypeScript.Scanner {
 
     function smallTokenPackData(fullStart: number, fullWidth: number, kind: SyntaxKind) {
         return (fullStart << ScannerConstants.SmallTokenFullStartShift) |
-               (fullWidth << ScannerConstants.SmallTokenFullWidthShift) |
-               kind;
+            (fullWidth << ScannerConstants.SmallTokenFullWidthShift) |
+            kind;
     }
 
     function smallTokenUnpackFullWidth(packedData: number): SyntaxKind {
@@ -106,8 +108,8 @@ module TypeScript.Scanner {
         return packedData >> ScannerConstants.SmallTokenFullStartShift;
     }
 
-    function largeTokenPackFullStartAndInfo(fullStart: number, hasLeadingTriviaInfo: number, hasTrailingTriviaInfo: number): number {
-        return (fullStart << ScannerConstants.LargeTokenFullStartShift) | hasLeadingTriviaInfo | hasTrailingTriviaInfo;
+    function largeTokenPackFullStartAndInfo(fullStart: number, triviaInfo: number): number {
+        return (fullStart << ScannerConstants.LargeTokenFullStartShift) | triviaInfo;
     }
 
     function largeTokenUnpackFullWidth(packedFullWidthAndKind: number) {
@@ -118,12 +120,24 @@ module TypeScript.Scanner {
         return packedFullStartAndInfo >> ScannerConstants.LargeTokenFullStartShift;
     }
 
-    function largeTokenUnpackHasLeadingTriviaInfo(packed: number): number {
-        return packed & ScannerConstants.LargeTokenLeadingTriviaBitMask;
+    function largeTokenUnpackHasLeadingTrivia(packed: number): boolean {
+        return (packed & ScannerConstants.LargeTokenLeadingTriviaBitMask) !== 0;
     }
 
-    function largeTokenUnpackHasTrailingTriviaInfo(packed: number): number {
-        return packed & ScannerConstants.LargeTokenTrailingTriviaBitMask;
+    function largeTokenUnpackHasTrailingTrivia(packed: number): boolean {
+        return (packed & ScannerConstants.LargeTokenTrailingTriviaBitMask) !== 0;
+    }
+
+    function largeTokenUnpackHasLeadingComment(packed: number): boolean {
+        return (packed & ScannerConstants.LargeTokenLeadingCommentBitMask) !== 0;
+    }
+
+    function largeTokenUnpackHasTrailingComment(packed: number): boolean {
+        return (packed & ScannerConstants.LargeTokenTrailingCommentBitMask) !== 0;
+    }
+
+    function largeTokenUnpackTriviaInfo(packed: number): number {
+        return packed & ScannerConstants.LargeTokenTriviaBitMask;
     }
 
     var isKeywordStartCharacter: number[] = ArrayUtilities.createArray<number>(CharacterCodes.maxAsciiCharacter, 0);
@@ -174,7 +188,7 @@ module TypeScript.Scanner {
 
     var triviaScanner = createScannerInternal(ts.ScriptTarget.ES5, SimpleText.fromString(""), () => { });
 
-    interface IScannerToken extends ISyntaxToken { 
+    interface IScannerToken extends ISyntaxToken {
     }
 
     function fillSizeInfo(token: IScannerToken, text: ISimpleText): void {
@@ -256,6 +270,8 @@ module TypeScript.Scanner {
         public fullStart(): number { return fixedWidthTokenUnpackFullStart(this._packedData); }
         public hasLeadingTrivia(): boolean { return false; }
         public hasTrailingTrivia(): boolean { return false; }
+        public hasLeadingComment(): boolean { return false; }
+        public hasTrailingComment(): boolean { return false; }
         public clone(): ISyntaxToken { return new FixedWidthTokenWithNoTrivia(this._packedData); }
     }
 
@@ -271,19 +287,18 @@ module TypeScript.Scanner {
 
         public setFullStart(fullStart: number): void {
             this._packedFullStartAndInfo = largeTokenPackFullStartAndInfo(fullStart,
-                largeTokenUnpackHasLeadingTriviaInfo(this._packedFullStartAndInfo),
-                largeTokenUnpackHasTrailingTriviaInfo(this._packedFullStartAndInfo));
+                largeTokenUnpackTriviaInfo(this._packedFullStartAndInfo));
         }
 
-        private syntaxTreeText(text: ISimpleText) { 
+        private syntaxTreeText(text: ISimpleText) {
             var result = text || syntaxTree(this).text;
             Debug.assert(result);
             return result;
         }
 
-        public isIncrementallyUnusable(): boolean           { return tokenIsIncrementallyUnusable(this); }
-        public isKeywordConvertedToIdentifier(): boolean    { return false; }
-        public hasSkippedToken(): boolean                   { return false; }
+        public isIncrementallyUnusable(): boolean { return tokenIsIncrementallyUnusable(this); }
+        public isKeywordConvertedToIdentifier(): boolean { return false; }
+        public hasSkippedToken(): boolean { return false; }
 
         public fullText(text?: ISimpleText): string {
             return fullText(this, this.syntaxTreeText(text));
@@ -294,8 +309,8 @@ module TypeScript.Scanner {
             return cachedText !== undefined ? cachedText : SyntaxFacts.getText(this.kind());
         }
 
-        public leadingTrivia(text?: ISimpleText): ISyntaxTriviaList           { return leadingTrivia(this, this.syntaxTreeText(text)); }
-        public trailingTrivia(text?: ISimpleText): ISyntaxTriviaList          { return trailingTrivia(this, this.syntaxTreeText(text)); }
+        public leadingTrivia(text?: ISimpleText): ISyntaxTriviaList { return leadingTrivia(this, this.syntaxTreeText(text)); }
+        public trailingTrivia(text?: ISimpleText): ISyntaxTriviaList { return trailingTrivia(this, this.syntaxTreeText(text)); }
 
         public leadingTriviaWidth(text?: ISimpleText): number {
             return leadingTriviaWidth(this, this.syntaxTreeText(text));
@@ -308,8 +323,10 @@ module TypeScript.Scanner {
         public kind(): SyntaxKind { return this._packedFullWidthAndKind & ScannerConstants.KindMask; }
         public fullWidth(): number { return largeTokenUnpackFullWidth(this._packedFullWidthAndKind); }
         public fullStart(): number { return largeTokenUnpackFullStart(this._packedFullStartAndInfo); }
-        public hasLeadingTrivia(): boolean { return largeTokenUnpackHasLeadingTriviaInfo(this._packedFullStartAndInfo) !== 0; }
-        public hasTrailingTrivia(): boolean { return largeTokenUnpackHasTrailingTriviaInfo(this._packedFullStartAndInfo) !== 0; }
+        public hasLeadingTrivia(): boolean { return largeTokenUnpackHasLeadingTrivia(this._packedFullStartAndInfo); }
+        public hasTrailingTrivia(): boolean { return largeTokenUnpackHasTrailingTrivia(this._packedFullStartAndInfo); }
+        public hasLeadingComment(): boolean { return largeTokenUnpackHasLeadingComment(this._packedFullStartAndInfo); }
+        public hasTrailingComment(): boolean { return largeTokenUnpackHasTrailingComment(this._packedFullStartAndInfo); }
         public clone(): ISyntaxToken { return new LargeScannerToken(this._packedFullStartAndInfo, this._packedFullWidthAndKind, this.cachedText); }
     }
 
@@ -351,8 +368,8 @@ module TypeScript.Scanner {
         }
 
         function reset(_text: ISimpleText, _start: number, _end: number) {
-            Debug.assert(_start <= _text.length());
-            Debug.assert(_end <= _text.length());
+            Debug.assert(_start <= _text.length(), "Token's start was not within the bounds of text: " + _start + " - [0, " + _text.length() + ")");
+            Debug.assert(_end <= _text.length(), "Token's end was not within the bounds of text: " + _end + " - [0, " + _text.length() + ")");
 
             if (!str || text !== _text) {
                 text = _text;
@@ -392,7 +409,7 @@ module TypeScript.Scanner {
             else {
                 // inline the packing logic for perf.  
                 var packedFullStartAndTriviaInfo = (fullStart << ScannerConstants.LargeTokenFullStartShift) |
-                    leadingTriviaInfo | (trailingTriviaInfo << 1);
+                    leadingTriviaInfo | (trailingTriviaInfo << 2);
 
                 var packedFullWidthAndKind = (fullWidth << ScannerConstants.LargeTokenFullWidthShift) | kind;
                 var cachedText = isFixedWidth ? undefined : text.substr(start, end - start);
@@ -505,7 +522,8 @@ module TypeScript.Scanner {
                     case CharacterCodes.verticalTab:
                     case CharacterCodes.formFeed:
                         index++;
-                        result = 1;
+                        // we have trivia
+                        result |= 1;
                         continue;
 
                     case CharacterCodes.carriageReturn:
@@ -516,27 +534,31 @@ module TypeScript.Scanner {
                     case CharacterCodes.lineFeed:
                         index++;
 
+                        // we have trivia
+                        result |= 1;
+
                         // If we're consuming leading trivia, then we will continue consuming more 
                         // trivia (including newlines) up to the first token we see.  If we're 
                         // consuming trailing trivia, then we break after the first newline we see.
                         if (isTrailing) {
-                            return 1;
+                            return result;
                         }
 
-                        result = 1;
                         continue;
 
                     case CharacterCodes.slash:
                         if ((index + 1) < _end) {
                             var ch2 = str.charCodeAt(index + 1);
                             if (ch2 === CharacterCodes.slash) {
-                                result = 1;
+                                // we have a comment, and we have trivia
+                                result |= 3;
                                 skipSingleLineCommentTrivia();
                                 continue;
                             }
 
                             if (ch2 === CharacterCodes.asterisk) {
-                                result = 1;
+                                // we have a comment, and we have trivia
+                                result |= 3;
                                 skipMultiLineCommentTrivia();
                                 continue;
                             }
@@ -547,7 +569,7 @@ module TypeScript.Scanner {
 
                     default:
                         if (ch > CharacterCodes.maxAsciiCharacter && slowScanTriviaInfo(ch)) {
-                            result = 1;
+                            result |= 1;
                             continue;
                         }
 
@@ -1427,7 +1449,7 @@ module TypeScript.Scanner {
             var fullEnd = fullStart + token.fullWidth();
             reset(text, fullStart, fullEnd);
 
-            var leadingTriviaInfo = scanTriviaInfo(/*isTrailing: */ false);
+            scanTriviaInfo(/*isTrailing: */ false);
 
             var start = index;
             scanSyntaxKind(isContextualToken(token));
@@ -1616,6 +1638,8 @@ module TypeScript.Scanner {
         }
 
         function resetToPosition(absolutePosition: number): void {
+            Debug.assert(absolutePosition <= text.length(), "Trying to set the position outside the bounds of the text!");
+
             _absolutePosition = absolutePosition;
 
             // First, remove any diagnostics that came after this position.
