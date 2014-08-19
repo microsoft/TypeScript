@@ -6773,19 +6773,19 @@ module ts {
                 (<QualifiedName>node.parent).right === node;
         }
 
-        function getSymbolOfIdentifier(identifier: Identifier) {
-            if (isDeclarationOrFunctionExpressionOrCatchVariableName(identifier)) {
-                return getSymbolOfNode(identifier.parent);
+        function getSymbolOfEntityName(entityName: EntityName): Symbol {
+            if (isDeclarationOrFunctionExpressionOrCatchVariableName(entityName)) {
+                return getSymbolOfNode(entityName.parent);
             }
 
-            if (identifier.parent.kind === SyntaxKind.ExportAssignment) {
-                return resolveEntityName(/*location*/ identifier.parent.parent, identifier,
+            if (entityName.parent.kind === SyntaxKind.ExportAssignment) {
+                return resolveEntityName(/*location*/ entityName.parent.parent, entityName,
                     /*all meanings*/ SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Import);
             }
 
-            var entityName: Node = identifier;
-            while (isRightSideOfQualifiedNameOrPropertyAccess(entityName))
+            if (isRightSideOfQualifiedNameOrPropertyAccess(entityName)) {
                 entityName = entityName.parent;
+            }
 
             if (isExpression(entityName)) {
                 if (entityName.kind === SyntaxKind.Identifier) {
@@ -6813,12 +6813,17 @@ module ts {
                 meaning |= SymbolFlags.Import;
                 return resolveEntityName(entityName, entityName, meaning);
             }
+
+            // Do we want to return undefined here?
+            return undefined;
         }
 
         function getSymbolInfo(node: Node) {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
-                    return getSymbolOfIdentifier(<Identifier>node);
+                case SyntaxKind.PropertyAccess:
+                case SyntaxKind.QualifiedName:
+                    return getSymbolOfEntityName(<Identifier>node);
 
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.SuperKeyword:
@@ -6894,10 +6899,12 @@ module ts {
                 }
                 else {
                     // It is an import statement
-                    while (node.kind !== SyntaxKind.ImportDeclaration) {
+                    if (isRightSideOfQualifiedNameOrPropertyAccess(node)) {
                         node = node.parent;
                     }
-                    symbol = getSymbolOfNode(node);
+                    // We include all declaration spaces for aliases. This is likely too inclusive, as the rules
+                    // for resolving aliases are quite particular. Ideally this should reuse the logic in resolveAlias.
+                    symbol = resolveEntityName(node, node, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Import);
                 }
                 var declaredType = getDeclaredTypeOfSymbol(symbol);
                 return declaredType !== unknownType ? declaredType : getTypeOfSymbol(symbol);

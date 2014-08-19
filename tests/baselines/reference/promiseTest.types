@@ -10,9 +10,9 @@ interface Promise<T> {
 >success : (value: T) => Promise<A>
 >value : T
 >T : T
->Promise : Promise
+>Promise : Promise<T>
 >A : A
->Promise : Promise
+>Promise : Promise<T>
 >A : A
 
     then<B>(success?: (value: T) => B): Promise<B>;
@@ -22,7 +22,7 @@ interface Promise<T> {
 >value : T
 >T : T
 >B : B
->Promise : Promise
+>Promise : Promise<T>
 >B : B
 
     data: T;
@@ -32,7 +32,7 @@ interface Promise<T> {
 
 var p: Promise<number> = null;
 >p : Promise<number>
->Promise : Promise
+>Promise : Promise<T>
 
 var p2 = p.then(function (x) {
 >p2 : Promise<number>

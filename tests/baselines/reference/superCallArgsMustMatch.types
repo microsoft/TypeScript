@@ -17,7 +17,7 @@ class T5<T>{
 
 class T6 extends T5<number>{
 >T6 : T6
->T5 : T5
+>T5 : T5<T>
 
     constructor() {
 

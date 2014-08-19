@@ -11,7 +11,7 @@ module Beta {
 
     import p = Alpha.x;
 >p : number
->Alpha : number
+>Alpha : typeof Alpha
 >x : number
 }
 

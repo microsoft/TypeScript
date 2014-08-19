@@ -61,7 +61,7 @@ import clolias = clodule;
 
 var p: clolias.Point;
 >p : Point
->clolias : clolias
+>clolias : clodule
 >Point : Point
 
 var p: clodule.Point;

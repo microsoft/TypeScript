@@ -129,7 +129,7 @@ module WithCandidates {
 
     var c: C<number>;
 >c : C<number>
->C : C
+>C : C<T>
 
     var r4 = c.foo2(1, function <Z>(a: Z) { return '' }); // string, contextual signature instantiation is applied to generic functions
 >r4 : string
@@ -187,7 +187,7 @@ module WithCandidates {
 
     var c2: C2<number, string>;
 >c2 : C2<number, string>
->C2 : C2
+>C2 : C2<T, U>
 
     var r7 = c2.foo3(1, <Z>(a: Z) => '', ''); // string
 >r7 : string
@@ -235,7 +235,7 @@ module WithCandidates {
     }
     var c3: C3<number, string>;
 >c3 : C3<number, string>
->C3 : C3
+>C3 : C3<T, U>
 
     function other<T, U>(t: T, u: U) {
 >other : <T, U>(t: T, u: U) => void

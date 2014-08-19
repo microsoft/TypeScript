@@ -15,12 +15,12 @@ module M2 {
 
     import T = M1.I;
 >T : T
->M1 : I
+>M1 : M1
 >I : I
 
     class C implements T {
 >C : C
->T : T
+>T : I
 
         foo() {}
 >foo : () => void

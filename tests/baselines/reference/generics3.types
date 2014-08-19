@@ -15,12 +15,12 @@ interface Y { f(): string; }
 
 var a: C<X>;
 >a : C<X>
->C : C
+>C : C<T>
 >X : X
 
 var b: C<Y>;
 >b : C<Y>
->C : C
+>C : C<T>
 >Y : Y
 
 a = b; // Ok - should be identical

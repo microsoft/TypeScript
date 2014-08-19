@@ -132,7 +132,7 @@ function foo12(x: I);
 function foo12(x: C<string>); // ok
 >foo12 : { (x: I): any; (x: C<string>): any; }
 >x : C<string>
->C : C
+>C : C<T>
 
 function foo12(x: any) { }
 >foo12 : { (x: I): any; (x: C<string>): any; }

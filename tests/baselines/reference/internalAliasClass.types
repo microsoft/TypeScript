@@ -12,12 +12,12 @@ module c {
 
     import b = a.c;
 >b : typeof c
->a : c
+>a : typeof a
 >c : c
 
     export var x: b = new b();
 >x : c
->b : b
+>b : c
 >new b() : c
 >b : typeof c
 }

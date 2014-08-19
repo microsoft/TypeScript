@@ -12,7 +12,7 @@ module m {
 }
 import a = m.c;
 >a : typeof c
->m : typeof c
+>m : typeof m
 >c : typeof c
 
 import b = a;

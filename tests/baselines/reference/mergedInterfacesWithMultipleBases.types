@@ -84,7 +84,7 @@ module M {
     interface A<T> extends C<T> {
 >A : A<T>
 >T : T
->C : C
+>C : C<T>
 >T : T
 
         y: T;
@@ -95,7 +95,7 @@ module M {
     interface A<T> extends C2<string> {
 >A : A<T>
 >T : T
->C2 : C2
+>C2 : C2<T>
 
         z: T;
 >z : T
@@ -104,7 +104,7 @@ module M {
 
     class D implements A<boolean> {
 >D : D
->A : A
+>A : A<T>
 
         a: boolean;
 >a : boolean

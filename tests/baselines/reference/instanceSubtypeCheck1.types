@@ -5,20 +5,20 @@ interface A<T>
 {
    x: A<B<T>>
 >x : A<B<T>>
->A : A
->B : B
+>A : A<T>
+>B : B<T>
 >T : T
 }
  
 interface B<T> extends A<T>
 >B : B<T>
 >T : T
->A : A
+>A : A<T>
 >T : T
 {
    x: B<A<T>>
 >x : B<A<T>>
->B : B
->A : A
+>B : B<T>
+>A : A<T>
 >T : T
 }

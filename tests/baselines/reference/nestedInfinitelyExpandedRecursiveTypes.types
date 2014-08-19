@@ -5,8 +5,8 @@ interface F<T> {
 
       t: G<F<() => T>>;
 >t : G<F<() => T>>
->G : G
->F : F
+>G : G<U>
+>F : F<T>
 >T : T
 }
 interface G<U> {
@@ -15,18 +15,18 @@ interface G<U> {
 
       t: G<G<() => U>>;
 >t : G<G<() => U>>
->G : G
->G : G
+>G : G<U>
+>G : G<U>
 >U : U
 }
  
 var f: F<string>;
 >f : F<string>
->F : F
+>F : F<T>
 
 var g: G<string>;
 >g : G<string>
->G : G
+>G : G<U>
 
 f = g;
 >f = g : G<string>

@@ -16,7 +16,7 @@ interface Sequence<T> {
 >value : T
 >T : T
 >U : U
->Sequence : Sequence
+>Sequence : Sequence<T>
 >U : U
 
     filter(iterator: (value: T) => boolean): Sequence<T>;
@@ -24,7 +24,7 @@ interface Sequence<T> {
 >iterator : (value: T) => boolean
 >value : T
 >T : T
->Sequence : Sequence
+>Sequence : Sequence<T>
 >T : T
 
     groupBy<K>(keySelector: (value: T) => K): Sequence<{ key: K; items: T[]; }>;
@@ -34,7 +34,7 @@ interface Sequence<T> {
 >value : T
 >T : T
 >K : K
->Sequence : Sequence
+>Sequence : Sequence<T>
 >key : K
 >K : K
 >items : T[]
@@ -43,7 +43,7 @@ interface Sequence<T> {
 
 var s: Sequence<string>;
 >s : Sequence<string>
->Sequence : Sequence
+>Sequence : Sequence<T>
 
 var s2 = s.groupBy(s => s.length);
 >s2 : Sequence<{ key: number; items: string[]; }>

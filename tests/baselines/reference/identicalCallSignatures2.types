@@ -12,12 +12,12 @@ interface Base<T> {
 
 interface I extends Base<string>, Base<number> { }
 >I : I
->Base : Base
->Base : Base
+>Base : Base<T>
+>Base : Base<T>
 
 interface I2<T> extends Base<string>, Base<number> { }
 >I2 : I2<T>
 >T : T
->Base : Base
->Base : Base
+>Base : Base<T>
+>Base : Base<T>
 

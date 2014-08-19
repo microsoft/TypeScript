@@ -63,13 +63,13 @@ module M
  
     import X2 = A.B;
 >X2 : typeof B
->A : typeof B
+>A : typeof A
 >B : typeof B
  
     import X3 = A.B.C;
 >X3 : typeof C
->A : typeof C
->B : typeof C
+>A : typeof A
+>B : typeof B
 >C : typeof C
  
 }

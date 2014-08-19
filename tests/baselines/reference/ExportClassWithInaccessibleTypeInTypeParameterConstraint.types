@@ -50,7 +50,7 @@ module A {
 >fromorigin2d : (p: Point) => Line<Point>
 >p : Point
 >Point : Point
->Line : Line
+>Line : Line<TPoint>
 >Point : Point
 
             return null;

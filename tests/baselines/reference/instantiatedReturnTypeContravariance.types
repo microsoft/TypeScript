@@ -17,7 +17,7 @@ class c {
 
 foo(): B<void> {
 >foo : () => B<void>
->B : B
+>B : B<T>
 
 return null;
 
@@ -31,7 +31,7 @@ class d extends c {
 
 foo(): B<number> {
 >foo : () => B<number>
->B : B
+>B : B<T>
 
 return null;
 

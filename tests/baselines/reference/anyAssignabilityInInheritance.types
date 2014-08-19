@@ -167,8 +167,8 @@ class A2<T> { foo: T; }
 declare function foo11(x: A2<string>): A2<string>;
 >foo11 : { (x: A2<string>): A2<string>; (x: any): any; }
 >x : A2<string>
->A2 : A2
->A2 : A2
+>A2 : A2<T>
+>A2 : A2<T>
 
 declare function foo11(x: any): any;
 >foo11 : { (x: A2<string>): A2<string>; (x: any): any; }

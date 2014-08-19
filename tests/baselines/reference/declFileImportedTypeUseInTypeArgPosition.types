@@ -15,7 +15,7 @@ declare module 'moo' {
 
     export var p: List<x.Foo>;
 >p : List<Foo>
->List : List
+>List : List<T>
 >x : x
 >Foo : Foo
 }

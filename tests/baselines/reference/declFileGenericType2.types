@@ -31,7 +31,7 @@ declare module templa.mvc {
 >mvc : mvc
 >IModel : IModel
 >mvc : mvc
->IController : IController
+>IController : IController<ModelType>
 >ModelType : ModelType
     }
 }
@@ -48,7 +48,7 @@ declare module templa.mvc.composite {
         getControllers(): mvc.IController<mvc.IModel>[];
 >getControllers : () => IController<IModel>[]
 >mvc : mvc
->IController : IController
+>IController : IController<ModelType>
 >mvc : mvc
 >IModel : IModel
     }
@@ -66,7 +66,7 @@ module templa.dom.mvc {
 >IModel : IModel
 >templa : templa
 >mvc : mvc
->IController : IController
+>IController : IController<ModelType>
 >ModelType : ModelType
     }
 }
@@ -84,9 +84,9 @@ module templa.dom.mvc {
 >IModel : IModel
 >templa : templa
 >mvc : mvc
->AbstractController : AbstractController
+>AbstractController : AbstractController<ModelType>
 >ModelType : ModelType
->IElementController : IElementController
+>IElementController : IElementController<ModelType>
 >ModelType : ModelType
 
         constructor() {
@@ -112,14 +112,14 @@ module templa.dom.mvc.composite {
 >templa : templa
 >dom : dom
 >mvc : mvc
->AbstractElementController : AbstractElementController
+>AbstractElementController : AbstractElementController<ModelType>
 >ModelType : ModelType
 
         public _controllers: templa.mvc.IController<templa.mvc.IModel>[];
 >_controllers : IController<IModel>[]
 >templa : templa
 >mvc : mvc
->IController : IController
+>IController : IController<ModelType>
 >templa : templa
 >mvc : mvc
 >IModel : IModel

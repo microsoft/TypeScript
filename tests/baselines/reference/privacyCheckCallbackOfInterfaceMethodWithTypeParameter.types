@@ -13,7 +13,7 @@ export interface A<T> {
 export interface B<T> extends A<T> {
 >B : B<T>
 >T : T
->A : A
+>A : A<T>
 >T : T
 }
 

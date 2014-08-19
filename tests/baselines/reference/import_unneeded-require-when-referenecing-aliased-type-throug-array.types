@@ -5,7 +5,7 @@ import ITest = require('ITest');
 
 var testData: ITest[];
 >testData : Name[]
->ITest : ITest
+>ITest : Name
 
 var p = testData[0].name;
 >p : string

@@ -11,7 +11,7 @@ module c {
 
     import b = a.x;
 >b : number
->a : number
+>a : typeof a
 >x : number
 
     export var bVal = b;

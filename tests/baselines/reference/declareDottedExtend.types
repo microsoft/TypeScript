@@ -9,7 +9,7 @@ declare module A.B
 
 import ab = A.B;
 >ab : typeof B
->A : typeof B
+>A : typeof A
 >B : typeof B
 
 class D extends ab.C{ }

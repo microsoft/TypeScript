@@ -9,11 +9,11 @@ declare module "m" {
     }
     export import a = x.c;
 >a : a
->x : c
+>x : x
 >c : c
 
     var b: a;
 >b : c
->a : a
+>a : c
 }
 

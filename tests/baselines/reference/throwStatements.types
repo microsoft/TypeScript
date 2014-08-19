@@ -26,13 +26,13 @@ class D<T>{
 
     recurse: D<T>;
 >recurse : D<T>
->D : D
+>D : D<T>
 >T : T
 
     wrapped: D<D<T>>
 >wrapped : D<D<T>>
->D : D
->D : D
+>D : D<T>
+>D : D<T>
 >T : T
 }
 

@@ -4,8 +4,8 @@ import appJs = require("file1");
 
 import Services = appJs.App.Services;
 >Services : typeof Services
->appJs : typeof Services
->App : typeof Services
+>appJs : typeof "tests/cases/compiler/file1"
+>App : typeof App
 >Services : typeof Services
 
 var x = new Services.UserServices().getUserName();

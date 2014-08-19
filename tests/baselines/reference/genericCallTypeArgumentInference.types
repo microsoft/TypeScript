@@ -306,7 +306,7 @@ interface I<T, U> {
 
 var i: I<string, number>;
 >i : I<string, number>
->I : I
+>I : I<T, U>
 
 var r4 = i.foo('', 1); // string
 >r4 : string

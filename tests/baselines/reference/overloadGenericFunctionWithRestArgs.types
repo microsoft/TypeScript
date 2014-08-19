@@ -13,7 +13,7 @@ class A<U>{
 
     GetEnumerator: () => B<U>;
 >GetEnumerator : () => B<U>
->B : B
+>B : B<V>
 >U : U
 }
 function Choice<T>(...v_args: T[]): A<T>;
@@ -21,7 +21,7 @@ function Choice<T>(...v_args: T[]): A<T>;
 >T : T
 >v_args : T[]
 >T : T
->A : A
+>A : A<U>
 >T : T
 
 function Choice<T>(...v_args: T[]): A<T> {
@@ -29,7 +29,7 @@ function Choice<T>(...v_args: T[]): A<T> {
 >T : T
 >v_args : T[]
 >T : T
->A : A
+>A : A<U>
 >T : T
 
     return new A<T>();

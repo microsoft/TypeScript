@@ -92,7 +92,7 @@ module Z {
     // 'y' should be a fundule here
     export import y = X.Y;
 >y : typeof Y
->X : typeof Y
+>X : typeof X
 >Y : typeof Y
 }
 
@@ -147,7 +147,7 @@ module M {
 
     export import D = K.L;
 >D : typeof L
->K : L
+>K : typeof K
 >L : L
 }
 

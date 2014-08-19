@@ -12,7 +12,7 @@ module MsPortal.Controls.Base.ItemList {
         // Removing this line fixes the constructor of ItemValue
         options: ViewModel<TValue>;
 >options : ViewModel<TValue>
->ViewModel : ViewModel
+>ViewModel : ViewModel<TValue>
 >TValue : TValue
     }    
 
@@ -29,7 +29,7 @@ module MsPortal.Controls.Base.ItemList {
     export class ViewModel<TValue> extends ItemValue<TValue> {
 >ViewModel : ViewModel<TValue>
 >TValue : TValue
->ItemValue : ItemValue
+>ItemValue : ItemValue<T>
 >TValue : TValue
     }
 }

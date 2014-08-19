@@ -9,20 +9,20 @@ interface List<T> {
 
     next: List<T>; // will be recursive reference when OwnerList is expanded
 >next : List<T>
->List : List
+>List : List<T>
 >T : T
 
     owner: OwnerList<T>;
 >owner : OwnerList<T>
->OwnerList : OwnerList
+>OwnerList : OwnerList<U>
 >T : T
 }
 
 interface OwnerList<U> extends List<List<U>> {
 >OwnerList : OwnerList<U>
 >U : U
->List : List
->List : List
+>List : List<T>
+>List : List<T>
 >U : U
 
     name: string;
@@ -32,8 +32,8 @@ interface OwnerList<U> extends List<List<U>> {
 interface OwnerList2<U> extends List<List<U>> {
 >OwnerList2 : OwnerList2<U>
 >U : U
->List : List
->List : List
+>List : List<T>
+>List : List<T>
 >U : U
 
     name: string;
@@ -42,11 +42,11 @@ interface OwnerList2<U> extends List<List<U>> {
 
 var o1: OwnerList<number>;
 >o1 : OwnerList<number>
->OwnerList : OwnerList
+>OwnerList : OwnerList<U>
 
 var o2: OwnerList2<number>;
 >o2 : OwnerList2<number>
->OwnerList2 : OwnerList2
+>OwnerList2 : OwnerList2<U>
 
 o1 = o2; // should not error
 >o1 = o2 : OwnerList2<number>

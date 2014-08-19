@@ -21,7 +21,7 @@ module N {
 >D2 : D2<T>
 >T : T
 >M : M
->C2 : C2
+>C2 : C2<T>
 >T : T
 }
 

@@ -18,12 +18,12 @@ export module a {
 
 export import b = a.weekend;
 >b : typeof weekend
->a : weekend
+>a : typeof a
 >weekend : weekend
 
 export var bVal: b = b.Sunday;
 >bVal : weekend
->b : b
+>b : weekend
 >b.Sunday : weekend
 >b : typeof weekend
 >Sunday : weekend

@@ -9,7 +9,7 @@ declare module _ {
     interface List<T> extends Collection<T> {
 >List : List<T>
 >T : T
->Collection : Collection
+>Collection : Collection<T>
 >T : T
 
         [index: number]: T;
@@ -37,7 +37,7 @@ declare module _ {
     interface Dictionary<T> extends Collection<T> {
 >Dictionary : Dictionary<T>
 >T : T
->Collection : Collection
+>Collection : Collection<T>
 >T : T
 
         [index: string]: T;
@@ -50,7 +50,7 @@ declare module _ {
 
         list: Collection<T>,
 >list : Collection<T>
->Collection : Collection
+>Collection : Collection<T>
 >T : T
 
         propertyName: string): any[];
@@ -63,12 +63,12 @@ declare module _ {
 
         list: List<T>,
 >list : List<T>
->List : List
+>List : List<T>
 >T : T
 
         iterator: ListIterator<T, TResult>,
 >iterator : ListIterator<T, TResult>
->ListIterator : ListIterator
+>ListIterator : ListIterator<T, TResult>
 >T : T
 >TResult : TResult
 
@@ -80,7 +80,7 @@ declare module _ {
 >first : <T>(array: List<T>) => T
 >T : T
 >array : List<T>
->List : List
+>List : List<T>
 >T : T
 >T : T
 }

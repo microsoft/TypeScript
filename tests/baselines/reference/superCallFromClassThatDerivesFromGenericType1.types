@@ -6,17 +6,17 @@ declare class B<T> {
     m<U>(): B<U>;
 >m : <U>() => B<U>
 >U : U
->B : B
+>B : B<T>
 >U : U
 
     static g(): B<any>;
 >g : () => B<any>
->B : B
+>B : B<T>
 }
 
 class D extends B<any> {
 >D : D
->B : B
+>B : B<T>
 
     constructor() {
         super();

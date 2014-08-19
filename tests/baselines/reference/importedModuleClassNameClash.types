@@ -1,7 +1,7 @@
 === tests/cases/compiler/importedModuleClassNameClash.ts ===
 import foo = m1;
 >foo : typeof foo
->m1 : foo
+>m1 : m1
  
 export module m1 { }
 >m1 : m1

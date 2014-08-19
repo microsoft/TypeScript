@@ -20,7 +20,7 @@ import ext2 = require('externalModuleAssignToVar_core_require2');
 
 var y2: new() => ext2 = ext2;
 >y2 : new () => C
->ext2 : ext2
+>ext2 : C
 >ext2 : typeof C
 
 y2 = ext2; // ok
@@ -33,7 +33,7 @@ import ext3 = require('externalModuleAssignToVar_ext');
 
 var y3: new () => ext3 = ext3;
 >y3 : new () => D
->ext3 : ext3
+>ext3 : D
 >ext3 : typeof D
 
 y3 = ext3; // ok

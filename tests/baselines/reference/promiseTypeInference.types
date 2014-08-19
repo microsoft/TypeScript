@@ -9,9 +9,9 @@ declare class Promise<T> {
 >success : (value: T) => Promise<U>
 >value : T
 >T : T
->Promise : Promise
+>Promise : Promise<T>
 >U : U
->Promise : Promise
+>Promise : Promise<T>
 >U : U
 }
 interface IPromise<T> {
@@ -24,20 +24,20 @@ interface IPromise<T> {
 >success : (value: T) => IPromise<U>
 >value : T
 >T : T
->IPromise : IPromise
+>IPromise : IPromise<T>
 >U : U
->IPromise : IPromise
+>IPromise : IPromise<T>
 >U : U
 }
 declare function load(name: string): Promise<string>;
 >load : (name: string) => Promise<string>
 >name : string
->Promise : Promise
+>Promise : Promise<T>
 
 declare function convert(s: string): IPromise<number>;
 >convert : (s: string) => IPromise<number>
 >s : string
->IPromise : IPromise
+>IPromise : IPromise<T>
 
 var $$x = load("something").then(s => convert(s));
 >$$x : Promise<number>

@@ -20,8 +20,8 @@ interface B<T> {
 interface C<S> extends A<D<S>> {
 >C : C<S>
 >S : S
->A : A
->D : D
+>A : A<T>
+>D : D<S>
 >S : S
 
     y: S
@@ -32,8 +32,8 @@ interface C<S> extends A<D<S>> {
 interface D<S> extends B<C<S>> {
 >D : D<S>
 >S : S
->B : B
->C : C
+>B : B<T>
+>C : C<S>
 >S : S
 
     y: S
@@ -43,13 +43,13 @@ interface D<S> extends B<C<S>> {
 
 var c: C<{ s: string; n: number }>
 >c : C<{ s: string; n: number; }>
->C : C
+>C : C<S>
 >s : string
 >n : number
 
 var d: D<{ n: number; s: string }> = c
 >d : D<{ n: number; s: string; }>
->D : D
+>D : D<S>
 >n : number
 >s : string
 >c : C<{ s: string; n: number; }>

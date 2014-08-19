@@ -11,7 +11,7 @@ module __test1__ {
 >two : U
 >U : U
 >obj4 : interfaceWithPublicAndOptional<number, string>
->interfaceWithPublicAndOptional : interfaceWithPublicAndOptional
+>interfaceWithPublicAndOptional : interfaceWithPublicAndOptional<T, U>
 >{ one: 1 } : { one: number; }
 >one : number
 

@@ -106,23 +106,23 @@ var a11: new (x: { foo: string }, y: { foo: string; bar: string }) => Base;
 var a12: new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
 >a12 : new (x: Base[], y: Derived2[]) => Derived[]
 >x : Base[]
->Array : Array
+>Array : T[]
 >Base : Base
 >y : Derived2[]
->Array : Array
+>Array : T[]
 >Derived2 : Derived2
->Array : Array
+>Array : T[]
 >Derived : Derived
 
 var a13: new (x: Array<Base>, y: Array<Derived>) => Array<Derived>;
 >a13 : new (x: Base[], y: Derived[]) => Derived[]
 >x : Base[]
->Array : Array
+>Array : T[]
 >Base : Base
 >y : Derived[]
->Array : Array
+>Array : T[]
 >Derived : Derived
->Array : Array
+>Array : T[]
 >Derived : Derived
 
 var a14: new (x: { a: string; b: number }) => Object;
@@ -429,14 +429,14 @@ b11 = a11; // ok
 var b12: new <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>; 
 >b12 : new <T extends Base[]>(x: Base[], y: T) => Derived[]
 >T : T
->Array : Array
+>Array : T[]
 >Base : Base
 >x : Base[]
->Array : Array
+>Array : T[]
 >Base : Base
 >y : T
 >T : T
->Array : Array
+>Array : T[]
 >Derived : Derived
 
 a12 = b12; // ok
@@ -452,10 +452,10 @@ b12 = a12; // ok
 var b13: new <T extends Array<Derived>>(x: Array<Base>, y: T) => T; 
 >b13 : new <T extends Derived[]>(x: Base[], y: T) => T
 >T : T
->Array : Array
+>Array : T[]
 >Derived : Derived
 >x : Base[]
->Array : Array
+>Array : T[]
 >Base : Base
 >y : T
 >T : T

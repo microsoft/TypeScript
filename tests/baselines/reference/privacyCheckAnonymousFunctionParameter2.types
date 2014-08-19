@@ -16,7 +16,7 @@ module Q {
 >T : T
 >x : (a: Iterator<T>) => number
 >a : Iterator<T>
->Iterator : Iterator
+>Iterator : Iterator<T>
 >T : T
 
         return x;

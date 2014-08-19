@@ -48,7 +48,7 @@ module TypeScript2 {
 >A : A
 >B : B
 >C : C
->PullTypeSymbol : PullTypeSymbol
+>PullTypeSymbol : PullTypeSymbol<A, B, C>
 >A : A
 >B : B
 >C : C

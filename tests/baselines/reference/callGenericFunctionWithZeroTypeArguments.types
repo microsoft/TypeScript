@@ -115,7 +115,7 @@ interface I2<T> {
 }
 var i2: I2<number>;
 >i2 : I2<number>
->I2 : I2
+>I2 : I2<T>
 
 var r7 = i2.f(1);
 >r7 : number

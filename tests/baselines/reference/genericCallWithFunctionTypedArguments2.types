@@ -39,7 +39,7 @@ var i: I;
 
 var i2: I2<string>;
 >i2 : I2<string>
->I2 : I2
+>I2 : I2<T>
 
 var a: {
 >a : new <T>(x: T) => T

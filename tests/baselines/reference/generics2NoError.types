@@ -47,14 +47,14 @@ var v1: {
 
 var v2: G<{ a: string }, C>;   // Ok, equivalent to G<A, C>
 >v2 : G<{ a: string; }, C>
->G : G
+>G : G<T, U>
 >a : string
 >C : C
 
 var v4: G<G<A, B>, C>;         // Ok
 >v4 : G<G<A, B>, C>
->G : G
->G : G
+>G : G<T, U>
+>G : G<T, U>
 >A : A
 >B : B
 >C : C

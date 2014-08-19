@@ -30,7 +30,7 @@ interface Combinators {
 >U : U
 >V : V
 >c : Collection<T, U>
->Collection : Collection
+>Collection : Collection<T, U>
 >T : T
 >U : U
 >f : (x: T, y: U) => V
@@ -39,7 +39,7 @@ interface Combinators {
 >y : U
 >U : U
 >V : V
->Collection : Collection
+>Collection : Collection<T, U>
 >T : T
 >V : V
 
@@ -48,7 +48,7 @@ interface Combinators {
 >T : T
 >U : U
 >c : Collection<T, U>
->Collection : Collection
+>Collection : Collection<T, U>
 >T : T
 >U : U
 >f : (x: T, y: U) => any
@@ -56,11 +56,11 @@ interface Combinators {
 >T : T
 >y : U
 >U : U
->Collection : Collection
+>Collection : Collection<T, U>
 }
 var c2: Collection<number, string>;
 >c2 : Collection<number, string>
->Collection : Collection
+>Collection : Collection<T, U>
 
 var _: Combinators;
 >_ : Combinators

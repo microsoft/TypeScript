@@ -4,7 +4,7 @@ import a = require('A');
 
 import A = a.A;
 >A : typeof A
->a : A
+>a : typeof "tests/cases/compiler/A"
 >A : A
 
 export = A;

@@ -132,7 +132,7 @@ interface I11 {
 
     foo: A2<number>;
 >foo : A2<number>
->A2 : A2
+>A2 : A2<T>
 }
 
 

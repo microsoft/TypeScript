@@ -72,7 +72,7 @@ var b: {
 >x : T
 >T : T
 >y : string
->C2 : C2
+>C2 : C2<T>
 >T : T
 
     new <T>(x: T, y: string): C2<T>;
@@ -80,7 +80,7 @@ var b: {
 >x : T
 >T : T
 >y : string
->C2 : C2
+>C2 : C2<T>
 >T : T
 }
 

@@ -23,12 +23,12 @@ export module M {
 
     export import a = M.f;
 >a : () => void
->M : () => void
+>M : typeof M
 >f : () => void
 
     export import b = M.C;
 >b : typeof C
->M : C
+>M : typeof M
 >C : C
 
     export import c = N;
@@ -61,8 +61,8 @@ export module M.P {
     }
     export import im = M.P.f;
 >im : () => void
->M : () => void
->P : () => void
+>M : typeof M
+>P : typeof P
 >f : () => void
 
     export var a = M.a; // emitted incorrectly as typeof f
@@ -120,7 +120,7 @@ export module M.Q {
     export interface b extends M.b { } // ok
 >b : b
 >M : M
->b : b
+>b : C
 
     export interface I extends M.c.I { } // ok
 >I : I

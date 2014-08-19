@@ -7,7 +7,7 @@ interface Query<T> {
 >foo : (x: T) => Query<T[]>
 >x : T
 >T : T
->Query : Query
+>Query : Query<T>
 >T : T
 }
 
@@ -27,16 +27,16 @@ function from<T>(array: T[]): Query<T>;
 >T : T
 >array : T[]
 >T : T
->Query : Query
+>Query : Query<T>
 >T : T
 
 function from<T>(enumerator: Enumerator<T>): Query<T>;
 >from : { <T>(array: T[]): Query<T>; <T>(enumerator: Enumerator<T>): Query<T>; }
 >T : T
 >enumerator : Enumerator<T>
->Enumerator : Enumerator
+>Enumerator : Enumerator<T>
 >T : T
->Query : Query
+>Query : Query<T>
 >T : T
 
 function from(arg: any): any {

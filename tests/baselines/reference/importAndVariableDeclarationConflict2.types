@@ -8,7 +8,7 @@ module m {
 
 import x = m.m;
 >x : string
->m : string
+>m : typeof m
 >m : string
 
 class C {

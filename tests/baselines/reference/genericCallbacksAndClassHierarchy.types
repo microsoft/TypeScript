@@ -18,7 +18,7 @@ module M {
 
         public value: I<T>;
 >value : I<T>
->I : I
+>I : I<T>
 >T : T
     }
     export class A<T> {
@@ -31,8 +31,8 @@ module M {
     export class B<T> extends C1<A<T>> { }
 >B : B<T>
 >T : T
->C1 : C1
->A : A
+>C1 : C1<T>
+>A : A<T>
 >T : T
 
     export class D<T> {
@@ -42,20 +42,20 @@ module M {
         _subscribe(viewModel: B<T>): void {
 >_subscribe : (viewModel: B<T>) => void
 >viewModel : B<T>
->B : B
+>B : B<T>
 >T : T
 
             var f = (newValue: A<T>) => { };
 >f : (newValue: A<T>) => void
 >(newValue: A<T>) => { } : (newValue: A<T>) => void
 >newValue : A<T>
->A : A
+>A : A<T>
 >T : T
 
             var v: I<A<T>> = viewModel.value;
 >v : I<A<T>>
->I : I
->A : A
+>I : I<T>
+>A : A<T>
 >T : T
 >viewModel.value : I<A<T>>
 >viewModel : B<T>
@@ -76,7 +76,7 @@ module M {
 >subscribe : (callback: (newValue: A<T>) => void) => any
 >(newValue: A<T>) => { } : (newValue: A<T>) => void
 >newValue : A<T>
->A : A
+>A : A<T>
 >T : T
         }
     }

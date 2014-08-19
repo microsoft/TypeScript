@@ -9,13 +9,13 @@ interface List<T> {
 
     next: List<T>;
 >next : List<T>
->List : List
+>List : List<T>
 >T : T
 
     owner: List<List<T>>;  // Error, recursive reference with wrapped T
 >owner : List<List<T>>
->List : List
->List : List
+>List : List<T>
+>List : List<T>
 >T : T
 }
 
@@ -29,12 +29,12 @@ interface List2<T> {
 
     next: List2<T>;
 >next : List2<T>
->List2 : List2
+>List2 : List2<T>
 >T : T
 
     owner: List2<List2<string>>;  // Ok
 >owner : List2<List2<string>>
->List2 : List2
->List2 : List2
+>List2 : List2<T>
+>List2 : List2<T>
 }
 

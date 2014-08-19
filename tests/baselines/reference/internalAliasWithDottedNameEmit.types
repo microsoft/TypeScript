@@ -14,7 +14,7 @@ module a.e.f {
 
       import g = b.c;
 >g : typeof c
->b : typeof c
+>b : typeof b
 >c : typeof c
 }
 

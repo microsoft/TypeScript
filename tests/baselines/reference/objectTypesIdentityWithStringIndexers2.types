@@ -100,12 +100,12 @@ function foo1b(x: any) { }
 function foo1c(x: C<string>);
 >foo1c : { (x: C<string>): any; (x: C<string>): any; }
 >x : C<string>
->C : C
+>C : C<T>
 
 function foo1c(x: C<string>); // error
 >foo1c : { (x: C<string>): any; (x: C<string>): any; }
 >x : C<string>
->C : C
+>C : C<T>
 
 function foo1c(x: any) { }
 >foo1c : { (x: C<string>): any; (x: C<string>): any; }
@@ -175,7 +175,7 @@ function foo5b(x: A);
 function foo5b(x: C<Derived>); // ok
 >foo5b : { (x: A): any; (x: C<Derived>): any; }
 >x : C<Derived>
->C : C
+>C : C<T>
 >Derived : Derived
 
 function foo5b(x: any) { }
@@ -260,7 +260,7 @@ function foo9(x: B);
 function foo9(x: C<Base>); // ok
 >foo9 : { (x: B): any; (x: C<Base>): any; }
 >x : C<Base>
->C : C
+>C : C<T>
 >Base : Base
 
 function foo9(x: any) { }
@@ -331,7 +331,7 @@ function foo12(x: I);
 function foo12(x: C<Derived>); // error
 >foo12 : { (x: I): any; (x: C<Derived>): any; }
 >x : C<Derived>
->C : C
+>C : C<T>
 >Derived : Derived
 
 function foo12(x: any) { }

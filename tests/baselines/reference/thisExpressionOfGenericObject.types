@@ -5,7 +5,7 @@ class MyClass1<T> {
 
     private obj: MyClass1<string>;
 >obj : MyClass1<string>
->MyClass1 : MyClass1
+>MyClass1 : MyClass1<T>
 
     constructor() {
         () => this;

@@ -4,12 +4,12 @@ import appJs = require("file1");
 
 import Services = appJs.Services;
 >Services : typeof Services
->appJs : typeof Services
+>appJs : typeof App
 >Services : typeof Services
 
 import UserServices = Services.UserServices;
 >UserServices : typeof UserServices
->Services : UserServices
+>Services : typeof Services
 >UserServices : UserServices
 
 var x = new UserServices().getUserName();

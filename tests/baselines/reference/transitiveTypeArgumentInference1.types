@@ -13,7 +13,7 @@ interface I1<T, U> {
 
 var i: I1<boolean, string> = null;
 >i : I1<boolean, string>
->I1 : I1
+>I1 : I1<T, U>
 
 class C<T> {
 >C : C<T>
@@ -21,7 +21,7 @@ class C<T> {
 
 	constructor(p: I1<boolean, T>) {
 >p : I1<boolean, T>
->I1 : I1
+>I1 : I1<T, U>
 >T : T
 	}
 }

@@ -64,7 +64,7 @@ var c1 = new T;
 
 var c1: T<{}>;
 >c1 : T<{}>
->T : T
+>T : T<T>
 
 // Construct expression where constructor is of type 'any' with no parentheses
 var d = new anyCtor;

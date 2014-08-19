@@ -10,7 +10,7 @@ interface Foo<T> {
 }
 var foo: Foo<string>
 >foo : Foo<string>
->Foo : Foo
+>Foo : Foo<T>
  
 interface bar<T> {
 >bar : bar<T>
@@ -30,7 +30,7 @@ interface bar<T> {
 }
 var test: bar<string>;
 >test : bar<string>
->bar : bar
+>bar : bar<T>
  
 test.fail(arg => foo.reject(arg));
 >test.fail(arg => foo.reject(arg)) : void

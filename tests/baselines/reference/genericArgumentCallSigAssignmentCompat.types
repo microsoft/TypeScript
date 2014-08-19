@@ -24,7 +24,7 @@ module Underscore {
 >list : T[]
 >T : T
 >iterator : Iterator<T, boolean>
->Iterator : Iterator
+>Iterator : Iterator<T, U>
 >T : T
 >context : any
 

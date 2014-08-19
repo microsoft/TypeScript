@@ -23,7 +23,7 @@ module A {
 var b: A.B<number>;
 >b : B<number>
 >A : A
->B : B
+>B : B<T>
 
 b.foo();
 >b.foo() : void

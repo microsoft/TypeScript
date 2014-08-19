@@ -13,7 +13,7 @@ interface IFoo<T> {
 class C<T> implements IFoo<T> {
 >C : C<T>
 >T : T
->IFoo : IFoo
+>IFoo : IFoo<T>
 >T : T
 
    foo(x: string): number {
@@ -27,7 +27,7 @@ class C<T> implements IFoo<T> {
 class C2<T> implements IFoo<T> {
 >C2 : C2<T>
 >T : T
->IFoo : IFoo
+>IFoo : IFoo<T>
 >T : T
 
    foo<U>(x: string): number {

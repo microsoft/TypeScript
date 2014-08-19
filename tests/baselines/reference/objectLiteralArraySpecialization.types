@@ -4,7 +4,7 @@ declare function create<T>(initialValues?: T[]): MyArrayWrapper<T>;
 >T : T
 >initialValues : T[]
 >T : T
->MyArrayWrapper : MyArrayWrapper
+>MyArrayWrapper : MyArrayWrapper<T>
 >T : T
 
 interface MyArrayWrapper<T> {

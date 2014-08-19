@@ -17,7 +17,7 @@ class Vec2_T<A>
 >a : A
 >A : A
 >B : B
->Vec2_T : Vec2_T
+>Vec2_T : Vec2_T<A>
 >B : B
 
         var x:B = f(this.x);
@@ -40,7 +40,7 @@ class Vec2_T<A>
 
         var retval: Vec2_T<B> = new Vec2_T(x, y);
 >retval : Vec2_T<B>
->Vec2_T : Vec2_T
+>Vec2_T : Vec2_T<A>
 >B : B
 >new Vec2_T(x, y) : Vec2_T<B>
 >Vec2_T : typeof Vec2_T
@@ -54,11 +54,11 @@ class Vec2_T<A>
 >apply : <B>(f: Vec2_T<(a: A) => B>) => Vec2_T<B>
 >B : B
 >f : Vec2_T<(a: A) => B>
->Vec2_T : Vec2_T
+>Vec2_T : Vec2_T<A>
 >a : A
 >A : A
 >B : B
->Vec2_T : Vec2_T
+>Vec2_T : Vec2_T<A>
 >B : B
 
         var x:B = f.x(this.x);
@@ -85,7 +85,7 @@ class Vec2_T<A>
 
         var retval: Vec2_T<B> = new Vec2_T(x, y);
 >retval : Vec2_T<B>
->Vec2_T : Vec2_T
+>Vec2_T : Vec2_T<A>
 >B : B
 >new Vec2_T(x, y) : Vec2_T<B>
 >Vec2_T : typeof Vec2_T

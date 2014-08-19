@@ -14,7 +14,7 @@ class Chain<T> {
 >x : T
 >T : T
 >S : S
->Chain : Chain
+>Chain : Chain<T>
 >S : S
 
         var result = cb(this.value);

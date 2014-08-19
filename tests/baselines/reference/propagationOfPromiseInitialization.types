@@ -13,13 +13,13 @@ interface IPromise<T> {
 >errorCallback : (reason: any) => TResult
 >reason : any
 >TResult : TResult
->IPromise : IPromise
+>IPromise : IPromise<T>
 >TResult : TResult
 }
 
 var foo: IPromise<number>;
 >foo : IPromise<number>
->IPromise : IPromise
+>IPromise : IPromise<T>
 
 foo.then((x) => {
 >foo.then((x) => {

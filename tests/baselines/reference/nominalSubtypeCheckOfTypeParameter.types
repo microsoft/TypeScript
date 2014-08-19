@@ -28,10 +28,10 @@ interface Sequence<T> {
 >zip : <S>(seq: Sequence<S>) => Sequence<Tuple<T, S>>
 >S : S
 >seq : Sequence<S>
->Sequence : Sequence
+>Sequence : Sequence<T>
 >S : S
->Sequence : Sequence
->Tuple : Tuple
+>Sequence : Sequence<T>
+>Tuple : Tuple<T, S>
 >T : T
 >S : S
 }
@@ -41,7 +41,7 @@ interface Sequence<T> {
 interface List<T> extends Sequence<T> {
 >List : List<T>
 >T : T
->Sequence : Sequence
+>Sequence : Sequence<T>
 >T : T
 
     getLength(): number
@@ -51,10 +51,10 @@ interface List<T> extends Sequence<T> {
 >zip : <S>(seq: Sequence<S>) => List<Tuple<T, S>>
 >S : S
 >seq : Sequence<S>
->Sequence : Sequence
+>Sequence : Sequence<T>
 >S : S
->List : List
->Tuple : Tuple
+>List : List<T>
+>Tuple : Tuple<T, S>
 >T : T
 >S : S
 }

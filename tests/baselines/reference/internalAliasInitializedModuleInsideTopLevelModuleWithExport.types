@@ -13,7 +13,7 @@ export module a {
 
 export import b = a.b;
 >b : typeof b
->a : typeof b
+>a : typeof a
 >b : typeof b
 
 export var x: b.c = new b.c();

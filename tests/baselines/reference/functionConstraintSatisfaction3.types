@@ -91,7 +91,7 @@ interface I2<T> {
 }
 var i2: I2<string>;
 >i2 : I2<string>
->I2 : I2
+>I2 : I2<T>
 
 class C2<T> {
 >C2 : C2<T>

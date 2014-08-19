@@ -20,7 +20,7 @@ export class CatBag {
     constructor(cats: { barry: Cat<IKitty>; }) {
 >cats : { barry: Cat<IKitty>; }
 >barry : Cat<IKitty>
->Cat : Cat
+>Cat : Cat<CatType>
 >IKitty : IKitty
         
     }

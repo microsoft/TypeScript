@@ -5,7 +5,7 @@ interface A<T>
 {
    x : A<()=>T>
 >x : A<() => T>
->A : A
+>A : A<T>
 >T : T
 }
  
@@ -15,16 +15,16 @@ interface B<T>
 {
    x : B<()=>T>
 >x : B<() => T>
->B : B
+>B : B<T>
 >T : T
 }
  
 var a: A<string>
 >a : A<string>
->A : A
+>A : A<T>
 
 var b: B<string> = a
 >b : B<string>
->B : B
+>B : B<T>
 >a : A<string>
 

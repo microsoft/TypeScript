@@ -34,7 +34,7 @@ interface Q<T> {
 }
 var q1: Q<{ a: number; }>;
 >q1 : Q<{ a: number; }>
->Q : Q
+>Q : Q<T>
 >a : number
 
 var x = q1.each(x => c.log(x));

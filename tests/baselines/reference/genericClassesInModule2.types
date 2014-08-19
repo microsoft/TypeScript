@@ -6,7 +6,7 @@ export class A<T1>{
     constructor( public callback: (self: A<T1>) => void) {
 >callback : (self: A<T1>) => void
 >self : A<T1>
->A : A
+>A : A<T1>
 >T1 : T1
 
         var child = new B(this);
@@ -19,7 +19,7 @@ export class A<T1>{
 >AAA : (callback: (self: A<T1>) => void) => void
 >callback : (self: A<T1>) => void
 >self : A<T1>
->A : A
+>A : A<T1>
 >T1 : T1
 
         var child = new B(this);
@@ -36,18 +36,18 @@ export interface C<T1>{
 
     child: B<T1>;
 >child : B<T1>
->B : B
+>B : B<T2>
 >T1 : T1
 
     (self: C<T1>): void;
 >self : C<T1>
->C : C
+>C : C<T1>
 >T1 : T1
 
     new(callback: (self: C<T1>) => void)
 >callback : (self: C<T1>) => void
 >self : C<T1>
->C : C
+>C : C<T1>
 >T1 : T1
 }
 

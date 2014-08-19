@@ -61,7 +61,7 @@ module Generic {
 >D : D<T, U>
 >T : T
 >U : U
->C : C
+>C : C<T, U>
 >T : T
 >U : U
 

@@ -11,8 +11,8 @@ interface Query<T> {
 >item : T
 >T : T
 >K : K
->Query : Query
->Grouping : Grouping
+>Query : Query<T>
+>Grouping : Grouping<K, T>
 >K : K
 >T : T
 
@@ -31,8 +31,8 @@ interface QueryEnumerator<T> {
 >item : T
 >T : T
 >K : K
->QueryEnumerator : QueryEnumerator
->Grouping : Grouping
+>QueryEnumerator : QueryEnumerator<T>
+>Grouping : Grouping<K, T>
 >K : K
 >T : T
 
@@ -43,7 +43,7 @@ interface Grouping<K, T> extends Query<T> {
 >Grouping : Grouping<K, T>
 >K : K
 >T : T
->Query : Query
+>Query : Query<T>
 >T : T
 
     key(): K;
@@ -53,15 +53,15 @@ interface Grouping<K, T> extends Query<T> {
 
 var q1: Query<number>;
 >q1 : Query<number>
->Query : Query
+>Query : Query<T>
 
 var q2: QueryEnumerator<number>;
 >q2 : QueryEnumerator<number>
->QueryEnumerator : QueryEnumerator
+>QueryEnumerator : QueryEnumerator<T>
 
 var q3: Query<number>;
 >q3 : Query<number>
->Query : Query
+>Query : Query<T>
 
 q1 = q2; // should error
 >q1 = q2 : QueryEnumerator<number>

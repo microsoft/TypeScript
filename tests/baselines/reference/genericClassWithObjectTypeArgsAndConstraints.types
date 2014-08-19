@@ -41,10 +41,10 @@ module Class {
 >T : T
 >x : string
 >t : X<T>
->X : X
+>X : X<T>
 >T : T
 >t2 : X<T>
->X : X
+>X : X<T>
 >T : T
 
             var x: T;
@@ -70,7 +70,7 @@ module Class {
 
     var g: G<{ x: string; y: string }>;
 >g : G<{ x: string; y: string; }>
->G : G
+>G : G<T>
 >x : string
 >y : string
 
@@ -102,10 +102,10 @@ module Class {
 >T : T
 >C : C
 >t : X<T>
->X : X
+>X : X<T>
 >T : T
 >t2 : X<T>
->X : X
+>X : X<T>
 >T : T
 
             var x: T;
@@ -118,7 +118,7 @@ module Class {
     }
     var g2: G2<D>;
 >g2 : G2<D>
->G2 : G2
+>G2 : G2<T>
 >D : D
 
     var r = g2.foo2(c1, d1);
@@ -153,10 +153,10 @@ module Interface {
 >T : T
 >x : string
 >t : X<T>
->X : X
+>X : X<T>
 >T : T
 >t2 : X<T>
->X : X
+>X : X<T>
 >T : T
 >T : T
     }
@@ -175,7 +175,7 @@ module Interface {
 
     var g: G<{ x: string; y: string }>;
 >g : G<{ x: string; y: string; }>
->G : G
+>G : G<T>
 >x : string
 >y : string
 
@@ -207,17 +207,17 @@ module Interface {
 >T : T
 >C : C
 >t : X<T>
->X : X
+>X : X<T>
 >T : T
 >t2 : X<T>
->X : X
+>X : X<T>
 >T : T
 >T : T
     }
 
     var g2: G2<D>;
 >g2 : G2<D>
->G2 : G2
+>G2 : G2<T>
 >D : D
 
     var r = g2.foo2(c1, d1);

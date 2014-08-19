@@ -12,7 +12,7 @@ function Foo<T>(array: T[]): Foo<T> {
 >T : T
 >array : T[]
 >T : T
->Foo : Foo
+>Foo : Foo<T>
 >T : T
 
     return undefined;

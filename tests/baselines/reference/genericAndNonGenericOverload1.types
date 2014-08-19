@@ -16,7 +16,7 @@ interface callable2<T> {
 }
 var c2: callable2<number>;
 >c2 : callable2<number>
->callable2 : callable2
+>callable2 : callable2<T>
 
 c2<string>(1);
 >c2<string>(1) : string

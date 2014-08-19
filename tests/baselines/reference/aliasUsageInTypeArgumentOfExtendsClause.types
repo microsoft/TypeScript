@@ -24,7 +24,7 @@ class C<T extends IHasVisualizationModel> {
 }
 class D extends C<IHasVisualizationModel> {
 >D : D
->C : C
+>C : C<T>
 >IHasVisualizationModel : IHasVisualizationModel
 
     x = moduleA;

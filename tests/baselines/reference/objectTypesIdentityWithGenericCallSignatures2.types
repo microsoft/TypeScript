@@ -112,12 +112,12 @@ function foo1(x: any) { }
 function foo1b(x: B<string, number>);
 >foo1b : { (x: B<string, number>): any; (x: B<string, number>): any; }
 >x : B<string, number>
->B : B
+>B : B<T, U>
 
 function foo1b(x: B<string, number>); // error
 >foo1b : { (x: B<string, number>): any; (x: B<string, number>): any; }
 >x : B<string, number>
->B : B
+>B : B<T, U>
 
 function foo1b(x: any) { }
 >foo1b : { (x: B<string, number>): any; (x: B<string, number>): any; }
@@ -126,12 +126,12 @@ function foo1b(x: any) { }
 function foo1c(x: C<string, number>);
 >foo1c : { (x: C<string, number>): any; (x: C<string, number>): any; }
 >x : C<string, number>
->C : C
+>C : C<T, U>
 
 function foo1c(x: C<string, number>); // error
 >foo1c : { (x: C<string, number>): any; (x: C<string, number>): any; }
 >x : C<string, number>
->C : C
+>C : C<T, U>
 
 function foo1c(x: any) { }
 >foo1c : { (x: C<string, number>): any; (x: C<string, number>): any; }
@@ -140,12 +140,12 @@ function foo1c(x: any) { }
 function foo2(x: I<string, number>);
 >foo2 : { (x: I<string, number>): any; (x: I<string, number>): any; }
 >x : I<string, number>
->I : I
+>I : I<T, U>
 
 function foo2(x: I<string, number>); // error
 >foo2 : { (x: I<string, number>): any; (x: I<string, number>): any; }
 >x : I<string, number>
->I : I
+>I : I<T, U>
 
 function foo2(x: any) { }
 >foo2 : { (x: I<string, number>): any; (x: I<string, number>): any; }
@@ -187,7 +187,7 @@ function foo5(x: A);
 function foo5(x: B<string, number>); // ok
 >foo5 : { (x: A): any; (x: B<string, number>): any; }
 >x : B<string, number>
->B : B
+>B : B<T, U>
 
 function foo5(x: any) { }
 >foo5 : { (x: A): any; (x: B<string, number>): any; }
@@ -201,7 +201,7 @@ function foo5b(x: A);
 function foo5b(x: C<string, number>); // ok
 >foo5b : { (x: A): any; (x: C<string, number>): any; }
 >x : C<string, number>
->C : C
+>C : C<T, U>
 
 function foo5b(x: any) { }
 >foo5b : { (x: A): any; (x: C<string, number>): any; }
@@ -215,7 +215,7 @@ function foo6(x: A);
 function foo6(x: I<string, number>); // ok
 >foo6 : { (x: A): any; (x: I<string, number>): any; }
 >x : I<string, number>
->I : I
+>I : I<T, U>
 
 function foo6(x: any) { }
 >foo6 : { (x: A): any; (x: I<string, number>): any; }
@@ -238,12 +238,12 @@ function foo7(x: any) { }
 function foo8(x: B<string, number>);
 >foo8 : { (x: B<string, number>): any; (x: I<string, number>): any; }
 >x : B<string, number>
->B : B
+>B : B<T, U>
 
 function foo8(x: I<string, number>); // error
 >foo8 : { (x: B<string, number>): any; (x: I<string, number>): any; }
 >x : I<string, number>
->I : I
+>I : I<T, U>
 
 function foo8(x: any) { }
 >foo8 : { (x: B<string, number>): any; (x: I<string, number>): any; }
@@ -252,12 +252,12 @@ function foo8(x: any) { }
 function foo9(x: B<string, number>);
 >foo9 : { (x: B<string, number>): any; (x: C<string, number>): any; }
 >x : B<string, number>
->B : B
+>B : B<T, U>
 
 function foo9(x: C<string, number>); // error
 >foo9 : { (x: B<string, number>): any; (x: C<string, number>): any; }
 >x : C<string, number>
->C : C
+>C : C<T, U>
 
 function foo9(x: any) { }
 >foo9 : { (x: B<string, number>): any; (x: C<string, number>): any; }
@@ -266,7 +266,7 @@ function foo9(x: any) { }
 function foo10(x: B<string, number>);
 >foo10 : { (x: B<string, number>): any; (x: { foo<T, U>(x: T, y: U): T; }): any; }
 >x : B<string, number>
->B : B
+>B : B<T, U>
 
 function foo10(x: typeof a); // ok
 >foo10 : { (x: B<string, number>): any; (x: { foo<T, U>(x: T, y: U): T; }): any; }
@@ -280,7 +280,7 @@ function foo10(x: any) { }
 function foo11(x: B<string, number>);
 >foo11 : { (x: B<string, number>): any; (x: { foo: <T, U>(x: T, y: U) => T; }): any; }
 >x : B<string, number>
->B : B
+>B : B<T, U>
 
 function foo11(x: typeof b); // ok
 >foo11 : { (x: B<string, number>): any; (x: { foo: <T, U>(x: T, y: U) => T; }): any; }
@@ -294,12 +294,12 @@ function foo11(x: any) { }
 function foo12(x: I<string, number>);
 >foo12 : { (x: I<string, number>): any; (x: C<string, number>): any; }
 >x : I<string, number>
->I : I
+>I : I<T, U>
 
 function foo12(x: C<string, number>); // error
 >foo12 : { (x: I<string, number>): any; (x: C<string, number>): any; }
 >x : C<string, number>
->C : C
+>C : C<T, U>
 
 function foo12(x: any) { }
 >foo12 : { (x: I<string, number>): any; (x: C<string, number>): any; }
@@ -313,7 +313,7 @@ function foo12b(x: I2);
 function foo12b(x: C<string, number>); // ok
 >foo12b : { (x: I2): any; (x: C<string, number>): any; }
 >x : C<string, number>
->C : C
+>C : C<T, U>
 
 function foo12b(x: any) { }
 >foo12b : { (x: I2): any; (x: C<string, number>): any; }
@@ -322,7 +322,7 @@ function foo12b(x: any) { }
 function foo13(x: I<string, number>);
 >foo13 : { (x: I<string, number>): any; (x: { foo<T, U>(x: T, y: U): T; }): any; }
 >x : I<string, number>
->I : I
+>I : I<T, U>
 
 function foo13(x: typeof a); // ok
 >foo13 : { (x: I<string, number>): any; (x: { foo<T, U>(x: T, y: U): T; }): any; }
@@ -336,7 +336,7 @@ function foo13(x: any) { }
 function foo14(x: I<string, number>);
 >foo14 : { (x: I<string, number>): any; (x: { foo: <T, U>(x: T, y: U) => T; }): any; }
 >x : I<string, number>
->I : I
+>I : I<T, U>
 
 function foo14(x: typeof b); // ok
 >foo14 : { (x: I<string, number>): any; (x: { foo: <T, U>(x: T, y: U) => T; }): any; }
@@ -355,7 +355,7 @@ function foo15(x: I2);
 function foo15(x: C<string, number>); // ok
 >foo15 : { (x: I2): any; (x: C<string, number>): any; }
 >x : C<string, number>
->C : C
+>C : C<T, U>
 
 function foo15(x: any) { }
 >foo15 : { (x: I2): any; (x: C<string, number>): any; }

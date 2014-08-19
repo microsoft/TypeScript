@@ -10,7 +10,7 @@ interface Promise<T> {
 >value : T
 >T : T
 >U : U
->Promise : Promise
+>Promise : Promise<T>
 >U : U
 
     then<U>(success?: (value: T) => Promise<U>): Promise<U>;
@@ -19,9 +19,9 @@ interface Promise<T> {
 >success : (value: T) => Promise<U>
 >value : T
 >T : T
->Promise : Promise
+>Promise : Promise<T>
 >U : U
->Promise : Promise
+>Promise : Promise<T>
 >U : U
 
     value: T;

@@ -117,7 +117,7 @@ interface I<T, U> {
 
 var i: I<Base, Derived>;
 >i : I<Base, Derived>
->I : I
+>I : I<T, U>
 >Base : Base
 >Derived : Derived
 

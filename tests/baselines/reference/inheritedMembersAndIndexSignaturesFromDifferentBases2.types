@@ -18,5 +18,5 @@ interface B {
 interface C extends B, A<string> { } // Should succeed
 >C : C
 >B : B
->A : A
+>A : A<T>
 

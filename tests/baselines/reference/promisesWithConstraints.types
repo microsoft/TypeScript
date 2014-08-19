@@ -9,9 +9,9 @@ interface Promise<T> {
 >cb : (x: T) => Promise<U>
 >x : T
 >T : T
->Promise : Promise
+>Promise : Promise<T>
 >U : U
->Promise : Promise
+>Promise : Promise<T>
 >U : U
 }
 
@@ -27,9 +27,9 @@ interface CPromise<T extends { x: any; }> {
 >cb : (x: T) => Promise<U>
 >x : T
 >T : T
->Promise : Promise
+>Promise : Promise<T>
 >U : U
->Promise : Promise
+>Promise : Promise<T>
 >U : U
 }
 
@@ -44,12 +44,12 @@ interface Bar { x; y; }
 
 var a: Promise<Foo>;
 >a : Promise<Foo>
->Promise : Promise
+>Promise : Promise<T>
 >Foo : Foo
 
 var b: Promise<Bar>;
 >b : Promise<Bar>
->Promise : Promise
+>Promise : Promise<T>
 >Bar : Bar
 
 a = b; // ok
@@ -64,12 +64,12 @@ b = a; // ok
 
 var a2: CPromise<Foo>;
 >a2 : CPromise<Foo>
->CPromise : CPromise
+>CPromise : CPromise<T>
 >Foo : Foo
 
 var b2: CPromise<Bar>;
 >b2 : CPromise<Bar>
->CPromise : CPromise
+>CPromise : CPromise<T>
 >Bar : Bar
 
 a2 = b2; // ok

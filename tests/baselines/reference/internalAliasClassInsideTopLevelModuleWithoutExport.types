@@ -17,7 +17,7 @@ export module x {
 
 import xc = x.c;
 >xc : typeof c
->x : c
+>x : typeof x
 >c : c
 
 export var cProp = new xc();

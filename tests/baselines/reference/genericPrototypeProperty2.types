@@ -35,5 +35,5 @@ class MyEventWrapper extends BaseEventWrapper {
 
     t: MyEvent<any>; // any satisfies constraint and passes assignability check between 'target' properties
 >t : MyEvent<any>
->MyEvent : MyEvent
+>MyEvent : MyEvent<T>
 }

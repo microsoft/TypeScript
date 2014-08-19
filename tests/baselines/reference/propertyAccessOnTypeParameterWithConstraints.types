@@ -51,7 +51,7 @@ interface I<T extends Date> {
 }
 var i: I<Date>;
 >i : I<Date>
->I : I
+>I : I<T>
 >Date : Date
 
 var r2 = i.foo.getDate();

@@ -4,8 +4,8 @@ import a = require('declFileExportAssignmentOfGenericInterface_0');
 
 export var x: a<a<string>>;
 >x : Foo<Foo<string>>
->a : a
->a : a
+>a : Foo<T>
+>a : Foo<T>
 
 x.a;
 >x.a : string

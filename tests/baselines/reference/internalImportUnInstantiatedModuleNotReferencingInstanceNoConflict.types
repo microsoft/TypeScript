@@ -15,6 +15,6 @@ module B {
 
     import Y = A;
 >Y : Y
->A : A
+>A : number
 }
 

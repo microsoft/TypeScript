@@ -11,9 +11,9 @@ interface Stack<T> {
 >zip : <S>(a: Stack<S>) => Stack<{ x: T; y: S; }>
 >S : S
 >a : Stack<S>
->Stack : Stack
+>Stack : Stack<T>
 >S : S
->Stack : Stack
+>Stack : Stack<T>
 >x : T
 >T : T
 >y : S
@@ -23,16 +23,16 @@ interface Stack<T> {
 interface MyStack<T> extends Stack<T> {
 >MyStack : MyStack<T>
 >T : T
->Stack : Stack
+>Stack : Stack<T>
 >T : T
 
       zip<S>(a: Stack<S>): Stack<{ x: T; y: S }>
 >zip : <S>(a: Stack<S>) => Stack<{ x: T; y: S; }>
 >S : S
 >a : Stack<S>
->Stack : Stack
+>Stack : Stack<T>
 >S : S
->Stack : Stack
+>Stack : Stack<T>
 >x : T
 >T : T
 >y : S

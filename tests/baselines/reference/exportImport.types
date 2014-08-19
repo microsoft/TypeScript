@@ -5,7 +5,7 @@ import e = require('./exporter');
 export function w(): e.w { // Should be OK
 >w : () => Widget1
 >e : e
->w : w
+>w : Widget1
 
     return new e.w();
 >new e.w() : Widget1

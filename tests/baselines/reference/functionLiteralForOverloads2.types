@@ -64,13 +64,13 @@ var f3: {
     new<T>(x: string): D<T>;
 >T : T
 >x : string
->D : D
+>D : D<T>
 >T : T
 
     new<T>(x: number): D<T>;
 >T : T
 >x : number
->D : D
+>D : D<T>
 >T : T
 
 } = D;

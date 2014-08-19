@@ -71,7 +71,7 @@ function f2<T extends Base>(x: I<T>) {
 >T : T
 >Base : Base
 >x : I<T>
->I : I
+>I : I<T>
 >T : T
 
     var r: T;
@@ -83,7 +83,7 @@ function f2<T extends Base>(x: I<T>) {
 }
 var i: I<Derived>;
 >i : I<Derived>
->I : I
+>I : I<T>
 >Derived : Derived
 
 var r3 = f2(i);

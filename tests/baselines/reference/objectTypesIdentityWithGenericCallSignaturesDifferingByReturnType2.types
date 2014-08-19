@@ -96,13 +96,13 @@ function foo1(x: any) { }
 function foo1b(x: B<Date>);
 >foo1b : { (x: B<Date>): any; (x: B<Date>): any; }
 >x : B<Date>
->B : B
+>B : B<T>
 >Date : Date
 
 function foo1b(x: B<Date>); // error
 >foo1b : { (x: B<Date>): any; (x: B<Date>): any; }
 >x : B<Date>
->B : B
+>B : B<T>
 >Date : Date
 
 function foo1b(x: any) { }
@@ -112,13 +112,13 @@ function foo1b(x: any) { }
 function foo1c(x: C<Date>);
 >foo1c : { (x: C<Date>): any; (x: C<Date>): any; }
 >x : C<Date>
->C : C
+>C : C<T>
 >Date : Date
 
 function foo1c(x: C<Date>); // error
 >foo1c : { (x: C<Date>): any; (x: C<Date>): any; }
 >x : C<Date>
->C : C
+>C : C<T>
 >Date : Date
 
 function foo1c(x: any) { }
@@ -128,13 +128,13 @@ function foo1c(x: any) { }
 function foo2(x: I<Date>);
 >foo2 : { (x: I<Date>): any; (x: I<Date>): any; }
 >x : I<Date>
->I : I
+>I : I<T>
 >Date : Date
 
 function foo2(x: I<Date>); // error
 >foo2 : { (x: I<Date>): any; (x: I<Date>): any; }
 >x : I<Date>
->I : I
+>I : I<T>
 >Date : Date
 
 function foo2(x: any) { }
@@ -177,7 +177,7 @@ function foo5(x: A);
 function foo5(x: B<Date>); // ok
 >foo5 : { (x: A): any; (x: B<Date>): any; }
 >x : B<Date>
->B : B
+>B : B<T>
 >Date : Date
 
 function foo5(x: any) { }
@@ -192,7 +192,7 @@ function foo5b(x: A);
 function foo5b(x: C<Date>); // ok
 >foo5b : { (x: A): any; (x: C<Date>): any; }
 >x : C<Date>
->C : C
+>C : C<T>
 >Date : Date
 
 function foo5b(x: any) { }
@@ -207,7 +207,7 @@ function foo6(x: A);
 function foo6(x: I<Date>); // ok
 >foo6 : { (x: A): any; (x: I<Date>): any; }
 >x : I<Date>
->I : I
+>I : I<T>
 >Date : Date
 
 function foo6(x: any) { }
@@ -231,13 +231,13 @@ function foo7(x: any) { }
 function foo8(x: B<Date>);
 >foo8 : { (x: B<Date>): any; (x: I<Date>): any; }
 >x : B<Date>
->B : B
+>B : B<T>
 >Date : Date
 
 function foo8(x: I<Date>); // ok
 >foo8 : { (x: B<Date>): any; (x: I<Date>): any; }
 >x : I<Date>
->I : I
+>I : I<T>
 >Date : Date
 
 function foo8(x: any) { }
@@ -247,13 +247,13 @@ function foo8(x: any) { }
 function foo9(x: B<Date>);
 >foo9 : { (x: B<Date>): any; (x: C<Date>): any; }
 >x : B<Date>
->B : B
+>B : B<T>
 >Date : Date
 
 function foo9(x: C<Date>); // ok
 >foo9 : { (x: B<Date>): any; (x: C<Date>): any; }
 >x : C<Date>
->C : C
+>C : C<T>
 >Date : Date
 
 function foo9(x: any) { }
@@ -263,7 +263,7 @@ function foo9(x: any) { }
 function foo10(x: B<Date>);
 >foo10 : { (x: B<Date>): any; (x: { foo<T extends Date>(x: T): T; }): any; }
 >x : B<Date>
->B : B
+>B : B<T>
 >Date : Date
 
 function foo10(x: typeof a); // ok
@@ -278,7 +278,7 @@ function foo10(x: any) { }
 function foo11(x: B<Date>);
 >foo11 : { (x: B<Date>): any; (x: { foo: <T extends Date>(x: T) => any; }): any; }
 >x : B<Date>
->B : B
+>B : B<T>
 >Date : Date
 
 function foo11(x: typeof b); // ok
@@ -293,13 +293,13 @@ function foo11(x: any) { }
 function foo12(x: I<Date>);
 >foo12 : { (x: I<Date>): any; (x: C<Date>): any; }
 >x : I<Date>
->I : I
+>I : I<T>
 >Date : Date
 
 function foo12(x: C<Date>); // ok
 >foo12 : { (x: I<Date>): any; (x: C<Date>): any; }
 >x : C<Date>
->C : C
+>C : C<T>
 >Date : Date
 
 function foo12(x: any) { }
@@ -314,7 +314,7 @@ function foo12b(x: I2);
 function foo12b(x: C<Date>); // ok
 >foo12b : { (x: I2): any; (x: C<Date>): any; }
 >x : C<Date>
->C : C
+>C : C<T>
 >Date : Date
 
 function foo12b(x: any) { }
@@ -324,7 +324,7 @@ function foo12b(x: any) { }
 function foo13(x: I<Date>);
 >foo13 : { (x: I<Date>): any; (x: { foo<T extends Date>(x: T): T; }): any; }
 >x : I<Date>
->I : I
+>I : I<T>
 >Date : Date
 
 function foo13(x: typeof a); // ok
@@ -339,7 +339,7 @@ function foo13(x: any) { }
 function foo14(x: I<Date>);
 >foo14 : { (x: I<Date>): any; (x: { foo: <T extends Date>(x: T) => any; }): any; }
 >x : I<Date>
->I : I
+>I : I<T>
 >Date : Date
 
 function foo14(x: typeof b); // ok
@@ -359,7 +359,7 @@ function foo15(x: I2);
 function foo15(x: C<Date>); // ok
 >foo15 : { (x: I2): any; (x: C<Date>): any; }
 >x : C<Date>
->C : C
+>C : C<T>
 >Date : Date
 
 function foo15(x: any) { }

@@ -27,7 +27,7 @@ export interface I3<T> extends I1, I2 {
  
 var x: I3<number>;
 >x : I3<number>
->I3 : I3
+>I3 : I3<T>
 
 x.p1;
 >x.p1 : number

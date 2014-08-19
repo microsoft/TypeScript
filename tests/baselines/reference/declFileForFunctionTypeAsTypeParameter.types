@@ -6,11 +6,11 @@ class X<T> {
 }
 class C extends X<() => number> {
 >C : C
->X : X
+>X : X<T>
 }
 interface I extends X<() => number> {
 >I : I
->X : X
+>X : X<T>
 }
 
 

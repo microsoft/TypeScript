@@ -8,7 +8,7 @@ function Generate<T>(func: Generator<T>): T {
 >Generate : <T>(func: Generator<T>) => T
 >T : T
 >func : Generator<T>
->Generator : Generator
+>Generator : Generator<T>
 >T : T
 >T : T
 

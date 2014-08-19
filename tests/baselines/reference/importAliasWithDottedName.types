@@ -18,7 +18,7 @@ module A {
 
     import N = M.N;
 >N : typeof N
->M : typeof N
+>M : typeof M
 >N : typeof N
 
     var r = N.y;

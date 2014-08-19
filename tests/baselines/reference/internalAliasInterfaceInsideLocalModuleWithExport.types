@@ -12,11 +12,11 @@ export module c {
 
     export import b = a.I;
 >b : b
->a : I
+>a : a
 >I : I
 
     export var x: b;
 >x : I
->b : b
+>b : I
 }
 

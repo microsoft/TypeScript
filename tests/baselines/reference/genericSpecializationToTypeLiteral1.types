@@ -7,7 +7,7 @@ interface IEnumerable<T> {
 >zip : { <TResult>(second: IEnumerable<T>, resultSelector: (first: T, second: T, index: number) => TResult): IEnumerable<TResult>; <TResult>(second: T[], resultSelector: (first: T, second: T, index: number) => TResult): IEnumerable<TResult>; <TResult>(...params: any[]): IEnumerable<TResult>; }
 >TResult : TResult
 >second : IEnumerable<T>
->IEnumerable : IEnumerable
+>IEnumerable : IEnumerable<T>
 >T : T
 >resultSelector : (first: T, second: T, index: number) => TResult
 >first : T
@@ -16,7 +16,7 @@ interface IEnumerable<T> {
 >T : T
 >index : number
 >TResult : TResult
->IEnumerable : IEnumerable
+>IEnumerable : IEnumerable<T>
 >TResult : TResult
 
     zip<TResult>(second: T[], resultSelector: (first: T, second: T, index: number) => TResult): IEnumerable<TResult>;
@@ -31,23 +31,23 @@ interface IEnumerable<T> {
 >T : T
 >index : number
 >TResult : TResult
->IEnumerable : IEnumerable
+>IEnumerable : IEnumerable<T>
 >TResult : TResult
 
     zip<TResult>(...params: any[]): IEnumerable<TResult>; // last one is selector
 >zip : { <TResult>(second: IEnumerable<T>, resultSelector: (first: T, second: T, index: number) => TResult): IEnumerable<TResult>; <TResult>(second: T[], resultSelector: (first: T, second: T, index: number) => TResult): IEnumerable<TResult>; <TResult>(...params: any[]): IEnumerable<TResult>; }
 >TResult : TResult
 >params : any[]
->IEnumerable : IEnumerable
+>IEnumerable : IEnumerable<T>
 >TResult : TResult
 
     merge<TResult>(...params: IEnumerable<T>[]): IEnumerable<T>;
 >merge : { <TResult>(...params: IEnumerable<T>[]): IEnumerable<T>; <TResult>(...params: T[][]): IEnumerable<T>; }
 >TResult : TResult
 >params : IEnumerable<T>[]
->IEnumerable : IEnumerable
+>IEnumerable : IEnumerable<T>
 >T : T
->IEnumerable : IEnumerable
+>IEnumerable : IEnumerable<T>
 >T : T
 
     merge<TResult>(...params: T[][]): IEnumerable<T>;
@@ -55,45 +55,45 @@ interface IEnumerable<T> {
 >TResult : TResult
 >params : T[][]
 >T : T
->IEnumerable : IEnumerable
+>IEnumerable : IEnumerable<T>
 >T : T
 
 
     concat(...sequences: IEnumerable<T>[]): IEnumerable<T>;
 >concat : { (...sequences: IEnumerable<T>[]): IEnumerable<T>; (...sequences: T[]): IEnumerable<T>; }
 >sequences : IEnumerable<T>[]
->IEnumerable : IEnumerable
+>IEnumerable : IEnumerable<T>
 >T : T
->IEnumerable : IEnumerable
+>IEnumerable : IEnumerable<T>
 >T : T
 
     concat(...sequences: T[]): IEnumerable<T>;
 >concat : { (...sequences: IEnumerable<T>[]): IEnumerable<T>; (...sequences: T[]): IEnumerable<T>; }
 >sequences : T[]
 >T : T
->IEnumerable : IEnumerable
+>IEnumerable : IEnumerable<T>
 >T : T
 
     insert(index: number, second: IEnumerable<T>): IEnumerable<T>;
 >insert : (index: number, second: IEnumerable<T>) => IEnumerable<T>
 >index : number
 >second : IEnumerable<T>
->IEnumerable : IEnumerable
+>IEnumerable : IEnumerable<T>
 >T : T
->IEnumerable : IEnumerable
+>IEnumerable : IEnumerable<T>
 >T : T
 
     sequenceEqual(second: IEnumerable<T>): boolean;
 >sequenceEqual : { (second: IEnumerable<T>): boolean; <TCompare>(second: IEnumerable<T>, compareSelector: (element: T) => TCompare): boolean; (second: T[]): boolean; <TCompare>(second: T[], compareSelector: (element: T) => TCompare): boolean; }
 >second : IEnumerable<T>
->IEnumerable : IEnumerable
+>IEnumerable : IEnumerable<T>
 >T : T
 
     sequenceEqual<TCompare>(second: IEnumerable<T>, compareSelector: (element: T) => TCompare): boolean;
 >sequenceEqual : { (second: IEnumerable<T>): boolean; <TCompare>(second: IEnumerable<T>, compareSelector: (element: T) => TCompare): boolean; (second: T[]): boolean; <TCompare>(second: T[], compareSelector: (element: T) => TCompare): boolean; }
 >TCompare : TCompare
 >second : IEnumerable<T>
->IEnumerable : IEnumerable
+>IEnumerable : IEnumerable<T>
 >T : T
 >compareSelector : (element: T) => TCompare
 >element : T
@@ -122,7 +122,7 @@ interface IEnumerable<T> {
 >element : T
 >T : T
 >TKey : TKey
->IDictionary : IDictionary
+>IDictionary : IDictionary<TKey, TValue>
 >TKey : TKey
 
     toDictionary<TKey, TValue>(keySelector: (element: T) => TKey, elementSelector: (element: T) => TValue): IDictionary<TKey, TValue>;
@@ -137,7 +137,7 @@ interface IEnumerable<T> {
 >element : T
 >T : T
 >TValue : TValue
->IDictionary : IDictionary
+>IDictionary : IDictionary<TKey, TValue>
 >TKey : TKey
 >TValue : TValue
 
@@ -158,7 +158,7 @@ interface IEnumerable<T> {
 >key : TKey
 >TKey : TKey
 >TCompare : TCompare
->IDictionary : IDictionary
+>IDictionary : IDictionary<TKey, TValue>
 >TKey : TKey
 >TValue : TValue
 }
@@ -170,7 +170,7 @@ interface IDictionary<TKey, TValue> {
 
     toEnumerable(): IEnumerable<{ key: TKey; value: TValue }>;
 >toEnumerable : () => IEnumerable<{ key: TKey; value: TValue; }>
->IEnumerable : IEnumerable
+>IEnumerable : IEnumerable<T>
 >key : TKey
 >TKey : TKey
 >value : TValue

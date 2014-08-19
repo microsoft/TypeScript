@@ -55,7 +55,7 @@ interface B<T> {
 
 var b: B<boolean>;
 >b : B<boolean>
->B : B
+>B : B<T>
 
 var r = b.foo(true); // returns Date
 >r : Date
@@ -100,7 +100,7 @@ interface C<T, U> {
 
 var c: C<boolean, Date>;
 >c : C<boolean, Date>
->C : C
+>C : C<T, U>
 >Date : Date
 
 var r2 = c.foo(1, 2); // number
@@ -151,7 +151,7 @@ interface D<T, U> {
 
 var d: D<boolean, Date>;
 >d : D<boolean, Date>
->D : D
+>D : D<T, U>
 >Date : Date
 
 var r3 = d.foo(1, 1); // boolean, last definition wins

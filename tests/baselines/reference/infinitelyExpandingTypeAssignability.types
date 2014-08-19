@@ -11,27 +11,27 @@ interface A<T> {
 interface B<T> extends A<B<B<B<T>>>> { }
 >B : B<T>
 >T : T
->A : A
->B : B
->B : B
->B : B
+>A : A<T>
+>B : B<T>
+>B : B<T>
+>B : B<T>
 >T : T
 
 interface C<T> extends A<C<C<C<T>>>> { }
 >C : C<T>
 >T : T
->A : A
->C : C
->C : C
->C : C
+>A : A<T>
+>C : C<T>
+>C : C<T>
+>C : C<T>
 >T : T
  
 var x : B<string>
 >x : B<string>
->B : B
+>B : B<T>
 
 var y : C<string> = x
 >y : C<string>
->C : C
+>C : C<T>
 >x : B<string>
 

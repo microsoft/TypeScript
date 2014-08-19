@@ -28,7 +28,7 @@
 >T : T
 >value : T
 >T : T
->Observable : Observable
+>Observable : Observable<T>
 >T : T
     } 
     var o = { 

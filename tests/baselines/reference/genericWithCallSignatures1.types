@@ -5,7 +5,7 @@ class MyClass {
 
     public callableThing: CallableExtention<string>;
 >callableThing : CallableExtention<string>
->CallableExtention : CallableExtention
+>CallableExtention : CallableExtention<T>
 
     public myMethod() {
 >myMethod : () => void
@@ -35,6 +35,6 @@ interface Callable<T> {
 interface CallableExtention<T> extends Callable<T> { }
 >CallableExtention : CallableExtention<T>
 >T : T
->Callable : Callable
+>Callable : Callable<T>
 >T : T
 

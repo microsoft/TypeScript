@@ -10,14 +10,14 @@ interface IOption<A> {
     flatten<B>(): IOption<B>;
 >flatten : <B>() => IOption<B>
 >B : B
->IOption : IOption
+>IOption : IOption<A>
 >B : B
 }
 
 class None<T> implements IOption<T>{
 >None : None<T>
 >T : T
->IOption : IOption
+>IOption : IOption<A>
 >T : T
 
     get(): T {
@@ -30,7 +30,7 @@ class None<T> implements IOption<T>{
     flatten<U>() : IOption<U> {
 >flatten : <U>() => IOption<U>
 >U : U
->IOption : IOption
+>IOption : IOption<A>
 >U : U
 
         return new None<U>();

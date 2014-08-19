@@ -28,7 +28,7 @@ interface FooOf<TBase extends Base> extends Foo {
 }
 var x: FooOf<Derived> = null;
 >x : FooOf<Derived>
->FooOf : FooOf
+>FooOf : FooOf<TBase>
 >Derived : Derived
 
 var y: Derived = x[0];

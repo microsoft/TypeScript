@@ -76,14 +76,14 @@ interface I2<T> {
 >x : T
 >T : T
 >y : string
->C2 : C2
+>C2 : C2<T>
 >T : T
 
     new (x: T, y: string): C2<T>; // error
 >x : T
 >T : T
 >y : string
->C2 : C2
+>C2 : C2<T>
 >T : T
 
     new <T>(x: T, y: string): C2<T>;
@@ -91,7 +91,7 @@ interface I2<T> {
 >x : T
 >T : T
 >y : string
->C2 : C2
+>C2 : C2<T>
 >T : T
 
     new <T>(x: T, y: string): C2<T>; // error
@@ -99,13 +99,13 @@ interface I2<T> {
 >x : T
 >T : T
 >y : string
->C2 : C2
+>C2 : C2<T>
 >T : T
 }
 
 var i2: I2<number>;
 >i2 : I2<number>
->I2 : I2
+>I2 : I2<T>
 
 var r4 = new i2(1, '');
 >r4 : C2<number>
@@ -139,7 +139,7 @@ var b: {
 >x : T
 >T : T
 >y : string
->C2 : C2
+>C2 : C2<T>
 >T : T
 
     new <T>(x: T, y: string): C2<T>; // error
@@ -147,7 +147,7 @@ var b: {
 >x : T
 >T : T
 >y : string
->C2 : C2
+>C2 : C2<T>
 >T : T
 }
 

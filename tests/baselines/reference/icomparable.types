@@ -12,14 +12,14 @@
     declare function sort<U extends IComparable<any>>(items: U[]): U[];
 >sort : <U extends IComparable<any>>(items: U[]) => U[]
 >U : U
->IComparable : IComparable
+>IComparable : IComparable<T>
 >items : U[]
 >U : U
 >U : U
 
     interface StringComparable extends IComparable<string> {
 >StringComparable : StringComparable
->IComparable : IComparable
+>IComparable : IComparable<T>
     }
 
     var sc: StringComparable[];

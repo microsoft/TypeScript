@@ -15,7 +15,7 @@ class B<T> {
 class C<T> extends B<T> {
 >C : C<T>
 >T : T
->B : B
+>B : B<T>
 >T : T
 
     public x: T;
@@ -25,7 +25,7 @@ class C<T> extends B<T> {
 
 var v2: C <string>;
 >v2 : C<string>
->C : C
+>C : C<T>
 
 var y = v2.x; // should be 'string'
 >y : string

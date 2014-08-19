@@ -31,27 +31,27 @@ export interface publicInterfaceWithPrivateTypeParameters<T extends privateClass
 
     myMethod0(): publicClassT<T>; // error
 >myMethod0 : () => publicClassT<T>
->publicClassT : publicClassT
+>publicClassT : publicClassT<T>
 >T : T
 
     myMethod1(): privateClassT<privateClass>; // error
 >myMethod1 : () => privateClassT<privateClass>
->privateClassT : privateClassT
+>privateClassT : privateClassT<T>
 >privateClass : privateClass
 
     myMethod2(): privateClassT<publicClass>; // error
 >myMethod2 : () => privateClassT<publicClass>
->privateClassT : privateClassT
+>privateClassT : privateClassT<T>
 >publicClass : publicClass
 
     myMethod3(): publicClassT<privateClass>; //error
 >myMethod3 : () => publicClassT<privateClass>
->publicClassT : publicClassT
+>publicClassT : publicClassT<T>
 >privateClass : privateClass
 
     myMethod4(): publicClassT<publicClass>; // no error
 >myMethod4 : () => publicClassT<publicClass>
->publicClassT : publicClassT
+>publicClassT : publicClassT<T>
 >publicClass : publicClass
 }
 
@@ -68,27 +68,27 @@ export interface publicInterfaceWithPublicTypeParameters<T extends publicClass> 
 
     myMethod0(): publicClassT<T>; // No error
 >myMethod0 : () => publicClassT<T>
->publicClassT : publicClassT
+>publicClassT : publicClassT<T>
 >T : T
 
     myMethod1(): privateClassT<privateClass>; // error
 >myMethod1 : () => privateClassT<privateClass>
->privateClassT : privateClassT
+>privateClassT : privateClassT<T>
 >privateClass : privateClass
 
     myMethod2(): privateClassT<publicClass>; // error
 >myMethod2 : () => privateClassT<publicClass>
->privateClassT : privateClassT
+>privateClassT : privateClassT<T>
 >publicClass : publicClass
 
     myMethod3(): publicClassT<privateClass>; //error
 >myMethod3 : () => publicClassT<privateClass>
->publicClassT : publicClassT
+>publicClassT : publicClassT<T>
 >privateClass : privateClass
 
     myMethod4(): publicClassT<publicClass>; // no error
 >myMethod4 : () => publicClassT<publicClass>
->publicClassT : publicClassT
+>publicClassT : publicClassT<T>
 >publicClass : publicClass
 }
 
@@ -105,27 +105,27 @@ interface privateInterfaceWithPrivateTypeParameters<T extends privateClass> {
 
     myMethod0(): publicClassT<T>; // No error
 >myMethod0 : () => publicClassT<T>
->publicClassT : publicClassT
+>publicClassT : publicClassT<T>
 >T : T
 
     myMethod1(): privateClassT<privateClass>; // No error
 >myMethod1 : () => privateClassT<privateClass>
->privateClassT : privateClassT
+>privateClassT : privateClassT<T>
 >privateClass : privateClass
 
     myMethod2(): privateClassT<publicClass>; // No error
 >myMethod2 : () => privateClassT<publicClass>
->privateClassT : privateClassT
+>privateClassT : privateClassT<T>
 >publicClass : publicClass
 
     myMethod3(): publicClassT<privateClass>; //No error
 >myMethod3 : () => publicClassT<privateClass>
->publicClassT : publicClassT
+>publicClassT : publicClassT<T>
 >privateClass : privateClass
 
     myMethod4(): publicClassT<publicClass>; // no error
 >myMethod4 : () => publicClassT<publicClass>
->publicClassT : publicClassT
+>publicClassT : publicClassT<T>
 >publicClass : publicClass
 }
 
@@ -142,27 +142,27 @@ interface privateInterfaceWithPublicTypeParameters<T extends publicClass> {
 
     myMethod0(): publicClassT<T>; // No error
 >myMethod0 : () => publicClassT<T>
->publicClassT : publicClassT
+>publicClassT : publicClassT<T>
 >T : T
 
     myMethod1(): privateClassT<privateClass>; // No error
 >myMethod1 : () => privateClassT<privateClass>
->privateClassT : privateClassT
+>privateClassT : privateClassT<T>
 >privateClass : privateClass
 
     myMethod2(): privateClassT<publicClass>; // No error
 >myMethod2 : () => privateClassT<publicClass>
->privateClassT : privateClassT
+>privateClassT : privateClassT<T>
 >publicClass : publicClass
 
     myMethod3(): publicClassT<privateClass>; //No error
 >myMethod3 : () => publicClassT<privateClass>
->publicClassT : publicClassT
+>publicClassT : publicClassT<T>
 >privateClass : privateClass
 
     myMethod4(): publicClassT<publicClass>; // no error
 >myMethod4 : () => publicClassT<publicClass>
->publicClassT : publicClassT
+>publicClassT : publicClassT<T>
 >publicClass : publicClass
 }
 
@@ -178,7 +178,7 @@ export interface publicInterfaceWithPublicTypeParametersWithoutExtends<T> {
 
     myMethod0(): publicClassT<T>; // No error
 >myMethod0 : () => publicClassT<T>
->publicClassT : publicClassT
+>publicClassT : publicClassT<T>
 >T : T
 }
 
@@ -194,6 +194,6 @@ interface privateInterfaceWithPublicTypeParametersWithoutExtends<T> {
 
     myMethod0(): publicClassT<T>; // No error
 >myMethod0 : () => publicClassT<T>
->publicClassT : publicClassT
+>publicClassT : publicClassT<T>
 >T : T
 }

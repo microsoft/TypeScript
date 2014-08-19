@@ -16,7 +16,7 @@ export module c {
 
     export import b = a.foo;
 >b : (x: number) => number
->a : (x: number) => number
+>a : typeof a
 >foo : (x: number) => number
 
     export var bVal = b(10);

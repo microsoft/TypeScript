@@ -23,7 +23,7 @@ export module m2 {
 
         import c = x.c;
 >c : typeof c
->x : c
+>x : typeof x
 >c : c
 
         export var cProp = new c();

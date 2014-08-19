@@ -29,5 +29,5 @@ class MyEventWrapper extends BaseEventWrapper {
 
     t: MyEvent<any>;
 >t : MyEvent<any>
->MyEvent : MyEvent
+>MyEvent : MyEvent<T>
 }

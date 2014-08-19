@@ -8,8 +8,8 @@ interface A<T> {
 >U : U
 >T : T
 >x : A<A<U>>
->A : A
->A : A
+>A : A<T>
+>A : A<T>
 >U : U
 }
 
@@ -22,17 +22,17 @@ interface B<T> {
 >U : U
 >T : T
 >x : B<B<U>>
->B : B
->B : B
+>B : B<T>
+>B : B<T>
 >U : U
 }
 
 var a: A<string>
 >a : A<string>
->A : A
+>A : A<T>
 
 var b: B<string> = a;
 >b : B<string>
->B : B
+>B : B<T>
 >a : A<string>
 

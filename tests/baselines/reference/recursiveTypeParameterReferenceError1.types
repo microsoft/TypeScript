@@ -9,13 +9,13 @@ interface Foo<T> {
 
     z: Foo<X<T>>; // error
 >z : Foo<X<T>>
->Foo : Foo
->X : X
+>Foo : Foo<T>
+>X : X<T>
 >T : T
 }
 var f: Foo<number>;
 >f : Foo<number>
->Foo : Foo
+>Foo : Foo<T>
 
 var r = f.z; 
 >r : Foo<X<number>>
@@ -38,13 +38,13 @@ interface Foo2<T> {
 
     ofC4: C2<{ x: T }> // ok
 >ofC4 : C2<{ x: T; }>
->C2 : C2
+>C2 : C2<T>
 >x : T
 >T : T
 }
 var f2: Foo2<number>;
 >f2 : Foo2<number>
->Foo2 : Foo2
+>Foo2 : Foo2<T>
 
 var r2 = f2.ofC4;
 >r2 : C2<{ x: number; }>

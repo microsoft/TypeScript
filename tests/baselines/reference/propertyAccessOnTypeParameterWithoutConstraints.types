@@ -45,7 +45,7 @@ interface I<T> {
 }
 var i: I<number>;
 >i : I<number>
->I : I
+>I : I<T>
 
 var r2 = i.foo.toString();
 >r2 : string

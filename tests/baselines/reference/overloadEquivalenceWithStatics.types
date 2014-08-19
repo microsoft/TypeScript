@@ -7,9 +7,9 @@ static B<S>(v: A1<S>): A1<S>; // 1
 >B : { <S>(v: A1<S>): A1<S>; <S>(v: S): A1<S>; }
 >S : S
 >v : A1<S>
->A1 : A1
+>A1 : A1<T>
 >S : S
->A1 : A1
+>A1 : A1<T>
 >S : S
 
 static B<S>(v: S): A1<S>; // 2 : Error Duplicate signature
@@ -17,14 +17,14 @@ static B<S>(v: S): A1<S>; // 2 : Error Duplicate signature
 >S : S
 >v : S
 >S : S
->A1 : A1
+>A1 : A1<T>
 >S : S
 
 static B<S>(v: any): A1<S> {
 >B : { <S>(v: A1<S>): A1<S>; <S>(v: S): A1<S>; }
 >S : S
 >v : any
->A1 : A1
+>A1 : A1<T>
 >S : S
 
 return null;

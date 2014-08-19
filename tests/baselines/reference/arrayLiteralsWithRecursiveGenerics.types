@@ -9,15 +9,15 @@ class List<T> {
 
     next: List<List<T>>;
 >next : List<List<T>>
->List : List
->List : List
+>List : List<T>
+>List : List<T>
 >T : T
 }
 
 class DerivedList<U> extends List<U> {
 >DerivedList : DerivedList<U>
 >U : U
->List : List
+>List : List<T>
 >U : U
 
     foo: U;
@@ -37,22 +37,22 @@ class MyList<T> {
 
     next: MyList<MyList<T>>;
 >next : MyList<MyList<T>>
->MyList : MyList
->MyList : MyList
+>MyList : MyList<T>
+>MyList : MyList<T>
 >T : T
 }
 
 var list: List<number>;
 >list : List<number>
->List : List
+>List : List<T>
 
 var list2: List<string>;
 >list2 : List<string>
->List : List
+>List : List<T>
 
 var myList: MyList<number>;
 >myList : MyList<number>
->MyList : MyList
+>MyList : MyList<T>
 
 var xs = [list, myList]; // {}[]
 >xs : List<number>[]
@@ -73,7 +73,7 @@ var zs = [list, null]; // List<number>[]
 
 var myDerivedList: DerivedList<number>;
 >myDerivedList : DerivedList<number>
->DerivedList : DerivedList
+>DerivedList : DerivedList<U>
 
 var as = [list, myDerivedList]; // List<number>[]
 >as : List<number>[]

@@ -10,7 +10,7 @@ interface Bar {
 
     foo: Foo<number>;
 >foo : Foo<number>
->Foo : Foo
+>Foo : Foo<A>
 }
 === tests/cases/compiler/privacyCheckExternalModuleExportAssignmentOfGenericClass_0.ts ===
 export = Foo;

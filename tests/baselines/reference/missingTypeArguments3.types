@@ -9,7 +9,7 @@ declare module linq {
         OrderByDescending(keySelector?: string): OrderedEnumerable<T>;
 >OrderByDescending : (keySelector?: string) => OrderedEnumerable<T>
 >keySelector : string
->OrderedEnumerable : OrderedEnumerable
+>OrderedEnumerable : OrderedEnumerable<T>
 >T : T
 
         GroupBy<TKey>(keySelector: (element: T) => TKey): Enumerable<Grouping<TKey, T>>;
@@ -19,8 +19,8 @@ declare module linq {
 >element : T
 >T : T
 >TKey : TKey
->Enumerable : Enumerable
->Grouping : Grouping
+>Enumerable : Enumerable<T>
+>Grouping : Grouping<TKey, TElement>
 >TKey : TKey
 >T : T
 
@@ -36,8 +36,8 @@ declare module linq {
 >element : T
 >T : T
 >TElement : TElement
->Enumerable : Enumerable
->Grouping : Grouping
+>Enumerable : Enumerable<T>
+>Grouping : Grouping<TKey, TElement>
 >TKey : TKey
 >TElement : TElement
 
@@ -48,7 +48,7 @@ declare module linq {
 >element : T
 >T : T
 >TKey : TKey
->Dictionary : Dictionary
+>Dictionary : Dictionary<TKey, TValue>
 >TKey : TKey
 >T : T
     }
@@ -56,7 +56,7 @@ declare module linq {
     interface OrderedEnumerable<T> extends Enumerable<T> {
 >OrderedEnumerable : OrderedEnumerable<T>
 >T : T
->Enumerable : Enumerable
+>Enumerable : Enumerable<T>
 >T : T
 
         ThenBy<TCompare>(keySelector: (element: T) => TCompare): OrderedEnumerable<T>; // used to incorrectly think this was missing a type argument
@@ -66,7 +66,7 @@ declare module linq {
 >element : T
 >T : T
 >TCompare : TCompare
->OrderedEnumerable : OrderedEnumerable
+>OrderedEnumerable : OrderedEnumerable<T>
 >T : T
     }
 
@@ -74,7 +74,7 @@ declare module linq {
 >Grouping : Grouping<TKey, TElement>
 >TKey : TKey
 >TElement : TElement
->Enumerable : Enumerable
+>Enumerable : Enumerable<T>
 >TElement : TElement
 
         Key(): TKey;
@@ -93,7 +93,7 @@ declare module linq {
         Get(key): Enumerable<any>;
 >Get : (key: any) => Enumerable<any>
 >key : any
->Enumerable : Enumerable
+>Enumerable : Enumerable<T>
 
         Contains(key): boolean;
 >Contains : (key: any) => boolean
@@ -101,8 +101,8 @@ declare module linq {
 
         ToEnumerable(): Enumerable<Grouping<TKey, any>>;
 >ToEnumerable : () => Enumerable<Grouping<TKey, any>>
->Enumerable : Enumerable
->Grouping : Grouping
+>Enumerable : Enumerable<T>
+>Grouping : Grouping<TKey, TElement>
 >TKey : TKey
     }
 
@@ -149,8 +149,8 @@ declare module linq {
 
         ToEnumerable(): Enumerable<KeyValuePair<TKey, TValue>>;
 >ToEnumerable : () => Enumerable<KeyValuePair<TKey, TValue>>
->Enumerable : Enumerable
->KeyValuePair : KeyValuePair
+>Enumerable : Enumerable<T>
+>KeyValuePair : KeyValuePair<TKey, TValue>
 >TKey : TKey
 >TValue : TValue
     }

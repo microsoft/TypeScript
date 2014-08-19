@@ -13,9 +13,9 @@ interface Foo<T> {
 }
 var Foo: new () => Foo.A<Foo<string>>;
 >Foo : new () => A<Foo<string>>
->Foo : Foo
->A : A
->Foo : Foo
+>Foo : Foo<T>
+>A : A<T>
+>Foo : Foo<T>
 
 export = Foo;
 >Foo : Foo<T>

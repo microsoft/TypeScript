@@ -12,15 +12,15 @@ declare module WinJS {
 >success : (value: T) => Promise<U>
 >value : T
 >T : T
->Promise : Promise
+>Promise : Promise<T>
 >U : U
 >error : (error: any) => Promise<U>
 >error : any
->Promise : Promise
+>Promise : Promise<T>
 >U : U
 >progress : (progress: any) => void
 >progress : any
->Promise : Promise
+>Promise : Promise<T>
 >U : U
     }
 }
@@ -66,14 +66,14 @@ declare module Data {
 >indices : number[]
 >options : any
 >WinJS : WinJS
->Promise : Promise
->IListItem : IListItem
+>Promise : Promise<T>
+>IListItem : IListItem<T>
 >T : T
     }
     export class VirtualList<T> implements IVirtualList<T> {
 >VirtualList : VirtualList<T>
 >T : T
->IVirtualList : IVirtualList
+>IVirtualList : IVirtualList<T>
 >T : T
 
         //removeIndices: WinJS.Promise<IListItem<T>[]>;
@@ -82,8 +82,8 @@ declare module Data {
 >indices : number[]
 >options : any
 >WinJS : WinJS
->Promise : Promise
->IListItem : IListItem
+>Promise : Promise<T>
+>IListItem : IListItem<T>
 >T : T
     }
 }

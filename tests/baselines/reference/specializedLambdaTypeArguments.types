@@ -5,12 +5,12 @@ class X<A> {
 
 	prop: X< <Tany>() => Tany >;
 >prop : X<<Tany>() => Tany>
->X : X
+>X : X<A>
 >Tany : Tany
 >Tany : Tany
 }
 var a: X<boolean>;
 >a : X<boolean>
->X : X
+>X : X<A>
  
 

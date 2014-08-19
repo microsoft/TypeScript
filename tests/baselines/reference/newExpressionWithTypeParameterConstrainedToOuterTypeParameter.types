@@ -12,7 +12,7 @@ interface I<T> {
 }
 var i: I<string>;
 >i : I<string>
->I : I
+>I : I<T>
 
 var y = new i(""); // y should be string
 >y : string

@@ -25,7 +25,7 @@ var g: <T>(x: T) => <S>(y: S) => I<T, S>
 >S : S
 >y : S
 >S : S
->I : I
+>I : I<T, S>
 >T : T
 >S : S
 

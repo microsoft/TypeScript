@@ -42,12 +42,12 @@ var a: { <Z, A, B, C, D>(x: Z): Z }
 function foo1(x: I<string, boolean, number, string>);
 >foo1 : { (x: I<string, boolean, number, string>): any; (x: I<string, boolean, number, string>): any; }
 >x : I<string, boolean, number, string>
->I : I
+>I : I<X, Y, Z, A>
 
 function foo1(x: I<string, boolean, number, string>); // error
 >foo1 : { (x: I<string, boolean, number, string>): any; (x: I<string, boolean, number, string>): any; }
 >x : I<string, boolean, number, string>
->I : I
+>I : I<X, Y, Z, A>
 
 function foo1(x: any) { }
 >foo1 : { (x: I<string, boolean, number, string>): any; (x: I<string, boolean, number, string>): any; }
@@ -84,7 +84,7 @@ function foo3(x: any) { }
 function foo13(x: I<boolean, string, number, Date>);
 >foo13 : { (x: I<boolean, string, number, Date>): any; (x: <Z, A, B, C, D>(x: Z) => Z): any; }
 >x : I<boolean, string, number, Date>
->I : I
+>I : I<X, Y, Z, A>
 >Date : Date
 
 function foo13(x: typeof a); // ok
@@ -99,7 +99,7 @@ function foo13(x: any) { }
 function foo14(x: I<boolean, string, number, Date>);
 >foo14 : { (x: I<boolean, string, number, Date>): any; (x: I2): any; }
 >x : I<boolean, string, number, Date>
->I : I
+>I : I<X, Y, Z, A>
 >Date : Date
 
 function foo14(x: I2); // error
@@ -128,7 +128,7 @@ function foo14b(x: any) { }
 function foo15(x: I<boolean, string, number, Date>);
 >foo15 : { (x: I<boolean, string, number, Date>): any; (x: I2): any; }
 >x : I<boolean, string, number, Date>
->I : I
+>I : I<X, Y, Z, A>
 >Date : Date
 
 function foo15(x: I2); // ok

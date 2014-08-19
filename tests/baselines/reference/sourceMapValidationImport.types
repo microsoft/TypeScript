@@ -8,12 +8,12 @@ export module m {
 }
 import a = m.c;
 >a : typeof c
->m : c
+>m : typeof m
 >c : c
 
 export import b = m.c;
 >b : typeof c
->m : c
+>m : typeof m
 >c : c
 
 var x = new a();

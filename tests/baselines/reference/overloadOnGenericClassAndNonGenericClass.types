@@ -35,7 +35,7 @@ function f<T>(a: X<T>): B;
 >f : { (a: X1): A; <T>(a: X<T>): B; }
 >T : T
 >a : X<T>
->X : X
+>X : X<T>
 >T : T
 >B : B
 
@@ -46,7 +46,7 @@ function f(a): any {
 
 var xs: X<string>;
 >xs : X<string>
->X : X
+>X : X<T>
 
 var t3 = f(xs);
 >t3 : A

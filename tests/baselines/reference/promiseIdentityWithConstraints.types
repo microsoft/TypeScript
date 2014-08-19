@@ -13,10 +13,10 @@ interface IPromise<T, V> {
 >callback : (x: T) => IPromise<U, W>
 >x : T
 >T : T
->IPromise : IPromise
+>IPromise : IPromise<T, V>
 >U : U
 >W : W
->IPromise : IPromise
+>IPromise : IPromise<T, V>
 >U : U
 >W : W
 }
@@ -34,10 +34,10 @@ interface Promise<T, V> {
 >callback : (x: T) => Promise<U, W>
 >x : T
 >T : T
->Promise : Promise
+>Promise : Promise<T, V>
 >U : U
 >W : W
->Promise : Promise
+>Promise : Promise<T, V>
 >U : U
 >W : W
 }
@@ -45,9 +45,9 @@ interface Promise<T, V> {
 // Error because constraint V doesn't match
 var x: IPromise<string, number>;
 >x : IPromise<string, number>
->IPromise : IPromise
+>IPromise : IPromise<T, V>
 
 var x: Promise<string, boolean>;
 >x : IPromise<string, number>
->Promise : Promise
+>Promise : Promise<T, V>
 

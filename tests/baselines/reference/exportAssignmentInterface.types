@@ -4,7 +4,7 @@ import I1 = require("exportAssignmentInterface_A");
 
 var i: I1;
 >i : A
->I1 : I1
+>I1 : A
 
 var n: number = i.p1;
 >n : number

@@ -40,7 +40,7 @@ interface Array<T> {
 }
 var a: Array<string>;
 >a : string[]
->Array : Array
+>Array : T[]
 
 var r5 = a.reduce((x, y) => x + y);
 >r5 : string

@@ -18,7 +18,7 @@ interface KnockoutObservableBase<T> {
 interface KnockoutObservable<T> extends KnockoutObservableBase<T> {
 >KnockoutObservable : KnockoutObservable<T>
 >T : T
->KnockoutObservableBase : KnockoutObservableBase
+>KnockoutObservableBase : KnockoutObservableBase<T>
 >T : T
 
     equalityComparer(a: T, b: T): boolean;
@@ -38,7 +38,7 @@ interface KnockoutObservable<T> extends KnockoutObservableBase<T> {
 interface KnockoutObservableArray<T> extends KnockoutObservable<T[]> {
 >KnockoutObservableArray : KnockoutObservableArray<T>
 >T : T
->KnockoutObservable : KnockoutObservable
+>KnockoutObservable : KnockoutObservable<T>
 >T : T
 
     indexOf(searchElement: T, fromIndex?: number): number;
@@ -126,13 +126,13 @@ interface KnockoutObservableArrayStatic {
 
     fn: KnockoutObservableArray<any>;
 >fn : KnockoutObservableArray<any>
->KnockoutObservableArray : KnockoutObservableArray
+>KnockoutObservableArray : KnockoutObservableArray<T>
 
     <T>(value?: T[]): KnockoutObservableArray<T>;
 >T : T
 >value : T[]
 >T : T
->KnockoutObservableArray : KnockoutObservableArray
+>KnockoutObservableArray : KnockoutObservableArray<T>
 >T : T
 }
 
@@ -158,15 +158,15 @@ module Portal.Controls.Validators {
 
         public message: KnockoutObservable<string>;
 >message : KnockoutObservable<string>
->KnockoutObservable : KnockoutObservable
+>KnockoutObservable : KnockoutObservable<T>
 
         public validationState: KnockoutObservable<number>;
 >validationState : KnockoutObservable<number>
->KnockoutObservable : KnockoutObservable
+>KnockoutObservable : KnockoutObservable<T>
 
         public validate: KnockoutObservable<TValue>;
 >validate : KnockoutObservable<TValue>
->KnockoutObservable : KnockoutObservable
+>KnockoutObservable : KnockoutObservable<T>
 >TValue : TValue
 
         constructor(message?: string) { }
@@ -194,7 +194,7 @@ module PortalFx.ViewModels.Controls.Validators {
 >Portal : Portal
 >Controls : Controls
 >Validators : Validators
->Validator : Validator
+>Validator : Validator<TValue>
 >TValue : TValue
 
         constructor(message?: string) {
@@ -214,12 +214,12 @@ interface Contract<TValue> {
 
     validators: KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>;
 >validators : KnockoutObservableArray<Validator<TValue>>
->KnockoutObservableArray : KnockoutObservableArray
+>KnockoutObservableArray : KnockoutObservableArray<T>
 >PortalFx : PortalFx
 >ViewModels : ViewModels
 >Controls : Controls
 >Validators : Validators
->Validator : Validator
+>Validator : Validator<TValue>
 >TValue : TValue
 }
 
@@ -227,17 +227,17 @@ interface Contract<TValue> {
 class ViewModel<TValue> implements Contract<TValue> {
 >ViewModel : ViewModel<TValue>
 >TValue : TValue
->Contract : Contract
+>Contract : Contract<TValue>
 >TValue : TValue
 
     public validators: KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>> = ko.observableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>();
 >validators : KnockoutObservableArray<Validator<TValue>>
->KnockoutObservableArray : KnockoutObservableArray
+>KnockoutObservableArray : KnockoutObservableArray<T>
 >PortalFx : PortalFx
 >ViewModels : ViewModels
 >Controls : Controls
 >Validators : Validators
->Validator : Validator
+>Validator : Validator<TValue>
 >TValue : TValue
 >ko.observableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>() : KnockoutObservableArray<Validator<TValue>>
 >ko.observableArray : KnockoutObservableArrayStatic
@@ -247,7 +247,7 @@ class ViewModel<TValue> implements Contract<TValue> {
 >ViewModels : ViewModels
 >Controls : Controls
 >Validators : Validators
->Validator : Validator
+>Validator : Validator<TValue>
 >TValue : TValue
 }
 

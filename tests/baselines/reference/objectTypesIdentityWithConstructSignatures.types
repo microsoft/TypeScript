@@ -76,12 +76,12 @@ function foo1b(x: any) { }
 function foo1c(x: C<string>);
 >foo1c : { (x: C<string>): any; (x: C<string>): any; }
 >x : C<string>
->C : C
+>C : C<T>
 
 function foo1c(x: C<string>); // error
 >foo1c : { (x: C<string>): any; (x: C<string>): any; }
 >x : C<string>
->C : C
+>C : C<T>
 
 function foo1c(x: any) { }
 >foo1c : { (x: C<string>): any; (x: C<string>): any; }
@@ -137,7 +137,7 @@ function foo5b(x: A);
 function foo5b(x: C<string>); // error
 >foo5b : { (x: A): any; (x: C<string>): any; }
 >x : C<string>
->C : C
+>C : C<T>
 
 function foo5b(x: any) { }
 >foo5b : { (x: A): any; (x: C<string>): any; }
@@ -193,7 +193,7 @@ function foo9(x: B);
 function foo9(x: C<string>); // error
 >foo9 : { (x: B): any; (x: C<string>): any; }
 >x : C<string>
->C : C
+>C : C<T>
 
 function foo9(x: any) { }
 >foo9 : { (x: B): any; (x: C<string>): any; }
@@ -221,7 +221,7 @@ function foo12(x: I);
 function foo12(x: C<string>); // ok
 >foo12 : { (x: I): any; (x: C<string>): any; }
 >x : C<string>
->C : C
+>C : C<T>
 
 function foo12(x: any) { }
 >foo12 : { (x: I): any; (x: C<string>): any; }
@@ -230,12 +230,12 @@ function foo12(x: any) { }
 function foo12b(x: I2<string>);
 >foo12b : { (x: I2<string>): any; (x: C<string>): any; }
 >x : I2<string>
->I2 : I2
+>I2 : I2<T>
 
 function foo12b(x: C<string>); // ok
 >foo12b : { (x: I2<string>): any; (x: C<string>): any; }
 >x : C<string>
->C : C
+>C : C<T>
 
 function foo12b(x: any) { }
 >foo12b : { (x: I2<string>): any; (x: C<string>): any; }
@@ -258,12 +258,12 @@ function foo13(x: any) { }
 function foo15(x: I2<string>);
 >foo15 : { (x: I2<string>): any; (x: C<number>): any; }
 >x : I2<string>
->I2 : I2
+>I2 : I2<T>
 
 function foo15(x: C<number>); // ok
 >foo15 : { (x: I2<string>): any; (x: C<number>): any; }
 >x : C<number>
->C : C
+>C : C<T>
 
 function foo15(x: any) { }
 >foo15 : { (x: I2<string>): any; (x: C<number>): any; }

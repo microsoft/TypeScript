@@ -51,7 +51,7 @@ module EndGate.Tweening {
 
     export class NumberTween extends Tween<Number>{
 >NumberTween : NumberTween
->Tween : Tween
+>Tween : Tween<T>
 >Number : Number
 
         constructor(from: number) {

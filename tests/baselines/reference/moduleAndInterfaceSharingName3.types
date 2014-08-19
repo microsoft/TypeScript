@@ -21,5 +21,5 @@ var z: X.Y.Z = null;
 var z2: X.Y<string>;
 >z2 : Y<string>
 >X : X
->Y : Y
+>Y : Y<T>
 

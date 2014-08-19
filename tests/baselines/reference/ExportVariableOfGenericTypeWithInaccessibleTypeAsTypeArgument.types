@@ -11,7 +11,7 @@ module A {
 
     export var beez: Array<B>;
 >beez : B[]
->Array : Array
+>Array : T[]
 >B : B
 
     export var beez2 = new Array<B>();

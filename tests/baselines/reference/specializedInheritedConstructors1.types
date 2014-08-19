@@ -14,7 +14,7 @@ class View<TModel> {
 
     constructor(options: ViewOptions<TModel>) { }
 >options : ViewOptions<TModel>
->ViewOptions : ViewOptions
+>ViewOptions : ViewOptions<TModel>
 >TModel : TModel
 
     model: TModel;
@@ -27,12 +27,12 @@ class Model { }
 
 class MyView extends View<Model> { }
 >MyView : MyView
->View : View
+>View : View<TModel>
 >Model : Model
 
 var m: ViewOptions<Model> = { model: new Model() };
 >m : ViewOptions<Model>
->ViewOptions : ViewOptions
+>ViewOptions : ViewOptions<TModel>
 >Model : Model
 >{ model: new Model() } : { model: Model; }
 >model : Model

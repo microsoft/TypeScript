@@ -12,7 +12,7 @@ interface B<T> {
 interface A<T> extends B<T> {
 >A : A<T>
 >T : T
->B : B
+>B : B<T>
 >T : T
 
     foo: T;
@@ -24,8 +24,8 @@ interface A<T> extends B<T> {
 interface A2<T> extends B<B<string>> {
 >A2 : A2<T>
 >T : T
->B : B
->B : B
+>B : B<T>
+>B : B<T>
 
     baz: T;
 >baz : T
@@ -45,8 +45,8 @@ interface C<T> {
 interface A3<T> extends B<C<T>> {
 >A3 : A3<T>
 >T : T
->B : B
->C : C
+>B : B<T>
+>C : C<T>
 >T : T
 
     bing: T;

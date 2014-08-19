@@ -6,7 +6,7 @@ class BiMap<K, V> {
 
     private inverseBiMap: BiMap<V, K>;
 >inverseBiMap : BiMap<V, K>
->BiMap : BiMap
+>BiMap : BiMap<K, V>
 >V : V
 >K : K
 
@@ -18,7 +18,7 @@ class BiMap<K, V> {
 
     public inverse(): BiMap<V, K> { return null; }
 >inverse : () => BiMap<V, K>
->BiMap : BiMap
+>BiMap : BiMap<K, V>
 >V : V
 >K : K
 }

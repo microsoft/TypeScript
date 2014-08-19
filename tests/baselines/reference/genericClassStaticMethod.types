@@ -11,7 +11,7 @@ class Foo<T> {
 class Bar<T> extends Foo<T> {
 >Bar : Bar<T>
 >T : T
->Foo : Foo
+>Foo : Foo<T>
 >T : T
 
     static getFoo() {

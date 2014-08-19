@@ -52,7 +52,7 @@ interface I<T extends Object> {
 }
 var i: I<{}>;
 >i : I<{}>
->I : I
+>I : I<T>
 
 // {} constraint
 function foo2<T extends {}>(x: T) { }
@@ -102,6 +102,6 @@ interface I2<T extends {}> {
 }
 var i2: I2<{}>;
 >i2 : I2<{}>
->I2 : I2
+>I2 : I2<T>
 
 

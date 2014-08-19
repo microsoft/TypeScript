@@ -12,6 +12,6 @@ module M {
 
 import r = M.X;
 >r : r
->M : M
+>M : typeof M
 >X : X
 

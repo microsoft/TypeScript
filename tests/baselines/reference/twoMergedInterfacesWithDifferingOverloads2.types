@@ -69,7 +69,7 @@ module G {
 
     var a: A<boolean>;
 >a : A<boolean>
->A : A
+>A : A<T>
 
     var r = a();
 >r : string

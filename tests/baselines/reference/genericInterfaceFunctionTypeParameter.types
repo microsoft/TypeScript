@@ -8,7 +8,7 @@ export function foo<A>(fn: (ifoo: IFoo<A>) => void) {
 >A : A
 >fn : (ifoo: IFoo<A>) => void
 >ifoo : IFoo<A>
->IFoo : IFoo
+>IFoo : IFoo<A>
 >A : A
 
     foo(fn); // Invocation is necessary to repro (!)

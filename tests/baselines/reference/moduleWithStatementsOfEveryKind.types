@@ -18,7 +18,7 @@ module A {
 
     class B extends AA<string> implements I { id: number }
 >B : B
->AA : AA
+>AA : AA<T>
 >I : I
 >id : number
 
@@ -94,7 +94,7 @@ module Y {
 
     export class B extends AA<string> implements I { id: number }
 >B : B
->AA : AA
+>AA : AA<T>
 >I : I
 >id : number
 

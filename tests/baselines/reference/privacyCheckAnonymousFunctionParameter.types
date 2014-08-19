@@ -15,9 +15,9 @@ module Query {
 >T : T
 >doWhile : (test: Iterator<T>) => boolean
 >test : Iterator<T>
->Iterator : Iterator
+>Iterator : Iterator<T>
 >T : T
->Iterator : Iterator
+>Iterator : Iterator<T>
 >T : T
 
         return null;

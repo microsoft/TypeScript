@@ -11,7 +11,7 @@ class C<T> {
 class D<T> extends C<string> {
 >D : D<T>
 >T : T
->C : C
+>C : C<T>
 
     y: T;
 >y : T
@@ -25,7 +25,7 @@ class D<T> extends C<string> {
 
 var d: D<number>;
 >d : D<number>
->D : D
+>D : D<T>
 
 var r: string = d.x;
 >r : string

@@ -15,7 +15,7 @@ module App {
 
   import Key = Keyboard.Key;
 >Key : typeof Key
->Keyboard : Key
+>Keyboard : typeof Keyboard
 >Key : Key
 
   export function foo(key: Key): void {}

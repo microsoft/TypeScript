@@ -9,9 +9,9 @@ interface IPromise<T> {
 >callback : (x: T) => IPromise<U>
 >x : T
 >T : T
->IPromise : IPromise
+>IPromise : IPromise<T>
 >U : U
->IPromise : IPromise
+>IPromise : IPromise<T>
 >U : U
 }
 interface Promise<T> {
@@ -24,18 +24,18 @@ interface Promise<T> {
 >callback : (x: T) => Promise<U>
 >x : T
 >T : T
->Promise : Promise
+>Promise : Promise<T>
 >U : U
->Promise : Promise
+>Promise : Promise<T>
 >U : U
 }
 var x: IPromise<string>;
 >x : IPromise<string>
->IPromise : IPromise
+>IPromise : IPromise<T>
 
 var x: Promise<string>;
 >x : IPromise<string>
->Promise : Promise
+>Promise : Promise<T>
 
 
 interface IPromise2<T, V> {
@@ -50,10 +50,10 @@ interface IPromise2<T, V> {
 >callback : (x: T) => IPromise2<U, W>
 >x : T
 >T : T
->IPromise2 : IPromise2
+>IPromise2 : IPromise2<T, V>
 >U : U
 >W : W
->IPromise2 : IPromise2
+>IPromise2 : IPromise2<T, V>
 >W : W
 >U : U
 }
@@ -69,10 +69,10 @@ interface Promise2<T, V> {
 >callback : (x: V) => Promise2<U, T>
 >x : V
 >V : V
->Promise2 : Promise2
+>Promise2 : Promise2<T, V>
 >U : U
 >T : T
->Promise2 : Promise2
+>Promise2 : Promise2<T, V>
 >T : T
 >W : W
 }
@@ -81,9 +81,9 @@ interface Promise2<T, V> {
 // Also, the V of Promise2 happens to coincide with the T of IPromise2 (they are both string).
 var y: IPromise2<string, number>;
 >y : IPromise2<string, number>
->IPromise2 : IPromise2
+>IPromise2 : IPromise2<T, V>
 
 var y: Promise2<any, string>;
 >y : IPromise2<string, number>
->Promise2 : Promise2
+>Promise2 : Promise2<T, V>
 

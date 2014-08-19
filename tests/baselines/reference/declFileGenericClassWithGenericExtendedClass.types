@@ -13,7 +13,7 @@ class Base<T> { }
 class Derived<T> extends Base<T> { }
 >Derived : Derived<T>
 >T : T
->Base : Base
+>Base : Base<T>
 >T : T
 
 interface IBar<T> {
@@ -22,17 +22,17 @@ interface IBar<T> {
 
     derived: Derived<T>;
 >derived : Derived<T>
->Derived : Derived
+>Derived : Derived<T>
 >T : T
 }
 class Baz implements IBar<Baz> {
 >Baz : Baz
->IBar : IBar
+>IBar : IBar<T>
 >Baz : Baz
 
     derived: Derived<Baz>;
 >derived : Derived<Baz>
->Derived : Derived
+>Derived : Derived<T>
 >Baz : Baz
 }
 

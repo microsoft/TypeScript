@@ -41,7 +41,7 @@ class Base {
 
     ownerCollection: BaseCollection<Base>;
 >ownerCollection : BaseCollection<Base>
->BaseCollection : BaseCollection
+>BaseCollection : BaseCollection<T>
 >Base : Base
 }
 
@@ -50,7 +50,7 @@ class Thing {
 
     public get Components(): ComponentCollection<any> { return null }
 >Components : ComponentCollection<any>
->ComponentCollection : ComponentCollection
+>ComponentCollection : ComponentCollection<T>
 }
 
 class ComponentCollection<T> {
@@ -90,7 +90,7 @@ class Foo {
     }
     public get prop2(): BaseCollection<Derived> {
 >prop2 : BaseCollection<Derived>
->BaseCollection : BaseCollection
+>BaseCollection : BaseCollection<T>
 >Derived : Derived
 
         return new BaseCollection<Derived>(Derived.createEmpty);

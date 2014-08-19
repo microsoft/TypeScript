@@ -8,7 +8,7 @@ module M1 {
 >ar : any
 >f : any
 >e : any
->Array : Array
+>Array : T[]
 >A : A
 
         return Array.prototype.reduce.apply(ar, e ? [f, e] : [f]);

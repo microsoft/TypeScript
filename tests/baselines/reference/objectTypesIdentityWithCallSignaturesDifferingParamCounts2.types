@@ -54,12 +54,12 @@ function foo3(x: any) { }
 function foo4(x: I2<string>);
 >foo4 : { (x: I2<string>): any; (x: I2<string>): any; }
 >x : I2<string>
->I2 : I2
+>I2 : I2<T>
 
 function foo4(x: I2<string>); // error
 >foo4 : { (x: I2<string>): any; (x: I2<string>): any; }
 >x : I2<string>
->I2 : I2
+>I2 : I2<T>
 
 function foo4(x: any) { }
 >foo4 : { (x: I2<string>): any; (x: I2<string>): any; }
@@ -68,12 +68,12 @@ function foo4(x: any) { }
 function foo5(x: I2<string>);
 >foo5 : { (x: I2<string>): any; (x: I2<number>): any; }
 >x : I2<string>
->I2 : I2
+>I2 : I2<T>
 
 function foo5(x: I2<number>); // ok
 >foo5 : { (x: I2<string>): any; (x: I2<number>): any; }
 >x : I2<number>
->I2 : I2
+>I2 : I2<T>
 
 function foo5(x: any) { }
 >foo5 : { (x: I2<string>): any; (x: I2<number>): any; }
@@ -101,7 +101,7 @@ function foo14(x: I);
 function foo14(x: I2<string>); // error
 >foo14 : { (x: I): any; (x: I2<string>): any; }
 >x : I2<string>
->I2 : I2
+>I2 : I2<T>
 
 function foo14(x: any) { }
 >foo14 : { (x: I): any; (x: I2<string>): any; }
@@ -115,7 +115,7 @@ function foo14b(x: typeof a);
 function foo14b(x: I2<string>); // ok
 >foo14b : { (x: (x: string, y: string) => string): any; (x: I2<string>): any; }
 >x : I2<string>
->I2 : I2
+>I2 : I2<T>
 
 function foo14b(x: any) { }
 >foo14b : { (x: (x: string, y: string) => string): any; (x: I2<string>): any; }
@@ -129,7 +129,7 @@ function foo15(x: I);
 function foo15(x: I2<number>); // ok
 >foo15 : { (x: I): any; (x: I2<number>): any; }
 >x : I2<number>
->I2 : I2
+>I2 : I2<T>
 
 function foo15(x: any) { }
 >foo15 : { (x: I): any; (x: I2<number>): any; }

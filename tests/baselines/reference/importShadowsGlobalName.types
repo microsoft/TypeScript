@@ -4,7 +4,7 @@ import Error = require('Foo');
 
 class Bar extends Error {}
 >Bar : Bar
->Error : Error
+>Error : Foo
 
 export = Bar;
 >Bar : Bar

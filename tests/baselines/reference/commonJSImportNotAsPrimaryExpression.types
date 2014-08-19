@@ -5,7 +5,7 @@ import foo = require("./foo_0");
 // None of the below should cause a runtime dependency on foo_0
 import f = foo.M1;
 >f : f
->foo : foo
+>foo : typeof "tests/cases/conformance/externalModules/foo_0"
 >M1 : M1
 
 var i: f.I2;

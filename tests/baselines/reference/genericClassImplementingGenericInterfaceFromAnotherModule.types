@@ -13,7 +13,7 @@ module bar {
 >Foo : Foo<T>
 >T : T
 >foo : foo
->IFoo : IFoo
+>IFoo : IFoo<T>
 >T : T
 }
 

@@ -30,7 +30,7 @@ module M {
 
     export import D = K.L;
 >D : typeof L
->K : L
+>K : typeof K
 >L : L
 }
 var o: { name: string };

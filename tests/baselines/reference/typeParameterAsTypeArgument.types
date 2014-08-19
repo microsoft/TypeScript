@@ -42,7 +42,7 @@ interface I<T, U> {
 
     x: C<U, T>;
 >x : C<U, T>
->C : C
+>C : C<T, U>
 >U : U
 >T : T
 }

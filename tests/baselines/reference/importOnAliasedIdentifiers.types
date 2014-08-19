@@ -19,15 +19,15 @@ module B {
 
     import Y = A; // Alias only for module A
 >Y : typeof A
->A : typeof A
+>A : A
 
     import Z = A.X; // Alias for both type and member A.X
 >Z : X
->A : X
+>A : A
 >X : X
 
     var v: Z = Z;
 >v : X
->Z : Z
+>Z : X
 >Z : X
 }

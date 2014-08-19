@@ -75,7 +75,7 @@ interface B<T> {
 
 var b: B<string>;
 >b : B<string>
->B : B
+>B : B<T>
 
 var r4 = b.foo
 >r4 : string
@@ -173,7 +173,7 @@ module M {
 
     var b: B<string>;
 >b : B<string>
->B : B
+>B : B<T>
 
     var r4 = b.foo
 >r4 : string

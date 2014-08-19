@@ -5,7 +5,7 @@ interface A<T> {
 
     foo(): B<T>; // instead of B does see this
 >foo : { (): B<T>; (): void; }
->B : B
+>B : B<T>
 >T : T
 
     foo(): void; // instead of B does see this
@@ -13,13 +13,13 @@ interface A<T> {
  
     foo2(): B<number>;
 >foo2 : () => B<number>
->B : B
+>B : B<T>
 }
  
 interface B<T> extends A<T> {
 >B : B<T>
 >T : T
->A : A
+>A : A<T>
 >T : T
 
     bar(): void;
@@ -28,7 +28,7 @@ interface B<T> extends A<T> {
  
 var b: B<number>;
 >b : B<number>
->B : B
+>B : B<T>
 
 b.foo(); // should not error
 >b.foo() : B<number>

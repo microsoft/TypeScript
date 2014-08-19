@@ -14,7 +14,7 @@ class BaseClass<T> {
 
 class SubClass extends BaseClass<number> {
 >SubClass : SubClass
->BaseClass : BaseClass
+>BaseClass : BaseClass<T>
 
     public Error(): void {
 >Error : () => void

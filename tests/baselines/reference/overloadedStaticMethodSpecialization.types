@@ -7,9 +7,9 @@ class A<T> {
 >B : { <S>(v: A<S>): A<S>; <S>(v: S): A<S>; }
 >S : S
 >v : A<S>
->A : A
+>A : A<T>
 >S : S
->A : A
+>A : A<T>
 >S : S
 
     static B<S>(v: S): A<S>;
@@ -17,14 +17,14 @@ class A<T> {
 >S : S
 >v : S
 >S : S
->A : A
+>A : A<T>
 >S : S
 
     static B<S>(v: any): A<S> {
 >B : { <S>(v: A<S>): A<S>; <S>(v: S): A<S>; }
 >S : S
 >v : any
->A : A
+>A : A<T>
 >S : S
 
         return null;

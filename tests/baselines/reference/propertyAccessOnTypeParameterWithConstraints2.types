@@ -121,7 +121,7 @@ interface I<U extends A, T extends A> {
 //}
 var i: I<B, A>;
 >i : I<B, A>
->I : I
+>I : I<U, T>
 >B : B
 >A : A
 

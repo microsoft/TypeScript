@@ -26,7 +26,7 @@ var c3 = new C<number>();
 
 var c4: C<any> = new C();
 >c4 : C<any>
->C : C
+>C : C<T>
 >new C() : C<{}>
 >C : typeof C
 
@@ -62,7 +62,7 @@ var d4 = new D(<any>1);
 
 var d5: D<any> = new D(null);
 >d5 : D<any>
->D : D
+>D : D<T>
 >new D(null) : D<any>
 >D : typeof D
 

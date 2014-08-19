@@ -10,14 +10,14 @@ interface IList<A> {
 >t : A
 >A : A
 >B : B
->IList : IList
+>IList : IList<A>
 >B : B
 }
 
 class Nil<C> implements IList<C>{
 >Nil : Nil<C>
 >C : C
->IList : IList
+>IList : IList<A>
 >C : C
 
     map<D>(f: (t: C) => D): IList<D> {
@@ -27,7 +27,7 @@ class Nil<C> implements IList<C>{
 >t : C
 >C : C
 >D : D
->IList : IList
+>IList : IList<A>
 >D : D
 
         return null;
@@ -37,7 +37,7 @@ class Nil<C> implements IList<C>{
 class Cons<T> implements IList<T>{
 >Cons : Cons<T>
 >T : T
->IList : IList
+>IList : IList<A>
 >T : T
 
     map<U>(f: (t: T) => U): IList<U> {
@@ -47,7 +47,7 @@ class Cons<T> implements IList<T>{
 >t : T
 >T : T
 >U : U
->IList : IList
+>IList : IList<A>
 >U : U
 
         return this.foldRight(new Nil<U>(), (t, acc) => {

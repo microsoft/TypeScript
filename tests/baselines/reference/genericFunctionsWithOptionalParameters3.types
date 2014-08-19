@@ -16,7 +16,7 @@ interface Utils {
 >T : T
 >S : S
 >c : Collection<T>
->Collection : Collection
+>Collection : Collection<T>
 >T : T
 >folder : (s: S, t: T) => T
 >s : S
@@ -34,7 +34,7 @@ interface Utils {
 >U : U
 >V : V
 >c : Collection<T>
->Collection : Collection
+>Collection : Collection<T>
 >T : T
 >mapper : (x: T) => U
 >x : T
@@ -44,7 +44,7 @@ interface Utils {
 >y : U
 >U : U
 >V : V
->Collection : Collection
+>Collection : Collection<T>
 >V : V
 }
 var utils: Utils;

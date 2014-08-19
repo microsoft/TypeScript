@@ -5,7 +5,7 @@ interface A<T> {
 
     x: C<T>
 >x : C<T>
->C : C
+>C : C<T>
 >T : T
 }
 
@@ -15,15 +15,15 @@ interface B<T> {
 
     x: C<T>
 >x : C<T>
->C : C
+>C : C<T>
 >T : T
 }
 
 interface C<T> extends A<T>, B<T> { } // Should not be an error
 >C : C<T>
 >T : T
->A : A
+>A : A<T>
 >T : T
->B : B
+>B : B<T>
 >T : T
 

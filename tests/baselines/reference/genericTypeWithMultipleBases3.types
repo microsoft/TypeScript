@@ -26,14 +26,14 @@ bar(x: T): T;
 interface IC<T> extends IA<T>, IB<T> { }
 >IC : IC<T>
 >T : T
->IA : IA
+>IA : IA<T>
 >T : T
->IB : IB
+>IB : IB<T>
 >T : T
 
 var c: IC<number>;
 >c : IC<number>
->IC : IC
+>IC : IC<T>
 
 var x = c.foo;
 >x : (x: number) => number

@@ -29,14 +29,14 @@ export declare class TPromise<V> {
 >success : (value: V) => TPromise<U>
 >value : V
 >V : V
->TPromise : TPromise
+>TPromise : TPromise<V>
 >U : U
 >error : (err: any) => TPromise<U>
 >err : any
->TPromise : TPromise
+>TPromise : TPromise<V>
 >U : U
 >progress : ProgressCallback
 >ProgressCallback : ProgressCallback
->TPromise : TPromise
+>TPromise : TPromise<V>
 >U : U
 }

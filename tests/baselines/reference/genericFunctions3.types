@@ -6,7 +6,7 @@ interface Query<T> {
     foo(x: string): Query<T[]>;
 >foo : (x: string) => Query<T[]>
 >x : string
->Query : Query
+>Query : Query<T>
 >T : T
 }
  
@@ -14,14 +14,14 @@ function from<T>(arg: boolean): Query<T>; // was Error: Overload signature is no
 >from : <T>(arg: boolean) => Query<T>
 >T : T
 >arg : boolean
->Query : Query
+>Query : Query<T>
 >T : T
 
 function from<T>(arg: any): Query<T> {
 >from : <T>(arg: boolean) => Query<T>
 >T : T
 >arg : any
->Query : Query
+>Query : Query<T>
 >T : T
 
     return undefined;

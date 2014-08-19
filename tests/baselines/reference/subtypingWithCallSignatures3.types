@@ -101,12 +101,12 @@ module Errors {
 >foo12 : { (a2: (x: Base[], y: Derived2[]) => Derived[]): (x: Base[], y: Derived2[]) => Derived[]; (a2: any): any; }
 >a2 : (x: Base[], y: Derived2[]) => Derived[]
 >x : Base[]
->Array : Array
+>Array : T[]
 >Base : Base
 >y : Derived2[]
->Array : Array
+>Array : T[]
 >Derived2 : Derived2
->Array : Array
+>Array : T[]
 >Derived : Derived
 >a2 : (x: Base[], y: Derived2[]) => Derived[]
 
@@ -432,26 +432,26 @@ module Errors {
 >r6arg : (x: Base[], y: Derived2[]) => Derived[]
 >(x: Array<Base>, y: Array<Derived2>) => <Array<Derived>>null : (x: Base[], y: Derived2[]) => Derived[]
 >x : Base[]
->Array : Array
+>Array : T[]
 >Base : Base
 >y : Derived2[]
->Array : Array
+>Array : T[]
 >Derived2 : Derived2
 ><Array<Derived>>null : Derived[]
->Array : Array
+>Array : T[]
 >Derived : Derived
 
     var r6arg2 = <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => <T>null;
 >r6arg2 : <T extends Derived2[]>(x: Base[], y: Base[]) => T
 ><T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => <T>null : <T extends Derived2[]>(x: Base[], y: Base[]) => T
 >T : T
->Array : Array
+>Array : T[]
 >Derived2 : Derived2
 >x : Base[]
->Array : Array
+>Array : T[]
 >Base : Base
 >y : Base[]
->Array : Array
+>Array : T[]
 >Base : Base
 ><T>null : T
 >T : T
