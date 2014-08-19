@@ -219,7 +219,9 @@ module ts {
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypeReference,
-        LastTypeNode = ArrayType
+        LastTypeNode = ArrayType,
+        FirstPunctuation= OpenBraceToken,
+        LastPunctuation = CaretEqualsToken
     }
 
     export enum NodeFlags {
@@ -935,7 +937,6 @@ module ts {
         Warning,
         Error,
         Message,
-        NoPrefix
     }
 
     export interface CompilerOptions {

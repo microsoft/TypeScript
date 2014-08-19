@@ -7,21 +7,21 @@
     class Q extends P {
         xx = super;
                   ~
-!!! 'super' must be followed by argument list or member access.
+!!! 'super' must be followed by an argument list or member access.
         static yy = super; // error for static initializer accessing super
                          ~
-!!! 'super' must be followed by argument list or member access.
+!!! 'super' must be followed by an argument list or member access.
                     ~~~~~
 !!! 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
     
         // Super is not allowed in constructor args
         constructor(public z = super, zz = super, zzz = () => super) {
                                     ~
-!!! 'super' must be followed by argument list or member access.
+!!! 'super' must be followed by an argument list or member access.
                                                 ~
-!!! 'super' must be followed by argument list or member access.
+!!! 'super' must be followed by an argument list or member access.
                                                                    ~
-!!! 'super' must be followed by argument list or member access.
+!!! 'super' must be followed by an argument list or member access.
                                ~~~~~
 !!! 'super' cannot be referenced in constructor arguments.
                                            ~~~~~
@@ -33,7 +33,7 @@
     
         foo(zz = super) {
                       ~
-!!! 'super' must be followed by argument list or member access.
+!!! 'super' must be followed by an argument list or member access.
             super.x();
             super.y(); // error
                   ~
@@ -42,7 +42,7 @@
     
         static bar(zz = super) {
                              ~
-!!! 'super' must be followed by argument list or member access.
+!!! 'super' must be followed by an argument list or member access.
             super.x(); // error
                   ~
 !!! Property 'x' does not exist on type 'typeof P'.

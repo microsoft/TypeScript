@@ -10,9 +10,9 @@
                     ~~~~
 !!! Cannot find name 'asdf'.
                                       ~~~~
-!!! A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
-                                      ~~~~
 !!! Cannot find name 'asdf'.
+                                      ~~~~
+!!! A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
     function foo2() {
         return asdf;
                ~~~~

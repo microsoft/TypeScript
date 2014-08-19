@@ -7,17 +7,17 @@
     interface Derived extends Base {
         1: { y: number } // error
         ~~~~~~~~~~~~~~~~
-!!! Property '1' of type '{ y: number; }' is not assignable to numeric index type '{ x: number; y: number; }'.
-        ~~~~~~~~~~~~~~~~
 !!! Property '1' of type '{ y: number; }' is not assignable to string index type '{ x: number; }'.
+        ~~~~~~~~~~~~~~~~
+!!! Property '1' of type '{ y: number; }' is not assignable to numeric index type '{ x: number; y: number; }'.
     }
     
     interface Derived2 extends Base {
         '1': { y: number } // error
         ~~~~~~~~~~~~~~~~~~
-!!! Property ''1'' of type '{ y: number; }' is not assignable to numeric index type '{ x: number; y: number; }'.
-        ~~~~~~~~~~~~~~~~~~
 !!! Property ''1'' of type '{ y: number; }' is not assignable to string index type '{ x: number; }'.
+        ~~~~~~~~~~~~~~~~~~
+!!! Property ''1'' of type '{ y: number; }' is not assignable to numeric index type '{ x: number; y: number; }'.
     }
     
     interface Derived3 extends Base {
