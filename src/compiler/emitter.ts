@@ -1616,6 +1616,9 @@ module ts {
                     write(" {");
                     scopeEmitStart(node, "constructor");
                     increaseIndent();
+                    if (ctor) {
+                        emitDetachedComments((<Block>ctor.body).statements);
+                    }
                     emitCaptureThisForNodeIfNecessary(node);
                     if (ctor) {
                         emitDefaultValueAssignments(ctor);

@@ -43,8 +43,8 @@ var __extends = this.__extends || function (d, b) {
 };
 var Event = (function () {
     function Event() {
-        this._listeners = [];
         // TODO: remove
+        this._listeners = [];
         this._listeners = [];
     }
     Event.prototype.add = function (listener) {
