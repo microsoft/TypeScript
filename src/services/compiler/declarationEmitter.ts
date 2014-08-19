@@ -969,7 +969,7 @@ module TypeScript {
                     this.declFile.WriteLine("require(" + (<ExternalModuleReferenceSyntax>importDeclAST.moduleReference).stringLiteral.text() + ");");
                 }
                 else {
-                    this.declFile.WriteLine(ASTHelpers.getNameOfIdenfierOrQualifiedName((<ModuleNameModuleReferenceSyntax>importDeclAST.moduleReference).moduleName) + ";");
+                    this.declFile.WriteLine(ASTHelpers.getNameOfIdentifierOrQualifiedName((<ModuleNameModuleReferenceSyntax>importDeclAST.moduleReference).moduleName) + ";");
                 }
             }
         }
@@ -1023,7 +1023,7 @@ module TypeScript {
                 this.declFile.Write(moduleDecl.stringLiteral.text());
             }
             else {
-                this.declFile.Write(ASTHelpers.getNameOfIdenfierOrQualifiedName(moduleDecl.name));
+                this.declFile.Write(ASTHelpers.getNameOfIdentifierOrQualifiedName(moduleDecl.name));
             }
 
             this.declFile.WriteLine(" {");
