@@ -1,0 +1,4 @@
+=== tests/cases/compiler/voidConstructor.ts ===
+var foo:{ new ( ): void; }
+>foo : new () => void
+

@@ -1,0 +1,9 @@
+=== tests/cases/compiler/arguments.ts ===
+function f() {
+>f : () => void
+
+    var x=arguments[12];
+>x : any
+>arguments[12] : any
+>arguments : IArguments
+}

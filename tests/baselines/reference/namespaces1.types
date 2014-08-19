@@ -1,0 +1,25 @@
+=== tests/cases/compiler/namespaces1.ts ===
+module X {
+>X : X
+
+    export module Y {
+>Y : Y
+
+        export interface Z { }
+>Z : Z
+    }
+    export interface Y { }
+>Y : Y
+}
+
+var x: X.Y.Z;
+>x : Z
+>X : X
+>Y : Y
+>Z : Z
+
+var x2: X.Y;
+>x2 : Y
+>X : X
+>Y : Y
+

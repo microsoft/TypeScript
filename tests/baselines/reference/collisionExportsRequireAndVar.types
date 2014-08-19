@@ -1,0 +1,10 @@
+=== tests/cases/compiler/collisionExportsRequireAndVar.ts ===
+export function foo() {
+>foo : () => void
+}
+var exports = 1;
+>exports : number
+
+var require = "require";
+>require : string
+

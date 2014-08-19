@@ -1,0 +1,91 @@
+=== tests/cases/compiler/declFileTypeofInAnonymousType.ts ===
+
+module m1 {
+>m1 : typeof m1
+
+    export class c {
+>c : c
+    }
+    export enum e {
+>e : e
+
+        weekday,
+>weekday : e
+
+        weekend,
+>weekend : e
+
+        holiday
+>holiday : e
+    }
+}
+var a: { c: m1.c; };
+>a : { c: c; }
+>c : c
+>m1 : m1
+>c : c
+
+var b = {
+>b : { c: typeof c; m1: typeof m1; }
+>{
+    c: m1.c,
+    m1: m1
+} : { c: typeof c; m1: typeof m1; }
+
+    c: m1.c,
+>c : typeof c
+>m1.c : typeof c
+>m1 : typeof m1
+>c : typeof c
+
+    m1: m1
+>m1 : typeof m1
+>m1 : m1
+
+};
+var c = { m1: m1 };
+>c : { m1: typeof m1; }
+>{ m1: m1 } : { m1: typeof m1; }
+>m1 : typeof m1
+>m1 : m1
+
+var d = {
+>d : { m: { mod: typeof m1; }; mc: { cl: typeof c; }; me: { en: typeof e; }; mh: e; }
+>{
+    m: { mod: m1 },
+    mc: { cl: m1.c },
+    me: { en: m1.e },
+    mh: m1.e.holiday
+} : { m: { mod: typeof m1; }; mc: { cl: typeof c; }; me: { en: typeof e; }; mh: e; }
+
+    m: { mod: m1 },
+>m : { mod: typeof m1; }
+>{ mod: m1 } : { mod: typeof m1; }
+>mod : typeof m1
+>m1 : m1
+
+    mc: { cl: m1.c },
+>mc : { cl: typeof c; }
+>{ cl: m1.c } : { cl: typeof c; }
+>cl : typeof c
+>m1.c : typeof c
+>m1 : typeof m1
+>c : typeof c
+
+    me: { en: m1.e },
+>me : { en: typeof e; }
+>{ en: m1.e } : { en: typeof e; }
+>en : typeof e
+>m1.e : typeof e
+>m1 : typeof m1
+>e : typeof e
+
+    mh: m1.e.holiday
+>mh : e
+>m1.e.holiday : e
+>m1.e : typeof e
+>m1 : typeof m1
+>e : typeof e
+>holiday : e
+
+};

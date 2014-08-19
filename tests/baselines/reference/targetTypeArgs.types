@@ -1,0 +1,81 @@
+=== tests/cases/compiler/targetTypeArgs.ts ===
+function foo(callback: (x: string) => void) {
+>foo : (callback: (x: string) => void) => void
+>callback : (x: string) => void
+>x : string
+
+    callback("hello");   
+>callback("hello") : void
+>callback : (x: string) => void
+}
+
+foo(function(x) { x });
+>foo(function(x) { x }) : void
+>foo : (callback: (x: string) => void) => void
+>function(x) { x } : (x: string) => void
+>x : string
+>x : string
+
+[1].forEach(function(v,i,a) { v });
+>[1].forEach(function(v,i,a) { v }) : void
+>[1].forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
+>[1] : number[]
+>forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
+>function(v,i,a) { v } : (v: number, i: number, a: number[]) => void
+>v : number
+>i : number
+>a : number[]
+>v : number
+
+["hello"].every(function(v,i,a) {return true;});
+>["hello"].every(function(v,i,a) {return true;}) : boolean
+>["hello"].every : (callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
+>["hello"] : string[]
+>every : (callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
+>function(v,i,a) {return true;} : (v: string, i: number, a: string[]) => boolean
+>v : string
+>i : number
+>a : string[]
+
+[1].every(function(v,i,a) {return true;});
+>[1].every(function(v,i,a) {return true;}) : boolean
+>[1].every : (callbackfn: (value: number, index: number, array: number[]) => boolean, thisArg?: any) => boolean
+>[1] : number[]
+>every : (callbackfn: (value: number, index: number, array: number[]) => boolean, thisArg?: any) => boolean
+>function(v,i,a) {return true;} : (v: number, i: number, a: number[]) => boolean
+>v : number
+>i : number
+>a : number[]
+
+[1].every(function(v,i,a) {return true;});
+>[1].every(function(v,i,a) {return true;}) : boolean
+>[1].every : (callbackfn: (value: number, index: number, array: number[]) => boolean, thisArg?: any) => boolean
+>[1] : number[]
+>every : (callbackfn: (value: number, index: number, array: number[]) => boolean, thisArg?: any) => boolean
+>function(v,i,a) {return true;} : (v: number, i: number, a: number[]) => boolean
+>v : number
+>i : number
+>a : number[]
+
+["s"].every(function(v,i,a) {return true;});
+>["s"].every(function(v,i,a) {return true;}) : boolean
+>["s"].every : (callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
+>["s"] : string[]
+>every : (callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
+>function(v,i,a) {return true;} : (v: string, i: number, a: string[]) => boolean
+>v : string
+>i : number
+>a : string[]
+
+["s"].forEach(function(v,i,a) { v });
+>["s"].forEach(function(v,i,a) { v }) : void
+>["s"].forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>["s"] : string[]
+>forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>function(v,i,a) { v } : (v: string, i: number, a: string[]) => void
+>v : string
+>i : number
+>a : string[]
+>v : string
+
+

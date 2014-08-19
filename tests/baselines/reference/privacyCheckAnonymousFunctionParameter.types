@@ -1,0 +1,43 @@
+=== tests/cases/compiler/privacyCheckAnonymousFunctionParameter.ts ===
+export var x = 1;  // Makes this an external module
+>x : number
+
+interface Iterator<T> {
+>Iterator : Iterator<T>
+>T : T
+}
+
+module Query {
+>Query : typeof Query
+
+    export function fromDoWhile<T>(doWhile: (test: Iterator<T>) => boolean): Iterator<T> {
+>fromDoWhile : <T>(doWhile: (test: Iterator<T>) => boolean) => Iterator<T>
+>T : T
+>doWhile : (test: Iterator<T>) => boolean
+>test : Iterator<T>
+>Iterator : Iterator<T>
+>T : T
+>Iterator : Iterator<T>
+>T : T
+
+        return null;
+    }
+
+    function fromOrderBy() {
+>fromOrderBy : () => Iterator<{}>
+
+        return fromDoWhile(test => {
+>fromDoWhile(test => {
+            return true;
+        }) : Iterator<{}>
+>fromDoWhile : <T>(doWhile: (test: Iterator<T>) => boolean) => Iterator<T>
+>test => {
+            return true;
+        } : (test: Iterator<{}>) => boolean
+>test : Iterator<{}>
+
+            return true;
+        });
+    }
+}
+

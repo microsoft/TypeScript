@@ -1,0 +1,85 @@
+=== tests/cases/compiler/memberVariableDeclarations1.ts ===
+// from spec
+
+class Employee {
+>Employee : Employee
+
+    public name: string;
+>name : string
+
+    public address: string;
+>address : string
+
+    public retired = false;
+>retired : boolean
+
+    public manager: Employee = null;
+>manager : Employee
+>Employee : Employee
+
+    public reports: Employee[] = [];
+>reports : Employee[]
+>Employee : Employee
+>[] : Employee[]
+}
+
+class Employee2 {
+>Employee2 : Employee2
+
+    public name: string;
+>name : string
+
+    public address: string;
+>address : string
+
+    public retired: boolean;
+>retired : boolean
+
+    public manager: Employee;
+>manager : Employee
+>Employee : Employee
+
+    public reports: Employee[];
+>reports : Employee[]
+>Employee : Employee
+
+    constructor() {
+        this.retired = false;
+>this.retired = false : boolean
+>this.retired : boolean
+>this : Employee2
+>retired : boolean
+
+        this.manager = null;
+>this.manager = null : null
+>this.manager : Employee
+>this : Employee2
+>manager : Employee
+
+        this.reports = [];
+>this.reports = [] : Employee[]
+>this.reports : Employee[]
+>this : Employee2
+>reports : Employee[]
+>[] : Employee[]
+    }
+}
+
+var e1: Employee;
+>e1 : Employee
+>Employee : Employee
+
+var e2: Employee2;
+>e2 : Employee2
+>Employee2 : Employee2
+
+e1 = e2;
+>e1 = e2 : Employee2
+>e1 : Employee
+>e2 : Employee2
+
+e2 = e1;
+>e2 = e1 : Employee
+>e2 : Employee2
+>e1 : Employee
+

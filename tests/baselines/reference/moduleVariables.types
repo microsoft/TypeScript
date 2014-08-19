@@ -1,0 +1,46 @@
+=== tests/cases/compiler/moduleVariables.ts ===
+declare var console: any;
+>console : any
+ 
+var x = 1;
+>x : number
+
+module M {
+>M : typeof M
+
+    export var x = 2;
+>x : number
+
+    console.log(x); // 2
+>console.log(x) : any
+>console.log : any
+>console : any
+>log : any
+>x : number
+}
+ 
+module M {
+>M : typeof M
+
+    console.log(x); // 2
+>console.log(x) : any
+>console.log : any
+>console : any
+>log : any
+>x : number
+}
+ 
+module M {
+>M : typeof M
+
+    var x = 3;
+>x : number
+
+    console.log(x); // 3
+>console.log(x) : any
+>console.log : any
+>console : any
+>log : any
+>x : number
+}
+

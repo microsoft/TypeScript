@@ -1,0 +1,46 @@
+=== tests/cases/compiler/classSideInheritance2.ts ===
+interface IText {
+>IText : IText
+
+    foo: number;
+>foo : number
+}
+
+interface TextSpan {}
+>TextSpan : TextSpan
+
+class SubText extends TextBase {
+>SubText : SubText
+>TextBase : TextBase
+
+        constructor(text: IText, span: TextSpan) {
+>text : IText
+>IText : IText
+>span : TextSpan
+>TextSpan : TextSpan
+
+            super();
+>super() : void
+        }
+}
+
+class TextBase implements IText {
+>TextBase : TextBase
+>IText : IText
+
+        public foo: number;
+>foo : number
+
+        public subText(span: TextSpan): IText {
+>subText : (span: TextSpan) => IText
+>span : TextSpan
+>TextSpan : TextSpan
+>IText : IText
+
+            return new SubText(this, span);
+>new SubText(this, span) : SubText
+>SubText : typeof SubText
+>this : TextBase
+>span : TextSpan
+        }
+}

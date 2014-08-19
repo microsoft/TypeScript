@@ -1,0 +1,19 @@
+=== tests/cases/compiler/Bar.ts ===
+import Error = require('Foo');
+>Error : typeof Foo
+
+class Bar extends Error {}
+>Bar : Bar
+>Error : Foo
+
+export = Bar;
+>Bar : Bar
+
+=== tests/cases/compiler/Foo.ts ===
+
+class Foo {}
+>Foo : Foo
+
+export = Foo;
+>Foo : Foo
+

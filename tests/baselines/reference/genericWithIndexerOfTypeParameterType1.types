@@ -1,0 +1,34 @@
+=== tests/cases/compiler/genericWithIndexerOfTypeParameterType1.ts ===
+class LazyArray<T> {
+>LazyArray : LazyArray<T>
+>T : T
+
+    private objects = <{ [objectId: string]: T; }>{};
+>objects : { [x: string]: T; }
+><{ [objectId: string]: T; }>{} : { [x: string]: T; }
+>objectId : string
+>T : T
+>{} : { [x: string]: T; }
+
+    array() {
+>array : () => { [x: string]: T; }
+
+        return this.objects;
+>this.objects : { [x: string]: T; }
+>this : LazyArray<T>
+>objects : { [x: string]: T; }
+    }
+}
+var lazyArray = new LazyArray<string>();
+>lazyArray : LazyArray<string>
+>new LazyArray<string>() : LazyArray<string>
+>LazyArray : typeof LazyArray
+
+var value: string = lazyArray.array()["test"]; // used to be an error
+>value : string
+>lazyArray.array()["test"] : string
+>lazyArray.array() : { [x: string]: string; }
+>lazyArray.array : () => { [x: string]: string; }
+>lazyArray : LazyArray<string>
+>array : () => { [x: string]: string; }
+

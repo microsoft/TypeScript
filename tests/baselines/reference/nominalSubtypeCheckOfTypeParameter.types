@@ -1,0 +1,61 @@
+=== tests/cases/conformance/types/typeRelationships/recursiveTypes/nominalSubtypeCheckOfTypeParameter.ts ===
+interface Tuple<T, S> {
+>Tuple : Tuple<T, S>
+>T : T
+>S : S
+
+    first: T
+>first : T
+>T : T
+
+      second: S
+>second : S
+>S : S
+}
+
+interface Sequence<T> {
+>Sequence : Sequence<T>
+>T : T
+
+    hasNext(): boolean
+>hasNext : () => boolean
+
+      pop(): T
+>pop : () => T
+>T : T
+
+      zip<S>(seq: Sequence<S>): Sequence<Tuple<T, S>>
+>zip : <S>(seq: Sequence<S>) => Sequence<Tuple<T, S>>
+>S : S
+>seq : Sequence<S>
+>Sequence : Sequence<T>
+>S : S
+>Sequence : Sequence<T>
+>Tuple : Tuple<T, S>
+>T : T
+>S : S
+}
+
+// error, despite the fact that the code explicitly says List<T> extends Sequence<T>, the current rules for infinitely expanding type references 
+// perform nominal subtyping checks that allow variance for type arguments, but not nominal subtyping for the generic type itself
+interface List<T> extends Sequence<T> {
+>List : List<T>
+>T : T
+>Sequence : Sequence<T>
+>T : T
+
+    getLength(): number
+>getLength : () => number
+
+      zip<S>(seq: Sequence<S>): List<Tuple<T, S>>
+>zip : <S>(seq: Sequence<S>) => List<Tuple<T, S>>
+>S : S
+>seq : Sequence<S>
+>Sequence : Sequence<T>
+>S : S
+>List : List<T>
+>Tuple : Tuple<T, S>
+>T : T
+>S : S
+}
+

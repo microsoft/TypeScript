@@ -36,19 +36,17 @@ module ts {
             getTypeCount: () => typeCount,
             checkProgram: checkProgram,
             emitFiles: invokeEmitter,
-            getSymbolOfNode: getSymbolOfNode,
             getParentOfSymbol: getParentOfSymbol,
             getTypeOfSymbol: getTypeOfSymbol,
-            getDeclaredTypeOfSymbol: getDeclaredTypeOfSymbol,
             getPropertiesOfType: getPropertiesOfType,
             getPropertyOfType: getPropertyOfType,
             getSignaturesOfType: getSignaturesOfType,
             getIndexTypeOfType: getIndexTypeOfType,
             getReturnTypeOfSignature: getReturnTypeOfSignature,
-            resolveEntityName: resolveEntityName,
             getSymbolsInScope: getSymbolsInScope,
             getSymbolInfo: getSymbolInfo,
-            getTypeOfExpression: getTypeOfExpression,
+            getTypeOfNode: getTypeOfNode,
+            getApparentType: getApparentType,
             typeToString: typeToString,
             symbolToString: symbolToString,
             getAugmentedPropertiesOfApparentType: getAugmentedPropertiesOfApparentType
@@ -2298,6 +2296,12 @@ module ts {
                     return getTypeFromArrayTypeNode(<ArrayTypeNode>node);
                 case SyntaxKind.TypeLiteral:
                     return getTypeFromTypeLiteralNode(<TypeLiteralNode>node);
+                // This function assumes that an identifier or qualified name is a type expression
+                // Callers should first ensure this by calling isTypeNode
+                case SyntaxKind.Identifier:
+                case SyntaxKind.QualifiedName:
+                    var symbol = getSymbolInfo(node);
+                    return getDeclaredTypeOfSymbol(symbol);
                 default:
                     return unknownType;
             }
@@ -6546,30 +6550,59 @@ module ts {
             return mapToArray(symbols);
         }
 
-        // True if the given identifier is the identifier of a declaration node
-        function isDeclarationIdentifier(identifier: Identifier): boolean {
-            if (identifier.parent) {
-                switch (identifier.parent.kind) {
-                    case SyntaxKind.TypeParameter:
-                    case SyntaxKind.Parameter:
-                    case SyntaxKind.VariableDeclaration:
-                    case SyntaxKind.Property:
-                    case SyntaxKind.PropertyAssignment:
-                    case SyntaxKind.EnumMember:
-                    case SyntaxKind.Method:
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.FunctionExpression:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                    case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.InterfaceDeclaration:
-                    case SyntaxKind.EnumDeclaration:
-                    case SyntaxKind.ModuleDeclaration:
-                    case SyntaxKind.ImportDeclaration:
-                        return (<Declaration>identifier.parent).name === identifier;
-                    case SyntaxKind.CatchBlock:
-                        return (<CatchBlock>identifier.parent).variable === identifier;
-                }
+        // True if the given identifier is the name of a type declaration node (class, interface, enum, type parameter, etc)
+        function isTypeDeclarationName(name: Node): boolean {
+            return name.kind == SyntaxKind.Identifier &&
+                isTypeDeclaration(name.parent) &&
+                (<Declaration>name.parent).name === name;
+        }
+
+        // True if the given identifier, string literal, or number literal is the name of a declaration node
+        function isDeclarationOrFunctionExpressionOrCatchVariableName(name: Node): boolean {
+            if (name.kind !== SyntaxKind.Identifier && name.kind !== SyntaxKind.StringLiteral && name.kind !== SyntaxKind.NumericLiteral) {
+                return false;
+            }
+
+            var parent = name.parent;
+            if (isDeclaration(parent) || parent.kind === SyntaxKind.FunctionExpression) {
+                return (<Declaration>parent).name === name;
+            }
+
+            if (parent.kind === SyntaxKind.CatchBlock) {
+                return (<CatchBlock>parent).variable === name;
+            }
+
+            return false;
+        }
+
+        function isTypeDeclaration(node: Node): boolean {
+            switch (node.kind) {
+                case SyntaxKind.TypeParameter:
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.EnumDeclaration:
+                    return true;
+            }
+        }
+
+        function isDeclaration(node: Node): boolean {
+            switch (node.kind) {
+                case SyntaxKind.TypeParameter:
+                case SyntaxKind.Parameter:
+                case SyntaxKind.VariableDeclaration:
+                case SyntaxKind.Property:
+                case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.EnumMember:
+                case SyntaxKind.Method:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.ImportDeclaration:
+                    return true;
             }
             return false;
         }
@@ -6603,41 +6636,135 @@ module ts {
                 case SyntaxKind.PostfixOperator:
                 case SyntaxKind.BinaryExpression:
                 case SyntaxKind.ConditionalExpression:
+                case SyntaxKind.OmittedExpression:
                     return true;
                 case SyntaxKind.QualifiedName:
-                    while (node.parent && node.parent.kind === SyntaxKind.QualifiedName) node = node.parent;
-                    return node.parent && node.parent.kind === SyntaxKind.TypeQuery;
+                    while (node.parent.kind === SyntaxKind.QualifiedName) node = node.parent;
+                    return node.parent.kind === SyntaxKind.TypeQuery;
                 case SyntaxKind.Identifier:
+                    if (node.parent.kind === SyntaxKind.TypeQuery) {
+                        return true;
+                    }
+                // Fall through
                 case SyntaxKind.NumericLiteral:
                 case SyntaxKind.StringLiteral:
                     var parent = node.parent;
-                    if (parent) {
-                        if (isExpression(parent)) return true;
-                        switch (parent.kind) {
-                            case SyntaxKind.VariableDeclaration:
-                            case SyntaxKind.Parameter:
-                            case SyntaxKind.Property:
-                            case SyntaxKind.EnumMember:
-                                return (<VariableDeclaration>parent).initializer === node;
-                            case SyntaxKind.ExpressionStatement:
-                            case SyntaxKind.IfStatement:
-                            case SyntaxKind.DoStatement:
-                            case SyntaxKind.WhileStatement:
-                            case SyntaxKind.ReturnStatement:
-                            case SyntaxKind.WithStatement:
-                            case SyntaxKind.SwitchStatement:
-                            case SyntaxKind.CaseClause:
-                            case SyntaxKind.ThrowStatement:
-                            case SyntaxKind.SwitchStatement:
-                                return (<ExpressionStatement>parent).expression === node;
-                            case SyntaxKind.ForStatement:
-                                return (<ForStatement>parent).initializer === node || (<ForStatement>parent).condition === node ||
-                                    (<ForStatement>parent).iterator === node;
-                            case SyntaxKind.ForInStatement:
-                                return (<ForInStatement>parent).variable === node || (<ForInStatement>parent).expression === node;
-                        }
+                    switch (parent.kind) {
+                        case SyntaxKind.VariableDeclaration:
+                        case SyntaxKind.Parameter:
+                        case SyntaxKind.Property:
+                        case SyntaxKind.EnumMember:
+                            return (<VariableDeclaration>parent).initializer === node;
+                        case SyntaxKind.ExpressionStatement:
+                        case SyntaxKind.IfStatement:
+                        case SyntaxKind.DoStatement:
+                        case SyntaxKind.WhileStatement:
+                        case SyntaxKind.ReturnStatement:
+                        case SyntaxKind.WithStatement:
+                        case SyntaxKind.SwitchStatement:
+                        case SyntaxKind.CaseClause:
+                        case SyntaxKind.ThrowStatement:
+                        case SyntaxKind.SwitchStatement:
+                            return (<ExpressionStatement>parent).expression === node;
+                        case SyntaxKind.ForStatement:
+                            return (<ForStatement>parent).initializer === node ||
+                                (<ForStatement>parent).condition === node ||
+                                (<ForStatement>parent).iterator === node;
+                        case SyntaxKind.ForInStatement:
+                            return (<ForInStatement>parent).variable === node ||
+                                (<ForInStatement>parent).expression === node;
+                        case SyntaxKind.TypeAssertion:
+                            return node === (<TypeAssertion>parent).operand;
+                        default:
+                            if (isExpression(parent)) {
+                                return true;
+                            }
                     }
             }
+            return false;
+        }
+
+        function isTypeNode(node: Node): boolean {
+            if (node.kind >= SyntaxKind.FirstTypeNode && node.kind <= SyntaxKind.LastTypeNode) {
+                return true;
+            }
+
+            switch (node.kind) {
+                case SyntaxKind.AnyKeyword:
+                case SyntaxKind.NumberKeyword:
+                case SyntaxKind.StringKeyword:
+                case SyntaxKind.BooleanKeyword:
+                    return true;
+                case SyntaxKind.VoidKeyword:
+                    return node.parent.kind !== SyntaxKind.PrefixOperator;
+                case SyntaxKind.StringLiteral:
+                    // Specialized signatures can have string literals as their parameters' type names
+                    return node.parent.kind === SyntaxKind.Parameter;
+                // Identifiers and qualified names may be type nodes, depending on their context. Climb
+                // above them to find the lowest container
+                case SyntaxKind.Identifier:
+                    // If the identifier is the RHS of a qualified name, then it's a type iff its parent is.
+                    if (node.parent.kind === SyntaxKind.QualifiedName) {
+                        node = node.parent;
+                    }
+                    // Fall through
+                case SyntaxKind.QualifiedName:
+                    // At this point, node is either a qualified name or an identifier
+                    var parent = node.parent;
+                    if (parent.kind === SyntaxKind.TypeQuery) {
+                        return false;
+                    }
+                    // Do not recursively call isTypeNode on the parent. In the example:
+                    //
+                    //     var a: A.B.C;
+                    //
+                    // Calling isTypeNode would consider the qualified name A.B a type node. Only C or
+                    // A.B.C is a type node.
+                    if (parent.kind >= SyntaxKind.FirstTypeNode && parent.kind <= SyntaxKind.LastTypeNode) {
+                        return true;
+                    }
+                    switch (parent.kind) {
+                        case SyntaxKind.TypeParameter:
+                            return node === (<TypeParameterDeclaration>parent).constraint;
+                        case SyntaxKind.Property:
+                        case SyntaxKind.Parameter:
+                        case SyntaxKind.VariableDeclaration:
+                            return node === (<VariableDeclaration>parent).type;
+                        case SyntaxKind.FunctionDeclaration:
+                        case SyntaxKind.FunctionExpression:
+                        case SyntaxKind.ArrowFunction:
+                        case SyntaxKind.Constructor:
+                        case SyntaxKind.Method:
+                        case SyntaxKind.GetAccessor:
+                        case SyntaxKind.SetAccessor:
+                            return node === (<FunctionDeclaration>parent).type;
+                        case SyntaxKind.CallSignature:
+                        case SyntaxKind.ConstructSignature:
+                        case SyntaxKind.IndexSignature:
+                            return node === (<SignatureDeclaration>parent).type;
+                        case SyntaxKind.TypeAssertion:
+                            return node === (<TypeAssertion>parent).type;
+                        case SyntaxKind.CallExpression:
+                        case SyntaxKind.NewExpression:
+                            return (<CallExpression>parent).typeArguments.indexOf(node) >= 0;
+                    }
+            }
+
+            return false;
+        }
+
+        function isInRightSideOfImportOrExportAssignment(node: EntityName) {
+            while (node.parent.kind === SyntaxKind.QualifiedName) {
+                node = node.parent;
+            }
+
+            if (node.parent.kind === SyntaxKind.ImportDeclaration) {
+                return (<ImportDeclaration>node.parent).entityName === node;
+            }
+            if (node.parent.kind === SyntaxKind.ExportAssignment) {
+                return (<ExportAssignment>node.parent).exportName === node;
+            }
+
             return false;
         }
 
@@ -6646,14 +6773,19 @@ module ts {
                 (<QualifiedName>node.parent).right === node;
         }
 
-        function getSymbolOfIdentifier(identifier: Identifier) {
-            if (isDeclarationIdentifier(identifier)) {
-                return getSymbolOfNode(identifier.parent);
+        function getSymbolOfEntityName(entityName: EntityName): Symbol {
+            if (isDeclarationOrFunctionExpressionOrCatchVariableName(entityName)) {
+                return getSymbolOfNode(entityName.parent);
             }
 
-            var entityName: Node = identifier;
-            while (isRightSideOfQualifiedNameOrPropertyAccess(entityName))
+            if (entityName.parent.kind === SyntaxKind.ExportAssignment) {
+                return resolveEntityName(/*location*/ entityName.parent.parent, entityName,
+                    /*all meanings*/ SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Import);
+            }
+
+            if (isRightSideOfQualifiedNameOrPropertyAccess(entityName)) {
                 entityName = entityName.parent;
+            }
 
             if (isExpression(entityName)) {
                 if (entityName.kind === SyntaxKind.Identifier) {
@@ -6681,12 +6813,17 @@ module ts {
                 meaning |= SymbolFlags.Import;
                 return resolveEntityName(entityName, entityName, meaning);
             }
+
+            // Do we want to return undefined here?
+            return undefined;
         }
 
         function getSymbolInfo(node: Node) {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
-                    return getSymbolOfIdentifier(<Identifier>node);
+                case SyntaxKind.PropertyAccess:
+                case SyntaxKind.QualifiedName:
+                    return getSymbolOfEntityName(<Identifier>node);
 
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.SuperKeyword:
@@ -6725,14 +6862,62 @@ module ts {
             return undefined;
         }
 
-        function getTypeOfExpression(node: Node) {
+        function getTypeOfNode(node: Node): Type {
             if (isExpression(node)) {
-                while (isRightSideOfQualifiedNameOrPropertyAccess(node)) {
-                  node = node.parent;
-                }
-                return <Type>getApparentType(checkExpression(node));
+                return getTypeOfExpression(<Expression>node);
             }
+            if (isTypeNode(node)) {
+                return getTypeFromTypeNode(<TypeNode>node);
+            }
+
+            if (isTypeDeclaration(node)) {
+                // In this case, we call getSymbolOfNode instead of getSymbolInfo because it is a declaration
+                var symbol = getSymbolOfNode(node);
+                return getDeclaredTypeOfSymbol(symbol);
+            }
+
+            if (isTypeDeclarationName(node)) {
+                var symbol = getSymbolInfo(node);
+                return getDeclaredTypeOfSymbol(symbol);
+            }
+
+            if (isDeclaration(node)) {
+                // In this case, we call getSymbolOfNode instead of getSymbolInfo because it is a declaration
+                var symbol = getSymbolOfNode(node);
+                return getTypeOfSymbol(symbol);
+            }
+
+            if (isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
+                var symbol = getSymbolInfo(node);
+                return getTypeOfSymbol(symbol);
+            }
+
+            if (isInRightSideOfImportOrExportAssignment(node)) {
+                var symbol: Symbol;
+                if (node.parent.kind === SyntaxKind.ExportAssignment) {
+                    symbol = getSymbolInfo(node);
+                }
+                else {
+                    // It is an import statement
+                    if (isRightSideOfQualifiedNameOrPropertyAccess(node)) {
+                        node = node.parent;
+                    }
+                    // We include all declaration spaces for aliases. This is likely too inclusive, as the rules
+                    // for resolving aliases are quite particular. Ideally this should reuse the logic in resolveAlias.
+                    symbol = resolveEntityName(node, node, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Import);
+                }
+                var declaredType = getDeclaredTypeOfSymbol(symbol);
+                return declaredType !== unknownType ? declaredType : getTypeOfSymbol(symbol);
+            }
+
             return unknownType;
+        }
+
+        function getTypeOfExpression(expr: Expression): Type {
+            if (isRightSideOfQualifiedNameOrPropertyAccess(expr)) {
+                expr = expr.parent;
+            }
+            return checkExpression(expr);
         }
 
         function getAugmentedPropertiesOfApparentType(type: Type): Symbol[]{
@@ -6743,13 +6928,13 @@ module ts {
                 var propertiesByName: Map<Symbol> = {};
                 var results: Symbol[] = [];
 
-                forEach(getPropertiesOfType(apparentType), (s) => {
+                forEach(getPropertiesOfType(apparentType), s => {
                     propertiesByName[s.name] = s;
                     results.push(s);
                 });
 
                 var resolved = resolveObjectTypeMembers(<ObjectType>type);
-                forEachValue(resolved.members, (s) => {
+                forEachValue(resolved.members, s => {
                     if (symbolIsValue(s) && !propertiesByName[s.name]) {
                         propertiesByName[s.name] = s;
                         results.push(s);
@@ -6757,7 +6942,7 @@ module ts {
                 });
 
                 if (resolved === anyFunctionType || resolved.callSignatures.length || resolved.constructSignatures.length) {
-                    forEach(getPropertiesOfType(globalFunctionType), (s) => {
+                    forEach(getPropertiesOfType(globalFunctionType), s => {
                         if (!propertiesByName[s.name]) {
                             propertiesByName[s.name] = s;
                             results.push(s);

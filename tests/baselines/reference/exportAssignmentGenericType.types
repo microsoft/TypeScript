@@ -1,0 +1,27 @@
+=== tests/cases/conformance/externalModules/foo_1.ts ===
+import foo = require("./foo_0");
+>foo : typeof Foo
+
+var x = new foo<number>();
+>x : Foo<number>
+>new foo<number>() : Foo<number>
+>foo : typeof Foo
+
+var y:number = x.test;
+>y : number
+>x.test : number
+>x : Foo<number>
+>test : number
+
+=== tests/cases/conformance/externalModules/foo_0.ts ===
+class Foo<T>{
+>Foo : Foo<T>
+>T : T
+
+	test: T;
+>test : T
+>T : T
+}
+export = Foo;
+>Foo : Foo<T>
+

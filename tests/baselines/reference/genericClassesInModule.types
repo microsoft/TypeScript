@@ -1,0 +1,22 @@
+=== tests/cases/compiler/genericClassesInModule.ts ===
+
+module Foo {
+>Foo : typeof Foo
+
+    export class B<T>{ }
+>B : B<T>
+>T : T
+
+    export class A { }
+>A : A
+}
+
+var a = new Foo.B<Foo.A>();
+>a : B<A>
+>new Foo.B<Foo.A>() : B<A>
+>Foo.B : typeof B
+>Foo : typeof Foo
+>B : typeof B
+>Foo : Foo
+>A : A
+

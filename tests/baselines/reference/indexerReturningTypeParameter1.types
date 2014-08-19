@@ -1,0 +1,44 @@
+=== tests/cases/compiler/indexerReturningTypeParameter1.ts ===
+interface f {
+>f : f
+
+    groupBy<T>(): { [key: string]: T[]; };
+>groupBy : <T>() => { [x: string]: T[]; }
+>T : T
+>key : string
+>T : T
+}
+var a: f;
+>a : f
+>f : f
+
+var r = a.groupBy();
+>r : { [x: string]: {}[]; }
+>a.groupBy() : { [x: string]: {}[]; }
+>a.groupBy : <T>() => { [x: string]: T[]; }
+>a : f
+>groupBy : <T>() => { [x: string]: T[]; }
+
+class c {
+>c : c
+
+    groupBy<T>(): { [key: string]: T[]; } {
+>groupBy : <T>() => { [x: string]: T[]; }
+>T : T
+>key : string
+>T : T
+
+        return null;
+    }
+}
+var a2: c;
+>a2 : c
+>c : c
+
+var r2 = a2.groupBy();
+>r2 : { [x: string]: {}[]; }
+>a2.groupBy() : { [x: string]: {}[]; }
+>a2.groupBy : <T>() => { [x: string]: T[]; }
+>a2 : c
+>groupBy : <T>() => { [x: string]: T[]; }
+

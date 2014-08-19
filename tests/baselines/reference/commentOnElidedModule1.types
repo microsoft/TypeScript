@@ -1,0 +1,10 @@
+=== tests/cases/compiler/commentOnElidedModule1.ts ===
+/*! Keep this pinned comment */
+module ElidedModule {
+>ElidedModule : ElidedModule
+}
+
+// Don't keep this comment.
+module ElidedModule2 {
+>ElidedModule2 : ElidedModule2
+}

@@ -1,0 +1,20 @@
+=== tests/cases/compiler/internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.ts ===
+module A {
+>A : A
+
+    export interface X { s: string }
+>X : X
+>s : string
+}
+
+module B {
+>B : typeof B
+
+    var A = 1;
+>A : number
+
+    import Y = A;
+>Y : Y
+>A : number
+}
+

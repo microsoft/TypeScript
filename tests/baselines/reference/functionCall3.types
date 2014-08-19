@@ -1,0 +1,10 @@
+=== tests/cases/compiler/functionCall3.ts ===
+function foo():any[]{return [1];} 
+>foo : () => any[]
+>[1] : any[]
+
+var x = foo();
+>x : any[]
+>foo() : any[]
+>foo : () => any[]
+

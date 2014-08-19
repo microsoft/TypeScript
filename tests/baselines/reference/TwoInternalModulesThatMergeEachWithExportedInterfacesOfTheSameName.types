@@ -1,0 +1,112 @@
+=== tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts ===
+module A {
+>A : A
+
+    export interface Point {
+>Point : Point
+
+        x: number;
+>x : number
+
+        y: number;
+>y : number
+
+        toCarth(): Point;
+>toCarth : () => Point
+>Point : Point
+    }
+}
+
+module A {
+>A : A
+
+    export interface Point {
+>Point : Point
+
+        fromCarth(): Point;
+>fromCarth : () => Point
+>Point : Point
+    }
+}
+
+// ensure merges as expected
+var p: { x: number; y: number; toCarth(): A.Point; fromCarth(): A.Point; };
+>p : { x: number; y: number; toCarth(): Point; fromCarth(): Point; }
+>x : number
+>y : number
+>toCarth : () => Point
+>A : A
+>Point : Point
+>fromCarth : () => Point
+>A : A
+>Point : Point
+
+var p: A.Point;
+>p : { x: number; y: number; toCarth(): Point; fromCarth(): Point; }
+>A : A
+>Point : Point
+
+module X.Y.Z {
+>X : X
+>Y : Y
+>Z : Z
+
+    export interface Line {
+>Line : Line
+
+        new (start: A.Point, end: A.Point);
+>start : Point
+>A : A
+>Point : Point
+>end : Point
+>A : A
+>Point : Point
+    }
+}
+
+module X {
+>X : X
+
+    export module Y.Z {
+>Y : Y
+>Z : Z
+
+        export interface Line {
+>Line : Line
+
+            start: A.Point;
+>start : Point
+>A : A
+>Point : Point
+
+            end: A.Point;
+>end : Point
+>A : A
+>Point : Point
+        }
+    }
+}
+
+// ensure merges as expected
+var l: { start: A.Point; end: A.Point; new (s: A.Point, e: A.Point); }
+>l : { new (s: Point, e: Point): any; start: Point; end: Point; }
+>start : Point
+>A : A
+>Point : Point
+>end : Point
+>A : A
+>Point : Point
+>s : Point
+>A : A
+>Point : Point
+>e : Point
+>A : A
+>Point : Point
+
+var l: X.Y.Z.Line;
+>l : { new (s: Point, e: Point): any; start: Point; end: Point; }
+>X : X
+>Y : Y
+>Z : Z
+>Line : Line
+

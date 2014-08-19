@@ -1,0 +1,11 @@
+=== tests/cases/compiler/forInStatement5.ts ===
+var a: string;
+>a : string
+
+var expr: any;
+>expr : any
+
+for (a in expr) {
+>a : string
+>expr : any
+}

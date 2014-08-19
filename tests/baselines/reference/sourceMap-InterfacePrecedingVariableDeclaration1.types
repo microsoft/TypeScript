@@ -1,0 +1,8 @@
+=== tests/cases/compiler/sourceMap-InterfacePrecedingVariableDeclaration1.ts ===
+
+interface I {}
+>I : I
+
+var x = 0;
+>x : number
+

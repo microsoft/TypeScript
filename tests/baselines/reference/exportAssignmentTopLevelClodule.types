@@ -1,0 +1,32 @@
+=== tests/cases/conformance/externalModules/foo_1.ts ===
+import foo = require("./foo_0");
+>foo : typeof Foo
+
+if(foo.answer === 42){
+>foo.answer === 42 : boolean
+>foo.answer : number
+>foo : typeof Foo
+>answer : number
+
+	var x = new foo();
+>x : Foo
+>new foo() : Foo
+>foo : typeof Foo
+}
+
+=== tests/cases/conformance/externalModules/foo_0.ts ===
+class Foo {
+>Foo : Foo
+
+	test = "test";
+>test : string
+}
+module Foo {
+>Foo : typeof Foo
+
+	export var answer = 42;
+>answer : number
+}
+export = Foo;
+>Foo : Foo
+

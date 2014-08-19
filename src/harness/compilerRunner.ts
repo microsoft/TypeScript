@@ -39,8 +39,9 @@ class CompilerBaselineRunner extends RunnerBase {
 
     public checkTestCodeOutput(fileName: string) {
         describe('compiler tests for ' + fileName, () => {
-            // strips the fileName from the path.
-            var justName = fileName.replace(/^.*[\\\/]/, '');
+            // Mocha holds onto the closure environment of the describe callback even after the test is done.
+            // Everything declared here should be cleared out in the "after" callback.
+            var justName = fileName.replace(/^.*[\\\/]/, ''); // strips the fileName from the path.
             var content = Harness.IO.readFile(fileName);
             var testCaseContent = Harness.TestCaseParser.makeUnitsFromTest(content, fileName);
 
@@ -52,6 +53,7 @@ class CompilerBaselineRunner extends RunnerBase {
             var rootDir = lastUnit.originalFilePath.indexOf('conformance') === -1 ? 'tests/cases/compiler/' : lastUnit.originalFilePath.substring(0, lastUnit.originalFilePath.lastIndexOf('/')) + '/';
 
             var result: Harness.Compiler.CompilerResult;
+            var checker: ts.TypeChecker;
             var options: ts.CompilerOptions;
             // equivalent to the files that will be passed on the command line
             var toBeCompiled: { unitName: string; content: string }[];
@@ -85,8 +87,10 @@ class CompilerBaselineRunner extends RunnerBase {
                     });
                 }
 
-                options = harnessCompiler.compileFiles(toBeCompiled, otherFiles, function (compileResult) {
+                options = harnessCompiler.compileFiles(toBeCompiled, otherFiles, function (compileResult, _checker) {
                     result = compileResult;
+                    // The checker will be used by typeWriter
+                    checker = _checker;
                 }, function (settings) {
                         harnessCompiler.setCompilerSettings(tcSettings);
                 });
@@ -97,6 +101,7 @@ class CompilerBaselineRunner extends RunnerBase {
                    a fresh compiler instance for themselves and then create a fresh one for the next test. Would be nice to get dev fixes
                    eventually to remove this limitation. */
                 for (var i = 0; i < tcSettings.length; ++i) {
+                    // noImplicitAny is passed to getCompiler, but target is just passed in the settings blob to setCompilerSettings
                     if (!createNewInstance && (tcSettings[i].flag == "noimplicitany" || tcSettings[i].flag === 'target')) {
                         harnessCompiler = Harness.Compiler.getCompiler({
                             useExistingInstance: false,
@@ -116,6 +121,27 @@ class CompilerBaselineRunner extends RunnerBase {
                     });
                     createNewInstance = false;
                 }
+            });
+
+            after(() => {
+                // Mocha holds onto the closure environment of the describe callback even after the test is done.
+                // Therefore we have to clean out large objects after the test is done.
+                justName = undefined;
+                content = undefined;
+                testCaseContent = undefined;
+                units = undefined;
+                tcSettings = undefined;
+                lastUnit = undefined;
+                rootDir = undefined;
+                result = undefined;
+                checker = undefined;
+                options = undefined;
+                toBeCompiled = undefined;
+                otherFiles = undefined;
+                harnessCompiler = undefined;
+                declToBeCompiled = undefined;
+                declOtherFiles = undefined;
+                declResult = undefined;
             });
 
             function getByteOrderMarkText(file: Harness.Compiler.GeneratedFile): string {
@@ -251,32 +277,15 @@ class CompilerBaselineRunner extends RunnerBase {
 
             it('Correct type baselines for ' + fileName, () => {
                 // NEWTODO: Type baselines
-                if (/* ! */ false && /* ! */ result.errors.length === 0) {
+                if (result.errors.length === 0) {
                     Harness.Baseline.runBaseline('Correct expression types for ' + fileName, justName.replace(/\.ts/, '.types'), () => {
-                        // TODO: Rewrite this part
-                        //var compiler = new TypeScript.TypeScriptCompiler(
-                        //    new TypeScript.NullLogger(), TypeScript.ImmutableCompilationSettings.defaultSettings());
-
-                        //compiler.addFile('lib.d.ts', TypeScript.ScriptSnapshot.fromString(Harness.Compiler.libTextMinimal),
-                        //    TypeScript.ByteOrderMark.None, /*version:*/ "0", /*isOpen:*/ true);
-
-                        //var allFiles = toBeCompiled.concat(otherFiles);
-                        //allFiles.forEach(file => {
-                        //    compiler.addFile(file.unitName, TypeScript.ScriptSnapshot.fromString(file.content),
-                        //        TypeScript.ByteOrderMark.None, /*version:*/ "0", /*isOpen:*/ true);
-                        //});
-
-                        var allFiles: any[] = [];
-                        var compiler: any = undefined;
-
-                        var typeBaselineText = '';
+                        var allFiles = toBeCompiled.concat(otherFiles).filter(file => !!checker.getProgram().getSourceFile(file.unitName));
                         var typeLines: string[] = [];
                         var typeMap: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
+                        var walker = new TypeWriterWalker(checker);
                         allFiles.forEach(file => {
                             var codeLines = file.content.split('\n');
-                            var walker = new TypeWriterWalker(file.unitName, compiler);
-                            walker.run();
-                            walker.results.forEach(result => {
+                            walker.getTypes(file.unitName).forEach(result => {
                                 var formattedLine = result.identifierName + " : " + result.type;
                                 if (!typeMap[file.unitName]) {
                                     typeMap[file.unitName] = {};
@@ -288,23 +297,6 @@ class CompilerBaselineRunner extends RunnerBase {
                                     typeInfo = existingTypeInfo.concat(typeInfo);
                                 }
                                 typeMap[file.unitName][result.line] = typeInfo;
-                            });
-
-                            var typeBaselineText = '';
-                            var typeLines: string[] = [];
-                            var typeMap: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
-                            allFiles.forEach(file => {
-                                var codeLines = file.content.split('\n');
-                                var walker = new TypeWriterWalker(file.unitName, compiler);
-                                walker.run();
-                                walker.results.forEach(result => {
-                                    var formattedLine = result.identifierName + " : " + result.type;
-                                    if (!typeMap[file.unitName]) {
-                                        typeMap[file.unitName] = {};
-                                    } else {
-                                        typeLines.push('No type information for this code.');
-                                    }
-                                });
                             });
 
                             typeLines.push('=== ' + file.unitName + ' ===\r\n');

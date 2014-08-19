@@ -1,0 +1,49 @@
+=== tests/cases/compiler/importInTypePosition.ts ===
+module A {
+>A : typeof A
+
+    export class Point {
+>Point : Point
+
+        constructor(public x: number, public y: number) { }
+>x : number
+>y : number
+    }
+    export var Origin = new Point(0, 0);
+>Origin : Point
+>new Point(0, 0) : Point
+>Point : typeof Point
+}
+
+// no code gen expected
+module B {
+>B : B
+
+    import a = A; //Error generates 'var <Alias> = <EntityName>;'
+>a : typeof A
+>A : typeof A
+}
+// no code gen expected
+module C {
+>C : typeof C
+
+    import a = A; //Error generates 'var <Alias> = <EntityName>;'
+>a : typeof A
+>A : typeof A
+
+    var m: typeof a;
+>m : typeof A
+>a : typeof A
+
+    var p: a.Point;
+>p : Point
+>a : a
+>Point : Point
+
+    var p = { x: 0, y: 0 };
+>p : Point
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>y : number
+}
+
