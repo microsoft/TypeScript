@@ -76,15 +76,18 @@ class TypeWriterWalker {
     private log(node: ts.Node, type: ts.Type): void {
         var actualPos = ts.skipTrivia(this.currentSourceFile.text, node.pos);
         var lineAndCharacter = this.currentSourceFile.getLineAndCharacterFromPosition(actualPos);
-        var name = ts.getSourceTextOfNodeFromSourceText(this.currentSourceFile.text, node);
-        var isUnkownType = (<ts.IntrinsicType>type).intrinsicName === "unknown";
+        var sourceText = ts.getSourceTextOfNodeFromSourceText(this.currentSourceFile.text, node);
+        var isUnknownType = (<ts.IntrinsicType>type).intrinsicName === "unknown";
         
+        // If we got an unknown type, we temporarily want to fall back to just pretending the name
+        // (source text) of the node is the type. This is to align with the old typeWriter to make
+        // baseline comparisons easier. In the long term, we will want to just call typeToString
         this.results.push({
             line: lineAndCharacter.line - 1,
             column: lineAndCharacter.character,
             syntaxKind: ts.SyntaxKind[node.kind],
-            identifierName: name,
-            type: isUnkownType ? name : this.checker.typeToString(type)
+            identifierName: sourceText,
+            type: isUnknownType ? sourceText : this.checker.typeToString(type)
         });
     }
 

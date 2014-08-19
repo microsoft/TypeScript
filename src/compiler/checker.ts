@@ -2296,6 +2296,12 @@ module ts {
                     return getTypeFromArrayTypeNode(<ArrayTypeNode>node);
                 case SyntaxKind.TypeLiteral:
                     return getTypeFromTypeLiteralNode(<TypeLiteralNode>node);
+                // This function assumes that an identifier or qualified name is a type expression
+                // Callers should first ensure this by calling isTypeNode
+                case SyntaxKind.Identifier:
+                case SyntaxKind.QualifiedName:
+                    var symbol = getSymbolInfo(node);
+                    return getDeclaredTypeOfSymbol(symbol);
                 default:
                     return unknownType;
             }
@@ -6544,13 +6550,15 @@ module ts {
             return mapToArray(symbols);
         }
 
-        // True if the given identifier, string literal, or number literal is the name of a declaration node
+        // True if the given identifier is the name of a type declaration node (class, interface, enum, type parameter, etc)
         function isTypeDeclarationName(name: Node): boolean {
-            return name.kind == SyntaxKind.Identifier && isTypeDeclaration(name.parent);
+            return name.kind == SyntaxKind.Identifier &&
+                isTypeDeclaration(name.parent) &&
+                (<Declaration>name.parent).name === name;
         }
 
         // True if the given identifier, string literal, or number literal is the name of a declaration node
-        function isDeclarationName(name: Node): boolean {
+        function isDeclarationOrFunctionExpressionOrCatchVariableName(name: Node): boolean {
             if (name.kind !== SyntaxKind.Identifier && name.kind !== SyntaxKind.StringLiteral && name.kind !== SyntaxKind.NumericLiteral) {
                 return false;
             }
@@ -6607,7 +6615,6 @@ module ts {
         }
 
         function isExpression(node: Node): boolean {
-            // Omitted expression?
             switch (node.kind) {
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.SuperKeyword:
@@ -6629,6 +6636,7 @@ module ts {
                 case SyntaxKind.PostfixOperator:
                 case SyntaxKind.BinaryExpression:
                 case SyntaxKind.ConditionalExpression:
+                case SyntaxKind.OmittedExpression:
                     return true;
                 case SyntaxKind.QualifiedName:
                     while (node.parent.kind === SyntaxKind.QualifiedName) node = node.parent;
@@ -6641,14 +6649,6 @@ module ts {
                 case SyntaxKind.NumericLiteral:
                 case SyntaxKind.StringLiteral:
                     var parent = node.parent;
-                    if (parent.kind === SyntaxKind.TypeAssertion) {
-                        return node === (<TypeAssertion>parent).operand;
-                    }
-
-                    if (isExpression(parent)) {
-                        return true;
-                    }
-
                     switch (parent.kind) {
                         case SyntaxKind.VariableDeclaration:
                         case SyntaxKind.Parameter:
@@ -6667,10 +6667,18 @@ module ts {
                         case SyntaxKind.SwitchStatement:
                             return (<ExpressionStatement>parent).expression === node;
                         case SyntaxKind.ForStatement:
-                            return (<ForStatement>parent).initializer === node || (<ForStatement>parent).condition === node ||
+                            return (<ForStatement>parent).initializer === node ||
+                                (<ForStatement>parent).condition === node ||
                                 (<ForStatement>parent).iterator === node;
                         case SyntaxKind.ForInStatement:
-                            return (<ForInStatement>parent).variable === node || (<ForInStatement>parent).expression === node;
+                            return (<ForInStatement>parent).variable === node ||
+                                (<ForInStatement>parent).expression === node;
+                        case SyntaxKind.TypeAssertion:
+                            return node === (<TypeAssertion>parent).operand;
+                        default:
+                            if (isExpression(parent)) {
+                                return true;
+                            }
                     }
             }
             return false;
@@ -6690,6 +6698,7 @@ module ts {
                 case SyntaxKind.VoidKeyword:
                     return node.parent.kind !== SyntaxKind.PrefixOperator;
                 case SyntaxKind.StringLiteral:
+                    // Specialized signatures can have string literals as their parameters' type names
                     return node.parent.kind === SyntaxKind.Parameter;
                 // Identifiers and qualified names may be type nodes, depending on their context. Climb
                 // above them to find the lowest container
@@ -6700,6 +6709,7 @@ module ts {
                     }
                     // Fall through
                 case SyntaxKind.QualifiedName:
+                    // At this point, node is either a qualified name or an identifier
                     var parent = node.parent;
                     if (parent.kind === SyntaxKind.TypeQuery) {
                         return false;
@@ -6710,7 +6720,7 @@ module ts {
                     //
                     // Calling isTypeNode would consider the qualified name A.B a type node. Only C or
                     // A.B.C is a type node.
-                    if (node.kind >= SyntaxKind.FirstTypeNode && node.kind <= SyntaxKind.LastTypeNode) {
+                    if (parent.kind >= SyntaxKind.FirstTypeNode && parent.kind <= SyntaxKind.LastTypeNode) {
                         return true;
                     }
                     switch (parent.kind) {
@@ -6764,7 +6774,7 @@ module ts {
         }
 
         function getSymbolOfIdentifier(identifier: Identifier) {
-            if (isDeclarationName(identifier)) {
+            if (isDeclarationOrFunctionExpressionOrCatchVariableName(identifier)) {
                 return getSymbolOfNode(identifier.parent);
             }
 
@@ -6852,10 +6862,6 @@ module ts {
                 return getTypeOfExpression(<Expression>node);
             }
             if (isTypeNode(node)) {
-                if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName) {
-                    var symbol = getSymbolInfo(node);
-                    return getDeclaredTypeOfSymbol(symbol);
-                }
                 return getTypeFromTypeNode(<TypeNode>node);
             }
 
@@ -6876,7 +6882,7 @@ module ts {
                 return getTypeOfSymbol(symbol);
             }
 
-            if (isDeclarationName(node)) {
+            if (isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
                 var symbol = getSymbolInfo(node);
                 return getTypeOfSymbol(symbol);
             }
