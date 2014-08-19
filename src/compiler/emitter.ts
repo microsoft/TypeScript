@@ -203,7 +203,7 @@ module ts {
             });
         }
 
-        function emitNewLineBeforeLeadingComments(node: Node, leadingComments: Comment[], writer: EmitTextWriter) {
+        function emitNewLineBeforeLeadingComments(node: TextRange, leadingComments: Comment[], writer: EmitTextWriter) {
             // If the leading comments start on different line than the start of node, write new line
             if (leadingComments && leadingComments.length && node.pos !== leadingComments[0].pos &&
                 currentSourceFile.getLineAndCharacterFromPosition(node.pos).line !== currentSourceFile.getLineAndCharacterFromPosition(leadingComments[0].pos).line) {
@@ -325,9 +325,9 @@ module ts {
             /** Emit Trailing comments of the node */
             var emitTrailingComments = compilerOptions.removeComments ? (node: Node) => { } : emitTrailingDeclarationComments;
 
-            var detachedCommentsEndPos: number;
+            var detachedCommentsInfo: { nodePos: number; detachedCommentEndPos: number }[];
             /** Emit detached comments of the node */
-            var emitDetachedComments = compilerOptions.removeComments ? (node: Node) => { } : emitDetachedCommentsAtPosition;
+            var emitDetachedComments = compilerOptions.removeComments ? (node: TextRange) => { } : emitDetachedCommentsAtPosition;
 
             var writeComment = writeCommentRange;
 
@@ -1354,6 +1354,8 @@ module ts {
                 scopeEmitStart(node);
                 increaseIndent();
 
+                emitDetachedComments(node.body.kind === SyntaxKind.FunctionBlock ? (<Block>node.body).statements : node.body);
+
                 var startIndex = 0;
                 if (node.body.kind === SyntaxKind.FunctionBlock) {
                     startIndex = emitDirectivePrologues((<Block>node.body).statements, /*startWithNewLine*/ true);
@@ -1380,9 +1382,11 @@ module ts {
                     }
                     else {
                         writeLine();
+                        emitLeadingComments(node.body);
                         write("return ");
                         emit(node.body);
                         write(";");
+                        emitTrailingComments(node.body);
                     }
                     decreaseIndent();
                     writeLine();
@@ -2070,14 +2074,19 @@ module ts {
                 // Emit the leading comments only if the parent's pos doesnt match because parent should take care of emitting these comments
                 if (node.parent.kind === SyntaxKind.SourceFile || node.pos !== node.parent.pos) {
                     var leadingComments: Comment[];
-                    if (detachedCommentsEndPos === undefined) {
+                    if (detachedCommentsInfo === undefined || detachedCommentsInfo[detachedCommentsInfo.length - 1].nodePos !== node.pos) {
                         // get the leading comments from the node
                         leadingComments = getLeadingCommentsOfNode(node, currentSourceFile);
                     }
                     else {
                         // get the leading comments from detachedPos
-                        leadingComments = getLeadingComments(currentSourceFile.text, detachedCommentsEndPos);
-                        detachedCommentsEndPos = undefined;
+                        leadingComments = getLeadingComments(currentSourceFile.text, detachedCommentsInfo[detachedCommentsInfo.length - 1].detachedCommentEndPos);
+                        if (detachedCommentsInfo.length - 1) {
+                            detachedCommentsInfo.pop();
+                        }
+                        else {
+                            detachedCommentsInfo = undefined;
+                        }
                     }
                     emitNewLineBeforeLeadingComments(node, leadingComments, writer);
                     // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
@@ -2094,7 +2103,7 @@ module ts {
                 }
             }
 
-            function emitDetachedCommentsAtPosition(node: Node) {
+            function emitDetachedCommentsAtPosition(node: TextRange) {
                 var leadingComments = getLeadingComments(currentSourceFile.text, node.pos);
                 if (leadingComments) {
                     var detachedComments: Comment[] = [];
@@ -2125,8 +2134,15 @@ module ts {
                         var astLine = currentSourceFile.getLineAndCharacterFromPosition(skipTrivia(currentSourceFile.text, node.pos)).line;
                         if (astLine >= lastCommentLine + 2) {
                             // Valid detachedComments
+                            emitNewLineBeforeLeadingComments(node, leadingComments, writer);
                             emitComments(detachedComments, /*trailingSeparator*/ true, writer, writeComment);
-                            detachedCommentsEndPos = detachedComments[detachedComments.length - 1].end;
+                            var currentDetachedCommentInfo = { nodePos: node.pos, detachedCommentEndPos: detachedComments[detachedComments.length - 1].end };
+                            if (detachedCommentsInfo) {
+                                detachedCommentsInfo.push(currentDetachedCommentInfo);
+                            }
+                            else {
+                                detachedCommentsInfo = [currentDetachedCommentInfo];
+                            }
                         }
                     }
                 }

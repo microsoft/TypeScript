@@ -656,28 +656,26 @@ sourceFile:typeResolution.ts
 ---
 >>>                        /** Exactly the same as above in AisIn1_1_1 **/
 1->^^^^^^^^^^^^^^^^^^^^^^^^
-2 >                        
-3 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->public BisIn1_1_1() {
-  >                    /** Exactly the same as above in AisIn1_1_1 **/
+  >                    
+2 >                        /** Exactly the same as above in AisIn1_1_1 **/
+1->Emitted(39, 25) Source(26, 21) + SourceIndex(0) name (TopLevelModule1.SubModule1.SubSubModule1.ClassB.BisIn1_1_1)
+2 >Emitted(39, 72) Source(26, 68) + SourceIndex(0) name (TopLevelModule1.SubModule1.SubSubModule1.ClassB.BisIn1_1_1)
+---
+>>>                        // Try all qualified names of this type
+1 >^^^^^^^^^^^^^^^^^^^^^^^^
+2 >                        
+3 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
   >                    
   >                    // Try all qualified names of this type
   >                    
 2 >                        
-3 >                        /** Exactly the same as above in AisIn1_1_1 **/
-1->Emitted(39, 25) Source(29, 21) + SourceIndex(0) name (TopLevelModule1.SubModule1.SubSubModule1.ClassB.BisIn1_1_1)
-2 >Emitted(39, 25) Source(26, 21) + SourceIndex(0) name (TopLevelModule1.SubModule1.SubSubModule1.ClassB.BisIn1_1_1)
-3 >Emitted(39, 72) Source(26, 68) + SourceIndex(0) name (TopLevelModule1.SubModule1.SubSubModule1.ClassB.BisIn1_1_1)
----
->>>                        // Try all qualified names of this type
-1 >^^^^^^^^^^^^^^^^^^^^^^^^
-2 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-1 >
-  >                    
-  >                    
-2 >                        // Try all qualified names of this type
-1 >Emitted(40, 25) Source(28, 21) + SourceIndex(0) name (TopLevelModule1.SubModule1.SubSubModule1.ClassB.BisIn1_1_1)
-2 >Emitted(40, 64) Source(28, 60) + SourceIndex(0) name (TopLevelModule1.SubModule1.SubSubModule1.ClassB.BisIn1_1_1)
+3 >                        // Try all qualified names of this type
+1 >Emitted(40, 25) Source(29, 21) + SourceIndex(0) name (TopLevelModule1.SubModule1.SubSubModule1.ClassB.BisIn1_1_1)
+2 >Emitted(40, 25) Source(28, 21) + SourceIndex(0) name (TopLevelModule1.SubModule1.SubSubModule1.ClassB.BisIn1_1_1)
+3 >Emitted(40, 64) Source(28, 60) + SourceIndex(0) name (TopLevelModule1.SubModule1.SubSubModule1.ClassB.BisIn1_1_1)
 ---
 >>>                        var a1;
 1 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^

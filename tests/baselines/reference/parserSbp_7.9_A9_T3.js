@@ -22,11 +22,4 @@ do {
 do {
     ;
 } while (false);
-/**
- * Check Do-While Statement for automatic semicolon insertion
- *
- * @path bestPractice/Sbp_7.9_A9_T3.js
- * @description Execute do { \n ; \n }while(false) true
- */
-//CHECK#1
 true;
