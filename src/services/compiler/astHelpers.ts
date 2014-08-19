@@ -732,14 +732,14 @@ module TypeScript.ASTHelpers {
         return false;
     }
 
-    export function getNameOfIdenfierOrQualifiedName(name: ISyntaxElement): string {
+    export function getNameOfIdentifierOrQualifiedName(name: ISyntaxElement): string {
         if (name.kind() === SyntaxKind.IdentifierName) {
             return (<ISyntaxToken>name).text();
         }
         else {
             Debug.assert(name.kind() == SyntaxKind.QualifiedName);
             var dotExpr = <QualifiedNameSyntax>name;
-            return getNameOfIdenfierOrQualifiedName(dotExpr.left) + "." + getNameOfIdenfierOrQualifiedName(dotExpr.right);
+            return getNameOfIdentifierOrQualifiedName(dotExpr.left) + "." + getNameOfIdentifierOrQualifiedName(dotExpr.right);
         }
     }
 
