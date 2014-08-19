@@ -41,3 +41,6 @@ lambdaFoo = (a, b) => a * b; // This is trailing comment
 
 /*leading comment*/() => 0; // Needs to be wrapped in parens to be a valid expression (not declaration)
 /*leading comment*/(() => 0); //trailing comment
+
+function blah4(/*1*/a: string/*2*/,/*3*/b: string/*4*/) {
+}

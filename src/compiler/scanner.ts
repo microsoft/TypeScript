@@ -433,11 +433,11 @@ module ts {
         }
     }
 
-    export function getLeadingComments(text: string, pos: number): TextRange[] {
+    export function getLeadingComments(text: string, pos: number): Comment[] {
         return getCommentRanges(text, pos, /*trailing*/ false);
     }
 
-    export function getTrailingComments(text: string, pos: number): TextRange[] {
+    export function getTrailingComments(text: string, pos: number): Comment[] {
         return getCommentRanges(text, pos, /*trailing*/ true);
     }
 

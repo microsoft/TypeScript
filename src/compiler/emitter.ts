@@ -2064,7 +2064,7 @@ module ts {
             function emitLeadingDeclarationComments(node: Node) {
                 // Emit the leading comments only if the parent's pos doesnt match because parent should take care of emitting these comments
                 if (node.parent.kind === SyntaxKind.SourceFile || node.pos !== node.parent.pos) {
-                    var leadingComments = getLeadingComments(currentSourceFile.text, node.pos);
+                    var leadingComments = getLeadingCommentsOfNode(node, currentSourceFile);
                     emitNewLineBeforeLeadingComments(node, leadingComments, writer);
                     // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
                     emitComments(leadingComments, /*trailingSeparator*/ true, writer, writeComment);

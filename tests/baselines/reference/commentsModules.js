@@ -127,7 +127,7 @@ var m1;
     }
     m1.fooExport = fooExport;
     // shouldn't appear
-    function foo2Export(a) {
+    function foo2Export(/**hm*/ a) {
     }
     m1.foo2Export = foo2Export;
     /** foo3Export

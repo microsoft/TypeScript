@@ -198,7 +198,7 @@ var c1 = (function () {
     c1.prototype.foo = function () {
     };
     /** This is comment for function signature*/
-    c1.prototype.fooWithParameters = function (a, 
+    c1.prototype.fooWithParameters = function (/** this is comment about a*/ a, 
         /** this is comment for b*/
         b) {
         var d = a;
@@ -217,7 +217,7 @@ var c1 = (function () {
     c1.prototype.privateFoo = function () {
     };
     /** This is comment for function signature*/
-    c1.prototype.privateFooWithParameters = function (a, 
+    c1.prototype.privateFooWithParameters = function (/** this is comment about a*/ a, 
         /** this is comment for b*/
         b) {
         var d = a;
@@ -236,7 +236,7 @@ var c1 = (function () {
     c1.staticFoo = function () {
     };
     /** This is comment for function signature*/
-    c1.staticFooWithParameters = function (a, 
+    c1.staticFooWithParameters = function (/** this is comment about a*/ a, 
         /** this is comment for b*/
         b) {
         var d = a;
@@ -255,7 +255,7 @@ var c1 = (function () {
     c1.privateStaticFoo = function () {
     };
     /** This is comment for function signature*/
-    c1.privateStaticFooWithParameters = function (a, 
+    c1.privateStaticFooWithParameters = function (/** this is comment about a*/ a, 
         /** this is comment for b*/
         b) {
         var d = a;
@@ -281,7 +281,7 @@ var c2 = (function () {
     c2.prototype.foo = function () {
     };
     /** This is comment for function signature*/
-    c2.prototype.fooWithParameters = function (a, 
+    c2.prototype.fooWithParameters = function (/** this is comment about a*/ a, 
         /** this is comment for b*/
         b) {
         var d = a;
@@ -300,7 +300,7 @@ var c2 = (function () {
     c2.prototype.privateFoo = function () {
     };
     /** This is comment for function signature*/
-    c2.prototype.privateFooWithParameters = function (a, 
+    c2.prototype.privateFooWithParameters = function (/** this is comment about a*/ a, 
         /** this is comment for b*/
         b) {
         var d = a;
@@ -319,7 +319,7 @@ var c2 = (function () {
     c2.staticFoo = function () {
     };
     /** This is comment for function signature*/
-    c2.staticFooWithParameters = function (a, 
+    c2.staticFooWithParameters = function (/** this is comment about a*/ a, 
         /** this is comment for b*/
         b) {
         var d = a;
@@ -338,7 +338,7 @@ var c2 = (function () {
     c2.privateStaticFoo = function () {
     };
     /** This is comment for function signature*/
-    c2.privateStaticFooWithParameters = function (a, 
+    c2.privateStaticFooWithParameters = function (/** this is comment about a*/ a, 
         /** this is comment for b*/
         b) {
         var d = a;

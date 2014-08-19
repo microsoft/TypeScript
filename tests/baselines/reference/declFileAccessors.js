@@ -112,7 +112,7 @@ var c1 = (function () {
             return 10;
         },
         /** setter property*/
-        set: function (value) {
+        set: function (/** this is value*/ value) {
         },
         enumerable: true,
         configurable: true
@@ -123,7 +123,7 @@ var c1 = (function () {
             return 10;
         },
         /** private setter property*/
-        set: function (value) {
+        set: function (/** this is value*/ value) {
         },
         enumerable: true,
         configurable: true
@@ -134,7 +134,7 @@ var c1 = (function () {
             return 10;
         },
         /** setter property*/
-        set: function (value) {
+        set: function (/** this is value*/ value) {
         },
         enumerable: true,
         configurable: true
@@ -195,7 +195,7 @@ var c2 = (function () {
             return 10;
         },
         /** setter property*/
-        set: function (value) {
+        set: function (/** this is value*/ value) {
         },
         enumerable: true,
         configurable: true
@@ -206,7 +206,7 @@ var c2 = (function () {
             return 10;
         },
         /** private setter property*/
-        set: function (value) {
+        set: function (/** this is value*/ value) {
         },
         enumerable: true,
         configurable: true
@@ -217,7 +217,7 @@ var c2 = (function () {
             return 10;
         },
         /** setter property*/
-        set: function (value) {
+        set: function (/** this is value*/ value) {
         },
         enumerable: true,
         configurable: true

@@ -280,7 +280,7 @@ function divide(a, b) {
 *@param a it is first parameter
 *@param c it is third parameter
 */
-function jsDocParamTest(a, b, c, d) {
+function jsDocParamTest(/** this is inline comment for a */ a, /** this is inline comment for b*/ b, c, d) {
     return a + b + c + d;
 }
 /**/

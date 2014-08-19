@@ -139,26 +139,23 @@ module ts {
         return (<Identifier>(<ExpressionStatement>node).expression).text === "use strict";
     }
 
-    export function getJsDocComments(node: Declaration, sourceFileOfNode: SourceFile) {
-        var comments: Comment[];
+    export function getLeadingCommentsOfNode(node: Node, sourceFileOfNode: SourceFile) {
+        // If parameter/type parameter, the prev token trailing comments are part of this node too
         if (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) {
-            // First check if the parameter was written like so:
-            //      (
-            //          /** blah */ a,
-            //          /** blah */ b);
-            comments = getLeadingComments(sourceFileOfNode.text, node.pos);
-            if (!comments) {
-                // Now check if it was written like so:
-                //      (/** blah */ a, /** blah */ b);
-                // In this case, the comment will belong to the preceding token.
-                comments = getTrailingComments(sourceFileOfNode.text, node.pos);
-            }
+            // eg     (/** blah */ a, /** blah */ b);
+            return concatenate(getTrailingComments(sourceFileOfNode.text, node.pos),
+                // eg:     (
+                //          /** blah */ a,
+                //          /** blah */ b);
+                getLeadingComments(sourceFileOfNode.text, node.pos));
         }
         else {
-            comments = getLeadingComments(sourceFileOfNode.text, node.pos);
+            return getLeadingComments(sourceFileOfNode.text, node.pos);
         }
+    }
 
-        return filter(comments, comment => isJsDocComment(comment));
+    export function getJsDocComments(node: Declaration, sourceFileOfNode: SourceFile) {
+        return filter(getLeadingCommentsOfNode(node, sourceFileOfNode), comment => isJsDocComment(comment));
 
         function isJsDocComment(comment: Comment) {
             // js doc is if comment is starting with /** but not if it is /**/

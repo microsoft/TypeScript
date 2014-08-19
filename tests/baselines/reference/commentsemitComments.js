@@ -92,7 +92,7 @@ declare var x;
 /** Variable comments*/
 var myVariable = 10;
 /** function comments*/
-function foo(p) {
+function foo(/** parameter comment*/ p) {
 }
 /** variable with function type comment*/
 var fooVar;

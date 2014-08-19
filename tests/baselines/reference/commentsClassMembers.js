@@ -225,7 +225,7 @@ var c1 = (function () {
     function c1() {
     }
     /** sum with property*/
-    c1.prototype.p2 = function (b) {
+    c1.prototype.p2 = function (/** number to add*/ b) {
         return this.p1 + b;
     }; /* trailing comment of method*/
     Object.defineProperty(c1.prototype, "p3", {
@@ -235,7 +235,7 @@ var c1 = (function () {
         } // trailing comment Getter
         ,
         /** setter property*/
-        set: function (value) {
+        set: function (/** this is value*/ value) {
             this.p1 = this.p2(value);
         } // trailing comment Setter
         ,
@@ -243,7 +243,7 @@ var c1 = (function () {
         configurable: true
     });
     /** sum with property*/
-    c1.prototype.pp2 = function (b) {
+    c1.prototype.pp2 = function (/** number to add*/ b) {
         return this.p1 + b;
     }; // trailing comment of method
     Object.defineProperty(c1.prototype, "pp3", {
@@ -252,14 +252,14 @@ var c1 = (function () {
             return this.pp2(this.pp1);
         },
         /** setter property*/
-        set: function (value) {
+        set: function (/** this is value*/ value) {
             this.pp1 = this.pp2(value);
         },
         enumerable: true,
         configurable: true
     });
     /** static sum with property*/
-    c1.s2 = function (b) {
+    c1.s2 = function (/** number to add*/ b) {
         return c1.s1 + b;
     };
     Object.defineProperty(c1, "s3", {
@@ -268,7 +268,7 @@ var c1 = (function () {
             return c1.s2(c1.s1);
         } /*trailing comment 1 getter*/,
         /** setter property*/
-        set: function (value) {
+        set: function (/** this is value*/ value) {
             c1.s1 = c1.s2(value);
         } /*trailing comment 2 */ /*setter*/,
         enumerable: true,
