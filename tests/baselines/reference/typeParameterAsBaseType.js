@@ -11,14 +11,14 @@ interface I2<T, U> extends U { }
 
 
 //// [typeParameterAsBaseType.js]
+// type parameters cannot be used as base types
+// these are all errors
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-// type parameters cannot be used as base types
-// these are all errors
 var C = (function (_super) {
     __extends(C, _super);
     function C() {

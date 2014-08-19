@@ -33,13 +33,13 @@ class Derived4<T> extends Base2<T> {
 }
 
 //// [derivedClassConstructorWithoutSuperCall.js]
+// derived class constructors must contain a super call
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-// derived class constructors must contain a super call
 var Base = (function () {
     function Base() {
     }

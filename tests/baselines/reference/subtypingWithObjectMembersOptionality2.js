@@ -34,7 +34,7 @@ var b: { Foo?: Derived; }
 var r = true ? a : b; // error
 
 //// [subtypingWithObjectMembersOptionality2.js]
-// object literal case
+// Derived member is optional but base member is not, should be an error
 var a;
 var b;
 var r = true ? a : b; // error

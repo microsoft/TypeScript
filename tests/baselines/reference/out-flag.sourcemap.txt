@@ -10,29 +10,27 @@ sourceFile:out-flag.ts
 -------------------------------------------------------------------
 >>>//// @out: bin\
 1 >
+2 >^^^^^^^^^^^^^^^
+3 >               ^^^^^^->
+1 >
+2 >//// @out: bin\
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 16) Source(1, 16) + SourceIndex(0)
+---
+>>>// my class comments
+1->
 2 >
-3 >^^^^^^^^^^^^^^^
-4 >               ^^^^^^->
-1 >//// @out: bin\
+3 >^^^^^^^^^^^^^^^^^^^^
+4 >                    ^^^^^^^^^->
+1->
   >
   >// my class comments
   >
 2 >
-3 >//// @out: bin\
-1 >Emitted(1, 1) Source(4, 1) + SourceIndex(0)
-2 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-3 >Emitted(1, 16) Source(1, 16) + SourceIndex(0)
----
->>>// my class comments
-1->
-2 >^^^^^^^^^^^^^^^^^^^^
-3 >                    ^^^^^^^^^->
-1->
-  >
-  >
-2 >// my class comments
-1->Emitted(2, 1) Source(3, 1) + SourceIndex(0)
-2 >Emitted(2, 21) Source(3, 21) + SourceIndex(0)
+3 >// my class comments
+1->Emitted(2, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(2, 1) Source(3, 1) + SourceIndex(0)
+3 >Emitted(2, 21) Source(3, 21) + SourceIndex(0)
 ---
 >>>var MyClass = (function () {
 1->^^^^

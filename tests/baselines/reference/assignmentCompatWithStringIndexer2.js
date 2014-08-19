@@ -54,6 +54,7 @@ module Generics {
 }
 
 //// [assignmentCompatWithStringIndexer2.js]
+// index signatures must be compatible in assignments
 var a;
 var b;
 a = b; // ok

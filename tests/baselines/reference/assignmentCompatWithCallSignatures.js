@@ -44,6 +44,7 @@ a = function (x: string) { return ''; }
 
 
 //// [assignmentCompatWithCallSignatures.js]
+// void returning call signatures can be assigned a non-void returning call signature that otherwise matches
 var t;
 var a;
 t = a;

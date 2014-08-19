@@ -45,13 +45,13 @@ var context4: Base[] = [new Derived1(), new Derived1()];
 
 
 //// [arrayLiterals.js]
+// Empty array literal with no contextual type has type Undefined[]
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-// Empty array literal with no contextual type has type Undefined[]
 var arr1 = [[], [1], ['']];
 var arr1; // Bug 825172: Error ({}[] does not match {}[]), but should be OK
 var arr2 = [[null], [1], ['']];

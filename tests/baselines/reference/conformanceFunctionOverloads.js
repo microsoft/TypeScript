@@ -24,3 +24,4 @@
 
 
 //// [conformanceFunctionOverloads.js]
+// Function overloads do not emit code

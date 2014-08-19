@@ -90,14 +90,14 @@ module SourceHasOptional {
 }
 
 //// [assignmentCompatWithObjectMembersOptionality2.js]
+// M is optional and S contains no property with the same name as M
+// N is optional and T contains no property with the same name as N
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-// M is optional and S contains no property with the same name as M
-// N is optional and T contains no property with the same name as N
 var Base = (function () {
     function Base() {
     }

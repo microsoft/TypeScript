@@ -33,13 +33,13 @@ class Derived2 extends Base {
 }
 
 //// [constructorFunctionTypeIsAssignableToBaseType2.js]
+// the constructor function itself does not need to be a subtype of the base type constructor function
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-// the constructor function itself does not need to be a subtype of the base type constructor function
 var Base = (function () {
     function Base(x) {
     }

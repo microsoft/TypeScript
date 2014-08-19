@@ -319,11 +319,15 @@ module ts {
             /** write emitted output to disk*/
             var writeEmittedFiles = writeJavaScriptFile;
 
-            /** Emit leading comments of the declaration */
-            var emitLeadingComments = compilerOptions.removeComments ? (d: Node) => { } : emitLeadingDeclarationComments;
+            /** Emit leading comments of the node */
+            var emitLeadingComments = compilerOptions.removeComments ? (node: Node) => { } : emitLeadingDeclarationComments;
 
-            /** Emit Trailing comments of the declaration */
-            var emitTrailingComments = compilerOptions.removeComments ? (d: Node) => { } : emitTrailingDeclarationComments;
+            /** Emit Trailing comments of the node */
+            var emitTrailingComments = compilerOptions.removeComments ? (node: Node) => { } : emitTrailingDeclarationComments;
+
+            var detachedCommentsEndPos: number;
+            /** Emit detached comments of the node */
+            var emitDetachedComments = compilerOptions.removeComments ? (node: Node) => { } : emitDetachedCommentsAtPosition;
 
             var writeComment = writeCommentRange;
 
@@ -1912,6 +1916,7 @@ module ts {
 
             function emitSourceFile(node: SourceFile) {
                 currentSourceFile = node;
+                emitDetachedComments(node);
                 // emit prologue directives prior to __extends
                 var startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
                 if (!extendsEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitExtends) {
@@ -2064,7 +2069,16 @@ module ts {
             function emitLeadingDeclarationComments(node: Node) {
                 // Emit the leading comments only if the parent's pos doesnt match because parent should take care of emitting these comments
                 if (node.parent.kind === SyntaxKind.SourceFile || node.pos !== node.parent.pos) {
-                    var leadingComments = getLeadingCommentsOfNode(node, currentSourceFile);
+                    var leadingComments: Comment[];
+                    if (detachedCommentsEndPos === undefined) {
+                        // get the leading comments from the node
+                        leadingComments = getLeadingCommentsOfNode(node, currentSourceFile);
+                    }
+                    else {
+                        // get the leading comments from detachedPos
+                        leadingComments = getLeadingComments(currentSourceFile.text, detachedCommentsEndPos);
+                        detachedCommentsEndPos = undefined;
+                    }
                     emitNewLineBeforeLeadingComments(node, leadingComments, writer);
                     // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
                     emitComments(leadingComments, /*trailingSeparator*/ true, writer, writeComment);
@@ -2077,6 +2091,44 @@ module ts {
                     var trailingComments = getTrailingComments(currentSourceFile.text, node.end);
                     // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
                     emitComments(trailingComments, /*trailingSeparator*/ false, writer, writeComment);
+                }
+            }
+
+            function emitDetachedCommentsAtPosition(node: Node) {
+                var leadingComments = getLeadingComments(currentSourceFile.text, node.pos);
+                if (leadingComments) {
+                    var detachedComments: Comment[] = [];
+                    var lastComment: Comment;
+
+                    forEach(leadingComments, comment => {
+                        if (lastComment) {
+                            var lastCommentLine = currentSourceFile.getLineAndCharacterFromPosition(lastComment.end).line;
+                            var commentLine = currentSourceFile.getLineAndCharacterFromPosition(comment.pos).line;
+
+                            if (commentLine >= lastCommentLine + 2) {
+                                // There was a blank line between the last comment and this comment.  This
+                                // comment is not part of the copyright comments.  Return what we have so 
+                                // far.
+                                return detachedComments;
+                            }
+                        }
+
+                        detachedComments.push(comment);
+                        lastComment = comment;
+                    });
+
+                    if (detachedComments && detachedComments.length) {
+                        // All comments look like they could have been part of the copyright header.  Make
+                        // sure there is at least one blank line between it and the node.  If not, it's not
+                        // a copyright header.
+                        var lastCommentLine = currentSourceFile.getLineAndCharacterFromPosition(detachedComments[detachedComments.length - 1].end).line;
+                        var astLine = currentSourceFile.getLineAndCharacterFromPosition(skipTrivia(currentSourceFile.text, node.pos)).line;
+                        if (astLine >= lastCommentLine + 2) {
+                            // Valid detachedComments
+                            emitComments(detachedComments, /*trailingSeparator*/ true, writer, writeComment);
+                            detachedCommentsEndPos = detachedComments[detachedComments.length - 1].end;
+                        }
+                    }
                 }
             }
 

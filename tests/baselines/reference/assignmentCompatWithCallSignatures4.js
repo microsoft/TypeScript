@@ -99,13 +99,13 @@ module Errors {
 }
 
 //// [assignmentCompatWithCallSignatures4.js]
+// These are mostly permitted with the current loose rules. All ok unless otherwise noted.
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-// These are mostly permitted with the current loose rules. All ok unless otherwise noted.
 var Errors;
 (function (Errors) {
     var Base = (function () {

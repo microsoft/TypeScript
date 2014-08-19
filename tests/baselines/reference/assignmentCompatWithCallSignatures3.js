@@ -100,13 +100,13 @@ b18 = a18; // ok
 
 
 //// [assignmentCompatWithCallSignatures3.js]
+// these are all permitted with the current rules, since we do not do contextual signature instantiation
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-// these are all permitted with the current rules, since we do not do contextual signature instantiation
 var Base = (function () {
     function Base() {
     }

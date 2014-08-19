@@ -82,13 +82,13 @@ var b = {
 var r4 = b.foo(aB, aB); // no inferences for T so constraint isn't satisfied, error
 
 //// [propertyAccessOnTypeParameterWithConstraints2.js]
+// generic types should behave as if they have properties of their constraint type
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-// generic types should behave as if they have properties of their constraint type
 var A = (function () {
     function A() {
     }

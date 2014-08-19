@@ -121,14 +121,14 @@ module WithGenericSignaturesInBaseType {
 }
 
 //// [subtypingWithConstructSignatures3.js]
+// checking subtype relations for function types as it relates to contextual signature instantiation
+// error cases, so function calls will all result in 'any'
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-// checking subtype relations for function types as it relates to contextual signature instantiation
-// error cases, so function calls will all result in 'any'
 var Errors;
 (function (Errors) {
     var Base = (function () {

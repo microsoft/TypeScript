@@ -70,6 +70,7 @@ var a5: (x?: number, y?: number) => number;
     a5 = b.a6; // ok, same number of params
 
 //// [assignmentCompatWithCallSignaturesWithOptionalParameters.js]
+// call signatures in derived types must have the same or fewer optional parameters as the base type
 var b;
 var a;
 a = function () { return 1; }; // ok, same number of required params

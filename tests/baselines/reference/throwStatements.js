@@ -86,6 +86,7 @@ throw new D<number>();
 
 
 //// [throwStatements.js]
+// all legal
 var C = (function () {
     function C() {
     }

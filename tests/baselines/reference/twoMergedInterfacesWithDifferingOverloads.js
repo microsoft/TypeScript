@@ -51,6 +51,7 @@ var d: D<boolean, Date>;
 var r3 = d.foo(1, 1); // boolean, last definition wins
 
 //// [twoMergedInterfacesWithDifferingOverloads.js]
+// interfaces that merge must not have members that conflict
 var b;
 var r = b.foo(true); // returns Date
 var c;

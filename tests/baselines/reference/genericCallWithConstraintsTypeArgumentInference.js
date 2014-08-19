@@ -108,13 +108,13 @@ var r11 = i.foo8(); // Base
 
 
 //// [genericCallWithConstraintsTypeArgumentInference.js]
+// Basic type inference with generic calls and constraints, no errors expected
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-// Basic type inference with generic calls and constraints, no errors expected
 var Base = (function () {
     function Base() {
     }

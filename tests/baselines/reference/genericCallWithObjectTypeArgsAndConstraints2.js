@@ -39,14 +39,14 @@ var r7 = f3(null, x => x); // any
 
 
 //// [genericCallWithObjectTypeArgsAndConstraints2.js]
+// Generic call with constraints infering type parameter from object member properties
+// No errors expected
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-// Generic call with constraints infering type parameter from object member properties
-// No errors expected
 var Base = (function () {
     function Base() {
     }

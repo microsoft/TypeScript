@@ -167,6 +167,7 @@ var s12b = s12.then(testFunction12P, testFunction12P, testFunction12P); // ok
 var s12c = s12.then(testFunction12P, testFunction12, testFunction12); // ok
 
 //// [promisePermutations3.js]
+// same as promisePermutations but without the same overloads in IPromise<T>
 var r1;
 var r1a = r1.then(testFunction, testFunction, testFunction);
 var r1b = r1.then(testFunction, testFunction, testFunction).then(testFunction, testFunction, testFunction);

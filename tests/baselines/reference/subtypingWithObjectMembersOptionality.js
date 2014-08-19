@@ -74,7 +74,7 @@ module TwoLevels {
 }
 
 //// [subtypingWithObjectMembersOptionality.js]
-// object literal case
+// Derived member is not optional but base member is, should be ok
 var a;
 var b = { Foo: null };
 var r = true ? a : b;

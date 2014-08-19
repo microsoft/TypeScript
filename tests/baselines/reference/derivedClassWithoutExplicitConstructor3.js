@@ -47,13 +47,13 @@ var d2 = new D2(new Date()); // error
 var d3 = new D2(new Date(), new Date()); // ok
 
 //// [derivedClassWithoutExplicitConstructor3.js]
+// automatic constructors with a class hieararchy of depth > 2
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-// automatic constructors with a class hieararchy of depth > 2
 var Base = (function () {
     function Base(x) {
         this.a = 1;

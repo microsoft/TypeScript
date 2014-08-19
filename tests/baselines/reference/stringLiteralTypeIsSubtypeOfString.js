@@ -100,6 +100,8 @@ function f16<T extends String, U extends T>(x: U);
 function f16<T extends String, U extends T>(x: any) { }
 
 //// [stringLiteralTypeIsSubtypeOfString.js]
+// string literal types are subtypes of string, any
+// ok
 function f1(x) {
 }
 function f2(x) {
