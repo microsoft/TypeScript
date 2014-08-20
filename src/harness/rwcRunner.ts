@@ -102,7 +102,12 @@ module RWC {
                         getSourceFile: (fileName, languageVersion) => {
                             var fileContents: string;
                             try {
-                                fileContents = sys.readFile(fileName);
+                                if (libPath === fileName) {
+                                    fileContents = Harness.IO.readFile(Harness.libFolder + "lib.d.ts");
+                                }
+                                else {
+                                    fileContents = sys.readFile(fileName);
+                                }
                             }
                             catch (e) {
                                 // Leave fileContents undefined;
@@ -134,9 +139,14 @@ module RWC {
 
                 // Load the files
                 inputList.forEach((item: string) => {
-                    var resolvedPath = Harness.Path.switchToForwardSlashes(sys.resolvePath(item));
+                    var resolvedPath = libPath === item ? item : Harness.Path.switchToForwardSlashes(sys.resolvePath(item));
                     try {
-                        var content = sys.readFile(resolvedPath);
+                        if (libPath === item) {
+                            var content = Harness.IO.readFile(Harness.libFolder + "lib.d.ts");
+                        }
+                        else {
+                            var content = sys.readFile(resolvedPath);
+                        }
                     }
                     catch (e) {
                         // Leave content undefined.
@@ -148,13 +158,16 @@ module RWC {
 
                 // Emit the results
                 harnessCompiler.emitAll(emitterIOHost);
-                harnessCompiler.emitAllDeclarations();
-
                 var compilationErrors = harnessCompiler.reportCompilationErrors();
 
                 // Create an error baseline
                 compilationErrors.forEach(err => {
-                    errors += err.filename + ' line ' + err.line + ': ' + err.message + '\r\n';
+                    if (err.filename) {
+                        errors += err.filename + ' (' + err.line + "," + err.character + "): " + err.message + '\r\n';
+                    }
+                    else {
+                        errors += err.message + '\r\n';
+                    }
                 });
             });
         });
@@ -165,13 +178,13 @@ module RWC {
 
         it('has the expected emitted code', () => {
             Harness.Baseline.runBaseline('has the expected emitted code', baseName + '.output.js', () => {
-                return collateOutputs(emitterIOHost, fn => fn.substr(fn.length - '.js'.length) === '.js', s => SyntacticCleaner.clean(s));
+                return collateOutputs(emitterIOHost, fn => Harness.Compiler.isJS(fn), s => SyntacticCleaner.clean(s));
             }, false, baselineOpts);
         });
 
         it('has the expected declaration file content', () => {
             Harness.Baseline.runBaseline('has the expected declaration file content', baseName + '.d.ts', () => {
-                var result = collateOutputs(emitterIOHost, fn => fn.substr(fn.length - '.d.ts'.length) === '.d.ts');
+                var result = collateOutputs(emitterIOHost, fn => Harness.Compiler.isDTS(fn));
                 return result.length > 0 ? result : null;
             }, false, baselineOpts);
         });

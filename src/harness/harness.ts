@@ -571,10 +571,6 @@ module Harness {
                 this.lastErrors = [];
             }
 
-            public emitAllDeclarations() {
-                // NEWTODO: Do something here?
-            }
-
             public reportCompilationErrors() {
                 return this.lastErrors;
             }
@@ -764,7 +760,8 @@ module Harness {
         }
 
         export function getMinimalDiagnostic(err: ts.Diagnostic): MinimalDiagnostic {
-            return { filename: err.file && err.file.filename, start: err.start, end: err.start + err.length, line: 0, character: 0, message: err.messageText };
+            var errorLineInfo = err.file ? err.file.getLineAndCharacterFromPosition(err.start) : { line: 0, character: 0 };
+            return { filename: err.file && err.file.filename, start: err.start, end: err.start + err.length, line: errorLineInfo.line, character: errorLineInfo.character, message: err.messageText };
         }
 
         export function getErrorBaseline(inputFiles: { unitName: string; content: string }[],
