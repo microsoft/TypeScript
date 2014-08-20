@@ -1411,10 +1411,7 @@ module ts {
             return {
                 getSourceFile: (filename, languageVersion) => {
                     var sourceFile = getSourceFile(filename);
-
-                    Debug.assert(!!sourceFile, "sourceFile can not be undefined");
-
-                    return sourceFile;
+                    return sourceFile ? sourceFile.getSourceFile() : null;
                 },
                 getCancellationToken: () => cancellationToken,
                 getCanonicalFileName: (filename) => useCaseSensitivefilenames ? filename : filename.toLowerCase(),
