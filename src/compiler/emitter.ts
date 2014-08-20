@@ -345,7 +345,7 @@ module ts {
 
                 function recordEmitNodeStartSpan(node: Node) {
                     // Get the token pos after skipping to the token (ignoring the leading trivia)
-                    recordSourceMapSpan(ts.getTokenPosOfNode(node));
+                    recordSourceMapSpan(skipTrivia(currentSourceFile.text, node.pos));
                 }
 
                 function recordEmitNodeEndSpan(node: Node) {
