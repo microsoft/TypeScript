@@ -177,6 +177,10 @@ module ts {
             return text.substring(skipTrivia(text, node.pos), node.end);
         }
 
+        function getLineOfLocalPosition(pos: number) {
+            return currentSourceFile.getLineAndCharacterFromPosition(pos).line;
+        }
+
         function writeFile(filename: string, data: string, writeByteOrderMark: boolean) {
             compilerHost.writeFile(filename, data, writeByteOrderMark, hostErrorMessage => {
                 diagnostics.push(createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, filename, hostErrorMessage));
@@ -193,7 +197,8 @@ module ts {
                 writeComment(comment, writer);
                 if (comment.hasTrailingNewLine) {
                     writer.writeLine();
-                } else if (trailingSeparator) {
+                }
+                else if (trailingSeparator) {
                     writer.write(" ");
                 }
                 else {
@@ -206,7 +211,7 @@ module ts {
         function emitNewLineBeforeLeadingComments(node: TextRange, leadingComments: Comment[], writer: EmitTextWriter) {
             // If the leading comments start on different line than the start of node, write new line
             if (leadingComments && leadingComments.length && node.pos !== leadingComments[0].pos &&
-                currentSourceFile.getLineAndCharacterFromPosition(node.pos).line !== currentSourceFile.getLineAndCharacterFromPosition(leadingComments[0].pos).line) {
+                getLineOfLocalPosition(node.pos) !== getLineOfLocalPosition(leadingComments[0].pos)) {
                 writer.writeLine();
             }
         }
@@ -1229,7 +1234,6 @@ module ts {
                 emitLeadingComments(node);
                 emitModuleMemberName(node);
                 emitOptional(" = ", node.initializer);
-                var variableStatement = <VariableStatement>node.parent;
                 emitTrailingComments(node);
             }
 
@@ -2114,8 +2118,8 @@ module ts {
 
                     forEach(leadingComments, comment => {
                         if (lastComment) {
-                            var lastCommentLine = currentSourceFile.getLineAndCharacterFromPosition(lastComment.end).line;
-                            var commentLine = currentSourceFile.getLineAndCharacterFromPosition(comment.pos).line;
+                            var lastCommentLine = getLineOfLocalPosition(lastComment.end);
+                            var commentLine = getLineOfLocalPosition(comment.pos);
 
                             if (commentLine >= lastCommentLine + 2) {
                                 // There was a blank line between the last comment and this comment.  This
@@ -2133,8 +2137,8 @@ module ts {
                         // All comments look like they could have been part of the copyright header.  Make
                         // sure there is at least one blank line between it and the node.  If not, it's not
                         // a copyright header.
-                        var lastCommentLine = currentSourceFile.getLineAndCharacterFromPosition(detachedComments[detachedComments.length - 1].end).line;
-                        var astLine = currentSourceFile.getLineAndCharacterFromPosition(skipTrivia(currentSourceFile.text, node.pos)).line;
+                        var lastCommentLine = getLineOfLocalPosition(detachedComments[detachedComments.length - 1].end);
+                        var astLine = getLineOfLocalPosition(skipTrivia(currentSourceFile.text, node.pos));
                         if (astLine >= lastCommentLine + 2) {
                             // Valid detachedComments
                             emitNewLineBeforeLeadingComments(node, leadingComments, writer);
