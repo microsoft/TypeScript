@@ -356,8 +356,7 @@ module ts {
                 var node = <ImportDeclaration>getDeclarationOfKind(symbol, SyntaxKind.ImportDeclaration);
                 var target = node.externalModuleName ?
                     resolveExternalModuleName(node, node.externalModuleName) :
-                    resolveEntityName(node, node.entityName, node.entityName.kind === SyntaxKind.QualifiedName ?
-                        SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace : SymbolFlags.Namespace);
+                    getSymbolOfPartOfRightHandSideOfImport(node.entityName, node);
                 if (links.target === resolvingSymbol) {
                     links.target = target || unknownSymbol;
                 }
@@ -369,6 +368,33 @@ module ts {
                 links.target = unknownSymbol;
             }
             return links.target;
+        }
+
+        // This function is only for imports with entity names
+        function getSymbolOfPartOfRightHandSideOfImport(entityName: EntityName, importDeclaration?: ImportDeclaration): Symbol {
+            if (!importDeclaration) {
+                importDeclaration = getAncestor(entityName, SyntaxKind.ImportDeclaration);
+                Debug.assert(importDeclaration);
+            }
+            // There are three things we might try to look for. In the following examples,
+            // the search term is enclosed in |...|:
+            //
+            //     import a = |b|; // Namespace
+            //     import a = |b.c|; // Value, type, namespace
+            //     import a = |b.c|.d; // Namespace
+            if (entityName.kind === SyntaxKind.Identifier && isRightSideOfQualifiedNameOrPropertyAccess(entityName)) {
+                entityName = entityName.parent;
+            }
+            // Check for case 1 and 3 in the above example
+            if (entityName.kind === SyntaxKind.Identifier || entityName.parent.kind === SyntaxKind.QualifiedName) {
+                return resolveEntityName(importDeclaration, entityName, SymbolFlags.Namespace);
+            }
+            else {
+                // Case 2 in above example
+                // entityName.kind could be a QualifiedName or a Missing identifier
+                Debug.assert(entityName.parent.kind === SyntaxKind.ImportDeclaration);
+                return resolveEntityName(importDeclaration, entityName, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace);
+            }
         }
 
         function getFullyQualifiedName(symbol: Symbol) {
@@ -6894,18 +6920,10 @@ module ts {
 
             if (isInRightSideOfImportOrExportAssignment(node)) {
                 var symbol: Symbol;
-                if (node.parent.kind === SyntaxKind.ExportAssignment) {
-                    symbol = getSymbolInfo(node);
-                }
-                else {
-                    // It is an import statement
-                    if (isRightSideOfQualifiedNameOrPropertyAccess(node)) {
-                        node = node.parent;
-                    }
-                    // We include all declaration spaces for aliases. This is likely too inclusive, as the rules
-                    // for resolving aliases are quite particular. Ideally this should reuse the logic in resolveAlias.
-                    symbol = resolveEntityName(node, node, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Import);
-                }
+                symbol = node.parent.kind === SyntaxKind.ExportAssignment
+                    ? getSymbolInfo(node)
+                    : getSymbolOfPartOfRightHandSideOfImport(node);
+
                 var declaredType = getDeclaredTypeOfSymbol(symbol);
                 return declaredType !== unknownType ? declaredType : getTypeOfSymbol(symbol);
             }
