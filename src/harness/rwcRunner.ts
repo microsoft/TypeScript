@@ -189,14 +189,12 @@ module RWC {
             }, false, baselineOpts);
         });
 
-        /*
         it('has the expected source maps', () => {
             Harness.Baseline.runBaseline('has the expected source maps', baseName + '.map', () => {
                 var result = collateOutputs(emitterIOHost, fn => fn.substr(fn.length - '.map'.length) === '.map');
                 return result.length > 0 ? result : null;
             }, false, baselineOpts);
         });
-        */
 
         it('has the expected errors', () => {
             Harness.Baseline.runBaseline('has the expected errors', baseName + '.errors.txt', () => {

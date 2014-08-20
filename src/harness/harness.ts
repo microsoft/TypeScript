@@ -600,6 +600,12 @@ module Harness {
                     result.files.forEach(file => {
                         ioHost.writeFile(file.fileName, file.code, false);
                     });
+                    result.declFilesCode.forEach(file => {
+                        ioHost.writeFile(file.fileName, file.code, false);
+                    });
+                    result.sourceMaps.forEach(file => {
+                        ioHost.writeFile(file.fileName, file.code, false);
+                    });
                 }, () => { }, this.compileOptions);
             }
 
