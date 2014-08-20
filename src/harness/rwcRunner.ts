@@ -5,27 +5,6 @@
 /// <reference path='..\compiler\commandLineParser.ts'/>
 
 module RWC {
-    class RWCEmitter implements Harness.Compiler.IEmitterIOHost {
-        public outputs: { [filename: string]: string; } = {};
-
-        constructor() { }
-
-        writeFile(path: string, contents: string, writeByteOrderMark: boolean) {
-            if (path in this.outputs) throw new Error('Emitter attempted to write to "' + path + '" twice');
-            this.outputs[path] = contents;
-        }
-
-        directoryExists(s: string) {
-            return false;
-        }
-        fileExists(s: string) {
-            return true;
-        }
-        resolvePath(s: string) {
-            return s;
-        }
-    }
-
     function runWithIOLog(ioLog: IOLog, fn: () => void) {
         var oldSys = sys;
 
@@ -41,32 +20,26 @@ module RWC {
         }
     }
 
-    function collateOutputs(emitterIOHost: RWCEmitter, fnTest: (s: string) => {}, clean?: (s: string) => string) {
+    function collateOutputs(outputFiles: Harness.Compiler.GeneratedFile[], clean?: (s: string) => string) {
         // Collect, test, and sort the filenames
-        var files: string[] = [];
-        for (var fn in emitterIOHost.outputs) {
-            if (emitterIOHost.outputs.hasOwnProperty(fn) && fnTest(fn)) {
-                files.push(fn);
-            }
-        }
         function cleanName(fn: string) {
             var lastSlash = Harness.Path.switchToForwardSlashes(fn).lastIndexOf('/');
             return fn.substr(lastSlash + 1).toLowerCase();
         }
-        files.sort((a, b) => cleanName(a).localeCompare(cleanName(b)));
+        outputFiles.sort((a, b) => cleanName(a.fileName).localeCompare(cleanName(b.fileName)));
 
         // Emit them
         var result = '';
-        files.forEach(fn => {
+        ts.forEach(outputFiles, outputFile => {
             // Some extra spacing if this isn't the first file
             if (result.length) result = result + '\r\n\r\n';
 
             // Filename header + content
-            result = result + '/*====== ' + fn + ' ======*/\r\n';
+            result = result + '/*====== ' + outputFile.fileName + ' ======*/\r\n';
             if (clean) {
-                result = result + clean(emitterIOHost.outputs[fn]);
+                result = result + clean(outputFile.code);
             } else {
-                result = result + emitterIOHost.outputs[fn];
+                result = result + outputFile.code;
             }
         });
         return result;
@@ -86,90 +59,54 @@ module RWC {
             });
         });
 
-        var emitterIOHost = new RWCEmitter();
+        var compilerResult: Harness.Compiler.CompilerResult;
         it('can compile', () => {
             runWithIOLog(ioLog, () => {
                 harnessCompiler.reset();
-                var inputList: string[] = opts.filenames;
-                var noDefaultLib = false;
-                var libPath = Harness.IO.directoryName(sys.getExecutingFilePath()) + '/lib.d.ts';
-
-                if (!opts.options.noResolve) {
-                    var filemap: any = {};
-                    var host: ts.CompilerHost = {
-                        getCurrentDirectory: () => sys.getCurrentDirectory(),
-                        getCancellationToken: (): any => undefined,
-                        getSourceFile: (fileName, languageVersion) => {
-                            var fileContents: string;
-                            try {
-                                if (libPath === fileName) {
-                                    fileContents = Harness.IO.readFile(Harness.libFolder + "lib.d.ts");
-                                }
-                                else {
-                                    fileContents = sys.readFile(fileName);
-                                }
-                            }
-                            catch (e) {
-                                // Leave fileContents undefined;
-                            }
-                            return ts.createSourceFile(fileName, fileContents, languageVersion);
-                        },
-                        getDefaultLibFilename: () => libPath,
-                        writeFile: (fn, contents) => emitterIOHost.writeFile(fn, contents, false),
-                        getCanonicalFileName: ts.getCanonicalFileName,
-                        useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
-                        getNewLine: () => sys.newLine
-                    };
-
-                    var resolvedProgram = ts.createProgram(opts.filenames, opts.options, host);
-                    resolvedProgram.getSourceFiles().forEach(sourceFile => {
-                        noDefaultLib = noDefaultLib || sourceFile.hasNoDefaultLib;
-                        if (inputList.indexOf(sourceFile.filename) === -1) {
-                            inputList.push(sourceFile.filename);
-                        }
-                    });
-                }
-
-                if (!opts.options.noLib && !noDefaultLib) {
-                    inputList.push(libPath);
-                }
-
-                harnessCompiler.reset();
-                harnessCompiler.setCompilerSettingsFromOptions(opts.options);
 
                 // Load the files
-                inputList.forEach((item: string) => {
-                    var resolvedPath = libPath === item ? item : Harness.Path.switchToForwardSlashes(sys.resolvePath(item));
-                    try {
-                        if (libPath === item) {
-                            var content = Harness.IO.readFile(Harness.libFolder + "lib.d.ts");
-                        }
-                        else {
-                            var content = sys.readFile(resolvedPath);
-                        }
-                    }
-                    catch (e) {
-                        // Leave content undefined.
-                    }
-                    harnessCompiler.addInputFile({ unitName: resolvedPath, content: content });
+                var inputFiles: { unitName: string; content: string; }[] = [];
+                ts.forEach(opts.filenames, fileName => {
+                    inputFiles.push(getHarnessCompilerInputUnit(fileName));
                 });
 
-                harnessCompiler.setCompilerOptions();
+                if (!opts.options.noLib) {
+                    // Find the lib.d.ts file in the input file and add it to the input files list
+                    var libFile = ts.forEach(ioLog.filesRead, fileRead=> Harness.isLibraryFile(fileRead.path) ? fileRead.path : undefined);
+                    if (libFile) {
+                        inputFiles.push(getHarnessCompilerInputUnit(libFile));
+                    }
+                }
+
+                var otherFiles: { unitName: string; content: string; }[] = [];
+                ts.forEach(ioLog.filesRead, fileRead => {
+                    var resolvedPath = Harness.Path.switchToForwardSlashes(sys.resolvePath(fileRead.path));
+                    var inInputList = ts.forEach(inputFiles, inputFile=> inputFile.unitName === resolvedPath);
+                    if (!inInputList) {
+                        // Add the file to other files
+                        otherFiles.push(getHarnessCompilerInputUnit(fileRead.path));
+                    }
+                });
+
+                // do not use lib since we shouldnt be reading any files that arent in the ioLog
+                opts.options.noLib = true;
 
                 // Emit the results
-                harnessCompiler.emitAll(emitterIOHost);
-                var compilationErrors = harnessCompiler.reportCompilationErrors();
-
-                // Create an error baseline
-                compilationErrors.forEach(err => {
-                    if (err.filename) {
-                        errors += err.filename + ' (' + err.line + "," + err.character + "): " + err.message + '\r\n';
-                    }
-                    else {
-                        errors += err.message + '\r\n';
-                    }
-                });
+                harnessCompiler.compileFiles(inputFiles, otherFiles, compileResult => {
+                    compilerResult = compileResult;
+                }, /*settingsCallback*/ undefined, opts.options);
             });
+
+            function getHarnessCompilerInputUnit(fileName: string) {
+                var resolvedPath = Harness.Path.switchToForwardSlashes(sys.resolvePath(fileName));
+                try {
+                    var content = sys.readFile(resolvedPath);
+                }
+                catch (e) {
+                    // Leave content undefined.
+                }
+                return { unitName: resolvedPath, content: content };
+            }
         });
 
         // Baselines
@@ -178,27 +115,36 @@ module RWC {
 
         it('has the expected emitted code', () => {
             Harness.Baseline.runBaseline('has the expected emitted code', baseName + '.output.js', () => {
-                return collateOutputs(emitterIOHost, fn => Harness.Compiler.isJS(fn), s => SyntacticCleaner.clean(s));
+                return collateOutputs(compilerResult.files, s => SyntacticCleaner.clean(s));
             }, false, baselineOpts);
         });
 
         it('has the expected declaration file content', () => {
             Harness.Baseline.runBaseline('has the expected declaration file content', baseName + '.d.ts', () => {
-                var result = collateOutputs(emitterIOHost, fn => Harness.Compiler.isDTS(fn));
-                return result.length > 0 ? result : null;
+                if (compilerResult.errors.length || !compilerResult.declFilesCode.length) {
+                    return null;
+                }
+                return collateOutputs(compilerResult.declFilesCode);
             }, false, baselineOpts);
         });
 
         it('has the expected source maps', () => {
             Harness.Baseline.runBaseline('has the expected source maps', baseName + '.map', () => {
-                var result = collateOutputs(emitterIOHost, fn => fn.substr(fn.length - '.map'.length) === '.map');
-                return result.length > 0 ? result : null;
+                if (!compilerResult.sourceMaps.length) {
+                    return null;
+                }
+
+                return collateOutputs(compilerResult.sourceMaps);
             }, false, baselineOpts);
         });
 
         it('has the expected errors', () => {
             Harness.Baseline.runBaseline('has the expected errors', baseName + '.errors.txt', () => {
-                return errors.length > 0 ? errors : null;
+                if (compilerResult.errors.length === 0) {
+                    return null;
+                }
+
+                return Harness.Compiler.minimalDiagnosticsToString(compilerResult.errors);
             }, false, baselineOpts);
         });
 

@@ -539,8 +539,8 @@ module Harness {
                 getCurrentDirectory: sys.getCurrentDirectory,
                 getCancellationToken: (): any => undefined,
                 getSourceFile: (fn, languageVersion) => {
-                    if (fn in filemap) {
-                        return filemap[fn];
+                    if (ts.getCanonicalFileName(fn) in filemap) {
+                        return filemap[ts.getCanonicalFileName(fn)];
                     } else {
                         var lib = defaultLibFileName;
                         if (fn === defaultLibFileName) {
@@ -726,7 +726,7 @@ module Harness {
                 var filemap: { [name: string]: ts.SourceFile; } = {};
                 var register = (file: { unitName: string; content: string; }) => {
                     var filename = Path.switchToForwardSlashes(file.unitName);
-                    filemap[filename] = ts.createSourceFile(filename, file.content, options.target);
+                    filemap[ts.getCanonicalFileName(filename)] = ts.createSourceFile(filename, file.content, options.target);
                 };
                 inputFiles.forEach(register);
                 otherFiles.forEach(register);
@@ -768,6 +768,21 @@ module Harness {
         export function getMinimalDiagnostic(err: ts.Diagnostic): MinimalDiagnostic {
             var errorLineInfo = err.file ? err.file.getLineAndCharacterFromPosition(err.start) : { line: 0, character: 0 };
             return { filename: err.file && err.file.filename, start: err.start, end: err.start + err.length, line: errorLineInfo.line, character: errorLineInfo.character, message: err.messageText };
+        }
+
+        export function minimalDiagnosticsToString(diagnostics: MinimalDiagnostic[]) {
+            // This is copied from tsc.ts's reportError to replicate what tsc does
+            var errors = "";
+            ts.forEach(diagnostics, diagnotic => {
+                if (diagnotic.filename) {
+                    errors += diagnotic.filename + "(" + diagnotic.line + "," + diagnotic.character + "): " + diagnotic.message + sys.newLine;
+                }
+                else {
+                    errors += diagnotic.message + sys.newLine;
+                }
+            });
+
+            return errors;
         }
 
         export function getErrorBaseline(inputFiles: { unitName: string; content: string }[],

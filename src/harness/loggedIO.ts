@@ -173,8 +173,6 @@ module Playback {
         var results = logArray.filter(e => pathsAreEquivalent(e.path, expectedPath, wrapper));
         if (results.length === 0) {
             if (defaultValue === undefined) {
-                console.log('Resolved path: ' + wrapper.resolvePath(expectedPath));
-                console.log('Filenames were: ' + logArray.map(x => x.path).join(', '));
                 throw new Error('No matching result in log array for path: ' + expectedPath);
             } else {
                 return defaultValue;
@@ -191,7 +189,7 @@ module Playback {
     }
 
     function noOpReplay(name: string) {
-        console.log("Swallowed write operation during replay: " + name);
+        //console.log("Swallowed write operation during replay: " + name);
     }
 
     export function wrapSystem(underlying: System): PlaybackSystem {
@@ -257,7 +255,7 @@ module Playback {
 
         wrapper.resolvePath = recordReplay(wrapper.resolvePath, underlying)(
             (path) => callAndRecord(underlying.resolvePath(path), recordLog.pathsResolved, { path: path }),
-            memoize((path) => findResultByFields(replayLog.pathsResolved, { path: path }, replayLog.currentDirectory ? replayLog.currentDirectory + '/' + path : path)));
+            memoize((path) => findResultByFields(replayLog.pathsResolved, { path: path }, !ts.isRootedDiskPath(ts.normalizeSlashes(path)) && replayLog.currentDirectory ? replayLog.currentDirectory + '/' + path : ts.normalizeSlashes(path))));
 
         wrapper.readFile = recordReplay(wrapper.readFile, underlying)(
             (path) => callAndRecord(underlying.readFile(path), recordLog.filesRead, { path: path, codepage: 0 }),
