@@ -194,9 +194,6 @@ module ts {
               * @param emitFn if given will be invoked to emit the text instead of actual token emit */
             var emitToken = emitTokenText;
 
-            /** Called to notify start of new source file emit */
-            var emitNewSourceFileStart = function (node: SourceFile) { }
-
             /** Called to before starting the lexical scopes as in function/class in the emitted code because of node
               * @param scopeDeclaration node that starts the lexical scope
               * @param scopeName Optional name of this scope instead of deducing one from the declaration node */
@@ -322,8 +319,9 @@ module ts {
                     if (!lastRecordedSourceMapSpan ||
                         lastRecordedSourceMapSpan.emittedLine != emittedLine ||
                         lastRecordedSourceMapSpan.emittedColumn != emittedColumn ||
-                        lastRecordedSourceMapSpan.sourceLine > sourceLinePos.line ||
-                        (lastRecordedSourceMapSpan.sourceLine === sourceLinePos.line && lastRecordedSourceMapSpan.sourceColumn > sourceLinePos.character)) {
+                        (lastRecordedSourceMapSpan.sourceIndex === sourceMapSourceIndex &&
+                        (lastRecordedSourceMapSpan.sourceLine > sourceLinePos.line ||
+                        (lastRecordedSourceMapSpan.sourceLine === sourceLinePos.line && lastRecordedSourceMapSpan.sourceColumn > sourceLinePos.character)))) {
                         // Encode the last recordedSpan before assigning new
                         encodeLastRecordedSourceMapSpan();
 
@@ -341,6 +339,7 @@ module ts {
                         // Take the new pos instead since there is no change in emittedLine and column since last location
                         lastRecordedSourceMapSpan.sourceLine = sourceLinePos.line;
                         lastRecordedSourceMapSpan.sourceColumn = sourceLinePos.character;
+                        lastRecordedSourceMapSpan.sourceIndex = sourceMapSourceIndex;
                     }
                 }
 
@@ -510,7 +509,6 @@ module ts {
                 emitStart = recordEmitNodeStartSpan;
                 emitEnd = recordEmitNodeEndSpan;
                 emitToken = writeTextWithSpanRecord;
-                emitNewSourceFileStart = recordNewSourceFileStart;
                 scopeEmitStart = recordScopeNameOfNode;
                 scopeEmitEnd = recordScopeNameEnd;
             }
