@@ -2148,20 +2148,16 @@ module ts {
 
             // Labels
             if (isLabelName(node)) {
-                var labelName = (<Identifier>node).text;
-
-                var labelScope: Node;
-
                 if (isJumpStatementTarget(node)) {
                     var labelDefinition = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
-                    labelScope = labelDefinition ? labelDefinition.parent : getContainerNode(node);
+                    // if we have a label definition, look within its statement for references, if not, then
+                    // the label is undefined, just return a set of one for the current node.
+                    return labelDefinition ? getLabelReferencesInNode(labelDefinition.parent, labelDefinition) : [getReferenceEntry(node)];
                 }
                 else {
-                    // it is a label definition and not a target, the scope is the labeledStatement
-                    labelScope = node.parent;
+                    // it is a label definition and not a target, search within the parent labeledStatement
+                    return getLabelReferencesInNode(node.parent, <Identifier>node);
                 }
-
-                return getLabelReferencesInNode(labelScope, labelName);
             }
 
             var symbol = typeInfoResolver.getSymbolInfo(node);
@@ -2246,16 +2242,23 @@ module ts {
                 return positions;
             }
 
-            function getLabelReferencesInNode(container: Node, labelName: string): ReferenceEntry[] {
+            function getLabelReferencesInNode(container: Node, targetLabel: Identifier): ReferenceEntry[] {
                 var result: ReferenceEntry[] = [];
                 var sourceFile = container.getSourceFile();
+                var labelName = targetLabel.text;
                 var possiblePositions = getPossibleSymbolReferencePositions(sourceFile, labelName, container.getStart(), container.getEnd());
                 if (possiblePositions && possiblePositions.length > 0) {
                     possiblePositions.forEach(position => {
                         cancellationToken.throwIfCancellationRequested();
 
                         var node = getNodeAtPosition(sourceFile, position);
-                        if (node && isLabelName(node) && node.getWidth() === labelName.length) {
+                        if (!node || node.getWidth() !== labelName.length) {
+                            return;
+                        }
+
+                        // Only pick labels that are either the target label, or have a target that is the target label
+                        if (node === targetLabel ||
+                            (isJumpStatementTarget(node) && getTargetLabel(node, labelName) === targetLabel)) {
                             result.push(getReferenceEntry(node));
                         }
                     });

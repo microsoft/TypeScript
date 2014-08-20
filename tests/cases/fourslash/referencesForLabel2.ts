@@ -9,4 +9,4 @@
 ////}
 
 goTo.marker("1");
-verify.referencesCountIs(2);
+verify.referencesCountIs(1);
