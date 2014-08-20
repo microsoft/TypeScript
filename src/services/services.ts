@@ -11,7 +11,7 @@
 /// <reference path='breakpoints.ts' />
 /// <reference path='indentation.ts' />
 /// <reference path='formatting\formatting.ts' />
-/// <reference path='compiler\bloomFilter.ts' />
+/// <reference path='bloomFilter.ts' />
 
 /// <reference path='core\references.ts' />
 /// <reference path='resources\references.ts' />
@@ -71,7 +71,7 @@ module ts {
     export interface SourceFile {
         getSourceUnit(): TypeScript.SourceUnitSyntax;
         getSyntaxTree(): TypeScript.SyntaxTree;
-        getBloomFilter(): TypeScript.BloomFilter;
+        getBloomFilter(): BloomFilter;
         update(scriptSnapshot: TypeScript.IScriptSnapshot, version: number, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile;
     }
 
@@ -324,7 +324,7 @@ module ts {
         public isOpen: boolean;
         public languageVersion: ScriptTarget;
 
-        private bloomFilter: TypeScript.BloomFilter;
+        private bloomFilter: BloomFilter;
         private syntaxTree: TypeScript.SyntaxTree;
         private scriptSnapshot: TypeScript.IScriptSnapshot;
 
@@ -356,61 +356,27 @@ module ts {
             return TypeScript.isDTSFile(this.filename);
         }
 
-        private static isNameOfPropertyDeclaration(node: TypeScript.ISyntaxElement): boolean {
-            if (node.kind() !== TypeScript.SyntaxKind.IdentifierName && node.kind() !== TypeScript.SyntaxKind.StringLiteral && node.kind() !== TypeScript.SyntaxKind.NumericLiteral) {
-                return false;
-            }
-
-            switch (node.parent.kind()) {
-                case TypeScript.SyntaxKind.VariableDeclarator:
-                    return (<TypeScript.VariableDeclaratorSyntax>node.parent).propertyName === node;
-
-                case TypeScript.SyntaxKind.PropertySignature:
-                    return (<TypeScript.PropertySignatureSyntax>node.parent).propertyName === node;
-
-                case TypeScript.SyntaxKind.SimplePropertyAssignment:
-                    return (<TypeScript.SimplePropertyAssignmentSyntax>node.parent).propertyName === node;
-
-                case TypeScript.SyntaxKind.EnumElement:
-                    return (<TypeScript.EnumElementSyntax>node.parent).propertyName === node;
-
-                case TypeScript.SyntaxKind.ModuleDeclaration:
-                    return (<TypeScript.ModuleDeclarationSyntax>node.parent).name === node;
-            }
-
-            return false;
-        }
-
-        private static isElementAccessLiteralIndexer(node: TypeScript.ISyntaxElement): boolean {
-            return (node.kind() === TypeScript.SyntaxKind.StringLiteral || node.kind() === TypeScript.SyntaxKind.NumericLiteral) &&
-                node.parent.kind() === TypeScript.SyntaxKind.ElementAccessExpression && (<TypeScript.ElementAccessExpressionSyntax> node.parent).argumentExpression === node;
-        }
-
-        public getBloomFilter(): TypeScript.BloomFilter {
+        public getBloomFilter(): BloomFilter {
             if (!this.bloomFilter) {
-                var identifiers = TypeScript.createIntrinsicsObject<boolean>();
-                var pre = function (cur: TypeScript.ISyntaxElement) {
-                    if (TypeScript.ASTHelpers.isValidAstNode(cur)) {
-                        if (cur.kind() === TypeScript.SyntaxKind.IdentifierName ||
-                            SourceFileObject.isNameOfPropertyDeclaration(cur) ||
-                            SourceFileObject.isElementAccessLiteralIndexer(cur)) {
-                            var nodeText = TypeScript.tokenValueText((<TypeScript.ISyntaxToken>cur));
+                var identifiers: string[] = [];
 
-                            identifiers[nodeText] = true;
-                        }
-                    }
-                };
+                forEachChild(this, function visit (node: Node) {
+                    switch (node.kind) {
+                        case SyntaxKind.Identifier:
+                            identifiers.push((<Identifier>node).text);
+                            return undefined;
+                        case SyntaxKind.StringLiteral:
+                        case SyntaxKind.NumericLiteral:
+                            if (isNameOfPropertyDeclaration(node) || isLiteralIndexOfIndexAccess(node)) {
+                                identifiers.push((<LiteralExpression>node).text);
+                            }
+                            return undefined;
+                        default:
+                            return forEachChild(node, visit);
+                    };
+                });
 
-                TypeScript.getAstWalkerFactory().simpleWalk(this.getSourceUnit(), pre, null, identifiers);
-
-                var identifierCount = 0;
-                for (var name in identifiers) {
-                    if (identifiers[name]) {
-                        identifierCount++;
-                    }
-                }
-
-                this.bloomFilter = new TypeScript.BloomFilter(identifierCount);
+                this.bloomFilter = new BloomFilter(identifiers.length);
                 this.bloomFilter.addKeys(identifiers);
             }
             return this.bloomFilter;
@@ -2375,7 +2341,7 @@ module ts {
                 // type to the search set
                 if (isNameOfPropertyAssignment(location)) {
                     var symbolFromContextualType = getPropertySymbolFromContextualType(location);
-                    if (symbolFromContextualType) result.push(symbolFromContextualType);
+                    if (symbolFromContextualType) result.push(typeInfoResolver.getRootSymbol(symbolFromContextualType));
                 }
 
                 // Add symbol of properties/methods of the same name in base classes and implemented interfaces definitions
@@ -2429,7 +2395,7 @@ module ts {
                 // compare to our searchSymbol
                 if (isNameOfPropertyAssignment(referenceLocation)) {
                     var symbolFromContextualType = getPropertySymbolFromContextualType(referenceLocation);
-                    if (searchSymbols.indexOf(symbolFromContextualType) >= 0) {
+                    if (symbolFromContextualType && searchSymbols.indexOf(typeInfoResolver.getRootSymbol(symbolFromContextualType)) >= 0) {
                         return true;
                     }
                 }
