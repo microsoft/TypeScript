@@ -138,6 +138,14 @@ module RWC {
             }, false, baselineOpts);
         });
 
+        it('has correct source map record', () => {
+            if (compilerResult.sourceMapRecord) {
+                Harness.Baseline.runBaseline('has correct source map record', baseName + '.sourcemap.txt', () => {
+                    return compilerResult.sourceMapRecord;
+                }, false, baselineOpts);
+            }
+        });
+
         it('has the expected errors', () => {
             Harness.Baseline.runBaseline('has the expected errors', baseName + '.errors.txt', () => {
                 if (compilerResult.errors.length === 0) {
