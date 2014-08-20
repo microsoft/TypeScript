@@ -59,13 +59,14 @@ module RWC {
             });
         });
 
+        var inputFiles: { unitName: string; content: string; }[] = [];
+        var otherFiles: { unitName: string; content: string; }[] = [];
         var compilerResult: Harness.Compiler.CompilerResult;
         it('can compile', () => {
             runWithIOLog(ioLog, () => {
                 harnessCompiler.reset();
 
                 // Load the files
-                var inputFiles: { unitName: string; content: string; }[] = [];
                 ts.forEach(opts.filenames, fileName => {
                     inputFiles.push(getHarnessCompilerInputUnit(fileName));
                 });
@@ -78,7 +79,6 @@ module RWC {
                     }
                 }
 
-                var otherFiles: { unitName: string; content: string; }[] = [];
                 ts.forEach(ioLog.filesRead, fileRead => {
                     var resolvedPath = Harness.Path.switchToForwardSlashes(sys.resolvePath(fileRead.path));
                     var inInputList = ts.forEach(inputFiles, inputFile=> inputFile.unitName === resolvedPath);
@@ -144,7 +144,9 @@ module RWC {
                     return null;
                 }
 
-                return Harness.Compiler.minimalDiagnosticsToString(compilerResult.errors);
+                return Harness.Compiler.minimalDiagnosticsToString(compilerResult.errors) +
+                    sys.newLine + sys.newLine +
+                    Harness.Compiler.getErrorBaseline(inputFiles.concat(otherFiles), compilerResult.errors);
             }, false, baselineOpts);
         });
 
