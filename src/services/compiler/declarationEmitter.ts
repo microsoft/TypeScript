@@ -763,7 +763,7 @@ module TypeScript {
 
             var start = new Date().getTime();
             var accessors = PullHelpers.getGetterAndSetterFunction(funcDecl, this.semanticInfoChain);
-            TypeScript.declarationEmitGetAccessorFunctionTime += new Date().getTime();
+            TypeScript.declarationEmitGetAccessorFunctionTime += new Date().getTime() - start;
 
             var comments: Comment[] = [];
             if (accessors.getter) {
@@ -787,7 +787,7 @@ module TypeScript {
         private emitMemberAccessorDeclaration(funcDecl: ISyntaxElement, modifiers: ISyntaxToken[], name: ISyntaxToken) {
             var start = new Date().getTime();
             var accessorSymbol = PullHelpers.getAccessorSymbol(funcDecl, this.semanticInfoChain);
-            TypeScript.declarationEmitGetAccessorFunctionTime += new Date().getTime();
+            TypeScript.declarationEmitGetAccessorFunctionTime += new Date().getTime() - start;
 
             if (funcDecl.kind() === SyntaxKind.SetAccessor && accessorSymbol.getGetter()) {
                 // Setter is being used to emit the type info. 
