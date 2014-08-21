@@ -539,7 +539,7 @@ module Harness {
                 getCurrentDirectory: sys.getCurrentDirectory,
                 getCancellationToken: (): any => undefined,
                 getSourceFile: (fn, languageVersion) => {
-                    if (ts.getCanonicalFileName(fn) in filemap) {
+                    if (Object.prototype.hasOwnProperty.call(filemap, ts.getCanonicalFileName(fn))) {
                         return filemap[ts.getCanonicalFileName(fn)];
                     } else {
                         var lib = defaultLibFileName;
