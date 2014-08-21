@@ -361,104 +361,44 @@ module ts {
         return false;
     }
 
-    // True if the given identifier is the identifier of a declaration node
-    export function isDeclarationIdentifier(identifier: Identifier): boolean {
-        if (identifier.parent) {
-            switch (identifier.parent.kind) {
-                case SyntaxKind.TypeParameter:
-                case SyntaxKind.Parameter:
-                case SyntaxKind.VariableDeclaration:
-                case SyntaxKind.Property:
-                case SyntaxKind.PropertyAssignment:
-                case SyntaxKind.EnumMember:
-                case SyntaxKind.Method:
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.InterfaceDeclaration:
-                case SyntaxKind.EnumDeclaration:
-                case SyntaxKind.ModuleDeclaration:
-                case SyntaxKind.ImportDeclaration:
-                    return (<Declaration>identifier.parent).name === identifier;
-                case SyntaxKind.CatchBlock:
-                    return (<CatchBlock>identifier.parent).variable === identifier;
-            }
-        }
-        return false;
-    }
-
-    // True if the given identifier is part of a type reference
-    export function isTypeReferenceIdentifier(entityName: EntityName): boolean {
-        var node: Node = entityName;
-        while (node.parent && node.parent.kind === SyntaxKind.QualifiedName) node = node.parent;
-        return node.parent && node.parent.kind === SyntaxKind.TypeReference;
-    }
-
-    export function isExpression(node: Node): boolean {
+    export function isDeclaration(node: Node): boolean {
         switch (node.kind) {
-            case SyntaxKind.ThisKeyword:
-            case SyntaxKind.SuperKeyword:
-            case SyntaxKind.NullKeyword:
-            case SyntaxKind.TrueKeyword:
-            case SyntaxKind.FalseKeyword:
-            case SyntaxKind.RegularExpressionLiteral:
-            case SyntaxKind.ArrayLiteral:
-            case SyntaxKind.ObjectLiteral:
-            case SyntaxKind.PropertyAccess:
-            case SyntaxKind.IndexedAccess:
-            case SyntaxKind.CallExpression:
-            case SyntaxKind.NewExpression:
-            case SyntaxKind.TypeAssertion:
-            case SyntaxKind.ParenExpression:
-            case SyntaxKind.FunctionExpression:
-            case SyntaxKind.ArrowFunction:
-            case SyntaxKind.PrefixOperator:
-            case SyntaxKind.PostfixOperator:
-            case SyntaxKind.BinaryExpression:
-            case SyntaxKind.ConditionalExpression:
+            case SyntaxKind.TypeParameter:
+            case SyntaxKind.Parameter:
+            case SyntaxKind.VariableDeclaration:
+            case SyntaxKind.Property:
+            case SyntaxKind.PropertyAssignment:
+            case SyntaxKind.EnumMember:
+            case SyntaxKind.Method:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.EnumDeclaration:
+            case SyntaxKind.ModuleDeclaration:
+            case SyntaxKind.ImportDeclaration:
                 return true;
-            case SyntaxKind.QualifiedName:
-                while (node.parent && node.parent.kind === SyntaxKind.QualifiedName) node = node.parent;
-                return node.parent && node.parent.kind === SyntaxKind.TypeQuery;
-            case SyntaxKind.Identifier:
-            case SyntaxKind.NumericLiteral:
-            case SyntaxKind.StringLiteral:
-                var parent = node.parent;
-                if (parent) {
-                    if (isExpression(parent)) return true;
-                    switch (parent.kind) {
-                        case SyntaxKind.VariableDeclaration:
-                        case SyntaxKind.Parameter:
-                        case SyntaxKind.Property:
-                        case SyntaxKind.EnumMember:
-                            return (<VariableDeclaration>parent).initializer === node;
-                        case SyntaxKind.ExpressionStatement:
-                        case SyntaxKind.IfStatement:
-                        case SyntaxKind.DoStatement:
-                        case SyntaxKind.WhileStatement:
-                        case SyntaxKind.ReturnStatement:
-                        case SyntaxKind.WithStatement:
-                        case SyntaxKind.SwitchStatement:
-                        case SyntaxKind.CaseClause:
-                        case SyntaxKind.ThrowStatement:
-                        case SyntaxKind.SwitchStatement:
-                            return (<ExpressionStatement>parent).expression === node;
-                        case SyntaxKind.ForStatement:
-                            return (<ForStatement>parent).initializer === node || (<ForStatement>parent).condition === node ||
-                                (<ForStatement>parent).iterator === node;
-                        case SyntaxKind.ForInStatement:
-                            return (<ForInStatement>parent).variable === node || (<ForInStatement>parent).expression === node;
-                    }
-                }
         }
         return false;
     }
 
-    export function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {
-        return (node.parent.kind === SyntaxKind.QualifiedName || node.parent.kind === SyntaxKind.PropertyAccess) &&
-            (<QualifiedName>node.parent).right === node;
+    // True if the given identifier, string literal, or number literal is the name of a declaration node
+    export function isDeclarationOrFunctionExpressionOrCatchVariableName(name: Node): boolean {
+        if (name.kind !== SyntaxKind.Identifier && name.kind !== SyntaxKind.StringLiteral && name.kind !== SyntaxKind.NumericLiteral) {
+            return false;
+        }
+
+        var parent = name.parent;
+        if (isDeclaration(parent) || parent.kind === SyntaxKind.FunctionExpression) {
+            return (<Declaration>parent).name === name;
+        }
+
+        if (parent.kind === SyntaxKind.CatchBlock) {
+            return (<CatchBlock>parent).variable === name;
+        }
+
+        return false;
     }
 
     enum ParsingContext {

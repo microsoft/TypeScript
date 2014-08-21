@@ -6587,24 +6587,6 @@ module ts {
                 (<Declaration>name.parent).name === name;
         }
 
-        // True if the given identifier, string literal, or number literal is the name of a declaration node
-        function isDeclarationOrFunctionExpressionOrCatchVariableName(name: Node): boolean {
-            if (name.kind !== SyntaxKind.Identifier && name.kind !== SyntaxKind.StringLiteral && name.kind !== SyntaxKind.NumericLiteral) {
-                return false;
-            }
-
-            var parent = name.parent;
-            if (isDeclaration(parent) || parent.kind === SyntaxKind.FunctionExpression) {
-                return (<Declaration>parent).name === name;
-            }
-
-            if (parent.kind === SyntaxKind.CatchBlock) {
-                return (<CatchBlock>parent).variable === name;
-            }
-
-            return false;
-        }
-
         function isTypeDeclaration(node: Node): boolean {
             switch (node.kind) {
                 case SyntaxKind.TypeParameter:
@@ -6613,28 +6595,6 @@ module ts {
                 case SyntaxKind.EnumDeclaration:
                     return true;
             }
-        }
-
-        function isDeclaration(node: Node): boolean {
-            switch (node.kind) {
-                case SyntaxKind.TypeParameter:
-                case SyntaxKind.Parameter:
-                case SyntaxKind.VariableDeclaration:
-                case SyntaxKind.Property:
-                case SyntaxKind.PropertyAssignment:
-                case SyntaxKind.EnumMember:
-                case SyntaxKind.Method:
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.InterfaceDeclaration:
-                case SyntaxKind.EnumDeclaration:
-                case SyntaxKind.ModuleDeclaration:
-                case SyntaxKind.ImportDeclaration:
-                    return true;
-            }
-            return false;
         }
 
         // True if the given identifier is part of a type reference

@@ -2515,7 +2515,7 @@ module ts {
                 else if (isInRightSideOfImport(node)) {
                     return getMeaningFromRightHandSideOfImport(node);
                 }
-                else if (isDeclarationIdentifier(<Identifier>node)) {
+                else if (isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
                     return getMeaningFromDeclaration(node.parent);
                 }
                 else if (isTypeReference(node)) {
@@ -2560,7 +2560,7 @@ module ts {
 
             /// A node is considedered a writeAccess iff it is a name of a declaration or a target of an assignment
             function isWriteAccess(node: Node): boolean {
-                if (node.kind === SyntaxKind.Identifier && isDeclarationIdentifier(<Identifier>node)) {
+                if (node.kind === SyntaxKind.Identifier && isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
                     return true;
                 }
 
