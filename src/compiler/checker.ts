@@ -6849,6 +6849,11 @@ module ts {
         }
 
         function getSymbolInfo(node: Node) {
+            if (isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
+                // In this case, we call getSymbolOfNode instead of getSymbolInfo because it is a declaration
+                return getSymbolOfNode(node.parent);
+            }
+
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                 case SyntaxKind.PropertyAccess:
@@ -6888,18 +6893,6 @@ module ts {
                                 var importSymbol = getSymbolOfNode(node.parent);
                                 var moduleType = getTypeOfSymbol(importSymbol);
                                 return moduleType ? moduleType.symbol : undefined;
-                            }
-                            break;
-
-                        // External module name in an ambient declaration
-                        case SyntaxKind.ModuleDeclaration:
-                        // Property with name as string or numeric literal
-                        case SyntaxKind.Property:
-                        case SyntaxKind.PropertyAssignment:
-                        // Enum member with string or numeric literal name
-                        case SyntaxKind.EnumMember:
-                            if ((<Declaration>node.parent).name === node) {
-                                return getSymbolOfNode(node.parent);
                             }
                             break;
                     }

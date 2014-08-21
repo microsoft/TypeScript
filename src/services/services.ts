@@ -2761,12 +2761,28 @@ module ts {
     /// Classifier
     export function createClassifier(host: Logger): Classifier {
         var scanner: Scanner;
-        var noRegexTable: boolean[];
+        var noRegexTable: boolean[];
+
         /// We do not have a full parser support to know when we should parse a regex or not
         /// If we consider every slash token to be a regex, we could be missing cases like "1/2/3", where
         /// we have a series of divide operator. this list allows us to be more accurate by ruling out 
         /// locations where a regexp cannot exist.
-        if (!noRegexTable) {            noRegexTable = [];            noRegexTable[SyntaxKind.Identifier] = true;            noRegexTable[SyntaxKind.StringLiteral] = true;            noRegexTable[SyntaxKind.NumericLiteral] = true;            noRegexTable[SyntaxKind.RegularExpressionLiteral] = true;            noRegexTable[SyntaxKind.ThisKeyword] = true;            noRegexTable[SyntaxKind.PlusPlusToken] = true;            noRegexTable[SyntaxKind.MinusMinusToken] = true;            noRegexTable[SyntaxKind.CloseParenToken] = true;            noRegexTable[SyntaxKind.CloseBracketToken] = true;            noRegexTable[SyntaxKind.CloseBraceToken] = true;            noRegexTable[SyntaxKind.TrueKeyword] = true;            noRegexTable[SyntaxKind.FalseKeyword] = true;        }
+        if (!noRegexTable) {
+            noRegexTable = [];
+            noRegexTable[SyntaxKind.Identifier] = true;
+            noRegexTable[SyntaxKind.StringLiteral] = true;
+            noRegexTable[SyntaxKind.NumericLiteral] = true;
+            noRegexTable[SyntaxKind.RegularExpressionLiteral] = true;
+            noRegexTable[SyntaxKind.ThisKeyword] = true;
+            noRegexTable[SyntaxKind.PlusPlusToken] = true;
+            noRegexTable[SyntaxKind.MinusMinusToken] = true;
+            noRegexTable[SyntaxKind.CloseParenToken] = true;
+            noRegexTable[SyntaxKind.CloseBracketToken] = true;
+            noRegexTable[SyntaxKind.CloseBraceToken] = true;
+            noRegexTable[SyntaxKind.TrueKeyword] = true;
+            noRegexTable[SyntaxKind.FalseKeyword] = true;
+        }
+
         function getClassificationsForLine(text: string, lexState: EndOfLineState): ClassificationResult {
             var offset = 0;
             var lastTokenOrCommentEnd = 0;
