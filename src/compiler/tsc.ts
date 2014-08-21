@@ -53,7 +53,6 @@ module ts {
             return false;
         }
 
-        // TODO: Add codePage support for readFile?
         try {
             var fileContents = sys.readFile(filePath);
         }
@@ -134,7 +133,7 @@ module ts {
 
         function getSourceFile(filename: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile {
             try {
-                var text = sys.readFile(filename, options.charset);
+                var text = sys.readFile(filename, options.codepage, options.charset);
             }
             catch (e) {
                 if (onError) {
@@ -209,6 +208,12 @@ module ts {
             printVersion();
             printHelp();
             return sys.exit(0);
+        }
+
+        // If the codepage has been defined, then we should bail out if we can't support it.
+        if (commandLine.options.codepage !== undefined && !sys.supportsCodepage()) {
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--codepage"));
+            return sys.exit(1);
         }
 
         var defaultCompilerHost = createCompilerHost(commandLine.options);

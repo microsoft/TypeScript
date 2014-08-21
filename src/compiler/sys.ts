@@ -5,9 +5,10 @@ interface System {
     newLine: string;
     useCaseSensitiveFileNames: boolean;
     write(s: string): void;
-    readFile(fileName: string, encoding?: string): string;
+    readFile(fileName: string, codepage?: number, encoding?: string): string;
     writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void;
     watchFile?(fileName: string, callback: (fileName: string) => void): FileWatcher;
+    supportsCodepage(): boolean;
     resolvePath(path: string): string;
     fileExists(path: string): boolean;
     directoryExists(path: string): boolean;
@@ -44,10 +45,28 @@ var sys: System = (function () {
             args[i] = WScript.Arguments.Item(i);
         }
 
-        function readFile(fileName: string, encoding?: string): string {
+        function readFile(fileName: string, codepage?: number, encoding?: string): string {
             if (!fso.FileExists(fileName)) {
                 return undefined;
             }
+
+            // Check if a codepage was specified.
+            // If one was given, then check if the environment supports it
+            // (i.e. if the WScript object supports the ReadFile property).
+            if (codepage !== undefined) {
+                if (supportsCodepage()) {
+                    try {
+                        return (<any>WScript).ReadFile(fileName, codepage);
+                    }
+                    catch (e) {
+                        // Potentially means we couldn't read it with the given code page.
+                        // Fall back to the normal BOM/UTF-8 logic below.
+                    }
+                }
+                else {
+                }
+            }
+
             fileStream.Open();
             try {
                 if (encoding) {
@@ -73,6 +92,10 @@ var sys: System = (function () {
             finally {
                 fileStream.Close();
             }
+        }
+
+        function supportsCodepage(): boolean {
+            return !!(<any>WScript).ReadFile;
         }
 
         function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
@@ -108,6 +131,7 @@ var sys: System = (function () {
             },
             readFile: readFile,
             writeFile: writeFile,
+            supportsCodepage: supportsCodepage,
             resolvePath(path: string): string {
                 return fso.GetAbsolutePathName(path);
             },
@@ -146,7 +170,10 @@ var sys: System = (function () {
         // win32\win64 are case insensitive platforms, MacOS (darwin) by default is also case insensitive
         var useCaseSensitiveFileNames = platform !== "win32" && platform !== "win64" && platform !== "darwin";
 
-        function readFile(fileName: string, encoding?: string): string {
+        function readFile(fileName: string, codepage?: number, encoding?: string): string {
+            if (codepage !== undefined) {
+            }
+
             if (!_fs.existsSync(fileName)) {
                 return undefined;
             }
@@ -210,6 +237,7 @@ var sys: System = (function () {
                     callback(fileName);
                 };
             },
+            supportsCodepage: () => false,
             resolvePath: function (path: string): string {
                 return _path.resolve(path);
             },
