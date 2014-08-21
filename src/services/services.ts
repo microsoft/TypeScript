@@ -367,7 +367,7 @@ module ts {
                             return undefined;
                         case SyntaxKind.StringLiteral:
                         case SyntaxKind.NumericLiteral:
-                            if (isNameOfPropertyDeclaration(node) || isLiteralIndexOfIndexAccess(node)) {
+                            if (isLiteralNameOfPropertyDeclarationOrIndexAccess(node)) {
                                 identifiers.push((<LiteralExpression>node).text);
                             }
                             return undefined;
@@ -1240,12 +1240,12 @@ module ts {
     }
 
     /// Helpers
-    function getTargetLabel(node: Node, labelName: string): Identifier {
-        while (node) {
-            if (node.kind === SyntaxKind.LabelledStatement && (<LabelledStatement>node).label.text === labelName) {
-                return (<LabelledStatement>node).label;
+    function getTargetLabel(referenceNode: Node, labelName: string): Identifier {
+        while (referenceNode) {
+            if (referenceNode.kind === SyntaxKind.LabelledStatement && (<LabelledStatement>referenceNode).label.text === labelName) {
+                return (<LabelledStatement>referenceNode).label;
             }
-            node = node.parent;
+            referenceNode = referenceNode.parent;
         }
         return undefined;
     }
@@ -1278,7 +1278,7 @@ module ts {
         return node.parent.kind === SyntaxKind.NewExpression && (<CallExpression>node.parent).func === node;
     }
 
-    function isFunctionDeclaration(node: Node): boolean {
+    function isAnyFunction(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.Method:
@@ -1293,47 +1293,32 @@ module ts {
 
     function isNameOfFunctionDeclaration(node: Node): boolean {
         return node.kind === SyntaxKind.Identifier &&
-            isFunctionDeclaration(node.parent) && (<FunctionDeclaration>node.parent).name === node;
+            isAnyFunction(node.parent) && (<FunctionDeclaration>node.parent).name === node;
     }
 
+    /// Returns true if node is a name of an object literal property, e.g. "a" in x = { "a": 1 }
     function isNameOfPropertyAssignment(node: Node): boolean {
         return (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NumericLiteral) &&
             node.parent.kind === SyntaxKind.PropertyAssignment && (<PropertyDeclaration>node.parent).name === node;
     }
 
-    function isNameOfPropertyDeclaration(node: Node): boolean {
-        if (node.kind !== SyntaxKind.Identifier && node.kind !== SyntaxKind.StringLiteral && node.kind !== SyntaxKind.NumericLiteral) {
-            return false;
-        }
-
-        switch (node.parent.kind) {
-            case SyntaxKind.TypeParameter:
-            case SyntaxKind.Parameter:
-            case SyntaxKind.VariableDeclaration:
-            case SyntaxKind.Property:
-            case SyntaxKind.PropertyAssignment:
-            case SyntaxKind.EnumMember:
-            case SyntaxKind.Method:
-            case SyntaxKind.FunctionDeclaration:
-            case SyntaxKind.FunctionExpression:
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor:
-            case SyntaxKind.ClassDeclaration:
-            case SyntaxKind.InterfaceDeclaration:
-            case SyntaxKind.EnumDeclaration:
-            case SyntaxKind.ModuleDeclaration:
-            case SyntaxKind.ImportDeclaration:
-                return (<Declaration>node.parent).name === node;
-            case SyntaxKind.CatchBlock:
-                return (<CatchBlock>node.parent).variable === node;
+    function isLiteralNameOfPropertyDeclarationOrIndexAccess(node: Node): boolean {
+        if (node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NumericLiteral) {
+            switch (node.parent.kind) {
+                case SyntaxKind.Property:
+                case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.EnumMember:
+                case SyntaxKind.Method:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.ModuleDeclaration:
+                    return (<Declaration>node.parent).name === node;
+                case SyntaxKind.IndexedAccess:
+                    return (<IndexedAccess>node.parent).index === node;
+            }
         }
 
         return false;
-    }
-
-    function isLiteralIndexOfIndexAccess(node: Node): boolean {
-        return (node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NumericLiteral) &&
-            node.parent.kind === SyntaxKind.IndexedAccess && (<IndexedAccess>node.parent).index === node;
     }
 
     enum SearchMeaning {
@@ -1388,7 +1373,7 @@ module ts {
 
                     Debug.assert(!!sourceFile, "sourceFile can not be undefined");
 
-                    return sourceFile.getSourceFile();
+                    return sourceFile;
                 },
                 getCancellationToken: () => cancellationToken,
                 getCanonicalFileName: (filename) => useCaseSensitivefilenames ? filename : filename.toLowerCase(),
@@ -1778,7 +1763,7 @@ module ts {
             }
 
             // TODO: this is a hack for now, we need a proper walking mechanism to verify that we have the correct node
-            var mappedNode = getNodeAtPosition(sourceFile.getSourceFile(), TypeScript.end(node) - 1);
+            var mappedNode = getNodeAtPosition(sourceFile, TypeScript.end(node) - 1);
 
             Debug.assert(mappedNode, "Could not map a Fidelity node to an AST node");
 
@@ -1991,7 +1976,7 @@ module ts {
 
             filename = TypeScript.switchToForwardSlashes(filename);
             var sourceFile = getSourceFile(filename);
-            var node = getNodeAtPosition(sourceFile.getSourceFile(), position);
+            var node = getNodeAtPosition(sourceFile, position);
             if (!node) return undefined;
 
             var symbol = typeInfoResolver.getSymbolInfo(node);
@@ -2074,7 +2059,7 @@ module ts {
             filename = TypeScript.switchToForwardSlashes(filename);
             var sourceFile = getSourceFile(filename);
 
-            var node = getNodeAtPosition(sourceFile.getSourceFile(), position);
+            var node = getNodeAtPosition(sourceFile, position);
             if (!node) {
                 return undefined;
             }
@@ -2087,7 +2072,7 @@ module ts {
             }
 
             /// Triple slash reference comments
-            var comment = forEach(sourceFile.getSourceFile().referencedFiles, r => (r.pos <= position && position < r.end) ? r : undefined);
+            var comment = forEach(sourceFile.referencedFiles, r => (r.pos <= position && position < r.end) ? r : undefined);
             if (comment) {
                 var targetFilename = normalizePath(combinePaths(getDirectoryPath(filename), comment.filename));
                 if (program.getSourceFile(targetFilename)) {
@@ -2130,19 +2115,17 @@ module ts {
 
         /// Find references
         function getReferencesAtPosition(filename: string, position: number): ReferenceEntry[] {
-
             synchronizeHostData();
 
             filename = TypeScript.switchToForwardSlashes(filename);
             var sourceFile = getSourceFile(filename);
 
-            var node = getNodeAtPosition(sourceFile.getSourceFile(), position);
+            var node = getNodeAtPosition(sourceFile, position);
             if (!node) {
                 return undefined;
             }
 
-            if (node.kind !== SyntaxKind.Identifier && node.kind !== SyntaxKind.Constructor &&
-                !isLiteralIndexOfIndexAccess(node) && !isNameOfPropertyDeclaration(node)) {
+            if (node.kind !== SyntaxKind.Identifier && !isLiteralNameOfPropertyDeclarationOrIndexAccess(node)) {
                 return undefined;
             }
 
@@ -2177,7 +2160,7 @@ module ts {
             var result: ReferenceEntry[];
 
             // Compute the meaning from the location and the symbol it references
-            var searchMeaning = getIntersectingMeaningFromDeclaration(getMeaningFromLocation(node), symbol.getDeclarations());
+            var searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), symbol.getDeclarations());
 
             var scope = getSymbolScope(symbol, node);
 
@@ -2188,11 +2171,11 @@ module ts {
             else {
                 var symbolName = symbol.getName();
 
-                forEach(program.getSourceFiles(), (sourceFile) => {
+                forEach(program.getSourceFiles(), sourceFile => {
                     cancellationToken.throwIfCancellationRequested();
 
                     if (sourceFile.getBloomFilter().probablyContains(symbolName)) {
-                        if (!result) result = [];
+                        result = result || [];
                         getReferencesInNode(sourceFile, symbol, node, searchMeaning, result);
                     }
                 });
@@ -2211,7 +2194,7 @@ module ts {
                 /// TODO: Cache symbol existence for files to save text search
                 // Also, need to make this work for unicode escapes.
 
-                // Be reseliant in the face of a symbol with no name or zero length name
+                // Be resilient in the face of a symbol with no name or zero length name
                 if (!symbolName || !symbolName.length) {
                     return positions;
                 }
@@ -2231,8 +2214,8 @@ module ts {
                     // before and after it have to be a non-identifier char).
                     var endPosition = position + symbolNameLength;
 
-                    if ((position <= 0 || !isIdentifierPart(text.charCodeAt(position - 1), ScriptTarget.ES5)) &&
-                        (endPosition >= sourceLength || !isIdentifierPart(text.charCodeAt(endPosition), ScriptTarget.ES5))) {
+                    if ((position === 0 || !isIdentifierPart(text.charCodeAt(position - 1), ScriptTarget.ES5)) &&
+                        (endPosition === sourceLength || !isIdentifierPart(text.charCodeAt(endPosition), ScriptTarget.ES5))) {
                         // Found a real match.  Keep searching.  
                         positions.push(position);
                     }
@@ -2247,22 +2230,20 @@ module ts {
                 var sourceFile = container.getSourceFile();
                 var labelName = targetLabel.text;
                 var possiblePositions = getPossibleSymbolReferencePositions(sourceFile, labelName, container.getStart(), container.getEnd());
-                if (possiblePositions && possiblePositions.length > 0) {
-                    possiblePositions.forEach(position => {
-                        cancellationToken.throwIfCancellationRequested();
+                forEach(possiblePositions, position => {
+                    cancellationToken.throwIfCancellationRequested();
 
-                        var node = getNodeAtPosition(sourceFile, position);
-                        if (!node || node.getWidth() !== labelName.length) {
-                            return;
-                        }
+                    var node = getNodeAtPosition(sourceFile, position);
+                    if (!node || node.getWidth() !== labelName.length) {
+                        return;
+                    }
 
-                        // Only pick labels that are either the target label, or have a target that is the target label
-                        if (node === targetLabel ||
-                            (isJumpStatementTarget(node) && getTargetLabel(node, labelName) === targetLabel)) {
-                            result.push(getReferenceEntry(node));
-                        }
-                    });
-                }
+                    // Only pick labels that are either the target label, or have a target that is the target label
+                    if (node === targetLabel ||
+                        (isJumpStatementTarget(node) && getTargetLabel(node, labelName) === targetLabel)) {
+                        result.push(getReferenceEntry(node));
+                    }
+                });
                 return result;
             }
 
@@ -2276,13 +2257,14 @@ module ts {
                             return node.getWidth() === searchSymbolName.length;
 
                         case SyntaxKind.StringLiteral:
-                            if (isLiteralIndexOfIndexAccess(node) || isNameOfPropertyDeclaration(node)) {
+                            if (isLiteralNameOfPropertyDeclarationOrIndexAccess(node)) {
+                                // For string literals we have two additional chars for the quotes
                                 return node.getWidth() === searchSymbolName.length + 2;
                             }
                             break;
 
                         case SyntaxKind.NumericLiteral:
-                            if (isLiteralIndexOfIndexAccess(node) || isNameOfPropertyDeclaration(node)) {
+                            if (isLiteralNameOfPropertyDeclarationOrIndexAccess(node)) {
                                 return node.getWidth() === searchSymbolName.length;
                             }
                             break;
@@ -2292,17 +2274,21 @@ module ts {
                 return false;
             }
 
+            /// Search within node "container" for references for a search value, where the search value is defined as a 
+            /// tuple of(searchSymbol, searchLocation, and searchMeaning).
+            /// searchLocation: a node where the search value 
             function getReferencesInNode(container: Node, searchSymbol: Symbol, searchLocation: Node, searchMeaning: SearchMeaning, result: ReferenceEntry[]): void {
                 var searchSymbolName = searchSymbol.getName();
 
                 var sourceFile = container.getSourceFile();
 
                 var possiblePositions = getPossibleSymbolReferencePositions(sourceFile, searchSymbolName, container.getStart(), container.getEnd());
-                if (possiblePositions && possiblePositions.length > 0) {
+
+                if (possiblePositions.length) {
                     // Build the set of symbols to search for, initially it has only the current symbol
                     var searchSymbols = populateSearchSymbolSet(searchSymbol, searchLocation);
 
-                    possiblePositions.forEach(position => {
+                    forEach(possiblePositions, position => {
                         cancellationToken.throwIfCancellationRequested();
 
                         var referenceLocation = getNodeAtPosition(sourceFile, position);
@@ -2519,9 +2505,7 @@ module ts {
             /// On the contrary, if we are searching for "Bar" in type position and we trace bar to an interface, and an uninstantiated
             /// module, we want to keep the search limited to only types, as the two declarations (interface and uninstantiated module)
             /// do not intersect in any of the three spaces.
-            function getIntersectingMeaningFromDeclaration(initialMeaning: SearchMeaning, declarations: Declaration[]): SearchMeaning {
-                var meaning = initialMeaning;
-                var incomplete = true;
+            function getIntersectingMeaningFromDeclarations(meaning: SearchMeaning, declarations: Declaration[]): SearchMeaning {
                 if (declarations) {
                     do {
                         // The result is order-sensitive, for instance if initialMeaning === Namespace, and declarations = [class, instantiated module]
@@ -2536,13 +2520,9 @@ module ts {
                             var declarationMeaning = getMeaningFromDeclaration(declarations[i]);
 
                             if (declarationMeaning & meaning) {
-                                searchMeaning |= declarationMeaning;
+                                meaning |= declarationMeaning;
                             }
                         }
-
-                        // meaning becomes the old one
-                        meaning = searchMeaning;
-
                     } while (meaning !== lastIterationMeaning);
                 }
                 return meaning;

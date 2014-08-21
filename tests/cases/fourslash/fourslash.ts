@@ -180,7 +180,7 @@ module FourSlashInterface {
         }
 
         public referencesCountIs(count: number) {
-            FourSlash.currentTestState.verifyReferencesCountIs(count, false);
+            FourSlash.currentTestState.verifyReferencesCountIs(count, /*localFilesOnly*/ false);
         }
 
         public implementorsCountIs(count: number) {

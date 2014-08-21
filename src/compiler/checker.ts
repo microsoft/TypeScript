@@ -6606,6 +6606,7 @@ module ts {
                     return undefined;
 
                 case SyntaxKind.StringLiteral:
+                case SyntaxKind.NumericLiteral:
                     switch (node.parent.kind) {
                         // index access
                         case SyntaxKind.IndexedAccess:
@@ -6629,35 +6630,10 @@ module ts {
 
                         // External module name in an ambient declaration
                         case SyntaxKind.ModuleDeclaration:
-                        // Property with name as string literal
+                        // Property with name as string or numeric literal
                         case SyntaxKind.Property:
                         case SyntaxKind.PropertyAssignment:
-                        // Enum member with string name
-                        case SyntaxKind.EnumMember:
-                            if ((<Declaration>node.parent).name === node) {
-                                return getSymbolOfNode(node.parent);
-                            }
-                            break;
-                    }
-                    break;
-
-                case SyntaxKind.NumericLiteral:
-                    switch (node.parent.kind) {
-                        // index access
-                        case SyntaxKind.IndexedAccess:
-                            if ((<IndexedAccess>node.parent).index === node) {
-                                var objectType = checkExpression((<IndexedAccess>node.parent).object);
-                                if (objectType === unknownType) return undefined;
-                                var apparentType = getApparentType(objectType);
-                                if (<Type>apparentType === unknownType) return undefined;
-                                return getPropertyOfApparentType(apparentType, (<LiteralExpression>node).text);
-                            }
-                            break;
-
-                        // Property with name as numeric literal
-                        case SyntaxKind.Property:
-                        case SyntaxKind.PropertyAssignment:
-                        // Enum member with numeric name
+                        // Enum member with string or numeric literal name
                         case SyntaxKind.EnumMember:
                             if ((<Declaration>node.parent).name === node) {
                                 return getSymbolOfNode(node.parent);

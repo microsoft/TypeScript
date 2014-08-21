@@ -952,7 +952,7 @@ module FourSlash {
 
         public printContext() {
             var fileNames: string[] = JSON.parse(this.languageServiceShimHost.getScriptFileNames());
-            ts.forEach(fileNames, f => Harness.IO.log(f));
+            ts.forEach(fileNames, Harness.IO.log);
         }
 
         private editCheckpoint(filename: string) {
