@@ -2485,8 +2485,37 @@ module ts {
                 return root.parent.kind === SyntaxKind.TypeReference && !isLastClause;
             }
 
+            function isInRightSideOfImport(node: EntityName) {
+                while (node.parent.kind === SyntaxKind.QualifiedName) {
+                    node = node.parent;
+                }
+
+                return node.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent).entityName === node;
+            }
+
+            function getMeaningFromRightHandSideOfImport(node: Node) {
+                Debug.assert(node.kind === SyntaxKind.Identifier);
+
+                //     import a = |b|; // Namespace
+                //     import a = |b.c|; // Value, type, namespace
+                //     import a = |b.c|.d; // Namespace
+
+                if (node.parent.kind === SyntaxKind.QualifiedName &&
+                    (<QualifiedName>node.parent).right === node &&
+                    node.parent.parent.kind === SyntaxKind.ImportDeclaration) {
+                    return SearchMeaning.Value | SearchMeaning.Type | SearchMeaning.Namespace;
+                }
+                return SearchMeaning.Namespace;
+            }
+
             function getMeaningFromLocation(node: Node): SearchMeaning {
-                if (isDeclarationIdentifier(<Identifier>node)) {
+                if (node.parent.kind === SyntaxKind.ExportAssignment) {
+                    return SearchMeaning.Value | SearchMeaning.Type | SearchMeaning.Namespace;
+                }
+                else if (isInRightSideOfImport(node)) {
+                    return getMeaningFromRightHandSideOfImport(node);
+                }
+                else if (isDeclarationIdentifier(<Identifier>node)) {
                     return getMeaningFromDeclaration(node.parent);
                 }
                 else if (isTypeReference(node)) {

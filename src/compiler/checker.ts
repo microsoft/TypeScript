@@ -6850,8 +6850,14 @@ module ts {
 
         function getSymbolInfo(node: Node) {
             if (isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
-                // In this case, we call getSymbolOfNode instead of getSymbolInfo because it is a declaration
+                // This is a declaration, call getSymbolOfNode
                 return getSymbolOfNode(node.parent);
+            }
+
+            if (isInRightSideOfImportOrExportAssignment(node)) {
+                return node.parent.kind === SyntaxKind.ExportAssignment
+                    ? getSymbolOfEntityName(<Identifier>node)
+                    : getSymbolOfPartOfRightHandSideOfImport(node);
             }
 
             switch (node.kind) {
@@ -6874,27 +6880,22 @@ module ts {
                     return undefined;
 
                 case SyntaxKind.StringLiteral:
-                case SyntaxKind.NumericLiteral:
-                    switch (node.parent.kind) {
-                        // index access
-                        case SyntaxKind.IndexedAccess:
-                            if ((<IndexedAccess>node.parent).index === node) {
-                                var objectType = checkExpression((<IndexedAccess>node.parent).object);
-                                if (objectType === unknownType) return undefined;
-                                var apparentType = getApparentType(objectType);
-                                if (<Type>apparentType === unknownType) return undefined;
-                                return getPropertyOfApparentType(apparentType, (<LiteralExpression>node).text);
-                            }
-                            break;
+                    // External module name in an import declaration
+                    if (node.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent).externalModuleName === node) {
+                        var importSymbol = getSymbolOfNode(node.parent);
+                        var moduleType = getTypeOfSymbol(importSymbol);
+                        return moduleType ? moduleType.symbol : undefined;
+                    }
 
-                        // External module name in an import declaration
-                        case SyntaxKind.ImportDeclaration:
-                            if ((<ImportDeclaration>node.parent).externalModuleName === node) {
-                                var importSymbol = getSymbolOfNode(node.parent);
-                                var moduleType = getTypeOfSymbol(importSymbol);
-                                return moduleType ? moduleType.symbol : undefined;
-                            }
-                            break;
+                // Intentinal fallthrough
+                case SyntaxKind.NumericLiteral:
+                    // index access
+                    if (node.parent.kind == SyntaxKind.IndexedAccess && (<IndexedAccess>node.parent).index === node) {
+                        var objectType = checkExpression((<IndexedAccess>node.parent).object);
+                        if (objectType === unknownType) return undefined;
+                        var apparentType = getApparentType(objectType);
+                        if (<Type>apparentType === unknownType) return undefined;
+                        return getPropertyOfApparentType(apparentType, (<LiteralExpression>node).text);
                     }
                     break;
             }
