@@ -71,10 +71,14 @@ interface IGlobalCallSignatureWithOwnTypeParametes {
 
 //// [declFileCallSignatures_0.d.ts]
 export interface ICallSignature {
+    /** This comment should appear for foo*/
     (): string;
 }
 export interface ICallSignatureWithParameters {
-    (a: string, b: number): void;
+    /** This is comment for function signature*/
+    (/** this is comment about a*/ a: string, 
+        /** this is comment for b*/
+        b: number): void;
 }
 export interface ICallSignatureWithRestParameters {
     (a: string, ...rests: string[]): string;
@@ -84,6 +88,7 @@ export interface ICallSignatureWithOverloads {
     (a: number): number;
 }
 export interface ICallSignatureWithTypeParameters<T> {
+    /** This comment should appear for foo*/
     (a: T): string;
 }
 export interface ICallSignatureWithOwnTypeParametes {
@@ -91,10 +96,14 @@ export interface ICallSignatureWithOwnTypeParametes {
 }
 //// [declFileCallSignatures_1.d.ts]
 interface IGlobalCallSignature {
+    /** This comment should appear for foo*/
     (): string;
 }
 interface IGlobalCallSignatureWithParameters {
-    (a: string, b: number): void;
+    /** This is comment for function signature*/
+    (/** this is comment about a*/ a: string, 
+        /** this is comment for b*/
+        b: number): void;
 }
 interface IGlobalCallSignatureWithRestParameters {
     (a: string, ...rests: string[]): string;
@@ -104,6 +113,7 @@ interface IGlobalCallSignatureWithOverloads {
     (a: number): number;
 }
 interface IGlobalCallSignatureWithTypeParameters<T> {
+    /** This comment should appear for foo*/
     (a: T): string;
 }
 interface IGlobalCallSignatureWithOwnTypeParametes {

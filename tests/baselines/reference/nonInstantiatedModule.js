@@ -50,6 +50,7 @@ var M;
 (function (M) {
     M.a = 1;
 })(M || (M = {}));
+// primary expression
 var m;
 var m = M;
 var a1;

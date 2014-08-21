@@ -40,6 +40,7 @@ var r2: Derived2 = new i('bye');
 var r3: Base = new a('hm');
 
 //// [typesWithSpecializedConstructSignatures.js]
+// basic uses of specialized signatures without errors
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }

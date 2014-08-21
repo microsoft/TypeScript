@@ -112,6 +112,8 @@ module Errors {
 }
 
 //// [constructSignatureAssignabilityInInheritance3.js]
+// checking subtype relations for function types as it relates to contextual signature instantiation
+// error cases
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }

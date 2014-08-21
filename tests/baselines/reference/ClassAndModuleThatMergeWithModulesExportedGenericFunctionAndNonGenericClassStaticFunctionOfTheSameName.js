@@ -25,6 +25,7 @@ var clodule = (function () {
 })();
 var clodule;
 (function (clodule) {
+    // error: duplicate identifier expected
     function fn(x, y) {
         return x;
     }

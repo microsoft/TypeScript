@@ -19,6 +19,7 @@ var b = <T extends T>() => { }
 var b2 = <T, U extends U>() => { }
 
 //// [typeParameterDirectlyConstrainedToItself.js]
+// all of the below should be errors
 var C = (function () {
     function C() {
     }

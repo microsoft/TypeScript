@@ -1,0 +1,25 @@
+=== tests/cases/compiler/commentsOnObjectLiteral4.ts ===
+
+var v = {
+>v : { bar: number; }
+>{
+ /**
+  * @type {number}
+  */
+ get bar(): number {
+  return this._bar;
+ }
+} : { bar: number; }
+
+ /**
+  * @type {number}
+  */
+ get bar(): number {
+>bar : number
+
+  return this._bar;
+>this._bar : any
+>this : any
+>_bar : any
+ }
+}

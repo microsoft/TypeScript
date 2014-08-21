@@ -9,4 +9,4 @@ x(true); // was error
 
 //// [genericWithCallSignatureReturningSpecialization.js]
 var x;
-x(true);
+x(true); // was error

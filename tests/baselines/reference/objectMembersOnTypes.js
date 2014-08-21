@@ -18,6 +18,6 @@ var AAA = (function () {
 var x;
 x.toString();
 var i;
-i.toString();
+i.toString(); // used to be an error
 var c;
-c.toString();
+c.toString(); // used to be an error

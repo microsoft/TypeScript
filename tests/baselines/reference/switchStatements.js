@@ -90,6 +90,7 @@ switch (x) {
     case (function (x) { return ''; })(2):
     default:
 }
+// basic assignable check, rest covered in tests for 'assignement compatibility'
 var C = (function () {
     function C() {
     }

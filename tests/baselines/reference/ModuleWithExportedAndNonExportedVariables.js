@@ -20,4 +20,5 @@ var A;
 })(A || (A = {}));
 var x;
 var x = A.x;
+// Error, since y is not exported
 var y = A.y;

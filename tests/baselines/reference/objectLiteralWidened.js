@@ -15,6 +15,7 @@ var y = {
 }
 
 //// [objectLiteralWidened.js]
+// object literal properties are widened to any
 var x = {
     foo: null,
     bar: undefined

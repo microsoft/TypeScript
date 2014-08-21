@@ -516,10 +516,15 @@ module ts {
         filename: string;
     }
 
+    export interface Comment extends TextRange {
+        hasTrailingNewLine?: boolean;
+    }
+
     export interface SourceFile extends Block {
         filename: string;
         text: string;
         getLineAndCharacterFromPosition(position: number): { line: number; character: number };
+        getPositionFromLineAndCharacter(line: number, character: number): number;
         amdDependencies: string[];
         referencedFiles: FileReference[];
         syntacticErrors: Diagnostic[];

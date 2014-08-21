@@ -30,6 +30,7 @@ var b: {
 }
 
 //// [constructSignatureWithAccessibilityModifiersOnParameters.js]
+// Parameter properties are only valid in constructor definitions, not even in other forms of construct signatures
 var C = (function () {
     function C(x, y) {
         this.x = x;

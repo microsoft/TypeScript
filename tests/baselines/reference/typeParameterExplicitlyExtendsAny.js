@@ -14,11 +14,11 @@ function fee2<T extends any>() {
 //// [typeParameterExplicitlyExtendsAny.js]
 function fee() {
     var t;
-    t.blah;
-    t.toString;
+    t.blah; // Error
+    t.toString; // ok
 }
 function fee2() {
     var t;
-    t.blah;
-    t.toString;
+    t.blah; // Error
+    t.toString; // ok
 }

@@ -218,6 +218,7 @@ var N;
     }
     N.F2 = F2;
 })(N || (N = {}));
+// literals
 if (true) {
 }
 while (true) {
@@ -302,6 +303,7 @@ while (new D()) {
 }
 do {
 } while (new D());
+// references
 var a = true;
 if (a) {
 }

@@ -11,7 +11,8 @@ enum Colors {
     /** Fancy name for 'pink'*/
     FancyPink
 >FancyPink : Colors
-}
+
+} // trailing comment
 var x = Colors.Cornflower;
 >x : Colors
 >Colors.Cornflower : Colors

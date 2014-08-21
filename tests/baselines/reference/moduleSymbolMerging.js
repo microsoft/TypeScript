@@ -15,6 +15,7 @@ module B {
 
 //// [A.js]
 //// [B.js]
+///<reference path="A.ts" />
 var A;
 (function (A) {
     ;

@@ -41,11 +41,11 @@ var C = (function () {
     return C;
 })();
 var a = new B();
-a = new C();
-a = B;
+a = new C(); // error name is missing
+a = B; // error name is missing
 a = C;
-var b = new C();
-b = B;
+var b = new C(); // error name is missing
+b = B; // error name is missing
 b = C;
 b = a;
 var c = new B();

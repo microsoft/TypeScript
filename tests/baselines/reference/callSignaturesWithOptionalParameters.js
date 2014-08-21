@@ -56,6 +56,7 @@ b.b(1);
 
 
 //// [callSignaturesWithOptionalParameters.js]
+// Optional parameters should be valid in all the below casts
 function foo(x) {
 }
 var f = function foo(x) {

@@ -31,6 +31,7 @@ var Bugs;
         }
         return A;
     })();
+    // replace(searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string;
     function bug2(message) {
         var args = [];
         for (var _i = 1; _i < arguments.length; _i++) {

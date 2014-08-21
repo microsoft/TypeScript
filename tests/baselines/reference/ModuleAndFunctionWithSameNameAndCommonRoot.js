@@ -40,6 +40,7 @@ var A;
 //// [function.js]
 var A;
 (function (A) {
+    // duplicate identifier error
     function Point() {
         return { x: 0, y: 0 };
     }
@@ -52,6 +53,7 @@ var B;
         Point.Origin = { x: 0, y: 0 };
     })(B.Point || (B.Point = {}));
     var Point = B.Point;
+    // duplicate identifier error
     function Point() {
         return { x: 0, y: 0 };
     }

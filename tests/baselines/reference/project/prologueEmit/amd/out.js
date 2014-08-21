@@ -1,4 +1,5 @@
 var _this = this;
+// Add a lambda to ensure global 'this' capture is triggered
 (function () { return _this.window; });
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -6,6 +7,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// class inheritance to ensure __extends is emitted
 var m;
 (function (m) {
     var base = (function () {

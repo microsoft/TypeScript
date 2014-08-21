@@ -65,12 +65,14 @@ var _modes;
     })();
     _modes.Mode = Mode;
 })(_modes || (_modes = {}));
+// _modes. // produces an internal error - please implement in derived class
 var editor;
 (function (editor) {
     var i;
+    // If you just use p1:modes, the compiler accepts it - should be an error
     var Bug = (function () {
         function Bug(p1, p2) {
-        }
+        } // should be an error on p2 - it's not exported
         Bug.prototype.foo = function (p1) {
         };
         return Bug;
@@ -82,7 +84,7 @@ var editor2;
     var i;
     var Bug = (function () {
         function Bug(p1, p2) {
-        }
+        } // no error here, since modesOuter is declared externally
         return Bug;
     })();
     var Foo;

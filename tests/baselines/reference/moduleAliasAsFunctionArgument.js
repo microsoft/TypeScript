@@ -22,6 +22,6 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", 'moduleAliasAsFunctionArgument_0'], function (require, exports, a) {
     function fn(arg) {
     }
-    a.x;
-    fn(a);
+    a.x; // OK
+    fn(a); // Error: property 'x' is missing from 'a'
 });

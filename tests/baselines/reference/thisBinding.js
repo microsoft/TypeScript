@@ -30,8 +30,8 @@ var M;
             ({ z: 10, f: this.f }).f(({}));
         }
         C.prototype.f = function (x) {
-            x.e;
-            x.z;
+            x.e; // e not found
+            x.z; // ok 
         };
         return C;
     })();

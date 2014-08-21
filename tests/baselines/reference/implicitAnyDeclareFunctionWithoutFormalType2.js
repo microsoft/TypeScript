@@ -17,14 +17,17 @@ function fn3() {
 
 
 //// [implicitAnyDeclareFunctionWithoutFormalType2.js]
+// generates function fn1(): number;
 function fn1() {
     var x;
     return x;
 }
+// generates function fn2(): any;
 function fn2() {
     var x;
     return x;
 }
+// generates function fn3();
 function fn3() {
     var x;
     return x;

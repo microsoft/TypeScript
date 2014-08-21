@@ -38,6 +38,8 @@ class C2<T extends Date, U extends Date> {
 //}
 
 //// [innerTypeParameterShadowingOuterOne2.js]
+// inner type parameters shadow outer ones of the same name
+// no errors expected
 var C = (function () {
     function C() {
     }

@@ -24,8 +24,8 @@ a = o; // ok
 //// [objectTypeHidingMembersOfObjectAssignmentCompat2.js]
 var i;
 var o;
-o = i;
-i = o;
+o = i; // error
+i = o; // error
 var C = (function () {
     function C() {
     }
@@ -35,11 +35,11 @@ var C = (function () {
     return C;
 })();
 var c;
-o = c;
-c = o;
+o = c; // error
+c = o; // error
 var a = {
     toString: function () {
     }
 };
-o = a;
-a = o;
+o = a; // error
+a = o; // ok

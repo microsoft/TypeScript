@@ -40,7 +40,7 @@ var Outer;
 var importInst = Outer.instantiated;
 var x1 = importInst.C;
 var x2 = new x1();
-var x3;
+var x3; // Error again
 var x4 = Outer;
 var x5;
 x5 = Outer;

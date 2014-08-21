@@ -10,11 +10,13 @@ class c2 implements i1 { public name:string; }
  
 
 //// [privateInterfaceProperties.js]
+// should be an error 
 var c1 = (function () {
     function c1() {
     }
     return c1;
 })();
+// should be ok 
 var c2 = (function () {
     function c2() {
     }

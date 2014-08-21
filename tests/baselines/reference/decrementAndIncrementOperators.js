@@ -40,6 +40,7 @@ x[x++]++;
 
 //// [decrementAndIncrementOperators.js]
 var x = 0;
+// errors
 1++;
 (1)++;
 (1)--;
@@ -53,6 +54,7 @@ var x = 0;
 (x + x)--;
 ++(x + x);
 --(x + x);
+//OK
 x++;
 x--;
 ++x;

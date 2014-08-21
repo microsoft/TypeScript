@@ -42,6 +42,7 @@ var r2: Derived2 = c.foo('bye');
 var r3: Base = c.foo('hm');
 
 //// [typesWithSpecializedCallSignatures.js]
+// basic uses of specialized signatures without errors
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }

@@ -8,4 +8,4 @@ declare function foo<T extends Item>(x?: T, y?: T): T;
 var z7 = foo("abc", 5); // Error
 
 //// [typeArgInference2WithError.js]
-var z7 = foo("abc", 5);
+var z7 = foo("abc", 5); // Error

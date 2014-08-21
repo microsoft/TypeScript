@@ -121,6 +121,8 @@ function foo15() {
 var r15 = foo15();
 
 //// [callSignatureWithoutReturnTypeAnnotationInference.js]
+// Call signatures without a return type should infer one from the function body (if present)
+// Simple types
 function foo(x) {
     return 1;
 }
@@ -161,6 +163,7 @@ function foo7(x) {
     return typeof x;
 }
 var r7 = foo7(1);
+// object types
 function foo8(x) {
     return { x: x };
 }

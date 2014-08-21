@@ -90,6 +90,7 @@ var C = (function () {
     };
     return C;
 })();
+// Function expressions
 var x = function (a, b, c) {
     if (a === void 0) { a = b; }
     if (b === void 0) { b = c; }

@@ -57,6 +57,7 @@ var b = {
 var r4 = b.foo(new B()); // valid call to an invalid function
 
 //// [propertyAccessOnTypeParameterWithConstraints3.js]
+// generic types should behave as if they have properties of their constraint type
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -86,11 +87,13 @@ var C = (function () {
     }
     C.prototype.f = function () {
         var x;
-        var a = x['foo']();
+        // BUG 823818
+        var a = x['foo'](); // should be string
         return a + x.foo();
     };
     C.prototype.g = function (x) {
-        var a = x['foo']();
+        // BUG 823818
+        var a = x['foo'](); // should be string
         return a + x.foo();
     };
     return C;
@@ -101,14 +104,16 @@ var i;
 var r2 = i.foo.foo();
 var r2b = i.foo['foo']();
 var a;
-var r3 = a().foo();
+var r3 = a().foo(); // error, no inferences for U so it doesn't satisfy constraint
 var r3b = a()['foo']();
-var r3c = a(new B()).foo();
-var r3d = a(new B())['foo']();
+// parameter supplied for type argument inference for U
+var r3c = a(new B()).foo(); // valid call to an invalid function, U is inferred as B, which has a foo
+var r3d = a(new B())['foo'](); // valid call to an invalid function, U is inferred as B, which has a foo
 var b = {
     foo: function (x) {
-        var a = x['foo']();
+        // BUG 823818
+        var a = x['foo'](); // should be string
         return a + x.foo();
     }
 };
-var r4 = b.foo(new B());
+var r4 = b.foo(new B()); // valid call to an invalid function

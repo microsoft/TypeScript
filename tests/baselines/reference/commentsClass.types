@@ -3,7 +3,8 @@
 /** This is class c2 without constuctor*/
 class c2 {
 >c2 : c2
-}
+
+} // trailing comment1
 var i2 = new c2();
 >i2 : c2
 >new c2() : c2
@@ -18,8 +19,8 @@ class c3 {
 
     /** Constructor comment*/
     constructor() {
-    }
-}
+    } // trailing comment of constructor
+} /* trailing comment 2 */
 var i3 = new c3();
 >i3 : c3
 >new c3() : c3
@@ -35,7 +36,7 @@ class c4 {
 
     /** Constructor comment*/
     constructor() {
-    }
+    } /* trailing comment of constructor 2*/
 }
 var i4 = new c4();
 >i4 : c4

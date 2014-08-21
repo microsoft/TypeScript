@@ -31,4 +31,5 @@ var y = 10;
 
 
 //// [emitPreComments.js]
+// This is pre comment
 var y = 10;

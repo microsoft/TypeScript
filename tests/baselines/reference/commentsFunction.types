@@ -3,7 +3,8 @@
 /** This comment should appear for foo*/
 function foo() {
 >foo : () => void
-}
+
+} /* trailing comment of function */
 foo();
 >foo() : void
 >foo : () => void
@@ -20,7 +21,8 @@ function fooWithParameters(/** this is comment about a*/a: string,
     var d = a;
 >d : string
 >a : string
-}
+
+} // trailing comment of function
 fooWithParameters("a", 10);
 >fooWithParameters("a", 10) : void
 >fooWithParameters : (a: string, b: number) => void
@@ -67,3 +69,44 @@ lambddaNoVarComment(10, 20);
 >lambddaNoVarComment(10, 20) : number
 >lambddaNoVarComment : (a: number, b: number) => number
 
+function blah(a: string /* multiline trailing comment 
+>blah : (a: string) => void
+>a : string
+
+multiline */) {
+}
+
+function blah2(a: string /* single line multiple trailing comments */ /* second */) {
+>blah2 : (a: string) => void
+>a : string
+}
+
+function blah3(a: string // trailing commen single line
+>blah3 : (a: string) => void
+>a : string
+
+    ) {
+}
+
+lambdaFoo = (a, b) => a * b; // This is trailing comment
+>lambdaFoo = (a, b) => a * b : (a: number, b: number) => number
+>lambdaFoo : (a: number, b: number) => number
+>(a, b) => a * b : (a: number, b: number) => number
+>a : number
+>b : number
+>a * b : number
+>a : number
+>b : number
+
+/*leading comment*/() => 0; // Needs to be wrapped in parens to be a valid expression (not declaration)
+>() => 0 : () => number
+
+/*leading comment*/(() => 0); //trailing comment
+>(() => 0) : () => number
+>() => 0 : () => number
+
+function blah4(/*1*/a: string/*2*/,/*3*/b: string/*4*/) {
+>blah4 : (a: string, b: string) => void
+>a : string
+>b : string
+}

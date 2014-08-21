@@ -25,8 +25,8 @@ var Foo = (function () {
     Foo.prototype.bar = function () {
         function inner() {
             var _this = this;
-            this.y = "hi";
-            var f = function () { return _this.y; };
+            this.y = "hi"; // 'this' should be not type to 'Foo' either
+            var f = function () { return _this.y; }; // 'this' should be not type to 'Foo' either
         }
     };
     return Foo;
