@@ -1925,6 +1925,8 @@ module ts {
 
             function emitSourceFile(node: SourceFile) {
                 currentSourceFile = node;
+                // Start new file on new line
+                writeLine();
                 emitDetachedComments(node);
                 // emit prologue directives prior to __extends
                 var startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
