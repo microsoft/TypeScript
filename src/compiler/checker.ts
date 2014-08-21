@@ -1470,7 +1470,7 @@ module ts {
         function getTypeOfFuncClassEnumModule(symbol: Symbol): Type {
             var links = getSymbolLinks(symbol);
             if (!links.type) {
-                var type = links.type = createObjectType(TypeFlags.Anonymous, symbol);
+                links.type = createObjectType(TypeFlags.Anonymous, symbol);
             }
             return links.type;
         }
