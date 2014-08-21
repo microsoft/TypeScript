@@ -32,3 +32,13 @@ Copyright
 ///<reference path="a.ts"/>
 var y = x;
 //# sourceMappingURL=a.js.map
+
+//// [a.d.ts]
+declare var x: {
+    a: number;
+    b: number;
+};
+declare var y: {
+    a: number;
+    b: number;
+};

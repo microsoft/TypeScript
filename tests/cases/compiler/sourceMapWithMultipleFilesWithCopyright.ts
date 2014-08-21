@@ -1,5 +1,6 @@
 // @out: a.js
 // @sourcemap: true
+// @declaration: true
 // @Filename: a.ts
 /*--------------------------------------------------------------------------
 Copyright 
