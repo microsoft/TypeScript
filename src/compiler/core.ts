@@ -567,7 +567,7 @@ module ts {
         var currentAssertionLevel = AssertionLevel.None;
 
         export function shouldAssert(level: AssertionLevel): boolean {
-            return this.currentAssertionLevel >= level;
+            return currentAssertionLevel >= level;
         }
 
         export function assert(expression: any, message?: string, verboseDebugInfo?: () => string): void {
