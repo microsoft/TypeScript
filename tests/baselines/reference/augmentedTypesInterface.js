@@ -34,6 +34,7 @@ interface i4 {
 //import i4 = require('');  // error
 
 //// [augmentedTypesInterface.js]
+// interface then interface
 var i2 = (function () {
     function i2() {
     }

@@ -1,0 +1,35 @@
+=== tests/cases/compiler/collisionExportsRequireAndModule.ts ===
+export module require {
+>require : typeof require
+
+    export interface I {
+>I : I
+    }
+    export class C {
+>C : C
+    }
+}
+export function foo(): require.I {
+>foo : () => I
+>require : require
+>I : I
+
+    return null;
+}
+export module exports {
+>exports : typeof exports
+
+    export interface I {
+>I : I
+    }
+    export class C {
+>C : C
+    }
+}
+export function foo2(): exports.I {
+>foo2 : () => I
+>exports : exports
+>I : I
+
+    return null;
+}

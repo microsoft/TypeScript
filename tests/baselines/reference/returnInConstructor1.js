@@ -83,7 +83,7 @@ var A = (function () {
 })();
 var B = (function () {
     function B() {
-        return 1;
+        return 1; // error
     }
     B.prototype.foo = function () {
     };
@@ -99,7 +99,7 @@ var C = (function () {
 })();
 var D = (function () {
     function D() {
-        return "test";
+        return "test"; // error
     }
     D.prototype.foo = function () {
     };
@@ -113,7 +113,7 @@ var E = (function () {
 })();
 var F = (function () {
     function F() {
-        return { foo: 1 };
+        return { foo: 1 }; //error
     }
     return F;
 })();
@@ -131,7 +131,7 @@ var H = (function (_super) {
     __extends(H, _super);
     function H() {
         _super.call(this);
-        return new G();
+        return new G(); //error
     }
     return H;
 })(F);

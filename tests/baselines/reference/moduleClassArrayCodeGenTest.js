@@ -11,6 +11,7 @@ var t: M.A[] = [];
 var t2: M.B[] = [];
 
 //// [moduleClassArrayCodeGenTest.js]
+// Invalid code gen for Array of Module class
 var M;
 (function (M) {
     var A = (function () {

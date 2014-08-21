@@ -14,4 +14,4 @@ var List = (function () {
     };
     return List;
 })();
-List.prototype.add("abc");
+List.prototype.add("abc"); // Valid because T is instantiated to any

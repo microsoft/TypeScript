@@ -23,6 +23,7 @@ var A;
 var B;
 (function (B) {
 })(B || (B = {}));
+// should be ok
 function foo(x) {
 }
 var C = (function () {
@@ -30,5 +31,6 @@ var C = (function () {
     }
     return C;
 })();
+// should be ok
 function foo1(x) {
 }

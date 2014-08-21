@@ -1,0 +1,19 @@
+=== tests/cases/compiler/undefinedInferentialTyping.ts ===
+function f<T>(arr: T[], elemnt: T): T {
+>f : <T>(arr: T[], elemnt: T) => T
+>T : T
+>arr : T[]
+>T : T
+>elemnt : T
+>T : T
+>T : T
+
+    return null;
+}
+
+var a = f([], 3); // should be number
+>a : number
+>f([], 3) : number
+>f : <T>(arr: T[], elemnt: T) => T
+>[] : number[]
+

@@ -38,7 +38,7 @@ function F1(s) {
 }
 function F1(a) {
     return a;
-}
+} // error -  duplicate identifier
 var f1 = new Foo("hey");
 f1.bar1();
 Foo();

@@ -14,6 +14,7 @@ class c5c { public foo() { } }
 //import c5c = require('');
 
 //// [augmentedTypesClass3.js]
+// class then module
 var c5 = (function () {
     function c5() {
     }
@@ -31,7 +32,7 @@ var c5a = (function () {
 var c5a;
 (function (c5a) {
     var y = 2;
-})(c5a || (c5a = {}));
+})(c5a || (c5a = {})); // should be ok
 var c5b = (function () {
     function c5b() {
     }
@@ -42,7 +43,8 @@ var c5b = (function () {
 var c5b;
 (function (c5b) {
     c5b.y = 2;
-})(c5b || (c5b = {}));
+})(c5b || (c5b = {})); // should be ok
+//// class then import
 var c5c = (function () {
     function c5c() {
     }

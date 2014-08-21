@@ -10,7 +10,7 @@ export function foo<A>(fn: (ifoo: IFoo<A>) => void) {
 //// [genericInterfaceFunctionTypeParameter.js]
 define(["require", "exports"], function (require, exports) {
     function foo(fn) {
-        foo(fn);
+        foo(fn); // Invocation is necessary to repro (!)
     }
     exports.foo = foo;
 });

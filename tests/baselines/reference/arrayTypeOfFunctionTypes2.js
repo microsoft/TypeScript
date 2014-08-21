@@ -17,6 +17,7 @@ var r6 = new r5();
 var r6b = r5();
 
 //// [arrayTypeOfFunctionTypes2.js]
+// valid uses of arrays of function types
 var x;
 var r = x[1];
 var r2 = new r();

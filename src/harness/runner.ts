@@ -68,16 +68,10 @@ if (testConfigFile !== '') {
                  runners.push(new GeneratedFourslashRunner());
                 break;
             case 'unittests':
-                runners.push(new UnitTestRunner(UnittestTestType.Compiler));
+                runners.push(new UnitTestRunner());
                 break;
             case 'rwc':
                 runners.push(new RWCRunner());
-                break;
-            case 'ls':
-                runners.push(new UnitTestRunner(UnittestTestType.LanguageService));
-                break;
-            case 'services':
-                runners.push(new UnitTestRunner(UnittestTestType.Services));
                 break;
             case 'reverse':
                 reverse = true;
@@ -96,9 +90,12 @@ if (runners.length === 0) {
         runners.push(new ProjectRunner());
     }
 
-    //// language services
+    // language services
     runners.push(new FourslashRunner());
     //runners.push(new GeneratedFourslashRunner());
+
+    // unittests
+    runners.push(new UnitTestRunner());
 }
 
 sys.newLine = '\r\n';

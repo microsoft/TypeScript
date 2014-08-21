@@ -41,9 +41,9 @@ var Derived = (function (_super) {
         return null;
     };
     Derived.prototype.bar = function () {
-        var r = _super.prototype.foo.call(this, { a: 1 });
-        var r2 = _super.prototype.foo.call(this, { a: 1, b: 2 });
-        var r3 = this.foo({ a: 1, b: 2 });
+        var r = _super.prototype.foo.call(this, { a: 1 }); // { a: number }
+        var r2 = _super.prototype.foo.call(this, { a: 1, b: 2 }); // { a: number }
+        var r3 = this.foo({ a: 1, b: 2 }); // { a: number; b: number; }
     };
     return Derived;
 })(Base);

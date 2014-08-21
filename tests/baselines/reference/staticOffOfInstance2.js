@@ -13,7 +13,7 @@ var List = (function () {
     function List() {
     }
     List.prototype.Blah = function () {
-        this.Foo();
+        this.Foo(); // no error
         List.Foo();
     };
     List.Foo = function () {

@@ -29,7 +29,7 @@ var A = (function () {
         return 0;
     };
     A.two = function (source) {
-        return this.one(source, 42);
+        return this.one(source, 42); // should not error
     };
     return A;
 })();

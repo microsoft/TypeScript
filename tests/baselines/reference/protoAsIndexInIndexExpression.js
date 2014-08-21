@@ -22,6 +22,7 @@ class C {
 //// [protoAsIndexInIndexExpression_0.js]
 exports.x;
 //// [protoAsIndexInIndexExpression_1.js]
+///<reference path='protoAsIndexInIndexExpression_0.ts'/>
 var EntityPrototype = undefined;
 var WorkspacePrototype = {
     serialize: function () {

@@ -1,0 +1,55 @@
+=== tests/cases/compiler/inheritanceOfGenericConstructorMethod2.ts ===
+module M {
+>M : typeof M
+
+   export class C1 { }
+>C1 : C1
+
+   export class C2<T> { }
+>C2 : C2<T>
+>T : T
+}
+module N {
+>N : typeof N
+
+   export class D1 extends M.C1 { }
+>D1 : D1
+>M : M
+>C1 : C1
+
+   export class D2<T> extends M.C2<T> { }
+>D2 : D2<T>
+>T : T
+>M : M
+>C2 : C2<T>
+>T : T
+}
+
+var c = new M.C2<number>(); // no error
+>c : C2<number>
+>new M.C2<number>() : C2<number>
+>M.C2 : typeof C2
+>M : typeof M
+>C2 : typeof C2
+
+var n = new N.D1(); // no error
+>n : D1
+>new N.D1() : D1
+>N.D1 : typeof D1
+>N : typeof N
+>D1 : typeof D1
+
+var n2 = new N.D2<number>(); // error
+>n2 : D2<number>
+>new N.D2<number>() : D2<number>
+>N.D2 : typeof D2
+>N : typeof N
+>D2 : typeof D2
+
+var n3 = new N.D2(); // no error, D2<any>
+>n3 : D2<{}>
+>new N.D2() : D2<{}>
+>N.D2 : typeof D2
+>N : typeof N
+>D2 : typeof D2
+

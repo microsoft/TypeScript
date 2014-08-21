@@ -49,6 +49,7 @@ var b = {
 
 
 //// [duplicatePropertyNames.js]
+// duplicate property names are an error in all types
 var C = (function () {
     function C() {
         this.baz = function () {

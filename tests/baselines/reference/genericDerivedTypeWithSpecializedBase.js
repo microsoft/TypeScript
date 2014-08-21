@@ -33,4 +33,4 @@ var B = (function (_super) {
 })(A);
 var x;
 var y;
-x = y;
+x = y; // error

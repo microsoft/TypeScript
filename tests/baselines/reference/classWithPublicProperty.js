@@ -37,6 +37,7 @@ var C = (function () {
     C.g = function () { return ''; };
     return C;
 })();
+// all of these are valid
 var c = new C();
 var r1 = c.x;
 var r2 = c.a;

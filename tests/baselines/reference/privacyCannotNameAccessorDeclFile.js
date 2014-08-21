@@ -164,6 +164,7 @@ exports.createWidget1 = createWidget1;
 })(exports.SpecializedWidget || (exports.SpecializedWidget = {}));
 var SpecializedWidget = exports.SpecializedWidget;
 //// [privacyCannotNameAccessorDeclFile_exporter.js]
+///<reference path='privacyCannotNameAccessorDeclFile_GlobalWidgets.ts'/>
 var Widgets = require("privacyCannotNameAccessorDeclFile_Widgets");
 var Widgets1 = require("GlobalWidgets");
 function createExportedWidget1() {

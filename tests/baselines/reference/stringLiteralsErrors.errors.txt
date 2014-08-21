@@ -2,46 +2,46 @@
     // Srtings missing line terminator
     var es1 = "line 1
                      
-!!! Unterminated string constant.
+!!! Unterminated string literal.
     ";
       
-!!! Unterminated string constant.
+!!! Unterminated string literal.
     var es2 = 'line 1
                      
-!!! Unterminated string constant.
+!!! Unterminated string literal.
     ';
       
-!!! Unterminated string constant.
+!!! Unterminated string literal.
     
     // Space after backslash
     var es3 = 'line 1\ 
                        
-!!! Unterminated string constant.
+!!! Unterminated string literal.
     ';
       
-!!! Unterminated string constant.
+!!! Unterminated string literal.
     var es4 = 'line 1\ 
                        
-!!! Unterminated string constant.
+!!! Unterminated string literal.
     ';
       
-!!! Unterminated string constant.
+!!! Unterminated string literal.
     
     // Unterminated strings
     var es5 = "unterminated
                            
-!!! Unterminated string constant.
+!!! Unterminated string literal.
     var es6 = 'unterminated
                            
-!!! Unterminated string constant.
+!!! Unterminated string literal.
     
     // wrong terminator
     var es7 = "unterminated '
                              
-!!! Unterminated string constant.
+!!! Unterminated string literal.
     var es8 = 'unterminated "
                              
-!!! Unterminated string constant.
+!!! Unterminated string literal.
     
     // wrong unicode sequences
     var es9 = "\u00";

@@ -28,6 +28,7 @@ c = i;
 i = c;
 
 //// [classWithOnlyPublicMembersEquivalentToInterface2.js]
+// no errors expected
 var C = (function () {
     function C() {
     }

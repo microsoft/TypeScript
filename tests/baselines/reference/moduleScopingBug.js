@@ -34,16 +34,16 @@ var M;
 (function (M) {
     var outer;
     function f() {
-        var inner = outer;
+        var inner = outer; // Ok
     }
     var C = (function () {
         function C() {
-            var inner = outer;
+            var inner = outer; // Ok
         }
         return C;
     })();
     var X;
     (function (X) {
-        var inner = outer;
+        var inner = outer; // Error: outer not visible
     })(X || (X = {}));
 })(M || (M = {}));

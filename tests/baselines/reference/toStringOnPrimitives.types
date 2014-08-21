@@ -1,0 +1,20 @@
+=== tests/cases/compiler/toStringOnPrimitives.ts ===
+true.toString()
+>true.toString() : string
+>true.toString : () => string
+>toString : () => string
+
+var aBool = false;
+>aBool : boolean
+
+aBool.toString();
+>aBool.toString() : string
+>aBool.toString : () => string
+>aBool : boolean
+>toString : () => string
+
+1..toString();
+>1..toString() : string
+>1..toString : (radix?: number) => string
+>toString : (radix?: number) => string
+

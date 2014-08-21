@@ -43,6 +43,8 @@ a2 = t;
 
 
 //// [assignmentCompatWithObjectMembersNumericNames.js]
+// members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
+// numeric named properties work correctly, no errors expected
 var S = (function () {
     function S() {
     }

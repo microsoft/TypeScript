@@ -15,5 +15,5 @@ var Test;
     Test[Test["B"] = 1] = "B";
     Test[Test["C"] = Math.floor(Math.random() * 1000)] = "C";
     Test[Test["D"] = 10] = "D";
-    Test[Test["E"] = 11] = "E";
+    Test[Test["E"] = 11] = "E"; // Error but shouldn't be
 })(Test || (Test = {}));

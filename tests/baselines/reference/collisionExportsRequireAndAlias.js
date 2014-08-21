@@ -20,3 +20,4 @@
 //}
 
 //// [collisionExportsRequireAndAlias.js]
+// TODO: re-enable, fails when run in the browser with full compiler suite, but not when run alone

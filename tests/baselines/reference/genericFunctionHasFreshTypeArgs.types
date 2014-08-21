@@ -1,0 +1,21 @@
+=== tests/cases/compiler/genericFunctionHasFreshTypeArgs.ts ===
+function f(p: <T>(x: T) => void) { };
+>f : (p: <T>(x: T) => void) => void
+>p : <T>(x: T) => void
+>T : T
+>x : T
+>T : T
+
+f(x => f(y => x = y));
+>f(x => f(y => x = y)) : void
+>f : (p: <T>(x: T) => void) => void
+>x => f(y => x = y) : (x: any) => void
+>x : any
+>f(y => x = y) : void
+>f : (p: <T>(x: T) => void) => void
+>y => x = y : (y: any) => any
+>y : any
+>x = y : any
+>x : any
+>y : any
+

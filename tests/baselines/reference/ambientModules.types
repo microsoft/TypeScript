@@ -1,0 +1,14 @@
+=== tests/cases/compiler/ambientModules.ts ===
+declare module Foo.Bar { export var foo; };
+>Foo : typeof Foo
+>Bar : typeof Bar
+>foo : any
+
+Foo.Bar.foo = 5; 
+>Foo.Bar.foo = 5 : number
+>Foo.Bar.foo : any
+>Foo.Bar : typeof Bar
+>Foo : typeof Foo
+>Bar : typeof Bar
+>foo : any
+

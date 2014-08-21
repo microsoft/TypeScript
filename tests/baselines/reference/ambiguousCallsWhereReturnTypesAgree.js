@@ -35,7 +35,7 @@ var TestClass = (function () {
     TestClass.prototype.bar = function (x) {
     };
     TestClass.prototype.foo = function (x) {
-        this.bar(x);
+        this.bar(x); // should not error
     };
     return TestClass;
 })();
@@ -46,7 +46,7 @@ var TestClass2 = (function () {
         return 0;
     };
     TestClass2.prototype.foo = function (x) {
-        return this.bar(x);
+        return this.bar(x); // should not error
     };
     return TestClass2;
 })();

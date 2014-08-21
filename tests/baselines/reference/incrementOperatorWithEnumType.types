@@ -1,0 +1,30 @@
+=== tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumType.ts ===
+// ++ operator on enum type
+
+enum ENUM1 { 1, 2, "" };
+>ENUM1 : ENUM1
+
+// expression
+var ResultIsNumber1 = ++ENUM1[1];
+>ResultIsNumber1 : number
+>++ENUM1[1] : number
+>ENUM1[1] : ENUM1
+>ENUM1 : typeof ENUM1
+
+var ResultIsNumber2 = ENUM1[1]++;
+>ResultIsNumber2 : number
+>ENUM1[1]++ : number
+>ENUM1[1] : ENUM1
+>ENUM1 : typeof ENUM1
+
+// miss assignment operator
+++ENUM1[1];
+>++ENUM1[1] : number
+>ENUM1[1] : ENUM1
+>ENUM1 : typeof ENUM1
+
+ENUM1[1]++;
+>ENUM1[1]++ : number
+>ENUM1[1] : ENUM1
+>ENUM1 : typeof ENUM1
+

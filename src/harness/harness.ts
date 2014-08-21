@@ -571,10 +571,6 @@ module Harness {
                 this.lastErrors = [];
             }
 
-            public emitAllDeclarations() {
-                // NEWTODO: Do something here?
-            }
-
             public reportCompilationErrors() {
                 return this.lastErrors;
             }
@@ -604,12 +600,18 @@ module Harness {
                     result.files.forEach(file => {
                         ioHost.writeFile(file.fileName, file.code, false);
                     });
+                    result.declFilesCode.forEach(file => {
+                        ioHost.writeFile(file.fileName, file.code, false);
+                    });
+                    result.sourceMaps.forEach(file => {
+                        ioHost.writeFile(file.fileName, file.code, false);
+                    });
                 }, () => { }, this.compileOptions);
             }
 
             public compileFiles(inputFiles: { unitName: string; content: string }[],
                 otherFiles: { unitName: string; content?: string }[],
-                onComplete: (result: CompilerResult) => void,
+                onComplete: (result: CompilerResult, checker: ts.TypeChecker) => void,
                 settingsCallback?: (settings: ts.CompilerOptions) => void,
                 options?: ts.CompilerOptions) {
 
@@ -695,6 +697,10 @@ module Harness {
                             sys.newLine = setting.value;
                             break;
 
+                        case 'comments':
+                            options.removeComments = setting.value === 'false';
+                            break;
+
                         case 'mapsourcefiles':
                         case 'maproot':
                         case 'generatedeclarationfiles':
@@ -702,7 +708,6 @@ module Harness {
                         case 'gatherDiagnostics':
                         case 'codepage':
                         case 'createFileLog':
-                        case 'comments':
                         case 'filename':
                         case 'propagateenumconstants':
                         case 'removecomments':
@@ -755,7 +760,7 @@ module Harness {
                 var result = new CompilerResult(fileOutputs, errors, []);
                 // Covert the source Map data into the baseline
                 result.updateSourceMapRecord(program, emitResult ? emitResult.sourceMaps : undefined);
-                onComplete(result);
+                onComplete(result, checker);
 
                 // reset what newline means in case the last test changed it
                 sys.newLine = '\r\n';
@@ -764,7 +769,8 @@ module Harness {
         }
 
         export function getMinimalDiagnostic(err: ts.Diagnostic): MinimalDiagnostic {
-            return { filename: err.file && err.file.filename, start: err.start, end: err.start + err.length, line: 0, character: 0, message: err.messageText };
+            var errorLineInfo = err.file ? err.file.getLineAndCharacterFromPosition(err.start) : { line: 0, character: 0 };
+            return { filename: err.file && err.file.filename, start: err.start, end: err.start + err.length, line: errorLineInfo.line, character: errorLineInfo.character, message: err.messageText };
         }
 
         export function getErrorBaseline(inputFiles: { unitName: string; content: string }[],

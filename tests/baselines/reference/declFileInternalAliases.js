@@ -25,12 +25,12 @@ var m;
 var m1;
 (function (m1) {
     var x = m.c;
-    m1.d = new x();
+    m1.d = new x(); // emit the type as m.c
 })(m1 || (m1 = {}));
 var m2;
 (function (m2) {
     m2.x = m.c;
-    m2.d = new m2.x();
+    m2.d = new m2.x(); // emit the type as x
 })(m2 || (m2 = {}));
 
 

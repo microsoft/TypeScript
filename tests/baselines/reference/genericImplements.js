@@ -33,6 +33,7 @@ var B = (function () {
     return B;
 })();
 ;
+// OK
 var X = (function () {
     function X() {
     }
@@ -40,7 +41,8 @@ var X = (function () {
         return undefined;
     };
     return X;
-})();
+})(); // { f: () => { b; } }
+// OK
 var Y = (function () {
     function Y() {
     }
@@ -48,7 +50,8 @@ var Y = (function () {
         return undefined;
     };
     return Y;
-})();
+})(); // { f: () => { a; } }
+// OK
 var Z = (function () {
     function Z() {
     }
@@ -56,4 +59,4 @@ var Z = (function () {
         return undefined;
     };
     return Z;
-})();
+})(); // { f: <T>() => T } 

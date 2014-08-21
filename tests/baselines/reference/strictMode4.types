@@ -1,0 +1,7 @@
+=== tests/cases/compiler/strictMode4.ts ===
+"use strict";
+
+class A {
+>A : A
+}
+

@@ -49,6 +49,8 @@ module D {
 //// [nameCollision.js]
 var A;
 (function (__A) {
+    // these 2 statements force an underscore before the 'A' 
+    // in the generated function call.
     var A = 12;
     var _A = '';
 })(A || (A = {}));
@@ -58,6 +60,8 @@ var B;
 })(B || (B = {}));
 var B;
 (function (_B) {
+    // re-opened module with colliding name
+    // this should add an underscore.
     var B = (function () {
         function B() {
         }
@@ -89,6 +93,8 @@ var Y;
     })(_Y.Y || (_Y.Y = {}));
     var Y = _Y.Y;
 })(Y || (Y = {}));
+// no collision, since interface doesn't
+// generate code.
 var D;
 (function (D) {
     D.E = 'hello';

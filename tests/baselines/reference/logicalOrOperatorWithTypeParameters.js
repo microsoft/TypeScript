@@ -32,6 +32,7 @@ function fn1(t, u) {
 }
 function fn2(t, u, v) {
     var r1 = t || u;
+    //var r2: T = t || u;
     var r3 = u || u;
     var r4 = u || u;
     var r5 = u || v;

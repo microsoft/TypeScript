@@ -1,3 +1,4 @@
+// only used privately no need to emit
 var private_m4 = require("private_m4");
 (function (usePrivate_m4_m1) {
     var x3 = private_m4.x;

@@ -61,6 +61,7 @@ var A;
         return Point;
     })();
 })(A || (A = {}));
+// ensure merges as expected
 var p;
 var p;
 var X;
@@ -92,5 +93,6 @@ var X;
     })(X.Y || (X.Y = {}));
     var Y = X.Y;
 })(X || (X = {}));
+// ensure merges as expected
 var l;
 var l;

@@ -18,6 +18,6 @@ var A;
     function a() {
         A.b();
     }
-    A.a = a;
+    A.a = a; // A.b should be an unresolved symbol error
 })(A || (A = {}));
 A.a();

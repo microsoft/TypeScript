@@ -1,0 +1,79 @@
+=== tests/cases/compiler/asiArith.ts ===
+var x = 1;
+>x : number
+
+var y = 1;
+>y : number
+
+var z =
+>z : number
+
+x
+>x
+
++
+
++
+
++
+
+y : number
+>x : number
+
++
+
++
+>+
+
++
+
+y : number
+
++
+>+
+
+y : number
+
+y
+>y : number
+
+
+var a = 1;
+>a : number
+
+var b = 1;
+>b : number
+
+var c =
+>c : number
+
+x
+>x
+
+-
+
+-
+
+-
+
+y : number
+>x : number
+
+-
+
+-
+>-
+
+-
+
+y : number
+
+-
+>-
+
+y : number
+
+y
+>y : number
+
+

@@ -1,0 +1,32 @@
+=== tests/cases/compiler/declInput3.ts ===
+interface bar2 {
+>bar2 : bar2
+
+}
+
+class bar {
+>bar : bar
+
+  public f() { return ''; }
+>f : () => string
+
+  public g() { return {a: <bar>null, b: undefined, c: void 4 }; }
+>g : () => { a: bar; b: any; c: any; }
+>{a: <bar>null, b: undefined, c: void 4 } : { a: bar; b: undefined; c: undefined; }
+>a : bar
+><bar>null : bar
+>bar : bar
+>b : any
+>undefined : undefined
+>c : any
+>void 4 : undefined
+
+  public h(x = 4, y = null, z = '') { x++; }
+>h : (x?: number, y?: any, z?: string) => void
+>x : number
+>y : any
+>z : string
+>x++ : number
+>x : number
+}
+

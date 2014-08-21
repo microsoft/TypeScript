@@ -11,4 +11,4 @@ var C = (function () {
     }
     return C;
 })();
-C.prototype.x.boo;
+C.prototype.x.boo; // No error, prototype is instantiated to any

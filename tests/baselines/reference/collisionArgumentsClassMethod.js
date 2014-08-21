@@ -57,34 +57,34 @@ var c1 = (function () {
         for (var _i = 1; _i < arguments.length; _i++) {
             arguments[_i - 1] = arguments[_i];
         }
-        var arguments;
+        var arguments; // no error
     };
     c1.prototype.foo1 = function (arguments) {
         var rest = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             rest[_i - 1] = arguments[_i];
         }
-        var arguments = 10;
+        var arguments = 10; // no error
     };
     c1.prototype.fooNoError = function (arguments) {
-        var arguments = 10;
+        var arguments = 10; // no error
     };
     c1.prototype.f4 = function (i) {
         var arguments = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             arguments[_i - 1] = arguments[_i];
         }
-        var arguments;
+        var arguments; // no error
     };
     c1.prototype.f41 = function (arguments) {
         var rest = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             rest[_i - 1] = arguments[_i];
         }
-        var arguments;
+        var arguments; // no error
     };
     c1.prototype.f4NoError = function (arguments) {
-        var arguments;
+        var arguments; // no error
     };
     return c1;
 })();
@@ -96,10 +96,10 @@ var c3 = (function () {
         for (var _i = 0; _i < arguments.length; _i++) {
             restParameters[_i - 0] = arguments[_i];
         }
-        var arguments = 10;
+        var arguments = 10; // no error
     };
     c3.prototype.fooNoError = function () {
-        var arguments = 10;
+        var arguments = 10; // no error
     };
     return c3;
 })();

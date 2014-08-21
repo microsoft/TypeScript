@@ -15,11 +15,11 @@ var __extends = this.__extends || function (d, b) {
 function Foo() {
     this.x = 1;
 }
-var x = new Foo();
+var x = new Foo(); // legal, considered a constructor function
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
         _super.apply(this, arguments);
     }
     return C;
-})(Foo);
+})(Foo); // error, could not find symbol Foo

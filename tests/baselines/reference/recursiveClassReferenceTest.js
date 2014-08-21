@@ -103,6 +103,8 @@ module Sample.Thing.Languages.PlainText {
 
 
 //// [recursiveClassReferenceTest.js]
+// Scenario 1: Test reqursive function call with "this" parameter
+// Scenario 2: Test recursive function call with cast and "this" parameter
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -141,6 +143,7 @@ var Sample;
                 function FindWidget(codeThing) {
                     this.codeThing = codeThing;
                     this.domNode = null;
+                    // scenario 1
                     codeThing.addWidget("addWidget", this);
                 }
                 FindWidget.prototype.gar = function (runner) {
@@ -195,6 +198,7 @@ var Sample;
                     function Mode() {
                         _super.apply(this, arguments);
                     }
+                    // scenario 2
                     Mode.prototype.getInitialState = function () {
                         return new State(self);
                     };

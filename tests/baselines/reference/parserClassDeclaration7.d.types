@@ -1,0 +1,4 @@
+=== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration7.d.ts ===
+declare class C {
+>C : C
+}

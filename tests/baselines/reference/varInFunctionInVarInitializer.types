@@ -1,0 +1,18 @@
+=== tests/cases/compiler/varInFunctionInVarInitializer.ts ===
+var a = function () {
+>a : () => number
+>function () {
+    var c = 1;
+    return c;
+} : () => number
+
+    var c = 1;
+>c : number
+
+    return c;
+>c : number
+
+},
+    b = 1;
+>b : number
+

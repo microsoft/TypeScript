@@ -1,0 +1,30 @@
+=== tests/cases/compiler/implicitAnyInCatch.ts ===
+// this should not be an error
+try { } catch (error) {
+>error : any
+
+    if (error.number === -2147024809) { }
+>error.number === -2147024809 : boolean
+>error.number : any
+>error : any
+>number : any
+>-2147024809 : number
+}
+for (var key in this) { }
+>key : any
+>this : any
+
+class C {
+>C : C
+
+    public temp() {
+>temp : () => void
+
+        for (var x in this) {
+>x : any
+>this : C
+        }
+    }
+}
+
+

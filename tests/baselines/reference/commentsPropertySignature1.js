@@ -7,5 +7,6 @@ var a = {
 
 //// [commentsPropertySignature1.js]
 var a = {
+    /** own x*/
     x: 0
 };

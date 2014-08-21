@@ -8,6 +8,7 @@ class C {
 }
 
 //// [staticGetter2.js]
+// once caused stack overflow
 var C = (function () {
     function C() {
     }

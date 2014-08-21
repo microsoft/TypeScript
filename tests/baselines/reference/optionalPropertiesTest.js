@@ -43,11 +43,11 @@ test10_1 = test10_2;
 //// [optionalPropertiesTest.js]
 var x;
 var foo;
-foo = { id: 1234 };
-foo = { id: 1234, name: "test" };
-foo = { name: "test" };
+foo = { id: 1234 }; // Ok
+foo = { id: 1234, name: "test" }; // Ok
+foo = { name: "test" }; // Error, id missing
 foo = { id: 1234, print: function () {
-} };
+} }; // Ok
 var s = foo.name || "default";
 if (foo.print !== undefined)
     foo.print();

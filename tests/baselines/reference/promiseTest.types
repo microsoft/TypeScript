@@ -1,0 +1,61 @@
+=== tests/cases/compiler/promiseTest.ts ===
+
+interface Promise<T> {
+>Promise : Promise<T>
+>T : T
+
+    then<A>(success?: (value: T) => Promise<A>): Promise<A>;
+>then : { <A>(success?: (value: T) => Promise<A>): Promise<A>; <B>(success?: (value: T) => B): Promise<B>; }
+>A : A
+>success : (value: T) => Promise<A>
+>value : T
+>T : T
+>Promise : Promise<T>
+>A : A
+>Promise : Promise<T>
+>A : A
+
+    then<B>(success?: (value: T) => B): Promise<B>;
+>then : { <A>(success?: (value: T) => Promise<A>): Promise<A>; <B>(success?: (value: T) => B): Promise<B>; }
+>B : B
+>success : (value: T) => B
+>value : T
+>T : T
+>B : B
+>Promise : Promise<T>
+>B : B
+
+    data: T;
+>data : T
+>T : T
+}
+
+var p: Promise<number> = null;
+>p : Promise<number>
+>Promise : Promise<T>
+
+var p2 = p.then(function (x) {
+>p2 : Promise<number>
+>p.then(function (x) {
+    return p;
+} ) : Promise<number>
+>p.then : { <A>(success?: (value: number) => Promise<A>): Promise<A>; <B>(success?: (value: number) => B): Promise<B>; }
+>p : Promise<number>
+>then : { <A>(success?: (value: number) => Promise<A>): Promise<A>; <B>(success?: (value: number) => B): Promise<B>; }
+>function (x) {
+    return p;
+} : (x: number) => Promise<number>
+>x : number
+
+    return p;
+>p : Promise<number>
+
+} );
+
+var x = p2.data; // number
+>x : number
+>p2.data : number
+>p2 : Promise<number>
+>data : number
+
+

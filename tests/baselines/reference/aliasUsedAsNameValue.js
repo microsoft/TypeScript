@@ -26,8 +26,11 @@ function b(a) {
 }
 exports.b = b;
 //// [aliasUsedAsNameValue_2.js]
+///<reference path='aliasUsedAsNameValue_0.ts' />
+///<reference path='aliasUsedAsNameValue_1.ts' />
 var mod = require("aliasUsedAsNameValue_0");
 var b = require("aliasUsedAsNameValue_1");
 exports.a = function () {
+    //var x = mod.id; // TODO needed hack that mod is loaded
     b.b(mod);
 };

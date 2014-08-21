@@ -1,0 +1,26 @@
+=== tests/cases/compiler/prototypeOnConstructorFunctions.ts ===
+interface I1 {
+>I1 : I1
+
+    const: new (options?, element?) => any;
+>const : new (options?: any, element?: any) => any
+>options : any
+>element : any
+}
+
+
+var i: I1;
+>i : I1
+>I1 : I1
+
+
+i.const.prototype.prop = "yo";
+>i.const.prototype.prop = "yo" : string
+>i.const.prototype.prop : any
+>i.const.prototype : any
+>i.const : new (options?: any, element?: any) => any
+>i : I1
+>const : new (options?: any, element?: any) => any
+>prototype : any
+>prop : any
+

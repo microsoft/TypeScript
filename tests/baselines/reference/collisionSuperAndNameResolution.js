@@ -19,7 +19,7 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 var console;
-var _super = 10;
+var _super = 10; // No error
 var base = (function () {
     function base() {
     }
@@ -31,7 +31,7 @@ var Foo = (function (_super) {
         _super.apply(this, arguments);
     }
     Foo.prototype.x = function () {
-        console.log(_super);
+        console.log(_super); // Error as this doesnt not resolve to user defined _super
     };
     return Foo;
 })(base);

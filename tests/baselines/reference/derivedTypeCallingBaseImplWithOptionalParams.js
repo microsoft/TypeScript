@@ -22,6 +22,6 @@ var MyClass = (function () {
     return MyClass;
 })();
 var x = new MyClass();
-x.myMethod();
+x.myMethod(); // should be valid, but MyClass has no implementation to handle it.
 var y = new MyClass();
-y.myMethod();
+y.myMethod(); // error

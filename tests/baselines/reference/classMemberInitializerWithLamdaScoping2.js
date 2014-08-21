@@ -24,7 +24,7 @@ var Test1 = (function () {
     function Test1(field1) {
         this.field1 = field1;
         this.messageHandler = function () {
-            console.log(field1);
+            console.log(field1); // But this should be error as the field1 will resolve to var field1 
         };
     }
     return Test1;

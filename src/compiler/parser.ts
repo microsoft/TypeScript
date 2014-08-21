@@ -139,6 +139,32 @@ module ts {
         return (<Identifier>(<ExpressionStatement>node).expression).text === "use strict";
     }
 
+    export function getLeadingCommentsOfNode(node: Node, sourceFileOfNode: SourceFile) {
+        // If parameter/type parameter, the prev token trailing comments are part of this node too
+        if (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) {
+            // eg     (/** blah */ a, /** blah */ b);
+            return concatenate(getTrailingComments(sourceFileOfNode.text, node.pos),
+                // eg:     (
+                //          /** blah */ a,
+                //          /** blah */ b);
+                getLeadingComments(sourceFileOfNode.text, node.pos));
+        }
+        else {
+            return getLeadingComments(sourceFileOfNode.text, node.pos);
+        }
+    }
+
+    export function getJsDocComments(node: Declaration, sourceFileOfNode: SourceFile) {
+        return filter(getLeadingCommentsOfNode(node, sourceFileOfNode), comment => isJsDocComment(comment));
+
+        function isJsDocComment(comment: Comment) {
+            // js doc is if comment is starting with /** but not if it is /**/
+            return sourceFileOfNode.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
+                sourceFileOfNode.text.charCodeAt(comment.pos + 2) === CharacterCodes.asterisk &&
+                sourceFileOfNode.text.charCodeAt(comment.pos + 3) !== CharacterCodes.slash;
+        }
+    }
+
     // Invokes a callback for each child of the given node. The 'cbNode' callback is invoked for all child nodes
     // stored in properties. If a 'cbNodes' callback is specified, it is invoked for embedded arrays; otherwise,
     // embedded arrays are flattened and the 'cbNode' callback is invoked for each element. If a callback returns
@@ -644,6 +670,13 @@ module ts {
                 lineStarts = getLineStarts(sourceText);
             }
             return getLineAndCharacterOfPosition(lineStarts, position);
+        }
+
+        function getPositionFromSourceLineAndCharacter(line: number, character: number): number {
+            if (!lineStarts) {
+                lineStarts = getLineStarts(sourceText);
+            }
+            return getPositionFromLineAndCharacter(lineStarts, line, character);
         }
 
         function error(message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
@@ -2024,7 +2057,7 @@ module ts {
                 primaryExpression.kind === SyntaxKind.SuperKeyword && token !== SyntaxKind.OpenParenToken && token !== SyntaxKind.DotToken;
 
             if (illegalUsageOfSuperKeyword) {
-                error(Diagnostics.super_must_be_followed_by_argument_list_or_member_access);
+                error(Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
             }
 
             var expr = parseCallAndAccess(primaryExpression, /* inNewExpression */ false);
@@ -2077,13 +2110,12 @@ module ts {
                     var indexedAccess = <IndexedAccess>createNode(SyntaxKind.IndexedAccess, expr.pos);
                     indexedAccess.object = expr;
 
-                    // It's not uncommon for a user to write: "new Type[]".  Check for that common pattern
-                    // and report a better error message.
+                    // It's not uncommon for a user to write: "new Type[]".
+                    // Check for that common pattern and report a better error message.
                     if (inNewExpression && parseOptional(SyntaxKind.CloseBracketToken)) {
                         indexedAccess.index = createMissingNode();
                         grammarErrorAtPos(bracketStart, scanner.getStartPos() - bracketStart, Diagnostics.new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead);
                     }
-                    // Otherwise parse the indexed access normally.
                     else {
                         indexedAccess.index = parseExpression();
                         parseExpected(SyntaxKind.CloseBracketToken);
@@ -3581,7 +3613,7 @@ module ts {
                         if (!matchResult) {
                             var start = range.pos;
                             var length = range.end - start;
-                            errorAtPos(start, length, Diagnostics.Invalid_reference_comment);
+                            errorAtPos(start, length, Diagnostics.Invalid_reference_directive_syntax);
                         }
                         else {
                             referencedFiles.push({
@@ -3626,6 +3658,7 @@ module ts {
         file.filename = normalizePath(filename);
         file.text = sourceText;
         file.getLineAndCharacterFromPosition = getLineAndCharacterlFromSourcePosition;
+        file.getPositionFromLineAndCharacter = getPositionFromSourceLineAndCharacter;
         file.syntacticErrors = [];
         file.semanticErrors = [];
         var referenceComments = processReferenceComments(); 

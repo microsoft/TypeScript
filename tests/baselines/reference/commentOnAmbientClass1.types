@@ -1,0 +1,10 @@
+=== tests/cases/compiler/commentOnAmbientClass1.ts ===
+/*! Keep this pinned comment */
+declare class C {
+>C : C
+}
+
+// Don't keep this comment.
+declare class D {
+>D : D
+}

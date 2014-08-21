@@ -28,6 +28,7 @@ var b: {
 var r4: void = b.valueOf();
 
 //// [objectTypeHidingMembersOfObject.js]
+// all of these valueOf calls should return the type shown in the overriding signatures here
 var C = (function () {
     function C() {
     }

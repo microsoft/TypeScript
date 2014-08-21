@@ -38,8 +38,10 @@ var x5: void = b('A0');
 
 //// [inheritedOverloadedSpecializedSignatures.js]
 var b;
+// Should not error
 b('foo').charAt(0);
 var b;
+// non of these lines should error
 var x1 = b('B2');
 var x2 = b('B1');
 var x3 = b('A2');

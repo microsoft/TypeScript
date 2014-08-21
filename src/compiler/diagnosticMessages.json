@@ -1,26 +1,5 @@
 {
-    "Unknown compiler option '{0}'.": {
-        "category": "Error",
-        "code": 6001
-    },
-    "File '{0}' not found.": {
-        "category": "Error",
-        "code": 6002
-    },
-    "File '{0}' must have extension '.ts' or '.d.ts'.": {
-        "category": "Error",
-        "code": 6003
-    },
-	
-    "Unrecognized escape sequence.": {
-        "category": "Error",
-        "code": 1000
-    },
-    "Unexpected character {0}.": {
-        "category": "Error",
-        "code": 1001
-    },
-    "Missing close quote character.": {
+    "Unterminated string literal.": {
         "category": "Error",
         "code": 1002
     },
@@ -28,21 +7,9 @@
         "category": "Error",
         "code": 1003
     },
-    "'{0}' keyword expected.": {
-        "category": "Error",
-        "code": 1004
-    },
     "'{0}' expected.": {
         "category": "Error",
         "code": 1005
-    },
-    "Identifier expected; '{0}' is a keyword.": {
-        "category": "Error",
-        "code": 1006
-    },
-    "Automatic semicolon insertion not allowed.": {
-        "category": "Error",
-        "code": 1007
     },
     "Trailing comma not allowed.": {
         "category": "Error",
@@ -51,10 +18,6 @@
     "'*/' expected.": {
         "category": "Error",
         "code": 1010
-    },
-    "'public' or 'private' modifier must precede 'static'.": {
-        "category": "Error",
-        "code": 1011
     },
     "Unexpected token.": {
         "category": "Error",
@@ -104,19 +67,19 @@
         "category": "Error",
         "code": 1023
     },
-    "'extends' clause already seen.": {
+    "A class or interface declaration can only have one 'extends' clause.": {
         "category": "Error",
         "code": 1024
     },
-    "'extends' clause must precede 'implements' clause.": {
+    "An 'extends' clause must precede an 'implements' clause.": {
         "category": "Error",
         "code": 1025
     },
-    "Classes can only extend a single class.": {
+    "A class can only extend a single class.": {
         "category": "Error",
         "code": 1026
     },
-    "'implements' clause already seen.": {
+    "A class declaration can only have one 'implements' clause.": {
         "category": "Error",
         "code": 1027
     },
@@ -136,11 +99,11 @@
         "category": "Error",
         "code": 1031
     },
-    "Interface declaration cannot have 'implements' clause.": {
+    "An interface declaration cannot have an 'implements' clause.": {
         "category": "Error",
         "code": 1032
     },
-    "'super' invocation cannot have type arguments.": {
+    "'super' must be followed by an argument list or member access.": {
         "category": "Error",
         "code": 1034
     },
@@ -204,10 +167,6 @@
         "category": "Error",
         "code": 1054
     },
-    "Modifiers cannot appear here.": {
-        "category": "Error",
-        "code": 1055
-    },
     "Accessors are only available when targeting ECMAScript 5 and higher.": {
         "category": "Error",
         "code": 1056
@@ -224,53 +183,9 @@
         "category": "Error",
         "code": 1066
     },
-    "module, class, interface, enum, import or statement": {
-        "category": "NoPrefix",
-        "code": 1067
-    },
     "Unexpected token. A constructor, method, accessor, or property was expected." : {
         "category": "Error",
         "code": 1068
-    },
-    "statement": {
-        "category": "NoPrefix",
-        "code": 1069
-    },
-    "case or default clause": {
-        "category": "NoPrefix",
-        "code": 1070
-    },
-    "identifier": {
-        "category": "NoPrefix",
-        "code": 1071
-    },
-    "call, construct, index, property or function signature": {
-        "category": "NoPrefix",
-        "code": 1072
-    },
-    "expression": {
-        "category": "NoPrefix",
-        "code": 1073
-    },
-    "type name": {
-        "category": "NoPrefix",
-        "code": 1074
-    },
-    "property or accessor": {
-        "category": "NoPrefix",
-        "code": 1075
-    },
-    "parameter": {
-        "category": "NoPrefix",
-        "code": 1076
-    },
-    "type": {
-        "category": "NoPrefix",
-        "code": 1077
-    },
-    "type parameter": {
-        "category": "NoPrefix",
-        "code": 1078
     },
     "A 'declare' modifier cannot be used with an import declaration.": {
         "category": "Error",
@@ -344,10 +259,6 @@
         "category": "Error",
         "code": 1102
     },
-    "Invalid left-hand side in 'for...in' statement.": {
-        "category": "Error",
-        "code": 1103
-    },
     "A 'continue' statement can only be used within an enclosing iteration statement.": {
         "category": "Error",
         "code": 1104
@@ -416,740 +327,1002 @@
         "category": "Error",
         "code": 1121
     },
-    "Duplicate identifier '{0}'.": {
+    "Variable declaration list cannot be empty.": {
         "category": "Error",
-        "code": 2000
+        "code": 1123
     },
-    "Extends clause of exported class '{0}' has or is using private name '{1}'.": {
+    "Digit expected.": {
         "category": "Error",
-        "code": 2018
+        "code": 1124
     },
-    "Implements clause of exported class '{0}' has or is using private name '{1}'.": {
+    "Hexadecimal digit expected.": {
         "category": "Error",
-        "code": 2019
+        "code": 1125
     },
-    "Extends clause of exported interface '{0}' has or is using private name '{1}'.": {
+    "Unexpected end of text.": {
         "category": "Error",
-        "code": 2020
+        "code": 1126
     },
-    "Extends clause of exported class '{0}' has or is using name '{1}' from private module '{2}'.": {
+    "Invalid character.": {
         "category": "Error",
-        "code": 2021
+        "code": 1127
     },
-    "Implements clause of exported class '{0}' has or is using name '{1}' from private module '{2}'.": {
+    "Declaration or statement expected.": {
         "category": "Error",
-        "code": 2022
+        "code": 1128
     },
-    "Extends clause of exported interface '{0}' has or is using name '{1}' from private module '{2}'.": {
+    "Statement expected.": {
         "category": "Error",
-        "code": 2023
+        "code": 1129
     },
-    "Public static property '{0}' of exported class has or is using private name '{1}'.": {
+    "'case' or 'default' expected.": {
         "category": "Error",
-        "code": 2024
+        "code": 1130
     },
-    "Public property '{0}' of exported class has or is using private name '{1}'.": {
+    "Property or signature expected.": {
         "category": "Error",
-        "code": 2025
+        "code": 1131
     },
-    "Property '{0}' of exported interface has or is using private name '{1}'.": {
+    "Enum member expected.": {
         "category": "Error",
-        "code": 2026
+        "code": 1132
     },
-    "Exported variable '{0}' has or is using private name '{1}'.": {
+    "Type reference expected.": {
         "category": "Error",
-        "code": 2027
+        "code": 1133
     },
-    "Public static property '{0}' of exported class has or is using name '{1}' from private module '{2}'.": {
+    "Variable declaration expected.": {
         "category": "Error",
-        "code": 2028
+        "code": 1134
     },
-    "Public property '{0}' of exported class has or is using name '{1}' from private module '{2}'.": {
+    "Argument expression expected.": {
         "category": "Error",
-        "code": 2029
+        "code": 1135
     },
-    "Property '{0}' of exported interface has or is using name '{1}' from private module '{2}'.": {
+    "Property assignment expected.": {
         "category": "Error",
-        "code": 2030
+        "code": 1136
     },
-    "Exported variable '{0}' has or is using name '{1}' from private module '{2}'.": {
+    "Expression or comma expected.": {
         "category": "Error",
-        "code": 2031
+        "code": 1137
     },
-    "Parameter '{0}' of constructor from exported class has or is using private name '{1}'.": {
+    "Parameter declaration expected.": {
         "category": "Error",
-        "code": 2032
+        "code": 1138
     },
-    "Parameter '{0}' of public static property setter from exported class has or is using private name '{1}'.": {
+    "Type parameter declaration expected.": {
         "category": "Error",
-        "code": 2033
+        "code": 1139
     },
-    "Parameter '{0}' of public property setter from exported class has or is using private name '{1}'.": {
+    "Type argument expected.": {
         "category": "Error",
-        "code": 2034
+        "code": 1140
     },
-    "Parameter '{0}' of constructor signature from exported interface has or is using private name '{1}'.": {
+    "String literal expected.": {
         "category": "Error",
-        "code": 2035
+        "code": 1141
     },
-    "Parameter '{0}' of call signature from exported interface has or is using private name '{1}'.": {
+    "Line break not permitted here.": {
         "category": "Error",
-        "code": 2036
+        "code": 1142
     },
-    "Parameter '{0}' of public static method from exported class has or is using private name '{1}'.": {
+    "'catch' or 'finally' expected.": {
         "category": "Error",
-        "code": 2037
+        "code": 1143
     },
-    "Parameter '{0}' of public method from exported class has or is using private name '{1}'.": {
+    "Block or ';' expected.": {
         "category": "Error",
-        "code": 2038
+        "code": 1144
     },
-    "Parameter '{0}' of method from exported interface has or is using private name '{1}'.": {
+    "Modifiers not permitted on index signature members.": {
         "category": "Error",
-        "code": 2039
+        "code": 1145
     },
-    "Parameter '{0}' of exported function has or is using private name '{1}'.": {
+    "Declaration expected.": {
         "category": "Error",
-        "code": 2040
+        "code": 1146
     },
-    "Parameter '{0}' of constructor from exported class has or is using name '{1}' from private module '{2}'.": {
+    "Import declarations in an internal module cannot reference an external module.": {
         "category": "Error",
-        "code": 2041
+        "code": 1147
     },
-    "Parameter '{0}' of public static property setter from exported class has or is using name '{1}' from private module '{2}'.": {
+    "Cannot compile external modules unless the '--module' flag is provided.": {
         "category": "Error",
-        "code": 2042
+        "code": 1148
     },
-    "Parameter '{0}' of public property setter from exported class has or is using name '{1}' from private module '{2}'.": {
+    "Filename '{0}' differs from already included filename '{1}' only in casing": {
         "category": "Error",
-        "code": 2043
-    },
-    "Parameter '{0}' of constructor signature from exported interface has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 2044
-    },
-    "Parameter '{0}' of call signature from exported interface has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 2045
-    },
-    "Parameter '{0}' of public static method from exported class has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 2046
-    },
-    "Parameter '{0}' of public method from exported class has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 2047
-    },
-    "Parameter '{0}' of method from exported interface has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 2048
-    },
-    "Parameter '{0}' of exported function has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 2049
-    },
-    "Return type of public static property getter from exported class has or is using private name '{0}'.": {
-        "category": "Error",
-        "code": 2050
-    },
-    "Return type of public property getter from exported class has or is using private name '{0}'.": {
-        "category": "Error",
-        "code": 2051
-    },
-    "Return type of constructor signature from exported interface has or is using private name '{0}'.": {
-        "category": "Error",
-        "code": 2052
-    },
-    "Return type of call signature from exported interface has or is using private name '{0}'.": {
-        "category": "Error",
-        "code": 2053
-    },
-    "Return type of index signature from exported interface has or is using private name '{0}'.": {
-        "category": "Error",
-        "code": 2054
-    },
-    "Return type of public static method from exported class has or is using private name '{0}'.": {
-        "category": "Error",
-        "code": 2055
-    },
-    "Return type of public method from exported class has or is using private name '{0}'.": {
-        "category": "Error",
-        "code": 2056
-    },
-    "Return type of method from exported interface has or is using private name '{0}'.": {
-        "category": "Error",
-        "code": 2057
-    },
-    "Return type of exported function has or is using private name '{0}'.": {
-        "category": "Error",
-        "code": 2058
-    },
-    "Return type of public static property getter from exported class has or is using name '{0}' from private module '{1}'.": {
-        "category": "Error",
-        "code": 2059
-    },
-    "Return type of public property getter from exported class has or is using name '{0}' from private module '{1}'.": {
-        "category": "Error",
-        "code": 2060
-    },
-    "Return type of constructor signature from exported interface has or is using name '{0}' from private module '{1}'.": {
-        "category": "Error",
-        "code": 2061
-    },
-    "Return type of call signature from exported interface has or is using name '{0}' from private module '{1}'.": {
-        "category": "Error",
-        "code": 2062
-    },
-    "Return type of index signature from exported interface has or is using name '{0}' from private module '{1}'.": {
-        "category": "Error",
-        "code": 2063
-    },
-    "Return type of public static method from exported class has or is using name '{0}' from private module '{1}'.": {
-        "category": "Error",
-        "code": 2064
-    },
-    "Return type of public method from exported class has or is using name '{0}' from private module '{1}'.": {
-        "category": "Error",
-        "code": 2065
-    },
-    "Return type of method from exported interface has or is using name '{0}' from private module '{1}'.": {
-        "category": "Error",
-        "code": 2066
-    },
-    "Return type of exported function has or is using name '{0}' from private module '{1}'.": {
-        "category": "Error",
-        "code": 2067
-    },
-    "Import declaration '{0}' is using private name '{1}'.": {
-        "category": "Error",
-        "code": 2181
-    },
-   "Type parameter '{0}' of constructor signature from exported interface has or is using private name '{1}'.": {
-        "category": "Error",
-        "code": 2208
-    },
-    "Type parameter '{0}' of call signature from exported interface has or is using private name '{1}'.": {
-        "category": "Error",
-        "code": 2209
-    },
-    "Type parameter '{0}' of public static method from exported class has or is using private name '{1}'.": {
-        "category": "Error",
-        "code": 2210
-    },
-    "Type parameter '{0}' of public method from exported class has or is using private name '{1}'.": {
-        "category": "Error",
-        "code": 2211
-    },
-    "Type parameter '{0}' of method from exported interface has or is using private name '{1}'.": {
-        "category": "Error",
-        "code": 2212
-    },
-    "Type parameter '{0}' of exported function has or is using private name '{1}'.": {
-        "category": "Error",
-        "code": 2213
-    },
-    "Type parameter '{0}' of constructor signature from exported interface has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 2214
-    },
-    "Type parameter '{0}' of call signature from exported interface has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 2215
-    },
-    "Type parameter '{0}' of public static method from exported class has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 2216
-    },
-    "Type parameter '{0}' of public method from exported class has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 2217
-    },
-    "Type parameter '{0}' of method from exported interface has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 2218
-    },
-    "Type parameter '{0}' of exported function has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 2219
-    },
-    "Type parameter '{0}' of exported class has or is using private name '{1}'.": {
-        "category": "Error",
-        "code": 2220
-    },
-    "Type parameter '{0}' of exported interface has or is using private name '{1}'.": {
-        "category": "Error",
-        "code": 2221
-    },
-    "Type parameter '{0}' of exported class has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 2222
-    },
-    "Type parameter '{0}' of exported interface has or is using name '{1}' from private module '{2}'.": {
-        "category": "Error",
-        "code": 2223
+        "code": 1149
     },
     "'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.": {
+       "category": "Error",
+       "code": 1150
+   },
+
+    "Duplicate identifier '{0}'.": {
         "category": "Error",
-        "code": 2068
-    },
-    "Multiple constructor implementations are not allowed.": {
-        "category": "Error",
-        "code": 2070
-    },
-    "A class may only implement another class or interface.": {
-        "category": "Error",
-        "code": 2074
-    },
-    "'get' and 'set' accessor must have the same type.": {
-        "category": "Error",
-        "code": 2096
-    },
-    "Static members cannot reference class type parameters.": {
-        "category": "Error",
-        "code": 2099
-    },
-    "'super' property access is permitted only in a constructor, member function, or member accessor of a derived class": {
-        "category": "Error",
-        "code": 2102
-    },
-    "The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.": {
-        "category": "Error",
-        "code": 2112
-    },
-    "The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.": {
-        "category": "Error",
-        "code": 2113
-    },
-    "An arithmetic operand must be of type 'any', 'number' or an enum type.": {
-        "category": "Error",
-        "code": 2114
-    },
-    "The left-hand side of a 'for...in' statement cannot use a type annotation.": {
-        "category": "Error",
-        "code": 2115
-    },
-    "The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.": {
-        "category": "Error",
-        "code": 2116
-    },
-    "The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.": {
-        "category": "Error",
-        "code": 2117
-    },
-    "The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.": {
-        "category": "Error",
-        "code": 2118
-    }, 
-    "The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter": {
-        "category": "Error",
-        "code": 2119
-    },
-    "A 'get' accessor must return a value or consist of a single 'throw' statement.": {
-        "category": "Error",
-        "code": 2126
-    },
-    "Getter and setter accessors do not agree in visibility.": {
-        "category": "Error",
-        "code": 2127
-    },
-    "A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.": {
-        "category": "Error",
-        "code": 2131
-    },
-    "Untyped function calls may not accept type arguments.": {
-        "category": "Error",
-        "code": 2158
-    },
-    "The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.": {
-        "category": "Error",
-        "code": 2120
-    },
-    "The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type.": {
-        "category": "Error",
-        "code": 2121
-    },
-    "Setters cannot return a value.": {
-        "category": "Error",
-        "code": 2122
-    },
-    "Invalid left-hand side of assignment expression.": {
-        "category": "Error",
-        "code": 2130
-    },
-    "Subsequent variable declarations must have the same type.  Variable '{0}' must be of type '{1}', but here has type '{2}'.": {
-        "category": "Error",
-        "code": 2134
-    },
-    "All symbols within a 'with' block will be resolved to 'any'.": {
-        "category": "Error",
-        "code": 2135
-    },
-    "The operand of an increment or decrement operator must be a variable, property or indexer.": {
-        "category": "Error",
-        "code": 2139
-    },
-    "Overload signatures must all be public or private.": {
-        "category": "Error",
-        "code": 2150
-    },
-    "Overload signatures must all be exported or not exported.": {
-        "category": "Error",
-        "code": 2151
-    },
-    "Overload signatures must all be ambient or non-ambient.": {
-        "category": "Error",
-        "code": 2152
-    },
-    "Overload signatures must all be optional or required.": {
-        "category": "Error",
-        "code": 2153
-    },
-    "'this' cannot be referenced in constructor arguments.": {
-        "category": "Error",
-        "code": 2155
-    },
-    "Value of type '{0}' is not callable. Did you mean to include 'new'?": {
-        "category": "Error",
-        "code": 2161
-    },
-    "A signature with an implementation cannot use a string literal type.": {
-        "category": "Error",
-        "code": 2163
-    },
-    "Interface '{0}' cannot simultaneously extend types '{1}' and '{2}':": {
-        "category": "Error",
-        "code": 2189
-    },
-    "Initializer of parameter '{0}' cannot reference identifier '{1}' declared after it.": {
-        "category": "Error",
-        "code": 2190
-    },
-    "Individual declarations in merged declaration {0} must be all exported or all local.": {
-        "category": "Error",
-        "code": 2192
-    },
-    "'super' cannot be referenced in constructor arguments.":{
-        "category": "Error",
-        "code": 2193
-    },
-    "Return type of constructor signature must be assignable to the instance type of the class":{
-        "category": "Error",
-        "code": 2194
-    },
-    "Ambient external module declaration cannot specify relative module name.":{
-        "category": "Error",
-        "code": 2196
-    },
-    "Import declaration in an ambient external module declaration cannot reference external module through relative external module name.": {
-        "category": "Error",
-        "code": 2197
-    },
-    "Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.": {
-        "category": "Error",
-        "code": 2200
-    },
-    "Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.": {
-        "category": "Error",
-        "code": 2205
-    },
-    "Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.": {
-        "category": "Error",
-        "code": 2206
-    },
-    "Expression resolves to '_super' that compiler uses to capture base class reference.": {
-        "category": "Error",
-        "code": 2207
-    },
-    "Duplicate identifier '_i'. Compiler uses '_i' to initialize rest parameter.": {
-        "category": "Error",
-        "code": 2224
-    },
-    "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.": {
-        "category": "Error",
-        "code": 2225
-    },
-    "Constraint of a type parameter cannot reference any type parameter from the same type parameter list.": {
-        "category": "Error",
-        "code": 2229
+        "code": 2300
     },
     "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor.": {
         "category": "Error",
-        "code": 2230
+        "code": 2301
     },
-    "Parameter '{0}' cannot be referenced in its initializer.": {
+    "Static members cannot reference class type parameters.": {
         "category": "Error",
-        "code": 2231
-    },
-    "Duplicate string index signature.": {
-        "category": "Error",
-        "code": 2232
-    },
-    "Duplicate number index signature.": {
-        "category": "Error",
-        "code": 2233
-    },
-    "All declarations of an interface must have identical type parameters.": {
-        "category": "Error",
-        "code": 2234
-    },
-    "Expression resolves to variable declaration '_i' that compiler uses to initialize rest parameter.": {
-        "category": "Error",
-        "code": 2235
-    },
-    "Function implementation name must be '{0}'.": {
-        "category": "Error",
-        "code": 2239
-    },
-    "Constructor implementation is missing.": {
-        "category": "Error",
-        "code": 2240
-    },
-    "An export assignment cannot be used in a module with other exported elements.": {
-        "category": "Error",
-        "code": 2245
-    },
-    "A parameter property is only allowed in a constructor implementation.": {
-        "category": "Error",
-        "code": 2246
-    },
-    "Function overload must be static.": {
-        "category": "Error",
-        "code": 2247
-    },
-    "Function overload must not be static.": {
-        "category": "Error",
-        "code": 2248
-    },
-    "Public static property '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.": {
-        "category": "Error",
-        "code": 2249
-    },
-    "Public property '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.": {
-        "category": "Error",
-        "code": 2250
-    },
-    "Exported variable '{0}' has or is using name '{1}' from external module {2} but cannot be named.": {
-        "category": "Error",
-        "code": 2251
-    },
-    "Parameter '{0}' of constructor from exported class has or is using name '{1}' from external module {2} but cannot be named.": {
-        "category": "Error",
-        "code": 2252
-    },
-    "Parameter '{0}' of public static method from exported class has or is using name '{1}' from external module {2} but cannot be named.": {
-        "category": "Error",
-        "code": 2253
-    },
-    "Parameter '{0}' of public method from exported class has or is using name '{1}' from external module {2} but cannot be named.": {
-        "category": "Error",
-        "code": 2254
-    },
-    "Parameter '{0}' of exported function has or is using name '{1}' from external module {2} but cannot be named.": {
-        "category": "Error",
-        "code": 2255
-    },
-    "Return type of public static property getter from exported class has or is using name '{0}' from external module {1} but cannot be named.": {
-        "category": "Error",
-        "code": 2256
-    },
-    "Return type of public property getter from exported class has or is using name '{0}' from external module {1} but cannot be named.": {
-        "category": "Error",
-        "code": 2257
-    },
-    "Return type of public static method from exported class has or is using name '{0}' from external module {1} but cannot be named.": {
-        "category": "Error",
-        "code": 2258
-    },
-    "Return type of public method from exported class has or is using name '{0}' from external module {1} but cannot be named.": {
-        "category": "Error",
-        "code": 2259
-    },
-    "Return type of exported function has or is using name '{0}' from external module {1} but cannot be named.": {
-        "category": "Error",
-        "code": 2260
+        "code": 2302
     },
     "Circular definition of import alias '{0}'.": {
         "category": "Error",
-        "code": 3000
+        "code": 2303
     },
     "Cannot find name '{0}'.": {
         "category": "Error",
-        "code": 3001
+        "code": 2304
     },
     "Module '{0}' has no exported member '{1}'.": {
         "category": "Error",
-        "code": 3002
+        "code": 2305
+    },
+    "File '{0}' is not an external module.": {
+        "category": "Error",
+        "code": 2306
     },
     "Cannot find external module '{0}'.": {
         "category": "Error",
-        "code": 3003
+        "code": 2307
     },
     "A module cannot have more than one export assignment.": {
         "category": "Error",
-        "code": 3004
+        "code": 2308
+    },
+    "An export assignment cannot be used in a module with other exported elements.": {
+        "category": "Error",
+        "code": 2309
     },
     "Type '{0}' recursively references itself as a base type.": {
         "category": "Error",
-        "code": 3005
+        "code": 2310
     },
     "A class may only extend another class.": {
         "category": "Error",
-        "code": 3006
+        "code": 2311
     },
     "An interface may only extend a class or another interface.": {
         "category": "Error",
-        "code": 3007
+        "code": 2312
+    },
+    "Constraint of a type parameter cannot reference any type parameter from the same type parameter list.": {
+        "category": "Error",
+        "code": 2313
     },
     "Generic type '{0}' requires {1} type argument(s).": {
         "category": "Error",
-        "code": 3008
+        "code": 2314
     },
     "Type '{0}' is not generic.": {
         "category": "Error",
-        "code": 3009
-    },
-    "Cannot find global type '{0}'.": {
-        "category": "Error",
-        "code": 3010
+        "code": 2315
     },
     "Global type '{0}' must be a class or interface type.": {
         "category": "Error",
-        "code": 3011
+        "code": 2316
     },
     "Global type '{0}' must have {1} type parameter(s).": {
         "category": "Error",
-        "code": 3012
+        "code": 2317
     },
-    "'this' cannot be referenced in a module body.": {
+    "Cannot find global type '{0}'.": {
         "category": "Error",
-        "code": 3013
+        "code": 2318
     },
-    "'this' cannot be referenced in a static property initializer.": {
+    "Named properties '{0}' of types '{1}' and '{2}' are not identical.": {
         "category": "Error",
-        "code": 3014
+        "code": 2319
     },
-    "'this' cannot be referenced in current location.": {
+    "Interface '{0}' cannot simultaneously extend types '{1}' and '{2}':": {
         "category": "Error",
-        "code": -9999999
+        "code": 2320
     },
-    "'super' can only be referenced in a derived class.": {
+    "Excessive stack depth comparing types '{0}' and '{1}'.": {
         "category": "Error",
-        "code": 3015
+        "code": 2321
     },
-    "Property '{0}' does not exist on type '{1}'.": {
+    "Type '{0}' is not assignable to type '{1}':": {
         "category": "Error",
-        "code": 3017
+        "code": 2322
     },
-    "An index expression argument must be of type 'string', 'number', or 'any'.": {
+    "Type '{0}' is not assignable to type '{1}'.": {
         "category": "Error",
-        "code": 3018
+        "code": 2323
     },
-    "Type '{0}' does not satisfy the constraint '{1}':": {
+    "Property '{0}' is missing in type '{1}'.": {
         "category": "Error",
-        "code": 3019
+        "code": 2324
     },
-    "Type '{0}' does not satisfy the constraint '{1}'.": {
+    "Private property '{0}' cannot be reimplemented.": {
         "category": "Error",
-        "code": 3019
+        "code": 2325
     },
-    "Supplied parameters do not match any signature of call target.": {
+    "Types of property '{0}' are incompatible:": {
         "category": "Error",
-        "code": 3020
+        "code": 2326
     },
-    "Cannot invoke an expression whose type lacks a call signature.": {
+    "Required property '{0}' cannot be reimplemented with optional property in '{1}'.": {
         "category": "Error",
-        "code": 3021
+        "code": 2327
     },
-    "Only a void function can be called with the 'new' keyword.": {
+    "Types of parameters '{0}' and '{1}' are incompatible:": {
         "category": "Error",
-        "code": 3022
+        "code": 2328
     },
-    "Cannot use 'new' with an expression whose type lacks a call or construct signature.": {
-        "category": "Error",
-        "code": 3023
-    },
-    "Neither type '{0}' nor type '{1}' is assignable to the other:": {
-        "category": "Error",
-        "code": 3024
-    },
-    "Neither type '{0}' nor type '{1}' is assignable to the other.": {
-        "category": "Error",
-        "code": 3024
-    },
-    "No best common type exists among return expressions.": {
-        "category": "Error",
-        "code": 3027
-    },
-    "Operator '{0}' cannot be applied to types '{1}' and '{2}'.": {
-        "category": "Error",
-        "code": 3028
-    },
-    "No best common type exists between '{0}' and '{1}'.": {
-        "category": "Error",
-        "code": 3029
-    },
-    "No best common type exists between '{0}', '{1}', and '{2}'.": {
-        "category": "Error",
-        "code": 3030
-    },
-    "A rest parameter must be of an array type.": {
-        "category": "Error",
-        "code": 3031
-    },
-    "A parameter initializer is only allowed in a function or constructor implementation.": {
-        "category": "Error",
-        "code": 3032
-    },
-    "Specialized overload signature is not assignable to any non-specialized signature.": {
-        "category": "Error",
-        "code": 3033
-    },
-    "Duplicate function implementation.": {
-        "category": "Error",
-        "code": 3034
-    },
-    "Overload signature is not compatible with function implementation.": {
-        "category": "Error",
-        "code": 3035
-    },
-    "Argument of type '{0}' is not assignable to parameter of type '{1}'.": {
-        "category": "Error",
-        "code": 3036
-    },
-
-
     "Index signature is missing in type '{0}'.": {
         "category": "Error",
-        "code": 4003
+        "code": 2329
     },
     "Index signatures are incompatible:": {
         "category": "Error",
-        "code": 4004
+        "code": 2330
     },
-    "Class '{0}' defines instance member accessor '{1}', but extended class '{2}' defines it as instance member function.": {
-        "category": "NoPrefix",
-        "code": 4016
+    "'this' cannot be referenced in a module body.": {
+        "category": "Error",
+        "code": 2331
     },
-    "Class '{0}' defines instance member property '{1}', but extended class '{2}' defines it as instance member function.": {
-        "category": "NoPrefix",
-        "code": 4017
+    "'this' cannot be referenced in current location.": {
+        "category": "Error",
+        "code": 2332
+    },
+    "'this' cannot be referenced in constructor arguments.": {
+        "category": "Error",
+        "code": 2333
+    },
+    "'this' cannot be referenced in a static property initializer.": {
+        "category": "Error",
+        "code": 2334
+    },
+    "'super' can only be referenced in a derived class.": {
+        "category": "Error",
+        "code": 2335
+    },
+    "'super' cannot be referenced in constructor arguments.": {
+        "category": "Error",
+        "code": 2336
+    },
+    "Super calls are not permitted outside constructors or in nested functions inside constructors": {
+        "category": "Error",
+        "code": 2337
+    },
+    "'super' property access is permitted only in a constructor, member function, or member accessor of a derived class": {
+        "category": "Error",
+        "code": 2338
+    },
+    "Property '{0}' does not exist on type '{1}'.": {
+        "category": "Error",
+        "code": 2339
+    },
+    "Only public methods of the base class are accessible via the 'super' keyword": {
+        "category": "Error",
+        "code": 2340
+    },
+    "Property '{0}' is inaccessible.": {
+        "category": "Error",
+        "code": 2341
+    },
+    "An index expression argument must be of type 'string', 'number', or 'any'.": {
+        "category": "Error",
+        "code": 2342
+    },
+    "Type '{0}' does not satisfy the constraint '{1}':": {
+        "category": "Error",
+        "code": 2343
+    },
+    "Type '{0}' does not satisfy the constraint '{1}'.": {
+        "category": "Error",
+        "code": 2344
+    },
+    "Argument of type '{0}' is not assignable to parameter of type '{1}'.": {
+        "category": "Error",
+        "code": 2345
+    },
+    "Supplied parameters do not match any signature of call target.": {
+        "category": "Error",
+        "code": 2346
+    },
+    "Untyped function calls may not accept type arguments.": {
+        "category": "Error",
+        "code": 2347
+    },
+    "Value of type '{0}' is not callable. Did you mean to include 'new'?": {
+        "category": "Error",
+        "code": 2348
+    },
+    "Cannot invoke an expression whose type lacks a call signature.": {
+        "category": "Error",
+        "code": 2349
+    },
+    "Only a void function can be called with the 'new' keyword.": {
+        "category": "Error",
+        "code": 2350
+    },
+    "Cannot use 'new' with an expression whose type lacks a call or construct signature.": {
+        "category": "Error",
+        "code": 2351
+    },
+    "Neither type '{0}' nor type '{1}' is assignable to the other.": {
+        "category": "Error",
+        "code": 2352
+    },
+    "Neither type '{0}' nor type '{1}' is assignable to the other:": {
+        "category": "Error",
+        "code": 2353
+    },
+    "No best common type exists among return expressions.": {
+        "category": "Error",
+        "code": 2354
+    },
+    "A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.": {
+        "category": "Error",
+        "code": 2355
+    },
+    "An arithmetic operand must be of type 'any', 'number' or an enum type.": {
+        "category": "Error",
+        "code": 2356
+    },
+    "The operand of an increment or decrement operator must be a variable, property or indexer.": {
+        "category": "Error",
+        "code": 2357
+    },
+    "The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.": {
+        "category": "Error",
+        "code": 2358
+    },
+    "The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type.": {
+        "category": "Error",
+        "code": 2359
+    },
+    "The left-hand side of an 'in' expression must be of types 'any', 'string' or 'number'.": {
+        "category": "Error",
+        "code": 2360
+    },
+    "The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter": {
+        "category": "Error",
+        "code": 2361
+    },
+    "The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.": {
+        "category": "Error",
+        "code": 2362
+    },
+    "The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.": {
+        "category": "Error",
+        "code": 2363
+    },
+    "Invalid left-hand side of assignment expression.": {
+        "category": "Error",
+        "code": 2364
+    },
+    "Operator '{0}' cannot be applied to types '{1}' and '{2}'.": {
+        "category": "Error",
+        "code": 2365
+    },
+    "No best common type exists between '{0}', '{1}', and '{2}'.": {
+        "category": "Error",
+        "code": 2366
+    },
+    "No best common type exists between '{0}' and '{1}'.": {
+        "category": "Error",
+        "code": 2367
+    },
+    "Type parameter name cannot be '{0}'": {
+        "category": "Error",
+        "code": 2368
+    },
+    "A parameter property is only allowed in a constructor implementation.": {
+        "category": "Error",
+        "code": 2369
+    },
+    "A rest parameter must be of an array type.": {
+        "category": "Error",
+        "code": 2370
+    },
+    "A parameter initializer is only allowed in a function or constructor implementation.": {
+        "category": "Error",
+        "code": 2371
+    },
+    "Parameter '{0}' cannot be referenced in its initializer.": {
+        "category": "Error",
+        "code": 2372
+    },
+    "Initializer of parameter '{0}' cannot reference identifier '{1}' declared after it.": {
+        "category": "Error",
+        "code": 2373
+    },
+    "Duplicate string index signature.": {
+        "category": "Error",
+        "code": 2374
+    },
+    "Duplicate number index signature.": {
+        "category": "Error",
+        "code": 2375
+    },
+    "A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.": {
+        "category": "Error",
+        "code": 2376
+    },
+    "Constructors for derived classes must contain a 'super' call.": {
+        "category": "Error",
+        "code": 2377
+    },
+    "A 'get' accessor must return a value or consist of a single 'throw' statement.": {
+        "category": "Error",
+        "code": 2378
+    },
+    "Getter and setter accessors do not agree in visibility.": {
+        "category": "Error",
+        "code": 2379
+    },
+    "'get' and 'set' accessor must have the same type.": {
+        "category": "Error",
+        "code": 2380
+    },
+    "A signature with an implementation cannot use a string literal type.": {
+        "category": "Error",
+        "code": 2381
+    },
+    "Specialized overload signature is not assignable to any non-specialized signature.": {
+        "category": "Error",
+        "code": 2382
+    },
+    "Overload signatures must all be exported or not exported.": {
+        "category": "Error",
+        "code": 2383
+    },
+    "Overload signatures must all be ambient or non-ambient.": {
+        "category": "Error",
+        "code": 2384
+    },
+    "Overload signatures must all be public or private.": {
+        "category": "Error",
+        "code": 2385
+    },
+    "Overload signatures must all be optional or required.": {
+        "category": "Error",
+        "code": 2386
+    },
+    "Function overload must be static.": {
+        "category": "Error",
+        "code": 2387
+    },
+    "Function overload must not be static.": {
+        "category": "Error",
+        "code": 2388
+    },
+    "Function implementation name must be '{0}'.": {
+        "category": "Error",
+        "code": 2389
+    },
+    "Constructor implementation is missing.": {
+        "category": "Error",
+        "code": 2390
+    },
+    "Function implementation is missing or not immediately following the declaration.": {
+        "category": "Error",
+        "code": 2391
+    },
+    "Multiple constructor implementations are not allowed.": {
+        "category": "Error",
+        "code": 2392
+    },
+    "Duplicate function implementation.": {
+        "category": "Error",
+        "code": 2393
+    },
+    "Overload signature is not compatible with function implementation.": {
+        "category": "Error",
+        "code": 2394
+    },
+    "Individual declarations in merged declaration {0} must be all exported or all local.": {
+        "category": "Error",
+        "code": 2395
+    },
+    "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.": {
+        "category": "Error",
+        "code": 2396
+    },
+    "Duplicate identifier '_i'. Compiler uses '_i' to initialize rest parameter.": {
+        "category": "Error",
+        "code": 2397
+    },
+    "Expression resolves to variable declaration '_i' that compiler uses to initialize rest parameter.": {
+        "category": "Error",
+        "code": 2398
+    },
+    "Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.": {
+        "category": "Error",
+        "code": 2399
+    },
+    "Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.": {
+        "category": "Error",
+        "code": 2400
+    },
+    "Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.": {
+        "category": "Error",
+        "code": 2401
+    },
+    "Expression resolves to '_super' that compiler uses to capture base class reference.": {
+        "category": "Error",
+        "code": 2402
+    },
+    "Subsequent variable declarations must have the same type.  Variable '{0}' must be of type '{1}', but here has type '{2}'.": {
+        "category": "Error",
+        "code": 2403
+    },
+    "The left-hand side of a 'for...in' statement cannot use a type annotation.": {
+        "category": "Error",
+        "code": 2404
+    },
+    "The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.": {
+        "category": "Error",
+        "code": 2405
+    },
+    "Invalid left-hand side in 'for...in' statement.": {
+        "category": "Error",
+        "code": 2406
+    },
+    "The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.": {
+        "category": "Error",
+        "code": 2407
+    },
+    "Setters cannot return a value.": {
+        "category": "Error",
+        "code": 2408
+    },
+    "Return type of constructor signature must be assignable to the instance type of the class": {
+        "category": "Error",
+        "code": 2409
+    },
+    "All symbols within a 'with' block will be resolved to 'any'.": {
+        "category": "Error",
+        "code": 2410
+    },
+    "Property '{0}' of type '{1}' is not assignable to string index type '{2}'.": {
+        "category": "Error",
+        "code": 2411
+    },
+    "Property '{0}' of type '{1}' is not assignable to numeric index type '{2}'.": {
+        "category": "Error",
+        "code": 2412
+    },
+    "Numeric index type '{0}' is not assignable to string index type '{1}'.": {
+        "category": "Error",
+        "code": 2413
+    },
+    "Class name cannot be '{0}'": {
+        "category": "Error",
+        "code": 2414
+    },
+    "Class '{0}' incorrectly extends base class '{1}'.": {
+        "category": "Error",
+        "code": 2415
+    },
+    "Class '{0}' incorrectly extends base class '{1}':": {
+        "category": "Error",
+        "code": 2416
+    },
+    "Class static side '{0}' incorrectly extends base class static side '{1}'.": {
+        "category": "Error",
+        "code": 2417
+    },
+    "Class static side '{0}' incorrectly extends base class static side '{1}':": {
+        "category": "Error",
+        "code": 2418
+    },
+    "Type name '{0}' in extends clause does not reference constructor function for '{0}'.": {
+        "category": "Error",
+        "code": 2419
+    },
+    "Class '{0}' incorrectly implements interface '{1}'.": {
+        "category": "Error",
+        "code": 2420
+    },
+    "Class '{0}' incorrectly implements interface '{1}':": {
+        "category": "Error",
+        "code": 2421
+    },
+    "A class may only implement another class or interface.": {
+        "category": "Error",
+        "code": 2422
     },
     "Class '{0}' defines instance member function '{1}', but extended class '{2}' defines it as instance member accessor.": {
-        "category": "NoPrefix",
-        "code": 4018
+        "category": "Error",
+        "code": 2423
     },
     "Class '{0}' defines instance member function '{1}', but extended class '{2}' defines it as instance member property.": {
-        "category": "NoPrefix",
-        "code": 4019
+        "category": "Error",
+        "code": 2424
+    },
+    "Class '{0}' defines instance member property '{1}', but extended class '{2}' defines it as instance member function.": {
+        "category": "Error",
+        "code": 2425
+    },
+    "Class '{0}' defines instance member accessor '{1}', but extended class '{2}' defines it as instance member function.": {
+        "category": "Error",
+        "code": 2426
+    },
+    "Interface name cannot be '{0}'": {
+        "category": "Error",
+        "code": 2427
+    },
+    "All declarations of an interface must have identical type parameters.": {
+        "category": "Error",
+        "code": 2428
+    },
+    "Interface '{0}' incorrectly extends interface '{1}':": {
+        "category": "Error",
+        "code": 2429
+    },
+    "Interface '{0}' incorrectly extends interface '{1}'.": {
+        "category": "Error",
+        "code": 2430
+    },
+    "Enum name cannot be '{0}'": {
+        "category": "Error",
+        "code": 2431
     },
     "In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.": {
         "category": "Error",
+        "code": 2432
+    },
+    "A module declaration cannot be in a different file from a class or function with which it is merged": {
+        "category": "Error",
+        "code": 2433
+    },
+    "A module declaration cannot be located prior to a class or function with which it is merged": {
+        "category": "Error",
+        "code": 2434
+    },
+    "Ambient external modules cannot be nested in other modules.": {
+        "category": "Error",
+        "code": 2435
+    },
+    "Ambient external module declaration cannot specify relative module name.": {
+        "category": "Error",
+        "code": 2436
+    },
+    "Module '{0}' is hidden by a local declaration with the same name": {
+        "category": "Error",
+        "code": 2437
+    },
+    "Import name cannot be '{0}'": {
+        "category": "Error",
+        "code": 2438
+    },
+    "Import declaration in an ambient external module declaration cannot reference external module through relative external module name.": {
+        "category": "Error",
+        "code": 2439
+    },
+    "Import declaration conflicts with local declaration of '{0}'": {
+        "category": "Error",
+        "code": 2440
+    },
+
+    "Import declaration '{0}' is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4000
+    },
+    "Type parameter '{0}' of exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4001
+    },
+    "Type parameter '{0}' of exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4002
+    },
+    "Type parameter '{0}' of exported interface has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4003
+    },
+    "Type parameter '{0}' of exported interface has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4004
+    },
+    "Type parameter '{0}' of constructor signature from exported interface has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4005
+    },
+    "Type parameter '{0}' of constructor signature from exported interface has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4006
+    },
+    "Type parameter '{0}' of call signature from exported interface has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4007
+    },
+    "Type parameter '{0}' of call signature from exported interface has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4008
+    },
+    "Type parameter '{0}' of public static method from exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4009
+    },
+    "Type parameter '{0}' of public static method from exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4010
+    },
+    "Type parameter '{0}' of public method from exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4011
+    },
+    "Type parameter '{0}' of public method from exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4012
+    },
+    "Type parameter '{0}' of method from exported interface has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4013
+    },
+    "Type parameter '{0}' of method from exported interface has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4014
+    },
+    "Type parameter '{0}' of exported function has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4015
+    },
+    "Type parameter '{0}' of exported function has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4016
+    },
+    "Implements clause of exported class '{0}' has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4017
+    },
+    "Extends clause of exported class '{0}' has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4018
+    },
+    "Implements clause of exported class '{0}' has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4019
+    },
+    "Extends clause of exported class '{0}' has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4020
+    },
+    "Extends clause of exported interface '{0}' has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4021
+    },
+    "Extends clause of exported interface '{0}' has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4022
+    },
+    "Exported variable '{0}' has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 4023
+    },
+    "Exported variable '{0}' has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
         "code": 4024
     },
-    "Named properties '{0}' of types '{1}' and '{2}' are not identical.": {
-        "category": "NoPrefix",
+    "Exported variable '{0}' has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4025
+    },
+    "Public static property '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 4026
+    },
+    "Public static property '{0}' of exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4027
+    },
+    "Public static property '{0}' of exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4028
+    },
+    "Public property '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 4029
+    },
+    "Public property '{0}' of exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4030
+    },
+    "Public property '{0}' of exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4031
+    },
+    "Property '{0}' of exported interface has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
         "code": 4032
     },
+    "Property '{0}' of exported interface has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4033
+    },
+    "Parameter '{0}' of public static property setter from exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4034
+    },
+    "Parameter '{0}' of public static property setter from exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4035
+    },
+    "Parameter '{0}' of public property setter from exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4036
+    },
+    "Parameter '{0}' of public property setter from exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4037
+    },
+    "Return type of public static property getter from exported class has or is using name '{0}' from external module {1} but cannot be named.": {
+        "category": "Error",
+        "code": 4038
+    },
+    "Return type of public static property getter from exported class has or is using name '{0}' from private module '{1}'.": {
+        "category": "Error",
+        "code": 4039
+    },
+    "Return type of public static property getter from exported class has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 4040
+    },
+    "Return type of public property getter from exported class has or is using name '{0}' from external module {1} but cannot be named.": {
+        "category": "Error",
+        "code": 4041
+    },
+    "Return type of public property getter from exported class has or is using name '{0}' from private module '{1}'.": {
+        "category": "Error",
+        "code": 4042
+    },
+    "Return type of public property getter from exported class has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 4043
+    },
+    "Return type of constructor signature from exported interface has or is using name '{0}' from private module '{1}'.": {
+        "category": "Error",
+        "code": 4044
+    },
+    "Return type of constructor signature from exported interface has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 4045
+    },
+    "Return type of call signature from exported interface has or is using name '{0}' from private module '{1}'.": {
+        "category": "Error",
+        "code": 4046
+    },
+    "Return type of call signature from exported interface has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 4047
+    },
+    "Return type of index signature from exported interface has or is using name '{0}' from private module '{1}'.": {
+        "category": "Error",
+        "code": 4048
+    },
+    "Return type of index signature from exported interface has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 4049
+    },
+    "Return type of public static method from exported class has or is using name '{0}' from external module {1} but cannot be named.": {
+        "category": "Error",
+        "code": 4050
+    },
+    "Return type of public static method from exported class has or is using name '{0}' from private module '{1}'.": {
+        "category": "Error",
+        "code": 4051
+    },
+    "Return type of public static method from exported class has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 4052
+    },
+    "Return type of public method from exported class has or is using name '{0}' from external module {1} but cannot be named.": {
+        "category": "Error",
+        "code": 4053
+    },
+    "Return type of public method from exported class has or is using name '{0}' from private module '{1}'.": {
+        "category": "Error",
+        "code": 4054
+    },
+    "Return type of public method from exported class has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 4055
+    },
+    "Return type of method from exported interface has or is using name '{0}' from private module '{1}'.": {
+        "category": "Error",
+        "code": 4056
+    },
+    "Return type of method from exported interface has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 4057
+    },
+    "Return type of exported function has or is using name '{0}' from external module {1} but cannot be named.": {
+        "category": "Error",
+        "code": 4058
+    },
+    "Return type of exported function has or is using name '{0}' from private module '{1}'.": {
+        "category": "Error",
+        "code": 4059
+    },
+    "Return type of exported function has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 4060
+    },
+    "Parameter '{0}' of constructor from exported class has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 4061
+    },
+    "Parameter '{0}' of constructor from exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4062
+    },
+    "Parameter '{0}' of constructor from exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4063
+    },
+    "Parameter '{0}' of constructor signature from exported interface has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4064
+    },
+    "Parameter '{0}' of constructor signature from exported interface has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4065
+    },
+    "Parameter '{0}' of call signature from exported interface has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4066
+    },
+    "Parameter '{0}' of call signature from exported interface has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4067
+    },
+    "Parameter '{0}' of public static method from exported class has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 4068
+    },
+    "Parameter '{0}' of public static method from exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4069
+    },
+    "Parameter '{0}' of public static method from exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4070
+    },
+    "Parameter '{0}' of public method from exported class has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 4071
+    },
+    "Parameter '{0}' of public method from exported class has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4072
+    },
+    "Parameter '{0}' of public method from exported class has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4073
+    },
+    "Parameter '{0}' of method from exported interface has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4074
+    },
+    "Parameter '{0}' of method from exported interface has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4075
+    },
+    "Parameter '{0}' of exported function has or is using name '{1}' from external module {2} but cannot be named.": {
+        "category": "Error",
+        "code": 4076
+    },
+    "Parameter '{0}' of exported function has or is using name '{1}' from private module '{2}'.": {
+        "category": "Error",
+        "code": 4077
+    },
+    "Parameter '{0}' of exported function has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4078
+    },
+
+    
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
@@ -1163,8 +1336,12 @@
         "code": 5012
     },
     "Unsupported file encoding.": {
-        "category": "NoPrefix",
+        "category": "Error",
         "code": 5013
+    },
+    "Unknown compiler option '{0}'.": {
+        "category": "Error",
+        "code": 5023
     },
     "Could not write file '{0}': {1}": {
         "category": "Error",
@@ -1178,6 +1355,7 @@
         "category": "Error",
         "code": 5039
     },
+    
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001
@@ -1206,10 +1384,6 @@
         "category": "Message",
         "code": 6009
     },
-    "Skip resolution and preprocessing.": {
-        "category": "Message",
-        "code": 6010
-    },
     "Specify ECMAScript target version: 'ES3' (default), or 'ES5'": {
         "category": "Message",
         "code": 6015
@@ -1225,14 +1399,6 @@
     "Print the compiler's version.": {
         "category": "Message",
         "code": 6019
-    },
-    "Allow use of deprecated '{0}' keyword when referencing an external module.": {
-        "category": "Message",
-        "code": 6021
-    },
-    "Specify locale for errors and messages. For example '{0}' or '{1}'": {
-        "category": "Message",
-        "code": 6022
     },
     "Syntax: {0}": {
         "category": "Message",
@@ -1254,7 +1420,6 @@
         "category": "Message",
         "code": 6027
     },
-
     "Version {0}": {
         "category": "Message",
         "code": 6029
@@ -1263,17 +1428,9 @@
         "category": "Message",
         "code": 6030
     },
-    "Use the '{0}' flag to see options.": {
-        "category": "Message",
-        "code": 6031
-    },
     "File change detected. Compiling...": {
         "category": "Message",
         "code": 6032
-    },
-    "STRING": {
-        "category": "Message",
-        "code": 6033
     },
     "KIND": {
         "category": "Message",
@@ -1295,18 +1452,6 @@
         "category": "Message",
         "code": 6038
     },
-    "NUMBER": {
-        "category": "Message",
-        "code": 6039
-    },
-    "Specify the codepage to use when opening source files.": {
-        "category": "Message",
-        "code": 6040
-    },
-    "Additional locations:": {
-        "category": "Message",
-        "code": 6041
-    },
     "Compilation complete. Watching for file changes.": {
         "category": "Message",
         "code": 6042
@@ -1325,36 +1470,41 @@
     },
     "Argument for '--module' option must be 'commonjs' or 'amd'.": {
         "category": "Error",
-        "code": 6045
+        "code": 6046
     },
     "Argument for '--target' option must be 'es3' or 'es5'.": {
         "category": "Error",
-        "code": 6046
+        "code": 6047
     },
     "Locale must be of the form <language> or <language>-<territory>. For example '{0}' or '{1}'.": {
         "category": "Error",
-        "code": 6047
+        "code": 6048
     },
     "Unsupported locale '{0}'.": {
         "category": "Error",
-        "code": 6048
+        "code": 6049
     },
     "Unable to open file '{0}'.": {
         "category": "Error",
-        "code": 6049
-    },
-    "Corrupted locale file {0}.": {
-        "category": "Error",
         "code": 6050
     },
-    "No input files specified.": {
+    "Corrupted locale file {0}.": {
         "category": "Error",
         "code": 6051
     },
     "Warn on expressions and declarations with an implied 'any' type.": {
         "category": "Message",
-        "code": 7004
+        "code": 6052
     },
+    "File '{0}' not found.": {
+        "category": "Error",
+        "code": 6053
+    },
+    "File '{0}' must have extension '.ts' or '.d.ts'.": {
+        "category": "Error",
+        "code": 6054
+    },
+
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -1383,14 +1533,6 @@
         "category": "Error",
         "code": 7013
     },
-    "Lambda function, which lacks return-type annotation, implicitly has an '{0}' return type.": {
-        "category": "Error",
-        "code": 7014
-    },
-    "Array literal implicitly has an '{0}' type.": {
-        "category": "Error",
-        "code": 7015
-    },
     "Property '{0}' implicitly has type 'any', because its 'set' accessor lacks a type annotation.": {
         "category": "Error",
         "code": 7016
@@ -1410,313 +1552,5 @@
     "Call signature, which lacks return-type annotation, implicitly has an 'any' return type.": {
         "category": "Error",
         "code": 7020
-    },
-    "Variable declaration list cannot be empty.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Digit expected.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Hexadecimal digit expected.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Unexpected end of text.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Unterminated string constant.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Invalid character.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Declaration or statement expected.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Statement expected.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "'case' or 'default' expected.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Property or signature expected.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Enum member expected.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Type reference expected.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Variable declaration expected.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Argument expression expected.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Property assignment expected.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Expression or comma expected.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Parameter declaration expected.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Type parameter declaration expected.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Type argument expected.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "'{0}' expected.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Identifier expected.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "String literal expected.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Type expected.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "'=>' not preceded by parameter list.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Invalid assignment target.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "'super' must be followed by argument list or member access.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Expression expected.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Line break not permitted here.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "'catch' or 'finally' expected.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Block or ';' expected.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Modifiers not permitted on index signature members.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Class member declaration expected.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Declaration expected.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Invalid reference comment.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "File '{0}' is not an external module.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Excessive stack depth comparing types '{0}' and '{1}'.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Type '{0}' is not assignable to type '{1}':": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Type '{0}' is not assignable to type '{1}'.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Property '{0}' is missing in type '{1}'.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Private property '{0}' cannot be reimplemented.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Required property '{0}' cannot be reimplemented with optional property in '{1}'.": {
-        "category": "Error",
-        "code": 2012
-    },
-    "Super calls are not permitted outside constructors or in nested functions inside constructors": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Only public methods of the base class are accessible via the 'super' keyword": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Constructors for derived classes must contain a 'super' call.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Only public methods of the base class are accessible via the 'super' keyword": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Import name cannot be '{0}'": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Type parameter name cannot be '{0}'": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Class name cannot be '{0}'": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Interface name cannot be '{0}'": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Enum name cannot be '{0}'": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Types of property '{0}' are incompatible:": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Types of parameters '{0}' and '{1}' are incompatible:": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Unknown identifier '{0}'.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Property '{0}' is inaccessible.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Function implementation is missing or not immediately following the declaration.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Property '{0}' of type '{1}' is not assignable to string index type '{2}'.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Property '{0}' of type '{1}' is not assignable to numeric index type '{2}'.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Numeric index type '{0}' is not assignable to string index type '{1}'.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Class '{0}' incorrectly extends base class '{1}':": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Class '{0}' incorrectly extends base class '{1}'.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Class static side '{0}' incorrectly extends base class static side '{1}':": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Class static side '{0}' incorrectly extends base class static side '{1}'.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Type name '{0}' in extends clause does not reference constructor function for '{0}'.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Class '{0}' incorrectly implements interface '{1}':": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Class '{0}' incorrectly implements interface '{1}'.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Interface '{0}' incorrectly extends interface '{1}':": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Interface '{0}' incorrectly extends interface '{1}'.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Enum member must have initializer.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Ambient external modules cannot be nested in other modules.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Import declarations in an internal module cannot reference an external module.": {
-        "category": "Error",
-        "code": -9999999
-    },
-	"A module declaration cannot be in a different file from a class or function with which it is merged": {
-        "category": "Error",
-        "code": -9999999
-	},
-	"A module declaration cannot be located prior to a class or function with which it is merged": {
-        "category": "Error",
-        "code": -9999999
-	},
-    "Cannot compile external modules unless the '--module' flag is provided.": {
-        "category": "Error",
-        "code": -9999999
-    },
-    "Import declaration conflicts with local declaration of '{0}'": {
-        "category": "Error",
-        "code": -9999999
-    },
-	"Module '{0}' is hidden by a local declaration with the same name": {
-        "category": "Error",
-        "code": -9999999
-	},
-    "Filename '{0}' differs from already included filename '{1}' only in casing": {
-        "category": "Error",
-        "code": -9999999
     }
 }

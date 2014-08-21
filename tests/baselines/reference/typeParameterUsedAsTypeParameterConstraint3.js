@@ -51,3 +51,5 @@ interface I2<V, T, U> {
 //}
 
 //// [typeParameterUsedAsTypeParameterConstraint3.js]
+// Type parameters are in scope in their own and other type parameter lists
+// Object types

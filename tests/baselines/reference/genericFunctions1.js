@@ -7,7 +7,7 @@ var x = foo(5); // 'x' should be number
 function foo(x) {
     return x;
 }
-var x = foo(5);
+var x = foo(5); // 'x' should be number
 
 
 //// [genericFunctions1.d.ts]

@@ -15,6 +15,9 @@ var xx = new a(null, 7, new B());
 
 
 //// [arrayAssignmentTest3.js]
+// The following gives no error
+// Michal saw no error if he used number instead of B, 
+// but I do...
 var B = (function () {
     function B() {
     }
