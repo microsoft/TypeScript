@@ -89,6 +89,7 @@ function foo14(x: typeof b); // error
 function foo14(x: any) { }
 
 //// [objectTypesIdentity.js]
+// object types are identical structurally
 var A = (function () {
     function A() {
     }

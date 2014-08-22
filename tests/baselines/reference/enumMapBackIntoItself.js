@@ -18,4 +18,5 @@ var TShirtSize;
 })(TShirtSize || (TShirtSize = {}));
 var mySize = 2 /* Large */;
 var test = TShirtSize[mySize];
+// specifically checking output here, bug was that test used to be undefined at runtime
 test + '';

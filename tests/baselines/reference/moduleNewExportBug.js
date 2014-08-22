@@ -24,4 +24,4 @@ var mod1;
         return C;
     })();
 })(mod1 || (mod1 = {}));
-var c;
+var c; // ERROR: C should not be visible

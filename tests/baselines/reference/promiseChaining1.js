@@ -11,13 +11,15 @@ class Chain2<T extends { length: number }> {
 }
 
 //// [promiseChaining1.js]
+// same example but with constraints on each type parameter
 var Chain2 = (function () {
     function Chain2(value) {
         this.value = value;
     }
     Chain2.prototype.then = function (cb) {
         var result = cb(this.value);
-        var z = this.then(function (x) { return result; }).then(function (x) { return "abc"; }).then(function (x) { return x.length; });
+        // should get a fresh type parameter which each then call
+        var z = this.then(function (x) { return result; }).then(function (x) { return "abc"; }).then(function (x) { return x.length; }) /*number*/; // Should error on "abc" because it is not a Function
         return new Chain2(result);
     };
     return Chain2;

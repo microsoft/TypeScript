@@ -310,6 +310,7 @@ module ts {
         public filename: string;
         public text: string;
         public getLineAndCharacterFromPosition(position: number): { line: number; character: number } { return null; }
+        public getPositionFromLineAndCharacter(line: number, character: number): number { return -1; }
         public amdDependencies: string[];
         public referencedFiles: FileReference[];
         public syntacticErrors: Diagnostic[];
@@ -721,6 +722,7 @@ module ts {
         InMultiLineCommentTrivia,
         InSingleQuoteStringLiteral,
         InDoubleQuoteStringLiteral,
+        EndingWithDotToken,
     }
 
     export enum TokenClass {
@@ -755,8 +757,7 @@ module ts {
             compilationSettings: CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
             version: string,
-            isOpen: boolean,
-            referencedFiles: string[]): SourceFile;
+            isOpen: boolean): SourceFile;
 
         updateDocument(
             sourceFile: SourceFile,
@@ -1317,7 +1318,11 @@ module ts {
         var formattingRulesProvider: TypeScript.Services.Formatting.RulesProvider;
         var hostCache: HostCache; // A cache of all the information about the files on the host side.
         var program: Program;
-        var typeChecker: TypeChecker;
+        // this checker is used to answer all LS questions except errors 
+        var typeInfoResolver: TypeChecker;
+        // the sole purpose of this checkes is to reutrn semantic diagnostics
+        // creation is deferred - use getFullTypeCheckChecker to get instance
+        var fullTypeCheckChecker_doNotAccessDirectly: TypeChecker;
         var useCaseSensitivefilenames = false;
         var sourceFilesByName: Map<SourceFile> = {};
         var documentRegistry = documentRegistry;
@@ -1331,6 +1336,10 @@ module ts {
 
         function getSourceFile(filename: string): SourceFile {
             return lookUp(sourceFilesByName, filename);
+        }
+
+        function getFullTypeCheckChecker() {
+            return fullTypeCheckChecker_doNotAccessDirectly || (fullTypeCheckChecker_doNotAccessDirectly = program.getTypeChecker(/*fullTypeCheck*/ true));
         }
 
         function createCompilerHost(): CompilerHost {
@@ -1455,7 +1464,7 @@ module ts {
                     sourceFile = documentRegistry.updateDocument(sourceFile, filename, compilationSettings, scriptSnapshot, version, isOpen, textChangeRange);
                 }
                 else {
-                    sourceFile = documentRegistry.acquireDocument(filename, compilationSettings, scriptSnapshot, version, isOpen, []);
+                    sourceFile = documentRegistry.acquireDocument(filename, compilationSettings, scriptSnapshot, version, isOpen);
                 }
 
                 // Remeber the new sourceFile
@@ -1464,7 +1473,8 @@ module ts {
 
             // Now create a new compiler
             program = createProgram(hostfilenames, compilationSettings, createCompilerHost());
-            typeChecker = program.getTypeChecker();
+            typeInfoResolver = program.getTypeChecker(/*fullTypeCheckMode*/ false);
+            fullTypeCheckChecker_doNotAccessDirectly = undefined;
         }
 
         /// Clean up any semantic caches that are not needed. 
@@ -1472,7 +1482,8 @@ module ts {
         /// We will just dump the typeChecker and recreate a new one. this should have the effect of destroying all the semantic caches.
         function cleanupSemanticCache(): void {
             if (program) {
-                typeChecker = program.getTypeChecker();
+                typeInfoResolver = program.getTypeChecker(/*fullTypeCheckMode*/ false);
+                fullTypeCheckChecker_doNotAccessDirectly = undefined;
             }
         }
 
@@ -1497,7 +1508,7 @@ module ts {
 
             filename = TypeScript.switchToForwardSlashes(filename)
 
-            return typeChecker.getDiagnostics(getSourceFile(filename).getSourceFile());
+            return getFullTypeCheckChecker().getDiagnostics(getSourceFile(filename));
         }
 
         function getCompilerOptionsDiagnostics() {
@@ -1739,12 +1750,12 @@ module ts {
                 entries: [],
                 symbols: {},
                 location: mappedNode,
-                typeChecker: typeChecker
+                typeChecker: typeInfoResolver
             };
 
             // Right of dot member completion list
             if (isRightOfDot) {
-                var type: Type = typeChecker.getTypeOfExpression(mappedNode);
+                var type: ApparentType = typeInfoResolver.getApparentType(typeInfoResolver.getTypeOfNode(mappedNode));
                 if (!type) {
                     return undefined;
                 }
@@ -1792,7 +1803,7 @@ module ts {
                     isMemberCompletion = false;
                     /// TODO filter meaning based on the current context
                     var symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace;
-                    var symbols = typeChecker.getSymbolsInScope(mappedNode, symbolMeanings);
+                    var symbols = typeInfoResolver.getSymbolsInScope(mappedNode, symbolMeanings);
 
                     getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
                 }
@@ -1831,7 +1842,7 @@ module ts {
                     kind: completionEntry.kind,
                     kindModifiers: completionEntry.kindModifiers,
                     type: session.typeChecker.typeToString(type, session.location),
-                    fullSymbolName: typeChecker.symbolToString(symbol, session.location),
+                    fullSymbolName: typeInfoResolver.symbolToString(symbol, session.location),
                     docComment: ""
                 };
             }
@@ -1943,12 +1954,12 @@ module ts {
             var node = getNodeAtPosition(sourceFile.getSourceFile(), position);
             if (!node) return undefined;
 
-            var symbol = typeChecker.getSymbolInfo(node);
-            var type = symbol && typeChecker.getTypeOfSymbol(symbol);
+            var symbol = typeInfoResolver.getSymbolInfo(node);
+            var type = symbol && typeInfoResolver.getTypeOfSymbol(symbol);
             if (type) {
                 return new TypeInfo(
-                    new TypeScript.MemberNameString(typeChecker.typeToString(type)),
-                    "", typeChecker.symbolToString(symbol, getContainerNode(node)),
+                    new TypeScript.MemberNameString(typeInfoResolver.typeToString(type)),
+                    "", typeInfoResolver.symbolToString(symbol, getContainerNode(node)),
                     getSymbolKind(symbol), TypeScript.TextSpan.fromBounds(node.pos, node.end));
             }
 
@@ -2088,7 +2099,7 @@ module ts {
                 return undefined;
             }
 
-            var symbol = typeChecker.getSymbolInfo(node);
+            var symbol = typeInfoResolver.getSymbolInfo(node);
 
             // Could not find a symbol e.g. node is string or number keyword,
             // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol
@@ -2099,10 +2110,10 @@ module ts {
             var result: DefinitionInfo[] = [];
 
             var declarations = symbol.getDeclarations();
-            var symbolName = typeChecker.symbolToString(symbol, node);
+            var symbolName = typeInfoResolver.symbolToString(symbol, node);
             var symbolKind = getSymbolKind(symbol);
             var containerSymbol = symbol.parent;
-            var containerName = containerSymbol ? typeChecker.symbolToString(containerSymbol, node) : "";
+            var containerName = containerSymbol ? typeInfoResolver.symbolToString(containerSymbol, node) : "";
             var containerKind = containerSymbol ? getSymbolKind(symbol) : "";
 
             if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
@@ -2471,50 +2482,57 @@ module ts {
     }
 
     /// Classifier
-
-    export function createClassifier(logger: Logger): Classifier {
-        var scanner: TypeScript.Scanner.IScanner;
-        var lastDiagnosticKey: string = null;
+    export function createClassifier(host: Logger): Classifier {
+        var scanner: Scanner;
         var noRegexTable: boolean[];
-        var reportDiagnostic = (position: number, fullWidth: number, key: string, args: any[]) => {
-            lastDiagnosticKey = key;
-        };
 
+        /// We do not have a full parser support to know when we should parse a regex or not
+        /// If we consider every slash token to be a regex, we could be missing cases like "1/2/3", where
+        /// we have a series of divide operator. this list allows us to be more accurate by ruling out 
+        /// locations where a regexp cannot exist.
         if (!noRegexTable) {
             noRegexTable = [];
-            noRegexTable[TypeScript.SyntaxKind.IdentifierName] = true;
-            noRegexTable[TypeScript.SyntaxKind.StringLiteral] = true;
-            noRegexTable[TypeScript.SyntaxKind.NumericLiteral] = true;
-            noRegexTable[TypeScript.SyntaxKind.RegularExpressionLiteral] = true;
-            noRegexTable[TypeScript.SyntaxKind.ThisKeyword] = true;
-            noRegexTable[TypeScript.SyntaxKind.PlusPlusToken] = true;
-            noRegexTable[TypeScript.SyntaxKind.MinusMinusToken] = true;
-            noRegexTable[TypeScript.SyntaxKind.CloseParenToken] = true;
-            noRegexTable[TypeScript.SyntaxKind.CloseBracketToken] = true;
-            noRegexTable[TypeScript.SyntaxKind.CloseBraceToken] = true;
-            noRegexTable[TypeScript.SyntaxKind.TrueKeyword] = true;
-            noRegexTable[TypeScript.SyntaxKind.FalseKeyword] = true;
+            noRegexTable[SyntaxKind.Identifier] = true;
+            noRegexTable[SyntaxKind.StringLiteral] = true;
+            noRegexTable[SyntaxKind.NumericLiteral] = true;
+            noRegexTable[SyntaxKind.RegularExpressionLiteral] = true;
+            noRegexTable[SyntaxKind.ThisKeyword] = true;
+            noRegexTable[SyntaxKind.PlusPlusToken] = true;
+            noRegexTable[SyntaxKind.MinusMinusToken] = true;
+            noRegexTable[SyntaxKind.CloseParenToken] = true;
+            noRegexTable[SyntaxKind.CloseBracketToken] = true;
+            noRegexTable[SyntaxKind.CloseBraceToken] = true;
+            noRegexTable[SyntaxKind.TrueKeyword] = true;
+            noRegexTable[SyntaxKind.FalseKeyword] = true;
         }
 
         function getClassificationsForLine(text: string, lexState: EndOfLineState): ClassificationResult {
             var offset = 0;
-            if (lexState !== EndOfLineState.Start) {
-                // If we're in a string literal, then prepend: "\
-                // (and a newline).  That way when we lex we'll think we're still in a string literal.
-                //
-                // If we're in a multiline comment, then prepend: /*
-                // (and a newline).  That way when we lex we'll think we're still in a multiline comment.
-                if (lexState === EndOfLineState.InDoubleQuoteStringLiteral) {
-                    text = '"\\\n' + text;
-                }
-                else if (lexState === EndOfLineState.InSingleQuoteStringLiteral) {
-                    text = "'\\\n" + text;
-                }
-                else if (lexState === EndOfLineState.InMultiLineCommentTrivia) {
-                    text = "/*\n" + text;
-                }
+            var lastTokenOrCommentEnd = 0;
+            var lastToken = SyntaxKind.Unknown;
+            var inUnterminatedMultiLineComment = false;
 
-                offset = 3;
+            // If we're in a string literal, then prepend: "\
+            // (and a newline).  That way when we lex we'll think we're still in a string literal.
+            //
+            // If we're in a multiline comment, then prepend: /*
+            // (and a newline).  That way when we lex we'll think we're still in a multiline comment.
+            switch (lexState) {
+                case EndOfLineState.InDoubleQuoteStringLiteral:
+                    text = '"\\\n' + text;
+                    offset = 3;
+                    break;
+                case EndOfLineState.InSingleQuoteStringLiteral:
+                    text = "'\\\n" + text;
+                    offset = 3;
+                    break;
+                case EndOfLineState.InMultiLineCommentTrivia:
+                    text = "/*\n" + text;
+                    offset = 3;
+                    break;
+                case EndOfLineState.EndingWithDotToken:
+                    lastToken = SyntaxKind.DotToken;
+                    break;
             }
 
             var result: ClassificationResult = {
@@ -2522,94 +2540,174 @@ module ts {
                 entries: []
             };
 
-            var simpleText = TypeScript.SimpleText.fromString(text);
-            scanner = TypeScript.Scanner.createScanner(ScriptTarget.ES5, simpleText, reportDiagnostic);
+            scanner = createScanner(ScriptTarget.ES5, text, onError, processComment);
 
-            var lastTokenKind = TypeScript.SyntaxKind.None;
-            var token: TypeScript.ISyntaxToken = null;
+            var token = SyntaxKind.Unknown;
             do {
-                lastDiagnosticKey = null;
+                token = scanner.scan();
 
-                token = scanner.scan(!noRegexTable[lastTokenKind]);
-                lastTokenKind = token.kind();
-
-                processToken(text, simpleText, offset, token, result);
-            }
-            while (token.kind() !== TypeScript.SyntaxKind.EndOfFileToken);
-
-            lastDiagnosticKey = null;
-            return result;
-        }
-
-        function processToken(text: string, simpleText: TypeScript.ISimpleText, offset: number, token: TypeScript.ISyntaxToken, result: ClassificationResult): void {
-            processTriviaList(text, offset, token.leadingTrivia(simpleText), result);
-            addResult(text, offset, result, TypeScript.width(token), token.kind());
-            processTriviaList(text, offset, token.trailingTrivia(simpleText), result);
-
-            if (TypeScript.fullEnd(token) >= text.length) {
-                // We're at the end.
-                if (lastDiagnosticKey === TypeScript.DiagnosticCode.AsteriskSlash_expected) {
-                    result.finalLexState = EndOfLineState.InMultiLineCommentTrivia;
-                    return;
+                if ((token === SyntaxKind.SlashToken || token === SyntaxKind.SlashEqualsToken) && !noRegexTable[lastToken]) {
+                    if (scanner.reScanSlashToken() === SyntaxKind.RegularExpressionLiteral) {
+                        token = SyntaxKind.RegularExpressionLiteral;
+                    }
+                }
+                else if (lastToken === SyntaxKind.DotToken) {
+                    token = SyntaxKind.Identifier;
                 }
 
-                if (token.kind() === TypeScript.SyntaxKind.StringLiteral) {
-                    var tokenText = token.text();
-                    if (tokenText.length > 0 && tokenText.charCodeAt(tokenText.length - 1) === TypeScript.CharacterCodes.backslash) {
-                        var quoteChar = tokenText.charCodeAt(0);
-                        result.finalLexState = quoteChar === TypeScript.CharacterCodes.doubleQuote
-                        ? EndOfLineState.InDoubleQuoteStringLiteral
-                        : EndOfLineState.InSingleQuoteStringLiteral;
-                        return;
+                lastToken = token;
+
+                processToken();
+            }
+            while (token !== SyntaxKind.EndOfFileToken);
+
+            return result;
+
+
+            function onError(message: DiagnosticMessage): void {
+                inUnterminatedMultiLineComment = message.key === Diagnostics.Asterisk_Slash_expected.key;
+            }
+
+            function processComment(start: number, end: number) {
+                // add Leading white spaces
+                addLeadingWhiteSpace(start, end);
+
+                // add the comment
+                addResult(end - start, TokenClass.Comment);
+            }
+
+            function processToken(): void {
+                var start = scanner.getTokenPos();
+                var end = scanner.getTextPos();
+
+                // add Leading white spaces
+                addLeadingWhiteSpace(start, end);
+
+                // add the token
+                addResult(end - start, classFromKind(token));
+
+                if (end >= text.length) {
+                    // We're at the end.
+                    if (inUnterminatedMultiLineComment) {
+                        result.finalLexState = EndOfLineState.InMultiLineCommentTrivia;
+                    }
+                    else if (token === SyntaxKind.StringLiteral) {
+                        var tokenText = scanner.getTokenText();
+                        if (tokenText.length > 0 && tokenText.charCodeAt(tokenText.length - 1) === CharacterCodes.backslash) {
+                            var quoteChar = tokenText.charCodeAt(0);
+                            result.finalLexState = quoteChar === CharacterCodes.doubleQuote
+                                ? EndOfLineState.InDoubleQuoteStringLiteral
+                                : EndOfLineState.InSingleQuoteStringLiteral;
+                        }
+                    }
+                    else if (token === SyntaxKind.DotToken) {
+                        result.finalLexState = EndOfLineState.EndingWithDotToken;
                     }
                 }
             }
-        }
 
-        function processTriviaList(text: string, offset: number, triviaList: TypeScript.ISyntaxTriviaList, result: ClassificationResult): void {
-            for (var i = 0, n = triviaList.count(); i < n; i++) {
-                var trivia = triviaList.syntaxTriviaAt(i);
-                addResult(text, offset, result, trivia.fullWidth(), trivia.kind());
-            }
-        }
-
-        function addResult(text: string, offset: number, result: ClassificationResult, length: number, kind: TypeScript.SyntaxKind): void {
-            if (length > 0) {
-                // If this is the first classification we're adding to the list, then remove any 
-                // offset we have if we were continuing a construct from the previous line.
-                if (result.entries.length === 0) {
-                    length -= offset;
+            function addLeadingWhiteSpace(start: number, end: number): void {
+                if (start > lastTokenOrCommentEnd) {
+                    addResult(start - lastTokenOrCommentEnd, TokenClass.Whitespace);
                 }
 
-                result.entries.push({ length: length, classification: classFromKind(kind) });
+                // Remeber the end of the last token
+                lastTokenOrCommentEnd = end;
+            }
+
+            function addResult(length: number, classification: TokenClass): void {
+                if (length > 0) {
+                    // If this is the first classification we're adding to the list, then remove any 
+                    // offset we have if we were continuing a construct from the previous line.
+                    if (result.entries.length === 0) {
+                        length -= offset;
+                    }
+
+                    result.entries.push({ length: length, classification: classification });
+                }
             }
         }
 
-        function classFromKind(kind: TypeScript.SyntaxKind) {
-            if (TypeScript.SyntaxFacts.isAnyKeyword(kind)) {
+        function isBinaryExpressionOperatorToken(token: SyntaxKind): boolean {
+            switch (token) {
+                case SyntaxKind.AsteriskToken:
+                case SyntaxKind.SlashToken:
+                case SyntaxKind.PercentToken:
+                case SyntaxKind.PlusToken:
+                case SyntaxKind.MinusToken:
+                case SyntaxKind.LessThanLessThanToken:
+                case SyntaxKind.GreaterThanGreaterThanToken:
+                case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
+                case SyntaxKind.LessThanToken:
+                case SyntaxKind.GreaterThanToken:
+                case SyntaxKind.LessThanEqualsToken:
+                case SyntaxKind.GreaterThanEqualsToken:
+                case SyntaxKind.InstanceOfKeyword:
+                case SyntaxKind.InKeyword:
+                case SyntaxKind.EqualsEqualsToken:
+                case SyntaxKind.ExclamationEqualsToken:
+                case SyntaxKind.EqualsEqualsEqualsToken:
+                case SyntaxKind.ExclamationEqualsEqualsToken:
+                case SyntaxKind.AmpersandToken:
+                case SyntaxKind.CaretToken:
+                case SyntaxKind.BarToken:
+                case SyntaxKind.AmpersandAmpersandToken:
+                case SyntaxKind.BarBarToken:
+                case SyntaxKind.BarEqualsToken:
+                case SyntaxKind.AmpersandEqualsToken:
+                case SyntaxKind.CaretEqualsToken:
+                case SyntaxKind.LessThanLessThanEqualsToken:
+                case SyntaxKind.GreaterThanGreaterThanEqualsToken:
+                case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
+                case SyntaxKind.PlusEqualsToken:
+                case SyntaxKind.MinusEqualsToken:
+                case SyntaxKind.AsteriskEqualsToken:
+                case SyntaxKind.SlashEqualsToken:
+                case SyntaxKind.PercentEqualsToken:
+                case SyntaxKind.EqualsToken:
+                case SyntaxKind.CommaToken:
+                    return true;
+                default: return false;
+            }
+        }
+
+        function isPrefixUnaryExpressionOperatorToken(token: SyntaxKind): boolean {
+            switch (token) {
+                case SyntaxKind.PlusToken:
+                case SyntaxKind.MinusToken:
+                case SyntaxKind.TildeToken:
+                case SyntaxKind.ExclamationToken:
+                case SyntaxKind.PlusPlusToken:
+                case SyntaxKind.MinusMinusToken:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        function isKeyword(token: SyntaxKind): boolean {
+            return token >= SyntaxKind.FirstKeyword && token <= SyntaxKind.LastKeyword;
+        }
+
+        function classFromKind(token: SyntaxKind) {
+            if (isKeyword(token)) {
                 return TokenClass.Keyword;
             }
-            else if (TypeScript.SyntaxFacts.isBinaryExpressionOperatorToken(kind) ||
-                TypeScript.SyntaxFacts.isPrefixUnaryExpressionOperatorToken(kind)) {
+            else if (isBinaryExpressionOperatorToken(token) || isPrefixUnaryExpressionOperatorToken(token)) {
                 return TokenClass.Operator;
             }
-            else if (TypeScript.SyntaxFacts.isAnyPunctuation(kind)) {
+            else if (token >= SyntaxKind.FirstPunctuation && token <= SyntaxKind.LastPunctuation) {
                 return TokenClass.Punctuation;
             }
 
-            switch (kind) {
-                case TypeScript.SyntaxKind.WhitespaceTrivia:
-                    return TokenClass.Whitespace;
-                case TypeScript.SyntaxKind.MultiLineCommentTrivia:
-                case TypeScript.SyntaxKind.SingleLineCommentTrivia:
-                    return TokenClass.Comment;
-                case TypeScript.SyntaxKind.NumericLiteral:
+            switch (token) {
+                case SyntaxKind.NumericLiteral:
                     return TokenClass.NumberLiteral;
-                case TypeScript.SyntaxKind.StringLiteral:
+                case SyntaxKind.StringLiteral:
                     return TokenClass.StringLiteral;
-                case TypeScript.SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.RegularExpressionLiteral:
                     return TokenClass.RegExpLiteral;
-                case TypeScript.SyntaxKind.IdentifierName:
+                case SyntaxKind.Identifier:
                 default:
                     return TokenClass.Identifier;
             }

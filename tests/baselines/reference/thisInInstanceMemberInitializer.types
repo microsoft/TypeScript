@@ -1,0 +1,21 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/thisInInstanceMemberInitializer.ts ===
+class C {
+>C : C
+
+    x = this;
+>x : C
+>this : C
+}
+
+class D<T> {
+>D : D<T>
+>T : T
+
+    x = this;
+>x : D<T>
+>this : D<T>
+
+    y: T;
+>y : T
+>T : T
+}

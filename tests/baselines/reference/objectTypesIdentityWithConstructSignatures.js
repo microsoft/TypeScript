@@ -88,6 +88,7 @@ function foo15(x: C<number>); // ok
 function foo15(x: any) { }
 
 //// [objectTypesIdentityWithConstructSignatures.js]
+// object types are identical structurally
 var A = (function () {
     function A(x) {
     }

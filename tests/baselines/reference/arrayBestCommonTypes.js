@@ -102,6 +102,7 @@ var f = (function () {
         var t2 = [{ x: true, y: new derived() }, { x: false, y: new base() }];
         var t3 = [{ x: undefined, y: new base() }, { x: '', y: new derived() }];
         var anyObj = null;
+        // Order matters here so test all the variants
         var a1 = [{ x: 0, y: 'a' }, { x: 'a', y: 'a' }, { x: anyObj, y: 'a' }];
         var a2 = [{ x: anyObj, y: 'a' }, { x: 0, y: 'a' }, { x: 'a', y: 'a' }];
         var a3 = [{ x: 0, y: 'a' }, { x: anyObj, y: 'a' }, { x: 'a', y: 'a' }];

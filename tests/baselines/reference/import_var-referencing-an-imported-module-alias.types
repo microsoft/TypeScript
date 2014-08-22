@@ -1,0 +1,20 @@
+=== tests/cases/compiler/consumer.ts ===
+
+import host = require("host");
+>host : typeof "tests/cases/compiler/host"
+
+var hostVar = host;
+>hostVar : typeof "tests/cases/compiler/host"
+>host : typeof "tests/cases/compiler/host"
+
+var v = new hostVar.Host();
+>v : Host
+>new hostVar.Host() : Host
+>hostVar.Host : typeof Host
+>hostVar : typeof "tests/cases/compiler/host"
+>Host : typeof Host
+ 
+=== tests/cases/compiler/host.ts ===
+export class Host { }
+>Host : Host
+

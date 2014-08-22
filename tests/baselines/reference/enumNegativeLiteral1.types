@@ -1,0 +1,11 @@
+=== tests/cases/compiler/enumNegativeLiteral1.ts ===
+enum E {
+>E : E
+
+    a = -5, b, c
+>a : E
+>-5 : number
+>b : E
+>c : E
+}
+

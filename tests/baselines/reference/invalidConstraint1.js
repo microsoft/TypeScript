@@ -10,4 +10,4 @@ f<string, { a: number }>(); // should error
 function f() {
     return undefined;
 }
-f();
+f(); // should error

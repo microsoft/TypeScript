@@ -34,6 +34,7 @@ class B3 extends A3 {
 }
 
 //// [subtypingWithObjectMembersAccessibility.js]
+// Derived member is private, base member is not causes errors
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }

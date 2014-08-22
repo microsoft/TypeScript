@@ -54,4 +54,5 @@ var C = (function (_super) {
     }
     return C;
 })(B);
+// Ok to go down the chain, but error to try to climb back up
 (new Chain(new A)).then(function (a) { return new B; }).then(function (b) { return new C; }).then(function (c) { return new B; }).then(function (b) { return new A; });

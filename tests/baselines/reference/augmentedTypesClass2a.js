@@ -5,6 +5,7 @@ function c2() { } // error
 var c2 = () => { }
 
 //// [augmentedTypesClass2a.js]
+//// class then function
 var c2 = (function () {
     function c2() {
     }
@@ -13,6 +14,6 @@ var c2 = (function () {
     return c2;
 })();
 function c2() {
-}
+} // error
 var c2 = function () {
 };

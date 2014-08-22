@@ -24,6 +24,7 @@ var obj = {
     break: 3,
     function: 4
 };
+//This compiles.
 var obj2 = {
     if: 0,
     while: 1,

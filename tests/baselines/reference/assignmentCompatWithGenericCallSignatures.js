@@ -8,7 +8,8 @@ f = g; // ok
 g = f; // ok
 
 //// [assignmentCompatWithGenericCallSignatures.js]
+// some complex cases of assignment compat of generic signatures that stress contextual signature instantiation
 var f;
 var g;
-f = g;
-g = f;
+f = g; // ok
+g = f; // ok

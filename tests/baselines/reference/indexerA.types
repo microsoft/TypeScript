@@ -1,0 +1,31 @@
+=== tests/cases/compiler/indexerA.ts ===
+class JQueryElement {
+>JQueryElement : JQueryElement
+
+    id:string;
+>id : string
+}
+
+class JQuery {
+>JQuery : JQuery
+
+    [n:number]:JQueryElement
+>n : number
+>JQueryElement : JQueryElement
+}
+
+var jq:JQuery={ 0: { id : "a" }, 1: { id : "b" } };
+>jq : JQuery
+>JQuery : JQuery
+>{ 0: { id : "a" }, 1: { id : "b" } } : { [x: number]: JQueryElement; 0: { id: string; }; 1: { id: string; }; }
+>{ id : "a" } : { id: string; }
+>id : string
+>{ id : "b" } : { id: string; }
+>id : string
+
+jq[0].id;
+>jq[0].id : string
+>jq[0] : JQueryElement
+>jq : JQuery
+>id : string
+

@@ -24,7 +24,7 @@ var C = (function (_super) {
         _super.apply(this, arguments);
     }
     return C;
-})(E);
+})(E); // error
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
@@ -45,7 +45,7 @@ var C2 = (function (_super) {
         _super.apply(this, arguments);
     }
     return C2;
-})(E2);
+})(E2); // error
 var D2 = (function (_super) {
     __extends(D2, _super);
     function D2() {

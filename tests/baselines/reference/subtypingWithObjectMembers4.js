@@ -34,6 +34,7 @@ class B3 extends A3 {
 }
 
 //// [subtypingWithObjectMembers4.js]
+// subtyping when property names do not match
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }

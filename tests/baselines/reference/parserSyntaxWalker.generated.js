@@ -280,3 +280,12 @@
 
 
 //// [parserSyntaxWalker.generated.js]
+//declare module "fs" {
+//    export class File {
+//        constructor(filename: string);
+//        public ReadAllText(): string;
+//    }
+//    export interface IFile {
+//        [index: number]: string;
+//    }
+//}

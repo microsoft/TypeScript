@@ -1,0 +1,22 @@
+=== tests/cases/compiler/moduleAndInterfaceSharingName4.ts ===
+declare module D3 {
+>D3 : typeof D3
+
+    var x: D3.Color.Color;
+>x : Color
+>D3 : D3
+>Color : Color
+>Color : Color
+
+    module Color {
+>Color : Color
+
+        export interface Color {
+>Color : Color
+
+            darker: Color;
+>darker : Color
+>Color : Color
+        }
+    }
+}

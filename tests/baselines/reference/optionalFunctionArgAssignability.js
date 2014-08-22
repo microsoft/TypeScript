@@ -15,4 +15,4 @@ var a = function then(onFulfill, onReject) {
 var b = function then(onFulFill, onReject) {
     return null;
 };
-a = b;
+a = b; // error because number is not assignable to string

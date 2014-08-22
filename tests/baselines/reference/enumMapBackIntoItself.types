@@ -1,0 +1,30 @@
+=== tests/cases/compiler/enumMapBackIntoItself.ts ===
+enum TShirtSize {
+>TShirtSize : TShirtSize
+
+   Small,
+>Small : TShirtSize
+
+   Medium,
+>Medium : TShirtSize
+
+   Large
+>Large : TShirtSize
+}
+var mySize = TShirtSize.Large;
+>mySize : TShirtSize
+>TShirtSize.Large : TShirtSize
+>TShirtSize : typeof TShirtSize
+>Large : TShirtSize
+
+var test = TShirtSize[mySize];
+>test : string
+>TShirtSize[mySize] : string
+>TShirtSize : typeof TShirtSize
+>mySize : TShirtSize
+
+// specifically checking output here, bug was that test used to be undefined at runtime
+test + ''
+>test + '' : string
+>test : string
+

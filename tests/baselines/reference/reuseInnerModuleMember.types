@@ -1,0 +1,24 @@
+=== tests/cases/compiler/reuseInnerModuleMember_1.ts ===
+///<reference path='reuseInnerModuleMember_0.ts'/>
+declare module bar {
+>bar : typeof bar
+
+    interface alpha { }
+>alpha : alpha
+}
+
+import f = require('reuseInnerModuleMember_0');
+>f : typeof "tests/cases/compiler/reuseInnerModuleMember_0"
+
+module bar {
+>bar : typeof bar
+
+    var x: alpha;
+>x : alpha
+>alpha : alpha
+}
+
+=== tests/cases/compiler/reuseInnerModuleMember_0.ts ===
+export module M { }
+>M : M
+

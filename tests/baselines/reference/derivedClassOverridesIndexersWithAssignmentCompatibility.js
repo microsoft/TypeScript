@@ -29,6 +29,7 @@ var Base = (function () {
     }
     return Base;
 })();
+// ok, use assignment compatibility
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
@@ -41,6 +42,7 @@ var Base2 = (function () {
     }
     return Base2;
 })();
+// ok, use assignment compatibility
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {

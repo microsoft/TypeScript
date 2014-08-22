@@ -68,8 +68,8 @@ module ts {
     }
 
     export function concatenate<T>(array1: T[], array2: T[]): T[] {
-        if (!array2.length) return array1;
-        if (!array1.length) return array2;
+        if (!array2 || !array2.length) return array1;
+        if (!array1 || !array1.length) return array2;
         return array1.concat(array2);
     }
 
@@ -564,7 +564,7 @@ module ts {
         var currentAssertionLevel = AssertionLevel.None;
 
         export function shouldAssert(level: AssertionLevel): boolean {
-            return this.currentAssertionLevel >= level;
+            return currentAssertionLevel >= level;
         }
 
         export function assert(expression: any, message?: string, verboseDebugInfo?: () => string): void {

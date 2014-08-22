@@ -18,4 +18,5 @@ var Foo = (function () {
     return Foo;
 })();
 var baz = Foo.b;
+// Foo.b won't bind. 
 baz.concat("y");

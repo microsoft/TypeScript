@@ -21,6 +21,7 @@ var r = c.foo('', '');
 var r2 = e.foo('', 1);
 
 //// [derivedClassTransitivity3.js]
+// subclassing is not transitive when you can remove required parameters and add optional parameters
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -40,7 +41,7 @@ var D = (function (_super) {
         _super.apply(this, arguments);
     }
     D.prototype.foo = function (x) {
-    };
+    }; // ok to drop parameters
     return D;
 })(C);
 var E = (function (_super) {
@@ -49,7 +50,7 @@ var E = (function (_super) {
         _super.apply(this, arguments);
     }
     E.prototype.foo = function (x, y) {
-    };
+    }; // ok to add optional parameters
     return E;
 })(D);
 var c;

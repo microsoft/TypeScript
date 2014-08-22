@@ -25,6 +25,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+///<reference path='importUsedInExtendsList1_require.ts'/>
 var foo = require('importUsedInExtendsList1_require');
 var Sub = (function (_super) {
     __extends(Sub, _super);

@@ -47,6 +47,7 @@ var B = (function (_super) {
     }
     return B;
 })(A);
+// Inheritance
 var F = (function () {
     function F() {
     }
@@ -59,6 +60,7 @@ var G = (function (_super) {
     }
     return G;
 })(F);
+// Other way
 var H = (function () {
     function H() {
     }
@@ -71,6 +73,7 @@ var I = (function (_super) {
     }
     return I;
 })(H);
+// With hidden indexer
 var J = (function () {
     function J() {
     }

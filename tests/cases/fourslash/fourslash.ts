@@ -315,10 +315,6 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifyTodoComments(descriptors, test.ranges());
         }
 
-        public todoCommentsInCurrentFile(descriptors: string[]) {
-            FourSlash.currentTestState.verifyTodoComments(descriptors, test.ranges());
-        }
-
         public matchingBracePositionInCurrentFile(bracePosition: number, expectedMatchPosition: number) {
             FourSlash.currentTestState.verifyMatchingBracePosition(bracePosition, expectedMatchPosition);
         }

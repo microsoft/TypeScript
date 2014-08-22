@@ -24,7 +24,7 @@ var C = (function () {
     return C;
 })();
 var c = new C();
-var c2 = new C(null);
+var c2 = new C(null); // error
 var D = (function () {
     function D() {
         this.x = 2;
@@ -33,4 +33,4 @@ var D = (function () {
     return D;
 })();
 var d = new D();
-var d2 = new D(null);
+var d2 = new D(null); // error

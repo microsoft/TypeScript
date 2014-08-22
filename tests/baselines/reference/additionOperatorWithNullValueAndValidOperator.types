@@ -1,0 +1,107 @@
+=== tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndValidOperator.ts ===
+// If one operand is the null or undefined value, it is treated as having the type of the other operand.
+
+enum E { a, b, c }
+>E : E
+>a : E
+>b : E
+>c : E
+
+var a: any;
+>a : any
+
+var b: number;
+>b : number
+
+var c: E;
+>c : E
+>E : E
+
+var d: string;
+>d : string
+
+// null + any
+var r1: any = null + a;
+>r1 : any
+>null + a : any
+>a : any
+
+var r2: any = a + null;
+>r2 : any
+>a + null : any
+>a : any
+
+// null + number/enum
+var r3 = null + b;
+>r3 : number
+>null + b : number
+>b : number
+
+var r4 = null + 1;
+>r4 : number
+>null + 1 : number
+
+var r5 = null + c;
+>r5 : number
+>null + c : number
+>c : E
+
+var r6 = null + E.a;
+>r6 : number
+>null + E.a : number
+>E.a : E
+>E : typeof E
+>a : E
+
+var r7 = null + E['a'];
+>r7 : number
+>null + E['a'] : number
+>E['a'] : E
+>E : typeof E
+
+var r8 = b + null;
+>r8 : number
+>b + null : number
+>b : number
+
+var r9 = 1 + null;
+>r9 : number
+>1 + null : number
+
+var r10 = c + null
+>r10 : number
+>c + null : number
+>c : E
+
+var r11 = E.a + null;
+>r11 : number
+>E.a + null : number
+>E.a : E
+>E : typeof E
+>a : E
+
+var r12 = E['a'] + null;
+>r12 : number
+>E['a'] + null : number
+>E['a'] : E
+>E : typeof E
+
+// null + string
+var r13 = null + d;
+>r13 : string
+>null + d : string
+>d : string
+
+var r14 = null + '';
+>r14 : string
+>null + '' : string
+
+var r15 = d + null;
+>r15 : string
+>d + null : string
+>d : string
+
+var r16 = '' + null;
+>r16 : string
+>'' + null : string
+

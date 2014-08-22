@@ -69,6 +69,7 @@ var p: { x: number; y: number; }
 var p: M.D.Point;
 
 //// [exportImportAlias.js]
+// expect no errors here
 var A;
 (function (A) {
     A.x = 'hello world';
@@ -109,6 +110,7 @@ var X;
 })(X || (X = {}));
 var Z;
 (function (Z) {
+    // 'y' should be a fundule here
     Z.y = X.Y;
 })(Z || (Z = {}));
 var m = Z.y();

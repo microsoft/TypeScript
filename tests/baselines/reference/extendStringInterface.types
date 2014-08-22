@@ -1,0 +1,44 @@
+=== tests/cases/conformance/types/primitives/string/extendStringInterface.ts ===
+interface String {
+>String : String
+
+    doStuff(): string;
+>doStuff : () => string
+
+    doOtherStuff<T>(x:T): T;
+>doOtherStuff : <T>(x: T) => T
+>T : T
+>x : T
+>T : T
+>T : T
+}
+
+var x = '';
+>x : string
+
+var a: string = x.doStuff();
+>a : string
+>x.doStuff() : string
+>x.doStuff : () => string
+>x : string
+>doStuff : () => string
+
+var b: string = x.doOtherStuff('hm');
+>b : string
+>x.doOtherStuff('hm') : string
+>x.doOtherStuff : <T>(x: T) => T
+>x : string
+>doOtherStuff : <T>(x: T) => T
+
+var c: string = x['doStuff']();
+>c : string
+>x['doStuff']() : string
+>x['doStuff'] : () => string
+>x : string
+
+var d: string = x['doOtherStuff']('hm');
+>d : string
+>x['doOtherStuff']('hm') : string
+>x['doOtherStuff'] : <T>(x: T) => T
+>x : string
+

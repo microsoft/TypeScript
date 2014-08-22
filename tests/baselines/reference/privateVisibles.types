@@ -1,0 +1,23 @@
+=== tests/cases/compiler/privateVisibles.ts ===
+class Foo {
+>Foo : Foo
+
+	private pvar = 0;
+>pvar : number
+
+	constructor() {
+	    var n = this.pvar;
+>n : number
+>this.pvar : number
+>this : Foo
+>pvar : number
+	}
+
+	public meth() { var q = this.pvar;}
+>meth : () => void
+>q : number
+>this.pvar : number
+>this : Foo
+>pvar : number
+}
+

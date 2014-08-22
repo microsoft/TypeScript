@@ -48,6 +48,7 @@ var Root;
 var otherRoot;
 (function (otherRoot) {
     (function (A) {
+        // have to be fully qualified since in different root
         A.Origin = { x: 0, y: 0 };
         (function (Utils) {
             var Plane = (function () {

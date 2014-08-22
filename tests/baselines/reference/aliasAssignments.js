@@ -23,6 +23,6 @@ exports.someClass = someClass;
 //// [aliasAssignments_1.js]
 var moduleA = require("aliasAssignments_moduleA");
 var x = moduleA;
-x = 1;
+x = 1; // Should be error
 var y = 1;
-y = moduleA;
+y = moduleA; // should be error

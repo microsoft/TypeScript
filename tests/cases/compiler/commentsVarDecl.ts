@@ -3,7 +3,7 @@
 // @comments: true
 
 /** Variable comments*/
-var myVariable = 10;
+var myVariable = 10; // This trailing Comment1
 
 /** This is another variable comment*/
 var anotherVariable = 30;
@@ -13,13 +13,13 @@ var aVar = "";
 
 /** this is multiline comment
   * All these variables are of number type */
-var anotherAnotherVariable = 70;
+var anotherAnotherVariable = 70; /* these are multiple trailing comments */ /* multiple trailing comments */
 
 /** Triple slash multiline comment*/
 /** another line in the comment*/
 /** comment line 2*/
-var x = 70;
-
+var x = 70; /* multiline trailing comment 
+this is multiline trailing comment */
 /** Triple slash comment on the assignement shouldnt be in .d.ts file*/
 x = myVariable;
 

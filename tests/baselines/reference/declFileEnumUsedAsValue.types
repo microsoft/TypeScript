@@ -1,0 +1,18 @@
+=== tests/cases/compiler/declFileEnumUsedAsValue.ts ===
+
+enum e {
+>e : e
+
+    a,
+>a : e
+
+    b,
+>b : e
+
+    c
+>c : e
+}
+var x = e;
+>x : typeof e
+>e : typeof e
+

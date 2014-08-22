@@ -28,4 +28,4 @@ function concat(x, y) {
     return null;
 }
 var result = concat(1, "");
-var elementCount = result.length;
+var elementCount = result.length; // would like to get an error by now

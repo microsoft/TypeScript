@@ -132,7 +132,6 @@ module Harness.LanguageService {
     }
     export class TypeScriptLS implements ts.LanguageServiceShimHost {
         private ls: ts.LanguageServiceShim = null;
-        public newLS: ts.LanguageService;
 
         private fileNameToScript: ts.Map<ScriptInfo> = {};
 
@@ -233,12 +232,13 @@ module Harness.LanguageService {
          *  To access the non-shim (i.e. actual) language service, use the "ls.languageService" property.
          */
         public getLanguageService(): ts.LanguageServiceShim {
-            var ls = new TypeScript.Services.TypeScriptServicesFactory().createLanguageServiceShim(this);
-            this.ls = ls;
-            var hostAdapter = new ts.LanguageServiceShimHostAdapter(this);
+            this.ls = new TypeScript.Services.TypeScriptServicesFactory().createLanguageServiceShim(this);
+            return this.ls;
+        }
 
-            this.newLS = ts.createLanguageService(hostAdapter, NonCachingDocumentRegistry.Instance);
-            return ls;
+        /** Return a new instance of the classifier service shim */
+        public getClassifier(): ts.ClassifierShim {
+            return new TypeScript.Services.TypeScriptServicesFactory().createClassifierShim(this);
         }
 
         /** Parse file given its source text */

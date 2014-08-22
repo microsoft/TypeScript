@@ -179,6 +179,7 @@ function foo(t, u) {
     var r6 = t != u;
     var r7 = t === u;
     var r8 = t !== u;
+    // operator <
     var r1a1 = t < a;
     var r1a2 = t < b;
     var r1a3 = t < c;
@@ -193,6 +194,7 @@ function foo(t, u) {
     var r1b5 = e < t;
     var r1b6 = f < t;
     var r1b7 = g < t;
+    // operator >
     var r2a1 = t < a;
     var r2a2 = t < b;
     var r2a3 = t < c;
@@ -207,6 +209,7 @@ function foo(t, u) {
     var r2b5 = e < t;
     var r2b6 = f < t;
     var r2b7 = g < t;
+    // operator <=
     var r3a1 = t < a;
     var r3a2 = t < b;
     var r3a3 = t < c;
@@ -221,6 +224,7 @@ function foo(t, u) {
     var r3b5 = e < t;
     var r3b6 = f < t;
     var r3b7 = g < t;
+    // operator >=
     var r4a1 = t < a;
     var r4a2 = t < b;
     var r4a3 = t < c;
@@ -235,6 +239,7 @@ function foo(t, u) {
     var r4b5 = e < t;
     var r4b6 = f < t;
     var r4b7 = g < t;
+    // operator ==
     var r5a1 = t < a;
     var r5a2 = t < b;
     var r5a3 = t < c;
@@ -249,6 +254,7 @@ function foo(t, u) {
     var r5b5 = e < t;
     var r5b6 = f < t;
     var r5b7 = g < t;
+    // operator !=
     var r6a1 = t < a;
     var r6a2 = t < b;
     var r6a3 = t < c;
@@ -263,6 +269,7 @@ function foo(t, u) {
     var r6b5 = e < t;
     var r6b6 = f < t;
     var r6b7 = g < t;
+    // operator ===
     var r7a1 = t < a;
     var r7a2 = t < b;
     var r7a3 = t < c;
@@ -277,6 +284,7 @@ function foo(t, u) {
     var r7b5 = e < t;
     var r7b6 = f < t;
     var r7b7 = g < t;
+    // operator !==
     var r8a1 = t < a;
     var r8a2 = t < b;
     var r8a3 = t < c;

@@ -38,10 +38,12 @@ var Foo;
         }
         return Inner;
     })();
+    // Inner should show up in intellisense
     Foo.Outer = 0;
 })(Foo || (Foo = {}));
 var Foo;
 (function (Foo) {
+    // Should not be an error
     var Helper = (function () {
         function Helper() {
         }

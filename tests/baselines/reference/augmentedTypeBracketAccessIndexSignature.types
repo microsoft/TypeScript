@@ -1,0 +1,36 @@
+=== tests/cases/compiler/augmentedTypeBracketAccessIndexSignature.ts ===
+interface Foo { a }
+>Foo : Foo
+>a : any
+
+interface Bar { b }
+>Bar : Bar
+>b : any
+
+interface Object {
+>Object : Object
+
+    [n: number]: Foo;
+>n : number
+>Foo : Foo
+}
+
+interface Function {
+>Function : Function
+
+    [n: number]: Bar;
+>n : number
+>Bar : Bar
+}
+
+var a = {}[0]; // Should be Foo
+>a : any
+>{}[0] : any
+>{} : {}
+
+var b = (() => { })[0]; // Should be Bar
+>b : any
+>(() => { })[0] : any
+>(() => { }) : () => void
+>() => { } : () => void
+

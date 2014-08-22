@@ -65,7 +65,7 @@ var D = (function (_super) {
         this.z = z;
     }
     return D;
-})(C);
+})(C); // too few params
 var E = (function (_super) {
     __extends(E, _super);
     function E(z) {
@@ -81,7 +81,7 @@ var F = (function (_super) {
         this.z = z;
     }
     return F;
-})(C);
+})(C); // first param type
 function f() {
     if (x < 10) {
         x = 11;

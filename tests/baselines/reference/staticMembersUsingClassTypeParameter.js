@@ -16,6 +16,7 @@ class C3<T extends Date> {
 }
 
 //// [staticMembersUsingClassTypeParameter.js]
+// BUG 745747
 var C = (function () {
     function C() {
     }

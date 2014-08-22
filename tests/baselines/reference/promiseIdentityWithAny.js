@@ -11,5 +11,6 @@ var x: IPromise<string, number>;
 var x: Promise<string, boolean>;
 
 //// [promiseIdentityWithAny.js]
+// Should be ok because signature type parameters get erased to any
 var x;
 var x;

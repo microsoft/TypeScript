@@ -60,10 +60,14 @@ function globalfooWithOverloads(a: any): any {
 }
 
 //// [declFileFunctions_0.js]
+/** This comment should appear for foo*/
 function foo() {
 }
 exports.foo = foo;
-function fooWithParameters(a, b) {
+/** This is comment for function signature*/
+function fooWithParameters(/** this is comment about a*/ a, 
+    /** this is comment for b*/
+    b) {
     var d = a;
 }
 exports.fooWithParameters = fooWithParameters;
@@ -79,9 +83,13 @@ function fooWithOverloads(a) {
     return a;
 }
 exports.fooWithOverloads = fooWithOverloads;
+/** This comment should appear for nonExportedFoo*/
 function nonExportedFoo() {
 }
-function nonExportedFooWithParameters(a, b) {
+/** This is comment for function signature*/
+function nonExportedFooWithParameters(/** this is comment about a*/ a, 
+    /** this is comment for b*/
+    b) {
     var d = a;
 }
 function nonExportedFooWithRestParameters(a) {
@@ -95,9 +103,13 @@ function nonExportedFooWithOverloads(a) {
     return a;
 }
 //// [declFileFunctions_1.js]
+/** This comment should appear for foo*/
 function globalfoo() {
 }
-function globalfooWithParameters(a, b) {
+/** This is comment for function signature*/
+function globalfooWithParameters(/** this is comment about a*/ a, 
+    /** this is comment for b*/
+    b) {
     var d = a;
 }
 function globalfooWithRestParameters(a) {
@@ -113,14 +125,22 @@ function globalfooWithOverloads(a) {
 
 
 //// [declFileFunctions_0.d.ts]
+/** This comment should appear for foo*/
 export declare function foo(): void;
-export declare function fooWithParameters(a: string, b: number): void;
+/** This is comment for function signature*/
+export declare function fooWithParameters(/** this is comment about a*/ a: string, 
+    /** this is comment for b*/
+    b: number): void;
 export declare function fooWithRestParameters(a: string, ...rests: string[]): string;
 export declare function fooWithOverloads(a: string): string;
 export declare function fooWithOverloads(a: number): number;
 //// [declFileFunctions_1.d.ts]
+/** This comment should appear for foo*/
 declare function globalfoo(): void;
-declare function globalfooWithParameters(a: string, b: number): void;
+/** This is comment for function signature*/
+declare function globalfooWithParameters(/** this is comment about a*/ a: string, 
+    /** this is comment for b*/
+    b: number): void;
 declare function globalfooWithRestParameters(a: string, ...rests: string[]): string;
 declare function globalfooWithOverloads(a: string): string;
 declare function globalfooWithOverloads(a: number): number;

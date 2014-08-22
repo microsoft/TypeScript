@@ -1,0 +1,16 @@
+=== tests/cases/compiler/styleOptions.ts ===
+///<style eqeqeq="on" strict="on" /> 
+
+var x = 1;
+>x : number
+
+var y = 1;
+>y : number
+
+var t = x == y;
+>t : boolean
+>x == y : boolean
+>x : number
+>y : number
+
+

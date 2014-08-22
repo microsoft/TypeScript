@@ -1,0 +1,28 @@
+=== tests/cases/compiler/defaultIndexProps1.ts ===
+class Foo {
+>Foo : Foo
+
+	public v = "Yo";
+>v : string
+}
+
+var f = new Foo();
+>f : Foo
+>new Foo() : Foo
+>Foo : typeof Foo
+
+var q = f["v"];
+>q : string
+>f["v"] : string
+>f : Foo
+
+var o = {v:"Yo2"};
+>o : { v: string; }
+>{v:"Yo2"} : { v: string; }
+>v : string
+
+var q2 = o["v"];
+>q2 : string
+>o["v"] : string
+>o : { v: string; }
+

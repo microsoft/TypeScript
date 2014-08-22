@@ -11,6 +11,7 @@ class derived extends base { }
 
 
 //// [errorForwardReferenceForwadingConstructor.js]
+// Error forward referencing derived class with forwarding constructor
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }

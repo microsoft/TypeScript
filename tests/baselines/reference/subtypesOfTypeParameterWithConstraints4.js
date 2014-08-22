@@ -79,6 +79,7 @@ class D9<T extends Foo, U extends Foo, V> extends B1<U> {
 }
 
 //// [subtypesOfTypeParameterWithConstraints4.js]
+// checking whether other types are subtypes of type parameters with constraints
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -91,16 +92,22 @@ var Foo = (function () {
     return Foo;
 })();
 function f(t, u, v) {
+    // error
     var r = true ? t : u;
     var r = true ? u : t;
+    // error
     var r2 = true ? t : v;
     var r2 = true ? v : t;
+    // error
     var r3 = true ? v : u;
     var r3 = true ? u : v;
+    // ok
     var r4 = true ? t : new Foo();
     var r4 = true ? new Foo() : t;
+    // ok
     var r5 = true ? u : new Foo();
     var r5 = true ? new Foo() : u;
+    // BUG, should be error
     var r6 = true ? v : new Foo();
     var r6 = true ? new Foo() : v;
 }

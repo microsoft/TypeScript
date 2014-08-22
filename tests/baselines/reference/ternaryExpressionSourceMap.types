@@ -1,0 +1,12 @@
+=== tests/cases/compiler/ternaryExpressionSourceMap.ts ===
+
+var x = 1;
+>x : number
+
+var foo = x ? () => 0 : () => 0;
+>foo : () => number
+>x ? () => 0 : () => 0 : () => number
+>x : number
+>() => 0 : () => number
+>() => 0 : () => number
+

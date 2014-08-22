@@ -1,0 +1,7 @@
+=== tests/cases/conformance/parser/ecmascript5/ObjectLiterals/parserObjectLiterals1.ts ===
+var v = { a: 1, b: 2 };
+>v : { a: number; b: number; }
+>{ a: 1, b: 2 } : { a: number; b: number; }
+>a : number
+>b : number
+

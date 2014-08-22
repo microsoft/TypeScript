@@ -30,19 +30,19 @@ function foo(bar) {
     return bar;
 }
 ;
-var x1 = foo([{ a: true }]);
-var x11 = foo([{ a: 0 }]);
-var x111 = foo([{ a: "s" }]);
-var x1111 = foo([{ a: null }]);
+var x1 = foo([{ a: true }]); // works
+var x11 = foo([{ a: 0 }]); // works
+var x111 = foo([{ a: "s" }]); // error - does not match any signature
+var x1111 = foo([{ a: null }]); // works - ambiguous call is resolved to be the first in the overload set so this returns a string
 function foo2(bar) {
     return bar;
 }
 ;
-var x2 = foo2({ a: 0 });
-var x3 = foo2({ a: true });
-var x4 = foo2({ a: "s" });
+var x2 = foo2({ a: 0 }); // works
+var x3 = foo2({ a: true }); // works
+var x4 = foo2({ a: "s" }); // error
 function foo4(bar) {
     return bar;
 }
 ;
-var x = foo4({ a: true });
+var x = foo4({ a: true }); // error

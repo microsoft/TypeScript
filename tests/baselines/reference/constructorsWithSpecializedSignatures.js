@@ -44,13 +44,15 @@ interface I2 {
 }
 
 //// [constructorsWithSpecializedSignatures.js]
+// errors
 var D = (function () {
     function D(x) {
     }
     return D;
 })();
+// overloads are ok
 var D2 = (function () {
     function D2(x) {
-    }
+    } // error
     return D2;
 })();

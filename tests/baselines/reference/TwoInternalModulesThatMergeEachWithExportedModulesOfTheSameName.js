@@ -49,6 +49,7 @@ var A;
         B.x;
     })(B || (B = {}));
 })(A || (A = {}));
+// ensure the right var decl is exported
 var x;
 var x = A.B.x;
 var X;
@@ -81,5 +82,6 @@ var X;
     })(X.Y || (X.Y = {}));
     var Y = X.Y;
 })(X || (X = {}));
+// make sure merging works as expected
 var l;
 var l;

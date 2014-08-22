@@ -1,0 +1,64 @@
+=== tests/cases/compiler/externalModuleAssignToVar_core.ts ===
+///<reference path='externalModuleAssignToVar_core_require.ts'/>
+import ext = require('externalModuleAssignToVar_core_require');
+>ext : typeof "tests/cases/compiler/externalModuleAssignToVar_core_require"
+
+var y1: { C: new() => ext.C; } = ext;
+>y1 : { C: new () => C; }
+>C : new () => C
+>ext : ext
+>C : C
+>ext : typeof "tests/cases/compiler/externalModuleAssignToVar_core_require"
+
+y1 = ext; // ok
+>y1 = ext : typeof "tests/cases/compiler/externalModuleAssignToVar_core_require"
+>y1 : { C: new () => C; }
+>ext : typeof "tests/cases/compiler/externalModuleAssignToVar_core_require"
+
+import ext2 = require('externalModuleAssignToVar_core_require2');
+>ext2 : typeof C
+
+var y2: new() => ext2 = ext2;
+>y2 : new () => C
+>ext2 : C
+>ext2 : typeof C
+
+y2 = ext2; // ok
+>y2 = ext2 : typeof C
+>y2 : new () => C
+>ext2 : typeof C
+
+import ext3 = require('externalModuleAssignToVar_ext');
+>ext3 : typeof D
+
+var y3: new () => ext3 = ext3;
+>y3 : new () => D
+>ext3 : D
+>ext3 : typeof D
+
+y3 = ext3; // ok
+>y3 = ext3 : typeof D
+>y3 : new () => D
+>ext3 : typeof D
+
+=== tests/cases/compiler/externalModuleAssignToVar_ext.ts ===
+class D { foo: string; }
+>D : D
+>foo : string
+
+export = D;
+>D : D
+
+=== tests/cases/compiler/externalModuleAssignToVar_core_require.ts ===
+export class C { bar: string; }
+>C : C
+>bar : string
+
+=== tests/cases/compiler/externalModuleAssignToVar_core_require2.ts ===
+class C { baz: string; }
+>C : C
+>baz : string
+
+export = C;
+>C : C
+

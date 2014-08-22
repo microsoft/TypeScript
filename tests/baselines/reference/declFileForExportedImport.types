@@ -1,0 +1,25 @@
+=== tests/cases/compiler/declFileForExportedImport_1.ts ===
+///<reference path='declFileForExportedImport_0.ts'/>
+export import a = require('declFileForExportedImport_0');
+>a : typeof "tests/cases/compiler/declFileForExportedImport_0"
+
+var y = a.x;
+>y : number
+>a.x : number
+>a : typeof "tests/cases/compiler/declFileForExportedImport_0"
+>x : number
+
+export import b = a;
+>b : typeof "tests/cases/compiler/declFileForExportedImport_0"
+>a : typeof "tests/cases/compiler/declFileForExportedImport_0"
+
+var z = b.x;
+>z : number
+>b.x : number
+>b : typeof "tests/cases/compiler/declFileForExportedImport_0"
+>x : number
+
+=== tests/cases/compiler/declFileForExportedImport_0.ts ===
+export var x: number;
+>x : number
+

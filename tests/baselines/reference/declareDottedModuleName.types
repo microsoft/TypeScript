@@ -1,0 +1,21 @@
+=== tests/cases/compiler/declareDottedModuleName.ts ===
+module M {
+>M : M
+
+    module P.Q { } // This shouldnt be emitted
+>P : P
+>Q : Q
+}
+
+module M {
+>M : M
+
+    export module R.S { }  //This should be emitted
+>R : R
+>S : S
+}
+
+module T.U { // This needs to be emitted
+>T : T
+>U : U
+}

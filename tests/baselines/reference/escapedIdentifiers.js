@@ -120,12 +120,24 @@ l\u0061bel4:
     } 
 
 //// [escapedIdentifiers.js]
+/*
+    0 .. \u0030
+    9 .. \u0039
+
+    A .. \u0041
+    Z .. \u005a
+
+    a .. \u0061
+    z .. \u00za
+*/
+// var decl
 var \u0061 = 1;
 a++;
 \u0061++;
 var b = 1;
 b++;
 \u0062++;
+// modules
 var moduleType1;
 (function (moduleType1) {
     moduleType1.baz1;
@@ -138,6 +150,7 @@ moduleType1.baz1 = 3;
 moduleType\u0031.baz1 = 3;
 moduleType2.baz2 = 3;
 moduleType\u0032.baz2 = 3;
+// classes
 var classType1 = (function () {
     function classType1() {
     }
@@ -164,6 +177,7 @@ var interfaceType2Object1 = { bar2: 0 };
 interfaceType2Object1.bar2 = 2;
 var interfaceType2Object2 = { bar2: 0 };
 interfaceType2Object2.bar2 = 2;
+// arguments
 var testClass = (function () {
     function testClass() {
     }
@@ -175,6 +189,7 @@ var testClass = (function () {
     };
     return testClass;
 })();
+// constructors
 var constructorTestClass = (function () {
     function constructorTestClass(arg1, arg\u0032, arg\u0033, arg4) {
         this.arg1 = arg1;

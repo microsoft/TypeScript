@@ -1,0 +1,23 @@
+=== tests/cases/compiler/exportAssignmentClass_B.ts ===
+import D = require("exportAssignmentClass_A");
+>D : typeof C
+
+var d = new D();
+>d : C
+>new D() : C
+>D : typeof C
+
+var x = d.p;
+>x : number
+>d.p : number
+>d : C
+>p : number
+
+=== tests/cases/compiler/exportAssignmentClass_A.ts ===
+class C { public p = 0; }
+>C : C
+>p : number
+
+export = C;
+>C : C
+

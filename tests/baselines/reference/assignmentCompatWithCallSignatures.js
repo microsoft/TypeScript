@@ -44,6 +44,7 @@ a = function (x: string) { return ''; }
 
 
 //// [assignmentCompatWithCallSignatures.js]
+// void returning call signatures can be assigned a non-void returning call signature that otherwise matches
 var t;
 var a;
 t = a;
@@ -66,6 +67,7 @@ a = function (x) {
 };
 var s2;
 var a3;
+// these are errors
 t = s2;
 t = a3;
 t = function (x) { return 1; };

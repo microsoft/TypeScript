@@ -8,5 +8,5 @@ Callbacks<number, string, boolean>('s'); // no error
 new Callbacks<number, string, boolean>('s'); // no error
 
 //// [overloadsAndTypeArgumentArity.js]
-Callbacks('s');
-new Callbacks('s');
+Callbacks('s'); // no error
+new Callbacks('s'); // no error

@@ -539,8 +539,8 @@ module Harness {
                 getCurrentDirectory: sys.getCurrentDirectory,
                 getCancellationToken: (): any => undefined,
                 getSourceFile: (fn, languageVersion) => {
-                    if (fn in filemap) {
-                        return filemap[fn];
+                    if (Object.prototype.hasOwnProperty.call(filemap, ts.getCanonicalFileName(fn))) {
+                        return filemap[ts.getCanonicalFileName(fn)];
                     } else {
                         var lib = defaultLibFileName;
                         if (fn === defaultLibFileName) {
@@ -569,10 +569,6 @@ module Harness {
                 this.inputFiles = [];
                 this.settings = [];
                 this.lastErrors = [];
-            }
-
-            public emitAllDeclarations() {
-                // NEWTODO: Do something here?
             }
 
             public reportCompilationErrors() {
@@ -604,12 +600,18 @@ module Harness {
                     result.files.forEach(file => {
                         ioHost.writeFile(file.fileName, file.code, false);
                     });
+                    result.declFilesCode.forEach(file => {
+                        ioHost.writeFile(file.fileName, file.code, false);
+                    });
+                    result.sourceMaps.forEach(file => {
+                        ioHost.writeFile(file.fileName, file.code, false);
+                    });
                 }, () => { }, this.compileOptions);
             }
 
             public compileFiles(inputFiles: { unitName: string; content: string }[],
                 otherFiles: { unitName: string; content?: string }[],
-                onComplete: (result: CompilerResult) => void,
+                onComplete: (result: CompilerResult, checker: ts.TypeChecker) => void,
                 settingsCallback?: (settings: ts.CompilerOptions) => void,
                 options?: ts.CompilerOptions) {
 
@@ -695,6 +697,10 @@ module Harness {
                             sys.newLine = setting.value;
                             break;
 
+                        case 'comments':
+                            options.removeComments = setting.value === 'false';
+                            break;
+
                         case 'mapsourcefiles':
                         case 'maproot':
                         case 'generatedeclarationfiles':
@@ -702,7 +708,6 @@ module Harness {
                         case 'gatherDiagnostics':
                         case 'codepage':
                         case 'createFileLog':
-                        case 'comments':
                         case 'filename':
                         case 'propagateenumconstants':
                         case 'removecomments':
@@ -724,7 +729,7 @@ module Harness {
                 var filemap: { [name: string]: ts.SourceFile; } = {};
                 var register = (file: { unitName: string; content: string; }) => {
                     var filename = Path.switchToForwardSlashes(file.unitName);
-                    filemap[filename] = ts.createSourceFile(filename, file.content, options.target, /*version:*/ "0");
+                    filemap[ts.getCanonicalFileName(filename)] = ts.createSourceFile(filename, file.content, options.target, /*version:*/ "0");
                 };
                 inputFiles.forEach(register);
                 otherFiles.forEach(register);
@@ -736,7 +741,7 @@ module Harness {
 
                 var hadParseErrors = program.getDiagnostics().length > 0;
 
-                var checker = program.getTypeChecker();
+                var checker = program.getTypeChecker(/*fullTypeCheckMode*/ true);
                 checker.checkProgram();
 
                 // only emit if there weren't parse errors
@@ -755,7 +760,7 @@ module Harness {
                 var result = new CompilerResult(fileOutputs, errors, []);
                 // Covert the source Map data into the baseline
                 result.updateSourceMapRecord(program, emitResult ? emitResult.sourceMaps : undefined);
-                onComplete(result);
+                onComplete(result, checker);
 
                 // reset what newline means in case the last test changed it
                 sys.newLine = '\r\n';
@@ -764,7 +769,23 @@ module Harness {
         }
 
         export function getMinimalDiagnostic(err: ts.Diagnostic): MinimalDiagnostic {
-            return { filename: err.file && err.file.filename, start: err.start, end: err.start + err.length, line: 0, character: 0, message: err.messageText };
+            var errorLineInfo = err.file ? err.file.getLineAndCharacterFromPosition(err.start) : { line: 0, character: 0 };
+            return { filename: err.file && err.file.filename, start: err.start, end: err.start + err.length, line: errorLineInfo.line, character: errorLineInfo.character, message: err.messageText };
+        }
+
+        export function minimalDiagnosticsToString(diagnostics: MinimalDiagnostic[]) {
+            // This is copied from tsc.ts's reportError to replicate what tsc does
+            var errors = "";
+            ts.forEach(diagnostics, diagnotic => {
+                if (diagnotic.filename) {
+                    errors += diagnotic.filename + "(" + diagnotic.line + "," + diagnotic.character + "): " + diagnotic.message + sys.newLine;
+                }
+                else {
+                    errors += diagnotic.message + sys.newLine;
+                }
+            });
+
+            return errors;
         }
 
         export function getErrorBaseline(inputFiles: { unitName: string; content: string }[],

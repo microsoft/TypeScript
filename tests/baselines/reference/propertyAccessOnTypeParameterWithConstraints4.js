@@ -38,7 +38,7 @@ var C = (function () {
     }
     C.prototype.f = function () {
         var x;
-        var a = x['notHere']();
+        var a = x['notHere'](); // should be string
         return a + x.notHere();
     };
     return C;
@@ -52,7 +52,7 @@ var r3 = a().notHere();
 var r3b = a()['notHere']();
 var b = {
     foo: function (x) {
-        var a = x['notHere']();
+        var a = x['notHere'](); // should be string
         return a + x.notHere();
     },
     bar: b.foo().notHere()

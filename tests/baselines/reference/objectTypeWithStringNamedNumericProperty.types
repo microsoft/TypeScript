@@ -1,0 +1,469 @@
+=== tests/cases/conformance/types/members/objectTypeWithStringNamedNumericProperty.ts ===
+
+// string named numeric properties are legal and distinct when indexed by string values
+// indexed numerically the value is converted to a number
+// no errors expected below
+
+class C {
+>C : C
+
+    "0.1": void;
+    ".1": Object;
+>Object : Object
+
+    "1": number;
+    "1.": string;
+    "1..": boolean;
+    "1.0": Date;
+>Date : Date
+
+    "-1.0": RegExp;
+>RegExp : RegExp
+
+    "-1": Date;
+>Date : Date
+}
+
+var c: C;
+>c : C
+>C : C
+
+var r1 = c['0.1'];
+>r1 : void
+>c['0.1'] : void
+>c : C
+
+var r2 = c['.1'];
+>r2 : Object
+>c['.1'] : Object
+>c : C
+
+var r3 = c['1'];
+>r3 : number
+>c['1'] : number
+>c : C
+
+var r3 = c[1];
+>r3 : number
+>c[1] : number
+>c : C
+
+var r4 = c['1.'];
+>r4 : string
+>c['1.'] : string
+>c : C
+
+var r3 = c[1.]; // same as indexing by 1 when done numerically
+>r3 : number
+>c[1.] : number
+>c : C
+
+var r5 = c['1..'];
+>r5 : boolean
+>c['1..'] : boolean
+>c : C
+
+var r6 = c['1.0'];
+>r6 : Date
+>c['1.0'] : Date
+>c : C
+
+var r3 = c[1.0]; // same as indexing by 1 when done numerically
+>r3 : number
+>c[1.0] : number
+>c : C
+
+// BUG 823822
+var r7 = i[-1];
+>r7 : any
+>i[-1] : any
+>i : I
+>-1 : number
+
+var r7 = i[-1.0];
+>r7 : any
+>i[-1.0] : any
+>i : I
+>-1.0 : number
+
+var r8 = i["-1.0"];
+>r8 : RegExp
+>i["-1.0"] : RegExp
+>i : I
+
+var r9 = i["-1"];
+>r9 : Date
+>i["-1"] : Date
+>i : I
+
+var r10 = i[0x1]
+>r10 : number
+>i[0x1] : number
+>i : I
+
+var r11 = i[-0x1]
+>r11 : any
+>i[-0x1] : any
+>i : I
+>-0x1 : number
+
+var r12 = i[01]
+>r12 : number
+>i[01] : number
+>i : I
+
+var r13 = i[-01]
+>r13 : any
+>i[-01] : any
+>i : I
+>-01 : number
+
+interface I {
+>I : I
+
+    "0.1": void;
+    ".1": Object;
+>Object : Object
+
+    "1": number;
+    "1.": string;
+    "1..": boolean;
+    "1.0": Date;
+>Date : Date
+
+    "-1.0": RegExp;
+>RegExp : RegExp
+
+    "-1": Date;
+>Date : Date
+}
+
+var i: I;
+>i : I
+>I : I
+
+var r1 = i['0.1'];
+>r1 : void
+>i['0.1'] : void
+>i : I
+
+var r2 = i['.1'];
+>r2 : Object
+>i['.1'] : Object
+>i : I
+
+var r3 = i['1'];
+>r3 : number
+>i['1'] : number
+>i : I
+
+var r3 = c[1];
+>r3 : number
+>c[1] : number
+>c : C
+
+var r4 = i['1.'];
+>r4 : string
+>i['1.'] : string
+>i : I
+
+var r3 = c[1.]; // same as indexing by 1 when done numerically
+>r3 : number
+>c[1.] : number
+>c : C
+
+var r5 = i['1..'];
+>r5 : boolean
+>i['1..'] : boolean
+>i : I
+
+var r6 = i['1.0'];
+>r6 : Date
+>i['1.0'] : Date
+>i : I
+
+var r3 = c[1.0]; // same as indexing by 1 when done numerically
+>r3 : number
+>c[1.0] : number
+>c : C
+
+// BUG 823822
+var r7 = i[-1]; 
+>r7 : any
+>i[-1] : any
+>i : I
+>-1 : number
+
+var r7 = i[-1.0]; 
+>r7 : any
+>i[-1.0] : any
+>i : I
+>-1.0 : number
+
+var r8 = i["-1.0"];
+>r8 : RegExp
+>i["-1.0"] : RegExp
+>i : I
+
+var r9 = i["-1"];
+>r9 : Date
+>i["-1"] : Date
+>i : I
+
+var r10 = i[0x1]
+>r10 : number
+>i[0x1] : number
+>i : I
+
+var r11 = i[-0x1]
+>r11 : any
+>i[-0x1] : any
+>i : I
+>-0x1 : number
+
+var r12 = i[01]
+>r12 : number
+>i[01] : number
+>i : I
+
+var r13 = i[-01]
+>r13 : any
+>i[-01] : any
+>i : I
+>-01 : number
+
+var a: {
+>a : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": Date; }
+
+    "0.1": void;
+    ".1": Object;
+>Object : Object
+
+    "1": number;
+    "1.": string;
+    "1..": boolean;
+    "1.0": Date;
+>Date : Date
+
+    "-1.0": RegExp;
+>RegExp : RegExp
+
+    "-1": Date;
+>Date : Date
+}
+
+var r1 = a['0.1'];
+>r1 : void
+>a['0.1'] : void
+>a : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": Date; }
+
+var r2 = a['.1'];
+>r2 : Object
+>a['.1'] : Object
+>a : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": Date; }
+
+var r3 = a['1'];
+>r3 : number
+>a['1'] : number
+>a : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": Date; }
+
+var r3 = c[1];
+>r3 : number
+>c[1] : number
+>c : C
+
+var r4 = a['1.'];
+>r4 : string
+>a['1.'] : string
+>a : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": Date; }
+
+var r3 = c[1.]; // same as indexing by 1 when done numerically
+>r3 : number
+>c[1.] : number
+>c : C
+
+var r5 = a['1..'];
+>r5 : boolean
+>a['1..'] : boolean
+>a : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": Date; }
+
+var r6 = a['1.0'];
+>r6 : Date
+>a['1.0'] : Date
+>a : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": Date; }
+
+var r3 = c[1.0]; // same as indexing by 1 when done numerically
+>r3 : number
+>c[1.0] : number
+>c : C
+
+// BUG 823822
+var r7 = i[-1];
+>r7 : any
+>i[-1] : any
+>i : I
+>-1 : number
+
+var r7 = i[-1.0];
+>r7 : any
+>i[-1.0] : any
+>i : I
+>-1.0 : number
+
+var r8 = i["-1.0"];
+>r8 : RegExp
+>i["-1.0"] : RegExp
+>i : I
+
+var r9 = i["-1"];
+>r9 : Date
+>i["-1"] : Date
+>i : I
+
+var r10 = i[0x1]
+>r10 : number
+>i[0x1] : number
+>i : I
+
+var r11 = i[-0x1]
+>r11 : any
+>i[-0x1] : any
+>i : I
+>-0x1 : number
+
+var r12 = i[01]
+>r12 : number
+>i[01] : number
+>i : I
+
+var r13 = i[-01]
+>r13 : any
+>i[-01] : any
+>i : I
+>-01 : number
+
+var b = {
+>b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }; }
+>{
+    "0.1": <void>null,
+    ".1": new Object(),
+    "1": 1,
+    "1.": "",
+    "1..": true,
+    "1.0": new Date(),
+    "-1.0": /123/,
+    "-1": Date
+} : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }; }
+
+    "0.1": <void>null,
+><void>null : void
+
+    ".1": new Object(),
+>new Object() : Object
+>Object : { (): any; (value: any): any; new (value?: any): Object; prototype: Object; getPrototypeOf(o: any): any; getOwnPropertyDescriptor(o: any, p: string): PropertyDescriptor; getOwnPropertyNames(o: any): string[]; create(o: any, properties?: PropertyDescriptorMap): any; defineProperty(o: any, p: string, attributes: PropertyDescriptor): any; defineProperties(o: any, properties: PropertyDescriptorMap): any; seal(o: any): any; freeze(o: any): any; preventExtensions(o: any): any; isSealed(o: any): boolean; isFrozen(o: any): boolean; isExtensible(o: any): boolean; keys(o: any): string[]; }
+
+    "1": 1,
+    "1.": "",
+    "1..": true,
+    "1.0": new Date(),
+>new Date() : Date
+>Date : { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }
+
+    "-1.0": /123/,
+>/123/ : RegExp
+
+    "-1": Date
+>Date : Date
+
+};
+
+var r1 = b['0.1'];
+>r1 : void
+>b['0.1'] : void
+>b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }; }
+
+var r2 = b['.1'];
+>r2 : Object
+>b['.1'] : Object
+>b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }; }
+
+var r3 = b['1'];
+>r3 : number
+>b['1'] : number
+>b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }; }
+
+var r3 = c[1];
+>r3 : number
+>c[1] : number
+>c : C
+
+var r4 = b['1.'];
+>r4 : string
+>b['1.'] : string
+>b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }; }
+
+var r3 = c[1.]; // same as indexing by 1 when done numerically
+>r3 : number
+>c[1.] : number
+>c : C
+
+var r5 = b['1..'];
+>r5 : boolean
+>b['1..'] : boolean
+>b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }; }
+
+var r6 = b['1.0'];
+>r6 : Date
+>b['1.0'] : Date
+>b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }; }
+
+var r3 = c[1.0]; // same as indexing by 1 when done numerically
+>r3 : number
+>c[1.0] : number
+>c : C
+
+// BUG 823822
+var r7 = i[-1];
+>r7 : any
+>i[-1] : any
+>i : I
+>-1 : number
+
+var r7 = i[-1.0];
+>r7 : any
+>i[-1.0] : any
+>i : I
+>-1.0 : number
+
+var r8 = i["-1.0"];
+>r8 : RegExp
+>i["-1.0"] : RegExp
+>i : I
+
+var r9 = i["-1"];
+>r9 : Date
+>i["-1"] : Date
+>i : I
+
+var r10 = i[0x1]
+>r10 : number
+>i[0x1] : number
+>i : I
+
+var r11 = i[-0x1]
+>r11 : any
+>i[-0x1] : any
+>i : I
+>-0x1 : number
+
+var r12 = i[01]
+>r12 : number
+>i[01] : number
+>i : I
+
+var r13 = i[-01]
+>r13 : any
+>i[-01] : any
+>i : I
+>-01 : number
+

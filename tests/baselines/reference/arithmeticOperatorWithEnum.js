@@ -151,6 +151,7 @@ var rj11 = b | E.b;
 var rj12 = 1 | E.b;
 
 //// [arithmeticOperatorWithEnum.js]
+// operands of an enum type are treated as having the primitive type Number.
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";
@@ -159,6 +160,7 @@ var E;
 var a;
 var b;
 var c;
+// operator *
 var ra1 = c * a;
 var ra2 = c * b;
 var ra3 = c * c;
@@ -171,6 +173,7 @@ var ra9 = 0 /* a */ * 1;
 var ra10 = a * 1 /* b */;
 var ra11 = b * 1 /* b */;
 var ra12 = 1 * 1 /* b */;
+// operator /
 var rb1 = c / a;
 var rb2 = c / b;
 var rb3 = c / c;
@@ -183,6 +186,7 @@ var rb9 = 0 /* a */ / 1;
 var rb10 = a / 1 /* b */;
 var rb11 = b / 1 /* b */;
 var rb12 = 1 / 1 /* b */;
+// operator %
 var rc1 = c % a;
 var rc2 = c % b;
 var rc3 = c % c;
@@ -195,6 +199,7 @@ var rc9 = 0 /* a */ % 1;
 var rc10 = a % 1 /* b */;
 var rc11 = b % 1 /* b */;
 var rc12 = 1 % 1 /* b */;
+// operator -
 var rd1 = c - a;
 var rd2 = c - b;
 var rd3 = c - c;
@@ -207,6 +212,7 @@ var rd9 = 0 /* a */ - 1;
 var rd10 = a - 1 /* b */;
 var rd11 = b - 1 /* b */;
 var rd12 = 1 - 1 /* b */;
+// operator <<
 var re1 = c << a;
 var re2 = c << b;
 var re3 = c << c;
@@ -219,6 +225,7 @@ var re9 = 0 /* a */ << 1;
 var re10 = a << 1 /* b */;
 var re11 = b << 1 /* b */;
 var re12 = 1 << 1 /* b */;
+// operator >>
 var rf1 = c >> a;
 var rf2 = c >> b;
 var rf3 = c >> c;
@@ -231,6 +238,7 @@ var rf9 = 0 /* a */ >> 1;
 var rf10 = a >> 1 /* b */;
 var rf11 = b >> 1 /* b */;
 var rf12 = 1 >> 1 /* b */;
+// operator >>>
 var rg1 = c >>> a;
 var rg2 = c >>> b;
 var rg3 = c >>> c;
@@ -243,6 +251,7 @@ var rg9 = 0 /* a */ >>> 1;
 var rg10 = a >>> 1 /* b */;
 var rg11 = b >>> 1 /* b */;
 var rg12 = 1 >>> 1 /* b */;
+// operator &
 var rh1 = c & a;
 var rh2 = c & b;
 var rh3 = c & c;
@@ -255,6 +264,7 @@ var rh9 = 0 /* a */ & 1;
 var rh10 = a & 1 /* b */;
 var rh11 = b & 1 /* b */;
 var rh12 = 1 & 1 /* b */;
+// operator ^
 var ri1 = c ^ a;
 var ri2 = c ^ b;
 var ri3 = c ^ c;
@@ -267,6 +277,7 @@ var ri9 = 0 /* a */ ^ 1;
 var ri10 = a ^ 1 /* b */;
 var ri11 = b ^ 1 /* b */;
 var ri12 = 1 ^ 1 /* b */;
+// operator |
 var rj1 = c | a;
 var rj2 = c | b;
 var rj3 = c | c;

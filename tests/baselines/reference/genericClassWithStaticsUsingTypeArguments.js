@@ -18,6 +18,7 @@ class Foo<T> {
 
 
 //// [genericClassWithStaticsUsingTypeArguments.js]
+// Should be error to use 'T' in all declarations within Foo.
 var Foo = (function () {
     function Foo() {
     }

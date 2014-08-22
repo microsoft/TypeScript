@@ -30,6 +30,7 @@ var promise = function (obj) {
                 catch (e) {
                     return setTimeout(doScrollCheck, 50);
                 }
+                // detach all dom ready events
                 detach();
             }
         })();

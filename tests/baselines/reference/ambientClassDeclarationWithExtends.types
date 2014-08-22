@@ -1,0 +1,8 @@
+=== tests/cases/compiler/ambientClassDeclarationWithExtends.ts ===
+declare class A { }
+>A : A
+
+declare class B extends A { }
+>B : B
+>A : A
+

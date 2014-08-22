@@ -55,6 +55,7 @@ M.n--;
 objA.a--, M.n--;
 
 //// [decrementOperatorWithUnsupportedBooleanType.js]
+// -- operator on boolean type
 var BOOLEAN;
 function foo() {
     return true;
@@ -72,8 +73,10 @@ var M;
     M.n;
 })(M || (M = {}));
 var objA = new A();
+// boolean type var
 var ResultIsNumber1 = --BOOLEAN;
 var ResultIsNumber2 = BOOLEAN--;
+// boolean type literal
 var ResultIsNumber3 = --true;
 var ResultIsNumber4 = --{ x: true, y: false };
 var ResultIsNumber5 = --{ x: true, y: function (n) {
@@ -84,6 +87,7 @@ var ResultIsNumber7 = { x: true, y: false }--;
 var ResultIsNumber8 = { x: true, y: function (n) {
     return n;
 } }--;
+// boolean type expressions
 var ResultIsNumber9 = --objA.a;
 var ResultIsNumber10 = --M.n;
 var ResultIsNumber11 = --foo();
@@ -92,6 +96,7 @@ var ResultIsNumber13 = foo()--;
 var ResultIsNumber14 = A.foo()--;
 var ResultIsNumber15 = objA.a--;
 var ResultIsNumber16 = M.n--;
+// miss assignment operators
 --true;
 --BOOLEAN;
 --foo();

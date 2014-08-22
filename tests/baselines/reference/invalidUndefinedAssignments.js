@@ -46,4 +46,5 @@ var M;
 M = x;
 function i(a) {
 }
+// BUG 767030
 i = x;

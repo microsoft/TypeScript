@@ -13,8 +13,8 @@ function createInstance2<T>(ctor: INewable<T>): T {
 
 //// [genericNewInterface.js]
 function createInstance(ctor) {
-    return new ctor(42);
+    return new ctor(42); //should be an error
 }
 function createInstance2(ctor) {
-    return new ctor(1024);
+    return new ctor(1024); //should be an error
 }

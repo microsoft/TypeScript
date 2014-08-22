@@ -1,0 +1,33 @@
+=== tests/cases/compiler/genericCloduleInModule.ts ===
+module A {
+>A : typeof A
+
+    export class B<T> {
+>B : B<T>
+>T : T
+
+        foo() { }
+>foo : () => void
+
+        static bar() { }
+>bar : () => void
+    }
+    export module B {
+>B : typeof B
+
+        export var x = 1;
+>x : number
+    }
+}
+
+var b: A.B<number>;
+>b : B<number>
+>A : A
+>B : B<T>
+
+b.foo();
+>b.foo() : void
+>b.foo : () => void
+>b : B<number>
+>foo : () => void
+

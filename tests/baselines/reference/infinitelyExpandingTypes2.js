@@ -21,4 +21,4 @@ function f(p) {
     console.log(p);
 }
 var v = null;
-f(v);
+f(v); // should not error

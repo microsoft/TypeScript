@@ -77,8 +77,8 @@ var D = (function () {
     return D;
 })();
 var c;
-var r = c.foo(1);
+var r = c.foo(1); // error
 var d;
-var r2 = d.foo(2);
-var r3 = C.foo(1);
-var r4 = D.bar('');
+var r2 = d.foo(2); // error
+var r3 = C.foo(1); // error
+var r4 = D.bar(''); // error

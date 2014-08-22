@@ -139,6 +139,32 @@ module ts {
         return (<Identifier>(<ExpressionStatement>node).expression).text === "use strict";
     }
 
+    export function getLeadingCommentsOfNode(node: Node, sourceFileOfNode: SourceFile) {
+        // If parameter/type parameter, the prev token trailing comments are part of this node too
+        if (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) {
+            // eg     (/** blah */ a, /** blah */ b);
+            return concatenate(getTrailingComments(sourceFileOfNode.text, node.pos),
+                // eg:     (
+                //          /** blah */ a,
+                //          /** blah */ b);
+                getLeadingComments(sourceFileOfNode.text, node.pos));
+        }
+        else {
+            return getLeadingComments(sourceFileOfNode.text, node.pos);
+        }
+    }
+
+    export function getJsDocComments(node: Declaration, sourceFileOfNode: SourceFile) {
+        return filter(getLeadingCommentsOfNode(node, sourceFileOfNode), comment => isJsDocComment(comment));
+
+        function isJsDocComment(comment: Comment) {
+            // js doc is if comment is starting with /** but not if it is /**/
+            return sourceFileOfNode.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
+                sourceFileOfNode.text.charCodeAt(comment.pos + 2) === CharacterCodes.asterisk &&
+                sourceFileOfNode.text.charCodeAt(comment.pos + 3) !== CharacterCodes.slash;
+        }
+    }
+
     // Invokes a callback for each child of the given node. The 'cbNode' callback is invoked for all child nodes
     // stored in properties. If a 'cbNodes' callback is specified, it is invoked for embedded arrays; otherwise,
     // embedded arrays are flattened and the 'cbNode' callback is invoked for each element. If a callback returns
@@ -544,6 +570,13 @@ module ts {
                 lineStarts = getLineStarts(sourceText);
             }
             return getLineAndCharacterOfPosition(lineStarts, position);
+        }
+
+        function getPositionFromSourceLineAndCharacter(line: number, character: number): number {
+            if (!lineStarts) {
+                lineStarts = getLineStarts(sourceText);
+            }
+            return getPositionFromLineAndCharacter(lineStarts, line, character);
         }
 
         function error(message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
@@ -1554,11 +1587,11 @@ module ts {
             // Note: for ease of implementation we treat productions '2' and '3' as the same thing. 
             // (i.e. they're both BinaryExpressions with an assignment operator in it).
 
-            // First, check if we have production '4' (an arrow function).  Note that if we do, we
-            // must *not* recurse for productsion 1, 2 or 3. An ArrowFunction is not a 
-            // LeftHandSideExpression, nor does it start a ConditionalExpression.  So we are done 
+            // First, check if we have an arrow function (production '4') that starts with a parenthesized
+            // parameter list. If we do, we must *not* recurse for productsion 1, 2 or 3. An ArrowFunction is
+            // not a  LeftHandSideExpression, nor does it start a ConditionalExpression.  So we are done 
             // with AssignmentExpression if we see one.
-            var arrowExpression = tryParseArrowFunctionExpression();
+            var arrowExpression = tryParseParenthesizedArrowFunctionExpression();
             if (arrowExpression) {
                 return arrowExpression;
             }
@@ -1566,6 +1599,13 @@ module ts {
             // Now try to handle the rest of the cases.  First, see if we can parse out up to and
             // including a conditional expression.
             var expr = parseConditionalExpression(noIn);
+
+            // To avoid a look-ahead, we did not handle the case of an arrow function with a single un-parenthesized
+            // parameter ('x => ...') above. We handle it here by checking if the parsed expression was a single
+            // identifier and the current token is an arrow.
+            if (expr.kind === SyntaxKind.Identifier && token === SyntaxKind.EqualsGreaterThanToken) {
+                return parseSimpleArrowFunctionExpression(<Identifier>expr);
+            }
 
             // Now see if we might be in cases '2' or '3'.
             // If the expression was a LHS expression, and we  have an assignment operator, then 
@@ -1613,39 +1653,7 @@ module ts {
             return false;
         }
 
-        function tryParseArrowFunctionExpression(): Expression {
-            return isSimpleArrowFunctionExpression()
-                ? parseSimpleArrowFunctionExpression()
-                : tryParseParenthesizedArrowFunctionExpression();
-        }
-
-        function isSimpleArrowFunctionExpression(): boolean {
-            if (token === SyntaxKind.EqualsGreaterThanToken) {
-                // ERROR RECOVERY TWEAK:
-                // If we see a standalone => try to parse it as an arrow function expression as that's
-                // likely whatthe user intended to write.
-                return true;
-            }
-
-            if (token === SyntaxKind.Identifier) {
-                // if we see:    a => 
-                // then this is clearly an arrow function expression.
-                return lookAhead(() => {
-                    return nextToken() === SyntaxKind.EqualsGreaterThanToken;
-                });
-            }
-
-            // Definitely not a simple arrow function expression.
-            return false;
-        }
-
-        function parseSimpleArrowFunctionExpression(): Expression {
-            Debug.assert(token === SyntaxKind.Identifier || token === SyntaxKind.EqualsGreaterThanToken);
-
-            // Get the identifier for the simple arrow.  If one isn't there then we'll report a useful
-            // message that it is missing.
-            var identifier = parseIdentifier();
-
+        function parseSimpleArrowFunctionExpression(identifier: Identifier): Expression {
             Debug.assert(token === SyntaxKind.EqualsGreaterThanToken, "parseSimpleArrowFunctionExpression should only have been called if we had a =>");
             parseExpected(SyntaxKind.EqualsGreaterThanToken);
 
@@ -1664,14 +1672,14 @@ module ts {
         }
 
         function tryParseParenthesizedArrowFunctionExpression(): Expression {
-            var pos = getNodePos();
-
             // Indicates whether we are certain that we should parse an arrow expression.
             var triState = isParenthesizedArrowFunctionExpression();
 
             if (triState === Tristate.False) {
                 return undefined;
             }
+
+            var pos = getNodePos();
 
             if (triState === Tristate.True) {
                 var sig = parseSignature(SyntaxKind.CallSignature, SyntaxKind.ColonToken);
@@ -1765,7 +1773,12 @@ module ts {
                     }
                 });
             }
-
+            if (token === SyntaxKind.EqualsGreaterThanToken) {
+                // ERROR RECOVERY TWEAK:
+                // If we see a standalone => try to parse it as an arrow function expression as that's
+                // likely whatthe user intended to write.
+                return Tristate.True;
+            }
             // Definitely not a parenthesized arrow function.
             return Tristate.False;
         }
@@ -1944,7 +1957,7 @@ module ts {
                 primaryExpression.kind === SyntaxKind.SuperKeyword && token !== SyntaxKind.OpenParenToken && token !== SyntaxKind.DotToken;
 
             if (illegalUsageOfSuperKeyword) {
-                error(Diagnostics.super_must_be_followed_by_argument_list_or_member_access);
+                error(Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
             }
 
             var expr = parseCallAndAccess(primaryExpression, /* inNewExpression */ false);
@@ -1997,13 +2010,12 @@ module ts {
                     var indexedAccess = <IndexedAccess>createNode(SyntaxKind.IndexedAccess, expr.pos);
                     indexedAccess.object = expr;
 
-                    // It's not uncommon for a user to write: "new Type[]".  Check for that common pattern
-                    // and report a better error message.
+                    // It's not uncommon for a user to write: "new Type[]".
+                    // Check for that common pattern and report a better error message.
                     if (inNewExpression && parseOptional(SyntaxKind.CloseBracketToken)) {
                         indexedAccess.index = createMissingNode();
                         grammarErrorAtPos(bracketStart, scanner.getStartPos() - bracketStart, Diagnostics.new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead);
                     }
-                    // Otherwise parse the indexed access normally.
                     else {
                         indexedAccess.index = parseExpression();
                         parseExpected(SyntaxKind.CloseBracketToken);
@@ -2393,8 +2405,6 @@ module ts {
         function parseBreakOrContinueStatement(kind: SyntaxKind): BreakOrContinueStatement {
             var node = <BreakOrContinueStatement>createNode(kind);
             var errorCountBeforeStatement = file.syntacticErrors.length;
-            var keywordStart = scanner.getTokenPos();
-            var keywordLength = scanner.getTextPos() - keywordStart;
             parseExpected(kind === SyntaxKind.BreakStatement ? SyntaxKind.BreakKeyword : SyntaxKind.ContinueKeyword);
             if (!canParseSemicolon()) node.label = parseIdentifier();
             parseSemicolon();
@@ -3501,7 +3511,7 @@ module ts {
                         if (!matchResult) {
                             var start = range.pos;
                             var length = range.end - start;
-                            errorAtPos(start, length, Diagnostics.Invalid_reference_comment);
+                            errorAtPos(start, length, Diagnostics.Invalid_reference_directive_syntax);
                         }
                         else {
                             referencedFiles.push({
@@ -3546,6 +3556,7 @@ module ts {
         file.filename = normalizePath(filename);
         file.text = sourceText;
         file.getLineAndCharacterFromPosition = getLineAndCharacterlFromSourcePosition;
+        file.getPositionFromLineAndCharacter = getPositionFromSourceLineAndCharacter;
         file.syntacticErrors = [];
         file.semanticErrors = [];
         var referenceComments = processReferenceComments(); 
@@ -3582,7 +3593,7 @@ module ts {
             getCompilerHost: () => host,
             getDiagnostics: getDiagnostics,
             getGlobalDiagnostics: getGlobalDiagnostics,
-            getTypeChecker: () => createTypeChecker(program),
+            getTypeChecker: fullTypeCheckMode => createTypeChecker(program, fullTypeCheckMode),
             getCommonSourceDirectory: () => commonSourceDirectory,
         };
         return program;

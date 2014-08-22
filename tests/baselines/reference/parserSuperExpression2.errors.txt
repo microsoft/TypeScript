@@ -3,7 +3,7 @@
       M() {
         super<T>(0);
              ~
-!!! 'super' must be followed by argument list or member access.
+!!! 'super' must be followed by an argument list or member access.
         ~~~~~
 !!! 'super' can only be referenced in a derived class.
       }

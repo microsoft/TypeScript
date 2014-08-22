@@ -217,7 +217,11 @@ module ts {
         FirstKeyword = BreakKeyword,
         LastKeyword = StringKeyword,
         FirstFutureReservedWord = ImplementsKeyword,
-        LastFutureReservedWord = YieldKeyword
+        LastFutureReservedWord = YieldKeyword,
+        FirstTypeNode = TypeReference,
+        LastTypeNode = ArrayType,
+        FirstPunctuation= OpenBraceToken,
+        LastPunctuation = CaretEqualsToken
     }
 
     export enum NodeFlags {
@@ -512,10 +516,15 @@ module ts {
         filename: string;
     }
 
+    export interface Comment extends TextRange {
+        hasTrailingNewLine?: boolean;
+    }
+
     export interface SourceFile extends Block {
         filename: string;
         text: string;
         getLineAndCharacterFromPosition(position: number): { line: number; character: number };
+        getPositionFromLineAndCharacter(line: number, character: number): number;
         amdDependencies: string[];
         referencedFiles: FileReference[];
         syntacticErrors: Diagnostic[];
@@ -537,7 +546,7 @@ module ts {
         getCompilerHost(): CompilerHost;
         getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getGlobalDiagnostics(): Diagnostic[];
-        getTypeChecker(): TypeChecker;
+        getTypeChecker(fullTypeCheckMode: boolean): TypeChecker;
         getCommonSourceDirectory(): string;
     }
 
@@ -593,19 +602,17 @@ module ts {
         getTypeCount(): number;
         checkProgram(): void;
         emitFiles(): EmitResult;
-        getSymbolOfNode(node: Node): Symbol;
         getParentOfSymbol(symbol: Symbol): Symbol;
         getTypeOfSymbol(symbol: Symbol): Type;
-        getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
         getPropertyOfType(type: Type, propetyName: string): Symbol;
         getSignaturesOfType(type: Type, kind: SignatureKind): Signature[];
         getIndexTypeOfType(type: Type, kind: IndexKind): Type;
         getReturnTypeOfSignature(signature: Signature): Type;
-        resolveEntityName(location: Node, name: EntityName, meaning: SymbolFlags): Symbol;
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolInfo(node: Node): Symbol;
-        getTypeOfExpression(node: Expression, contextualType?: Type, contextualMapper?: TypeMapper): Type;
+        getTypeOfNode(node: Node): Type;
+        getApparentType(type: Type): ApparentType;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
         getAugmentedPropertiesOfApparentType(type: Type): Symbol[];
@@ -935,7 +942,6 @@ module ts {
         Warning,
         Error,
         Message,
-        NoPrefix
     }
 
     export interface CompilerOptions {

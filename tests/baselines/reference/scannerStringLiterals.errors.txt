@@ -10,7 +10,7 @@
     "
     "Should error because of newline.
                                      
-!!! Unterminated string constant.
+!!! Unterminated string literal.
     "Should error because of end of file.
                                          
 !!! Unexpected end of text.
