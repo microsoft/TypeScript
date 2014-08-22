@@ -65,3 +65,11 @@ class c8 {
 }
 var i8 = new c8();
 var i8_c = c8;
+
+class c9 {
+    constructor() {
+        /// This is some detached comment
+
+        // should emit this leading comment of } too
+    }
+}

@@ -110,3 +110,18 @@ function blah4(/*1*/a: string/*2*/,/*3*/b: string/*4*/) {
 >a : string
 >b : string
 }
+
+function foo1() {
+>foo1 : () => void
+
+    // should emit this
+}
+
+function foo2() {
+>foo2 : () => void
+
+    /// This is some detached comment
+
+    // should emit this leading comment of } too
+}
+

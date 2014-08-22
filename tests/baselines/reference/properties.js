@@ -22,6 +22,7 @@ var MyClass = (function () {
             return 42;
         },
         set: function (value) {
+            //
         },
         enumerable: true,
         configurable: true

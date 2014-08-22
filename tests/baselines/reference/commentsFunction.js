@@ -43,6 +43,18 @@ lambdaFoo = (a, b) => a * b; // This is trailing comment
 function blah4(/*1*/a: string/*2*/,/*3*/b: string/*4*/) {
 }
 
+function foo1() {
+
+    // should emit this
+}
+
+function foo2() {
+    /// This is some detached comment
+
+    // should emit this leading comment of } too
+}
+
+
 //// [commentsFunction.js]
 /** This comment should appear for foo*/
 function foo() {
@@ -79,6 +91,13 @@ lambdaFoo = function (a, b) { return a * b; }; // This is trailing comment
 /*leading comment*/ (function () { return 0; }); //trailing comment
 function blah4(/*1*/ a /*2*/, /*3*/ b /*4*/) {
 }
+function foo1() {
+    // should emit this
+}
+function foo2() {
+    /// This is some detached comment
+    // should emit this leading comment of } too
+}
 
 
 //// [commentsFunction.d.ts]
@@ -98,3 +117,5 @@ declare function blah(a: string): void;
 declare function blah2(a: string): void;
 declare function blah3(a: string): void;
 declare function blah4(a: string, b: string): void;
+declare function foo1(): void;
+declare function foo2(): void;
