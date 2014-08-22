@@ -1682,6 +1682,10 @@ module ts {
                 }
             }
 
+            function emitInterfaceDeclaration(node: InterfaceDeclaration) {
+                emitPinnedOrTripleSlashComments(node);
+            }
+
             function emitEnumDeclaration(node: EnumDeclaration) {
                 emitLeadingComments(node);
                 if (!(node.flags & NodeFlags.Export)) {
@@ -2089,6 +2093,8 @@ module ts {
                         return emitVariableDeclaration(<VariableDeclaration>node);
                     case SyntaxKind.ClassDeclaration:
                         return emitClassDeclaration(<ClassDeclaration>node);
+                    case SyntaxKind.InterfaceDeclaration:
+                        return emitInterfaceDeclaration(<InterfaceDeclaration>node);
                     case SyntaxKind.EnumDeclaration:
                         return emitEnumDeclaration(<EnumDeclaration>node);
                     case SyntaxKind.ModuleDeclaration:

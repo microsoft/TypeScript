@@ -1,4 +1,6 @@
-//// [commentOnInterface1.ts]
+//// [tests/cases/compiler/commentOnInterface1.ts] ////
+
+//// [a.ts]
 /*! Keep this pinned comment */
 interface I {
 }
@@ -7,4 +9,12 @@ interface I {
 interface I2 {
 }
 
-//// [commentOnInterface1.js]
+//// [b.ts]
+///<reference path='a.ts'/>
+interface I3 {
+}
+
+//// [a.js]
+/*! Keep this pinned comment */
+//// [b.js]
+///<reference path='a.ts'/>
