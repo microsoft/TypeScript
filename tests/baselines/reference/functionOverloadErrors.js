@@ -142,6 +142,7 @@ function fn11() {
 }
 function fn12() {
 }
+//Function overloads that differ by accessibility
 var cls = (function () {
     function cls() {
     }
@@ -151,6 +152,7 @@ var cls = (function () {
     };
     return cls;
 })();
+//Function overloads with differing export
 var M;
 (function (M) {
     function fn1() {

@@ -22,7 +22,7 @@ function doThing(x) {
 }
 var A = (function () {
     function A() {
-        this.p = doThing(A);
+        this.p = doThing(A); // OK
     }
     return A;
 })();
@@ -30,9 +30,9 @@ var B = (function (_super) {
     __extends(B, _super);
     function B() {
         _super.apply(this, arguments);
-        this.p1 = doThing(A);
-        this.p2 = doThing(B);
+        this.p1 = doThing(A); // OK
+        this.p2 = doThing(B); // OK
     }
     return B;
 })(A);
-doThing(B);
+doThing(B); //OK

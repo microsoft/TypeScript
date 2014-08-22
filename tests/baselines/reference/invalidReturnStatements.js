@@ -27,6 +27,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// all the following should be error
 function fn1() {
 }
 function fn2() {
@@ -36,7 +37,7 @@ function fn3() {
 function fn4() {
 }
 function fn7() {
-}
+} // should be valid: any includes void
 var C = (function () {
     function C() {
     }

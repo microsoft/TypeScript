@@ -1,0 +1,29 @@
+=== tests/cases/compiler/collisionExportsRequireAndUninstantiatedModule.ts ===
+export module require { // no error 
+>require : require
+
+    export interface I {
+>I : I
+    }
+}
+export function foo(): require.I {
+>foo : () => I
+>require : require
+>I : I
+
+    return null;
+}
+export module exports { // no error
+>exports : exports
+
+    export interface I {
+>I : I
+    }
+}
+export function foo2(): exports.I {
+>foo2 : () => I
+>exports : exports
+>I : I
+
+    return null;
+}

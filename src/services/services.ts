@@ -310,6 +310,7 @@ module ts {
         public filename: string;
         public text: string;
         public getLineAndCharacterFromPosition(position: number): { line: number; character: number } { return null; }
+        public getPositionFromLineAndCharacter(line: number, character: number): number { return -1; }
         public amdDependencies: string[];
         public referencedFiles: FileReference[];
         public syntacticErrors: Diagnostic[];
@@ -1693,7 +1694,7 @@ module ts {
 
             // Right of dot member completion list
             if (isRightOfDot) {
-                var type: Type = typeInfoResolver.getTypeOfExpression(mappedNode);
+                var type: ApparentType = typeInfoResolver.getApparentType(typeInfoResolver.getTypeOfNode(mappedNode));
                 if (!type) {
                     return undefined;
                 }

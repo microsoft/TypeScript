@@ -14,12 +14,15 @@ function foo1<T1, T2>() {
 }
 
 //// [commaOperatorOtherInvalidOperation.js]
+//Expect to have compiler errors
+//Comma operator in fuction arguments and return
 function foo(x, y) {
     return x, y;
 }
-var resultIsString = foo(1, "123");
+var resultIsString = foo(1, "123"); //error here
+//TypeParameters
 function foo1() {
     var x;
     var y;
-    var result = (x, y);
+    var result = (x, y); //error here
 }

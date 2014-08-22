@@ -22,9 +22,9 @@ var C = (function () {
     };
     C.bar = function (x) {
         C.bar = function () {
-        };
-        C.bar = function (x) { return x; };
-        C.bar = function (x) { return 1; };
+        }; // error
+        C.bar = function (x) { return x; }; // ok
+        C.bar = function (x) { return 1; }; // ok
         return 1;
     };
     return C;

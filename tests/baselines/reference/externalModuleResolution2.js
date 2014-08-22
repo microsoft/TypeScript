@@ -25,4 +25,4 @@ var M2;
 module.exports = M2;
 //// [consumer.js]
 var x = require('./foo');
-x.X;
+x.X; // .ts should be picked

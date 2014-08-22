@@ -1,0 +1,61 @@
+=== tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorWithEnumType.ts ===
+// ~ operator on enum type
+
+enum ENUM1 { 1, 2, "" };
+>ENUM1 : ENUM1
+
+// enum type var
+var ResultIsNumber1 = ~ENUM1;
+>ResultIsNumber1 : number
+>~ENUM1 : number
+>ENUM1 : typeof ENUM1
+
+// enum type expressions
+var ResultIsNumber2 = ~ENUM1[1];
+>ResultIsNumber2 : number
+>~ENUM1[1] : number
+>ENUM1[1] : ENUM1
+>ENUM1 : typeof ENUM1
+
+var ResultIsNumber3 = ~(ENUM1[1] + ENUM1[2]);
+>ResultIsNumber3 : number
+>~(ENUM1[1] + ENUM1[2]) : number
+>(ENUM1[1] + ENUM1[2]) : number
+>ENUM1[1] + ENUM1[2] : number
+>ENUM1[1] : ENUM1
+>ENUM1 : typeof ENUM1
+>ENUM1[2] : ENUM1
+>ENUM1 : typeof ENUM1
+
+// multiple ~ operators
+var ResultIsNumber4 = ~~~(ENUM1[1] + ENUM1[2]);
+>ResultIsNumber4 : number
+>~~~(ENUM1[1] + ENUM1[2]) : number
+>~~(ENUM1[1] + ENUM1[2]) : number
+>~(ENUM1[1] + ENUM1[2]) : number
+>(ENUM1[1] + ENUM1[2]) : number
+>ENUM1[1] + ENUM1[2] : number
+>ENUM1[1] : ENUM1
+>ENUM1 : typeof ENUM1
+>ENUM1[2] : ENUM1
+>ENUM1 : typeof ENUM1
+
+// miss assignment operators
+~ENUM1;
+>~ENUM1 : number
+>ENUM1 : typeof ENUM1
+
+~ENUM1[1];
+>~ENUM1[1] : number
+>ENUM1[1] : ENUM1
+>ENUM1 : typeof ENUM1
+
+~ENUM1[1], ~ENUM1[2];
+>~ENUM1[1], ~ENUM1[2] : number
+>~ENUM1[1] : number
+>ENUM1[1] : ENUM1
+>ENUM1 : typeof ENUM1
+>~ENUM1[2] : number
+>ENUM1[2] : ENUM1
+>ENUM1 : typeof ENUM1
+

@@ -27,6 +27,7 @@ var Foo = (function () {
     };
     return Foo;
 })();
+//class Foo(s: String);
 var f1 = new Foo("hey");
 f1.bar1("a");
 Foo();

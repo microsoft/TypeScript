@@ -139,6 +139,32 @@ module ts {
         return (<Identifier>(<ExpressionStatement>node).expression).text === "use strict";
     }
 
+    export function getLeadingCommentsOfNode(node: Node, sourceFileOfNode: SourceFile) {
+        // If parameter/type parameter, the prev token trailing comments are part of this node too
+        if (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) {
+            // eg     (/** blah */ a, /** blah */ b);
+            return concatenate(getTrailingComments(sourceFileOfNode.text, node.pos),
+                // eg:     (
+                //          /** blah */ a,
+                //          /** blah */ b);
+                getLeadingComments(sourceFileOfNode.text, node.pos));
+        }
+        else {
+            return getLeadingComments(sourceFileOfNode.text, node.pos);
+        }
+    }
+
+    export function getJsDocComments(node: Declaration, sourceFileOfNode: SourceFile) {
+        return filter(getLeadingCommentsOfNode(node, sourceFileOfNode), comment => isJsDocComment(comment));
+
+        function isJsDocComment(comment: Comment) {
+            // js doc is if comment is starting with /** but not if it is /**/
+            return sourceFileOfNode.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
+                sourceFileOfNode.text.charCodeAt(comment.pos + 2) === CharacterCodes.asterisk &&
+                sourceFileOfNode.text.charCodeAt(comment.pos + 3) !== CharacterCodes.slash;
+        }
+    }
+
     // Invokes a callback for each child of the given node. The 'cbNode' callback is invoked for all child nodes
     // stored in properties. If a 'cbNodes' callback is specified, it is invoked for embedded arrays; otherwise,
     // embedded arrays are flattened and the 'cbNode' callback is invoked for each element. If a callback returns
@@ -544,6 +570,13 @@ module ts {
                 lineStarts = getLineStarts(sourceText);
             }
             return getLineAndCharacterOfPosition(lineStarts, position);
+        }
+
+        function getPositionFromSourceLineAndCharacter(line: number, character: number): number {
+            if (!lineStarts) {
+                lineStarts = getLineStarts(sourceText);
+            }
+            return getPositionFromLineAndCharacter(lineStarts, line, character);
         }
 
         function error(message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
@@ -2372,8 +2405,6 @@ module ts {
         function parseBreakOrContinueStatement(kind: SyntaxKind): BreakOrContinueStatement {
             var node = <BreakOrContinueStatement>createNode(kind);
             var errorCountBeforeStatement = file.syntacticErrors.length;
-            var keywordStart = scanner.getTokenPos();
-            var keywordLength = scanner.getTextPos() - keywordStart;
             parseExpected(kind === SyntaxKind.BreakStatement ? SyntaxKind.BreakKeyword : SyntaxKind.ContinueKeyword);
             if (!canParseSemicolon()) node.label = parseIdentifier();
             parseSemicolon();
@@ -3525,6 +3556,7 @@ module ts {
         file.filename = normalizePath(filename);
         file.text = sourceText;
         file.getLineAndCharacterFromPosition = getLineAndCharacterlFromSourcePosition;
+        file.getPositionFromLineAndCharacter = getPositionFromSourceLineAndCharacter;
         file.syntacticErrors = [];
         file.semanticErrors = [];
         var referenceComments = processReferenceComments(); 

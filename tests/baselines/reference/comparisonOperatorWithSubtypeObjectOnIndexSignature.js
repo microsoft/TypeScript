@@ -134,6 +134,7 @@ var a3;
 var b3;
 var a4;
 var b4;
+// operator <
 var r1a1 = a1 < b1;
 var r1a1 = a2 < b2;
 var r1a1 = a3 < b3;
@@ -142,6 +143,7 @@ var r1b1 = b1 < a1;
 var r1b1 = b2 < a2;
 var r1b1 = b3 < a3;
 var r1b1 = b4 < a4;
+// operator >
 var r2a1 = a1 > b1;
 var r2a1 = a2 > b2;
 var r2a1 = a3 > b3;
@@ -150,6 +152,7 @@ var r2b1 = b1 > a1;
 var r2b1 = b2 > a2;
 var r2b1 = b3 > a3;
 var r2b1 = b4 > a4;
+// operator <=
 var r3a1 = a1 <= b1;
 var r3a1 = a2 <= b2;
 var r3a1 = a3 <= b3;
@@ -158,6 +161,7 @@ var r3b1 = b1 <= a1;
 var r3b1 = b2 <= a2;
 var r3b1 = b3 <= a3;
 var r3b1 = b4 <= a4;
+// operator >=
 var r4a1 = a1 >= b1;
 var r4a1 = a2 >= b2;
 var r4a1 = a3 >= b3;
@@ -166,6 +170,7 @@ var r4b1 = b1 >= a1;
 var r4b1 = b2 >= a2;
 var r4b1 = b3 >= a3;
 var r4b1 = b4 >= a4;
+// operator ==
 var r5a1 = a1 == b1;
 var r5a1 = a2 == b2;
 var r5a1 = a3 == b3;
@@ -174,6 +179,7 @@ var r5b1 = b1 == a1;
 var r5b1 = b2 == a2;
 var r5b1 = b3 == a3;
 var r5b1 = b4 == a4;
+// operator !=
 var r6a1 = a1 != b1;
 var r6a1 = a2 != b2;
 var r6a1 = a3 != b3;
@@ -182,6 +188,7 @@ var r6b1 = b1 != a1;
 var r6b1 = b2 != a2;
 var r6b1 = b3 != a3;
 var r6b1 = b4 != a4;
+// operator ===
 var r7a1 = a1 === b1;
 var r7a1 = a2 === b2;
 var r7a1 = a3 === b3;
@@ -190,6 +197,7 @@ var r7b1 = b1 === a1;
 var r7b1 = b2 === a2;
 var r7b1 = b3 === a3;
 var r7b1 = b4 === a4;
+// operator !==
 var r8a1 = a1 !== b1;
 var r8a1 = a2 !== b2;
 var r8a1 = a3 !== b3;

@@ -30,5 +30,5 @@ a = x;
 a = b;
 b = a;
 b = x;
-x = a;
-x = b;
+x = a; // expected error
+x = b; // expected error

@@ -49,6 +49,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// Module
 var templa;
 (function (templa) {
     (function (dom) {
@@ -66,6 +67,7 @@ var templa;
     })(templa.dom || (templa.dom = {}));
     var dom = templa.dom;
 })(templa || (templa = {}));
+// Module
 var templa;
 (function (templa) {
     (function (dom) {

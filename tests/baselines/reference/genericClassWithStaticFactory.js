@@ -183,7 +183,7 @@ var Editor;
             entry.next = this.next;
             entry.prev = this;
             this.next = entry;
-            entry.next.prev = entry;
+            entry.next.prev = entry; // entry.next.prev does not show intellisense, but entry.prev.prev does
         };
         List.prototype.push = function (data) {
             var entry = this.listFactory.MakeEntry(data);
@@ -192,7 +192,7 @@ var Editor;
             entry.next = this.next;
             entry.prev = this;
             this.next = entry;
-            entry.next.prev = entry;
+            entry.next.prev = entry; // entry.next.prev does not show intellisense, but entry.prev.prev does
         };
         List.prototype.popEntry = function (head) {
             if (this.next.isHead) {
@@ -215,7 +215,7 @@ var Editor;
             entry.next = this.next;
             entry.prev = this;
             this.next = entry;
-            entry.next.prev = entry;
+            entry.next.prev = entry; // entry.next.prev does not show intellisense, but entry.prev.prev does
             return entry;
         };
         List.prototype.insertEntryBefore = function (entry) {
@@ -252,6 +252,7 @@ var Editor;
                 return null;
             }
             else if (entry.isHead) {
+                // Can't remove the head of a list!
                 return null;
             }
             else {

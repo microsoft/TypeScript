@@ -1,0 +1,49 @@
+=== tests/cases/compiler/aliasUsageInFunctionExpression_main.ts ===
+import Backbone = require("aliasUsageInFunctionExpression_backbone");
+>Backbone : typeof "tests/cases/compiler/aliasUsageInFunctionExpression_backbone"
+
+import moduleA = require("aliasUsageInFunctionExpression_moduleA");
+>moduleA : typeof "tests/cases/compiler/aliasUsageInFunctionExpression_moduleA"
+
+interface IHasVisualizationModel {
+>IHasVisualizationModel : IHasVisualizationModel
+
+    VisualizationModel: typeof Backbone.Model;
+>VisualizationModel : typeof Model
+>Backbone : typeof "tests/cases/compiler/aliasUsageInFunctionExpression_backbone"
+>Model : typeof Model
+}
+var f = (x: IHasVisualizationModel) => x;
+>f : (x: IHasVisualizationModel) => IHasVisualizationModel
+>(x: IHasVisualizationModel) => x : (x: IHasVisualizationModel) => IHasVisualizationModel
+>x : IHasVisualizationModel
+>IHasVisualizationModel : IHasVisualizationModel
+>x : IHasVisualizationModel
+
+f = (x) => moduleA;
+>f = (x) => moduleA : (x: IHasVisualizationModel) => typeof "tests/cases/compiler/aliasUsageInFunctionExpression_moduleA"
+>f : (x: IHasVisualizationModel) => IHasVisualizationModel
+>(x) => moduleA : (x: IHasVisualizationModel) => typeof "tests/cases/compiler/aliasUsageInFunctionExpression_moduleA"
+>x : IHasVisualizationModel
+>moduleA : typeof "tests/cases/compiler/aliasUsageInFunctionExpression_moduleA"
+
+=== tests/cases/compiler/aliasUsageInFunctionExpression_backbone.ts ===
+export class Model {
+>Model : Model
+
+    public someData: string;
+>someData : string
+}
+
+=== tests/cases/compiler/aliasUsageInFunctionExpression_moduleA.ts ===
+import Backbone = require("aliasUsageInFunctionExpression_backbone");
+>Backbone : typeof "tests/cases/compiler/aliasUsageInFunctionExpression_backbone"
+
+export class VisualizationModel extends Backbone.Model {
+>VisualizationModel : VisualizationModel
+>Backbone : Backbone
+>Model : Model
+
+    // interesting stuff here
+}
+

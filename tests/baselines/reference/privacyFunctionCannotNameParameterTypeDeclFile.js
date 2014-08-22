@@ -184,6 +184,7 @@ exports.createWidget1 = createWidget1;
 })(exports.SpecializedWidget || (exports.SpecializedWidget = {}));
 var SpecializedWidget = exports.SpecializedWidget;
 //// [privacyFunctionCannotNameParameterTypeDeclFile_exporter.js]
+///<reference path='privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts'/>
 var Widgets = require("privacyFunctionCannotNameParameterTypeDeclFile_Widgets");
 var Widgets1 = require("GlobalWidgets");
 function createExportedWidget1() {

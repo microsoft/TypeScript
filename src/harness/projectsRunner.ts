@@ -293,27 +293,13 @@ class ProjectRunner extends RunnerBase {
         }
 
         function getErrorsBaseline(compilerResult: CompileProjectFilesResult) {
-            // This is copied from tc.ts's reportError to replicate what tc does
-            var errors = "";
-            for (var i = 0; i < compilerResult.errors.length; i++) {
-                var error = compilerResult.errors[i];
-                // TODO(jfreeman): Remove assert
-                ts.Debug.assert(error.messageText.indexOf("{NL}") < 0);
-                if (error.file) {
-                    var loc = error.file.getLineAndCharacterFromPosition(error.start);
-                    errors += error.file.filename + "(" + loc.line + "," + loc.character + "): " + error.messageText + sys.newLine;
-                }
-                else {
-                    errors += error.messageText + sys.newLine;
-                }
-            }
-
             var inputFiles = ts.map(ts.filter(compilerResult.program.getSourceFiles(),
                 sourceFile => sourceFile.filename !== "lib.d.ts"),
                 sourceFile => {
                     return { unitName: sourceFile.filename, content: sourceFile.text };
                 });
             var diagnostics = ts.map(compilerResult.errors, error => Harness.Compiler.getMinimalDiagnostic(error));
+            var errors = Harness.Compiler.minimalDiagnosticsToString(diagnostics);
             errors += sys.newLine + sys.newLine + Harness.Compiler.getErrorBaseline(inputFiles, diagnostics);
 
             return errors;

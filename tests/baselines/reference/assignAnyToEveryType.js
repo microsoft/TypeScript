@@ -46,6 +46,7 @@ function k<T>(a: T) {
 }
 
 //// [assignAnyToEveryType.js]
+// all of these are valid
 var x;
 var a = x;
 var b = x;

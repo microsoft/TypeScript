@@ -7,6 +7,7 @@ class boolean { }
 class string { }
 
 //// [classWithPredefinedTypesAsNames.js]
+// classes cannot use predefined types as names
 var any = (function () {
     function any() {
     }

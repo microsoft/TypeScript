@@ -44,6 +44,7 @@ var A;
 })(A || (A = {}));
 var A;
 (function (A) {
+    // expected error
     var Point = (function () {
         function Point() {
         }
@@ -70,6 +71,7 @@ var X;
 (function (X) {
     (function (Y) {
         (function (Z) {
+            // expected error
             var Line = (function () {
                 function Line() {
                 }

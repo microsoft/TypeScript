@@ -55,6 +55,7 @@ module Others {
 }
 
 //// [enumAssignability.js]
+// enums assignable to number, any, Object, errors unless otherwise noted
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";
@@ -67,13 +68,13 @@ var e = 0 /* A */;
 var f = 0 /* B */;
 e = f;
 f = e;
-e = 1;
-f = 1;
-var x = e;
-x = f;
+e = 1; // ok
+f = 1; // ok
+var x = e; // ok
+x = f; // ok
 var Others;
 (function (Others) {
-    var a = e;
+    var a = e; // ok
     var C = (function () {
         function C() {
         }
@@ -81,11 +82,11 @@ var Others;
     })();
     var ac;
     var ai;
-    var b = e;
+    var b = e; // ok
     var c = e;
     var d = e;
     var ee = e;
-    var f = e;
+    var f = e; // ok
     var g = e;
     var h = e;
     var i = e;

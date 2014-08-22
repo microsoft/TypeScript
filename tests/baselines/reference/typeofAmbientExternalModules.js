@@ -33,6 +33,8 @@ var D = (function () {
 })();
 module.exports = D;
 //// [typeofAmbientExternalModules_2.js]
+///<reference path='typeofAmbientExternalModules_0.ts'/>
+///<reference path='typeofAmbientExternalModules_1.ts'/>
 var ext = require('typeofAmbientExternalModules_0');
 var exp = require('typeofAmbientExternalModules_1');
 var y1 = ext;

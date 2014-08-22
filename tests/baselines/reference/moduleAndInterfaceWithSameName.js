@@ -46,7 +46,7 @@ var Foo2;
         Bar.x = 42;
     })(Bar || (Bar = {}));
 })(Foo2 || (Foo2 = {}));
-var z2 = Foo2.Bar.y;
+var z2 = Foo2.Bar.y; // Error for using interface name as a value.
 var Foo3;
 (function (Foo3) {
     (function (Bar) {

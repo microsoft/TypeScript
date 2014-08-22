@@ -1,0 +1,52 @@
+=== tests/cases/compiler/accessOverriddenBaseClassMember1.ts ===
+class Point {
+>Point : Point
+
+    constructor(public x: number, public y: number) { }
+>x : number
+>y : number
+
+    public toString() {
+>toString : () => string
+
+        return "x=" + this.x + " y=" + this.y;
+>"x=" + this.x + " y=" + this.y : string
+>"x=" + this.x + " y=" : string
+>"x=" + this.x : string
+>this.x : number
+>this : Point
+>x : number
+>this.y : number
+>this : Point
+>y : number
+    }
+}
+class ColoredPoint extends Point {
+>ColoredPoint : ColoredPoint
+>Point : Point
+
+    constructor(x: number, y: number, public color: string) {
+>x : number
+>y : number
+>color : string
+
+        super(x, y);
+>super(x, y) : void
+>x : number
+>y : number
+    }
+    public toString() {
+>toString : () => string
+
+        return super.toString() + " color=" + this.color;
+>super.toString() + " color=" + this.color : string
+>super.toString() + " color=" : string
+>super.toString() : string
+>super.toString : () => string
+>toString : () => string
+>this.color : string
+>this : ColoredPoint
+>color : string
+    }
+}
+

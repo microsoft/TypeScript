@@ -1,0 +1,24 @@
+=== tests/cases/compiler/unexportedInstanceClassVariables.ts ===
+module M{
+>M : typeof M
+
+	class A{
+>A : A
+
+		constructor(val:string){}
+>val : string
+	}
+}
+
+module M{
+>M : typeof M
+
+	class A {}  
+>A : A
+ 
+ 	var a = new A();
+>a : A
+>new A() : A
+>A : typeof A
+}
+

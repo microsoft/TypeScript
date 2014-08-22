@@ -328,28 +328,47 @@ sources: outputdir_multifolder/test.ts
 emittedFile:test.js
 sourceFile:outputdir_multifolder/test.ts
 -------------------------------------------------------------------
->>>var a1 = 10;
+>>>/// <reference path='ref/m1.ts'/>
 1 >
-2 >^^^^
-3 >    ^^
-4 >      ^^^
-5 >         ^^
-6 >           ^
-7 >            ^^^^^^^^^^^^->
+2 >
+3 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >/// <reference path='ref/m1.ts'/>
   >/// <reference path='../outputdir_multifolder_ref/m2.ts'/>
   >
-2 >var 
-3 >    a1
-4 >       = 
-5 >         10
-6 >           ;
+2 >
+3 >/// <reference path='ref/m1.ts'/>
 1 >Emitted(1, 1) Source(3, 1) + SourceIndex(0)
-2 >Emitted(1, 5) Source(3, 5) + SourceIndex(0)
-3 >Emitted(1, 7) Source(3, 7) + SourceIndex(0)
-4 >Emitted(1, 10) Source(3, 10) + SourceIndex(0)
-5 >Emitted(1, 12) Source(3, 12) + SourceIndex(0)
-6 >Emitted(1, 13) Source(3, 13) + SourceIndex(0)
+2 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+3 >Emitted(1, 34) Source(1, 34) + SourceIndex(0)
+---
+>>>/// <reference path='../outputdir_multifolder_ref/m2.ts'/>
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+  >
+2 >/// <reference path='../outputdir_multifolder_ref/m2.ts'/>
+1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 59) Source(2, 59) + SourceIndex(0)
+---
+>>>var a1 = 10;
+1 >^^^^
+2 >    ^^
+3 >      ^^^
+4 >         ^^
+5 >           ^
+6 >            ^^^^^^^^^^^^->
+1 >
+  >var 
+2 >    a1
+3 >       = 
+4 >         10
+5 >           ;
+1 >Emitted(3, 5) Source(3, 5) + SourceIndex(0)
+2 >Emitted(3, 7) Source(3, 7) + SourceIndex(0)
+3 >Emitted(3, 10) Source(3, 10) + SourceIndex(0)
+4 >Emitted(3, 12) Source(3, 12) + SourceIndex(0)
+5 >Emitted(3, 13) Source(3, 13) + SourceIndex(0)
 ---
 >>>var c1 = (function () {
 1->
@@ -360,9 +379,9 @@ sourceFile:outputdir_multifolder/test.ts
   >
 2 >class 
 3 >    c1
-1->Emitted(2, 1) Source(4, 1) + SourceIndex(0)
-2 >Emitted(2, 5) Source(4, 7) + SourceIndex(0)
-3 >Emitted(2, 7) Source(4, 9) + SourceIndex(0)
+1->Emitted(4, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(4, 5) Source(4, 7) + SourceIndex(0)
+3 >Emitted(4, 7) Source(4, 9) + SourceIndex(0)
 ---
 >>>    function c1() {
 1->^^^^
@@ -371,9 +390,9 @@ sourceFile:outputdir_multifolder/test.ts
 1->
 2 >    class 
 3 >             c1
-1->Emitted(3, 5) Source(4, 1) + SourceIndex(0) name (c1)
-2 >Emitted(3, 14) Source(4, 7) + SourceIndex(0) name (c1)
-3 >Emitted(3, 16) Source(4, 9) + SourceIndex(0) name (c1)
+1->Emitted(5, 5) Source(4, 1) + SourceIndex(0) name (c1)
+2 >Emitted(5, 14) Source(4, 7) + SourceIndex(0) name (c1)
+3 >Emitted(5, 16) Source(4, 9) + SourceIndex(0) name (c1)
 ---
 >>>    }
 1 >^^^^
@@ -383,16 +402,16 @@ sourceFile:outputdir_multifolder/test.ts
   >    public p1: number;
   >
 2 >    }
-1 >Emitted(4, 5) Source(6, 1) + SourceIndex(0) name (c1.constructor)
-2 >Emitted(4, 6) Source(6, 2) + SourceIndex(0) name (c1.constructor)
+1 >Emitted(6, 5) Source(6, 1) + SourceIndex(0) name (c1.constructor)
+2 >Emitted(6, 6) Source(6, 2) + SourceIndex(0) name (c1.constructor)
 ---
 >>>    return c1;
 1->^^^^
 2 >    ^^^^^^^^^
 1->
 2 >    }
-1->Emitted(5, 5) Source(6, 1) + SourceIndex(0) name (c1)
-2 >Emitted(5, 14) Source(6, 2) + SourceIndex(0) name (c1)
+1->Emitted(7, 5) Source(6, 1) + SourceIndex(0) name (c1)
+2 >Emitted(7, 14) Source(6, 2) + SourceIndex(0) name (c1)
 ---
 >>>})();
 1 >
@@ -406,10 +425,10 @@ sourceFile:outputdir_multifolder/test.ts
 4 > class c1 {
   >     public p1: number;
   > }
-1 >Emitted(6, 1) Source(6, 1) + SourceIndex(0) name (c1)
-2 >Emitted(6, 2) Source(6, 2) + SourceIndex(0) name (c1)
-3 >Emitted(6, 2) Source(4, 1) + SourceIndex(0)
-4 >Emitted(6, 6) Source(6, 2) + SourceIndex(0)
+1 >Emitted(8, 1) Source(6, 1) + SourceIndex(0) name (c1)
+2 >Emitted(8, 2) Source(6, 2) + SourceIndex(0) name (c1)
+3 >Emitted(8, 2) Source(4, 1) + SourceIndex(0)
+4 >Emitted(8, 6) Source(6, 2) + SourceIndex(0)
 ---
 >>>var instance1 = new c1();
 1->
@@ -430,14 +449,14 @@ sourceFile:outputdir_multifolder/test.ts
 6 >                    c1
 7 >                      ()
 8 >                        ;
-1->Emitted(7, 1) Source(8, 1) + SourceIndex(0)
-2 >Emitted(7, 5) Source(8, 5) + SourceIndex(0)
-3 >Emitted(7, 14) Source(8, 14) + SourceIndex(0)
-4 >Emitted(7, 17) Source(8, 17) + SourceIndex(0)
-5 >Emitted(7, 21) Source(8, 21) + SourceIndex(0)
-6 >Emitted(7, 23) Source(8, 23) + SourceIndex(0)
-7 >Emitted(7, 25) Source(8, 25) + SourceIndex(0)
-8 >Emitted(7, 26) Source(8, 26) + SourceIndex(0)
+1->Emitted(9, 1) Source(8, 1) + SourceIndex(0)
+2 >Emitted(9, 5) Source(8, 5) + SourceIndex(0)
+3 >Emitted(9, 14) Source(8, 14) + SourceIndex(0)
+4 >Emitted(9, 17) Source(8, 17) + SourceIndex(0)
+5 >Emitted(9, 21) Source(8, 21) + SourceIndex(0)
+6 >Emitted(9, 23) Source(8, 23) + SourceIndex(0)
+7 >Emitted(9, 25) Source(8, 25) + SourceIndex(0)
+8 >Emitted(9, 26) Source(8, 26) + SourceIndex(0)
 ---
 >>>function f1() {
 1 >
@@ -448,9 +467,9 @@ sourceFile:outputdir_multifolder/test.ts
   >
 2 >function 
 3 >         f1
-1 >Emitted(8, 1) Source(9, 1) + SourceIndex(0)
-2 >Emitted(8, 10) Source(9, 10) + SourceIndex(0)
-3 >Emitted(8, 12) Source(9, 12) + SourceIndex(0)
+1 >Emitted(10, 1) Source(9, 1) + SourceIndex(0)
+2 >Emitted(10, 10) Source(9, 10) + SourceIndex(0)
+3 >Emitted(10, 12) Source(9, 12) + SourceIndex(0)
 ---
 >>>    return instance1;
 1->^^^^
@@ -464,11 +483,11 @@ sourceFile:outputdir_multifolder/test.ts
 3 >           
 4 >           instance1
 5 >                    ;
-1->Emitted(9, 5) Source(10, 5) + SourceIndex(0) name (f1)
-2 >Emitted(9, 11) Source(10, 11) + SourceIndex(0) name (f1)
-3 >Emitted(9, 12) Source(10, 12) + SourceIndex(0) name (f1)
-4 >Emitted(9, 21) Source(10, 21) + SourceIndex(0) name (f1)
-5 >Emitted(9, 22) Source(10, 22) + SourceIndex(0) name (f1)
+1->Emitted(11, 5) Source(10, 5) + SourceIndex(0) name (f1)
+2 >Emitted(11, 11) Source(10, 11) + SourceIndex(0) name (f1)
+3 >Emitted(11, 12) Source(10, 12) + SourceIndex(0) name (f1)
+4 >Emitted(11, 21) Source(10, 21) + SourceIndex(0) name (f1)
+5 >Emitted(11, 22) Source(10, 22) + SourceIndex(0) name (f1)
 ---
 >>>}
 1 >
@@ -477,7 +496,7 @@ sourceFile:outputdir_multifolder/test.ts
 1 >
   >
 2 >}
-1 >Emitted(10, 1) Source(11, 1) + SourceIndex(0) name (f1)
-2 >Emitted(10, 2) Source(11, 2) + SourceIndex(0) name (f1)
+1 >Emitted(12, 1) Source(11, 1) + SourceIndex(0) name (f1)
+2 >Emitted(12, 2) Source(11, 2) + SourceIndex(0) name (f1)
 ---
 >>>//# sourceMappingURL=test.js.map

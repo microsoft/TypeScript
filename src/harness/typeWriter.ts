@@ -1,180 +1,99 @@
-
-/** TODO: Rewrite entirely **/
-class TypeWriterWalker {
-    constructor(public filename: string, public compiler: any) {
-    }
-    public run() { }
-    public results: any[];
+interface TypeWriterResult {
+    line: number;
+    column: number;
+    syntaxKind: string;
+    identifierName: string;
+    type: string;
 }
 
-/*
-class TypeWriterWalker extends TypeScript.SyntaxWalker {
-    private document: TypeScript.Document;
-    private syntaxTree: TypeScript.SyntaxTree;
-    private text: TypeScript.ISimpleText;
-    private currentPosition = 0;
+class TypeWriterWalker {
+    results: TypeWriterResult[];
+    currentSourceFile: ts.SourceFile;
 
-    public results: {
-        line: number;
-        column: number;
-        syntaxKind: string;
-        identifierName: string;
-        type: string;
-    }[] = [];
-
-    constructor(public filename: string, public compiler: TypeScript.TypeScriptCompiler) {
-        super();
-
-        this.document = compiler.getDocument(filename);
-        this.syntaxTree = this.document.syntaxTree();
-        this.text = this.syntaxTree.text;
+    constructor(public checker: ts.TypeChecker) {
     }
 
-    public run() {
-        TypeScript.visitNodeOrToken(this, this.syntaxTree.sourceUnit());
+    public getTypes(fileName: string): TypeWriterResult[] {
+        var sourceFile = this.checker.getProgram().getSourceFile(fileName);
+        this.currentSourceFile = sourceFile;
+        this.results = [];
+        this.visitNode(sourceFile);
+        return this.results;
     }
 
-    private isName(token: TypeScript.ISyntaxToken) {
-        var parent = token.parent;
+    private visitNode(node: ts.Node): void {
+        switch (node.kind) {
+            // Should always log expressions that are not tokens
+            // Also, always log the "this" keyword
+            // TODO: Ideally we should log all expressions, but to compare to the
+            // old typeWriter baselines, suppress tokens
+            case ts.SyntaxKind.ThisKeyword:
+            case ts.SyntaxKind.RegularExpressionLiteral:
+            case ts.SyntaxKind.ArrayLiteral:
+            case ts.SyntaxKind.ObjectLiteral:
+            case ts.SyntaxKind.PropertyAccess:
+            case ts.SyntaxKind.IndexedAccess:
+            case ts.SyntaxKind.CallExpression:
+            case ts.SyntaxKind.NewExpression:
+            case ts.SyntaxKind.TypeAssertion:
+            case ts.SyntaxKind.ParenExpression:
+            case ts.SyntaxKind.FunctionExpression:
+            case ts.SyntaxKind.ArrowFunction:
+            case ts.SyntaxKind.PrefixOperator:
+            case ts.SyntaxKind.PostfixOperator:
+            case ts.SyntaxKind.BinaryExpression:
+            case ts.SyntaxKind.ConditionalExpression:
+                this.log(node, this.getTypeOfNode(node));
+                break;
 
-        switch (parent.kind()) {
-            case TypeScript.SyntaxKind.ContinueStatement:
-                return (<TypeScript.ContinueStatementSyntax>parent).identifier === token;
-            case TypeScript.SyntaxKind.BreakStatement:
-                return (<TypeScript.BreakStatementSyntax>parent).identifier === token;
-            case TypeScript.SyntaxKind.LabeledStatement:
-                return (<TypeScript.LabeledStatementSyntax>parent).identifier === token;
+            // Should not change expression status (maybe expressions)
+            // TODO: Again, ideally should log number and string literals too,
+            // but to be consistent with the old typeWriter, just log identifiers
+            case ts.SyntaxKind.Identifier:
+                var identifier = <ts.Identifier>node;
+                if (!this.isLabel(identifier)) {
+                    var type = this.getTypeOfNode(identifier);
+                    this.log(node, type);
+                }
+                break;
+        }
+
+        ts.forEachChild(node, child => this.visitNode(child));
+    }
+
+    private isLabel(identifier: ts.Identifier): boolean {
+        var parent = identifier.parent;
+        switch (parent.kind) {
+            case ts.SyntaxKind.ContinueStatement:
+            case ts.SyntaxKind.BreakStatement:
+                return (<ts.BreakOrContinueStatement>parent).label === identifier;
+            case ts.SyntaxKind.LabelledStatement:
+                return (<ts.LabelledStatement>parent).label === identifier;
         }
         return false;
     }
 
-    public visitToken(token: TypeScript.ISyntaxToken) {
-        if (token.kind() === TypeScript.SyntaxKind.IdentifierName) {
-            if (!this.isName(token)) {
-                this.log(token);
-            }
-        } else if (token.kind() === TypeScript.SyntaxKind.ThisKeyword) {
-            this.log(token);
-        }
-        return super.visitToken(token);
+    private log(node: ts.Node, type: ts.Type): void {
+        var actualPos = ts.skipTrivia(this.currentSourceFile.text, node.pos);
+        var lineAndCharacter = this.currentSourceFile.getLineAndCharacterFromPosition(actualPos);
+        var sourceText = ts.getSourceTextOfNodeFromSourceText(this.currentSourceFile.text, node);
+        var isUnknownType = (<ts.IntrinsicType>type).intrinsicName === "unknown";
+        
+        // If we got an unknown type, we temporarily want to fall back to just pretending the name
+        // (source text) of the node is the type. This is to align with the old typeWriter to make
+        // baseline comparisons easier. In the long term, we will want to just call typeToString
+        this.results.push({
+            line: lineAndCharacter.line - 1,
+            column: lineAndCharacter.character,
+            syntaxKind: ts.SyntaxKind[node.kind],
+            identifierName: sourceText,
+            type: isUnknownType ? sourceText : this.checker.typeToString(type)
+        });
     }
 
-    public visitNode(node: TypeScript.ISyntaxNode) {
-        return super.visitNode(node);
-    }
-
-    private getAstForElement(element: TypeScript.ISyntaxElement) {
-        if (!TypeScript.isShared(element)) {
-            return element;
-        }
-    }
-
-    private getEnclosingScopeSymbol(ast: TypeScript.ISyntaxElement): TypeScript.PullSymbol {
-        var enclosingScopeAST = TypeScript.DeclarationEmitter.getEnclosingContainer(ast);
-        if (enclosingScopeAST) {
-            var typeInfo = this.compiler.pullGetSymbolInformationFromAST(enclosingScopeAST, this.document);
-            return typeInfo ? typeInfo.symbol : null;
-        }
-
-        return null;
-    }
-
-    private getTypeOfElement(element: TypeScript.ISyntaxElement) {
-        var ast = this.getAstForElement(element);
-        if (ast) {
-            var typeInfo = this.compiler.pullGetSymbolInformationFromAST(ast, this.document);
-            if (typeInfo.symbol && typeInfo.symbol.type) {
-                var enclosingScope = this.getEnclosingScopeSymbol(ast);
-                return typeInfo.symbol.type.toString(enclosingScope);
-            }
-        }
-
-        return "<unknown>";
-    }
-
-    public visitPrefixUnaryExpression(node: TypeScript.PrefixUnaryExpressionSyntax) {
-        this.log(node);
-        return super.visitPrefixUnaryExpression(node);
-    }
-    public visitArrayLiteralExpression(node: TypeScript.ArrayLiteralExpressionSyntax) {
-        this.log(node);
-        return super.visitArrayLiteralExpression(node);
-    }
-    public visitOmittedExpression(node: TypeScript.OmittedExpressionSyntax) {
-        this.log(node);
-        return super.visitOmittedExpression(node);
-    }
-    public visitParenthesizedExpression(node: TypeScript.ParenthesizedExpressionSyntax) {
-        this.log(node);
-        return super.visitParenthesizedExpression(node);
-    }
-    public visitSimpleArrowFunctionExpression(node: TypeScript.SimpleArrowFunctionExpressionSyntax) {
-        this.log(node);
-        return super.visitSimpleArrowFunctionExpression(node);
-    }
-    public visitParenthesizedArrowFunctionExpression(node: TypeScript.ParenthesizedArrowFunctionExpressionSyntax) {
-        this.log(node);
-        return super.visitParenthesizedArrowFunctionExpression(node);
-    }
-    public visitObjectCreationExpression(node: TypeScript.ObjectCreationExpressionSyntax) {
-        this.log(node);
-        return super.visitObjectCreationExpression(node);
-    }
-    public visitCastExpression(node: TypeScript.CastExpressionSyntax) {
-        this.log(node);
-        return super.visitCastExpression(node);
-    }
-    public visitObjectLiteralExpression(node: TypeScript.ObjectLiteralExpressionSyntax) {
-        this.log(node);
-        return super.visitObjectLiteralExpression(node);
-    }
-    public visitFunctionExpression(node: TypeScript.FunctionExpressionSyntax) {
-        this.log(node);
-        return super.visitFunctionExpression(node);
-    }
-    public visitTypeOfExpression(node: TypeScript.TypeOfExpressionSyntax) {
-        this.log(node);
-        return super.visitTypeOfExpression(node);
-    }
-    public visitDeleteExpression(node: TypeScript.DeleteExpressionSyntax) {
-        this.log(node);
-        return super.visitDeleteExpression(node);
-    }
-    public visitVoidExpression(node: TypeScript.VoidExpressionSyntax) {
-        this.log(node);
-        return super.visitVoidExpression(node);
-    }
-    public visitMemberAccessExpression(node: TypeScript.MemberAccessExpressionSyntax) {
-        this.log(node);
-        return super.visitMemberAccessExpression(node);
-    }
-    public visitPostfixUnaryExpression(node: TypeScript.PostfixUnaryExpressionSyntax) {
-        this.log(node);
-        return super.visitPostfixUnaryExpression(node);
-    }
-    public visitElementAccessExpression(node: TypeScript.ElementAccessExpressionSyntax) {
-        this.log(node);
-        return super.visitElementAccessExpression(node);
-    }
-    public visitInvocationExpression(node: TypeScript.InvocationExpressionSyntax) {
-        this.log(node);
-        return super.visitInvocationExpression(node);
-    }
-    public visitBinaryExpression(node: TypeScript.BinaryExpressionSyntax) {
-        this.log(node);
-        return super.visitBinaryExpression(node);
-    }
-    public visitConditionalExpression(node: TypeScript.ConditionalExpressionSyntax) {
-        this.log(node);
-        return super.visitConditionalExpression(node);
-    }
-
-    public log(node: TypeScript.ISyntaxNodeOrToken) {
-        var _fullStart = TypeScript.fullStart(node);
-        if (_fullStart >= 0) {
-            var pos = this.document.lineMap().getLineAndCharacterFromPosition(_fullStart);
-            this.results.push({ line: pos.line(), column: pos.character(), syntaxKind: TypeScript.SyntaxKind[node.kind()], identifierName: TypeScript.fullText(node, this.text).trim(), type: this.getTypeOfElement(node) });
-        }
+    private getTypeOfNode(node: ts.Node): ts.Type {
+        var type = this.checker.getTypeOfNode(node);
+        ts.Debug.assert(type, "type doesn't exist");
+        return type;
     }
 }
-*/

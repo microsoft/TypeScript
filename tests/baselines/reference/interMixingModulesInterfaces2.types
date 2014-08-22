@@ -1,0 +1,31 @@
+=== tests/cases/compiler/interMixingModulesInterfaces2.ts ===
+module A {
+>A : typeof A
+
+    export interface B {
+>B : B
+
+        name: string;
+>name : string
+
+        value: number;
+>value : number
+    }
+
+    module B {
+>B : typeof B
+
+        export function createB(): B {
+>createB : () => B
+>B : B
+
+            return null;
+        }
+    }
+}
+
+var x: A.B = null;
+>x : B
+>A : A
+>B : B
+

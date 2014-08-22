@@ -47,7 +47,7 @@ function f1(x) {
 var C = (function () {
     function C() {
         var bar = (function () {
-            return bar;
+            return bar; // 'bar' should be resolvable
         });
         var b = f1(f1(bar));
     }

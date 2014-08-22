@@ -35,7 +35,7 @@ module m1 {
      */
     function foo4Export() {
     }
-}
+} // trailing comment module
 m1.fooExport();
 var myvar = new m1.m2.c();
 /** module comment of m2.m3*/
@@ -43,14 +43,14 @@ module m2.m3 {
     /** Exported class comment*/
     export class c {
     }
-}
+} /* trailing dotted module comment*/
 new m2.m3.c();
 /** module comment of m3.m4.m5*/
 module m3.m4.m5 {
     /** Exported class comment*/
     export class c {
     }
-}
+} // trailing dotted module 2
 new m3.m4.m5.c();
 /** module comment of m4.m5.m6*/
 module m4.m5.m6 {
@@ -58,7 +58,7 @@ module m4.m5.m6 {
         /** Exported class comment*/
         export class c {
         }
-    }
+    } /* trailing inner module */ /* multiple comments*/
 }
 new m4.m5.m6.m7.c();
 /** module comment of m5.m6.m7*/
@@ -98,13 +98,18 @@ module m7.m8 {
 new m7.m8.m9.c();
 
 //// [commentsModules.js]
+/** Module comment*/
 var m1;
 (function (m1) {
+    /** b's comment*/
     m1.b;
+    /** foo's comment*/
     function foo() {
         return m1.b;
     }
+    /** m2 comments*/
     (function (m2) {
+        /** class comment;*/
         var c = (function () {
             function c() {
             }
@@ -112,27 +117,38 @@ var m1;
         })();
         m2.c = c;
         ;
+        /** i*/
         m2.i = new c();
     })(m1.m2 || (m1.m2 = {}));
     var m2 = m1.m2;
+    /** exported function*/
     function fooExport() {
         return foo();
     }
     m1.fooExport = fooExport;
-    function foo2Export(a) {
+    // shouldn't appear
+    function foo2Export(/**hm*/ a) {
     }
     m1.foo2Export = foo2Export;
+    /** foo3Export
+     * comment
+     */
     function foo3Export() {
     }
     m1.foo3Export = foo3Export;
+    /** foo4Export
+     * comment
+     */
     function foo4Export() {
     }
-})(m1 || (m1 = {}));
+})(m1 || (m1 = {})); // trailing comment module
 m1.fooExport();
 var myvar = new m1.m2.c();
+/** module comment of m2.m3*/
 var m2;
 (function (m2) {
     (function (m3) {
+        /** Exported class comment*/
         var c = (function () {
             function c() {
             }
@@ -141,12 +157,14 @@ var m2;
         m3.c = c;
     })(m2.m3 || (m2.m3 = {}));
     var m3 = m2.m3;
-})(m2 || (m2 = {}));
+})(m2 || (m2 = {})); /* trailing dotted module comment*/
 new m2.m3.c();
+/** module comment of m3.m4.m5*/
 var m3;
 (function (m3) {
     (function (m4) {
         (function (m5) {
+            /** Exported class comment*/
             var c = (function () {
                 function c() {
                 }
@@ -157,13 +175,15 @@ var m3;
         var m5 = m4.m5;
     })(m3.m4 || (m3.m4 = {}));
     var m4 = m3.m4;
-})(m3 || (m3 = {}));
+})(m3 || (m3 = {})); // trailing dotted module 2
 new m3.m4.m5.c();
+/** module comment of m4.m5.m6*/
 var m4;
 (function (m4) {
     (function (m5) {
         (function (m6) {
             (function (m7) {
+                /** Exported class comment*/
                 var c = (function () {
                     function c() {
                     }
@@ -171,18 +191,21 @@ var m4;
                 })();
                 m7.c = c;
             })(m6.m7 || (m6.m7 = {}));
-            var m7 = m6.m7;
+            var m7 = m6.m7; /* trailing inner module */ /* multiple comments*/
         })(m5.m6 || (m5.m6 = {}));
         var m6 = m5.m6;
     })(m4.m5 || (m4.m5 = {}));
     var m5 = m4.m5;
 })(m4 || (m4 = {}));
 new m4.m5.m6.m7.c();
+/** module comment of m5.m6.m7*/
 var m5;
 (function (m5) {
     (function (m6) {
         (function (m7) {
+            /** module m8 comment*/
             (function (m8) {
+                /** Exported class comment*/
                 var c = (function () {
                     function c() {
                     }
@@ -201,6 +224,7 @@ var m6;
 (function (m6) {
     (function (m7) {
         (function (m8) {
+            /** Exported class comment*/
             var c = (function () {
                 function c() {
                 }
@@ -216,18 +240,22 @@ new m6.m7.m8.c();
 var m7;
 (function (m7) {
     (function (m8) {
+        /** module m9 comment*/
         (function (m9) {
+            /** Exported class comment*/
             var c = (function () {
                 function c() {
                 }
                 return c;
             })();
             m9.c = c;
+            /** class d */
             var d = (function () {
                 function d() {
                 }
                 return d;
             })();
+            // class e
             var e = (function () {
                 function e() {
                 }
@@ -243,46 +271,67 @@ new m7.m8.m9.c();
 
 
 //// [commentsModules.d.ts]
+/** Module comment*/
 declare module m1 {
+    /** b's comment*/
     var b: number;
+    /** m2 comments*/
     module m2 {
+        /** class comment;*/
         class c {
         }
+        /** i*/
         var i: c;
     }
+    /** exported function*/
     function fooExport(): number;
-    function foo2Export(a: string): void;
+    function foo2Export(/**hm*/ a: string): void;
+    /** foo3Export
+     * comment
+     */
     function foo3Export(): void;
 }
 declare var myvar: m1.m2.c;
+/** module comment of m2.m3*/
 declare module m2.m3 {
+    /** Exported class comment*/
     class c {
     }
 }
+/** module comment of m3.m4.m5*/
 declare module m3.m4.m5 {
+    /** Exported class comment*/
     class c {
     }
 }
+/** module comment of m4.m5.m6*/
 declare module m4.m5.m6 {
     module m7 {
+        /** Exported class comment*/
         class c {
         }
     }
 }
+/** module comment of m5.m6.m7*/
 declare module m5.m6.m7 {
+    /** module m8 comment*/
     module m8 {
+        /** Exported class comment*/
         class c {
         }
     }
 }
 declare module m6.m7 {
     module m8 {
+        /** Exported class comment*/
         class c {
         }
     }
 }
 declare module m7.m8 {
+    /** module m9 comment*/
     module m9 {
+        /** Exported class comment*/
         class c {
         }
         class e {

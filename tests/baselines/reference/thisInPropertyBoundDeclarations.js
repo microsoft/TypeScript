@@ -81,6 +81,7 @@ var Bug = (function () {
     ];
     return Bug;
 })();
+// Valid use of this in a property bound decl
 var A = (function () {
     function A() {
         this.prop1 = function () {

@@ -41,8 +41,10 @@ var B = (function () {
     }
     return B;
 })();
+// Below 2 should compile without error 
 var x;
 var y;
+// Below should be in error
 var x1;
 var x2;
 var x3;

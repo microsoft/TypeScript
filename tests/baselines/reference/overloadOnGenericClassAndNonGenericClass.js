@@ -51,4 +51,4 @@ function f(a) {
 }
 var xs;
 var t3 = f(xs);
-var t3;
+var t3; // should not error

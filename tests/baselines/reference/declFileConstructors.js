@@ -99,13 +99,17 @@ class GlobalConstructorWithParameterInitializer {
 
 //// [declFileConstructors_0.js]
 var SimpleConstructor = (function () {
+    /** This comment should appear for foo*/
     function SimpleConstructor() {
     }
     return SimpleConstructor;
 })();
 exports.SimpleConstructor = SimpleConstructor;
 var ConstructorWithParameters = (function () {
-    function ConstructorWithParameters(a, b) {
+    /** This is comment for function signature*/
+    function ConstructorWithParameters(/** this is comment about a*/ a, 
+        /** this is comment for b*/
+        b) {
         var d = a;
     }
     return ConstructorWithParameters;
@@ -159,12 +163,16 @@ var ConstructorWithParameterInitializer = (function () {
 exports.ConstructorWithParameterInitializer = ConstructorWithParameterInitializer;
 //// [declFileConstructors_1.js]
 var GlobalSimpleConstructor = (function () {
+    /** This comment should appear for foo*/
     function GlobalSimpleConstructor() {
     }
     return GlobalSimpleConstructor;
 })();
 var GlobalConstructorWithParameters = (function () {
-    function GlobalConstructorWithParameters(a, b) {
+    /** This is comment for function signature*/
+    function GlobalConstructorWithParameters(/** this is comment about a*/ a, 
+        /** this is comment for b*/
+        b) {
         var d = a;
     }
     return GlobalConstructorWithParameters;
@@ -213,10 +221,14 @@ var GlobalConstructorWithParameterInitializer = (function () {
 
 //// [declFileConstructors_0.d.ts]
 export declare class SimpleConstructor {
+    /** This comment should appear for foo*/
     constructor();
 }
 export declare class ConstructorWithParameters {
-    constructor(a: string, b: number);
+    /** This is comment for function signature*/
+    constructor(/** this is comment about a*/ a: string, 
+        /** this is comment for b*/
+        b: number);
 }
 export declare class ConstructorWithRestParamters {
     constructor(a: string, ...rests: string[]);
@@ -243,10 +255,14 @@ export declare class ConstructorWithParameterInitializer {
 }
 //// [declFileConstructors_1.d.ts]
 declare class GlobalSimpleConstructor {
+    /** This comment should appear for foo*/
     constructor();
 }
 declare class GlobalConstructorWithParameters {
-    constructor(a: string, b: number);
+    /** This is comment for function signature*/
+    constructor(/** this is comment about a*/ a: string, 
+        /** this is comment for b*/
+        b: number);
 }
 declare class GlobalConstructorWithRestParamters {
     constructor(a: string, ...rests: string[]);

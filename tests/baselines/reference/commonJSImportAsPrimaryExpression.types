@@ -1,0 +1,25 @@
+=== tests/cases/conformance/externalModules/foo_1.ts ===
+import foo = require("./foo_0");
+>foo : typeof "tests/cases/conformance/externalModules/foo_0"
+
+if(foo.C1.s1){
+>foo.C1.s1 : boolean
+>foo.C1 : typeof C1
+>foo : typeof "tests/cases/conformance/externalModules/foo_0"
+>C1 : typeof C1
+>s1 : boolean
+
+	// Should cause runtime import
+}
+
+=== tests/cases/conformance/externalModules/foo_0.ts ===
+export class C1 {
+>C1 : C1
+
+	m1 = 42;
+>m1 : number
+
+	static s1 = true;
+>s1 : boolean
+}
+

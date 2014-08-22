@@ -98,7 +98,7 @@ module m6 { export var y = 2; }
 
 
 //// [augmentedTypesModules.js]
-var m1 = 1;
+var m1 = 1; // Should be allowed
 var m1a;
 (function (m1a) {
     var y = 2;
@@ -109,7 +109,7 @@ var m1b;
     m1b.y = 2;
 })(m1b || (m1b = {}));
 var m1b = 1;
-var m1c = 1;
+var m1c = 1; // Should be allowed
 var m1d;
 (function (m1d) {
     var I = (function () {
@@ -121,7 +121,7 @@ var m1d;
     })();
     m1d.I = I;
 })(m1d || (m1d = {}));
-var m1d = 1;
+var m1d = 1; // error
 function m2() {
 }
 ;
@@ -139,6 +139,7 @@ var m2b;
 function m2b() {
 }
 ;
+// should be errors to have function first
 function m2c() {
 }
 ;
@@ -167,7 +168,7 @@ var m3 = (function () {
     function m3() {
     }
     return m3;
-})();
+})(); // ok since the module is not instantiated
 var m3a;
 (function (m3a) {
     var y = 2;
@@ -178,7 +179,7 @@ var m3a = (function () {
     m3a.prototype.foo = function () {
     };
     return m3a;
-})();
+})(); // error, class isn't ambient or declared before the module
 var m3b = (function () {
     function m3b() {
     }
@@ -257,10 +258,12 @@ var m4d;
 (function (m4d) {
     m4d[m4d["One"] = 0] = "One";
 })(m4d || (m4d = {}));
+//// module then module
 var m5;
 (function (m5) {
     m5.y = 2;
 })(m5 || (m5 = {}));
+// module then import
 var m6;
 (function (m6) {
     m6.y = 2;

@@ -46,6 +46,7 @@ var X;
 var X;
 (function (X) {
     (function (Y) {
+        // duplicate identifier
         var Point = (function () {
             function Point(x, y) {
                 this.x = x;
@@ -62,6 +63,7 @@ var A;
 (function (A) {
     A.Instance = new A();
 })(A || (A = {}));
+// duplicate identifier
 var A = (function () {
     function A() {
     }

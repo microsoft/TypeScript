@@ -11,5 +11,6 @@ var x: IPromise<string, number>;
 var x: Promise<string, boolean>;
 
 //// [promiseIdentityWithConstraints.js]
+// Error because constraint V doesn't match
 var x;
 var x;

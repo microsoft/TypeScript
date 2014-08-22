@@ -93,6 +93,8 @@ var Derived2 = (function (_super) {
     }
     return Derived2;
 })(Derived);
+// N and M have the same name, same accessibility, same optionality, and N is a subtype of M
+// foo properties are valid, bar properties cause errors in the derived class declarations
 var A = (function () {
     function A() {
     }

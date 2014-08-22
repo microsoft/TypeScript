@@ -1,0 +1,6 @@
+=== tests/cases/conformance/parser/ecmascript5/MethodSignatures/parserMethodSignature10.ts ===
+interface I {
+>I : I
+
+  1?();
+}

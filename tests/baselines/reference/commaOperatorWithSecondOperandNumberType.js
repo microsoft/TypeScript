@@ -41,16 +41,19 @@ var BOOLEAN;
 var NUMBER;
 var STRING;
 var OBJECT;
+//The second operand type is number
 ANY, NUMBER;
 BOOLEAN, NUMBER;
 NUMBER, NUMBER;
 STRING, NUMBER;
 OBJECT, NUMBER;
+//Return type is number
 var resultIsNumber1 = (ANY, NUMBER);
 var resultIsNumber2 = (BOOLEAN, NUMBER);
 var resultIsNumber3 = (NUMBER, NUMBER);
 var resultIsNumber4 = (STRING, NUMBER);
 var resultIsNumber5 = (OBJECT, NUMBER);
+//Literal and expression
 null, NUMBER;
 ANY = undefined, NUMBER;
 true, 1;

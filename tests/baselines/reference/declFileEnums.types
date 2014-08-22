@@ -1,0 +1,78 @@
+=== tests/cases/compiler/declFileEnums.ts ===
+
+enum e1 {
+>e1 : e1
+
+    a,
+>a : e1
+
+    b,
+>b : e1
+
+    c
+>c : e1
+}
+
+enum e2 {
+>e2 : e2
+
+    a = 10,
+>a : e2
+
+    b = a + 2,
+>b : e2
+>a + 2 : number
+>a : e2
+
+    c = 10,
+>c : e2
+}
+
+enum e3 {
+>e3 : e3
+
+    a = 10,
+>a : e3
+
+    b = Math.PI,
+>b : e3
+>Math.PI : number
+>Math : Math
+>PI : number
+
+    c = a + 3
+>c : e3
+>a + 3 : number
+>a : e3
+}
+
+enum e4 {
+>e4 : e4
+
+    a,
+>a : e4
+
+    b,
+>b : e4
+
+    c,
+>c : e4
+
+    d = 10,
+>d : e4
+
+    e
+>e : e4
+}
+
+enum e5 {
+>e5 : e5
+
+    "Friday",
+    "Saturday",
+    "Sunday",
+    "Weekend days"
+}
+
+
+

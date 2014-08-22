@@ -763,7 +763,7 @@ module TypeScript {
 
             var start = new Date().getTime();
             var accessors = PullHelpers.getGetterAndSetterFunction(funcDecl, this.semanticInfoChain);
-            TypeScript.declarationEmitGetAccessorFunctionTime += new Date().getTime();
+            TypeScript.declarationEmitGetAccessorFunctionTime += new Date().getTime() - start;
 
             var comments: Comment[] = [];
             if (accessors.getter) {
@@ -787,7 +787,7 @@ module TypeScript {
         private emitMemberAccessorDeclaration(funcDecl: ISyntaxElement, modifiers: ISyntaxToken[], name: ISyntaxToken) {
             var start = new Date().getTime();
             var accessorSymbol = PullHelpers.getAccessorSymbol(funcDecl, this.semanticInfoChain);
-            TypeScript.declarationEmitGetAccessorFunctionTime += new Date().getTime();
+            TypeScript.declarationEmitGetAccessorFunctionTime += new Date().getTime() - start;
 
             if (funcDecl.kind() === SyntaxKind.SetAccessor && accessorSymbol.getGetter()) {
                 // Setter is being used to emit the type info. 
@@ -969,7 +969,7 @@ module TypeScript {
                     this.declFile.WriteLine("require(" + (<ExternalModuleReferenceSyntax>importDeclAST.moduleReference).stringLiteral.text() + ");");
                 }
                 else {
-                    this.declFile.WriteLine(ASTHelpers.getNameOfIdenfierOrQualifiedName((<ModuleNameModuleReferenceSyntax>importDeclAST.moduleReference).moduleName) + ";");
+                    this.declFile.WriteLine(ASTHelpers.getNameOfIdentifierOrQualifiedName((<ModuleNameModuleReferenceSyntax>importDeclAST.moduleReference).moduleName) + ";");
                 }
             }
         }
@@ -1023,7 +1023,7 @@ module TypeScript {
                 this.declFile.Write(moduleDecl.stringLiteral.text());
             }
             else {
-                this.declFile.Write(ASTHelpers.getNameOfIdenfierOrQualifiedName(moduleDecl.name));
+                this.declFile.Write(ASTHelpers.getNameOfIdentifierOrQualifiedName(moduleDecl.name));
             }
 
             this.declFile.WriteLine(" {");

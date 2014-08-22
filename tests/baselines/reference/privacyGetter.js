@@ -255,7 +255,7 @@ define(["require", "exports"], function (require, exports) {
             });
             Object.defineProperty(C3_public.prototype, "p4_public", {
                 get: function () {
-                    return new C2_private();
+                    return new C2_private(); //error
                 },
                 set: function (m1_c3_p4_arg) {
                 },
@@ -452,7 +452,7 @@ define(["require", "exports"], function (require, exports) {
         });
         Object.defineProperty(C7_public.prototype, "p4_public", {
             get: function () {
-                return new C5_private();
+                return new C5_private(); //error
             },
             set: function (m1_c3_p4_arg) {
             },

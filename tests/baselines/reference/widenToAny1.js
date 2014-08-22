@@ -10,4 +10,4 @@ var z1: number = foo1({ x: undefined, y: "def" });  // Best common type is any
 function foo1(f1) {
     return undefined;
 }
-var z1 = foo1({ x: undefined, y: "def" });
+var z1 = foo1({ x: undefined, y: "def" }); // Best common type is any

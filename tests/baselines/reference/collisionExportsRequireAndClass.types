@@ -1,0 +1,8 @@
+=== tests/cases/compiler/collisionExportsRequireAndClass.ts ===
+export class require {
+>require : require
+}
+export class exports {
+>exports : exports
+}
+

@@ -101,6 +101,7 @@ export var publicUse_im_public_mu_public: im_public_mu_public.i;
 
 //// [privacyTopLevelInternalReferenceImportWithExport.js]
 define(["require", "exports"], function (require, exports) {
+    // private elements
     var m_private;
     (function (m_private) {
         var c_private = (function () {
@@ -129,6 +130,7 @@ define(["require", "exports"], function (require, exports) {
         })(m_private.mi_private || (m_private.mi_private = {}));
         var mi_private = m_private.mi_private;
     })(m_private || (m_private = {}));
+    // Public elements
     (function (m_public) {
         var c_public = (function () {
             function c_public() {
@@ -157,11 +159,13 @@ define(["require", "exports"], function (require, exports) {
         var mi_public = m_public.mi_public;
     })(exports.m_public || (exports.m_public = {}));
     var m_public = exports.m_public;
+    // Privacy errors - importing private elements
     exports.im_public_c_private = m_private.c_private;
     exports.im_public_e_private = m_private.e_private;
     exports.im_public_f_private = m_private.f_private;
     exports.im_public_v_private = m_private.v_private;
     exports.im_public_mi_private = m_private.mi_private;
+    // Usage of privacy error imports
     var privateUse_im_public_c_private = new exports.im_public_c_private();
     exports.publicUse_im_public_c_private = new exports.im_public_c_private();
     var privateUse_im_public_e_private = 0 /* Happy */;
@@ -176,11 +180,13 @@ define(["require", "exports"], function (require, exports) {
     exports.publicUse_im_public_mi_private = new exports.im_public_mi_private.c();
     var privateUse_im_public_mu_private;
     exports.publicUse_im_public_mu_private;
+    // No Privacy errors - importing public elements
     exports.im_public_c_public = m_public.c_public;
     exports.im_public_e_public = m_public.e_public;
     exports.im_public_f_public = m_public.f_public;
     exports.im_public_v_public = m_public.v_public;
     exports.im_public_mi_public = m_public.mi_public;
+    // Usage of above decls
     var privateUse_im_public_c_public = new exports.im_public_c_public();
     exports.publicUse_im_public_c_public = new exports.im_public_c_public();
     var privateUse_im_public_e_public = 0 /* Happy */;

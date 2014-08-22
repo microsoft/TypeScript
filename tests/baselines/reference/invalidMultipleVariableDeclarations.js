@@ -93,6 +93,7 @@ var M;
     }
     M.F2 = F2;
 })(M || (M = {}));
+// all of these are errors
 var a;
 var a = 1;
 var a = 'a string';

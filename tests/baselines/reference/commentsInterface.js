@@ -89,8 +89,9 @@ var i2_i_nc_fnfoo = i2_i.nc_fnfoo;
 var i2_i_nc_fnfoo_r = i2_i.nc_fnfoo(10);
 var i3_i;
 i3_i = {
-    f: function (a) { return "Hello" + a; },
+    f: function (/**i3_i a*/ a) { return "Hello" + a; },
     l: this.f,
+    /** own x*/
     x: this.f(10),
     nc_x: this.l(this.x),
     nc_f: this.f,
@@ -103,22 +104,30 @@ i3_i.nc_l(10);
 
 
 //// [commentsInterface.d.ts]
+/** this is interface 1*/
 interface i1 {
 }
 declare var i1_i: i1;
 interface nc_i1 {
 }
 declare var nc_i1_i: nc_i1;
+/** this is interface 2 with memebers*/
 interface i2 {
+    /** this is x*/
     x: number;
+    /** this is foo*/
     foo: (b: number) => string;
-    [i: string]: any;
-    new (i: i1): any;
+    /** this is indexer*/
+    [/**string param*/ i: string]: any;
+    /**new method*/
+    new (/** param*/ i: i1): any;
     nc_x: number;
     nc_foo: (b: number) => string;
     [i: number]: number;
-    (a: number, b: number): number;
-    fnfoo(b: number): string;
+    /** this is call signature*/
+    (/**paramhelp a*/ a: number, /**paramhelp b*/ b: number): number;
+    /** this is fnfoo*/
+    fnfoo(/**param help*/ b: number): string;
     nc_fnfoo(b: number): string;
     nc_y: number;
 }
@@ -138,8 +147,11 @@ declare var i2_i_fnfoo_r: string;
 declare var i2_i_nc_fnfoo: (b: number) => string;
 declare var i2_i_nc_fnfoo_r: string;
 interface i3 {
+    /** Comment i3 x*/
     x: number;
-    f(a: number): string;
+    /** Function i3 f*/
+    f(/**number parameter*/ a: number): string;
+    /** i3 l*/
     l: (b: number) => string;
     nc_x: number;
     nc_f(a: number): string;

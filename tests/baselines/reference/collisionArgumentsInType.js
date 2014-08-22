@@ -15,7 +15,7 @@ var v21: {
 }
 
 //// [collisionArgumentsInType.js]
-var v1;
-var v12;
+var v1; // no error - no code gen
+var v12; // no error - no code gen
 var v2;
 var v21;

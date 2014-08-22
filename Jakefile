@@ -71,6 +71,7 @@ var harnessSources = [
     "fourslashRunner.ts",
     "projectsRunner.ts",
     "unittestrunner.ts",
+    "loggedIO.ts",
     "rwcRunner.ts",
     "runner.ts"
 ].map(function (f) {

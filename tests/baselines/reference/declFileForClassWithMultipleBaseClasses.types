@@ -1,0 +1,54 @@
+=== tests/cases/compiler/declFileForClassWithMultipleBaseClasses.ts ===
+
+class A {
+>A : A
+
+    foo() { }
+>foo : () => void
+}
+
+class B {
+>B : B
+
+    bar() { }
+>bar : () => void
+}
+
+interface I {
+>I : I
+
+    baz();
+>baz : () => any
+}
+
+interface J {
+>J : J
+
+    bat();
+>bat : () => any
+}
+
+
+class D implements I, J {
+>D : D
+>I : I
+>J : J
+
+    baz() { }
+>baz : () => void
+
+    bat() { }
+>bat : () => void
+
+    foo() { }
+>foo : () => void
+
+    bar() { }
+>bar : () => void
+}
+
+interface I extends A, B {
+>I : I
+>A : A
+>B : B
+}

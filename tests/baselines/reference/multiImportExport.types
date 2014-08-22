@@ -1,0 +1,51 @@
+=== tests/cases/compiler/consumer.ts ===
+import Drawing = require('./Drawing');
+>Drawing : typeof "tests/cases/compiler/Drawing"
+
+var addr = new Drawing.Math.Adder();
+>addr : Adder
+>new Drawing.Math.Adder() : Adder
+>Drawing.Math.Adder : typeof Adder
+>Drawing.Math : { Adder: typeof Adder; }
+>Drawing : typeof "tests/cases/compiler/Drawing"
+>Math : { Adder: typeof Adder; }
+>Adder : typeof Adder
+
+=== tests/cases/compiler/Drawing.ts ===
+export import Math = require('Math/Math')
+>Math : { Adder: typeof Adder; }
+
+=== tests/cases/compiler/Math/Math.ts ===
+import Adder = require('Math/Adder');
+>Adder : typeof Adder
+
+var Math = {
+>Math : { Adder: typeof Adder; }
+>{
+    Adder:Adder
+} : { Adder: typeof Adder; }
+
+    Adder:Adder
+>Adder : typeof Adder
+>Adder : Adder
+
+};
+
+export = Math
+>Math : { Adder: typeof Adder; }
+
+=== tests/cases/compiler/Math/Adder.ts ===
+class Adder {
+>Adder : Adder
+
+    add(a: number, b: number) {
+>add : (a: number, b: number) => void
+>a : number
+>b : number
+        
+    }
+}
+
+export = Adder;
+>Adder : Adder
+

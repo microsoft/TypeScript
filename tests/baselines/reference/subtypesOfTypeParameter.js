@@ -106,6 +106,7 @@ function f2<T, U>(x: T, y: U) {
 }
 
 //// [subtypesOfTypeParameter.js]
+// checking whether other types are subtypes of type parameters
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -125,8 +126,8 @@ var D1 = (function (_super) {
     return D1;
 })(C3);
 function f1(x, y) {
-    var r = true ? x : y;
-    var r = true ? y : x;
+    var r = true ? x : y; // error
+    var r = true ? y : x; // error
 }
 var C1 = (function () {
     function C1() {
@@ -157,6 +158,7 @@ var c;
 (function (c) {
     c.bar = 1;
 })(c || (c = {}));
+// errors throughout
 function f2(x, y) {
     var r0 = true ? x : null;
     var r0 = true ? null : x;
@@ -184,7 +186,7 @@ function f2(x, y) {
     } : x;
     var r8b = true ? x : function (x) {
         return x;
-    };
+    }; // type parameters not identical across declarations
     var i1;
     var r9 = true ? i1 : x;
     var r9 = true ? x : i1;
@@ -212,8 +214,8 @@ function f2(x, y) {
         var r18 = true ? x : a;
         var r18 = true ? a : x;
     }
-    var r19 = true ? new Object() : x;
-    var r19 = true ? x : new Object();
-    var r20 = true ? {} : x;
-    var r20 = true ? x : {};
+    var r19 = true ? new Object() : x; // BCT is Object
+    var r19 = true ? x : new Object(); // BCT is Object
+    var r20 = true ? {} : x; // ok
+    var r20 = true ? x : {}; // ok
 }

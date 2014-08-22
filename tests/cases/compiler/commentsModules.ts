@@ -37,7 +37,7 @@ module m1 {
      */
     function foo4Export() {
     }
-}
+} // trailing comment module
 m1.fooExport();
 var myvar = new m1.m2.c();
 /** module comment of m2.m3*/
@@ -45,14 +45,14 @@ module m2.m3 {
     /** Exported class comment*/
     export class c {
     }
-}
+} /* trailing dotted module comment*/
 new m2.m3.c();
 /** module comment of m3.m4.m5*/
 module m3.m4.m5 {
     /** Exported class comment*/
     export class c {
     }
-}
+} // trailing dotted module 2
 new m3.m4.m5.c();
 /** module comment of m4.m5.m6*/
 module m4.m5.m6 {
@@ -60,7 +60,7 @@ module m4.m5.m6 {
         /** Exported class comment*/
         export class c {
         }
-    }
+    } /* trailing inner module */ /* multiple comments*/
 }
 new m4.m5.m6.m7.c();
 /** module comment of m5.m6.m7*/

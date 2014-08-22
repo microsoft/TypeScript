@@ -1,0 +1,111 @@
+=== tests/cases/compiler/typeArgInference.ts ===
+interface I {
+>I : I
+
+    f<T, U>(a1: { a: T; b: U }[], a2: { a: T; b: U }[]): { c: T; d: U };
+>f : <T, U>(a1: { a: T; b: U; }[], a2: { a: T; b: U; }[]) => { c: T; d: U; }
+>T : T
+>U : U
+>a1 : { a: T; b: U; }[]
+>a : T
+>T : T
+>b : U
+>U : U
+>a2 : { a: T; b: U; }[]
+>a : T
+>T : T
+>b : U
+>U : U
+>c : T
+>T : T
+>d : U
+>U : U
+
+    g<T, U>(...arg: { a: T; b: U }[][]): { c: T; d: U };
+>g : <T, U>(...arg: { a: T; b: U; }[][]) => { c: T; d: U; }
+>T : T
+>U : U
+>arg : { a: T; b: U; }[][]
+>a : T
+>T : T
+>b : U
+>U : U
+>c : T
+>T : T
+>d : U
+>U : U
+}
+var o = { a: 3, b: "test" };
+>o : { a: number; b: string; }
+>{ a: 3, b: "test" } : { a: number; b: string; }
+>a : number
+>b : string
+
+var x: I;
+>x : I
+>I : I
+
+var t1 = x.f([o], [o]);
+>t1 : { c: number; d: string; }
+>x.f([o], [o]) : { c: number; d: string; }
+>x.f : <T, U>(a1: { a: T; b: U; }[], a2: { a: T; b: U; }[]) => { c: T; d: U; }
+>x : I
+>f : <T, U>(a1: { a: T; b: U; }[], a2: { a: T; b: U; }[]) => { c: T; d: U; }
+>[o] : { a: number; b: string; }[]
+>o : { a: number; b: string; }
+>[o] : { a: number; b: string; }[]
+>o : { a: number; b: string; }
+
+var t1: { c: number; d: string }; 
+>t1 : { c: number; d: string; }
+>c : number
+>d : string
+
+var t2 = x.f<number, string>([o], [o]);
+>t2 : { c: number; d: string; }
+>x.f<number, string>([o], [o]) : { c: number; d: string; }
+>x.f : <T, U>(a1: { a: T; b: U; }[], a2: { a: T; b: U; }[]) => { c: T; d: U; }
+>x : I
+>f : <T, U>(a1: { a: T; b: U; }[], a2: { a: T; b: U; }[]) => { c: T; d: U; }
+>[o] : { a: number; b: string; }[]
+>o : { a: number; b: string; }
+>[o] : { a: number; b: string; }[]
+>o : { a: number; b: string; }
+
+var t2: { c: number; d: string }; 
+>t2 : { c: number; d: string; }
+>c : number
+>d : string
+
+var t3 = x.g([o], [o]);
+>t3 : { c: number; d: string; }
+>x.g([o], [o]) : { c: number; d: string; }
+>x.g : <T, U>(...arg: { a: T; b: U; }[][]) => { c: T; d: U; }
+>x : I
+>g : <T, U>(...arg: { a: T; b: U; }[][]) => { c: T; d: U; }
+>[o] : { a: number; b: string; }[]
+>o : { a: number; b: string; }
+>[o] : { a: number; b: string; }[]
+>o : { a: number; b: string; }
+
+var t3: { c: number; d: string };
+>t3 : { c: number; d: string; }
+>c : number
+>d : string
+
+var t4 = x.g<number, string>([o], [o]);
+>t4 : { c: number; d: string; }
+>x.g<number, string>([o], [o]) : { c: number; d: string; }
+>x.g : <T, U>(...arg: { a: T; b: U; }[][]) => { c: T; d: U; }
+>x : I
+>g : <T, U>(...arg: { a: T; b: U; }[][]) => { c: T; d: U; }
+>[o] : { a: number; b: string; }[]
+>o : { a: number; b: string; }
+>[o] : { a: number; b: string; }[]
+>o : { a: number; b: string; }
+
+var t4: { c: number; d: string };
+>t4 : { c: number; d: string; }
+>c : number
+>d : string
+

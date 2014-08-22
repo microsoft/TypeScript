@@ -17,6 +17,7 @@ var c2 = new C2();
 var r2: (x: number) => void = c2.constructor;
 
 //// [typesWithPublicConstructor.js]
+// public is allowed on a constructor but is not meaningful
 var C = (function () {
     function C() {
     }

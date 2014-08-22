@@ -12,6 +12,7 @@ function noError2(x: number, y: string) { };
 
 
 //// [implicitAnyDeclareFunctionWithoutFormalType.js]
+// these should be errors
 function foo(x) {
 }
 ;
@@ -33,6 +34,7 @@ function func4(z, w) {
     if (w === void 0) { w = undefined; }
 }
 ;
+// these shouldn't be errors
 function noError1(x, y) {
     if (x === void 0) { x = 3; }
     if (y === void 0) { y = 2; }

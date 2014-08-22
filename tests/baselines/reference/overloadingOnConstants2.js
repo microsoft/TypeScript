@@ -56,12 +56,12 @@ var E = (function () {
 function foo(x, items) {
     return null;
 }
-var a = foo("hi", []);
-var b = foo("bye", []);
-var c = foo("um", []);
+var a = foo("hi", []); // D
+var b = foo("bye", []); // E 
+var c = foo("um", []); // error
 function bar(x, items) {
     return null;
 }
-var d = bar("hi", []);
-var e = bar("bye", []);
-var f = bar("um", []);
+var d = bar("hi", []); // D
+var e = bar("bye", []); // E 
+var f = bar("um", []); // C

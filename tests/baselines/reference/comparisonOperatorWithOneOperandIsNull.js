@@ -197,6 +197,7 @@ var d;
 var e;
 var f;
 var g;
+// operator <
 var r1a1 = null < a;
 var r1a2 = null < b;
 var r1a3 = null < c;
@@ -211,6 +212,7 @@ var r1b4 = d < null;
 var r1b5 = e < null;
 var r1b6 = f < null;
 var r1b7 = g < null;
+// operator >
 var r2a1 = null > a;
 var r2a2 = null > b;
 var r2a3 = null > c;
@@ -225,6 +227,7 @@ var r2b4 = d > null;
 var r2b5 = e > null;
 var r2b6 = f > null;
 var r2b7 = g > null;
+// operator <=
 var r3a1 = null <= a;
 var r3a2 = null <= b;
 var r3a3 = null <= c;
@@ -239,6 +242,7 @@ var r3b4 = d <= null;
 var r3b5 = e <= null;
 var r3b6 = f <= null;
 var r3b7 = g <= null;
+// operator >=
 var r4a1 = null >= a;
 var r4a2 = null >= b;
 var r4a3 = null >= c;
@@ -253,6 +257,7 @@ var r4b4 = d >= null;
 var r4b5 = e >= null;
 var r4b6 = f >= null;
 var r4b7 = g >= null;
+// operator ==
 var r5a1 = null == a;
 var r5a2 = null == b;
 var r5a3 = null == c;
@@ -267,6 +272,7 @@ var r5b4 = d == null;
 var r5b5 = e == null;
 var r5b6 = f == null;
 var r5b7 = g == null;
+// operator !=
 var r6a1 = null != a;
 var r6a2 = null != b;
 var r6a3 = null != c;
@@ -281,6 +287,7 @@ var r6b4 = d != null;
 var r6b5 = e != null;
 var r6b6 = f != null;
 var r6b7 = g != null;
+// operator ===
 var r7a1 = null === a;
 var r7a2 = null === b;
 var r7a3 = null === c;
@@ -295,6 +302,7 @@ var r7b4 = d === null;
 var r7b5 = e === null;
 var r7b6 = f === null;
 var r7b7 = g === null;
+// operator !==
 var r8a1 = null !== a;
 var r8a2 = null !== b;
 var r8a3 = null !== c;

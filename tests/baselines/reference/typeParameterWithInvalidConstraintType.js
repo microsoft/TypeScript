@@ -16,6 +16,7 @@ var A = (function () {
     }
     A.prototype.foo = function () {
         var x;
+        // no error expected below this line
         var a = x.foo();
         var b = new x(123);
         var c = x[1];

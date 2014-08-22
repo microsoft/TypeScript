@@ -23,10 +23,10 @@ var M;
     var y;
     M.z;
     var test1 = x;
-    var test2 = y;
+    var test2 = y; // y visible because same module
 })(M || (M = {}));
 var N;
 (function (N) {
-    var test3 = M.y;
-    var test4 = M.z;
+    var test3 = M.y; // nope y private property of M
+    var test4 = M.z; // ok public property of M
 })(N || (N = {}));

@@ -1,0 +1,111 @@
+=== tests/cases/conformance/internalModules/codeGeneration/exportCodeGen.ts ===
+
+// should replace all refs to 'x' in the body,
+// with fully qualified
+module A {
+>A : typeof A
+
+    export var x = 12;
+>x : number
+
+    function lt12() {
+>lt12 : () => boolean
+
+        return x < 12;
+>x < 12 : boolean
+>x : number
+    }
+} 
+
+// should not fully qualify 'x'
+module B {
+>B : typeof B
+
+    var x = 12;
+>x : number
+
+    function lt12() {
+>lt12 : () => boolean
+
+        return x < 12;
+>x < 12 : boolean
+>x : number
+    }
+}
+
+// not copied, since not exported
+module C {
+>C : typeof C
+
+    function no() {
+>no : () => boolean
+
+        return false;
+    }
+}
+
+// copies, since exported
+module D {
+>D : typeof D
+
+    export function yes() {
+>yes : () => boolean
+
+        return true;
+    }
+}
+
+// validate all exportable statements
+module E {
+>E : typeof E
+
+    export enum Color { Red }
+>Color : Color
+>Red : Color
+
+    export function fn() { }
+>fn : () => void
+
+    export interface I { id: number }
+>I : I
+>id : number
+
+    export class C { name: string }
+>C : C
+>name : string
+
+    export module M {
+>M : typeof M
+
+        export var x = 42;
+>x : number
+    }
+}
+
+// validate all exportable statements,
+// which are not exported
+module F {
+>F : typeof F
+
+    enum Color { Red }
+>Color : Color
+>Red : Color
+
+    function fn() { }
+>fn : () => void
+
+    interface I { id: number }
+>I : I
+>id : number
+
+    class C { name: string }
+>C : C
+>name : string
+
+    module M {
+>M : typeof M
+
+        var x = 42;
+>x : number
+    }
+}

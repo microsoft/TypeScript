@@ -1,0 +1,17 @@
+=== tests/cases/compiler/prefixIncrementAsOperandOfPlusExpression.ts ===
+var x = 1;
+>x : number
+
+var y = 1;
+>y : number
+
++ ++x;
+>+ ++x : number
+>++x : number
+>x : number
+
++ ++y;
+>+ ++y : number
+>++y : number
+>y : number
+

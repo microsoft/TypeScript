@@ -1,0 +1,43 @@
+=== tests/cases/compiler/commentsMultiModuleSingleFile.ts ===
+
+/** this is multi declare module*/
+module multiM {
+>multiM : typeof multiM
+
+    /** class b*/
+    export class b {
+>b : b
+    }
+
+    // class d
+    export class d {
+>d : d
+    }
+}
+
+/// this is multi module 2
+module multiM {
+>multiM : typeof multiM
+
+    /** class c comment*/
+    export class c {
+>c : c
+    }
+
+    /// class e
+    export class e {
+>e : e
+    }
+}
+new multiM.b();
+>new multiM.b() : b
+>multiM.b : typeof b
+>multiM : typeof multiM
+>b : typeof b
+
+new multiM.c();
+>new multiM.c() : c
+>multiM.c : typeof c
+>multiM : typeof multiM
+>c : typeof c
+

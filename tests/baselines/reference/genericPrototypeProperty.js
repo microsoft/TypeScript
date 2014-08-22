@@ -19,5 +19,6 @@ var C = (function () {
     return C;
 })();
 var r = C.prototype;
+// should be any
 var r2 = r.x;
 var r3 = r.foo(null);

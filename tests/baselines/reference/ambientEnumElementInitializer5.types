@@ -1,0 +1,8 @@
+=== tests/cases/compiler/ambientEnumElementInitializer5.ts ===
+declare enum E {
+>E : E
+
+ e = -0xA
+>e : E
+>-0xA : number
+}

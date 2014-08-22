@@ -28,6 +28,7 @@ e1 = e2;
 e2 = e1;
 
 //// [memberVariableDeclarations1.js]
+// from spec
 var Employee = (function () {
     function Employee() {
         this.retired = false;

@@ -1,0 +1,10 @@
+=== tests/cases/compiler/commentOnInterface1.ts ===
+/*! Keep this pinned comment */
+interface I {
+>I : I
+}
+
+// Don't keep this comment.
+interface I2 {
+>I2 : I2
+}

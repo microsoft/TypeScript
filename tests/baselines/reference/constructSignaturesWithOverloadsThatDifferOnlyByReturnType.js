@@ -33,6 +33,7 @@ var b: {
 }
 
 //// [constructSignaturesWithOverloadsThatDifferOnlyByReturnType.js]
+// Error for construct signature overloads to differ only by return type
 var C = (function () {
     function C(x) {
     }

@@ -1,0 +1,57 @@
+=== tests/cases/compiler/duplicateOverloadInTypeAugmentation1.ts ===
+interface Array<T> {
+>Array : T[]
+>T : T
+
+    reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T,
+>reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
+>callbackfn : (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T
+>previousValue : T
+>T : T
+>currentValue : T
+>T : T
+>currentIndex : number
+>array : T[]
+>T : T
+>T : T
+
+        initialValue?: T): T;
+>initialValue : T
+>T : T
+>T : T
+
+    reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U,
+>reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
+>U : U
+>callbackfn : (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U
+>previousValue : U
+>U : U
+>currentValue : T
+>T : T
+>currentIndex : number
+>array : T[]
+>T : T
+>U : U
+
+        initialValue: U): U;
+>initialValue : U
+>U : U
+>U : U
+}
+var a: Array<string>;
+>a : string[]
+>Array : T[]
+
+var r5 = a.reduce((x, y) => x + y);
+>r5 : string
+>a.reduce((x, y) => x + y) : string
+>a.reduce : { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue?: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue?: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; }
+>a : string[]
+>reduce : { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue?: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue?: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; }
+>(x, y) => x + y : (x: string, y: string) => string
+>x : string
+>y : string
+>x + y : string
+>x : string
+>y : string
+

@@ -1,0 +1,26 @@
+=== tests/cases/compiler/staticInstanceResolution3_1.ts ===
+///<reference path='staticInstanceResolution3_0.ts'/>
+import WinJS = require('staticInstanceResolution3_0');
+>WinJS : typeof "tests/cases/compiler/staticInstanceResolution3_0"
+
+WinJS.Promise.timeout(10);
+>WinJS.Promise.timeout(10) : Promise
+>WinJS.Promise.timeout : (delay: number) => Promise
+>WinJS.Promise : typeof Promise
+>WinJS : typeof "tests/cases/compiler/staticInstanceResolution3_0"
+>Promise : typeof Promise
+>timeout : (delay: number) => Promise
+
+=== tests/cases/compiler/staticInstanceResolution3_0.ts ===
+export class Promise {
+>Promise : Promise
+
+    static timeout(delay: number): Promise {
+>timeout : (delay: number) => Promise
+>delay : number
+>Promise : Promise
+
+        return null;
+    }
+}
+

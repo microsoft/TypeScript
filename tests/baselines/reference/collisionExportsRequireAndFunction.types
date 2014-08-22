@@ -1,0 +1,12 @@
+=== tests/cases/compiler/collisionExportsRequireAndFunction.ts ===
+export function exports() {
+>exports : () => number
+
+    return 1;
+}
+export function require() {
+>require : () => string
+
+    return "require";
+}
+

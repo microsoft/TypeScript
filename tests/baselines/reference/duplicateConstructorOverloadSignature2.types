@@ -1,0 +1,16 @@
+=== tests/cases/compiler/duplicateConstructorOverloadSignature2.ts ===
+class C<T> {
+>C : C<T>
+>T : T
+
+    constructor(x: T);
+>x : T
+>T : T
+
+    constructor(x: T);
+>x : T
+>T : T
+
+    constructor(x: any) { }
+>x : any
+}

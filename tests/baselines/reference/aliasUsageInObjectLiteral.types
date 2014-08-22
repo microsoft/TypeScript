@@ -1,0 +1,62 @@
+=== tests/cases/compiler/aliasUsageInObjectLiteral_main.ts ===
+import Backbone = require("aliasUsageInObjectLiteral_backbone");
+>Backbone : typeof "tests/cases/compiler/aliasUsageInObjectLiteral_backbone"
+
+import moduleA = require("aliasUsageInObjectLiteral_moduleA");
+>moduleA : typeof "tests/cases/compiler/aliasUsageInObjectLiteral_moduleA"
+
+interface IHasVisualizationModel {
+>IHasVisualizationModel : IHasVisualizationModel
+
+    VisualizationModel: typeof Backbone.Model;
+>VisualizationModel : typeof Model
+>Backbone : typeof "tests/cases/compiler/aliasUsageInObjectLiteral_backbone"
+>Model : typeof Model
+}
+var a: { x: typeof moduleA } = { x: moduleA };
+>a : { x: typeof "tests/cases/compiler/aliasUsageInObjectLiteral_moduleA"; }
+>x : typeof "tests/cases/compiler/aliasUsageInObjectLiteral_moduleA"
+>moduleA : typeof "tests/cases/compiler/aliasUsageInObjectLiteral_moduleA"
+>{ x: moduleA } : { x: typeof "tests/cases/compiler/aliasUsageInObjectLiteral_moduleA"; }
+>x : typeof "tests/cases/compiler/aliasUsageInObjectLiteral_moduleA"
+>moduleA : moduleA
+
+var b: { x: IHasVisualizationModel } = { x: moduleA };
+>b : { x: IHasVisualizationModel; }
+>x : IHasVisualizationModel
+>IHasVisualizationModel : IHasVisualizationModel
+>{ x: moduleA } : { x: typeof "tests/cases/compiler/aliasUsageInObjectLiteral_moduleA"; }
+>x : typeof "tests/cases/compiler/aliasUsageInObjectLiteral_moduleA"
+>moduleA : moduleA
+
+var c: { y: { z: IHasVisualizationModel } } = { y: { z: moduleA } };
+>c : { y: { z: IHasVisualizationModel; }; }
+>y : { z: IHasVisualizationModel; }
+>z : IHasVisualizationModel
+>IHasVisualizationModel : IHasVisualizationModel
+>{ y: { z: moduleA } } : { y: { z: typeof "tests/cases/compiler/aliasUsageInObjectLiteral_moduleA"; }; }
+>y : { z: typeof "tests/cases/compiler/aliasUsageInObjectLiteral_moduleA"; }
+>{ z: moduleA } : { z: typeof "tests/cases/compiler/aliasUsageInObjectLiteral_moduleA"; }
+>z : typeof "tests/cases/compiler/aliasUsageInObjectLiteral_moduleA"
+>moduleA : moduleA
+
+=== tests/cases/compiler/aliasUsageInObjectLiteral_backbone.ts ===
+export class Model {
+>Model : Model
+
+    public someData: string;
+>someData : string
+}
+
+=== tests/cases/compiler/aliasUsageInObjectLiteral_moduleA.ts ===
+import Backbone = require("aliasUsageInObjectLiteral_backbone");
+>Backbone : typeof "tests/cases/compiler/aliasUsageInObjectLiteral_backbone"
+
+export class VisualizationModel extends Backbone.Model {
+>VisualizationModel : VisualizationModel
+>Backbone : Backbone
+>Model : Model
+
+    // interesting stuff here
+}
+

@@ -5,3 +5,4 @@
 import foo = require('./foo');
 
 //// [commentOnImportStatement3.js]
+/* copyright */

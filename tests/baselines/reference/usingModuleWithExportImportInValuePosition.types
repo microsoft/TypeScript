@@ -1,0 +1,63 @@
+=== tests/cases/compiler/usingModuleWithExportImportInValuePosition.ts ===
+module A {
+>A : typeof A
+
+export var x = 'hello world'
+>x : string
+
+export class Point {
+>Point : Point
+
+        constructor(public x: number, public y: number) { }
+>x : number
+>y : number
+    }
+    export module B {
+>B : B
+
+        export interface Id {
+>Id : Id
+
+            name: string;
+>name : string
+        }
+    }
+}
+module C {
+>C : typeof C
+
+    export import a = A;
+>a : typeof A
+>A : typeof A
+}
+
+var a: string = C.a.x;
+>a : string
+>C.a.x : string
+>C.a : typeof A
+>C : typeof C
+>a : typeof A
+>x : string
+
+var b: { x: number; y: number; } = new C.a.Point(0, 0);
+>b : { x: number; y: number; }
+>x : number
+>y : number
+>new C.a.Point(0, 0) : Point
+>C.a.Point : typeof Point
+>C.a : typeof A
+>C : typeof C
+>a : typeof A
+>Point : typeof Point
+
+var c: { name: string };
+>c : { name: string; }
+>name : string
+
+var c: C.a.B.Id;
+>c : { name: string; }
+>C : C
+>a : a
+>B : B
+>Id : Id
+

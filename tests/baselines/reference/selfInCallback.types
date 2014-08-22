@@ -1,0 +1,28 @@
+=== tests/cases/compiler/selfInCallback.ts ===
+class C {
+>C : C
+
+	public p1 = 0;
+>p1 : number
+
+	public callback(cb:()=>void) {cb();}
+>callback : (cb: () => void) => void
+>cb : () => void
+>cb() : void
+>cb : () => void
+
+	public doit() {
+>doit : () => void
+
+		this.callback(()=>{this.p1+1});
+>this.callback(()=>{this.p1+1}) : void
+>this.callback : (cb: () => void) => void
+>this : C
+>callback : (cb: () => void) => void
+>()=>{this.p1+1} : () => void
+>this.p1+1 : number
+>this.p1 : number
+>this : C
+>p1 : number
+	}
+}
