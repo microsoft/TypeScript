@@ -563,7 +563,7 @@ module Harness {
             private compileOptions: ts.CompilerOptions;
             private settings: Harness.TestCaseParser.CompilerSetting[] = [];
 
-            private lastErrors: MinimalDiagnostic[];
+            private lastErrors: HarnessDiagnostic[];
 
             public reset() {
                 this.inputFiles = [];
@@ -750,7 +750,7 @@ module Harness {
                     emitResult = checker.emitFiles();
                 }
 
-                var errors: MinimalDiagnostic[] = [];
+                var errors: HarnessDiagnostic[] = [];
                 program.getDiagnostics().concat(checker.getDiagnostics()).concat(emitResult ? emitResult.errors : []).forEach(err => {
                     // TODO: new compiler formats errors after this point to add . and newlines so we'll just do it manually for now
                     errors.push(getMinimalDiagnostic(err));
@@ -768,35 +768,43 @@ module Harness {
             }
         }
 
-        export function getMinimalDiagnostic(err: ts.Diagnostic): MinimalDiagnostic {
+        export function getMinimalDiagnostic(err: ts.Diagnostic): HarnessDiagnostic {
             var errorLineInfo = err.file ? err.file.getLineAndCharacterFromPosition(err.start) : { line: 0, character: 0 };
-            return { filename: err.file && err.file.filename, start: err.start, end: err.start + err.length, line: errorLineInfo.line, character: errorLineInfo.character, message: err.messageText };
+            return {
+                filename: err.file && err.file.filename,
+                start: err.start,
+                end: err.start + err.length,
+                line: errorLineInfo.line,
+                character: errorLineInfo.character,
+                message: err.messageText,
+                category: ts.DiagnosticCategory[err.category].toLowerCase(),
+                code: err.code
+            };
         }
 
-        export function minimalDiagnosticsToString(diagnostics: MinimalDiagnostic[]) {
-            // This is copied from tsc.ts's reportError to replicate what tsc does
-            var errors = "";
+        export function minimalDiagnosticsToString(diagnostics: HarnessDiagnostic[]) {
+            // This is basically copied from tsc.ts's reportError to replicate what tsc does
+            var errorOutput = "";
             ts.forEach(diagnostics, diagnotic => {
                 if (diagnotic.filename) {
-                    errors += diagnotic.filename + "(" + diagnotic.line + "," + diagnotic.character + "): " + diagnotic.message + sys.newLine;
+                    errorOutput += diagnotic.filename + "(" + diagnotic.line + "," + diagnotic.character + "): ";
                 }
-                else {
-                    errors += diagnotic.message + sys.newLine;
-                }
+
+                errorOutput += diagnotic.category + " TS" + diagnotic.code + ": " + diagnotic.message + sys.newLine;
             });
 
-            return errors;
+            return errorOutput;
         }
 
         export function getErrorBaseline(inputFiles: { unitName: string; content: string }[],
-            diagnostics: MinimalDiagnostic[]
+            diagnostics: HarnessDiagnostic[]
             ) {
 
             var outputLines: string[] = [];
             // Count up all the errors we find so we don't miss any
             var totalErrorsReported = 0;
 
-            function outputErrorText(error: Harness.Compiler.MinimalDiagnostic) {
+            function outputErrorText(error: Harness.Compiler.HarnessDiagnostic) {
                 var errLines = RunnerBase.removeFullPaths(error.message)
                     .split('\n')
                     .map(s => s.length > 0 && s.charAt(s.length - 1) === '\r' ? s.substr(0, s.length - 1) : s)
@@ -916,13 +924,15 @@ module Harness {
             //harnessCompiler.compileString(code, unitName, callback);
         }
 
-        export interface MinimalDiagnostic {
+        export interface HarnessDiagnostic {
             filename: string;
             start: number;
             end: number;
             line: number;
             character: number;
             message: string;
+            category: string;
+            code: number;
         }
 
         export interface GeneratedFile {
@@ -950,13 +960,13 @@ module Harness {
         /** Contains the code and errors of a compilation and some helper methods to check its status. */
         export class CompilerResult {
             public files: GeneratedFile[] = [];
-            public errors: MinimalDiagnostic[] = [];
+            public errors: HarnessDiagnostic[] = [];
             public declFilesCode: GeneratedFile[] = [];
             public sourceMaps: GeneratedFile[] = [];
             public sourceMapRecord: string;
 
             /** @param fileResults an array of strings for the fileName and an ITextWriter with its code */
-            constructor(fileResults: GeneratedFile[], errors: MinimalDiagnostic[], sourceMapRecordLines: string[]) {
+            constructor(fileResults: GeneratedFile[], errors: HarnessDiagnostic[], sourceMapRecordLines: string[]) {
                 var lines: string[] = [];
 
                 fileResults.forEach(emittedFile => {
