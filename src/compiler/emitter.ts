@@ -1652,8 +1652,11 @@ module ts {
                         if (superCall) statements = statements.slice(1);
                         emitLines(statements);
                     }
-                    decreaseIndent();
                     writeLine();
+                    if (ctor) {
+                        emitLeadingCommentsOfPosition((<Block>ctor.body).statements.end);
+                    }
+                    decreaseIndent();
                     emitToken(SyntaxKind.CloseBraceToken, ctor ? (<Block>ctor.body).statements.end : node.members.end);
                     scopeEmitEnd();
                     emitEnd(<Node>ctor || node);
