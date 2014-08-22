@@ -17,6 +17,8 @@ module TypeScript {
 
         hasLeadingTrivia(): boolean;
         hasTrailingTrivia(): boolean;
+        hasLeadingComment(): boolean;
+        hasTrailingComment(): boolean;
 
         hasSkippedToken(): boolean;
 
@@ -264,7 +266,7 @@ module TypeScript.Syntax {
     export function realizeToken(token: ISyntaxToken, text: ISimpleText): ISyntaxToken {
         return new RealizedToken(token.fullStart(), token.kind(), token.isKeywordConvertedToIdentifier(), token.leadingTrivia(text), token.text(), token.trailingTrivia(text));
     }
-    
+
     export function convertKeywordToIdentifier(token: ISyntaxToken): ISyntaxToken {
         return new ConvertedKeywordToken(token);
     }
@@ -381,11 +383,14 @@ module TypeScript.Syntax {
         public fullText(): string { return ""; }
 
         public hasLeadingTrivia() { return false; }
-        public leadingTriviaWidth() { return 0; }
         public hasTrailingTrivia() { return false; }
+        public hasLeadingComment() { return false; }
+        public hasTrailingComment() { return false; }
         public hasSkippedToken() { return false; }
 
+        public leadingTriviaWidth() { return 0; }
         public trailingTriviaWidth() { return 0; }
+
         public leadingTrivia(): ISyntaxTriviaList { return Syntax.emptyTriviaList; }
         public trailingTrivia(): ISyntaxTriviaList { return Syntax.emptyTriviaList; }
     }
@@ -401,11 +406,11 @@ module TypeScript.Syntax {
         public _primaryExpressionBrand: any; public _memberExpressionBrand: any; public _leftHandSideExpressionBrand: any; public _postfixExpressionBrand: any; public _unaryExpressionBrand: any; public _expressionBrand: any; public _typeBrand: any;
 
         constructor(fullStart: number,
-                    kind: SyntaxKind,
-                    isKeywordConvertedToIdentifier: boolean,
-                    leadingTrivia: ISyntaxTriviaList,
-                    text: string,
-                    trailingTrivia: ISyntaxTriviaList) {
+            kind: SyntaxKind,
+            isKeywordConvertedToIdentifier: boolean,
+            leadingTrivia: ISyntaxTriviaList,
+            text: string,
+            trailingTrivia: ISyntaxTriviaList) {
             this._fullStart = fullStart;
             this._kind = kind;
             this._isKeywordConvertedToIdentifier = isKeywordConvertedToIdentifier;
@@ -438,8 +443,8 @@ module TypeScript.Syntax {
         // Realized tokens are created from the parser.  They are *never* incrementally reusable.
         public isIncrementallyUnusable() { return true; }
 
-        public isKeywordConvertedToIdentifier() { 
-            return this._isKeywordConvertedToIdentifier; 
+        public isKeywordConvertedToIdentifier() {
+            return this._isKeywordConvertedToIdentifier;
         }
 
         public fullStart(): number { return this._fullStart; }
@@ -450,6 +455,8 @@ module TypeScript.Syntax {
 
         public hasLeadingTrivia(): boolean { return this._leadingTrivia.count() > 0; }
         public hasTrailingTrivia(): boolean { return this._trailingTrivia.count() > 0; }
+        public hasLeadingComment(): boolean { return this._leadingTrivia.hasComment(); }
+        public hasTrailingComment(): boolean { return this._trailingTrivia.hasComment(); }
 
         public leadingTriviaWidth(): number { return this._leadingTrivia.fullWidth(); }
         public trailingTriviaWidth(): number { return this._trailingTrivia.fullWidth(); }
@@ -502,6 +509,14 @@ module TypeScript.Syntax {
 
         public hasTrailingTrivia(): boolean {
             return this.underlyingToken.hasTrailingTrivia();
+        }
+
+        public hasLeadingComment(): boolean {
+            return this.underlyingToken.hasLeadingComment();
+        }
+
+        public hasTrailingComment(): boolean {
+            return this.underlyingToken.hasTrailingComment();
         }
 
         public hasSkippedToken(): boolean {

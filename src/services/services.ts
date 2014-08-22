@@ -26,7 +26,6 @@
 /// <reference path='compiler\pathUtils.ts' />
 
 module ts {
-
     export interface Node {
         getSourceFile(): SourceFile;
         getChildCount(): number;
@@ -72,7 +71,8 @@ module ts {
         getSourceUnit(): TypeScript.SourceUnitSyntax;
         getSyntaxTree(): TypeScript.SyntaxTree;
         getBloomFilter(): TypeScript.BloomFilter;
-        update(scriptSnapshot: TypeScript.IScriptSnapshot, version: number, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile;
+        getScriptSnapshot(): TypeScript.IScriptSnapshot;
+        update(scriptSnapshot: TypeScript.IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile;
     }
 
     var scanner: Scanner = createScanner(ScriptTarget.ES5);
@@ -321,7 +321,7 @@ module ts {
         public identifierCount: number;
         public symbolCount: number;
         public statements: NodeArray<Statement>;
-        public version: number;
+        public version: string;
         public isOpen: boolean;
         public languageVersion: ScriptTarget;
 
@@ -332,6 +332,10 @@ module ts {
         public getSourceUnit(): TypeScript.SourceUnitSyntax {
             // If we don't have a script, create one from our parse tree.
             return this.getSyntaxTree().sourceUnit();
+        }
+
+        public getScriptSnapshot(): TypeScript.IScriptSnapshot {
+            return this.scriptSnapshot;
         }
 
         public getLineMap(): TypeScript.LineMap {
@@ -385,7 +389,7 @@ module ts {
             return this.bloomFilter;
         }
 
-        public update(scriptSnapshot: TypeScript.IScriptSnapshot, version: number, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile {
+        public update(scriptSnapshot: TypeScript.IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile {
             // See if we are currently holding onto a syntax tree.  We may not be because we're 
             // either a closed file, or we've just been lazy and haven't had to create the syntax
             // tree yet.  Access the field instead of the method so we don't accidently realize
@@ -420,7 +424,7 @@ module ts {
             return SourceFileObject.createSourceFileObject(this.filename, scriptSnapshot, this.languageVersion, version, isOpen, newSyntaxTree);
         }
 
-        public static createSourceFileObject(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, languageVersion: ScriptTarget, version: number, isOpen: boolean, syntaxTree?: TypeScript.SyntaxTree) {
+        public static createSourceFileObject(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, languageVersion: ScriptTarget, version: string, isOpen: boolean, syntaxTree?: TypeScript.SyntaxTree) {
             var newSourceFile = <SourceFileObject><any>createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), languageVersion, version, isOpen);
             newSourceFile.scriptSnapshot = scriptSnapshot;
             newSourceFile.syntaxTree = syntaxTree;
@@ -429,11 +433,6 @@ module ts {
     }
 
     export interface Logger {
-        information(): boolean;
-        debug(): boolean;
-        warning(): boolean;
-        error(): boolean;
-        fatal(): boolean;
         log(s: string): void;
     }
 
@@ -443,7 +442,7 @@ module ts {
     export interface LanguageServiceHost extends Logger {
         getCompilationSettings(): CompilerOptions;
         getScriptFileNames(): string[];
-        getScriptVersion(fileName: string): number;
+        getScriptVersion(fileName: string): string;
         getScriptIsOpen(fileName: string): boolean;
         getScriptSnapshot(fileName: string): TypeScript.IScriptSnapshot;
         getLocalizedDiagnosticMessages(): any;
@@ -455,9 +454,6 @@ module ts {
     // with a language service host instance
     //
     export interface LanguageService {
-        // Note: refresh is a no-op now.  It is only around for back compat purposes.
-        refresh(): void;
-
         cleanupSemanticCache(): void;
 
         getSyntacticDiagnostics(fileName: string): Diagnostic[];
@@ -469,28 +465,30 @@ module ts {
 
         getTypeAtPosition(fileName: string, position: number): TypeInfo;
 
-        getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): SpanInfo;
+        getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TypeScript.TextSpan;
 
-        getBreakpointStatementAtPosition(fileName: string, position: number): SpanInfo;
+        getBreakpointStatementAtPosition(fileName: string, position: number): TypeScript.TextSpan;
 
-        getSignatureAtPosition(fileName: string, position: number): SignatureInfo;
+        getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems;
+        getSignatureHelpCurrentArgumentState(fileName: string, position: number, applicableSpanStart: number): SignatureHelpState;
 
+        getRenameInfo(fileName: string, position: number): RenameInfo;
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[];
         getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[];
         getImplementorsAtPosition(fileName: string, position: number): ReferenceEntry[];
 
         getNavigateToItems(searchValue: string): NavigateToItem[];
-        getScriptLexicalStructure(fileName: string): NavigateToItem[];
+        getNavigationBarItems(fileName: string): NavigationBarItem[];
 
-        getOutliningRegions(fileName: string): OutliningSpan[];
+        getOutliningSpans(fileName: string): OutliningSpan[];
+        getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
         getBraceMatchingAtPosition(fileName: string, position: number): TypeScript.TextSpan[];
         getIndentationAtPosition(fileName: string, position: number, options: EditorOptions): number;
 
-        getFormattingEditsForRange(fileName: string, minChar: number, limChar: number, options: FormatCodeOptions): TextEdit[];
-        getFormattingEditsForDocument(fileName: string, minChar: number, limChar: number, options: FormatCodeOptions): TextEdit[];
-        getFormattingEditsOnPaste(fileName: string, minChar: number, limChar: number, options: FormatCodeOptions): TextEdit[];
-        getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextEdit[];
+        getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions): TextChange[];
+        getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[];
+        getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[];
 
         getEmitOutput(fileName: string): EmitOutput;
 
@@ -499,30 +497,68 @@ module ts {
         dispose(): void;
     }
 
-    export interface ReferenceEntry {
-        fileName: string;
-        minChar: number;
-        limChar: number;
-        isWriteAccess: boolean;
+    export class NavigationBarItem {
+        constructor(public text: string,
+                    public kind: string,
+                    public kindModifiers: string,
+                    public spans: TypeScript.TextSpan[],
+                    public childItems: NavigationBarItem[] = null,
+                    public indent = 0,
+                    public bolded = false,
+                    public grayed = false) {
+        }
     }
 
-    export interface NavigateToItem {
-        name: string;
-        kind: string;            // see ScriptElementKind
-        kindModifiers: string;   // see ScriptElementKindModifier, comma separated
-        matchKind: string;
-        fileName: string;
-        minChar: number;
-        limChar: number;
-        additionalSpans?: SpanInfo[];
-        containerName: string;
-        containerKind: string;  // see ScriptElementKind
+    export class TodoCommentDescriptor {
+        constructor(public text: string,
+                    public priority: number) {
+        }
     }
 
-    export interface TextEdit {
-        minChar: number;
-        limChar: number;
-        text: string;
+    export class TodoComment {
+        constructor(public descriptor: TodoCommentDescriptor,
+                    public message: string,
+                    public position: number) {
+        }
+    }
+
+    export class TextChange {
+        constructor(public span: TypeScript.TextSpan, public newText: string) {
+        }
+
+        static createInsert(pos: number, newText: string): TextChange {
+            return new TextChange(new TypeScript.TextSpan(pos, 0), newText);
+        }
+        static createDelete(start: number, end: number): TextChange {
+            return new TextChange(TypeScript.TextSpan.fromBounds(start, end), "");
+        }
+        static createReplace(start: number, end: number, newText: string): TextChange {
+            return new TextChange(TypeScript.TextSpan.fromBounds(start, end), newText);
+        }
+    }
+
+    export class ReferenceEntry {
+        public fileName: string = "";
+        public textSpan: TypeScript.TextSpan;
+        public isWriteAccess: boolean = false;
+
+        constructor(fileName: string, textSpan: TypeScript.TextSpan, isWriteAccess: boolean) {
+            this.fileName = fileName;
+            this.textSpan = textSpan;
+            this.isWriteAccess = isWriteAccess;
+        }
+    }
+
+    export class NavigateToItem {
+        constructor(public name: string,
+                    public kind: string,
+                    public kindModifiers: string,
+                    public matchKind: string,
+                    public fileName: string,
+                    public textSpan: TypeScript.TextSpan,
+                    public containerName: string,
+                    public containerKind: string) {
+        }
     }
 
     export interface EditorOptions {
@@ -543,14 +579,14 @@ module ts {
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
     }
 
-    export interface DefinitionInfo {
-        fileName: string;
-        minChar: number;
-        limChar: number;
-        kind: string;
-        name: string;
-        containerKind: string;
-        containerName: string;
+    export class DefinitionInfo {
+        constructor(public fileName: string,
+                    public textSpan: TypeScript.TextSpan,
+                    public kind: string,
+                    public name: string,
+                    public containerKind: string,
+                    public containerName: string) {
+        }
     }
 
     export interface MemberName {
@@ -559,54 +595,80 @@ module ts {
         text: string;
     }
 
-    export interface TypeInfo {
-        memberName: MemberName;
-        docComment: string;
-        fullSymbolName: string;
-        kind: string;
-        minChar: number;
-        limChar: number;
+    export class TypeInfo {
+        constructor(
+            public memberName: TypeScript.MemberName,
+            public docComment: string,
+            public fullSymbolName: string,
+            public kind: string,
+            public textSpan: TypeScript.TextSpan) {
+        }
     }
 
-    export interface SpanInfo {
-        minChar: number;
-        limChar: number;
-        // text?: string;
+    export class RenameInfo {
+        constructor(public canRename: boolean,
+                    public localizedErrorMessage: string,
+                    public displayName: string,
+                    public fullDisplayName: string,
+                    public kind: string,
+                    public kindModifiers: string,
+                    public triggerSpan: TypeScript.TextSpan) {
+        }
+
+        public static CreateError(localizedErrorMessage: string) {
+            return new RenameInfo(/*canRename:*/ false, localizedErrorMessage,
+                                  /*displayName:*/ null, /*fullDisplayName:*/ null,
+                                  /*kind:*/ null, /*kindModifiers:*/ null, /*triggerSpan:*/ null);
+        }
+
+        public static Create(displayName: string,
+                             fullDisplayName: string,
+                             kind: string,
+                             kindModifiers: string,
+                             triggerSpan: TypeScript.TextSpan) {
+            return new RenameInfo(/*canRename:*/ true, /*localizedErrorMessage:*/ null, displayName, fullDisplayName, kind, kindModifiers, triggerSpan);
+        }
     }
 
-    export interface SignatureInfo {
-        actual: ActualSignatureInfo;
-        formal: FormalSignatureItemInfo[]; // Formal signatures
-        activeFormal: number; // Index of the "best match" formal signature
+    export class SignatureHelpParameter {
+        constructor(public name: string,
+                    public documentation: string,
+                    public display: string,
+                    public isOptional: boolean) {
+        }
     }
 
-    export interface FormalSignatureItemInfo {
-        signatureInfo: string;
-        typeParameters: FormalTypeParameterInfo[];
-        parameters: FormalParameterInfo[];   // Array of parameters
-        docComment: string; // Help for the signature
+    /**
+     * Represents a single signature to show in signature help.
+     * The id is used for subsequent calls into the language service to ask questions about the
+     * signature help item in the context of any documents that have been updated.  i.e. after
+     * an edit has happened, while signature help is still active, the host can ask important 
+     * questions like 'what parameter is the user currently contained within?'.
+     */
+    export class SignatureHelpItem {
+        constructor(public isVariadic: boolean,
+                    public prefix: string,
+                    public suffix: string,
+                    public separator: string,
+                    public parameters: SignatureHelpParameter[],
+                    public documentation: string) {
+        }
     }
 
-    export interface FormalTypeParameterInfo {
-        name: string;        // Type parameter name
-        docComment: string;  // Comments that contain help for the parameter
-        minChar: number;     // minChar for parameter info in the formal signature info string
-        limChar: number;     // lim char for parameter info in the formal signature info string
+    /**
+     * Represents a set of signature help items, and the preferred item that should be selected.
+     */
+    export class SignatureHelpItems {
+        constructor(public items: SignatureHelpItem[],
+                    public applicableSpan: TypeScript.TextSpan,
+                    public selectedItemIndex: number) {
+        }
     }
 
-    export interface FormalParameterInfo {
-        name: string;        // Parameter name
-        isVariable: boolean; // true if parameter is var args
-        docComment: string;  // Comments that contain help for the parameter
-        minChar: number;     // minChar for parameter info in the formal signature info string
-        limChar: number;     // lim char for parameter info in the formal signature info string
-    }
-
-    export interface ActualSignatureInfo {
-        parameterMinChar: number;
-        parameterLimChar: number;
-        currentParameterIsTypeParameter: boolean; // current parameter is a type argument or a normal argument
-        currentParameter: number;        // Index of active parameter in "parameters" or "typeParamters" array
+    export class SignatureHelpState {
+        constructor(public argumentIndex: number,
+                    public argumentCount: number) {
+        }
     }
 
     export interface CompletionInfo {
@@ -694,7 +756,7 @@ module ts {
             filename: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
-            version: number,
+            version: string,
             isOpen: boolean): SourceFile;
 
         updateDocument(
@@ -702,7 +764,7 @@ module ts {
             filename: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
-            version: number,
+            version: string,
             isOpen: boolean,
             textChangeRange: TypeScript.TextChangeRange
             ): SourceFile;
@@ -820,7 +882,7 @@ module ts {
     // Information about a specific host file.
     interface HostFileInformation {
         filename: string;
-        version: number;
+        version: string;
         isOpen: boolean;
         sourceText?: TypeScript.IScriptSnapshot;
     }
@@ -929,7 +991,7 @@ module ts {
             return fileNames;
         }
 
-        public getVersion(filename: string): number {
+        public getVersion(filename: string): string {
             return this.getEntry(filename).version;
         }
 
@@ -945,14 +1007,14 @@ module ts {
             return file.sourceText;
         }
 
-        public getScriptTextChangeRangeSinceVersion(filename: string, lastKnownVersion: number): TypeScript.TextChangeRange {
+        public getChangeRange(filename: string, lastKnownVersion: string, oldScriptSnapshot: TypeScript.IScriptSnapshot): TypeScript.TextChangeRange {
             var currentVersion = this.getVersion(filename);
             if (lastKnownVersion === currentVersion) {
                 return TypeScript.TextChangeRange.unchanged; // "No changes"
             }
 
             var scriptSnapshot = this.getScriptSnapshot(filename);
-            return scriptSnapshot.getTextChangeRangeSinceVersion(lastKnownVersion);
+            return scriptSnapshot.getChangeRange(oldScriptSnapshot);
         }
     }
 
@@ -961,11 +1023,10 @@ module ts {
 
         // For our syntactic only features, we also keep a cache of the syntax tree for the 
         // currently edited file.  
-        private currentfilename: string = "";
-        private currentFileVersion: number = -1;
+        private currentFilename: string = "";
+        private currentFileVersion: string = null;
         private currentSourceFile: SourceFile = null;
         private currentFileSyntaxTree: TypeScript.SyntaxTree = null;
-        private currentFileScriptSnapshot: TypeScript.IScriptSnapshot = null;
 
         constructor(private host: LanguageServiceHost) {
             this.hostCache = new HostCache(host);
@@ -980,7 +1041,7 @@ module ts {
             var syntaxTree: TypeScript.SyntaxTree = null;
             var sourceFile: SourceFile;
 
-            if (this.currentFileSyntaxTree === null || this.currentfilename !== filename) {
+            if (this.currentFileSyntaxTree === null || this.currentFilename !== filename) {
                 var scriptSnapshot = this.hostCache.getScriptSnapshot(filename);
                 syntaxTree = this.createSyntaxTree(filename, scriptSnapshot);
                 sourceFile = createSourceFileFromScriptSnapshot(filename, scriptSnapshot, getDefaultCompilerOptions(), version, /*isOpen*/ true);
@@ -989,9 +1050,10 @@ module ts {
             }
             else if (this.currentFileVersion !== version) {
                 var scriptSnapshot = this.hostCache.getScriptSnapshot(filename);
-                syntaxTree = this.updateSyntaxTree(filename, scriptSnapshot, this.currentFileSyntaxTree, this.currentFileVersion);
+                syntaxTree = this.updateSyntaxTree(filename, scriptSnapshot,
+                    this.currentSourceFile.getScriptSnapshot(), this.currentFileSyntaxTree, this.currentFileVersion);
 
-                var editRange = this.hostCache.getScriptTextChangeRangeSinceVersion(filename, this.currentFileVersion);
+                var editRange = this.hostCache.getChangeRange(filename, this.currentFileVersion, this.currentSourceFile.getScriptSnapshot());
                 sourceFile = !editRange 
                     ? createSourceFileFromScriptSnapshot(filename, scriptSnapshot, getDefaultCompilerOptions(), version, /*isOpen*/ true)
                     : this.currentSourceFile.update(scriptSnapshot, version, /*isOpen*/ true, editRange);
@@ -1002,9 +1064,8 @@ module ts {
             if (syntaxTree !== null) {
                 Debug.assert(sourceFile);
                 // All done, ensure state is up to date
-                this.currentFileScriptSnapshot = scriptSnapshot;
                 this.currentFileVersion = version;
-                this.currentfilename = filename;
+                this.currentFilename = filename;
                 this.currentFileSyntaxTree = syntaxTree;
                 this.currentSourceFile = sourceFile;
             }
@@ -1039,7 +1100,7 @@ module ts {
         public getCurrentScriptSnapshot(filename: string): TypeScript.IScriptSnapshot {
             // update currentFileScriptSnapshot as a part of 'getCurrentFileSyntaxTree' call
             this.getCurrentFileSyntaxTree(filename);
-            return this.currentFileScriptSnapshot;
+            return this.getCurrentSourceFile(filename).getScriptSnapshot();
         }
 
         private createSyntaxTree(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot): TypeScript.SyntaxTree {
@@ -1053,8 +1114,8 @@ module ts {
             return syntaxTree;
         }
 
-        private updateSyntaxTree(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, previousSyntaxTree: TypeScript.SyntaxTree, previousFileVersion: number): TypeScript.SyntaxTree {
-            var editRange = this.hostCache.getScriptTextChangeRangeSinceVersion(filename, previousFileVersion);
+        private updateSyntaxTree(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, previousScriptSnapshot: TypeScript.IScriptSnapshot, previousSyntaxTree: TypeScript.SyntaxTree, previousFileVersion: string): TypeScript.SyntaxTree {
+            var editRange = this.hostCache.getChangeRange(filename, previousFileVersion, previousScriptSnapshot);
 
             // Debug.assert(newLength >= 0);
 
@@ -1066,7 +1127,7 @@ module ts {
             var nextSyntaxTree = TypeScript.IncrementalParser.parse(
                 previousSyntaxTree, editRange, TypeScript.SimpleText.fromScriptSnapshot(scriptSnapshot));
 
-            this.ensureInvariants(filename, editRange, nextSyntaxTree, this.currentFileScriptSnapshot, scriptSnapshot);
+            this.ensureInvariants(filename, editRange, nextSyntaxTree, previousScriptSnapshot, scriptSnapshot);
 
             return nextSyntaxTree;
         }
@@ -1134,7 +1195,7 @@ module ts {
         }
     }
 
-    function createSourceFileFromScriptSnapshot(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, settings: CompilerOptions, version: number, isOpen: boolean) {
+    function createSourceFileFromScriptSnapshot(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, settings: CompilerOptions, version: string, isOpen: boolean) {
         return SourceFileObject.createSourceFileObject(filename, scriptSnapshot, settings.target, version, isOpen);
     }
 
@@ -1179,7 +1240,7 @@ module ts {
             filename: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
-            version: number,
+            version: string,
             isOpen: boolean): SourceFile {
 
             var bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
@@ -1203,7 +1264,7 @@ module ts {
             filename: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
-            version: number,
+            version: string,
             isOpen: boolean,
             textChangeRange: TypeScript.TextChangeRange
             ): SourceFile {
@@ -1397,7 +1458,7 @@ module ts {
                     // new text buffer).
                     var textChangeRange: TypeScript.TextChangeRange = null;
                     if (sourceFile.isOpen && isOpen) {
-                        textChangeRange = hostCache.getScriptTextChangeRangeSinceVersion(filename, sourceFile.version);
+                        textChangeRange = hostCache.getChangeRange(filename, sourceFile.version, sourceFile.getScriptSnapshot());
                     }
 
                     sourceFile = documentRegistry.updateDocument(sourceFile, filename, compilationSettings, scriptSnapshot, version, isOpen, textChangeRange);
@@ -1885,25 +1946,21 @@ module ts {
         }
 
         /// QuickInfo
-        function getTypeAtPosition(filename: string, position: number): TypeInfo {
+        function getTypeAtPosition(fileName: string, position: number): TypeInfo {
             synchronizeHostData();
 
-            filename = TypeScript.switchToForwardSlashes(filename);
-            var sourceFile = getSourceFile(filename);
+            fileName = TypeScript.switchToForwardSlashes(fileName);
+            var sourceFile = getSourceFile(fileName);
             var node = getNodeAtPosition(sourceFile.getSourceFile(), position);
             if (!node) return undefined;
 
             var symbol = typeInfoResolver.getSymbolInfo(node);
             var type = symbol && typeInfoResolver.getTypeOfSymbol(symbol);
             if (type) {
-                return {
-                    memberName: new TypeScript.MemberNameString(typeInfoResolver.typeToString(type)),
-                    docComment: "",
-                    fullSymbolName: typeInfoResolver.symbolToString(symbol, getContainerNode(node)),
-                    kind: getSymbolKind(symbol),
-                    minChar: node.pos,
-                    limChar: node.end
-                };
+                return new TypeInfo(
+                    new TypeScript.MemberNameString(typeInfoResolver.typeToString(type)),
+                    "", typeInfoResolver.symbolToString(symbol, getContainerNode(node)),
+                    getSymbolKind(symbol), TypeScript.TextSpan.fromBounds(node.pos, node.end));
             }
 
             return undefined;
@@ -1958,15 +2015,13 @@ module ts {
             }
 
             function getDefinitionInfo(node: Node, symbolKind: string, symbolName: string, containerName: string): DefinitionInfo {
-                return {
-                    fileName: node.getSourceFile().filename,
-                    minChar: node.getStart(),
-                    limChar: node.getEnd(),
-                    kind: symbolKind,
-                    name: symbolName,
-                    containerName: containerName,
-                    containerKind: undefined
-                };
+                return new DefinitionInfo(
+                    node.getSourceFile().filename,
+                    TypeScript.TextSpan.fromBounds(node.getStart(), node.getEnd()),
+                    symbolKind,
+                    symbolName,
+                    undefined,
+                    containerName);
             }
 
             function tryAddSignature(signatureDeclarations: Declaration[], selectConstructors: boolean, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
@@ -2036,11 +2091,10 @@ module ts {
             if (comment) {
                 var targetFilename = normalizePath(combinePaths(getDirectoryPath(filename), comment.filename));
                 if (program.getSourceFile(targetFilename)) {
-                    return [{
-                        fileName: targetFilename, minChar: 0, limChar: 0,
-                        kind: ScriptElementKind.scriptElement,
-                        name: comment.filename, containerName: undefined, containerKind: undefined
-                    }];
+                    return [new DefinitionInfo(
+                        targetFilename, TypeScript.TextSpan.fromBounds(0, 0),
+                        ScriptElementKind.scriptElement,
+                        comment.filename, undefined, undefined)];
                 }
                 return undefined;
             }
@@ -2085,7 +2139,7 @@ module ts {
             return currentSourceFile;
         }
 
-        function getNameOrDottedNameSpan(filename: string, startPos: number, endPos: number): SpanInfo {
+        function getNameOrDottedNameSpan(filename: string, startPos: number, endPos: number): TypeScript.TextSpan {
             function getTypeInfoEligiblePath(filename: string, position: number, isConstructorValidPosition: boolean) {
                 var sourceUnit = syntaxTreeCache.getCurrentFileSyntaxTree(filename).sourceUnit();
 
@@ -2136,10 +2190,9 @@ module ts {
                 }
             }
 
-            return {
-                minChar: TypeScript.start(node),
-                limChar: TypeScript.end(node)
-            };
+            return TypeScript.TextSpan.fromBounds(
+                TypeScript.start(node),
+                TypeScript.end(node));
         }
 
         function getBreakpointStatementAtPosition(filename: string, position: number) {
@@ -2150,15 +2203,13 @@ module ts {
             return TypeScript.Services.Breakpoints.getBreakpointLocation(syntaxtree, position);
         }
 
-        function getScriptLexicalStructure(filename: string) {
+        function getNavigationBarItems(filename: string) {
             filename = TypeScript.switchToForwardSlashes(filename);
             var syntaxTree = getSyntaxTree(filename);
-            var items: NavigateToItem[] = [];
-            TypeScript.Services.GetScriptLexicalStructureWalker.getListsOfAllScriptLexicalStructure(items, filename, syntaxTree.sourceUnit());
-            return items;
+            return new TypeScript.Services.NavigationBarItemGetter().getItems(syntaxTree.sourceUnit());
         }
 
-        function getOutliningRegions(filename: string): OutliningSpan[] {
+        function getOutliningSpans(filename: string): OutliningSpan[] {
             // doesn't use compiler - no need to synchronize with host
             filename = TypeScript.switchToForwardSlashes(filename);
             var sourceFile = getCurrentSourceFile(filename);
@@ -2205,41 +2256,202 @@ module ts {
             return manager;
         }
 
-        function getFormattingEditsForRange(filename: string, minChar: number, limChar: number, options: FormatCodeOptions): TextEdit[] {
-            filename = TypeScript.switchToForwardSlashes(filename);
+        function getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions): TextChange[] {
+            fileName = TypeScript.switchToForwardSlashes(fileName);
 
-            var manager = getFormattingManager(filename, options);
-            return manager.formatSelection(minChar, limChar);
+            var manager = getFormattingManager(fileName, options);
+            return manager.formatSelection(start, end);
         }
 
-        function getFormattingEditsForDocument(filename: string, minChar: number, limChar: number, options: FormatCodeOptions): TextEdit[] {
-            filename = TypeScript.switchToForwardSlashes(filename);
+        function getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[] {
+            fileName = TypeScript.switchToForwardSlashes(fileName);
 
-            var manager = getFormattingManager(filename, options);
-            return manager.formatDocument(minChar, limChar);
+            var manager = getFormattingManager(fileName, options);
+            return manager.formatDocument();
         }
 
-        function getFormattingEditsOnPaste(filename: string, minChar: number, limChar: number, options: FormatCodeOptions): TextEdit[] {
-            filename = TypeScript.switchToForwardSlashes(filename);
+        function getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[] {
+            fileName = TypeScript.switchToForwardSlashes(fileName);
 
-            var manager = getFormattingManager(filename, options);
-            return manager.formatOnPaste(minChar, limChar);
+            var manager = getFormattingManager(fileName, options);
+
+            if (key === "}") {
+                return manager.formatOnClosingCurlyBrace(position);
+            }
+            else if (key === ";") {
+                return manager.formatOnSemicolon(position);
+            }
+            else if (key === "\n") {
+                return manager.formatOnEnter(position);
+            }
+
+            return [];
         }
 
-        function getFormattingEditsAfterKeystroke(filename: string, position: number, key: string, options: FormatCodeOptions): TextEdit[] {
-            filename = TypeScript.switchToForwardSlashes(filename);
-
-            var manager = getFormattingManager(filename, options);
-            if (key === "}") return manager.formatOnClosingCurlyBrace(position);
-            else if (key === ";") return manager.formatOnSemicolon(position);
-            else if (key === "\n") return manager.formatOnEnter(position);
-            else return [];
+        function escapeRegExp(str: string): string {
+            return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
         }
 
+        function getTodoCommentsRegExp(descriptors: TodoCommentDescriptor[]): RegExp {
+            // NOTE: ?:  means 'non-capture group'.  It allows us to have groups without having to
+            // filter them out later in the final result array.
+
+            // TODO comments can appear in one of the following forms:
+            //
+            //  1)      // TODO     or  /////////// TODO
+            //
+            //  2)      /* TODO     or  /********** TODO
+            //
+            //  3)      /*
+            //           *   TODO
+            //           */
+            //
+            // The following three regexps are used to match the start of the text up to the TODO
+            // comment portion.
+            var singleLineCommentStart = /(?:\/\/+\s*)/.source;
+            var multiLineCommentStart = /(?:\/\*+\s*)/.source;
+            var anyNumberOfSpacesAndAsterixesAtStartOfLine = /(?:^(?:\s|\*)*)/.source;
+
+            // Match any of the above three TODO comment start regexps.
+            // Note that the outermost group *is* a capture group.  We want to capture the preamble
+            // so that we can determine the starting position of the TODO comment match.
+            var preamble = "(" + anyNumberOfSpacesAndAsterixesAtStartOfLine + "|" + singleLineCommentStart + "|" + multiLineCommentStart + ")";
+
+            // Takes the descriptors and forms a regexp that matches them as if they were literals.
+            // For example, if the descriptors are "TODO(jason)" and "HACK", then this will be:
+            //
+            //      (?:(TODO\(jason\))|(HACK))
+            //
+            // Note that the outermost group is *not* a capture group, but the innermost groups
+            // *are* capture groups.  By capturing the inner literals we can determine after 
+            // matching which descriptor we are dealing with.
+            var literals = "(?:" + descriptors.map(d => "(" + escapeRegExp(d.text) + ")").join("|") + ")";
+
+            // After matching a descriptor literal, the following regexp matches the rest of the 
+            // text up to the end of the line (or */).
+            var endOfLineOrEndOfComment = /(?:$|\*\/)/.source
+            var messageRemainder = /(?:.*?)/.source
+
+            // This is the portion of the match we'll return as part of the TODO comment result. We
+            // match the literal portion up to the end of the line or end of comment.
+            var messagePortion = "(" + literals + messageRemainder + ")";
+            var regExpString = preamble + messagePortion + endOfLineOrEndOfComment;
+
+            // The final regexp will look like this:
+            // /((?:\/\/+\s*)|(?:\/\*+\s*)|(?:^(?:\s|\*)*))((?:(TODO\(jason\))|(HACK))(?:.*?))(?:$|\*\/)/gim
+
+            // The flags of the regexp are important here.
+            //  'g' is so that we are doing a global search and can find matches several times
+            //  in the input.
+            //
+            //  'i' is for case insensitivity (We do this to match C# TODO comment code).
+            //
+            //  'm' is so we can find matches in a multiline input.
+            return new RegExp(regExpString, "gim");
+        }
+
+        function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
+            fileName = TypeScript.switchToForwardSlashes(fileName);
+
+            var sourceFile = getCurrentSourceFile(fileName);
+            var syntaxTree = sourceFile.getSyntaxTree();
+            cancellationToken.throwIfCancellationRequested();
+
+            var text = syntaxTree.text;
+            var fileContents = text.substr(0, text.length());
+            cancellationToken.throwIfCancellationRequested();
+
+            var result: TodoComment[] = [];
+
+            if (descriptors.length > 0) {
+                var regExp = getTodoCommentsRegExp(descriptors);
+
+                var matchArray: RegExpExecArray;
+                while (matchArray = regExp.exec(fileContents)) {
+                    cancellationToken.throwIfCancellationRequested();
+
+                    // If we got a match, here is what the match array will look like.  Say the source text is:
+                    //
+                    //      "    // hack   1"
+                    //
+                    // The result array with the regexp:    will be:
+                    //
+                    //      ["// hack   1", "// ", "hack   1", undefined, "hack"]
+                    //
+                    // Here are the relevant capture groups:
+                    //  0) The full match for hte entire regex.
+                    //  1) The preamble to the message portion.
+                    //  2) The message portion.
+                    //  3...N) The descriptor that was matched - by index.  'undefined' for each 
+                    //         descriptor that didn't match.  an actual value if it did match.
+                    //
+                    //  i.e. 'undefined' in position 3 above means TODO(jason) didn't match.
+                    //       "hack"      in position 4 means HACK did match.
+                    var firstDescriptorCaptureIndex = 3;
+                    Debug.assert(matchArray.length === descriptors.length + firstDescriptorCaptureIndex);
+
+                    var preamble = matchArray[1];
+                    var matchPosition = matchArray.index + preamble.length;
+
+                    // Ok, we have found a match in the file.  This is ony an acceptable match if
+                    // it is contained within a comment.
+                    var token = TypeScript.findToken(syntaxTree.sourceUnit(), matchPosition);
+
+                    if (matchPosition >= TypeScript.start(token) && matchPosition < TypeScript.end(token)) {
+                        // match was within the token itself.  Not in the comment.  Keep searching
+                        // descriptor.
+                        continue;
+                    }
+
+                    // Looks to be within the trivia.  See if we can find hte comment containing it.
+                    var triviaList = matchPosition < TypeScript.start(token) ? token.leadingTrivia(syntaxTree.text) : token.trailingTrivia(syntaxTree.text);
+                    var trivia = findContainingComment(triviaList, matchPosition);
+                    if (trivia === null) {
+                        continue;
+                    }
+
+                    var descriptor: TodoCommentDescriptor = undefined;
+                    for (var i = 0, n = descriptors.length; i < n; i++) {
+                        if (matchArray[i + firstDescriptorCaptureIndex]) {
+                            descriptor = descriptors[i];
+                        }
+                    }
+                    Debug.assert(descriptor);
+
+                    // We don't want to match something like 'TODOBY', so we make sure a non 
+                    // letter/digit follows the match.
+                    if (isLetterOrDigit(fileContents.charCodeAt(matchPosition + descriptor.text.length))) {
+                        continue;
+                    }
+
+                    var message = matchArray[2];
+                    result.push(new TodoComment(descriptor, message, matchPosition));
+                }
+            }
+
+            return result;
+        }
+
+        function isLetterOrDigit(char: number): boolean {
+            return (char >= TypeScript.CharacterCodes.a && char <= TypeScript.CharacterCodes.z) ||
+                (char >= TypeScript.CharacterCodes.A && char <= TypeScript.CharacterCodes.Z) ||
+                (char >= TypeScript.CharacterCodes._0 && char <= TypeScript.CharacterCodes._9);
+        }
+
+        function findContainingComment(triviaList: TypeScript.ISyntaxTriviaList, position: number): TypeScript.ISyntaxTrivia {
+            for (var i = 0, n = triviaList.count(); i < n; i++) {
+                var trivia = triviaList.syntaxTriviaAt(i);
+                var fullEnd = trivia.fullStart() + trivia.fullWidth();
+                if (trivia.isComment() && trivia.fullStart() <= position && position < fullEnd) {
+                    return trivia;
+                }
+            }
+
+            return null;
+        }
 
         return {
             dispose: dispose,
-            refresh: () => { },
             cleanupSemanticCache: cleanupSemanticCache,
             getSyntacticDiagnostics: getSyntacticDiagnostics,
             getSemanticDiagnostics: getSemanticDiagnostics,
@@ -2247,7 +2459,8 @@ module ts {
             getCompletionsAtPosition: getCompletionsAtPosition,
             getCompletionEntryDetails: getCompletionEntryDetails,
             getTypeAtPosition: getTypeAtPosition,
-            getSignatureAtPosition: (filename, position): SignatureInfo => undefined,
+            getSignatureHelpItems: (filename, position): SignatureHelpItems => null,
+            getSignatureHelpCurrentArgumentState: (fileName, position, applicableSpanStart): SignatureHelpState => null,
             getDefinitionAtPosition: getDefinitionAtPosition,
             getReferencesAtPosition: (filename, position) => [],
             getOccurrencesAtPosition: (filename, position) => [],
@@ -2255,27 +2468,44 @@ module ts {
             getNameOrDottedNameSpan: getNameOrDottedNameSpan,
             getBreakpointStatementAtPosition: getBreakpointStatementAtPosition,
             getNavigateToItems: (searchValue) => [],
-            getScriptLexicalStructure: getScriptLexicalStructure,
-            getOutliningRegions: getOutliningRegions,
+            getRenameInfo: (fileName, position): RenameInfo => RenameInfo.CreateError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_this_element.key)),
+            getNavigationBarItems: getNavigationBarItems,
+            getOutliningSpans: getOutliningSpans,
+            getTodoComments: getTodoComments,
             getBraceMatchingAtPosition: getBraceMatchingAtPosition,
             getIndentationAtPosition: getIndentationAtPosition,
             getFormattingEditsForRange: getFormattingEditsForRange,
             getFormattingEditsForDocument: getFormattingEditsForDocument,
-            getFormattingEditsOnPaste: getFormattingEditsOnPaste,
             getFormattingEditsAfterKeystroke: getFormattingEditsAfterKeystroke,
-            getEmitOutput: (filename): EmitOutput => undefined,
+            getEmitOutput: (filename): EmitOutput => null,
         };
     }
 
     /// Classifier
     export function createClassifier(host: Logger): Classifier {
         var scanner: Scanner;
-        var noRegexTable: boolean[];
+        var noRegexTable: boolean[];
+
         /// We do not have a full parser support to know when we should parse a regex or not
         /// If we consider every slash token to be a regex, we could be missing cases like "1/2/3", where
         /// we have a series of divide operator. this list allows us to be more accurate by ruling out 
         /// locations where a regexp cannot exist.
-        if (!noRegexTable) {            noRegexTable = [];            noRegexTable[SyntaxKind.Identifier] = true;            noRegexTable[SyntaxKind.StringLiteral] = true;            noRegexTable[SyntaxKind.NumericLiteral] = true;            noRegexTable[SyntaxKind.RegularExpressionLiteral] = true;            noRegexTable[SyntaxKind.ThisKeyword] = true;            noRegexTable[SyntaxKind.PlusPlusToken] = true;            noRegexTable[SyntaxKind.MinusMinusToken] = true;            noRegexTable[SyntaxKind.CloseParenToken] = true;            noRegexTable[SyntaxKind.CloseBracketToken] = true;            noRegexTable[SyntaxKind.CloseBraceToken] = true;            noRegexTable[SyntaxKind.TrueKeyword] = true;            noRegexTable[SyntaxKind.FalseKeyword] = true;        }
+        if (!noRegexTable) {
+            noRegexTable = [];
+            noRegexTable[SyntaxKind.Identifier] = true;
+            noRegexTable[SyntaxKind.StringLiteral] = true;
+            noRegexTable[SyntaxKind.NumericLiteral] = true;
+            noRegexTable[SyntaxKind.RegularExpressionLiteral] = true;
+            noRegexTable[SyntaxKind.ThisKeyword] = true;
+            noRegexTable[SyntaxKind.PlusPlusToken] = true;
+            noRegexTable[SyntaxKind.MinusMinusToken] = true;
+            noRegexTable[SyntaxKind.CloseParenToken] = true;
+            noRegexTable[SyntaxKind.CloseBracketToken] = true;
+            noRegexTable[SyntaxKind.CloseBraceToken] = true;
+            noRegexTable[SyntaxKind.TrueKeyword] = true;
+            noRegexTable[SyntaxKind.FalseKeyword] = true;
+        }
+
         function getClassificationsForLine(text: string, lexState: EndOfLineState): ClassificationResult {
             var offset = 0;
             var lastTokenOrCommentEnd = 0;

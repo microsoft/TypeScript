@@ -17,6 +17,7 @@
 
 module TypeScript.Services.Formatting {
     export interface ITextSnapshot {
+        getLength(): number;
         getText(span: TextSpan): string;
         getLineNumberFromPosition(position: number): number;
         getLineFromPosition(position: number): ITextSnapshotLine;
@@ -28,6 +29,10 @@ module TypeScript.Services.Formatting {
 
         constructor(private snapshot: ISimpleText) {
             this.lines = [];
+        }
+
+        public getLength(): number {
+            return this.snapshot.length();
         }
 
         public getText(span: TextSpan): string {

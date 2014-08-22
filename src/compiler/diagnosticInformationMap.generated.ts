@@ -111,7 +111,7 @@ module ts {
         Import_declarations_in_an_internal_module_cannot_reference_an_external_module: { code: 1147, category: DiagnosticCategory.Error, key: "Import declarations in an internal module cannot reference an external module." },
         Cannot_compile_external_modules_unless_the_module_flag_is_provided: { code: 1148, category: DiagnosticCategory.Error, key: "Cannot compile external modules unless the '--module' flag is provided." },
         Filename_0_differs_from_already_included_filename_1_only_in_casing: { code: 1149, category: DiagnosticCategory.Error, key: "Filename '{0}' differs from already included filename '{1}' only in casing" },
-        new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead: { code: 2068, category: DiagnosticCategory.Error, key: "'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead." },
+        new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead: { code: 1150, category: DiagnosticCategory.Error, key: "'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead." },
         Duplicate_identifier_0: { code: 2300, category: DiagnosticCategory.Error, key: "Duplicate identifier '{0}'." },
         Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor: { code: 2301, category: DiagnosticCategory.Error, key: "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor." },
         Static_members_cannot_reference_class_type_parameters: { code: 2302, category: DiagnosticCategory.Error, key: "Static members cannot reference class type parameters." },
@@ -389,5 +389,6 @@ module ts {
         Object_literal_s_property_0_implicitly_has_an_1_type: { code: 7018, category: DiagnosticCategory.Error, key: "Object literal's property '{0}' implicitly has an '{1}' type." },
         Rest_parameter_0_implicitly_has_an_any_type: { code: 7019, category: DiagnosticCategory.Error, key: "Rest parameter '{0}' implicitly has an 'any[]' type." },
         Call_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type: { code: 7020, category: DiagnosticCategory.Error, key: "Call signature, which lacks return-type annotation, implicitly has an 'any' return type." },
+        You_cannot_rename_this_element: { code: 8000, category: DiagnosticCategory.Error, key: "You cannot rename this element." },
     };
 }

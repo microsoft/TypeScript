@@ -1355,7 +1355,6 @@
         "category": "Error",
         "code": 5039
     },
-    
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001
@@ -1552,5 +1551,9 @@
     "Call signature, which lacks return-type annotation, implicitly has an 'any' return type.": {
         "category": "Error",
         "code": 7020
+    },
+    "You cannot rename this element.": {
+        "category": "Error",
+        "code": 8000
     }
 }

@@ -183,19 +183,40 @@ class CompilerBaselineRunner extends RunnerBase {
 
                 // if the .d.ts is non-empty, confirm it compiles correctly as well
                 if (options.declaration && result.errors.length === 0 && result.declFilesCode.length > 0) {
-                    function getDtsFile(file: { unitName: string; content: string }) {
+                    function addDtsFile(file: { unitName: string; content: string }, dtsFiles: { unitName: string; content: string }[]) {
                         if (Harness.Compiler.isDTS(file.unitName)) {
-                            return file;
-                        } else {
-                            var declFile = ts.forEach(result.declFilesCode,
-                                declFile => declFile.fileName === (file.unitName.substr(0, file.unitName.length - ".ts".length) + ".d.ts")
+                            dtsFiles.push(file);
+                        }
+                        else {
+                            var declFile = findResultCodeFile(file.unitName);
+                            // Look if there is --out file corresponding to this ts file
+                            if (!declFile && options.out) {
+                                declFile = findResultCodeFile(options.out);
+                                if (!declFile || findUnit(declFile.fileName, declToBeCompiled) ||
+                                    findUnit(declFile.fileName, declOtherFiles)) {
+                                    return;
+                                }
+                            }
+
+                            if (declFile) {
+                                dtsFiles.push({ unitName: declFile.fileName, content: declFile.code });
+                                return;
+                            }
+                        }
+
+                        function findResultCodeFile(fileName: string) {
+                            return ts.forEach(result.declFilesCode,
+                                declFile => declFile.fileName === (fileName.substr(0, fileName.length - ".ts".length) + ".d.ts")
                                     ? declFile : undefined);
-                            return { unitName: declFile.fileName, content: declFile.code };
+                        }
+
+                        function findUnit(fileName: string, units: { unitName: string; content: string }[]) {
+                            return ts.forEach(units, unit => unit.unitName === fileName ? unit : undefined);
                         }
                     }
 
-                    ts.forEach(toBeCompiled, file => { declToBeCompiled.push(getDtsFile(file)); });
-                    ts.forEach(otherFiles, file => { declOtherFiles.push(getDtsFile(file)); });
+                    ts.forEach(toBeCompiled, file => addDtsFile(file, declToBeCompiled));
+                    ts.forEach(otherFiles, file => addDtsFile(file, declOtherFiles));
                     harnessCompiler.compileFiles(declToBeCompiled, declOtherFiles, function (compileResult) {
                         declResult = compileResult;
                     }, function (settings) {
