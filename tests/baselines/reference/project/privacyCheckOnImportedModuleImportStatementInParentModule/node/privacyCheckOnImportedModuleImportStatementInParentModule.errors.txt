@@ -1,5 +1,5 @@
-test.ts(2,5): Import declarations in an internal module cannot reference an external module.
-test.ts(42,5): Import declarations in an internal module cannot reference an external module.
+test.ts(2,5): error TS1147: Import declarations in an internal module cannot reference an external module.
+test.ts(42,5): error TS1147: Import declarations in an internal module cannot reference an external module.
 
 
 ==== test.ts (2 errors) ====
