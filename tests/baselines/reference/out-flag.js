@@ -27,6 +27,7 @@ var MyClass = (function () {
         return 42;
     };
     MyClass.prototype.SetCount = function (value) {
+        //
     };
     return MyClass;
 })();
