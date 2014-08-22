@@ -80,8 +80,9 @@ module Harness.LanguageService {
             return JSON.stringify(this.lineMap.lineStarts());
         }
 
-        public getTextChangeRangeSinceVersion(scriptVersion: number): string {
-            var range = this.scriptInfo.getTextChangeRangeBetweenVersions(scriptVersion, this.version);
+        public getChangeRange(oldScript: ts.ScriptSnapshotShim): string {
+            var oldShim = <ScriptSnapshotShim>oldScript;
+            var range = this.scriptInfo.getTextChangeRangeBetweenVersions(oldShim.version, this.version);
             if (range === null) {
                 return null;
             }
@@ -101,50 +102,14 @@ module Harness.LanguageService {
         }
     }
 
-    class ScriptSnapshotShimAdapter implements TypeScript.IScriptSnapshot {
-        private lineStartPositions: number[] = null;
-        constructor(private scriptSnapshotShim: ts.ScriptSnapshotShim) {}
-        getText(start: number, end: number): string {return this.scriptSnapshotShim.getText(start, end);}
-        getLength(): number {return this.scriptSnapshotShim.getLength();}
-        getLineStartPositions(): number[] { return JSON.parse(this.scriptSnapshotShim.getLineStartPositions()); }
-        getTextChangeRangeSinceVersion(scriptVersion: number): TypeScript.TextChangeRange {
-            var encoded = this.scriptSnapshotShim.getTextChangeRangeSinceVersion(scriptVersion);
-            if (encoded == null) {
-                return null;
-            }
-
-            var decoded: { span: { start: number; length: number; }; newLength: number; } = JSON.parse(encoded);
-            return new TypeScript.TextChangeRange(
-                new TypeScript.TextSpan(decoded.span.start, decoded.span.length), decoded.newLength);
-        }
-    }
-
-    class LanguageServiceShimHostAdapter implements ts.LanguageServiceHost {
-        constructor(private shimHost: ts.LanguageServiceShimHost) { }
-        information(): boolean { return this.shimHost.information(); }
-        debug(): boolean { return this.shimHost.debug(); }
-        warning(): boolean { return this.shimHost.warning();}
-        error(): boolean { return this.shimHost.error(); }
-        fatal(): boolean { return this.shimHost.fatal(); }
-        log(s: string): void { this.shimHost.log(s); }
-        getCompilationSettings(): ts.CompilerOptions { return JSON.parse(this.shimHost.getCompilationSettings()); }
-        getScriptFileNames(): string[] { return JSON.parse(this.shimHost.getScriptFileNames());}
-        getScriptSnapshot(fileName: string): TypeScript.IScriptSnapshot { return new ScriptSnapshotShimAdapter(this.shimHost.getScriptSnapshot(fileName));}
-        getScriptVersion(fileName: string): number { return this.shimHost.getScriptVersion(fileName);}
-        getScriptIsOpen(fileName: string): boolean { return this.shimHost.getScriptIsOpen(fileName); }
-        getLocalizedDiagnosticMessages(): any { JSON.parse(this.shimHost.getLocalizedDiagnosticMessages());}
-        getCancellationToken(): ts.CancellationToken { return this.shimHost.getCancellationToken(); }
-    }
-
     export class NonCachingDocumentRegistry implements ts.DocumentRegistry {
-
         public static Instance: ts.DocumentRegistry = new NonCachingDocumentRegistry();
 
         public acquireDocument(
             fileName: string,
             compilationSettings: ts.CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
-            version: number,
+            version: string,
             isOpen: boolean): ts.SourceFile {
             return ts.createSourceFile(fileName, scriptSnapshot.getText(0, scriptSnapshot.getLength()), compilationSettings.target, version, isOpen);
         }
@@ -154,7 +119,7 @@ module Harness.LanguageService {
             fileName: string,
             compilationSettings: ts.CompilerOptions,
             scriptSnapshot: TypeScript.IScriptSnapshot,
-            version: number,
+            version: string,
             isOpen: boolean,
             textChangeRange: TypeScript.TextChangeRange
             ): ts.SourceFile {
@@ -251,8 +216,8 @@ module Harness.LanguageService {
             return new ScriptSnapshotShim(this.getScriptInfo(fileName));
         }
 
-        public getScriptVersion(fileName: string): number {
-            return this.getScriptInfo(fileName).version;
+        public getScriptVersion(fileName: string): string {
+            return this.getScriptInfo(fileName).version.toString();
         }
 
         public getScriptIsOpen(fileName: string): boolean {
@@ -316,7 +281,7 @@ module Harness.LanguageService {
         }
 
         /** Verify that applying edits to sourceFileName result in the content of the file baselineFileName */
-        public checkEdits(sourceFileName: string, baselineFileName: string, edits: ts.TextEdit[]) {
+        public checkEdits(sourceFileName: string, baselineFileName: string, edits: ts.TextChange[]) {
             var script = Harness.IO.readFile(sourceFileName);
             var formattedScript = this.applyEdits(script, edits);
             var baseline = Harness.IO.readFile(baselineFileName);
@@ -345,26 +310,26 @@ module Harness.LanguageService {
 
 
         /** Apply an array of text edits to a string, and return the resulting string. */
-        public applyEdits(content: string, edits: ts.TextEdit[]): string {
+        public applyEdits(content: string, edits: ts.TextChange[]): string {
             var result = content;
             edits = this.normalizeEdits(edits);
 
             for (var i = edits.length - 1; i >= 0; i--) {
                 var edit = edits[i];
-                var prefix = result.substring(0, edit.minChar);
-                var middle = edit.text;
-                var suffix = result.substring(edit.limChar);
+                var prefix = result.substring(0, edit.span.start());
+                var middle = edit.newText;
+                var suffix = result.substring(edit.span.end());
                 result = prefix + middle + suffix;
             }
             return result;
         }
 
         /** Normalize an array of edits by removing overlapping entries and sorting entries on the minChar position. */
-        private normalizeEdits(edits: ts.TextEdit[]): ts.TextEdit[] {
-            var result: ts.TextEdit[] = [];
+        private normalizeEdits(edits: ts.TextChange[]): ts.TextChange[] {
+            var result: ts.TextChange[] = [];
 
-            function mapEdits(edits: ts.TextEdit[]): { edit: ts.TextEdit; index: number; }[] {
-                var result: { edit: ts.TextEdit; index: number; }[] = [];
+            function mapEdits(edits: ts.TextChange[]): { edit: ts.TextChange; index: number; }[] {
+                var result: { edit: ts.TextChange; index: number; }[] = [];
                 for (var i = 0; i < edits.length; i++) {
                     result.push({ edit: edits[i], index: i });
                 }
@@ -372,7 +337,7 @@ module Harness.LanguageService {
             }
 
             var temp = mapEdits(edits).sort(function (a, b) {
-                var result = a.edit.minChar - b.edit.limChar;
+                var result = a.edit.span.start() - b.edit.span.start();
                 if (result === 0)
                     result = a.index - b.index;
                 return result;
@@ -391,7 +356,7 @@ module Harness.LanguageService {
                 }
                 var nextEdit = temp[next].edit;
 
-                var gap = nextEdit.minChar - currentEdit.limChar;
+                var gap = nextEdit.span.start() - currentEdit.span.end();
 
                 // non-overlapping edits
                 if (gap >= 0) {
@@ -400,10 +365,10 @@ module Harness.LanguageService {
                     next++;
                     continue;
                 }
-
+ 
                 // overlapping edits: for now, we only support ignoring an next edit 
                 // entirely contained in the current edit.
-                if (currentEdit.minChar >= nextEdit.limChar) {
+                if (currentEdit.span.end() >= nextEdit.span.end()) {
                     next++;
                     continue;
                 }

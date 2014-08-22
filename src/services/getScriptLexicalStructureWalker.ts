@@ -1,121 +1,22 @@
-
 ///<reference path='references.ts' />
+
 module TypeScript.Services {
-    interface LexicalScope {
-        items: ts.Map<ts.NavigateToItem>;
-        itemNames: string[];
-        childScopes: ts.Map<LexicalScope>;
-        childScopeNames: string[];
-    }
+    export class NavigationBarItemGetter {
+        private hasGlobalNode = false;
 
-    export class GetScriptLexicalStructureWalker extends TypeScript.SyntaxWalker {
-        private nameStack: string[] = [];
-        private kindStack: string[] = [];
+        private getIndent(node: ISyntaxNode): number {
+            var indent = this.hasGlobalNode ? 1 : 0;
 
-        private parentScopes: LexicalScope[] = [];
-        private currentScope: LexicalScope;
+            var current = node.parent;
+            while (current != null) {
+                if (current.kind() == SyntaxKind.ModuleDeclaration || current.kind() === SyntaxKind.FunctionDeclaration) {
+                    indent++;
+                }
 
-        private createScope(): LexicalScope {
-            return {
-                items: TypeScript.createIntrinsicsObject<ts.NavigateToItem>(),
-                childScopes: TypeScript.createIntrinsicsObject<LexicalScope>(),
-                childScopeNames: [],
-                itemNames: []
-            };
-        }
-
-        private pushNewContainerScope(containerName: string, kind: string): LexicalScope {
-            Debug.assert(containerName, "No scope name provided");
-
-            var key = kind + "+" + containerName;
-            this.nameStack.push(containerName);
-            this.kindStack.push(kind);
-
-            var parentScope = this.currentScope;
-            this.parentScopes.push(parentScope);
-
-            var scope = ts.lookUp(parentScope.childScopes, key);
-            if (!scope) {
-                scope = this.createScope()
-                parentScope.childScopes[key] = scope;
-                parentScope.childScopeNames.push(key);
+                current = current.parent;
             }
 
-            this.currentScope = scope;
-            return parentScope;
-        }
-
-        private popScope() {
-            Debug.assert(this.parentScopes.length > 0, "No parent scopes to return to")
-            this.currentScope = this.parentScopes.pop();
-            this.kindStack.pop();
-            this.nameStack.pop();
-        }
-
-        constructor(private fileName: string) {
-            super();
-            this.currentScope = this.createScope();
-        }
-
-        private collectItems(items: ts.NavigateToItem[], scope = this.currentScope) {
-            scope.itemNames.forEach(item => {
-                items.push(scope.items[item]);
-            });
-
-            scope.childScopeNames.forEach(childScope => {
-                this.collectItems(items, scope.childScopes[childScope]);
-            });
-        }
-
-        static getListsOfAllScriptLexicalStructure(items: ts.NavigateToItem[], fileName: string, unit: TypeScript.SourceUnitSyntax) {
-            var visitor = new GetScriptLexicalStructureWalker(fileName);
-            visitNodeOrToken(visitor, unit);
-            visitor.collectItems(items);
-        }
-
-        private createItem(node: TypeScript.ISyntaxNode, modifiers: ISyntaxToken[], kind: string, name: string): void {
-            var key = kind + "+" + name;
-
-            if (ts.lookUp(this.currentScope.items, key) !== undefined) {
-                this.addAdditionalSpan(node, key);
-                return;
-            }
-
-            var item: ts.NavigateToItem = {
-                name: name,
-                kind: kind,
-                matchKind: ts.MatchKind.exact,
-                fileName: this.fileName,
-                kindModifiers: this.getKindModifiers(modifiers),
-                minChar: start(node),
-                limChar: end(node),
-                containerName: this.nameStack.join("."),
-                containerKind: this.kindStack.length === 0 ? "" : TypeScript.ArrayUtilities.last(this.kindStack),
-            };
-            this.currentScope.items[key] = item;
-            this.currentScope.itemNames.push(key);
-        }
-
-        private addAdditionalSpan(
-            node: TypeScript.ISyntaxNode,
-            key: string) {
-
-            var item = ts.lookUp(this.currentScope.items, key);
-            Debug.assert(item !== undefined);
-
-            var start = TypeScript.start(node);
-            var span: ts.SpanInfo = {
-                minChar: start,
-                limChar: start + width(node)
-            };
-
-
-            if (item.additionalSpans) {
-                item.additionalSpans.push(span);
-            }
-            else {
-                item.additionalSpans = [span];
-            }
+            return indent;
         }
 
         private getKindModifiers(modifiers: TypeScript.ISyntaxToken[]): string {
@@ -128,28 +29,219 @@ module TypeScript.Services {
             return result.length > 0 ? result.join(',') : ts.ScriptElementKindModifier.none;
         }
 
-        public visitModuleDeclaration(node: TypeScript.ModuleDeclarationSyntax): void {
-            var names = this.getModuleNames(node);
-            this.visitModuleDeclarationWorker(node, names, 0);
+        public getItems(node: TypeScript.SourceUnitSyntax): ts.NavigationBarItem[] {
+            return this.getItemsWorker(() => this.getTopLevelNodes(node), n => this.createTopLevelItem(n));
         }
 
-        private visitModuleDeclarationWorker(node: TypeScript.ModuleDeclarationSyntax, names: string[], nameIndex: number): void {
-            if (nameIndex === names.length) {
-                // We're after all the module names, descend and process all children.
-                super.visitModuleDeclaration(node);
+        private getChildNodes(nodes: IModuleElementSyntax[]): ISyntaxNode[] {
+            var childNodes: ISyntaxNode[] = [];
+
+            for (var i = 0, n = nodes.length; i < n; i++) {
+                var node = <ISyntaxNode>nodes[i];
+
+                if (node.kind() === SyntaxKind.FunctionDeclaration) {
+                    childNodes.push(node);
+                }
+                else if (node.kind() === SyntaxKind.VariableStatement) {
+                    var variableDeclaration = (<VariableStatementSyntax>node).variableDeclaration;
+                    childNodes.push.apply(childNodes, variableDeclaration.variableDeclarators);
+                }
             }
-            else {
-                var name = names[nameIndex];
-                var kind = ts.ScriptElementKind.moduleElement;
 
-                this.createItem(node, node.modifiers, kind, name);
+            return childNodes;
+        }
 
-                this.pushNewContainerScope(name, kind);
+        private getTopLevelNodes(node: SourceUnitSyntax): ISyntaxNode[] {
+            var topLevelNodes: ISyntaxNode[] = [];
+            topLevelNodes.push(node);
 
-                this.visitModuleDeclarationWorker(node, names, nameIndex + 1);
+            this.addTopLevelNodes(node.moduleElements, topLevelNodes);
 
-                this.popScope();
+            return topLevelNodes;
+        }
+
+        private addTopLevelNodes(nodes: IModuleElementSyntax[], topLevelNodes: ISyntaxNode[]): void {
+            for (var i = 0, n = nodes.length; i < n; i++) {
+                var node = nodes[i];
+                switch (node.kind()) {
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.EnumDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                        topLevelNodes.push(node);
+                        break;
+
+                    case SyntaxKind.ModuleDeclaration:
+                        var moduleDeclaration = <ModuleDeclarationSyntax>node;
+                        topLevelNodes.push(node);
+                        this.addTopLevelNodes(moduleDeclaration.moduleElements, topLevelNodes);
+                        break;
+
+                    case SyntaxKind.FunctionDeclaration:
+                        var functionDeclaration = <FunctionDeclarationSyntax>node;
+                        if (this.isTopLevelFunctionDeclaration(functionDeclaration)) {
+                            topLevelNodes.push(node);
+                            this.addTopLevelNodes(functionDeclaration.block.statements, topLevelNodes);
+                        }
+                        break;
+                }
             }
+        }
+
+        public isTopLevelFunctionDeclaration(functionDeclaration: FunctionDeclarationSyntax) {
+            // A function declaration is 'top level' if it contains any function declarations 
+            // within it.
+            return functionDeclaration.block && ArrayUtilities.any(functionDeclaration.block.statements, s => s.kind() === SyntaxKind.FunctionDeclaration);
+        }
+
+        private getItemsWorker(getNodes: () => ISyntaxNode[], createItem: (n: ISyntaxNode) => ts.NavigationBarItem): ts.NavigationBarItem[] {
+            var items: ts.NavigationBarItem[] = [];
+
+            var keyToItem = createIntrinsicsObject<ts.NavigationBarItem>();
+
+            var nodes = getNodes();
+            for (var i = 0, n = nodes.length; i < n; i++) {
+                var child = nodes[i];
+                var item = createItem(child);
+                if (item != null) {
+                    if (item.text.length > 0) {
+                        var key = item.text + "-" + item.kind;
+
+                        var itemWithSameName = keyToItem[key];
+                        if (itemWithSameName) {
+                            // We had an item with the same name.  Merge these items together.
+                            this.merge(itemWithSameName, item);
+                        }
+                        else {
+                            keyToItem[key] = item;
+                            items.push(item);
+                        }
+                    }
+                }
+            }
+
+            return items;
+        }
+
+        private merge(target: ts.NavigationBarItem, source: ts.NavigationBarItem) {
+            // First, add any spans in the source to the target.
+            target.spans.push.apply(target.spans, source.spans);
+
+            if (source.childItems) {
+                if (!target.childItems) {
+                    target.childItems = [];
+                }
+
+                // Next, recursively merge or add any children in the source as appropriate.
+                outer:
+                for (var i = 0, n = source.childItems.length; i < n; i++) {
+                    var sourceChild = source.childItems[i];
+
+                    for (var j = 0, m = target.childItems.length; j < m; j++) {
+                        var targetChild = target.childItems[j];
+
+                        if (targetChild.text === sourceChild.text && targetChild.kind === sourceChild.kind) {
+                            // Found a match.  merge them.
+                            this.merge(targetChild, sourceChild);
+                            continue outer;
+                        }
+                    }
+
+                    // Didn't find a match, just add this child to the list.
+                    target.childItems.push(sourceChild);
+                }
+            }
+        }
+
+        private createChildItem(node: ISyntaxNode): ts.NavigationBarItem {
+            switch (node.kind()) {
+                case SyntaxKind.Parameter:
+                    var parameter = <ParameterSyntax>node;
+                    if (parameter.modifiers.length === 0) {
+                        return null;
+                    }
+                    return new ts.NavigationBarItem(parameter.identifier.text(), ts.ScriptElementKind.memberVariableElement, this.getKindModifiers(parameter.modifiers), [TextSpan.fromBounds(start(node), end(node))]);
+
+                case SyntaxKind.MemberFunctionDeclaration:
+                    var memberFunction = <MemberFunctionDeclarationSyntax>node;
+                    return new ts.NavigationBarItem(memberFunction.propertyName.text(), ts.ScriptElementKind.memberFunctionElement, this.getKindModifiers(memberFunction.modifiers), [TextSpan.fromBounds(start(node), end(node))]);
+
+                case SyntaxKind.GetAccessor:
+                    var getAccessor = <GetAccessorSyntax>node;
+                    return new ts.NavigationBarItem(getAccessor.propertyName.text(), ts.ScriptElementKind.memberGetAccessorElement, this.getKindModifiers(getAccessor.modifiers), [TextSpan.fromBounds(start(node), end(node))]);
+
+                case SyntaxKind.SetAccessor:
+                    var setAccessor = <SetAccessorSyntax>node;
+                    return new ts.NavigationBarItem(setAccessor.propertyName.text(), ts.ScriptElementKind.memberSetAccessorElement, this.getKindModifiers(setAccessor.modifiers), [TextSpan.fromBounds(start(node), end(node))]);
+
+                case SyntaxKind.IndexSignature:
+                    var indexSignature = <IndexSignatureSyntax>node;
+                    return new ts.NavigationBarItem("[]", ts.ScriptElementKind.indexSignatureElement, ts.ScriptElementKindModifier.none, [TextSpan.fromBounds(start(node), end(node))]);
+
+                case SyntaxKind.EnumElement:
+                    var enumElement = <EnumElementSyntax>node;
+                    return new ts.NavigationBarItem(enumElement.propertyName.text(), ts.ScriptElementKind.memberVariableElement, ts.ScriptElementKindModifier.none, [TextSpan.fromBounds(start(node), end(node))]);
+
+                case SyntaxKind.CallSignature:
+                    var callSignature = <CallSignatureSyntax>node;
+                    return new ts.NavigationBarItem("()", ts.ScriptElementKind.callSignatureElement, ts.ScriptElementKindModifier.none, [TextSpan.fromBounds(start(node), end(node))]);
+
+                case SyntaxKind.ConstructSignature:
+                    var constructSignature = <ConstructSignatureSyntax>node;
+                    return new ts.NavigationBarItem("new()", ts.ScriptElementKind.constructSignatureElement, ts.ScriptElementKindModifier.none, [TextSpan.fromBounds(start(node), end(node))]);
+
+                case SyntaxKind.MethodSignature:
+                    var methodSignature = <MethodSignatureSyntax>node;
+                    return new ts.NavigationBarItem(methodSignature.propertyName.text(), ts.ScriptElementKind.memberFunctionElement, ts.ScriptElementKindModifier.none, [TextSpan.fromBounds(start(node), end(node))]);
+
+                case SyntaxKind.PropertySignature:
+                    var propertySignature = <PropertySignatureSyntax>node;
+                    return new ts.NavigationBarItem(propertySignature.propertyName.text(), ts.ScriptElementKind.memberVariableElement, ts.ScriptElementKindModifier.none, [TextSpan.fromBounds(start(node), end(node))]);
+
+                case SyntaxKind.FunctionDeclaration:
+                    var functionDeclaration = <FunctionDeclarationSyntax>node;
+                    if (!this.isTopLevelFunctionDeclaration(functionDeclaration)) {
+                        return new ts.NavigationBarItem(functionDeclaration.identifier.text(), ts.ScriptElementKind.functionElement, this.getKindModifiers(functionDeclaration.modifiers), [TextSpan.fromBounds(start(node), end(node))]);
+                    }
+                    break;
+
+                case SyntaxKind.MemberVariableDeclaration:
+                    var memberVariableDeclaration = <MemberVariableDeclarationSyntax>node;
+                    return new ts.NavigationBarItem(memberVariableDeclaration.variableDeclarator.propertyName.text(), ts.ScriptElementKind.memberVariableElement, this.getKindModifiers(memberVariableDeclaration.modifiers), [TextSpan.fromBounds(start(memberVariableDeclaration.variableDeclarator), end(memberVariableDeclaration.variableDeclarator))]);
+
+                case SyntaxKind.VariableDeclarator:
+                    var variableDeclarator = <VariableDeclaratorSyntax>node;
+                    return new ts.NavigationBarItem(variableDeclarator.propertyName.text(), ts.ScriptElementKind.variableElement, ts.ScriptElementKindModifier.none, [TextSpan.fromBounds(start(variableDeclarator), end(variableDeclarator))]);
+
+                case SyntaxKind.ConstructorDeclaration:
+                    var constructorDeclaration = <ConstructorDeclarationSyntax>node;
+                    return new ts.NavigationBarItem("constructor", ts.ScriptElementKind.constructorImplementationElement, ts.ScriptElementKindModifier.none, [TextSpan.fromBounds(start(node), end(node))]);
+            }
+
+            return null;
+        }
+
+        private createTopLevelItem(node: ISyntaxNode): ts.NavigationBarItem {
+            switch (node.kind()) {
+                case SyntaxKind.SourceUnit:
+                    return this.createSourceUnitItem(<SourceUnitSyntax>node);
+
+                case SyntaxKind.ClassDeclaration:
+                    return this.createClassItem(<ClassDeclarationSyntax>node);
+
+                case SyntaxKind.EnumDeclaration:
+                    return this.createEnumItem(<EnumDeclarationSyntax>node);
+
+                case SyntaxKind.InterfaceDeclaration:
+                    return this.createIterfaceItem(<InterfaceDeclarationSyntax>node);
+
+                case SyntaxKind.ModuleDeclaration:
+                    return this.createModuleItem(<ModuleDeclarationSyntax>node);
+
+                case SyntaxKind.FunctionDeclaration:
+                    return this.createFunctionItem(<FunctionDeclarationSyntax>node);
+            }
+
+            return null;
         }
 
         private getModuleNames(node: TypeScript.ModuleDeclarationSyntax): string[] {
@@ -176,180 +268,84 @@ module TypeScript.Services {
             }
         }
 
-        public visitClassDeclaration(node: TypeScript.ClassDeclarationSyntax): void {
-            var name = node.identifier.text();
-            var kind = ts.ScriptElementKind.classElement;
+        private createModuleItem(node: ModuleDeclarationSyntax): ts.NavigationBarItem {
+            var moduleNames = this.getModuleNames(node);
 
-            this.createItem(node, node.modifiers, kind, name);
+            var childItems = this.getItemsWorker(() => this.getChildNodes(node.moduleElements), n => this.createChildItem(n));
 
-            this.pushNewContainerScope(name, kind);
-
-            super.visitClassDeclaration(node);
-
-            this.popScope();
+            return new ts.NavigationBarItem(moduleNames.join("."),
+                ts.ScriptElementKind.moduleElement,
+                this.getKindModifiers(node.modifiers),
+                [TextSpan.fromBounds(start(node), end(node))],
+                childItems,
+                this.getIndent(node));
         }
 
-        public visitInterfaceDeclaration(node: TypeScript.InterfaceDeclarationSyntax): void {
-            var name = node.identifier.text();
-            var kind = ts.ScriptElementKind.interfaceElement;
+        private createFunctionItem(node: FunctionDeclarationSyntax) {
+            var childItems = this.getItemsWorker(() => node.block.statements, n => this.createChildItem(n));
 
-            this.createItem(node, node.modifiers, kind, name);
-
-            this.pushNewContainerScope(name, kind);
-
-            super.visitInterfaceDeclaration(node);
-
-            this.popScope();
+            return new ts.NavigationBarItem(node.identifier.text(),
+                ts.ScriptElementKind.functionElement,
+                this.getKindModifiers(node.modifiers),
+                [TextSpan.fromBounds(start(node), end(node))],
+                childItems,
+                this.getIndent(node));
         }
 
-        public visitObjectType(node: TypeScript.ObjectTypeSyntax): void {
-            // Ignore an object type if we aren't inside an interface declaration.  We don't want
-            // to add some random object type's members to the nav bar.
-            if (node.parent.kind() === SyntaxKind.InterfaceDeclaration) {
-                super.visitObjectType(node);
-            }
-        }
+        private createSourceUnitItem(node: SourceUnitSyntax): ts.NavigationBarItem {
+            var childItems = this.getItemsWorker(() => this.getChildNodes(node.moduleElements), n => this.createChildItem(n));
 
-        public visitEnumDeclaration(node: TypeScript.EnumDeclarationSyntax): void {
-            var name = node.identifier.text();
-            var kind = ts.ScriptElementKind.enumElement;
-
-            this.createItem(node, node.modifiers, kind, name);
-
-            this.pushNewContainerScope(name, kind);
-
-            super.visitEnumDeclaration(node);
-
-            this.popScope();
-        }
-
-        public visitConstructorDeclaration(node: TypeScript.ConstructorDeclarationSyntax): void {
-            this.createItem(node, TypeScript.Syntax.emptyList<ISyntaxToken>(), ts.ScriptElementKind.constructorImplementationElement, "constructor");
-
-            // Search the parameter list of class properties
-            var parameters = node.callSignature.parameterList.parameters;
-            if (parameters) {
-                for (var i = 0, n = parameters.length; i < n; i++) {
-                    var parameter = <ParameterSyntax>parameters[i];
-
-                    Debug.assert(parameter.kind() === SyntaxKind.Parameter);
-
-                    if (SyntaxUtilities.containsToken(parameter.modifiers, SyntaxKind.PublicKeyword) ||
-                        SyntaxUtilities.containsToken(parameter.modifiers, SyntaxKind.PrivateKeyword)) {
-                        this.createItem(node, parameter.modifiers, ts.ScriptElementKind.memberVariableElement, parameter.identifier.text());
-                    }
-                }
+            if (childItems === null || childItems.length === 0) {
+                return null;
             }
 
-            // No need to descend into a constructor;
+            this.hasGlobalNode = true;
+            return new ts.NavigationBarItem("<global>",
+                ts.ScriptElementKind.moduleElement,
+                ts.ScriptElementKindModifier.none,
+                [TextSpan.fromBounds(start(node), end(node))],
+                childItems);
         }
 
-        public visitMemberFunctionDeclaration(node: TypeScript.MemberFunctionDeclarationSyntax): void {
-            this.createItem(node, node.modifiers, ts.ScriptElementKind.memberFunctionElement, node.propertyName.text());
+        private createClassItem(node: ClassDeclarationSyntax): ts.NavigationBarItem {
+            var constructor = <ConstructorDeclarationSyntax>ArrayUtilities.firstOrDefault(
+                node.classElements, n => n.kind() === SyntaxKind.ConstructorDeclaration);
 
-            // No need to descend into a member function;
+            // Add the constructor parameters in as children of hte class (for property parameters).
+            var nodes: ISyntaxNode[] = constructor
+                ? (<ISyntaxNode[]>constructor.callSignature.parameterList.parameters).concat(node.classElements)
+                : node.classElements;
+
+            var childItems = this.getItemsWorker(() => nodes, n => this.createChildItem(n));
+            return new ts.NavigationBarItem(
+                node.identifier.text(),
+                ts.ScriptElementKind.classElement,
+                this.getKindModifiers(node.modifiers),
+                [TextSpan.fromBounds(start(node), end(node))],
+                childItems,
+                this.getIndent(node));
         }
 
-        public visitGetAccessor(node: TypeScript.GetAccessorSyntax): void {
-            this.createItem(node, node.modifiers, ts.ScriptElementKind.memberGetAccessorElement, node.propertyName.text());
-
-            // No need to descend into a member accessor;
+        private createEnumItem(node: TypeScript.EnumDeclarationSyntax): ts.NavigationBarItem {
+            var childItems = this.getItemsWorker(() => node.enumElements, n => this.createChildItem(n));
+            return new ts.NavigationBarItem(
+                node.identifier.text(),
+                ts.ScriptElementKind.enumElement,
+                this.getKindModifiers(node.modifiers),
+                [TextSpan.fromBounds(start(node), end(node))],
+                childItems,
+                this.getIndent(node));
         }
 
-        public visitSetAccessor(node: TypeScript.SetAccessorSyntax): void {
-            this.createItem(node, node.modifiers, ts.ScriptElementKind.memberSetAccessorElement, node.propertyName.text());
-
-            // No need to descend into a member accessor;
-        }
-
-        public visitVariableDeclarator(node: TypeScript.VariableDeclaratorSyntax): void {
-            var modifiers = node.parent.kind() === SyntaxKind.MemberVariableDeclaration
-                ? (<MemberVariableDeclarationSyntax>node.parent).modifiers
-                : TypeScript.Syntax.emptyList<ISyntaxToken>();
-            var kind = node.parent.kind() === SyntaxKind.MemberVariableDeclaration
-                ? ts.ScriptElementKind.memberVariableElement
-                : ts.ScriptElementKind.variableElement;
-            this.createItem(node, modifiers, kind, node.propertyName.text());
-
-            // No need to descend into a variable declarator;
-        }
-
-        public visitIndexSignature(node: TypeScript.IndexSignatureSyntax): void {
-            this.createItem(node, TypeScript.Syntax.emptyList<ISyntaxToken>(), ts.ScriptElementKind.indexSignatureElement, "[]");
-
-            // No need to descend into an index signature;
-        }
-
-        public visitEnumElement(node: TypeScript.EnumElementSyntax): void {
-            this.createItem(node, TypeScript.Syntax.emptyList<ISyntaxToken>(), ts.ScriptElementKind.memberVariableElement, node.propertyName.text());
-
-            // No need to descend into an enum element;
-        }
-
-        public visitCallSignature(node: TypeScript.CallSignatureSyntax): void {
-            this.createItem(node, TypeScript.Syntax.emptyList<ISyntaxToken>(), ts.ScriptElementKind.callSignatureElement, "()");
-
-            // No need to descend into a call signature;
-        }
-
-        public visitConstructSignature(node: TypeScript.ConstructSignatureSyntax): void {
-            this.createItem(node, TypeScript.Syntax.emptyList<ISyntaxToken>(), ts.ScriptElementKind.constructSignatureElement, "new()");
-
-            // No need to descend into a construct signature;
-        }
-
-        public visitMethodSignature(node: TypeScript.MethodSignatureSyntax): void {
-            this.createItem(node, TypeScript.Syntax.emptyList<ISyntaxToken>(), ts.ScriptElementKind.memberFunctionElement, node.propertyName.text());
-
-            // No need to descend into a method signature;
-        }
-
-        public visitPropertySignature(node: TypeScript.PropertySignatureSyntax): void {
-            this.createItem(node, TypeScript.Syntax.emptyList<ISyntaxToken>(), ts.ScriptElementKind.memberVariableElement, node.propertyName.text());
-
-            // No need to descend into a property signature;
-        }
-
-        public visitFunctionDeclaration(node: TypeScript.FunctionDeclarationSyntax): void {
-            // in the case of:
-            //    declare function
-            // the parser will synthesize an identifier.
-            // we shouldn't add an unnamed function declaration
-            if (width(node.identifier) > 0) {
-                this.createItem(node, node.modifiers, ts.ScriptElementKind.functionElement, node.identifier.text());
-            }
-
-            // No need to descend into a function declaration;
-        }
-
-        // Common statement types.  Don't even bother walking into them as we'll never find anything
-        // inside that we'd put in the navbar.
-
-        public visitBlock(node: TypeScript.BlockSyntax): void {
-        }
-
-        public visitIfStatement(node: TypeScript.IfStatementSyntax): void {
-        }
-
-        public visitExpressionStatement(node: TypeScript.ExpressionStatementSyntax): void {
-        }
-
-        public visitThrowStatement(node: TypeScript.ThrowStatementSyntax): void {
-        }
-
-        public visitReturnStatement(node: TypeScript.ReturnStatementSyntax): void {
-        }
-
-        public visitSwitchStatement(node: TypeScript.SwitchStatementSyntax): void {
-        }
-
-        public visitWithStatement(node: TypeScript.WithStatementSyntax): void {
-        }
-
-        public visitTryStatement(node: TypeScript.TryStatementSyntax): void {
-        }
-
-        public visitLabeledStatement(node: TypeScript.LabeledStatementSyntax): void {
+        private createIterfaceItem(node: TypeScript.InterfaceDeclarationSyntax): ts.NavigationBarItem {
+            var childItems = this.getItemsWorker(() => node.body.typeMembers, n => this.createChildItem(n));
+            return new ts.NavigationBarItem(
+                node.identifier.text(),
+                ts.ScriptElementKind.interfaceElement,
+                this.getKindModifiers(node.modifiers),
+                [TextSpan.fromBounds(start(node), end(node))],
+                childItems,
+                this.getIndent(node));
         }
     }
 }
