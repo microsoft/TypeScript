@@ -1,13 +1,10 @@
 //@filename: a.ts
 /*! Keep this pinned comment */
-declare class C {
-}
+declare function foo();
 
 // Don't keep this comment.
-declare class D {
-}
+declare function bar();
 
 //@filename: b.ts
 ///<reference path="a.ts"/>
-declare class E extends C {
-}
+declare function foobar(a: typeof foo): typeof bar;

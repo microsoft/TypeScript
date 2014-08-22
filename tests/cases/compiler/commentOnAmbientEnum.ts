@@ -1,13 +1,16 @@
 //@filename: a.ts
 /*! Keep this pinned comment */
-declare class C {
+declare enum C {
+    a,
+    b,
+    c
 }
 
 // Don't keep this comment.
-declare class D {
+declare enum D {
 }
 
 //@filename: b.ts
 ///<reference path="a.ts"/>
-declare class E extends C {
+declare enum E {
 }

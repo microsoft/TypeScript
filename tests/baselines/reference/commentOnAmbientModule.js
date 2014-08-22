@@ -1,17 +1,22 @@
-//// [tests/cases/compiler/commentOnAmbientClass1.ts] ////
+//// [tests/cases/compiler/commentOnAmbientModule.ts] ////
 
 //// [a.ts]
 /*! Keep this pinned comment */
-declare class C {
+declare module C {
+    function foo();
 }
 
 // Don't keep this comment.
-declare class D {
+declare module D {
+    class bar { }
 }
 
 //// [b.ts]
 ///<reference path="a.ts"/>
-declare class E extends C {
+declare module E {
+    class foobar extends D.bar {
+        foo();
+    }
 }
 
 //// [a.js]

@@ -1,18 +1,15 @@
-//// [tests/cases/compiler/commentOnAmbientClass1.ts] ////
+//// [tests/cases/compiler/commentOnAmbientfunction.ts] ////
 
 //// [a.ts]
 /*! Keep this pinned comment */
-declare class C {
-}
+declare function foo();
 
 // Don't keep this comment.
-declare class D {
-}
+declare function bar();
 
 //// [b.ts]
 ///<reference path="a.ts"/>
-declare class E extends C {
-}
+declare function foobar(a: typeof foo): typeof bar;
 
 //// [a.js]
 /*! Keep this pinned comment */

@@ -1,17 +1,20 @@
-//// [tests/cases/compiler/commentOnAmbientClass1.ts] ////
+//// [tests/cases/compiler/commentOnAmbientEnum.ts] ////
 
 //// [a.ts]
 /*! Keep this pinned comment */
-declare class C {
+declare enum C {
+    a,
+    b,
+    c
 }
 
 // Don't keep this comment.
-declare class D {
+declare enum D {
 }
 
 //// [b.ts]
 ///<reference path="a.ts"/>
-declare class E extends C {
+declare enum E {
 }
 
 //// [a.js]

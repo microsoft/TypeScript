@@ -1989,7 +1989,14 @@ module ts {
             }
 
             function emitNode(node: Node) {
-                if (!node || node.flags & NodeFlags.Ambient) return;
+                if (!node) {
+                    return;
+                }
+
+                if (node.flags & NodeFlags.Ambient) {
+                    return emitPinnedOrTripleSlashComments(node);
+                }
+
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
                         return emitIdentifier(<Identifier>node);
