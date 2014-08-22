@@ -1411,7 +1411,7 @@ module ts {
             return {
                 getSourceFile: (filename, languageVersion) => {
                     var sourceFile = getSourceFile(filename);
-                    return sourceFile ? sourceFile.getSourceFile() : null;
+                    return sourceFile && sourceFile.getSourceFile();
                 },
                 getCancellationToken: () => cancellationToken,
                 getCanonicalFileName: (filename) => useCaseSensitivefilenames ? filename : filename.toLowerCase(),
