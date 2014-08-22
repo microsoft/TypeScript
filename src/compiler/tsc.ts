@@ -91,7 +91,7 @@ module ts {
         if (diagnostic.file) {
             var loc = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);
 
-            var output = diagnostic.file.filename + "(" + loc.line + "," + loc.character + "): ";
+            output += diagnostic.file.filename + "(" + loc.line + "," + loc.character + "): ";
         }
 
         var category = DiagnosticCategory[diagnostic.category];
