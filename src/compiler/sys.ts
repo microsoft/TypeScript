@@ -53,17 +53,13 @@ var sys: System = (function () {
             // Check if a codepage was specified.
             // If one was given, then check if the environment supports it
             // (i.e. if the WScript object supports the ReadFile property).
-            if (codepage !== undefined) {
-                if (supportsCodepage()) {
-                    try {
-                        return (<any>WScript).ReadFile(fileName, codepage);
-                    }
-                    catch (e) {
-                        // Potentially means we couldn't read it with the given code page.
-                        // Fall back to the normal BOM/UTF-8 logic below.
-                    }
+            if (codepage !== undefined && supportsCodepage()) {
+                try {
+                    return (<any>WScript).ReadFile(fileName, codepage);
                 }
-                else {
+                catch (e) {
+                    // Potentially means we couldn't read it with the given code page.
+                    // Fall back to the normal BOM/UTF-8 logic below.
                 }
             }
 
@@ -171,9 +167,6 @@ var sys: System = (function () {
         var useCaseSensitiveFileNames = platform !== "win32" && platform !== "win64" && platform !== "darwin";
 
         function readFile(fileName: string, codepage?: number, encoding?: string): string {
-            if (codepage !== undefined) {
-            }
-
             if (!_fs.existsSync(fileName)) {
                 return undefined;
             }
