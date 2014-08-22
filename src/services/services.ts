@@ -2163,7 +2163,7 @@ module ts {
             // Compute the meaning from the location and the symbol it references
             var searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), symbol.getDeclarations());
 
-            var scope = getSymbolScope(symbol, node);
+            var scope = getSymbolScope(symbol);
 
             if (scope) {
                 result = [];
@@ -2184,9 +2184,42 @@ module ts {
 
             return result;
 
-            function getSymbolScope(symbol: Symbol, node: Node): Node {
-                /// TODO: find the enclosing scope
-                return undefined;
+            function getSymbolScope(symbol: Symbol): Node {
+                // If this is private property or method, the scope is the containing class
+                if (symbol.getFlags() && (SymbolFlags.Property | SymbolFlags.Method)) {
+                    var privateDeclaration = forEach(symbol.getDeclarations(), d => (d.flags & NodeFlags.Private) ? d : undefined);
+                    if (privateDeclaration) {
+                        return privateDeclaration.parent;
+                    }
+                }
+
+                // if this symbol is visible from its parent container, e.g. exported, then bail out
+                if (symbol.parent) {
+                    return undefined;
+                }
+
+                var scope: Node = undefined;
+
+                var declarations = symbol.getDeclarations();
+                for (var i = 0, n = declarations.length; i < n; i++) {
+                    var container = getContainerNode(declarations[i]);
+
+                    if (scope && scope !== container) {
+                        // Diffrent declarations have diffrent containers, bail out
+                        return undefined;
+                    }
+
+                    if (container.kind === SyntaxKind.SourceFile && !isExternalModule(<SourceFile>container)) {
+                        // This is a global variable and not an external module, any declaration defined
+                        // withen this scope is visible outside the file
+                        return undefined;
+                    }
+
+                    // The search scope is the container node
+                    scope = container;
+                }
+
+                return scope;
             }
 
             function getPossibleSymbolReferencePositions(sourceFile: SourceFile, symbolName: string, start: number, end: number): number[] {
