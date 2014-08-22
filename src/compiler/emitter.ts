@@ -1761,7 +1761,10 @@ module ts {
             }
 
             function emitModuleDeclaration(node: ModuleDeclaration) {
-                if (!isInstantiated(node)) return;
+                if (!isInstantiated(node)) {
+                    return emitPinnedOrTripleSlashComments(node);
+                }
+
                 emitLeadingComments(node);
                 if (!(node.flags & NodeFlags.Export)) {
                     emitStart(node);
