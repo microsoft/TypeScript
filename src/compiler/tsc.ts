@@ -94,7 +94,7 @@ module ts {
             output += diagnostic.file.filename + "(" + loc.line + "," + loc.character + "): ";
         }
 
-        var category = DiagnosticCategory[diagnostic.category];
+        var category = DiagnosticCategory[diagnostic.category].toLowerCase();
         output += category + " TS" + diagnostic.code + ": " + diagnostic.messageText + sys.newLine;
 
         sys.write(output);
