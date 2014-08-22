@@ -14,7 +14,7 @@ interface IHasVisualizationModel {
 >Model : typeof Model
 }
 function foo<T extends { a: IHasVisualizationModel }>(x: T) {
->foo : <T extends { a: IHasVisualizationModel; }>(x: T) => T
+>foo : typeof foo
 >T : T
 >a : IHasVisualizationModel
 >IHasVisualizationModel : IHasVisualizationModel
@@ -27,7 +27,7 @@ function foo<T extends { a: IHasVisualizationModel }>(x: T) {
 var r = foo({ a: moduleA });
 >r : { a: typeof "tests/cases/compiler/aliasUsageInGenericFunction_moduleA"; }
 >foo({ a: moduleA }) : { a: typeof "tests/cases/compiler/aliasUsageInGenericFunction_moduleA"; }
->foo : <T extends { a: IHasVisualizationModel; }>(x: T) => T
+>foo : typeof foo
 >{ a: moduleA } : { a: typeof "tests/cases/compiler/aliasUsageInGenericFunction_moduleA"; }
 >a : typeof "tests/cases/compiler/aliasUsageInGenericFunction_moduleA"
 >moduleA : moduleA
@@ -35,7 +35,7 @@ var r = foo({ a: moduleA });
 var r2 = foo({ a: <IHasVisualizationModel>null });
 >r2 : { a: IHasVisualizationModel; }
 >foo({ a: <IHasVisualizationModel>null }) : { a: IHasVisualizationModel; }
->foo : <T extends { a: IHasVisualizationModel; }>(x: T) => T
+>foo : typeof foo
 >{ a: <IHasVisualizationModel>null } : { a: IHasVisualizationModel; }
 >a : IHasVisualizationModel
 ><IHasVisualizationModel>null : IHasVisualizationModel

@@ -62,12 +62,10 @@ var r4 = true ? null : new Date();
 var r5 = true ? /1/ : null;
 >r5 : RegExp
 >true ? /1/ : null : RegExp
->/1/ : RegExp
 
 var r5 = true ? null : /1/;
 >r5 : RegExp
 >true ? null : /1/ : RegExp
->/1/ : RegExp
 
 var r6 = true ? { foo: 1 } : null;
 >r6 : { foo: number; }
@@ -241,7 +239,7 @@ var r16 = true ? null : ac;
 >ac : typeof c
 
 function f17<T>(x: T) {
->f17 : <T>(x: T) => void
+>f17 : typeof f17
 >T : T
 >x : T
 >T : T
@@ -258,7 +256,7 @@ function f17<T>(x: T) {
 }
 
 function f18<T, U>(x: U) {
->f18 : <T, U>(x: U) => void
+>f18 : typeof f18
 >T : T
 >U : U
 >x : U

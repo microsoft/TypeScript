@@ -3,5 +3,5 @@ declare module M {
 >M : typeof M
 
    function foo();
->foo : () => any
+>foo : typeof foo
 }

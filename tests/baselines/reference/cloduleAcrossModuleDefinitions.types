@@ -9,7 +9,7 @@ module A {
 >foo : () => void
 
         static bar() { }
->bar : () => void
+>bar : typeof bar
     }
 }
 

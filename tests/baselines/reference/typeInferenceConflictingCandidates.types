@@ -1,6 +1,6 @@
 === tests/cases/compiler/typeInferenceConflictingCandidates.ts ===
 declare function g<T>(a: T, b: T, c: (t: T) => T): T;
->g : <T>(a: T, b: T, c: (t: T) => T) => T
+>g : typeof g
 >T : T
 >a : T
 >T : T
@@ -14,7 +14,7 @@ declare function g<T>(a: T, b: T, c: (t: T) => T): T;
 
 g("", 3, a => a);
 >g("", 3, a => a) : {}
->g : <T>(a: T, b: T, c: (t: T) => T) => T
+>g : typeof g
 >a => a : (a: {}) => {}
 >a : {}
 >a : {}

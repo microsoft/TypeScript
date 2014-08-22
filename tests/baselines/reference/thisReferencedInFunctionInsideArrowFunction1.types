@@ -5,15 +5,12 @@ var foo = (dummy) => { };
 >dummy : any
 
 function test()
->test : () => void
+>test : typeof test
 {
     foo(() =>
->foo(() =>
-        function () { return this; }
-    ) : void
+>foo(() =>        function () { return this; }    ) : void
 >foo : (dummy: any) => void
->() =>
-        function () { return this; } : () => () => any
+>() =>        function () { return this; } : () => () => any
 
         function () { return this; }
 >function () { return this; } : () => any

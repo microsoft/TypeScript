@@ -3,7 +3,7 @@ module __test1__ {
     export var __val__obj4 = obj4;
 }
 module __test2__ {
-    export var obj = function f<Tstring>(a: Tstring) { return a; };;
+    export var obj = function f<string>(a: string) { return a; };;
     export var __val__obj = obj;
 }
 __test2__.__val__obj = __test1__.__val__obj4

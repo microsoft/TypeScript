@@ -1,6 +1,6 @@
 //// [specializedLambdaTypeArguments.ts]
 class X<A> {
-	prop: X< <Tany>() => Tany >;
+	prop: X< <any>() => any >;
 }
 var a: X<boolean>;
  

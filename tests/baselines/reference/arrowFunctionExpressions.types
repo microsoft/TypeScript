@@ -118,7 +118,7 @@ var e: number;
 
 // Arrow function used in arrow function used in function
 function someFn() {
->someFn : () => void
+>someFn : typeof someFn
 
     var arr = (n: number) => (p: number) => p * n;
 >arr : (n: number) => (p: number) => number
@@ -141,7 +141,7 @@ function someFn() {
 
 // Arrow function used in function
 function someOtherFn() {
->someOtherFn : () => void
+>someOtherFn : typeof someOtherFn
 
     var arr = (n: number) => '' + n;
 >arr : (n: number) => string
@@ -160,7 +160,7 @@ function someOtherFn() {
 
 // Arrow function used in nested function in function
 function outerFn() {
->outerFn : () => void
+>outerFn : typeof outerFn
 
     function innerFn() {
 >innerFn : () => void
@@ -182,12 +182,7 @@ function outerFn() {
 // Arrow function used in nested function in arrow function
 var f = (n: string) => {
 >f : (n: string) => () => string
->(n: string) => {
-    function fn(x: number) {
-        return () => n + x;
-    }
-    return fn(4);
-} : (n: string) => () => string
+>(n: string) => {    function fn(x: number) {        return () => n + x;    }    return fn(4);} : (n: string) => () => string
 >n : string
 
     function fn(x: number) {
@@ -216,16 +211,11 @@ var g: string;
 
 // Arrow function used in nested function in arrow function in nested function
 function someOuterFn() {
->someOuterFn : () => (n: string) => () => () => number
+>someOuterFn : typeof someOuterFn
 
     var arr = (n: string) => {
 >arr : (n: string) => () => () => number
->(n: string) => {
-        function innerFn() {
-            return () => n.length;
-        }
-        return innerFn;
-    } : (n: string) => () => () => number
+>(n: string) => {        function innerFn() {            return () => n.length;        }        return innerFn;    } : (n: string) => () => () => number
 >n : string
 
         function innerFn() {
@@ -249,7 +239,7 @@ var h = someOuterFn()('')()();
 >someOuterFn()('')() : () => number
 >someOuterFn()('') : () => () => number
 >someOuterFn() : (n: string) => () => () => number
->someOuterFn : () => (n: string) => () => () => number
+>someOuterFn : typeof someOuterFn
 
 h.toExponential();
 >h.toExponential() : string
@@ -259,7 +249,7 @@ h.toExponential();
 
 // Arrow function used in try/catch/finally in function
 function tryCatchFn() {
->tryCatchFn : () => void
+>tryCatchFn : typeof tryCatchFn
 
     try {
         var x = () => this;

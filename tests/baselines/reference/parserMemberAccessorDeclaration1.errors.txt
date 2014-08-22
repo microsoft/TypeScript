@@ -1,6 +1,8 @@
-==== tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration1.ts (1 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration1.ts (2 errors) ====
     class C {
       get a() { }
+          ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
           ~
 !!! A 'get' accessor must return a value or consist of a single 'throw' statement.
     }

@@ -8,14 +8,14 @@ class B extends A { x: number; }
 >x : number
 
 declare function f(p: A, q: B): number;
->f : { (p: A, q: B): number; (p: B, q: A): string; }
+>f : typeof f
 >p : A
 >A : A
 >q : B
 >B : B
 
 declare function f(p: B, q: A): string;
->f : { (p: A, q: B): number; (p: B, q: A): string; }
+>f : typeof f
 >p : B
 >B : B
 >q : A
@@ -28,7 +28,7 @@ var x: B;
 var t: number = f(x, x); // Not an error
 >t : number
 >f(x, x) : number
->f : { (p: A, q: B): number; (p: B, q: A): string; }
+>f : typeof f
 >x : B
 >x : B
 

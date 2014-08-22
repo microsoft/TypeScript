@@ -34,9 +34,9 @@ module TypeScript {
 
             return Syntax.childIndex();
 >Syntax.childIndex() : void
->Syntax.childIndex : () => void
+>Syntax.childIndex : typeof childIndex
 >Syntax : typeof Syntax
->childIndex : () => void
+>childIndex : typeof childIndex
         }
     }
 
@@ -91,7 +91,7 @@ module TypeScript.Syntax {
 >Syntax : typeof Syntax
 
     export function childIndex() { }
->childIndex : () => void
+>childIndex : typeof childIndex
 
     export class VariableWidthTokenWithTrailingTrivia implements ISyntaxToken {
 >VariableWidthTokenWithTrailingTrivia : VariableWidthTokenWithTrailingTrivia

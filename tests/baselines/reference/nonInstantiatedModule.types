@@ -45,7 +45,7 @@ module M2 {
 >Point : typeof Point
 
         export function Origin(): Point {
->Origin : () => Point
+>Origin : typeof Origin
 >Point : Point
 
             return { x: 0, y: 0 };

@@ -1,10 +1,8 @@
-==== tests/cases/compiler/privacyCheckTypeOfFunction.ts (2 errors) ====
+==== tests/cases/compiler/privacyCheckTypeOfFunction.ts (1 errors) ====
     function foo() {
     }
     export var x: typeof foo;
-               ~
-!!! Exported variable 'x' has or is using private name 'foo'.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! Cannot compile external modules unless the '--module' flag is provided.
     export var b = foo;
-               ~
-!!! Exported variable 'b' has or is using private name 'foo'.
     

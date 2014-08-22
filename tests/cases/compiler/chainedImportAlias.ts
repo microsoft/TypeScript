@@ -5,6 +5,9 @@ export module m {
 }
 
 // @Filename: chainedImportAlias_file1.ts 
-import x = require('chainedImportAlias_file0');
+import x = require('chainedImportAlias_file1');
 import y = x;
-y.m.foo();
+declare var console: {
+    log(message?: any);
+};
+console.log(y);

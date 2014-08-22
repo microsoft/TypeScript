@@ -2,7 +2,7 @@
 // type of 'this' in FunctionExpression is Any
 
 function fn() {
->fn : () => void
+>fn : typeof fn
 
     var p = this;
 >p : any
@@ -14,10 +14,7 @@ function fn() {
 
 var t = function () {
 >t : () => void
->function () {
-    var p = this;
-    var p: any;
-} : () => void
+>function () {    var p = this;    var p: any;} : () => void
 
     var p = this;
 >p : any
@@ -29,10 +26,7 @@ var t = function () {
 
 var t2 = function f() {
 >t2 : () => void
->function f() {
-    var x = this;
-    var x: any;
-} : () => void
+>function f() {    var x = this;    var x: any;} : () => void
 >f : () => void
 
     var x = this;
@@ -48,10 +42,7 @@ class C {
 
     x = function () {
 >x : () => void
->function () {
-        var q: any;
-        var q = this;
-    } : () => void
+>function () {        var q: any;        var q = this;    } : () => void
 
         var q: any;
 >q : any
@@ -62,10 +53,7 @@ class C {
     }
     y = function ff() {
 >y : () => void
->function ff() {
-        var q: any;
-        var q = this;
-    } : () => void
+>function ff() {        var q: any;        var q = this;    } : () => void
 >ff : () => void
 
         var q: any;
@@ -81,7 +69,7 @@ module M {
 >M : typeof M
 
     function fn() {
->fn : () => void
+>fn : typeof fn
 
         var p = this;
 >p : any
@@ -93,10 +81,7 @@ module M {
 
     var t = function () {
 >t : () => void
->function () {
-        var p = this;
-        var p: any;
-    } : () => void
+>function () {        var p = this;        var p: any;    } : () => void
 
         var p = this;
 >p : any
@@ -108,10 +93,7 @@ module M {
 
     var t2 = function f() {
 >t2 : () => void
->function f() {
-        var x = this;
-        var x: any;
-    } : () => void
+>function f() {        var x = this;        var x: any;    } : () => void
 >f : () => void
 
         var x = this;

@@ -1,6 +1,6 @@
 === tests/cases/compiler/cf.ts ===
 function f() {
->f : () => void
+>f : typeof f
 
     var z;
 >z : any

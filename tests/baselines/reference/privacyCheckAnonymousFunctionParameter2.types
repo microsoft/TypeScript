@@ -12,7 +12,7 @@ module Q {
 >Q : typeof Q
 
     export function foo<T>(x: (a: Iterator<T>) => number) {
->foo : <T>(x: (a: Iterator<T>) => number) => (a: Iterator<T>) => number
+>foo : typeof foo
 >T : T
 >x : (a: Iterator<T>) => number
 >a : Iterator<T>
@@ -28,10 +28,10 @@ module Q {
 >Q : typeof Q
 
     function bar() {
->bar : () => void
+>bar : typeof bar
 
         foo(null);
 >foo(null) : (a: Iterator<{}>) => number
->foo : <T>(x: (a: Iterator<T>) => number) => (a: Iterator<T>) => number
+>foo : typeof foo
     }
 }

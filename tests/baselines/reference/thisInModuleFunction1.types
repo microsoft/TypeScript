@@ -3,7 +3,7 @@ module bar {
 >bar : typeof bar
 
  export function bar() {
->bar : () => any
+>bar : typeof bar
 
   return this;
 >this : any
@@ -12,7 +12,7 @@ module bar {
 var z = bar.bar();
 >z : any
 >bar.bar() : any
->bar.bar : () => any
+>bar.bar : typeof bar
 >bar : typeof bar
->bar : () => any
+>bar : typeof bar
 

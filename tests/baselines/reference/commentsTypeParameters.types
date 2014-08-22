@@ -11,7 +11,7 @@ class C</**docComment for type parameter*/ T> {
 >U : U
     }
     static staticmethod</**docComment of method type parameter */ U>(a: U) {
->staticmethod : <U>(a: U) => void
+>staticmethod : typeof staticmethod
 >U : U
 >a : U
 >U : U
@@ -25,7 +25,7 @@ class C</**docComment for type parameter*/ T> {
 >U : U
     }
     private static privatestaticmethod</**docComment of method type parameter */ U>(a: U) {
->privatestaticmethod : <U>(a: U) => void
+>privatestaticmethod : typeof privatestaticmethod
 >U : U
 >a : U
 >U : U
@@ -33,7 +33,7 @@ class C</**docComment for type parameter*/ T> {
 }
 
 function compare</**type*/T>(a: T, b: T) {
->compare : <T>(a: T, b: T) => boolean
+>compare : typeof compare
 >T : T
 >a : T
 >T : T

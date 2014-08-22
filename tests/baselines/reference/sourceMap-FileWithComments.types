@@ -57,7 +57,7 @@ module Shapes {
 >a : number
 
     export function foo() {
->foo : () => void
+>foo : typeof foo
     }
 
     /**  comment after function

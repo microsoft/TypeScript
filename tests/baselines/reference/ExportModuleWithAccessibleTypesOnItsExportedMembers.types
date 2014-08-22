@@ -31,7 +31,7 @@ module A {
             }
 
             static fromOrigin(p: Point) {
->fromOrigin : (p: Point) => Line
+>fromOrigin : typeof fromOrigin
 >p : Point
 >Point : Point
 

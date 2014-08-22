@@ -1,7 +1,0 @@
-==== tests/cases/compiler/emptyTypeArgumentList.ts (2 errors) ====
-    function foo<T>() { }
-    foo<>();
-       ~~
-!!! Type argument list cannot be empty.
-    ~~~~~~~
-!!! Supplied parameters do not match any signature of call target.

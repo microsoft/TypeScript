@@ -17,7 +17,7 @@ class Derived extends Base {
 }
 
 function f<T extends Base>(x: { foo: T; bar: T }) {
->f : <T extends Base>(x: { foo: T; bar: T; }) => T
+>f : typeof f
 >T : T
 >Base : Base
 >x : { foo: T; bar: T; }
@@ -36,7 +36,7 @@ function f<T extends Base>(x: { foo: T; bar: T }) {
 var r = f({ foo: new Base(), bar: new Derived() });
 >r : Base
 >f({ foo: new Base(), bar: new Derived() }) : Base
->f : <T extends Base>(x: { foo: T; bar: T; }) => T
+>f : typeof f
 >{ foo: new Base(), bar: new Derived() } : { foo: Base; bar: Derived; }
 >foo : Base
 >new Base() : Base
@@ -48,7 +48,7 @@ var r = f({ foo: new Base(), bar: new Derived() });
 var r2 = f({ foo: new Derived(), bar: new Derived() });
 >r2 : Derived
 >f({ foo: new Derived(), bar: new Derived() }) : Derived
->f : <T extends Base>(x: { foo: T; bar: T; }) => T
+>f : typeof f
 >{ foo: new Derived(), bar: new Derived() } : { foo: Derived; bar: Derived; }
 >foo : Derived
 >new Derived() : Derived
@@ -67,7 +67,7 @@ interface I<T> {
 >T : T
 }
 function f2<T extends Base>(x: I<T>) {
->f2 : <T extends Base>(x: I<T>) => T
+>f2 : typeof f2
 >T : T
 >Base : Base
 >x : I<T>
@@ -89,12 +89,12 @@ var i: I<Derived>;
 var r3 = f2(i);
 >r3 : Derived
 >f2(i) : Derived
->f2 : <T extends Base>(x: I<T>) => T
+>f2 : typeof f2
 >i : I<Derived>
 
 
 function f3<T extends Base>(x: T, y: (a: T) => T) {
->f3 : <T extends Base>(x: T, y: (a: T) => T) => T
+>f3 : typeof f3
 >T : T
 >Base : Base
 >x : T
@@ -111,7 +111,7 @@ function f3<T extends Base>(x: T, y: (a: T) => T) {
 var r4 = f3(new Base(), x => x);
 >r4 : Base
 >f3(new Base(), x => x) : Base
->f3 : <T extends Base>(x: T, y: (a: T) => T) => T
+>f3 : typeof f3
 >new Base() : Base
 >Base : typeof Base
 >x => x : (x: Base) => Base
@@ -121,7 +121,7 @@ var r4 = f3(new Base(), x => x);
 var r5 = f3(new Derived(), x => x);
 >r5 : Derived
 >f3(new Derived(), x => x) : Derived
->f3 : <T extends Base>(x: T, y: (a: T) => T) => T
+>f3 : typeof f3
 >new Derived() : Derived
 >Derived : typeof Derived
 >x => x : (x: Derived) => Derived
@@ -131,12 +131,12 @@ var r5 = f3(new Derived(), x => x);
 var r6 = f3(null, null); // any
 >r6 : any
 >f3(null, null) : any
->f3 : <T extends Base>(x: T, y: (a: T) => T) => T
+>f3 : typeof f3
 
 var r7 = f3(null, x => x); // any
 >r7 : any
 >f3(null, x => x) : any
->f3 : <T extends Base>(x: T, y: (a: T) => T) => T
+>f3 : typeof f3
 >x => x : (x: any) => any
 >x : any
 >x : any

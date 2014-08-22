@@ -28,7 +28,7 @@ class TypeWriterWalker {
             // TODO: Ideally we should log all expressions, but to compare to the
             // old typeWriter baselines, suppress tokens
             case ts.SyntaxKind.ThisKeyword:
-            case ts.SyntaxKind.RegularExpressionLiteral:
+         //   case ts.SyntaxKind.RegularExpressionLiteral:
             case ts.SyntaxKind.ArrayLiteral:
             case ts.SyntaxKind.ObjectLiteral:
             case ts.SyntaxKind.PropertyAccess:
@@ -87,7 +87,7 @@ class TypeWriterWalker {
             column: lineAndCharacter.character,
             syntaxKind: ts.SyntaxKind[node.kind],
             identifierName: sourceText,
-            type: isUnknownType ? sourceText : this.checker.typeToString(type)
+            type: isUnknownType ? sourceText : this.checker.typeToString(type, undefined, ts.TypeFormatFlags.UseTypeOfFunction)
         });
     }
 

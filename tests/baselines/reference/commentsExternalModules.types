@@ -5,11 +5,11 @@ import extMod = require("commentsExternalModules_0"); // trailing comment1
 
 extMod.m1.fooExport();
 >extMod.m1.fooExport() : number
->extMod.m1.fooExport : () => number
+>extMod.m1.fooExport : typeof fooExport
 >extMod.m1 : typeof m1
 >extMod : typeof "tests/cases/compiler/commentsExternalModules_0"
 >m1 : typeof m1
->fooExport : () => number
+>fooExport : typeof fooExport
 
 var newVar = new extMod.m1.m2.c();
 >newVar : c
@@ -24,11 +24,11 @@ var newVar = new extMod.m1.m2.c();
 
 extMod.m4.fooExport();
 >extMod.m4.fooExport() : number
->extMod.m4.fooExport : () => number
+>extMod.m4.fooExport : typeof fooExport
 >extMod.m4 : typeof m4
 >extMod : typeof "tests/cases/compiler/commentsExternalModules_0"
 >m4 : typeof m4
->fooExport : () => number
+>fooExport : typeof fooExport
 
 var newVar2 = new extMod.m4.m2.c();
 >newVar2 : c
@@ -53,7 +53,7 @@ export module m1 {
 
     /** foo's comment*/
     function foo() {
->foo : () => number
+>foo : typeof foo
 
         return b;
 >b : number
@@ -75,18 +75,18 @@ export module m1 {
     }
     /** exported function*/
     export function fooExport() {
->fooExport : () => number
+>fooExport : typeof fooExport
 
         return foo();
 >foo() : number
->foo : () => number
+>foo : typeof foo
     }
 }
 m1.fooExport();
 >m1.fooExport() : number
->m1.fooExport : () => number
+>m1.fooExport : typeof fooExport
 >m1 : typeof m1
->fooExport : () => number
+>fooExport : typeof fooExport
 
 var myvar = new m1.m2.c();
 >myvar : c
@@ -108,7 +108,7 @@ export module m4 {
     /** foo's comment
     */
     function foo() {
->foo : () => number
+>foo : typeof foo
 
         return b;
 >b : number
@@ -131,18 +131,18 @@ export module m4 {
     }
     /** exported function */
     export function fooExport() {
->fooExport : () => number
+>fooExport : typeof fooExport
 
         return foo();
 >foo() : number
->foo : () => number
+>foo : typeof foo
     }
 }
 m4.fooExport();
 >m4.fooExport() : number
->m4.fooExport : () => number
+>m4.fooExport : typeof fooExport
 >m4 : typeof m4
->fooExport : () => number
+>fooExport : typeof fooExport
 
 var myvar2 = new m4.m2.c();
 >myvar2 : c

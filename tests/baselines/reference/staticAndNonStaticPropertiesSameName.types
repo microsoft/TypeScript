@@ -12,5 +12,5 @@ class C {
 >f : () => void
 
     static f() { }
->f : () => void
+>f : typeof f
 }

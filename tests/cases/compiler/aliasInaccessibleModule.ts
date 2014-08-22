@@ -1,4 +1,3 @@
-// @declaration: true
 module M {
     module N {
     }

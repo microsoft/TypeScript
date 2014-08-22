@@ -33,7 +33,7 @@ module M2 {
 }
 
 function fn() {
->fn : () => void
+>fn : typeof fn
 
     var s: boolean;
 >s : boolean

@@ -25,10 +25,7 @@ var moduleMap: { [key: string]: IHasVisualizationModel } = {
 >moduleMap : { [x: string]: IHasVisualizationModel; }
 >key : string
 >IHasVisualizationModel : IHasVisualizationModel
->{
-    "moduleA": moduleA,
-    "moduleB": moduleB
-} : { [x: string]: IHasVisualizationModel; "moduleA": typeof "tests/cases/compiler/extendingClassFromAliasAndUsageInIndexer_moduleA"; "moduleB": typeof "tests/cases/compiler/extendingClassFromAliasAndUsageInIndexer_moduleB"; }
+>{    "moduleA": moduleA,    "moduleB": moduleB} : { [x: string]: IHasVisualizationModel; "moduleA": typeof "tests/cases/compiler/extendingClassFromAliasAndUsageInIndexer_moduleA"; "moduleB": typeof "tests/cases/compiler/extendingClassFromAliasAndUsageInIndexer_moduleB"; }
 
     "moduleA": moduleA,
 >moduleA : moduleA

@@ -19,27 +19,27 @@ module App {
 >Key : Key
 
   export function foo(key: Key): void {}
->foo : (key: Key) => void
+>foo : typeof foo
 >key : Key
 >Key : Key
 
   foo(Key.UP);
 >foo(Key.UP) : void
->foo : (key: Key) => void
+>foo : typeof foo
 >Key.UP : Key
 >Key : typeof Key
 >UP : Key
 
   foo(Key.DOWN);
 >foo(Key.DOWN) : void
->foo : (key: Key) => void
+>foo : typeof foo
 >Key.DOWN : Key
 >Key : typeof Key
 >DOWN : Key
 
   foo(Key.LEFT);
 >foo(Key.LEFT) : void
->foo : (key: Key) => void
+>foo : typeof foo
 >Key.LEFT : Key
 >Key : typeof Key
 >LEFT : Key

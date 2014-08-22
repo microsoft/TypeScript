@@ -1180,7 +1180,7 @@ class x120 { constructor(private parm: Genric<Base> = { func: n => { return [d1,
 >d2 : Derived2
 
 function x121(parm: () => Base[] = () => [d1, d2]) { }
->x121 : (parm?: () => Base[]) => void
+>x121 : typeof x121
 >parm : () => Base[]
 >Base : Base
 >() => [d1, d2] : () => Base[]
@@ -1189,7 +1189,7 @@ function x121(parm: () => Base[] = () => [d1, d2]) { }
 >d2 : Derived2
 
 function x122(parm: () => Base[] = function() { return [d1, d2] }) { }
->x122 : (parm?: () => Base[]) => void
+>x122 : typeof x122
 >parm : () => Base[]
 >Base : Base
 >function() { return [d1, d2] } : () => Base[]
@@ -1198,7 +1198,7 @@ function x122(parm: () => Base[] = function() { return [d1, d2] }) { }
 >d2 : Derived2
 
 function x123(parm: () => Base[] = function named() { return [d1, d2] }) { }
->x123 : (parm?: () => Base[]) => void
+>x123 : typeof x123
 >parm : () => Base[]
 >Base : Base
 >function named() { return [d1, d2] } : () => Base[]
@@ -1208,7 +1208,7 @@ function x123(parm: () => Base[] = function named() { return [d1, d2] }) { }
 >d2 : Derived2
 
 function x124(parm: { (): Base[]; } = () => [d1, d2]) { }
->x124 : (parm?: () => Base[]) => void
+>x124 : typeof x124
 >parm : () => Base[]
 >Base : Base
 >() => [d1, d2] : () => Base[]
@@ -1217,7 +1217,7 @@ function x124(parm: { (): Base[]; } = () => [d1, d2]) { }
 >d2 : Derived2
 
 function x125(parm: { (): Base[]; } = function() { return [d1, d2] }) { }
->x125 : (parm?: () => Base[]) => void
+>x125 : typeof x125
 >parm : () => Base[]
 >Base : Base
 >function() { return [d1, d2] } : () => Base[]
@@ -1226,7 +1226,7 @@ function x125(parm: { (): Base[]; } = function() { return [d1, d2] }) { }
 >d2 : Derived2
 
 function x126(parm: { (): Base[]; } = function named() { return [d1, d2] }) { }
->x126 : (parm?: () => Base[]) => void
+>x126 : typeof x126
 >parm : () => Base[]
 >Base : Base
 >function named() { return [d1, d2] } : () => Base[]
@@ -1236,7 +1236,7 @@ function x126(parm: { (): Base[]; } = function named() { return [d1, d2] }) { }
 >d2 : Derived2
 
 function x127(parm: Base[] = [d1, d2]) { }
->x127 : (parm?: Base[]) => void
+>x127 : typeof x127
 >parm : Base[]
 >Base : Base
 >[d1, d2] : Base[]
@@ -1244,7 +1244,7 @@ function x127(parm: Base[] = [d1, d2]) { }
 >d2 : Derived2
 
 function x128(parm: Array<Base> = [d1, d2]) { }
->x128 : (parm?: Base[]) => void
+>x128 : typeof x128
 >parm : Base[]
 >Array : T[]
 >Base : Base
@@ -1253,7 +1253,7 @@ function x128(parm: Array<Base> = [d1, d2]) { }
 >d2 : Derived2
 
 function x129(parm: { [n: number]: Base; } = [d1, d2]) { }
->x129 : (parm?: { [x: number]: Base; }) => void
+>x129 : typeof x129
 >parm : { [x: number]: Base; }
 >n : number
 >Base : Base
@@ -1262,7 +1262,7 @@ function x129(parm: { [n: number]: Base; } = [d1, d2]) { }
 >d2 : Derived2
 
 function x130(parm: {n: Base[]; }  = { n: [d1, d2] }) { }
->x130 : (parm?: { n: Base[]; }) => void
+>x130 : typeof x130
 >parm : { n: Base[]; }
 >n : Base[]
 >Base : Base
@@ -1273,7 +1273,7 @@ function x130(parm: {n: Base[]; }  = { n: [d1, d2] }) { }
 >d2 : Derived2
 
 function x131(parm: (s: Base[]) => any = n => { var n: Base[]; return null; }) { }
->x131 : (parm?: (s: Base[]) => any) => void
+>x131 : typeof x131
 >parm : (s: Base[]) => any
 >s : Base[]
 >Base : Base
@@ -1283,7 +1283,7 @@ function x131(parm: (s: Base[]) => any = n => { var n: Base[]; return null; }) {
 >Base : Base
 
 function x132(parm: Genric<Base> = { func: n => { return [d1, d2]; } }) { }
->x132 : (parm?: Genric<Base>) => void
+>x132 : typeof x132
 >parm : Genric<Base>
 >Genric : Genric<T>
 >Base : Base
@@ -1296,7 +1296,7 @@ function x132(parm: Genric<Base> = { func: n => { return [d1, d2]; } }) { }
 >d2 : Derived2
 
 function x133(): () => Base[] { return () => [d1, d2]; }
->x133 : () => () => Base[]
+>x133 : typeof x133
 >Base : Base
 >() => [d1, d2] : () => Base[]
 >[d1, d2] : Base[]
@@ -1304,7 +1304,7 @@ function x133(): () => Base[] { return () => [d1, d2]; }
 >d2 : Derived2
 
 function x134(): () => Base[] { return function() { return [d1, d2] }; }
->x134 : () => () => Base[]
+>x134 : typeof x134
 >Base : Base
 >function() { return [d1, d2] } : () => Base[]
 >[d1, d2] : Base[]
@@ -1312,7 +1312,7 @@ function x134(): () => Base[] { return function() { return [d1, d2] }; }
 >d2 : Derived2
 
 function x135(): () => Base[] { return function named() { return [d1, d2] }; }
->x135 : () => () => Base[]
+>x135 : typeof x135
 >Base : Base
 >function named() { return [d1, d2] } : () => Base[]
 >named : () => Base[]
@@ -1321,7 +1321,7 @@ function x135(): () => Base[] { return function named() { return [d1, d2] }; }
 >d2 : Derived2
 
 function x136(): { (): Base[]; } { return () => [d1, d2]; }
->x136 : () => () => Base[]
+>x136 : typeof x136
 >Base : Base
 >() => [d1, d2] : () => Base[]
 >[d1, d2] : Base[]
@@ -1329,7 +1329,7 @@ function x136(): { (): Base[]; } { return () => [d1, d2]; }
 >d2 : Derived2
 
 function x137(): { (): Base[]; } { return function() { return [d1, d2] }; }
->x137 : () => () => Base[]
+>x137 : typeof x137
 >Base : Base
 >function() { return [d1, d2] } : () => Base[]
 >[d1, d2] : Base[]
@@ -1337,7 +1337,7 @@ function x137(): { (): Base[]; } { return function() { return [d1, d2] }; }
 >d2 : Derived2
 
 function x138(): { (): Base[]; } { return function named() { return [d1, d2] }; }
->x138 : () => () => Base[]
+>x138 : typeof x138
 >Base : Base
 >function named() { return [d1, d2] } : () => Base[]
 >named : () => Base[]
@@ -1346,14 +1346,14 @@ function x138(): { (): Base[]; } { return function named() { return [d1, d2] }; 
 >d2 : Derived2
 
 function x139(): Base[] { return [d1, d2]; }
->x139 : () => Base[]
+>x139 : typeof x139
 >Base : Base
 >[d1, d2] : Base[]
 >d1 : Derived1
 >d2 : Derived2
 
 function x140(): Array<Base> { return [d1, d2]; }
->x140 : () => Base[]
+>x140 : typeof x140
 >Array : T[]
 >Base : Base
 >[d1, d2] : Base[]
@@ -1361,7 +1361,7 @@ function x140(): Array<Base> { return [d1, d2]; }
 >d2 : Derived2
 
 function x141(): { [n: number]: Base; } { return [d1, d2]; }
->x141 : () => { [x: number]: Base; }
+>x141 : typeof x141
 >n : number
 >Base : Base
 >[d1, d2] : Base[]
@@ -1369,7 +1369,7 @@ function x141(): { [n: number]: Base; } { return [d1, d2]; }
 >d2 : Derived2
 
 function x142(): {n: Base[]; }  { return { n: [d1, d2] }; }
->x142 : () => { n: Base[]; }
+>x142 : typeof x142
 >n : Base[]
 >Base : Base
 >{ n: [d1, d2] } : { n: Base[]; }
@@ -1379,7 +1379,7 @@ function x142(): {n: Base[]; }  { return { n: [d1, d2] }; }
 >d2 : Derived2
 
 function x143(): (s: Base[]) => any { return n => { var n: Base[]; return null; }; }
->x143 : () => (s: Base[]) => any
+>x143 : typeof x143
 >s : Base[]
 >Base : Base
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
@@ -1388,7 +1388,7 @@ function x143(): (s: Base[]) => any { return n => { var n: Base[]; return null; 
 >Base : Base
 
 function x144(): Genric<Base> { return { func: n => { return [d1, d2]; } }; }
->x144 : () => Genric<Base>
+>x144 : typeof x144
 >Genric : Genric<T>
 >Base : Base
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => {}[]; }
@@ -1400,7 +1400,7 @@ function x144(): Genric<Base> { return { func: n => { return [d1, d2]; } }; }
 >d2 : Derived2
 
 function x145(): () => Base[] { return () => [d1, d2]; return () => [d1, d2]; }
->x145 : () => () => Base[]
+>x145 : typeof x145
 >Base : Base
 >() => [d1, d2] : () => Base[]
 >[d1, d2] : Base[]
@@ -1412,7 +1412,7 @@ function x145(): () => Base[] { return () => [d1, d2]; return () => [d1, d2]; }
 >d2 : Derived2
 
 function x146(): () => Base[] { return function() { return [d1, d2] }; return function() { return [d1, d2] }; }
->x146 : () => () => Base[]
+>x146 : typeof x146
 >Base : Base
 >function() { return [d1, d2] } : () => Base[]
 >[d1, d2] : Base[]
@@ -1424,7 +1424,7 @@ function x146(): () => Base[] { return function() { return [d1, d2] }; return fu
 >d2 : Derived2
 
 function x147(): () => Base[] { return function named() { return [d1, d2] }; return function named() { return [d1, d2] }; }
->x147 : () => () => Base[]
+>x147 : typeof x147
 >Base : Base
 >function named() { return [d1, d2] } : () => Base[]
 >named : () => Base[]
@@ -1438,7 +1438,7 @@ function x147(): () => Base[] { return function named() { return [d1, d2] }; ret
 >d2 : Derived2
 
 function x148(): { (): Base[]; } { return () => [d1, d2]; return () => [d1, d2]; }
->x148 : () => () => Base[]
+>x148 : typeof x148
 >Base : Base
 >() => [d1, d2] : () => Base[]
 >[d1, d2] : Base[]
@@ -1450,7 +1450,7 @@ function x148(): { (): Base[]; } { return () => [d1, d2]; return () => [d1, d2];
 >d2 : Derived2
 
 function x149(): { (): Base[]; } { return function() { return [d1, d2] }; return function() { return [d1, d2] }; }
->x149 : () => () => Base[]
+>x149 : typeof x149
 >Base : Base
 >function() { return [d1, d2] } : () => Base[]
 >[d1, d2] : Base[]
@@ -1462,7 +1462,7 @@ function x149(): { (): Base[]; } { return function() { return [d1, d2] }; return
 >d2 : Derived2
 
 function x150(): { (): Base[]; } { return function named() { return [d1, d2] }; return function named() { return [d1, d2] }; }
->x150 : () => () => Base[]
+>x150 : typeof x150
 >Base : Base
 >function named() { return [d1, d2] } : () => Base[]
 >named : () => Base[]
@@ -1476,7 +1476,7 @@ function x150(): { (): Base[]; } { return function named() { return [d1, d2] }; 
 >d2 : Derived2
 
 function x151(): Base[] { return [d1, d2]; return [d1, d2]; }
->x151 : () => Base[]
+>x151 : typeof x151
 >Base : Base
 >[d1, d2] : Base[]
 >d1 : Derived1
@@ -1486,7 +1486,7 @@ function x151(): Base[] { return [d1, d2]; return [d1, d2]; }
 >d2 : Derived2
 
 function x152(): Array<Base> { return [d1, d2]; return [d1, d2]; }
->x152 : () => Base[]
+>x152 : typeof x152
 >Array : T[]
 >Base : Base
 >[d1, d2] : Base[]
@@ -1497,7 +1497,7 @@ function x152(): Array<Base> { return [d1, d2]; return [d1, d2]; }
 >d2 : Derived2
 
 function x153(): { [n: number]: Base; } { return [d1, d2]; return [d1, d2]; }
->x153 : () => { [x: number]: Base; }
+>x153 : typeof x153
 >n : number
 >Base : Base
 >[d1, d2] : Base[]
@@ -1508,7 +1508,7 @@ function x153(): { [n: number]: Base; } { return [d1, d2]; return [d1, d2]; }
 >d2 : Derived2
 
 function x154(): {n: Base[]; }  { return { n: [d1, d2] }; return { n: [d1, d2] }; }
->x154 : () => { n: Base[]; }
+>x154 : typeof x154
 >n : Base[]
 >Base : Base
 >{ n: [d1, d2] } : { n: Base[]; }
@@ -1523,7 +1523,7 @@ function x154(): {n: Base[]; }  { return { n: [d1, d2] }; return { n: [d1, d2] }
 >d2 : Derived2
 
 function x155(): (s: Base[]) => any { return n => { var n: Base[]; return null; }; return n => { var n: Base[]; return null; }; }
->x155 : () => (s: Base[]) => any
+>x155 : typeof x155
 >s : Base[]
 >Base : Base
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
@@ -1536,7 +1536,7 @@ function x155(): (s: Base[]) => any { return n => { var n: Base[]; return null; 
 >Base : Base
 
 function x156(): Genric<Base> { return { func: n => { return [d1, d2]; } }; return { func: n => { return [d1, d2]; } }; }
->x156 : () => Genric<Base>
+>x156 : typeof x156
 >Genric : Genric<T>
 >Base : Base
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => {}[]; }
@@ -3248,33 +3248,33 @@ var x320: Genric<Base> = true ? { func: n => { return [d1, d2]; } } : undefined;
 >undefined : undefined
 
 function x321(n: () => Base[]) { }; x321(() => [d1, d2]);
->x321 : (n: () => Base[]) => void
+>x321 : typeof x321
 >n : () => Base[]
 >Base : Base
 >x321(() => [d1, d2]) : void
->x321 : (n: () => Base[]) => void
+>x321 : typeof x321
 >() => [d1, d2] : () => Base[]
 >[d1, d2] : Base[]
 >d1 : Derived1
 >d2 : Derived2
 
 function x322(n: () => Base[]) { }; x322(function() { return [d1, d2] });
->x322 : (n: () => Base[]) => void
+>x322 : typeof x322
 >n : () => Base[]
 >Base : Base
 >x322(function() { return [d1, d2] }) : void
->x322 : (n: () => Base[]) => void
+>x322 : typeof x322
 >function() { return [d1, d2] } : () => Base[]
 >[d1, d2] : Base[]
 >d1 : Derived1
 >d2 : Derived2
 
 function x323(n: () => Base[]) { }; x323(function named() { return [d1, d2] });
->x323 : (n: () => Base[]) => void
+>x323 : typeof x323
 >n : () => Base[]
 >Base : Base
 >x323(function named() { return [d1, d2] }) : void
->x323 : (n: () => Base[]) => void
+>x323 : typeof x323
 >function named() { return [d1, d2] } : () => Base[]
 >named : () => Base[]
 >[d1, d2] : Base[]
@@ -3282,33 +3282,33 @@ function x323(n: () => Base[]) { }; x323(function named() { return [d1, d2] });
 >d2 : Derived2
 
 function x324(n: { (): Base[]; }) { }; x324(() => [d1, d2]);
->x324 : (n: () => Base[]) => void
+>x324 : typeof x324
 >n : () => Base[]
 >Base : Base
 >x324(() => [d1, d2]) : void
->x324 : (n: () => Base[]) => void
+>x324 : typeof x324
 >() => [d1, d2] : () => Base[]
 >[d1, d2] : Base[]
 >d1 : Derived1
 >d2 : Derived2
 
 function x325(n: { (): Base[]; }) { }; x325(function() { return [d1, d2] });
->x325 : (n: () => Base[]) => void
+>x325 : typeof x325
 >n : () => Base[]
 >Base : Base
 >x325(function() { return [d1, d2] }) : void
->x325 : (n: () => Base[]) => void
+>x325 : typeof x325
 >function() { return [d1, d2] } : () => Base[]
 >[d1, d2] : Base[]
 >d1 : Derived1
 >d2 : Derived2
 
 function x326(n: { (): Base[]; }) { }; x326(function named() { return [d1, d2] });
->x326 : (n: () => Base[]) => void
+>x326 : typeof x326
 >n : () => Base[]
 >Base : Base
 >x326(function named() { return [d1, d2] }) : void
->x326 : (n: () => Base[]) => void
+>x326 : typeof x326
 >function named() { return [d1, d2] } : () => Base[]
 >named : () => Base[]
 >[d1, d2] : Base[]
@@ -3316,44 +3316,44 @@ function x326(n: { (): Base[]; }) { }; x326(function named() { return [d1, d2] }
 >d2 : Derived2
 
 function x327(n: Base[]) { }; x327([d1, d2]);
->x327 : (n: Base[]) => void
+>x327 : typeof x327
 >n : Base[]
 >Base : Base
 >x327([d1, d2]) : void
->x327 : (n: Base[]) => void
+>x327 : typeof x327
 >[d1, d2] : Base[]
 >d1 : Derived1
 >d2 : Derived2
 
 function x328(n: Array<Base>) { }; x328([d1, d2]);
->x328 : (n: Base[]) => void
+>x328 : typeof x328
 >n : Base[]
 >Array : T[]
 >Base : Base
 >x328([d1, d2]) : void
->x328 : (n: Base[]) => void
+>x328 : typeof x328
 >[d1, d2] : Base[]
 >d1 : Derived1
 >d2 : Derived2
 
 function x329(n: { [n: number]: Base; }) { }; x329([d1, d2]);
->x329 : (n: { [x: number]: Base; }) => void
+>x329 : typeof x329
 >n : { [x: number]: Base; }
 >n : number
 >Base : Base
 >x329([d1, d2]) : void
->x329 : (n: { [x: number]: Base; }) => void
+>x329 : typeof x329
 >[d1, d2] : Base[]
 >d1 : Derived1
 >d2 : Derived2
 
 function x330(n: {n: Base[]; } ) { }; x330({ n: [d1, d2] });
->x330 : (n: { n: Base[]; }) => void
+>x330 : typeof x330
 >n : { n: Base[]; }
 >n : Base[]
 >Base : Base
 >x330({ n: [d1, d2] }) : void
->x330 : (n: { n: Base[]; }) => void
+>x330 : typeof x330
 >{ n: [d1, d2] } : { n: Base[]; }
 >n : Base[]
 >[d1, d2] : Base[]
@@ -3361,24 +3361,24 @@ function x330(n: {n: Base[]; } ) { }; x330({ n: [d1, d2] });
 >d2 : Derived2
 
 function x331(n: (s: Base[]) => any) { }; x331(n => { var n: Base[]; return null; });
->x331 : (n: (s: Base[]) => any) => void
+>x331 : typeof x331
 >n : (s: Base[]) => any
 >s : Base[]
 >Base : Base
 >x331(n => { var n: Base[]; return null; }) : void
->x331 : (n: (s: Base[]) => any) => void
+>x331 : typeof x331
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
 >n : Base[]
 >n : Base[]
 >Base : Base
 
 function x332(n: Genric<Base>) { }; x332({ func: n => { return [d1, d2]; } });
->x332 : (n: Genric<Base>) => void
+>x332 : typeof x332
 >n : Genric<Base>
 >Genric : Genric<T>
 >Base : Base
 >x332({ func: n => { return [d1, d2]; } }) : void
->x332 : (n: Genric<Base>) => void
+>x332 : typeof x332
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => {}[]; }
 >func : (n: Base[]) => {}[]
 >n => { return [d1, d2]; } : (n: Base[]) => {}[]

@@ -1,6 +1,6 @@
 === tests/cases/compiler/genericFunctions1.ts ===
 function foo<T > (x: T) { return x; }
->foo : <T>(x: T) => T
+>foo : typeof foo
 >T : T
 >x : T
 >T : T
@@ -9,5 +9,5 @@ function foo<T > (x: T) { return x; }
 var x = foo(5); // 'x' should be number
 >x : number
 >foo(5) : number
->foo : <T>(x: T) => T
+>foo : typeof foo
 

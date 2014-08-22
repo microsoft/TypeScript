@@ -3,14 +3,14 @@ class foo {
 >foo : foo
 
    static fnOverload();
->fnOverload : { (): any; (foo: string): any; }
+>fnOverload : typeof fnOverload
 
    static fnOverload(foo:string);
->fnOverload : { (): any; (foo: string): any; }
+>fnOverload : typeof fnOverload
 >foo : string
 
    static fnOverload(foo?: any){ }
->fnOverload : { (): any; (foo: string): any; }
+>fnOverload : typeof fnOverload
 >foo : any
 }
 

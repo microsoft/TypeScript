@@ -10,16 +10,16 @@ var list = {};
 
 
 function returnType(): TokenType { return null; }
->returnType : () => TokenType
+>returnType : typeof returnType
 >TokenType : TokenType
 
 function foo() {
->foo : () => void
+>foo : typeof foo
 
     var x = returnType();
 >x : TokenType
 >returnType() : TokenType
->returnType : () => TokenType
+>returnType : typeof returnType
 
     var x: TokenType = list['one'];
 >x : TokenType

@@ -3,7 +3,7 @@ module M {
 >M : typeof M
 
     export function fn(x: number) {
->fn : (x: number) => string
+>fn : typeof fn
 >x : number
 
         return '';
@@ -32,8 +32,6 @@ switch (x) {
 >Object : { (): any; (value: any): any; new (value?: any): Object; prototype: Object; getPrototypeOf(o: any): any; getOwnPropertyDescriptor(o: any, p: string): PropertyDescriptor; getOwnPropertyNames(o: any): string[]; create(o: any, properties?: PropertyDescriptorMap): any; defineProperty(o: any, p: string, attributes: PropertyDescriptor): any; defineProperties(o: any, properties: PropertyDescriptorMap): any; seal(o: any): any; freeze(o: any): any; preventExtensions(o: any): any; isSealed(o: any): boolean; isFrozen(o: any): boolean; isExtensible(o: any): boolean; keys(o: any): string[]; }
 
     case /[a-z]/:
->/[a-z]/ : RegExp
-
     case[]:
 >[] : undefined[]
 
@@ -57,9 +55,9 @@ switch (x) {
 
     case M.fn(1):
 >M.fn(1) : string
->M.fn : (x: number) => string
+>M.fn : typeof fn
 >M : typeof M
->fn : (x: number) => string
+>fn : typeof fn
 
     case <T>(x: number) => '':
 ><T>(x: number) => '' : <T>(x: number) => string
@@ -120,8 +118,6 @@ switch (new Object()) { }
 >Object : { (): any; (value: any): any; new (value?: any): Object; prototype: Object; getPrototypeOf(o: any): any; getOwnPropertyDescriptor(o: any, p: string): PropertyDescriptor; getOwnPropertyNames(o: any): string[]; create(o: any, properties?: PropertyDescriptorMap): any; defineProperty(o: any, p: string, attributes: PropertyDescriptor): any; defineProperties(o: any, properties: PropertyDescriptorMap): any; seal(o: any): any; freeze(o: any): any; preventExtensions(o: any): any; isSealed(o: any): boolean; isFrozen(o: any): boolean; isExtensible(o: any): boolean; keys(o: any): string[]; }
 
 switch (/[a-z]/) { }
->/[a-z]/ : RegExp
-
 switch ([]) { }
 >[] : undefined[]
 

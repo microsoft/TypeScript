@@ -9,7 +9,7 @@ class C {
 >thing : () => void
 
     static other() { }
->other : () => void
+>other : typeof other
 }
 
 class D extends C {
@@ -46,9 +46,9 @@ var r3 = d.thing();
 var r4 = D.other();
 >r4 : void
 >D.other() : void
->D.other : () => void
+>D.other : typeof other
 >D : typeof D
->other : () => void
+>other : typeof other
 
 class C2<T> {
 >C2 : C2<T>
@@ -64,7 +64,7 @@ class C2<T> {
 >T : T
 
     static other<T>(x: T) { }
->other : <T>(x: T) => void
+>other : typeof other
 >T : T
 >x : T
 >T : T
@@ -106,7 +106,7 @@ var r7 = d2.thing('');
 var r8 = D2.other(1);
 >r8 : void
 >D2.other(1) : void
->D2.other : <T>(x: T) => void
+>D2.other : typeof other
 >D2 : typeof D2
->other : <T>(x: T) => void
+>other : typeof other
 

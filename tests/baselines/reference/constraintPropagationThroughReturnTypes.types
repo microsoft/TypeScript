@@ -1,6 +1,6 @@
 === tests/cases/compiler/constraintPropagationThroughReturnTypes.ts ===
 function g<T>(x: T): T {
->g : <T>(x: T) => T
+>g : typeof g
 >T : T
 >x : T
 >T : T
@@ -11,7 +11,7 @@ function g<T>(x: T): T {
 }
  
 function f<S extends { foo: string }>(x: S) {
->f : <S extends { foo: string; }>(x: S) => void
+>f : typeof f
 >S : S
 >foo : string
 >x : S
@@ -20,7 +20,7 @@ function f<S extends { foo: string }>(x: S) {
   var y = g(x);
 >y : S
 >g(x) : S
->g : <T>(x: T) => T
+>g : typeof g
 >x : S
 
   y;

@@ -1,8 +1,10 @@
-==== tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration9.ts (2 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration9.ts (3 errors) ====
     class C {
         static public get Foo() { }
                ~~~~~~
 !!! 'public' modifier must precede 'static' modifier.
+                          ~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
                           ~~~
 !!! A 'get' accessor must return a value or consist of a single 'throw' statement.
     }

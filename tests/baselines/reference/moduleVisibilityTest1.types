@@ -5,14 +5,14 @@ module OuterMod {
 >OuterMod : typeof OuterMod
 
 	export function someExportedOuterFunc() { return -1; }
->someExportedOuterFunc : () => number
+>someExportedOuterFunc : typeof someExportedOuterFunc
 >-1 : number
 
 	export module OuterInnerMod {
 >OuterInnerMod : typeof OuterInnerMod
 
 		export function someExportedOuterInnerFunc() { return "foo"; }
->someExportedOuterInnerFunc : () => string
+>someExportedOuterInnerFunc : typeof someExportedOuterInnerFunc
 	}
 }
 
@@ -28,7 +28,7 @@ module M {
 >InnerMod : typeof InnerMod
 
 		export function someExportedInnerFunc() { return -2; }
->someExportedInnerFunc : () => number
+>someExportedInnerFunc : typeof someExportedInnerFunc
 >-2 : number
 	}
 
@@ -76,23 +76,23 @@ module M {
 		public someMethodThatCallsAnOuterMethod() {return OuterInnerAlias.someExportedOuterInnerFunc();}
 >someMethodThatCallsAnOuterMethod : () => string
 >OuterInnerAlias.someExportedOuterInnerFunc() : string
->OuterInnerAlias.someExportedOuterInnerFunc : () => string
+>OuterInnerAlias.someExportedOuterInnerFunc : typeof someExportedOuterInnerFunc
 >OuterInnerAlias : typeof OuterInnerMod
->someExportedOuterInnerFunc : () => string
+>someExportedOuterInnerFunc : typeof someExportedOuterInnerFunc
 
 		public someMethodThatCallsAnInnerMethod() {return InnerMod.someExportedInnerFunc();}
 >someMethodThatCallsAnInnerMethod : () => number
 >InnerMod.someExportedInnerFunc() : number
->InnerMod.someExportedInnerFunc : () => number
+>InnerMod.someExportedInnerFunc : typeof someExportedInnerFunc
 >InnerMod : typeof InnerMod
->someExportedInnerFunc : () => number
+>someExportedInnerFunc : typeof someExportedInnerFunc
 
 		public someMethodThatCallsAnOuterInnerMethod() {return OuterMod.someExportedOuterFunc();}
 >someMethodThatCallsAnOuterInnerMethod : () => number
 >OuterMod.someExportedOuterFunc() : number
->OuterMod.someExportedOuterFunc : () => number
+>OuterMod.someExportedOuterFunc : typeof someExportedOuterFunc
 >OuterMod : typeof OuterMod
->someExportedOuterFunc : () => number
+>someExportedOuterFunc : typeof someExportedOuterFunc
 
 		public someMethod() { return 0; }
 >someMethod : () => number
@@ -113,7 +113,7 @@ module M {
 >someModuleVar : number
 
 	function someModuleFunction() { return 5;}
->someModuleFunction : () => number
+>someModuleFunction : typeof someModuleFunction
 }
 
 module M {

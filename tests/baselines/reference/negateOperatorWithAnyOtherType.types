@@ -22,7 +22,7 @@ var obj1 = { x: "", y: () => { }};
 >() => { } : () => void
 
 function foo(): any {
->foo : () => any
+>foo : typeof foo
 
     var a;
 >a : any
@@ -37,7 +37,7 @@ class A {
 >a : any
 
     static foo() {
->foo : () => any
+>foo : typeof foo
 
         var a;
 >a : any
@@ -137,15 +137,15 @@ var ResultIsNumber13 = -foo();
 >ResultIsNumber13 : number
 >-foo() : number
 >foo() : any
->foo : () => any
+>foo : typeof foo
 
 var ResultIsNumber14 = -A.foo();
 >ResultIsNumber14 : number
 >-A.foo() : number
 >A.foo() : any
->A.foo : () => any
+>A.foo : typeof foo
 >A : typeof A
->foo : () => any
+>foo : typeof foo
 
 var ResultIsNumber15 = -(ANY - ANY1);
 >ResultIsNumber15 : number

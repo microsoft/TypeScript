@@ -1,18 +1,14 @@
 === tests/cases/compiler/commentOnSimpleArrowFunctionBody1.ts ===
 function Foo(x: any)
->Foo : (x: any) => void
+>Foo : typeof Foo
 >x : any
 {
 }
  
 Foo(() =>
->Foo(() =>
-    // do something
-    127) : void
->Foo : (x: any) => void
->() =>
-    // do something
-    127 : () => number
+>Foo(() =>    // do something    127) : void
+>Foo : typeof Foo
+>() =>    // do something    127 : () => number
 
     // do something
     127);

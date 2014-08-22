@@ -12,7 +12,7 @@ class C {
 >bar : () => void
 
     static boo() { }
->boo : () => void
+>boo : typeof boo
 }
 
 module C {
@@ -28,10 +28,10 @@ module C {
 >C : typeof C
 
     export function foo() { }
->foo : () => void
+>foo : typeof foo
 
     function baz() { return ''; }
->baz : () => string
+>baz : typeof baz
 }
 
 var c = new C(C.x);
@@ -43,11 +43,11 @@ var c = new C(C.x);
 >x : number
 
 c.foo = C.foo;
->c.foo = C.foo : () => void
+>c.foo = C.foo : typeof foo
 >c.foo : () => void
 >c : C
 >foo : () => void
->C.foo : () => void
+>C.foo : typeof foo
 >C : typeof C
->foo : () => void
+>foo : typeof foo
 

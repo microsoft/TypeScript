@@ -4,7 +4,7 @@ import a = require('moduleAliasAsFunctionArgument_0');
 >a : typeof "tests/cases/compiler/moduleAliasAsFunctionArgument_0"
 
 function fn(arg: { x: number }) {
->fn : (arg: { x: number; }) => void
+>fn : typeof fn
 >arg : { x: number; }
 >x : number
 }
@@ -16,7 +16,7 @@ a.x; // OK
 
 fn(a); // Error: property 'x' is missing from 'a'
 >fn(a) : void
->fn : (arg: { x: number; }) => void
+>fn : typeof fn
 >a : typeof "tests/cases/compiler/moduleAliasAsFunctionArgument_0"
 
 === tests/cases/compiler/moduleAliasAsFunctionArgument_0.ts ===

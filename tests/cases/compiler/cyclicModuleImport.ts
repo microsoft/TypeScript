@@ -1,4 +1,3 @@
-// @declaration: true
 declare module "SubModule" {
     import MainModule = require('MainModule');
     class SubModule {

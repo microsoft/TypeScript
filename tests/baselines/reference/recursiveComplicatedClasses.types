@@ -8,7 +8,7 @@ class Signature {
 }
 
 function aEnclosesB(a: Symbol) {
->aEnclosesB : (a: Symbol) => boolean
+>aEnclosesB : typeof aEnclosesB
 >a : Symbol
 >Symbol : Symbol
 
@@ -30,7 +30,7 @@ class Symbol {
 
         return aEnclosesB(b);
 >aEnclosesB(b) : boolean
->aEnclosesB : (a: Symbol) => boolean
+>aEnclosesB : typeof aEnclosesB
 >b : TypeSymbol
     }
 

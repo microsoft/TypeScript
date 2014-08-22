@@ -1,6 +1,6 @@
 === tests/cases/conformance/types/objectTypeLiteral/callSignatures/parametersWithNoAnnotationAreAny.ts ===
 function foo(x) { return x; }
->foo : (x: any) => any
+>foo : typeof foo
 >x : any
 >x : any
 
@@ -59,21 +59,11 @@ var a: {
 
 var b = {
 >b : { foo: (x: any) => any; a: (x: any) => any; b: (x: any) => any; }
->{
-    foo(x) {
-        return x;
-    },
-    a: function foo(x) {
-        return x;
-    },
-    b: (x) => x
-} : { foo: (x: any) => any; a: (x: any) => any; b: (x: any) => any; }
+>{    foo(x) {        return x;    },    a: function foo(x) {        return x;    },    b: (x) => x} : { foo: (x: any) => any; a: (x: any) => any; b: (x: any) => any; }
 
     foo(x) {
 >foo : (x: any) => any
->foo(x) {
-        return x;
-    } : (x: any) => any
+>foo(x) {        return x;    } : (x: any) => any
 >x : any
 
         return x;
@@ -82,9 +72,7 @@ var b = {
     },
     a: function foo(x) {
 >a : (x: any) => any
->function foo(x) {
-        return x;
-    } : (x: any) => any
+>function foo(x) {        return x;    } : (x: any) => any
 >foo : (x: any) => any
 >x : any
 

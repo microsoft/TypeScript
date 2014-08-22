@@ -3,7 +3,7 @@ class DebugClass {
 >DebugClass : DebugClass
 
     public static debugFunc() {
->debugFunc : () => boolean
+>debugFunc : typeof debugFunc
 
         // Start Debugger Test Code
         var i = 0;

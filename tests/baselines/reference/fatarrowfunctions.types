@@ -1,7 +1,7 @@
 === tests/cases/compiler/fatarrowfunctions.ts ===
 
 function foo(x:any) {
->foo : (x: any) => any
+>foo : typeof foo
 >x : any
 
 	return x();
@@ -12,7 +12,7 @@ function foo(x:any) {
 
 foo((x:number,y,z)=>{return x+y+z;});
 >foo((x:number,y,z)=>{return x+y+z;}) : any
->foo : (x: any) => any
+>foo : typeof foo
 >(x:number,y,z)=>{return x+y+z;} : (x: number, y: any, z: any) => any
 >x : number
 >y : any
@@ -25,7 +25,7 @@ foo((x:number,y,z)=>{return x+y+z;});
 
 foo((x,y,z)=>{return x+y+z;});
 >foo((x,y,z)=>{return x+y+z;}) : any
->foo : (x: any) => any
+>foo : typeof foo
 >(x,y,z)=>{return x+y+z;} : (x: any, y: any, z: any) => any
 >x : any
 >y : any
@@ -38,7 +38,7 @@ foo((x,y,z)=>{return x+y+z;});
 
 foo((x,y:number,z)=>{return x+y+z;});
 >foo((x,y:number,z)=>{return x+y+z;}) : any
->foo : (x: any) => any
+>foo : typeof foo
 >(x,y:number,z)=>{return x+y+z;} : (x: any, y: number, z: any) => any
 >x : any
 >y : number
@@ -51,7 +51,7 @@ foo((x,y:number,z)=>{return x+y+z;});
 
 foo((x,y:number,z:number)=>{return x+y+z;});
 >foo((x,y:number,z:number)=>{return x+y+z;}) : any
->foo : (x: any) => any
+>foo : typeof foo
 >(x,y:number,z:number)=>{return x+y+z;} : (x: any, y: number, z: number) => any
 >x : any
 >y : number
@@ -64,7 +64,7 @@ foo((x,y:number,z:number)=>{return x+y+z;});
 
 foo((x,y,z:number)=>{return x+y+z;});
 >foo((x,y,z:number)=>{return x+y+z;}) : any
->foo : (x: any) => any
+>foo : typeof foo
 >(x,y,z:number)=>{return x+y+z;} : (x: any, y: any, z: number) => any
 >x : any
 >y : any
@@ -77,12 +77,12 @@ foo((x,y,z:number)=>{return x+y+z;});
 
 foo(()=>{return 0;});
 >foo(()=>{return 0;}) : any
->foo : (x: any) => any
+>foo : typeof foo
 >()=>{return 0;} : () => number
 
 foo((x:number,y,z)=>x+y+z);
 >foo((x:number,y,z)=>x+y+z) : any
->foo : (x: any) => any
+>foo : typeof foo
 >(x:number,y,z)=>x+y+z : (x: number, y: any, z: any) => any
 >x : number
 >y : any
@@ -95,7 +95,7 @@ foo((x:number,y,z)=>x+y+z);
 
 foo((x,y,z)=>x+y+z);
 >foo((x,y,z)=>x+y+z) : any
->foo : (x: any) => any
+>foo : typeof foo
 >(x,y,z)=>x+y+z : (x: any, y: any, z: any) => any
 >x : any
 >y : any
@@ -108,7 +108,7 @@ foo((x,y,z)=>x+y+z);
 
 foo((x,y:number,z)=>{return x+y+z;});
 >foo((x,y:number,z)=>{return x+y+z;}) : any
->foo : (x: any) => any
+>foo : typeof foo
 >(x,y:number,z)=>{return x+y+z;} : (x: any, y: number, z: any) => any
 >x : any
 >y : number
@@ -121,7 +121,7 @@ foo((x,y:number,z)=>{return x+y+z;});
 
 foo((x,y:number,z:number)=>{return x+y+z;});
 >foo((x,y:number,z:number)=>{return x+y+z;}) : any
->foo : (x: any) => any
+>foo : typeof foo
 >(x,y:number,z:number)=>{return x+y+z;} : (x: any, y: number, z: number) => any
 >x : any
 >y : number
@@ -134,7 +134,7 @@ foo((x,y:number,z:number)=>{return x+y+z;});
 
 foo((x,y,z:number)=>{return x+y+z;});
 >foo((x,y,z:number)=>{return x+y+z;}) : any
->foo : (x: any) => any
+>foo : typeof foo
 >(x,y,z:number)=>{return x+y+z;} : (x: any, y: any, z: number) => any
 >x : any
 >y : any
@@ -147,13 +147,13 @@ foo((x,y,z:number)=>{return x+y+z;});
 
 foo(()=>{return 0;});
 >foo(()=>{return 0;}) : any
->foo : (x: any) => any
+>foo : typeof foo
 >()=>{return 0;} : () => number
 
 
 foo(((x) => x));
 >foo(((x) => x)) : any
->foo : (x: any) => any
+>foo : typeof foo
 >((x) => x) : (x: any) => any
 >(x) => x : (x: any) => any
 >x : any
@@ -161,7 +161,7 @@ foo(((x) => x));
 
 foo(x => x*x);
 >foo(x => x*x) : any
->foo : (x: any) => any
+>foo : typeof foo
 >x => x*x : (x: any) => number
 >x : any
 >x*x : number
@@ -189,7 +189,7 @@ var w = () => 3;
 >() => 3 : () => number
 
 function ternaryTest(isWhile:boolean) {
->ternaryTest : (isWhile: boolean) => void
+>ternaryTest : typeof ternaryTest
 >isWhile : boolean
 
                 var f = isWhile ? function (n) { return n > 0; } : function (n) { return n === 0; };
@@ -208,32 +208,25 @@ function ternaryTest(isWhile:boolean) {
 }
 
 declare function setTimeout(expression: any, msec?: number, language?: any): number;
->setTimeout : (expression: any, msec?: number, language?: any) => number
+>setTimeout : typeof setTimeout
 >expression : any
 >msec : number
 >language : any
 
 var messenger = {
 >messenger : { message: string; start: () => void; }
->{
-    message: "Hello World",
-    start: function() {
-        setTimeout(() => { this.message.toString(); }, 3000);
-    }
-} : { message: string; start: () => void; }
+>{    message: "Hello World",    start: function() {        setTimeout(() => { this.message.toString(); }, 3000);    }} : { message: string; start: () => void; }
 
     message: "Hello World",
 >message : string
 
     start: function() {
 >start : () => void
->function() {
-        setTimeout(() => { this.message.toString(); }, 3000);
-    } : () => void
+>function() {        setTimeout(() => { this.message.toString(); }, 3000);    } : () => void
 
         setTimeout(() => { this.message.toString(); }, 3000);
 >setTimeout(() => { this.message.toString(); }, 3000) : number
->setTimeout : (expression: any, msec?: number, language?: any) => number
+>setTimeout : typeof setTimeout
 >() => { this.message.toString(); } : () => void
 >this.message.toString() : any
 >this.message.toString : any

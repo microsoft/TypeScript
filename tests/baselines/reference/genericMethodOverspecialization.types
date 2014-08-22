@@ -28,15 +28,11 @@ interface Document {
 
 var elements = names.map(function (name) {
 >elements : HTMLElement[]
->names.map(function (name) {
-    return document.getElementById(name);
-}) : HTMLElement[]
+>names.map(function (name) {    return document.getElementById(name);}) : HTMLElement[]
 >names.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
 >names : string[]
 >map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
->function (name) {
-    return document.getElementById(name);
-} : (name: string) => HTMLElement
+>function (name) {    return document.getElementById(name);} : (name: string) => HTMLElement
 >name : string
 
     return document.getElementById(name);
@@ -51,15 +47,11 @@ var elements = names.map(function (name) {
 
 var xxx = elements.filter(function (e) {
 >xxx : HTMLElement[]
->elements.filter(function (e) {
-    return !e.isDisabled;
-}) : HTMLElement[]
+>elements.filter(function (e) {    return !e.isDisabled;}) : HTMLElement[]
 >elements.filter : (callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => boolean, thisArg?: any) => HTMLElement[]
 >elements : HTMLElement[]
 >filter : (callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => boolean, thisArg?: any) => HTMLElement[]
->function (e) {
-    return !e.isDisabled;
-} : (e: HTMLElement) => boolean
+>function (e) {    return !e.isDisabled;} : (e: HTMLElement) => boolean
 >e : HTMLElement
 
     return !e.isDisabled;
@@ -72,15 +64,11 @@ var xxx = elements.filter(function (e) {
 
 var widths:number[] = elements.map(function (e) { // should not error
 >widths : number[]
->elements.map(function (e) { // should not error
-    return e.clientWidth;
-}) : number[]
+>elements.map(function (e) { // should not error    return e.clientWidth;}) : number[]
 >elements.map : <U>(callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => U, thisArg?: any) => U[]
 >elements : HTMLElement[]
 >map : <U>(callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => U, thisArg?: any) => U[]
->function (e) { // should not error
-    return e.clientWidth;
-} : (e: HTMLElement) => number
+>function (e) { // should not error    return e.clientWidth;} : (e: HTMLElement) => number
 >e : HTMLElement
 
     return e.clientWidth;

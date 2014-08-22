@@ -1,4 +1,4 @@
-// @target: es5
+// target: es5
 
 class C {
     set X(public v) { }

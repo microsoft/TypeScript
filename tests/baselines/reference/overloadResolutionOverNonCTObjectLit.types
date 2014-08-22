@@ -32,7 +32,7 @@ module Bugs {
                 }
                 
                 function bug3() {
->bug3 : () => void
+>bug3 : typeof bug3
 
                                 var tokens:IToken[]= [];
 >tokens : IToken[]

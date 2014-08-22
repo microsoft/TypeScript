@@ -1,6 +1,6 @@
 === tests/cases/compiler/noSelfOnVars.ts ===
 function foo() {
->foo : () => void
+>foo : typeof foo
 
     function bar() { }
 >bar : () => void

@@ -3,12 +3,12 @@ class Foo{};
 >Foo : Foo
 
 function bar(x: {new(): Foo;}){}
->bar : (x: new () => Foo) => void
+>bar : typeof bar
 >x : new () => Foo
 >Foo : Foo
 
 bar(Foo); // Error, but should be allowed
 >bar(Foo) : void
->bar : (x: new () => Foo) => void
+>bar : typeof bar
 >Foo : typeof Foo
 

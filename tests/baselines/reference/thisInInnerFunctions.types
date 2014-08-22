@@ -28,14 +28,11 @@ class Foo {
 }
 
 function test() {
->test : () => void
+>test : typeof test
 
     var x = () => {
 >x : () => void
->() => {
-        (() => this)();
-        this;
-    } : () => void
+>() => {        (() => this)();        this;    } : () => void
 
         (() => this)();
 >(() => this)() : any

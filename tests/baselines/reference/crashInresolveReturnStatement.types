@@ -7,9 +7,9 @@ class WorkItemToolbar {
 
         WITDialogs.createCopyOfWorkItem();
 >WITDialogs.createCopyOfWorkItem() : void
->WITDialogs.createCopyOfWorkItem : () => void
+>WITDialogs.createCopyOfWorkItem : typeof createCopyOfWorkItem
 >WITDialogs : typeof WITDialogs
->createCopyOfWorkItem : () => void
+>createCopyOfWorkItem : typeof createCopyOfWorkItem
     }
 }
 class CreateCopyOfWorkItemDialog {
@@ -22,7 +22,7 @@ class CreateCopyOfWorkItemDialog {
     }
 }
 function createWorkItemDialog<P0>(dialogType: P0) {
->createWorkItemDialog : <P0>(dialogType: P0) => void
+>createWorkItemDialog : typeof createWorkItemDialog
 >P0 : P0
 >dialogType : P0
 >P0 : P0
@@ -31,11 +31,11 @@ class WITDialogs {
 >WITDialogs : WITDialogs
 
     public static createCopyOfWorkItem() {
->createCopyOfWorkItem : () => void
+>createCopyOfWorkItem : typeof createCopyOfWorkItem
 
         createWorkItemDialog(CreateCopyOfWorkItemDialog);
 >createWorkItemDialog(CreateCopyOfWorkItemDialog) : void
->createWorkItemDialog : <P0>(dialogType: P0) => void
+>createWorkItemDialog : typeof createWorkItemDialog
 >CreateCopyOfWorkItemDialog : typeof CreateCopyOfWorkItemDialog
     }
 }

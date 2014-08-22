@@ -2,46 +2,46 @@
 // type parameters from the same declaration are identical to themself
 
 function foo1<T>(x: T);
->foo1 : { <T>(x: T): any; <T>(x: T): any; }
+>foo1 : typeof foo1
 >T : T
 >x : T
 >T : T
 
 function foo1<T>(x: T); // no error, different declaration for each T
->foo1 : { <T>(x: T): any; <T>(x: T): any; }
+>foo1 : typeof foo1
 >T : T
 >x : T
 >T : T
 
 function foo1<T>(x: T) { }
->foo1 : { <T>(x: T): any; <T>(x: T): any; }
+>foo1 : typeof foo1
 >T : T
 >x : T
 >T : T
 
 function foo2<T, U>(x: T);
->foo2 : { <T, U>(x: T): any; <T, U>(x: T): any; }
+>foo2 : typeof foo2
 >T : T
 >U : U
 >x : T
 >T : T
 
 function foo2<T, U>(x: T); // no error, different declaration for each T
->foo2 : { <T, U>(x: T): any; <T, U>(x: T): any; }
+>foo2 : typeof foo2
 >T : T
 >U : U
 >x : T
 >T : T
 
 function foo2<T, U>(x: T) { }
->foo2 : { <T, U>(x: T): any; <T, U>(x: T): any; }
+>foo2 : typeof foo2
 >T : T
 >U : U
 >x : T
 >T : T
 
 function foo3<T, U>(x: T, y: U) {
->foo3 : <T, U>(x: T, y: U) => void
+>foo3 : typeof foo3
 >T : T
 >U : U
 >x : T

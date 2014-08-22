@@ -1,6 +1,6 @@
 === tests/cases/compiler/idInProp.ts ===
 function f() {
->f : () => void
+>f : typeof f
 
 var t: { (f: any) : any; };
 >t : (f: any) => any

@@ -3,7 +3,7 @@ class A {
 >A : A
 
     static one<T>(source: T, value: number): T {
->one : <T>(source: T, value: number) => T
+>one : typeof one
 >T : T
 >source : T
 >T : T
@@ -15,10 +15,10 @@ class A {
 
     }
     static goo() { return 0; }
->goo : () => number
+>goo : typeof goo
 
     static two<T>(source: T): T {
->two : <T>(source: T) => T
+>two : typeof two
 >T : T
 >source : T
 >T : T
@@ -26,9 +26,9 @@ class A {
 
         return this.one<T>(source, 42); // should not error
 >this.one<T>(source, 42) : T
->this.one : <T>(source: T, value: number) => T
+>this.one : typeof one
 >this : typeof A
->one : <T>(source: T, value: number) => T
+>one : typeof one
 >T : T
 >source : T
 

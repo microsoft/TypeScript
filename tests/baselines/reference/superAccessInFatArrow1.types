@@ -21,15 +21,11 @@ module test {
 >runme : () => void
 
             this.bar(() => {
->this.bar(() => {
-                super.foo();
-            }) : void
+>this.bar(() => {                super.foo();            }) : void
 >this.bar : (callback: () => void) => void
 >this : B
 >bar : (callback: () => void) => void
->() => {
-                super.foo();
-            } : () => void
+>() => {                super.foo();            } : () => void
 
                 super.foo();
 >super.foo() : void

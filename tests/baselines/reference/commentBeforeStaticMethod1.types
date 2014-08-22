@@ -6,7 +6,7 @@ class C {
    * Returns bar
    */
   public static foo(): string {
->foo : () => string
+>foo : typeof foo
 
     return "bar";
   }

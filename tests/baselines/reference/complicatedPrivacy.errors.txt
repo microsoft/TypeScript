@@ -1,4 +1,4 @@
-==== tests/cases/compiler/complicatedPrivacy.ts (4 errors) ====
+==== tests/cases/compiler/complicatedPrivacy.ts (5 errors) ====
     module m1 {
         export module m2 {
     
@@ -11,11 +11,13 @@
             export class C2 implements m3.i3 {
                 public get p1(arg) {
                            ~~
-!!! A 'get' accessor cannot have parameters.
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
                     return new C1();
                 }
     
                 public set p1(arg1: C1) {
+                           ~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
                 }
     
                 public f55() {

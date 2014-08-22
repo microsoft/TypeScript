@@ -1,5 +1,4 @@
 //@module: amd
-//@declaration: true
 
 // @Filename: privacyTopLevelAmbientExternalModuleImportWithoutExport_require.ts
 // Public elements
@@ -29,8 +28,6 @@ declare module 'm2' {
 }
 
 // @Filename: privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts
-///<reference path='privacyTopLevelAmbientExternalModuleImportWithoutExport_require2.ts'/>
-///<reference path='privacyTopLevelAmbientExternalModuleImportWithoutExport_require3.ts'/>
 // Privacy errors - importing private elements
 import im_private_mi_private = require("m");
 import im_private_mu_private = require("m2");

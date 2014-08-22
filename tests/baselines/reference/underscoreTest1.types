@@ -5,7 +5,7 @@ declare var $;
 >$ : any
 
 declare function alert(x: string): void;
->alert : (x: string) => void
+>alert : typeof alert
 >x : string
 
 _.each([1, 2, 3], (num) => alert(num.toString()));
@@ -17,7 +17,7 @@ _.each([1, 2, 3], (num) => alert(num.toString()));
 >(num) => alert(num.toString()) : (num: number) => void
 >num : number
 >alert(num.toString()) : void
->alert : (x: string) => void
+>alert : typeof alert
 >num.toString() : string
 >num.toString : (radix?: number) => string
 >num : number
@@ -36,7 +36,7 @@ _.each({ one: 1, two: 2, three: 3 }, (value: number, key?: string) => alert(valu
 >value : number
 >key : string
 >alert(value.toString()) : void
->alert : (x: string) => void
+>alert : typeof alert
 >value.toString() : string
 >value.toString : (radix?: number) => string
 >value : number
@@ -557,11 +557,7 @@ func2();
 
 var buttonView = {
 >buttonView : { label: string; onClick: () => void; onHover: () => void; }
->{
-    label: 'underscore',
-    onClick: function () { alert('clicked: ' + this.label); },
-    onHover: function () { alert('hovering: ' + this.label); }
-} : { label: string; onClick: () => void; onHover: () => void; }
+>{    label: 'underscore',    onClick: function () { alert('clicked: ' + this.label); },    onHover: function () { alert('hovering: ' + this.label); }} : { label: string; onClick: () => void; onHover: () => void; }
 
     label: 'underscore',
 >label : string
@@ -570,7 +566,7 @@ var buttonView = {
 >onClick : () => void
 >function () { alert('clicked: ' + this.label); } : () => void
 >alert('clicked: ' + this.label) : void
->alert : (x: string) => void
+>alert : typeof alert
 >'clicked: ' + this.label : string
 >this.label : any
 >this : any
@@ -580,7 +576,7 @@ var buttonView = {
 >onHover : () => void
 >function () { alert('hovering: ' + this.label); } : () => void
 >alert('hovering: ' + this.label) : void
->alert : (x: string) => void
+>alert : typeof alert
 >'hovering: ' + this.label : string
 >this.label : any
 >this : any
@@ -606,15 +602,11 @@ $('#underscore_button').bind('click', buttonView.onClick);
 
 var fibonacci = _.memoize(function (n) {
 >fibonacci : any
->_.memoize(function (n) {
-    return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2);
-}) : (n: any) => any
+>_.memoize(function (n) {    return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2);}) : (n: any) => any
 >_.memoize : <T extends Function>(func: T, hashFunction?: Function) => T
 >_ : Static
 >memoize : <T extends Function>(func: T, hashFunction?: Function) => T
->function (n) {
-    return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2);
-} : (n: any) => any
+>function (n) {    return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2);} : (n: any) => any
 >n : any
 
     return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2);
@@ -659,13 +651,13 @@ _.defer(function () { alert('deferred'); });
 >defer : (func: Function, ...args: any[]) => number
 >function () { alert('deferred'); } : () => void
 >alert('deferred') : void
->alert : (x: string) => void
+>alert : typeof alert
 
 var updatePosition = () => alert('updating position...');
 >updatePosition : () => void
 >() => alert('updating position...') : () => void
 >alert('updating position...') : void
->alert : (x: string) => void
+>alert : typeof alert
 
 var throttled = _.throttle(updatePosition, 100);
 >throttled : () => void
@@ -687,7 +679,7 @@ var calculateLayout = () => alert('calculating layout...');
 >calculateLayout : () => void
 >() => alert('calculating layout...') : () => void
 >alert('calculating layout...') : void
->alert : (x: string) => void
+>alert : typeof alert
 
 var lazyLayout = _.debounce(calculateLayout, 300);
 >lazyLayout : () => void
@@ -709,7 +701,7 @@ var createApplication = () => alert('creating application...');
 >createApplication : () => void
 >() => alert('creating application...') : () => void
 >alert('creating application...') : void
->alert : (x: string) => void
+>alert : typeof alert
 
 var initialize = _.once(createApplication);
 >initialize : () => void
@@ -734,7 +726,7 @@ var render = () => alert("rendering...");
 >render : () => void
 >() => alert("rendering...") : () => void
 >alert("rendering...") : void
->alert : (x: string) => void
+>alert : typeof alert
 
 var renderNotes = _.after(notes.length, render);
 >renderNotes : () => void
@@ -921,34 +913,14 @@ _.clone({ name: 'moe' });
 >name : string
 
 _.chain([1, 2, 3, 200])
->_.chain([1, 2, 3, 200])
-    .filter(function (num) { return num % 2 == 0; })
-    .tap(<any>alert)
-    .map(function (num) { return num * num })
-    .value() : number[]
->_.chain([1, 2, 3, 200])
-    .filter(function (num) { return num % 2 == 0; })
-    .tap(<any>alert)
-    .map(function (num) { return num * num })
-    .value : () => number[]
->_.chain([1, 2, 3, 200])
-    .filter(function (num) { return num % 2 == 0; })
-    .tap(<any>alert)
-    .map(function (num) { return num * num }) : ChainedArray<number>
->_.chain([1, 2, 3, 200])
-    .filter(function (num) { return num % 2 == 0; })
-    .tap(<any>alert)
-    .map : <U>(iterator: Iterator<number, U>, context?: any) => ChainedArray<U>
->_.chain([1, 2, 3, 200])
-    .filter(function (num) { return num % 2 == 0; })
-    .tap(<any>alert) : ChainedArray<number>
->_.chain([1, 2, 3, 200])
-    .filter(function (num) { return num % 2 == 0; })
-    .tap : (interceptor: (object: number[]) => void) => ChainedArray<number>
->_.chain([1, 2, 3, 200])
-    .filter(function (num) { return num % 2 == 0; }) : ChainedArray<number>
->_.chain([1, 2, 3, 200])
-    .filter : (iterator: Iterator<number, boolean>, context?: any) => ChainedArray<number>
+>_.chain([1, 2, 3, 200])    .filter(function (num) { return num % 2 == 0; })    .tap(<any>alert)    .map(function (num) { return num * num })    .value() : number[]
+>_.chain([1, 2, 3, 200])    .filter(function (num) { return num % 2 == 0; })    .tap(<any>alert)    .map(function (num) { return num * num })    .value : () => number[]
+>_.chain([1, 2, 3, 200])    .filter(function (num) { return num % 2 == 0; })    .tap(<any>alert)    .map(function (num) { return num * num }) : ChainedArray<number>
+>_.chain([1, 2, 3, 200])    .filter(function (num) { return num % 2 == 0; })    .tap(<any>alert)    .map : <U>(iterator: Iterator<number, U>, context?: any) => ChainedArray<U>
+>_.chain([1, 2, 3, 200])    .filter(function (num) { return num % 2 == 0; })    .tap(<any>alert) : ChainedArray<number>
+>_.chain([1, 2, 3, 200])    .filter(function (num) { return num % 2 == 0; })    .tap : (interceptor: (object: number[]) => void) => ChainedArray<number>
+>_.chain([1, 2, 3, 200])    .filter(function (num) { return num % 2 == 0; }) : ChainedArray<number>
+>_.chain([1, 2, 3, 200])    .filter : (iterator: Iterator<number, boolean>, context?: any) => ChainedArray<number>
 >_.chain([1, 2, 3, 200]) : ChainedArray<number>
 >_.chain : { <T>(list: T[]): ChainedArray<T>; <T>(list: Dictionary<T>): ChainedDictionary<T>; <T>(obj: T): ChainedObject<T>; }
 >_ : Static
@@ -966,7 +938,7 @@ _.chain([1, 2, 3, 200])
     .tap(<any>alert)
 >tap : (interceptor: (object: number[]) => void) => ChainedArray<number>
 ><any>alert : any
->alert : (x: string) => void
+>alert : typeof alert
 
     .map(function (num) { return num * num })
 >map : <U>(iterator: Iterator<number, U>, context?: any) => ChainedArray<U>
@@ -1083,7 +1055,7 @@ _.isFunction(alert);
 >_.isFunction : (object: any) => boolean
 >_ : Static
 >isFunction : (object: any) => boolean
->alert : (x: string) => void
+>alert : typeof alert
 
 _.isString("moe");
 >_.isString("moe") : boolean
@@ -1132,7 +1104,6 @@ _.isRegExp(/moe/);
 >_.isRegExp : (object: any) => boolean
 >_ : Static
 >isRegExp : (object: any) => boolean
->/moe/ : RegExp
 
 _.isNaN(NaN);
 >_.isNaN(NaN) : boolean
@@ -1143,7 +1114,7 @@ _.isNaN(NaN);
 
 isNaN(undefined);
 >isNaN(undefined) : boolean
->isNaN : (number: number) => boolean
+>isNaN : typeof isNaN
 >undefined : undefined
 
 _.isNaN(undefined);
@@ -1222,25 +1193,15 @@ _.random(0, 100);
 >random : { (max: number): number; (min: number, max: number): number; }
 
 _.mixin({
->_.mixin({
-    capitalize: function (string) {
-        return string.charAt(0).toUpperCase() + string.substring(1).toLowerCase();
-    }
-}) : void
+>_.mixin({    capitalize: function (string) {        return string.charAt(0).toUpperCase() + string.substring(1).toLowerCase();    }}) : void
 >_.mixin : (object: any) => void
 >_ : Static
 >mixin : (object: any) => void
->{
-    capitalize: function (string) {
-        return string.charAt(0).toUpperCase() + string.substring(1).toLowerCase();
-    }
-} : { capitalize: (string: any) => any; }
+>{    capitalize: function (string) {        return string.charAt(0).toUpperCase() + string.substring(1).toLowerCase();    }} : { capitalize: (string: any) => any; }
 
     capitalize: function (string) {
 >capitalize : (string: any) => any
->function (string) {
-        return string.charAt(0).toUpperCase() + string.substring(1).toLowerCase();
-    } : (string: any) => any
+>function (string) {        return string.charAt(0).toUpperCase() + string.substring(1).toLowerCase();    } : (string: any) => any
 >string : any
 
         return string.charAt(0).toUpperCase() + string.substring(1).toLowerCase();
@@ -1356,19 +1317,14 @@ compiled2({ epithet: "stooge" });
 >epithet : string
 
 _.templateSettings = {
->_.templateSettings = {
-    interpolate: /\{\{(.+?)\}\}/g
-} : { interpolate: RegExp; }
+>_.templateSettings = {    interpolate: /\{\{(.+?)\}\}/g} : { interpolate: RegExp; }
 >_.templateSettings : TemplateSettings
 >_ : Static
 >templateSettings : TemplateSettings
->{
-    interpolate: /\{\{(.+?)\}\}/g
-} : { interpolate: RegExp; }
+>{    interpolate: /\{\{(.+?)\}\}/g} : { interpolate: RegExp; }
 
     interpolate: /\{\{(.+?)\}\}/g
 >interpolate : RegExp
->/\{\{(.+?)\}\}/g : RegExp
 
 };
 var template2 = _.template("Hello {{ name }}!");

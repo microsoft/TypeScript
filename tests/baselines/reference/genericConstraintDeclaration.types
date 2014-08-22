@@ -4,7 +4,7 @@ class List<T extends {}>{
 >T : T
 
     static empty<T extends {}>(): List<T>{return null;}
->empty : <T extends {}>() => List<T>
+>empty : typeof empty
 >T : T
 >List : List<T>
 >T : T

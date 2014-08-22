@@ -31,7 +31,3 @@ define(["require", "exports"], function (require, exports) {
         }
     })(Q || (Q = {}));
 });
-
-
-//// [privacyCheckAnonymousFunctionParameter2.d.ts]
-export declare var x: number;

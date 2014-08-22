@@ -20,7 +20,7 @@ module m3 {
     }
 
     export function foo() {
->foo : () => number
+>foo : typeof foo
 
         return m4.x;
 >m4.x : number

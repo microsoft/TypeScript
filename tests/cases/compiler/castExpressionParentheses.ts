@@ -26,7 +26,7 @@ declare var A;
 (<any>typeof A).x; 
 (<any>-A).x; 
 new (<any>A());
-(<Tany>()=> {})();
+(<any>()=> {})();
 (<any>function foo() { })();
 (<any><number><any>-A).x; 
 

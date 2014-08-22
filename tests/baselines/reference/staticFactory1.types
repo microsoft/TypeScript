@@ -6,7 +6,7 @@ class Base {
 >foo : () => number
 
     static create() {
->create : () => Base
+>create : typeof create
 
         return new this();
 >new this() : Base
@@ -24,9 +24,9 @@ class Derived extends Base {
 var d = Derived.create(); 
 >d : Base
 >Derived.create() : Base
->Derived.create : () => Base
+>Derived.create : typeof create
 >Derived : typeof Derived
->create : () => Base
+>create : typeof create
 
 d.foo();  
 >d.foo() : number

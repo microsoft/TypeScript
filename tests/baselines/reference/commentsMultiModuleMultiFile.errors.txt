@@ -1,0 +1,41 @@
+==== tests/cases/compiler/commentsMultiModuleMultiFile_1.ts (0 errors) ====
+    import m = require('commentsMultiModuleMultiFile_0');
+    /** this is multi module 3 comment*/
+    module multiM {
+        /** class d comment*/
+        export class d {
+        }
+    
+        /// class f comment
+        export class f {
+        }
+    }
+    new multiM.d();
+==== tests/cases/compiler/commentsMultiModuleMultiFile_0.ts (3 errors) ====
+    
+    /** this is multi declare module*/
+    export module multiM {
+                  ~~~~~~
+!!! Individual declarations in merged declaration multiM must be all exported or all local.
+        /// class b comment
+        export class b {
+        }
+    }
+    /** thi is multi module 2*/
+    module multiM {
+           ~~~~~~
+!!! Individual declarations in merged declaration multiM must be all exported or all local.
+        /** class c comment*/
+        export class c {
+        }
+    
+        // class e comment
+        export class e {
+        }
+    }
+    
+    new multiM.b();
+    new multiM.c();
+               ~
+!!! Property 'c' does not exist on type 'typeof multiM'.
+    

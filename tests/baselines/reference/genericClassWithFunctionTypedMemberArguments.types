@@ -238,7 +238,7 @@ module WithCandidates {
 >C3 : C3<T, U>
 
     function other<T, U>(t: T, u: U) {
->other : <T, U>(t: T, u: U) => void
+>other : typeof other
 >T : T
 >U : U
 >t : T

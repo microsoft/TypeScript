@@ -1,6 +1,4 @@
 //@module: amd
-//@declaration: true
-
 // private elements
 module m_private {
     export class c_private {

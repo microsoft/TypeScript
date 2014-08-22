@@ -1,6 +1,6 @@
 === tests/cases/compiler/nestedIndexer.ts ===
 function then(x) {
->then : (x: any) => void
+>then : typeof then
 >x : any
 
 var match: { [index: number]: string; }

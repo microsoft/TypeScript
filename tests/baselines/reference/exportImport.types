@@ -3,7 +3,7 @@ import e = require('./exporter');
 >e : typeof "tests/cases/compiler/exporter"
 
 export function w(): e.w { // Should be OK
->w : () => Widget1
+>w : typeof w
 >e : e
 >w : Widget1
 

@@ -24,7 +24,7 @@ module consumer {
 >UsefulClass : UsefulClass
                 
                 function use():provider.UsefulClass { 
->use : () => UsefulClass
+>use : typeof use
 >provider : provider
 >UsefulClass : UsefulClass
 

@@ -13,7 +13,7 @@ var series: Series;
 
 
 function foo() {
->foo : () => any
+>foo : typeof foo
 
     var seriesExtent = (series) => null;
 >seriesExtent : (series: any) => any

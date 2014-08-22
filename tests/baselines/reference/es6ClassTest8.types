@@ -1,6 +1,6 @@
 === tests/cases/compiler/es6ClassTest8.ts ===
 function f1(x:any) {return x;}
->f1 : (x: any) => any
+>f1 : typeof f1
 >x : any
 >x : any
 
@@ -10,12 +10,8 @@ class C {
     constructor() {
         var bar:any = (function() {
 >bar : any
->(function() {
-            return bar; // 'bar' should be resolvable
-        }) : () => any
->function() {
-            return bar; // 'bar' should be resolvable
-        } : () => any
+>(function() {            return bar; // 'bar' should be resolvable        }) : () => any
+>function() {            return bar; // 'bar' should be resolvable        } : () => any
 
             return bar; // 'bar' should be resolvable
 >bar : any
@@ -24,9 +20,9 @@ class C {
         var b = f1(f1(bar));
 >b : any
 >f1(f1(bar)) : any
->f1 : (x: any) => any
+>f1 : typeof f1
 >f1(bar) : any
->f1 : (x: any) => any
+>f1 : typeof f1
 >bar : any
     }
   
@@ -36,13 +32,13 @@ class Vector {
 >Vector : Vector
 
     static norm(v:Vector):Vector {return null;}
->norm : (v: Vector) => Vector
+>norm : typeof norm
 >v : Vector
 >Vector : Vector
 >Vector : Vector
 
     static minus(v1:Vector, v2:Vector):Vector {return null;}
->minus : (v1: Vector, v2: Vector) => Vector
+>minus : typeof minus
 >v1 : Vector
 >Vector : Vector
 >v2 : Vector
@@ -50,7 +46,7 @@ class Vector {
 >Vector : Vector
 
     static times(v1:Vector, v2:Vector):Vector {return null;}
->times : (v1: Vector, v2: Vector) => Vector
+>times : typeof times
 >v1 : Vector
 >Vector : Vector
 >v2 : Vector
@@ -58,7 +54,7 @@ class Vector {
 >Vector : Vector
 
     static cross(v1:Vector, v2:Vector):Vector {return null;}
->cross : (v1: Vector, v2: Vector) => Vector
+>cross : typeof cross
 >v1 : Vector
 >Vector : Vector
 >v2 : Vector
@@ -76,7 +72,7 @@ class Vector {
     }
 
     static dot(v1:Vector, v2:Vector):Vector {return null;}    
->dot : (v1: Vector, v2: Vector) => Vector
+>dot : typeof dot
 >v1 : Vector
 >Vector : Vector
 >v2 : Vector
@@ -118,13 +114,13 @@ class Camera {
 >this : Camera
 >forward : Vector
 >Vector.norm(Vector.minus(lookAt,this.pos)) : Vector
->Vector.norm : (v: Vector) => Vector
+>Vector.norm : typeof norm
 >Vector : typeof Vector
->norm : (v: Vector) => Vector
+>norm : typeof norm
 >Vector.minus(lookAt,this.pos) : Vector
->Vector.minus : (v1: Vector, v2: Vector) => Vector
+>Vector.minus : typeof minus
 >Vector : typeof Vector
->minus : (v1: Vector, v2: Vector) => Vector
+>minus : typeof minus
 >lookAt : Vector
 >this.pos : Vector
 >this : Camera
@@ -136,18 +132,18 @@ class Camera {
 >this : Camera
 >right : Vector
 >Vector.times(down, Vector.norm(Vector.cross(this.forward, down))) : Vector
->Vector.times : (v1: Vector, v2: Vector) => Vector
+>Vector.times : typeof times
 >Vector : typeof Vector
->times : (v1: Vector, v2: Vector) => Vector
+>times : typeof times
 >down : Vector
 >Vector.norm(Vector.cross(this.forward, down)) : Vector
->Vector.norm : (v: Vector) => Vector
+>Vector.norm : typeof norm
 >Vector : typeof Vector
->norm : (v: Vector) => Vector
+>norm : typeof norm
 >Vector.cross(this.forward, down) : Vector
->Vector.cross : (v1: Vector, v2: Vector) => Vector
+>Vector.cross : typeof cross
 >Vector : typeof Vector
->cross : (v1: Vector, v2: Vector) => Vector
+>cross : typeof cross
 >this.forward : Vector
 >this : Camera
 >forward : Vector
@@ -159,18 +155,18 @@ class Camera {
 >this : Camera
 >up : Vector
 >Vector.times(down, Vector.norm(Vector.cross(this.forward, this.right))) : Vector
->Vector.times : (v1: Vector, v2: Vector) => Vector
+>Vector.times : typeof times
 >Vector : typeof Vector
->times : (v1: Vector, v2: Vector) => Vector
+>times : typeof times
 >down : Vector
 >Vector.norm(Vector.cross(this.forward, this.right)) : Vector
->Vector.norm : (v: Vector) => Vector
+>Vector.norm : typeof norm
 >Vector : typeof Vector
->norm : (v: Vector) => Vector
+>norm : typeof norm
 >Vector.cross(this.forward, this.right) : Vector
->Vector.cross : (v1: Vector, v2: Vector) => Vector
+>Vector.cross : typeof cross
 >Vector : typeof Vector
->cross : (v1: Vector, v2: Vector) => Vector
+>cross : typeof cross
 >this.forward : Vector
 >this : Camera
 >forward : Vector

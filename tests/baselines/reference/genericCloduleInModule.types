@@ -10,7 +10,7 @@ module A {
 >foo : () => void
 
         static bar() { }
->bar : () => void
+>bar : typeof bar
     }
     export module B {
 >B : typeof B

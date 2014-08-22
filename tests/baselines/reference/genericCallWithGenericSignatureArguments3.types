@@ -3,7 +3,7 @@
 // the corresponding inferred type arguments to become fixed and no further candidate inferences are made for them.
 
 function foo<T>(x: T, a: (x: T) => T, b: (x: T) => T) {
->foo : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+>foo : typeof foo
 >T : T
 >x : T
 >T : T
@@ -29,7 +29,7 @@ function foo<T>(x: T, a: (x: T) => T, b: (x: T) => T) {
 var r1 = foo('', (x: string) => '', (x: Object) => null); // any => any
 >r1 : (x: any) => any
 >foo('', (x: string) => '', (x: Object) => null) : (x: any) => any
->foo : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+>foo : typeof foo
 >(x: string) => '' : (x: string) => string
 >x : string
 >(x: Object) => null : (x: Object) => any
@@ -39,7 +39,7 @@ var r1 = foo('', (x: string) => '', (x: Object) => null); // any => any
 var r1ii = foo('', (x) => '', (x) => null); // string => string
 >r1ii : (x: string) => string
 >foo('', (x) => '', (x) => null) : (x: string) => string
->foo : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+>foo : typeof foo
 >(x) => '' : (x: string) => string
 >x : string
 >(x) => null : (x: string) => any
@@ -48,7 +48,7 @@ var r1ii = foo('', (x) => '', (x) => null); // string => string
 var r2 = foo('', (x: string) => '', (x: Object) => ''); // string => string
 >r2 : (x: Object) => Object
 >foo('', (x: string) => '', (x: Object) => '') : (x: Object) => Object
->foo : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+>foo : typeof foo
 >(x: string) => '' : (x: string) => string
 >x : string
 >(x: Object) => '' : (x: Object) => string
@@ -58,7 +58,7 @@ var r2 = foo('', (x: string) => '', (x: Object) => ''); // string => string
 var r3 = foo(null, (x: Object) => '', (x: string) => ''); // Object => Object
 >r3 : (x: Object) => Object
 >foo(null, (x: Object) => '', (x: string) => '') : (x: Object) => Object
->foo : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+>foo : typeof foo
 >(x: Object) => '' : (x: Object) => string
 >x : Object
 >Object : Object
@@ -68,7 +68,7 @@ var r3 = foo(null, (x: Object) => '', (x: string) => ''); // Object => Object
 var r4 = foo(null, (x) => '', (x) => ''); // any => any
 >r4 : (x: any) => any
 >foo(null, (x) => '', (x) => '') : (x: any) => any
->foo : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+>foo : typeof foo
 >(x) => '' : (x: any) => string
 >x : any
 >(x) => '' : (x: any) => string
@@ -77,7 +77,7 @@ var r4 = foo(null, (x) => '', (x) => ''); // any => any
 var r5 = foo(new Object(), (x) => '', (x) => ''); // Object => Object
 >r5 : (x: Object) => Object
 >foo(new Object(), (x) => '', (x) => '') : (x: Object) => Object
->foo : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+>foo : typeof foo
 >new Object() : Object
 >Object : { (): any; (value: any): any; new (value?: any): Object; prototype: Object; getPrototypeOf(o: any): any; getOwnPropertyDescriptor(o: any, p: string): PropertyDescriptor; getOwnPropertyNames(o: any): string[]; create(o: any, properties?: PropertyDescriptorMap): any; defineProperty(o: any, p: string, attributes: PropertyDescriptor): any; defineProperties(o: any, properties: PropertyDescriptorMap): any; seal(o: any): any; freeze(o: any): any; preventExtensions(o: any): any; isSealed(o: any): boolean; isFrozen(o: any): boolean; isExtensible(o: any): boolean; keys(o: any): string[]; }
 >(x) => '' : (x: Object) => string
@@ -96,7 +96,7 @@ enum F { A }
 var r6 = foo(E.A, (x: number) => E.A, (x: F) => F.A); // number => number 
 >r6 : (x: number) => number
 >foo(E.A, (x: number) => E.A, (x: F) => F.A) : (x: number) => number
->foo : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+>foo : typeof foo
 >E.A : E
 >E : typeof E
 >A : E
@@ -114,7 +114,7 @@ var r6 = foo(E.A, (x: number) => E.A, (x: F) => F.A); // number => number
 
 
 function foo2<T, U>(x: T, a: (x: T) => U, b: (x: T) => U) {
->foo2 : <T, U>(x: T, a: (x: T) => U, b: (x: T) => U) => (x: T) => U
+>foo2 : typeof foo2
 >T : T
 >U : U
 >x : T
@@ -141,7 +141,7 @@ function foo2<T, U>(x: T, a: (x: T) => U, b: (x: T) => U) {
 var r8 = foo2('', (x) => '', (x) => null); // string => string
 >r8 : (x: string) => any
 >foo2('', (x) => '', (x) => null) : (x: string) => any
->foo2 : <T, U>(x: T, a: (x: T) => U, b: (x: T) => U) => (x: T) => U
+>foo2 : typeof foo2
 >(x) => '' : (x: string) => string
 >x : string
 >(x) => null : (x: string) => any
@@ -150,7 +150,7 @@ var r8 = foo2('', (x) => '', (x) => null); // string => string
 var r9 = foo2(null, (x) => '', (x) => ''); // any => any
 >r9 : (x: any) => string
 >foo2(null, (x) => '', (x) => '') : (x: any) => string
->foo2 : <T, U>(x: T, a: (x: T) => U, b: (x: T) => U) => (x: T) => U
+>foo2 : typeof foo2
 >(x) => '' : (x: any) => string
 >x : any
 >(x) => '' : (x: any) => string
@@ -159,7 +159,7 @@ var r9 = foo2(null, (x) => '', (x) => ''); // any => any
 var r10 = foo2(null, (x: Object) => '', (x: string) => ''); // Object => Object
 >r10 : (x: Object) => string
 >foo2(null, (x: Object) => '', (x: string) => '') : (x: Object) => string
->foo2 : <T, U>(x: T, a: (x: T) => U, b: (x: T) => U) => (x: T) => U
+>foo2 : typeof foo2
 >(x: Object) => '' : (x: Object) => string
 >x : Object
 >Object : Object
@@ -173,7 +173,7 @@ var x: (a: string) => boolean;
 var r11 = foo2(x, (a1: (y: string) => string) => (n: Object) => 1, (a2: (z: string) => string) => 2); // {} => {}
 >r11 : (x: {}) => {}
 >foo2(x, (a1: (y: string) => string) => (n: Object) => 1, (a2: (z: string) => string) => 2) : (x: {}) => {}
->foo2 : <T, U>(x: T, a: (x: T) => U, b: (x: T) => U) => (x: T) => U
+>foo2 : typeof foo2
 >x : (a: string) => boolean
 >(a1: (y: string) => string) => (n: Object) => 1 : (a1: (y: string) => string) => (n: Object) => number
 >a1 : (y: string) => string
@@ -188,7 +188,7 @@ var r11 = foo2(x, (a1: (y: string) => string) => (n: Object) => 1, (a2: (z: stri
 var r12 = foo2(x, (a1: (y: string) => boolean) => (n: Object) => 1, (a2: (z: string) => boolean) => 2); // (string => boolean) => {}
 >r12 : (x: (a: string) => boolean) => {}
 >foo2(x, (a1: (y: string) => boolean) => (n: Object) => 1, (a2: (z: string) => boolean) => 2) : (x: (a: string) => boolean) => {}
->foo2 : <T, U>(x: T, a: (x: T) => U, b: (x: T) => U) => (x: T) => U
+>foo2 : typeof foo2
 >x : (a: string) => boolean
 >(a1: (y: string) => boolean) => (n: Object) => 1 : (a1: (y: string) => boolean) => (n: Object) => number
 >a1 : (y: string) => boolean

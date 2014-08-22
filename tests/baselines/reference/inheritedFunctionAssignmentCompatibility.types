@@ -4,20 +4,20 @@ interface IResultCallback extends Function { }
 >Function : Function
 
 function fn(cb: IResultCallback) { }
->fn : (cb: IResultCallback) => void
+>fn : typeof fn
 >cb : IResultCallback
 >IResultCallback : IResultCallback
 
 fn((a, b) => true);
 >fn((a, b) => true) : void
->fn : (cb: IResultCallback) => void
+>fn : typeof fn
 >(a, b) => true : (a: any, b: any) => boolean
 >a : any
 >b : any
 
 fn(function (a, b) { return true; })
 >fn(function (a, b) { return true; }) : void
->fn : (cb: IResultCallback) => void
+>fn : typeof fn
 >function (a, b) { return true; } : (a: any, b: any) => boolean
 >a : any
 >b : any

@@ -9,10 +9,7 @@ class C<T> {
 
     x = <U>(a: U) => {
 >x : <U>(a: U) => T
-><U>(a: U) => {
-        var y: T;
-        return y;
-    } : <U>(a: U) => T
+><U>(a: U) => {        var y: T;        return y;    } : <U>(a: U) => T
 >U : U
 >a : U
 >U : U

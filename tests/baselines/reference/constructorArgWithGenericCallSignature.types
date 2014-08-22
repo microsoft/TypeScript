@@ -20,7 +20,7 @@ module Test {
     }
  
  export function F(func: MyFunc) { }
->F : (func: MyFunc) => void
+>F : typeof F
 >func : MyFunc
 >MyFunc : MyFunc
 }
@@ -31,9 +31,9 @@ var func: Test.MyFunc;
 
 Test.F(func); // OK
 >Test.F(func) : void
->Test.F : (func: MyFunc) => void
+>Test.F : typeof F
 >Test : typeof Test
->F : (func: MyFunc) => void
+>F : typeof F
 >func : MyFunc
 
 var test = new Test.MyClass(func); // Should be OK

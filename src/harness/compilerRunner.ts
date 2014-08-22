@@ -307,7 +307,7 @@ class CompilerBaselineRunner extends RunnerBase {
                         allFiles.forEach(file => {
                             var codeLines = file.content.split('\n');
                             walker.getTypes(file.unitName).forEach(result => {
-                                var formattedLine = result.identifierName + " : " + result.type;
+                                var formattedLine = result.identifierName.replace(/\r?\n/g, "") + " : " + result.type;
                                 if (!typeMap[file.unitName]) {
                                     typeMap[file.unitName] = {};
                                 }

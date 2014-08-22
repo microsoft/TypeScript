@@ -1,4 +1,3 @@
-// @target: es5
 // no errors expected
 
 class C {

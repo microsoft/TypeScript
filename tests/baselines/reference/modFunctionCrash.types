@@ -3,16 +3,16 @@ declare module Q {
 >Q : typeof Q
 
     function f(fn:()=>void); // typechecking the function type shouldnot crash the compiler
->f : (fn: () => void) => any
+>f : typeof f
 >fn : () => void
 }
 
 
 Q.f(function() {this;});
 >Q.f(function() {this;}) : any
->Q.f : (fn: () => void) => any
+>Q.f : typeof f
 >Q : typeof Q
->f : (fn: () => void) => any
+>f : typeof f
 >function() {this;} : () => void
 >this : any
 

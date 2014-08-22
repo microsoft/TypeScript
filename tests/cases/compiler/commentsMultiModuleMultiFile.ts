@@ -11,7 +11,7 @@ export module multiM {
     }
 }
 /** thi is multi module 2*/
-export module multiM {
+module multiM {
     /** class c comment*/
     export class c {
     }
@@ -27,7 +27,7 @@ new multiM.c();
 // @Filename: commentsMultiModuleMultiFile_1.ts
 import m = require('commentsMultiModuleMultiFile_0');
 /** this is multi module 3 comment*/
-export module multiM {
+module multiM {
     /** class d comment*/
     export class d {
     }

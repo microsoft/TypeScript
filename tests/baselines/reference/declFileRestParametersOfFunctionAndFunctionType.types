@@ -1,26 +1,26 @@
 === tests/cases/compiler/declFileRestParametersOfFunctionAndFunctionType.ts ===
 
 function f1(...args) { }
->f1 : (...args: any[]) => void
+>f1 : typeof f1
 >args : any[]
 
 function f2(x: (...args) => void) { }
->f2 : (x: (...args: any[]) => void) => void
+>f2 : typeof f2
 >x : (...args: any[]) => void
 >args : any[]
 
 function f3(x: { (...args): void }) { }
->f3 : (x: (...args: any[]) => void) => void
+>f3 : typeof f3
 >x : (...args: any[]) => void
 >args : any[]
 
 function f4<T extends (...args) => void>() { }
->f4 : <T extends (...args: any[]) => void>() => void
+>f4 : typeof f4
 >T : T
 >args : any[]
 
 function f5<T extends { (...args): void }>() { }
->f5 : <T extends (...args: any[]) => void>() => void
+>f5 : typeof f5
 >T : T
 >args : any[]
 

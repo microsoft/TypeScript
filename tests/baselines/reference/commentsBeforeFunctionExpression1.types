@@ -1,9 +1,7 @@
 === tests/cases/compiler/commentsBeforeFunctionExpression1.ts ===
 var v = {
 >v : { f: (a: any) => number; }
->{
-    f: /**own f*/ (a) => 0
-} : { f: (a: any) => number; }
+>{    f: /**own f*/ (a) => 0} : { f: (a: any) => number; }
 
     f: /**own f*/ (a) => 0
 >f : (a: any) => number

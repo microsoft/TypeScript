@@ -1,7 +1,7 @@
 === tests/cases/compiler/implicitAnyDeclareFunctionWithoutFormalType2.ts ===
 // generates function fn1(): number;
 function fn1() {
->fn1 : () => number
+>fn1 : typeof fn1
 
     var x: number;
 >x : number
@@ -11,7 +11,7 @@ function fn1() {
 }
 // generates function fn2(): any;
 function fn2(): any {
->fn2 : () => any
+>fn2 : typeof fn2
 
     var x: any;
 >x : any
@@ -21,7 +21,7 @@ function fn2(): any {
 }
 // generates function fn3();
 function fn3() {
->fn3 : () => any
+>fn3 : typeof fn3
 
     var x: any;
 >x : any

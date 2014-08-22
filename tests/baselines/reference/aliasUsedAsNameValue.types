@@ -9,17 +9,14 @@ import b = require("aliasUsedAsNameValue_1");
  
 export var a = function () {
 >a : () => void
->function () {
-    //var x = mod.id; // TODO needed hack that mod is loaded
-    b.b(mod);
-} : () => void
+>function () {    //var x = mod.id; // TODO needed hack that mod is loaded    b.b(mod);} : () => void
 
     //var x = mod.id; // TODO needed hack that mod is loaded
     b.b(mod);
 >b.b(mod) : any
->b.b : (a: any) => any
+>b.b : typeof b
 >b : typeof "tests/cases/compiler/aliasUsedAsNameValue_1"
->b : (a: any) => any
+>b : typeof b
 >mod : typeof "tests/cases/compiler/aliasUsedAsNameValue_0"
 }
 
@@ -29,6 +26,6 @@ export var id: number;
 
 === tests/cases/compiler/aliasUsedAsNameValue_1.ts ===
 export function b(a: any): any { return null; }
->b : (a: any) => any
+>b : typeof b
 >a : any
 

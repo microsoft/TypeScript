@@ -6,19 +6,15 @@ export module m {
 }
 
 //// [chainedImportAlias_file1.ts]
-import x = require('chainedImportAlias_file0');
+import x = require('chainedImportAlias_file1');
 import y = x;
-y.m.foo();
+declare var console: {
+    log(message?: any);
+};
+console.log(y);
 
 
-//// [chainedImportAlias_file0.js]
-(function (m) {
-    function foo() {
-    }
-    m.foo = foo;
-})(exports.m || (exports.m = {}));
-var m = exports.m;
 //// [chainedImportAlias_file1.js]
-var x = require('chainedImportAlias_file0');
+var x = require('chainedImportAlias_file1');
 var y = x;
-y.m.foo();
+console.log(y);

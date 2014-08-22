@@ -1,4 +1,3 @@
-// @target: es5
 module m1 {
     export module m2 {
 

@@ -3,7 +3,7 @@ export module a {
 >a : typeof a
 
     export function foo(x: number) {
->foo : (x: number) => number
+>foo : typeof foo
 >x : number
 
         return x;
@@ -15,17 +15,17 @@ export module c {
 >c : typeof c
 
     import b = a.foo;
->b : (x: number) => number
+>b : typeof foo
 >a : typeof a
->foo : (x: number) => number
+>foo : typeof foo
 
     var bVal = b(10);
 >bVal : number
 >b(10) : number
->b : (x: number) => number
+>b : typeof foo
 
     export var bVal2 = b;
->bVal2 : (x: number) => number
->b : (x: number) => number
+>bVal2 : typeof foo
+>b : typeof foo
 }
 

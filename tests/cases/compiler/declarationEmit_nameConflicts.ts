@@ -1,7 +1,6 @@
 // @declaration: true
-// @module: commonjs
 // @Filename: declarationEmit_nameConflicts_1.ts
-module f { export class c { } }
+function f() { }
 export = f;
 
 // @Filename: declarationEmit_nameConflicts_0.ts
@@ -28,6 +27,7 @@ export module M.P {
         export interface I { }
     }
     export import im = M.P.f;
+    // Bug 887180: Invalid .d.ts when an aliased entity is referenced, and a different entity is closer in scope
     export var a = M.a; // emitted incorrectly as typeof f
     export var b = M.b; // ok
     export var c = M.c; // ok

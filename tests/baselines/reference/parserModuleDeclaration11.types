@@ -6,14 +6,14 @@ declare module string {
 >X : X
 
     export function foo(s: string);
->foo : (s: string) => any
+>foo : typeof foo
 >s : string
 }
 string.foo("abc");
 >string.foo("abc") : any
->string.foo : (s: string) => any
+>string.foo : typeof foo
 >string : typeof string
->foo : (s: string) => any
+>foo : typeof foo
 
 var x: string.X;
 >x : X

@@ -1,0 +1,30 @@
+==== tests/cases/compiler/aliasUsage1_main.ts (2 errors) ====
+    import Backbone = require("aliasUsage1_backbone");
+    import moduleA = require("aliasUsage1_moduleA");
+    interface IHasVisualizationModel {
+        VisualizationModel: typeof Backbone.Model;
+    }
+    class C2 {
+        x: IHasVisualizationModel;
+        get A() {
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            return this.x;
+        }
+        set A(x) {
+            ~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+            x = moduleA;
+        }
+    }
+==== tests/cases/compiler/aliasUsage1_backbone.ts (0 errors) ====
+    export class Model {
+        public someData: string;
+    }
+    
+==== tests/cases/compiler/aliasUsage1_moduleA.ts (0 errors) ====
+    import Backbone = require("aliasUsage1_backbone");
+    export class VisualizationModel extends Backbone.Model {
+        // interesting stuff here
+    }
+    

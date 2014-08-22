@@ -1,6 +1,6 @@
 === tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrOperatorWithTypeParameters.ts ===
 function fn1<T, U>(t: T, u: U) {
->fn1 : <T, U>(t: T, u: U) => void
+>fn1 : typeof fn1
 >T : T
 >U : U
 >t : T
@@ -35,7 +35,7 @@ function fn1<T, U>(t: T, u: U) {
 }
 
 function fn2<T, U/* extends T*/, V/* extends T*/>(t: T, u: U, v: V) {
->fn2 : <T, U, V>(t: T, u: U, v: V) => void
+>fn2 : typeof fn2
 >T : T
 >U : U
 >V : V
@@ -82,7 +82,7 @@ function fn2<T, U/* extends T*/, V/* extends T*/>(t: T, u: U, v: V) {
 }
 
 function fn3<T extends { a: string; b: string }, U extends { a: string; b: number }>(t: T, u: U) {
->fn3 : <T extends { a: string; b: string; }, U extends { a: string; b: number; }>(t: T, u: U) => void
+>fn3 : typeof fn3
 >T : T
 >a : string
 >b : string

@@ -8,7 +8,7 @@ module M
 >outer : number
 
     function f() {
->f : () => void
+>f : typeof f
 
         var inner = outer;   // Ok
 >inner : number

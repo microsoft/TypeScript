@@ -23,7 +23,7 @@ interface ObservableArray<T> extends Observable<T[]>
  
 
 function observableArray<T>(): ObservableArray<T> { return null;}
->observableArray : <T>() => ObservableArray<T>
+>observableArray : typeof observableArray
 >T : T
 >ObservableArray : ObservableArray<T>
 >T : T
@@ -33,7 +33,7 @@ function observableArray<T>(): ObservableArray<T> { return null;}
 var a =  observableArray<string>();
 >a : ObservableArray<string>
 >observableArray<string>() : ObservableArray<string>
->observableArray : <T>() => ObservableArray<T>
+>observableArray : typeof observableArray
 
 a.push('Some Value');
 >a.push('Some Value') : any

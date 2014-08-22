@@ -4,13 +4,13 @@ import f = require('file1');
 
 f.foo();
 >f.foo() : any
->f.foo : () => any
+>f.foo : typeof foo
 >f : typeof "tests/cases/compiler/file1"
->foo : () => any
+>foo : typeof foo
 
 === tests/cases/compiler/file1.ts ===
 export function foo() {
->foo : () => any
+>foo : typeof foo
 
 var classes = undefined;
 >classes : any

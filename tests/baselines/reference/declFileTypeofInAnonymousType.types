@@ -27,10 +27,7 @@ var a: { c: m1.c; };
 
 var b = {
 >b : { c: typeof c; m1: typeof m1; }
->{
-    c: m1.c,
-    m1: m1
-} : { c: typeof c; m1: typeof m1; }
+>{    c: m1.c,    m1: m1} : { c: typeof c; m1: typeof m1; }
 
     c: m1.c,
 >c : typeof c
@@ -51,12 +48,7 @@ var c = { m1: m1 };
 
 var d = {
 >d : { m: { mod: typeof m1; }; mc: { cl: typeof c; }; me: { en: typeof e; }; mh: e; }
->{
-    m: { mod: m1 },
-    mc: { cl: m1.c },
-    me: { en: m1.e },
-    mh: m1.e.holiday
-} : { m: { mod: typeof m1; }; mc: { cl: typeof c; }; me: { en: typeof e; }; mh: e; }
+>{    m: { mod: m1 },    mc: { cl: m1.c },    me: { en: m1.e },    mh: m1.e.holiday} : { m: { mod: typeof m1; }; mc: { cl: typeof c; }; me: { en: typeof e; }; mh: e; }
 
     m: { mod: m1 },
 >m : { mod: typeof m1; }

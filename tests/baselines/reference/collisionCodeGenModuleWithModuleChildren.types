@@ -44,7 +44,7 @@ module M {
 >m3 : typeof m3
 
         function M() {
->M : () => void
+>M : typeof M
         }
         var p = x;
 >p : number
@@ -53,7 +53,7 @@ module M {
         var p2 = M();
 >p2 : void
 >M() : void
->M : () => void
+>M : typeof M
     }
 }
 

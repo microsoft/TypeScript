@@ -1,42 +1,42 @@
 === tests/cases/conformance/expressions/functionCalls/typeArgumentInference.ts ===
 // Generic call with no parameters
 function noParams<T>() { }
->noParams : <T>() => void
+>noParams : typeof noParams
 >T : T
 
 noParams();
 >noParams() : void
->noParams : <T>() => void
+>noParams : typeof noParams
 
 noParams<string>();
 >noParams<string>() : void
->noParams : <T>() => void
+>noParams : typeof noParams
 
 noParams<{}>();
 >noParams<{}>() : void
->noParams : <T>() => void
+>noParams : typeof noParams
 
 // Generic call with parameters but none use type parameter type
 function noGenericParams<T>(n: string) { }
->noGenericParams : <T>(n: string) => void
+>noGenericParams : typeof noGenericParams
 >T : T
 >n : string
 
 noGenericParams('');
 >noGenericParams('') : void
->noGenericParams : <T>(n: string) => void
+>noGenericParams : typeof noGenericParams
 
 noGenericParams<number>('');
 >noGenericParams<number>('') : void
->noGenericParams : <T>(n: string) => void
+>noGenericParams : typeof noGenericParams
 
 noGenericParams<{}>('');
 >noGenericParams<{}>('') : void
->noGenericParams : <T>(n: string) => void
+>noGenericParams : typeof noGenericParams
 
 // Generic call with multiple type parameters and only one used in parameter type annotation
 function someGenerics1<T, U>(n: T, m: number) { }
->someGenerics1 : <T, U>(n: T, m: number) => void
+>someGenerics1 : typeof someGenerics1
 >T : T
 >U : U
 >n : T
@@ -45,15 +45,15 @@ function someGenerics1<T, U>(n: T, m: number) { }
 
 someGenerics1(3, 4);
 >someGenerics1(3, 4) : void
->someGenerics1 : <T, U>(n: T, m: number) => void
+>someGenerics1 : typeof someGenerics1
 
 someGenerics1<number, {}>(3, 4);
 >someGenerics1<number, {}>(3, 4) : void
->someGenerics1 : <T, U>(n: T, m: number) => void
+>someGenerics1 : typeof someGenerics1
 
 // Generic call with argument of function type whose parameter is of type parameter type
 function someGenerics2a<T>(n: (x: T) => void) { }
->someGenerics2a : <T>(n: (x: T) => void) => void
+>someGenerics2a : typeof someGenerics2a
 >T : T
 >n : (x: T) => void
 >x : T
@@ -61,21 +61,21 @@ function someGenerics2a<T>(n: (x: T) => void) { }
 
 someGenerics2a((n: string) => n);
 >someGenerics2a((n: string) => n) : void
->someGenerics2a : <T>(n: (x: T) => void) => void
+>someGenerics2a : typeof someGenerics2a
 >(n: string) => n : (n: string) => string
 >n : string
 >n : string
 
 someGenerics2a<string>((n: string) => n);
 >someGenerics2a<string>((n: string) => n) : void
->someGenerics2a : <T>(n: (x: T) => void) => void
+>someGenerics2a : typeof someGenerics2a
 >(n: string) => n : (n: string) => string
 >n : string
 >n : string
 
 someGenerics2a<string>((n) => n.substr(0));
 >someGenerics2a<string>((n) => n.substr(0)) : void
->someGenerics2a : <T>(n: (x: T) => void) => void
+>someGenerics2a : typeof someGenerics2a
 >(n) => n.substr(0) : (n: string) => string
 >n : string
 >n.substr(0) : string
@@ -84,7 +84,7 @@ someGenerics2a<string>((n) => n.substr(0));
 >substr : (from: number, length?: number) => string
 
 function someGenerics2b<T, U>(n: (x: T, y: U) => void) { }
->someGenerics2b : <T, U>(n: (x: T, y: U) => void) => void
+>someGenerics2b : typeof someGenerics2b
 >T : T
 >U : U
 >n : (x: T, y: U) => void
@@ -95,7 +95,7 @@ function someGenerics2b<T, U>(n: (x: T, y: U) => void) { }
 
 someGenerics2b((n: string, x: number) => n);
 >someGenerics2b((n: string, x: number) => n) : void
->someGenerics2b : <T, U>(n: (x: T, y: U) => void) => void
+>someGenerics2b : typeof someGenerics2b
 >(n: string, x: number) => n : (n: string, x: number) => string
 >n : string
 >x : number
@@ -103,7 +103,7 @@ someGenerics2b((n: string, x: number) => n);
 
 someGenerics2b<string, number>((n: string, t: number) => n);
 >someGenerics2b<string, number>((n: string, t: number) => n) : void
->someGenerics2b : <T, U>(n: (x: T, y: U) => void) => void
+>someGenerics2b : typeof someGenerics2b
 >(n: string, t: number) => n : (n: string, t: number) => string
 >n : string
 >t : number
@@ -111,7 +111,7 @@ someGenerics2b<string, number>((n: string, t: number) => n);
 
 someGenerics2b<string, number>((n, t) => n.substr(t * t));
 >someGenerics2b<string, number>((n, t) => n.substr(t * t)) : void
->someGenerics2b : <T, U>(n: (x: T, y: U) => void) => void
+>someGenerics2b : typeof someGenerics2b
 >(n, t) => n.substr(t * t) : (n: string, t: number) => string
 >n : string
 >t : number
@@ -125,31 +125,31 @@ someGenerics2b<string, number>((n, t) => n.substr(t * t));
 
 // Generic call with argument of function type whose parameter is not of type parameter type but body/return type uses type parameter
 function someGenerics3<T>(producer: () => T) { }
->someGenerics3 : <T>(producer: () => T) => void
+>someGenerics3 : typeof someGenerics3
 >T : T
 >producer : () => T
 >T : T
 
 someGenerics3(() => '');
 >someGenerics3(() => '') : void
->someGenerics3 : <T>(producer: () => T) => void
+>someGenerics3 : typeof someGenerics3
 >() => '' : () => string
 
 someGenerics3<Date>(() => undefined);
 >someGenerics3<Date>(() => undefined) : void
->someGenerics3 : <T>(producer: () => T) => void
+>someGenerics3 : typeof someGenerics3
 >Date : Date
 >() => undefined : () => any
 >undefined : undefined
 
 someGenerics3<number>(() => 3);
 >someGenerics3<number>(() => 3) : void
->someGenerics3 : <T>(producer: () => T) => void
+>someGenerics3 : typeof someGenerics3
 >() => 3 : () => number
 
 // 2 parameter generic call with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
 function someGenerics4<T, U>(n: T, f: (x: U) => void) { }
->someGenerics4 : <T, U>(n: T, f: (x: U) => void) => void
+>someGenerics4 : typeof someGenerics4
 >T : T
 >U : U
 >n : T
@@ -160,21 +160,21 @@ function someGenerics4<T, U>(n: T, f: (x: U) => void) { }
 
 someGenerics4(4, () => null);
 >someGenerics4(4, () => null) : void
->someGenerics4 : <T, U>(n: T, f: (x: U) => void) => void
+>someGenerics4 : typeof someGenerics4
 >() => null : () => any
 
 someGenerics4<string, number>('', () => 3);
 >someGenerics4<string, number>('', () => 3) : void
->someGenerics4 : <T, U>(n: T, f: (x: U) => void) => void
+>someGenerics4 : typeof someGenerics4
 >() => 3 : () => number
 
 someGenerics4<string, number>(null, null);
 >someGenerics4<string, number>(null, null) : void
->someGenerics4 : <T, U>(n: T, f: (x: U) => void) => void
+>someGenerics4 : typeof someGenerics4
 
 // 2 parameter generic call with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
 function someGenerics5<U, T>(n: T, f: (x: U) => void) { }
->someGenerics5 : <U, T>(n: T, f: (x: U) => void) => void
+>someGenerics5 : typeof someGenerics5
 >U : U
 >T : T
 >n : T
@@ -185,21 +185,21 @@ function someGenerics5<U, T>(n: T, f: (x: U) => void) { }
 
 someGenerics5(4, () => null);
 >someGenerics5(4, () => null) : void
->someGenerics5 : <U, T>(n: T, f: (x: U) => void) => void
+>someGenerics5 : typeof someGenerics5
 >() => null : () => any
 
 someGenerics5<number, string>('', () => 3);
 >someGenerics5<number, string>('', () => 3) : void
->someGenerics5 : <U, T>(n: T, f: (x: U) => void) => void
+>someGenerics5 : typeof someGenerics5
 >() => 3 : () => number
 
 someGenerics5<string, number>(null, null);
 >someGenerics5<string, number>(null, null) : void
->someGenerics5 : <U, T>(n: T, f: (x: U) => void) => void
+>someGenerics5 : typeof someGenerics5
 
 // Generic call with multiple arguments of function types that each have parameters of the same generic type
 function someGenerics6<A>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) { }
->someGenerics6 : <A>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) => void
+>someGenerics6 : typeof someGenerics6
 >A : A
 >a : (a: A) => A
 >a : A
@@ -216,7 +216,7 @@ function someGenerics6<A>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) { }
 
 someGenerics6(n => n, n => n, n => n);
 >someGenerics6(n => n, n => n, n => n) : void
->someGenerics6 : <A>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) => void
+>someGenerics6 : typeof someGenerics6
 >n => n : (n: {}) => {}
 >n : {}
 >n : {}
@@ -229,7 +229,7 @@ someGenerics6(n => n, n => n, n => n);
 
 someGenerics6<number>(n => n, n => n, n => n);
 >someGenerics6<number>(n => n, n => n, n => n) : void
->someGenerics6 : <A>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) => void
+>someGenerics6 : typeof someGenerics6
 >n => n : (n: number) => number
 >n : number
 >n : number
@@ -242,7 +242,7 @@ someGenerics6<number>(n => n, n => n, n => n);
 
 someGenerics6<number>((n: number) => n, (n: number) => n, (n: number) => n);
 >someGenerics6<number>((n: number) => n, (n: number) => n, (n: number) => n) : void
->someGenerics6 : <A>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) => void
+>someGenerics6 : typeof someGenerics6
 >(n: number) => n : (n: number) => number
 >n : number
 >n : number
@@ -255,7 +255,7 @@ someGenerics6<number>((n: number) => n, (n: number) => n, (n: number) => n);
 
 // Generic call with multiple arguments of function types that each have parameters of different generic type
 function someGenerics7<A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) { }
->someGenerics7 : <A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
+>someGenerics7 : typeof someGenerics7
 >A : A
 >B : B
 >C : C
@@ -274,7 +274,7 @@ function someGenerics7<A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) 
 
 someGenerics7(n => n, n => n, n => n);
 >someGenerics7(n => n, n => n, n => n) : void
->someGenerics7 : <A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
+>someGenerics7 : typeof someGenerics7
 >n => n : (n: {}) => {}
 >n : {}
 >n : {}
@@ -287,7 +287,7 @@ someGenerics7(n => n, n => n, n => n);
 
 someGenerics7<number, string, number>(n => n, n => n, n => n);
 >someGenerics7<number, string, number>(n => n, n => n, n => n) : void
->someGenerics7 : <A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
+>someGenerics7 : typeof someGenerics7
 >n => n : (n: number) => number
 >n : number
 >n : number
@@ -300,7 +300,7 @@ someGenerics7<number, string, number>(n => n, n => n, n => n);
 
 someGenerics7<number, string, number>((n: number) => n, (n: string) => n, (n: number) => n);
 >someGenerics7<number, string, number>((n: number) => n, (n: string) => n, (n: number) => n) : void
->someGenerics7 : <A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
+>someGenerics7 : typeof someGenerics7
 >(n: number) => n : (n: number) => number
 >n : number
 >n : number
@@ -313,7 +313,7 @@ someGenerics7<number, string, number>((n: number) => n, (n: string) => n, (n: nu
 
 // Generic call with argument of generic function type
 function someGenerics8<T>(n: T): T { return n; }
->someGenerics8 : <T>(n: T) => T
+>someGenerics8 : typeof someGenerics8
 >T : T
 >n : T
 >T : T
@@ -321,18 +321,18 @@ function someGenerics8<T>(n: T): T { return n; }
 >n : T
 
 var x = someGenerics8(someGenerics7);
->x : <A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
->someGenerics8(someGenerics7) : <A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
->someGenerics8 : <T>(n: T) => T
->someGenerics7 : <A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
+>x : typeof someGenerics7
+>someGenerics8(someGenerics7) : typeof someGenerics7
+>someGenerics8 : typeof someGenerics8
+>someGenerics7 : typeof someGenerics7
 
 x<string, string, string>(null, null, null);
 >x<string, string, string>(null, null, null) : void
->x : <A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
+>x : typeof someGenerics7
 
 // Generic call with multiple parameters of generic type passed arguments with no best common type
 function someGenerics9<T>(a: T, b: T, c: T): T {
->someGenerics9 : <T>(a: T, b: T, c: T) => T
+>someGenerics9 : typeof someGenerics9
 >T : T
 >a : T
 >T : T
@@ -347,7 +347,7 @@ function someGenerics9<T>(a: T, b: T, c: T): T {
 var a9a = someGenerics9('', 0, []);
 >a9a : {}
 >someGenerics9('', 0, []) : {}
->someGenerics9 : <T>(a: T, b: T, c: T) => T
+>someGenerics9 : typeof someGenerics9
 >[] : undefined[]
 
 var a9a: {};
@@ -356,7 +356,7 @@ var a9a: {};
 var a9b = someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
 >a9b : { a?: number; b?: string; }
 >someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null) : { a?: number; b?: string; }
->someGenerics9 : <T>(a: T, b: T, c: T) => T
+>someGenerics9 : typeof someGenerics9
 >a : number
 >b : string
 >{ a: 0 } : { a: number; }
@@ -392,7 +392,7 @@ interface A92 {
 var a9e = someGenerics9(undefined, { x: 6, z: new Date() }, { x: 6, y: '' });
 >a9e : {}
 >someGenerics9(undefined, { x: 6, z: new Date() }, { x: 6, y: '' }) : {}
->someGenerics9 : <T>(a: T, b: T, c: T) => T
+>someGenerics9 : typeof someGenerics9
 >undefined : undefined
 >{ x: 6, z: new Date() } : { x: number; z: Date; }
 >x : number
@@ -409,7 +409,7 @@ var a9e: {};
 var a9f = someGenerics9<A92>(undefined, { x: 6, z: new Date() }, { x: 6, y: '' });
 >a9f : A92
 >someGenerics9<A92>(undefined, { x: 6, z: new Date() }, { x: 6, y: '' }) : A92
->someGenerics9 : <T>(a: T, b: T, c: T) => T
+>someGenerics9 : typeof someGenerics9
 >A92 : A92
 >undefined : undefined
 >{ x: 6, z: new Date() } : { x: number; z: Date; }
@@ -429,7 +429,7 @@ var a9f: A92;
 var a9d = someGenerics9({ x: 3 }, { x: 6 }, { x: 6 });
 >a9d : { x: number; }
 >someGenerics9({ x: 3 }, { x: 6 }, { x: 6 }) : { x: number; }
->someGenerics9 : <T>(a: T, b: T, c: T) => T
+>someGenerics9 : typeof someGenerics9
 >{ x: 3 } : { x: number; }
 >x : number
 >{ x: 6 } : { x: number; }
@@ -448,7 +448,7 @@ var anyVar: any;
 var a = someGenerics9(7, anyVar, 4);
 >a : any
 >someGenerics9(7, anyVar, 4) : any
->someGenerics9 : <T>(a: T, b: T, c: T) => T
+>someGenerics9 : typeof someGenerics9
 >anyVar : any
 
 var a: any;
@@ -458,7 +458,7 @@ var a: any;
 var arr = someGenerics9([], null, undefined);
 >arr : any[]
 >someGenerics9([], null, undefined) : any[]
->someGenerics9 : <T>(a: T, b: T, c: T) => T
+>someGenerics9 : typeof someGenerics9
 >[] : any[]
 >undefined : undefined
 

@@ -1,5 +1,4 @@
 //@module: commonjs
-// @target: ES5
 // @Filename: aliasUsage1_backbone.ts
 export class Model {
     public someData: string;

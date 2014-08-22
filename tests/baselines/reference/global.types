@@ -3,7 +3,7 @@ module M {
 >M : typeof M
 
     export function f(y:number) {
->f : (y: number) => number
+>f : typeof f
 >y : number
 
         return x+y;
@@ -18,8 +18,8 @@ var x=10;
 
 M.f(3);
 >M.f(3) : number
->M.f : (y: number) => number
+>M.f : typeof f
 >M : typeof M
->f : (y: number) => number
+>f : typeof f
 
 

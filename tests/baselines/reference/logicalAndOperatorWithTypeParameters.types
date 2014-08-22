@@ -3,7 +3,7 @@
 // type as the second operand.
 
 function foo<T, U, V/* extends T*/>(t: T, u: U, v: V) {
->foo : <T, U, V>(t: T, u: U, v: V) => void
+>foo : typeof foo
 >T : T
 >U : U
 >V : V

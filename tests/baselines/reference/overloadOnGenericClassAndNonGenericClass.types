@@ -26,13 +26,13 @@ class X2 { x: string; }
 >x : string
 
 function f(a: X1): A;
->f : { (a: X1): A; <T>(a: X<T>): B; }
+>f : typeof f
 >a : X1
 >X1 : X1
 >A : A
 
 function f<T>(a: X<T>): B;
->f : { (a: X1): A; <T>(a: X<T>): B; }
+>f : typeof f
 >T : T
 >a : X<T>
 >X : X<T>
@@ -40,7 +40,7 @@ function f<T>(a: X<T>): B;
 >B : B
 
 function f(a): any {
->f : { (a: X1): A; <T>(a: X<T>): B; }
+>f : typeof f
 >a : any
 }
 
@@ -51,7 +51,7 @@ var xs: X<string>;
 var t3 = f(xs);
 >t3 : A
 >f(xs) : A
->f : { (a: X1): A; <T>(a: X<T>): B; }
+>f : typeof f
 >xs : X<string>
 
 var t3: A; // should not error

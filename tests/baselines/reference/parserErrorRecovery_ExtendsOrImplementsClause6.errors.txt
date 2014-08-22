@@ -1,4 +1,0 @@
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ExtendsOrImplementsClauses/parserErrorRecovery_ExtendsOrImplementsClause6.ts (1 errors) ====
-    interface I extends { }
-                ~~~~~~~
-!!! 'extends' list cannot be empty.

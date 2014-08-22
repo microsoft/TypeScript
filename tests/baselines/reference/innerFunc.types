@@ -1,6 +1,6 @@
 === tests/cases/compiler/innerFunc.ts ===
 function salt() {
->salt : () => number
+>salt : typeof salt
 
   function pepper() { return 5;}
 >pepper : () => number
@@ -14,7 +14,7 @@ module M {
 >M : typeof M
 
     export function tungsten() {
->tungsten : () => number
+>tungsten : typeof tungsten
 
         function oxygen() { return 6; };
 >oxygen : () => number

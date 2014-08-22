@@ -14,19 +14,19 @@ interface A {
 }
 
 function f<T>(a: T);
->f : { <T>(a: T): any; <T>(a: T): any; }
+>f : typeof f
 >T : T
 >a : T
 >T : T
 
 function f<T>(a: T);
->f : { <T>(a: T): any; <T>(a: T): any; }
+>f : typeof f
 >T : T
 >a : T
 >T : T
 
 function f(a) { }
->f : { <T>(a: T): any; <T>(a: T): any; }
+>f : typeof f
 >a : any
 
 interface I2 {

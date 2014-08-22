@@ -1,9 +1,9 @@
 === tests/cases/compiler/externFunc.ts ===
 declare function parseInt(s:string):number;
->parseInt : { (s: string, radix?: number): number; (s: string): number; }
+>parseInt : typeof parseInt
 >s : string
 
 parseInt("2");
 >parseInt("2") : number
->parseInt : { (s: string, radix?: number): number; (s: string): number; }
+>parseInt : typeof parseInt
 

@@ -23,7 +23,7 @@ class X<T> {
 }
 
 function foo<T>(t: X<T>, t2: X<T>) {
->foo : <T>(t: X<T>, t2: X<T>) => T
+>foo : typeof foo
 >T : T
 >t : X<T>
 >X : X<T>
@@ -55,14 +55,14 @@ var d1 = new X<D>();
 var r = foo(c1, d1); // error
 >r : {}
 >foo(c1, d1) : {}
->foo : <T>(t: X<T>, t2: X<T>) => T
+>foo : typeof foo
 >c1 : X<C>
 >d1 : X<D>
 
 var r2 = foo(c1, c1); // ok
 >r2 : C
 >foo(c1, c1) : C
->foo : <T>(t: X<T>, t2: X<T>) => T
+>foo : typeof foo
 >c1 : X<C>
 >c1 : X<C>
 

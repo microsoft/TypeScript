@@ -14,23 +14,23 @@ interface IPromise<T> {
 }
 
 function f() {
->f : () => IPromise<void>
+>f : typeof f
 
     if (true) return b();
 >b() : IPromise<void>
->b : () => IPromise<void>
+>b : typeof b
 
     return d();
 >d() : IPromise<any>
->d : () => IPromise<any>
+>d : typeof d
 }
 
 
 function b(): IPromise<void> { return null; }
->b : () => IPromise<void>
+>b : typeof b
 >IPromise : IPromise<T>
 
 function d(): IPromise<any> { return null; }
->d : () => IPromise<any>
+>d : typeof d
 >IPromise : IPromise<T>
 

@@ -1,5 +1,4 @@
 //@module: commonjs
-//@declaration: true
 module Foo {
     export interface A<T> {
     }

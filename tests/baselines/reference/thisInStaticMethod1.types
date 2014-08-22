@@ -6,7 +6,7 @@ class foo {
 >x : number
 
  static bar() {
->bar : () => number
+>bar : typeof bar
 
   return this.x;
 >this.x : number
@@ -17,7 +17,7 @@ class foo {
 var x = foo.bar();
 >x : number
 >foo.bar() : number
->foo.bar : () => number
+>foo.bar : typeof bar
 >foo : typeof foo
->bar : () => number
+>bar : typeof bar
 

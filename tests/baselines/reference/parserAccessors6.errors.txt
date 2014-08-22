@@ -2,5 +2,5 @@
     declare class C {
       set foo(v) { }
           ~~~
-!!! An accessor cannot be declared in an ambient context.
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
     }

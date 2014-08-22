@@ -121,7 +121,7 @@ var q: String = a;
 >a : any
 
 function foo<T, U /*extends T*/, V extends Date>(x: T, y: U, z: V) {
->foo : <T, U, V extends Date>(x: T, y: U, z: V) => void
+>foo : typeof foo
 >T : T
 >U : U
 >V : V

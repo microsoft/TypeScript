@@ -1,6 +1,6 @@
 === tests/cases/conformance/statements/tryStatements/tryStatements.ts ===
 function fn() {
->fn : () => void
+>fn : typeof fn
 
     try {
 

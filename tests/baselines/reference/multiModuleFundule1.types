@@ -13,7 +13,7 @@ module C {
 >C : typeof C
 
     export function foo() { }
->foo : () => void
+>foo : typeof foo
 }
 
 var r = C(2);
@@ -29,7 +29,7 @@ var r2 = new C(2); // using void returning function as constructor
 var r3 = C.foo();
 >r3 : void
 >C.foo() : void
->C.foo : () => void
+>C.foo : typeof foo
 >C : typeof C
->foo : () => void
+>foo : typeof foo
 

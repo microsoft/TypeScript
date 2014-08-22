@@ -18,11 +18,3 @@ var a;
     })(a.b || (a.b = {}));
     var b = a.b;
 })(a || (a = {}));
-
-
-//// [internalAliasWithDottedNameEmit.d.ts]
-declare module a.b.c {
-    var d: any;
-}
-declare module a.e.f {
-}

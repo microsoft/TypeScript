@@ -5,7 +5,7 @@ module m1 { export class c1 { public a; }}
 >a : any
 
 function foo():m1.c1{return new m1.c1();}; 
->foo : () => c1
+>foo : typeof foo
 >m1 : m1
 >c1 : c1
 >new m1.c1() : c1
@@ -16,5 +16,5 @@ function foo():m1.c1{return new m1.c1();};
 var x = foo();
 >x : c1
 >foo() : c1
->foo : () => c1
+>foo : typeof foo
 

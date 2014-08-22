@@ -1,21 +1,21 @@
 === tests/cases/compiler/recursiveReturns.ts ===
 function R1() {
->R1 : () => void
+>R1 : typeof R1
 
 	R1();
 >R1() : void
->R1 : () => void
+>R1 : typeof R1
 
 	return;
 }
 
 function R2() { R2(); }
->R2 : () => void
+>R2 : typeof R2
 >R2() : void
->R2 : () => void
+>R2 : typeof R2
 
 function R3(n:number) {
->R3 : (n: number) => void
+>R3 : typeof R3
 >n : number
 
 	if (n == 0) {
@@ -27,7 +27,7 @@ function R3(n:number) {
 	else {
 		R3(n--);
 >R3(n--) : void
->R3 : (n: number) => void
+>R3 : typeof R3
 >n-- : number
 >n : number
 	}

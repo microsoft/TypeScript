@@ -1,9 +1,9 @@
 === tests/cases/compiler/functionCall2.ts ===
 function foo():number{return 1}; 
->foo : () => number
+>foo : typeof foo
 
 var x = foo();
 >x : number
 >foo() : number
->foo : () => number
+>foo : typeof foo
 

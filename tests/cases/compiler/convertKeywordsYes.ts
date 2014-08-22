@@ -21,16 +21,20 @@ var declare = 0;
 
 function bigGeneric<
     constructor,
+    any,
+    boolean,
     implements ,
     interface ,
     let,
     module ,
+    number,
     package,
     private ,
     protected,
     public ,
     set ,
     static ,
+    string,
     get ,
     yield,
     declare
@@ -289,16 +293,20 @@ enum bigEnum {
 
 module bigModule {
     class constructor { }
+    class any { }
+    class boolean { }
     class implements { }
     class interface { }
     class let { }
     class module { }
+    class number { }
     class package { }
     class private { }
     class protected { }
     class public { }
     class set { }
     class static { }
+    class string { }
     class get { }
     class yield { }
     class declare { }

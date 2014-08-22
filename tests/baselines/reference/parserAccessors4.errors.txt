@@ -1,0 +1,4 @@
+==== tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors4.ts (1 errors) ====
+    var v = { set Foo(a) { } };
+                  ~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.

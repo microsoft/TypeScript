@@ -19,7 +19,7 @@
 >AjaxSettings : AjaxSettings
     }
     export function ajax(options: AjaxSettings) { }
->ajax : (options: AjaxSettings) => void
+>ajax : typeof ajax
 >options : AjaxSettings
 >AjaxSettings : AjaxSettings
   }

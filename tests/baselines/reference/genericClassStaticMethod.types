@@ -4,7 +4,7 @@ class Foo<T> {
 >T : T
 
     static getFoo() {
->getFoo : () => void
+>getFoo : typeof getFoo
     }
 }
 
@@ -15,7 +15,7 @@ class Bar<T> extends Foo<T> {
 >T : T
 
     static getFoo() {
->getFoo : () => void
+>getFoo : typeof getFoo
     }
 }
 

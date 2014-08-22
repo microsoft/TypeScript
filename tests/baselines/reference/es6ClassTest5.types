@@ -8,9 +8,7 @@ class C1T5 {
 >s : string
 
 	   	(i) => {
->(i) => {
-	        return i;
-	    } : (i: number) => number
+>(i) => {	        return i;	    } : (i: number) => number
 >i : number
 
 	        return i;

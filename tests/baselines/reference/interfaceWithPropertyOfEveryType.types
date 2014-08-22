@@ -4,7 +4,7 @@ class C { foo: string; }
 >foo : string
 
 function f1() { }
->f1 : () => void
+>f1 : typeof f1
 
 module M {
 >M : typeof M
@@ -61,8 +61,8 @@ interface Foo {
 >C : C
 
     l: typeof f1;
->l : () => void
->f1 : () => void
+>l : typeof f1
+>f1 : typeof f1
 
     m: typeof M;
 >m : typeof M
@@ -79,23 +79,7 @@ interface Foo {
 var a: Foo = {
 >a : Foo
 >Foo : Foo
->{
-    a: 1,
-    b: '',
-    c: true,
-    d: {},
-    e: null ,
-    f: [1],
-    g: {},
-    h: (x: number) => 1,
-    i: <T>(x: T) => x,
-    j: <Foo>null,
-    k: new C(),
-    l: f1,
-    m: M,
-    n: {},
-    o: E.A
-} : { a: number; b: string; c: boolean; d: {}; e: null; f: number[]; g: {}; h: (x: number) => number; i: <T>(x: T) => T; j: Foo; k: C; l: () => void; m: typeof M; n: {}; o: E; }
+>{    a: 1,    b: '',    c: true,    d: {},    e: null ,    f: [1],    g: {},    h: (x: number) => 1,    i: <T>(x: T) => x,    j: <Foo>null,    k: new C(),    l: f1,    m: M,    n: {},    o: E.A} : { a: number; b: string; c: boolean; d: {}; e: null; f: number[]; g: {}; h: (x: number) => number; i: <T>(x: T) => T; j: Foo; k: C; l: typeof f1; m: typeof M; n: {}; o: E; }
 
     a: 1,
 >a : number
@@ -145,7 +129,7 @@ var a: Foo = {
 >C : typeof C
 
     l: f1,
->l : () => void
+>l : typeof f1
 >f1 : f1
 
     m: M,

@@ -1,4 +1,4 @@
-==== tests/cases/compiler/implementGenericWithMismatchedTypes.ts (2 errors) ====
+==== tests/cases/compiler/implementGenericWithMismatchedTypes.ts (3 errors) ====
     // no errors because in the derived types the best common type for T's value is Object
     // and that matches the original signature for assignability since we treat its T's as Object
     
@@ -24,9 +24,12 @@
           ~~
 !!! Class 'C2<T>' incorrectly implements interface 'IFoo2<T>':
 !!!   Types of property 'foo' are incompatible:
-!!!     Type '<Tstring>(x: Tstring) => number' is not assignable to type '(x: T) => T':
-!!!       Type 'number' is not assignable to type 'T'.
-        foo<Tstring>(x: Tstring): number {
+!!!     Type '<string>(x: string) => number' is not assignable to type '(x: T) => T':
+!!!       Types of parameters 'x' and 'x' are incompatible:
+!!!         Type 'string' is not assignable to type 'T'.
+        foo<string>(x: string): number {
+            ~~~~~~
+!!! Type parameter name cannot be 'string'
             return null;
         }
     }

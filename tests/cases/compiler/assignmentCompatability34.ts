@@ -3,7 +3,7 @@ module __test1__ {
     export var __val__obj4 = obj4;
 }
 module __test2__ {
-    export var obj: { <Tnumber>(a:Tnumber):Tnumber;};
+    export var obj: { <number>(a:number):number;};
     export var __val__obj = obj;
 }
 __test2__.__val__obj = __test1__.__val__obj4

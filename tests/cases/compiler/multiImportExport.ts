@@ -1,5 +1,3 @@
-// @module: commonjs
-// @declaration: true
 // @Filename: consumer.ts
 import Drawing = require('./Drawing');
 var addr = new Drawing.Math.Adder();

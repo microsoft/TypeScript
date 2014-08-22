@@ -2,7 +2,7 @@
 // Optional parameters should be valid in all the below casts
 
 function foo(x?: number) { }
->foo : (x?: number) => void
+>foo : typeof foo
 >x : number
 
 var f = function foo(x?: number) { }
@@ -19,11 +19,11 @@ var f2 = (x: number, y?: number) => { }
 
 foo(1);
 >foo(1) : void
->foo : (x?: number) => void
+>foo : typeof foo
 
 foo();
 >foo() : void
->foo : (x?: number) => void
+>foo : typeof foo
 
 f(1);
 >f(1) : void
@@ -134,11 +134,7 @@ a.foo(1);
 
 var b = {
 >b : { foo: (x?: number) => void; a: (x: number, y?: number) => void; b: (x?: number) => void; }
->{
-    foo(x?: number) { },
-    a: function foo(x: number, y?: number) { },
-    b: (x?: number) => { }
-} : { foo: (x?: number) => void; a: (x: number, y?: number) => void; b: (x?: number) => void; }
+>{    foo(x?: number) { },    a: function foo(x: number, y?: number) { },    b: (x?: number) => { }} : { foo: (x?: number) => void; a: (x: number, y?: number) => void; b: (x?: number) => void; }
 
     foo(x?: number) { },
 >foo : (x?: number) => void

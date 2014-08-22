@@ -37,7 +37,7 @@ class D<T>{
 }
 
 function F(x: string): number { return 42; }
->F : (x: string) => number
+>F : typeof F
 >x : string
 
 module M {
@@ -51,7 +51,7 @@ module M {
     }
 
     export function F2(x: number): string { return x.toString(); }
->F2 : (x: number) => string
+>F2 : typeof F2
 >x : number
 >x.toString() : string
 >x.toString : (radix?: number) => string
@@ -134,15 +134,15 @@ throw anObjectLiteral;
 >anObjectLiteral : { id: number; }
 
 var aFunction = F;
->aFunction : (x: string) => number
->F : (x: string) => number
+>aFunction : typeof F
+>F : typeof F
 
 throw aFunction;
->aFunction : (x: string) => number
+>aFunction : typeof F
 
 throw aFunction('');
 >aFunction('') : number
->aFunction : (x: string) => number
+>aFunction : typeof F
 
 var aLambda = (x) => 2;
 >aLambda : (x: any) => number
@@ -178,13 +178,13 @@ throw aClassInModule;
 >aClassInModule : A
 
 var aFunctionInModule = M.F2;
->aFunctionInModule : (x: number) => string
->M.F2 : (x: number) => string
+>aFunctionInModule : typeof F2
+>M.F2 : typeof F2
 >M : typeof M
->F2 : (x: number) => string
+>F2 : typeof F2
 
 throw aFunctionInModule;
->aFunctionInModule : (x: number) => string
+>aFunctionInModule : typeof F2
 
 // no initializer or annotation, so this is an 'any'
 var x;
@@ -223,8 +223,6 @@ throw ['a', ['b']];
 >['b'] : string[]
 
 throw /[a-z]/;
->/[a-z]/ : RegExp
-
 throw new Date();
 >new Date() : Date
 >Date : { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }

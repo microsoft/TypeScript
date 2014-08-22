@@ -1,11 +1,11 @@
 === tests/cases/compiler/collisionExportsRequireAndFunction.ts ===
 export function exports() {
->exports : () => number
+>exports : typeof exports
 
     return 1;
 }
 export function require() {
->require : () => string
+>require : typeof require
 
     return "require";
 }

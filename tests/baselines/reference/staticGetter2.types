@@ -4,7 +4,7 @@ class C {
 >C : C
 
     static x() {
->x : () => typeof C
+>x : typeof x
 
         var r = this;
 >r : typeof C

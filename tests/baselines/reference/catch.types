@@ -1,6 +1,6 @@
 === tests/cases/compiler/catch.ts ===
 function f() {
->f : () => void
+>f : typeof f
 
     try {} catch(e) { }
 >e : any

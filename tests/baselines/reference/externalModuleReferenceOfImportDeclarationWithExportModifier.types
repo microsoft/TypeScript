@@ -4,11 +4,11 @@ export import file1 = require('externalModuleReferenceOfImportDeclarationWithExp
 
 file1.foo();
 >file1.foo() : void
->file1.foo : () => void
+>file1.foo : typeof foo
 >file1 : typeof "tests/cases/compiler/externalModuleReferenceOfImportDeclarationWithExportModifier_0"
->foo : () => void
+>foo : typeof foo
 
 === tests/cases/compiler/externalModuleReferenceOfImportDeclarationWithExportModifier_0.ts ===
 export function foo() { };
->foo : () => void
+>foo : typeof foo
 

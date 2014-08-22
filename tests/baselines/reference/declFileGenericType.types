@@ -10,7 +10,7 @@ export module C {
 >B : B
     
     export function F<T>(x: T): A<B> { return null; }
->F : <T>(x: T) => A<B>
+>F : typeof F
 >T : T
 >x : T
 >T : T
@@ -18,7 +18,7 @@ export module C {
 >B : B
 
     export function F2<T>(x: T): C.A<C.B> { return null; }
->F2 : <T>(x: T) => A<B>
+>F2 : typeof F2
 >T : T
 >x : T
 >T : T
@@ -28,7 +28,7 @@ export module C {
 >B : B
 
     export function F3<T>(x: T): C.A<C.B>[] { return null; }
->F3 : <T>(x: T) => A<B>[]
+>F3 : typeof F3
 >T : T
 >x : T
 >T : T
@@ -38,7 +38,7 @@ export module C {
 >B : B
 
     export function F4<T extends A<B>>(x: T): Array<C.A<C.B>> { return null; }
->F4 : <T extends A<B>>(x: T) => A<B>[]
+>F4 : typeof F4
 >T : T
 >A : A<T>
 >B : B
@@ -51,12 +51,12 @@ export module C {
 >B : B
 
     export function F5<T>(): T { return null; }
->F5 : <T>() => T
+>F5 : typeof F5
 >T : T
 >T : T
 
     export function F6<T extends A<B>>(x: T): T { return null; }
->F6 : <T extends A<B>>(x: T) => T
+>F6 : typeof F6
 >T : T
 >A : A<T>
 >B : B
@@ -83,28 +83,28 @@ export var a: C.A<C.B>;
 >B : B
 
 export var b = C.F;
->b : <T>(x: T) => A<B>
->C.F : <T>(x: T) => A<B>
+>b : typeof F
+>C.F : typeof F
 >C : typeof C
->F : <T>(x: T) => A<B>
+>F : typeof F
 
 export var c = C.F2;
->c : <T>(x: T) => A<B>
->C.F2 : <T>(x: T) => A<B>
+>c : typeof F2
+>C.F2 : typeof F2
 >C : typeof C
->F2 : <T>(x: T) => A<B>
+>F2 : typeof F2
 
 export var d = C.F3;
->d : <T>(x: T) => A<B>[]
->C.F3 : <T>(x: T) => A<B>[]
+>d : typeof F3
+>C.F3 : typeof F3
 >C : typeof C
->F3 : <T>(x: T) => A<B>[]
+>F3 : typeof F3
 
 export var e = C.F4;
->e : <T extends A<B>>(x: T) => A<B>[]
->C.F4 : <T extends A<B>>(x: T) => A<B>[]
+>e : typeof F4
+>C.F4 : typeof F4
 >C : typeof C
->F4 : <T extends A<B>>(x: T) => A<B>[]
+>F4 : typeof F4
 
 export var x = (new C.D<C.A<C.B>>(new C.A<C.B>())).val;
 >x : A<B>
@@ -127,7 +127,7 @@ export var x = (new C.D<C.A<C.B>>(new C.A<C.B>())).val;
 >val : A<B>
 
 export function f<T extends C.A<C.B>>() { }
->f : <T extends A<B>>() => void
+>f : typeof f
 >T : T
 >C : C
 >A : A<T>
@@ -137,9 +137,9 @@ export function f<T extends C.A<C.B>>() { }
 export var g = C.F5<C.A<C.B>>();
 >g : A<B>
 >C.F5<C.A<C.B>>() : A<B>
->C.F5 : <T>() => T
+>C.F5 : typeof F5
 >C : typeof C
->F5 : <T>() => T
+>F5 : typeof F5
 >C : C
 >A : A<T>
 >C : C
@@ -160,8 +160,8 @@ export interface i extends C.A<C.B> { }
 >B : B
 
 export var j = C.F6;
->j : <T extends A<B>>(x: T) => T
->C.F6 : <T extends A<B>>(x: T) => T
+>j : typeof F6
+>C.F6 : typeof F6
 >C : typeof C
->F6 : <T extends A<B>>(x: T) => T
+>F6 : typeof F6
 

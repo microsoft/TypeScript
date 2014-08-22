@@ -1,31 +1,31 @@
 === tests/cases/compiler/declFileTypeofFunction.ts ===
 
 function f(n: typeof f): string;
->f : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
->n : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
->f : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
+>f : typeof f
+>n : typeof f
+>f : typeof f
 
 function f(n: typeof g): string;
->f : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
->n : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
->g : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
+>f : typeof f
+>n : typeof g
+>g : typeof g
 
 function f() { return undefined; }
->f : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
+>f : typeof f
 >undefined : undefined
 
 function g(n: typeof g): number;
->g : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
->n : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
->g : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
+>g : typeof g
+>n : typeof g
+>g : typeof g
 
 function g(n: typeof f): number;
->g : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
->n : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
->f : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
+>g : typeof g
+>n : typeof f
+>f : typeof f
 
 function g() { return undefined; }
->g : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
+>g : typeof g
 >undefined : undefined
 
 var b: () => typeof b;
@@ -33,47 +33,43 @@ var b: () => typeof b;
 >b : any
 
 function b1() {
->b1 : () => typeof b1
+>b1 : typeof b1
 
     return b1;
->b1 : () => typeof b1
+>b1 : typeof b1
 }
 
 function foo(): typeof foo {
->foo : () => typeof foo
->foo : () => typeof foo
+>foo : typeof foo
+>foo : typeof foo
 
     return null;
 }
 var foo1: typeof foo;
->foo1 : () => typeof foo
->foo : () => typeof foo
+>foo1 : typeof foo
+>foo : typeof foo
 
 var foo2 = foo;
->foo2 : () => typeof foo
->foo : () => typeof foo
+>foo2 : typeof foo
+>foo : typeof foo
 
 var foo3 = function () {
 >foo3 : any
->function () {
-    return foo3;
-} : () => any
+>function () {    return foo3;} : () => any
 
     return foo3;
 >foo3 : any
 }
 var x = () => {
 >x : any
->() => {
-    return x;
-} : () => any
+>() => {    return x;} : () => any
 
     return x;
 >x : any
 }
 
 function foo5(x: number) {
->foo5 : (x: number) => (x: number) => number
+>foo5 : typeof foo5
 >x : number
 
     function bar(x: number) {

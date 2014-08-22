@@ -30,7 +30,7 @@ module point {
 >point : typeof point
 
     export function equals(p1: Point, p2: Point) {
->equals : (p1: Point, p2: Point) => boolean
+>equals : typeof equals
 >p1 : Point
 >Point : Point
 >p2 : Point
@@ -68,9 +68,9 @@ var p2 = point.origin;
 var b = point.equals(p1, p2);
 >b : boolean
 >point.equals(p1, p2) : boolean
->point.equals : (p1: Point, p2: Point) => boolean
+>point.equals : typeof equals
 >point : typeof point
->equals : (p1: Point, p2: Point) => boolean
+>equals : typeof equals
 >p1 : Point
 >p2 : Point
 

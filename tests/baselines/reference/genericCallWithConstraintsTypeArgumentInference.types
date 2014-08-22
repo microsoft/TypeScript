@@ -28,7 +28,7 @@ var d2: Derived2;
 >Derived2 : Derived2
 
 function foo<T extends Base>(t: T) {
->foo : <T extends Base>(t: T) => T
+>foo : typeof foo
 >T : T
 >Base : Base
 >t : T
@@ -41,17 +41,17 @@ function foo<T extends Base>(t: T) {
 var r = foo(b); // Base
 >r : Base
 >foo(b) : Base
->foo : <T extends Base>(t: T) => T
+>foo : typeof foo
 >b : Base
 
 var r2 = foo(d1); // Derived
 >r2 : Derived
 >foo(d1) : Derived
->foo : <T extends Base>(t: T) => T
+>foo : typeof foo
 >d1 : Derived
 
 function foo2<T extends Base, U extends Derived>(t: T, u: U) {
->foo2 : <T extends Base, U extends Derived>(t: T, u: U) => U
+>foo2 : typeof foo2
 >T : T
 >Base : Base
 >U : U
@@ -66,7 +66,7 @@ function foo2<T extends Base, U extends Derived>(t: T, u: U) {
 }
 
 function foo2b<T extends Base, U extends Derived>(u: U) {
->foo2b : <T extends Base, U extends Derived>(u: U) => T
+>foo2b : typeof foo2b
 >T : T
 >Base : Base
 >U : U
@@ -83,7 +83,7 @@ function foo2b<T extends Base, U extends Derived>(u: U) {
 }
 
 function foo2c<T extends Base, U extends Derived>() {
->foo2c : <T extends Base, U extends Derived>() => T
+>foo2c : typeof foo2c
 >T : T
 >Base : Base
 >U : U
@@ -100,13 +100,13 @@ function foo2c<T extends Base, U extends Derived>() {
 var r3 = foo2b(d1); // Base
 >r3 : Base
 >foo2b(d1) : Base
->foo2b : <T extends Base, U extends Derived>(u: U) => T
+>foo2b : typeof foo2b
 >d1 : Derived
 
 var r3b = foo2c(); // Base
 >r3b : Base
 >foo2c() : Base
->foo2c : <T extends Base, U extends Derived>() => T
+>foo2c : typeof foo2c
 
 class C<T extends Base, U extends Derived> {
 >C : C<T, U>

@@ -5,9 +5,9 @@ import foo = require("./foo_0");
 var a: number = foo.a();
 >a : number
 >foo.a() : number
->foo.a : () => number
+>foo.a : typeof a
 >foo : typeof Foo
->a : () => number
+>a : typeof a
 
 if(!!foo.b){
 >!!foo.b : boolean
@@ -24,16 +24,16 @@ if(!!foo.b){
 >Test : typeof Test
 >answer : number
 >foo.c(42) : number
->foo.c : (a: number) => number
+>foo.c : typeof c
 >foo : typeof Foo
->c : (a: number) => number
+>c : typeof c
 }
 === tests/cases/conformance/externalModules/foo_0.ts ===
 module Foo {
 >Foo : typeof Foo
 
 	export function a(){
->a : () => number
+>a : typeof a
 
 		return 5;
 	}
@@ -44,7 +44,7 @@ module Foo {
 >Foo : typeof Foo
 
 	export function c(a: number){
->c : (a: number) => number
+>c : typeof c
 >a : number
 
 		return a;

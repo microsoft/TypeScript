@@ -1,6 +1,6 @@
 === tests/cases/compiler/thisExpressionInIndexExpression.ts ===
 function f() {
->f : () => (r: any) => any
+>f : typeof f
 
     return r => r[this];
 >r => r[this] : (r: any) => any

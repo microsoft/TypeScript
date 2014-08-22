@@ -1,8 +1,10 @@
-==== tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration7.ts (2 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration7.ts (3 errors) ====
     class C {
         public public get Foo() { }
                ~~~~~~
 !!! Accessibility modifier already seen.
+                          ~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
                           ~~~
 !!! A 'get' accessor must return a value or consist of a single 'throw' statement.
     }

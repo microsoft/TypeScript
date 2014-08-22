@@ -50,156 +50,156 @@ var b = { foo: E.A };
 >A : E
 
 function foo5(x: A);
->foo5 : { (x: A): any; (x: B): any; }
+>foo5 : typeof foo5
 >x : A
 >A : A
 
 function foo5(x: B); // ok
->foo5 : { (x: A): any; (x: B): any; }
+>foo5 : typeof foo5
 >x : B
 >B : B
 
 function foo5(x: any) { }
->foo5 : { (x: A): any; (x: B): any; }
+>foo5 : typeof foo5
 >x : any
 
 function foo5b(x: A);
->foo5b : { (x: A): any; (x: C<string>): any; }
+>foo5b : typeof foo5b
 >x : A
 >A : A
 
 function foo5b(x: C<string>); // ok
->foo5b : { (x: A): any; (x: C<string>): any; }
+>foo5b : typeof foo5b
 >x : C<string>
 >C : C<T>
 
 function foo5b(x: any) { }
->foo5b : { (x: A): any; (x: C<string>): any; }
+>foo5b : typeof foo5b
 >x : any
 
 function foo6(x: A);
->foo6 : { (x: A): any; (x: I): any; }
+>foo6 : typeof foo6
 >x : A
 >A : A
 
 function foo6(x: I); // ok
->foo6 : { (x: A): any; (x: I): any; }
+>foo6 : typeof foo6
 >x : I
 >I : I
 
 function foo6(x: any) { }
->foo6 : { (x: A): any; (x: I): any; }
+>foo6 : typeof foo6
 >x : any
 
 function foo7(x: A);
->foo7 : { (x: A): any; (x: { foo: RegExp; }): any; }
+>foo7 : typeof foo7
 >x : A
 >A : A
 
 function foo7(x: typeof a); // ok
->foo7 : { (x: A): any; (x: { foo: RegExp; }): any; }
+>foo7 : typeof foo7
 >x : { foo: RegExp; }
 >a : { foo: RegExp; }
 
 function foo7(x: any) { }
->foo7 : { (x: A): any; (x: { foo: RegExp; }): any; }
+>foo7 : typeof foo7
 >x : any
 
 function foo8(x: B);
->foo8 : { (x: B): any; (x: I): any; }
+>foo8 : typeof foo8
 >x : B
 >B : B
 
 function foo8(x: I); // ok
->foo8 : { (x: B): any; (x: I): any; }
+>foo8 : typeof foo8
 >x : I
 >I : I
 
 function foo8(x: any) { }
->foo8 : { (x: B): any; (x: I): any; }
+>foo8 : typeof foo8
 >x : any
 
 function foo9(x: B);
->foo9 : { (x: B): any; (x: C<string>): any; }
+>foo9 : typeof foo9
 >x : B
 >B : B
 
 function foo9(x: C<string>); // ok
->foo9 : { (x: B): any; (x: C<string>): any; }
+>foo9 : typeof foo9
 >x : C<string>
 >C : C<T>
 
 function foo9(x: any) { }
->foo9 : { (x: B): any; (x: C<string>): any; }
+>foo9 : typeof foo9
 >x : any
 
 function foo10(x: B);
->foo10 : { (x: B): any; (x: { foo: RegExp; }): any; }
+>foo10 : typeof foo10
 >x : B
 >B : B
 
 function foo10(x: typeof a); // ok
->foo10 : { (x: B): any; (x: { foo: RegExp; }): any; }
+>foo10 : typeof foo10
 >x : { foo: RegExp; }
 >a : { foo: RegExp; }
 
 function foo10(x: any) { }
->foo10 : { (x: B): any; (x: { foo: RegExp; }): any; }
+>foo10 : typeof foo10
 >x : any
 
 function foo11(x: B);
->foo11 : { (x: B): any; (x: { foo: E; }): any; }
+>foo11 : typeof foo11
 >x : B
 >B : B
 
 function foo11(x: typeof b); // ok
->foo11 : { (x: B): any; (x: { foo: E; }): any; }
+>foo11 : typeof foo11
 >x : { foo: E; }
 >b : { foo: E; }
 
 function foo11(x: any) { }
->foo11 : { (x: B): any; (x: { foo: E; }): any; }
+>foo11 : typeof foo11
 >x : any
 
 function foo12(x: I);
->foo12 : { (x: I): any; (x: C<string>): any; }
+>foo12 : typeof foo12
 >x : I
 >I : I
 
 function foo12(x: C<string>); // ok
->foo12 : { (x: I): any; (x: C<string>): any; }
+>foo12 : typeof foo12
 >x : C<string>
 >C : C<T>
 
 function foo12(x: any) { }
->foo12 : { (x: I): any; (x: C<string>): any; }
+>foo12 : typeof foo12
 >x : any
 
 function foo13(x: I);
->foo13 : { (x: I): any; (x: { foo: RegExp; }): any; }
+>foo13 : typeof foo13
 >x : I
 >I : I
 
 function foo13(x: typeof a); // ok
->foo13 : { (x: I): any; (x: { foo: RegExp; }): any; }
+>foo13 : typeof foo13
 >x : { foo: RegExp; }
 >a : { foo: RegExp; }
 
 function foo13(x: any) { }
->foo13 : { (x: I): any; (x: { foo: RegExp; }): any; }
+>foo13 : typeof foo13
 >x : any
 
 function foo14(x: I);
->foo14 : { (x: I): any; (x: { foo: E; }): any; }
+>foo14 : typeof foo14
 >x : I
 >I : I
 
 function foo14(x: typeof b); // ok
->foo14 : { (x: I): any; (x: { foo: E; }): any; }
+>foo14 : typeof foo14
 >x : { foo: E; }
 >b : { foo: E; }
 
 function foo14(x: any) { }
->foo14 : { (x: I): any; (x: { foo: E; }): any; }
+>foo14 : typeof foo14
 >x : any
 

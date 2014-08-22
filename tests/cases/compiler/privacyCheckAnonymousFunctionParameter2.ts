@@ -1,5 +1,4 @@
 //@module: amd
-//@declaration: true
 export var x = 1;  // Makes this an external module 
 interface Iterator<T> { x: T }
 

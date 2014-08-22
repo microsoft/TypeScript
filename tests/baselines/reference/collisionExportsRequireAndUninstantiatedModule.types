@@ -7,7 +7,7 @@ export module require { // no error
     }
 }
 export function foo(): require.I {
->foo : () => I
+>foo : typeof foo
 >require : require
 >I : I
 
@@ -21,7 +21,7 @@ export module exports { // no error
     }
 }
 export function foo2(): exports.I {
->foo2 : () => I
+>foo2 : typeof foo2
 >exports : exports
 >I : I
 

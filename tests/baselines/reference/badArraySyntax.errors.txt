@@ -1,4 +1,4 @@
-==== tests/cases/compiler/badArraySyntax.ts (6 errors) ====
+==== tests/cases/compiler/badArraySyntax.ts (4 errors) ====
     class Z {
      public x = "";
     }
@@ -16,9 +16,5 @@
     var a5: Z[] = new Z[]();
                        ~~
 !!! 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
-    var a6: Z[][] = new   Z     [      ]   [  ];
-                                ~~~~~~~~
-!!! 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
-                                           ~~~~
-!!! 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+    
     

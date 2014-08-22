@@ -2,7 +2,7 @@
 // These are all errors because type parameters cannot reference other type parameters from the same list
 
 function foo<T, U>(x: T, y: U) {
->foo : <T, U>(x: T, y: U) => C<U, T>
+>foo : typeof foo
 >T : T
 >U : U
 >x : T
@@ -12,7 +12,7 @@ function foo<T, U>(x: T, y: U) {
 
     foo<U, U>(y, y);
 >foo<U, U>(y, y) : C<U, U>
->foo : <T, U>(x: T, y: U) => C<U, T>
+>foo : typeof foo
 >U : U
 >U : U
 >y : U

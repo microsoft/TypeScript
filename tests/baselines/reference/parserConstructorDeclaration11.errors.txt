@@ -1,8 +1,0 @@
-==== tests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration11.ts (2 errors) ====
-    class C {
-      constructor<>() { }
-                 ~~
-!!! Type parameter list cannot be empty.
-                  
-!!! Type parameters cannot appear on a constructor declaration.
-    }

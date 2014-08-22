@@ -8,14 +8,14 @@ class B { bar() { }}
 >bar : () => void
 
 function g<T, U>(x) { }
->g : <T, U>(x: any) => void
+>g : typeof g
 >T : T
 >U : U
 >x : any
 
 g<A, B>(7) // the parameter list is fixed, so this should not error
 >g<A, B>(7) : void
->g : <T, U>(x: any) => void
+>g : typeof g
 >A : A
 >B : B
  

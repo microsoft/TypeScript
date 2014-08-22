@@ -3,7 +3,7 @@ declare module foo {
 >foo : typeof foo
 
     export function x(): any;
->x : () => any
+>x : typeof x
 }
 class foo { } // Legal, because module is ambient
 >foo : foo

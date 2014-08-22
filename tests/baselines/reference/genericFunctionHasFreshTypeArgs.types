@@ -1,6 +1,6 @@
 === tests/cases/compiler/genericFunctionHasFreshTypeArgs.ts ===
 function f(p: <T>(x: T) => void) { };
->f : (p: <T>(x: T) => void) => void
+>f : typeof f
 >p : <T>(x: T) => void
 >T : T
 >x : T
@@ -8,11 +8,11 @@ function f(p: <T>(x: T) => void) { };
 
 f(x => f(y => x = y));
 >f(x => f(y => x = y)) : void
->f : (p: <T>(x: T) => void) => void
+>f : typeof f
 >x => f(y => x = y) : (x: any) => void
 >x : any
 >f(y => x = y) : void
->f : (p: <T>(x: T) => void) => void
+>f : typeof f
 >y => x = y : (y: any) => any
 >y : any
 >x = y : any

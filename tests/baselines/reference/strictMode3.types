@@ -11,7 +11,7 @@ class B extends A {
 }
 
 function foo() {
->foo : () => any
+>foo : typeof foo
 
     return this.window;
 >this.window : any

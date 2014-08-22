@@ -4,15 +4,15 @@ import lib = require('./exportImportMultipleFiles_library');
 
 lib.math.add(3, 4); // Shouldnt be error
 >lib.math.add(3, 4) : any
->lib.math.add : (a: any, b: any) => any
+>lib.math.add : typeof add
 >lib.math : typeof "tests/cases/compiler/exportImportMultipleFiles_math"
 >lib : typeof "tests/cases/compiler/exportImportMultipleFiles_library"
 >math : typeof "tests/cases/compiler/exportImportMultipleFiles_math"
->add : (a: any, b: any) => any
+>add : typeof add
 
 === tests/cases/compiler/exportImportMultipleFiles_math.ts ===
 export function add(a, b) { return a + b; }
->add : (a: any, b: any) => any
+>add : typeof add
 >a : any
 >b : any
 >a + b : any
@@ -25,7 +25,7 @@ export import math = require("exportImportMultipleFiles_math");
 
 math.add(3, 4); // OK
 >math.add(3, 4) : any
->math.add : (a: any, b: any) => any
+>math.add : typeof add
 >math : typeof "tests/cases/compiler/exportImportMultipleFiles_math"
->add : (a: any, b: any) => any
+>add : typeof add
 

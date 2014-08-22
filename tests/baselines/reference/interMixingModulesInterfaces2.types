@@ -16,7 +16,7 @@ module A {
 >B : typeof B
 
         export function createB(): B {
->createB : () => B
+>createB : typeof createB
 >B : B
 
             return null;

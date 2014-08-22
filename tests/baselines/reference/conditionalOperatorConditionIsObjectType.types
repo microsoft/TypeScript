@@ -37,7 +37,7 @@ var exprIsObject2: Object;
 >Object : Object
 
 function foo() { };
->foo : () => void
+>foo : typeof foo
 
 class C { static doIt: () => void };
 >C : C
@@ -126,7 +126,7 @@ condObject ? exprIsObject1 : exprIsObject2;
 foo() ? exprAny1 : exprAny2;
 >foo() ? exprAny1 : exprAny2 : any
 >foo() : void
->foo : () => void
+>foo : typeof foo
 >exprAny1 : any
 >exprAny2 : any
 
@@ -254,7 +254,7 @@ var resultIsAny3 = foo() ? exprAny1 : exprAny2;
 >resultIsAny3 : any
 >foo() ? exprAny1 : exprAny2 : any
 >foo() : void
->foo : () => void
+>foo : typeof foo
 >exprAny1 : any
 >exprAny2 : any
 

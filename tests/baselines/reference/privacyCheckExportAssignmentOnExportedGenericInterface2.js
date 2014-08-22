@@ -24,13 +24,3 @@ define(["require", "exports"], function (require, exports) {
     })(Foo || (Foo = {}));
     return Foo;
 });
-
-
-//// [privacyCheckExportAssignmentOnExportedGenericInterface2.d.ts]
-export = Foo;
-interface Foo<T> {
-}
-declare function Foo<T>(array: T[]): Foo<T>;
-declare module Foo {
-    var x: string;
-}

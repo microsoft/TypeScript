@@ -73,7 +73,7 @@ module E {
 >A : typeof A
 
     export function xDist(x: a.Point) {
->xDist : (x: Point) => number
+>xDist : typeof xDist
 >x : Point
 >a : a
 >Point : Point

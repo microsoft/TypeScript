@@ -13,7 +13,7 @@ module superContain {
 >data : typeof data
 
                 export function foo() { }
->foo : () => void
+>foo : typeof foo
             }
         }
         export module my.buz {
@@ -24,7 +24,7 @@ module superContain {
 >data : typeof data
 
                 export function bar(contain, my, buz, data) {
->bar : (contain: any, my: any, buz: any, data: any) => void
+>bar : typeof bar
 >contain : any
 >my : any
 >buz : any
@@ -32,7 +32,7 @@ module superContain {
 
                     foo();
 >foo() : void
->foo : () => void
+>foo : typeof foo
                 }
             }
         }

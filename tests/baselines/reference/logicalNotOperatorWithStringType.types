@@ -8,7 +8,7 @@ var STRING1: string[] = ["", "abc"];
 >["", "abc"] : string[]
 
 function foo(): string { return "abc"; }
->foo : () => string
+>foo : typeof foo
 
 class A {
 >A : A
@@ -17,7 +17,7 @@ class A {
 >a : string
 
     static foo() { return ""; }
->foo : () => string
+>foo : typeof foo
 }
 module M {
 >M : typeof M
@@ -89,15 +89,15 @@ var ResultIsBoolean9 = !foo();
 >ResultIsBoolean9 : boolean
 >!foo() : boolean
 >foo() : string
->foo : () => string
+>foo : typeof foo
 
 var ResultIsBoolean10 = !A.foo();
 >ResultIsBoolean10 : boolean
 >!A.foo() : boolean
 >A.foo() : string
->A.foo : () => string
+>A.foo : typeof foo
 >A : typeof A
->foo : () => string
+>foo : typeof foo
 
 var ResultIsBoolean11 = !(STRING + STRING);
 >ResultIsBoolean11 : boolean
@@ -147,7 +147,7 @@ var ResultIsBoolean14 = !!!(STRING + STRING);
 !foo();
 >!foo() : boolean
 >foo() : string
->foo : () => string
+>foo : typeof foo
 
 !objA.a,M.n;
 >!objA.a,M.n : string

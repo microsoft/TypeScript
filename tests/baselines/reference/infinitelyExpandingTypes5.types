@@ -23,7 +23,7 @@ interface Enumerator<T> {
 }
 
 function from<T>(array: T[]): Query<T>;
->from : { <T>(array: T[]): Query<T>; <T>(enumerator: Enumerator<T>): Query<T>; }
+>from : typeof from
 >T : T
 >array : T[]
 >T : T
@@ -31,7 +31,7 @@ function from<T>(array: T[]): Query<T>;
 >T : T
 
 function from<T>(enumerator: Enumerator<T>): Query<T>;
->from : { <T>(array: T[]): Query<T>; <T>(enumerator: Enumerator<T>): Query<T>; }
+>from : typeof from
 >T : T
 >enumerator : Enumerator<T>
 >Enumerator : Enumerator<T>
@@ -40,7 +40,7 @@ function from<T>(enumerator: Enumerator<T>): Query<T>;
 >T : T
 
 function from(arg: any): any {
->from : { <T>(array: T[]): Query<T>; <T>(enumerator: Enumerator<T>): Query<T>; }
+>from : typeof from
 >arg : any
 
     return undefined;

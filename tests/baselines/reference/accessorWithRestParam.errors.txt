@@ -1,10 +1,9 @@
 ==== tests/cases/compiler/accessorWithRestParam.ts (2 errors) ====
-    
     class C {
         set X(...v) { }
             ~
-!!! A 'set' accessor cannot have rest parameter.
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
         static set X(...v2) { }
                    ~
-!!! A 'set' accessor cannot have rest parameter.
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
     }

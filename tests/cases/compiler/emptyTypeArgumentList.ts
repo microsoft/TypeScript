@@ -1,2 +1,0 @@
-function foo<T>() { }
-foo<>();

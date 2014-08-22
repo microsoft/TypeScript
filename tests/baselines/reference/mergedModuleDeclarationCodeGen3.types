@@ -4,7 +4,7 @@ module my.data {
 >data : typeof data
 
     export function buz() { }
->buz : () => void
+>buz : typeof buz
 }
 module my.data.foo {
 >my : typeof my
@@ -12,12 +12,12 @@ module my.data.foo {
 >foo : typeof foo
 
     function data(my, foo) {
->data : (my: any, foo: any) => void
+>data : typeof data
 >my : any
 >foo : any
 
         buz();
 >buz() : void
->buz : () => void
+>buz : typeof buz
     }
 }

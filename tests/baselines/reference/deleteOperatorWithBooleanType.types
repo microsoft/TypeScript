@@ -4,7 +4,7 @@ var BOOLEAN: boolean;
 >BOOLEAN : boolean
 
 function foo(): boolean { return true; }
->foo : () => boolean
+>foo : typeof foo
 
 class A {
 >A : A
@@ -13,7 +13,7 @@ class A {
 >a : boolean
 
     static foo() { return false; }
->foo : () => boolean
+>foo : typeof foo
 }
 module M {
 >M : typeof M
@@ -64,15 +64,15 @@ var ResultIsBoolean6 = delete foo();
 >ResultIsBoolean6 : boolean
 >delete foo() : boolean
 >foo() : boolean
->foo : () => boolean
+>foo : typeof foo
 
 var ResultIsBoolean7 = delete A.foo();
 >ResultIsBoolean7 : boolean
 >delete A.foo() : boolean
 >A.foo() : boolean
->A.foo : () => boolean
+>A.foo : typeof foo
 >A : typeof A
->foo : () => boolean
+>foo : typeof foo
 
 // multiple delete  operator
 var ResultIsBoolean8 = delete delete BOOLEAN;
@@ -92,7 +92,7 @@ delete BOOLEAN;
 delete foo();
 >delete foo() : boolean
 >foo() : boolean
->foo : () => boolean
+>foo : typeof foo
 
 delete true, false;
 >delete true, false : boolean

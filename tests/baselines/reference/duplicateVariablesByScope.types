@@ -22,7 +22,7 @@ module M {
 }
 
 function foo() {
->foo : () => void
+>foo : typeof foo
 
     var x = 2;
 >x : number

@@ -2,7 +2,7 @@
 // Type inference infers from indexers in target type, no errors expected
 
 function foo<T>(x: T) {
->foo : <T>(x: T) => T
+>foo : typeof foo
 >T : T
 >x : T
 >T : T
@@ -19,11 +19,11 @@ var a: { [x: number]: Date };
 var r = foo(a);
 >r : { [x: number]: Date; }
 >foo(a) : { [x: number]: Date; }
->foo : <T>(x: T) => T
+>foo : typeof foo
 >a : { [x: number]: Date; }
 
 function other<T>(arg: T) {
->other : <T>(arg: T) => void
+>other : typeof other
 >T : T
 >arg : T
 >T : T
@@ -36,12 +36,12 @@ function other<T>(arg: T) {
     var r2 = foo(b); // T
 >r2 : { [x: number]: T; }
 >foo(b) : { [x: number]: T; }
->foo : <T>(x: T) => T
+>foo : typeof foo
 >b : { [x: number]: T; }
 }
 
 function other2<T extends Date>(arg: T) {
->other2 : <T extends Date>(arg: T) => void
+>other2 : typeof other2
 >T : T
 >Date : Date
 >arg : T
@@ -55,7 +55,7 @@ function other2<T extends Date>(arg: T) {
     var r2 = foo(b);
 >r2 : { [x: number]: T; }
 >foo(b) : { [x: number]: T; }
->foo : <T>(x: T) => T
+>foo : typeof foo
 >b : { [x: number]: T; }
 
     var d = r2[1];
@@ -65,7 +65,7 @@ function other2<T extends Date>(arg: T) {
 }
 
 function other3<T extends Date, U extends Date>(arg: T) {
->other3 : <T extends Date, U extends Date>(arg: T) => void
+>other3 : typeof other3
 >T : T
 >Date : Date
 >U : U
@@ -81,7 +81,7 @@ function other3<T extends Date, U extends Date>(arg: T) {
     var r2 = foo(b);
 >r2 : { [x: number]: T; }
 >foo(b) : { [x: number]: T; }
->foo : <T>(x: T) => T
+>foo : typeof foo
 >b : { [x: number]: T; }
 
     var d = r2[1];

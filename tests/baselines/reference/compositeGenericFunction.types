@@ -1,13 +1,13 @@
 === tests/cases/compiler/compositeGenericFunction.ts ===
 function f<T>(value: T) { return value; };
->f : <T>(value: T) => T
+>f : typeof f
 >T : T
 >value : T
 >T : T
 >value : T
 
 function h<R>(func: (x: number) => R): R { return null; }
->h : <R>(func: (x: number) => R) => R
+>h : typeof h
 >R : R
 >func : (x: number) => R
 >x : number
@@ -17,12 +17,12 @@ function h<R>(func: (x: number) => R): R { return null; }
 var z: number = h<number>(f);
 >z : number
 >h<number>(f) : number
->h : <R>(func: (x: number) => R) => R
->f : <T>(value: T) => T
+>h : typeof h
+>f : typeof f
 
 var z: number = h(f);
 >z : number
 >h(f) : number
->h : <R>(func: (x: number) => R) => R
->f : <T>(value: T) => T
+>h : typeof h
+>f : typeof f
 

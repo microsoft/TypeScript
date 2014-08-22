@@ -22,7 +22,7 @@ class Derived2 extends Base {
 
 // returns {}[]
 function f<T extends Base, U extends Base>(a: { x: T; y: U }) {
->f : <T extends Base, U extends Base>(a: { x: T; y: U; }) => {}[]
+>f : typeof f
 >T : T
 >Base : Base
 >U : U
@@ -46,7 +46,7 @@ function f<T extends Base, U extends Base>(a: { x: T; y: U }) {
 var r = f({ x: new Derived(), y: new Derived2() }); // {}[]
 >r : {}[]
 >f({ x: new Derived(), y: new Derived2() }) : {}[]
->f : <T extends Base, U extends Base>(a: { x: T; y: U; }) => {}[]
+>f : typeof f
 >{ x: new Derived(), y: new Derived2() } : { x: Derived; y: Derived2; }
 >x : Derived
 >new Derived() : Derived
@@ -58,7 +58,7 @@ var r = f({ x: new Derived(), y: new Derived2() }); // {}[]
 var r2 = f({ x: new Base(), y: new Derived2() }); // {}[]
 >r2 : {}[]
 >f({ x: new Base(), y: new Derived2() }) : {}[]
->f : <T extends Base, U extends Base>(a: { x: T; y: U; }) => {}[]
+>f : typeof f
 >{ x: new Base(), y: new Derived2() } : { x: Base; y: Derived2; }
 >x : Base
 >new Base() : Base
@@ -69,7 +69,7 @@ var r2 = f({ x: new Base(), y: new Derived2() }); // {}[]
 
 
 function f2<T extends Base, U extends Base>(a: { x: T; y: U }) {
->f2 : <T extends Base, U extends Base>(a: { x: T; y: U; }) => (x: T) => U
+>f2 : typeof f2
 >T : T
 >Base : Base
 >U : U
@@ -92,7 +92,7 @@ function f2<T extends Base, U extends Base>(a: { x: T; y: U }) {
 var r3 = f2({ x: new Derived(), y: new Derived2() }); // Derived => Derived2
 >r3 : (x: Derived) => Derived2
 >f2({ x: new Derived(), y: new Derived2() }) : (x: Derived) => Derived2
->f2 : <T extends Base, U extends Base>(a: { x: T; y: U; }) => (x: T) => U
+>f2 : typeof f2
 >{ x: new Derived(), y: new Derived2() } : { x: Derived; y: Derived2; }
 >x : Derived
 >new Derived() : Derived
@@ -124,6 +124,6 @@ var i: I<Base, Derived>;
 var r4 = f2(i); // Base => Derived
 >r4 : (x: Base) => Derived
 >f2(i) : (x: Base) => Derived
->f2 : <T extends Base, U extends Base>(a: { x: T; y: U; }) => (x: T) => U
+>f2 : typeof f2
 >i : I<Base, Derived>
 

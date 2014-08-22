@@ -1,6 +1,0 @@
-==== tests/cases/conformance/parser/ecmascript5/Expressions/parserUnaryExpression5.ts (2 errors) ====
-    ++ delete foo.bar
-       ~~~~~~~~~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
-              ~~~
-!!! Cannot find name 'foo'.

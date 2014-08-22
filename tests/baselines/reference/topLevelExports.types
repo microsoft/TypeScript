@@ -3,7 +3,7 @@ export var foo = 3;
 >foo : number
 
 function log(n:number) { return n;}
->log : (n: number) => number
+>log : typeof log
 >n : number
 >n : number
 
@@ -12,7 +12,7 @@ void log(foo).toString();
 >log(foo).toString() : string
 >log(foo).toString : (radix?: number) => string
 >log(foo) : number
->log : (n: number) => number
+>log : typeof log
 >foo : number
 >toString : (radix?: number) => string
 

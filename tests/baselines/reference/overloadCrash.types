@@ -17,12 +17,12 @@ interface I3 {a:number; b:number; c:number; d:number;};
 >d : number
 
 declare function foo(...n:I1[]);
->foo : { (...n: I1[]): any; (n1: I2, n3: I2): any; }
+>foo : typeof foo
 >n : I1[]
 >I1 : I1
 
 declare function foo(n1:I2, n3:I2);
->foo : { (...n: I1[]): any; (n1: I2, n3: I2): any; }
+>foo : typeof foo
 >n1 : I2
 >I2 : I2
 >n3 : I2
@@ -34,7 +34,7 @@ var i3:I3;
 
 foo(i3, i3); // should not crash the compiler :)
 >foo(i3, i3) : any
->foo : { (...n: I1[]): any; (n1: I2, n3: I2): any; }
+>foo : typeof foo
 >i3 : I3
 >i3 : I3
 

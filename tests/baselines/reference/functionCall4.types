@@ -1,13 +1,13 @@
 === tests/cases/compiler/functionCall4.ts ===
 function foo():any{return ""}; 
->foo : () => any
+>foo : typeof foo
 
 function bar():()=>any{return foo}; 
->bar : () => () => any
->foo : () => any
+>bar : typeof bar
+>foo : typeof foo
 
 var x = bar();
 >x : () => any
 >bar() : () => any
->bar : () => () => any
+>bar : typeof bar
 

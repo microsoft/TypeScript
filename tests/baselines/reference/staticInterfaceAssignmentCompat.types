@@ -3,7 +3,7 @@ class Shape {
 >Shape : Shape
 
     static create(): Shape {
->create : () => Shape
+>create : typeof create
 >Shape : Shape
 
         return new Shape();

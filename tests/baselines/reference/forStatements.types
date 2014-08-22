@@ -35,7 +35,7 @@ class D<T>{
 }
 
 function F(x: string): number { return 42; }
->F : (x: string) => number
+>F : typeof F
 >x : string
 
 module M {
@@ -49,7 +49,7 @@ module M {
     }
 
     export function F2(x: number): string { return x.toString(); }
->F2 : (x: number) => string
+>F2 : typeof F2
 >x : number
 >x.toString() : string
 >x.toString : (radix?: number) => string
@@ -117,18 +117,18 @@ for(var anOtherObjectLiteral: { id: number } = new C();;){}
 >C : typeof C
 
 for(var aFunction: typeof F = F;;){}
->aFunction : (x: string) => number
->F : (x: string) => number
->F : (x: string) => number
+>aFunction : typeof F
+>F : typeof F
+>F : typeof F
 
 for(var anOtherFunction: (x: string) => number = F;;){}
 >anOtherFunction : (x: string) => number
 >x : string
->F : (x: string) => number
+>F : typeof F
 
 for(var aLambda: typeof F = (x) => 2;;){}
->aLambda : (x: string) => number
->F : (x: string) => number
+>aLambda : typeof F
+>F : typeof F
 >(x) => 2 : (x: string) => number
 >x : string
 
@@ -147,9 +147,9 @@ for(var aClassInModule: M.A = new M.A();;){}
 >A : typeof A
 
 for(var aFunctionInModule: typeof M.F2 = (x) => 'this is a string';;){}
->aFunctionInModule : (x: number) => string
+>aFunctionInModule : typeof F2
 >M : typeof M
->F2 : (x: number) => string
+>F2 : typeof F2
 >(x) => 'this is a string' : (x: number) => string
 >x : number
 

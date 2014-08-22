@@ -2,41 +2,41 @@
 
 /// This is simple /// comments
 function simple() {
->simple : () => void
+>simple : typeof simple
 }
 
 simple();
 >simple() : void
->simple : () => void
+>simple : typeof simple
 
 /// multiLine /// Comments
 /// This is example of multiline /// comments
 /// Another multiLine
 function multiLine() {
->multiLine : () => void
+>multiLine : typeof multiLine
 }
 multiLine();
 >multiLine() : void
->multiLine : () => void
+>multiLine : typeof multiLine
 
 /** this is eg of single line jsdoc style comment */
 function jsDocSingleLine() {
->jsDocSingleLine : () => void
+>jsDocSingleLine : typeof jsDocSingleLine
 }
 jsDocSingleLine();
 >jsDocSingleLine() : void
->jsDocSingleLine : () => void
+>jsDocSingleLine : typeof jsDocSingleLine
 
 
 /** this is multiple line jsdoc stule comment
 *New line1
 *New Line2*/
 function jsDocMultiLine() {
->jsDocMultiLine : () => void
+>jsDocMultiLine : typeof jsDocMultiLine
 }
 jsDocMultiLine();
 >jsDocMultiLine() : void
->jsDocMultiLine : () => void
+>jsDocMultiLine : typeof jsDocMultiLine
 
 /** this is multiple line jsdoc stule comment
 *New line1
@@ -44,60 +44,60 @@ jsDocMultiLine();
 /** Shoul mege this line as well
 * and this too*/ /** Another this one too*/
 function jsDocMultiLineMerge() {
->jsDocMultiLineMerge : () => void
+>jsDocMultiLineMerge : typeof jsDocMultiLineMerge
 }
 jsDocMultiLineMerge();
 >jsDocMultiLineMerge() : void
->jsDocMultiLineMerge : () => void
+>jsDocMultiLineMerge : typeof jsDocMultiLineMerge
 
 
 /// Triple slash comment
 /** jsdoc comment */
 function jsDocMixedComments1() {
->jsDocMixedComments1 : () => void
+>jsDocMixedComments1 : typeof jsDocMixedComments1
 }
 jsDocMixedComments1();
 >jsDocMixedComments1() : void
->jsDocMixedComments1 : () => void
+>jsDocMixedComments1 : typeof jsDocMixedComments1
 
 /// Triple slash comment
 /** jsdoc comment */ /*** another jsDocComment*/
 function jsDocMixedComments2() {
->jsDocMixedComments2 : () => void
+>jsDocMixedComments2 : typeof jsDocMixedComments2
 }
 jsDocMixedComments2();
 >jsDocMixedComments2() : void
->jsDocMixedComments2 : () => void
+>jsDocMixedComments2 : typeof jsDocMixedComments2
 
 /** jsdoc comment */ /*** another jsDocComment*/
 /// Triple slash comment
 function jsDocMixedComments3() {
->jsDocMixedComments3 : () => void
+>jsDocMixedComments3 : typeof jsDocMixedComments3
 }
 jsDocMixedComments3();
 >jsDocMixedComments3() : void
->jsDocMixedComments3 : () => void
+>jsDocMixedComments3 : typeof jsDocMixedComments3
 
 /** jsdoc comment */ /*** another jsDocComment*/
 /// Triple slash comment
 /// Triple slash comment 2
 function jsDocMixedComments4() {
->jsDocMixedComments4 : () => void
+>jsDocMixedComments4 : typeof jsDocMixedComments4
 }
 jsDocMixedComments4();
 >jsDocMixedComments4() : void
->jsDocMixedComments4 : () => void
+>jsDocMixedComments4 : typeof jsDocMixedComments4
 
 /// Triple slash comment 1
 /** jsdoc comment */ /*** another jsDocComment*/
 /// Triple slash comment
 /// Triple slash comment 2
 function jsDocMixedComments5() {
->jsDocMixedComments5 : () => void
+>jsDocMixedComments5 : typeof jsDocMixedComments5
 }
 jsDocMixedComments5();
 >jsDocMixedComments5() : void
->jsDocMixedComments5 : () => void
+>jsDocMixedComments5 : typeof jsDocMixedComments5
 
 /*** another jsDocComment*/
 /// Triple slash comment 1
@@ -105,41 +105,41 @@ jsDocMixedComments5();
 /// Triple slash comment 2
 /** jsdoc comment */
 function jsDocMixedComments6() {
->jsDocMixedComments6 : () => void
+>jsDocMixedComments6 : typeof jsDocMixedComments6
 }
 jsDocMixedComments6();
 >jsDocMixedComments6() : void
->jsDocMixedComments6 : () => void
+>jsDocMixedComments6 : typeof jsDocMixedComments6
 
 // This shoulnot be help comment
 function noHelpComment1() {
->noHelpComment1 : () => void
+>noHelpComment1 : typeof noHelpComment1
 }
 noHelpComment1();
 >noHelpComment1() : void
->noHelpComment1 : () => void
+>noHelpComment1 : typeof noHelpComment1
 
 /* This shoulnot be help comment */
 function noHelpComment2() {
->noHelpComment2 : () => void
+>noHelpComment2 : typeof noHelpComment2
 }
 noHelpComment2();
 >noHelpComment2() : void
->noHelpComment2 : () => void
+>noHelpComment2 : typeof noHelpComment2
 
 function noHelpComment3() {
->noHelpComment3 : () => void
+>noHelpComment3 : typeof noHelpComment3
 }
 noHelpComment3();
 >noHelpComment3() : void
->noHelpComment3 : () => void
+>noHelpComment3 : typeof noHelpComment3
 
 /** Adds two integers and returns the result
   * @param {number} a first number
   * @param b second number
   */
 function sum(a: number, b: number) {
->sum : (a: number, b: number) => number
+>sum : typeof sum
 >a : number
 >b : number
 
@@ -150,7 +150,7 @@ function sum(a: number, b: number) {
 }
 sum(10, 20);
 >sum(10, 20) : number
->sum : (a: number, b: number) => number
+>sum : typeof sum
 
 /** This is multiplication function*/
 /** @param */
@@ -160,7 +160,7 @@ sum(10, 20);
  @param d @anotherTag*/
 /** @param e LastParam @anotherTag*/
 function multiply(a: number, b: number, c?: number, d?, e?) {
->multiply : (a: number, b: number, c?: number, d?: any, e?: any) => void
+>multiply : typeof multiply
 >a : number
 >b : number
 >c : number
@@ -171,16 +171,16 @@ function multiply(a: number, b: number, c?: number, d?, e?) {
 * @param { string} b about b
 */
 function f1(a: number);
->f1 : { (a: number): any; (b: string): any; }
+>f1 : typeof f1
 >a : number
 
 function f1(b: string);
->f1 : { (a: number): any; (b: string): any; }
+>f1 : typeof f1
 >b : string
 
 /**@param opt optional parameter*/
 function f1(aOrb, opt?) {
->f1 : { (a: number): any; (b: string): any; }
+>f1 : typeof f1
 >aOrb : any
 >opt : any
 
@@ -196,7 +196,7 @@ function f1(aOrb, opt?) {
 @param { { { () => string; } } f this is optional param f
 */
 function subtract(a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string) {
->subtract : (a: number, b: number, c?: () => string, d?: () => string, e?: () => string, f?: () => string) => void
+>subtract : typeof subtract
 >a : number
 >b : number
 >c : () => string
@@ -210,7 +210,7 @@ function subtract(a: number, b: number, c?: () => string, d?: () => string, e?: 
 @returnType { number } it is return type
 */
 function square(a: number) {
->square : (a: number) => number
+>square : typeof square
 >a : number
 
     return a * a;
@@ -224,7 +224,7 @@ function square(a: number) {
 @param { number} b this is b
 */
 function divide(a: number, b: number) {
->divide : (a: number, b: number) => void
+>divide : typeof divide
 >a : number
 >b : number
 }
@@ -233,7 +233,7 @@ function divide(a: number, b: number) {
 *@param c it is third parameter
 */
 function jsDocParamTest(/** this is inline comment for a */a: number, /** this is inline comment for b*/ b: number, c: number, d: number) {
->jsDocParamTest : (a: number, b: number, c: number, d: number) => number
+>jsDocParamTest : typeof jsDocParamTest
 >a : number
 >b : number
 >c : number

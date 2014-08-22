@@ -11,14 +11,14 @@ interface Query<T> {
 }
  
 function from<T>(arg: boolean): Query<T>; // was Error: Overload signature is not compatible with function definition.
->from : <T>(arg: boolean) => Query<T>
+>from : typeof from
 >T : T
 >arg : boolean
 >Query : Query<T>
 >T : T
 
 function from<T>(arg: any): Query<T> {
->from : <T>(arg: boolean) => Query<T>
+>from : typeof from
 >T : T
 >arg : any
 >Query : Query<T>

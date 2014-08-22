@@ -11,7 +11,7 @@ interface MyPropertyDescriptor {
 }
 
 declare function defineMyProperty(o: any, p: string, attributes: MyPropertyDescriptor): any;
->defineMyProperty : (o: any, p: string, attributes: MyPropertyDescriptor) => any
+>defineMyProperty : typeof defineMyProperty
 >o : any
 >p : string
 >attributes : MyPropertyDescriptor
@@ -19,7 +19,7 @@ declare function defineMyProperty(o: any, p: string, attributes: MyPropertyDescr
 
 defineMyProperty({}, "name", { get: function () { return 5; } });
 >defineMyProperty({}, "name", { get: function () { return 5; } }) : any
->defineMyProperty : (o: any, p: string, attributes: MyPropertyDescriptor) => any
+>defineMyProperty : typeof defineMyProperty
 >{} : {}
 >{ get: function () { return 5; } } : { get: () => number; }
 >get : () => number
@@ -37,7 +37,7 @@ interface MyPropertyDescriptor2 {
 }
 
 declare function defineMyProperty2(o: any, p: string, attributes: MyPropertyDescriptor2): any;
->defineMyProperty2 : (o: any, p: string, attributes: MyPropertyDescriptor2) => any
+>defineMyProperty2 : typeof defineMyProperty2
 >o : any
 >p : string
 >attributes : MyPropertyDescriptor2
@@ -45,7 +45,7 @@ declare function defineMyProperty2(o: any, p: string, attributes: MyPropertyDesc
 
 defineMyProperty2({}, "name", { get: function () { return 5; } });
 >defineMyProperty2({}, "name", { get: function () { return 5; } }) : any
->defineMyProperty2 : (o: any, p: string, attributes: MyPropertyDescriptor2) => any
+>defineMyProperty2 : typeof defineMyProperty2
 >{} : {}
 >{ get: function () { return 5; } } : { get: () => number; }
 >get : () => number

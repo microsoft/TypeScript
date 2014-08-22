@@ -3,7 +3,7 @@
 // no errors expected
 
 function f<T extends Date>() {
->f : <T extends Date>() => void
+>f : typeof f
 >T : T
 >Date : Date
 
@@ -34,7 +34,7 @@ function f<T extends Date>() {
 }
 
 function f2<T extends Date, U extends Date>() {
->f2 : <T extends Date, U extends Date>() => void
+>f2 : typeof f2
 >T : T
 >Date : Date
 >U : U

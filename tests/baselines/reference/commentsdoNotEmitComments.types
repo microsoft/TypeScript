@@ -6,7 +6,7 @@ var myVariable = 10;
 
 /** function comments*/
 function foo(/** parameter comment*/p: number) {
->foo : (p: number) => void
+>foo : typeof foo
 >p : number
 }
 
@@ -16,7 +16,7 @@ var fooVar: () => void;
 
 foo(50);
 >foo(50) : void
->foo : (p: number) => void
+>foo : typeof foo
 
 fooVar();
 >fooVar() : void

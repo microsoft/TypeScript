@@ -12,7 +12,7 @@ x1 = value;
 >value : any
 
 function fn1(x2: number) {
->fn1 : (x2: number) => void
+>fn1 : typeof fn1
 >x2 : number
 
     x2 = value;
@@ -47,7 +47,7 @@ x3['a'] = value;
 >value : any
 
 function fn2(x4: number) {
->fn2 : (x4: number) => void
+>fn2 : typeof fn2
 >x4 : number
 
     (x4) = value;

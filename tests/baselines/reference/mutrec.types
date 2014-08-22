@@ -16,7 +16,7 @@ interface B {
 }
 
 function f(p: A) { return p };
->f : (p: A) => A
+>f : typeof f
 >p : A
 >A : A
 >p : A
@@ -27,7 +27,7 @@ var b:B;
 
 f(b);
 >f(b) : A
->f : (p: A) => A
+>f : typeof f
 >b : B
 
 interface I1 {
@@ -55,7 +55,7 @@ interface I3 {
 }
 
 function g(p: I1) { return p };
->g : (p: I1) => I1
+>g : typeof g
 >p : I1
 >I1 : I1
 >p : I1
@@ -66,7 +66,7 @@ var i2:I2;
 
 g(i2);
 >g(i2) : I1
->g : (p: I1) => I1
+>g : typeof g
 >i2 : I2
 
 var i3:I3;
@@ -75,7 +75,7 @@ var i3:I3;
 
 g(i3);
 >g(i3) : I1
->g : (p: I1) => I1
+>g : typeof g
 >i3 : I3
 
 interface I4 {
@@ -100,7 +100,7 @@ var i4:I4;
 
 g(i4);
 >g(i4) : I1
->g : (p: I1) => I1
+>g : typeof g
 >i4 : I4
 
 

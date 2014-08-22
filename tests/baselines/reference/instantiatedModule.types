@@ -62,7 +62,7 @@ module M2 {
 >y : number
 
         static Origin(): Point {
->Origin : () => Point
+>Origin : typeof Origin
 >Point : Point
 
             return { x: 0, y: 0 };
@@ -104,9 +104,9 @@ var o: M2.Point = a2.Origin();
 >M2 : M2
 >Point : Point
 >a2.Origin() : Point
->a2.Origin : () => Point
+>a2.Origin : typeof Origin
 >a2 : typeof Point
->Origin : () => Point
+>Origin : typeof Origin
 
 var p2: { x: number; y: number }
 >p2 : { x: number; y: number; }

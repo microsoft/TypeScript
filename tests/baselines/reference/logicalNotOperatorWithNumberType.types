@@ -8,7 +8,7 @@ var NUMBER1: number[] = [1, 2];
 >[1, 2] : number[]
 
 function foo(): number { return 1; }
->foo : () => number
+>foo : typeof foo
 
 class A {
 >A : A
@@ -17,7 +17,7 @@ class A {
 >a : number
 
     static foo() { return 1; }
->foo : () => number
+>foo : typeof foo
 }
 module M {
 >M : typeof M
@@ -89,15 +89,15 @@ var ResultIsBoolean9 = !foo();
 >ResultIsBoolean9 : boolean
 >!foo() : boolean
 >foo() : number
->foo : () => number
+>foo : typeof foo
 
 var ResultIsBoolean10 = !A.foo();
 >ResultIsBoolean10 : boolean
 >!A.foo() : boolean
 >A.foo() : number
->A.foo : () => number
+>A.foo : typeof foo
 >A : typeof A
->foo : () => number
+>foo : typeof foo
 
 var ResultIsBoolean11 = !(NUMBER + NUMBER);
 >ResultIsBoolean11 : boolean
@@ -139,7 +139,7 @@ var ResultIsBoolean13 = !!!(NUMBER + NUMBER);
 !foo();
 >!foo() : boolean
 >foo() : number
->foo : () => number
+>foo : typeof foo
 
 !objA.a;
 >!objA.a : boolean

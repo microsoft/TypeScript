@@ -1,6 +1,6 @@
 === tests/cases/compiler/fatarrowfunctionsInFunctionParameterDefaults.ts ===
 function fn(x = () => this, y = x()) {
->fn : (x?: () => any, y?: any) => any
+>fn : typeof fn
 >x : () => any
 >() => this : () => any
 >this : any
@@ -17,6 +17,6 @@ function fn(x = () => this, y = x()) {
 fn.call(4); // Should be 4
 >fn.call(4) : any
 >fn.call : (thisArg: any, ...argArray: any[]) => any
->fn : (x?: () => any, y?: any) => any
+>fn : typeof fn
 >call : (thisArg: any, ...argArray: any[]) => any
 

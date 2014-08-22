@@ -1,9 +1,9 @@
 === tests/cases/compiler/functionCall1.ts ===
 function foo():any{return ""};
->foo : () => any
+>foo : typeof foo
 
 var x = foo();
 >x : any
 >foo() : any
->foo : () => any
+>foo : typeof foo
 

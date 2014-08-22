@@ -10,7 +10,7 @@ var x = 10;
     
     
 function foo() {
->foo : () => void
+>foo : typeof foo
 
     x++;
 >x++ : number

@@ -1,6 +1,6 @@
 === tests/cases/compiler/arguments.ts ===
 function f() {
->f : () => void
+>f : typeof f
 
     var x=arguments[12];
 >x : any

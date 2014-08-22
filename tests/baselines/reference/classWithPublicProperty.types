@@ -22,7 +22,7 @@ class C {
 >e : any
 
     public static f() { return '' }
->f : () => string
+>f : typeof f
 
     public static g = () => '';
 >g : () => string
@@ -76,9 +76,9 @@ var r6: string = C.e;
 var r7: string = C.f();
 >r7 : string
 >C.f() : string
->C.f : () => string
+>C.f : typeof f
 >C : typeof C
->f : () => string
+>f : typeof f
 
 var r8: string = C.g();
 >r8 : string

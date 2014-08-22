@@ -5,18 +5,18 @@ import WinJS = require('memberAccessMustUseModuleInstances_0');
 
 WinJS.Promise.timeout(10);
 >WinJS.Promise.timeout(10) : Promise
->WinJS.Promise.timeout : (delay: number) => Promise
+>WinJS.Promise.timeout : typeof timeout
 >WinJS.Promise : typeof Promise
 >WinJS : typeof "tests/cases/compiler/memberAccessMustUseModuleInstances_0"
 >Promise : typeof Promise
->timeout : (delay: number) => Promise
+>timeout : typeof timeout
 
 === tests/cases/compiler/memberAccessMustUseModuleInstances_0.ts ===
 export class Promise {
 >Promise : Promise
 
     static timeout(delay: number): Promise {
->timeout : (delay: number) => Promise
+>timeout : typeof timeout
 >delay : number
 >Promise : Promise
 

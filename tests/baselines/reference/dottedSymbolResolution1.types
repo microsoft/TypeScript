@@ -26,14 +26,14 @@ class Base { foo() { } }
 >foo : () => void
 
 function each(collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any;
->each : { (collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any; (collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any; }
+>each : typeof each
 >collection : string
 >callback : (indexInArray: any, valueOfElement: any) => any
 >indexInArray : any
 >valueOfElement : any
 
 function each(collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any;
->each : { (collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any; (collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any; }
+>each : typeof each
 >collection : JQuery
 >JQuery : JQuery
 >callback : (indexInArray: number, valueOfElement: Base) => any
@@ -42,7 +42,7 @@ function each(collection: JQuery, callback: (indexInArray: number, valueOfElemen
 >Base : Base
 
 function each(collection: any, callback: (indexInArray: any, valueOfElement: any) => any): any {
->each : { (collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any; (collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any; }
+>each : typeof each
 >collection : any
 >callback : (indexInArray: any, valueOfElement: any) => any
 >indexInArray : any
@@ -52,7 +52,7 @@ function each(collection: any, callback: (indexInArray: any, valueOfElement: any
 }
 
 function _setBarAndText(): void {
->_setBarAndText : () => void
+>_setBarAndText : typeof _setBarAndText
 
     var x: JQuery, $: JQueryStatic
 >x : JQuery
@@ -61,19 +61,13 @@ function _setBarAndText(): void {
 >JQueryStatic : JQueryStatic
 
     each(x.find(" "), function () {
->each(x.find(" "), function () {
-        var $this: JQuery = $(''),
-            thisBar = $this.find(".fx-usagebars-calloutbar-this"); // bug lead to 'could not find dotted symbol' here
-    } ) : any
->each : { (collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any; (collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any; }
+>each(x.find(" "), function () {        var $this: JQuery = $(''),            thisBar = $this.find(".fx-usagebars-calloutbar-this"); // bug lead to 'could not find dotted symbol' here    } ) : any
+>each : typeof each
 >x.find(" ") : JQuery
 >x.find : (selector: string) => JQuery
 >x : JQuery
 >find : (selector: string) => JQuery
->function () {
-        var $this: JQuery = $(''),
-            thisBar = $this.find(".fx-usagebars-calloutbar-this"); // bug lead to 'could not find dotted symbol' here
-    } : () => void
+>function () {        var $this: JQuery = $(''),            thisBar = $this.find(".fx-usagebars-calloutbar-this"); // bug lead to 'could not find dotted symbol' here    } : () => void
 
         var $this: JQuery = $(''),
 >$this : JQuery

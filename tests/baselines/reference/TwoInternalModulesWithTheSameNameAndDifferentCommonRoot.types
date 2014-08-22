@@ -19,7 +19,7 @@ module Root {
 >Utils : typeof Utils
 
             export function mirror<T extends Point>(p: T) {
->mirror : <T extends Point>(p: T) => { x: number; y: number; }
+>mirror : typeof mirror
 >T : T
 >Point : Point
 >p : T

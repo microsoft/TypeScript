@@ -1,5 +1,4 @@
 // @declaration: true
-// @module: commonjs
 module M {
     export interface D { }
     export module D {
@@ -21,6 +20,7 @@ module M.P {
     export enum D {
         f
     }
+    // Bug 887180
     export var v: M.D; // ok
     export var w = M.D.f; // error, should be typeof M.D.f
     export var x = M.C.f; // error, should be typeof M.C.f

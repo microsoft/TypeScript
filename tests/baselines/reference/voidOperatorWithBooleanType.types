@@ -4,7 +4,7 @@ var BOOLEAN: boolean;
 >BOOLEAN : boolean
 
 function foo(): boolean { return true; }
->foo : () => boolean
+>foo : typeof foo
 
 class A {
 >A : A
@@ -13,7 +13,7 @@ class A {
 >a : boolean
 
     static foo() { return false; }
->foo : () => boolean
+>foo : typeof foo
 }
 module M {
 >M : typeof M
@@ -64,15 +64,15 @@ var ResultIsAny6 = void foo();
 >ResultIsAny6 : any
 >void foo() : undefined
 >foo() : boolean
->foo : () => boolean
+>foo : typeof foo
 
 var ResultIsAny7 = void A.foo();
 >ResultIsAny7 : any
 >void A.foo() : undefined
 >A.foo() : boolean
->A.foo : () => boolean
+>A.foo : typeof foo
 >A : typeof A
->foo : () => boolean
+>foo : typeof foo
 
 // multiple void  operator
 var ResultIsAny8 = void void BOOLEAN;
@@ -92,7 +92,7 @@ void BOOLEAN;
 void foo();
 >void foo() : undefined
 >foo() : boolean
->foo : () => boolean
+>foo : typeof foo
 
 void true, false;
 >void true, false : boolean

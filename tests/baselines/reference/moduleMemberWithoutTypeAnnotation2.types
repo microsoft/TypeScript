@@ -17,7 +17,7 @@ module TypeScript {
 >diagnosticWriter : any
 
         export function Alert(output: string) {
->Alert : (output: string) => void
+>Alert : typeof Alert
 >output : string
 
             if (diagnosticWriter) {

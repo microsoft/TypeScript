@@ -1,11 +1,11 @@
 === tests/cases/compiler/functionType.ts ===
 function salt() {}
->salt : () => void
+>salt : typeof salt
 
 salt.apply("hello", []);
 >salt.apply("hello", []) : any
 >salt.apply : (thisArg: any, argArray?: any) => any
->salt : () => void
+>salt : typeof salt
 >apply : (thisArg: any, argArray?: any) => any
 >[] : undefined[]
 

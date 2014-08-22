@@ -30,7 +30,3 @@ var Query;
         });
     }
 })(Query || (Query = {}));
-
-
-//// [privacyCheckAnonymousFunctionParameter.d.ts]
-export declare var x: number;

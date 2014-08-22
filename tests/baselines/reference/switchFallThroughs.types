@@ -1,6 +1,6 @@
 === tests/cases/compiler/switchFallThroughs.ts ===
 function R1(index: number) {
->R1 : (index: number) => string
+>R1 : typeof R1
 >index : number
 
     switch (index) {

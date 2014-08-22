@@ -1,9 +1,0 @@
-==== tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement4.ts (3 errors) ====
-    for (a = 1 in b) {
-         ~
-!!! Cannot find name 'a'.
-         ~~~~~
-!!! The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
-                  ~
-!!! Cannot find name 'b'.
-    }

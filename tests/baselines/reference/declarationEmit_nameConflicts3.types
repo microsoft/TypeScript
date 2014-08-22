@@ -9,19 +9,19 @@ module M {
 >D : typeof D
 
         export function f() { }
->f : () => void
+>f : typeof f
     }
     export module C {
 >C : typeof C
 
         export function f() { }
->f : () => void
+>f : typeof f
     }
     export module E {
 >E : typeof E
 
         export function f() { }
->f : () => void
+>f : typeof f
     }
 }
 
@@ -33,7 +33,7 @@ module M.P {
 >C : C
 
         static f() { }
->f : () => void
+>f : typeof f
     }
     export class E extends C { }
 >E : E
@@ -45,32 +45,33 @@ module M.P {
         f
 >f : D
     }
+    // Bug 887180
     export var v: M.D; // ok
 >v : D
 >M : M
 >D : D
 
     export var w = M.D.f; // error, should be typeof M.D.f
->w : () => void
->M.D.f : () => void
+>w : typeof f
+>M.D.f : typeof f
 >M.D : typeof D
 >M : typeof M
 >D : typeof D
->f : () => void
+>f : typeof f
 
     export var x = M.C.f; // error, should be typeof M.C.f
->x : () => void
->M.C.f : () => void
+>x : typeof f
+>M.C.f : typeof f
 >M.C : typeof C
 >M : typeof M
 >C : typeof C
->f : () => void
+>f : typeof f
 
     export var x = M.E.f; // error, should be typeof M.E.f
->x : () => void
->M.E.f : () => void
+>x : typeof f
+>M.E.f : typeof f
 >M.E : typeof E
 >M : typeof M
 >E : typeof E
->f : () => void
+>f : typeof f
 }

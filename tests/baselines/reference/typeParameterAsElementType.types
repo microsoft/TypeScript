@@ -1,6 +1,6 @@
 === tests/cases/compiler/typeParameterAsElementType.ts ===
 function fee<T>() {
->fee : <T>() => void
+>fee : typeof fee
 >T : T
 
     var t: T;

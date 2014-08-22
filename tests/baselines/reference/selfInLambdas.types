@@ -24,51 +24,21 @@ interface Window {
 }
 var o = {
 >o : { counter: number; start: () => void; }
->{
-
-    counter: 0,
-
-    start: function() {
-
-        window.onmousemove = () => {
-            this.counter++
-            var f = () => this.counter;
-
-        }
-
-    }
-
-} : { counter: number; start: () => void; }
+>{    counter: 0,    start: function() {        window.onmousemove = () => {            this.counter++            var f = () => this.counter;        }    }} : { counter: number; start: () => void; }
 
     counter: 0,
 >counter : number
 
     start: function() {
 >start : () => void
->function() {
+>function() {        window.onmousemove = () => {            this.counter++            var f = () => this.counter;        }    } : () => void
 
         window.onmousemove = () => {
-            this.counter++
-            var f = () => this.counter;
-
-        }
-
-    } : () => void
-
-        window.onmousemove = () => {
->window.onmousemove = () => {
-            this.counter++
-            var f = () => this.counter;
-
-        } : () => void
+>window.onmousemove = () => {            this.counter++            var f = () => this.counter;        } : () => void
 >window.onmousemove : (ev: MouseEvent) => any
 >window : Window
 >onmousemove : (ev: MouseEvent) => any
->() => {
-            this.counter++
-            var f = () => this.counter;
-
-        } : () => void
+>() => {            this.counter++            var f = () => this.counter;        } : () => void
 
             this.counter++
 >this.counter++ : number
@@ -102,15 +72,7 @@ class X {
 
 		var outer= () => {
 >outer : () => void
->() => {
-            var x = this.value;
-            var inner = () => {
-                var y = this.value;
-			}
-
-			inner();
-
-		} : () => void
+>() => {            var x = this.value;            var inner = () => {                var y = this.value;			}			inner();		} : () => void
 
             var x = this.value;
 >x : string
@@ -120,9 +82,7 @@ class X {
 
             var inner = () => {
 >inner : () => void
->() => {
-                var y = this.value;
-			} : () => void
+>() => {                var y = this.value;			} : () => void
 
                 var y = this.value;
 >y : string

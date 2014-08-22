@@ -8,7 +8,7 @@ var STRING1: string[] = ["", "abc"];
 >["", "abc"] : string[]
 
 function foo(): string { return "abc"; }
->foo : () => string
+>foo : typeof foo
 
 class A {
 >A : A
@@ -17,7 +17,7 @@ class A {
 >a : string
 
     static foo() { return ""; }
->foo : () => string
+>foo : typeof foo
 }
 module M {
 >M : typeof M
@@ -89,15 +89,15 @@ var ResultIsString9 = typeof foo();
 >ResultIsString9 : string
 >typeof foo() : string
 >foo() : string
->foo : () => string
+>foo : typeof foo
 
 var ResultIsString10 = typeof A.foo();
 >ResultIsString10 : string
 >typeof A.foo() : string
 >A.foo() : string
->A.foo : () => string
+>A.foo : typeof foo
 >A : typeof A
->foo : () => string
+>foo : typeof foo
 
 var ResultIsString11 = typeof (STRING + STRING);
 >ResultIsString11 : string
@@ -147,7 +147,7 @@ typeof STRING1;
 typeof foo();
 >typeof foo() : string
 >foo() : string
->foo : () => string
+>foo : typeof foo
 
 typeof objA.a, M.n;
 >typeof objA.a, M.n : string
@@ -179,7 +179,7 @@ x: typeof STRING1;
 
 r: typeof foo;
 >typeof foo : string
->foo : () => string
+>foo : typeof foo
 
 var y = { a: "", b: "" };
 >y : { a: string; b: string; }
@@ -201,9 +201,9 @@ z: typeof objA.a;
 
 z: typeof A.foo;
 >typeof A.foo : string
->A.foo : () => string
+>A.foo : typeof foo
 >A : typeof A
->foo : () => string
+>foo : typeof foo
 
 z: typeof M.n;
 >typeof M.n : string

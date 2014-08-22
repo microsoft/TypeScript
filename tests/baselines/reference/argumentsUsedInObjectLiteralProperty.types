@@ -3,14 +3,12 @@ class A {
 >A : A
 
     public static createSelectableViewModel(initialState?: any, selectedValue?: any) {
->createSelectableViewModel : (initialState?: any, selectedValue?: any) => { selectedValue: number; }
+>createSelectableViewModel : typeof createSelectableViewModel
 >initialState : any
 >selectedValue : any
 
         return {
->{
-            selectedValue: arguments.length
-        } : { selectedValue: number; }
+>{            selectedValue: arguments.length        } : { selectedValue: number; }
 
             selectedValue: arguments.length
 >selectedValue : number

@@ -47,7 +47,7 @@ module A {
 >x : number
 
     function F(s: string): number {
->F : (s: string) => number
+>F : typeof F
 >s : string
 
         return 2;
@@ -58,9 +58,7 @@ module A {
 
     var fn = (s: string) => {
 >fn : (s: string) => string
->(s: string) => {
-        return 'hello ' + s;
-    } : (s: string) => string
+>(s: string) => {        return 'hello ' + s;    } : (s: string) => string
 >s : string
 
         return 'hello ' + s;
@@ -123,7 +121,7 @@ module Y {
 >x : number
 
     export function F(s: string): number {
->F : (s: string) => number
+>F : typeof F
 >s : string
 
         return 2;
@@ -134,9 +132,7 @@ module Y {
 
     export var fn = (s: string) => {
 >fn : (s: string) => string
->(s: string) => {
-        return 'hello ' + s;
-    } : (s: string) => string
+>(s: string) => {        return 'hello ' + s;    } : (s: string) => string
 >s : string
 
         return 'hello ' + s;

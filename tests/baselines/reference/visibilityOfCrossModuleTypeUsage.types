@@ -3,7 +3,7 @@ import commands = require('visibilityOfCrossModuleTypeUsage_commands');
 >commands : typeof "tests/cases/compiler/visibilityOfCrossModuleTypeUsage_commands"
 
 function run(configuration: commands.IConfiguration) {
->run : (configuration: IConfiguration) => void
+>run : typeof run
 >configuration : IConfiguration
 >commands : commands
 >IConfiguration : IConfiguration
