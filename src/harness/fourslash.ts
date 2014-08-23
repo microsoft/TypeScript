@@ -596,6 +596,29 @@ module FourSlash {
             }
         }
 
+        public verifyReferencesAtPositionListContains(fileName: string, start: number, end: number, isWriteAccess?: boolean) {
+            this.taoInvalidReason = 'verifyReferencesAtPositionListContains NYI';
+
+            var references = this.getReferencesAtCaret();
+
+            if (!references || references.length === 0) {
+                throw new Error('verifyReferencesAtPositionListContains failed - found 0 references, expected at least one.');
+            }
+
+            for (var i = 0; i < references.length; i++) {
+                var reference = references[i];
+                if (reference && reference.fileName === fileName && reference.minChar === start && reference.limChar === end) {
+                    if (typeof isWriteAccess !== "undefined" && reference.isWriteAccess !== isWriteAccess) {
+                        throw new Error('verifyReferencesAtPositionListContains failed - item isWriteAccess value doe not match, actual: ' + reference.isWriteAccess + ', expected: ' + isWriteAccess + '.');
+                    }
+                    return;
+                }
+            }
+
+            var missingItem = { fileName: fileName, start: start, end: end, isWriteAccess: isWriteAccess };
+            throw new Error('verifyReferencesAtPositionListContains failed - could not find the item: ' + JSON.stringify(missingItem) + ' in the returned list: (' + JSON.stringify(references) + ')');
+        }
+
         public verifyReferencesCountIs(count: number, localFilesOnly: boolean = true) {
             this.taoInvalidReason = 'verifyReferences NYI';
 

@@ -183,6 +183,10 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifyReferencesCountIs(count, /*localFilesOnly*/ false);
         }
 
+        public referencesAtPositionContains(range: Range, isWriteAccess?: boolean) {
+            FourSlash.currentTestState.verifyReferencesAtPositionListContains(range.fileName, range.start, range.end, isWriteAccess);
+        }
+
         public implementorsCountIs(count: number) {
             FourSlash.currentTestState.verifyImplementorsCountIs(count);
         }

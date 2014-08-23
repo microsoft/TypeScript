@@ -2466,8 +2466,8 @@ module ts {
             function getReferenceEntry(node: Node): ReferenceEntry {
                 return {
                     fileName: node.getSourceFile().filename,
-                    minChar: node.getStart(),
-                    limChar: node.getEnd(),
+                    minChar: node.kind === SyntaxKind.StringLiteral ? node.getStart() + 1 : node.getStart(),
+                    limChar: node.kind === SyntaxKind.StringLiteral ? node.getEnd() - 1 : node.getEnd(),
                     isWriteAccess: isWriteAccess(node)
                 };
             }
