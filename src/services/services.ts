@@ -11,7 +11,6 @@
 /// <reference path='breakpoints.ts' />
 /// <reference path='indentation.ts' />
 /// <reference path='formatting\formatting.ts' />
-/// <reference path='bloomFilter.ts' />
 
 /// <reference path='core\references.ts' />
 /// <reference path='resources\references.ts' />
@@ -71,7 +70,6 @@ module ts {
     export interface SourceFile {
         getSourceUnit(): TypeScript.SourceUnitSyntax;
         getSyntaxTree(): TypeScript.SyntaxTree;
-        getBloomFilter(): BloomFilter;
         update(scriptSnapshot: TypeScript.IScriptSnapshot, version: number, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile;
     }
 
@@ -325,7 +323,6 @@ module ts {
         public isOpen: boolean;
         public languageVersion: ScriptTarget;
 
-        private bloomFilter: BloomFilter;
         private syntaxTree: TypeScript.SyntaxTree;
         private scriptSnapshot: TypeScript.IScriptSnapshot;
 
@@ -355,36 +352,6 @@ module ts {
 
         private isDeclareFile(): boolean {
             return TypeScript.isDTSFile(this.filename);
-        }
-
-        public getBloomFilter(): BloomFilter {
-            if (!this.bloomFilter) {
-                var identifiers: string[] = [];
-
-                forEachChild(this, function visit (node: Node) {
-                    switch (node.kind) {
-                        case SyntaxKind.Identifier:
-                            identifiers.push((<Identifier>node).text);
-                            return undefined;
-                        case SyntaxKind.StringLiteral:
-                            if (isNameOfExternalModuleImportOrDeclaration(node)) {
-                                identifiers.push((<LiteralExpression>node).text);
-                            }
-                        // intential fall through
-                        case SyntaxKind.NumericLiteral:
-                            if (isLiteralNameOfPropertyDeclarationOrIndexAccess(node)) {
-                                identifiers.push((<LiteralExpression>node).text);
-                            }
-                            return undefined;
-                        default:
-                            return forEachChild(node, visit);
-                    };
-                });
-
-                this.bloomFilter = new BloomFilter(identifiers.length);
-                this.bloomFilter.addKeys(identifiers);
-            }
-            return this.bloomFilter;
         }
 
         public update(scriptSnapshot: TypeScript.IScriptSnapshot, version: number, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile {
@@ -2188,10 +2155,10 @@ module ts {
                 forEach(program.getSourceFiles(), sourceFile => {
                     cancellationToken.throwIfCancellationRequested();
 
-                    if (sourceFile.getBloomFilter().probablyContains(symbolName)) {
+                    //if (sourceFile.getBloomFilter().probablyContains(symbolName)) {
                         result = result || [];
                         getReferencesInNode(sourceFile, symbol, symbolName, node, searchMeaning, result);
-                    }
+                    //}
                 });
             }
 
