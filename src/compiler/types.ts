@@ -537,6 +537,7 @@ module ts {
         isOpen: boolean;
         version: number;
         languageVersion: ScriptTarget;
+        identifiers: Map<string>;
     }
 
     export interface Program {

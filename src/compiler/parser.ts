@@ -814,6 +814,10 @@ module ts {
             return createNode(SyntaxKind.Missing);
         }
 
+        function internIdentifier(text: string): string {
+            return hasProperty(identifiers, text) ? identifiers[text] : (identifiers[text] = text);
+        }
+
         // An identifier that starts with two underscores has an extra underscore character prepended to it to avoid issues
         // with magic property names like '__proto__'. The 'identifiers' object is used to share a single string instance for
         // each identifier in order to reduce memory consumption.
@@ -822,7 +826,7 @@ module ts {
             if (isIdentifier) {
                 var node = <Identifier>createNode(SyntaxKind.Identifier);
                 var text = escapeIdentifier(scanner.getTokenValue());
-                node.text = hasProperty(identifiers, text) ? identifiers[text] : (identifiers[text] = text);
+                node.text = internIdentifier(text);
                 nextToken();
                 return finishNode(node);
             }
@@ -844,7 +848,7 @@ module ts {
 
         function parsePropertyName(): Identifier {
             if (token === SyntaxKind.StringLiteral || token === SyntaxKind.NumericLiteral) {
-                return <LiteralExpression>parsePrimaryExpression();
+                return parseLiteralNode(/*internName:*/ true);
             }
             return parseIdentifierName();
         }
@@ -1125,9 +1129,11 @@ module ts {
             return finishNode(node);
         }
 
-        function parseLiteralNode(): LiteralExpression {
+        function parseLiteralNode(internName?:boolean): LiteralExpression {
             var node = <LiteralExpression>createNode(token);
-            node.text = scanner.getTokenValue();
+            var text = scanner.getTokenValue();
+            node.text = internName ? internIdentifier(text) : text;
+
             var tokenPos = scanner.getTokenPos();
             nextToken();
             finishNode(node);
@@ -1154,7 +1160,7 @@ module ts {
         }
 
         function parseStringLiteral(): LiteralExpression {
-            if (token === SyntaxKind.StringLiteral) return parseLiteralNode();
+            if (token === SyntaxKind.StringLiteral) return parseLiteralNode(/*internName:*/ true);
             error(Diagnostics.String_literal_expected);
             return <LiteralExpression>createMissingNode();
         }
@@ -2058,6 +2064,10 @@ module ts {
                     }
                     else {
                         indexedAccess.index = parseExpression();
+                        if (indexedAccess.index.kind === SyntaxKind.StringLiteral || indexedAccess.index.kind === SyntaxKind.NumericLiteral) {
+                            var literal = <LiteralExpression>indexedAccess.index;
+                            literal.text = internIdentifier(literal.text);
+                        }
                         parseExpected(SyntaxKind.CloseBracketToken);
                     }
 
@@ -3611,6 +3621,7 @@ module ts {
         file.version = version;
         file.isOpen = isOpen;
         file.languageVersion = languageVersion;
+        file.identifiers = identifiers;
         return file;
     }
 

@@ -322,6 +322,7 @@ module ts {
         public version: number;
         public isOpen: boolean;
         public languageVersion: ScriptTarget;
+        public identifiers: Map<string>;
 
         private syntaxTree: TypeScript.SyntaxTree;
         private scriptSnapshot: TypeScript.IScriptSnapshot;
@@ -2155,10 +2156,10 @@ module ts {
                 forEach(program.getSourceFiles(), sourceFile => {
                     cancellationToken.throwIfCancellationRequested();
 
-                    //if (sourceFile.getBloomFilter().probablyContains(symbolName)) {
+                    if (lookUp(sourceFile.identifiers, symbolName)) {
                         result = result || [];
                         getReferencesInNode(sourceFile, symbol, symbolName, node, searchMeaning, result);
-                    //}
+                    }
                 });
             }
 
