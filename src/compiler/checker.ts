@@ -6814,7 +6814,7 @@ module ts {
                 return getSymbolOfNode(node.parent);
             }
 
-            if (isInRightSideOfImportOrExportAssignment(node)) {
+            if (node.kind === SyntaxKind.Identifier && isInRightSideOfImportOrExportAssignment(node)) {
                 return node.parent.kind === SyntaxKind.ExportAssignment
                     ? getSymbolOfEntityName(<Identifier>node)
                     : getSymbolOfPartOfRightHandSideOfImport(node);

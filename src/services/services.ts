@@ -367,6 +367,10 @@ module ts {
                             identifiers.push((<Identifier>node).text);
                             return undefined;
                         case SyntaxKind.StringLiteral:
+                            if (isNameOfExternalModuleImportOrDeclaration(node)) {
+                                identifiers.push((<LiteralExpression>node).text);
+                            }
+                        // intential fall through
                         case SyntaxKind.NumericLiteral:
                             if (isLiteralNameOfPropertyDeclarationOrIndexAccess(node)) {
                                 identifiers.push((<LiteralExpression>node).text);
@@ -1322,6 +1326,12 @@ module ts {
         return false;
     }
 
+    function isNameOfExternalModuleImportOrDeclaration(node: Node): boolean {
+        return node.kind === SyntaxKind.StringLiteral &&
+            ((node.parent.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>node.parent).name === node) ||
+            (node.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent).externalModuleName === node));
+    }
+
     enum SearchMeaning {
         Value = 0x1,
         Type = 0x2,
@@ -2126,7 +2136,9 @@ module ts {
                 return undefined;
             }
 
-            if (node.kind !== SyntaxKind.Identifier && !isLiteralNameOfPropertyDeclarationOrIndexAccess(node)) {
+            if (node.kind !== SyntaxKind.Identifier &&
+                !isLiteralNameOfPropertyDeclarationOrIndexAccess(node) && 
+                !isNameOfExternalModuleImportOrDeclaration(node)) {
                 return undefined;
             }
 
@@ -2163,26 +2175,35 @@ module ts {
             // Compute the meaning from the location and the symbol it references
             var searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), symbol.getDeclarations());
 
+            // Get the text to search for, we need to normalize it as external module names will have quote
+            var symbolName = getNormalizedSymbolName(symbol.getName());                
+
             var scope = getSymbolScope(symbol);
 
             if (scope) {
                 result = [];
-                getReferencesInNode(scope, symbol, node, searchMeaning, result);
+                getReferencesInNode(scope, symbol, symbolName, node, searchMeaning, result);
             }
             else {
-                var symbolName = symbol.getName();
-
                 forEach(program.getSourceFiles(), sourceFile => {
                     cancellationToken.throwIfCancellationRequested();
 
                     if (sourceFile.getBloomFilter().probablyContains(symbolName)) {
                         result = result || [];
-                        getReferencesInNode(sourceFile, symbol, node, searchMeaning, result);
+                        getReferencesInNode(sourceFile, symbol, symbolName, node, searchMeaning, result);
                     }
                 });
             }
 
             return result;
+
+            function getNormalizedSymbolName(name: string): string {
+                var length = name.length;
+                if (length >= 2 && name.charCodeAt(0) === CharacterCodes.doubleQuote && name.charCodeAt(length - 1) === CharacterCodes.doubleQuote) {
+                    return name.substring(1, length - 1);
+                };
+                return name;
+            }
 
             function getSymbolScope(symbol: Symbol): Node {
                 // If this is private property or method, the scope is the containing class
@@ -2281,17 +2302,16 @@ module ts {
                 return result;
             }
 
-            function isValidReferencePosition(node: Node, searchSymbol: Symbol): boolean {
+            function isValidReferencePosition(node: Node, searchSymbolName: string): boolean {
                 if (node) {
-                    var searchSymbolName = searchSymbol.getName();
-
                     // Compare the length so we filter out strict superstrings of the symbol we are looking for
                     switch (node.kind) {
                         case SyntaxKind.Identifier:
                             return node.getWidth() === searchSymbolName.length;
 
                         case SyntaxKind.StringLiteral:
-                            if (isLiteralNameOfPropertyDeclarationOrIndexAccess(node)) {
+                            if (isLiteralNameOfPropertyDeclarationOrIndexAccess(node) ||
+                                isNameOfExternalModuleImportOrDeclaration(node)) {
                                 // For string literals we have two additional chars for the quotes
                                 return node.getWidth() === searchSymbolName.length + 2;
                             }
@@ -2309,14 +2329,12 @@ module ts {
             }
 
             /// Search within node "container" for references for a search value, where the search value is defined as a 
-            /// tuple of(searchSymbol, searchLocation, and searchMeaning).
+            /// tuple of(searchSymbol, searchText, searchLocation, and searchMeaning).
             /// searchLocation: a node where the search value 
-            function getReferencesInNode(container: Node, searchSymbol: Symbol, searchLocation: Node, searchMeaning: SearchMeaning, result: ReferenceEntry[]): void {
-                var searchSymbolName = searchSymbol.getName();
-
+            function getReferencesInNode(container: Node, searchSymbol: Symbol, searchText: string, searchLocation: Node, searchMeaning: SearchMeaning, result: ReferenceEntry[]): void {
                 var sourceFile = container.getSourceFile();
 
-                var possiblePositions = getPossibleSymbolReferencePositions(sourceFile, searchSymbolName, container.getStart(), container.getEnd());
+                var possiblePositions = getPossibleSymbolReferencePositions(sourceFile, searchText, container.getStart(), container.getEnd());
 
                 if (possiblePositions.length) {
                     // Build the set of symbols to search for, initially it has only the current symbol
@@ -2326,7 +2344,7 @@ module ts {
                         cancellationToken.throwIfCancellationRequested();
 
                         var referenceLocation = getNodeAtPosition(sourceFile, position);
-                        if (!isValidReferencePosition(referenceLocation, searchSymbol)) {
+                        if (!isValidReferencePosition(referenceLocation, searchText)) {
                             return;
                         }
 
