@@ -7098,34 +7098,29 @@ module ts {
             return false;
         }
 
-        function isParameterReferencedInBody(node: FunctionDeclaration, param: ParameterDeclaration) {
+        function isParameterReferencedInBody(body: FunctionDeclaration, param: ParameterDeclaration) {
+
+            function equals(a: Symbol, b: Symbol) {
+                var x = a.valueDeclaration;
+                var y = b.valueDeclaration;
+                return (x.pos === y.pos) && (x.end === y.end);
+            }
 
             function isReferenced(node: Node): boolean {
-
-                if (node === undefined)
-                    return false;
-
                 switch (node.kind) {
-
-                // Terminals
-                case SyntaxKind.NumericLiteral:
-                case SyntaxKind.StringLiteral:
-                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.Parameter:
                     return false;
 
                 case SyntaxKind.Identifier:
-                    var identifier = <Identifier> node;
-                    // DEBUG
-                    console.log({ name: identifier.text, id: identifier.id }, 'vs', { name: param.symbol.name, id: param.symbol.id });
-                    return identifier.id === param.symbol.id
+                    var symbol = getSymbolOfEntityName(node);
+                    return symbol && symbol.valueDeclaration && equals(symbol, param.symbol);
 
                 default:
-                    // Recursively check children until we hit a terminal
                     return forEachChild(node, isReferenced);
                 }
             }
 
-            return forEachChild(node, isReferenced);
+            return forEachChild(body, isReferenced);
         }
 
         function getNodeCheckFlags(node: Node): NodeCheckFlags {
