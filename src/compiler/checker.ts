@@ -7121,12 +7121,11 @@ module ts {
 
                 default:
                     // Recursively check children until we hit a terminal
-                    return forEachChild(node, isReferenced) || false;
+                    return forEachChild(node, isReferenced);
                 }
             }
 
-            forEachChild(node, isReferenced);
-            return false;
+            return forEachChild(node, isReferenced);
         }
 
         function getNodeCheckFlags(node: Node): NodeCheckFlags {
