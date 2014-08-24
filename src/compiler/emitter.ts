@@ -1275,6 +1275,11 @@ module ts {
                 if (hasRestParameters(node)) {
                     var restIndex = node.parameters.length - 1;
                     var restParam = node.parameters[restIndex];
+
+                    if (!resolver.isParameterReferencedInBody(node, restParam)) {
+                        return;
+                    }
+
                     writeLine();
                     emitLeadingComments(restParam);
                     emitStart(restParam);
