@@ -7100,12 +7100,6 @@ module ts {
 
         function isParameterReferencedInBody(body: FunctionDeclaration, param: ParameterDeclaration) {
 
-            function equals(a: Symbol, b: Symbol) {
-                var x = a.valueDeclaration;
-                var y = b.valueDeclaration;
-                return (x.pos === y.pos) && (x.end === y.end);
-            }
-
             function isReferenced(node: Node): boolean {
                 switch (node.kind) {
                 case SyntaxKind.Parameter:
@@ -7113,7 +7107,7 @@ module ts {
 
                 case SyntaxKind.Identifier:
                     var symbol = getSymbolOfEntityName(node);
-                    return symbol && symbol.valueDeclaration && equals(symbol, param.symbol);
+                    return symbol && symbol.valueDeclaration && (symbol.valueDeclaration === param.symbol.valueDeclaration);
 
                 default:
                     return forEachChild(node, isReferenced);
