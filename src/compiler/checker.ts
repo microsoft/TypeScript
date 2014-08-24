@@ -7098,6 +7098,20 @@ module ts {
             return false;
         }
 
+        function isParameterReferencedInBody (node: FunctionDeclaration, param: ParameterDeclaration) {
+            var result = true;
+
+            var statements = (<Block> node.body).statements;
+            forEach(statements, s => {
+                if (s.kind == SyntaxKind.ReturnStatement) {
+                    var expr = (<ReturnStatement> s).expression;
+                    if (expr === undefined)
+                        result = false;
+                }
+            });
+            return result;
+        }
+
         function getNodeCheckFlags(node: Node): NodeCheckFlags {
             return getNodeLinks(node).flags;
         }
@@ -7133,6 +7147,7 @@ module ts {
                 shouldEmitDeclarations: shouldEmitDeclarations,
                 isDeclarationVisible: isDeclarationVisible,
                 isImplementationOfOverload: isImplementationOfOverload,
+                isParameterReferencedInBody: isParameterReferencedInBody,
                 writeTypeAtLocation: writeTypeAtLocation,
                 writeReturnTypeOfSignatureDeclaration: writeReturnTypeOfSignatureDeclaration,
                 writeSymbol: writeSymbolToTextWriter,
