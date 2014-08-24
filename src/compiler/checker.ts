@@ -7098,18 +7098,35 @@ module ts {
             return false;
         }
 
-        function isParameterReferencedInBody (node: FunctionDeclaration, param: ParameterDeclaration) {
-            var result = true;
+        function isParameterReferencedInBody(node: FunctionDeclaration, param: ParameterDeclaration) {
 
-            var statements = (<Block> node.body).statements;
-            forEach(statements, s => {
-                if (s.kind == SyntaxKind.ReturnStatement) {
-                    var expr = (<ReturnStatement> s).expression;
-                    if (expr === undefined)
-                        result = false;
+            function isReferenced(node: Node): boolean {
+
+                if (node === undefined)
+                    return false;
+
+                switch (node.kind) {
+
+                // Terminals
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.RegularExpressionLiteral:
+                    return false;
+
+                case SyntaxKind.Identifier:
+                    var identifier = <Identifier> node;
+                    // DEBUG
+                    console.log({ name: identifier.text, id: identifier.id }, 'vs', { name: param.symbol.name, id: param.symbol.id });
+                    return identifier.id === param.symbol.id
+
+                default:
+                    // Recursively check children until we hit a terminal
+                    return forEachChild(node, isReferenced) || false;
                 }
-            });
-            return result;
+            }
+
+            forEachChild(node, isReferenced);
+            return false;
         }
 
         function getNodeCheckFlags(node: Node): NodeCheckFlags {
