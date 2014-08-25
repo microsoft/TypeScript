@@ -143,17 +143,25 @@ sourceFile:out-flag.ts
 4 >Emitted(10, 44) Source(12, 21) + SourceIndex(0) name (MyClass)
 5 >Emitted(10, 49) Source(12, 34) + SourceIndex(0) name (MyClass)
 ---
+>>>        //
+1 >^^^^^^^^
+2 >        ^^
+1 >)
+  >    {
+  >        
+2 >        //
+1 >Emitted(11, 9) Source(14, 9) + SourceIndex(0) name (MyClass.SetCount)
+2 >Emitted(11, 11) Source(14, 11) + SourceIndex(0) name (MyClass.SetCount)
+---
 >>>    };
 1 >^^^^
 2 >    ^
 3 >     ^^^^^^^^^^^^^^^->
-1 >)
-  >    {
-  >        //
+1 >
   >    
 2 >    }
-1 >Emitted(11, 5) Source(15, 5) + SourceIndex(0) name (MyClass.SetCount)
-2 >Emitted(11, 6) Source(15, 6) + SourceIndex(0) name (MyClass.SetCount)
+1 >Emitted(12, 5) Source(15, 5) + SourceIndex(0) name (MyClass.SetCount)
+2 >Emitted(12, 6) Source(15, 6) + SourceIndex(0) name (MyClass.SetCount)
 ---
 >>>    return MyClass;
 1->^^^^
@@ -161,8 +169,8 @@ sourceFile:out-flag.ts
 1->
   >
 2 >    }
-1->Emitted(12, 5) Source(16, 1) + SourceIndex(0) name (MyClass)
-2 >Emitted(12, 19) Source(16, 2) + SourceIndex(0) name (MyClass)
+1->Emitted(13, 5) Source(16, 1) + SourceIndex(0) name (MyClass)
+2 >Emitted(13, 19) Source(16, 2) + SourceIndex(0) name (MyClass)
 ---
 >>>})();
 1 >
@@ -186,9 +194,9 @@ sourceFile:out-flag.ts
   >         //
   >     }
   > }
-1 >Emitted(13, 1) Source(16, 1) + SourceIndex(0) name (MyClass)
-2 >Emitted(13, 2) Source(16, 2) + SourceIndex(0) name (MyClass)
-3 >Emitted(13, 2) Source(4, 1) + SourceIndex(0)
-4 >Emitted(13, 6) Source(16, 2) + SourceIndex(0)
+1 >Emitted(14, 1) Source(16, 1) + SourceIndex(0) name (MyClass)
+2 >Emitted(14, 2) Source(16, 2) + SourceIndex(0) name (MyClass)
+3 >Emitted(14, 2) Source(4, 1) + SourceIndex(0)
+4 >Emitted(14, 6) Source(16, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=out-flag.js.map

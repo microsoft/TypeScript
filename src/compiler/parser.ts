@@ -9,7 +9,7 @@ module ts {
     export function getNodeConstructor(kind: SyntaxKind): new () => Node {
         return nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind));
     }
-
+ 
     function createRootNode(kind: SyntaxKind, pos: number, end: number, flags: NodeFlags): Node {
         var node = new (getNodeConstructor(kind))();
         node.pos = pos;
@@ -483,7 +483,7 @@ module ts {
         nodeIsNestedInLabel(label: Identifier, requireIterationStatement: boolean, stopAtFunctionBoundary: boolean): ControlBlockContext;
     }
 
-    export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, version: number = 0, isOpen: boolean = false): SourceFile {
+    export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, version: string, isOpen: boolean = false): SourceFile {
         var file: SourceFile;
         var scanner: Scanner;
         var token: SyntaxKind;
@@ -2455,8 +2455,6 @@ module ts {
         function parseBreakOrContinueStatement(kind: SyntaxKind): BreakOrContinueStatement {
             var node = <BreakOrContinueStatement>createNode(kind);
             var errorCountBeforeStatement = file.syntacticErrors.length;
-            var keywordStart = scanner.getTokenPos();
-            var keywordLength = scanner.getTextPos() - keywordStart;
             parseExpected(kind === SyntaxKind.BreakStatement ? SyntaxKind.BreakKeyword : SyntaxKind.ContinueKeyword);
             if (!canParseSemicolon()) node.label = parseIdentifier();
             parseSemicolon();

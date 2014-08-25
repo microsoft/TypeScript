@@ -1,4 +1,4 @@
-Option sourceRoot cannot be specified without specifying sourcemap option.
+error TS5039: Option sourceRoot cannot be specified without specifying sourcemap option.
 
 
 !!! Option sourceRoot cannot be specified without specifying sourcemap option.

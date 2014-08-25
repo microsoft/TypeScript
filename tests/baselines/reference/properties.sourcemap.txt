@@ -111,17 +111,25 @@ sourceFile:properties.ts
 2 >Emitted(8, 24) Source(9, 22) + SourceIndex(0) name (MyClass)
 3 >Emitted(8, 29) Source(9, 35) + SourceIndex(0) name (MyClass)
 ---
+>>>            //
+1 >^^^^^^^^^^^^
+2 >            ^^
+1 >)
+  >    {
+  >        
+2 >            //
+1 >Emitted(9, 13) Source(11, 9) + SourceIndex(0) name (MyClass.Count)
+2 >Emitted(9, 15) Source(11, 11) + SourceIndex(0) name (MyClass.Count)
+---
 >>>        },
 1 >^^^^^^^^
 2 >        ^
 3 >         ^^^^^^^^^^^^^^^^^->
-1 >)
-  >    {
-  >        //
+1 >
   >    
 2 >        }
-1 >Emitted(9, 9) Source(12, 5) + SourceIndex(0) name (MyClass.Count)
-2 >Emitted(9, 10) Source(12, 6) + SourceIndex(0) name (MyClass.Count)
+1 >Emitted(10, 9) Source(12, 5) + SourceIndex(0) name (MyClass.Count)
+2 >Emitted(10, 10) Source(12, 6) + SourceIndex(0) name (MyClass.Count)
 ---
 >>>        enumerable: true,
 >>>        configurable: true
@@ -129,7 +137,7 @@ sourceFile:properties.ts
 1->^^^^^^^
 2 >       ^^^^^^^^^^^^^->
 1->
-1->Emitted(12, 8) Source(7, 6) + SourceIndex(0) name (MyClass)
+1->Emitted(13, 8) Source(7, 6) + SourceIndex(0) name (MyClass)
 ---
 >>>    return MyClass;
 1->^^^^
@@ -142,8 +150,8 @@ sourceFile:properties.ts
   >    }
   >
 2 >    }
-1->Emitted(13, 5) Source(13, 1) + SourceIndex(0) name (MyClass)
-2 >Emitted(13, 19) Source(13, 2) + SourceIndex(0) name (MyClass)
+1->Emitted(14, 5) Source(13, 1) + SourceIndex(0) name (MyClass)
+2 >Emitted(14, 19) Source(13, 2) + SourceIndex(0) name (MyClass)
 ---
 >>>})();
 1 >
@@ -166,9 +174,9 @@ sourceFile:properties.ts
   >         //
   >     }
   > }
-1 >Emitted(14, 1) Source(13, 1) + SourceIndex(0) name (MyClass)
-2 >Emitted(14, 2) Source(13, 2) + SourceIndex(0) name (MyClass)
-3 >Emitted(14, 2) Source(2, 1) + SourceIndex(0)
-4 >Emitted(14, 6) Source(13, 2) + SourceIndex(0)
+1 >Emitted(15, 1) Source(13, 1) + SourceIndex(0) name (MyClass)
+2 >Emitted(15, 2) Source(13, 2) + SourceIndex(0) name (MyClass)
+3 >Emitted(15, 2) Source(2, 1) + SourceIndex(0)
+4 >Emitted(15, 6) Source(13, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=properties.js.map

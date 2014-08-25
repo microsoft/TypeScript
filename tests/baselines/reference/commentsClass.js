@@ -64,6 +64,14 @@ class c8 {
 var i8 = new c8();
 var i8_c = c8;
 
+class c9 {
+    constructor() {
+        /// This is some detached comment
+
+        // should emit this leading comment of } too
+    }
+}
+
 
 //// [commentsClass.js]
 /** This is class c2 without constuctor*/
@@ -123,11 +131,20 @@ var c8 = (function () {
     /** constructor comment
     */
     function c8() {
+        /** constructor comment2
+        */
     }
     return c8;
 })();
 var i8 = new c8();
 var i8_c = c8;
+var c9 = (function () {
+    function c9() {
+        /// This is some detached comment
+        // should emit this leading comment of } too
+    }
+    return c9;
+})();
 
 
 //// [commentsClass.d.ts]
@@ -178,3 +195,6 @@ declare class c8 {
 }
 declare var i8: c8;
 declare var i8_c: typeof c8;
+declare class c9 {
+    constructor();
+}

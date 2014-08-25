@@ -1,5 +1,5 @@
-main.ts(2,1): File 'nonExistingFile1.ts' not found.
-main.ts(3,1): File 'nonExistingFile2.ts' not found.
+main.ts(2,1): error TS6053: File 'nonExistingFile1.ts' not found.
+main.ts(3,1): error TS6053: File 'nonExistingFile2.ts' not found.
 
 
 ==== main.ts (2 errors) ====

@@ -535,7 +535,7 @@ module ts {
         identifierCount: number;
         symbolCount: number;
         isOpen: boolean;
-        version: number;
+        version: string;
         languageVersion: ScriptTarget;
         identifiers: Map<string>;
     }

@@ -188,13 +188,10 @@ module ts {
 
     export var localizedDiagnosticMessages: Map<string> = undefined;
 
-    function getLocaleSpecificMessage(message: string) {
+    export function getLocaleSpecificMessage(message: string) {
         if (ts.localizedDiagnosticMessages) {
             message = localizedDiagnosticMessages[message];
         }
-
-        /* Check to see that we got an actual value back. */
-        Debug.assert(message, "Diagnostic message does not exist in locale map.");
 
         return message;
     }
@@ -567,7 +564,7 @@ module ts {
         var currentAssertionLevel = AssertionLevel.None;
 
         export function shouldAssert(level: AssertionLevel): boolean {
-            return this.currentAssertionLevel >= level;
+            return currentAssertionLevel >= level;
         }
 
         export function assert(expression: any, message?: string, verboseDebugInfo?: () => string): void {

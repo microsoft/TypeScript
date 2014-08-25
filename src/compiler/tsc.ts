@@ -86,13 +86,18 @@ module ts {
     }
 
     function reportDiagnostic(diagnostic: Diagnostic) {
+        var output = "";
+        
         if (diagnostic.file) {
             var loc = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);
-            sys.write(diagnostic.file.filename + "(" + loc.line + "," + loc.character + "): " + diagnostic.messageText + sys.newLine);
+
+            output += diagnostic.file.filename + "(" + loc.line + "," + loc.character + "): ";
         }
-        else {
-            sys.write(diagnostic.messageText + sys.newLine);
-        }
+
+        var category = DiagnosticCategory[diagnostic.category].toLowerCase();
+        output += category + " TS" + diagnostic.code + ": " + diagnostic.messageText + sys.newLine;
+
+        sys.write(output);
     }
 
     function reportDiagnostics(diagnostics: Diagnostic[]) {
@@ -142,7 +147,7 @@ module ts {
                 }
                 text = "";
             }
-            return text !== undefined ? createSourceFile(filename, text, languageVersion) : undefined;
+            return text !== undefined ? createSourceFile(filename, text, languageVersion, /*version:*/ "0") : undefined;
         }
 
         function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {

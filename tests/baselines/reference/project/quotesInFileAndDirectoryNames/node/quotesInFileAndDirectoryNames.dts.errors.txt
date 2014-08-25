@@ -1,4 +1,4 @@
-m'ain.d.ts(1,1): File 'li.ts' not found.
+m'ain.d.ts(1,1): error TS6053: File 'li.ts' not found.
 
 
 ==== li'b/class'A.d.ts (0 errors) ====
