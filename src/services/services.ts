@@ -2093,6 +2093,26 @@ module ts {
         }
 
         /// Find references
+        function getOccurrencesAtPosition(filename: string, position: number): ReferenceEntry[] {
+            synchronizeHostData();
+
+            filename = TypeScript.switchToForwardSlashes(filename);
+            var sourceFile = getSourceFile(filename);
+
+            var node = getNodeAtPosition(sourceFile, position);
+            if (!node) {
+                return undefined;
+            }
+
+            if (node.kind !== SyntaxKind.Identifier &&
+                !isLiteralNameOfPropertyDeclarationOrIndexAccess(node) &&
+                !isNameOfExternalModuleImportOrDeclaration(node)) {
+                return undefined;
+            }
+
+            return getReferencesForNode(node, [sourceFile]);
+        }
+
         function getReferencesAtPosition(filename: string, position: number): ReferenceEntry[] {
             synchronizeHostData();
 
@@ -2105,11 +2125,15 @@ module ts {
             }
 
             if (node.kind !== SyntaxKind.Identifier &&
-                !isLiteralNameOfPropertyDeclarationOrIndexAccess(node) && 
+                !isLiteralNameOfPropertyDeclarationOrIndexAccess(node) &&
                 !isNameOfExternalModuleImportOrDeclaration(node)) {
                 return undefined;
             }
 
+            return getReferencesForNode(node, program.getSourceFiles());
+        }
+
+        function getReferencesForNode(node: Node, sourceFiles : SourceFile[]): ReferenceEntry[] {
             // Labels
             if (isLabelName(node)) {
                 if (isJumpStatementTarget(node)) {
@@ -2153,7 +2177,7 @@ module ts {
                 getReferencesInNode(scope, symbol, symbolName, node, searchMeaning, result);
             }
             else {
-                forEach(program.getSourceFiles(), sourceFile => {
+                forEach(sourceFiles, sourceFile => {
                     cancellationToken.throwIfCancellationRequested();
 
                     if (lookUp(sourceFile.identifiers, symbolName)) {
@@ -2789,7 +2813,7 @@ module ts {
             getSignatureAtPosition: (filename, position): SignatureInfo => undefined,
             getDefinitionAtPosition: getDefinitionAtPosition,
             getReferencesAtPosition: getReferencesAtPosition,
-            getOccurrencesAtPosition: (filename, position) => [],
+            getOccurrencesAtPosition: getOccurrencesAtPosition,
             getImplementorsAtPosition: (filename, position) => [],
             getNameOrDottedNameSpan: getNameOrDottedNameSpan,
             getBreakpointStatementAtPosition: getBreakpointStatementAtPosition,
