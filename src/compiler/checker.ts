@@ -6644,6 +6644,7 @@ module ts {
                         case SyntaxKind.Parameter:
                         case SyntaxKind.Property:
                         case SyntaxKind.EnumMember:
+                        case SyntaxKind.PropertyAssignment:
                             return (<VariableDeclaration>parent).initializer === node;
                         case SyntaxKind.ExpressionStatement:
                         case SyntaxKind.IfStatement:
