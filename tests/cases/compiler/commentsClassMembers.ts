@@ -9,21 +9,21 @@ class c1 {
     /** sum with property*/
     public p2(/** number to add*/b: number) {
         return this.p1 + b;
-    } /* trailing comment of method*/
+    }
     /** getter property*/
     public get p3() {
         return this.p2(this.p1);
-    }// trailing comment Getter
+    }
     /** setter property*/
     public set p3(/** this is value*/value: number) {
         this.p1 = this.p2(value);
-    }// trailing comment Setter
+    }
     /** pp1 is property of c1*/
     private pp1: number;
     /** sum with property*/
     private pp2(/** number to add*/b: number) {
         return this.p1 + b;
-    } // trailing comment of method
+    }
     /** getter property*/
     private get pp3() {
         return this.pp2(this.pp1);
@@ -44,11 +44,11 @@ class c1 {
     /** static getter property*/
     static get s3() {
         return c1.s2(c1.s1);
-    } /*trailing comment 1 getter*/
+    }
     /** setter property*/
     static set s3( /** this is value*/value: number) {
         c1.s1 = c1.s2(value);
-    }/*trailing comment 2 */ /*setter*/
+    }
     public nc_p1: number;
     public nc_p2(b: number) {
         return this.nc_p1 + b;
@@ -200,7 +200,7 @@ class cProperties {
     /** getter only property*/
     public get p1() {
         return this.val;
-    } // trailing comment of only getter
+    }
     public get nc_p1() {
         return this.val;
     }
@@ -210,10 +210,7 @@ class cProperties {
     }
     public set nc_p2(value: number) {
         this.val = value;
-    } /* trailing comment of setter only*/
-
-    public x = 10; /*trailing comment for property*/
-    private y = 10; // trailing comment of // style
+    }
 }
 var cProperties_i = new cProperties();
 cProperties_i.p2 = cProperties_i.p1;

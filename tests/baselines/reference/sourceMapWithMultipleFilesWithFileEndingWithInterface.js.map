@@ -1,2 +1,0 @@
-//// [fooResult.js.map]
-{"version":3,"file":"fooResult.js","sourceRoot":"","sources":["tests/cases/compiler/a.ts","tests/cases/compiler/b.ts"],"names":["M","m1","m1.c1","m1.c1.constructor"],"mappings":"AAAA,IAAO,CAAC,CAEP;AAFD,WAAO,CAAC,EAAC,CAAC;IACKA,GAACA,GAAGA,CAACA,CAACA;AACrBA,CAACA,EAFM,CAAC,KAAD,CAAC,QAEP;ACFD,IAAO,EAAE,CAGR;AAHD,WAAO,EAAE,EAAC,CAAC;IACPC,IAAaA,EAAEA;QAAfC,SAAaA,EAAEA;QACfC,CAACA;QAADD,SAACA;IAADA,CAACA,AADDD,IACCA;IADYA,KAAEA,GAAFA,EACZA,CAAAA;AACLA,CAACA,EAHM,EAAE,KAAF,EAAE,QAGR"}

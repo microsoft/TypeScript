@@ -19,8 +19,7 @@ class c1 {
 >this : c1
 >p1 : number
 >b : number
-
-    } /* trailing comment of method*/
+    }
     /** getter property*/
     public get p3() {
 >p3 : number
@@ -33,8 +32,7 @@ class c1 {
 >this.p1 : number
 >this : c1
 >p1 : number
-
-    }// trailing comment Getter
+    }
     /** setter property*/
     public set p3(/** this is value*/value: number) {
 >p3 : number
@@ -50,8 +48,7 @@ class c1 {
 >this : c1
 >p2 : (b: number) => number
 >value : number
-
-    }// trailing comment Setter
+    }
     /** pp1 is property of c1*/
     private pp1: number;
 >pp1 : number
@@ -67,8 +64,7 @@ class c1 {
 >this : c1
 >p1 : number
 >b : number
-
-    } // trailing comment of method
+    }
     /** getter property*/
     private get pp3() {
 >pp3 : number
@@ -129,8 +125,7 @@ class c1 {
 >c1.s1 : number
 >c1 : typeof c1
 >s1 : number
-
-    } /*trailing comment 1 getter*/
+    }
     /** setter property*/
     static set s3( /** this is value*/value: number) {
 >s3 : number
@@ -146,8 +141,7 @@ class c1 {
 >c1 : typeof c1
 >s2 : (b: number) => number
 >value : number
-
-    }/*trailing comment 2 */ /*setter*/
+    }
     public nc_p1: number;
 >nc_p1 : number
 
@@ -702,8 +696,7 @@ class cProperties {
 >this.val : number
 >this : cProperties
 >val : number
-
-    } // trailing comment of only getter
+    }
     public get nc_p1() {
 >nc_p1 : number
 
@@ -734,14 +727,7 @@ class cProperties {
 >this : cProperties
 >val : number
 >value : number
-
-    } /* trailing comment of setter only*/
-
-    public x = 10; /*trailing comment for property*/
->x : number
-
-    private y = 10; // trailing comment of // style
->y : number
+    }
 }
 var cProperties_i = new cProperties();
 >cProperties_i : cProperties

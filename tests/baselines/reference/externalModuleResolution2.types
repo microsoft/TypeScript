@@ -17,3 +17,4 @@ module M2 {
 export = M2
 >M2 : typeof M2
 
+

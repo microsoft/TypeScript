@@ -1,5 +1,4 @@
 // @comments: true
-// @target: ES5
 
 var v = {
  /**

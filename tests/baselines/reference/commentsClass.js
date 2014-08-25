@@ -2,21 +2,21 @@
 
 /** This is class c2 without constuctor*/
 class c2 {
-} // trailing comment1
+}
 var i2 = new c2();
 var i2_c = c2;
 class c3 {
     /** Constructor comment*/
     constructor() {
-    } // trailing comment of constructor
-} /* trailing comment 2 */
+    }
+}
 var i3 = new c3();
 var i3_c = c3;
 /** Class comment*/
 class c4 {
     /** Constructor comment*/
     constructor() {
-    } /* trailing comment of constructor 2*/
+    }
 }
 var i4 = new c4();
 var i4_c = c4;
@@ -64,14 +64,6 @@ class c8 {
 var i8 = new c8();
 var i8_c = c8;
 
-class c9 {
-    constructor() {
-        /// This is some detached comment
-
-        // should emit this leading comment of } too
-    }
-}
-
 
 //// [commentsClass.js]
 /** This is class c2 without constuctor*/
@@ -79,22 +71,22 @@ var c2 = (function () {
     function c2() {
     }
     return c2;
-})(); // trailing comment1
+})();
 var i2 = new c2();
 var i2_c = c2;
 var c3 = (function () {
     /** Constructor comment*/
     function c3() {
-    } // trailing comment of constructor
+    }
     return c3;
-})(); /* trailing comment 2 */
+})();
 var i3 = new c3();
 var i3_c = c3;
 /** Class comment*/
 var c4 = (function () {
     /** Constructor comment*/
     function c4() {
-    } /* trailing comment of constructor 2*/
+    }
     return c4;
 })();
 var i4 = new c4();
@@ -138,13 +130,6 @@ var c8 = (function () {
 })();
 var i8 = new c8();
 var i8_c = c8;
-var c9 = (function () {
-    function c9() {
-        /// This is some detached comment
-        // should emit this leading comment of } too
-    }
-    return c9;
-})();
 
 
 //// [commentsClass.d.ts]
@@ -195,6 +180,3 @@ declare class c8 {
 }
 declare var i8: c8;
 declare var i8_c: typeof c8;
-declare class c9 {
-    constructor();
-}

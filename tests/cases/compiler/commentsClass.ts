@@ -4,21 +4,21 @@
 
 /** This is class c2 without constuctor*/
 class c2 {
-} // trailing comment1
+}
 var i2 = new c2();
 var i2_c = c2;
 class c3 {
     /** Constructor comment*/
     constructor() {
-    } // trailing comment of constructor
-} /* trailing comment 2 */
+    }
+}
 var i3 = new c3();
 var i3_c = c3;
 /** Class comment*/
 class c4 {
     /** Constructor comment*/
     constructor() {
-    } /* trailing comment of constructor 2*/
+    }
 }
 var i4 = new c4();
 var i4_c = c4;
@@ -65,11 +65,3 @@ class c8 {
 }
 var i8 = new c8();
 var i8_c = c8;
-
-class c9 {
-    constructor() {
-        /// This is some detached comment
-
-        // should emit this leading comment of } too
-    }
-}
