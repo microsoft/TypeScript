@@ -7102,15 +7102,15 @@ module ts {
 
             function isReferenced(node: Node): boolean {
                 switch (node.kind) {
-                case SyntaxKind.Parameter:
-                    return false;
+                    case SyntaxKind.Parameter:
+                            var p = <ParameterDeclaration> node;
+                            return (p.initializer) ? isReferenced(p.initializer) : false;
+                    case SyntaxKind.Identifier:
+                            var symbol = getSymbolOfEntityName(node);
+                            return symbol && symbol.valueDeclaration && (symbol.valueDeclaration === param.symbol.valueDeclaration);
 
-                case SyntaxKind.Identifier:
-                    var symbol = getSymbolOfEntityName(node);
-                    return symbol && symbol.valueDeclaration && (symbol.valueDeclaration === param.symbol.valueDeclaration);
-
-                default:
-                    return forEachChild(node, isReferenced);
+                    default:
+                            return forEachChild(node, isReferenced);
                 }
             }
 
