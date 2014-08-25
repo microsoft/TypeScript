@@ -12,7 +12,7 @@ interface server {
 
     (): http.Server;
 >http : http
->Server : Server
+>Server : http.Server
 
     startTime: Date;
 >startTime : Date

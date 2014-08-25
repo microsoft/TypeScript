@@ -61,7 +61,7 @@ var r = a.a;
 
 // generic interfaces in a module
 module M {
->M : typeof M
+>M : M
 
     class C<T> {
 >C : C<T>

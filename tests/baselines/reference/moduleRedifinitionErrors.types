@@ -3,6 +3,6 @@ class A {
 >A : A
 }
 module A {
->A : typeof A
+>A : A
 }
 

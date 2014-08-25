@@ -1,13 +1,13 @@
 === tests/cases/compiler/recursiveMods.ts ===
 export module Foo {
->Foo : typeof Foo
+>Foo : Foo
 
 	export class C {}
 >C : C
 }
 
 export module Foo {
->Foo : typeof Foo
+>Foo : Foo
 
 	function Bar() : C {
 >Bar : typeof Bar

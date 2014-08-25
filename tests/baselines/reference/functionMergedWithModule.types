@@ -8,8 +8,8 @@ function foo(title: string) {
 }
 
 module foo.Bar {
->foo : typeof foo
->Bar : typeof Bar
+>foo : foo
+>Bar : Bar
 
     export function f() {
 >f : typeof f
@@ -17,16 +17,16 @@ module foo.Bar {
 }
 
 module foo.Baz {
->foo : typeof foo
->Baz : typeof Baz
+>foo : foo
+>Baz : Baz
 
     export function g() {
 >g : typeof g
 
         Bar.f();
 >Bar.f() : void
->Bar.f : typeof f
+>Bar.f : typeof Bar.f
 >Bar : typeof Bar
->f : typeof f
+>f : typeof Bar.f
     }
 }

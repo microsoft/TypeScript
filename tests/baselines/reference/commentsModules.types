@@ -1,7 +1,7 @@
 === tests/cases/compiler/commentsModules.ts ===
 /** Module comment*/
 module m1 {
->m1 : typeof m1
+>m1 : m1
 
     /** b's comment*/
     export var b: number;
@@ -16,7 +16,7 @@ module m1 {
     }
     /** m2 comments*/
     export module m2 {
->m2 : typeof m2
+>m2 : m2
 
         /** class comment;*/
         export class c {
@@ -60,23 +60,23 @@ module m1 {
 } // trailing comment module
 m1.fooExport();
 >m1.fooExport() : number
->m1.fooExport : typeof fooExport
+>m1.fooExport : typeof m1.fooExport
 >m1 : typeof m1
->fooExport : typeof fooExport
+>fooExport : typeof m1.fooExport
 
 var myvar = new m1.m2.c();
->myvar : c
->new m1.m2.c() : c
->m1.m2.c : typeof c
->m1.m2 : typeof m2
+>myvar : m1.m2.c
+>new m1.m2.c() : m1.m2.c
+>m1.m2.c : typeof m1.m2.c
+>m1.m2 : typeof m1.m2
 >m1 : typeof m1
->m2 : typeof m2
->c : typeof c
+>m2 : typeof m1.m2
+>c : typeof m1.m2.c
 
 /** module comment of m2.m3*/
 module m2.m3 {
->m2 : typeof m2
->m3 : typeof m3
+>m2 : m2
+>m3 : m3
 
     /** Exported class comment*/
     export class c {
@@ -84,18 +84,18 @@ module m2.m3 {
     }
 } /* trailing dotted module comment*/
 new m2.m3.c();
->new m2.m3.c() : c
->m2.m3.c : typeof c
->m2.m3 : typeof m3
+>new m2.m3.c() : m2.m3.c
+>m2.m3.c : typeof m2.m3.c
+>m2.m3 : typeof m2.m3
 >m2 : typeof m2
->m3 : typeof m3
->c : typeof c
+>m3 : typeof m2.m3
+>c : typeof m2.m3.c
 
 /** module comment of m3.m4.m5*/
 module m3.m4.m5 {
->m3 : typeof m3
->m4 : typeof m4
->m5 : typeof m5
+>m3 : m3
+>m4 : m4
+>m5 : m5
 
     /** Exported class comment*/
     export class c {
@@ -103,23 +103,23 @@ module m3.m4.m5 {
     }
 } // trailing dotted module 2
 new m3.m4.m5.c();
->new m3.m4.m5.c() : c
->m3.m4.m5.c : typeof c
->m3.m4.m5 : typeof m5
->m3.m4 : typeof m4
+>new m3.m4.m5.c() : m3.m4.m5.c
+>m3.m4.m5.c : typeof m3.m4.m5.c
+>m3.m4.m5 : typeof m3.m4.m5
+>m3.m4 : typeof m3.m4
 >m3 : typeof m3
->m4 : typeof m4
->m5 : typeof m5
->c : typeof c
+>m4 : typeof m3.m4
+>m5 : typeof m3.m4.m5
+>c : typeof m3.m4.m5.c
 
 /** module comment of m4.m5.m6*/
 module m4.m5.m6 {
->m4 : typeof m4
->m5 : typeof m5
->m6 : typeof m6
+>m4 : m4
+>m5 : m5
+>m6 : m6
 
     export module m7 {
->m7 : typeof m7
+>m7 : m7
 
         /** Exported class comment*/
         export class c {
@@ -128,26 +128,26 @@ module m4.m5.m6 {
     } /* trailing inner module */ /* multiple comments*/
 }
 new m4.m5.m6.m7.c();
->new m4.m5.m6.m7.c() : c
->m4.m5.m6.m7.c : typeof c
->m4.m5.m6.m7 : typeof m7
->m4.m5.m6 : typeof m6
->m4.m5 : typeof m5
+>new m4.m5.m6.m7.c() : m4.m5.m6.m7.c
+>m4.m5.m6.m7.c : typeof m4.m5.m6.m7.c
+>m4.m5.m6.m7 : typeof m4.m5.m6.m7
+>m4.m5.m6 : typeof m4.m5.m6
+>m4.m5 : typeof m4.m5
 >m4 : typeof m4
->m5 : typeof m5
->m6 : typeof m6
->m7 : typeof m7
->c : typeof c
+>m5 : typeof m4.m5
+>m6 : typeof m4.m5.m6
+>m7 : typeof m4.m5.m6.m7
+>c : typeof m4.m5.m6.m7.c
 
 /** module comment of m5.m6.m7*/
 module m5.m6.m7 {
->m5 : typeof m5
->m6 : typeof m6
->m7 : typeof m7
+>m5 : m5
+>m6 : m6
+>m7 : m7
 
     /** module m8 comment*/
     export module m8 {
->m8 : typeof m8
+>m8 : m8
 
         /** Exported class comment*/
         export class c {
@@ -156,23 +156,23 @@ module m5.m6.m7 {
     }
 }
 new m5.m6.m7.m8.c();
->new m5.m6.m7.m8.c() : c
->m5.m6.m7.m8.c : typeof c
->m5.m6.m7.m8 : typeof m8
->m5.m6.m7 : typeof m7
->m5.m6 : typeof m6
+>new m5.m6.m7.m8.c() : m5.m6.m7.m8.c
+>m5.m6.m7.m8.c : typeof m5.m6.m7.m8.c
+>m5.m6.m7.m8 : typeof m5.m6.m7.m8
+>m5.m6.m7 : typeof m5.m6.m7
+>m5.m6 : typeof m5.m6
 >m5 : typeof m5
->m6 : typeof m6
->m7 : typeof m7
->m8 : typeof m8
->c : typeof c
+>m6 : typeof m5.m6
+>m7 : typeof m5.m6.m7
+>m8 : typeof m5.m6.m7.m8
+>c : typeof m5.m6.m7.m8.c
 
 module m6.m7 {
->m6 : typeof m6
->m7 : typeof m7
+>m6 : m6
+>m7 : m7
 
     export module m8 {
->m8 : typeof m8
+>m8 : m8
 
         /** Exported class comment*/
         export class c {
@@ -181,22 +181,22 @@ module m6.m7 {
     }
 }
 new m6.m7.m8.c();
->new m6.m7.m8.c() : c
->m6.m7.m8.c : typeof c
->m6.m7.m8 : typeof m8
->m6.m7 : typeof m7
+>new m6.m7.m8.c() : m6.m7.m8.c
+>m6.m7.m8.c : typeof m6.m7.m8.c
+>m6.m7.m8 : typeof m6.m7.m8
+>m6.m7 : typeof m6.m7
 >m6 : typeof m6
->m7 : typeof m7
->m8 : typeof m8
->c : typeof c
+>m7 : typeof m6.m7
+>m8 : typeof m6.m7.m8
+>c : typeof m6.m7.m8.c
 
 module m7.m8 {
->m7 : typeof m7
->m8 : typeof m8
+>m7 : m7
+>m8 : m8
 
     /** module m9 comment*/
     export module m9 {
->m9 : typeof m9
+>m9 : m9
 
         /** Exported class comment*/
         export class c {
@@ -215,12 +215,12 @@ module m7.m8 {
     }
 }
 new m7.m8.m9.c();
->new m7.m8.m9.c() : c
->m7.m8.m9.c : typeof c
->m7.m8.m9 : typeof m9
->m7.m8 : typeof m8
+>new m7.m8.m9.c() : m7.m8.m9.c
+>m7.m8.m9.c : typeof m7.m8.m9.c
+>m7.m8.m9 : typeof m7.m8.m9
+>m7.m8 : typeof m7.m8
 >m7 : typeof m7
->m8 : typeof m8
->m9 : typeof m9
->c : typeof c
+>m8 : typeof m7.m8
+>m9 : typeof m7.m8.m9
+>c : typeof m7.m8.m9.c
 

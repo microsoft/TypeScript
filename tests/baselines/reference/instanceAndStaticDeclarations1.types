@@ -52,7 +52,7 @@ class Point {
 >Point : typeof Point
 
     static distance(p1: Point, p2: Point) { return p1.distance(p2); }
->distance : typeof distance
+>distance : (p1: Point, p2: Point) => number
 >p1 : Point
 >Point : Point
 >p2 : Point

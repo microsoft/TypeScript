@@ -67,7 +67,7 @@ declare class cls {
 >cls : cls
 
     static static(p): number;
->static : typeof static
+>static : (p: any) => number
 >p : any
 
     static q;
@@ -77,7 +77,7 @@ declare class cls {
 >fn : () => any
 
     private static fns();
->fns : typeof fns
+>fns : () => any
 }
 
 // Ambient enum
@@ -122,7 +122,7 @@ declare enum E3 {
 >A : E3
 }
 declare module E3 {
->E3 : typeof E3
+>E3 : E3
 
     var B;
 >B : any
@@ -135,7 +135,7 @@ var x = E3.B;
 
 // Ambient module
 declare module M1 {
->M1 : typeof M1
+>M1 : M1
 
     var x;
 >x : any
@@ -154,9 +154,9 @@ var p = M1.x;
 var q = M1.fn();
 >q : number
 >M1.fn() : number
->M1.fn : typeof fn
+>M1.fn : typeof M1.fn
 >M1 : typeof M1
->fn : typeof fn
+>fn : typeof M1.fn
 
 // Ambient external module in the global module
 // Ambient external module with a string literal name that is a top level external module name

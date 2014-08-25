@@ -3,7 +3,7 @@ class SomeBase {
 >SomeBase : SomeBase
 
     static GetNumber() {
->GetNumber : typeof GetNumber
+>GetNumber : () => number
 
         return 2;
     }
@@ -15,8 +15,8 @@ class P extends SomeBase {
     static SomeNumber = P.GetNumber();
 >SomeNumber : number
 >P.GetNumber() : number
->P.GetNumber : typeof GetNumber
+>P.GetNumber : () => number
 >P : typeof P
->GetNumber : typeof GetNumber
+>GetNumber : () => number
 }
 

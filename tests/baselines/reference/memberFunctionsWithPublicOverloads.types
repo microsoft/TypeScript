@@ -35,34 +35,34 @@ class C {
 >y : any
 
     public static foo(x: number);
->foo : typeof foo
+>foo : { (x: number): any; (x: number, y: string): any; }
 >x : number
 
     public static foo(x: number, y: string);
->foo : typeof foo
+>foo : { (x: number): any; (x: number, y: string): any; }
 >x : number
 >y : string
 
     public static foo(x: any, y?: any) { }
->foo : typeof foo
+>foo : { (x: number): any; (x: number, y: string): any; }
 >x : any
 >y : any
 
     public static bar(x: 'hi');
->bar : typeof bar
+>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
 >x : 'hi'
 
     public static bar(x: string);
->bar : typeof bar
+>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
 >x : string
 
     public static bar(x: number, y: string);
->bar : typeof bar
+>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
 >x : number
 >y : string
 
     public static bar(x: any, y?: any) { }
->bar : typeof bar
+>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
 >x : any
 >y : any
 }
@@ -108,34 +108,34 @@ class D<T> {
 >y : any
 
     public static foo(x: number);
->foo : typeof foo
+>foo : { (x: number): any; (x: number, y: string): any; }
 >x : number
 
     public static foo(x: number, y: string);
->foo : typeof foo
+>foo : { (x: number): any; (x: number, y: string): any; }
 >x : number
 >y : string
 
     public static foo(x: any, y?: any) { }
->foo : typeof foo
+>foo : { (x: number): any; (x: number, y: string): any; }
 >x : any
 >y : any
 
     public static bar(x: 'hi');
->bar : typeof bar
+>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
 >x : 'hi'
 
     public static bar(x: string);
->bar : typeof bar
+>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
 >x : string
 
     public static bar(x: number, y: string);
->bar : typeof bar
+>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
 >x : number
 >y : string
 
     public static bar(x: any, y?: any) { }
->bar : typeof bar
+>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
 >x : any
 >y : any
 

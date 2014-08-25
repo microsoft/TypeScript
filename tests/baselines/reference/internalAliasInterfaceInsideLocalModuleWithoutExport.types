@@ -8,15 +8,15 @@ export module a {
 }
 
 export module c {
->c : typeof c
+>c : c
 
     import b = a.I;
 >b : b
 >a : a
->I : I
+>I : b
 
     export var x: b;
->x : I
->b : I
+>x : b
+>b : b
 }
 

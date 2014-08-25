@@ -1,6 +1,6 @@
 === tests/cases/compiler/enumsWithMultipleDeclarations3.ts ===
 module E {
->E : typeof E
+>E : E
 }
 
 enum E {

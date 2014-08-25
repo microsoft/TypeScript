@@ -13,7 +13,7 @@ declare module outer {
     export interface Beta extends outer.Beta { }
 >Beta : Beta
 >outer : outer
->Beta : Beta
+>Beta : outer.Beta
   }
 }
 

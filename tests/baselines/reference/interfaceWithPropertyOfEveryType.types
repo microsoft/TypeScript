@@ -7,7 +7,7 @@ function f1() { }
 >f1 : typeof f1
 
 module M {
->M : typeof M
+>M : M
 
     export var y = 1;
 >y : number
@@ -130,11 +130,11 @@ var a: Foo = {
 
     l: f1,
 >l : typeof f1
->f1 : f1
+>f1 : typeof f1
 
     m: M,
 >m : typeof M
->M : M
+>M : typeof M
 
     n: {},
 >n : {}

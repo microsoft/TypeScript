@@ -1,9 +1,9 @@
 === tests/cases/conformance/internalModules/DeclarationMerging/module.d.ts ===
 declare module A {
->A : typeof A
+>A : A
 
     export module Point {
->Point : typeof Point
+>Point : Point
 
         export var Origin: {
 >Origin : { x: number; y: number; }
@@ -19,7 +19,7 @@ declare module A {
 
 === tests/cases/conformance/internalModules/DeclarationMerging/classPoint.ts ===
 module A {
->A : typeof A
+>A : A
 
     export class Point {
 >Point : Point
@@ -39,15 +39,15 @@ var p: { x: number; y: number; }
 var p = A.Point.Origin;
 >p : { x: number; y: number; }
 >A.Point.Origin : { x: number; y: number; }
->A.Point : typeof Point
+>A.Point : typeof A.Point
 >A : typeof A
->Point : typeof Point
+>Point : typeof A.Point
 >Origin : { x: number; y: number; }
 
 var p = new A.Point(0, 0); // unexpected error here, bug 840000
 >p : { x: number; y: number; }
->new A.Point(0, 0) : Point
->A.Point : typeof Point
+>new A.Point(0, 0) : A.Point
+>A.Point : typeof A.Point
 >A : typeof A
->Point : typeof Point
+>Point : typeof A.Point
 

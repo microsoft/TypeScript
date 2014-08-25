@@ -47,6 +47,7 @@ var X;
     (function (Y) {
         (function (base) {
             (function (Z) {
+                // Bug 887180
                 Z.f = X.Y.base.f; // Should be base.f
                 Z.C = X.Y.base.C; // Should be base.C
                 Z.M = X.Y.base.M; // Should be base.M

@@ -1,6 +1,6 @@
 === tests/cases/compiler/moduleScopingBug.ts ===
 module M
->M : typeof M
+>M : M
 
 {
 
@@ -28,7 +28,7 @@ module M
     }
 
     module X {
->X : typeof X
+>X : X
 
         var inner = outer;   // Error: outer not visible
 >inner : number

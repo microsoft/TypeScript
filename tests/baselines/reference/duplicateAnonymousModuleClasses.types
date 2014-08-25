@@ -1,6 +1,6 @@
 === tests/cases/compiler/duplicateAnonymousModuleClasses.ts ===
 module F {
->F : typeof F
+>F : F
 
     class Helper {
 >Helper : Helper
@@ -11,7 +11,7 @@ module F {
 
 
 module F {
->F : typeof F
+>F : F
     
     // Should not be an error
     class Helper {
@@ -22,7 +22,7 @@ module F {
 }
 
 module Foo {
->Foo : typeof Foo
+>Foo : Foo
 
     class Helper {
 >Helper : Helper
@@ -33,7 +33,7 @@ module Foo {
 
 
 module Foo {
->Foo : typeof Foo
+>Foo : Foo
     
     // Should not be an error
     class Helper {
@@ -44,10 +44,10 @@ module Foo {
 }
 
 module Gar {
->Gar : typeof Gar
+>Gar : Gar
 
     module Foo {
->Foo : typeof Foo
+>Foo : Foo
 
         class Helper {
 >Helper : Helper
@@ -58,7 +58,7 @@ module Gar {
 
 
     module Foo {
->Foo : typeof Foo
+>Foo : Foo
     
         // Should not be an error
         class Helper {

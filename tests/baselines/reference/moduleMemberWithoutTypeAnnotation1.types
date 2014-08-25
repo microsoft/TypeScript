@@ -1,7 +1,7 @@
 === tests/cases/compiler/moduleMemberWithoutTypeAnnotation1.ts ===
 module TypeScript.Parser {
->TypeScript : typeof TypeScript
->Parser : typeof Parser
+>TypeScript : TypeScript
+>Parser : Parser
 
     class SyntaxCursor {
 >SyntaxCursor : SyntaxCursor
@@ -16,7 +16,7 @@ module TypeScript.Parser {
 }
 
 module TypeScript {
->TypeScript : typeof TypeScript
+>TypeScript : TypeScript
 
     export interface ISyntaxElement { };
 >ISyntaxElement : ISyntaxElement
@@ -34,9 +34,9 @@ module TypeScript {
 
             return Syntax.childIndex();
 >Syntax.childIndex() : void
->Syntax.childIndex : typeof childIndex
+>Syntax.childIndex : typeof Syntax.childIndex
 >Syntax : typeof Syntax
->childIndex : typeof childIndex
+>childIndex : typeof Syntax.childIndex
         }
     }
 
@@ -54,7 +54,7 @@ module TypeScript {
 }
 
 module TypeScript {
->TypeScript : typeof TypeScript
+>TypeScript : TypeScript
 
     export class SyntaxNode {
 >SyntaxNode : SyntaxNode
@@ -87,8 +87,8 @@ module TypeScript {
 }
 
 module TypeScript.Syntax {
->TypeScript : typeof TypeScript
->Syntax : typeof Syntax
+>TypeScript : TypeScript
+>Syntax : Syntax
 
     export function childIndex() { }
 >childIndex : typeof childIndex

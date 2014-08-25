@@ -110,23 +110,23 @@ interface A { // T
     a12: new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
 >a12 : new (x: Base[], y: Derived2[]) => Derived[]
 >x : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >y : Derived2[]
->Array : T[]
+>Array : Array<T>
 >Derived2 : Derived2
->Array : T[]
+>Array : Array<T>
 >Derived : Derived
 
     a13: new (x: Array<Base>, y: Array<Derived>) => Array<Derived>;
 >a13 : new (x: Base[], y: Derived[]) => Derived[]
 >x : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >y : Derived[]
->Array : T[]
+>Array : Array<T>
 >Derived : Derived
->Array : T[]
+>Array : Array<T>
 >Derived : Derived
 
     a14: new (x: { a: string; b: number }) => Object;
@@ -332,23 +332,23 @@ interface I extends A {
     a12: new <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>; // ok, less specific parameter type
 >a12 : new <T extends Base[]>(x: Base[], y: T) => Derived[]
 >T : T
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >x : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >y : T
 >T : T
->Array : T[]
+>Array : Array<T>
 >Derived : Derived
 
     a13: new <T extends Array<Derived>>(x: Array<Base>, y: T) => T; // ok, T = Array<Derived>, satisfies constraint, contextual signature instantiation succeeds
 >a13 : new <T extends Derived[]>(x: Base[], y: T) => T
 >T : T
->Array : T[]
+>Array : Array<T>
 >Derived : Derived
 >x : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >y : T
 >T : T

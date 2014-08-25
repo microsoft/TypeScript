@@ -23,7 +23,7 @@ interface NamedColors {
 >_Color : _Color
 }
 module Color {
->Color : typeof Color
+>Color : Color
 
     export var namedColors: NamedColors;
 >namedColors : NamedColors

@@ -3,7 +3,7 @@
 // error cases, so function calls will all result in 'any'
 
 module Errors {
->Errors : typeof Errors
+>Errors : Errors
 
     class Base { foo: string; }
 >Base : Base
@@ -101,12 +101,12 @@ module Errors {
 >foo12 : typeof foo12
 >a2 : new (x: Base[], y: Derived2[]) => Derived[]
 >x : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >y : Derived2[]
->Array : T[]
+>Array : Array<T>
 >Derived2 : Derived2
->Array : T[]
+>Array : Array<T>
 >Derived : Derived
 >a2 : new (x: Base[], y: Derived2[]) => Derived[]
 
@@ -401,24 +401,24 @@ module Errors {
     var r6arg1: new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
 >r6arg1 : new (x: Base[], y: Derived2[]) => Derived[]
 >x : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >y : Derived2[]
->Array : T[]
+>Array : Array<T>
 >Derived2 : Derived2
->Array : T[]
+>Array : Array<T>
 >Derived : Derived
 
     var r6arg2: new <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T;
 >r6arg2 : new <T extends Derived2[]>(x: Base[], y: Base[]) => T
 >T : T
->Array : T[]
+>Array : Array<T>
 >Derived2 : Derived2
 >x : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >y : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >T : T
 
@@ -533,7 +533,7 @@ module Errors {
 }
 
 module WithGenericSignaturesInBaseType {
->WithGenericSignaturesInBaseType : typeof WithGenericSignaturesInBaseType
+>WithGenericSignaturesInBaseType : WithGenericSignaturesInBaseType
 
     declare function foo2(a2: new <T>(x: T) => T[]): typeof a2;
 >foo2 : typeof foo2

@@ -1,11 +1,11 @@
 === tests/cases/compiler/interfaceInReopenedModule.ts ===
 module m {
->m : typeof m
+>m : m
 }
 
 // In second instance of same module, exported interface is not visible
 module m {
->m : typeof m
+>m : m
 
     interface f {}
 >f : f

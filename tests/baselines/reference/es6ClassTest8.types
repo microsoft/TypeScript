@@ -32,13 +32,13 @@ class Vector {
 >Vector : Vector
 
     static norm(v:Vector):Vector {return null;}
->norm : typeof norm
+>norm : (v: Vector) => Vector
 >v : Vector
 >Vector : Vector
 >Vector : Vector
 
     static minus(v1:Vector, v2:Vector):Vector {return null;}
->minus : typeof minus
+>minus : (v1: Vector, v2: Vector) => Vector
 >v1 : Vector
 >Vector : Vector
 >v2 : Vector
@@ -46,7 +46,7 @@ class Vector {
 >Vector : Vector
 
     static times(v1:Vector, v2:Vector):Vector {return null;}
->times : typeof times
+>times : (v1: Vector, v2: Vector) => Vector
 >v1 : Vector
 >Vector : Vector
 >v2 : Vector
@@ -54,7 +54,7 @@ class Vector {
 >Vector : Vector
 
     static cross(v1:Vector, v2:Vector):Vector {return null;}
->cross : typeof cross
+>cross : (v1: Vector, v2: Vector) => Vector
 >v1 : Vector
 >Vector : Vector
 >v2 : Vector
@@ -72,7 +72,7 @@ class Vector {
     }
 
     static dot(v1:Vector, v2:Vector):Vector {return null;}    
->dot : typeof dot
+>dot : (v1: Vector, v2: Vector) => Vector
 >v1 : Vector
 >Vector : Vector
 >v2 : Vector
@@ -114,13 +114,13 @@ class Camera {
 >this : Camera
 >forward : Vector
 >Vector.norm(Vector.minus(lookAt,this.pos)) : Vector
->Vector.norm : typeof norm
+>Vector.norm : (v: Vector) => Vector
 >Vector : typeof Vector
->norm : typeof norm
+>norm : (v: Vector) => Vector
 >Vector.minus(lookAt,this.pos) : Vector
->Vector.minus : typeof minus
+>Vector.minus : (v1: Vector, v2: Vector) => Vector
 >Vector : typeof Vector
->minus : typeof minus
+>minus : (v1: Vector, v2: Vector) => Vector
 >lookAt : Vector
 >this.pos : Vector
 >this : Camera
@@ -132,18 +132,18 @@ class Camera {
 >this : Camera
 >right : Vector
 >Vector.times(down, Vector.norm(Vector.cross(this.forward, down))) : Vector
->Vector.times : typeof times
+>Vector.times : (v1: Vector, v2: Vector) => Vector
 >Vector : typeof Vector
->times : typeof times
+>times : (v1: Vector, v2: Vector) => Vector
 >down : Vector
 >Vector.norm(Vector.cross(this.forward, down)) : Vector
->Vector.norm : typeof norm
+>Vector.norm : (v: Vector) => Vector
 >Vector : typeof Vector
->norm : typeof norm
+>norm : (v: Vector) => Vector
 >Vector.cross(this.forward, down) : Vector
->Vector.cross : typeof cross
+>Vector.cross : (v1: Vector, v2: Vector) => Vector
 >Vector : typeof Vector
->cross : typeof cross
+>cross : (v1: Vector, v2: Vector) => Vector
 >this.forward : Vector
 >this : Camera
 >forward : Vector
@@ -155,18 +155,18 @@ class Camera {
 >this : Camera
 >up : Vector
 >Vector.times(down, Vector.norm(Vector.cross(this.forward, this.right))) : Vector
->Vector.times : typeof times
+>Vector.times : (v1: Vector, v2: Vector) => Vector
 >Vector : typeof Vector
->times : typeof times
+>times : (v1: Vector, v2: Vector) => Vector
 >down : Vector
 >Vector.norm(Vector.cross(this.forward, this.right)) : Vector
->Vector.norm : typeof norm
+>Vector.norm : (v: Vector) => Vector
 >Vector : typeof Vector
->norm : typeof norm
+>norm : (v: Vector) => Vector
 >Vector.cross(this.forward, this.right) : Vector
->Vector.cross : typeof cross
+>Vector.cross : (v1: Vector, v2: Vector) => Vector
 >Vector : typeof Vector
->cross : typeof cross
+>cross : (v1: Vector, v2: Vector) => Vector
 >this.forward : Vector
 >this : Camera
 >forward : Vector

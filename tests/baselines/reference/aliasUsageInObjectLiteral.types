@@ -1,44 +1,44 @@
 === tests/cases/compiler/aliasUsageInObjectLiteral_main.ts ===
 import Backbone = require("aliasUsageInObjectLiteral_backbone");
->Backbone : typeof "tests/cases/compiler/aliasUsageInObjectLiteral_backbone"
+>Backbone : Backbone
 
 import moduleA = require("aliasUsageInObjectLiteral_moduleA");
->moduleA : typeof "tests/cases/compiler/aliasUsageInObjectLiteral_moduleA"
+>moduleA : moduleA
 
 interface IHasVisualizationModel {
 >IHasVisualizationModel : IHasVisualizationModel
 
     VisualizationModel: typeof Backbone.Model;
->VisualizationModel : typeof Model
->Backbone : typeof "tests/cases/compiler/aliasUsageInObjectLiteral_backbone"
->Model : typeof Model
+>VisualizationModel : typeof Backbone.Model
+>Backbone : typeof Backbone
+>Model : typeof Backbone.Model
 }
 var a: { x: typeof moduleA } = { x: moduleA };
->a : { x: typeof "tests/cases/compiler/aliasUsageInObjectLiteral_moduleA"; }
->x : typeof "tests/cases/compiler/aliasUsageInObjectLiteral_moduleA"
->moduleA : typeof "tests/cases/compiler/aliasUsageInObjectLiteral_moduleA"
->{ x: moduleA } : { x: typeof "tests/cases/compiler/aliasUsageInObjectLiteral_moduleA"; }
->x : typeof "tests/cases/compiler/aliasUsageInObjectLiteral_moduleA"
->moduleA : moduleA
+>a : { x: typeof moduleA; }
+>x : typeof moduleA
+>moduleA : typeof moduleA
+>{ x: moduleA } : { x: typeof moduleA; }
+>x : typeof moduleA
+>moduleA : typeof moduleA
 
 var b: { x: IHasVisualizationModel } = { x: moduleA };
 >b : { x: IHasVisualizationModel; }
 >x : IHasVisualizationModel
 >IHasVisualizationModel : IHasVisualizationModel
->{ x: moduleA } : { x: typeof "tests/cases/compiler/aliasUsageInObjectLiteral_moduleA"; }
->x : typeof "tests/cases/compiler/aliasUsageInObjectLiteral_moduleA"
->moduleA : moduleA
+>{ x: moduleA } : { x: typeof moduleA; }
+>x : typeof moduleA
+>moduleA : typeof moduleA
 
 var c: { y: { z: IHasVisualizationModel } } = { y: { z: moduleA } };
 >c : { y: { z: IHasVisualizationModel; }; }
 >y : { z: IHasVisualizationModel; }
 >z : IHasVisualizationModel
 >IHasVisualizationModel : IHasVisualizationModel
->{ y: { z: moduleA } } : { y: { z: typeof "tests/cases/compiler/aliasUsageInObjectLiteral_moduleA"; }; }
->y : { z: typeof "tests/cases/compiler/aliasUsageInObjectLiteral_moduleA"; }
->{ z: moduleA } : { z: typeof "tests/cases/compiler/aliasUsageInObjectLiteral_moduleA"; }
->z : typeof "tests/cases/compiler/aliasUsageInObjectLiteral_moduleA"
->moduleA : moduleA
+>{ y: { z: moduleA } } : { y: { z: typeof moduleA; }; }
+>y : { z: typeof moduleA; }
+>{ z: moduleA } : { z: typeof moduleA; }
+>z : typeof moduleA
+>moduleA : typeof moduleA
 
 === tests/cases/compiler/aliasUsageInObjectLiteral_backbone.ts ===
 export class Model {
@@ -50,12 +50,12 @@ export class Model {
 
 === tests/cases/compiler/aliasUsageInObjectLiteral_moduleA.ts ===
 import Backbone = require("aliasUsageInObjectLiteral_backbone");
->Backbone : typeof "tests/cases/compiler/aliasUsageInObjectLiteral_backbone"
+>Backbone : Backbone
 
 export class VisualizationModel extends Backbone.Model {
 >VisualizationModel : VisualizationModel
 >Backbone : Backbone
->Model : Model
+>Model : Backbone.Model
 
     // interesting stuff here
 }

@@ -3,7 +3,7 @@ declare function f();
 >f : typeof f
 
 declare module f { var x }
->f : typeof f
+>f : f
 >x : any
 
 declare function f(x);

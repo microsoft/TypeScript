@@ -4,7 +4,7 @@ export class Enhancement {
 >Enhancement : Enhancement
 
     public static getType() {
->getType : typeof getType
+>getType : () => typeof Enhancement
 
         return this;
 >this : typeof Enhancement

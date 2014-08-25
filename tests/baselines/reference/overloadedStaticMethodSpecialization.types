@@ -4,7 +4,7 @@ class A<T> {
 >T : T
 
     static B<S>(v: A<S>): A<S>;
->B : typeof B
+>B : { <S>(v: A<S>): A<S>; <S>(v: S): A<S>; }
 >S : S
 >v : A<S>
 >A : A<T>
@@ -13,7 +13,7 @@ class A<T> {
 >S : S
 
     static B<S>(v: S): A<S>;
->B : typeof B
+>B : { <S>(v: A<S>): A<S>; <S>(v: S): A<S>; }
 >S : S
 >v : S
 >S : S
@@ -21,7 +21,7 @@ class A<T> {
 >S : S
 
     static B<S>(v: any): A<S> {
->B : typeof B
+>B : { <S>(v: A<S>): A<S>; <S>(v: S): A<S>; }
 >S : S
 >v : any
 >A : A<T>

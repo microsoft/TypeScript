@@ -4,7 +4,7 @@ class A1<T> {
 >T : T
 
 static B<S>(v: A1<S>): A1<S>; // 1 
->B : typeof B
+>B : { <S>(v: A1<S>): A1<S>; <S>(v: S): A1<S>; }
 >S : S
 >v : A1<S>
 >A1 : A1<T>
@@ -13,7 +13,7 @@ static B<S>(v: A1<S>): A1<S>; // 1
 >S : S
 
 static B<S>(v: S): A1<S>; // 2 : Error Duplicate signature
->B : typeof B
+>B : { <S>(v: A1<S>): A1<S>; <S>(v: S): A1<S>; }
 >S : S
 >v : S
 >S : S
@@ -21,7 +21,7 @@ static B<S>(v: S): A1<S>; // 2 : Error Duplicate signature
 >S : S
 
 static B<S>(v: any): A1<S> {
->B : typeof B
+>B : { <S>(v: A1<S>): A1<S>; <S>(v: S): A1<S>; }
 >S : S
 >v : any
 >A1 : A1<T>

@@ -26,5 +26,5 @@ var s = map("", () => { return { x: identity }; });
 >() => { return { x: identity }; } : () => { x: typeof identity; }
 >{ x: identity } : { x: typeof identity; }
 >x : typeof identity
->identity : identity
+>identity : typeof identity
 

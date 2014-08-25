@@ -1,15 +1,15 @@
 === tests/cases/compiler/mergedModuleDeclarationCodeGen2.ts ===
 module my.data.foo {
->my : typeof my
->data : typeof data
->foo : typeof foo
+>my : my
+>data : data
+>foo : foo
 
     export function buz() { }
 >buz : typeof buz
 }
 module my.data {
->my : typeof my
->data : typeof data
+>my : my
+>data : my.data
 
     function data(my) {
 >data : typeof data
@@ -17,8 +17,8 @@ module my.data {
 
         foo.buz();
 >foo.buz() : void
->foo.buz : typeof buz
+>foo.buz : typeof foo.buz
 >foo : typeof foo
->buz : typeof buz
+>buz : typeof foo.buz
     }
 }

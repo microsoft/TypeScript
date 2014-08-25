@@ -17,10 +17,10 @@ class A {
 >a : string
 
     static foo() { return ""; }
->foo : typeof foo
+>foo : () => string
 }
 module M {
->M : typeof M
+>M : M
 
     export var n: string;
 >n : string
@@ -95,9 +95,9 @@ var ResultIsNumber10 = +A.foo();
 >ResultIsNumber10 : number
 >+A.foo() : number
 >A.foo() : string
->A.foo : typeof foo
+>A.foo : () => string
 >A : typeof A
->foo : typeof foo
+>foo : () => string
 
 var ResultIsNumber11 = +(STRING + STRING);
 >ResultIsNumber11 : number

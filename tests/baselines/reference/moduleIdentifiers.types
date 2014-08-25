@@ -1,6 +1,6 @@
 === tests/cases/compiler/moduleIdentifiers.ts ===
 module M {
->M : typeof M
+>M : M
 
     interface P { x: number; y: number; }
 >P : P

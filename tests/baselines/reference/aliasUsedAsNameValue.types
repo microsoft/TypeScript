@@ -2,10 +2,10 @@
 ///<reference path='aliasUsedAsNameValue_0.ts' />
 ///<reference path='aliasUsedAsNameValue_1.ts' />
 import mod = require("aliasUsedAsNameValue_0");
->mod : typeof "tests/cases/compiler/aliasUsedAsNameValue_0"
+>mod : mod
 
 import b = require("aliasUsedAsNameValue_1");
->b : typeof "tests/cases/compiler/aliasUsedAsNameValue_1"
+>b : b
  
 export var a = function () {
 >a : () => void
@@ -14,10 +14,10 @@ export var a = function () {
     //var x = mod.id; // TODO needed hack that mod is loaded
     b.b(mod);
 >b.b(mod) : any
->b.b : typeof b
->b : typeof "tests/cases/compiler/aliasUsedAsNameValue_1"
+>b.b : typeof b.b
 >b : typeof b
->mod : typeof "tests/cases/compiler/aliasUsedAsNameValue_0"
+>b : typeof b.b
+>mod : typeof mod
 }
 
 === tests/cases/compiler/aliasUsedAsNameValue_0.ts ===

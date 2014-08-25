@@ -7,9 +7,9 @@ class WorkItemToolbar {
 
         WITDialogs.createCopyOfWorkItem();
 >WITDialogs.createCopyOfWorkItem() : void
->WITDialogs.createCopyOfWorkItem : typeof createCopyOfWorkItem
+>WITDialogs.createCopyOfWorkItem : () => void
 >WITDialogs : typeof WITDialogs
->createCopyOfWorkItem : typeof createCopyOfWorkItem
+>createCopyOfWorkItem : () => void
     }
 }
 class CreateCopyOfWorkItemDialog {
@@ -31,7 +31,7 @@ class WITDialogs {
 >WITDialogs : WITDialogs
 
     public static createCopyOfWorkItem() {
->createCopyOfWorkItem : typeof createCopyOfWorkItem
+>createCopyOfWorkItem : () => void
 
         createWorkItemDialog(CreateCopyOfWorkItemDialog);
 >createWorkItemDialog(CreateCopyOfWorkItemDialog) : void

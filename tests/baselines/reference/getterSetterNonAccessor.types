@@ -19,11 +19,11 @@ Object.defineProperty({}, "0", <PropertyDescriptor>({
 
           get: getFunc,
 >get : typeof getFunc
->getFunc : getFunc
+>getFunc : typeof getFunc
 
           set: setFunc,
 >set : typeof setFunc
->setFunc : setFunc
+>setFunc : typeof setFunc
 
           configurable: true
 >configurable : boolean

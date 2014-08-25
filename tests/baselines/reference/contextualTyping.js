@@ -231,7 +231,7 @@ interface B extends A { }
 var x: B = { };
 
 //// [contextualTyping.js]
-// CONTEXT: Class property declaration\nvar C1T5 = (function () {\n    function C1T5() {\n        this.foo = function (i) {\n            return i;\n        };\n    }\n    return C1T5;\n})();\n// CONTEXT: Module property declaration\nvar C2T5;\n(function (C2T5) {\n    C2T5.foo = function (i) {\n        return i;\n    };\n})(C2T5 || (C2T5 = {}));\n// CONTEXT: Variable declaration\nvar c3t1 = (function (s) {\n    return s;\n});\nvar c3t2 = ({\n    n: 1\n});\nvar c3t3 = [];\nvar c3t4 = function () {\n    return ({});\n};\nvar c3t5 = function (n) {\n    return ({});\n};\nvar c3t6 = function (n, s) {\n    return ({});\n};\nvar c3t7 = function (n) {\n    return n;\n};\nvar c3t8 = function (n) {\n    return n;\n};\nvar c3t9 = [[], []];\nvar c3t10 = [({}), ({})];\nvar c3t11 = [function (n, s) {\n    return s;\n}];\nvar c3t12 = {\n    foo: ({})\n};\nvar c3t13 = ({\n    f: function (i, s) {\n        return s;\n    }\n});\nvar c3t14 = ({\n    a: []\n});\n// CONTEXT: Class property assignment\nvar C4T5 = (function () {\n    function C4T5() {\n        this.foo = function (i, s) {\n            return s;\n        };\n    }\n    return C4T5;\n})();\n// CONTEXT: Module property assignment\nvar C5T5;\n(function (C5T5) {\n    C5T5.foo;\n    C5T5.foo = function (i, s) {\n        return s;\n    };\n})(C5T5 || (C5T5 = {}));\n// CONTEXT: Variable assignment\nvar c6t5;\nc6t5 = function (n) {\n    return ({});\n};\n// CONTEXT: Array index assignment\nvar c7t2;\nc7t2[0] = ({ n: 1 });\nvar objc8 = ({});\nobjc8.t1 = (function (s) {\n    return s;\n});\nobjc8.t2 = ({\n    n: 1\n});\nobjc8.t3 = [];\nobjc8.t4 = function () {\n    return ({});\n};\nobjc8.t5 = function (n) {\n    return ({});\n};\nobjc8.t6 = function (n, s) {\n    return ({});\n};\nobjc8.t7 = function (n) {\n    return n;\n};\nobjc8.t8 = function (n) {\n    return n;\n};\nobjc8.t9 = [[], []];\nobjc8.t10 = [({}), ({})];\nobjc8.t11 = [function (n, s) {\n    return s;\n}];\nobjc8.t12 = {\n    foo: ({})\n};\nobjc8.t13 = ({\n    f: function (i, s) {\n        return s;\n    }\n});\nobjc8.t14 = ({\n    a: []\n});\n// CONTEXT: Function call\nfunction c9t5(f) {\n}\n;\nc9t5(function (n) {\n    return ({});\n});\n// CONTEXT: Return statement\nvar c10t5 = function () {\n    return function (n) {\n        return ({});\n    };\n};\n// CONTEXT: Newing a class\nvar C11t5 = (function () {\n    function C11t5(f) {\n    }\n    return C11t5;\n})();\n;\nvar i = new C11t5(function (n) {\n    return ({});\n});\n// CONTEXT: Type annotated expression\nvar c12t1 = (function (s) {\n    return s;\n});\nvar c12t2 = ({\n    n: 1\n});\nvar c12t3 = [];\nvar c12t4 = function () {\n    return ({});\n};\nvar c12t5 = function (n) {\n    return ({});\n};\nvar c12t6 = function (n, s) {\n    return ({});\n};\nvar c12t7 = function (n) {\n    return n;\n};\nvar c12t8 = function (n) {\n    return n;\n};\nvar c12t9 = [[], []];\nvar c12t10 = [({}), ({})];\nvar c12t11 = [function (n, s) {\n    return s;\n}];\nvar c12t12 = {\n    foo: ({})\n};\nvar c12t13 = ({\n    f: function (i, s) {\n        return s;\n    }\n});\nvar c12t14 = ({\n    a: []\n});\nfunction EF1(a, b) {\n    return a + b;\n}\nvar efv = EF1(1, 2);\nfunction Point(x, y) {\n    this.x = x;\n    this.y = y;\n    return this;\n}\nPoint.origin = new Point(0, 0);\nPoint.prototype.add = function (dx, dy) {\n    return new Point(this.x + dx, this.y + dy);\n};\nPoint.prototype = {\n    x: 0,\n    y: 0,\n    add: function (dx, dy) {\n        return new Point(this.x + dx, this.y + dy);\n    }\n};\nvar x = {};\n//# sourceMappingURL=contextualTyping.js.map
+// CONTEXT: Class property declaration
 var C1T5 = (function () {
     function C1T5() {
         this.foo = function (i) {
@@ -240,12 +240,14 @@ var C1T5 = (function () {
     }
     return C1T5;
 })();
+// CONTEXT: Module property declaration
 var C2T5;
 (function (C2T5) {
     C2T5.foo = function (i) {
         return i;
     };
 })(C2T5 || (C2T5 = {}));
+// CONTEXT: Variable declaration
 var c3t1 = (function (s) {
     return s;
 });
@@ -284,6 +286,7 @@ var c3t13 = ({
 var c3t14 = ({
     a: []
 });
+// CONTEXT: Class property assignment
 var C4T5 = (function () {
     function C4T5() {
         this.foo = function (i, s) {
@@ -292,6 +295,7 @@ var C4T5 = (function () {
     }
     return C4T5;
 })();
+// CONTEXT: Module property assignment
 var C5T5;
 (function (C5T5) {
     C5T5.foo;
@@ -299,10 +303,12 @@ var C5T5;
         return s;
     };
 })(C5T5 || (C5T5 = {}));
+// CONTEXT: Variable assignment
 var c6t5;
 c6t5 = function (n) {
     return ({});
 };
+// CONTEXT: Array index assignment
 var c7t2;
 c7t2[0] = ({ n: 1 });
 var objc8 = ({});
@@ -344,17 +350,20 @@ objc8.t13 = ({
 objc8.t14 = ({
     a: []
 });
+// CONTEXT: Function call
 function c9t5(f) {
 }
 ;
 c9t5(function (n) {
     return ({});
 });
+// CONTEXT: Return statement
 var c10t5 = function () {
     return function (n) {
         return ({});
     };
 };
+// CONTEXT: Newing a class
 var C11t5 = (function () {
     function C11t5(f) {
     }
@@ -364,6 +373,7 @@ var C11t5 = (function () {
 var i = new C11t5(function (n) {
     return ({});
 });
+// CONTEXT: Type annotated expression
 var c12t1 = (function (s) {
     return s;
 });

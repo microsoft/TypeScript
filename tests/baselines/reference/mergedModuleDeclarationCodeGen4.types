@@ -1,27 +1,27 @@
 === tests/cases/compiler/mergedModuleDeclarationCodeGen4.ts ===
 module superContain {
->superContain : typeof superContain
+>superContain : superContain
 
     export module contain {
->contain : typeof contain
+>contain : contain
 
         export module my.buz {
->my : typeof my
->buz : typeof buz
+>my : my
+>buz : buz
 
             export module data {
->data : typeof data
+>data : data
 
                 export function foo() { }
 >foo : typeof foo
             }
         }
         export module my.buz {
->my : typeof my
->buz : typeof buz
+>my : my
+>buz : buz
 
             export module data {
->data : typeof data
+>data : data
 
                 export function bar(contain, my, buz, data) {
 >bar : typeof bar

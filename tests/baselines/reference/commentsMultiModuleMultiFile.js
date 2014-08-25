@@ -92,28 +92,3 @@ define(["require", "exports"], function (require, exports) {
     })(multiM || (multiM = {}));
     new multiM.d();
 });
-
-
-//// [commentsMultiModuleMultiFile_0.d.ts]
-/** this is multi declare module*/
-export declare module multiM {
-    class b {
-    }
-}
-/** thi is multi module 2*/
-export declare module multiM {
-    /** class c comment*/
-    class c {
-    }
-    class e {
-    }
-}
-//// [commentsMultiModuleMultiFile_1.d.ts]
-/** this is multi module 3 comment*/
-export declare module multiM {
-    /** class d comment*/
-    class d {
-    }
-    class f {
-    }
-}

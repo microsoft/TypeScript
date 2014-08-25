@@ -1,6 +1,6 @@
 === tests/cases/conformance/statements/switchStatements/switchStatements.ts ===
 module M {
->M : typeof M
+>M : M
 
     export function fn(x: number) {
 >fn : typeof fn
@@ -55,9 +55,9 @@ switch (x) {
 
     case M.fn(1):
 >M.fn(1) : string
->M.fn : typeof fn
+>M.fn : typeof M.fn
 >M : typeof M
->fn : typeof fn
+>fn : typeof M.fn
 
     case <T>(x: number) => '':
 ><T>(x: number) => '' : <T>(x: number) => string

@@ -1,6 +1,6 @@
 === tests/cases/compiler/qualifiedName_ImportDeclarations-entity-names-referencing-a-var.ts ===
 module Alpha {
->Alpha : typeof Alpha
+>Alpha : Alpha
 
     export var x = 100;
 >x : number
@@ -10,7 +10,7 @@ module Beta {
 >Beta : Beta
 
     import p = Alpha.x;
->p : number
+>p : p
 >Alpha : typeof Alpha
 >x : number
 }

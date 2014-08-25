@@ -1,6 +1,6 @@
 === tests/cases/compiler/collisionCodeGenModuleWithPrivateMember.ts ===
 module m1 {
->m1 : typeof m1
+>m1 : m1
 
     class m1 {
 >m1 : m1
@@ -15,9 +15,9 @@ module m1 {
     }
 }
 var foo = new m1.c1();
->foo : c1
->new m1.c1() : c1
->m1.c1 : typeof c1
+>foo : m1.c1
+>new m1.c1() : m1.c1
+>m1.c1 : typeof m1.c1
 >m1 : typeof m1
->c1 : typeof c1
+>c1 : typeof m1.c1
 

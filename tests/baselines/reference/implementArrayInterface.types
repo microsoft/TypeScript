@@ -2,7 +2,7 @@
 declare class ArrayConstructor<T> implements Array<T> {
 >ArrayConstructor : ArrayConstructor<T>
 >T : T
->Array : T[]
+>Array : Array<T>
 >T : T
 
     toString(): string;

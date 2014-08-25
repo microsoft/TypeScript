@@ -10,7 +10,7 @@ declare class B<T> {
 >U : U
 
     static g(): B<any>;
->g : typeof g
+>g : () => B<any>
 >B : B<T>
 }
 

@@ -1,46 +1,46 @@
 === tests/cases/compiler/visibilityOfCrossModuleTypeUsage_fs.ts ===
 import commands = require('visibilityOfCrossModuleTypeUsage_commands');
->commands : typeof "tests/cases/compiler/visibilityOfCrossModuleTypeUsage_commands"
+>commands : commands
 
 function run(configuration: commands.IConfiguration) {
 >run : typeof run
->configuration : IConfiguration
+>configuration : commands.IConfiguration
 >commands : commands
->IConfiguration : IConfiguration
+>IConfiguration : commands.IConfiguration
 
     var absoluteWorkspacePath = configuration.workspace.toAbsolutePath(configuration.server);
 >absoluteWorkspacePath : string
 >configuration.workspace.toAbsolutePath(configuration.server) : string
 >configuration.workspace.toAbsolutePath : (server: IServer, workspaceRelativePath?: string) => string
 >configuration.workspace : IWorkspace
->configuration : IConfiguration
+>configuration : commands.IConfiguration
 >workspace : IWorkspace
 >toAbsolutePath : (server: IServer, workspaceRelativePath?: string) => string
 >configuration.server : IServer
->configuration : IConfiguration
+>configuration : commands.IConfiguration
 >server : IServer
 }
 === tests/cases/compiler/visibilityOfCrossModuleTypeUsage_commands.ts ===
 //visibilityOfCrossModuleTypeUsage
 
 import fs = require('visibilityOfCrossModuleTypeUsage_fs');
->fs : typeof "tests/cases/compiler/visibilityOfCrossModuleTypeUsage_fs"
+>fs : fs
 
 import server = require('visibilityOfCrossModuleTypeUsage_server');
->server : typeof "tests/cases/compiler/visibilityOfCrossModuleTypeUsage_server"
+>server : server
 
 export interface IConfiguration {
 >IConfiguration : IConfiguration
 
     workspace: server.IWorkspace;
->workspace : IWorkspace
+>workspace : server.IWorkspace
 >server : server
->IWorkspace : IWorkspace
+>IWorkspace : server.IWorkspace
 
     server?: server.IServer;
->server : IServer
+>server : server.IServer
 >server : server
->IServer : IServer
+>IServer : server.IServer
 }
 
 === tests/cases/compiler/visibilityOfCrossModuleTypeUsage_server.ts ===

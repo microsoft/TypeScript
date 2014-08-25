@@ -39,7 +39,7 @@ function F(x: string): number { return 42; }
 >x : string
 
 module M {
->M : typeof M
+>M : M
 
     export class A {
 >A : A
@@ -138,18 +138,18 @@ for(var aModule: typeof M = M;;){}
 >M : typeof M
 
 for(var aClassInModule: M.A = new M.A();;){}
->aClassInModule : A
+>aClassInModule : M.A
 >M : M
->A : A
->new M.A() : A
->M.A : typeof A
+>A : M.A
+>new M.A() : M.A
+>M.A : typeof M.A
 >M : typeof M
->A : typeof A
+>A : typeof M.A
 
 for(var aFunctionInModule: typeof M.F2 = (x) => 'this is a string';;){}
->aFunctionInModule : typeof F2
+>aFunctionInModule : typeof M.F2
 >M : typeof M
->F2 : typeof F2
+>F2 : typeof M.F2
 >(x) => 'this is a string' : (x: number) => string
 >x : number
 

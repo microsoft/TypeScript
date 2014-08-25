@@ -31,20 +31,20 @@ module A {
 
 // ensure merges as expected
 var p: { x: number; y: number; toCarth(): A.Point; fromCarth(): A.Point; };
->p : { x: number; y: number; toCarth(): Point; fromCarth(): Point; }
+>p : { x: number; y: number; toCarth(): A.Point; fromCarth(): A.Point; }
 >x : number
 >y : number
->toCarth : () => Point
+>toCarth : () => A.Point
 >A : A
->Point : Point
->fromCarth : () => Point
+>Point : A.Point
+>fromCarth : () => A.Point
 >A : A
->Point : Point
+>Point : A.Point
 
 var p: A.Point;
->p : { x: number; y: number; toCarth(): Point; fromCarth(): Point; }
+>p : { x: number; y: number; toCarth(): A.Point; fromCarth(): A.Point; }
 >A : A
->Point : Point
+>Point : A.Point
 
 module X.Y.Z {
 >X : X
@@ -55,12 +55,12 @@ module X.Y.Z {
 >Line : Line
 
         new (start: A.Point, end: A.Point);
->start : Point
+>start : A.Point
 >A : A
->Point : Point
->end : Point
+>Point : A.Point
+>end : A.Point
 >A : A
->Point : Point
+>Point : A.Point
     }
 }
 
@@ -75,38 +75,38 @@ module X {
 >Line : Line
 
             start: A.Point;
->start : Point
+>start : A.Point
 >A : A
->Point : Point
+>Point : A.Point
 
             end: A.Point;
->end : Point
+>end : A.Point
 >A : A
->Point : Point
+>Point : A.Point
         }
     }
 }
 
 // ensure merges as expected
 var l: { start: A.Point; end: A.Point; new (s: A.Point, e: A.Point); }
->l : { new (s: Point, e: Point): any; start: Point; end: Point; }
->start : Point
+>l : { new (s: A.Point, e: A.Point): any; start: A.Point; end: A.Point; }
+>start : A.Point
 >A : A
->Point : Point
->end : Point
+>Point : A.Point
+>end : A.Point
 >A : A
->Point : Point
->s : Point
+>Point : A.Point
+>s : A.Point
 >A : A
->Point : Point
->e : Point
+>Point : A.Point
+>e : A.Point
 >A : A
->Point : Point
+>Point : A.Point
 
 var l: X.Y.Z.Line;
->l : { new (s: Point, e: Point): any; start: Point; end: Point; }
+>l : { new (s: A.Point, e: A.Point): any; start: A.Point; end: A.Point; }
 >X : X
->Y : Y
->Z : Z
->Line : Line
+>Y : X.Y
+>Z : X.Y.Z
+>Line : X.Y.Z.Line
 

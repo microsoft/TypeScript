@@ -4,8 +4,8 @@ import test = require('exportAssignedTypeAsTypeAnnotation_0');
 >test : test
 
 var t2: test; // should not raise a 'container type' error
->t2 : x
->test : x
+>t2 : test
+>test : test
 
 === tests/cases/compiler/exportAssignedTypeAsTypeAnnotation_0.ts ===
 

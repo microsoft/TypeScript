@@ -1,8 +1,8 @@
 === tests/cases/compiler/declarationEmit_nameConflicts2.ts ===
 module X.Y.base {
->X : typeof X
->Y : typeof Y
->base : typeof base
+>X : X
+>Y : Y
+>base : base
 
     export function f() { }
 >f : typeof f
@@ -11,7 +11,7 @@ module X.Y.base {
 >C : C
 
     export module M {
->M : typeof M
+>M : M
 
         export var v;
 >v : any
@@ -21,49 +21,49 @@ module X.Y.base {
 }
 
 module X.Y.base.Z {
->X : typeof X
->Y : typeof Y
->base : typeof base
->Z : typeof Z
+>X : X
+>Y : Y
+>base : base
+>Z : Z
 
     // Bug 887180
     export var f = X.Y.base.f; // Should be base.f
->f : typeof f
->X.Y.base.f : typeof f
+>f : typeof base.f
+>X.Y.base.f : typeof base.f
 >X.Y.base : typeof base
 >X.Y : typeof Y
 >X : typeof X
 >Y : typeof Y
 >base : typeof base
->f : typeof f
+>f : typeof base.f
 
     export var C = X.Y.base.C; // Should be base.C
->C : typeof C
->X.Y.base.C : typeof C
+>C : typeof base.C
+>X.Y.base.C : typeof base.C
 >X.Y.base : typeof base
 >X.Y : typeof Y
 >X : typeof X
 >Y : typeof Y
 >base : typeof base
->C : typeof C
+>C : typeof base.C
 
     export var M = X.Y.base.M; // Should be base.M
->M : typeof M
->X.Y.base.M : typeof M
+>M : typeof base.M
+>X.Y.base.M : typeof base.M
 >X.Y.base : typeof base
 >X.Y : typeof Y
 >X : typeof X
 >Y : typeof Y
 >base : typeof base
->M : typeof M
+>M : typeof base.M
 
     export var E = X.Y.base.E; // Should be base.E
->E : typeof E
->X.Y.base.E : typeof E
+>E : typeof base.E
+>X.Y.base.E : typeof base.E
 >X.Y.base : typeof base
 >X.Y : typeof Y
 >X : typeof X
 >Y : typeof Y
 >base : typeof base
->E : typeof E
+>E : typeof base.E
 }

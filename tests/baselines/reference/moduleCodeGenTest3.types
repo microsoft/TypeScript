@@ -1,6 +1,6 @@
 === tests/cases/compiler/moduleCodeGenTest3.ts ===
 module Baz { export var x = "hello"; }
->Baz : typeof Baz
+>Baz : Baz
 >x : string
 
 Baz.x = "goodbye";

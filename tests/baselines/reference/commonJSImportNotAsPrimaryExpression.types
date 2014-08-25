@@ -1,43 +1,43 @@
 === tests/cases/conformance/externalModules/foo_1.ts ===
 import foo = require("./foo_0");
->foo : typeof "tests/cases/conformance/externalModules/foo_0"
+>foo : foo
 
 // None of the below should cause a runtime dependency on foo_0
 import f = foo.M1;
 >f : f
->foo : typeof "tests/cases/conformance/externalModules/foo_0"
->M1 : M1
+>foo : typeof foo
+>M1 : foo.M1
 
 var i: f.I2;
->i : I2
+>i : f.I2
 >f : f
->I2 : I2
+>I2 : f.I2
 
 var x: foo.C1 = <{m1: number}>{};
->x : C1
+>x : foo.C1
 >foo : foo
->C1 : C1
+>C1 : foo.C1
 ><{m1: number}>{} : { m1: number; }
 >m1 : number
 >{} : {}
 
 var y: typeof foo.C1.s1 = false;
 >y : boolean
->foo : typeof "tests/cases/conformance/externalModules/foo_0"
->C1 : typeof C1
+>foo : typeof foo
+>C1 : typeof foo.C1
 >s1 : boolean
 
 var z: foo.M1.I2;
->z : I2
+>z : f.I2
 >foo : foo
->M1 : M1
->I2 : I2
+>M1 : foo.M1
+>I2 : f.I2
 
 var e: number = <foo.E1>0;
 >e : number
-><foo.E1>0 : E1
+><foo.E1>0 : foo.E1
 >foo : foo
->E1 : E1
+>E1 : foo.E1
 
 === tests/cases/conformance/externalModules/foo_0.ts ===
 export class C1 {

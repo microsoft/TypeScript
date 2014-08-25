@@ -3,7 +3,7 @@ class A {
 >A : A
 
     public static createSelectableViewModel(initialState?: any, selectedValue?: any) {
->createSelectableViewModel : typeof createSelectableViewModel
+>createSelectableViewModel : (initialState?: any, selectedValue?: any) => { selectedValue: number; }
 >initialState : any
 >selectedValue : any
 

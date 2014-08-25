@@ -78,6 +78,12 @@ class TypeWriterWalker {
         var lineAndCharacter = this.currentSourceFile.getLineAndCharacterFromPosition(actualPos);
         var sourceText = ts.getSourceTextOfNodeFromSourceText(this.currentSourceFile.text, node);
         var isUnknownType = (<ts.IntrinsicType>type).intrinsicName === "unknown";
+        if (isUnknownType) {
+            var symbol = this.checker.getSymbolInfo(node);
+        }
+        else {
+            var writeArrayAsGenericType = node.kind === ts.SyntaxKind.Identifier && (<ts.Identifier>node).text === "Array" ? ts.TypeFormatFlags.WriteArrayAsGenericType : 0;
+        }
         
         // If we got an unknown type, we temporarily want to fall back to just pretending the name
         // (source text) of the node is the type. This is to align with the old typeWriter to make
@@ -87,7 +93,9 @@ class TypeWriterWalker {
             column: lineAndCharacter.character,
             syntaxKind: ts.SyntaxKind[node.kind],
             identifierName: sourceText,
-            type: isUnknownType ? sourceText : this.checker.typeToString(type, undefined, ts.TypeFormatFlags.UseTypeOfFunction)
+            type: isUnknownType
+                ? this.checker.symbolToString(symbol, node.parent, ts.SymbolFlags.Value | ts.SymbolFlags.Type | ts.SymbolFlags.Namespace | ts.SymbolFlags.Import)
+                : this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.UseTypeOfFunction | writeArrayAsGenericType)
         });
     }
 

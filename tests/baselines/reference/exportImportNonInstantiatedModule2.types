@@ -1,11 +1,11 @@
 === tests/cases/compiler/consumer.ts ===
 import e = require('./exporter');
->e : typeof "tests/cases/compiler/exporter"
+>e : e
 
 export function w(): e.w { // Should be OK
 >w : typeof w
 >e : e
->w : Widget1
+>w : e.w
 
     return {name: 'value' };
 >{name: 'value' } : { name: string; }

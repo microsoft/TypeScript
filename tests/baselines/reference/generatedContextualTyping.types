@@ -90,7 +90,7 @@ var x7: Base[] = [d1, d2];
 
 var x8: Array<Base> = [d1, d2];
 >x8 : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >[d1, d2] : Base[]
 >d1 : Derived1
@@ -202,7 +202,7 @@ class x19 { member: Base[] = [d1, d2] }
 class x20 { member: Array<Base> = [d1, d2] }
 >x20 : x20
 >member : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >[d1, d2] : Base[]
 >d1 : Derived1
@@ -318,7 +318,7 @@ class x31 { private member: Base[] = [d1, d2] }
 class x32 { private member: Array<Base> = [d1, d2] }
 >x32 : x32
 >member : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >[d1, d2] : Base[]
 >d1 : Derived1
@@ -434,7 +434,7 @@ class x43 { public member: Base[] = [d1, d2] }
 class x44 { public member: Array<Base> = [d1, d2] }
 >x44 : x44
 >member : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >[d1, d2] : Base[]
 >d1 : Derived1
@@ -550,7 +550,7 @@ class x55 { static member: Base[] = [d1, d2] }
 class x56 { static member: Array<Base> = [d1, d2] }
 >x56 : x56
 >member : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >[d1, d2] : Base[]
 >d1 : Derived1
@@ -666,7 +666,7 @@ class x67 { private static member: Base[] = [d1, d2] }
 class x68 { private static member: Array<Base> = [d1, d2] }
 >x68 : x68
 >member : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >[d1, d2] : Base[]
 >d1 : Derived1
@@ -782,7 +782,7 @@ class x79 { public static member: Base[] = [d1, d2] }
 class x80 { public static member: Array<Base> = [d1, d2] }
 >x80 : x80
 >member : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >[d1, d2] : Base[]
 >d1 : Derived1
@@ -898,7 +898,7 @@ class x91 { constructor(parm: Base[] = [d1, d2]) { } }
 class x92 { constructor(parm: Array<Base> = [d1, d2]) { } }
 >x92 : x92
 >parm : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >[d1, d2] : Base[]
 >d1 : Derived1
@@ -1014,7 +1014,7 @@ class x103 { constructor(public parm: Base[] = [d1, d2]) { } }
 class x104 { constructor(public parm: Array<Base> = [d1, d2]) { } }
 >x104 : x104
 >parm : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >[d1, d2] : Base[]
 >d1 : Derived1
@@ -1130,7 +1130,7 @@ class x115 { constructor(private parm: Base[] = [d1, d2]) { } }
 class x116 { constructor(private parm: Array<Base> = [d1, d2]) { } }
 >x116 : x116
 >parm : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >[d1, d2] : Base[]
 >d1 : Derived1
@@ -1246,7 +1246,7 @@ function x127(parm: Base[] = [d1, d2]) { }
 function x128(parm: Array<Base> = [d1, d2]) { }
 >x128 : typeof x128
 >parm : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >[d1, d2] : Base[]
 >d1 : Derived1
@@ -1354,7 +1354,7 @@ function x139(): Base[] { return [d1, d2]; }
 
 function x140(): Array<Base> { return [d1, d2]; }
 >x140 : typeof x140
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >[d1, d2] : Base[]
 >d1 : Derived1
@@ -1487,7 +1487,7 @@ function x151(): Base[] { return [d1, d2]; return [d1, d2]; }
 
 function x152(): Array<Base> { return [d1, d2]; return [d1, d2]; }
 >x152 : typeof x152
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >[d1, d2] : Base[]
 >d1 : Derived1
@@ -1620,7 +1620,7 @@ var x163: () => Base[] = () => { return [d1, d2]; };
 
 var x164: () => Array<Base> = () => { return [d1, d2]; };
 >x164 : () => Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >() => { return [d1, d2]; } : () => Base[]
 >[d1, d2] : Base[]
@@ -1736,7 +1736,7 @@ var x175: () => Base[] = function() { return [d1, d2]; };
 
 var x176: () => Array<Base> = function() { return [d1, d2]; };
 >x176 : () => Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >function() { return [d1, d2]; } : () => Base[]
 >[d1, d2] : Base[]
@@ -1787,7 +1787,7 @@ var x180: () => Genric<Base> = function() { return { func: n => { return [d1, d2
 >d2 : Derived2
 
 module x181 { var t: () => Base[] = () => [d1, d2]; }
->x181 : typeof x181
+>x181 : x181
 >t : () => Base[]
 >Base : Base
 >() => [d1, d2] : () => Base[]
@@ -1796,7 +1796,7 @@ module x181 { var t: () => Base[] = () => [d1, d2]; }
 >d2 : Derived2
 
 module x182 { var t: () => Base[] = function() { return [d1, d2] }; }
->x182 : typeof x182
+>x182 : x182
 >t : () => Base[]
 >Base : Base
 >function() { return [d1, d2] } : () => Base[]
@@ -1805,7 +1805,7 @@ module x182 { var t: () => Base[] = function() { return [d1, d2] }; }
 >d2 : Derived2
 
 module x183 { var t: () => Base[] = function named() { return [d1, d2] }; }
->x183 : typeof x183
+>x183 : x183
 >t : () => Base[]
 >Base : Base
 >function named() { return [d1, d2] } : () => Base[]
@@ -1815,7 +1815,7 @@ module x183 { var t: () => Base[] = function named() { return [d1, d2] }; }
 >d2 : Derived2
 
 module x184 { var t: { (): Base[]; } = () => [d1, d2]; }
->x184 : typeof x184
+>x184 : x184
 >t : () => Base[]
 >Base : Base
 >() => [d1, d2] : () => Base[]
@@ -1824,7 +1824,7 @@ module x184 { var t: { (): Base[]; } = () => [d1, d2]; }
 >d2 : Derived2
 
 module x185 { var t: { (): Base[]; } = function() { return [d1, d2] }; }
->x185 : typeof x185
+>x185 : x185
 >t : () => Base[]
 >Base : Base
 >function() { return [d1, d2] } : () => Base[]
@@ -1833,7 +1833,7 @@ module x185 { var t: { (): Base[]; } = function() { return [d1, d2] }; }
 >d2 : Derived2
 
 module x186 { var t: { (): Base[]; } = function named() { return [d1, d2] }; }
->x186 : typeof x186
+>x186 : x186
 >t : () => Base[]
 >Base : Base
 >function named() { return [d1, d2] } : () => Base[]
@@ -1843,7 +1843,7 @@ module x186 { var t: { (): Base[]; } = function named() { return [d1, d2] }; }
 >d2 : Derived2
 
 module x187 { var t: Base[] = [d1, d2]; }
->x187 : typeof x187
+>x187 : x187
 >t : Base[]
 >Base : Base
 >[d1, d2] : Base[]
@@ -1851,16 +1851,16 @@ module x187 { var t: Base[] = [d1, d2]; }
 >d2 : Derived2
 
 module x188 { var t: Array<Base> = [d1, d2]; }
->x188 : typeof x188
+>x188 : x188
 >t : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >[d1, d2] : Base[]
 >d1 : Derived1
 >d2 : Derived2
 
 module x189 { var t: { [n: number]: Base; } = [d1, d2]; }
->x189 : typeof x189
+>x189 : x189
 >t : { [x: number]: Base; }
 >n : number
 >Base : Base
@@ -1869,7 +1869,7 @@ module x189 { var t: { [n: number]: Base; } = [d1, d2]; }
 >d2 : Derived2
 
 module x190 { var t: {n: Base[]; }  = { n: [d1, d2] }; }
->x190 : typeof x190
+>x190 : x190
 >t : { n: Base[]; }
 >n : Base[]
 >Base : Base
@@ -1880,7 +1880,7 @@ module x190 { var t: {n: Base[]; }  = { n: [d1, d2] }; }
 >d2 : Derived2
 
 module x191 { var t: (s: Base[]) => any = n => { var n: Base[]; return null; }; }
->x191 : typeof x191
+>x191 : x191
 >t : (s: Base[]) => any
 >s : Base[]
 >Base : Base
@@ -1890,7 +1890,7 @@ module x191 { var t: (s: Base[]) => any = n => { var n: Base[]; return null; }; 
 >Base : Base
 
 module x192 { var t: Genric<Base> = { func: n => { return [d1, d2]; } }; }
->x192 : typeof x192
+>x192 : x192
 >t : Genric<Base>
 >Genric : Genric<T>
 >Base : Base
@@ -1903,7 +1903,7 @@ module x192 { var t: Genric<Base> = { func: n => { return [d1, d2]; } }; }
 >d2 : Derived2
 
 module x193 { export var t: () => Base[] = () => [d1, d2]; }
->x193 : typeof x193
+>x193 : x193
 >t : () => Base[]
 >Base : Base
 >() => [d1, d2] : () => Base[]
@@ -1912,7 +1912,7 @@ module x193 { export var t: () => Base[] = () => [d1, d2]; }
 >d2 : Derived2
 
 module x194 { export var t: () => Base[] = function() { return [d1, d2] }; }
->x194 : typeof x194
+>x194 : x194
 >t : () => Base[]
 >Base : Base
 >function() { return [d1, d2] } : () => Base[]
@@ -1921,7 +1921,7 @@ module x194 { export var t: () => Base[] = function() { return [d1, d2] }; }
 >d2 : Derived2
 
 module x195 { export var t: () => Base[] = function named() { return [d1, d2] }; }
->x195 : typeof x195
+>x195 : x195
 >t : () => Base[]
 >Base : Base
 >function named() { return [d1, d2] } : () => Base[]
@@ -1931,7 +1931,7 @@ module x195 { export var t: () => Base[] = function named() { return [d1, d2] };
 >d2 : Derived2
 
 module x196 { export var t: { (): Base[]; } = () => [d1, d2]; }
->x196 : typeof x196
+>x196 : x196
 >t : () => Base[]
 >Base : Base
 >() => [d1, d2] : () => Base[]
@@ -1940,7 +1940,7 @@ module x196 { export var t: { (): Base[]; } = () => [d1, d2]; }
 >d2 : Derived2
 
 module x197 { export var t: { (): Base[]; } = function() { return [d1, d2] }; }
->x197 : typeof x197
+>x197 : x197
 >t : () => Base[]
 >Base : Base
 >function() { return [d1, d2] } : () => Base[]
@@ -1949,7 +1949,7 @@ module x197 { export var t: { (): Base[]; } = function() { return [d1, d2] }; }
 >d2 : Derived2
 
 module x198 { export var t: { (): Base[]; } = function named() { return [d1, d2] }; }
->x198 : typeof x198
+>x198 : x198
 >t : () => Base[]
 >Base : Base
 >function named() { return [d1, d2] } : () => Base[]
@@ -1959,7 +1959,7 @@ module x198 { export var t: { (): Base[]; } = function named() { return [d1, d2]
 >d2 : Derived2
 
 module x199 { export var t: Base[] = [d1, d2]; }
->x199 : typeof x199
+>x199 : x199
 >t : Base[]
 >Base : Base
 >[d1, d2] : Base[]
@@ -1967,16 +1967,16 @@ module x199 { export var t: Base[] = [d1, d2]; }
 >d2 : Derived2
 
 module x200 { export var t: Array<Base> = [d1, d2]; }
->x200 : typeof x200
+>x200 : x200
 >t : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >[d1, d2] : Base[]
 >d1 : Derived1
 >d2 : Derived2
 
 module x201 { export var t: { [n: number]: Base; } = [d1, d2]; }
->x201 : typeof x201
+>x201 : x201
 >t : { [x: number]: Base; }
 >n : number
 >Base : Base
@@ -1985,7 +1985,7 @@ module x201 { export var t: { [n: number]: Base; } = [d1, d2]; }
 >d2 : Derived2
 
 module x202 { export var t: {n: Base[]; }  = { n: [d1, d2] }; }
->x202 : typeof x202
+>x202 : x202
 >t : { n: Base[]; }
 >n : Base[]
 >Base : Base
@@ -1996,7 +1996,7 @@ module x202 { export var t: {n: Base[]; }  = { n: [d1, d2] }; }
 >d2 : Derived2
 
 module x203 { export var t: (s: Base[]) => any = n => { var n: Base[]; return null; }; }
->x203 : typeof x203
+>x203 : x203
 >t : (s: Base[]) => any
 >s : Base[]
 >Base : Base
@@ -2006,7 +2006,7 @@ module x203 { export var t: (s: Base[]) => any = n => { var n: Base[]; return nu
 >Base : Base
 
 module x204 { export var t: Genric<Base> = { func: n => { return [d1, d2]; } }; }
->x204 : typeof x204
+>x204 : x204
 >t : Genric<Base>
 >Genric : Genric<T>
 >Base : Base
@@ -2067,7 +2067,7 @@ var x211 = <Base[]>[d1, d2];
 var x212 = <Array<Base>>[d1, d2];
 >x212 : Base[]
 ><Array<Base>>[d1, d2] : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >[d1, d2] : Base[]
 >d1 : Derived1
@@ -2172,7 +2172,7 @@ var x222 = (<Array<Base>>undefined) || [d1, d2];
 >(<Array<Base>>undefined) || [d1, d2] : Base[]
 >(<Array<Base>>undefined) : Base[]
 ><Array<Base>>undefined : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >undefined : undefined
 >[d1, d2] : Base[]
@@ -2278,7 +2278,7 @@ var x231: Base[]; x231 = [d1, d2];
 
 var x232: Array<Base>; x232 = [d1, d2];
 >x232 : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >x232 = [d1, d2] : Base[]
 >x232 : Base[]
@@ -2414,7 +2414,7 @@ var x243: { n: Base[]; } = { n: [d1, d2] };
 var x244: { n: Array<Base>; } = { n: [d1, d2] };
 >x244 : { n: Base[]; }
 >n : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >{ n: [d1, d2] } : { n: Base[]; }
 >n : Base[]
@@ -2511,7 +2511,7 @@ var x255: Base[][] = [[d1, d2]];
 
 var x256: Array<Base>[] = [[d1, d2]];
 >x256 : Base[][]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >[[d1, d2]] : Base[][]
 >[d1, d2] : Base[]
@@ -2604,7 +2604,7 @@ var x265: Base[] = [d1, d2] || undefined;
 
 var x266: Array<Base> = [d1, d2] || undefined;
 >x266 : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >[d1, d2] || undefined : Base[]
 >[d1, d2] : Base[]
@@ -2687,7 +2687,7 @@ var x273: Base[] = undefined || [d1, d2];
 
 var x274: Array<Base> = undefined || [d1, d2];
 >x274 : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >undefined || [d1, d2] : Base[]
 >undefined : undefined
@@ -2786,7 +2786,7 @@ var x281: Base[] = [d1, d2] || [d1, d2];
 
 var x282: Array<Base> = [d1, d2] || [d1, d2];
 >x282 : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >[d1, d2] || [d1, d2] : Base[]
 >[d1, d2] : Base[]
@@ -2919,7 +2919,7 @@ var x291: Base[] = true ? [d1, d2] : [d1, d2];
 
 var x292: Array<Base> = true ? [d1, d2] : [d1, d2];
 >x292 : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >true ? [d1, d2] : [d1, d2] : Base[]
 >[d1, d2] : Base[]
@@ -3064,7 +3064,7 @@ var x303: Base[] = true ? undefined : [d1, d2];
 
 var x304: Array<Base> = true ? undefined : [d1, d2];
 >x304 : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >true ? undefined : [d1, d2] : Base[]
 >undefined : undefined
@@ -3192,7 +3192,7 @@ var x315: Base[] = true ? [d1, d2] : undefined;
 
 var x316: Array<Base> = true ? [d1, d2] : undefined;
 >x316 : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >true ? [d1, d2] : undefined : Base[]
 >[d1, d2] : Base[]
@@ -3328,7 +3328,7 @@ function x327(n: Base[]) { }; x327([d1, d2]);
 function x328(n: Array<Base>) { }; x328([d1, d2]);
 >x328 : typeof x328
 >n : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >x328([d1, d2]) : void
 >x328 : typeof x328
@@ -3483,7 +3483,7 @@ var x340 = (n: Array<Base>) => n; x340([d1, d2]);
 >x340 : (n: Base[]) => Base[]
 >(n: Array<Base>) => n : (n: Base[]) => Base[]
 >n : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >n : Base[]
 >x340([d1, d2]) : Base[]
@@ -3640,7 +3640,7 @@ var x352 = function(n: Array<Base>) { }; x352([d1, d2]);
 >x352 : (n: Base[]) => void
 >function(n: Array<Base>) { } : (n: Base[]) => void
 >n : Base[]
->Array : T[]
+>Array : Array<T>
 >Base : Base
 >x352([d1, d2]) : void
 >x352 : (n: Base[]) => void

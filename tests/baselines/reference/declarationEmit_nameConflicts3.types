@@ -1,24 +1,24 @@
 === tests/cases/compiler/declarationEmit_nameConflicts3.ts ===
 module M {
->M : typeof M
+>M : M
 
     export interface D { }
 >D : D
 
     export module D {
->D : typeof D
+>D : D
 
         export function f() { }
 >f : typeof f
     }
     export module C {
->C : typeof C
+>C : C
 
         export function f() { }
 >f : typeof f
     }
     export module E {
->E : typeof E
+>E : E
 
         export function f() { }
 >f : typeof f
@@ -26,14 +26,14 @@ module M {
 }
 
 module M.P {
->M : typeof M
->P : typeof P
+>M : M
+>P : P
 
     export class C {
 >C : C
 
         static f() { }
->f : typeof f
+>f : () => void
     }
     export class E extends C { }
 >E : E
@@ -47,31 +47,31 @@ module M.P {
     }
     // Bug 887180
     export var v: M.D; // ok
->v : D
+>v : M.D
 >M : M
->D : D
+>D : M.D
 
     export var w = M.D.f; // error, should be typeof M.D.f
->w : typeof f
->M.D.f : typeof f
->M.D : typeof D
+>w : typeof M.D.f
+>M.D.f : typeof M.D.f
+>M.D : typeof M.D
 >M : typeof M
->D : typeof D
->f : typeof f
+>D : typeof M.D
+>f : typeof M.D.f
 
     export var x = M.C.f; // error, should be typeof M.C.f
->x : typeof f
->M.C.f : typeof f
->M.C : typeof C
+>x : typeof M.C.f
+>M.C.f : typeof M.C.f
+>M.C : typeof M.C
 >M : typeof M
->C : typeof C
->f : typeof f
+>C : typeof M.C
+>f : typeof M.C.f
 
     export var x = M.E.f; // error, should be typeof M.E.f
->x : typeof f
->M.E.f : typeof f
->M.E : typeof E
+>x : typeof M.C.f
+>M.E.f : typeof M.E.f
+>M.E : typeof M.E
 >M : typeof M
->E : typeof E
->f : typeof f
+>E : typeof M.E
+>f : typeof M.E.f
 }

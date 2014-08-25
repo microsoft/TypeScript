@@ -1,6 +1,6 @@
 === tests/cases/compiler/cloduleAcrossModuleDefinitions.ts ===
 module A {
->A : typeof A
+>A : A
 
     export class B {
 >B : B
@@ -9,15 +9,15 @@ module A {
 >foo : () => void
 
         static bar() { }
->bar : typeof bar
+>bar : () => void
     }
 }
 
 module A {
->A : typeof A
+>A : A
 
     export module B {
->B : typeof B
+>B : B
 
         export var x = 1;
 >x : number
@@ -25,7 +25,7 @@ module A {
 }
 
 var b: A.B; // ok
->b : B
+>b : A.B
 >A : A
->B : B
+>B : A.B
 

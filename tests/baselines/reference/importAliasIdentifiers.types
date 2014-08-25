@@ -1,6 +1,6 @@
 === tests/cases/conformance/internalModules/importDeclarations/importAliasIdentifiers.ts ===
 module moduleA {
->moduleA : typeof moduleA
+>moduleA : moduleA
 
     export class Point {
 >Point : Point
@@ -12,21 +12,21 @@ module moduleA {
 }
 
 import alias = moduleA;
->alias : typeof moduleA
+>alias : alias
 >moduleA : typeof moduleA
 
 var p: alias.Point;
->p : Point
+>p : alias.Point
 >alias : alias
->Point : Point
+>Point : alias.Point
 
 var p: moduleA.Point;
->p : Point
+>p : alias.Point
 >moduleA : moduleA
->Point : Point
+>Point : alias.Point
 
 var p: { x: number; y: number; };
->p : Point
+>p : alias.Point
 >x : number
 >y : number
 
@@ -38,7 +38,7 @@ class clodule {
 }
 
 module clodule {
->clodule : typeof clodule
+>clodule : clodule
 
     export interface Point {
 >Point : Point
@@ -56,21 +56,21 @@ module clodule {
 }
 
 import clolias = clodule;
->clolias : typeof clodule
+>clolias : clolias
 >clodule : clodule
 
 var p: clolias.Point;
->p : Point
+>p : alias.Point
 >clolias : clodule
->Point : Point
+>Point : clolias.Point
 
 var p: clodule.Point;
->p : Point
+>p : alias.Point
 >clodule : clodule
->Point : Point
+>Point : clolias.Point
 
 var p: { x: number; y: number; };
->p : Point
+>p : alias.Point
 >x : number
 >y : number
 
@@ -85,7 +85,7 @@ function fundule() {
 }
 
 module fundule {
->fundule : typeof fundule
+>fundule : fundule
 
     export interface Point {
 >Point : Point
@@ -103,21 +103,21 @@ module fundule {
 }
 
 import funlias = fundule;
->funlias : typeof fundule
+>funlias : funlias
 >fundule : typeof fundule
 
 var p: funlias.Point;
->p : Point
+>p : alias.Point
 >funlias : funlias
->Point : Point
+>Point : funlias.Point
 
 var p: fundule.Point;
->p : Point
+>p : alias.Point
 >fundule : fundule
->Point : Point
+>Point : funlias.Point
 
 var p: { x: number; y: number; };
->p : Point
+>p : alias.Point
 >x : number
 >y : number
 

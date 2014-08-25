@@ -1,6 +1,6 @@
 === tests/cases/compiler/assignmentCompatability2.ts ===
 module __test1__ {
->__test1__ : typeof __test1__
+>__test1__ : __test1__
 
     export interface interfaceWithPublicAndOptional<T,U> { one: T; two?: U; };  var obj4: interfaceWithPublicAndOptional<number,string> = { one: 1 };;
 >interfaceWithPublicAndOptional : interfaceWithPublicAndOptional<T, U>
@@ -20,7 +20,7 @@ module __test1__ {
 >obj4 : interfaceWithPublicAndOptional<number, string>
 }
 module __test2__ {
->__test2__ : typeof __test2__
+>__test2__ : __test2__
 
     export var aa:{};;
 >aa : {}
@@ -30,11 +30,11 @@ module __test2__ {
 >aa : {}
 }
 __test2__.__val__aa = __test1__.__val__obj4
->__test2__.__val__aa = __test1__.__val__obj4 : interfaceWithPublicAndOptional<number, string>
+>__test2__.__val__aa = __test1__.__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
 >__test2__.__val__aa : {}
 >__test2__ : typeof __test2__
 >__val__aa : {}
->__test1__.__val__obj4 : interfaceWithPublicAndOptional<number, string>
+>__test1__.__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
 >__test1__ : typeof __test1__
->__val__obj4 : interfaceWithPublicAndOptional<number, string>
+>__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
 

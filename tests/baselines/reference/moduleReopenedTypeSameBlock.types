@@ -1,10 +1,10 @@
 === tests/cases/compiler/moduleReopenedTypeSameBlock.ts ===
 module M { export class C1 { } }
->M : typeof M
+>M : M
 >C1 : C1
 
 module M {
->M : typeof M
+>M : M
 
     export interface I { n: number; }
 >I : I

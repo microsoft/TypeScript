@@ -13,13 +13,13 @@ module X {
 >T : T
 }
 var z: X.Y.Z = null;
->z : Z
+>z : X.Y.Z
 >X : X
->Y : Y
->Z : Z
+>Y : X.Y
+>Z : X.Y.Z
 
 var z2: X.Y<string>;
->z2 : Y<string>
+>z2 : X.Y<string>
 >X : X
->Y : Y<T>
+>Y : X.Y<T>
 

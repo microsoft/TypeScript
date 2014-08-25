@@ -5,9 +5,9 @@ declare var OData: any;
 >OData : any
 
 module Microsoft.PeopleAtWork.Model {
->Microsoft : typeof Microsoft
->PeopleAtWork : typeof PeopleAtWork
->Model : typeof Model
+>Microsoft : Microsoft
+>PeopleAtWork : PeopleAtWork
+>Model : Model
 
     export class KnockoutExtentions {
 >KnockoutExtentions : KnockoutExtentions
@@ -21,9 +21,9 @@ No type information for this code.=== tests/cases/compiler/emitMemberAccessExpre
 /// <reference path="emitMemberAccessExpression_file3.ts" />
 "use strict";
 module Microsoft.PeopleAtWork.Model {
->Microsoft : typeof Microsoft
->PeopleAtWork : typeof PeopleAtWork
->Model : typeof Model
+>Microsoft : Microsoft
+>PeopleAtWork : PeopleAtWork
+>Model : Model
 
     export class _Person {
 >_Person : _Person

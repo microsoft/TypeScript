@@ -4,13 +4,13 @@ function C(x: number) { }
 >x : number
 
 module C {
->C : typeof C
+>C : C
 
     export var x = 1;
 >x : number
 }
 module C {
->C : typeof C
+>C : C
 
     export function foo() { }
 >foo : typeof foo
@@ -29,7 +29,7 @@ var r2 = new C(2); // using void returning function as constructor
 var r3 = C.foo();
 >r3 : void
 >C.foo() : void
->C.foo : typeof foo
+>C.foo : typeof C.foo
 >C : typeof C
->foo : typeof foo
+>foo : typeof C.foo
 

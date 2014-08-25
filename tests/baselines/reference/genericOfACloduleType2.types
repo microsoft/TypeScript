@@ -8,14 +8,14 @@ class G<T>{ bar(x: T) { return x; } }
 >x : T
 
 module M {
->M : typeof M
+>M : M
 
     export class C { foo() { } }
 >C : C
 >foo : () => void
 
     export module C {
->C : typeof C
+>C : C
 
         export class X {
 >X : X
@@ -39,12 +39,12 @@ module M {
 }
 
 module N {
->N : typeof N
+>N : N
 
     var g2 = new G<M.C>()
->g2 : G<C>
->new G<M.C>() : G<C>
+>g2 : G<M.C>
+>new G<M.C>() : G<M.C>
 >G : typeof G
 >M : M
->C : C
+>C : M.C
 }

@@ -1,6 +1,6 @@
 === tests/cases/conformance/internalModules/DeclarationMerging/function.ts ===
 module A {
->A : typeof A
+>A : A
 
     export function Point() {
 >Point : typeof Point
@@ -14,10 +14,10 @@ module A {
 
 === tests/cases/conformance/internalModules/DeclarationMerging/module.ts ===
 module B {
->B : typeof B
+>B : B
 
     export module Point {
->Point : typeof Point
+>Point : Point
 
         export var Origin = { x: 0, y: 0 };
 >Origin : { x: number; y: number; }
@@ -35,9 +35,9 @@ var fn: () => { x: number; y: number };
 
 var fn = A.Point;
 >fn : () => { x: number; y: number; }
->A.Point : typeof Point
+>A.Point : typeof A.Point
 >A : typeof A
->Point : typeof Point
+>Point : typeof A.Point
 
 var cl: { x: number; y: number; }
 >cl : { x: number; y: number; }
@@ -47,8 +47,8 @@ var cl: { x: number; y: number; }
 var cl = B.Point.Origin;
 >cl : { x: number; y: number; }
 >B.Point.Origin : { x: number; y: number; }
->B.Point : typeof Point
+>B.Point : typeof B.Point
 >B : typeof B
->Point : typeof Point
+>Point : typeof B.Point
 >Origin : { x: number; y: number; }
 

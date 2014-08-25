@@ -23,7 +23,7 @@ function suggest(){
 >push : any
 >{text:keyword, type:"keyword"} : { text: string; type: string; }
 >text : string
->keyword : keyword
+>keyword : string
 >type : string
 
 	});			

@@ -1,9 +1,9 @@
 === tests/cases/compiler/aliasInaccessibleModule2.ts ===
 module M {
->M : typeof M
+>M : M
 
     module N {
->N : typeof N
+>N : N
 
         class C {
 >C : C
@@ -11,10 +11,10 @@ module M {
         
     }
     import R = N;
->R : typeof N
+>R : R
 >N : typeof N
 
     export import X = R;
->X : typeof N
+>X : X
 >R : typeof N
 }

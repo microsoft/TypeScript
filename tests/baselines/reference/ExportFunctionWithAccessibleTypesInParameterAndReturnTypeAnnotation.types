@@ -1,6 +1,6 @@
 === tests/cases/conformance/internalModules/exportDeclarations/ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts ===
 module A {
->A : typeof A
+>A : A
 
     export class Point {
 >Point : Point

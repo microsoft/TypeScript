@@ -9,7 +9,7 @@ class C {
 >a : string
 
     static foo() { }
->foo : typeof foo
+>foo : () => void
 }
 enum E { a, b, c }
 >E : E
@@ -18,7 +18,7 @@ enum E { a, b, c }
 >c : E
 
 module M { export var a }
->M : typeof M
+>M : M
 >a : any
 
 var a: any;

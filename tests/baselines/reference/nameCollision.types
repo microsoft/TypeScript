@@ -1,6 +1,6 @@
 === tests/cases/conformance/internalModules/codeGeneration/nameCollision.ts ===
 module A {
->A : typeof A
+>A : A
 
     // these 2 statements force an underscore before the 'A' 
     // in the generated function call.
@@ -12,14 +12,14 @@ module A {
 }
 
 module B {
->B : typeof B
+>B : B
 
     var A = 12;
 >A : number
 }
 
 module B {
->B : typeof B
+>B : B
 
     // re-opened module with colliding name
     // this should add an underscore.
@@ -32,19 +32,19 @@ module B {
 }
 
 module X {
->X : typeof X
+>X : X
 
     var X = 13;
 >X : number
 
     export module Y {
->Y : typeof Y
+>Y : X.Y
 
         var Y = 13;
 >Y : number
 
         export module Z {
->Z : typeof Z
+>Z : Y.Z
 
             var X = 12;
 >X : number
@@ -59,8 +59,8 @@ module X {
 }
 
 module Y.Y {
->Y : typeof Y
->Y : typeof Y
+>Y : Y
+>Y : Y.Y
 
     export enum Y {
 >Y : Y
@@ -74,7 +74,7 @@ module Y.Y {
 // no collision, since interface doesn't
 // generate code.
 module D {
->D : typeof D
+>D : D
 
     export interface D {
 >D : D

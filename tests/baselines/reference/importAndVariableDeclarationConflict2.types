@@ -1,13 +1,13 @@
 === tests/cases/compiler/importAndVariableDeclarationConflict2.ts ===
 module m {
->m : typeof m
+>m : m
 
   export var m = '';
 >m : string
 }
 
 import x = m.m;
->x : string
+>x : x
 >m : typeof m
 >m : string
 

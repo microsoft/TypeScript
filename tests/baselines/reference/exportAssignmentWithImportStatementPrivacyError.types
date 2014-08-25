@@ -27,29 +27,29 @@ module m2 {
 }
 
 module M {
->M : typeof M
+>M : M
 
     export var server: {
->server : { (): connectExport; test1: connectModule; test2(): connectModule; }
+>server : { (): m2.connectExport; test1: m2.connectModule; test2(): m2.connectModule; }
 
         (): m2.connectExport;
 >m2 : m2
->connectExport : connectExport
+>connectExport : m2.connectExport
 
         test1: m2.connectModule;
->test1 : connectModule
+>test1 : m2.connectModule
 >m2 : m2
->connectModule : connectModule
+>connectModule : m2.connectModule
 
         test2(): m2.connectModule;
->test2 : () => connectModule
+>test2 : () => m2.connectModule
 >m2 : m2
->connectModule : connectModule
+>connectModule : m2.connectModule
 
     };
 }
 import M22 = M;
->M22 : typeof M
+>M22 : M22
 >M : typeof M
 
 export = M;

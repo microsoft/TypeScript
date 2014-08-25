@@ -6,7 +6,7 @@ var x = 1;
 >x : number
 
 module M {
->M : typeof M
+>M : M
 
     export var x = 2;
 >x : number
@@ -20,7 +20,7 @@ module M {
 }
  
 module M {
->M : typeof M
+>M : M
 
     console.log(x); // 2
 >console.log(x) : any
@@ -31,7 +31,7 @@ module M {
 }
  
 module M {
->M : typeof M
+>M : M
 
     var x = 3;
 >x : number

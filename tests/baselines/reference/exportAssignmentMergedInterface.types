@@ -3,28 +3,28 @@ import foo = require("./foo_0");
 >foo : foo
 
 var x: foo;
->x : Foo
->foo : Foo
+>x : foo
+>foo : foo
 
 x("test");
 >x("test") : void
->x : Foo
+>x : foo
 
 x(42);
 >x(42) : number
->x : Foo
+>x : foo
 
 var y: string = x.b;
 >y : string
 >x.b : string
->x : Foo
+>x : foo
 >b : string
 
 if(!!x.c){ }
 >!!x.c : boolean
 >!x.c : boolean
 >x.c : boolean
->x : Foo
+>x : foo
 >c : boolean
 
 var z = {x: 1, y: 2};
@@ -37,7 +37,7 @@ z = x.d;
 >z = x.d : { x: number; y: number; }
 >z : { x: number; y: number; }
 >x.d : { x: number; y: number; }
->x : Foo
+>x : foo
 >d : { x: number; y: number; }
 
 === tests/cases/conformance/externalModules/foo_0.ts ===

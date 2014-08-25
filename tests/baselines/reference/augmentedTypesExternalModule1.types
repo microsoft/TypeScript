@@ -7,5 +7,5 @@ class c5 { public foo() { } }
 >foo : () => void
 
 module c5 { } // should be ok everywhere
->c5 : typeof c5
+>c5 : c5
 

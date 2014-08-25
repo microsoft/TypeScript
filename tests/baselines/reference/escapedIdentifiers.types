@@ -35,13 +35,13 @@ b ++;
 
 // modules
 module moduleType1 { 
->moduleType1 : typeof moduleType1
+>moduleType1 : moduleType1
 
     export var baz1: number;
 >baz1 : number
 }
 module moduleType\u0032 { 
->moduleType\u0032 : typeof moduleType\u0032
+>moduleType\u0032 : moduleType\u0032
 
     export var baz2: number;
 >baz2 : number

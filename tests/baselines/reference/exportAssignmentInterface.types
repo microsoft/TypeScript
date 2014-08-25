@@ -3,13 +3,13 @@ import I1 = require("exportAssignmentInterface_A");
 >I1 : I1
 
 var i: I1;
->i : A
->I1 : A
+>i : I1
+>I1 : I1
 
 var n: number = i.p1;
 >n : number
 >i.p1 : number
->i : A
+>i : I1
 >p1 : number
 
 === tests/cases/compiler/exportAssignmentInterface_A.ts ===

@@ -107,7 +107,7 @@ class c1 {
 
     /** static sum with property*/
     static s2(/** number to add*/b: number) {
->s2 : typeof s2
+>s2 : (b: number) => number
 >b : number
 
         return c1.s1 + b;
@@ -123,9 +123,9 @@ class c1 {
 
         return c1.s2(c1.s1);
 >c1.s2(c1.s1) : number
->c1.s2 : typeof s2
+>c1.s2 : (b: number) => number
 >c1 : typeof c1
->s2 : typeof s2
+>s2 : (b: number) => number
 >c1.s1 : number
 >c1 : typeof c1
 >s1 : number
@@ -142,9 +142,9 @@ class c1 {
 >c1 : typeof c1
 >s1 : number
 >c1.s2(value) : number
->c1.s2 : typeof s2
+>c1.s2 : (b: number) => number
 >c1 : typeof c1
->s2 : typeof s2
+>s2 : (b: number) => number
 >value : number
 
     }/*trailing comment 2 */ /*setter*/
@@ -234,7 +234,7 @@ class c1 {
 >nc_s1 : number
 
     static nc_s2(b: number) {
->nc_s2 : typeof nc_s2
+>nc_s2 : (b: number) => number
 >b : number
 
         return c1.nc_s1 + b;
@@ -249,9 +249,9 @@ class c1 {
 
         return c1.nc_s2(c1.nc_s1);
 >c1.nc_s2(c1.nc_s1) : number
->c1.nc_s2 : typeof nc_s2
+>c1.nc_s2 : (b: number) => number
 >c1 : typeof c1
->nc_s2 : typeof nc_s2
+>nc_s2 : (b: number) => number
 >c1.nc_s1 : number
 >c1 : typeof c1
 >nc_s1 : number
@@ -266,9 +266,9 @@ class c1 {
 >c1 : typeof c1
 >nc_s1 : number
 >c1.nc_s2(value) : number
->c1.nc_s2 : typeof nc_s2
+>c1.nc_s2 : (b: number) => number
 >c1 : typeof c1
->nc_s2 : typeof nc_s2
+>nc_s2 : (b: number) => number
 >value : number
     }
 
@@ -369,7 +369,7 @@ class c1 {
 
     // static sum with property
     static a_s2(b: number) {
->a_s2 : typeof a_s2
+>a_s2 : (b: number) => number
 >b : number
 
         return c1.a_s1 + b;
@@ -385,9 +385,9 @@ class c1 {
 
         return c1.s2(c1.s1);
 >c1.s2(c1.s1) : number
->c1.s2 : typeof s2
+>c1.s2 : (b: number) => number
 >c1 : typeof c1
->s2 : typeof s2
+>s2 : (b: number) => number
 >c1.s1 : number
 >c1 : typeof c1
 >s1 : number
@@ -404,9 +404,9 @@ class c1 {
 >c1 : typeof c1
 >a_s1 : number
 >c1.a_s2(value) : number
->c1.a_s2 : typeof a_s2
+>c1.a_s2 : (b: number) => number
 >c1 : typeof c1
->a_s2 : typeof a_s2
+>a_s2 : (b: number) => number
 >value : number
     }
 
@@ -507,7 +507,7 @@ class c1 {
 
     /** static sum with property */
     static b_s2(b: number) {
->b_s2 : typeof b_s2
+>b_s2 : (b: number) => number
 >b : number
 
         return c1.b_s1 + b;
@@ -524,9 +524,9 @@ class c1 {
 
         return c1.s2(c1.s1);
 >c1.s2(c1.s1) : number
->c1.s2 : typeof s2
+>c1.s2 : (b: number) => number
 >c1 : typeof c1
->s2 : typeof s2
+>s2 : (b: number) => number
 >c1.s1 : number
 >c1 : typeof c1
 >s1 : number
@@ -545,9 +545,9 @@ class c1 {
 >c1 : typeof c1
 >b_s1 : number
 >c1.b_s2(value) : number
->c1.b_s2 : typeof b_s2
+>c1.b_s2 : (b: number) => number
 >c1 : typeof c1
->b_s2 : typeof b_s2
+>b_s2 : (b: number) => number
 >value : number
     }
 }
@@ -627,17 +627,17 @@ var i1_s_p = c1.s1;
 >s1 : number
 
 var i1_s_f = c1.s2;
->i1_s_f : typeof s2
->c1.s2 : typeof s2
+>i1_s_f : (b: number) => number
+>c1.s2 : (b: number) => number
 >c1 : typeof c1
->s2 : typeof s2
+>s2 : (b: number) => number
 
 var i1_s_r = c1.s2(20);
 >i1_s_r : number
 >c1.s2(20) : number
->c1.s2 : typeof s2
+>c1.s2 : (b: number) => number
 >c1 : typeof c1
->s2 : typeof s2
+>s2 : (b: number) => number
 
 var i1_s_prop = c1.s3;
 >i1_s_prop : number
@@ -659,17 +659,17 @@ var i1_s_nc_p = c1.nc_s1;
 >nc_s1 : number
 
 var i1_s_ncf = c1.nc_s2;
->i1_s_ncf : typeof nc_s2
->c1.nc_s2 : typeof nc_s2
+>i1_s_ncf : (b: number) => number
+>c1.nc_s2 : (b: number) => number
 >c1 : typeof c1
->nc_s2 : typeof nc_s2
+>nc_s2 : (b: number) => number
 
 var i1_s_ncr = c1.nc_s2(20);
 >i1_s_ncr : number
 >c1.nc_s2(20) : number
->c1.nc_s2 : typeof nc_s2
+>c1.nc_s2 : (b: number) => number
 >c1 : typeof c1
->nc_s2 : typeof nc_s2
+>nc_s2 : (b: number) => number
 
 var i1_s_ncprop = c1.nc_s3;
 >i1_s_ncprop : number

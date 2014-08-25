@@ -1,6 +1,6 @@
 === tests/cases/compiler/partiallyAmbientFundule.ts ===
 declare module foo {
->foo : typeof foo
+>foo : foo
 
     export function x(): any;
 >x : typeof x

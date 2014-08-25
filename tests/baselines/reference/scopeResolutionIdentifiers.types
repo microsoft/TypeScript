@@ -5,7 +5,7 @@ var s: string;
 >s : string
 
 module M1 {
->M1 : typeof M1
+>M1 : M1
 
     export var s: number;
 >s : number
@@ -19,7 +19,7 @@ module M1 {
 }
 
 module M2 {
->M2 : typeof M2
+>M2 : M2
 
     var s: number;
 >s : number
@@ -75,13 +75,13 @@ class C {
 }
 
 module M3 {
->M3 : typeof M3
+>M3 : M3
 
     var s: any;
 >s : any
 
     module M4 {
->M4 : typeof M4
+>M4 : M4
 
         var n = s;
 >n : any

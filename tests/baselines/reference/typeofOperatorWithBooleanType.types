@@ -13,10 +13,10 @@ class A {
 >a : boolean
 
     static foo() { return false; }
->foo : typeof foo
+>foo : () => boolean
 }
 module M {
->M : typeof M
+>M : M
 
     export var n: boolean;
 >n : boolean
@@ -70,9 +70,9 @@ var ResultIsString7 = typeof A.foo();
 >ResultIsString7 : string
 >typeof A.foo() : string
 >A.foo() : boolean
->A.foo : typeof foo
+>A.foo : () => boolean
 >A : typeof A
->foo : typeof foo
+>foo : () => boolean
 
 // multiple typeof  operator
 var ResultIsString8 = typeof typeof BOOLEAN;
@@ -148,9 +148,9 @@ z: typeof objA.a;
 
 z: typeof A.foo;
 >typeof A.foo : string
->A.foo : typeof foo
+>A.foo : () => boolean
 >A : typeof A
->foo : typeof foo
+>foo : () => boolean
 
 z: typeof M.n;
 >typeof M.n : string

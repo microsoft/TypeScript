@@ -1,6 +1,6 @@
 === tests/cases/compiler/genericRecursiveImplicitConstructorErrors2.ts ===
 module TypeScript2 {
->TypeScript2 : typeof TypeScript2
+>TypeScript2 : TypeScript2
 
   export interface DeclKind { };
 >DeclKind : DeclKind

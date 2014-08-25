@@ -1,11 +1,11 @@
 === tests/cases/compiler/exportAssignmentFunction_B.ts ===
 import fooFunc = require("exportAssignmentFunction_A");
->fooFunc : typeof foo
+>fooFunc : fooFunc
 
 var n: number = fooFunc();
 >n : number
 >fooFunc() : number
->fooFunc : typeof foo
+>fooFunc : typeof fooFunc
 
 === tests/cases/compiler/exportAssignmentFunction_A.ts ===
 function foo() { return 0; }

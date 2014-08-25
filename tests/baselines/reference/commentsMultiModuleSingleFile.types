@@ -2,7 +2,7 @@
 
 /** this is multi declare module*/
 module multiM {
->multiM : typeof multiM
+>multiM : multiM
 
     /** class b*/
     export class b {
@@ -17,7 +17,7 @@ module multiM {
 
 /// this is multi module 2
 module multiM {
->multiM : typeof multiM
+>multiM : multiM
 
     /** class c comment*/
     export class c {
@@ -30,14 +30,14 @@ module multiM {
     }
 }
 new multiM.b();
->new multiM.b() : b
->multiM.b : typeof b
+>new multiM.b() : multiM.b
+>multiM.b : typeof multiM.b
 >multiM : typeof multiM
->b : typeof b
+>b : typeof multiM.b
 
 new multiM.c();
->new multiM.c() : c
->multiM.c : typeof c
+>new multiM.c() : multiM.c
+>multiM.c : typeof multiM.c
 >multiM : typeof multiM
->c : typeof c
+>c : typeof multiM.c
 

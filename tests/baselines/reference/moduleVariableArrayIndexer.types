@@ -1,6 +1,6 @@
 === tests/cases/compiler/moduleVariableArrayIndexer.ts ===
 module Bar {
->Bar : typeof Bar
+>Bar : Bar
 
     export var a = 1;
 >a : number

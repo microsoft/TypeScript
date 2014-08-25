@@ -1,7 +1,7 @@
 === tests/cases/compiler/enumDecl1.ts ===
 
 declare module mAmbient {
->mAmbient : typeof mAmbient
+>mAmbient : mAmbient
 
     enum e {
 >e : e

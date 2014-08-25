@@ -1,6 +1,6 @@
 === tests/cases/compiler/underscoreMapFirst.ts ===
 declare module _ {
->_ : typeof _
+>_ : _
 
     interface Collection<T> { }
 >Collection : Collection<T>
@@ -132,20 +132,20 @@ class MyView extends View {
 >allSeries : ISeries[][]
 >ISeries : ISeries
 >_.pluck(data, "series") : any[]
->_.pluck : typeof pluck
+>_.pluck : typeof _.pluck
 >_ : typeof _
->pluck : typeof pluck
+>pluck : typeof _.pluck
 >data : IData[]
 
         return _.map(allSeries, _.first);
 >_.map(allSeries, _.first) : ISeries[]
->_.map : typeof map
+>_.map : typeof _.map
 >_ : typeof _
->map : typeof map
+>map : typeof _.map
 >allSeries : ISeries[][]
->_.first : typeof first
+>_.first : typeof _.first
 >_ : typeof _
->first : typeof first
+>first : typeof _.first
     }
 }
 

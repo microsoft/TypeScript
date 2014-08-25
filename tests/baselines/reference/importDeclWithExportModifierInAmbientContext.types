@@ -10,10 +10,10 @@ declare module "m" {
     export import a = x.c;
 >a : a
 >x : x
->c : c
+>c : a
 
     var b: a;
->b : c
->a : c
+>b : a
+>a : a
 }
 

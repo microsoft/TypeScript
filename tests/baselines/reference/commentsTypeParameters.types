@@ -11,7 +11,7 @@ class C</**docComment for type parameter*/ T> {
 >U : U
     }
     static staticmethod</**docComment of method type parameter */ U>(a: U) {
->staticmethod : typeof staticmethod
+>staticmethod : <U>(a: U) => void
 >U : U
 >a : U
 >U : U
@@ -25,7 +25,7 @@ class C</**docComment for type parameter*/ T> {
 >U : U
     }
     private static privatestaticmethod</**docComment of method type parameter */ U>(a: U) {
->privatestaticmethod : typeof privatestaticmethod
+>privatestaticmethod : <U>(a: U) => void
 >U : U
 >a : U
 >U : U

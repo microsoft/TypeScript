@@ -59,7 +59,7 @@ x = c;
 >c : I
 
 module M { export var x = 1; }
->M : typeof M
+>M : M
 >x : number
 
 x = M;

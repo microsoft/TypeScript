@@ -13,10 +13,10 @@ class A {
 >a : boolean
 
     static foo() { return false; }
->foo : typeof foo
+>foo : () => boolean
 }
 module M {
->M : typeof M
+>M : M
 
     export var n: boolean;
 >n : boolean
@@ -70,9 +70,9 @@ var ResultIsAny7 = void A.foo();
 >ResultIsAny7 : any
 >void A.foo() : undefined
 >A.foo() : boolean
->A.foo : typeof foo
+>A.foo : () => boolean
 >A : typeof A
->foo : typeof foo
+>foo : () => boolean
 
 // multiple void  operator
 var ResultIsAny8 = void void BOOLEAN;

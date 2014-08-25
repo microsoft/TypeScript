@@ -37,7 +37,7 @@ class A {
 >a : any
 
     static foo() {
->foo : typeof foo
+>foo : () => any
 
         var a;
 >a : any
@@ -47,7 +47,7 @@ class A {
     }
 }
 module M {
->M : typeof M
+>M : M
 
     export var n: any;
 >n : any
@@ -143,9 +143,9 @@ var ResultIsNumber14 = -A.foo();
 >ResultIsNumber14 : number
 >-A.foo() : number
 >A.foo() : any
->A.foo : typeof foo
+>A.foo : () => any
 >A : typeof A
->foo : typeof foo
+>foo : () => any
 
 var ResultIsNumber15 = -(ANY - ANY1);
 >ResultIsNumber15 : number

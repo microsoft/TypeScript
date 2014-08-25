@@ -90,7 +90,7 @@ var r = true ? a : b;
 >b : { Foo: Derived; }
 
 module TwoLevels {
->TwoLevels : typeof TwoLevels
+>TwoLevels : TwoLevels
 
     interface T {
 >T : T

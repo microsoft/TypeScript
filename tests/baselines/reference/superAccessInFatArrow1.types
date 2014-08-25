@@ -1,6 +1,6 @@
 === tests/cases/compiler/superAccessInFatArrow1.ts ===
 module test {
->test : typeof test
+>test : test
 
     export class A {
 >A : A

@@ -6,7 +6,7 @@ class A {
 >aProp : string
 }
 module A {
->A : typeof A
+>A : A
 
     export interface X { s: string }
 >X : X
@@ -17,7 +17,7 @@ module B {
 >B : B
 
     import Y = A;
->Y : typeof A
->A : A
+>Y : Y
+>A : Y
 }
 

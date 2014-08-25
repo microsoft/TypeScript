@@ -1,6 +1,6 @@
 === tests/cases/compiler/covariance1.ts ===
 module M {
->M : typeof M
+>M : M
 
     interface X { m1:number; }
 >X : X
@@ -30,7 +30,7 @@ module M {
 >f : typeof f
 >{x:a} : { x: X; }
 >x : X
->a : a
+>a : X
 
     var b:XX;
 >b : XX
@@ -41,7 +41,7 @@ module M {
 >f : typeof f
 >{x:b} : { x: XX; }
 >x : XX
->b : b
+>b : XX
 }
 
 

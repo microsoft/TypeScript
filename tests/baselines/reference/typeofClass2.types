@@ -12,20 +12,20 @@ class C {
 >x : any
 
     static foo(x: number);
->foo : typeof foo
+>foo : { (x: number): any; (x: C): any; }
 >x : number
 
     static foo(x: C);
->foo : typeof foo
+>foo : { (x: number): any; (x: C): any; }
 >x : C
 >C : C
 
     static foo(x) { }
->foo : typeof foo
+>foo : { (x: number): any; (x: C): any; }
 >x : any
 
     static bar(x) { }
->bar : typeof bar
+>bar : (x: any) => void
 >x : any
 }
 
@@ -34,7 +34,7 @@ class D extends C {
 >C : C
 
     static baz(x: number) { }
->baz : typeof baz
+>baz : (x: number) => void
 >x : number
 
     foo() { }

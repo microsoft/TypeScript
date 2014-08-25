@@ -10,9 +10,9 @@ export module a {
 export import b = a.I;
 >b : b
 >a : a
->I : I
+>I : b
 
 export var x: b;
->x : I
->b : I
+>x : b
+>b : b
 

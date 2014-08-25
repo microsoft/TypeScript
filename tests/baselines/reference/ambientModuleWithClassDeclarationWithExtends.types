@@ -1,6 +1,6 @@
 === tests/cases/compiler/ambientModuleWithClassDeclarationWithExtends.ts ===
 declare module foo {
->foo : typeof foo
+>foo : foo
 
     class A { }
 >A : A

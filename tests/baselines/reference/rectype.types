@@ -1,6 +1,6 @@
 === tests/cases/compiler/rectype.ts ===
 module M {
->M : typeof M
+>M : M
 
     interface I { (i:I):I; }
 >I : I

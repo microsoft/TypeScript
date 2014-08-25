@@ -1,7 +1,7 @@
 === tests/cases/compiler/arrayOfExportedClass_1.ts ===
 ///<reference path='arrayOfExportedClass_0.ts'/>
 import Car = require('arrayOfExportedClass_0');
->Car : typeof Car
+>Car : Car
 
 class Road {
 >Road : Road

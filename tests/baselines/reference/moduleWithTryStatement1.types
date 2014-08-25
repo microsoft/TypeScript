@@ -1,6 +1,6 @@
 === tests/cases/compiler/moduleWithTryStatement1.ts ===
 module M {
->M : typeof M
+>M : M
 
   try {
   }

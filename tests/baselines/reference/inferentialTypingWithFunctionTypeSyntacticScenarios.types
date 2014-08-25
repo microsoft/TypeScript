@@ -26,7 +26,7 @@ var dottedIdentity = { x: identity };
 >dottedIdentity : { x: typeof identity; }
 >{ x: identity } : { x: typeof identity; }
 >x : typeof identity
->identity : identity
+>identity : typeof identity
 
 s = map("", dottedIdentity.x);
 >s = map("", dottedIdentity.x) : string

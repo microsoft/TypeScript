@@ -1,6 +1,6 @@
 === tests/cases/compiler/thisInModuleFunction1.ts ===
 module bar {
->bar : typeof bar
+>bar : bar
 
  export function bar() {
 >bar : typeof bar
@@ -12,7 +12,7 @@ module bar {
 var z = bar.bar();
 >z : any
 >bar.bar() : any
->bar.bar : typeof bar
+>bar.bar : typeof bar.bar
 >bar : typeof bar
->bar : typeof bar
+>bar : typeof bar.bar
 

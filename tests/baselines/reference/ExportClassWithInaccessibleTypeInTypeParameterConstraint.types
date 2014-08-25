@@ -1,6 +1,6 @@
 === tests/cases/conformance/internalModules/exportDeclarations/ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts ===
 module A {
->A : typeof A
+>A : A
 
     class Point {
 >Point : Point
@@ -47,7 +47,7 @@ module A {
 >TPoint : TPoint
 
         static fromorigin2d(p: Point): Line<Point>{
->fromorigin2d : typeof fromorigin2d
+>fromorigin2d : (p: Point) => Line<Point>
 >p : Point
 >Point : Point
 >Line : Line<TPoint>

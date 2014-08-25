@@ -1,6 +1,6 @@
 === tests/cases/compiler/moduleReopenedTypeOtherBlock.ts ===
 module M {
->M : typeof M
+>M : M
 
     export class C1 { }
 >C1 : C1
@@ -10,7 +10,7 @@ module M {
 >n : number
 }
 module M {
->M : typeof M
+>M : M
 
     export class C2 { f(): I { return null; } }
 >C2 : C2

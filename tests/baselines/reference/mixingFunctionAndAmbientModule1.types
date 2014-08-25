@@ -1,9 +1,9 @@
 === tests/cases/compiler/mixingFunctionAndAmbientModule1.ts ===
 module A {
->A : typeof A
+>A : A
 
     declare module My {
->My : typeof My
+>My : My
 
         export var x: number;
 >x : number
@@ -14,10 +14,10 @@ module A {
 }
 
 module B {
->B : typeof B
+>B : B
 
     declare module My {
->My : typeof My
+>My : My
 
         export var x: number;
 >x : number
@@ -32,10 +32,10 @@ module B {
 }
 
 module C {
->C : typeof C
+>C : C
 
     declare module My {
->My : typeof My
+>My : My
 
         export var x: number;
 >x : number
@@ -46,10 +46,10 @@ module C {
 }
 
 module D {
->D : typeof D
+>D : D
 
     declare module My {
->My : typeof My
+>My : My
 
         export var x: number;
 >x : number
@@ -65,10 +65,10 @@ module D {
 
 
 module E {
->E : typeof E
+>E : E
 
     declare module My {
->My : typeof My
+>My : My
 
         export var x: number;
 >x : number
@@ -78,7 +78,7 @@ module E {
 >s : boolean
 
     declare module My {
->My : typeof My
+>My : My
 
         export var y: number;
 >y : number

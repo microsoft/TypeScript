@@ -1,6 +1,6 @@
 === tests/cases/compiler/duplicateAnonymousInners1.ts ===
 module Foo {
->Foo : typeof Foo
+>Foo : Foo
 
     class Helper {
 >Helper : Helper
@@ -18,7 +18,7 @@ module Foo {
 
 
 module Foo {
->Foo : typeof Foo
+>Foo : Foo
     
     // Should not be an error
     class Helper {

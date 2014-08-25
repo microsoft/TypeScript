@@ -1,6 +1,6 @@
 === tests/cases/compiler/acceptableAlias1.ts ===
 module M {
->M : typeof M
+>M : M
 
     export module N {
 >N : N
@@ -13,5 +13,5 @@ module M {
 import r = M.X;
 >r : r
 >M : typeof M
->X : X
+>X : r
 

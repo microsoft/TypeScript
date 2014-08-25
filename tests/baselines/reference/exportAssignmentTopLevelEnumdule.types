@@ -1,6 +1,6 @@
 === tests/cases/conformance/externalModules/foo_1.ts ===
 import foo = require("./foo_0");
->foo : typeof foo
+>foo : foo
 
 var color: foo;
 >color : foo
@@ -31,7 +31,7 @@ enum foo {
 >blue : foo
 }
 module foo {
->foo : typeof foo
+>foo : foo
 
 	export var answer = 42;
 >answer : number

@@ -4,6 +4,6 @@ class Greeter {
 
     //Hello World
     static foo(){
->foo : typeof foo
+>foo : () => void
     }
 }

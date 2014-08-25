@@ -2,7 +2,7 @@
 // expect no errors here
 
 module A {
->A : typeof A
+>A : A
 
     export var x = 'hello world'
 >x : string
@@ -27,11 +27,11 @@ module A {
 }
 
 module C {
->C : typeof C
+>C : C
 
     export import a = A;
->a : typeof A
->A : typeof A
+>a : a
+>A : typeof a
 }
 
 var a: string = C.a.x;
@@ -46,12 +46,12 @@ var b: { x: number; y: number; } = new C.a.Point(0, 0);
 >b : { x: number; y: number; }
 >x : number
 >y : number
->new C.a.Point(0, 0) : Point
->C.a.Point : typeof Point
+>new C.a.Point(0, 0) : A.Point
+>C.a.Point : typeof A.Point
 >C.a : typeof A
 >C : typeof C
 >a : typeof A
->Point : typeof Point
+>Point : typeof A.Point
 
 var c: { name: string };
 >c : { name: string; }
@@ -60,12 +60,12 @@ var c: { name: string };
 var c: C.a.B.Id;
 >c : { name: string; }
 >C : C
->a : a
->B : B
->Id : Id
+>a : C.a
+>B : A.B
+>Id : A.B.Id
 
 module X {
->X : typeof X
+>X : X
 
     export function Y() {
 >Y : typeof Y
@@ -74,7 +74,7 @@ module X {
     }
 
     export module Y {
->Y : typeof Y
+>Y : Y
 
         export class Point {
 >Point : Point
@@ -87,35 +87,35 @@ module X {
 }
 
 module Z {
->Z : typeof Z
+>Z : Z
 
     // 'y' should be a fundule here
     export import y = X.Y;
->y : typeof Y
+>y : y
 >X : typeof X
->Y : typeof Y
+>Y : typeof y
 }
 
 var m: number = Z.y();
 >m : number
 >Z.y() : number
->Z.y : typeof Y
+>Z.y : typeof X.Y
 >Z : typeof Z
->y : typeof Y
+>y : typeof X.Y
 
 var n: { x: number; y: number; } = new Z.y.Point(0, 0);
 >n : { x: number; y: number; }
 >x : number
 >y : number
->new Z.y.Point(0, 0) : Point
->Z.y.Point : typeof Point
->Z.y : typeof Y
+>new Z.y.Point(0, 0) : X.Y.Point
+>Z.y.Point : typeof X.Y.Point
+>Z.y : typeof X.Y
 >Z : typeof Z
->y : typeof Y
->Point : typeof Point
+>y : typeof X.Y
+>Point : typeof X.Y.Point
 
 module K {
->K : typeof K
+>K : K
 
     export class L {
 >L : L
@@ -125,7 +125,7 @@ module K {
     }
 
     export module L {
->L : typeof L
+>L : L
 
         export var y = 12;
 >y : number
@@ -143,12 +143,12 @@ module K {
 }
 
 module M {
->M : typeof M
+>M : M
 
     export import D = K.L;
->D : typeof L
+>D : D
 >K : typeof K
->L : L
+>L : D
 }
 
 var o: { name: string };
@@ -157,10 +157,10 @@ var o: { name: string };
 
 var o = new M.D('Hello');
 >o : { name: string; }
->new M.D('Hello') : L
->M.D : typeof L
+>new M.D('Hello') : K.L
+>M.D : typeof K.L
 >M : typeof M
->D : typeof L
+>D : typeof K.L
 
 var p: { x: number; y: number; }
 >p : { x: number; y: number; }
@@ -170,6 +170,6 @@ var p: { x: number; y: number; }
 var p: M.D.Point;
 >p : { x: number; y: number; }
 >M : M
->D : D
->Point : Point
+>D : M.D
+>Point : K.L.Point
 

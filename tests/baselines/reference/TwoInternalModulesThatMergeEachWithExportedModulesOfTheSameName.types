@@ -1,17 +1,17 @@
 === tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts ===
 module A.B {
->A : typeof A
->B : typeof B
+>A : A
+>B : B
 
     export var x: number;
 >x : number
 }
 
 module A{ 
->A : typeof A
+>A : A
 
     module B {
->B : typeof B
+>B : B
 
         export var x: string;
 >x : string
@@ -25,15 +25,15 @@ var x: number;
 var x = A.B.x;
 >x : number
 >A.B.x : number
->A.B : typeof B
+>A.B : typeof A.B
 >A : typeof A
->B : typeof B
+>B : typeof A.B
 >x : number
 
 module X.Y.Z {
->X : typeof X
->Y : typeof Y
->Z : typeof Z
+>X : X
+>Y : Y
+>Z : Z
 
     export class Line {
 >Line : Line
@@ -44,13 +44,13 @@ module X.Y.Z {
 }
 
 module X {
->X : typeof X
+>X : X
 
     export module Y {
->Y : typeof Y
+>Y : Y
 
         module Z {
->Z : typeof Z
+>Z : Z
 
             export class Line {
 >Line : Line
@@ -70,7 +70,7 @@ var l: { length: number };
 var l: X.Y.Z.Line;
 >l : { length: number; }
 >X : X
->Y : Y
->Z : Z
->Line : Line
+>Y : X.Y
+>Z : X.Y.Z
+>Line : X.Y.Z.Line
 

@@ -1,6 +1,6 @@
 === tests/cases/compiler/listFailure.ts ===
 module Editor {
->Editor : typeof Editor
+>Editor : Editor
 
     export class Buffer {
 >Buffer : Buffer

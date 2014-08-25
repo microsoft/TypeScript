@@ -35,7 +35,7 @@
     }
     C.g(3); // error
         ~
-!!! Argument of type 'number' is not assignable to parameter of type '(t: typeof g) => void'.
+!!! Argument of type 'number' is not assignable to parameter of type '(t: any) => void'.
     
     var f4: () => typeof f4;
     f4 = 3; // error

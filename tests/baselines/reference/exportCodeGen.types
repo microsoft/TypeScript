@@ -3,7 +3,7 @@
 // should replace all refs to 'x' in the body,
 // with fully qualified
 module A {
->A : typeof A
+>A : A
 
     export var x = 12;
 >x : number
@@ -19,7 +19,7 @@ module A {
 
 // should not fully qualify 'x'
 module B {
->B : typeof B
+>B : B
 
     var x = 12;
 >x : number
@@ -35,7 +35,7 @@ module B {
 
 // not copied, since not exported
 module C {
->C : typeof C
+>C : C
 
     function no() {
 >no : typeof no
@@ -46,7 +46,7 @@ module C {
 
 // copies, since exported
 module D {
->D : typeof D
+>D : D
 
     export function yes() {
 >yes : typeof yes
@@ -57,7 +57,7 @@ module D {
 
 // validate all exportable statements
 module E {
->E : typeof E
+>E : E
 
     export enum Color { Red }
 >Color : Color
@@ -75,7 +75,7 @@ module E {
 >name : string
 
     export module M {
->M : typeof M
+>M : M
 
         export var x = 42;
 >x : number
@@ -85,7 +85,7 @@ module E {
 // validate all exportable statements,
 // which are not exported
 module F {
->F : typeof F
+>F : F
 
     enum Color { Red }
 >Color : Color
@@ -103,7 +103,7 @@ module F {
 >name : string
 
     module M {
->M : typeof M
+>M : M
 
         var x = 42;
 >x : number

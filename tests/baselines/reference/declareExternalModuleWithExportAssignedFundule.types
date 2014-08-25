@@ -7,10 +7,10 @@ declare module "express" {
     function express(): express.ExpressServer;
 >express : typeof express
 >express : express
->ExpressServer : ExpressServer
+>ExpressServer : express.ExpressServer
 
     module express {
->express : typeof express
+>express : express
 
         export interface ExpressServer {
 >ExpressServer : ExpressServer

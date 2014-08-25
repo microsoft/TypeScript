@@ -111,7 +111,7 @@ function foo8(x: number) {
     return { x: x };
 >{ x: x } : { x: number; }
 >x : number
->x : x
+>x : number
 }
 var r8 = foo8(1);
 >r8 : { x: number; }
@@ -163,7 +163,7 @@ var r10 = foo10(1);
 >foo10 : typeof foo10
 
 module M {
->M : typeof M
+>M : M
 
     export var x = 1;
 >x : number
@@ -215,7 +215,7 @@ function m1() { return 1; }
 >m1 : typeof m1
 
 module m1 { export var y = 2; }
->m1 : typeof m1
+>m1 : m1
 >y : number
 
 function foo13() {
@@ -239,7 +239,7 @@ class c1 {
 >x : any
 }
 module c1 {
->c1 : typeof c1
+>c1 : c1
 
     export var x = 1;
 >x : number
@@ -260,7 +260,7 @@ enum e1 { A }
 >A : e1
 
 module e1 { export var y = 1; }
->e1 : typeof e1
+>e1 : e1
 >y : number
 
 function foo15() {

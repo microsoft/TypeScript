@@ -3,6 +3,6 @@ class Outer
 >Outer : Outer
 {
 static public() {}
->public : typeof public
+>public : () => void
 }
 

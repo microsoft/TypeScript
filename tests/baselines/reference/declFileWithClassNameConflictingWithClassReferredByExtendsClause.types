@@ -1,9 +1,9 @@
 === tests/cases/compiler/declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts ===
 
 declare module A.B.Base {
->A : typeof A
->B : typeof B
->Base : typeof Base
+>A : A
+>B : B
+>Base : Base
 
     export class W {
 >W : W
@@ -13,16 +13,16 @@ declare module A.B.Base {
     }
 }
 module X.Y.base {
->X : typeof X
->Y : typeof Y
->base : typeof base
+>X : X
+>Y : Y
+>base : base
 
     export class W extends A.B.Base.W {
 >W : W
 >A : A
->B : B
->Base : Base
->W : W
+>B : A.B
+>Base : A.B.Base
+>W : A.B.Base.W
 
         name: string;
 >name : string
@@ -30,10 +30,10 @@ module X.Y.base {
 }
 
 module X.Y.base.Z {
->X : typeof X
->Y : typeof Y
->base : typeof base
->Z : typeof Z
+>X : X
+>Y : Y
+>base : base
+>Z : Z
 
     export class W<TValue> extends X.Y.base.W {
 >W : W<TValue>
@@ -41,7 +41,7 @@ module X.Y.base.Z {
 >X : X
 >Y : Y
 >base : base
->W : W
+>W : base.W
 
         value: boolean;
 >value : boolean

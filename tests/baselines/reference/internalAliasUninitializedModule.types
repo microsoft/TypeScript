@@ -15,7 +15,7 @@ module a {
 }
 
 module c {
->c : typeof c
+>c : c
 
     import b = a.b;
 >b : b
@@ -23,13 +23,13 @@ module c {
 >b : b
 
     export var x: b.I;
->x : I
+>x : b.I
 >b : b
->I : I
+>I : b.I
 
     x.foo();
 >x.foo() : any
 >x.foo : () => any
->x : I
+>x : b.I
 >foo : () => any
 }

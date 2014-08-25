@@ -1,6 +1,6 @@
 === tests/cases/compiler/mergedDeclarations4.ts ===
 module M {
->M : typeof M
+>M : M
 
     export function f() { }
 >f : typeof f
@@ -23,10 +23,10 @@ module M {
 }
  
 module M {
->M : typeof M
+>M : M
 
     export module f {
->f : typeof f
+>f : f
 
         export var hello = 1;
 >hello : number
@@ -50,14 +50,14 @@ module M {
  
 M.f();
 >M.f() : void
->M.f : typeof f
+>M.f : typeof M.f
 >M : typeof M
->f : typeof f
+>f : typeof M.f
 
 M.f.hello;
 >M.f.hello : number
->M.f : typeof f
+>M.f : typeof M.f
 >M : typeof M
->f : typeof f
+>f : typeof M.f
 >hello : number
 

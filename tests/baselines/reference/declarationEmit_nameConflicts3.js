@@ -78,6 +78,7 @@ var M;
             D[D["f"] = 0] = "f";
         })(P.D || (P.D = {}));
         var D = P.D;
+        // Bug 887180
         P.v; // ok
         P.w = M.D.f; // error, should be typeof M.D.f
         P.x = M.C.f; // error, should be typeof M.C.f

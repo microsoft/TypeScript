@@ -1,6 +1,6 @@
 === tests/cases/compiler/importOnAliasedIdentifiers.ts ===
 module A {
->A : typeof A
+>A : A
 
     export interface X { s: string }
 >X : X
@@ -11,23 +11,23 @@ module A {
 >X : X
 }
 module B {
->B : typeof B
+>B : B
 
     interface A { n: number }
 >A : A
 >n : number
 
     import Y = A; // Alias only for module A
->Y : typeof A
->A : typeof A
+>Y : Y
+>A : typeof Y
 
     import Z = A.X; // Alias for both type and member A.X
->Z : X
->A : typeof A
->X : X
+>Z : Z
+>A : typeof Y
+>X : Y.X
 
     var v: Z = Z;
->v : X
->Z : X
->Z : X
+>v : Y.X
+>Z : Y.X
+>Z : Y.X
 }

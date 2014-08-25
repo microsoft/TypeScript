@@ -1,6 +1,6 @@
 === tests/cases/compiler/constructorArgWithGenericCallSignature.ts ===
 module Test {
->Test : typeof Test
+>Test : Test
 
     export interface MyFunc {
 >MyFunc : MyFunc
@@ -25,22 +25,22 @@ module Test {
 >MyFunc : MyFunc
 }
 var func: Test.MyFunc;
->func : MyFunc
+>func : Test.MyFunc
 >Test : Test
->MyFunc : MyFunc
+>MyFunc : Test.MyFunc
 
 Test.F(func); // OK
 >Test.F(func) : void
->Test.F : typeof F
+>Test.F : typeof Test.F
 >Test : typeof Test
->F : typeof F
->func : MyFunc
+>F : typeof Test.F
+>func : Test.MyFunc
 
 var test = new Test.MyClass(func); // Should be OK
->test : MyClass
->new Test.MyClass(func) : MyClass
->Test.MyClass : typeof MyClass
+>test : Test.MyClass
+>new Test.MyClass(func) : Test.MyClass
+>Test.MyClass : typeof Test.MyClass
 >Test : typeof Test
->MyClass : typeof MyClass
->func : MyFunc
+>MyClass : typeof Test.MyClass
+>func : Test.MyFunc
 

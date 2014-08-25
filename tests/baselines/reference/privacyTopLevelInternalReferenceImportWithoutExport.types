@@ -1,7 +1,7 @@
 === tests/cases/compiler/privacyTopLevelInternalReferenceImportWithoutExport.ts ===
 // private elements
 module m_private {
->m_private : typeof m_private
+>m_private : m_private
 
     export class c_private {
 >c_private : c_private
@@ -31,7 +31,7 @@ module m_private {
 >i_private : i_private
     }
     export module mi_private {
->mi_private : typeof mi_private
+>mi_private : mi_private
 
         export class c {
 >c : c
@@ -48,7 +48,7 @@ module m_private {
 
 // Public elements
 export module m_public {
->m_public : typeof m_public
+>m_public : m_public
 
     export class c_public {
 >c_public : c_public
@@ -76,7 +76,7 @@ export module m_public {
 >i_public : i_public
     }
     export module mi_public {
->mi_public : typeof mi_public
+>mi_public : mi_public
 
         export class c {
 >c : c
@@ -93,182 +93,182 @@ export module m_public {
 
 // No Privacy errors - importing private elements
 import im_private_c_private = m_private.c_private;
->im_private_c_private : typeof c_private
+>im_private_c_private : im_private_c_private
 >m_private : typeof m_private
->c_private : c_private
+>c_private : im_private_c_private
 
 import im_private_e_private = m_private.e_private;
->im_private_e_private : typeof e_private
+>im_private_e_private : im_private_e_private
 >m_private : typeof m_private
->e_private : e_private
+>e_private : im_private_e_private
 
 import im_private_f_private = m_private.f_private;
->im_private_f_private : typeof f_private
+>im_private_f_private : im_private_f_private
 >m_private : typeof m_private
->f_private : typeof f_private
+>f_private : typeof im_private_f_private
 
 import im_private_v_private = m_private.v_private;
->im_private_v_private : c_private
+>im_private_v_private : im_private_v_private
 >m_private : typeof m_private
->v_private : c_private
+>v_private : im_private_c_private
 
 import im_private_i_private = m_private.i_private;
 >im_private_i_private : im_private_i_private
 >m_private : typeof m_private
->i_private : i_private
+>i_private : im_private_i_private
 
 import im_private_mi_private = m_private.mi_private;
->im_private_mi_private : typeof mi_private
+>im_private_mi_private : im_private_mi_private
 >m_private : typeof m_private
->mi_private : typeof mi_private
+>mi_private : typeof im_private_mi_private
 
 import im_private_mu_private = m_private.mu_private;
 >im_private_mu_private : im_private_mu_private
 >m_private : typeof m_private
->mu_private : mu_private
+>mu_private : im_private_mu_private
 
 // Usage of above decls
 var privateUse_im_private_c_private = new im_private_c_private();
->privateUse_im_private_c_private : c_private
->new im_private_c_private() : c_private
->im_private_c_private : typeof c_private
+>privateUse_im_private_c_private : im_private_c_private
+>new im_private_c_private() : im_private_c_private
+>im_private_c_private : typeof im_private_c_private
 
 export var publicUse_im_private_c_private = new im_private_c_private();
->publicUse_im_private_c_private : c_private
->new im_private_c_private() : c_private
->im_private_c_private : typeof c_private
+>publicUse_im_private_c_private : im_private_c_private
+>new im_private_c_private() : im_private_c_private
+>im_private_c_private : typeof im_private_c_private
 
 var privateUse_im_private_e_private = im_private_e_private.Happy;
->privateUse_im_private_e_private : e_private
->im_private_e_private.Happy : e_private
->im_private_e_private : typeof e_private
->Happy : e_private
+>privateUse_im_private_e_private : im_private_e_private
+>im_private_e_private.Happy : im_private_e_private
+>im_private_e_private : typeof im_private_e_private
+>Happy : im_private_e_private
 
 export var publicUse_im_private_e_private = im_private_e_private.Grumpy;
->publicUse_im_private_e_private : e_private
->im_private_e_private.Grumpy : e_private
->im_private_e_private : typeof e_private
->Grumpy : e_private
+>publicUse_im_private_e_private : im_private_e_private
+>im_private_e_private.Grumpy : im_private_e_private
+>im_private_e_private : typeof im_private_e_private
+>Grumpy : im_private_e_private
 
 var privateUse_im_private_f_private = im_private_f_private();
->privateUse_im_private_f_private : c_private
->im_private_f_private() : c_private
->im_private_f_private : typeof f_private
+>privateUse_im_private_f_private : im_private_c_private
+>im_private_f_private() : im_private_c_private
+>im_private_f_private : typeof im_private_f_private
 
 export var publicUse_im_private_f_private = im_private_f_private();
->publicUse_im_private_f_private : c_private
->im_private_f_private() : c_private
->im_private_f_private : typeof f_private
+>publicUse_im_private_f_private : im_private_c_private
+>im_private_f_private() : im_private_c_private
+>im_private_f_private : typeof im_private_f_private
 
 var privateUse_im_private_v_private = im_private_v_private;
->privateUse_im_private_v_private : c_private
->im_private_v_private : c_private
+>privateUse_im_private_v_private : im_private_c_private
+>im_private_v_private : im_private_c_private
 
 export var publicUse_im_private_v_private = im_private_v_private;
->publicUse_im_private_v_private : c_private
->im_private_v_private : c_private
+>publicUse_im_private_v_private : im_private_c_private
+>im_private_v_private : im_private_c_private
 
 var privateUse_im_private_i_private: im_private_i_private;
->privateUse_im_private_i_private : i_private
->im_private_i_private : i_private
+>privateUse_im_private_i_private : im_private_i_private
+>im_private_i_private : im_private_i_private
 
 export var publicUse_im_private_i_private: im_private_i_private;
->publicUse_im_private_i_private : i_private
->im_private_i_private : i_private
+>publicUse_im_private_i_private : im_private_i_private
+>im_private_i_private : im_private_i_private
 
 var privateUse_im_private_mi_private = new im_private_mi_private.c();
->privateUse_im_private_mi_private : c
->new im_private_mi_private.c() : c
->im_private_mi_private.c : typeof c
->im_private_mi_private : typeof mi_private
->c : typeof c
+>privateUse_im_private_mi_private : im_private_mi_private.c
+>new im_private_mi_private.c() : im_private_mi_private.c
+>im_private_mi_private.c : typeof im_private_mi_private.c
+>im_private_mi_private : typeof im_private_mi_private
+>c : typeof im_private_mi_private.c
 
 export var publicUse_im_private_mi_private = new im_private_mi_private.c();
->publicUse_im_private_mi_private : c
->new im_private_mi_private.c() : c
->im_private_mi_private.c : typeof c
->im_private_mi_private : typeof mi_private
->c : typeof c
+>publicUse_im_private_mi_private : im_private_mi_private.c
+>new im_private_mi_private.c() : im_private_mi_private.c
+>im_private_mi_private.c : typeof im_private_mi_private.c
+>im_private_mi_private : typeof im_private_mi_private
+>c : typeof im_private_mi_private.c
 
 var privateUse_im_private_mu_private: im_private_mu_private.i;
->privateUse_im_private_mu_private : i
+>privateUse_im_private_mu_private : im_private_mu_private.i
 >im_private_mu_private : im_private_mu_private
->i : i
+>i : im_private_mu_private.i
 
 export var publicUse_im_private_mu_private: im_private_mu_private.i;
->publicUse_im_private_mu_private : i
+>publicUse_im_private_mu_private : im_private_mu_private.i
 >im_private_mu_private : im_private_mu_private
->i : i
+>i : im_private_mu_private.i
 
 
 // No Privacy errors - importing public elements
 import im_private_c_public = m_public.c_public;
->im_private_c_public : typeof c_public
+>im_private_c_public : im_private_c_public
 >m_public : typeof m_public
->c_public : c_public
+>c_public : im_private_c_public
 
 import im_private_e_public = m_public.e_public;
->im_private_e_public : typeof e_public
+>im_private_e_public : im_private_e_public
 >m_public : typeof m_public
->e_public : e_public
+>e_public : im_private_e_public
 
 import im_private_f_public = m_public.f_public;
->im_private_f_public : typeof f_public
+>im_private_f_public : im_private_f_public
 >m_public : typeof m_public
->f_public : typeof f_public
+>f_public : typeof im_private_f_public
 
 import im_private_v_public = m_public.v_public;
->im_private_v_public : number
+>im_private_v_public : im_private_v_public
 >m_public : typeof m_public
 >v_public : number
 
 import im_private_i_public = m_public.i_public;
 >im_private_i_public : im_private_i_public
 >m_public : typeof m_public
->i_public : i_public
+>i_public : im_private_i_public
 
 import im_private_mi_public = m_public.mi_public;
->im_private_mi_public : typeof mi_public
+>im_private_mi_public : im_private_mi_public
 >m_public : typeof m_public
->mi_public : typeof mi_public
+>mi_public : typeof im_private_mi_public
 
 import im_private_mu_public = m_public.mu_public;
 >im_private_mu_public : im_private_mu_public
 >m_public : typeof m_public
->mu_public : mu_public
+>mu_public : im_private_mu_public
 
 // Usage of above decls
 var privateUse_im_private_c_public = new im_private_c_public();
->privateUse_im_private_c_public : c_public
->new im_private_c_public() : c_public
->im_private_c_public : typeof c_public
+>privateUse_im_private_c_public : im_private_c_public
+>new im_private_c_public() : im_private_c_public
+>im_private_c_public : typeof im_private_c_public
 
 export var publicUse_im_private_c_public = new im_private_c_public();
->publicUse_im_private_c_public : c_public
->new im_private_c_public() : c_public
->im_private_c_public : typeof c_public
+>publicUse_im_private_c_public : im_private_c_public
+>new im_private_c_public() : im_private_c_public
+>im_private_c_public : typeof im_private_c_public
 
 var privateUse_im_private_e_public = im_private_e_public.Happy;
->privateUse_im_private_e_public : e_public
->im_private_e_public.Happy : e_public
->im_private_e_public : typeof e_public
->Happy : e_public
+>privateUse_im_private_e_public : im_private_e_public
+>im_private_e_public.Happy : im_private_e_public
+>im_private_e_public : typeof im_private_e_public
+>Happy : im_private_e_public
 
 export var publicUse_im_private_e_public = im_private_e_public.Grumpy;
->publicUse_im_private_e_public : e_public
->im_private_e_public.Grumpy : e_public
->im_private_e_public : typeof e_public
->Grumpy : e_public
+>publicUse_im_private_e_public : im_private_e_public
+>im_private_e_public.Grumpy : im_private_e_public
+>im_private_e_public : typeof im_private_e_public
+>Grumpy : im_private_e_public
 
 var privateUse_im_private_f_public = im_private_f_public();
->privateUse_im_private_f_public : c_public
->im_private_f_public() : c_public
->im_private_f_public : typeof f_public
+>privateUse_im_private_f_public : im_private_c_public
+>im_private_f_public() : im_private_c_public
+>im_private_f_public : typeof im_private_f_public
 
 export var publicUse_im_private_f_public = im_private_f_public();
->publicUse_im_private_f_public : c_public
->im_private_f_public() : c_public
->im_private_f_public : typeof f_public
+>publicUse_im_private_f_public : im_private_c_public
+>im_private_f_public() : im_private_c_public
+>im_private_f_public : typeof im_private_f_public
 
 var privateUse_im_private_v_public = im_private_v_public;
 >privateUse_im_private_v_public : number
@@ -279,34 +279,34 @@ export var publicUse_im_private_v_public = im_private_v_public;
 >im_private_v_public : number
 
 var privateUse_im_private_i_public: im_private_i_public;
->privateUse_im_private_i_public : i_public
->im_private_i_public : i_public
+>privateUse_im_private_i_public : im_private_i_public
+>im_private_i_public : im_private_i_public
 
 export var publicUse_im_private_i_public: im_private_i_public;
->publicUse_im_private_i_public : i_public
->im_private_i_public : i_public
+>publicUse_im_private_i_public : im_private_i_public
+>im_private_i_public : im_private_i_public
 
 var privateUse_im_private_mi_public = new im_private_mi_public.c();
->privateUse_im_private_mi_public : c
->new im_private_mi_public.c() : c
->im_private_mi_public.c : typeof c
->im_private_mi_public : typeof mi_public
->c : typeof c
+>privateUse_im_private_mi_public : im_private_mi_public.c
+>new im_private_mi_public.c() : im_private_mi_public.c
+>im_private_mi_public.c : typeof im_private_mi_public.c
+>im_private_mi_public : typeof im_private_mi_public
+>c : typeof im_private_mi_public.c
 
 export var publicUse_im_private_mi_public = new im_private_mi_public.c();
->publicUse_im_private_mi_public : c
->new im_private_mi_public.c() : c
->im_private_mi_public.c : typeof c
->im_private_mi_public : typeof mi_public
->c : typeof c
+>publicUse_im_private_mi_public : im_private_mi_public.c
+>new im_private_mi_public.c() : im_private_mi_public.c
+>im_private_mi_public.c : typeof im_private_mi_public.c
+>im_private_mi_public : typeof im_private_mi_public
+>c : typeof im_private_mi_public.c
 
 var privateUse_im_private_mu_public: im_private_mu_public.i;
->privateUse_im_private_mu_public : i
+>privateUse_im_private_mu_public : im_private_mu_public.i
 >im_private_mu_public : im_private_mu_public
->i : i
+>i : im_private_mu_public.i
 
 export var publicUse_im_private_mu_public: im_private_mu_public.i;
->publicUse_im_private_mu_public : i
+>publicUse_im_private_mu_public : im_private_mu_public.i
 >im_private_mu_public : im_private_mu_public
->i : i
+>i : im_private_mu_public.i
 

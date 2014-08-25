@@ -5,7 +5,7 @@ class Derived extends Base {
 >Base : Base
 
     public static createEmpty(): Derived {
->createEmpty : typeof createEmpty
+>createEmpty : () => Derived
 >Derived : Derived
 
         var item = new Derived();
@@ -58,7 +58,7 @@ class ComponentCollection<T> {
 >T : T
 
     private static sortComponents(p: Foo) {
->sortComponents : typeof sortComponents
+>sortComponents : (p: Foo) => GenericType<string>
 >p : Foo
 >Foo : Foo
 
@@ -97,9 +97,9 @@ class Foo {
 >new BaseCollection<Derived>(Derived.createEmpty) : BaseCollection<Derived>
 >BaseCollection : typeof BaseCollection
 >Derived : Derived
->Derived.createEmpty : typeof createEmpty
+>Derived.createEmpty : () => Derived
 >Derived : typeof Derived
->createEmpty : typeof createEmpty
+>createEmpty : () => Derived
     }
 }
 

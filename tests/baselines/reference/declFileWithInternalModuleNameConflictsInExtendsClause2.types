@@ -1,8 +1,8 @@
 === tests/cases/compiler/declFileWithInternalModuleNameConflictsInExtendsClause2.ts ===
 
 module X.A.C {
->X : typeof X
->A : typeof A
+>X : X
+>A : A
 >C : C
 
     export interface Z {
@@ -10,24 +10,24 @@ module X.A.C {
     }
 }
 module X.A.B.C {
->X : typeof X
->A : typeof A
->B : typeof B
->C : typeof C
+>X : X
+>A : A
+>B : B
+>C : C
 
     export class W implements A.C.Z { // This can refer to it as A.C.Z
 >W : W
 >A : A
->C : C
->Z : Z
+>C : A.C
+>Z : A.C.Z
     }
 }
 
 module X.A.B.C {
->X : typeof X
->A : typeof A
->B : typeof B
->C : typeof C
+>X : X
+>A : A
+>B : B
+>C : C
 
     module A {
 >A : A

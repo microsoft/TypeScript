@@ -1,8 +1,8 @@
 === tests/cases/compiler/mergedModuleDeclarationCodeGen5.ts ===
 module M.buz.plop {
->M : typeof M
->buz : typeof buz
->plop : typeof plop
+>M : M
+>buz : buz
+>plop : buz.plop
 
     export function doom() { }
 >doom : typeof doom
@@ -11,9 +11,9 @@ module M.buz.plop {
 >M : typeof M
 }
 module M.buz.plop {
->M : typeof M
->buz : typeof buz
->plop : typeof plop
+>M : M
+>buz : buz
+>plop : buz.plop
 
     function gunk() { }
 >gunk : typeof gunk

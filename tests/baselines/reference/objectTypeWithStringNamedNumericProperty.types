@@ -362,7 +362,7 @@ var b = {
 
     "-1.0": /123/,
     "-1": Date
->Date : Date
+>Date : { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }
 
 };
 

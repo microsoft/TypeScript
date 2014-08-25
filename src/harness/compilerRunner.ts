@@ -68,6 +68,14 @@ class CompilerBaselineRunner extends RunnerBase {
             var createNewInstance = false;
 
             before(() => {
+                justName = fileName.replace(/^.*[\\\/]/, ''); // strips the fileName from the path.
+                content = Harness.IO.readFile(fileName);
+                testCaseContent = Harness.TestCaseParser.makeUnitsFromTest(content, fileName);
+                units = testCaseContent.testUnitData;
+                tcSettings = testCaseContent.settings;
+                createNewInstance = false;
+                lastUnit = units[units.length - 1];
+                rootDir = lastUnit.originalFilePath.indexOf('conformance') === -1 ? 'tests/cases/compiler/' : lastUnit.originalFilePath.substring(0, lastUnit.originalFilePath.lastIndexOf('/')) + '/';
                 harnessCompiler = Harness.Compiler.getCompiler();
                 // We need to assemble the list of input files for the compiler and other related files on the 'filesystem' (ie in a multi-file test)
                 // If the last file in a test uses require or a triple slash reference we'll assume all other files will be brought in via references,

@@ -1,6 +1,6 @@
 === tests/cases/conformance/internalModules/exportDeclarations/ExportModuleWithAccessibleTypesOnItsExportedMembers.ts ===
 module A {
->A : typeof A
+>A : A
 
     export class Point {
 >Point : Point
@@ -11,7 +11,7 @@ module A {
     }
 
     export module B {
->B : typeof B
+>B : B
 
         export var Origin: Point = new Point(0, 0);
 >Origin : Point
@@ -31,7 +31,7 @@ module A {
             }
 
             static fromOrigin(p: Point) {
->fromOrigin : typeof fromOrigin
+>fromOrigin : (p: Point) => Line
 >p : Point
 >Point : Point
 

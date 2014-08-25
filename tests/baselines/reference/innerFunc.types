@@ -11,7 +11,7 @@ function salt() {
 }
 
 module M {
->M : typeof M
+>M : M
 
     export function tungsten() {
 >tungsten : typeof tungsten

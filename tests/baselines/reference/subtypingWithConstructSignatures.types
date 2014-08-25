@@ -1,6 +1,6 @@
 === tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignatures.ts ===
 module ConstructSignature {
->ConstructSignature : typeof ConstructSignature
+>ConstructSignature : ConstructSignature
 
     declare function foo1(cb: new (x: number) => void): typeof cb;
 >foo1 : typeof foo1

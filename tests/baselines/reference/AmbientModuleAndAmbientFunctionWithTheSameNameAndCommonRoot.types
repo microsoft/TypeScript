@@ -1,6 +1,6 @@
 === tests/cases/conformance/internalModules/DeclarationMerging/module.d.ts ===
 declare module Point {
->Point : typeof Point
+>Point : Point
 
     export var Origin: { x: number; y: number; }
 >Origin : { x: number; y: number; }

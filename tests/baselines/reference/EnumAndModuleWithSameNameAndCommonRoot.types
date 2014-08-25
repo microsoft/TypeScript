@@ -8,7 +8,7 @@ enum enumdule {
 }
 
 module enumdule {
->enumdule : typeof enumdule
+>enumdule : enumdule
 
     export class Point {
 >Point : Point
@@ -36,8 +36,8 @@ var y: { x: number; y: number };
 
 var y = new enumdule.Point(0, 0);
 >y : { x: number; y: number; }
->new enumdule.Point(0, 0) : Point
->enumdule.Point : typeof Point
+>new enumdule.Point(0, 0) : enumdule.Point
+>enumdule.Point : typeof enumdule.Point
 >enumdule : typeof enumdule
->Point : typeof Point
+>Point : typeof enumdule.Point
 

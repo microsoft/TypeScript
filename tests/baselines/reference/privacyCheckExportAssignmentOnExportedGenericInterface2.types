@@ -20,7 +20,7 @@ function Foo<T>(array: T[]): Foo<T> {
 }
 
 module Foo {
->Foo : typeof Foo
+>Foo : Foo
 
     export var x = "hello";
 >x : string

@@ -1,6 +1,6 @@
 === tests/cases/compiler/returnTypeParameterWithModules.ts ===
 module M1 {
->M1 : typeof M1
+>M1 : M1
 
     export function reduce<A>(ar, f, e?): Array<A> {
 >reduce : typeof reduce
@@ -8,7 +8,7 @@ module M1 {
 >ar : any
 >f : any
 >e : any
->Array : T[]
+>Array : Array<T>
 >A : A
 
         return Array.prototype.reduce.apply(ar, e ? [f, e] : [f]);
@@ -16,7 +16,7 @@ module M1 {
 >Array.prototype.reduce.apply : (thisArg: any, argArray?: any) => any
 >Array.prototype.reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue?: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
 >Array.prototype : any[]
->Array : { (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: any[]; }
+>Array : { (arrayLength?: number): Array<any>; <T>(arrayLength: number): Array<T>; <T>(...items: Array<T>): Array<T>; new (arrayLength?: number): Array<any>; new <T>(arrayLength: number): Array<T>; new <T>(...items: Array<T>): Array<T>; isArray(arg: any): boolean; prototype: Array<any>; }
 >prototype : any[]
 >reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue?: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
 >apply : (thisArg: any, argArray?: any) => any
@@ -32,20 +32,20 @@ module M1 {
     };
 };
 module M2 {
->M2 : typeof M2
+>M2 : M2
 
   import A = M1
->A : typeof M1
->M1 : typeof M1
+>A : A
+>M1 : typeof A
 
   export function compose() {
 >compose : typeof compose
 
         A.reduce(arguments, compose2);
 >A.reduce(arguments, compose2) : {}[]
->A.reduce : typeof reduce
->A : typeof M1
->reduce : typeof reduce
+>A.reduce : typeof A.reduce
+>A : typeof A
+>reduce : typeof A.reduce
 >arguments : IArguments
 >compose2 : typeof compose2
 

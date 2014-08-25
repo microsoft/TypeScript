@@ -1,7 +1,7 @@
 === tests/cases/compiler/declFileModuleWithPropertyOfTypeModule.ts ===
 
 module m {
->m : typeof m
+>m : m
 
     export class c {
 >c : c

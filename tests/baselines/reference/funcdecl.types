@@ -116,7 +116,7 @@ function f(n: () => void) { }
 >n : () => void
 
 module m2 {
->m2 : typeof m2
+>m2 : m2
 
     export function foo(n: () => void ) {
 >foo : typeof foo
@@ -127,9 +127,9 @@ module m2 {
 
 m2.foo(() =>  {
 >m2.foo(() =>  {    var b = 30;    return b;}) : void
->m2.foo : typeof foo
+>m2.foo : typeof m2.foo
 >m2 : typeof m2
->foo : typeof foo
+>foo : typeof m2.foo
 >() =>  {    var b = 30;    return b;} : () => number
 
     var b = 30;

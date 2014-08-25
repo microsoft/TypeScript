@@ -4,7 +4,7 @@ class m3b { foo() { } }
 >foo : () => void
 
 module m3b { var y = 2; }
->m3b : typeof m3b
+>m3b : m3b
 >y : number
 
 class m3c { foo() { } }
@@ -12,7 +12,7 @@ class m3c { foo() { } }
 >foo : () => void
 
 module m3c { export var y = 2; } 
->m3c : typeof m3c
+>m3c : m3c
 >y : number
 
 declare class m3d { foo(): void }
@@ -20,11 +20,11 @@ declare class m3d { foo(): void }
 >foo : () => void
 
 module m3d { export var y = 2; } 
->m3d : typeof m3d
+>m3d : m3d
 >y : number
 
 module m3e { export var y = 2; } 
->m3e : typeof m3e
+>m3e : m3e
 >y : number
 
 declare class m3e { foo(): void } 
@@ -36,7 +36,7 @@ declare class m3f { foo(): void }
 >foo : () => void
 
 module m3f { export interface I { foo(): void } }
->m3f : typeof m3f
+>m3f : m3f
 >I : I
 >foo : () => void
 
@@ -45,7 +45,7 @@ declare class m3g { foo(): void }
 >foo : () => void
 
 module m3g { export class C { foo() { } } }
->m3g : typeof m3g
+>m3g : m3g
 >C : C
 >foo : () => void
 

@@ -17,12 +17,12 @@ function point(x: number, y: number): Point {
     return { x: x, y: y };
 >{ x: x, y: y } : { x: number; y: number; }
 >x : number
->x : x
+>x : number
 >y : number
->y : y
+>y : number
 }
 module point {
->point : typeof point
+>point : point
 
     export var origin = point(0, 0);
 >origin : Point
@@ -68,9 +68,9 @@ var p2 = point.origin;
 var b = point.equals(p1, p2);
 >b : boolean
 >point.equals(p1, p2) : boolean
->point.equals : typeof equals
+>point.equals : typeof point.equals
 >point : typeof point
->equals : typeof equals
+>equals : typeof point.equals
 >p1 : Point
 >p2 : Point
 

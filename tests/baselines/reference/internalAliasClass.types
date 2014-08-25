@@ -1,6 +1,6 @@
 === tests/cases/compiler/internalAliasClass.ts ===
 module a {
->a : typeof a
+>a : a
 
     export class c {
 >c : c
@@ -8,16 +8,16 @@ module a {
 }
 
 module c {
->c : typeof c
-
-    import b = a.c;
->b : typeof c
->a : typeof a
 >c : c
 
+    import b = a.c;
+>b : b
+>a : typeof a
+>c : b
+
     export var x: b = new b();
->x : c
->b : c
->new b() : c
->b : typeof c
+>x : b
+>b : b
+>new b() : b
+>b : typeof b
 }

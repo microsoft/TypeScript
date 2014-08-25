@@ -1,9 +1,9 @@
 === tests/cases/compiler/internalAliasInitializedModuleInsideTopLevelModuleWithoutExport.ts ===
 export module a {
->a : typeof a
+>a : a
 
     export module b {
->b : typeof b
+>b : b
 
         export class c {
 >c : c
@@ -12,16 +12,16 @@ export module a {
 }
 
 import b = a.b;
->b : typeof b
+>b : b
 >a : typeof a
 >b : typeof b
 
 export var x: b.c = new b.c();
->x : c
+>x : b.c
 >b : b
->c : c
->new b.c() : c
->b.c : typeof c
+>c : b.c
+>new b.c() : b.c
+>b.c : typeof b.c
 >b : typeof b
->c : typeof c
+>c : typeof b.c
 

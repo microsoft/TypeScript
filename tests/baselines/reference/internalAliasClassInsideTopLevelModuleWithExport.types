@@ -1,6 +1,6 @@
 === tests/cases/compiler/internalAliasClassInsideTopLevelModuleWithExport.ts ===
 export module x {
->x : typeof x
+>x : x
 
     export class c {
 >c : c
@@ -16,19 +16,19 @@ export module x {
 }
 
 export import xc = x.c;
->xc : typeof c
+>xc : xc
 >x : typeof x
->c : c
+>c : xc
 
 export var cProp = new xc();
->cProp : c
->new xc() : c
->xc : typeof c
+>cProp : xc
+>new xc() : xc
+>xc : typeof xc
 
 var cReturnVal = cProp.foo(10);
 >cReturnVal : number
 >cProp.foo(10) : number
 >cProp.foo : (a: number) => number
->cProp : c
+>cProp : xc
 >foo : (a: number) => number
 

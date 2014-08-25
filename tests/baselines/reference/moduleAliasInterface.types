@@ -1,6 +1,6 @@
 === tests/cases/compiler/moduleAliasInterface.ts ===
 module _modes {
->_modes : typeof _modes
+>_modes : _modes
 
  export interface IMode {
 >IMode : IMode
@@ -16,83 +16,83 @@ module _modes {
 // _modes. // produces an internal error - please implement in derived class
 
 module editor {
->editor : typeof editor
+>editor : editor
 
  import modes = _modes;
->modes : typeof _modes
->_modes : typeof _modes
+>modes : modes
+>_modes : typeof modes
  
  var i : modes.IMode;
->i : IMode
+>i : modes.IMode
 >modes : modes
->IMode : IMode
+>IMode : modes.IMode
   
  // If you just use p1:modes, the compiler accepts it - should be an error
  class Bug { 
 >Bug : Bug
 
   constructor(p1: modes.IMode, p2: modes.Mode) { }// should be an error on p2 - it's not exported
->p1 : IMode
+>p1 : modes.IMode
 >modes : modes
->IMode : IMode
->p2 : Mode
+>IMode : modes.IMode
+>p2 : modes.Mode
 >modes : modes
->Mode : Mode
+>Mode : modes.Mode
 
   public foo(p1:modes.IMode) {
->foo : (p1: IMode) => void
->p1 : IMode
+>foo : (p1: modes.IMode) => void
+>p1 : modes.IMode
 >modes : modes
->IMode : IMode
+>IMode : modes.IMode
    
   } 
  }
 }
 
 import modesOuter = _modes;
->modesOuter : typeof _modes
+>modesOuter : modesOuter
 >_modes : typeof _modes
 
 module editor2 {
->editor2 : typeof editor2
+>editor2 : editor2
  
  var i : modesOuter.IMode;
->i : IMode
+>i : modesOuter.IMode
 >modesOuter : modesOuter
->IMode : IMode
+>IMode : modesOuter.IMode
  
  class Bug {
 >Bug : Bug
 
      constructor(p1: modesOuter.IMode, p2: modesOuter.Mode) { }// no error here, since modesOuter is declared externally
->p1 : IMode
+>p1 : modesOuter.IMode
 >modesOuter : modesOuter
->IMode : IMode
->p2 : Mode
+>IMode : modesOuter.IMode
+>p2 : modesOuter.Mode
 >modesOuter : modesOuter
->Mode : Mode
+>Mode : modesOuter.Mode
   
  }
  
   module Foo { export class Bar{} }
->Foo : typeof Foo
+>Foo : Foo
 >Bar : Bar
  
   class Bug2 {
 >Bug2 : Bug2
 
       constructor(p1: Foo.Bar, p2: modesOuter.Mode) { }
->p1 : Bar
+>p1 : Foo.Bar
 >Foo : Foo
->Bar : Bar
->p2 : Mode
+>Bar : Foo.Bar
+>p2 : modesOuter.Mode
 >modesOuter : modesOuter
->Mode : Mode
+>Mode : modesOuter.Mode
   }
 }
 
 module A1 {
->A1 : typeof A1
+>A1 : A1
 
     export interface A1I1 {}
 >A1I1 : A1I1
@@ -102,20 +102,20 @@ module A1 {
 }
 
 module B1 {
->B1 : typeof B1
+>B1 : B1
 
     import A1Alias1 = A1;
->A1Alias1 : typeof A1
->A1 : typeof A1
+>A1Alias1 : A1Alias1
+>A1 : typeof A1Alias1
     
     var i : A1Alias1.A1I1;   
->i : A1I1
+>i : A1Alias1.A1I1
 >A1Alias1 : A1Alias1
->A1I1 : A1I1
+>A1I1 : A1Alias1.A1I1
 
     var c : A1Alias1.A1C1;
->c : A1C1
+>c : A1Alias1.A1C1
 >A1Alias1 : A1Alias1
->A1C1 : A1C1
+>A1C1 : A1Alias1.A1C1
 }
 

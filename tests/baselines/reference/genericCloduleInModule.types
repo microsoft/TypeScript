@@ -1,6 +1,6 @@
 === tests/cases/compiler/genericCloduleInModule.ts ===
 module A {
->A : typeof A
+>A : A
 
     export class B<T> {
 >B : B<T>
@@ -10,10 +10,10 @@ module A {
 >foo : () => void
 
         static bar() { }
->bar : typeof bar
+>bar : () => void
     }
     export module B {
->B : typeof B
+>B : B
 
         export var x = 1;
 >x : number
@@ -21,13 +21,13 @@ module A {
 }
 
 var b: A.B<number>;
->b : B<number>
+>b : A.B<number>
 >A : A
->B : B<T>
+>B : A.B<T>
 
 b.foo();
 >b.foo() : void
 >b.foo : () => void
->b : B<number>
+>b : A.B<number>
 >foo : () => void
 

@@ -2,7 +2,7 @@
 // duplicate local variables are only reported at global scope
 
 module M {
->M : typeof M
+>M : M
 
     for (var j = 0; j < 10; j++) {
 >j : number

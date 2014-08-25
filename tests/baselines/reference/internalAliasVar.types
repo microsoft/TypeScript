@@ -1,16 +1,16 @@
 === tests/cases/compiler/internalAliasVar.ts ===
 module a {
->a : typeof a
+>a : a
 
     export var x = 10;
 >x : number
 }
 
 module c {
->c : typeof c
+>c : c
 
     import b = a.x;
->b : number
+>b : b
 >a : typeof a
 >x : number
 

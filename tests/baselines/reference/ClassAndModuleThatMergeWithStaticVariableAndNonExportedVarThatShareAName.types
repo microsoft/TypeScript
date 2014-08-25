@@ -15,7 +15,7 @@ class Point {
 }
 
 module Point {
->Point : typeof Point
+>Point : Point
 
     var Origin = ""; // not an error, since not exported
 >Origin : string
@@ -23,7 +23,7 @@ module Point {
 
 
 module A {
->A : typeof A
+>A : A
 
     export class Point {
 >Point : Point
@@ -41,7 +41,7 @@ module A {
     }
 
     export module Point {
->Point : typeof Point
+>Point : Point
 
         var Origin = ""; // not an error since not exported
 >Origin : string

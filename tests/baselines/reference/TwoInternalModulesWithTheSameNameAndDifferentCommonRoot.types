@@ -1,9 +1,9 @@
 === tests/cases/conformance/internalModules/DeclarationMerging/part1.ts ===
 module Root {
->Root : typeof Root
+>Root : Root
 
     export module A {
->A : typeof A
+>A : A
 
         export interface Point {
 >Point : Point
@@ -16,7 +16,7 @@ module Root {
         }
 
         export module Utils {
->Utils : typeof Utils
+>Utils : Utils
 
             export function mirror<T extends Point>(p: T) {
 >mirror : typeof mirror
@@ -42,36 +42,36 @@ module Root {
 
 === tests/cases/conformance/internalModules/DeclarationMerging/part2.ts ===
 module otherRoot {
->otherRoot : typeof otherRoot
+>otherRoot : otherRoot
 
     export module A {
->A : typeof A
+>A : A
 
         // have to be fully qualified since in different root
         export var Origin: Root.A.Point = { x: 0, y: 0 };
->Origin : Point
+>Origin : Root.A.Point
 >Root : Root
->A : A
->Point : Point
+>A : Root.A
+>Point : Root.A.Point
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
 >y : number
 
         export module Utils {
->Utils : typeof Utils
+>Utils : Utils
 
             export class Plane {
 >Plane : Plane
 
                 constructor(public tl: Root.A.Point, public br: Root.A.Point) { }
->tl : Point
+>tl : Root.A.Point
 >Root : Root
->A : A
->Point : Point
->br : Point
+>A : Root.A
+>Point : Root.A.Point
+>br : Root.A.Point
 >Root : Root
->A : A
->Point : Point
+>A : Root.A
+>Point : Root.A.Point
             }
         }
     }

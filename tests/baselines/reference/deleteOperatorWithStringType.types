@@ -17,10 +17,10 @@ class A {
 >a : string
 
     static foo() { return ""; }
->foo : typeof foo
+>foo : () => string
 }
 module M {
->M : typeof M
+>M : M
 
     export var n: string;
 >n : string
@@ -95,9 +95,9 @@ var ResultIsBoolean10 = delete A.foo();
 >ResultIsBoolean10 : boolean
 >delete A.foo() : boolean
 >A.foo() : string
->A.foo : typeof foo
+>A.foo : () => string
 >A : typeof A
->foo : typeof foo
+>foo : () => string
 
 var ResultIsBoolean11 = delete (STRING + STRING);
 >ResultIsBoolean11 : boolean

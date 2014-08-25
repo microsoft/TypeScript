@@ -13,13 +13,13 @@ module X {
 }
 
 var x: X.Y.Z;
->x : Z
+>x : X.Y.Z
 >X : X
->Y : Y
->Z : Z
+>Y : X.Y
+>Z : X.Y.Z
 
 var x2: X.Y;
->x2 : Y
+>x2 : X.Y
 >X : X
->Y : Y
+>Y : X.Y
 

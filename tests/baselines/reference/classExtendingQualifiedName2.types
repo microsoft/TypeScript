@@ -1,6 +1,6 @@
 === tests/cases/compiler/classExtendingQualifiedName2.ts ===
 module M {
->M : typeof M
+>M : M
 
     export class C {
 >C : C

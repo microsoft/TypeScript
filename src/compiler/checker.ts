@@ -906,7 +906,7 @@ module ts {
             // Get qualified name 
             if (enclosingDeclaration &&
                 // Properties/methods/Signatures/Constructors/TypeParameters do not need qualification
-                !(symbol.flags & SymbolFlags.PropertyOrAccessor & SymbolFlags.Signature & SymbolFlags.Constructor & SymbolFlags.Method & SymbolFlags.TypeParameter)) {
+                !(symbol.flags & (SymbolFlags.PropertyOrAccessor | SymbolFlags.Signature | SymbolFlags.Constructor | SymbolFlags.Method | SymbolFlags.TypeParameter))) {
                 var symbolName: string;
                 while (symbol) {
                     var isFirstName = !symbolName;
@@ -1036,8 +1036,10 @@ module ts {
                             (type.symbol.parent || // is exported function symbol
                             ts.forEach(type.symbol.declarations, declaration =>
                                 declaration.parent.kind === SyntaxKind.SourceFile || declaration.parent.kind === SyntaxKind.ModuleBlock));
-
-                        if (isStaticMethodSymbol || isNonLocalFunctionSymbol) {
+                        if (isStaticMethodSymbol) {
+                            return false;
+                        }
+                        if (isNonLocalFunctionSymbol) {
                             // typeof is allowed only for static/non local functions
                             return !!(flags & TypeFormatFlags.UseTypeOfFunction) || // use typeof if format flags specify it
                                 (typeStack && contains(typeStack, type)); // it is type of the symbol uses itself recursively
@@ -2237,11 +2239,11 @@ module ts {
             }
             var type = getDeclaredTypeOfSymbol(symbol);
             if (!(type.flags & TypeFlags.ObjectType)) {
-                error(getTypeDeclaration(symbol), Diagnostics.Global_type_0_must_be_a_class_or_interface_type, name);
+                error(getTypeDeclaration(symbol), Diagnostics.Global_type_0_must_be_a_class_or_interface_type, symbol.name);
                 return emptyObjectType;
             }
             if (((<InterfaceType>type).typeParameters ? (<InterfaceType>type).typeParameters.length : 0) !== arity) {
-                error(getTypeDeclaration(symbol), Diagnostics.Global_type_0_must_have_1_type_parameter_s, name, arity);
+                error(getTypeDeclaration(symbol), Diagnostics.Global_type_0_must_have_1_type_parameter_s, symbol.name, arity);
                 return emptyObjectType;
             }
             return <ObjectType>type;
@@ -6680,6 +6682,7 @@ module ts {
                         case SyntaxKind.Parameter:
                         case SyntaxKind.Property:
                         case SyntaxKind.EnumMember:
+                        case SyntaxKind.PropertyAssignment:
                             return (<VariableDeclaration>parent).initializer === node;
                         case SyntaxKind.ExpressionStatement:
                         case SyntaxKind.IfStatement:
@@ -6809,6 +6812,11 @@ module ts {
                     /*all meanings*/ SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Import);
             }
 
+            if (isInRightSideOfImportOrExportAssignment(entityName)) {
+                // Since we already checked for ExportAssignment, this really could only be an Import
+                return getSymbolOfPartOfRightHandSideOfImport(entityName);
+            }
+
             if (isRightSideOfQualifiedNameOrPropertyAccess(entityName)) {
                 entityName = entityName.parent;
             }
@@ -6907,6 +6915,18 @@ module ts {
                 return getDeclaredTypeOfSymbol(symbol);
             }
 
+            if (node.kind === SyntaxKind.ModuleDeclaration ||
+                node.kind === SyntaxKind.ImportDeclaration) {
+                return unknownType;
+            }
+
+            if (node.parent.kind === SyntaxKind.ModuleDeclaration ||
+                node.parent.kind === SyntaxKind.ImportDeclaration) {
+                if ((<Declaration>node.parent).name === node) {
+                    return unknownType;
+                }
+            }
+
             if (isDeclaration(node)) {
                 // In this case, we call getSymbolOfNode instead of getSymbolInfo because it is a declaration
                 var symbol = getSymbolOfNode(node);
@@ -6920,10 +6940,7 @@ module ts {
 
             if (isInRightSideOfImportOrExportAssignment(node)) {
                 var symbol: Symbol;
-                symbol = node.parent.kind === SyntaxKind.ExportAssignment
-                    ? getSymbolInfo(node)
-                    : getSymbolOfPartOfRightHandSideOfImport(node);
-
+                symbol = getSymbolInfo(node);
                 var declaredType = getDeclaredTypeOfSymbol(symbol);
                 return declaredType !== unknownType ? declaredType : getTypeOfSymbol(symbol);
             }

@@ -1,12 +1,12 @@
 === tests/cases/compiler/classDeclarationMergedInModuleWithContinuation.ts ===
 module M {
->M : typeof M
+>M : M
 
     export class N { }
 >N : N
 
     export module N {
->N : typeof N
+>N : N
 
         export var v = 0;
 >v : number
@@ -14,7 +14,7 @@ module M {
 }
 
 module M {
->M : typeof M
+>M : M
 
     export class O extends M.N {
 >O : O

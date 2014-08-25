@@ -3,7 +3,7 @@ class T {
 >T : T
 
     static x() { }
->x : typeof x
+>x : () => void
 
     public y() { }
 >y : () => void

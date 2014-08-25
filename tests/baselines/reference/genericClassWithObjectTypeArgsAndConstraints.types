@@ -29,7 +29,7 @@ class X<T> {
 }
 
 module Class {
->Class : typeof Class
+>Class : Class
 
     class G<T extends { x: string }> {
 >G : G<T>
@@ -141,7 +141,7 @@ module Class {
 }
 
 module Interface {
->Interface : typeof Interface
+>Interface : Interface
 
     interface G<T extends { x: string }> {
 >G : G<T>

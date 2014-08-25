@@ -1,10 +1,10 @@
 === tests/cases/compiler/chainedImportAlias_file1.ts ===
 import x = require('chainedImportAlias_file1');
->x : typeof "tests/cases/compiler/chainedImportAlias_file1"
+>x : x
 
 import y = x;
->y : typeof "tests/cases/compiler/chainedImportAlias_file1"
->x : typeof "tests/cases/compiler/chainedImportAlias_file1"
+>y : y
+>x : typeof x
 
 declare var console: {
 >console : { log(message?: any): any; }
@@ -19,5 +19,5 @@ console.log(y);
 >console.log : (message?: any) => any
 >console : { log(message?: any): any; }
 >log : (message?: any) => any
->y : typeof "tests/cases/compiler/chainedImportAlias_file1"
+>y : typeof x
 

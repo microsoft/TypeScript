@@ -6,7 +6,7 @@ declare function Q<T>(value: T): string;
 >T : T
 
 declare module Q {
->Q : typeof Q
+>Q : Q
 
     interface Promise<T> {
 >Promise : Promise<T>
@@ -24,16 +24,16 @@ declare module Q {
 function promiseWithCancellation<T>(promise: Q.Promise<T>) {
 >promiseWithCancellation : typeof promiseWithCancellation
 >T : T
->promise : Promise<T>
+>promise : Q.Promise<T>
 >Q : Q
->Promise : Promise<T>
+>Promise : Q.Promise<T>
 >T : T
 
     var deferred = Q.defer<T>(); // used to be an error
 >deferred : string
 >Q.defer<T>() : string
->Q.defer : typeof defer
+>Q.defer : typeof Q.defer
 >Q : typeof Q
->defer : typeof defer
+>defer : typeof Q.defer
 >T : T
 }

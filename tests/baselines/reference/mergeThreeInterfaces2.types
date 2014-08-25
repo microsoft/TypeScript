@@ -3,7 +3,7 @@
 
 // root module now multiple module declarations
 module M2 {
->M2 : typeof M2
+>M2 : M2
 
     export interface A {
 >A : A
@@ -30,7 +30,7 @@ module M2 {
 }
 
 module M2 {
->M2 : typeof M2
+>M2 : M2
 
     export interface A {
 >A : A
@@ -71,10 +71,10 @@ module M2 {
 
 // same as above but with an additional level of nesting and third module declaration
 module M2 {
->M2 : typeof M2
+>M2 : M2
 
     export module M3 {
->M3 : typeof M3
+>M3 : M3
 
         export interface A {
 >A : A
@@ -102,10 +102,10 @@ module M2 {
 }
 
 module M2 {
->M2 : typeof M2
+>M2 : M2
 
     export module M3 {
->M3 : typeof M3
+>M3 : M3
 
         export interface A {
 >A : A
@@ -139,10 +139,10 @@ module M2 {
 }
 
 module M2 {
->M2 : typeof M2
+>M2 : M2
 
     export module M3 {
->M3 : typeof M3
+>M3 : M3
 
         export interface A {
 >A : A

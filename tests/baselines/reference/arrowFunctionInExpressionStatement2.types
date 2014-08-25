@@ -1,6 +1,6 @@
 === tests/cases/compiler/arrowFunctionInExpressionStatement2.ts ===
 module M {
->M : typeof M
+>M : M
 
     () => 0;
 >() => 0 : () => number

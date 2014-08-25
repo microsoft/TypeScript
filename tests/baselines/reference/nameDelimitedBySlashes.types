@@ -1,12 +1,12 @@
 === tests/cases/conformance/externalModules/foo_1.ts ===
 import foo = require('./test/foo_0');
->foo : typeof "tests/cases/conformance/externalModules/test/foo_0"
+>foo : foo
 
 var x = foo.foo + 42;
 >x : number
 >foo.foo + 42 : number
 >foo.foo : number
->foo : typeof "tests/cases/conformance/externalModules/test/foo_0"
+>foo : typeof foo
 >foo : number
 
 === tests/cases/conformance/externalModules/test/foo_0.ts ===
