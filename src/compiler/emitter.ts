@@ -1276,7 +1276,7 @@ module ts {
                     var restIndex = node.parameters.length - 1;
                     var restParam = node.parameters[restIndex];
 
-                    if (!resolver.isParameterReferencedInBody(node, restParam)) {
+                    if (!resolver.isParameterUsedInFunction(node, restParam)) {
                         return;
                     }
 

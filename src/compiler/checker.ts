@@ -7098,23 +7098,25 @@ module ts {
             return false;
         }
 
-        function isParameterReferencedInBody(body: FunctionDeclaration, param: ParameterDeclaration) {
+        function isParameterUsedInFunction(func: FunctionDeclaration, param: ParameterDeclaration) {
 
             function isReferenced(node: Node): boolean {
                 switch (node.kind) {
+                    // Necessary to check parameters with default initializer
                     case SyntaxKind.Parameter:
                             var p = <ParameterDeclaration> node;
-                            return (p.initializer) ? isReferenced(p.initializer) : false;
+                            return p.initializer && isReferenced(p.initializer);
+
                     case SyntaxKind.Identifier:
                             var symbol = getSymbolOfEntityName(node);
-                            return symbol && symbol.valueDeclaration && (symbol.valueDeclaration === param.symbol.valueDeclaration);
+                            return symbol === param.symbol;
 
                     default:
                             return forEachChild(node, isReferenced);
                 }
             }
 
-            return forEachChild(body, isReferenced);
+            return forEach(func.parameters, isReferenced) || forEachChild(func.body, isReferenced);
         }
 
         function getNodeCheckFlags(node: Node): NodeCheckFlags {
@@ -7152,7 +7154,7 @@ module ts {
                 shouldEmitDeclarations: shouldEmitDeclarations,
                 isDeclarationVisible: isDeclarationVisible,
                 isImplementationOfOverload: isImplementationOfOverload,
-                isParameterReferencedInBody: isParameterReferencedInBody,
+                isParameterUsedInFunction: isParameterUsedInFunction,
                 writeTypeAtLocation: writeTypeAtLocation,
                 writeReturnTypeOfSignatureDeclaration: writeReturnTypeOfSignatureDeclaration,
                 writeSymbol: writeSymbolToTextWriter,
