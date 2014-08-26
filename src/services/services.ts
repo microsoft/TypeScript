@@ -2169,9 +2169,29 @@ module ts {
             }
 
             switch (node.kind) {
+                case SyntaxKind.TryKeyword:
+                case SyntaxKind.CatchKeyword:
+                case SyntaxKind.FinallyKeyword:
+                    return getTryCatchFinallyOccurrences(<TryStatement>node.parent.parent);
             }
 
             return undefined;
+
+            function getTryCatchFinallyOccurrences(tryStatement: TryStatement): ReferenceEntry[] {
+                var keywords: Node[] = [];
+
+                keywords.push(tryStatement.getFirstToken())
+
+                if (tryStatement.catchBlock) {
+                    keywords.push(tryStatement.catchBlock.getFirstToken());
+                }
+
+                if (tryStatement.finallyBlock) {
+                    keywords.push(tryStatement.finallyBlock.getFirstToken());
+                }
+
+                return keywordsToReferenceEntries(keywords);
+            }
 
             function keywordsToReferenceEntries(keywords: Node[]): ReferenceEntry[]{
                 return keywords.map(keyword =>
