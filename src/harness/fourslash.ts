@@ -607,7 +607,7 @@ module FourSlash {
 
             for (var i = 0; i < references.length; i++) {
                 var reference = references[i];
-                if (reference && reference.fileName === fileName && reference.minChar === start && reference.limChar === end) {
+                if (reference && reference.fileName === fileName && reference.textSpan.start() === start && reference.textSpan.end() === end) {
                     if (typeof isWriteAccess !== "undefined" && reference.isWriteAccess !== isWriteAccess) {
                         throw new Error('verifyReferencesAtPositionListContains failed - item isWriteAccess value doe not match, actual: ' + reference.isWriteAccess + ', expected: ' + isWriteAccess + '.');
                     }

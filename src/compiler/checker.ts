@@ -11,6 +11,18 @@ module ts {
     var nextNodeId = 1;
     var nextMergeId = 1;
 
+    export function getDeclarationOfKind(symbol: Symbol, kind: SyntaxKind): Declaration {
+        var declarations = symbol.declarations;
+        for (var i = 0; i < declarations.length; i++) {
+            var declaration = declarations[i];
+            if (declaration.kind === kind) {
+                return declaration;
+            }
+        }
+
+        return undefined;
+    }
+
     /// fullTypeCheck denotes if this instance of the typechecker will be used to get semantic diagnostics.
     /// If fullTypeCheck === true - then typechecker should do every possible check to produce all errors
     /// If fullTypeCheck === false - typechecker can shortcut and skip checks that only produce errors.
@@ -568,18 +580,6 @@ module ts {
             }
 
             return false;
-        }
-
-        function getDeclarationOfKind(symbol: Symbol, kind: SyntaxKind): Declaration {
-            var declarations = symbol.declarations;
-            for (var i = 0; i < declarations.length; i++) {
-                var declaration = declarations[i];
-                if (declaration.kind === kind) {
-                    return declaration;
-                }
-            }
-
-            return undefined;
         }
 
         function findConstructorDeclaration(node: ClassDeclaration): ConstructorDeclaration {

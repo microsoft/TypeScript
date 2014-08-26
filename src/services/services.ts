@@ -2224,7 +2224,7 @@ module ts {
             var searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), symbol.getDeclarations());
 
             // Get the text to search for, we need to normalize it as external module names will have quote
-            var symbolName = getNormalizedSymbolName(symbol.getName());                
+            var symbolName = getNormalizedSymbolName(symbol);                
 
             var scope = getSymbolScope(symbol);
 
@@ -2245,7 +2245,17 @@ module ts {
 
             return result;
 
-            function getNormalizedSymbolName(name: string): string {
+            function getNormalizedSymbolName(symbol: Symbol): string {
+                // Special case for function expressions, whose names are solely local to their bodies.
+                var functionExpression = getDeclarationOfKind(symbol, SyntaxKind.FunctionExpression);
+
+                if (functionExpression && functionExpression.name) {
+                    var name = functionExpression.name.text;
+                }
+                else {
+                    var name = symbol.name;
+                }
+                
                 var length = name.length;
                 if (length >= 2 && name.charCodeAt(0) === CharacterCodes.doubleQuote && name.charCodeAt(length - 1) === CharacterCodes.doubleQuote) {
                     return name.substring(1, length - 1);
