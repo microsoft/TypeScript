@@ -2236,6 +2236,7 @@ module ts {
                 return emptyObjectType;
             }
             var type = getDeclaredTypeOfSymbol(symbol);
+            var name = symbol.name;
             if (!(type.flags & TypeFlags.ObjectType)) {
                 error(getTypeDeclaration(symbol), Diagnostics.Global_type_0_must_be_a_class_or_interface_type, name);
                 return emptyObjectType;
