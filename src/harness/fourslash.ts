@@ -1740,10 +1740,6 @@ module FourSlash {
             }
         }
 
-        private getBOF(): number {
-            return 0;
-        }
-
         private getEOF(): number {
             return this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName).getLength();
         }
