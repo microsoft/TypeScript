@@ -2172,25 +2172,35 @@ module ts {
                 case SyntaxKind.TryKeyword:
                 case SyntaxKind.CatchKeyword:
                 case SyntaxKind.FinallyKeyword:
-                    return getTryCatchFinallyOccurrences(<TryStatement>node.parent.parent);
+                    return getTryCatchFinallyOccurrences(<TryStatement>(node.parent && node.parent.parent));
             }
 
             return undefined;
 
-            function getTryCatchFinallyOccurrences(tryStatement: TryStatement): ReferenceEntry[] {
+            function getTryCatchFinallyOccurrences(tryStatement: TryStatement): ReferenceEntry[]{
+                if (!tryStatement || tryStatement.kind !== SyntaxKind.TryStatement) {
+                    return undefined;
+                }
+
                 var keywords: Node[] = [];
 
-                keywords.push(tryStatement.getFirstToken())
+                pushIfKeyword(keywords, tryStatement.getFirstToken());
 
                 if (tryStatement.catchBlock) {
-                    keywords.push(tryStatement.catchBlock.getFirstToken());
+                    pushIfKeyword(keywords, tryStatement.catchBlock.getFirstToken());
                 }
 
                 if (tryStatement.finallyBlock) {
-                    keywords.push(tryStatement.finallyBlock.getFirstToken());
+                    pushIfKeyword(keywords, tryStatement.finallyBlock.getFirstToken());
                 }
 
                 return keywordsToReferenceEntries(keywords);
+            }
+
+            function pushIfKeyword(keywordList: Node[], token: Node) {
+                if (token && isKeyword(token.kind)) {
+                    keywordList.push(token);
+                }
             }
 
             function keywordsToReferenceEntries(keywords: Node[]): ReferenceEntry[]{
