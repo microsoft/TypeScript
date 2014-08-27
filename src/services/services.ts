@@ -2168,8 +2168,7 @@ module ts {
 
             var result: ReferenceEntry[];
 
-            // Each of these helper functions bails out if the node is undefined,
-            // which is why you'll see much of this 'node.parent && node.parent.parent' pattern.
+            // 'parent' and 'hasKind' are falsey-propagating convenience functions.
             switch (node.kind) {
                 case SyntaxKind.TryKeyword:
                 case SyntaxKind.CatchKeyword:
@@ -2201,14 +2200,14 @@ module ts {
             function getTryCatchFinallyOccurrences(tryStatement: TryStatement): ReferenceEntry[] {
                 var keywords: Node[] = [];
 
-                pushIfKeyword(keywords, tryStatement.getFirstToken(), SyntaxKind.TryKeyword);
+                pushKeyword(keywords, tryStatement.getFirstToken(), SyntaxKind.TryKeyword);
 
                 if (tryStatement.catchBlock) {
-                    pushIfKeyword(keywords, tryStatement.catchBlock.getFirstToken(), SyntaxKind.CatchKeyword);
+                    pushKeyword(keywords, tryStatement.catchBlock.getFirstToken(), SyntaxKind.CatchKeyword);
                 }
 
                 if (tryStatement.finallyBlock) {
-                    pushIfKeyword(keywords, tryStatement.finallyBlock.getFirstToken(), SyntaxKind.FinallyKeyword);
+                    pushKeyword(keywords, tryStatement.finallyBlock.getFirstToken(), SyntaxKind.FinallyKeyword);
                 }
 
                 return keywordsToReferenceEntries(keywords);
@@ -2217,11 +2216,11 @@ module ts {
             function getSwitchCaseDefaultOccurrences(switchStatement: SwitchStatement) {
                 var keywords: Node[] = [];
 
-                pushIfKeyword(keywords, switchStatement.getFirstToken(), SyntaxKind.SwitchKeyword);
+                pushKeyword(keywords, switchStatement.getFirstToken(), SyntaxKind.SwitchKeyword);
 
                 // Go through each clause in the switch statement, collecting the clause keywords.
                 switchStatement.clauses.forEach(clause => {
-                    pushIfKeyword(keywords, clause.getFirstToken(), [SyntaxKind.CaseKeyword, SyntaxKind.DefaultKeyword]);
+                    pushKeyword(keywords, clause.getFirstToken(), [SyntaxKind.CaseKeyword, SyntaxKind.DefaultKeyword]);
 
                     // For each clause, also recursively traverse the statements where we can find analogous breaks.
                     forEachChild(clause, function aggregateBreakKeywords(node: Node): void {
@@ -2229,7 +2228,7 @@ module ts {
                             case SyntaxKind.BreakStatement:
                                 // If the break statement has a label, it cannot be part of a switch block.
                                 if (!(<BreakOrContinueStatement>node).label) {
-                                    pushIfKeyword(keywords, node.getFirstToken(), SyntaxKind.BreakKeyword);
+                                    pushKeyword(keywords, node.getFirstToken(), SyntaxKind.BreakKeyword);
                                 }
                             // Fall through
                             case SyntaxKind.ForStatement:
@@ -2237,13 +2236,13 @@ module ts {
                             case SyntaxKind.DoStatement:
                             case SyntaxKind.WhileStatement:
                             case SyntaxKind.SwitchStatement:
-                            case SyntaxKind.FunctionExpression:
-                            case SyntaxKind.FunctionDeclaration:
-                            case SyntaxKind.ArrowFunction:
                                 return;
                         }
 
-                        forEachChild(node, aggregateBreakKeywords);
+                        // Do not cross function boundaries.
+                        if (!isAnyFunction(node)) {
+                            forEachChild(node, aggregateBreakKeywords);
+                        }
                     });
                 });
 
@@ -2264,12 +2263,14 @@ module ts {
                         case SyntaxKind.WhileStatement:
                             // TODO (drosen): Handle loops!
                             return undefined;
-                        case SyntaxKind.FunctionExpression:
-                        case SyntaxKind.FunctionDeclaration:
-                        case SyntaxKind.ArrowFunction:
-                            return undefined;
+
                         case SyntaxKind.SwitchStatement:
                             return getSwitchCaseDefaultOccurrences(<SwitchStatement>owner);
+
+                        default:
+                            if (isAnyFunction(owner)) {
+                                return undefined;
+                            }
                     }
                 }
 
@@ -2286,9 +2287,9 @@ module ts {
                 return node && node.parent;
             }
 
-            function pushIfKeyword(keywordList: Node[], token: Node, expected: SyntaxKind): void;
-            function pushIfKeyword(keywordList: Node[], token: Node, expected: SyntaxKind[]): void;
-            function pushIfKeyword(keywordList: Node[], token: Node, expected: any): void {
+            function pushKeyword(keywordList: Node[], token: Node, expected: SyntaxKind): void;
+            function pushKeyword(keywordList: Node[], token: Node, expected: SyntaxKind[]): void;
+            function pushKeyword(keywordList: Node[], token: Node, expected: any): void {
                 if (!token) {
                     return;
                 }
