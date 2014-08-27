@@ -70,7 +70,7 @@ module GenericParameter {
         new (x: number): boolean;
 >x : number
     }
-    var r5 = foo5(a); // new{} => string; new(x:number) => {}
+    var r5 = foo5(a); // new boolean => string; new(x:number) => boolean
 >r5 : { new (x: boolean): string; new (x: number): boolean; }
 >foo5(a) : { new (x: boolean): string; new (x: number): boolean; }
 >foo5 : typeof foo5

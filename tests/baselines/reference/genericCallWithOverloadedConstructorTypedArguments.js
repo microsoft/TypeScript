@@ -26,7 +26,7 @@ module GenericParameter {
         new (x: boolean): string;
         new (x: number): boolean;
     }
-    var r5 = foo5(a); // new{} => string; new(x:number) => {}
+    var r5 = foo5(a); // new boolean => string; new(x:number) => boolean
     var b: { new<T>(x: T): string; new<T>(x: number): T; }
     var r7 = foo5(b); // new any => string; new(x:number) => any
 
@@ -67,7 +67,7 @@ var GenericParameter;
         return cb;
     }
     var a;
-    var r5 = foo5(a); // new{} => string; new(x:number) => {}
+    var r5 = foo5(a); // new boolean => string; new(x:number) => boolean
     var b;
     var r7 = foo5(b); // new any => string; new(x:number) => any
     function foo6(cb) {
