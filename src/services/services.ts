@@ -1314,12 +1314,13 @@ module ts {
 
     function isAnyFunction(node: Node): boolean {
         switch (node.kind) {
-            case SyntaxKind.FunctionDeclaration:
-            case SyntaxKind.Method:
             case SyntaxKind.FunctionExpression:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.Method:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
-            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.Constructor:
                 return true;
         }
         return false;
