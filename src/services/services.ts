@@ -2174,62 +2174,62 @@ module ts {
                 case SyntaxKind.TryKeyword:
                 case SyntaxKind.CatchKeyword:
                 case SyntaxKind.FinallyKeyword:
-                    result = getTryCatchFinallyOccurrences(<TryStatement>(node.parent && node.parent.parent));
+                    if (hasKind(parent(parent(node)), SyntaxKind.TryStatement)) {
+                        result = getTryCatchFinallyOccurrences(<TryStatement>(node.parent.parent));
+                    }
                     break;
                 case SyntaxKind.SwitchKeyword:
-                    result = getSwitchCaseDefaultOccurrences(<SwitchStatement>node.parent);
+                    if (hasKind(node.parent, SyntaxKind.SwitchStatement)) {
+                        result = getSwitchCaseDefaultOccurrences(<SwitchStatement>node.parent);
+                    }
                     break;
                 case SyntaxKind.CaseKeyword:
                 case SyntaxKind.DefaultKeyword:
-                    result = getSwitchCaseDefaultOccurrences(<SwitchStatement>(node.parent && node.parent.parent));
+                    if (hasKind(parent(parent(node)), SyntaxKind.SwitchStatement)) {
+                        result = getSwitchCaseDefaultOccurrences(<SwitchStatement>(node.parent.parent));
+                    }
                     break;
                 case SyntaxKind.BreakKeyword:
-                    result = getBreakStatementOccurences(<BreakOrContinueStatement>node.parent);
-                    
+                    if (hasKind(node.parent, SyntaxKind.BreakStatement)) {
+                        result = getBreakStatementOccurences(<BreakOrContinueStatement>node.parent);
+                    }
+                    break;
             }
 
             return result;
 
             function getTryCatchFinallyOccurrences(tryStatement: TryStatement): ReferenceEntry[] {
-                if (!tryStatement || tryStatement.kind !== SyntaxKind.TryStatement) {
-                    return undefined;
-                }
-
                 var keywords: Node[] = [];
 
-                pushIfKeyword(keywords, tryStatement.getFirstToken());
+                pushIfKeyword(keywords, tryStatement.getFirstToken(), SyntaxKind.TryKeyword);
 
                 if (tryStatement.catchBlock) {
-                    pushIfKeyword(keywords, tryStatement.catchBlock.getFirstToken());
+                    pushIfKeyword(keywords, tryStatement.catchBlock.getFirstToken(), SyntaxKind.CatchKeyword);
                 }
 
                 if (tryStatement.finallyBlock) {
-                    pushIfKeyword(keywords, tryStatement.finallyBlock.getFirstToken());
+                    pushIfKeyword(keywords, tryStatement.finallyBlock.getFirstToken(), SyntaxKind.FinallyKeyword);
                 }
 
                 return keywordsToReferenceEntries(keywords);
             }
 
             function getSwitchCaseDefaultOccurrences(switchStatement: SwitchStatement) {
-                if (!switchStatement || switchStatement.kind !== SyntaxKind.SwitchStatement) {
-                    return undefined;
-                }
-
                 var keywords: Node[] = [];
 
-                pushIfKeyword(keywords, switchStatement.getFirstToken());
+                pushIfKeyword(keywords, switchStatement.getFirstToken(), SyntaxKind.SwitchKeyword);
 
                 // Go through each clause in the switch statement, collecting the clause keywords.
                 switchStatement.clauses.forEach(clause => {
-                    pushIfKeyword(keywords, clause.getFirstToken());
+                    pushIfKeyword(keywords, clause.getFirstToken(), [SyntaxKind.CaseKeyword, SyntaxKind.DefaultKeyword]);
 
                     // For each clause, also recursively traverse the statements where we can find analogous breaks.
                     forEachChild(clause, function aggregateBreakKeywords(node: Node): void {
                         switch (node.kind) {
                             case SyntaxKind.BreakStatement:
-                                // If the break statement has a label, cannot be part of 
+                                // If the break statement has a label, it cannot be part of a switch block.
                                 if (!(<BreakOrContinueStatement>node).label) {
-                                    pushIfKeyword(keywords, node.getFirstToken());
+                                    pushIfKeyword(keywords, node.getFirstToken(), SyntaxKind.BreakKeyword);
                                 }
                             // Fall through
                             case SyntaxKind.ForStatement:
@@ -2251,10 +2251,6 @@ module ts {
             }
 
             function getBreakStatementOccurences(breakStatement: BreakOrContinueStatement): ReferenceEntry[]{
-                if (!breakStatement || breakStatement.kind !== SyntaxKind.BreakStatement) {
-                    return undefined;
-                }
-
                 // TODO (drosen): Deal with labeled statements.
                 if (breakStatement.label) {
                     return undefined;
@@ -2280,9 +2276,29 @@ module ts {
                 return undefined;
             }
 
-            function pushIfKeyword(keywordList: Node[], token: Node) {
-                if (token && isKeyword(token.kind)) {
+            // returns true if 'node' is defined and has a matching 'kind'.
+            function hasKind(node: Node, kind: SyntaxKind) {
+                return !!(node && node.kind === kind);
+            }
+
+            // Null-propagating 'parent' function.
+            function parent(node: Node): Node {
+                return node && node.parent;
+            }
+
+            function pushIfKeyword(keywordList: Node[], token: Node, expected: SyntaxKind): void;
+            function pushIfKeyword(keywordList: Node[], token: Node, expected: SyntaxKind[]): void;
+            function pushIfKeyword(keywordList: Node[], token: Node, expected: any): void {
+                if (!token) {
+                    return;
+                }
+
+                if (token.kind === expected ||
+                    (expected.length && (<SyntaxKind[]>expected).some(expectedKind => expectedKind === token.kind))) {
                     keywordList.push(token);
+                }
+                else {
+                    Debug.assert("Expected keyword, got " + token.getFullText().substring(token.getLeadingTriviaWidth()));
                 }
             }
 
