@@ -29,8 +29,8 @@ function g() { return undefined; }
 >undefined : undefined
 
 var b: () => typeof b;
->b : any
->b : any
+>b : () => any
+>b : () => any
 
 function b1() {
 >b1 : () => typeof b1

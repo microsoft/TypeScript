@@ -1799,27 +1799,37 @@ module ts {
 
         function resolveAnonymousTypeMembers(type: ObjectType) {
             var symbol = type.symbol;
-            var members = emptySymbols;
-            var callSignatures = emptyArray;
-            var constructSignatures = emptyArray;
-            if (symbol.flags & SymbolFlags.HasExports) {
-                members = symbol.exports;
+            if (symbol.flags & SymbolFlags.TypeLiteral) {
+                // Type literal
+                var members = symbol.members;
+                var callSignatures = getSignaturesOfSymbol(members["__call"]);
+                var constructSignatures = getSignaturesOfSymbol(members["__new"]);
+                var stringIndexType = getIndexTypeOfSymbol(symbol, IndexKind.String);
+                var numberIndexType = getIndexTypeOfSymbol(symbol, IndexKind.Number);
             }
-            if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method)) {
-                callSignatures = getSignaturesOfSymbol(symbol);
-            }
-            if (symbol.flags & SymbolFlags.Class) {
-                var classType = getDeclaredTypeOfClass(symbol);
-                constructSignatures = getSignaturesOfSymbol(symbol.members["__constructor"]);
-                if (!constructSignatures.length) constructSignatures = getDefaultConstructSignatures(classType);
-                if (classType.baseTypes.length) {
-                    var members = createSymbolTable(getNamedMembers(members));
-                    addInheritedMembers(members, getPropertiesOfType(getTypeOfSymbol(classType.baseTypes[0].symbol)));
+            else {
+                // Combinations of function, class, enum and module
+                var members = emptySymbols;
+                var callSignatures = <Signature[]>emptyArray;
+                var constructSignatures = <Signature[]>emptyArray;
+                if (symbol.flags & SymbolFlags.HasExports) {
+                    members = symbol.exports;
                 }
+                if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method)) {
+                    callSignatures = getSignaturesOfSymbol(symbol);
+                }
+                if (symbol.flags & SymbolFlags.Class) {
+                    var classType = getDeclaredTypeOfClass(symbol);
+                    constructSignatures = getSignaturesOfSymbol(symbol.members["__constructor"]);
+                    if (!constructSignatures.length) constructSignatures = getDefaultConstructSignatures(classType);
+                    if (classType.baseTypes.length) {
+                        var members = createSymbolTable(getNamedMembers(members));
+                        addInheritedMembers(members, getPropertiesOfType(getTypeOfSymbol(classType.baseTypes[0].symbol)));
+                    }
+                }
+                var numberIndexType = (symbol.flags & SymbolFlags.Enum) ? <Type>stringType : undefined;
             }
-            var numberIndexType = (symbol.flags & SymbolFlags.Enum) ? stringType : undefined;
-
-            setObjectTypeMembers(type, members, callSignatures, constructSignatures, /* stringIndexType */ undefined, numberIndexType);
+            setObjectTypeMembers(type, members, callSignatures, constructSignatures, stringIndexType, numberIndexType);
         }
 
         function resolveObjectTypeMembers(type: ObjectType): ResolvedObjectType {
@@ -2275,13 +2285,8 @@ module ts {
         function getTypeFromTypeLiteralNode(node: TypeLiteralNode): Type {
             var links = getNodeLinks(node);
             if (!links.resolvedType) {
-                var symbol = node.symbol;
-                var members = symbol.members;
-                var callSignatures = getSignaturesOfSymbol(members["__call"]);
-                var constructSignatures = getSignaturesOfSymbol(members["__new"]);
-                var stringIndexType = getIndexTypeOfSymbol(symbol, IndexKind.String);
-                var numberIndexType = getIndexTypeOfSymbol(symbol, IndexKind.Number);
-                links.resolvedType = createAnonymousType(symbol, members, callSignatures, constructSignatures, stringIndexType, numberIndexType);
+                // Deferred resolution of members is handled by resolveObjectTypeMembers
+                links.resolvedType = createObjectType(TypeFlags.Anonymous, node.symbol);
             }
             return links.resolvedType;
         }
