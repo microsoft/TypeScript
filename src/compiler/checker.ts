@@ -1800,7 +1800,6 @@ module ts {
         function resolveAnonymousTypeMembers(type: ObjectType) {
             var symbol = type.symbol;
             if (symbol.flags & SymbolFlags.TypeLiteral) {
-                // Type literal
                 var members = symbol.members;
                 var callSignatures = getSignaturesOfSymbol(members["__call"]);
                 var constructSignatures = getSignaturesOfSymbol(members["__new"]);
@@ -1810,8 +1809,8 @@ module ts {
             else {
                 // Combinations of function, class, enum and module
                 var members = emptySymbols;
-                var callSignatures = <Signature[]>emptyArray;
-                var constructSignatures = <Signature[]>emptyArray;
+                var callSignatures: Signature[] = emptyArray;
+                var constructSignatures: Signature[] = emptyArray;
                 if (symbol.flags & SymbolFlags.HasExports) {
                     members = symbol.exports;
                 }
@@ -1821,13 +1820,16 @@ module ts {
                 if (symbol.flags & SymbolFlags.Class) {
                     var classType = getDeclaredTypeOfClass(symbol);
                     constructSignatures = getSignaturesOfSymbol(symbol.members["__constructor"]);
-                    if (!constructSignatures.length) constructSignatures = getDefaultConstructSignatures(classType);
+                    if (!constructSignatures.length) {
+                        constructSignatures = getDefaultConstructSignatures(classType);
+                    }
                     if (classType.baseTypes.length) {
-                        var members = createSymbolTable(getNamedMembers(members));
+                        members = createSymbolTable(getNamedMembers(members));
                         addInheritedMembers(members, getPropertiesOfType(getTypeOfSymbol(classType.baseTypes[0].symbol)));
                     }
                 }
-                var numberIndexType = (symbol.flags & SymbolFlags.Enum) ? <Type>stringType : undefined;
+                var stringIndexType: Type = undefined;
+                var numberIndexType: Type = (symbol.flags & SymbolFlags.Enum) ? stringType : undefined;
             }
             setObjectTypeMembers(type, members, callSignatures, constructSignatures, stringIndexType, numberIndexType);
         }
