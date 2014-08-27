@@ -2162,22 +2162,35 @@ module ts {
                 return undefined;
             }
 
-            if (node.kind === SyntaxKind.Identifier ||
-                isLiteralNameOfPropertyDeclarationOrIndexAccess(node) ||
-                isNameOfExternalModuleImportOrDeclaration(node)) {
+            if (node.kind === SyntaxKind.Identifier || isLiteralNameOfPropertyDeclarationOrIndexAccess(node) || isNameOfExternalModuleImportOrDeclaration(node)) {
                 return getReferencesForNode(node, [sourceFile]);
             }
 
+            var result: ReferenceEntry[];
+
+            // Each of these helper functions bails out if the node is undefined,
+            // which is why you'll see much of this'node.parent && node.parent.parent' pattern.
             switch (node.kind) {
                 case SyntaxKind.TryKeyword:
                 case SyntaxKind.CatchKeyword:
                 case SyntaxKind.FinallyKeyword:
-                    return getTryCatchFinallyOccurrences(<TryStatement>(node.parent && node.parent.parent));
+                    result = getTryCatchFinallyOccurrences(<TryStatement>(node.parent && node.parent.parent));
+                    break;
+                case SyntaxKind.SwitchKeyword:
+                    result = getSwitchCaseDefaultOccurrences(<SwitchStatement>node.parent);
+                    break;
+                case SyntaxKind.CaseKeyword:
+                case SyntaxKind.DefaultKeyword:
+                    result = getSwitchCaseDefaultOccurrences(<SwitchStatement>(node.parent && node.parent.parent));
+                    break;
+                case SyntaxKind.BreakKeyword:
+                    result = getBreakStatementOccurences(<BreakOrContinueStatement>node.parent);
+                    
             }
 
-            return undefined;
+            return result;
 
-            function getTryCatchFinallyOccurrences(tryStatement: TryStatement): ReferenceEntry[]{
+            function getTryCatchFinallyOccurrences(tryStatement: TryStatement): ReferenceEntry[] {
                 if (!tryStatement || tryStatement.kind !== SyntaxKind.TryStatement) {
                     return undefined;
                 }
@@ -2195,6 +2208,67 @@ module ts {
                 }
 
                 return keywordsToReferenceEntries(keywords);
+            }
+
+            function getSwitchCaseDefaultOccurrences(switchStatement: SwitchStatement) {
+                if (!switchStatement || switchStatement.kind !== SyntaxKind.SwitchStatement) {
+                    return undefined;
+                }
+
+                var keywords: Node[] = [];
+
+                pushIfKeyword(keywords, switchStatement.getFirstToken());
+
+                // Go through each clause in the switch statement, collecting the clause keywords.
+                switchStatement.clauses.forEach(clause => {
+                    pushIfKeyword(keywords, clause.getFirstToken());
+
+                    // For each clause, also recursively traverse the statements where we can find analogous breaks.
+                    forEachChild(clause, function aggregateBreakKeywords(node: Node): void {
+                        switch (node.kind) {
+                            case SyntaxKind.BreakStatement:
+                                // If the break statement has a label, cannot be part of 
+                                if (!(<BreakOrContinueStatement>node).label) {
+                                    pushIfKeyword(keywords, node.getFirstToken());
+                                }
+                            // Fall through
+                            case SyntaxKind.ForStatement:
+                            case SyntaxKind.ForInStatement:
+                            case SyntaxKind.DoStatement:
+                            case SyntaxKind.WhileStatement:
+                            case SyntaxKind.SwitchStatement:
+                                return;
+                        }
+
+                        forEachChild(node, aggregateBreakKeywords);
+                    });
+                });
+
+                return keywordsToReferenceEntries(keywords);
+            }
+
+            function getBreakStatementOccurences(breakStatement: BreakOrContinueStatement): ReferenceEntry[]{
+                if (!breakStatement || breakStatement.kind !== SyntaxKind.BreakStatement) {
+                    return undefined;
+                }
+
+                // TODO (drosen): Deal with labeled statements.
+                if (breakStatement.label) {
+                    return undefined;
+                }
+
+                for (var owner = node.parent; owner; owner = owner.parent) {
+                    switch (owner.kind) {
+                        case SyntaxKind.ForStatement:
+                        case SyntaxKind.ForInStatement:
+                        case SyntaxKind.DoStatement:
+                        case SyntaxKind.WhileStatement:
+                            // TODO (drosen): Handle loops!
+                            return undefined;
+                        case SyntaxKind.SwitchStatement:
+                            return getSwitchCaseDefaultOccurrences(<SwitchStatement>owner);
+                    }
+                }
             }
 
             function pushIfKeyword(keywordList: Node[], token: Node) {
