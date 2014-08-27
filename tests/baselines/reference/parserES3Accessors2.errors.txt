@@ -1,0 +1,6 @@
+==== tests/cases/conformance/parser/ecmascript3/Accessors/parserES3Accessors2.ts (1 errors) ====
+    class C {
+        set Foo(a) { }
+            ~~~
+!!! Accessors are only available when targeting ECMAScript 5 and higher.
+    }

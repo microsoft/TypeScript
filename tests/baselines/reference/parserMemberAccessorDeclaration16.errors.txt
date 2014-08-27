@@ -2,5 +2,5 @@
     class C {
        set Foo(a = 1) { }
            ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! A 'set' accessor parameter cannot have an initializer.
     }

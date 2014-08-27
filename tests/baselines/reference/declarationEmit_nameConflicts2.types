@@ -26,7 +26,6 @@ module X.Y.base.Z {
 >base : base
 >Z : Z
 
-    // Bug 887180
     export var f = X.Y.base.f; // Should be base.f
 >f : typeof base.f
 >X.Y.base.f : typeof base.f

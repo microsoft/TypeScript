@@ -1,23 +1,24 @@
 === tests/cases/compiler/chainedImportAlias_file1.ts ===
-import x = require('chainedImportAlias_file1');
+import x = require('chainedImportAlias_file0');
 >x : x
 
 import y = x;
 >y : y
 >x : typeof x
 
-declare var console: {
->console : { log(message?: any): any; }
-
-    log(message?: any);
->log : (message?: any) => any
->message : any
-
-};
-console.log(y);
->console.log(y) : any
->console.log : (message?: any) => any
->console : { log(message?: any): any; }
->log : (message?: any) => any
+y.m.foo();
+>y.m.foo() : void
+>y.m.foo : typeof x.m.foo
+>y.m : typeof x.m
 >y : typeof x
+>m : typeof x.m
+>foo : typeof x.m.foo
+
+=== tests/cases/compiler/chainedImportAlias_file0.ts ===
+export module m {
+>m : m
+
+    export function foo() { }
+>foo : typeof foo
+}
 

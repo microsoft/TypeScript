@@ -1,0 +1,38 @@
+=== tests/cases/compiler/mixedExports.ts ===
+declare module M {
+>M : M
+
+     function foo();
+>foo : typeof foo
+
+     export function foo();
+>foo : typeof foo
+
+     function foo();
+>foo : typeof foo
+}
+
+declare module M1 {
+>M1 : M1
+
+     export interface Foo {}
+>Foo : Foo
+
+     interface Foo {}
+>Foo : Foo
+}
+
+module A {
+>A : A
+
+     interface X {x}
+>X : X
+>x : any
+
+     export module X {}
+>X : A.X
+
+     interface X {y}
+>X : X
+>y : any
+}

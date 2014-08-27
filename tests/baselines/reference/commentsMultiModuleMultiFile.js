@@ -9,7 +9,7 @@ export module multiM {
     }
 }
 /** thi is multi module 2*/
-module multiM {
+export module multiM {
     /** class c comment*/
     export class c {
     }
@@ -25,7 +25,7 @@ new multiM.c();
 //// [commentsMultiModuleMultiFile_1.ts]
 import m = require('commentsMultiModuleMultiFile_0');
 /** this is multi module 3 comment*/
-module multiM {
+export module multiM {
     /** class d comment*/
     export class d {
     }
@@ -50,7 +50,6 @@ define(["require", "exports"], function (require, exports) {
     })(exports.multiM || (exports.multiM = {}));
     var multiM = exports.multiM;
     /** thi is multi module 2*/
-    var multiM;
     (function (multiM) {
         /** class c comment*/
         var c = (function () {
@@ -66,14 +65,14 @@ define(["require", "exports"], function (require, exports) {
             return e;
         })();
         multiM.e = e;
-    })(multiM || (multiM = {}));
+    })(exports.multiM || (exports.multiM = {}));
+    var multiM = exports.multiM;
     new multiM.b();
     new multiM.c();
 });
 //// [commentsMultiModuleMultiFile_1.js]
 define(["require", "exports"], function (require, exports) {
     /** this is multi module 3 comment*/
-    var multiM;
     (function (multiM) {
         /** class d comment*/
         var d = (function () {
@@ -89,6 +88,32 @@ define(["require", "exports"], function (require, exports) {
             return f;
         })();
         multiM.f = f;
-    })(multiM || (multiM = {}));
+    })(exports.multiM || (exports.multiM = {}));
+    var multiM = exports.multiM;
     new multiM.d();
 });
+
+
+//// [commentsMultiModuleMultiFile_0.d.ts]
+/** this is multi declare module*/
+export declare module multiM {
+    class b {
+    }
+}
+/** thi is multi module 2*/
+export declare module multiM {
+    /** class c comment*/
+    class c {
+    }
+    class e {
+    }
+}
+//// [commentsMultiModuleMultiFile_1.d.ts]
+/** this is multi module 3 comment*/
+export declare module multiM {
+    /** class d comment*/
+    class d {
+    }
+    class f {
+    }
+}

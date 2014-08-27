@@ -4,7 +4,7 @@ module __test1__ {
     export var __val__obj4 = obj4;
 }
 module __test2__ {
-    export var obj: { <string>(a: string): string; };
+    export var obj: { <Tstring>(a: Tstring): Tstring; };
     export var __val__obj = obj;
 }
 __test2__.__val__obj = __test1__.__val__obj4

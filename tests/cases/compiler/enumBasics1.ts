@@ -31,7 +31,7 @@ enum E2 {
 	B,
 }
 
-enum E2 { // shouldn't error
+enum E2 { // should error for continued autonumbering
 	C,
 	D,
 }

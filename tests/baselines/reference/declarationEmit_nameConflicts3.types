@@ -45,7 +45,6 @@ module M.P {
         f
 >f : D
     }
-    // Bug 887180
     export var v: M.D; // ok
 >v : M.D
 >M : M

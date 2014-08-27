@@ -35,7 +35,7 @@ module m1 {
      */
     function foo4Export() {
     }
-}
+} // trailing comment module
 m1.fooExport();
 var myvar = new m1.m2.c();
 /** module comment of m2.m3*/
@@ -43,14 +43,14 @@ module m2.m3 {
     /** Exported class comment*/
     export class c {
     }
-}
+} /* trailing dotted module comment*/
 new m2.m3.c();
 /** module comment of m3.m4.m5*/
 module m3.m4.m5 {
     /** Exported class comment*/
     export class c {
     }
-}
+} // trailing dotted module 2
 new m3.m4.m5.c();
 /** module comment of m4.m5.m6*/
 module m4.m5.m6 {
@@ -58,7 +58,7 @@ module m4.m5.m6 {
         /** Exported class comment*/
         export class c {
         }
-    }
+    } /* trailing inner module */ /* multiple comments*/
 }
 new m4.m5.m6.m7.c();
 /** module comment of m5.m6.m7*/
@@ -141,7 +141,7 @@ var m1;
      */
     function foo4Export() {
     }
-})(m1 || (m1 = {}));
+})(m1 || (m1 = {})); // trailing comment module
 m1.fooExport();
 var myvar = new m1.m2.c();
 /** module comment of m2.m3*/
@@ -157,7 +157,7 @@ var m2;
         m3.c = c;
     })(m2.m3 || (m2.m3 = {}));
     var m3 = m2.m3;
-})(m2 || (m2 = {}));
+})(m2 || (m2 = {})); /* trailing dotted module comment*/
 new m2.m3.c();
 /** module comment of m3.m4.m5*/
 var m3;
@@ -175,7 +175,7 @@ var m3;
         var m5 = m4.m5;
     })(m3.m4 || (m3.m4 = {}));
     var m4 = m3.m4;
-})(m3 || (m3 = {}));
+})(m3 || (m3 = {})); // trailing dotted module 2
 new m3.m4.m5.c();
 /** module comment of m4.m5.m6*/
 var m4;
@@ -191,7 +191,7 @@ var m4;
                 })();
                 m7.c = c;
             })(m6.m7 || (m6.m7 = {}));
-            var m7 = m6.m7;
+            var m7 = m6.m7; /* trailing inner module */ /* multiple comments*/
         })(m5.m6 || (m5.m6 = {}));
         var m6 = m5.m6;
     })(m4.m5 || (m4.m5 = {}));

@@ -1,0 +1,47 @@
+=== tests/cases/compiler/trailingCommasES3.ts ===
+
+var o1 = { a: 1, b: 2 };
+>o1 : { a: number; b: number; }
+>{ a: 1, b: 2 } : { a: number; b: number; }
+>a : number
+>b : number
+
+var o2 = { a: 1, b: 2, };
+>o2 : { a: number; b: number; }
+>{ a: 1, b: 2, } : { a: number; b: number; }
+>a : number
+>b : number
+
+var o3 = { a: 1, };
+>o3 : { a: number; }
+>{ a: 1, } : { a: number; }
+>a : number
+
+var o4 = {};
+>o4 : {}
+>{} : {}
+
+var a1 = [1, 2];
+>a1 : number[]
+>[1, 2] : number[]
+
+var a2 = [1, 2, ];
+>a2 : number[]
+>[1, 2, ] : number[]
+
+var a3 = [1, ];
+>a3 : number[]
+>[1, ] : number[]
+
+var a4 = [];
+>a4 : any[]
+>[] : undefined[]
+
+var a5 = [1, , ];
+>a5 : number[]
+>[1, , ] : number[]
+
+var a6 = [, , ];
+>a6 : any[]
+>[, , ] : undefined[]
+

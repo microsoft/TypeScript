@@ -6,6 +6,12 @@ module M2 {
 }
 export = M2
 
+//// [foo.d.ts]
+declare module M1 {
+    export var Y:number;
+}
+export = M1
+
 
 //// [consumer.ts]
 import x = require('./foo');

@@ -20,7 +20,7 @@ class C<T extends Constructable> {
     create() {
 >create : () => void
 
-        var x = new this.data(); // error
+        var x = new this.data(); // no error
 >x : Constructable
 >new this.data() : Constructable
 >this.data : T

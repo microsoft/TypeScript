@@ -1,12 +1,13 @@
 ==== tests/cases/compiler/ambientGetters.ts (2 errors) ====
+    
     declare class A {
         get length() : number;
             ~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! An accessor cannot be declared in an ambient context.
     }
     
     declare class B {
         get length() { return 0; }
             ~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! An accessor cannot be declared in an ambient context.
     }

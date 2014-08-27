@@ -15,7 +15,7 @@ interface IFoo2<T> {
     foo(x: T): T;
 }
 class C2<T> implements IFoo2<T> { // error
-    foo<string>(x: string): number {
+    foo<Tstring>(x: Tstring): number {
         return null;
     }
 }

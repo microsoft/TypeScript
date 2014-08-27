@@ -1,0 +1,24 @@
+=== tests/cases/compiler/declFileImportChainInExportAssignment.ts ===
+module m {
+>m : m
+
+    export module c {
+>c : m.c
+
+        export class c {
+>c : c
+        }
+    }
+}
+import a = m.c;
+>a : a
+>m : typeof m
+>c : typeof a
+
+import b = a;
+>b : b
+>a : typeof a
+
+export = b;
+>b : typeof a
+

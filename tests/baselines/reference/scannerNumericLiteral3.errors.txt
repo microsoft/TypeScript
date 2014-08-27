@@ -1,4 +1,6 @@
-==== tests/cases/conformance/scanner/ecmascript5/scannerNumericLiteral3.ts (1 errors) ====
+==== tests/cases/conformance/scanner/ecmascript5/scannerNumericLiteral3.ts (2 errors) ====
     01.0
+    ~~
+!!! Octal literals are not available when targeting ECMAScript 5 and higher.
       ~~
 !!! ';' expected.

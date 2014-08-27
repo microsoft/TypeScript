@@ -1,9 +1,0 @@
-==== tests/cases/compiler/specializedLambdaTypeArguments.ts (1 errors) ====
-    class X<A> {
-    	prop: X< <any>() => any >;
-    	          ~~~
-!!! Type parameter name cannot be 'any'
-    }
-    var a: X<boolean>;
-     
-    

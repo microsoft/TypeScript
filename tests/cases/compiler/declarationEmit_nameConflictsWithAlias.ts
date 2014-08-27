@@ -1,5 +1,5 @@
 // @declaration: true
-// Bug 887180
+// @module: commonjs
 export module C { export interface I { } }
 export import v = C;
 export module M {

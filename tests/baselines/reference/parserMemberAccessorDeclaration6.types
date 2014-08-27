@@ -1,0 +1,7 @@
+=== tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration6.ts ===
+class C {
+>C : C
+
+  set 0(i) { }
+>i : any
+}

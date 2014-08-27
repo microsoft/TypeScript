@@ -2,5 +2,5 @@
     declare class C {
       get foo() { return 0; }
           ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! An accessor cannot be declared in an ambient context.
     }

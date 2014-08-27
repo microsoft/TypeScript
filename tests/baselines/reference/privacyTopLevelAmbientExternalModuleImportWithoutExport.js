@@ -29,6 +29,8 @@ declare module 'm2' {
 }
 
 //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts]
+///<reference path='privacyTopLevelAmbientExternalModuleImportWithoutExport_require2.ts'/>
+///<reference path='privacyTopLevelAmbientExternalModuleImportWithoutExport_require3.ts'/>
 // Privacy errors - importing private elements
 import im_private_mi_private = require("m");
 import im_private_mu_private = require("m2");
@@ -46,6 +48,8 @@ var privateUse_im_private_mi_public = new im_private_mi_public.c_public();
 export var publicUse_im_private_mi_public = new im_private_mi_public.c_public();
 
 
+//// [privacyTopLevelAmbientExternalModuleImportWithoutExport_require2.js]
+//// [privacyTopLevelAmbientExternalModuleImportWithoutExport_require3.js]
 //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_require.js]
 define(["require", "exports"], function (require, exports) {
     // Public elements
@@ -77,3 +81,35 @@ define(["require", "exports", "m", "m2", "privacyTopLevelAmbientExternalModuleIm
     var privateUse_im_private_mi_public = new im_private_mi_public.c_public();
     exports.publicUse_im_private_mi_public = new im_private_mi_public.c_public();
 });
+
+
+//// [privacyTopLevelAmbientExternalModuleImportWithoutExport_require2.d.ts]
+declare module 'm' {
+    class c_private {
+        baz: string;
+    }
+}
+//// [privacyTopLevelAmbientExternalModuleImportWithoutExport_require3.d.ts]
+declare module 'm2' {
+    class c_private {
+        bing: string;
+    }
+}
+//// [privacyTopLevelAmbientExternalModuleImportWithoutExport_require.d.ts]
+export declare class c_public {
+    foo: string;
+}
+//// [privacyTopLevelAmbientExternalModuleImportWithoutExport_require1.d.ts]
+export declare class c_public {
+    bar: string;
+}
+//// [privacyTopLevelAmbientExternalModuleImportWithoutExport_core.d.ts]
+/// <reference path='privacyTopLevelAmbientExternalModuleImportWithoutExport_require2.d.ts' />
+/// <reference path='privacyTopLevelAmbientExternalModuleImportWithoutExport_require3.d.ts' />
+import im_private_mi_private = require("m");
+import im_private_mu_private = require("m2");
+import im_private_mi_public = require("privacyTopLevelAmbientExternalModuleImportWithoutExport_require");
+export declare var publicUse_im_private_mi_private: im_private_mi_private.c_private;
+export declare var publicUse_im_private_mu_private: im_private_mu_private.c_private;
+export declare var publicUse_im_private_mi_public: im_private_mi_public.c_public;
+export declare var publicUse_im_private_mi_public: im_private_mi_public.c_public;

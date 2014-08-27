@@ -1,15 +1,14 @@
 ==== tests/cases/compiler/accessorParameterAccessibilityModifier.ts (4 errors) ====
-    // target: es5
     
     class C {
         set X(public v) { }
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! A parameter property is only allowed in a constructor implementation.
               ~~~~~~~~
 !!! A parameter property is only allowed in a constructor implementation.
         static set X(public v2) { }
                    ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! A parameter property is only allowed in a constructor implementation.
                      ~~~~~~~~~
 !!! A parameter property is only allowed in a constructor implementation.
     }

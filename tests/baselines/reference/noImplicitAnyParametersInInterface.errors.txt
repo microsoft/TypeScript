@@ -1,0 +1,106 @@
+==== tests/cases/compiler/noImplicitAnyParametersInInterface.ts (27 errors) ====
+    
+    interface I {
+        // Implicit-'any' errors for first two call signatures, x1, x2, z2.
+        ();
+        ~~~
+!!! Call signature, which lacks return-type annotation, implicitly has an 'any' return type.
+        (x1);
+        ~~~~~
+!!! Call signature, which lacks return-type annotation, implicitly has an 'any' return type.
+         ~~
+!!! Parameter 'x1' implicitly has an 'any' type.
+        (x2, y2: string, z2): any;
+         ~~
+!!! Parameter 'x2' implicitly has an 'any' type.
+                         ~~
+!!! Parameter 'z2' implicitly has an 'any' type.
+    
+        // No implicit-'any' errors.
+        f1(): void;
+    
+        // Implicit-'any' errors for x.
+        f2(x): void;
+           ~
+!!! Parameter 'x' implicitly has an 'any' type.
+    
+        // No implicit-'any' errors.
+        f3(x: any): void;
+    
+        // Implicit-'any' errors for x, y, and z.
+        f4(x, y, z): void;
+           ~
+!!! Parameter 'x' implicitly has an 'any' type.
+              ~
+!!! Parameter 'y' implicitly has an 'any' type.
+                 ~
+!!! Parameter 'z' implicitly has an 'any' type.
+    
+        // Implicit-'any' errors for x, and z.
+        f5(x, y: any, z): void;
+           ~
+!!! Parameter 'x' implicitly has an 'any' type.
+                      ~
+!!! Parameter 'z' implicitly has an 'any' type.
+    
+        // Implicit-'any[]' errors for r.
+        f6(...r): void;
+           ~~~~
+!!! Rest parameter 'r' implicitly has an 'any[]' type.
+    
+        // Implicit-'any'/'any[]' errors for x, r.
+        f7(x, ...r): void;
+           ~
+!!! Parameter 'x' implicitly has an 'any' type.
+              ~~~~
+!!! Rest parameter 'r' implicitly has an 'any[]' type.
+    
+        // Implicit-'any' errors for x1, y2, x3, and y3.
+        f8(x1, y1: number): any;
+           ~~
+!!! Parameter 'x1' implicitly has an 'any' type.
+        f8(x2: string, y2): any;
+                       ~~
+!!! Parameter 'y2' implicitly has an 'any' type.
+        f8(x3, y3): any;
+           ~~
+!!! Parameter 'x3' implicitly has an 'any' type.
+               ~~
+!!! Parameter 'y3' implicitly has an 'any' type.
+    
+        // No implicit-'any' errors.
+        f9: () => string;
+    
+        // Implicit-'any' errors for x.
+        f10: (x) => string;
+              ~
+!!! Parameter 'x' implicitly has an 'any' type.
+    
+        // Implicit-'any' errors for x, y, and z.
+        f11: (x, y, z) => string;
+              ~
+!!! Parameter 'x' implicitly has an 'any' type.
+                 ~
+!!! Parameter 'y' implicitly has an 'any' type.
+                    ~
+!!! Parameter 'z' implicitly has an 'any' type.
+    
+        // Implicit-'any' errors for x and z.
+        f12: (x, y: any, z) => string;
+              ~
+!!! Parameter 'x' implicitly has an 'any' type.
+                         ~
+!!! Parameter 'z' implicitly has an 'any' type.
+    
+        // Implicit-'any[]' error for r.
+        f13: (...r) => string;
+              ~~~~
+!!! Rest parameter 'r' implicitly has an 'any[]' type.
+    
+        // Implicit-'any'/'any[]' errors for x, r.
+        f14: (x, ...r) => string;
+              ~
+!!! Parameter 'x' implicitly has an 'any' type.
+                 ~~~~
+!!! Rest parameter 'r' implicitly has an 'any[]' type.
+    }

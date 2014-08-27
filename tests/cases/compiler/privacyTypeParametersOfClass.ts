@@ -1,3 +1,4 @@
+// @module: commonjs
 class privateClass {
 }
 

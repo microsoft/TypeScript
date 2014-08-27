@@ -2,5 +2,5 @@
     class C {
        set foo<T>(v) { }
            ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! An accessor cannot have type parameters.
     }

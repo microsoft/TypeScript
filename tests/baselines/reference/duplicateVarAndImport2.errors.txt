@@ -1,0 +1,7 @@
+==== tests/cases/compiler/duplicateVarAndImport2.ts (1 errors) ====
+    // error since module is instantiated
+    var a;
+    module M { export var x = 1; }
+    import a = M;
+    ~~~~~~~~~~~~~
+!!! Import declaration conflicts with local declaration of 'a'

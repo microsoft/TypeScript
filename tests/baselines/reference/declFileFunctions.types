@@ -1,0 +1,142 @@
+=== tests/cases/compiler/declFileFunctions_0.ts ===
+
+/** This comment should appear for foo*/
+export function foo() {
+>foo : typeof foo
+}
+/** This is comment for function signature*/
+export function fooWithParameters(/** this is comment about a*/a: string,
+>fooWithParameters : typeof fooWithParameters
+>a : string
+
+    /** this is comment for b*/
+    b: number) {
+>b : number
+
+    var d = a;
+>d : string
+>a : string
+}
+export function fooWithRestParameters(a: string, ...rests: string[]) {
+>fooWithRestParameters : typeof fooWithRestParameters
+>a : string
+>rests : string[]
+
+    return a + rests.join("");
+>a + rests.join("") : string
+>a : string
+>rests.join("") : string
+>rests.join : (separator?: string) => string
+>rests : string[]
+>join : (separator?: string) => string
+}
+
+export function fooWithOverloads(a: string): string;
+>fooWithOverloads : typeof fooWithOverloads
+>a : string
+
+export function fooWithOverloads(a: number): number;
+>fooWithOverloads : typeof fooWithOverloads
+>a : number
+
+export function fooWithOverloads(a: any): any {
+>fooWithOverloads : typeof fooWithOverloads
+>a : any
+
+    return a;
+>a : any
+}
+
+/** This comment should appear for nonExportedFoo*/
+function nonExportedFoo() {
+>nonExportedFoo : typeof nonExportedFoo
+}
+/** This is comment for function signature*/
+function nonExportedFooWithParameters(/** this is comment about a*/a: string,
+>nonExportedFooWithParameters : typeof nonExportedFooWithParameters
+>a : string
+
+    /** this is comment for b*/
+    b: number) {
+>b : number
+
+    var d = a;
+>d : string
+>a : string
+}
+function nonExportedFooWithRestParameters(a: string, ...rests: string[]) {
+>nonExportedFooWithRestParameters : typeof nonExportedFooWithRestParameters
+>a : string
+>rests : string[]
+
+    return a + rests.join("");
+>a + rests.join("") : string
+>a : string
+>rests.join("") : string
+>rests.join : (separator?: string) => string
+>rests : string[]
+>join : (separator?: string) => string
+}
+
+function nonExportedFooWithOverloads(a: string): string;
+>nonExportedFooWithOverloads : typeof nonExportedFooWithOverloads
+>a : string
+
+function nonExportedFooWithOverloads(a: number): number;
+>nonExportedFooWithOverloads : typeof nonExportedFooWithOverloads
+>a : number
+
+function nonExportedFooWithOverloads(a: any): any {
+>nonExportedFooWithOverloads : typeof nonExportedFooWithOverloads
+>a : any
+
+    return a;
+>a : any
+}
+
+=== tests/cases/compiler/declFileFunctions_1.ts ===
+/** This comment should appear for foo*/
+function globalfoo() {
+>globalfoo : typeof globalfoo
+}
+/** This is comment for function signature*/
+function globalfooWithParameters(/** this is comment about a*/a: string,
+>globalfooWithParameters : typeof globalfooWithParameters
+>a : string
+
+    /** this is comment for b*/
+    b: number) {
+>b : number
+
+    var d = a;
+>d : string
+>a : string
+}
+function globalfooWithRestParameters(a: string, ...rests: string[]) {
+>globalfooWithRestParameters : typeof globalfooWithRestParameters
+>a : string
+>rests : string[]
+
+    return a + rests.join("");
+>a + rests.join("") : string
+>a : string
+>rests.join("") : string
+>rests.join : (separator?: string) => string
+>rests : string[]
+>join : (separator?: string) => string
+}
+function globalfooWithOverloads(a: string): string;
+>globalfooWithOverloads : typeof globalfooWithOverloads
+>a : string
+
+function globalfooWithOverloads(a: number): number;
+>globalfooWithOverloads : typeof globalfooWithOverloads
+>a : number
+
+function globalfooWithOverloads(a: any): any {
+>globalfooWithOverloads : typeof globalfooWithOverloads
+>a : any
+
+    return a;
+>a : any
+}

@@ -1,0 +1,148 @@
+=== tests/cases/compiler/declarationEmit_nameConflicts_0.ts ===
+import im = require('declarationEmit_nameConflicts_1');
+>im : im
+
+export module M {
+>M : M
+
+    export function f() { }
+>f : typeof f
+
+    export class C { }
+>C : C
+
+    export module N {
+>N : N
+
+        export function g() { };
+>g : typeof g
+
+        export interface I { }
+>I : I
+    }
+
+    export import a = M.f;
+>a : a
+>M : typeof M
+>f : typeof f
+
+    export import b = M.C;
+>b : b
+>M : typeof M
+>C : C
+
+    export import c = N;
+>c : c
+>N : typeof N
+
+    export import d = im;
+>d : d
+>im : typeof d
+}
+
+export module M.P {
+>M : M
+>P : P
+
+    export function f() { }
+>f : typeof f
+
+    export class C { }
+>C : C
+
+    export module N {
+>N : N
+
+        export function g() { };
+>g : typeof g
+
+        export interface I { }
+>I : I
+    }
+    export import im = M.P.f;
+>im : im
+>M : typeof M
+>P : typeof P
+>f : typeof f
+
+    export var a = M.a; // emitted incorrectly as typeof f
+>a : typeof M.f
+>M.a : typeof M.f
+>M : typeof M
+>a : typeof M.f
+
+    export var b = M.b; // ok
+>b : typeof M.C
+>M.b : typeof M.C
+>M : typeof M
+>b : typeof M.C
+
+    export var c = M.c; // ok
+>c : typeof M.N
+>M.c : typeof M.N
+>M : typeof M
+>c : typeof M.N
+
+    export var g = M.c.g; // ok
+>g : typeof M.c.g
+>M.c.g : typeof M.c.g
+>M.c : typeof M.N
+>M : typeof M
+>c : typeof M.N
+>g : typeof M.c.g
+
+    export var d = M.d; // emitted incorrectly as typeof im
+>d : typeof M.d
+>M.d : typeof M.d
+>M : typeof M
+>d : typeof M.d
+}
+
+export module M.Q {
+>M : M
+>Q : Q
+
+    export function f() { }
+>f : typeof f
+
+    export class C { }
+>C : C
+
+    export module N {
+>N : N
+
+        export function g() { };
+>g : typeof g
+
+        export interface I { }
+>I : I
+    }
+    export interface b extends M.b { } // ok
+>b : b
+>M : M
+>b : M.C
+
+    export interface I extends M.c.I { } // ok
+>I : I
+>M : M
+>c : M.c
+>I : M.c.I
+
+    export module c {
+>c : c
+
+        export interface I extends M.c.I { } // ok
+>I : I
+>M : M
+>c : M.c
+>I : M.c.I
+    }
+}
+=== tests/cases/compiler/declarationEmit_nameConflicts_1.ts ===
+module f { export class c { } }
+>f : f
+>c : c
+
+export = f;
+>f : typeof f
+

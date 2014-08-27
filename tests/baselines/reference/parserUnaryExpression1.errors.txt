@@ -1,0 +1,4 @@
+==== tests/cases/conformance/parser/ecmascript5/Expressions/parserUnaryExpression1.ts (1 errors) ====
+    ++this;
+      ~~~~
+!!! The operand of an increment or decrement operator must be a variable, property or indexer.

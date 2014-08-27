@@ -57,7 +57,7 @@ module m1 {
     function foo4Export() {
 >foo4Export : typeof foo4Export
     }
-}
+} // trailing comment module
 m1.fooExport();
 >m1.fooExport() : number
 >m1.fooExport : typeof m1.fooExport
@@ -82,7 +82,7 @@ module m2.m3 {
     export class c {
 >c : c
     }
-}
+} /* trailing dotted module comment*/
 new m2.m3.c();
 >new m2.m3.c() : m2.m3.c
 >m2.m3.c : typeof m2.m3.c
@@ -101,7 +101,7 @@ module m3.m4.m5 {
     export class c {
 >c : c
     }
-}
+} // trailing dotted module 2
 new m3.m4.m5.c();
 >new m3.m4.m5.c() : m3.m4.m5.c
 >m3.m4.m5.c : typeof m3.m4.m5.c
@@ -125,7 +125,7 @@ module m4.m5.m6 {
         export class c {
 >c : c
         }
-    }
+    } /* trailing inner module */ /* multiple comments*/
 }
 new m4.m5.m6.m7.c();
 >new m4.m5.m6.m7.c() : m4.m5.m6.m7.c

@@ -1,0 +1,7 @@
+==== tests/cases/compiler/exportAssignmentWithExportModifier.ts (2 errors) ====
+    var x;
+    export export = x;
+    ~~~~~~
+!!! An export assignment cannot have modifiers.
+    ~~~~~~~~~~~~~~~~~~
+!!! Cannot compile external modules unless the '--module' flag is provided.

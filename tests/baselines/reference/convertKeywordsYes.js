@@ -22,20 +22,16 @@ var declare = 0;
 
 function bigGeneric<
     constructor,
-    any,
-    boolean,
     implements ,
     interface ,
     let,
     module ,
-    number,
     package,
     private ,
     protected,
     public ,
     set ,
     static ,
-    string,
     get ,
     yield,
     declare
@@ -294,20 +290,16 @@ enum bigEnum {
 
 module bigModule {
     class constructor { }
-    class any { }
-    class boolean { }
     class implements { }
     class interface { }
     class let { }
     class module { }
-    class number { }
     class package { }
     class private { }
     class protected { }
     class public { }
     class set { }
     class static { }
-    class string { }
     class get { }
     class yield { }
     class declare { }
@@ -514,16 +506,6 @@ var bigModule;
         }
         return constructor;
     })();
-    var any = (function () {
-        function any() {
-        }
-        return any;
-    })();
-    var boolean = (function () {
-        function boolean() {
-        }
-        return boolean;
-    })();
     var implements = (function () {
         function implements() {
         }
@@ -543,11 +525,6 @@ var bigModule;
         function module() {
         }
         return module;
-    })();
-    var number = (function () {
-        function number() {
-        }
-        return number;
     })();
     var package = (function () {
         function package() {
@@ -578,11 +555,6 @@ var bigModule;
         function static() {
         }
         return static;
-    })();
-    var string = (function () {
-        function string() {
-        }
-        return string;
     })();
     var get = (function () {
         function get() {

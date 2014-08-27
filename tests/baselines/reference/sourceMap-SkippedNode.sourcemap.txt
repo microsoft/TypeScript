@@ -1,0 +1,52 @@
+===================================================================
+JsFile: sourceMap-SkippedNode.js
+mapUrl: sourceMap-SkippedNode.js.map
+sourceRoot: 
+sources: sourceMap-SkippedNode.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMap-SkippedNode.js
+sourceFile:sourceMap-SkippedNode.ts
+-------------------------------------------------------------------
+>>>try {
+1 >
+2 >^^^^
+3 >    ^
+1 >
+2 >
+3 >    t
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 5) Source(1, 1) + SourceIndex(0)
+3 >Emitted(1, 6) Source(1, 2) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^->
+1 >ry {
+  >// ...
+  >
+2 >}
+1 >Emitted(2, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(2, 2) Source(3, 2) + SourceIndex(0)
+---
+>>>finally {
+1->^^^^^^^^
+2 >        ^
+1-> 
+2 >        f
+1->Emitted(3, 9) Source(3, 3) + SourceIndex(0)
+2 >Emitted(3, 10) Source(3, 4) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >inally {
+  >// N.B. No 'catch' block
+  >
+2 >}
+1 >Emitted(4, 1) Source(5, 1) + SourceIndex(0)
+2 >Emitted(4, 2) Source(5, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMap-SkippedNode.js.map

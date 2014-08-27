@@ -1,5 +1,5 @@
 ==== tests/cases/conformance/parser/ecmascript5/parserKeywordsAsIdentifierName2.ts (2 errors) ====
-    // 'public' shoudl be marked unusable because it has a trailing /*
+    // 'public' should be marked unusable, should complain on trailing /*
     a.public /*
                
 !!! '*/' expected.

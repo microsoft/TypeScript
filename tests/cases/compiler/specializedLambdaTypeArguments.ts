@@ -1,5 +1,5 @@
 class X<A> {
-	prop: X< <any>() => any >;
+	prop: X< <Tany>() => Tany >;
 }
 var a: X<boolean>;
  

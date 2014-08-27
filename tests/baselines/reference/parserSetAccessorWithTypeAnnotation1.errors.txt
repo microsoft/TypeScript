@@ -2,6 +2,6 @@
     class C {
        set foo(v): number {
            ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! A 'set' accessor cannot have a return type annotation.
        }
     }
