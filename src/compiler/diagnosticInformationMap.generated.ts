@@ -340,6 +340,7 @@ module ts {
         Could_not_write_file_0_Colon_1: { code: 5033, category: DiagnosticCategory.Error, key: "Could not write file '{0}': {1}" },
         mapRoot_option_cannot_be_specified_without_specifying_sourcemap_option: { code: 5038, category: DiagnosticCategory.Error, key: "'--mapRoot' option cannot be specified without specifying '--sourcemap' option." },
         sourceRoot_option_cannot_be_specified_without_specifying_sourcemap_option: { code: 5039, category: DiagnosticCategory.Error, key: "'--sourceRoot' option cannot be specified without specifying '--sourcemap' option." },
+        The_codepage_option_has_been_deprecated_Please_use_charset: { code: 5043, category: DiagnosticCategory.Warning, key: "The '--codepage' option has been deprecated. Please use '--charset'." },
         Concatenate_and_emit_output_to_single_file: { code: 6001, category: DiagnosticCategory.Message, key: "Concatenate and emit output to single file." },
         Generates_corresponding_d_ts_file: { code: 6002, category: DiagnosticCategory.Message, key: "Generates corresponding '.d.ts' file." },
         Specifies_the_location_where_debugger_should_locate_map_files_instead_of_generated_locations: { code: 6003, category: DiagnosticCategory.Message, key: "Specifies the location where debugger should locate map files instead of generated locations." },

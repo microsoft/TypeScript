@@ -1355,6 +1355,10 @@
         "category": "Error",
         "code": 5039
     },
+    "The '--codepage' option has been deprecated. Please use '--charset'.": {
+       "category": "Warning",
+       "code": 5043
+   },
     
     "Concatenate and emit output to single file.": {
         "category": "Message",

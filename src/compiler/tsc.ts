@@ -211,9 +211,13 @@ module ts {
         }
 
         // If the codepage has been defined, then we should bail out if we can't support it.
-        if (commandLine.options.codepage !== undefined && !sys.supportsCodepage()) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--codepage"));
-            return sys.exit(1);
+        if (commandLine.options.codepage !== undefined) {
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_codepage_option_has_been_deprecated_Please_use_charset));
+
+            if (!sys.supportsCodepage()) {
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--codepage"));
+                return sys.exit(1);
+            }
         }
 
         var defaultCompilerHost = createCompilerHost(commandLine.options);
