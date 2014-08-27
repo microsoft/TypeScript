@@ -10,18 +10,23 @@
 ////        break;
 ////    /*5*/cas 16:
 ////    c/*3*/ase 12:
+////        function f() {
+////            br/*11*/eak;
+////            /*12*/break;
+////        }
 ////}
-
+////
 ////sw/*6*/itch (10) {
 ////    de/*7*/fault
 ////    case 1:
 ////    case 2
-
+////
 ////    c/*8*/ose 4:
 ////    case 8:
 ////    case 0xBEEF:
 ////        bre/*9*/ak;
 ////    case 16:
+////        () => bre/*10*/ak;
 ////}
 
 for (var i = 1; i <= test.markers().length; i++) {
@@ -42,6 +47,11 @@ for (var i = 1; i <= test.markers().length; i++) {
         case 7:
         case 9:
             verify.occurrencesAtPositionCount(8);
+            break;
+        case 10:
+        case 11:
+        case 12:
+            verify.occurrencesAtPositionCount(0);
             break;
     }
 }

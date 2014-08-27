@@ -2169,7 +2169,7 @@ module ts {
             var result: ReferenceEntry[];
 
             // Each of these helper functions bails out if the node is undefined,
-            // which is why you'll see much of this'node.parent && node.parent.parent' pattern.
+            // which is why you'll see much of this 'node.parent && node.parent.parent' pattern.
             switch (node.kind) {
                 case SyntaxKind.TryKeyword:
                 case SyntaxKind.CatchKeyword:
@@ -2237,6 +2237,9 @@ module ts {
                             case SyntaxKind.DoStatement:
                             case SyntaxKind.WhileStatement:
                             case SyntaxKind.SwitchStatement:
+                            case SyntaxKind.FunctionExpression:
+                            case SyntaxKind.FunctionDeclaration:
+                            case SyntaxKind.ArrowFunction:
                                 return;
                         }
 
@@ -2256,7 +2259,7 @@ module ts {
                 if (breakStatement.label) {
                     return undefined;
                 }
-
+                
                 for (var owner = node.parent; owner; owner = owner.parent) {
                     switch (owner.kind) {
                         case SyntaxKind.ForStatement:
@@ -2265,10 +2268,16 @@ module ts {
                         case SyntaxKind.WhileStatement:
                             // TODO (drosen): Handle loops!
                             return undefined;
+                        case SyntaxKind.FunctionExpression:
+                        case SyntaxKind.FunctionDeclaration:
+                        case SyntaxKind.ArrowFunction:
+                            return undefined;
                         case SyntaxKind.SwitchStatement:
                             return getSwitchCaseDefaultOccurrences(<SwitchStatement>owner);
                     }
                 }
+
+                return undefined;
             }
 
             function pushIfKeyword(keywordList: Node[], token: Node) {
