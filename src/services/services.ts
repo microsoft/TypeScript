@@ -2219,7 +2219,7 @@ module ts {
                 pushKeyword(keywords, switchStatement.getFirstToken(), SyntaxKind.SwitchKeyword);
 
                 // Go through each clause in the switch statement, collecting the clause keywords.
-                switchStatement.clauses.forEach(clause => {
+                forEach(switchStatement.clauses, clause => {
                     pushKeyword(keywords, clause.getFirstToken(), [SyntaxKind.CaseKeyword, SyntaxKind.DefaultKeyword]);
 
                     // For each clause, also recursively traverse the statements where we can find analogous breaks.
@@ -2294,8 +2294,7 @@ module ts {
                     return;
                 }
 
-                if (token.kind === expected ||
-                    (expected.length && (<SyntaxKind[]>expected).some(expectedKind => expectedKind === token.kind))) {
+                if (token.kind === expected || (expected.length && contains(<SyntaxKind[]>expected, token.kind))) {
                     keywordList.push(token);
                 }
                 else {
@@ -2304,7 +2303,7 @@ module ts {
             }
 
             function keywordsToReferenceEntries(keywords: Node[]): ReferenceEntry[]{
-                return keywords.map(keyword =>
+                return map(keywords, keyword =>
                     new ReferenceEntry(filename, TypeScript.TextSpan.fromBounds(keyword.getStart(), keyword.end), /* isWriteAccess */ false)
                 );
             }
