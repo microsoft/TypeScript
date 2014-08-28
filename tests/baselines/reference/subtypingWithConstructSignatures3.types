@@ -101,12 +101,12 @@ module Errors {
 >foo12 : typeof foo12
 >a2 : new (x: Base[], y: Derived2[]) => Derived[]
 >x : Base[]
->Array : Array<T>
+>Array : T[]
 >Base : Base
 >y : Derived2[]
->Array : Array<T>
+>Array : T[]
 >Derived2 : Derived2
->Array : Array<T>
+>Array : T[]
 >Derived : Derived
 >a2 : new (x: Base[], y: Derived2[]) => Derived[]
 
@@ -401,24 +401,24 @@ module Errors {
     var r6arg1: new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
 >r6arg1 : new (x: Base[], y: Derived2[]) => Derived[]
 >x : Base[]
->Array : Array<T>
+>Array : T[]
 >Base : Base
 >y : Derived2[]
->Array : Array<T>
+>Array : T[]
 >Derived2 : Derived2
->Array : Array<T>
+>Array : T[]
 >Derived : Derived
 
     var r6arg2: new <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T;
 >r6arg2 : new <T extends Derived2[]>(x: Base[], y: Base[]) => T
 >T : T
->Array : Array<T>
+>Array : T[]
 >Derived2 : Derived2
 >x : Base[]
->Array : Array<T>
+>Array : T[]
 >Base : Base
 >y : Base[]
->Array : Array<T>
+>Array : T[]
 >Base : Base
 >T : T
 

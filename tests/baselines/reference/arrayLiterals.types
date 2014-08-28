@@ -78,7 +78,7 @@ var classTypeArray = [C, C, C];
 
 var classTypeArray: Array<typeof C>; // Should OK, not be a parse error
 >classTypeArray : typeof C[]
->Array : Array<T>
+>Array : T[]
 >C : typeof C
 
 // Contextual type C with numeric index signature makes array literal of EveryType E of type BCT(E,C)[]
@@ -111,7 +111,7 @@ var context2 = [{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }];
 
 var context2: Array<{}>; // Should be OK
 >context2 : {}[]
->Array : Array<T>
+>Array : T[]
 
 // Contextual type C with numeric index signature of type Base makes array literal of Derived have type Base[]
 class Base { private p; }

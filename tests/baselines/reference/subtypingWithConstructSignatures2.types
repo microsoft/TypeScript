@@ -173,12 +173,12 @@ declare function foo12(a: new (x: Array<Base>, y: Array<Derived2>) => Array<Deri
 >foo12 : typeof foo12
 >a : new (x: Base[], y: Derived2[]) => Derived[]
 >x : Base[]
->Array : Array<T>
+>Array : T[]
 >Base : Base
 >y : Derived2[]
->Array : Array<T>
+>Array : T[]
 >Derived2 : Derived2
->Array : Array<T>
+>Array : T[]
 >Derived : Derived
 >a : new (x: Base[], y: Derived2[]) => Derived[]
 
@@ -190,12 +190,12 @@ declare function foo13(a: new (x: Array<Base>, y: Array<Derived>) => Array<Deriv
 >foo13 : typeof foo13
 >a : new (x: Base[], y: Derived[]) => Derived[]
 >x : Base[]
->Array : Array<T>
+>Array : T[]
 >Base : Base
 >y : Derived[]
->Array : Array<T>
+>Array : T[]
 >Derived : Derived
->Array : Array<T>
+>Array : T[]
 >Derived : Derived
 >a : new (x: Base[], y: Derived[]) => Derived[]
 
@@ -713,25 +713,25 @@ var r11b = [r11arg2, r11arg1];
 var r12arg1: new <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>;
 >r12arg1 : new <T extends Base[]>(x: Base[], y: T) => Derived[]
 >T : T
->Array : Array<T>
+>Array : T[]
 >Base : Base
 >x : Base[]
->Array : Array<T>
+>Array : T[]
 >Base : Base
 >y : T
 >T : T
->Array : Array<T>
+>Array : T[]
 >Derived : Derived
 
 var r12arg2: new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
 >r12arg2 : new (x: Base[], y: Derived2[]) => Derived[]
 >x : Base[]
->Array : Array<T>
+>Array : T[]
 >Base : Base
 >y : Derived2[]
->Array : Array<T>
+>Array : T[]
 >Derived2 : Derived2
->Array : Array<T>
+>Array : T[]
 >Derived : Derived
 
 var r12 = foo12(r12arg1); // any
@@ -755,10 +755,10 @@ var r12b = [r12arg2, r12arg1];
 var r13arg1: new <T extends Array<Derived>>(x: Array<Base>, y: T) => T;
 >r13arg1 : new <T extends Derived[]>(x: Base[], y: T) => T
 >T : T
->Array : Array<T>
+>Array : T[]
 >Derived : Derived
 >x : Base[]
->Array : Array<T>
+>Array : T[]
 >Base : Base
 >y : T
 >T : T
@@ -767,12 +767,12 @@ var r13arg1: new <T extends Array<Derived>>(x: Array<Base>, y: T) => T;
 var r13arg2: new (x: Array<Base>, y: Array<Derived>) => Array<Derived>;
 >r13arg2 : new (x: Base[], y: Derived[]) => Derived[]
 >x : Base[]
->Array : Array<T>
+>Array : T[]
 >Base : Base
 >y : Derived[]
->Array : Array<T>
+>Array : T[]
 >Derived : Derived
->Array : Array<T>
+>Array : T[]
 >Derived : Derived
 
 var r13 = foo13(r13arg1); // any

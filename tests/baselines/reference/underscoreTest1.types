@@ -1392,7 +1392,7 @@ interface Tuple2<T0, T1> extends Array<any> {
 >Tuple2 : Tuple2<T0, T1>
 >T0 : T0
 >T1 : T1
->Array : Array<T>
+>Array : T[]
 
     0: T0;
 >T0 : T0
@@ -1406,7 +1406,7 @@ interface Tuple3<T0, T1, T2> extends Array<any> {
 >T0 : T0
 >T1 : T1
 >T2 : T2
->Array : Array<T>
+>Array : T[]
 
     0: T0;
 >T0 : T0
@@ -1424,7 +1424,7 @@ interface Tuple4<T0, T1, T2, T3> extends Array<any> {
 >T1 : T1
 >T2 : T2
 >T3 : T3
->Array : Array<T>
+>Array : T[]
 
     0: T0;
 >T0 : T0
@@ -1631,7 +1631,7 @@ module Underscore {
 >WrappedArray : WrappedArray<T>
 >T : T
 >WrappedObject : WrappedObject<T>
->Array : Array<T>
+>Array : T[]
 >T : T
 
         each(iterator: Iterator<T, void>, context?: any): void;
@@ -2635,7 +2635,7 @@ module Underscore {
 >ChainedArray : ChainedArray<T>
 >T : T
 >ChainedObject : ChainedObject<T>
->Array : Array<T>
+>Array : T[]
 >T : T
 
         each(iterator: Iterator<T, void>, context?: any): ChainedObject<void>;

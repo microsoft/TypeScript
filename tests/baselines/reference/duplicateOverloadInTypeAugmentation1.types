@@ -1,6 +1,6 @@
 === tests/cases/compiler/duplicateOverloadInTypeAugmentation1.ts ===
 interface Array<T> {
->Array : Array<T>
+>Array : T[]
 >T : T
 
     reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T,
@@ -40,7 +40,7 @@ interface Array<T> {
 }
 var a: Array<string>;
 >a : string[]
->Array : Array<T>
+>Array : T[]
 
 var r5 = a.reduce((x, y) => x + y);
 >r5 : string

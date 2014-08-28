@@ -6,19 +6,19 @@ x = new Array(1);
 >x = new Array(1) : any[]
 >x : string[]
 >new Array(1) : any[]
->Array : { (arrayLength?: number): Array<any>; <T>(arrayLength: number): Array<T>; <T>(...items: Array<T>): Array<T>; new (arrayLength?: number): Array<any>; new <T>(arrayLength: number): Array<T>; new <T>(...items: Array<T>): Array<T>; isArray(arg: any): boolean; prototype: Array<any>; }
+>Array : { (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: any[]; }
 
 x = new Array('hi', 'bye'); 
 >x = new Array('hi', 'bye') : string[]
 >x : string[]
 >new Array('hi', 'bye') : string[]
->Array : { (arrayLength?: number): Array<any>; <T>(arrayLength: number): Array<T>; <T>(...items: Array<T>): Array<T>; new (arrayLength?: number): Array<any>; new <T>(arrayLength: number): Array<T>; new <T>(...items: Array<T>): Array<T>; isArray(arg: any): boolean; prototype: Array<any>; }
+>Array : { (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: any[]; }
 
 x = new Array<string>('hi', 'bye');
 >x = new Array<string>('hi', 'bye') : string[]
 >x : string[]
 >new Array<string>('hi', 'bye') : string[]
->Array : { (arrayLength?: number): Array<any>; <T>(arrayLength: number): Array<T>; <T>(...items: Array<T>): Array<T>; new (arrayLength?: number): Array<any>; new <T>(arrayLength: number): Array<T>; new <T>(...items: Array<T>): Array<T>; isArray(arg: any): boolean; prototype: Array<any>; }
+>Array : { (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: any[]; }
 
 var y: number[];
 >y : number[]
@@ -27,17 +27,17 @@ y = new Array(1);
 >y = new Array(1) : any[]
 >y : number[]
 >new Array(1) : any[]
->Array : { (arrayLength?: number): Array<any>; <T>(arrayLength: number): Array<T>; <T>(...items: Array<T>): Array<T>; new (arrayLength?: number): Array<any>; new <T>(arrayLength: number): Array<T>; new <T>(...items: Array<T>): Array<T>; isArray(arg: any): boolean; prototype: Array<any>; }
+>Array : { (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: any[]; }
 
 y = new Array(1,2);
 >y = new Array(1,2) : number[]
 >y : number[]
 >new Array(1,2) : number[]
->Array : { (arrayLength?: number): Array<any>; <T>(arrayLength: number): Array<T>; <T>(...items: Array<T>): Array<T>; new (arrayLength?: number): Array<any>; new <T>(arrayLength: number): Array<T>; new <T>(...items: Array<T>): Array<T>; isArray(arg: any): boolean; prototype: Array<any>; }
+>Array : { (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: any[]; }
 
 y = new Array<number>(1, 2);
 >y = new Array<number>(1, 2) : number[]
 >y : number[]
 >new Array<number>(1, 2) : number[]
->Array : { (arrayLength?: number): Array<any>; <T>(arrayLength: number): Array<T>; <T>(...items: Array<T>): Array<T>; new (arrayLength?: number): Array<any>; new <T>(arrayLength: number): Array<T>; new <T>(...items: Array<T>): Array<T>; isArray(arg: any): boolean; prototype: Array<any>; }
+>Array : { (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: any[]; }
 

@@ -10,7 +10,7 @@ module M {
 >() => { } : () => void
 }
 interface Array<T> {
->Array : Array<T>
+>Array : T[]
 >T : T
 
     toFoo(): M.Foo

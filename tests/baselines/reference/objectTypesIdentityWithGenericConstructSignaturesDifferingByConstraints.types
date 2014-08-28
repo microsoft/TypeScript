@@ -6,7 +6,7 @@
 class B<T extends Array<number>> {
 >B : B<T>
 >T : T
->Array : Array<T>
+>Array : T[]
 
     constructor(x: T) { return null; }
 >x : T
@@ -46,7 +46,7 @@ interface I2 {
 var a: { new<T extends Array<string>>(x: T): string }
 >a : new <T extends string[]>(x: T) => string
 >T : T
->Array : Array<T>
+>Array : T[]
 >x : T
 >T : T
 
@@ -64,13 +64,13 @@ function foo1b(x: B<Array<number>>);
 >foo1b : typeof foo1b
 >x : B<number[]>
 >B : B<T>
->Array : Array<T>
+>Array : T[]
 
 function foo1b(x: B<Array<number>>); // error
 >foo1b : typeof foo1b
 >x : B<number[]>
 >B : B<T>
->Array : Array<T>
+>Array : T[]
 
 function foo1b(x: any) { }
 >foo1b : typeof foo1b
@@ -140,7 +140,7 @@ function foo8(x: B<Array<number>>);
 >foo8 : typeof foo8
 >x : B<number[]>
 >B : B<T>
->Array : Array<T>
+>Array : T[]
 
 function foo8(x: I<Number>); // ok
 >foo8 : typeof foo8
@@ -156,7 +156,7 @@ function foo9(x: B<Array<number>>);
 >foo9 : typeof foo9
 >x : B<number[]>
 >B : B<T>
->Array : Array<T>
+>Array : T[]
 
 function foo9(x: C<String>); // error, types are structurally equal
 >foo9 : typeof foo9
@@ -172,7 +172,7 @@ function foo10(x: B<Array<number>>);
 >foo10 : typeof foo10
 >x : B<number[]>
 >B : B<T>
->Array : Array<T>
+>Array : T[]
 
 function foo10(x: typeof a); // ok
 >foo10 : typeof foo10
@@ -187,7 +187,7 @@ function foo11(x: B<Array<number>>);
 >foo11 : typeof foo11
 >x : B<number[]>
 >B : B<T>
->Array : Array<T>
+>Array : T[]
 
 function foo11(x: typeof b); // ok
 >foo11 : typeof foo11

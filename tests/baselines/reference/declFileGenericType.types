@@ -44,7 +44,7 @@ export module C {
 >B : B
 >x : T
 >T : T
->Array : Array<T>
+>Array : T[]
 >C : unknown
 >A : A<T>
 >C : unknown
