@@ -125,7 +125,7 @@ var ts;
         Import_declarations_in_an_internal_module_cannot_reference_an_external_module: { code: 1147, category: 1 /* Error */, key: "Import declarations in an internal module cannot reference an external module." },
         Cannot_compile_external_modules_unless_the_module_flag_is_provided: { code: 1148, category: 1 /* Error */, key: "Cannot compile external modules unless the '--module' flag is provided." },
         Filename_0_differs_from_already_included_filename_1_only_in_casing: { code: 1149, category: 1 /* Error */, key: "Filename '{0}' differs from already included filename '{1}' only in casing" },
-        new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead: { code: 2068, category: 1 /* Error */, key: "'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead." },
+        new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead: { code: 1150, category: 1 /* Error */, key: "'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead." },
         Duplicate_identifier_0: { code: 2300, category: 1 /* Error */, key: "Duplicate identifier '{0}'." },
         Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor: { code: 2301, category: 1 /* Error */, key: "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor." },
         Static_members_cannot_reference_class_type_parameters: { code: 2302, category: 1 /* Error */, key: "Static members cannot reference class type parameters." },
@@ -402,7 +402,8 @@ var ts;
         Index_signature_of_object_type_implicitly_has_an_any_type: { code: 7017, category: 1 /* Error */, key: "Index signature of object type implicitly has an 'any' type." },
         Object_literal_s_property_0_implicitly_has_an_1_type: { code: 7018, category: 1 /* Error */, key: "Object literal's property '{0}' implicitly has an '{1}' type." },
         Rest_parameter_0_implicitly_has_an_any_type: { code: 7019, category: 1 /* Error */, key: "Rest parameter '{0}' implicitly has an 'any[]' type." },
-        Call_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type: { code: 7020, category: 1 /* Error */, key: "Call signature, which lacks return-type annotation, implicitly has an 'any' return type." }
+        Call_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type: { code: 7020, category: 1 /* Error */, key: "Call signature, which lacks return-type annotation, implicitly has an 'any' return type." },
+        You_cannot_rename_this_element: { code: 8000, category: 1 /* Error */, key: "You cannot rename this element." }
     };
 })(ts || (ts = {}));
 var ts;
@@ -1938,9 +1939,9 @@ var ts;
         if (ts.localizedDiagnosticMessages) {
             message = ts.localizedDiagnosticMessages[message];
         }
-        Debug.assert(message, "Diagnostic message does not exist in locale map.");
         return message;
     }
+    ts.getLocaleSpecificMessage = getLocaleSpecificMessage;
     function createFileDiagnostic(file, start, length, message) {
         var text = getLocaleSpecificMessage(message.key);
         if (arguments.length > 4) {
@@ -2247,7 +2248,7 @@ var ts;
     (function (Debug) {
         var currentAssertionLevel = 0 /* None */;
         function shouldAssert(level) {
-            return this.currentAssertionLevel >= level;
+            return currentAssertionLevel >= level;
         }
         Debug.shouldAssert = shouldAssert;
         function assert(expression, message, verboseDebugInfo) {
@@ -2823,7 +2824,6 @@ var ts;
         ControlBlockContext[ControlBlockContext["CrossingFunctionBoundary"] = 2] = "CrossingFunctionBoundary";
     })(ControlBlockContext || (ControlBlockContext = {}));
     function createSourceFile(filename, sourceText, languageVersion, version, isOpen) {
-        if (version === void 0) { version = 0; }
         if (isOpen === void 0) { isOpen = false; }
         var file;
         var scanner;
@@ -4331,8 +4331,6 @@ var ts;
         function parseBreakOrContinueStatement(kind) {
             var node = createNode(kind);
             var errorCountBeforeStatement = file.syntacticErrors.length;
-            var keywordStart = scanner.getTokenPos();
-            var keywordLength = scanner.getTextPos() - keywordStart;
             parseExpected(kind === 153 /* BreakStatement */ ? 56 /* BreakKeyword */ : 61 /* ContinueKeyword */);
             if (!canParseSemicolon())
                 node.label = parseIdentifier();
@@ -6056,6 +6054,8 @@ var ts;
             } : emitLeadingDeclarationComments;
             var emitTrailingComments = compilerOptions.removeComments ? function (node) {
             } : emitTrailingDeclarationComments;
+            var emitLeadingCommentsOfPosition = compilerOptions.removeComments ? function (pos) {
+            } : emitLeadingCommentsOfLocalPosition;
             var detachedCommentsInfo;
             var emitDetachedComments = compilerOptions.removeComments ? function (node) {
             } : emitDetachedCommentsAtPosition;
@@ -6923,12 +6923,14 @@ var ts;
                         write(";");
                         emitTrailingComments(node.body);
                     }
-                    decreaseIndent();
                     writeLine();
                     if (node.body.kind === 168 /* FunctionBlock */) {
+                        emitLeadingCommentsOfPosition(node.body.statements.end);
+                        decreaseIndent();
                         emitToken(6 /* CloseBraceToken */, node.body.statements.end);
                     }
                     else {
+                        decreaseIndent();
                         emitStart(node.body);
                         write("}");
                         emitEnd(node.body);
@@ -7176,8 +7178,11 @@ var ts;
                             statements = statements.slice(1);
                         emitLines(statements);
                     }
-                    decreaseIndent();
                     writeLine();
+                    if (ctor) {
+                        emitLeadingCommentsOfPosition(ctor.body.statements.end);
+                    }
+                    decreaseIndent();
                     emitToken(6 /* CloseBraceToken */, ctor ? ctor.body.statements.end : node.members.end);
                     scopeEmitEnd();
                     emitEnd(ctor || node);
@@ -7438,6 +7443,7 @@ var ts;
             }
             function emitSourceFile(node) {
                 currentSourceFile = node;
+                writeLine();
                 emitDetachedComments(node);
                 var startIndex = emitDirectivePrologues(node.statements, false);
                 if (!extendsEmitted && resolver.getNodeCheckFlags(node) & 8 /* EmitExtends */) {
@@ -7586,20 +7592,27 @@ var ts;
                         return emitSourceFile(node);
                 }
             }
+            function hasDetachedComments(pos) {
+                return detachedCommentsInfo !== undefined && detachedCommentsInfo[detachedCommentsInfo.length - 1].nodePos === pos;
+            }
+            function getLeadingCommentsWithoutDetachedComments() {
+                var leadingComments = ts.getLeadingComments(currentSourceFile.text, detachedCommentsInfo[detachedCommentsInfo.length - 1].detachedCommentEndPos);
+                if (detachedCommentsInfo.length - 1) {
+                    detachedCommentsInfo.pop();
+                }
+                else {
+                    detachedCommentsInfo = undefined;
+                }
+                return leadingComments;
+            }
             function emitLeadingDeclarationComments(node) {
                 if (node.parent.kind === 177 /* SourceFile */ || node.pos !== node.parent.pos) {
                     var leadingComments;
-                    if (detachedCommentsInfo === undefined || detachedCommentsInfo[detachedCommentsInfo.length - 1].nodePos !== node.pos) {
-                        leadingComments = ts.getLeadingCommentsOfNode(node, currentSourceFile);
+                    if (hasDetachedComments(node.pos)) {
+                        leadingComments = getLeadingCommentsWithoutDetachedComments();
                     }
                     else {
-                        leadingComments = ts.getLeadingComments(currentSourceFile.text, detachedCommentsInfo[detachedCommentsInfo.length - 1].detachedCommentEndPos);
-                        if (detachedCommentsInfo.length - 1) {
-                            detachedCommentsInfo.pop();
-                        }
-                        else {
-                            detachedCommentsInfo = undefined;
-                        }
+                        leadingComments = ts.getLeadingCommentsOfNode(node, currentSourceFile);
                     }
                     emitNewLineBeforeLeadingComments(node, leadingComments, writer);
                     emitComments(leadingComments, true, writer, writeComment);
@@ -7610,6 +7623,17 @@ var ts;
                     var trailingComments = ts.getTrailingComments(currentSourceFile.text, node.end);
                     emitComments(trailingComments, false, writer, writeComment);
                 }
+            }
+            function emitLeadingCommentsOfLocalPosition(pos) {
+                var leadingComments;
+                if (hasDetachedComments(pos)) {
+                    leadingComments = getLeadingCommentsWithoutDetachedComments();
+                }
+                else {
+                    leadingComments = ts.getLeadingComments(currentSourceFile.text, pos);
+                }
+                emitNewLineBeforeLeadingComments({ pos: pos, end: pos }, leadingComments, writer);
+                emitComments(leadingComments, true, writer, writeComment);
             }
             function emitDetachedCommentsAtPosition(node) {
                 var leadingComments = ts.getLeadingComments(currentSourceFile.text, node.pos);
@@ -9561,7 +9585,7 @@ var ts;
         function getTypeOfFuncClassEnumModule(symbol) {
             var links = getSymbolLinks(symbol);
             if (!links.type) {
-                var type = links.type = createObjectType(8192 /* Anonymous */, symbol);
+                links.type = createObjectType(8192 /* Anonymous */, symbol);
             }
             return links.type;
         }
@@ -10233,6 +10257,7 @@ var ts;
                 return emptyObjectType;
             }
             var type = getDeclaredTypeOfSymbol(symbol);
+            var name = symbol.name;
             if (!(type.flags & ts.TypeFlags.ObjectType)) {
                 error(getTypeDeclaration(symbol), ts.Diagnostics.Global_type_0_must_be_a_class_or_interface_type, name);
                 return emptyObjectType;
@@ -15801,7 +15826,7 @@ var TypeScript;
                 }
                 return this._lineStartPositions;
             };
-            StringScriptSnapshot.prototype.getTextChangeRangeSinceVersion = function (scriptVersion) {
+            StringScriptSnapshot.prototype.getChangeRange = function (oldSnapshot) {
                 throw TypeScript.Errors.notYetImplemented();
             };
             return StringScriptSnapshot;
@@ -15975,6 +16000,9 @@ var TypeScript;
             this._start = start;
             this._length = length;
         }
+        TextSpan.prototype.toJSON = function (key) {
+            return { start: this._start, length: this._length };
+        };
         TextSpan.prototype.start = function () {
             return this._start;
         };
@@ -16825,23 +16853,26 @@ var TypeScript;
         TypeScript.Debug.assert(TypeScript.SyntaxKind.LastToken <= 127);
         var ScannerConstants;
         (function (ScannerConstants) {
-            ScannerConstants[ScannerConstants["LargeTokenFullStartShift"] = 2] = "LargeTokenFullStartShift";
+            ScannerConstants[ScannerConstants["LargeTokenFullStartShift"] = 4] = "LargeTokenFullStartShift";
             ScannerConstants[ScannerConstants["LargeTokenFullWidthShift"] = 7] = "LargeTokenFullWidthShift";
+            ScannerConstants[ScannerConstants["LargeTokenLeadingTriviaBitMask"] = 0x01] = "LargeTokenLeadingTriviaBitMask";
+            ScannerConstants[ScannerConstants["LargeTokenLeadingCommentBitMask"] = 0x02] = "LargeTokenLeadingCommentBitMask";
+            ScannerConstants[ScannerConstants["LargeTokenTrailingTriviaBitMask"] = 0x04] = "LargeTokenTrailingTriviaBitMask";
+            ScannerConstants[ScannerConstants["LargeTokenTrailingCommentBitMask"] = 0x08] = "LargeTokenTrailingCommentBitMask";
+            ScannerConstants[ScannerConstants["LargeTokenTriviaBitMask"] = 0x0F] = "LargeTokenTriviaBitMask";
             ScannerConstants[ScannerConstants["FixedWidthTokenFullStartShift"] = 7] = "FixedWidthTokenFullStartShift";
+            ScannerConstants[ScannerConstants["FixedWidthTokenMaxFullStart"] = 0x7FFFFF] = "FixedWidthTokenMaxFullStart";
             ScannerConstants[ScannerConstants["SmallTokenFullWidthShift"] = 7] = "SmallTokenFullWidthShift";
             ScannerConstants[ScannerConstants["SmallTokenFullStartShift"] = 12] = "SmallTokenFullStartShift";
-            ScannerConstants[ScannerConstants["KindMask"] = 0x7F] = "KindMask";
-            ScannerConstants[ScannerConstants["IsVariableWidthMask"] = 0x80] = "IsVariableWidthMask";
-            ScannerConstants[ScannerConstants["LargeTokenLeadingTriviaBitMask"] = 0x01] = "LargeTokenLeadingTriviaBitMask";
-            ScannerConstants[ScannerConstants["LargeTokenTrailingTriviaBitMask"] = 0x02] = "LargeTokenTrailingTriviaBitMask";
-            ScannerConstants[ScannerConstants["SmallTokenFullWidthMask"] = 0x1F] = "SmallTokenFullWidthMask";
-            ScannerConstants[ScannerConstants["FixedWidthTokenMaxFullStart"] = 0x7FFFFF] = "FixedWidthTokenMaxFullStart";
             ScannerConstants[ScannerConstants["SmallTokenMaxFullStart"] = 0x3FFFF] = "SmallTokenMaxFullStart";
             ScannerConstants[ScannerConstants["SmallTokenMaxFullWidth"] = 0x1F] = "SmallTokenMaxFullWidth";
+            ScannerConstants[ScannerConstants["SmallTokenFullWidthMask"] = 0x1F] = "SmallTokenFullWidthMask";
+            ScannerConstants[ScannerConstants["KindMask"] = 0x7F] = "KindMask";
+            ScannerConstants[ScannerConstants["IsVariableWidthMask"] = 0x80] = "IsVariableWidthMask";
         })(ScannerConstants || (ScannerConstants = {}));
-        TypeScript.Debug.assert(largeTokenUnpackFullStart(largeTokenPackFullStartAndInfo(1 << 28, 1, 1)) === (1 << 28));
-        TypeScript.Debug.assert(largeTokenUnpackFullStart(largeTokenPackFullStartAndInfo(3 << 27, 0, 1)) === (3 << 27));
-        TypeScript.Debug.assert(largeTokenUnpackFullStart(largeTokenPackFullStartAndInfo(10 << 25, 1, 0)) === (10 << 25));
+        TypeScript.Debug.assert(largeTokenUnpackFullStart(largeTokenPackFullStartAndInfo(1 << 26, 3)) === (1 << 26));
+        TypeScript.Debug.assert(largeTokenUnpackFullStart(largeTokenPackFullStartAndInfo(3 << 25, 1)) === (3 << 25));
+        TypeScript.Debug.assert(largeTokenUnpackFullStart(largeTokenPackFullStartAndInfo(10 << 23, 2)) === (10 << 23));
         function fixedWidthTokenPackData(fullStart, kind) {
             return (fullStart << 7 /* FixedWidthTokenFullStartShift */) | kind;
         }
@@ -16857,20 +16888,29 @@ var TypeScript;
         function smallTokenUnpackFullStart(packedData) {
             return packedData >> 12 /* SmallTokenFullStartShift */;
         }
-        function largeTokenPackFullStartAndInfo(fullStart, hasLeadingTriviaInfo, hasTrailingTriviaInfo) {
-            return (fullStart << 2 /* LargeTokenFullStartShift */) | hasLeadingTriviaInfo | hasTrailingTriviaInfo;
+        function largeTokenPackFullStartAndInfo(fullStart, triviaInfo) {
+            return (fullStart << 4 /* LargeTokenFullStartShift */) | triviaInfo;
         }
         function largeTokenUnpackFullWidth(packedFullWidthAndKind) {
             return packedFullWidthAndKind >> 7 /* LargeTokenFullWidthShift */;
         }
         function largeTokenUnpackFullStart(packedFullStartAndInfo) {
-            return packedFullStartAndInfo >> 2 /* LargeTokenFullStartShift */;
+            return packedFullStartAndInfo >> 4 /* LargeTokenFullStartShift */;
         }
-        function largeTokenUnpackHasLeadingTriviaInfo(packed) {
-            return packed & 1 /* LargeTokenLeadingTriviaBitMask */;
+        function largeTokenUnpackHasLeadingTrivia(packed) {
+            return (packed & 1 /* LargeTokenLeadingTriviaBitMask */) !== 0;
         }
-        function largeTokenUnpackHasTrailingTriviaInfo(packed) {
-            return packed & 2 /* LargeTokenTrailingTriviaBitMask */;
+        function largeTokenUnpackHasTrailingTrivia(packed) {
+            return (packed & 4 /* LargeTokenTrailingTriviaBitMask */) !== 0;
+        }
+        function largeTokenUnpackHasLeadingComment(packed) {
+            return (packed & 2 /* LargeTokenLeadingCommentBitMask */) !== 0;
+        }
+        function largeTokenUnpackHasTrailingComment(packed) {
+            return (packed & 8 /* LargeTokenTrailingCommentBitMask */) !== 0;
+        }
+        function largeTokenUnpackTriviaInfo(packed) {
+            return packed & 15 /* LargeTokenTriviaBitMask */;
         }
         var isKeywordStartCharacter = TypeScript.ArrayUtilities.createArray(127 /* maxAsciiCharacter */, 0);
         var isIdentifierStartCharacter = TypeScript.ArrayUtilities.createArray(127 /* maxAsciiCharacter */, false);
@@ -16993,6 +17033,12 @@ var TypeScript;
             FixedWidthTokenWithNoTrivia.prototype.hasTrailingTrivia = function () {
                 return false;
             };
+            FixedWidthTokenWithNoTrivia.prototype.hasLeadingComment = function () {
+                return false;
+            };
+            FixedWidthTokenWithNoTrivia.prototype.hasTrailingComment = function () {
+                return false;
+            };
             FixedWidthTokenWithNoTrivia.prototype.clone = function () {
                 return new FixedWidthTokenWithNoTrivia(this._packedData);
             };
@@ -17007,7 +17053,7 @@ var TypeScript;
                 }
             }
             LargeScannerToken.prototype.setFullStart = function (fullStart) {
-                this._packedFullStartAndInfo = largeTokenPackFullStartAndInfo(fullStart, largeTokenUnpackHasLeadingTriviaInfo(this._packedFullStartAndInfo), largeTokenUnpackHasTrailingTriviaInfo(this._packedFullStartAndInfo));
+                this._packedFullStartAndInfo = largeTokenPackFullStartAndInfo(fullStart, largeTokenUnpackTriviaInfo(this._packedFullStartAndInfo));
             };
             LargeScannerToken.prototype.syntaxTreeText = function (text) {
                 var result = text || TypeScript.syntaxTree(this).text;
@@ -17052,10 +17098,16 @@ var TypeScript;
                 return largeTokenUnpackFullStart(this._packedFullStartAndInfo);
             };
             LargeScannerToken.prototype.hasLeadingTrivia = function () {
-                return largeTokenUnpackHasLeadingTriviaInfo(this._packedFullStartAndInfo) !== 0;
+                return largeTokenUnpackHasLeadingTrivia(this._packedFullStartAndInfo);
             };
             LargeScannerToken.prototype.hasTrailingTrivia = function () {
-                return largeTokenUnpackHasTrailingTriviaInfo(this._packedFullStartAndInfo) !== 0;
+                return largeTokenUnpackHasTrailingTrivia(this._packedFullStartAndInfo);
+            };
+            LargeScannerToken.prototype.hasLeadingComment = function () {
+                return largeTokenUnpackHasLeadingComment(this._packedFullStartAndInfo);
+            };
+            LargeScannerToken.prototype.hasTrailingComment = function () {
+                return largeTokenUnpackHasTrailingComment(this._packedFullStartAndInfo);
             };
             LargeScannerToken.prototype.clone = function () {
                 return new LargeScannerToken(this._packedFullStartAndInfo, this._packedFullWidthAndKind, this.cachedText);
@@ -17079,8 +17131,8 @@ var TypeScript;
                 index = _index;
             }
             function reset(_text, _start, _end) {
-                TypeScript.Debug.assert(_start <= _text.length());
-                TypeScript.Debug.assert(_end <= _text.length());
+                TypeScript.Debug.assert(_start <= _text.length(), "Token's start was not within the bounds of text: " + _start + " - [0, " + _text.length() + ")");
+                TypeScript.Debug.assert(_end <= _text.length(), "Token's end was not within the bounds of text: " + _end + " - [0, " + _text.length() + ")");
                 if (!str || text !== _text) {
                     text = _text;
                     str = _text.substr(0, _text.length());
@@ -17103,7 +17155,7 @@ var TypeScript;
                     return new FixedWidthTokenWithNoTrivia((fullStart << 7 /* FixedWidthTokenFullStartShift */) | kind);
                 }
                 else {
-                    var packedFullStartAndTriviaInfo = (fullStart << 2 /* LargeTokenFullStartShift */) | leadingTriviaInfo | (trailingTriviaInfo << 1);
+                    var packedFullStartAndTriviaInfo = (fullStart << 4 /* LargeTokenFullStartShift */) | leadingTriviaInfo | (trailingTriviaInfo << 2);
                     var packedFullWidthAndKind = (fullWidth << 7 /* LargeTokenFullWidthShift */) | kind;
                     var cachedText = isFixedWidth ? undefined : text.substr(start, end - start);
                     return new LargeScannerToken(packedFullStartAndTriviaInfo, packedFullWidthAndKind, cachedText);
@@ -17185,7 +17237,7 @@ var TypeScript;
                         case 11 /* verticalTab */:
                         case 12 /* formFeed */:
                             index++;
-                            result = 1;
+                            result |= 1;
                             continue;
                         case 13 /* carriageReturn */:
                             if ((index + 1) < end && str.charCodeAt(index + 1) === 10 /* lineFeed */) {
@@ -17193,21 +17245,21 @@ var TypeScript;
                             }
                         case 10 /* lineFeed */:
                             index++;
+                            result |= 1;
                             if (isTrailing) {
-                                return 1;
+                                return result;
                             }
-                            result = 1;
                             continue;
                         case 47 /* slash */:
                             if ((index + 1) < _end) {
                                 var ch2 = str.charCodeAt(index + 1);
                                 if (ch2 === 47 /* slash */) {
-                                    result = 1;
+                                    result |= 3;
                                     skipSingleLineCommentTrivia();
                                     continue;
                                 }
                                 if (ch2 === 42 /* asterisk */) {
-                                    result = 1;
+                                    result |= 3;
                                     skipMultiLineCommentTrivia();
                                     continue;
                                 }
@@ -17215,7 +17267,7 @@ var TypeScript;
                             return result;
                         default:
                             if (ch > 127 /* maxAsciiCharacter */ && slowScanTriviaInfo(ch)) {
-                                result = 1;
+                                result |= 1;
                                 continue;
                             }
                             return result;
@@ -17884,7 +17936,7 @@ var TypeScript;
                 var fullStart = token.fullStart();
                 var fullEnd = fullStart + token.fullWidth();
                 reset(text, fullStart, fullEnd);
-                var leadingTriviaInfo = scanTriviaInfo(false);
+                scanTriviaInfo(false);
                 var start = index;
                 scanSyntaxKind(isContextualToken(token));
                 var end = index;
@@ -17995,6 +18047,7 @@ var TypeScript;
                 _tokenDiagnostics.length = tokenDiagnosticsLength;
             }
             function resetToPosition(absolutePosition) {
+                TypeScript.Debug.assert(absolutePosition <= text.length(), "Trying to set the position outside the bounds of the text!");
                 _absolutePosition = absolutePosition;
                 removeDiagnosticsOnOrAfterPosition(absolutePosition);
                 slidingWindow.disgardAllItemsFromCurrentIndexOnwards();
@@ -19310,14 +19363,20 @@ var TypeScript;
             EmptyToken.prototype.hasLeadingTrivia = function () {
                 return false;
             };
-            EmptyToken.prototype.leadingTriviaWidth = function () {
-                return 0;
-            };
             EmptyToken.prototype.hasTrailingTrivia = function () {
+                return false;
+            };
+            EmptyToken.prototype.hasLeadingComment = function () {
+                return false;
+            };
+            EmptyToken.prototype.hasTrailingComment = function () {
                 return false;
             };
             EmptyToken.prototype.hasSkippedToken = function () {
                 return false;
+            };
+            EmptyToken.prototype.leadingTriviaWidth = function () {
+                return 0;
             };
             EmptyToken.prototype.trailingTriviaWidth = function () {
                 return 0;
@@ -19378,6 +19437,12 @@ var TypeScript;
             RealizedToken.prototype.hasTrailingTrivia = function () {
                 return this._trailingTrivia.count() > 0;
             };
+            RealizedToken.prototype.hasLeadingComment = function () {
+                return this._leadingTrivia.hasComment();
+            };
+            RealizedToken.prototype.hasTrailingComment = function () {
+                return this._trailingTrivia.hasComment();
+            };
             RealizedToken.prototype.leadingTriviaWidth = function () {
                 return this._leadingTrivia.fullWidth();
             };
@@ -19427,6 +19492,12 @@ var TypeScript;
             };
             ConvertedKeywordToken.prototype.hasTrailingTrivia = function () {
                 return this.underlyingToken.hasTrailingTrivia();
+            };
+            ConvertedKeywordToken.prototype.hasLeadingComment = function () {
+                return this.underlyingToken.hasLeadingComment();
+            };
+            ConvertedKeywordToken.prototype.hasTrailingComment = function () {
+                return this.underlyingToken.hasTrailingComment();
             };
             ConvertedKeywordToken.prototype.hasSkippedToken = function () {
                 return this.underlyingToken.hasSkippedToken();
@@ -25974,121 +26045,192 @@ var ts;
 var TypeScript;
 (function (TypeScript) {
     (function (Services) {
-        var GetScriptLexicalStructureWalker = (function (_super) {
-            __extends(GetScriptLexicalStructureWalker, _super);
-            function GetScriptLexicalStructureWalker(fileName) {
-                _super.call(this);
-                this.fileName = fileName;
-                this.nameStack = [];
-                this.kindStack = [];
-                this.parentScopes = [];
-                this.currentScope = this.createScope();
+        var NavigationBarItemGetter = (function () {
+            function NavigationBarItemGetter() {
+                this.hasGlobalNode = false;
             }
-            GetScriptLexicalStructureWalker.prototype.createScope = function () {
-                return {
-                    items: TypeScript.createIntrinsicsObject(),
-                    childScopes: TypeScript.createIntrinsicsObject(),
-                    childScopeNames: [],
-                    itemNames: []
-                };
-            };
-            GetScriptLexicalStructureWalker.prototype.pushNewContainerScope = function (containerName, kind) {
-                TypeScript.Debug.assert(containerName, "No scope name provided");
-                var key = kind + "+" + containerName;
-                this.nameStack.push(containerName);
-                this.kindStack.push(kind);
-                var parentScope = this.currentScope;
-                this.parentScopes.push(parentScope);
-                var scope = ts.lookUp(parentScope.childScopes, key);
-                if (!scope) {
-                    scope = this.createScope();
-                    parentScope.childScopes[key] = scope;
-                    parentScope.childScopeNames.push(key);
+            NavigationBarItemGetter.prototype.getIndent = function (node) {
+                var indent = this.hasGlobalNode ? 1 : 0;
+                var current = node.parent;
+                while (current != null) {
+                    if (current.kind() == 130 /* ModuleDeclaration */ || current.kind() === 129 /* FunctionDeclaration */) {
+                        indent++;
+                    }
+                    current = current.parent;
                 }
-                this.currentScope = scope;
-                return parentScope;
+                return indent;
             };
-            GetScriptLexicalStructureWalker.prototype.popScope = function () {
-                TypeScript.Debug.assert(this.parentScopes.length > 0, "No parent scopes to return to");
-                this.currentScope = this.parentScopes.pop();
-                this.kindStack.pop();
-                this.nameStack.pop();
-            };
-            GetScriptLexicalStructureWalker.prototype.collectItems = function (items, scope) {
-                var _this = this;
-                if (scope === void 0) { scope = this.currentScope; }
-                scope.itemNames.forEach(function (item) {
-                    items.push(scope.items[item]);
-                });
-                scope.childScopeNames.forEach(function (childScope) {
-                    _this.collectItems(items, scope.childScopes[childScope]);
-                });
-            };
-            GetScriptLexicalStructureWalker.getListsOfAllScriptLexicalStructure = function (items, fileName, unit) {
-                var visitor = new GetScriptLexicalStructureWalker(fileName);
-                TypeScript.visitNodeOrToken(visitor, unit);
-                visitor.collectItems(items);
-            };
-            GetScriptLexicalStructureWalker.prototype.createItem = function (node, modifiers, kind, name) {
-                var key = kind + "+" + name;
-                if (ts.lookUp(this.currentScope.items, key) !== undefined) {
-                    this.addAdditionalSpan(node, key);
-                    return;
-                }
-                var item = {
-                    name: name,
-                    kind: kind,
-                    matchKind: ts.MatchKind.exact,
-                    fileName: this.fileName,
-                    kindModifiers: this.getKindModifiers(modifiers),
-                    minChar: TypeScript.start(node),
-                    limChar: TypeScript.end(node),
-                    containerName: this.nameStack.join("."),
-                    containerKind: this.kindStack.length === 0 ? "" : TypeScript.ArrayUtilities.last(this.kindStack)
-                };
-                this.currentScope.items[key] = item;
-                this.currentScope.itemNames.push(key);
-            };
-            GetScriptLexicalStructureWalker.prototype.addAdditionalSpan = function (node, key) {
-                var item = ts.lookUp(this.currentScope.items, key);
-                TypeScript.Debug.assert(item !== undefined);
-                var start = TypeScript.start(node);
-                var span = {
-                    minChar: start,
-                    limChar: start + TypeScript.width(node)
-                };
-                if (item.additionalSpans) {
-                    item.additionalSpans.push(span);
-                }
-                else {
-                    item.additionalSpans = [span];
-                }
-            };
-            GetScriptLexicalStructureWalker.prototype.getKindModifiers = function (modifiers) {
+            NavigationBarItemGetter.prototype.getKindModifiers = function (modifiers) {
                 var result = [];
                 for (var i = 0, n = modifiers.length; i < n; i++) {
                     result.push(modifiers[i].text());
                 }
                 return result.length > 0 ? result.join(',') : ts.ScriptElementKindModifier.none;
             };
-            GetScriptLexicalStructureWalker.prototype.visitModuleDeclaration = function (node) {
-                var names = this.getModuleNames(node);
-                this.visitModuleDeclarationWorker(node, names, 0);
+            NavigationBarItemGetter.prototype.getItems = function (node) {
+                var _this = this;
+                return this.getItemsWorker(function () { return _this.getTopLevelNodes(node); }, function (n) { return _this.createTopLevelItem(n); });
             };
-            GetScriptLexicalStructureWalker.prototype.visitModuleDeclarationWorker = function (node, names, nameIndex) {
-                if (nameIndex === names.length) {
-                    _super.prototype.visitModuleDeclaration.call(this, node);
+            NavigationBarItemGetter.prototype.getChildNodes = function (nodes) {
+                var childNodes = [];
+                for (var i = 0, n = nodes.length; i < n; i++) {
+                    var node = nodes[i];
+                    if (node.kind() === 129 /* FunctionDeclaration */) {
+                        childNodes.push(node);
+                    }
+                    else if (node.kind() === 148 /* VariableStatement */) {
+                        var variableDeclaration = node.variableDeclaration;
+                        childNodes.push.apply(childNodes, variableDeclaration.variableDeclarators);
+                    }
                 }
-                else {
-                    var name = names[nameIndex];
-                    var kind = ts.ScriptElementKind.moduleElement;
-                    this.createItem(node, node.modifiers, kind, name);
-                    this.pushNewContainerScope(name, kind);
-                    this.visitModuleDeclarationWorker(node, names, nameIndex + 1);
-                    this.popScope();
+                return childNodes;
+            };
+            NavigationBarItemGetter.prototype.getTopLevelNodes = function (node) {
+                var topLevelNodes = [];
+                topLevelNodes.push(node);
+                this.addTopLevelNodes(node.moduleElements, topLevelNodes);
+                return topLevelNodes;
+            };
+            NavigationBarItemGetter.prototype.addTopLevelNodes = function (nodes, topLevelNodes) {
+                for (var i = 0, n = nodes.length; i < n; i++) {
+                    var node = nodes[i];
+                    switch (node.kind()) {
+                        case 131 /* ClassDeclaration */:
+                        case 132 /* EnumDeclaration */:
+                        case 128 /* InterfaceDeclaration */:
+                            topLevelNodes.push(node);
+                            break;
+                        case 130 /* ModuleDeclaration */:
+                            var moduleDeclaration = node;
+                            topLevelNodes.push(node);
+                            this.addTopLevelNodes(moduleDeclaration.moduleElements, topLevelNodes);
+                            break;
+                        case 129 /* FunctionDeclaration */:
+                            var functionDeclaration = node;
+                            if (this.isTopLevelFunctionDeclaration(functionDeclaration)) {
+                                topLevelNodes.push(node);
+                                this.addTopLevelNodes(functionDeclaration.block.statements, topLevelNodes);
+                            }
+                            break;
+                    }
                 }
             };
-            GetScriptLexicalStructureWalker.prototype.getModuleNames = function (node) {
+            NavigationBarItemGetter.prototype.isTopLevelFunctionDeclaration = function (functionDeclaration) {
+                return functionDeclaration.block && TypeScript.ArrayUtilities.any(functionDeclaration.block.statements, function (s) { return s.kind() === 129 /* FunctionDeclaration */; });
+            };
+            NavigationBarItemGetter.prototype.getItemsWorker = function (getNodes, createItem) {
+                var items = [];
+                var keyToItem = TypeScript.createIntrinsicsObject();
+                var nodes = getNodes();
+                for (var i = 0, n = nodes.length; i < n; i++) {
+                    var child = nodes[i];
+                    var item = createItem(child);
+                    if (item != null) {
+                        if (item.text.length > 0) {
+                            var key = item.text + "-" + item.kind;
+                            var itemWithSameName = keyToItem[key];
+                            if (itemWithSameName) {
+                                this.merge(itemWithSameName, item);
+                            }
+                            else {
+                                keyToItem[key] = item;
+                                items.push(item);
+                            }
+                        }
+                    }
+                }
+                return items;
+            };
+            NavigationBarItemGetter.prototype.merge = function (target, source) {
+                target.spans.push.apply(target.spans, source.spans);
+                if (source.childItems) {
+                    if (!target.childItems) {
+                        target.childItems = [];
+                    }
+                    outer: for (var i = 0, n = source.childItems.length; i < n; i++) {
+                        var sourceChild = source.childItems[i];
+                        for (var j = 0, m = target.childItems.length; j < m; j++) {
+                            var targetChild = target.childItems[j];
+                            if (targetChild.text === sourceChild.text && targetChild.kind === sourceChild.kind) {
+                                this.merge(targetChild, sourceChild);
+                                continue outer;
+                            }
+                        }
+                        target.childItems.push(sourceChild);
+                    }
+                }
+            };
+            NavigationBarItemGetter.prototype.createChildItem = function (node) {
+                switch (node.kind()) {
+                    case 242 /* Parameter */:
+                        var parameter = node;
+                        if (parameter.modifiers.length === 0) {
+                            return null;
+                        }
+                        return new ts.NavigationBarItem(parameter.identifier.text(), ts.ScriptElementKind.memberVariableElement, this.getKindModifiers(parameter.modifiers), [TypeScript.TextSpan.fromBounds(TypeScript.start(node), TypeScript.end(node))]);
+                    case 135 /* MemberFunctionDeclaration */:
+                        var memberFunction = node;
+                        return new ts.NavigationBarItem(memberFunction.propertyName.text(), ts.ScriptElementKind.memberFunctionElement, this.getKindModifiers(memberFunction.modifiers), [TypeScript.TextSpan.fromBounds(TypeScript.start(node), TypeScript.end(node))]);
+                    case 139 /* GetAccessor */:
+                        var getAccessor = node;
+                        return new ts.NavigationBarItem(getAccessor.propertyName.text(), ts.ScriptElementKind.memberGetAccessorElement, this.getKindModifiers(getAccessor.modifiers), [TypeScript.TextSpan.fromBounds(TypeScript.start(node), TypeScript.end(node))]);
+                    case 140 /* SetAccessor */:
+                        var setAccessor = node;
+                        return new ts.NavigationBarItem(setAccessor.propertyName.text(), ts.ScriptElementKind.memberSetAccessorElement, this.getKindModifiers(setAccessor.modifiers), [TypeScript.TextSpan.fromBounds(TypeScript.start(node), TypeScript.end(node))]);
+                    case 144 /* IndexSignature */:
+                        var indexSignature = node;
+                        return new ts.NavigationBarItem("[]", ts.ScriptElementKind.indexSignatureElement, ts.ScriptElementKindModifier.none, [TypeScript.TextSpan.fromBounds(TypeScript.start(node), TypeScript.end(node))]);
+                    case 243 /* EnumElement */:
+                        var enumElement = node;
+                        return new ts.NavigationBarItem(enumElement.propertyName.text(), ts.ScriptElementKind.memberVariableElement, ts.ScriptElementKindModifier.none, [TypeScript.TextSpan.fromBounds(TypeScript.start(node), TypeScript.end(node))]);
+                    case 142 /* CallSignature */:
+                        var callSignature = node;
+                        return new ts.NavigationBarItem("()", ts.ScriptElementKind.callSignatureElement, ts.ScriptElementKindModifier.none, [TypeScript.TextSpan.fromBounds(TypeScript.start(node), TypeScript.end(node))]);
+                    case 143 /* ConstructSignature */:
+                        var constructSignature = node;
+                        return new ts.NavigationBarItem("new()", ts.ScriptElementKind.constructSignatureElement, ts.ScriptElementKindModifier.none, [TypeScript.TextSpan.fromBounds(TypeScript.start(node), TypeScript.end(node))]);
+                    case 145 /* MethodSignature */:
+                        var methodSignature = node;
+                        return new ts.NavigationBarItem(methodSignature.propertyName.text(), ts.ScriptElementKind.memberFunctionElement, ts.ScriptElementKindModifier.none, [TypeScript.TextSpan.fromBounds(TypeScript.start(node), TypeScript.end(node))]);
+                    case 141 /* PropertySignature */:
+                        var propertySignature = node;
+                        return new ts.NavigationBarItem(propertySignature.propertyName.text(), ts.ScriptElementKind.memberVariableElement, ts.ScriptElementKindModifier.none, [TypeScript.TextSpan.fromBounds(TypeScript.start(node), TypeScript.end(node))]);
+                    case 129 /* FunctionDeclaration */:
+                        var functionDeclaration = node;
+                        if (!this.isTopLevelFunctionDeclaration(functionDeclaration)) {
+                            return new ts.NavigationBarItem(functionDeclaration.identifier.text(), ts.ScriptElementKind.functionElement, this.getKindModifiers(functionDeclaration.modifiers), [TypeScript.TextSpan.fromBounds(TypeScript.start(node), TypeScript.end(node))]);
+                        }
+                        break;
+                    case 136 /* MemberVariableDeclaration */:
+                        var memberVariableDeclaration = node;
+                        return new ts.NavigationBarItem(memberVariableDeclaration.variableDeclarator.propertyName.text(), ts.ScriptElementKind.memberVariableElement, this.getKindModifiers(memberVariableDeclaration.modifiers), [TypeScript.TextSpan.fromBounds(TypeScript.start(memberVariableDeclaration.variableDeclarator), TypeScript.end(memberVariableDeclaration.variableDeclarator))]);
+                    case 225 /* VariableDeclarator */:
+                        var variableDeclarator = node;
+                        return new ts.NavigationBarItem(variableDeclarator.propertyName.text(), ts.ScriptElementKind.variableElement, ts.ScriptElementKindModifier.none, [TypeScript.TextSpan.fromBounds(TypeScript.start(variableDeclarator), TypeScript.end(variableDeclarator))]);
+                    case 137 /* ConstructorDeclaration */:
+                        var constructorDeclaration = node;
+                        return new ts.NavigationBarItem("constructor", ts.ScriptElementKind.constructorImplementationElement, ts.ScriptElementKindModifier.none, [TypeScript.TextSpan.fromBounds(TypeScript.start(node), TypeScript.end(node))]);
+                }
+                return null;
+            };
+            NavigationBarItemGetter.prototype.createTopLevelItem = function (node) {
+                switch (node.kind()) {
+                    case 120 /* SourceUnit */:
+                        return this.createSourceUnitItem(node);
+                    case 131 /* ClassDeclaration */:
+                        return this.createClassItem(node);
+                    case 132 /* EnumDeclaration */:
+                        return this.createEnumItem(node);
+                    case 128 /* InterfaceDeclaration */:
+                        return this.createIterfaceItem(node);
+                    case 130 /* ModuleDeclaration */:
+                        return this.createModuleItem(node);
+                    case 129 /* FunctionDeclaration */:
+                        return this.createFunctionItem(node);
+                }
+                return null;
+            };
+            NavigationBarItemGetter.prototype.getModuleNames = function (node) {
                 var result = [];
                 if (node.stringLiteral) {
                     result.push(node.stringLiteral.text());
@@ -26098,7 +26240,7 @@ var TypeScript;
                 }
                 return result;
             };
-            GetScriptLexicalStructureWalker.prototype.getModuleNamesHelper = function (name, result) {
+            NavigationBarItemGetter.prototype.getModuleNamesHelper = function (name, result) {
                 if (name.kind() === 121 /* QualifiedName */) {
                     var qualifiedName = name;
                     this.getModuleNamesHelper(qualifiedName.left, result);
@@ -26108,106 +26250,46 @@ var TypeScript;
                     result.push(name.text());
                 }
             };
-            GetScriptLexicalStructureWalker.prototype.visitClassDeclaration = function (node) {
-                var name = node.identifier.text();
-                var kind = ts.ScriptElementKind.classElement;
-                this.createItem(node, node.modifiers, kind, name);
-                this.pushNewContainerScope(name, kind);
-                _super.prototype.visitClassDeclaration.call(this, node);
-                this.popScope();
+            NavigationBarItemGetter.prototype.createModuleItem = function (node) {
+                var _this = this;
+                var moduleNames = this.getModuleNames(node);
+                var childItems = this.getItemsWorker(function () { return _this.getChildNodes(node.moduleElements); }, function (n) { return _this.createChildItem(n); });
+                return new ts.NavigationBarItem(moduleNames.join("."), ts.ScriptElementKind.moduleElement, this.getKindModifiers(node.modifiers), [TypeScript.TextSpan.fromBounds(TypeScript.start(node), TypeScript.end(node))], childItems, this.getIndent(node));
             };
-            GetScriptLexicalStructureWalker.prototype.visitInterfaceDeclaration = function (node) {
-                var name = node.identifier.text();
-                var kind = ts.ScriptElementKind.interfaceElement;
-                this.createItem(node, node.modifiers, kind, name);
-                this.pushNewContainerScope(name, kind);
-                _super.prototype.visitInterfaceDeclaration.call(this, node);
-                this.popScope();
+            NavigationBarItemGetter.prototype.createFunctionItem = function (node) {
+                var _this = this;
+                var childItems = this.getItemsWorker(function () { return node.block.statements; }, function (n) { return _this.createChildItem(n); });
+                return new ts.NavigationBarItem(node.identifier.text(), ts.ScriptElementKind.functionElement, this.getKindModifiers(node.modifiers), [TypeScript.TextSpan.fromBounds(TypeScript.start(node), TypeScript.end(node))], childItems, this.getIndent(node));
             };
-            GetScriptLexicalStructureWalker.prototype.visitObjectType = function (node) {
-                if (node.parent.kind() === 128 /* InterfaceDeclaration */) {
-                    _super.prototype.visitObjectType.call(this, node);
+            NavigationBarItemGetter.prototype.createSourceUnitItem = function (node) {
+                var _this = this;
+                var childItems = this.getItemsWorker(function () { return _this.getChildNodes(node.moduleElements); }, function (n) { return _this.createChildItem(n); });
+                if (childItems === null || childItems.length === 0) {
+                    return null;
                 }
+                this.hasGlobalNode = true;
+                return new ts.NavigationBarItem("<global>", ts.ScriptElementKind.moduleElement, ts.ScriptElementKindModifier.none, [TypeScript.TextSpan.fromBounds(TypeScript.start(node), TypeScript.end(node))], childItems);
             };
-            GetScriptLexicalStructureWalker.prototype.visitEnumDeclaration = function (node) {
-                var name = node.identifier.text();
-                var kind = ts.ScriptElementKind.enumElement;
-                this.createItem(node, node.modifiers, kind, name);
-                this.pushNewContainerScope(name, kind);
-                _super.prototype.visitEnumDeclaration.call(this, node);
-                this.popScope();
+            NavigationBarItemGetter.prototype.createClassItem = function (node) {
+                var _this = this;
+                var constructor = TypeScript.ArrayUtilities.firstOrDefault(node.classElements, function (n) { return n.kind() === 137 /* ConstructorDeclaration */; });
+                var nodes = constructor ? constructor.callSignature.parameterList.parameters.concat(node.classElements) : node.classElements;
+                var childItems = this.getItemsWorker(function () { return nodes; }, function (n) { return _this.createChildItem(n); });
+                return new ts.NavigationBarItem(node.identifier.text(), ts.ScriptElementKind.classElement, this.getKindModifiers(node.modifiers), [TypeScript.TextSpan.fromBounds(TypeScript.start(node), TypeScript.end(node))], childItems, this.getIndent(node));
             };
-            GetScriptLexicalStructureWalker.prototype.visitConstructorDeclaration = function (node) {
-                this.createItem(node, TypeScript.Syntax.emptyList(), ts.ScriptElementKind.constructorImplementationElement, "constructor");
-                var parameters = node.callSignature.parameterList.parameters;
-                if (parameters) {
-                    for (var i = 0, n = parameters.length; i < n; i++) {
-                        var parameter = parameters[i];
-                        TypeScript.Debug.assert(parameter.kind() === 242 /* Parameter */);
-                        if (TypeScript.SyntaxUtilities.containsToken(parameter.modifiers, 57 /* PublicKeyword */) || TypeScript.SyntaxUtilities.containsToken(parameter.modifiers, 55 /* PrivateKeyword */)) {
-                            this.createItem(node, parameter.modifiers, ts.ScriptElementKind.memberVariableElement, parameter.identifier.text());
-                        }
-                    }
-                }
+            NavigationBarItemGetter.prototype.createEnumItem = function (node) {
+                var _this = this;
+                var childItems = this.getItemsWorker(function () { return node.enumElements; }, function (n) { return _this.createChildItem(n); });
+                return new ts.NavigationBarItem(node.identifier.text(), ts.ScriptElementKind.enumElement, this.getKindModifiers(node.modifiers), [TypeScript.TextSpan.fromBounds(TypeScript.start(node), TypeScript.end(node))], childItems, this.getIndent(node));
             };
-            GetScriptLexicalStructureWalker.prototype.visitMemberFunctionDeclaration = function (node) {
-                this.createItem(node, node.modifiers, ts.ScriptElementKind.memberFunctionElement, node.propertyName.text());
+            NavigationBarItemGetter.prototype.createIterfaceItem = function (node) {
+                var _this = this;
+                var childItems = this.getItemsWorker(function () { return node.body.typeMembers; }, function (n) { return _this.createChildItem(n); });
+                return new ts.NavigationBarItem(node.identifier.text(), ts.ScriptElementKind.interfaceElement, this.getKindModifiers(node.modifiers), [TypeScript.TextSpan.fromBounds(TypeScript.start(node), TypeScript.end(node))], childItems, this.getIndent(node));
             };
-            GetScriptLexicalStructureWalker.prototype.visitGetAccessor = function (node) {
-                this.createItem(node, node.modifiers, ts.ScriptElementKind.memberGetAccessorElement, node.propertyName.text());
-            };
-            GetScriptLexicalStructureWalker.prototype.visitSetAccessor = function (node) {
-                this.createItem(node, node.modifiers, ts.ScriptElementKind.memberSetAccessorElement, node.propertyName.text());
-            };
-            GetScriptLexicalStructureWalker.prototype.visitVariableDeclarator = function (node) {
-                var modifiers = node.parent.kind() === 136 /* MemberVariableDeclaration */ ? node.parent.modifiers : TypeScript.Syntax.emptyList();
-                var kind = node.parent.kind() === 136 /* MemberVariableDeclaration */ ? ts.ScriptElementKind.memberVariableElement : ts.ScriptElementKind.variableElement;
-                this.createItem(node, modifiers, kind, node.propertyName.text());
-            };
-            GetScriptLexicalStructureWalker.prototype.visitIndexSignature = function (node) {
-                this.createItem(node, TypeScript.Syntax.emptyList(), ts.ScriptElementKind.indexSignatureElement, "[]");
-            };
-            GetScriptLexicalStructureWalker.prototype.visitEnumElement = function (node) {
-                this.createItem(node, TypeScript.Syntax.emptyList(), ts.ScriptElementKind.memberVariableElement, node.propertyName.text());
-            };
-            GetScriptLexicalStructureWalker.prototype.visitCallSignature = function (node) {
-                this.createItem(node, TypeScript.Syntax.emptyList(), ts.ScriptElementKind.callSignatureElement, "()");
-            };
-            GetScriptLexicalStructureWalker.prototype.visitConstructSignature = function (node) {
-                this.createItem(node, TypeScript.Syntax.emptyList(), ts.ScriptElementKind.constructSignatureElement, "new()");
-            };
-            GetScriptLexicalStructureWalker.prototype.visitMethodSignature = function (node) {
-                this.createItem(node, TypeScript.Syntax.emptyList(), ts.ScriptElementKind.memberFunctionElement, node.propertyName.text());
-            };
-            GetScriptLexicalStructureWalker.prototype.visitPropertySignature = function (node) {
-                this.createItem(node, TypeScript.Syntax.emptyList(), ts.ScriptElementKind.memberVariableElement, node.propertyName.text());
-            };
-            GetScriptLexicalStructureWalker.prototype.visitFunctionDeclaration = function (node) {
-                if (TypeScript.width(node.identifier) > 0) {
-                    this.createItem(node, node.modifiers, ts.ScriptElementKind.functionElement, node.identifier.text());
-                }
-            };
-            GetScriptLexicalStructureWalker.prototype.visitBlock = function (node) {
-            };
-            GetScriptLexicalStructureWalker.prototype.visitIfStatement = function (node) {
-            };
-            GetScriptLexicalStructureWalker.prototype.visitExpressionStatement = function (node) {
-            };
-            GetScriptLexicalStructureWalker.prototype.visitThrowStatement = function (node) {
-            };
-            GetScriptLexicalStructureWalker.prototype.visitReturnStatement = function (node) {
-            };
-            GetScriptLexicalStructureWalker.prototype.visitSwitchStatement = function (node) {
-            };
-            GetScriptLexicalStructureWalker.prototype.visitWithStatement = function (node) {
-            };
-            GetScriptLexicalStructureWalker.prototype.visitTryStatement = function (node) {
-            };
-            GetScriptLexicalStructureWalker.prototype.visitLabeledStatement = function (node) {
-            };
-            return GetScriptLexicalStructureWalker;
-        })(TypeScript.SyntaxWalker);
-        Services.GetScriptLexicalStructureWalker = GetScriptLexicalStructureWalker;
+            return NavigationBarItemGetter;
+        })();
+        Services.NavigationBarItemGetter = NavigationBarItemGetter;
     })(TypeScript.Services || (TypeScript.Services = {}));
     var Services = TypeScript.Services;
 })(TypeScript || (TypeScript = {}));
@@ -26219,59 +26301,33 @@ var TypeScript;
             }
             BraceMatcher.getMatchSpans = function (syntaxTree, position) {
                 var result = [];
-                var currentToken = TypeScript.findToken(syntaxTree.sourceUnit(), position);
-                BraceMatcher.getMatchingCloseBrace(currentToken, position, result);
-                BraceMatcher.getMatchingOpenBrace(currentToken, position, result);
+                var token = TypeScript.findToken(syntaxTree.sourceUnit(), position);
+                if (TypeScript.start(token) === position) {
+                    var matchKind = BraceMatcher.getMatchingTokenKind(token);
+                    if (matchKind !== null) {
+                        var parentElement = token.parent;
+                        for (var i = 0, n = TypeScript.childCount(parentElement); i < n; i++) {
+                            var current = TypeScript.childAt(parentElement, i);
+                            if (current !== null && TypeScript.fullWidth(current) > 0) {
+                                if (current.kind() === matchKind) {
+                                    var range1 = new TypeScript.TextSpan(TypeScript.start(token), TypeScript.width(token));
+                                    var range2 = new TypeScript.TextSpan(TypeScript.start(current), TypeScript.width(current));
+                                    if (range1.start() < range2.start()) {
+                                        result.push(range1, range2);
+                                    }
+                                    else {
+                                        result.push(range2, range1);
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
                 return result;
             };
-            BraceMatcher.getMatchingCloseBrace = function (currentToken, position, result) {
-                if (TypeScript.start(currentToken) === position) {
-                    var closingBraceKind = BraceMatcher.getMatchingCloseBraceTokenKind(currentToken);
-                    if (closingBraceKind !== null) {
-                        var parentElement = currentToken.parent;
-                        var currentPosition = TypeScript.fullStart(currentToken.parent);
-                        for (var i = 0, n = TypeScript.childCount(parentElement); i < n; i++) {
-                            var element = TypeScript.childAt(parentElement, i);
-                            if (element !== null && TypeScript.fullWidth(element) > 0) {
-                                if (element.kind() === closingBraceKind) {
-                                    var range1 = new TypeScript.TextSpan(position, TypeScript.width(currentToken));
-                                    var range2 = new TypeScript.TextSpan(currentPosition + TypeScript.leadingTriviaWidth(element), TypeScript.width(element));
-                                    result.push(range1, range2);
-                                    break;
-                                }
-                                currentPosition += TypeScript.fullWidth(element);
-                            }
-                        }
-                    }
-                }
-            };
-            BraceMatcher.getMatchingOpenBrace = function (currentToken, position, result) {
-                if (currentToken.fullStart() === position) {
-                    currentToken = TypeScript.previousToken(currentToken);
-                }
-                if (currentToken !== null && TypeScript.start(currentToken) === (position - 1)) {
-                    var openBraceKind = BraceMatcher.getMatchingOpenBraceTokenKind(currentToken);
-                    if (openBraceKind !== null) {
-                        var parentElement = currentToken.parent;
-                        var currentPosition = TypeScript.fullStart(currentToken.parent) + TypeScript.fullWidth(parentElement);
-                        for (var i = TypeScript.childCount(parentElement) - 1; i >= 0; i--) {
-                            var element = TypeScript.childAt(parentElement, i);
-                            if (element !== null && TypeScript.fullWidth(element) > 0) {
-                                if (element.kind() === openBraceKind) {
-                                    var range1 = new TypeScript.TextSpan(position - 1, TypeScript.width(currentToken));
-                                    var range2 = new TypeScript.TextSpan(currentPosition - TypeScript.lastToken(element).trailingTriviaWidth() - TypeScript.width(element), TypeScript.width(element));
-                                    result.push(range1, range2);
-                                    break;
-                                }
-                                currentPosition -= TypeScript.fullWidth(element);
-                            }
-                        }
-                    }
-                }
-            };
-            BraceMatcher.getMatchingCloseBraceTokenKind = function (positionedElement) {
-                var element = positionedElement !== null && positionedElement;
-                switch (element.kind()) {
+            BraceMatcher.getMatchingTokenKind = function (token) {
+                switch (token.kind()) {
                     case 70 /* OpenBraceToken */:
                         return 71 /* CloseBraceToken */;
                     case 72 /* OpenParenToken */:
@@ -26279,13 +26335,7 @@ var TypeScript;
                     case 74 /* OpenBracketToken */:
                         return 75 /* CloseBracketToken */;
                     case 80 /* LessThanToken */:
-                        return TypeScript.SyntaxUtilities.isAngleBracket(positionedElement) ? 81 /* GreaterThanToken */ : null;
-                }
-                return null;
-            };
-            BraceMatcher.getMatchingOpenBraceTokenKind = function (positionedElement) {
-                var element = positionedElement !== null && positionedElement;
-                switch (element.kind()) {
+                        return 81 /* GreaterThanToken */;
                     case 71 /* CloseBraceToken */:
                         return 70 /* OpenBraceToken */;
                     case 73 /* CloseParenToken */:
@@ -26293,7 +26343,7 @@ var TypeScript;
                     case 75 /* CloseBracketToken */:
                         return 74 /* OpenBracketToken */;
                     case 81 /* GreaterThanToken */:
-                        return TypeScript.SyntaxUtilities.isAngleBracket(positionedElement) ? 80 /* LessThanToken */ : null;
+                        return 80 /* LessThanToken */;
                 }
                 return null;
             };
@@ -26316,10 +26366,7 @@ var TypeScript;
                     return null;
                 }
                 if (childElements.length == 0) {
-                    return {
-                        minChar: TypeScript.start(parentElement),
-                        limChar: TypeScript.end(parentElement)
-                    };
+                    return TypeScript.TextSpan.fromBounds(TypeScript.start(parentElement), TypeScript.end(parentElement));
                 }
                 var start;
                 var end;
@@ -26332,16 +26379,10 @@ var TypeScript;
                         end = TypeScript.end(element);
                     }
                 }
-                return {
-                    minChar: start,
-                    limChar: end
-                };
+                return TypeScript.TextSpan.fromBounds(start, end);
             }
             function createBreakpointSpanInfoWithLimChar(startElement, limChar) {
-                return {
-                    minChar: TypeScript.start(startElement),
-                    limChar: limChar
-                };
+                return TypeScript.TextSpan.fromBounds(TypeScript.start(startElement), limChar);
             }
             var BreakpointResolver = (function () {
                 function BreakpointResolver(posLine, lineMap) {
@@ -27310,6 +27351,9 @@ var TypeScript;
                     this.snapshot = snapshot;
                     this.lines = [];
                 }
+                TextSnapshot.prototype.getLength = function () {
+                    return this.snapshot.length();
+                };
                 TextSnapshot.prototype.getText = function (span) {
                     return this.snapshot.substr(span.start(), span.length());
                 };
@@ -27536,13 +27580,9 @@ var TypeScript;
                     var span = TypeScript.TextSpan.fromBounds(minChar, limChar);
                     return this.formatSpan(span, 1 /* FormatSelection */);
                 };
-                FormattingManager.prototype.formatDocument = function (minChar, limChar) {
-                    var span = TypeScript.TextSpan.fromBounds(minChar, limChar);
+                FormattingManager.prototype.formatDocument = function () {
+                    var span = TypeScript.TextSpan.fromBounds(0, this.snapshot.getLength());
                     return this.formatSpan(span, 0 /* FormatDocument */);
-                };
-                FormattingManager.prototype.formatOnPaste = function (minChar, limChar) {
-                    var span = TypeScript.TextSpan.fromBounds(minChar, limChar);
-                    return this.formatSpan(span, 5 /* FormatOnPaste */);
                 };
                 FormattingManager.prototype.formatOnSemicolon = function (caretPosition) {
                     var sourceUnit = this.syntaxTree.sourceUnit();
@@ -27586,11 +27626,8 @@ var TypeScript;
                     var result = [];
                     var formattingEdits = Formatting.Formatter.getEdits(span, this.syntaxTree.sourceUnit(), this.options, true, this.snapshot, this.rulesProvider, formattingRequestKind);
                     formattingEdits.forEach(function (item) {
-                        result.push({
-                            minChar: item.position,
-                            limChar: item.position + item.length,
-                            text: item.replaceWith
-                        });
+                        var edit = new ts.TextChange(new TypeScript.TextSpan(item.position, item.length), item.replaceWith);
+                        result.push(edit);
                     });
                     return result;
                 };
@@ -28274,14 +28311,9 @@ var TypeScript;
                     return this.rulesMap;
                 };
                 RulesProvider.prototype.ensureUpToDate = function (options) {
-                    var _this = this;
                     if (this.options == null || !ts.compareDataObjects(this.options, options)) {
-                        var activeRules = TypeScript.timeFunction(this.logger, "RulesProvider: createActiveRules()", function () {
-                            return _this.createActiveRules(options);
-                        });
-                        var rulesMap = TypeScript.timeFunction(this.logger, "RulesProvider: RulesMap.create()", function () {
-                            return Formatting.RulesMap.create(activeRules);
-                        });
+                        var activeRules = this.createActiveRules(options);
+                        var rulesMap = Formatting.RulesMap.create(activeRules);
                         this.activeRules = activeRules;
                         this.rulesMap = rulesMap;
                         this.options = ts.clone(options);
@@ -29301,36 +29333,11 @@ var TypeScript;
     var NullLogger = (function () {
         function NullLogger() {
         }
-        NullLogger.prototype.information = function () {
-            return false;
-        };
-        NullLogger.prototype.debug = function () {
-            return false;
-        };
-        NullLogger.prototype.warning = function () {
-            return false;
-        };
-        NullLogger.prototype.error = function () {
-            return false;
-        };
-        NullLogger.prototype.fatal = function () {
-            return false;
-        };
         NullLogger.prototype.log = function (s) {
         };
         return NullLogger;
     })();
     TypeScript.NullLogger = NullLogger;
-    function timeFunction(logger, funcDescription, func) {
-        var start = (new Date()).getTime();
-        var result = func();
-        var end = (new Date()).getTime();
-        if (logger.information()) {
-            logger.log(funcDescription + " completed in " + (end - start) + " msec");
-        }
-        return result;
-    }
-    TypeScript.timeFunction = timeFunction;
 })(TypeScript || (TypeScript = {}));
 var TypeScript;
 (function (TypeScript) {
@@ -31020,6 +31027,9 @@ var ts;
         SourceFileObject.prototype.getSourceUnit = function () {
             return this.getSyntaxTree().sourceUnit();
         };
+        SourceFileObject.prototype.getScriptSnapshot = function () {
+            return this.scriptSnapshot;
+        };
         SourceFileObject.prototype.getLineMap = function () {
             return this.getSyntaxTree().lineMap();
         };
@@ -31084,6 +31094,164 @@ var ts;
         };
         return SourceFileObject;
     })(NodeObject);
+    var NavigationBarItem = (function () {
+        function NavigationBarItem(text, kind, kindModifiers, spans, childItems, indent, bolded, grayed) {
+            if (childItems === void 0) { childItems = null; }
+            if (indent === void 0) { indent = 0; }
+            if (bolded === void 0) { bolded = false; }
+            if (grayed === void 0) { grayed = false; }
+            this.text = text;
+            this.kind = kind;
+            this.kindModifiers = kindModifiers;
+            this.spans = spans;
+            this.childItems = childItems;
+            this.indent = indent;
+            this.bolded = bolded;
+            this.grayed = grayed;
+        }
+        return NavigationBarItem;
+    })();
+    ts.NavigationBarItem = NavigationBarItem;
+    var TodoCommentDescriptor = (function () {
+        function TodoCommentDescriptor(text, priority) {
+            this.text = text;
+            this.priority = priority;
+        }
+        return TodoCommentDescriptor;
+    })();
+    ts.TodoCommentDescriptor = TodoCommentDescriptor;
+    var TodoComment = (function () {
+        function TodoComment(descriptor, message, position) {
+            this.descriptor = descriptor;
+            this.message = message;
+            this.position = position;
+        }
+        return TodoComment;
+    })();
+    ts.TodoComment = TodoComment;
+    var TextChange = (function () {
+        function TextChange(span, newText) {
+            this.span = span;
+            this.newText = newText;
+        }
+        TextChange.createInsert = function (pos, newText) {
+            return new TextChange(new TypeScript.TextSpan(pos, 0), newText);
+        };
+        TextChange.createDelete = function (start, end) {
+            return new TextChange(TypeScript.TextSpan.fromBounds(start, end), "");
+        };
+        TextChange.createReplace = function (start, end, newText) {
+            return new TextChange(TypeScript.TextSpan.fromBounds(start, end), newText);
+        };
+        return TextChange;
+    })();
+    ts.TextChange = TextChange;
+    var ReferenceEntry = (function () {
+        function ReferenceEntry(fileName, textSpan, isWriteAccess) {
+            this.fileName = "";
+            this.isWriteAccess = false;
+            this.fileName = fileName;
+            this.textSpan = textSpan;
+            this.isWriteAccess = isWriteAccess;
+        }
+        return ReferenceEntry;
+    })();
+    ts.ReferenceEntry = ReferenceEntry;
+    var NavigateToItem = (function () {
+        function NavigateToItem(name, kind, kindModifiers, matchKind, fileName, textSpan, containerName, containerKind) {
+            this.name = name;
+            this.kind = kind;
+            this.kindModifiers = kindModifiers;
+            this.matchKind = matchKind;
+            this.fileName = fileName;
+            this.textSpan = textSpan;
+            this.containerName = containerName;
+            this.containerKind = containerKind;
+        }
+        return NavigateToItem;
+    })();
+    ts.NavigateToItem = NavigateToItem;
+    var DefinitionInfo = (function () {
+        function DefinitionInfo(fileName, textSpan, kind, name, containerKind, containerName) {
+            this.fileName = fileName;
+            this.textSpan = textSpan;
+            this.kind = kind;
+            this.name = name;
+            this.containerKind = containerKind;
+            this.containerName = containerName;
+        }
+        return DefinitionInfo;
+    })();
+    ts.DefinitionInfo = DefinitionInfo;
+    var TypeInfo = (function () {
+        function TypeInfo(memberName, docComment, fullSymbolName, kind, textSpan) {
+            this.memberName = memberName;
+            this.docComment = docComment;
+            this.fullSymbolName = fullSymbolName;
+            this.kind = kind;
+            this.textSpan = textSpan;
+        }
+        return TypeInfo;
+    })();
+    ts.TypeInfo = TypeInfo;
+    var RenameInfo = (function () {
+        function RenameInfo(canRename, localizedErrorMessage, displayName, fullDisplayName, kind, kindModifiers, triggerSpan) {
+            this.canRename = canRename;
+            this.localizedErrorMessage = localizedErrorMessage;
+            this.displayName = displayName;
+            this.fullDisplayName = fullDisplayName;
+            this.kind = kind;
+            this.kindModifiers = kindModifiers;
+            this.triggerSpan = triggerSpan;
+        }
+        RenameInfo.CreateError = function (localizedErrorMessage) {
+            return new RenameInfo(false, localizedErrorMessage, null, null, null, null, null);
+        };
+        RenameInfo.Create = function (displayName, fullDisplayName, kind, kindModifiers, triggerSpan) {
+            return new RenameInfo(true, null, displayName, fullDisplayName, kind, kindModifiers, triggerSpan);
+        };
+        return RenameInfo;
+    })();
+    ts.RenameInfo = RenameInfo;
+    var SignatureHelpParameter = (function () {
+        function SignatureHelpParameter(name, documentation, display, isOptional) {
+            this.name = name;
+            this.documentation = documentation;
+            this.display = display;
+            this.isOptional = isOptional;
+        }
+        return SignatureHelpParameter;
+    })();
+    ts.SignatureHelpParameter = SignatureHelpParameter;
+    var SignatureHelpItem = (function () {
+        function SignatureHelpItem(isVariadic, prefix, suffix, separator, parameters, documentation) {
+            this.isVariadic = isVariadic;
+            this.prefix = prefix;
+            this.suffix = suffix;
+            this.separator = separator;
+            this.parameters = parameters;
+            this.documentation = documentation;
+        }
+        return SignatureHelpItem;
+    })();
+    ts.SignatureHelpItem = SignatureHelpItem;
+    var SignatureHelpItems = (function () {
+        function SignatureHelpItems(items, applicableSpan, selectedItemIndex) {
+            this.items = items;
+            this.applicableSpan = applicableSpan;
+            this.selectedItemIndex = selectedItemIndex;
+        }
+        return SignatureHelpItems;
+    })();
+    ts.SignatureHelpItems = SignatureHelpItems;
+    var SignatureHelpState = (function () {
+        function SignatureHelpState(argumentIndex, argumentCount) {
+            this.argumentIndex = argumentIndex;
+            this.argumentCount = argumentCount;
+        }
+        return SignatureHelpState;
+    })();
+    ts.SignatureHelpState = SignatureHelpState;
     (function (EmitOutputResult) {
         EmitOutputResult[EmitOutputResult["Succeeded"] = 0] = "Succeeded";
         EmitOutputResult[EmitOutputResult["FailedBecauseOfSyntaxErrors"] = 1] = "FailedBecauseOfSyntaxErrors";
@@ -31264,24 +31432,23 @@ var ts;
             }
             return file.sourceText;
         };
-        HostCache.prototype.getScriptTextChangeRangeSinceVersion = function (filename, lastKnownVersion) {
+        HostCache.prototype.getChangeRange = function (filename, lastKnownVersion, oldScriptSnapshot) {
             var currentVersion = this.getVersion(filename);
             if (lastKnownVersion === currentVersion) {
                 return TypeScript.TextChangeRange.unchanged;
             }
             var scriptSnapshot = this.getScriptSnapshot(filename);
-            return scriptSnapshot.getTextChangeRangeSinceVersion(lastKnownVersion);
+            return scriptSnapshot.getChangeRange(oldScriptSnapshot);
         };
         return HostCache;
     })();
     var SyntaxTreeCache = (function () {
         function SyntaxTreeCache(host) {
             this.host = host;
-            this.currentfilename = "";
-            this.currentFileVersion = -1;
+            this.currentFilename = "";
+            this.currentFileVersion = null;
             this.currentSourceFile = null;
             this.currentFileSyntaxTree = null;
-            this.currentFileScriptSnapshot = null;
             this.hostCache = new HostCache(host);
         }
         SyntaxTreeCache.prototype.initialize = function (filename) {
@@ -31290,7 +31457,7 @@ var ts;
             var version = this.hostCache.getVersion(filename);
             var syntaxTree = null;
             var sourceFile;
-            if (this.currentFileSyntaxTree === null || this.currentfilename !== filename) {
+            if (this.currentFileSyntaxTree === null || this.currentFilename !== filename) {
                 var scriptSnapshot = this.hostCache.getScriptSnapshot(filename);
                 syntaxTree = this.createSyntaxTree(filename, scriptSnapshot);
                 sourceFile = createSourceFileFromScriptSnapshot(filename, scriptSnapshot, getDefaultCompilerOptions(), version, true);
@@ -31298,16 +31465,15 @@ var ts;
             }
             else if (this.currentFileVersion !== version) {
                 var scriptSnapshot = this.hostCache.getScriptSnapshot(filename);
-                syntaxTree = this.updateSyntaxTree(filename, scriptSnapshot, this.currentFileSyntaxTree, this.currentFileVersion);
-                var editRange = this.hostCache.getScriptTextChangeRangeSinceVersion(filename, this.currentFileVersion);
+                syntaxTree = this.updateSyntaxTree(filename, scriptSnapshot, this.currentSourceFile.getScriptSnapshot(), this.currentFileSyntaxTree, this.currentFileVersion);
+                var editRange = this.hostCache.getChangeRange(filename, this.currentFileVersion, this.currentSourceFile.getScriptSnapshot());
                 sourceFile = !editRange ? createSourceFileFromScriptSnapshot(filename, scriptSnapshot, getDefaultCompilerOptions(), version, true) : this.currentSourceFile.update(scriptSnapshot, version, true, editRange);
                 fixupParentReferences(sourceFile);
             }
             if (syntaxTree !== null) {
                 ts.Debug.assert(sourceFile);
-                this.currentFileScriptSnapshot = scriptSnapshot;
                 this.currentFileVersion = version;
-                this.currentfilename = filename;
+                this.currentFilename = filename;
                 this.currentFileSyntaxTree = syntaxTree;
                 this.currentSourceFile = sourceFile;
             }
@@ -31333,20 +31499,20 @@ var ts;
         };
         SyntaxTreeCache.prototype.getCurrentScriptSnapshot = function (filename) {
             this.getCurrentFileSyntaxTree(filename);
-            return this.currentFileScriptSnapshot;
+            return this.getCurrentSourceFile(filename).getScriptSnapshot();
         };
         SyntaxTreeCache.prototype.createSyntaxTree = function (filename, scriptSnapshot) {
             var text = TypeScript.SimpleText.fromScriptSnapshot(scriptSnapshot);
             var syntaxTree = TypeScript.Parser.parse(filename, text, getDefaultCompilerOptions().target, TypeScript.isDTSFile(filename));
             return syntaxTree;
         };
-        SyntaxTreeCache.prototype.updateSyntaxTree = function (filename, scriptSnapshot, previousSyntaxTree, previousFileVersion) {
-            var editRange = this.hostCache.getScriptTextChangeRangeSinceVersion(filename, previousFileVersion);
+        SyntaxTreeCache.prototype.updateSyntaxTree = function (filename, scriptSnapshot, previousScriptSnapshot, previousSyntaxTree, previousFileVersion) {
+            var editRange = this.hostCache.getChangeRange(filename, previousFileVersion, previousScriptSnapshot);
             if (editRange === null) {
                 return this.createSyntaxTree(filename, scriptSnapshot);
             }
             var nextSyntaxTree = TypeScript.IncrementalParser.parse(previousSyntaxTree, editRange, TypeScript.SimpleText.fromScriptSnapshot(scriptSnapshot));
-            this.ensureInvariants(filename, editRange, nextSyntaxTree, this.currentFileScriptSnapshot, scriptSnapshot);
+            this.ensureInvariants(filename, editRange, nextSyntaxTree, previousScriptSnapshot, scriptSnapshot);
             return nextSyntaxTree;
         };
         SyntaxTreeCache.prototype.ensureInvariants = function (filename, editRange, incrementalTree, oldScriptSnapshot, newScriptSnapshot) {
@@ -31562,7 +31728,7 @@ var ts;
                     }
                     var textChangeRange = null;
                     if (sourceFile.isOpen && isOpen) {
-                        textChangeRange = hostCache.getScriptTextChangeRangeSinceVersion(filename, sourceFile.version);
+                        textChangeRange = hostCache.getChangeRange(filename, sourceFile.version, sourceFile.getScriptSnapshot());
                     }
                     sourceFile = documentRegistry.updateDocument(sourceFile, filename, compilationSettings, scriptSnapshot, version, isOpen, textChangeRange);
                 }
@@ -31930,24 +32096,17 @@ var ts;
                 result.push(ScriptElementKindModifier.ambientModifier);
             return result.length > 0 ? result.join(',') : ScriptElementKindModifier.none;
         }
-        function getTypeAtPosition(filename, position) {
+        function getTypeAtPosition(fileName, position) {
             synchronizeHostData();
-            filename = TypeScript.switchToForwardSlashes(filename);
-            var sourceFile = getSourceFile(filename);
+            fileName = TypeScript.switchToForwardSlashes(fileName);
+            var sourceFile = getSourceFile(fileName);
             var node = getNodeAtPosition(sourceFile.getSourceFile(), position);
             if (!node)
                 return undefined;
             var symbol = typeInfoResolver.getSymbolInfo(node);
             var type = symbol && typeInfoResolver.getTypeOfSymbol(symbol);
             if (type) {
-                return {
-                    memberName: new TypeScript.MemberNameString(typeInfoResolver.typeToString(type)),
-                    docComment: "",
-                    fullSymbolName: typeInfoResolver.symbolToString(symbol, getContainerNode(node)),
-                    kind: getSymbolKind(symbol),
-                    minChar: node.pos,
-                    limChar: node.end
-                };
+                return new TypeInfo(new TypeScript.MemberNameString(typeInfoResolver.typeToString(type)), "", typeInfoResolver.symbolToString(symbol, getContainerNode(node)), getSymbolKind(symbol), TypeScript.TextSpan.fromBounds(node.pos, node.end));
             }
             return undefined;
         }
@@ -31990,15 +32149,7 @@ var ts;
                 return node.kind === 55 /* Identifier */ && isFunctionDeclaration(node.parent) && node.parent.name === node;
             }
             function getDefinitionInfo(node, symbolKind, symbolName, containerName) {
-                return {
-                    fileName: node.getSourceFile().filename,
-                    minChar: node.getStart(),
-                    limChar: node.getEnd(),
-                    kind: symbolKind,
-                    name: symbolName,
-                    containerName: containerName,
-                    containerKind: undefined
-                };
+                return new DefinitionInfo(node.getSourceFile().filename, TypeScript.TextSpan.fromBounds(node.getStart(), node.getEnd()), symbolKind, symbolName, undefined, containerName);
             }
             function tryAddSignature(signatureDeclarations, selectConstructors, symbolKind, symbolName, containerName, result) {
                 var declarations = [];
@@ -32052,15 +32203,7 @@ var ts;
             if (comment) {
                 var targetFilename = ts.normalizePath(ts.combinePaths(ts.getDirectoryPath(filename), comment.filename));
                 if (program.getSourceFile(targetFilename)) {
-                    return [{
-                        fileName: targetFilename,
-                        minChar: 0,
-                        limChar: 0,
-                        kind: ScriptElementKind.scriptElement,
-                        name: comment.filename,
-                        containerName: undefined,
-                        containerKind: undefined
-                    }];
+                    return [new DefinitionInfo(targetFilename, TypeScript.TextSpan.fromBounds(0, 0), ScriptElementKind.scriptElement, comment.filename, undefined, undefined)];
                 }
                 return undefined;
             }
@@ -32135,24 +32278,19 @@ var ts;
                     break;
                 }
             }
-            return {
-                minChar: TypeScript.start(node),
-                limChar: TypeScript.end(node)
-            };
+            return TypeScript.TextSpan.fromBounds(TypeScript.start(node), TypeScript.end(node));
         }
         function getBreakpointStatementAtPosition(filename, position) {
             filename = TypeScript.switchToForwardSlashes(filename);
             var syntaxtree = getSyntaxTree(filename);
             return TypeScript.Services.Breakpoints.getBreakpointLocation(syntaxtree, position);
         }
-        function getScriptLexicalStructure(filename) {
+        function getNavigationBarItems(filename) {
             filename = TypeScript.switchToForwardSlashes(filename);
             var syntaxTree = getSyntaxTree(filename);
-            var items = [];
-            TypeScript.Services.GetScriptLexicalStructureWalker.getListsOfAllScriptLexicalStructure(items, filename, syntaxTree.sourceUnit());
-            return items;
+            return new TypeScript.Services.NavigationBarItemGetter().getItems(syntaxTree.sourceUnit());
         }
-        function getOutliningRegions(filename) {
+        function getOutliningSpans(filename) {
             filename = TypeScript.switchToForwardSlashes(filename);
             var sourceFile = getCurrentSourceFile(filename);
             return ts.OutliningElementsCollector.collectElements(sourceFile);
@@ -32183,37 +32321,103 @@ var ts;
             var manager = new TypeScript.Services.Formatting.FormattingManager(syntaxTree, textSnapshot, formattingRulesProvider, options);
             return manager;
         }
-        function getFormattingEditsForRange(filename, minChar, limChar, options) {
-            filename = TypeScript.switchToForwardSlashes(filename);
-            var manager = getFormattingManager(filename, options);
-            return manager.formatSelection(minChar, limChar);
+        function getFormattingEditsForRange(fileName, start, end, options) {
+            fileName = TypeScript.switchToForwardSlashes(fileName);
+            var manager = getFormattingManager(fileName, options);
+            return manager.formatSelection(start, end);
         }
-        function getFormattingEditsForDocument(filename, minChar, limChar, options) {
-            filename = TypeScript.switchToForwardSlashes(filename);
-            var manager = getFormattingManager(filename, options);
-            return manager.formatDocument(minChar, limChar);
+        function getFormattingEditsForDocument(fileName, options) {
+            fileName = TypeScript.switchToForwardSlashes(fileName);
+            var manager = getFormattingManager(fileName, options);
+            return manager.formatDocument();
         }
-        function getFormattingEditsOnPaste(filename, minChar, limChar, options) {
-            filename = TypeScript.switchToForwardSlashes(filename);
-            var manager = getFormattingManager(filename, options);
-            return manager.formatOnPaste(minChar, limChar);
-        }
-        function getFormattingEditsAfterKeystroke(filename, position, key, options) {
-            filename = TypeScript.switchToForwardSlashes(filename);
-            var manager = getFormattingManager(filename, options);
-            if (key === "}")
+        function getFormattingEditsAfterKeystroke(fileName, position, key, options) {
+            fileName = TypeScript.switchToForwardSlashes(fileName);
+            var manager = getFormattingManager(fileName, options);
+            if (key === "}") {
                 return manager.formatOnClosingCurlyBrace(position);
-            else if (key === ";")
+            }
+            else if (key === ";") {
                 return manager.formatOnSemicolon(position);
-            else if (key === "\n")
+            }
+            else if (key === "\n") {
                 return manager.formatOnEnter(position);
-            else
-                return [];
+            }
+            return [];
+        }
+        function escapeRegExp(str) {
+            return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+        }
+        function getTodoCommentsRegExp(descriptors) {
+            var singleLineCommentStart = /(?:\/\/+\s*)/.source;
+            var multiLineCommentStart = /(?:\/\*+\s*)/.source;
+            var anyNumberOfSpacesAndAsterixesAtStartOfLine = /(?:^(?:\s|\*)*)/.source;
+            var preamble = "(" + anyNumberOfSpacesAndAsterixesAtStartOfLine + "|" + singleLineCommentStart + "|" + multiLineCommentStart + ")";
+            var literals = "(?:" + descriptors.map(function (d) { return "(" + escapeRegExp(d.text) + ")"; }).join("|") + ")";
+            var endOfLineOrEndOfComment = /(?:$|\*\/)/.source;
+            var messageRemainder = /(?:.*?)/.source;
+            var messagePortion = "(" + literals + messageRemainder + ")";
+            var regExpString = preamble + messagePortion + endOfLineOrEndOfComment;
+            return new RegExp(regExpString, "gim");
+        }
+        function getTodoComments(fileName, descriptors) {
+            fileName = TypeScript.switchToForwardSlashes(fileName);
+            var sourceFile = getCurrentSourceFile(fileName);
+            var syntaxTree = sourceFile.getSyntaxTree();
+            cancellationToken.throwIfCancellationRequested();
+            var text = syntaxTree.text;
+            var fileContents = text.substr(0, text.length());
+            cancellationToken.throwIfCancellationRequested();
+            var result = [];
+            if (descriptors.length > 0) {
+                var regExp = getTodoCommentsRegExp(descriptors);
+                var matchArray;
+                while (matchArray = regExp.exec(fileContents)) {
+                    cancellationToken.throwIfCancellationRequested();
+                    var firstDescriptorCaptureIndex = 3;
+                    ts.Debug.assert(matchArray.length === descriptors.length + firstDescriptorCaptureIndex);
+                    var preamble = matchArray[1];
+                    var matchPosition = matchArray.index + preamble.length;
+                    var token = TypeScript.findToken(syntaxTree.sourceUnit(), matchPosition);
+                    if (matchPosition >= TypeScript.start(token) && matchPosition < TypeScript.end(token)) {
+                        continue;
+                    }
+                    var triviaList = matchPosition < TypeScript.start(token) ? token.leadingTrivia(syntaxTree.text) : token.trailingTrivia(syntaxTree.text);
+                    var trivia = findContainingComment(triviaList, matchPosition);
+                    if (trivia === null) {
+                        continue;
+                    }
+                    var descriptor = undefined;
+                    for (var i = 0, n = descriptors.length; i < n; i++) {
+                        if (matchArray[i + firstDescriptorCaptureIndex]) {
+                            descriptor = descriptors[i];
+                        }
+                    }
+                    ts.Debug.assert(descriptor);
+                    if (isLetterOrDigit(fileContents.charCodeAt(matchPosition + descriptor.text.length))) {
+                        continue;
+                    }
+                    var message = matchArray[2];
+                    result.push(new TodoComment(descriptor, message, matchPosition));
+                }
+            }
+            return result;
+        }
+        function isLetterOrDigit(char) {
+            return (char >= 97 /* a */ && char <= 122 /* z */) || (char >= 65 /* A */ && char <= 90 /* Z */) || (char >= 48 /* _0 */ && char <= 57 /* _9 */);
+        }
+        function findContainingComment(triviaList, position) {
+            for (var i = 0, n = triviaList.count(); i < n; i++) {
+                var trivia = triviaList.syntaxTriviaAt(i);
+                var fullEnd = trivia.fullStart() + trivia.fullWidth();
+                if (trivia.isComment() && trivia.fullStart() <= position && position < fullEnd) {
+                    return trivia;
+                }
+            }
+            return null;
         }
         return {
             dispose: dispose,
-            refresh: function () {
-            },
             cleanupSemanticCache: cleanupSemanticCache,
             getSyntacticDiagnostics: getSyntacticDiagnostics,
             getSemanticDiagnostics: getSemanticDiagnostics,
@@ -32221,7 +32425,8 @@ var ts;
             getCompletionsAtPosition: getCompletionsAtPosition,
             getCompletionEntryDetails: getCompletionEntryDetails,
             getTypeAtPosition: getTypeAtPosition,
-            getSignatureAtPosition: function (filename, position) { return undefined; },
+            getSignatureHelpItems: function (filename, position) { return null; },
+            getSignatureHelpCurrentArgumentState: function (fileName, position, applicableSpanStart) { return null; },
             getDefinitionAtPosition: getDefinitionAtPosition,
             getReferencesAtPosition: function (filename, position) { return []; },
             getOccurrencesAtPosition: function (filename, position) { return []; },
@@ -32229,15 +32434,16 @@ var ts;
             getNameOrDottedNameSpan: getNameOrDottedNameSpan,
             getBreakpointStatementAtPosition: getBreakpointStatementAtPosition,
             getNavigateToItems: function (searchValue) { return []; },
-            getScriptLexicalStructure: getScriptLexicalStructure,
-            getOutliningRegions: getOutliningRegions,
+            getRenameInfo: function (fileName, position) { return RenameInfo.CreateError(ts.getLocaleSpecificMessage(ts.Diagnostics.You_cannot_rename_this_element.key)); },
+            getNavigationBarItems: getNavigationBarItems,
+            getOutliningSpans: getOutliningSpans,
+            getTodoComments: getTodoComments,
             getBraceMatchingAtPosition: getBraceMatchingAtPosition,
             getIndentationAtPosition: getIndentationAtPosition,
             getFormattingEditsForRange: getFormattingEditsForRange,
             getFormattingEditsForDocument: getFormattingEditsForDocument,
-            getFormattingEditsOnPaste: getFormattingEditsOnPaste,
             getFormattingEditsAfterKeystroke: getFormattingEditsAfterKeystroke,
-            getEmitOutput: function (filename) { return undefined; }
+            getEmitOutput: function (filename) { return null; }
         };
     }
     ts.createLanguageService = createLanguageService;
@@ -32695,8 +32901,9 @@ var ts;
             }
             return this.lineStartPositions;
         };
-        ScriptSnapshotShimAdapter.prototype.getTextChangeRangeSinceVersion = function (scriptVersion) {
-            var encoded = this.scriptSnapshotShim.getTextChangeRangeSinceVersion(scriptVersion);
+        ScriptSnapshotShimAdapter.prototype.getChangeRange = function (oldSnapshot) {
+            var oldSnapshotShim = oldSnapshot;
+            var encoded = this.scriptSnapshotShim.getChangeRange(oldSnapshotShim.scriptSnapshotShim);
             if (encoded == null) {
                 return null;
             }
@@ -32709,21 +32916,6 @@ var ts;
         function LanguageServiceShimHostAdapter(shimHost) {
             this.shimHost = shimHost;
         }
-        LanguageServiceShimHostAdapter.prototype.information = function () {
-            return this.shimHost.information();
-        };
-        LanguageServiceShimHostAdapter.prototype.debug = function () {
-            return this.shimHost.debug();
-        };
-        LanguageServiceShimHostAdapter.prototype.warning = function () {
-            return this.shimHost.warning();
-        };
-        LanguageServiceShimHostAdapter.prototype.error = function () {
-            return this.shimHost.error();
-        };
-        LanguageServiceShimHostAdapter.prototype.fatal = function () {
-            return this.shimHost.fatal();
-        };
         LanguageServiceShimHostAdapter.prototype.log = function (s) {
             this.shimHost.log(s);
         };
@@ -32768,6 +32960,7 @@ var ts;
         };
         return LanguageServiceShimHostAdapter;
     })();
+    ts.LanguageServiceShimHostAdapter = LanguageServiceShimHostAdapter;
     function simpleForwardCall(logger, actionDescription, action) {
         logger.log(actionDescription);
         var start = Date.now();
@@ -32830,9 +33023,7 @@ var ts;
             _super.prototype.dispose.call(this, dummy);
         };
         LanguageServiceShimObject.prototype.refresh = function (throwOnError) {
-            var _this = this;
             this.forwardJSONCall("refresh(" + throwOnError + ")", function () {
-                _this.languageService.refresh();
                 return null;
             });
         };
@@ -32862,14 +33053,14 @@ var ts;
         };
         LanguageServiceShimObject.prototype.getSyntacticDiagnostics = function (fileName) {
             var _this = this;
-            return this.forwardJSONCall("getSyntacticDiagnostics(\"" + fileName + "\")", function () {
+            return this.forwardJSONCall("getSyntacticDiagnostics('" + fileName + "')", function () {
                 var errors = _this.languageService.getSyntacticDiagnostics(fileName);
                 return errors.map(LanguageServiceShimObject.realizeDiagnostic);
             });
         };
         LanguageServiceShimObject.prototype.getSemanticDiagnostics = function (fileName) {
             var _this = this;
-            return this.forwardJSONCall("getSemanticDiagnostics(\"" + fileName + "\")", function () {
+            return this.forwardJSONCall("getSemanticDiagnostics('" + fileName + "')", function () {
                 var errors = _this.languageService.getSemanticDiagnostics(fileName);
                 return errors.map(LanguageServiceShimObject.realizeDiagnostic);
             });
@@ -32883,112 +33074,116 @@ var ts;
         };
         LanguageServiceShimObject.prototype.getTypeAtPosition = function (fileName, position) {
             var _this = this;
-            return this.forwardJSONCall("getTypeAtPosition(\"" + fileName + "\", " + position + ")", function () {
+            return this.forwardJSONCall("getTypeAtPosition('" + fileName + "', " + position + ")", function () {
                 var typeInfo = _this.languageService.getTypeAtPosition(fileName, position);
                 return typeInfo;
             });
         };
         LanguageServiceShimObject.prototype.getNameOrDottedNameSpan = function (fileName, startPos, endPos) {
             var _this = this;
-            return this.forwardJSONCall("getNameOrDottedNameSpan(\"" + fileName + "\", " + startPos + ", " + endPos + ")", function () {
+            return this.forwardJSONCall("getNameOrDottedNameSpan('" + fileName + "', " + startPos + ", " + endPos + ")", function () {
                 var spanInfo = _this.languageService.getNameOrDottedNameSpan(fileName, startPos, endPos);
                 return spanInfo;
             });
         };
         LanguageServiceShimObject.prototype.getBreakpointStatementAtPosition = function (fileName, position) {
             var _this = this;
-            return this.forwardJSONCall("getBreakpointStatementAtPosition(\"" + fileName + "\", " + position + ")", function () {
+            return this.forwardJSONCall("getBreakpointStatementAtPosition('" + fileName + "', " + position + ")", function () {
                 var spanInfo = _this.languageService.getBreakpointStatementAtPosition(fileName, position);
                 return spanInfo;
             });
         };
-        LanguageServiceShimObject.prototype.getSignatureAtPosition = function (fileName, position) {
+        LanguageServiceShimObject.prototype.getSignatureHelpItems = function (fileName, position) {
             var _this = this;
-            return this.forwardJSONCall("getSignatureAtPosition(\"" + fileName + "\", " + position + ")", function () {
-                var signatureInfo = _this.languageService.getSignatureAtPosition(fileName, position);
+            return this.forwardJSONCall("getSignatureHelpItems('" + fileName + "', " + position + ")", function () {
+                var signatureInfo = _this.languageService.getSignatureHelpItems(fileName, position);
+                return signatureInfo;
+            });
+        };
+        LanguageServiceShimObject.prototype.getSignatureHelpCurrentArgumentState = function (fileName, position, applicableSpanStart) {
+            var _this = this;
+            return this.forwardJSONCall("getSignatureHelpCurrentArgumentState('" + fileName + "', " + position + ", " + applicableSpanStart + ")", function () {
+                var signatureInfo = _this.languageService.getSignatureHelpItems(fileName, position);
                 return signatureInfo;
             });
         };
         LanguageServiceShimObject.prototype.getDefinitionAtPosition = function (fileName, position) {
             var _this = this;
-            return this.forwardJSONCall("getDefinitionAtPosition(\"" + fileName + "\", " + position + ")", function () {
+            return this.forwardJSONCall("getDefinitionAtPosition('" + fileName + "', " + position + ")", function () {
                 return _this.languageService.getDefinitionAtPosition(fileName, position);
+            });
+        };
+        LanguageServiceShimObject.prototype.getRenameInfo = function (fileName, position) {
+            var _this = this;
+            return this.forwardJSONCall("getRenameInfo('" + fileName + "', " + position + ")", function () {
+                return _this.languageService.getRenameInfo(fileName, position);
             });
         };
         LanguageServiceShimObject.prototype.getBraceMatchingAtPosition = function (fileName, position) {
             var _this = this;
-            return this.forwardJSONCall("getBraceMatchingAtPosition(\"" + fileName + "\", " + position + ")", function () {
+            return this.forwardJSONCall("getBraceMatchingAtPosition('" + fileName + "', " + position + ")", function () {
                 var textRanges = _this.languageService.getBraceMatchingAtPosition(fileName, position);
                 return textRanges;
             });
         };
         LanguageServiceShimObject.prototype.getIndentationAtPosition = function (fileName, position, options) {
             var _this = this;
-            return this.forwardJSONCall("getIndentationAtPosition(\"" + fileName + "\", " + position + ")", function () {
+            return this.forwardJSONCall("getIndentationAtPosition('" + fileName + "', " + position + ")", function () {
                 var localOptions = JSON.parse(options);
-                var columnOffset = _this.languageService.getIndentationAtPosition(fileName, position, localOptions);
-                return { value: columnOffset };
+                return _this.languageService.getIndentationAtPosition(fileName, position, localOptions);
             });
         };
         LanguageServiceShimObject.prototype.getReferencesAtPosition = function (fileName, position) {
             var _this = this;
-            return this.forwardJSONCall("getReferencesAtPosition(\"" + fileName + "\", " + position + ")", function () {
+            return this.forwardJSONCall("getReferencesAtPosition('" + fileName + "', " + position + ")", function () {
                 return _this.languageService.getReferencesAtPosition(fileName, position);
             });
         };
         LanguageServiceShimObject.prototype.getOccurrencesAtPosition = function (fileName, position) {
             var _this = this;
-            return this.forwardJSONCall("getOccurrencesAtPosition(\"" + fileName + "\", " + position + ")", function () {
+            return this.forwardJSONCall("getOccurrencesAtPosition('" + fileName + "', " + position + ")", function () {
                 return _this.languageService.getOccurrencesAtPosition(fileName, position);
             });
         };
         LanguageServiceShimObject.prototype.getImplementorsAtPosition = function (fileName, position) {
             var _this = this;
-            return this.forwardJSONCall("getImplementorsAtPosition(\"" + fileName + "\", " + position + ")", function () {
+            return this.forwardJSONCall("getImplementorsAtPosition('" + fileName + "', " + position + ")", function () {
                 return _this.languageService.getImplementorsAtPosition(fileName, position);
             });
         };
         LanguageServiceShimObject.prototype.getCompletionsAtPosition = function (fileName, position, isMemberCompletion) {
             var _this = this;
-            return this.forwardJSONCall("getCompletionsAtPosition(\"" + fileName + "\", " + position + ", " + isMemberCompletion + ")", function () {
+            return this.forwardJSONCall("getCompletionsAtPosition('" + fileName + "', " + position + ", " + isMemberCompletion + ")", function () {
                 var completion = _this.languageService.getCompletionsAtPosition(fileName, position, isMemberCompletion);
                 return completion;
             });
         };
         LanguageServiceShimObject.prototype.getCompletionEntryDetails = function (fileName, position, entryName) {
             var _this = this;
-            return this.forwardJSONCall("getCompletionEntryDetails(\"" + fileName + "\", " + position + ", " + entryName + ")", function () {
+            return this.forwardJSONCall("getCompletionEntryDetails('" + fileName + "', " + position + ", " + entryName + ")", function () {
                 var details = _this.languageService.getCompletionEntryDetails(fileName, position, entryName);
                 return details;
             });
         };
-        LanguageServiceShimObject.prototype.getFormattingEditsForRange = function (fileName, minChar, limChar, options) {
+        LanguageServiceShimObject.prototype.getFormattingEditsForRange = function (fileName, start, end, options) {
             var _this = this;
-            return this.forwardJSONCall("getFormattingEditsForRange(\"" + fileName + "\", " + minChar + ", " + limChar + ")", function () {
+            return this.forwardJSONCall("getFormattingEditsForRange('" + fileName + "', " + start + ", " + end + ")", function () {
                 var localOptions = JSON.parse(options);
-                var edits = _this.languageService.getFormattingEditsForRange(fileName, minChar, limChar, localOptions);
+                var edits = _this.languageService.getFormattingEditsForRange(fileName, start, end, localOptions);
                 return edits;
             });
         };
-        LanguageServiceShimObject.prototype.getFormattingEditsForDocument = function (fileName, minChar, limChar, options) {
+        LanguageServiceShimObject.prototype.getFormattingEditsForDocument = function (fileName, options) {
             var _this = this;
-            return this.forwardJSONCall("getFormattingEditsForDocument(\"" + fileName + "\", " + minChar + ", " + limChar + ")", function () {
+            return this.forwardJSONCall("getFormattingEditsForDocument('" + fileName + "')", function () {
                 var localOptions = JSON.parse(options);
-                var edits = _this.languageService.getFormattingEditsForDocument(fileName, minChar, limChar, localOptions);
-                return edits;
-            });
-        };
-        LanguageServiceShimObject.prototype.getFormattingEditsOnPaste = function (fileName, minChar, limChar, options) {
-            var _this = this;
-            return this.forwardJSONCall("getFormattingEditsOnPaste(\"" + fileName + "\", " + minChar + ", " + limChar + ")", function () {
-                var localOptions = JSON.parse(options);
-                var edits = _this.languageService.getFormattingEditsOnPaste(fileName, minChar, limChar, localOptions);
+                var edits = _this.languageService.getFormattingEditsForDocument(fileName, localOptions);
                 return edits;
             });
         };
         LanguageServiceShimObject.prototype.getFormattingEditsAfterKeystroke = function (fileName, position, key, options) {
             var _this = this;
-            return this.forwardJSONCall("getFormattingEditsAfterKeystroke(\"" + fileName + "\", " + position + ", \"" + key + "\")", function () {
+            return this.forwardJSONCall("getFormattingEditsAfterKeystroke('" + fileName + "', " + position + ", '" + key + "')", function () {
                 var localOptions = JSON.parse(options);
                 var edits = _this.languageService.getFormattingEditsAfterKeystroke(fileName, position, key, localOptions);
                 return edits;
@@ -32996,64 +33191,47 @@ var ts;
         };
         LanguageServiceShimObject.prototype.getNavigateToItems = function (searchValue) {
             var _this = this;
-            return this.forwardJSONCall("getNavigateToItems(\"" + searchValue + "\")", function () {
+            return this.forwardJSONCall("getNavigateToItems('" + searchValue + "')", function () {
                 var items = _this.languageService.getNavigateToItems(searchValue);
-                var result = _this._navigateToItemsToString(items);
-                return result;
+                return items;
             });
         };
-        LanguageServiceShimObject.prototype.getScriptLexicalStructure = function (fileName) {
+        LanguageServiceShimObject.prototype.getNavigationBarItems = function (fileName) {
             var _this = this;
-            return this.forwardJSONCall("getScriptLexicalStructure(\"" + fileName + "\")", function () {
-                var items = _this.languageService.getScriptLexicalStructure(fileName);
-                var result = _this._navigateToItemsToString(items);
-                return result;
+            return this.forwardJSONCall("getNavigationBarItems('" + fileName + "')", function () {
+                var items = _this.languageService.getNavigationBarItems(fileName);
+                return items;
             });
         };
-        LanguageServiceShimObject.prototype.getOutliningRegions = function (fileName) {
+        LanguageServiceShimObject.prototype.getOutliningSpans = function (fileName) {
             var _this = this;
-            return this.forwardJSONCall("getOutliningRegions(\"" + fileName + "\")", function () {
-                var items = _this.languageService.getOutliningRegions(fileName);
-                var spans = ts.map(items, function (i) { return i.textSpan; });
-                return spans;
+            return this.forwardJSONCall("getOutliningSpans('" + fileName + "')", function () {
+                var items = _this.languageService.getOutliningSpans(fileName);
+                return items;
+            });
+        };
+        LanguageServiceShimObject.prototype.getTodoComments = function (fileName, descriptors) {
+            var _this = this;
+            return this.forwardJSONCall("getTodoComments('" + fileName + "')", function () {
+                var items = _this.languageService.getTodoComments(fileName, JSON.parse(descriptors));
+                return items;
             });
         };
         LanguageServiceShimObject.prototype.getEmitOutput = function (fileName) {
             var _this = this;
-            return this.forwardJSONCall("getEmitOutput(\"" + fileName + "\")", function () {
+            return this.forwardJSONCall("getEmitOutput('" + fileName + "')", function () {
                 var output = _this.languageService.getEmitOutput(fileName);
                 return output;
             });
-        };
-        LanguageServiceShimObject.prototype._navigateToItemsToString = function (items) {
-            var result = [];
-            for (var i = 0; i < items.length; i++) {
-                var item = items[i];
-                result.push({
-                    name: item.name,
-                    kind: item.kind,
-                    kindModifiers: item.kindModifiers,
-                    containerName: item.containerName,
-                    containerKind: item.containerKind,
-                    matchKind: item.matchKind,
-                    fileName: item.fileName,
-                    minChar: item.minChar,
-                    limChar: item.limChar,
-                    additionalSpans: item.additionalSpans ? item.additionalSpans.map(function (i) {
-                        return { start: i.minChar, end: i.limChar };
-                    }) : undefined
-                });
-            }
-            return result;
         };
         return LanguageServiceShimObject;
     })(ShimBase);
     var ClassifierShimObject = (function (_super) {
         __extends(ClassifierShimObject, _super);
-        function ClassifierShimObject(factory, host) {
+        function ClassifierShimObject(factory, logger) {
             _super.call(this, factory);
-            this.host = host;
-            this.classifier = ts.createClassifier(this.host);
+            this.logger = logger;
+            this.classifier = ts.createClassifier(this.logger);
         }
         ClassifierShimObject.prototype.getClassificationsForLine = function (text, lexState) {
             var classification = this.classifier.getClassificationsForLine(text, lexState);
@@ -33070,15 +33248,15 @@ var ts;
     })(ShimBase);
     var CoreServicesShimObject = (function (_super) {
         __extends(CoreServicesShimObject, _super);
-        function CoreServicesShimObject(factory, host) {
+        function CoreServicesShimObject(factory, logger) {
             _super.call(this, factory);
-            this.host = host;
+            this.logger = logger;
         }
         CoreServicesShimObject.prototype.forwardJSONCall = function (actionDescription, action) {
-            return forwardJSONCall(this.host, actionDescription, action);
+            return forwardJSONCall(this.logger, actionDescription, action);
         };
         CoreServicesShimObject.prototype.getPreProcessedFileInfo = function (fileName, sourceText) {
-            return this.forwardJSONCall("getPreProcessedFileInfo(\"" + fileName + "\")", function () {
+            return this.forwardJSONCall("getPreProcessedFileInfo('" + fileName + "')", function () {
                 var result = TypeScript.preProcessFile(fileName, sourceText);
                 return result;
             });
@@ -33106,21 +33284,21 @@ var ts;
                 throw err;
             }
         };
-        TypeScriptServicesFactory.prototype.createClassifierShim = function (host) {
+        TypeScriptServicesFactory.prototype.createClassifierShim = function (logger) {
             try {
-                return new ClassifierShimObject(this, host);
+                return new ClassifierShimObject(this, logger);
             }
             catch (err) {
-                logInternalError(host, err);
+                logInternalError(logger, err);
                 throw err;
             }
         };
-        TypeScriptServicesFactory.prototype.createCoreServicesShim = function (host) {
+        TypeScriptServicesFactory.prototype.createCoreServicesShim = function (logger) {
             try {
-                return new CoreServicesShimObject(this, host);
+                return new CoreServicesShimObject(this, logger);
             }
             catch (err) {
-                logInternalError(host, err);
+                logInternalError(logger, err);
                 throw err;
             }
         };
