@@ -2198,14 +2198,14 @@ module ts {
             function getTryCatchFinallyOccurrences(tryStatement: TryStatement): ReferenceEntry[] {
                 var keywords: Node[] = [];
 
-                pushKeyword(keywords, tryStatement.getFirstToken(), SyntaxKind.TryKeyword);
+                pushKeywordIf(keywords, tryStatement.getFirstToken(), SyntaxKind.TryKeyword);
 
                 if (tryStatement.catchBlock) {
-                    pushKeyword(keywords, tryStatement.catchBlock.getFirstToken(), SyntaxKind.CatchKeyword);
+                    pushKeywordIf(keywords, tryStatement.catchBlock.getFirstToken(), SyntaxKind.CatchKeyword);
                 }
 
                 if (tryStatement.finallyBlock) {
-                    pushKeyword(keywords, tryStatement.finallyBlock.getFirstToken(), SyntaxKind.FinallyKeyword);
+                    pushKeywordIf(keywords, tryStatement.finallyBlock.getFirstToken(), SyntaxKind.FinallyKeyword);
                 }
 
                 return keywordsToReferenceEntries(keywords);
@@ -2214,11 +2214,11 @@ module ts {
             function getSwitchCaseDefaultOccurrences(switchStatement: SwitchStatement) {
                 var keywords: Node[] = [];
 
-                pushKeyword(keywords, switchStatement.getFirstToken(), SyntaxKind.SwitchKeyword);
+                pushKeywordIf(keywords, switchStatement.getFirstToken(), SyntaxKind.SwitchKeyword);
 
                 // Go through each clause in the switch statement, collecting the clause keywords.
                 forEach(switchStatement.clauses, clause => {
-                    pushKeyword(keywords, clause.getFirstToken(), SyntaxKind.CaseKeyword, SyntaxKind.DefaultKeyword);
+                    pushKeywordIf(keywords, clause.getFirstToken(), SyntaxKind.CaseKeyword, SyntaxKind.DefaultKeyword);
 
                     // For each clause, also recursively traverse the statements where we can find analogous breaks.
                     forEachChild(clause, function aggregateBreakKeywords(node: Node): void {
@@ -2226,7 +2226,7 @@ module ts {
                             case SyntaxKind.BreakStatement:
                                 // If the break statement has a label, it cannot be part of a switch block.
                                 if (!(<BreakOrContinueStatement>node).label) {
-                                    pushKeyword(keywords, node.getFirstToken(), SyntaxKind.BreakKeyword);
+                                    pushKeywordIf(keywords, node.getFirstToken(), SyntaxKind.BreakKeyword);
                                 }
                             // Fall through
                             case SyntaxKind.ForStatement:
@@ -2285,7 +2285,7 @@ module ts {
                 return node && node.parent;
             }
 
-            function pushKeyword(keywordList: Node[], token: Node, ...expected: SyntaxKind[]): void {
+            function pushKeywordIf(keywordList: Node[], token: Node, ...expected: SyntaxKind[]): void {
                 if (!token) {
                     return;
                 }
