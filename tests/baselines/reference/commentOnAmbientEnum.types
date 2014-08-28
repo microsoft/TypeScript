@@ -1,16 +1,25 @@
 === tests/cases/compiler/b.ts ===
 ///<reference path="a.ts"/>
-module ElidedModule3 {
->ElidedModule3 : ElidedModule3
+declare enum E {
+>E : E
 }
 === tests/cases/compiler/a.ts ===
 /*! Keep this pinned comment */
-module ElidedModule {
->ElidedModule : ElidedModule
+declare enum C {
+>C : C
+
+    a,
+>a : C
+
+    b,
+>b : C
+
+    c
+>c : C
 }
 
 // Don't keep this comment.
-module ElidedModule2 {
->ElidedModule2 : ElidedModule2
+declare enum D {
+>D : D
 }
 
