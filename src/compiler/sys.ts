@@ -50,10 +50,7 @@ var sys: System = (function () {
                 return undefined;
             }
 
-            // Check if a codepage was specified.
-            // If one was given, then check if the environment supports it
-            // (i.e. if the WScript object supports the ReadFile property).
-            if (codepage !== undefined && supportsCodepage()) {
+            if (codepage !== undefined) {
                 try {
                     return (<any>WScript).ReadFile(fileName, codepage);
                 }
