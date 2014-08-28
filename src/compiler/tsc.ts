@@ -210,10 +210,15 @@ module ts {
             return sys.exit(0);
         }
 
-        // If the codepage has been defined, then we should bail out if we can't support it.
         if (commandLine.options.codepage !== undefined) {
+            if (commandLine.options.charset !== undefined) {
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_codepage_option_cannot_be_used_with_charset_Please_use_charset_only));
+                return sys.exit(1);
+            }
+
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_codepage_option_has_been_deprecated_Please_use_charset));
 
+            // We should bail out if we can't support it.
             if (!sys.supportsCodepage()) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--codepage"));
                 return sys.exit(1);
