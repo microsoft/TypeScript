@@ -1,7 +1,7 @@
 === tests/cases/compiler/dottedModuleName2.ts ===
 module A.B {
->A : A
->B : B
+>A : typeof A
+>B : typeof B
  
   export var x = 1;
 >x : number
@@ -11,8 +11,8 @@ module A.B {
  
  
 module AA { export module B {
->AA : AA
->B : B
+>AA : typeof AA
+>B : typeof B
  
   export var x = 1;
 >x : number
@@ -39,9 +39,9 @@ var tmpError = A.B.x;
 
 
 module A.B.C
->A : A
->B : B
->C : C
+>A : typeof A
+>B : typeof B
+>C : typeof C
  
 {
  
@@ -53,21 +53,21 @@ module A.B.C
  
  
 module M
->M : M
+>M : unknown
  
 {
  
     import X1 = A;
->X1 : X1
+>X1 : typeof X1
 >A : typeof X1
  
     import X2 = A.B;
->X2 : X2
+>X2 : typeof X1.B
 >A : typeof X1
 >B : typeof X1.B
  
     import X3 = A.B.C;
->X3 : X3
+>X3 : typeof X2.C
 >A : typeof X1
 >B : typeof X1.B
 >C : typeof X2.C

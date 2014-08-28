@@ -1,7 +1,7 @@
 === tests/cases/compiler/exportAssignClassAndModule_1.ts ===
 ///<reference path='exportAssignClassAndModule_0.ts'/>
 import Foo = require('exportAssignClassAndModule_0');
->Foo : Foo
+>Foo : typeof Foo
 
 var z: Foo.Bar;
 >z : Foo.Bar
@@ -27,7 +27,7 @@ class Foo {
 >Bar : Foo.Bar
 }
 module Foo {
->Foo : Foo
+>Foo : typeof Foo
 
     export interface Bar {
 >Bar : Bar

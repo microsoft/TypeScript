@@ -1,6 +1,6 @@
 === tests/cases/conformance/internalModules/DeclarationMerging/part1.ts ===
 module A {
->A : A
+>A : typeof A
 
     export interface Point {
 >Point : Point
@@ -13,7 +13,7 @@ module A {
     }
 
     export module Utils {
->Utils : Utils
+>Utils : typeof Utils
 
         export function mirror<T extends Point>(p: T) {
 >mirror : typeof mirror
@@ -38,7 +38,7 @@ module A {
 
 === tests/cases/conformance/internalModules/DeclarationMerging/part2.ts ===
 module A {
->A : A
+>A : typeof A
 
     export var Origin: Point = { x: 0, y: 0 };
 >Origin : Point
@@ -48,7 +48,7 @@ module A {
 >y : number
 
     export module Utils {
->Utils : Utils
+>Utils : typeof Utils
 
         export class Plane {
 >Plane : Plane
@@ -72,7 +72,7 @@ var o: { x: number; y: number };
 
 var o: A.Point;
 >o : { x: number; y: number; }
->A : A
+>A : unknown
 >Point : A.Point
 
 var o = A.Origin;
@@ -94,16 +94,16 @@ var o = A.Utils.mirror(o);
 var p: { tl: A.Point; br: A.Point };
 >p : { tl: A.Point; br: A.Point; }
 >tl : A.Point
->A : A
+>A : unknown
 >Point : A.Point
 >br : A.Point
->A : A
+>A : unknown
 >Point : A.Point
 
 var p: A.Utils.Plane;
 >p : { tl: A.Point; br: A.Point; }
->A : A
->Utils : A.Utils
+>A : unknown
+>Utils : unknown
 >Plane : A.Utils.Plane
 
 var p = new A.Utils.Plane(o, { x: 1, y: 1 });

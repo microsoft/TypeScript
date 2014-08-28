@@ -1,9 +1,9 @@
 === tests/cases/compiler/recursivelySpecializedConstructorDeclaration.ts ===
 module MsPortal.Controls.Base.ItemList {
->MsPortal : MsPortal
->Controls : Controls
->Base : Base
->ItemList : ItemList
+>MsPortal : typeof MsPortal
+>Controls : typeof Controls
+>Base : typeof Base
+>ItemList : typeof ItemList
 
     export interface Interface<TValue> {
 >Interface : Interface<TValue>

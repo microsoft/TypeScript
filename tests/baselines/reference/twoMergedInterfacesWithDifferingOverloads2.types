@@ -35,7 +35,7 @@ var r3 = a(1, 2);
 >a : A
 
 module G {
->G : G
+>G : typeof G
 
     interface A<T> {
 >A : A<T>

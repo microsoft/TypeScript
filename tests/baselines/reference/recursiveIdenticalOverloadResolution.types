@@ -1,7 +1,7 @@
 === tests/cases/compiler/recursiveIdenticalOverloadResolution.ts ===
 
 module M {
->M : M
+>M : typeof M
 
    interface I { (i: I): I; }
 >I : I

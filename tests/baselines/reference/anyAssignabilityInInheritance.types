@@ -242,7 +242,7 @@ function f() { }
 >f : typeof f
 
 module f {
->f : f
+>f : typeof f
 
     export var bar = 1;
 >bar : number
@@ -268,7 +268,7 @@ class CC { baz: string }
 >baz : string
 
 module CC {
->CC : CC
+>CC : typeof CC
 
     export var bar = 1;
 >bar : number

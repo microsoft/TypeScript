@@ -71,7 +71,7 @@ result+=(new Point(3,4).move(2,2));
 >move : (xo: number, yo: number) => Point
 
 module M {
->M : M
+>M : typeof M
 
     export var origin=new Point(0,0);
 >origin : Point

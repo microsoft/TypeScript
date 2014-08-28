@@ -1,9 +1,9 @@
 === tests/cases/compiler/moduleMemberWithoutTypeAnnotation2.ts ===
 module TypeScript {
->TypeScript : TypeScript
+>TypeScript : typeof TypeScript
 
     export module CompilerDiagnostics {
->CompilerDiagnostics : CompilerDiagnostics
+>CompilerDiagnostics : typeof CompilerDiagnostics
 
         export interface IDiagnosticWriter {
 >IDiagnosticWriter : IDiagnosticWriter

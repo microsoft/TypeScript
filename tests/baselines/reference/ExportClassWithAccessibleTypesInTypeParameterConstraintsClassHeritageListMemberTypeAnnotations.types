@@ -1,6 +1,6 @@
 === tests/cases/conformance/internalModules/exportDeclarations/ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.ts ===
 module A {
->A : A
+>A : typeof A
 
     export class Point {
 >Point : Point

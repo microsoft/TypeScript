@@ -22,7 +22,7 @@ function point(x: number, y: number): Point {
 >y : number
 }
 module point {
->point : point
+>point : typeof point
 
     export var origin = point(0, 0);
 >origin : Point

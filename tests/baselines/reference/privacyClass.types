@@ -1,6 +1,6 @@
 === tests/cases/compiler/privacyClass.ts ===
 export module m1 {
->m1 : m1
+>m1 : typeof m1
 
     export interface m1_i_public {
 >m1_i_public : m1_i_public
@@ -84,7 +84,7 @@ export module m1 {
 
 
 module m2 {
->m2 : m2
+>m2 : typeof m2
 
     export interface m2_i_public {
 >m2_i_public : m2_i_public

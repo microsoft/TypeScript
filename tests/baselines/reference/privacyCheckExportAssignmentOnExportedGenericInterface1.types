@@ -1,6 +1,6 @@
 === tests/cases/compiler/privacyCheckExportAssignmentOnExportedGenericInterface1.ts ===
 module Foo {
->Foo : Foo
+>Foo : new () => A<Foo<string>>
 
     export interface A<T> {
 >A : A<T>

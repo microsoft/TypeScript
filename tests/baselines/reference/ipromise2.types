@@ -1,7 +1,7 @@
 === tests/cases/compiler/ipromise2.ts ===
 declare module Windows.Foundation {
->Windows : Windows
->Foundation : Foundation
+>Windows : unknown
+>Foundation : unknown
 
     export interface IPromise<T> {
 >IPromise : IPromise<T>
@@ -21,8 +21,8 @@ declare module Windows.Foundation {
 >U : U
 >progress : (progress: any) => void
 >progress : any
->Windows : Windows
->Foundation : Foundation
+>Windows : unknown
+>Foundation : unknown
 >IPromise : IPromise<T>
 >U : U
 
@@ -39,8 +39,8 @@ declare module Windows.Foundation {
 >U : U
 >progress : (progress: any) => void
 >progress : any
->Windows : Windows
->Foundation : Foundation
+>Windows : unknown
+>Foundation : unknown
 >IPromise : IPromise<T>
 >U : U
 
@@ -57,8 +57,8 @@ declare module Windows.Foundation {
 >U : U
 >progress : (progress: any) => void
 >progress : any
->Windows : Windows
->Foundation : Foundation
+>Windows : unknown
+>Foundation : unknown
 >IPromise : IPromise<T>
 >U : U
 
@@ -74,8 +74,8 @@ declare module Windows.Foundation {
 >U : U
 >progress : (progress: any) => void
 >progress : any
->Windows : Windows
->Foundation : Foundation
+>Windows : unknown
+>Foundation : unknown
 >IPromise : IPromise<T>
 >U : U
 
@@ -98,8 +98,8 @@ declare module Windows.Foundation {
 
 var p: Windows.Foundation.IPromise<string>;
 >p : Windows.Foundation.IPromise<string>
->Windows : Windows
->Foundation : Windows.Foundation
+>Windows : unknown
+>Foundation : unknown
 >IPromise : Windows.Foundation.IPromise<T>
 
 var p2 = p.then(function (s) {

@@ -1,6 +1,6 @@
 === tests/cases/conformance/internalModules/exportDeclarations/ExportInterfaceWithInaccessibleTypeInTypeParameterConstraint.ts ===
 module A {
->A : A
+>A : typeof A
 
     interface Point {
 >Point : Point

@@ -8,7 +8,7 @@ function fn() {
 >n : number
 }
 module fn {
->fn : fn
+>fn : typeof fn
 
     export var n = 1;
 >n : number

@@ -1,6 +1,6 @@
 === tests/cases/compiler/namedFunctionExpressionInModule.ts ===
 module Variables{
->Variables : Variables
+>Variables : typeof Variables
 
     var x = function bar(a, b, c) {
 >x : (a: any, b: any, c: any) => void

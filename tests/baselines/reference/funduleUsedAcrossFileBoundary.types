@@ -6,7 +6,7 @@ declare function Q<T>(value: T): string;
 >T : T
 
 declare module Q {
->Q : Q
+>Q : typeof Q
 
     interface Promise<T> {
 >Promise : Promise<T>
@@ -25,7 +25,7 @@ function promiseWithCancellation<T>(promise: Q.Promise<T>) {
 >promiseWithCancellation : typeof promiseWithCancellation
 >T : T
 >promise : Q.Promise<T>
->Q : Q
+>Q : unknown
 >Promise : Q.Promise<T>
 >T : T
 

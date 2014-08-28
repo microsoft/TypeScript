@@ -1,9 +1,9 @@
 === tests/cases/compiler/recursiveExportAssignmentAndFindAliasedType7_moduleA.ts ===
 import moduleC = require("recursiveExportAssignmentAndFindAliasedType7_moduleC");
->moduleC : moduleC
+>moduleC : any
 
 import ClassB = require("recursiveExportAssignmentAndFindAliasedType7_moduleB");
->ClassB : ClassB
+>ClassB : typeof ClassB
 
 export var b: ClassB; // This should result in type ClassB
 >b : ClassB
@@ -11,7 +11,7 @@ export var b: ClassB; // This should result in type ClassB
 
 === tests/cases/compiler/recursiveExportAssignmentAndFindAliasedType7_moduleC.ts ===
 import self = require("recursiveExportAssignmentAndFindAliasedType7_moduleD");
->self : self
+>self : any
 
 var selfVar = self;
 >selfVar : any
@@ -22,14 +22,14 @@ export = selfVar;
 
 === tests/cases/compiler/recursiveExportAssignmentAndFindAliasedType7_moduleD.ts ===
 import self = require("recursiveExportAssignmentAndFindAliasedType7_moduleE");
->self : self
+>self : any
 
 export = self;
 >self : any
 
 === tests/cases/compiler/recursiveExportAssignmentAndFindAliasedType7_moduleE.ts ===
 import self = require("recursiveExportAssignmentAndFindAliasedType7_moduleC");
->self : self
+>self : any
 
 export = self;
 >self : any

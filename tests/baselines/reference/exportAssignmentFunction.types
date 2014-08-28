@@ -1,6 +1,6 @@
 === tests/cases/compiler/exportAssignmentFunction_B.ts ===
 import fooFunc = require("exportAssignmentFunction_A");
->fooFunc : fooFunc
+>fooFunc : typeof fooFunc
 
 var n: number = fooFunc();
 >n : number

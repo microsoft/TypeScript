@@ -1,9 +1,9 @@
 === tests/cases/compiler/aliasUsageInObjectLiteral_main.ts ===
 import Backbone = require("aliasUsageInObjectLiteral_backbone");
->Backbone : Backbone
+>Backbone : typeof Backbone
 
 import moduleA = require("aliasUsageInObjectLiteral_moduleA");
->moduleA : moduleA
+>moduleA : typeof moduleA
 
 interface IHasVisualizationModel {
 >IHasVisualizationModel : IHasVisualizationModel
@@ -50,11 +50,11 @@ export class Model {
 
 === tests/cases/compiler/aliasUsageInObjectLiteral_moduleA.ts ===
 import Backbone = require("aliasUsageInObjectLiteral_backbone");
->Backbone : Backbone
+>Backbone : typeof Backbone
 
 export class VisualizationModel extends Backbone.Model {
 >VisualizationModel : VisualizationModel
->Backbone : Backbone
+>Backbone : unknown
 >Model : Backbone.Model
 
     // interesting stuff here

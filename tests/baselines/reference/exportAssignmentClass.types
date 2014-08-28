@@ -1,6 +1,6 @@
 === tests/cases/compiler/exportAssignmentClass_B.ts ===
 import D = require("exportAssignmentClass_A");
->D : D
+>D : typeof D
 
 var d = new D();
 >d : D

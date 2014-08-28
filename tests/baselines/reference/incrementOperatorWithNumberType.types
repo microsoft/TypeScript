@@ -14,7 +14,7 @@ class A {
 >a : number
 }
 module M {
->M : M
+>M : typeof M
 
     export var n: number;
 >n : number

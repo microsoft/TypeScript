@@ -1,12 +1,12 @@
 === tests/cases/conformance/externalModules/test/foo_3.ts ===
 import foo0 = require('../foo_0');
->foo0 : foo0
+>foo0 : typeof foo0
 
 import foo1 = require('./test/foo_1');
->foo1 : foo1
+>foo1 : typeof foo1
 
 import foo2 = require('./.././test/foo_2');
->foo2 : foo2
+>foo2 : typeof foo2
 
 if(foo2.M2.x){
 >foo2.M2.x : boolean
@@ -40,7 +40,7 @@ export function f(){
 
 === tests/cases/conformance/externalModules/test/foo_2.ts ===
 export module M2 {
->M2 : M2
+>M2 : typeof M2
 
 	export var x = true;
 >x : boolean

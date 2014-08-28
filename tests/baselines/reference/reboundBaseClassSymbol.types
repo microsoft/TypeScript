@@ -4,7 +4,7 @@ interface A { a: number; }
 >a : number
 
 module Foo {
->Foo : Foo
+>Foo : typeof Foo
 
     var A = 1;
 >A : number

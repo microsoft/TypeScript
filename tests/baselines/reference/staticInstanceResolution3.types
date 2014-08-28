@@ -1,7 +1,7 @@
 === tests/cases/compiler/staticInstanceResolution3_1.ts ===
 ///<reference path='staticInstanceResolution3_0.ts'/>
 import WinJS = require('staticInstanceResolution3_0');
->WinJS : WinJS
+>WinJS : typeof WinJS
 
 WinJS.Promise.timeout(10);
 >WinJS.Promise.timeout(10) : WinJS.Promise

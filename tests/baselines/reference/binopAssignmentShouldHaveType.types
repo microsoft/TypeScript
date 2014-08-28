@@ -4,7 +4,7 @@ declare var console;
 
 "use strict";
 module Test {
->Test : Test
+>Test : typeof Test
 
  export class Bug {
 >Bug : Bug

@@ -1,7 +1,7 @@
 === tests/cases/compiler/declFileTypeofModule.ts ===
 
 module m1 {
->m1 : m1
+>m1 : typeof m1
 
     export var c: string;
 >c : string
@@ -15,7 +15,7 @@ var m1_2: typeof m1;
 >m1 : typeof m1
 
 module m2 {
->m2 : m2
+>m2 : typeof m2
 
     export var d: typeof m2;
 >d : typeof m2

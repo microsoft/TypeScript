@@ -39,7 +39,7 @@ function F(x: string): number { return 42; }
 >x : string
 
 module M {
->M : M
+>M : typeof M
 
     export class A {
 >A : A

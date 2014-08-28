@@ -1,6 +1,6 @@
 === tests/cases/compiler/privacyGloClass.ts ===
 module m1 {
->m1 : m1
+>m1 : typeof m1
 
     export interface m1_i_public {
 >m1_i_public : m1_i_public

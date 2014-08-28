@@ -1,9 +1,9 @@
 === tests/cases/compiler/chainedImportAlias_file1.ts ===
 import x = require('chainedImportAlias_file0');
->x : x
+>x : typeof x
 
 import y = x;
->y : y
+>y : typeof x
 >x : typeof x
 
 y.m.foo();
@@ -16,7 +16,7 @@ y.m.foo();
 
 === tests/cases/compiler/chainedImportAlias_file0.ts ===
 export module m {
->m : m
+>m : typeof m
 
     export function foo() { }
 >foo : typeof foo

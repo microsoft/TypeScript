@@ -1,6 +1,6 @@
 === tests/cases/compiler/fatArrowSelf.ts ===
 module Events {
->Events : Events
+>Events : typeof Events
 
     export interface ListenerCallback {
 >ListenerCallback : ListenerCallback
@@ -21,14 +21,14 @@ module Events {
 }
 
 module Consumer {
->Consumer : Consumer
+>Consumer : typeof Consumer
 
     class EventEmitterConsummer {
 >EventEmitterConsummer : EventEmitterConsummer
 
         constructor (private emitter: Events.EventEmitter) { }
 >emitter : Events.EventEmitter
->Events : Events
+>Events : unknown
 >EventEmitter : Events.EventEmitter
 
         private register() {

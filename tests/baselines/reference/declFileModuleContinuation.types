@@ -1,7 +1,7 @@
 === tests/cases/compiler/declFileModuleContinuation.ts ===
 module A.C {
->A : A
->C : C
+>A : typeof A
+>C : unknown
 
     export interface Z {
 >Z : Z
@@ -9,14 +9,14 @@ module A.C {
 }
 
 module A.B.C {
->A : A
->B : B
->C : C
+>A : typeof A
+>B : typeof B
+>C : typeof C
 
     export class W implements A.C.Z {
 >W : W
->A : A
->C : A.C
+>A : unknown
+>C : unknown
 >Z : A.C.Z
     }
 }

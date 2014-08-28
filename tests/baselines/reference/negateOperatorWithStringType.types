@@ -20,7 +20,7 @@ class A {
 >foo : () => string
 }
 module M {
->M : M
+>M : typeof M
 
     export var n: string;
 >n : string

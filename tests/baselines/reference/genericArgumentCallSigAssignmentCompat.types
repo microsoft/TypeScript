@@ -1,6 +1,6 @@
 === tests/cases/compiler/genericArgumentCallSigAssignmentCompat.ts ===
 module Underscore {
->Underscore : Underscore
+>Underscore : unknown
 
     export interface Iterator<T, U> {
 >Iterator : Iterator<T, U>
@@ -39,7 +39,7 @@ module Underscore {
  
 declare var _: Underscore.Static;
 >_ : Underscore.Static
->Underscore : Underscore
+>Underscore : unknown
 >Static : Underscore.Static
  
 // No error, Call signatures of types '<T>(value: T) => T' and 'Underscore.Iterator<{}, boolean>' are compatible when instantiated with any.

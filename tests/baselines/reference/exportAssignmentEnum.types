@@ -1,6 +1,6 @@
 === tests/cases/compiler/exportAssignmentEnum_B.ts ===
 import EnumE = require("exportAssignmentEnum_A");
->EnumE : EnumE
+>EnumE : typeof EnumE
 
 var a = EnumE.A;
 >a : EnumE

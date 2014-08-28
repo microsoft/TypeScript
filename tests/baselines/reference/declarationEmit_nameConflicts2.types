@@ -1,8 +1,8 @@
 === tests/cases/compiler/declarationEmit_nameConflicts2.ts ===
 module X.Y.base {
->X : X
->Y : Y
->base : base
+>X : typeof X
+>Y : typeof Y
+>base : typeof base
 
     export function f() { }
 >f : typeof f
@@ -11,7 +11,7 @@ module X.Y.base {
 >C : C
 
     export module M {
->M : M
+>M : typeof M
 
         export var v;
 >v : any
@@ -21,10 +21,10 @@ module X.Y.base {
 }
 
 module X.Y.base.Z {
->X : X
->Y : Y
->base : base
->Z : Z
+>X : typeof X
+>Y : typeof Y
+>base : typeof base
+>Z : typeof Z
 
     export var f = X.Y.base.f; // Should be base.f
 >f : typeof base.f

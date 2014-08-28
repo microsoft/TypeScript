@@ -8,8 +8,8 @@ function foo(title: string) {
 }
 
 module foo.Bar {
->foo : foo
->Bar : Bar
+>foo : typeof foo
+>Bar : typeof Bar
 
     export function f() {
 >f : typeof f
@@ -17,8 +17,8 @@ module foo.Bar {
 }
 
 module foo.Baz {
->foo : foo
->Baz : Baz
+>foo : typeof foo
+>Baz : typeof Baz
 
     export function g() {
 >g : typeof g

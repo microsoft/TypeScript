@@ -1,6 +1,6 @@
 === tests/cases/compiler/constructorArgWithGenericCallSignature.ts ===
 module Test {
->Test : Test
+>Test : typeof Test
 
     export interface MyFunc {
 >MyFunc : MyFunc
@@ -26,7 +26,7 @@ module Test {
 }
 var func: Test.MyFunc;
 >func : Test.MyFunc
->Test : Test
+>Test : unknown
 >MyFunc : Test.MyFunc
 
 Test.F(func); // OK

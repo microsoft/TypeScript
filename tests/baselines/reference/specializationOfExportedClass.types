@@ -1,6 +1,6 @@
 === tests/cases/compiler/specializationOfExportedClass.ts ===
 module M {
->M : M
+>M : typeof M
 
 export class C<T> { }
 >C : C<T>

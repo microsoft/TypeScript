@@ -1,21 +1,21 @@
 === tests/cases/conformance/externalModules/foo_1.ts ===
 import foo = require("./foo_0");
->foo : foo
+>foo : typeof foo
 
 // None of the below should cause a runtime dependency on foo_0
 import f = foo.M1;
->f : f
+>f : unknown
 >foo : typeof foo
->M1 : foo.M1
+>M1 : unknown
 
 var i: f.I2;
 >i : f.I2
->f : f
+>f : unknown
 >I2 : f.I2
 
 var x: foo.C1 = <{m1: number}>{};
 >x : foo.C1
->foo : foo
+>foo : unknown
 >C1 : foo.C1
 ><{m1: number}>{} : { m1: number; }
 >m1 : number
@@ -29,14 +29,14 @@ var y: typeof foo.C1.s1 = false;
 
 var z: foo.M1.I2;
 >z : f.I2
->foo : foo
->M1 : foo.M1
+>foo : unknown
+>M1 : unknown
 >I2 : f.I2
 
 var e: number = <foo.E1>0;
 >e : number
 ><foo.E1>0 : foo.E1
->foo : foo
+>foo : unknown
 >E1 : foo.E1
 
 === tests/cases/conformance/externalModules/foo_0.ts ===
@@ -61,7 +61,7 @@ export interface I1 {
 }
 
 export module M1 {
->M1 : M1
+>M1 : unknown
 
 	export interface I2 {
 >I2 : I2

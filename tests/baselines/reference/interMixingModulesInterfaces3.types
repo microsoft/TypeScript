@@ -1,9 +1,9 @@
 === tests/cases/compiler/interMixingModulesInterfaces3.ts ===
 module A {
->A : A
+>A : typeof A
 
     module B {
->B : B
+>B : typeof B
 
         export function createB(): B {
 >createB : typeof createB
@@ -26,6 +26,6 @@ module A {
 
 var x: A.B = null;
 >x : A.B
->A : A
+>A : unknown
 >B : A.B
 

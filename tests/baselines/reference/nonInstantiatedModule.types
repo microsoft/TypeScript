@@ -1,6 +1,6 @@
 === tests/cases/conformance/internalModules/moduleDeclarations/nonInstantiatedModule.ts ===
 module M {
->M : M
+>M : typeof M
 
     export interface Point { x: number; y: number }
 >Point : Point
@@ -39,10 +39,10 @@ var a2 = m.a;
 >a : number
 
 module M2 {
->M2 : M2
+>M2 : typeof M2
 
     export module Point {
->Point : Point
+>Point : typeof Point
 
         export function Origin(): Point {
 >Origin : typeof Origin
@@ -73,7 +73,7 @@ var p: { x: number; y: number; };
 
 var p: M2.Point;
 >p : { x: number; y: number; }
->M2 : M2
+>M2 : unknown
 >Point : M2.Point
 
 var p2: { Origin() : { x: number; y: number; } };
@@ -88,10 +88,10 @@ var p2: typeof M2.Point;
 >Point : typeof M2.Point
 
 module M3 {
->M3 : M3
+>M3 : typeof M3
 
     export module Utils {
->Utils : Utils
+>Utils : typeof Utils
 
         export interface Point {
 >Point : Point

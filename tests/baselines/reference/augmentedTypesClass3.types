@@ -5,14 +5,14 @@ class c5 { public foo() { } }
 >foo : () => void
 
 module c5 { } // should be ok
->c5 : c5
+>c5 : typeof c5
 
 class c5a { public foo() { } }
 >c5a : c5a
 >foo : () => void
 
 module c5a { var y = 2; } // should be ok
->c5a : c5a
+>c5a : typeof c5a
 >y : number
 
 class c5b { public foo() { } }
@@ -20,7 +20,7 @@ class c5b { public foo() { } }
 >foo : () => void
 
 module c5b { export var y = 2; } // should be ok
->c5b : c5b
+>c5b : typeof c5b
 >y : number
 
 //// class then import

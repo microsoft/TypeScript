@@ -1,6 +1,6 @@
 === tests/cases/compiler/internalAliasFunction.ts ===
 module a {
->a : a
+>a : typeof a
 
     export function foo(x: number) {
 >foo : typeof foo
@@ -12,10 +12,10 @@ module a {
 }
 
 module c {
->c : c
+>c : typeof c
 
     import b = a.foo;
->b : b
+>b : typeof b
 >a : typeof a
 >foo : typeof b
 

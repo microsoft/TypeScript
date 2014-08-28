@@ -1,6 +1,6 @@
 === tests/cases/compiler/file2.ts ===
 import f = require('file1');
->f : f
+>f : typeof f
 
 f.foo();
 >f.foo() : any

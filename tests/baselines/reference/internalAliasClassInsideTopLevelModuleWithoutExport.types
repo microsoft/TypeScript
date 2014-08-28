@@ -1,6 +1,6 @@
 === tests/cases/compiler/internalAliasClassInsideTopLevelModuleWithoutExport.ts ===
 export module x {
->x : x
+>x : typeof x
 
     export class c {
 >c : c
@@ -16,7 +16,7 @@ export module x {
 }
 
 import xc = x.c;
->xc : xc
+>xc : typeof xc
 >x : typeof x
 >c : xc
 

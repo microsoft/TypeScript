@@ -1,6 +1,6 @@
 === tests/cases/compiler/global.ts ===
 module M {
->M : M
+>M : typeof M
 
     export function f(y:number) {
 >f : typeof f

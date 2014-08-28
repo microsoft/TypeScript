@@ -122,7 +122,7 @@ declare enum E3 {
 >A : E3
 }
 declare module E3 {
->E3 : E3
+>E3 : typeof E3
 
     var B;
 >B : any
@@ -135,7 +135,7 @@ var x = E3.B;
 
 // Ambient module
 declare module M1 {
->M1 : M1
+>M1 : typeof M1
 
     var x;
 >x : any

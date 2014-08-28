@@ -1,6 +1,6 @@
 === tests/cases/compiler/exportImportAndClodule.ts ===
 module K {
->K : K
+>K : typeof K
 
     export class L {
 >L : L
@@ -9,7 +9,7 @@ module K {
 >name : string
     }
     export module L {
->L : L
+>L : typeof L
 
         export var y = 12;
 >y : number
@@ -26,10 +26,10 @@ module K {
     }
 }
 module M {
->M : M
+>M : typeof M
 
     export import D = K.L;
->D : D
+>D : typeof D
 >K : typeof K
 >L : D
 }
@@ -51,7 +51,7 @@ var p: { x: number; y: number; }
 
 var p: M.D.Point;
 >p : { x: number; y: number; }
->M : M
->D : M.D
+>M : unknown
+>D : unknown
 >Point : K.L.Point
 

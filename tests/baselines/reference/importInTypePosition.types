@@ -1,6 +1,6 @@
 === tests/cases/compiler/importInTypePosition.ts ===
 module A {
->A : A
+>A : typeof A
 
     export class Point {
 >Point : Point
@@ -17,18 +17,18 @@ module A {
 
 // no code gen expected
 module B {
->B : B
+>B : unknown
 
     import a = A; //Error generates 'var <Alias> = <EntityName>;'
->a : a
+>a : typeof a
 >A : typeof a
 }
 // no code gen expected
 module C {
->C : C
+>C : typeof C
 
     import a = A; //Error generates 'var <Alias> = <EntityName>;'
->a : a
+>a : typeof a
 >A : typeof a
 
     var m: typeof a;
@@ -37,7 +37,7 @@ module C {
 
     var p: a.Point;
 >p : a.Point
->a : a
+>a : unknown
 >Point : a.Point
 
     var p = { x: 0, y: 0 };

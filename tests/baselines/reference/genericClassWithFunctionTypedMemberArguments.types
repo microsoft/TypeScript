@@ -3,7 +3,7 @@
 // Using function arguments, no errors expected
 
 module ImmediatelyFix {
->ImmediatelyFix : ImmediatelyFix
+>ImmediatelyFix : typeof ImmediatelyFix
 
     class C<T> {
 >C : C<T>
@@ -103,7 +103,7 @@ module ImmediatelyFix {
 }
 
 module WithCandidates {
->WithCandidates : WithCandidates
+>WithCandidates : typeof WithCandidates
 
     class C<T> {
 >C : C<T>

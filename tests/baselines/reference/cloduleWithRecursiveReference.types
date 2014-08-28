@@ -1,12 +1,12 @@
 === tests/cases/compiler/cloduleWithRecursiveReference.ts ===
 module M
->M : M
+>M : typeof M
 {
   export class C {  }
 >C : C
 
   export module C {
->C : M.C
+>C : typeof M.C
 
     export var C = M.C
 >C : typeof M.C

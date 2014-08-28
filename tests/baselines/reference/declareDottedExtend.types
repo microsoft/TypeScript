@@ -1,25 +1,25 @@
 === tests/cases/compiler/declareDottedExtend.ts ===
 declare module A.B
->A : A
->B : B
+>A : typeof A
+>B : typeof B
 {
     export class C{ }
 >C : C
 }
 
 import ab = A.B;
->ab : ab
+>ab : typeof ab
 >A : typeof A
 >B : typeof ab
 
 class D extends ab.C{ }
 >D : D
->ab : ab
+>ab : unknown
 >C : ab.C
 
 class E extends A.B.C{ }
 >E : E
->A : A
->B : ab
+>A : unknown
+>B : unknown
 >C : ab.C
 

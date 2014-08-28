@@ -1,9 +1,9 @@
 === tests/cases/conformance/externalModules/foo_1.ts ===
 import foo = require("vs/foo_0");
->foo : foo
+>foo : typeof foo
 
 import fum = require("vs/fum");
->fum : fum
+>fum : typeof fum
 
 var z = foo.x + fum.y;
 >z : number

@@ -1,6 +1,6 @@
 === tests/cases/conformance/classes/members/constructorFunctionTypes/constructorHasPrototypeProperty.ts ===
 module NonGeneric {
->NonGeneric : NonGeneric
+>NonGeneric : typeof NonGeneric
 
     class C {
 >C : C
@@ -41,7 +41,7 @@ module NonGeneric {
 }
 
 module Generic {
->Generic : Generic
+>Generic : typeof Generic
 
     class C<T,U> {
 >C : C<T, U>

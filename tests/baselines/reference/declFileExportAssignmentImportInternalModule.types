@@ -1,9 +1,9 @@
 === tests/cases/compiler/declFileExportAssignmentImportInternalModule.ts ===
 module m3 {
->m3 : m3
+>m3 : typeof m3
 
     export module m2 {
->m2 : m2
+>m2 : unknown
 
         export interface connectModule {
 >connectModule : connectModule
@@ -33,24 +33,24 @@ module m3 {
 >server : { (): m2.connectExport; test1: m2.connectModule; test2(): m2.connectModule; }
 
         (): m2.connectExport;
->m2 : m2
+>m2 : unknown
 >connectExport : m2.connectExport
 
         test1: m2.connectModule;
 >test1 : m2.connectModule
->m2 : m2
+>m2 : unknown
 >connectModule : m2.connectModule
 
         test2(): m2.connectModule;
 >test2 : () => m2.connectModule
->m2 : m2
+>m2 : unknown
 >connectModule : m2.connectModule
 
     };
 }
 
 import m = m3
->m : m
+>m : typeof m3
 >m3 : typeof m3
 
 export = m;

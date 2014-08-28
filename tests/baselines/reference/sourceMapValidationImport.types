@@ -1,18 +1,18 @@
 === tests/cases/compiler/sourceMapValidationImport.ts ===
 export module m {
->m : m
+>m : typeof m
 
     export class c {
 >c : c
     }
 }
 import a = m.c;
->a : a
+>a : typeof a
 >m : typeof m
 >c : a
 
 export import b = m.c;
->b : b
+>b : typeof a
 >m : typeof m
 >c : a
 

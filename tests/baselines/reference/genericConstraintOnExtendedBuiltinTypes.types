@@ -1,6 +1,6 @@
 === tests/cases/compiler/genericConstraintOnExtendedBuiltinTypes.ts ===
 declare module EndGate {
->EndGate : EndGate
+>EndGate : typeof EndGate
 
     export interface ICloneable {
 >ICloneable : ICloneable
@@ -12,12 +12,12 @@ declare module EndGate {
 
 interface Number extends EndGate.ICloneable { }
 >Number : Number
->EndGate : EndGate
+>EndGate : unknown
 >ICloneable : EndGate.ICloneable
 
 module EndGate.Tweening {
->EndGate : EndGate
->Tweening : Tweening
+>EndGate : typeof EndGate
+>Tweening : typeof Tweening
 
     export class Tween<T extends ICloneable>{
 >Tween : Tween<T>
@@ -47,8 +47,8 @@ module EndGate.Tweening {
 }
 
 module EndGate.Tweening {
->EndGate : EndGate
->Tweening : Tweening
+>EndGate : typeof EndGate
+>Tweening : typeof Tweening
 
     export class NumberTween extends Tween<number>{
 >NumberTween : NumberTween

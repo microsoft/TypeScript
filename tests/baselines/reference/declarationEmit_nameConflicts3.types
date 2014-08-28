@@ -1,24 +1,24 @@
 === tests/cases/compiler/declarationEmit_nameConflicts3.ts ===
 module M {
->M : M
+>M : typeof M
 
     export interface D { }
 >D : D
 
     export module D {
->D : D
+>D : typeof D
 
         export function f() { }
 >f : typeof f
     }
     export module C {
->C : C
+>C : typeof C
 
         export function f() { }
 >f : typeof f
     }
     export module E {
->E : E
+>E : typeof E
 
         export function f() { }
 >f : typeof f
@@ -26,8 +26,8 @@ module M {
 }
 
 module M.P {
->M : M
->P : P
+>M : typeof M
+>P : typeof P
 
     export class C {
 >C : C
@@ -47,7 +47,7 @@ module M.P {
     }
     export var v: M.D; // ok
 >v : M.D
->M : M
+>M : unknown
 >D : M.D
 
     export var w = M.D.f; // error, should be typeof M.D.f

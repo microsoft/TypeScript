@@ -1,6 +1,6 @@
 === tests/cases/compiler/overloadResolutionOverNonCTLambdas.ts ===
 module Bugs {
->Bugs : Bugs
+>Bugs : typeof Bugs
 
   class A {
 >A : A

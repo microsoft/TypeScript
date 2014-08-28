@@ -1,6 +1,6 @@
 === tests/cases/conformance/externalModules/foo_1.ts ===
 import foo = require("./foo_0");
->foo : foo
+>foo : typeof foo
 
 if(foo.answer === 42){
 >foo.answer === 42 : boolean
@@ -22,7 +22,7 @@ class Foo {
 >test : string
 }
 module Foo {
->Foo : Foo
+>Foo : typeof Foo
 
 	export var answer = 42;
 >answer : number

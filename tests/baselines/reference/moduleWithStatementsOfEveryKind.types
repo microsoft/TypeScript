@@ -1,6 +1,6 @@
 === tests/cases/conformance/internalModules/moduleBody/moduleWithStatementsOfEveryKind.ts ===
 module A {
->A : A
+>A : typeof A
 
     class A { s: string }
 >A : A
@@ -32,7 +32,7 @@ module A {
     }
 
     module Module {
->Module : Module
+>Module : typeof Module
 
         class A { s: string }
 >A : A
@@ -74,7 +74,7 @@ module A {
 }
 
 module Y {
->Y : Y
+>Y : typeof Y
 
     export class A { s: string }
 >A : A
@@ -106,7 +106,7 @@ module Y {
     }
 
     export module Module {
->Module : Module
+>Module : typeof Module
 
         class A { s: string }
 >A : A

@@ -1,89 +1,89 @@
 === tests/cases/compiler/declFileGenericType2.ts ===
 
 declare module templa.mvc {
->templa : templa
->mvc : mvc
+>templa : typeof templa
+>mvc : typeof mvc
 
     interface IModel {
 >IModel : IModel
     }
 }
 declare module templa.mvc {
->templa : templa
->mvc : mvc
+>templa : typeof templa
+>mvc : typeof mvc
 
     interface IController<ModelType extends templa.mvc.IModel> {
 >IController : IController<ModelType>
 >ModelType : ModelType
->templa : templa
->mvc : mvc
+>templa : unknown
+>mvc : unknown
 >IModel : IModel
     }
 }
 declare module templa.mvc {
->templa : templa
->mvc : mvc
+>templa : typeof templa
+>mvc : typeof mvc
 
     class AbstractController<ModelType extends templa.mvc.IModel> implements mvc.IController<ModelType> {
 >AbstractController : AbstractController<ModelType>
 >ModelType : ModelType
->templa : templa
->mvc : mvc
+>templa : unknown
+>mvc : unknown
 >IModel : IModel
->mvc : mvc
+>mvc : unknown
 >IController : IController<ModelType>
 >ModelType : ModelType
     }
 }
 declare module templa.mvc.composite {
->templa : templa
->mvc : mvc
->composite : composite
+>templa : typeof templa
+>mvc : typeof mvc
+>composite : unknown
 
     interface ICompositeControllerModel extends mvc.IModel {
 >ICompositeControllerModel : ICompositeControllerModel
->mvc : mvc
+>mvc : unknown
 >IModel : IModel
 
         getControllers(): mvc.IController<mvc.IModel>[];
 >getControllers : () => IController<IModel>[]
->mvc : mvc
+>mvc : unknown
 >IController : IController<ModelType>
->mvc : mvc
+>mvc : unknown
 >IModel : IModel
     }
 }
 module templa.dom.mvc {
->templa : templa
->dom : dom
->mvc : mvc
+>templa : typeof templa
+>dom : typeof dom
+>mvc : typeof mvc
 
     export interface IElementController<ModelType extends templa.mvc.IModel> extends templa.mvc.IController<ModelType> {
 >IElementController : IElementController<ModelType>
 >ModelType : ModelType
->templa : templa
->mvc : templa.mvc
+>templa : unknown
+>mvc : unknown
 >IModel : templa.mvc.IModel
->templa : templa
->mvc : templa.mvc
+>templa : unknown
+>mvc : unknown
 >IController : templa.mvc.IController<ModelType>
 >ModelType : ModelType
     }
 }
 // Module
 module templa.dom.mvc {
->templa : templa
->dom : dom
->mvc : mvc
+>templa : typeof templa
+>dom : typeof dom
+>mvc : typeof mvc
 
     export class AbstractElementController<ModelType extends templa.mvc.IModel> extends templa.mvc.AbstractController<ModelType> implements IElementController<ModelType> {
 >AbstractElementController : AbstractElementController<ModelType>
 >ModelType : ModelType
->templa : templa
->mvc : templa.mvc
+>templa : unknown
+>mvc : unknown
 >IModel : templa.mvc.IModel
->templa : templa
->mvc : templa.mvc
+>templa : unknown
+>mvc : unknown
 >AbstractController : templa.mvc.AbstractController<ModelType>
 >ModelType : ModelType
 >IElementController : IElementController<ModelType>
@@ -98,31 +98,31 @@ module templa.dom.mvc {
 }
 // Module
 module templa.dom.mvc.composite {
->templa : templa
->dom : dom
->mvc : mvc
->composite : composite
+>templa : typeof templa
+>dom : typeof dom
+>mvc : typeof mvc
+>composite : typeof composite
 
     export class AbstractCompositeElementController<ModelType extends templa.mvc.composite.ICompositeControllerModel> extends templa.dom.mvc.AbstractElementController<ModelType> {
 >AbstractCompositeElementController : AbstractCompositeElementController<ModelType>
 >ModelType : ModelType
->templa : templa
->mvc : templa.mvc
->composite : templa.mvc.composite
+>templa : unknown
+>mvc : unknown
+>composite : unknown
 >ICompositeControllerModel : templa.mvc.composite.ICompositeControllerModel
->templa : templa
->dom : dom
->mvc : mvc
+>templa : unknown
+>dom : unknown
+>mvc : unknown
 >AbstractElementController : AbstractElementController<ModelType>
 >ModelType : ModelType
 
         public _controllers: templa.mvc.IController<templa.mvc.IModel>[];
 >_controllers : templa.mvc.IController<templa.mvc.IModel>[]
->templa : templa
->mvc : templa.mvc
+>templa : unknown
+>mvc : unknown
 >IController : templa.mvc.IController<ModelType>
->templa : templa
->mvc : templa.mvc
+>templa : unknown
+>mvc : unknown
 >IModel : templa.mvc.IModel
 
         constructor() {

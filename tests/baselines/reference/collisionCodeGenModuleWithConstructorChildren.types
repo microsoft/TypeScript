@@ -1,6 +1,6 @@
 === tests/cases/compiler/collisionCodeGenModuleWithConstructorChildren.ts ===
 module M {
->M : M
+>M : typeof M
 
     export var x = 3;
 >x : number
@@ -17,7 +17,7 @@ module M {
 }
 
 module M {
->M : M
+>M : typeof M
 
     class d {
 >d : d
@@ -31,7 +31,7 @@ module M {
 }
 
 module M {
->M : M
+>M : typeof M
 
     class d2 {
 >d2 : d2

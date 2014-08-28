@@ -7,7 +7,7 @@ var a = new TypeScript2.MemberNameArray()
 >MemberNameArray : typeof TypeScript2.MemberNameArray
 
 module TypeScript2 {
->TypeScript2 : TypeScript2
+>TypeScript2 : typeof TypeScript2
 
 export class MemberName {
 >MemberName : MemberName

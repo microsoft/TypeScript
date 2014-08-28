@@ -1,6 +1,6 @@
 === tests/cases/compiler/underscoreMapFirst.ts ===
 declare module _ {
->_ : _
+>_ : typeof _
 
     interface Collection<T> { }
 >Collection : Collection<T>

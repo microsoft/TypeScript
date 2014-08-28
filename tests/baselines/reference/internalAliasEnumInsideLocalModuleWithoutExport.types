@@ -1,6 +1,6 @@
 === tests/cases/compiler/internalAliasEnumInsideLocalModuleWithoutExport.ts ===
 export module a {
->a : a
+>a : typeof a
 
     export enum weekend {
 >weekend : weekend
@@ -17,10 +17,10 @@ export module a {
 }
 
 export module c {
->c : c
+>c : typeof c
 
     import b = a.weekend;
->b : b
+>b : typeof b
 >a : typeof a
 >weekend : b
 

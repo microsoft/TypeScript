@@ -1,6 +1,6 @@
 === tests/cases/compiler/arrayTypeInSignatureOfInterfaceAndClass.ts ===
 declare module WinJS {
->WinJS : WinJS
+>WinJS : typeof WinJS
 
     class Promise<T> {
 >Promise : Promise<T>
@@ -25,7 +25,7 @@ declare module WinJS {
     }
 }
 declare module Data {
->Data : Data
+>Data : typeof Data
 
     export interface IListItem<T> {
 >IListItem : IListItem<T>
@@ -65,7 +65,7 @@ declare module Data {
 >removeIndices : (indices: number[], options?: any) => WinJS.Promise<IListItem<T>[]>
 >indices : number[]
 >options : any
->WinJS : WinJS
+>WinJS : unknown
 >Promise : WinJS.Promise<T>
 >IListItem : IListItem<T>
 >T : T
@@ -81,7 +81,7 @@ declare module Data {
 >removeIndices : (indices: number[], options?: any) => WinJS.Promise<IListItem<T>[]>
 >indices : number[]
 >options : any
->WinJS : WinJS
+>WinJS : unknown
 >Promise : WinJS.Promise<T>
 >IListItem : IListItem<T>
 >T : T

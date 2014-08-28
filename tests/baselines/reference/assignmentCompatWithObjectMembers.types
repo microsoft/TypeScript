@@ -3,7 +3,7 @@
 // no errors expected
 
 module SimpleTypes {
->SimpleTypes : SimpleTypes
+>SimpleTypes : typeof SimpleTypes
 
     class S { foo: string; }
 >S : S
@@ -152,7 +152,7 @@ module SimpleTypes {
 }
 
 module ObjectTypes {
->ObjectTypes : ObjectTypes
+>ObjectTypes : typeof ObjectTypes
 
     class S { foo: S; }
 >S : S

@@ -9,7 +9,7 @@ interface Iterator<T> { x: T }
 >T : T
 
 module Q {
->Q : Q
+>Q : typeof Q
 
     export function foo<T>(x: (a: Iterator<T>) => number) {
 >foo : typeof foo
@@ -25,7 +25,7 @@ module Q {
 }
 
 module Q {
->Q : Q
+>Q : typeof Q
 
     function bar() {
 >bar : typeof bar

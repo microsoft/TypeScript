@@ -114,7 +114,7 @@ var derived2: Derived2;
 >Derived2 : Derived2
 
 module Derived {
->Derived : Derived
+>Derived : typeof Derived
 
     var h = [{ foo: base, basear: derived }, { foo: base }]; // {foo: Base}[]
 >h : { foo: Base; }[]
@@ -206,7 +206,7 @@ module Derived {
 }
 
 module WithContextualType {
->WithContextualType : WithContextualType
+>WithContextualType : typeof WithContextualType
 
     // no errors
     var a: Base[] = [derived, derived2];

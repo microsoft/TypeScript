@@ -137,7 +137,7 @@ interface KnockoutObservableArrayStatic {
 }
 
 declare module ko {
->ko : ko
+>ko : typeof ko
 
     export var observableArray: KnockoutObservableArrayStatic;
 >observableArray : KnockoutObservableArrayStatic
@@ -145,9 +145,9 @@ declare module ko {
 }
 
 module Portal.Controls.Validators {
->Portal : Portal
->Controls : Controls
->Validators : Validators
+>Portal : typeof Portal
+>Controls : typeof Controls
+>Validators : typeof Validators
 
     export class Validator<TValue> {
 >Validator : Validator<TValue>
@@ -183,17 +183,17 @@ module Portal.Controls.Validators {
 }
 
 module PortalFx.ViewModels.Controls.Validators {
->PortalFx : PortalFx
->ViewModels : ViewModels
->Controls : Controls
->Validators : Validators
+>PortalFx : typeof PortalFx
+>ViewModels : typeof ViewModels
+>Controls : typeof Controls
+>Validators : typeof Validators
 
     export class Validator<TValue> extends Portal.Controls.Validators.Validator<TValue> {
 >Validator : Validator<TValue>
 >TValue : TValue
->Portal : Portal
->Controls : Portal.Controls
->Validators : Portal.Controls.Validators
+>Portal : unknown
+>Controls : unknown
+>Validators : unknown
 >Validator : Portal.Controls.Validators.Validator<TValue>
 >TValue : TValue
 
@@ -216,10 +216,10 @@ interface Contract<TValue> {
     validators: KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>;
 >validators : KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>
 >KnockoutObservableArray : KnockoutObservableArray<T>
->PortalFx : PortalFx
->ViewModels : PortalFx.ViewModels
->Controls : PortalFx.ViewModels.Controls
->Validators : PortalFx.ViewModels.Controls.Validators
+>PortalFx : unknown
+>ViewModels : unknown
+>Controls : unknown
+>Validators : unknown
 >Validator : PortalFx.ViewModels.Controls.Validators.Validator<TValue>
 >TValue : TValue
 }
@@ -234,20 +234,20 @@ class ViewModel<TValue> implements Contract<TValue> {
     public validators: KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>> = ko.observableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>();
 >validators : KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>
 >KnockoutObservableArray : KnockoutObservableArray<T>
->PortalFx : PortalFx
->ViewModels : PortalFx.ViewModels
->Controls : PortalFx.ViewModels.Controls
->Validators : PortalFx.ViewModels.Controls.Validators
+>PortalFx : unknown
+>ViewModels : unknown
+>Controls : unknown
+>Validators : unknown
 >Validator : PortalFx.ViewModels.Controls.Validators.Validator<TValue>
 >TValue : TValue
 >ko.observableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>() : KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>
 >ko.observableArray : KnockoutObservableArrayStatic
 >ko : typeof ko
 >observableArray : KnockoutObservableArrayStatic
->PortalFx : PortalFx
->ViewModels : PortalFx.ViewModels
->Controls : PortalFx.ViewModels.Controls
->Validators : PortalFx.ViewModels.Controls.Validators
+>PortalFx : unknown
+>ViewModels : unknown
+>Controls : unknown
+>Validators : unknown
 >Validator : PortalFx.ViewModels.Controls.Validators.Validator<TValue>
 >TValue : TValue
 }

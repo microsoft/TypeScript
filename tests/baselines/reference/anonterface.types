@@ -1,6 +1,6 @@
 === tests/cases/compiler/anonterface.ts ===
 module M {
->M : M
+>M : typeof M
 
     export class C {
 >C : C

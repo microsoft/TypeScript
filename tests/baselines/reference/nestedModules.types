@@ -1,8 +1,8 @@
 === tests/cases/conformance/internalModules/moduleDeclarations/nestedModules.ts ===
 module A.B.C {
->A : A
->B : B
->C : C
+>A : typeof A
+>B : typeof B
+>C : unknown
 
     export interface Point {
 >Point : Point
@@ -16,14 +16,14 @@ module A.B.C {
 }
 
 module A {
->A : A
+>A : typeof A
 
     export module B {
->B : B
+>B : typeof B
 
         var Point: C.Point = { x: 0, y: 0 }; // bug 832088: could not find module 'C'
 >Point : C.Point
->C : C
+>C : unknown
 >Point : C.Point
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
@@ -32,8 +32,8 @@ module A {
 }
 
 module M2.X {
->M2 : M2
->X : X
+>M2 : typeof M2
+>X : typeof X
 
     export interface Point {
 >Point : Point
@@ -45,10 +45,10 @@ module M2.X {
 }
 
 module M2 {
->M2 : M2
+>M2 : typeof M2
 
     export module X {
->X : X
+>X : typeof X
 
         export var Point: number;
 >Point : number
@@ -77,7 +77,7 @@ var p: { x: number; y: number; }
 
 var p: M2.X.Point;
 >p : { x: number; y: number; }
->M2 : M2
->X : M2.X
+>M2 : unknown
+>X : unknown
 >Point : M2.X.Point
 

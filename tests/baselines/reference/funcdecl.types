@@ -116,7 +116,7 @@ function f(n: () => void) { }
 >n : () => void
 
 module m2 {
->m2 : m2
+>m2 : typeof m2
 
     export function foo(n: () => void ) {
 >foo : typeof foo

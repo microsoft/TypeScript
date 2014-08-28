@@ -1,6 +1,6 @@
 === tests/cases/compiler/sourcemapValidationDuplicateNames.ts ===
 module m1 {
->m1 : m1
+>m1 : typeof m1
 
     var x = 10;
 >x : number
@@ -10,7 +10,7 @@ module m1 {
     }
 }
 module m1 {
->m1 : m1
+>m1 : typeof m1
 
     var b = new m1.c();
 >b : c

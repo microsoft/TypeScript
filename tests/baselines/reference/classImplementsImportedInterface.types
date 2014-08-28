@@ -1,6 +1,6 @@
 === tests/cases/compiler/classImplementsImportedInterface.ts ===
 module M1 {
->M1 : M1
+>M1 : unknown
 
     export interface I {
 >I : I
@@ -11,11 +11,11 @@ module M1 {
 }
 
 module M2 {
->M2 : M2
+>M2 : typeof M2
 
     import T = M1.I;
->T : T
->M1 : M1
+>T : unknown
+>M1 : unknown
 >I : T
 
     class C implements T {

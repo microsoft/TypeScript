@@ -3,7 +3,7 @@
 // Inferences are made quadratic-pairwise to and from these overload sets
 
 module NonGenericParameter {
->NonGenericParameter : NonGenericParameter
+>NonGenericParameter : typeof NonGenericParameter
 
     var a: {
 >a : { (x: boolean): boolean; (x: string): string; }
@@ -50,7 +50,7 @@ module NonGenericParameter {
 }
 
 module GenericParameter {
->GenericParameter : GenericParameter
+>GenericParameter : typeof GenericParameter
 
     function foo5<T>(cb: { (x: T): string; (x: number): T }) {
 >foo5 : typeof foo5

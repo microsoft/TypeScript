@@ -1,6 +1,6 @@
 === tests/cases/conformance/externalModules/foo_1.ts ===
 import foo = require("./foo_0");
->foo : foo
+>foo : typeof foo
 
 if(foo.C1.s1){
 >foo.C1.s1 : boolean

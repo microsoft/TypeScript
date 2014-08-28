@@ -1,7 +1,7 @@
 === tests/cases/compiler/instanceOfInExternalModules_1.ts ===
 ///<reference path='instanceOfInExternalModules_require.ts'/>
 import Bar = require("instanceOfInExternalModules_require");
->Bar : Bar
+>Bar : typeof Bar
 
 function IsFoo(value: any): boolean {
 >IsFoo : typeof IsFoo

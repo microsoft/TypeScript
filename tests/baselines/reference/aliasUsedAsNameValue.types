@@ -2,10 +2,10 @@
 ///<reference path='aliasUsedAsNameValue_0.ts' />
 ///<reference path='aliasUsedAsNameValue_1.ts' />
 import mod = require("aliasUsedAsNameValue_0");
->mod : mod
+>mod : typeof mod
 
 import b = require("aliasUsedAsNameValue_1");
->b : b
+>b : typeof b
  
 export var a = function () {
 >a : () => void

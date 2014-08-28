@@ -1,7 +1,7 @@
 === tests/cases/compiler/testContainerList.ts ===
 // Regression test for #325
 module A {
->A : A
+>A : typeof A
 
     class C {
 >C : C

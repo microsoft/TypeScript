@@ -1,6 +1,6 @@
 === tests/cases/compiler/privateInstanceVisibility.ts ===
 module Test {
->Test : Test
+>Test : typeof Test
  
     export class Example {
 >Example : Example

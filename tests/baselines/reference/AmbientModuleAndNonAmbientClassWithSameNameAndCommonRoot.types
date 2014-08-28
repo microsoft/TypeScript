@@ -1,9 +1,9 @@
 === tests/cases/conformance/internalModules/DeclarationMerging/module.d.ts ===
 declare module A {
->A : A
+>A : typeof A
 
     export module Point {
->Point : Point
+>Point : typeof Point
 
         export var Origin: {
 >Origin : { x: number; y: number; }
@@ -19,7 +19,7 @@ declare module A {
 
 === tests/cases/conformance/internalModules/DeclarationMerging/classPoint.ts ===
 module A {
->A : A
+>A : typeof A
 
     export class Point {
 >Point : Point

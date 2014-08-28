@@ -89,7 +89,7 @@ class C {
 }
 
 module M {
->M : M
+>M : typeof M
 
     export function exhibitBug() {
 >exhibitBug : typeof exhibitBug

@@ -2,7 +2,7 @@
 // This should not compile both B classes are in the same module this should be a collission
 
 module A
->A : A
+>A : typeof A
 {
     class B
 >B : B
@@ -16,7 +16,7 @@ module A
 }
 
 module A
->A : A
+>A : typeof A
 {
     export class B
 >B : B

@@ -1,6 +1,6 @@
 === tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignatures.ts ===
 module CallSignature {
->CallSignature : CallSignature
+>CallSignature : typeof CallSignature
 
     declare function foo1(cb: (x: number) => void): typeof cb;
 >foo1 : typeof foo1

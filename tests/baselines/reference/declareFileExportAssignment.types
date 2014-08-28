@@ -1,6 +1,6 @@
 === tests/cases/compiler/declareFileExportAssignment.ts ===
 module m2 {
->m2 : m2
+>m2 : { (): connectExport; test1: connectModule; test2(): connectModule; }
 
     export interface connectModule {
 >connectModule : connectModule
@@ -30,17 +30,17 @@ var m2: {
 >m2 : { (): m2.connectExport; test1: m2.connectModule; test2(): m2.connectModule; }
 
     (): m2.connectExport;
->m2 : m2
+>m2 : unknown
 >connectExport : m2.connectExport
 
     test1: m2.connectModule;
 >test1 : m2.connectModule
->m2 : m2
+>m2 : unknown
 >connectModule : m2.connectModule
 
     test2(): m2.connectModule;
 >test2 : () => m2.connectModule
->m2 : m2
+>m2 : unknown
 >connectModule : m2.connectModule
 
 };

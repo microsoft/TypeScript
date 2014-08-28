@@ -5,9 +5,9 @@ var a;
 >a : any
 
 module M { }
->M : M
+>M : unknown
 
 import a = M;
->a : a
->M : M
+>a : any
+>M : unknown
 

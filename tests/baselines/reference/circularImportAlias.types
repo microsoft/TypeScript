@@ -2,15 +2,15 @@
 // expected no error
 
 module B {
->B : a.b
+>B : typeof a.b
 
     export import a = A;
->a : a
+>a : typeof a
 >A : typeof a
 
     export class D extends a.C {
 >D : D
->a : a
+>a : unknown
 >C : a.C
 
         id: number;
@@ -19,14 +19,14 @@ module B {
 }
 
 module A {
->A : b.a
+>A : typeof b.a
 
     export class C { name: string }
 >C : C
 >name : string
 
     export import b = B;
->b : b
+>b : typeof b
 >B : typeof b
 }
 

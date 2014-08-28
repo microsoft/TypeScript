@@ -4,13 +4,13 @@ function C(x: number) { }
 >x : number
 
 module C {
->C : C
+>C : typeof C
 
     export var x = 1;
 >x : number
 }
 module C {
->C : C
+>C : typeof C
 
     export function foo() { }
 >foo : typeof foo

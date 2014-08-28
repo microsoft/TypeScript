@@ -833,7 +833,7 @@ enum bigEnum {
 }
 
 module bigModule {
->bigModule : bigModule
+>bigModule : typeof bigModule
 
     class constructor { }
 >constructor : constructor

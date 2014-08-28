@@ -1,6 +1,6 @@
 === tests/cases/compiler/moduleNoEmit.ts ===
 module Foo {
->Foo : Foo
+>Foo : typeof Foo
 
 	1+1;
 >1+1 : number

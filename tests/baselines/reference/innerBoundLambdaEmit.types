@@ -1,6 +1,6 @@
 === tests/cases/compiler/innerBoundLambdaEmit.ts ===
 module M {
->M : M
+>M : typeof M
 
     export class Foo {
 >Foo : Foo
@@ -15,7 +15,7 @@ interface Array<T> {
 
     toFoo(): M.Foo
 >toFoo : () => M.Foo
->M : M
+>M : unknown
 >Foo : M.Foo
 }
 

@@ -1,10 +1,10 @@
 === tests/cases/compiler/importedModuleClassNameClash.ts ===
 import foo = m1;
->foo : foo
->m1 : foo
+>foo : typeof foo
+>m1 : unknown
  
 export module m1 { }
->m1 : foo
+>m1 : unknown
  
 class foo { }
 >foo : foo

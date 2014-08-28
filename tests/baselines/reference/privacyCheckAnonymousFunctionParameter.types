@@ -8,7 +8,7 @@ interface Iterator<T> {
 }
 
 module Query {
->Query : Query
+>Query : typeof Query
 
     export function fromDoWhile<T>(doWhile: (test: Iterator<T>) => boolean): Iterator<T> {
 >fromDoWhile : typeof fromDoWhile

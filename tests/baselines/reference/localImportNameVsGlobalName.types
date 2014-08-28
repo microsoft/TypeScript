@@ -1,6 +1,6 @@
 === tests/cases/compiler/localImportNameVsGlobalName.ts ===
 module Keyboard {
->Keyboard : Keyboard
+>Keyboard : typeof Keyboard
 
   export enum Key { UP, DOWN, LEFT, RIGHT }
 >Key : Key
@@ -11,10 +11,10 @@ module Keyboard {
 }
 
 module App {
->App : App
+>App : typeof App
 
   import Key = Keyboard.Key;
->Key : Key
+>Key : typeof Key
 >Keyboard : typeof Keyboard
 >Key : Key
 

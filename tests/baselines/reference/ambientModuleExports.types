@@ -1,6 +1,6 @@
 === tests/cases/compiler/ambientModuleExports.ts ===
 declare module Foo {
->Foo : Foo
+>Foo : typeof Foo
 
 	function a():void;
 >a : typeof a
@@ -31,7 +31,7 @@ var c = new Foo.C();
 >C : typeof Foo.C
 
 declare module Foo2 {
->Foo2 : Foo2
+>Foo2 : typeof Foo2
 
     export function a(): void;
 >a : typeof a

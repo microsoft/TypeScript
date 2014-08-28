@@ -1,6 +1,6 @@
 === tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration11.ts ===
 declare module string {
->string : string
+>string : typeof string
 
     interface X { }
 >X : X
@@ -17,6 +17,6 @@ string.foo("abc");
 
 var x: string.X;
 >x : string.X
->string : string
+>string : unknown
 >X : string.X
 

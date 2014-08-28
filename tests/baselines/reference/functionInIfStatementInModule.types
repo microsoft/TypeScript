@@ -1,7 +1,7 @@
 === tests/cases/compiler/functionInIfStatementInModule.ts ===
  
 module Midori
->Midori : Midori
+>Midori : typeof Midori
 {
     if (false) {
         function Foo(src)

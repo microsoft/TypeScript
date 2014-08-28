@@ -47,7 +47,7 @@ class A {
     }
 }
 module M {
->M : M
+>M : typeof M
 
     export var n: any;
 >n : any

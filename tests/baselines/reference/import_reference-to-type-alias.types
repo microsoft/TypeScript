@@ -1,9 +1,9 @@
 === tests/cases/compiler/file2.ts ===
 import appJs = require("file1");
->appJs : appJs
+>appJs : typeof appJs
 
 import Services = appJs.App.Services;
->Services : Services
+>Services : typeof Services
 >appJs : typeof appJs
 >App : typeof appJs.App
 >Services : typeof Services
@@ -20,10 +20,10 @@ var x = new Services.UserServices().getUserName();
 
 === tests/cases/compiler/file1.ts ===
 export module App {
->App : App
+>App : typeof App
 
     export module Services {
->Services : Services
+>Services : typeof Services
 
         export class UserServices {
 >UserServices : UserServices

@@ -11,12 +11,12 @@ declare module 'mod1' {
 
 declare module 'moo' {
     import x = require('mod1');
->x : x
+>x : typeof x
 
     export var p: List<x.Foo>;
 >p : List<x.Foo>
 >List : List<T>
->x : x
+>x : unknown
 >Foo : x.Foo
 }
 

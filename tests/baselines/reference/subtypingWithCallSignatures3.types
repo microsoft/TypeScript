@@ -3,7 +3,7 @@
 // error cases, so function calls will all result in 'any'
 
 module Errors {
->Errors : Errors
+>Errors : typeof Errors
 
     class Base { foo: string; }
 >Base : Base
@@ -575,7 +575,7 @@ module Errors {
 }
 
 module WithGenericSignaturesInBaseType {
->WithGenericSignaturesInBaseType : WithGenericSignaturesInBaseType
+>WithGenericSignaturesInBaseType : typeof WithGenericSignaturesInBaseType
 
     declare function foo2(a2: <T>(x: T) => T[]): typeof a2;
 >foo2 : typeof foo2

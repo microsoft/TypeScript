@@ -1,6 +1,6 @@
 === tests/cases/compiler/genericClassWithStaticFactory.ts ===
 module Editor {
->Editor : Editor
+>Editor : typeof Editor
 
     export class List<T> {
 >List : List<T>

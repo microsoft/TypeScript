@@ -2,8 +2,8 @@
 
 /** this is multi declare module*/
 export module outerModule.InnerModule {
->outerModule : outerModule
->InnerModule : InnerModule
+>outerModule : typeof outerModule
+>InnerModule : typeof InnerModule
 
     /// class b comment
     export class b {

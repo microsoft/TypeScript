@@ -15,7 +15,7 @@ class Point {
 }
 
 module Point {
->Point : Point
+>Point : typeof Point
 
     function Origin() { return ""; }// not an error, since not exported
 >Origin : typeof Origin
@@ -23,7 +23,7 @@ module Point {
 
 
 module A {
->A : A
+>A : typeof A
 
     export class Point {
 >Point : Point
@@ -41,7 +41,7 @@ module A {
     }
 
     export module Point {
->Point : Point
+>Point : typeof Point
 
         function Origin() { return ""; }// not an error since not exported
 >Origin : typeof Origin

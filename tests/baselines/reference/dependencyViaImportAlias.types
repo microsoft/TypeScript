@@ -1,9 +1,9 @@
 === tests/cases/compiler/B.ts ===
 import a = require('A');
->a : a
+>a : typeof a
 
 import A = a.A;
->A : A
+>A : typeof a.A
 >a : typeof a
 >A : a.A
 

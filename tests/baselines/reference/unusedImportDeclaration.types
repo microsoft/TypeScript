@@ -1,6 +1,6 @@
 === tests/cases/compiler/unusedImportDeclaration_testerA.ts ===
 import B = require("unusedImportDeclaration_testerB");
->B : B
+>B : typeof B
 
 var thingy: B = {
 >thingy : B

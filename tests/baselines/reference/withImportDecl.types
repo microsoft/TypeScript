@@ -58,7 +58,7 @@ function simpleFunction() {
 }
 
 module m1 {
->m1 : m1
+>m1 : typeof m1
 
     export function foo() {
 >foo : typeof foo
@@ -68,7 +68,7 @@ module m1 {
 }
 
 import m3 = require("withImportDecl_0");
->m3 : m3
+>m3 : typeof m3
 
 var b = new m3.A();
 >b : m3.A

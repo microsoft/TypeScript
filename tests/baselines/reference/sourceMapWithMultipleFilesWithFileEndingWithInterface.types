@@ -1,6 +1,6 @@
 === tests/cases/compiler/a.ts ===
 module M {
->M : M
+>M : typeof M
 
     export var X = 1;
 >X : number
@@ -27,7 +27,7 @@ interface Navigator {
 
 === tests/cases/compiler/b.ts ===
 module m1 {
->m1 : m1
+>m1 : typeof m1
 
     export class c1 {
 >c1 : c1

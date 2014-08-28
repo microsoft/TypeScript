@@ -56,7 +56,7 @@ function F2(x: number): boolean { return x < 42; }
 >x : number
 
 module M {
->M : M
+>M : typeof M
 
     export class A {
 >A : A
@@ -75,7 +75,7 @@ module M {
 }
 
 module N {
->N : N
+>N : typeof N
 
     export class A {
 >A : A

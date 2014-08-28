@@ -1,14 +1,14 @@
 === tests/cases/compiler/B.ts ===
 ///<reference path="A.ts" />
 module A { ; }
->A : A
+>A : typeof A
 
 module B {
->B : B
+>B : typeof B
 
 	export function f(): A.I { return null; }
 >f : typeof f
->A : A
+>A : unknown
 >I : A.I
 }
 
@@ -16,6 +16,6 @@ module B {
 === tests/cases/compiler/A.ts ===
 
 module A { export interface I {} }
->A : A
+>A : typeof A
 >I : I
 

@@ -1,6 +1,6 @@
 === tests/cases/compiler/usingModuleWithExportImportInValuePosition.ts ===
 module A {
->A : A
+>A : typeof A
 
 export var x = 'hello world'
 >x : string
@@ -13,7 +13,7 @@ export class Point {
 >y : number
     }
     export module B {
->B : B
+>B : unknown
 
         export interface Id {
 >Id : Id
@@ -24,10 +24,10 @@ export class Point {
     }
 }
 module C {
->C : C
+>C : typeof C
 
     export import a = A;
->a : a
+>a : typeof a
 >A : typeof a
 }
 
@@ -56,8 +56,8 @@ var c: { name: string };
 
 var c: C.a.B.Id;
 >c : { name: string; }
->C : C
->a : C.a
->B : A.B
+>C : unknown
+>a : unknown
+>B : unknown
 >Id : A.B.Id
 

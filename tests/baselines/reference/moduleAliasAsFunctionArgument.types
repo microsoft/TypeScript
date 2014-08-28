@@ -1,7 +1,7 @@
 === tests/cases/compiler/moduleAliasAsFunctionArgument_1.ts ===
 ///<reference path='moduleAliasAsFunctionArgument_0.ts'/>
 import a = require('moduleAliasAsFunctionArgument_0');
->a : a
+>a : typeof a
 
 function fn(arg: { x: number }) {
 >fn : typeof fn

@@ -6916,18 +6916,6 @@ module ts {
                 return getDeclaredTypeOfSymbol(symbol);
             }
 
-            if (node.kind === SyntaxKind.ModuleDeclaration ||
-                node.kind === SyntaxKind.ImportDeclaration) {
-                return unknownType;
-            }
-
-            if (node.parent.kind === SyntaxKind.ModuleDeclaration ||
-                node.parent.kind === SyntaxKind.ImportDeclaration) {
-                if ((<Declaration>node.parent).name === node) {
-                    return unknownType;
-                }
-            }
-
             if (isDeclaration(node)) {
                 // In this case, we call getSymbolOfNode instead of getSymbolInfo because it is a declaration
                 var symbol = getSymbolOfNode(node);

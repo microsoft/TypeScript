@@ -3,16 +3,16 @@ interface A {   // interface before module declaration
 >A : A
 
     (): B.C;    // uses defined below class in module
->B : B
+>B : unknown
 >C : B.C
 }
 declare function B(): B.C;  // function merged with module
 >B : typeof B
->B : B
+>B : unknown
 >C : B.C
 
 declare module B {
->B : B
+>B : typeof B
 
     export class C {    // class defined in module 
 >C : C

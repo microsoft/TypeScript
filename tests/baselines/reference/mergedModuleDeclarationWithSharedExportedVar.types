@@ -1,6 +1,6 @@
 === tests/cases/compiler/mergedModuleDeclarationWithSharedExportedVar.ts ===
 module M {
->M : M
+>M : typeof M
 
     export var v = 10;
 >v : number
@@ -9,7 +9,7 @@ module M {
 >v : number
 }
 module M {
->M : M
+>M : typeof M
 
     v;
 >v : number

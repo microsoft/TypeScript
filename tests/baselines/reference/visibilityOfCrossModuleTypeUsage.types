@@ -1,11 +1,11 @@
 === tests/cases/compiler/visibilityOfCrossModuleTypeUsage_fs.ts ===
 import commands = require('visibilityOfCrossModuleTypeUsage_commands');
->commands : commands
+>commands : typeof commands
 
 function run(configuration: commands.IConfiguration) {
 >run : typeof run
 >configuration : commands.IConfiguration
->commands : commands
+>commands : unknown
 >IConfiguration : commands.IConfiguration
 
     var absoluteWorkspacePath = configuration.workspace.toAbsolutePath(configuration.server);
@@ -24,22 +24,22 @@ function run(configuration: commands.IConfiguration) {
 //visibilityOfCrossModuleTypeUsage
 
 import fs = require('visibilityOfCrossModuleTypeUsage_fs');
->fs : fs
+>fs : typeof fs
 
 import server = require('visibilityOfCrossModuleTypeUsage_server');
->server : server
+>server : typeof server
 
 export interface IConfiguration {
 >IConfiguration : IConfiguration
 
     workspace: server.IWorkspace;
 >workspace : server.IWorkspace
->server : server
+>server : unknown
 >IWorkspace : server.IWorkspace
 
     server?: server.IServer;
 >server : server.IServer
->server : server
+>server : unknown
 >IServer : server.IServer
 }
 

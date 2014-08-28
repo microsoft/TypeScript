@@ -10,7 +10,7 @@ interface IPoint {
 
 // Module
 module Shapes {
->Shapes : Shapes
+>Shapes : typeof Shapes
 
     // Class
     export class Point implements IPoint {

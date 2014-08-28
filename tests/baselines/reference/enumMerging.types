@@ -2,7 +2,7 @@
 // Enum with only constant members across 2 declarations with the same root module
 // Enum with initializer in all declarations with constant members with the same root module
 module M1 {
->M1 : M1
+>M1 : typeof M1
 
     enum EImpl1 {
 >EImpl1 : EImpl1
@@ -65,7 +65,7 @@ module M1 {
 
 // Enum with only computed members across 2 declarations with the same root module 
 module M2 {
->M2 : M2
+>M2 : typeof M2
 
     export enum EComp2 {
 >EComp2 : EComp2
@@ -122,7 +122,7 @@ module M2 {
 
 // Enum with initializer in only one of two declarations with constant members with the same root module
 module M3 {
->M3 : M3
+>M3 : typeof M3
 
     enum EInit {
 >EInit : EInit
@@ -146,7 +146,7 @@ module M3 {
 
 // Enums with same name but different root module
 module M4 {
->M4 : M4
+>M4 : typeof M4
 
     export enum Color { Red, Green, Blue }
 >Color : Color
@@ -155,7 +155,7 @@ module M4 {
 >Blue : Color
 }
 module M5 {
->M5 : M5
+>M5 : typeof M5
 
     export enum Color { Red, Green, Blue }
 >Color : Color
@@ -165,8 +165,8 @@ module M5 {
 }
 
 module M6.A {
->M6 : M6
->A : A
+>M6 : typeof M6
+>A : typeof A
 
     export enum Color { Red, Green, Blue }
 >Color : Color
@@ -175,10 +175,10 @@ module M6.A {
 >Blue : Color
 }
 module M6 {
->M6 : M6
+>M6 : typeof M6
 
     export module A {
->A : A
+>A : typeof A
 
         export enum Color { Yellow = 1 }
 >Color : Color

@@ -1,6 +1,6 @@
 === tests/cases/compiler/genericCallbacksAndClassHierarchy.ts ===
 module M {
->M : M
+>M : typeof M
 
     export interface I<T> {
 >I : I<T>

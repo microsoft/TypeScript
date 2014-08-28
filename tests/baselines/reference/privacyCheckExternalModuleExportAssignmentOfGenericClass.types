@@ -1,6 +1,6 @@
 === tests/cases/compiler/privacyCheckExternalModuleExportAssignmentOfGenericClass_1.ts ===
 import Foo = require("privacyCheckExternalModuleExportAssignmentOfGenericClass_0");
->Foo : Foo
+>Foo : typeof Foo
 
 export = Bar;
 >Bar : Bar

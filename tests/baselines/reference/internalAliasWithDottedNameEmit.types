@@ -1,19 +1,19 @@
 === tests/cases/compiler/internalAliasWithDottedNameEmit.ts ===
 module a.b.c {
->a : a
->b : b
->c : c
+>a : typeof a
+>b : typeof b
+>c : typeof c
 
       export var d;
 >d : any
 }
 module a.e.f {
->a : a
->e : e
->f : f
+>a : typeof a
+>e : unknown
+>f : unknown
 
       import g = b.c;
->g : g
+>g : typeof g
 >b : typeof b
 >c : typeof g
 }

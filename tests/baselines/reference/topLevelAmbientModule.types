@@ -1,7 +1,7 @@
 === tests/cases/conformance/externalModules/foo_1.ts ===
 /// <reference path="foo_0.ts"/>
 import foo = require("foo");
->foo : foo
+>foo : typeof foo
 
 var z = foo.x + 10;
 >z : number

@@ -1,6 +1,6 @@
 === tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts ===
 module A {
->A : A
+>A : typeof A
 
     export class Point {
 >Point : Point
@@ -14,7 +14,7 @@ module A {
 }
 
 module A {
->A : A
+>A : typeof A
 
     class Point {
 >Point : Point
@@ -22,7 +22,7 @@ module A {
         fromCarthesian(p: A.Point) {
 >fromCarthesian : (p: A.Point) => { x: number; y: number; }
 >p : A.Point
->A : A
+>A : unknown
 >Point : A.Point
 
             return { x: p.x, y: p.y };
@@ -47,13 +47,13 @@ var p: { x: number; y: number; };
 
 var p: A.Point;
 >p : { x: number; y: number; }
->A : A
+>A : unknown
 >Point : A.Point
 
 module X.Y.Z {
->X : X
->Y : Y
->Z : Z
+>X : typeof X
+>Y : typeof Y
+>Z : typeof Z
 
     export class Line {
 >Line : Line
@@ -64,13 +64,13 @@ module X.Y.Z {
 }
 
 module X {
->X : X
+>X : typeof X
 
     export module Y {
->Y : Y
+>Y : typeof Y
 
         export module Z {
->Z : Z
+>Z : typeof Z
 
             class Line {
 >Line : Line
@@ -89,9 +89,9 @@ var l: { length: number; }
 
 var l: X.Y.Z.Line;
 >l : { length: number; }
->X : X
->Y : X.Y
->Z : X.Y.Z
+>X : unknown
+>Y : unknown
+>Z : unknown
 >Line : X.Y.Z.Line
 
 

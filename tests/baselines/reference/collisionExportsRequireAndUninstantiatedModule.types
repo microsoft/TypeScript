@@ -1,6 +1,6 @@
 === tests/cases/compiler/collisionExportsRequireAndUninstantiatedModule.ts ===
 export module require { // no error 
->require : require
+>require : unknown
 
     export interface I {
 >I : I
@@ -8,13 +8,13 @@ export module require { // no error
 }
 export function foo(): require.I {
 >foo : typeof foo
->require : require
+>require : unknown
 >I : require.I
 
     return null;
 }
 export module exports { // no error
->exports : exports
+>exports : unknown
 
     export interface I {
 >I : I
@@ -22,7 +22,7 @@ export module exports { // no error
 }
 export function foo2(): exports.I {
 >foo2 : typeof foo2
->exports : exports
+>exports : unknown
 >I : exports.I
 
     return null;

@@ -1,6 +1,6 @@
 === tests/cases/compiler/declFileGenericType.ts ===
 export module C {
->C : C
+>C : typeof C
 
     export class A<T>{ }
 >A : A<T>
@@ -22,9 +22,9 @@ export module C {
 >T : T
 >x : T
 >T : T
->C : C
+>C : unknown
 >A : A<T>
->C : C
+>C : unknown
 >B : B
 
     export function F3<T>(x: T): C.A<C.B>[] { return null; }
@@ -32,9 +32,9 @@ export module C {
 >T : T
 >x : T
 >T : T
->C : C
+>C : unknown
 >A : A<T>
->C : C
+>C : unknown
 >B : B
 
     export function F4<T extends A<B>>(x: T): Array<C.A<C.B>> { return null; }
@@ -45,9 +45,9 @@ export module C {
 >x : T
 >T : T
 >Array : Array<T>
->C : C
+>C : unknown
 >A : A<T>
->C : C
+>C : unknown
 >B : B
 
     export function F5<T>(): T { return null; }
@@ -77,9 +77,9 @@ export module C {
 
 export var a: C.A<C.B>;
 >a : C.A<C.B>
->C : C
+>C : unknown
 >A : C.A<T>
->C : C
+>C : unknown
 >B : C.B
 
 export var b = C.F;
@@ -114,24 +114,24 @@ export var x = (new C.D<C.A<C.B>>(new C.A<C.B>())).val;
 >C.D : typeof C.D
 >C : typeof C
 >D : typeof C.D
->C : C
+>C : unknown
 >A : C.A<T>
->C : C
+>C : unknown
 >B : C.B
 >new C.A<C.B>() : C.A<C.B>
 >C.A : typeof C.A
 >C : typeof C
 >A : typeof C.A
->C : C
+>C : unknown
 >B : C.B
 >val : C.A<C.B>
 
 export function f<T extends C.A<C.B>>() { }
 >f : typeof f
 >T : T
->C : C
+>C : unknown
 >A : C.A<T>
->C : C
+>C : unknown
 >B : C.B
 
 export var g = C.F5<C.A<C.B>>();
@@ -140,23 +140,23 @@ export var g = C.F5<C.A<C.B>>();
 >C.F5 : typeof C.F5
 >C : typeof C
 >F5 : typeof C.F5
->C : C
+>C : unknown
 >A : C.A<T>
->C : C
+>C : unknown
 >B : C.B
 
 export class h extends C.A<C.B>{ }
 >h : h
->C : C
+>C : unknown
 >A : C.A<T>
->C : C
+>C : unknown
 >B : C.B
 
 export interface i extends C.A<C.B> { }
 >i : i
->C : C
+>C : unknown
 >A : C.A<T>
->C : C
+>C : unknown
 >B : C.B
 
 export var j = C.F6;

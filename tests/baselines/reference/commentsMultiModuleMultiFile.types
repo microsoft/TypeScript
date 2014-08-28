@@ -1,10 +1,10 @@
 === tests/cases/compiler/commentsMultiModuleMultiFile_1.ts ===
 import m = require('commentsMultiModuleMultiFile_0');
->m : m
+>m : typeof m
 
 /** this is multi module 3 comment*/
 export module multiM {
->multiM : multiM
+>multiM : typeof multiM
 
     /** class d comment*/
     export class d {
@@ -26,7 +26,7 @@ new multiM.d();
 
 /** this is multi declare module*/
 export module multiM {
->multiM : multiM
+>multiM : typeof multiM
 
     /// class b comment
     export class b {
@@ -35,7 +35,7 @@ export module multiM {
 }
 /** thi is multi module 2*/
 export module multiM {
->multiM : multiM
+>multiM : typeof multiM
 
     /** class c comment*/
     export class c {

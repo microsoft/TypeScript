@@ -1,16 +1,16 @@
 === tests/cases/compiler/declFileInternalAliases.ts ===
 module m {
->m : m
+>m : typeof m
 
     export class c {
 >c : c
     }
 }
 module m1 {
->m1 : m1
+>m1 : typeof m1
 
     import x = m.c;
->x : x
+>x : typeof x
 >m : typeof m
 >c : x
 
@@ -20,10 +20,10 @@ module m1 {
 >x : typeof x
 }
 module m2 {
->m2 : m2
+>m2 : typeof m2
 
     export import x = m.c;
->x : x
+>x : typeof x
 >m : typeof m
 >c : x
 

@@ -1,10 +1,10 @@
 === tests/cases/compiler/requireEmitSemicolon_1.ts ===
 ///<reference path='requireEmitSemicolon_0.ts'/>
 import P = require("requireEmitSemicolon_0"); // bug was we were not emitting a ; here and causing runtime failures in node
->P : P
+>P : typeof P
 
 export module Database {
->Database : Database
+>Database : typeof Database
 
 	export class DB {
 >DB : DB
@@ -12,8 +12,8 @@ export module Database {
 	    public findPerson(id: number): P.Models.Person {
 >findPerson : (id: number) => P.Models.Person
 >id : number
->P : P
->Models : P.Models
+>P : unknown
+>Models : unknown
 >Person : P.Models.Person
 
 	        return new P.Models.Person("Rock");
@@ -28,7 +28,7 @@ export module Database {
 } 
 === tests/cases/compiler/requireEmitSemicolon_0.ts ===
 export module Models {
->Models : Models
+>Models : typeof Models
 
 	export class Person {
 >Person : Person

@@ -1,6 +1,6 @@
 === tests/cases/compiler/indexIntoEnum.ts ===
 module M {
->M : M
+>M : typeof M
 
     enum E { }
 >E : E

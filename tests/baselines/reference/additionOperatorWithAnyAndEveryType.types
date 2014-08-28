@@ -18,7 +18,7 @@ enum E { a, b, c }
 >c : E
 
 module M { export var a }
->M : M
+>M : typeof M
 >a : any
 
 var a: any;

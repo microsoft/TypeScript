@@ -15,7 +15,7 @@ declare var window: Window;
 >Window : Window
 
 module Foo {
->Foo : Foo
+>Foo : typeof Foo
 
     var x = "test1";
 >x : string

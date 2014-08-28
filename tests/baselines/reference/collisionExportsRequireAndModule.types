@@ -1,6 +1,6 @@
 === tests/cases/compiler/collisionExportsRequireAndModule.ts ===
 export module require {
->require : require
+>require : typeof require
 
     export interface I {
 >I : I
@@ -11,13 +11,13 @@ export module require {
 }
 export function foo(): require.I {
 >foo : typeof foo
->require : require
+>require : unknown
 >I : require.I
 
     return null;
 }
 export module exports {
->exports : exports
+>exports : typeof exports
 
     export interface I {
 >I : I
@@ -28,7 +28,7 @@ export module exports {
 }
 export function foo2(): exports.I {
 >foo2 : typeof foo2
->exports : exports
+>exports : unknown
 >I : exports.I
 
     return null;

@@ -1,6 +1,6 @@
 === tests/cases/compiler/Bar.ts ===
 import Error = require('Foo');
->Error : Error
+>Error : typeof Error
 
 class Bar extends Error {}
 >Bar : Bar

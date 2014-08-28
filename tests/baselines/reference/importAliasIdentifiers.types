@@ -1,6 +1,6 @@
 === tests/cases/conformance/internalModules/importDeclarations/importAliasIdentifiers.ts ===
 module moduleA {
->moduleA : moduleA
+>moduleA : typeof moduleA
 
     export class Point {
 >Point : Point
@@ -12,17 +12,17 @@ module moduleA {
 }
 
 import alias = moduleA;
->alias : alias
+>alias : typeof moduleA
 >moduleA : typeof moduleA
 
 var p: alias.Point;
 >p : alias.Point
->alias : alias
+>alias : unknown
 >Point : alias.Point
 
 var p: moduleA.Point;
 >p : alias.Point
->moduleA : moduleA
+>moduleA : unknown
 >Point : alias.Point
 
 var p: { x: number; y: number; };
@@ -38,7 +38,7 @@ class clodule {
 }
 
 module clodule {
->clodule : clodule
+>clodule : typeof clodule
 
     export interface Point {
 >Point : Point
@@ -56,7 +56,7 @@ module clodule {
 }
 
 import clolias = clodule;
->clolias : clolias
+>clolias : typeof clodule
 >clodule : clodule
 
 var p: clolias.Point;
@@ -85,7 +85,7 @@ function fundule() {
 }
 
 module fundule {
->fundule : fundule
+>fundule : typeof fundule
 
     export interface Point {
 >Point : Point
@@ -103,17 +103,17 @@ module fundule {
 }
 
 import funlias = fundule;
->funlias : funlias
+>funlias : typeof fundule
 >fundule : typeof fundule
 
 var p: funlias.Point;
 >p : alias.Point
->funlias : funlias
+>funlias : unknown
 >Point : funlias.Point
 
 var p: fundule.Point;
 >p : alias.Point
->fundule : fundule
+>fundule : unknown
 >Point : funlias.Point
 
 var p: { x: number; y: number; };

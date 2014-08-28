@@ -29,7 +29,6 @@ class TypeWriterWalker {
             // old typeWriter baselines, suppress tokens
             case ts.SyntaxKind.ThisKeyword:
             case ts.SyntaxKind.SuperKeyword:
-         //   case ts.SyntaxKind.RegularExpressionLiteral:
             case ts.SyntaxKind.ArrayLiteral:
             case ts.SyntaxKind.ObjectLiteral:
             case ts.SyntaxKind.PropertyAccess:
@@ -79,10 +78,7 @@ class TypeWriterWalker {
         var lineAndCharacter = this.currentSourceFile.getLineAndCharacterFromPosition(actualPos);
         var sourceText = ts.getSourceTextOfNodeFromSourceText(this.currentSourceFile.text, node);
         var isUnknownType = (<ts.IntrinsicType>type).intrinsicName === "unknown";
-        if (isUnknownType) {
-            var symbol = this.checker.getSymbolInfo(node);
-        }
-        else {
+        if (!isUnknownType) {
             var writeArrayAsGenericType = node.kind === ts.SyntaxKind.Identifier && (<ts.Identifier>node).text === "Array" ? ts.TypeFormatFlags.WriteArrayAsGenericType : 0;
         }
         
@@ -94,9 +90,7 @@ class TypeWriterWalker {
             column: lineAndCharacter.character,
             syntaxKind: ts.SyntaxKind[node.kind],
             sourceText: sourceText,
-            type: isUnknownType
-                ? this.checker.symbolToString(symbol, node.parent, ts.SymbolFlags.Value | ts.SymbolFlags.Type | ts.SymbolFlags.Namespace | ts.SymbolFlags.Import)
-                : this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.UseTypeOfFunction | writeArrayAsGenericType)
+            type: this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.UseTypeOfFunction | writeArrayAsGenericType)
         });
     }
 

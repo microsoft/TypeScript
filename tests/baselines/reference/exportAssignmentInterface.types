@@ -1,6 +1,6 @@
 === tests/cases/compiler/exportAssignmentInterface_B.ts ===
 import I1 = require("exportAssignmentInterface_A");
->I1 : I1
+>I1 : unknown
 
 var i: I1;
 >i : I1

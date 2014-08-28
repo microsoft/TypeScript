@@ -1,7 +1,7 @@
 === tests/cases/compiler/consumer.ts ===
 
 import host = require("host");
->host : host
+>host : typeof host
 
 var hostVar = host;
 >hostVar : typeof host

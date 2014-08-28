@@ -2,7 +2,7 @@
 
 /** this is multi declare module*/
 module multiM {
->multiM : multiM
+>multiM : typeof multiM
 
     /** class b*/
     export class b {
@@ -17,7 +17,7 @@ module multiM {
 
 /// this is multi module 2
 module multiM {
->multiM : multiM
+>multiM : typeof multiM
 
     /** class c comment*/
     export class c {

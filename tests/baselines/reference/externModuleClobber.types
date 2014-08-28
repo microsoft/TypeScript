@@ -1,6 +1,6 @@
 === tests/cases/compiler/externModuleClobber.ts ===
 declare module EM {
->EM : EM
+>EM : typeof EM
 
 	export class Position { }
 >Position : Position
@@ -10,19 +10,19 @@ declare module EM {
 
 		public getPosition() : EM.Position;
 >getPosition : () => Position
->EM : EM
+>EM : unknown
 >Position : Position
 	}
 }
 
 var x:EM.Position;
 >x : EM.Position
->EM : EM
+>EM : unknown
 >Position : EM.Position
 
 var ec:EM.EC = new EM.EC();
 >ec : EM.EC
->EM : EM
+>EM : unknown
 >EC : EM.EC
 >new EM.EC() : EM.EC
 >EM.EC : typeof EM.EC

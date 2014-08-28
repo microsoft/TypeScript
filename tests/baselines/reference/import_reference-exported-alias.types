@@ -1,14 +1,14 @@
 === tests/cases/compiler/file2.ts ===
 import appJs = require("file1");
->appJs : appJs
+>appJs : typeof appJs
 
 import Services = appJs.Services;
->Services : Services
+>Services : typeof appJs.Services
 >appJs : typeof appJs
 >Services : typeof appJs.Services
 
 import UserServices = Services.UserServices;
->UserServices : UserServices
+>UserServices : typeof Services.UserServices
 >Services : typeof appJs.Services
 >UserServices : Services.UserServices
 
@@ -22,10 +22,10 @@ var x = new UserServices().getUserName();
 
 === tests/cases/compiler/file1.ts ===
 module App {
->App : App
+>App : typeof App
 
     export module Services {
->Services : Services
+>Services : typeof Services
 
         export class UserServices {
 >UserServices : UserServices
@@ -40,7 +40,7 @@ module App {
 }
 
 import Mod = App;
->Mod : Mod
+>Mod : typeof App
 >App : typeof App
 
 export = Mod;

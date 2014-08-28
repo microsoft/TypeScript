@@ -1,6 +1,6 @@
 === tests/cases/compiler/extBaseClass1.ts ===
 module M {
->M : M
+>M : typeof M
 
     export class B {
 >B : B
@@ -16,7 +16,7 @@ module M {
 }
 
 module M {
->M : M
+>M : typeof M
 
     export class C2 extends B {
 >C2 : C2
@@ -25,11 +25,11 @@ module M {
 }
 
 module N {
->N : N
+>N : typeof N
 
     export class C3 extends M.B {
 >C3 : C3
->M : M
+>M : unknown
 >B : M.B
     }
 }

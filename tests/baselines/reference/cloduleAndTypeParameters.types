@@ -10,7 +10,7 @@ class Foo<T extends Foo.Bar> {
 }
 
 module Foo {
->Foo : Foo
+>Foo : typeof Foo
 
   export interface Bar {
 >Bar : Bar

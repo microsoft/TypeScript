@@ -1,6 +1,6 @@
 === tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts ===
 module A {
->A : A
+>A : unknown
 
     export interface Point {
 >Point : Point
@@ -18,7 +18,7 @@ module A {
 }
 
 module A {
->A : A
+>A : unknown
 
     interface Point {
 >Point : Point
@@ -35,50 +35,50 @@ var p: { x: number; y: number; toCarth(): A.Point; };
 >x : number
 >y : number
 >toCarth : () => A.Point
->A : A
+>A : unknown
 >Point : A.Point
 
 var p: A.Point;
 >p : { x: number; y: number; toCarth(): A.Point; }
->A : A
+>A : unknown
 >Point : A.Point
 
 module X.Y.Z {
->X : X
->Y : Y
->Z : Z
+>X : unknown
+>Y : unknown
+>Z : unknown
 
     export interface Line {
 >Line : Line
 
         new (start: A.Point, end: A.Point);
 >start : A.Point
->A : A
+>A : unknown
 >Point : A.Point
 >end : A.Point
->A : A
+>A : unknown
 >Point : A.Point
     }
 }
 
 module X {
->X : X
+>X : unknown
 
     export module Y.Z {
->Y : Y
->Z : Z
+>Y : unknown
+>Z : unknown
 
         interface Line {
 >Line : Line
 
             start: A.Point;
 >start : A.Point
->A : A
+>A : unknown
 >Point : A.Point
 
             end: A.Point;
 >end : A.Point
->A : A
+>A : unknown
 >Point : A.Point
         }
     }
@@ -88,16 +88,16 @@ module X {
 var l: { new (s: A.Point, e: A.Point); }
 >l : new (s: A.Point, e: A.Point) => any
 >s : A.Point
->A : A
+>A : unknown
 >Point : A.Point
 >e : A.Point
->A : A
+>A : unknown
 >Point : A.Point
 
 var l: X.Y.Z.Line;
 >l : new (s: A.Point, e: A.Point) => any
->X : X
->Y : X.Y
->Z : X.Y.Z
+>X : unknown
+>Y : unknown
+>Z : unknown
 >Line : X.Y.Z.Line
 

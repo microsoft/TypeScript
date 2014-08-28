@@ -1,6 +1,6 @@
 === tests/cases/compiler/modFunctionCrash.ts ===
 declare module Q {
->Q : Q
+>Q : typeof Q
 
     function f(fn:()=>void); // typechecking the function type shouldnot crash the compiler
 >f : typeof f

@@ -97,7 +97,7 @@ var r6 = b.baz;
 
 // basic non-generic and generic case inside a module
 module M {
->M : M
+>M : typeof M
 
     interface A {
 >A : A

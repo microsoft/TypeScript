@@ -1,9 +1,9 @@
 === tests/cases/compiler/namespaces1.ts ===
 module X {
->X : X
+>X : unknown
 
     export module Y {
->Y : Y
+>Y : unknown
 
         export interface Z { }
 >Z : Z
@@ -14,12 +14,12 @@ module X {
 
 var x: X.Y.Z;
 >x : X.Y.Z
->X : X
->Y : X.Y
+>X : unknown
+>Y : unknown
 >Z : X.Y.Z
 
 var x2: X.Y;
 >x2 : X.Y
->X : X
+>X : unknown
 >Y : X.Y
 

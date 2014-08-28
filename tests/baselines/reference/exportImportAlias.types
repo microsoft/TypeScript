@@ -2,7 +2,7 @@
 // expect no errors here
 
 module A {
->A : A
+>A : typeof A
 
     export var x = 'hello world'
 >x : string
@@ -15,7 +15,7 @@ module A {
 >y : number
     }
     export module B {
->B : B
+>B : unknown
 
         export interface Id {
 >Id : Id
@@ -27,10 +27,10 @@ module A {
 }
 
 module C {
->C : C
+>C : typeof C
 
     export import a = A;
->a : a
+>a : typeof a
 >A : typeof a
 }
 
@@ -59,13 +59,13 @@ var c: { name: string };
 
 var c: C.a.B.Id;
 >c : { name: string; }
->C : C
->a : C.a
->B : A.B
+>C : unknown
+>a : unknown
+>B : unknown
 >Id : A.B.Id
 
 module X {
->X : X
+>X : typeof X
 
     export function Y() {
 >Y : typeof Y
@@ -74,7 +74,7 @@ module X {
     }
 
     export module Y {
->Y : Y
+>Y : typeof Y
 
         export class Point {
 >Point : Point
@@ -87,11 +87,11 @@ module X {
 }
 
 module Z {
->Z : Z
+>Z : typeof Z
 
     // 'y' should be a fundule here
     export import y = X.Y;
->y : y
+>y : typeof y
 >X : typeof X
 >Y : typeof y
 }
@@ -115,7 +115,7 @@ var n: { x: number; y: number; } = new Z.y.Point(0, 0);
 >Point : typeof X.Y.Point
 
 module K {
->K : K
+>K : typeof K
 
     export class L {
 >L : L
@@ -125,7 +125,7 @@ module K {
     }
 
     export module L {
->L : L
+>L : typeof L
 
         export var y = 12;
 >y : number
@@ -143,10 +143,10 @@ module K {
 }
 
 module M {
->M : M
+>M : typeof M
 
     export import D = K.L;
->D : D
+>D : typeof D
 >K : typeof K
 >L : D
 }
@@ -169,7 +169,7 @@ var p: { x: number; y: number; }
 
 var p: M.D.Point;
 >p : { x: number; y: number; }
->M : M
->D : M.D
+>M : unknown
+>D : unknown
 >Point : K.L.Point
 

@@ -1,6 +1,6 @@
 === tests/cases/compiler/newArrays.ts ===
 module M {
->M : M
+>M : typeof M
 
 	class Foo {}
 >Foo : Foo

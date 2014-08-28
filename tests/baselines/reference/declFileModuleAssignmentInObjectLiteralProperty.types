@@ -1,7 +1,7 @@
 === tests/cases/compiler/declFileModuleAssignmentInObjectLiteralProperty.ts ===
 
 module m1 {
->m1 : m1
+>m1 : typeof m1
 
     export class c {
 >c : c

@@ -1440,7 +1440,7 @@ interface Tuple4<T0, T1, T2, T3> extends Array<any> {
 }
 
 module Underscore {
->Underscore : Underscore
+>Underscore : unknown
 
     export interface WrappedObject<T> {
 >WrappedObject : WrappedObject<T>
@@ -5277,6 +5277,6 @@ module Underscore {
 
 declare var _: Underscore.Static;
 >_ : Underscore.Static
->Underscore : Underscore
+>Underscore : unknown
 >Static : Underscore.Static
 

@@ -1,6 +1,6 @@
 === tests/cases/compiler/collisionCodeGenModuleWithEnumMemberConflict.ts ===
 module m1 {
->m1 : m1
+>m1 : typeof m1
 
     enum e {
 >e : e

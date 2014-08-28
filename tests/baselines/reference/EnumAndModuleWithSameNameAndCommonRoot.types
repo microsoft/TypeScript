@@ -8,7 +8,7 @@ enum enumdule {
 }
 
 module enumdule {
->enumdule : enumdule
+>enumdule : typeof enumdule
 
     export class Point {
 >Point : Point

@@ -1,7 +1,7 @@
 === tests/cases/compiler/structuralTypeInDeclareFileForModule.ts ===
 
 module M { export var x; }
->M : M
+>M : typeof M
 >x : any
 
 var m = M;

@@ -1,6 +1,6 @@
 === tests/cases/compiler/genericTypeArgumentInference1.ts ===
 module Underscore {
->Underscore : Underscore
+>Underscore : unknown
 
     export interface Iterator<T, U> {
 >Iterator : Iterator<T, U>
@@ -38,7 +38,7 @@ module Underscore {
 }
 declare var _: Underscore.Static;
 >_ : Underscore.Static
->Underscore : Underscore
+>Underscore : unknown
 >Static : Underscore.Static
 
 var r = _.all([true, 1, null, 'yes'], _.identity);

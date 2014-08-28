@@ -1,6 +1,6 @@
 === tests/cases/compiler/overloadResolutionOverNonCTObjectLit.ts ===
 module Bugs {
->Bugs : Bugs
+>Bugs : typeof Bugs
 
                 export interface IToken {
 >IToken : IToken

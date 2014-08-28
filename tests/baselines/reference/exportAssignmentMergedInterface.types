@@ -1,6 +1,6 @@
 === tests/cases/conformance/externalModules/foo_1.ts ===
 import foo = require("./foo_0");
->foo : foo
+>foo : unknown
 
 var x: foo;
 >x : foo

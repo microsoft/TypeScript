@@ -1,9 +1,9 @@
 === tests/cases/compiler/declFileImportChainInExportAssignment.ts ===
 module m {
->m : m
+>m : typeof m
 
     export module c {
->c : m.c
+>c : typeof m.c
 
         export class c {
 >c : c
@@ -11,12 +11,12 @@ module m {
     }
 }
 import a = m.c;
->a : a
+>a : typeof a
 >m : typeof m
 >c : typeof a
 
 import b = a;
->b : b
+>b : typeof a
 >a : typeof a
 
 export = b;

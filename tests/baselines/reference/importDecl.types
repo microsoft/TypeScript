@@ -5,7 +5,7 @@
 ///<reference path='importDecl_require3.ts'/>
 ///<reference path='importDecl_require4.ts'/>
 import m4 = require("importDecl_require"); // Emit used
->m4 : m4
+>m4 : typeof m4
 
 export var x4 = m4.x;
 >x4 : m4.d
@@ -27,7 +27,7 @@ export var f4 = m4.foo();
 >foo : typeof m4.foo
 
 export module m1 {
->m1 : m1
+>m1 : typeof m1
 
     export var x2 = m4.x;
 >x2 : m4.d
@@ -70,7 +70,7 @@ export module m1 {
 
 //Emit global only usage
 import glo_m4 = require("importDecl_require1");
->glo_m4 : glo_m4
+>glo_m4 : typeof glo_m4
 
 export var useGlo_m4_d4 = glo_m4.d;
 >useGlo_m4_d4 : typeof glo_m4.d
@@ -87,7 +87,7 @@ export var useGlo_m4_f4 = glo_m4.foo();
 
 //Emit even when used just in function type
 import fncOnly_m4 = require("importDecl_require2");
->fncOnly_m4 : fncOnly_m4
+>fncOnly_m4 : typeof fncOnly_m4
 
 export var useFncOnly_m4_f4 = fncOnly_m4.foo();
 >useFncOnly_m4_f4 : fncOnly_m4.d
@@ -98,10 +98,10 @@ export var useFncOnly_m4_f4 = fncOnly_m4.foo();
 
 // only used privately no need to emit
 import private_m4 = require("importDecl_require3");
->private_m4 : private_m4
+>private_m4 : typeof private_m4
 
 export module usePrivate_m4_m1 {
->usePrivate_m4_m1 : usePrivate_m4_m1
+>usePrivate_m4_m1 : typeof usePrivate_m4_m1
 
     var x3 = private_m4.x;
 >x3 : private_m4.d
@@ -125,7 +125,7 @@ export module usePrivate_m4_m1 {
 
 // Do not emit unused import
 import m5 = require("importDecl_require4");
->m5 : m5
+>m5 : typeof m5
 
 export var d = m5.foo2();
 >d : m4.d
@@ -136,7 +136,7 @@ export var d = m5.foo2();
 
 // Do not emit multiple used import statements
 import multiImport_m4 = require("importDecl_require"); // Emit used
->multiImport_m4 : multiImport_m4
+>multiImport_m4 : typeof m4
 
 export var useMultiImport_m4_x4 = multiImport_m4.x;
 >useMultiImport_m4_x4 : m4.d
@@ -219,10 +219,10 @@ export function foo(): d { return null; }
 
 === tests/cases/compiler/importDecl_require4.ts ===
 import m4 = require("importDecl_require");
->m4 : m4
+>m4 : typeof m4
 
 export function foo2(): m4.d { return null; }
 >foo2 : typeof foo2
->m4 : m4
+>m4 : unknown
 >d : m4.d
 

@@ -1,6 +1,6 @@
 === tests/cases/compiler/genericInference2.ts ===
     declare module ko { 
->ko : ko
+>ko : typeof ko
 
        export interface Observable<T> { 
 >Observable : Observable<T>
