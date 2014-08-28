@@ -202,6 +202,7 @@ module PortalFx.ViewModels.Controls.Validators {
 
             super(message);
 >super(message) : void
+>super : typeof Portal.Controls.Validators.Validator
 >message : string
         }
     }

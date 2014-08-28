@@ -2,7 +2,7 @@ interface TypeWriterResult {
     line: number;
     column: number;
     syntaxKind: string;
-    identifierName: string;
+    sourceText: string;
     type: string;
 }
 
@@ -28,6 +28,7 @@ class TypeWriterWalker {
             // TODO: Ideally we should log all expressions, but to compare to the
             // old typeWriter baselines, suppress tokens
             case ts.SyntaxKind.ThisKeyword:
+            case ts.SyntaxKind.SuperKeyword:
          //   case ts.SyntaxKind.RegularExpressionLiteral:
             case ts.SyntaxKind.ArrayLiteral:
             case ts.SyntaxKind.ObjectLiteral:
@@ -92,7 +93,7 @@ class TypeWriterWalker {
             line: lineAndCharacter.line - 1,
             column: lineAndCharacter.character,
             syntaxKind: ts.SyntaxKind[node.kind],
-            identifierName: sourceText,
+            sourceText: sourceText,
             type: isUnknownType
                 ? this.checker.symbolToString(symbol, node.parent, ts.SymbolFlags.Value | ts.SymbolFlags.Type | ts.SymbolFlags.Namespace | ts.SymbolFlags.Import)
                 : this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.UseTypeOfFunction | writeArrayAsGenericType)

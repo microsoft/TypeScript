@@ -30,6 +30,7 @@ module test {
                 super.foo();
 >super.foo() : void
 >super.foo : () => void
+>super : A
 >foo : () => void
 
             });

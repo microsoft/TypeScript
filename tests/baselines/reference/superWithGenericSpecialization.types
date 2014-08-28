@@ -20,6 +20,7 @@ class D<T> extends C<string> {
     constructor() {
         super(); // uses the type parameter type of the base class, ie string
 >super() : void
+>super : typeof C
     }
 }
 

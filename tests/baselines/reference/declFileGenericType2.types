@@ -92,6 +92,7 @@ module templa.dom.mvc {
         constructor() {
             super();
 >super() : void
+>super : typeof templa.mvc.AbstractController
         }
     }
 }
@@ -127,6 +128,7 @@ module templa.dom.mvc.composite {
         constructor() {
             super();
 >super() : void
+>super : typeof AbstractElementController
 
             this._controllers = [];
 >this._controllers = [] : templa.mvc.IController<templa.mvc.IModel>[]

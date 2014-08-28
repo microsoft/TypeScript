@@ -2238,7 +2238,6 @@ module ts {
                 return emptyObjectType;
             }
             var type = getDeclaredTypeOfSymbol(symbol);
-            var name = symbol.name;
             if (!(type.flags & TypeFlags.ObjectType)) {
                 error(getTypeDeclaration(symbol), Diagnostics.Global_type_0_must_be_a_class_or_interface_type, symbol.name);
                 return emptyObjectType;
@@ -3547,7 +3546,8 @@ module ts {
             return false;
         }
 
-        function checkSuperExpression(node: Node, isCallExpression: boolean): Type {
+        function checkSuperExpression(node: Node): Type {
+            var isCallExpression = node.parent.kind === SyntaxKind.CallExpression && (<CallExpression>node.parent).func === node;
             var enclosingClass = <ClassDeclaration>getAncestor(node, SyntaxKind.ClassDeclaration);
             var baseClass: Type;
             if (enclosingClass && enclosingClass.baseType) {
@@ -4181,7 +4181,7 @@ module ts {
 
         function resolveCallExpression(node: CallExpression): Signature {
             if (node.func.kind === SyntaxKind.SuperKeyword) {
-                var superType = checkSuperExpression(node.func, true);
+                var superType = checkSuperExpression(node.func);
                 if (superType !== unknownType) {
                     return resolveCall(node, getSignaturesOfType(superType, SignatureKind.Construct));
                 }
@@ -4829,7 +4829,7 @@ module ts {
                 case SyntaxKind.ThisKeyword:
                     return checkThisExpression(node);
                 case SyntaxKind.SuperKeyword:
-                    return checkSuperExpression(node, false);
+                    return checkSuperExpression(node);
                 case SyntaxKind.NullKeyword:
                     return nullType;
                 case SyntaxKind.TrueKeyword:
@@ -6940,8 +6940,7 @@ module ts {
             }
 
             if (isInRightSideOfImportOrExportAssignment(node)) {
-                var symbol: Symbol;
-                symbol = getSymbolInfo(node);
+                var symbol = getSymbolInfo(node);
                 var declaredType = getDeclaredTypeOfSymbol(symbol);
                 return declaredType !== unknownType ? declaredType : getTypeOfSymbol(symbol);
             }

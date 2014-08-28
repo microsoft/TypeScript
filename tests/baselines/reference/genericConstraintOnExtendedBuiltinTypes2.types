@@ -59,6 +59,7 @@ module EndGate.Tweening {
 
             super(from);
 >super(from) : void
+>super : typeof Tween
 >from : number
         }
     }

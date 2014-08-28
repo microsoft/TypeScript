@@ -12,6 +12,7 @@ class B extends A {
 
     constructor() { super({ test: () => this.someMethod()}); } 
 >super({ test: () => this.someMethod()}) : void
+>super : typeof A
 >{ test: () => this.someMethod()} : { test: () => void; }
 >test : () => void
 >() => this.someMethod() : () => void
