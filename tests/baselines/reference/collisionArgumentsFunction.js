@@ -47,10 +47,6 @@ declare function f6(arguments: string); // no codegen no error
 //// [collisionArgumentsFunction.js]
 // Functions
 function f1(arguments) {
-    var restParameters = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        restParameters[_i - 1] = arguments[_i];
-    }
     var arguments = 10; // no error
 }
 function f12(i) {
@@ -64,20 +60,12 @@ function f1NoError(arguments) {
     var arguments = 10; // no error
 }
 function f3() {
-    var restParameters = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        restParameters[_i - 0] = arguments[_i];
-    }
     var arguments = 10; // no error
 }
 function f3NoError() {
     var arguments = 10; // no error
 }
 function f4(arguments) {
-    var rest = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        rest[_i - 1] = arguments[_i];
-    }
     var arguments; // No error
 }
 function f42(i) {

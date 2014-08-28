@@ -27,30 +27,18 @@ function foo() {
 //// [collisionRestParameterFunctionExpressions.js]
 function foo() {
     function f1(_i) {
-        var restParameters = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            restParameters[_i - 1] = arguments[_i];
-        }
         var _i = 10; // no error
     }
     function f1NoError(_i) {
         var _i = 10; // no error
     }
     function f3() {
-        var restParameters = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            restParameters[_i - 0] = arguments[_i];
-        }
         var _i = 10; // no error
     }
     function f3NoError() {
         var _i = 10; // no error
     }
     function f4(_i) {
-        var rest = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            rest[_i - 1] = arguments[_i];
-        }
     }
     function f4NoError(_i) {
     }

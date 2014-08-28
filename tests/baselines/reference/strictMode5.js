@@ -21,10 +21,6 @@ function bar(x: number = 10) {
 //// [strictMode5.js]
 function foo() {
     "use strict";
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i - 0] = arguments[_i];
-    }
 }
 var A = (function () {
     function A() {

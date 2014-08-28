@@ -23,10 +23,6 @@ function func2(a, b, c) {
 }
 ;
 function func3() {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i - 0] = arguments[_i];
-    }
 }
 ;
 function func4(z, w) {

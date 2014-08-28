@@ -16,16 +16,7 @@ var TestFile = (function () {
     }
     TestFile.prototype.foo = function (message) {
         var _this = this;
-        return function () {
-            var x = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                x[_i - 0] = arguments[_i];
-            }
-            /// <summary>Test summary</summary>
-            /// <param name="message" type="String" />
-            /// <returns type="Function" />
-            return message + _this.name;
-        };
+        return function () { return message + _this.name; };
     };
     return TestFile;
 })();

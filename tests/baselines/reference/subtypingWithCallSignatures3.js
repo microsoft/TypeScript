@@ -168,20 +168,8 @@ var Errors;
     var r3 = foo8(r3arg); // any
     var r3a = [r3arg2, r3arg];
     var r3b = [r3arg, r3arg2];
-    var r4arg = function () {
-        var x = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            x[_i - 0] = arguments[_i];
-        }
-        return null;
-    };
-    var r4arg2 = function () {
-        var x = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            x[_i - 0] = arguments[_i];
-        }
-        return null;
-    };
+    var r4arg = function () { return null; };
+    var r4arg2 = function () { return null; };
     var r4 = foo10(r4arg); // any
     var r4a = [r4arg2, r4arg];
     var r4b = [r4arg, r4arg2];
