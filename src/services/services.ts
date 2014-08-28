@@ -2293,9 +2293,6 @@ module ts {
                 if (contains(<SyntaxKind[]>expected, token.kind)) {
                     keywordList.push(token);
                 }
-                else {
-                    Debug.assert("Got '" + token.getFullText().substring(token.getLeadingTriviaWidth()) + "' instead of expected keyword.");
-                }
             }
 
             function keywordsToReferenceEntries(keywords: Node[]): ReferenceEntry[]{
@@ -3093,7 +3090,7 @@ module ts {
                     //      ["// hack   1", "// ", "hack   1", undefined, "hack"]
                     //
                     // Here are the relevant capture groups:
-                    //  0) The full match for hte entire regex.
+                    //  0) The full match for the entire regex.
                     //  1) The preamble to the message portion.
                     //  2) The message portion.
                     //  3...N) The descriptor that was matched - by index.  'undefined' for each 
