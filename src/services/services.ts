@@ -1314,12 +1314,13 @@ module ts {
 
     function isAnyFunction(node: Node): boolean {
         switch (node.kind) {
-            case SyntaxKind.FunctionDeclaration:
-            case SyntaxKind.Method:
             case SyntaxKind.FunctionExpression:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.Method:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
-            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.Constructor:
                 return true;
         }
         return false;
@@ -1933,7 +1934,9 @@ module ts {
                         current = child;
                         continue outer;
                     }
-                    if (child.end > position) break;
+                    if (child.end > position) {
+                        break;
+                    }
                 }
                 return current;
             }
@@ -2160,13 +2163,143 @@ module ts {
                 return undefined;
             }
 
-            if (node.kind !== SyntaxKind.Identifier &&
-                !isLiteralNameOfPropertyDeclarationOrIndexAccess(node) &&
-                !isNameOfExternalModuleImportOrDeclaration(node)) {
+            if (node.kind === SyntaxKind.Identifier || isLiteralNameOfPropertyDeclarationOrIndexAccess(node) || isNameOfExternalModuleImportOrDeclaration(node)) {
+                return getReferencesForNode(node, [sourceFile]);
+            }
+
+            switch (node.kind) {
+                case SyntaxKind.TryKeyword:
+                case SyntaxKind.CatchKeyword:
+                case SyntaxKind.FinallyKeyword:
+                    if (hasKind(parent(parent(node)), SyntaxKind.TryStatement)) {
+                        return getTryCatchFinallyOccurrences(<TryStatement>node.parent.parent);
+                    }
+                    break;
+                case SyntaxKind.SwitchKeyword:
+                    if (hasKind(node.parent, SyntaxKind.SwitchStatement)) {
+                        return getSwitchCaseDefaultOccurrences(<SwitchStatement>node.parent);
+                    }
+                    break;
+                case SyntaxKind.CaseKeyword:
+                case SyntaxKind.DefaultKeyword:
+                    if (hasKind(parent(parent(node)), SyntaxKind.SwitchStatement)) {
+                        return getSwitchCaseDefaultOccurrences(<SwitchStatement>node.parent.parent);
+                    }
+                    break;
+                case SyntaxKind.BreakKeyword:
+                    if (hasKind(node.parent, SyntaxKind.BreakStatement)) {
+                        return getBreakStatementOccurences(<BreakOrContinueStatement>node.parent);
+                    }
+                    break;
+            }
+
+            return undefined;
+
+            function getTryCatchFinallyOccurrences(tryStatement: TryStatement): ReferenceEntry[] {
+                var keywords: Node[] = [];
+
+                pushKeywordIf(keywords, tryStatement.getFirstToken(), SyntaxKind.TryKeyword);
+
+                if (tryStatement.catchBlock) {
+                    pushKeywordIf(keywords, tryStatement.catchBlock.getFirstToken(), SyntaxKind.CatchKeyword);
+                }
+
+                if (tryStatement.finallyBlock) {
+                    pushKeywordIf(keywords, tryStatement.finallyBlock.getFirstToken(), SyntaxKind.FinallyKeyword);
+                }
+
+                return keywordsToReferenceEntries(keywords);
+            }
+
+            function getSwitchCaseDefaultOccurrences(switchStatement: SwitchStatement) {
+                var keywords: Node[] = [];
+
+                pushKeywordIf(keywords, switchStatement.getFirstToken(), SyntaxKind.SwitchKeyword);
+
+                // Go through each clause in the switch statement, collecting the clause keywords.
+                forEach(switchStatement.clauses, clause => {
+                    pushKeywordIf(keywords, clause.getFirstToken(), SyntaxKind.CaseKeyword, SyntaxKind.DefaultKeyword);
+
+                    // For each clause, also recursively traverse the statements where we can find analogous breaks.
+                    forEachChild(clause, function aggregateBreakKeywords(node: Node): void {
+                        switch (node.kind) {
+                            case SyntaxKind.BreakStatement:
+                                // If the break statement has a label, it cannot be part of a switch block.
+                                if (!(<BreakOrContinueStatement>node).label) {
+                                    pushKeywordIf(keywords, node.getFirstToken(), SyntaxKind.BreakKeyword);
+                                }
+                            // Fall through
+                            case SyntaxKind.ForStatement:
+                            case SyntaxKind.ForInStatement:
+                            case SyntaxKind.DoStatement:
+                            case SyntaxKind.WhileStatement:
+                            case SyntaxKind.SwitchStatement:
+                                return;
+                        }
+
+                        // Do not cross function boundaries.
+                        if (!isAnyFunction(node)) {
+                            forEachChild(node, aggregateBreakKeywords);
+                        }
+                    });
+                });
+
+                return keywordsToReferenceEntries(keywords);
+            }
+
+            function getBreakStatementOccurences(breakStatement: BreakOrContinueStatement): ReferenceEntry[]{
+                // TODO (drosen): Deal with labeled statements.
+                if (breakStatement.label) {
+                    return undefined;
+                }
+                
+                for (var owner = node.parent; owner; owner = owner.parent) {
+                    switch (owner.kind) {
+                        case SyntaxKind.ForStatement:
+                        case SyntaxKind.ForInStatement:
+                        case SyntaxKind.DoStatement:
+                        case SyntaxKind.WhileStatement:
+                            // TODO (drosen): Handle loops!
+                            return undefined;
+
+                        case SyntaxKind.SwitchStatement:
+                            return getSwitchCaseDefaultOccurrences(<SwitchStatement>owner);
+
+                        default:
+                            if (isAnyFunction(owner)) {
+                                return undefined;
+                            }
+                    }
+                }
+
                 return undefined;
             }
 
-            return getReferencesForNode(node, [sourceFile]);
+            // returns true if 'node' is defined and has a matching 'kind'.
+            function hasKind(node: Node, kind: SyntaxKind) {
+                return !!(node && node.kind === kind);
+            }
+
+            // Null-propagating 'parent' function.
+            function parent(node: Node): Node {
+                return node && node.parent;
+            }
+
+            function pushKeywordIf(keywordList: Node[], token: Node, ...expected: SyntaxKind[]): void {
+                if (!token) {
+                    return;
+                }
+
+                if (contains(<SyntaxKind[]>expected, token.kind)) {
+                    keywordList.push(token);
+                }
+            }
+
+            function keywordsToReferenceEntries(keywords: Node[]): ReferenceEntry[]{
+                return map(keywords, keyword =>
+                    new ReferenceEntry(filename, TypeScript.TextSpan.fromBounds(keyword.getStart(), keyword.end), /* isWriteAccess */ false)
+                );
+            }
         }
 
         function getReferencesAtPosition(filename: string, position: number): ReferenceEntry[] {
@@ -2284,13 +2417,13 @@ module ts {
                     var container = getContainerNode(declarations[i]);
 
                     if (scope && scope !== container) {
-                        // Diffrent declarations have diffrent containers, bail out
+                        // Different declarations have different containers, bail out
                         return undefined;
                     }
 
                     if (container.kind === SyntaxKind.SourceFile && !isExternalModule(<SourceFile>container)) {
                         // This is a global variable and not an external module, any declaration defined
-                        // withen this scope is visible outside the file
+                        // within this scope is visible outside the file
                         return undefined;
                     }
 
@@ -2957,7 +3090,7 @@ module ts {
                     //      ["// hack   1", "// ", "hack   1", undefined, "hack"]
                     //
                     // Here are the relevant capture groups:
-                    //  0) The full match for hte entire regex.
+                    //  0) The full match for the entire regex.
                     //  1) The preamble to the message portion.
                     //  2) The message portion.
                     //  3...N) The descriptor that was matched - by index.  'undefined' for each 

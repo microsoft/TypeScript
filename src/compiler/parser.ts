@@ -483,6 +483,22 @@ module ts {
         nodeIsNestedInLabel(label: Identifier, requireIterationStatement: boolean, stopAtFunctionBoundary: boolean): ControlBlockContext;
     }
 
+    export function isKeyword(token: SyntaxKind): boolean {
+        return SyntaxKind.FirstKeyword <= token && token <= SyntaxKind.LastKeyword;
+    }
+
+    export function isModifier(token: SyntaxKind): boolean {
+        switch (token) {
+            case SyntaxKind.PublicKeyword:
+            case SyntaxKind.PrivateKeyword:
+            case SyntaxKind.StaticKeyword:
+            case SyntaxKind.ExportKeyword:
+            case SyntaxKind.DeclareKeyword:
+                return true;
+        }
+        return false;
+    }
+
     export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, version: string, isOpen: boolean = false): SourceFile {
         var file: SourceFile;
         var scanner: Scanner;
@@ -851,23 +867,6 @@ module ts {
                 return parseLiteralNode(/*internName:*/ true);
             }
             return parseIdentifierName();
-        }
-
-
-        function isKeyword(token: SyntaxKind): boolean {
-            return SyntaxKind.FirstKeyword <= token && token <= SyntaxKind.LastKeyword;
-        }
-
-        function isModifier(token: SyntaxKind): boolean {
-            switch (token) {
-                case SyntaxKind.PublicKeyword:
-                case SyntaxKind.PrivateKeyword:
-                case SyntaxKind.StaticKeyword:
-                case SyntaxKind.ExportKeyword:
-                case SyntaxKind.DeclareKeyword:
-                    return true;
-            }
-            return false;
         }
 
         function parseContextualModifier(t: SyntaxKind): boolean {
