@@ -31,10 +31,10 @@ var moduleMap: { [key: string]: IHasVisualizationModel } = {
 } : { [x: string]: IHasVisualizationModel; "moduleA": typeof "tests/cases/compiler/extendingClassFromAliasAndUsageInIndexer_moduleA"; "moduleB": typeof "tests/cases/compiler/extendingClassFromAliasAndUsageInIndexer_moduleB"; }
 
     "moduleA": moduleA,
->moduleA : moduleA
+>moduleA : typeof "tests/cases/compiler/extendingClassFromAliasAndUsageInIndexer_moduleA"
 
     "moduleB": moduleB
->moduleB : moduleB
+>moduleB : typeof "tests/cases/compiler/extendingClassFromAliasAndUsageInIndexer_moduleB"
 
 };
 var moduleName: string;

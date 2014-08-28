@@ -146,11 +146,11 @@ var a: Foo = {
 
     l: f1,
 >l : () => void
->f1 : f1
+>f1 : () => void
 
     m: M,
 >m : typeof M
->M : M
+>M : typeof M
 
     n: {},
 >n : {}

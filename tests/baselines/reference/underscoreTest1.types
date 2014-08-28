@@ -761,7 +761,7 @@ _.each(notes, (note) => note.asyncSave({ success: renderNotes }));
 >asyncSave : any
 >{ success: renderNotes } : { success: () => void; }
 >success : () => void
->renderNotes : renderNotes
+>renderNotes : () => void
 
 var hello = function (name) { return "hello: " + name; };
 >hello : (name: any) => string

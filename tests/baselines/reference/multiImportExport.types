@@ -27,7 +27,7 @@ var Math = {
 
     Adder:Adder
 >Adder : typeof Adder
->Adder : Adder
+>Adder : typeof Adder
 
 };
 

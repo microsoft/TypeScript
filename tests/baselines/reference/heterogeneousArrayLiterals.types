@@ -121,24 +121,24 @@ module Derived {
 >[{ foo: base, basear: derived }, { foo: base }] : { foo: Base; }[]
 >{ foo: base, basear: derived } : { foo: Base; basear: Derived; }
 >foo : Base
->base : base
+>base : Base
 >basear : Derived
->derived : derived
+>derived : Derived
 >{ foo: base } : { foo: Base; }
 >foo : Base
->base : base
+>base : Base
 
     var i = [{ foo: base, basear: derived }, { foo: derived }]; // {foo: Derived}[]
 >i : {}[]
 >[{ foo: base, basear: derived }, { foo: derived }] : {}[]
 >{ foo: base, basear: derived } : { foo: Base; basear: Derived; }
 >foo : Base
->base : base
+>base : Base
 >basear : Derived
->derived : derived
+>derived : Derived
 >{ foo: derived } : { foo: Derived; }
 >foo : Derived
->derived : derived
+>derived : Derived
 
     var j = [() => base, () => derived]; // { {}: Base }
 >j : { (): Base; }[]

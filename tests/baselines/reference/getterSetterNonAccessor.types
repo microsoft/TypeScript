@@ -35,11 +35,11 @@ Object.defineProperty({}, "0", <PropertyDescriptor>({
 
           get: getFunc,
 >get : () => any
->getFunc : getFunc
+>getFunc : () => any
 
           set: setFunc,
 >set : (v: any) => void
->setFunc : setFunc
+>setFunc : (v: any) => void
 
           configurable: true
 >configurable : boolean

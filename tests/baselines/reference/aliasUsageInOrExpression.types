@@ -47,7 +47,7 @@ var e: { x: IHasVisualizationModel } = <{ x: IHasVisualizationModel }>null || { 
 >IHasVisualizationModel : IHasVisualizationModel
 >{ x: moduleA } : { x: typeof "tests/cases/compiler/aliasUsageInOrExpression_moduleA"; }
 >x : typeof "tests/cases/compiler/aliasUsageInOrExpression_moduleA"
->moduleA : moduleA
+>moduleA : typeof "tests/cases/compiler/aliasUsageInOrExpression_moduleA"
 
 var f: { x: IHasVisualizationModel } = <{ x: IHasVisualizationModel }>null ? { x: moduleA } : null;
 >f : { x: IHasVisualizationModel; }
@@ -59,7 +59,7 @@ var f: { x: IHasVisualizationModel } = <{ x: IHasVisualizationModel }>null ? { x
 >IHasVisualizationModel : IHasVisualizationModel
 >{ x: moduleA } : { x: typeof "tests/cases/compiler/aliasUsageInOrExpression_moduleA"; }
 >x : typeof "tests/cases/compiler/aliasUsageInOrExpression_moduleA"
->moduleA : moduleA
+>moduleA : typeof "tests/cases/compiler/aliasUsageInOrExpression_moduleA"
 
 === tests/cases/compiler/aliasUsageInOrExpression_backbone.ts ===
 export class Model {

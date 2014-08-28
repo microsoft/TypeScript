@@ -30,7 +30,7 @@ var r = foo({ a: moduleA });
 >foo : <T extends { a: IHasVisualizationModel; }>(x: T) => T
 >{ a: moduleA } : { a: typeof "tests/cases/compiler/aliasUsageInGenericFunction_moduleA"; }
 >a : typeof "tests/cases/compiler/aliasUsageInGenericFunction_moduleA"
->moduleA : moduleA
+>moduleA : typeof "tests/cases/compiler/aliasUsageInGenericFunction_moduleA"
 
 var r2 = foo({ a: <IHasVisualizationModel>null });
 >r2 : { a: IHasVisualizationModel; }
