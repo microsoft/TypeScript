@@ -2,7 +2,7 @@
 // Type inference infers from indexers in target type, no errors expected
 
 function foo<T>(x: T) {
->foo : typeof foo
+>foo : <T>(x: T) => T
 >T : T
 >x : T
 >T : T
@@ -26,11 +26,11 @@ var a: {
 var r = foo(a);
 >r : { [x: string]: Object; [x: number]: Date; }
 >foo(a) : { [x: string]: Object; [x: number]: Date; }
->foo : typeof foo
+>foo : <T>(x: T) => T
 >a : { [x: string]: Object; [x: number]: Date; }
 
 function other<T extends Date>(arg: T) {
->other : typeof other
+>other : <T extends Date>(arg: T) => void
 >T : T
 >Date : Date
 >arg : T
@@ -51,7 +51,7 @@ function other<T extends Date>(arg: T) {
     var r2 = foo(b);
 >r2 : { [x: string]: Object; [x: number]: T; }
 >foo(b) : { [x: string]: Object; [x: number]: T; }
->foo : typeof foo
+>foo : <T>(x: T) => T
 >b : { [x: string]: Object; [x: number]: T; }
 
     var d = r2[1]; 

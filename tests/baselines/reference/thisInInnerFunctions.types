@@ -28,7 +28,7 @@ class Foo {
 }
 
 function test() {
->test : typeof test
+>test : () => void
 
     var x = () => {
 >x : () => void

@@ -12,7 +12,7 @@ var v1 = ((1, 2, 3), 4, 5, (6, 7));
 >6, 7 : number
 
 function f1() {
->f1 : typeof f1
+>f1 : () => number
 
     var a = 1;
 >a : number

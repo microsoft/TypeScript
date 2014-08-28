@@ -8,7 +8,7 @@ var STRING1: string[] = ["", "abc"];
 >["", "abc"] : string[]
 
 function foo(): string { return "abc"; }
->foo : typeof foo
+>foo : () => string
 
 class A {
 >A : A
@@ -89,7 +89,7 @@ var ResultIsBoolean9 = !foo();
 >ResultIsBoolean9 : boolean
 >!foo() : boolean
 >foo() : string
->foo : typeof foo
+>foo : () => string
 
 var ResultIsBoolean10 = !A.foo();
 >ResultIsBoolean10 : boolean
@@ -147,7 +147,7 @@ var ResultIsBoolean14 = !!!(STRING + STRING);
 !foo();
 >!foo() : boolean
 >foo() : string
->foo : typeof foo
+>foo : () => string
 
 !objA.a,M.n;
 >!objA.a,M.n : string

@@ -8,7 +8,7 @@ module Bugs {
   
   // replace(searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string;
   function bug2(message:string, ...args:any[]):string {
->bug2 : typeof bug2
+>bug2 : (message: string, ...args: any[]) => string
 >message : string
 >args : any[]
 
@@ -50,25 +50,25 @@ module Bugs {
 }
 
 function bug3(f:(x:string)=>string) { return f("s") }
->bug3 : typeof bug3
+>bug3 : (f: (x: string) => string) => string
 >f : (x: string) => string
 >x : string
 >f("s") : string
 >f : (x: string) => string
 
 function fprime(x:string):string { return x; }
->fprime : typeof fprime
+>fprime : (x: string) => string
 >x : string
 >x : string
 
 bug3(fprime);
 >bug3(fprime) : string
->bug3 : typeof bug3
->fprime : typeof fprime
+>bug3 : (f: (x: string) => string) => string
+>fprime : (x: string) => string
 
 bug3(function(x:string):string { return x; });
 >bug3(function(x:string):string { return x; }) : string
->bug3 : typeof bug3
+>bug3 : (f: (x: string) => string) => string
 >function(x:string):string { return x; } : (x: string) => string
 >x : string
 >x : string

@@ -2,7 +2,7 @@
 // any is not a valid type argument unless there is no constraint, or the constraint is any
 
 function foo<T extends String>(x: T): T { return null; }
->foo : typeof foo
+>foo : <T extends String>(x: T) => T
 >T : T
 >String : String
 >x : T
@@ -10,7 +10,7 @@ function foo<T extends String>(x: T): T { return null; }
 >T : T
 
 function foo2<T extends { x: number }>(x: T): T { return null; }
->foo2 : typeof foo2
+>foo2 : <T extends { x: number; }>(x: T) => T
 >T : T
 >x : number
 >x : T
@@ -19,7 +19,7 @@ function foo2<T extends { x: number }>(x: T): T { return null; }
 
 //function foo3<T extends T[]>(x: T): T { return null; }
 function foo4<T extends <T>(x: T) => void>(x: T): T { return null; }
->foo4 : typeof foo4
+>foo4 : <T extends <T>(x: T) => void>(x: T) => T
 >T : T
 >T : T
 >x : T
@@ -33,18 +33,18 @@ var a;
 
 foo(a);
 >foo(a) : any
->foo : typeof foo
+>foo : <T extends String>(x: T) => T
 >a : any
 
 foo2(a);
 >foo2(a) : any
->foo2 : typeof foo2
+>foo2 : <T extends { x: number; }>(x: T) => T
 >a : any
 
 //foo3(a);
 foo4(a);
 >foo4(a) : any
->foo4 : typeof foo4
+>foo4 : <T extends <T>(x: T) => void>(x: T) => T
 >a : any
 
 var b: number;
@@ -52,18 +52,18 @@ var b: number;
 
 foo<any>(b);
 >foo<any>(b) : any
->foo : typeof foo
+>foo : <T extends String>(x: T) => T
 >b : number
 
 foo2<any>(b);
 >foo2<any>(b) : any
->foo2 : typeof foo2
+>foo2 : <T extends { x: number; }>(x: T) => T
 >b : number
 
 //foo3<any>(b);
 foo4<any>(b);
 >foo4<any>(b) : any
->foo4 : typeof foo4
+>foo4 : <T extends <T>(x: T) => void>(x: T) => T
 >b : number
 
 //function foo5<T extends String, U extends T>(x: T, y: U): T { return null; }

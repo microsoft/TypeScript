@@ -22,9 +22,9 @@ export var d4 = m4.d;
 export var f4 = m4.foo();
 >f4 : m4.d
 >m4.foo() : m4.d
->m4.foo : typeof m4.foo
+>m4.foo : () => m4.d
 >m4 : typeof m4
->foo : typeof m4.foo
+>foo : () => m4.d
 
 export module m1 {
 >m1 : typeof m1
@@ -44,9 +44,9 @@ export module m1 {
     export var f2 = m4.foo();
 >f2 : m4.d
 >m4.foo() : m4.d
->m4.foo : typeof m4.foo
+>m4.foo : () => m4.d
 >m4 : typeof m4
->foo : typeof m4.foo
+>foo : () => m4.d
 
     var x3 = m4.x;
 >x3 : m4.d
@@ -63,9 +63,9 @@ export module m1 {
     var f3 = m4.foo();
 >f3 : m4.d
 >m4.foo() : m4.d
->m4.foo : typeof m4.foo
+>m4.foo : () => m4.d
 >m4 : typeof m4
->foo : typeof m4.foo
+>foo : () => m4.d
 }
 
 //Emit global only usage
@@ -81,9 +81,9 @@ export var useGlo_m4_d4 = glo_m4.d;
 export var useGlo_m4_f4 = glo_m4.foo();
 >useGlo_m4_f4 : glo_m4.d
 >glo_m4.foo() : glo_m4.d
->glo_m4.foo : typeof glo_m4.foo
+>glo_m4.foo : () => glo_m4.d
 >glo_m4 : typeof glo_m4
->foo : typeof glo_m4.foo
+>foo : () => glo_m4.d
 
 //Emit even when used just in function type
 import fncOnly_m4 = require("importDecl_require2");
@@ -92,9 +92,9 @@ import fncOnly_m4 = require("importDecl_require2");
 export var useFncOnly_m4_f4 = fncOnly_m4.foo();
 >useFncOnly_m4_f4 : fncOnly_m4.d
 >fncOnly_m4.foo() : fncOnly_m4.d
->fncOnly_m4.foo : typeof fncOnly_m4.foo
+>fncOnly_m4.foo : () => fncOnly_m4.d
 >fncOnly_m4 : typeof fncOnly_m4
->foo : typeof fncOnly_m4.foo
+>foo : () => fncOnly_m4.d
 
 // only used privately no need to emit
 import private_m4 = require("importDecl_require3");
@@ -118,9 +118,9 @@ export module usePrivate_m4_m1 {
     var f3 = private_m4.foo();
 >f3 : private_m4.d
 >private_m4.foo() : private_m4.d
->private_m4.foo : typeof private_m4.foo
+>private_m4.foo : () => private_m4.d
 >private_m4 : typeof private_m4
->foo : typeof private_m4.foo
+>foo : () => private_m4.d
 }
 
 // Do not emit unused import
@@ -130,9 +130,9 @@ import m5 = require("importDecl_require4");
 export var d = m5.foo2();
 >d : m4.d
 >m5.foo2() : m4.d
->m5.foo2 : typeof m5.foo2
+>m5.foo2 : () => m4.d
 >m5 : typeof m5
->foo2 : typeof m5.foo2
+>foo2 : () => m4.d
 
 // Do not emit multiple used import statements
 import multiImport_m4 = require("importDecl_require"); // Emit used
@@ -153,9 +153,9 @@ export var useMultiImport_m4_d4 = multiImport_m4.d;
 export var useMultiImport_m4_f4 = multiImport_m4.foo();
 >useMultiImport_m4_f4 : m4.d
 >multiImport_m4.foo() : m4.d
->multiImport_m4.foo : typeof m4.foo
+>multiImport_m4.foo : () => m4.d
 >multiImport_m4 : typeof m4
->foo : typeof m4.foo
+>foo : () => m4.d
 
 === tests/cases/compiler/importDecl_require.ts ===
 export class d {
@@ -169,7 +169,7 @@ export var x: d;
 >d : d
 
 export function foo(): d { return null; }
->foo : typeof foo
+>foo : () => d
 >d : d
 
 === tests/cases/compiler/importDecl_require1.ts ===
@@ -184,7 +184,7 @@ var x: d;
 >d : d
 
 export function foo(): d { return null; }
->foo : typeof foo
+>foo : () => d
 >d : d
 
 === tests/cases/compiler/importDecl_require2.ts ===
@@ -199,7 +199,7 @@ export var x: d;
 >d : d
 
 export function foo(): d { return null; }
->foo : typeof foo
+>foo : () => d
 >d : d
 
 === tests/cases/compiler/importDecl_require3.ts ===
@@ -214,7 +214,7 @@ export var x: d;
 >d : d
 
 export function foo(): d { return null; }
->foo : typeof foo
+>foo : () => d
 >d : d
 
 === tests/cases/compiler/importDecl_require4.ts ===
@@ -222,7 +222,7 @@ import m4 = require("importDecl_require");
 >m4 : typeof m4
 
 export function foo2(): m4.d { return null; }
->foo2 : typeof foo2
+>foo2 : () => m4.d
 >m4 : unknown
 >d : m4.d
 

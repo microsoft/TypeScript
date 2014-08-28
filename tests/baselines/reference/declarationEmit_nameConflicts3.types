@@ -9,19 +9,19 @@ module M {
 >D : typeof D
 
         export function f() { }
->f : typeof f
+>f : () => void
     }
     export module C {
 >C : typeof C
 
         export function f() { }
->f : typeof f
+>f : () => void
     }
     export module E {
 >E : typeof E
 
         export function f() { }
->f : typeof f
+>f : () => void
     }
 }
 
@@ -51,26 +51,26 @@ module M.P {
 >D : M.D
 
     export var w = M.D.f; // error, should be typeof M.D.f
->w : typeof M.D.f
->M.D.f : typeof M.D.f
+>w : () => void
+>M.D.f : () => void
 >M.D : typeof M.D
 >M : typeof M
 >D : typeof M.D
->f : typeof M.D.f
+>f : () => void
 
     export var x = M.C.f; // error, should be typeof M.C.f
->x : typeof M.C.f
->M.C.f : typeof M.C.f
+>x : () => void
+>M.C.f : () => void
 >M.C : typeof M.C
 >M : typeof M
 >C : typeof M.C
->f : typeof M.C.f
+>f : () => void
 
     export var x = M.E.f; // error, should be typeof M.E.f
->x : typeof M.C.f
->M.E.f : typeof M.E.f
+>x : () => void
+>M.E.f : () => void
 >M.E : typeof M.E
 >M : typeof M
 >E : typeof M.E
->f : typeof M.E.f
+>f : () => void
 }

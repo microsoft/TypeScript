@@ -1,6 +1,6 @@
 === tests/cases/compiler/targetTypeArgs.ts ===
 function foo(callback: (x: string) => void) {
->foo : typeof foo
+>foo : (callback: (x: string) => void) => void
 >callback : (x: string) => void
 >x : string
 
@@ -11,7 +11,7 @@ function foo(callback: (x: string) => void) {
 
 foo(function(x) { x });
 >foo(function(x) { x }) : void
->foo : typeof foo
+>foo : (callback: (x: string) => void) => void
 >function(x) { x } : (x: string) => void
 >x : string
 >x : string

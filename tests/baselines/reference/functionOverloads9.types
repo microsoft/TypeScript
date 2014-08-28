@@ -1,14 +1,14 @@
 === tests/cases/compiler/functionOverloads9.ts ===
 function foo(foo:string);
->foo : typeof foo
+>foo : (foo: string) => any
 >foo : string
 
 function foo(foo?:string){ return '' };
->foo : typeof foo
+>foo : (foo: string) => any
 >foo : string
 
 var x = foo('foo');
 >x : any
 >foo('foo') : any
->foo : typeof foo
+>foo : (foo: string) => any
 

@@ -2,7 +2,7 @@
 // type of 'this' in FunctionExpression is Any
 
 function fn() {
->fn : typeof fn
+>fn : () => void
 
     var p = this;
 >p : any
@@ -69,7 +69,7 @@ module M {
 >M : typeof M
 
     function fn() {
->fn : typeof fn
+>fn : () => void
 
         var p = this;
 >p : any

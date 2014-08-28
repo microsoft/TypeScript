@@ -3,13 +3,13 @@ declare module M {
 >M : typeof M
 
      function foo();
->foo : typeof foo
+>foo : { (): any; (): any; (): any; }
 
      export function foo();
->foo : typeof foo
+>foo : { (): any; (): any; (): any; }
 
      function foo();
->foo : typeof foo
+>foo : { (): any; (): any; (): any; }
 }
 
 declare module M1 {

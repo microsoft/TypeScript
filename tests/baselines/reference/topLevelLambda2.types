@@ -1,11 +1,11 @@
 === tests/cases/compiler/topLevelLambda2.ts ===
 function foo(x:any) {}
->foo : typeof foo
+>foo : (x: any) => void
 >x : any
 
 foo(()=>this.window);
 >foo(()=>this.window) : void
->foo : typeof foo
+>foo : (x: any) => void
 >()=>this.window : () => any
 >this.window : any
 >this : any

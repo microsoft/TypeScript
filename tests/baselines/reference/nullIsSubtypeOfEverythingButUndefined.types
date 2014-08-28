@@ -239,7 +239,7 @@ var r16 = true ? null : ac;
 >ac : typeof c
 
 function f17<T>(x: T) {
->f17 : typeof f17
+>f17 : <T>(x: T) => void
 >T : T
 >x : T
 >T : T
@@ -256,7 +256,7 @@ function f17<T>(x: T) {
 }
 
 function f18<T, U>(x: U) {
->f18 : typeof f18
+>f18 : <T, U>(x: U) => void
 >T : T
 >U : U
 >x : U

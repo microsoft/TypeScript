@@ -1,25 +1,25 @@
 === tests/cases/compiler/inferTypeArgumentsInSignatureWithRestParameters.ts ===
 function f<T>(array: T[], ...args) { }
->f : typeof f
+>f : <T>(array: T[], ...args: any[]) => void
 >T : T
 >array : T[]
 >T : T
 >args : any[]
 
 function g(array: number[], ...args) { }
->g : typeof g
+>g : (array: number[], ...args: any[]) => void
 >array : number[]
 >args : any[]
 
 function h<T>(nonarray: T, ...args) { }
->h : typeof h
+>h : <T>(nonarray: T, ...args: any[]) => void
 >T : T
 >nonarray : T
 >T : T
 >args : any[]
 
 function i<T>(array: T[], opt?: any[]) { }
->i : typeof i
+>i : <T>(array: T[], opt?: any[]) => void
 >T : T
 >array : T[]
 >T : T
@@ -31,21 +31,21 @@ var a = [1, 2, 3, 4, 5];
 
 f(a); // OK
 >f(a) : void
->f : typeof f
+>f : <T>(array: T[], ...args: any[]) => void
 >a : number[]
 
 g(a); // OK
 >g(a) : void
->g : typeof g
+>g : (array: number[], ...args: any[]) => void
 >a : number[]
 
 h(a); // OK
 >h(a) : void
->h : typeof h
+>h : <T>(nonarray: T, ...args: any[]) => void
 >a : number[]
 
 i(a); // OK
 >i(a) : void
->i : typeof i
+>i : <T>(array: T[], opt?: any[]) => void
 >a : number[]
 

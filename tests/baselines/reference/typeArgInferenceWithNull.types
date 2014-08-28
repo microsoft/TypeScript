@@ -2,17 +2,17 @@
 // All legal
 
 function fn4<T extends string>(n: T) { }
->fn4 : typeof fn4
+>fn4 : <T extends string>(n: T) => void
 >T : T
 >n : T
 >T : T
 
 fn4(null);
 >fn4(null) : void
->fn4 : typeof fn4
+>fn4 : <T extends string>(n: T) => void
 
 function fn5<T extends { x: string }>(n: T) { }
->fn5 : typeof fn5
+>fn5 : <T extends { x: string; }>(n: T) => void
 >T : T
 >x : string
 >n : T
@@ -20,12 +20,12 @@ function fn5<T extends { x: string }>(n: T) { }
 
 fn5({ x: null });
 >fn5({ x: null }) : void
->fn5 : typeof fn5
+>fn5 : <T extends { x: string; }>(n: T) => void
 >{ x: null } : { x: null; }
 >x : any
 
 function fn6<T extends { x: string }>(n: T, fun: (x: T) => void, n2: T) { }
->fn6 : typeof fn6
+>fn6 : <T extends { x: string; }>(n: T, fun: (x: T) => void, n2: T) => void
 >T : T
 >x : string
 >n : T
@@ -38,7 +38,7 @@ function fn6<T extends { x: string }>(n: T, fun: (x: T) => void, n2: T) { }
 
 fn6({ x: null }, y => { }, { x: "" }); // y has type { x: any }, but ideally would have type { x: string }
 >fn6({ x: null }, y => { }, { x: "" }) : void
->fn6 : typeof fn6
+>fn6 : <T extends { x: string; }>(n: T, fun: (x: T) => void, n2: T) => void
 >{ x: null } : { x: null; }
 >x : any
 >y => { } : (y: { x: string; }) => void

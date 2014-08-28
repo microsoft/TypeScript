@@ -45,7 +45,7 @@ declare module _ {
 >T : T
     }
     export function pluck<T extends {}>(
->pluck : typeof pluck
+>pluck : <T extends {}>(list: Collection<T>, propertyName: string) => any[]
 >T : T
 
         list: Collection<T>,
@@ -57,7 +57,7 @@ declare module _ {
 >propertyName : string
 
     export function map<T, TResult>(
->map : typeof map
+>map : <T, TResult>(list: List<T>, iterator: ListIterator<T, TResult>, context?: any) => TResult[]
 >T : T
 >TResult : TResult
 
@@ -77,7 +77,7 @@ declare module _ {
 >TResult : TResult
 
     export function first<T>(array: List<T>): T;
->first : typeof first
+>first : <T>(array: List<T>) => T
 >T : T
 >array : List<T>
 >List : List<T>
@@ -132,20 +132,20 @@ class MyView extends View {
 >allSeries : ISeries[][]
 >ISeries : ISeries
 >_.pluck(data, "series") : any[]
->_.pluck : typeof _.pluck
+>_.pluck : <T extends {}>(list: _.Collection<T>, propertyName: string) => any[]
 >_ : typeof _
->pluck : typeof _.pluck
+>pluck : <T extends {}>(list: _.Collection<T>, propertyName: string) => any[]
 >data : IData[]
 
         return _.map(allSeries, _.first);
 >_.map(allSeries, _.first) : ISeries[]
->_.map : typeof _.map
+>_.map : <T, TResult>(list: _.List<T>, iterator: _.ListIterator<T, TResult>, context?: any) => TResult[]
 >_ : typeof _
->map : typeof _.map
+>map : <T, TResult>(list: _.List<T>, iterator: _.ListIterator<T, TResult>, context?: any) => TResult[]
 >allSeries : ISeries[][]
->_.first : typeof _.first
+>_.first : <T>(array: _.List<T>) => T
 >_ : typeof _
->first : typeof _.first
+>first : <T>(array: _.List<T>) => T
     }
 }
 

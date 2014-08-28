@@ -1,10 +1,10 @@
 === tests/cases/compiler/badThisBinding.ts ===
 declare function foo(a:any): any;
->foo : typeof foo
+>foo : (a: any) => any
 >a : any
 
 declare function bar(a:any): any;
->bar : typeof bar
+>bar : (a: any) => any
 >a : any
 
 class Greeter {
@@ -13,12 +13,12 @@ class Greeter {
     constructor() {
 		foo(() => {
 >foo(() => {            bar(() => {                var x = this;			});		}) : any
->foo : typeof foo
+>foo : (a: any) => any
 >() => {            bar(() => {                var x = this;			});		} : () => void
 
             bar(() => {
 >bar(() => {                var x = this;			}) : any
->bar : typeof bar
+>bar : (a: any) => any
 >() => {                var x = this;			} : () => void
 
                 var x = this;

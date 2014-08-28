@@ -220,7 +220,7 @@ var z;
 >z : any
 
 function foo(a2) {
->foo : typeof foo
+>foo : (a2: any) => void
 >a2 : any
 
     var a = 10;

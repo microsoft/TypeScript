@@ -22,9 +22,9 @@ if(foo2.M2.x){
 >foo0 : typeof foo0
 >foo : number
 >foo1.f() : number
->foo1.f : typeof foo1.f
+>foo1.f : () => number
 >foo1 : typeof foo1
->f : typeof foo1.f
+>f : () => number
 }
 
 === tests/cases/conformance/externalModules/foo_0.ts ===
@@ -33,7 +33,7 @@ export var foo = 42;
 
 === tests/cases/conformance/externalModules/test/test/foo_1.ts ===
 export function f(){
->f : typeof f
+>f : () => number
 
 	return 42;
 }

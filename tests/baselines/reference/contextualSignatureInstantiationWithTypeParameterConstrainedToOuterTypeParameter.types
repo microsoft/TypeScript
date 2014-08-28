@@ -1,6 +1,6 @@
 === tests/cases/compiler/contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts ===
 function f<T>() {
->f : typeof f
+>f : <T>() => <U extends T>(u: U) => U
 >T : T
 
     function g<U extends T>(u: U): U { return null }
@@ -31,5 +31,5 @@ var x = h("", f<string>()); // Call should succeed and x should be string. All t
 >h("", f<string>()) : string
 >h : <V, W>(v: V, func: (v: V) => W) => W
 >f<string>() : <U extends string>(u: U) => U
->f : typeof f
+>f : <T>() => <U extends T>(u: U) => U
 

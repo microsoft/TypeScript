@@ -26,7 +26,7 @@ module Foo.Bar {
 
 
     function foo(greeting: string): Greeter {
->foo : typeof foo
+>foo : (greeting: string) => Greeter
 >greeting : string
 >Greeter : Greeter
 
@@ -49,7 +49,7 @@ module Foo.Bar {
 >greet : () => string
 
     function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
->foo2 : typeof foo2
+>foo2 : (greeting: string, ...restGreetings: string[]) => Greeter[]
 >greeting : string
 >restGreetings : string[]
 
@@ -95,7 +95,7 @@ module Foo.Bar {
     var b = foo2("Hello", "World", "!");
 >b : Greeter[]
 >foo2("Hello", "World", "!") : Greeter[]
->foo2 : typeof foo2
+>foo2 : (greeting: string, ...restGreetings: string[]) => Greeter[]
 
     // This is simple signle line comment
     for (var j = 0; j < b.length; j++) {

@@ -2,7 +2,7 @@
 debugger;
 
 function foo() {
->foo : typeof foo
+>foo : () => void
 
     debugger;
 

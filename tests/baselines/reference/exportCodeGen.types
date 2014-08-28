@@ -9,7 +9,7 @@ module A {
 >x : number
 
     function lt12() {
->lt12 : typeof lt12
+>lt12 : () => boolean
 
         return x < 12;
 >x < 12 : boolean
@@ -25,7 +25,7 @@ module B {
 >x : number
 
     function lt12() {
->lt12 : typeof lt12
+>lt12 : () => boolean
 
         return x < 12;
 >x < 12 : boolean
@@ -38,7 +38,7 @@ module C {
 >C : typeof C
 
     function no() {
->no : typeof no
+>no : () => boolean
 
         return false;
     }
@@ -49,7 +49,7 @@ module D {
 >D : typeof D
 
     export function yes() {
->yes : typeof yes
+>yes : () => boolean
 
         return true;
     }
@@ -64,7 +64,7 @@ module E {
 >Red : Color
 
     export function fn() { }
->fn : typeof fn
+>fn : () => void
 
     export interface I { id: number }
 >I : I
@@ -92,7 +92,7 @@ module F {
 >Red : Color
 
     function fn() { }
->fn : typeof fn
+>fn : () => void
 
     interface I { id: number }
 >I : I

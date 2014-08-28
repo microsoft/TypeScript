@@ -8,19 +8,19 @@ var a : any[] = [1,2,"3"];
 
 
 function func1(stuff:any[]) { return stuff; }
->func1 : typeof func1
+>func1 : (stuff: any[]) => any[]
 >stuff : any[]
 >stuff : any[]
 
 function func2(stuff1:string, stuff2:number, stuff3:number) {
->func2 : typeof func2
+>func2 : (stuff1: string, stuff2: number, stuff3: number) => any[]
 >stuff1 : string
 >stuff2 : number
 >stuff3 : number
 
 	return func1([stuff1, stuff2, stuff3]);
 >func1([stuff1, stuff2, stuff3]) : any[]
->func1 : typeof func1
+>func1 : (stuff: any[]) => any[]
 >[stuff1, stuff2, stuff3] : any[]
 >stuff1 : string
 >stuff2 : number

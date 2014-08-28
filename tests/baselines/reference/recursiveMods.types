@@ -10,12 +10,12 @@ export module Foo {
 >Foo : typeof Foo
 
 	function Bar() : C {
->Bar : typeof Bar
+>Bar : () => C
 >C : C
 
 		if (true) { return Bar();}
 >Bar() : C
->Bar : typeof Bar
+>Bar : () => C
 
 		return new C();
 >new C() : C
@@ -23,27 +23,27 @@ export module Foo {
 	}
 
 	function Baz() : C {
->Baz : typeof Baz
+>Baz : () => C
 >C : C
 
 		var c = Baz();
 >c : C
 >Baz() : C
->Baz : typeof Baz
+>Baz : () => C
 
 		return Bar();
 >Bar() : C
->Bar : typeof Bar
+>Bar : () => C
 	}
 
 	function Gar() {
->Gar : typeof Gar
+>Gar : () => void
 
 		var c : C = Baz();
 >c : C
 >C : C
 >Baz() : C
->Baz : typeof Baz
+>Baz : () => C
 
 		return;
 	}

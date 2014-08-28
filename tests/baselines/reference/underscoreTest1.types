@@ -5,7 +5,7 @@ declare var $;
 >$ : any
 
 declare function alert(x: string): void;
->alert : typeof alert
+>alert : (x: string) => void
 >x : string
 
 _.each([1, 2, 3], (num) => alert(num.toString()));
@@ -17,7 +17,7 @@ _.each([1, 2, 3], (num) => alert(num.toString()));
 >(num) => alert(num.toString()) : (num: number) => void
 >num : number
 >alert(num.toString()) : void
->alert : typeof alert
+>alert : (x: string) => void
 >num.toString() : string
 >num.toString : (radix?: number) => string
 >num : number
@@ -36,7 +36,7 @@ _.each({ one: 1, two: 2, three: 3 }, (value: number, key?: string) => alert(valu
 >value : number
 >key : string
 >alert(value.toString()) : void
->alert : typeof alert
+>alert : (x: string) => void
 >value.toString() : string
 >value.toString : (radix?: number) => string
 >value : number
@@ -566,7 +566,7 @@ var buttonView = {
 >onClick : () => void
 >function () { alert('clicked: ' + this.label); } : () => void
 >alert('clicked: ' + this.label) : void
->alert : typeof alert
+>alert : (x: string) => void
 >'clicked: ' + this.label : string
 >this.label : any
 >this : any
@@ -576,7 +576,7 @@ var buttonView = {
 >onHover : () => void
 >function () { alert('hovering: ' + this.label); } : () => void
 >alert('hovering: ' + this.label) : void
->alert : typeof alert
+>alert : (x: string) => void
 >'hovering: ' + this.label : string
 >this.label : any
 >this : any
@@ -651,13 +651,13 @@ _.defer(function () { alert('deferred'); });
 >defer : (func: Function, ...args: any[]) => number
 >function () { alert('deferred'); } : () => void
 >alert('deferred') : void
->alert : typeof alert
+>alert : (x: string) => void
 
 var updatePosition = () => alert('updating position...');
 >updatePosition : () => void
 >() => alert('updating position...') : () => void
 >alert('updating position...') : void
->alert : typeof alert
+>alert : (x: string) => void
 
 var throttled = _.throttle(updatePosition, 100);
 >throttled : () => void
@@ -679,7 +679,7 @@ var calculateLayout = () => alert('calculating layout...');
 >calculateLayout : () => void
 >() => alert('calculating layout...') : () => void
 >alert('calculating layout...') : void
->alert : typeof alert
+>alert : (x: string) => void
 
 var lazyLayout = _.debounce(calculateLayout, 300);
 >lazyLayout : () => void
@@ -701,7 +701,7 @@ var createApplication = () => alert('creating application...');
 >createApplication : () => void
 >() => alert('creating application...') : () => void
 >alert('creating application...') : void
->alert : typeof alert
+>alert : (x: string) => void
 
 var initialize = _.once(createApplication);
 >initialize : () => void
@@ -726,7 +726,7 @@ var render = () => alert("rendering...");
 >render : () => void
 >() => alert("rendering...") : () => void
 >alert("rendering...") : void
->alert : typeof alert
+>alert : (x: string) => void
 
 var renderNotes = _.after(notes.length, render);
 >renderNotes : () => void
@@ -938,7 +938,7 @@ _.chain([1, 2, 3, 200])
     .tap(<any>alert)
 >tap : (interceptor: (object: number[]) => void) => Underscore.ChainedArray<number>
 ><any>alert : any
->alert : typeof alert
+>alert : (x: string) => void
 
     .map(function (num) { return num * num })
 >map : <U>(iterator: Iterator<number, U>, context?: any) => Underscore.ChainedArray<U>
@@ -1055,7 +1055,7 @@ _.isFunction(alert);
 >_.isFunction : (object: any) => boolean
 >_ : Underscore.Static
 >isFunction : (object: any) => boolean
->alert : typeof alert
+>alert : (x: string) => void
 
 _.isString("moe");
 >_.isString("moe") : boolean
@@ -1114,7 +1114,7 @@ _.isNaN(NaN);
 
 isNaN(undefined);
 >isNaN(undefined) : boolean
->isNaN : typeof isNaN
+>isNaN : (number: number) => boolean
 >undefined : undefined
 
 _.isNaN(undefined);

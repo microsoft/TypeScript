@@ -8,7 +8,7 @@ var STRING1: string[] = ["", "abc"];
 >["", "abc"] : string[]
 
 function foo(): string { return "abc"; }
->foo : typeof foo
+>foo : () => string
 
 class A {
 >A : A
@@ -89,7 +89,7 @@ var ResultIsNumber9 = +foo();
 >ResultIsNumber9 : number
 >+foo() : number
 >foo() : string
->foo : typeof foo
+>foo : () => string
 
 var ResultIsNumber10 = +A.foo();
 >ResultIsNumber10 : number
@@ -130,7 +130,7 @@ var ResultIsNumber12 = +STRING.charAt(0);
 +foo();
 >+foo() : number
 >foo() : string
->foo : typeof foo
+>foo : () => string
 
 +objA.a,M.n;
 >+objA.a,M.n : string

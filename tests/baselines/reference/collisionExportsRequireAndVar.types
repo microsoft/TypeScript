@@ -1,6 +1,6 @@
 === tests/cases/compiler/collisionExportsRequireAndVar.ts ===
 export function foo() {
->foo : typeof foo
+>foo : () => void
 }
 var exports = 1;
 >exports : number

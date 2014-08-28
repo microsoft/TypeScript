@@ -23,7 +23,7 @@ module A {
     }
 
     export function fromOrigin(p: Point): Line {
->fromOrigin : typeof fromOrigin
+>fromOrigin : (p: Point) => Line
 >p : Point
 >Point : Point
 >Line : Line

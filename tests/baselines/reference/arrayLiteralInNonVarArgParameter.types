@@ -1,11 +1,11 @@
 === tests/cases/compiler/arrayLiteralInNonVarArgParameter.ts ===
 function panic(val: string[], ...opt: string[]) { }
->panic : typeof panic
+>panic : (val: string[], ...opt: string[]) => void
 >val : string[]
 >opt : string[]
 
 panic([], 'one', 'two');
 >panic([], 'one', 'two') : void
->panic : typeof panic
+>panic : (val: string[], ...opt: string[]) => void
 >[] : string[]
 

@@ -1,6 +1,6 @@
 === tests/cases/compiler/badOverloadError.ts ===
 function method() {
->method : typeof method
+>method : () => void
 
     var dictionary = <{ [index: string]: string; }>{};
 >dictionary : { [x: string]: string; }

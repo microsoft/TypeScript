@@ -7,7 +7,7 @@ var console: {
 >val : any
 }
 function x() {
->x : typeof x
+>x : () => void
 
     var _this = 5;
 >_this : number

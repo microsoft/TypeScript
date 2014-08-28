@@ -9,50 +9,50 @@ declare var m: string;
 
 // Ambient function with no type annotations
 declare function fn1();
->fn1 : typeof fn1
+>fn1 : () => any
 
 // Ambient function with type annotations
 declare function fn2(n: string): number;
->fn2 : typeof fn2
+>fn2 : (n: string) => number
 >n : string
 
 // Ambient function with valid overloads
 declare function fn3(n: string): number;
->fn3 : typeof fn3
+>fn3 : (n: string) => number
 >n : string
 
 declare function fn4(n: number, y: number): string;
->fn4 : typeof fn4
+>fn4 : (n: number, y: number) => string
 >n : number
 >y : number
 
 // Ambient function with optional parameters
 declare function fn5(x, y?);
->fn5 : typeof fn5
+>fn5 : (x: any, y?: any) => any
 >x : any
 >y : any
 
 declare function fn6(e?);
->fn6 : typeof fn6
+>fn6 : (e?: any) => any
 >e : any
 
 declare function fn7(x, y?, ...z);
->fn7 : typeof fn7
+>fn7 : (x: any, y?: any, ...z: any[]) => any
 >x : any
 >y : any
 >z : any[]
 
 declare function fn8(y?, ...z: number[]);
->fn8 : typeof fn8
+>fn8 : (y?: any, ...z: number[]) => any
 >y : any
 >z : number[]
 
 declare function fn9(...q: {}[]);
->fn9 : typeof fn9
+>fn9 : (...q: {}[]) => any
 >q : {}[]
 
 declare function fn10<T>(...q: T[]);
->fn10 : typeof fn10
+>fn10 : <T>(...q: T[]) => any
 >T : T
 >q : T[]
 >T : T
@@ -141,7 +141,7 @@ declare module M1 {
 >x : any
 
     function fn(): number;
->fn : typeof fn
+>fn : () => number
 }
 
 // Ambient module members are always exported with or without export keyword
@@ -154,9 +154,9 @@ var p = M1.x;
 var q = M1.fn();
 >q : number
 >M1.fn() : number
->M1.fn : typeof M1.fn
+>M1.fn : () => number
 >M1 : typeof M1
->fn : typeof M1.fn
+>fn : () => number
 
 // Ambient external module in the global module
 // Ambient external module with a string literal name that is a top level external module name

@@ -6,14 +6,14 @@ module Bar {
 >a : number
 
     function fooA() { return a; } // Correct: return Bar.a
->fooA : typeof fooA
+>fooA : () => number
 >a : number
 
     export var b;
 >b : any
 
     function fooB() { return b; } // Incorrect: return b
->fooB : typeof fooB
+>fooB : () => any
 >b : any
 }
 

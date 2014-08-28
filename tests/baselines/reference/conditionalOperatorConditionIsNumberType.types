@@ -95,7 +95,7 @@ condNumber ? exprIsObject1 : exprIsObject2;
 
 //Cond is a number type expression
 function foo() { return 1 };
->foo : typeof foo
+>foo : () => number
 
 var array = [1, 2, 3];
 >array : number[]
@@ -123,7 +123,7 @@ var array = [1, 2, 3];
 foo() ? exprString1 : exprString2;
 >foo() ? exprString1 : exprString2 : string
 >foo() : number
->foo : typeof foo
+>foo : () => number
 >exprString1 : string
 >exprString2 : string
 
@@ -131,7 +131,7 @@ foo() / array[1] ? exprIsObject1 : exprIsObject2;
 >foo() / array[1] ? exprIsObject1 : exprIsObject2 : Object
 >foo() / array[1] : number
 >foo() : number
->foo : typeof foo
+>foo : () => number
 >array[1] : number
 >array : number[]
 >exprIsObject1 : Object
@@ -230,7 +230,7 @@ var resultIsString3 = foo() ? exprString1 : exprString2;
 >resultIsString3 : string
 >foo() ? exprString1 : exprString2 : string
 >foo() : number
->foo : typeof foo
+>foo : () => number
 >exprString1 : string
 >exprString2 : string
 
@@ -239,7 +239,7 @@ var resultIsObject3 = foo() / array[1] ? exprIsObject1 : exprIsObject2;
 >foo() / array[1] ? exprIsObject1 : exprIsObject2 : Object
 >foo() / array[1] : number
 >foo() : number
->foo : typeof foo
+>foo : () => number
 >array[1] : number
 >array : number[]
 >exprIsObject1 : Object

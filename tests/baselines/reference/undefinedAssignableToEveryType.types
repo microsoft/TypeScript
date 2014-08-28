@@ -118,7 +118,7 @@ var q: String = undefined;
 >undefined : undefined
 
 function foo<T, U, V extends Date>(x: T, y: U, z: V) {
->foo : typeof foo
+>foo : <T, U, V extends Date>(x: T, y: U, z: V) => void
 >T : T
 >U : U
 >V : V

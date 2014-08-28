@@ -2,7 +2,7 @@
 "use strict";
 
 function foo() {
->foo : typeof foo
+>foo : () => number
 
     return 30;
 }

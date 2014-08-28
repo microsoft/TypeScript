@@ -1,29 +1,29 @@
 === tests/cases/compiler/functionReturn.ts ===
 function f0(): void { }
->f0 : typeof f0
+>f0 : () => void
 
 function f1() {
->f1 : typeof f1
+>f1 : () => void
 
     var n: any = f0();
 >n : any
 >f0() : void
->f0 : typeof f0
+>f0 : () => void
 }
 function f2(): any { }
->f2 : typeof f2
+>f2 : () => any
 
 function f3(): string { return; }
->f3 : typeof f3
+>f3 : () => string
 
 function f4(): string {
->f4 : typeof f4
+>f4 : () => string
 
     return '';
     return;
 }
 function f5(): string {
->f5 : typeof f5
+>f5 : () => string
 
     return '';
     return undefined;

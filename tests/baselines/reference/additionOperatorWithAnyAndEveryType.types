@@ -1,6 +1,6 @@
 === tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithAnyAndEveryType.ts ===
 function foo() { }
->foo : typeof foo
+>foo : () => void
 
 class C {
 >C : C
@@ -98,14 +98,14 @@ var r10 = a + foo;
 >r10 : any
 >a + foo : any
 >a : any
->foo : typeof foo
+>foo : () => void
 
 var r11 = a + foo();
 >r11 : any
 >a + foo() : any
 >a : any
 >foo() : void
->foo : typeof foo
+>foo : () => void
 
 var r12 = a + C;
 >r12 : any

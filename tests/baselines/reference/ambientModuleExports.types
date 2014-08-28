@@ -3,7 +3,7 @@ declare module Foo {
 >Foo : typeof Foo
 
 	function a():void;
->a : typeof a
+>a : () => void
 
 	var b:number;
 >b : number
@@ -14,9 +14,9 @@ declare module Foo {
 
 Foo.a();
 >Foo.a() : void
->Foo.a : typeof Foo.a
+>Foo.a : () => void
 >Foo : typeof Foo
->a : typeof Foo.a
+>a : () => void
 
 Foo.b;
 >Foo.b : number
@@ -34,7 +34,7 @@ declare module Foo2 {
 >Foo2 : typeof Foo2
 
     export function a(): void;
->a : typeof a
+>a : () => void
 
     export var b: number;
 >b : number
@@ -45,9 +45,9 @@ declare module Foo2 {
 
 Foo2.a();
 >Foo2.a() : void
->Foo2.a : typeof Foo2.a
+>Foo2.a : () => void
 >Foo2 : typeof Foo2
->a : typeof Foo2.a
+>a : () => void
 
 Foo2.b;
 >Foo2.b : number

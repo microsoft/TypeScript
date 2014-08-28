@@ -2,13 +2,13 @@
 // Call signatures without a return type annotation and function body return 'any'
 
 function foo(x) { }
->foo : typeof foo
+>foo : (x: any) => void
 >x : any
 
 var r = foo(1); // void since there's a body
 >r : void
 >foo(1) : void
->foo : typeof foo
+>foo : (x: any) => void
 
 interface I {
 >I : I

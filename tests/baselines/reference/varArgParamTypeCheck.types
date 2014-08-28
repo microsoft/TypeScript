@@ -1,17 +1,17 @@
 === tests/cases/compiler/varArgParamTypeCheck.ts ===
 function sequence(...sequences:{():void;}[]) {
->sequence : typeof sequence
+>sequence : (...sequences: { (): void; }[]) => void
 >sequences : { (): void; }[]
 }
 
 function callback(clb:()=>void) {
->callback : typeof callback
+>callback : (clb: () => void) => void
 >clb : () => void
 }
 
 sequence(
 >sequence(    function bar() {    },    function foo() {        callback(()=>{            this();        });    },    function baz() {        callback(()=>{            this();        });    }) : void
->sequence : typeof sequence
+>sequence : (...sequences: { (): void; }[]) => void
 
     function bar() {
 >function bar() {    } : () => void
@@ -24,7 +24,7 @@ sequence(
 
         callback(()=>{
 >callback(()=>{            this();        }) : void
->callback : typeof callback
+>callback : (clb: () => void) => void
 >()=>{            this();        } : () => void
 
             this();
@@ -39,7 +39,7 @@ sequence(
 
         callback(()=>{
 >callback(()=>{            this();        }) : void
->callback : typeof callback
+>callback : (clb: () => void) => void
 >()=>{            this();        } : () => void
 
             this();

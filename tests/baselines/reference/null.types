@@ -15,7 +15,7 @@ class C {
 >C : C
 }
 function f() {
->f : typeof f
+>f : () => C
 
     return null;
     return new C();
@@ -23,7 +23,7 @@ function f() {
 >C : typeof C
 }
 function g() {
->g : typeof g
+>g : () => number
 
     return null;
     return 3;

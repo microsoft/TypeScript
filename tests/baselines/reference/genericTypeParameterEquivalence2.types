@@ -1,7 +1,7 @@
 === tests/cases/compiler/genericTypeParameterEquivalence2.ts ===
 // compose :: (b->c) -> (a->b) -> (a->c)
 function compose<A, B, C>(f: (b: B) => C, g: (a:A) => B): (a:A) => C {
->compose : typeof compose
+>compose : <A, B, C>(f: (b: B) => C, g: (a: A) => B) => (a: A) => C
 >A : A
 >B : B
 >C : C
@@ -37,7 +37,7 @@ function compose<A, B, C>(f: (b: B) => C, g: (a:A) => B): (a:A) => C {
 
 // forEach :: [a] -> (a -> ()) -> ()
 function forEach<A>(list: A[], f: (a: A, n?: number) => void ): void {
->forEach : typeof forEach
+>forEach : <A>(list: A[], f: (a: A, n?: number) => void) => void
 >A : A
 >list : A[]
 >A : A
@@ -68,7 +68,7 @@ function forEach<A>(list: A[], f: (a: A, n?: number) => void ): void {
 
 // filter :: (a->bool) -> [a] -> [a]
 function filter<A>(f: (a: A) => boolean, ar: A[]): A[] {
->filter : typeof filter
+>filter : <A>(f: (a: A) => boolean, ar: A[]) => A[]
 >A : A
 >f : (a: A) => boolean
 >a : A
@@ -83,7 +83,7 @@ function filter<A>(f: (a: A) => boolean, ar: A[]): A[] {
 
     forEach(ar, (el) => {
 >forEach(ar, (el) => {        if (f(el)) {            ret.push(el);        }    } ) : void
->forEach : typeof forEach
+>forEach : <A>(list: A[], f: (a: A, n?: number) => void) => void
 >ar : A[]
 >(el) => {        if (f(el)) {            ret.push(el);        }    } : (el: A) => void
 >el : A
@@ -108,7 +108,7 @@ function filter<A>(f: (a: A) => boolean, ar: A[]): A[] {
 
 // length :: [a] -> Num
 function length2<A>(ar: A[]): number {
->length2 : typeof length2
+>length2 : <A>(ar: A[]) => number
 >A : A
 >ar : A[]
 >A : A
@@ -121,7 +121,7 @@ function length2<A>(ar: A[]): number {
 
 // curry1 :: ((a,b)->c) -> (a->(b->c))
 function curry1<A, B, C>(f: (a: A, b: B) => C): (ax: A) => (bx: B) => C {
->curry1 : typeof curry1
+>curry1 : <A, B, C>(f: (a: A, b: B) => C) => (ax: A) => (bx: B) => C
 >A : A
 >B : B
 >C : C
@@ -160,8 +160,8 @@ function curry1<A, B, C>(f: (a: A, b: B) => C): (ax: A) => (bx: B) => C {
 var cfilter = curry1(filter);
 >cfilter : (ax: {}) => (bx: {}) => {}[]
 >curry1(filter) : (ax: {}) => (bx: {}) => {}[]
->curry1 : typeof curry1
->filter : typeof filter
+>curry1 : <A, B, C>(f: (a: A, b: B) => C) => (ax: A) => (bx: B) => C
+>filter : <A>(f: (a: A) => boolean, ar: A[]) => A[]
 
 // compose :: (b->c) -> (a->b) -> (a->c)
 // length :: [a] -> Num
@@ -172,7 +172,7 @@ var cfilter = curry1(filter);
 // countWhere :: (a -> Bool) -> [a] -> Num
 
 function countWhere_1<A>(pred: (a: A) => boolean): (a: A[]) => number {
->countWhere_1 : typeof countWhere_1
+>countWhere_1 : <A>(pred: (a: A) => boolean) => (a: A[]) => number
 >A : A
 >pred : (a: A) => boolean
 >a : A
@@ -182,15 +182,15 @@ function countWhere_1<A>(pred: (a: A) => boolean): (a: A[]) => number {
 
     return compose(length2, cfilter(pred));
 >compose(length2, cfilter(pred)) : (a: {}) => number
->compose : typeof compose
->length2 : typeof length2
+>compose : <A, B, C>(f: (b: B) => C, g: (a: A) => B) => (a: A) => C
+>length2 : <A>(ar: A[]) => number
 >cfilter(pred) : (bx: {}) => {}[]
 >cfilter : (ax: {}) => (bx: {}) => {}[]
 >pred : (a: A) => boolean
 }
 
 function countWhere_2<A>(pred: (a: A) => boolean): (a: A[]) => number {
->countWhere_2 : typeof countWhere_2
+>countWhere_2 : <A>(pred: (a: A) => boolean) => (a: A[]) => number
 >A : A
 >pred : (a: A) => boolean
 >a : A
@@ -206,7 +206,7 @@ function countWhere_2<A>(pred: (a: A) => boolean): (a: A[]) => number {
 
     return compose(length2, where);
 >compose(length2, where) : (a: {}) => number
->compose : typeof compose
->length2 : typeof length2
+>compose : <A, B, C>(f: (b: B) => C, g: (a: A) => B) => (a: A) => C
+>length2 : <A>(ar: A[]) => number
 >where : (bx: {}) => {}[]
 }

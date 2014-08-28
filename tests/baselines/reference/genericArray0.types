@@ -10,7 +10,7 @@ var y = x;
 >x : number[]
 
 function map<U>() {
->map : typeof map
+>map : <U>() => void
 >U : U
 
     var ys: U[] = [];

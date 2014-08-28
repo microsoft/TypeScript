@@ -10,7 +10,7 @@ var _this = 5;
 >_this : number
 
 function x() {
->x : typeof x
+>x : () => void
 
     x => { console.log(this); };
 >x => { console.log(this); } : (x: any) => void

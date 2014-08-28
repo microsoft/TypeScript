@@ -1,16 +1,16 @@
 === tests/cases/compiler/functionOverloads38.ts ===
 function foo(bar:{a:number;}[]):string;
->foo : typeof foo
+>foo : { (bar: { a: number; }[]): string; (bar: { a: boolean; }[]): number; }
 >bar : { a: number; }[]
 >a : number
 
 function foo(bar:{a:boolean;}[]):number;
->foo : typeof foo
+>foo : { (bar: { a: number; }[]): string; (bar: { a: boolean; }[]): number; }
 >bar : { a: boolean; }[]
 >a : boolean
 
 function foo(bar:{a:any;}[]):any{ return bar }
->foo : typeof foo
+>foo : { (bar: { a: number; }[]): string; (bar: { a: boolean; }[]): number; }
 >bar : { a: any; }[]
 >a : any
 >bar : { a: any; }[]
@@ -18,7 +18,7 @@ function foo(bar:{a:any;}[]):any{ return bar }
 var x = foo([{a:1}]);
 >x : string
 >foo([{a:1}]) : string
->foo : typeof foo
+>foo : { (bar: { a: number; }[]): string; (bar: { a: boolean; }[]): number; }
 >[{a:1}] : { a: number; }[]
 >{a:1} : { a: number; }
 >a : number

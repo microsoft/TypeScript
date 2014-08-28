@@ -12,7 +12,7 @@ module foo.Bar {
 >Bar : typeof Bar
 
     export function f() {
->f : typeof f
+>f : () => void
     }
 }
 
@@ -21,12 +21,12 @@ module foo.Baz {
 >Baz : typeof Baz
 
     export function g() {
->g : typeof g
+>g : () => void
 
         Bar.f();
 >Bar.f() : void
->Bar.f : typeof Bar.f
+>Bar.f : () => void
 >Bar : typeof Bar
->f : typeof Bar.f
+>f : () => void
     }
 }

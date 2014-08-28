@@ -2,11 +2,11 @@
 
 /** This comment should appear for foo*/
 export function foo() {
->foo : typeof foo
+>foo : () => void
 }
 /** This is comment for function signature*/
 export function fooWithParameters(/** this is comment about a*/a: string,
->fooWithParameters : typeof fooWithParameters
+>fooWithParameters : (a: string, b: number) => void
 >a : string
 
     /** this is comment for b*/
@@ -18,7 +18,7 @@ export function fooWithParameters(/** this is comment about a*/a: string,
 >a : string
 }
 export function fooWithRestParameters(a: string, ...rests: string[]) {
->fooWithRestParameters : typeof fooWithRestParameters
+>fooWithRestParameters : (a: string, ...rests: string[]) => string
 >a : string
 >rests : string[]
 
@@ -32,15 +32,15 @@ export function fooWithRestParameters(a: string, ...rests: string[]) {
 }
 
 export function fooWithOverloads(a: string): string;
->fooWithOverloads : typeof fooWithOverloads
+>fooWithOverloads : { (a: string): string; (a: number): number; }
 >a : string
 
 export function fooWithOverloads(a: number): number;
->fooWithOverloads : typeof fooWithOverloads
+>fooWithOverloads : { (a: string): string; (a: number): number; }
 >a : number
 
 export function fooWithOverloads(a: any): any {
->fooWithOverloads : typeof fooWithOverloads
+>fooWithOverloads : { (a: string): string; (a: number): number; }
 >a : any
 
     return a;
@@ -49,11 +49,11 @@ export function fooWithOverloads(a: any): any {
 
 /** This comment should appear for nonExportedFoo*/
 function nonExportedFoo() {
->nonExportedFoo : typeof nonExportedFoo
+>nonExportedFoo : () => void
 }
 /** This is comment for function signature*/
 function nonExportedFooWithParameters(/** this is comment about a*/a: string,
->nonExportedFooWithParameters : typeof nonExportedFooWithParameters
+>nonExportedFooWithParameters : (a: string, b: number) => void
 >a : string
 
     /** this is comment for b*/
@@ -65,7 +65,7 @@ function nonExportedFooWithParameters(/** this is comment about a*/a: string,
 >a : string
 }
 function nonExportedFooWithRestParameters(a: string, ...rests: string[]) {
->nonExportedFooWithRestParameters : typeof nonExportedFooWithRestParameters
+>nonExportedFooWithRestParameters : (a: string, ...rests: string[]) => string
 >a : string
 >rests : string[]
 
@@ -79,15 +79,15 @@ function nonExportedFooWithRestParameters(a: string, ...rests: string[]) {
 }
 
 function nonExportedFooWithOverloads(a: string): string;
->nonExportedFooWithOverloads : typeof nonExportedFooWithOverloads
+>nonExportedFooWithOverloads : { (a: string): string; (a: number): number; }
 >a : string
 
 function nonExportedFooWithOverloads(a: number): number;
->nonExportedFooWithOverloads : typeof nonExportedFooWithOverloads
+>nonExportedFooWithOverloads : { (a: string): string; (a: number): number; }
 >a : number
 
 function nonExportedFooWithOverloads(a: any): any {
->nonExportedFooWithOverloads : typeof nonExportedFooWithOverloads
+>nonExportedFooWithOverloads : { (a: string): string; (a: number): number; }
 >a : any
 
     return a;
@@ -97,11 +97,11 @@ function nonExportedFooWithOverloads(a: any): any {
 === tests/cases/compiler/declFileFunctions_1.ts ===
 /** This comment should appear for foo*/
 function globalfoo() {
->globalfoo : typeof globalfoo
+>globalfoo : () => void
 }
 /** This is comment for function signature*/
 function globalfooWithParameters(/** this is comment about a*/a: string,
->globalfooWithParameters : typeof globalfooWithParameters
+>globalfooWithParameters : (a: string, b: number) => void
 >a : string
 
     /** this is comment for b*/
@@ -113,7 +113,7 @@ function globalfooWithParameters(/** this is comment about a*/a: string,
 >a : string
 }
 function globalfooWithRestParameters(a: string, ...rests: string[]) {
->globalfooWithRestParameters : typeof globalfooWithRestParameters
+>globalfooWithRestParameters : (a: string, ...rests: string[]) => string
 >a : string
 >rests : string[]
 
@@ -126,15 +126,15 @@ function globalfooWithRestParameters(a: string, ...rests: string[]) {
 >join : (separator?: string) => string
 }
 function globalfooWithOverloads(a: string): string;
->globalfooWithOverloads : typeof globalfooWithOverloads
+>globalfooWithOverloads : { (a: string): string; (a: number): number; }
 >a : string
 
 function globalfooWithOverloads(a: number): number;
->globalfooWithOverloads : typeof globalfooWithOverloads
+>globalfooWithOverloads : { (a: string): string; (a: number): number; }
 >a : number
 
 function globalfooWithOverloads(a: any): any {
->globalfooWithOverloads : typeof globalfooWithOverloads
+>globalfooWithOverloads : { (a: string): string; (a: number): number; }
 >a : any
 
     return a;

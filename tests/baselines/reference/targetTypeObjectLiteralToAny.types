@@ -1,6 +1,6 @@
 === tests/cases/compiler/targetTypeObjectLiteralToAny.ts ===
 function suggest(){ 
->suggest : typeof suggest
+>suggest : () => void
 
 	var TypeScriptKeywords:string[];  
 >TypeScriptKeywords : string[]

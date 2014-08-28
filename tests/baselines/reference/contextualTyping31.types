@@ -1,8 +1,8 @@
 === tests/cases/compiler/contextualTyping31.ts ===
 function foo(param:number[]){}; foo([1]);
->foo : typeof foo
+>foo : (param: number[]) => void
 >param : number[]
 >foo([1]) : void
->foo : typeof foo
+>foo : (param: number[]) => void
 >[1] : number[]
 

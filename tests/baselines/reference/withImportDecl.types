@@ -40,7 +40,7 @@ var arrayVar: string[] = ['a', 'b'];
 
 
 function simpleFunction() {
->simpleFunction : typeof simpleFunction
+>simpleFunction : () => { x: string; y: string; n: number; }
 
     return {
 >{        x: "Hello",        y: "word",        n: 2    } : { x: string; y: string; n: number; }
@@ -61,7 +61,7 @@ module m1 {
 >m1 : typeof m1
 
     export function foo() {
->foo : typeof foo
+>foo : () => string
 
         return "Hello";
     }

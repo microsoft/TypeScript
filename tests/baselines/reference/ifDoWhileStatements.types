@@ -46,11 +46,11 @@ class D<T>{
 }
 
 function F(x: string): number { return 42; }
->F : typeof F
+>F : (x: string) => number
 >x : string
 
 function F2(x: number): boolean { return x < 42; }
->F2 : typeof F2
+>F2 : (x: number) => boolean
 >x : number
 >x < 42 : boolean
 >x : number
@@ -66,7 +66,7 @@ module M {
     }
 
     export function F2(x: number): string { return x.toString(); }
->F2 : typeof F2
+>F2 : (x: number) => string
 >x : number
 >x.toString() : string
 >x.toString : (radix?: number) => string
@@ -85,7 +85,7 @@ module N {
     }
 
     export function F2(x: number): string { return x.toString(); }
->F2 : typeof F2
+>F2 : (x: number) => string
 >x : number
 >x.toString() : string
 >x.toString : (radix?: number) => string
@@ -346,30 +346,30 @@ do { }while(k)
 >k : { x: number; y: string; }
 
 function fn(x?: string): I { return null; }
->fn : typeof fn
+>fn : (x?: string) => I
 >x : string
 >I : I
 
 if (fn()) { }
 >fn() : I
->fn : typeof fn
+>fn : (x?: string) => I
 
 while (fn()) { }
 >fn() : I
->fn : typeof fn
+>fn : (x?: string) => I
 
 do { }while(fn())
 >fn() : I
->fn : typeof fn
+>fn : (x?: string) => I
 
 if (fn) { }
->fn : typeof fn
+>fn : (x?: string) => I
 
 while (fn) { }
->fn : typeof fn
+>fn : (x?: string) => I
 
 do { }while(fn)
->fn : typeof fn
+>fn : (x?: string) => I
 
 
 

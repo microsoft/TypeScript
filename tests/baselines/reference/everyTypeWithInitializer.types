@@ -35,7 +35,7 @@ class D<T>{
 }
 
 function F(x: string): number { return 42; }
->F : typeof F
+>F : (x: string) => number
 >x : string
 
 module M {
@@ -49,7 +49,7 @@ module M {
     }
 
     export function F2(x: number): string { return x.toString(); }
->F2 : typeof F2
+>F2 : (x: number) => string
 >x : number
 >x.toString() : string
 >x.toString : (radix?: number) => string
@@ -103,8 +103,8 @@ var anObjectLiteral = { id: 12 };
 >id : number
 
 var aFunction = F;
->aFunction : typeof F
->F : typeof F
+>aFunction : (x: string) => number
+>F : (x: string) => number
 
 var aLambda = (x) => 2;
 >aLambda : (x: any) => number
@@ -123,10 +123,10 @@ var aClassInModule = new M.A();
 >A : typeof M.A
 
 var aFunctionInModule = M.F2;
->aFunctionInModule : typeof M.F2
->M.F2 : typeof M.F2
+>aFunctionInModule : (x: number) => string
+>M.F2 : (x: number) => string
 >M : typeof M
->F2 : typeof M.F2
+>F2 : (x: number) => string
 
 // no initializer or annotation, so this is an 'any'
 var x;

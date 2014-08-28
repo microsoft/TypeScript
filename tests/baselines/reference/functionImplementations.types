@@ -43,43 +43,43 @@ var a: any = function f() {
 
 // Two mutually recursive function implementations with no return type annotations
 function rec1() {
->rec1 : typeof rec1
+>rec1 : () => any
 
     return rec2();
 >rec2() : any
->rec2 : typeof rec2
+>rec2 : () => any
 }
 function rec2() {
->rec2 : typeof rec2
+>rec2 : () => any
 
     return rec1();
 >rec1() : any
->rec1 : typeof rec1
+>rec1 : () => any
 }
 var a = rec1();
 >a : any
 >rec1() : any
->rec1 : typeof rec1
+>rec1 : () => any
 
 var a = rec2();
 >a : any
 >rec2() : any
->rec2 : typeof rec2
+>rec2 : () => any
 
 // Two mutually recursive function implementations with return type annotation in one
 function rec3(): number {
->rec3 : typeof rec3
+>rec3 : () => number
 
     return rec4();
 >rec4() : number
->rec4 : typeof rec4
+>rec4 : () => number
 }
 function rec4() {
->rec4 : typeof rec4
+>rec4 : () => number
 
     return rec3();
 >rec3() : number
->rec3 : typeof rec3
+>rec3 : () => number
 }
 var n: number;
 >n : number
@@ -87,12 +87,12 @@ var n: number;
 var n = rec3();
 >n : number
 >rec3() : number
->rec3 : typeof rec3
+>rec3 : () => number
 
 var n = rec4();
 >n : number
 >rec4() : number
->rec4 : typeof rec4
+>rec4 : () => number
 
 // FunctionExpression with no return type annotation and returns a number
 var n = function () {
@@ -225,7 +225,7 @@ undefined === function (): number {
 
 // Type of 'this' in function implementation is 'any'
 function thisFunc() {
->thisFunc : typeof thisFunc
+>thisFunc : () => void
 
     var x = this;
 >x : any
@@ -237,7 +237,7 @@ function thisFunc() {
 
 // Function signature with optional parameter, no type annotation and initializer has initializer's type
 function opt1(n = 4) {
->opt1 : typeof opt1
+>opt1 : (n?: number) => void
 >n : number
 
     var m = n;
@@ -250,7 +250,7 @@ function opt1(n = 4) {
 
 // Function signature with optional parameter, no type annotation and initializer has initializer's widened type
 function opt2(n = { x: null, y: undefined }) {
->opt2 : typeof opt2
+>opt2 : (n?: { x: any; y: any; }) => void
 >n : { x: any; y: any; }
 >{ x: null, y: undefined } : { x: null; y: undefined; }
 >x : any
@@ -269,7 +269,7 @@ function opt2(n = { x: null, y: undefined }) {
 
 // Function signature with initializer referencing other parameter to the left
 function opt3(n: number, m = n) {
->opt3 : typeof opt3
+>opt3 : (n: number, m?: number) => void
 >n : number
 >m : number
 >n : number
@@ -287,7 +287,7 @@ function opt3(n: number, m = n) {
 
 // FunctionExpression with non -void return type annotation return with no expression
 function f6(): number {
->f6 : typeof f6
+>f6 : () => number
 
     return;
 }

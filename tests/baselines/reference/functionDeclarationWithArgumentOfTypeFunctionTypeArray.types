@@ -1,6 +1,6 @@
 === tests/cases/compiler/functionDeclarationWithArgumentOfTypeFunctionTypeArray.ts ===
 function foo(args: { (x): number }[]) {
->foo : typeof foo
+>foo : (args: { (x: any): number; }[]) => number
 >args : { (x: any): number; }[]
 >x : any
 

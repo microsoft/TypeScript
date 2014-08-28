@@ -1,6 +1,6 @@
 === tests/cases/compiler/contextualSignatureInstantiation3.ts ===
 function map<T, U>(items: T[], f: (x: T) => U): U[]{
->map : typeof map
+>map : <T, U>(items: T[], f: (x: T) => U) => U[]
 >T : T
 >U : U
 >items : T[]
@@ -20,7 +20,7 @@ function map<T, U>(items: T[], f: (x: T) => U): U[]{
 }
 
 function identity<T>(x: T) {
->identity : typeof identity
+>identity : <T>(x: T) => T
 >T : T
 >x : T
 >T : T
@@ -30,7 +30,7 @@ function identity<T>(x: T) {
 }
 
 function singleton<T>(x: T) {
->singleton : typeof singleton
+>singleton : <T>(x: T) => T[]
 >T : T
 >x : T
 >T : T
@@ -54,14 +54,14 @@ var v1 = xs.map(identity);      // Error if not number[]
 >xs.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
 >xs : number[]
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->identity : typeof identity
+>identity : <T>(x: T) => T
 
 var v1 = map(xs, identity);     // Error if not number[]
 >v1 : number[]
 >map(xs, identity) : number[]
->map : typeof map
+>map : <T, U>(items: T[], f: (x: T) => U) => U[]
 >xs : number[]
->identity : typeof identity
+>identity : <T>(x: T) => T
 
 var v2: number[][];         
 >v2 : number[][]
@@ -72,12 +72,12 @@ var v2 = xs.map(singleton);     // Error if not number[][]
 >xs.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
 >xs : number[]
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->singleton : typeof singleton
+>singleton : <T>(x: T) => T[]
 
 var v2 = map(xs, singleton);    // Error if not number[][]
 >v2 : number[][]
 >map(xs, singleton) : number[][]
->map : typeof map
+>map : <T, U>(items: T[], f: (x: T) => U) => U[]
 >xs : number[]
->singleton : typeof singleton
+>singleton : <T>(x: T) => T[]
 

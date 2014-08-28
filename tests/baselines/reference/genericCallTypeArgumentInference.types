@@ -2,7 +2,7 @@
 // Basic type inference with generic calls, no errors expected
 
 function foo<T>(t: T) {
->foo : typeof foo
+>foo : <T>(t: T) => T
 >T : T
 >t : T
 >T : T
@@ -14,10 +14,10 @@ function foo<T>(t: T) {
 var r = foo(''); // string
 >r : string
 >foo('') : string
->foo : typeof foo
+>foo : <T>(t: T) => T
 
 function foo2<T, U>(t: T, u: U) {
->foo2 : typeof foo2
+>foo2 : <T, U>(t: T, u: U) => U
 >T : T
 >U : U
 >t : T
@@ -30,7 +30,7 @@ function foo2<T, U>(t: T, u: U) {
 }
 
 function foo2b<T, U>(u: U) {
->foo2b : typeof foo2b
+>foo2b : <T, U>(u: U) => T
 >T : T
 >U : U
 >u : U
@@ -47,12 +47,12 @@ function foo2b<T, U>(u: U) {
 var r2 = foo2('', 1); // number
 >r2 : number
 >foo2('', 1) : number
->foo2 : typeof foo2
+>foo2 : <T, U>(t: T, u: U) => U
 
 var r3 = foo2b(1); // {}
 >r3 : {}
 >foo2b(1) : {}
->foo2b : typeof foo2b
+>foo2b : <T, U>(u: U) => T
 
 class C<T, U> {
 >C : C<T, U>

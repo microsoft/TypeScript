@@ -56,7 +56,7 @@ var rb2 = x in {};
 >{} : {}
 
 function foo<T>(t: T) {
->foo : typeof foo
+>foo : <T>(t: T) => void
 >T : T
 >t : T
 >T : T

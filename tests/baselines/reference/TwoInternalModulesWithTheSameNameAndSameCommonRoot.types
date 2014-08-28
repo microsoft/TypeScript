@@ -16,7 +16,7 @@ module A {
 >Utils : typeof Utils
 
         export function mirror<T extends Point>(p: T) {
->mirror : typeof mirror
+>mirror : <T extends Point>(p: T) => { x: number; y: number; }
 >T : T
 >Point : Point
 >p : T
@@ -84,11 +84,11 @@ var o = A.Origin;
 var o = A.Utils.mirror(o);
 >o : { x: number; y: number; }
 >A.Utils.mirror(o) : { x: number; y: number; }
->A.Utils.mirror : typeof A.Utils.mirror
+>A.Utils.mirror : <T extends A.Point>(p: T) => { x: number; y: number; }
 >A.Utils : typeof A.Utils
 >A : typeof A
 >Utils : typeof A.Utils
->mirror : typeof A.Utils.mirror
+>mirror : <T extends A.Point>(p: T) => { x: number; y: number; }
 >o : { x: number; y: number; }
 
 var p: { tl: A.Point; br: A.Point };

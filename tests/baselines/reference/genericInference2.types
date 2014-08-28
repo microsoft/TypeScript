@@ -24,7 +24,7 @@
 >T : T
        } 
        export function observable<T>(value: T): Observable<T>; 
->observable : typeof observable
+>observable : <T>(value: T) => Observable<T>
 >T : T
 >value : T
 >T : T
@@ -38,16 +38,16 @@
        name: ko.observable("Bob"), 
 >name : ko.Observable<string>
 >ko.observable("Bob") : ko.Observable<string>
->ko.observable : typeof ko.observable
+>ko.observable : <T>(value: T) => ko.Observable<T>
 >ko : typeof ko
->observable : typeof ko.observable
+>observable : <T>(value: T) => ko.Observable<T>
 
        age: ko.observable(37) 
 >age : ko.Observable<number>
 >ko.observable(37) : ko.Observable<number>
->ko.observable : typeof ko.observable
+>ko.observable : <T>(value: T) => ko.Observable<T>
 >ko : typeof ko
->observable : typeof ko.observable
+>observable : <T>(value: T) => ko.Observable<T>
 
     }; 
     var x_v = o.name().length;  // should be 'number'

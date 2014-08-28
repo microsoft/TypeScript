@@ -4,7 +4,7 @@ export interface IFoo<A> { }
 >A : A
 
 export function foo<A>(fn: (ifoo: IFoo<A>) => void) {
->foo : typeof foo
+>foo : <A>(fn: (ifoo: IFoo<A>) => void) => void
 >A : A
 >fn : (ifoo: IFoo<A>) => void
 >ifoo : IFoo<A>
@@ -13,7 +13,7 @@ export function foo<A>(fn: (ifoo: IFoo<A>) => void) {
 
     foo(fn); // Invocation is necessary to repro (!)
 >foo(fn) : void
->foo : typeof foo
+>foo : <A>(fn: (ifoo: IFoo<A>) => void) => void
 >fn : (ifoo: IFoo<A>) => void
 }
 

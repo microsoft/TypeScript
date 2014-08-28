@@ -29,7 +29,7 @@ var c: C;
 >C : C
 
 function foo<T, U, V>(x: T, y: U, z: V): V { return z; }
->foo : typeof foo
+>foo : <T, U, V>(x: T, y: U, z: V) => V
 >T : T
 >U : U
 >V : V
@@ -46,11 +46,11 @@ function foo<T, U, V>(x: T, y: U, z: V): V { return z; }
 
 foo(1, 2, 3);
 >foo(1, 2, 3) : number
->foo : typeof foo
+>foo : <T, U, V>(x: T, y: U, z: V) => V
 
 foo({ x: 1 }, { x: 1, y: '' }, { x: 2, y: '', z: true });
 >foo({ x: 1 }, { x: 1, y: '' }, { x: 2, y: '', z: true }) : { x: number; y: string; z: boolean; }
->foo : typeof foo
+>foo : <T, U, V>(x: T, y: U, z: V) => V
 >{ x: 1 } : { x: number; }
 >x : number
 >{ x: 1, y: '' } : { x: number; y: string; }
@@ -63,14 +63,14 @@ foo({ x: 1 }, { x: 1, y: '' }, { x: 2, y: '', z: true });
 
 foo(a, b, c);
 >foo(a, b, c) : C
->foo : typeof foo
+>foo : <T, U, V>(x: T, y: U, z: V) => V
 >a : A
 >b : B
 >c : C
 
 foo(a, b, { foo: 1, bar: '', hm: true });
 >foo(a, b, { foo: 1, bar: '', hm: true }) : { foo: number; bar: string; hm: boolean; }
->foo : typeof foo
+>foo : <T, U, V>(x: T, y: U, z: V) => V
 >a : A
 >b : B
 >{ foo: 1, bar: '', hm: true } : { foo: number; bar: string; hm: boolean; }
@@ -80,7 +80,7 @@ foo(a, b, { foo: 1, bar: '', hm: true });
 
 foo((x: number, y) => { }, (x) => { }, () => { });
 >foo((x: number, y) => { }, (x) => { }, () => { }) : () => void
->foo : typeof foo
+>foo : <T, U, V>(x: T, y: U, z: V) => V
 >(x: number, y) => { } : (x: number, y: any) => void
 >x : number
 >y : any
@@ -89,7 +89,7 @@ foo((x: number, y) => { }, (x) => { }, () => { });
 >() => { } : () => void
 
 function foo2<T extends A, U, V>(x: T, y: U, z: V): V { return z; }
->foo2 : typeof foo2
+>foo2 : <T extends A, U, V>(x: T, y: U, z: V) => V
 >T : T
 >A : A
 >U : U
@@ -106,21 +106,21 @@ function foo2<T extends A, U, V>(x: T, y: U, z: V): V { return z; }
 //function foo2<T extends A, U extends T, V extends U>(x: T, y: U, z: V): V { return z; }
 foo(a, a, a);
 >foo(a, a, a) : A
->foo : typeof foo
+>foo : <T, U, V>(x: T, y: U, z: V) => V
 >a : A
 >a : A
 >a : A
 
 foo(a, b, c);
 >foo(a, b, c) : C
->foo : typeof foo
+>foo : <T, U, V>(x: T, y: U, z: V) => V
 >a : A
 >b : B
 >c : C
 
 foo(b, b, { foo: 1, bar: '', hm: '' });
 >foo(b, b, { foo: 1, bar: '', hm: '' }) : { foo: number; bar: string; hm: string; }
->foo : typeof foo
+>foo : <T, U, V>(x: T, y: U, z: V) => V
 >b : B
 >b : B
 >{ foo: 1, bar: '', hm: '' } : { foo: number; bar: string; hm: string; }

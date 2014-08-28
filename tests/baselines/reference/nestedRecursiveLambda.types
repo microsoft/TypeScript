@@ -1,6 +1,6 @@
 === tests/cases/compiler/nestedRecursiveLambda.ts ===
 function f(a:any) {
->f : typeof f
+>f : (a: any) => void
 >a : any
 
 void (r =>(r => r));
@@ -15,7 +15,7 @@ void (r =>(r => r));
 }
 f((r =>(r => r)));
 >f((r =>(r => r))) : void
->f : typeof f
+>f : (a: any) => void
 >(r =>(r => r)) : (r: any) => (r: any) => any
 >r =>(r => r) : (r: any) => (r: any) => any
 >r : any

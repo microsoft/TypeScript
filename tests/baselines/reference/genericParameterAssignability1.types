@@ -1,6 +1,6 @@
 === tests/cases/compiler/genericParameterAssignability1.ts ===
 function f<T>(x: T): T { return null; }
->f : typeof f
+>f : <T>(x: T) => T
 >T : T
 >x : T
 >T : T
@@ -15,7 +15,7 @@ var r = <T>(x: T) => x;
 >x : T
 
 r = f; // should be allowed
->r = f : typeof f
+>r = f : <T>(x: T) => T
 >r : <T>(x: T) => T
->f : typeof f
+>f : <T>(x: T) => T
 

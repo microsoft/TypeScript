@@ -8,7 +8,7 @@ var STRING1: string[] = ["", "abc"];
 >["", "abc"] : string[]
 
 function foo(): string { return "abc"; }
->foo : typeof foo
+>foo : () => string
 
 class A {
 >A : A
@@ -89,7 +89,7 @@ var ResultIsAny9 = void foo();
 >ResultIsAny9 : any
 >void foo() : undefined
 >foo() : string
->foo : typeof foo
+>foo : () => string
 
 var ResultIsAny10 = void A.foo();
 >ResultIsAny10 : any
@@ -147,7 +147,7 @@ void STRING1;
 void foo();
 >void foo() : undefined
 >foo() : string
->foo : typeof foo
+>foo : () => string
 
 void objA.a,M.n;
 >void objA.a,M.n : string

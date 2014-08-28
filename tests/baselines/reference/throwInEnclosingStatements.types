@@ -1,6 +1,6 @@
 === tests/cases/conformance/statements/throwStatements/throwInEnclosingStatements.ts ===
 function fn(x) {
->fn : typeof fn
+>fn : (x: any) => void
 >x : any
 
     throw x;

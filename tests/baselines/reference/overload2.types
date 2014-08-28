@@ -6,18 +6,18 @@ enum B { }
 >B : B
     
 function foo(a: A);
->foo : typeof foo
+>foo : { (a: A): any; (b: B): any; }
 >a : A
 >A : A
 
 function foo(b: B);
->foo : typeof foo
+>foo : { (a: A): any; (b: B): any; }
 >b : B
 >B : B
 
 // should be ok
 function foo(x: number) { 
->foo : typeof foo
+>foo : { (a: A): any; (b: B): any; }
 >x : number
 }
 
@@ -25,18 +25,18 @@ class C { }
 >C : C
 
 function foo1(a: A);
->foo1 : typeof foo1
+>foo1 : { (a: A): any; (c: C): any; }
 >a : A
 >A : A
 
 function foo1(c: C);
->foo1 : typeof foo1
+>foo1 : { (a: A): any; (c: C): any; }
 >c : C
 >C : C
 
 // should be ok
 function foo1(x: number) { 
->foo1 : typeof foo1
+>foo1 : { (a: A): any; (c: C): any; }
 >x : number
 }
 

@@ -5,7 +5,7 @@ module X.Y.base {
 >base : typeof base
 
     export function f() { }
->f : typeof f
+>f : () => void
 
     export class C { }
 >C : C
@@ -27,14 +27,14 @@ module X.Y.base.Z {
 >Z : typeof Z
 
     export var f = X.Y.base.f; // Should be base.f
->f : typeof base.f
->X.Y.base.f : typeof base.f
+>f : () => void
+>X.Y.base.f : () => void
 >X.Y.base : typeof base
 >X.Y : typeof Y
 >X : typeof X
 >Y : typeof Y
 >base : typeof base
->f : typeof base.f
+>f : () => void
 
     export var C = X.Y.base.C; // Should be base.C
 >C : typeof base.C

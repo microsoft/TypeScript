@@ -8,17 +8,17 @@ import y = x;
 
 y.m.foo();
 >y.m.foo() : void
->y.m.foo : typeof x.m.foo
+>y.m.foo : () => void
 >y.m : typeof x.m
 >y : typeof x
 >m : typeof x.m
->foo : typeof x.m.foo
+>foo : () => void
 
 === tests/cases/compiler/chainedImportAlias_file0.ts ===
 export module m {
 >m : typeof m
 
     export function foo() { }
->foo : typeof foo
+>foo : () => void
 }
 

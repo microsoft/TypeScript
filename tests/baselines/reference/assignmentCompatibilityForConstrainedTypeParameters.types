@@ -1,6 +1,6 @@
 === tests/cases/compiler/assignmentCompatibilityForConstrainedTypeParameters.ts ===
 function foo<T extends { bar: string }>() {
->foo : typeof foo
+>foo : <T extends { bar: string; }>() => void
 >T : T
 >bar : string
 

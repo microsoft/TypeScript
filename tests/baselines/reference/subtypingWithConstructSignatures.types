@@ -3,13 +3,13 @@ module ConstructSignature {
 >ConstructSignature : typeof ConstructSignature
 
     declare function foo1(cb: new (x: number) => void): typeof cb;
->foo1 : typeof foo1
+>foo1 : { (cb: new (x: number) => void): new (x: number) => void; (cb: any): any; }
 >cb : new (x: number) => void
 >x : number
 >cb : new (x: number) => void
 
     declare function foo1(cb: any): any;
->foo1 : typeof foo1
+>foo1 : { (cb: new (x: number) => void): new (x: number) => void; (cb: any): any; }
 >cb : any
 
     var rarg1: new (x: number) => number;
@@ -19,7 +19,7 @@ module ConstructSignature {
     var r = foo1(rarg1); // ok because base returns void
 >r : new (x: number) => void
 >foo1(rarg1) : new (x: number) => void
->foo1 : typeof foo1
+>foo1 : { (cb: new (x: number) => void): new (x: number) => void; (cb: any): any; }
 >rarg1 : new (x: number) => number
 
     var rarg2: new <T>(x: T) => string;
@@ -31,18 +31,18 @@ module ConstructSignature {
     var r2 = foo1(rarg2); // ok because base returns void
 >r2 : new (x: number) => void
 >foo1(rarg2) : new (x: number) => void
->foo1 : typeof foo1
+>foo1 : { (cb: new (x: number) => void): new (x: number) => void; (cb: any): any; }
 >rarg2 : new <T>(x: T) => string
 
     declare function foo2(cb: new (x: number, y: number) => void): typeof cb;
->foo2 : typeof foo2
+>foo2 : { (cb: new (x: number, y: number) => void): new (x: number, y: number) => void; (cb: any): any; }
 >cb : new (x: number, y: number) => void
 >x : number
 >y : number
 >cb : new (x: number, y: number) => void
 
     declare function foo2(cb: any): any;
->foo2 : typeof foo2
+>foo2 : { (cb: new (x: number, y: number) => void): new (x: number, y: number) => void; (cb: any): any; }
 >cb : any
 
     var r3arg1: new (x: number, y: number) => number;
@@ -53,7 +53,7 @@ module ConstructSignature {
     var r3 = foo2(r3arg1); // ok because base returns void
 >r3 : new (x: number, y: number) => void
 >foo2(r3arg1) : new (x: number, y: number) => void
->foo2 : typeof foo2
+>foo2 : { (cb: new (x: number, y: number) => void): new (x: number, y: number) => void; (cb: any): any; }
 >r3arg1 : new (x: number, y: number) => number
 
     var r4arg1: new <T>(x: T) => string;
@@ -65,6 +65,6 @@ module ConstructSignature {
     var r4 = foo2(r4arg1); // ok because base returns void
 >r4 : new (x: number, y: number) => void
 >foo2(r4arg1) : new (x: number, y: number) => void
->foo2 : typeof foo2
+>foo2 : { (cb: new (x: number, y: number) => void): new (x: number, y: number) => void; (cb: any): any; }
 >r4arg1 : new <T>(x: T) => string
 }

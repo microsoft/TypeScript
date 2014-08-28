@@ -47,7 +47,7 @@ module A {
 >x : number
 
     function F(s: string): number {
->F : typeof F
+>F : (s: string) => number
 >s : string
 
         return 2;
@@ -121,7 +121,7 @@ module Y {
 >x : number
 
     export function F(s: string): number {
->F : typeof F
+>F : (s: string) => number
 >s : string
 
         return 2;

@@ -3,7 +3,7 @@ module M1 {
 >M1 : typeof M1
 
     export function reduce<A>(ar, f, e?): Array<A> {
->reduce : typeof reduce
+>reduce : <A>(ar: any, f: any, e?: any) => A[]
 >A : A
 >ar : any
 >f : any
@@ -39,19 +39,19 @@ module M2 {
 >M1 : typeof A
 
   export function compose() {
->compose : typeof compose
+>compose : () => void
 
         A.reduce(arguments, compose2);
 >A.reduce(arguments, compose2) : {}[]
->A.reduce : typeof A.reduce
+>A.reduce : <A>(ar: any, f: any, e?: any) => A[]
 >A : typeof A
->reduce : typeof A.reduce
+>reduce : <A>(ar: any, f: any, e?: any) => A[]
 >arguments : IArguments
->compose2 : typeof compose2
+>compose2 : <B, C, D>(g: (x: B) => C, f: (x: D) => B) => (x: D) => C
 
     };
     export function compose2<B, C, D>(g: (x: B) => C, f: (x: D) => B): (x: D) => C {
->compose2 : typeof compose2
+>compose2 : <B, C, D>(g: (x: B) => C, f: (x: D) => B) => (x: D) => C
 >B : B
 >C : C
 >D : D

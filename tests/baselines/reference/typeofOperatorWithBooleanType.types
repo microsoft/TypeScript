@@ -4,7 +4,7 @@ var BOOLEAN: boolean;
 >BOOLEAN : boolean
 
 function foo(): boolean { return true; }
->foo : typeof foo
+>foo : () => boolean
 
 class A {
 >A : A
@@ -64,7 +64,7 @@ var ResultIsString6 = typeof foo();
 >ResultIsString6 : string
 >typeof foo() : string
 >foo() : boolean
->foo : typeof foo
+>foo : () => boolean
 
 var ResultIsString7 = typeof A.foo();
 >ResultIsString7 : string
@@ -92,7 +92,7 @@ typeof BOOLEAN;
 typeof foo();
 >typeof foo() : string
 >foo() : boolean
->foo : typeof foo
+>foo : () => boolean
 
 typeof true, false;
 >typeof true, false : boolean
@@ -126,7 +126,7 @@ z: typeof BOOLEAN;
 
 r: typeof foo;
 >typeof foo : string
->foo : typeof foo
+>foo : () => boolean
 
 var y = { a: true, b: false};
 >y : { a: boolean; b: boolean; }

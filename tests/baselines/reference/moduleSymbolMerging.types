@@ -7,7 +7,7 @@ module B {
 >B : typeof B
 
 	export function f(): A.I { return null; }
->f : typeof f
+>f : () => A.I
 >A : unknown
 >I : A.I
 }

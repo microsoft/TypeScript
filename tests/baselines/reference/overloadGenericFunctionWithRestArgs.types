@@ -17,7 +17,7 @@ class A<U>{
 >U : U
 }
 function Choice<T>(...v_args: T[]): A<T>;
->Choice : typeof Choice
+>Choice : <T>(...v_args: T[]) => A<T>
 >T : T
 >v_args : T[]
 >T : T
@@ -25,7 +25,7 @@ function Choice<T>(...v_args: T[]): A<T>;
 >T : T
 
 function Choice<T>(...v_args: T[]): A<T> {
->Choice : typeof Choice
+>Choice : <T>(...v_args: T[]) => A<T>
 >T : T
 >v_args : T[]
 >T : T

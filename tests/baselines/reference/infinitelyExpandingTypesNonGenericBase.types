@@ -44,13 +44,13 @@ interface Options<T> extends OptionsBase<T> {
 
 
 function o(type: new () => Base) {
->o : typeof o
+>o : (type: new () => Base) => void
 >type : new () => Base
 >Base : Base
 }
 
 o(A);
 >o(A) : void
->o : typeof o
+>o : (type: new () => Base) => void
 >A : typeof A
 

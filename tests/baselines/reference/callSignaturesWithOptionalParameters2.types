@@ -2,42 +2,42 @@
 // Optional parameters should be valid in all the below casts
 
 function foo(x?: number);
->foo : typeof foo
+>foo : (x?: number) => any
 >x : number
 
 function foo(x?: number) { }
->foo : typeof foo
+>foo : (x?: number) => any
 >x : number
 
 foo(1);
 >foo(1) : any
->foo : typeof foo
+>foo : (x?: number) => any
 
 foo();
 >foo() : any
->foo : typeof foo
+>foo : (x?: number) => any
 
 function foo2(x: number);
->foo2 : typeof foo2
+>foo2 : { (x: number): any; (x: number, y?: number): any; }
 >x : number
 
 function foo2(x: number, y?: number);
->foo2 : typeof foo2
+>foo2 : { (x: number): any; (x: number, y?: number): any; }
 >x : number
 >y : number
 
 function foo2(x: number, y?: number) { }
->foo2 : typeof foo2
+>foo2 : { (x: number): any; (x: number, y?: number): any; }
 >x : number
 >y : number
 
 foo2(1);
 >foo2(1) : any
->foo2 : typeof foo2
+>foo2 : { (x: number): any; (x: number, y?: number): any; }
 
 foo2(1, 2);
 >foo2(1, 2) : any
->foo2 : typeof foo2
+>foo2 : { (x: number): any; (x: number, y?: number): any; }
 
 class C {
 >C : C

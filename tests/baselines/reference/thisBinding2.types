@@ -44,7 +44,7 @@ class C {
     }  
 }
 declare function setTimeout(expression: any, msec?: number, language?: any): number;
->setTimeout : typeof setTimeout
+>setTimeout : (expression: any, msec?: number, language?: any) => number
 >expression : any
 >msec : number
 >language : any
@@ -62,7 +62,7 @@ var messenger = {
 
         return setTimeout(() => { var x = this.message; }, 3000);
 >setTimeout(() => { var x = this.message; }, 3000) : number
->setTimeout : typeof setTimeout
+>setTimeout : (expression: any, msec?: number, language?: any) => number
 >() => { var x = this.message; } : () => void
 >x : any
 >this.message : any

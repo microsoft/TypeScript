@@ -75,7 +75,7 @@ x = { f() { } }
 >f() { } : () => void
 
 function f<T>(a: T) {
->f : typeof f
+>f : <T>(a: T) => void
 >T : T
 >a : T
 >T : T
@@ -86,9 +86,9 @@ function f<T>(a: T) {
 >a : T
 }
 x = f;
->x = f : typeof f
+>x = f : <T>(a: T) => void
 >x : any
->f : typeof f
+>f : <T>(a: T) => void
 
 enum E { A }
 >E : E

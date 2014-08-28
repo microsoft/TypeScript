@@ -92,7 +92,7 @@ module M {
 >M : typeof M
 
     export function exhibitBug() {
->exhibitBug : typeof exhibitBug
+>exhibitBug : () => void
 
         function localFunction() { }
 >localFunction : () => void

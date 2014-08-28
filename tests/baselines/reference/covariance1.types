@@ -17,7 +17,7 @@ module M {
 >X : X
 
     export function f(y:Y) { }
->f : typeof f
+>f : (y: Y) => void
 >y : Y
 >Y : Y
 
@@ -27,7 +27,7 @@ module M {
 
     f({x:a}); // ok
 >f({x:a}) : void
->f : typeof f
+>f : (y: Y) => void
 >{x:a} : { x: X; }
 >x : X
 >a : X
@@ -38,7 +38,7 @@ module M {
 
     f({x:b}); // ok covariant subtype
 >f({x:b}) : void
->f : typeof f
+>f : (y: Y) => void
 >{x:b} : { x: XX; }
 >x : XX
 >b : XX

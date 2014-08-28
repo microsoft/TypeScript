@@ -9,7 +9,7 @@ module m1 {
 
     /** foo's comment*/
     function foo() {
->foo : typeof foo
+>foo : () => number
 
         return b;
 >b : number
@@ -31,16 +31,16 @@ module m1 {
     }
     /** exported function*/
     export function fooExport() {
->fooExport : typeof fooExport
+>fooExport : () => number
 
         return foo();
 >foo() : number
->foo : typeof foo
+>foo : () => number
     }
 
     // shouldn't appear
     export function foo2Export(/**hm*/ a: string) {
->foo2Export : typeof foo2Export
+>foo2Export : (a: string) => void
 >a : string
     }
 
@@ -48,21 +48,21 @@ module m1 {
      * comment
      */
     export function foo3Export() {
->foo3Export : typeof foo3Export
+>foo3Export : () => void
     }
 
     /** foo4Export
      * comment
      */
     function foo4Export() {
->foo4Export : typeof foo4Export
+>foo4Export : () => void
     }
 } // trailing comment module
 m1.fooExport();
 >m1.fooExport() : number
->m1.fooExport : typeof m1.fooExport
+>m1.fooExport : () => number
 >m1 : typeof m1
->fooExport : typeof m1.fooExport
+>fooExport : () => number
 
 var myvar = new m1.m2.c();
 >myvar : m1.m2.c

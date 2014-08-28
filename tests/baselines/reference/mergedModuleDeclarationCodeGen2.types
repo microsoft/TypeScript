@@ -5,20 +5,20 @@ module my.data.foo {
 >foo : typeof foo
 
     export function buz() { }
->buz : typeof buz
+>buz : () => void
 }
 module my.data {
 >my : typeof my
 >data : typeof my.data
 
     function data(my) {
->data : typeof data
+>data : (my: any) => void
 >my : any
 
         foo.buz();
 >foo.buz() : void
->foo.buz : typeof foo.buz
+>foo.buz : () => void
 >foo : typeof foo
->buz : typeof foo.buz
+>buz : () => void
     }
 }

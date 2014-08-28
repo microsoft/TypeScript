@@ -3,5 +3,5 @@ module X {
 >X : typeof X
 
     export function f() { }
->f : typeof f
+>f : () => void
 }

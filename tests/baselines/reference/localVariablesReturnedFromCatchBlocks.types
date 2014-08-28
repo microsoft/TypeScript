@@ -1,6 +1,6 @@
 === tests/cases/compiler/localVariablesReturnedFromCatchBlocks.ts ===
 function f() {
->f : typeof f
+>f : () => any
 
     try {
     } catch (e) {

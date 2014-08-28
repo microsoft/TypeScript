@@ -194,25 +194,25 @@ class privateClassWithWithPublicTypeParameters {
 
 // TypeParameter_0_of_exported_function_has_or_is_using_private_type_1
 export function publicFunctionWithPrivateTypeParameters<T extends privateClass>() {
->publicFunctionWithPrivateTypeParameters : typeof publicFunctionWithPrivateTypeParameters
+>publicFunctionWithPrivateTypeParameters : <T extends privateClass>() => void
 >T : T
 >privateClass : privateClass
 }
 
 export function publicFunctionWithPublicTypeParameters<T extends publicClass>() {
->publicFunctionWithPublicTypeParameters : typeof publicFunctionWithPublicTypeParameters
+>publicFunctionWithPublicTypeParameters : <T extends publicClass>() => void
 >T : T
 >publicClass : publicClass
 }
 
 function privateFunctionWithPrivateTypeParameters<T extends privateClass>() {
->privateFunctionWithPrivateTypeParameters : typeof privateFunctionWithPrivateTypeParameters
+>privateFunctionWithPrivateTypeParameters : <T extends privateClass>() => void
 >T : T
 >privateClass : privateClass
 }
 
 function privateFunctionWithPublicTypeParameters<T extends publicClass>() {
->privateFunctionWithPublicTypeParameters : typeof privateFunctionWithPublicTypeParameters
+>privateFunctionWithPublicTypeParameters : <T extends publicClass>() => void
 >T : T
 >publicClass : publicClass
 }
@@ -293,11 +293,11 @@ class privateClassWithWithPublicTypeParametersWithoutExtends {
 }
 
 export function publicFunctionWithPublicTypeParametersWithoutExtends<T>() {
->publicFunctionWithPublicTypeParametersWithoutExtends : typeof publicFunctionWithPublicTypeParametersWithoutExtends
+>publicFunctionWithPublicTypeParametersWithoutExtends : <T>() => void
 >T : T
 }
 
 function privateFunctionWithPublicTypeParametersWithoutExtends<T>() {
->privateFunctionWithPublicTypeParametersWithoutExtends : typeof privateFunctionWithPublicTypeParametersWithoutExtends
+>privateFunctionWithPublicTypeParametersWithoutExtends : <T>() => void
 >T : T
 }

@@ -22,7 +22,7 @@ var obj1 = { x: "", y: () => { }};
 >() => { } : () => void
 
 function foo(): any {
->foo : typeof foo
+>foo : () => any
 
     var a;
 >a : any
@@ -137,7 +137,7 @@ var ResultIsNumber13 = -foo();
 >ResultIsNumber13 : number
 >-foo() : number
 >foo() : any
->foo : typeof foo
+>foo : () => any
 
 var ResultIsNumber14 = -A.foo();
 >ResultIsNumber14 : number

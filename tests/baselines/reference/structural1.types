@@ -13,14 +13,14 @@ module M {
     }
 
     export function f(i:I) {
->f : typeof f
+>f : (i: I) => void
 >i : I
 >I : I
     }
 
     f({salt:2,pepper:0});
 >f({salt:2,pepper:0}) : void
->f : typeof f
+>f : (i: I) => void
 >{salt:2,pepper:0} : { salt: number; pepper: number; }
 >salt : number
 >pepper : number

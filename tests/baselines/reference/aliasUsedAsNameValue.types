@@ -14,9 +14,9 @@ export var a = function () {
     //var x = mod.id; // TODO needed hack that mod is loaded
     b.b(mod);
 >b.b(mod) : any
->b.b : typeof b.b
+>b.b : (a: any) => any
 >b : typeof b
->b : typeof b.b
+>b : (a: any) => any
 >mod : typeof mod
 }
 
@@ -26,6 +26,6 @@ export var id: number;
 
 === tests/cases/compiler/aliasUsedAsNameValue_1.ts ===
 export function b(a: any): any { return null; }
->b : typeof b
+>b : (a: any) => any
 >a : any
 

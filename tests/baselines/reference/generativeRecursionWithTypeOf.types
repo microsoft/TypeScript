@@ -16,7 +16,7 @@ module M {
 >M : typeof M
 
     export function f(x: typeof C) {   
->f : typeof f
+>f : (x: typeof C) => C<typeof C>
 >x : typeof C
 >C : typeof C
 

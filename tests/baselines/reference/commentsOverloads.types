@@ -1,96 +1,96 @@
 === tests/cases/compiler/commentsOverloads.ts ===
 /** this is signature 1*/
 function f1(/**param a*/a: number): number;
->f1 : typeof f1
+>f1 : { (a: number): number; (b: string): number; }
 >a : number
 
 function f1(b: string): number;
->f1 : typeof f1
+>f1 : { (a: number): number; (b: string): number; }
 >b : string
 
 function f1(aOrb: any) {
->f1 : typeof f1
+>f1 : { (a: number): number; (b: string): number; }
 >aOrb : any
 
     return 10;
 }
 f1("hello");
 >f1("hello") : number
->f1 : typeof f1
+>f1 : { (a: number): number; (b: string): number; }
 
 f1(10);
 >f1(10) : number
->f1 : typeof f1
+>f1 : { (a: number): number; (b: string): number; }
 
 function f2(a: number): number;
->f2 : typeof f2
+>f2 : { (a: number): number; (b: string): number; }
 >a : number
 
 /** this is signature 2*/
 function f2(b: string): number;
->f2 : typeof f2
+>f2 : { (a: number): number; (b: string): number; }
 >b : string
 
 /** this is f2 var comment*/
 function f2(aOrb: any) {
->f2 : typeof f2
+>f2 : { (a: number): number; (b: string): number; }
 >aOrb : any
 
     return 10;
 }
 f2("hello");
 >f2("hello") : number
->f2 : typeof f2
+>f2 : { (a: number): number; (b: string): number; }
 
 f2(10);
 >f2(10) : number
->f2 : typeof f2
+>f2 : { (a: number): number; (b: string): number; }
 
 function f3(a: number): number;
->f3 : typeof f3
+>f3 : { (a: number): number; (b: string): number; }
 >a : number
 
 function f3(b: string): number;
->f3 : typeof f3
+>f3 : { (a: number): number; (b: string): number; }
 >b : string
 
 function f3(aOrb: any) {
->f3 : typeof f3
+>f3 : { (a: number): number; (b: string): number; }
 >aOrb : any
 
     return 10;
 }
 f3("hello");
 >f3("hello") : number
->f3 : typeof f3
+>f3 : { (a: number): number; (b: string): number; }
 
 f3(10);
 >f3(10) : number
->f3 : typeof f3
+>f3 : { (a: number): number; (b: string): number; }
 
 /** this is signature 4 - with number parameter*/
 function f4(/**param a*/a: number): number;
->f4 : typeof f4
+>f4 : { (a: number): number; (b: string): number; }
 >a : number
 
 /** this is signature 4 - with string parameter*/
 function f4(b: string): number;
->f4 : typeof f4
+>f4 : { (a: number): number; (b: string): number; }
 >b : string
 
 function f4(aOrb: any) {
->f4 : typeof f4
+>f4 : { (a: number): number; (b: string): number; }
 >aOrb : any
 
     return 10;
 }
 f4("hello");
 >f4("hello") : number
->f4 : typeof f4
+>f4 : { (a: number): number; (b: string): number; }
 
 f4(10);
 >f4(10) : number
->f4 : typeof f4
+>f4 : { (a: number): number; (b: string): number; }
 
 interface i1 {
 >i1 : i1

@@ -16,7 +16,7 @@ module A {
 >B : typeof B
 
         export function createB(): number {
->createB : typeof createB
+>createB : () => number
 
             return null;
         }
@@ -26,9 +26,9 @@ module A {
 var x: number = A.B.createB();
 >x : number
 >A.B.createB() : number
->A.B.createB : typeof A.B.createB
+>A.B.createB : () => number
 >A.B : typeof A.B
 >A : typeof A
 >B : typeof A.B
->createB : typeof A.B.createB
+>createB : () => number
 

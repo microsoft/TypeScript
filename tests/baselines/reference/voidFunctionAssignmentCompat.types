@@ -18,7 +18,7 @@ fv = function() { return 0; } // should work
 >function() { return 0; } : () => number
 
 function execAny(callback:(val:any)=>any) { return callback(0) }
->execAny : typeof execAny
+>execAny : (callback: (val: any) => any) => any
 >callback : (val: any) => any
 >val : any
 >callback(0) : any
@@ -26,11 +26,11 @@ function execAny(callback:(val:any)=>any) { return callback(0) }
 
 execAny(function () {}); // should work
 >execAny(function () {}) : any
->execAny : typeof execAny
+>execAny : (callback: (val: any) => any) => any
 >function () {} : () => void
 
 function execVoid(callback:(val:any)=>void) { callback(0); }
->execVoid : typeof execVoid
+>execVoid : (callback: (val: any) => void) => void
 >callback : (val: any) => void
 >val : any
 >callback(0) : void
@@ -38,7 +38,7 @@ function execVoid(callback:(val:any)=>void) { callback(0); }
 
 execVoid(function () {return 0;}); // should work
 >execVoid(function () {return 0;}) : void
->execVoid : typeof execVoid
+>execVoid : (callback: (val: any) => void) => void
 >function () {return 0;} : () => number
 
 var fra: (v:any)=>any = function() { return function () {}; } // should work

@@ -25,17 +25,17 @@ module Errors {
 >bing : string
 
     declare function foo2(a2: new (x: number) => string[]): typeof a2;
->foo2 : typeof foo2
+>foo2 : { (a2: new (x: number) => string[]): new (x: number) => string[]; (a2: any): any; }
 >a2 : new (x: number) => string[]
 >x : number
 >a2 : new (x: number) => string[]
 
     declare function foo2(a2: any): any;
->foo2 : typeof foo2
+>foo2 : { (a2: new (x: number) => string[]): new (x: number) => string[]; (a2: any): any; }
 >a2 : any
 
     declare function foo7(a2: new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2): typeof a2;
->foo7 : typeof foo7
+>foo7 : { (a2: new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2): new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2; (a2: any): any; }
 >a2 : new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2
 >x : new (arg: Base) => Derived
 >arg : Base
@@ -47,11 +47,11 @@ module Errors {
 >a2 : new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2
 
     declare function foo7(a2: any): any;
->foo7 : typeof foo7
+>foo7 : { (a2: new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2): new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2; (a2: any): any; }
 >a2 : any
 
     declare function foo8(a2: new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived): typeof a2;
->foo8 : typeof foo8
+>foo8 : { (a2: new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived): new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived; (a2: any): any; }
 >a2 : new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived
 >x : new (arg: Base) => Derived
 >arg : Base
@@ -67,11 +67,11 @@ module Errors {
 >a2 : new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived
 
     declare function foo8(a2: any): any;
->foo8 : typeof foo8
+>foo8 : { (a2: new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived): new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived; (a2: any): any; }
 >a2 : any
 
     declare function foo10(a2: new (...x: Base[]) => Base): typeof a2;
->foo10 : typeof foo10
+>foo10 : { (a2: new (...x: Base[]) => Base): new (...x: Base[]) => Base; (a2: any): any; }
 >a2 : new (...x: Base[]) => Base
 >x : Base[]
 >Base : Base
@@ -79,11 +79,11 @@ module Errors {
 >a2 : new (...x: Base[]) => Base
 
     declare function foo10(a2: any): any;
->foo10 : typeof foo10
+>foo10 : { (a2: new (...x: Base[]) => Base): new (...x: Base[]) => Base; (a2: any): any; }
 >a2 : any
 
     declare function foo11(a2: new (x: { foo: string }, y: { foo: string; bar: string }) => Base): typeof a2;
->foo11 : typeof foo11
+>foo11 : { (a2: new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base): new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base; (a2: any): any; }
 >a2 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
 >x : { foo: string; }
 >foo : string
@@ -94,11 +94,11 @@ module Errors {
 >a2 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
 
     declare function foo11(a2: any): any;
->foo11 : typeof foo11
+>foo11 : { (a2: new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base): new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base; (a2: any): any; }
 >a2 : any
 
     declare function foo12(a2: new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>): typeof a2;
->foo12 : typeof foo12
+>foo12 : { (a2: new (x: Base[], y: Derived2[]) => Derived[]): new (x: Base[], y: Derived2[]) => Derived[]; (a2: any): any; }
 >a2 : new (x: Base[], y: Derived2[]) => Derived[]
 >x : Base[]
 >Array : T[]
@@ -111,11 +111,11 @@ module Errors {
 >a2 : new (x: Base[], y: Derived2[]) => Derived[]
 
     declare function foo12(a2: any): any;
->foo12 : typeof foo12
+>foo12 : { (a2: new (x: Base[], y: Derived2[]) => Derived[]): new (x: Base[], y: Derived2[]) => Derived[]; (a2: any): any; }
 >a2 : any
 
     declare function foo15(a2: new (x: { a: string; b: number }) => number): typeof a2;
->foo15 : typeof foo15
+>foo15 : { (a2: new (x: { a: string; b: number; }) => number): new (x: { a: string; b: number; }) => number; (a2: any): any; }
 >a2 : new (x: { a: string; b: number; }) => number
 >x : { a: string; b: number; }
 >a : string
@@ -123,11 +123,11 @@ module Errors {
 >a2 : new (x: { a: string; b: number; }) => number
 
     declare function foo15(a2: any): any;
->foo15 : typeof foo15
+>foo15 : { (a2: new (x: { a: string; b: number; }) => number): new (x: { a: string; b: number; }) => number; (a2: any): any; }
 >a2 : any
 
     declare function foo16(a2: {
->foo16 : typeof foo16
+>foo16 : { (a2: { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }): { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }; (a2: any): any; }
 >a2 : { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }
 
         // type of parameter is overload set which means we can't do inference based on this type
@@ -155,11 +155,11 @@ module Errors {
 >a2 : { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }
 
     declare function foo16(a2: any): any;
->foo16 : typeof foo16
+>foo16 : { (a2: { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }): { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }; (a2: any): any; }
 >a2 : any
 
     declare function foo17(a2: {
->foo17 : typeof foo17
+>foo17 : { (a2: { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }): { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }; (a2: any): any; }
 >a2 : { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }
 
         new (x: {
@@ -202,7 +202,7 @@ module Errors {
 >a2 : { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }
 
     declare function foo17(a2: any): any;
->foo17 : typeof foo17
+>foo17 : { (a2: { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }): { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }; (a2: any): any; }
 >a2 : any
 
     var r1arg1: new <T, U>(x: T) => U[];
@@ -220,7 +220,7 @@ module Errors {
     var r1 = foo2(r1arg1); // any
 >r1 : any
 >foo2(r1arg1) : any
->foo2 : typeof foo2
+>foo2 : { (a2: new (x: number) => string[]): new (x: number) => string[]; (a2: any): any; }
 >r1arg1 : new <T, U>(x: T) => U[]
 
     var r1a = [r1arg2, r1arg1];
@@ -264,7 +264,7 @@ module Errors {
     var r2 = foo7(r2arg1); // any
 >r2 : any
 >foo7(r2arg1) : any
->foo7 : typeof foo7
+>foo7 : { (a2: new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2): new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2; (a2: any): any; }
 >r2arg1 : new <T extends Base, U extends Derived, V extends Derived2>(x: new (arg: T) => U) => new (r: T) => V
 
     var r2a = [r2arg2, r2arg1];
@@ -314,7 +314,7 @@ module Errors {
     var r3 = foo8(r3arg1); // any
 >r3 : any
 >foo8(r3arg1) : any
->foo8 : typeof foo8
+>foo8 : { (a2: new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived): new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived; (a2: any): any; }
 >r3arg1 : new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: number; }) => U) => new (r: T) => U
 
     var r3a = [r3arg2, r3arg1];
@@ -346,7 +346,7 @@ module Errors {
     var r4 = foo10(r4arg1); // any
 >r4 : any
 >foo10(r4arg1) : any
->foo10 : typeof foo10
+>foo10 : { (a2: new (...x: Base[]) => Base): new (...x: Base[]) => Base; (a2: any): any; }
 >r4arg1 : new <T extends Derived>(...x: T[]) => T
 
     var r4a = [r4arg2, r4arg1];
@@ -383,7 +383,7 @@ module Errors {
     var r5 = foo11(r5arg1); // any
 >r5 : any
 >foo11(r5arg1) : any
->foo11 : typeof foo11
+>foo11 : { (a2: new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base): new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base; (a2: any): any; }
 >r5arg1 : new <T extends Derived>(x: T, y: T) => T
 
     var r5a = [r5arg2, r5arg1];
@@ -425,7 +425,7 @@ module Errors {
     var r6 = foo12(r6arg1); // new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
 >r6 : new (x: Base[], y: Derived2[]) => Derived[]
 >foo12(r6arg1) : new (x: Base[], y: Derived2[]) => Derived[]
->foo12 : typeof foo12
+>foo12 : { (a2: new (x: Base[], y: Derived2[]) => Derived[]): new (x: Base[], y: Derived2[]) => Derived[]; (a2: any): any; }
 >r6arg1 : new (x: Base[], y: Derived2[]) => Derived[]
 
     var r6a = [r6arg2, r6arg1];
@@ -459,7 +459,7 @@ module Errors {
     var r7 = foo15(r7arg1); // (x: { a: string; b: number }) => number): number;
 >r7 : any
 >foo15(r7arg1) : any
->foo15 : typeof foo15
+>foo15 : { (a2: new (x: { a: string; b: number; }) => number): new (x: { a: string; b: number; }) => number; (a2: any): any; }
 >r7arg1 : new <T>(x: { a: T; b: T; }) => T
 
     var r7a = [r7arg2, r7arg1];
@@ -487,7 +487,7 @@ module Errors {
     var r7c = foo15(r7arg3); // any
 >r7c : new (x: { a: string; b: number; }) => number
 >foo15(r7arg3) : new (x: { a: string; b: number; }) => number
->foo15 : typeof foo15
+>foo15 : { (a2: new (x: { a: string; b: number; }) => number): new (x: { a: string; b: number; }) => number; (a2: any): any; }
 >r7arg3 : new <T extends Base>(x: { a: T; b: T; }) => number
 
     var r7d = [r7arg2, r7arg3];
@@ -514,7 +514,7 @@ module Errors {
     var r8 = foo16(r8arg); // any
 >r8 : any
 >foo16(r8arg) : any
->foo16 : typeof foo16
+>foo16 : { (a2: { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }): { new (x: { new (a: number): number; new (a?: number): number; }): number[]; new (x: { new (a: boolean): boolean; new (a?: boolean): boolean; }): boolean[]; }; (a2: any): any; }
 >r8arg : new <T>(x: new (a: T) => T) => T[]
 
     var r9arg: new <T>(x: new (a: T) => T) => any[];
@@ -528,7 +528,7 @@ module Errors {
     var r9 = foo17(r9arg); // // (x: { <T extends Derived >(a: T): T; <T extends Base >(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[];
 >r9 : { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }
 >foo17(r9arg) : { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }
->foo17 : typeof foo17
+>foo17 : { (a2: { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }): { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }; (a2: any): any; }
 >r9arg : new <T>(x: new (a: T) => T) => any[]
 }
 
@@ -536,7 +536,7 @@ module WithGenericSignaturesInBaseType {
 >WithGenericSignaturesInBaseType : typeof WithGenericSignaturesInBaseType
 
     declare function foo2(a2: new <T>(x: T) => T[]): typeof a2;
->foo2 : typeof foo2
+>foo2 : { (a2: new <T>(x: T) => T[]): new <T>(x: T) => T[]; (a2: any): any; }
 >a2 : new <T>(x: T) => T[]
 >T : T
 >x : T
@@ -545,7 +545,7 @@ module WithGenericSignaturesInBaseType {
 >a2 : new <T>(x: T) => T[]
 
     declare function foo2(a2: any): any;
->foo2 : typeof foo2
+>foo2 : { (a2: new <T>(x: T) => T[]): new <T>(x: T) => T[]; (a2: any): any; }
 >a2 : any
 
     var r2arg2: new <T>(x: T) => string[];
@@ -557,11 +557,11 @@ module WithGenericSignaturesInBaseType {
     var r2 = foo2(r2arg2); // <T>(x:T) => T[] since we can infer from generic signatures now
 >r2 : new <T>(x: T) => T[]
 >foo2(r2arg2) : new <T>(x: T) => T[]
->foo2 : typeof foo2
+>foo2 : { (a2: new <T>(x: T) => T[]): new <T>(x: T) => T[]; (a2: any): any; }
 >r2arg2 : new <T>(x: T) => string[]
 
     declare function foo3(a2: new <T>(x: T) => string[]): typeof a2;
->foo3 : typeof foo3
+>foo3 : { (a2: new <T>(x: T) => string[]): new <T>(x: T) => string[]; (a2: any): any; }
 >a2 : new <T>(x: T) => string[]
 >T : T
 >x : T
@@ -569,7 +569,7 @@ module WithGenericSignaturesInBaseType {
 >a2 : new <T>(x: T) => string[]
 
     declare function foo3(a2: any): any;
->foo3 : typeof foo3
+>foo3 : { (a2: new <T>(x: T) => string[]): new <T>(x: T) => string[]; (a2: any): any; }
 >a2 : any
 
     var r3arg2: new <T>(x: T) => T[];
@@ -582,6 +582,6 @@ module WithGenericSignaturesInBaseType {
     var r3 = foo3(r3arg2); // any
 >r3 : any
 >foo3(r3arg2) : any
->foo3 : typeof foo3
+>foo3 : { (a2: new <T>(x: T) => string[]): new <T>(x: T) => string[]; (a2: any): any; }
 >r3arg2 : new <T>(x: T) => T[]
 }

@@ -1,6 +1,6 @@
 === tests/cases/compiler/es6ClassTest8.ts ===
 function f1(x:any) {return x;}
->f1 : typeof f1
+>f1 : (x: any) => any
 >x : any
 >x : any
 
@@ -20,9 +20,9 @@ class C {
         var b = f1(f1(bar));
 >b : any
 >f1(f1(bar)) : any
->f1 : typeof f1
+>f1 : (x: any) => any
 >f1(bar) : any
->f1 : typeof f1
+>f1 : (x: any) => any
 >bar : any
     }
   

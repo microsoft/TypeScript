@@ -5,7 +5,7 @@ interface Generator<T> { (): T; }
 >T : T
 
 function Generate<U>(func: Generator<U>): U {
->Generate : typeof Generate
+>Generate : <U>(func: Generator<U>) => U
 >U : U
 >func : Generator<U>
 >Generator : Generator<T>
@@ -14,6 +14,6 @@ function Generate<U>(func: Generator<U>): U {
 
     return Generate(func);
 >Generate(func) : U
->Generate : typeof Generate
+>Generate : <U>(func: Generator<U>) => U
 >func : Generator<U>
 }

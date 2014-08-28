@@ -7,7 +7,7 @@ interface ICallback {
 }
 
 function load(f: ICallback) {}
->load : typeof load
+>load : (f: ICallback) => void
 >f : ICallback
 >ICallback : ICallback
 
@@ -25,22 +25,22 @@ var f2: ICallback = function(z?) {}
 
 load(f1) // ok
 >load(f1) : void
->load : typeof load
+>load : (f: ICallback) => void
 >f1 : ICallback
 
 load(f2) // ok
 >load(f2) : void
->load : typeof load
+>load : (f: ICallback) => void
 >f2 : ICallback
 
 load(function() {}) // this shouldn’t be an error
 >load(function() {}) : void
->load : typeof load
+>load : (f: ICallback) => void
 >function() {} : () => void
 
 load(function(z?) {}) // this shouldn't be an error
 >load(function(z?) {}) : void
->load : typeof load
+>load : (f: ICallback) => void
 >function(z?) {} : (z?: string) => void
 >z : string
 

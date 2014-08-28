@@ -1,7 +1,7 @@
 === tests/cases/conformance/parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration5.ts ===
 function foo();
->foo : typeof foo
+>foo : () => any
 
 function foo() { }
->foo : typeof foo
+>foo : () => any
 

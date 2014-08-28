@@ -6,7 +6,7 @@ module M {
 >x : number
 
     function fn(M, p = x) { }
->fn : typeof fn
+>fn : (M: any, p?: number) => void
 >M : any
 >p : number
 >x : number
@@ -16,7 +16,7 @@ module M {
 >M : typeof M
 
     function fn2() {
->fn2 : typeof fn2
+>fn2 : () => void
 
         var M;
 >M : any
@@ -31,7 +31,7 @@ module M {
 >M : typeof M
 
     function fn3() {
->fn3 : typeof fn3
+>fn3 : () => void
 
         function M() {
 >M : () => void

@@ -94,7 +94,7 @@ condString ? exprIsObject1 : exprIsObject2;
 
 //Cond is a string type expression
 function foo() { return "string" };
->foo : typeof foo
+>foo : () => string
 
 var array = ["1", "2", "3"];
 >array : string[]
@@ -125,7 +125,7 @@ condString + "string" ? exprNumber1 : exprNumber2;
 foo() ? exprString1 : exprString2;
 >foo() ? exprString1 : exprString2 : string
 >foo() : string
->foo : typeof foo
+>foo : () => string
 >exprString1 : string
 >exprString2 : string
 
@@ -231,7 +231,7 @@ var resultIsString3 = foo() ? exprString1 : exprString2;
 >resultIsString3 : string
 >foo() ? exprString1 : exprString2 : string
 >foo() : string
->foo : typeof foo
+>foo : () => string
 >exprString1 : string
 >exprString2 : string
 

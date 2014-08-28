@@ -28,10 +28,10 @@ module C {
 >C : typeof C
 
     export function foo() { }
->foo : typeof foo
+>foo : () => void
 
     function baz() { return ''; }
->baz : typeof baz
+>baz : () => string
 }
 
 var c = new C(C.x);
@@ -43,11 +43,11 @@ var c = new C(C.x);
 >x : number
 
 c.foo = C.foo;
->c.foo = C.foo : typeof C.foo
+>c.foo = C.foo : () => void
 >c.foo : () => void
 >c : C
 >foo : () => void
->C.foo : typeof C.foo
+>C.foo : () => void
 >C : typeof C
->foo : typeof C.foo
+>foo : () => void
 

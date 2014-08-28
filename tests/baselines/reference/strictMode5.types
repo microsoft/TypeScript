@@ -1,6 +1,6 @@
 === tests/cases/compiler/strictMode5.ts ===
 function foo(...args) {
->foo : typeof foo
+>foo : (...args: any[]) => void
 >args : any[]
 
     "use strict"
@@ -31,7 +31,7 @@ class A {
 }
 
 function bar(x: number = 10) {
->bar : typeof bar
+>bar : (x?: number) => void
 >x : number
 
     "use strict"

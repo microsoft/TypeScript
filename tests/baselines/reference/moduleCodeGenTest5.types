@@ -6,10 +6,10 @@ var y = 0;
 >y : number
 
 export function f1() {}
->f1 : typeof f1
+>f1 : () => void
 
 function f2() {}
->f2 : typeof f2
+>f2 : () => void
 
 export class C1 {
 >C1 : C1

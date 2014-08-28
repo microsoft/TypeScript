@@ -4,7 +4,7 @@ import Bar = require("instanceOfInExternalModules_require");
 >Bar : typeof Bar
 
 function IsFoo(value: any): boolean {
->IsFoo : typeof IsFoo
+>IsFoo : (value: any) => boolean
 >value : any
 
     return value instanceof Bar.Foo;

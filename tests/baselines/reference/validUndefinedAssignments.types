@@ -61,7 +61,7 @@ var h: { f(): void } = x;
 >x : any
 
 function i<T>(a: T) {
->i : typeof i
+>i : <T>(a: T) => void
 >T : T
 >a : T
 >T : T

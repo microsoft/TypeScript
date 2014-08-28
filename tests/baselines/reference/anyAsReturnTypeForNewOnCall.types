@@ -1,6 +1,6 @@
 === tests/cases/compiler/anyAsReturnTypeForNewOnCall.ts ===
 function Point(x, y) {
->Point : typeof Point
+>Point : (x: any, y: any) => void
 >x : any
 >y : any
 
@@ -23,7 +23,7 @@ function Point(x, y) {
 var o = new Point(3, 4);
 >o : any
 >new Point(3, 4) : any
->Point : typeof Point
+>Point : (x: any, y: any) => void
 
 var xx = o.x;
 >xx : any

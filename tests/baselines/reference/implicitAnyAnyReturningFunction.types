@@ -1,13 +1,13 @@
 === tests/cases/compiler/implicitAnyAnyReturningFunction.ts ===
 function A() {
->A : typeof A
+>A : () => any
 
     return <any>"";
 ><any>"" : any
 }
 
 function B() {
->B : typeof B
+>B : () => any
 
     var someLocal: any = {};
 >someLocal : any

@@ -9,7 +9,7 @@ export var foo = new Foo();
 >Foo : typeof Foo
 
 export function test(foo: Foo) {
->test : typeof test
+>test : (foo: Foo) => boolean
 >foo : Foo
 >Foo : Foo
 

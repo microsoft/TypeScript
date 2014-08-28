@@ -3,22 +3,22 @@ class Accessor {}
 >Accessor : Accessor
 
 function attr(name: string): string;
->attr : typeof attr
+>attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
 >name : string
 
 function attr(name: string, value: string): Accessor;
->attr : typeof attr
+>attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
 >name : string
 >value : string
 >Accessor : Accessor
 
 function attr(map: any): Accessor;
->attr : typeof attr
+>attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
 >map : any
 >Accessor : Accessor
 
 function attr(nameOrMap: any, value?: string): any {
->attr : typeof attr
+>attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
 >nameOrMap : any
 >value : string
 

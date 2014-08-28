@@ -1,10 +1,10 @@
 === tests/cases/compiler/contextualTyping27.ts ===
 function foo(param:{id:number;}){}; foo(<{id:number;}>({}));
->foo : typeof foo
+>foo : (param: { id: number; }) => void
 >param : { id: number; }
 >id : number
 >foo(<{id:number;}>({})) : void
->foo : typeof foo
+>foo : (param: { id: number; }) => void
 ><{id:number;}>({}) : { id: number; }
 >id : number
 >({}) : {}

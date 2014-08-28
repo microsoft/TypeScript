@@ -1,6 +1,6 @@
 === tests/cases/compiler/avoid.ts ===
 function f() {
->f : typeof f
+>f : () => void
 
     var x=1;
 >x : number
@@ -9,12 +9,12 @@ function f() {
 var y=f();  // error void fn
 >y : void
 >f() : void
->f : typeof f
+>f : () => void
 
 var why:any=f(); // error void fn
 >why : any
 >f() : void
->f : typeof f
+>f : () => void
 
 var w:any;
 >w : any
@@ -23,7 +23,7 @@ w=f(); // error void fn
 >w=f() : void
 >w : any
 >f() : void
->f : typeof f
+>f : () => void
 
 class C {
 >C : C
@@ -45,6 +45,6 @@ var z=new C().g(); // error void fn
 var N=new f();  // ok with void fn
 >N : any
 >new f() : any
->f : typeof f
+>f : () => void
 
 

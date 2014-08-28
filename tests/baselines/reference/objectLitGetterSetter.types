@@ -20,7 +20,7 @@
 
                     eval("public = 1;");
 >eval("public = 1;") : any
->eval : typeof eval
+>eval : (x: string) => any
 
                     return 11;
                 },

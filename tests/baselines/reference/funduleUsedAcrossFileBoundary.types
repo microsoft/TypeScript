@@ -16,13 +16,13 @@ declare module Q {
 >foo : string
     }
     export function defer<T>(): string;
->defer : typeof defer
+>defer : <T>() => string
 >T : T
 }
 
 === tests/cases/compiler/funduleUsedAcrossFileBoundary_file2.ts ===
 function promiseWithCancellation<T>(promise: Q.Promise<T>) {
->promiseWithCancellation : typeof promiseWithCancellation
+>promiseWithCancellation : <T>(promise: Q.Promise<T>) => void
 >T : T
 >promise : Q.Promise<T>
 >Q : unknown
@@ -32,8 +32,8 @@ function promiseWithCancellation<T>(promise: Q.Promise<T>) {
     var deferred = Q.defer<T>(); // used to be an error
 >deferred : string
 >Q.defer<T>() : string
->Q.defer : typeof Q.defer
+>Q.defer : <T>() => string
 >Q : typeof Q
->defer : typeof Q.defer
+>defer : <T>() => string
 >T : T
 }

@@ -1,6 +1,6 @@
 === tests/cases/compiler/forInStatement3.ts ===
 function F<T>() {
->F : typeof F
+>F : <T>() => void
 >T : T
 
   var expr: T;

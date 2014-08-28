@@ -12,7 +12,7 @@ var a: {
 }
 
 function foo4<T, U>(cb: (x: T) => U) {
->foo4 : typeof foo4
+>foo4 : <T, U>(cb: (x: T) => U) => U
 >T : T
 >U : U
 >cb : (x: T) => U
@@ -31,7 +31,7 @@ function foo4<T, U>(cb: (x: T) => U) {
 var r = foo4(a); // T is {} (candidates boolean and string), U is any (candidates any and boolean)
 >r : any
 >foo4(a) : any
->foo4 : typeof foo4
+>foo4 : <T, U>(cb: (x: T) => U) => U
 >a : { (x: boolean): boolean; (x: string): any; }
 
 var b: {
@@ -51,6 +51,6 @@ var b: {
 var r2 = foo4(b); // T is {} (candidates boolean and {}), U is any (candidates any and {})
 >r2 : any
 >foo4(b) : any
->foo4 : typeof foo4
+>foo4 : <T, U>(cb: (x: T) => U) => U
 >b : { <T>(x: boolean): T; <T>(x: T): any; }
 

@@ -28,7 +28,7 @@ y = x;
 >x : Pair<string, number>
 
 declare function f<T, U>(x: Pair<T, U>);
->f : typeof f
+>f : <T, U>(x: Pair<T, U>) => any
 >T : T
 >U : U
 >x : Pair<T, U>
@@ -37,7 +37,7 @@ declare function f<T, U>(x: Pair<T, U>);
 >U : U
 
 declare function f2<T, U>(x: { first: T; second: U; });
->f2 : typeof f2
+>f2 : <T, U>(x: { first: T; second: U; }) => any
 >T : T
 >U : U
 >x : { first: T; second: U; }
@@ -48,21 +48,21 @@ declare function f2<T, U>(x: { first: T; second: U; });
 
 f(x);
 >f(x) : any
->f : typeof f
+>f : <T, U>(x: Pair<T, U>) => any
 >x : Pair<string, number>
 
 f(y);
 >f(y) : any
->f : typeof f
+>f : <T, U>(x: Pair<T, U>) => any
 >y : { first: string; second: number; }
 
 f2(x);
 >f2(x) : any
->f2 : typeof f2
+>f2 : <T, U>(x: { first: T; second: U; }) => any
 >x : Pair<string, number>
 
 f2(y);
 >f2(y) : any
->f2 : typeof f2
+>f2 : <T, U>(x: { first: T; second: U; }) => any
 >y : { first: string; second: number; }
 

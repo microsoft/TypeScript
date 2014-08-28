@@ -150,7 +150,7 @@ x = { f<T>(x: T) { return x; } }
 >x : T
 
 function j<T>(a: T) {
->j : typeof j
+>j : <T>(a: T) => void
 >T : T
 >a : T
 >T : T

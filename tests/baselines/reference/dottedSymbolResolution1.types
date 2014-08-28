@@ -26,14 +26,14 @@ class Base { foo() { } }
 >foo : () => void
 
 function each(collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any;
->each : typeof each
+>each : { (collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any; (collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any; }
 >collection : string
 >callback : (indexInArray: any, valueOfElement: any) => any
 >indexInArray : any
 >valueOfElement : any
 
 function each(collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any;
->each : typeof each
+>each : { (collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any; (collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any; }
 >collection : JQuery
 >JQuery : JQuery
 >callback : (indexInArray: number, valueOfElement: Base) => any
@@ -42,7 +42,7 @@ function each(collection: JQuery, callback: (indexInArray: number, valueOfElemen
 >Base : Base
 
 function each(collection: any, callback: (indexInArray: any, valueOfElement: any) => any): any {
->each : typeof each
+>each : { (collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any; (collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any; }
 >collection : any
 >callback : (indexInArray: any, valueOfElement: any) => any
 >indexInArray : any
@@ -52,7 +52,7 @@ function each(collection: any, callback: (indexInArray: any, valueOfElement: any
 }
 
 function _setBarAndText(): void {
->_setBarAndText : typeof _setBarAndText
+>_setBarAndText : () => void
 
     var x: JQuery, $: JQueryStatic
 >x : JQuery
@@ -62,7 +62,7 @@ function _setBarAndText(): void {
 
     each(x.find(" "), function () {
 >each(x.find(" "), function () {        var $this: JQuery = $(''),            thisBar = $this.find(".fx-usagebars-calloutbar-this"); // bug lead to 'could not find dotted symbol' here    } ) : any
->each : typeof each
+>each : { (collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any; (collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any; }
 >x.find(" ") : JQuery
 >x.find : (selector: string) => JQuery
 >x : JQuery

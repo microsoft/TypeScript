@@ -33,7 +33,7 @@ class C</**docComment for type parameter*/ T> {
 }
 
 function compare</**type*/T>(a: T, b: T) {
->compare : typeof compare
+>compare : <T>(a: T, b: T) => boolean
 >T : T
 >a : T
 >T : T

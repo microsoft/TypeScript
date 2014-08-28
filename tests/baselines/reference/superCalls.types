@@ -12,7 +12,7 @@ class Base {
 }
 
 function v(): void { }
->v : typeof v
+>v : () => void
 
 class Derived extends Base {
 >Derived : Derived
@@ -35,7 +35,7 @@ class Derived extends Base {
         var p = v();
 >p : void
 >v() : void
->v : typeof v
+>v : () => void
     }
 }
 

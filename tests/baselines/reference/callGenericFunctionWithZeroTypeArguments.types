@@ -2,7 +2,7 @@
 // valid invocations of generic functions with no explicit type arguments provided 
 
 function f<T>(x: T): T { return null; }
->f : typeof f
+>f : <T>(x: T) => T
 >T : T
 >x : T
 >T : T
@@ -11,7 +11,7 @@ function f<T>(x: T): T { return null; }
 var r = f(1);
 >r : number
 >f(1) : number
->f : typeof f
+>f : <T>(x: T) => T
 
 var f2 = <T>(x: T): T => { return null; }
 >f2 : <T>(x: T) => T

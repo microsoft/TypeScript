@@ -6,7 +6,7 @@ declare var index, lineTokens, token, tokens;
 >tokens : any
 
 function f() {
->f : typeof f
+>f : () => { appendText: string; advanceCount: number; }
 
     if (lineTokens[index].trim() === '=' && index > 0 && token.type === '' && tokens[index - 1].type === 'attribute.name.html') {
 >lineTokens[index].trim() === '=' && index > 0 && token.type === '' && tokens[index - 1].type === 'attribute.name.html' : boolean

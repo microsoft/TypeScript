@@ -6,7 +6,7 @@ enum E { a, b, c }
 >c : E
 
 function foo<T>(t: T) {
->foo : typeof foo
+>foo : <T>(t: T) => void
 >T : T
 >t : T
 >T : T

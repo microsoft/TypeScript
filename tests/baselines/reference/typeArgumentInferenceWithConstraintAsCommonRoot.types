@@ -14,7 +14,7 @@ interface Elephant extends Animal { z }
 >z : any
 
 function f<T extends Animal>(x: T, y: T): T { return undefined; }
->f : typeof f
+>f : <T extends Animal>(x: T, y: T) => T
 >T : T
 >Animal : Animal
 >x : T
@@ -34,7 +34,7 @@ var e: Elephant;
 
 f(g, e); // valid because both Giraffe and Elephant satisfy the constraint. T is Animal
 >f(g, e) : Animal
->f : typeof f
+>f : <T extends Animal>(x: T, y: T) => T
 >g : Giraffe
 >e : Elephant
 

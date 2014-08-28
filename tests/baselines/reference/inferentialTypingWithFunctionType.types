@@ -1,6 +1,6 @@
 === tests/cases/compiler/inferentialTypingWithFunctionType.ts ===
 declare function map<T, U>(x: T, f: (s: T) => U): U;
->map : typeof map
+>map : <T, U>(x: T, f: (s: T) => U) => U
 >T : T
 >U : U
 >x : T
@@ -12,7 +12,7 @@ declare function map<T, U>(x: T, f: (s: T) => U): U;
 >U : U
 
 declare function identity<V>(y: V): V;
->identity : typeof identity
+>identity : <V>(y: V) => V
 >V : V
 >y : V
 >V : V
@@ -21,6 +21,6 @@ declare function identity<V>(y: V): V;
 var s = map("", identity);
 >s : string
 >map("", identity) : string
->map : typeof map
->identity : typeof identity
+>map : <T, U>(x: T, f: (s: T) => U) => U
+>identity : <V>(y: V) => V
 

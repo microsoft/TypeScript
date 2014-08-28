@@ -1,6 +1,6 @@
 === tests/cases/compiler/objectLiteralArraySpecialization.ts ===
 declare function create<T>(initialValues?: T[]): MyArrayWrapper<T>;
->create : typeof create
+>create : <T>(initialValues?: T[]) => MyArrayWrapper<T>
 >T : T
 >initialValues : T[]
 >T : T
@@ -27,7 +27,7 @@ interface MyArrayWrapper<T> {
 var thing = create([ { name: "bob", id: 24 }, { name: "doug", id: 32 } ]); // should not error
 >thing : MyArrayWrapper<{ name: string; id: number; }>
 >create([ { name: "bob", id: 24 }, { name: "doug", id: 32 } ]) : MyArrayWrapper<{ name: string; id: number; }>
->create : typeof create
+>create : <T>(initialValues?: T[]) => MyArrayWrapper<T>
 >[ { name: "bob", id: 24 }, { name: "doug", id: 32 } ] : { name: string; id: number; }[]
 >{ name: "bob", id: 24 } : { name: string; id: number; }
 >name : string

@@ -1,4 +1,4 @@
 === tests/cases/conformance/parser/ecmascript5/parserUnicodeWhitespaceCharacter1.ts ===
 function foo(){　}
->foo : typeof foo
+>foo : () => void
 

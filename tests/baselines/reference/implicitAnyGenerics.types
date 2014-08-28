@@ -67,17 +67,17 @@ var d5: D<any> = new D(null);
 >D : typeof D
 
 function foo<T>(): T { return null; };
->foo : typeof foo
+>foo : <T>() => T
 >T : T
 >T : T
 
 foo() 
 >foo() : {}
->foo : typeof foo
+>foo : <T>() => T
 
 foo<any>();
 >foo<any>() : any
->foo : typeof foo
+>foo : <T>() => T
 
 
     

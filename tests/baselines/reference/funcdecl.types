@@ -1,42 +1,42 @@
 === tests/cases/compiler/funcdecl.ts ===
 function simpleFunc() {
->simpleFunc : typeof simpleFunc
+>simpleFunc : () => string
 
     return "this is my simple func";
 }
 var simpleFuncVar = simpleFunc;
->simpleFuncVar : typeof simpleFunc
->simpleFunc : typeof simpleFunc
+>simpleFuncVar : () => string
+>simpleFunc : () => string
 
 function anotherFuncNoReturn() {
->anotherFuncNoReturn : typeof anotherFuncNoReturn
+>anotherFuncNoReturn : () => void
 }
 var anotherFuncNoReturnVar = anotherFuncNoReturn;
->anotherFuncNoReturnVar : typeof anotherFuncNoReturn
->anotherFuncNoReturn : typeof anotherFuncNoReturn
+>anotherFuncNoReturnVar : () => void
+>anotherFuncNoReturn : () => void
 
 function withReturn() : string{
->withReturn : typeof withReturn
+>withReturn : () => string
 
     return "Hello";
 }
 var withReturnVar = withReturn;
->withReturnVar : typeof withReturn
->withReturn : typeof withReturn
+>withReturnVar : () => string
+>withReturn : () => string
 
 function withParams(a : string) : string{
->withParams : typeof withParams
+>withParams : (a: string) => string
 >a : string
 
     return a;
 >a : string
 }
 var withparamsVar = withParams;
->withparamsVar : typeof withParams
->withParams : typeof withParams
+>withparamsVar : (a: string) => string
+>withParams : (a: string) => string
 
 function withMultiParams(a : number, b, c: Object) {
->withMultiParams : typeof withMultiParams
+>withMultiParams : (a: number, b: any, c: Object) => number
 >a : number
 >b : any
 >c : Object
@@ -46,39 +46,39 @@ function withMultiParams(a : number, b, c: Object) {
 >a : number
 }
 var withMultiParamsVar = withMultiParams;
->withMultiParamsVar : typeof withMultiParams
->withMultiParams : typeof withMultiParams
+>withMultiParamsVar : (a: number, b: any, c: Object) => number
+>withMultiParams : (a: number, b: any, c: Object) => number
 
 function withOptionalParams(a?: string) {
->withOptionalParams : typeof withOptionalParams
+>withOptionalParams : (a?: string) => void
 >a : string
 }
 var withOptionalParamsVar = withOptionalParams;
->withOptionalParamsVar : typeof withOptionalParams
->withOptionalParams : typeof withOptionalParams
+>withOptionalParamsVar : (a?: string) => void
+>withOptionalParams : (a?: string) => void
 
 function withInitializedParams(a: string, b0, b = 30, c = "string value") {
->withInitializedParams : typeof withInitializedParams
+>withInitializedParams : (a: string, b0: any, b?: number, c?: string) => void
 >a : string
 >b0 : any
 >b : number
 >c : string
 }
 var withInitializedParamsVar = withInitializedParams;
->withInitializedParamsVar : typeof withInitializedParams
->withInitializedParams : typeof withInitializedParams
+>withInitializedParamsVar : (a: string, b0: any, b?: number, c?: string) => void
+>withInitializedParams : (a: string, b0: any, b?: number, c?: string) => void
 
 function withOptionalInitializedParams(a: string, c: string = "hello string") {
->withOptionalInitializedParams : typeof withOptionalInitializedParams
+>withOptionalInitializedParams : (a: string, c?: string) => void
 >a : string
 >c : string
 }
 var withOptionalInitializedParamsVar = withOptionalInitializedParams;
->withOptionalInitializedParamsVar : typeof withOptionalInitializedParams
->withOptionalInitializedParams : typeof withOptionalInitializedParams
+>withOptionalInitializedParamsVar : (a: string, c?: string) => void
+>withOptionalInitializedParams : (a: string, c?: string) => void
 
 function withRestParams(a: string, ... myRestParameter : number[]) {
->withRestParams : typeof withRestParams
+>withRestParams : (a: string, ...myRestParameter: number[]) => number[]
 >a : string
 >myRestParameter : number[]
 
@@ -86,19 +86,19 @@ function withRestParams(a: string, ... myRestParameter : number[]) {
 >myRestParameter : number[]
 }
 var withRestParamsVar = withRestParams;
->withRestParamsVar : typeof withRestParams
->withRestParams : typeof withRestParams
+>withRestParamsVar : (a: string, ...myRestParameter: number[]) => number[]
+>withRestParams : (a: string, ...myRestParameter: number[]) => number[]
 
 function overload1(n: number) : string;
->overload1 : typeof overload1
+>overload1 : { (n: number): string; (s: string): string; }
 >n : number
 
 function overload1(s: string) : string;
->overload1 : typeof overload1
+>overload1 : { (n: number): string; (s: string): string; }
 >s : string
 
 function overload1(ns: any) {
->overload1 : typeof overload1
+>overload1 : { (n: number): string; (s: string): string; }
 >ns : any
 
     return ns.toString();
@@ -108,18 +108,18 @@ function overload1(ns: any) {
 >toString : any
 }
 var withOverloadSignature = overload1;
->withOverloadSignature : typeof overload1
->overload1 : typeof overload1
+>withOverloadSignature : { (n: number): string; (s: string): string; }
+>overload1 : { (n: number): string; (s: string): string; }
 
 function f(n: () => void) { }
->f : typeof f
+>f : (n: () => void) => void
 >n : () => void
 
 module m2 {
 >m2 : typeof m2
 
     export function foo(n: () => void ) {
->foo : typeof foo
+>foo : (n: () => void) => void
 >n : () => void
     }
 
@@ -127,9 +127,9 @@ module m2 {
 
 m2.foo(() =>  {
 >m2.foo(() =>  {    var b = 30;    return b;}) : void
->m2.foo : typeof m2.foo
+>m2.foo : (n: () => void) => void
 >m2 : typeof m2
->foo : typeof m2.foo
+>foo : (n: () => void) => void
 >() =>  {    var b = 30;    return b;} : () => number
 
     var b = 30;
@@ -142,15 +142,15 @@ m2.foo(() =>  {
 
 
 declare function fooAmbient(n: number): string;
->fooAmbient : typeof fooAmbient
+>fooAmbient : (n: number) => string
 >n : number
 
 declare function overloadAmbient(n: number): string;
->overloadAmbient : typeof overloadAmbient
+>overloadAmbient : { (n: number): string; (s: string): string; }
 >n : number
 
 declare function overloadAmbient(s: string): string;
->overloadAmbient : typeof overloadAmbient
+>overloadAmbient : { (n: number): string; (s: string): string; }
 >s : string
 
 var f2 = () => {

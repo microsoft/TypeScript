@@ -8,7 +8,7 @@ var NUMBER1: number[] = [1, 2];
 >[1, 2] : number[]
 
 function foo(): number { return 1; }
->foo : typeof foo
+>foo : () => number
 
 class A {
 >A : A
@@ -89,7 +89,7 @@ var ResultIsBoolean9 = !foo();
 >ResultIsBoolean9 : boolean
 >!foo() : boolean
 >foo() : number
->foo : typeof foo
+>foo : () => number
 
 var ResultIsBoolean10 = !A.foo();
 >ResultIsBoolean10 : boolean
@@ -139,7 +139,7 @@ var ResultIsBoolean13 = !!!(NUMBER + NUMBER);
 !foo();
 >!foo() : boolean
 >foo() : number
->foo : typeof foo
+>foo : () => number
 
 !objA.a;
 >!objA.a : boolean

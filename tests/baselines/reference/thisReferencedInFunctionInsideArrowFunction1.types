@@ -5,7 +5,7 @@ var foo = (dummy) => { };
 >dummy : any
 
 function test()
->test : typeof test
+>test : () => void
 {
     foo(() =>
 >foo(() =>        function () { return this; }    ) : void

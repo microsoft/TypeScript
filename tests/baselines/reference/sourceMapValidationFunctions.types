@@ -3,7 +3,7 @@ var greetings = 0;
 >greetings : number
 
 function greet(greeting: string): number {
->greet : typeof greet
+>greet : (greeting: string) => number
 >greeting : string
 
     greetings++;
@@ -14,7 +14,7 @@ function greet(greeting: string): number {
 >greetings : number
 }
 function greet2(greeting: string, n = 10, x?: string, ...restParams: string[]): number {
->greet2 : typeof greet2
+>greet2 : (greeting: string, n?: number, x?: string, ...restParams: string[]) => number
 >greeting : string
 >n : number
 >x : string
@@ -28,7 +28,7 @@ function greet2(greeting: string, n = 10, x?: string, ...restParams: string[]): 
 >greetings : number
 }
 function foo(greeting: string, n = 10, x?: string, ...restParams: string[])
->foo : typeof foo
+>foo : (greeting: string, n?: number, x?: string, ...restParams: string[]) => void
 >greeting : string
 >n : number
 >x : string

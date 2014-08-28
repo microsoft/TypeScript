@@ -18,7 +18,7 @@ module Point {
 >Point : typeof Point
 
     function Origin() { return ""; }// not an error, since not exported
->Origin : typeof Origin
+>Origin : () => string
 }
 
 
@@ -44,6 +44,6 @@ module A {
 >Point : typeof Point
 
         function Origin() { return ""; }// not an error since not exported
->Origin : typeof Origin
+>Origin : () => string
     }
 }

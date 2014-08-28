@@ -1,6 +1,6 @@
 === tests/cases/compiler/contextualTypingTwoInstancesOfSameTypeParameter.ts ===
 function f6<T>(x: (a: T) => T) {
->f6 : typeof f6
+>f6 : <T>(x: (a: T) => T) => any
 >T : T
 >x : (a: T) => T
 >a : T
@@ -11,11 +11,11 @@ function f6<T>(x: (a: T) => T) {
 } 
 f6(x => f6(y => x = y));
 >f6(x => f6(y => x = y)) : any
->f6 : typeof f6
+>f6 : <T>(x: (a: T) => T) => any
 >x => f6(y => x = y) : (x: {}) => any
 >x : {}
 >f6(y => x = y) : any
->f6 : typeof f6
+>f6 : <T>(x: (a: T) => T) => any
 >y => x = y : (y: {}) => {}
 >y : {}
 >x = y : {}

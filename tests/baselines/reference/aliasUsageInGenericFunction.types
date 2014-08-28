@@ -14,7 +14,7 @@ interface IHasVisualizationModel {
 >Model : typeof Backbone.Model
 }
 function foo<T extends { a: IHasVisualizationModel }>(x: T) {
->foo : typeof foo
+>foo : <T extends { a: IHasVisualizationModel; }>(x: T) => T
 >T : T
 >a : IHasVisualizationModel
 >IHasVisualizationModel : IHasVisualizationModel
@@ -27,7 +27,7 @@ function foo<T extends { a: IHasVisualizationModel }>(x: T) {
 var r = foo({ a: moduleA });
 >r : { a: typeof moduleA; }
 >foo({ a: moduleA }) : { a: typeof moduleA; }
->foo : typeof foo
+>foo : <T extends { a: IHasVisualizationModel; }>(x: T) => T
 >{ a: moduleA } : { a: typeof moduleA; }
 >a : typeof moduleA
 >moduleA : typeof moduleA
@@ -35,7 +35,7 @@ var r = foo({ a: moduleA });
 var r2 = foo({ a: <IHasVisualizationModel>null });
 >r2 : { a: IHasVisualizationModel; }
 >foo({ a: <IHasVisualizationModel>null }) : { a: IHasVisualizationModel; }
->foo : typeof foo
+>foo : <T extends { a: IHasVisualizationModel; }>(x: T) => T
 >{ a: <IHasVisualizationModel>null } : { a: IHasVisualizationModel; }
 >a : IHasVisualizationModel
 ><IHasVisualizationModel>null : IHasVisualizationModel

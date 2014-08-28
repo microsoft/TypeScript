@@ -38,7 +38,7 @@ var h = [{h:5}, null];
 >h : number
 
 function i() { if (true) { return { x: 5 }; } else { return null; } }
->i : typeof i
+>i : () => { x: number; }
 >{ x: 5 } : { x: number; }
 >x : number
 

@@ -30,12 +30,12 @@ interface IPromise<T> {
 >U : U
 }
 declare function load(name: string): Promise<string>;
->load : typeof load
+>load : (name: string) => Promise<string>
 >name : string
 >Promise : Promise<T>
 
 declare function convert(s: string): IPromise<number>;
->convert : typeof convert
+>convert : (s: string) => IPromise<number>
 >s : string
 >IPromise : IPromise<T>
 
@@ -44,11 +44,11 @@ var $$x = load("something").then(s => convert(s));
 >load("something").then(s => convert(s)) : Promise<number>
 >load("something").then : <U>(success?: (value: string) => Promise<U>) => Promise<U>
 >load("something") : Promise<string>
->load : typeof load
+>load : (name: string) => Promise<string>
 >then : <U>(success?: (value: string) => Promise<U>) => Promise<U>
 >s => convert(s) : (s: string) => IPromise<number>
 >s : string
 >convert(s) : IPromise<number>
->convert : typeof convert
+>convert : (s: string) => IPromise<number>
 >s : string
 

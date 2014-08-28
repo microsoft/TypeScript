@@ -10,7 +10,7 @@
     }
 
     declare function sort<U extends IComparable<any>>(items: U[]): U[];
->sort : typeof sort
+>sort : <U extends IComparable<any>>(items: U[]) => U[]
 >U : U
 >IComparable : IComparable<T>
 >items : U[]
@@ -29,6 +29,6 @@
     var x = sort(sc);
 >x : StringComparable[]
 >sort(sc) : StringComparable[]
->sort : typeof sort
+>sort : <U extends IComparable<any>>(items: U[]) => U[]
 >sc : StringComparable[]
 
