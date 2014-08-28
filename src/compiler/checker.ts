@@ -1036,10 +1036,8 @@ module ts {
                             (type.symbol.parent || // is exported function symbol
                             ts.forEach(type.symbol.declarations, declaration =>
                                 declaration.parent.kind === SyntaxKind.SourceFile || declaration.parent.kind === SyntaxKind.ModuleBlock));
-                        if (isStaticMethodSymbol) {
-                            return false;
-                        }
-                        if (isNonLocalFunctionSymbol) {
+
+                        if (isStaticMethodSymbol || isNonLocalFunctionSymbol) {
                             // typeof is allowed only for static/non local functions
                             return !!(flags & TypeFormatFlags.UseTypeOfFunction) || // use typeof if format flags specify it
                                 (typeStack && contains(typeStack, type)); // it is type of the symbol uses itself recursively
