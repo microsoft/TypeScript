@@ -2167,36 +2167,33 @@ module ts {
                 return getReferencesForNode(node, [sourceFile]);
             }
 
-            var result: ReferenceEntry[];
-
-            // 'parent' and 'hasKind' are falsey-propagating convenience functions.
             switch (node.kind) {
                 case SyntaxKind.TryKeyword:
                 case SyntaxKind.CatchKeyword:
                 case SyntaxKind.FinallyKeyword:
                     if (hasKind(parent(parent(node)), SyntaxKind.TryStatement)) {
-                        result = getTryCatchFinallyOccurrences(<TryStatement>(node.parent.parent));
+                        return getTryCatchFinallyOccurrences(<TryStatement>node.parent.parent);
                     }
                     break;
                 case SyntaxKind.SwitchKeyword:
                     if (hasKind(node.parent, SyntaxKind.SwitchStatement)) {
-                        result = getSwitchCaseDefaultOccurrences(<SwitchStatement>node.parent);
+                        return getSwitchCaseDefaultOccurrences(<SwitchStatement>node.parent);
                     }
                     break;
                 case SyntaxKind.CaseKeyword:
                 case SyntaxKind.DefaultKeyword:
                     if (hasKind(parent(parent(node)), SyntaxKind.SwitchStatement)) {
-                        result = getSwitchCaseDefaultOccurrences(<SwitchStatement>(node.parent.parent));
+                        return getSwitchCaseDefaultOccurrences(<SwitchStatement>node.parent.parent);
                     }
                     break;
                 case SyntaxKind.BreakKeyword:
                     if (hasKind(node.parent, SyntaxKind.BreakStatement)) {
-                        result = getBreakStatementOccurences(<BreakOrContinueStatement>node.parent);
+                        return getBreakStatementOccurences(<BreakOrContinueStatement>node.parent);
                     }
                     break;
             }
 
-            return result;
+            return undefined;
 
             function getTryCatchFinallyOccurrences(tryStatement: TryStatement): ReferenceEntry[] {
                 var keywords: Node[] = [];
@@ -2221,7 +2218,7 @@ module ts {
 
                 // Go through each clause in the switch statement, collecting the clause keywords.
                 forEach(switchStatement.clauses, clause => {
-                    pushKeyword(keywords, clause.getFirstToken(), [SyntaxKind.CaseKeyword, SyntaxKind.DefaultKeyword]);
+                    pushKeyword(keywords, clause.getFirstToken(), SyntaxKind.CaseKeyword, SyntaxKind.DefaultKeyword);
 
                     // For each clause, also recursively traverse the statements where we can find analogous breaks.
                     forEachChild(clause, function aggregateBreakKeywords(node: Node): void {
@@ -2288,18 +2285,16 @@ module ts {
                 return node && node.parent;
             }
 
-            function pushKeyword(keywordList: Node[], token: Node, expected: SyntaxKind): void;
-            function pushKeyword(keywordList: Node[], token: Node, expected: SyntaxKind[]): void;
-            function pushKeyword(keywordList: Node[], token: Node, expected: any): void {
+            function pushKeyword(keywordList: Node[], token: Node, ...expected: SyntaxKind[]): void {
                 if (!token) {
                     return;
                 }
 
-                if (token.kind === expected || (expected.length && contains(<SyntaxKind[]>expected, token.kind))) {
+                if (contains(<SyntaxKind[]>expected, token.kind)) {
                     keywordList.push(token);
                 }
                 else {
-                    Debug.assert("Expected keyword, got " + token.getFullText().substring(token.getLeadingTriviaWidth()));
+                    Debug.assert("Got '" + token.getFullText().substring(token.getLeadingTriviaWidth()) + "' instead of expected keyword.");
                 }
             }
 
