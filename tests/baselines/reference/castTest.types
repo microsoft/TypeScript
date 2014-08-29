@@ -63,31 +63,10 @@ declare class Point
 
 var p_cast = <Point> ({
 >p_cast : Point
-><Point> ({
-    x: 0,
-    y: 0,
-    add: function(dx, dy) {
-        return new Point(this.x + dx, this.y + dy);
-    },
-    mult: function(p) { return p; }
-}) : Point
+><Point> ({    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    },    mult: function(p) { return p; }}) : Point
 >Point : Point
->({
-    x: 0,
-    y: 0,
-    add: function(dx, dy) {
-        return new Point(this.x + dx, this.y + dy);
-    },
-    mult: function(p) { return p; }
-}) : { x: number; y: number; add: (dx: any, dy: any) => Point; mult: (p: any) => any; }
->{
-    x: 0,
-    y: 0,
-    add: function(dx, dy) {
-        return new Point(this.x + dx, this.y + dy);
-    },
-    mult: function(p) { return p; }
-} : { x: number; y: number; add: (dx: any, dy: any) => Point; mult: (p: any) => any; }
+>({    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    },    mult: function(p) { return p; }}) : { x: number; y: number; add: (dx: any, dy: any) => Point; mult: (p: any) => any; }
+>{    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    },    mult: function(p) { return p; }} : { x: number; y: number; add: (dx: any, dy: any) => Point; mult: (p: any) => any; }
 
     x: 0,
 >x : number
@@ -97,9 +76,7 @@ var p_cast = <Point> ({
 
     add: function(dx, dy) {
 >add : (dx: any, dy: any) => Point
->function(dx, dy) {
-        return new Point(this.x + dx, this.y + dy);
-    } : (dx: any, dy: any) => Point
+>function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    } : (dx: any, dy: any) => Point
 >dx : any
 >dy : any
 

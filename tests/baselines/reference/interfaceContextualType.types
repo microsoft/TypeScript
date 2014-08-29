@@ -46,15 +46,11 @@ class Bug {
 >shouldBeOK : () => void
 
         this.values = {
->this.values = {
-            comments: { italic: true }
-        } : { [x: string]: IOptions; comments: { italic: boolean; }; }
+>this.values = {            comments: { italic: true }        } : { [x: string]: IOptions; comments: { italic: boolean; }; }
 >this.values : IMap
 >this : Bug
 >values : IMap
->{
-            comments: { italic: true }
-        } : { [x: string]: IOptions; comments: { italic: boolean; }; }
+>{            comments: { italic: true }        } : { [x: string]: IOptions; comments: { italic: boolean; }; }
 
             comments: { italic: true }
 >comments : { italic: boolean; }

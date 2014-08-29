@@ -22,9 +22,7 @@ var a: {
 
 var b = {
 >b : { foo: any; }
->{
-    foo: null
-} : { foo: null; }
+>{    foo: null} : { foo: null; }
 
     foo: null
 >foo : any

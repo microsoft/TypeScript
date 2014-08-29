@@ -16,7 +16,7 @@ string.foo("abc");
 >foo : (s: string) => any
 
 var x: string.X;
->x : X
->string : string
->X : X
+>x : string.X
+>string : unknown
+>X : string.X
 

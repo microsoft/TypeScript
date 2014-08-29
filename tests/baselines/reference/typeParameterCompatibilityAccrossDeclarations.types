@@ -1,9 +1,7 @@
 === tests/cases/compiler/typeParameterCompatibilityAccrossDeclarations.ts ===
 var a = {
 >a : { x: <T>(y: T) => T; }
->{
-   x: function <T>(y: T): T { return null; }
-} : { x: <T>(y: T) => T; }
+>{   x: function <T>(y: T): T { return null; }} : { x: <T>(y: T) => T; }
 
    x: function <T>(y: T): T { return null; }
 >x : <T>(y: T) => T
@@ -15,9 +13,7 @@ var a = {
 }
 var a2 = {
 >a2 : { x: (y: any) => any; }
->{
-   x: function (y: any): any { return null; }
-} : { x: (y: any) => any; }
+>{   x: function (y: any): any { return null; }} : { x: (y: any) => any; }
 
    x: function (y: any): any { return null; }
 >x : (y: any) => any

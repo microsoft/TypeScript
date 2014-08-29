@@ -25,13 +25,13 @@ module A {
 }
 
 var x: A.B = A.B.createB();
->x : B
->A : A
->B : B
->A.B.createB() : B
->A.B.createB : () => B
->A.B : typeof B
+>x : A.B
+>A : unknown
+>B : A.B
+>A.B.createB() : A.B
+>A.B.createB : () => A.B
+>A.B : typeof A.B
 >A : typeof A
->B : typeof B
->createB : () => B
+>B : typeof A.B
+>createB : () => A.B
 

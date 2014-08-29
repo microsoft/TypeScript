@@ -25,7 +25,7 @@ export module TopLevelModule1 {
 
                     var a2: SubSubModule1.ClassA; a2.AisIn1_1_1();
 >a2 : ClassA
->SubSubModule1 : SubSubModule1
+>SubSubModule1 : unknown
 >ClassA : ClassA
 >a2.AisIn1_1_1() : void
 >a2.AisIn1_1_1 : () => void
@@ -34,8 +34,8 @@ export module TopLevelModule1 {
 
                     var a3: SubModule1.SubSubModule1.ClassA; a3.AisIn1_1_1();
 >a3 : ClassA
->SubModule1 : SubModule1
->SubSubModule1 : SubSubModule1
+>SubModule1 : unknown
+>SubSubModule1 : unknown
 >ClassA : ClassA
 >a3.AisIn1_1_1() : void
 >a3.AisIn1_1_1 : () => void
@@ -44,9 +44,9 @@ export module TopLevelModule1 {
 
                     var a4: TopLevelModule1.SubModule1.SubSubModule1.ClassA; a4.AisIn1_1_1();
 >a4 : ClassA
->TopLevelModule1 : TopLevelModule1
->SubModule1 : SubModule1
->SubSubModule1 : SubSubModule1
+>TopLevelModule1 : unknown
+>SubModule1 : unknown
+>SubSubModule1 : unknown
 >ClassA : ClassA
 >a4.AisIn1_1_1() : void
 >a4.AisIn1_1_1 : () => void
@@ -64,9 +64,9 @@ export module TopLevelModule1 {
 
                     var b2: TopLevelModule1.SubModule1.SubSubModule1.ClassB; b2.BisIn1_1_1();
 >b2 : ClassB
->TopLevelModule1 : TopLevelModule1
->SubModule1 : SubModule1
->SubSubModule1 : SubSubModule1
+>TopLevelModule1 : unknown
+>SubModule1 : unknown
+>SubSubModule1 : unknown
 >ClassB : ClassB
 >b2.BisIn1_1_1() : void
 >b2.BisIn1_1_1 : () => void
@@ -75,14 +75,14 @@ export module TopLevelModule1 {
                     
                     // Type only accessible from the root
                     var c1: TopLevelModule1.SubModule2.SubSubModule2.ClassA; c1.AisIn1_2_2();
->c1 : ClassA
->TopLevelModule1 : TopLevelModule1
->SubModule2 : SubModule2
->SubSubModule2 : SubSubModule2
->ClassA : ClassA
+>c1 : SubModule2.SubSubModule2.ClassA
+>TopLevelModule1 : unknown
+>SubModule2 : unknown
+>SubSubModule2 : unknown
+>ClassA : SubModule2.SubSubModule2.ClassA
 >c1.AisIn1_2_2() : void
 >c1.AisIn1_2_2 : () => void
->c1 : ClassA
+>c1 : SubModule2.SubSubModule2.ClassA
 >AisIn1_2_2 : () => void
                     
                     // Interface reference
@@ -96,7 +96,7 @@ export module TopLevelModule1 {
 
                     var d2: SubSubModule1.InterfaceX; d2.XisIn1_1_1();
 >d2 : InterfaceX
->SubSubModule1 : SubSubModule1
+>SubSubModule1 : unknown
 >InterfaceX : InterfaceX
 >d2.XisIn1_1_1() : any
 >d2.XisIn1_1_1 : () => any
@@ -123,7 +123,7 @@ export module TopLevelModule1 {
 
                     var a2: SubSubModule1.ClassA; a2.AisIn1_1_1();
 >a2 : ClassA
->SubSubModule1 : SubSubModule1
+>SubSubModule1 : unknown
 >ClassA : ClassA
 >a2.AisIn1_1_1() : void
 >a2.AisIn1_1_1 : () => void
@@ -132,8 +132,8 @@ export module TopLevelModule1 {
 
                     var a3: SubModule1.SubSubModule1.ClassA; a3.AisIn1_1_1();
 >a3 : ClassA
->SubModule1 : SubModule1
->SubSubModule1 : SubSubModule1
+>SubModule1 : unknown
+>SubSubModule1 : unknown
 >ClassA : ClassA
 >a3.AisIn1_1_1() : void
 >a3.AisIn1_1_1 : () => void
@@ -142,9 +142,9 @@ export module TopLevelModule1 {
 
                     var a4: TopLevelModule1.SubModule1.SubSubModule1.ClassA; a4.AisIn1_1_1();
 >a4 : ClassA
->TopLevelModule1 : TopLevelModule1
->SubModule1 : SubModule1
->SubSubModule1 : SubSubModule1
+>TopLevelModule1 : unknown
+>SubModule1 : unknown
+>SubSubModule1 : unknown
 >ClassA : ClassA
 >a4.AisIn1_1_1() : void
 >a4.AisIn1_1_1 : () => void
@@ -162,9 +162,9 @@ export module TopLevelModule1 {
 
                     var b2: TopLevelModule1.SubModule1.SubSubModule1.ClassB; b2.BisIn1_1_1();
 >b2 : ClassB
->TopLevelModule1 : TopLevelModule1
->SubModule1 : SubModule1
->SubSubModule1 : SubSubModule1
+>TopLevelModule1 : unknown
+>SubModule1 : unknown
+>SubSubModule1 : unknown
 >ClassB : ClassB
 >b2.BisIn1_1_1() : void
 >b2.BisIn1_1_1 : () => void
@@ -173,24 +173,24 @@ export module TopLevelModule1 {
                     
                     // Type only accessible from the root
                     var c1: TopLevelModule1.SubModule2.SubSubModule2.ClassA; c1.AisIn1_2_2();
->c1 : ClassA
->TopLevelModule1 : TopLevelModule1
->SubModule2 : SubModule2
->SubSubModule2 : SubSubModule2
->ClassA : ClassA
+>c1 : SubModule2.SubSubModule2.ClassA
+>TopLevelModule1 : unknown
+>SubModule2 : unknown
+>SubSubModule2 : unknown
+>ClassA : SubModule2.SubSubModule2.ClassA
 >c1.AisIn1_2_2() : void
 >c1.AisIn1_2_2 : () => void
->c1 : ClassA
+>c1 : SubModule2.SubSubModule2.ClassA
 >AisIn1_2_2 : () => void
 
                     var c2: TopLevelModule2.SubModule3.ClassA; c2.AisIn2_3();
->c2 : ClassA
->TopLevelModule2 : TopLevelModule2
->SubModule3 : SubModule3
->ClassA : ClassA
+>c2 : TopLevelModule2.SubModule3.ClassA
+>TopLevelModule2 : unknown
+>SubModule3 : unknown
+>ClassA : TopLevelModule2.SubModule3.ClassA
 >c2.AisIn2_3() : void
 >c2.AisIn2_3 : () => void
->c2 : ClassA
+>c2 : TopLevelModule2.SubModule3.ClassA
 >AisIn2_3 : () => void
                     
                     // Interface reference
@@ -204,7 +204,7 @@ export module TopLevelModule1 {
 
                     var d2: SubSubModule1.InterfaceX; d2.XisIn1_1_1();
 >d2 : InterfaceX
->SubSubModule1 : SubSubModule1
+>SubSubModule1 : unknown
 >InterfaceX : InterfaceX
 >d2.XisIn1_1_1() : any
 >d2.XisIn1_1_1 : () => any
@@ -226,9 +226,9 @@ export module TopLevelModule1 {
                         /* Sampling of stuff from AisIn1_1_1 */
                         var a4: TopLevelModule1.SubModule1.SubSubModule1.ClassA; a4.AisIn1_1_1();
 >a4 : ClassA
->TopLevelModule1 : TopLevelModule1
->SubModule1 : SubModule1
->SubSubModule1 : SubSubModule1
+>TopLevelModule1 : unknown
+>SubModule1 : unknown
+>SubSubModule1 : unknown
 >ClassA : ClassA
 >a4.AisIn1_1_1() : void
 >a4.AisIn1_1_1 : () => void
@@ -236,14 +236,14 @@ export module TopLevelModule1 {
 >AisIn1_1_1 : () => void
 
                         var c1: TopLevelModule1.SubModule2.SubSubModule2.ClassA; c1.AisIn1_2_2();
->c1 : ClassA
->TopLevelModule1 : TopLevelModule1
->SubModule2 : SubModule2
->SubSubModule2 : SubSubModule2
->ClassA : ClassA
+>c1 : SubModule2.SubSubModule2.ClassA
+>TopLevelModule1 : unknown
+>SubModule2 : unknown
+>SubSubModule2 : unknown
+>ClassA : SubModule2.SubSubModule2.ClassA
 >c1.AisIn1_2_2() : void
 >c1.AisIn1_2_2 : () => void
->c1 : ClassA
+>c1 : SubModule2.SubSubModule2.ClassA
 >AisIn1_2_2 : () => void
 
                         var d1: InterfaceX; d1.XisIn1_1_1();
@@ -255,13 +255,13 @@ export module TopLevelModule1 {
 >XisIn1_1_1 : () => any
 
                         var c2: TopLevelModule2.SubModule3.ClassA; c2.AisIn2_3();
->c2 : ClassA
->TopLevelModule2 : TopLevelModule2
->SubModule3 : SubModule3
->ClassA : ClassA
+>c2 : TopLevelModule2.SubModule3.ClassA
+>TopLevelModule2 : unknown
+>SubModule3 : unknown
+>ClassA : TopLevelModule2.SubModule3.ClassA
 >c2.AisIn2_3() : void
 >c2.AisIn2_3 : () => void
->c2 : ClassA
+>c2 : TopLevelModule2.SubModule3.ClassA
 >AisIn2_3 : () => void
                     }
                 }
@@ -277,43 +277,43 @@ export module TopLevelModule1 {
 >AA : () => void
 
                     var a2: SubSubModule1.ClassA; a2.AisIn1_1_1();
->a2 : ClassA
->SubSubModule1 : SubSubModule1
->ClassA : ClassA
+>a2 : SubSubModule1.ClassA
+>SubSubModule1 : unknown
+>ClassA : SubSubModule1.ClassA
 >a2.AisIn1_1_1() : void
 >a2.AisIn1_1_1 : () => void
->a2 : ClassA
+>a2 : SubSubModule1.ClassA
 >AisIn1_1_1 : () => void
 
                     var a3: SubModule1.SubSubModule1.ClassA; a3.AisIn1_1_1();
->a3 : ClassA
->SubModule1 : SubModule1
->SubSubModule1 : SubSubModule1
->ClassA : ClassA
+>a3 : SubSubModule1.ClassA
+>SubModule1 : unknown
+>SubSubModule1 : unknown
+>ClassA : SubSubModule1.ClassA
 >a3.AisIn1_1_1() : void
 >a3.AisIn1_1_1 : () => void
->a3 : ClassA
+>a3 : SubSubModule1.ClassA
 >AisIn1_1_1 : () => void
 
                     var a4: TopLevelModule1.SubModule1.SubSubModule1.ClassA; a4.AisIn1_1_1();
->a4 : ClassA
->TopLevelModule1 : TopLevelModule1
->SubModule1 : SubModule1
->SubSubModule1 : SubSubModule1
->ClassA : ClassA
+>a4 : SubSubModule1.ClassA
+>TopLevelModule1 : unknown
+>SubModule1 : unknown
+>SubSubModule1 : unknown
+>ClassA : SubSubModule1.ClassA
 >a4.AisIn1_1_1() : void
 >a4.AisIn1_1_1 : () => void
->a4 : ClassA
+>a4 : SubSubModule1.ClassA
 >AisIn1_1_1 : () => void
                     
                     // Interface reference
                     var d2: SubSubModule1.InterfaceX; d2.XisIn1_1_1();
->d2 : InterfaceX
->SubSubModule1 : SubSubModule1
->InterfaceX : InterfaceX
+>d2 : SubSubModule1.InterfaceX
+>SubSubModule1 : unknown
+>InterfaceX : SubSubModule1.InterfaceX
 >d2.XisIn1_1_1() : any
 >d2.XisIn1_1_1 : () => any
->d2 : InterfaceX
+>d2 : SubSubModule1.InterfaceX
 >XisIn1_1_1 : () => any
                 }
             }

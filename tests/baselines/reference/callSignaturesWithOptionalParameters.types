@@ -134,11 +134,7 @@ a.foo(1);
 
 var b = {
 >b : { foo: (x?: number) => void; a: (x: number, y?: number) => void; b: (x?: number) => void; }
->{
-    foo(x?: number) { },
-    a: function foo(x: number, y?: number) { },
-    b: (x?: number) => { }
-} : { foo: (x?: number) => void; a: (x: number, y?: number) => void; b: (x?: number) => void; }
+>{    foo(x?: number) { },    a: function foo(x: number, y?: number) { },    b: (x?: number) => { }} : { foo: (x?: number) => void; a: (x: number, y?: number) => void; b: (x?: number) => void; }
 
     foo(x?: number) { },
 >foo : (x?: number) => void

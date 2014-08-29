@@ -33,13 +33,11 @@ var cat = new Cat<IKitty>();
 
 var catThing = {
 >catThing : { barry: Cat<IKitty>; }
->{
-    barry: cat
-} : { barry: Cat<IKitty>; }
+>{    barry: cat} : { barry: Cat<IKitty>; }
 
     barry: cat
 >barry : Cat<IKitty>
->cat : cat
+>cat : Cat<IKitty>
 
 };
 var catBag = new CatBag(catThing);

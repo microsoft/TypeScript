@@ -2,8 +2,7 @@
 var x = {'text\
 >x : { 'text\
 ': string; }
->{'text\
-':'hello'} : { 'text\
+>{'text\':'hello'} : { 'text\
 ': string; }
 
 ':'hello'}

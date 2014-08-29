@@ -8,7 +8,7 @@ declare module bar {
 }
 
 import f = require('reuseInnerModuleMember_0');
->f : typeof "tests/cases/compiler/reuseInnerModuleMember_0"
+>f : typeof f
 
 module bar {
 >bar : typeof bar
@@ -20,5 +20,5 @@ module bar {
 
 === tests/cases/compiler/reuseInnerModuleMember_0.ts ===
 export module M { }
->M : M
+>M : unknown
 

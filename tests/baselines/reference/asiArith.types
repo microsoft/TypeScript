@@ -9,30 +9,16 @@ var z =
 >z : number
 
 x
->x
-
-+
-
-+
-
-+
-
-y : number
+>x+++y : number
 >x : number
 
 +
 
 +
->+
+>++y : number
 
 +
-
-y : number
-
-+
->+
-
-y : number
+>+y : number
 
 y
 >y : number
@@ -48,30 +34,16 @@ var c =
 >c : number
 
 x
->x
-
--
-
--
-
--
-
-y : number
+>x---y : number
 >x : number
 
 -
 
 -
->-
+>--y : number
 
 -
-
-y : number
-
--
->-
-
-y : number
+>-y : number
 
 y
 >y : number

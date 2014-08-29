@@ -36,6 +36,7 @@ class StringEvent extends EventBase {
         super.add(listener);
 >super.add(listener) : void
 >super.add : (listener: (...args: any[]) => void) => void
+>super : EventBase
 >add : (listener: (...args: any[]) => void) => void
 >listener : (items: string, moreitems: number) => void
     }

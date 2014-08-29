@@ -34,6 +34,7 @@ class Foo extends FooBase {
 
         super(x);
 >super(x) : void
+>super : typeof FooBase
 >x : any
     }
     bar1() {  /*WScript.Echo("bar1");*/ }

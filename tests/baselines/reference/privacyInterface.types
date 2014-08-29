@@ -510,7 +510,7 @@ interface C8_private {
 }
 
 export module m3 {
->m3 : m3
+>m3 : unknown
 
     export interface m3_i_public {
 >m3_i_public : m3_i_public
@@ -557,7 +557,7 @@ export module m3 {
 
 
 module m4 {
->m4 : m4
+>m4 : unknown
 
     export interface m4_i_public {
 >m4_i_public : m4_i_public

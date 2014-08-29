@@ -23,6 +23,7 @@ class T6 extends T5<number>{
 
         super("hi"); // Should error, base constructor has type T for first arg, which is fixed as number in the extends clause
 >super("hi") : void
+>super : typeof T5
 
         var x: number = this.foo;
 >x : number

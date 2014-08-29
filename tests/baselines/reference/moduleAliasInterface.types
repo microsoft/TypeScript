@@ -19,31 +19,31 @@ module editor {
 >editor : typeof editor
 
  import modes = _modes;
->modes : typeof _modes
->_modes : typeof _modes
+>modes : typeof modes
+>_modes : typeof modes
  
  var i : modes.IMode;
->i : IMode
->modes : modes
->IMode : IMode
+>i : modes.IMode
+>modes : unknown
+>IMode : modes.IMode
   
  // If you just use p1:modes, the compiler accepts it - should be an error
  class Bug { 
 >Bug : Bug
 
   constructor(p1: modes.IMode, p2: modes.Mode) { }// should be an error on p2 - it's not exported
->p1 : IMode
->modes : modes
->IMode : IMode
->p2 : Mode
->modes : modes
->Mode : Mode
+>p1 : modes.IMode
+>modes : unknown
+>IMode : modes.IMode
+>p2 : modes.Mode
+>modes : unknown
+>Mode : modes.Mode
 
   public foo(p1:modes.IMode) {
->foo : (p1: IMode) => void
->p1 : IMode
->modes : modes
->IMode : IMode
+>foo : (p1: modes.IMode) => void
+>p1 : modes.IMode
+>modes : unknown
+>IMode : modes.IMode
    
   } 
  }
@@ -57,20 +57,20 @@ module editor2 {
 >editor2 : typeof editor2
  
  var i : modesOuter.IMode;
->i : IMode
->modesOuter : modesOuter
->IMode : IMode
+>i : modesOuter.IMode
+>modesOuter : unknown
+>IMode : modesOuter.IMode
  
  class Bug {
 >Bug : Bug
 
      constructor(p1: modesOuter.IMode, p2: modesOuter.Mode) { }// no error here, since modesOuter is declared externally
->p1 : IMode
->modesOuter : modesOuter
->IMode : IMode
->p2 : Mode
->modesOuter : modesOuter
->Mode : Mode
+>p1 : modesOuter.IMode
+>modesOuter : unknown
+>IMode : modesOuter.IMode
+>p2 : modesOuter.Mode
+>modesOuter : unknown
+>Mode : modesOuter.Mode
   
  }
  
@@ -82,12 +82,12 @@ module editor2 {
 >Bug2 : Bug2
 
       constructor(p1: Foo.Bar, p2: modesOuter.Mode) { }
->p1 : Bar
->Foo : Foo
->Bar : Bar
->p2 : Mode
->modesOuter : modesOuter
->Mode : Mode
+>p1 : Foo.Bar
+>Foo : unknown
+>Bar : Foo.Bar
+>p2 : modesOuter.Mode
+>modesOuter : unknown
+>Mode : modesOuter.Mode
   }
 }
 
@@ -105,17 +105,17 @@ module B1 {
 >B1 : typeof B1
 
     import A1Alias1 = A1;
->A1Alias1 : typeof A1
->A1 : typeof A1
+>A1Alias1 : typeof A1Alias1
+>A1 : typeof A1Alias1
     
     var i : A1Alias1.A1I1;   
->i : A1I1
->A1Alias1 : A1Alias1
->A1I1 : A1I1
+>i : A1Alias1.A1I1
+>A1Alias1 : unknown
+>A1I1 : A1Alias1.A1I1
 
     var c : A1Alias1.A1C1;
->c : A1C1
->A1Alias1 : A1Alias1
->A1C1 : A1C1
+>c : A1Alias1.A1C1
+>A1Alias1 : unknown
+>A1C1 : A1Alias1.A1C1
 }
 

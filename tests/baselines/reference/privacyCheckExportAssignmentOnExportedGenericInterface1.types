@@ -12,9 +12,9 @@ interface Foo<T> {
 >T : T
 }
 var Foo: new () => Foo.A<Foo<string>>;
->Foo : new () => A<Foo<string>>
+>Foo : new () => Foo.A<Foo<string>>
 >Foo : Foo<T>
->A : A<T>
+>A : Foo.A<T>
 >Foo : Foo<T>
 
 export = Foo;

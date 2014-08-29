@@ -1,15 +1,15 @@
 === tests/cases/compiler/declFileExportAssignmentOfGenericInterface_1.ts ===
 import a = require('declFileExportAssignmentOfGenericInterface_0');
->a : a
+>a : unknown
 
 export var x: a<a<string>>;
->x : Foo<Foo<string>>
->a : Foo<T>
->a : Foo<T>
+>x : a<a<string>>
+>a : a<T>
+>a : a<T>
 
 x.a;
 >x.a : string
->x : Foo<Foo<string>>
+>x : a<a<string>>
 >a : string
 
 === tests/cases/compiler/declFileExportAssignmentOfGenericInterface_0.ts ===

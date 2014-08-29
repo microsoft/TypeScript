@@ -112,24 +112,9 @@ enum E {
 
     A = (() => {
 >A : E
->(() => {
-        function localFunction() { }
-        var x: { (): void; };
-        x = localFunction;
-        return 0;
-    })() : number
->(() => {
-        function localFunction() { }
-        var x: { (): void; };
-        x = localFunction;
-        return 0;
-    }) : () => number
->() => {
-        function localFunction() { }
-        var x: { (): void; };
-        x = localFunction;
-        return 0;
-    } : () => number
+>(() => {        function localFunction() { }        var x: { (): void; };        x = localFunction;        return 0;    })() : number
+>(() => {        function localFunction() { }        var x: { (): void; };        x = localFunction;        return 0;    }) : () => number
+>() => {        function localFunction() { }        var x: { (): void; };        x = localFunction;        return 0;    } : () => number
 
         function localFunction() { }
 >localFunction : () => void

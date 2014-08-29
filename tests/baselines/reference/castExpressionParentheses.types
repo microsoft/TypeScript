@@ -26,7 +26,6 @@ declare var a;
 (<any>/regexp/g); 
 >(<any>/regexp/g) : any
 ><any>/regexp/g : any
->/regexp/g : RegExp
 
 (<any>false); 
 >(<any>false) : any

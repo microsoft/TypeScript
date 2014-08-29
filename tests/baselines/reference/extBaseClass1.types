@@ -29,8 +29,8 @@ module N {
 
     export class C3 extends M.B {
 >C3 : C3
->M : M
->B : B
+>M : unknown
+>B : M.B
     }
 }
 

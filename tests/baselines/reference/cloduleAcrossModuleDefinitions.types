@@ -25,7 +25,7 @@ module A {
 }
 
 var b: A.B; // ok
->b : B
->A : A
->B : B
+>b : A.B
+>A : unknown
+>B : A.B
 

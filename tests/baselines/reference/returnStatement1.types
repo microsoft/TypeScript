@@ -3,9 +3,7 @@ function f() {
 >f : () => (s: any) => void
 
     return function (s) {
->function (s) {
-        var x = s;
-    } : (s: any) => void
+>function (s) {        var x = s;    } : (s: any) => void
 >s : any
 
         var x = s;
