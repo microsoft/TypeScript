@@ -7096,7 +7096,20 @@ module ts {
         function isImplementationOfOverload(node: FunctionDeclaration) {
             if (node.body) {
                 var symbol = getSymbolOfNode(node);
-                return getSignaturesOfSymbol(symbol).length > 1;
+                var signaturesOfSymbol = getSignaturesOfSymbol(symbol);
+                // If this function body corresponds to function with multiple signature, it is implementation of overload
+                // eg: function foo(a: string): string;
+                //     function foo(a: number): number;
+                //     function foo(a: any) { // This is implementation of the overloads
+                //         return a;
+                //     }
+                return signaturesOfSymbol.length > 1 ||
+                    // If there is single signature for the symbol, it is overload if that signature isnt coming from the node
+                    // eg: function foo(a: string): string;
+                    //     function foo(a: any) { // This is implementation of the overloads
+                    //         return a;
+                    //     }
+                    (signaturesOfSymbol.length === 1 && signaturesOfSymbol[0].declaration !== node);
             }
             return false;
         }
