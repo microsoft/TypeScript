@@ -1,5 +1,5 @@
 node_modules/
-built/
+built/*
 tests/cases/*.js
 tests/cases/*/*.js
 tests/cases/*/*/*.js
