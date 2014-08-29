@@ -71,10 +71,10 @@ module Shapes {
 var p: IPoint = new Shapes.Point(3, 4);
 >p : IPoint
 >IPoint : IPoint
->new Shapes.Point(3, 4) : Point
->Shapes.Point : typeof Point
+>new Shapes.Point(3, 4) : Shapes.Point
+>Shapes.Point : typeof Shapes.Point
 >Shapes : typeof Shapes
->Point : typeof Point
+>Point : typeof Shapes.Point
 
 var dist = p.getDist();
 >dist : number

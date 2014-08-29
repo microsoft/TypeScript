@@ -23,6 +23,11 @@ export function fooWithOverloads(a: any): any {
     return a;
 }
 
+export function fooWithSingleOverload(a: string): string;
+export function fooWithSingleOverload(a: any) {
+    return a;
+}
+
 /** This comment should appear for nonExportedFoo*/
 function nonExportedFoo() {
 }

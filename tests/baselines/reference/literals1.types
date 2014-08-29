@@ -34,13 +34,10 @@ var k = 'q\tq';
 
 var m = /q/;
 >m : RegExp
->/q/ : RegExp
 
 var n = /\d+/g;
 >n : RegExp
->/\d+/g : RegExp
 
 var o = /[3-5]+/i;
 >o : RegExp
->/[3-5]+/i : RegExp
 

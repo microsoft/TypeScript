@@ -32,6 +32,7 @@ class ColoredPoint extends Point {
 
         super(x, y);
 >super(x, y) : void
+>super : typeof Point
 >x : number
 >y : number
     }
@@ -43,6 +44,7 @@ class ColoredPoint extends Point {
 >super.toString() + " color=" : string
 >super.toString() : string
 >super.toString : () => string
+>super : Point
 >toString : () => string
 >this.color : string
 >this : ColoredPoint

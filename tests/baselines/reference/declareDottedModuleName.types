@@ -1,21 +1,21 @@
 === tests/cases/compiler/declareDottedModuleName.ts ===
 module M {
->M : M
+>M : unknown
 
     module P.Q { } // This shouldnt be emitted
->P : P
->Q : Q
+>P : unknown
+>Q : unknown
 }
 
 module M {
->M : M
+>M : unknown
 
     export module R.S { }  //This should be emitted
->R : R
->S : S
+>R : unknown
+>S : unknown
 }
 
 module T.U { // This needs to be emitted
->T : T
->U : U
+>T : unknown
+>U : unknown
 }

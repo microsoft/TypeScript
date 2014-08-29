@@ -27,13 +27,9 @@ module Query {
 >fromOrderBy : () => Iterator<{}>
 
         return fromDoWhile(test => {
->fromDoWhile(test => {
-            return true;
-        }) : Iterator<{}>
+>fromDoWhile(test => {            return true;        }) : Iterator<{}>
 >fromDoWhile : <T>(doWhile: (test: Iterator<T>) => boolean) => Iterator<T>
->test => {
-            return true;
-        } : (test: Iterator<{}>) => boolean
+>test => {            return true;        } : (test: Iterator<{}>) => boolean
 >test : Iterator<{}>
 
             return true;

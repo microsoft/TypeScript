@@ -557,11 +557,11 @@ declare var i1_ncf: (b: number) => number;
 declare var i1_ncr: number;
 declare var i1_ncprop: number;
 declare var i1_s_p: number;
-declare var i1_s_f: typeof c1.s2;
+declare var i1_s_f: typeof s2;
 declare var i1_s_r: number;
 declare var i1_s_prop: number;
 declare var i1_s_nc_p: number;
-declare var i1_s_ncf: typeof c1.nc_s2;
+declare var i1_s_ncf: typeof nc_s2;
 declare var i1_s_ncr: number;
 declare var i1_s_ncprop: number;
 declare var i1_c: typeof c1;
@@ -577,3 +577,111 @@ declare class cProperties {
     private y;
 }
 declare var cProperties_i: cProperties;
+
+
+//// [DtsFileErrors]
+
+
+==== tests/cases/compiler/commentsClassMembers.d.ts (2 errors) ====
+    /** This is comment for c1*/
+    declare class c1 {
+        /** p1 is property of c1*/
+        p1: number;
+        /** sum with property*/
+        p2(/** number to add*/ b: number): number;
+        /** getter property*/
+        /** setter property*/
+        p3: number;
+        /** pp1 is property of c1*/
+        private pp1;
+        /** sum with property*/
+        private pp2(/** number to add*/ b);
+        /** getter property*/
+        /** setter property*/
+        private pp3;
+        /** Constructor method*/
+        constructor();
+        /** s1 is static property of c1*/
+        static s1: number;
+        /** static sum with property*/
+        static s2(/** number to add*/ b: number): number;
+        /** static getter property*/
+        /** setter property*/
+        static s3: number;
+        nc_p1: number;
+        nc_p2(b: number): number;
+        nc_p3: number;
+        private nc_pp1;
+        private nc_pp2(b);
+        private nc_pp3;
+        static nc_s1: number;
+        static nc_s2(b: number): number;
+        static nc_s3: number;
+        a_p1: number;
+        a_p2(b: number): number;
+        a_p3: number;
+        private a_pp1;
+        private a_pp2(b);
+        private a_pp3;
+        static a_s1: number;
+        static a_s2(b: number): number;
+        static a_s3: number;
+        /** p1 is property of c1 */
+        b_p1: number;
+        /** sum with property */
+        b_p2(b: number): number;
+        /** getter property */
+        /** setter property */
+        b_p3: number;
+        /** pp1 is property of c1 */
+        private b_pp1;
+        /** sum with property */
+        private b_pp2(b);
+        /** getter property */
+        /** setter property */
+        private b_pp3;
+        /** s1 is static property of c1 */
+        static b_s1: number;
+        /** static sum with property */
+        static b_s2(b: number): number;
+        /** static getter property
+        */
+        /** setter property
+        */
+        static b_s3: number;
+    }
+    declare var i1: c1;
+    declare var i1_p: number;
+    declare var i1_f: (b: number) => number;
+    declare var i1_r: number;
+    declare var i1_prop: number;
+    declare var i1_nc_p: number;
+    declare var i1_ncf: (b: number) => number;
+    declare var i1_ncr: number;
+    declare var i1_ncprop: number;
+    declare var i1_s_p: number;
+    declare var i1_s_f: typeof s2;
+                               ~~
+!!! Cannot find name 's2'.
+    declare var i1_s_r: number;
+    declare var i1_s_prop: number;
+    declare var i1_s_nc_p: number;
+    declare var i1_s_ncf: typeof nc_s2;
+                                 ~~~~~
+!!! Cannot find name 'nc_s2'.
+    declare var i1_s_ncr: number;
+    declare var i1_s_ncprop: number;
+    declare var i1_c: typeof c1;
+    declare class cProperties {
+        private val;
+        /** getter only property*/
+        p1: number;
+        nc_p1: number;
+        /**setter only property*/
+        p2: number;
+        nc_p2: number;
+        x: number;
+        private y;
+    }
+    declare var cProperties_i: cProperties;
+    

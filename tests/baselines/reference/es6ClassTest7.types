@@ -9,7 +9,7 @@ declare module M {
 
 class Bar extends M.Foo {
 >Bar : Bar
->M : M
->Foo : Foo
+>M : unknown
+>Foo : M.Foo
 }
 

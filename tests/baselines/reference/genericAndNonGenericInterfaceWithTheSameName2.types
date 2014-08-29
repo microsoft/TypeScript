@@ -2,7 +2,7 @@
 // generic and non-generic interfaces with the same name do not merge
 
 module M {
->M : M
+>M : unknown
 
     interface A<T> {
 >A : A<T>
@@ -15,7 +15,7 @@ module M {
 }
 
 module M2 {
->M2 : M2
+>M2 : unknown
 
     interface A { // ok
 >A : A
@@ -26,10 +26,10 @@ module M2 {
 }
 
 module N {
->N : N
+>N : unknown
 
     module M {
->M : M
+>M : unknown
 
         interface A<T> {
 >A : A<T>
@@ -42,7 +42,7 @@ module N {
     }
 
     module M2 {
->M2 : M2
+>M2 : unknown
 
         interface A { // ok
 >A : A

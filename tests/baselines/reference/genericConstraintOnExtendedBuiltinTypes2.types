@@ -12,8 +12,8 @@ module EndGate {
 
 interface Number extends EndGate.ICloneable { }
 >Number : Number
->EndGate : EndGate
->ICloneable : ICloneable
+>EndGate : unknown
+>ICloneable : EndGate.ICloneable
 
 module EndGate.Tweening {
 >EndGate : typeof EndGate
@@ -59,6 +59,7 @@ module EndGate.Tweening {
 
             super(from);
 >super(from) : void
+>super : typeof Tween
 >from : number
         }
     }

@@ -1,6 +1,6 @@
 === tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts ===
 module A {
->A : A
+>A : unknown
 
     export interface Point {
 >Point : Point
@@ -18,7 +18,7 @@ module A {
 }
 
 module A {
->A : A
+>A : unknown
 
     interface Point {
 >Point : Point
@@ -31,73 +31,73 @@ module A {
 
 // ensure merges as expected
 var p: { x: number; y: number; toCarth(): A.Point; };
->p : { x: number; y: number; toCarth(): Point; }
+>p : { x: number; y: number; toCarth(): A.Point; }
 >x : number
 >y : number
->toCarth : () => Point
->A : A
->Point : Point
+>toCarth : () => A.Point
+>A : unknown
+>Point : A.Point
 
 var p: A.Point;
->p : { x: number; y: number; toCarth(): Point; }
->A : A
->Point : Point
+>p : { x: number; y: number; toCarth(): A.Point; }
+>A : unknown
+>Point : A.Point
 
 module X.Y.Z {
->X : X
->Y : Y
->Z : Z
+>X : unknown
+>Y : unknown
+>Z : unknown
 
     export interface Line {
 >Line : Line
 
         new (start: A.Point, end: A.Point);
->start : Point
->A : A
->Point : Point
->end : Point
->A : A
->Point : Point
+>start : A.Point
+>A : unknown
+>Point : A.Point
+>end : A.Point
+>A : unknown
+>Point : A.Point
     }
 }
 
 module X {
->X : X
+>X : unknown
 
     export module Y.Z {
->Y : Y
->Z : Z
+>Y : unknown
+>Z : unknown
 
         interface Line {
 >Line : Line
 
             start: A.Point;
->start : Point
->A : A
->Point : Point
+>start : A.Point
+>A : unknown
+>Point : A.Point
 
             end: A.Point;
->end : Point
->A : A
->Point : Point
+>end : A.Point
+>A : unknown
+>Point : A.Point
         }
     }
 }
 
 // ensure merges as expected
 var l: { new (s: A.Point, e: A.Point); }
->l : new (s: Point, e: Point) => any
->s : Point
->A : A
->Point : Point
->e : Point
->A : A
->Point : Point
+>l : new (s: A.Point, e: A.Point) => any
+>s : A.Point
+>A : unknown
+>Point : A.Point
+>e : A.Point
+>A : unknown
+>Point : A.Point
 
 var l: X.Y.Z.Line;
->l : new (s: Point, e: Point) => any
->X : X
->Y : Y
->Z : Z
->Line : Line
+>l : new (s: A.Point, e: A.Point) => any
+>X : unknown
+>Y : unknown
+>Z : unknown
+>Line : X.Y.Z.Line
 

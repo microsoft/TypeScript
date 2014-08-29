@@ -23,38 +23,16 @@ interface IMenuItem {
 var menuData: IMenuItem[] = [
 >menuData : IMenuItem[]
 >IMenuItem : IMenuItem
->[
+>[    {        "id": "ourLogo",        "type": "image",        "link": "",        "icon": "modules/menu/logo.svg"    }, {        "id": "productName",        "type": "default",        "link": "",        "text": "Product Name"    }] : IMenuItem[]
     {
-        "id": "ourLogo",
-        "type": "image",
-        "link": "",
-        "icon": "modules/menu/logo.svg"
-    }, {
-        "id": "productName",
-        "type": "default",
-        "link": "",
-        "text": "Product Name"
-    }
-] : IMenuItem[]
-    {
->{
-        "id": "ourLogo",
-        "type": "image",
-        "link": "",
-        "icon": "modules/menu/logo.svg"
-    } : { "id": string; "type": string; "link": string; "icon": string; }
+>{        "id": "ourLogo",        "type": "image",        "link": "",        "icon": "modules/menu/logo.svg"    } : { "id": string; "type": string; "link": string; "icon": string; }
 
         "id": "ourLogo",
         "type": "image",
         "link": "",
         "icon": "modules/menu/logo.svg"
     }, {
->{
-        "id": "productName",
-        "type": "default",
-        "link": "",
-        "text": "Product Name"
-    } : { "id": string; "type": string; "link": string; "text": string; }
+>{        "id": "productName",        "type": "default",        "link": "",        "text": "Product Name"    } : { "id": string; "type": string; "link": string; "text": string; }
 
         "id": "productName",
         "type": "default",

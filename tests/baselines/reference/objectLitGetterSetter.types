@@ -4,50 +4,19 @@
 >{} : {}
 
             Object.defineProperty(obj, "accProperty", <PropertyDescriptor>({
->Object.defineProperty(obj, "accProperty", <PropertyDescriptor>({
-                get: function () {
-                    eval("public = 1;");
-                    return 11;
-                },
-                set: function (v) {
-                }
-            })) : any
+>Object.defineProperty(obj, "accProperty", <PropertyDescriptor>({                get: function () {                    eval("public = 1;");                    return 11;                },                set: function (v) {                }            })) : any
 >Object.defineProperty : (o: any, p: string, attributes: PropertyDescriptor) => any
 >Object : { (): any; (value: any): any; new (value?: any): Object; prototype: Object; getPrototypeOf(o: any): any; getOwnPropertyDescriptor(o: any, p: string): PropertyDescriptor; getOwnPropertyNames(o: any): string[]; create(o: any, properties?: PropertyDescriptorMap): any; defineProperty(o: any, p: string, attributes: PropertyDescriptor): any; defineProperties(o: any, properties: PropertyDescriptorMap): any; seal(o: any): any; freeze(o: any): any; preventExtensions(o: any): any; isSealed(o: any): boolean; isFrozen(o: any): boolean; isExtensible(o: any): boolean; keys(o: any): string[]; }
 >defineProperty : (o: any, p: string, attributes: PropertyDescriptor) => any
 >obj : {}
-><PropertyDescriptor>({
-                get: function () {
-                    eval("public = 1;");
-                    return 11;
-                },
-                set: function (v) {
-                }
-            }) : PropertyDescriptor
+><PropertyDescriptor>({                get: function () {                    eval("public = 1;");                    return 11;                },                set: function (v) {                }            }) : PropertyDescriptor
 >PropertyDescriptor : PropertyDescriptor
->({
-                get: function () {
-                    eval("public = 1;");
-                    return 11;
-                },
-                set: function (v) {
-                }
-            }) : { get: () => number; set: (v: any) => void; }
->{
-                get: function () {
-                    eval("public = 1;");
-                    return 11;
-                },
-                set: function (v) {
-                }
-            } : { get: () => number; set: (v: any) => void; }
+>({                get: function () {                    eval("public = 1;");                    return 11;                },                set: function (v) {                }            }) : { get: () => number; set: (v: any) => void; }
+>{                get: function () {                    eval("public = 1;");                    return 11;                },                set: function (v) {                }            } : { get: () => number; set: (v: any) => void; }
 
                 get: function () {
 >get : () => number
->function () {
-                    eval("public = 1;");
-                    return 11;
-                } : () => number
+>function () {                    eval("public = 1;");                    return 11;                } : () => number
 
                     eval("public = 1;");
 >eval("public = 1;") : any
@@ -57,8 +26,7 @@
                 },
                 set: function (v) {
 >set : (v: any) => void
->function (v) {
-                } : (v: any) => void
+>function (v) {                } : (v: any) => void
 >v : any
                 }
             }))

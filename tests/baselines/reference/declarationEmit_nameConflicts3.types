@@ -46,31 +46,31 @@ module M.P {
 >f : D
     }
     export var v: M.D; // ok
->v : D
->M : M
->D : D
+>v : M.D
+>M : unknown
+>D : M.D
 
     export var w = M.D.f; // error, should be typeof M.D.f
 >w : () => void
 >M.D.f : () => void
->M.D : typeof D
+>M.D : typeof M.D
 >M : typeof M
->D : typeof D
+>D : typeof M.D
 >f : () => void
 
     export var x = M.C.f; // error, should be typeof M.C.f
 >x : () => void
 >M.C.f : () => void
->M.C : typeof C
+>M.C : typeof M.C
 >M : typeof M
->C : typeof C
+>C : typeof M.C
 >f : () => void
 
     export var x = M.E.f; // error, should be typeof M.E.f
 >x : () => void
 >M.E.f : () => void
->M.E : typeof E
+>M.E : typeof M.E
 >M : typeof M
->E : typeof E
+>E : typeof M.E
 >f : () => void
 }

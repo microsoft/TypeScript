@@ -21,9 +21,7 @@ class D {
 
 var x = {
 >x : { a: number; }
->{
-    get a() { return 1 }
-} : { a: number; }
+>{    get a() { return 1 }} : { a: number; }
 
     get a() { return 1 }
 >a : number
@@ -31,9 +29,7 @@ var x = {
 
 var y = {
 >y : { b: any; }
->{
-    set b(v) { }
-} : { b: any; }
+>{    set b(v) { }} : { b: any; }
 
     set b(v) { }
 >b : any

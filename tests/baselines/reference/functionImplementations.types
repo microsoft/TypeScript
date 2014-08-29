@@ -8,9 +8,7 @@ var v: void = function () { } ();
 // FunctionExpression f with no return type annotation and directly references f in its body returns any
 var a: any = function f() {
 >a : any
->function f() {
-    return f;
-} : () => any
+>function f() {    return f;} : () => any
 >f : () => any
 
     return f;
@@ -19,9 +17,7 @@ var a: any = function f() {
 };
 var a: any = function f() {
 >a : any
->function f() {
-    return f();
-} : () => any
+>function f() {    return f();} : () => any
 >f : () => any
 
     return f();
@@ -33,10 +29,7 @@ var a: any = function f() {
 // FunctionExpression f with no return type annotation and indirectly references f in its body returns any
 var a: any = function f() {
 >a : any
->function f() {
-    var x = f;
-    return x;
-} : () => any
+>function f() {    var x = f;    return x;} : () => any
 >f : () => any
 
     var x = f;
@@ -104,12 +97,8 @@ var n = rec4();
 // FunctionExpression with no return type annotation and returns a number
 var n = function () {
 >n : number
->function () {
-    return 3;
-} () : number
->function () {
-    return 3;
-} : () => number
+>function () {    return 3;} () : number
+>function () {    return 3;} : () => number
 
     return 3;
 } ();
@@ -120,12 +109,8 @@ var nu = null;
 
 var nu = function () {
 >nu : any
->function () {
-    return null;
-} () : any
->function () {
-    return null;
-} : () => any
+>function () {    return null;} () : any
+>function () {    return null;} : () => any
 
     return null;
 } ();
@@ -137,12 +122,8 @@ var un = undefined;
 
 var un = function () {
 >un : any
->function () {
-    return undefined;
-} () : any
->function () {
-    return undefined;
-} : () => any
+>function () {    return undefined;} () : any
+>function () {    return undefined;} : () => any
 
     return undefined;
 >undefined : undefined
@@ -152,12 +133,8 @@ var un = function () {
 // FunctionExpression with no return type annotation and returns a type parameter type
 var n = function <T>(x: T) {
 >n : number
->function <T>(x: T) {
-    return x;
-} (4) : number
->function <T>(x: T) {
-    return x;
-} : <T>(x: T) => T
+>function <T>(x: T) {    return x;} (4) : number
+>function <T>(x: T) {    return x;} : <T>(x: T) => T
 >T : T
 >x : T
 >T : T
@@ -170,12 +147,8 @@ var n = function <T>(x: T) {
 // FunctionExpression with no return type annotation and returns a constrained type parameter type
 var n = function <T extends {}>(x: T) {
 >n : number
->function <T extends {}>(x: T) {
-    return x;
-} (4) : number
->function <T extends {}>(x: T) {
-    return x;
-} : <T extends {}>(x: T) => T
+>function <T extends {}>(x: T) {    return x;} (4) : number
+>function <T extends {}>(x: T) {    return x;} : <T extends {}>(x: T) => T
 >T : T
 >x : T
 >T : T
@@ -188,14 +161,8 @@ var n = function <T extends {}>(x: T) {
 // FunctionExpression with no return type annotation with multiple return statements with identical types
 var n = function () {
 >n : number
->function () {
-    return 3;
-    return 5;
-}() : number
->function () {
-    return 3;
-    return 5;
-} : () => number
+>function () {    return 3;    return 5;}() : number
+>function () {    return 3;    return 5;} : () => number
 
     return 3;
     return 5;
@@ -217,12 +184,8 @@ var b: Base;
 
 var b = function () {
 >b : Base
->function () {
-    return new Base(); return new Derived();
-} () : Base
->function () {
-    return new Base(); return new Derived();
-} : () => Base
+>function () {    return new Base(); return new Derived();} () : Base
+>function () {    return new Base(); return new Derived();} : () => Base
 
     return new Base(); return new Derived();
 >new Base() : Base
@@ -235,12 +198,8 @@ var b = function () {
 // FunctionExpression with no return type annotation with multiple return statements with one a recursive call
 var a = function f() {
 >a : any
->function f() {
-    return new Base(); return new Derived(); return f(); // ?
-} () : any
->function f() {
-    return new Base(); return new Derived(); return f(); // ?
-} : () => any
+>function f() {    return new Base(); return new Derived(); return f(); // ?} () : any
+>function f() {    return new Base(); return new Derived(); return f(); // ?} : () => any
 >f : () => any
 
     return new Base(); return new Derived(); return f(); // ?
@@ -255,13 +214,9 @@ var a = function f() {
 
 // FunctionExpression with non -void return type annotation with a single throw statement
 undefined === function (): number {
->undefined === function (): number {
-    throw undefined;
-} : boolean
+>undefined === function (): number {    throw undefined;} : boolean
 >undefined : undefined
->function (): number {
-    throw undefined;
-} : () => number
+>function (): number {    throw undefined;} : () => number
 
     throw undefined;
 >undefined : undefined

@@ -1,4 +1,10 @@
-=== tests/cases/compiler/commentOnAmbientClass1.ts ===
+=== tests/cases/compiler/b.ts ===
+///<reference path="a.ts"/>
+declare class E extends C {
+>E : E
+>C : C
+}
+=== tests/cases/compiler/a.ts ===
 /*! Keep this pinned comment */
 declare class C {
 >C : C
@@ -8,3 +14,4 @@ declare class C {
 declare class D {
 >D : D
 }
+

@@ -6,3 +6,4 @@ declare var v: number;
 declare var y: number;
 
 //// [commentOnAmbientVariable1.js]
+/*! Keep this pinned comment */

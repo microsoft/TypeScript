@@ -187,7 +187,7 @@ class ProjectRunner extends RunnerBase {
                     getDefaultLibFilename: () => "lib.d.ts",
                     writeFile: writeFile,
                     getCurrentDirectory: getCurrentDirectory,
-                    getCanonicalFileName: ts.getCanonicalFileName,
+                    getCanonicalFileName: Harness.Compiler.getCanonicalFileName,
                     useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
                     getNewLine: () => sys.newLine
                 };

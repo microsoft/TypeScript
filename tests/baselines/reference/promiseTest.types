@@ -36,15 +36,11 @@ var p: Promise<number> = null;
 
 var p2 = p.then(function (x) {
 >p2 : Promise<number>
->p.then(function (x) {
-    return p;
-} ) : Promise<number>
+>p.then(function (x) {    return p;} ) : Promise<number>
 >p.then : { <A>(success?: (value: number) => Promise<A>): Promise<A>; <B>(success?: (value: number) => B): Promise<B>; }
 >p : Promise<number>
 >then : { <A>(success?: (value: number) => Promise<A>): Promise<A>; <B>(success?: (value: number) => B): Promise<B>; }
->function (x) {
-    return p;
-} : (x: number) => Promise<number>
+>function (x) {    return p;} : (x: number) => Promise<number>
 >x : number
 
     return p;

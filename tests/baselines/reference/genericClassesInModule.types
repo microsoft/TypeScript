@@ -12,11 +12,11 @@ module Foo {
 }
 
 var a = new Foo.B<Foo.A>();
->a : B<A>
->new Foo.B<Foo.A>() : B<A>
->Foo.B : typeof B
+>a : Foo.B<Foo.A>
+>new Foo.B<Foo.A>() : Foo.B<Foo.A>
+>Foo.B : typeof Foo.B
 >Foo : typeof Foo
->B : typeof B
->Foo : Foo
->A : A
+>B : typeof Foo.B
+>Foo : unknown
+>A : Foo.A
 

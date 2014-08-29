@@ -24,11 +24,11 @@ Foo.b;
 >b : number
 
 var c = new Foo.C();
->c : C
->new Foo.C() : C
->Foo.C : typeof C
+>c : Foo.C
+>new Foo.C() : Foo.C
+>Foo.C : typeof Foo.C
 >Foo : typeof Foo
->C : typeof C
+>C : typeof Foo.C
 
 declare module Foo2 {
 >Foo2 : typeof Foo2
@@ -55,9 +55,9 @@ Foo2.b;
 >b : number
 
 var c2 = new Foo2.C();
->c2 : C
->new Foo2.C() : C
->Foo2.C : typeof C
+>c2 : Foo2.C
+>new Foo2.C() : Foo2.C
+>Foo2.C : typeof Foo2.C
 >Foo2 : typeof Foo2
->C : typeof C
+>C : typeof Foo2.C
 

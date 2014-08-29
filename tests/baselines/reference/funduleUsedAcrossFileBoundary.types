@@ -22,11 +22,11 @@ declare module Q {
 
 === tests/cases/compiler/funduleUsedAcrossFileBoundary_file2.ts ===
 function promiseWithCancellation<T>(promise: Q.Promise<T>) {
->promiseWithCancellation : <T>(promise: Promise<T>) => void
+>promiseWithCancellation : <T>(promise: Q.Promise<T>) => void
 >T : T
->promise : Promise<T>
->Q : Q
->Promise : Promise<T>
+>promise : Q.Promise<T>
+>Q : unknown
+>Promise : Q.Promise<T>
 >T : T
 
     var deferred = Q.defer<T>(); // used to be an error

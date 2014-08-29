@@ -1,0 +1,9 @@
+==== tests/cases/compiler/duplicateLabel2.ts (1 errors) ====
+    target:
+    while (true) {
+      target:
+      ~~~~~~
+!!! Duplicate label 'target'
+      while (true) {
+      }
+    }

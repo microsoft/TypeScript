@@ -14,22 +14,11 @@ module Bugs {
 
     var result= message.replace(/\{(\d+)\}/g, function(match, ...rest) {
 >result : string
->message.replace(/\{(\d+)\}/g, function(match, ...rest) {
-      var index= rest[0];
-      return typeof args[index] !== 'undefined'
-        ? args[index]
-        : match;
-    }) : string
+>message.replace(/\{(\d+)\}/g, function(match, ...rest) {      var index= rest[0];      return typeof args[index] !== 'undefined'        ? args[index]        : match;    }) : string
 >message.replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
 >message : string
 >replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
->/\{(\d+)\}/g : RegExp
->function(match, ...rest) {
-      var index= rest[0];
-      return typeof args[index] !== 'undefined'
-        ? args[index]
-        : match;
-    } : (match: string, ...rest: any[]) => any
+>function(match, ...rest) {      var index= rest[0];      return typeof args[index] !== 'undefined'        ? args[index]        : match;    } : (match: string, ...rest: any[]) => any
 >match : string
 >rest : any[]
 
@@ -39,9 +28,7 @@ module Bugs {
 >rest : any[]
 
       return typeof args[index] !== 'undefined'
->typeof args[index] !== 'undefined'
-        ? args[index]
-        : match : any
+>typeof args[index] !== 'undefined'        ? args[index]        : match : any
 >typeof args[index] !== 'undefined' : boolean
 >typeof args[index] : string
 >args[index] : any

@@ -1,14 +1,14 @@
 === tests/cases/compiler/declFileExportImportChain_d.ts ===
 import c = require("declFileExportImportChain_c");
->c : typeof "tests/cases/compiler/declFileExportImportChain_c"
+>c : typeof c
 
 export var x: c.b1.a.m2.c1;
->x : c1
->c : c
->b1 : b1
->a : a
->m2 : m2
->c1 : c1
+>x : c.b1.a.m2.c1
+>c : unknown
+>b1 : unknown
+>a : unknown
+>m2 : unknown
+>c1 : c.b1.a.m2.c1
 
 === tests/cases/compiler/declFileExportImportChain_a.ts ===
 
@@ -28,16 +28,16 @@ export = m1;
 
 === tests/cases/compiler/declFileExportImportChain_b.ts ===
 export import a = require("declFileExportImportChain_a");
->a : typeof m1
+>a : typeof a
 
 === tests/cases/compiler/declFileExportImportChain_b1.ts ===
 import b = require("declFileExportImportChain_b");
->b : typeof "tests/cases/compiler/declFileExportImportChain_b"
+>b : typeof b
 
 export = b;
->b : typeof "tests/cases/compiler/declFileExportImportChain_b"
+>b : typeof b
 
 === tests/cases/compiler/declFileExportImportChain_c.ts ===
 export import b1 = require("declFileExportImportChain_b1");
->b1 : typeof "tests/cases/compiler/declFileExportImportChain_b"
+>b1 : typeof b1
 

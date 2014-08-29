@@ -41,16 +41,16 @@ class CompilerBaselineRunner extends RunnerBase {
         describe('compiler tests for ' + fileName, () => {
             // Mocha holds onto the closure environment of the describe callback even after the test is done.
             // Everything declared here should be cleared out in the "after" callback.
-            var justName = fileName.replace(/^.*[\\\/]/, ''); // strips the fileName from the path.
-            var content = Harness.IO.readFile(fileName);
-            var testCaseContent = Harness.TestCaseParser.makeUnitsFromTest(content, fileName);
+            var justName: string;
+            var content: string;
+            var testCaseContent: { settings: Harness.TestCaseParser.CompilerSetting[]; testUnitData: Harness.TestCaseParser.TestUnitData[]; }
 
-            var units = testCaseContent.testUnitData;
-            var tcSettings = testCaseContent.settings;
-            var createNewInstance = false;
+            var units: Harness.TestCaseParser.TestUnitData[];
+            var tcSettings: Harness.TestCaseParser.CompilerSetting[];
+            var createNewInstance: boolean;
 
-            var lastUnit = units[units.length - 1];
-            var rootDir = lastUnit.originalFilePath.indexOf('conformance') === -1 ? 'tests/cases/compiler/' : lastUnit.originalFilePath.substring(0, lastUnit.originalFilePath.lastIndexOf('/')) + '/';
+            var lastUnit: Harness.TestCaseParser.TestUnitData;
+            var rootDir: string;
 
             var result: Harness.Compiler.CompilerResult;
             var checker: ts.TypeChecker;
@@ -68,6 +68,14 @@ class CompilerBaselineRunner extends RunnerBase {
             var createNewInstance = false;
 
             before(() => {
+                justName = fileName.replace(/^.*[\\\/]/, ''); // strips the fileName from the path.
+                content = Harness.IO.readFile(fileName);
+                testCaseContent = Harness.TestCaseParser.makeUnitsFromTest(content, fileName);
+                units = testCaseContent.testUnitData;
+                tcSettings = testCaseContent.settings;
+                createNewInstance = false;
+                lastUnit = units[units.length - 1];
+                rootDir = lastUnit.originalFilePath.indexOf('conformance') === -1 ? 'tests/cases/compiler/' : lastUnit.originalFilePath.substring(0, lastUnit.originalFilePath.lastIndexOf('/')) + '/';
                 harnessCompiler = Harness.Compiler.getCompiler();
                 // We need to assemble the list of input files for the compiler and other related files on the 'filesystem' (ie in a multi-file test)
                 // If the last file in a test uses require or a triple slash reference we'll assume all other files will be brought in via references,
@@ -307,7 +315,7 @@ class CompilerBaselineRunner extends RunnerBase {
                         allFiles.forEach(file => {
                             var codeLines = file.content.split('\n');
                             walker.getTypes(file.unitName).forEach(result => {
-                                var formattedLine = result.identifierName + " : " + result.type;
+                                var formattedLine = result.sourceText.replace(/\r?\n/g, "") + " : " + result.type;
                                 if (!typeMap[file.unitName]) {
                                     typeMap[file.unitName] = {};
                                 }

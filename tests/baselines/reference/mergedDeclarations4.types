@@ -50,14 +50,14 @@ module M {
  
 M.f();
 >M.f() : void
->M.f : typeof f
+>M.f : typeof M.f
 >M : typeof M
->f : typeof f
+>f : typeof M.f
 
 M.f.hello;
 >M.f.hello : number
->M.f : typeof f
+>M.f : typeof M.f
 >M : typeof M
->f : typeof f
+>f : typeof M.f
 >hello : number
 

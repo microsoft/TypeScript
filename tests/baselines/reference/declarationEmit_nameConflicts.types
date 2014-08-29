@@ -1,6 +1,6 @@
 === tests/cases/compiler/declarationEmit_nameConflicts_0.ts ===
 import im = require('declarationEmit_nameConflicts_1');
->im : typeof f
+>im : typeof im
 
 export module M {
 >M : typeof M
@@ -36,8 +36,8 @@ export module M {
 >N : typeof N
 
     export import d = im;
->d : typeof f
->im : typeof f
+>d : typeof d
+>im : typeof d
 }
 
 export module M.P {
@@ -72,30 +72,30 @@ export module M.P {
 >a : () => void
 
     export var b = M.b; // ok
->b : typeof C
->M.b : typeof C
+>b : typeof M.C
+>M.b : typeof M.C
 >M : typeof M
->b : typeof C
+>b : typeof M.C
 
     export var c = M.c; // ok
->c : typeof N
->M.c : typeof N
+>c : typeof M.N
+>M.c : typeof M.N
 >M : typeof M
->c : typeof N
+>c : typeof M.N
 
     export var g = M.c.g; // ok
 >g : () => void
 >M.c.g : () => void
->M.c : typeof N
+>M.c : typeof M.N
 >M : typeof M
->c : typeof N
+>c : typeof M.N
 >g : () => void
 
     export var d = M.d; // emitted incorrectly as typeof im
->d : typeof f
->M.d : typeof f
+>d : typeof M.d
+>M.d : typeof M.d
 >M : typeof M
->d : typeof f
+>d : typeof M.d
 }
 
 export module M.Q {
@@ -119,23 +119,23 @@ export module M.Q {
     }
     export interface b extends M.b { } // ok
 >b : b
->M : M
->b : C
+>M : unknown
+>b : M.C
 
     export interface I extends M.c.I { } // ok
 >I : I
->M : M
->c : c
->I : I
+>M : unknown
+>c : unknown
+>I : M.c.I
 
     export module c {
->c : c
+>c : unknown
 
         export interface I extends M.c.I { } // ok
 >I : I
->M : M
->c : c
->I : I
+>M : unknown
+>c : unknown
+>I : M.c.I
     }
 }
 === tests/cases/compiler/declarationEmit_nameConflicts_1.ts ===

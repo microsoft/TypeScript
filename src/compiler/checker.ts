@@ -908,7 +908,7 @@ module ts {
             // Get qualified name 
             if (enclosingDeclaration &&
                 // Properties/methods/Signatures/Constructors/TypeParameters do not need qualification
-                !(symbol.flags & SymbolFlags.PropertyOrAccessor & SymbolFlags.Signature & SymbolFlags.Constructor & SymbolFlags.Method & SymbolFlags.TypeParameter)) {
+                !(symbol.flags & (SymbolFlags.PropertyOrAccessor | SymbolFlags.Signature | SymbolFlags.Constructor | SymbolFlags.Method | SymbolFlags.TypeParameter))) {
                 var symbolName: string;
                 while (symbol) {
                     var isFirstName = !symbolName;
@@ -2238,13 +2238,12 @@ module ts {
                 return emptyObjectType;
             }
             var type = getDeclaredTypeOfSymbol(symbol);
-            var name = symbol.name;
             if (!(type.flags & TypeFlags.ObjectType)) {
-                error(getTypeDeclaration(symbol), Diagnostics.Global_type_0_must_be_a_class_or_interface_type, name);
+                error(getTypeDeclaration(symbol), Diagnostics.Global_type_0_must_be_a_class_or_interface_type, symbol.name);
                 return emptyObjectType;
             }
             if (((<InterfaceType>type).typeParameters ? (<InterfaceType>type).typeParameters.length : 0) !== arity) {
-                error(getTypeDeclaration(symbol), Diagnostics.Global_type_0_must_have_1_type_parameter_s, name, arity);
+                error(getTypeDeclaration(symbol), Diagnostics.Global_type_0_must_have_1_type_parameter_s, symbol.name, arity);
                 return emptyObjectType;
             }
             return <ObjectType>type;
@@ -3548,7 +3547,8 @@ module ts {
             return false;
         }
 
-        function checkSuperExpression(node: Node, isCallExpression: boolean): Type {
+        function checkSuperExpression(node: Node): Type {
+            var isCallExpression = node.parent.kind === SyntaxKind.CallExpression && (<CallExpression>node.parent).func === node;
             var enclosingClass = <ClassDeclaration>getAncestor(node, SyntaxKind.ClassDeclaration);
             var baseClass: Type;
             if (enclosingClass && enclosingClass.baseType) {
@@ -4183,7 +4183,7 @@ module ts {
 
         function resolveCallExpression(node: CallExpression): Signature {
             if (node.func.kind === SyntaxKind.SuperKeyword) {
-                var superType = checkSuperExpression(node.func, true);
+                var superType = checkSuperExpression(node.func);
                 if (superType !== unknownType) {
                     return resolveCall(node, getSignaturesOfType(superType, SignatureKind.Construct));
                 }
@@ -4831,7 +4831,7 @@ module ts {
                 case SyntaxKind.ThisKeyword:
                     return checkThisExpression(node);
                 case SyntaxKind.SuperKeyword:
-                    return checkSuperExpression(node, false);
+                    return checkSuperExpression(node);
                 case SyntaxKind.NullKeyword:
                     return nullType;
                 case SyntaxKind.TrueKeyword:
@@ -6775,6 +6775,11 @@ module ts {
                     /*all meanings*/ SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Import);
             }
 
+            if (isInRightSideOfImportOrExportAssignment(entityName)) {
+                // Since we already checked for ExportAssignment, this really could only be an Import
+                return getSymbolOfPartOfRightHandSideOfImport(entityName);
+            }
+
             if (isRightSideOfQualifiedNameOrPropertyAccess(entityName)) {
                 entityName = entityName.parent;
             }
@@ -6895,11 +6900,7 @@ module ts {
             }
 
             if (isInRightSideOfImportOrExportAssignment(node)) {
-                var symbol: Symbol;
-                symbol = node.parent.kind === SyntaxKind.ExportAssignment
-                    ? getSymbolInfo(node)
-                    : getSymbolOfPartOfRightHandSideOfImport(node);
-
+                var symbol = getSymbolInfo(node);
                 var declaredType = getDeclaredTypeOfSymbol(symbol);
                 return declaredType !== unknownType ? declaredType : getTypeOfSymbol(symbol);
             }
@@ -7073,7 +7074,20 @@ module ts {
         function isImplementationOfOverload(node: FunctionDeclaration) {
             if (node.body) {
                 var symbol = getSymbolOfNode(node);
-                return getSignaturesOfSymbol(symbol).length > 1;
+                var signaturesOfSymbol = getSignaturesOfSymbol(symbol);
+                // If this function body corresponds to function with multiple signature, it is implementation of overload
+                // eg: function foo(a: string): string;
+                //     function foo(a: number): number;
+                //     function foo(a: any) { // This is implementation of the overloads
+                //         return a;
+                //     }
+                return signaturesOfSymbol.length > 1 ||
+                    // If there is single signature for the symbol, it is overload if that signature isnt coming from the node
+                    // eg: function foo(a: string): string;
+                    //     function foo(a: any) { // This is implementation of the overloads
+                    //         return a;
+                    //     }
+                    (signaturesOfSymbol.length === 1 && signaturesOfSymbol[0].declaration !== node);
             }
             return false;
         }

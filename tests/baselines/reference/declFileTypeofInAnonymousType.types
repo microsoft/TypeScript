@@ -20,23 +20,20 @@ module m1 {
     }
 }
 var a: { c: m1.c; };
->a : { c: c; }
->c : c
->m1 : m1
->c : c
+>a : { c: m1.c; }
+>c : m1.c
+>m1 : unknown
+>c : m1.c
 
 var b = {
->b : { c: typeof c; m1: typeof m1; }
->{
-    c: m1.c,
-    m1: m1
-} : { c: typeof c; m1: typeof m1; }
+>b : { c: typeof m1.c; m1: typeof m1; }
+>{    c: m1.c,    m1: m1} : { c: typeof m1.c; m1: typeof m1; }
 
     c: m1.c,
->c : typeof c
->m1.c : typeof c
+>c : typeof m1.c
+>m1.c : typeof m1.c
 >m1 : typeof m1
->c : typeof c
+>c : typeof m1.c
 
     m1: m1
 >m1 : typeof m1
@@ -50,13 +47,8 @@ var c = { m1: m1 };
 >m1 : typeof m1
 
 var d = {
->d : { m: { mod: typeof m1; }; mc: { cl: typeof c; }; me: { en: typeof e; }; mh: e; }
->{
-    m: { mod: m1 },
-    mc: { cl: m1.c },
-    me: { en: m1.e },
-    mh: m1.e.holiday
-} : { m: { mod: typeof m1; }; mc: { cl: typeof c; }; me: { en: typeof e; }; mh: e; }
+>d : { m: { mod: typeof m1; }; mc: { cl: typeof m1.c; }; me: { en: typeof m1.e; }; mh: m1.e; }
+>{    m: { mod: m1 },    mc: { cl: m1.c },    me: { en: m1.e },    mh: m1.e.holiday} : { m: { mod: typeof m1; }; mc: { cl: typeof m1.c; }; me: { en: typeof m1.e; }; mh: m1.e; }
 
     m: { mod: m1 },
 >m : { mod: typeof m1; }
@@ -65,27 +57,27 @@ var d = {
 >m1 : typeof m1
 
     mc: { cl: m1.c },
->mc : { cl: typeof c; }
->{ cl: m1.c } : { cl: typeof c; }
->cl : typeof c
->m1.c : typeof c
+>mc : { cl: typeof m1.c; }
+>{ cl: m1.c } : { cl: typeof m1.c; }
+>cl : typeof m1.c
+>m1.c : typeof m1.c
 >m1 : typeof m1
->c : typeof c
+>c : typeof m1.c
 
     me: { en: m1.e },
->me : { en: typeof e; }
->{ en: m1.e } : { en: typeof e; }
->en : typeof e
->m1.e : typeof e
+>me : { en: typeof m1.e; }
+>{ en: m1.e } : { en: typeof m1.e; }
+>en : typeof m1.e
+>m1.e : typeof m1.e
 >m1 : typeof m1
->e : typeof e
+>e : typeof m1.e
 
     mh: m1.e.holiday
->mh : e
->m1.e.holiday : e
->m1.e : typeof e
+>mh : m1.e
+>m1.e.holiday : m1.e
+>m1.e : typeof m1.e
 >m1 : typeof m1
->e : typeof e
->holiday : e
+>e : typeof m1.e
+>holiday : m1.e
 
 };

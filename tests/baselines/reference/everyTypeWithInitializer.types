@@ -116,11 +116,11 @@ var aModule = M;
 >M : typeof M
 
 var aClassInModule = new M.A();
->aClassInModule : A
->new M.A() : A
->M.A : typeof A
+>aClassInModule : M.A
+>new M.A() : M.A
+>M.A : typeof M.A
 >M : typeof M
->A : typeof A
+>A : typeof M.A
 
 var aFunctionInModule = M.F2;
 >aFunctionInModule : (x: number) => string

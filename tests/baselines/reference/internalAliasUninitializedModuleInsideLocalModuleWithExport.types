@@ -1,9 +1,9 @@
 === tests/cases/compiler/internalAliasUninitializedModuleInsideLocalModuleWithExport.ts ===
 export module a {
->a : a
+>a : unknown
 
     export module b {
->b : b
+>b : unknown
 
         export interface I {
 >I : I
@@ -18,18 +18,18 @@ export module c {
 >c : typeof c
 
     export import b = a.b;
->b : b
->a : a
->b : b
+>b : unknown
+>a : unknown
+>b : unknown
 
     export var x: b.I;
->x : I
->b : b
->I : I
+>x : b.I
+>b : unknown
+>I : b.I
 
     x.foo();
 >x.foo() : any
 >x.foo : () => any
->x : I
+>x : b.I
 >foo : () => any
 }

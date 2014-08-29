@@ -24,6 +24,7 @@ class Sub extends Super {
 
   super(options.value);
 >super(options.value) : void
+>super : typeof Super
 >options.value : number
 >options : Options
 >value : number

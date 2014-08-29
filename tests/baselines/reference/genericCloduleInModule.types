@@ -21,13 +21,13 @@ module A {
 }
 
 var b: A.B<number>;
->b : B<number>
->A : A
->B : B<T>
+>b : A.B<number>
+>A : unknown
+>B : A.B<T>
 
 b.foo();
 >b.foo() : void
 >b.foo : () => void
->b : B<number>
+>b : A.B<number>
 >foo : () => void
 

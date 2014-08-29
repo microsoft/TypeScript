@@ -33,9 +33,7 @@ var cat = new Cat<IKitty>();
 
 var catThing = {
 >catThing : { barry: Cat<IKitty>; }
->{
-    barry: cat
-} : { barry: Cat<IKitty>; }
+>{    barry: cat} : { barry: Cat<IKitty>; }
 
     barry: cat
 >barry : Cat<IKitty>

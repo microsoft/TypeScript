@@ -1,12 +1,12 @@
 === tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration4.ts ===
 module M {
->M : M
+>M : unknown
 
   declare module M1 {
->M1 : M1
+>M1 : unknown
 
     module M2 {
->M2 : M2
+>M2 : unknown
     }
   }
 }

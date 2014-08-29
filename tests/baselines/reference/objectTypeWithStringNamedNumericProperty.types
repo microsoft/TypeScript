@@ -344,16 +344,7 @@ var r13 = i[-01]
 
 var b = {
 >b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }; }
->{
-    "0.1": <void>null,
-    ".1": new Object(),
-    "1": 1,
-    "1.": "",
-    "1..": true,
-    "1.0": new Date(),
-    "-1.0": /123/,
-    "-1": Date
-} : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }; }
+>{    "0.1": <void>null,    ".1": new Object(),    "1": 1,    "1.": "",    "1..": true,    "1.0": new Date(),    "-1.0": /123/,    "-1": Date} : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }; }
 
     "0.1": <void>null,
 ><void>null : void
@@ -370,8 +361,6 @@ var b = {
 >Date : { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }
 
     "-1.0": /123/,
->/123/ : RegExp
-
     "-1": Date
 >Date : { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }
 

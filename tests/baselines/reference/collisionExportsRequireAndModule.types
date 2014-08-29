@@ -10,9 +10,9 @@ export module require {
     }
 }
 export function foo(): require.I {
->foo : () => I
->require : require
->I : I
+>foo : () => require.I
+>require : unknown
+>I : require.I
 
     return null;
 }
@@ -27,9 +27,9 @@ export module exports {
     }
 }
 export function foo2(): exports.I {
->foo2 : () => I
->exports : exports
->I : I
+>foo2 : () => exports.I
+>exports : unknown
+>I : exports.I
 
     return null;
 }
