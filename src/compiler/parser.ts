@@ -362,6 +362,46 @@ module ts {
         return false;
     }
 
+    export function isDeclaration(node: Node): boolean {
+        switch (node.kind) {
+            case SyntaxKind.TypeParameter:
+            case SyntaxKind.Parameter:
+            case SyntaxKind.VariableDeclaration:
+            case SyntaxKind.Property:
+            case SyntaxKind.PropertyAssignment:
+            case SyntaxKind.EnumMember:
+            case SyntaxKind.Method:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.EnumDeclaration:
+            case SyntaxKind.ModuleDeclaration:
+            case SyntaxKind.ImportDeclaration:
+                return true;
+        }
+        return false;
+    }
+
+    // True if the given identifier, string literal, or number literal is the name of a declaration node
+    export function isDeclarationOrFunctionExpressionOrCatchVariableName(name: Node): boolean {
+        if (name.kind !== SyntaxKind.Identifier && name.kind !== SyntaxKind.StringLiteral && name.kind !== SyntaxKind.NumericLiteral) {
+            return false;
+        }
+
+        var parent = name.parent;
+        if (isDeclaration(parent) || parent.kind === SyntaxKind.FunctionExpression) {
+            return (<Declaration>parent).name === name;
+        }
+
+        if (parent.kind === SyntaxKind.CatchBlock) {
+            return (<CatchBlock>parent).variable === name;
+        }
+
+        return false;
+    }
+
     enum ParsingContext {
         SourceElements,          // Elements in source file
         ModuleElements,          // Elements in module declaration
@@ -442,6 +482,22 @@ module ts {
         pushFunctionBoundary(): void;
         pop(): void;
         nodeIsNestedInLabel(label: Identifier, requireIterationStatement: boolean, stopAtFunctionBoundary: boolean): ControlBlockContext;
+    }
+
+    export function isKeyword(token: SyntaxKind): boolean {
+        return SyntaxKind.FirstKeyword <= token && token <= SyntaxKind.LastKeyword;
+    }
+
+    export function isModifier(token: SyntaxKind): boolean {
+        switch (token) {
+            case SyntaxKind.PublicKeyword:
+            case SyntaxKind.PrivateKeyword:
+            case SyntaxKind.StaticKeyword:
+            case SyntaxKind.ExportKeyword:
+            case SyntaxKind.DeclareKeyword:
+                return true;
+        }
+        return false;
     }
 
     export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, version: string, isOpen: boolean = false): SourceFile {
@@ -775,6 +831,10 @@ module ts {
             return createNode(SyntaxKind.Missing);
         }
 
+        function internIdentifier(text: string): string {
+            return hasProperty(identifiers, text) ? identifiers[text] : (identifiers[text] = text);
+        }
+
         // An identifier that starts with two underscores has an extra underscore character prepended to it to avoid issues
         // with magic property names like '__proto__'. The 'identifiers' object is used to share a single string instance for
         // each identifier in order to reduce memory consumption.
@@ -783,7 +843,7 @@ module ts {
             if (isIdentifier) {
                 var node = <Identifier>createNode(SyntaxKind.Identifier);
                 var text = escapeIdentifier(scanner.getTokenValue());
-                node.text = hasProperty(identifiers, text) ? identifiers[text] : (identifiers[text] = text);
+                node.text = internIdentifier(text);
                 nextToken();
                 return finishNode(node);
             }
@@ -805,26 +865,9 @@ module ts {
 
         function parsePropertyName(): Identifier {
             if (token === SyntaxKind.StringLiteral || token === SyntaxKind.NumericLiteral) {
-                return <LiteralExpression>parsePrimaryExpression();
+                return parseLiteralNode(/*internName:*/ true);
             }
             return parseIdentifierName();
-        }
-
-
-        function isKeyword(token: SyntaxKind): boolean {
-            return SyntaxKind.FirstKeyword <= token && token <= SyntaxKind.LastKeyword;
-        }
-
-        function isModifier(token: SyntaxKind): boolean {
-            switch (token) {
-                case SyntaxKind.PublicKeyword:
-                case SyntaxKind.PrivateKeyword:
-                case SyntaxKind.StaticKeyword:
-                case SyntaxKind.ExportKeyword:
-                case SyntaxKind.DeclareKeyword:
-                    return true;
-            }
-            return false;
         }
 
         function parseContextualModifier(t: SyntaxKind): boolean {
@@ -1086,9 +1129,11 @@ module ts {
             return finishNode(node);
         }
 
-        function parseLiteralNode(): LiteralExpression {
+        function parseLiteralNode(internName?:boolean): LiteralExpression {
             var node = <LiteralExpression>createNode(token);
-            node.text = scanner.getTokenValue();
+            var text = scanner.getTokenValue();
+            node.text = internName ? internIdentifier(text) : text;
+
             var tokenPos = scanner.getTokenPos();
             nextToken();
             finishNode(node);
@@ -1115,7 +1160,7 @@ module ts {
         }
 
         function parseStringLiteral(): LiteralExpression {
-            if (token === SyntaxKind.StringLiteral) return parseLiteralNode();
+            if (token === SyntaxKind.StringLiteral) return parseLiteralNode(/*internName:*/ true);
             error(Diagnostics.String_literal_expected);
             return <LiteralExpression>createMissingNode();
         }
@@ -2019,6 +2064,10 @@ module ts {
                     }
                     else {
                         indexedAccess.index = parseExpression();
+                        if (indexedAccess.index.kind === SyntaxKind.StringLiteral || indexedAccess.index.kind === SyntaxKind.NumericLiteral) {
+                            var literal = <LiteralExpression>indexedAccess.index;
+                            literal.text = internIdentifier(literal.text);
+                        }
                         parseExpected(SyntaxKind.CloseBracketToken);
                     }
 
@@ -3569,6 +3618,7 @@ module ts {
         file.version = version;
         file.isOpen = isOpen;
         file.languageVersion = languageVersion;
+        file.identifiers = identifiers;
         return file;
     }
 

@@ -3,7 +3,7 @@
 // Class references should work across file and not find local variables.
 
 // @Filename: referenceToClass_1.ts
-////class foo/*1*/ {
+////class /*1*/foo {
 ////    public n: /*2*/foo;
 ////    public foo: number;
 ////}

@@ -17,7 +17,7 @@
 ////}
 ////
 ////class foo2 {
-////    private x = foo.n/*2*/;
+////    private x = foo./*2*/n;
 ////    constructor() {
 ////        foo./*3*/n = x;
 ////    }

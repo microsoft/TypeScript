@@ -11,6 +11,18 @@ module ts {
     var nextNodeId = 1;
     var nextMergeId = 1;
 
+    export function getDeclarationOfKind(symbol: Symbol, kind: SyntaxKind): Declaration {
+        var declarations = symbol.declarations;
+        for (var i = 0; i < declarations.length; i++) {
+            var declaration = declarations[i];
+            if (declaration.kind === kind) {
+                return declaration;
+            }
+        }
+
+        return undefined;
+    }
+
     /// fullTypeCheck denotes if this instance of the typechecker will be used to get semantic diagnostics.
     /// If fullTypeCheck === true - then typechecker should do every possible check to produce all errors
     /// If fullTypeCheck === false - typechecker can shortcut and skip checks that only produce errors.
@@ -49,7 +61,9 @@ module ts {
             getApparentType: getApparentType,
             typeToString: typeToString,
             symbolToString: symbolToString,
-            getAugmentedPropertiesOfApparentType: getAugmentedPropertiesOfApparentType
+            getAugmentedPropertiesOfApparentType: getAugmentedPropertiesOfApparentType,
+            getRootSymbol: getRootSymbol,
+            getContextualType: getContextualType
         };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
@@ -566,18 +580,6 @@ module ts {
             }
 
             return false;
-        }
-
-        function getDeclarationOfKind(symbol: Symbol, kind: SyntaxKind): Declaration {
-            var declarations = symbol.declarations;
-            for (var i = 0; i < declarations.length; i++) {
-                var declaration = declarations[i];
-                if (declaration.kind === kind) {
-                    return declaration;
-                }
-            }
-
-            return undefined;
         }
 
         function findConstructorDeclaration(node: ClassDeclaration): ConstructorDeclaration {
@@ -3148,6 +3150,7 @@ module ts {
                         symbol.declarations = p.declarations;
                         symbol.parent = p.parent;
                         symbol.type = widenedTypes[index++];
+                        symbol.target = p;
                         if (p.valueDeclaration) symbol.valueDeclaration = p.valueDeclaration;
                         members[symbol.name] = symbol;
                     });
@@ -3821,6 +3824,7 @@ module ts {
                         prop.parent = member.parent;
                         if (member.valueDeclaration) prop.valueDeclaration = member.valueDeclaration;
                         prop.type = type;
+                        prop.target = member;
                         member = prop;
                     }
                     else {
@@ -6584,24 +6588,6 @@ module ts {
                 (<Declaration>name.parent).name === name;
         }
 
-        // True if the given identifier, string literal, or number literal is the name of a declaration node
-        function isDeclarationOrFunctionExpressionOrCatchVariableName(name: Node): boolean {
-            if (name.kind !== SyntaxKind.Identifier && name.kind !== SyntaxKind.StringLiteral && name.kind !== SyntaxKind.NumericLiteral) {
-                return false;
-            }
-
-            var parent = name.parent;
-            if (isDeclaration(parent) || parent.kind === SyntaxKind.FunctionExpression) {
-                return (<Declaration>parent).name === name;
-            }
-
-            if (parent.kind === SyntaxKind.CatchBlock) {
-                return (<CatchBlock>parent).variable === name;
-            }
-
-            return false;
-        }
-
         function isTypeDeclaration(node: Node): boolean {
             switch (node.kind) {
                 case SyntaxKind.TypeParameter:
@@ -6610,28 +6596,6 @@ module ts {
                 case SyntaxKind.EnumDeclaration:
                     return true;
             }
-        }
-
-        function isDeclaration(node: Node): boolean {
-            switch (node.kind) {
-                case SyntaxKind.TypeParameter:
-                case SyntaxKind.Parameter:
-                case SyntaxKind.VariableDeclaration:
-                case SyntaxKind.Property:
-                case SyntaxKind.PropertyAssignment:
-                case SyntaxKind.EnumMember:
-                case SyntaxKind.Method:
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.InterfaceDeclaration:
-                case SyntaxKind.EnumDeclaration:
-                case SyntaxKind.ModuleDeclaration:
-                case SyntaxKind.ImportDeclaration:
-                    return true;
-            }
-            return false;
         }
 
         // True if the given identifier is part of a type reference
@@ -6852,6 +6816,17 @@ module ts {
         }
 
         function getSymbolInfo(node: Node) {
+            if (isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
+                // This is a declaration, call getSymbolOfNode
+                return getSymbolOfNode(node.parent);
+            }
+
+            if (node.kind === SyntaxKind.Identifier && isInRightSideOfImportOrExportAssignment(node)) {
+                return node.parent.kind === SyntaxKind.ExportAssignment
+                    ? getSymbolOfEntityName(<Identifier>node)
+                    : getSymbolOfPartOfRightHandSideOfImport(node);
+            }
+
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                 case SyntaxKind.PropertyAccess:
@@ -6862,7 +6837,7 @@ module ts {
                 case SyntaxKind.SuperKeyword:
                     var type = checkExpression(node);
                     return type.symbol;
-                    
+
                 case SyntaxKind.ConstructorKeyword:
                     // constructor keyword for an overload, should take us to the definition if it exist
                     var constructorDeclaration = node.parent;
@@ -6872,23 +6847,22 @@ module ts {
                     return undefined;
 
                 case SyntaxKind.StringLiteral:
-                    // Property access
-                    if (node.parent.kind === SyntaxKind.IndexedAccess && (<IndexedAccess>node.parent).index === node) {
+                    // External module name in an import declaration
+                    if (node.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent).externalModuleName === node) {
+                        var importSymbol = getSymbolOfNode(node.parent);
+                        var moduleType = getTypeOfSymbol(importSymbol);
+                        return moduleType ? moduleType.symbol : undefined;
+                    }
+
+                // Intentinal fallthrough
+                case SyntaxKind.NumericLiteral:
+                    // index access
+                    if (node.parent.kind == SyntaxKind.IndexedAccess && (<IndexedAccess>node.parent).index === node) {
                         var objectType = checkExpression((<IndexedAccess>node.parent).object);
                         if (objectType === unknownType) return undefined;
                         var apparentType = getApparentType(objectType);
                         if (<Type>apparentType === unknownType) return undefined;
                         return getPropertyOfApparentType(apparentType, (<LiteralExpression>node).text);
-                    }
-                    // External module name in an import declaration
-                    else if (node.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent).externalModuleName === node) {
-                        var importSymbol = getSymbolOfNode(node.parent);
-                        var moduleType = getTypeOfSymbol(importSymbol);
-                        return moduleType ? moduleType.symbol : undefined;
-                    }
-                    // External module name in an ambient declaration
-                    else if (node.parent.kind === SyntaxKind.ModuleDeclaration) {
-                        return getSymbolOfNode(node.parent);
                     }
                     break;
             }
@@ -6976,6 +6950,10 @@ module ts {
             else {
                 return getPropertiesOfType(<Type>apparentType);
             }
+        }
+
+        function getRootSymbol(symbol: Symbol) {
+            return (symbol.flags & SymbolFlags.Transient) ? getSymbolLinks(symbol).target : symbol;
         }
 
         // Emitter support
