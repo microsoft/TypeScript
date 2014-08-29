@@ -2230,7 +2230,7 @@ module ts {
 
                 var result: ReferenceEntry[] = [];
 
-                // We'd like to highlight else/ifs together if they are only separated by spaces/tabs
+                // We'd like to highlight else/ifs together if they are only separated by whitespace
                 // (i.e. the keywords are separated by no comments, no newlines).
                 for (var i = 0; i < keywords.length; i++) {
                     if (keywords[i].kind === SyntaxKind.ElseKeyword && i < keywords.length - 1) {
@@ -2241,8 +2241,7 @@ module ts {
 
                         // Avoid recalculating getStart() by iterating backwards.
                         for (var j = ifKeyword.getStart() - 1; j >= elseKeyword.end; j--) {
-                            var c = sourceFile.text.charCodeAt(j);
-                            if (c !== CharacterCodes.space && c !== CharacterCodes.tab) {
+                            if (!isWhiteSpace(sourceFile.text.charCodeAt(j))) {
                                 shouldHighlightNextKeyword = false;
                                 break;
                             }
