@@ -2207,10 +2207,6 @@ var ts;
         return pathLen > extLen && path.substr(pathLen - extLen, extLen) === extension;
     }
     ts.fileExtensionIs = fileExtensionIs;
-    function getCanonicalFileName(fileName) {
-        return sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
-    }
-    ts.getCanonicalFileName = getCanonicalFileName;
     function Symbol(flags, name) {
         this.flags = flags;
         this.name = name;
@@ -2591,6 +2587,7 @@ var ts;
         }
     }
     ts.getJsDocComments = getJsDocComments;
+    ts.fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
     function forEachChild(node, cbNode, cbNodes) {
         function child(node) {
             if (node)
@@ -5252,8 +5249,7 @@ var ts;
                         file.hasNoDefaultLib = true;
                     }
                     else {
-                        var fullReferenceRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
-                        var matchResult = fullReferenceRegEx.exec(comment);
+                        var matchResult = ts.fullTripleSlashReferencePathRegEx.exec(comment);
                         if (!matchResult) {
                             var start = range.pos;
                             var length = range.end - start;
@@ -6025,7 +6021,7 @@ var ts;
                     }
                 }
                 else {
-                    writer.writeLiteral(sys.newLine);
+                    writer.writeLiteral(newLine);
                 }
             }
             function calculateIndent(pos, end) {
@@ -6059,6 +6055,8 @@ var ts;
             var detachedCommentsInfo;
             var emitDetachedComments = compilerOptions.removeComments ? function (node) {
             } : emitDetachedCommentsAtPosition;
+            var emitPinnedOrTripleSlashComments = compilerOptions.removeComments ? function (node) {
+            } : emitPinnedOrTripleSlashCommentsOfNode;
             var writeComment = writeCommentRange;
             var emit = emitNode;
             var emitStart = function (node) {
@@ -6854,8 +6852,9 @@ var ts;
                 emitTrailingComments(node);
             }
             function emitFunctionDeclaration(node) {
-                if (!node.body)
-                    return;
+                if (!node.body) {
+                    return emitPinnedOrTripleSlashComments(node);
+                }
                 if (node.kind !== 116 /* Method */) {
                     emitLeadingComments(node);
                 }
@@ -7014,8 +7013,9 @@ var ts;
             function emitMemberFunctions(node) {
                 ts.forEach(node.members, function (member) {
                     if (member.kind === 116 /* Method */) {
-                        if (!member.body)
-                            return;
+                        if (!member.body) {
+                            return emitPinnedOrTripleSlashComments(member);
+                        }
                         writeLine();
                         emitLeadingComments(member);
                         emitStart(member);
@@ -7136,6 +7136,11 @@ var ts;
                 }
                 emitTrailingComments(node);
                 function emitConstructorOfClass() {
+                    ts.forEach(node.members, function (member) {
+                        if (member.kind === 117 /* Constructor */ && !member.body) {
+                            emitPinnedOrTripleSlashComments(member);
+                        }
+                    });
                     var ctor = getFirstConstructorWithBody(node);
                     if (ctor) {
                         emitLeadingComments(ctor);
@@ -7190,6 +7195,9 @@ var ts;
                         emitTrailingComments(ctor);
                     }
                 }
+            }
+            function emitInterfaceDeclaration(node) {
+                emitPinnedOrTripleSlashComments(node);
             }
             function emitEnumDeclaration(node) {
                 emitLeadingComments(node);
@@ -7263,8 +7271,9 @@ var ts;
                 }
             }
             function emitModuleDeclaration(node) {
-                if (!ts.isInstantiated(node))
-                    return;
+                if (!ts.isInstantiated(node)) {
+                    return emitPinnedOrTripleSlashComments(node);
+                }
                 emitLeadingComments(node);
                 if (!(node.flags & 1 /* Export */)) {
                     emitStart(node);
@@ -7477,8 +7486,12 @@ var ts;
                 }
             }
             function emitNode(node) {
-                if (!node || node.flags & 2 /* Ambient */)
+                if (!node) {
                     return;
+                }
+                if (node.flags & 2 /* Ambient */) {
+                    return emitPinnedOrTripleSlashComments(node);
+                }
                 switch (node.kind) {
                     case 55 /* Identifier */:
                         return emitIdentifier(node);
@@ -7582,6 +7595,8 @@ var ts;
                         return emitVariableDeclaration(node);
                     case 169 /* ClassDeclaration */:
                         return emitClassDeclaration(node);
+                    case 170 /* InterfaceDeclaration */:
+                        return emitInterfaceDeclaration(node);
                     case 171 /* EnumDeclaration */:
                         return emitEnumDeclaration(node);
                     case 172 /* ModuleDeclaration */:
@@ -7605,7 +7620,7 @@ var ts;
                 }
                 return leadingComments;
             }
-            function emitLeadingDeclarationComments(node) {
+            function getLeadingCommentsToEmit(node) {
                 if (node.parent.kind === 177 /* SourceFile */ || node.pos !== node.parent.pos) {
                     var leadingComments;
                     if (hasDetachedComments(node.pos)) {
@@ -7614,9 +7629,13 @@ var ts;
                     else {
                         leadingComments = ts.getLeadingCommentsOfNode(node, currentSourceFile);
                     }
-                    emitNewLineBeforeLeadingComments(node, leadingComments, writer);
-                    emitComments(leadingComments, true, writer, writeComment);
+                    return leadingComments;
                 }
+            }
+            function emitLeadingDeclarationComments(node) {
+                var leadingComments = getLeadingCommentsToEmit(node);
+                emitNewLineBeforeLeadingComments(node, leadingComments, writer);
+                emitComments(leadingComments, true, writer, writeComment);
             }
             function emitTrailingDeclarationComments(node) {
                 if (node.parent.kind === 177 /* SourceFile */ || node.end !== node.parent.end) {
@@ -7651,7 +7670,7 @@ var ts;
                         detachedComments.push(comment);
                         lastComment = comment;
                     });
-                    if (detachedComments && detachedComments.length) {
+                    if (detachedComments.length) {
                         var lastCommentLine = getLineOfLocalPosition(detachedComments[detachedComments.length - 1].end);
                         var astLine = getLineOfLocalPosition(ts.skipTrivia(currentSourceFile.text, node.pos));
                         if (astLine >= lastCommentLine + 2) {
@@ -7667,6 +7686,19 @@ var ts;
                         }
                     }
                 }
+            }
+            function emitPinnedOrTripleSlashCommentsOfNode(node) {
+                var pinnedComments = ts.filter(getLeadingCommentsToEmit(node), isPinnedOrTripleSlashComment);
+                function isPinnedOrTripleSlashComment(comment) {
+                    if (currentSourceFile.text.charCodeAt(comment.pos + 1) === 42 /* asterisk */) {
+                        return currentSourceFile.text.charCodeAt(comment.pos + 2) === 33 /* exclamation */;
+                    }
+                    else if (currentSourceFile.text.charCodeAt(comment.pos + 1) === 47 /* slash */ && comment.pos + 2 < comment.end && currentSourceFile.text.charCodeAt(comment.pos + 2) === 47 /* slash */ && currentSourceFile.text.substring(comment.pos, comment.end).match(ts.fullTripleSlashReferencePathRegEx)) {
+                        return true;
+                    }
+                }
+                emitNewLineBeforeLeadingComments(node, pinnedComments, writer);
+                emitComments(pinnedComments, true, writer, writeComment);
             }
             if (compilerOptions.sourceMap) {
                 initializeEmitterWithSourceMaps();
@@ -9102,7 +9134,7 @@ var ts;
                 }
                 return symbol.name;
             }
-            if (enclosingDeclaration && !(symbol.flags & ts.SymbolFlags.PropertyOrAccessor & ts.SymbolFlags.Signature & 4096 /* Constructor */ & 2048 /* Method */ & 262144 /* TypeParameter */)) {
+            if (enclosingDeclaration && !(symbol.flags & (ts.SymbolFlags.PropertyOrAccessor | ts.SymbolFlags.Signature | 4096 /* Constructor */ | 2048 /* Method */ | 262144 /* TypeParameter */))) {
                 var symbolName;
                 while (symbol) {
                     var isFirstName = !symbolName;
@@ -10257,13 +10289,12 @@ var ts;
                 return emptyObjectType;
             }
             var type = getDeclaredTypeOfSymbol(symbol);
-            var name = symbol.name;
             if (!(type.flags & ts.TypeFlags.ObjectType)) {
-                error(getTypeDeclaration(symbol), ts.Diagnostics.Global_type_0_must_be_a_class_or_interface_type, name);
+                error(getTypeDeclaration(symbol), ts.Diagnostics.Global_type_0_must_be_a_class_or_interface_type, symbol.name);
                 return emptyObjectType;
             }
             if ((type.typeParameters ? type.typeParameters.length : 0) !== arity) {
-                error(getTypeDeclaration(symbol), ts.Diagnostics.Global_type_0_must_have_1_type_parameter_s, name, arity);
+                error(getTypeDeclaration(symbol), ts.Diagnostics.Global_type_0_must_have_1_type_parameter_s, symbol.name, arity);
                 return emptyObjectType;
             }
             return type;
@@ -11395,7 +11426,8 @@ var ts;
             }
             return false;
         }
-        function checkSuperExpression(node, isCallExpression) {
+        function checkSuperExpression(node) {
+            var isCallExpression = node.parent.kind === 132 /* CallExpression */ && node.parent.func === node;
             var enclosingClass = getAncestor(node, 169 /* ClassDeclaration */);
             var baseClass;
             if (enclosingClass && enclosingClass.baseType) {
@@ -11897,7 +11929,7 @@ var ts;
         }
         function resolveCallExpression(node) {
             if (node.func.kind === 81 /* SuperKeyword */) {
-                var superType = checkSuperExpression(node.func, true);
+                var superType = checkSuperExpression(node.func);
                 if (superType !== unknownType) {
                     return resolveCall(node, getSignaturesOfType(superType, 1 /* Construct */));
                 }
@@ -12370,7 +12402,7 @@ var ts;
                 case 83 /* ThisKeyword */:
                     return checkThisExpression(node);
                 case 81 /* SuperKeyword */:
-                    return checkSuperExpression(node, false);
+                    return checkSuperExpression(node);
                 case 79 /* NullKeyword */:
                     return nullType;
                 case 85 /* TrueKeyword */:
@@ -13811,6 +13843,7 @@ var ts;
                         case 114 /* Parameter */:
                         case 115 /* Property */:
                         case 176 /* EnumMember */:
+                        case 129 /* PropertyAssignment */:
                             return parent.initializer === node;
                         case 146 /* ExpressionStatement */:
                         case 147 /* IfStatement */:
@@ -13913,6 +13946,9 @@ var ts;
             if (entityName.parent.kind === 175 /* ExportAssignment */) {
                 return resolveEntityName(entityName.parent.parent, entityName, ts.SymbolFlags.Value | ts.SymbolFlags.Type | ts.SymbolFlags.Namespace | 4194304 /* Import */);
             }
+            if (isInRightSideOfImportOrExportAssignment(entityName)) {
+                return getSymbolOfPartOfRightHandSideOfImport(entityName);
+            }
             if (isRightSideOfQualifiedNameOrPropertyAccess(entityName)) {
                 entityName = entityName.parent;
             }
@@ -14001,8 +14037,7 @@ var ts;
                 return getTypeOfSymbol(symbol);
             }
             if (isInRightSideOfImportOrExportAssignment(node)) {
-                var symbol;
-                symbol = node.parent.kind === 175 /* ExportAssignment */ ? getSymbolInfo(node) : getSymbolOfPartOfRightHandSideOfImport(node);
+                var symbol = getSymbolInfo(node);
                 var declaredType = getDeclaredTypeOfSymbol(symbol);
                 return declaredType !== unknownType ? declaredType : getTypeOfSymbol(symbol);
             }
@@ -14138,7 +14173,8 @@ var ts;
         function isImplementationOfOverload(node) {
             if (node.body) {
                 var symbol = getSymbolOfNode(node);
-                return getSignaturesOfSymbol(symbol).length > 1;
+                var signaturesOfSymbol = getSignaturesOfSymbol(symbol);
+                return signaturesOfSymbol.length > 1 || (signaturesOfSymbol.length === 1 && signaturesOfSymbol[0].declaration !== node);
             }
             return false;
         }
@@ -14528,6 +14564,9 @@ var ts;
     function createCompilerHost(options) {
         var currentDirectory;
         var existingDirectories = {};
+        function getCanonicalFileName(fileName) {
+            return sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
+        }
         function getSourceFile(filename, languageVersion, onError) {
             try {
                 var text = sys.readFile(filename, options.charset);
@@ -14573,7 +14612,7 @@ var ts;
             writeFile: writeFile,
             getCurrentDirectory: function () { return currentDirectory || (currentDirectory = sys.getCurrentDirectory()); },
             useCaseSensitiveFileNames: function () { return sys.useCaseSensitiveFileNames; },
-            getCanonicalFileName: ts.getCanonicalFileName,
+            getCanonicalFileName: getCanonicalFileName,
             getNewLine: function () { return sys.newLine; }
         };
     }
