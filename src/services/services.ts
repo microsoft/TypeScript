@@ -2174,6 +2174,11 @@ module ts {
                         return getIfElseOccurrences(<IfStatement>node.parent);
                     }
                     break;
+                case SyntaxKind.ReturnKeyword:
+                    if (hasKind(node.parent, SyntaxKind.ReturnStatement)) {
+                        return getReturnOccurrences(<ReturnStatement>node.parent);
+                    }
+                    break;
                 case SyntaxKind.TryKeyword:
                 case SyntaxKind.CatchKeyword:
                 case SyntaxKind.FinallyKeyword:
@@ -2259,6 +2264,25 @@ module ts {
                 }
 
                 return result;
+            }
+
+            function getReturnOccurrences(returnStatement: ReturnStatement): ReferenceEntry[]{
+                var node: Node = returnStatement;
+                while (!isAnyFunction(node) && node.parent) {
+                    node = node.parent;
+                }
+
+                // If we didn't find a containing function with a block body, bail out.
+                if (!(isAnyFunction(node) && hasKind((<FunctionDeclaration>node).body, SyntaxKind.FunctionBlock))) {
+                    return undefined;
+                }
+
+                var keywords: Node[] = []
+                forEachReturnStatement(<Block>(<FunctionDeclaration>node).body, returnStmt => {
+                    pushKeywordIf(keywords, returnStmt.getFirstToken(), SyntaxKind.ReturnKeyword);
+                });
+
+                return map(keywords, keywordToReferenceEntry);
             }
 
             function getTryCatchFinallyOccurrences(tryStatement: TryStatement): ReferenceEntry[] {
