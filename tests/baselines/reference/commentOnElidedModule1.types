@@ -1,7 +1,7 @@
 === tests/cases/compiler/b.ts ===
 ///<reference path="a.ts"/>
 module ElidedModule3 {
->ElidedModule3 : ElidedModule3
+>ElidedModule3 : unknown
 }
 === tests/cases/compiler/a.ts ===
 /*! Keep this pinned comment */
