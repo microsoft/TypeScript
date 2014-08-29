@@ -1,17 +1,22 @@
-//// [tests/cases/compiler/commentOnElidedModule1.ts] ////
+//// [tests/cases/compiler/commentOnAmbientModule.ts] ////
 
 //// [a.ts]
 /*! Keep this pinned comment */
-module ElidedModule {
+declare module C {
+    function foo();
 }
 
 // Don't keep this comment.
-module ElidedModule2 {
+declare module D {
+    class bar { }
 }
 
 //// [b.ts]
 ///<reference path="a.ts"/>
-module ElidedModule3 {
+declare module E {
+    class foobar extends D.bar {
+        foo();
+    }
 }
 
 //// [a.js]

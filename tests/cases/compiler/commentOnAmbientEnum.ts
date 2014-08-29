@@ -1,13 +1,16 @@
 //@filename: a.ts
 /*! Keep this pinned comment */
-module ElidedModule {
+declare enum C {
+    a,
+    b,
+    c
 }
 
 // Don't keep this comment.
-module ElidedModule2 {
+declare enum D {
 }
 
 //@filename: b.ts
 ///<reference path="a.ts"/>
-module ElidedModule3 {
+declare enum E {
 }

@@ -1,17 +1,20 @@
-//// [tests/cases/compiler/commentOnElidedModule1.ts] ////
+//// [tests/cases/compiler/commentOnAmbientEnum.ts] ////
 
 //// [a.ts]
 /*! Keep this pinned comment */
-module ElidedModule {
+declare enum C {
+    a,
+    b,
+    c
 }
 
 // Don't keep this comment.
-module ElidedModule2 {
+declare enum D {
 }
 
 //// [b.ts]
 ///<reference path="a.ts"/>
-module ElidedModule3 {
+declare enum E {
 }
 
 //// [a.js]

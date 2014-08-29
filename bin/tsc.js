@@ -125,7 +125,7 @@ var ts;
         Import_declarations_in_an_internal_module_cannot_reference_an_external_module: { code: 1147, category: 1 /* Error */, key: "Import declarations in an internal module cannot reference an external module." },
         Cannot_compile_external_modules_unless_the_module_flag_is_provided: { code: 1148, category: 1 /* Error */, key: "Cannot compile external modules unless the '--module' flag is provided." },
         Filename_0_differs_from_already_included_filename_1_only_in_casing: { code: 1149, category: 1 /* Error */, key: "Filename '{0}' differs from already included filename '{1}' only in casing" },
-        new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead: { code: 2068, category: 1 /* Error */, key: "'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead." },
+        new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead: { code: 1150, category: 1 /* Error */, key: "'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead." },
         Duplicate_identifier_0: { code: 2300, category: 1 /* Error */, key: "Duplicate identifier '{0}'." },
         Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor: { code: 2301, category: 1 /* Error */, key: "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor." },
         Static_members_cannot_reference_class_type_parameters: { code: 2302, category: 1 /* Error */, key: "Static members cannot reference class type parameters." },
@@ -402,7 +402,8 @@ var ts;
         Index_signature_of_object_type_implicitly_has_an_any_type: { code: 7017, category: 1 /* Error */, key: "Index signature of object type implicitly has an 'any' type." },
         Object_literal_s_property_0_implicitly_has_an_1_type: { code: 7018, category: 1 /* Error */, key: "Object literal's property '{0}' implicitly has an '{1}' type." },
         Rest_parameter_0_implicitly_has_an_any_type: { code: 7019, category: 1 /* Error */, key: "Rest parameter '{0}' implicitly has an 'any[]' type." },
-        Call_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type: { code: 7020, category: 1 /* Error */, key: "Call signature, which lacks return-type annotation, implicitly has an 'any' return type." }
+        Call_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type: { code: 7020, category: 1 /* Error */, key: "Call signature, which lacks return-type annotation, implicitly has an 'any' return type." },
+        You_cannot_rename_this_element: { code: 8000, category: 1 /* Error */, key: "You cannot rename this element." }
     };
 })(ts || (ts = {}));
 var ts;
@@ -1938,9 +1939,9 @@ var ts;
         if (ts.localizedDiagnosticMessages) {
             message = ts.localizedDiagnosticMessages[message];
         }
-        Debug.assert(message, "Diagnostic message does not exist in locale map.");
         return message;
     }
+    ts.getLocaleSpecificMessage = getLocaleSpecificMessage;
     function createFileDiagnostic(file, start, length, message) {
         var text = getLocaleSpecificMessage(message.key);
         if (arguments.length > 4) {
@@ -2247,7 +2248,7 @@ var ts;
     (function (Debug) {
         var currentAssertionLevel = 0 /* None */;
         function shouldAssert(level) {
-            return this.currentAssertionLevel >= level;
+            return currentAssertionLevel >= level;
         }
         Debug.shouldAssert = shouldAssert;
         function assert(expression, message, verboseDebugInfo) {
@@ -2823,7 +2824,6 @@ var ts;
         ControlBlockContext[ControlBlockContext["CrossingFunctionBoundary"] = 2] = "CrossingFunctionBoundary";
     })(ControlBlockContext || (ControlBlockContext = {}));
     function createSourceFile(filename, sourceText, languageVersion, version, isOpen) {
-        if (version === void 0) { version = 0; }
         if (isOpen === void 0) { isOpen = false; }
         var file;
         var scanner;
@@ -4331,8 +4331,6 @@ var ts;
         function parseBreakOrContinueStatement(kind) {
             var node = createNode(kind);
             var errorCountBeforeStatement = file.syntacticErrors.length;
-            var keywordStart = scanner.getTokenPos();
-            var keywordLength = scanner.getTextPos() - keywordStart;
             parseExpected(kind === 153 /* BreakStatement */ ? 56 /* BreakKeyword */ : 61 /* ContinueKeyword */);
             if (!canParseSemicolon())
                 node.label = parseIdentifier();
@@ -6056,6 +6054,8 @@ var ts;
             } : emitLeadingDeclarationComments;
             var emitTrailingComments = compilerOptions.removeComments ? function (node) {
             } : emitTrailingDeclarationComments;
+            var emitLeadingCommentsOfPosition = compilerOptions.removeComments ? function (pos) {
+            } : emitLeadingCommentsOfLocalPosition;
             var detachedCommentsInfo;
             var emitDetachedComments = compilerOptions.removeComments ? function (node) {
             } : emitDetachedCommentsAtPosition;
@@ -6923,12 +6923,14 @@ var ts;
                         write(";");
                         emitTrailingComments(node.body);
                     }
-                    decreaseIndent();
                     writeLine();
                     if (node.body.kind === 168 /* FunctionBlock */) {
+                        emitLeadingCommentsOfPosition(node.body.statements.end);
+                        decreaseIndent();
                         emitToken(6 /* CloseBraceToken */, node.body.statements.end);
                     }
                     else {
+                        decreaseIndent();
                         emitStart(node.body);
                         write("}");
                         emitEnd(node.body);
@@ -7176,8 +7178,11 @@ var ts;
                             statements = statements.slice(1);
                         emitLines(statements);
                     }
-                    decreaseIndent();
                     writeLine();
+                    if (ctor) {
+                        emitLeadingCommentsOfPosition(ctor.body.statements.end);
+                    }
+                    decreaseIndent();
                     emitToken(6 /* CloseBraceToken */, ctor ? ctor.body.statements.end : node.members.end);
                     scopeEmitEnd();
                     emitEnd(ctor || node);
@@ -7438,6 +7443,7 @@ var ts;
             }
             function emitSourceFile(node) {
                 currentSourceFile = node;
+                writeLine();
                 emitDetachedComments(node);
                 var startIndex = emitDirectivePrologues(node.statements, false);
                 if (!extendsEmitted && resolver.getNodeCheckFlags(node) & 8 /* EmitExtends */) {
@@ -7586,20 +7592,27 @@ var ts;
                         return emitSourceFile(node);
                 }
             }
+            function hasDetachedComments(pos) {
+                return detachedCommentsInfo !== undefined && detachedCommentsInfo[detachedCommentsInfo.length - 1].nodePos === pos;
+            }
+            function getLeadingCommentsWithoutDetachedComments() {
+                var leadingComments = ts.getLeadingComments(currentSourceFile.text, detachedCommentsInfo[detachedCommentsInfo.length - 1].detachedCommentEndPos);
+                if (detachedCommentsInfo.length - 1) {
+                    detachedCommentsInfo.pop();
+                }
+                else {
+                    detachedCommentsInfo = undefined;
+                }
+                return leadingComments;
+            }
             function emitLeadingDeclarationComments(node) {
                 if (node.parent.kind === 177 /* SourceFile */ || node.pos !== node.parent.pos) {
                     var leadingComments;
-                    if (detachedCommentsInfo === undefined || detachedCommentsInfo[detachedCommentsInfo.length - 1].nodePos !== node.pos) {
-                        leadingComments = ts.getLeadingCommentsOfNode(node, currentSourceFile);
+                    if (hasDetachedComments(node.pos)) {
+                        leadingComments = getLeadingCommentsWithoutDetachedComments();
                     }
                     else {
-                        leadingComments = ts.getLeadingComments(currentSourceFile.text, detachedCommentsInfo[detachedCommentsInfo.length - 1].detachedCommentEndPos);
-                        if (detachedCommentsInfo.length - 1) {
-                            detachedCommentsInfo.pop();
-                        }
-                        else {
-                            detachedCommentsInfo = undefined;
-                        }
+                        leadingComments = ts.getLeadingCommentsOfNode(node, currentSourceFile);
                     }
                     emitNewLineBeforeLeadingComments(node, leadingComments, writer);
                     emitComments(leadingComments, true, writer, writeComment);
@@ -7610,6 +7623,17 @@ var ts;
                     var trailingComments = ts.getTrailingComments(currentSourceFile.text, node.end);
                     emitComments(trailingComments, false, writer, writeComment);
                 }
+            }
+            function emitLeadingCommentsOfLocalPosition(pos) {
+                var leadingComments;
+                if (hasDetachedComments(pos)) {
+                    leadingComments = getLeadingCommentsWithoutDetachedComments();
+                }
+                else {
+                    leadingComments = ts.getLeadingComments(currentSourceFile.text, pos);
+                }
+                emitNewLineBeforeLeadingComments({ pos: pos, end: pos }, leadingComments, writer);
+                emitComments(leadingComments, true, writer, writeComment);
             }
             function emitDetachedCommentsAtPosition(node) {
                 var leadingComments = ts.getLeadingComments(currentSourceFile.text, node.pos);
@@ -9561,7 +9585,7 @@ var ts;
         function getTypeOfFuncClassEnumModule(symbol) {
             var links = getSymbolLinks(symbol);
             if (!links.type) {
-                var type = links.type = createObjectType(8192 /* Anonymous */, symbol);
+                links.type = createObjectType(8192 /* Anonymous */, symbol);
             }
             return links.type;
         }
@@ -10233,6 +10257,7 @@ var ts;
                 return emptyObjectType;
             }
             var type = getDeclaredTypeOfSymbol(symbol);
+            var name = symbol.name;
             if (!(type.flags & ts.TypeFlags.ObjectType)) {
                 error(getTypeDeclaration(symbol), ts.Diagnostics.Global_type_0_must_be_a_class_or_interface_type, name);
                 return emptyObjectType;
@@ -14465,13 +14490,14 @@ var ts;
         return diagnostic.messageText;
     }
     function reportDiagnostic(diagnostic) {
+        var output = "";
         if (diagnostic.file) {
             var loc = diagnostic.file.getLineAndCharacterFromPosition(diagnostic.start);
-            sys.write(diagnostic.file.filename + "(" + loc.line + "," + loc.character + "): " + diagnostic.messageText + sys.newLine);
+            output += diagnostic.file.filename + "(" + loc.line + "," + loc.character + "): ";
         }
-        else {
-            sys.write(diagnostic.messageText + sys.newLine);
-        }
+        var category = ts.DiagnosticCategory[diagnostic.category].toLowerCase();
+        output += category + " TS" + diagnostic.code + ": " + diagnostic.messageText + sys.newLine;
+        sys.write(output);
     }
     function reportDiagnostics(diagnostics) {
         for (var i = 0; i < diagnostics.length; i++) {
@@ -14512,7 +14538,7 @@ var ts;
                 }
                 text = "";
             }
-            return text !== undefined ? ts.createSourceFile(filename, text, languageVersion) : undefined;
+            return text !== undefined ? ts.createSourceFile(filename, text, languageVersion, "0") : undefined;
         }
         function writeFile(fileName, data, writeByteOrderMark, onError) {
             function directoryExists(directoryPath) {
