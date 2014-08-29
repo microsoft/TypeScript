@@ -2210,7 +2210,15 @@ module ts {
 
                 // Now traverse back down through the else branches, aggregating if/else keywords of if-statements.
                 while (ifStatement) {
-                    pushIfAndElseKeywords();
+                    var children = ifStatement.getChildren();
+                    pushKeywordIf(keywords, children[0], SyntaxKind.IfKeyword);
+
+                    // Generally the 'else' keyword is second-to-last, so we traverse backwards.
+                    for (var i = children.length - 1; i >= 0; i--) {
+                        if (pushKeywordIf(keywords, children[i], SyntaxKind.ElseKeyword)) {
+                            break;
+                        }
+                    }
 
                     if (!hasKind(ifStatement.elseStatement, SyntaxKind.IfStatement)) {
                         break
@@ -2221,42 +2229,36 @@ module ts {
 
                 var result: ReferenceEntry[] = [];
 
-                // Here we do a little extra.
-                // We'd like to make else/ifs on the same line to be highlighted together
+                // We'd like to highlight else/ifs together if they are only separated by spaces/tabs
+                // (i.e. the keywords are separated by no comments, no newlines).
                 for (var i = 0; i < keywords.length; i++) {
                     if (keywords[i].kind === SyntaxKind.ElseKeyword && i < keywords.length - 1) {
                         var elseKeyword = keywords[i];
                         var ifKeyword = keywords[i + 1]; // this *should* always be an 'if' keyword.
 
-                        // Ensure that the keywords are only separated by trivia.
-                        if (elseKeyword.end === ifKeyword.getFullStart()) {
-                            var elseLine = sourceFile.getLineAndCharacterFromPosition(elseKeyword.end);
-                            var ifLine = sourceFile.getLineAndCharacterFromPosition(ifKeyword.getStart());
+                        var shouldHighlightNextKeyword = true;
 
-                            if (elseLine.line === ifLine.line) {
-                                result.push(new ReferenceEntry(filename, TypeScript.TextSpan.fromBounds(elseKeyword.getStart(), ifKeyword.end), /* isWriteAccess */ false));
-                                i++; // skip the next keyword
-                                continue;
+                        // Avoid recalculating getStart() by iterating backwards.
+                        for (var j = ifKeyword.getStart() - 1; j >= elseKeyword.end; j--) {
+                            var c = sourceFile.text.charCodeAt(j);
+                            if (c !== CharacterCodes.space && c !== CharacterCodes.tab) {
+                                shouldHighlightNextKeyword = false;
+                                break;
                             }
+                        }
+
+                        if (shouldHighlightNextKeyword) {
+                            result.push(new ReferenceEntry(filename, TypeScript.TextSpan.fromBounds(elseKeyword.getStart(), ifKeyword.end), /* isWriteAccess */ false));
+                            i++; // skip the next keyword
+                            continue;
                         }
                     }
 
+                    // Ordinary case: just highlight the keyword.
                     result.push(keywordToReferenceEntry(keywords[i]));
                 }
 
                 return result;
-
-                function pushIfAndElseKeywords() {
-                    var children = ifStatement.getChildren();
-                    pushKeywordIf(keywords, children[0], SyntaxKind.IfKeyword);
-
-                    // Generally the 'else' keyword is second-to-last, so we traverse backwards.
-                    for (var i = children.length - 1; i >= 0; i--) {
-                        if (pushKeywordIf(keywords, children[i], SyntaxKind.ElseKeyword)) {
-                            break;
-                        }
-                    }
-                }
             }
 
             function getTryCatchFinallyOccurrences(tryStatement: TryStatement): ReferenceEntry[] {
@@ -2350,7 +2352,7 @@ module ts {
             }
 
             function pushKeywordIf(keywordList: Node[], token: Node, ...expected: SyntaxKind[]): boolean {
-                if (token && contains(<SyntaxKind[]>expected, token.kind)) {
+                if (token && contains(expected, token.kind)) {
                     keywordList.push(token);
                     return true;
                 }

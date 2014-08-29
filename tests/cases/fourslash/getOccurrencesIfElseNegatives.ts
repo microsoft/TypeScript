@@ -13,7 +13,7 @@
 ////                var x = undefined;
 ////    }
 ////}
-////else/*8*/ if (null) {
+////else/*8*/            if (null) {
 ////}
 ////else/*9*/ /* whar garbl */ if/*10*/ (undefined) {
 ////}
@@ -23,7 +23,7 @@
 ////else/*13*/ { }
 
 
-for (var i = 1; i <= test.markers().length; i++) {
-    goTo.marker("" + i);
+test.markers().forEach(m => {
+    goTo.position(m.position, m.fileName)
     verify.occurrencesAtPositionCount(0);
-}
+});

@@ -13,9 +13,9 @@
 ////                var x = undefined;
 ////    }
 ////}
-////[|else i/**/f|] (null) {
+////[|else            i/**/f|] (null) {
 ////}
-////[|else /* whar garbl */ if|] (undefined) {
+////[|else|] /* whar garbl */ [|if|] (undefined) {
 ////}
 ////[|else|]
 ////[|if|] (false) {
