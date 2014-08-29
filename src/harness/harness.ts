@@ -534,13 +534,17 @@ module Harness {
         export var defaultLibFileName = 'lib.d.ts';
         export var defaultLibSourceFile = ts.createSourceFile(defaultLibFileName, IO.readFile(libFolder + 'lib.core.d.ts'), /*languageVersion*/ ts.ScriptTarget.ES5, /*version:*/ "0");
 
+        export function getCanonicalFileName(fileName: string): string {
+            return sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
+        }
+
         export function createCompilerHost(filemap: { [filename: string]: ts.SourceFile; }, writeFile: (fn: string, contents: string, writeByteOrderMark:boolean) => void): ts.CompilerHost {
             return {
                 getCurrentDirectory: sys.getCurrentDirectory,
                 getCancellationToken: (): any => undefined,
                 getSourceFile: (fn, languageVersion) => {
-                    if (Object.prototype.hasOwnProperty.call(filemap, ts.getCanonicalFileName(fn))) {
-                        return filemap[ts.getCanonicalFileName(fn)];
+                    if (Object.prototype.hasOwnProperty.call(filemap, getCanonicalFileName(fn))) {
+                        return filemap[getCanonicalFileName(fn)];
                     } else {
                         var lib = defaultLibFileName;
                         if (fn === defaultLibFileName) {
@@ -552,7 +556,7 @@ module Harness {
                 },
                 getDefaultLibFilename: () => defaultLibFileName,
                 writeFile: writeFile,
-                getCanonicalFileName: ts.getCanonicalFileName,
+                getCanonicalFileName: getCanonicalFileName,
                 useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
                 getNewLine: ()=> sys.newLine
             };
@@ -729,7 +733,7 @@ module Harness {
                 var filemap: { [name: string]: ts.SourceFile; } = {};
                 var register = (file: { unitName: string; content: string; }) => {
                     var filename = Path.switchToForwardSlashes(file.unitName);
-                    filemap[ts.getCanonicalFileName(filename)] = ts.createSourceFile(filename, file.content, options.target, /*version:*/ "0");
+                    filemap[getCanonicalFileName(filename)] = ts.createSourceFile(filename, file.content, options.target, /*version:*/ "0");
                 };
                 inputFiles.forEach(register);
                 otherFiles.forEach(register);

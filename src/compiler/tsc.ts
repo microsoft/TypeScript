@@ -137,6 +137,12 @@ module ts {
         var currentDirectory: string;
         var existingDirectories: Map<boolean> = {};
 
+        function getCanonicalFileName(fileName: string): string {
+            // if underlying system can distinguish between two files whose names differs only in cases then file name already in canonical form.
+            // otherwise use toLowerCase as a canonical form.
+            return sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
+        }
+
         function getSourceFile(filename: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile {
             try {
                 var text = sys.readFile(filename, options.charset);
@@ -323,6 +329,7 @@ module ts {
     function compile(commandLine: ParsedCommandLine, compilerHost: CompilerHost) {
         var parseStart = new Date().getTime();
         var program = createProgram(commandLine.filenames, commandLine.options, compilerHost);
+
         var bindStart = new Date().getTime();
         var errors = program.getDiagnostics();
         if (errors.length) {

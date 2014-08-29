@@ -290,7 +290,7 @@ module ts {
                 }
                 else {
                     // Empty string - make sure we write empty line
-                    writer.writeLiteral(sys.newLine);
+                    writer.writeLiteral(newLine);
                 }
             }
 
