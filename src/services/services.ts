@@ -73,6 +73,200 @@ module ts {
         update(scriptSnapshot: TypeScript.IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile;
     }
 
+    export interface TypeQueryNode {
+        typeOfKeyword?: Node;
+    }
+
+    export interface SignatureDeclaration extends HasOpenBracketAndCloseBracket {
+    }
+
+    export interface ParsedSignature extends HasOpenParenAndCloseParen, HasLessThanAndGreaterThan {
+    }
+
+    export interface TypeLiteralNode extends HasOpenBraceAndCloseBrace {
+    }
+
+    export interface Signature {
+        newKeyword?: Node;
+    }
+
+    export interface ArrayTypeNode {
+        closeBracketToken?: Node;
+    }
+
+    export interface ParameterDeclaration {
+        equalsToken?: Node;
+    }
+
+    export interface HasLessThanAndGreaterThan {
+        lessThanToken?: Node;
+        greaterThanToken?: Node;
+    }
+
+    export interface HasOpenParenAndCloseParen {
+        openParenToken?: Node;
+        closeParenToken?: Node;
+    }
+
+    export interface HasOpenBracketAndCloseBracket {
+        openBracketToken?: Node;
+        closeBracketToken?: Node;
+    }
+
+    export interface HasOpenBraceAndCloseBrace {
+        openBraceToken?: Node;
+        closeBraceToken?: Node;
+    }
+
+    export interface TypeAssertion extends HasLessThanAndGreaterThan {
+    }
+
+    export interface IndexedAccess extends HasOpenBracketAndCloseBracket {
+    }
+
+    export interface CallExpression extends HasOpenParenAndCloseParen, HasLessThanAndGreaterThan {
+    }
+
+    export interface ParenExpression extends HasOpenParenAndCloseParen {
+    }
+
+    export interface ArrayLiteral extends HasOpenBracketAndCloseBracket {
+    }
+
+    export interface VariableDeclaration {
+        colonToken?: Node;
+    }
+
+    export interface ObjectLiteral extends Block {
+    }
+
+    export interface FunctionDeclaration {
+        functionKeyword?: Node;
+    }
+
+    export interface ConstructorDeclaration {
+        constructorKeyword?: Node;
+    }
+
+    export interface VariableStatement {
+        varKeyword?: Node;
+    }
+
+    export interface DebuggerStatement {
+        debuggerKeyword?: Node;
+    }
+
+    export interface NewExpression extends CallExpression {
+        newKeyword?: Node;
+    }
+
+    export interface LabelledStatement {
+        colonToken?: Node;
+    }
+
+    export interface Block extends HasOpenBraceAndCloseBrace {
+    }
+
+    export interface CatchBlock extends HasOpenParenAndCloseParen {
+        catchKeyword?: Node;
+    }
+
+    export interface Statement {
+        semicolonToken?: Node;
+    }
+
+    export interface ModuleDeclaration {
+        moduleKeyword?: Node;
+    }
+
+    export interface ImportDeclaration extends HasOpenParenAndCloseParen {
+        importKeyword?: Node;
+        equalsToken?: Node;
+    }
+
+    export interface InterfaceDeclaration extends HasOpenBraceAndCloseBrace {
+        interfaceKeyword?: Node;
+    }
+
+    export interface ClassDeclaration extends HasOpenBraceAndCloseBrace, HasLessThanAndGreaterThan {
+        classKeyword?: Node;
+    }
+
+    export interface ThrowStatement {
+        throwKeyword?: Node;
+    }
+
+    export interface SwitchStatement extends HasOpenParenAndCloseParen, HasOpenBraceAndCloseBrace {
+        switchKeyword?: Node;
+    }
+
+    export interface CaseOrDefaultClause {
+        caseKeyword?: Node;
+        defaultKeyword?: Node;
+        colonToken?: Node;
+    }
+
+    export interface ReturnStatement {
+        returnKeyword?: Node;
+    }
+
+    export interface WithStatement extends HasOpenParenAndCloseParen {
+        withKeyword?: Node;
+    }
+
+    export interface BreakOrContinueStatement {
+        breakOrContinueKeyword?: Node;
+    }
+
+    export interface DoStatement extends HasOpenParenAndCloseParen {
+        doKeyword?: Node;
+        whileKeyword?: Node;
+    }
+
+    export interface WhileStatement extends HasOpenParenAndCloseParen {
+        whileKeyword?: Node;
+    }
+
+    export interface IfStatement extends HasOpenParenAndCloseParen {
+        ifKeyword?: Node;
+        elseKeyword?: Node;
+    }
+
+    export interface TypeReferenceNode extends HasLessThanAndGreaterThan {
+    }
+
+    export interface TryStatement {
+        tryKeyword?: Node;
+        finallyKeyword?: Node;
+    }
+
+    export interface ConditionalExpression {
+        questionToken?: Node;
+        colonToken?: Node;
+    }
+
+    export interface EnumMember {
+        equalsToken?: Node;
+    }
+
+    export interface EnumDeclaration extends HasOpenBraceAndCloseBrace {
+        enumKeyword?: Node;
+    }
+
+    export interface FunctionExpression {
+        equalsGreaterThanToken?: Node;
+    }
+
+    export interface ForStatement extends HasOpenParenAndCloseParen {
+        firstSemicolonToken?: Node;
+        secondSemicolonToken?: Node;
+        forKeyword?: Node;
+    }
+
+    export interface ForInStatement extends HasOpenParenAndCloseParen {
+        forKeyword?: Node;
+    }
+
     var scanner: Scanner = createScanner(ScriptTarget.ES5);
 
     var emptyArray: any [] = [];
@@ -3447,6 +3641,11 @@ module ts {
             getTypeConstructor: () => TypeObject,
             getSignatureConstructor: () => SignatureObject,
         };
+
+        parserHooks = {
+            onParseExpected(kind: SyntaxKind, parent: Node, propertyName: string, isMissing: boolean) {
+            }
+        }
     }
 
     initializeServices();
