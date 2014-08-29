@@ -2173,6 +2173,7 @@ module ts {
                     if (hasKind(node.parent, SyntaxKind.IfStatement)) {
                         return getIfElseOccurrences(<IfStatement>node.parent);
                     }
+                    break;
                 case SyntaxKind.TryKeyword:
                 case SyntaxKind.CatchKeyword:
                 case SyntaxKind.FinallyKeyword:
