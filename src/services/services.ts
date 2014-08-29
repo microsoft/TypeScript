@@ -81,6 +81,8 @@ module ts {
     }
 
     export interface ParsedSignature extends HasOpenParenAndCloseParen, HasLessThanAndGreaterThan {
+        equalsGreaterThanToken?: Node;
+        colonToken?: Node;
     }
 
     export interface TypeLiteralNode extends HasOpenBraceAndCloseBrace {
@@ -169,6 +171,7 @@ module ts {
 
     export interface CatchBlock extends HasOpenParenAndCloseParen {
         catchKeyword?: Node;
+        colonToken?: Node;
     }
 
     export interface Statement {
@@ -185,11 +188,14 @@ module ts {
     }
 
     export interface InterfaceDeclaration extends HasOpenBraceAndCloseBrace {
+        extendsKeyword?: Node;
         interfaceKeyword?: Node;
     }
 
     export interface ClassDeclaration extends HasOpenBraceAndCloseBrace, HasLessThanAndGreaterThan {
         classKeyword?: Node;
+        extendsKeyword?: Node;
+        implementsKeyword?: Node;
     }
 
     export interface ThrowStatement {
@@ -261,10 +267,30 @@ module ts {
         firstSemicolonToken?: Node;
         secondSemicolonToken?: Node;
         forKeyword?: Node;
+        varKeyword?: Node;
     }
 
     export interface ForInStatement extends HasOpenParenAndCloseParen {
         forKeyword?: Node;
+        varKeyword?: Node;
+        inKeyword?: Node;
+    }
+
+    export interface QualifiedName {
+        dotToken?: Node;
+    }
+
+    export interface TypeParameterDeclaration {
+        extendsKeyword?: Node;
+    }
+
+    export interface ParameterDeclaration {
+        dotDotDotToken?: Node;
+        questionToken?: Node;
+    }
+
+    export interface PropertyDeclaration {
+        questionToken?: Node;
     }
 
     var scanner: Scanner = createScanner(ScriptTarget.ES5);
