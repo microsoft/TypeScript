@@ -7,11 +7,11 @@ module m1 {
     }
 }
 var foo = new m1.m1();
->foo : m1
->new m1.m1() : m1
->m1.m1 : typeof m1
+>foo : m1.m1
+>new m1.m1() : m1.m1
+>m1.m1 : typeof m1.m1
 >m1 : typeof m1
->m1 : typeof m1
+>m1 : typeof m1.m1
 
 module m1 {
 >m1 : typeof m1
@@ -30,11 +30,11 @@ module m1 {
 >m1 : typeof m1
 }
 var foo2 = new m1.c1();
->foo2 : c1
->new m1.c1() : c1
->m1.c1 : typeof c1
+>foo2 : m1.c1
+>new m1.c1() : m1.c1
+>m1.c1 : typeof m1.c1
 >m1 : typeof m1
->c1 : typeof c1
+>c1 : typeof m1.c1
 
 module m2 {
 >m2 : typeof m2
@@ -51,11 +51,11 @@ module m2 {
 >c1 : typeof c1
 }
 var foo3 = new m2.c1();
->foo3 : c1
->new m2.c1() : c1
->m2.c1 : typeof c1
+>foo3 : m2.c1
+>new m2.c1() : m2.c1
+>m2.c1 : typeof m2.c1
 >m2 : typeof m2
->c1 : typeof c1
+>c1 : typeof m2.c1
 
 module m2 {
 >m2 : typeof m2
@@ -78,16 +78,16 @@ module m2 {
 >c1 : typeof c1
 }
 var foo3 = new m2.c1();
->foo3 : c1
->new m2.c1() : c1
->m2.c1 : typeof c1
+>foo3 : m2.c1
+>new m2.c1() : m2.c1
+>m2.c1 : typeof m2.c1
 >m2 : typeof m2
->c1 : typeof c1
+>c1 : typeof m2.c1
 
 var foo2 = new m2.m2();
->foo2 : c1
->new m2.m2() : m2
->m2.m2 : typeof m2
+>foo2 : m1.c1
+>new m2.m2() : m2.m2
+>m2.m2 : typeof m2.m2
 >m2 : typeof m2
->m2 : typeof m2
+>m2 : typeof m2.m2
 

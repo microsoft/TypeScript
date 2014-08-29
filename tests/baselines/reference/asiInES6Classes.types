@@ -6,11 +6,7 @@ class Foo {
 
     defaults = {
 >defaults : { done: boolean; }
->{
-
-        done: false
-
-    } : { done: boolean; }
+>{        done: false    } : { done: boolean; }
 
         done: false
 >done : boolean

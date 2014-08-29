@@ -16,9 +16,7 @@ class A {
 
         var v = () => {
 >v : () => void
->() => {
-            return this.n();
-        } : () => void
+>() => {            return this.n();        } : () => void
 
             return this.n();
 >this.n() : void

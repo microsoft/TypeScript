@@ -39,9 +39,7 @@ var r2: void = i.valueOf();
 
 var a = {
 >a : { valueOf: () => void; }
->{
-    valueOf: () => { }
-} : { valueOf: () => void; }
+>{    valueOf: () => { }} : { valueOf: () => void; }
 
     valueOf: () => { }
 >valueOf : () => void

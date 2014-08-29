@@ -17,10 +17,10 @@ module A {
 }
 
 module B {
->B : B
+>B : unknown
 
     import Y = A;
->Y : typeof A
->A : A
+>Y : typeof Y
+>A : Y
 }
 

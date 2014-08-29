@@ -9,12 +9,12 @@ module a.b.c {
 }
 module a.e.f {
 >a : typeof a
->e : e
->f : f
+>e : unknown
+>f : unknown
 
       import g = b.c;
->g : typeof c
+>g : typeof g
 >b : typeof b
->c : typeof c
+>c : typeof g
 }
 

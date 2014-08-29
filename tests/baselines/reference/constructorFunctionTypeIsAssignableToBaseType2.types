@@ -34,6 +34,7 @@ class Derived extends Base {
 
         super(x);
 >super(x) : void
+>super : typeof Base
 >x : number
     }
 }
@@ -55,6 +56,7 @@ class Derived2 extends Base {
 
         super(x);
 >super(x) : void
+>super : typeof Base
 >x : any
 
         return 1;

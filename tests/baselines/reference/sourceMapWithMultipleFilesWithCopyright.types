@@ -15,10 +15,7 @@ Copyright
 
 var x = {
 >x : { a: number; b: number; }
->{
-    a: 10,
-    b: 20
-} : { a: number; b: number; }
+>{    a: 10,    b: 20} : { a: number; b: number; }
 
     a: 10,
 >a : number

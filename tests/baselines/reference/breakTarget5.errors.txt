@@ -1,0 +1,11 @@
+==== tests/cases/compiler/breakTarget5.ts (1 errors) ====
+    target:
+    while (true) {
+      function f() {
+        while (true) {
+          break target;
+          ~~~~~~~~~~~~~
+!!! Jump target cannot cross function boundary.
+        }
+      }
+    }

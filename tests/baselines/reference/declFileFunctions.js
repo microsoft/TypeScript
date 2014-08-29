@@ -21,6 +21,11 @@ export function fooWithOverloads(a: any): any {
     return a;
 }
 
+export function fooWithSingleOverload(a: string): string;
+export function fooWithSingleOverload(a: any) {
+    return a;
+}
+
 /** This comment should appear for nonExportedFoo*/
 function nonExportedFoo() {
 }
@@ -83,6 +88,10 @@ function fooWithOverloads(a) {
     return a;
 }
 exports.fooWithOverloads = fooWithOverloads;
+function fooWithSingleOverload(a) {
+    return a;
+}
+exports.fooWithSingleOverload = fooWithSingleOverload;
 /** This comment should appear for nonExportedFoo*/
 function nonExportedFoo() {
 }
@@ -134,6 +143,7 @@ export declare function fooWithParameters(/** this is comment about a*/ a: strin
 export declare function fooWithRestParameters(a: string, ...rests: string[]): string;
 export declare function fooWithOverloads(a: string): string;
 export declare function fooWithOverloads(a: number): number;
+export declare function fooWithSingleOverload(a: string): string;
 //// [declFileFunctions_1.d.ts]
 /** This comment should appear for foo*/
 declare function globalfoo(): void;

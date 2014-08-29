@@ -20,16 +20,16 @@ module M {
 }
 
 var c=new M.C();
->c : C
->new M.C() : C
->M.C : typeof C
+>c : M.C
+>new M.C() : M.C
+>M.C : typeof M.C
 >M : typeof M
->C : typeof C
+>C : typeof M.C
 
 c.m(function(n) { return "hello: "+n; },18);
 >c.m(function(n) { return "hello: "+n; },18) : string
 >c.m : (fn: (n: number) => string, n2: number) => string
->c : C
+>c : M.C
 >m : (fn: (n: number) => string, n2: number) => string
 >function(n) { return "hello: "+n; } : (n: number) => string
 >n : number

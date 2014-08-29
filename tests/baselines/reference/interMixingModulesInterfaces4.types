@@ -27,8 +27,8 @@ var x : number = A.B.createB();
 >x : number
 >A.B.createB() : number
 >A.B.createB : () => number
->A.B : typeof B
+>A.B : typeof A.B
 >A : typeof A
->B : typeof B
+>B : typeof A.B
 >createB : () => number
 

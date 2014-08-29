@@ -215,21 +215,14 @@ declare function setTimeout(expression: any, msec?: number, language?: any): num
 
 var messenger = {
 >messenger : { message: string; start: () => void; }
->{
-    message: "Hello World",
-    start: function() {
-        setTimeout(() => { this.message.toString(); }, 3000);
-    }
-} : { message: string; start: () => void; }
+>{    message: "Hello World",    start: function() {        setTimeout(() => { this.message.toString(); }, 3000);    }} : { message: string; start: () => void; }
 
     message: "Hello World",
 >message : string
 
     start: function() {
 >start : () => void
->function() {
-        setTimeout(() => { this.message.toString(); }, 3000);
-    } : () => void
+>function() {        setTimeout(() => { this.message.toString(); }, 3000);    } : () => void
 
         setTimeout(() => { this.message.toString(); }, 3000);
 >setTimeout(() => { this.message.toString(); }, 3000) : number

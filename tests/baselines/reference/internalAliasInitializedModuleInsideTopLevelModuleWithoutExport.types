@@ -17,11 +17,11 @@ import b = a.b;
 >b : typeof b
 
 export var x: b.c = new b.c();
->x : c
->b : b
->c : c
->new b.c() : c
->b.c : typeof c
+>x : b.c
+>b : unknown
+>c : b.c
+>new b.c() : b.c
+>b.c : typeof b.c
 >b : typeof b
->c : typeof c
+>c : typeof b.c
 

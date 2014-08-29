@@ -32,9 +32,7 @@ fooWithParameters("a", 10);
  */
 var fooFunc = function FooFunctionValue(/** fooFunctionValue param */ b: string) {
 >fooFunc : (b: string) => string
->function FooFunctionValue(/** fooFunctionValue param */ b: string) {
-    return b;
-} : (b: string) => string
+>function FooFunctionValue(/** fooFunctionValue param */ b: string) {    return b;} : (b: string) => string
 >FooFunctionValue : (b: string) => string
 >b : string
 

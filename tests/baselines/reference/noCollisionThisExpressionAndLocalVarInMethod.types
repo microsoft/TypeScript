@@ -9,24 +9,13 @@ class a {
 >method1 : () => { doStuff: (callback: any) => () => any; }
 
         return {
->{
-            doStuff: (callback) => () => {
-                var _this = 2;
-                return callback(_this);
-            }
-        } : { doStuff: (callback: any) => () => any; }
+>{            doStuff: (callback) => () => {                var _this = 2;                return callback(_this);            }        } : { doStuff: (callback: any) => () => any; }
 
             doStuff: (callback) => () => {
 >doStuff : (callback: any) => () => any
->(callback) => () => {
-                var _this = 2;
-                return callback(_this);
-            } : (callback: any) => () => any
+>(callback) => () => {                var _this = 2;                return callback(_this);            } : (callback: any) => () => any
 >callback : any
->() => {
-                var _this = 2;
-                return callback(_this);
-            } : () => any
+>() => {                var _this = 2;                return callback(_this);            } : () => any
 
                 var _this = 2;
 >_this : number
@@ -45,21 +34,13 @@ class a {
 >_this : number
 
         return {
->{
-            doStuff: (callback) => () => {
-                return callback(_this);
-            }
-        } : { doStuff: (callback: any) => () => any; }
+>{            doStuff: (callback) => () => {                return callback(_this);            }        } : { doStuff: (callback: any) => () => any; }
 
             doStuff: (callback) => () => {
 >doStuff : (callback: any) => () => any
->(callback) => () => {
-                return callback(_this);
-            } : (callback: any) => () => any
+>(callback) => () => {                return callback(_this);            } : (callback: any) => () => any
 >callback : any
->() => {
-                return callback(_this);
-            } : () => any
+>() => {                return callback(_this);            } : () => any
 
                 return callback(_this);
 >callback(_this) : any

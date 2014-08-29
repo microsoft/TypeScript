@@ -7,7 +7,7 @@ module Alpha {
 }
 
 module Beta {
->Beta : Beta
+>Beta : unknown
 
     import p = Alpha.x;
 >p : number

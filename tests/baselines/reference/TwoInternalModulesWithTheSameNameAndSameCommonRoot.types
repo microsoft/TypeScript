@@ -72,48 +72,48 @@ var o: { x: number; y: number };
 
 var o: A.Point;
 >o : { x: number; y: number; }
->A : A
->Point : Point
+>A : unknown
+>Point : A.Point
 
 var o = A.Origin;
 >o : { x: number; y: number; }
->A.Origin : Point
+>A.Origin : A.Point
 >A : typeof A
->Origin : Point
+>Origin : A.Point
 
 var o = A.Utils.mirror(o);
 >o : { x: number; y: number; }
 >A.Utils.mirror(o) : { x: number; y: number; }
->A.Utils.mirror : <T extends Point>(p: T) => { x: number; y: number; }
->A.Utils : typeof Utils
+>A.Utils.mirror : <T extends A.Point>(p: T) => { x: number; y: number; }
+>A.Utils : typeof A.Utils
 >A : typeof A
->Utils : typeof Utils
->mirror : <T extends Point>(p: T) => { x: number; y: number; }
+>Utils : typeof A.Utils
+>mirror : <T extends A.Point>(p: T) => { x: number; y: number; }
 >o : { x: number; y: number; }
 
 var p: { tl: A.Point; br: A.Point };
->p : { tl: Point; br: Point; }
->tl : Point
->A : A
->Point : Point
->br : Point
->A : A
->Point : Point
+>p : { tl: A.Point; br: A.Point; }
+>tl : A.Point
+>A : unknown
+>Point : A.Point
+>br : A.Point
+>A : unknown
+>Point : A.Point
 
 var p: A.Utils.Plane;
->p : { tl: Point; br: Point; }
->A : A
->Utils : Utils
->Plane : Plane
+>p : { tl: A.Point; br: A.Point; }
+>A : unknown
+>Utils : unknown
+>Plane : A.Utils.Plane
 
 var p = new A.Utils.Plane(o, { x: 1, y: 1 });
->p : { tl: Point; br: Point; }
->new A.Utils.Plane(o, { x: 1, y: 1 }) : Plane
->A.Utils.Plane : typeof Plane
->A.Utils : typeof Utils
+>p : { tl: A.Point; br: A.Point; }
+>new A.Utils.Plane(o, { x: 1, y: 1 }) : A.Utils.Plane
+>A.Utils.Plane : typeof A.Utils.Plane
+>A.Utils : typeof A.Utils
 >A : typeof A
->Utils : typeof Utils
->Plane : typeof Plane
+>Utils : typeof A.Utils
+>Plane : typeof A.Utils.Plane
 >o : { x: number; y: number; }
 >{ x: 1, y: 1 } : { x: number; y: number; }
 >x : number

@@ -71,9 +71,7 @@ var r7 = i['bar'];
 
 var a = {
 >a : { foo: string; }
->{
-    foo: ''
-} : { foo: string; }
+>{    foo: ''} : { foo: string; }
 
     foo: ''
 >foo : string

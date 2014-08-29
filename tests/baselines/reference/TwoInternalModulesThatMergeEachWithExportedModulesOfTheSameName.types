@@ -25,9 +25,9 @@ var x: number;
 var x = A.B.x;
 >x : number
 >A.B.x : number
->A.B : typeof B
+>A.B : typeof A.B
 >A : typeof A
->B : typeof B
+>B : typeof A.B
 >x : number
 
 module X.Y.Z {
@@ -69,8 +69,8 @@ var l: { length: number };
 
 var l: X.Y.Z.Line;
 >l : { length: number; }
->X : X
->Y : Y
->Z : Z
->Line : Line
+>X : unknown
+>Y : unknown
+>Z : unknown
+>Line : X.Y.Z.Line
 

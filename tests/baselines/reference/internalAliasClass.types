@@ -11,13 +11,13 @@ module c {
 >c : typeof c
 
     import b = a.c;
->b : typeof c
+>b : typeof b
 >a : typeof a
->c : c
+>c : b
 
     export var x: b = new b();
->x : c
->b : c
->new b() : c
->b : typeof c
+>x : b
+>b : b
+>new b() : b
+>b : typeof b
 }

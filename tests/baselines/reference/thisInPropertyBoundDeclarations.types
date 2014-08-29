@@ -8,16 +8,10 @@ class Bug {
     private static func: Function[] = [
 >func : Function[]
 >Function : Function
->[
-     (that: Bug, name: string) => {
-         that.foo(name);
-     }
-    ] : Function[]
+>[     (that: Bug, name: string) => {         that.foo(name);     }    ] : Function[]
 
      (that: Bug, name: string) => {
->(that: Bug, name: string) => {
-         that.foo(name);
-     } : (that: Bug, name: string) => void
+>(that: Bug, name: string) => {         that.foo(name);     } : (that: Bug, name: string) => void
 >that : Bug
 >Bug : Bug
 >name : string
@@ -50,9 +44,7 @@ class A {
 
     prop1 = function() {
 >prop1 : () => void
->function() {
-        this;
-    } : () => void
+>function() {        this;    } : () => void
 
         this;
 >this : any
@@ -61,12 +53,7 @@ class A {
 
     prop2 = function() {
 >prop2 : () => void
->function() {
-        function inner() {
-            this;
-        }
-        () => this;
-    } : () => void
+>function() {        function inner() {            this;        }        () => this;    } : () => void
 
         function inner() {
 >inner : () => void
@@ -82,11 +69,7 @@ class A {
 
     prop3 = () => {
 >prop3 : () => void
->() => {
-        function inner() {
-            this;
-        }
-    } : () => void
+>() => {        function inner() {            this;        }    } : () => void
 
         function inner() {
 >inner : () => void
@@ -98,9 +81,7 @@ class A {
 
     prop4 = {
 >prop4 : { a: () => any; }
->{
-        a: function() { return this; },
-    } : { a: () => any; }
+>{        a: function() { return this; },    } : { a: () => any; }
 
         a: function() { return this; },
 >a : () => any
@@ -111,16 +92,10 @@ class A {
 
     prop5 = () => {
 >prop5 : () => { a: () => any; }
->() => {
-        return {
-            a: function() { return this; },
-        };
-    } : () => { a: () => any; }
+>() => {        return {            a: function() { return this; },        };    } : () => { a: () => any; }
 
         return {
->{
-            a: function() { return this; },
-        } : { a: () => any; }
+>{            a: function() { return this; },        } : { a: () => any; }
 
             a: function() { return this; },
 >a : () => any
@@ -153,22 +128,12 @@ class B {
 
     prop4 = '  ' +
 >prop4 : string
->'  ' +
-    function() {
-    } +
-    ' ' +
-    (() => () => () => this) : string
->'  ' +
-    function() {
-    } +
-    ' ' : string
->'  ' +
-    function() {
-    } : string
+>'  ' +    function() {    } +    ' ' +    (() => () => () => this) : string
+>'  ' +    function() {    } +    ' ' : string
+>'  ' +    function() {    } : string
 
     function() {
->function() {
-    } : () => void
+>function() {    } : () => void
 
     } +
     ' ' +
@@ -181,9 +146,7 @@ class B {
 
     prop5 = {
 >prop5 : { a: () => B; }
->{
-        a: () => { return this; }
-    } : { a: () => B; }
+>{        a: () => { return this; }    } : { a: () => B; }
 
         a: () => { return this; }
 >a : () => B
@@ -194,16 +157,10 @@ class B {
 
     prop6 = () => {
 >prop6 : () => { a: () => B; }
->() => {
-        return {
-            a: () => { return this; }
-        };
-    } : () => { a: () => B; }
+>() => {        return {            a: () => { return this; }        };    } : () => { a: () => B; }
 
         return {
->{
-            a: () => { return this; }
-        } : { a: () => B; }
+>{            a: () => { return this; }        } : { a: () => B; }
 
             a: () => { return this; }
 >a : () => B

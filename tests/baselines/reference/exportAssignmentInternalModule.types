@@ -1,11 +1,11 @@
 === tests/cases/compiler/exportAssignmentInternalModule_B.ts ===
 import modM = require("exportAssignmentInternalModule_A");
->modM : typeof M
+>modM : typeof modM
 
 var n: number = modM.x;
 >n : number
 >modM.x : any
->modM : typeof M
+>modM : typeof modM
 >x : any
 
 === tests/cases/compiler/exportAssignmentInternalModule_A.ts ===

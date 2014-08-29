@@ -3,7 +3,7 @@
 module X.A.C {
 >X : typeof X
 >A : typeof A
->C : C
+>C : unknown
 
     export interface Z {
 >Z : Z
@@ -17,9 +17,9 @@ module X.A.B.C {
 
     export class W implements A.C.Z { // This can refer to it as A.C.Z
 >W : W
->A : A
->C : C
->Z : Z
+>A : unknown
+>C : unknown
+>Z : A.C.Z
     }
 }
 
@@ -30,6 +30,6 @@ module X.A.B.C {
 >C : typeof C
 
     module A {
->A : A
+>A : unknown
     }
 }

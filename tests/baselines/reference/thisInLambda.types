@@ -31,26 +31,14 @@ class myCls {
 
     constructor () {
         myFn(() => {
->myFn(() => {
-            myFn(() => {
-                var x = this;
-            });
-        }) : void
+>myFn(() => {            myFn(() => {                var x = this;            });        }) : void
 >myFn : (a: any) => void
->() => {
-            myFn(() => {
-                var x = this;
-            });
-        } : () => void
+>() => {            myFn(() => {                var x = this;            });        } : () => void
 
             myFn(() => {
->myFn(() => {
-                var x = this;
-            }) : void
+>myFn(() => {                var x = this;            }) : void
 >myFn : (a: any) => void
->() => {
-                var x = this;
-            } : () => void
+>() => {                var x = this;            } : () => void
 
                 var x = this;
 >x : myCls

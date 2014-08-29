@@ -30,7 +30,7 @@ module M {
 >f : (y: Y) => void
 >{x:a} : { x: X; }
 >x : X
->a : a
+>a : X
 
     var b:XX;
 >b : XX
@@ -41,7 +41,7 @@ module M {
 >f : (y: Y) => void
 >{x:b} : { x: XX; }
 >x : XX
->b : b
+>b : XX
 }
 
 

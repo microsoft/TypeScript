@@ -20,6 +20,7 @@ class B extends A {
    super.m();
 >super.m() : void
 >super.m : () => void
+>super : A
 >m : () => void
   }
  }

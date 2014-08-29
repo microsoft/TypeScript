@@ -33,22 +33,22 @@ var o1: { [s: string]: A;[n: number]: B; } = { x: a, 0: b }; // string indexer i
 >B : B
 >{ x: a, 0: b } : { [x: string]: A; [x: number]: B; 0: B; x: A; }
 >x : A
->a : a
->b : b
+>a : A
+>b : B
 
 o1 = { x: b, 0: c }; // both indexers are any
 >o1 = { x: b, 0: c } : { [x: string]: any; [x: number]: any; 0: any; x: B; }
 >o1 : { [x: string]: A; [x: number]: B; }
 >{ x: b, 0: c } : { [x: string]: any; [x: number]: any; 0: any; x: B; }
 >x : B
->b : b
->c : c
+>b : B
+>c : any
 
 o1 = { x: c, 0: b }; // string indexer is any, number indexer is B
 >o1 = { x: c, 0: b } : { [x: string]: any; [x: number]: B; 0: B; x: any; }
 >o1 : { [x: string]: A; [x: number]: B; }
 >{ x: c, 0: b } : { [x: string]: any; [x: number]: B; 0: B; x: any; }
 >x : any
->c : c
->b : b
+>c : any
+>b : B
 
