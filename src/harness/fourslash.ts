@@ -819,14 +819,14 @@ module FourSlash {
         public verifyCurrentSignatureHelpIs(expected: string) {
             this.taoInvalidReason = 'verifyCurrentSignatureHelpIs NYI';
 
-            var help = this.getActiveSignatureHelp();
+            var help = this.getActiveSignatureHelpItem();
             assert.equal(help.prefix + help.parameters.map(p => p.display).join(help.separator) + help.suffix, expected);
         }
 
         public verifyCurrentParameterIsVariable(isVariable: boolean) {
             this.taoInvalidReason = 'verifyCurrentParameterIsVariable NYI';
 
-            var signature = this.getActiveSignatureHelp();
+            var signature = this.getActiveSignatureHelpItem();
             assert.isNotNull(signature);
             assert.equal(isVariable, signature.isVariadic);
         }
@@ -842,7 +842,7 @@ module FourSlash {
         public verifyCurrentParameterSpanIs(parameter: string) {
             this.taoInvalidReason = 'verifyCurrentParameterSpanIs NYI';
 
-            var activeSignature = this.getActiveSignatureHelp();
+            var activeSignature = this.getActiveSignatureHelpItem();
             var activeParameter = this.getActiveParameter();
             assert.equal(activeParameter.display, parameter);
         }
@@ -858,19 +858,19 @@ module FourSlash {
         public verifyCurrentSignatureHelpParameterCount(expectedCount: number) {
             this.taoInvalidReason = 'verifyCurrentSignatureHelpParameterCount NYI';
 
-            assert.equal(this.getActiveSignatureHelp().parameters.length, expectedCount);
+            assert.equal(this.getActiveSignatureHelpItem().parameters.length, expectedCount);
         }
 
         public verifyCurrentSignatureHelpTypeParameterCount(expectedCount: number) {
             this.taoInvalidReason = 'verifyCurrentSignatureHelpTypeParameterCount NYI';
 
-            // assert.equal(this.getActiveSignatureHelp().typeParameters.length, expectedCount);
+            // assert.equal(this.getActiveSignatureHelpItem().typeParameters.length, expectedCount);
         }
 
         public verifyCurrentSignatureHelpDocComment(docComment: string) {
             this.taoInvalidReason = 'verifyCurrentSignatureHelpDocComment NYI';
 
-            var actualDocComment = this.getActiveSignatureHelp().documentation;
+            var actualDocComment = this.getActiveSignatureHelpItem().documentation;
             assert.equal(actualDocComment, docComment);
         }
 
@@ -941,7 +941,7 @@ module FourSlash {
         //    return help.formal;
         //}
 
-        private getActiveSignatureHelp() {
+        private getActiveSignatureHelpItem() {
             var help = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition);
 
             // If the signature hasn't been narrowed down yet (e.g. no parameters have yet been entered),
@@ -953,14 +953,13 @@ module FourSlash {
         }
 
         private getActiveParameter(): ts.SignatureHelpParameter {
-            var currentSig = this.getActiveSignatureHelp();
             var help = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition);
 
             var item = help.items[help.selectedItemIndex];
             var state = this.languageService.getSignatureHelpCurrentArgumentState(this.activeFile.fileName, this.currentCaretPosition, help.applicableSpan.start());
 
             // Same logic as in getActiveSignatureHelp - this value might be -1 until a parameter value actually gets typed
-            var currentParam = state === null ? 0 : state.argumentIndex;
+            var currentParam = state === null || state.argumentIndex < 0 ? 0 : state.argumentIndex;
             return item.parameters[currentParam];
         }
 
@@ -1083,7 +1082,7 @@ module FourSlash {
         }
 
         public printCurrentSignatureHelp() {
-            var sigHelp = this.getActiveSignatureHelp();
+            var sigHelp = this.getActiveSignatureHelpItem();
             Harness.IO.log(JSON.stringify(sigHelp));
         }
 

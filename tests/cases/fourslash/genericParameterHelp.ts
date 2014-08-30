@@ -28,66 +28,66 @@
 ////var x : testClass<,, /*type4*/any>;
 
 goTo.marker("1");
-// verify.currentSignatureParamterCountIs(3);
-// verify.currentSignatureHelpIs("testFunction<T extends IFoo, U, M extends IFoo>(a: T, b: U, c: M): M");
+ verify.currentSignatureParamterCountIs(3);
+ verify.currentSignatureHelpIs("testFunction<T extends IFoo, U, M extends IFoo>(a: T, b: U, c: M): M");
 
-// verify.currentParameterHelpArgumentNameIs("T");
-// verify.currentParameterSpanIs("T extends IFoo");
+ verify.currentParameterHelpArgumentNameIs("T");
+ verify.currentParameterSpanIs("T extends IFoo");
 
-// goTo.marker("2");
-// verify.currentParameterHelpArgumentNameIs("U");
-// verify.currentParameterSpanIs("U");
+ goTo.marker("2");
+ verify.currentParameterHelpArgumentNameIs("U");
+ verify.currentParameterSpanIs("U");
 
-// goTo.marker("3");
-// verify.currentParameterHelpArgumentNameIs("a");
-// verify.currentParameterSpanIs("a: T");
+ goTo.marker("3");
+ verify.currentParameterHelpArgumentNameIs("a");
+ verify.currentParameterSpanIs("a: T");
 
-// goTo.marker("4");
-// verify.currentParameterHelpArgumentNameIs("M");
-// verify.currentParameterSpanIs("M extends IFoo");
+ goTo.marker("4");
+ verify.currentParameterHelpArgumentNameIs("M");
+ verify.currentParameterSpanIs("M extends IFoo");
 
-// goTo.marker("5");
-// verify.currentParameterHelpArgumentNameIs("M");
-// verify.currentParameterSpanIs("M extends IFoo");
+ goTo.marker("5");
+ verify.currentParameterHelpArgumentNameIs("M");
+ verify.currentParameterSpanIs("M extends IFoo");
 
-// goTo.marker("construcor1");
-// verify.currentSignatureHelpIs("testClass<T extends IFoo, U, M extends IFoo>(a: T, b: U, c: M): testClass<T, U, M>");
-// verify.currentParameterHelpArgumentNameIs("T");
-// verify.currentParameterSpanIs("T extends IFoo");
+ goTo.marker("construcor1");
+ verify.currentSignatureHelpIs("testClass<T extends IFoo, U, M extends IFoo>(a: T, b: U, c: M): testClass<T, U, M>");
+ verify.currentParameterHelpArgumentNameIs("T");
+ verify.currentParameterSpanIs("T extends IFoo");
 
-// goTo.marker("construcor2");
-// verify.currentParameterHelpArgumentNameIs("U");
-// verify.currentParameterSpanIs("U");
+ goTo.marker("construcor2");
+ verify.currentParameterHelpArgumentNameIs("U");
+ verify.currentParameterSpanIs("U");
 
-// goTo.marker("construcor3");
-// verify.currentParameterHelpArgumentNameIs("T");
-// verify.currentParameterSpanIs("T extends IFoo");
+ goTo.marker("construcor3");
+ verify.currentParameterHelpArgumentNameIs("T");
+ verify.currentParameterSpanIs("T extends IFoo");
 
-// goTo.marker("construcor4");
-// verify.currentParameterHelpArgumentNameIs("M");
-// verify.currentParameterSpanIs("M extends IFoo");
+ goTo.marker("construcor4");
+ verify.currentParameterHelpArgumentNameIs("M");
+ verify.currentParameterSpanIs("M extends IFoo");
 
-// goTo.marker("construcor5");
-// verify.currentParameterHelpArgumentNameIs("U");
-// verify.currentParameterSpanIs("U");
+ goTo.marker("construcor5");
+ verify.currentParameterHelpArgumentNameIs("U");
+ verify.currentParameterSpanIs("U");
 
-// goTo.marker("type1");
-// verify.signatureHelpCountIs(1);
-// verify.currentSignatureHelpIs("testClass<T extends IFoo, U, M extends IFoo>");
-// verify.currentParameterHelpArgumentNameIs("T");
-// verify.currentParameterSpanIs("T extends IFoo");
+ goTo.marker("type1");
+ verify.signatureHelpCountIs(1);
+ verify.currentSignatureHelpIs("testClass<T extends IFoo, U, M extends IFoo>");
+ verify.currentParameterHelpArgumentNameIs("T");
+ verify.currentParameterSpanIs("T extends IFoo");
 
-// goTo.marker("type2");
-// verify.signatureHelpCountIs(1);
-// verify.currentParameterHelpArgumentNameIs("T");
-// verify.currentParameterSpanIs("T extends IFoo");
+ goTo.marker("type2");
+ verify.signatureHelpCountIs(1);
+ verify.currentParameterHelpArgumentNameIs("T");
+ verify.currentParameterSpanIs("T extends IFoo");
 
-// goTo.marker("type3");
-// verify.signatureHelpCountIs(1);
-// verify.currentParameterHelpArgumentNameIs("T");
-// verify.currentParameterSpanIs("T extends IFoo");
+ goTo.marker("type3");
+ verify.signatureHelpCountIs(1);
+ verify.currentParameterHelpArgumentNameIs("T");
+ verify.currentParameterSpanIs("T extends IFoo");
 
-// goTo.marker("type4");
-// verify.signatureHelpCountIs(1);
-// verify.currentParameterHelpArgumentNameIs("M");
-// verify.currentParameterSpanIs("M extends IFoo");
+ goTo.marker("type4");
+ verify.signatureHelpCountIs(1);
+ verify.currentParameterHelpArgumentNameIs("M");
+ verify.currentParameterSpanIs("M extends IFoo");
