@@ -1313,6 +1313,10 @@ module ts {
     }
 
     function isAnyFunction(node: Node): boolean {
+        if (!node) {
+            return false;
+        }
+
         switch (node.kind) {
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.FunctionDeclaration:
@@ -2267,18 +2271,15 @@ module ts {
             }
 
             function getReturnOccurrences(returnStatement: ReturnStatement): ReferenceEntry[]{
-                var node: Node = returnStatement;
-                while (!isAnyFunction(node) && node.parent) {
-                    node = node.parent;
-                }
+                var func = <FunctionDeclaration>getContainingFunction(returnStatement);
 
                 // If we didn't find a containing function with a block body, bail out.
-                if (!(isAnyFunction(node) && hasKind((<FunctionDeclaration>node).body, SyntaxKind.FunctionBlock))) {
+                if (!(isAnyFunction(func) && hasKind(func.body, SyntaxKind.FunctionBlock))) {
                     return undefined;
                 }
 
                 var keywords: Node[] = []
-                forEachReturnStatement(<Block>(<FunctionDeclaration>node).body, returnStmt => {
+                forEachReturnStatement(<Block>(<FunctionDeclaration>func).body, returnStmt => {
                     pushKeywordIf(keywords, returnStmt.getFirstToken(), SyntaxKind.ReturnKeyword);
                 });
 
