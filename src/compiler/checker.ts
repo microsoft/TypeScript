@@ -4950,6 +4950,7 @@ module ts {
             if (fullTypeCheck) {
                 checkCollisionWithCapturedSuperVariable(node, node.name);
                 checkCollisionWithCapturedThisVariable(node, node.name);
+                checkCollistionWithRequireExportsInGeneratedCode(node, node.name);
                 checkCollisionWithArgumentsInGeneratedCode(node);
                 if (program.getCompilerOptions().noImplicitAny && !node.type) {
                     switch (node.kind) {
@@ -5692,6 +5693,24 @@ module ts {
             }
         }
 
+        function checkCollistionWithRequireExportsInGeneratedCode(node: Node, name: Identifier) {
+            if (!needCollisionCheckForIdentifier(node, name, "require") && !needCollisionCheckForIdentifier(node, name, "exports")) {
+                return;
+            }
+
+            // Uninstantiated modules shouldnt do this check
+            if (node.kind === SyntaxKind.ModuleDeclaration && !isInstantiated(node)) {
+                return;
+            }
+
+            // In case of variable declaration, node.parent is variable statement so look at the variable statement's parent
+            var parent = node.kind === SyntaxKind.VariableDeclaration ? node.parent.parent : node.parent;
+            if (parent.kind === SyntaxKind.SourceFile && isExternalModule(<SourceFile>parent)) {
+                // If the declaration happens to be in external module, report error that require and exports are reserved keywords
+                error(name, Diagnostics.Duplicate_identifier_0_Compiler_reserves_name_1_in_top_level_scope_of_an_external_module, name.text, name.text);
+            }
+        }
+
         function checkVariableDeclaration(node: VariableDeclaration) {
             checkSourceElement(node.type);
             checkExportsOnMergedDeclarations(node);
@@ -5719,6 +5738,7 @@ module ts {
 
                 checkCollisionWithCapturedSuperVariable(node, node.name);
                 checkCollisionWithCapturedThisVariable(node, node.name);
+                checkCollistionWithRequireExportsInGeneratedCode(node, node.name);
                 if (!useTypeFromValueDeclaration) {
                     // TypeScript 1.0 spec (April 2014): 5.1
                     // Multiple declarations for the same variable name in the same declaration space are permitted,
@@ -5988,6 +6008,7 @@ module ts {
             checkTypeNameIsReserved(node.name, Diagnostics.Class_name_cannot_be_0);
             checkTypeParameters(node.typeParameters);
             checkCollisionWithCapturedThisVariable(node, node.name);
+            checkCollistionWithRequireExportsInGeneratedCode(node, node.name);
             checkExportsOnMergedDeclarations(node);
             var symbol = getSymbolOfNode(node);
             var type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
@@ -6203,6 +6224,7 @@ module ts {
             }
             checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
             checkCollisionWithCapturedThisVariable(node, node.name);
+            checkCollistionWithRequireExportsInGeneratedCode(node, node.name);
             checkExportsOnMergedDeclarations(node);
             var enumSymbol = getSymbolOfNode(node);
             var enumType = getDeclaredTypeOfSymbol(enumSymbol);
@@ -6276,6 +6298,7 @@ module ts {
         function checkModuleDeclaration(node: ModuleDeclaration) {
             if (fullTypeCheck) {
                 checkCollisionWithCapturedThisVariable(node, node.name);
+                checkCollistionWithRequireExportsInGeneratedCode(node, node.name);
                 checkExportsOnMergedDeclarations(node);
                 var symbol = getSymbolOfNode(node);
                 if (symbol.flags & SymbolFlags.ValueModule && symbol.declarations.length > 1 && !isInAmbientContext(node)) {
@@ -6310,6 +6333,7 @@ module ts {
 
         function checkImportDeclaration(node: ImportDeclaration) {
             checkCollisionWithCapturedThisVariable(node, node.name);
+            checkCollistionWithRequireExportsInGeneratedCode(node, node.name);
             var symbol = getSymbolOfNode(node);
             var target: Symbol;
             

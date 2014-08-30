@@ -1,0 +1,23 @@
+==== tests/cases/compiler/collisionExportsRequireAndModule.ts (2 errors) ====
+    export module require {
+                  ~~~~~~~
+!!! Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of an external module.
+        export interface I {
+        }
+        export class C {
+        }
+    }
+    export function foo(): require.I {
+        return null;
+    }
+    export module exports {
+                  ~~~~~~~
+!!! Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of an external module.
+        export interface I {
+        }
+        export class C {
+        }
+    }
+    export function foo2(): exports.I {
+        return null;
+    }

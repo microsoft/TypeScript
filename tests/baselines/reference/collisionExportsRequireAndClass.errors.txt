@@ -1,0 +1,10 @@
+==== tests/cases/compiler/collisionExportsRequireAndClass.ts (2 errors) ====
+    export class require {
+                 ~~~~~~~
+!!! Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of an external module.
+    }
+    export class exports {
+                 ~~~~~~~
+!!! Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of an external module.
+    }
+    
