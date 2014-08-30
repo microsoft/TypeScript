@@ -296,11 +296,10 @@ module ts {
 
             function calculateIndent(pos: number, end: number) {
                 var currentLineIndent = 0;
-                while (pos < end && isWhiteSpace(currentSourceFile.text.charCodeAt(pos))) {
-                    pos++;
+                for (; pos < end && isWhiteSpace(currentSourceFile.text.charCodeAt(pos)); pos++) {
                     if (currentSourceFile.text.charCodeAt(pos) === CharacterCodes.tab) {
-                        // Tabs = size of the indent
-                        currentLineIndent += getIndentSize();
+                        // Tabs = TabSize = indent size and go to next tabStop
+                        currentLineIndent += (getIndentSize() - currentLineIndent % getIndentSize());
                     }
                     else {
                         // Single space
