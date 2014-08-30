@@ -1,10 +1,10 @@
 === tests/cases/conformance/externalModules/foo_2.ts ===
 import foo = require("./foo_1");
->foo : typeof "tests/cases/conformance/externalModules/foo_1"
+>foo : typeof foo
 
 var x = foo; // Cause a runtime dependency
->x : typeof "tests/cases/conformance/externalModules/foo_1"
->foo : typeof "tests/cases/conformance/externalModules/foo_1"
+>x : typeof foo
+>foo : typeof foo
 
 === tests/cases/conformance/externalModules/foo_0.ts ===
 export class C1 {
@@ -19,7 +19,7 @@ export class C1 {
 
 === tests/cases/conformance/externalModules/foo_1.ts ===
 import c1 = require('./foo_0'); // Makes this an external module
->c1 : typeof "tests/cases/conformance/externalModules/foo_0"
+>c1 : typeof c1
 
 var answer = 42; // No exports
 >answer : number

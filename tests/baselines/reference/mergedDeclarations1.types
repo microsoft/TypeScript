@@ -17,9 +17,9 @@ function point(x: number, y: number): Point {
     return { x: x, y: y };
 >{ x: x, y: y } : { x: number; y: number; }
 >x : number
->x : x
+>x : number
 >y : number
->y : y
+>y : number
 }
 module point {
 >point : typeof point

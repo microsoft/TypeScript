@@ -101,9 +101,7 @@ var a: {
 
 var b = {
 >b : { foo: (x: any) => any; }
->{
-    foo(x: any) { return <any>''; }
-} : { foo: (x: any) => any; }
+>{    foo(x: any) { return <any>''; }} : { foo: (x: any) => any; }
 
     foo(x: any) { return <any>''; }
 >foo : (x: any) => any

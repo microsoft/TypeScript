@@ -1,10 +1,10 @@
 === tests/cases/compiler/recursiveClassInstantiationsWithDefaultConstructors.ts ===
 var a = new TypeScript2.MemberNameArray()
->a : MemberNameArray
->new TypeScript2.MemberNameArray() : MemberNameArray
->TypeScript2.MemberNameArray : typeof MemberNameArray
+>a : TypeScript2.MemberNameArray
+>new TypeScript2.MemberNameArray() : TypeScript2.MemberNameArray
+>TypeScript2.MemberNameArray : typeof TypeScript2.MemberNameArray
 >TypeScript2 : typeof TypeScript2
->MemberNameArray : typeof MemberNameArray
+>MemberNameArray : typeof TypeScript2.MemberNameArray
 
 module TypeScript2 {
 >TypeScript2 : typeof TypeScript2

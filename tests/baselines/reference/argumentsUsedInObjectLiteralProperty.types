@@ -8,9 +8,7 @@ class A {
 >selectedValue : any
 
         return {
->{
-            selectedValue: arguments.length
-        } : { selectedValue: number; }
+>{            selectedValue: arguments.length        } : { selectedValue: number; }
 
             selectedValue: arguments.length
 >selectedValue : number

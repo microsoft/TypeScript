@@ -47,8 +47,8 @@ var cl: { x: number; y: number; }
 var cl = B.Point.Origin;
 >cl : { x: number; y: number; }
 >B.Point.Origin : { x: number; y: number; }
->B.Point : typeof Point
+>B.Point : typeof B.Point
 >B : typeof B
->Point : typeof Point
+>Point : typeof B.Point
 >Origin : { x: number; y: number; }
 

@@ -441,6 +441,18 @@ module ts {
         return getCommentRanges(text, pos, /*trailing*/ true);
     }
 
+    export function isIdentifierStart(ch: number, languageVersion: ScriptTarget): boolean {
+        return ch >= CharacterCodes.A && ch <= CharacterCodes.Z || ch >= CharacterCodes.a && ch <= CharacterCodes.z ||
+            ch === CharacterCodes.$ || ch === CharacterCodes._ ||
+            ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierStart(ch, languageVersion);
+    }
+
+    export function isIdentifierPart(ch: number, languageVersion: ScriptTarget): boolean {
+        return ch >= CharacterCodes.A && ch <= CharacterCodes.Z || ch >= CharacterCodes.a && ch <= CharacterCodes.z ||
+            ch >= CharacterCodes._0 && ch <= CharacterCodes._9 || ch === CharacterCodes.$ || ch === CharacterCodes._ ||
+            ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
+    }
+
     export function createScanner(languageVersion: ScriptTarget, text?: string, onError?: ErrorCallback, onComment?: CommentCallback): Scanner {
         var pos: number;       // Current position (end position of text of current token)
         var len: number;       // Length of text

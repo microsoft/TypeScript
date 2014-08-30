@@ -1,4 +1,6 @@
-//// [commentOnElidedModule1.ts]
+//// [tests/cases/compiler/commentOnElidedModule1.ts] ////
+
+//// [a.ts]
 /*! Keep this pinned comment */
 module ElidedModule {
 }
@@ -7,4 +9,12 @@ module ElidedModule {
 module ElidedModule2 {
 }
 
-//// [commentOnElidedModule1.js]
+//// [b.ts]
+///<reference path="a.ts"/>
+module ElidedModule3 {
+}
+
+//// [a.js]
+/*! Keep this pinned comment */
+//// [b.js]
+///<reference path="a.ts"/>

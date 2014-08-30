@@ -204,30 +204,29 @@ module FourSlash {
             this.cancellationToken = new TestCancellationToken();
             this.languageServiceShimHost = new Harness.LanguageService.TypeScriptLS(this.cancellationToken);
 
-            var harnessCompiler = Harness.Compiler.getCompiler();
             var inputFiles: { unitName: string; content: string }[] = [];
 
             testData.files.forEach(file => {
                 var fixedPath = file.fileName.substr(file.fileName.indexOf('tests/'));
-                harnessCompiler.addInputFile({ unitName: fixedPath, content: file.content });
             });
 
+            // NEWTODO: disable resolution for now.
             // If the last unit contains require( or /// reference then consider it the only input file
             // and the rest will be added via resolution. If not, then assume we have multiple files
             // with 0 references in any of them. We could be smarter here to allow scenarios like
             // 2 files without references and 1 file with a reference but we have 0 tests like that
             // at the moment and an exhaustive search of the test files for that content could be quite slow.
             var lastFile = testData.files[testData.files.length - 1];
-            if (/require\(/.test(lastFile.content) || /reference\spath/.test(lastFile.content)) {
-                inputFiles.push({ unitName: lastFile.fileName, content: lastFile.content });
-            } else {
+            //if (/require\(/.test(lastFile.content) || /reference\spath/.test(lastFile.content)) {
+            //    inputFiles.push({ unitName: lastFile.fileName, content: lastFile.content });
+            //} else {
                 inputFiles = testData.files.map(file => {
                     return { unitName: file.fileName, content: file.content };
                 });
-            }
+            //}
+
 
             // NEWTODO: Re-implement commented-out section
-
             //harnessCompiler.addInputFiles(inputFiles);
             //try {
             //    var resolvedFiles = harnessCompiler.resolve();
@@ -597,6 +596,29 @@ module FourSlash {
             }
         }
 
+        public verifyReferencesAtPositionListContains(fileName: string, start: number, end: number, isWriteAccess?: boolean) {
+            this.taoInvalidReason = 'verifyReferencesAtPositionListContains NYI';
+
+            var references = this.getReferencesAtCaret();
+
+            if (!references || references.length === 0) {
+                throw new Error('verifyReferencesAtPositionListContains failed - found 0 references, expected at least one.');
+            }
+
+            for (var i = 0; i < references.length; i++) {
+                var reference = references[i];
+                if (reference && reference.fileName === fileName && reference.textSpan.start() === start && reference.textSpan.end() === end) {
+                    if (typeof isWriteAccess !== "undefined" && reference.isWriteAccess !== isWriteAccess) {
+                        throw new Error('verifyReferencesAtPositionListContains failed - item isWriteAccess value doe not match, actual: ' + reference.isWriteAccess + ', expected: ' + isWriteAccess + '.');
+                    }
+                    return;
+                }
+            }
+
+            var missingItem = { fileName: fileName, start: start, end: end, isWriteAccess: isWriteAccess };
+            throw new Error('verifyReferencesAtPositionListContains failed - could not find the item: ' + JSON.stringify(missingItem) + ' in the returned list: (' + JSON.stringify(references) + ')');
+        }
+
         public verifyReferencesCountIs(count: number, localFilesOnly: boolean = true) {
             this.taoInvalidReason = 'verifyReferences NYI';
 
@@ -606,19 +628,19 @@ module FourSlash {
             if (localFilesOnly) {
                 var localFiles = this.testData.files.map<string>(file => file.fileName);
                 // Count only the references in local files. Filter the ones in lib and other files.
-                references.forEach((entry) => {
+                ts.forEach(references, entry => {
                     if (localFiles.some((filename) => filename === entry.fileName)) {
                         ++referencesCount;
                     }
                 });
             }
             else {
-                referencesCount = references.length;
+                referencesCount = references && references.length || 0;
             }
 
             if (referencesCount !== count) {
                 var condition = localFilesOnly ? "excluding libs" : "including libs";
-                throw new Error("Expected references count (" + condition + ") to be " + count + ", but is actually " + references.length);
+                throw new Error("Expected references count (" + condition + ") to be " + count + ", but is actually " + referencesCount);
             }
         }
 
@@ -927,6 +949,18 @@ module FourSlash {
         public printCompletionListMembers() {
             var completions = this.getCompletionListAtCaret();
             Harness.IO.log(JSON.stringify(completions));
+        }
+
+        public printReferences() {
+            var references = this.getReferencesAtCaret();
+            ts.forEach(references, entry => {
+                Harness.IO.log(JSON.stringify(entry));
+            });
+        }
+
+        public printContext() {
+            var fileNames: string[] = JSON.parse(this.languageServiceShimHost.getScriptFileNames());
+            ts.forEach(fileNames, Harness.IO.log);
         }
 
         private editCheckpoint(filename: string) {
@@ -1706,10 +1740,6 @@ module FourSlash {
             }
         }
 
-        private getBOF(): number {
-            return 0;
-        }
-
         private getEOF(): number {
             return this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName).getLength();
         }
@@ -1893,9 +1923,9 @@ module FourSlash {
         fourslashSourceFile = fourslashSourceFile || ts.createSourceFile(tsFn, Harness.IO.readFile(tsFn), ts.ScriptTarget.ES5, /*version*/ "0", /*isOpen*/ false);
 
         var files: { [filename: string]: ts.SourceFile; } = {};
-        files[ts.getCanonicalFileName(fourslashFilename)] = fourslashSourceFile;
-        files[ts.getCanonicalFileName(fileName)] = ts.createSourceFile(fileName, content, ts.ScriptTarget.ES5, /*version*/ "0", /*isOpen*/ false);
-        files[ts.getCanonicalFileName(Harness.Compiler.defaultLibFileName)] = Harness.Compiler.defaultLibSourceFile;
+        files[Harness.Compiler.getCanonicalFileName(fourslashFilename)] = fourslashSourceFile;
+        files[Harness.Compiler.getCanonicalFileName(fileName)] = ts.createSourceFile(fileName, content, ts.ScriptTarget.ES5, /*version*/ "0", /*isOpen*/ false);
+        files[Harness.Compiler.getCanonicalFileName(Harness.Compiler.defaultLibFileName)] = Harness.Compiler.defaultLibSourceFile;
 
         var host = Harness.Compiler.createCompilerHost(files, (fn, contents) => result = contents);
         var program = ts.createProgram([fourslashFilename, fileName], { out: "fourslashTestOutput.js" }, host);

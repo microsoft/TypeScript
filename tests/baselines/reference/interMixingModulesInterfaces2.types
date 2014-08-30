@@ -25,7 +25,7 @@ module A {
 }
 
 var x: A.B = null;
->x : B
->A : A
->B : B
+>x : A.B
+>A : unknown
+>B : A.B
 

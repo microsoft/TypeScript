@@ -1,17 +1,17 @@
 === tests/cases/compiler/aliasUsage1_main.ts ===
 import Backbone = require("aliasUsage1_backbone");
->Backbone : typeof "tests/cases/compiler/aliasUsage1_backbone"
+>Backbone : typeof Backbone
 
 import moduleA = require("aliasUsage1_moduleA");
->moduleA : typeof "tests/cases/compiler/aliasUsage1_moduleA"
+>moduleA : typeof moduleA
 
 interface IHasVisualizationModel {
 >IHasVisualizationModel : IHasVisualizationModel
 
     VisualizationModel: typeof Backbone.Model;
->VisualizationModel : typeof Model
->Backbone : typeof "tests/cases/compiler/aliasUsage1_backbone"
->Model : typeof Model
+>VisualizationModel : typeof Backbone.Model
+>Backbone : typeof Backbone
+>Model : typeof Backbone.Model
 }
 class C2 {
 >C2 : C2
@@ -33,9 +33,9 @@ class C2 {
 >x : IHasVisualizationModel
 
         x = moduleA;
->x = moduleA : typeof "tests/cases/compiler/aliasUsage1_moduleA"
+>x = moduleA : typeof moduleA
 >x : IHasVisualizationModel
->moduleA : typeof "tests/cases/compiler/aliasUsage1_moduleA"
+>moduleA : typeof moduleA
     }
 }
 === tests/cases/compiler/aliasUsage1_backbone.ts ===
@@ -48,12 +48,12 @@ export class Model {
 
 === tests/cases/compiler/aliasUsage1_moduleA.ts ===
 import Backbone = require("aliasUsage1_backbone");
->Backbone : typeof "tests/cases/compiler/aliasUsage1_backbone"
+>Backbone : typeof Backbone
 
 export class VisualizationModel extends Backbone.Model {
 >VisualizationModel : VisualizationModel
->Backbone : Backbone
->Model : Model
+>Backbone : unknown
+>Model : Backbone.Model
 
     // interesting stuff here
 }

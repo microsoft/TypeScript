@@ -19,10 +19,10 @@ module X.Y.base {
 
     export class W extends A.B.Base.W {
 >W : W
->A : A
->B : B
->Base : Base
->W : W
+>A : unknown
+>B : unknown
+>Base : unknown
+>W : A.B.Base.W
 
         name: string;
 >name : string
@@ -38,10 +38,10 @@ module X.Y.base.Z {
     export class W<TValue> extends X.Y.base.W {
 >W : W<TValue>
 >TValue : TValue
->X : X
->Y : Y
->base : base
->W : W
+>X : unknown
+>Y : unknown
+>base : unknown
+>W : base.W
 
         value: boolean;
 >value : boolean

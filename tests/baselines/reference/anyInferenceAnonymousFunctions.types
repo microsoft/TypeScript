@@ -3,19 +3,11 @@ var paired: any[];
 >paired : any[]
 
 paired.reduce(function (a1, a2) {
->paired.reduce(function (a1, a2) {
-
-    return a1.concat({});
-
-} , []) : any
+>paired.reduce(function (a1, a2) {    return a1.concat({});} , []) : any
 >paired.reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue?: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
 >paired : any[]
 >reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue?: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
->function (a1, a2) {
-
-    return a1.concat({});
-
-} : (a1: any, a2: any) => any
+>function (a1, a2) {    return a1.concat({});} : (a1: any, a2: any) => any
 >a1 : any
 >a2 : any
 
@@ -30,17 +22,11 @@ paired.reduce(function (a1, a2) {
 >[] : undefined[]
 
 paired.reduce((b1, b2) => {
->paired.reduce((b1, b2) => {
-
-    return b1.concat({});
-} , []) : any
+>paired.reduce((b1, b2) => {    return b1.concat({});} , []) : any
 >paired.reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue?: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
 >paired : any[]
 >reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue?: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
->(b1, b2) => {
-
-    return b1.concat({});
-} : (b1: any, b2: any) => any
+>(b1, b2) => {    return b1.concat({});} : (b1: any, b2: any) => any
 >b1 : any
 >b2 : any
 

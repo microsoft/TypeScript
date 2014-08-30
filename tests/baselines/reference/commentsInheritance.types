@@ -178,6 +178,7 @@ class c3 extends c2 {
     constructor() {
         super(10);
 >super(10) : void
+>super : typeof c2
     }
     /** c3 p1*/
     public p1: number;

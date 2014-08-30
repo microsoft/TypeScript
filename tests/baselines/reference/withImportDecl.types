@@ -43,11 +43,7 @@ function simpleFunction() {
 >simpleFunction : () => { x: string; y: string; n: number; }
 
     return {
->{
-        x: "Hello",
-        y: "word",
-        n: 2
-    } : { x: string; y: string; n: number; }
+>{        x: "Hello",        y: "word",        n: 2    } : { x: string; y: string; n: number; }
 
         x: "Hello",
 >x : string
@@ -72,18 +68,18 @@ module m1 {
 }
 
 import m3 = require("withImportDecl_0");
->m3 : typeof "tests/cases/compiler/withImportDecl_0"
+>m3 : typeof m3
 
 var b = new m3.A();
->b : A
->new m3.A() : A
->m3.A : typeof A
->m3 : typeof "tests/cases/compiler/withImportDecl_0"
->A : typeof A
+>b : m3.A
+>new m3.A() : m3.A
+>m3.A : typeof m3.A
+>m3 : typeof m3
+>A : typeof m3.A
 
 b.foo;
 >b.foo : string
->b : A
+>b : m3.A
 >foo : string
 
 === tests/cases/compiler/withImportDecl_0.ts ===

@@ -11,5 +11,6 @@ class D extends C {
         var x: void = super();
 >x : void
 >super() : void
+>super : typeof C
     }
 }

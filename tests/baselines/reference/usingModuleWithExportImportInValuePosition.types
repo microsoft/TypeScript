@@ -13,7 +13,7 @@ export class Point {
 >y : number
     }
     export module B {
->B : B
+>B : unknown
 
         export interface Id {
 >Id : Id
@@ -27,8 +27,8 @@ module C {
 >C : typeof C
 
     export import a = A;
->a : typeof A
->A : typeof A
+>a : typeof a
+>A : typeof a
 }
 
 var a: string = C.a.x;
@@ -43,12 +43,12 @@ var b: { x: number; y: number; } = new C.a.Point(0, 0);
 >b : { x: number; y: number; }
 >x : number
 >y : number
->new C.a.Point(0, 0) : Point
->C.a.Point : typeof Point
+>new C.a.Point(0, 0) : A.Point
+>C.a.Point : typeof A.Point
 >C.a : typeof A
 >C : typeof C
 >a : typeof A
->Point : typeof Point
+>Point : typeof A.Point
 
 var c: { name: string };
 >c : { name: string; }
@@ -56,8 +56,8 @@ var c: { name: string };
 
 var c: C.a.B.Id;
 >c : { name: string; }
->C : C
->a : a
->B : B
->Id : Id
+>C : unknown
+>a : unknown
+>B : unknown
+>Id : A.B.Id
 

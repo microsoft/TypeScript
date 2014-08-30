@@ -47,6 +47,18 @@ export function fooWithOverloads(a: any): any {
 >a : any
 }
 
+export function fooWithSingleOverload(a: string): string;
+>fooWithSingleOverload : (a: string) => string
+>a : string
+
+export function fooWithSingleOverload(a: any) {
+>fooWithSingleOverload : (a: string) => string
+>a : any
+
+    return a;
+>a : any
+}
+
 /** This comment should appear for nonExportedFoo*/
 function nonExportedFoo() {
 >nonExportedFoo : () => void

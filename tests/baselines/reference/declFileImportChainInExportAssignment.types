@@ -3,7 +3,7 @@ module m {
 >m : typeof m
 
     export module c {
->c : typeof c
+>c : typeof m.c
 
         export class c {
 >c : c
@@ -11,14 +11,14 @@ module m {
     }
 }
 import a = m.c;
->a : typeof c
+>a : typeof a
 >m : typeof m
->c : typeof c
+>c : typeof a
 
 import b = a;
->b : typeof c
->a : typeof c
+>b : typeof a
+>a : typeof a
 
 export = b;
->b : typeof c
+>b : typeof a
 

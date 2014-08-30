@@ -1,11 +1,11 @@
 === tests/cases/compiler/consumer.ts ===
 import e = require('./exporter');
->e : typeof "tests/cases/compiler/exporter"
+>e : typeof e
 
 export function w(): e.w { // Should be OK
->w : () => Widget1
->e : e
->w : Widget1
+>w : () => e.w
+>e : unknown
+>w : e.w
 
     return {name: 'value' };
 >{name: 'value' } : { name: string; }
@@ -22,5 +22,5 @@ interface Widget1 { name: string; }
 
 === tests/cases/compiler/exporter.ts ===
 export import w = require('./w1');
->w : w
+>w : unknown
 

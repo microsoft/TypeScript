@@ -14,8 +14,8 @@ interface Array<T> {
 >T : T
 
     toFoo(): M.Foo
->toFoo : () => Foo
->M : M
->Foo : Foo
+>toFoo : () => M.Foo
+>M : unknown
+>Foo : M.Foo
 }
 

@@ -219,7 +219,7 @@ interface C7_public {
 }
 
 module m3 {
->m3 : m3
+>m3 : unknown
 
     export interface m3_i_public {
 >m3_i_public : m3_i_public

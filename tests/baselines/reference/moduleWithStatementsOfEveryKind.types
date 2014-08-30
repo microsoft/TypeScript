@@ -58,9 +58,7 @@ module A {
 
     var fn = (s: string) => {
 >fn : (s: string) => string
->(s: string) => {
-        return 'hello ' + s;
-    } : (s: string) => string
+>(s: string) => {        return 'hello ' + s;    } : (s: string) => string
 >s : string
 
         return 'hello ' + s;
@@ -134,9 +132,7 @@ module Y {
 
     export var fn = (s: string) => {
 >fn : (s: string) => string
->(s: string) => {
-        return 'hello ' + s;
-    } : (s: string) => string
+>(s: string) => {        return 'hello ' + s;    } : (s: string) => string
 >s : string
 
         return 'hello ' + s;

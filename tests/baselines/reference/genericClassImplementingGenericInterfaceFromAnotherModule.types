@@ -1,6 +1,6 @@
 === tests/cases/compiler/genericClassImplementingGenericInterfaceFromAnotherModule.ts ===
 module foo {
->foo : foo
+>foo : unknown
 
     export interface IFoo<T> { }
 >IFoo : IFoo<T>
@@ -12,8 +12,8 @@ module bar {
     export class Foo<T> implements foo.IFoo<T> { }
 >Foo : Foo<T>
 >T : T
->foo : foo
->IFoo : IFoo<T>
+>foo : unknown
+>IFoo : foo.IFoo<T>
 >T : T
 }
 

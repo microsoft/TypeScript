@@ -120,7 +120,7 @@ module TypeScript {
         // TODO: We need to expose an extensibility point on our hosts to have them tell us what 
         // they want the newline string to be.  That way we can get the correct result regardless
         // of which host we use
-        return sys.newLine ? sys.newLine : "\r\n";
+        return "\r\n";
     }
 
     function getLargestIndex(diagnostic: string): number {

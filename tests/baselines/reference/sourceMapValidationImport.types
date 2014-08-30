@@ -7,22 +7,22 @@ export module m {
     }
 }
 import a = m.c;
->a : typeof c
+>a : typeof a
 >m : typeof m
->c : c
+>c : a
 
 export import b = m.c;
->b : typeof c
+>b : typeof a
 >m : typeof m
->c : c
+>c : a
 
 var x = new a();
->x : c
->new a() : c
->a : typeof c
+>x : a
+>new a() : a
+>a : typeof a
 
 var y = new b();
->y : c
->new b() : c
->b : typeof c
+>y : a
+>new b() : a
+>b : typeof a
 

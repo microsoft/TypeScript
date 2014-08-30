@@ -3,13 +3,13 @@ declare module D3 {
 >D3 : typeof D3
 
     var x: D3.Color.Color;
->x : Color
->D3 : D3
->Color : Color
->Color : Color
+>x : Color.Color
+>D3 : unknown
+>Color : unknown
+>Color : Color.Color
 
     module Color {
->Color : Color
+>Color : unknown
 
         export interface Color {
 >Color : Color

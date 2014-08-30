@@ -6,15 +6,11 @@ var EntityPrototype = undefined;
 
 var WorkspacePrototype = {
 >WorkspacePrototype : { serialize: () => any; }
->{
-    serialize: function (): any {
-    }
-} : { serialize: () => any; }
+>{    serialize: function (): any {    }} : { serialize: () => any; }
 
     serialize: function (): any {
 >serialize : () => any
->function (): any {
-    } : () => any
+>function (): any {    } : () => any
     }
 };
 WorkspacePrototype['__proto__'] = EntityPrototype;
@@ -25,9 +21,7 @@ WorkspacePrototype['__proto__'] = EntityPrototype;
 
 var o = {
 >o : {}
->{
-    "__proto__": 0
-} : {}
+>{    "__proto__": 0} : {}
 
     "__proto__": 0
 };

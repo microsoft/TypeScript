@@ -9,7 +9,7 @@ class X<T>
 >T : T
 >{ a: t } : { a: T; }
 >a : T
->t : t
+>t : T
 }
 
  

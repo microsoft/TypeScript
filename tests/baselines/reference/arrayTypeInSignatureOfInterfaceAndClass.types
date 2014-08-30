@@ -62,11 +62,11 @@ declare module Data {
 
         //removeIndices: WinJS.Promise<IListItem<T>[]>;
         removeIndices(indices: number[], options?: any): WinJS.Promise<IListItem<T>[]>;
->removeIndices : (indices: number[], options?: any) => Promise<IListItem<T>[]>
+>removeIndices : (indices: number[], options?: any) => WinJS.Promise<IListItem<T>[]>
 >indices : number[]
 >options : any
->WinJS : WinJS
->Promise : Promise<T>
+>WinJS : unknown
+>Promise : WinJS.Promise<T>
 >IListItem : IListItem<T>
 >T : T
     }
@@ -78,11 +78,11 @@ declare module Data {
 
         //removeIndices: WinJS.Promise<IListItem<T>[]>;
         public removeIndices(indices: number[], options?: any): WinJS.Promise<IListItem<T>[]>;
->removeIndices : (indices: number[], options?: any) => Promise<IListItem<T>[]>
+>removeIndices : (indices: number[], options?: any) => WinJS.Promise<IListItem<T>[]>
 >indices : number[]
 >options : any
->WinJS : WinJS
->Promise : Promise<T>
+>WinJS : unknown
+>Promise : WinJS.Promise<T>
 >IListItem : IListItem<T>
 >T : T
     }

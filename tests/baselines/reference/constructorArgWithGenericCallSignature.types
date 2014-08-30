@@ -25,22 +25,22 @@ module Test {
 >MyFunc : MyFunc
 }
 var func: Test.MyFunc;
->func : MyFunc
->Test : Test
->MyFunc : MyFunc
+>func : Test.MyFunc
+>Test : unknown
+>MyFunc : Test.MyFunc
 
 Test.F(func); // OK
 >Test.F(func) : void
->Test.F : (func: MyFunc) => void
+>Test.F : (func: Test.MyFunc) => void
 >Test : typeof Test
->F : (func: MyFunc) => void
->func : MyFunc
+>F : (func: Test.MyFunc) => void
+>func : Test.MyFunc
 
 var test = new Test.MyClass(func); // Should be OK
->test : MyClass
->new Test.MyClass(func) : MyClass
->Test.MyClass : typeof MyClass
+>test : Test.MyClass
+>new Test.MyClass(func) : Test.MyClass
+>Test.MyClass : typeof Test.MyClass
 >Test : typeof Test
->MyClass : typeof MyClass
->func : MyFunc
+>MyClass : typeof Test.MyClass
+>func : Test.MyFunc
 

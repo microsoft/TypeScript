@@ -124,13 +124,8 @@ while ('') { }
 do { }while('')
 
 if (/[a-z]/) { }
->/[a-z]/ : RegExp
-
 while (/[a-z]/) { }
->/[a-z]/ : RegExp
-
 do { }while(/[a-z]/)
->/[a-z]/ : RegExp
 
 if ([]) { }
 >[] : undefined[]
@@ -286,7 +281,6 @@ do { }while(f)
 
 var g = /[a-z]/
 >g : RegExp
->/[a-z]/ : RegExp
 
 if (g) { }
 >g : RegExp

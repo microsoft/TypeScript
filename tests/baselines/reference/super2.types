@@ -37,6 +37,7 @@ class SubSub5 extends Sub5 {
         return super.x();
 >super.x() : string
 >super.x : () => string
+>super : Sub5
 >x : () => string
     }
     public y() {
@@ -45,6 +46,7 @@ class SubSub5 extends Sub5 {
         return super.y();
 >super.y() : string
 >super.y : () => string
+>super : Sub5
 >y : () => string
     }
 }
@@ -81,6 +83,7 @@ class SubSub6 extends Sub6 {
         return super.y();
 >super.y() : string
 >super.y : () => string
+>super : Sub6
 >y : () => string
     }
 }
