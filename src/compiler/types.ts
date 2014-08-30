@@ -1007,9 +1007,6 @@ module ts {
         carriageReturn = 0x0D,        // \r
         lineSeparator = 0x2028,
         paragraphSeparator = 0x2029,
-
-        // REVIEW: do we need to support this?  The scanner doesn't, but our IText does.  This seems 
-        // like an odd disparity?  (Or maybe it's completely fine for them to be different).
         nextLine = 0x0085,
 
         // Unicode 3.0 space characters
