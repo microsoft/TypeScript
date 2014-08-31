@@ -1,0 +1,451 @@
+
+--------------------------------
+>>>>var greetings = 0;
+
+   |Pos: 0 SpanInfo: {"start":0,"length":17} Statement: 
+   |var greetings = 0
+    |Pos: 1 SpanInfo: {"start":0,"length":17} Statement: 
+    |var greetings = 0
+     |Pos: 2 SpanInfo: {"start":0,"length":17} Statement: 
+     |var greetings = 0
+      |Pos: 3 SpanInfo: {"start":0,"length":17} Statement: 
+      |var greetings = 0
+       |Pos: 4 SpanInfo: {"start":0,"length":17} Statement: 
+       |var greetings = 0
+        |Pos: 5 SpanInfo: {"start":0,"length":17} Statement: 
+        |var greetings = 0
+         |Pos: 6 SpanInfo: {"start":0,"length":17} Statement: 
+         |var greetings = 0
+          |Pos: 7 SpanInfo: {"start":0,"length":17} Statement: 
+          |var greetings = 0
+           |Pos: 8 SpanInfo: {"start":0,"length":17} Statement: 
+           |var greetings = 0
+            |Pos: 9 SpanInfo: {"start":0,"length":17} Statement: 
+            |var greetings = 0
+             |Pos: 10 SpanInfo: {"start":0,"length":17} Statement: 
+             |var greetings = 0
+              |Pos: 11 SpanInfo: {"start":0,"length":17} Statement: 
+              |var greetings = 0
+               |Pos: 12 SpanInfo: {"start":0,"length":17} Statement: 
+               |var greetings = 0
+                |Pos: 13 SpanInfo: {"start":0,"length":17} Statement: 
+                |var greetings = 0
+                 |Pos: 14 SpanInfo: {"start":0,"length":17} Statement: 
+                 |var greetings = 0
+                  |Pos: 15 SpanInfo: {"start":0,"length":17} Statement: 
+                  |var greetings = 0
+                   |Pos: 16 SpanInfo: {"start":0,"length":17} Statement: 
+                   |var greetings = 0
+                    |Pos: 17 SpanInfo: {"start":0,"length":17} Statement: 
+                    |var greetings = 0
+                     |Pos: 18 SpanInfo: {"start":0,"length":17} Statement: 
+                     |var greetings = 0
+--------------------------------
+>>>>function greet(greeting: string): number {
+
+   |Pos: 19 SpanInfo: undefined Statement: 
+    |Pos: 20 SpanInfo: undefined Statement: 
+     |Pos: 21 SpanInfo: undefined Statement: 
+      |Pos: 22 SpanInfo: undefined Statement: 
+       |Pos: 23 SpanInfo: undefined Statement: 
+        |Pos: 24 SpanInfo: undefined Statement: 
+         |Pos: 25 SpanInfo: undefined Statement: 
+          |Pos: 26 SpanInfo: undefined Statement: 
+           |Pos: 27 SpanInfo: undefined Statement: 
+            |Pos: 28 SpanInfo: undefined Statement: 
+             |Pos: 29 SpanInfo: undefined Statement: 
+              |Pos: 30 SpanInfo: undefined Statement: 
+               |Pos: 31 SpanInfo: undefined Statement: 
+                |Pos: 32 SpanInfo: undefined Statement: 
+                 |Pos: 33 SpanInfo: undefined Statement: 
+                  |Pos: 34 SpanInfo: undefined Statement: 
+                   |Pos: 35 SpanInfo: undefined Statement: 
+                    |Pos: 36 SpanInfo: undefined Statement: 
+                     |Pos: 37 SpanInfo: undefined Statement: 
+                      |Pos: 38 SpanInfo: undefined Statement: 
+                       |Pos: 39 SpanInfo: undefined Statement: 
+                        |Pos: 40 SpanInfo: undefined Statement: 
+                         |Pos: 41 SpanInfo: undefined Statement: 
+                          |Pos: 42 SpanInfo: undefined Statement: 
+                           |Pos: 43 SpanInfo: undefined Statement: 
+                            |Pos: 44 SpanInfo: undefined Statement: 
+                             |Pos: 45 SpanInfo: undefined Statement: 
+                              |Pos: 46 SpanInfo: undefined Statement: 
+                               |Pos: 47 SpanInfo: undefined Statement: 
+                                |Pos: 48 SpanInfo: undefined Statement: 
+                                 |Pos: 49 SpanInfo: undefined Statement: 
+                                  |Pos: 50 SpanInfo: undefined Statement: 
+                                   |Pos: 51 SpanInfo: undefined Statement: 
+                                    |Pos: 52 SpanInfo: undefined Statement: 
+                                     |Pos: 53 SpanInfo: undefined Statement: 
+                                      |Pos: 54 SpanInfo: undefined Statement: 
+                                       |Pos: 55 SpanInfo: undefined Statement: 
+                                        |Pos: 56 SpanInfo: undefined Statement: 
+                                         |Pos: 57 SpanInfo: undefined Statement: 
+                                          |Pos: 58 SpanInfo: undefined Statement: 
+                                           |Pos: 59 SpanInfo: undefined Statement: 
+                                            |Pos: 60 SpanInfo: undefined Statement: 
+                                             |Pos: 61 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    greetings++;
+
+   |Pos: 62 SpanInfo: undefined Statement: 
+    |Pos: 63 SpanInfo: undefined Statement: 
+     |Pos: 64 SpanInfo: undefined Statement: 
+      |Pos: 65 SpanInfo: undefined Statement: 
+       |Pos: 66 SpanInfo: undefined Statement: 
+        |Pos: 67 SpanInfo: undefined Statement: 
+         |Pos: 68 SpanInfo: undefined Statement: 
+          |Pos: 69 SpanInfo: undefined Statement: 
+           |Pos: 70 SpanInfo: undefined Statement: 
+            |Pos: 71 SpanInfo: undefined Statement: 
+             |Pos: 72 SpanInfo: undefined Statement: 
+              |Pos: 73 SpanInfo: undefined Statement: 
+               |Pos: 74 SpanInfo: undefined Statement: 
+                |Pos: 75 SpanInfo: undefined Statement: 
+                 |Pos: 76 SpanInfo: undefined Statement: 
+                  |Pos: 77 SpanInfo: undefined Statement: 
+                   |Pos: 78 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    return greetings;
+
+   |Pos: 79 SpanInfo: undefined Statement: 
+    |Pos: 80 SpanInfo: undefined Statement: 
+     |Pos: 81 SpanInfo: undefined Statement: 
+      |Pos: 82 SpanInfo: undefined Statement: 
+       |Pos: 83 SpanInfo: undefined Statement: 
+        |Pos: 84 SpanInfo: undefined Statement: 
+         |Pos: 85 SpanInfo: undefined Statement: 
+          |Pos: 86 SpanInfo: undefined Statement: 
+           |Pos: 87 SpanInfo: undefined Statement: 
+            |Pos: 88 SpanInfo: undefined Statement: 
+             |Pos: 89 SpanInfo: undefined Statement: 
+              |Pos: 90 SpanInfo: undefined Statement: 
+               |Pos: 91 SpanInfo: undefined Statement: 
+                |Pos: 92 SpanInfo: undefined Statement: 
+                 |Pos: 93 SpanInfo: undefined Statement: 
+                  |Pos: 94 SpanInfo: undefined Statement: 
+                   |Pos: 95 SpanInfo: undefined Statement: 
+                    |Pos: 96 SpanInfo: undefined Statement: 
+                     |Pos: 97 SpanInfo: undefined Statement: 
+                      |Pos: 98 SpanInfo: undefined Statement: 
+                       |Pos: 99 SpanInfo: undefined Statement: 
+                        |Pos: 100 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>}
+
+   |Pos: 101 SpanInfo: {"start":101,"length":1} Statement: 
+   |}
+    |Pos: 102 SpanInfo: {"start":101,"length":1} Statement: 
+    |}
+--------------------------------
+>>>>function greet2(greeting: string, n = 10, x?: string, ...restParams: string[]): number {
+
+   |Pos: 103 SpanInfo: undefined Statement: 
+    |Pos: 104 SpanInfo: undefined Statement: 
+     |Pos: 105 SpanInfo: undefined Statement: 
+      |Pos: 106 SpanInfo: undefined Statement: 
+       |Pos: 107 SpanInfo: undefined Statement: 
+        |Pos: 108 SpanInfo: undefined Statement: 
+         |Pos: 109 SpanInfo: undefined Statement: 
+          |Pos: 110 SpanInfo: undefined Statement: 
+           |Pos: 111 SpanInfo: undefined Statement: 
+            |Pos: 112 SpanInfo: undefined Statement: 
+             |Pos: 113 SpanInfo: undefined Statement: 
+              |Pos: 114 SpanInfo: undefined Statement: 
+               |Pos: 115 SpanInfo: undefined Statement: 
+                |Pos: 116 SpanInfo: undefined Statement: 
+                 |Pos: 117 SpanInfo: undefined Statement: 
+                  |Pos: 118 SpanInfo: undefined Statement: 
+                   |Pos: 119 SpanInfo: undefined Statement: 
+                    |Pos: 120 SpanInfo: undefined Statement: 
+                     |Pos: 121 SpanInfo: undefined Statement: 
+                      |Pos: 122 SpanInfo: undefined Statement: 
+                       |Pos: 123 SpanInfo: undefined Statement: 
+                        |Pos: 124 SpanInfo: undefined Statement: 
+                         |Pos: 125 SpanInfo: undefined Statement: 
+                          |Pos: 126 SpanInfo: undefined Statement: 
+                           |Pos: 127 SpanInfo: undefined Statement: 
+                            |Pos: 128 SpanInfo: undefined Statement: 
+                             |Pos: 129 SpanInfo: undefined Statement: 
+                              |Pos: 130 SpanInfo: undefined Statement: 
+                               |Pos: 131 SpanInfo: undefined Statement: 
+                                |Pos: 132 SpanInfo: undefined Statement: 
+                                 |Pos: 133 SpanInfo: undefined Statement: 
+                                  |Pos: 134 SpanInfo: undefined Statement: 
+                                   |Pos: 135 SpanInfo: undefined Statement: 
+                                    |Pos: 136 SpanInfo: {"start":137,"length":6} Statement: 
+                                    |n = 10
+                                     |Pos: 137 SpanInfo: {"start":137,"length":6} Statement: 
+                                     |n = 10
+                                      |Pos: 138 SpanInfo: {"start":137,"length":6} Statement: 
+                                      |n = 10
+                                       |Pos: 139 SpanInfo: {"start":137,"length":6} Statement: 
+                                       |n = 10
+                                        |Pos: 140 SpanInfo: {"start":137,"length":6} Statement: 
+                                        |n = 10
+                                         |Pos: 141 SpanInfo: {"start":137,"length":6} Statement: 
+                                         |n = 10
+                                          |Pos: 142 SpanInfo: {"start":137,"length":6} Statement: 
+                                          |n = 10
+                                           |Pos: 143 SpanInfo: {"start":137,"length":6} Statement: 
+                                           |n = 10
+                                            |Pos: 144 SpanInfo: undefined Statement: 
+                                             |Pos: 145 SpanInfo: undefined Statement: 
+                                              |Pos: 146 SpanInfo: undefined Statement: 
+                                               |Pos: 147 SpanInfo: undefined Statement: 
+                                                |Pos: 148 SpanInfo: undefined Statement: 
+                                                 |Pos: 149 SpanInfo: undefined Statement: 
+                                                  |Pos: 150 SpanInfo: undefined Statement: 
+                                                   |Pos: 151 SpanInfo: undefined Statement: 
+                                                    |Pos: 152 SpanInfo: undefined Statement: 
+                                                     |Pos: 153 SpanInfo: undefined Statement: 
+                                                      |Pos: 154 SpanInfo: undefined Statement: 
+                                                       |Pos: 155 SpanInfo: undefined Statement: 
+                                                        |Pos: 156 SpanInfo: {"start":157,"length":23} Statement: 
+                                                        |...restParams: string[]
+                                                         |Pos: 157 SpanInfo: {"start":157,"length":23} Statement: 
+                                                         |...restParams: string[]
+                                                          |Pos: 158 SpanInfo: {"start":157,"length":23} Statement: 
+                                                          |...restParams: string[]
+                                                           |Pos: 159 SpanInfo: {"start":157,"length":23} Statement: 
+                                                           |...restParams: string[]
+                                                            |Pos: 160 SpanInfo: {"start":157,"length":23} Statement: 
+                                                            |...restParams: string[]
+                                                             |Pos: 161 SpanInfo: {"start":157,"length":23} Statement: 
+                                                             |...restParams: string[]
+                                                              |Pos: 162 SpanInfo: {"start":157,"length":23} Statement: 
+                                                              |...restParams: string[]
+                                                               |Pos: 163 SpanInfo: {"start":157,"length":23} Statement: 
+                                                               |...restParams: string[]
+                                                                |Pos: 164 SpanInfo: {"start":157,"length":23} Statement: 
+                                                                |...restParams: string[]
+                                                                 |Pos: 165 SpanInfo: {"start":157,"length":23} Statement: 
+                                                                 |...restParams: string[]
+                                                                  |Pos: 166 SpanInfo: {"start":157,"length":23} Statement: 
+                                                                  |...restParams: string[]
+                                                                   |Pos: 167 SpanInfo: {"start":157,"length":23} Statement: 
+                                                                   |...restParams: string[]
+                                                                    |Pos: 168 SpanInfo: {"start":157,"length":23} Statement: 
+                                                                    |...restParams: string[]
+                                                                     |Pos: 169 SpanInfo: {"start":157,"length":23} Statement: 
+                                                                     |...restParams: string[]
+                                                                      |Pos: 170 SpanInfo: {"start":157,"length":23} Statement: 
+                                                                      |...restParams: string[]
+                                                                       |Pos: 171 SpanInfo: {"start":157,"length":23} Statement: 
+                                                                       |...restParams: string[]
+                                                                        |Pos: 172 SpanInfo: {"start":157,"length":23} Statement: 
+                                                                        |...restParams: string[]
+                                                                         |Pos: 173 SpanInfo: {"start":157,"length":23} Statement: 
+                                                                         |...restParams: string[]
+                                                                          |Pos: 174 SpanInfo: {"start":157,"length":23} Statement: 
+                                                                          |...restParams: string[]
+                                                                           |Pos: 175 SpanInfo: {"start":157,"length":23} Statement: 
+                                                                           |...restParams: string[]
+                                                                            |Pos: 176 SpanInfo: {"start":157,"length":23} Statement: 
+                                                                            |...restParams: string[]
+                                                                             |Pos: 177 SpanInfo: {"start":157,"length":23} Statement: 
+                                                                             |...restParams: string[]
+                                                                              |Pos: 178 SpanInfo: {"start":157,"length":23} Statement: 
+                                                                              |...restParams: string[]
+                                                                               |Pos: 179 SpanInfo: {"start":157,"length":23} Statement: 
+                                                                               |...restParams: string[]
+                                                                                |Pos: 180 SpanInfo: undefined Statement: 
+                                                                                 |Pos: 181 SpanInfo: undefined Statement: 
+                                                                                  |Pos: 182 SpanInfo: undefined Statement: 
+                                                                                   |Pos: 183 SpanInfo: undefined Statement: 
+                                                                                    |Pos: 184 SpanInfo: undefined Statement: 
+                                                                                     |Pos: 185 SpanInfo: undefined Statement: 
+                                                                                      |Pos: 186 SpanInfo: undefined Statement: 
+                                                                                       |Pos: 187 SpanInfo: undefined Statement: 
+                                                                                        |Pos: 188 SpanInfo: undefined Statement: 
+                                                                                         |Pos: 189 SpanInfo: undefined Statement: 
+                                                                                          |Pos: 190 SpanInfo: undefined Statement: 
+                                                                                           |Pos: 191 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    greetings++;
+
+   |Pos: 192 SpanInfo: undefined Statement: 
+    |Pos: 193 SpanInfo: undefined Statement: 
+     |Pos: 194 SpanInfo: undefined Statement: 
+      |Pos: 195 SpanInfo: undefined Statement: 
+       |Pos: 196 SpanInfo: undefined Statement: 
+        |Pos: 197 SpanInfo: undefined Statement: 
+         |Pos: 198 SpanInfo: undefined Statement: 
+          |Pos: 199 SpanInfo: undefined Statement: 
+           |Pos: 200 SpanInfo: undefined Statement: 
+            |Pos: 201 SpanInfo: undefined Statement: 
+             |Pos: 202 SpanInfo: undefined Statement: 
+              |Pos: 203 SpanInfo: undefined Statement: 
+               |Pos: 204 SpanInfo: undefined Statement: 
+                |Pos: 205 SpanInfo: undefined Statement: 
+                 |Pos: 206 SpanInfo: undefined Statement: 
+                  |Pos: 207 SpanInfo: undefined Statement: 
+                   |Pos: 208 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    return greetings;
+
+   |Pos: 209 SpanInfo: undefined Statement: 
+    |Pos: 210 SpanInfo: undefined Statement: 
+     |Pos: 211 SpanInfo: undefined Statement: 
+      |Pos: 212 SpanInfo: undefined Statement: 
+       |Pos: 213 SpanInfo: undefined Statement: 
+        |Pos: 214 SpanInfo: undefined Statement: 
+         |Pos: 215 SpanInfo: undefined Statement: 
+          |Pos: 216 SpanInfo: undefined Statement: 
+           |Pos: 217 SpanInfo: undefined Statement: 
+            |Pos: 218 SpanInfo: undefined Statement: 
+             |Pos: 219 SpanInfo: undefined Statement: 
+              |Pos: 220 SpanInfo: undefined Statement: 
+               |Pos: 221 SpanInfo: undefined Statement: 
+                |Pos: 222 SpanInfo: undefined Statement: 
+                 |Pos: 223 SpanInfo: undefined Statement: 
+                  |Pos: 224 SpanInfo: undefined Statement: 
+                   |Pos: 225 SpanInfo: undefined Statement: 
+                    |Pos: 226 SpanInfo: undefined Statement: 
+                     |Pos: 227 SpanInfo: undefined Statement: 
+                      |Pos: 228 SpanInfo: undefined Statement: 
+                       |Pos: 229 SpanInfo: undefined Statement: 
+                        |Pos: 230 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>}
+
+   |Pos: 231 SpanInfo: {"start":231,"length":1} Statement: 
+   |}
+    |Pos: 232 SpanInfo: {"start":231,"length":1} Statement: 
+    |}
+--------------------------------
+>>>>function foo(greeting: string, n = 10, x?: string, ...restParams: string[])
+
+   |Pos: 233 SpanInfo: undefined Statement: 
+    |Pos: 234 SpanInfo: undefined Statement: 
+     |Pos: 235 SpanInfo: undefined Statement: 
+      |Pos: 236 SpanInfo: undefined Statement: 
+       |Pos: 237 SpanInfo: undefined Statement: 
+        |Pos: 238 SpanInfo: undefined Statement: 
+         |Pos: 239 SpanInfo: undefined Statement: 
+          |Pos: 240 SpanInfo: undefined Statement: 
+           |Pos: 241 SpanInfo: undefined Statement: 
+            |Pos: 242 SpanInfo: undefined Statement: 
+             |Pos: 243 SpanInfo: undefined Statement: 
+              |Pos: 244 SpanInfo: undefined Statement: 
+               |Pos: 245 SpanInfo: undefined Statement: 
+                |Pos: 246 SpanInfo: undefined Statement: 
+                 |Pos: 247 SpanInfo: undefined Statement: 
+                  |Pos: 248 SpanInfo: undefined Statement: 
+                   |Pos: 249 SpanInfo: undefined Statement: 
+                    |Pos: 250 SpanInfo: undefined Statement: 
+                     |Pos: 251 SpanInfo: undefined Statement: 
+                      |Pos: 252 SpanInfo: undefined Statement: 
+                       |Pos: 253 SpanInfo: undefined Statement: 
+                        |Pos: 254 SpanInfo: undefined Statement: 
+                         |Pos: 255 SpanInfo: undefined Statement: 
+                          |Pos: 256 SpanInfo: undefined Statement: 
+                           |Pos: 257 SpanInfo: undefined Statement: 
+                            |Pos: 258 SpanInfo: undefined Statement: 
+                             |Pos: 259 SpanInfo: undefined Statement: 
+                              |Pos: 260 SpanInfo: undefined Statement: 
+                               |Pos: 261 SpanInfo: undefined Statement: 
+                                |Pos: 262 SpanInfo: undefined Statement: 
+                                 |Pos: 263 SpanInfo: {"start":264,"length":6} Statement: 
+                                 |n = 10
+                                  |Pos: 264 SpanInfo: {"start":264,"length":6} Statement: 
+                                  |n = 10
+                                   |Pos: 265 SpanInfo: {"start":264,"length":6} Statement: 
+                                   |n = 10
+                                    |Pos: 266 SpanInfo: {"start":264,"length":6} Statement: 
+                                    |n = 10
+                                     |Pos: 267 SpanInfo: {"start":264,"length":6} Statement: 
+                                     |n = 10
+                                      |Pos: 268 SpanInfo: {"start":264,"length":6} Statement: 
+                                      |n = 10
+                                       |Pos: 269 SpanInfo: {"start":264,"length":6} Statement: 
+                                       |n = 10
+                                        |Pos: 270 SpanInfo: {"start":264,"length":6} Statement: 
+                                        |n = 10
+                                         |Pos: 271 SpanInfo: undefined Statement: 
+                                          |Pos: 272 SpanInfo: undefined Statement: 
+                                           |Pos: 273 SpanInfo: undefined Statement: 
+                                            |Pos: 274 SpanInfo: undefined Statement: 
+                                             |Pos: 275 SpanInfo: undefined Statement: 
+                                              |Pos: 276 SpanInfo: undefined Statement: 
+                                               |Pos: 277 SpanInfo: undefined Statement: 
+                                                |Pos: 278 SpanInfo: undefined Statement: 
+                                                 |Pos: 279 SpanInfo: undefined Statement: 
+                                                  |Pos: 280 SpanInfo: undefined Statement: 
+                                                   |Pos: 281 SpanInfo: undefined Statement: 
+                                                    |Pos: 282 SpanInfo: undefined Statement: 
+                                                     |Pos: 283 SpanInfo: {"start":284,"length":23} Statement: 
+                                                     |...restParams: string[]
+                                                      |Pos: 284 SpanInfo: {"start":284,"length":23} Statement: 
+                                                      |...restParams: string[]
+                                                       |Pos: 285 SpanInfo: {"start":284,"length":23} Statement: 
+                                                       |...restParams: string[]
+                                                        |Pos: 286 SpanInfo: {"start":284,"length":23} Statement: 
+                                                        |...restParams: string[]
+                                                         |Pos: 287 SpanInfo: {"start":284,"length":23} Statement: 
+                                                         |...restParams: string[]
+                                                          |Pos: 288 SpanInfo: {"start":284,"length":23} Statement: 
+                                                          |...restParams: string[]
+                                                           |Pos: 289 SpanInfo: {"start":284,"length":23} Statement: 
+                                                           |...restParams: string[]
+                                                            |Pos: 290 SpanInfo: {"start":284,"length":23} Statement: 
+                                                            |...restParams: string[]
+                                                             |Pos: 291 SpanInfo: {"start":284,"length":23} Statement: 
+                                                             |...restParams: string[]
+                                                              |Pos: 292 SpanInfo: {"start":284,"length":23} Statement: 
+                                                              |...restParams: string[]
+                                                               |Pos: 293 SpanInfo: {"start":284,"length":23} Statement: 
+                                                               |...restParams: string[]
+                                                                |Pos: 294 SpanInfo: {"start":284,"length":23} Statement: 
+                                                                |...restParams: string[]
+                                                                 |Pos: 295 SpanInfo: {"start":284,"length":23} Statement: 
+                                                                 |...restParams: string[]
+                                                                  |Pos: 296 SpanInfo: {"start":284,"length":23} Statement: 
+                                                                  |...restParams: string[]
+                                                                   |Pos: 297 SpanInfo: {"start":284,"length":23} Statement: 
+                                                                   |...restParams: string[]
+                                                                    |Pos: 298 SpanInfo: {"start":284,"length":23} Statement: 
+                                                                    |...restParams: string[]
+                                                                     |Pos: 299 SpanInfo: {"start":284,"length":23} Statement: 
+                                                                     |...restParams: string[]
+                                                                      |Pos: 300 SpanInfo: {"start":284,"length":23} Statement: 
+                                                                      |...restParams: string[]
+                                                                       |Pos: 301 SpanInfo: {"start":284,"length":23} Statement: 
+                                                                       |...restParams: string[]
+                                                                        |Pos: 302 SpanInfo: {"start":284,"length":23} Statement: 
+                                                                        |...restParams: string[]
+                                                                         |Pos: 303 SpanInfo: {"start":284,"length":23} Statement: 
+                                                                         |...restParams: string[]
+                                                                          |Pos: 304 SpanInfo: {"start":284,"length":23} Statement: 
+                                                                          |...restParams: string[]
+                                                                           |Pos: 305 SpanInfo: {"start":284,"length":23} Statement: 
+                                                                           |...restParams: string[]
+                                                                            |Pos: 306 SpanInfo: {"start":284,"length":23} Statement: 
+                                                                            |...restParams: string[]
+                                                                             |Pos: 307 SpanInfo: undefined Statement: 
+                                                                              |Pos: 308 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>{
+
+   |Pos: 309 SpanInfo: undefined Statement: 
+    |Pos: 310 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    return;
+
+   |Pos: 311 SpanInfo: undefined Statement: 
+    |Pos: 312 SpanInfo: undefined Statement: 
+     |Pos: 313 SpanInfo: undefined Statement: 
+      |Pos: 314 SpanInfo: undefined Statement: 
+       |Pos: 315 SpanInfo: undefined Statement: 
+        |Pos: 316 SpanInfo: undefined Statement: 
+         |Pos: 317 SpanInfo: undefined Statement: 
+          |Pos: 318 SpanInfo: undefined Statement: 
+           |Pos: 319 SpanInfo: undefined Statement: 
+            |Pos: 320 SpanInfo: undefined Statement: 
+             |Pos: 321 SpanInfo: undefined Statement: 
+              |Pos: 322 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>}
+   |Pos: 323 SpanInfo: {"start":323,"length":1} Statement: 
+   |}

@@ -14,7 +14,7 @@ module ts.BreakpointResolver {
         var askedPosLineAndCharacter = sourceFile.getLineAndCharacterFromPosition(askedPos);
 
         // try first in the statements at given location
-        return spanInNodeArray(sourceFile.statements, spanInStatement, /*isTokenSeparated*/ false);
+        return spanInStatements(sourceFile.statements);
 
         function getLocalTokenStartPos(pos: number) {
             return skipTrivia(sourceFile.text, pos);
@@ -25,13 +25,15 @@ module ts.BreakpointResolver {
             return TypeScript.TextSpan.fromBounds(getLocalTokenStartPos(pos), end);
         }
 
-        function spanInStatement(statement: Statement) {
+        function spanInStatement(statement: Statement): TypeScript.TextSpan {
             switch (statement.kind) {
                 case SyntaxKind.VariableStatement:
                     return spanInVariableStatement(<VariableStatement>statement);
+                case SyntaxKind.FunctionDeclaration:
+                    return spanInFunctionDeclaration(<FunctionDeclaration>statement);
             }
 
-            function spanInVariableStatement(variableStatement: VariableStatement) {
+            function spanInVariableStatement(variableStatement: VariableStatement): TypeScript.TextSpan {
                 // No breakpoints in the ambient variable statement
                 if (variableStatement.flags & NodeFlags.Ambient) {
                     return;
@@ -52,7 +54,7 @@ module ts.BreakpointResolver {
 
                 return spanInNodeArray(variableStatement.declarations, spanInVariableDeclaration, /*isTokenSeparated*/ true);
 
-                function spanInVariableDeclaration(variableDeclaration: VariableDeclaration) {
+                function spanInVariableDeclaration(variableDeclaration: VariableDeclaration): TypeScript.TextSpan {
                     // Breakpoint is possible in variableDeclaration only if there is initialization
                     if (variableDeclaration.initializer) {
                         // If this is first variable declaration, the span starts at the variable statement pos so we can include var keyword
@@ -67,10 +69,60 @@ module ts.BreakpointResolver {
                             }
                             previousVariableDeclaration = currentDeclaration;
                         });
-
                         return spanInVariableDeclaration(previousVariableDeclaration);
                     }
                 }
+            }
+
+            function spanInFunctionDeclaration(functionDeclaration: FunctionDeclaration): TypeScript.TextSpan {
+                // No breakpoints in the ambient function declaration or just a signature
+                if ((functionDeclaration.flags & NodeFlags.Ambient) || !functionDeclaration.body) {
+                    return;
+                }
+
+                // Set the span in parameters if the asked pos falls inside parameter list
+                if (functionDeclaration.parameters.pos <= askedPos && askedPos < functionDeclaration.parameters.end) {
+                    return spanInNodeArray(functionDeclaration.parameters, spanInParameterDeclaration, /*isTokenSeparated*/ true);
+                }
+
+                // Set the breakpoint in the function body
+                return spanInFunctionBody();
+
+                function spanInParameterDeclaration(parameter: ParameterDeclaration): TypeScript.TextSpan {
+                    // Breakpoint is possible on parameter only if it has initializer or is a rest parameter
+                    if (parameter.initializer || parameter.flags & NodeFlags.Rest) {
+                        // If this is first variable declaration, the span starts at the variable statement pos so we can include var keyword
+                        return textSpan(parameter.pos, parameter.end);
+                    }
+                    else {
+                        // first parameter and cant set breakpoint, goto body and set breakpoint there
+                        return spanInFunctionBody();
+                    }
+                }
+
+                function spanInFunctionBody(): TypeScript.TextSpan {
+                    if (functionDeclaration.body.kind === SyntaxKind.FunctionBlock) {
+                        return spanInBlock(<Block>functionDeclaration.body);
+                    }
+                    else {
+                        return textSpan(functionDeclaration.body.pos, functionDeclaration.body.end);
+                    }
+                }
+            }
+
+            function spanInBlock(block: Block): TypeScript.TextSpan {
+                // If the asked pos > statement.length or there are no statements, the breakpoint goes on the '}'
+                if (!block.statements.length || askedPos >= skipTrivia(sourceFile.text, block.statements.end, /*stopAfterLineBreak*/ true)) {
+                    return textSpan(block.statements.end, block.end);
+                }
+
+                // if the position is before the first statement, the breakpoint goes into first statement
+                if (askedPos <= block.statements.pos) {
+                    return spanInStatement(block.statements[0]);
+                }
+
+                // Set the breakpoint in the statement with askedPos
+                return spanInStatements(block.statements);
             }
         }
 
@@ -80,7 +132,11 @@ module ts.BreakpointResolver {
                 spanInNode(node) : undefined;
         }
 
-        function spanInNodeArray<T extends Node>(nodes: NodeArray<T>, spanInNode: (node: T)=> TypeScript.TextSpan, isTokenSeparated: boolean) {
+        function spanInStatements(statements: NodeArray<Statement>) {
+            return spanInNodeArray(statements, spanInStatement, /*isTokenSeparated*/false);
+        }
+
+        function spanInNodeArray<T extends Node>(nodes: NodeArray<T>, spanInNode: (node: T) => TypeScript.TextSpan, isTokenSeparated: boolean) {
             // find the child that has this
             for (var i = 0, n = nodes.length; i < n; i++) {
                 var node = nodes[i];
