@@ -211,7 +211,8 @@
                       |return greetings
                        |Pos: 99 SpanInfo: {"start":83,"length":16} Statement: 
                        |return greetings
-                        |Pos: 100 SpanInfo: undefined Statement: 
+                        |Pos: 100 SpanInfo: {"start":83,"length":16} Statement: 
+                        |return greetings
 --------------------------------
 >>>>}
 
@@ -482,7 +483,8 @@
                       |return greetings
                        |Pos: 229 SpanInfo: {"start":213,"length":16} Statement: 
                        |return greetings
-                        |Pos: 230 SpanInfo: undefined Statement: 
+                        |Pos: 230 SpanInfo: {"start":213,"length":16} Statement: 
+                        |return greetings
 --------------------------------
 >>>>}
 
@@ -677,7 +679,8 @@
             |return
              |Pos: 321 SpanInfo: {"start":315,"length":6} Statement: 
              |return
-              |Pos: 322 SpanInfo: undefined Statement: 
+              |Pos: 322 SpanInfo: {"start":315,"length":6} Statement: 
+              |return
 --------------------------------
 >>>>}
    |Pos: 323 SpanInfo: {"start":323,"length":1} Statement: 

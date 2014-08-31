@@ -172,6 +172,13 @@ module ts.BreakpointResolver {
                     return spanInNode(node);
                 }
 
+                if (i === n - 1) {
+                    // If this is last node, set breakpoint on this node if the asked Pos is in skipped trivia that is on this line
+                    if (askedPos < skipTrivia(sourceFile.text, node.end, /*stopAfterLineBreak*/ true)) {
+                        return spanInNode(node);
+                    }
+                }
+
                 if (isTokenSeparated && i + 1 < n && nodes[i + 1].pos > askedPos) {
                     // Check if we should be setting breakpoint on this node if the asked pos is before the separating token
                     var tokenPos = getLocalTokenStartPos(node.end);
