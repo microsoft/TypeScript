@@ -33,6 +33,8 @@ module ts.BreakpointResolver {
                     return spanInFunctionDeclaration(<FunctionDeclaration>statement);
                 case SyntaxKind.ExpressionStatement:
                     return spanInExpressionStatement(<ExpressionStatement>statement);
+                case SyntaxKind.ReturnStatement:
+                    return spanInReturnStatement(<ReturnStatement>statement);
             }
 
             function spanInVariableStatement(variableStatement: VariableStatement): TypeScript.TextSpan {
@@ -129,6 +131,10 @@ module ts.BreakpointResolver {
 
             function spanInExpressionStatement(expressionStatement: ExpressionStatement): TypeScript.TextSpan {
                 return textSpan(expressionStatement.expression.pos, expressionStatement.expression.end);
+            }
+
+            function spanInReturnStatement(returnStatement: ReturnStatement): TypeScript.TextSpan {
+                return textSpan(returnStatement.pos, returnStatement.expression ? returnStatement.expression.end : getLocalTokenStartPos(returnStatement.pos) + tokenToString(SyntaxKind.ReturnKeyword).length);
             }
         }
 
