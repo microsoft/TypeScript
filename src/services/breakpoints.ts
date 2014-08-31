@@ -53,6 +53,8 @@ module ts.BreakpointResolver {
                     return spanInDoStatement(<DoStatement>statement);
                 case SyntaxKind.Block:
                     return spanInBlock(<Block>statement, /*canSetBreakpointOnCloseBrace*/ false);
+                case SyntaxKind.DebuggerStatement:
+                    return spanInDebuggerStatement(statement);
             }
 
             function spanInVariableStatement(variableStatement: VariableStatement): TypeScript.TextSpan {
@@ -198,6 +200,11 @@ module ts.BreakpointResolver {
                 }
 
                 return spanInStatement(doStatement.statement);
+            }
+
+            function spanInDebuggerStatement(debuggerStatement: Statement): TypeScript.TextSpan {
+                var debuggerKeyWordPos = getLocalTokenStartPos(debuggerStatement.pos);
+                return textSpan(debuggerKeyWordPos, debuggerKeyWordPos + getTokenLength(SyntaxKind.DebuggerKeyword));
             }
         }
 
