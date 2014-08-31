@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
 // See LICENSE.txt in the project root for complete license information.
 
-module ts.Breakpoints {
+module ts.BreakpointResolver {
     /**
      * Get the breakpoint span in given sourceFile
      */
-    export function spanInSourceFileAtLocation(sourceFile: SourceFile, askedPos: number) {
+    export function spanInSourceFileAtLocation(sourceFile: SourceFile, askedPos: number): TypeScript.TextSpan {
         // Cannot set breakpoint in dts file
         if (sourceFile.flags & NodeFlags.DeclarationFile) {
             return;
