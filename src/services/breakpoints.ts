@@ -49,6 +49,8 @@ module ts.BreakpointResolver {
                     return spanInReturnStatement(<ReturnStatement>statement);
                 case SyntaxKind.WhileStatement:
                     return spanInWhileStatement(<WhileStatement>statement);
+                case SyntaxKind.DoStatement:
+                    return spanInDoStatement(<DoStatement>statement);
                 case SyntaxKind.Block:
                     return spanInBlock(<Block>statement, /*canSetBreakpointOnCloseBrace*/ false);
             }
@@ -184,6 +186,18 @@ module ts.BreakpointResolver {
                 function spanInWhileExpression() {
                     return textSpan(whileStatement.pos, closeParenPos + getTokenLength(SyntaxKind.CloseParenToken));
                 }
+            }
+
+            function spanInDoStatement(doStatement: DoStatement): TypeScript.TextSpan {
+                if (askedPos >= doStatement.statement.end) {
+                    return spanInNodeConsideringTrivia(doStatement.statement.end,
+                        // On statement of the doStatement
+                        () => spanInStatement(doStatement.statement),
+                        // On While expression
+                        () => textSpan(doStatement.statement.end, getLocalTokenStartPos(doStatement.expression.end) + getTokenLength(SyntaxKind.CloseParenToken))); 
+                }
+
+                return spanInStatement(doStatement.statement);
             }
         }
 

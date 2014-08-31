@@ -1,0 +1,250 @@
+
+--------------------------------
+>>>>var i = 0;
+
+   |Pos: 0 SpanInfo: {"start":0,"length":9} Statement: 
+   |var i = 0
+    |Pos: 1 SpanInfo: {"start":0,"length":9} Statement: 
+    |var i = 0
+     |Pos: 2 SpanInfo: {"start":0,"length":9} Statement: 
+     |var i = 0
+      |Pos: 3 SpanInfo: {"start":0,"length":9} Statement: 
+      |var i = 0
+       |Pos: 4 SpanInfo: {"start":0,"length":9} Statement: 
+       |var i = 0
+        |Pos: 5 SpanInfo: {"start":0,"length":9} Statement: 
+        |var i = 0
+         |Pos: 6 SpanInfo: {"start":0,"length":9} Statement: 
+         |var i = 0
+          |Pos: 7 SpanInfo: {"start":0,"length":9} Statement: 
+          |var i = 0
+           |Pos: 8 SpanInfo: {"start":0,"length":9} Statement: 
+           |var i = 0
+            |Pos: 9 SpanInfo: {"start":0,"length":9} Statement: 
+            |var i = 0
+             |Pos: 10 SpanInfo: {"start":0,"length":9} Statement: 
+             |var i = 0
+--------------------------------
+>>>>do
+
+   |Pos: 11 SpanInfo: {"start":20,"length":3} Statement: 
+   |i++
+    |Pos: 12 SpanInfo: {"start":20,"length":3} Statement: 
+    |i++
+     |Pos: 13 SpanInfo: {"start":20,"length":3} Statement: 
+     |i++
+--------------------------------
+>>>>{
+
+   |Pos: 14 SpanInfo: {"start":20,"length":3} Statement: 
+   |i++
+    |Pos: 15 SpanInfo: {"start":20,"length":3} Statement: 
+    |i++
+--------------------------------
+>>>>    i++;
+
+   |Pos: 16 SpanInfo: {"start":20,"length":3} Statement: 
+   |i++
+    |Pos: 17 SpanInfo: {"start":20,"length":3} Statement: 
+    |i++
+     |Pos: 18 SpanInfo: {"start":20,"length":3} Statement: 
+     |i++
+      |Pos: 19 SpanInfo: {"start":20,"length":3} Statement: 
+      |i++
+       |Pos: 20 SpanInfo: {"start":20,"length":3} Statement: 
+       |i++
+        |Pos: 21 SpanInfo: {"start":20,"length":3} Statement: 
+        |i++
+         |Pos: 22 SpanInfo: {"start":20,"length":3} Statement: 
+         |i++
+          |Pos: 23 SpanInfo: {"start":20,"length":3} Statement: 
+          |i++
+           |Pos: 24 SpanInfo: {"start":20,"length":3} Statement: 
+           |i++
+--------------------------------
+>>>>} while (i < 10);
+
+   |Pos: 25 SpanInfo: {"start":20,"length":3} Statement: 
+   |i++
+    |Pos: 26 SpanInfo: {"start":27,"length":14} Statement: 
+    |while (i < 10)
+     |Pos: 27 SpanInfo: {"start":27,"length":14} Statement: 
+     |while (i < 10)
+      |Pos: 28 SpanInfo: {"start":27,"length":14} Statement: 
+      |while (i < 10)
+       |Pos: 29 SpanInfo: {"start":27,"length":14} Statement: 
+       |while (i < 10)
+        |Pos: 30 SpanInfo: {"start":27,"length":14} Statement: 
+        |while (i < 10)
+         |Pos: 31 SpanInfo: {"start":27,"length":14} Statement: 
+         |while (i < 10)
+          |Pos: 32 SpanInfo: {"start":27,"length":14} Statement: 
+          |while (i < 10)
+           |Pos: 33 SpanInfo: {"start":27,"length":14} Statement: 
+           |while (i < 10)
+            |Pos: 34 SpanInfo: {"start":27,"length":14} Statement: 
+            |while (i < 10)
+             |Pos: 35 SpanInfo: {"start":27,"length":14} Statement: 
+             |while (i < 10)
+              |Pos: 36 SpanInfo: {"start":27,"length":14} Statement: 
+              |while (i < 10)
+               |Pos: 37 SpanInfo: {"start":27,"length":14} Statement: 
+               |while (i < 10)
+                |Pos: 38 SpanInfo: {"start":27,"length":14} Statement: 
+                |while (i < 10)
+                 |Pos: 39 SpanInfo: {"start":27,"length":14} Statement: 
+                 |while (i < 10)
+                  |Pos: 40 SpanInfo: {"start":27,"length":14} Statement: 
+                  |while (i < 10)
+                   |Pos: 41 SpanInfo: {"start":27,"length":14} Statement: 
+                   |while (i < 10)
+                    |Pos: 42 SpanInfo: {"start":27,"length":14} Statement: 
+                    |while (i < 10)
+--------------------------------
+>>>>do {
+
+   |Pos: 43 SpanInfo: {"start":52,"length":3} Statement: 
+   |i++
+    |Pos: 44 SpanInfo: {"start":52,"length":3} Statement: 
+    |i++
+     |Pos: 45 SpanInfo: {"start":52,"length":3} Statement: 
+     |i++
+      |Pos: 46 SpanInfo: {"start":52,"length":3} Statement: 
+      |i++
+       |Pos: 47 SpanInfo: {"start":52,"length":3} Statement: 
+       |i++
+--------------------------------
+>>>>    i++;
+
+   |Pos: 48 SpanInfo: {"start":52,"length":3} Statement: 
+   |i++
+    |Pos: 49 SpanInfo: {"start":52,"length":3} Statement: 
+    |i++
+     |Pos: 50 SpanInfo: {"start":52,"length":3} Statement: 
+     |i++
+      |Pos: 51 SpanInfo: {"start":52,"length":3} Statement: 
+      |i++
+       |Pos: 52 SpanInfo: {"start":52,"length":3} Statement: 
+       |i++
+        |Pos: 53 SpanInfo: {"start":52,"length":3} Statement: 
+        |i++
+         |Pos: 54 SpanInfo: {"start":52,"length":3} Statement: 
+         |i++
+          |Pos: 55 SpanInfo: {"start":52,"length":3} Statement: 
+          |i++
+           |Pos: 56 SpanInfo: {"start":52,"length":3} Statement: 
+           |i++
+--------------------------------
+>>>>} while (i < 20);
+
+   |Pos: 57 SpanInfo: {"start":52,"length":3} Statement: 
+   |i++
+    |Pos: 58 SpanInfo: {"start":59,"length":14} Statement: 
+    |while (i < 20)
+     |Pos: 59 SpanInfo: {"start":59,"length":14} Statement: 
+     |while (i < 20)
+      |Pos: 60 SpanInfo: {"start":59,"length":14} Statement: 
+      |while (i < 20)
+       |Pos: 61 SpanInfo: {"start":59,"length":14} Statement: 
+       |while (i < 20)
+        |Pos: 62 SpanInfo: {"start":59,"length":14} Statement: 
+        |while (i < 20)
+         |Pos: 63 SpanInfo: {"start":59,"length":14} Statement: 
+         |while (i < 20)
+          |Pos: 64 SpanInfo: {"start":59,"length":14} Statement: 
+          |while (i < 20)
+           |Pos: 65 SpanInfo: {"start":59,"length":14} Statement: 
+           |while (i < 20)
+            |Pos: 66 SpanInfo: {"start":59,"length":14} Statement: 
+            |while (i < 20)
+             |Pos: 67 SpanInfo: {"start":59,"length":14} Statement: 
+             |while (i < 20)
+              |Pos: 68 SpanInfo: {"start":59,"length":14} Statement: 
+              |while (i < 20)
+               |Pos: 69 SpanInfo: {"start":59,"length":14} Statement: 
+               |while (i < 20)
+                |Pos: 70 SpanInfo: {"start":59,"length":14} Statement: 
+                |while (i < 20)
+                 |Pos: 71 SpanInfo: {"start":59,"length":14} Statement: 
+                 |while (i < 20)
+                  |Pos: 72 SpanInfo: {"start":59,"length":14} Statement: 
+                  |while (i < 20)
+                   |Pos: 73 SpanInfo: {"start":59,"length":14} Statement: 
+                   |while (i < 20)
+                    |Pos: 74 SpanInfo: {"start":59,"length":14} Statement: 
+                    |while (i < 20)
+--------------------------------
+>>>>do {
+
+   |Pos: 75 SpanInfo: {"start":84,"length":3} Statement: 
+   |i++
+    |Pos: 76 SpanInfo: {"start":84,"length":3} Statement: 
+    |i++
+     |Pos: 77 SpanInfo: {"start":84,"length":3} Statement: 
+     |i++
+      |Pos: 78 SpanInfo: {"start":84,"length":3} Statement: 
+      |i++
+       |Pos: 79 SpanInfo: {"start":84,"length":3} Statement: 
+       |i++
+--------------------------------
+>>>>    i++;
+
+   |Pos: 80 SpanInfo: {"start":84,"length":3} Statement: 
+   |i++
+    |Pos: 81 SpanInfo: {"start":84,"length":3} Statement: 
+    |i++
+     |Pos: 82 SpanInfo: {"start":84,"length":3} Statement: 
+     |i++
+      |Pos: 83 SpanInfo: {"start":84,"length":3} Statement: 
+      |i++
+       |Pos: 84 SpanInfo: {"start":84,"length":3} Statement: 
+       |i++
+        |Pos: 85 SpanInfo: {"start":84,"length":3} Statement: 
+        |i++
+         |Pos: 86 SpanInfo: {"start":84,"length":3} Statement: 
+         |i++
+          |Pos: 87 SpanInfo: {"start":84,"length":3} Statement: 
+          |i++
+           |Pos: 88 SpanInfo: {"start":84,"length":3} Statement: 
+           |i++
+--------------------------------
+>>>>} 
+
+   |Pos: 89 SpanInfo: {"start":84,"length":3} Statement: 
+   |i++
+    |Pos: 90 SpanInfo: {"start":84,"length":3} Statement: 
+    |i++
+     |Pos: 91 SpanInfo: {"start":84,"length":3} Statement: 
+     |i++
+--------------------------------
+>>>>while (i < 30);
+   |Pos: 92 SpanInfo: {"start":92,"length":14} Statement: 
+   |while (i < 30)
+    |Pos: 93 SpanInfo: {"start":92,"length":14} Statement: 
+    |while (i < 30)
+     |Pos: 94 SpanInfo: {"start":92,"length":14} Statement: 
+     |while (i < 30)
+      |Pos: 95 SpanInfo: {"start":92,"length":14} Statement: 
+      |while (i < 30)
+       |Pos: 96 SpanInfo: {"start":92,"length":14} Statement: 
+       |while (i < 30)
+        |Pos: 97 SpanInfo: {"start":92,"length":14} Statement: 
+        |while (i < 30)
+         |Pos: 98 SpanInfo: {"start":92,"length":14} Statement: 
+         |while (i < 30)
+          |Pos: 99 SpanInfo: {"start":92,"length":14} Statement: 
+          |while (i < 30)
+           |Pos: 100 SpanInfo: {"start":92,"length":14} Statement: 
+           |while (i < 30)
+            |Pos: 101 SpanInfo: {"start":92,"length":14} Statement: 
+            |while (i < 30)
+             |Pos: 102 SpanInfo: {"start":92,"length":14} Statement: 
+             |while (i < 30)
+              |Pos: 103 SpanInfo: {"start":92,"length":14} Statement: 
+              |while (i < 30)
+               |Pos: 104 SpanInfo: {"start":92,"length":14} Statement: 
+               |while (i < 30)
+                |Pos: 105 SpanInfo: {"start":92,"length":14} Statement: 
+                |while (i < 30)
+                 |Pos: 106 SpanInfo: {"start":92,"length":14} Statement: 
+                 |while (i < 30)
