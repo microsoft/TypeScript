@@ -791,7 +791,7 @@ module ts {
 
         function parseOptional(t: SyntaxKind, parent: Node, propertyName: string): boolean {
             if (token === t) {
-                if (parserHooks) {
+                if (parserHooks && parent) {
                     parserHooks.onParseOptional(t, parent, propertyName, scanner)
                 }
                 nextToken();
@@ -1058,7 +1058,11 @@ module ts {
                 if (isListElement(kind, /* inErrorRecovery */ false)) {
                     result.push(parseElement());
                     commaStart = scanner.getTokenPos();
-                    if (parseOptional(SyntaxKind.CommaToken)) {
+                    if (token === SyntaxKind.CommaToken) {
+                        if (parserHooks) {
+                            parserHooks.onParseComma(result, scanner);
+                        }
+                        nextToken();
                         continue;
                     }
                     commaStart = -1; // Back to the state where the last token was not a comma
@@ -1124,14 +1128,13 @@ module ts {
         function parseEntityName(allowReservedWords: boolean): EntityName {
             var entity: EntityName = parseIdentifier();
 
-            var node = <QualifiedName>createNode(SyntaxKind.QualifiedName);
-            while (parseOptional(SyntaxKind.DotToken, node, "dotToken")) {
+            while (token === SyntaxKind.DotToken) {
+                var node = <QualifiedName>createNode(SyntaxKind.QualifiedName);
+                parseOptional(SyntaxKind.DotToken, node, "dotToken");
                 node.pos = entity.pos;
                 node.left = entity;
                 node.right = allowReservedWords ? parseIdentifierName() : parseIdentifier();
                 entity = finishNode(node);
-
-                var node = <QualifiedName>createNode(SyntaxKind.QualifiedName);
             }
             return entity;
         }
@@ -1609,8 +1612,10 @@ module ts {
 
         function parseExpression(noIn?: boolean): Expression {
             var expr = parseAssignmentExpression(noIn);
-            while (parseOptional(SyntaxKind.CommaToken)) {
-                expr = makeBinaryExpression(expr, SyntaxKind.CommaToken, parseAssignmentExpression(noIn));
+            while (token === SyntaxKind.CommaToken) {
+                var node = <BinaryExpression>createNode(SyntaxKind.BinaryExpression);
+                parseOptional(SyntaxKind.CommaToken, node, "operatorToken");
+                expr = finishBinaryExpression(node, expr, SyntaxKind.CommaToken, parseAssignmentExpression(noIn));
             }
             return expr;
         }
@@ -1677,9 +1682,13 @@ module ts {
                     // Assignment operator(11.13) or of a PostfixExpression(11.3)
                     reportInvalidUseInStrictMode(<Identifier>expr);
                 }
+                var binaryExpression = <BinaryExpression>createNode(SyntaxKind.BinaryExpression);
                 var operator = token;
+                if (parserHooks) {
+                    parserHooks.onParseOptional(operator, binaryExpression, "operatorToken", scanner);
+                }
                 nextToken();
-                return makeBinaryExpression(expr, operator, parseAssignmentExpression(noIn));
+                return finishBinaryExpression(binaryExpression, expr, operator, parseAssignmentExpression(noIn));
             }
 
             // otherwise this was production '1'.  Return whatever we parsed so far.
@@ -1900,8 +1909,9 @@ module ts {
 
         function parseConditionalExpression(noIn?: boolean): Expression {
             var expr = parseBinaryExpression(noIn);
-            while (parseOptional(SyntaxKind.QuestionToken)) {
+            while (token === SyntaxKind.QuestionToken) {
                 var node = <ConditionalExpression>createNode(SyntaxKind.ConditionalExpression, expr.pos);
+                parseOptional(SyntaxKind.QuestionToken, node, "questionToken");
                 node.condition = expr;
                 node.whenTrue = parseAssignmentExpression(false);
                 parseExpected(SyntaxKind.ColonToken, node, "colonToken");
@@ -1921,8 +1931,12 @@ module ts {
                 var precedence = getOperatorPrecedence();
                 if (precedence && precedence > minPrecedence && (!noIn || token !== SyntaxKind.InKeyword)) {
                     var operator = token;
+                    var node = <BinaryExpression>createNode(SyntaxKind.BinaryExpression);
+                    if (parserHooks) {
+                        parserHooks.onParseOptional(token, node, "operatorToken", scanner);
+                    }
                     nextToken();
-                    expr = makeBinaryExpression(expr, operator, parseBinaryOperators(parseUnaryExpression(), precedence, noIn));
+                    expr = finishBinaryExpression(node, expr, operator, parseBinaryOperators(parseUnaryExpression(), precedence, noIn));
                     continue;
                 }
                 return expr;
@@ -1968,8 +1982,8 @@ module ts {
             return undefined;
         }
 
-        function makeBinaryExpression(left: Expression, operator: SyntaxKind, right: Expression): BinaryExpression {
-            var node = <BinaryExpression>createNode(SyntaxKind.BinaryExpression, left.pos);
+        function finishBinaryExpression(node: BinaryExpression, left: Expression, operator: SyntaxKind, right: Expression): BinaryExpression {
+            node.pos = left.pos;
             node.left = left;
             node.operator = operator;
             node.right = right;
@@ -2057,23 +2071,23 @@ module ts {
 
         function parseCallAndAccess(expr: Expression, inNewExpression: boolean): Expression {
             while (true) {
-                if (parseOptional(SyntaxKind.DotToken)) {
+                if (token === SyntaxKind.DotToken) {
                     var propertyAccess = <PropertyAccess>createNode(SyntaxKind.PropertyAccess, expr.pos);
+                    parseOptional(SyntaxKind.DotToken, propertyAccess, "dotToken");
                     propertyAccess.left = expr;
                     propertyAccess.right = parseIdentifierName();
                     expr = finishNode(propertyAccess);
                     continue;
                 }
-
                 var bracketStart = scanner.getTokenPos();
-                if (parseOptional(SyntaxKind.OpenBracketToken)) {
-
+                if (token === SyntaxKind.OpenBracketToken) {
                     var indexedAccess = <IndexedAccess>createNode(SyntaxKind.IndexedAccess, expr.pos);
+                    parseOptional(SyntaxKind.OpenBracketToken, indexedAccess, "openBracketToken");
                     indexedAccess.object = expr;
 
-                    // It's not uncommon for a user to write: "new Type[]".
-                    // Check for that common pattern and report a better error message.
-                    if (inNewExpression && parseOptional(SyntaxKind.CloseBracketToken)) {
+                    // It's not uncommon for a user to write: "new Type[]".  Check for that common pattern
+                    // and report a better error message.
+                    if (inNewExpression && parseOptional(SyntaxKind.CloseBracketToken, indexedAccess, "closeBracketToken")) {
                         indexedAccess.index = createMissingNode();
                         grammarErrorAtPos(bracketStart, scanner.getStartPos() - bracketStart, Diagnostics.new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead);
                     }
@@ -2313,7 +2327,7 @@ module ts {
             var node = <NewExpression>createNode(SyntaxKind.NewExpression);
             parseExpected(SyntaxKind.NewKeyword, node, "newKeyword");
             node.func = parseCallAndAccess(parsePrimaryExpression(), /* inNewExpression */ true);
-            if (parseOptional(SyntaxKind.OpenParenToken) || token === SyntaxKind.LessThanToken && (node.typeArguments = tryParse(() => parseTypeArgumentsAndOpenParen(node)))) {
+            if (parseOptional(SyntaxKind.OpenParenToken, node, "openParenToken") || token === SyntaxKind.LessThanToken && (node.typeArguments = tryParse(() => parseTypeArgumentsAndOpenParen(node)))) {
                 node.arguments = parseDelimitedList(ParsingContext.ArgumentExpressions, parseAssignmentExpression, TrailingCommaBehavior.Disallow);
                 parseExpected(SyntaxKind.CloseParenToken, node, "closeParenToken");
             }
@@ -2936,7 +2950,8 @@ module ts {
             var name = parsePropertyName();
 
             var questionStart = scanner.getTokenPos();
-            if (parseOptional(SyntaxKind.QuestionToken)) {
+            // TOOD: handle skipped token
+            if (parseOptional(SyntaxKind.QuestionToken, /*parent*/ undefined, /*propertyName*/ undefined)) {
                 errorAtPos(questionStart, scanner.getStartPos() - questionStart, Diagnostics.A_class_member_cannot_be_declared_optional);
             }
 
@@ -3373,7 +3388,7 @@ module ts {
         function parseInternalModuleTail(node: ModuleDeclaration, flags: NodeFlags): ModuleDeclaration {
             node.flags = flags;
             node.name = parseIdentifier();
-            if (parseOptional(SyntaxKind.DotToken)) {
+            if (parseOptional(SyntaxKind.DotToken, node, "dotToken")) {
                 var subNode = <ModuleDeclaration>createNode(SyntaxKind.ModuleDeclaration);
                 node.body = parseInternalModuleTail(subNode, NodeFlags.Export);
             }
@@ -3426,7 +3441,7 @@ module ts {
             node.name = parseIdentifier();
             parseExpected(SyntaxKind.EqualsToken, node, "equalsToken");
             var entityName = parseEntityName(/*allowReservedWords*/ false);
-            if (entityName.kind === SyntaxKind.Identifier && (<Identifier>entityName).text === "require" && parseOptional(SyntaxKind.OpenParenToken)) {
+            if (entityName.kind === SyntaxKind.Identifier && (<Identifier>entityName).text === "require" && parseOptional(SyntaxKind.OpenParenToken, node, "openParenToken")) {
                 node.externalModuleName = parseStringLiteral();
                 parseExpected(SyntaxKind.CloseParenToken, node, "closeParenToken");
             }
@@ -3437,8 +3452,7 @@ module ts {
             return finishNode(node);
         }
 
-        function parseExportAssignmentTail(pos: number): ExportAssignment {
-            var node = <ExportAssignment>createNode(SyntaxKind.ExportAssignment, pos);
+        function parseExportAssignmentTail(node: ExportAssignment): ExportAssignment {
             node.exportName = parseIdentifier();
             parseSemicolon();
             return finishNode(node);
@@ -3478,8 +3492,10 @@ module ts {
             if (token === SyntaxKind.ExportKeyword) {
                 var modifiersEnd = scanner.getStartPos();
                 nextToken();
-                if (parseOptional(SyntaxKind.EqualsToken)) {
-                    var exportAssignmentTail = parseExportAssignmentTail(pos);
+                if (token === SyntaxKind.EqualsToken) {
+                    var node = <ExportAssignment>createNode(SyntaxKind.ExportAssignment, pos);
+                    parseOptional(SyntaxKind.EqualsToken, node, "equalsToken")
+                    var exportAssignmentTail = parseExportAssignmentTail(node);
                     if (flags !== 0 && errorCountBeforeModifiers === file.syntacticErrors.length) {
                         var modifiersStart = skipTrivia(sourceText, pos);
                         grammarErrorAtPos(modifiersStart, modifiersEnd - modifiersStart, Diagnostics.An_export_assignment_cannot_have_modifiers);

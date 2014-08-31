@@ -532,6 +532,7 @@ module ts {
     export interface ParserHooks {
         onParseExpected(kind: SyntaxKind, parent: Node, propertyName: string, isMissing: boolean, scanner: Scanner): void;
         onParseOptional(kind: SyntaxKind, parent: Node, propertyName: string, scanner: Scanner): void;
+        onParseComma<T>(parent: NodeArray<T>, scanner: Scanner): void;
     }
 
     export var objectAllocator: ObjectAllocator = {
