@@ -31,6 +31,8 @@ module ts.BreakpointResolver {
                     return spanInVariableStatement(<VariableStatement>statement);
                 case SyntaxKind.FunctionDeclaration:
                     return spanInFunctionDeclaration(<FunctionDeclaration>statement);
+                case SyntaxKind.ExpressionStatement:
+                    return spanInExpressionStatement(<ExpressionStatement>statement);
             }
 
             function spanInVariableStatement(variableStatement: VariableStatement): TypeScript.TextSpan {
@@ -123,6 +125,10 @@ module ts.BreakpointResolver {
 
                 // Set the breakpoint in the statement with askedPos
                 return spanInStatements(block.statements);
+            }
+
+            function spanInExpressionStatement(expressionStatement: ExpressionStatement): TypeScript.TextSpan {
+                return textSpan(expressionStatement.expression.pos, expressionStatement.expression.end);
             }
         }
 
