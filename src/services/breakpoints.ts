@@ -11,13 +11,25 @@ module ts.BreakpointResolver {
             return;
         }
 
-        var askedPosLineAndCharacter = sourceFile.getLineAndCharacterFromPosition(askedPos);
+        var askedPosLine = getLineOfLocalPosition(askedPos);
 
         // try first in the statements at given location
         return spanInStatements(sourceFile.statements);
 
         function getLocalTokenStartPos(pos: number) {
             return skipTrivia(sourceFile.text, pos);
+        }
+
+        function getLocalLineBreakPos(pos: number) {
+            return skipTrivia(sourceFile.text, pos, /*stopAfterLineBreak*/ true);
+        }
+
+        function getTokenLength(tokenKind: SyntaxKind) {
+            return tokenToString(tokenKind).length;
+        }
+
+        function getLineOfLocalPosition(pos: number) {
+            return sourceFile.getLineAndCharacterFromPosition(pos).line;
         }
 
         function textSpan(pos: number, end: number) {
@@ -35,6 +47,10 @@ module ts.BreakpointResolver {
                     return spanInExpressionStatement(<ExpressionStatement>statement);
                 case SyntaxKind.ReturnStatement:
                     return spanInReturnStatement(<ReturnStatement>statement);
+                case SyntaxKind.WhileStatement:
+                    return spanInWhileStatement(<WhileStatement>statement);
+                case SyntaxKind.Block:
+                    return spanInBlock(<Block>statement, /*canSetBreakpointOnCloseBrace*/ false);
             }
 
             function spanInVariableStatement(variableStatement: VariableStatement): TypeScript.TextSpan {
@@ -56,7 +72,7 @@ module ts.BreakpointResolver {
                     return spanInVariableDeclaration(firstDeclaration);
                 }
 
-                return spanInNodeArray(variableStatement.declarations, spanInVariableDeclaration, /*isTokenSeparated*/ true);
+                return spanInNodeArray(variableStatement.declarations, spanInVariableDeclaration, SyntaxKind.CommaToken);
 
                 function spanInVariableDeclaration(variableDeclaration: VariableDeclaration): TypeScript.TextSpan {
                     // Breakpoint is possible in variableDeclaration only if there is initialization
@@ -86,7 +102,7 @@ module ts.BreakpointResolver {
 
                 // Set the span in parameters if the asked pos falls inside parameter list
                 if (functionDeclaration.parameters.pos <= askedPos && askedPos < functionDeclaration.parameters.end) {
-                    return spanInNodeArray(functionDeclaration.parameters, spanInParameterDeclaration, /*isTokenSeparated*/ true);
+                    return spanInNodeArray(functionDeclaration.parameters, spanInParameterDeclaration, SyntaxKind.CommaToken);
                 }
 
                 // Set the breakpoint in the function body
@@ -106,7 +122,7 @@ module ts.BreakpointResolver {
 
                 function spanInFunctionBody(): TypeScript.TextSpan {
                     if (functionDeclaration.body.kind === SyntaxKind.FunctionBlock) {
-                        return spanInBlock(<Block>functionDeclaration.body);
+                        return spanInBlock(<Block>functionDeclaration.body, /*canSetBreakpointOnCloseBrace*/ true);
                     }
                     else {
                         return textSpan(functionDeclaration.body.pos, functionDeclaration.body.end);
@@ -114,10 +130,17 @@ module ts.BreakpointResolver {
                 }
             }
 
-            function spanInBlock(block: Block): TypeScript.TextSpan {
+            function spanInBlock(block: Block, canSetBreakpointOnCloseBrace: boolean): TypeScript.TextSpan {
                 // If the asked pos > statement.length or there are no statements, the breakpoint goes on the '}'
-                if (!block.statements.length || askedPos >= skipTrivia(sourceFile.text, block.statements.end, /*stopAfterLineBreak*/ true)) {
-                    return textSpan(block.statements.end, block.end);
+                if (!block.statements.length || askedPos >= getLocalLineBreakPos(block.statements.end)) {
+                    if (canSetBreakpointOnCloseBrace) {
+                        // Set breakpoint on '}'
+                        return textSpan(block.statements.end, block.end);
+                    }
+                    else if (block.statements.length) {
+                        // Set breakpoint on last statement
+                        return spanInStatement(block.statements[block.statements.length - 1]);
+                    }
                 }
 
                 // if the position is before the first statement, the breakpoint goes into first statement
@@ -134,21 +157,66 @@ module ts.BreakpointResolver {
             }
 
             function spanInReturnStatement(returnStatement: ReturnStatement): TypeScript.TextSpan {
-                return textSpan(returnStatement.pos, returnStatement.expression ? returnStatement.expression.end : getLocalTokenStartPos(returnStatement.pos) + tokenToString(SyntaxKind.ReturnKeyword).length);
+                return textSpan(returnStatement.pos, returnStatement.expression ? returnStatement.expression.end : getLocalTokenStartPos(returnStatement.pos) + getTokenLength(SyntaxKind.ReturnKeyword));
+            }
+
+            function spanInStatementOrBlock(statementOrBlock: Statement, spanInPreviousNode: () => TypeScript.TextSpan): TypeScript.TextSpan {
+                if (statementOrBlock.kind === SyntaxKind.Block) {
+                    return spanInTriviaContainingSeparatingToke(statementOrBlock.pos, SyntaxKind.OpenBraceToken, spanInPreviousNode, () => spanInStatement(statementOrBlock));
+                }
+                else {
+                    // Set the span in statement considering trivia
+                    return spanInNodeConsideringTrivia(statementOrBlock.pos, spanInPreviousNode, () => spanInStatement(statementOrBlock));
+                }
+            }
+
+            function spanInWhileStatement(whileStatement: WhileStatement): TypeScript.TextSpan {
+                var closeParenPos = getLocalTokenStartPos(whileStatement.expression.end);
+
+                // Any pos before while expression close Paren - set breakpoint on whileExpression
+                if (askedPos <= closeParenPos) {
+                    return spanInWhileExpression();
+                }
+
+                // Set the breakpoint in the statement or use while expression depending on asked position and position of statement
+                return spanInStatementOrBlock(whileStatement.statement, spanInWhileExpression);
+
+                function spanInWhileExpression() {
+                    return textSpan(whileStatement.pos, closeParenPos + getTokenLength(SyntaxKind.CloseParenToken));
+                }
             }
         }
 
-        function spanInNodeIfEndsOnSameLine<T extends Node>(node: T, spanInNode: (node: T) => TypeScript.TextSpan) {
-            // If the previous statement ends on same line as asked position, then set it on previous statement
-            return sourceFile.getLineAndCharacterFromPosition(node.end).line === askedPosLineAndCharacter.line ?
-                spanInNode(node) : undefined;
+        function spanInTriviaContainingSeparatingToke(pos: number, separatingToken: SyntaxKind, spanInPreviousNode: () => TypeScript.TextSpan, spanInNode: () => TypeScript.TextSpan) {
+            return spanInNodeConsideringTrivia(pos, spanInPreviousNode, () => {
+                // If separating token is on same line as previous node, set the breakpoint span in prev node for the asked Pos on the same line
+                var separatingTokenPos = getLocalTokenStartPos(pos);
+                if (getLineOfLocalPosition(separatingTokenPos) === getLineOfLocalPosition(pos) && // separating token on same line
+                    askedPos < getLocalLineBreakPos(separatingTokenPos + getTokenLength(separatingToken))) { // asked pos is on line same as previous node
+                    return spanInPreviousNode();
+                }
+
+                // Set the breakpoint on the node
+                return spanInNode();
+            });
+        }
+
+        function spanInNodeConsideringTrivia(pos: number, spanInPreviousNode: () => TypeScript.TextSpan, spanInNode: () => TypeScript.TextSpan) {
+            if (askedPos < getLocalLineBreakPos(pos) && // If the position is in the trivia
+                getLineOfLocalPosition(pos) < getLineOfLocalPosition(getLocalTokenStartPos(pos))) { // node token starts on different line
+                // token is on different line, set breakpoint on previous node for pos on prev node's line 
+                return spanInPreviousNode();
+            }
+
+            // Breakpoint on the node
+            return spanInNode();
         }
 
         function spanInStatements(statements: NodeArray<Statement>) {
-            return spanInNodeArray(statements, spanInStatement, /*isTokenSeparated*/false);
+            return spanInNodeArray(statements, spanInStatement, /*separtingToken*/ undefined);
         }
 
-        function spanInNodeArray<T extends Node>(nodes: NodeArray<T>, spanInNode: (node: T) => TypeScript.TextSpan, isTokenSeparated: boolean) {
+        function spanInNodeArray<T extends Node>(nodes: NodeArray<T>, spanInNode: (node: T) => TypeScript.TextSpan, separtingToken: SyntaxKind) {
             // find the child that has this
             for (var i = 0, n = nodes.length; i < n; i++) {
                 var node = nodes[i];
@@ -159,32 +227,18 @@ module ts.BreakpointResolver {
 
                 // If the node lies inside this nodes pos and end try to set the breakpoint in this node
                 if (node.end > askedPos) {
-                    // Check if we should be setting the breakpoint in the previous node
-                    if (i) {
-                        // If the node doesnt starts on a line after the asked position, 
-                        // we can either set the breakpoint on previous node or shouldnt set the breakpoint at all
-                        if (sourceFile.getLineAndCharacterFromPosition(getLocalTokenStartPos(node.pos)).line > askedPosLineAndCharacter.line) {
-                            // If the previous statement ends on same line as asked position, then set it on previous statement
-                            return spanInNodeIfEndsOnSameLine(nodes[i - 1], spanInNode);
-                        }
-                    }
-
-                    return spanInNode(node);
+                    // If the position is inside trivia, set breakpoint on the previous node otherwise on the currentNode
+                    return i ? spanInNodeConsideringTrivia(node.pos, () => spanInNode(nodes[i - 1]), () => spanInNode(node)) : spanInNode(node);
                 }
 
                 if (i === n - 1) {
                     // If this is last node, set breakpoint on this node if the asked Pos is in skipped trivia that is on this line
-                    if (askedPos < skipTrivia(sourceFile.text, node.end, /*stopAfterLineBreak*/ true)) {
-                        return spanInNode(node);
-                    }
+                    return spanInNodeConsideringTrivia(node.end, () => spanInNode(node), () => <TypeScript.TextSpan>undefined);
                 }
 
-                if (isTokenSeparated && i + 1 < n && nodes[i + 1].pos > askedPos) {
-                    // Check if we should be setting breakpoint on this node if the asked pos is before the separating token
-                    var tokenPos = getLocalTokenStartPos(node.end);
-                    if (askedPos <= tokenPos) {
-                        return spanInNodeIfEndsOnSameLine(node, spanInNode);
-                    }
+                if (separtingToken !== undefined && i + 1 < n && nodes[i + 1].pos > askedPos) {
+                    // Set breakpoint in separating token
+                    return spanInTriviaContainingSeparatingToke(node.end, separtingToken, () => spanInNode(node), () => spanInNode(nodes[i + 1]));
                 }
             }
         }
