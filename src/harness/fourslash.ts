@@ -860,13 +860,20 @@ module FourSlash {
             return item.parameters[currentParam];
         }
 
-        public getBreakpointStatementLocation(pos: number) {
+        public getBreakpointStatementLocation(pos: number, prefixString: string) {
             this.taoInvalidReason = 'getBreakpointStatementLocation NYI';
 
             var spanInfo = this.languageService.getBreakpointStatementAtPosition(this.activeFile.fileName, pos);
-            var resultString = "\n**Pos: " + pos + " SpanInfo: " + JSON.stringify(spanInfo) + "\n** Statement: ";
-            if (spanInfo !== null) {
-                resultString = resultString + this.activeFile.content.substr(spanInfo.start(), spanInfo.length());
+            var resultString = "\n" + prefixString + "Pos: " + pos + " SpanInfo: " + JSON.stringify(spanInfo) + " Statement: ";
+            if (spanInfo) {
+                var spanString = this.activeFile.content.substr(spanInfo.start(), spanInfo.length());
+                var spanLineMap = ts.getLineStarts(spanString);
+                for (var i = 0; i < spanLineMap.length; i++) {
+                    if (!i) {
+                        resultString += "\n";
+                    }
+                    resultString += prefixString + spanString.substring(spanLineMap[i], spanLineMap[i + 1]);
+                }
             }
             return resultString;
         }
@@ -878,10 +885,18 @@ module FourSlash {
                 "Breakpoint Locations for " + this.activeFile.fileName,
                 this.testData.globalOptions['BaselineFile'],
                 () => {
-                    var fileLength = this.languageServiceShimHost.getScriptSnapshot(this.activeFile.fileName).getLength();
+                    var fileLineMap = ts.getLineStarts(this.activeFile.content);
+                    var nextLine = 0;
                     var resultString = "";
-                    for (var pos = 0; pos < fileLength; pos++) {
-                        resultString = resultString + this.getBreakpointStatementLocation(pos);
+                    var currentLinePrefix: string;
+                    for (var pos = 0; pos < this.activeFile.content.length; pos++) {
+                        if (pos === 0 || pos === fileLineMap[nextLine]) {
+                            nextLine++;
+                            resultString += "\n--------------------------------\n>>>>" + this.activeFile.content.substring(pos, fileLineMap[nextLine]);
+                            currentLinePrefix = "   |";
+                        }
+                        resultString = resultString + this.getBreakpointStatementLocation(pos, currentLinePrefix);
+                        currentLinePrefix = " " + currentLinePrefix;
                     }
                     return resultString;
                 },
@@ -889,7 +904,7 @@ module FourSlash {
         }
 
         public printBreakpointLocation(pos: number) {
-            Harness.IO.log(this.getBreakpointStatementLocation(pos));
+            Harness.IO.log(this.getBreakpointStatementLocation(pos, "**"));
         }
 
         public printBreakpointAtCurrentLocation() {

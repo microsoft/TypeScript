@@ -52,6 +52,7 @@ var servicesSources = [
 ].map(function (f) {
     return path.join(compilerDirectory, f);
 }).concat([
+    "breakpoints.ts",
     "services.ts",
     "shims.ts",
 ].map(function (f) {
