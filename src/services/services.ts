@@ -4737,7 +4737,7 @@ module ts {
         function getBreakpointStatementAtPosition(filename: string, position: number) {
             // doesn't use compiler - no need to synchronize with host
             filename = TypeScript.switchToForwardSlashes(filename);
-            return Breakpoints.spanInSourceFileAtLocation(getCurrentSourceFile(filename), position);
+            return BreakpointResolver.spanInSourceFileAtLocation(getCurrentSourceFile(filename), position);
         }
 
         function getNavigationBarItems(filename: string): NavigationBarItem[] {
