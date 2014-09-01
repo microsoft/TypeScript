@@ -77,7 +77,12 @@ module ts {
         typeOfKeyword?: Node;
     }
 
-    export interface SignatureDeclaration extends HasOpenBracketAndCloseBracket {
+    export interface SignatureDeclaration extends HasOpenBracketAndCloseBracket, HasSemicolon {
+    }
+
+    export interface MethodDeclaration {
+        getKeywordToken?: Node;
+        setKeywordToken?: Node;
     }
 
     export interface ParsedSignature extends HasOpenParenAndCloseParen, HasLessThanAndGreaterThan {
@@ -99,8 +104,7 @@ module ts {
         newKeyword?: Node;
     }
 
-    export interface ArrayTypeNode {
-        closeBracketToken?: Node;
+    export interface ArrayTypeNode extends HasOpenBracketAndCloseBracket{
     }
 
     export interface ParameterDeclaration {
@@ -125,6 +129,10 @@ module ts {
     export interface HasOpenBraceAndCloseBrace {
         openBraceToken?: Node;
         closeBraceToken?: Node;
+    }
+
+    export interface HasSemicolon {
+        semicolonToken?: Node;
     }
 
     export interface TypeAssertion extends HasLessThanAndGreaterThan {
@@ -302,12 +310,16 @@ module ts {
         questionToken?: Node;
     }
 
-    export interface PropertyDeclaration {
+    export interface PropertyDeclaration extends HasSemicolon {
         questionToken?: Node;
     }
 
     export interface PropertyAccess {
         dotToken?: Node;
+    }
+
+    export interface UnaryExpression {
+        operatorToken?: Node;
     }
 
     var scanner: Scanner = createScanner(ScriptTarget.ES5);
@@ -3686,17 +3698,13 @@ module ts {
         };
 
         parserHooks = {
-            onParseExpected(kind: SyntaxKind, parent: Node, propertyName: string, isMissing: boolean, scanner: Scanner): void {
-                var node = createNode(kind, scanner.getTokenPos(), scanner.getStartPos(), 0);
+            onParseToken(kind: SyntaxKind, parent: Node, propertyName: string, isMissing: boolean, startPos: number, endPos: number): void {
+                var node = createNode(kind, startPos, endPos, 0);
                 (<any>parent)[propertyName] = node;
             },
-            onParseOptional(kind: SyntaxKind, parent: Node, propertyName: string, scanner: Scanner): void {
-                var node = createNode(kind, scanner.getTokenPos(), scanner.getStartPos(), 0);
-                (<any>parent)[propertyName] = node;
-            },
-            onParseComma<T>(parent: NodeArray<T>, scanner: Scanner): void {
+            onParseComma<T>(parent: NodeArray<T>, startPos: number, endPos: number): void {
                 var commas = parent.commaTokens || (parent.commaTokens = []);
-                var comma = createNode(SyntaxKind.CommaToken, scanner.getTextPos(), scanner.getStartPos(), 0);
+                var comma = createNode(SyntaxKind.CommaToken, startPos, endPos, 0);
                 commas.push(comma);
             }
         }
