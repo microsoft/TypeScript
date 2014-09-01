@@ -701,7 +701,7 @@ module ts {
             return scanner.getStartPos();
         }
 
-        function nextToken(unused?: any): SyntaxKind {
+        function nextToken(): SyntaxKind {
             return token = scanner.scan();
         }
 
