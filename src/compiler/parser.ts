@@ -775,7 +775,7 @@ module ts {
         }
 
         function onParseToken(t: SyntaxKind, parent: Node, propertyName: string, isMissing: boolean, startPos?: number, endPos?: number) {
-            if (parserHooks) {
+            if (parserHooks && parent) {
                 parserHooks.onParseToken(t, parent, propertyName, isMissing, startPos || scanner.getTokenPos(), endPos || scanner.getStartPos());
             }
         }
@@ -2827,9 +2827,9 @@ module ts {
                 case SyntaxKind.OpenBraceToken:
                     return parseBlock(undefined, /* ignoreMissingOpenBrace */ false, /*checkForStrictMode*/ false);
                 case SyntaxKind.VarKeyword:
-                    return parseVariableStatement();
+                    return parseVariableStatement(/*parent*/ undefined);
                 case SyntaxKind.FunctionKeyword:
-                    return parseFunctionDeclaration();
+                    return parseFunctionDeclaration(/*parent*/ undefined);
                 case SyntaxKind.SemicolonToken:
                     return parseEmptyStatement();
                 case SyntaxKind.IfKeyword:
@@ -2865,10 +2865,6 @@ module ts {
                     }
                     return parseExpressionStatement();
             }
-        }
-
-        function parseStatementOrFunction(): Statement {
-            return token === SyntaxKind.FunctionKeyword ? parseFunctionDeclaration() : parseStatement();
         }
 
         function parseAndCheckFunctionBody(parent: Node, isConstructor: boolean): Block {
@@ -2918,8 +2914,15 @@ module ts {
             return parseDelimitedList(ParsingContext.VariableDeclarations, () => parseVariableDeclaration(flags, noIn), TrailingCommaBehavior.Disallow);
         }
 
-        function parseVariableStatement(pos?: number, flags?: NodeFlags): VariableStatement {
-            var node = <VariableStatement>createNode(SyntaxKind.VariableStatement, pos);
+        function parseVariableStatement(existingNode: Node, pos?: number, flags?: NodeFlags): VariableStatement {
+            if (existingNode) {
+                Debug.assert(existingNode.kind == SyntaxKind.Unknown);
+                var node = <VariableStatement>existingNode;
+                node.kind = SyntaxKind.VariableStatement;
+            }
+            else {
+                var node = <VariableStatement>createNode(SyntaxKind.VariableStatement, pos);
+            }
             if (flags) node.flags = flags;
             var errorCountBeforeVarStatement = file.syntacticErrors.length;
             parseExpected(SyntaxKind.VarKeyword, node, "varKeyword");
@@ -2931,8 +2934,15 @@ module ts {
             return finishNode(node);
         }
 
-        function parseFunctionDeclaration(pos?: number, flags?: NodeFlags): FunctionDeclaration {
-            var node = <FunctionDeclaration>createNode(SyntaxKind.FunctionDeclaration, pos);
+        function parseFunctionDeclaration(existingNode: Node, pos?: number, flags?: NodeFlags): FunctionDeclaration {
+            if (existingNode) {
+                Debug.assert(existingNode.kind == SyntaxKind.Unknown);
+                var node = <FunctionDeclaration>existingNode;
+                node.kind = SyntaxKind.FunctionDeclaration;
+            }
+            else {
+                var node = <FunctionDeclaration>createNode(SyntaxKind.FunctionDeclaration, pos);
+            }
             if (flags) node.flags = flags;
             parseExpected(SyntaxKind.FunctionKeyword, node, "functionKeyword");
             node.name = parseIdentifier();
@@ -3299,8 +3309,15 @@ module ts {
             Debug.fail("Should not have attempted to parse class member declaration.");
         }
 
-        function parseClassDeclaration(pos: number, flags: NodeFlags): ClassDeclaration {
-            var node = <ClassDeclaration>createNode(SyntaxKind.ClassDeclaration, pos);
+        function parseClassDeclaration(existingNode: Node, pos: number, flags: NodeFlags): ClassDeclaration {
+            if (existingNode) {
+                Debug.assert(existingNode.kind == SyntaxKind.Unknown);
+                var node = <ClassDeclaration>existingNode;
+                node.kind = SyntaxKind.ClassDeclaration;
+            }
+            else {
+                var node = <ClassDeclaration>createNode(SyntaxKind.ClassDeclaration, pos);
+            }
             node.flags = flags;
             var errorCountBeforeClassDeclaration = file.syntacticErrors.length;
             parseExpected(SyntaxKind.ClassKeyword, node, "classKeyword");
@@ -3328,8 +3345,15 @@ module ts {
             return finishNode(node);
         }
 
-        function parseInterfaceDeclaration(pos: number, flags: NodeFlags): InterfaceDeclaration {
-            var node = <InterfaceDeclaration>createNode(SyntaxKind.InterfaceDeclaration, pos);
+        function parseInterfaceDeclaration(existingNode: Node, pos: number, flags: NodeFlags): InterfaceDeclaration {
+            if (existingNode) {
+                Debug.assert(existingNode.kind == SyntaxKind.Unknown);
+                var node = <InterfaceDeclaration>existingNode;
+                node.kind = SyntaxKind.InterfaceDeclaration;
+            }
+            else {
+                var node = <InterfaceDeclaration>createNode(SyntaxKind.InterfaceDeclaration, pos);
+            }
             node.flags = flags;
             var errorCountBeforeInterfaceDeclaration = file.syntacticErrors.length;
             parseExpected(SyntaxKind.InterfaceKeyword, node, "interfaceKeyword");
@@ -3350,7 +3374,7 @@ module ts {
             return finishNode(node);
         }
 
-        function parseAndCheckEnumDeclaration(pos: number, flags: NodeFlags): EnumDeclaration {
+        function parseAndCheckEnumDeclaration(existingNode: Node, pos: number, flags: NodeFlags): EnumDeclaration {
             function isIntegerLiteral(expression: Expression): boolean {
                 function isInteger(literalExpression: LiteralExpression): boolean {
                     // Allows for scientific notation since literalExpression.text was formed by
@@ -3399,7 +3423,14 @@ module ts {
                 return finishNode(node);
             }
 
-            var node = <EnumDeclaration>createNode(SyntaxKind.EnumDeclaration, pos);
+            if (existingNode) {
+                Debug.assert(existingNode.kind == SyntaxKind.Unknown);
+                var node = <EnumDeclaration>existingNode;
+                node.kind = SyntaxKind.EnumDeclaration;
+            }
+            else {
+                var node = <EnumDeclaration>createNode(SyntaxKind.EnumDeclaration, pos);
+            }
             node.flags = flags;
             parseExpected(SyntaxKind.EnumKeyword, node, "enumKeyword");
             node.name = parseIdentifier();
@@ -3468,14 +3499,28 @@ module ts {
             return finishNode(node);
         }
 
-        function parseModuleDeclaration(pos: number, flags: NodeFlags): ModuleDeclaration {
-            var node = <ModuleDeclaration>createNode(SyntaxKind.ModuleDeclaration, pos)
+        function parseModuleDeclaration(existingNode: Node, pos: number, flags: NodeFlags): ModuleDeclaration {
+            if (existingNode) {
+                Debug.assert(existingNode.kind == SyntaxKind.Unknown);
+                var node = <ModuleDeclaration>existingNode;
+                node.kind = SyntaxKind.ModuleDeclaration;
+            }
+            else {
+                var node = <ModuleDeclaration>createNode(SyntaxKind.ModuleDeclaration, pos);
+            }
             parseExpected(SyntaxKind.ModuleKeyword, node, "moduleKeyword");
             return token === SyntaxKind.StringLiteral ? parseAmbientExternalModuleDeclaration(node, pos, flags) : parseInternalModuleTail(node, flags);
         }
 
-        function parseImportDeclaration(pos: number, flags: NodeFlags): ImportDeclaration {
-            var node = <ImportDeclaration>createNode(SyntaxKind.ImportDeclaration, pos);
+        function parseImportDeclaration(existingNode: Node, pos: number, flags: NodeFlags): ImportDeclaration {
+            if (existingNode) {
+                Debug.assert(existingNode.kind == SyntaxKind.Unknown);
+                var node = <ImportDeclaration>existingNode;
+                node.kind = SyntaxKind.ImportDeclaration;
+            }
+            else {
+                var node = <ImportDeclaration>createNode(SyntaxKind.ImportDeclaration, pos);
+            }
             node.flags = flags;
             parseExpected(SyntaxKind.ImportKeyword, node, "importKeyword");
             node.name = parseIdentifier();
@@ -3527,14 +3572,21 @@ module ts {
         function parseDeclaration(modifierContext: ModifierContext): Statement {
             var pos = getNodePos();
             var errorCountBeforeModifiers = file.syntacticErrors.length;
-            var temp = parserHooks && createNode(SyntaxKind.Unknown);
-            var flags = parseAndCheckModifiers(modifierContext, temp);
+
+            var parent = parserHooks && createNode(SyntaxKind.Unknown, pos);
+            var flags = parseAndCheckModifiers(modifierContext, parent);
 
             if (token === SyntaxKind.ExportKeyword) {
                 var modifiersEnd = scanner.getStartPos();
                 nextToken();
                 if (token === SyntaxKind.EqualsToken) {
-                    var node = <ExportAssignment>createNode(SyntaxKind.ExportAssignment, pos);
+                    if (parent) {
+                        var node = <ExportAssignment>parent;
+                        node.kind = SyntaxKind.ExportAssignment;
+                    }
+                    else {
+                        var node = <ExportAssignment>createNode(SyntaxKind.ExportAssignment, pos);
+                    }
 
                     onParseToken(SyntaxKind.EqualsToken, node, "equalsToken", /*isMissing*/ false);
                     nextToken();
@@ -3556,35 +3608,28 @@ module ts {
             var result: Declaration;
             switch (token) {
                 case SyntaxKind.VarKeyword:
-                    result = parseVariableStatement(pos, flags);
+                    result = parseVariableStatement(parent, pos, flags);
                     break;
                 case SyntaxKind.FunctionKeyword:
-                    result = parseFunctionDeclaration(pos, flags);
+                    result = parseFunctionDeclaration(parent, pos, flags);
                     break;
                 case SyntaxKind.ClassKeyword:
-                    result = parseClassDeclaration(pos, flags);
+                    result = parseClassDeclaration(parent, pos, flags);
                     break;
                 case SyntaxKind.InterfaceKeyword:
-                    result = parseInterfaceDeclaration(pos, flags);
+                    result = parseInterfaceDeclaration(parent, pos, flags);
                     break;
                 case SyntaxKind.EnumKeyword:
-                    result = parseAndCheckEnumDeclaration(pos, flags);
+                    result = parseAndCheckEnumDeclaration(parent, pos, flags);
                     break;
                 case SyntaxKind.ModuleKeyword:
-                    result = parseModuleDeclaration(pos, flags);
+                    result = parseModuleDeclaration(parent, pos, flags);
                     break;
                 case SyntaxKind.ImportKeyword:
-                    result = parseImportDeclaration(pos, flags);
+                    result = parseImportDeclaration(parent, pos, flags);
                     break;
                 default:
                     error(Diagnostics.Declaration_expected);
-            }
-
-            if (result && temp) {
-                forEachKey(<Map<Node>><any>temp, k => {
-                    var v = (<Map<Node>><any>temp)[k]
-                    onParseToken(v.kind, result, k, false, v.pos, v.end);
-                    });
             }
 
             inAmbientContext = saveInAmbientContext;

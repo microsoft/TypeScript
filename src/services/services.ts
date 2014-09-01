@@ -80,9 +80,17 @@ module ts {
     export interface SignatureDeclaration extends HasOpenBracketAndCloseBracket, HasSemicolon {
     }
 
-    export interface MethodDeclaration {
+    export interface MethodDeclaration extends HasModifiers {
         getKeywordToken?: Node;
         setKeywordToken?: Node;
+    }
+
+    export interface HasModifiers {
+        publicKeywordToken?: Node;
+        privateKeywordToken?: Node;
+        staticKeywordToken?: Node;
+        exportKeywordToken?: Node;
+        declareKeywordToken?: Node;
     }
 
     export interface ParsedSignature extends HasOpenParenAndCloseParen, HasLessThanAndGreaterThan {
@@ -157,7 +165,7 @@ module ts {
     export interface ObjectLiteral extends Block {
     }
 
-    export interface FunctionDeclaration {
+    export interface FunctionDeclaration extends HasModifiers {
         functionKeyword?: Node;
     }
 
@@ -165,7 +173,7 @@ module ts {
         constructorKeyword?: Node;
     }
 
-    export interface VariableStatement {
+    export interface VariableStatement extends HasModifiers {
         varKeyword?: Node;
     }
 
@@ -197,23 +205,23 @@ module ts {
         semicolonToken?: Node;
     }
 
-    export interface ModuleDeclaration {
+    export interface ModuleDeclaration extends HasModifiers {
         moduleKeyword?: Node;
         dotToken?: Node;
     }
 
-    export interface ImportDeclaration extends HasOpenParenAndCloseParen {
+    export interface ImportDeclaration extends HasOpenParenAndCloseParen, HasModifiers {
         importKeyword?: Node;
         equalsToken?: Node;
         openParenToken?: Node;
     }
 
-    export interface InterfaceDeclaration extends HasOpenBraceAndCloseBrace {
+    export interface InterfaceDeclaration extends HasOpenBraceAndCloseBrace, HasModifiers {
         extendsKeyword?: Node;
         interfaceKeyword?: Node;
     }
 
-    export interface ClassDeclaration extends HasOpenBraceAndCloseBrace, HasLessThanAndGreaterThan {
+    export interface ClassDeclaration extends HasOpenBraceAndCloseBrace, HasLessThanAndGreaterThan, HasModifiers {
         classKeyword?: Node;
         extendsKeyword?: Node;
         implementsKeyword?: Node;
@@ -276,7 +284,7 @@ module ts {
         equalsToken?: Node;
     }
 
-    export interface EnumDeclaration extends HasOpenBraceAndCloseBrace {
+    export interface EnumDeclaration extends HasOpenBraceAndCloseBrace, HasModifiers {
         enumKeyword?: Node;
     }
 
@@ -310,7 +318,7 @@ module ts {
         questionToken?: Node;
     }
 
-    export interface PropertyDeclaration extends HasSemicolon {
+    export interface PropertyDeclaration extends HasSemicolon, HasModifiers {
         questionToken?: Node;
     }
 
