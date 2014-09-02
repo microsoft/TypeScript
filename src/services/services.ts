@@ -115,8 +115,10 @@ module ts {
     export interface ArrayTypeNode extends HasOpenBracketAndCloseBracket{
     }
 
-    export interface ParameterDeclaration {
+    export interface ParameterDeclaration extends HasModifiers {
         equalsToken?: Node;
+        dotDotDotToken?: Node;
+        questionToken?: Node;
     }
 
     export interface HasLessThanAndGreaterThan {
@@ -190,6 +192,7 @@ module ts {
     }
 
     export interface ExportAssignment {
+        exportKeywordToken?: Node;
         equalsToken?: Node;
     }
 
@@ -311,11 +314,6 @@ module ts {
 
     export interface TypeParameterDeclaration {
         extendsKeyword?: Node;
-    }
-
-    export interface ParameterDeclaration {
-        dotDotDotToken?: Node;
-        questionToken?: Node;
     }
 
     export interface PropertyDeclaration extends HasSemicolon, HasModifiers {
