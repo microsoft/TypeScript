@@ -100,6 +100,9 @@ module ts.BreakpointResolver {
                     case SyntaxKind.ForStatement:
                         return spanInForStatement(<ForStatement>node);
                         
+                    case SyntaxKind.ForInStatement:
+                        return spanInForInStatement(<ForInStatement>node);
+
                     case SyntaxKind.BinaryExpression:
                     case SyntaxKind.PostfixOperator:
                     case SyntaxKind.PrefixOperator:
@@ -142,6 +145,11 @@ module ts.BreakpointResolver {
             }
 
             function spanInVariableDeclaration(variableDeclaration: VariableDeclaration): TypeScript.TextSpan {
+                // If declaration of for in statement, just set the span in parent
+                if (variableDeclaration.parent.kind === SyntaxKind.ForInStatement) {
+                    return spanInForInStatement(<ForInStatement>variableDeclaration.parent);
+                }
+
                 var isParentVariableStatement = variableDeclaration.parent.kind === SyntaxKind.VariableStatement;
                 var isDeclarationOfForStatement = variableDeclaration.parent.kind === SyntaxKind.ForStatement && contains((<ForStatement>variableDeclaration.parent).declarations, variableDeclaration);
                 var declarations = isParentVariableStatement
@@ -243,6 +251,7 @@ module ts.BreakpointResolver {
                     // Set on parent if on same line otherwise on first statement
                     case SyntaxKind.WhileStatement:
                     case SyntaxKind.IfStatement:
+                    case SyntaxKind.ForInStatement:
                         return spanInNodeIfStartsOnSameLine(block.parent, block.statements[0]);
 
                     // Set span on previous token if it starts on same line otherwise on the first statement of the block
@@ -302,6 +311,10 @@ module ts.BreakpointResolver {
                 if (forStatement.iterator) {
                     return textSpan(forStatement.iterator);
                 }
+            }
+
+            function spanInForInStatement(forInStatement: ForInStatement): TypeScript.TextSpan {
+                return textSpan(forInStatement, findNextToken(forInStatement.expression, forInStatement));
             }
 
             function spanInExpression(expression: Expression): TypeScript.TextSpan {
