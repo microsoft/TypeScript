@@ -122,6 +122,9 @@ module ts.BreakpointResolver {
                     case SyntaxKind.ExportAssignment:
                         return spanInExportAssignment(<ExportAssignment>node);
 
+                    case SyntaxKind.ImportDeclaration:
+                        return spanInImportDeclaration(<ImportDeclaration>node);
+
                     case SyntaxKind.BinaryExpression:
                     case SyntaxKind.PostfixOperator:
                     case SyntaxKind.PrefixOperator:
@@ -356,6 +359,10 @@ module ts.BreakpointResolver {
 
             function spanInExportAssignment(exportAssignment: ExportAssignment): TypeScript.TextSpan {
                 return textSpan(exportAssignment, exportAssignment.exportName);
+            }
+
+            function spanInImportDeclaration(importDeclaration: ImportDeclaration): TypeScript.TextSpan {
+                return textSpan(importDeclaration, importDeclaration.entityName || importDeclaration.externalModuleName);
             }
 
             function spanInExpression(expression: Expression): TypeScript.TextSpan {
