@@ -1,0 +1,404 @@
+
+--------------------------------
+>>>>for (var x in String) {
+
+   |Pos: 0 SpanInfo: {"start":0,"length":21} Statement: 
+   |for (var x in String)
+    |Pos: 1 SpanInfo: {"start":0,"length":21} Statement: 
+    |for (var x in String)
+     |Pos: 2 SpanInfo: {"start":0,"length":21} Statement: 
+     |for (var x in String)
+      |Pos: 3 SpanInfo: {"start":0,"length":21} Statement: 
+      |for (var x in String)
+       |Pos: 4 SpanInfo: {"start":0,"length":21} Statement: 
+       |for (var x in String)
+        |Pos: 5 SpanInfo: {"start":0,"length":21} Statement: 
+        |for (var x in String)
+         |Pos: 6 SpanInfo: {"start":0,"length":21} Statement: 
+         |for (var x in String)
+          |Pos: 7 SpanInfo: {"start":0,"length":21} Statement: 
+          |for (var x in String)
+           |Pos: 8 SpanInfo: {"start":0,"length":21} Statement: 
+           |for (var x in String)
+            |Pos: 9 SpanInfo: {"start":0,"length":21} Statement: 
+            |for (var x in String)
+             |Pos: 10 SpanInfo: {"start":0,"length":21} Statement: 
+             |for (var x in String)
+              |Pos: 11 SpanInfo: {"start":0,"length":21} Statement: 
+              |for (var x in String)
+               |Pos: 12 SpanInfo: {"start":0,"length":21} Statement: 
+               |for (var x in String)
+                |Pos: 13 SpanInfo: {"start":0,"length":21} Statement: 
+                |for (var x in String)
+                 |Pos: 14 SpanInfo: {"start":0,"length":21} Statement: 
+                 |for (var x in String)
+                  |Pos: 15 SpanInfo: {"start":0,"length":21} Statement: 
+                  |for (var x in String)
+                   |Pos: 16 SpanInfo: {"start":0,"length":21} Statement: 
+                   |for (var x in String)
+                    |Pos: 17 SpanInfo: {"start":0,"length":21} Statement: 
+                    |for (var x in String)
+                     |Pos: 18 SpanInfo: {"start":0,"length":21} Statement: 
+                     |for (var x in String)
+                      |Pos: 19 SpanInfo: {"start":0,"length":21} Statement: 
+                      |for (var x in String)
+                       |Pos: 20 SpanInfo: {"start":0,"length":21} Statement: 
+                       |for (var x in String)
+                        |Pos: 21 SpanInfo: {"start":0,"length":21} Statement: 
+                        |for (var x in String)
+                         |Pos: 22 SpanInfo: {"start":0,"length":21} Statement: 
+                         |for (var x in String)
+                          |Pos: 23 SpanInfo: {"start":0,"length":21} Statement: 
+                          |for (var x in String)
+--------------------------------
+>>>>    WScript.Echo(x);
+
+   |Pos: 24 SpanInfo: {"start":28,"length":15} Statement: 
+   |WScript.Echo(x)
+    |Pos: 25 SpanInfo: {"start":28,"length":15} Statement: 
+    |WScript.Echo(x)
+     |Pos: 26 SpanInfo: {"start":28,"length":15} Statement: 
+     |WScript.Echo(x)
+      |Pos: 27 SpanInfo: {"start":28,"length":15} Statement: 
+      |WScript.Echo(x)
+       |Pos: 28 SpanInfo: {"start":28,"length":15} Statement: 
+       |WScript.Echo(x)
+        |Pos: 29 SpanInfo: {"start":28,"length":15} Statement: 
+        |WScript.Echo(x)
+         |Pos: 30 SpanInfo: {"start":28,"length":15} Statement: 
+         |WScript.Echo(x)
+          |Pos: 31 SpanInfo: {"start":28,"length":15} Statement: 
+          |WScript.Echo(x)
+           |Pos: 32 SpanInfo: {"start":28,"length":15} Statement: 
+           |WScript.Echo(x)
+            |Pos: 33 SpanInfo: {"start":28,"length":15} Statement: 
+            |WScript.Echo(x)
+             |Pos: 34 SpanInfo: {"start":28,"length":15} Statement: 
+             |WScript.Echo(x)
+              |Pos: 35 SpanInfo: {"start":28,"length":15} Statement: 
+              |WScript.Echo(x)
+               |Pos: 36 SpanInfo: {"start":28,"length":15} Statement: 
+               |WScript.Echo(x)
+                |Pos: 37 SpanInfo: {"start":28,"length":15} Statement: 
+                |WScript.Echo(x)
+                 |Pos: 38 SpanInfo: {"start":28,"length":15} Statement: 
+                 |WScript.Echo(x)
+                  |Pos: 39 SpanInfo: {"start":28,"length":15} Statement: 
+                  |WScript.Echo(x)
+                   |Pos: 40 SpanInfo: {"start":28,"length":15} Statement: 
+                   |WScript.Echo(x)
+                    |Pos: 41 SpanInfo: {"start":28,"length":15} Statement: 
+                    |WScript.Echo(x)
+                     |Pos: 42 SpanInfo: {"start":28,"length":15} Statement: 
+                     |WScript.Echo(x)
+                      |Pos: 43 SpanInfo: {"start":28,"length":15} Statement: 
+                      |WScript.Echo(x)
+                       |Pos: 44 SpanInfo: {"start":28,"length":15} Statement: 
+                       |WScript.Echo(x)
+--------------------------------
+>>>>}
+
+   |Pos: 45 SpanInfo: {"start":28,"length":15} Statement: 
+   |WScript.Echo(x)
+    |Pos: 46 SpanInfo: {"start":28,"length":15} Statement: 
+    |WScript.Echo(x)
+--------------------------------
+>>>>for (x in String) {
+
+   |Pos: 47 SpanInfo: {"start":47,"length":17} Statement: 
+   |for (x in String)
+    |Pos: 48 SpanInfo: {"start":47,"length":17} Statement: 
+    |for (x in String)
+     |Pos: 49 SpanInfo: {"start":47,"length":17} Statement: 
+     |for (x in String)
+      |Pos: 50 SpanInfo: {"start":47,"length":17} Statement: 
+      |for (x in String)
+       |Pos: 51 SpanInfo: {"start":47,"length":17} Statement: 
+       |for (x in String)
+        |Pos: 52 SpanInfo: {"start":47,"length":17} Statement: 
+        |for (x in String)
+         |Pos: 53 SpanInfo: {"start":47,"length":17} Statement: 
+         |for (x in String)
+          |Pos: 54 SpanInfo: {"start":47,"length":17} Statement: 
+          |for (x in String)
+           |Pos: 55 SpanInfo: {"start":47,"length":17} Statement: 
+           |for (x in String)
+            |Pos: 56 SpanInfo: {"start":47,"length":17} Statement: 
+            |for (x in String)
+             |Pos: 57 SpanInfo: {"start":47,"length":17} Statement: 
+             |for (x in String)
+              |Pos: 58 SpanInfo: {"start":47,"length":17} Statement: 
+              |for (x in String)
+               |Pos: 59 SpanInfo: {"start":47,"length":17} Statement: 
+               |for (x in String)
+                |Pos: 60 SpanInfo: {"start":47,"length":17} Statement: 
+                |for (x in String)
+                 |Pos: 61 SpanInfo: {"start":47,"length":17} Statement: 
+                 |for (x in String)
+                  |Pos: 62 SpanInfo: {"start":47,"length":17} Statement: 
+                  |for (x in String)
+                   |Pos: 63 SpanInfo: {"start":47,"length":17} Statement: 
+                   |for (x in String)
+                    |Pos: 64 SpanInfo: {"start":47,"length":17} Statement: 
+                    |for (x in String)
+                     |Pos: 65 SpanInfo: {"start":47,"length":17} Statement: 
+                     |for (x in String)
+                      |Pos: 66 SpanInfo: {"start":47,"length":17} Statement: 
+                      |for (x in String)
+--------------------------------
+>>>>    WScript.Echo(x);
+
+   |Pos: 67 SpanInfo: {"start":71,"length":15} Statement: 
+   |WScript.Echo(x)
+    |Pos: 68 SpanInfo: {"start":71,"length":15} Statement: 
+    |WScript.Echo(x)
+     |Pos: 69 SpanInfo: {"start":71,"length":15} Statement: 
+     |WScript.Echo(x)
+      |Pos: 70 SpanInfo: {"start":71,"length":15} Statement: 
+      |WScript.Echo(x)
+       |Pos: 71 SpanInfo: {"start":71,"length":15} Statement: 
+       |WScript.Echo(x)
+        |Pos: 72 SpanInfo: {"start":71,"length":15} Statement: 
+        |WScript.Echo(x)
+         |Pos: 73 SpanInfo: {"start":71,"length":15} Statement: 
+         |WScript.Echo(x)
+          |Pos: 74 SpanInfo: {"start":71,"length":15} Statement: 
+          |WScript.Echo(x)
+           |Pos: 75 SpanInfo: {"start":71,"length":15} Statement: 
+           |WScript.Echo(x)
+            |Pos: 76 SpanInfo: {"start":71,"length":15} Statement: 
+            |WScript.Echo(x)
+             |Pos: 77 SpanInfo: {"start":71,"length":15} Statement: 
+             |WScript.Echo(x)
+              |Pos: 78 SpanInfo: {"start":71,"length":15} Statement: 
+              |WScript.Echo(x)
+               |Pos: 79 SpanInfo: {"start":71,"length":15} Statement: 
+               |WScript.Echo(x)
+                |Pos: 80 SpanInfo: {"start":71,"length":15} Statement: 
+                |WScript.Echo(x)
+                 |Pos: 81 SpanInfo: {"start":71,"length":15} Statement: 
+                 |WScript.Echo(x)
+                  |Pos: 82 SpanInfo: {"start":71,"length":15} Statement: 
+                  |WScript.Echo(x)
+                   |Pos: 83 SpanInfo: {"start":71,"length":15} Statement: 
+                   |WScript.Echo(x)
+                    |Pos: 84 SpanInfo: {"start":71,"length":15} Statement: 
+                    |WScript.Echo(x)
+                     |Pos: 85 SpanInfo: {"start":71,"length":15} Statement: 
+                     |WScript.Echo(x)
+                      |Pos: 86 SpanInfo: {"start":71,"length":15} Statement: 
+                      |WScript.Echo(x)
+                       |Pos: 87 SpanInfo: {"start":71,"length":15} Statement: 
+                       |WScript.Echo(x)
+--------------------------------
+>>>>}
+
+   |Pos: 88 SpanInfo: {"start":71,"length":15} Statement: 
+   |WScript.Echo(x)
+    |Pos: 89 SpanInfo: {"start":71,"length":15} Statement: 
+    |WScript.Echo(x)
+--------------------------------
+>>>>for (var x2 in String)
+
+   |Pos: 90 SpanInfo: {"start":90,"length":22} Statement: 
+   |for (var x2 in String)
+    |Pos: 91 SpanInfo: {"start":90,"length":22} Statement: 
+    |for (var x2 in String)
+     |Pos: 92 SpanInfo: {"start":90,"length":22} Statement: 
+     |for (var x2 in String)
+      |Pos: 93 SpanInfo: {"start":90,"length":22} Statement: 
+      |for (var x2 in String)
+       |Pos: 94 SpanInfo: {"start":90,"length":22} Statement: 
+       |for (var x2 in String)
+        |Pos: 95 SpanInfo: {"start":90,"length":22} Statement: 
+        |for (var x2 in String)
+         |Pos: 96 SpanInfo: {"start":90,"length":22} Statement: 
+         |for (var x2 in String)
+          |Pos: 97 SpanInfo: {"start":90,"length":22} Statement: 
+          |for (var x2 in String)
+           |Pos: 98 SpanInfo: {"start":90,"length":22} Statement: 
+           |for (var x2 in String)
+            |Pos: 99 SpanInfo: {"start":90,"length":22} Statement: 
+            |for (var x2 in String)
+             |Pos: 100 SpanInfo: {"start":90,"length":22} Statement: 
+             |for (var x2 in String)
+              |Pos: 101 SpanInfo: {"start":90,"length":22} Statement: 
+              |for (var x2 in String)
+               |Pos: 102 SpanInfo: {"start":90,"length":22} Statement: 
+               |for (var x2 in String)
+                |Pos: 103 SpanInfo: {"start":90,"length":22} Statement: 
+                |for (var x2 in String)
+                 |Pos: 104 SpanInfo: {"start":90,"length":22} Statement: 
+                 |for (var x2 in String)
+                  |Pos: 105 SpanInfo: {"start":90,"length":22} Statement: 
+                  |for (var x2 in String)
+                   |Pos: 106 SpanInfo: {"start":90,"length":22} Statement: 
+                   |for (var x2 in String)
+                    |Pos: 107 SpanInfo: {"start":90,"length":22} Statement: 
+                    |for (var x2 in String)
+                     |Pos: 108 SpanInfo: {"start":90,"length":22} Statement: 
+                     |for (var x2 in String)
+                      |Pos: 109 SpanInfo: {"start":90,"length":22} Statement: 
+                      |for (var x2 in String)
+                       |Pos: 110 SpanInfo: {"start":90,"length":22} Statement: 
+                       |for (var x2 in String)
+                        |Pos: 111 SpanInfo: {"start":90,"length":22} Statement: 
+                        |for (var x2 in String)
+                         |Pos: 112 SpanInfo: {"start":90,"length":22} Statement: 
+                         |for (var x2 in String)
+--------------------------------
+>>>>{
+
+   |Pos: 113 SpanInfo: {"start":119,"length":16} Statement: 
+   |WScript.Echo(x2)
+    |Pos: 114 SpanInfo: {"start":119,"length":16} Statement: 
+    |WScript.Echo(x2)
+--------------------------------
+>>>>    WScript.Echo(x2);
+
+   |Pos: 115 SpanInfo: {"start":119,"length":16} Statement: 
+   |WScript.Echo(x2)
+    |Pos: 116 SpanInfo: {"start":119,"length":16} Statement: 
+    |WScript.Echo(x2)
+     |Pos: 117 SpanInfo: {"start":119,"length":16} Statement: 
+     |WScript.Echo(x2)
+      |Pos: 118 SpanInfo: {"start":119,"length":16} Statement: 
+      |WScript.Echo(x2)
+       |Pos: 119 SpanInfo: {"start":119,"length":16} Statement: 
+       |WScript.Echo(x2)
+        |Pos: 120 SpanInfo: {"start":119,"length":16} Statement: 
+        |WScript.Echo(x2)
+         |Pos: 121 SpanInfo: {"start":119,"length":16} Statement: 
+         |WScript.Echo(x2)
+          |Pos: 122 SpanInfo: {"start":119,"length":16} Statement: 
+          |WScript.Echo(x2)
+           |Pos: 123 SpanInfo: {"start":119,"length":16} Statement: 
+           |WScript.Echo(x2)
+            |Pos: 124 SpanInfo: {"start":119,"length":16} Statement: 
+            |WScript.Echo(x2)
+             |Pos: 125 SpanInfo: {"start":119,"length":16} Statement: 
+             |WScript.Echo(x2)
+              |Pos: 126 SpanInfo: {"start":119,"length":16} Statement: 
+              |WScript.Echo(x2)
+               |Pos: 127 SpanInfo: {"start":119,"length":16} Statement: 
+               |WScript.Echo(x2)
+                |Pos: 128 SpanInfo: {"start":119,"length":16} Statement: 
+                |WScript.Echo(x2)
+                 |Pos: 129 SpanInfo: {"start":119,"length":16} Statement: 
+                 |WScript.Echo(x2)
+                  |Pos: 130 SpanInfo: {"start":119,"length":16} Statement: 
+                  |WScript.Echo(x2)
+                   |Pos: 131 SpanInfo: {"start":119,"length":16} Statement: 
+                   |WScript.Echo(x2)
+                    |Pos: 132 SpanInfo: {"start":119,"length":16} Statement: 
+                    |WScript.Echo(x2)
+                     |Pos: 133 SpanInfo: {"start":119,"length":16} Statement: 
+                     |WScript.Echo(x2)
+                      |Pos: 134 SpanInfo: {"start":119,"length":16} Statement: 
+                      |WScript.Echo(x2)
+                       |Pos: 135 SpanInfo: {"start":119,"length":16} Statement: 
+                       |WScript.Echo(x2)
+                        |Pos: 136 SpanInfo: {"start":119,"length":16} Statement: 
+                        |WScript.Echo(x2)
+--------------------------------
+>>>>}
+
+   |Pos: 137 SpanInfo: {"start":119,"length":16} Statement: 
+   |WScript.Echo(x2)
+    |Pos: 138 SpanInfo: {"start":119,"length":16} Statement: 
+    |WScript.Echo(x2)
+--------------------------------
+>>>>for (x in String)
+
+   |Pos: 139 SpanInfo: {"start":139,"length":17} Statement: 
+   |for (x in String)
+    |Pos: 140 SpanInfo: {"start":139,"length":17} Statement: 
+    |for (x in String)
+     |Pos: 141 SpanInfo: {"start":139,"length":17} Statement: 
+     |for (x in String)
+      |Pos: 142 SpanInfo: {"start":139,"length":17} Statement: 
+      |for (x in String)
+       |Pos: 143 SpanInfo: {"start":139,"length":17} Statement: 
+       |for (x in String)
+        |Pos: 144 SpanInfo: {"start":139,"length":17} Statement: 
+        |for (x in String)
+         |Pos: 145 SpanInfo: {"start":139,"length":17} Statement: 
+         |for (x in String)
+          |Pos: 146 SpanInfo: {"start":139,"length":17} Statement: 
+          |for (x in String)
+           |Pos: 147 SpanInfo: {"start":139,"length":17} Statement: 
+           |for (x in String)
+            |Pos: 148 SpanInfo: {"start":139,"length":17} Statement: 
+            |for (x in String)
+             |Pos: 149 SpanInfo: {"start":139,"length":17} Statement: 
+             |for (x in String)
+              |Pos: 150 SpanInfo: {"start":139,"length":17} Statement: 
+              |for (x in String)
+               |Pos: 151 SpanInfo: {"start":139,"length":17} Statement: 
+               |for (x in String)
+                |Pos: 152 SpanInfo: {"start":139,"length":17} Statement: 
+                |for (x in String)
+                 |Pos: 153 SpanInfo: {"start":139,"length":17} Statement: 
+                 |for (x in String)
+                  |Pos: 154 SpanInfo: {"start":139,"length":17} Statement: 
+                  |for (x in String)
+                   |Pos: 155 SpanInfo: {"start":139,"length":17} Statement: 
+                   |for (x in String)
+                    |Pos: 156 SpanInfo: {"start":139,"length":17} Statement: 
+                    |for (x in String)
+--------------------------------
+>>>>{
+
+   |Pos: 157 SpanInfo: {"start":163,"length":15} Statement: 
+   |WScript.Echo(x)
+    |Pos: 158 SpanInfo: {"start":163,"length":15} Statement: 
+    |WScript.Echo(x)
+--------------------------------
+>>>>    WScript.Echo(x);
+
+   |Pos: 159 SpanInfo: {"start":163,"length":15} Statement: 
+   |WScript.Echo(x)
+    |Pos: 160 SpanInfo: {"start":163,"length":15} Statement: 
+    |WScript.Echo(x)
+     |Pos: 161 SpanInfo: {"start":163,"length":15} Statement: 
+     |WScript.Echo(x)
+      |Pos: 162 SpanInfo: {"start":163,"length":15} Statement: 
+      |WScript.Echo(x)
+       |Pos: 163 SpanInfo: {"start":163,"length":15} Statement: 
+       |WScript.Echo(x)
+        |Pos: 164 SpanInfo: {"start":163,"length":15} Statement: 
+        |WScript.Echo(x)
+         |Pos: 165 SpanInfo: {"start":163,"length":15} Statement: 
+         |WScript.Echo(x)
+          |Pos: 166 SpanInfo: {"start":163,"length":15} Statement: 
+          |WScript.Echo(x)
+           |Pos: 167 SpanInfo: {"start":163,"length":15} Statement: 
+           |WScript.Echo(x)
+            |Pos: 168 SpanInfo: {"start":163,"length":15} Statement: 
+            |WScript.Echo(x)
+             |Pos: 169 SpanInfo: {"start":163,"length":15} Statement: 
+             |WScript.Echo(x)
+              |Pos: 170 SpanInfo: {"start":163,"length":15} Statement: 
+              |WScript.Echo(x)
+               |Pos: 171 SpanInfo: {"start":163,"length":15} Statement: 
+               |WScript.Echo(x)
+                |Pos: 172 SpanInfo: {"start":163,"length":15} Statement: 
+                |WScript.Echo(x)
+                 |Pos: 173 SpanInfo: {"start":163,"length":15} Statement: 
+                 |WScript.Echo(x)
+                  |Pos: 174 SpanInfo: {"start":163,"length":15} Statement: 
+                  |WScript.Echo(x)
+                   |Pos: 175 SpanInfo: {"start":163,"length":15} Statement: 
+                   |WScript.Echo(x)
+                    |Pos: 176 SpanInfo: {"start":163,"length":15} Statement: 
+                    |WScript.Echo(x)
+                     |Pos: 177 SpanInfo: {"start":163,"length":15} Statement: 
+                     |WScript.Echo(x)
+                      |Pos: 178 SpanInfo: {"start":163,"length":15} Statement: 
+                      |WScript.Echo(x)
+                       |Pos: 179 SpanInfo: {"start":163,"length":15} Statement: 
+                       |WScript.Echo(x)
+--------------------------------
+>>>>}
+   |Pos: 180 SpanInfo: {"start":163,"length":15} Statement: 
+   |WScript.Echo(x)

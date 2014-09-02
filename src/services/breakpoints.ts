@@ -67,6 +67,8 @@ module ts.BreakpointResolver {
                 case SyntaxKind.BreakStatement:
                 case SyntaxKind.ContinueStatement:
                     return spanInBreakOrContinueStatement(<BreakOrContinueStatement>statement);
+                case SyntaxKind.ForInStatement:
+                    return spanInForInStatement(<ForInStatement>statement);
             }
 
             function spanInVariableStatement(variableStatement: VariableStatement): TypeScript.TextSpan {
@@ -327,6 +329,22 @@ module ts.BreakpointResolver {
                     getLocalTokenStartPos(breakOrContinueStatement.pos) +
                     (breakOrContinueStatement.kind === SyntaxKind.BreakStatement ? getTokenLength(SyntaxKind.BreakKeyword) :
                     getTokenLength(SyntaxKind.ContinueKeyword))); 
+            }
+
+            function spanInForInStatement(forInStatement: ForInStatement): TypeScript.TextSpan {
+                var closeParenPos = getLocalTokenStartPos(forInStatement.expression.end);
+
+                // Any pos before for in expression close Paren - set breakpoint on for in expression
+                if (askedPos <= closeParenPos) {
+                    return spanInForInExpression();
+                }
+
+                // Set the breakpoint in the statement or use for in expression depending on asked position and position of statement
+                return spanInStatementOrBlock(forInStatement.statement, spanInForInExpression);
+
+                function spanInForInExpression() {
+                    return textSpan(forInStatement.pos, closeParenPos + getTokenLength(SyntaxKind.CloseParenToken));
+                }
             }
         }
 
