@@ -64,6 +64,9 @@ module ts.BreakpointResolver {
                     return spanInLabelledStatement(<LabelledStatement>statement);
                 case SyntaxKind.ForStatement:
                     return spanInForStatement(<ForStatement>statement);
+                case SyntaxKind.BreakStatement:
+                case SyntaxKind.ContinueStatement:
+                    return spanInBreakOrContinueStatement(<BreakOrContinueStatement>statement);
             }
 
             function spanInVariableStatement(variableStatement: VariableStatement): TypeScript.TextSpan {
@@ -317,6 +320,13 @@ module ts.BreakpointResolver {
                         return getLocalTokenStartPos(openParenPos + getTokenLength(SyntaxKind.OpenParenToken));
                     }
                 }
+            }
+
+            function spanInBreakOrContinueStatement(breakOrContinueStatement: BreakOrContinueStatement): TypeScript.TextSpan {
+                return textSpan(breakOrContinueStatement.pos, breakOrContinueStatement.label ? breakOrContinueStatement.label.end :
+                    getLocalTokenStartPos(breakOrContinueStatement.pos) +
+                    (breakOrContinueStatement.kind === SyntaxKind.BreakStatement ? getTokenLength(SyntaxKind.BreakKeyword) :
+                    getTokenLength(SyntaxKind.ContinueKeyword))); 
             }
         }
 
