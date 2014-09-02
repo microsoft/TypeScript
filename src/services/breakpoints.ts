@@ -78,6 +78,8 @@ module ts.BreakpointResolver {
                     return spanInTryStatement(<TryStatement>statement);
                 case SyntaxKind.ThrowStatement:
                     return spanInThrowStatement(<ThrowStatement>statement);
+                case SyntaxKind.ExportAssignment:
+                    return spanInExportAssignment(<ExportAssignment>statement);
             }
 
             function spanInVariableStatement(variableStatement: VariableStatement): TypeScript.TextSpan {
@@ -406,6 +408,10 @@ module ts.BreakpointResolver {
 
             function spanInThrowStatement(throwStatement: ThrowStatement): TypeScript.TextSpan {
                 return textSpan(throwStatement.pos, throwStatement.expression.end);
+            }
+
+            function spanInExportAssignment(exportAssignment: ExportAssignment): TypeScript.TextSpan {
+                return textSpan(exportAssignment.pos, exportAssignment.exportName.end);
             }
         }
 
