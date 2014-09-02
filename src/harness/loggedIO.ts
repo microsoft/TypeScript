@@ -1,4 +1,6 @@
 /// <reference path="..\..\src\compiler\sys.ts" />
+/// <reference path="..\..\src\harness\harness.ts" />
+/// <reference path="..\..\src\harness\runnerbase.ts" />
 
 interface FileInformation {
     contents: string;
@@ -258,7 +260,12 @@ module Playback {
             memoize((path) => findResultByFields(replayLog.pathsResolved, { path: path }, !ts.isRootedDiskPath(ts.normalizeSlashes(path)) && replayLog.currentDirectory ? replayLog.currentDirectory + '/' + path : ts.normalizeSlashes(path))));
 
         wrapper.readFile = recordReplay(wrapper.readFile, underlying)(
-            (path) => callAndRecord(underlying.readFile(path), recordLog.filesRead, { path: path, codepage: 0 }),
+            (path) => {
+                var result = underlying.readFile(path);
+                var logEntry = { path: path, codepage: 0, result: { contents: result, codepage: 0 } };
+                recordLog.filesRead.push(logEntry);
+                return result;
+            },
             memoize((path) => findResultByPath(wrapper, replayLog.filesRead, path).contents));
 
         wrapper.writeFile = recordReplay(wrapper.writeFile, underlying)(

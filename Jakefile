@@ -123,6 +123,8 @@ function concatenateFiles(destinationFile, sourceFiles) {
 }
 
 var useDebugMode = false;
+var host = (process.env.host || process.env.TYPESCRIPT_HOST || "node");
+var compilerFilename = "tsc.js";
 /* Compiles a file from a list of sources
     * @param outFile: the target file name
     * @param sources: an array of the names of the source files
@@ -134,10 +136,9 @@ var useDebugMode = false;
 function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile) {
     file(outFile, prereqs, function() {
         var dir = useBuiltCompiler ? builtLocalDirectory : LKGDirectory;
-        var compilerFilename = "tsc.js";
         var options = "-removeComments --module commonjs -noImplicitAny "; //" -propagateEnumConstants "
         
-        var cmd = (process.env.host || process.env.TYPESCRIPT_HOST || "node") + " " + dir + compilerFilename + " " + options + " ";
+        var cmd = host + " " + dir + compilerFilename + " " + options + " ";
         if (useDebugMode) {
             cmd = cmd + " " + path.join(harnessDirectory, "external/es5compat.ts") + " " + path.join(harnessDirectory, "external/json2.ts") + " ";
         }
@@ -230,7 +231,7 @@ task("generate-diagnostics", [diagnosticInfoMapTs])
 
 
 // Local target to build the compiler and services
-var tscFile = path.join(builtLocalDirectory, "tsc.js");
+var tscFile = path.join(builtLocalDirectory, compilerFilename);
 compileFile(tscFile, compilerSources, [builtLocalDirectory, copyright].concat(compilerSources), [copyright], /*useBuiltCompiler:*/ false);
 
 var servicesFile = path.join(builtLocalDirectory, "typescriptServices.js");
@@ -473,3 +474,36 @@ var perftscJsPath = "built/local/perftsc.js";
 compileFile(perftscJsPath, [perftscPath], [tscFile, perftscPath, "tests/perfsys.ts"].concat(libraryTargets), [], true);
 desc("Builds augmented version of the compiler for perf tests");
 task("perftsc", [perftscJsPath]);
+
+// Instrumented compiler
+var loggedIOpath = harnessDirectory + 'loggedIO.ts';
+var loggedIOJsPath = builtLocalDirectory + 'loggedIO.js';
+file(loggedIOJsPath, [builtLocalDirectory], function() {
+	var temp = builtLocalDirectory + 'temp';
+    jake.mkdirP(temp);
+    var options = "--outdir " + temp + ' ' + loggedIOpath;
+    var cmd = host + " " + LKGDirectory + compilerFilename + " " + options + " ";
+    console.log(cmd + "\n");
+    var ex = jake.createExec([cmd]);
+    ex.addListener("cmdEnd", function() {
+	    fs.renameSync(temp + '/harness/loggedIO.js', loggedIOJsPath);
+		jake.rmRf(temp);
+    });
+    ex.run();    
+}, {async: true});
+
+var instrumenterPath = harnessDirectory + 'instrumenter.ts';
+var instrumenterJsPath = builtLocalDirectory + 'instrumenter.js';
+compileFile(instrumenterJsPath, [instrumenterPath], [tscFile, instrumenterPath], [], true);
+
+desc("Builds an instrumented tsc.js");
+task('tsc-instrumented', [loggedIOJsPath, instrumenterJsPath, tscFile], function() {
+	var cmd = host + ' ' + instrumenterJsPath + ' record iocapture ' + builtLocalDirectory + compilerFilename;
+	console.log(cmd);
+    var ex = jake.createExec([cmd]);
+    ex.addListener("error", function(e) {
+		console.log('error running instrumenter');
+		console.log(e);
+    });
+	ex.run();
+}, { async: true });
