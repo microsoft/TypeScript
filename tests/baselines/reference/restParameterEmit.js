@@ -8,7 +8,7 @@ function shouldEmit2(x, y, z, ...rest) {
 }
 
 function shouldEmit3(a: string, b: number, ...rest: any[]) {
-    console.log(g());
+    g();
     return;
 
     function g(): any {
@@ -31,7 +31,7 @@ function shouldNotEmit(x, y, z, ...rest) {
 var shouldNotEmit2 = (a, b, ...c) => a.concat([1,2,3]);
 
 function shouldNotEmit3(a: string, b: number, ...rest: any[]) {
-    console.log(g());
+    g();
     return;
 
     function g(): any {
@@ -68,7 +68,7 @@ function shouldEmit3(a, b) {
     for (var _i = 2; _i < arguments.length; _i++) {
         rest[_i - 2] = arguments[_i];
     }
-    console.log(g());
+    g();
     return;
     function g() {
         return rest[0];
@@ -90,7 +90,7 @@ function shouldNotEmit(x, y, z) {
 }
 var shouldNotEmit2 = function (a, b) { return a.concat([1, 2, 3]); };
 function shouldNotEmit3(a, b) {
-    console.log(g());
+    g();
     return;
     function g() {
         return a;

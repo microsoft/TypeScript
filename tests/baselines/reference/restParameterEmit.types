@@ -1,0 +1,139 @@
+=== tests/cases/compiler/restParameterEmit.ts ===
+function shouldEmit(x, y, z, ...rest) {
+>shouldEmit : (x: any, y: any, z: any, ...rest: any[]) => any[]
+>x : any
+>y : any
+>z : any
+>rest : any[]
+
+    return rest;
+>rest : any[]
+}
+
+function shouldEmit2(x, y, z, ...rest) {
+>shouldEmit2 : (x: any, y: any, z: any, ...rest: any[]) => void
+>x : any
+>y : any
+>z : any
+>rest : any[]
+
+    var a = rest.concat([x, y, z]);
+>a : any[]
+>rest.concat([x, y, z]) : any[]
+>rest.concat : { <U extends any[]>(...items: U[]): any[]; (...items: any[]): any[]; }
+>rest : any[]
+>concat : { <U extends any[]>(...items: U[]): any[]; (...items: any[]): any[]; }
+>[x, y, z] : any[]
+>x : any
+>y : any
+>z : any
+}
+
+function shouldEmit3(a: string, b: number, ...rest: any[]) {
+>shouldEmit3 : (a: string, b: number, ...rest: any[]) => void
+>a : string
+>b : number
+>rest : any[]
+
+    g();
+>g() : any
+>g : () => any
+
+    return;
+
+    function g(): any {
+>g : () => any
+
+        return rest[0];
+>rest[0] : any
+>rest : any[]
+    }
+}
+
+function shouldEmit4(a: number, ...rest: number[]) {
+>shouldEmit4 : (a: number, ...rest: number[]) => number
+>a : number
+>rest : number[]
+
+    function g(x: number = rest[0]): number {
+>g : (x?: number) => number
+>x : number
+>rest[0] : number
+>rest : number[]
+
+        return a || x;
+>a || x : number
+>a : number
+>x : number
+    }
+
+    return g();
+>g() : number
+>g : (x?: number) => number
+}
+
+function shouldNotEmit(x, y, z, ...rest) {
+>shouldNotEmit : (x: any, y: any, z: any, ...rest: any[]) => void
+>x : any
+>y : any
+>z : any
+>rest : any[]
+
+    return;
+}
+
+var shouldNotEmit2 = (a, b, ...c) => a.concat([1,2,3]);
+>shouldNotEmit2 : (a: any, b: any, ...c: any[]) => any
+>(a, b, ...c) => a.concat([1,2,3]) : (a: any, b: any, ...c: any[]) => any
+>a : any
+>b : any
+>c : any[]
+>a.concat([1,2,3]) : any
+>a.concat : any
+>a : any
+>concat : any
+>[1,2,3] : number[]
+
+function shouldNotEmit3(a: string, b: number, ...rest: any[]) {
+>shouldNotEmit3 : (a: string, b: number, ...rest: any[]) => void
+>a : string
+>b : number
+>rest : any[]
+
+    g();
+>g() : any
+>g : () => any
+
+    return;
+
+    function g(): any {
+>g : () => any
+
+        return a;
+>a : string
+    }
+}
+
+function shouldNotEmit4(a: number, b: number[], ...rest: number[]) {
+>shouldNotEmit4 : (a: number, b: number[], ...rest: number[]) => number
+>a : number
+>b : number[]
+>rest : number[]
+
+    function g(x: number = b[0]): number {
+>g : (x?: number) => number
+>x : number
+>b[0] : number
+>b : number[]
+
+        return a || x;
+>a || x : number
+>a : number
+>x : number
+    }
+
+    return g();
+>g() : number
+>g : (x?: number) => number
+}
+
