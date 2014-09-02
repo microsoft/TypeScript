@@ -1,0 +1,201 @@
+
+--------------------------------
+>>>>module m {
+
+   |Pos: 0 SpanInfo: undefined Statement: 
+    |Pos: 1 SpanInfo: undefined Statement: 
+     |Pos: 2 SpanInfo: undefined Statement: 
+      |Pos: 3 SpanInfo: undefined Statement: 
+       |Pos: 4 SpanInfo: undefined Statement: 
+        |Pos: 5 SpanInfo: undefined Statement: 
+         |Pos: 6 SpanInfo: undefined Statement: 
+          |Pos: 7 SpanInfo: undefined Statement: 
+           |Pos: 8 SpanInfo: undefined Statement: 
+            |Pos: 9 SpanInfo: undefined Statement: 
+             |Pos: 10 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    class c {
+
+   |Pos: 11 SpanInfo: undefined Statement: 
+    |Pos: 12 SpanInfo: undefined Statement: 
+     |Pos: 13 SpanInfo: undefined Statement: 
+      |Pos: 14 SpanInfo: undefined Statement: 
+       |Pos: 15 SpanInfo: undefined Statement: 
+        |Pos: 16 SpanInfo: undefined Statement: 
+         |Pos: 17 SpanInfo: undefined Statement: 
+          |Pos: 18 SpanInfo: undefined Statement: 
+           |Pos: 19 SpanInfo: undefined Statement: 
+            |Pos: 20 SpanInfo: undefined Statement: 
+             |Pos: 21 SpanInfo: undefined Statement: 
+              |Pos: 22 SpanInfo: undefined Statement: 
+               |Pos: 23 SpanInfo: undefined Statement: 
+                |Pos: 24 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    }
+
+   |Pos: 25 SpanInfo: undefined Statement: 
+    |Pos: 26 SpanInfo: undefined Statement: 
+     |Pos: 27 SpanInfo: undefined Statement: 
+      |Pos: 28 SpanInfo: undefined Statement: 
+       |Pos: 29 SpanInfo: undefined Statement: 
+        |Pos: 30 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>}
+
+   |Pos: 31 SpanInfo: undefined Statement: 
+    |Pos: 32 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>import a = m.c;
+
+   |Pos: 33 SpanInfo: {"start":33,"length":14} Statement: 
+   |import a = m.c
+    |Pos: 34 SpanInfo: {"start":33,"length":14} Statement: 
+    |import a = m.c
+     |Pos: 35 SpanInfo: {"start":33,"length":14} Statement: 
+     |import a = m.c
+      |Pos: 36 SpanInfo: {"start":33,"length":14} Statement: 
+      |import a = m.c
+       |Pos: 37 SpanInfo: {"start":33,"length":14} Statement: 
+       |import a = m.c
+        |Pos: 38 SpanInfo: {"start":33,"length":14} Statement: 
+        |import a = m.c
+         |Pos: 39 SpanInfo: {"start":33,"length":14} Statement: 
+         |import a = m.c
+          |Pos: 40 SpanInfo: {"start":33,"length":14} Statement: 
+          |import a = m.c
+           |Pos: 41 SpanInfo: {"start":33,"length":14} Statement: 
+           |import a = m.c
+            |Pos: 42 SpanInfo: {"start":33,"length":14} Statement: 
+            |import a = m.c
+             |Pos: 43 SpanInfo: {"start":33,"length":14} Statement: 
+             |import a = m.c
+              |Pos: 44 SpanInfo: {"start":33,"length":14} Statement: 
+              |import a = m.c
+               |Pos: 45 SpanInfo: {"start":33,"length":14} Statement: 
+               |import a = m.c
+                |Pos: 46 SpanInfo: {"start":33,"length":14} Statement: 
+                |import a = m.c
+                 |Pos: 47 SpanInfo: {"start":33,"length":14} Statement: 
+                 |import a = m.c
+                  |Pos: 48 SpanInfo: {"start":33,"length":14} Statement: 
+                  |import a = m.c
+--------------------------------
+>>>>export import b = m.c;
+
+   |Pos: 49 SpanInfo: {"start":49,"length":21} Statement: 
+   |export import b = m.c
+    |Pos: 50 SpanInfo: {"start":49,"length":21} Statement: 
+    |export import b = m.c
+     |Pos: 51 SpanInfo: {"start":49,"length":21} Statement: 
+     |export import b = m.c
+      |Pos: 52 SpanInfo: {"start":49,"length":21} Statement: 
+      |export import b = m.c
+       |Pos: 53 SpanInfo: {"start":49,"length":21} Statement: 
+       |export import b = m.c
+        |Pos: 54 SpanInfo: {"start":49,"length":21} Statement: 
+        |export import b = m.c
+         |Pos: 55 SpanInfo: {"start":49,"length":21} Statement: 
+         |export import b = m.c
+          |Pos: 56 SpanInfo: {"start":49,"length":21} Statement: 
+          |export import b = m.c
+           |Pos: 57 SpanInfo: {"start":49,"length":21} Statement: 
+           |export import b = m.c
+            |Pos: 58 SpanInfo: {"start":49,"length":21} Statement: 
+            |export import b = m.c
+             |Pos: 59 SpanInfo: {"start":49,"length":21} Statement: 
+             |export import b = m.c
+              |Pos: 60 SpanInfo: {"start":49,"length":21} Statement: 
+              |export import b = m.c
+               |Pos: 61 SpanInfo: {"start":49,"length":21} Statement: 
+               |export import b = m.c
+                |Pos: 62 SpanInfo: {"start":49,"length":21} Statement: 
+                |export import b = m.c
+                 |Pos: 63 SpanInfo: {"start":49,"length":21} Statement: 
+                 |export import b = m.c
+                  |Pos: 64 SpanInfo: {"start":49,"length":21} Statement: 
+                  |export import b = m.c
+                   |Pos: 65 SpanInfo: {"start":49,"length":21} Statement: 
+                   |export import b = m.c
+                    |Pos: 66 SpanInfo: {"start":49,"length":21} Statement: 
+                    |export import b = m.c
+                     |Pos: 67 SpanInfo: {"start":49,"length":21} Statement: 
+                     |export import b = m.c
+                      |Pos: 68 SpanInfo: {"start":49,"length":21} Statement: 
+                      |export import b = m.c
+                       |Pos: 69 SpanInfo: {"start":49,"length":21} Statement: 
+                       |export import b = m.c
+                        |Pos: 70 SpanInfo: {"start":49,"length":21} Statement: 
+                        |export import b = m.c
+                         |Pos: 71 SpanInfo: {"start":49,"length":21} Statement: 
+                         |export import b = m.c
+--------------------------------
+>>>>var x = new a();
+
+   |Pos: 72 SpanInfo: {"start":72,"length":15} Statement: 
+   |var x = new a()
+    |Pos: 73 SpanInfo: {"start":72,"length":15} Statement: 
+    |var x = new a()
+     |Pos: 74 SpanInfo: {"start":72,"length":15} Statement: 
+     |var x = new a()
+      |Pos: 75 SpanInfo: {"start":72,"length":15} Statement: 
+      |var x = new a()
+       |Pos: 76 SpanInfo: {"start":72,"length":15} Statement: 
+       |var x = new a()
+        |Pos: 77 SpanInfo: {"start":72,"length":15} Statement: 
+        |var x = new a()
+         |Pos: 78 SpanInfo: {"start":72,"length":15} Statement: 
+         |var x = new a()
+          |Pos: 79 SpanInfo: {"start":72,"length":15} Statement: 
+          |var x = new a()
+           |Pos: 80 SpanInfo: {"start":72,"length":15} Statement: 
+           |var x = new a()
+            |Pos: 81 SpanInfo: {"start":72,"length":15} Statement: 
+            |var x = new a()
+             |Pos: 82 SpanInfo: {"start":72,"length":15} Statement: 
+             |var x = new a()
+              |Pos: 83 SpanInfo: {"start":72,"length":15} Statement: 
+              |var x = new a()
+               |Pos: 84 SpanInfo: {"start":72,"length":15} Statement: 
+               |var x = new a()
+                |Pos: 85 SpanInfo: {"start":72,"length":15} Statement: 
+                |var x = new a()
+                 |Pos: 86 SpanInfo: {"start":72,"length":15} Statement: 
+                 |var x = new a()
+                  |Pos: 87 SpanInfo: {"start":72,"length":15} Statement: 
+                  |var x = new a()
+                   |Pos: 88 SpanInfo: {"start":72,"length":15} Statement: 
+                   |var x = new a()
+--------------------------------
+>>>>var y = new b();
+   |Pos: 89 SpanInfo: {"start":89,"length":15} Statement: 
+   |var y = new b()
+    |Pos: 90 SpanInfo: {"start":89,"length":15} Statement: 
+    |var y = new b()
+     |Pos: 91 SpanInfo: {"start":89,"length":15} Statement: 
+     |var y = new b()
+      |Pos: 92 SpanInfo: {"start":89,"length":15} Statement: 
+      |var y = new b()
+       |Pos: 93 SpanInfo: {"start":89,"length":15} Statement: 
+       |var y = new b()
+        |Pos: 94 SpanInfo: {"start":89,"length":15} Statement: 
+        |var y = new b()
+         |Pos: 95 SpanInfo: {"start":89,"length":15} Statement: 
+         |var y = new b()
+          |Pos: 96 SpanInfo: {"start":89,"length":15} Statement: 
+          |var y = new b()
+           |Pos: 97 SpanInfo: {"start":89,"length":15} Statement: 
+           |var y = new b()
+            |Pos: 98 SpanInfo: {"start":89,"length":15} Statement: 
+            |var y = new b()
+             |Pos: 99 SpanInfo: {"start":89,"length":15} Statement: 
+             |var y = new b()
+              |Pos: 100 SpanInfo: {"start":89,"length":15} Statement: 
+              |var y = new b()
+               |Pos: 101 SpanInfo: {"start":89,"length":15} Statement: 
+               |var y = new b()
+                |Pos: 102 SpanInfo: {"start":89,"length":15} Statement: 
+                |var y = new b()
+                 |Pos: 103 SpanInfo: {"start":89,"length":15} Statement: 
+                 |var y = new b()
+                  |Pos: 104 SpanInfo: {"start":89,"length":15} Statement: 
+                  |var y = new b()

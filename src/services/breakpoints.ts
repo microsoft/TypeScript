@@ -80,6 +80,8 @@ module ts.BreakpointResolver {
                     return spanInThrowStatement(<ThrowStatement>statement);
                 case SyntaxKind.ExportAssignment:
                     return spanInExportAssignment(<ExportAssignment>statement);
+                case SyntaxKind.ImportDeclaration: 
+                    return spanInImportDeclaration(<ImportDeclaration>statement);
             }
 
             function spanInVariableStatement(variableStatement: VariableStatement): TypeScript.TextSpan {
@@ -199,7 +201,7 @@ module ts.BreakpointResolver {
 
             function spanInStatementOrBlock(statementOrBlock: Statement, spanInPreviousNode: () => TypeScript.TextSpan): TypeScript.TextSpan {
                 if (statementOrBlock.kind === SyntaxKind.Block) {
-                    return spanInTriviaContainingSeparatingToke(statementOrBlock.pos, SyntaxKind.OpenBraceToken, spanInPreviousNode, () => spanInStatement(statementOrBlock));
+                    return spanInTriviaContainingSeparatingToken(statementOrBlock.pos, SyntaxKind.OpenBraceToken, spanInPreviousNode, () => spanInStatement(statementOrBlock));
                 }
                 else {
                     // Set the span in statement considering trivia
@@ -374,7 +376,7 @@ module ts.BreakpointResolver {
                     }
                 }
 
-                return spanInTriviaContainingSeparatingToke(closeParenPos + getTokenLength(SyntaxKind.CloseParenToken), SyntaxKind.OpenBraceToken,
+                return spanInTriviaContainingSeparatingToken(closeParenPos + getTokenLength(SyntaxKind.CloseParenToken), SyntaxKind.OpenBraceToken,
                     spanInSwitchExpression, () => spanInNodeArray(switchStatement.clauses, spanInCaseOrDefaultClause, /*separatingToken*/ undefined));
 
                 function spanInSwitchExpression() {
@@ -413,9 +415,13 @@ module ts.BreakpointResolver {
             function spanInExportAssignment(exportAssignment: ExportAssignment): TypeScript.TextSpan {
                 return textSpan(exportAssignment.pos, exportAssignment.exportName.end);
             }
+
+            function spanInImportDeclaration(importDeclaration: ImportDeclaration): TypeScript.TextSpan {
+                return textSpan(importDeclaration.pos, importDeclaration.entityName ? importDeclaration.entityName.end : importDeclaration.externalModuleName.end);
+            }
         }
 
-        function spanInTriviaContainingSeparatingToke(pos: number, separatingToken: SyntaxKind, spanInPreviousNode: () => TypeScript.TextSpan, spanInNode: () => TypeScript.TextSpan) {
+        function spanInTriviaContainingSeparatingToken(pos: number, separatingToken: SyntaxKind, spanInPreviousNode: () => TypeScript.TextSpan, spanInNode: () => TypeScript.TextSpan) {
             return spanInNodeConsideringTrivia(pos, spanInPreviousNode, () => {
                 // If separating token is on same line as previous node, set the breakpoint span in prev node for the asked Pos on the same line
                 var separatingTokenPos = getLocalTokenStartPos(pos);
@@ -466,7 +472,7 @@ module ts.BreakpointResolver {
 
                 if (separtingToken !== undefined && i + 1 < n && nodes[i + 1].pos > askedPos) {
                     // Set breakpoint in separating token
-                    return spanInTriviaContainingSeparatingToke(node.end, separtingToken, () => spanInNode(node), () => spanInNode(nodes[i + 1]));
+                    return spanInTriviaContainingSeparatingToken(node.end, separtingToken, () => spanInNode(node), () => spanInNode(nodes[i + 1]));
                 }
             }
         }
