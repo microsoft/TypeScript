@@ -69,6 +69,8 @@ module ts.BreakpointResolver {
                     return spanInBreakOrContinueStatement(<BreakOrContinueStatement>statement);
                 case SyntaxKind.ForInStatement:
                     return spanInForInStatement(<ForInStatement>statement);
+                case SyntaxKind.SwitchStatement:
+                    return spanInSwitchStatement(<SwitchStatement>statement);
             }
 
             function spanInVariableStatement(variableStatement: VariableStatement): TypeScript.TextSpan {
@@ -344,6 +346,38 @@ module ts.BreakpointResolver {
 
                 function spanInForInExpression() {
                     return textSpan(forInStatement.pos, closeParenPos + getTokenLength(SyntaxKind.CloseParenToken));
+                }
+            }
+
+            function spanInSwitchStatement(switchStatement: SwitchStatement): TypeScript.TextSpan {
+                var closeParenPos = getLocalTokenStartPos(switchStatement.expression.end);
+
+                // Any pos before expression close Paren - set breakpoint on in expression
+                if (askedPos <= closeParenPos) {
+                    return spanInSwitchExpression();
+                }
+
+                if (askedPos >= switchStatement.clauses.end) {
+                    // Set breakpoint in the last clause's last statement
+                    var lastClause = switchStatement.clauses[switchStatement.clauses.length - 1];
+                    if (lastClause && lastClause.statements.length) {
+                        return spanInStatement(lastClause.statements[lastClause.statements.length -1]);
+                    }
+                }
+
+                return spanInTriviaContainingSeparatingToke(closeParenPos + getTokenLength(SyntaxKind.CloseParenToken), SyntaxKind.OpenBraceToken,
+                    spanInSwitchExpression, () => spanInNodeArray(switchStatement.clauses, spanInCaseOrDefaultClause, /*separatingToken*/ undefined));
+
+                function spanInSwitchExpression() {
+                    return textSpan(switchStatement.pos, closeParenPos + getTokenLength(SyntaxKind.CloseParenToken));
+                }
+
+                function spanInCaseOrDefaultClause(caseOrDefaultClause: CaseOrDefaultClause) {
+                    if (askedPos <= caseOrDefaultClause.statements.pos) {
+                        return spanInStatement(caseOrDefaultClause.statements[0]);
+                    }
+
+                    return spanInStatements(caseOrDefaultClause.statements);
                 }
             }
         }
