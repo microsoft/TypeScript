@@ -95,6 +95,7 @@ module Playback {
 
     function createEmptyLog(): IOLog {
         return {
+            timestamp: (new Date()).toString(),
             arguments: [],
             currentDirectory: '',
             filesRead: [],
