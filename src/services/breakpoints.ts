@@ -55,6 +55,9 @@ module ts.BreakpointResolver {
                 case SyntaxKind.DoStatement:
                     return spanInDoStatement(<DoStatement>statement);
                 case SyntaxKind.Block:
+                case SyntaxKind.TryBlock:
+                case SyntaxKind.CatchBlock:
+                case SyntaxKind.FinallyBlock:
                     return spanInBlock(<Block>statement, /*canSetBreakpointOnCloseBrace*/ false);
                 case SyntaxKind.DebuggerStatement:
                     return spanInDebuggerStatement(statement);
@@ -71,6 +74,10 @@ module ts.BreakpointResolver {
                     return spanInForInStatement(<ForInStatement>statement);
                 case SyntaxKind.SwitchStatement:
                     return spanInSwitchStatement(<SwitchStatement>statement);
+                case SyntaxKind.TryStatement:
+                    return spanInTryStatement(<TryStatement>statement);
+                case SyntaxKind.ThrowStatement:
+                    return spanInThrowStatement(<ThrowStatement>statement);
             }
 
             function spanInVariableStatement(variableStatement: VariableStatement): TypeScript.TextSpan {
@@ -379,6 +386,26 @@ module ts.BreakpointResolver {
 
                     return spanInStatements(caseOrDefaultClause.statements);
                 }
+            }
+
+            function spanInTryStatement(tryStatement: TryStatement): TypeScript.TextSpan {
+                if (tryStatement.finallyBlock && askedPos >= tryStatement.finallyBlock.pos) {
+                    return spanInNodeConsideringTrivia(tryStatement.finallyBlock.pos,
+                        () => spanInStatement(tryStatement.catchBlock || tryStatement.tryBlock),
+                        () => spanInStatement(tryStatement.finallyBlock));
+                }
+
+                if (tryStatement.catchBlock && askedPos >= tryStatement.catchBlock.pos) {
+                    return spanInNodeConsideringTrivia(tryStatement.catchBlock.pos,
+                        () => spanInStatement(tryStatement.tryBlock),
+                        () => spanInStatement(tryStatement.catchBlock));
+                }
+
+                return spanInStatement(tryStatement.tryBlock);
+            }
+
+            function spanInThrowStatement(throwStatement: ThrowStatement): TypeScript.TextSpan {
+                return textSpan(throwStatement.pos, throwStatement.expression.end);
             }
         }
 
