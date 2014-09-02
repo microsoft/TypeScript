@@ -125,6 +125,12 @@ module ts.BreakpointResolver {
                     case SyntaxKind.ImportDeclaration:
                         return spanInImportDeclaration(<ImportDeclaration>node);
 
+                    case SyntaxKind.EnumDeclaration:
+                        return spanInEnumDeclaration(<EnumDeclaration>node);
+
+                    case SyntaxKind.EnumMember:
+                        return spanInEnumMember(<EnumMember>node);
+
                     case SyntaxKind.BinaryExpression:
                     case SyntaxKind.PostfixOperator:
                     case SyntaxKind.PrefixOperator:
@@ -365,6 +371,19 @@ module ts.BreakpointResolver {
                 return textSpan(importDeclaration, importDeclaration.entityName || importDeclaration.externalModuleName);
             }
 
+            function spanInEnumDeclaration(enumDeclaration: EnumDeclaration): TypeScript.TextSpan {
+                if (enumDeclaration.members.length) {
+                    return spanInEnumMember(enumDeclaration.members[0]);
+                }
+
+                // On close brace
+                return spanInNode(enumDeclaration.getLastToken(sourceFile));
+            }
+
+            function spanInEnumMember(enumMember: EnumMember) {
+                return textSpan(enumMember);
+            }
+
             function spanInExpression(expression: Expression): TypeScript.TextSpan {
                 //TODO (pick this up later) for now lets fix do-while baseline                if (node.parent.kind === SyntaxKind.DoStatement) {
                     // Set span as if on while keyword
@@ -385,6 +404,7 @@ module ts.BreakpointResolver {
                 switch (node.parent.kind) {
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.VariableStatement:
+                    case SyntaxKind.EnumDeclaration:
                         return spanInPreviousNode(node);
 
                     // Default to parent node
@@ -417,6 +437,7 @@ module ts.BreakpointResolver {
             function spanInCloseBraceToken(node: Node): TypeScript.TextSpan {
                 switch (node.parent.kind) {
                     case SyntaxKind.FunctionBlock:
+                    case SyntaxKind.EnumDeclaration:
                         // Span on close brace token
                         return textSpan(node);
 
