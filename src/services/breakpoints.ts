@@ -38,6 +38,9 @@ module ts.BreakpointResolver {
         }
 
         function spanInStatement(statement: Statement): TypeScript.TextSpan {
+            if (!statement) {
+                return;
+            }
             switch (statement.kind) {
                 case SyntaxKind.VariableStatement:
                     return spanInVariableStatement(<VariableStatement>statement);
@@ -55,6 +58,8 @@ module ts.BreakpointResolver {
                     return spanInBlock(<Block>statement, /*canSetBreakpointOnCloseBrace*/ false);
                 case SyntaxKind.DebuggerStatement:
                     return spanInDebuggerStatement(statement);
+                case SyntaxKind.IfStatement:
+                    return spanInIfStatement(<IfStatement>statement);
             }
 
             function spanInVariableStatement(variableStatement: VariableStatement): TypeScript.TextSpan {
@@ -205,6 +210,32 @@ module ts.BreakpointResolver {
             function spanInDebuggerStatement(debuggerStatement: Statement): TypeScript.TextSpan {
                 var debuggerKeyWordPos = getLocalTokenStartPos(debuggerStatement.pos);
                 return textSpan(debuggerKeyWordPos, debuggerKeyWordPos + getTokenLength(SyntaxKind.DebuggerKeyword));
+            }
+
+            function spanInIfStatement(ifStatement: IfStatement): TypeScript.TextSpan {
+                var closeParenPos = getLocalTokenStartPos(ifStatement.expression.end);
+
+                // Any pos before while expression close Paren - set breakpoint on whileExpression
+                if (askedPos <= closeParenPos) {
+                    return spanInIfExpression();
+                }
+
+                // Set the breakpoint in thenStatement if there is no else statement or if the asked pos is inside thenStatement
+                if (!ifStatement.elseStatement || askedPos < ifStatement.thenStatement.end) {
+                    return spanInStatementOrBlock(ifStatement.thenStatement, spanInIfExpression);
+                }
+
+                // Set breakpoint in else statement depending on position of then token
+                return  spanInNodeConsideringTrivia(ifStatement.thenStatement.end, spanInThenStatement,
+                    () => spanInStatement(ifStatement.elseStatement));
+
+                function spanInIfExpression() {
+                    return textSpan(ifStatement.pos, closeParenPos + getTokenLength(SyntaxKind.CloseParenToken));
+                }
+
+                function spanInThenStatement() {
+                    return spanInStatement(ifStatement.thenStatement);
+                }
             }
         }
 
