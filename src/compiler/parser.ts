@@ -774,15 +774,15 @@ module ts {
             return token === SyntaxKind.Identifier || (isInStrictMode ? token > SyntaxKind.LastFutureReservedWord : token > SyntaxKind.LastReservedWord);
         }
 
-        function onParseToken(t: SyntaxKind, parent: Node, propertyName: string, isMissing: boolean, startPos?: number, endPos?: number) {
+        function onParseToken(t: SyntaxKind, parent: Node, propertyName: string, isMissing: boolean, startPos: number, endPos: number) {
             if (parserHooks && parent) {
-                parserHooks.onParseToken(t, parent, propertyName, isMissing, startPos || scanner.getTokenPos(), endPos || scanner.getStartPos());
+                parserHooks.onParseToken(t, parent, propertyName, isMissing, startPos, endPos);
             }
         }
 
-        function onParseComma(parent: NodeArray<Node>) {
+        function onParseComma(parent: NodeArray<Node>, startPos: number, endPos: number) {
             if (parserHooks) {
-                parserHooks.onParseComma(parent, scanner.getTokenPos(), scanner.getStartPos());
+                parserHooks.onParseComma(parent, startPos, endPos);
             }
         }
 
@@ -792,13 +792,17 @@ module ts {
                 return true;
             }
             error(Diagnostics._0_expected, tokenToString(t));
-            onParseToken(t, parent, propertyName, /*isMissing*/ true);
+            var currentStartPos = scanner.getStartPos();
+            onParseToken(t, parent, propertyName, /*isMissing*/ true, currentStartPos, currentStartPos);
             return false;
         }
 
         function raiseOnParseTokenAndMoveToNextToken(t: SyntaxKind, parent: Node, propertyName: string): void {
-            onParseToken(t, parent, propertyName, /*isMissing*/ false);
+            var startPos = scanner.getStartPos();
             nextToken();
+            var endPos = scanner.getStartPos();
+
+            onParseToken(t, parent, propertyName, /*isMissing*/ false, startPos, endPos);
         }
 
         function parseOptional(t: SyntaxKind, parent: Node, propertyName: string): boolean {
@@ -1069,8 +1073,12 @@ module ts {
                     result.push(parseElement());
                     commaStart = scanner.getTokenPos();
                     if (token === SyntaxKind.CommaToken) {
-                        onParseComma(result);
+                        var startPos = scanner.getStartPos();
                         nextToken();
+                        var endPos = scanner.getStartPos();
+
+                        onParseComma(result, startPos, endPos);
+                        
                         continue;
                     }
                     commaStart = -1; // Back to the state where the last token was not a comma
@@ -1483,8 +1491,8 @@ module ts {
             }
         }
 
-        function parseTypeLiteral(): TypeLiteralNode {
-            var node = <TypeLiteralNode>createNode(SyntaxKind.TypeLiteral);
+        function parseTypeLiteral(existingNode: TypeLiteralNode): TypeLiteralNode {
+            var node = existingNode || <TypeLiteralNode>createNode(SyntaxKind.TypeLiteral);
             if (parseExpected(SyntaxKind.OpenBraceToken, node, "openBraceToken")) {
                 node.members = parseList(ParsingContext.TypeMembers, /*checkForStrictMode*/ false, parseTypeMember);
                 parseExpected(SyntaxKind.CloseBraceToken, node, "closeBraceToken");
@@ -1524,7 +1532,7 @@ module ts {
                 case SyntaxKind.TypeOfKeyword:
                     return parseTypeQuery();
                 case SyntaxKind.OpenBraceToken:
-                    return parseTypeLiteral();
+                    return parseTypeLiteral(/*existingNode*/ undefined);
                 case SyntaxKind.OpenParenToken:
                 case SyntaxKind.LessThanToken:
                     return parseFunctionType(SyntaxKind.CallSignature);
@@ -3362,7 +3370,7 @@ module ts {
                 node.baseTypes = parseDelimitedList(ParsingContext.BaseTypeReferences, parseTypeReference, TrailingCommaBehavior.Disallow);
             }
             var errorCountBeforeInterfaceBody = file.syntacticErrors.length;
-            node.members = parseTypeLiteral().members;
+            parseTypeLiteral(node);
             if (node.baseTypes && !node.baseTypes.length && errorCountBeforeInterfaceBody === errorCountBeforeInterfaceDeclaration) {
                 grammarErrorAtPos(extendsKeywordStart, extendsKeywordLength, Diagnostics._0_list_cannot_be_empty, "extends");
             }
