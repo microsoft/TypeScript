@@ -82,6 +82,8 @@ module ts.BreakpointResolver {
                     return spanInExportAssignment(<ExportAssignment>statement);
                 case SyntaxKind.ImportDeclaration: 
                     return spanInImportDeclaration(<ImportDeclaration>statement);
+                case SyntaxKind.EnumDeclaration:
+                    return spanInEnumDeclaration(<EnumDeclaration>statement);
             }
 
             function spanInVariableStatement(variableStatement: VariableStatement): TypeScript.TextSpan {
@@ -418,6 +420,37 @@ module ts.BreakpointResolver {
 
             function spanInImportDeclaration(importDeclaration: ImportDeclaration): TypeScript.TextSpan {
                 return textSpan(importDeclaration.pos, importDeclaration.entityName ? importDeclaration.entityName.end : importDeclaration.externalModuleName.end);
+            }
+
+            function spanInEnumDeclaration(enumDeclaration: EnumDeclaration): TypeScript.TextSpan {
+                if (enumDeclaration.flags & NodeFlags.Ambient) {
+                    return;
+                }
+
+                if (askedPos > enumDeclaration.members.end) {
+                    return spanInNodeConsideringTrivia(enumDeclaration.members.end, () => spanInEnumMember(enumDeclaration.members[enumDeclaration.members.length - 1]),
+                        spanInCloseBraceTokenOfEnumDeclaration);
+                }
+
+                if (askedPos < enumDeclaration.name.end) {
+                    // Set breakpoint on the whole 
+                    return spanInFirstEnumMember();
+                }
+
+                return spanInTriviaContainingSeparatingToken(enumDeclaration.name.end, SyntaxKind.OpenBraceToken, spanInFirstEnumMember,
+                    () => spanInNodeArray(enumDeclaration.members, spanInEnumMember, SyntaxKind.CommaToken));
+
+                function spanInFirstEnumMember() {
+                    return enumDeclaration.members.length ? spanInEnumMember(enumDeclaration.members[0]) : spanInCloseBraceTokenOfEnumDeclaration();
+                }
+
+                function spanInCloseBraceTokenOfEnumDeclaration() {
+                    return textSpan(getLocalTokenStartPos(enumDeclaration.members.end), enumDeclaration.end)
+                }
+
+                function spanInEnumMember(enumMember: EnumMember): TypeScript.TextSpan {
+                    return textSpan(enumMember.pos, enumMember.end);
+                }
             }
         }
 

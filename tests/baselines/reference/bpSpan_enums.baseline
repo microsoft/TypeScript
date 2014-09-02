@@ -2,60 +2,24 @@
 --------------------------------
 >>>>enum e {
 
-   |Pos: 0 SpanInfo: {"start":0,"length":30} Statement: 
-   |enum e {
-   |    x,
-   |    y,
-   |    x
-   |}
-    |Pos: 1 SpanInfo: {"start":0,"length":30} Statement: 
-    |enum e {
-    |    x,
-    |    y,
-    |    x
-    |}
-     |Pos: 2 SpanInfo: {"start":0,"length":30} Statement: 
-     |enum e {
-     |    x,
-     |    y,
-     |    x
-     |}
-      |Pos: 3 SpanInfo: {"start":0,"length":30} Statement: 
-      |enum e {
-      |    x,
-      |    y,
-      |    x
-      |}
-       |Pos: 4 SpanInfo: {"start":0,"length":30} Statement: 
-       |enum e {
-       |    x,
-       |    y,
-       |    x
-       |}
-        |Pos: 5 SpanInfo: {"start":0,"length":30} Statement: 
-        |enum e {
-        |    x,
-        |    y,
-        |    x
-        |}
-         |Pos: 6 SpanInfo: {"start":0,"length":30} Statement: 
-         |enum e {
-         |    x,
-         |    y,
-         |    x
-         |}
-          |Pos: 7 SpanInfo: {"start":0,"length":30} Statement: 
-          |enum e {
-          |    x,
-          |    y,
-          |    x
-          |}
-           |Pos: 8 SpanInfo: {"start":0,"length":30} Statement: 
-           |enum e {
-           |    x,
-           |    y,
-           |    x
-           |}
+   |Pos: 0 SpanInfo: {"start":13,"length":1} Statement: 
+   |x
+    |Pos: 1 SpanInfo: {"start":13,"length":1} Statement: 
+    |x
+     |Pos: 2 SpanInfo: {"start":13,"length":1} Statement: 
+     |x
+      |Pos: 3 SpanInfo: {"start":13,"length":1} Statement: 
+      |x
+       |Pos: 4 SpanInfo: {"start":13,"length":1} Statement: 
+       |x
+        |Pos: 5 SpanInfo: {"start":13,"length":1} Statement: 
+        |x
+         |Pos: 6 SpanInfo: {"start":13,"length":1} Statement: 
+         |x
+          |Pos: 7 SpanInfo: {"start":13,"length":1} Statement: 
+          |x
+           |Pos: 8 SpanInfo: {"start":13,"length":1} Statement: 
+           |x
 --------------------------------
 >>>>    x,
 
@@ -115,76 +79,26 @@
 --------------------------------
 >>>>enum e2 {
 
-   |Pos: 31 SpanInfo: {"start":31,"length":49} Statement: 
-   |enum e2 {
-   |    x = 10,
-   |    y = 10,
-   |    z,
-   |    x2
-   |}
-    |Pos: 32 SpanInfo: {"start":31,"length":49} Statement: 
-    |enum e2 {
-    |    x = 10,
-    |    y = 10,
-    |    z,
-    |    x2
-    |}
-     |Pos: 33 SpanInfo: {"start":31,"length":49} Statement: 
-     |enum e2 {
-     |    x = 10,
-     |    y = 10,
-     |    z,
-     |    x2
-     |}
-      |Pos: 34 SpanInfo: {"start":31,"length":49} Statement: 
-      |enum e2 {
-      |    x = 10,
-      |    y = 10,
-      |    z,
-      |    x2
-      |}
-       |Pos: 35 SpanInfo: {"start":31,"length":49} Statement: 
-       |enum e2 {
-       |    x = 10,
-       |    y = 10,
-       |    z,
-       |    x2
-       |}
-        |Pos: 36 SpanInfo: {"start":31,"length":49} Statement: 
-        |enum e2 {
-        |    x = 10,
-        |    y = 10,
-        |    z,
-        |    x2
-        |}
-         |Pos: 37 SpanInfo: {"start":31,"length":49} Statement: 
-         |enum e2 {
-         |    x = 10,
-         |    y = 10,
-         |    z,
-         |    x2
-         |}
-          |Pos: 38 SpanInfo: {"start":31,"length":49} Statement: 
-          |enum e2 {
-          |    x = 10,
-          |    y = 10,
-          |    z,
-          |    x2
-          |}
-           |Pos: 39 SpanInfo: {"start":31,"length":49} Statement: 
-           |enum e2 {
-           |    x = 10,
-           |    y = 10,
-           |    z,
-           |    x2
-           |}
-            |Pos: 40 SpanInfo: {"start":31,"length":49} Statement: 
-            |enum e2 {
-            |    x = 10,
-            |    y = 10,
-            |    z,
-            |    x2
-            |}
+   |Pos: 31 SpanInfo: {"start":45,"length":6} Statement: 
+   |x = 10
+    |Pos: 32 SpanInfo: {"start":45,"length":6} Statement: 
+    |x = 10
+     |Pos: 33 SpanInfo: {"start":45,"length":6} Statement: 
+     |x = 10
+      |Pos: 34 SpanInfo: {"start":45,"length":6} Statement: 
+      |x = 10
+       |Pos: 35 SpanInfo: {"start":45,"length":6} Statement: 
+       |x = 10
+        |Pos: 36 SpanInfo: {"start":45,"length":6} Statement: 
+        |x = 10
+         |Pos: 37 SpanInfo: {"start":45,"length":6} Statement: 
+         |x = 10
+          |Pos: 38 SpanInfo: {"start":45,"length":6} Statement: 
+          |x = 10
+           |Pos: 39 SpanInfo: {"start":45,"length":6} Statement: 
+           |x = 10
+            |Pos: 40 SpanInfo: {"start":45,"length":6} Statement: 
+            |x = 10
 --------------------------------
 >>>>    x = 10,
 
@@ -283,37 +197,94 @@
 --------------------------------
 >>>>enum e3 {
 
-   |Pos: 81 SpanInfo: {"start":81,"length":11} Statement: 
-   |enum e3 {
+   |Pos: 81 SpanInfo: {"start":91,"length":1} Statement: 
    |}
-    |Pos: 82 SpanInfo: {"start":81,"length":11} Statement: 
-    |enum e3 {
+    |Pos: 82 SpanInfo: {"start":91,"length":1} Statement: 
     |}
-     |Pos: 83 SpanInfo: {"start":81,"length":11} Statement: 
-     |enum e3 {
+     |Pos: 83 SpanInfo: {"start":91,"length":1} Statement: 
      |}
-      |Pos: 84 SpanInfo: {"start":81,"length":11} Statement: 
-      |enum e3 {
+      |Pos: 84 SpanInfo: {"start":91,"length":1} Statement: 
       |}
-       |Pos: 85 SpanInfo: {"start":81,"length":11} Statement: 
-       |enum e3 {
+       |Pos: 85 SpanInfo: {"start":91,"length":1} Statement: 
        |}
-        |Pos: 86 SpanInfo: {"start":81,"length":11} Statement: 
-        |enum e3 {
+        |Pos: 86 SpanInfo: {"start":91,"length":1} Statement: 
         |}
-         |Pos: 87 SpanInfo: {"start":81,"length":11} Statement: 
-         |enum e3 {
+         |Pos: 87 SpanInfo: {"start":91,"length":1} Statement: 
          |}
-          |Pos: 88 SpanInfo: {"start":81,"length":11} Statement: 
-          |enum e3 {
+          |Pos: 88 SpanInfo: {"start":91,"length":1} Statement: 
           |}
-           |Pos: 89 SpanInfo: {"start":81,"length":11} Statement: 
-           |enum e3 {
+           |Pos: 89 SpanInfo: {"start":91,"length":1} Statement: 
            |}
-            |Pos: 90 SpanInfo: {"start":81,"length":11} Statement: 
-            |enum e3 {
+            |Pos: 90 SpanInfo: {"start":91,"length":1} Statement: 
             |}
 --------------------------------
 >>>>}
+
    |Pos: 91 SpanInfo: {"start":91,"length":1} Statement: 
    |}
+    |Pos: 92 SpanInfo: {"start":91,"length":1} Statement: 
+    |}
+--------------------------------
+>>>>declare enum e4 {
+
+   |Pos: 93 SpanInfo: undefined Statement: 
+    |Pos: 94 SpanInfo: undefined Statement: 
+     |Pos: 95 SpanInfo: undefined Statement: 
+      |Pos: 96 SpanInfo: undefined Statement: 
+       |Pos: 97 SpanInfo: undefined Statement: 
+        |Pos: 98 SpanInfo: undefined Statement: 
+         |Pos: 99 SpanInfo: undefined Statement: 
+          |Pos: 100 SpanInfo: undefined Statement: 
+           |Pos: 101 SpanInfo: undefined Statement: 
+            |Pos: 102 SpanInfo: undefined Statement: 
+             |Pos: 103 SpanInfo: undefined Statement: 
+              |Pos: 104 SpanInfo: undefined Statement: 
+               |Pos: 105 SpanInfo: undefined Statement: 
+                |Pos: 106 SpanInfo: undefined Statement: 
+                 |Pos: 107 SpanInfo: undefined Statement: 
+                  |Pos: 108 SpanInfo: undefined Statement: 
+                   |Pos: 109 SpanInfo: undefined Statement: 
+                    |Pos: 110 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    x,
+
+   |Pos: 111 SpanInfo: undefined Statement: 
+    |Pos: 112 SpanInfo: undefined Statement: 
+     |Pos: 113 SpanInfo: undefined Statement: 
+      |Pos: 114 SpanInfo: undefined Statement: 
+       |Pos: 115 SpanInfo: undefined Statement: 
+        |Pos: 116 SpanInfo: undefined Statement: 
+         |Pos: 117 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    y,
+
+   |Pos: 118 SpanInfo: undefined Statement: 
+    |Pos: 119 SpanInfo: undefined Statement: 
+     |Pos: 120 SpanInfo: undefined Statement: 
+      |Pos: 121 SpanInfo: undefined Statement: 
+       |Pos: 122 SpanInfo: undefined Statement: 
+        |Pos: 123 SpanInfo: undefined Statement: 
+         |Pos: 124 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    z,
+
+   |Pos: 125 SpanInfo: undefined Statement: 
+    |Pos: 126 SpanInfo: undefined Statement: 
+     |Pos: 127 SpanInfo: undefined Statement: 
+      |Pos: 128 SpanInfo: undefined Statement: 
+       |Pos: 129 SpanInfo: undefined Statement: 
+        |Pos: 130 SpanInfo: undefined Statement: 
+         |Pos: 131 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>    x2
+
+   |Pos: 132 SpanInfo: undefined Statement: 
+    |Pos: 133 SpanInfo: undefined Statement: 
+     |Pos: 134 SpanInfo: undefined Statement: 
+      |Pos: 135 SpanInfo: undefined Statement: 
+       |Pos: 136 SpanInfo: undefined Statement: 
+        |Pos: 137 SpanInfo: undefined Statement: 
+         |Pos: 138 SpanInfo: undefined Statement: 
+--------------------------------
+>>>>}
+   |Pos: 139 SpanInfo: undefined Statement: 
