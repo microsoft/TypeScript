@@ -62,6 +62,8 @@ module ts.BreakpointResolver {
                     return spanInIfStatement(<IfStatement>statement);
                 case SyntaxKind.LabelledStatement:
                     return spanInLabelledStatement(<LabelledStatement>statement);
+                case SyntaxKind.ForStatement:
+                    return spanInForStatement(<ForStatement>statement);
             }
 
             function spanInVariableStatement(variableStatement: VariableStatement): TypeScript.TextSpan {
@@ -70,8 +72,12 @@ module ts.BreakpointResolver {
                     return;
                 }
 
-                var firstDeclaration = variableStatement.declarations[0];
-                var lastDeclaration = variableStatement.declarations[variableStatement.declarations.length - 1];
+                return spanInVariableDeclarations(variableStatement.declarations, () => variableStatement.pos);
+            }
+
+            function spanInVariableDeclarations(declarations: NodeArray<VariableDeclaration>, getFirstDeclarationPos: () => number): TypeScript.TextSpan {
+                var firstDeclaration = declarations[0];
+                var lastDeclaration = declarations[declarations.length - 1];
 
                 // if past the end of the variable statement, the breakpoint goes into last variable declaration
                 if (lastDeclaration.end <= askedPos) {
@@ -83,18 +89,18 @@ module ts.BreakpointResolver {
                     return spanInVariableDeclaration(firstDeclaration);
                 }
 
-                return spanInNodeArray(variableStatement.declarations, spanInVariableDeclaration, SyntaxKind.CommaToken);
+                return spanInNodeArray(declarations, spanInVariableDeclaration, SyntaxKind.CommaToken);
 
                 function spanInVariableDeclaration(variableDeclaration: VariableDeclaration): TypeScript.TextSpan {
                     // Breakpoint is possible in variableDeclaration only if there is initialization
                     if (variableDeclaration.initializer) {
                         // If this is first variable declaration, the span starts at the variable statement pos so we can include var keyword
-                        return textSpan(firstDeclaration === variableDeclaration ? variableStatement.pos : variableDeclaration.pos, variableDeclaration.end);
+                        return textSpan(firstDeclaration === variableDeclaration ? getFirstDeclarationPos() : variableDeclaration.pos, variableDeclaration.end);
                     }
                     else if (variableDeclaration != firstDeclaration) {
                         // if we cant set breakpoint on this declaration, set it on previous one
                         var previousVariableDeclaration: VariableDeclaration;
-                        forEach(variableStatement.declarations, currentDeclaration => {
+                        forEach(declarations, currentDeclaration => {
                             if (currentDeclaration === variableDeclaration) {
                                 return true;
                             }
@@ -164,7 +170,11 @@ module ts.BreakpointResolver {
             }
 
             function spanInExpressionStatement(expressionStatement: ExpressionStatement): TypeScript.TextSpan {
-                return textSpan(expressionStatement.expression.pos, expressionStatement.expression.end);
+                return spanInExpression(expressionStatement.expression);
+            }
+
+            function spanInExpression(expression: Expression): TypeScript.TextSpan {
+                return textSpan(expression.pos, expression.end);
             }
 
             function spanInReturnStatement(returnStatement: ReturnStatement): TypeScript.TextSpan {
@@ -242,6 +252,71 @@ module ts.BreakpointResolver {
 
             function spanInLabelledStatement(labelledStatement: LabelledStatement): TypeScript.TextSpan {
                 return spanInStatement(labelledStatement.statement);
+            }
+
+            function spanInForStatement(forStatement: ForStatement): TypeScript.TextSpan {
+                if (askedPos < forStatement.statement.pos) {
+                    var firstSemiColonPos = forStatement.declarations ? getLocalTokenStartPos(forStatement.declarations.end) :
+                        forStatement.initializer ? getLocalTokenStartPos(forStatement.initializer.end) : undefined;
+
+                    // Declaration or initializer
+                    if (askedPos <= firstSemiColonPos) {
+                        return spanInDeclarationOrInitializerOfForStatement();
+                    }
+
+                    // Condition
+                    var secondSemiColonPos = forStatement.condition ? getLocalTokenStartPos(forStatement.condition.end) :
+                        firstSemiColonPos !== undefined ? getLocalTokenStartPos(firstSemiColonPos + getTokenLength(SyntaxKind.SemicolonToken)) : undefined;
+                    if (askedPos <= secondSemiColonPos) {
+                        if (forStatement.condition) {
+                            // If condition is present set breakpoint in the condition
+                            return spanInExpression(forStatement.condition);
+                        }
+                        else if (firstSemiColonPos !== undefined) {
+                            // Otherwise if declarations/initializer present set breakpoint in there
+                            return spanInDeclarationOrInitializerOfForStatement();
+                        }
+                    }
+
+                    // Iterator
+                    var closeParenPos = forStatement.iterator ? getLocalTokenStartPos(forStatement.iterator.end) :
+                        secondSemiColonPos !== undefined ? getLocalTokenStartPos(secondSemiColonPos + getTokenLength(SyntaxKind.SemicolonToken)) : undefined;
+                    if (askedPos <= closeParenPos) {
+                        return spanInForStatementIteratorOrConditionOrDeclarationsOrInitializer();
+                    }
+                }
+
+                return spanInStatementOrBlock(forStatement.statement, spanInForStatementIteratorOrConditionOrDeclarationsOrInitializer);
+
+                function spanInForStatementIteratorOrConditionOrDeclarationsOrInitializer() {
+                    if (forStatement.iterator) {
+                        // Set breakpoint in the iterator
+                        return spanInExpression(forStatement.iterator);
+                    }
+                    else if (forStatement.condition) {
+                        // Set breakpoint in the 
+                        return spanInExpression(forStatement.condition);
+                    }
+                    else if (forStatement.declarations || forStatement.initializer) {
+                        // Set breakpoint in declarations/intializer
+                        return spanInDeclarationOrInitializerOfForStatement();
+                    }
+                }
+
+                function spanInDeclarationOrInitializerOfForStatement() {
+                    if (forStatement.declarations) {
+                        return spanInVariableDeclarations(forStatement.declarations, getFirstDeclarationStartPos);
+                    }
+                    else if (forStatement.initializer) {
+                        return spanInExpression(forStatement.initializer);
+                    }
+
+                    function getFirstDeclarationStartPos() {
+                        var forKeywordPos = getLocalTokenStartPos(forStatement.pos);
+                        var openParenPos = getLocalTokenStartPos(forKeywordPos + getTokenLength(SyntaxKind.ForKeyword));
+                        return getLocalTokenStartPos(openParenPos + getTokenLength(SyntaxKind.OpenParenToken));
+                    }
+                }
             }
         }
 
