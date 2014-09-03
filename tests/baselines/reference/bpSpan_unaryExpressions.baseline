@@ -1,0 +1,229 @@
+
+--------------------------------
+>>>>var x = 10;
+
+   |Pos: 0 SpanInfo: {"start":0,"length":10} Statement: 
+   |var x = 10
+    |Pos: 1 SpanInfo: {"start":0,"length":10} Statement: 
+    |var x = 10
+     |Pos: 2 SpanInfo: {"start":0,"length":10} Statement: 
+     |var x = 10
+      |Pos: 3 SpanInfo: {"start":0,"length":10} Statement: 
+      |var x = 10
+       |Pos: 4 SpanInfo: {"start":0,"length":10} Statement: 
+       |var x = 10
+        |Pos: 5 SpanInfo: {"start":0,"length":10} Statement: 
+        |var x = 10
+         |Pos: 6 SpanInfo: {"start":0,"length":10} Statement: 
+         |var x = 10
+          |Pos: 7 SpanInfo: {"start":0,"length":10} Statement: 
+          |var x = 10
+           |Pos: 8 SpanInfo: {"start":0,"length":10} Statement: 
+           |var x = 10
+            |Pos: 9 SpanInfo: {"start":0,"length":10} Statement: 
+            |var x = 10
+             |Pos: 10 SpanInfo: {"start":0,"length":10} Statement: 
+             |var x = 10
+              |Pos: 11 SpanInfo: {"start":0,"length":10} Statement: 
+              |var x = 10
+--------------------------------
+>>>>var y = 20;
+
+   |Pos: 12 SpanInfo: {"start":12,"length":10} Statement: 
+   |var y = 20
+    |Pos: 13 SpanInfo: {"start":12,"length":10} Statement: 
+    |var y = 20
+     |Pos: 14 SpanInfo: {"start":12,"length":10} Statement: 
+     |var y = 20
+      |Pos: 15 SpanInfo: {"start":12,"length":10} Statement: 
+      |var y = 20
+       |Pos: 16 SpanInfo: {"start":12,"length":10} Statement: 
+       |var y = 20
+        |Pos: 17 SpanInfo: {"start":12,"length":10} Statement: 
+        |var y = 20
+         |Pos: 18 SpanInfo: {"start":12,"length":10} Statement: 
+         |var y = 20
+          |Pos: 19 SpanInfo: {"start":12,"length":10} Statement: 
+          |var y = 20
+           |Pos: 20 SpanInfo: {"start":12,"length":10} Statement: 
+           |var y = 20
+            |Pos: 21 SpanInfo: {"start":12,"length":10} Statement: 
+            |var y = 20
+             |Pos: 22 SpanInfo: {"start":12,"length":10} Statement: 
+             |var y = 20
+              |Pos: 23 SpanInfo: {"start":12,"length":10} Statement: 
+              |var y = 20
+--------------------------------
+>>>>x++;
+
+   |Pos: 24 SpanInfo: {"start":24,"length":3} Statement: 
+   |x++
+    |Pos: 25 SpanInfo: {"start":24,"length":3} Statement: 
+    |x++
+     |Pos: 26 SpanInfo: {"start":24,"length":3} Statement: 
+     |x++
+      |Pos: 27 SpanInfo: {"start":24,"length":3} Statement: 
+      |x++
+       |Pos: 28 SpanInfo: {"start":24,"length":3} Statement: 
+       |x++
+--------------------------------
+>>>>y--;
+
+   |Pos: 29 SpanInfo: {"start":29,"length":3} Statement: 
+   |y--
+    |Pos: 30 SpanInfo: {"start":29,"length":3} Statement: 
+    |y--
+     |Pos: 31 SpanInfo: {"start":29,"length":3} Statement: 
+     |y--
+      |Pos: 32 SpanInfo: {"start":29,"length":3} Statement: 
+      |y--
+       |Pos: 33 SpanInfo: {"start":29,"length":3} Statement: 
+       |y--
+--------------------------------
+>>>>typeof (function foo() {
+
+   |Pos: 34 SpanInfo: {"start":34,"length":43} Statement: 
+   |typeof (function foo() {
+   |    return y;
+   |})()
+    |Pos: 35 SpanInfo: {"start":34,"length":43} Statement: 
+    |typeof (function foo() {
+    |    return y;
+    |})()
+     |Pos: 36 SpanInfo: {"start":34,"length":43} Statement: 
+     |typeof (function foo() {
+     |    return y;
+     |})()
+      |Pos: 37 SpanInfo: {"start":34,"length":43} Statement: 
+      |typeof (function foo() {
+      |    return y;
+      |})()
+       |Pos: 38 SpanInfo: {"start":34,"length":43} Statement: 
+       |typeof (function foo() {
+       |    return y;
+       |})()
+        |Pos: 39 SpanInfo: {"start":34,"length":43} Statement: 
+        |typeof (function foo() {
+        |    return y;
+        |})()
+         |Pos: 40 SpanInfo: {"start":34,"length":43} Statement: 
+         |typeof (function foo() {
+         |    return y;
+         |})()
+          |Pos: 41 SpanInfo: {"start":34,"length":43} Statement: 
+          |typeof (function foo() {
+          |    return y;
+          |})()
+           |Pos: 42 SpanInfo: {"start":63,"length":8} Statement: 
+           |return y
+            |Pos: 43 SpanInfo: {"start":63,"length":8} Statement: 
+            |return y
+             |Pos: 44 SpanInfo: {"start":63,"length":8} Statement: 
+             |return y
+              |Pos: 45 SpanInfo: {"start":63,"length":8} Statement: 
+              |return y
+               |Pos: 46 SpanInfo: {"start":63,"length":8} Statement: 
+               |return y
+                |Pos: 47 SpanInfo: {"start":63,"length":8} Statement: 
+                |return y
+                 |Pos: 48 SpanInfo: {"start":63,"length":8} Statement: 
+                 |return y
+                  |Pos: 49 SpanInfo: {"start":63,"length":8} Statement: 
+                  |return y
+                   |Pos: 50 SpanInfo: {"start":63,"length":8} Statement: 
+                   |return y
+                    |Pos: 51 SpanInfo: {"start":63,"length":8} Statement: 
+                    |return y
+                     |Pos: 52 SpanInfo: {"start":63,"length":8} Statement: 
+                     |return y
+                      |Pos: 53 SpanInfo: {"start":63,"length":8} Statement: 
+                      |return y
+                       |Pos: 54 SpanInfo: {"start":63,"length":8} Statement: 
+                       |return y
+                        |Pos: 55 SpanInfo: {"start":63,"length":8} Statement: 
+                        |return y
+                         |Pos: 56 SpanInfo: {"start":63,"length":8} Statement: 
+                         |return y
+                          |Pos: 57 SpanInfo: {"start":63,"length":8} Statement: 
+                          |return y
+                           |Pos: 58 SpanInfo: {"start":63,"length":8} Statement: 
+                           |return y
+--------------------------------
+>>>>    return y;
+
+   |Pos: 59 SpanInfo: {"start":63,"length":8} Statement: 
+   |return y
+    |Pos: 60 SpanInfo: {"start":63,"length":8} Statement: 
+    |return y
+     |Pos: 61 SpanInfo: {"start":63,"length":8} Statement: 
+     |return y
+      |Pos: 62 SpanInfo: {"start":63,"length":8} Statement: 
+      |return y
+       |Pos: 63 SpanInfo: {"start":63,"length":8} Statement: 
+       |return y
+        |Pos: 64 SpanInfo: {"start":63,"length":8} Statement: 
+        |return y
+         |Pos: 65 SpanInfo: {"start":63,"length":8} Statement: 
+         |return y
+          |Pos: 66 SpanInfo: {"start":63,"length":8} Statement: 
+          |return y
+           |Pos: 67 SpanInfo: {"start":63,"length":8} Statement: 
+           |return y
+            |Pos: 68 SpanInfo: {"start":63,"length":8} Statement: 
+            |return y
+             |Pos: 69 SpanInfo: {"start":63,"length":8} Statement: 
+             |return y
+              |Pos: 70 SpanInfo: {"start":63,"length":8} Statement: 
+              |return y
+               |Pos: 71 SpanInfo: {"start":63,"length":8} Statement: 
+               |return y
+                |Pos: 72 SpanInfo: {"start":63,"length":8} Statement: 
+                |return y
+--------------------------------
+>>>>})();
+
+   |Pos: 73 SpanInfo: {"start":73,"length":1} Statement: 
+   |}
+    |Pos: 74 SpanInfo: {"start":34,"length":43} Statement: 
+    |typeof (function foo() {
+    |    return y;
+    |})()
+     |Pos: 75 SpanInfo: {"start":34,"length":43} Statement: 
+     |typeof (function foo() {
+     |    return y;
+     |})()
+      |Pos: 76 SpanInfo: {"start":34,"length":43} Statement: 
+      |typeof (function foo() {
+      |    return y;
+      |})()
+       |Pos: 77 SpanInfo: {"start":34,"length":43} Statement: 
+       |typeof (function foo() {
+       |    return y;
+       |})()
+        |Pos: 78 SpanInfo: {"start":34,"length":43} Statement: 
+        |typeof (function foo() {
+        |    return y;
+        |})()
+--------------------------------
+>>>>++x;
+
+   |Pos: 79 SpanInfo: {"start":79,"length":3} Statement: 
+   |++x
+    |Pos: 80 SpanInfo: {"start":79,"length":3} Statement: 
+    |++x
+     |Pos: 81 SpanInfo: {"start":79,"length":3} Statement: 
+     |++x
+      |Pos: 82 SpanInfo: {"start":79,"length":3} Statement: 
+      |++x
+       |Pos: 83 SpanInfo: {"start":79,"length":3} Statement: 
+       |++x
+--------------------------------
+>>>>++y;
+   |Pos: 84 SpanInfo: {"start":84,"length":3} Statement: 
+   |++y
+    |Pos: 85 SpanInfo: {"start":84,"length":3} Statement: 
+    |++y
+     |Pos: 86 SpanInfo: {"start":84,"length":3} Statement: 
+     |++y
+      |Pos: 87 SpanInfo: {"start":84,"length":3} Statement: 
+      |++y

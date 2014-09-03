@@ -447,5 +447,277 @@
                   |x = x * 10
 --------------------------------
 >>>>}
+
    |Pos: 193 SpanInfo: {"start":181,"length":10} Statement: 
    |x = x * 10
+    |Pos: 194 SpanInfo: {"start":181,"length":10} Statement: 
+    |x = x * 10
+--------------------------------
+>>>>try {
+
+   |Pos: 195 SpanInfo: {"start":205,"length":65} Statement: 
+   |throw (function foo() {
+   |        new Error(x.toString());
+   |    })()
+    |Pos: 196 SpanInfo: {"start":205,"length":65} Statement: 
+    |throw (function foo() {
+    |        new Error(x.toString());
+    |    })()
+     |Pos: 197 SpanInfo: {"start":205,"length":65} Statement: 
+     |throw (function foo() {
+     |        new Error(x.toString());
+     |    })()
+      |Pos: 198 SpanInfo: {"start":205,"length":65} Statement: 
+      |throw (function foo() {
+      |        new Error(x.toString());
+      |    })()
+       |Pos: 199 SpanInfo: {"start":205,"length":65} Statement: 
+       |throw (function foo() {
+       |        new Error(x.toString());
+       |    })()
+        |Pos: 200 SpanInfo: {"start":205,"length":65} Statement: 
+        |throw (function foo() {
+        |        new Error(x.toString());
+        |    })()
+--------------------------------
+>>>>    throw (function foo() {
+
+   |Pos: 201 SpanInfo: {"start":205,"length":65} Statement: 
+   |throw (function foo() {
+   |        new Error(x.toString());
+   |    })()
+    |Pos: 202 SpanInfo: {"start":205,"length":65} Statement: 
+    |throw (function foo() {
+    |        new Error(x.toString());
+    |    })()
+     |Pos: 203 SpanInfo: {"start":205,"length":65} Statement: 
+     |throw (function foo() {
+     |        new Error(x.toString());
+     |    })()
+      |Pos: 204 SpanInfo: {"start":205,"length":65} Statement: 
+      |throw (function foo() {
+      |        new Error(x.toString());
+      |    })()
+       |Pos: 205 SpanInfo: {"start":205,"length":65} Statement: 
+       |throw (function foo() {
+       |        new Error(x.toString());
+       |    })()
+        |Pos: 206 SpanInfo: {"start":205,"length":65} Statement: 
+        |throw (function foo() {
+        |        new Error(x.toString());
+        |    })()
+         |Pos: 207 SpanInfo: {"start":205,"length":65} Statement: 
+         |throw (function foo() {
+         |        new Error(x.toString());
+         |    })()
+          |Pos: 208 SpanInfo: {"start":205,"length":65} Statement: 
+          |throw (function foo() {
+          |        new Error(x.toString());
+          |    })()
+           |Pos: 209 SpanInfo: {"start":205,"length":65} Statement: 
+           |throw (function foo() {
+           |        new Error(x.toString());
+           |    })()
+            |Pos: 210 SpanInfo: {"start":205,"length":65} Statement: 
+            |throw (function foo() {
+            |        new Error(x.toString());
+            |    })()
+             |Pos: 211 SpanInfo: {"start":205,"length":65} Statement: 
+             |throw (function foo() {
+             |        new Error(x.toString());
+             |    })()
+              |Pos: 212 SpanInfo: {"start":237,"length":23} Statement: 
+              |new Error(x.toString())
+               |Pos: 213 SpanInfo: {"start":237,"length":23} Statement: 
+               |new Error(x.toString())
+                |Pos: 214 SpanInfo: {"start":237,"length":23} Statement: 
+                |new Error(x.toString())
+                 |Pos: 215 SpanInfo: {"start":237,"length":23} Statement: 
+                 |new Error(x.toString())
+                  |Pos: 216 SpanInfo: {"start":237,"length":23} Statement: 
+                  |new Error(x.toString())
+                   |Pos: 217 SpanInfo: {"start":237,"length":23} Statement: 
+                   |new Error(x.toString())
+                    |Pos: 218 SpanInfo: {"start":237,"length":23} Statement: 
+                    |new Error(x.toString())
+                     |Pos: 219 SpanInfo: {"start":237,"length":23} Statement: 
+                     |new Error(x.toString())
+                      |Pos: 220 SpanInfo: {"start":237,"length":23} Statement: 
+                      |new Error(x.toString())
+                       |Pos: 221 SpanInfo: {"start":237,"length":23} Statement: 
+                       |new Error(x.toString())
+                        |Pos: 222 SpanInfo: {"start":237,"length":23} Statement: 
+                        |new Error(x.toString())
+                         |Pos: 223 SpanInfo: {"start":237,"length":23} Statement: 
+                         |new Error(x.toString())
+                          |Pos: 224 SpanInfo: {"start":237,"length":23} Statement: 
+                          |new Error(x.toString())
+                           |Pos: 225 SpanInfo: {"start":237,"length":23} Statement: 
+                           |new Error(x.toString())
+                            |Pos: 226 SpanInfo: {"start":237,"length":23} Statement: 
+                            |new Error(x.toString())
+                             |Pos: 227 SpanInfo: {"start":237,"length":23} Statement: 
+                             |new Error(x.toString())
+                              |Pos: 228 SpanInfo: {"start":237,"length":23} Statement: 
+                              |new Error(x.toString())
+--------------------------------
+>>>>        new Error(x.toString());
+
+   |Pos: 229 SpanInfo: {"start":237,"length":23} Statement: 
+   |new Error(x.toString())
+    |Pos: 230 SpanInfo: {"start":237,"length":23} Statement: 
+    |new Error(x.toString())
+     |Pos: 231 SpanInfo: {"start":237,"length":23} Statement: 
+     |new Error(x.toString())
+      |Pos: 232 SpanInfo: {"start":237,"length":23} Statement: 
+      |new Error(x.toString())
+       |Pos: 233 SpanInfo: {"start":237,"length":23} Statement: 
+       |new Error(x.toString())
+        |Pos: 234 SpanInfo: {"start":237,"length":23} Statement: 
+        |new Error(x.toString())
+         |Pos: 235 SpanInfo: {"start":237,"length":23} Statement: 
+         |new Error(x.toString())
+          |Pos: 236 SpanInfo: {"start":237,"length":23} Statement: 
+          |new Error(x.toString())
+           |Pos: 237 SpanInfo: {"start":237,"length":23} Statement: 
+           |new Error(x.toString())
+            |Pos: 238 SpanInfo: {"start":237,"length":23} Statement: 
+            |new Error(x.toString())
+             |Pos: 239 SpanInfo: {"start":237,"length":23} Statement: 
+             |new Error(x.toString())
+              |Pos: 240 SpanInfo: {"start":237,"length":23} Statement: 
+              |new Error(x.toString())
+               |Pos: 241 SpanInfo: {"start":237,"length":23} Statement: 
+               |new Error(x.toString())
+                |Pos: 242 SpanInfo: {"start":237,"length":23} Statement: 
+                |new Error(x.toString())
+                 |Pos: 243 SpanInfo: {"start":237,"length":23} Statement: 
+                 |new Error(x.toString())
+                  |Pos: 244 SpanInfo: {"start":237,"length":23} Statement: 
+                  |new Error(x.toString())
+                   |Pos: 245 SpanInfo: {"start":237,"length":23} Statement: 
+                   |new Error(x.toString())
+                    |Pos: 246 SpanInfo: {"start":237,"length":23} Statement: 
+                    |new Error(x.toString())
+                     |Pos: 247 SpanInfo: {"start":237,"length":23} Statement: 
+                     |new Error(x.toString())
+                      |Pos: 248 SpanInfo: {"start":237,"length":23} Statement: 
+                      |new Error(x.toString())
+                       |Pos: 249 SpanInfo: {"start":237,"length":23} Statement: 
+                       |new Error(x.toString())
+                        |Pos: 250 SpanInfo: {"start":237,"length":23} Statement: 
+                        |new Error(x.toString())
+                         |Pos: 251 SpanInfo: {"start":237,"length":23} Statement: 
+                         |new Error(x.toString())
+                          |Pos: 252 SpanInfo: {"start":237,"length":23} Statement: 
+                          |new Error(x.toString())
+                           |Pos: 253 SpanInfo: {"start":237,"length":23} Statement: 
+                           |new Error(x.toString())
+                            |Pos: 254 SpanInfo: {"start":237,"length":23} Statement: 
+                            |new Error(x.toString())
+                             |Pos: 255 SpanInfo: {"start":237,"length":23} Statement: 
+                             |new Error(x.toString())
+                              |Pos: 256 SpanInfo: {"start":237,"length":23} Statement: 
+                              |new Error(x.toString())
+                               |Pos: 257 SpanInfo: {"start":237,"length":23} Statement: 
+                               |new Error(x.toString())
+                                |Pos: 258 SpanInfo: {"start":237,"length":23} Statement: 
+                                |new Error(x.toString())
+                                 |Pos: 259 SpanInfo: {"start":237,"length":23} Statement: 
+                                 |new Error(x.toString())
+                                  |Pos: 260 SpanInfo: {"start":237,"length":23} Statement: 
+                                  |new Error(x.toString())
+                                   |Pos: 261 SpanInfo: {"start":237,"length":23} Statement: 
+                                   |new Error(x.toString())
+--------------------------------
+>>>>    })();
+
+   |Pos: 262 SpanInfo: {"start":266,"length":1} Statement: 
+   |}
+    |Pos: 263 SpanInfo: {"start":266,"length":1} Statement: 
+    |}
+     |Pos: 264 SpanInfo: {"start":266,"length":1} Statement: 
+     |}
+      |Pos: 265 SpanInfo: {"start":266,"length":1} Statement: 
+      |}
+       |Pos: 266 SpanInfo: {"start":266,"length":1} Statement: 
+       |}
+        |Pos: 267 SpanInfo: {"start":205,"length":65} Statement: 
+        |throw (function foo() {
+        |        new Error(x.toString());
+        |    })()
+         |Pos: 268 SpanInfo: {"start":205,"length":65} Statement: 
+         |throw (function foo() {
+         |        new Error(x.toString());
+         |    })()
+          |Pos: 269 SpanInfo: {"start":205,"length":65} Statement: 
+          |throw (function foo() {
+          |        new Error(x.toString());
+          |    })()
+           |Pos: 270 SpanInfo: {"start":205,"length":65} Statement: 
+           |throw (function foo() {
+           |        new Error(x.toString());
+           |    })()
+            |Pos: 271 SpanInfo: {"start":205,"length":65} Statement: 
+            |throw (function foo() {
+            |        new Error(x.toString());
+            |    })()
+--------------------------------
+>>>>}
+
+   |Pos: 272 SpanInfo: {"start":205,"length":65} Statement: 
+   |throw (function foo() {
+   |        new Error(x.toString());
+   |    })()
+    |Pos: 273 SpanInfo: {"start":205,"length":65} Statement: 
+    |throw (function foo() {
+    |        new Error(x.toString());
+    |    })()
+--------------------------------
+>>>>finally {
+
+   |Pos: 274 SpanInfo: {"start":288,"length":3} Statement: 
+   |x++
+    |Pos: 275 SpanInfo: {"start":288,"length":3} Statement: 
+    |x++
+     |Pos: 276 SpanInfo: {"start":288,"length":3} Statement: 
+     |x++
+      |Pos: 277 SpanInfo: {"start":288,"length":3} Statement: 
+      |x++
+       |Pos: 278 SpanInfo: {"start":288,"length":3} Statement: 
+       |x++
+        |Pos: 279 SpanInfo: {"start":288,"length":3} Statement: 
+        |x++
+         |Pos: 280 SpanInfo: {"start":288,"length":3} Statement: 
+         |x++
+          |Pos: 281 SpanInfo: {"start":288,"length":3} Statement: 
+          |x++
+           |Pos: 282 SpanInfo: {"start":288,"length":3} Statement: 
+           |x++
+            |Pos: 283 SpanInfo: {"start":288,"length":3} Statement: 
+            |x++
+--------------------------------
+>>>>    x++;
+
+   |Pos: 284 SpanInfo: {"start":288,"length":3} Statement: 
+   |x++
+    |Pos: 285 SpanInfo: {"start":288,"length":3} Statement: 
+    |x++
+     |Pos: 286 SpanInfo: {"start":288,"length":3} Statement: 
+     |x++
+      |Pos: 287 SpanInfo: {"start":288,"length":3} Statement: 
+      |x++
+       |Pos: 288 SpanInfo: {"start":288,"length":3} Statement: 
+       |x++
+        |Pos: 289 SpanInfo: {"start":288,"length":3} Statement: 
+        |x++
+         |Pos: 290 SpanInfo: {"start":288,"length":3} Statement: 
+         |x++
+          |Pos: 291 SpanInfo: {"start":288,"length":3} Statement: 
+          |x++
+           |Pos: 292 SpanInfo: {"start":288,"length":3} Statement: 
+           |x++
+--------------------------------
+>>>>}
+   |Pos: 293 SpanInfo: {"start":288,"length":3} Statement: 
+   |x++

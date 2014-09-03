@@ -11,8 +11,6 @@ module ts.BreakpointResolver {
             return;
         }
 
-        var askedPosLine = getLineOfLocalPosition(askedPos);
-
         // try first in the statements at given location
         return spanInStatements(sourceFile.statements);
 
@@ -32,6 +30,32 @@ module ts.BreakpointResolver {
             return sourceFile.getLineAndCharacterFromPosition(pos).line;
         }
 
+        /** Get the lineBreak pos if the text after pos on that line contains only trivia, otherwise return pos */
+        function getPosOrLineBreakPos(pos: number) {
+            var lineBreakPos = getLocalLineBreakPos(pos);
+            return getLineOfLocalPosition(pos) < getLineOfLocalPosition(lineBreakPos) ? lineBreakPos : pos;
+        }
+
+        function isAskedPosInLeftOfPosOrLineBreakPosOf(node: TextRange) {
+            return askedPos < getPosOrLineBreakPos(node.end);
+        }
+
+        function isAskedPosInRightOfPosOrLineBreakPos(node: TextRange) {
+            return askedPos >= getPosOrLineBreakPos(node.pos);
+        }
+
+        function isAskedPosInside(node: TextRange) {
+            return isAskedPosInLeftOfPosOrLineBreakPosOf(node) && isAskedPosInRightOfPosOrLineBreakPos(node)
+        }
+
+        function isAskedPosAtOrLeftOfPos(pos: number) {
+            return askedPos <= pos;
+        }
+
+        function isAskedPosAtOrRightOfPos(pos: number) {
+            return pos <= askedPos;
+        }
+
         function textSpan(pos: number, end: number) {
             // Check if the asked Pos is in any comment
             return TypeScript.TextSpan.fromBounds(getLocalTokenStartPos(pos), end);
@@ -41,59 +65,90 @@ module ts.BreakpointResolver {
             if (!statement) {
                 return;
             }
-            switch (statement.kind) {
-                case SyntaxKind.VariableStatement:
-                    return spanInVariableStatement(<VariableStatement>statement);
-                case SyntaxKind.Property:
-                    return spanInProperty(<PropertyDeclaration>statement);
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.Constructor:
-                case SyntaxKind.Method:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    return spanInFunctionDeclaration(<FunctionDeclaration>statement);
-                case SyntaxKind.ExpressionStatement:
-                    return spanInExpressionStatement(<ExpressionStatement>statement);
-                case SyntaxKind.ReturnStatement:
-                    return spanInReturnStatement(<ReturnStatement>statement);
-                case SyntaxKind.WhileStatement:
-                    return spanInWhileStatement(<WhileStatement>statement);
-                case SyntaxKind.DoStatement:
-                    return spanInDoStatement(<DoStatement>statement);
-                case SyntaxKind.Block:
-                case SyntaxKind.TryBlock:
-                case SyntaxKind.CatchBlock:
-                case SyntaxKind.FinallyBlock:
-                    return spanInBlock(<Block>statement, /*canSetBreakpointOnCloseBrace*/ false);
-                case SyntaxKind.DebuggerStatement:
-                    return spanInDebuggerStatement(statement);
-                case SyntaxKind.IfStatement:
-                    return spanInIfStatement(<IfStatement>statement);
-                case SyntaxKind.LabelledStatement:
-                    return spanInLabelledStatement(<LabelledStatement>statement);
-                case SyntaxKind.ForStatement:
-                    return spanInForStatement(<ForStatement>statement);
-                case SyntaxKind.BreakStatement:
-                case SyntaxKind.ContinueStatement:
-                    return spanInBreakOrContinueStatement(<BreakOrContinueStatement>statement);
-                case SyntaxKind.ForInStatement:
-                    return spanInForInStatement(<ForInStatement>statement);
-                case SyntaxKind.SwitchStatement:
-                    return spanInSwitchStatement(<SwitchStatement>statement);
-                case SyntaxKind.TryStatement:
-                    return spanInTryStatement(<TryStatement>statement);
-                case SyntaxKind.ThrowStatement:
-                    return spanInThrowStatement(<ThrowStatement>statement);
-                case SyntaxKind.ExportAssignment:
-                    return spanInExportAssignment(<ExportAssignment>statement);
-                case SyntaxKind.ImportDeclaration: 
-                    return spanInImportDeclaration(<ImportDeclaration>statement);
-                case SyntaxKind.EnumDeclaration:
-                    return spanInEnumDeclaration(<EnumDeclaration>statement);
-                case SyntaxKind.ModuleDeclaration:
-                    return spanInModuleDeclaration(<ModuleDeclaration>statement);
-                case SyntaxKind.ClassDeclaration:
-                    return spanInClassDeclaration(<ClassDeclaration>statement);
+
+            return getBreakpointSpanFromExpressionOfStatement() || getBreakpointSpanFromStatement();
+
+            function getBreakpointSpanFromStatement() {
+                switch (statement.kind) {
+                    case SyntaxKind.VariableStatement:
+                        return spanInVariableStatement(<VariableStatement>statement);
+                    case SyntaxKind.Property:
+                        return spanInProperty(<PropertyDeclaration>statement);
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.Method:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                        return spanInFunctionDeclaration(<FunctionDeclaration>statement);
+                    case SyntaxKind.ExpressionStatement:
+                        return spanInExpressionStatement(<ExpressionStatement>statement);
+                    case SyntaxKind.ReturnStatement:
+                        return spanInReturnStatement(<ReturnStatement>statement);
+                    case SyntaxKind.WhileStatement:
+                        return spanInWhileStatement(<WhileStatement>statement);
+                    case SyntaxKind.DoStatement:
+                        return spanInDoStatement(<DoStatement>statement);
+                    case SyntaxKind.Block:
+                    case SyntaxKind.TryBlock:
+                    case SyntaxKind.CatchBlock:
+                    case SyntaxKind.FinallyBlock:
+                        return spanInBlock(<Block>statement, /*canSetBreakpointOnCloseBrace*/ false);
+                    case SyntaxKind.DebuggerStatement:
+                        return spanInDebuggerStatement(statement);
+                    case SyntaxKind.IfStatement:
+                        return spanInIfStatement(<IfStatement>statement);
+                    case SyntaxKind.LabelledStatement:
+                        return spanInLabelledStatement(<LabelledStatement>statement);
+                    case SyntaxKind.ForStatement:
+                        return spanInForStatement(<ForStatement>statement);
+                    case SyntaxKind.BreakStatement:
+                    case SyntaxKind.ContinueStatement:
+                        return spanInBreakOrContinueStatement(<BreakOrContinueStatement>statement);
+                    case SyntaxKind.ForInStatement:
+                        return spanInForInStatement(<ForInStatement>statement);
+                    case SyntaxKind.SwitchStatement:
+                        return spanInSwitchStatement(<SwitchStatement>statement);
+                    case SyntaxKind.TryStatement:
+                        return spanInTryStatement(<TryStatement>statement);
+                    case SyntaxKind.ThrowStatement:
+                        return spanInThrowStatement(<ThrowStatement>statement);
+                    case SyntaxKind.ExportAssignment:
+                        return spanInExportAssignment(<ExportAssignment>statement);
+                    case SyntaxKind.ImportDeclaration:
+                        return spanInImportDeclaration(<ImportDeclaration>statement);
+                    case SyntaxKind.EnumDeclaration:
+                        return spanInEnumDeclaration(<EnumDeclaration>statement);
+                    case SyntaxKind.ModuleDeclaration:
+                        return spanInModuleDeclaration(<ModuleDeclaration>statement);
+                    case SyntaxKind.ClassDeclaration:
+                        return spanInClassDeclaration(<ClassDeclaration>statement);
+                }
+            }
+
+            function getBreakpointSpanFromExpressionOfStatement() {
+                var expression = getExpressionOfStatement();
+                if (expression && isAskedPosInside(expression)) {
+                    return spanInExpression(expression);
+                }
+
+                function getExpressionOfStatement(): Expression {
+                    switch (statement.kind) {
+                        case SyntaxKind.ReturnStatement:
+                            return (<ReturnStatement>statement).expression;
+                        case SyntaxKind.WhileStatement:
+                            return (<WhileStatement>statement).expression;
+                        case SyntaxKind.DoStatement:
+                            return (<DoStatement>statement).expression;
+                        case SyntaxKind.IfStatement:
+                            return (<IfStatement>statement).expression;
+                        case SyntaxKind.ForInStatement:
+                            return (<ForInStatement>statement).expression;
+                        case SyntaxKind.SwitchStatement:
+                            return (<SwitchStatement>statement).expression;
+                        case SyntaxKind.ThrowStatement:
+                            return (<ThrowStatement>statement).expression;
+                    }
+                }
             }
 
             function spanInVariableStatement(variableStatement: VariableStatement): TypeScript.TextSpan {
@@ -110,28 +165,20 @@ module ts.BreakpointResolver {
             }
 
             function spanInVariableDeclarations(declarations: NodeArray<VariableDeclaration>, getFirstDeclarationPos: () => number): TypeScript.TextSpan {
-                var firstDeclaration = declarations[0];
-                var lastDeclaration = declarations[declarations.length - 1];
-
-                // if past the end of the variable statement, the breakpoint goes into last variable declaration
-                if (lastDeclaration.end <= askedPos) {
-                    return spanInVariableDeclaration(lastDeclaration);
-                }
-
-                // If the position is before the first declaration, set breakpoint on the first declaration
-                if (askedPos <= firstDeclaration.pos) {
-                    return spanInVariableDeclaration(firstDeclaration);
-                }
-
-                return spanInNodeArray(declarations, spanInVariableDeclaration, SyntaxKind.CommaToken);
+                return spanInNodeWithChildNodeArray(declarations, spanInVariableDeclaration, SyntaxKind.CommaToken);
 
                 function spanInVariableDeclaration(variableDeclaration: VariableDeclaration): TypeScript.TextSpan {
                     // Breakpoint is possible in variableDeclaration only if there is initialization
                     if (variableDeclaration.initializer) {
+                        // try getting span from expression
+                        var spanOfInitializer: TypeScript.TextSpan;
+                        if (isAskedPosInRightOfPosOrLineBreakPos(variableDeclaration.initializer)) {
+                            spanOfInitializer = spanInExpression(variableDeclaration.initializer);
+                        }
                         // If this is first variable declaration, the span starts at the variable statement pos so we can include var keyword
-                        return textSpan(firstDeclaration === variableDeclaration ? getFirstDeclarationPos() : variableDeclaration.pos, variableDeclaration.end);
+                        return spanOfInitializer || textSpan(declarations[0] === variableDeclaration ? getFirstDeclarationPos() : variableDeclaration.pos, variableDeclaration.end);
                     }
-                    else if (variableDeclaration != firstDeclaration) {
+                    else if (variableDeclaration != declarations[0]) {
                         // if we cant set breakpoint on this declaration, set it on previous one
                         var previousVariableDeclaration: VariableDeclaration;
                         forEach(declarations, currentDeclaration => {
@@ -152,7 +199,7 @@ module ts.BreakpointResolver {
                 }
 
                 // Set the span in parameters if the asked pos falls inside parameter list
-                if (functionDeclaration.parameters.pos <= askedPos && askedPos < functionDeclaration.parameters.end) {
+                if (isAskedPosInside(functionDeclaration.parameters)) {
                     return spanInNodeArray(functionDeclaration.parameters, spanInParameterDeclaration, SyntaxKind.CommaToken);
                 }
 
@@ -161,9 +208,13 @@ module ts.BreakpointResolver {
 
                 function spanInParameterDeclaration(parameter: ParameterDeclaration): TypeScript.TextSpan {
                     // Breakpoint is possible on parameter only if it has initializer or is a rest parameter
-                    if (parameter.initializer || parameter.flags & (NodeFlags.Rest| NodeFlags.Public | NodeFlags.Private)) {
+                    if (parameter.initializer || parameter.flags & (NodeFlags.Rest | NodeFlags.Public | NodeFlags.Private)) {
+                        var spanInParameterInitializer: TypeScript.TextSpan;
+                        if (parameter.initializer && isAskedPosInRightOfPosOrLineBreakPos(parameter.initializer)) {
+                            spanInParameterInitializer = spanInExpression(parameter.initializer);
+                        }
                         // If this is first variable declaration, the span starts at the variable statement pos so we can include var keyword
-                        return textSpan(parameter.pos, parameter.end);
+                        return spanInParameterInitializer || textSpan(parameter.pos, parameter.end);
                     }
                     else {
                         // first parameter and cant set breakpoint, goto body and set breakpoint there
@@ -183,7 +234,7 @@ module ts.BreakpointResolver {
 
             function spanInBlock(block: Block, canSetBreakpointOnCloseBrace: boolean): TypeScript.TextSpan {
                 // If the asked pos > statement.length or there are no statements, the breakpoint goes on the '}'
-                if (!block.statements.length || askedPos >= getLocalLineBreakPos(block.statements.end)) {
+                if (!block.statements.length || isAskedPosAtOrRightOfPos(getPosOrLineBreakPos(block.statements.end))) {
                     if (canSetBreakpointOnCloseBrace) {
                         // Set breakpoint on '}'
                         return textSpan(block.statements.end, block.end);
@@ -195,7 +246,7 @@ module ts.BreakpointResolver {
                 }
 
                 // if the position is before the first statement, the breakpoint goes into first statement
-                if (askedPos <= block.statements.pos) {
+                if (isAskedPosAtOrLeftOfPos(block.statements.pos)) {
                     return spanInStatement(block.statements[0]);
                 }
 
@@ -208,7 +259,142 @@ module ts.BreakpointResolver {
             }
 
             function spanInExpression(expression: Expression): TypeScript.TextSpan {
-                return textSpan(expression.pos, expression.end);
+                if (!expression) {
+                    return;
+                }
+
+                return getBreakpointSpanFromExpression(expression) ||
+                    (canUseExpressionAsBreakpointSpan(expression) ? textSpan(expression.pos, expression.end) : undefined);
+
+                function canUseExpressionAsBreakpointSpan(expression: Expression): boolean {
+                    switch (expression.parent.kind) {
+                        case SyntaxKind.ExpressionStatement:
+                        case SyntaxKind.ForStatement:
+                            return true;
+                        case SyntaxKind.BinaryExpression:
+                            if ((<BinaryExpression>expression.parent).operator === SyntaxKind.CommaToken) {
+                                return canUseExpressionAsBreakpointSpan(expression.parent);
+                            }
+                    }
+                }
+
+                function getBreakpointSpanFromExpression(expression: Expression) {
+                    switch (expression.kind) {
+                        case SyntaxKind.BinaryExpression:
+                            return spanInBinaryExpression(<BinaryExpression>expression);
+                        case SyntaxKind.PrefixOperator:
+                            return spanInPrefixOperator(<UnaryExpression>expression);
+                        case SyntaxKind.PostfixOperator:
+                            return spanInPostfixOperator(<UnaryExpression>expression);
+                        case SyntaxKind.NewExpression:
+                        case SyntaxKind.CallExpression:
+                            return spanInCallExpression(<CallExpression>expression);
+                        case SyntaxKind.ParenExpression:
+                            return spanInParenExpression(<ParenExpression>expression);
+                        case SyntaxKind.ConditionalExpression:
+                            return spanInConditionalExpression(<ConditionalExpression>expression);
+                        case SyntaxKind.PropertyAccess:
+                            return spanInPropertyAccess(<PropertyAccess>expression);
+                        case SyntaxKind.IndexedAccess:
+                            return spanInIndexedAccess(<IndexedAccess>expression);
+                        case SyntaxKind.TypeAssertion:
+                            return spanInTypeAssertion(<TypeAssertion>expression);
+                        case SyntaxKind.ArrayLiteral:
+                            return spanInArrayLiteral(<ArrayLiteral>expression);
+                        case SyntaxKind.ObjectLiteral:
+                            return spanInObjectLiteral(<ObjectLiteral>expression);
+                        case SyntaxKind.ArrowFunction:
+                        case SyntaxKind.FunctionExpression:
+                        case SyntaxKind.GetAccessor:
+                        case SyntaxKind.SetAccessor:
+                            return spanInFunctionDeclaration(<FunctionDeclaration>expression);
+                        case SyntaxKind.PropertyAssignment:
+                            return spanInPropertyAssignment(<PropertyDeclaration>expression);
+                    }
+
+                    function spanInBinaryExpression(binaryExpression: BinaryExpression): TypeScript.TextSpan {
+                        if (isAskedPosInLeftOfPosOrLineBreakPosOf(binaryExpression.left)) {
+                            return spanInExpression(binaryExpression.left);
+                        }
+                        if (binaryExpression.operator == SyntaxKind.CommaToken && isAskedPosInRightOfPosOrLineBreakPos(binaryExpression.left)) {
+                            return spanInTriviaContainingSeparatingToken(binaryExpression.left.end, binaryExpression.operator,
+                                () => spanInExpression(binaryExpression.left), () => spanInExpression(binaryExpression.right));
+                        }
+                        if (isAskedPosInRightOfPosOrLineBreakPos(binaryExpression.right)) {
+                            return spanInExpression(binaryExpression.right);
+                        }
+                    }
+
+                    function spanInPrefixOperator(prefixOperator: UnaryExpression): TypeScript.TextSpan {
+                        if (isAskedPosInRightOfPosOrLineBreakPos(prefixOperator.operand)) {
+                            return spanInExpression(prefixOperator.operand);
+                        }
+                    }
+
+                    function spanInPostfixOperator(postfixOperator: UnaryExpression): TypeScript.TextSpan {
+                        if (isAskedPosInLeftOfPosOrLineBreakPosOf(postfixOperator.operand)) {
+                            return spanInExpression(postfixOperator.operand);
+                        }
+                    }
+
+                    function spanInCallExpression(callExpression: CallExpression): TypeScript.TextSpan {
+                        if (isAskedPosInLeftOfPosOrLineBreakPosOf(callExpression.func)) {
+                            return spanInExpression(callExpression.func);
+                        }
+                        if (isAskedPosInside(callExpression.arguments)) {
+                            return spanInNodeArray(callExpression.arguments, spanInExpression, SyntaxKind.CommaToken);
+                        }
+                    }
+
+                    function spanInParenExpression(parenExpression: ParenExpression): TypeScript.TextSpan {
+                        if (isAskedPosInside(parenExpression.expression)) {
+                            return spanInExpression(parenExpression.expression);
+                        }
+                    }
+
+                    function spanInConditionalExpression(conditionalExpression: ConditionalExpression): TypeScript.TextSpan {
+                        if (isAskedPosInLeftOfPosOrLineBreakPosOf(conditionalExpression.condition)) {
+                            return spanInExpression(conditionalExpression.condition);
+                        }
+                        if (isAskedPosInside(conditionalExpression.whenTrue)) {
+                            return spanInExpression(conditionalExpression.whenTrue);
+                        }
+                        if (isAskedPosInRightOfPosOrLineBreakPos(conditionalExpression.whenFalse)) {
+                            return spanInExpression(conditionalExpression.whenFalse);
+                        }
+                    }
+
+                    function spanInPropertyAccess(propertyAccess: PropertyAccess): TypeScript.TextSpan {
+                        if (isAskedPosInLeftOfPosOrLineBreakPosOf(propertyAccess.left)) {
+                            return spanInExpression(propertyAccess.left);
+                        }
+                    }
+
+                    function spanInIndexedAccess(indexedAccess: IndexedAccess): TypeScript.TextSpan {
+                        if (isAskedPosInLeftOfPosOrLineBreakPosOf(indexedAccess.object)) {
+                            return spanInExpression(indexedAccess.object);
+                        }
+                        if (isAskedPosInside(indexedAccess.index)) {
+                            return spanInExpression(indexedAccess.index);
+                        }
+                    }
+
+                    function spanInTypeAssertion(typeAssertion: TypeAssertion): TypeScript.TextSpan {
+                        return spanInExpression(typeAssertion.operand);
+                    }
+
+                    function spanInArrayLiteral(arrayLiteral: ArrayLiteral): TypeScript.TextSpan {
+                        return spanInNodeWithChildNodeArray(arrayLiteral.elements, spanInExpression, SyntaxKind.CommaToken);
+                    }
+
+                    function spanInObjectLiteral(objectLiteral: ObjectLiteral): TypeScript.TextSpan {
+                        return spanInNodeWithChildNodeArray(objectLiteral.properties, spanInExpression, SyntaxKind.CommaToken);
+                    }
+
+                    function spanInPropertyAssignment(propertyAssignment: PropertyDeclaration): TypeScript.TextSpan {
+                        return spanInExpression(propertyAssignment.initializer);
+                    }
+                }
             }
 
             function spanInReturnStatement(returnStatement: ReturnStatement): TypeScript.TextSpan {
@@ -225,11 +411,17 @@ module ts.BreakpointResolver {
                 }
             }
 
+            function spanInExpressionIfAskedPosInExpression(expression: Expression): TypeScript.TextSpan {
+                if (expression && isAskedPosInside(expression)) {
+                    return spanInExpression(expression);
+                }
+            }
+
             function spanInWhileStatement(whileStatement: WhileStatement): TypeScript.TextSpan {
                 var closeParenPos = getLocalTokenStartPos(whileStatement.expression.end);
 
                 // Any pos before while expression close Paren - set breakpoint on whileExpression
-                if (askedPos <= closeParenPos) {
+                if (isAskedPosAtOrLeftOfPos(closeParenPos)) {
                     return spanInWhileExpression();
                 }
 
@@ -242,7 +434,7 @@ module ts.BreakpointResolver {
             }
 
             function spanInDoStatement(doStatement: DoStatement): TypeScript.TextSpan {
-                if (askedPos >= doStatement.statement.end) {
+                if (isAskedPosAtOrRightOfPos(doStatement.statement.end)) {
                     return spanInNodeConsideringTrivia(doStatement.statement.end,
                         // On statement of the doStatement
                         () => spanInStatement(doStatement.statement),
@@ -262,18 +454,17 @@ module ts.BreakpointResolver {
                 var closeParenPos = getLocalTokenStartPos(ifStatement.expression.end);
 
                 // Any pos before while expression close Paren - set breakpoint on whileExpression
-                if (askedPos <= closeParenPos) {
+                if (isAskedPosAtOrLeftOfPos(closeParenPos)) {
                     return spanInIfExpression();
                 }
 
                 // Set the breakpoint in thenStatement if there is no else statement or if the asked pos is inside thenStatement
-                if (!ifStatement.elseStatement || askedPos < ifStatement.thenStatement.end) {
+                if (!ifStatement.elseStatement || isAskedPosInLeftOfPosOrLineBreakPosOf(ifStatement.thenStatement)) {
                     return spanInStatementOrBlock(ifStatement.thenStatement, spanInIfExpression);
                 }
 
-                // Set breakpoint in else statement depending on position of then token
-                return  spanInNodeConsideringTrivia(ifStatement.thenStatement.end, spanInThenStatement,
-                    () => spanInStatement(ifStatement.elseStatement));
+                // Set breakpoint in else statement
+                return spanInStatement(ifStatement.elseStatement);
 
                 function spanInIfExpression() {
                     return textSpan(ifStatement.pos, closeParenPos + getTokenLength(SyntaxKind.CloseParenToken));
@@ -289,19 +480,19 @@ module ts.BreakpointResolver {
             }
 
             function spanInForStatement(forStatement: ForStatement): TypeScript.TextSpan {
-                if (askedPos < forStatement.statement.pos) {
+                if (isAskedPosAtOrLeftOfPos(forStatement.statement.pos)) {
                     var firstSemiColonPos = forStatement.declarations ? getLocalTokenStartPos(forStatement.declarations.end) :
                         forStatement.initializer ? getLocalTokenStartPos(forStatement.initializer.end) : undefined;
 
                     // Declaration or initializer
-                    if (askedPos <= firstSemiColonPos) {
+                    if (isAskedPosAtOrLeftOfPos(firstSemiColonPos)) {
                         return spanInDeclarationOrInitializerOfForStatement();
                     }
 
                     // Condition
                     var secondSemiColonPos = forStatement.condition ? getLocalTokenStartPos(forStatement.condition.end) :
                         firstSemiColonPos !== undefined ? getLocalTokenStartPos(firstSemiColonPos + getTokenLength(SyntaxKind.SemicolonToken)) : undefined;
-                    if (askedPos <= secondSemiColonPos) {
+                    if (isAskedPosAtOrLeftOfPos(secondSemiColonPos)) {
                         if (forStatement.condition) {
                             // If condition is present set breakpoint in the condition
                             return spanInExpression(forStatement.condition);
@@ -315,7 +506,7 @@ module ts.BreakpointResolver {
                     // Iterator
                     var closeParenPos = forStatement.iterator ? getLocalTokenStartPos(forStatement.iterator.end) :
                         secondSemiColonPos !== undefined ? getLocalTokenStartPos(secondSemiColonPos + getTokenLength(SyntaxKind.SemicolonToken)) : undefined;
-                    if (askedPos <= closeParenPos) {
+                    if (isAskedPosAtOrLeftOfPos(closeParenPos)) {
                         return spanInForStatementIteratorOrConditionOrDeclarationsOrInitializer();
                     }
                 }
@@ -364,7 +555,7 @@ module ts.BreakpointResolver {
                 var closeParenPos = getLocalTokenStartPos(forInStatement.expression.end);
 
                 // Any pos before for in expression close Paren - set breakpoint on for in expression
-                if (askedPos <= closeParenPos) {
+                if (isAskedPosAtOrLeftOfPos(closeParenPos)) {
                     return spanInForInExpression();
                 }
 
@@ -380,11 +571,11 @@ module ts.BreakpointResolver {
                 var closeParenPos = getLocalTokenStartPos(switchStatement.expression.end);
 
                 // Any pos before expression close Paren - set breakpoint on in expression
-                if (askedPos <= closeParenPos) {
+                if (isAskedPosAtOrLeftOfPos(closeParenPos)) {
                     return spanInSwitchExpression();
                 }
 
-                if (askedPos >= switchStatement.clauses.end) {
+                if (isAskedPosAtOrRightOfPos(switchStatement.clauses.end)) {
                     // Set breakpoint in the last clause's last statement
                     var lastClause = switchStatement.clauses[switchStatement.clauses.length - 1];
                     if (lastClause && lastClause.statements.length) {
@@ -400,25 +591,25 @@ module ts.BreakpointResolver {
                 }
 
                 function spanInCaseOrDefaultClause(caseOrDefaultClause: CaseOrDefaultClause) {
-                    if (askedPos <= caseOrDefaultClause.statements.pos) {
-                        return spanInStatement(caseOrDefaultClause.statements[0]);
+                    var spanFromCaseOrDefaultClauseExpression: TypeScript.TextSpan;
+                    if (caseOrDefaultClause.expression && isAskedPosInside(caseOrDefaultClause.expression)) {
+                        spanFromCaseOrDefaultClauseExpression = spanInExpression(caseOrDefaultClause.expression);
                     }
 
-                    return spanInStatements(caseOrDefaultClause.statements);
+                    return spanFromCaseOrDefaultClauseExpression ||
+                        (isAskedPosAtOrLeftOfPos(caseOrDefaultClause.statements.pos) ?
+                        spanInStatement(caseOrDefaultClause.statements[0]) :
+                        spanInStatements(caseOrDefaultClause.statements));
                 }
             }
 
             function spanInTryStatement(tryStatement: TryStatement): TypeScript.TextSpan {
-                if (tryStatement.finallyBlock && askedPos >= tryStatement.finallyBlock.pos) {
-                    return spanInNodeConsideringTrivia(tryStatement.finallyBlock.pos,
-                        () => spanInStatement(tryStatement.catchBlock || tryStatement.tryBlock),
-                        () => spanInStatement(tryStatement.finallyBlock));
+                if (tryStatement.finallyBlock && isAskedPosInRightOfPosOrLineBreakPos(tryStatement.finallyBlock)) {
+                        return spanInStatement(tryStatement.finallyBlock);
                 }
 
-                if (tryStatement.catchBlock && askedPos >= tryStatement.catchBlock.pos) {
-                    return spanInNodeConsideringTrivia(tryStatement.catchBlock.pos,
-                        () => spanInStatement(tryStatement.tryBlock),
-                        () => spanInStatement(tryStatement.catchBlock));
+                if (tryStatement.catchBlock && isAskedPosInRightOfPosOrLineBreakPos(tryStatement.catchBlock)) {
+                    return spanInStatement(tryStatement.catchBlock);
                 }
 
                 return spanInStatement(tryStatement.tryBlock);
@@ -441,22 +632,17 @@ module ts.BreakpointResolver {
                     return;
                 }
 
-                if (askedPos > enumDeclaration.members.end) {
+                // No members span on '}' of enum declaration
+                if (!enumDeclaration.members.length) {
+                    return spanInCloseBraceTokenOfEnumDeclaration();
+                }
+
+                if (isAskedPosAtOrRightOfPos(enumDeclaration.members.end)) {
                     return spanInNodeConsideringTrivia(enumDeclaration.members.end, () => spanInEnumMember(enumDeclaration.members[enumDeclaration.members.length - 1]),
                         spanInCloseBraceTokenOfEnumDeclaration);
                 }
 
-                if (askedPos < enumDeclaration.name.end) {
-                    // Set breakpoint on the whole 
-                    return spanInFirstEnumMember();
-                }
-
-                return spanInTriviaContainingSeparatingToken(enumDeclaration.name.end, SyntaxKind.OpenBraceToken, spanInFirstEnumMember,
-                    () => spanInNodeArray(enumDeclaration.members, spanInEnumMember, SyntaxKind.CommaToken));
-
-                function spanInFirstEnumMember() {
-                    return enumDeclaration.members.length ? spanInEnumMember(enumDeclaration.members[0]) : spanInCloseBraceTokenOfEnumDeclaration();
-                }
+                return spanInNodeWithChildNodeArray(enumDeclaration.members, spanInEnumMember, SyntaxKind.CommaToken);
 
                 function spanInCloseBraceTokenOfEnumDeclaration() {
                     return textSpan(getLocalTokenStartPos(enumDeclaration.members.end), enumDeclaration.end)
@@ -492,22 +678,17 @@ module ts.BreakpointResolver {
                     return;
                 }
 
-                if (askedPos > classDeclaration.members.end) {
+                // No members span on '}' of enum declaration
+                if (!classDeclaration.members.length) {
+                    return spanInCloseBraceTokenOfClassDeclaration();
+                }
+
+                if (isAskedPosAtOrRightOfPos(classDeclaration.members.end)) {
                     return spanInNodeConsideringTrivia(classDeclaration.members.end, () => spanInStatement(classDeclaration.members[classDeclaration.members.length - 1]),
                         spanInCloseBraceTokenOfClassDeclaration);
                 }
 
-                if (askedPos < classDeclaration.name.end) {
-                    // Set breakpoint on the whole 
-                    return spanInFirstClassMember();
-                }
-
-                return spanInTriviaContainingSeparatingToken(classDeclaration.name.end, SyntaxKind.OpenBraceToken, spanInFirstClassMember,
-                    () => spanInStatements(classDeclaration.members));
-
-                function spanInFirstClassMember() {
-                    return classDeclaration.members.length ? spanInStatement(classDeclaration.members[0]) : spanInCloseBraceTokenOfClassDeclaration();
-                }
+                return spanInNodeWithChildNodeArray(classDeclaration.members, spanInStatement, /*separatingToken*/undefined);
 
                 function spanInCloseBraceTokenOfClassDeclaration() {
                     return textSpan(getLocalTokenStartPos(classDeclaration.members.end), classDeclaration.end)
@@ -520,7 +701,7 @@ module ts.BreakpointResolver {
                 // If separating token is on same line as previous node, set the breakpoint span in prev node for the asked Pos on the same line
                 var separatingTokenPos = getLocalTokenStartPos(pos);
                 if (getLineOfLocalPosition(separatingTokenPos) === getLineOfLocalPosition(pos) && // separating token on same line
-                    askedPos < getLocalLineBreakPos(separatingTokenPos + getTokenLength(separatingToken))) { // asked pos is on line same as previous node
+                    askedPos < getPosOrLineBreakPos(separatingTokenPos + getTokenLength(separatingToken))) { // asked pos is on line same as previous node
                     return spanInPreviousNode();
                 }
 
@@ -530,9 +711,8 @@ module ts.BreakpointResolver {
         }
 
         function spanInNodeConsideringTrivia(pos: number, spanInPreviousNode: () => TypeScript.TextSpan, spanInNode: () => TypeScript.TextSpan) {
-            if (askedPos < getLocalLineBreakPos(pos) && // If the position is in the trivia
-                getLineOfLocalPosition(pos) < getLineOfLocalPosition(getLocalTokenStartPos(pos))) { // node token starts on different line
-                // token is on different line, set breakpoint on previous node for pos on prev node's line 
+            if (askedPos < getPosOrLineBreakPos(pos)) { 
+                // if askedPos is inside the skipped trivia on same line and the rest of the line contains only trivia
                 return spanInPreviousNode();
             }
 
@@ -542,6 +722,21 @@ module ts.BreakpointResolver {
 
         function spanInStatements(statements: NodeArray<Statement>) {
             return spanInNodeArray(statements, spanInStatement, /*separtingToken*/ undefined);
+        }
+
+        function spanInNodeWithChildNodeArray<T extends Node>(childNodes: NodeArray<T>, spanInChildNode: (node: T) => TypeScript.TextSpan, separtingToken: SyntaxKind): TypeScript.TextSpan {
+            // If asked pos is after child array, set breakpoint in the last node
+            if (isAskedPosAtOrRightOfPos(childNodes.end)) {
+                return spanInChildNode(childNodes[childNodes.length - 1]);
+            }
+
+            // If the position is before the first child, set breakpoint on the first node
+            if (isAskedPosAtOrLeftOfPos(childNodes.pos)) {
+                return spanInChildNode(childNodes[0]);
+            }
+
+            // Asked pos is inside the child nodes pos-end, use spanInNodeArray to get the result
+            return spanInNodeArray(childNodes, spanInChildNode, separtingToken);
         }
 
         function spanInNodeArray<T extends Node>(nodes: NodeArray<T>, spanInNode: (node: T) => TypeScript.TextSpan, separtingToken: SyntaxKind) {

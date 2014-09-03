@@ -769,76 +769,76 @@
 --------------------------------
 >>>>for (i = 0, j = 20; j < 20, i < 20; j++) {
 
-   |Pos: 351 SpanInfo: {"start":356,"length":13} Statement: 
-   |i = 0, j = 20
-    |Pos: 352 SpanInfo: {"start":356,"length":13} Statement: 
-    |i = 0, j = 20
-     |Pos: 353 SpanInfo: {"start":356,"length":13} Statement: 
-     |i = 0, j = 20
-      |Pos: 354 SpanInfo: {"start":356,"length":13} Statement: 
-      |i = 0, j = 20
-       |Pos: 355 SpanInfo: {"start":356,"length":13} Statement: 
-       |i = 0, j = 20
-        |Pos: 356 SpanInfo: {"start":356,"length":13} Statement: 
-        |i = 0, j = 20
-         |Pos: 357 SpanInfo: {"start":356,"length":13} Statement: 
-         |i = 0, j = 20
-          |Pos: 358 SpanInfo: {"start":356,"length":13} Statement: 
-          |i = 0, j = 20
-           |Pos: 359 SpanInfo: {"start":356,"length":13} Statement: 
-           |i = 0, j = 20
-            |Pos: 360 SpanInfo: {"start":356,"length":13} Statement: 
-            |i = 0, j = 20
-             |Pos: 361 SpanInfo: {"start":356,"length":13} Statement: 
-             |i = 0, j = 20
-              |Pos: 362 SpanInfo: {"start":356,"length":13} Statement: 
-              |i = 0, j = 20
-               |Pos: 363 SpanInfo: {"start":356,"length":13} Statement: 
-               |i = 0, j = 20
-                |Pos: 364 SpanInfo: {"start":356,"length":13} Statement: 
-                |i = 0, j = 20
-                 |Pos: 365 SpanInfo: {"start":356,"length":13} Statement: 
-                 |i = 0, j = 20
-                  |Pos: 366 SpanInfo: {"start":356,"length":13} Statement: 
-                  |i = 0, j = 20
-                   |Pos: 367 SpanInfo: {"start":356,"length":13} Statement: 
-                   |i = 0, j = 20
-                    |Pos: 368 SpanInfo: {"start":356,"length":13} Statement: 
-                    |i = 0, j = 20
-                     |Pos: 369 SpanInfo: {"start":356,"length":13} Statement: 
-                     |i = 0, j = 20
-                      |Pos: 370 SpanInfo: {"start":371,"length":14} Statement: 
-                      |j < 20, i < 20
-                       |Pos: 371 SpanInfo: {"start":371,"length":14} Statement: 
-                       |j < 20, i < 20
-                        |Pos: 372 SpanInfo: {"start":371,"length":14} Statement: 
-                        |j < 20, i < 20
-                         |Pos: 373 SpanInfo: {"start":371,"length":14} Statement: 
-                         |j < 20, i < 20
-                          |Pos: 374 SpanInfo: {"start":371,"length":14} Statement: 
-                          |j < 20, i < 20
-                           |Pos: 375 SpanInfo: {"start":371,"length":14} Statement: 
-                           |j < 20, i < 20
-                            |Pos: 376 SpanInfo: {"start":371,"length":14} Statement: 
-                            |j < 20, i < 20
-                             |Pos: 377 SpanInfo: {"start":371,"length":14} Statement: 
-                             |j < 20, i < 20
-                              |Pos: 378 SpanInfo: {"start":371,"length":14} Statement: 
-                              |j < 20, i < 20
-                               |Pos: 379 SpanInfo: {"start":371,"length":14} Statement: 
-                               |j < 20, i < 20
-                                |Pos: 380 SpanInfo: {"start":371,"length":14} Statement: 
-                                |j < 20, i < 20
-                                 |Pos: 381 SpanInfo: {"start":371,"length":14} Statement: 
-                                 |j < 20, i < 20
-                                  |Pos: 382 SpanInfo: {"start":371,"length":14} Statement: 
-                                  |j < 20, i < 20
-                                   |Pos: 383 SpanInfo: {"start":371,"length":14} Statement: 
-                                   |j < 20, i < 20
-                                    |Pos: 384 SpanInfo: {"start":371,"length":14} Statement: 
-                                    |j < 20, i < 20
-                                     |Pos: 385 SpanInfo: {"start":371,"length":14} Statement: 
-                                     |j < 20, i < 20
+   |Pos: 351 SpanInfo: {"start":356,"length":5} Statement: 
+   |i = 0
+    |Pos: 352 SpanInfo: {"start":356,"length":5} Statement: 
+    |i = 0
+     |Pos: 353 SpanInfo: {"start":356,"length":5} Statement: 
+     |i = 0
+      |Pos: 354 SpanInfo: {"start":356,"length":5} Statement: 
+      |i = 0
+       |Pos: 355 SpanInfo: {"start":356,"length":5} Statement: 
+       |i = 0
+        |Pos: 356 SpanInfo: {"start":356,"length":5} Statement: 
+        |i = 0
+         |Pos: 357 SpanInfo: {"start":356,"length":5} Statement: 
+         |i = 0
+          |Pos: 358 SpanInfo: {"start":356,"length":5} Statement: 
+          |i = 0
+           |Pos: 359 SpanInfo: {"start":356,"length":5} Statement: 
+           |i = 0
+            |Pos: 360 SpanInfo: {"start":356,"length":5} Statement: 
+            |i = 0
+             |Pos: 361 SpanInfo: {"start":356,"length":5} Statement: 
+             |i = 0
+              |Pos: 362 SpanInfo: {"start":363,"length":6} Statement: 
+              |j = 20
+               |Pos: 363 SpanInfo: {"start":363,"length":6} Statement: 
+               |j = 20
+                |Pos: 364 SpanInfo: {"start":363,"length":6} Statement: 
+                |j = 20
+                 |Pos: 365 SpanInfo: {"start":363,"length":6} Statement: 
+                 |j = 20
+                  |Pos: 366 SpanInfo: {"start":363,"length":6} Statement: 
+                  |j = 20
+                   |Pos: 367 SpanInfo: {"start":363,"length":6} Statement: 
+                   |j = 20
+                    |Pos: 368 SpanInfo: {"start":363,"length":6} Statement: 
+                    |j = 20
+                     |Pos: 369 SpanInfo: {"start":363,"length":6} Statement: 
+                     |j = 20
+                      |Pos: 370 SpanInfo: {"start":371,"length":6} Statement: 
+                      |j < 20
+                       |Pos: 371 SpanInfo: {"start":371,"length":6} Statement: 
+                       |j < 20
+                        |Pos: 372 SpanInfo: {"start":371,"length":6} Statement: 
+                        |j < 20
+                         |Pos: 373 SpanInfo: {"start":371,"length":6} Statement: 
+                         |j < 20
+                          |Pos: 374 SpanInfo: {"start":371,"length":6} Statement: 
+                          |j < 20
+                           |Pos: 375 SpanInfo: {"start":371,"length":6} Statement: 
+                           |j < 20
+                            |Pos: 376 SpanInfo: {"start":371,"length":6} Statement: 
+                            |j < 20
+                             |Pos: 377 SpanInfo: {"start":371,"length":6} Statement: 
+                             |j < 20
+                              |Pos: 378 SpanInfo: {"start":379,"length":6} Statement: 
+                              |i < 20
+                               |Pos: 379 SpanInfo: {"start":379,"length":6} Statement: 
+                               |i < 20
+                                |Pos: 380 SpanInfo: {"start":379,"length":6} Statement: 
+                                |i < 20
+                                 |Pos: 381 SpanInfo: {"start":379,"length":6} Statement: 
+                                 |i < 20
+                                  |Pos: 382 SpanInfo: {"start":379,"length":6} Statement: 
+                                  |i < 20
+                                   |Pos: 383 SpanInfo: {"start":379,"length":6} Statement: 
+                                   |i < 20
+                                    |Pos: 384 SpanInfo: {"start":379,"length":6} Statement: 
+                                    |i < 20
+                                     |Pos: 385 SpanInfo: {"start":379,"length":6} Statement: 
+                                     |i < 20
                                       |Pos: 386 SpanInfo: {"start":387,"length":3} Statement: 
                                       |j++
                                        |Pos: 387 SpanInfo: {"start":387,"length":3} Statement: 

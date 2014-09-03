@@ -400,5 +400,209 @@
                        |WScript.Echo(x)
 --------------------------------
 >>>>}
+
    |Pos: 180 SpanInfo: {"start":163,"length":15} Statement: 
    |WScript.Echo(x)
+    |Pos: 181 SpanInfo: {"start":163,"length":15} Statement: 
+    |WScript.Echo(x)
+--------------------------------
+>>>>var z = 10;
+
+   |Pos: 182 SpanInfo: {"start":182,"length":10} Statement: 
+   |var z = 10
+    |Pos: 183 SpanInfo: {"start":182,"length":10} Statement: 
+    |var z = 10
+     |Pos: 184 SpanInfo: {"start":182,"length":10} Statement: 
+     |var z = 10
+      |Pos: 185 SpanInfo: {"start":182,"length":10} Statement: 
+      |var z = 10
+       |Pos: 186 SpanInfo: {"start":182,"length":10} Statement: 
+       |var z = 10
+        |Pos: 187 SpanInfo: {"start":182,"length":10} Statement: 
+        |var z = 10
+         |Pos: 188 SpanInfo: {"start":182,"length":10} Statement: 
+         |var z = 10
+          |Pos: 189 SpanInfo: {"start":182,"length":10} Statement: 
+          |var z = 10
+           |Pos: 190 SpanInfo: {"start":182,"length":10} Statement: 
+           |var z = 10
+            |Pos: 191 SpanInfo: {"start":182,"length":10} Statement: 
+            |var z = 10
+             |Pos: 192 SpanInfo: {"start":182,"length":10} Statement: 
+             |var z = 10
+              |Pos: 193 SpanInfo: {"start":182,"length":10} Statement: 
+              |var z = 10
+--------------------------------
+>>>>for (x in function foo() {
+
+   |Pos: 194 SpanInfo: {"start":194,"length":54} Statement: 
+   |for (x in function foo() {
+   |    return new String();
+   |})
+    |Pos: 195 SpanInfo: {"start":194,"length":54} Statement: 
+    |for (x in function foo() {
+    |    return new String();
+    |})
+     |Pos: 196 SpanInfo: {"start":194,"length":54} Statement: 
+     |for (x in function foo() {
+     |    return new String();
+     |})
+      |Pos: 197 SpanInfo: {"start":194,"length":54} Statement: 
+      |for (x in function foo() {
+      |    return new String();
+      |})
+       |Pos: 198 SpanInfo: {"start":194,"length":54} Statement: 
+       |for (x in function foo() {
+       |    return new String();
+       |})
+        |Pos: 199 SpanInfo: {"start":194,"length":54} Statement: 
+        |for (x in function foo() {
+        |    return new String();
+        |})
+         |Pos: 200 SpanInfo: {"start":194,"length":54} Statement: 
+         |for (x in function foo() {
+         |    return new String();
+         |})
+          |Pos: 201 SpanInfo: {"start":194,"length":54} Statement: 
+          |for (x in function foo() {
+          |    return new String();
+          |})
+           |Pos: 202 SpanInfo: {"start":194,"length":54} Statement: 
+           |for (x in function foo() {
+           |    return new String();
+           |})
+            |Pos: 203 SpanInfo: {"start":225,"length":19} Statement: 
+            |return new String()
+             |Pos: 204 SpanInfo: {"start":225,"length":19} Statement: 
+             |return new String()
+              |Pos: 205 SpanInfo: {"start":225,"length":19} Statement: 
+              |return new String()
+               |Pos: 206 SpanInfo: {"start":225,"length":19} Statement: 
+               |return new String()
+                |Pos: 207 SpanInfo: {"start":225,"length":19} Statement: 
+                |return new String()
+                 |Pos: 208 SpanInfo: {"start":225,"length":19} Statement: 
+                 |return new String()
+                  |Pos: 209 SpanInfo: {"start":225,"length":19} Statement: 
+                  |return new String()
+                   |Pos: 210 SpanInfo: {"start":225,"length":19} Statement: 
+                   |return new String()
+                    |Pos: 211 SpanInfo: {"start":225,"length":19} Statement: 
+                    |return new String()
+                     |Pos: 212 SpanInfo: {"start":225,"length":19} Statement: 
+                     |return new String()
+                      |Pos: 213 SpanInfo: {"start":225,"length":19} Statement: 
+                      |return new String()
+                       |Pos: 214 SpanInfo: {"start":225,"length":19} Statement: 
+                       |return new String()
+                        |Pos: 215 SpanInfo: {"start":225,"length":19} Statement: 
+                        |return new String()
+                         |Pos: 216 SpanInfo: {"start":225,"length":19} Statement: 
+                         |return new String()
+                          |Pos: 217 SpanInfo: {"start":225,"length":19} Statement: 
+                          |return new String()
+                           |Pos: 218 SpanInfo: {"start":225,"length":19} Statement: 
+                           |return new String()
+                            |Pos: 219 SpanInfo: {"start":225,"length":19} Statement: 
+                            |return new String()
+                             |Pos: 220 SpanInfo: {"start":225,"length":19} Statement: 
+                             |return new String()
+--------------------------------
+>>>>    return new String();
+
+   |Pos: 221 SpanInfo: {"start":225,"length":19} Statement: 
+   |return new String()
+    |Pos: 222 SpanInfo: {"start":225,"length":19} Statement: 
+    |return new String()
+     |Pos: 223 SpanInfo: {"start":225,"length":19} Statement: 
+     |return new String()
+      |Pos: 224 SpanInfo: {"start":225,"length":19} Statement: 
+      |return new String()
+       |Pos: 225 SpanInfo: {"start":225,"length":19} Statement: 
+       |return new String()
+        |Pos: 226 SpanInfo: {"start":225,"length":19} Statement: 
+        |return new String()
+         |Pos: 227 SpanInfo: {"start":225,"length":19} Statement: 
+         |return new String()
+          |Pos: 228 SpanInfo: {"start":225,"length":19} Statement: 
+          |return new String()
+           |Pos: 229 SpanInfo: {"start":225,"length":19} Statement: 
+           |return new String()
+            |Pos: 230 SpanInfo: {"start":225,"length":19} Statement: 
+            |return new String()
+             |Pos: 231 SpanInfo: {"start":225,"length":19} Statement: 
+             |return new String()
+              |Pos: 232 SpanInfo: {"start":225,"length":19} Statement: 
+              |return new String()
+               |Pos: 233 SpanInfo: {"start":225,"length":19} Statement: 
+               |return new String()
+                |Pos: 234 SpanInfo: {"start":225,"length":19} Statement: 
+                |return new String()
+                 |Pos: 235 SpanInfo: {"start":225,"length":19} Statement: 
+                 |return new String()
+                  |Pos: 236 SpanInfo: {"start":225,"length":19} Statement: 
+                  |return new String()
+                   |Pos: 237 SpanInfo: {"start":225,"length":19} Statement: 
+                   |return new String()
+                    |Pos: 238 SpanInfo: {"start":225,"length":19} Statement: 
+                    |return new String()
+                     |Pos: 239 SpanInfo: {"start":225,"length":19} Statement: 
+                     |return new String()
+                      |Pos: 240 SpanInfo: {"start":225,"length":19} Statement: 
+                      |return new String()
+                       |Pos: 241 SpanInfo: {"start":225,"length":19} Statement: 
+                       |return new String()
+                        |Pos: 242 SpanInfo: {"start":225,"length":19} Statement: 
+                        |return new String()
+                         |Pos: 243 SpanInfo: {"start":225,"length":19} Statement: 
+                         |return new String()
+                          |Pos: 244 SpanInfo: {"start":225,"length":19} Statement: 
+                          |return new String()
+                           |Pos: 245 SpanInfo: {"start":225,"length":19} Statement: 
+                           |return new String()
+--------------------------------
+>>>>}) {
+
+   |Pos: 246 SpanInfo: {"start":246,"length":1} Statement: 
+   |}
+    |Pos: 247 SpanInfo: {"start":194,"length":54} Statement: 
+    |for (x in function foo() {
+    |    return new String();
+    |})
+     |Pos: 248 SpanInfo: {"start":194,"length":54} Statement: 
+     |for (x in function foo() {
+     |    return new String();
+     |})
+      |Pos: 249 SpanInfo: {"start":194,"length":54} Statement: 
+      |for (x in function foo() {
+      |    return new String();
+      |})
+       |Pos: 250 SpanInfo: {"start":194,"length":54} Statement: 
+       |for (x in function foo() {
+       |    return new String();
+       |})
+--------------------------------
+>>>>    z++;
+
+   |Pos: 251 SpanInfo: {"start":255,"length":3} Statement: 
+   |z++
+    |Pos: 252 SpanInfo: {"start":255,"length":3} Statement: 
+    |z++
+     |Pos: 253 SpanInfo: {"start":255,"length":3} Statement: 
+     |z++
+      |Pos: 254 SpanInfo: {"start":255,"length":3} Statement: 
+      |z++
+       |Pos: 255 SpanInfo: {"start":255,"length":3} Statement: 
+       |z++
+        |Pos: 256 SpanInfo: {"start":255,"length":3} Statement: 
+        |z++
+         |Pos: 257 SpanInfo: {"start":255,"length":3} Statement: 
+         |z++
+          |Pos: 258 SpanInfo: {"start":255,"length":3} Statement: 
+          |z++
+           |Pos: 259 SpanInfo: {"start":255,"length":3} Statement: 
+           |z++
+--------------------------------
+>>>>}
+   |Pos: 260 SpanInfo: {"start":255,"length":3} Statement: 
+   |z++

@@ -251,6 +251,7 @@
                    |while (a == 10)
 --------------------------------
 >>>>    a++;
+
    |Pos: 110 SpanInfo: {"start":114,"length":3} Statement: 
    |a++
     |Pos: 111 SpanInfo: {"start":114,"length":3} Statement: 
@@ -267,3 +268,191 @@
          |a++
           |Pos: 117 SpanInfo: {"start":114,"length":3} Statement: 
           |a++
+           |Pos: 118 SpanInfo: {"start":114,"length":3} Statement: 
+           |a++
+--------------------------------
+>>>>while ((function () {
+
+   |Pos: 119 SpanInfo: {"start":119,"length":52} Statement: 
+   |while ((function () {
+   |    return 30 * a;
+   |})() !== a)
+    |Pos: 120 SpanInfo: {"start":119,"length":52} Statement: 
+    |while ((function () {
+    |    return 30 * a;
+    |})() !== a)
+     |Pos: 121 SpanInfo: {"start":119,"length":52} Statement: 
+     |while ((function () {
+     |    return 30 * a;
+     |})() !== a)
+      |Pos: 122 SpanInfo: {"start":119,"length":52} Statement: 
+      |while ((function () {
+      |    return 30 * a;
+      |})() !== a)
+       |Pos: 123 SpanInfo: {"start":119,"length":52} Statement: 
+       |while ((function () {
+       |    return 30 * a;
+       |})() !== a)
+        |Pos: 124 SpanInfo: {"start":119,"length":52} Statement: 
+        |while ((function () {
+        |    return 30 * a;
+        |})() !== a)
+         |Pos: 125 SpanInfo: {"start":119,"length":52} Statement: 
+         |while ((function () {
+         |    return 30 * a;
+         |})() !== a)
+          |Pos: 126 SpanInfo: {"start":119,"length":52} Statement: 
+          |while ((function () {
+          |    return 30 * a;
+          |})() !== a)
+           |Pos: 127 SpanInfo: {"start":145,"length":13} Statement: 
+           |return 30 * a
+            |Pos: 128 SpanInfo: {"start":145,"length":13} Statement: 
+            |return 30 * a
+             |Pos: 129 SpanInfo: {"start":145,"length":13} Statement: 
+             |return 30 * a
+              |Pos: 130 SpanInfo: {"start":145,"length":13} Statement: 
+              |return 30 * a
+               |Pos: 131 SpanInfo: {"start":145,"length":13} Statement: 
+               |return 30 * a
+                |Pos: 132 SpanInfo: {"start":145,"length":13} Statement: 
+                |return 30 * a
+                 |Pos: 133 SpanInfo: {"start":145,"length":13} Statement: 
+                 |return 30 * a
+                  |Pos: 134 SpanInfo: {"start":145,"length":13} Statement: 
+                  |return 30 * a
+                   |Pos: 135 SpanInfo: {"start":145,"length":13} Statement: 
+                   |return 30 * a
+                    |Pos: 136 SpanInfo: {"start":145,"length":13} Statement: 
+                    |return 30 * a
+                     |Pos: 137 SpanInfo: {"start":145,"length":13} Statement: 
+                     |return 30 * a
+                      |Pos: 138 SpanInfo: {"start":145,"length":13} Statement: 
+                      |return 30 * a
+                       |Pos: 139 SpanInfo: {"start":145,"length":13} Statement: 
+                       |return 30 * a
+                        |Pos: 140 SpanInfo: {"start":145,"length":13} Statement: 
+                        |return 30 * a
+--------------------------------
+>>>>    return 30 * a;
+
+   |Pos: 141 SpanInfo: {"start":145,"length":13} Statement: 
+   |return 30 * a
+    |Pos: 142 SpanInfo: {"start":145,"length":13} Statement: 
+    |return 30 * a
+     |Pos: 143 SpanInfo: {"start":145,"length":13} Statement: 
+     |return 30 * a
+      |Pos: 144 SpanInfo: {"start":145,"length":13} Statement: 
+      |return 30 * a
+       |Pos: 145 SpanInfo: {"start":145,"length":13} Statement: 
+       |return 30 * a
+        |Pos: 146 SpanInfo: {"start":145,"length":13} Statement: 
+        |return 30 * a
+         |Pos: 147 SpanInfo: {"start":145,"length":13} Statement: 
+         |return 30 * a
+          |Pos: 148 SpanInfo: {"start":145,"length":13} Statement: 
+          |return 30 * a
+           |Pos: 149 SpanInfo: {"start":145,"length":13} Statement: 
+           |return 30 * a
+            |Pos: 150 SpanInfo: {"start":145,"length":13} Statement: 
+            |return 30 * a
+             |Pos: 151 SpanInfo: {"start":145,"length":13} Statement: 
+             |return 30 * a
+              |Pos: 152 SpanInfo: {"start":145,"length":13} Statement: 
+              |return 30 * a
+               |Pos: 153 SpanInfo: {"start":145,"length":13} Statement: 
+               |return 30 * a
+                |Pos: 154 SpanInfo: {"start":145,"length":13} Statement: 
+                |return 30 * a
+                 |Pos: 155 SpanInfo: {"start":145,"length":13} Statement: 
+                 |return 30 * a
+                  |Pos: 156 SpanInfo: {"start":145,"length":13} Statement: 
+                  |return 30 * a
+                   |Pos: 157 SpanInfo: {"start":145,"length":13} Statement: 
+                   |return 30 * a
+                    |Pos: 158 SpanInfo: {"start":145,"length":13} Statement: 
+                    |return 30 * a
+                     |Pos: 159 SpanInfo: {"start":145,"length":13} Statement: 
+                     |return 30 * a
+--------------------------------
+>>>>})() !== a) {
+
+   |Pos: 160 SpanInfo: {"start":160,"length":1} Statement: 
+   |}
+    |Pos: 161 SpanInfo: {"start":119,"length":52} Statement: 
+    |while ((function () {
+    |    return 30 * a;
+    |})() !== a)
+     |Pos: 162 SpanInfo: {"start":119,"length":52} Statement: 
+     |while ((function () {
+     |    return 30 * a;
+     |})() !== a)
+      |Pos: 163 SpanInfo: {"start":119,"length":52} Statement: 
+      |while ((function () {
+      |    return 30 * a;
+      |})() !== a)
+       |Pos: 164 SpanInfo: {"start":119,"length":52} Statement: 
+       |while ((function () {
+       |    return 30 * a;
+       |})() !== a)
+        |Pos: 165 SpanInfo: {"start":119,"length":52} Statement: 
+        |while ((function () {
+        |    return 30 * a;
+        |})() !== a)
+         |Pos: 166 SpanInfo: {"start":119,"length":52} Statement: 
+         |while ((function () {
+         |    return 30 * a;
+         |})() !== a)
+          |Pos: 167 SpanInfo: {"start":119,"length":52} Statement: 
+          |while ((function () {
+          |    return 30 * a;
+          |})() !== a)
+           |Pos: 168 SpanInfo: {"start":119,"length":52} Statement: 
+           |while ((function () {
+           |    return 30 * a;
+           |})() !== a)
+            |Pos: 169 SpanInfo: {"start":119,"length":52} Statement: 
+            |while ((function () {
+            |    return 30 * a;
+            |})() !== a)
+             |Pos: 170 SpanInfo: {"start":119,"length":52} Statement: 
+             |while ((function () {
+             |    return 30 * a;
+             |})() !== a)
+              |Pos: 171 SpanInfo: {"start":119,"length":52} Statement: 
+              |while ((function () {
+              |    return 30 * a;
+              |})() !== a)
+               |Pos: 172 SpanInfo: {"start":119,"length":52} Statement: 
+               |while ((function () {
+               |    return 30 * a;
+               |})() !== a)
+                |Pos: 173 SpanInfo: {"start":119,"length":52} Statement: 
+                |while ((function () {
+                |    return 30 * a;
+                |})() !== a)
+--------------------------------
+>>>>    a--;
+
+   |Pos: 174 SpanInfo: {"start":178,"length":3} Statement: 
+   |a--
+    |Pos: 175 SpanInfo: {"start":178,"length":3} Statement: 
+    |a--
+     |Pos: 176 SpanInfo: {"start":178,"length":3} Statement: 
+     |a--
+      |Pos: 177 SpanInfo: {"start":178,"length":3} Statement: 
+      |a--
+       |Pos: 178 SpanInfo: {"start":178,"length":3} Statement: 
+       |a--
+        |Pos: 179 SpanInfo: {"start":178,"length":3} Statement: 
+        |a--
+         |Pos: 180 SpanInfo: {"start":178,"length":3} Statement: 
+         |a--
+          |Pos: 181 SpanInfo: {"start":178,"length":3} Statement: 
+          |a--
+           |Pos: 182 SpanInfo: {"start":178,"length":3} Statement: 
+           |a--
+--------------------------------
+>>>>}
+   |Pos: 183 SpanInfo: {"start":178,"length":3} Statement: 
+   |a--

@@ -14,4 +14,9 @@
 ////    i++;
 ////} 
 ////while (i < 30);
+////do {
+////    i--;
+////} while ((function () {
+////        return 30 * i;
+////    })() !== i); 
 verify.baselineCurrentFileBreakpointLocations();

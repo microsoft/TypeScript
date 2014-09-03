@@ -775,5 +775,309 @@
             |x = x * 10
 --------------------------------
 >>>>}
+
    |Pos: 347 SpanInfo: {"start":325,"length":10} Statement: 
    |x = x * 10
+    |Pos: 348 SpanInfo: {"start":325,"length":10} Statement: 
+    |x = x * 10
+--------------------------------
+>>>>switch ((function foo() {
+
+   |Pos: 349 SpanInfo: {"start":349,"length":50} Statement: 
+   |switch ((function foo() {
+   |    return x * 30;
+   |})())
+    |Pos: 350 SpanInfo: {"start":349,"length":50} Statement: 
+    |switch ((function foo() {
+    |    return x * 30;
+    |})())
+     |Pos: 351 SpanInfo: {"start":349,"length":50} Statement: 
+     |switch ((function foo() {
+     |    return x * 30;
+     |})())
+      |Pos: 352 SpanInfo: {"start":349,"length":50} Statement: 
+      |switch ((function foo() {
+      |    return x * 30;
+      |})())
+       |Pos: 353 SpanInfo: {"start":349,"length":50} Statement: 
+       |switch ((function foo() {
+       |    return x * 30;
+       |})())
+        |Pos: 354 SpanInfo: {"start":349,"length":50} Statement: 
+        |switch ((function foo() {
+        |    return x * 30;
+        |})())
+         |Pos: 355 SpanInfo: {"start":349,"length":50} Statement: 
+         |switch ((function foo() {
+         |    return x * 30;
+         |})())
+          |Pos: 356 SpanInfo: {"start":349,"length":50} Statement: 
+          |switch ((function foo() {
+          |    return x * 30;
+          |})())
+           |Pos: 357 SpanInfo: {"start":349,"length":50} Statement: 
+           |switch ((function foo() {
+           |    return x * 30;
+           |})())
+            |Pos: 358 SpanInfo: {"start":379,"length":13} Statement: 
+            |return x * 30
+             |Pos: 359 SpanInfo: {"start":379,"length":13} Statement: 
+             |return x * 30
+              |Pos: 360 SpanInfo: {"start":379,"length":13} Statement: 
+              |return x * 30
+               |Pos: 361 SpanInfo: {"start":379,"length":13} Statement: 
+               |return x * 30
+                |Pos: 362 SpanInfo: {"start":379,"length":13} Statement: 
+                |return x * 30
+                 |Pos: 363 SpanInfo: {"start":379,"length":13} Statement: 
+                 |return x * 30
+                  |Pos: 364 SpanInfo: {"start":379,"length":13} Statement: 
+                  |return x * 30
+                   |Pos: 365 SpanInfo: {"start":379,"length":13} Statement: 
+                   |return x * 30
+                    |Pos: 366 SpanInfo: {"start":379,"length":13} Statement: 
+                    |return x * 30
+                     |Pos: 367 SpanInfo: {"start":379,"length":13} Statement: 
+                     |return x * 30
+                      |Pos: 368 SpanInfo: {"start":379,"length":13} Statement: 
+                      |return x * 30
+                       |Pos: 369 SpanInfo: {"start":379,"length":13} Statement: 
+                       |return x * 30
+                        |Pos: 370 SpanInfo: {"start":379,"length":13} Statement: 
+                        |return x * 30
+                         |Pos: 371 SpanInfo: {"start":379,"length":13} Statement: 
+                         |return x * 30
+                          |Pos: 372 SpanInfo: {"start":379,"length":13} Statement: 
+                          |return x * 30
+                           |Pos: 373 SpanInfo: {"start":379,"length":13} Statement: 
+                           |return x * 30
+                            |Pos: 374 SpanInfo: {"start":379,"length":13} Statement: 
+                            |return x * 30
+--------------------------------
+>>>>    return x * 30;
+
+   |Pos: 375 SpanInfo: {"start":379,"length":13} Statement: 
+   |return x * 30
+    |Pos: 376 SpanInfo: {"start":379,"length":13} Statement: 
+    |return x * 30
+     |Pos: 377 SpanInfo: {"start":379,"length":13} Statement: 
+     |return x * 30
+      |Pos: 378 SpanInfo: {"start":379,"length":13} Statement: 
+      |return x * 30
+       |Pos: 379 SpanInfo: {"start":379,"length":13} Statement: 
+       |return x * 30
+        |Pos: 380 SpanInfo: {"start":379,"length":13} Statement: 
+        |return x * 30
+         |Pos: 381 SpanInfo: {"start":379,"length":13} Statement: 
+         |return x * 30
+          |Pos: 382 SpanInfo: {"start":379,"length":13} Statement: 
+          |return x * 30
+           |Pos: 383 SpanInfo: {"start":379,"length":13} Statement: 
+           |return x * 30
+            |Pos: 384 SpanInfo: {"start":379,"length":13} Statement: 
+            |return x * 30
+             |Pos: 385 SpanInfo: {"start":379,"length":13} Statement: 
+             |return x * 30
+              |Pos: 386 SpanInfo: {"start":379,"length":13} Statement: 
+              |return x * 30
+               |Pos: 387 SpanInfo: {"start":379,"length":13} Statement: 
+               |return x * 30
+                |Pos: 388 SpanInfo: {"start":379,"length":13} Statement: 
+                |return x * 30
+                 |Pos: 389 SpanInfo: {"start":379,"length":13} Statement: 
+                 |return x * 30
+                  |Pos: 390 SpanInfo: {"start":379,"length":13} Statement: 
+                  |return x * 30
+                   |Pos: 391 SpanInfo: {"start":379,"length":13} Statement: 
+                   |return x * 30
+                    |Pos: 392 SpanInfo: {"start":379,"length":13} Statement: 
+                    |return x * 30
+                     |Pos: 393 SpanInfo: {"start":379,"length":13} Statement: 
+                     |return x * 30
+--------------------------------
+>>>>})()) {
+
+   |Pos: 394 SpanInfo: {"start":394,"length":1} Statement: 
+   |}
+    |Pos: 395 SpanInfo: {"start":349,"length":50} Statement: 
+    |switch ((function foo() {
+    |    return x * 30;
+    |})())
+     |Pos: 396 SpanInfo: {"start":349,"length":50} Statement: 
+     |switch ((function foo() {
+     |    return x * 30;
+     |})())
+      |Pos: 397 SpanInfo: {"start":349,"length":50} Statement: 
+      |switch ((function foo() {
+      |    return x * 30;
+      |})())
+       |Pos: 398 SpanInfo: {"start":349,"length":50} Statement: 
+       |switch ((function foo() {
+       |    return x * 30;
+       |})())
+        |Pos: 399 SpanInfo: {"start":349,"length":50} Statement: 
+        |switch ((function foo() {
+        |    return x * 30;
+        |})())
+         |Pos: 400 SpanInfo: {"start":349,"length":50} Statement: 
+         |switch ((function foo() {
+         |    return x * 30;
+         |})())
+          |Pos: 401 SpanInfo: {"start":349,"length":50} Statement: 
+          |switch ((function foo() {
+          |    return x * 30;
+          |})())
+--------------------------------
+>>>>    case (function bar() {
+
+   |Pos: 402 SpanInfo: {"start":466,"length":3} Statement: 
+   |x++
+    |Pos: 403 SpanInfo: {"start":466,"length":3} Statement: 
+    |x++
+     |Pos: 404 SpanInfo: {"start":466,"length":3} Statement: 
+     |x++
+      |Pos: 405 SpanInfo: {"start":466,"length":3} Statement: 
+      |x++
+       |Pos: 406 SpanInfo: {"start":466,"length":3} Statement: 
+       |x++
+        |Pos: 407 SpanInfo: {"start":466,"length":3} Statement: 
+        |x++
+         |Pos: 408 SpanInfo: {"start":466,"length":3} Statement: 
+         |x++
+          |Pos: 409 SpanInfo: {"start":466,"length":3} Statement: 
+          |x++
+           |Pos: 410 SpanInfo: {"start":466,"length":3} Statement: 
+           |x++
+            |Pos: 411 SpanInfo: {"start":466,"length":3} Statement: 
+            |x++
+             |Pos: 412 SpanInfo: {"start":437,"length":9} Statement: 
+             |return 30
+              |Pos: 413 SpanInfo: {"start":437,"length":9} Statement: 
+              |return 30
+               |Pos: 414 SpanInfo: {"start":437,"length":9} Statement: 
+               |return 30
+                |Pos: 415 SpanInfo: {"start":437,"length":9} Statement: 
+                |return 30
+                 |Pos: 416 SpanInfo: {"start":437,"length":9} Statement: 
+                 |return 30
+                  |Pos: 417 SpanInfo: {"start":437,"length":9} Statement: 
+                  |return 30
+                   |Pos: 418 SpanInfo: {"start":437,"length":9} Statement: 
+                   |return 30
+                    |Pos: 419 SpanInfo: {"start":437,"length":9} Statement: 
+                    |return 30
+                     |Pos: 420 SpanInfo: {"start":437,"length":9} Statement: 
+                     |return 30
+                      |Pos: 421 SpanInfo: {"start":437,"length":9} Statement: 
+                      |return 30
+                       |Pos: 422 SpanInfo: {"start":437,"length":9} Statement: 
+                       |return 30
+                        |Pos: 423 SpanInfo: {"start":437,"length":9} Statement: 
+                        |return 30
+                         |Pos: 424 SpanInfo: {"start":437,"length":9} Statement: 
+                         |return 30
+                          |Pos: 425 SpanInfo: {"start":437,"length":9} Statement: 
+                          |return 30
+                           |Pos: 426 SpanInfo: {"start":437,"length":9} Statement: 
+                           |return 30
+                            |Pos: 427 SpanInfo: {"start":437,"length":9} Statement: 
+                            |return 30
+                             |Pos: 428 SpanInfo: {"start":437,"length":9} Statement: 
+                             |return 30
+--------------------------------
+>>>>        return 30;
+
+   |Pos: 429 SpanInfo: {"start":437,"length":9} Statement: 
+   |return 30
+    |Pos: 430 SpanInfo: {"start":437,"length":9} Statement: 
+    |return 30
+     |Pos: 431 SpanInfo: {"start":437,"length":9} Statement: 
+     |return 30
+      |Pos: 432 SpanInfo: {"start":437,"length":9} Statement: 
+      |return 30
+       |Pos: 433 SpanInfo: {"start":437,"length":9} Statement: 
+       |return 30
+        |Pos: 434 SpanInfo: {"start":437,"length":9} Statement: 
+        |return 30
+         |Pos: 435 SpanInfo: {"start":437,"length":9} Statement: 
+         |return 30
+          |Pos: 436 SpanInfo: {"start":437,"length":9} Statement: 
+          |return 30
+           |Pos: 437 SpanInfo: {"start":437,"length":9} Statement: 
+           |return 30
+            |Pos: 438 SpanInfo: {"start":437,"length":9} Statement: 
+            |return 30
+             |Pos: 439 SpanInfo: {"start":437,"length":9} Statement: 
+             |return 30
+              |Pos: 440 SpanInfo: {"start":437,"length":9} Statement: 
+              |return 30
+               |Pos: 441 SpanInfo: {"start":437,"length":9} Statement: 
+               |return 30
+                |Pos: 442 SpanInfo: {"start":437,"length":9} Statement: 
+                |return 30
+                 |Pos: 443 SpanInfo: {"start":437,"length":9} Statement: 
+                 |return 30
+                  |Pos: 444 SpanInfo: {"start":437,"length":9} Statement: 
+                  |return 30
+                   |Pos: 445 SpanInfo: {"start":437,"length":9} Statement: 
+                   |return 30
+                    |Pos: 446 SpanInfo: {"start":437,"length":9} Statement: 
+                    |return 30
+                     |Pos: 447 SpanInfo: {"start":437,"length":9} Statement: 
+                     |return 30
+--------------------------------
+>>>>    })():
+
+   |Pos: 448 SpanInfo: {"start":452,"length":1} Statement: 
+   |}
+    |Pos: 449 SpanInfo: {"start":452,"length":1} Statement: 
+    |}
+     |Pos: 450 SpanInfo: {"start":452,"length":1} Statement: 
+     |}
+      |Pos: 451 SpanInfo: {"start":452,"length":1} Statement: 
+      |}
+       |Pos: 452 SpanInfo: {"start":452,"length":1} Statement: 
+       |}
+        |Pos: 453 SpanInfo: {"start":466,"length":3} Statement: 
+        |x++
+         |Pos: 454 SpanInfo: {"start":466,"length":3} Statement: 
+         |x++
+          |Pos: 455 SpanInfo: {"start":466,"length":3} Statement: 
+          |x++
+           |Pos: 456 SpanInfo: {"start":466,"length":3} Statement: 
+           |x++
+            |Pos: 457 SpanInfo: {"start":466,"length":3} Statement: 
+            |x++
+--------------------------------
+>>>>        x++;
+
+   |Pos: 458 SpanInfo: {"start":466,"length":3} Statement: 
+   |x++
+    |Pos: 459 SpanInfo: {"start":466,"length":3} Statement: 
+    |x++
+     |Pos: 460 SpanInfo: {"start":466,"length":3} Statement: 
+     |x++
+      |Pos: 461 SpanInfo: {"start":466,"length":3} Statement: 
+      |x++
+       |Pos: 462 SpanInfo: {"start":466,"length":3} Statement: 
+       |x++
+        |Pos: 463 SpanInfo: {"start":466,"length":3} Statement: 
+        |x++
+         |Pos: 464 SpanInfo: {"start":466,"length":3} Statement: 
+         |x++
+          |Pos: 465 SpanInfo: {"start":466,"length":3} Statement: 
+          |x++
+           |Pos: 466 SpanInfo: {"start":466,"length":3} Statement: 
+           |x++
+            |Pos: 467 SpanInfo: {"start":466,"length":3} Statement: 
+            |x++
+             |Pos: 468 SpanInfo: {"start":466,"length":3} Statement: 
+             |x++
+              |Pos: 469 SpanInfo: {"start":466,"length":3} Statement: 
+              |x++
+               |Pos: 470 SpanInfo: {"start":466,"length":3} Statement: 
+               |x++
+--------------------------------
+>>>>}
+   |Pos: 471 SpanInfo: {"start":466,"length":3} Statement: 
+   |x++
