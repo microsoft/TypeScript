@@ -32,8 +32,10 @@
 --------------------------------
 >>>>}
 
-   |Pos: 24 SpanInfo: undefined Statement: 
-    |Pos: 25 SpanInfo: undefined Statement: 
+   |Pos: 24 SpanInfo: {"start":24,"length":1} Statement: 
+   |}
+    |Pos: 25 SpanInfo: {"start":24,"length":1} Statement: 
+    |}
 --------------------------------
 >>>>export = a;
    |Pos: 26 SpanInfo: {"start":26,"length":10} Statement: 

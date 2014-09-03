@@ -44,7 +44,13 @@ module ts.BreakpointResolver {
             switch (statement.kind) {
                 case SyntaxKind.VariableStatement:
                     return spanInVariableStatement(<VariableStatement>statement);
+                case SyntaxKind.Property:
+                    return spanInProperty(<PropertyDeclaration>statement);
                 case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.Method:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
                     return spanInFunctionDeclaration(<FunctionDeclaration>statement);
                 case SyntaxKind.ExpressionStatement:
                     return spanInExpressionStatement(<ExpressionStatement>statement);
@@ -86,6 +92,8 @@ module ts.BreakpointResolver {
                     return spanInEnumDeclaration(<EnumDeclaration>statement);
                 case SyntaxKind.ModuleDeclaration:
                     return spanInModuleDeclaration(<ModuleDeclaration>statement);
+                case SyntaxKind.ClassDeclaration:
+                    return spanInClassDeclaration(<ClassDeclaration>statement);
             }
 
             function spanInVariableStatement(variableStatement: VariableStatement): TypeScript.TextSpan {
@@ -95,6 +103,10 @@ module ts.BreakpointResolver {
                 }
 
                 return spanInVariableDeclarations(variableStatement.declarations, () => variableStatement.pos);
+            }
+
+            function spanInProperty(propertyDeclaration: PropertyDeclaration): TypeScript.TextSpan {
+                return spanInVariableDeclarations(<NodeArray<PropertyDeclaration>>[propertyDeclaration], () => propertyDeclaration.pos);
             }
 
             function spanInVariableDeclarations(declarations: NodeArray<VariableDeclaration>, getFirstDeclarationPos: () => number): TypeScript.TextSpan {
@@ -149,7 +161,7 @@ module ts.BreakpointResolver {
 
                 function spanInParameterDeclaration(parameter: ParameterDeclaration): TypeScript.TextSpan {
                     // Breakpoint is possible on parameter only if it has initializer or is a rest parameter
-                    if (parameter.initializer || parameter.flags & NodeFlags.Rest) {
+                    if (parameter.initializer || parameter.flags & (NodeFlags.Rest| NodeFlags.Public | NodeFlags.Private)) {
                         // If this is first variable declaration, the span starts at the variable statement pos so we can include var keyword
                         return textSpan(parameter.pos, parameter.end);
                     }
@@ -473,6 +485,33 @@ module ts.BreakpointResolver {
                     return spanInStatement(moduleDeclaration.body);
                 }
                 return spanInBlock(<Block>moduleDeclaration.body, /*canSetBreakpointOnCloseBrace*/ true);
+            }
+
+            function spanInClassDeclaration(classDeclaration: ClassDeclaration): TypeScript.TextSpan {
+                if (classDeclaration.flags & NodeFlags.Ambient) {
+                    return;
+                }
+
+                if (askedPos > classDeclaration.members.end) {
+                    return spanInNodeConsideringTrivia(classDeclaration.members.end, () => spanInStatement(classDeclaration.members[classDeclaration.members.length - 1]),
+                        spanInCloseBraceTokenOfClassDeclaration);
+                }
+
+                if (askedPos < classDeclaration.name.end) {
+                    // Set breakpoint on the whole 
+                    return spanInFirstClassMember();
+                }
+
+                return spanInTriviaContainingSeparatingToken(classDeclaration.name.end, SyntaxKind.OpenBraceToken, spanInFirstClassMember,
+                    () => spanInStatements(classDeclaration.members));
+
+                function spanInFirstClassMember() {
+                    return classDeclaration.members.length ? spanInStatement(classDeclaration.members[0]) : spanInCloseBraceTokenOfClassDeclaration();
+                }
+
+                function spanInCloseBraceTokenOfClassDeclaration() {
+                    return textSpan(getLocalTokenStartPos(classDeclaration.members.end), classDeclaration.end)
+                }
             }
         }
 
