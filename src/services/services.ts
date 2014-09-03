@@ -81,16 +81,16 @@ module ts {
     }
 
     export interface MethodDeclaration extends HasModifiers {
-        getKeywordToken?: Node;
-        setKeywordToken?: Node;
+        getKeyword?: Node;
+        setKeyword?: Node;
     }
 
     export interface HasModifiers {
-        publicKeywordToken?: Node;
-        privateKeywordToken?: Node;
-        staticKeywordToken?: Node;
-        exportKeywordToken?: Node;
-        declareKeywordToken?: Node;
+        publicKeyword?: Node;
+        privateKeyword?: Node;
+        staticKeyword?: Node;
+        exportKeyword?: Node;
+        declareKeyword?: Node;
     }
 
     export interface ParsedSignature extends HasOpenParenAndCloseParen, HasLessThanAndGreaterThan {
@@ -165,7 +165,7 @@ module ts {
         colonToken?: Node;
     }
 
-    export interface ObjectLiteral extends Block {
+    export interface ObjectLiteral extends HasOpenBraceAndCloseBrace {
     }
 
     export interface FunctionDeclaration extends HasModifiers {
@@ -193,7 +193,7 @@ module ts {
     }
 
     export interface ExportAssignment {
-        exportKeywordToken?: Node;
+        exportKeyword?: Node;
         equalsToken?: Node;
     }
 
@@ -217,7 +217,7 @@ module ts {
     export interface ImportDeclaration extends HasOpenParenAndCloseParen, HasModifiers {
         importKeyword?: Node;
         equalsToken?: Node;
-        openParenToken?: Node;
+        requireKeyword?: Node;
     }
 
     export interface InterfaceDeclaration extends HasOpenBraceAndCloseBrace, HasModifiers {
@@ -3704,10 +3704,40 @@ module ts {
             getSignatureConstructor: () => SignatureObject,
         };
 
+        var tokenNames: string[] = [];
+
+        function getDefaultPropertyNameForSyntaxKind(kind: SyntaxKind): string {
+            // SyntaxKind type has some marker entries at the end, in reverse mapping these markers overwrite the actual values
+            // since we don't want to get FirstPunctuation instead of OpenBraceToken we need to partially override the generated reverse mapping.
+            switch (kind) {
+                case SyntaxKind.EqualsToken:
+                    return "equalsToken";
+                case SyntaxKind.CaretEqualsToken:
+                    return "caretEqualsToken";
+                case SyntaxKind.BreakKeyword:
+                    return "breakKeyword";
+                case SyntaxKind.WithKeyword:
+                    return "withKeyword";
+                case SyntaxKind.StringKeyword:
+                    return "stringKeyword";
+                case SyntaxKind.ImplementsKeyword:
+                    return "implementsKeyword";
+                case SyntaxKind.YieldKeyword:
+                    return "yieldKeyword";
+                case SyntaxKind.OpenBraceToken:
+                    return "openBraceToken";
+                default:
+                    var name = SyntaxKind[kind];
+                    return name.charAt(0).toLowerCase() + name.substring(1);
+            }
+        }
+
         parserHooks = {
-            onParseToken(kind: SyntaxKind, parent: Node, propertyName: string, isMissing: boolean, startPos: number, endPos: number): void {
+            onParseToken(kind: SyntaxKind, parent: Node, isMissing: boolean, startPos: number, endPos: number, propertyName?: string): void {
+                var kind = isMissing ? SyntaxKind.Missing : kind;
                 var node = createNode(kind, startPos, endPos, 0);
-                (<any>parent)[propertyName] = node;
+                var name = propertyName || tokenNames[kind] || (tokenNames[kind] = getDefaultPropertyNameForSyntaxKind(kind));
+                (<any>parent)[name] = node;
             },
             onParseComma<T>(parent: NodeArray<T>, startPos: number, endPos: number): void {
                 var commas = parent.commaTokens || (parent.commaTokens = []);

@@ -530,7 +530,7 @@ module ts {
     }
 
     export interface ParserHooks {
-        onParseToken(kind: SyntaxKind, parent: Node, propertyName: string, isMissing: boolean, startPos: number, endPos: number): void;
+        onParseToken(kind: SyntaxKind, parent: Node, isMissing: boolean, startPos: number, endPos: number, propertyName: string): void;
         onParseComma<T>(parent: NodeArray<T>, startPos: number, endPos: number): void;
     }
 
