@@ -2852,7 +2852,7 @@ module ts {
             var emitDeclaration = program.getCompilerOptions().declaration;
             var emitResult: EmitOutput = {
                 outputFiles: [],
-                emitOutputResult: null,
+                emitOutputResult: undefined,
             };
 
             // Initialize writter for CompilerHost.writeFile
@@ -2862,29 +2862,31 @@ module ts {
                     writeByteOrderMark: writeByteOrderMark,
                     text: data
                 }
-
                 emitResult.outputFiles.push(outputFile);
             }
 
-            // Get syntactic diagnostics
             var syntacticDiagnostics = emitToSingleFile
                 ? program.getDiagnostics(getSourceFile(filename).getSourceFile())
                 : program.getDiagnostics();
             program.getGlobalDiagnostics();
 
+            // If there is any syntactic error, terminate the process
             if (containErrors(syntacticDiagnostics)) {
                 emitResult.emitOutputResult = EmitOutputResult.FailedBecauseOfSyntaxErrors;
                 return emitResult;
             }
 
-            // Perform semantic and forace a type check before emit to ensure that all symbols are updated
+            // Perform semantic and force a type check before emit to ensure that all symbols are updated
             var semanticDiagnostics = emitToSingleFile
                 ? getFullTypeCheckChecker().getDiagnostics(getSourceFile(filename).getSourceFile())
                 : getFullTypeCheckChecker().getDiagnostics();
             getFullTypeCheckChecker().getGlobalDiagnostics();
-            getFullTypeCheckChecker().emitFiles();
+            var emitOutput = getFullTypeCheckChecker().emitFiles();
 
             if (emitDeclaration && containErrors(semanticDiagnostics)) {
+                emitResult.emitOutputResult = EmitOutputResult.FailedToGenerateDeclarationsBecauseOfSemanticErrors;
+            }
+            else if (emitDeclaration && containErrors(emitOutput.errors)) {
                 emitResult.emitOutputResult = EmitOutputResult.FailedToGenerateDeclarationsBecauseOfSemanticErrors;
             }
             else {
@@ -2892,7 +2894,8 @@ module ts {
             }
 
             // Reset writter back to underfined to make sure that we produce an error message if CompilerHost.writeFile method is called when we are not in an emitting stage
-            return null;
+            this.writter = undefined;
+            return emitResult;
         }
 
         /// Syntactic features

@@ -34,7 +34,7 @@ module ts {
         var newLine = program.getCompilerHost().getNewLine();
 
         function getSourceFilePathInNewDir(newDirPath: string, sourceFile: SourceFile) {
-            var sourceFilePath = getNormalizedPathFromPathCompoments(getNormalizedPathComponents(sourceFile.filename, compilerHost.getCurrentDirectory()));
+            var sourceFilePath = getNormalizedPathFromPathCompoments(getNormalizedPathComponents(sourceFile.filename, compilerHost.getCurrentDirectory));
             sourceFilePath = sourceFilePath.replace(program.getCommonSourceDirectory(), "");
             return combinePaths(newDirPath, sourceFilePath);
         }
@@ -523,7 +523,7 @@ module ts {
 
                     sourceMapData.sourceMapSources.push(getRelativePathToDirectoryOrUrl(sourcesDirectoryPath,
                         node.filename,
-                        compilerHost.getCurrentDirectory(),
+                        compilerHost.getCurrentDirectory,
                     /*isAbsolutePathAnUrl*/ true));
                     sourceMapSourceIndex = sourceMapData.sourceMapSources.length - 1;
 
@@ -640,7 +640,7 @@ module ts {
                         sourceMapData.jsSourceMappingURL = getRelativePathToDirectoryOrUrl(
                             getDirectoryPath(normalizePath(jsFilePath)), // get the relative sourceMapDir path based on jsFilePath
                             combinePaths(sourceMapDir, sourceMapData.jsSourceMappingURL), // this is where user expects to see sourceMap
-                            compilerHost.getCurrentDirectory(),
+                            compilerHost.getCurrentDirectory,
                         /*isAbsolutePathAnUrl*/ true);
                     }
                     else {
@@ -3089,7 +3089,7 @@ module ts {
                 declFileName = getRelativePathToDirectoryOrUrl(
                     getDirectoryPath(normalizeSlashes(jsFilePath)),
                     declFileName,
-                    compilerHost.getCurrentDirectory(),
+                    compilerHost.getCurrentDirectory,
                 /*isAbsolutePathAnUrl*/ false);
 
                 referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
