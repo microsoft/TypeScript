@@ -135,6 +135,8 @@ module Harness.LanguageService {
 
         private fileNameToScript: ts.Map<ScriptInfo> = {};
 
+        private settings: any = {};
+
         constructor(private cancellationToken: ts.CancellationToken = CancellationToken.None) {
         }
 
@@ -179,6 +181,14 @@ module Harness.LanguageService {
             throw new Error("No script with name '" + fileName + "'");
         }
 
+        public getDefaultLibFilename(): string {
+            return undefined;
+        }
+
+        public getCurrentDirectory(): string {
+            return undefined;
+        }
+
         //////////////////////////////////////////////////////////////////////
         // ILogger implementation
         //
@@ -199,7 +209,7 @@ module Harness.LanguageService {
 
         /// Returns json for Tools.CompilationSettings
         public getCompilationSettings(): string {
-            return JSON.stringify({}); // i.e. default settings
+            return JSON.stringify(this.settings);
         }
 
         public getCancellationToken(): ts.CancellationToken {
@@ -234,6 +244,12 @@ module Harness.LanguageService {
         public getLanguageService(): ts.LanguageServiceShim {
             this.ls = new TypeScript.Services.TypeScriptServicesFactory().createLanguageServiceShim(this);
             return this.ls;
+        }
+
+        public setCompilationSettings(settings: any) {
+            for (var key in settings) {
+                this.settings[key] = settings[key];
+            }
         }
 
         /** Return a new instance of the classifier service shim */

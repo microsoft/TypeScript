@@ -189,6 +189,15 @@ module FourSlash {
         // Whether or not we should format on keystrokes
         public enableFormatting = true;
 
+        // Whether or not to generate .d.ts file
+        public enableDeclaration = false;
+
+        // Whether or not to generate one output javascript file
+        public enableSingleOutputFile = false;
+
+        // Output filename for single-output-file option
+        public singleOutputFilename: string = undefined;
+
         public formatCodeOptions: ts.FormatCodeOptions;
 
         public cancellationToken: TestCancellationToken;
@@ -449,6 +458,48 @@ module FourSlash {
             var evaluation = new Function(emit.outputFiles[0].text + ';\r\nreturn (' + expr + ');')();
             if (evaluation !== value) {
                 throw new Error('Expected evaluation of expression "' + expr + '" to equal "' + value + '", but got "' + evaluation + '"');
+            }
+        }
+
+        public verifyEmitOutput(state: ts.EmitOutputResult, filename?: string) {
+            if (this.enableDeclaration) {
+                this.languageServiceShimHost.setCompilationSettings({generateDeclarationFiles: true});
+            }
+
+            if (this.enableSingleOutputFile) {
+                this.languageServiceShimHost.setCompilationSettings({ outFileOption: this.singleOutputFilename });
+            }
+
+            var expectedFilenames:string[] = [];
+            if (filename !== undefined) {
+                expectedFilenames = filename.split(" ");
+            }
+
+            var emit = this.languageService.getEmitOutput(this.activeFile.fileName);
+
+            if (emit.emitOutputResult !== state) {
+                throw new Error("Expected emitOutputResult '" + state + "', but actual emitOutputResult '" + emit.emitOutputResult + "'");
+            }
+
+            var passed = true;
+            if (emit.outputFiles.length > 0) {
+                passed = expectedFilenames.every(expectedFilename => {
+                    return emit.outputFiles.some(outputFile => {
+                        return outputFile.name === expectedFilename;
+                    });
+                });
+            }
+
+            if (!passed) {
+                var errorMessage = "Expected outputFilename '" + filename + "', but actualy outputFilename '";
+                emit.outputFiles.forEach((outputFile, idx, array) => {
+                    errorMessage += outputFile.name;
+                    if (idx !== emit.outputFiles.length - 1) {
+                        errorMessage += " ";
+                    }
+                });
+                errorMessage += "'";
+                throw new Error(errorMessage);
             }
         }
 

@@ -44,6 +44,14 @@ enum TypingFidelity {
     High = FourSlash.TypingFidelity.High
 }
 
+// We have to duplicate EmitOutputResult from Services.ts to expose the enum to getEmitOutput testcases in fourslah
+enum EmitOutputResult {
+        Succeeded,
+        FailedBecauseOfSyntaxErrors,
+        FailedBecauseOfCompilerOptionsErrors,
+        FailedToGenerateDeclarationsBecauseOfSemanticErrors
+}
+
 module FourSlashInterface {
     declare var FourSlash;
 
@@ -255,6 +263,10 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifyEval(expr, value);
         }
 
+        public emitOutput(expectedState: EmitOutputResult, expectedFilename?: string) {
+            FourSlash.currentTestState.verifyEmitOutput(expectedState, expectedFilename);
+        }
+
         public currentLineContentIs(text: string) {
             FourSlash.currentTestState.verifyCurrentLineContent(text);
         }
@@ -430,6 +442,23 @@ module FourSlashInterface {
 
         public disableFormatting() {
             FourSlash.currentTestState.enableFormatting = false;
+        }
+
+        public enableDeclaration() {
+            FourSlash.currentTestState.enableDeclaration = true;
+        }
+
+        public disableDeclaration() {
+            FourSlash.currentTestState.enableDeclaration = false;
+        }
+
+        public enableSingleOutputFile(outputFilename: string) {
+            FourSlash.currentTestState.enableSingleOutputFile = true;
+            FourSlash.currentTestState.singleOutputFilename = outputFilename;
+        }
+
+        public disableSingleOutputFile() {
+            FourSlash.currentTestState.enableSingleOutputFile = false;
         }
     }
 
