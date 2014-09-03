@@ -383,11 +383,12 @@ module ts {
         return [path.substr(0, rootLength)].concat(normalizedParts);
     }
 
-    export function getNormalizedPathComponents(path: string, currentDirectory: string) {
+    export function getNormalizedPathComponents(path: string, getCurrentDirectory: ()=>string) {
         var path = normalizeSlashes(path);
         var rootLength = getRootLength(path);
         if (rootLength == 0) {
             // If the path is not rooted it is relative to current directory
+            var currentDirectory = getCurrentDirectory();
             path = combinePaths(normalizeSlashes(currentDirectory), path);
             rootLength = getRootLength(path);
         }
@@ -443,18 +444,18 @@ module ts {
         }
     }
 
-    function getNormalizedPathOrUrlComponents(pathOrUrl: string, currentDirectory: string) {
+    function getNormalizedPathOrUrlComponents(pathOrUrl: string, getCurrentDirectory: ()=>string) {
         if (isUrl(pathOrUrl)) {
             return getNormalizedPathComponentsOfUrl(pathOrUrl);
         }
         else {
-            return getNormalizedPathComponents(pathOrUrl, currentDirectory);
+            return getNormalizedPathComponents(pathOrUrl, getCurrentDirectory);
         }
     }
 
-    export function getRelativePathToDirectoryOrUrl(directoryPathOrUrl: string, relativeOrAbsolutePath: string, currentDirectory: string, isAbsolutePathAnUrl: boolean) {
-        var pathComponents = getNormalizedPathOrUrlComponents(relativeOrAbsolutePath, currentDirectory);
-        var directoryComponents = getNormalizedPathOrUrlComponents(directoryPathOrUrl, currentDirectory);
+    export function getRelativePathToDirectoryOrUrl(directoryPathOrUrl: string, relativeOrAbsolutePath: string, getCurrentDirectory: () => string, isAbsolutePathAnUrl: boolean) {
+        var pathComponents = getNormalizedPathOrUrlComponents(relativeOrAbsolutePath, getCurrentDirectory);
+        var directoryComponents = getNormalizedPathOrUrlComponents(directoryPathOrUrl, getCurrentDirectory);
         if (directoryComponents.length > 1 && directoryComponents[directoryComponents.length - 1] === "") {
             // If the directory path given was of type test/cases/ then we really need components of directory to be only till its name
             // that is  ["test", "cases", ""] needs to be actually ["test", "cases"]
