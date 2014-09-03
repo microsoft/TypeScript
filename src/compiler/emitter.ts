@@ -299,7 +299,7 @@ module ts {
                 for (; pos < end && isWhiteSpace(currentSourceFile.text.charCodeAt(pos)); pos++) {
                     if (currentSourceFile.text.charCodeAt(pos) === CharacterCodes.tab) {
                         // Tabs = TabSize = indent size and go to next tabStop
-                        currentLineIndent += (getIndentSize() - currentLineIndent % getIndentSize());
+                        currentLineIndent += getIndentSize() - (currentLineIndent % getIndentSize());
                     }
                     else {
                         // Single space
