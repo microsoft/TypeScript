@@ -104,6 +104,7 @@ module ts {
     export interface NodeArray<T> {
         commaTokens?: Node[];
     }
+
     export interface BinaryExpression {
         operatorToken: Node;
     }

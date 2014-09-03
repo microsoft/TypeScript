@@ -774,9 +774,9 @@ module ts {
             return token === SyntaxKind.Identifier || (isInStrictMode ? token > SyntaxKind.LastFutureReservedWord : token > SyntaxKind.LastReservedWord);
         }
 
-        function onParseToken(t: SyntaxKind, parent: Node, propertyName: string, isMissing: boolean, startPos: number, endPos: number) {
-            if (parserHooks && parent) {
-                parserHooks.onParseToken(t, parent, propertyName, isMissing, startPos, endPos);
+        function onParseToken(tokenKind: SyntaxKind, parent: Node, propertyName: string, isMissing: boolean, startPos: number, endPos: number) {
+            if (parserHooks) {
+                parserHooks.onParseToken(tokenKind, parent, propertyName, isMissing, startPos, endPos);
             }
         }
 
@@ -1160,7 +1160,7 @@ module ts {
             var node = createNode(token);
             nextToken();
             return finishNode(node);
-        }
+        }3
 
         function parseLiteralNode(internName?:boolean): LiteralExpression {
             var node = <LiteralExpression>createNode(token);
@@ -2830,9 +2830,9 @@ module ts {
                 case SyntaxKind.OpenBraceToken:
                     return parseBlock(undefined, /* ignoreMissingOpenBrace */ false, /*checkForStrictMode*/ false);
                 case SyntaxKind.VarKeyword:
-                    return parseVariableStatement(/*parent*/ undefined);
+                    return parseVariableStatement(/*existingNode*/ undefined);
                 case SyntaxKind.FunctionKeyword:
-                    return parseFunctionDeclaration(/*parent*/ undefined);
+                    return parseFunctionDeclaration(/*existingNode*/ undefined);
                 case SyntaxKind.SemicolonToken:
                     return parseEmptyStatement();
                 case SyntaxKind.IfKeyword:
@@ -2986,7 +2986,8 @@ module ts {
 
             var questionStart = scanner.getTokenPos();
             // TOOD: handle skipped token
-            if (parseOptional(SyntaxKind.QuestionToken, /*parent*/ undefined, /*propertyName*/ undefined)) {
+            if (token === SyntaxKind.QuestionToken) {
+                nextToken();
                 errorAtPos(questionStart, scanner.getStartPos() - questionStart, Diagnostics.A_class_member_cannot_be_declared_optional);
             }
 
@@ -3576,6 +3577,7 @@ module ts {
             var pos = getNodePos();
             var errorCountBeforeModifiers = file.syntacticErrors.length;
 
+            // pre-create declaration node if parserHooks are set - this instance will be used to store tokens for parsed modifiers
             var parent = parserHooks && createNode(SyntaxKind.Unknown, pos);
             var flags = parseAndCheckModifiers(modifierContext, parent);
 
