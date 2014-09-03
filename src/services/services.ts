@@ -2168,6 +2168,12 @@ module ts {
             }
 
             switch (node.kind) {
+                case SyntaxKind.IfKeyword:
+                case SyntaxKind.ElseKeyword:
+                    if (hasKind(node.parent, SyntaxKind.IfStatement)) {
+                        return getIfElseOccurrences(<IfStatement>node.parent);
+                    }
+                    break;
                 case SyntaxKind.TryKeyword:
                 case SyntaxKind.CatchKeyword:
                 case SyntaxKind.FinallyKeyword:
@@ -2195,6 +2201,66 @@ module ts {
 
             return undefined;
 
+            function getIfElseOccurrences(ifStatement: IfStatement): ReferenceEntry[] {
+                var keywords: Node[] = [];
+
+                // Traverse upwards through all parent if-statements linked by their else-branches.
+                while (hasKind(ifStatement.parent, SyntaxKind.IfStatement) && (<IfStatement>ifStatement.parent).elseStatement === ifStatement) {
+                    ifStatement = <IfStatement>ifStatement.parent;
+                }
+
+                // Now traverse back down through the else branches, aggregating if/else keywords of if-statements.
+                while (ifStatement) {
+                    var children = ifStatement.getChildren();
+                    pushKeywordIf(keywords, children[0], SyntaxKind.IfKeyword);
+
+                    // Generally the 'else' keyword is second-to-last, so we traverse backwards.
+                    for (var i = children.length - 1; i >= 0; i--) {
+                        if (pushKeywordIf(keywords, children[i], SyntaxKind.ElseKeyword)) {
+                            break;
+                        }
+                    }
+
+                    if (!hasKind(ifStatement.elseStatement, SyntaxKind.IfStatement)) {
+                        break
+                    }
+                    
+                    ifStatement = <IfStatement>ifStatement.elseStatement;
+                }
+
+                var result: ReferenceEntry[] = [];
+
+                // We'd like to highlight else/ifs together if they are only separated by whitespace
+                // (i.e. the keywords are separated by no comments, no newlines).
+                for (var i = 0; i < keywords.length; i++) {
+                    if (keywords[i].kind === SyntaxKind.ElseKeyword && i < keywords.length - 1) {
+                        var elseKeyword = keywords[i];
+                        var ifKeyword = keywords[i + 1]; // this *should* always be an 'if' keyword.
+
+                        var shouldHighlightNextKeyword = true;
+
+                        // Avoid recalculating getStart() by iterating backwards.
+                        for (var j = ifKeyword.getStart() - 1; j >= elseKeyword.end; j--) {
+                            if (!isWhiteSpace(sourceFile.text.charCodeAt(j))) {
+                                shouldHighlightNextKeyword = false;
+                                break;
+                            }
+                        }
+
+                        if (shouldHighlightNextKeyword) {
+                            result.push(new ReferenceEntry(filename, TypeScript.TextSpan.fromBounds(elseKeyword.getStart(), ifKeyword.end), /* isWriteAccess */ false));
+                            i++; // skip the next keyword
+                            continue;
+                        }
+                    }
+
+                    // Ordinary case: just highlight the keyword.
+                    result.push(keywordToReferenceEntry(keywords[i]));
+                }
+
+                return result;
+            }
+
             function getTryCatchFinallyOccurrences(tryStatement: TryStatement): ReferenceEntry[] {
                 var keywords: Node[] = [];
 
@@ -2208,7 +2274,7 @@ module ts {
                     pushKeywordIf(keywords, tryStatement.finallyBlock.getFirstToken(), SyntaxKind.FinallyKeyword);
                 }
 
-                return keywordsToReferenceEntries(keywords);
+                return map(keywords, keywordToReferenceEntry);
             }
 
             function getSwitchCaseDefaultOccurrences(switchStatement: SwitchStatement) {
@@ -2244,7 +2310,7 @@ module ts {
                     });
                 });
 
-                return keywordsToReferenceEntries(keywords);
+                return map(keywords, keywordToReferenceEntry);
             }
 
             function getBreakStatementOccurences(breakStatement: BreakOrContinueStatement): ReferenceEntry[]{
@@ -2285,20 +2351,17 @@ module ts {
                 return node && node.parent;
             }
 
-            function pushKeywordIf(keywordList: Node[], token: Node, ...expected: SyntaxKind[]): void {
-                if (!token) {
-                    return;
+            function pushKeywordIf(keywordList: Node[], token: Node, ...expected: SyntaxKind[]): boolean {
+                if (token && contains(expected, token.kind)) {
+                    keywordList.push(token);
+                    return true;
                 }
 
-                if (contains(<SyntaxKind[]>expected, token.kind)) {
-                    keywordList.push(token);
-                }
+                return false;
             }
 
-            function keywordsToReferenceEntries(keywords: Node[]): ReferenceEntry[]{
-                return map(keywords, keyword =>
-                    new ReferenceEntry(filename, TypeScript.TextSpan.fromBounds(keyword.getStart(), keyword.end), /* isWriteAccess */ false)
-                );
+            function keywordToReferenceEntry(keyword: Node): ReferenceEntry {
+                return new ReferenceEntry(filename, TypeScript.TextSpan.fromBounds(keyword.getStart(), keyword.end), /* isWriteAccess */ false);
             }
         }
 
