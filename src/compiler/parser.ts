@@ -1160,7 +1160,7 @@ module ts {
             var node = createNode(token);
             nextToken();
             return finishNode(node);
-        }3
+        }
 
         function parseLiteralNode(internName?:boolean): LiteralExpression {
             var node = <LiteralExpression>createNode(token);
