@@ -360,8 +360,13 @@ task("runtests", ["tests", builtLocalDirectory], function() {
     if(fs.existsSync(testConfigFile)) {
         fs.unlinkSync(testConfigFile);
     }
+
     if(tests) {
         writeTestConfigFile(tests, testConfigFile);
+    }
+
+    if (tests && tests.toLocaleLowerCase() === "rwc") {
+        testTimeout = 50000;
     }
 
     colors = process.env.colors || process.env.color
