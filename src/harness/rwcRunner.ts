@@ -89,7 +89,7 @@ module RWC {
                 });
 
                 // do not use lib since we shouldnt be reading any files that arent in the ioLog
-                opts.options.noLib = true;
+                opts.options.noLib = false;
 
                 // Emit the results
                 harnessCompiler.compileFiles(inputFiles, otherFiles, compileResult => {

@@ -173,22 +173,46 @@ module Playback {
     }
 
     function findResultByPath<T>(wrapper: { resolvePath(s: string): string }, logArray: { path: string; result?: T }[], expectedPath: string, defaultValue?: T): T {
-        var results = logArray.filter(e => pathsAreEquivalent(e.path, expectedPath, wrapper));
-        if (results.length === 0) {
-            if (defaultValue === undefined) {
-                throw new Error('No matching result in log array for path: ' + expectedPath);
-            } else {
-                return defaultValue;
+        var normalizedName = Harness.Path.switchToForwardSlashes(expectedPath).toLowerCase();
+        // Try to find the result through normal filename
+        for (var i = 0; i < logArray.length; i++) {
+            if (Harness.Path.switchToForwardSlashes(logArray[i].path).toLowerCase() === normalizedName) {
+                return logArray[i].result;
             }
         }
-        return results[0].result;
+        // Fallback, try to resolve the target paths as well
+        if (replayLog.pathsResolved.length > 0) {
+            var normalizedResolvedName = wrapper.resolvePath(expectedPath).toLowerCase();
+            for (var i = 0; i < logArray.length; i++) {
+                if (wrapper.resolvePath(logArray[i].path).toLowerCase() === normalizedResolvedName) {
+                    return logArray[i].result;
+                }
+            }
+        }
+        // If we got here, we didn't find a match
+        if (defaultValue === undefined) {
+            throw new Error('No matching result in log array for path: ' + expectedPath);
+        } else {
+            return defaultValue;
+        }
     }
 
+    var pathEquivCache: any = {};
     function pathsAreEquivalent(left: string, right: string, wrapper: { resolvePath(s: string): string }) {
+        var key = left + '-~~-' + right;
         function areSame(a: string, b: string) {
             return Harness.Path.switchToForwardSlashes(a).toLowerCase() === Harness.Path.switchToForwardSlashes(b).toLowerCase();
         }
-        return areSame(left, right) || areSame(wrapper.resolvePath(left), right) || areSame(left, wrapper.resolvePath(right)) || areSame(wrapper.resolvePath(left), wrapper.resolvePath(right));
+        function check() {
+            if (Harness.Path.getFileName(left).toLowerCase() === Harness.Path.getFileName(right).toLowerCase()) {
+                return areSame(left, right) || areSame(wrapper.resolvePath(left), right) || areSame(left, wrapper.resolvePath(right)) || areSame(wrapper.resolvePath(left), wrapper.resolvePath(right));
+            }
+        }
+        if (pathEquivCache.hasOwnProperty(key)) {
+            return pathEquivCache[key];
+        } else {
+            return pathEquivCache[key] = check();
+        }
     }
 
     function noOpReplay(name: string) {
