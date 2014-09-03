@@ -67,6 +67,23 @@ this is 4 spaces left aligned but above line is empty
     above 3 lines are empty*/
     export class c3 {
     }
+
+    /** this is first line - aligned to class declaration
+	*              this is 0 space + tab
+ 	*              this is 1 space + tab
+  	*              this is 2 spaces + tab
+   	*              this is 3 spaces + tab
+    	*          this is 4 spaces + tab
+     	*          this is 5 spaces + tab
+      	*          this is 6 spaces + tab
+       	*          this is 7 spaces + tab
+        	*      this is 8 spaces + tab
+         	*      this is 9 spaces + tab
+          	*      this is 10 spaces + tab
+           	*      this is 11 spaces + tab
+            	*  this is 12 spaces + tab */
+    export class c4 {
+    }
 }
 
 //// [commentsFormatting.js]
@@ -148,6 +165,26 @@ this is 4 spaces left aligned but above line is empty
         return c3;
     })();
     m.c3 = c3;
+    /** this is first line - aligned to class declaration
+    *              this is 0 space + tab
+    *              this is 1 space + tab
+    *              this is 2 spaces + tab
+    *              this is 3 spaces + tab
+        *          this is 4 spaces + tab
+        *          this is 5 spaces + tab
+        *          this is 6 spaces + tab
+        *          this is 7 spaces + tab
+            *      this is 8 spaces + tab
+            *      this is 9 spaces + tab
+            *      this is 10 spaces + tab
+            *      this is 11 spaces + tab
+                *  this is 12 spaces + tab */
+    var c4 = (function () {
+        function c4() {
+        }
+        return c4;
+    })();
+    m.c4 = c4;
 })(m || (m = {}));
 
 
@@ -216,5 +253,21 @@ this is 4 spaces left aligned but above line is empty
     
     above 3 lines are empty*/
     class c3 {
+    }
+    /** this is first line - aligned to class declaration
+    *              this is 0 space + tab
+    *              this is 1 space + tab
+    *              this is 2 spaces + tab
+    *              this is 3 spaces + tab
+        *          this is 4 spaces + tab
+        *          this is 5 spaces + tab
+        *          this is 6 spaces + tab
+        *          this is 7 spaces + tab
+            *      this is 8 spaces + tab
+            *      this is 9 spaces + tab
+            *      this is 10 spaces + tab
+            *      this is 11 spaces + tab
+                *  this is 12 spaces + tab */
+    class c4 {
     }
 }
