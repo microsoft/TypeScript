@@ -535,8 +535,9 @@ module ts {
         identifierCount: number;
         symbolCount: number;
         isOpen: boolean;
-        version: number;
+        version: string;
         languageVersion: ScriptTarget;
+        identifiers: Map<string>;
     }
 
     export interface Program {
@@ -616,6 +617,8 @@ module ts {
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
         getAugmentedPropertiesOfApparentType(type: Type): Symbol[];
+        getRootSymbol(symbol: Symbol): Symbol;
+        getContextualType(node: Node): Type;
     }
 
     export interface TextWriter {

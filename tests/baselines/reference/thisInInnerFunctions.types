@@ -32,10 +32,7 @@ function test() {
 
     var x = () => {
 >x : () => void
->() => {
-        (() => this)();
-        this;
-    } : () => void
+>() => {        (() => this)();        this;    } : () => void
 
         (() => this)();
 >(() => this)() : any

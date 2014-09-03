@@ -13,21 +13,13 @@ class X {
 >ret : any
 
         return ret.always(() => {
->ret.always(() => {
-            this.y = 0;
-        }).promise() : any
->ret.always(() => {
-            this.y = 0;
-        }).promise : any
->ret.always(() => {
-            this.y = 0;
-        }) : any
+>ret.always(() => {            this.y = 0;        }).promise() : any
+>ret.always(() => {            this.y = 0;        }).promise : any
+>ret.always(() => {            this.y = 0;        }) : any
 >ret.always : any
 >ret : any
 >always : any
->() => {
-            this.y = 0;
-        } : () => void
+>() => {            this.y = 0;        } : () => void
 
             this.y = 0;
 >this.y = 0 : number

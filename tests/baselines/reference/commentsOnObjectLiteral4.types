@@ -2,14 +2,7 @@
 
 var v = {
 >v : { bar: number; }
->{
- /**
-  * @type {number}
-  */
- get bar(): number {
-  return this._bar;
- }
-} : { bar: number; }
+>{ /**  * @type {number}  */ get bar(): number {  return this._bar; }} : { bar: number; }
 
  /**
   * @type {number}

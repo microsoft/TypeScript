@@ -23,7 +23,7 @@ map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U
 }
 
 interface String{
- length: number;
+    length: number;
 }
 */
 var lengths = ["a", "b", "c"].map(function (x) { return x.length; });

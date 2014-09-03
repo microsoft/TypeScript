@@ -54,4 +54,6 @@ function other3(arg) {
     var b;
     var r2 = foo(b);
     var d = r2[1];
+    // BUG 821629
+    //var u: U = r2[1]; // ok
 }

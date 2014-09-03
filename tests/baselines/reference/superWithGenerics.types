@@ -21,6 +21,7 @@ class D extends B<any> {
     constructor() {
         super(); 
 >super() : void
+>super : typeof B
     }
 }
 

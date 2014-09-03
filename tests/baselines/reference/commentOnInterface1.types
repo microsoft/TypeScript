@@ -1,4 +1,9 @@
-=== tests/cases/compiler/commentOnInterface1.ts ===
+=== tests/cases/compiler/b.ts ===
+///<reference path='a.ts'/>
+interface I3 {
+>I3 : I3
+}
+=== tests/cases/compiler/a.ts ===
 /*! Keep this pinned comment */
 interface I {
 >I : I
@@ -8,3 +13,4 @@ interface I {
 interface I2 {
 >I2 : I2
 }
+

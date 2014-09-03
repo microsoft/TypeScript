@@ -9,7 +9,7 @@ module my.data.foo {
 }
 module my.data {
 >my : typeof my
->data : typeof data
+>data : typeof my.data
 
     function data(my) {
 >data : (my: any) => void

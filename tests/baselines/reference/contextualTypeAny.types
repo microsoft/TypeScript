@@ -8,7 +8,7 @@ var obj: { [s: string]: number } = { p: "", q: x };
 >{ p: "", q: x } : { [x: string]: any; p: string; q: any; }
 >p : string
 >q : any
->x : x
+>x : any
 
 var arr: number[] = ["", x];
 >arr : number[]

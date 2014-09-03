@@ -18,9 +18,7 @@ function compose<A, B, C>(f: (b: B) => C, g: (a:A) => B): (a:A) => C {
 >C : C
 
     return function (a:A) : C {
->function (a:A) : C {
-        return f(g.apply(null, a));
-    } : (a: A) => C
+>function (a:A) : C {        return f(g.apply(null, a));    } : (a: A) => C
 >a : A
 >A : A
 >C : C
@@ -84,18 +82,10 @@ function filter<A>(f: (a: A) => boolean, ar: A[]): A[] {
 >[] : undefined[]
 
     forEach(ar, (el) => {
->forEach(ar, (el) => {
-        if (f(el)) {
-            ret.push(el);
-        }
-    } ) : void
+>forEach(ar, (el) => {        if (f(el)) {            ret.push(el);        }    } ) : void
 >forEach : <A>(list: A[], f: (a: A, n?: number) => void) => void
 >ar : A[]
->(el) => {
-        if (f(el)) {
-            ret.push(el);
-        }
-    } : (el: A) => void
+>(el) => {        if (f(el)) {            ret.push(el);        }    } : (el: A) => void
 >el : A
 
         if (f(el)) {
@@ -148,18 +138,12 @@ function curry1<A, B, C>(f: (a: A, b: B) => C): (ax: A) => (bx: B) => C {
 >C : C
 
     return function (ay: A) {
->function (ay: A) {
-        return function (by: B) {
-            return f(ay, by);
-        };
-    } : (ay: A) => (by: B) => C
+>function (ay: A) {        return function (by: B) {            return f(ay, by);        };    } : (ay: A) => (by: B) => C
 >ay : A
 >A : A
 
         return function (by: B) {
->function (by: B) {
-            return f(ay, by);
-        } : (by: B) => C
+>function (by: B) {            return f(ay, by);        } : (by: B) => C
 >by : B
 >B : B
 

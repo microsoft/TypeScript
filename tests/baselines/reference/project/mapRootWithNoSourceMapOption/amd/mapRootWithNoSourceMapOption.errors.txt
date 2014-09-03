@@ -1,4 +1,4 @@
-'--mapRoot' option cannot be specified without specifying '--sourcemap' option.
+error TS5038: '--mapRoot' option cannot be specified without specifying '--sourcemap' option.
 
 
 !!! '--mapRoot' option cannot be specified without specifying '--sourcemap' option.

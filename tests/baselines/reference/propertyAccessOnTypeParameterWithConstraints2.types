@@ -221,19 +221,11 @@ var r3d = a(aB, aB)['foo']();
 
 var b = {
 >b : { foo: <U extends A, T extends A>(x: U, y: T) => string; }
->{
-    foo: <U extends A, T extends A>(x: U, y: T) => {
-        var a = x['foo'](); // should be string
-        return a + x.foo();
-    }
-} : { foo: <U extends A, T extends A>(x: U, y: T) => string; }
+>{    foo: <U extends A, T extends A>(x: U, y: T) => {        var a = x['foo'](); // should be string        return a + x.foo();    }} : { foo: <U extends A, T extends A>(x: U, y: T) => string; }
 
     foo: <U extends A, T extends A>(x: U, y: T) => {
 >foo : <U extends A, T extends A>(x: U, y: T) => string
-><U extends A, T extends A>(x: U, y: T) => {
-        var a = x['foo'](); // should be string
-        return a + x.foo();
-    } : <U extends A, T extends A>(x: U, y: T) => string
+><U extends A, T extends A>(x: U, y: T) => {        var a = x['foo'](); // should be string        return a + x.foo();    } : <U extends A, T extends A>(x: U, y: T) => string
 >U : U
 >A : A
 >T : T

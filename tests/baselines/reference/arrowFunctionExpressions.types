@@ -182,12 +182,7 @@ function outerFn() {
 // Arrow function used in nested function in arrow function
 var f = (n: string) => {
 >f : (n: string) => () => string
->(n: string) => {
-    function fn(x: number) {
-        return () => n + x;
-    }
-    return fn(4);
-} : (n: string) => () => string
+>(n: string) => {    function fn(x: number) {        return () => n + x;    }    return fn(4);} : (n: string) => () => string
 >n : string
 
     function fn(x: number) {
@@ -220,12 +215,7 @@ function someOuterFn() {
 
     var arr = (n: string) => {
 >arr : (n: string) => () => () => number
->(n: string) => {
-        function innerFn() {
-            return () => n.length;
-        }
-        return innerFn;
-    } : (n: string) => () => () => number
+>(n: string) => {        function innerFn() {            return () => n.length;        }        return innerFn;    } : (n: string) => () => () => number
 >n : string
 
         function innerFn() {

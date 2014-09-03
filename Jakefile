@@ -43,7 +43,6 @@ var compilerSources = [
 
 var servicesSources = [
     "core.ts",
-    "sys.ts",
     "types.ts",
     "scanner.ts",
     "parser.ts",

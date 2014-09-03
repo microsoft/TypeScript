@@ -111,7 +111,7 @@ function foo8(x: number) {
     return { x: x };
 >{ x: x } : { x: number; }
 >x : number
->x : x
+>x : number
 }
 var r8 = foo8(1);
 >r8 : { x: number; }

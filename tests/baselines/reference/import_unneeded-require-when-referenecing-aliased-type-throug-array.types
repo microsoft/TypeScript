@@ -1,17 +1,17 @@
 === tests/cases/compiler/a.ts ===
 /// <reference path="b.ts" />
 import ITest = require('ITest');
->ITest : ITest
+>ITest : unknown
 
 var testData: ITest[];
->testData : Name[]
->ITest : Name
+>testData : ITest[]
+>ITest : ITest
 
 var p = testData[0].name;
 >p : string
 >testData[0].name : string
->testData[0] : Name
->testData : Name[]
+>testData[0] : ITest
+>testData : ITest[]
 >name : string
  
 === tests/cases/compiler/b.ts ===

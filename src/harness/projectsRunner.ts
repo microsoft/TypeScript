@@ -174,7 +174,7 @@ class ProjectRunner extends RunnerBase {
                 else {
                     var text = getSourceFileText(filename);
                     if (text !== undefined) {
-                        sourceFile = ts.createSourceFile(filename, text, languageVersion);
+                        sourceFile = ts.createSourceFile(filename, text, languageVersion, /*version:*/ "0");
                     }
                 }
 
@@ -187,7 +187,7 @@ class ProjectRunner extends RunnerBase {
                     getDefaultLibFilename: () => "lib.d.ts",
                     writeFile: writeFile,
                     getCurrentDirectory: getCurrentDirectory,
-                    getCanonicalFileName: ts.getCanonicalFileName,
+                    getCanonicalFileName: Harness.Compiler.getCanonicalFileName,
                     useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
                     getNewLine: () => sys.newLine
                 };

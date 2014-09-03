@@ -17,14 +17,14 @@ export module a {
 }
 
 import b = a.weekend;
->b : typeof weekend
+>b : typeof b
 >a : typeof a
->weekend : weekend
+>weekend : b
 
 export var bVal: b = b.Sunday;
->bVal : weekend
->b : weekend
->b.Sunday : weekend
->b : typeof weekend
->Sunday : weekend
+>bVal : b
+>b : b
+>b.Sunday : b
+>b : typeof b
+>Sunday : b
 

@@ -4,16 +4,13 @@
 ///<reference path='references.ts' />
 
 module TypeScript.Services.Breakpoints {
-    function createBreakpointSpanInfo(parentElement: TypeScript.ISyntaxElement, ...childElements: TypeScript.ISyntaxElement[]): ts.SpanInfo {
+    function createBreakpointSpanInfo(parentElement: TypeScript.ISyntaxElement, ...childElements: TypeScript.ISyntaxElement[]): TextSpan {
         if (!parentElement) {
             return null;
         }
 
         if (childElements.length == 0) {
-            return {
-                minChar: TypeScript.start(parentElement),
-                limChar: TypeScript.end(parentElement)
-            };
+            return TextSpan.fromBounds(TypeScript.start(parentElement), TypeScript.end(parentElement));
         }
 
         var start: number;
@@ -28,24 +25,18 @@ module TypeScript.Services.Breakpoints {
             }
         }
 
-        return {
-            minChar: start,
-            limChar: end
-        };
+        return TextSpan.fromBounds(start, end);
     }
 
-    function createBreakpointSpanInfoWithLimChar(startElement: TypeScript.ISyntaxElement, limChar: number): ts.SpanInfo {
-        return {
-            minChar: start(startElement),
-            limChar: limChar
-        };
+    function createBreakpointSpanInfoWithLimChar(startElement: TypeScript.ISyntaxElement, limChar: number): TextSpan {
+        return TextSpan.fromBounds(start(startElement), limChar);
     }
 
     class BreakpointResolver {
         constructor(private posLine: number, private lineMap: TypeScript.LineMap) {
         }
 
-        private breakpointSpanOfToken(positionedToken: TypeScript.ISyntaxToken): ts.SpanInfo {
+        private breakpointSpanOfToken(positionedToken: TypeScript.ISyntaxToken): TextSpan {
             switch (positionedToken.kind()) {
                 case TypeScript.SyntaxKind.OpenBraceToken:
                     return this.breakpointSpanOfOpenBrace(positionedToken);
@@ -74,7 +65,7 @@ module TypeScript.Services.Breakpoints {
             return this.breakpointSpanOfContainingNode(positionedToken);
         }
 
-        private breakpointSpanOfOpenBrace(openBraceToken: TypeScript.ISyntaxToken): ts.SpanInfo {
+        private breakpointSpanOfOpenBrace(openBraceToken: TypeScript.ISyntaxToken): TextSpan {
             var container = Syntax.containingNode(openBraceToken);
             if (container) {
                 var originalContainer = container;
@@ -168,7 +159,7 @@ module TypeScript.Services.Breakpoints {
             return null;
         }
 
-        private breakpointSpanOfCloseBrace(closeBraceToken: TypeScript.ISyntaxToken): ts.SpanInfo {
+        private breakpointSpanOfCloseBrace(closeBraceToken: TypeScript.ISyntaxToken): TextSpan {
             var container = Syntax.containingNode(closeBraceToken);
             if (container) {
                 var originalContainer = container;
@@ -243,7 +234,7 @@ module TypeScript.Services.Breakpoints {
         }
 
 
-        private breakpointSpanOfComma(commaToken: TypeScript.ISyntaxToken): ts.SpanInfo {
+        private breakpointSpanOfComma(commaToken: TypeScript.ISyntaxToken): TextSpan {
             var commaParent = commaToken.parent;
             if (isSeparatedList(commaParent)) {
                 var grandParent = commaParent.parent;
@@ -271,7 +262,7 @@ module TypeScript.Services.Breakpoints {
             return this.breakpointSpanOfContainingNode(commaToken);
         }
 
-        private breakpointSpanOfCloseParen(closeParenToken: TypeScript.ISyntaxToken): ts.SpanInfo {
+        private breakpointSpanOfCloseParen(closeParenToken: TypeScript.ISyntaxToken): TextSpan {
             var closeParenParent = closeParenToken.parent;
             if (closeParenParent) {
                 switch (closeParenParent.kind()) {
@@ -293,7 +284,7 @@ module TypeScript.Services.Breakpoints {
             return blockSyntax.statements && blockSyntax.statements.length != 0;
         }
 
-        private breakpointSpanOfFirstStatementInBlock(blockNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointSpanOfFirstStatementInBlock(blockNode: TypeScript.ISyntaxNode): TextSpan {
             if (!blockNode) {
                 return null;
             }
@@ -316,7 +307,7 @@ module TypeScript.Services.Breakpoints {
             }
         }
 
-        private breakpointSpanOfLastStatementInBlock(blockNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointSpanOfLastStatementInBlock(blockNode: TypeScript.ISyntaxNode): TextSpan {
             if (!blockNode) {
                 return null;
             }
@@ -339,7 +330,7 @@ module TypeScript.Services.Breakpoints {
             }
         }
 
-        private breakpointSpanOfFirstChildOfSyntaxList(positionedList: TypeScript.ISyntaxNodeOrToken[]): ts.SpanInfo {
+        private breakpointSpanOfFirstChildOfSyntaxList(positionedList: TypeScript.ISyntaxNodeOrToken[]): TextSpan {
             if (!positionedList) {
                 return null;
             }
@@ -363,7 +354,7 @@ module TypeScript.Services.Breakpoints {
             }
         }
 
-        private breakpointSpanOfLastChildOfSyntaxList(positionedList: TypeScript.ISyntaxNodeOrToken[]): ts.SpanInfo {
+        private breakpointSpanOfLastChildOfSyntaxList(positionedList: TypeScript.ISyntaxNodeOrToken[]): TextSpan {
             if (!positionedList) {
                 return null;
             }
@@ -385,7 +376,7 @@ module TypeScript.Services.Breakpoints {
             }
         }
 
-        private breakpointSpanOfNode(positionedNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointSpanOfNode(positionedNode: ISyntaxNode): TextSpan {
             var node = positionedNode;
             switch (node.kind()) {
                 // Declarations with elements
@@ -493,7 +484,7 @@ module TypeScript.Services.Breakpoints {
             }
             return false;
         }
-        
+
         private isInitializerOfForStatement(expressionNode: TypeScript.ISyntaxNode): boolean {
             if (!expressionNode) {
                 return false;
@@ -552,12 +543,12 @@ module TypeScript.Services.Breakpoints {
             return false;
         }
 
-        private breakpointOfLeftOfCommaExpression(commaExpressionNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointOfLeftOfCommaExpression(commaExpressionNode: TypeScript.ISyntaxNode): TextSpan {
             var commaExpression = <TypeScript.BinaryExpressionSyntax>commaExpressionNode;
             return this.breakpointSpanOf(commaExpression.left);
         }
 
-        private breakpointOfExpression(expressionNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointOfExpression(expressionNode: TypeScript.ISyntaxNode): TextSpan {
             if (this.isInitializerOfForStatement(expressionNode) ||
                 this.isConditionOfForStatement(expressionNode) ||
                 this.isIncrememtorOfForStatement(expressionNode)) {
@@ -582,7 +573,7 @@ module TypeScript.Services.Breakpoints {
             return this.breakpointSpanOfContainingNode(expressionNode);
         }
 
-        private breakpointSpanOfStatement(statementNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointSpanOfStatement(statementNode: TypeScript.ISyntaxNode): TextSpan {
             var statement = statementNode;
             if (statement.kind() == TypeScript.SyntaxKind.EmptyStatement) {
                 return null;
@@ -722,7 +713,7 @@ module TypeScript.Services.Breakpoints {
             return positionedNode && !TypeScript.SyntaxUtilities.isAmbientDeclarationSyntax(positionedNode);
         }
 
-        private breakpointSpanOfDeclarationWithElements(positionedNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointSpanOfDeclarationWithElements(positionedNode: TypeScript.ISyntaxNode): TextSpan {
             if (!this.canHaveBreakpointInDeclaration(positionedNode)) {
                 return null;
             }
@@ -751,7 +742,7 @@ module TypeScript.Services.Breakpoints {
             return !!varDeclaratorSyntax.equalsValueClause;
         }
 
-        private breakpointSpanOfVariableDeclarator(varDeclaratorNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointSpanOfVariableDeclarator(varDeclaratorNode: TypeScript.ISyntaxNode): TextSpan {
             if (!this.canHaveBreakpointInVariableDeclarator(varDeclaratorNode)) {
                 return null;
             }
@@ -799,7 +790,7 @@ module TypeScript.Services.Breakpoints {
             return false;
         }
 
-        private breakpointSpanOfVariableDeclaration(varDeclarationNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointSpanOfVariableDeclaration(varDeclarationNode: TypeScript.ISyntaxNode): TextSpan {
             if (!this.canHaveBreakpointInDeclaration(varDeclarationNode)) {
                 return null;
             }
@@ -830,7 +821,7 @@ module TypeScript.Services.Breakpoints {
             return this.canHaveBreakpointInVariableDeclaration(<TypeScript.ISyntaxNode>variableStatement.variableDeclaration);
         }
 
-        private breakpointSpanOfVariableStatement(varStatementNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointSpanOfVariableStatement(varStatementNode: TypeScript.ISyntaxNode): TextSpan {
             if (!this.canHaveBreakpointInVariableStatement(varStatementNode)) {
                 return null;
             }
@@ -842,7 +833,7 @@ module TypeScript.Services.Breakpoints {
             return createBreakpointSpanInfoWithLimChar(varStatementNode, end(childAt(varDeclarators, 0)));
         }
 
-        private breakpointSpanOfParameter(parameterNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointSpanOfParameter(parameterNode: TypeScript.ISyntaxNode): TextSpan {
             if (parameterNode.parent.kind() === SyntaxKind.SimpleArrowFunctionExpression) {
                 return this.breakpointSpanOfNode(<ISyntaxNode>parameterNode.parent);
             }
@@ -860,7 +851,7 @@ module TypeScript.Services.Breakpoints {
             }
         }
 
-        private breakpointSpanOfMemberVariableDeclaration(memberVarDeclarationNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointSpanOfMemberVariableDeclaration(memberVarDeclarationNode: TypeScript.ISyntaxNode): TextSpan {
             if (TypeScript.SyntaxUtilities.isAmbientDeclarationSyntax(memberVarDeclarationNode)) {
                 return null;
             }
@@ -874,7 +865,7 @@ module TypeScript.Services.Breakpoints {
             }
         }
 
-        private breakpointSpanOfImportDeclaration(importDeclarationNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointSpanOfImportDeclaration(importDeclarationNode: TypeScript.ISyntaxNode): TextSpan {
             if (TypeScript.SyntaxUtilities.isAmbientDeclarationSyntax(importDeclarationNode)) {
                 return null;
             }
@@ -883,7 +874,7 @@ module TypeScript.Services.Breakpoints {
             return createBreakpointSpanInfo(importDeclarationNode, importSyntax.modifiers, importSyntax.importKeyword, importSyntax.identifier, importSyntax.equalsToken, importSyntax.moduleReference);
         }
 
-        private breakpointSpanOfEnumDeclaration(enumDeclarationNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointSpanOfEnumDeclaration(enumDeclarationNode: TypeScript.ISyntaxNode): TextSpan {
             if (!this.canHaveBreakpointInDeclaration(enumDeclarationNode)) {
                 return null;
             }
@@ -891,7 +882,7 @@ module TypeScript.Services.Breakpoints {
             return createBreakpointSpanInfo(enumDeclarationNode);
         }
 
-        private breakpointSpanOfFirstEnumElement(enumDeclarationNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointSpanOfFirstEnumElement(enumDeclarationNode: TypeScript.ISyntaxNode): TextSpan {
             var enumDeclarationSyntax = <TypeScript.EnumDeclarationSyntax>enumDeclarationNode;
             var enumElements = enumDeclarationSyntax.enumElements;
             if (enumElements && childCount(enumElements)) {
@@ -901,7 +892,7 @@ module TypeScript.Services.Breakpoints {
             return null;
         }
 
-        private breakpointSpanOfEnumElement(enumElementNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointSpanOfEnumElement(enumElementNode: TypeScript.ISyntaxNode): TextSpan {
             if (TypeScript.SyntaxUtilities.isAmbientDeclarationSyntax(enumElementNode)) {
                 return null;
             }
@@ -909,45 +900,45 @@ module TypeScript.Services.Breakpoints {
             return createBreakpointSpanInfo(enumElementNode);
         }
 
-        private breakpointSpanOfIfStatement(ifStatementNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointSpanOfIfStatement(ifStatementNode: TypeScript.ISyntaxNode): TextSpan {
             var ifStatement = <TypeScript.IfStatementSyntax>ifStatementNode;
             return createBreakpointSpanInfo(ifStatementNode, ifStatement.ifKeyword, ifStatement.openParenToken, ifStatement.condition, ifStatement.closeParenToken);
         }
 
-        private breakpointSpanOfElseClause(elseClauseNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointSpanOfElseClause(elseClauseNode: TypeScript.ISyntaxNode): TextSpan {
             var elseClause = <TypeScript.ElseClauseSyntax>elseClauseNode;
             return this.breakpointSpanOf(elseClause.statement);
         }
 
-        private breakpointSpanOfForInStatement(forInStatementNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointSpanOfForInStatement(forInStatementNode: TypeScript.ISyntaxNode): TextSpan {
             var forInStatement = <TypeScript.ForInStatementSyntax>forInStatementNode;
             return createBreakpointSpanInfo(forInStatementNode, forInStatement.forKeyword, forInStatement.openParenToken, forInStatement.variableDeclaration,
                 forInStatement.left, forInStatement.inKeyword, forInStatement.expression, forInStatement.closeParenToken);
         }
 
-        private breakpointSpanOfForStatement(forStatementNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointSpanOfForStatement(forStatementNode: TypeScript.ISyntaxNode): TextSpan {
             var forStatement = <TypeScript.ForStatementSyntax>forStatementNode;
             return this.breakpointSpanOf(forStatement.variableDeclaration
                 ? <TypeScript.ISyntaxElement>forStatement.variableDeclaration
                 : forStatement.initializer);
         }
 
-        private breakpointSpanOfWhileStatement(whileStatementNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointSpanOfWhileStatement(whileStatementNode: TypeScript.ISyntaxNode): TextSpan {
             var whileStatement = <TypeScript.WhileStatementSyntax>whileStatementNode;
             return createBreakpointSpanInfo(whileStatementNode, whileStatement.whileKeyword, whileStatement.openParenToken, whileStatement.condition, whileStatement.closeParenToken);
         }
 
-        private breakpointSpanOfDoStatement(doStatementNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointSpanOfDoStatement(doStatementNode: TypeScript.ISyntaxNode): TextSpan {
             var doStatement = <TypeScript.DoStatementSyntax>doStatementNode;
             return createBreakpointSpanInfo(doStatementNode, doStatement.whileKeyword, doStatement.openParenToken, doStatement.condition, doStatement.closeParenToken);
         }
 
-        private breakpointSpanOfSwitchStatement(switchStatementNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointSpanOfSwitchStatement(switchStatementNode: TypeScript.ISyntaxNode): TextSpan {
             var switchStatement = <TypeScript.SwitchStatementSyntax>switchStatementNode;
             return createBreakpointSpanInfo(switchStatementNode, switchStatement.switchKeyword, switchStatement.openParenToken, switchStatement.expression, switchStatement.closeParenToken);
         }
 
-        private breakpointSpanOfFirstStatementOfFirstCaseClause(switchStatementNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointSpanOfFirstStatementOfFirstCaseClause(switchStatementNode: TypeScript.ISyntaxNode): TextSpan {
             var switchStatement = <TypeScript.SwitchStatementSyntax>switchStatementNode;
             if (switchStatement.switchClauses && switchStatement.switchClauses.length == 0) {
                 return null;
@@ -964,7 +955,7 @@ module TypeScript.Services.Breakpoints {
             return this.breakpointSpanOfFirstChildOfSyntaxList(statements);
         }
 
-        private breakpointSpanOfLastStatementOfLastCaseClause(switchStatementNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointSpanOfLastStatementOfLastCaseClause(switchStatementNode: TypeScript.ISyntaxNode): TextSpan {
             var switchStatement = <TypeScript.SwitchStatementSyntax>switchStatementNode;
             if (switchStatement.switchClauses && switchStatement.switchClauses.length == 0) {
                 return null;
@@ -981,37 +972,37 @@ module TypeScript.Services.Breakpoints {
             return this.breakpointSpanOfLastChildOfSyntaxList(statements);
         }
 
-        private breakpointSpanOfCaseSwitchClause(caseClauseNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointSpanOfCaseSwitchClause(caseClauseNode: TypeScript.ISyntaxNode): TextSpan {
             var caseSwitchClause = <TypeScript.CaseSwitchClauseSyntax>caseClauseNode;
             return this.breakpointSpanOfFirstChildOfSyntaxList(caseSwitchClause.statements);
         }
 
-        private breakpointSpanOfDefaultSwitchClause(defaultSwithClauseNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointSpanOfDefaultSwitchClause(defaultSwithClauseNode: TypeScript.ISyntaxNode): TextSpan {
             var defaultSwitchClause = <TypeScript.DefaultSwitchClauseSyntax>defaultSwithClauseNode;
             return this.breakpointSpanOfFirstChildOfSyntaxList(defaultSwitchClause.statements);
         }
 
-        private breakpointSpanOfWithStatement(withStatementNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointSpanOfWithStatement(withStatementNode: TypeScript.ISyntaxNode): TextSpan {
             var withStatement = <TypeScript.WithStatementSyntax>withStatementNode;
             return this.breakpointSpanOf(withStatement.statement);
         }
 
-        private breakpointSpanOfTryStatement(tryStatementNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointSpanOfTryStatement(tryStatementNode: TypeScript.ISyntaxNode): TextSpan {
             var tryStatement = <TypeScript.TryStatementSyntax>tryStatementNode;
             return this.breakpointSpanOfFirstStatementInBlock(<TypeScript.ISyntaxNode>tryStatement.block);
         }
 
-        private breakpointSpanOfCatchClause(catchClauseNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointSpanOfCatchClause(catchClauseNode: TypeScript.ISyntaxNode): TextSpan {
             var catchClause = <TypeScript.CatchClauseSyntax>catchClauseNode;
             return createBreakpointSpanInfo(catchClauseNode, catchClause.catchKeyword, catchClause.openParenToken, catchClause.identifier, catchClause.typeAnnotation, catchClause.closeParenToken);
         }
 
-        private breakpointSpanOfFinallyClause(finallyClauseNode: TypeScript.ISyntaxNode): ts.SpanInfo {
+        private breakpointSpanOfFinallyClause(finallyClauseNode: TypeScript.ISyntaxNode): TextSpan {
             var finallyClause = <TypeScript.FinallyClauseSyntax>finallyClauseNode;
             return this.breakpointSpanOfFirstStatementInBlock(<TypeScript.ISyntaxNode>finallyClause.block);
         }
 
-        private breakpointSpanOfParenthesizedArrowFunctionExpression(arrowFunctionExpression: ParenthesizedArrowFunctionExpressionSyntax): ts.SpanInfo {
+        private breakpointSpanOfParenthesizedArrowFunctionExpression(arrowFunctionExpression: ParenthesizedArrowFunctionExpressionSyntax): TextSpan {
             if (arrowFunctionExpression.block) {
                 return this.breakpointSpanOfFirstStatementInBlock(arrowFunctionExpression.block);
             }
@@ -1020,7 +1011,7 @@ module TypeScript.Services.Breakpoints {
             }
         }
 
-        private breakpointSpanOfSimpleArrowFunctionExpression(arrowFunctionExpression: SimpleArrowFunctionExpressionSyntax): ts.SpanInfo {
+        private breakpointSpanOfSimpleArrowFunctionExpression(arrowFunctionExpression: SimpleArrowFunctionExpressionSyntax): TextSpan {
             if (arrowFunctionExpression.block) {
                 return this.breakpointSpanOfFirstStatementInBlock(arrowFunctionExpression.block);
             }
@@ -1029,7 +1020,7 @@ module TypeScript.Services.Breakpoints {
             }
         }
 
-        private breakpointSpanOfContainingNode(positionedElement: ISyntaxElement): ts.SpanInfo {
+        private breakpointSpanOfContainingNode(positionedElement: ISyntaxElement): TextSpan {
             var current = positionedElement.parent;
             while (!isNode(current)) {
                 current = current.parent;
@@ -1038,7 +1029,7 @@ module TypeScript.Services.Breakpoints {
             return this.breakpointSpanOf(current);
         }
 
-        private breakpointSpanIfStartsOnSameLine(positionedElement: TypeScript.ISyntaxElement): ts.SpanInfo {
+        private breakpointSpanIfStartsOnSameLine(positionedElement: TypeScript.ISyntaxElement): TextSpan {
             if (positionedElement && this.posLine == this.lineMap.getLineNumberFromPosition(start(positionedElement))) {
                 return this.breakpointSpanOf(positionedElement);
             }
@@ -1046,7 +1037,7 @@ module TypeScript.Services.Breakpoints {
             return null;
         }
 
-        public breakpointSpanOf(positionedElement: TypeScript.ISyntaxElement): ts.SpanInfo {
+        public breakpointSpanOf(positionedElement: TypeScript.ISyntaxElement): TextSpan {
             if (!positionedElement) {
                 return null;
             }
@@ -1075,7 +1066,7 @@ module TypeScript.Services.Breakpoints {
         }
     }
 
-    export function getBreakpointLocation(syntaxTree: TypeScript.SyntaxTree, askedPos: number): ts.SpanInfo {
+    export function getBreakpointLocation(syntaxTree: TypeScript.SyntaxTree, askedPos: number): TextSpan {
         // Cannot set breakpoint in dts file
         if (TypeScript.isDTSFile(syntaxTree.fileName())) {
             return null;

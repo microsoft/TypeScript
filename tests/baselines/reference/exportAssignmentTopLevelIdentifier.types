@@ -1,11 +1,11 @@
 === tests/cases/conformance/externalModules/foo_1.ts ===
 import foo = require("./foo_0");
->foo : typeof Foo
+>foo : typeof foo
 
 if(foo.answer === 42){
 >foo.answer === 42 : boolean
 >foo.answer : number
->foo : typeof Foo
+>foo : typeof foo
 >answer : number
 
 }

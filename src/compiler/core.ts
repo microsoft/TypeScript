@@ -188,13 +188,10 @@ module ts {
 
     export var localizedDiagnosticMessages: Map<string> = undefined;
 
-    function getLocaleSpecificMessage(message: string) {
+    export function getLocaleSpecificMessage(message: string) {
         if (ts.localizedDiagnosticMessages) {
             message = localizedDiagnosticMessages[message];
         }
-
-        /* Check to see that we got an actual value back. */
-        Debug.assert(message, "Diagnostic message does not exist in locale map.");
 
         return message;
     }
@@ -510,12 +507,6 @@ module ts {
         var pathLen = path.length;
         var extLen = extension.length;
         return pathLen > extLen && path.substr(pathLen - extLen, extLen) === extension;
-    }
-
-    export function getCanonicalFileName(fileName: string): string {
-        // if underlying system can distinguish between two files whose names differs only in cases then file name already in canonical form.
-        // otherwise use toLowerCase as a canonical form.
-        return sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
     }
 
     export interface ObjectAllocator {

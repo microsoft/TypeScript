@@ -38,13 +38,13 @@ module X {
 >X : number
 
     export module Y {
->Y : typeof Y
+>Y : typeof X.Y
 
         var Y = 13;
 >Y : number
 
         export module Z {
->Z : typeof Z
+>Z : typeof X.Y.Z
 
             var X = 12;
 >X : number
@@ -60,7 +60,7 @@ module X {
 
 module Y.Y {
 >Y : typeof Y
->Y : typeof Y
+>Y : typeof Y.Y
 
     export enum Y {
 >Y : Y

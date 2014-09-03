@@ -1,4 +1,4 @@
-test1.ts(3,2): Import declarations in an internal module cannot reference an external module.
+test1.ts(3,2): error TS1147: Import declarations in an internal module cannot reference an external module.
 
 
 ==== test1.ts (1 errors) ====

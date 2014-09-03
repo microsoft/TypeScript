@@ -27,6 +27,10 @@ module TypeScript {
             this._length = length;
         }
 
+        public toJSON(key: any): any {
+            return { start: this._start, length: this._length };
+        }
+
         public start(): number {
             return this._start;
         }

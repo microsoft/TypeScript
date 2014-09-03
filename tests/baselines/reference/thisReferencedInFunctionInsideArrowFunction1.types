@@ -8,12 +8,9 @@ function test()
 >test : () => void
 {
     foo(() =>
->foo(() =>
-        function () { return this; }
-    ) : void
+>foo(() =>        function () { return this; }    ) : void
 >foo : (dummy: any) => void
->() =>
-        function () { return this; } : () => () => any
+>() =>        function () { return this; } : () => () => any
 
         function () { return this; }
 >function () { return this; } : () => any

@@ -2,7 +2,7 @@ interface TypeWriterResult {
     line: number;
     column: number;
     syntaxKind: string;
-    identifierName: string;
+    sourceText: string;
     type: string;
 }
 
@@ -28,7 +28,7 @@ class TypeWriterWalker {
             // TODO: Ideally we should log all expressions, but to compare to the
             // old typeWriter baselines, suppress tokens
             case ts.SyntaxKind.ThisKeyword:
-            case ts.SyntaxKind.RegularExpressionLiteral:
+            case ts.SyntaxKind.SuperKeyword:
             case ts.SyntaxKind.ArrayLiteral:
             case ts.SyntaxKind.ObjectLiteral:
             case ts.SyntaxKind.PropertyAccess:
@@ -77,7 +77,6 @@ class TypeWriterWalker {
         var actualPos = ts.skipTrivia(this.currentSourceFile.text, node.pos);
         var lineAndCharacter = this.currentSourceFile.getLineAndCharacterFromPosition(actualPos);
         var sourceText = ts.getSourceTextOfNodeFromSourceText(this.currentSourceFile.text, node);
-        var isUnknownType = (<ts.IntrinsicType>type).intrinsicName === "unknown";
         
         // If we got an unknown type, we temporarily want to fall back to just pretending the name
         // (source text) of the node is the type. This is to align with the old typeWriter to make
@@ -86,8 +85,8 @@ class TypeWriterWalker {
             line: lineAndCharacter.line - 1,
             column: lineAndCharacter.character,
             syntaxKind: ts.SyntaxKind[node.kind],
-            identifierName: sourceText,
-            type: isUnknownType ? sourceText : this.checker.typeToString(type)
+            sourceText: sourceText,
+            type: this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.None)
         });
     }
 

@@ -18,7 +18,7 @@ module M {
 
     export class O extends M.N {
 >O : O
->M : M
+>M : unknown
 >N : N
     }
 }

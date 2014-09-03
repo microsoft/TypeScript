@@ -126,19 +126,11 @@ module m2 {
 }
 
 m2.foo(() =>  {
->m2.foo(() =>  {
-
-    var b = 30;
-    return b;
-}) : void
+>m2.foo(() =>  {    var b = 30;    return b;}) : void
 >m2.foo : (n: () => void) => void
 >m2 : typeof m2
 >foo : (n: () => void) => void
->() =>  {
-
-    var b = 30;
-    return b;
-} : () => number
+>() =>  {    var b = 30;    return b;} : () => number
 
     var b = 30;
 >b : number
@@ -163,9 +155,7 @@ declare function overloadAmbient(s: string): string;
 
 var f2 = () => {
 >f2 : () => string
->() => {
-    return "string";
-} : () => string
+>() => {    return "string";} : () => string
 
     return "string";
 }

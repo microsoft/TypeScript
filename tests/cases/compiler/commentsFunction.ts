@@ -44,3 +44,14 @@ lambdaFoo = (a, b) => a * b; // This is trailing comment
 
 function blah4(/*1*/a: string/*2*/,/*3*/b: string/*4*/) {
 }
+
+function foo1() {
+
+    // should emit this
+}
+
+function foo2() {
+    /// This is some detached comment
+
+    // should emit this leading comment of } too
+}

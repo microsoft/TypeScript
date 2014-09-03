@@ -69,4 +69,21 @@ this is 4 spaces left aligned but above line is empty
     above 3 lines are empty*/
     export class c3 {
     }
+
+    /** this is first line - aligned to class declaration
+	*              this is 0 space + tab
+ 	*              this is 1 space + tab
+  	*              this is 2 spaces + tab
+   	*              this is 3 spaces + tab
+    	*          this is 4 spaces + tab
+     	*          this is 5 spaces + tab
+      	*          this is 6 spaces + tab
+       	*          this is 7 spaces + tab
+        	*      this is 8 spaces + tab
+         	*      this is 9 spaces + tab
+          	*      this is 10 spaces + tab
+           	*      this is 11 spaces + tab
+            	*  this is 12 spaces + tab */
+    export class c4 {
+    }
 }

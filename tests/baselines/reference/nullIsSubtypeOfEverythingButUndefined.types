@@ -62,12 +62,10 @@ var r4 = true ? null : new Date();
 var r5 = true ? /1/ : null;
 >r5 : RegExp
 >true ? /1/ : null : RegExp
->/1/ : RegExp
 
 var r5 = true ? null : /1/;
 >r5 : RegExp
 >true ? null : /1/ : RegExp
->/1/ : RegExp
 
 var r6 = true ? { foo: 1 } : null;
 >r6 : { foo: number; }

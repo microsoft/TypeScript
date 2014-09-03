@@ -10,30 +10,30 @@ declare module EM {
 
 		public getPosition() : EM.Position;
 >getPosition : () => Position
->EM : EM
+>EM : unknown
 >Position : Position
 	}
 }
 
 var x:EM.Position;
->x : Position
->EM : EM
->Position : Position
+>x : EM.Position
+>EM : unknown
+>Position : EM.Position
 
 var ec:EM.EC = new EM.EC();
->ec : EC
->EM : EM
->EC : EC
->new EM.EC() : EC
->EM.EC : typeof EC
+>ec : EM.EC
+>EM : unknown
+>EC : EM.EC
+>new EM.EC() : EM.EC
+>EM.EC : typeof EM.EC
 >EM : typeof EM
->EC : typeof EC
+>EC : typeof EM.EC
 
 x = ec.getPosition();
->x = ec.getPosition() : Position
->x : Position
->ec.getPosition() : Position
->ec.getPosition : () => Position
->ec : EC
->getPosition : () => Position
+>x = ec.getPosition() : EM.Position
+>x : EM.Position
+>ec.getPosition() : EM.Position
+>ec.getPosition : () => EM.Position
+>ec : EM.EC
+>getPosition : () => EM.Position
 

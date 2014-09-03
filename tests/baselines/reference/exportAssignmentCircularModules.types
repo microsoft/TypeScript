@@ -1,6 +1,6 @@
 === tests/cases/conformance/externalModules/foo_2.ts ===
 import foo0 = require("./foo_0");
->foo0 : typeof Foo
+>foo0 : typeof foo0
 
 module Foo {
 >Foo : typeof Foo
@@ -8,7 +8,7 @@ module Foo {
 	export var x = foo0.x;
 >x : any
 >foo0.x : any
->foo0 : typeof Foo
+>foo0 : typeof foo0
 >x : any
 }
 export = Foo;
@@ -16,7 +16,7 @@ export = Foo;
 
 === tests/cases/conformance/externalModules/foo_0.ts ===
 import foo1 = require('./foo_1');
->foo1 : typeof Foo
+>foo1 : typeof foo1
 
 module Foo {
 >Foo : typeof Foo
@@ -24,7 +24,7 @@ module Foo {
 	export var x = foo1.x;
 >x : any
 >foo1.x : any
->foo1 : typeof Foo
+>foo1 : typeof foo1
 >x : any
 }
 export = Foo;
@@ -32,7 +32,7 @@ export = Foo;
 
 === tests/cases/conformance/externalModules/foo_1.ts ===
 import foo2 = require("./foo_2");
->foo2 : typeof Foo
+>foo2 : typeof foo2
 
 module Foo {
 >Foo : typeof Foo
@@ -40,7 +40,7 @@ module Foo {
 	export var x = foo2.x;
 >x : any
 >foo2.x : any
->foo2 : typeof Foo
+>foo2 : typeof foo2
 >x : any
 }
 export = Foo;

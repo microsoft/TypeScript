@@ -168,14 +168,14 @@ throw typeof M;
 >M : typeof M
 
 var aClassInModule = new M.A();
->aClassInModule : A
->new M.A() : A
->M.A : typeof A
+>aClassInModule : M.A
+>new M.A() : M.A
+>M.A : typeof M.A
 >M : typeof M
->A : typeof A
+>A : typeof M.A
 
 throw aClassInModule;
->aClassInModule : A
+>aClassInModule : M.A
 
 var aFunctionInModule = M.F2;
 >aFunctionInModule : (x: number) => string
@@ -223,8 +223,6 @@ throw ['a', ['b']];
 >['b'] : string[]
 
 throw /[a-z]/;
->/[a-z]/ : RegExp
-
 throw new Date();
 >new Date() : Date
 >Date : { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }

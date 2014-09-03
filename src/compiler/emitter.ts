@@ -290,17 +290,16 @@ module ts {
                 }
                 else {
                     // Empty string - make sure we write empty line
-                    writer.writeLiteral(sys.newLine);
+                    writer.writeLiteral(newLine);
                 }
             }
 
             function calculateIndent(pos: number, end: number) {
                 var currentLineIndent = 0;
-                while (pos < end && isWhiteSpace(currentSourceFile.text.charCodeAt(pos))) {
-                    pos++;
+                for (; pos < end && isWhiteSpace(currentSourceFile.text.charCodeAt(pos)); pos++) {
                     if (currentSourceFile.text.charCodeAt(pos) === CharacterCodes.tab) {
-                        // Tabs = size of the indent
-                        currentLineIndent += getIndentSize();
+                        // Tabs = TabSize = indent size and go to next tabStop
+                        currentLineIndent += getIndentSize() - (currentLineIndent % getIndentSize());
                     }
                     else {
                         // Single space
@@ -330,9 +329,14 @@ module ts {
             /** Emit Trailing comments of the node */
             var emitTrailingComments = compilerOptions.removeComments ? (node: Node) => { } : emitTrailingDeclarationComments;
 
+            var emitLeadingCommentsOfPosition = compilerOptions.removeComments ? (pos: number) => { } : emitLeadingCommentsOfLocalPosition;
+
             var detachedCommentsInfo: { nodePos: number; detachedCommentEndPos: number }[];
             /** Emit detached comments of the node */
             var emitDetachedComments = compilerOptions.removeComments ? (node: TextRange) => { } : emitDetachedCommentsAtPosition;
+
+            /** Emits /// or pinned which is comment starting with /*! comments */
+            var emitPinnedOrTripleSlashComments = compilerOptions.removeComments ? (node: Node) => { } : emitPinnedOrTripleSlashCommentsOfNode;
 
             var writeComment = writeCommentRange;
 
@@ -1316,7 +1320,10 @@ module ts {
             }
 
             function emitFunctionDeclaration(node: FunctionDeclaration) {
-                if (!node.body) return;
+                if (!node.body) {
+                    return emitPinnedOrTripleSlashComments(node);
+                }
+
                 if (node.kind !== SyntaxKind.Method) {
                     // Methods will emit the comments as part of emitting method declaration
                     emitLeadingComments(node);
@@ -1390,12 +1397,14 @@ module ts {
                         write(";");
                         emitTrailingComments(node.body);
                     }
-                    decreaseIndent();
                     writeLine();
                     if (node.body.kind === SyntaxKind.FunctionBlock) {
+                        emitLeadingCommentsOfPosition((<Block>node.body).statements.end);
+                        decreaseIndent();
                         emitToken(SyntaxKind.CloseBraceToken, (<Block>node.body).statements.end);
                     }
                     else {
+                        decreaseIndent();
                         emitStart(node.body);
                         write("}");
                         emitEnd(node.body);
@@ -1484,7 +1493,10 @@ module ts {
             function emitMemberFunctions(node: ClassDeclaration) {
                 forEach(node.members, member => {
                     if (member.kind === SyntaxKind.Method) {
-                        if (!(<MethodDeclaration>member).body) return;
+                        if (!(<MethodDeclaration>member).body) {
+                            return emitPinnedOrTripleSlashComments(member);
+                        }
+
                         writeLine();
                         emitLeadingComments(member);
                         emitStart(member);
@@ -1607,6 +1619,13 @@ module ts {
                 emitTrailingComments(node);
 
                 function emitConstructorOfClass() {
+                    // Emit the constructor overload pinned comments
+                    forEach(node.members, member => {
+                        if (member.kind === SyntaxKind.Constructor && !(<ConstructorDeclaration>member).body) {
+                            emitPinnedOrTripleSlashComments(member);
+                        }
+                    });
+
                     var ctor = getFirstConstructorWithBody(node);
                     if (ctor) {
                         emitLeadingComments(ctor);
@@ -1648,8 +1667,11 @@ module ts {
                         if (superCall) statements = statements.slice(1);
                         emitLines(statements);
                     }
-                    decreaseIndent();
                     writeLine();
+                    if (ctor) {
+                        emitLeadingCommentsOfPosition((<Block>ctor.body).statements.end);
+                    }
+                    decreaseIndent();
                     emitToken(SyntaxKind.CloseBraceToken, ctor ? (<Block>ctor.body).statements.end : node.members.end);
                     scopeEmitEnd();
                     emitEnd(<Node>ctor || node);
@@ -1657,6 +1679,10 @@ module ts {
                         emitTrailingComments(ctor);
                     }
                 }
+            }
+
+            function emitInterfaceDeclaration(node: InterfaceDeclaration) {
+                emitPinnedOrTripleSlashComments(node);
             }
 
             function emitEnumDeclaration(node: EnumDeclaration) {
@@ -1734,7 +1760,10 @@ module ts {
             }
 
             function emitModuleDeclaration(node: ModuleDeclaration) {
-                if (!isInstantiated(node)) return;
+                if (!isInstantiated(node)) {
+                    return emitPinnedOrTripleSlashComments(node);
+                }
+
                 emitLeadingComments(node);
                 if (!(node.flags & NodeFlags.Export)) {
                     emitStart(node);
@@ -1962,7 +1991,14 @@ module ts {
             }
 
             function emitNode(node: Node) {
-                if (!node || node.flags & NodeFlags.Ambient) return;
+                if (!node) {
+                    return;
+                }
+
+                if (node.flags & NodeFlags.Ambient) {
+                    return emitPinnedOrTripleSlashComments(node);
+                }
+
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
                         return emitIdentifier(<Identifier>node);
@@ -2066,6 +2102,8 @@ module ts {
                         return emitVariableDeclaration(<VariableDeclaration>node);
                     case SyntaxKind.ClassDeclaration:
                         return emitClassDeclaration(<ClassDeclaration>node);
+                    case SyntaxKind.InterfaceDeclaration:
+                        return emitInterfaceDeclaration(<InterfaceDeclaration>node);
                     case SyntaxKind.EnumDeclaration:
                         return emitEnumDeclaration(<EnumDeclaration>node);
                     case SyntaxKind.ModuleDeclaration:
@@ -2077,28 +2115,44 @@ module ts {
                 }
             }
 
-            function emitLeadingDeclarationComments(node: Node) {
+            function hasDetachedComments(pos: number) {
+                return detachedCommentsInfo !== undefined && detachedCommentsInfo[detachedCommentsInfo.length - 1].nodePos === pos;
+            }
+
+            function getLeadingCommentsWithoutDetachedComments() {
+                // get the leading comments from detachedPos
+                var leadingComments = getLeadingComments(currentSourceFile.text, detachedCommentsInfo[detachedCommentsInfo.length - 1].detachedCommentEndPos);
+                if (detachedCommentsInfo.length - 1) {
+                    detachedCommentsInfo.pop();
+                }
+                else {
+                    detachedCommentsInfo = undefined;
+                }
+
+                return leadingComments;
+            }
+
+            function getLeadingCommentsToEmit(node: Node) {
                 // Emit the leading comments only if the parent's pos doesnt match because parent should take care of emitting these comments
                 if (node.parent.kind === SyntaxKind.SourceFile || node.pos !== node.parent.pos) {
                     var leadingComments: Comment[];
-                    if (detachedCommentsInfo === undefined || detachedCommentsInfo[detachedCommentsInfo.length - 1].nodePos !== node.pos) {
+                    if (hasDetachedComments(node.pos)) {
+                        // get comments without detached comments
+                        leadingComments = getLeadingCommentsWithoutDetachedComments();
+                    }
+                    else {
                         // get the leading comments from the node
                         leadingComments = getLeadingCommentsOfNode(node, currentSourceFile);
                     }
-                    else {
-                        // get the leading comments from detachedPos
-                        leadingComments = getLeadingComments(currentSourceFile.text, detachedCommentsInfo[detachedCommentsInfo.length - 1].detachedCommentEndPos);
-                        if (detachedCommentsInfo.length - 1) {
-                            detachedCommentsInfo.pop();
-                        }
-                        else {
-                            detachedCommentsInfo = undefined;
-                        }
-                    }
-                    emitNewLineBeforeLeadingComments(node, leadingComments, writer);
-                    // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
-                    emitComments(leadingComments, /*trailingSeparator*/ true, writer, writeComment);
+                    return leadingComments;
                 }
+            }
+
+            function emitLeadingDeclarationComments(node: Node) {
+                var leadingComments = getLeadingCommentsToEmit(node);
+                emitNewLineBeforeLeadingComments(node, leadingComments, writer);
+                // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
+                emitComments(leadingComments, /*trailingSeparator*/ true, writer, writeComment);
             }
 
             function emitTrailingDeclarationComments(node: Node) {
@@ -2108,6 +2162,21 @@ module ts {
                     // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
                     emitComments(trailingComments, /*trailingSeparator*/ false, writer, writeComment);
                 }
+            }
+
+            function emitLeadingCommentsOfLocalPosition(pos: number) {
+                var leadingComments: Comment[];
+                if (hasDetachedComments(pos)) {
+                    // get comments without detached comments
+                    leadingComments = getLeadingCommentsWithoutDetachedComments();
+                }
+                else {
+                    // get the leading comments from the node
+                    leadingComments = getLeadingComments(currentSourceFile.text, pos);
+                }
+                emitNewLineBeforeLeadingComments({ pos: pos, end: pos }, leadingComments, writer);
+                // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
+                emitComments(leadingComments, /*trailingSeparator*/ true, writer, writeComment);
             }
 
             function emitDetachedCommentsAtPosition(node: TextRange) {
@@ -2133,7 +2202,7 @@ module ts {
                         lastComment = comment;
                     });
 
-                    if (detachedComments && detachedComments.length) {
+                    if (detachedComments.length) {
                         // All comments look like they could have been part of the copyright header.  Make
                         // sure there is at least one blank line between it and the node.  If not, it's not
                         // a copyright header.
@@ -2153,6 +2222,28 @@ module ts {
                         }
                     }
                 }
+            }
+
+            function emitPinnedOrTripleSlashCommentsOfNode(node: Node) {
+                var pinnedComments = ts.filter(getLeadingCommentsToEmit(node), isPinnedOrTripleSlashComment);
+
+                function isPinnedOrTripleSlashComment(comment: Comment) {
+                    if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
+                        return currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
+                    }
+                    // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text 
+                    // so that we dont end up computing comment string and doing match for all // comments
+                    else if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.slash &&
+                        comment.pos + 2 < comment.end &&
+                        currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.slash &&
+                        currentSourceFile.text.substring(comment.pos, comment.end).match(fullTripleSlashReferencePathRegEx)) {
+                        return true;
+                    }
+                }
+
+                emitNewLineBeforeLeadingComments(node, pinnedComments, writer);
+                // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
+                emitComments(pinnedComments, /*trailingSeparator*/ true, writer, writeComment);
             }
 
             if (compilerOptions.sourceMap) {

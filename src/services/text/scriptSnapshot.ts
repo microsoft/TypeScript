@@ -16,10 +16,12 @@ module TypeScript {
         // always determine this (albeit in a more expensive manner).
         getLineStartPositions(): number[];
 
-        // Returns a text change range representing what text has changed since the specified version.
-        // If the change cannot be determined (say, because a file was opened/closed), then 'null' 
-        // should be returned.
-        getTextChangeRangeSinceVersion(scriptVersion: number): TextChangeRange;
+        // Gets the TextChangeRange that describe how the text changed between this text and 
+        // an older version.  This informatoin is used by the incremental parser to determine
+        // what sections of the script need to be reparsed.  'null' can be returned if the 
+        // change range cannot be determined.  However, in that case, incremental parsing will
+        // not happen and the entire document will be reparsed.
+        getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange;
     }
 
     export module ScriptSnapshot {
@@ -45,7 +47,7 @@ module TypeScript {
                 return this._lineStartPositions;
             }
 
-            public getTextChangeRangeSinceVersion(scriptVersion: number): TypeScript.TextChangeRange {
+            public getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange {
                 throw Errors.notYetImplemented();
             }
         }

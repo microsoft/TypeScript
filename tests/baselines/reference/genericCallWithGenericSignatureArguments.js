@@ -66,6 +66,8 @@ function other2(x) {
     var r7 = foo(function (a) { return a; }, function (b) { return b; }); // T => T
     var r7b = foo(function (a) { return a; }, function (b) { return b; }); // {} => {}
     var r8 = r7(null);
+    // BUG 835518
+    //var r9 = r7(new Date());
 }
 function foo2(a, b) {
     var r;

@@ -8,18 +8,18 @@ declare module A.B
 }
 
 import ab = A.B;
->ab : typeof B
+>ab : typeof ab
 >A : typeof A
->B : typeof B
+>B : typeof ab
 
 class D extends ab.C{ }
 >D : D
->ab : ab
->C : C
+>ab : unknown
+>C : ab.C
 
 class E extends A.B.C{ }
 >E : E
->A : A
->B : B
->C : C
+>A : unknown
+>B : unknown
+>C : ab.C
 

@@ -45,9 +45,7 @@ var r3 = a["a b"];
 
 var b = {
 >b : { "a b": number; }
->{
-    "a b": 1
-} : { "a b": number; }
+>{    "a b": 1} : { "a b": number; }
 
     "a b": 1
 }

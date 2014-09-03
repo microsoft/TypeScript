@@ -2,7 +2,7 @@
 module M.buz.plop {
 >M : typeof M
 >buz : typeof buz
->plop : typeof plop
+>plop : typeof buz.plop
 
     export function doom() { }
 >doom : () => void
@@ -13,7 +13,7 @@ module M.buz.plop {
 module M.buz.plop {
 >M : typeof M
 >buz : typeof buz
->plop : typeof plop
+>plop : typeof M.buz.plop
 
     function gunk() { }
 >gunk : () => void

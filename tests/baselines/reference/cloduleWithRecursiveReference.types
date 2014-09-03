@@ -6,12 +6,12 @@ module M
 >C : C
 
   export module C {
->C : typeof C
+>C : typeof M.C
 
     export var C = M.C
->C : typeof C
->M.C : typeof C
+>C : typeof M.C
+>M.C : typeof M.C
 >M : typeof M
->C : typeof C
+>C : typeof M.C
   }
 }

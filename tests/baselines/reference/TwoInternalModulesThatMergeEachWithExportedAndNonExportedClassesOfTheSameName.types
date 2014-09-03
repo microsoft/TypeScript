@@ -20,20 +20,20 @@ module A {
 >Point : Point
 
         fromCarthesian(p: A.Point) {
->fromCarthesian : (p: Point) => { x: number; y: number; }
->p : Point
->A : A
->Point : Point
+>fromCarthesian : (p: A.Point) => { x: number; y: number; }
+>p : A.Point
+>A : unknown
+>Point : A.Point
 
             return { x: p.x, y: p.y };
 >{ x: p.x, y: p.y } : { x: number; y: number; }
 >x : number
 >p.x : number
->p : Point
+>p : A.Point
 >x : number
 >y : number
 >p.y : number
->p : Point
+>p : A.Point
 >y : number
         }
     }
@@ -47,8 +47,8 @@ var p: { x: number; y: number; };
 
 var p: A.Point;
 >p : { x: number; y: number; }
->A : A
->Point : Point
+>A : unknown
+>Point : A.Point
 
 module X.Y.Z {
 >X : typeof X
@@ -89,9 +89,9 @@ var l: { length: number; }
 
 var l: X.Y.Z.Line;
 >l : { length: number; }
->X : X
->Y : Y
->Z : Z
->Line : Line
+>X : unknown
+>Y : unknown
+>Z : unknown
+>Line : X.Y.Z.Line
 
 

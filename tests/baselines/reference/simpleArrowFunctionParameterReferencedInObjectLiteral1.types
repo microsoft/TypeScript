@@ -14,5 +14,5 @@
 >({ X: p }) : { X: any; }
 >{ X: p } : { X: any; }
 >X : any
->p : p
+>p : any
 

@@ -73,8 +73,8 @@ var p: { x: number; y: number; };
 
 var p: M2.Point;
 >p : { x: number; y: number; }
->M2 : M2
->Point : Point
+>M2 : unknown
+>Point : M2.Point
 
 var p2: { Origin() : { x: number; y: number; } };
 >p2 : { Origin(): { x: number; y: number; }; }
@@ -85,7 +85,7 @@ var p2: { Origin() : { x: number; y: number; } };
 var p2: typeof M2.Point;
 >p2 : { Origin(): { x: number; y: number; }; }
 >M2 : typeof M2
->Point : typeof Point
+>Point : typeof M2.Point
 
 module M3 {
 >M3 : typeof M3

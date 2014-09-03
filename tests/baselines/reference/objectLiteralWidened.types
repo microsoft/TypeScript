@@ -3,10 +3,7 @@
 
 var x = {
 >x : { foo: any; bar: any; }
->{
-    foo: null,
-    bar: undefined
-} : { foo: null; bar: undefined; }
+>{    foo: null,    bar: undefined} : { foo: null; bar: undefined; }
 
     foo: null,
 >foo : any
@@ -18,23 +15,14 @@ var x = {
 
 var y = {
 >y : { foo: any; bar: { baz: any; boo: any; }; }
->{
-    foo: null,
-    bar: {
-        baz: null,
-        boo: undefined
-    }
-} : { foo: null; bar: { baz: null; boo: undefined; }; }
+>{    foo: null,    bar: {        baz: null,        boo: undefined    }} : { foo: null; bar: { baz: null; boo: undefined; }; }
 
     foo: null,
 >foo : any
 
     bar: {
 >bar : { baz: any; boo: any; }
->{
-        baz: null,
-        boo: undefined
-    } : { baz: null; boo: undefined; }
+>{        baz: null,        boo: undefined    } : { baz: null; boo: undefined; }
 
         baz: null,
 >baz : any
