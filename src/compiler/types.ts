@@ -12,6 +12,10 @@ module ts {
     export enum SyntaxKind {
         Unknown,
         EndOfFileToken,
+        WhitespaceTrivia,
+        NewLineTrivia,
+        SingleLineCommentTrivia,
+        MultiLineCommentTrivia,
         // Literals
         NumericLiteral,
         StringLiteral,
