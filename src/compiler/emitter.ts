@@ -130,7 +130,7 @@ module ts {
                     var lineStartsOfS = getLineStarts(s);
                     if (lineStartsOfS.length > 1) {
                         lineCount = lineCount + lineStartsOfS.length - 1;
-                        linePos = linePos = output.length - s.length + lineStartsOfS[lineStartsOfS.length - 1];
+                        linePos = output.length - s.length + lineStartsOfS[lineStartsOfS.length - 1];
                     }
                 }
             }
