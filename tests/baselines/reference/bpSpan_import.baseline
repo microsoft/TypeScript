@@ -42,8 +42,10 @@
 --------------------------------
 >>>>}
 
-   |Pos: 31 SpanInfo: undefined Statement: 
-    |Pos: 32 SpanInfo: undefined Statement: 
+   |Pos: 31 SpanInfo: {"start":31,"length":1} Statement: 
+   |}
+    |Pos: 32 SpanInfo: {"start":31,"length":1} Statement: 
+    |}
 --------------------------------
 >>>>import a = m.c;
 

@@ -84,6 +84,8 @@ module ts.BreakpointResolver {
                     return spanInImportDeclaration(<ImportDeclaration>statement);
                 case SyntaxKind.EnumDeclaration:
                     return spanInEnumDeclaration(<EnumDeclaration>statement);
+                case SyntaxKind.ModuleDeclaration:
+                    return spanInModuleDeclaration(<ModuleDeclaration>statement);
             }
 
             function spanInVariableStatement(variableStatement: VariableStatement): TypeScript.TextSpan {
@@ -451,6 +453,26 @@ module ts.BreakpointResolver {
                 function spanInEnumMember(enumMember: EnumMember): TypeScript.TextSpan {
                     return textSpan(enumMember.pos, enumMember.end);
                 }
+            }
+
+            function spanInModuleDeclaration(moduleDeclaration: ModuleDeclaration): TypeScript.TextSpan {
+                if (moduleDeclaration.flags & NodeFlags.Ambient) {
+                    return;
+                }
+
+                // Empty modules cant have breakpoints
+                if (moduleDeclaration.body.kind === SyntaxKind.ModuleBlock && // If the members of this module is module block
+                    !(<Block>moduleDeclaration.body).statements.length && // and there are no statements in the module body
+                    (moduleDeclaration.parent.kind !== SyntaxKind.ModuleDeclaration // And this module is not a child from dotted module name
+                    || (<ModuleDeclaration>moduleDeclaration.parent).body !== moduleDeclaration)) {
+                    return;
+                }
+
+                if (moduleDeclaration.body.kind !== SyntaxKind.ModuleBlock) {
+                    // Set the breakpoint in the module body
+                    return spanInStatement(moduleDeclaration.body);
+                }
+                return spanInBlock(<Block>moduleDeclaration.body, /*canSetBreakpointOnCloseBrace*/ true);
             }
         }
 
