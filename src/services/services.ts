@@ -1300,16 +1300,30 @@ module ts {
         return isLabelOfLabeledStatement(node) || isJumpStatementTarget(node);
     }
 
+    function isRightSideOfQualifiedName(node: Node) {
+        return node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node;
+    }
+
+    function isRightSideOfPropertyAccess(node: Node) {
+        return node.parent.kind === SyntaxKind.PropertyAccess && (<PropertyAccess>node.parent).right === node;
+    }
+
     function isCallExpressionTarget(node: Node): boolean {
-        if (node.parent.kind === SyntaxKind.PropertyAccess && (<PropertyAccess>node.parent).right === node)
+        if (isRightSideOfPropertyAccess(node)) {
             node = node.parent;
+        }
         return node.parent.kind === SyntaxKind.CallExpression && (<CallExpression>node.parent).func === node;
     }
 
     function isNewExpressionTarget(node: Node): boolean {
-        if (node.parent.kind === SyntaxKind.PropertyAccess && (<PropertyAccess>node.parent).right === node)
+        if (isRightSideOfPropertyAccess(node)) {
             node = node.parent;
+        }
         return node.parent.kind === SyntaxKind.NewExpression && (<CallExpression>node.parent).func === node;
+    }
+
+    function isNameOfModuleDeclaration(node: Node) {
+        return node.parent.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>node.parent).name === node;
     }
 
     function isAnyFunction(node: Node): boolean {
@@ -1358,7 +1372,7 @@ module ts {
 
     function isNameOfExternalModuleImportOrDeclaration(node: Node): boolean {
         return node.kind === SyntaxKind.StringLiteral &&
-            ((node.parent.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>node.parent).name === node) ||
+            (isNameOfModuleDeclaration(node) ||
             (node.parent.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node.parent).externalModuleName === node));
     }
 
@@ -2708,9 +2722,9 @@ module ts {
             }
 
             function isTypeReference(node: Node): boolean {
-                if (node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node)
+                if (isRightSideOfQualifiedName(node)) {
                     node = node.parent;
-
+                }
                 return node.parent.kind === SyntaxKind.TypeReference;
             }
 
@@ -2848,64 +2862,63 @@ module ts {
         }
 
         function getNameOrDottedNameSpan(filename: string, startPos: number, endPos: number): TypeScript.TextSpan {
-            function getTypeInfoEligiblePath(filename: string, position: number, isConstructorValidPosition: boolean) {
-                var sourceUnit = syntaxTreeCache.getCurrentFileSyntaxTree(filename).sourceUnit();
+            filename = ts.normalizeSlashes(filename);
+            // Get node at the location
+            var node = getNodeAtPosition(getCurrentSourceFile(filename), startPos);
 
-                var ast = TypeScript.ASTHelpers.getAstAtPosition(sourceUnit, position, /*useTrailingTriviaAsLimChar*/ false, /*forceInclusive*/ true);
-                if (ast === null) {
-                    return null;
-                }
-
-                if (ast.kind() === TypeScript.SyntaxKind.ParameterList && ast.parent.kind() === TypeScript.SyntaxKind.CallSignature && ast.parent.parent.kind() === TypeScript.SyntaxKind.ConstructorDeclaration) {
-                    ast = ast.parent.parent;
-                }
-
-                switch (ast.kind()) {
-                    default:
-                        return null;
-                    case TypeScript.SyntaxKind.ConstructorDeclaration:
-                        var constructorAST = <TypeScript.ConstructorDeclarationSyntax>ast;
-                        if (!isConstructorValidPosition || !(position >= TypeScript.start(constructorAST) && position <= TypeScript.start(constructorAST) + "constructor".length)) {
-                            return null;
-                        }
-                        else {
-                            return ast;
-                        }
-                    case TypeScript.SyntaxKind.FunctionDeclaration:
-                        return null;
-                    case TypeScript.SyntaxKind.MemberAccessExpression:
-                    case TypeScript.SyntaxKind.QualifiedName:
-                    case TypeScript.SyntaxKind.SuperKeyword:
-                    case TypeScript.SyntaxKind.StringLiteral:
-                    case TypeScript.SyntaxKind.ThisKeyword:
-                    case TypeScript.SyntaxKind.IdentifierName:
-                        return ast;
-                }
+            if (!node) {
+                return;
             }
 
-            filename = TypeScript.switchToForwardSlashes(filename);
+            switch (node.kind) {
+                case SyntaxKind.PropertyAccess:
+                case SyntaxKind.QualifiedName:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.NullKeyword:
+                case SyntaxKind.SuperKeyword:
+                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.Identifier:
+                    break;
 
-            var node = getTypeInfoEligiblePath(filename, startPos, false);
-            if (!node) return null;
+                // Cant create the text span
+                default:
+                    return;
+            }
 
-            while (node) {
-                if (TypeScript.ASTHelpers.isNameOfMemberAccessExpression(node) ||
-                    TypeScript.ASTHelpers.isRightSideOfQualifiedName(node)) {
-                    node = node.parent;
+            var nodeForStartPos = node;
+            while (true) {
+                if (isRightSideOfPropertyAccess(nodeForStartPos) || isRightSideOfQualifiedName(nodeForStartPos)) {
+                    // If on the span is in right side of the the property or qualified name, return the span from the qualified name pos to end of this node
+                    nodeForStartPos = nodeForStartPos.parent;
+                }
+                else if (isNameOfModuleDeclaration(nodeForStartPos)) {
+                    // If this is name of a module declarations, check if this is right side of dotted module name
+                    // If parent of the module declaration which is parent of this node is module declaration and its body is the module declaration that this node is name of 
+                    // Then this name is name from dotted module
+                    if (nodeForStartPos.parent.parent.kind === SyntaxKind.ModuleDeclaration &&
+                        (<ModuleDeclaration>nodeForStartPos.parent.parent).body === nodeForStartPos.parent) {
+                        // Use parent module declarations name for start pos
+                        nodeForStartPos = (<ModuleDeclaration>nodeForStartPos.parent.parent).name;
+                    }
+                    else {
+                        // We have to use this name for start pos
+                        break;
+                    }
                 }
                 else {
+                    // Is not a member expression so we have found the node for start pos
                     break;
                 }
             }
 
-            return TypeScript.TextSpan.fromBounds(
-                TypeScript.start(node),
-                TypeScript.end(node));
+            return TypeScript.TextSpan.fromBounds(nodeForStartPos.getStart(), node.getEnd());
         }
 
         function getBreakpointStatementAtPosition(filename: string, position: number) {
             // doesn't use compiler - no need to synchronize with host
-            filename = TypeScript.switchToForwardSlashes(filename);
+            filename = ts.normalizeSlashes(filename);
             return BreakpointResolver.spanInSourceFileAtLocation(getCurrentSourceFile(filename), position);
         }
 
