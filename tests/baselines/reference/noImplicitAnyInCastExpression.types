@@ -1,0 +1,30 @@
+=== tests/cases/compiler/noImplicitAnyInCastExpression.ts ===
+interface IBar {
+>IBar : IBar
+
+    b: number;
+>b : number
+}
+interface IFoo {
+>IFoo : IFoo
+
+    p: IBar[];
+>p : IBar[]
+>IBar : IBar
+}
+
+function foo(a: any) { }
+>foo : (a: any) => void
+>a : any
+
+foo(<IFoo> {
+>foo(<IFoo> {    p: null,}) : void
+>foo : (a: any) => void
+><IFoo> {    p: null,} : IFoo
+>IFoo : IFoo
+>{    p: null,} : { p: null; }
+
+    p: null,
+>p : any
+
+});
