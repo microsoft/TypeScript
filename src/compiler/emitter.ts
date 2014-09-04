@@ -127,18 +127,10 @@ module ts {
             function writeLiteral(s: string) {
                 if (s && s.length) {
                     write(s);
-                    var pos = 0;
-                    while (pos < s.length) {
-                        switch (s.charCodeAt(pos++)) {
-                            case CharacterCodes.carriageReturn:
-                                if (pos < s.length && s.charCodeAt(pos) === CharacterCodes.lineFeed) {
-                                    pos++;
-                                }
-                            case CharacterCodes.lineFeed:
-                                lineCount++;
-                                linePos = output.length - s.length + pos;
-                                break;
-                        }
+                    var lineStartsOfS = getLineStarts(s);
+                    if (lineStartsOfS.length > 1) {
+                        lineCount = lineCount + lineStartsOfS.length - 1;
+                        linePos = output.length - s.length + lineStartsOfS[lineStartsOfS.length - 1];
                     }
                 }
             }

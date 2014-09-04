@@ -249,7 +249,8 @@ module ts {
         var pos = 0;
         var lineStart = 0;
         while (pos < text.length) {
-            switch (text.charCodeAt(pos++)) {
+            var ch = text.charCodeAt(pos++);
+           switch (ch) {
                 case CharacterCodes.carriageReturn:
                     if (text.charCodeAt(pos) === CharacterCodes.lineFeed) {
                         pos++;
@@ -257,6 +258,12 @@ module ts {
                 case CharacterCodes.lineFeed:
                     result.push(lineStart);
                     lineStart = pos;
+                    break;
+                default:
+                    if (ch > CharacterCodes.maxAsciiCharacter && isLineBreak(ch)) {
+                        result.push(lineStart);
+                        lineStart = pos;
+                    }
                     break;
             }
         }
@@ -298,7 +305,7 @@ module ts {
     }
 
     export function isLineBreak(ch: number): boolean {
-        return ch === CharacterCodes.lineFeed || ch === CharacterCodes.carriageReturn || ch === CharacterCodes.lineSeparator || ch === CharacterCodes.paragraphSeparator;
+        return ch === CharacterCodes.lineFeed || ch === CharacterCodes.carriageReturn || ch === CharacterCodes.lineSeparator || ch === CharacterCodes.paragraphSeparator || ch === CharacterCodes.nextLine;
     }
 
     function isDigit(ch: number): boolean {
