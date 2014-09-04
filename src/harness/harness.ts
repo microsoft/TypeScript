@@ -732,8 +732,10 @@ module Harness {
 
                 var filemap: { [name: string]: ts.SourceFile; } = {};
                 var register = (file: { unitName: string; content: string; }) => {
-                    var filename = Path.switchToForwardSlashes(file.unitName);
-                    filemap[getCanonicalFileName(filename)] = ts.createSourceFile(filename, file.content, options.target, /*version:*/ "0");
+                    if (file.content !== undefined) {
+                        var filename = Path.switchToForwardSlashes(file.unitName);
+                        filemap[getCanonicalFileName(filename)] = ts.createSourceFile(filename, file.content, options.target, /*version:*/ "0");
+                    }
                 };
                 inputFiles.forEach(register);
                 otherFiles.forEach(register);
@@ -824,7 +826,7 @@ module Harness {
             globalErrors.forEach(err => outputErrorText(err));
 
             // 'merge' the lines of each input file with any errors associated with it
-            inputFiles.forEach(inputFile => {
+            inputFiles.filter(f => f.content !== undefined).forEach(inputFile => {
                 // Filter down to the errors in the file
                 var fileErrors = diagnostics.filter(e => {
                     var errFn = e.filename;
@@ -1253,7 +1255,7 @@ module Harness {
     }
 
     export function isLibraryFile(filePath: string): boolean {
-        return filePath.indexOf('lib.d.ts') >= 0 || filePath.indexOf('lib.core.d.ts') >= 0;
+        return (Path.getFileName(filePath) === 'lib.d.ts') || (Path.getFileName(filePath) === 'lib.core.d.ts');
     }
 
     if (Error) (<any>Error).stackTraceLimit = 1;
