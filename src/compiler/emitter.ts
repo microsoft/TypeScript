@@ -25,6 +25,14 @@ module ts {
         return indentStrings[1].length;
     }
 
+    export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions) {
+        if (!(sourceFile.flags & NodeFlags.DeclarationFile)) {
+            if ((isExternalModule(sourceFile) || !compilerOptions.out) && !fileExtensionIs(sourceFile.filename, ".js")) {
+                return true;
+            }
+        }
+    }
+
     export function emitFiles(resolver: EmitResolver): EmitResult {
         var program = resolver.getProgram();
         var compilerHost = program.getCompilerHost();
@@ -34,17 +42,9 @@ module ts {
         var newLine = program.getCompilerHost().getNewLine();
 
         function getSourceFilePathInNewDir(newDirPath: string, sourceFile: SourceFile) {
-            var sourceFilePath = getNormalizedPathFromPathCompoments(getNormalizedPathComponents(sourceFile.filename, compilerHost.getCurrentDirectory));
+            var sourceFilePath = getNormalizedPathFromPathComponents(getNormalizedPathComponents(sourceFile.filename, compilerHost.getCurrentDirectory));
             sourceFilePath = sourceFilePath.replace(program.getCommonSourceDirectory(), "");
             return combinePaths(newDirPath, sourceFilePath);
-        }
-
-        function shouldEmitToOwnFile(sourceFile: SourceFile) {
-            if (!(sourceFile.flags & NodeFlags.DeclarationFile)) {
-                if ((isExternalModule(sourceFile) || !compilerOptions.out) && !fileExtensionIs(sourceFile.filename, ".js")) {
-                    return true;
-                }
-            }
         }
 
         function getOwnEmitOutputFilePath(sourceFile: SourceFile, extension: string) {
@@ -3082,7 +3082,7 @@ module ts {
             function writeReferencePath(referencedFile: SourceFile) {
                 var declFileName = referencedFile.flags & NodeFlags.DeclarationFile
                     ? referencedFile.filename // Declaration file, use declaration file name
-                    : shouldEmitToOwnFile(referencedFile)
+                    : shouldEmitToOwnFile(referencedFile, compilerOptions)
                     ? getOwnEmitOutputFilePath(referencedFile, ".d.ts") // Own output file so get the .d.ts file
                     : getModuleNameFromFilename(compilerOptions.out) + ".d.ts";// Global out file
 
@@ -3170,7 +3170,7 @@ module ts {
         }
 
         forEach(program.getSourceFiles(), sourceFile => {
-            if (shouldEmitToOwnFile(sourceFile)) {
+            if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
                 var jsFilePath = getOwnEmitOutputFilePath(sourceFile, ".js");
                 emitFile(jsFilePath, sourceFile);
             }

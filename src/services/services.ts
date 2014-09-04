@@ -2849,8 +2849,10 @@ module ts {
         function getEmitOutput(filename: string): EmitOutput {
             synchronizeHostData();
             filename = TypeScript.switchToForwardSlashes(filename);
-            var emitToSingleFile = program.getCompilerOptions().out;
-            var emitDeclaration = program.getCompilerOptions().declaration;
+            var sourceFile = getSourceFile(filename);
+            var compilerOptions = program.getCompilerOptions();
+            var emitToSingleFile = ts.shouldEmitToOwnFile(program.getSourceFile(filename), compilerOptions);
+            var emitDeclaration = compilerOptions.declaration;
             var emitResult: EmitOutput = {
                 outputFiles: [],
                 emitOutputResult: undefined,
@@ -2867,7 +2869,7 @@ module ts {
             }
 
             var syntacticDiagnostics = emitToSingleFile
-                ? program.getDiagnostics(getSourceFile(filename).getSourceFile())
+                ? program.getDiagnostics(sourceFile)
                 : program.getDiagnostics();
             program.getGlobalDiagnostics();
 
