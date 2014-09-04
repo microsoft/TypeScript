@@ -1312,20 +1312,6 @@ module ts {
         return node.parent.kind === SyntaxKind.NewExpression && (<CallExpression>node.parent).func === node;
     }
 
-    function isAnyFunction(node: Node): boolean {
-        switch (node.kind) {
-            case SyntaxKind.FunctionExpression:
-            case SyntaxKind.FunctionDeclaration:
-            case SyntaxKind.ArrowFunction:
-            case SyntaxKind.Method:
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor:
-            case SyntaxKind.Constructor:
-                return true;
-        }
-        return false;
-    }
-
     function isNameOfFunctionDeclaration(node: Node): boolean {
         return node.kind === SyntaxKind.Identifier &&
             isAnyFunction(node.parent) && (<FunctionDeclaration>node.parent).name === node;
@@ -2171,6 +2157,11 @@ module ts {
                         return getIfElseOccurrences(<IfStatement>node.parent);
                     }
                     break;
+                case SyntaxKind.ReturnKeyword:
+                    if (hasKind(node.parent, SyntaxKind.ReturnStatement)) {
+                        return getReturnOccurrences(<ReturnStatement>node.parent);
+                    }
+                    break;
                 case SyntaxKind.TryKeyword:
                 case SyntaxKind.CatchKeyword:
                 case SyntaxKind.FinallyKeyword:
@@ -2256,6 +2247,22 @@ module ts {
                 }
 
                 return result;
+            }
+
+            function getReturnOccurrences(returnStatement: ReturnStatement): ReferenceEntry[]{
+                var func = <FunctionDeclaration>getContainingFunction(returnStatement);
+
+                // If we didn't find a containing function with a block body, bail out.
+                if (!(func && hasKind(func.body, SyntaxKind.FunctionBlock))) {
+                    return undefined;
+                }
+
+                var keywords: Node[] = []
+                forEachReturnStatement(<Block>(<FunctionDeclaration>func).body, returnStatement => {
+                    pushKeywordIf(keywords, returnStatement.getFirstToken(), SyntaxKind.ReturnKeyword);
+                });
+
+                return map(keywords, keywordToReferenceEntry);
             }
 
             function getTryCatchFinallyOccurrences(tryStatement: TryStatement): ReferenceEntry[] {

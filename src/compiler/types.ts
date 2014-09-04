@@ -220,7 +220,7 @@ module ts {
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypeReference,
         LastTypeNode = ArrayType,
-        FirstPunctuation= OpenBraceToken,
+        FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken
     }
 
