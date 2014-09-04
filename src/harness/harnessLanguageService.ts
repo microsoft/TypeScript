@@ -248,7 +248,9 @@ module Harness.LanguageService {
 
         public setCompilationSettings(settings: any) {
             for (var key in settings) {
-                this.settings[key] = settings[key];
+                if (settings.hasOwnProperty(key)) {
+                    this.settings[key] = settings[key];
+                }
             }
         }
 
