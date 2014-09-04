@@ -383,7 +383,7 @@ module ts {
         return [path.substr(0, rootLength)].concat(normalizedParts);
     }
 
-    export function getNormalizedPathComponents(path: string, getCurrentDirectory: ()=>string) {
+    export function getNormalizedPathComponents(path: string, getCurrentDirectory: () => string) {
         var path = normalizeSlashes(path);
         var rootLength = getRootLength(path);
         if (rootLength == 0) {
@@ -396,7 +396,7 @@ module ts {
         return normalizedPathComponents(path, rootLength);
     }
 
-    export function getNormalizedPathFromPathCompoments(pathComponents: string[]) {
+    export function getNormalizedPathFromPathComponents(pathComponents: string[]) {
         if (pathComponents && pathComponents.length) {
             return pathComponents[0] + pathComponents.slice(1).join(directorySeparator);
         }
@@ -444,7 +444,7 @@ module ts {
         }
     }
 
-    function getNormalizedPathOrUrlComponents(pathOrUrl: string, getCurrentDirectory: ()=>string) {
+    function getNormalizedPathOrUrlComponents(pathOrUrl: string, getCurrentDirectory: () => string) {
         if (isUrl(pathOrUrl)) {
             return getNormalizedPathComponentsOfUrl(pathOrUrl);
         }
@@ -457,7 +457,7 @@ module ts {
         var pathComponents = getNormalizedPathOrUrlComponents(relativeOrAbsolutePath, getCurrentDirectory);
         var directoryComponents = getNormalizedPathOrUrlComponents(directoryPathOrUrl, getCurrentDirectory);
         if (directoryComponents.length > 1 && directoryComponents[directoryComponents.length - 1] === "") {
-            // If the directory path given was of type test/cases/ then we really need components of directry to be only till its name 
+            // If the directory path given was of type test/cases/ then we really need components of directory to be only till its name
             // that is  ["test", "cases", ""] needs to be actually ["test", "cases"]
             directoryComponents.length--;
         }
@@ -483,7 +483,7 @@ module ts {
         }
 
         // Cant find the relative path, get the absolute path
-        var absolutePath = getNormalizedPathFromPathCompoments(pathComponents);
+        var absolutePath = getNormalizedPathFromPathComponents(pathComponents);
         if (isAbsolutePathAnUrl && isRootedDiskPath(absolutePath)) {
             absolutePath = "file:///" + absolutePath;
         }

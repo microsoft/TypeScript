@@ -368,6 +368,7 @@ module ts {
         getDefaultLibFilename(): string {
             return this.shimHost.getDefaultLibFilename();
         }
+
         getCurrentDirectory(): string {
             return this.shimHost.getCurrentDirectory();
         }

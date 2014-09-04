@@ -46,10 +46,10 @@ enum TypingFidelity {
 
 // We have to duplicate EmitOutputResult from Services.ts to expose the enum to getEmitOutput testcases in fourslah
 enum EmitOutputResult {
-        Succeeded,
-        FailedBecauseOfSyntaxErrors,
-        FailedBecauseOfCompilerOptionsErrors,
-        FailedToGenerateDeclarationsBecauseOfSemanticErrors
+    Succeeded,
+    FailedBecauseOfSyntaxErrors,
+    FailedBecauseOfCompilerOptionsErrors,
+    FailedToGenerateDeclarationsBecauseOfSemanticErrors
 }
 
 module FourSlashInterface {

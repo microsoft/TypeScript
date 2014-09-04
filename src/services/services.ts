@@ -1393,7 +1393,7 @@ module ts {
         var documentRegistry = documentRegistry;
         var cancellationToken = new CancellationTokenObject(host.getCancellationToken());
         var activeCompletionSession: CompletionSession;         // The current active completion session, used to get the completion entry details
-        var writter: (filename: string, data: string, writebyteordermark: boolean) => void = undefined;
+        var writer: (filename: string, data: string, writeByteOrderMark: boolean) => void = undefined;
 
         // Check if the localized messages json is set, otherwise query the host for it
         if (!TypeScript.LocalizedDiagnosticMessages) {
@@ -1423,8 +1423,8 @@ module ts {
                     return host.getDefaultLibFilename();
                 },
                 writeFile: (filename, data, writeByteOrderMark) => {
-                    if (writter) {
-                        writter(filename, data, writeByteOrderMark);
+                    if (writer) {
+                        writer(filename, data, writeByteOrderMark);
                         return;
                     }
                     throw Error("Error occurs: Invalid invocation to writeFile");
@@ -2840,6 +2840,7 @@ module ts {
                 }
             }
         }
+
         function containErrors(diagnostics: Diagnostic[]): boolean {
             var hasError = forEach(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error);
             return hasError;
@@ -2855,8 +2856,8 @@ module ts {
                 emitOutputResult: undefined,
             };
 
-            // Initialize writter for CompilerHost.writeFile
-            writter = function (fileName: string, data: string, writeByteOrderMark: boolean) {
+            // Initialize writer for CompilerHost.writeFile
+            writer = function (fileName: string, data: string, writeByteOrderMark: boolean) {
                 var outputFile: OutputFile = {
                     name: fileName,
                     writeByteOrderMark: writeByteOrderMark,
@@ -2893,8 +2894,8 @@ module ts {
                 emitResult.emitOutputResult = EmitOutputResult.Succeeded;
             }
 
-            // Reset writter back to underfined to make sure that we produce an error message if CompilerHost.writeFile method is called when we are not in an emitting stage
-            this.writter = undefined;
+            // Reset writer back to underfined to make sure that we produce an error message if CompilerHost.writeFile method is called when we are not in an emitting stage
+            this.writer = undefined;
             return emitResult;
         }
 
