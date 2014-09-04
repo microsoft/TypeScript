@@ -349,6 +349,37 @@ module ts {
         }
     }
 
+    // Warning: This has the same semantics as the forEach family of functions,
+    //          in that traversal terminates in the event that 'visitor' supplies a truthy value.
+    export function forEachReturnStatement<T>(body: Block, visitor: (stmt: ReturnStatement) => T): T {
+
+        return traverse(body);
+
+        function traverse(node: Node): T {
+            switch (node.kind) {
+                case SyntaxKind.ReturnStatement:
+                    return visitor(node);
+                case SyntaxKind.Block:
+                case SyntaxKind.FunctionBlock:
+                case SyntaxKind.IfStatement:
+                case SyntaxKind.DoStatement:
+                case SyntaxKind.WhileStatement:
+                case SyntaxKind.ForStatement:
+                case SyntaxKind.ForInStatement:
+                case SyntaxKind.WithStatement:
+                case SyntaxKind.SwitchStatement:
+                case SyntaxKind.CaseClause:
+                case SyntaxKind.DefaultClause:
+                case SyntaxKind.LabelledStatement:
+                case SyntaxKind.TryStatement:
+                case SyntaxKind.TryBlock:
+                case SyntaxKind.CatchBlock:
+                case SyntaxKind.FinallyBlock:
+                    return forEachChild(node, traverse);
+            }
+        }
+    }
+
     export function hasRestParameters(s: SignatureDeclaration): boolean {
         return s.parameters.length > 0 && (s.parameters[s.parameters.length - 1].flags & NodeFlags.Rest) !== 0;
     }

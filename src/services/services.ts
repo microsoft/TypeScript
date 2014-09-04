@@ -2279,8 +2279,8 @@ module ts {
                 }
 
                 var keywords: Node[] = []
-                forEachReturnStatement(<Block>(<FunctionDeclaration>func).body, returnStmt => {
-                    pushKeywordIf(keywords, returnStmt.getFirstToken(), SyntaxKind.ReturnKeyword);
+                forEachReturnStatement(<Block>(<FunctionDeclaration>func).body, returnStatement => {
+                    pushKeywordIf(keywords, returnStatement.getFirstToken(), SyntaxKind.ReturnKeyword);
                 });
 
                 return map(keywords, keywordToReferenceEntry);
