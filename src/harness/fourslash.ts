@@ -192,9 +192,6 @@ module FourSlash {
         // Whether or not to generate .d.ts file
         public enableDeclaration = false;
 
-        // Whether or not to generate one output javascript file
-        public enableSingleOutputFile = false;
-
         // Output filename for single-output-file option
         public singleOutputFilename: string = undefined;
 
@@ -463,10 +460,10 @@ module FourSlash {
 
         public verifyEmitOutput(state: ts.EmitOutputResult, filename?: string) {
             if (this.enableDeclaration) {
-                this.languageServiceShimHost.setCompilationSettings({generateDeclarationFiles: true});
+                this.languageServiceShimHost.setCompilationSettings({ generateDeclarationFiles: true });
             }
 
-            if (this.enableSingleOutputFile) {
+            if (this.singleOutputFilename !== undefined) {
                 this.languageServiceShimHost.setCompilationSettings({ outFileOption: this.singleOutputFilename });
             }
 
