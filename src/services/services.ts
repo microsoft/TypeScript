@@ -1312,24 +1312,6 @@ module ts {
         return node.parent.kind === SyntaxKind.NewExpression && (<CallExpression>node.parent).func === node;
     }
 
-    function isAnyFunction(node: Node): boolean {
-        if (!node) {
-            return false;
-        }
-
-        switch (node.kind) {
-            case SyntaxKind.FunctionExpression:
-            case SyntaxKind.FunctionDeclaration:
-            case SyntaxKind.ArrowFunction:
-            case SyntaxKind.Method:
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor:
-            case SyntaxKind.Constructor:
-                return true;
-        }
-        return false;
-    }
-
     function isNameOfFunctionDeclaration(node: Node): boolean {
         return node.kind === SyntaxKind.Identifier &&
             isAnyFunction(node.parent) && (<FunctionDeclaration>node.parent).name === node;
@@ -2274,7 +2256,7 @@ module ts {
                 var func = <FunctionDeclaration>getContainingFunction(returnStatement);
 
                 // If we didn't find a containing function with a block body, bail out.
-                if (!(isAnyFunction(func) && hasKind(func.body, SyntaxKind.FunctionBlock))) {
+                if (!(func && hasKind(func.body, SyntaxKind.FunctionBlock))) {
                     return undefined;
                 }
 

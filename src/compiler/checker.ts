@@ -7113,15 +7113,4 @@ module ts {
 
         return checker;
     }
-    
-    export function getContainingFunction(node: Node): SignatureDeclaration {
-        while (true) {
-            node = node.parent;
-            if (!node || node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression ||
-                node.kind === SyntaxKind.ArrowFunction || node.kind === SyntaxKind.Method || node.kind === SyntaxKind.Constructor ||
-                node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor) {
-                return <SignatureDeclaration>node;
-            }
-        }
-    }
 }

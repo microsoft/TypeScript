@@ -380,6 +380,32 @@ module ts {
         }
     }
 
+    export function isAnyFunction(node: Node): boolean {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.Method:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.Constructor:
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    export function getContainingFunction(node: Node): SignatureDeclaration {
+        while (true) {
+            node = node.parent;
+            if (!node || isAnyFunction(node)) {
+                return <SignatureDeclaration>node;
+            }
+        }
+    }
+
     export function hasRestParameters(s: SignatureDeclaration): boolean {
         return s.parameters.length > 0 && (s.parameters[s.parameters.length - 1].flags & NodeFlags.Rest) !== 0;
     }
