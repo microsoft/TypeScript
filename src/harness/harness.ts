@@ -732,7 +732,7 @@ module Harness {
 
                 var filemap: { [name: string]: ts.SourceFile; } = {};
                 var register = (file: { unitName: string; content: string; }) => {
-                    if (file.content) {
+                    if (file.content !== undefined) {
                         var filename = Path.switchToForwardSlashes(file.unitName);
                         filemap[getCanonicalFileName(filename)] = ts.createSourceFile(filename, file.content, options.target, /*version:*/ "0");
                     }
