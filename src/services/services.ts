@@ -1296,6 +1296,16 @@ module ts {
             (<LabelledStatement>node.parent).label === node;
     }
 
+    function isLabelledBy(node: Node, labelName: string) {
+        for (var owner = node.parent; owner && owner.kind === SyntaxKind.LabelledStatement; owner = owner.parent) {
+            if ((<LabelledStatement>owner).label.text === labelName) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     function isLabelName(node: Node): boolean {
         return isLabelOfLabeledStatement(node) || isJumpStatementTarget(node);
     }
@@ -2181,8 +2191,20 @@ module ts {
                     }
                     break;
                 case SyntaxKind.BreakKeyword:
-                    if (hasKind(node.parent, SyntaxKind.BreakStatement)) {
-                        return getBreakStatementOccurences(<BreakOrContinueStatement>node.parent);
+                case SyntaxKind.ContinueKeyword:
+                    if (hasKind(node.parent, SyntaxKind.BreakStatement) || hasKind(node.parent, SyntaxKind.ContinueStatement)) {
+                        return getBreakOrContinueStatementOccurences(<BreakOrContinueStatement>node.parent);
+                    }
+                    break;
+                case SyntaxKind.ForKeyword:
+                    if (hasKind(node.parent, SyntaxKind.ForStatement) || hasKind(node.parent, SyntaxKind.ForInStatement)) {
+                        return getLoopBreakContinueOccurrences(<IterationStatement>node.parent);
+                    }
+                    break;
+                case SyntaxKind.WhileKeyword:
+                case SyntaxKind.DoKeyword:
+                    if (hasKind(node.parent, SyntaxKind.WhileStatement) || hasKind(node.parent, SyntaxKind.DoStatement)) {
+                        return getLoopBreakContinueOccurrences(<IterationStatement>node.parent);
                     }
                     break;
             }
@@ -2281,6 +2303,66 @@ module ts {
                 return map(keywords, getReferenceEntryFromNode);
             }
 
+            function getLoopBreakContinueOccurrences(loopNode: IterationStatement): ReferenceEntry[] {
+                var keywords: Node[] = [];
+
+                if (pushKeywordIf(keywords, loopNode.getFirstToken(), SyntaxKind.ForKeyword, SyntaxKind.WhileKeyword, SyntaxKind.DoKeyword)) {
+                    // If we succeeded and got a do-while loop, then start looking for a 'while' keyword.
+                    if (loopNode.kind === SyntaxKind.DoStatement) {
+                        var loopTokens = loopNode.getChildren();
+
+                        for (var i = loopTokens.length - 1; i >= 0; i--) {
+                            if (pushKeywordIf(keywords, loopTokens[i], SyntaxKind.WhileKeyword)) {
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                // This switch tracks whether or not we're traversing into a construct that takes
+                // ownership over unlabelled 'break'/'continue' statements.
+                var onlyCheckLabelled = false;
+
+                forEachChild(loopNode.statement, function aggregateBreakContinues(node: Node) {
+                    // This tracks the status of the flag before diving into the next node.
+                    var lastOnlyCheckLabelled = onlyCheckLabelled;
+
+                    switch (node.kind) {
+                        case SyntaxKind.BreakStatement:
+                        case SyntaxKind.ContinueStatement:
+                            // If the 'break'/'continue' statement has a label, it must be one of our tracked labels.
+                            if ((<BreakOrContinueStatement>node).label) {
+                                var labelName = (<BreakOrContinueStatement>node).label.text;
+                                if (isLabelledBy(loopNode, labelName)) {
+                                    pushKeywordIf(keywords, node.getFirstToken(), SyntaxKind.BreakKeyword, SyntaxKind.ContinueKeyword);
+                                }
+                            }
+                            // If not, we are free to add it if we haven't lost ownership of unlabeled break/continue statements.
+                            else if (!onlyCheckLabelled) {
+                                pushKeywordIf(keywords, node.getFirstToken(), SyntaxKind.BreakKeyword, SyntaxKind.ContinueKeyword);
+                            }
+                            break;
+
+                        case SyntaxKind.ForStatement:
+                        case SyntaxKind.ForInStatement:
+                        case SyntaxKind.DoStatement:
+                        case SyntaxKind.WhileStatement:
+                        case SyntaxKind.SwitchStatement:
+                            onlyCheckLabelled = true;
+                        // Fall through
+                        default:
+                            // Do not cross function boundaries.
+                            if (!isAnyFunction(node)) {
+                                forEachChild(node, aggregateBreakContinues);
+                            }
+                    }
+                    // Restore the last state.
+                    onlyCheckLabelled = lastOnlyCheckLabelled;
+                });
+
+                return map(keywords, keywordToReferenceEntry);
+            }
+
             function getSwitchCaseDefaultOccurrences(switchStatement: SwitchStatement) {
                 var keywords: Node[] = [];
 
@@ -2317,28 +2399,30 @@ module ts {
                 return map(keywords, getReferenceEntryFromNode);
             }
 
-            function getBreakStatementOccurences(breakStatement: BreakOrContinueStatement): ReferenceEntry[]{
-                // TODO (drosen): Deal with labeled statements.
-                if (breakStatement.label) {
-                    return undefined;
-                }
-                
+            function getBreakOrContinueStatementOccurences(breakOrContinueStatement: BreakOrContinueStatement): ReferenceEntry[]{
                 for (var owner = node.parent; owner; owner = owner.parent) {
                     switch (owner.kind) {
                         case SyntaxKind.ForStatement:
                         case SyntaxKind.ForInStatement:
                         case SyntaxKind.DoStatement:
                         case SyntaxKind.WhileStatement:
-                            // TODO (drosen): Handle loops!
-                            return undefined;
-
+                            // The iteration statement is the owner if the break/continue statement is either unlabeled,
+                            // or if the break/continue statement's label corresponds to one of the loop's labels.
+                            if (!breakOrContinueStatement.label || isLabelledBy(owner, breakOrContinueStatement.label.text)) {
+                                return getLoopBreakContinueOccurrences(<IterationStatement>owner)
+                            }
+                            break;
                         case SyntaxKind.SwitchStatement:
-                            return getSwitchCaseDefaultOccurrences(<SwitchStatement>owner);
-
+                            // A switch statement can only be the owner of an unlabeled break statement.
+                            if (breakOrContinueStatement.kind === SyntaxKind.BreakStatement && !breakOrContinueStatement.label) {
+                                return getSwitchCaseDefaultOccurrences(<SwitchStatement>owner);
+                            }
+                            break;
                         default:
                             if (isAnyFunction(owner)) {
                                 return undefined;
                             }
+                            break;
                     }
                 }
 
@@ -2347,7 +2431,7 @@ module ts {
 
             // returns true if 'node' is defined and has a matching 'kind'.
             function hasKind(node: Node, kind: SyntaxKind) {
-                return !!(node && node.kind === kind);
+                return node !== undefined && node.kind === kind;
             }
 
             // Null-propagating 'parent' function.
