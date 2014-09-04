@@ -54,7 +54,6 @@ enum EmitReturnStatus {
     EmitErrorsEncountered = 4           // Emitter errors occured during emitting process
 }
 
-
 module FourSlashInterface {
     declare var FourSlash;
 

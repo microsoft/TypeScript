@@ -383,7 +383,7 @@ module ts {
         return [path.substr(0, rootLength)].concat(normalizedParts);
     }
 
-    export function getNormalizedPathComponents(path: string, getCurrentDirectory: ()=>string) {
+    export function getNormalizedPathComponents(path: string, getCurrentDirectory: () => string) {
         var path = normalizeSlashes(path);
         var rootLength = getRootLength(path);
         if (rootLength == 0) {
@@ -444,7 +444,7 @@ module ts {
         }
     }
 
-    function getNormalizedPathOrUrlComponents(pathOrUrl: string, getCurrentDirectory: ()=>string) {
+    function getNormalizedPathOrUrlComponents(pathOrUrl: string, getCurrentDirectory: () => string) {
         if (isUrl(pathOrUrl)) {
             return getNormalizedPathComponentsOfUrl(pathOrUrl);
         }
