@@ -1,11 +1,10 @@
-//@module: amd
-export function exports() {
+function exports() {
     return 1;
 }
-export function require() {
+function require() {
     return "require";
 }
-module m1 {
+module m3 {
     function exports() {
         return 1;
     }
@@ -13,7 +12,7 @@ module m1 {
         return "require";
     }
 }
-module m2 {
+module m4 {
     export function exports() {
         return 1;
     }

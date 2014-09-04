@@ -9,4 +9,19 @@
 !!! Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of an external module.
         return "require";
     }
-    
+    module m1 {
+        function exports() {
+            return 1;
+        }
+        function require() {
+            return "require";
+        }
+    }
+    module m2 {
+        export function exports() {
+            return 1;
+        }
+        export function require() {
+            return "require";
+        }
+    }
