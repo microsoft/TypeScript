@@ -3691,23 +3691,22 @@ module ts {
 
         // Get source file from normalized filename
         function findSourceFile(filename: string, isDefaultLib: boolean, refFile?: SourceFile, refStart?: number, refLength?: number): SourceFile {
-            // Look through existing source files to see if we've encountered it.
             var canonicalName = host.getCanonicalFileName(filename);
-            var file = getSourceFile(filename);
-            if (file) {
-                if (host.useCaseSensitiveFileNames() && canonicalName !== file.filename) {
+            if (hasProperty(filesByName, canonicalName)) {
+                // We've already looked for this file, use cached result
+                var file = filesByName[canonicalName];
+                if (file && host.useCaseSensitiveFileNames() && canonicalName !== file.filename) {
                     errors.push(createFileDiagnostic(refFile, refStart, refLength,
                         Diagnostics.Filename_0_differs_from_already_included_filename_1_only_in_casing, filename, file.filename));
-                } 
+                }
             }
             else {
-                // If we haven't, read the file.
-                file = host.getSourceFile(filename, options.target, hostErrorMessage => {
+                // We haven't looked for this file, do so now and cache result
+                var file = filesByName[canonicalName] = host.getSourceFile(filename, options.target, hostErrorMessage => {
                     errors.push(createFileDiagnostic(refFile, refStart, refLength,
                         Diagnostics.Cannot_read_file_0_Colon_1, filename, hostErrorMessage));
                 });
                 if (file) {
-                    filesByName[host.getCanonicalFileName(filename)] = file;
                     seenNoDefaultLib = seenNoDefaultLib || file.hasNoDefaultLib;
                     if (!options.noResolve) {
                         var basePath = getDirectoryPath(filename);
@@ -3725,7 +3724,6 @@ module ts {
                     });
                 }
             }
-
             return file;
         }
 
