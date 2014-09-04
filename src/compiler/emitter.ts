@@ -3130,7 +3130,6 @@ module ts {
                                 // If the reference file is a declaration file or an external module, emit that reference
                                 if (isExternalModuleOrDeclarationFile(referencedFile) &&
                                     !contains(emittedReferencedFiles, referencedFile)) { // If the file reference was not already emitted
-
                                     writeReferencePath(referencedFile);
                                     emittedReferencedFiles.push(referencedFile);
                                 }
