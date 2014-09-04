@@ -33,6 +33,6 @@ declare module "SubModule" {
     }
 }
 //// [declFileAmbientExternalModuleWithSingleExportedModule_1.d.ts]
-/// <reference path='declFileAmbientExternalModuleWithSingleExportedModule_0.d.ts' />
+/// <reference path="declFileAmbientExternalModuleWithSingleExportedModule_0.d.ts" />
 import SubModule = require('SubModule');
 export declare var x: SubModule.m.m3.c;
