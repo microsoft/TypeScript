@@ -10,6 +10,7 @@
 /// <reference path='braceMatcher.ts' />
 /// <reference path='breakpoints.ts' />
 /// <reference path='indentation.ts' />
+/// <reference path='signatureInfoHelpers.ts' />
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='formatting\smartIndenter.ts' />
 
@@ -95,6 +96,7 @@ module ts {
         public flags: NodeFlags;
         public parent: Node;
         private _children: Node[];
+        private _syntheticParent: Node;
 
         public getSourceFile(): SourceFile {
             var node: Node = this;
@@ -150,6 +152,9 @@ module ts {
                 if (pos < node.pos) {
                     pos = this.addSyntheticNodes(list._children, pos, node.pos);
                 }
+                else {
+                    (<NodeObject>node)._syntheticParent = list;
+                }
                 list._children.push(node);
                 pos = node.end;
             }
@@ -202,8 +207,13 @@ module ts {
             return this._children;
         }
 
+        public getIndexOfChild(child: Node): number {
+            if (!this._children) this.createChildren();
+            return this._children.indexOf(child);
+        }
+
         public getFirstToken(sourceFile?: SourceFile): Node {
-            var children = this.getChildren(sourceFile);
+            var children = this.getChildren();
             for (var i = 0; i < children.length; i++) {
                 var child = children[i];
                 if (child.kind < SyntaxKind.Missing) return child;
@@ -218,6 +228,10 @@ module ts {
                 if (child.kind < SyntaxKind.Missing) return child;
                 if (child.kind > SyntaxKind.Missing) return child.getLastToken(sourceFile);
             }
+        }
+
+        public getSyntheticParentOrParent(): Node {
+            return this._syntheticParent || this.parent;
         }
     }
 
@@ -3477,6 +3491,104 @@ module ts {
             return emitOutput;
         }
 
+        // Signature help
+        function getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems {
+            // If node is an argument, returns its index in the argument list
+            // If not, returns -1
+            function getArgumentIndex(node: Node): number {
+                // Treat the open paren / angle bracket of a call as the introduction of parameter slot 0
+                var parent = (<NodeObject>node).getSyntheticParentOrParent();
+                if (parent.kind === SyntaxKind.SyntaxList) {
+                    var grandparent = parent.parent;
+                    if (grandparent.kind === SyntaxKind.CallExpression || grandparent.kind === SyntaxKind.NewExpression) {
+                        var index = (<NodeObject>parent).getIndexOfChild(node);
+                        Debug.assert(index >= 0);
+                        return index;
+                    }
+                }
+
+                if (node.kind === SyntaxKind.LessThanToken || node.kind === SyntaxKind.OpenParenToken) {
+                    return parent.kind === SyntaxKind.CallExpression || parent.kind === SyntaxKind.NewExpression
+                        ? 0
+                        : -1;
+                }
+                
+                // TODO: Handle close paren or close angle bracket on nonempty list
+
+                return -1;
+            }
+            //// Technically signature help should only be triggered on these characters
+            //if (node.kind !== SyntaxKind.CommaToken && node.kind !== SyntaxKind.OpenParenToken && node.kind !== SyntaxKind.LessThanToken) {
+            //    return false;
+            //}
+
+            //if (node.kind === SyntaxKind.CommaToken) {
+            //    if (node.parent.kind !== SyntaxKind.SyntaxList) {
+            //        return false;
+            //    }
+
+            //    // node becomes the containing SyntaxList
+            //    node = node.parent;
+            //}
+
+            //// node is open paren, less than, or a syntax list containing a comma
+            //if (node.parent.kind === SyntaxKind.CallExpression || node.parent.kind === SyntaxKind.NewExpression) {
+            //    return true;
+            //}
+
+            synchronizeHostData();
+
+            // Decide whether to show signature help
+            var sourceFile = getSourceFile(fileName);
+            var node = getNodeAtPosition(sourceFile, position);
+            // We only want this node if it is a token and it strictly contains the current position.
+            // Otherwise we want the previous token
+            var isToken = node.kind < SyntaxKind.Missing;
+            if (!isToken || position <= node.getStart() || position >= node.getEnd()) {
+                // This is a temporary hack until we figure out our token story.
+                // The correct solution is to get the previous token
+                node = SignatureInfoHelpers.findClosestRightmostSiblingFromLeft(position, sourceFile);
+
+                if (!node) {
+                    return undefined;
+                }
+                if (node.parent.kind === SyntaxKind.CallExpression || node.parent.kind === SyntaxKind.NewExpression) {
+                    if (node === (<CallExpression>node.parent).func) {
+                        node = node.parent.getChildAt(1);
+                    }
+                }
+            }
+            
+            var signatureHelpAvailable = false;
+            for (var n = node; n.kind !== SyntaxKind.SourceFile; n = n.parent) {
+                if (n.kind === SyntaxKind.FunctionBlock) {
+                    break;
+                }
+
+                var index = getArgumentIndex(n);
+                if (index >= 0) {
+                    signatureHelpAvailable = true;
+                    break;
+                }
+
+
+                // TODO: Handle previous token logic
+                // TODO: Handle generic call with incomplete 
+            }
+
+
+            return signatureHelpAvailable
+                ? new SignatureHelpItems(undefined, undefined, undefined)
+                : undefined;
+
+
+        }
+
+        function getSignatureHelpCurrentArgumentState(fileName: string, position: number, applicableSpanStart: number): SignatureHelpState {
+            synchronizeHostData();
+            return null;
+        }
+
         /// Syntactic features
         function getSyntaxTree(filename: string): TypeScript.SyntaxTree {
             filename = TypeScript.switchToForwardSlashes(filename);
@@ -4026,8 +4138,8 @@ module ts {
             getCompletionsAtPosition: getCompletionsAtPosition,
             getCompletionEntryDetails: getCompletionEntryDetails,
             getTypeAtPosition: getTypeAtPosition,
-            getSignatureHelpItems: (filename, position): SignatureHelpItems => null,
-            getSignatureHelpCurrentArgumentState: (fileName, position, applicableSpanStart): SignatureHelpState => null,
+            getSignatureHelpItems: getSignatureHelpItems,
+            getSignatureHelpCurrentArgumentState: getSignatureHelpCurrentArgumentState,
             getDefinitionAtPosition: getDefinitionAtPosition,
             getReferencesAtPosition: getReferencesAtPosition,
             getOccurrencesAtPosition: getOccurrencesAtPosition,
