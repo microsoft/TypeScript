@@ -1,4 +1,4 @@
-==== tests/cases/compiler/defaultArgsForwardReferencing.ts (12 errors) ====
+==== tests/cases/compiler/defaultArgsForwardReferencing.ts (10 errors) ====
     function left(a, b = a, c = b) {
         a;
         b;
@@ -37,11 +37,7 @@
     }
     
     function defaultArgFunction(a = function () { return b; }, b = 1) { }
-                                                         ~
-!!! Initializer of parameter 'a' cannot reference identifier 'b' declared after it.
     function defaultArgArrow(a = () => () => b, b = 3) { }
-                                             ~
-!!! Initializer of parameter 'a' cannot reference identifier 'b' declared after it.
     
     class C {
         constructor(a = b, b = 1) { }
