@@ -230,7 +230,7 @@ export declare module SpecializedWidget {
     function createWidget2(): Widget2;
 }
 //// [privacyCannotNameVarTypeDeclFile_exporter.d.ts]
-/// <reference path='privacyCannotNameVarTypeDeclFile_GlobalWidgets.d.ts' />
+/// <reference path="privacyCannotNameVarTypeDeclFile_GlobalWidgets.d.ts" />
 import Widgets = require("privacyCannotNameVarTypeDeclFile_Widgets");
 import Widgets1 = require("GlobalWidgets");
 export declare function createExportedWidget1(): Widgets.Widget1;

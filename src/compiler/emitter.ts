@@ -3103,7 +3103,7 @@ module ts {
                     compilerHost.getCurrentDirectory(),
                 /*isAbsolutePathAnUrl*/ false);
 
-                referencePathsOutput += "/// <reference path='" + declFileName + "' />" + newLine;
+                referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
             }
 
             if (root) {
