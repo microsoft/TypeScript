@@ -430,6 +430,14 @@ module ts {
         }
     }
 
+    export function getThisContainer(node: Node): Node {
+        do {
+            node = getThisContainerOrArrowFunction(node);
+        } while (node.kind === SyntaxKind.ArrowFunction);
+
+        return node;
+    }
+
     export function hasRestParameters(s: SignatureDeclaration): boolean {
         return s.parameters.length > 0 && (s.parameters[s.parameters.length - 1].flags & NodeFlags.Rest) !== 0;
     }

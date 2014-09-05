@@ -2629,10 +2629,7 @@ module ts {
 
             function getReferencesForThisKeyword(thisKeyword: Node, sourceFiles: SourceFile[]) {
                 // Get the owner" of the 'this' keyword.
-                var thisContainer = thisKeyword;
-                do {
-                    thisContainer = getThisContainerOrArrowFunction(thisContainer);
-                } while (thisContainer.kind === SyntaxKind.ArrowFunction);
+                var thisContainer = getThisContainer(thisKeyword);
 
                 var searchSpaceNode: Node;
 
@@ -2683,10 +2680,7 @@ module ts {
                         }
 
                         // Get the owner" of the 'this' keyword.
-                        var container = node;
-                        do {
-                            container = getThisContainerOrArrowFunction(container);
-                        } while (container.kind === SyntaxKind.ArrowFunction);
+                        var container = getThisContainer(node);
 
                         switch (container.kind) {
                             case SyntaxKind.Property:
