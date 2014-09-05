@@ -1420,17 +1420,14 @@ module ts {
                 getNewLine: () => "\r\n",
                 // Need something that doesn't depend on sys.ts here
                 getDefaultLibFilename: (): string => {
-                    return host.getDefaultLibFilename();
+                    return "";
                 },
                 writeFile: (filename, data, writeByteOrderMark) => {
-                    if (writer) {
-                        writer(filename, data, writeByteOrderMark);
-                        return;
-                    }
-                    throw Error("Error occurs: Invalid invocation to writeFile");
+                    writer(filename, data, writeByteOrderMark);
                 },
                 getCurrentDirectory: (): string => {
-                    return host.getCurrentDirectory();
+                    // Return empty string as in compilerHost using with Visual Studio should not need to getCurrentDirectory since CompilerHost should have absolute path already
+                    return "";
                 }
             };
         }

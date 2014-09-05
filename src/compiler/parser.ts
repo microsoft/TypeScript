@@ -3817,7 +3817,7 @@ module ts {
                     // Each file contributes into common source file path
                     if (!(sourceFile.flags & NodeFlags.DeclarationFile)
                         && !fileExtensionIs(sourceFile.filename, ".js")) {
-                        var sourcePathComponents = getNormalizedPathComponents(sourceFile.filename, host.getCurrentDirectory);
+                        var sourcePathComponents = getNormalizedPathComponents(sourceFile.filename, host.getCurrentDirectory());
                         sourcePathComponents.pop(); // FileName is not part of directory
                         if (commonPathComponents) {
                             for (var i = 0; i < Math.min(commonPathComponents.length, sourcePathComponents.length); i++) {
