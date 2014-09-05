@@ -2629,7 +2629,7 @@ module ts {
 
             function getReferencesForThisKeyword(thisKeyword: Node, sourceFiles: SourceFile[]) {
                 // Get the owner" of the 'this' keyword.
-                var thisContainer = getThisContainer(thisKeyword);
+                var thisContainer = getThisContainer(thisKeyword, /* includeArrowFunctions */ false);
 
                 var searchSpaceNode: Node;
 
@@ -2645,9 +2645,13 @@ module ts {
                         searchSpaceNode = thisContainer.parent; // should be the owning class
                         staticFlag &= thisContainer.flags
                         break;
+                    case SyntaxKind.SourceFile:
+                        if (isExternalModule(<SourceFile>thisContainer)) {
+                            return undefined;
+                        }
+                    // Fall through
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.FunctionExpression:
-                    case SyntaxKind.SourceFile:
                         searchSpaceNode = thisContainer;
                         break;
                     default:
@@ -2679,8 +2683,9 @@ module ts {
                             return;
                         }
 
-                        // Get the owner" of the 'this' keyword.
-                        var container = getThisContainer(node);
+                        // Get the owner of the 'this' keyword.
+                        // This *should* be a node that occurs somewhere within searchSpaceNode.
+                        var container = getThisContainer(node, /* includeArrowFunctions */ false);
 
                         switch (container.kind) {
                             case SyntaxKind.Property:
@@ -2702,7 +2707,7 @@ module ts {
                                 break;
                             case SyntaxKind.SourceFile:
                                 // Add all 'this' keywords that belong to the top-level scope.
-                                if (searchSpaceNode.kind === SyntaxKind.SourceFile) {
+                                if (searchSpaceNode.kind === SyntaxKind.SourceFile && !isExternalModule(<SourceFile>searchSpaceNode)) {
                                     result.push(getReferenceEntryFromNode(node));
                                 }
                                 break;
@@ -2970,21 +2975,7 @@ module ts {
                 }
                 else if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).left === node) {
                     var operator = (<BinaryExpression>parent).operator;
-                    switch (operator) {
-                        case SyntaxKind.AsteriskEqualsToken:
-                        case SyntaxKind.SlashEqualsToken:
-                        case SyntaxKind.PercentEqualsToken:
-                        case SyntaxKind.MinusEqualsToken:
-                        case SyntaxKind.LessThanLessThanEqualsToken:
-                        case SyntaxKind.GreaterThanGreaterThanEqualsToken:
-                        case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
-                        case SyntaxKind.BarEqualsToken:
-                        case SyntaxKind.CaretEqualsToken:
-                        case SyntaxKind.AmpersandEqualsToken:
-                        case SyntaxKind.PlusEqualsToken:
-                        case SyntaxKind.EqualsToken:
-                            return true;
-                    }
+                    return SyntaxKind.FirstAssignment <= operator && operator <= SyntaxKind.LastAssignment;
                 }
             }
 

@@ -407,13 +407,18 @@ module ts {
         }
     }
 
-    export function getThisContainerOrArrowFunction(node: Node): Node {
+    export function getThisContainer(node: Node, includeArrowFunctions: boolean): Node {
         while (true) {
             node = node.parent;
             if (!node) {
                 return node;
             }
             switch (node.kind) {
+                case SyntaxKind.ArrowFunction:
+                    if (!includeArrowFunctions) {
+                        continue;
+                    }
+                // Fall through
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ModuleDeclaration:
@@ -424,18 +429,9 @@ module ts {
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.SourceFile:
-                case SyntaxKind.ArrowFunction:
                     return node;
             }
         }
-    }
-
-    export function getThisContainer(node: Node): Node {
-        do {
-            node = getThisContainerOrArrowFunction(node);
-        } while (node.kind === SyntaxKind.ArrowFunction);
-
-        return node;
     }
 
     export function hasRestParameters(s: SignatureDeclaration): boolean {

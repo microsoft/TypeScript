@@ -3461,11 +3461,14 @@ module ts {
         }
 
         function checkThisExpression(node: Node): Type {
-            var container = getThisContainerOrArrowFunction(node);
+            // Stop at the first arrow function so that we can
+            // tell whether 'this' needs to be captured.
+            var container = getThisContainer(node, /* includeArrowFunctions */ true);
             var needToCaptureLexicalThis = false;
-            // skip arrow functions
-            while (container.kind === SyntaxKind.ArrowFunction) {
-                container = getThisContainerOrArrowFunction(container);
+
+            // Now skip arrow functions to get the "real" owner of 'this'.
+            if (container.kind === SyntaxKind.ArrowFunction) {
+                container = getThisContainer(container, /* includeArrowFunctions */ false);
                 needToCaptureLexicalThis = true;
             }
 
