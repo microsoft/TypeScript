@@ -4523,25 +4523,26 @@ module ts {
                             }
                         }
                     }
+                    checkSignatureDeclaration(node);
                 }
-            }
-            if (fullTypeCheck && !(links.flags & NodeCheckFlags.TypeChecked)) {
-                checkSignatureDeclaration(node);
-                if (node.type) {
-                    checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
-                }
-                if (node.body.kind === SyntaxKind.FunctionBlock) {
-                    checkSourceElement(node.body);
-                }
-                else {
-                    var exprType = checkExpression(node.body);
-                    if (node.type) {
-                        checkTypeAssignableTo(exprType, getTypeFromTypeNode(node.type), node.body, undefined, undefined);
-                    }
-                }
-                links.flags |= NodeCheckFlags.TypeChecked;
             }
             return type;
+        }
+
+        function checkFunctionExpressionBody(node: FunctionExpression) {
+            if (node.type) {
+                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
+            }
+            if (node.body.kind === SyntaxKind.FunctionBlock) {
+                checkSourceElement(node.body);
+            }
+            else {
+                var exprType = checkExpression(node.body);
+                if (node.type) {
+                    checkTypeAssignableTo(exprType, getTypeFromTypeNode(node.type), node.body, undefined, undefined);
+                }
+                checkFunctionExpressionBodies(node.body);
+            }
         }
 
         function checkArithmeticOperandType(operand: Node, type: Type, diagnostic: DiagnosticMessage): boolean {
@@ -6437,9 +6438,10 @@ module ts {
                 case SyntaxKind.FunctionDeclaration:
                     return checkFunctionDeclaration(<FunctionDeclaration>node);
                 case SyntaxKind.Block:
+                    return checkBlock(<Block>node);
                 case SyntaxKind.FunctionBlock:
                 case SyntaxKind.ModuleBlock:
-                    return checkBlock(<Block>node);
+                    return checkBody(<Block>node);
                 case SyntaxKind.VariableStatement:
                     return checkVariableStatement(<VariableStatement>node);
                 case SyntaxKind.ExpressionStatement:
@@ -6486,13 +6488,91 @@ module ts {
             }
         }
 
+        // Function expression bodies are checked after all statements in the enclosing body. This is to ensure
+        // constructs like the following are permitted:
+        //     var foo = function () {
+        //        var s = foo();
+        //        return "hello";
+        //     }
+        // Here, performing a full type check of the body of the function expression whilst in the process of
+        // determining the type of foo would cause foo to be given type any because of the recursive reference.
+        // Delaying the type check of the body ensures foo has been assigned a type.
+        function checkFunctionExpressionBodies(node: Node): void {
+            switch (node.kind) {
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                    forEach((<FunctionDeclaration>node).parameters, checkFunctionExpressionBodies);
+                    checkFunctionExpressionBody(<FunctionExpression>node);
+                    break;
+                case SyntaxKind.Method:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.FunctionDeclaration:
+                    forEach((<FunctionDeclaration>node).parameters, checkFunctionExpressionBodies);
+                    break;
+                case SyntaxKind.WithStatement:
+                    checkFunctionExpressionBodies((<WithStatement>node).expression);
+                    break;
+                case SyntaxKind.Parameter:
+                case SyntaxKind.Property:
+                case SyntaxKind.ArrayLiteral:
+                case SyntaxKind.ObjectLiteral:
+                case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.PropertyAccess:
+                case SyntaxKind.IndexedAccess:
+                case SyntaxKind.CallExpression:
+                case SyntaxKind.NewExpression:
+                case SyntaxKind.TypeAssertion:
+                case SyntaxKind.ParenExpression:
+                case SyntaxKind.PrefixOperator:
+                case SyntaxKind.PostfixOperator:
+                case SyntaxKind.BinaryExpression:
+                case SyntaxKind.ConditionalExpression:
+                case SyntaxKind.Block:
+                case SyntaxKind.FunctionBlock:
+                case SyntaxKind.ModuleBlock:
+                case SyntaxKind.VariableStatement:
+                case SyntaxKind.ExpressionStatement:
+                case SyntaxKind.IfStatement:
+                case SyntaxKind.DoStatement:
+                case SyntaxKind.WhileStatement:
+                case SyntaxKind.ForStatement:
+                case SyntaxKind.ForInStatement:
+                case SyntaxKind.ContinueStatement:
+                case SyntaxKind.BreakStatement:
+                case SyntaxKind.ReturnStatement:
+                case SyntaxKind.SwitchStatement:
+                case SyntaxKind.CaseClause:
+                case SyntaxKind.DefaultClause:
+                case SyntaxKind.LabelledStatement:
+                case SyntaxKind.ThrowStatement:
+                case SyntaxKind.TryStatement:
+                case SyntaxKind.TryBlock:
+                case SyntaxKind.CatchBlock:
+                case SyntaxKind.FinallyBlock:
+                case SyntaxKind.VariableDeclaration:
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.EnumMember:
+                case SyntaxKind.SourceFile:
+                    forEachChild(node, checkFunctionExpressionBodies);
+                    break;
+            }
+        }
+
+        function checkBody(node: Block) {
+            checkBlock(node);
+            checkFunctionExpressionBodies(node);
+        }
+
         // Fully type check a source file and collect the relevant diagnostics.
         function checkSourceFile(node: SourceFile) {
             var links = getNodeLinks(node);
             if (!(links.flags & NodeCheckFlags.TypeChecked)) {
                 emitExtends = false;
                 potentialThisCollisions.length = 0;
-                forEach(node.statements, checkSourceElement);
+                checkBody(node);
                 if (isExternalModule(node)) {
                     var symbol = getExportAssignmentSymbol(node.symbol);
                     if (symbol && symbol.flags & SymbolFlags.Import) {
