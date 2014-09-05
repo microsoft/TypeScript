@@ -1004,6 +1004,11 @@
         "category": "Error",
         "code": 2440
     },
+    "Duplicate identifier '{0}'. Compiler reserves name '{1}' in top level scope of an external module.": {
+        "category": "Error",
+        "code": 2441
+    },
+
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

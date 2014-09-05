@@ -373,7 +373,7 @@ export declare module SpecializedWidget {
     function createWidget2(): Widget2;
 }
 //// [privacyFunctionReturnTypeDeclFile_exporter.d.ts]
-/// <reference path='privacyFunctionReturnTypeDeclFile_GlobalWidgets.d.ts' />
+/// <reference path="privacyFunctionReturnTypeDeclFile_GlobalWidgets.d.ts" />
 import Widgets = require("privacyFunctionReturnTypeDeclFile_Widgets");
 import Widgets1 = require("GlobalWidgets");
 export declare function createExportedWidget1(): Widgets.Widget1;

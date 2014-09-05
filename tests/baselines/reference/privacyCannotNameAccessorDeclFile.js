@@ -402,7 +402,7 @@ export declare module SpecializedWidget {
     function createWidget2(): Widget2;
 }
 //// [privacyCannotNameAccessorDeclFile_exporter.d.ts]
-/// <reference path='privacyCannotNameAccessorDeclFile_GlobalWidgets.d.ts' />
+/// <reference path="privacyCannotNameAccessorDeclFile_GlobalWidgets.d.ts" />
 import Widgets = require("privacyCannotNameAccessorDeclFile_Widgets");
 import Widgets1 = require("GlobalWidgets");
 export declare function createExportedWidget1(): Widgets.Widget1;
