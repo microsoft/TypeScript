@@ -1,0 +1,38 @@
+=== tests/cases/compiler/strictMode5.ts ===
+function foo(...args) {
+>foo : (...args: any[]) => void
+>args : any[]
+
+    "use strict"
+}
+
+class A {
+>A : A
+
+    m() {
+>m : () => void
+
+        "use strict"
+
+        var v = () => {
+>v : () => void
+>() => {            return this.n();        } : () => void
+
+            return this.n();
+>this.n() : void
+>this.n : () => void
+>this : A
+>n : () => void
+
+        };
+    }
+    n() {}
+>n : () => void
+}
+
+function bar(x: number = 10) {
+>bar : (x?: number) => void
+>x : number
+
+    "use strict"
+}

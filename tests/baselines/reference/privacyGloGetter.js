@@ -136,7 +136,7 @@ var m1;
         });
         Object.defineProperty(C3_public.prototype, "p4_public", {
             get: function () {
-                return new C2_private();
+                return new C2_private(); //error
             },
             set: function (m1_c3_p4_arg) {
             },

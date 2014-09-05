@@ -62,8 +62,8 @@ var c;
 var i;
 var d;
 c = i;
-i = c;
+i = c; // error
 i = d;
-d = i;
+d = i; // error
 c = d;
-d = c;
+d = c; // error

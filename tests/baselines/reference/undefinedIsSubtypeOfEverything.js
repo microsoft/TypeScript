@@ -122,6 +122,7 @@ class D17 extends Base {
 
 
 //// [undefinedIsSubtypeOfEverything.js]
+// undefined is a subtype of every other types, no errors expected below
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -292,6 +293,9 @@ var D15 = (function (_super) {
     }
     return D15;
 })(Base);
+//class D15<T, U extends T> extends Base {
+//    foo: U;
+//}
 var D16 = (function (_super) {
     __extends(D16, _super);
     function D16() {

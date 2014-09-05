@@ -33,6 +33,7 @@ class Derived2 extends Base {
 }
 
 //// [constructorFunctionTypeIsAssignableToBaseType2.js]
+// the constructor function itself does not need to be a subtype of the base type constructor function
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -53,6 +54,7 @@ var Derived = (function (_super) {
 })(Base);
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
+    // ok, not enforcing assignability relation on this
     function Derived2(x) {
         _super.call(this, x);
         return 1;

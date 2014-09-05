@@ -10,3 +10,4 @@ import fs = require('requireOfAnEmptyFile1_b');
 
 //// [requireOfAnEmptyFile1_b.js]
 //// [requireOfAnEmptyFile1_a.js]
+//requireOfAnEmptyFile1

@@ -34,6 +34,7 @@ module Z {
 }
 
 //// [shadowedInternalModule.js]
+// all errors imported modules conflict with local variables
 var A;
 (function (A) {
     A.Point = { x: 0, y: 0 };

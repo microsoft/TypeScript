@@ -1,0 +1,5 @@
+=== tests/cases/compiler/stringHasStringValuedNumericIndexer.ts ===
+var str: string = ""[0];
+>str : string
+>""[0] : string
+

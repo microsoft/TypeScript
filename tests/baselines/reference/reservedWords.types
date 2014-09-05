@@ -1,0 +1,40 @@
+=== tests/cases/compiler/reservedWords.ts ===
+var obj = {
+>obj : { if: number; debugger: number; break: number; function: number; }
+>{    if: 0,    debugger: 2,    break: 3,    function: 4} : { if: number; debugger: number; break: number; function: number; }
+
+    if: 0,
+>if : number
+
+    debugger: 2,
+>debugger : number
+
+    break: 3,
+>break : number
+
+    function: 4
+>function : number
+}
+
+//This compiles.
+
+var obj2 = {
+>obj2 : { if: number; while: number; debugger: number; break: number; function: number; }
+>{    if: 0,    while: 1,    debugger: 2,    break: 3,    function: 4} : { if: number; while: number; debugger: number; break: number; function: number; }
+
+    if: 0,
+>if : number
+
+    while: 1,
+>while : number
+
+    debugger: 2,
+>debugger : number
+
+    break: 3,
+>break : number
+
+    function: 4
+>function : number
+}
+

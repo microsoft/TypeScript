@@ -13,4 +13,4 @@ var v3: G<A, A>;               // Error, A not valid argument for U
 
 
 //// [generics5.js]
-var v3;
+var v3; // Error, A not valid argument for U

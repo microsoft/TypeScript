@@ -1,0 +1,28 @@
+=== tests/cases/compiler/asiInES6Classes.ts ===
+class Foo {
+>Foo : Foo
+
+ 
+
+    defaults = {
+>defaults : { done: boolean; }
+>{        done: false    } : { done: boolean; }
+
+        done: false
+>done : boolean
+
+    }
+
+ 
+
+    bar() {
+>bar : () => number
+
+        return 3;
+
+    }
+
+ 
+
+}
+

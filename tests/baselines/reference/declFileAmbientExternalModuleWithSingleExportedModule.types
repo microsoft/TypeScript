@@ -1,0 +1,29 @@
+=== tests/cases/compiler/declFileAmbientExternalModuleWithSingleExportedModule_1.ts ===
+///<reference path='declFileAmbientExternalModuleWithSingleExportedModule_0.ts'/>
+import SubModule = require('SubModule');
+>SubModule : typeof SubModule
+
+export var x: SubModule.m.m3.c;
+>x : SubModule.m.m3.c
+>SubModule : unknown
+>m : unknown
+>m3 : unknown
+>c : SubModule.m.m3.c
+
+
+=== tests/cases/compiler/declFileAmbientExternalModuleWithSingleExportedModule_0.ts ===
+
+declare module "SubModule" {
+    export module m {
+>m : unknown
+
+        export module m3 {
+>m3 : unknown
+
+            interface c {
+>c : c
+            }
+        }
+    }
+}
+

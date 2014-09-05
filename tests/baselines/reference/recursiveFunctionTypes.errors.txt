@@ -1,4 +1,4 @@
-==== tests/cases/compiler/recursiveFunctionTypes.ts (12 errors) ====
+==== tests/cases/compiler/recursiveFunctionTypes.ts (13 errors) ====
     function fn(): typeof fn { return 1; }
                                       ~
 !!! Type 'number' is not assignable to type '() => typeof fn'.
@@ -39,6 +39,8 @@
     
     var f4: () => typeof f4;
     f4 = 3; // error
+    ~~
+!!! Type 'number' is not assignable to type '() => any'.
     
     function f5() { return f5; }
     

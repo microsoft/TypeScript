@@ -1,0 +1,226 @@
+=== tests/cases/compiler/commentsModules.ts ===
+/** Module comment*/
+module m1 {
+>m1 : typeof m1
+
+    /** b's comment*/
+    export var b: number;
+>b : number
+
+    /** foo's comment*/
+    function foo() {
+>foo : () => number
+
+        return b;
+>b : number
+    }
+    /** m2 comments*/
+    export module m2 {
+>m2 : typeof m2
+
+        /** class comment;*/
+        export class c {
+>c : c
+
+        };
+        /** i*/
+        export var i = new c();
+>i : c
+>new c() : c
+>c : typeof c
+    }
+    /** exported function*/
+    export function fooExport() {
+>fooExport : () => number
+
+        return foo();
+>foo() : number
+>foo : () => number
+    }
+
+    // shouldn't appear
+    export function foo2Export(/**hm*/ a: string) {
+>foo2Export : (a: string) => void
+>a : string
+    }
+
+    /** foo3Export
+     * comment
+     */
+    export function foo3Export() {
+>foo3Export : () => void
+    }
+
+    /** foo4Export
+     * comment
+     */
+    function foo4Export() {
+>foo4Export : () => void
+    }
+} // trailing comment module
+m1.fooExport();
+>m1.fooExport() : number
+>m1.fooExport : () => number
+>m1 : typeof m1
+>fooExport : () => number
+
+var myvar = new m1.m2.c();
+>myvar : m1.m2.c
+>new m1.m2.c() : m1.m2.c
+>m1.m2.c : typeof m1.m2.c
+>m1.m2 : typeof m1.m2
+>m1 : typeof m1
+>m2 : typeof m1.m2
+>c : typeof m1.m2.c
+
+/** module comment of m2.m3*/
+module m2.m3 {
+>m2 : typeof m2
+>m3 : typeof m3
+
+    /** Exported class comment*/
+    export class c {
+>c : c
+    }
+} /* trailing dotted module comment*/
+new m2.m3.c();
+>new m2.m3.c() : m2.m3.c
+>m2.m3.c : typeof m2.m3.c
+>m2.m3 : typeof m2.m3
+>m2 : typeof m2
+>m3 : typeof m2.m3
+>c : typeof m2.m3.c
+
+/** module comment of m3.m4.m5*/
+module m3.m4.m5 {
+>m3 : typeof m3
+>m4 : typeof m4
+>m5 : typeof m5
+
+    /** Exported class comment*/
+    export class c {
+>c : c
+    }
+} // trailing dotted module 2
+new m3.m4.m5.c();
+>new m3.m4.m5.c() : m3.m4.m5.c
+>m3.m4.m5.c : typeof m3.m4.m5.c
+>m3.m4.m5 : typeof m3.m4.m5
+>m3.m4 : typeof m3.m4
+>m3 : typeof m3
+>m4 : typeof m3.m4
+>m5 : typeof m3.m4.m5
+>c : typeof m3.m4.m5.c
+
+/** module comment of m4.m5.m6*/
+module m4.m5.m6 {
+>m4 : typeof m4
+>m5 : typeof m5
+>m6 : typeof m6
+
+    export module m7 {
+>m7 : typeof m7
+
+        /** Exported class comment*/
+        export class c {
+>c : c
+        }
+    } /* trailing inner module */ /* multiple comments*/
+}
+new m4.m5.m6.m7.c();
+>new m4.m5.m6.m7.c() : m4.m5.m6.m7.c
+>m4.m5.m6.m7.c : typeof m4.m5.m6.m7.c
+>m4.m5.m6.m7 : typeof m4.m5.m6.m7
+>m4.m5.m6 : typeof m4.m5.m6
+>m4.m5 : typeof m4.m5
+>m4 : typeof m4
+>m5 : typeof m4.m5
+>m6 : typeof m4.m5.m6
+>m7 : typeof m4.m5.m6.m7
+>c : typeof m4.m5.m6.m7.c
+
+/** module comment of m5.m6.m7*/
+module m5.m6.m7 {
+>m5 : typeof m5
+>m6 : typeof m6
+>m7 : typeof m7
+
+    /** module m8 comment*/
+    export module m8 {
+>m8 : typeof m8
+
+        /** Exported class comment*/
+        export class c {
+>c : c
+        }
+    }
+}
+new m5.m6.m7.m8.c();
+>new m5.m6.m7.m8.c() : m5.m6.m7.m8.c
+>m5.m6.m7.m8.c : typeof m5.m6.m7.m8.c
+>m5.m6.m7.m8 : typeof m5.m6.m7.m8
+>m5.m6.m7 : typeof m5.m6.m7
+>m5.m6 : typeof m5.m6
+>m5 : typeof m5
+>m6 : typeof m5.m6
+>m7 : typeof m5.m6.m7
+>m8 : typeof m5.m6.m7.m8
+>c : typeof m5.m6.m7.m8.c
+
+module m6.m7 {
+>m6 : typeof m6
+>m7 : typeof m7
+
+    export module m8 {
+>m8 : typeof m8
+
+        /** Exported class comment*/
+        export class c {
+>c : c
+        }
+    }
+}
+new m6.m7.m8.c();
+>new m6.m7.m8.c() : m6.m7.m8.c
+>m6.m7.m8.c : typeof m6.m7.m8.c
+>m6.m7.m8 : typeof m6.m7.m8
+>m6.m7 : typeof m6.m7
+>m6 : typeof m6
+>m7 : typeof m6.m7
+>m8 : typeof m6.m7.m8
+>c : typeof m6.m7.m8.c
+
+module m7.m8 {
+>m7 : typeof m7
+>m8 : typeof m8
+
+    /** module m9 comment*/
+    export module m9 {
+>m9 : typeof m9
+
+        /** Exported class comment*/
+        export class c {
+>c : c
+        }
+
+        /** class d */
+        class d {
+>d : d
+        }
+
+        // class e
+        export class e {
+>e : e
+        }
+    }
+}
+new m7.m8.m9.c();
+>new m7.m8.m9.c() : m7.m8.m9.c
+>m7.m8.m9.c : typeof m7.m8.m9.c
+>m7.m8.m9 : typeof m7.m8.m9
+>m7.m8 : typeof m7.m8
+>m7 : typeof m7
+>m8 : typeof m7.m8
+>m9 : typeof m7.m8.m9
+>c : typeof m7.m8.m9.c
+

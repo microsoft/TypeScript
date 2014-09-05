@@ -65,6 +65,8 @@ module WithCandidates {
 }
 
 //// [genericClassWithFunctionTypedMemberArguments.js]
+// Generic functions used as arguments for function typed parameters are not used to make inferences from
+// Using function arguments, no errors expected
 var ImmediatelyFix;
 (function (ImmediatelyFix) {
     var C = (function () {
@@ -76,9 +78,9 @@ var ImmediatelyFix;
         return C;
     })();
     var c = new C();
-    var r = c.foo(function (x) { return ''; });
-    var r2 = c.foo(function (x) { return ''; });
-    var r3 = c.foo(function (x) { return ''; });
+    var r = c.foo(function (x) { return ''; }); // {}
+    var r2 = c.foo(function (x) { return ''; }); // string 
+    var r3 = c.foo(function (x) { return ''; }); // {}
     var C2 = (function () {
         function C2() {
         }
@@ -88,8 +90,8 @@ var ImmediatelyFix;
         return C2;
     })();
     var c2 = new C2();
-    var ra = c2.foo(function (x) { return 1; });
-    var r3a = c2.foo(function (x) { return 1; });
+    var ra = c2.foo(function (x) { return 1; }); // number
+    var r3a = c2.foo(function (x) { return 1; }); // number
 })(ImmediatelyFix || (ImmediatelyFix = {}));
 var WithCandidates;
 (function (WithCandidates) {
@@ -104,9 +106,9 @@ var WithCandidates;
     var c;
     var r4 = c.foo2(1, function (a) {
         return '';
-    });
-    var r5 = c.foo2(1, function (a) { return ''; });
-    var r6 = c.foo2('', function (a) { return 1; });
+    }); // string, contextual signature instantiation is applied to generic functions
+    var r5 = c.foo2(1, function (a) { return ''; }); // string
+    var r6 = c.foo2('', function (a) { return 1; }); // number
     var C2 = (function () {
         function C2() {
         }
@@ -116,10 +118,10 @@ var WithCandidates;
         return C2;
     })();
     var c2;
-    var r7 = c2.foo3(1, function (a) { return ''; }, '');
+    var r7 = c2.foo3(1, function (a) { return ''; }, ''); // string
     var r8 = c2.foo3(1, function (a) {
         return '';
-    }, '');
+    }, ''); // string
     var C3 = (function () {
         function C3() {
         }
@@ -130,12 +132,12 @@ var WithCandidates;
     })();
     var c3;
     function other(t, u) {
-        var r10 = c.foo2(1, function (x) { return ''; });
-        var r10 = c.foo2(1, function (x) { return ''; });
-        var r11 = c3.foo3(1, function (x) { return ''; }, '');
-        var r11b = c3.foo3(1, function (x) { return ''; }, 1);
+        var r10 = c.foo2(1, function (x) { return ''; }); // string, non-generic signature allows inferences to be made
+        var r10 = c.foo2(1, function (x) { return ''; }); // string
+        var r11 = c3.foo3(1, function (x) { return ''; }, ''); // string
+        var r11b = c3.foo3(1, function (x) { return ''; }, 1); // {}
         var r12 = c3.foo3(1, function (a) {
             return '';
-        }, 1);
+        }, 1); // {}
     }
 })(WithCandidates || (WithCandidates = {}));

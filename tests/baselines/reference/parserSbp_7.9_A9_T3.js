@@ -17,6 +17,8 @@ do {
 
 
 //// [parserSbp_7.9_A9_T3.js]
+// Copyright 2009 the Sputnik authors.  All rights reserved.
+// This code is governed by the BSD license found in the LICENSE file.
 do {
     ;
 } while (false);

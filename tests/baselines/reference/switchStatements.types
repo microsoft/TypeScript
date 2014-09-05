@@ -1,0 +1,148 @@
+=== tests/cases/conformance/statements/switchStatements/switchStatements.ts ===
+module M {
+>M : typeof M
+
+    export function fn(x: number) {
+>fn : (x: number) => string
+>x : number
+
+        return '';
+    }
+}
+
+var x: any;
+>x : any
+
+switch (x) {
+>x : any
+
+    case '':
+    case 12:
+    case true:
+    case null:
+    case undefined:
+>undefined : undefined
+
+    case new Date(12):
+>new Date(12) : Date
+>Date : { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }
+
+    case new Object():
+>new Object() : Object
+>Object : { (): any; (value: any): any; new (value?: any): Object; prototype: Object; getPrototypeOf(o: any): any; getOwnPropertyDescriptor(o: any, p: string): PropertyDescriptor; getOwnPropertyNames(o: any): string[]; create(o: any, properties?: PropertyDescriptorMap): any; defineProperty(o: any, p: string, attributes: PropertyDescriptor): any; defineProperties(o: any, properties: PropertyDescriptorMap): any; seal(o: any): any; freeze(o: any): any; preventExtensions(o: any): any; isSealed(o: any): boolean; isFrozen(o: any): boolean; isExtensible(o: any): boolean; keys(o: any): string[]; }
+
+    case /[a-z]/:
+    case[]:
+>[] : undefined[]
+
+    case {}:
+>{} : {}
+
+    case { id: 12 }:
+>{ id: 12 } : { id: number; }
+>id : number
+
+    case['a']:
+>['a'] : string[]
+
+    case typeof x:
+>typeof x : string
+>x : any
+
+    case typeof M:
+>typeof M : string
+>M : typeof M
+
+    case M.fn(1):
+>M.fn(1) : string
+>M.fn : (x: number) => string
+>M : typeof M
+>fn : (x: number) => string
+
+    case <T>(x: number) => '':
+><T>(x: number) => '' : <T>(x: number) => string
+>T : T
+>x : number
+
+    case (<T>(x: number) => '')(2):
+>(<T>(x: number) => '')(2) : string
+>(<T>(x: number) => '') : <T>(x: number) => string
+><T>(x: number) => '' : <T>(x: number) => string
+>T : T
+>x : number
+
+    default:
+}
+
+// basic assignable check, rest covered in tests for 'assignement compatibility'
+class C { id: number; }
+>C : C
+>id : number
+
+class D extends C { name: string }
+>D : D
+>C : C
+>name : string
+
+switch (new C()) {
+>new C() : C
+>C : typeof C
+
+    case new D():
+>new D() : D
+>D : typeof D
+
+    case { id: 12, name: '' }:
+>{ id: 12, name: '' } : { id: number; name: string; }
+>id : number
+>name : string
+
+    case new C():
+>new C() : C
+>C : typeof C
+}
+
+switch ('') { }
+switch (12) { }
+switch (true) { }
+switch (null) { }
+switch (undefined) { }
+>undefined : undefined
+
+switch (new Date(12)) { }
+>new Date(12) : Date
+>Date : { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }
+
+switch (new Object()) { }
+>new Object() : Object
+>Object : { (): any; (value: any): any; new (value?: any): Object; prototype: Object; getPrototypeOf(o: any): any; getOwnPropertyDescriptor(o: any, p: string): PropertyDescriptor; getOwnPropertyNames(o: any): string[]; create(o: any, properties?: PropertyDescriptorMap): any; defineProperty(o: any, p: string, attributes: PropertyDescriptor): any; defineProperties(o: any, properties: PropertyDescriptorMap): any; seal(o: any): any; freeze(o: any): any; preventExtensions(o: any): any; isSealed(o: any): boolean; isFrozen(o: any): boolean; isExtensible(o: any): boolean; keys(o: any): string[]; }
+
+switch (/[a-z]/) { }
+switch ([]) { }
+>[] : undefined[]
+
+switch ({}) { }
+>{} : {}
+
+switch ({ id: 12 }) { }
+>{ id: 12 } : { id: number; }
+>id : number
+
+switch (['a']) { }
+>['a'] : string[]
+
+switch (<T>(x: number) => '') { }
+><T>(x: number) => '' : <T>(x: number) => string
+>T : T
+>x : number
+
+switch ((<T>(x: T) => '')(1)) { }
+>(<T>(x: T) => '')(1) : string
+>(<T>(x: T) => '') : <T>(x: T) => string
+><T>(x: T) => '' : <T>(x: T) => string
+>T : T
+>x : T
+>T : T
+
+
+

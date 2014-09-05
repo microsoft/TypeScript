@@ -218,7 +218,11 @@ module ts {
         FirstKeyword = BreakKeyword,
         LastKeyword = StringKeyword,
         FirstFutureReservedWord = ImplementsKeyword,
-        LastFutureReservedWord = YieldKeyword
+        LastFutureReservedWord = YieldKeyword,
+        FirstTypeNode = TypeReference,
+        LastTypeNode = ArrayType,
+        FirstPunctuation= OpenBraceToken,
+        LastPunctuation = CaretEqualsToken
     }
 
     export enum NodeFlags {
@@ -517,10 +521,15 @@ module ts {
         filename: string;
     }
 
+    export interface Comment extends TextRange {
+        hasTrailingNewLine?: boolean;
+    }
+
     export interface SourceFile extends Block {
         filename: string;
         text: string;
         getLineAndCharacterFromPosition(position: number): { line: number; character: number };
+        getPositionFromLineAndCharacter(line: number, character: number): number;
         amdDependencies: string[];
         referencedFiles: FileReference[];
         syntacticErrors: Diagnostic[];
@@ -531,8 +540,9 @@ module ts {
         identifierCount: number;
         symbolCount: number;
         isOpen: boolean;
-        version: number;
+        version: string;
         languageVersion: ScriptTarget;
+        identifiers: Map<string>;
     }
 
     export interface Program {
@@ -598,22 +608,22 @@ module ts {
         getTypeCount(): number;
         checkProgram(): void;
         emitFiles(): EmitResult;
-        getSymbolOfNode(node: Node): Symbol;
         getParentOfSymbol(symbol: Symbol): Symbol;
         getTypeOfSymbol(symbol: Symbol): Type;
-        getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
         getPropertyOfType(type: Type, propetyName: string): Symbol;
         getSignaturesOfType(type: Type, kind: SignatureKind): Signature[];
         getIndexTypeOfType(type: Type, kind: IndexKind): Type;
         getReturnTypeOfSignature(signature: Signature): Type;
-        resolveEntityName(location: Node, name: EntityName, meaning: SymbolFlags): Symbol;
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolInfo(node: Node): Symbol;
-        getTypeOfExpression(node: Expression, contextualType?: Type, contextualMapper?: TypeMapper): Type;
+        getTypeOfNode(node: Node): Type;
+        getApparentType(type: Type): ApparentType;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
         getAugmentedPropertiesOfApparentType(type: Type): Symbol[];
+        getRootSymbol(symbol: Symbol): Symbol;
+        getContextualType(node: Node): Type;
     }
 
     export interface TextWriter {
@@ -946,7 +956,6 @@ module ts {
         Warning,
         Error,
         Message,
-        NoPrefix
     }
 
     export interface CompilerOptions {
@@ -1009,9 +1018,6 @@ module ts {
         carriageReturn = 0x0D,        // \r
         lineSeparator = 0x2028,
         paragraphSeparator = 0x2029,
-
-        // REVIEW: do we need to support this?  The scanner doesn't, but our IText does.  This seems 
-        // like an odd disparity?  (Or maybe it's completely fine for them to be different).
         nextLine = 0x0085,
 
         // Unicode 3.0 space characters

@@ -1,2 +1,0 @@
-[{"start":87,"end":88,"data":"pubMeth\t() => void\npubProp\tnumber\nprivMeth\t() => void\nprivProp\tnumber\n"},{"start":205,"end":206,"data":"pubMeth\t() => void\npubProp\tnumber\n"},{"start":335,"end":336,"data":"C\tnew() => M.C\nV\tnumber\n"},{"start":345,"end":346,"data":"pub\tnumber\n"}]
-

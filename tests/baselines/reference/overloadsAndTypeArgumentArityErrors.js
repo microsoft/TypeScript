@@ -7,5 +7,5 @@ Callbacks<number, string, boolean>('s'); // wrong number of type arguments
 new Callbacks<number, string, boolean>('s'); // wrong number of type arguments
 
 //// [overloadsAndTypeArgumentArityErrors.js]
-Callbacks('s');
-new Callbacks('s');
+Callbacks('s'); // wrong number of type arguments
+new Callbacks('s'); // wrong number of type arguments

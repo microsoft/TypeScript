@@ -1,0 +1,4 @@
+=== tests/cases/compiler/isLiteral2.ts ===
+var x: number = 02343
+>x : number
+

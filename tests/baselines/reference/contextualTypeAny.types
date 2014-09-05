@@ -1,0 +1,17 @@
+=== tests/cases/compiler/contextualTypeAny.ts ===
+var x: any;
+>x : any
+
+var obj: { [s: string]: number } = { p: "", q: x };
+>obj : { [x: string]: number; }
+>s : string
+>{ p: "", q: x } : { [x: string]: any; p: string; q: any; }
+>p : string
+>q : any
+>x : any
+
+var arr: number[] = ["", x];
+>arr : number[]
+>["", x] : any[]
+>x : any
+

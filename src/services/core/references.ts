@@ -6,7 +6,6 @@
 ///<reference path='diagnosticCore.ts' />
 ///<reference path='diagnosticInfo.ts' />
 ///<reference path='errors.ts' />
-///<reference path='hash.ts' />
 ///<reference path='integerUtilities.ts' />
 ///<reference path='lineMap.ts' />
 ///<reference path='linePosition.ts' />

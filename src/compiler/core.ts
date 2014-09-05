@@ -63,8 +63,8 @@ module ts {
     }
 
     export function concatenate<T>(array1: T[], array2: T[]): T[] {
-        if (!array2.length) return array1;
-        if (!array1.length) return array2;
+        if (!array2 || !array2.length) return array1;
+        if (!array1 || !array1.length) return array2;
         return array1.concat(array2);
     }
 
@@ -194,13 +194,10 @@ module ts {
 
     export var localizedDiagnosticMessages: Map<string> = undefined;
 
-    function getLocaleSpecificMessage(message: string) {
+    export function getLocaleSpecificMessage(message: string) {
         if (ts.localizedDiagnosticMessages) {
             message = localizedDiagnosticMessages[message];
         }
-
-        /* Check to see that we got an actual value back. */
-        Debug.assert(message, "Diagnostic message does not exist in locale map.");
 
         return message;
     }
@@ -518,12 +515,6 @@ module ts {
         return pathLen > extLen && path.substr(pathLen - extLen, extLen) === extension;
     }
 
-    export function getCanonicalFileName(fileName: string): string {
-        // if underlying system can distinguish between two files whose names differs only in cases then file name already in canonical form.
-        // otherwise use toLowerCase as a canonical form.
-        return sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
-    }
-
     export interface ObjectAllocator {
         getNodeConstructor(kind: SyntaxKind): new () => Node;
         getSymbolConstructor(): new (flags: SymbolFlags, name: string) => Symbol;
@@ -573,7 +564,7 @@ module ts {
         var currentAssertionLevel = AssertionLevel.None;
 
         export function shouldAssert(level: AssertionLevel): boolean {
-            return this.currentAssertionLevel >= level;
+            return currentAssertionLevel >= level;
         }
 
         export function assert(expression: any, message?: string, verboseDebugInfo?: () => string): void {

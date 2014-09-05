@@ -17,31 +17,11 @@
 
 module TypeScript {
     export interface Logger {
-        information(): boolean;
-        debug(): boolean;
-        warning(): boolean;
-        error(): boolean;
-        fatal(): boolean;
         log(s: string): void;
     }
 
     export class NullLogger implements Logger {
-        public information(): boolean { return false; }
-        public debug(): boolean { return false; }
-        public warning(): boolean { return false; }
-        public error(): boolean { return false; }
-        public fatal(): boolean { return false; }
         public log(s: string): void {
         }
-    }
-
-    export function timeFunction(logger: Logger, funcDescription: string, func: () => any): any {
-        var start = (new Date()).getTime();
-        var result = func();
-        var end = (new Date()).getTime();
-        if (logger.information()) {
-            logger.log(funcDescription + " completed in " + (end - start) + " msec");
-        }
-        return result;
     }
 }

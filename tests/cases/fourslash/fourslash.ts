@@ -180,7 +180,11 @@ module FourSlashInterface {
         }
 
         public referencesCountIs(count: number) {
-            FourSlash.currentTestState.verifyReferencesCountIs(count);
+            FourSlash.currentTestState.verifyReferencesCountIs(count, /*localFilesOnly*/ false);
+        }
+
+        public referencesAtPositionContains(range: Range, isWriteAccess?: boolean) {
+            FourSlash.currentTestState.verifyReferencesAtPositionListContains(range.fileName, range.start, range.end, isWriteAccess);
         }
 
         public implementorsCountIs(count: number) {
@@ -483,6 +487,14 @@ module FourSlashInterface {
 
         public printScriptLexicalStructureItems() {
             FourSlash.currentTestState.printScriptLexicalStructureItems();
+        }
+
+        public printReferences() {
+            FourSlash.currentTestState.printReferences();
+        }
+
+        public printContext() {
+            FourSlash.currentTestState.printContext();
         }
     }
 

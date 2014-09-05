@@ -15,4 +15,4 @@ var MyEnumType;
 })(MyEnumType || (MyEnumType = {}));
 var _arr = [{ key: 'foo' }, { key: 'bar' }];
 var enumValue = 0 /* foo */;
-var x = _arr.map(function (o) { return MyEnumType[o.key] === enumValue; });
+var x = _arr.map(function (o) { return MyEnumType[o.key] === enumValue; }); // these are not same type

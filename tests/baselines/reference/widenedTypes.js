@@ -27,7 +27,7 @@ var obj: { [x: string]: string; } = { x: 3, y: null }; // assignable because nul
 //// [widenedTypes.js]
 null instanceof (function () {
 });
-({}) instanceof null;
+({}) instanceof null; // Ok because null is a subtype of function
 null in {};
 "" in null;
 for (var a in null) {
@@ -40,5 +40,6 @@ var y;
 var u = [3, (y = null)];
 u[3] = "";
 var ob = { x: "" };
-var arr = [3, null];
-var obj = { x: 3, y: null };
+// Highlights the difference between array literals and object literals
+var arr = [3, null]; // not assignable because null is not widened. BCT is {}
+var obj = { x: 3, y: null }; // assignable because null is widened, and therefore BCT is any

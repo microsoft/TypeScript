@@ -12,4 +12,4 @@ var a;
     a.b = 10;
 })(a || (a = {}));
 var f = function () { return _this; };
-var _this = a;
+var _this = a; // Error

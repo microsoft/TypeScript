@@ -31,20 +31,20 @@ function foo() {
         for (var _i = 1; _i < arguments.length; _i++) {
             restParameters[_i - 1] = arguments[_i];
         }
-        var _i = 10;
+        var _i = 10; // no error
     }
     function f1NoError(_i) {
-        var _i = 10;
+        var _i = 10; // no error
     }
     function f3() {
         var restParameters = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             restParameters[_i - 0] = arguments[_i];
         }
-        var _i = 10;
+        var _i = 10; // no error
     }
     function f3NoError() {
-        var _i = 10;
+        var _i = 10; // no error
     }
     function f4(_i) {
         var rest = [];

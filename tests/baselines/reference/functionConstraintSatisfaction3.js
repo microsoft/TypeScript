@@ -42,6 +42,7 @@ var r12 = foo(i2);
 var r15 = foo(c2);
 
 //// [functionConstraintSatisfaction3.js]
+// satisfaction of a constraint to Function, no errors expected
 function foo(x) {
     return x;
 }

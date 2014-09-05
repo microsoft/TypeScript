@@ -1,0 +1,175 @@
+=== tests/cases/compiler/moduleVisibilityTest1.ts ===
+
+
+module OuterMod {
+>OuterMod : typeof OuterMod
+
+	export function someExportedOuterFunc() { return -1; }
+>someExportedOuterFunc : () => number
+>-1 : number
+
+	export module OuterInnerMod {
+>OuterInnerMod : typeof OuterInnerMod
+
+		export function someExportedOuterInnerFunc() { return "foo"; }
+>someExportedOuterInnerFunc : () => string
+	}
+}
+
+import OuterInnerAlias = OuterMod.OuterInnerMod;
+>OuterInnerAlias : typeof OuterInnerAlias
+>OuterMod : typeof OuterMod
+>OuterInnerMod : typeof OuterInnerAlias
+
+module M {
+>M : typeof M
+
+	export module InnerMod {
+>InnerMod : typeof InnerMod
+
+		export function someExportedInnerFunc() { return -2; }
+>someExportedInnerFunc : () => number
+>-2 : number
+	}
+
+	export enum E {
+>E : E
+
+		A,
+>A : E
+
+		B,
+>B : E
+
+		C,
+>C : E
+	}
+
+	export var x = 5;
+>x : number
+
+	export declare var exported_var;
+>exported_var : any
+
+	var y = x + x;
+>y : number
+>x + x : number
+>x : number
+>x : number
+
+
+	export interface I {
+>I : I
+
+		someMethod():number;
+>someMethod : () => number
+	}
+
+	 class B {public b = 0;}
+>B : B
+>b : number
+
+	 export class C implements I {
+>C : C
+>I : I
+
+		public someMethodThatCallsAnOuterMethod() {return OuterInnerAlias.someExportedOuterInnerFunc();}
+>someMethodThatCallsAnOuterMethod : () => string
+>OuterInnerAlias.someExportedOuterInnerFunc() : string
+>OuterInnerAlias.someExportedOuterInnerFunc : () => string
+>OuterInnerAlias : typeof OuterInnerAlias
+>someExportedOuterInnerFunc : () => string
+
+		public someMethodThatCallsAnInnerMethod() {return InnerMod.someExportedInnerFunc();}
+>someMethodThatCallsAnInnerMethod : () => number
+>InnerMod.someExportedInnerFunc() : number
+>InnerMod.someExportedInnerFunc : () => number
+>InnerMod : typeof InnerMod
+>someExportedInnerFunc : () => number
+
+		public someMethodThatCallsAnOuterInnerMethod() {return OuterMod.someExportedOuterFunc();}
+>someMethodThatCallsAnOuterInnerMethod : () => number
+>OuterMod.someExportedOuterFunc() : number
+>OuterMod.someExportedOuterFunc : () => number
+>OuterMod : typeof OuterMod
+>someExportedOuterFunc : () => number
+
+		public someMethod() { return 0; }
+>someMethod : () => number
+
+		public someProp = 1;
+>someProp : number
+
+		constructor() {
+		    function someInnerFunc() { return 2; }
+>someInnerFunc : () => number
+
+            var someInnerVar = 3;
+>someInnerVar : number
+		}
+	}
+
+	var someModuleVar = 4;
+>someModuleVar : number
+
+	function someModuleFunction() { return 5;}
+>someModuleFunction : () => number
+}
+
+module M {
+>M : typeof M
+
+	export var c = x;
+>c : number
+>x : number
+
+	export var meb = M.E.B;
+>meb : E
+>M.E.B : E
+>M.E : typeof E
+>M : typeof M
+>E : typeof E
+>B : E
+}
+
+var cprime : M.I = <M.I>null;
+>cprime : M.I
+>M : unknown
+>I : M.I
+><M.I>null : M.I
+>M : unknown
+>I : M.I
+
+var c = new M.C();
+>c : M.C
+>new M.C() : M.C
+>M.C : typeof M.C
+>M : typeof M
+>C : typeof M.C
+
+var z = M.x;
+>z : number
+>M.x : number
+>M : typeof M
+>x : number
+
+var alpha = M.E.A;
+>alpha : M.E
+>M.E.A : M.E
+>M.E : typeof M.E
+>M : typeof M
+>E : typeof M.E
+>A : M.E
+
+var omega = M.exported_var;
+>omega : any
+>M.exported_var : any
+>M : typeof M
+>exported_var : any
+
+c.someMethodThatCallsAnOuterMethod();
+>c.someMethodThatCallsAnOuterMethod() : string
+>c.someMethodThatCallsAnOuterMethod : () => string
+>c : M.C
+>someMethodThatCallsAnOuterMethod : () => string
+

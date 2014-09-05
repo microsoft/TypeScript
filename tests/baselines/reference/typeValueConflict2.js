@@ -37,6 +37,7 @@ var M1;
 var M2;
 (function (M2) {
     var M1 = 0;
+    // Should error.  M1 should bind to the variable, not to the module.
     var B = (function (_super) {
         __extends(B, _super);
         function B() {
@@ -47,6 +48,7 @@ var M2;
 })(M2 || (M2 = {}));
 var M3;
 (function (M3) {
+    // Shouldn't error
     var B = (function (_super) {
         __extends(B, _super);
         function B() {

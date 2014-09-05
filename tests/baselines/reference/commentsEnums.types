@@ -1,0 +1,29 @@
+=== tests/cases/compiler/commentsEnums.ts ===
+
+/** Enum of colors*/
+enum Colors {
+>Colors : Colors
+
+    /** Fancy name for 'blue'*/
+    Cornflower /* blue */,
+>Cornflower : Colors
+
+    /** Fancy name for 'pink'*/
+    FancyPink
+>FancyPink : Colors
+
+} // trailing comment
+var x = Colors.Cornflower;
+>x : Colors
+>Colors.Cornflower : Colors
+>Colors : typeof Colors
+>Cornflower : Colors
+
+x = Colors.FancyPink;
+>x = Colors.FancyPink : Colors
+>x : Colors
+>Colors.FancyPink : Colors
+>Colors : typeof Colors
+>FancyPink : Colors
+
+

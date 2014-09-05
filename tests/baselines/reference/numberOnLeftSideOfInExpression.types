@@ -1,0 +1,12 @@
+=== tests/cases/compiler/numberOnLeftSideOfInExpression.ts ===
+var left: number;
+>left : number
+
+var right: any;
+>right : any
+
+left in right;
+>left in right : boolean
+>left : number
+>right : any
+

@@ -1,9 +1,9 @@
 ==== tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement3.ts (7 errors) ====
     for(d in _.jh[a]=_.jh[a]||[],b);
         ~
-!!! The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
-        ~
 !!! Cannot find name 'd'.
+        ~
+!!! The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
              ~
 !!! Cannot find name '_'.
                   ~

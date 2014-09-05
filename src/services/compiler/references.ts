@@ -18,7 +18,6 @@
 /////<reference path='precompile.ts' />
 /////<reference path='referenceResolver.ts' />
 /////<reference path='declarationEmitter.ts' />
-/////<reference path='bloomFilter.ts' />
 /////<reference path='identifierWalker.ts' />
 /////<reference path='settings.ts' />
 /////<reference path='typecheck\pullFlags.ts' />

@@ -147,10 +147,12 @@ exports.publicClass = publicClass;
 var publicClassWithWithPrivateTypeParameters = (function () {
     function publicClassWithWithPrivateTypeParameters() {
     }
+    // TypeParameter_0_of_public_static_method_from_exported_class_has_or_is_using_private_type_1
     publicClassWithWithPrivateTypeParameters.myPublicStaticMethod = function () {
     };
     publicClassWithWithPrivateTypeParameters.myPrivateStaticMethod = function () {
     };
+    // TypeParameter_0_of_public_method_from_exported_class_has_or_is_using_private_type_1
     publicClassWithWithPrivateTypeParameters.prototype.myPublicMethod = function () {
     };
     publicClassWithWithPrivateTypeParameters.prototype.myPrivateMethod = function () {
@@ -198,6 +200,7 @@ var privateClassWithWithPublicTypeParameters = (function () {
     };
     return privateClassWithWithPublicTypeParameters;
 })();
+// TypeParameter_0_of_exported_function_has_or_is_using_private_type_1
 function publicFunctionWithPrivateTypeParameters() {
 }
 exports.publicFunctionWithPrivateTypeParameters = publicFunctionWithPrivateTypeParameters;

@@ -1,0 +1,27 @@
+=== tests/cases/compiler/keywordField.ts ===
+var obj:any = {};
+>obj : any
+>{} : {}
+
+obj.if = 1;
+>obj.if = 1 : number
+>obj.if : any
+>obj : any
+>if : any
+
+var a = { if: "test" }
+>a : { if: string; }
+>{ if: "test" } : { if: string; }
+>if : string
+
+var n = a.if
+>n : string
+>a.if : string
+>a : { if: string; }
+>if : string
+
+var q = a["if"];
+>q : string
+>a["if"] : string
+>a : { if: string; }
+

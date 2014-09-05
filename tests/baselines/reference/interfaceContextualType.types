@@ -1,0 +1,63 @@
+=== tests/cases/compiler/interfaceContextualType.ts ===
+export interface IOptions {
+>IOptions : IOptions
+
+    italic?: boolean;
+>italic : boolean
+
+    bold?: boolean;
+>bold : boolean
+}
+export interface IMap {
+>IMap : IMap
+
+    [s: string]: IOptions;
+>s : string
+>IOptions : IOptions
+}
+
+class Bug {
+>Bug : Bug
+
+    public values: IMap;
+>values : IMap
+>IMap : IMap
+
+    ok() {
+>ok : () => void
+
+        this.values = {};
+>this.values = {} : { [x: string]: IOptions; }
+>this.values : IMap
+>this : Bug
+>values : IMap
+>{} : { [x: string]: IOptions; }
+
+        this.values['comments'] = { italic: true };
+>this.values['comments'] = { italic: true } : { italic: boolean; }
+>this.values['comments'] : IOptions
+>this.values : IMap
+>this : Bug
+>values : IMap
+>{ italic: true } : { italic: boolean; }
+>italic : boolean
+    }
+    shouldBeOK() {
+>shouldBeOK : () => void
+
+        this.values = {
+>this.values = {            comments: { italic: true }        } : { [x: string]: IOptions; comments: { italic: boolean; }; }
+>this.values : IMap
+>this : Bug
+>values : IMap
+>{            comments: { italic: true }        } : { [x: string]: IOptions; comments: { italic: boolean; }; }
+
+            comments: { italic: true }
+>comments : { italic: boolean; }
+>{ italic: true } : { italic: boolean; }
+>italic : boolean
+
+        };
+    }
+}
+

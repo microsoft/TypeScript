@@ -49,22 +49,29 @@ module M {
 //// [noImplicitAnyParametersInModule.js]
 var M;
 (function (M) {
+    // No implicit-'any' errors.
     function m_f1() {
     }
+    // Implicit-'any' error for x.
     function m_f2(x) {
     }
+    // No implicit-'any' errors.
     function m_f3(x) {
     }
+    // Implicit-'any' errors for x, y, and z.
     function m_f4(x, y, z) {
     }
+    // Implicit-'any' errors for x and z.
     function m_f5(x, y, z) {
     }
+    // Implicit-'any[]' error for r.
     function m_f6() {
         var r = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             r[_i - 0] = arguments[_i];
         }
     }
+    // Implicit-'any'/'any[]' errors for x and r.
     function m_f7(x) {
         var r = [];
         for (var _i = 1; _i < arguments.length; _i++) {
@@ -73,10 +80,15 @@ var M;
     }
     function m_f8(x3, y3) {
     }
+    // No implicit-'any' errors.
     var m_f9 = function () { return ""; };
+    // Implicit-'any' error for x.
     var m_f10 = function (x) { return ""; };
+    // Implicit-'any' errors for x, y, and z.
     var m_f11 = function (x, y, z) { return ""; };
+    // Implicit-'any' errors for x and z.
     var m_f12 = function (x, y, z) { return ""; };
+    // Implicit-'any[]' errors for r.
     var m_f13 = function () {
         var r = [];
         for (var _i = 0; _i < arguments.length; _i++) {
@@ -84,6 +96,7 @@ var M;
         }
         return "";
     };
+    // Implicit-'any'/'any[]' errors for x and r.
     var m_f14 = function (x) {
         var r = [];
         for (var _i = 1; _i < arguments.length; _i++) {

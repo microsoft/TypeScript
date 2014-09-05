@@ -9,5 +9,5 @@ var C = (function () {
     }
     return C;
 })();
-var x = new C();
-new x();
+var x = new C(); // should be ok
+new x(); // should error

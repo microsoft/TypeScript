@@ -123,6 +123,7 @@ function foo16(x: any) { }
 
 
 //// [objectTypesIdentityWithNumericIndexers1.js]
+// object types are identical structurally
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }

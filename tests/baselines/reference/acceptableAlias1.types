@@ -1,0 +1,17 @@
+=== tests/cases/compiler/acceptableAlias1.ts ===
+module M {
+>M : typeof M
+
+    export module N {
+>N : unknown
+    }
+    export import X = N;
+>X : unknown
+>N : unknown
+}
+
+import r = M.X;
+>r : unknown
+>M : typeof M
+>X : unknown
+

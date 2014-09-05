@@ -164,6 +164,7 @@ exports.createWidget1 = createWidget1;
 })(exports.SpecializedWidget || (exports.SpecializedWidget = {}));
 var SpecializedWidget = exports.SpecializedWidget;
 //// [privacyCannotNameAccessorDeclFile_exporter.js]
+///<reference path='privacyCannotNameAccessorDeclFile_GlobalWidgets.ts'/>
 var Widgets = require("privacyCannotNameAccessorDeclFile_Widgets");
 var Widgets1 = require("GlobalWidgets");
 function createExportedWidget1() {
@@ -401,7 +402,7 @@ export declare module SpecializedWidget {
     function createWidget2(): Widget2;
 }
 //// [privacyCannotNameAccessorDeclFile_exporter.d.ts]
-/// <reference path='privacyCannotNameAccessorDeclFile_GlobalWidgets.d.ts' />
+/// <reference path="privacyCannotNameAccessorDeclFile_GlobalWidgets.d.ts" />
 import Widgets = require("privacyCannotNameAccessorDeclFile_Widgets");
 import Widgets1 = require("GlobalWidgets");
 export declare function createExportedWidget1(): Widgets.Widget1;

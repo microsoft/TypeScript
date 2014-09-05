@@ -168,27 +168,36 @@ sources: test.ts
 emittedFile:outdir/simple/test.js
 sourceFile:test.ts
 -------------------------------------------------------------------
->>>var a1 = 10;
+>>>/// <reference path='m1.ts'/>
 1 >
-2 >^^^^
-3 >    ^^
-4 >      ^^^
-5 >         ^^
-6 >           ^
-7 >            ^^^^^^^^^^^^->
+2 >
+3 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1 >/// <reference path='m1.ts'/>
   >
-2 >var 
-3 >    a1
-4 >       = 
-5 >         10
-6 >           ;
+2 >
+3 >/// <reference path='m1.ts'/>
 1 >Emitted(1, 1) Source(2, 1) + SourceIndex(0)
-2 >Emitted(1, 5) Source(2, 5) + SourceIndex(0)
-3 >Emitted(1, 7) Source(2, 7) + SourceIndex(0)
-4 >Emitted(1, 10) Source(2, 10) + SourceIndex(0)
-5 >Emitted(1, 12) Source(2, 12) + SourceIndex(0)
-6 >Emitted(1, 13) Source(2, 13) + SourceIndex(0)
+2 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+3 >Emitted(1, 30) Source(1, 30) + SourceIndex(0)
+---
+>>>var a1 = 10;
+1 >^^^^
+2 >    ^^
+3 >      ^^^
+4 >         ^^
+5 >           ^
+6 >            ^^^^^^^^^^^^->
+1 >
+  >var 
+2 >    a1
+3 >       = 
+4 >         10
+5 >           ;
+1 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(2, 7) Source(2, 7) + SourceIndex(0)
+3 >Emitted(2, 10) Source(2, 10) + SourceIndex(0)
+4 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
+5 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
 ---
 >>>var c1 = (function () {
 1->
@@ -199,9 +208,9 @@ sourceFile:test.ts
   >
 2 >class 
 3 >    c1
-1->Emitted(2, 1) Source(3, 1) + SourceIndex(0)
-2 >Emitted(2, 5) Source(3, 7) + SourceIndex(0)
-3 >Emitted(2, 7) Source(3, 9) + SourceIndex(0)
+1->Emitted(3, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(3, 5) Source(3, 7) + SourceIndex(0)
+3 >Emitted(3, 7) Source(3, 9) + SourceIndex(0)
 ---
 >>>    function c1() {
 1->^^^^
@@ -210,9 +219,9 @@ sourceFile:test.ts
 1->
 2 >    class 
 3 >             c1
-1->Emitted(3, 5) Source(3, 1) + SourceIndex(0) name (c1)
-2 >Emitted(3, 14) Source(3, 7) + SourceIndex(0) name (c1)
-3 >Emitted(3, 16) Source(3, 9) + SourceIndex(0) name (c1)
+1->Emitted(4, 5) Source(3, 1) + SourceIndex(0) name (c1)
+2 >Emitted(4, 14) Source(3, 7) + SourceIndex(0) name (c1)
+3 >Emitted(4, 16) Source(3, 9) + SourceIndex(0) name (c1)
 ---
 >>>    }
 1 >^^^^
@@ -222,16 +231,16 @@ sourceFile:test.ts
   >    public p1: number;
   >
 2 >    }
-1 >Emitted(4, 5) Source(5, 1) + SourceIndex(0) name (c1.constructor)
-2 >Emitted(4, 6) Source(5, 2) + SourceIndex(0) name (c1.constructor)
+1 >Emitted(5, 5) Source(5, 1) + SourceIndex(0) name (c1.constructor)
+2 >Emitted(5, 6) Source(5, 2) + SourceIndex(0) name (c1.constructor)
 ---
 >>>    return c1;
 1->^^^^
 2 >    ^^^^^^^^^
 1->
 2 >    }
-1->Emitted(5, 5) Source(5, 1) + SourceIndex(0) name (c1)
-2 >Emitted(5, 14) Source(5, 2) + SourceIndex(0) name (c1)
+1->Emitted(6, 5) Source(5, 1) + SourceIndex(0) name (c1)
+2 >Emitted(6, 14) Source(5, 2) + SourceIndex(0) name (c1)
 ---
 >>>})();
 1 >
@@ -245,10 +254,10 @@ sourceFile:test.ts
 4 > class c1 {
   >     public p1: number;
   > }
-1 >Emitted(6, 1) Source(5, 1) + SourceIndex(0) name (c1)
-2 >Emitted(6, 2) Source(5, 2) + SourceIndex(0) name (c1)
-3 >Emitted(6, 2) Source(3, 1) + SourceIndex(0)
-4 >Emitted(6, 6) Source(5, 2) + SourceIndex(0)
+1 >Emitted(7, 1) Source(5, 1) + SourceIndex(0) name (c1)
+2 >Emitted(7, 2) Source(5, 2) + SourceIndex(0) name (c1)
+3 >Emitted(7, 2) Source(3, 1) + SourceIndex(0)
+4 >Emitted(7, 6) Source(5, 2) + SourceIndex(0)
 ---
 >>>var instance1 = new c1();
 1->
@@ -269,14 +278,14 @@ sourceFile:test.ts
 6 >                    c1
 7 >                      ()
 8 >                        ;
-1->Emitted(7, 1) Source(7, 1) + SourceIndex(0)
-2 >Emitted(7, 5) Source(7, 5) + SourceIndex(0)
-3 >Emitted(7, 14) Source(7, 14) + SourceIndex(0)
-4 >Emitted(7, 17) Source(7, 17) + SourceIndex(0)
-5 >Emitted(7, 21) Source(7, 21) + SourceIndex(0)
-6 >Emitted(7, 23) Source(7, 23) + SourceIndex(0)
-7 >Emitted(7, 25) Source(7, 25) + SourceIndex(0)
-8 >Emitted(7, 26) Source(7, 26) + SourceIndex(0)
+1->Emitted(8, 1) Source(7, 1) + SourceIndex(0)
+2 >Emitted(8, 5) Source(7, 5) + SourceIndex(0)
+3 >Emitted(8, 14) Source(7, 14) + SourceIndex(0)
+4 >Emitted(8, 17) Source(7, 17) + SourceIndex(0)
+5 >Emitted(8, 21) Source(7, 21) + SourceIndex(0)
+6 >Emitted(8, 23) Source(7, 23) + SourceIndex(0)
+7 >Emitted(8, 25) Source(7, 25) + SourceIndex(0)
+8 >Emitted(8, 26) Source(7, 26) + SourceIndex(0)
 ---
 >>>function f1() {
 1 >
@@ -287,9 +296,9 @@ sourceFile:test.ts
   >
 2 >function 
 3 >         f1
-1 >Emitted(8, 1) Source(8, 1) + SourceIndex(0)
-2 >Emitted(8, 10) Source(8, 10) + SourceIndex(0)
-3 >Emitted(8, 12) Source(8, 12) + SourceIndex(0)
+1 >Emitted(9, 1) Source(8, 1) + SourceIndex(0)
+2 >Emitted(9, 10) Source(8, 10) + SourceIndex(0)
+3 >Emitted(9, 12) Source(8, 12) + SourceIndex(0)
 ---
 >>>    return instance1;
 1->^^^^
@@ -303,11 +312,11 @@ sourceFile:test.ts
 3 >           
 4 >           instance1
 5 >                    ;
-1->Emitted(9, 5) Source(9, 5) + SourceIndex(0) name (f1)
-2 >Emitted(9, 11) Source(9, 11) + SourceIndex(0) name (f1)
-3 >Emitted(9, 12) Source(9, 12) + SourceIndex(0) name (f1)
-4 >Emitted(9, 21) Source(9, 21) + SourceIndex(0) name (f1)
-5 >Emitted(9, 22) Source(9, 22) + SourceIndex(0) name (f1)
+1->Emitted(10, 5) Source(9, 5) + SourceIndex(0) name (f1)
+2 >Emitted(10, 11) Source(9, 11) + SourceIndex(0) name (f1)
+3 >Emitted(10, 12) Source(9, 12) + SourceIndex(0) name (f1)
+4 >Emitted(10, 21) Source(9, 21) + SourceIndex(0) name (f1)
+5 >Emitted(10, 22) Source(9, 22) + SourceIndex(0) name (f1)
 ---
 >>>}
 1 >
@@ -316,7 +325,7 @@ sourceFile:test.ts
 1 >
   >
 2 >}
-1 >Emitted(10, 1) Source(10, 1) + SourceIndex(0) name (f1)
-2 >Emitted(10, 2) Source(10, 2) + SourceIndex(0) name (f1)
+1 >Emitted(11, 1) Source(10, 1) + SourceIndex(0) name (f1)
+2 >Emitted(11, 2) Source(10, 2) + SourceIndex(0) name (f1)
 ---
 >>>//# sourceMappingURL=test.js.map

@@ -71,10 +71,14 @@ interface IGlobalConstructSignatureWithOwnTypeParametes {
 
 //// [declFileConstructSignatures_0.d.ts]
 export interface IConstructSignature {
+    /** This comment should appear for foo*/
     new (): string;
 }
 export interface IConstructSignatureWithParameters {
-    new (a: string, b: number): any;
+    /** This is comment for function signature*/
+    new (/** this is comment about a*/ a: string, 
+        /** this is comment for b*/
+        b: number): any;
 }
 export interface IConstructSignatureWithRestParameters {
     new (a: string, ...rests: string[]): string;
@@ -84,6 +88,7 @@ export interface IConstructSignatureWithOverloads {
     new (a: number): number;
 }
 export interface IConstructSignatureWithTypeParameters<T> {
+    /** This comment should appear for foo*/
     new (a: T): T;
 }
 export interface IConstructSignatureWithOwnTypeParametes {
@@ -91,10 +96,14 @@ export interface IConstructSignatureWithOwnTypeParametes {
 }
 //// [declFileConstructSignatures_1.d.ts]
 interface IGlobalConstructSignature {
+    /** This comment should appear for foo*/
     new (): string;
 }
 interface IGlobalConstructSignatureWithParameters {
-    new (a: string, b: number): any;
+    /** This is comment for function signature*/
+    new (/** this is comment about a*/ a: string, 
+        /** this is comment for b*/
+        b: number): any;
 }
 interface IGlobalConstructSignatureWithRestParameters {
     new (a: string, ...rests: string[]): string;
@@ -104,6 +113,7 @@ interface IGlobalConstructSignatureWithOverloads {
     new (a: number): number;
 }
 interface IGlobalConstructSignatureWithTypeParameters<T> {
+    /** This comment should appear for foo*/
     new (a: T): T;
 }
 interface IGlobalConstructSignatureWithOwnTypeParametes {

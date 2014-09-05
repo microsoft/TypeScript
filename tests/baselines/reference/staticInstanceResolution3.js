@@ -23,5 +23,6 @@ var Promise = (function () {
 })();
 exports.Promise = Promise;
 //// [staticInstanceResolution3_1.js]
+///<reference path='staticInstanceResolution3_0.ts'/>
 var WinJS = require('staticInstanceResolution3_0');
 WinJS.Promise.timeout(10);

@@ -249,7 +249,8 @@ module ts {
         var pos = 0;
         var lineStart = 0;
         while (pos < text.length) {
-            switch (text.charCodeAt(pos++)) {
+            var ch = text.charCodeAt(pos++);
+           switch (ch) {
                 case CharacterCodes.carriageReturn:
                     if (text.charCodeAt(pos) === CharacterCodes.lineFeed) {
                         pos++;
@@ -258,10 +259,21 @@ module ts {
                     result.push(lineStart);
                     lineStart = pos;
                     break;
+                default:
+                    if (ch > CharacterCodes.maxAsciiCharacter && isLineBreak(ch)) {
+                        result.push(lineStart);
+                        lineStart = pos;
+                    }
+                    break;
             }
         }
         result.push(lineStart);
         return result;
+    }
+
+    export function getPositionFromLineAndCharacter(lineStarts: number[], line: number, character: number): number {
+        Debug.assert(line > 0);
+        return lineStarts[line - 1] + character - 1;
     }
 
     export function getLineAndCharacterOfPosition(lineStarts: number[], position: number) {
@@ -286,14 +298,14 @@ module ts {
 
     var hasOwnProperty = Object.prototype.hasOwnProperty;
 
-    function isWhiteSpace(ch: number): boolean {
+    export function isWhiteSpace(ch: number): boolean {
         return ch === CharacterCodes.space || ch === CharacterCodes.tab || ch === CharacterCodes.verticalTab || ch === CharacterCodes.formFeed ||
             ch === CharacterCodes.nonBreakingSpace || ch === CharacterCodes.ogham || ch >= CharacterCodes.enQuad && ch <= CharacterCodes.zeroWidthSpace ||
             ch === CharacterCodes.narrowNoBreakSpace || ch === CharacterCodes.mathematicalSpace || ch === CharacterCodes.ideographicSpace || ch === CharacterCodes.byteOrderMark;
     }
 
-    function isLineBreak(ch: number): boolean {
-        return ch === CharacterCodes.lineFeed || ch === CharacterCodes.carriageReturn || ch === CharacterCodes.lineSeparator || ch === CharacterCodes.paragraphSeparator;
+    export function isLineBreak(ch: number): boolean {
+        return ch === CharacterCodes.lineFeed || ch === CharacterCodes.carriageReturn || ch === CharacterCodes.lineSeparator || ch === CharacterCodes.paragraphSeparator || ch === CharacterCodes.nextLine;
     }
 
     function isDigit(ch: number): boolean {
@@ -359,9 +371,9 @@ module ts {
     // between the given position and the next line break are returned. The return value is an array containing a TextRange for each
     // comment. Single-line comment ranges include the the beginning '//' characters but not the ending line break. Multi-line comment
     // ranges include the beginning '/* and ending '*/' characters. The return value is undefined if no comments were found.
-    function getCommentRanges(text: string, pos: number, trailing: boolean): TextRange[] {
-        var result: TextRange[];
-        var collecting = trailing;
+    function getCommentRanges(text: string, pos: number, trailing: boolean): Comment[] {
+        var result: Comment[];
+        var collecting = trailing || pos === 0;
         while (true) {
             var ch = text.charCodeAt(pos);
             switch (ch) {
@@ -373,6 +385,9 @@ module ts {
                         return result;
                     }
                     collecting = true;
+                    if (result && result.length) {
+                        result[result.length - 1].hasTrailingNewLine = true;
+                    }
                     continue;
                 case CharacterCodes.tab:
                 case CharacterCodes.verticalTab:
@@ -382,12 +397,14 @@ module ts {
                     continue;
                 case CharacterCodes.slash:
                     var nextChar = text.charCodeAt(pos + 1);
+                    var hasTrailingNewLine = false;
                     if (nextChar === CharacterCodes.slash || nextChar === CharacterCodes.asterisk) {
                         var startPos = pos;
                         pos += 2;
                         if (nextChar === CharacterCodes.slash) {
                             while (pos < text.length) {
                                 if (isLineBreak(text.charCodeAt(pos))) {
+                                    hasTrailingNewLine = true;
                                     break;
                                 }
                                 pos++;
@@ -404,13 +421,16 @@ module ts {
                         }
                         if (collecting) {
                             if (!result) result = [];
-                            result.push({ pos: startPos, end: pos });
+                            result.push({ pos: startPos, end: pos, hasTrailingNewLine: hasTrailingNewLine });
                         }
                         continue;
                     }
                     break;
                 default:
                     if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch) || isLineBreak(ch))) {
+                        if (result && result.length && isLineBreak(ch)) {
+                            result[result.length - 1].hasTrailingNewLine = true;
+                        }
                         pos++;
                         continue;
                     }
@@ -420,12 +440,24 @@ module ts {
         }
     }
 
-    export function getLeadingComments(text: string, pos: number): TextRange[] {
+    export function getLeadingComments(text: string, pos: number): Comment[] {
         return getCommentRanges(text, pos, /*trailing*/ false);
     }
 
-    export function getTrailingComments(text: string, pos: number): TextRange[] {
+    export function getTrailingComments(text: string, pos: number): Comment[] {
         return getCommentRanges(text, pos, /*trailing*/ true);
+    }
+
+    export function isIdentifierStart(ch: number, languageVersion: ScriptTarget): boolean {
+        return ch >= CharacterCodes.A && ch <= CharacterCodes.Z || ch >= CharacterCodes.a && ch <= CharacterCodes.z ||
+            ch === CharacterCodes.$ || ch === CharacterCodes._ ||
+            ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierStart(ch, languageVersion);
+    }
+
+    export function isIdentifierPart(ch: number, languageVersion: ScriptTarget): boolean {
+        return ch >= CharacterCodes.A && ch <= CharacterCodes.Z || ch >= CharacterCodes.a && ch <= CharacterCodes.z ||
+            ch >= CharacterCodes._0 && ch <= CharacterCodes._9 || ch === CharacterCodes.$ || ch === CharacterCodes._ ||
+            ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
     }
 
     export function createScanner(languageVersion: ScriptTarget, text?: string, onError?: ErrorCallback, onComment?: CommentCallback): Scanner {
@@ -589,7 +621,7 @@ module ts {
                 }
                 if (isLineBreak(ch)) {
                     result += text.substring(start, pos);
-                    error(Diagnostics.Unterminated_string_constant);
+                    error(Diagnostics.Unterminated_string_literal);
                     break;
                 }
                 pos++;
@@ -750,9 +782,8 @@ module ts {
                         if (text.charCodeAt(pos + 1) === CharacterCodes.asterisk) {
                             pos += 2;
 
-                            var safeLength = len - 1; // For lookahead.
                             var commentClosed = false;
-                            while (pos < safeLength) {
+                            while (pos < len) {
                                 var ch = text.charCodeAt(pos);
 
                                 if (ch === CharacterCodes.asterisk && text.charCodeAt(pos + 1) === CharacterCodes.slash) {
@@ -768,7 +799,6 @@ module ts {
                             }
 
                             if (!commentClosed) {
-                                pos++;
                                 error(Diagnostics.Asterisk_Slash_expected);
                             }
 

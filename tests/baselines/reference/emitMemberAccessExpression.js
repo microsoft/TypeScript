@@ -25,6 +25,7 @@ module Microsoft.PeopleAtWork.Model {
 }
 
 //// [emitMemberAccessExpression_file2.js]
+/// <reference path="emitMemberAccessExpression_file3.ts" />
 "use strict";
 var Microsoft;
 (function (Microsoft) {
@@ -45,8 +46,11 @@ var Microsoft;
     var PeopleAtWork = Microsoft.PeopleAtWork;
 })(Microsoft || (Microsoft = {}));
 //// [emitMemberAccessExpression_file1.js]
+/// <reference path="emitMemberAccessExpression_file3.ts" />
 "use strict";
 //// [emitMemberAccessExpression_file3.js]
+/// <reference path="emitMemberAccessExpression_file2.ts" />
+/// <reference path="emitMemberAccessExpression_file1.ts" />
 var Microsoft;
 (function (Microsoft) {
     (function (PeopleAtWork) {

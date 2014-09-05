@@ -8,4 +8,4 @@ var Foo = (function () {
     }
     return Foo;
 })();
-Foo.prototype;
+Foo.prototype; // Foo<any, any, any>

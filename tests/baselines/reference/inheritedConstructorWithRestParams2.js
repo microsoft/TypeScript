@@ -65,6 +65,7 @@ var Derived = (function (_super) {
     }
     return Derived;
 })(Base);
+// Ok
 new Derived("", "");
 new Derived("", 3);
 new Derived("", 3, 3);
@@ -72,6 +73,7 @@ new Derived("", 3, 3, 3);
 new Derived("", 3, "");
 new Derived("", "", 3);
 new Derived("", "", 3, 3);
+// Errors
 new Derived(3);
 new Derived("", 3, "", 3);
 new Derived("", 3, "", "");

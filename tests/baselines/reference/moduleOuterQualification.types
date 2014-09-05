@@ -1,0 +1,19 @@
+=== tests/cases/compiler/moduleOuterQualification.ts ===
+
+declare module outer {
+>outer : unknown
+
+  interface Beta { }
+>Beta : Beta
+
+  module inner {
+>inner : unknown
+
+    // .d.ts emit: should be 'extends outer.Beta'
+    export interface Beta extends outer.Beta { }
+>Beta : Beta
+>outer : unknown
+>Beta : outer.Beta
+  }
+}
+

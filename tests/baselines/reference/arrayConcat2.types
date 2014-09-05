@@ -1,0 +1,28 @@
+=== tests/cases/compiler/arrayConcat2.ts ===
+var a: string[] = [];
+>a : string[]
+>[] : string[]
+
+a.concat("hello", 'world');
+>a.concat("hello", 'world') : string[]
+>a.concat : { <U extends string[]>(...items: U[]): string[]; (...items: string[]): string[]; }
+>a : string[]
+>concat : { <U extends string[]>(...items: U[]): string[]; (...items: string[]): string[]; }
+
+a.concat('Hello');
+>a.concat('Hello') : string[]
+>a.concat : { <U extends string[]>(...items: U[]): string[]; (...items: string[]): string[]; }
+>a : string[]
+>concat : { <U extends string[]>(...items: U[]): string[]; (...items: string[]): string[]; }
+
+var b = new Array<string>();
+>b : string[]
+>new Array<string>() : string[]
+>Array : { (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: any[]; }
+
+b.concat('hello');
+>b.concat('hello') : string[]
+>b.concat : { <U extends string[]>(...items: U[]): string[]; (...items: string[]): string[]; }
+>b : string[]
+>concat : { <U extends string[]>(...items: U[]): string[]; (...items: string[]): string[]; }
+

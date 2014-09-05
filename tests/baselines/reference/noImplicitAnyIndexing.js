@@ -54,14 +54,21 @@ var MyEmusEnum;
 (function (MyEmusEnum) {
     MyEmusEnum[MyEmusEnum["emu"] = 0] = "emu";
 })(MyEmusEnum || (MyEmusEnum = {}));
+// Should be okay; should be a string.
 var strRepresentation1 = MyEmusEnum[0];
+// Should be okay; should be a string.
 var strRepresentation2 = MyEmusEnum[0 /* emu */];
+// Should be implicit 'any' ; property access fails, no string indexer.
 var strRepresentation3 = MyEmusEnum["monehh"];
+// Should be okay; should be a MyEmusEnum
 var strRepresentation4 = MyEmusEnum["emu"];
+// Should report an implicit 'any'.
 var x = {}["hi"];
+// Should report an implicit 'any'.
 var y = {}[10];
 var hi = "hi";
 var emptyObj = {};
+// Should report an implicit 'any'.
 var z1 = emptyObj[hi];
 var z2 = emptyObj[hi];
 var m = {

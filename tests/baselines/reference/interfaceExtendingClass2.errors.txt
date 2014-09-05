@@ -18,9 +18,9 @@
 !!! Property 'a' of type '{ toString: () => {}; }' is not assignable to string index type 'Object'.
                 return 1;
                 ~~~~~~
-!!! Property or signature expected.
-                ~~~~~~
 !!! A 'return' statement can only be used within a function body.
+                ~~~~~~
+!!! Property or signature expected.
             };
             ~
 !!! Declaration or statement expected.

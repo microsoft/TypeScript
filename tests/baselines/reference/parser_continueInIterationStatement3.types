@@ -1,0 +1,5 @@
+=== tests/cases/conformance/parser/ecmascript5/Statements/ContinueStatements/parser_continueInIterationStatement3.ts ===
+for (;;) {
+No type information for this code.  continue;
+No type information for this code.}
+No type information for this code.

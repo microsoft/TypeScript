@@ -42,7 +42,7 @@ var C2 = (function (_super) {
 })(A);
 var a;
 var c;
-a.bar();
-c.bar();
-A.bar();
-C2.bar();
+a.bar(); // static off an instance - should be an error
+c.bar(); // static off an instance - should be an error
+A.bar(); // valid
+C2.bar(); // valid

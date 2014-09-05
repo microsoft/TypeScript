@@ -1,0 +1,13 @@
+=== tests/cases/compiler/reservedNameOnModuleImport.ts ===
+declare module test {
+>test : typeof test
+
+    module mstring { }
+>mstring : unknown
+
+    // Should be fine; this does not clobber any declared values.
+    export import string = mstring;
+>string : unknown
+>mstring : unknown
+}
+

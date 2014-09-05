@@ -134,6 +134,7 @@ interface I20 {
 }
 
 //// [subtypesOfAny.js]
+// every type is a subtype of any, no errors expected
 var A = (function () {
     function A() {
     }

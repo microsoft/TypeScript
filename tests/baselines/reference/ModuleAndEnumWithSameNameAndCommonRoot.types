@@ -1,0 +1,43 @@
+=== tests/cases/conformance/internalModules/DeclarationMerging/ModuleAndEnumWithSameNameAndCommonRoot.ts ===
+module enumdule {
+>enumdule : typeof enumdule
+
+    export class Point {
+>Point : Point
+
+        constructor(public x: number, public y: number) { }
+>x : number
+>y : number
+    }
+}
+
+enum enumdule {
+>enumdule : enumdule
+
+    Red, Blue
+>Red : enumdule
+>Blue : enumdule
+}
+
+var x: enumdule;
+>x : enumdule
+>enumdule : enumdule
+
+var x = enumdule.Red;
+>x : enumdule
+>enumdule.Red : enumdule
+>enumdule : typeof enumdule
+>Red : enumdule
+
+var y: { x: number; y: number };
+>y : { x: number; y: number; }
+>x : number
+>y : number
+
+var y = new enumdule.Point(0, 0);
+>y : { x: number; y: number; }
+>new enumdule.Point(0, 0) : enumdule.Point
+>enumdule.Point : typeof enumdule.Point
+>enumdule : typeof enumdule
+>Point : typeof enumdule.Point
+

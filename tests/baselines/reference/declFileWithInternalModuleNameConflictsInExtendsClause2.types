@@ -1,0 +1,35 @@
+=== tests/cases/compiler/declFileWithInternalModuleNameConflictsInExtendsClause2.ts ===
+
+module X.A.C {
+>X : typeof X
+>A : typeof A
+>C : unknown
+
+    export interface Z {
+>Z : Z
+    }
+}
+module X.A.B.C {
+>X : typeof X
+>A : typeof A
+>B : typeof B
+>C : typeof C
+
+    export class W implements A.C.Z { // This can refer to it as A.C.Z
+>W : W
+>A : unknown
+>C : unknown
+>Z : A.C.Z
+    }
+}
+
+module X.A.B.C {
+>X : typeof X
+>A : typeof A
+>B : typeof B
+>C : typeof C
+
+    module A {
+>A : unknown
+    }
+}

@@ -1,0 +1,89 @@
+=== tests/cases/compiler/withImportDecl_1.ts ===
+///<reference path='withImportDecl_0.ts'/>
+var simpleVar;
+>simpleVar : any
+
+var anotherVar: any;
+>anotherVar : any
+
+var varWithSimpleType: number;
+>varWithSimpleType : number
+
+var varWithArrayType: number[];
+>varWithArrayType : number[]
+
+var varWithInitialValue = 30;
+>varWithInitialValue : number
+
+var withComplicatedValue = { x: 30, y: 70, desc: "position" };
+>withComplicatedValue : { x: number; y: number; desc: string; }
+>{ x: 30, y: 70, desc: "position" } : { x: number; y: number; desc: string; }
+>x : number
+>y : number
+>desc : string
+
+declare var declaredVar;
+>declaredVar : any
+
+declare var declareVar2
+>declareVar2 : any
+
+declare var declaredVar;
+>declaredVar : any
+
+declare var deckareVarWithType: number;
+>deckareVarWithType : number
+
+var arrayVar: string[] = ['a', 'b'];
+>arrayVar : string[]
+>['a', 'b'] : string[]
+
+
+function simpleFunction() {
+>simpleFunction : () => { x: string; y: string; n: number; }
+
+    return {
+>{        x: "Hello",        y: "word",        n: 2    } : { x: string; y: string; n: number; }
+
+        x: "Hello",
+>x : string
+
+        y: "word",
+>y : string
+
+        n: 2
+>n : number
+
+    };
+}
+
+module m1 {
+>m1 : typeof m1
+
+    export function foo() {
+>foo : () => string
+
+        return "Hello";
+    }
+}
+
+import m3 = require("withImportDecl_0");
+>m3 : typeof m3
+
+var b = new m3.A();
+>b : m3.A
+>new m3.A() : m3.A
+>m3.A : typeof m3.A
+>m3 : typeof m3
+>A : typeof m3.A
+
+b.foo;
+>b.foo : string
+>b : m3.A
+>foo : string
+
+=== tests/cases/compiler/withImportDecl_0.ts ===
+export class A { foo: string; }
+>A : A
+>foo : string
+

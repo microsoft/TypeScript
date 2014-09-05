@@ -1,0 +1,33 @@
+=== tests/cases/compiler/exportAssignValueAndType.ts ===
+declare module http {
+>http : unknown
+
+	export interface Server { openPort: number; }
+>Server : Server
+>openPort : number
+}
+
+interface server {
+>server : server
+
+    (): http.Server;
+>http : unknown
+>Server : http.Server
+
+    startTime: Date;
+>startTime : Date
+>Date : Date
+}
+ 
+var x = 5;
+>x : number
+
+var server = new Date();
+>server : Date
+>new Date() : Date
+>Date : { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }
+
+export = server;
+>server : server
+ 
+

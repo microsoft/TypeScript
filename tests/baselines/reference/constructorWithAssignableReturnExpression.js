@@ -36,6 +36,7 @@ class G<T> {
 }
 
 //// [constructorWithAssignableReturnExpression.js]
+// a class constructor may return an expression, it must be assignable to the class instance type to be valid
 var C = (function () {
     function C() {
         return 1;
@@ -44,7 +45,7 @@ var C = (function () {
 })();
 var D = (function () {
     function D() {
-        return 1;
+        return 1; // error
     }
     return D;
 })();
@@ -56,7 +57,7 @@ var E = (function () {
 })();
 var F = (function () {
     function F() {
-        return { x: 1 };
+        return { x: 1 }; // error
     }
     return F;
 })();

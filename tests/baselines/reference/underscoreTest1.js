@@ -903,6 +903,7 @@ _.template("Using 'with': <%= data.answer %>", { answer: 'no' }, { variable: 'da
 
 //// [underscoreTest1_underscore.js]
 //// [underscoreTest1_underscoreTests.js]
+/// <reference path="underscoreTest1_underscore.ts" />
 _.each([1, 2, 3], function (num) { return alert(num.toString()); });
 _.each({ one: 1, two: 2, three: 3 }, function (value, key) { return alert(value.toString()); });
 _.map([1, 2, 3], function (num) { return num * 3; });
@@ -925,12 +926,15 @@ _.max(stooges, function (stooge) { return stooge.age; });
 var numbers = [10, 5, 100, 2, 1000];
 _.min(numbers);
 _.sortBy([1, 2, 3, 4, 5, 6], function (num) { return Math.sin(num); });
+// not sure how this is typechecking at all.. Math.floor(e) is number not string..?
 _([1.3, 2.1, 2.4]).groupBy(function (e, i, list) { return Math.floor(e); });
 _.groupBy([1.3, 2.1, 2.4], function (num) { return Math.floor(num); });
 _.groupBy(['one', 'two', 'three'], 'length');
 _.countBy([1, 2, 3, 4, 5], function (num) { return num % 2 == 0 ? 'even' : 'odd'; });
 _.shuffle([1, 2, 3, 4, 5, 6]);
+// (function(){ return _.toArray(arguments).slice(1); })(1, 2, 3, 4);
 _.size({ one: 1, two: 2, three: 3 });
+///////////////////////////////////////////////////////////////////////////////////////
 _.first([5, 4, 3, 2, 1]);
 _.initial([5, 4, 3, 2, 1]);
 _.last([5, 4, 3, 2, 1]);
@@ -938,6 +942,7 @@ _.rest([5, 4, 3, 2, 1]);
 _.compact([0, 1, false, 2, '', 3]);
 _.flatten([1, 2, 3, 4]);
 _.flatten([1, [2]]);
+// typescript doesn't like the elements being different
 _.flatten([1, [2], [3, [[4]]]]);
 _.flatten([1, [2], [3, [[4]]]], true);
 _.without([1, 2, 1, 0, 3, 1, 4], 0, 1);
@@ -956,9 +961,12 @@ _.range(1, 11);
 _.range(0, 30, 5);
 _.range(0, 30, 5);
 _.range(0);
+///////////////////////////////////////////////////////////////////////////////////////
 var func = function (greeting) {
     return greeting + ': ' + this.name;
 };
+// need a second var otherwise typescript thinks func signature is the above func type,
+// instead of the newly returned _bind => func type.
 var func2 = _.bind(func, { name: 'moe' }, 'hi');
 func2();
 var buttonView = {
@@ -1014,6 +1022,7 @@ var exclaim = function (statement) {
 };
 var welcome = _.compose(exclaim, greet);
 welcome('moe');
+///////////////////////////////////////////////////////////////////////////////////////
 _.keys({ one: 1, two: 2, three: 3 });
 _.values({ one: 1, two: 2, three: 3 });
 _.pairs({ one: 1, two: 2, three: 3 });
@@ -1044,6 +1053,7 @@ _.isElement($('body')[0]);
 _.isArray([1, 2, 3]);
 _.isObject({});
 _.isObject(1);
+// (() => { return _.isArguments(arguments); })(1, 2, 3);
 _.isArguments([1, 2, 3]);
 _.isFunction(alert);
 _.isString("moe");
@@ -1059,6 +1069,7 @@ _.isNaN(undefined);
 _.isNull(null);
 _.isNull(undefined);
 _.isUndefined(null.missingVariable);
+///////////////////////////////////////////////////////////////////////////////////////
 var underscore = _.noConflict();
 var moe2 = { name: 'moe' };
 moe2 === _.identity(moe);

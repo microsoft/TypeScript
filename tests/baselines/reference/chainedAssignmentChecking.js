@@ -43,4 +43,4 @@ var Z = (function () {
 var c1 = new X(3);
 var c2 = new Y(5);
 var c3 = new Z();
-c1 = c2 = c3;
+c1 = c2 = c3; // Should be error

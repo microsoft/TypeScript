@@ -191,6 +191,7 @@ exports.createWidget1 = createWidget1;
 })(exports.SpecializedWidget || (exports.SpecializedWidget = {}));
 var SpecializedWidget = exports.SpecializedWidget;
 //// [privacyFunctionReturnTypeDeclFile_exporter.js]
+///<reference path='privacyFunctionReturnTypeDeclFile_GlobalWidgets.ts'/>
 var Widgets = require("privacyFunctionReturnTypeDeclFile_Widgets");
 var Widgets1 = require("GlobalWidgets");
 function createExportedWidget1() {
@@ -372,7 +373,7 @@ export declare module SpecializedWidget {
     function createWidget2(): Widget2;
 }
 //// [privacyFunctionReturnTypeDeclFile_exporter.d.ts]
-/// <reference path='privacyFunctionReturnTypeDeclFile_GlobalWidgets.d.ts' />
+/// <reference path="privacyFunctionReturnTypeDeclFile_GlobalWidgets.d.ts" />
 import Widgets = require("privacyFunctionReturnTypeDeclFile_Widgets");
 import Widgets1 = require("GlobalWidgets");
 export declare function createExportedWidget1(): Widgets.Widget1;

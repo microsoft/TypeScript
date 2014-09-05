@@ -131,6 +131,7 @@ interface I20 {
 }
 
 //// [enumIsNotASubtypeOfAnythingButNumber.js]
+// enums are only subtypes of number, any and no other types
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";

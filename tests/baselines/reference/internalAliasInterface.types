@@ -1,0 +1,22 @@
+=== tests/cases/compiler/internalAliasInterface.ts ===
+module a {
+>a : unknown
+
+    export interface I {
+>I : I
+    }
+}
+
+module c {
+>c : typeof c
+
+    import b = a.I;
+>b : unknown
+>a : unknown
+>I : b
+
+    export var x: b;
+>x : b
+>b : b
+}
+

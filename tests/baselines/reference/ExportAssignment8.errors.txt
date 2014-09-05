@@ -3,9 +3,9 @@
     ~~~~~~~~~~~
 !!! Cannot compile external modules unless the '--module' flag is provided.
     ~~~~~~~~~~~
-!!! An export assignment cannot be used in a module with other exported elements.
-    ~~~~~~~~~~~
 !!! Cannot find name 'B'.
+    ~~~~~~~~~~~
+!!! An export assignment cannot be used in a module with other exported elements.
     
     export class C {
     }

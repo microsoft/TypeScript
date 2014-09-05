@@ -1,0 +1,21 @@
+=== tests/cases/compiler/B.ts ===
+///<reference path="A.ts" />
+module A { ; }
+>A : typeof A
+
+module B {
+>B : typeof B
+
+	export function f(): A.I { return null; }
+>f : () => A.I
+>A : unknown
+>I : A.I
+}
+
+
+=== tests/cases/compiler/A.ts ===
+
+module A { export interface I {} }
+>A : typeof A
+>I : I
+

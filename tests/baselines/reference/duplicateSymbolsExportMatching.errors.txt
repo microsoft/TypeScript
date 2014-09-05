@@ -69,9 +69,9 @@
     module M {
         module F {
                ~
-!!! A module declaration cannot be located prior to a class or function with which it is merged
-               ~
 !!! Individual declarations in merged declaration F must be all exported or all local.
+               ~
+!!! A module declaration cannot be located prior to a class or function with which it is merged
             var t;
         }
         export function F() { } // Only one error for duplicate identifier (don't consider visibility)

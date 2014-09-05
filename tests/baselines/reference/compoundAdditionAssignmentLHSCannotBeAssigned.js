@@ -18,6 +18,7 @@ var x5: void;
 x5 += '';
 
 //// [compoundAdditionAssignmentLHSCannotBeAssigned.js]
+// string can add every type, and result string cannot be assigned to below types
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";

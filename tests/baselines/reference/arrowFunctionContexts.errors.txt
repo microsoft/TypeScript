@@ -3,9 +3,9 @@
     // Arrow function used in with statement
     with (window) {
           ~~~~~~
-!!! All symbols within a 'with' block will be resolved to 'any'.
-          ~~~~~~
 !!! Cannot find name 'window'.
+          ~~~~~~
+!!! All symbols within a 'with' block will be resolved to 'any'.
         var p = () => this;
     }
     
@@ -54,9 +54,9 @@
         // Arrow function used in with statement
         with (window) {
               ~~~~~~
-!!! All symbols within a 'with' block will be resolved to 'any'.
-              ~~~~~~
 !!! Cannot find name 'window'.
+              ~~~~~~
+!!! All symbols within a 'with' block will be resolved to 'any'.
             var p = () => this;
         }
     

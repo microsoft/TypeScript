@@ -67,6 +67,8 @@ var a3: {
 
 
 //// [specializedSignatureIsNotSubtypeOfNonSpecializedSignature.js]
+// Specialized signatures must be a subtype of a non-specialized signature
+// All the below should be errors
 function foo(x) {
 }
 var C = (function () {

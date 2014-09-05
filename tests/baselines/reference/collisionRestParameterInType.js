@@ -8,5 +8,5 @@ var v2: {
 }
 
 //// [collisionRestParameterInType.js]
-var v1;
+var v1; // no error - no code gen
 var v2;

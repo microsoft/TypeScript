@@ -1,4 +1,4 @@
-in2.d.ts(1,8): Duplicate identifier 'a'.
+in2.d.ts(1,8): error TS2300: Duplicate identifier 'a'.
 
 
 ==== decl.d.ts (0 errors) ====

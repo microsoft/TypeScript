@@ -1,4 +1,6 @@
 /// <reference path="..\..\src\compiler\sys.ts" />
+/// <reference path="..\..\src\harness\harness.ts" />
+/// <reference path="..\..\src\harness\runnerbase.ts" />
 
 interface FileInformation {
     contents: string;
@@ -93,6 +95,7 @@ module Playback {
 
     function createEmptyLog(): IOLog {
         return {
+            timestamp: (new Date()).toString(),
             arguments: [],
             currentDirectory: '',
             filesRead: [],
@@ -119,6 +122,8 @@ module Playback {
         };
         wrapper.startReplayFromData = log => {
             replayLog = log;
+            // Remove non-found files from the log (shouldn't really need them, but we still record them for diganostic purposes)
+            replayLog.filesRead = replayLog.filesRead.filter(f => f.result.contents !== undefined);
         };
 
         wrapper.endReplay = () => {
@@ -170,28 +175,50 @@ module Playback {
     }
 
     function findResultByPath<T>(wrapper: { resolvePath(s: string): string }, logArray: { path: string; result?: T }[], expectedPath: string, defaultValue?: T): T {
-        var results = logArray.filter(e => pathsAreEquivalent(e.path, expectedPath, wrapper));
-        if (results.length === 0) {
-            if (defaultValue === undefined) {
-                console.log('Resolved path: ' + wrapper.resolvePath(expectedPath));
-                console.log('Filenames were: ' + logArray.map(x => x.path).join(', '));
-                throw new Error('No matching result in log array for path: ' + expectedPath);
-            } else {
-                return defaultValue;
+        var normalizedName = Harness.Path.switchToForwardSlashes(expectedPath).toLowerCase();
+        // Try to find the result through normal filename
+        for (var i = 0; i < logArray.length; i++) {
+            if (Harness.Path.switchToForwardSlashes(logArray[i].path).toLowerCase() === normalizedName) {
+                return logArray[i].result;
             }
         }
-        return results[0].result;
+        // Fallback, try to resolve the target paths as well
+        if (replayLog.pathsResolved.length > 0) {
+            var normalizedResolvedName = wrapper.resolvePath(expectedPath).toLowerCase();
+            for (var i = 0; i < logArray.length; i++) {
+                if (wrapper.resolvePath(logArray[i].path).toLowerCase() === normalizedResolvedName) {
+                    return logArray[i].result;
+                }
+            }
+        }
+        // If we got here, we didn't find a match
+        if (defaultValue === undefined) {
+            throw new Error('No matching result in log array for path: ' + expectedPath);
+        } else {
+            return defaultValue;
+        }
     }
 
+    var pathEquivCache: any = {};
     function pathsAreEquivalent(left: string, right: string, wrapper: { resolvePath(s: string): string }) {
+        var key = left + '-~~-' + right;
         function areSame(a: string, b: string) {
             return Harness.Path.switchToForwardSlashes(a).toLowerCase() === Harness.Path.switchToForwardSlashes(b).toLowerCase();
         }
-        return areSame(left, right) || areSame(wrapper.resolvePath(left), right) || areSame(left, wrapper.resolvePath(right)) || areSame(wrapper.resolvePath(left), wrapper.resolvePath(right));
+        function check() {
+            if (Harness.Path.getFileName(left).toLowerCase() === Harness.Path.getFileName(right).toLowerCase()) {
+                return areSame(left, right) || areSame(wrapper.resolvePath(left), right) || areSame(left, wrapper.resolvePath(right)) || areSame(wrapper.resolvePath(left), wrapper.resolvePath(right));
+            }
+        }
+        if (pathEquivCache.hasOwnProperty(key)) {
+            return pathEquivCache[key];
+        } else {
+            return pathEquivCache[key] = check();
+        }
     }
 
     function noOpReplay(name: string) {
-        console.log("Swallowed write operation during replay: " + name);
+        //console.log("Swallowed write operation during replay: " + name);
     }
 
     export function wrapSystem(underlying: System): PlaybackSystem {
@@ -257,10 +284,15 @@ module Playback {
 
         wrapper.resolvePath = recordReplay(wrapper.resolvePath, underlying)(
             (path) => callAndRecord(underlying.resolvePath(path), recordLog.pathsResolved, { path: path }),
-            memoize((path) => findResultByFields(replayLog.pathsResolved, { path: path }, replayLog.currentDirectory ? replayLog.currentDirectory + '/' + path : path)));
+            memoize((path) => findResultByFields(replayLog.pathsResolved, { path: path }, !ts.isRootedDiskPath(ts.normalizeSlashes(path)) && replayLog.currentDirectory ? replayLog.currentDirectory + '/' + path : ts.normalizeSlashes(path))));
 
         wrapper.readFile = recordReplay(wrapper.readFile, underlying)(
-            (path) => callAndRecord(underlying.readFile(path), recordLog.filesRead, { path: path, codepage: 0 }),
+            (path) => {
+                var result = underlying.readFile(path);
+                var logEntry = { path: path, codepage: 0, result: { contents: result, codepage: 0 } };
+                recordLog.filesRead.push(logEntry);
+                return result;
+            },
             memoize((path) => findResultByPath(wrapper, replayLog.filesRead, path).contents));
 
         wrapper.writeFile = recordReplay(wrapper.writeFile, underlying)(

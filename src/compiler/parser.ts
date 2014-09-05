@@ -1,4 +1,3 @@
-/// <reference path="sys.ts"/>
 /// <reference path="types.ts"/>
 /// <reference path="core.ts"/>
 /// <reference path="scanner.ts"/>
@@ -9,7 +8,7 @@ module ts {
     export function getNodeConstructor(kind: SyntaxKind): new () => Node {
         return nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind));
     }
-
+ 
     function createRootNode(kind: SyntaxKind, pos: number, end: number, flags: NodeFlags): Node {
         var node = new (getNodeConstructor(kind))();
         node.pos = pos;
@@ -138,6 +137,34 @@ module ts {
         Debug.assert(isPrologueDirective(node));
         return (<Identifier>(<ExpressionStatement>node).expression).text === "use strict";
     }
+
+    export function getLeadingCommentsOfNode(node: Node, sourceFileOfNode: SourceFile) {
+        // If parameter/type parameter, the prev token trailing comments are part of this node too
+        if (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) {
+            // eg     (/** blah */ a, /** blah */ b);
+            return concatenate(getTrailingComments(sourceFileOfNode.text, node.pos),
+                // eg:     (
+                //          /** blah */ a,
+                //          /** blah */ b);
+                getLeadingComments(sourceFileOfNode.text, node.pos));
+        }
+        else {
+            return getLeadingComments(sourceFileOfNode.text, node.pos);
+        }
+    }
+
+    export function getJsDocComments(node: Declaration, sourceFileOfNode: SourceFile) {
+        return filter(getLeadingCommentsOfNode(node, sourceFileOfNode), comment => isJsDocComment(comment));
+
+        function isJsDocComment(comment: Comment) {
+            // js doc is if comment is starting with /** but not if it is /**/
+            return sourceFileOfNode.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
+                sourceFileOfNode.text.charCodeAt(comment.pos + 2) === CharacterCodes.asterisk &&
+                sourceFileOfNode.text.charCodeAt(comment.pos + 3) !== CharacterCodes.slash;
+        }
+    }
+
+    export var fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/
 
     // Invokes a callback for each child of the given node. The 'cbNode' callback is invoked for all child nodes
     // stored in properties. If a 'cbNodes' callback is specified, it is invoked for embedded arrays; otherwise,
@@ -337,6 +364,46 @@ module ts {
         return false;
     }
 
+    export function isDeclaration(node: Node): boolean {
+        switch (node.kind) {
+            case SyntaxKind.TypeParameter:
+            case SyntaxKind.Parameter:
+            case SyntaxKind.VariableDeclaration:
+            case SyntaxKind.Property:
+            case SyntaxKind.PropertyAssignment:
+            case SyntaxKind.EnumMember:
+            case SyntaxKind.Method:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.EnumDeclaration:
+            case SyntaxKind.ModuleDeclaration:
+            case SyntaxKind.ImportDeclaration:
+                return true;
+        }
+        return false;
+    }
+
+    // True if the given identifier, string literal, or number literal is the name of a declaration node
+    export function isDeclarationOrFunctionExpressionOrCatchVariableName(name: Node): boolean {
+        if (name.kind !== SyntaxKind.Identifier && name.kind !== SyntaxKind.StringLiteral && name.kind !== SyntaxKind.NumericLiteral) {
+            return false;
+        }
+
+        var parent = name.parent;
+        if (isDeclaration(parent) || parent.kind === SyntaxKind.FunctionExpression) {
+            return (<Declaration>parent).name === name;
+        }
+
+        if (parent.kind === SyntaxKind.CatchBlock) {
+            return (<CatchBlock>parent).variable === name;
+        }
+
+        return false;
+    }
+
     enum ParsingContext {
         SourceElements,          // Elements in source file
         ModuleElements,          // Elements in module declaration
@@ -421,7 +488,23 @@ module ts {
         nodeIsNestedInLabel(label: Identifier, requireIterationStatement: boolean, stopAtFunctionBoundary: boolean): ControlBlockContext;
     }
 
-    export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, version: number = 0, isOpen: boolean = false): SourceFile {
+    export function isKeyword(token: SyntaxKind): boolean {
+        return SyntaxKind.FirstKeyword <= token && token <= SyntaxKind.LastKeyword;
+    }
+
+    export function isModifier(token: SyntaxKind): boolean {
+        switch (token) {
+            case SyntaxKind.PublicKeyword:
+            case SyntaxKind.PrivateKeyword:
+            case SyntaxKind.StaticKeyword:
+            case SyntaxKind.ExportKeyword:
+            case SyntaxKind.DeclareKeyword:
+                return true;
+        }
+        return false;
+    }
+
+    export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, version: string, isOpen: boolean = false): SourceFile {
         var file: SourceFile;
         var scanner: Scanner;
         var token: SyntaxKind;
@@ -548,6 +631,13 @@ module ts {
                 lineStarts = getLineStarts(sourceText);
             }
             return getLineAndCharacterOfPosition(lineStarts, position);
+        }
+
+        function getPositionFromSourceLineAndCharacter(line: number, character: number): number {
+            if (!lineStarts) {
+                lineStarts = getLineStarts(sourceText);
+            }
+            return getPositionFromLineAndCharacter(lineStarts, line, character);
         }
 
         function error(message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
@@ -745,6 +835,10 @@ module ts {
             return createNode(SyntaxKind.Missing);
         }
 
+        function internIdentifier(text: string): string {
+            return hasProperty(identifiers, text) ? identifiers[text] : (identifiers[text] = text);
+        }
+
         // An identifier that starts with two underscores has an extra underscore character prepended to it to avoid issues
         // with magic property names like '__proto__'. The 'identifiers' object is used to share a single string instance for
         // each identifier in order to reduce memory consumption.
@@ -753,7 +847,7 @@ module ts {
             if (isIdentifier) {
                 var node = <Identifier>createNode(SyntaxKind.Identifier);
                 var text = escapeIdentifier(scanner.getTokenValue());
-                node.text = hasProperty(identifiers, text) ? identifiers[text] : (identifiers[text] = text);
+                node.text = internIdentifier(text);
                 nextToken();
                 return finishNode(node);
             }
@@ -775,26 +869,9 @@ module ts {
 
         function parsePropertyName(): Identifier {
             if (token === SyntaxKind.StringLiteral || token === SyntaxKind.NumericLiteral) {
-                return <LiteralExpression>parsePrimaryExpression();
+                return parseLiteralNode(/*internName:*/ true);
             }
             return parseIdentifierName();
-        }
-
-
-        function isKeyword(token: SyntaxKind): boolean {
-            return SyntaxKind.FirstKeyword <= token && token <= SyntaxKind.LastKeyword;
-        }
-
-        function isModifier(token: SyntaxKind): boolean {
-            switch (token) {
-                case SyntaxKind.PublicKeyword:
-                case SyntaxKind.PrivateKeyword:
-                case SyntaxKind.StaticKeyword:
-                case SyntaxKind.ExportKeyword:
-                case SyntaxKind.DeclareKeyword:
-                    return true;
-            }
-            return false;
         }
 
         function parseContextualModifier(t: SyntaxKind): boolean {
@@ -1058,9 +1135,11 @@ module ts {
             return finishNode(node);
         }
 
-        function parseLiteralNode(): LiteralExpression {
+        function parseLiteralNode(internName?:boolean): LiteralExpression {
             var node = <LiteralExpression>createNode(token);
-            node.text = scanner.getTokenValue();
+            var text = scanner.getTokenValue();
+            node.text = internName ? internIdentifier(text) : text;
+
             var tokenPos = scanner.getTokenPos();
             nextToken();
             finishNode(node);
@@ -1087,7 +1166,7 @@ module ts {
         }
 
         function parseStringLiteral(): LiteralExpression {
-            if (token === SyntaxKind.StringLiteral) return parseLiteralNode();
+            if (token === SyntaxKind.StringLiteral) return parseLiteralNode(/*internName:*/ true);
             error(Diagnostics.String_literal_expected);
             return <LiteralExpression>createMissingNode();
         }
@@ -1944,7 +2023,7 @@ module ts {
                 primaryExpression.kind === SyntaxKind.SuperKeyword && token !== SyntaxKind.OpenParenToken && token !== SyntaxKind.DotToken;
 
             if (illegalUsageOfSuperKeyword) {
-                error(Diagnostics.super_must_be_followed_by_argument_list_or_member_access);
+                error(Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
             }
 
             var expr = parseCallAndAccess(primaryExpression, /* inNewExpression */ false);
@@ -1997,15 +2076,18 @@ module ts {
                     var indexedAccess = <IndexedAccess>createNode(SyntaxKind.IndexedAccess, expr.pos);
                     indexedAccess.object = expr;
 
-                    // It's not uncommon for a user to write: "new Type[]".  Check for that common pattern
-                    // and report a better error message.
+                    // It's not uncommon for a user to write: "new Type[]".
+                    // Check for that common pattern and report a better error message.
                     if (inNewExpression && parseOptional(SyntaxKind.CloseBracketToken)) {
                         indexedAccess.index = createMissingNode();
                         grammarErrorAtPos(bracketStart, scanner.getStartPos() - bracketStart, Diagnostics.new_T_cannot_be_used_to_create_an_array_Use_new_Array_T_instead);
                     }
-                    // Otherwise parse the indexed access normally.
                     else {
                         indexedAccess.index = parseExpression();
+                        if (indexedAccess.index.kind === SyntaxKind.StringLiteral || indexedAccess.index.kind === SyntaxKind.NumericLiteral) {
+                            var literal = <LiteralExpression>indexedAccess.index;
+                            literal.text = internIdentifier(literal.text);
+                        }
                         parseExpected(SyntaxKind.CloseBracketToken);
                     }
 
@@ -2393,8 +2475,6 @@ module ts {
         function parseBreakOrContinueStatement(kind: SyntaxKind): BreakOrContinueStatement {
             var node = <BreakOrContinueStatement>createNode(kind);
             var errorCountBeforeStatement = file.syntacticErrors.length;
-            var keywordStart = scanner.getTokenPos();
-            var keywordLength = scanner.getTextPos() - keywordStart;
             parseExpected(kind === SyntaxKind.BreakStatement ? SyntaxKind.BreakKeyword : SyntaxKind.ContinueKeyword);
             if (!canParseSemicolon()) node.label = parseIdentifier();
             parseSemicolon();
@@ -3496,12 +3576,11 @@ module ts {
                         file.hasNoDefaultLib = true;
                     }
                     else {
-                        var fullReferenceRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
-                        var matchResult = fullReferenceRegEx.exec(comment);
+                        var matchResult = fullTripleSlashReferencePathRegEx.exec(comment);
                         if (!matchResult) {
                             var start = range.pos;
                             var length = range.end - start;
-                            errorAtPos(start, length, Diagnostics.Invalid_reference_comment);
+                            errorAtPos(start, length, Diagnostics.Invalid_reference_directive_syntax);
                         }
                         else {
                             referencedFiles.push({
@@ -3546,6 +3625,7 @@ module ts {
         file.filename = normalizePath(filename);
         file.text = sourceText;
         file.getLineAndCharacterFromPosition = getLineAndCharacterlFromSourcePosition;
+        file.getPositionFromLineAndCharacter = getPositionFromSourceLineAndCharacter;
         file.syntacticErrors = [];
         file.semanticErrors = [];
         var referenceComments = processReferenceComments(); 
@@ -3558,6 +3638,7 @@ module ts {
         file.version = version;
         file.isOpen = isOpen;
         file.languageVersion = languageVersion;
+        file.identifiers = identifiers;
         return file;
     }
 
@@ -3630,23 +3711,22 @@ module ts {
 
         // Get source file from normalized filename
         function findSourceFile(filename: string, isDefaultLib: boolean, refFile?: SourceFile, refStart?: number, refLength?: number): SourceFile {
-            // Look through existing source files to see if we've encountered it.
             var canonicalName = host.getCanonicalFileName(filename);
-            var file = getSourceFile(filename);
-            if (file) {
-                if (host.useCaseSensitiveFileNames() && canonicalName !== file.filename) {
+            if (hasProperty(filesByName, canonicalName)) {
+                // We've already looked for this file, use cached result
+                var file = filesByName[canonicalName];
+                if (file && host.useCaseSensitiveFileNames() && canonicalName !== file.filename) {
                     errors.push(createFileDiagnostic(refFile, refStart, refLength,
                         Diagnostics.Filename_0_differs_from_already_included_filename_1_only_in_casing, filename, file.filename));
-                } 
+                }
             }
             else {
-                // If we haven't, read the file.
-                file = host.getSourceFile(filename, options.target, hostErrorMessage => {
+                // We haven't looked for this file, do so now and cache result
+                var file = filesByName[canonicalName] = host.getSourceFile(filename, options.target, hostErrorMessage => {
                     errors.push(createFileDiagnostic(refFile, refStart, refLength,
                         Diagnostics.Cannot_read_file_0_Colon_1, filename, hostErrorMessage));
                 });
                 if (file) {
-                    filesByName[host.getCanonicalFileName(filename)] = file;
                     seenNoDefaultLib = seenNoDefaultLib || file.hasNoDefaultLib;
                     if (!options.noResolve) {
                         var basePath = getDirectoryPath(filename);
@@ -3664,7 +3744,6 @@ module ts {
                     });
                 }
             }
-
             return file;
         }
 

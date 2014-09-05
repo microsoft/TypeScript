@@ -1,0 +1,105 @@
+=== tests/cases/compiler/selfInLambdas.ts ===
+interface MouseEvent {
+>MouseEvent : MouseEvent
+
+    x: number;
+>x : number
+
+    y: number;
+>y : number
+}
+
+declare var window: Window;
+>window : Window
+>Window : Window
+
+interface Window {
+>Window : Window
+
+    onmousemove: (ev: MouseEvent) => any;
+>onmousemove : (ev: MouseEvent) => any
+>ev : MouseEvent
+>MouseEvent : MouseEvent
+    
+}
+var o = {
+>o : { counter: number; start: () => void; }
+>{    counter: 0,    start: function() {        window.onmousemove = () => {            this.counter++            var f = () => this.counter;        }    }} : { counter: number; start: () => void; }
+
+    counter: 0,
+>counter : number
+
+    start: function() {
+>start : () => void
+>function() {        window.onmousemove = () => {            this.counter++            var f = () => this.counter;        }    } : () => void
+
+        window.onmousemove = () => {
+>window.onmousemove = () => {            this.counter++            var f = () => this.counter;        } : () => void
+>window.onmousemove : (ev: MouseEvent) => any
+>window : Window
+>onmousemove : (ev: MouseEvent) => any
+>() => {            this.counter++            var f = () => this.counter;        } : () => void
+
+            this.counter++
+>this.counter++ : number
+>this.counter : any
+>this : any
+>counter : any
+
+            var f = () => this.counter;
+>f : () => any
+>() => this.counter : () => any
+>this.counter : any
+>this : any
+>counter : any
+
+        }
+
+    }
+
+}
+
+
+
+class X {
+>X : X
+
+	private value = "value";
+>value : string
+
+	public foo() {
+>foo : () => void
+
+		var outer= () => {
+>outer : () => void
+>() => {            var x = this.value;            var inner = () => {                var y = this.value;			}			inner();		} : () => void
+
+            var x = this.value;
+>x : string
+>this.value : string
+>this : X
+>value : string
+
+            var inner = () => {
+>inner : () => void
+>() => {                var y = this.value;			} : () => void
+
+                var y = this.value;
+>y : string
+>this.value : string
+>this : X
+>value : string
+			}
+
+			inner();
+>inner() : void
+>inner : () => void
+
+		};
+		outer();
+>outer() : void
+>outer : () => void
+	}
+
+}
+

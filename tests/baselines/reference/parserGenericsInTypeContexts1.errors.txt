@@ -30,9 +30,9 @@
     
     function f2(): F<T> {
                    ~~~~
-!!! A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
-                   ~~~~
 !!! Cannot find name 'F'.
+                   ~~~~
+!!! A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
     }
     
     

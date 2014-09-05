@@ -54,6 +54,7 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [withImportDecl_1.js]
 define(["require", "exports", "withImportDecl_0"], function (require, exports, m3) {
+    ///<reference path='withImportDecl_0.ts'/>
     var simpleVar;
     var anotherVar;
     var varWithSimpleType;
@@ -85,4 +86,4 @@ export declare class A {
     foo: string;
 }
 //// [withImportDecl_1.d.ts]
-/// <reference path='withImportDecl_0.d.ts' />
+/// <reference path="withImportDecl_0.d.ts" />

@@ -27,6 +27,7 @@ class B {
 
 
 //// [thisInGenericStaticMembers.js]
+// this.call in static generic method not resolved correctly
 var A = (function () {
     function A() {
     }

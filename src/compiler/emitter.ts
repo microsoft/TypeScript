@@ -5,6 +5,7 @@
 
 module ts {
     interface EmitTextWriter extends TextWriter {
+        rawWrite(s: string): void;
         writeLiteral(s: string): void;
         getTextPos(): number;
         getLine(): number;
@@ -12,9 +13,16 @@ module ts {
         getIndent(): number;
     }
 
-    var indentStrings: string[] = [];
+    var indentStrings: string[] = ["", "    "];
     function getIndentString(level: number) {
-        return indentStrings[level] || (indentStrings[level] = level === 0 ? "" : getIndentString(level - 1) + "    ");
+        if (indentStrings[level] === undefined) {
+            indentStrings[level] = getIndentString(level - 1) + indentStrings[1];
+        }
+        return indentStrings[level];
+    }
+
+    function getIndentSize() {
+        return indentStrings[1].length;
     }
 
     export function emitFiles(resolver: EmitResolver): EmitResult {
@@ -107,21 +115,22 @@ module ts {
                 }
             }
 
+            function rawWrite(s: string) {
+                if (s !== undefined) {
+                    if (lineStart) {
+                        lineStart = false;
+                    }
+                    output += s;
+                }
+            }
+
             function writeLiteral(s: string) {
                 if (s && s.length) {
                     write(s);
-                    var pos = 0;
-                    while (pos < s.length) {
-                        switch (s.charCodeAt(pos++)) {
-                            case CharacterCodes.carriageReturn:
-                                if (pos < s.length && s.charCodeAt(pos) === CharacterCodes.lineFeed) {
-                                    pos++;
-                                }
-                            case CharacterCodes.lineFeed:
-                                lineCount++;
-                                linePos = output.length - s.length + pos;
-                                break;
-                        }
+                    var lineStartsOfS = getLineStarts(s);
+                    if (lineStartsOfS.length > 1) {
+                        lineCount = lineCount + lineStartsOfS.length - 1;
+                        linePos = output.length - s.length + lineStartsOfS[lineStartsOfS.length - 1];
                     }
                 }
             }
@@ -138,6 +147,7 @@ module ts {
             return {
                 write: write,
                 writeSymbol: writeSymbol,
+                rawWrite: rawWrite,
                 writeLiteral: writeLiteral,
                 writeLine: writeLine,
                 increaseIndent: () => indent++,
@@ -145,8 +155,8 @@ module ts {
                 getIndent: () => indent,
                 getTextPos: () => output.length,
                 getLine: () => lineCount + 1,
-                getColumn: () => lineStart ? indent * 4 + 1 : output.length - linePos + 1,
-                getText: () => output
+                getColumn: () => lineStart ? indent * getIndentSize() + 1 : output.length - linePos + 1,
+                getText: () => output,
             };
         }
 
@@ -159,10 +169,138 @@ module ts {
             return text.substring(skipTrivia(text, node.pos), node.end);
         }
 
+        function getLineOfLocalPosition(pos: number) {
+            return currentSourceFile.getLineAndCharacterFromPosition(pos).line;
+        }
+
         function writeFile(filename: string, data: string, writeByteOrderMark: boolean) {
             compilerHost.writeFile(filename, data, writeByteOrderMark, hostErrorMessage => {
                 diagnostics.push(createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, filename, hostErrorMessage));
             });
+        }
+
+        function emitComments(comments: Comment[], trailingSeparator: boolean, writer: EmitTextWriter, writeComment: (comment: Comment, writer: EmitTextWriter) => void) {
+            var emitLeadingSpace = !trailingSeparator;
+            forEach(comments, comment => {
+                if (emitLeadingSpace) {
+                    writer.write(" ");
+                    emitLeadingSpace = false;
+                }
+                writeComment(comment, writer);
+                if (comment.hasTrailingNewLine) {
+                    writer.writeLine();
+                }
+                else if (trailingSeparator) {
+                    writer.write(" ");
+                }
+                else {
+                    // Emit leading space to separate comment during next comment emit
+                    emitLeadingSpace = true;
+                }
+            });
+        }
+
+        function emitNewLineBeforeLeadingComments(node: TextRange, leadingComments: Comment[], writer: EmitTextWriter) {
+            // If the leading comments start on different line than the start of node, write new line
+            if (leadingComments && leadingComments.length && node.pos !== leadingComments[0].pos &&
+                getLineOfLocalPosition(node.pos) !== getLineOfLocalPosition(leadingComments[0].pos)) {
+                writer.writeLine();
+            }
+        }
+
+        function writeCommentRange(comment: Comment, writer: EmitTextWriter) {
+            if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
+                var firstCommentLineAndCharacter = currentSourceFile.getLineAndCharacterFromPosition(comment.pos);
+                var firstCommentLineIndent: number;
+                for (var pos = comment.pos, currentLine = firstCommentLineAndCharacter.line; pos < comment.end; currentLine++) {
+                    var nextLineStart = currentSourceFile.getPositionFromLineAndCharacter(currentLine + 1, /*character*/1);
+
+                    if (pos !== comment.pos) {
+                        // If we are not emitting first line, we need to write the spaces to adjust the alignment
+                        if (firstCommentLineIndent === undefined) {
+                            firstCommentLineIndent = calculateIndent(currentSourceFile.getPositionFromLineAndCharacter(firstCommentLineAndCharacter.line, /*character*/1),
+                                comment.pos);
+                        }
+
+                        // These are number of spaces writer is going to write at current indent
+                        var currentWriterIndentSpacing = writer.getIndent() * getIndentSize();
+
+                        // Number of spaces we want to be writing
+                        // eg: Assume writer indent
+                        // module m {
+                        //         /* starts at character 9 this is line 1
+                        //    * starts at character pos 4 line                        --1  = 8 - 8 + 3
+                        //   More left indented comment */                            --2  = 8 - 8 + 2
+                        //     class c { }
+                        // }
+                        // module m {
+                        //     /* this is line 1 -- Assume current writer indent 8
+                        //      * line                                                --3 = 8 - 4 + 5 
+                        //            More right indented comment */                  --4 = 8 - 4 + 11
+                        //     class c { }
+                        // }
+                        var spacesToEmit = currentWriterIndentSpacing - firstCommentLineIndent + calculateIndent(pos, nextLineStart); 
+                        if (spacesToEmit > 0) {
+                            var numberOfSingleSpacesToEmit = spacesToEmit % getIndentSize();
+                            var indentSizeSpaceString = getIndentString((spacesToEmit - numberOfSingleSpacesToEmit) / getIndentSize());
+
+                            // Write indent size string ( in eg 1: = "", 2: "" , 3: string with 8 spaces 4: string with 12 spaces
+                            writer.rawWrite(indentSizeSpaceString);
+
+                            // Emit the single spaces (in eg: 1: 3 spaces, 2: 2 spaces, 3: 1 space, 4: 3 spaces)
+                            while (numberOfSingleSpacesToEmit) {
+                                writer.rawWrite(" ");
+                                numberOfSingleSpacesToEmit--;
+                            }
+                        }
+                        else {
+                            // No spaces to emit write empty string
+                            writer.rawWrite("");
+                        }
+                    }
+
+                    // Write the comment line text
+                    writeTrimmedCurrentLine(pos, nextLineStart);
+
+                    pos = nextLineStart;
+                }
+            }
+            else {
+                // Single line comment of styly //....
+                writer.write(currentSourceFile.text.substring(comment.pos, comment.end));
+            }
+
+            function writeTrimmedCurrentLine(pos: number, nextLineStart: number) {
+                var end = Math.min(comment.end, nextLineStart - 1);
+                var currentLineText = currentSourceFile.text.substring(pos, end).replace(/^\s+|\s+$/g, '');
+                if (currentLineText) {
+                    // trimmed forward and ending spaces text
+                    writer.write(currentLineText);
+                    if (end !== comment.end) {
+                        writer.writeLine();
+                    }
+                }
+                else {
+                    // Empty string - make sure we write empty line
+                    writer.writeLiteral(newLine);
+                }
+            }
+
+            function calculateIndent(pos: number, end: number) {
+                var currentLineIndent = 0;
+                for (; pos < end && isWhiteSpace(currentSourceFile.text.charCodeAt(pos)); pos++) {
+                    if (currentSourceFile.text.charCodeAt(pos) === CharacterCodes.tab) {
+                        // Tabs = TabSize = indent size and go to next tabStop
+                        currentLineIndent += getIndentSize() - (currentLineIndent % getIndentSize());
+                    }
+                    else {
+                        // Single space
+                        currentLineIndent++;
+                    }
+                }
+
+                return currentLineIndent;
+            }
         }
 
         function emitJavaScript(jsFilePath: string, root?: SourceFile) {
@@ -177,14 +315,31 @@ module ts {
             /** write emitted output to disk*/
             var writeEmittedFiles = writeJavaScriptFile;
 
+            /** Emit leading comments of the node */
+            var emitLeadingComments = compilerOptions.removeComments ? (node: Node) => { } : emitLeadingDeclarationComments;
+
+            /** Emit Trailing comments of the node */
+            var emitTrailingComments = compilerOptions.removeComments ? (node: Node) => { } : emitTrailingDeclarationComments;
+
+            var emitLeadingCommentsOfPosition = compilerOptions.removeComments ? (pos: number) => { } : emitLeadingCommentsOfLocalPosition;
+
+            var detachedCommentsInfo: { nodePos: number; detachedCommentEndPos: number }[];
+            /** Emit detached comments of the node */
+            var emitDetachedComments = compilerOptions.removeComments ? (node: TextRange) => { } : emitDetachedCommentsAtPosition;
+
+            /** Emits /// or pinned which is comment starting with /*! comments */
+            var emitPinnedOrTripleSlashComments = compilerOptions.removeComments ? (node: Node) => { } : emitPinnedOrTripleSlashCommentsOfNode;
+
+            var writeComment = writeCommentRange;
+
             /** Emit a node */
             var emit = emitNode;
 
             /** Called just before starting emit of a node */
-            var emitStart = function (node: Node) { }
+            var emitStart = function (node: Node) { };
 
             /** Called once the emit of the node is done */
-            var emitEnd = function (node: Node) { }
+            var emitEnd = function (node: Node) { };
 
             /** Emit the text for the given token that comes after startPos
               * This by default writes the text provided with the given tokenKind 
@@ -193,9 +348,6 @@ module ts {
               * @param startPos the position in the source to start searching for the token
               * @param emitFn if given will be invoked to emit the text instead of actual token emit */
             var emitToken = emitTokenText;
-
-            /** Called to notify start of new source file emit */
-            var emitNewSourceFileStart = function (node: SourceFile) { }
 
             /** Called to before starting the lexical scopes as in function/class in the emitted code because of node
               * @param scopeDeclaration node that starts the lexical scope
@@ -322,8 +474,9 @@ module ts {
                     if (!lastRecordedSourceMapSpan ||
                         lastRecordedSourceMapSpan.emittedLine != emittedLine ||
                         lastRecordedSourceMapSpan.emittedColumn != emittedColumn ||
-                        lastRecordedSourceMapSpan.sourceLine > sourceLinePos.line ||
-                        (lastRecordedSourceMapSpan.sourceLine === sourceLinePos.line && lastRecordedSourceMapSpan.sourceColumn > sourceLinePos.character)) {
+                        (lastRecordedSourceMapSpan.sourceIndex === sourceMapSourceIndex &&
+                        (lastRecordedSourceMapSpan.sourceLine > sourceLinePos.line ||
+                        (lastRecordedSourceMapSpan.sourceLine === sourceLinePos.line && lastRecordedSourceMapSpan.sourceColumn > sourceLinePos.character)))) {
                         // Encode the last recordedSpan before assigning new
                         encodeLastRecordedSourceMapSpan();
 
@@ -341,12 +494,13 @@ module ts {
                         // Take the new pos instead since there is no change in emittedLine and column since last location
                         lastRecordedSourceMapSpan.sourceLine = sourceLinePos.line;
                         lastRecordedSourceMapSpan.sourceColumn = sourceLinePos.character;
+                        lastRecordedSourceMapSpan.sourceIndex = sourceMapSourceIndex;
                     }
                 }
 
                 function recordEmitNodeStartSpan(node: Node) {
                     // Get the token pos after skipping to the token (ignoring the leading trivia)
-                    recordSourceMapSpan(ts.getTokenPosOfNode(node));
+                    recordSourceMapSpan(skipTrivia(currentSourceFile.text, node.pos));
                 }
 
                 function recordEmitNodeEndSpan(node: Node) {
@@ -427,6 +581,12 @@ module ts {
                 function recordScopeNameEnd() {
                     sourceMapNameIndices.pop();
                 };
+
+                function writeCommentRangeWithMap(comment: Comment, writer: EmitTextWriter) {
+                    recordSourceMapSpan(comment.pos);
+                    writeCommentRange(comment, writer);
+                    recordSourceMapSpan(comment.end);
+                }
 
                 function writeJavaScriptAndSourceMapFile(emitOutput: string, writeByteOrderMark: boolean) {
                     // Write source map file
@@ -510,9 +670,9 @@ module ts {
                 emitStart = recordEmitNodeStartSpan;
                 emitEnd = recordEmitNodeEndSpan;
                 emitToken = writeTextWithSpanRecord;
-                emitNewSourceFileStart = recordNewSourceFileStart;
                 scopeEmitStart = recordScopeNameOfNode;
                 scopeEmitEnd = recordScopeNameEnd;
+                writeComment = writeCommentRangeWithMap;
             }
 
             function writeJavaScriptFile(emitOutput: string, writeByteOrderMark: boolean) {
@@ -697,9 +857,11 @@ module ts {
             }
 
             function emitPropertyAssignment(node: PropertyDeclaration) {
+                emitLeadingComments(node);
                 emit(node.name);
                 write(": ");
                 emit(node.initializer);
+                emitTrailingComments(node);
             }
 
             function emitPropertyAccess(node: PropertyAccess) {
@@ -866,13 +1028,16 @@ module ts {
 
             function emitExpressionStatement(node: ExpressionStatement) {
                 var isArrowExpression = node.expression.kind === SyntaxKind.ArrowFunction;
+                emitLeadingComments(node);
                 if (isArrowExpression) write("(");
                 emit(node.expression);
                 if (isArrowExpression) write(")");
                 write(";");
+                emitTrailingComments(node);
             }
 
             function emitIfStatement(node: IfStatement) {
+                emitLeadingComments(node);
                 var endPos = emitToken(SyntaxKind.IfKeyword, node.pos);
                 write(" ");
                 endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
@@ -890,6 +1055,7 @@ module ts {
                         emitEmbeddedStatement(node.elseStatement);
                     }
                 }
+                emitTrailingComments(node);
             }
 
             function emitDoStatement(node: DoStatement) {
@@ -958,9 +1124,11 @@ module ts {
             }
 
             function emitReturnStatement(node: ReturnStatement) {
+                emitLeadingComments(node);
                 emitToken(SyntaxKind.ReturnKeyword, node.pos);
                 emitOptional(" ", node.expression);
                 write(";");
+                emitTrailingComments(node);
             }
 
             function emitWithStatement(node: WhileStatement) {
@@ -1057,18 +1225,24 @@ module ts {
             }
 
             function emitVariableDeclaration(node: VariableDeclaration) {
+                emitLeadingComments(node);
                 emitModuleMemberName(node);
                 emitOptional(" = ", node.initializer);
+                emitTrailingComments(node);
             }
 
             function emitVariableStatement(node: VariableStatement) {
+                emitLeadingComments(node);
                 if (!(node.flags & NodeFlags.Export)) write("var ");
                 emitCommaList(node.declarations);
                 write(";");
+                emitTrailingComments(node);
             }
 
             function emitParameter(node: ParameterDeclaration) {
+                emitLeadingComments(node);
                 emit(node.name);
+                emitTrailingComments(node);
             }
 
             function emitDefaultValueAssignments(node: FunctionDeclaration) {
@@ -1096,11 +1270,13 @@ module ts {
                     var restIndex = node.parameters.length - 1;
                     var restParam = node.parameters[restIndex];
                     writeLine();
+                    emitLeadingComments(restParam);
                     emitStart(restParam);
                     write("var ");
                     emitNode(restParam.name);
                     write(" = [];");
                     emitEnd(restParam);
+                    emitTrailingComments(restParam);
                     writeLine();
                     write("for (");
                     emitStart(restParam);
@@ -1128,18 +1304,30 @@ module ts {
             }
 
             function emitAccessor(node: AccessorDeclaration) {
+                emitLeadingComments(node);
                 write(node.kind === SyntaxKind.GetAccessor ? "get " : "set ");
                 emit(node.name);
                 emitSignatureAndBody(node);
+                emitTrailingComments(node);
             }
 
             function emitFunctionDeclaration(node: FunctionDeclaration) {
-                if (!node.body) return;
+                if (!node.body) {
+                    return emitPinnedOrTripleSlashComments(node);
+                }
+
+                if (node.kind !== SyntaxKind.Method) {
+                    // Methods will emit the comments as part of emitting method declaration
+                    emitLeadingComments(node);
+                }
                 write("function ");
                 if (node.kind === SyntaxKind.FunctionDeclaration || (node.kind === SyntaxKind.FunctionExpression && node.name)) {
                     emit(node.name);
                 }
                 emitSignatureAndBody(node);
+                if (node.kind !== SyntaxKind.Method) {
+                    emitTrailingComments(node);
+                }
             }
 
             function emitCaptureThisForNodeIfNecessary(node: Node): void {
@@ -1152,11 +1340,13 @@ module ts {
             }
 
             function emitSignatureParameters(node: FunctionDeclaration) {
+                increaseIndent();
                 write("(");
                 if (node) {
                     emitCommaList(node.parameters, node.parameters.length - (hasRestParameters(node) ? 1 : 0));
                 }
                 write(")");
+                decreaseIndent();
             }
 
             function emitSignatureAndBody(node: FunctionDeclaration) {
@@ -1164,6 +1354,8 @@ module ts {
                 write(" {");
                 scopeEmitStart(node);
                 increaseIndent();
+
+                emitDetachedComments(node.body.kind === SyntaxKind.FunctionBlock ? (<Block>node.body).statements : node.body);
 
                 var startIndex = 0;
                 if (node.body.kind === SyntaxKind.FunctionBlock) {
@@ -1191,16 +1383,20 @@ module ts {
                     }
                     else {
                         writeLine();
+                        emitLeadingComments(node.body);
                         write("return ");
                         emit(node.body);
                         write(";");
+                        emitTrailingComments(node.body);
                     }
-                    decreaseIndent();
                     writeLine();
                     if (node.body.kind === SyntaxKind.FunctionBlock) {
+                        emitLeadingCommentsOfPosition((<Block>node.body).statements.end);
+                        decreaseIndent();
                         emitToken(SyntaxKind.CloseBraceToken, (<Block>node.body).statements.end);
                     }
                     else {
+                        decreaseIndent();
                         emitStart(node.body);
                         write("}");
                         emitEnd(node.body);
@@ -1266,6 +1462,7 @@ module ts {
                 forEach(node.members, member => {
                     if (member.kind === SyntaxKind.Property && (member.flags & NodeFlags.Static) === staticFlag && (<PropertyDeclaration>member).initializer) {
                         writeLine();
+                        emitLeadingComments(member);
                         emitStart(member);
                         emitStart((<PropertyDeclaration>member).name);
                         if (staticFlag) {
@@ -1280,6 +1477,7 @@ module ts {
                         emit((<PropertyDeclaration>member).initializer);
                         write(";");
                         emitEnd(member);
+                        emitTrailingComments(member);
                     }
                 });
             }
@@ -1287,8 +1485,12 @@ module ts {
             function emitMemberFunctions(node: ClassDeclaration) {
                 forEach(node.members, member => {
                     if (member.kind === SyntaxKind.Method) {
-                        if (!(<MethodDeclaration>member).body) return;
+                        if (!(<MethodDeclaration>member).body) {
+                            return emitPinnedOrTripleSlashComments(member);
+                        }
+
                         writeLine();
+                        emitLeadingComments(member);
                         emitStart(member);
                         emitStart((<MethodDeclaration>member).name);
                         emitNode(node.name);
@@ -1303,6 +1505,7 @@ module ts {
                         emitEnd(member);
                         emitEnd(member);
                         write(";");
+                        emitTrailingComments(member);
                     }
                     else if (member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor) {
                         var accessors = getAllAccessorDeclarations(node, <AccessorDeclaration>member);
@@ -1322,20 +1525,24 @@ module ts {
                             increaseIndent();
                             if (accessors.getAccessor) {
                                 writeLine();
+                                emitLeadingComments(accessors.getAccessor);
                                 write("get: ");
                                 emitStart(accessors.getAccessor);
                                 write("function ");
                                 emitSignatureAndBody(accessors.getAccessor);
                                 emitEnd(accessors.getAccessor);
+                                emitTrailingComments(accessors.getAccessor);
                                 write(",");
                             }
                             if (accessors.setAccessor) {
                                 writeLine();
+                                emitLeadingComments(accessors.setAccessor);
                                 write("set: ");
                                 emitStart(accessors.setAccessor);
                                 write("function ");
                                 emitSignatureAndBody(accessors.setAccessor);
                                 emitEnd(accessors.setAccessor);
+                                emitTrailingComments(accessors.setAccessor);
                                 write(",");
                             }
                             writeLine();
@@ -1352,11 +1559,13 @@ module ts {
             }
 
             function emitClassDeclaration(node: ClassDeclaration) {
-                var ctor = getFirstConstructorWithBody(node);
+                emitLeadingComments(node);
                 write("var ");
                 emit(node.name);
                 write(" = (function (");
-                if (node.baseType) write("_super");
+                if (node.baseType) {
+                    write("_super");
+                }
                 write(") {");
                 increaseIndent();
                 scopeEmitStart(node);
@@ -1369,45 +1578,7 @@ module ts {
                     emitEnd(node.baseType);
                 }
                 writeLine();
-                emitStart(<Node>ctor || node);
-                write("function ");
-                emit(node.name);
-                emitSignatureParameters(ctor);
-                write(" {");
-                scopeEmitStart(node, "constructor");
-                increaseIndent();
-                emitCaptureThisForNodeIfNecessary(node);
-                if (ctor) {
-                    emitDefaultValueAssignments(ctor);
-                    emitRestParameter(ctor);
-                    if (node.baseType) {
-                        var superCall = findInitialSuperCall(ctor);
-                        if (superCall) {
-                            writeLine();
-                            emit(superCall);
-                        }
-                    }
-                    emitParameterPropertyAssignments(ctor);
-                }
-                else {
-                    if (node.baseType) {
-                        writeLine();
-                        emitStart(node.baseType);
-                        write("_super.apply(this, arguments);");
-                        emitEnd(node.baseType);
-                    }
-                }                
-                emitMemberAssignments(node, /*nonstatic*/0);
-                if (ctor) {
-                    var statements: Node[] = (<Block>ctor.body).statements;
-                    if (superCall) statements = statements.slice(1);
-                    emitLines(statements);
-                }
-                decreaseIndent();
-                writeLine();
-                emitToken(SyntaxKind.CloseBraceToken, ctor ? (<Block>ctor.body).statements.end : node.members.end);
-                scopeEmitEnd();
-                emitEnd(<Node>ctor || node);
+                emitConstructorOfClass();
                 emitMemberFunctions(node);
                 emitMemberAssignments(node, NodeFlags.Static);
                 writeLine();
@@ -1437,9 +1608,77 @@ module ts {
                     emitEnd(node);
                     write(";");
                 }
+                emitTrailingComments(node);
+
+                function emitConstructorOfClass() {
+                    // Emit the constructor overload pinned comments
+                    forEach(node.members, member => {
+                        if (member.kind === SyntaxKind.Constructor && !(<ConstructorDeclaration>member).body) {
+                            emitPinnedOrTripleSlashComments(member);
+                        }
+                    });
+
+                    var ctor = getFirstConstructorWithBody(node);
+                    if (ctor) {
+                        emitLeadingComments(ctor);
+                    }
+                    emitStart(<Node>ctor || node);
+                    write("function ");
+                    emit(node.name);
+                    emitSignatureParameters(ctor);
+                    write(" {");
+                    scopeEmitStart(node, "constructor");
+                    increaseIndent();
+                    if (ctor) {
+                        emitDetachedComments((<Block>ctor.body).statements);
+                    }
+                    emitCaptureThisForNodeIfNecessary(node);
+                    if (ctor) {
+                        emitDefaultValueAssignments(ctor);
+                        emitRestParameter(ctor);
+                        if (node.baseType) {
+                            var superCall = findInitialSuperCall(ctor);
+                            if (superCall) {
+                                writeLine();
+                                emit(superCall);
+                            }
+                        }
+                        emitParameterPropertyAssignments(ctor);
+                    }
+                    else {
+                        if (node.baseType) {
+                            writeLine();
+                            emitStart(node.baseType);
+                            write("_super.apply(this, arguments);");
+                            emitEnd(node.baseType);
+                        }
+                    }
+                    emitMemberAssignments(node, /*nonstatic*/0);
+                    if (ctor) {
+                        var statements: Node[] = (<Block>ctor.body).statements;
+                        if (superCall) statements = statements.slice(1);
+                        emitLines(statements);
+                    }
+                    writeLine();
+                    if (ctor) {
+                        emitLeadingCommentsOfPosition((<Block>ctor.body).statements.end);
+                    }
+                    decreaseIndent();
+                    emitToken(SyntaxKind.CloseBraceToken, ctor ? (<Block>ctor.body).statements.end : node.members.end);
+                    scopeEmitEnd();
+                    emitEnd(<Node>ctor || node);
+                    if (ctor) {
+                        emitTrailingComments(ctor);
+                    }
+                }
+            }
+
+            function emitInterfaceDeclaration(node: InterfaceDeclaration) {
+                emitPinnedOrTripleSlashComments(node);
             }
 
             function emitEnumDeclaration(node: EnumDeclaration) {
+                emitLeadingComments(node);
                 if (!(node.flags & NodeFlags.Export)) {
                     emitStart(node);
                     write("var ");
@@ -1456,26 +1695,7 @@ module ts {
                 write(") {");
                 increaseIndent();
                 scopeEmitStart(node);
-                forEach(node.members, member => {
-                    writeLine();
-                    emitStart(member);
-                    write(resolver.getLocalNameOfContainer(node));
-                    write("[");
-                    write(resolver.getLocalNameOfContainer(node));
-                    write("[");
-                    emitQuotedIdentifier(member.name);
-                    write("] = ");
-                    if (member.initializer) {
-                        emit(member.initializer);
-                    }
-                    else {
-                        write(resolver.getEnumMemberValue(member).toString());
-                    }
-                    write("] = ");
-                    emitQuotedIdentifier(member.name);
-                    emitEnd(member);
-                    write(";");
-                });
+                emitEnumMemberDeclarations();
                 decreaseIndent();
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end);
@@ -1496,6 +1716,32 @@ module ts {
                     emitEnd(node);
                     write(";");
                 }
+                emitTrailingComments(node);
+
+                function emitEnumMemberDeclarations() {
+                    forEach(node.members, member => {
+                        writeLine();
+                        emitLeadingComments(member);
+                        emitStart(member);
+                        write(resolver.getLocalNameOfContainer(node));
+                        write("[");
+                        write(resolver.getLocalNameOfContainer(node));
+                        write("[");
+                        emitQuotedIdentifier(member.name);
+                        write("] = ");
+                        if (member.initializer) {
+                            emit(member.initializer);
+                        }
+                        else {
+                            write(resolver.getEnumMemberValue(member).toString());
+                        }
+                        write("] = ");
+                        emitQuotedIdentifier(member.name);
+                        emitEnd(member);
+                        write(";");
+                        emitTrailingComments(member);
+                    });
+                }
             }
 
             function getInnerMostModuleDeclarationFromDottedModule(moduleDeclaration: ModuleDeclaration): ModuleDeclaration {
@@ -1506,7 +1752,11 @@ module ts {
             }
 
             function emitModuleDeclaration(node: ModuleDeclaration) {
-                if (!isInstantiated(node)) return;
+                if (!isInstantiated(node)) {
+                    return emitPinnedOrTripleSlashComments(node);
+                }
+
+                emitLeadingComments(node);
                 if (!(node.flags & NodeFlags.Export)) {
                     emitStart(node);
                     write("var ");
@@ -1553,6 +1803,7 @@ module ts {
                     emitEnd(node);
                     write(";");
                 }
+                emitTrailingComments(node);
             }
 
             function emitImportDeclaration(node: ImportDeclaration) {
@@ -1569,16 +1820,19 @@ module ts {
                     if (node.externalModuleName && node.parent.kind === SyntaxKind.SourceFile && compilerOptions.module === ModuleKind.AMD) {
                         if (node.flags & NodeFlags.Export) {
                             writeLine();
+                            emitLeadingComments(node);
                             emitStart(node);
                             emitModuleMemberName(node);
                             write(" = ");
                             emit(node.name);
                             write(";");
                             emitEnd(node);
+                            emitTrailingComments(node);
                         }
                     }
                     else {
                         writeLine();
+                        emitLeadingComments(node);
                         emitStart(node);
                         if (!(node.flags & NodeFlags.Export)) write("var ");
                         emitModuleMemberName(node);
@@ -1595,6 +1849,7 @@ module ts {
                         }
                         write(";");
                         emitEnd(node);
+                        emitTrailingComments(node);
                     }
                 }
             }
@@ -1691,6 +1946,9 @@ module ts {
 
             function emitSourceFile(node: SourceFile) {
                 currentSourceFile = node;
+                // Start new file on new line
+                writeLine();
+                emitDetachedComments(node);
                 // emit prologue directives prior to __extends
                 var startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
                 if (!extendsEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitExtends) {
@@ -1725,7 +1983,14 @@ module ts {
             }
 
             function emitNode(node: Node) {
-                if (!node || node.flags & NodeFlags.Ambient) return;
+                if (!node) {
+                    return;
+                }
+
+                if (node.flags & NodeFlags.Ambient) {
+                    return emitPinnedOrTripleSlashComments(node);
+                }
+
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
                         return emitIdentifier(<Identifier>node);
@@ -1829,6 +2094,8 @@ module ts {
                         return emitVariableDeclaration(<VariableDeclaration>node);
                     case SyntaxKind.ClassDeclaration:
                         return emitClassDeclaration(<ClassDeclaration>node);
+                    case SyntaxKind.InterfaceDeclaration:
+                        return emitInterfaceDeclaration(<InterfaceDeclaration>node);
                     case SyntaxKind.EnumDeclaration:
                         return emitEnumDeclaration(<EnumDeclaration>node);
                     case SyntaxKind.ModuleDeclaration:
@@ -1838,6 +2105,137 @@ module ts {
                     case SyntaxKind.SourceFile:
                         return emitSourceFile(<SourceFile>node);
                 }
+            }
+
+            function hasDetachedComments(pos: number) {
+                return detachedCommentsInfo !== undefined && detachedCommentsInfo[detachedCommentsInfo.length - 1].nodePos === pos;
+            }
+
+            function getLeadingCommentsWithoutDetachedComments() {
+                // get the leading comments from detachedPos
+                var leadingComments = getLeadingComments(currentSourceFile.text, detachedCommentsInfo[detachedCommentsInfo.length - 1].detachedCommentEndPos);
+                if (detachedCommentsInfo.length - 1) {
+                    detachedCommentsInfo.pop();
+                }
+                else {
+                    detachedCommentsInfo = undefined;
+                }
+
+                return leadingComments;
+            }
+
+            function getLeadingCommentsToEmit(node: Node) {
+                // Emit the leading comments only if the parent's pos doesnt match because parent should take care of emitting these comments
+                if (node.parent.kind === SyntaxKind.SourceFile || node.pos !== node.parent.pos) {
+                    var leadingComments: Comment[];
+                    if (hasDetachedComments(node.pos)) {
+                        // get comments without detached comments
+                        leadingComments = getLeadingCommentsWithoutDetachedComments();
+                    }
+                    else {
+                        // get the leading comments from the node
+                        leadingComments = getLeadingCommentsOfNode(node, currentSourceFile);
+                    }
+                    return leadingComments;
+                }
+            }
+
+            function emitLeadingDeclarationComments(node: Node) {
+                var leadingComments = getLeadingCommentsToEmit(node);
+                emitNewLineBeforeLeadingComments(node, leadingComments, writer);
+                // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
+                emitComments(leadingComments, /*trailingSeparator*/ true, writer, writeComment);
+            }
+
+            function emitTrailingDeclarationComments(node: Node) {
+                // Emit the trailing comments only if the parent's end doesnt match
+                if (node.parent.kind === SyntaxKind.SourceFile || node.end !== node.parent.end) {
+                    var trailingComments = getTrailingComments(currentSourceFile.text, node.end);
+                    // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
+                    emitComments(trailingComments, /*trailingSeparator*/ false, writer, writeComment);
+                }
+            }
+
+            function emitLeadingCommentsOfLocalPosition(pos: number) {
+                var leadingComments: Comment[];
+                if (hasDetachedComments(pos)) {
+                    // get comments without detached comments
+                    leadingComments = getLeadingCommentsWithoutDetachedComments();
+                }
+                else {
+                    // get the leading comments from the node
+                    leadingComments = getLeadingComments(currentSourceFile.text, pos);
+                }
+                emitNewLineBeforeLeadingComments({ pos: pos, end: pos }, leadingComments, writer);
+                // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
+                emitComments(leadingComments, /*trailingSeparator*/ true, writer, writeComment);
+            }
+
+            function emitDetachedCommentsAtPosition(node: TextRange) {
+                var leadingComments = getLeadingComments(currentSourceFile.text, node.pos);
+                if (leadingComments) {
+                    var detachedComments: Comment[] = [];
+                    var lastComment: Comment;
+
+                    forEach(leadingComments, comment => {
+                        if (lastComment) {
+                            var lastCommentLine = getLineOfLocalPosition(lastComment.end);
+                            var commentLine = getLineOfLocalPosition(comment.pos);
+
+                            if (commentLine >= lastCommentLine + 2) {
+                                // There was a blank line between the last comment and this comment.  This
+                                // comment is not part of the copyright comments.  Return what we have so 
+                                // far.
+                                return detachedComments;
+                            }
+                        }
+
+                        detachedComments.push(comment);
+                        lastComment = comment;
+                    });
+
+                    if (detachedComments.length) {
+                        // All comments look like they could have been part of the copyright header.  Make
+                        // sure there is at least one blank line between it and the node.  If not, it's not
+                        // a copyright header.
+                        var lastCommentLine = getLineOfLocalPosition(detachedComments[detachedComments.length - 1].end);
+                        var astLine = getLineOfLocalPosition(skipTrivia(currentSourceFile.text, node.pos));
+                        if (astLine >= lastCommentLine + 2) {
+                            // Valid detachedComments
+                            emitNewLineBeforeLeadingComments(node, leadingComments, writer);
+                            emitComments(detachedComments, /*trailingSeparator*/ true, writer, writeComment);
+                            var currentDetachedCommentInfo = { nodePos: node.pos, detachedCommentEndPos: detachedComments[detachedComments.length - 1].end };
+                            if (detachedCommentsInfo) {
+                                detachedCommentsInfo.push(currentDetachedCommentInfo);
+                            }
+                            else {
+                                detachedCommentsInfo = [currentDetachedCommentInfo];
+                            }
+                        }
+                    }
+                }
+            }
+
+            function emitPinnedOrTripleSlashCommentsOfNode(node: Node) {
+                var pinnedComments = ts.filter(getLeadingCommentsToEmit(node), isPinnedOrTripleSlashComment);
+
+                function isPinnedOrTripleSlashComment(comment: Comment) {
+                    if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
+                        return currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
+                    }
+                    // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text 
+                    // so that we dont end up computing comment string and doing match for all // comments
+                    else if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.slash &&
+                        comment.pos + 2 < comment.end &&
+                        currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.slash &&
+                        currentSourceFile.text.substring(comment.pos, comment.end).match(fullTripleSlashReferencePathRegEx)) {
+                        return true;
+                    }
+                }
+
+                emitNewLineBeforeLeadingComments(node, pinnedComments, writer);
+                // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
+                emitComments(pinnedComments, /*trailingSeparator*/ true, writer, writeComment);
             }
 
             if (compilerOptions.sourceMap) {
@@ -1868,6 +2266,8 @@ module ts {
 
             var enclosingDeclaration: Node;
             var reportedDeclarationError = false;
+
+            var emitJsDocComments = compilerOptions.removeComments ? function (declaration: Declaration) { } : writeJsDocComments;
 
             var aliasDeclarationEmitInfo: {
                 declaration: ImportDeclaration;
@@ -1946,6 +2346,15 @@ module ts {
                 }
             }
 
+            function writeJsDocComments(declaration: Declaration) {
+                if (declaration) {
+                    var jsDocComments = getJsDocComments(declaration, currentSourceFile);
+                    emitNewLineBeforeLeadingComments(declaration, jsDocComments, writer);
+                    // jsDoc comments are emitted at /*leading comment1 */space/*leading comment*/space
+                    emitComments(jsDocComments, /*trailingSeparator*/ true, writer, writeCommentRange);
+                }
+            }
+
             function emitSourceTextOfNode(node: Node) {
                 write(getSourceTextOfLocalNode(node));
             }
@@ -2004,6 +2413,7 @@ module ts {
             function writeImportDeclaration(node: ImportDeclaration) {
                 // note usage of writer. methods instead of aliases created, just to make sure we are using 
                 // correct writer especially to handle asynchronous alias writing
+                emitJsDocComments(node);
                 if (node.flags & NodeFlags.Export) {
                     writer.write("export ");
                 }
@@ -2043,6 +2453,7 @@ module ts {
 
             function emitModuleDeclaration(node: ModuleDeclaration) {
                 if (resolver.isDeclarationVisible(node)) {
+                    emitJsDocComments(node);
                     emitDeclarationFlags(node);
                     write("module ");
                     emitSourceTextOfNode(node.name);
@@ -2066,6 +2477,7 @@ module ts {
 
             function emitEnumDeclaration(node: EnumDeclaration) {
                 if (resolver.isDeclarationVisible(node)) {
+                    emitJsDocComments(node);
                     emitDeclarationFlags(node);
                     write("enum ");
                     emitSourceTextOfNode(node.name);
@@ -2080,6 +2492,7 @@ module ts {
             }
 
             function emitEnumMemberDeclaration(node: EnumMember) {
+                emitJsDocComments(node);
                 emitSourceTextOfNode(node.name);
                 var enumMemberValue = resolver.getEnumMemberValue(node);
                 if (enumMemberValue !== undefined) {
@@ -2155,6 +2568,9 @@ module ts {
                         };
                     }
 
+                    increaseIndent();
+                    emitJsDocComments(node);
+                    decreaseIndent();
                     emitSourceTextOfNode(node.name);
                     // If there is constraint present and this is not a type parameter of the private method emit the constraint
                     if (node.constraint && (node.parent.kind !== SyntaxKind.Method || !(node.parent.flags & NodeFlags.Private))) {
@@ -2231,6 +2647,7 @@ module ts {
                 }
 
                 if (resolver.isDeclarationVisible(node)) {
+                    emitJsDocComments(node);
                     emitDeclarationFlags(node);
                     write("class ");
                     emitSourceTextOfNode(node.name);
@@ -2255,6 +2672,7 @@ module ts {
 
             function emitInterfaceDeclaration(node: InterfaceDeclaration) {
                 if (resolver.isDeclarationVisible(node)) {
+                    emitJsDocComments(node);
                     emitDeclarationFlags(node);
                     write("interface ");
                     emitSourceTextOfNode(node.name);
@@ -2274,6 +2692,7 @@ module ts {
             }
 
             function emitPropertyDeclaration(node: PropertyDeclaration) {
+                emitJsDocComments(node);
                 emitDeclarationFlags(node);
                 emitVariableDeclaration(node);
                 write(";");
@@ -2340,6 +2759,7 @@ module ts {
             function emitVariableStatement(node: VariableStatement) {
                 var hasDeclarationWithEmit = forEach(node.declarations, varDeclaration => resolver.isDeclarationVisible(varDeclaration));
                 if (hasDeclarationWithEmit) {
+                    emitJsDocComments(node);
                     emitDeclarationFlags(node);
                     write("var ");
                     emitCommaList(node.declarations, emitVariableDeclaration);
@@ -2351,6 +2771,8 @@ module ts {
             function emitAccessorDeclaration(node: AccessorDeclaration) {
                 var accessors = getAllAccessorDeclarations(<ClassDeclaration>node.parent, node);
                 if (node === accessors.firstAccessor) {
+                    emitJsDocComments(accessors.getAccessor);
+                    emitJsDocComments(accessors.setAccessor);
                     emitDeclarationFlags(node);
                     emitSourceTextOfNode(node.name);
                     if (!(node.flags & NodeFlags.Private)) {
@@ -2411,6 +2833,7 @@ module ts {
                 // so no need to verify if the declaration is visible
                 if ((node.kind !== SyntaxKind.FunctionDeclaration || resolver.isDeclarationVisible(node)) &&
                     !resolver.isImplementationOfOverload(node)) {
+                    emitJsDocComments(node);
                     emitDeclarationFlags(node);
                     if (node.kind === SyntaxKind.FunctionDeclaration) {
                         write("function ");
@@ -2430,11 +2853,16 @@ module ts {
             }
 
             function emitConstructSignatureDeclaration(node: SignatureDeclaration) {
+                emitJsDocComments(node);
                 write("new ");
                 emitSignatureDeclaration(node);
             }
 
             function emitSignatureDeclaration(node: SignatureDeclaration) {
+                if (node.kind === SyntaxKind.CallSignature || node.kind === SyntaxKind.IndexSignature) {
+                    // Only index and call signatures are emitted directly, so emit their js doc comments, rest will do that in their own functions
+                    emitJsDocComments(node);
+                }
                 emitTypeParameters(node.typeParameters);
                 if (node.kind === SyntaxKind.IndexSignature) {
                     write("[");
@@ -2529,6 +2957,8 @@ module ts {
             }
 
             function emitParameterDeclaration(node: ParameterDeclaration) {
+                increaseIndent();
+                emitJsDocComments(node);
                 if (node.flags & NodeFlags.Rest) {
                     write("...");
                 }
@@ -2536,6 +2966,7 @@ module ts {
                 if (node.initializer || (node.flags & NodeFlags.QuestionMark)) {
                     write("?");
                 }
+                decreaseIndent();
 
                 if (!(node.parent.flags & NodeFlags.Private)) {
                     write(": ");
@@ -2672,7 +3103,7 @@ module ts {
                     compilerHost.getCurrentDirectory(),
                 /*isAbsolutePathAnUrl*/ false);
 
-                referencePathsOutput += "/// <reference path='" + declFileName + "' />" + newLine;
+                referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
             }
 
             if (root) {

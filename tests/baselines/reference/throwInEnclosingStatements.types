@@ -1,0 +1,100 @@
+=== tests/cases/conformance/statements/throwStatements/throwInEnclosingStatements.ts ===
+function fn(x) {
+>fn : (x: any) => void
+>x : any
+
+    throw x;
+>x : any
+}
+
+<T>(x: T) => { throw x; }
+><T>(x: T) => { throw x; } : <T>(x: T) => void
+>T : T
+>x : T
+>T : T
+>x : T
+
+var y: string;
+>y : string
+
+switch (y) {
+>y : string
+
+    case 'a':
+        throw y;
+>y : string
+
+    default:
+        throw y;
+>y : string
+}
+
+var z = 0;
+>z : number
+
+while (z < 10) {
+>z < 10 : boolean
+>z : number
+
+    throw z;
+>z : number
+}
+
+for (var i = 0; ;) { throw i; }
+>i : number
+>i : number
+
+for (var idx in {}) { throw idx; }
+>idx : any
+>{} : {}
+>idx : any
+
+do { throw null; }while(true)
+
+var j = 0;
+>j : number
+
+while (j < 0) { throw j; }
+>j < 0 : boolean
+>j : number
+>j : number
+
+class C<T> {
+>C : C<T>
+>T : T
+
+    private value: T;
+>value : T
+>T : T
+
+    biz() {
+>biz : () => void
+
+        throw this.value;
+>this.value : T
+>this : C<T>
+>value : T
+    }
+
+    constructor() {
+        throw this;
+>this : C<T>
+    }
+}
+
+var aa = {
+>aa : { id: number; biz: () => void; }
+>{    id:12,    biz() {        throw this;    }} : { id: number; biz: () => void; }
+
+    id:12,
+>id : number
+
+    biz() {
+>biz : () => void
+>biz() {        throw this;    } : () => void
+
+        throw this;
+>this : any
+    }
+}
+

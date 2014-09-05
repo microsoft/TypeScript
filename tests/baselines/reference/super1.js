@@ -73,6 +73,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+// Case 1
 var Base1 = (function () {
     function Base1() {
     }
@@ -101,6 +102,7 @@ var SubSub1 = (function (_super) {
     };
     return SubSub1;
 })(Sub1);
+// Case 2
 var Base2 = (function () {
     function Base2() {
     }
@@ -119,6 +121,7 @@ var SubE2 = (function (_super) {
     };
     return SubE2;
 })(Base2);
+// Case 3
 var Base3 = (function () {
     function Base3() {
     }
@@ -137,6 +140,7 @@ var SubE3 = (function (_super) {
     };
     return SubE3;
 })(Base3);
+// Case 4
 var Base4;
 (function (Base4) {
     var Sub4 = (function () {

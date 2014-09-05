@@ -41,4 +41,4 @@ var B;
 var a;
 var b;
 a = b;
-b = a;
+b = a; // error

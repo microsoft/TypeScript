@@ -1,0 +1,7 @@
+=== tests/cases/compiler/numericMethodName1.ts ===
+class C {
+>C : C
+
+  1 = 2;
+}
+

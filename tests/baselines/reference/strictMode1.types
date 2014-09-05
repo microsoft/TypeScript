@@ -1,0 +1,9 @@
+=== tests/cases/compiler/strictMode1.ts ===
+"use strict";
+class A {}
+>A : A
+
+class B extends A {}
+>B : B
+>A : A
+

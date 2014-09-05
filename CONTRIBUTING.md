@@ -32,7 +32,7 @@ To run all tests, invoke the runtests target using jake:
 
 `jake runtests`
 
-This will all tests; to run only a specific subset of tests, use:
+This run will all tests; to run only a specific subset of tests, use:
 
 `jake runtests tests=<regex>`
 

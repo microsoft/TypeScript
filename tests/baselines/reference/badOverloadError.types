@@ -1,0 +1,11 @@
+=== tests/cases/compiler/badOverloadError.ts ===
+function method() {
+>method : () => void
+
+    var dictionary = <{ [index: string]: string; }>{};
+>dictionary : { [x: string]: string; }
+><{ [index: string]: string; }>{} : { [x: string]: string; }
+>index : string
+>{} : { [x: string]: string; }
+}
+
