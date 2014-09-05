@@ -1359,9 +1359,17 @@ module ts {
     }
 
     enum SearchMeaning {
+        None = 0x0,
         Value = 0x1,
         Type = 0x2,
         Namespace = 0x4
+    }
+
+    enum BreakContinueSearchType {
+        None = 0x0,
+        Unlabeled = 0x1,
+        Labeled = 0x2,
+        All = Unlabeled | Labeled
     }
 
     // A cache of completion entries for keywords, these do not change between sessions
@@ -2318,49 +2326,45 @@ module ts {
                         }
                     }
                 }
+                
+                // These track whether we can own unlabeled break/continues.
+                var breakSearchType = BreakContinueSearchType.All;
+                var continueSearchType = BreakContinueSearchType.All;
 
-                // This switch tracks whether or not we're traversing into a construct that takes
-                // ownership over unlabelled 'break'/'continue' statements.
-                var onlyCheckLabelled = false;
-
-                forEachChild(loopNode.statement, function aggregateBreakContinues(node: Node) {
-                    // This tracks the status of the flag before diving into the next node.
-                    var lastOnlyCheckLabelled = onlyCheckLabelled;
+                (function aggregateBreakContinues(node: Node) {
+                    // Remember the statuses of the flags before diving into the next node.
+                    var prevBreakSearchType = breakSearchType;
+                    var prevContinueSearchType = continueSearchType;
 
                     switch (node.kind) {
                         case SyntaxKind.BreakStatement:
                         case SyntaxKind.ContinueStatement:
-                            // If the 'break'/'continue' statement has a label, it must be one of our tracked labels.
-                            if ((<BreakOrContinueStatement>node).label) {
-                                var labelName = (<BreakOrContinueStatement>node).label.text;
-                                if (isLabelledBy(loopNode, labelName)) {
-                                    pushKeywordIf(keywords, node.getFirstToken(), SyntaxKind.BreakKeyword, SyntaxKind.ContinueKeyword);
-                                }
-                            }
-                            // If not, we are free to add it if we haven't lost ownership of unlabeled break/continue statements.
-                            else if (!onlyCheckLabelled) {
+                            if (ownsBreakOrContinue(loopNode, <BreakOrContinueStatement>node, breakSearchType, continueSearchType)) {
                                 pushKeywordIf(keywords, node.getFirstToken(), SyntaxKind.BreakKeyword, SyntaxKind.ContinueKeyword);
                             }
                             break;
-
+                        
                         case SyntaxKind.ForStatement:
                         case SyntaxKind.ForInStatement:
                         case SyntaxKind.DoStatement:
                         case SyntaxKind.WhileStatement:
-                        case SyntaxKind.SwitchStatement:
-                            onlyCheckLabelled = true;
+                            continueSearchType = BreakContinueSearchType.Labeled;
                         // Fall through
-                        default:
-                            // Do not cross function boundaries.
-                            if (!isAnyFunction(node)) {
-                                forEachChild(node, aggregateBreakContinues);
-                            }
+                        case SyntaxKind.SwitchStatement:
+                            breakSearchType = BreakContinueSearchType.Labeled;
                     }
-                    // Restore the last state.
-                    onlyCheckLabelled = lastOnlyCheckLabelled;
-                });
 
-                return map(keywords, keywordToReferenceEntry);
+                    // Do not cross function boundaries.
+                    if (!isAnyFunction(node)) {
+                        forEachChild(node, aggregateBreakContinues);
+                    }
+
+                    // Restore the last state.
+                    breakSearchType = prevBreakSearchType;
+                    continueSearchType = prevContinueSearchType;
+                })(loopNode.statement);
+
+                return map(keywords, getReferenceEntryFromNode);
             }
 
             function getSwitchCaseDefaultOccurrences(switchStatement: SwitchStatement) {
@@ -2368,38 +2372,50 @@ module ts {
 
                 pushKeywordIf(keywords, switchStatement.getFirstToken(), SyntaxKind.SwitchKeyword);
 
-                // Go through each clause in the switch statement, collecting the clause keywords.
+                // Types of break statements we can grab on to.
+                var breakSearchType = BreakContinueSearchType.All;
+
+                // Go through each clause in the switch statement, collecting the case/default keywords.
                 forEach(switchStatement.clauses, clause => {
                     pushKeywordIf(keywords, clause.getFirstToken(), SyntaxKind.CaseKeyword, SyntaxKind.DefaultKeyword);
 
                     // For each clause, also recursively traverse the statements where we can find analogous breaks.
                     forEachChild(clause, function aggregateBreakKeywords(node: Node): void {
+                        // Back the old search value up.
+                        var oldBreakSearchType = breakSearchType;
+
                         switch (node.kind) {
                             case SyntaxKind.BreakStatement:
                                 // If the break statement has a label, it cannot be part of a switch block.
-                                if (!(<BreakOrContinueStatement>node).label) {
+                                if (ownsBreakOrContinue(switchStatement,
+                                                        <BreakOrContinueStatement>node,
+                                                        breakSearchType,
+                                                        /*continuesSearchType*/ BreakContinueSearchType.None)) {
                                     pushKeywordIf(keywords, node.getFirstToken(), SyntaxKind.BreakKeyword);
                                 }
-                            // Fall through
+                                break;
                             case SyntaxKind.ForStatement:
                             case SyntaxKind.ForInStatement:
                             case SyntaxKind.DoStatement:
                             case SyntaxKind.WhileStatement:
                             case SyntaxKind.SwitchStatement:
-                                return;
+                                breakSearchType = BreakContinueSearchType.Labeled;
                         }
 
                         // Do not cross function boundaries.
                         if (!isAnyFunction(node)) {
                             forEachChild(node, aggregateBreakKeywords);
                         }
+
+                        // Restore the last state.
+                        breakSearchType = oldBreakSearchType;
                     });
                 });
 
                 return map(keywords, getReferenceEntryFromNode);
             }
 
-            function getBreakOrContinueStatementOccurences(breakOrContinueStatement: BreakOrContinueStatement): ReferenceEntry[]{
+            function getBreakOrContinueStatementOccurences(breakOrContinueStatement: BreakOrContinueStatement): ReferenceEntry[] {
                 for (var owner = node.parent; owner; owner = owner.parent) {
                     switch (owner.kind) {
                         case SyntaxKind.ForStatement:
@@ -2413,8 +2429,8 @@ module ts {
                             }
                             break;
                         case SyntaxKind.SwitchStatement:
-                            // A switch statement can only be the owner of an unlabeled break statement.
-                            if (breakOrContinueStatement.kind === SyntaxKind.BreakStatement && !breakOrContinueStatement.label) {
+                            // A switch statement can only be the owner of an break statement.
+                            if (breakOrContinueStatement.kind === SyntaxKind.BreakStatement && (!breakOrContinueStatement.label || isLabelledBy(owner, breakOrContinueStatement.label.text))) {
                                 return getSwitchCaseDefaultOccurrences(<SwitchStatement>owner);
                             }
                             break;
@@ -2427,6 +2443,25 @@ module ts {
                 }
 
                 return undefined;
+            }
+
+            // Note: 'statement' must be a descendant of 'root'.
+            //       Reasonable logic for restricting traversal prior to arriving at the
+            //       'statement' node is beyond the scope of this function.
+            function ownsBreakOrContinue(root: Node,
+                                         statement: BreakOrContinueStatement,
+                                         breakSearchType: BreakContinueSearchType,
+                                         continueSearchType: BreakContinueSearchType): boolean {
+                var searchType = statement.kind === SyntaxKind.BreakStatement ?
+                                    breakSearchType :
+                                    continueSearchType;
+
+                if (statement.label) {
+                    return isLabelledBy(root, statement.label.text);
+                }
+                else {
+                    return !!(searchType & BreakContinueSearchType.Unlabeled);
+                }
             }
 
             // returns true if 'node' is defined and has a matching 'kind'.

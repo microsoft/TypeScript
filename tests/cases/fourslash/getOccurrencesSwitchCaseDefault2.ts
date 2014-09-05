@@ -10,7 +10,7 @@
 ////            [|cas/*3*/e|] 2:
 ////                [|b/*4*/reak|];
 ////            [|defaul/*5*/t|]:
-////                break foo;
+////                [|break|] foo;
 ////        }
 ////    case 0xBEEF:
 ////    default:
@@ -19,9 +19,18 @@
 ////}
 
 
+test.ranges().forEach(r => {
+    goTo.position(r.start);
+
+    test.ranges().forEach(range => {
+        verify.occurrencesAtPositionContains(range, false);
+    });
+});
+
+
 for (var i = 1; i <= test.markers().length; i++) {
     goTo.marker("" + i);
-    verify.occurrencesAtPositionCount(5);
+    verify.occurrencesAtPositionCount(6);
 
     test.ranges().forEach(range => {
         verify.occurrencesAtPositionContains(range, false);
