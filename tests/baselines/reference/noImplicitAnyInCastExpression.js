@@ -1,20 +1,26 @@
 //// [noImplicitAnyInCastExpression.ts]
-interface IBar {
-    b: number;
-}
+
+// verify no noImplictAny errors reported with cast expression
+
 interface IFoo {
-    p: IBar[];
+    a: number;
+    b: string;
 }
 
-function foo(a: any) { }
+// Expr type not assignable to target type
+(<IFoo>{ a: null });
 
-foo(<IFoo> {
-    p: null,
-});
+// Expr type assignanle to target type
+(<IFoo>{ a: 2, b: undefined });
+
+// Niether types is assignable to each other
+(<IFoo>{ c: null });
 
 //// [noImplicitAnyInCastExpression.js]
-function foo(a) {
-}
-foo({
-    p: null
-});
+// verify no noImplictAny errors reported with cast expression
+// Expr type not assignable to target type
+{ a: null };
+// Expr type assignanle to target type
+{ a: 2, b: undefined };
+// Niether types is assignable to each other
+{ c: null };

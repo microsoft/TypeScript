@@ -1,4 +1,5 @@
 ==== tests/cases/compiler/contextualTyping41.ts (1 errors) ====
     var foo = <{():number; (i:number):number; }> (function(){return "err";});
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Neither type '{ (): number; (i: number): number; }' nor type '() => string' is assignable to the other.
+!!! Neither type '{ (): number; (i: number): number; }' nor type '() => string' is assignable to the other:
+!!!   Type 'number' is not assignable to type 'string'.

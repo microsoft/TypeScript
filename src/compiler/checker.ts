@@ -3132,7 +3132,7 @@ module ts {
             return (type.flags & TypeFlags.Anonymous) && type.symbol && (type.symbol.flags & SymbolFlags.ObjectLiteral) ? true : false;
         }
 
-        function getWidenedTypeOfObjectLiteral(type: Type, supressNoImplictAnyErrors?: boolean): Type {
+        function getWidenedTypeOfObjectLiteral(type: Type, supressNoImplicitAnyErrors?: boolean): Type {
             var properties = getPropertiesOfType(type);
             if (properties.length) {
                 var widenedTypes: Type[] = [];
@@ -3143,7 +3143,7 @@ module ts {
                     if (propType !== widenedType) {
                         propTypeWasWidened = true;
 
-                        if (!supressNoImplictAnyErrors && program.getCompilerOptions().noImplicitAny && getInnermostTypeOfNestedArrayTypes(widenedType) === anyType) {
+                        if (!supressNoImplicitAnyErrors && program.getCompilerOptions().noImplicitAny && getInnermostTypeOfNestedArrayTypes(widenedType) === anyType) {
                             error(p.valueDeclaration, Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type, p.name, typeToString(widenedType));
                         }
                     }
@@ -3183,9 +3183,9 @@ module ts {
             return type;
         }
 
-        function getWidenedTypeOfArrayLiteral(type: Type, supressNoImplictAnyErrors?: boolean): Type {
+        function getWidenedTypeOfArrayLiteral(type: Type, supressNoImplicitAnyErrors?: boolean): Type {
             var elementType = (<TypeReference>type).typeArguments[0];
-            var widenedType = getWidenedType(elementType, supressNoImplictAnyErrors);
+            var widenedType = getWidenedType(elementType, supressNoImplicitAnyErrors);
 
             type = elementType !== widenedType ? createArrayType(widenedType) : type;
 
@@ -3193,15 +3193,15 @@ module ts {
         }
 
         /* If we are widening on a literal, then we may need to the 'node' parameter for reporting purposes */
-        function getWidenedType(type: Type, supressNoImplictAnyErrors?: boolean): Type {
+        function getWidenedType(type: Type, supressNoImplicitAnyErrors?: boolean): Type {
             if (type.flags & (TypeFlags.Undefined | TypeFlags.Null)) {
                 return anyType;
             }
             if (isTypeOfObjectLiteral(type)) {
-                return getWidenedTypeOfObjectLiteral(type, supressNoImplictAnyErrors);
+                return getWidenedTypeOfObjectLiteral(type, supressNoImplicitAnyErrors);
             }
             if (isArrayType(type)) {
-                return getWidenedTypeOfArrayLiteral(type, supressNoImplictAnyErrors);
+                return getWidenedTypeOfArrayLiteral(type, supressNoImplicitAnyErrors);
             }
             return type;
         }
@@ -4330,10 +4330,7 @@ module ts {
             var targetType = getTypeFromTypeNode(node.type);
             if (fullTypeCheck && targetType !== unknownType) {
                 if (!isTypeAssignableTo(exprType, targetType)) {
-                    var widenedType = getWidenedType(exprType, /*supressNoImplictAnyErrors*/ true);
-                    if (!isTypeAssignableTo(targetType, widenedType)) {
-                        checkTypeAssignableTo(targetType, widenedType, node, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other_Colon, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
-                    }
+                    checkTypeAssignableTo(targetType, getWidenedType(exprType, /*supressNoImplicitAnyErrors*/ true), node, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other_Colon, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
                 }
             }
             return targetType;

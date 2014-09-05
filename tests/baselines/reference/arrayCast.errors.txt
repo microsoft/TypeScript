@@ -4,7 +4,8 @@
     <{ id: number; }[]>[{ foo: "s" }];
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! Neither type '{ id: number; }[]' nor type '{ foo: string; }[]' is assignable to the other:
-!!!   Type '{ id: number; }' is not assignable to type '{ foo: string; }'.
+!!!   Type '{ id: number; }' is not assignable to type '{ foo: string; }':
+!!!     Property 'foo' is missing in type '{ id: number; }'.
     
     // Should succeed, as the {} element causes the type of the array to be {}[]
     <{ id: number; }[]>[{ foo: "s" }, {}]; 

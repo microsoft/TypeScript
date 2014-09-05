@@ -32,7 +32,10 @@
             worksToo():R {
                 return <R>({ oneI: this });
                        ~~~~~~~~~~~~~~~~~~~
-!!! Neither type 'R' nor type '{ oneI: C; }' is assignable to the other.
+!!! Neither type 'R' nor type '{ oneI: C; }' is assignable to the other:
+!!!   Types of property 'oneI' are incompatible:
+!!!     Type 'I' is not assignable to type 'C':
+!!!       Property 'x' is missing in type 'I'.
             }
         }
     }
