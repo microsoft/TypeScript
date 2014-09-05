@@ -3079,7 +3079,7 @@ module ts {
                 }
             }
 
-            function tryResolveScriptReference(sourceFile: SourceFile, reference: FileReference) {
+            function resolveScriptReference(sourceFile: SourceFile, reference: FileReference) {
                 var referenceFileName = normalizePath(combinePaths(getDirectoryPath(sourceFile.filename), reference.filename));
                 return program.getSourceFile(referenceFileName);
             }
@@ -3109,10 +3109,10 @@ module ts {
                 if (!compilerOptions.noResolve) {
                     var addedGlobalFileReference = false;
                     forEach(root.referencedFiles, fileReference => {
-                        var referencedFile = tryResolveScriptReference(root, fileReference);
+                        var referencedFile = resolveScriptReference(root, fileReference);
 
                         // All the references that are not going to be part of same file
-                        if (referencedFile && (referencedFile.flags & NodeFlags.DeclarationFile) || // This is a declare file reference
+                        if ((referencedFile.flags & NodeFlags.DeclarationFile) || // This is a declare file reference
                             shouldEmitToOwnFile(referencedFile) || // This is referenced file is emitting its own js file
                             !addedGlobalFileReference) { // Or the global out file corresponding to this reference was not added
 
@@ -3134,10 +3134,10 @@ module ts {
                         // Check what references need to be added
                         if (!compilerOptions.noResolve) {
                             forEach(sourceFile.referencedFiles, fileReference => {
-                                var referencedFile = tryResolveScriptReference(sourceFile, fileReference);
+                                var referencedFile = resolveScriptReference(sourceFile, fileReference);
 
                                 // If the reference file is declaration file or external module emit that reference
-                                if (referencedFile && isExternalModuleOrDeclarationFile(referencedFile) &&
+                                if (isExternalModuleOrDeclarationFile(referencedFile) &&
                                     !contains(emittedReferencedFiles, referencedFile)) { // If the file refernece was not already emitted
 
                                     writeReferencePath(referencedFile);
