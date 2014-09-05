@@ -7181,6 +7181,11 @@ module ts {
             return target !== unknownSymbol && ((target.flags & SymbolFlags.Value) !== 0);
         }
 
+        function hasSemanticErrors() {
+            // Return true if there is any semantic error in a file or globally
+            return (getDiagnostics().length > 0) || (getGlobalDiagnostics().length > 0);
+        }
+
         function shouldEmitDeclarations() {
             // If the declaration emit and there are no errors being reported in program or by checker
             // declarations can be emitted
@@ -7258,6 +7263,7 @@ module ts {
                 getNodeCheckFlags: getNodeCheckFlags,
                 getEnumMemberValue: getEnumMemberValue,
                 isTopLevelValueImportedViaEntityName: isTopLevelValueImportedViaEntityName,
+                hasSemanticErrors: hasSemanticErrors,
                 shouldEmitDeclarations: shouldEmitDeclarations,
                 isDeclarationVisible: isDeclarationVisible,
                 isImplementationOfOverload: isImplementationOfOverload,

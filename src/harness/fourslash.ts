@@ -458,7 +458,7 @@ module FourSlash {
             }
         }
 
-        public verifyEmitOutput(state: ts.EmitOutputResult, filename?: string) {
+        public verifyEmitOutput(state: ts.EmitReturnStatus, filename?: string) {
             if (this.enableDeclaration) {
                 this.languageServiceShimHost.setCompilationSettings({ generateDeclarationFiles: true });
             }
@@ -474,8 +474,8 @@ module FourSlash {
 
             var emit = this.languageService.getEmitOutput(this.activeFile.fileName);
 
-            if (emit.emitOutputResult !== state) {
-                throw new Error("Expected emitOutputResult '" + state + "', but actual emitOutputResult '" + emit.emitOutputResult + "'");
+            if (emit.emitOutputStatus !== state) {
+                throw new Error("Expected emitOutputResult '" + state + "', but actual emitOutputResult '" + emit.emitOutputStatus + "'");
             }
 
             var passed = true;

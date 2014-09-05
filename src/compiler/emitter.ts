@@ -48,8 +48,8 @@ module ts {
         }
 
         function getOwnEmitOutputFilePath(sourceFile: SourceFile, extension: string) {
-            if (program.getCompilerOptions().outDir) {
-                var emitOutputFilePathWithoutExtension = getModuleNameFromFilename(getSourceFilePathInNewDir(program.getCompilerOptions().outDir, sourceFile));
+            if (compilerOptions.outDir) {
+                var emitOutputFilePathWithoutExtension = getModuleNameFromFilename(getSourceFilePathInNewDir(compilerOptions.outDir, sourceFile));
             }
             else {
                 var emitOutputFilePathWithoutExtension = getModuleNameFromFilename(sourceFile.filename);
@@ -3183,7 +3183,27 @@ module ts {
         diagnostics.sort(compareDiagnostics);
         diagnostics = deduplicateSortedDiagnostics(diagnostics);
 
+        var returnCode = EmitReturnStatus.Succeeded;
+
+        // Check if there is any diagnostic in an error category; if so, there is an emitter error
+        var hasEmitterError = forEach(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error);
+
+        if (resolver.hasSemanticErrors() && !compilerOptions.declaration) {
+            // There is an semantic errror when output javascript file
+            // Output JS file with semantic error
+            returnCode = EmitReturnStatus.JSGeneratedWithSemanticErrors;
+        }
+        else if (resolver.hasSemanticErrors() && compilerOptions.declaration) {
+            // There is an semantic errror when output javascript and declaration file
+            // Output JS file with semantic error, not output declaration file
+            returnCode = EmitReturnStatus.DeclarationGenerationSkipped;
+        }
+        else if (hasEmitterError) {
+            returnCode = EmitReturnStatus.EmitErrorsEncountered;
+        }
+
         return {
+            emitResultStatus: returnCode,
             errors: diagnostics,
             sourceMaps: sourceMapDataList
         };

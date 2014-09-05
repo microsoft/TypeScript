@@ -663,16 +663,9 @@ module ts {
         docComment: string;
     }
 
-    export enum EmitOutputResult {
-        Succeeded,
-        FailedBecauseOfSyntaxErrors,
-        FailedBecauseOfCompilerOptionsErrors,
-        FailedToGenerateDeclarationsBecauseOfSemanticErrors
-    }
-
     export interface EmitOutput {
         outputFiles: OutputFile[];
-        emitOutputResult: EmitOutputResult;
+        emitOutputStatus: EmitReturnStatus;
     }
 
     export enum OutputFileType {
@@ -2846,56 +2839,43 @@ module ts {
         function getEmitOutput(filename: string): EmitOutput {
             synchronizeHostData();
             filename = TypeScript.switchToForwardSlashes(filename);
-            var sourceFile = getSourceFile(filename);
+            var sourceFile = program.getSourceFile(filename);
             var compilerOptions = program.getCompilerOptions();
-            var emitToSingleFile = ts.shouldEmitToOwnFile(program.getSourceFile(filename), compilerOptions);
+            var emitToSingleFile = ts.shouldEmitToOwnFile(sourceFile, compilerOptions);
             var emitDeclaration = compilerOptions.declaration;
-            var emitResult: EmitOutput = {
+            var emitOutput: EmitOutput = {
                 outputFiles: [],
-                emitOutputResult: undefined,
+                emitOutputStatus: undefined,
             };
 
             // Initialize writer for CompilerHost.writeFile
             writer = function (fileName: string, data: string, writeByteOrderMark: boolean) {
-                var outputFile: OutputFile = {
+                emitOutput.outputFiles.push({
                     name: fileName,
                     writeByteOrderMark: writeByteOrderMark,
                     text: data
-                }
-                emitResult.outputFiles.push(outputFile);
+                });
             }
 
             var syntacticDiagnostics = emitToSingleFile
                 ? program.getDiagnostics(sourceFile)
                 : program.getDiagnostics();
-            program.getGlobalDiagnostics();
+            var globalSyntacticDiagnostics = program.getGlobalDiagnostics();
 
             // If there is any syntactic error, terminate the process
             if (containErrors(syntacticDiagnostics)) {
-                emitResult.emitOutputResult = EmitOutputResult.FailedBecauseOfSyntaxErrors;
-                return emitResult;
+                emitOutput.emitOutputStatus = EmitReturnStatus.AllOutputGenerationSkipped;
+                return emitOutput;
             }
 
             // Perform semantic and force a type check before emit to ensure that all symbols are updated
-            var semanticDiagnostics = emitToSingleFile
-                ? getFullTypeCheckChecker().getDiagnostics(getSourceFile(filename).getSourceFile())
-                : getFullTypeCheckChecker().getDiagnostics();
-            getFullTypeCheckChecker().getGlobalDiagnostics();
-            var emitOutput = getFullTypeCheckChecker().emitFiles();
+            // EmitFiles will report if there is an error from TypeChecker and Emitter
+            var emitFilesResult = getFullTypeCheckChecker().emitFiles();
+            emitOutput.emitOutputStatus = emitFilesResult.emitResultStatus;
 
-            if (emitDeclaration && containErrors(semanticDiagnostics)) {
-                emitResult.emitOutputResult = EmitOutputResult.FailedToGenerateDeclarationsBecauseOfSemanticErrors;
-            }
-            else if (emitDeclaration && containErrors(emitOutput.errors)) {
-                emitResult.emitOutputResult = EmitOutputResult.FailedToGenerateDeclarationsBecauseOfSemanticErrors;
-            }
-            else {
-                emitResult.emitOutputResult = EmitOutputResult.Succeeded;
-            }
-
-            // Reset writer back to underfined to make sure that we produce an error message if CompilerHost.writeFile method is called when we are not in an emitting stage
+            // Reset writer back to underfined to make sure that we produce an error message if CompilerHost.writeFile method is called when we are not in getEmitOutput
             this.writer = undefined;
-            return emitResult;
+            return emitOutput;
         }
 
         /// Syntactic features
