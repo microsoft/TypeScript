@@ -434,6 +434,23 @@ module ts {
         }
     }
 
+    export function getSuperContainer(node: Node): Node {
+        while (true) {
+            node = node.parent;
+            if (!node) {
+                return node;
+            }
+            switch (node.kind) {
+                case SyntaxKind.Property:
+                case SyntaxKind.Method:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    return node;
+            }
+        }
+    }
+
     export function hasRestParameters(s: SignatureDeclaration): boolean {
         return s.parameters.length > 0 && (s.parameters[s.parameters.length - 1].flags & NodeFlags.Rest) !== 0;
     }
