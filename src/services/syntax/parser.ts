@@ -544,18 +544,29 @@ module TypeScript.Parser {
             }
         }
 
-        function replaceTokenInParent(oldToken: ISyntaxToken, newToken: ISyntaxToken): void {
+        function replaceTokenInParent(node: ISyntaxNode, oldToken: ISyntaxToken, newToken: ISyntaxToken): void {
             // oldToken may be parented by a node or a list.
             replaceTokenInParentWorker(oldToken, newToken);
 
             var parent = oldToken.parent;
             newToken.parent = parent;
 
-            // Parent must be a list or a node.  All of those have a 'data' element.
-            Debug.assert(isNode(parent) || isList(parent) || isSeparatedList(parent));
-            var dataElement = <{ data: number }><any>parent;
-            if (dataElement.data) {
-                dataElement.data &= SyntaxConstants.NodeParsedInStrictModeMask
+            // Walk upwards to our outermost node, clearing hte cached 'data' in it.  This will 
+            // make sure that the fullWidths and incrementally unusable bits are computed correctly
+            // when next requested.
+            while (true) {
+                // Parent must be a list or a node.  All of those have a 'data' element.
+                Debug.assert(isNode(parent) || isList(parent) || isSeparatedList(parent));
+                var dataElement = <{ data: number }><any>parent;
+                if (dataElement.data) {
+                    dataElement.data &= SyntaxConstants.NodeParsedInStrictModeMask
+                }
+
+                if (parent === node) {
+                    break;
+                }
+
+                parent = parent.parent;
             }
         }
 
@@ -602,7 +613,7 @@ module TypeScript.Parser {
             var oldToken = lastToken(node);
             var newToken = addSkippedTokenAfterToken(oldToken, skippedToken);
 
-            replaceTokenInParent(oldToken, newToken);
+            replaceTokenInParent(node, oldToken, newToken);
             return node;
         }
 
@@ -611,7 +622,7 @@ module TypeScript.Parser {
                 var oldToken = firstToken(node);
                 var newToken = addSkippedTokensBeforeToken(oldToken, skippedTokens);
 
-                replaceTokenInParent(oldToken, newToken);
+                replaceTokenInParent(node, oldToken, newToken);
             }
 
             return node;
