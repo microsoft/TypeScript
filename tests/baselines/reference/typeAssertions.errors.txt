@@ -33,20 +33,22 @@
     someBase = <SomeBase>someBase;
     someBase = <SomeBase>someOther; // Error
                ~~~~~~~~~~~~~~~~~~~
-!!! Neither type 'SomeBase' nor type 'SomeOther' is assignable to the other.
+!!! Neither type 'SomeOther' nor type 'SomeBase' is assignable to the other:
+!!!   Property 'p' is missing in type 'SomeOther'.
     
     someDerived = <SomeDerived>someDerived;
     someDerived = <SomeDerived>someBase;
     someDerived = <SomeDerived>someOther; // Error
                   ~~~~~~~~~~~~~~~~~~~~~~
-!!! Neither type 'SomeDerived' nor type 'SomeOther' is assignable to the other.
+!!! Neither type 'SomeOther' nor type 'SomeDerived' is assignable to the other:
+!!!   Property 'x' is missing in type 'SomeOther'.
     
     someOther = <SomeOther>someDerived; // Error
                 ~~~~~~~~~~~~~~~~~~~~~~
-!!! Neither type 'SomeOther' nor type 'SomeDerived' is assignable to the other.
+!!! Neither type 'SomeDerived' nor type 'SomeOther' is assignable to the other.
     someOther = <SomeOther>someBase; // Error
                 ~~~~~~~~~~~~~~~~~~~
-!!! Neither type 'SomeOther' nor type 'SomeBase' is assignable to the other.
+!!! Neither type 'SomeBase' nor type 'SomeOther' is assignable to the other.
     someOther = <SomeOther>someOther;
     
     
