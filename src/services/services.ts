@@ -254,7 +254,8 @@ module ts {
     }
 
     export interface BreakOrContinueStatement {
-        breakOrContinueKeyword?: Node;
+        breakKeyword?: Node;
+        continueKeyword?: Node;
     }
 
     export interface DoStatement extends HasOpenParenAndCloseParen {
@@ -3704,40 +3705,76 @@ module ts {
             getSignatureConstructor: () => SignatureObject,
         };
 
-        var tokenNames: string[] = [];
-
-        function getDefaultPropertyNameForSyntaxKind(kind: SyntaxKind): string {
-            // SyntaxKind type has some marker entries at the end, in reverse mapping these markers overwrite the actual values
-            // since we don't want to get FirstPunctuation instead of OpenBraceToken we need to partially override the generated reverse mapping.
-            switch (kind) {
-                case SyntaxKind.EqualsToken:
-                    return "equalsToken";
-                case SyntaxKind.CaretEqualsToken:
-                    return "caretEqualsToken";
-                case SyntaxKind.BreakKeyword:
-                    return "breakKeyword";
-                case SyntaxKind.WithKeyword:
-                    return "withKeyword";
-                case SyntaxKind.StringKeyword:
-                    return "stringKeyword";
-                case SyntaxKind.ImplementsKeyword:
-                    return "implementsKeyword";
-                case SyntaxKind.YieldKeyword:
-                    return "yieldKeyword";
-                case SyntaxKind.OpenBraceToken:
-                    return "openBraceToken";
-                default:
-                    var name = SyntaxKind[kind];
-                    return name.charAt(0).toLowerCase() + name.substring(1);
-            }
-        }
-
         parserHooks = {
-            onParseToken(kind: SyntaxKind, parent: Node, isMissing: boolean, startPos: number, endPos: number, propertyName?: string): void {
-                var kind = isMissing ? SyntaxKind.Missing : kind;
-                var node = createNode(kind, startPos, endPos, 0);
-                var name = propertyName || tokenNames[kind] || (tokenNames[kind] = getDefaultPropertyNameForSyntaxKind(kind));
-                (<any>parent)[name] = node;
+            onParseToken(tokenKind: SyntaxKind, parent: Node, startPos: number, endPos: number, propertyKind: SyntaxKind): void {
+                var node = createNode(tokenKind, startPos, endPos, 0);
+                // perf tests showed that switch + setting explicit property has a better timings than using indexer to set property on object
+                switch (propertyKind) {
+                    case SyntaxKind.OpenBraceToken: (<any>parent).openBraceToken = node; break;
+                    case SyntaxKind.CloseBraceToken: (<any>parent).closeBraceToken = node; break;
+                    case SyntaxKind.OpenParenToken: (<any>parent).openParenToken = node; break;
+                    case SyntaxKind.CloseParenToken: (<any>parent).closeParenToken = node; break;
+                    case SyntaxKind.OpenBracketToken: (<any>parent).openBracketToken = node; break;
+                    case SyntaxKind.CloseBracketToken: (<any>parent).closeBracketToken = node; break;
+                    case SyntaxKind.DotToken: (<any>parent).dotToken = node; break;
+                    case SyntaxKind.DotDotDotToken: (<any>parent).dotDotDotToken = node; break;
+                    case SyntaxKind.SemicolonToken: (<any>parent).semicolonToken = node; break;
+                    case SyntaxKind.CommaToken: (<any>parent).commaToken = node; break;
+                    case SyntaxKind.LessThanToken: (<any>parent).lessThanToken = node; break;
+                    case SyntaxKind.GreaterThanToken: (<any>parent).greaterThanToken = node; break;
+                    case SyntaxKind.GreaterThanEqualsToken: (<any>parent).greaterThanEqualsToken = node; break;
+                    case SyntaxKind.EqualsGreaterThanToken: (<any>parent).equalsGreaterThanToken = node; break;
+                    case SyntaxKind.QuestionToken: (<any>parent).questionToken = node; break;
+                    case SyntaxKind.ColonToken: (<any>parent).colonToken = node; break;
+                    case SyntaxKind.EqualsToken: (<any>parent).equalsToken = node; break;
+                    case SyntaxKind.BreakKeyword: (<any>parent).breakKeyword = node; break;
+                    case SyntaxKind.CaseKeyword: (<any>parent).caseKeyword = node; break;
+                    case SyntaxKind.CatchKeyword: (<any>parent).catchKeyword = node; break;
+                    case SyntaxKind.ClassKeyword: (<any>parent).classKeyword = node; break;
+                    case SyntaxKind.ContinueKeyword: (<any>parent).continueKeyword = node; break;
+                    case SyntaxKind.DebuggerKeyword: (<any>parent).debuggerKeyword = node; break;
+                    case SyntaxKind.DefaultKeyword: (<any>parent).defaultKeyword = node; break;
+                    case SyntaxKind.DeleteKeyword: (<any>parent).deleteKeyword = node; break;
+                    case SyntaxKind.DoKeyword: (<any>parent).doKeyword = node; break;
+                    case SyntaxKind.ElseKeyword: (<any>parent).elseKeyword = node; break;
+                    case SyntaxKind.EnumKeyword: (<any>parent).enumKeyword = node; break;
+                    case SyntaxKind.ExportKeyword: (<any>parent).exportKeyword = node; break;
+                    case SyntaxKind.ExtendsKeyword: (<any>parent).extendsKeyword = node; break;
+                    case SyntaxKind.FalseKeyword: (<any>parent).falseKeyword = node; break;
+                    case SyntaxKind.FinallyKeyword: (<any>parent).finallyKeyword = node; break;
+                    case SyntaxKind.ForKeyword: (<any>parent).forKeyword = node; break;
+                    case SyntaxKind.FunctionKeyword: (<any>parent).functionKeyword = node; break;
+                    case SyntaxKind.IfKeyword: (<any>parent).ifKeyword = node; break;
+                    case SyntaxKind.ImportKeyword: (<any>parent).importKeyword = node; break;
+                    case SyntaxKind.InKeyword: (<any>parent).inKeyword = node; break;
+                    case SyntaxKind.NewKeyword: (<any>parent).newKeyword = node; break;
+                    case SyntaxKind.NullKeyword: (<any>parent).nullKeyword = node; break;
+                    case SyntaxKind.ReturnKeyword: (<any>parent).returnKeyword = node; break;
+                    case SyntaxKind.SuperKeyword: (<any>parent).superKeyword = node; break;
+                    case SyntaxKind.SwitchKeyword: (<any>parent).switchKeyword = node; break;
+                    case SyntaxKind.ThrowKeyword: (<any>parent).throwKeyword = node; break;
+                    case SyntaxKind.TrueKeyword: (<any>parent).trueKeyword = node; break;
+                    case SyntaxKind.TryKeyword: (<any>parent).tryKeyword = node; break;
+                    case SyntaxKind.TypeOfKeyword: (<any>parent).typeOfKeyword = node; break;
+                    case SyntaxKind.VarKeyword: (<any>parent).varKeyword = node; break;
+                    case SyntaxKind.WhileKeyword: (<any>parent).whileKeyword = node; break;
+                    case SyntaxKind.WithKeyword: (<any>parent).withKeyword = node; break;
+                    case SyntaxKind.ImplementsKeyword: (<any>parent).implementsKeyword = node; break;
+                    case SyntaxKind.InterfaceKeyword: (<any>parent).interfaceKeyword = node; break;
+                    case SyntaxKind.PrivateKeyword: (<any>parent).privateKeyword = node; break;
+                    case SyntaxKind.PublicKeyword: (<any>parent).publicKeyword = node; break;
+                    case SyntaxKind.StaticKeyword: (<any>parent).staticKeyword = node; break;
+                    case SyntaxKind.ConstructorKeyword: (<any>parent).constructorKeyword = node; break;
+                    case SyntaxKind.DeclareKeyword: (<any>parent).declareKeyword = node; break;
+                    case SyntaxKind.GetKeyword: (<any>parent).getKeyword = node; break;
+                    case SyntaxKind.ModuleKeyword: (<any>parent).moduleKeyword = node; break;
+                    case SyntaxKind.RequireKeyword: (<any>parent).requireKeyword = node; break;
+                    case SyntaxKind.SetKeyword: (<any>parent).setKeyword = node; break;
+                    case SyntaxKind.OperatorToken: (<any>parent).operatorToken = node; break;
+                    case SyntaxKind.FirstSemicolonToken: (<any>parent).firstSemicolonToken = node; break;
+                    case SyntaxKind.SecondSemicolonToken: (<any>parent).secondSemicolonToken = node; break;
+                    default: Debug.fail(SyntaxKind[propertyKind]);
+                }
             },
             onParseComma<T>(parent: NodeArray<T>, startPos: number, endPos: number): void {
                 var commas = parent.commaTokens || (parent.commaTokens = []);

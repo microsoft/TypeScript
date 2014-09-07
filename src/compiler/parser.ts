@@ -774,9 +774,9 @@ module ts {
             return token === SyntaxKind.Identifier || (isInStrictMode ? token > SyntaxKind.LastFutureReservedWord : token > SyntaxKind.LastReservedWord);
         }
 
-        function onParseToken(tokenKind: SyntaxKind, parent: Node, isMissing: boolean, startPos: number, endPos: number, propertyName?: string) {
+        function onParseToken(tokenKind: SyntaxKind, parent: Node, startPos: number, endPos: number, propertyKind?: SyntaxKind) {
             if (parserHooks) {
-                parserHooks.onParseToken(tokenKind, parent, isMissing, startPos, endPos, propertyName);
+                parserHooks.onParseToken(tokenKind, parent, startPos, endPos, propertyKind || tokenKind);
             }
         }
 
@@ -786,28 +786,29 @@ module ts {
             }
         }
 
-        function parseExpected(t: SyntaxKind, parent: Node, propertyName?: string): boolean {
+        function parseExpected(t: SyntaxKind, parent: Node, propertyKind?: SyntaxKind): boolean {
             if (token === t) {
-                raiseOnParseTokenAndMoveToNextToken(t, parent, propertyName);
+                raiseOnParseTokenAndMoveToNextToken(t, parent, propertyKind);
                 return true;
             }
             error(Diagnostics._0_expected, tokenToString(t));
             var currentStartPos = scanner.getStartPos();
-            onParseToken(t, parent, /*isMissing*/ true, currentStartPos, currentStartPos, propertyName);
+            // for missing tokens fullWidth === 0
+            onParseToken(t, parent, currentStartPos, currentStartPos, propertyKind);
             return false;
         }
 
-        function raiseOnParseTokenAndMoveToNextToken(t: SyntaxKind, parent: Node, propertyName?: string): void {
+        function raiseOnParseTokenAndMoveToNextToken(t: SyntaxKind, parent: Node, propertyKind?: SyntaxKind): void {
             var startPos = scanner.getStartPos();
             nextToken();
             var endPos = scanner.getStartPos();
 
-            onParseToken(t, parent, /*isMissing*/ false, startPos, endPos, propertyName);
+            onParseToken(t, parent, startPos, endPos, propertyKind);
         }
 
-        function parseOptional(t: SyntaxKind, parent: Node, propertyName?: string): boolean {
+        function parseOptional(t: SyntaxKind, parent: Node, propertyKind?: SyntaxKind): boolean {
             if (token === t) {
-                raiseOnParseTokenAndMoveToNextToken(t, parent, propertyName);
+                raiseOnParseTokenAndMoveToNextToken(t, parent, propertyKind);
                 return true;
             }
             return false;
@@ -828,11 +829,6 @@ module ts {
                 if (token === SyntaxKind.SemicolonToken) {
                     // consume the semicolon if it was explicitly provided.
                     raiseOnParseTokenAndMoveToNextToken(SyntaxKind.SemicolonToken, parent);
-                }
-                else {
-                    var startPos = scanner.getStartPos();
-                    // for ASI report semicolon as non-missing token with startPos === endPos
-                    onParseToken(SyntaxKind.SemicolonToken, parent, /*isMissing*/ false, startPos, startPos);
                 }
             }
             else {
@@ -1638,7 +1634,7 @@ module ts {
             var expr = parseAssignmentExpression(noIn);
             while (token === SyntaxKind.CommaToken) {
                 var node = <BinaryExpression>createNode(SyntaxKind.BinaryExpression);
-                raiseOnParseTokenAndMoveToNextToken(SyntaxKind.CommaToken, node, "operatorToken");
+                raiseOnParseTokenAndMoveToNextToken(SyntaxKind.CommaToken, node, SyntaxKind.OperatorToken);
                 expr = finishBinaryExpression(node, expr, SyntaxKind.CommaToken, parseAssignmentExpression(noIn));
             }
             return expr;
@@ -1709,7 +1705,7 @@ module ts {
                 var binaryExpression = <BinaryExpression>createNode(SyntaxKind.BinaryExpression);
                 var operator = token;
 
-                raiseOnParseTokenAndMoveToNextToken(operator, binaryExpression, "operatorToken");
+                raiseOnParseTokenAndMoveToNextToken(operator, binaryExpression, SyntaxKind.OperatorToken);
 
                 return finishBinaryExpression(binaryExpression, expr, operator, parseAssignmentExpression(noIn));
             }
@@ -1956,7 +1952,7 @@ module ts {
                     var operator = token;
                     var node = <BinaryExpression>createNode(SyntaxKind.BinaryExpression);
 
-                    raiseOnParseTokenAndMoveToNextToken(token, node, "operatorToken")
+                    raiseOnParseTokenAndMoveToNextToken(token, node, SyntaxKind.OperatorToken)
 
                     expr = finishBinaryExpression(node, expr, operator, parseBinaryOperators(parseUnaryExpression(), precedence, noIn));
                     continue;
@@ -2027,7 +2023,7 @@ module ts {
                     var operator = token;
                     var unaryExpression = <UnaryExpression>createNode(SyntaxKind.PrefixOperator, pos);
 
-                    raiseOnParseTokenAndMoveToNextToken(operator, unaryExpression, "operatorToken");
+                    raiseOnParseTokenAndMoveToNextToken(operator, unaryExpression, SyntaxKind.OperatorToken);
 
                     var operand = parseUnaryExpression();
                     if (isInStrictMode) {
@@ -2073,7 +2069,7 @@ module ts {
                 var operator = token;
                 var unaryExpression = <UnaryExpression>createNode(SyntaxKind.PostfixOperator, expr.pos);
 
-                raiseOnParseTokenAndMoveToNextToken(operator, unaryExpression, "operatorToken");
+                raiseOnParseTokenAndMoveToNextToken(operator, unaryExpression, SyntaxKind.OperatorToken);
 
                 expr = finishUnaryExpression(unaryExpression, operator, expr);
             }
@@ -2490,11 +2486,11 @@ module ts {
             else {
                 if (declarations) node.declarations = declarations;
                 if (varOrInit) node.initializer = varOrInit;
-                parseExpected(SyntaxKind.SemicolonToken, node, "firstSemicolonToken");
+                parseExpected(SyntaxKind.SemicolonToken, node, SyntaxKind.FirstSemicolonToken);
                 if (token !== SyntaxKind.SemicolonToken && token !== SyntaxKind.CloseParenToken) {
                     node.condition = parseExpression();
                 }
-                parseExpected(SyntaxKind.SemicolonToken, node, "secondSemicolonToken");
+                parseExpected(SyntaxKind.SemicolonToken, node, SyntaxKind.SecondSemicolonToken);
                 if (token !== SyntaxKind.CloseParenToken) {
                     node.iterator = parseExpression();
                 }
@@ -2514,7 +2510,7 @@ module ts {
             var errorCountBeforeStatement = file.syntacticErrors.length;
             var keywordStart = scanner.getTokenPos();
             var keywordLength = scanner.getTextPos() - keywordStart;
-            parseExpected(kind === SyntaxKind.BreakStatement ? SyntaxKind.BreakKeyword : SyntaxKind.ContinueKeyword, node, "breakOrContinueKeyword");
+            parseExpected(kind === SyntaxKind.BreakStatement ? SyntaxKind.BreakKeyword : SyntaxKind.ContinueKeyword, node);
             if (!canParseSemicolon()) node.label = parseIdentifier();
             parseSemicolon(node);
             finishNode(node);
@@ -3030,10 +3026,10 @@ module ts {
             var accessor = parseMemberAccessorDeclaration(kind, pos, flags);
 
             if (kind === SyntaxKind.GetAccessor) {
-                onParseToken(SyntaxKind.GetKeyword, accessor, /*isMissing*/ false, startPos, endPos);
+                onParseToken(SyntaxKind.GetKeyword, accessor, startPos, endPos);
             }
             else {
-                onParseToken(SyntaxKind.SetKeyword, accessor, /*isMissing*/ false, startPos, endPos);
+                onParseToken(SyntaxKind.SetKeyword, accessor, startPos, endPos);
             }
 
             if (errorCountBeforeAccessor === file.syntacticErrors.length) {
@@ -3177,7 +3173,7 @@ module ts {
                             grammarErrorAtPos(modifierStart, modifierLength, Diagnostics._0_modifier_cannot_appear_on_a_module_element, "public");
                         }
                         flags |= NodeFlags.Public;
-                        onParseToken(SyntaxKind.PublicKeyword, parent, /*isMissing*/ false, modifierStart, scanner.getStartPos())
+                        onParseToken(SyntaxKind.PublicKeyword, parent, modifierStart, scanner.getStartPos())
                         break;
 
                     case SyntaxKind.PrivateKeyword:
@@ -3193,7 +3189,7 @@ module ts {
                         lastPrivateModifierStart = modifierStart;
                         lastPrivateModifierLength = modifierLength;
                         flags |= NodeFlags.Private;
-                        onParseToken(SyntaxKind.PrivateKeyword, parent, /*isMissing*/ false, modifierStart, scanner.getStartPos())
+                        onParseToken(SyntaxKind.PrivateKeyword, parent, modifierStart, scanner.getStartPos())
                         break;
 
                     case SyntaxKind.StaticKeyword:
@@ -3209,7 +3205,7 @@ module ts {
                         lastStaticModifierStart = modifierStart;
                         lastStaticModifierLength = modifierLength;
                         flags |= NodeFlags.Static;
-                        onParseToken(SyntaxKind.StaticKeyword, parent, /*isMissing*/ false, modifierStart, scanner.getStartPos())
+                        onParseToken(SyntaxKind.StaticKeyword, parent, modifierStart, scanner.getStartPos())
 
                         break;
 
@@ -3227,7 +3223,7 @@ module ts {
                             grammarErrorAtPos(modifierStart, modifierLength, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "export");
                         }
                         flags |= NodeFlags.Export;
-                        onParseToken(SyntaxKind.ExportKeyword, parent, /*isMissing*/ false, modifierStart, scanner.getStartPos())
+                        onParseToken(SyntaxKind.ExportKeyword, parent, modifierStart, scanner.getStartPos())
 
                         break;
 
@@ -3517,7 +3513,7 @@ module ts {
             else {
                 var node = <ModuleDeclaration>createNode(SyntaxKind.ModuleDeclaration, pos);
             }
-            parseExpected(SyntaxKind.ModuleKeyword, node, "moduleKeyword");
+            parseExpected(SyntaxKind.ModuleKeyword, node);
             return token === SyntaxKind.StringLiteral ? parseAmbientExternalModuleDeclaration(node, pos, flags) : parseInternalModuleTail(node, flags);
         }
 
@@ -3536,7 +3532,7 @@ module ts {
             parseExpected(SyntaxKind.EqualsToken, node);
             var entityName = parseEntityName(/*allowReservedWords*/ false);
             if (entityName.kind === SyntaxKind.Identifier && (<Identifier>entityName).text === "require" && parseOptional(SyntaxKind.OpenParenToken, node)) {
-                onParseToken(SyntaxKind.RequireKeyword, node, /*isMissing*/ false, entityName.pos, entityName.end);
+                onParseToken(SyntaxKind.RequireKeyword, node, entityName.pos, entityName.end);
                 node.externalModuleName = parseStringLiteral();
                 parseExpected(SyntaxKind.CloseParenToken, node);
             }

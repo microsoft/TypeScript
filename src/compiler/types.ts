@@ -209,6 +209,10 @@ module ts {
         SyntaxList,
         // Enum value count
         Count,
+        // Special values used by parser hooks
+        OperatorToken,
+        FirstSemicolonToken,
+        SecondSemicolonToken,
         // Markers
         FirstAssignment = EqualsToken,
         LastAssignment = CaretEqualsToken,
