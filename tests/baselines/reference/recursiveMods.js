@@ -24,6 +24,7 @@ export module Foo {
 
 
 //// [recursiveMods.js]
+var Foo;
 (function (Foo) {
     var C = (function () {
         function C() {
@@ -31,8 +32,8 @@ export module Foo {
         return C;
     })();
     Foo.C = C;
-})(exports.Foo || (exports.Foo = {}));
-var Foo = exports.Foo;
+})(Foo = exports.Foo || (exports.Foo = {}));
+var Foo;
 (function (Foo) {
     function Bar() {
         if (true) {
@@ -48,5 +49,4 @@ var Foo = exports.Foo;
         var c = Baz();
         return;
     }
-})(exports.Foo || (exports.Foo = {}));
-var Foo = exports.Foo;
+})(Foo = exports.Foo || (exports.Foo = {}));

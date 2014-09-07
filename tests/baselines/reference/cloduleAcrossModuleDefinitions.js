@@ -31,9 +31,9 @@ var A;
 })(A || (A = {}));
 var A;
 (function (A) {
+    var B;
     (function (B) {
         B.x = 1;
-    })(A.B || (A.B = {}));
-    var B = A.B;
+    })(B = A.B || (A.B = {}));
 })(A || (A = {}));
 var b; // ok

@@ -96,6 +96,7 @@ var X;
         return 42;
     }
     X.Y = Y;
+    var Y;
     (function (Y) {
         var Point = (function () {
             function Point(x, y) {
@@ -105,8 +106,7 @@ var X;
             return Point;
         })();
         Y.Point = Point;
-    })(X.Y || (X.Y = {}));
-    var Y = X.Y;
+    })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
 var Z;
 (function (Z) {
@@ -124,10 +124,10 @@ var K;
         return L;
     })();
     K.L = L;
+    var L;
     (function (L) {
         L.y = 12;
-    })(K.L || (K.L = {}));
-    var L = K.L;
+    })(L = K.L || (K.L = {}));
 })(K || (K = {}));
 var M;
 (function (M) {

@@ -10,13 +10,13 @@ module a.e.f {
 //// [internalAliasWithDottedNameEmit.js]
 var a;
 (function (a) {
+    var b;
     (function (b) {
+        var c;
         (function (c) {
             c.d;
-        })(b.c || (b.c = {}));
-        var c = b.c;
-    })(a.b || (a.b = {}));
-    var b = a.b;
+        })(c = b.c || (b.c = {}));
+    })(b = a.b || (a.b = {}));
 })(a || (a = {}));
 
 

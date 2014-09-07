@@ -35,27 +35,28 @@ var __extends = this.__extends || function (d, b) {
 };
 var M;
 (function (M) {
+    var D;
     (function (D) {
         function f() {
         }
         D.f = f;
-    })(M.D || (M.D = {}));
-    var D = M.D;
+    })(D = M.D || (M.D = {}));
+    var C;
     (function (C) {
         function f() {
         }
         C.f = f;
-    })(M.C || (M.C = {}));
-    var C = M.C;
+    })(C = M.C || (M.C = {}));
+    var E;
     (function (E) {
         function f() {
         }
         E.f = f;
-    })(M.E || (M.E = {}));
-    var E = M.E;
+    })(E = M.E || (M.E = {}));
 })(M || (M = {}));
 var M;
 (function (M) {
+    var P;
     (function (P) {
         var C = (function () {
             function C() {
@@ -81,8 +82,7 @@ var M;
         P.w = M.D.f; // error, should be typeof M.D.f
         P.x = M.C.f; // error, should be typeof M.C.f
         P.x = M.E.f; // error, should be typeof M.E.f
-    })(M.P || (M.P = {}));
-    var P = M.P;
+    })(P = M.P || (M.P = {}));
 })(M || (M = {}));
 
 

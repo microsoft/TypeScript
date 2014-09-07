@@ -49,6 +49,7 @@ module TypeScript.Syntax {
 //// [moduleMemberWithoutTypeAnnotation1.js]
 var TypeScript;
 (function (TypeScript) {
+    var Parser;
     (function (Parser) {
         var SyntaxCursor = (function () {
             function SyntaxCursor() {
@@ -58,8 +59,7 @@ var TypeScript;
             };
             return SyntaxCursor;
         })();
-    })(TypeScript.Parser || (TypeScript.Parser = {}));
-    var Parser = TypeScript.Parser;
+    })(Parser = TypeScript.Parser || (TypeScript.Parser = {}));
 })(TypeScript || (TypeScript = {}));
 var TypeScript;
 (function (TypeScript) {
@@ -100,6 +100,7 @@ var TypeScript;
 })(TypeScript || (TypeScript = {}));
 var TypeScript;
 (function (TypeScript) {
+    var Syntax;
     (function (Syntax) {
         function childIndex() {
         }
@@ -113,6 +114,5 @@ var TypeScript;
             return VariableWidthTokenWithTrailingTrivia;
         })();
         Syntax.VariableWidthTokenWithTrailingTrivia = VariableWidthTokenWithTrailingTrivia;
-    })(TypeScript.Syntax || (TypeScript.Syntax = {}));
-    var Syntax = TypeScript.Syntax;
+    })(Syntax = TypeScript.Syntax || (TypeScript.Syntax = {}));
 })(TypeScript || (TypeScript = {}));

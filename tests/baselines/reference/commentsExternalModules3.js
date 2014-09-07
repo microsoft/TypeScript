@@ -63,6 +63,7 @@ export var newVar2 = new extMod.m4.m2.c();
 
 //// [commentsExternalModules2_0.js]
 /** Module comment*/
+var m1;
 (function (m1) {
     /** b's comment*/
     m1.b;
@@ -71,6 +72,7 @@ export var newVar2 = new extMod.m4.m2.c();
         return m1.b;
     }
     /** m2 comments*/
+    var m2;
     (function (m2) {
         /** class comment;*/
         var c = (function () {
@@ -82,18 +84,17 @@ export var newVar2 = new extMod.m4.m2.c();
         ;
         /** i*/
         m2.i = new c();
-    })(m1.m2 || (m1.m2 = {}));
-    var m2 = m1.m2;
+    })(m2 = m1.m2 || (m1.m2 = {}));
     /** exported function*/
     function fooExport() {
         return foo();
     }
     m1.fooExport = fooExport;
-})(exports.m1 || (exports.m1 = {}));
-var m1 = exports.m1;
+})(m1 = exports.m1 || (exports.m1 = {}));
 m1.fooExport();
 var myvar = new m1.m2.c();
 /** Module comment */
+var m4;
 (function (m4) {
     /** b's comment */
     m4.b;
@@ -104,6 +105,7 @@ var myvar = new m1.m2.c();
     }
     /** m2 comments
     */
+    var m2;
     (function (m2) {
         /** class comment; */
         var c = (function () {
@@ -115,15 +117,13 @@ var myvar = new m1.m2.c();
         ;
         /** i */
         m2.i = new c();
-    })(m4.m2 || (m4.m2 = {}));
-    var m2 = m4.m2;
+    })(m2 = m4.m2 || (m4.m2 = {}));
     /** exported function */
     function fooExport() {
         return foo();
     }
     m4.fooExport = fooExport;
-})(exports.m4 || (exports.m4 = {}));
-var m4 = exports.m4;
+})(m4 = exports.m4 || (exports.m4 = {}));
 m4.fooExport();
 var myvar2 = new m4.m2.c();
 //// [commentsExternalModules_1.js]

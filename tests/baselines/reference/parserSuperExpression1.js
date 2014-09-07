@@ -24,6 +24,7 @@ var C = (function () {
 })();
 var M1;
 (function (M1) {
+    var M2;
     (function (M2) {
         var C = (function () {
             function C() {
@@ -33,6 +34,5 @@ var M1;
             };
             return C;
         })();
-    })(M1.M2 || (M1.M2 = {}));
-    var M2 = M1.M2;
+    })(M2 = M1.M2 || (M1.M2 = {}));
 })(M1 || (M1 = {}));

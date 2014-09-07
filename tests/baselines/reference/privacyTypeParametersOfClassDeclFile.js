@@ -234,6 +234,7 @@ var privateClassWithTypeParametersFromPrivateModule = (function () {
     };
     return privateClassWithTypeParametersFromPrivateModule;
 })();
+var publicModule;
 (function (publicModule) {
     var privateClassInPublicModule = (function () {
         function privateClassInPublicModule() {
@@ -314,8 +315,7 @@ var privateClassWithTypeParametersFromPrivateModule = (function () {
         };
         return privateClassWithTypeParametersFromPrivateModule;
     })();
-})(exports.publicModule || (exports.publicModule = {}));
-var publicModule = exports.publicModule;
+})(publicModule = exports.publicModule || (exports.publicModule = {}));
 var privateModule;
 (function (privateModule) {
     var privateClassInPrivateModule = (function () {

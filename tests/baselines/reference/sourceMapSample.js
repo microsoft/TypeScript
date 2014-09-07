@@ -38,6 +38,7 @@ module Foo.Bar {
 //// [sourceMapSample.js]
 var Foo;
 (function (Foo) {
+    var Bar;
     (function (Bar) {
         "use strict";
         var Greeter = (function () {
@@ -70,7 +71,6 @@ var Foo;
         for (var j = 0; j < b.length; j++) {
             b[j].greet();
         }
-    })(Foo.Bar || (Foo.Bar = {}));
-    var Bar = Foo.Bar;
+    })(Bar = Foo.Bar || (Foo.Bar = {}));
 })(Foo || (Foo = {}));
 //# sourceMappingURL=sourceMapSample.js.map

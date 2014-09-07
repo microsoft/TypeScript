@@ -16,10 +16,10 @@ module A {
 var M;
 (function (M) {
     M.x = 1;
+    var N;
     (function (N) {
         N.y = 2;
-    })(M.N || (M.N = {}));
-    var N = M.N;
+    })(N = M.N || (M.N = {}));
 })(M || (M = {}));
 var A;
 (function (A) {

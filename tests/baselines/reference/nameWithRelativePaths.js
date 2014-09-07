@@ -31,10 +31,10 @@ function f() {
 }
 exports.f = f;
 //// [foo_2.js]
+var M2;
 (function (M2) {
     M2.x = true;
-})(exports.M2 || (exports.M2 = {}));
-var M2 = exports.M2;
+})(M2 = exports.M2 || (exports.M2 = {}));
 //// [foo_3.js]
 var foo0 = require('../foo_0');
 var foo1 = require('./test/foo_1');

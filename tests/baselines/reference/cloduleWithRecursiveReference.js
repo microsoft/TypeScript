@@ -16,8 +16,8 @@ var M;
         return C;
     })();
     M.C = C;
+    var C;
     (function (_C) {
         _C.C = M.C;
-    })(M.C || (M.C = {}));
-    var C = M.C;
+    })(C = M.C || (M.C = {}));
 })(M || (M = {}));
