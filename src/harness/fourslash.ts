@@ -122,9 +122,47 @@ module FourSlash {
         return s.replace(/[&<>"'\/]/g, ch => entityMap[ch]);
     }
 
+    // Name of ts.CompilerOptions properties that will be used by globalOptions
+    // To add additional option, add property into the compilerOptMetadataNames, refer the property in either globalMetadataNames or fileMetadataNames
+    // Add cases into convertGlobalOptionsToCompilationsSettings function for the compiler to acknowledge such option from meta data
+    var compilerOptMetadataNames = {
+      out: 'out',
+      outDir: 'outDir',
+      declaration: 'declaration',
+      sourceMap: 'sourceMap',
+      sourceRoot: 'sourceRoot'
+    };
+
     // List of allowed metadata names
     var fileMetadataNames = ['Filename'];
-    var globalMetadataNames = ['Module', 'Target', 'BaselineFile']; // Note: Only BaselineFile is actually supported at the moment
+    var globalMetadataNames = ['BaselineFile', compilerOptMetadataNames.out, compilerOptMetadataNames.outDir, compilerOptMetadataNames.declaration, compilerOptMetadataNames.outDir,
+                               compilerOptMetadataNames.declaration, compilerOptMetadataNames.sourceMap, compilerOptMetadataNames.sourceRoot]
+
+    function convertGlobalOptionsToCompilationSettings(globalOptions: { [idx: string]: string }): ts.CompilationSettings {
+        var settings: ts.CompilationSettings = {};
+        // Convert all property in globalOptions into ts.CompilationSettings
+        for (var prop in globalOptions) {
+            if (globalOptions.hasOwnProperty(prop)) {
+                switch (prop) {
+                    case compilerOptMetadataNames.out:
+                      settings.outFileOption = globalOptions[prop];
+                      break;
+                    case compilerOptMetadataNames.outDir:
+                      settings.outDirOption = globalOptions[prop];
+                      break;
+                    case compilerOptMetadataNames.declaration:
+                      settings.generateDeclarationFiles = true;
+                      break;
+                    case compilerOptMetadataNames.sourceMap:
+                      settings.mapSourceFiles = true;
+                      break;
+                  case compilerOptMetadataNames.sourceRoot:
+                      settings.sourceRoot = globalOptions[prop]
+                }
+            }
+        }
+        return settings;
+    }
 
     export var currentTestState: TestState = null;
 
@@ -189,12 +227,6 @@ module FourSlash {
         // Whether or not we should format on keystrokes
         public enableFormatting = true;
 
-        // Whether or not to generate .d.ts file
-        public enableDeclaration = false;
-
-        // Output filename for single-output-file option
-        public singleOutputFilename: string = undefined;
-
         public formatCodeOptions: ts.FormatCodeOptions;
 
         public cancellationToken: TestCancellationToken;
@@ -205,10 +237,14 @@ module FourSlash {
         private scenarioActions: string[] = [];
         private taoInvalidReason: string = null;
 
+
         constructor(public testData: FourSlashData) {
             // Initialize the language service with all the scripts
             this.cancellationToken = new TestCancellationToken();
             this.languageServiceShimHost = new Harness.LanguageService.TypeScriptLS(this.cancellationToken);
+
+            var compilationSettings = convertGlobalOptionsToCompilationSettings(this.testData.globalOptions);
+            this.languageServiceShimHost.setCompilationSettings(compilationSettings);
 
             var inputFiles: { unitName: string; content: string }[] = [];
 
@@ -226,9 +262,9 @@ module FourSlash {
             //if (/require\(/.test(lastFile.content) || /reference\spath/.test(lastFile.content)) {
             //    inputFiles.push({ unitName: lastFile.fileName, content: lastFile.content });
             //} else {
-                inputFiles = testData.files.map(file => {
-                    return { unitName: file.fileName, content: file.content };
-                });
+            inputFiles = testData.files.map(file => {
+                return { unitName: file.fileName, content: file.content };
+            });
             //}
 
 
@@ -459,14 +495,6 @@ module FourSlash {
         }
 
         public verifyEmitOutput(state: ts.EmitReturnStatus, filename?: string) {
-            if (this.enableDeclaration) {
-                this.languageServiceShimHost.setCompilationSettings({ generateDeclarationFiles: true });
-            }
-
-            if (this.singleOutputFilename !== undefined) {
-                this.languageServiceShimHost.setCompilationSettings({ outFileOption: this.singleOutputFilename });
-            }
-
             var expectedFilenames:string[] = [];
             if (filename !== undefined) {
                 expectedFilenames = filename.split(" ");

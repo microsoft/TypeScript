@@ -159,7 +159,7 @@ module ts {
         Asynchronous = 2,
     }
 
-    interface CompilationSettings {
+    export interface CompilationSettings {
         propagateEnumConstants?: boolean;
         removeComments?: boolean;
         watch?: boolean;
@@ -179,6 +179,9 @@ module ts {
         gatherDiagnostics?: boolean;
         codepage?: number;
         emitBOM?: boolean;
+
+        // Declare indexer signature
+        [index: string]: any;
     }
 
     function languageVersionToScriptTarget(languageVersion: LanguageVersion): ScriptTarget {

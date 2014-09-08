@@ -134,8 +134,7 @@ module Harness.LanguageService {
         private ls: ts.LanguageServiceShim = null;
 
         private fileNameToScript: ts.Map<ScriptInfo> = {};
-
-        private settings: any = {};
+        private settings: ts.CompilationSettings = {};
 
         constructor(private cancellationToken: ts.CancellationToken = CancellationToken.None) {
         }
@@ -246,7 +245,7 @@ module Harness.LanguageService {
             return this.ls;
         }
 
-        public setCompilationSettings(settings: any) {
+        public setCompilationSettings(settings: ts.CompilationSettings) {
             for (var key in settings) {
                 if (settings.hasOwnProperty(key)) {
                     this.settings[key] = settings[key];

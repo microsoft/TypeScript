@@ -446,23 +446,6 @@ module FourSlashInterface {
         public disableFormatting() {
             FourSlash.currentTestState.enableFormatting = false;
         }
-
-        public enableDeclaration() {
-            FourSlash.currentTestState.enableDeclaration = true;
-        }
-
-        public disableDeclaration() {
-            FourSlash.currentTestState.enableDeclaration = false;
-        }
-
-        public enableSingleOutputFile(outputFilename: string) {
-            FourSlash.currentTestState.enableSingleOutputFile = true;
-            FourSlash.currentTestState.singleOutputFilename = outputFilename;
-        }
-
-        public disableSingleOutputFile() {
-            FourSlash.currentTestState.enableSingleOutputFile = false;
-        }
     }
 
     export class debug {
