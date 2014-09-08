@@ -32,7 +32,9 @@ module M2 {
 //// [invalidNestedModules.js]
 var A;
 (function (A) {
+    var B;
     (function (B) {
+        var C;
         (function (C) {
             var Point = (function () {
                 function Point() {
@@ -40,13 +42,12 @@ var A;
                 return Point;
             })();
             C.Point = Point;
-        })(B.C || (B.C = {}));
-        var C = B.C;
-    })(A.B || (A.B = {}));
-    var B = A.B;
+        })(C = B.C || (B.C = {}));
+    })(B = A.B || (A.B = {}));
 })(A || (A = {}));
 var A;
 (function (A) {
+    var B;
     (function (B) {
         var C = (function () {
             function C() {
@@ -54,11 +55,11 @@ var A;
             return C;
         })();
         B.C = C;
-    })(A.B || (A.B = {}));
-    var B = A.B;
+    })(B = A.B || (A.B = {}));
 })(A || (A = {}));
 var M2;
 (function (M2) {
+    var X;
     (function (X) {
         var Point = (function () {
             function Point() {
@@ -66,13 +67,12 @@ var M2;
             return Point;
         })();
         X.Point = Point;
-    })(M2.X || (M2.X = {}));
-    var X = M2.X;
+    })(X = M2.X || (M2.X = {}));
 })(M2 || (M2 = {}));
 var M2;
 (function (M2) {
+    var X;
     (function (X) {
         X.Point; // Error
-    })(M2.X || (M2.X = {}));
-    var X = M2.X;
+    })(X = M2.X || (M2.X = {}));
 })(M2 || (M2 = {}));

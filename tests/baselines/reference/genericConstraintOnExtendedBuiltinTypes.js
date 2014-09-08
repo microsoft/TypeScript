@@ -35,6 +35,7 @@ var __extends = this.__extends || function (d, b) {
 };
 var EndGate;
 (function (EndGate) {
+    var Tweening;
     (function (Tweening) {
         var Tween = (function () {
             function Tween(from) {
@@ -43,11 +44,11 @@ var EndGate;
             return Tween;
         })();
         Tweening.Tween = Tween;
-    })(EndGate.Tweening || (EndGate.Tweening = {}));
-    var Tweening = EndGate.Tweening;
+    })(Tweening = EndGate.Tweening || (EndGate.Tweening = {}));
 })(EndGate || (EndGate = {}));
 var EndGate;
 (function (EndGate) {
+    var Tweening;
     (function (Tweening) {
         var NumberTween = (function (_super) {
             __extends(NumberTween, _super);
@@ -57,6 +58,5 @@ var EndGate;
             return NumberTween;
         })(Tweening.Tween);
         Tweening.NumberTween = NumberTween;
-    })(EndGate.Tweening || (EndGate.Tweening = {}));
-    var Tweening = EndGate.Tweening;
+    })(Tweening = EndGate.Tweening || (EndGate.Tweening = {}));
 })(EndGate || (EndGate = {}));

@@ -19,32 +19,32 @@ module superContain {
 //// [mergedModuleDeclarationCodeGen4.js]
 var superContain;
 (function (superContain) {
+    var contain;
     (function (_contain) {
+        var my;
         (function (my) {
+            var buz;
             (function (buz) {
+                var data;
                 (function (data) {
                     function foo() {
                     }
                     data.foo = foo;
-                })(buz.data || (buz.data = {}));
-                var data = buz.data;
-            })(my.buz || (my.buz = {}));
-            var buz = my.buz;
-        })(_contain.my || (_contain.my = {}));
-        var my = _contain.my;
+                })(data = buz.data || (buz.data = {}));
+            })(buz = my.buz || (my.buz = {}));
+        })(my = _contain.my || (_contain.my = {}));
+        var my;
         (function (_my) {
+            var buz;
             (function (_buz) {
+                var data;
                 (function (_data) {
                     function bar(contain, my, buz, data) {
                         _data.foo();
                     }
                     _data.bar = bar;
-                })(_buz.data || (_buz.data = {}));
-                var data = _buz.data;
-            })(_my.buz || (_my.buz = {}));
-            var buz = _my.buz;
-        })(_contain.my || (_contain.my = {}));
-        var my = _contain.my;
-    })(superContain.contain || (superContain.contain = {}));
-    var contain = superContain.contain;
+                })(data = _buz.data || (_buz.data = {}));
+            })(buz = _my.buz || (_my.buz = {}));
+        })(my = _contain.my || (_contain.my = {}));
+    })(contain = superContain.contain || (superContain.contain = {}));
 })(superContain || (superContain = {}));

@@ -12,7 +12,9 @@ module A.B.C {
 //// [declFileModuleContinuation.js]
 var A;
 (function (A) {
+    var B;
     (function (B) {
+        var C;
         (function (C) {
             var W = (function () {
                 function W() {
@@ -20,10 +22,8 @@ var A;
                 return W;
             })();
             C.W = W;
-        })(B.C || (B.C = {}));
-        var C = B.C;
-    })(A.B || (A.B = {}));
-    var B = A.B;
+        })(C = B.C || (B.C = {}));
+    })(B = A.B || (A.B = {}));
 })(A || (A = {}));
 
 

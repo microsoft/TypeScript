@@ -16,7 +16,9 @@ module X {
 //// [moduleImport.js]
 var A;
 (function (A) {
+    var B;
     (function (B) {
+        var C;
         (function (C) {
             var XYZ = X.Y.Z;
             function ping(x) {
@@ -24,10 +26,8 @@ var A;
                     XYZ.pong(x - 1);
             }
             C.ping = ping;
-        })(B.C || (B.C = {}));
-        var C = B.C;
-    })(A.B || (A.B = {}));
-    var B = A.B;
+        })(C = B.C || (B.C = {}));
+    })(B = A.B || (A.B = {}));
 })(A || (A = {}));
 var X;
 (function (X) {

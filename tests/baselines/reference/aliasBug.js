@@ -29,7 +29,9 @@ var foo;
         return Provide;
     })();
     foo.Provide = Provide;
+    var bar;
     (function (bar) {
+        var baz;
         (function (baz) {
             var boo = (function () {
                 function boo() {
@@ -37,10 +39,8 @@ var foo;
                 return boo;
             })();
             baz.boo = boo;
-        })(bar.baz || (bar.baz = {}));
-        var baz = bar.baz;
-    })(foo.bar || (foo.bar = {}));
-    var bar = foo.bar;
+        })(baz = bar.baz || (bar.baz = {}));
+    })(bar = foo.bar || (foo.bar = {}));
 })(foo || (foo = {}));
 var provide = foo;
 var booz = foo.bar.baz;

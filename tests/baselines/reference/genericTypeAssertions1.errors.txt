@@ -10,5 +10,6 @@
 !!! Type 'A<A<number>>' is not assignable to type 'A<number>':
 !!!   Type 'A<number>' is not assignable to type 'number'.
                         ~~~~~~~~~~~~~~~~~
-!!! Neither type 'A<A<number>>' nor type 'A<number>' is assignable to the other:
-!!!   Type 'A<number>' is not assignable to type 'number'.
+!!! Neither type 'A<number>' nor type 'A<A<number>>' is assignable to the other:
+!!!   Type 'number' is not assignable to type 'A<number>':
+!!!     Property 'foo' is missing in type 'Number'.

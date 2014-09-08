@@ -22,7 +22,7 @@
     // Contextually type the default arg with the type annotation
     var f3 = function (a: (s: string) => any = (s) => <number>s) { };
                                                       ~~~~~~~~~
-!!! Neither type 'number' nor type 'string' is assignable to the other.
+!!! Neither type 'string' nor type 'number' is assignable to the other.
     
     // Type check using the function's contextual type
     var f4: (a: number) => void = function (a = "") { };
@@ -32,7 +32,7 @@
     // Contextually type the default arg using the function's contextual type
     var f5: (a: (s: string) => any) => void = function (a = s => <number>s) { };
                                                                  ~~~~~~~~~
-!!! Neither type 'number' nor type 'string' is assignable to the other.
+!!! Neither type 'string' nor type 'number' is assignable to the other.
     
     // Instantiated module
     module T { }

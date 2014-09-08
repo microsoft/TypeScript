@@ -11,15 +11,15 @@ export module c {
 
 //// [internalAliasVarInsideLocalModuleWithoutExport.js]
 define(["require", "exports"], function (require, exports) {
+    var a;
     (function (a) {
         a.x = 10;
-    })(exports.a || (exports.a = {}));
-    var a = exports.a;
+    })(a = exports.a || (exports.a = {}));
+    var c;
     (function (c) {
         var b = a.x;
         c.bVal = b;
-    })(exports.c || (exports.c = {}));
-    var c = exports.c;
+    })(c = exports.c || (exports.c = {}));
 });
 
 
