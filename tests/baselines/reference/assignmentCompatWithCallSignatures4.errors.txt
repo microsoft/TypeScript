@@ -52,7 +52,7 @@
             var b8: <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U; 
             a8 = b8; // error, { foo: number } and Base are incompatible
             ~~
-!!! Type '<T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U' is not assignable to type '(x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived':
+!!! Type '<T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T)...' is not assignable to type '(x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived':
 !!!   Types of parameters 'y' and 'y' are incompatible:
 !!!     Type '(arg2: { foo: number; }) => any' is not assignable to type '(arg2: Base) => Derived':
 !!!       Types of parameters 'arg2' and 'arg2' are incompatible:
@@ -61,7 +61,7 @@
 !!!             Type 'number' is not assignable to type 'string'.
             b8 = a8; // error, { foo: number } and Base are incompatible
             ~~
-!!! Type '(x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived' is not assignable to type '<T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U':
+!!! Type '(x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived' is not assignable to type '<T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T)...':
 !!!   Types of parameters 'y' and 'y' are incompatible:
 !!!     Type '(arg2: Base) => Derived' is not assignable to type '(arg2: { foo: number; }) => any':
 !!!       Types of parameters 'arg2' and 'arg2' are incompatible:

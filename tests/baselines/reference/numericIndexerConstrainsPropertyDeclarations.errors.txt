@@ -98,7 +98,7 @@
     // error
     var b: { [x: number]: string; } = {
         ~
-!!! Type '{ [x: number]: {}; 1.0: string; 2.0: number; a: string; b: number; c: () => void; "d": string; "e": number; "3.0": string; "4.0": number; f: unknown; X: string; foo: () => string; }' is not assignable to type '{ [x: number]: string; }':
+!!! Type '{ [x: number]: {}; 1.0: string; 2.0: number; a: string; b: number; c: () => void; "d": string; "e...' is not assignable to type '{ [x: number]: string; }':
 !!!   Index signatures are incompatible:
 !!!     Type '{}' is not assignable to type 'string'.
         a: '',

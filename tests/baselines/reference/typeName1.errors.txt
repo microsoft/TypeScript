@@ -24,7 +24,7 @@
 !!!   Property 'x' is missing in type 'Number'.
     var x5:{ (s:string):number;(n:number):string;x;y;z:number;f(n:number):string;f(s:string):number; }=3;
         ~~
-!!! Type 'number' is not assignable to type '{ (s: string): number; (n: number): string; x: any; y: any; z: number; f(n: number): string; f(s: string): number; }':
+!!! Type 'number' is not assignable to type '{ (s: string): number; (n: number): string; x: any; y: any; z: number; f(n: number): string; f(s:...':
 !!!   Property 'x' is missing in type 'Number'.
     var x6:{ z:number;f:{(n:number):string;(s:string):number;}; }=3;
         ~~
@@ -53,7 +53,7 @@
 !!!   Property 'length' is missing in type 'Number'.
     var x12:{z:I;x:boolean;y:(s:string)=>boolean;w:{ z:I;[s:string]:{ x; y; };[n:number]:{x; y;};():boolean; };}[][]=3;
         ~~~
-!!! Type 'number' is not assignable to type '{ z: I; x: boolean; y: (s: string) => boolean; w: { (): boolean; [x: string]: { x: any; y: any; }; [x: number]: { x: any; y: any; }; z: I; }; }[][]':
+!!! Type 'number' is not assignable to type '{ z: I; x: boolean; y: (s: string) => boolean; w: { (): boolean; [x: string]: { x: any; y: any; }...':
 !!!   Property 'length' is missing in type 'Number'.
     var x13:{ new(): number; new(n:number):number; x: string; w: {y: number;}; (): {}; } = 3;
         ~~~

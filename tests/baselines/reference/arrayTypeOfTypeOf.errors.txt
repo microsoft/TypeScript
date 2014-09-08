@@ -10,7 +10,7 @@
                                  ~
 !!! Expression expected.
         ~~~
-!!! Type 'number' is not assignable to type '{ (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: any[]; }':
+!!! Type 'number' is not assignable to type '{ (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arr...':
 !!!   Property 'isArray' is missing in type 'Number'.
     var xs4: typeof Array<typeof x>;
                          ~
@@ -18,4 +18,4 @@
                                    ~
 !!! Expression expected.
         ~~~
-!!! Type 'number' is not assignable to type '{ (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: any[]; }'.
+!!! Type 'number' is not assignable to type '{ (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arr...'.

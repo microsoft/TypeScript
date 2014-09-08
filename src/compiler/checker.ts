@@ -943,20 +943,36 @@ module ts {
             writer.write(symbolToString(symbol, enclosingDeclaration, meaning));
         }
 
-        function createSingleLineTextWriter() {
+        function createSingleLineTextWriter(maxLength?: number) {
             var result = "";
+            var overflow = false;
+            function write(s: string) {
+                if (!overflow) {
+                    result += s;
+                    if (result.length > maxLength) {
+                        result = result.substr(0, maxLength - 3) + "...";
+                        overflow = true;
+                    }
+                }
+            }
             return {
-                write(s: string) { result += s; },
-                writeSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) { writeSymbolToTextWriter(symbol, enclosingDeclaration, meaning, this); },
-                writeLine() { result += " "; },
+                write: write,
+                writeSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
+                    writeSymbolToTextWriter(symbol, enclosingDeclaration, meaning, this);
+                },
+                writeLine() {
+                    write(" ");
+                },
                 increaseIndent() { },
                 decreaseIndent() { },
-                getText() { return result; }
+                getText() {
+                    return result;
+                }
             };
         }
 
         function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
-            var stringWriter = createSingleLineTextWriter();
+            var stringWriter = createSingleLineTextWriter(flags & TypeFormatFlags.NoTruncation ? undefined : 100);
             // TODO(shkamat): typeToString should take enclosingDeclaration as input, once we have implemented enclosingDeclaration
             writeTypeToTextWriter(type, enclosingDeclaration, flags, stringWriter);
             return stringWriter.getText();
