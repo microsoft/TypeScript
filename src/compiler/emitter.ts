@@ -235,11 +235,11 @@ module ts {
                         // }
                         // module m {
                         //     /* this is line 1 -- Assume current writer indent 8
-                        //      * line                                                --3 = 8 - 4 + 5 
+                        //      * line                                                --3 = 8 - 4 + 5
                         //            More right indented comment */                  --4 = 8 - 4 + 11
                         //     class c { }
                         // }
-                        var spacesToEmit = currentWriterIndentSpacing - firstCommentLineIndent + calculateIndent(pos, nextLineStart); 
+                        var spacesToEmit = currentWriterIndentSpacing - firstCommentLineIndent + calculateIndent(pos, nextLineStart);
                         if (spacesToEmit > 0) {
                             var numberOfSingleSpacesToEmit = spacesToEmit % getIndentSize();
                             var indentSizeSpaceString = getIndentString((spacesToEmit - numberOfSingleSpacesToEmit) / getIndentSize());
@@ -342,7 +342,7 @@ module ts {
             var emitEnd = function (node: Node) { };
 
             /** Emit the text for the given token that comes after startPos
-              * This by default writes the text provided with the given tokenKind 
+              * This by default writes the text provided with the given tokenKind
               * but if optional emitFn callback is provided the text is emitted using the callback instead of default text
               * @param tokenKind the kind of the token to search and emit
               * @param startPos the position in the source to start searching for the token
@@ -411,13 +411,13 @@ module ts {
                     // 1. Relative Column 0 based
                     sourceMapData.sourceMapMappings += base64VLQFormatEncode(lastRecordedSourceMapSpan.emittedColumn - prevEncodedEmittedColumn);
 
-                    // 2. Relative sourceIndex 
+                    // 2. Relative sourceIndex
                     sourceMapData.sourceMapMappings += base64VLQFormatEncode(lastRecordedSourceMapSpan.sourceIndex - lastEncodedSourceMapSpan.sourceIndex);
 
                     // 3. Relative sourceLine 0 based
                     sourceMapData.sourceMapMappings += base64VLQFormatEncode(lastRecordedSourceMapSpan.sourceLine - lastEncodedSourceMapSpan.sourceLine);
 
-                    // 4. Relative sourceColumn 0 based 
+                    // 4. Relative sourceColumn 0 based
                     sourceMapData.sourceMapMappings += base64VLQFormatEncode(lastRecordedSourceMapSpan.sourceColumn - lastEncodedSourceMapSpan.sourceColumn);
 
                     // 5. Relative namePosition 0 based
@@ -517,7 +517,7 @@ module ts {
 
                 function recordNewSourceFileStart(node: SourceFile) {
                     // Add the the file to tsFilePaths
-                    // If sourceroot option: Use the relative path corresponding to the common directory path 
+                    // If sourceroot option: Use the relative path corresponding to the common directory path
                     // otherwise source locations relative to map file location
                     var sourcesDirectoryPath = compilerOptions.sourceRoot ? program.getCommonSourceDirectory() : sourceMapDir;
 
@@ -619,7 +619,7 @@ module ts {
                     sourceMapDecodedMappings: []
                 };
 
-                // Normalize source root and make sure it has trailing "/" so that it can be used to combine paths with the 
+                // Normalize source root and make sure it has trailing "/" so that it can be used to combine paths with the
                 // relative paths of the sources list in the sourcemap
                 sourceMapData.sourceMapSourceRoot = ts.normalizeSlashes(sourceMapData.sourceMapSourceRoot);
                 if (sourceMapData.sourceMapSourceRoot.length && sourceMapData.sourceMapSourceRoot.charCodeAt(sourceMapData.sourceMapSourceRoot.length - 1) !== CharacterCodes.slash) {
@@ -923,7 +923,7 @@ module ts {
                     var operand = (<TypeAssertion>node.expression).operand;
 
                     // Make sure we consider all nested cast expressions, e.g.:
-                    // (<any><number><any>-A).x; 
+                    // (<any><number><any>-A).x;
                     while (operand.kind == SyntaxKind.TypeAssertion) {
                         operand = (<TypeAssertion>operand).operand;
                     }
@@ -931,7 +931,7 @@ module ts {
                     // We have an expression of the form: (<Type>SubExpr)
                     // Emitting this as (SubExpr) is really not desirable. We would like to emit the subexpr as is.
                     // Omitting the parentheses, however, could cause change in the semantics of the generated
-                    // code if the casted expression has a lower precedence than the rest of the expression, e.g.: 
+                    // code if the casted expression has a lower precedence than the rest of the expression, e.g.:
                     //      (<any>new A).foo should be emitted as (new A).foo and not new A.foo
                     //      (<any>typeof A).toString() should be emitted as (typeof A).toString() and not typeof A.toString()
                     //      new (<any>A()) should be emitted as new (A()) and not new A()
@@ -1269,6 +1269,11 @@ module ts {
                 if (hasRestParameters(node)) {
                     var restIndex = node.parameters.length - 1;
                     var restParam = node.parameters[restIndex];
+
+                    if (!resolver.isParameterUsedInFunction(node, restParam)) {
+                        return;
+                    }
+
                     writeLine();
                     emitLeadingComments(restParam);
                     emitStart(restParam);
@@ -2175,7 +2180,7 @@ module ts {
 
                             if (commentLine >= lastCommentLine + 2) {
                                 // There was a blank line between the last comment and this comment.  This
-                                // comment is not part of the copyright comments.  Return what we have so 
+                                // comment is not part of the copyright comments.  Return what we have so
                                 // far.
                                 return detachedComments;
                             }
@@ -2376,7 +2381,7 @@ module ts {
                     }
                     // If the node is parented in the current source file we need to emit export declare or just export
                     else if (node.parent === currentSourceFile) {
-                        // If the node is exported 
+                        // If the node is exported
                         if (node.flags & NodeFlags.Export) {
                             write("export ");
                         }
@@ -2402,7 +2407,7 @@ module ts {
             }
 
             function writeImportDeclaration(node: ImportDeclaration) {
-                // note usage of writer. methods instead of aliases created, just to make sure we are using 
+                // note usage of writer. methods instead of aliases created, just to make sure we are using
                 // correct writer especially to handle asynchronous alias writing
                 emitJsDocComments(node);
                 if (node.flags & NodeFlags.Export) {
@@ -2886,7 +2891,7 @@ module ts {
                     switch (node.kind) {
                         case SyntaxKind.ConstructSignature:
                             // Interfaces cannot have return types that cannot be named
-                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ? 
+                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
                             Diagnostics.Return_type_of_constructor_signature_from_exported_interface_has_or_is_using_name_0_from_private_module_1 :
                             Diagnostics.Return_type_of_constructor_signature_from_exported_interface_has_or_is_using_private_name_0;
                             break;
@@ -3075,8 +3080,8 @@ module ts {
                 return program.getSourceFile(referenceFileName);
             }
 
-            // Contains the reference paths that needs to go in the declaration file. 
-            // Collecting this separately because reference paths need to be first thing in the declaration file 
+            // Contains the reference paths that needs to go in the declaration file.
+            // Collecting this separately because reference paths need to be first thing in the declaration file
             // and we could be collecting these paths from multiple files into single one with --out option
             var referencePathsOutput = "";
             function writeReferencePath(referencedFile: SourceFile) {
@@ -3142,7 +3147,7 @@ module ts {
                 });
             }
 
-            // TODO(shkamat): Should we not write any declaration file if any of them can produce error, 
+            // TODO(shkamat): Should we not write any declaration file if any of them can produce error,
             // or should we just not write this file like we are doing now
             if (!reportedDeclarationError) {
                 var declarationOutput = referencePathsOutput;

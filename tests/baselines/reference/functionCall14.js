@@ -9,10 +9,6 @@ foo('foo', 1, 3);
 
 //// [functionCall14.js]
 function foo(a) {
-    var b = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        b[_i - 1] = arguments[_i];
-    }
 }
 foo('foo', 1);
 foo('foo');

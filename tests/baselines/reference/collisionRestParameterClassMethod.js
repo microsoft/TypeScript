@@ -43,20 +43,12 @@ var c1 = (function () {
     function c1() {
     }
     c1.prototype.foo = function (_i) {
-        var restParameters = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            restParameters[_i - 1] = arguments[_i];
-        }
         var _i = 10; // no error
     };
     c1.prototype.fooNoError = function (_i) {
         var _i = 10; // no error
     };
     c1.prototype.f4 = function (_i) {
-        var rest = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            rest[_i - 1] = arguments[_i];
-        }
         var _i; // no error
     };
     c1.prototype.f4NoError = function (_i) {
@@ -68,10 +60,6 @@ var c3 = (function () {
     function c3() {
     }
     c3.prototype.foo = function () {
-        var restParameters = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            restParameters[_i - 0] = arguments[_i];
-        }
         var _i = 10; // no error
     };
     c3.prototype.fooNoError = function () {

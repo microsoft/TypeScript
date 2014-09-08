@@ -259,13 +259,7 @@ var r10arg1 = function () {
     }
     return x[0];
 };
-var r10arg2 = function () {
-    var x = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i - 0] = arguments[_i];
-    }
-    return null;
-};
+var r10arg2 = function () { return null; };
 var r10 = foo10(r10arg1); // any
 var r10a = [r10arg1, r10arg2];
 var r10b = [r10arg2, r10arg1];
