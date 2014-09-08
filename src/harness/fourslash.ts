@@ -516,7 +516,7 @@ module FourSlash {
             }
 
             if (!passed) {
-                var errorMessage = "Expected outputFilename '" + filename + "', but actualy outputFilename '";
+                var errorMessage = "Expected outputFilename '" + filename + "', but actual outputFilename '";
                 emit.outputFiles.forEach((outputFile, idx, array) => {
                     errorMessage += outputFile.name;
                     if (idx !== emit.outputFiles.length - 1) {
@@ -1274,7 +1274,7 @@ module FourSlash {
 
         private applyEdits(fileName: string, edits: ts.TextChange[], isFormattingEdit = false): number {
             // We get back a set of edits, but langSvc.editScript only accepts one at a time. Use this to keep track
-            // of the incremental offest from each edit to the next. Assumption is that these edit ranges don't overlap
+            // of the incremental offset from each edit to the next. Assumption is that these edit ranges don't overlap
             var runningOffset = 0;
             edits = edits.sort((a, b) => a.span.start() - b.span.start());
             // Get a snapshot of the content of the file so we can make sure any formatting edits didn't destroy non-whitespace characters
@@ -1351,7 +1351,7 @@ module FourSlash {
 
             var definitions = this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             if (!definitions || !definitions.length) {
-                throw new Error('goToDefinition failed - expected to at least one defintion location but got 0');
+                throw new Error('goToDefinition failed - expected to at least one definition location but got 0');
             }
 
             if (definitionIndex >= definitions.length) {
@@ -1371,10 +1371,10 @@ module FourSlash {
             var foundDefinitions = definitions && definitions.length;
 
             if (foundDefinitions && negative) {
-                throw new Error('goToDefinition - expected to 0 defintion locations but got ' + definitions.length);
+                throw new Error('goToDefinition - expected to 0 definition locations but got ' + definitions.length);
             }
             else if (!foundDefinitions && !negative) {
-                throw new Error('goToDefinition - expected to at least one defintion location but got 0');
+                throw new Error('goToDefinition - expected to at least one definition location but got 0');
             }
         }
 
@@ -2222,7 +2222,7 @@ module FourSlash {
         /// A list of ranges we've collected so far */
         var localRanges: Range[] = [];
 
-        /// The latest position of the start of an unflushed plaintext area
+        /// The latest position of the start of an unflushed plain text area
         var lastNormalCharPosition: number = 0;
 
         /// The total number of metacharacters removed from the file (so far)
