@@ -10,17 +10,17 @@ interface IFoo {
 // Expr type not assignable to target type
 (<IFoo>{ a: null });
 
-// Expr type assignanle to target type
+// Expr type assignable to target type
 (<IFoo>{ a: 2, b: undefined });
 
-// Niether types is assignable to each other
+// Neither types is assignable to each other
 (<IFoo>{ c: null });
 
 //// [noImplicitAnyInCastExpression.js]
 // verify no noImplictAny errors reported with cast expression
 // Expr type not assignable to target type
 { a: null };
-// Expr type assignanle to target type
+// Expr type assignable to target type
 { a: 2, b: undefined };
-// Niether types is assignable to each other
+// Neither types is assignable to each other
 { c: null };
