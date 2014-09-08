@@ -1,5 +1,6 @@
 ﻿/// <reference path="fourslash.ts" />
 
+// @declaration: true
 // @Filename: inputFile1.ts
 //// var x: number = 5;
 //// class Bar {
@@ -16,6 +17,5 @@
 
 var inputFile1 = "tests/cases/fourslash/inputFile1";
 var inputFile2 = "tests/cases/fourslash/inputFile2";
-edit.enableDeclaration();
 var outputFilenames = inputFile1 + ".js" + " " + inputFile2 + ".js" + " " + inputFile1 + ".d.ts" + " " + inputFile2 + ".d.ts";
-verify.emitOutput(EmitOutputResult.Succeeded, outputFilenames);
+verify.emitOutput(EmitReturnStatus.Succeeded);

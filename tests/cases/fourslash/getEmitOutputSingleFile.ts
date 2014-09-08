@@ -1,5 +1,6 @@
 ﻿/// <reference path="fourslash.ts" />
 
+// @out: tests/cases/fourslash/singleFile.js
 // @Filename: inputFile1.ts
 //// var x: any;
 //// class Bar {
@@ -15,5 +16,4 @@
 //// }
 
 var outputFilename = "tests/cases/fourslash/singleFile.js";
-edit.enableSingleOutputFile(outputFilename);
-verify.emitOutput(EmitOutputResult.Succeeded, outputFilename);
+verify.emitOutput(EmitReturnStatus.Succeeded, outputFilename);

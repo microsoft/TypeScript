@@ -1,6 +1,8 @@
 ﻿/// <reference path="fourslash.ts" />
 
+// @declaration: true
 // @Filename: inputFile1.ts
+// @out: declSingleFile.js
 //// var x: number = 5;
 //// class Bar {
 ////    x : string;
@@ -14,10 +16,8 @@
 ////    y : number;
 //// }
 
-var singleFilename = "tests/cases/fourslash/declSingleFile";
+var singleFilename = "declSingleFile";
 var jsFilename = singleFilename + ".js";
 var declFilename = singleFilename + ".d.ts";
-edit.enableSingleOutputFile(jsFilename);
-edit.enableDeclaration();
 var outputFilenames = jsFilename + " " + declFilename;
-verify.emitOutput(EmitOutputResult.Succeeded, outputFilenames);
+verify.emitOutput(EmitReturnStatus.Succeeded, outputFilenames);

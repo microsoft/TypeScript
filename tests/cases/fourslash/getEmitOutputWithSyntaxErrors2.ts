@@ -1,10 +1,10 @@
 ﻿/// <reference path="fourslash.ts" />
 
+// @declaration
 // @Filename: syntaxErrorsResult2.ts
 //// var x;
 //// class M {
 ////    x : string;
 ////    y : numer
 
-edit.enableDeclaration();
-verify.emitOutput(EmitOutputResult.FailedBecauseOfSyntaxErrors);
+verify.emitOutput(EmitReturnStatus.AllOutputGenerationSkipped);

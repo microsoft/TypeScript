@@ -3,4 +3,4 @@
 // @Filename: getEmitOutputWithSyntaxErrorsResult.ts
 //// var x:
 
-verify.emitOutput(EmitOutputResult.FailedBecauseOfSyntaxErrors);
+verify.emitOutput(EmitReturnStatus.AllOutputGenerationSkipped);

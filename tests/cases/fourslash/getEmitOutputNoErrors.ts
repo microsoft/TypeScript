@@ -7,4 +7,4 @@
 ////   y: string;
 //// }
 
-verify.emitOutput(EmitOutputResult.Succeeded, "tests/cases/fourslash/noErrorsResult.js");
+verify.emitOutput(EmitReturnStatus.Succeeded, "tests/cases/fourslash/noErrorsResult.js");
