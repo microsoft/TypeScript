@@ -59,13 +59,13 @@ var a2;
 var a2 = m.a;
 var M2;
 (function (M2) {
+    var Point;
     (function (Point) {
         function Origin() {
             return { x: 0, y: 0 };
         }
         Point.Origin = Origin;
-    })(M2.Point || (M2.Point = {}));
-    var Point = M2.Point;
+    })(Point = M2.Point || (M2.Point = {}));
 })(M2 || (M2 = {}));
 var p;
 var p;

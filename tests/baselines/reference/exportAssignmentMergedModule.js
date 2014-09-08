@@ -39,10 +39,10 @@ var Foo;
         return a;
     }
     Foo.c = c;
+    var Test;
     (function (Test) {
         Test.answer = 42;
-    })(Foo.Test || (Foo.Test = {}));
-    var Test = Foo.Test;
+    })(Test = Foo.Test || (Foo.Test = {}));
 })(Foo || (Foo = {}));
 module.exports = Foo;
 //// [foo_1.js]

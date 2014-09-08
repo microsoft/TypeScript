@@ -33,23 +33,25 @@ module otherRoot {
 //// [part1.js]
 var Root;
 (function (Root) {
+    var A;
     (function (A) {
+        var Utils;
         (function (Utils) {
             function mirror(p) {
                 return { x: p.y, y: p.x };
             }
             Utils.mirror = mirror;
-        })(A.Utils || (A.Utils = {}));
-        var Utils = A.Utils;
-    })(Root.A || (Root.A = {}));
-    var A = Root.A;
+        })(Utils = A.Utils || (A.Utils = {}));
+    })(A = Root.A || (Root.A = {}));
 })(Root || (Root = {}));
 //// [part2.js]
 var otherRoot;
 (function (otherRoot) {
+    var A;
     (function (A) {
         // have to be fully qualified since in different root
         A.Origin = { x: 0, y: 0 };
+        var Utils;
         (function (Utils) {
             var Plane = (function () {
                 function Plane(tl, br) {
@@ -59,8 +61,6 @@ var otherRoot;
                 return Plane;
             })();
             Utils.Plane = Plane;
-        })(A.Utils || (A.Utils = {}));
-        var Utils = A.Utils;
-    })(otherRoot.A || (otherRoot.A = {}));
-    var A = otherRoot.A;
+        })(Utils = A.Utils || (A.Utils = {}));
+    })(A = otherRoot.A || (otherRoot.A = {}));
 })(otherRoot || (otherRoot = {}));

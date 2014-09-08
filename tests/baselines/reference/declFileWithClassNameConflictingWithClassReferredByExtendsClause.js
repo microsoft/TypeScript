@@ -29,7 +29,9 @@ var __extends = this.__extends || function (d, b) {
 };
 var X;
 (function (X) {
+    var Y;
     (function (Y) {
+        var base;
         (function (base) {
             var W = (function (_super) {
                 __extends(W, _super);
@@ -39,15 +41,16 @@ var X;
                 return W;
             })(A.B.Base.W);
             base.W = W;
-        })(Y.base || (Y.base = {}));
-        var base = Y.base;
-    })(X.Y || (X.Y = {}));
-    var Y = X.Y;
+        })(base = Y.base || (Y.base = {}));
+    })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
 var X;
 (function (X) {
+    var Y;
     (function (Y) {
+        var base;
         (function (base) {
+            var Z;
             (function (Z) {
                 var W = (function (_super) {
                     __extends(W, _super);
@@ -57,12 +60,9 @@ var X;
                     return W;
                 })(X.Y.base.W);
                 Z.W = W;
-            })(base.Z || (base.Z = {}));
-            var Z = base.Z;
-        })(Y.base || (Y.base = {}));
-        var base = Y.base;
-    })(X.Y || (X.Y = {}));
-    var Y = X.Y;
+            })(Z = base.Z || (base.Z = {}));
+        })(base = Y.base || (Y.base = {}));
+    })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
 
 

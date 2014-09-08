@@ -13,19 +13,19 @@ export module c {
 
 
 //// [internalAliasFunctionInsideLocalModuleWithExport.js]
+var a;
 (function (a) {
     function foo(x) {
         return x;
     }
     a.foo = foo;
-})(exports.a || (exports.a = {}));
-var a = exports.a;
+})(a = exports.a || (exports.a = {}));
+var c;
 (function (c) {
     c.b = a.foo;
     c.bVal = c.b(10);
     c.bVal2 = c.b;
-})(exports.c || (exports.c = {}));
-var c = exports.c;
+})(c = exports.c || (exports.c = {}));
 
 
 //// [internalAliasFunctionInsideLocalModuleWithExport.d.ts]

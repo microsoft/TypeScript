@@ -1755,16 +1755,13 @@ module ts {
                 if (!isInstantiated(node)) {
                     return emitPinnedOrTripleSlashComments(node);
                 }
-
                 emitLeadingComments(node);
-                if (!(node.flags & NodeFlags.Export)) {
-                    emitStart(node);
-                    write("var ");
-                    emit(node.name);
-                    write(";");
-                    emitEnd(node);
-                    writeLine();
-                }
+                emitStart(node);
+                write("var ");
+                emit(node.name);
+                write(";");
+                emitEnd(node);
+                writeLine();
                 emitStart(node);
                 write("(function (");
                 emitStart(node.name);
@@ -1788,21 +1785,15 @@ module ts {
                     scopeEmitEnd();
                 }
                 write(")(");
+                if (node.flags & NodeFlags.Export) {
+                    emit(node.name);
+                    write(" = ");
+                }
                 emitModuleMemberName(node);
                 write(" || (");
                 emitModuleMemberName(node);
                 write(" = {}));");
                 emitEnd(node);
-                if (node.flags & NodeFlags.Export) {
-                    writeLine();
-                    emitStart(node);
-                    write("var ");
-                    emit(node.name);
-                    write(" = ");
-                    emitModuleMemberName(node);
-                    emitEnd(node);
-                    write(";");
-                }
                 emitTrailingComments(node);
             }
 

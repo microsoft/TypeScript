@@ -14,6 +14,7 @@ module c {
 //// [internalAliasInitializedModule.js]
 var a;
 (function (a) {
+    var b;
     (function (b) {
         var c = (function () {
             function c() {
@@ -21,8 +22,7 @@ var a;
             return c;
         })();
         b.c = c;
-    })(a.b || (a.b = {}));
-    var b = a.b;
+    })(b = a.b || (a.b = {}));
 })(a || (a = {}));
 var c;
 (function (c) {

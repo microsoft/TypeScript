@@ -46,8 +46,8 @@ var A;
         return Point;
     })();
     A.Point = Point;
+    var Point;
     (function (Point) {
         Point.Origin = ""; //expected duplicate identifier error
-    })(A.Point || (A.Point = {}));
-    var Point = A.Point;
+    })(Point = A.Point || (A.Point = {}));
 })(A || (A = {}));

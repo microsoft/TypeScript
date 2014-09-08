@@ -12,12 +12,12 @@ y.m.foo();
 
 
 //// [chainedImportAlias_file0.js]
+var m;
 (function (m) {
     function foo() {
     }
     m.foo = foo;
-})(exports.m || (exports.m = {}));
-var m = exports.m;
+})(m = exports.m || (exports.m = {}));
 //// [chainedImportAlias_file1.js]
 var x = require('chainedImportAlias_file0');
 var y = x;

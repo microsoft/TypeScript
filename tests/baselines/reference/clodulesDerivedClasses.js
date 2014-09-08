@@ -36,13 +36,13 @@ var Shape = (function () {
 })();
 var Shape;
 (function (Shape) {
+    var Utils;
     (function (Utils) {
         function convert() {
             return null;
         }
         Utils.convert = convert;
-    })(Shape.Utils || (Shape.Utils = {}));
-    var Utils = Shape.Utils;
+    })(Utils = Shape.Utils || (Shape.Utils = {}));
 })(Shape || (Shape = {}));
 var Path = (function (_super) {
     __extends(Path, _super);
@@ -53,11 +53,11 @@ var Path = (function (_super) {
 })(Shape);
 var Path;
 (function (Path) {
+    var Utils;
     (function (Utils) {
         function convert2() {
             return null;
         }
         Utils.convert2 = convert2;
-    })(Path.Utils || (Path.Utils = {}));
-    var Utils = Path.Utils;
+    })(Utils = Path.Utils || (Path.Utils = {}));
 })(Path || (Path = {}));

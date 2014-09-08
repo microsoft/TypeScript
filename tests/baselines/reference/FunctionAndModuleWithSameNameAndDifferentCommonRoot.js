@@ -33,10 +33,10 @@ var A;
 //// [module.js]
 var B;
 (function (B) {
+    var Point;
     (function (Point) {
         Point.Origin = { x: 0, y: 0 };
-    })(B.Point || (B.Point = {}));
-    var Point = B.Point;
+    })(Point = B.Point || (B.Point = {}));
 })(B || (B = {}));
 //// [test.js]
 var fn;

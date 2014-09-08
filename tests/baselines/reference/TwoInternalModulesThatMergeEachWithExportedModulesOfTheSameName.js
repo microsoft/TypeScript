@@ -37,10 +37,10 @@ var l: X.Y.Z.Line;
 //// [TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.js]
 var A;
 (function (A) {
+    var B;
     (function (B) {
         B.x;
-    })(A.B || (A.B = {}));
-    var B = A.B;
+    })(B = A.B || (A.B = {}));
 })(A || (A = {}));
 var A;
 (function (A) {
@@ -54,7 +54,9 @@ var x;
 var x = A.B.x;
 var X;
 (function (X) {
+    var Y;
     (function (Y) {
+        var Z;
         (function (Z) {
             var Line = (function () {
                 function Line() {
@@ -62,13 +64,12 @@ var X;
                 return Line;
             })();
             Z.Line = Line;
-        })(Y.Z || (Y.Z = {}));
-        var Z = Y.Z;
-    })(X.Y || (X.Y = {}));
-    var Y = X.Y;
+        })(Z = Y.Z || (Y.Z = {}));
+    })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
 var X;
 (function (X) {
+    var Y;
     (function (Y) {
         var Z;
         (function (Z) {
@@ -79,8 +80,7 @@ var X;
             })();
             Z.Line = Line;
         })(Z || (Z = {}));
-    })(X.Y || (X.Y = {}));
-    var Y = X.Y;
+    })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
 // make sure merging works as expected
 var l;
