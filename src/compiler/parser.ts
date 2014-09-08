@@ -141,11 +141,11 @@ module ts {
     export function getLeadingCommentsOfNode(node: Node, sourceFileOfNode: SourceFile) {
         // If parameter/type parameter, the prev token trailing comments are part of this node too
         if (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) {
-            // eg     (/** blah */ a, /** blah */ b);
+            // e.g.   (/** blah */ a, /** blah */ b);
             return concatenate(getTrailingComments(sourceFileOfNode.text, node.pos),
-                // eg:     (
-                //          /** blah */ a,
-                //          /** blah */ b);
+                // e.g.:     (
+                //            /** blah */ a,
+                //            /** blah */ b);
                 getLeadingComments(sourceFileOfNode.text, node.pos));
         }
         else {
@@ -157,7 +157,7 @@ module ts {
         return filter(getLeadingCommentsOfNode(node, sourceFileOfNode), comment => isJsDocComment(comment));
 
         function isJsDocComment(comment: Comment) {
-            // js doc is if comment is starting with /** but not if it is /**/
+            // True if the comment starts with '/**' but not if it is '/**/'
             return sourceFileOfNode.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
                 sourceFileOfNode.text.charCodeAt(comment.pos + 2) === CharacterCodes.asterisk &&
                 sourceFileOfNode.text.charCodeAt(comment.pos + 3) !== CharacterCodes.slash;
@@ -661,7 +661,7 @@ module ts {
         }
 
         function reportInvalidUseInStrictMode(node: Identifier): void {
-            // identifierToString cannot be used here since it uses backreference to 'parent' that is not yet set
+            // identifierToString cannot be used here since it uses a backreference to 'parent' that is not yet set
             var name = sourceText.substring(skipTrivia(sourceText, node.pos), node.end);
             grammarErrorOnNode(node, Diagnostics.Invalid_use_of_0_in_strict_mode, name);
         }
@@ -732,7 +732,7 @@ module ts {
             lookAheadMode = LookAheadMode.NoErrorYet;
             var result = callback();
 
-            // If we switched from 1 to to -1 then a parse error occurred during the callback.
+            // If we switched from 1 to -1 then a parse error occurred during the callback.
             // If that's the case, then we want to act as if we never got any result at all.
             Debug.assert(lookAheadMode === LookAheadMode.Error || lookAheadMode === LookAheadMode.NoErrorYet);
             if (lookAheadMode === LookAheadMode.Error) {
@@ -1634,7 +1634,7 @@ module ts {
             // (i.e. they're both BinaryExpressions with an assignment operator in it).
 
             // First, check if we have an arrow function (production '4') that starts with a parenthesized
-            // parameter list. If we do, we must *not* recurse for productsion 1, 2 or 3. An ArrowFunction is
+            // parameter list. If we do, we must *not* recurse for productions 1, 2 or 3. An ArrowFunction is
             // not a  LeftHandSideExpression, nor does it start a ConditionalExpression.  So we are done 
             // with AssignmentExpression if we see one.
             var arrowExpression = tryParseParenthesizedArrowFunctionExpression();
@@ -1822,7 +1822,7 @@ module ts {
             if (token === SyntaxKind.EqualsGreaterThanToken) {
                 // ERROR RECOVERY TWEAK:
                 // If we see a standalone => try to parse it as an arrow function expression as that's
-                // likely whatthe user intended to write.
+                // likely what the user intended to write.
                 return Tristate.True;
             }
             // Definitely not a parenthesized arrow function.
@@ -2725,8 +2725,8 @@ module ts {
             switch (token) {
                 case SyntaxKind.SemicolonToken:
                     // If we're in error recovery, then we don't want to treat ';' as an empty statement.
-                    // The problem is that ';' can show up in far too many contexts, and if we see one 
-                    // and assume it's a statement, then we may bail out innapropriately from whatever 
+                    // The problem is that ';' can show up in far too many contexts, and if we see one
+                    // and assume it's a statement, then we may bail out inappropriately from whatever
                     // we're parsing.  For example, if we have a semicolon in the middle of a class, then
                     // we really don't want to assume the class is over and we're on a statement in the
                     // outer module.  We just want to consume and move on.
@@ -3286,7 +3286,7 @@ module ts {
             function isIntegerLiteral(expression: Expression): boolean {
                 function isInteger(literalExpression: LiteralExpression): boolean {
                     // Allows for scientific notation since literalExpression.text was formed by
-                    // coercing a number to a string. Sometimes this coersion can yield a string
+                    // coercing a number to a string. Sometimes this coercion can yield a string
                     // in scientific notation.
                     // We also don't need special logic for hex because a hex integer is converted
                     // to decimal when it is coerced.
@@ -3308,7 +3308,7 @@ module ts {
 
             var inConstantEnumMemberSection = true;
             // In an ambient declaration, the grammar only allows integer literals as initializers.
-            // In a nonambient declaration, the grammar allows uninitialized members only in a
+            // In a non-ambient declaration, the grammar allows uninitialized members only in a
             // ConstantEnumMemberSection, which starts at the beginning of an enum declaration
             // or any time an integer literal initializer is encountered.
             function parseAndCheckEnumMember(): EnumMember {
@@ -3848,7 +3848,7 @@ module ts {
                 commonSourceDirectory = getNormalizedPathFromPathCompoments(commonPathComponents);
                 if (commonSourceDirectory) {
                     // Make sure directory path ends with directory separator so this string can directly 
-                    // used to replace with "" to get the relative path of the source file and the relative path doesnt
+                    // used to replace with "" to get the relative path of the source file and the relative path doesn't
                     // start with / making it rooted path
                     commonSourceDirectory += directorySeparator;
                 }

@@ -648,7 +648,7 @@ module ts {
     export interface SymbolAccessiblityResult {
         accessibility: SymbolAccessibility;
         errorSymbolName?: string // Optional symbol name that results in error
-        errorModuleName?: string // If the symbol is not visibile from module, module's name
+        errorModuleName?: string // If the symbol is not visible from module, module's name
         aliasesToMakeVisible?: ImportDeclaration[]; // aliases that need to have this symbol visible
     }
 
