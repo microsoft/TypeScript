@@ -46,27 +46,27 @@ module M
 //// [dottedModuleName2.js]
 var A;
 (function (A) {
+    var B;
     (function (B) {
         B.x = 1;
-    })(A.B || (A.B = {}));
-    var B = A.B;
+    })(B = A.B || (A.B = {}));
 })(A || (A = {}));
 var AA;
 (function (AA) {
+    var B;
     (function (B) {
         B.x = 1;
-    })(AA.B || (AA.B = {}));
-    var B = AA.B;
+    })(B = AA.B || (AA.B = {}));
 })(AA || (AA = {}));
 var tmpOK = AA.B.x;
 var tmpError = A.B.x;
 var A;
 (function (A) {
+    var B;
     (function (B) {
+        var C;
         (function (C) {
             C.x = 1;
-        })(B.C || (B.C = {}));
-        var C = B.C;
-    })(A.B || (A.B = {}));
-    var B = A.B;
+        })(C = B.C || (B.C = {}));
+    })(B = A.B || (A.B = {}));
 })(A || (A = {}));

@@ -35,17 +35,17 @@ var p: M2.X.Point;
 //// [nestedModules.js]
 var A;
 (function (A) {
+    var B;
     (function (B) {
         var Point = { x: 0, y: 0 }; // bug 832088: could not find module 'C'
-    })(A.B || (A.B = {}));
-    var B = A.B;
+    })(B = A.B || (A.B = {}));
 })(A || (A = {}));
 var M2;
 (function (M2) {
+    var X;
     (function (X) {
         X.Point;
-    })(M2.X || (M2.X = {}));
-    var X = M2.X;
+    })(X = M2.X || (M2.X = {}));
 })(M2 || (M2 = {}));
 var m = M2.X;
 var point;

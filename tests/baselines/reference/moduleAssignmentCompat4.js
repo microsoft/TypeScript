@@ -19,17 +19,18 @@ b = a; // error
 //// [moduleAssignmentCompat4.js]
 var A;
 (function (A) {
+    var M;
     (function (M) {
         var C = (function () {
             function C() {
             }
             return C;
         })();
-    })(A.M || (A.M = {}));
-    var M = A.M;
+    })(M = A.M || (A.M = {}));
 })(A || (A = {}));
 var B;
 (function (B) {
+    var M;
     (function (M) {
         var D = (function () {
             function D() {
@@ -37,8 +38,7 @@ var B;
             return D;
         })();
         M.D = D;
-    })(B.M || (B.M = {}));
-    var M = B.M;
+    })(M = B.M || (B.M = {}));
 })(B || (B = {}));
 var a;
 var b;

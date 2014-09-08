@@ -24,6 +24,7 @@ module m2 {
 
 //// [collisionExportsRequireAndInternalModuleAlias.js]
 define(["require", "exports"], function (require, exports) {
+    var m;
     (function (m) {
         var c = (function () {
             function c() {
@@ -31,8 +32,7 @@ define(["require", "exports"], function (require, exports) {
             return c;
         })();
         m.c = c;
-    })(exports.m || (exports.m = {}));
-    var m = exports.m;
+    })(m = exports.m || (exports.m = {}));
     var exports = m.c;
     var require = m.c;
     new exports();

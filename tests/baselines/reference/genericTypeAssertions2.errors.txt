@@ -22,5 +22,5 @@
     var r4: A<number> = <A<number>>new A();
     var r5: A<number> = <A<number>>[]; // error
                         ~~~~~~~~~~~~~
-!!! Neither type 'A<number>' nor type 'any[]' is assignable to the other:
-!!!   Property 'length' is missing in type 'A<number>'.
+!!! Neither type 'undefined[]' nor type 'A<number>' is assignable to the other:
+!!!   Property 'foo' is missing in type 'undefined[]'.

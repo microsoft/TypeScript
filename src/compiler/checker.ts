@@ -4329,8 +4329,9 @@ module ts {
             var exprType = checkExpression(node.operand);
             var targetType = getTypeFromTypeNode(node.type);
             if (fullTypeCheck && targetType !== unknownType) {
-                if (!isTypeAssignableTo(exprType, targetType)) {
-                    checkTypeAssignableTo(targetType, getWidenedType(exprType, /*supressNoImplicitAnyErrors*/ true), node, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other_Colon, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
+                var widenedType = getWidenedType(exprType, /*supressNoImplicitAnyErrors*/ true);
+                if (!(isTypeAssignableTo(targetType, widenedType))) {
+                    checkTypeAssignableTo(exprType, targetType, node, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other_Colon, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
                 }
             }
             return targetType;

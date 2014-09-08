@@ -150,6 +150,7 @@ var M5;
 })(M5 || (M5 = {}));
 var M6;
 (function (M6) {
+    var A;
     (function (A) {
         (function (Color) {
             Color[Color["Red"] = 0] = "Red";
@@ -157,18 +158,17 @@ var M6;
             Color[Color["Blue"] = 2] = "Blue";
         })(A.Color || (A.Color = {}));
         var Color = A.Color;
-    })(M6.A || (M6.A = {}));
-    var A = M6.A;
+    })(A = M6.A || (M6.A = {}));
 })(M6 || (M6 = {}));
 var M6;
 (function (M6) {
+    var A;
     (function (A) {
         (function (Color) {
             Color[Color["Yellow"] = 1] = "Yellow";
         })(A.Color || (A.Color = {}));
         var Color = A.Color;
-    })(M6.A || (M6.A = {}));
-    var A = M6.A;
+    })(A = M6.A || (M6.A = {}));
     var t = 1 /* Yellow */;
     t = 0 /* Red */;
 })(M6 || (M6 = {}));

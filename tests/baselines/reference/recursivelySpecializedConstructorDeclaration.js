@@ -38,8 +38,11 @@ var __extends = this.__extends || function (d, b) {
 };
 var MsPortal;
 (function (MsPortal) {
+    var Controls;
     (function (Controls) {
+        var Base;
         (function (Base) {
+            var ItemList;
             (function (ItemList) {
                 var ItemValue = (function () {
                     function ItemValue(value) {
@@ -55,10 +58,7 @@ var MsPortal;
                     return ViewModel;
                 })(ItemValue);
                 ItemList.ViewModel = ViewModel;
-            })(Base.ItemList || (Base.ItemList = {}));
-            var ItemList = Base.ItemList;
-        })(Controls.Base || (Controls.Base = {}));
-        var Base = Controls.Base;
-    })(MsPortal.Controls || (MsPortal.Controls = {}));
-    var Controls = MsPortal.Controls;
+            })(ItemList = Base.ItemList || (Base.ItemList = {}));
+        })(Base = Controls.Base || (Controls.Base = {}));
+    })(Controls = MsPortal.Controls || (MsPortal.Controls = {}));
 })(MsPortal || (MsPortal = {}));

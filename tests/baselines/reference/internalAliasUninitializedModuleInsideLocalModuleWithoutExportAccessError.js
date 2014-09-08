@@ -18,10 +18,10 @@ export var z: c.b.I;
 
 //// [internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.js]
 define(["require", "exports"], function (require, exports) {
+    var c;
     (function (c) {
         c.x;
         c.x.foo();
-    })(exports.c || (exports.c = {}));
-    var c = exports.c;
+    })(c = exports.c || (exports.c = {}));
     exports.z;
 });

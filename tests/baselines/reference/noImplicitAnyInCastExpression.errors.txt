@@ -16,5 +16,5 @@
     // Niether types is assignable to each other
     (<IFoo>{ c: null });
      ~~~~~~~~~~~~~~~~~
-!!! Neither type 'IFoo' nor type '{ c: any; }' is assignable to the other:
-!!!   Property 'c' is missing in type 'IFoo'.
+!!! Neither type '{ c: null; }' nor type 'IFoo' is assignable to the other:
+!!!   Property 'a' is missing in type '{ c: null; }'.

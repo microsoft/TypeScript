@@ -46,6 +46,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+var C;
 (function (C) {
     var A = (function () {
         function A() {
@@ -90,8 +91,7 @@ var __extends = this.__extends || function (d, b) {
         return D;
     })();
     C.D = D;
-})(exports.C || (exports.C = {}));
-var C = exports.C;
+})(C = exports.C || (exports.C = {}));
 exports.a;
 exports.b = C.F;
 exports.c = C.F2;
