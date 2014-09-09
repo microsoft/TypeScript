@@ -3172,8 +3172,13 @@ module ts {
                         else if (context === ModifierContext.ModuleElements || context === ModifierContext.SourceElements) {
                             grammarErrorAtPos(modifierStart, modifierLength, Diagnostics._0_modifier_cannot_appear_on_a_module_element, "public");
                         }
-                        flags |= NodeFlags.Public;
-                        onParseToken(SyntaxKind.PublicKeyword, parent, modifierStart, scanner.getStartPos())
+                        if (!(flags & NodeFlags.Public)) {
+                            onParseToken(SyntaxKind.PublicKeyword, parent, modifierStart, scanner.getStartPos());
+                            flags |= NodeFlags.Public;
+                        }
+                        else {
+                            // TODO: handle skipped token
+                        }
                         break;
 
                     case SyntaxKind.PrivateKeyword:
@@ -3188,8 +3193,13 @@ module ts {
                         }
                         lastPrivateModifierStart = modifierStart;
                         lastPrivateModifierLength = modifierLength;
-                        flags |= NodeFlags.Private;
-                        onParseToken(SyntaxKind.PrivateKeyword, parent, modifierStart, scanner.getStartPos())
+                        if (!(flags & NodeFlags.Public)) {
+                            flags |= NodeFlags.Private;
+                            onParseToken(SyntaxKind.PrivateKeyword, parent, modifierStart, scanner.getStartPos());
+                        }
+                        else {
+                            // TODO: handle skipped token
+                        }
                         break;
 
                     case SyntaxKind.StaticKeyword:
@@ -3204,9 +3214,14 @@ module ts {
                         }
                         lastStaticModifierStart = modifierStart;
                         lastStaticModifierLength = modifierLength;
-                        flags |= NodeFlags.Static;
-                        onParseToken(SyntaxKind.StaticKeyword, parent, modifierStart, scanner.getStartPos())
 
+                        if (!(flags & NodeFlags.Static)) {
+                            flags |= NodeFlags.Static;
+                            onParseToken(SyntaxKind.StaticKeyword, parent, modifierStart, scanner.getStartPos());
+                        }
+                        else {
+                            // TODO: handle skipped token
+                        }
                         break;
 
                     case SyntaxKind.ExportKeyword:
@@ -3222,9 +3237,14 @@ module ts {
                         else if (context === ModifierContext.Parameters) {
                             grammarErrorAtPos(modifierStart, modifierLength, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "export");
                         }
-                        flags |= NodeFlags.Export;
-                        onParseToken(SyntaxKind.ExportKeyword, parent, modifierStart, scanner.getStartPos())
 
+                        if (!(flags & NodeFlags.Export)) {
+                            flags |= NodeFlags.Export;
+                            onParseToken(SyntaxKind.ExportKeyword, parent, modifierStart, scanner.getStartPos());
+                        }
+                        else {
+                            // TODO: handle skipped token
+                        }
                         break;
 
                     case SyntaxKind.DeclareKeyword:
@@ -3242,7 +3262,13 @@ module ts {
                         }
                         lastDeclareModifierStart = modifierStart;
                         lastDeclareModifierLength = modifierLength;
-                        flags |= NodeFlags.Ambient;
+                        if (!(flags & NodeFlags.Ambient)) {
+                            flags |= NodeFlags.Ambient;
+                            onParseToken(SyntaxKind.DeclareKeyword, parent, modifierStart, scanner.getStartPos());
+                        }
+                        else {
+                            // TODO: handle skipped tokens
+                        }
                         break;
                 }
             }
