@@ -631,12 +631,10 @@ module ts {
     }
 
     export enum TypeFormatFlags {
-        None                        = 0x00000000, 
-
-        /** writes Array<T> instead T[]  */
-        WriteArrayAsGenericType     = 0x00000001,  // Declarations
-
-        UseTypeOfFunction           = 0x00000002,  // instead of writing signature type of function use typeof
+        None                    = 0x00000000, 
+        WriteArrayAsGenericType = 0x00000001,  // Write Array<T> instead T[]
+        UseTypeOfFunction       = 0x00000002,  // Write typeof instead of function type literal
+        NoTruncation            = 0x00000004,  // Don't truncate typeToString result
     }
 
     export enum SymbolAccessibility {
@@ -957,6 +955,7 @@ module ts {
         locale?: string;
         mapRoot?: string;
         module?: ModuleKind;
+        noErrorTruncation?: boolean;
         noImplicitAny?: boolean;
         noLib?: boolean;
         noLibCheck?: boolean;
@@ -969,7 +968,6 @@ module ts {
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
-
         [option: string]: any;
     }
 

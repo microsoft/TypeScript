@@ -37,7 +37,9 @@ module ts {
 
         var emptyArray: any[] = [];
         var emptySymbols: SymbolTable = {};
-        
+
+        var compilerOptions = program.getCompilerOptions();
+
         var checker: TypeChecker = {
             getProgram: () => program,
             getDiagnostics: getDiagnostics,
@@ -943,20 +945,37 @@ module ts {
             writer.write(symbolToString(symbol, enclosingDeclaration, meaning));
         }
 
-        function createSingleLineTextWriter() {
+        function createSingleLineTextWriter(maxLength?: number) {
             var result = "";
+            var overflow = false;
+            function write(s: string) {
+                if (!overflow) {
+                    result += s;
+                    if (result.length > maxLength) {
+                        result = result.substr(0, maxLength - 3) + "...";
+                        overflow = true;
+                    }
+                }
+            }
             return {
-                write(s: string) { result += s; },
-                writeSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) { writeSymbolToTextWriter(symbol, enclosingDeclaration, meaning, this); },
-                writeLine() { result += " "; },
+                write: write,
+                writeSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
+                    writeSymbolToTextWriter(symbol, enclosingDeclaration, meaning, this);
+                },
+                writeLine() {
+                    write(" ");
+                },
                 increaseIndent() { },
                 decreaseIndent() { },
-                getText() { return result; }
+                getText() {
+                    return result;
+                }
             };
         }
 
         function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
-            var stringWriter = createSingleLineTextWriter();
+            var maxLength = compilerOptions.noErrorTruncation || flags & TypeFormatFlags.NoTruncation ? undefined : 100;
+            var stringWriter = createSingleLineTextWriter(maxLength);
             // TODO(shkamat): typeToString should take enclosingDeclaration as input, once we have implemented enclosingDeclaration
             writeTypeToTextWriter(type, enclosingDeclaration, flags, stringWriter);
             return stringWriter.getText();
@@ -1348,7 +1367,7 @@ module ts {
             return type;
 
             function checkImplicitAny(type: Type) {
-                if (!fullTypeCheck || !program.getCompilerOptions().noImplicitAny) {
+                if (!fullTypeCheck || !compilerOptions.noImplicitAny) {
                     return;
                 }
                 // We need to have ended up with 'any', 'any[]', 'any[][]', etc.
@@ -1451,7 +1470,7 @@ module ts {
                         }
                         // Otherwise, fall back to 'any'.
                         else {
-                            if (program.getCompilerOptions().noImplicitAny) {
+                            if (compilerOptions.noImplicitAny) {
                                 error(setter, Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_type_annotation, symbol.name);
                             }
 
@@ -3971,7 +3990,7 @@ module ts {
                 }
 
                 // Fall back to any.
-                if (program.getCompilerOptions().noImplicitAny && objectType !== anyType) {
+                if (compilerOptions.noImplicitAny && objectType !== anyType) {
                     error(node, Diagnostics.Index_signature_of_object_type_implicitly_has_an_any_type);
                 }
 
@@ -4316,7 +4335,7 @@ module ts {
                 var declaration = signature.declaration;
                 if (declaration && (declaration.kind !== SyntaxKind.Constructor && declaration.kind !== SyntaxKind.ConstructSignature)) {
                     // When resolved signature is a call signature (and not a construct signature) the result type is any
-                    if (program.getCompilerOptions().noImplicitAny) {
+                    if (compilerOptions.noImplicitAny) {
                         error(node, Diagnostics.new_expression_whose_target_lacks_a_construct_signature_implicitly_has_an_any_type);
                     }
                     return anyType;
@@ -4362,7 +4381,7 @@ module ts {
                 var unwidenedType = checkAndMarkExpression(func.body, contextualMapper);
                 var widenedType = getWidenedType(unwidenedType);
 
-                if (fullTypeCheck && program.getCompilerOptions().noImplicitAny && widenedType !== unwidenedType && getInnermostTypeOfNestedArrayTypes(widenedType) === anyType) {
+                if (fullTypeCheck && compilerOptions.noImplicitAny && widenedType !== unwidenedType && getInnermostTypeOfNestedArrayTypes(widenedType) === anyType) {
                     error(func, Diagnostics.Function_expression_which_lacks_return_type_annotation_implicitly_has_an_0_return_type, typeToString(widenedType));
                 }
 
@@ -4384,7 +4403,7 @@ module ts {
                 var widenedType = getWidenedType(commonType);
 
                 // Check and report for noImplicitAny if the best common type implicitly gets widened to an 'any'/arrays-of-'any' type.
-                if (fullTypeCheck && program.getCompilerOptions().noImplicitAny && widenedType !== commonType && getInnermostTypeOfNestedArrayTypes(widenedType) === anyType) {
+                if (fullTypeCheck && compilerOptions.noImplicitAny && widenedType !== commonType && getInnermostTypeOfNestedArrayTypes(widenedType) === anyType) {
                     var typeName = typeToString(widenedType);
 
                     if (func.name) {
@@ -4960,7 +4979,7 @@ module ts {
                 checkCollisionWithCapturedThisVariable(node, node.name);
                 checkCollistionWithRequireExportsInGeneratedCode(node, node.name);
                 checkCollisionWithArgumentsInGeneratedCode(node);
-                if (program.getCompilerOptions().noImplicitAny && !node.type) {
+                if (compilerOptions.noImplicitAny && !node.type) {
                     switch (node.kind) {
                         case SyntaxKind.ConstructSignature:
                             error(node, Diagnostics.Construct_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type);
@@ -5516,7 +5535,7 @@ module ts {
             }
 
             // If there is no body and no explicit return type, then report an error.
-            if (fullTypeCheck && program.getCompilerOptions().noImplicitAny && !node.body && !node.type) {
+            if (fullTypeCheck && compilerOptions.noImplicitAny && !node.body && !node.type) {
                 // Ignore privates within ambient contexts; they exist purely for documentative purposes to avoid name clashing.
                 // (e.g. privates within .d.ts files do not expose type information)
                 if (!isPrivateWithinAmbient(node)) {
@@ -7161,7 +7180,7 @@ module ts {
         function shouldEmitDeclarations() {
             // If the declaration emit and there are no errors being reported in program or by checker
             // declarations can be emitted
-            return program.getCompilerOptions().declaration &&
+            return compilerOptions.declaration &&
                 !program.getDiagnostics().length &&
                 !getDiagnostics().length;
         }
