@@ -909,8 +909,8 @@ module ts {
 
             // Get qualified name 
             if (enclosingDeclaration &&
-                // Properties/methods/Signatures/Constructors/TypeParameters do not need qualification
-                !(symbol.flags & (SymbolFlags.PropertyOrAccessor | SymbolFlags.Signature | SymbolFlags.Constructor | SymbolFlags.Method | SymbolFlags.TypeParameter))) {
+                // TypeParameters do not need qualification
+                !(symbol.flags & SymbolFlags.TypeParameter)) {
                 var symbolName: string;
                 while (symbol) {
                     var isFirstName = !symbolName;
