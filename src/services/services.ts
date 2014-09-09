@@ -2146,7 +2146,8 @@ module ts {
                 return undefined;
             }
 
-            if (node.kind === SyntaxKind.Identifier || isLiteralNameOfPropertyDeclarationOrIndexAccess(node) || isNameOfExternalModuleImportOrDeclaration(node)) {
+            if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ThisKeyword ||
+                isLiteralNameOfPropertyDeclarationOrIndexAccess(node) || isNameOfExternalModuleImportOrDeclaration(node)) {
                 return getReferencesForNode(node, [sourceFile]);
             }
 
@@ -2243,7 +2244,7 @@ module ts {
                     }
 
                     // Ordinary case: just highlight the keyword.
-                    result.push(keywordToReferenceEntry(keywords[i]));
+                    result.push(getReferenceEntryFromNode(keywords[i]));
                 }
 
                 return result;
@@ -2262,7 +2263,7 @@ module ts {
                     pushKeywordIf(keywords, returnStatement.getFirstToken(), SyntaxKind.ReturnKeyword);
                 });
 
-                return map(keywords, keywordToReferenceEntry);
+                return map(keywords, getReferenceEntryFromNode);
             }
 
             function getTryCatchFinallyOccurrences(tryStatement: TryStatement): ReferenceEntry[] {
@@ -2278,7 +2279,7 @@ module ts {
                     pushKeywordIf(keywords, tryStatement.finallyBlock.getFirstToken(), SyntaxKind.FinallyKeyword);
                 }
 
-                return map(keywords, keywordToReferenceEntry);
+                return map(keywords, getReferenceEntryFromNode);
             }
 
             function getSwitchCaseDefaultOccurrences(switchStatement: SwitchStatement) {
@@ -2314,7 +2315,7 @@ module ts {
                     });
                 });
 
-                return map(keywords, keywordToReferenceEntry);
+                return map(keywords, getReferenceEntryFromNode);
             }
 
             function getBreakStatementOccurences(breakStatement: BreakOrContinueStatement): ReferenceEntry[]{
@@ -2363,10 +2364,6 @@ module ts {
 
                 return false;
             }
-
-            function keywordToReferenceEntry(keyword: Node): ReferenceEntry {
-                return new ReferenceEntry(filename, TypeScript.TextSpan.fromBounds(keyword.getStart(), keyword.end), /* isWriteAccess */ false);
-            }
         }
 
         function getReferencesAtPosition(filename: string, position: number): ReferenceEntry[] {
@@ -2381,6 +2378,7 @@ module ts {
             }
 
             if (node.kind !== SyntaxKind.Identifier &&
+                node.kind !== SyntaxKind.ThisKeyword &&
                 !isLiteralNameOfPropertyDeclarationOrIndexAccess(node) &&
                 !isNameOfExternalModuleImportOrDeclaration(node)) {
                 return undefined;
@@ -2396,7 +2394,7 @@ module ts {
                     var labelDefinition = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
                     // if we have a label definition, look within its statement for references, if not, then
                     // the label is undefined, just return a set of one for the current node.
-                    return labelDefinition ? getLabelReferencesInNode(labelDefinition.parent, labelDefinition) : [getReferenceEntry(node)];
+                    return labelDefinition ? getLabelReferencesInNode(labelDefinition.parent, labelDefinition) : [getReferenceEntryFromNode(node)];
                 }
                 else {
                     // it is a label definition and not a target, search within the parent labeledStatement
@@ -2404,13 +2402,17 @@ module ts {
                 }
             }
 
+            if (node.kind === SyntaxKind.ThisKeyword) {
+                return getReferencesForThisKeyword(node, sourceFiles);
+            }
+
             var symbol = typeInfoResolver.getSymbolInfo(node);
 
             // Could not find a symbol e.g. unknown identifier
             if (!symbol) {
                 // Even if we did not find a symbol, we have an identifer, so there is at least
-                // one reference that we know of. return than instead of undefined.
-                return [getReferenceEntry(node)];
+                // one reference that we know of. return that instead of undefined.
+                return [getReferenceEntryFromNode(node)];
             }
 
             // the symbol was an internal symbol and does not have a declaration e.g.undefined symbol
@@ -2554,7 +2556,7 @@ module ts {
                     // Only pick labels that are either the target label, or have a target that is the target label
                     if (node === targetLabel ||
                         (isJumpStatementTarget(node) && getTargetLabel(node, labelName) === targetLabel)) {
-                        result.push(getReferenceEntry(node));
+                        result.push(getReferenceEntryFromNode(node));
                     }
                 });
                 return result;
@@ -2619,7 +2621,96 @@ module ts {
                         }
 
                         if (isRelatableToSearchSet(searchSymbols, referenceSymbol, referenceLocation)) {
-                            result.push(getReferenceEntry(referenceLocation));
+                            result.push(getReferenceEntryFromNode(referenceLocation));
+                        }
+                    });
+                }
+            }
+
+            function getReferencesForThisKeyword(thisKeyword: Node, sourceFiles: SourceFile[]) {
+                // Get the owner" of the 'this' keyword.
+                var thisContainer = getThisContainer(thisKeyword, /* includeArrowFunctions */ false);
+
+                var searchSpaceNode: Node;
+
+                // Whether 'this' occurs in a static context within a class;
+                var staticFlag = NodeFlags.Static;
+
+                switch (thisContainer.kind) {
+                    case SyntaxKind.Property:
+                    case SyntaxKind.Method:
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                        searchSpaceNode = thisContainer.parent; // should be the owning class
+                        staticFlag &= thisContainer.flags
+                        break;
+                    case SyntaxKind.SourceFile:
+                        if (isExternalModule(<SourceFile>thisContainer)) {
+                            return undefined;
+                        }
+                    // Fall through
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.FunctionExpression:
+                        searchSpaceNode = thisContainer;
+                        break;
+                    default:
+                        return undefined;
+                }
+
+                var result: ReferenceEntry[] = [];
+
+                if (searchSpaceNode.kind === SyntaxKind.SourceFile) {
+                    forEach(sourceFiles, sourceFile => {
+                        var possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "this", sourceFile.getStart(), sourceFile.getEnd());
+                        getThisReferencesInFile(sourceFile, sourceFile, possiblePositions, result);
+                    });
+                }
+                else {
+                    var sourceFile = searchSpaceNode.getSourceFile();
+                    var possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "this", searchSpaceNode.getStart(), searchSpaceNode.getEnd());
+                    getThisReferencesInFile(sourceFile, searchSpaceNode, possiblePositions, result);
+                }
+
+                return result;
+
+                function getThisReferencesInFile(sourceFile: SourceFile, searchSpaceNode: Node, possiblePositions: number[], result: ReferenceEntry[]): void {
+                    forEach(possiblePositions, position => {
+                        cancellationToken.throwIfCancellationRequested();
+
+                        var node = getNodeAtPosition(sourceFile, position);
+                        if (!node || node.kind !== SyntaxKind.ThisKeyword) {
+                            return;
+                        }
+
+                        // Get the owner of the 'this' keyword.
+                        // This *should* be a node that occurs somewhere within searchSpaceNode.
+                        var container = getThisContainer(node, /* includeArrowFunctions */ false);
+
+                        switch (container.kind) {
+                            case SyntaxKind.Property:
+                            case SyntaxKind.Method:
+                            case SyntaxKind.Constructor:
+                            case SyntaxKind.GetAccessor:
+                            case SyntaxKind.SetAccessor:
+                                // Make sure the container belongs to the same class
+                                // and has the appropriate static modifier from the original container.
+                                if (searchSpaceNode.symbol === container.parent.symbol && (container.flags & NodeFlags.Static) === staticFlag) {
+                                    result.push(getReferenceEntryFromNode(node));
+                                }
+                                break;
+                            case SyntaxKind.FunctionDeclaration:
+                            case SyntaxKind.FunctionExpression:
+                                if (searchSpaceNode.symbol === container.symbol) {
+                                    result.push(getReferenceEntryFromNode(node));
+                                }
+                                break;
+                            case SyntaxKind.SourceFile:
+                                // Add all 'this' keywords that belong to the top-level scope.
+                                if (searchSpaceNode.kind === SyntaxKind.SourceFile && !isExternalModule(<SourceFile>searchSpaceNode)) {
+                                    result.push(getReferenceEntryFromNode(node));
+                                }
+                                break;
                         }
                     });
                 }
@@ -2719,18 +2810,6 @@ module ts {
                     }
                 }
                 return undefined;
-            }
-
-            function getReferenceEntry(node: Node): ReferenceEntry {
-                var start = node.getStart();
-                var end = node.getEnd();
-
-                if (node.kind === SyntaxKind.StringLiteral) {
-                    start += 1;
-                    end -= 1;
-                } 
-
-                return new ReferenceEntry(node.getSourceFile().filename, TypeScript.TextSpan.fromBounds(start, end), isWriteAccess(node));
             }
 
             function getMeaningFromDeclaration(node: Declaration): SearchMeaning {
@@ -2869,40 +2948,38 @@ module ts {
                 }
                 return meaning;
             }
+        }
 
-            /// A node is considedered a writeAccess iff it is a name of a declaration or a target of an assignment
-            function isWriteAccess(node: Node): boolean {
-                if (node.kind === SyntaxKind.Identifier && isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
+        function getReferenceEntryFromNode(node: Node): ReferenceEntry {
+            var start = node.getStart();
+            var end = node.getEnd();
+
+            if (node.kind === SyntaxKind.StringLiteral) {
+                start += 1;
+                end -= 1;
+            }
+
+            return new ReferenceEntry(node.getSourceFile().filename, TypeScript.TextSpan.fromBounds(start, end), isWriteAccess(node));
+        }
+
+        /// A node is considedered a writeAccess iff it is a name of a declaration or a target of an assignment
+        function isWriteAccess(node: Node): boolean {
+            if (node.kind === SyntaxKind.Identifier && isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
+                return true;
+            }
+
+            var parent = node.parent;
+            if (parent) {
+                if (parent.kind === SyntaxKind.PostfixOperator || parent.kind === SyntaxKind.PrefixOperator) {
                     return true;
                 }
-
-                var parent = node.parent;
-                if (parent) {
-                    if (parent.kind === SyntaxKind.PostfixOperator || parent.kind === SyntaxKind.PrefixOperator) {
-                        return true;
-                    }
-                    else if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).left === node) {
-                        var operator = (<BinaryExpression>parent).operator;
-                        switch (operator) {
-                            case SyntaxKind.AsteriskEqualsToken:
-                            case SyntaxKind.SlashEqualsToken:
-                            case SyntaxKind.PercentEqualsToken:
-                            case SyntaxKind.MinusEqualsToken:
-                            case SyntaxKind.LessThanLessThanEqualsToken:
-                            case SyntaxKind.GreaterThanGreaterThanEqualsToken:
-                            case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
-                            case SyntaxKind.BarEqualsToken:
-                            case SyntaxKind.CaretEqualsToken:
-                            case SyntaxKind.AmpersandEqualsToken:
-                            case SyntaxKind.PlusEqualsToken:
-                            case SyntaxKind.EqualsToken:
-                                return true;
-                        }
-                    }
-
-                    return false;
+                else if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).left === node) {
+                    var operator = (<BinaryExpression>parent).operator;
+                    return SyntaxKind.FirstAssignment <= operator && operator <= SyntaxKind.LastAssignment;
                 }
             }
+
+            return false;
         }
 
         /// Syntactic features
