@@ -1453,6 +1453,11 @@ declare var FileReader: {
     new(): FileReader;
 }
 
+interface BlobPropertyBag {
+    type?: string;
+    endings?: string;
+}
+
 interface Blob {
     type: string;
     size: number;
@@ -1462,7 +1467,7 @@ interface Blob {
 }
 declare var Blob: {
     prototype: Blob;
-    new(): Blob;
+    new (blobParts?: any[], options?: BlobPropertyBag): Blob;
 }
 
 interface MSStream {
