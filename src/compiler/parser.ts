@@ -411,7 +411,7 @@ module ts {
         while (true) {
             node = node.parent;
             if (!node) {
-                return node;
+                return undefined;
             }
             switch (node.kind) {
                 case SyntaxKind.ArrowFunction:
@@ -438,7 +438,7 @@ module ts {
         while (true) {
             node = node.parent;
             if (!node) {
-                return node;
+                return undefined;
             }
             switch (node.kind) {
                 case SyntaxKind.Property:
