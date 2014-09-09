@@ -58,7 +58,7 @@
                       ~~
 !!! Interface 'I4' incorrectly extends interface 'A':
 !!!   Types of property 'a8' are incompatible:
-!!!     Type 'new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r...' is not assignable to type 'new (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived':
+!!!     Type 'new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U' is not assignable to type 'new (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived':
 !!!       Types of parameters 'y' and 'y' are incompatible:
 !!!         Type '(arg2: { foo: number; }) => any' is not assignable to type '(arg2: Base) => Derived':
 !!!           Types of parameters 'arg2' and 'arg2' are incompatible:

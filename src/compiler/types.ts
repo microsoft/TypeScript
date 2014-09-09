@@ -955,6 +955,7 @@ module ts {
         locale?: string;
         mapRoot?: string;
         module?: ModuleKind;
+        noErrorTruncation?: boolean;
         noImplicitAny?: boolean;
         noLib?: boolean;
         noLibCheck?: boolean;
@@ -967,7 +968,6 @@ module ts {
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
-
         [option: string]: any;
     }
 
