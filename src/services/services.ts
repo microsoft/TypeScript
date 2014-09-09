@@ -2378,8 +2378,9 @@ module ts {
             }
 
             if (node.kind !== SyntaxKind.Identifier &&
-                node.kind !== SyntaxKind.ThisKeyword &&
-                node.kind !== SyntaxKind.SuperKeyword &&
+                // TODO (drosen): This should be enabled in a later release - currently breaks rename.
+                //node.kind !== SyntaxKind.ThisKeyword &&
+                //node.kind !== SyntaxKind.SuperKeyword &&
                 !isLiteralNameOfPropertyDeclarationOrIndexAccess(node) &&
                 !isNameOfExternalModuleImportOrDeclaration(node)) {
                 return undefined;
