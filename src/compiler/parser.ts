@@ -411,7 +411,7 @@ module ts {
         while (true) {
             node = node.parent;
             if (!node) {
-                return node;
+                return undefined;
             }
             switch (node.kind) {
                 case SyntaxKind.ArrowFunction:
@@ -429,6 +429,23 @@ module ts {
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.SourceFile:
+                    return node;
+            }
+        }
+    }
+
+    export function getSuperContainer(node: Node): Node {
+        while (true) {
+            node = node.parent;
+            if (!node) {
+                return undefined;
+            }
+            switch (node.kind) {
+                case SyntaxKind.Property:
+                case SyntaxKind.Method:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
                     return node;
             }
         }
