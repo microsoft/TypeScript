@@ -2134,7 +2134,6 @@ module ts {
             return result;
         }
 
-        /// Find references
         function getOccurrencesAtPosition(filename: string, position: number): ReferenceEntry[] {
             synchronizeHostData();
 
@@ -2404,8 +2403,12 @@ module ts {
                 }
             }
 
-            if (node.kind === SyntaxKind.ThisKeyword || node.kind === SyntaxKind.SuperKeyword) {
-                return getReferencesForThisOrSuperKeyword(node, sourceFiles);
+            if (node.kind === SyntaxKind.ThisKeyword) {
+                return getReferencesForThisKeyword(node, sourceFiles);
+            }
+
+            if (node.kind === SyntaxKind.SuperKeyword) {
+                return getReferencesForSuperKeyword(node);
             }
 
             var symbol = typeInfoResolver.getSymbolInfo(node);
@@ -2629,24 +2632,57 @@ module ts {
                 }
             }
 
-            function getReferencesForThisOrSuperKeyword(thisOrSuperKeyword: Node, sourceFiles: SourceFile[]): ReferenceEntry[] {
-                var keywordName: string;
-                var searchSpaceNode: Node;
-
-                if (thisOrSuperKeyword.kind === SyntaxKind.ThisKeyword) {
-                    keywordName = "this"
-                    searchSpaceNode = getThisContainer(thisOrSuperKeyword, /* includeArrowFunctions */ false);
+            function getReferencesForSuperKeyword(superKeyword: Node): ReferenceEntry[]{
+                var searchSpaceNode = getSuperContainer(superKeyword);
+                if (!searchSpaceNode) {
+                    return undefined;
                 }
-                else {
-                    keywordName = "super";
-                    searchSpaceNode = getSuperContainer(thisOrSuperKeyword);
+                // Whether 'super' occurs in a static context within a class.
+                var staticFlag = NodeFlags.Static;
 
-                    if (!searchSpaceNode) {
+                switch (searchSpaceNode.kind) {
+                    case SyntaxKind.Property:
+                    case SyntaxKind.Method:
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                        staticFlag &= searchSpaceNode.flags;
+                        searchSpaceNode = searchSpaceNode.parent; // re-assign to be the owning class
+                        break;
+                    default:
                         return undefined;
-                    }
                 }
 
-                // Whether 'this'/'super' occurs in a static context within a class.
+                var result: ReferenceEntry[] = [];
+
+                var sourceFile = searchSpaceNode.getSourceFile();
+                var possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "super", searchSpaceNode.getStart(), searchSpaceNode.getEnd());
+                forEach(possiblePositions, position => {
+                    cancellationToken.throwIfCancellationRequested();
+
+                    var node = getNodeAtPosition(sourceFile, position);
+
+                    if (!node || node.kind !== SyntaxKind.SuperKeyword) {
+                        return;
+                    }
+
+                    var container = getSuperContainer(node);
+
+                    // If we have a 'super' container, we must have an enclosing class.
+                    // Now make sure the owning class is the same as the search-space
+                    // and has the same static qualifier as the original 'super's owner.
+                    if (container && (NodeFlags.Static & container.flags) === staticFlag && container.parent.symbol === searchSpaceNode.symbol) {
+                        result.push(getReferenceEntryFromNode(node));
+                    }
+                });
+
+                return result;
+            }
+
+            function getReferencesForThisKeyword(thisOrSuperKeyword: Node, sourceFiles: SourceFile[]): ReferenceEntry[] {
+                var searchSpaceNode = getThisContainer(thisOrSuperKeyword, /* includeArrowFunctions */ false);
+
+                // Whether 'this' occurs in a static context within a class.
                 var staticFlag = NodeFlags.Static;
 
                 switch (searchSpaceNode.kind) {
@@ -2662,13 +2698,9 @@ module ts {
                         if (isExternalModule(<SourceFile>searchSpaceNode)) {
                             return undefined;
                         }
-                        break;
+                    // Fall through
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.FunctionExpression:
-                        // 'super' can only occur within a class.
-                        if (thisOrSuperKeyword.kind === SyntaxKind.SuperKeyword) {
-                            return undefined;
-                        }
                         break;
                     default:
                         return undefined;
@@ -2678,60 +2710,48 @@ module ts {
 
                 if (searchSpaceNode.kind === SyntaxKind.SourceFile) {
                     forEach(sourceFiles, sourceFile => {
-                        var possiblePositions = getPossibleSymbolReferencePositions(sourceFile, keywordName, sourceFile.getStart(), sourceFile.getEnd());
-                        getThisOrSuperReferencesInFile(sourceFile, sourceFile, possiblePositions, result);
+                        var possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "this", sourceFile.getStart(), sourceFile.getEnd());
+                        getThisReferencesInFile(sourceFile, sourceFile, possiblePositions, result);
                     });
                 }
                 else {
                     var sourceFile = searchSpaceNode.getSourceFile();
-                    var possiblePositions = getPossibleSymbolReferencePositions(sourceFile, keywordName, searchSpaceNode.getStart(), searchSpaceNode.getEnd());
-                    getThisOrSuperReferencesInFile(sourceFile, searchSpaceNode, possiblePositions, result);
+                    var possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "this", searchSpaceNode.getStart(), searchSpaceNode.getEnd());
+                    getThisReferencesInFile(sourceFile, searchSpaceNode, possiblePositions, result);
                 }
 
                 return result;
 
-                function getThisOrSuperReferencesInFile(sourceFile: SourceFile, searchSpaceNode: Node, possiblePositions: number[], result: ReferenceEntry[]): void {
+                function getThisReferencesInFile(sourceFile: SourceFile, searchSpaceNode: Node, possiblePositions: number[], result: ReferenceEntry[]): void {
                     forEach(possiblePositions, position => {
                         cancellationToken.throwIfCancellationRequested();
 
                         var node = getNodeAtPosition(sourceFile, position);
-                        if (!node) {
+                        if (!node || node.kind !== SyntaxKind.ThisKeyword) {
                             return;
                         }
 
-                        var container = getNodeAtPosition(sourceFile, position);
-                        if (!container) {
-                            return;
-                        }
+                        var container = getThisContainer(node, /* includeArrowFunctions */ false);
 
-                        if (node.kind === SyntaxKind.SuperKeyword) {
-                            container = getSuperContainer(node);
-                        }
-                        else if (node.kind === SyntaxKind.ThisKeyword) {
-                            container = getThisContainer(node, /* includeArrowFunctions */ false);
-                        }
-
-                        if (container) {
-                            switch (searchSpaceNode.kind) {
-                                case SyntaxKind.FunctionExpression:
-                                case SyntaxKind.FunctionDeclaration:
-                                    if (searchSpaceNode.symbol === container.symbol) {
-                                        result.push(getReferenceEntryFromNode(node));
-                                    }
-                                    break;
-                                case SyntaxKind.ClassDeclaration:
-                                    // Make sure the container belongs to the same class
-                                    // and has the appropriate static modifier from the original container.
-                                    if (container.parent && searchSpaceNode.symbol === container.parent.symbol && (container.flags & NodeFlags.Static) === staticFlag) {
-                                        result.push(getReferenceEntryFromNode(node));
-                                    }
-                                    break;
-                                case SyntaxKind.SourceFile:
-                                    if (container.kind === SyntaxKind.SourceFile && !isExternalModule(<SourceFile>container)) {
-                                        result.push(getReferenceEntryFromNode(node));
-                                    }
-                                    break;
-                            }
+                        switch (searchSpaceNode.kind) {
+                            case SyntaxKind.FunctionExpression:
+                            case SyntaxKind.FunctionDeclaration:
+                                if (searchSpaceNode.symbol === container.symbol) {
+                                    result.push(getReferenceEntryFromNode(node));
+                                }
+                                break;
+                            case SyntaxKind.ClassDeclaration:
+                                // Make sure the container belongs to the same class
+                                // and has the appropriate static modifier from the original container.
+                                if (container.parent && searchSpaceNode.symbol === container.parent.symbol && (container.flags & NodeFlags.Static) === staticFlag) {
+                                    result.push(getReferenceEntryFromNode(node));
+                                }
+                                break;
+                            case SyntaxKind.SourceFile:
+                                if (container.kind === SyntaxKind.SourceFile && !isExternalModule(<SourceFile>container)) {
+                                    result.push(getReferenceEntryFromNode(node));
+                                }
+                                break;
                         }
                     });
                 }
