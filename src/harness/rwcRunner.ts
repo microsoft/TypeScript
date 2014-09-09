@@ -62,6 +62,7 @@ module RWC {
         var inputFiles: { unitName: string; content: string; }[] = [];
         var otherFiles: { unitName: string; content: string; }[] = [];
         var compilerResult: Harness.Compiler.CompilerResult;
+        var compilerOptions: ts.CompilerOptions;
         it('can compile', () => {
             runWithIOLog(ioLog, () => {
                 harnessCompiler.reset();
@@ -92,7 +93,7 @@ module RWC {
                 opts.options.noLib = true;
 
                 // Emit the results
-                harnessCompiler.compileFiles(inputFiles, otherFiles, compileResult => {
+                compilerOptions = harnessCompiler.compileFiles(inputFiles, otherFiles, compileResult => {
                     compilerResult = compileResult;
                 }, /*settingsCallback*/ undefined, opts.options);
             });
@@ -112,6 +113,17 @@ module RWC {
         // Baselines
         var baselineOpts: Harness.Baseline.BaselineOptions = { Subfolder: 'rwc' };
         var baseName = /(.*)\/(.*).json/.exec(Harness.Path.switchToForwardSlashes(jsonPath))[2];
+
+        // Compile .d.ts files
+        var declFileCompilationResult: {
+            declInputFiles: { unitName: string; content: string }[];
+            declOtherFiles: { unitName: string; content: string }[];
+            declResult: Harness.Compiler.CompilerResult;
+        };
+        it('Correct compiler generated.d.ts', () => {
+            declFileCompilationResult = harnessCompiler.compileDeclarationFiles(inputFiles, otherFiles, compilerResult, /*settingscallback*/ undefined, compilerOptions);
+        });
+
 
         it('has the expected emitted code', () => {
             Harness.Baseline.runBaseline('has the expected emitted code', baseName + '.output.js', () => {
@@ -139,9 +151,9 @@ module RWC {
         });
 
         it('has correct source map record', () => {
-            if (compilerResult.sourceMapRecord) {
+            if (compilerOptions.sourceMap) {
                 Harness.Baseline.runBaseline('has correct source map record', baseName + '.sourcemap.txt', () => {
-                    return compilerResult.sourceMapRecord;
+                    return compilerResult.getSourceMapRecord();
                 }, false, baselineOpts);
             }
         });
@@ -156,6 +168,20 @@ module RWC {
                     sys.newLine + sys.newLine +
                     Harness.Compiler.getErrorBaseline(inputFiles.concat(otherFiles), compilerResult.errors);
             }, false, baselineOpts);
+        });
+
+        it('has no errors in generated declaration files', () => {
+            if (compilerOptions.declaration && !compilerResult.errors.length) {
+                Harness.Baseline.runBaseline('has no errors in generated declaration files', baseName + '.dts.errors.txt', () => {
+                    if (declFileCompilationResult.declResult.errors.length === 0) {
+                        return null;
+                    }
+
+                    return Harness.Compiler.minimalDiagnosticsToString(declFileCompilationResult.declResult.errors) +
+                        sys.newLine + sys.newLine +
+                        Harness.Compiler.getErrorBaseline(declFileCompilationResult.declInputFiles.concat(declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.errors);
+                }, false, baselineOpts);
+            }
         });
 
         // TODO: Type baselines (need to refactor out from compilerRunner)
