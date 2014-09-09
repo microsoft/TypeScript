@@ -500,7 +500,7 @@ module ts {
         return false;
     }
 
-    export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, version: string, isOpen: boolean = false): SourceFile {
+    export function createSourceFile(filename: string, sourceText: string, languageVersion: ScriptTarget, version: string, isOpen: boolean = false, parserHooks?: ParserHooks): SourceFile {
         var file: SourceFile;
         var scanner: Scanner;
         var token: SyntaxKind;

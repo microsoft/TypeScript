@@ -552,8 +552,6 @@ module ts {
         getSignatureConstructor: () => <any>Signature
     }
 
-    export var parserHooks: ParserHooks;
-
     export enum AssertionLevel {
         None = 0,
         Normal = 1,

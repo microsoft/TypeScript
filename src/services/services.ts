@@ -652,7 +652,7 @@ module ts {
         }
 
         public static createSourceFileObject(filename: string, scriptSnapshot: TypeScript.IScriptSnapshot, languageVersion: ScriptTarget, version: string, isOpen: boolean, syntaxTree?: TypeScript.SyntaxTree) {
-            var newSourceFile = <SourceFileObject><any>createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), languageVersion, version, isOpen);
+            var newSourceFile = <SourceFileObject><any>createSourceFile(filename, scriptSnapshot.getText(0, scriptSnapshot.getLength()), languageVersion, version, isOpen, parserHooks);
             newSourceFile.scriptSnapshot = scriptSnapshot;
             newSourceFile.syntaxTree = syntaxTree;
             return newSourceFile;
@@ -3685,6 +3685,8 @@ module ts {
             getClassificationsForLine: getClassificationsForLine
         };
     }
+
+    var parserHooks: ParserHooks;
 
     function initializeServices() {
         objectAllocator = {
