@@ -505,6 +505,41 @@ module ts {
         return false;
     }
 
+    export function getAncestor(node: Node, kind: SyntaxKind): Node {
+        switch (kind) {
+            // special-cases that can be come first
+            case SyntaxKind.ClassDeclaration:
+                while (node) {
+                    switch (node.kind) {
+                        case SyntaxKind.ClassDeclaration:
+                            return <ClassDeclaration>node;
+                        case SyntaxKind.EnumDeclaration:
+                        case SyntaxKind.InterfaceDeclaration:
+                        case SyntaxKind.ModuleDeclaration:
+                        case SyntaxKind.ImportDeclaration:
+                            // early exit cases - declarations cannot be nested in classes
+                            return undefined;
+                        default:
+                            node = node.parent;
+                            continue;
+                    }
+                }
+                break;
+            default:
+                while (node) {
+                    if (node.kind === kind) {
+                        return node;
+                    }
+                    else {
+                        node = node.parent;
+                    }
+                }
+                break;
+        }
+
+        return undefined;
+    }
+
     enum ParsingContext {
         SourceElements,          // Elements in source file
         ModuleElements,          // Elements in module declaration
