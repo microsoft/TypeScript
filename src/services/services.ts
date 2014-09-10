@@ -1734,6 +1734,11 @@ module ts {
                 return false;
             }
 
+            function isToken(kind: SyntaxKind) {
+                return (SyntaxKind.FirstPunctuation <= kind && kind <= SyntaxKind.LastPunctuation) ||
+                    (SyntaxKind.FirstKeyword <= kind && kind <= SyntaxKind.LastKeyword);
+            }
+
             synchronizeHostData();
 
             filename = TypeScript.switchToForwardSlashes(filename);
@@ -1788,6 +1793,9 @@ module ts {
 
             // TODO: this is a hack for now, we need a proper walking mechanism to verify that we have the correct node
             var mappedNode = getNodeAtPosition(sourceFile, TypeScript.end(node) - 1);
+            if (isToken(mappedNode.kind)) {
+                mappedNode = mappedNode.parent;
+            }
 
             Debug.assert(mappedNode, "Could not map a Fidelity node to an AST node");
 
