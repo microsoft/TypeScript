@@ -51,7 +51,7 @@ enum EmitReturnStatus {
     AllOutputGenerationSkipped = 1,     // No .js generated because of syntax errors, or compiler options errors, nothing generated
     JSGeneratedWithSemanticErrors = 2,  // .js and .map generated with semantic errors
     DeclarationGenerationSkipped = 3,   // .d.ts generation skipped because of semantic errors or declaration emitter specific errors; Output .js with semantic errors
-    EmitErrorsEncountered = 4           // Emitter errors occured during emitting process
+    EmitErrorsEncountered = 4           // Emitter errors occurred during emitting process
 }
 
 module FourSlashInterface {
