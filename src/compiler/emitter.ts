@@ -3104,7 +3104,7 @@ module ts {
 
                         // All the references that are not going to be part of same file
                         if ((referencedFile.flags & NodeFlags.DeclarationFile) || // This is a declare file reference
-                            shouldEmitToOwnFile(referencedFile) || // This is referenced file is emitting its own js file
+                            shouldEmitToOwnFile(referencedFile, compilerOptions) || // This is referenced file is emitting its own js file
                             !addedGlobalFileReference) { // Or the global out file corresponding to this reference was not added
 
                             writeReferencePath(referencedFile);
