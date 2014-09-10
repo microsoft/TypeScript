@@ -1734,8 +1734,7 @@ module ts {
             }
 
             function isToken(kind: SyntaxKind) {
-                return (SyntaxKind.FirstPunctuation <= kind && kind <= SyntaxKind.LastPunctuation) ||
-                    (SyntaxKind.FirstKeyword <= kind && kind <= SyntaxKind.LastKeyword);
+                return (SyntaxKind.FirstPunctuation <= kind && kind <= SyntaxKind.LastPunctuation);
             }
 
             synchronizeHostData();
