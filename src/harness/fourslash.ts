@@ -130,13 +130,15 @@ module FourSlash {
       outDir: 'outDir',
       declaration: 'declaration',
       sourceMap: 'sourceMap',
-      sourceRoot: 'sourceRoot'
+      sourceRoot: 'sourceRoot',
+      mapRoot: 'mapRoot',
+      module: 'module',
     };
 
     // List of allowed metadata names
     var fileMetadataNames = ['Filename'];
     var globalMetadataNames = ['BaselineFile', compilerOptMetadataNames.out, compilerOptMetadataNames.outDir, compilerOptMetadataNames.declaration, compilerOptMetadataNames.outDir,
-                               compilerOptMetadataNames.declaration, compilerOptMetadataNames.sourceMap, compilerOptMetadataNames.sourceRoot]
+                               compilerOptMetadataNames.declaration, compilerOptMetadataNames.sourceMap, compilerOptMetadataNames.sourceRoot, compilerOptMetadataNames.mapRoot, compilerOptMetadataNames.module]
 
     function convertGlobalOptionsToCompilationSettings(globalOptions: { [idx: string]: string }): ts.CompilationSettings {
         var settings: ts.CompilationSettings = {};
@@ -156,8 +158,26 @@ module FourSlash {
                     case compilerOptMetadataNames.sourceMap:
                       settings.mapSourceFiles = true;
                       break;
-                  case compilerOptMetadataNames.sourceRoot:
-                      settings.sourceRoot = globalOptions[prop]
+                    case compilerOptMetadataNames.sourceRoot:
+                      settings.sourceRoot = globalOptions[prop];
+                      break;
+                    case compilerOptMetadataNames.mapRoot:
+                      settings.mapRoot = globalOptions[prop];
+                      break;
+                    case compilerOptMetadataNames.module:
+                        // create appropriate external module target for CompilationSettings
+                        switch (globalOptions[prop]) {
+                          case "AMD":
+                            settings.moduleGenTarget = ts.ModuleGenTarget.Asynchronous;
+                            break;
+                          case "CommonJS":
+                            settings.moduleGenTarget = ts.ModuleGenTarget.Synchronous;
+                            break;
+                          default:
+                            settings.moduleGenTarget = ts.ModuleGenTarget.Unspecified;
+                            break;
+                        }
+                      break;
                 }
             }
         }
@@ -491,40 +511,6 @@ module FourSlash {
             var evaluation = new Function(emit.outputFiles[0].text + ';\r\nreturn (' + expr + ');')();
             if (evaluation !== value) {
                 throw new Error('Expected evaluation of expression "' + expr + '" to equal "' + value + '", but got "' + evaluation + '"');
-            }
-        }
-
-        public verifyEmitOutput(state: ts.EmitReturnStatus, filename?: string) {
-            var expectedFilenames:string[] = [];
-            if (filename !== undefined) {
-                expectedFilenames = filename.split(" ");
-            }
-
-            var emit = this.languageService.getEmitOutput(this.activeFile.fileName);
-
-            if (emit.emitOutputStatus !== state) {
-                throw new Error("Expected emitOutputResult '" + state + "', but actual emitOutputResult '" + emit.emitOutputStatus + "'");
-            }
-
-            var passed = true;
-            if (emit.outputFiles.length > 0) {
-                passed = expectedFilenames.every(expectedFilename => {
-                    return emit.outputFiles.some(outputFile => {
-                        return outputFile.name === expectedFilename;
-                    });
-                });
-            }
-
-            if (!passed) {
-                var errorMessage = "Expected outputFilename '" + filename + "', but actual outputFilename '";
-                emit.outputFiles.forEach((outputFile, idx, array) => {
-                    errorMessage += outputFile.name;
-                    if (idx !== emit.outputFiles.length - 1) {
-                        errorMessage += " ";
-                    }
-                });
-                errorMessage += "'";
-                throw new Error(errorMessage);
             }
         }
 
@@ -959,6 +945,54 @@ module FourSlash {
                     for (var pos = 0; pos < fileLength; pos++) {
                         resultString = resultString + this.getBreakpointStatementLocation(pos);
                     }
+                    return resultString;
+                },
+                true /* run immediately */);
+        }
+
+        public baselineGetEmitOutput() {
+            this.taoInvalidReason = 'baselineCurrentFileBreakpointLocations impossible';
+
+            Harness.Baseline.runBaseline(
+                "Breakpoint Locations for " + this.activeFile.fileName,
+                this.testData.globalOptions['BaselineFile'],
+                () => {
+                    var emitOutput = this.languageService.getEmitOutput(this.activeFile.fileName);
+                    var emitOutputStatus = emitOutput.emitOutputStatus;
+                    var resultString = "";
+
+                    // Print emitOutputStatus in readable format
+                    switch (emitOutputStatus) {
+                        case ts.EmitReturnStatus.Succeeded:
+                            resultString += "EmitOutputStatus : Succeeded\n";
+                            break;
+                        case ts.EmitReturnStatus.AllOutputGenerationSkipped:
+                            resultString += "EmitOutputStatus : AllOutputGenerationSkipped\n";
+                            break;
+                        case ts.EmitReturnStatus.JSGeneratedWithSemanticErrors:
+                            resultString += "EmitOutputStatus : JSGeneratedWithSemanticErrors\n";
+                            break;
+                        case ts.EmitReturnStatus.DeclarationGenerationSkipped:
+                            resultString += "EmitOutputStatus : DeclaratiionGenerationSkipped\n";
+                            break;
+                        case ts.EmitReturnStatus.EmitErrorsEncountered:
+                            resultString += "EmitOutputStatus : EmitErrorEncountered\n";
+                            break;
+                        default:
+                            resultString += "Invalid EmitOutputStatus\n";
+                            break;
+                    }
+
+                    emitOutput.outputFiles.forEach((outputFile, idx, array) => {
+                        var filename = "Filename : " + outputFile.name + "\n";
+                        if (filename.match("/*.js.map/") === undefined) {
+                            var content = outputFile.text;
+                        }
+                        else {
+                            var content = outputFile.text + "\n";
+                        }
+                        resultString = resultString + filename + content + "\n";
+                    });
                     return resultString;
                 },
                 true /* run immediately */);

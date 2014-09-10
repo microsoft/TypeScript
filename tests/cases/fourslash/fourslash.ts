@@ -266,10 +266,6 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifyEval(expr, value);
         }
 
-        public emitOutput(expectedState: EmitReturnStatus, expectedFilename?: string) {
-            FourSlash.currentTestState.verifyEmitOutput(expectedState, expectedFilename);
-        }
-
         public currentLineContentIs(text: string) {
             FourSlash.currentTestState.verifyCurrentLineContent(text);
         }
@@ -320,6 +316,10 @@ module FourSlashInterface {
 
         public baselineCurrentFileNameOrDottedNameSpans() {
             FourSlash.currentTestState.baselineCurrentFileNameOrDottedNameSpans();
+        }
+
+        public baselineGetEmitOutput() {
+            FourSlash.currentTestState.baselineGetEmitOutput();
         }
 
         public nameOrDottedNameSpanTextIs(text: string) {
