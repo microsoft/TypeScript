@@ -1810,12 +1810,13 @@ module ts {
 
             // Right of dot member completion list
             if (isRightOfDot) {
-                var type: ApparentType = typeInfoResolver.getApparentType(typeInfoResolver.getTypeOfNode(mappedNode));
-                if (!type) {
+                var type = typeInfoResolver.getTypeOfNode(mappedNode);
+                var apparentType: ApparentType = type && typeInfoResolver.getApparentType(type);
+                if (!apparentType) {
                     return undefined;
                 }
 
-                var symbols = type.getApparentProperties();
+                var symbols = apparentType.getApparentProperties();
                 isMemberCompletion = true;
                 getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
             }

@@ -2431,7 +2431,7 @@ module ts {
                 case SyntaxKind.Identifier:
                 case SyntaxKind.QualifiedName:
                     var symbol = getSymbolInfo(node);
-                    return getDeclaredTypeOfSymbol(symbol);
+                    return symbol && getDeclaredTypeOfSymbol(symbol);
                 default:
                     return unknownType;
             }
@@ -7077,7 +7077,7 @@ module ts {
 
             if (isTypeDeclarationName(node)) {
                 var symbol = getSymbolInfo(node);
-                return getDeclaredTypeOfSymbol(symbol);
+                return symbol && getDeclaredTypeOfSymbol(symbol);
             }
 
             if (isDeclaration(node)) {
@@ -7088,12 +7088,12 @@ module ts {
 
             if (isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
                 var symbol = getSymbolInfo(node);
-                return getTypeOfSymbol(symbol);
+                return symbol && getTypeOfSymbol(symbol);
             }
 
             if (isInRightSideOfImportOrExportAssignment(node)) {
                 var symbol = getSymbolInfo(node);
-                var declaredType = getDeclaredTypeOfSymbol(symbol);
+                var declaredType = symbol && getDeclaredTypeOfSymbol(symbol);
                 return declaredType !== unknownType ? declaredType : getTypeOfSymbol(symbol);
             }
 
