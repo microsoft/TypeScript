@@ -180,14 +180,6 @@ module Harness.LanguageService {
             throw new Error("No script with name '" + fileName + "'");
         }
 
-        public getDefaultLibFilename(): string {
-            return undefined;
-        }
-
-        public getCurrentDirectory(): string {
-            return undefined;
-        }
-
         //////////////////////////////////////////////////////////////////////
         // ILogger implementation
         //

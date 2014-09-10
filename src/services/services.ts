@@ -417,8 +417,6 @@ module ts {
         getScriptSnapshot(fileName: string): TypeScript.IScriptSnapshot;
         getLocalizedDiagnosticMessages(): any;
         getCancellationToken(): CancellationToken;
-        getDefaultLibFilename(): string;
-        getCurrentDirectory(): string;
     }
 
     //
