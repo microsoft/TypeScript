@@ -1296,8 +1296,12 @@ module ts {
             (<LabelledStatement>node.parent).label === node;
     }
 
+    /**
+     * Whether or not a 'node' is preceded by a label of the given string.
+     * Note: 'node' cannot be a SourceFile.
+     */
     function isLabelledBy(node: Node, labelName: string) {
-        for (var owner = node.parent; owner && owner.kind === SyntaxKind.LabelledStatement; owner = owner.parent) {
+        for (var owner = node.parent; owner.kind === SyntaxKind.LabelledStatement; owner = owner.parent) {
             if ((<LabelledStatement>owner).label.text === labelName) {
                 return true;
             }
@@ -2326,43 +2330,12 @@ module ts {
                         }
                     }
                 }
-                
-                // These track whether we can own unlabeled break/continues.
-                var breakSearchType = BreakContinueSearchType.All;
-                var continueSearchType = BreakContinueSearchType.All;
 
-                (function aggregateBreakContinues(node: Node) {
-                    // Remember the statuses of the flags before diving into the next node.
-                    var prevBreakSearchType = breakSearchType;
-                    var prevContinueSearchType = continueSearchType;
-
-                    switch (node.kind) {
-                        case SyntaxKind.BreakStatement:
-                        case SyntaxKind.ContinueStatement:
-                            if (ownsBreakOrContinue(loopNode, <BreakOrContinueStatement>node, breakSearchType, continueSearchType)) {
-                                pushKeywordIf(keywords, node.getFirstToken(), SyntaxKind.BreakKeyword, SyntaxKind.ContinueKeyword);
-                            }
-                            break;
-                        
-                        case SyntaxKind.ForStatement:
-                        case SyntaxKind.ForInStatement:
-                        case SyntaxKind.DoStatement:
-                        case SyntaxKind.WhileStatement:
-                            continueSearchType = BreakContinueSearchType.Labeled;
-                        // Fall through
-                        case SyntaxKind.SwitchStatement:
-                            breakSearchType = BreakContinueSearchType.Labeled;
-                    }
-
-                    // Do not cross function boundaries.
-                    if (!isAnyFunction(node)) {
-                        forEachChild(node, aggregateBreakContinues);
-                    }
-
-                    // Restore the last state.
-                    breakSearchType = prevBreakSearchType;
-                    continueSearchType = prevContinueSearchType;
-                })(loopNode.statement);
+                aggregateBreakAndContinueKeywords(/* owner */ loopNode,
+                                                  /* startPoint */ loopNode.statement,
+                                                  /* breakSearchType */ BreakContinueSearchType.All,
+                                                  /* continueSearchType */ BreakContinueSearchType.All,
+                                                  /* keywordAccumulator */ keywords);
 
                 return map(keywords, getReferenceEntryFromNode);
             }
@@ -2375,41 +2348,16 @@ module ts {
                 // Types of break statements we can grab on to.
                 var breakSearchType = BreakContinueSearchType.All;
 
-                // Go through each clause in the switch statement, collecting the case/default keywords.
+                // Go through each clause in the switch statement, collecting the 'case'/'default' keywords.
                 forEach(switchStatement.clauses, clause => {
                     pushKeywordIf(keywords, clause.getFirstToken(), SyntaxKind.CaseKeyword, SyntaxKind.DefaultKeyword);
 
-                    // For each clause, also recursively traverse the statements where we can find analogous breaks.
-                    forEachChild(clause, function aggregateBreakKeywords(node: Node): void {
-                        // Back the old search value up.
-                        var oldBreakSearchType = breakSearchType;
-
-                        switch (node.kind) {
-                            case SyntaxKind.BreakStatement:
-                                // If the break statement has a label, it cannot be part of a switch block.
-                                if (ownsBreakOrContinue(switchStatement,
-                                                        <BreakOrContinueStatement>node,
-                                                        breakSearchType,
-                                                        /*continuesSearchType*/ BreakContinueSearchType.None)) {
-                                    pushKeywordIf(keywords, node.getFirstToken(), SyntaxKind.BreakKeyword);
-                                }
-                                break;
-                            case SyntaxKind.ForStatement:
-                            case SyntaxKind.ForInStatement:
-                            case SyntaxKind.DoStatement:
-                            case SyntaxKind.WhileStatement:
-                            case SyntaxKind.SwitchStatement:
-                                breakSearchType = BreakContinueSearchType.Labeled;
-                        }
-
-                        // Do not cross function boundaries.
-                        if (!isAnyFunction(node)) {
-                            forEachChild(node, aggregateBreakKeywords);
-                        }
-
-                        // Restore the last state.
-                        breakSearchType = oldBreakSearchType;
-                    });
+                    // For each clause, aggregate each of the analogous 'break' statements.
+                    aggregateBreakAndContinueKeywords(/* owner */ switchStatement,
+                                                      /* startPoint */ clause,
+                                                      /* breakSearchType */ BreakContinueSearchType.All,
+                                                      /* continueSearchType */ BreakContinueSearchType.None,
+                                                      /* keywordAccumulator */ keywords);
                 });
 
                 return map(keywords, getReferenceEntryFromNode);
@@ -2445,10 +2393,54 @@ module ts {
                 return undefined;
             }
 
+            function aggregateBreakAndContinueKeywords(owner: Node,
+                                                       startPoint: Node,
+                                                       breakSearchType: BreakContinueSearchType,
+                                                       continueSearchType: BreakContinueSearchType,
+                                                       keywordAccumulator: Node[]): void {
+                (function aggregate(node: Node) {
+                    // Remember the statuses of the flags before diving into the next node.
+                    var prevBreakSearchType = breakSearchType;
+                    var prevContinueSearchType = continueSearchType;
+
+                    switch (node.kind) {
+                        case SyntaxKind.BreakStatement:
+                        case SyntaxKind.ContinueStatement:
+                            if (ownsBreakOrContinue(owner, <BreakOrContinueStatement>node, breakSearchType, continueSearchType)) {
+                                pushKeywordIf(keywordAccumulator, node.getFirstToken(), SyntaxKind.BreakKeyword, SyntaxKind.ContinueKeyword);
+                            }
+                            break;
+
+                        case SyntaxKind.ForStatement:
+                        case SyntaxKind.ForInStatement:
+                        case SyntaxKind.DoStatement:
+                        case SyntaxKind.WhileStatement:
+                            // Inner loops take ownership of unlabeled 'continue' statements.
+                            continueSearchType &= ~BreakContinueSearchType.Unlabeled;
+                        // Fall through
+                        case SyntaxKind.SwitchStatement:
+                            // Inner loops & 'switch' statements take ownership of unlabeled 'break' statements.
+                            breakSearchType &= ~BreakContinueSearchType.Unlabeled;
+                            break;
+                    }
+
+                    // Do not cross function boundaries.
+                    if (!isAnyFunction(node)) {
+                        forEachChild(node, aggregate);
+                    }
+
+                    // Restore the last state.
+                    breakSearchType = prevBreakSearchType;
+                    continueSearchType = prevContinueSearchType;
+                })(startPoint);
+
+                return;
+            }
+
             // Note: 'statement' must be a descendant of 'root'.
             //       Reasonable logic for restricting traversal prior to arriving at the
             //       'statement' node is beyond the scope of this function.
-            function ownsBreakOrContinue(root: Node,
+            function ownsBreakOrContinue(owner: Node,
                                          statement: BreakOrContinueStatement,
                                          breakSearchType: BreakContinueSearchType,
                                          continueSearchType: BreakContinueSearchType): boolean {
@@ -2456,8 +2448,8 @@ module ts {
                                     breakSearchType :
                                     continueSearchType;
 
-                if (statement.label) {
-                    return isLabelledBy(root, statement.label.text);
+                if (statement.label && (searchType & BreakContinueSearchType.Labeled)) {
+                    return isLabelledBy(owner, statement.label.text);
                 }
                 else {
                     return !!(searchType & BreakContinueSearchType.Unlabeled);
@@ -2817,7 +2809,7 @@ module ts {
                         if (isExternalModule(<SourceFile>searchSpaceNode)) {
                             return undefined;
                         }
-                    // Fall through
+                        // Fall through
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.FunctionExpression:
                         break;
