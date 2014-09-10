@@ -4088,19 +4088,6 @@ module ts {
             return getSignatureInstantiation(signature, getInferredTypes(context));
         }
 
-        // Inferentially type an expression by a contextual parameter type (section 4.12.2 in TypeScript spec)
-        function inferentiallyTypeExpession(expr: Expression, contextualType: Type, contextualMapper: TypeMapper): Type {
-            var type = checkExpressionWithContextualType(expr, contextualType, contextualMapper);
-            var signature = getSingleCallSignature(type);
-            if (signature && signature.typeParameters) {
-                var contextualSignature = getSingleCallSignature(contextualType);
-                if (contextualSignature && !contextualSignature.typeParameters) {
-                    type = getOrCreateTypeFromSignature(instantiateSignatureInContextOf(signature, contextualSignature, contextualMapper));
-                }
-            }
-            return type;
-        }
-
         function inferTypeArguments(signature: Signature, args: Expression[], excludeArgument?: boolean[]): Type[] {
             var typeParameters = signature.typeParameters;
             var context = createInferenceContext(typeParameters);
@@ -4109,7 +4096,7 @@ module ts {
             for (var i = 0; i < args.length; i++) {
                 if (!excludeArgument || excludeArgument[i] === undefined) {
                     var parameterType = getTypeAtPosition(signature, i);
-                    inferTypes(context, inferentiallyTypeExpession(args[i], parameterType, mapper), parameterType);
+                    inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, mapper), parameterType);
                 }
             }
             // Next, infer from those context sensitive arguments that are no longer excluded
@@ -4117,7 +4104,7 @@ module ts {
                 for (var i = 0; i < args.length; i++) {
                     if (excludeArgument[i] === false) {
                         var parameterType = getTypeAtPosition(signature, i);
-                        inferTypes(context, inferentiallyTypeExpession(args[i], parameterType, mapper), parameterType);
+                        inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, mapper), parameterType);
                     }
                 }
             }
@@ -4852,6 +4839,23 @@ module ts {
         // have the wildcard function type; this form of type check is used during overload resolution to exclude
         // contextually typed function and arrow expressions in the initial phase.
         function checkExpression(node: Expression, contextualMapper?: TypeMapper): Type {
+            var type = checkExpressionNode(node, contextualMapper);
+            if (contextualMapper && contextualMapper !== identityMapper) {
+                var signature = getSingleCallSignature(type);
+                if (signature && signature.typeParameters) {
+                    var contextualType = getContextualType(node);
+                    if (contextualType) {
+                        var contextualSignature = getSingleCallSignature(contextualType);
+                        if (contextualSignature && !contextualSignature.typeParameters) {
+                            type = getOrCreateTypeFromSignature(instantiateSignatureInContextOf(signature, contextualSignature, contextualMapper));
+                        }
+                    }
+                }
+            }
+            return type;
+        }
+
+        function checkExpressionNode(node: Expression, contextualMapper: TypeMapper): Type {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     return checkIdentifier(<Identifier>node);
