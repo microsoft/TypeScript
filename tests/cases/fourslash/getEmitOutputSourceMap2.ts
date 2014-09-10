@@ -17,9 +17,4 @@
 ////    var k = 10;
 //// }
 
-var filename = "sample/outDir/sourceMapResult";
-var jsFilename = filename + ".js"; 
-var sourceMapFilename = filename + ".js.map"; 
-var outputFilenames = jsFilename + " " + sourceMapFilename;
 verify.baselineGetEmitOutput();
-//verify.emitOutput(EmitReturnStatus.Succeeded, outputFilenames);

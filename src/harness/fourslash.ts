@@ -2147,6 +2147,10 @@ module FourSlash {
                             currentFileOptions[match[1]] = match[2];
                         }
                     } else {
+                        // Check if the match is already existed in the global options
+                        if (opts[match[1]] !== undefined) {
+                            throw new Error("Global Option : '" + match[1] + "' is already existed");
+                        }
                         opts[match[1]] = match[2];
                     }
                 }
