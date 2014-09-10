@@ -65,6 +65,7 @@
 
 test.ranges().forEach(r => {
     goTo.position(r.start);
+    verify.occurrencesAtPositionCount(test.ranges().length);
 
     test.ranges().forEach(range => {
         verify.occurrencesAtPositionContains(range, false);
@@ -72,6 +73,7 @@ test.ranges().forEach(r => {
 });
 
 goTo.marker();
+verify.occurrencesAtPositionCount(test.ranges().length);
 test.ranges().forEach(range => {
     verify.occurrencesAtPositionContains(range, false);
 });
