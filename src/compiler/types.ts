@@ -569,7 +569,7 @@ module ts {
     export interface SourceMapData {
         /** Where the sourcemap file is written */
         sourceMapFilePath: string;
-        /** source map url written in the js file */
+        /** source map URL written in the js file */
         jsSourceMappingURL: string;
         /** Source map's file field - js file name*/
         sourceMapFile: string;
@@ -594,7 +594,7 @@ module ts {
         AllOutputGenerationSkipped = 1,     // No .js generated because of syntax errors, or compiler options errors, nothing generated
         JSGeneratedWithSemanticErrors = 2,  // .js and .map generated with semantic errors
         DeclarationGenerationSkipped = 3,   // .d.ts generation skipped because of semantic errors or declaration emitter specific errors; Output .js with semantic errors
-        EmitErrorsEncountered = 4           // Emitter errors occured during emitting process
+        EmitErrorsEncountered = 4           // Emitter errors occurred during emitting process
     }
 
     export interface EmitResult {
