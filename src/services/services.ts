@@ -1592,7 +1592,6 @@ module ts {
             }
 
             var declarations = symbol.getDeclarations();
-            var firstDeclaration = [0];
             return {
                 name: displayName,
                 kind: getSymbolKind(symbol),
@@ -1956,7 +1955,7 @@ module ts {
         }
 
         function getSymbolKind(symbol: Symbol): string {
-            var flags = symbol.getFlags();
+            var flags = typeInfoResolver.getRootSymbol(symbol).getFlags();
 
             if (flags & SymbolFlags.Module) return ScriptElementKind.moduleElement;
             if (flags & SymbolFlags.Class) return ScriptElementKind.classElement;
