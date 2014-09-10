@@ -8,6 +8,6 @@
 ////}
 
 goTo.marker();
-verify.memberListContains('privMeth', '(): void');
-verify.memberListContains('pubMeth', '(): void');
+verify.memberListContains('privMeth', '() => void');
+verify.memberListContains('pubMeth', '() => void');
 verify.memberListContains('pubProp', 'number');
