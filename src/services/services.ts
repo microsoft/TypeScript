@@ -1815,7 +1815,17 @@ module ts {
                     return undefined;
                 }
 
-                var symbols = apparentType.getApparentProperties();
+                var containingClass = getAncestor(mappedNode, SyntaxKind.ClassDeclaration);
+
+                var symbols: Symbol[] = [];
+                // Filter private properties
+                forEach(apparentType.getApparentProperties(), symbol => {
+                    var declaration = symbol.declarations && symbol.declarations[0];
+                    if (declaration && declaration.flags & NodeFlags.Private && containingClass !== declaration.parent)
+                        return;
+
+                    symbols.push(symbol);
+                });
                 isMemberCompletion = true;
                 getCompletionEntriesFromSymbols(symbols, activeCompletionSession);
             }
