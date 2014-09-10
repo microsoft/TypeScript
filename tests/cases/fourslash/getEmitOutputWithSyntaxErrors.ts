@@ -1,6 +1,7 @@
 ﻿/// <reference path="fourslash.ts" />
 
-// @Filename: getEmitOutputWithSyntaxErrorsResult.ts
+// @BaselineFile: getEmitOutputWithSyntaxErrors.baseline
+// @Filename: inputFile.ts
 //// var x:
 
-verify.emitOutput(EmitReturnStatus.AllOutputGenerationSkipped);
+verify.baselineGetEmitOutput();

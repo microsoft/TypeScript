@@ -1,6 +1,7 @@
 ﻿/// <reference path="fourslash.ts" />
 
-// @out: tests/cases/fourslash/singleFile.js
+// @BaselineFile: getEmitOutputSingleFile.baseline
+// @out: outputDir/singleFile.js
 // @Filename: inputFile1.ts
 //// var x: any;
 //// class Bar {
@@ -15,5 +16,4 @@
 ////    y : number
 //// }
 
-var outputFilename = "tests/cases/fourslash/singleFile.js";
-verify.emitOutput(EmitReturnStatus.Succeeded, outputFilename);
+verify.baselineGetEmitOutput();

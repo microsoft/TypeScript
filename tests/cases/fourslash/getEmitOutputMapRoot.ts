@@ -1,8 +1,11 @@
 ﻿/// <reference path="fourslash.ts" />
 
-// @BaselineFile: getEmitOutputNoErrors.baseline
+// @BaselineFile: getEmitOutputMapRoots.baseline
 // @Filename: inputFile.ts
-//// var x;
+// @sourceMap: true
+// @mapRoot: mapRootDir/
+//// var x = 109;
+//// var foo = "hello world";
 //// class M {
 ////   x: number;
 ////   y: string;

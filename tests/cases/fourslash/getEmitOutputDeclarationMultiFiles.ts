@@ -1,5 +1,6 @@
 ﻿/// <reference path="fourslash.ts" />
 
+// @BaselineFile: getEmitOutputDeclarationMultiFiles.baseline
 // @declaration: true
 // @Filename: inputFile1.ts
 //// var x: number = 5;
@@ -15,7 +16,4 @@
 ////    y : number;
 //// }
 
-var inputFile1 = "tests/cases/fourslash/inputFile1";
-var inputFile2 = "tests/cases/fourslash/inputFile2";
-var outputFilenames = inputFile1 + ".js" + " " + inputFile2 + ".js" + " " + inputFile1 + ".d.ts" + " " + inputFile2 + ".d.ts";
-verify.emitOutput(EmitReturnStatus.Succeeded);
+verify.baselineGetEmitOutput();
