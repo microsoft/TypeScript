@@ -3151,6 +3151,45 @@ module ts {
             return (type.flags & TypeFlags.Anonymous) && type.symbol && (type.symbol.flags & SymbolFlags.ObjectLiteral) ? true : false;
         }
 
+        function getWidenedTypeOfObjectLiteral(type: Type): Type {
+            var properties = getPropertiesOfType(type);
+            if (properties.length) {
+                var widenedTypes: Type[] = [];
+                var propTypeWasWidened: boolean = false;
+                forEach(properties, p => {
+                    var propType = getTypeOfSymbol(p);
+                    var widenedType = getWidenedType(propType);
+                    if (propType !== widenedType) {
+                        propTypeWasWidened = true;
+
+                        if (compilerOptions.noImplicitAny && getInnermostTypeOfNestedArrayTypes(widenedType) === anyType) {
+                            error(p.valueDeclaration, Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type, p.name, typeToString(widenedType));
+                        }
+                    }
+                    widenedTypes.push(widenedType);
+                });
+                if (propTypeWasWidened) {
+                    var members: SymbolTable = {};
+                    var index = 0;
+                    forEach(properties, p => {
+                        var symbol = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient, p.name);
+                        symbol.declarations = p.declarations;
+                        symbol.parent = p.parent;
+                        symbol.type = widenedTypes[index++];
+                        symbol.target = p;
+                        if (p.valueDeclaration) symbol.valueDeclaration = p.valueDeclaration;
+                        members[symbol.name] = symbol;
+                    });
+                    var stringIndexType = getIndexTypeOfType(type, IndexKind.String);
+                    var numberIndexType = getIndexTypeOfType(type, IndexKind.Number);
+                    if (stringIndexType) stringIndexType = getWidenedType(stringIndexType);
+                    if (numberIndexType) numberIndexType = getWidenedType(numberIndexType);
+                    type = createAnonymousType(type.symbol, members, emptyArray, emptyArray, stringIndexType, numberIndexType);
+                }
+            }
+            return type;
+        }
+
         function isArrayType(type: Type): boolean {
             return type.flags & TypeFlags.Reference && (<TypeReference>type).target === globalArrayType;
         }
@@ -7181,6 +7220,11 @@ module ts {
             return target !== unknownSymbol && ((target.flags & SymbolFlags.Value) !== 0);
         }
 
+        function hasSemanticErrors() {
+            // Return true if there is any semantic error in a file or globally
+            return (getDiagnostics().length > 0) || (getGlobalDiagnostics().length > 0);
+        }
+
         function shouldEmitDeclarations() {
             // If the declaration emit and there are no errors being reported in program or by checker
             // declarations can be emitted
@@ -7258,6 +7302,7 @@ module ts {
                 getNodeCheckFlags: getNodeCheckFlags,
                 getEnumMemberValue: getEnumMemberValue,
                 isTopLevelValueImportedViaEntityName: isTopLevelValueImportedViaEntityName,
+                hasSemanticErrors: hasSemanticErrors,
                 shouldEmitDeclarations: shouldEmitDeclarations,
                 isDeclarationVisible: isDeclarationVisible,
                 isImplementationOfOverload: isImplementationOfOverload,

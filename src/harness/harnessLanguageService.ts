@@ -134,6 +134,7 @@ module Harness.LanguageService {
         private ls: ts.LanguageServiceShim = null;
 
         private fileNameToScript: ts.Map<ScriptInfo> = {};
+        private settings: ts.CompilationSettings = {};
 
         constructor(private cancellationToken: ts.CancellationToken = CancellationToken.None) {
         }
@@ -199,7 +200,7 @@ module Harness.LanguageService {
 
         /// Returns json for Tools.CompilationSettings
         public getCompilationSettings(): string {
-            return JSON.stringify({}); // i.e. default settings
+            return JSON.stringify(this.settings);
         }
 
         public getCancellationToken(): ts.CancellationToken {
@@ -234,6 +235,14 @@ module Harness.LanguageService {
         public getLanguageService(): ts.LanguageServiceShim {
             this.ls = new TypeScript.Services.TypeScriptServicesFactory().createLanguageServiceShim(this);
             return this.ls;
+        }
+
+        public setCompilationSettings(settings: ts.CompilationSettings) {
+            for (var key in settings) {
+                if (settings.hasOwnProperty(key)) {
+                    this.settings[key] = settings[key];
+                }
+            }
         }
 
         /** Return a new instance of the classifier service shim */

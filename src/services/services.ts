@@ -362,7 +362,7 @@ module ts {
         public update(scriptSnapshot: TypeScript.IScriptSnapshot, version: string, isOpen: boolean, textChangeRange: TypeScript.TextChangeRange): SourceFile {
             // See if we are currently holding onto a syntax tree.  We may not be because we're 
             // either a closed file, or we've just been lazy and haven't had to create the syntax
-            // tree yet.  Access the field instead of the method so we don't accidently realize
+            // tree yet.  Access the field instead of the method so we don't accidentally realize
             // the old syntax tree.
             var oldSyntaxTree = this.syntaxTree;
 
@@ -661,16 +661,9 @@ module ts {
         docComment: string;
     }
 
-    export enum EmitOutputResult {
-        Succeeded,
-        FailedBecauseOfSyntaxErrors,
-        FailedBecauseOfCompilerOptionsErrors,
-        FailedToGenerateDeclarationsBecauseOfSemanticErrors
-    }
-
     export interface EmitOutput {
         outputFiles: OutputFile[];
-        emitOutputResult: EmitOutputResult;
+        emitOutputStatus: EmitReturnStatus;
     }
 
     export enum OutputFileType {
@@ -683,8 +676,6 @@ module ts {
         name: string;
         writeByteOrderMark: boolean;
         text: string;
-        fileType: OutputFileType;
-        sourceMapOutput: any;
     }
 
     export enum EndOfLineState {
@@ -1385,7 +1376,7 @@ module ts {
         var program: Program;
         // this checker is used to answer all LS questions except errors 
         var typeInfoResolver: TypeChecker;
-        // the sole purpose of this checkes is to reutrn semantic diagnostics
+        // the sole purpose of this checker is to return semantic diagnostics
         // creation is deferred - use getFullTypeCheckChecker to get instance
         var fullTypeCheckChecker_doNotAccessDirectly: TypeChecker;
         var useCaseSensitivefilenames = false;
@@ -1393,6 +1384,7 @@ module ts {
         var documentRegistry = documentRegistry;
         var cancellationToken = new CancellationTokenObject(host.getCancellationToken());
         var activeCompletionSession: CompletionSession;         // The current active completion session, used to get the completion entry details
+        var writer: (filename: string, data: string, writeByteOrderMark: boolean) => void = undefined;
 
         // Check if the localized messages json is set, otherwise query the host for it
         if (!TypeScript.LocalizedDiagnosticMessages) {
@@ -1419,13 +1411,14 @@ module ts {
                 getNewLine: () => "\r\n",
                 // Need something that doesn't depend on sys.ts here
                 getDefaultLibFilename: (): string => {
-                    throw Error("TOD:: getDefaultLibfilename");
+                    return "";
                 },
                 writeFile: (filename, data, writeByteOrderMark) => {
-                    throw Error("TODO: write file");
+                    writer(filename, data, writeByteOrderMark);
                 },
                 getCurrentDirectory: (): string => {
-                    throw Error("TODO: getCurrentDirectory");
+                    // Return empty string as in compilerHost using with Visual Studio should not need to getCurrentDirectory since CompilerHost should have absolute path already
+                    return "";
                 }
             };
         }
@@ -1529,7 +1522,7 @@ module ts {
                     sourceFile = documentRegistry.acquireDocument(filename, compilationSettings, scriptSnapshot, version, isOpen);
                 }
 
-                // Remeber the new sourceFile
+                // Remember the new sourceFile
                 sourceFilesByName[filename] = sourceFile;
             }
 
@@ -1584,7 +1577,7 @@ module ts {
                 var firstChar = displayName.charCodeAt(0);
                 if (firstChar === TypeScript.CharacterCodes.singleQuote || firstChar === TypeScript.CharacterCodes.doubleQuote) {
                     // If the user entered name for the symbol was quoted, removing the quotes is not enough, as the name could be an
-                    // invalid identifer name. We need to check if whatever was inside the quotes is actually a valid identifier name.
+                    // invalid identifier name. We need to check if whatever was inside the quotes is actually a valid identifier name.
                     displayName = TypeScript.stripStartAndEndQuotes(displayName);
                 }
 
@@ -1626,9 +1619,9 @@ module ts {
             }
 
             function isCompletionListBlocker(sourceUnit: TypeScript.SourceUnitSyntax, position: number): boolean {
-                // We shouldn't be getting a possition that is outside the file because
+                // We shouldn't be getting a position that is outside the file because
                 // isEntirelyInsideComment can't handle when the position is out of bounds, 
-                // callers should be fixed, however we should be resiliant to bad inputs
+                // callers should be fixed, however we should be resilient to bad inputs
                 // so we return true (this position is a blocker for getting completions)
                 if (position < 0 || position > TypeScript.fullWidth(sourceUnit)) {
                     return true;
@@ -1718,7 +1711,7 @@ module ts {
                 var positionedToken = TypeScript.Syntax.findCompleteTokenOnLeft(sourceUnit, position, /*includeSkippedTokens*/true);
 
                 if (positionedToken && position === TypeScript.end(positionedToken) && positionedToken.kind() == TypeScript.SyntaxKind.EndOfFileToken) {
-                    // EndOfFile token is not intresting, get the one before it
+                    // EndOfFile token is not interesting, get the one before it
                     positionedToken = TypeScript. previousToken(positionedToken, /*includeSkippedTokens*/true);
                 }
 
@@ -1853,14 +1846,14 @@ module ts {
                     //    // get existing members
                     //    var existingMembers = compiler.getVisibleMemberSymbolsFromAST(node, document);
 
-                    //    // Add filtterd items to the completion list
+                    //    // Add filtered items to the completion list
                     //    getCompletionEntriesFromSymbols({
                     //        symbols: filterContextualMembersList(contextualMembers.symbols, existingMembers, filename, position),
                     //        enclosingScopeSymbol: contextualMembers.enclosingScopeSymbol
                     //    }, entries);
                     //}
                 }
-                // Get scope memebers
+                // Get scope members
                 else {
                     isMemberCompletion = false;
                     /// TODO filter meaning based on the current context
@@ -2319,7 +2312,7 @@ module ts {
             return getReferencesForNode(node, program.getSourceFiles());
         }
 
-        function getReferencesForNode(node: Node, sourceFiles : SourceFile[]): ReferenceEntry[] {
+        function getReferencesForNode(node: Node, sourceFiles: SourceFile[]): ReferenceEntry[] {
             // Labels
             if (isLabelName(node)) {
                 if (isJumpStatementTarget(node)) {
@@ -2338,7 +2331,7 @@ module ts {
 
             // Could not find a symbol e.g. unknown identifier
             if (!symbol) {
-                // Even if we did not find a symbol, we have an identifer, so there is at least
+                // Even if we did not find a symbol, we have an identifier, so there is at least
                 // one reference that we know of. return than instead of undefined.
                 return [getReferenceEntry(node)];
             }
@@ -2354,8 +2347,9 @@ module ts {
             var searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), symbol.getDeclarations());
 
             // Get the text to search for, we need to normalize it as external module names will have quote
-            var symbolName = getNormalizedSymbolName(symbol);                
+            var symbolName = getNormalizedSymbolName(symbol);
 
+            // Get syntactic diagnostics
             var scope = getSymbolScope(symbol);
 
             if (scope) {
@@ -2385,7 +2379,7 @@ module ts {
                 else {
                     var name = symbol.name;
                 }
-                
+
                 var length = name.length;
                 if (length >= 2 && name.charCodeAt(0) === CharacterCodes.doubleQuote && name.charCodeAt(length - 1) === CharacterCodes.doubleQuote) {
                     return name.substring(1, length - 1);
@@ -2603,7 +2597,7 @@ module ts {
                             var propertySymbol = typeReferenceSymbol.members[propertyName];
                             if (propertySymbol) result.push(typeReferenceSymbol.members[propertyName]);
 
-                            // Visit the typeReference as well to see if it directelly or indirectelly use that property
+                            // Visit the typeReference as well to see if it directly or indirectly use that property
                             getPropertySymbolsFromBaseTypes(typeReferenceSymbol, propertyName, result);
                         }
                     }
@@ -2611,7 +2605,7 @@ module ts {
             }
 
             function isRelatableToSearchSet(searchSymbols: Symbol[], referenceSymbol: Symbol, referenceLocation: Node): boolean {
-                // Unwrap symbols to get to the root (e.g. triansient symbols as a result of widenning)
+                // Unwrap symbols to get to the root (e.g. transient symbols as a result of widening)
                 var referenceSymbolTarget = typeInfoResolver.getRootSymbol(referenceSymbol);
 
                 // if it is in the list, then we are done
@@ -2629,7 +2623,7 @@ module ts {
                     }
                 }
 
-                // Finally, try all properties with the same name in any type the containing type extened or implemented, and 
+                // Finally, try all properties with the same name in any type the containing type extended or implemented, and
                 // see if any is in the list
                 if (referenceSymbol.parent && referenceSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                     var result: Symbol[] = [];
@@ -2658,7 +2652,7 @@ module ts {
                 if (node.kind === SyntaxKind.StringLiteral) {
                     start += 1;
                     end -= 1;
-                } 
+                }
 
                 return new ReferenceEntry(node.getSourceFile().filename, TypeScript.TextSpan.fromBounds(start, end), isWriteAccess(node));
             }
@@ -2785,7 +2779,7 @@ module ts {
                         // intersects with the class in the value space.
                         // To achieve that we will keep iterating until the result stabilizes.
 
-                        // Remeber the last meaning
+                        // Remember the last meaning
                         var lastIterationMeaning = meaning;
 
                         for (var i = 0, n = declarations.length; i < n; i++) {
@@ -2800,7 +2794,7 @@ module ts {
                 return meaning;
             }
 
-            /// A node is considedered a writeAccess iff it is a name of a declaration or a target of an assignment
+            /// A node is considered a writeAccess iff it is a name of a declaration or a target of an assignment
             function isWriteAccess(node: Node): boolean {
                 if (node.kind === SyntaxKind.Identifier && isDeclarationOrFunctionExpressionOrCatchVariableName(node)) {
                     return true;
@@ -2833,6 +2827,53 @@ module ts {
                     return false;
                 }
             }
+        }
+
+        function containErrors(diagnostics: Diagnostic[]): boolean {
+            var hasError = forEach(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error);
+            return hasError;
+        }
+
+        function getEmitOutput(filename: string): EmitOutput {
+            synchronizeHostData();
+            filename = TypeScript.switchToForwardSlashes(filename);
+            var sourceFile = program.getSourceFile(filename);
+            var compilerOptions = program.getCompilerOptions();
+            var emitToSingleFile = ts.shouldEmitToOwnFile(sourceFile, compilerOptions);
+            var emitDeclaration = compilerOptions.declaration;
+            var emitOutput: EmitOutput = {
+                outputFiles: [],
+                emitOutputStatus: undefined,
+            };
+
+            // Initialize writer for CompilerHost.writeFile
+            writer = function (fileName: string, data: string, writeByteOrderMark: boolean) {
+                emitOutput.outputFiles.push({
+                    name: fileName,
+                    writeByteOrderMark: writeByteOrderMark,
+                    text: data
+                });
+            }
+
+            var syntacticDiagnostics = emitToSingleFile
+                ? program.getDiagnostics(sourceFile)
+                : program.getDiagnostics();
+            var globalSyntacticDiagnostics = program.getGlobalDiagnostics();
+
+            // If there is any syntactic error, terminate the process
+            if (containErrors(syntacticDiagnostics)) {
+                emitOutput.emitOutputStatus = EmitReturnStatus.AllOutputGenerationSkipped;
+                return emitOutput;
+            }
+
+            // Perform semantic and force a type check before emit to ensure that all symbols are updated
+            // EmitFiles will report if there is an error from TypeChecker and Emitter
+            var emitFilesResult = getFullTypeCheckChecker().emitFiles();
+            emitOutput.emitOutputStatus = emitFilesResult.emitResultStatus;
+
+            // Reset writer back to undefined to make sure that we produce an error message if CompilerHost.writeFile method is called when we are not in getEmitOutput
+            this.writer = undefined;
+            return emitOutput;
         }
 
         /// Syntactic features
@@ -3111,7 +3152,7 @@ module ts {
                         continue;
                     }
 
-                    // Looks to be within the trivia.  See if we can find hte comment containing it.
+                    // Looks to be within the trivia.  See if we can find the comment containing it.
                     var triviaList = matchPosition < TypeScript.start(token) ? token.leadingTrivia(syntaxTree.text) : token.trailingTrivia(syntaxTree.text);
                     var trivia = findContainingComment(triviaList, matchPosition);
                     if (trivia === null) {
@@ -3185,7 +3226,7 @@ module ts {
             getFormattingEditsForRange: getFormattingEditsForRange,
             getFormattingEditsForDocument: getFormattingEditsForDocument,
             getFormattingEditsAfterKeystroke: getFormattingEditsAfterKeystroke,
-            getEmitOutput: (filename): EmitOutput => null,
+            getEmitOutput: getEmitOutput,
         };
     }
 
@@ -3319,7 +3360,7 @@ module ts {
                     addResult(start - lastTokenOrCommentEnd, TokenClass.Whitespace);
                 }
 
-                // Remeber the end of the last token
+                // Remember the end of the last token
                 lastTokenOrCommentEnd = end;
             }
 

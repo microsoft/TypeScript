@@ -122,9 +122,67 @@ module FourSlash {
         return s.replace(/[&<>"'\/]/g, ch => entityMap[ch]);
     }
 
+    // Name of ts.CompilerOptions properties that will be used by globalOptions
+    // To add additional option, add property into the compilerOptMetadataNames, refer the property in either globalMetadataNames or fileMetadataNames
+    // Add cases into convertGlobalOptionsToCompilationsSettings function for the compiler to acknowledge such option from meta data
+    var compilerOptMetadataNames = {
+      out: 'out',
+      outDir: 'outDir',
+      declaration: 'declaration',
+      sourceMap: 'sourceMap',
+      sourceRoot: 'sourceRoot',
+      mapRoot: 'mapRoot',
+      module: 'module',
+    };
+
     // List of allowed metadata names
     var fileMetadataNames = ['Filename'];
-    var globalMetadataNames = ['Module', 'Target', 'BaselineFile']; // Note: Only BaselineFile is actually supported at the moment
+    var globalMetadataNames = ['BaselineFile', compilerOptMetadataNames.out, compilerOptMetadataNames.outDir, compilerOptMetadataNames.declaration, compilerOptMetadataNames.outDir,
+                               compilerOptMetadataNames.declaration, compilerOptMetadataNames.sourceMap, compilerOptMetadataNames.sourceRoot, compilerOptMetadataNames.mapRoot, compilerOptMetadataNames.module]
+
+    function convertGlobalOptionsToCompilationSettings(globalOptions: { [idx: string]: string }): ts.CompilationSettings {
+        var settings: ts.CompilationSettings = {};
+        // Convert all property in globalOptions into ts.CompilationSettings
+        for (var prop in globalOptions) {
+            if (globalOptions.hasOwnProperty(prop)) {
+                switch (prop) {
+                    case compilerOptMetadataNames.out:
+                      settings.outFileOption = globalOptions[prop];
+                      break;
+                    case compilerOptMetadataNames.outDir:
+                      settings.outDirOption = globalOptions[prop];
+                      break;
+                    case compilerOptMetadataNames.declaration:
+                      settings.generateDeclarationFiles = true;
+                      break;
+                    case compilerOptMetadataNames.sourceMap:
+                      settings.mapSourceFiles = true;
+                      break;
+                    case compilerOptMetadataNames.sourceRoot:
+                      settings.sourceRoot = globalOptions[prop];
+                      break;
+                    case compilerOptMetadataNames.mapRoot:
+                      settings.mapRoot = globalOptions[prop];
+                      break;
+                    case compilerOptMetadataNames.module:
+                        // create appropriate external module target for CompilationSettings
+                        switch (globalOptions[prop]) {
+                          case "AMD":
+                            settings.moduleGenTarget = ts.ModuleGenTarget.Asynchronous;
+                            break;
+                          case "CommonJS":
+                            settings.moduleGenTarget = ts.ModuleGenTarget.Synchronous;
+                            break;
+                          default:
+                            settings.moduleGenTarget = ts.ModuleGenTarget.Unspecified;
+                            break;
+                        }
+                      break;
+                }
+            }
+        }
+        return settings;
+    }
 
     export var currentTestState: TestState = null;
 
@@ -199,10 +257,14 @@ module FourSlash {
         private scenarioActions: string[] = [];
         private taoInvalidReason: string = null;
 
+
         constructor(public testData: FourSlashData) {
             // Initialize the language service with all the scripts
             this.cancellationToken = new TestCancellationToken();
             this.languageServiceShimHost = new Harness.LanguageService.TypeScriptLS(this.cancellationToken);
+
+            var compilationSettings = convertGlobalOptionsToCompilationSettings(this.testData.globalOptions);
+            this.languageServiceShimHost.setCompilationSettings(compilationSettings);
 
             var inputFiles: { unitName: string; content: string }[] = [];
 
@@ -220,9 +282,9 @@ module FourSlash {
             //if (/require\(/.test(lastFile.content) || /reference\spath/.test(lastFile.content)) {
             //    inputFiles.push({ unitName: lastFile.fileName, content: lastFile.content });
             //} else {
-                inputFiles = testData.files.map(file => {
-                    return { unitName: file.fileName, content: file.content };
-                });
+            inputFiles = testData.files.map(file => {
+                return { unitName: file.fileName, content: file.content };
+            });
             //}
 
 
@@ -888,6 +950,54 @@ module FourSlash {
                 true /* run immediately */);
         }
 
+        public baselineGetEmitOutput() {
+            this.taoInvalidReason = 'baselineCurrentFileBreakpointLocations impossible';
+
+            Harness.Baseline.runBaseline(
+                "Breakpoint Locations for " + this.activeFile.fileName,
+                this.testData.globalOptions['BaselineFile'],
+                () => {
+                    var emitOutput = this.languageService.getEmitOutput(this.activeFile.fileName);
+                    var emitOutputStatus = emitOutput.emitOutputStatus;
+                    var resultString = "";
+
+                    // Print emitOutputStatus in readable format
+                    switch (emitOutputStatus) {
+                        case ts.EmitReturnStatus.Succeeded:
+                            resultString += "EmitOutputStatus : Succeeded\n";
+                            break;
+                        case ts.EmitReturnStatus.AllOutputGenerationSkipped:
+                            resultString += "EmitOutputStatus : AllOutputGenerationSkipped\n";
+                            break;
+                        case ts.EmitReturnStatus.JSGeneratedWithSemanticErrors:
+                            resultString += "EmitOutputStatus : JSGeneratedWithSemanticErrors\n";
+                            break;
+                        case ts.EmitReturnStatus.DeclarationGenerationSkipped:
+                            resultString += "EmitOutputStatus : DeclaratiionGenerationSkipped\n";
+                            break;
+                        case ts.EmitReturnStatus.EmitErrorsEncountered:
+                            resultString += "EmitOutputStatus : EmitErrorEncountered\n";
+                            break;
+                        default:
+                            resultString += "Invalid EmitOutputStatus\n";
+                            break;
+                    }
+
+                    emitOutput.outputFiles.forEach((outputFile, idx, array) => {
+                        var filename = "Filename : " + outputFile.name + "\n";
+                        if (filename.match("/*.js.map/") === undefined) {
+                            var content = outputFile.text;
+                        }
+                        else {
+                            var content = outputFile.text + "\n";
+                        }
+                        resultString = resultString + filename + content + "\n";
+                    });
+                    return resultString;
+                },
+                true /* run immediately */);
+        }
+
         public printBreakpointLocation(pos: number) {
             Harness.IO.log(this.getBreakpointStatementLocation(pos));
         }
@@ -1198,7 +1308,7 @@ module FourSlash {
 
         private applyEdits(fileName: string, edits: ts.TextChange[], isFormattingEdit = false): number {
             // We get back a set of edits, but langSvc.editScript only accepts one at a time. Use this to keep track
-            // of the incremental offest from each edit to the next. Assumption is that these edit ranges don't overlap
+            // of the incremental offset from each edit to the next. Assumption is that these edit ranges don't overlap
             var runningOffset = 0;
             edits = edits.sort((a, b) => a.span.start() - b.span.start());
             // Get a snapshot of the content of the file so we can make sure any formatting edits didn't destroy non-whitespace characters
@@ -1275,7 +1385,7 @@ module FourSlash {
 
             var definitions = this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             if (!definitions || !definitions.length) {
-                throw new Error('goToDefinition failed - expected to at least one defintion location but got 0');
+                throw new Error('goToDefinition failed - expected to at least one definition location but got 0');
             }
 
             if (definitionIndex >= definitions.length) {
@@ -1295,10 +1405,10 @@ module FourSlash {
             var foundDefinitions = definitions && definitions.length;
 
             if (foundDefinitions && negative) {
-                throw new Error('goToDefinition - expected to 0 defintion locations but got ' + definitions.length);
+                throw new Error('goToDefinition - expected to 0 definition locations but got ' + definitions.length);
             }
             else if (!foundDefinitions && !negative) {
-                throw new Error('goToDefinition - expected to at least one defintion location but got 0');
+                throw new Error('goToDefinition - expected to at least one definition location but got 0');
             }
         }
 
@@ -2037,6 +2147,10 @@ module FourSlash {
                             currentFileOptions[match[1]] = match[2];
                         }
                     } else {
+                        // Check if the match is already existed in the global options
+                        if (opts[match[1]] !== undefined) {
+                            throw new Error("Global Option : '" + match[1] + "' is already existed");
+                        }
                         opts[match[1]] = match[2];
                     }
                 }
@@ -2146,7 +2260,7 @@ module FourSlash {
         /// A list of ranges we've collected so far */
         var localRanges: Range[] = [];
 
-        /// The latest position of the start of an unflushed plaintext area
+        /// The latest position of the start of an unflushed plain text area
         var lastNormalCharPosition: number = 0;
 
         /// The total number of metacharacters removed from the file (so far)

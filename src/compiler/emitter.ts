@@ -25,6 +25,14 @@ module ts {
         return indentStrings[1].length;
     }
 
+    export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions) {
+        if (!(sourceFile.flags & NodeFlags.DeclarationFile)) {
+            if ((isExternalModule(sourceFile) || !compilerOptions.out) && !fileExtensionIs(sourceFile.filename, ".js")) {
+                return true;
+            }
+        }
+    }
+
     export function emitFiles(resolver: EmitResolver): EmitResult {
         var program = resolver.getProgram();
         var compilerHost = program.getCompilerHost();
@@ -34,22 +42,14 @@ module ts {
         var newLine = program.getCompilerHost().getNewLine();
 
         function getSourceFilePathInNewDir(newDirPath: string, sourceFile: SourceFile) {
-            var sourceFilePath = getNormalizedPathFromPathCompoments(getNormalizedPathComponents(sourceFile.filename, compilerHost.getCurrentDirectory()));
+            var sourceFilePath = getNormalizedPathFromPathComponents(getNormalizedPathComponents(sourceFile.filename, compilerHost.getCurrentDirectory()));
             sourceFilePath = sourceFilePath.replace(program.getCommonSourceDirectory(), "");
             return combinePaths(newDirPath, sourceFilePath);
         }
 
-        function shouldEmitToOwnFile(sourceFile: SourceFile) {
-            if (!(sourceFile.flags & NodeFlags.DeclarationFile)) {
-                if ((isExternalModule(sourceFile) || !compilerOptions.out) && !fileExtensionIs(sourceFile.filename, ".js")) {
-                    return true;
-                }
-            }
-        }
-
         function getOwnEmitOutputFilePath(sourceFile: SourceFile, extension: string) {
-            if (program.getCompilerOptions().outDir) {
-                var emitOutputFilePathWithoutExtension = getModuleNameFromFilename(getSourceFilePathInNewDir(program.getCompilerOptions().outDir, sourceFile));
+            if (compilerOptions.outDir) {
+                var emitOutputFilePathWithoutExtension = getModuleNameFromFilename(getSourceFilePathInNewDir(compilerOptions.outDir, sourceFile));
             }
             else {
                 var emitOutputFilePathWithoutExtension = getModuleNameFromFilename(sourceFile.filename);
@@ -3082,7 +3082,7 @@ module ts {
             function writeReferencePath(referencedFile: SourceFile) {
                 var declFileName = referencedFile.flags & NodeFlags.DeclarationFile
                     ? referencedFile.filename // Declaration file, use declaration file name
-                    : shouldEmitToOwnFile(referencedFile)
+                    : shouldEmitToOwnFile(referencedFile, compilerOptions)
                     ? getOwnEmitOutputFilePath(referencedFile, ".d.ts") // Own output file so get the .d.ts file
                     : getModuleNameFromFilename(compilerOptions.out) + ".d.ts";// Global out file
 
@@ -3104,7 +3104,7 @@ module ts {
 
                         // All the references that are not going to be part of same file
                         if ((referencedFile.flags & NodeFlags.DeclarationFile) || // This is a declare file reference
-                            shouldEmitToOwnFile(referencedFile) || // This is referenced file is emitting its own js file
+                            shouldEmitToOwnFile(referencedFile, compilerOptions) || // This is referenced file is emitting its own js file
                             !addedGlobalFileReference) { // Or the global out file corresponding to this reference was not added
 
                             writeReferencePath(referencedFile);
@@ -3130,7 +3130,6 @@ module ts {
                                 // If the reference file is a declaration file or an external module, emit that reference
                                 if (isExternalModuleOrDeclarationFile(referencedFile) &&
                                     !contains(emittedReferencedFiles, referencedFile)) { // If the file reference was not already emitted
-
                                     writeReferencePath(referencedFile);
                                     emittedReferencedFiles.push(referencedFile);
                                 }
@@ -3170,7 +3169,7 @@ module ts {
         }
 
         forEach(program.getSourceFiles(), sourceFile => {
-            if (shouldEmitToOwnFile(sourceFile)) {
+            if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
                 var jsFilePath = getOwnEmitOutputFilePath(sourceFile, ".js");
                 emitFile(jsFilePath, sourceFile);
             }
@@ -3183,7 +3182,27 @@ module ts {
         diagnostics.sort(compareDiagnostics);
         diagnostics = deduplicateSortedDiagnostics(diagnostics);
 
+        var returnCode = EmitReturnStatus.Succeeded;
+
+        // Check if there is any diagnostic in an error category; if so, there is an emitter error
+        var hasEmitterError = forEach(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error);
+
+        if (resolver.hasSemanticErrors() && !compilerOptions.declaration) {
+            // There is an semantic errror when output javascript file
+            // Output JS file with semantic error
+            returnCode = EmitReturnStatus.JSGeneratedWithSemanticErrors;
+        }
+        else if (resolver.hasSemanticErrors() && compilerOptions.declaration) {
+            // There is an semantic errror when output javascript and declaration file
+            // Output JS file with semantic error, not output declaration file
+            returnCode = EmitReturnStatus.DeclarationGenerationSkipped;
+        }
+        else if (hasEmitterError) {
+            returnCode = EmitReturnStatus.EmitErrorsEncountered;
+        }
+
         return {
+            emitResultStatus: returnCode,
             errors: diagnostics,
             sourceMaps: sourceMapDataList
         };
