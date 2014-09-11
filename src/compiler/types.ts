@@ -673,6 +673,7 @@ module ts {
         WriteArrayAsGenericType = 0x00000001,  // Write Array<T> instead T[]
         UseTypeOfFunction       = 0x00000002,  // Write typeof instead of function type literal
         NoTruncation            = 0x00000004,  // Don't truncate typeToString result
+        NoArrowStyleTopLevelSignature = 0x00000008, // Do not write type global top level function or constructor literal
     }
 
     export enum SymbolAccessibility {

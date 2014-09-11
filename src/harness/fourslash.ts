@@ -772,35 +772,35 @@ module FourSlash {
             var actualQuickInfoSymbolName = actualQuickInfo ? actualQuickInfo.fullSymbolName : "";
             var actualQuickInfoKind = actualQuickInfo ? actualQuickInfo.kind : "";
 
-            function assertionMessage(name: string, actualValue: string, expectedValue: string) {
-                return "\nActual " + name + ":\n\t" + actualValue + "\nExpected value:\n\t" + expectedValue;
+            function assertionMessage(msg: string) {
+                return "\nMarker: " + currentTestState.lastKnownMarker + "\nChecking: " + msg + "\n\n";
             }
 
             if (negative) {
                 if (expectedTypeName !== undefined) {
-                    assert.notEqual(actualQuickInfoMemberName, expectedTypeName, assertionMessage("quick info member name", actualQuickInfoMemberName, expectedTypeName));
+                    assert.notEqual(actualQuickInfoMemberName, expectedTypeName, assertionMessage("quick info member name"));
                 }
                 if (docComment != undefined) {
-                    assert.notEqual(actualQuickInfoDocComment, docComment, assertionMessage("quick info doc comment", actualQuickInfoDocComment, docComment));
+                    assert.notEqual(actualQuickInfoDocComment, docComment, assertionMessage("quick info doc comment"));
                 }
                 if (symbolName !== undefined) {
-                    assert.notEqual(actualQuickInfoSymbolName, symbolName, assertionMessage("quick info symbol name", actualQuickInfoSymbolName, symbolName));
+                    assert.notEqual(actualQuickInfoSymbolName, symbolName, assertionMessage("quick info symbol name"));
                 }
                 if (kind !== undefined) {
-                    assert.notEqual(actualQuickInfoKind, kind, assertionMessage("quick info kind", actualQuickInfoKind, kind));
+                    assert.notEqual(actualQuickInfoKind, kind, assertionMessage("quick info kind"));
                 }
             } else {
                 if (expectedTypeName !== undefined) {
-                    assert.equal(actualQuickInfoMemberName, expectedTypeName, assertionMessage("quick info member", actualQuickInfoMemberName, expectedTypeName));
+                    assert.equal(actualQuickInfoMemberName, expectedTypeName, assertionMessage("quick info member"));
                 }
                 if (docComment != undefined) {
-                    assert.equal(actualQuickInfoDocComment, docComment, assertionMessage("quick info doc", actualQuickInfoDocComment, docComment));
+                    assert.equal(actualQuickInfoDocComment, docComment, assertionMessage("quick info doc"));
                 }
                 if (symbolName !== undefined) {
-                    assert.equal(actualQuickInfoSymbolName, symbolName, assertionMessage("quick info symbol name", actualQuickInfoSymbolName, symbolName));
+                    assert.equal(actualQuickInfoSymbolName, symbolName, assertionMessage("quick info symbol name"));
                 }
                 if (kind !== undefined) {
-                    assert.equal(actualQuickInfoKind, kind, assertionMessage("quick info kind", actualQuickInfoKind, kind));
+                    assert.equal(actualQuickInfoKind, kind, assertionMessage("quick info kind"));
                 }
             }
         }

@@ -2213,6 +2213,297 @@ module ts {
             };
         }
 
+        function getJsDocCommentOfSymbol(symbol: Symbol) {
+            var paramTag = "@param";
+            var jsDocCommentText: string[] = [];
+
+            ts.forEach(symbol.declarations, declaration => {
+                var sourceFileOfDeclaration = getSourceFileOfNode(declaration);
+                // If it is parameter - try and get the jsDoc comment with @param tag from function declaration's jsDoc comments
+                if (declaration.kind === SyntaxKind.Parameter) {
+                    ts.forEach(getJsDocCommentTextRange(declaration.parent, sourceFileOfDeclaration), jsDocCommentTextRange => {
+                        var cleanedParamJsDocComment = getCleanedParamJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
+                        if (cleanedParamJsDocComment) {
+                            jsDocCommentText.push(cleanedParamJsDocComment);
+                        }
+                    });
+                }
+
+                // Get the cleaned js doc comment text from the declaration
+                ts.forEach(getJsDocCommentTextRange(
+                    declaration.kind === SyntaxKind.VariableDeclaration ? declaration.parent : declaration, sourceFileOfDeclaration), jsDocCommentTextRange => {
+                        var cleanedJsDocComment = getCleanedJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
+                        if (cleanedJsDocComment) {
+                            jsDocCommentText.push(cleanedJsDocComment);
+                        }
+                    });
+            });
+
+            return jsDocCommentText.join("\n");
+
+            function getJsDocCommentTextRange(node: Node, sourceFile: SourceFile): TextRange[] {
+                return ts.map(getJsDocComments(node, sourceFile),
+                    jsDocComment => {
+                        return {
+                            pos: jsDocComment.pos + "/*".length, // Consume /* from the comment
+                            end: jsDocComment.end - "*/".length // Trim off comment end indicator 
+                        };
+                    });
+            }
+
+            function consumeWhiteSpacesOnTheLine(pos: number, end: number, sourceFile: SourceFile, maxSpacesToRemove?: number) {
+                if (maxSpacesToRemove !== undefined) {
+                    end = Math.min(end, pos + maxSpacesToRemove);
+                }
+
+                for (; pos < end; pos++) {
+                    var ch = sourceFile.text.charCodeAt(pos);
+                    if (!isWhiteSpace(ch) || isLineBreak(ch)) {
+                        // Either found lineBreak or non whiteSpace
+                        return pos;
+                    }
+                }
+
+                return end;
+            }
+
+            function consumeLineBreaks(pos: number, end: number, sourceFile: SourceFile) {
+                while (pos < end && isLineBreak(sourceFile.text.charCodeAt(pos))) {
+                    pos++;
+                }
+
+                return pos;
+            }
+
+            function isName(pos: number, end: number, sourceFile: SourceFile, name: string) {
+                return pos + name.length < end &&
+                    sourceFile.text.substr(pos, name.length) === name &&
+                    isWhiteSpace(sourceFile.text.charCodeAt(pos + name.length));
+            }
+
+            function isParamTag(pos: number, end: number, sourceFile: SourceFile) {
+                // If it is @param tag
+                return isName(pos, end, sourceFile, paramTag);
+            }
+
+            function getCleanedJsDocComment(pos: number, end: number, sourceFile: SourceFile) {
+                var spacesToRemoveAfterAsterisk: number;
+                var docComments: string[] = [];
+                var isInParamTag = false;
+
+                while (pos < end) {
+                    var docCommentTextOfLine = "";
+                    // First consume leading white space
+                    pos = consumeWhiteSpacesOnTheLine(pos, end, sourceFile);
+
+                    // If the comment starts with '*' consume the spaces on this line
+                    if (pos < end && sourceFile.text.charCodeAt(pos) === CharacterCodes.asterisk) {
+                        var lineStartPos = pos + 1;
+                        pos = consumeWhiteSpacesOnTheLine(pos + 1, end, sourceFile, spacesToRemoveAfterAsterisk);
+
+                        // Set the spaces to remove after asterisk as margin if not already set
+                        if (spacesToRemoveAfterAsterisk === undefined && pos < end && !isLineBreak(sourceFile.text.charCodeAt(pos))) {
+                            spacesToRemoveAfterAsterisk = pos - lineStartPos;
+                        }
+                    }
+                    else if (spacesToRemoveAfterAsterisk === undefined) {
+                        spacesToRemoveAfterAsterisk = 0;
+                    }
+
+                    // Analyse text on this line
+                    while (pos < end && !isLineBreak(sourceFile.text.charCodeAt(pos))) {
+                        var ch = sourceFile.text.charAt(pos);
+                        if (ch === "@") {
+                            // If it is @param tag
+                            if (isParamTag(pos, end, sourceFile)) {
+                                isInParamTag = true;
+                                pos += paramTag.length;
+                                continue;
+                            }
+                            else {
+                                isInParamTag = false;
+                            }
+                        }
+
+                        // Add the ch to doc text if we arent in param tag
+                        if (!isInParamTag) {
+                            docCommentTextOfLine += ch;
+                        }
+
+                        // Scan next character
+                        pos++;
+                    }
+
+                    // Continue with next line
+                    pos = consumeLineBreaks(pos, end, sourceFile);
+                    if (docCommentTextOfLine) {
+                        docComments.push(docCommentTextOfLine);
+                    }
+                }
+
+                return docComments.join("\n");
+            }
+
+            function getCleanedParamJsDocComment(pos: number, end: number, sourceFile: SourceFile) {
+                var paramHelpStringMargin: number;
+                var paramDocComments: string[] = [];
+                while (pos < end) {
+                    if (isParamTag(pos, end, sourceFile)) {
+                        // Consume leading spaces 
+                        pos = consumeWhiteSpaces(pos + paramTag.length);
+                        if (pos >= end) {
+                            break;
+                        }
+
+                        // Ignore type expression
+                        if (sourceFile.text.charCodeAt(pos) === CharacterCodes.openBrace) {
+                            pos++;
+                            for (var curlies = 1; pos < end; pos++) {
+                                var charCode = sourceFile.text.charCodeAt(pos);
+
+                                // { character means we need to find another } to match the found one
+                                if (charCode === CharacterCodes.openBrace) {
+                                    curlies++;
+                                    continue;
+                                }
+
+                                // } char
+                                if (charCode === CharacterCodes.closeBrace) {
+                                    curlies--;
+                                    if (curlies === 0) {
+                                        // We do not have any more } to match the type expression is ignored completely
+                                        pos++;
+                                        break;
+                                    }
+                                    else {
+                                        // there are more { to be matched with }
+                                        continue;
+                                    }
+                                }
+
+                                // Found start of another tag
+                                if (charCode === CharacterCodes.at) {
+                                    break;
+                                }
+                            }
+
+                            // Consume white spaces
+                            pos = consumeWhiteSpaces(pos);
+                            if (pos >= end) {
+                                break;
+                            }
+                        }
+
+                        // Parameter name
+                        if (isName(pos, end, sourceFile, symbol.name)) {
+                            // Found the parameter we are looking for consume white spaces
+                            pos = consumeWhiteSpaces(pos + symbol.name.length);
+                            if (pos >= end) {
+                                break;
+                            }
+
+                            var paramHelpString = "";
+                            var firstLineParamHelpStringPos = pos;
+                            while (pos < end) {
+                                var ch = sourceFile.text.charCodeAt(pos);
+
+                                // at line break, set this comment line text and go to next line 
+                                if (isLineBreak(ch)) {
+                                    if (paramHelpString) {
+                                        paramDocComments.push(paramHelpString);
+                                        paramHelpString = "";
+                                    }
+
+                                    // Get the pos after cleaning start of the line
+                                    setPosForParamHelpStringOnNextLine(firstLineParamHelpStringPos);
+                                    continue;
+                                }
+
+                                // Done scanning param help string - next tag found
+                                if (ch === CharacterCodes.at) {
+                                    break;
+                                }
+
+                                paramHelpString += sourceFile.text.charAt(pos);
+
+                                // Go to next character
+                                pos++;
+                            }
+
+                            // If there is param help text, add it top the doc comments
+                            if (paramHelpString) {
+                                paramDocComments.push(paramHelpString);
+                            }
+                            paramHelpStringMargin = undefined;
+                        }
+
+                        // If this is the start of another tag, continue with the loop in seach of param tag with symbol name
+                        if (sourceFile.text.charCodeAt(pos) === CharacterCodes.at) {
+                            continue;
+                        }
+                    }
+
+                    // Next character
+                    pos++;
+                }
+
+                return paramDocComments.join("\n");
+
+                function consumeWhiteSpaces(pos: number) {
+                    while (pos < end && isWhiteSpace(sourceFile.text.charCodeAt(pos))) {
+                        pos++;
+                    }
+
+                    return pos;
+                }
+
+                function setPosForParamHelpStringOnNextLine(firstLineParamHelpStringPos: number) {
+                    // Get the pos after consuming line breaks
+                    pos = consumeLineBreaks(pos, end, sourceFile);
+                    if (pos >= end) {
+                        return;
+                    }
+
+                    if (paramHelpStringMargin === undefined) {
+                        paramHelpStringMargin = sourceFile.getLineAndCharacterFromPosition(firstLineParamHelpStringPos).character - 1;
+                    }
+
+                    // Now consume white spaces max 
+                    var startOfLinePos = pos;
+                    pos = consumeWhiteSpacesOnTheLine(pos, end, sourceFile, paramHelpStringMargin);
+                    if (pos >= end) {
+                        return;
+                    }
+
+                    var consumedSpaces = pos - startOfLinePos;
+                    if (consumedSpaces < paramHelpStringMargin) {
+                        var ch = sourceFile.text.charCodeAt(pos);
+                        if (ch === CharacterCodes.asterisk) {
+                            // Consume more spaces after asterisk
+                            pos = consumeWhiteSpacesOnTheLine(pos + 1, end, sourceFile, paramHelpStringMargin - consumedSpaces - 1);
+                        }
+                    }
+                }
+            }
+        }
+
+        function getTypeFormatFlags(symbolKind: ScriptElementKind) {
+            var typeFormatFlags = TypeFormatFlags.NoTruncation;
+            switch (symbolKind) {
+                case ScriptElementKind.functionElement:
+                case ScriptElementKind.memberGetAccessorElement:
+                case ScriptElementKind.memberSetAccessorElement:
+                case ScriptElementKind.memberFunctionElement:
+                case ScriptElementKind.constructSignatureElement:
+                case ScriptElementKind.callSignatureElement:
+                case ScriptElementKind.constructorImplementationElement:
+                case ScriptElementKind.constructSignatureElement:
+                    typeFormatFlags = typeFormatFlags | TypeFormatFlags.NoArrowStyleTopLevelSignature;
+            }
+
+            return typeFormatFlags;
+        }
+
         function getCompletionEntryDetails(filename: string, position: number, entryName: string) {
             // Note: No need to call synchronizeHostData, as we have captured all the data we need
             //       in the getCompletionsAtPosition earlier
@@ -2234,9 +2525,9 @@ module ts {
                     name: entryName,
                     kind: completionEntry.kind,
                     kindModifiers: completionEntry.kindModifiers,
-                    type: session.typeChecker.typeToString(type, session.location),
+                    type: session.typeChecker.typeToString(type, session.location, getTypeFormatFlags(completionEntry.kind)),
                     fullSymbolName: typeInfoResolver.symbolToString(symbol, session.location),
-                    docComment: ""
+                    docComment: getJsDocCommentOfSymbol(symbol)
                 };
             }
             else {
@@ -2281,7 +2572,12 @@ module ts {
             if (flags & SymbolFlags.Class) return ScriptElementKind.classElement;
             if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
             if (flags & SymbolFlags.Enum) return ScriptElementKind.enumElement;
-            if (flags & SymbolFlags.Variable) return ScriptElementKind.variableElement;
+            if (flags & SymbolFlags.Variable) {
+                if (ts.forEach(symbol.declarations, declaration => declaration.kind === SyntaxKind.Parameter)) {
+                    return ScriptElementKind.parameterElement;
+                }
+                return ScriptElementKind.variableElement;
+            }
             if (flags & SymbolFlags.Function) return ScriptElementKind.functionElement;
             if (flags & SymbolFlags.GetAccessor) return ScriptElementKind.memberGetAccessorElement;
             if (flags & SymbolFlags.SetAccessor) return ScriptElementKind.memberSetAccessorElement;
@@ -2474,9 +2770,10 @@ module ts {
             var symbol = typeInfoResolver.getSymbolInfo(node);
             var type = symbol && typeInfoResolver.getTypeOfSymbol(symbol);
             if (type) {
+                var symbolKind = getSymbolKind(symbol);
                 return {
-                    memberName: new TypeScript.MemberNameString(typeInfoResolver.typeToString(type)),
-                    docComment: "",
+                    memberName: new TypeScript.MemberNameString(typeInfoResolver.typeToString(type, undefined, getTypeFormatFlags(symbolKind))),
+                    docComment: getJsDocCommentOfSymbol(symbol),
                     fullSymbolName: typeInfoResolver.symbolToString(symbol, getContainerNode(node)),
                     kind: getSymbolKind(symbol),
                     textSpan: TypeScript.TextSpan.fromBounds(node.pos, node.end)

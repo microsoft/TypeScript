@@ -1243,13 +1243,13 @@ module ts {
 
                     if (allowFunctionOrConstructorTypeLiteral) {
                         if (resolved.callSignatures.length === 1 && !resolved.constructSignatures.length) {
-                            writeSignature(resolved.callSignatures[0], /*arrowStyle*/ true);
+                            writeSignature(resolved.callSignatures[0], shouldTypeBeAllowStyleTypeLiteral());
                             return;
                         }
                         if (resolved.constructSignatures.length === 1 && !resolved.callSignatures.length) {
                             writeKeyword(writer, SyntaxKind.NewKeyword);
                             writeSpace(writer);
-                            writeSignature(resolved.constructSignatures[0], /*arrowStyle*/ true);
+                            writeSignature(resolved.constructSignatures[0], shouldTypeBeAllowStyleTypeLiteral());
                             return;
                         }
                     }
@@ -1328,6 +1328,11 @@ module ts {
                 }
                 writer.decreaseIndent();
                 writePunctuation(writer, SyntaxKind.CloseBraceToken);
+
+                function shouldTypeBeAllowStyleTypeLiteral() {
+                    return !typeStack || typeStack.length !== 1 || typeStack[0] !== type || // If this is not a top level type we are writing, arrowStyle is ok
+                        !(flags & TypeFormatFlags.NoArrowStyleTopLevelSignature);
+                }
             }
 
             function writeSignature(signature: Signature, arrowStyle?: boolean) {
