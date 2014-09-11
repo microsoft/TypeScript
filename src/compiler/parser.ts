@@ -81,7 +81,7 @@ module ts {
     export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): Diagnostic {
         node = getErrorSpanForNode(node);
         var file = getSourceFileOfNode(node);
-        var start = skipTrivia(file.text, node.pos);
+        var start = node.kind === SyntaxKind.Missing ? node.pos : skipTrivia(file.text, node.pos);
         var length = node.end - start;
 
         return createFileDiagnostic(file, start, length, message, arg0, arg1, arg2);
@@ -2876,10 +2876,11 @@ module ts {
             parseExpected(SyntaxKind.VarKeyword);
             node.declarations = parseVariableDeclarationList(flags, /*noIn*/false);
             parseSemicolon();
+            finishNode(node);
             if (!node.declarations.length && file.syntacticErrors.length === errorCountBeforeVarStatement) {
                 grammarErrorOnNode(node, Diagnostics.Variable_declaration_list_cannot_be_empty);
             }
-            return finishNode(node);
+            return node;
         }
 
         function parseFunctionDeclaration(pos?: number, flags?: NodeFlags): FunctionDeclaration {
