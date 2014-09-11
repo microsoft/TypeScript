@@ -95,7 +95,7 @@ var a: Foo = {
 >{} : {}
 
     e: null ,
->e : any
+>e : null
 
     f: [1],
 >f : number[]

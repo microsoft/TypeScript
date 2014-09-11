@@ -1354,10 +1354,14 @@ module ts {
             }
             // Use the type of the initializer expression if one is present
             if (declaration.initializer) {
-                var unwidenedType = checkAndMarkExpression(declaration.initializer);
-                var type = getWidenedType(unwidenedType);
-                if (type !== unwidenedType) {
-                    checkImplicitAny(type);
+                var type = checkAndMarkExpression(declaration.initializer);
+                // Widening of property assignments is handled by checkObjectLiteral, exclude them here
+                if (declaration.kind !== SyntaxKind.PropertyAssignment) {
+                    var unwidenedType = type;
+                    type = getWidenedType(type);
+                    if (type !== unwidenedType) {
+                        checkImplicitAny(type);
+                    }
                 }
                 return type;
             }

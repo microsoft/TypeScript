@@ -61,7 +61,7 @@ module Bugs {
 >startIndex : number
 >type : string
 >bracket : number
->state : any
+>state : null
 >length : number
                 }
 }

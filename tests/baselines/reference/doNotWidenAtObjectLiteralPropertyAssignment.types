@@ -26,5 +26,5 @@ var test: IIntervalTreeNode[] = [{ interval: { begin: 0 }, children: null }]; //
 >interval : { begin: number; }
 >{ begin: 0 } : { begin: number; }
 >begin : number
->children : any
+>children : null
 

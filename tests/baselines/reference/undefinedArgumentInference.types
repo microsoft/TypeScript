@@ -19,8 +19,8 @@ var z1 = foo1({ x: undefined, y: undefined });
 >foo1({ x: undefined, y: undefined }) : any
 >foo1 : <T>(f1: { x: T; y: T; }) => T
 >{ x: undefined, y: undefined } : { x: undefined; y: undefined; }
->x : any
+>x : undefined
 >undefined : undefined
->y : any
+>y : undefined
 >undefined : undefined
 
