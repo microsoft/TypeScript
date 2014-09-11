@@ -19,26 +19,66 @@ module ts.formatting {
                 return 0;
             }
 
+            var lineAtPosition = sourceFile.getLineAndCharacterFromPosition(position).line;
+
+            if (precedingToken.kind === SyntaxKind.CommaToken && precedingToken.parent.kind !== SyntaxKind.BinaryExpression) {
+
+                // previous token is comma that separates items in list - find the previous item and try to derive indentation from it
+                var precedingListItem = findPrecedingListItem(precedingToken);
+                var precedingListItemStartLineAndChar = sourceFile.getLineAndCharacterFromPosition(precedingListItem.getStart(sourceFile));
+                var listStartLine =  getStartLineForNode(precedingListItem.parent, sourceFile);
+
+                if (precedingListItemStartLineAndChar.line !== listStartLine) {
+
+                    // previous list item starts on the different line with list, find first non-whitespace character in this line and use its position as indentation
+                    var lineStartPosition = sourceFile.getPositionFromLineAndCharacter(precedingListItemStartLineAndChar.line, 1);
+                    for (var i = 0; i < precedingListItemStartLineAndChar.character; ++i) {
+                        if (!isWhiteSpace(sourceFile.text.charCodeAt(lineStartPosition + i))) {
+                            return i;
+                        }
+                    }
+
+                    // seems that this is the first non-whitespace character on the line - return it
+                    return precedingListItemStartLineAndChar.character;
+                }
+            }
+
             // try to find the node that will include 'position' starting from 'precedingToken'
             // if such node is found - compute initial indentation for 'position' inside this node
             var previous: Node;
             var current = precedingToken;
+            var currentStartLine: number;
             var indentation: number;
+
             while (current) {
                 if (!isToken(current) && isPositionBelongToNode(current, position, sourceFile)) {
-                    indentation = getInitialIndentationInNode(position, current, previous, sourceFile, options);
+
+                    currentStartLine = getStartLineForNode(current, sourceFile);
+
+                    if (discardInitialIndentationIfNextTokenIsOpenOrCloseBrace(precedingToken, current, lineAtPosition, sourceFile)) {
+                        indentation = 0;
+                    }
+                    else {
+                        indentation =
+                            isNodeContentIndented(current, previous) && 
+                            lineAtPosition !== currentStartLine
+                                ? options.indentSpaces 
+                                : 0;
+                    }
+
                     break;
                 }
 
                 previous = current;
                 current = current.parent;
             }
-
+                        
             if (!current) {
+                // no parent was found - return 0 to be indented on the level of SourceFile
                 return 0;
             }
 
-            var currentStartLine: number = sourceFile.getLineAndCharacterFromPosition(current.getStart(sourceFile)).line;
+
             var parent: Node = current.parent;
             var parentStartLine: number;
 
@@ -46,7 +86,12 @@ module ts.formatting {
             // indentation is not added if parent and child nodes start on the same line or if parent is IfStatement and child starts on the same line with 'else clause'
             while (parent) {
                 parentStartLine = sourceFile.getLineAndCharacterFromPosition(parent.getStart(sourceFile)).line;
-                if (isNodeContentIndented(parent, current) && parentStartLine !== currentStartLine && !isChildOnTheSameLineWithElseInIfStatement(parent, current, sourceFile)) {
+                var increaseIndentation = 
+                    isNodeContentIndented(parent, current) && 
+                    parentStartLine !== currentStartLine && 
+                    !isChildStartsOnTheSameLineWithElseInIfStatement(parent, current, currentStartLine, sourceFile);
+
+                if (increaseIndentation) {
                     indentation += options.indentSpaces;
                 }
 
@@ -58,72 +103,67 @@ module ts.formatting {
             return indentation;
         }
 
-        function getInitialIndentationInNode(position: number, parent: Node, previous: Node, sourceFile: SourceFile, options: TypeScript.FormattingOptions): number {
-            if (parent.kind === SyntaxKind.IfStatement) {
-                Debug.assert(previous);
-                
-                // IfStatement will be parent when:
-                // - previous token is the immediate child of IfStatement - some token
-                // - Then\Else parts are completed and position is outside Then\Else statements
-                if ((<IfStatement>parent).thenStatement === previous || (<IfStatement>parent).elseStatement === previous) {
-                    if (previous.getStart(sourceFile) > position || previous.end < position) {
-                        return 0;
-                    }
-                    else {
-                        return indentIfPositionOnDifferentLineWithNodeStart(position, previous, sourceFile, options);
-                    }
-                }
+        function discardInitialIndentationIfNextTokenIsOpenOrCloseBrace(precedingToken: Node, current: Node, lineAtPosition: number, sourceFile: SourceFile): boolean {
+            var nextToken = findNextToken(precedingToken, current);
+            if (!nextToken) {
+                return false;
             }
-            else if (parent.kind === SyntaxKind.TryStatement) {
-                Debug.assert(previous);
-                // this is possible only if position is next to completed Try\Catch blocks - no indentation
-                if (previous.kind === SyntaxKind.TryBlock || previous.kind === SyntaxKind.CatchBlock) {
-                    return 0;
-                }
+            
+            if (nextToken.kind === SyntaxKind.OpenBraceToken) {
+                // open braces are always indented at the parent level
+                return true;
+            }
+            else if (nextToken.kind === SyntaxKind.CloseBraceToken) {
+                // close braces are indented at the parent level if they are located on the same line with cursor
+                // this means that if new line will be added at $ position, this case will be indented
+                // class A {
+                //    $
+                // }
+                /// and this one - not
+                // class A {
+                // $}
+
+                var nextTokenStartLine = getStartLineForNode(nextToken, sourceFile);
+                return lineAtPosition === nextTokenStartLine;
             }
 
-            return indentIfPositionOnDifferentLineWithNodeStart(position, parent, sourceFile, options);
+            return false;
         }
 
-        function indentIfPositionOnDifferentLineWithNodeStart(position: number, node: Node, sourceFile: SourceFile, options: TypeScript.FormattingOptions): number {
-            return isPositionOnTheSameLineWithNodeStart(position, node, sourceFile) ? 0 : options.indentSpaces;
+        function getStartLineForNode(n: Node, sourceFile: SourceFile): number {
+            return sourceFile.getLineAndCharacterFromPosition(n.getStart(sourceFile)).line;
         }
 
-        function isPositionOnTheSameLineWithNodeStart(position: number, node: Node, sourceFile: SourceFile): boolean {
-            var lineAtPosition = sourceFile.getLineAndCharacterFromPosition(position).line;
-            var startLine = sourceFile.getLineAndCharacterFromPosition(node.getStart(sourceFile)).line;
-            return lineAtPosition === startLine;
+        function findPrecedingListItem(commaToken: Node): Node {
+            // CommaToken node is synthetic and thus will be stored in SyntaxList, however parent of the CommaToken points to the container of the SyntaxList skipping the list.
+            // In order to find the preceding list item we first need to locate SyntaxList itself and then search for the position of CommaToken
+            var syntaxList = forEach(commaToken.parent.getChildren(), c => {
+                // find syntax list that covers the span of CommaToken
+                if (c.kind == SyntaxKind.SyntaxList && c.pos <= commaToken.end && c.end >= commaToken.end) {
+                    return c;
+                }
+            });
+            Debug.assert(syntaxList);
+
+            var children = syntaxList.getChildren();
+            var commaIndex = indexOf(children, commaToken);
+            Debug.assert(commaIndex !== -1 && commaIndex !== 0);
+
+            return children[commaIndex - 1];
         }
 
         function isPositionBelongToNode(candidate: Node, position: number, sourceFile: SourceFile): boolean {
             return candidate.end > position || !isCompletedNode(candidate, sourceFile);
         }
 
-        function isPositionOnTheSameLineWithSomeBrace(token: Node, position: number, sourceFile: SourceFile): boolean {
-            switch (token.kind) {
-                case SyntaxKind.OpenBraceToken:
-                case SyntaxKind.OpenBracketToken:
-                case SyntaxKind.OpenParenToken:
-                case SyntaxKind.CloseBraceToken:
-                case SyntaxKind.CloseBracketToken:
-                case SyntaxKind.CloseParenToken:
-                    return isPositionOnTheSameLineWithNodeStart(position, token, sourceFile);
-                default:
-                    return false;
-            }
-        }
-
-        function isChildOnTheSameLineWithElseInIfStatement(parent: Node, child: Node, sourceFile: SourceFile): boolean {
+        function isChildStartsOnTheSameLineWithElseInIfStatement(parent: Node, child: Node, childStartLine: number, sourceFile: SourceFile): boolean {
             if (parent.kind === SyntaxKind.IfStatement && (<IfStatement>parent).elseStatement === child) {
-                var elseKeyword = findTokenOfKind(parent, SyntaxKind.ElseKeyword);
+                var elseKeyword = forEach(parent.getChildren(), c => c.kind === SyntaxKind.ElseKeyword && c);
                 Debug.assert(elseKeyword);
 
-                return isPositionOnTheSameLineWithNodeStart(child.getStart(sourceFile), elseKeyword, sourceFile);
+                var elseKeywordStartLine =  getStartLineForNode(elseKeyword, sourceFile);
+                return elseKeywordStartLine === childStartLine;
             }
-        }
-
-        function findTokenOfKind(parent: Node, kind: SyntaxKind) {
-            return forEach(parent.getChildren(), c => c.kind === kind && c);
         }
 
         // preserve indentation for list items
@@ -198,6 +238,31 @@ module ts.formatting {
             }
         }
 
+        function findNextToken(previousToken: Node, parent: Node): Node {
+            return find(parent);
+
+            function find(n: Node): Node {
+                if (isToken(n) && n.pos === previousToken.end) {
+                    // this is token that starts at the end of previous token - return it
+                    return n;
+                }
+
+                var children = n.getChildren();
+                for (var i = 0, len = children.length; i < len; ++i) {
+                    var child = children[i];
+                    var shouldDiveInChildNode = 
+                        // previous token is enclosed somewhere in the child
+                        (child.pos <= previousToken.pos && child.end > previousToken.end) ||
+                        // previous token end exactly at the beginning of child
+                        (child.pos === previousToken.end);
+
+                    if (shouldDiveInChildNode && isCandidateNode(child)) {                        
+                        return find(child);
+                    }
+                }
+            }
+        }
+
         function findPrecedingToken(position: number, sourceFile: SourceFile): Node {
             return find(sourceFile, /*diveIntoLastChild*/ false);
 
@@ -208,7 +273,7 @@ module ts.formatting {
 
                 var children = n.getChildren();
                 if (diveIntoLastChild) {
-                    var candidate = findLastChildNodeCandidate(children, children.length);
+                    var candidate = findLastChildNodeCandidate(children, /*exclusiveStartPosition*/ children.length);
                     return candidate && find(candidate, diveIntoLastChild);
                 }
 
@@ -218,7 +283,7 @@ module ts.formatting {
                         if (position < child.end) {
                             if (child.getStart(sourceFile) >= position) {
                                 // actual start of the node is past the position - previous token should be at the end of previous child
-                                var candidate = findLastChildNodeCandidate(children, i);
+                                var candidate = findLastChildNodeCandidate(children, /*exclusiveStartPosition*/ i);
                                 return candidate && find(candidate, /*diveIntoLastChild*/ true)
                             }
                             else {
@@ -232,26 +297,12 @@ module ts.formatting {
                 // here we know that none of child token nodes embrace the position
                 // try to find the closest token on the left 
                 if (children.length) {
-                    var candidate = findLastChildNodeCandidate(children, children.length);
+                    var candidate = findLastChildNodeCandidate(children, /*exclusiveStartPosition*/ children.length);
                     return candidate && find(candidate, /*diveIntoLastChild*/ true);
                 }
             }
 
-            // filters out EOF tokens, Missing\Omitted expressions, empty SyntaxLists and expression statements that wrap any of listed nodes.
-            function isCandidateNode(n: Node): boolean {
-                if (n.kind === SyntaxKind.ExpressionStatement) {
-                    return isCandidateNode((<ExpressionStatement>n).expression);
-                }
-
-                if (n.kind === SyntaxKind.EndOfFileToken || n.kind === SyntaxKind.OmittedExpression || n.kind === SyntaxKind.Missing) {
-                    return false;
-                }
-
-                // SyntaxList is already realized so getChildCount should be fast and non-expensive
-                return n.kind !== SyntaxKind.SyntaxList || n.getChildCount() !== 0;
-            }
-
-            // finds last node that is considered as candidate for search (isCandidate(node) === true) starting from 'exclusiveStartPosition'
+            /// finds last node that is considered as candidate for search (isCandidate(node) === true) starting from 'exclusiveStartPosition'
             function findLastChildNodeCandidate(children: Node[], exclusiveStartPosition: number): Node {
                 for (var i = exclusiveStartPosition - 1; i >= 0; --i) {
                     if (isCandidateNode(children[i])) {
@@ -259,6 +310,20 @@ module ts.formatting {
                     }
                 }
             }
+        }
+
+        /// checks if node is something that can contain tokens (except EOF) - filters out EOF tokens, Missing\Omitted expressions, empty SyntaxLists and expression statements that wrap any of listed nodes.
+        function isCandidateNode(n: Node): boolean {
+            if (n.kind === SyntaxKind.ExpressionStatement) {
+                return isCandidateNode((<ExpressionStatement>n).expression);
+            }
+
+            if (n.kind === SyntaxKind.EndOfFileToken || n.kind === SyntaxKind.OmittedExpression || n.kind === SyntaxKind.Missing) {
+                return false;
+            }
+
+            // SyntaxList is already realized so getChildCount should be fast and non-expensive
+            return n.kind !== SyntaxKind.SyntaxList || n.getChildCount() !== 0;
         }
 
         function isToken(n: Node): boolean {
@@ -305,12 +370,16 @@ module ts.formatting {
                 case SyntaxKind.BinaryExpression:
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
+                case SyntaxKind.VariableStatement:
+                case SyntaxKind.VariableDeclaration:
                     return true;
                 default:
                     return false;
             }
         }
 
+        /// checks if node ends with 'expectedLastToken'.
+        /// If child at position 'length - 1' is 'SemicolonToken' it is skipped and 'expectedLastToken' is compared with child at position 'length - 2'.
         function isNodeEndWith(n: Node, expectedLastToken: SyntaxKind, sourceFile: SourceFile): boolean {
             var children = n.getChildren(sourceFile);
             if (children.length) {
