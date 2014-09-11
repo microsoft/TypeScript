@@ -1567,14 +1567,20 @@ module ts {
         /// Completion
         function getValidCompletionEntryDisplayName(displayName: string, target: ScriptTarget): string {
             if (displayName && displayName.length > 0) {
-                var firstChar = displayName.charCodeAt(0);
-                if (firstChar === TypeScript.CharacterCodes.singleQuote || firstChar === TypeScript.CharacterCodes.doubleQuote) {
+                var firstCharCode = displayName.charCodeAt(0);
+                if (displayName && displayName.length >= 2 && firstCharCode === displayName.charCodeAt(displayName.length - 1) &&
+                    (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
                     // If the user entered name for the symbol was quoted, removing the quotes is not enough, as the name could be an
                     // invalid identifer name. We need to check if whatever was inside the quotes is actually a valid identifier name.
-                    displayName = TypeScript.stripStartAndEndQuotes(displayName);
+                    displayName = displayName.substring(1, displayName.length - 1);
                 }
 
-                if (TypeScript.Scanner.isValidIdentifier(TypeScript.SimpleText.fromString(displayName), target)) {
+                var isValid = isIdentifierStart(displayName.charCodeAt(0), target);
+                for (var i = 1, n = displayName.length; isValid && i < n; i++) {
+                    isValid = isValid && isIdentifierPart(displayName.charCodeAt(i), target);
+                }
+
+                if (isValid) {
                     return displayName;
                 }
             }
