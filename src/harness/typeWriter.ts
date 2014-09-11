@@ -67,8 +67,8 @@ class TypeWriterWalker {
             case ts.SyntaxKind.ContinueStatement:
             case ts.SyntaxKind.BreakStatement:
                 return (<ts.BreakOrContinueStatement>parent).label === identifier;
-            case ts.SyntaxKind.LabelledStatement:
-                return (<ts.LabelledStatement>parent).label === identifier;
+            case ts.SyntaxKind.LabeledStatement:
+                return (<ts.LabeledStatement>parent).label === identifier;
         }
         return false;
     }

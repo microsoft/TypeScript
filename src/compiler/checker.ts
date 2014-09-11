@@ -5815,7 +5815,7 @@ module ts {
             });
         }
 
-        function checkLabelledStatement(node: LabelledStatement) {
+        function checkLabelledStatement(node: LabeledStatement) {
             checkSourceElement(node.statement);
         }
 
@@ -6378,8 +6378,8 @@ module ts {
                     return checkWithStatement(<WithStatement>node);
                 case SyntaxKind.SwitchStatement:
                     return checkSwitchStatement(<SwitchStatement>node);
-                case SyntaxKind.LabelledStatement:
-                    return checkLabelledStatement(<LabelledStatement>node);
+                case SyntaxKind.LabeledStatement:
+                    return checkLabelledStatement(<LabeledStatement>node);
                 case SyntaxKind.ThrowStatement:
                     return checkThrowStatement(<ThrowStatement>node);
                 case SyntaxKind.TryStatement:

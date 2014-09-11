@@ -305,9 +305,9 @@ module ts {
             case SyntaxKind.DefaultClause:
                 return child((<CaseOrDefaultClause>node).expression) ||
                     children((<CaseOrDefaultClause>node).statements);
-            case SyntaxKind.LabelledStatement:
-                return child((<LabelledStatement>node).label) ||
-                    child((<LabelledStatement>node).statement);
+            case SyntaxKind.LabeledStatement:
+                return child((<LabeledStatement>node).label) ||
+                    child((<LabeledStatement>node).statement);
             case SyntaxKind.ThrowStatement:
                 return child((<ThrowStatement>node).expression);
             case SyntaxKind.TryStatement:
@@ -371,7 +371,7 @@ module ts {
                 case SyntaxKind.SwitchStatement:
                 case SyntaxKind.CaseClause:
                 case SyntaxKind.DefaultClause:
-                case SyntaxKind.LabelledStatement:
+                case SyntaxKind.LabeledStatement:
                 case SyntaxKind.TryStatement:
                 case SyntaxKind.TryBlock:
                 case SyntaxKind.CatchBlock:
@@ -2799,8 +2799,8 @@ module ts {
             return isIdentifier() && lookAhead(() => nextToken() === SyntaxKind.ColonToken);
         }
 
-        function parseLabelledStatement(): LabelledStatement {
-            var node = <LabelledStatement>createNode(SyntaxKind.LabelledStatement);
+        function parseLabelledStatement(): LabeledStatement {
+            var node = <LabeledStatement>createNode(SyntaxKind.LabeledStatement);
             node.label = parseIdentifier();
             parseExpected(SyntaxKind.ColonToken);
 

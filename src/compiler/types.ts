@@ -183,7 +183,7 @@ module ts {
         SwitchStatement,
         CaseClause,
         DefaultClause,
-        LabelledStatement,
+        LabeledStatement,
         ThrowStatement,
         TryStatement,
         TryBlock,
@@ -459,7 +459,7 @@ module ts {
         statements: NodeArray<Statement>;
     }
 
-    export interface LabelledStatement extends Statement {
+    export interface LabeledStatement extends Statement {
         label: Identifier;
         statement: Statement;
     }

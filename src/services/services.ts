@@ -1276,8 +1276,8 @@ module ts {
     /// Helpers
     function getTargetLabel(referenceNode: Node, labelName: string): Identifier {
         while (referenceNode) {
-            if (referenceNode.kind === SyntaxKind.LabelledStatement && (<LabelledStatement>referenceNode).label.text === labelName) {
-                return (<LabelledStatement>referenceNode).label;
+            if (referenceNode.kind === SyntaxKind.LabeledStatement && (<LabeledStatement>referenceNode).label.text === labelName) {
+                return (<LabeledStatement>referenceNode).label;
             }
             referenceNode = referenceNode.parent;
         }
@@ -1292,17 +1292,17 @@ module ts {
 
     function isLabelOfLabeledStatement(node: Node): boolean {
         return node.kind === SyntaxKind.Identifier &&
-            node.parent.kind === SyntaxKind.LabelledStatement &&
-            (<LabelledStatement>node.parent).label === node;
+            node.parent.kind === SyntaxKind.LabeledStatement &&
+            (<LabeledStatement>node.parent).label === node;
     }
 
     /**
      * Whether or not a 'node' is preceded by a label of the given string.
      * Note: 'node' cannot be a SourceFile.
      */
-    function isLabelledBy(node: Node, labelName: string) {
-        for (var owner = node.parent; owner.kind === SyntaxKind.LabelledStatement; owner = owner.parent) {
-            if ((<LabelledStatement>owner).label.text === labelName) {
+    function isLabeledBy(node: Node, labelName: string) {
+        for (var owner = node.parent; owner.kind === SyntaxKind.LabeledStatement; owner = owner.parent) {
+            if ((<LabeledStatement>owner).label.text === labelName) {
                 return true;
             }
         }
@@ -2372,13 +2372,13 @@ module ts {
                         case SyntaxKind.WhileStatement:
                             // The iteration statement is the owner if the break/continue statement is either unlabeled,
                             // or if the break/continue statement's label corresponds to one of the loop's labels.
-                            if (!breakOrContinueStatement.label || isLabelledBy(owner, breakOrContinueStatement.label.text)) {
+                            if (!breakOrContinueStatement.label || isLabeledBy(owner, breakOrContinueStatement.label.text)) {
                                 return getLoopBreakContinueOccurrences(<IterationStatement>owner)
                             }
                             break;
                         case SyntaxKind.SwitchStatement:
                             // A switch statement can only be the owner of an break statement.
-                            if (breakOrContinueStatement.kind === SyntaxKind.BreakStatement && (!breakOrContinueStatement.label || isLabelledBy(owner, breakOrContinueStatement.label.text))) {
+                            if (breakOrContinueStatement.kind === SyntaxKind.BreakStatement && (!breakOrContinueStatement.label || isLabeledBy(owner, breakOrContinueStatement.label.text))) {
                                 return getSwitchCaseDefaultOccurrences(<SwitchStatement>owner);
                             }
                             break;
@@ -2398,7 +2398,10 @@ module ts {
                                                        breakSearchType: BreakContinueSearchType,
                                                        continueSearchType: BreakContinueSearchType,
                                                        keywordAccumulator: Node[]): void {
-                (function aggregate(node: Node) {
+
+                return aggregate(startPoint);
+
+                function aggregate(node: Node): void {
                     // Remember the statuses of the flags before diving into the next node.
                     var prevBreakSearchType = breakSearchType;
                     var prevContinueSearchType = continueSearchType;
@@ -2432,9 +2435,7 @@ module ts {
                     // Restore the last state.
                     breakSearchType = prevBreakSearchType;
                     continueSearchType = prevContinueSearchType;
-                })(startPoint);
-
-                return;
+                };
             }
 
             // Note: 'statement' must be a descendant of 'root'.
@@ -2449,7 +2450,7 @@ module ts {
                                     continueSearchType;
 
                 if (statement.label && (searchType & BreakContinueSearchType.Labeled)) {
-                    return isLabelledBy(owner, statement.label.text);
+                    return isLabeledBy(owner, statement.label.text);
                 }
                 else {
                     return !!(searchType & BreakContinueSearchType.Unlabeled);
