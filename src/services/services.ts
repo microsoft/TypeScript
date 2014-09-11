@@ -2331,11 +2331,13 @@ module ts {
                     }
                 }
 
-                aggregateBreakAndContinueKeywords(/* owner */ loopNode,
-                                                  /* startPoint */ loopNode.statement,
-                                                  /* breakSearchType */ BreakContinueSearchType.All,
-                                                  /* continueSearchType */ BreakContinueSearchType.All,
-                                                  /* keywordAccumulator */ keywords);
+                var breaksAndContinues = aggregateAllBreakAndContinueStatements(loopNode.statement);
+
+                forEach(breaksAndContinues, statement => {
+                    if (ownsBreakOrContinueStatement(loopNode, statement)) {
+                        pushKeywordIf(keywords, statement.getFirstToken(), SyntaxKind.BreakKeyword, SyntaxKind.ContinueKeyword);
+                    }
+                });
 
                 return map(keywords, getReferenceEntryFromNode);
             }
@@ -2352,38 +2354,78 @@ module ts {
                 forEach(switchStatement.clauses, clause => {
                     pushKeywordIf(keywords, clause.getFirstToken(), SyntaxKind.CaseKeyword, SyntaxKind.DefaultKeyword);
 
-                    // For each clause, aggregate each of the analogous 'break' statements.
-                    aggregateBreakAndContinueKeywords(/* owner */ switchStatement,
-                                                      /* startPoint */ clause,
-                                                      /* breakSearchType */ BreakContinueSearchType.All,
-                                                      /* continueSearchType */ BreakContinueSearchType.None,
-                                                      /* keywordAccumulator */ keywords);
+                    var breaksAndContinues = aggregateAllBreakAndContinueStatements(clause);
+
+                    forEach(breaksAndContinues, statement => {
+                        if (ownsBreakOrContinueStatement(switchStatement, statement)) {
+                            pushKeywordIf(keywords, statement.getFirstToken(), SyntaxKind.BreakKeyword);
+                        }
+                    });
                 });
 
                 return map(keywords, getReferenceEntryFromNode);
             }
 
-            function getBreakOrContinueStatementOccurences(breakOrContinueStatement: BreakOrContinueStatement): ReferenceEntry[] {
-                for (var owner = node.parent; owner; owner = owner.parent) {
+            function getBreakOrContinueStatementOccurences(breakOrContinueStatement: BreakOrContinueStatement): ReferenceEntry[]{
+                var owner = getBreakOrContinueOwner(breakOrContinueStatement);
+
+                if (owner) {
                     switch (owner.kind) {
                         case SyntaxKind.ForStatement:
                         case SyntaxKind.ForInStatement:
                         case SyntaxKind.DoStatement:
                         case SyntaxKind.WhileStatement:
-                            // The iteration statement is the owner if the break/continue statement is either unlabeled,
-                            // or if the break/continue statement's label corresponds to one of the loop's labels.
-                            if (!breakOrContinueStatement.label || isLabeledBy(owner, breakOrContinueStatement.label.text)) {
-                                return getLoopBreakContinueOccurrences(<IterationStatement>owner)
-                            }
-                            break;
+                            return getLoopBreakContinueOccurrences(<IterationStatement>owner)
                         case SyntaxKind.SwitchStatement:
-                            // A switch statement can only be the owner of an break statement.
-                            if (breakOrContinueStatement.kind === SyntaxKind.BreakStatement && (!breakOrContinueStatement.label || isLabeledBy(owner, breakOrContinueStatement.label.text))) {
-                                return getSwitchCaseDefaultOccurrences(<SwitchStatement>owner);
+                            return getSwitchCaseDefaultOccurrences(<SwitchStatement>owner);
+
+                    }
+                }
+
+                return undefined;
+            }
+
+            function aggregateAllBreakAndContinueStatements(node: Node): BreakOrContinueStatement[] {
+                var statementAccumulator: BreakOrContinueStatement[] = []
+                aggregate(node);
+                return statementAccumulator;
+
+                function aggregate(node: Node): void {
+                    if (node.kind === SyntaxKind.BreakStatement || node.kind === SyntaxKind.ContinueStatement) {
+                        statementAccumulator.push(node);
+                    }
+                    // Do not cross function boundaries.
+                    else if (!isAnyFunction(node)) {
+                        forEachChild(node, aggregate);
+                    }
+                };
+            }
+
+            function ownsBreakOrContinueStatement(owner: Node, statement: BreakOrContinueStatement): boolean {
+                var actualOwner = getBreakOrContinueOwner(statement);
+
+                return actualOwner && actualOwner === owner;
+            }
+
+            function getBreakOrContinueOwner(statement: BreakOrContinueStatement): Node {
+                for (var node = statement.parent; node; node = node.parent) {
+                    switch (node.kind) {
+                        case SyntaxKind.SwitchStatement:
+                            if (statement.kind === SyntaxKind.ContinueStatement) {
+                                continue;
+                            }
+                            // Fall through.
+                        case SyntaxKind.ForStatement:
+                        case SyntaxKind.ForInStatement:
+                        case SyntaxKind.WhileStatement:
+                        case SyntaxKind.DoStatement:
+                            if (!statement.label || isLabeledBy(node, statement.label.text)) {
+                                return node;
                             }
                             break;
                         default:
-                            if (isAnyFunction(owner)) {
+                            // Don't cross function boundaries.
+                            if (isAnyFunction(node)) {
                                 return undefined;
                             }
                             break;
@@ -2391,70 +2433,6 @@ module ts {
                 }
 
                 return undefined;
-            }
-
-            function aggregateBreakAndContinueKeywords(owner: Node,
-                                                       startPoint: Node,
-                                                       breakSearchType: BreakContinueSearchType,
-                                                       continueSearchType: BreakContinueSearchType,
-                                                       keywordAccumulator: Node[]): void {
-
-                return aggregate(startPoint);
-
-                function aggregate(node: Node): void {
-                    // Remember the statuses of the flags before diving into the next node.
-                    var prevBreakSearchType = breakSearchType;
-                    var prevContinueSearchType = continueSearchType;
-
-                    switch (node.kind) {
-                        case SyntaxKind.BreakStatement:
-                        case SyntaxKind.ContinueStatement:
-                            if (ownsBreakOrContinue(owner, <BreakOrContinueStatement>node, breakSearchType, continueSearchType)) {
-                                pushKeywordIf(keywordAccumulator, node.getFirstToken(), SyntaxKind.BreakKeyword, SyntaxKind.ContinueKeyword);
-                            }
-                            break;
-
-                        case SyntaxKind.ForStatement:
-                        case SyntaxKind.ForInStatement:
-                        case SyntaxKind.DoStatement:
-                        case SyntaxKind.WhileStatement:
-                            // Inner loops take ownership of unlabeled 'continue' statements.
-                            continueSearchType &= ~BreakContinueSearchType.Unlabeled;
-                        // Fall through
-                        case SyntaxKind.SwitchStatement:
-                            // Inner loops & 'switch' statements take ownership of unlabeled 'break' statements.
-                            breakSearchType &= ~BreakContinueSearchType.Unlabeled;
-                            break;
-                    }
-
-                    // Do not cross function boundaries.
-                    if (!isAnyFunction(node)) {
-                        forEachChild(node, aggregate);
-                    }
-
-                    // Restore the last state.
-                    breakSearchType = prevBreakSearchType;
-                    continueSearchType = prevContinueSearchType;
-                };
-            }
-
-            // Note: 'statement' must be a descendant of 'root'.
-            //       Reasonable logic for restricting traversal prior to arriving at the
-            //       'statement' node is beyond the scope of this function.
-            function ownsBreakOrContinue(owner: Node,
-                                         statement: BreakOrContinueStatement,
-                                         breakSearchType: BreakContinueSearchType,
-                                         continueSearchType: BreakContinueSearchType): boolean {
-                var searchType = statement.kind === SyntaxKind.BreakStatement ?
-                                    breakSearchType :
-                                    continueSearchType;
-
-                if (statement.label && (searchType & BreakContinueSearchType.Labeled)) {
-                    return isLabeledBy(owner, statement.label.text);
-                }
-                else {
-                    return !!(searchType & BreakContinueSearchType.Unlabeled);
-                }
             }
 
             // returns true if 'node' is defined and has a matching 'kind'.
