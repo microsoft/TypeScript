@@ -2,12 +2,12 @@
     interface Comparable {}
     class A extends Comparable {}
                     ~~~~~~~~~~
-!!! A class may only extend another class.
+!!! error TS2311: A class may only extend another class.
     class B implements Comparable {}
      
     interface Comparable2<T> {}
     class A2<T> extends Comparable2<T> {}
                         ~~~~~~~~~~~~~~
-!!! A class may only extend another class.
+!!! error TS2311: A class may only extend another class.
     class B2<T> implements Comparable2<T> {}
     

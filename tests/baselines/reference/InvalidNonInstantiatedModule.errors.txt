@@ -5,9 +5,9 @@
     
     var m = M; // Error, not instantiated can not be used as var
             ~
-!!! Cannot find name 'M'.
+!!! error TS2304: Cannot find name 'M'.
     
     var x: typeof M; // Error only a namespace
                   ~
-!!! Cannot find name 'M'.
+!!! error TS2304: Cannot find name 'M'.
     

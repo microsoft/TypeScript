@@ -1,8 +1,8 @@
 ==== tests/cases/conformance/parser/ecmascript5/Expressions/parserTypeAssertionInObjectCreationExpression1.ts (3 errors) ====
     new <T>Foo()
         ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
          ~
-!!! Cannot find name 'T'.
+!!! error TS2304: Cannot find name 'T'.
            ~~~
-!!! Cannot find name 'Foo'.
+!!! error TS2304: Cannot find name 'Foo'.

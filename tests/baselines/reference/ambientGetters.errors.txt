@@ -3,11 +3,11 @@
     declare class A {
         get length() : number;
             ~~~~~~
-!!! An accessor cannot be declared in an ambient context.
+!!! error TS1086: An accessor cannot be declared in an ambient context.
     }
     
     declare class B {
         get length() { return 0; }
             ~~~~~~
-!!! An accessor cannot be declared in an ambient context.
+!!! error TS1086: An accessor cannot be declared in an ambient context.
     }

@@ -5,7 +5,7 @@
     // Error: foo should not be visible here
     foo();
     ~~~
-!!! Cannot find name 'foo'.
+!!! error TS2304: Cannot find name 'foo'.
     
     // recurser should be
     recurser();
@@ -14,10 +14,10 @@
         // Error: foo should not be visible here either
         foo();
         ~~~
-!!! Cannot find name 'foo'.
+!!! error TS2304: Cannot find name 'foo'.
     });
     
     // Error: bar should not be visible
     bar();
     ~~~
-!!! Cannot find name 'bar'.
+!!! error TS2304: Cannot find name 'bar'.

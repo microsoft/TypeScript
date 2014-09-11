@@ -3,15 +3,15 @@
     
         try {
         ~~~
-!!! Unexpected token. A constructor, method, accessor, or property was expected.
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
     
             public bar = someInitThatMightFail();
             ~~~~~~
-!!! Statement expected.
+!!! error TS1129: Statement expected.
                    ~~~
-!!! Cannot find name 'bar'.
+!!! error TS2304: Cannot find name 'bar'.
                          ~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'someInitThatMightFail'.
+!!! error TS2304: Cannot find name 'someInitThatMightFail'.
     
         } catch(e) {}
     
@@ -19,20 +19,20 @@
     
         public baz() {
         ~~~~~~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.
                      ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
                ~~~
-!!! Cannot find name 'baz'.
+!!! error TS2304: Cannot find name 'baz'.
     
             return this.bar; // doesn't get rewritten to Foo.bar.
             ~~~~~~
-!!! A 'return' statement can only be used within a function body.
+!!! error TS1108: A 'return' statement can only be used within a function body.
     
         }
     
     }
     ~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.
     
     

@@ -26,7 +26,7 @@
     
     b.foo();
       ~~~
-!!! Property 'foo' does not exist on type 'B'.
+!!! error TS2339: Property 'foo' does not exist on type 'B'.
     
     
     

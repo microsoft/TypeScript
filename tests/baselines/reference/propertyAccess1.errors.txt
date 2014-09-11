@@ -3,4 +3,4 @@
     foo.a = 4;
     foo.b = 5;
         ~
-!!! Property 'b' does not exist on type '{ a: number; }'.
+!!! error TS2339: Property 'b' does not exist on type '{ a: number; }'.

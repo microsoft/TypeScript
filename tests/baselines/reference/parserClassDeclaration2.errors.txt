@@ -1,15 +1,15 @@
 ==== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration2.ts (6 errors) ====
     class C implements A implements B {
                          ~~~~~~~~~~
-!!! '{' expected.
+!!! error TS1005: '{' expected.
                                     ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
                                       ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
                        ~
-!!! Cannot find name 'A'.
+!!! error TS2304: Cannot find name 'A'.
                          ~~~~~~~~~~
-!!! Cannot find name 'implements'.
+!!! error TS2304: Cannot find name 'implements'.
                                     ~
-!!! Cannot find name 'B'.
+!!! error TS2304: Cannot find name 'B'.
     }

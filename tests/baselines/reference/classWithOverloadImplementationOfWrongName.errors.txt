@@ -4,5 +4,5 @@
         foo(x): number;
         bar(x): any { }
         ~~~
-!!! Function implementation name must be 'foo'.
+!!! error TS2389: Function implementation name must be 'foo'.
     }

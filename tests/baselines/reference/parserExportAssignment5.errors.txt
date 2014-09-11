@@ -2,7 +2,7 @@
     module M {
         export = A;
         ~~~~~~~~~~~
-!!! An export assignment cannot be used in an internal module.
+!!! error TS1063: An export assignment cannot be used in an internal module.
         ~~~~~~~~~~~
-!!! Cannot find name 'A'.
+!!! error TS2304: Cannot find name 'A'.
     }

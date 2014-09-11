@@ -4,8 +4,8 @@
     
     var a : string[] = [1,2,"3"]; // should produce an error
         ~
-!!! Type '{}[]' is not assignable to type 'string[]':
-!!!   Type '{}' is not assignable to type 'string'.
+!!! error TS2322: Type '{}[]' is not assignable to type 'string[]':
+!!! error TS2322:   Type '{}' is not assignable to type 'string'.
     
     
     function func1(stuff:any[]) { return stuff; }

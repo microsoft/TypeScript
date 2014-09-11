@@ -2,7 +2,7 @@
     interface Foo<A> {
       bar(baz: Foo<B>): Foo<C>;
                    ~
-!!! Cannot find name 'B'.
+!!! error TS2304: Cannot find name 'B'.
                             ~
-!!! Cannot find name 'C'.
+!!! error TS2304: Cannot find name 'C'.
     }

@@ -6,7 +6,7 @@
     class D {
         private constructor(public x: number) { } // error
         ~~~~~~~
-!!! 'private' modifier cannot appear on a constructor declaration.
+!!! error TS1089: 'private' modifier cannot appear on a constructor declaration.
     }
     
     var c = new C(1);
@@ -20,7 +20,7 @@
         class D<T> {
             private constructor(public x: T) { } // error
             ~~~~~~~
-!!! 'private' modifier cannot appear on a constructor declaration.
+!!! error TS1089: 'private' modifier cannot appear on a constructor declaration.
         }
     
         var c = new C(1);

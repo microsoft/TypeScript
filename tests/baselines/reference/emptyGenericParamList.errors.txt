@@ -2,6 +2,6 @@
     class I<T> {}
     var x: I<>;
             ~~
-!!! Type argument list cannot be empty.
+!!! error TS1099: Type argument list cannot be empty.
            ~~~
-!!! Generic type 'I<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'I<T>' requires 1 type argument(s).

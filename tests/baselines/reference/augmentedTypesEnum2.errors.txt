@@ -4,7 +4,7 @@
     
     interface e1 {
               ~~
-!!! Duplicate identifier 'e1'.
+!!! error TS2300: Duplicate identifier 'e1'.
         foo(): void;
     }
     
@@ -14,7 +14,7 @@
     enum e2 { One };
     class e2 { // error
           ~~
-!!! Duplicate identifier 'e2'.
+!!! error TS2300: Duplicate identifier 'e2'.
         foo() {
             return 1;
         }

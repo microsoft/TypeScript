@@ -2,5 +2,5 @@
     class C {
         [x]: string
          ~
-!!! An index signature parameter must have a type annotation.
+!!! error TS1022: An index signature parameter must have a type annotation.
     }

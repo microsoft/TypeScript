@@ -5,7 +5,7 @@
     var s = <string>(null);
     var b = <boolean>(n);
             ~~~~~~~~~~~~
-!!! Neither type 'number' nor type 'boolean' is assignable to the other.
+!!! error TS2352: Neither type 'number' nor type 'boolean' is assignable to the other.
     
     function isVoid() : void { }
     

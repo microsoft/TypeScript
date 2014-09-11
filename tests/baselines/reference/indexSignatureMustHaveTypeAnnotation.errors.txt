@@ -2,21 +2,21 @@
     interface I {
         [x]: string;
          ~
-!!! An index signature parameter must have a type annotation.
+!!! error TS1022: An index signature parameter must have a type annotation.
         [x: string];
         ~~~~~~~~~~~
-!!! An index signature must have a type annotation.
+!!! error TS1021: An index signature must have a type annotation.
     }
     
     class C {
         [x]: string
          ~
-!!! An index signature parameter must have a type annotation.
+!!! error TS1022: An index signature parameter must have a type annotation.
         
     }
     
     class C2 {
         [x: string]
         ~~~~~~~~~~~
-!!! An index signature must have a type annotation.
+!!! error TS1021: An index signature must have a type annotation.
     }

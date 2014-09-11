@@ -8,10 +8,10 @@
     var x11 = foo([{a:0}]); // works
     var x111 = foo([{a:"s"}]); // error - does not match any signature
                    ~~~~~~~~~
-!!! Argument of type '{ a: string; }[]' is not assignable to parameter of type '{ a: boolean; }[]'.
-!!!   Type '{ a: string; }' is not assignable to type '{ a: boolean; }':
-!!!     Types of property 'a' are incompatible:
-!!!       Type 'string' is not assignable to type 'boolean'.
+!!! error TS2345: Argument of type '{ a: string; }[]' is not assignable to parameter of type '{ a: boolean; }[]'.
+!!! error TS2345:   Type '{ a: string; }' is not assignable to type '{ a: boolean; }':
+!!! error TS2345:     Types of property 'a' are incompatible:
+!!! error TS2345:       Type 'string' is not assignable to type 'boolean'.
     var x1111 = foo([{a:null}]); // works - ambiguous call is resolved to be the first in the overload set so this returns a string
     
     
@@ -24,9 +24,9 @@
     var x3 = foo2({a:true}); // works
     var x4 = foo2({a:"s"}); // error
                   ~~~~~~~
-!!! Argument of type '{ a: string; }' is not assignable to parameter of type '{ a: boolean; }'.
-!!!   Types of property 'a' are incompatible:
-!!!     Type 'string' is not assignable to type 'boolean'.
+!!! error TS2345: Argument of type '{ a: string; }' is not assignable to parameter of type '{ a: boolean; }'.
+!!! error TS2345:   Types of property 'a' are incompatible:
+!!! error TS2345:     Type 'string' is not assignable to type 'boolean'.
     
     
     function foo4(bar:{a:number;}):number;
@@ -34,6 +34,6 @@
     function foo4(bar:{a:any;}):any{ return bar };
     var x = foo4({a:true}); // error
                  ~~~~~~~~
-!!! Argument of type '{ a: boolean; }' is not assignable to parameter of type '{ a: string; }'.
-!!!   Types of property 'a' are incompatible:
-!!!     Type 'boolean' is not assignable to type 'string'.
+!!! error TS2345: Argument of type '{ a: boolean; }' is not assignable to parameter of type '{ a: string; }'.
+!!! error TS2345:   Types of property 'a' are incompatible:
+!!! error TS2345:     Type 'boolean' is not assignable to type 'string'.

@@ -2,13 +2,13 @@
     class A {
         private a = x;
                     ~
-!!! Cannot find name 'x'.
+!!! error TS2304: Cannot find name 'x'.
         private b = { p: x };
                          ~
-!!! Cannot find name 'x'.
+!!! error TS2304: Cannot find name 'x'.
         private c = () => x;
                           ~
-!!! Cannot find name 'x'.
+!!! error TS2304: Cannot find name 'x'.
         constructor(x: number) {
         }
     }
@@ -16,13 +16,13 @@
     class B {
         private a = x;
                     ~
-!!! Cannot find name 'x'.
+!!! error TS2304: Cannot find name 'x'.
         private b = { p: x };
                          ~
-!!! Cannot find name 'x'.
+!!! error TS2304: Cannot find name 'x'.
         private c = () => x;
                           ~
-!!! Cannot find name 'x'.
+!!! error TS2304: Cannot find name 'x'.
         constructor() {
             var x = 1;
         }

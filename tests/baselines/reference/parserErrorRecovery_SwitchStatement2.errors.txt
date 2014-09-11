@@ -3,9 +3,9 @@
       constructor() {
         switch (e) {
                 ~
-!!! Cannot find name 'e'.
+!!! error TS2304: Cannot find name 'e'.
     
     class D {
     ~~~~~
-!!! 'case' or 'default' expected.
+!!! error TS1130: 'case' or 'default' expected.
     }

@@ -10,22 +10,22 @@
     
             s = 1; // should be error
             ~
-!!! Cannot find name 's'.
+!!! error TS2304: Cannot find name 's'.
             C1.s = 1; // should be ok
     
             b(); // should be error
             ~
-!!! Cannot find name 'b'.
+!!! error TS2304: Cannot find name 'b'.
             C1.b(); // should be ok
         }
     
         static b() {
             v = 1; // should be error
             ~
-!!! Cannot find name 'v'.
+!!! error TS2304: Cannot find name 'v'.
             this.p = 0; // should be error
                  ~
-!!! Property 'p' does not exist on type 'typeof C1'.
+!!! error TS2339: Property 'p' does not exist on type 'typeof C1'.
             C1.s = 1; // should be ok
         }
     }
@@ -39,13 +39,13 @@
     
     static get Bar() {return "bar";} // ok
                ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
      
     static set Bar(bar:string) {barback = bar;} // not ok
                ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                                 ~~~~~~~
-!!! Cannot find name 'barback'.
+!!! error TS2304: Cannot find name 'barback'.
     
     }
     

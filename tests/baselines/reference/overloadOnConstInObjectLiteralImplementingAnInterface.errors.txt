@@ -2,9 +2,9 @@
     interface I {
         x1(a: number, callback: (x: 'hi') => number);
                                 ~~~~~~~~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
     }
     
     var i2: I = { x1: (a: number, cb: (x: 'hi') => number) => { } }; // error
                                       ~~~~~~~~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.

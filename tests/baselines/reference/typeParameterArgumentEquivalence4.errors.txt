@@ -4,11 +4,11 @@
         var y: (item) => T;
         x = y;  // Should be an error
         ~
-!!! Type '(item: any) => T' is not assignable to type '(item: any) => U':
-!!!   Type 'T' is not assignable to type 'U'.
+!!! error TS2322: Type '(item: any) => T' is not assignable to type '(item: any) => U':
+!!! error TS2322:   Type 'T' is not assignable to type 'U'.
         y = x;  // Shound be an error
         ~
-!!! Type '(item: any) => U' is not assignable to type '(item: any) => T':
-!!!   Type 'U' is not assignable to type 'T'.
+!!! error TS2322: Type '(item: any) => U' is not assignable to type '(item: any) => T':
+!!! error TS2322:   Type 'U' is not assignable to type 'T'.
     }
     

@@ -24,131 +24,131 @@
     // any type var
     var ResultIsNumber1 = ++ANY2;
                             ~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber2 = ++A;
                             ~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber3 = ++M;
                             ~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber4 = ++obj;
                             ~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber5 = ++obj1;
                             ~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     
     var ResultIsNumber6 = ANY2++;
                           ~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber7 = A++;
                           ~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber8 = M++;
                           ~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber9 = obj++;
                           ~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber10 = obj1++;
                            ~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     
     // any type literal
     var ResultIsNumber11 = ++{};
                              ~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber12 = ++null;
                              ~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber13 = ++undefined;
                              ~~~~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     
     var ResultIsNumber14 = null++;
                            ~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber15 = {}++;
                            ~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber16 = undefined++;
                            ~~~~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     
     // any type expressions
     var ResultIsNumber17 = ++foo();
                              ~~~~~
-!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
     var ResultIsNumber18 = ++A.foo();
                              ~~~~~~~
-!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
     var ResultIsNumber19 = ++(null + undefined);
                              ~~~~~~~~~~~~~~~~~~
-!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
                               ~~~~~~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
     var ResultIsNumber20 = ++(null + null);
                              ~~~~~~~~~~~~~
-!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
                               ~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'null' and 'null'.
+!!! error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
     var ResultIsNumber21 = ++(undefined + undefined);
                              ~~~~~~~~~~~~~~~~~~~~~~~
-!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
                               ~~~~~~~~~~~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
     var ResultIsNumber22 = ++obj1.x;
                              ~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber23 = ++obj1.y;
                              ~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     
     var ResultIsNumber24 = foo()++;
                            ~~~~~
-!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
     var ResultIsNumber25 = A.foo()++;
                            ~~~~~~~
-!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
     var ResultIsNumber26 = (null + undefined)++;
                            ~~~~~~~~~~~~~~~~~~
-!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
                             ~~~~~~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
     var ResultIsNumber27 = (null + null)++;
                            ~~~~~~~~~~~~~
-!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
                             ~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'null' and 'null'.
+!!! error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
     var ResultIsNumber28 = (undefined + undefined)++;
                            ~~~~~~~~~~~~~~~~~~~~~~~
-!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
                             ~~~~~~~~~~~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
     var ResultIsNumber29 = obj1.x++;
                            ~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     var ResultIsNumber30 = obj1.y++;
                            ~~~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     
     // miss assignment operators
     ++ANY2;
       ~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     
     ANY2++;
     ~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     
     ++ANY1++;
       ~~~~~~
-!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
     ++ANY2++;
       ~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
       ~~~~~~
-!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
     ++ANY2[0]++;
       ~~~~~~~~~
-!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.

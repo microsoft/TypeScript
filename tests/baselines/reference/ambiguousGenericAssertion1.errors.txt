@@ -4,13 +4,13 @@
     var r2 = < <T>(x: T) => T>f; // valid
     var r3 = <<T>(x: T) => T>f; // ambiguous, appears to the parser as a << operation
              ~~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
                    ~
-!!! ')' expected.
+!!! error TS1005: ')' expected.
                       ~
-!!! ',' expected.
+!!! error TS1005: ',' expected.
                         ~~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
                   ~
-!!! Cannot find name 'x'.
+!!! error TS2304: Cannot find name 'x'.
     

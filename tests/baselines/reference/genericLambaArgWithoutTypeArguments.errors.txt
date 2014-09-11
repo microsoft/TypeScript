@@ -7,5 +7,5 @@
     }
     foo((arg: Foo) => { return arg.x; });
               ~~~
-!!! Generic type 'Foo<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'Foo<T>' requires 1 type argument(s).
     

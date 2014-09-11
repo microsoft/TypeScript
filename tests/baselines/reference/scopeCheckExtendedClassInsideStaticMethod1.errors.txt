@@ -4,12 +4,12 @@
        static c() {
           v = 1;
           ~
-!!! Cannot find name 'v'.
+!!! error TS2304: Cannot find name 'v'.
           this.p = 1;
                ~
-!!! Property 'p' does not exist on type 'typeof D'.
+!!! error TS2339: Property 'p' does not exist on type 'typeof D'.
           s = 1;
           ~
-!!! Cannot find name 's'.
+!!! error TS2304: Cannot find name 's'.
        }
     }

@@ -2,4 +2,4 @@
     declare function foo3(cb: (x: number) => number): typeof cb;
     var r5 = foo3((x: number) => ''); // error
                   ~~~~~~~~~~~~~~~~~
-!!! Argument of type '(x: number) => string' is not assignable to parameter of type '(x: number) => number'.
+!!! error TS2345: Argument of type '(x: number) => string' is not assignable to parameter of type '(x: number) => number'.

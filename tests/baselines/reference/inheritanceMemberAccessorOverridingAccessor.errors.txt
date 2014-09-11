@@ -2,12 +2,12 @@
     class a {
         get x() {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return "20";
         }
         set x(aValue: string) {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     
         }
     }
@@ -15,12 +15,12 @@
     class b extends a {
         get x() {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return "20";
         }
         set x(aValue: string) {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     
         }
     }

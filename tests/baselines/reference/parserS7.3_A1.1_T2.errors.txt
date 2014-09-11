@@ -17,7 +17,7 @@
     if (x !== 1) {
       $ERROR('#1: var\\nx\\n=\\n1\\n; x === 1. Actual: ' + (x));
       ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     }
     
     

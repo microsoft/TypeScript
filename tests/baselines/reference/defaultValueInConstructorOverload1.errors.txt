@@ -2,7 +2,7 @@
     class C {
         constructor(x = '');
                     ~~~~~~
-!!! A parameter initializer is only allowed in a function or constructor implementation.
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
         constructor(x = '') {
         }
     }

@@ -5,16 +5,16 @@
     
     a = b;
     ~
-!!! Type '{ [x: number]: string; }' is not assignable to type '{ [x: string]: string; }':
-!!!   Index signature is missing in type '{ [x: number]: string; }'.
+!!! error TS2322: Type '{ [x: number]: string; }' is not assignable to type '{ [x: string]: string; }':
+!!! error TS2322:   Index signature is missing in type '{ [x: number]: string; }'.
     a = c;
     ~
-!!! Type '{}' is not assignable to type '{ [x: string]: string; }':
-!!!   Index signature is missing in type '{}'.
+!!! error TS2322: Type '{}' is not assignable to type '{ [x: string]: string; }':
+!!! error TS2322:   Index signature is missing in type '{}'.
     b = a;
     b = c;
     ~
-!!! Type '{}' is not assignable to type '{ [x: number]: string; }':
-!!!   Index signature is missing in type '{}'.
+!!! error TS2322: Type '{}' is not assignable to type '{ [x: number]: string; }':
+!!! error TS2322:   Index signature is missing in type '{}'.
     c = a;
     c = b;

@@ -5,4 +5,4 @@
     
     class C extends foo { } // error, cannot extend it though
                     ~~~
-!!! Cannot find name 'foo'.
+!!! error TS2304: Cannot find name 'foo'.

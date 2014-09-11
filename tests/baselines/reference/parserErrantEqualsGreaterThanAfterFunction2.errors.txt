@@ -1,10 +1,10 @@
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserErrantEqualsGreaterThanAfterFunction2.ts (4 errors) ====
     function f(p: A) => p;
                      ~~
-!!! Block or ';' expected.
+!!! error TS1144: Block or ';' expected.
              ~
-!!! Function implementation is missing or not immediately following the declaration.
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
                   ~
-!!! Cannot find name 'A'.
+!!! error TS2304: Cannot find name 'A'.
                         ~
-!!! Cannot find name 'p'.
+!!! error TS2304: Cannot find name 'p'.

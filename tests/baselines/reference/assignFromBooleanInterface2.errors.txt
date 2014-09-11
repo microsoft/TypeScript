@@ -19,9 +19,9 @@
     
     x = a; // expected error
     ~
-!!! Type 'Boolean' is not assignable to type 'boolean'.
+!!! error TS2323: Type 'Boolean' is not assignable to type 'boolean'.
     x = b; // expected error
     ~
-!!! Type 'NotBoolean' is not assignable to type 'boolean'.
+!!! error TS2323: Type 'NotBoolean' is not assignable to type 'boolean'.
     
     

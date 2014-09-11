@@ -3,7 +3,7 @@
     export class publicClassWithWithPrivateParmeterTypes {
         static myPublicStaticMethod() { // Error
                ~~~~~~~~~~~~~~~~~~~~
-!!! Return type of public static method from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
+!!! error TS4050: Return type of public static method from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
             return exporter.createExportedWidget1();
         }
         private static myPrivateStaticMethod() {
@@ -11,7 +11,7 @@
         }
         myPublicMethod() { // Error
         ~~~~~~~~~~~~~~
-!!! Return type of public method from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
+!!! error TS4053: Return type of public method from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
             return exporter.createExportedWidget1();;
         }
         private myPrivateMethod() {
@@ -19,7 +19,7 @@
         }
         static myPublicStaticMethod1() { // Error
                ~~~~~~~~~~~~~~~~~~~~~
-!!! Return type of public static method from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4050: Return type of public static method from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
             return exporter.createExportedWidget3();
         }
         private static myPrivateStaticMethod1() {
@@ -27,7 +27,7 @@
         }
         myPublicMethod1() { // Error
         ~~~~~~~~~~~~~~~
-!!! Return type of public method from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4053: Return type of public method from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
             return exporter.createExportedWidget3();;
         }
         private myPrivateMethod1() {
@@ -64,7 +64,7 @@
     
     export function publicFunctionWithPrivateParmeterTypes() { // Error
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Return type of exported function has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
+!!! error TS4058: Return type of exported function has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
         return exporter.createExportedWidget1();
     }
     function privateFunctionWithPrivateParmeterTypes()   {
@@ -72,7 +72,7 @@
     }
     export function publicFunctionWithPrivateParmeterTypes1() { // Error
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Return type of exported function has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4058: Return type of exported function has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
         return exporter.createExportedWidget3();
     }
     function privateFunctionWithPrivateParmeterTypes1() {
@@ -82,33 +82,33 @@
     export class publicClassWithPrivateModuleReturnTypes {
         static myPublicStaticMethod() { // Error
                ~~~~~~~~~~~~~~~~~~~~
-!!! Return type of public static method from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
+!!! error TS4050: Return type of public static method from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
             return exporter.createExportedWidget2();
         }
         myPublicMethod() { // Error
         ~~~~~~~~~~~~~~
-!!! Return type of public method from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
+!!! error TS4053: Return type of public method from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
             return exporter.createExportedWidget2();
         }
         static myPublicStaticMethod1() { // Error
                ~~~~~~~~~~~~~~~~~~~~~
-!!! Return type of public static method from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4050: Return type of public static method from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
             return exporter.createExportedWidget4();
         }
         myPublicMethod1() { // Error
         ~~~~~~~~~~~~~~~
-!!! Return type of public method from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4053: Return type of public method from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
             return exporter.createExportedWidget4();
         }
     }
     export function publicFunctionWithPrivateModuleReturnTypes() { // Error
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Return type of exported function has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
+!!! error TS4058: Return type of exported function has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
         return exporter.createExportedWidget2();
     }
     export function publicFunctionWithPrivateModuleReturnTypes1() { // Error
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Return type of exported function has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4058: Return type of exported function has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
         return exporter.createExportedWidget4();
     }
     

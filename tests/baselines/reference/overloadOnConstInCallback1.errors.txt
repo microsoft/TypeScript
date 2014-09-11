@@ -2,7 +2,7 @@
     class C {
         x1(a: number, callback: (x: 'hi') => number); // error
                                 ~~~~~~~~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         x1(a: number, callback: (x: any) => number) {
             callback('hi');
             callback('bye');

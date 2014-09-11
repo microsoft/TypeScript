@@ -8,10 +8,10 @@
     }
     function foo(x: "hi", items: string[]): D;
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
     function foo(x: "bye", items: string[]): E;
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
     function foo(x: string, items: string[]): C {
        return null;
     }
@@ -19,13 +19,13 @@
     var b: E = foo("bye", []); // E 
     var c = foo("um", []); // error
                 ~~~~
-!!! Argument of type 'string' is not assignable to parameter of type '"bye"'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type '"bye"'.
     
     
     //function bar(x: "hi", items: string[]): D;
     function bar(x: "bye", items: string[]): E;
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
     function bar(x: string, items: string[]): C;
     function bar(x: string, items: string[]): C {
        return null;

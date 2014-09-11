@@ -3,7 +3,7 @@
     
         export enum SignatureFlags {
                     ~~~~~~~~~~~~~~
-!!! Cannot compile external modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.
             None = 0,
             IsIndexer = 1,
             IsStringIndexer = 1 << 1,

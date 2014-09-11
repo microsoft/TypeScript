@@ -5,5 +5,5 @@
     
     module m3a { var y = 2; }
            ~~~
-!!! A module declaration cannot be located prior to a class or function with which it is merged
+!!! error TS2434: A module declaration cannot be located prior to a class or function with which it is merged
     class m3a { foo() { } } // error, class isn't ambient or declared before the module

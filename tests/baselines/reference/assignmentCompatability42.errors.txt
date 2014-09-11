@@ -9,5 +9,5 @@
     }
     __test2__.__val__x7 = __test1__.__val__obj4
     ~~~~~~~~~~~~~~~~~~~
-!!! Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type 'classWithPublicPrivate<number, string>':
-!!!   Private property 'two' cannot be reimplemented.
+!!! error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type 'classWithPublicPrivate<number, string>':
+!!! error TS2322:   Private property 'two' cannot be reimplemented.

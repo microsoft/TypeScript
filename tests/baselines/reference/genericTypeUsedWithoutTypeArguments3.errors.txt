@@ -2,5 +2,5 @@
     interface Foo<T> { }
     interface Bar<T> extends Foo { }
                              ~~~
-!!! Generic type 'Foo<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'Foo<T>' requires 1 type argument(s).
     

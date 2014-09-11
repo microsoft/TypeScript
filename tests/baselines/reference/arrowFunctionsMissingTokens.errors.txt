@@ -3,103 +3,103 @@
     module missingArrowsWithCurly {
         var a = () { };
                    ~
-!!! '=>' expected.
+!!! error TS1005: '=>' expected.
     
         var b = (): void { }
                          ~
-!!! '=>' expected.
+!!! error TS1005: '=>' expected.
     
         var c = (x) { };
                     ~
-!!! '=>' expected.
+!!! error TS1005: '=>' expected.
     
         var d = (x: number, y: string) { };
                                        ~
-!!! '=>' expected.
+!!! error TS1005: '=>' expected.
     
         var e = (x: number, y: string): void { };
                                              ~
-!!! '=>' expected.
+!!! error TS1005: '=>' expected.
     }
     
     module missingCurliesWithArrow {
         module withStatement {
             var a = () => var k = 10;};
                           ~~~
-!!! '{' expected.
+!!! error TS1005: '{' expected.
     
             var b = (): void => var k = 10;}
                                 ~~~
-!!! '{' expected.
+!!! error TS1005: '{' expected.
     
             var c = (x) => var k = 10;};
                            ~~~
-!!! '{' expected.
+!!! error TS1005: '{' expected.
     
             var d = (x: number, y: string) => var k = 10;};
                                               ~~~
-!!! '{' expected.
+!!! error TS1005: '{' expected.
     
             var e = (x: number, y: string): void => var k = 10;};
                                                     ~~~
-!!! '{' expected.
+!!! error TS1005: '{' expected.
     
             var f = () => var k = 10;}
                           ~~~
-!!! '{' expected.
+!!! error TS1005: '{' expected.
         }
     
         module withoutStatement {
             var a = () => };
                           ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     
             var b = (): void => }
                                 ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     
             var c = (x) => };
                            ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     
             var d = (x: number, y: string) => };
                                               ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     
             var e = (x: number, y: string): void => };
                                                     ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     
             var f = () => }
                           ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
         }
         ~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.
     }
     ~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.
     
     module ce_nEst_pas_une_arrow_function {
         var a = ();
                  ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     
         var b = (): void;
                         ~
-!!! '=>' expected.
+!!! error TS1005: '=>' expected.
     
         var c = (x);
                  ~
-!!! Cannot find name 'x'.
+!!! error TS2304: Cannot find name 'x'.
     
         var d = (x: number, y: string);
                                       ~
-!!! '=>' expected.
+!!! error TS1005: '=>' expected.
     
         var e = (x: number, y: string): void;
                                             ~
-!!! '=>' expected.
+!!! error TS1005: '=>' expected.
     }
     
     module okay {

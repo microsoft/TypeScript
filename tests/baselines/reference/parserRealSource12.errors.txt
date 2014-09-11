@@ -4,17 +4,17 @@
     
     ///<reference path='typescript.ts' />
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! File 'typescript.ts' not found.
+!!! error TS6053: File 'typescript.ts' not found.
     
     module TypeScript {
         export interface IAstWalker {
             walk(ast: AST, parent: AST): AST;
                       ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                                    ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                                          ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
             options: AstWalkOptions;
             state: any; // user state object
         }
@@ -33,19 +33,19 @@
         export interface IAstWalkCallback {
             (ast: AST, parent: AST, walker: IAstWalker): AST;
                   ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                                ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                                                          ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
         }
     
         export interface IAstWalkChildren {
             (preAst: AST, parent: AST, walker: IAstWalker): void;
                      ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                                   ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
         }
     
         class AstWalker implements IAstWalker {
@@ -59,11 +59,11 @@
     
             public walk(ast: AST, parent: AST): AST {
                              ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                                           ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                                                 ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 var preAst = this.pre(ast, parent, this);
                 if (preAst === undefined) {
                     preAst = ast;
@@ -101,9 +101,9 @@
     
             public walk(ast: AST, pre: IAstWalkCallback, post?: IAstWalkCallback, options?: AstWalkOptions, state?: any): AST {
                              ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                                                                                                                           ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 return this.getWalker(pre, post, options, state).walk(ast, null)
             }
     
@@ -122,330 +122,330 @@
             private initChildrenWalkers(): void {
                 this.childrenWalkers[NodeType.None] = ChildrenWalkers.walkNone;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Empty] = ChildrenWalkers.walkNone;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.EmptyExpr] = ChildrenWalkers.walkNone;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.True] = ChildrenWalkers.walkNone;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.False] = ChildrenWalkers.walkNone;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.This] = ChildrenWalkers.walkNone;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Super] = ChildrenWalkers.walkNone;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.QString] = ChildrenWalkers.walkNone;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Regex] = ChildrenWalkers.walkNone;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Null] = ChildrenWalkers.walkNone;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.ArrayLit] = ChildrenWalkers.walkUnaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.ObjectLit] = ChildrenWalkers.walkUnaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Void] = ChildrenWalkers.walkUnaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Comma] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Pos] = ChildrenWalkers.walkUnaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Neg] = ChildrenWalkers.walkUnaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Delete] = ChildrenWalkers.walkUnaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Await] = ChildrenWalkers.walkUnaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.In] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Dot] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.From] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Is] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.InstOf] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Typeof] = ChildrenWalkers.walkUnaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.NumberLit] = ChildrenWalkers.walkNone;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Name] = ChildrenWalkers.walkNone;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.TypeRef] = ChildrenWalkers.walkTypeReferenceChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Index] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Call] = ChildrenWalkers.walkCallExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.New] = ChildrenWalkers.walkCallExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Asg] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.AsgAdd] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.AsgSub] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.AsgDiv] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.AsgMul] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.AsgMod] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.AsgAnd] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.AsgXor] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.AsgOr] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.AsgLsh] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.AsgRsh] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.AsgRs2] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.ConditionalExpression] = ChildrenWalkers.walkTrinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.LogOr] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.LogAnd] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Or] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Xor] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.And] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Eq] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Ne] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Eqv] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.NEqv] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Lt] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Le] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Gt] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Ge] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Add] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Sub] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Mul] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Div] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Mod] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Lsh] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Rsh] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Rs2] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Not] = ChildrenWalkers.walkUnaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.LogNot] = ChildrenWalkers.walkUnaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.IncPre] = ChildrenWalkers.walkUnaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.DecPre] = ChildrenWalkers.walkUnaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.IncPost] = ChildrenWalkers.walkUnaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.DecPost] = ChildrenWalkers.walkUnaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.TypeAssertion] = ChildrenWalkers.walkUnaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.FuncDecl] = ChildrenWalkers.walkFuncDeclChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Member] = ChildrenWalkers.walkBinaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.VarDecl] = ChildrenWalkers.walkBoundDeclChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.ArgDecl] = ChildrenWalkers.walkBoundDeclChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Return] = ChildrenWalkers.walkReturnStatementChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Break] = ChildrenWalkers.walkNone;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Continue] = ChildrenWalkers.walkNone;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Throw] = ChildrenWalkers.walkUnaryExpressionChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.For] = ChildrenWalkers.walkForStatementChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.ForIn] = ChildrenWalkers.walkForInStatementChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.If] = ChildrenWalkers.walkIfStatementChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.While] = ChildrenWalkers.walkWhileStatementChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.DoWhile] = ChildrenWalkers.walkDoWhileStatementChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Block] = ChildrenWalkers.walkBlockChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Case] = ChildrenWalkers.walkCaseStatementChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Switch] = ChildrenWalkers.walkSwitchStatementChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Try] = ChildrenWalkers.walkTryChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.TryCatch] = ChildrenWalkers.walkTryCatchChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.TryFinally] = ChildrenWalkers.walkTryFinallyChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Finally] = ChildrenWalkers.walkFinallyChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Catch] = ChildrenWalkers.walkCatchChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.List] = ChildrenWalkers.walkListChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Script] = ChildrenWalkers.walkScriptChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.ClassDeclaration] = ChildrenWalkers.walkClassDeclChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.InterfaceDeclaration] = ChildrenWalkers.walkTypeDeclChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.ModuleDeclaration] = ChildrenWalkers.walkModuleDeclChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.ImportDeclaration] = ChildrenWalkers.walkImportDeclChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.With] = ChildrenWalkers.walkWithStatementChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Label] = ChildrenWalkers.walkLabelChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.LabeledStatement] = ChildrenWalkers.walkLabeledStatementChildren;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.EBStart] = ChildrenWalkers.walkNone;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.GotoEB] = ChildrenWalkers.walkNone;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.EndCode] = ChildrenWalkers.walkNone;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Error] = ChildrenWalkers.walkNone;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Comment] = ChildrenWalkers.walkNone;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                 this.childrenWalkers[NodeType.Debugger] = ChildrenWalkers.walkNone;
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
     
                 // Verify the code is up to date with the enum
                 for (var e in (<any>NodeType)._map) {
                                     ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                     if ((<any>this.childrenWalkers)[e] === undefined) {
                         throw new Error("initWalkers function is not up to date with enum content!");
                     }
@@ -465,17 +465,17 @@
         module ChildrenWalkers {
             export function walkNone(preAst: ASTList, parent: AST, walker: IAstWalker): void {
                                              ~~~~~~~
-!!! Cannot find name 'ASTList'.
+!!! error TS2304: Cannot find name 'ASTList'.
                                                               ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 // Nothing to do
             }
     
             export function walkListChildren(preAst: ASTList, parent: AST, walker: IAstWalker): void {
                                                      ~~~~~~~
-!!! Cannot find name 'ASTList'.
+!!! error TS2304: Cannot find name 'ASTList'.
                                                                       ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 var len = preAst.members.length;
                 if (walker.options.reverseSiblings) {
                     for (var i = len - 1; i >= 0; i--) {
@@ -495,9 +495,9 @@
     
             export function walkUnaryExpressionChildren(preAst: UnaryExpression, parent: AST, walker: IAstWalker): void {
                                                                 ~~~~~~~~~~~~~~~
-!!! Cannot find name 'UnaryExpression'.
+!!! error TS2304: Cannot find name 'UnaryExpression'.
                                                                                          ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 if (preAst.castTerm) {
                     preAst.castTerm = walker.walk(preAst.castTerm, preAst);
                 }
@@ -508,9 +508,9 @@
     
             export function walkBinaryExpressionChildren(preAst: BinaryExpression, parent: AST, walker: IAstWalker): void {
                                                                  ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'BinaryExpression'.
+!!! error TS2304: Cannot find name 'BinaryExpression'.
                                                                                            ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 if (walker.options.reverseSiblings) {
                     if (preAst.operand2) {
                         preAst.operand2 = walker.walk(preAst.operand2, preAst);
@@ -530,9 +530,9 @@
     
             export function walkTypeReferenceChildren(preAst: TypeReference, parent: AST, walker: IAstWalker): void {
                                                               ~~~~~~~~~~~~~
-!!! Cannot find name 'TypeReference'.
+!!! error TS2304: Cannot find name 'TypeReference'.
                                                                                      ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 if (preAst.term) {
                     preAst.term = walker.walk(preAst.term, preAst);
                 }
@@ -540,16 +540,16 @@
     
             export function walkCallExpressionChildren(preAst: CallExpression, parent: AST, walker: IAstWalker): void {
                                                                ~~~~~~~~~~~~~~
-!!! Cannot find name 'CallExpression'.
+!!! error TS2304: Cannot find name 'CallExpression'.
                                                                                        ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 if (!walker.options.reverseSiblings) {
                     preAst.target = walker.walk(preAst.target, preAst);
                 }
                 if (preAst.arguments && (walker.options.goNextSibling)) {
                     preAst.arguments = <ASTList> walker.walk(preAst.arguments, preAst);
                                         ~~~~~~~
-!!! Cannot find name 'ASTList'.
+!!! error TS2304: Cannot find name 'ASTList'.
                 }
                 if ((walker.options.reverseSiblings) && (walker.options.goNextSibling)) {
                     preAst.target = walker.walk(preAst.target, preAst);
@@ -558,9 +558,9 @@
     
             export function walkTrinaryExpressionChildren(preAst: ConditionalExpression, parent: AST, walker: IAstWalker): void {
                                                                   ~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ConditionalExpression'.
+!!! error TS2304: Cannot find name 'ConditionalExpression'.
                                                                                                  ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 if (preAst.operand1) {
                     preAst.operand1 = walker.walk(preAst.operand1, preAst);
                 }
@@ -574,18 +574,18 @@
     
             export function walkFuncDeclChildren(preAst: FuncDecl, parent: AST, walker: IAstWalker): void {
                                                          ~~~~~~~~
-!!! Cannot find name 'FuncDecl'.
+!!! error TS2304: Cannot find name 'FuncDecl'.
                                                                            ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 if (preAst.name) {
                     preAst.name = <Identifier>walker.walk(preAst.name, preAst);
                                    ~~~~~~~~~~
-!!! Cannot find name 'Identifier'.
+!!! error TS2304: Cannot find name 'Identifier'.
                 }
                 if (preAst.arguments && (preAst.arguments.members.length > 0) && (walker.options.goNextSibling)) {
                     preAst.arguments = <ASTList>walker.walk(preAst.arguments, preAst);
                                         ~~~~~~~
-!!! Cannot find name 'ASTList'.
+!!! error TS2304: Cannot find name 'ASTList'.
                 }
                 if (preAst.returnTypeAnnotation && (walker.options.goNextSibling)) {
                     preAst.returnTypeAnnotation = walker.walk(preAst.returnTypeAnnotation, preAst);
@@ -593,19 +593,19 @@
                 if (preAst.bod && (preAst.bod.members.length > 0) && (walker.options.goNextSibling)) {
                     preAst.bod = <ASTList>walker.walk(preAst.bod, preAst);
                                   ~~~~~~~
-!!! Cannot find name 'ASTList'.
+!!! error TS2304: Cannot find name 'ASTList'.
                 }
             }
     
             export function walkBoundDeclChildren(preAst: BoundDecl, parent: AST, walker: IAstWalker): void {
                                                           ~~~~~~~~~
-!!! Cannot find name 'BoundDecl'.
+!!! error TS2304: Cannot find name 'BoundDecl'.
                                                                              ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 if (preAst.id) {
                     preAst.id = <Identifier>walker.walk(preAst.id, preAst);
                                  ~~~~~~~~~~
-!!! Cannot find name 'Identifier'.
+!!! error TS2304: Cannot find name 'Identifier'.
                 }
                 if (preAst.init) {
                     preAst.init = walker.walk(preAst.init, preAst);
@@ -617,9 +617,9 @@
     
             export function walkReturnStatementChildren(preAst: ReturnStatement, parent: AST, walker: IAstWalker): void {
                                                                 ~~~~~~~~~~~~~~~
-!!! Cannot find name 'ReturnStatement'.
+!!! error TS2304: Cannot find name 'ReturnStatement'.
                                                                                          ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 if (preAst.returnExpression) {
                     preAst.returnExpression = walker.walk(preAst.returnExpression, preAst);
                 }
@@ -627,9 +627,9 @@
     
             export function walkForStatementChildren(preAst: ForStatement, parent: AST, walker: IAstWalker): void {
                                                              ~~~~~~~~~~~~
-!!! Cannot find name 'ForStatement'.
+!!! error TS2304: Cannot find name 'ForStatement'.
                                                                                    ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 if (preAst.init) {
                     preAst.init = walker.walk(preAst.init, preAst);
                 }
@@ -649,9 +649,9 @@
     
             export function walkForInStatementChildren(preAst: ForInStatement, parent: AST, walker: IAstWalker): void {
                                                                ~~~~~~~~~~~~~~
-!!! Cannot find name 'ForInStatement'.
+!!! error TS2304: Cannot find name 'ForInStatement'.
                                                                                        ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 preAst.lval = walker.walk(preAst.lval, preAst);
                 if (walker.options.goNextSibling) {
                     preAst.obj = walker.walk(preAst.obj, preAst);
@@ -663,9 +663,9 @@
     
             export function walkIfStatementChildren(preAst: IfStatement, parent: AST, walker: IAstWalker): void {
                                                             ~~~~~~~~~~~
-!!! Cannot find name 'IfStatement'.
+!!! error TS2304: Cannot find name 'IfStatement'.
                                                                                  ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 preAst.cond = walker.walk(preAst.cond, preAst);
                 if (preAst.thenBod && (walker.options.goNextSibling)) {
                     preAst.thenBod = walker.walk(preAst.thenBod, preAst);
@@ -677,9 +677,9 @@
     
             export function walkWhileStatementChildren(preAst: WhileStatement, parent: AST, walker: IAstWalker): void {
                                                                ~~~~~~~~~~~~~~
-!!! Cannot find name 'WhileStatement'.
+!!! error TS2304: Cannot find name 'WhileStatement'.
                                                                                        ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 preAst.cond = walker.walk(preAst.cond, preAst);
                 if (preAst.body && (walker.options.goNextSibling)) {
                     preAst.body = walker.walk(preAst.body, preAst);
@@ -688,9 +688,9 @@
     
             export function walkDoWhileStatementChildren(preAst: DoWhileStatement, parent: AST, walker: IAstWalker): void {
                                                                  ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'DoWhileStatement'.
+!!! error TS2304: Cannot find name 'DoWhileStatement'.
                                                                                            ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 preAst.cond = walker.walk(preAst.cond, preAst);
                 if (preAst.body && (walker.options.goNextSibling)) {
                     preAst.body = walker.walk(preAst.body, preAst);
@@ -699,21 +699,21 @@
     
             export function walkBlockChildren(preAst: Block, parent: AST, walker: IAstWalker): void {
                                                       ~~~~~
-!!! Cannot find name 'Block'.
+!!! error TS2304: Cannot find name 'Block'.
                                                                      ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 if (preAst.statements) {
                     preAst.statements = <ASTList>walker.walk(preAst.statements, preAst);
                                          ~~~~~~~
-!!! Cannot find name 'ASTList'.
+!!! error TS2304: Cannot find name 'ASTList'.
                 }
             }
     
             export function walkCaseStatementChildren(preAst: CaseStatement, parent: AST, walker: IAstWalker): void {
                                                               ~~~~~~~~~~~~~
-!!! Cannot find name 'CaseStatement'.
+!!! error TS2304: Cannot find name 'CaseStatement'.
                                                                                      ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 if (preAst.expr) {
                     preAst.expr = walker.walk(preAst.expr, preAst);
                 }
@@ -721,15 +721,15 @@
                 if (preAst.body && walker.options.goNextSibling) {
                     preAst.body = <ASTList>walker.walk(preAst.body, preAst);
                                    ~~~~~~~
-!!! Cannot find name 'ASTList'.
+!!! error TS2304: Cannot find name 'ASTList'.
                 }
             }
     
             export function walkSwitchStatementChildren(preAst: SwitchStatement, parent: AST, walker: IAstWalker): void {
                                                                 ~~~~~~~~~~~~~~~
-!!! Cannot find name 'SwitchStatement'.
+!!! error TS2304: Cannot find name 'SwitchStatement'.
                                                                                          ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 if (preAst.val) {
                     preAst.val = walker.walk(preAst.val, preAst);
                 }
@@ -737,15 +737,15 @@
                 if ((preAst.caseList) && walker.options.goNextSibling) {
                     preAst.caseList = <ASTList>walker.walk(preAst.caseList, preAst);
                                        ~~~~~~~
-!!! Cannot find name 'ASTList'.
+!!! error TS2304: Cannot find name 'ASTList'.
                 }
             }
     
             export function walkTryChildren(preAst: Try, parent: AST, walker: IAstWalker): void {
                                                     ~~~
-!!! Cannot find name 'Try'.
+!!! error TS2304: Cannot find name 'Try'.
                                                                  ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 if (preAst.body) {
                     preAst.body = walker.walk(preAst.body, preAst);
                 }
@@ -753,27 +753,27 @@
     
             export function walkTryCatchChildren(preAst: TryCatch, parent: AST, walker: IAstWalker): void {
                                                          ~~~~~~~~
-!!! Cannot find name 'TryCatch'.
+!!! error TS2304: Cannot find name 'TryCatch'.
                                                                            ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 if (preAst.tryNode) {
                     preAst.tryNode = <Try>walker.walk(preAst.tryNode, preAst);
                                       ~~~
-!!! Cannot find name 'Try'.
+!!! error TS2304: Cannot find name 'Try'.
                 }
     
                 if ((preAst.catchNode) && walker.options.goNextSibling) {
                     preAst.catchNode = <Catch>walker.walk(preAst.catchNode, preAst);
                                         ~~~~~
-!!! Cannot find name 'Catch'.
+!!! error TS2304: Cannot find name 'Catch'.
                 }
             }
     
             export function walkTryFinallyChildren(preAst: TryFinally, parent: AST, walker: IAstWalker): void {
                                                            ~~~~~~~~~~
-!!! Cannot find name 'TryFinally'.
+!!! error TS2304: Cannot find name 'TryFinally'.
                                                                                ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 if (preAst.tryNode) {
                     preAst.tryNode = walker.walk(preAst.tryNode, preAst);
                 }
@@ -781,15 +781,15 @@
                 if (preAst.finallyNode && walker.options.goNextSibling) {
                     preAst.finallyNode = <Finally>walker.walk(preAst.finallyNode, preAst);
                                           ~~~~~~~
-!!! Cannot find name 'Finally'.
+!!! error TS2304: Cannot find name 'Finally'.
                 }
             }
     
             export function walkFinallyChildren(preAst: Finally, parent: AST, walker: IAstWalker): void {
                                                         ~~~~~~~
-!!! Cannot find name 'Finally'.
+!!! error TS2304: Cannot find name 'Finally'.
                                                                          ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 if (preAst.body) {
                     preAst.body = walker.walk(preAst.body, preAst);
                 }
@@ -797,13 +797,13 @@
     
             export function walkCatchChildren(preAst: Catch, parent: AST, walker: IAstWalker): void {
                                                       ~~~~~
-!!! Cannot find name 'Catch'.
+!!! error TS2304: Cannot find name 'Catch'.
                                                                      ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 if (preAst.param) {
                     preAst.param = <VarDecl>walker.walk(preAst.param, preAst);
                                     ~~~~~~~
-!!! Cannot find name 'VarDecl'.
+!!! error TS2304: Cannot find name 'VarDecl'.
                 }
     
                 if ((preAst.body) && walker.options.goNextSibling) {
@@ -813,98 +813,98 @@
     
             export function walkRecordChildren(preAst: NamedDeclaration, parent: AST, walker: IAstWalker): void {
                                                        ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'NamedDeclaration'.
+!!! error TS2304: Cannot find name 'NamedDeclaration'.
                                                                                  ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 preAst.name = <Identifier>walker.walk(preAst.name, preAst);
                                ~~~~~~~~~~
-!!! Cannot find name 'Identifier'.
+!!! error TS2304: Cannot find name 'Identifier'.
                 if (walker.options.goNextSibling && preAst.members) {
                     preAst.members = <ASTList>walker.walk(preAst.members, preAst);
                                       ~~~~~~~
-!!! Cannot find name 'ASTList'.
+!!! error TS2304: Cannot find name 'ASTList'.
                 }
     
             }
     
             export function walkNamedTypeChildren(preAst: TypeDeclaration, parent: AST, walker: IAstWalker): void {
                                                           ~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeDeclaration'.
+!!! error TS2304: Cannot find name 'TypeDeclaration'.
                                                                                    ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 walkRecordChildren(preAst, parent, walker);
             }
     
             export function walkClassDeclChildren(preAst: ClassDeclaration, parent: AST, walker: IAstWalker): void {
                                                           ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ClassDeclaration'.
+!!! error TS2304: Cannot find name 'ClassDeclaration'.
                                                                                     ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 walkNamedTypeChildren(preAst, parent, walker);
     
                 if (walker.options.goNextSibling && preAst.extendsList) {
                     preAst.extendsList = <ASTList>walker.walk(preAst.extendsList, preAst);
                                           ~~~~~~~
-!!! Cannot find name 'ASTList'.
+!!! error TS2304: Cannot find name 'ASTList'.
                 }
     
                 if (walker.options.goNextSibling && preAst.implementsList) {
                     preAst.implementsList = <ASTList>walker.walk(preAst.implementsList, preAst);
                                              ~~~~~~~
-!!! Cannot find name 'ASTList'.
+!!! error TS2304: Cannot find name 'ASTList'.
                 }
             }
     
             export function walkScriptChildren(preAst: Script, parent: AST, walker: IAstWalker): void {
                                                        ~~~~~~
-!!! Cannot find name 'Script'.
+!!! error TS2304: Cannot find name 'Script'.
                                                                        ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 if (preAst.bod) {
                     preAst.bod = <ASTList>walker.walk(preAst.bod, preAst);
                                   ~~~~~~~
-!!! Cannot find name 'ASTList'.
+!!! error TS2304: Cannot find name 'ASTList'.
                 }
             }
     
             export function walkTypeDeclChildren(preAst: InterfaceDeclaration, parent: AST, walker: IAstWalker): void {
                                                          ~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'InterfaceDeclaration'.
+!!! error TS2304: Cannot find name 'InterfaceDeclaration'.
                                                                                        ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 walkNamedTypeChildren(preAst, parent, walker);
     
                 // walked arguments as part of members
                 if (walker.options.goNextSibling && preAst.extendsList) {
                     preAst.extendsList = <ASTList>walker.walk(preAst.extendsList, preAst);
                                           ~~~~~~~
-!!! Cannot find name 'ASTList'.
+!!! error TS2304: Cannot find name 'ASTList'.
                 }
     
                 if (walker.options.goNextSibling && preAst.implementsList) {
                     preAst.implementsList = <ASTList>walker.walk(preAst.implementsList, preAst);
                                              ~~~~~~~
-!!! Cannot find name 'ASTList'.
+!!! error TS2304: Cannot find name 'ASTList'.
                 }
             }
     
             export function walkModuleDeclChildren(preAst: ModuleDeclaration, parent: AST, walker: IAstWalker): void {
                                                            ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ModuleDeclaration'.
+!!! error TS2304: Cannot find name 'ModuleDeclaration'.
                                                                                       ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 walkRecordChildren(preAst, parent, walker);
             }
     
             export function walkImportDeclChildren(preAst: ImportDeclaration, parent: AST, walker: IAstWalker): void {
                                                            ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ImportDeclaration'.
+!!! error TS2304: Cannot find name 'ImportDeclaration'.
                                                                                       ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 if (preAst.id) {
                     preAst.id = <Identifier>walker.walk(preAst.id, preAst);
                                  ~~~~~~~~~~
-!!! Cannot find name 'Identifier'.
+!!! error TS2304: Cannot find name 'Identifier'.
                 }
                 if (preAst.alias) {
                     preAst.alias = walker.walk(preAst.alias, preAst);
@@ -913,9 +913,9 @@
     
             export function walkWithStatementChildren(preAst: WithStatement, parent: AST, walker: IAstWalker): void {
                                                               ~~~~~~~~~~~~~
-!!! Cannot find name 'WithStatement'.
+!!! error TS2304: Cannot find name 'WithStatement'.
                                                                                      ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 if (preAst.expr) {
                     preAst.expr = walker.walk(preAst.expr, preAst);
                 }
@@ -927,20 +927,20 @@
     
             export function walkLabelChildren(preAst: Label, parent: AST, walker: IAstWalker): void {
                                                       ~~~~~
-!!! Cannot find name 'Label'.
+!!! error TS2304: Cannot find name 'Label'.
                                                                      ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 //TODO: Walk "id"?
             }
     
             export function walkLabeledStatementChildren(preAst: LabeledStatement, parent: AST, walker: IAstWalker): void {
                                                                  ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'LabeledStatement'.
+!!! error TS2304: Cannot find name 'LabeledStatement'.
                                                                                            ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                 preAst.labels = <ASTList>walker.walk(preAst.labels, preAst);
                                  ~~~~~~~
-!!! Cannot find name 'ASTList'.
+!!! error TS2304: Cannot find name 'ASTList'.
                 if (walker.options.goNextSibling) {
                     preAst.stmt = walker.walk(preAst.stmt, preAst);
                 }

@@ -5,7 +5,7 @@
     }
     export import a = x.c;
     ~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'x' has no exported member 'c'.
+!!! error TS2305: Module 'x' has no exported member 'c'.
     export = x;
     ~~~~~~~~~~~
-!!! An export assignment cannot be used in a module with other exported elements.
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.

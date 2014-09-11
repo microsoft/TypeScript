@@ -3,7 +3,7 @@
      return { 
       get x() { return x; } 
           ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
      } 
     }; 
     var x = makePoint(2).x;

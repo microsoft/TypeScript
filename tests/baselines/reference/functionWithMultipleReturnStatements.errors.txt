@@ -16,7 +16,7 @@
     ~~~~~
     }
     ~
-!!! No best common type exists among return expressions.
+!!! error TS2354: No best common type exists among return expressions.
     
     function f2() {
     ~~~~~~~~~~~~~~~
@@ -36,7 +36,7 @@
     ~~~~~
     }
     ~
-!!! No best common type exists among return expressions.
+!!! error TS2354: No best common type exists among return expressions.
     
     function f3() {
     ~~~~~~~~~~~~~~~
@@ -54,7 +54,7 @@
     ~~~~~
     }
     ~
-!!! No best common type exists among return expressions.
+!!! error TS2354: No best common type exists among return expressions.
     
     function f4() {
     ~~~~~~~~~~~~~~~
@@ -78,7 +78,7 @@
     ~~~~~
     }
     ~
-!!! No best common type exists among return expressions.
+!!! error TS2354: No best common type exists among return expressions.
     
     function f5() {
     ~~~~~~~~~~~~~~~
@@ -88,7 +88,7 @@
     ~~~~~~~~~~~~~~
     }
     ~
-!!! No best common type exists among return expressions.
+!!! error TS2354: No best common type exists among return expressions.
     
     function f6<T, U>(x: T, y:U) {
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -104,14 +104,14 @@
     ~~~~~
     }
     ~
-!!! No best common type exists among return expressions.
+!!! error TS2354: No best common type exists among return expressions.
     
     function f8<T extends U, U extends V, V>(x: T, y: U) {
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                              ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         if (true) {
     ~~~~~~~~~~~~~~~
             return x;
@@ -124,5 +124,5 @@
     ~~~~~
     }
     ~
-!!! No best common type exists among return expressions.
+!!! error TS2354: No best common type exists among return expressions.
     

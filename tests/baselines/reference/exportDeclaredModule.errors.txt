@@ -9,5 +9,5 @@
     }
     export = M1;
     ~~~~~~~~~~~~
-!!! Cannot compile external modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.
     

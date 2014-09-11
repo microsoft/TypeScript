@@ -2,4 +2,4 @@
     "use strict";
     delete a;
            ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.

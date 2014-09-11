@@ -13,6 +13,6 @@
     //CHECK#
     "\u000G"
           
-!!! Hexadecimal digit expected.
+!!! error TS1125: Hexadecimal digit expected.
     
     

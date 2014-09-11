@@ -45,13 +45,13 @@
     var ResultIsBoolean16 = delete (ANY + ANY1);
     var ResultIsBoolean17 = delete (null + undefined);
                                     ~~~~~~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
     var ResultIsBoolean18 = delete (null + null);
                                     ~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'null' and 'null'.
+!!! error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
     var ResultIsBoolean19 = delete (undefined + undefined);
                                     ~~~~~~~~~~~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
     
     // multiple delete  operators
     var ResultIsBoolean20 = delete delete ANY;

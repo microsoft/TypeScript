@@ -87,10 +87,10 @@
         n==a;
         n==s;
         ~~~~
-!!! Operator '==' cannot be applied to types 'number' and 'string'.
+!!! error TS2365: Operator '==' cannot be applied to types 'number' and 'string'.
         n==b;
         ~~~~
-!!! Operator '==' cannot be applied to types 'number' and 'boolean'.
+!!! error TS2365: Operator '==' cannot be applied to types 'number' and 'boolean'.
         n==i;
         n==n;
         n==e;
@@ -98,15 +98,15 @@
         s==a;
         s==n;
         ~~~~
-!!! Operator '==' cannot be applied to types 'string' and 'number'.
+!!! error TS2365: Operator '==' cannot be applied to types 'string' and 'number'.
         s==b;
         ~~~~
-!!! Operator '==' cannot be applied to types 'string' and 'boolean'.
+!!! error TS2365: Operator '==' cannot be applied to types 'string' and 'boolean'.
         s==i;
         s==s;
         s==e;
         ~~~~
-!!! Operator '==' cannot be applied to types 'string' and 'E'.
+!!! error TS2365: Operator '==' cannot be applied to types 'string' and 'E'.
     
         a==n;
         a==s;
@@ -125,10 +125,10 @@
         e==n;
         e==s;
         ~~~~
-!!! Operator '==' cannot be applied to types 'E' and 'string'.
+!!! error TS2365: Operator '==' cannot be applied to types 'E' and 'string'.
         e==b;
         ~~~~
-!!! Operator '==' cannot be applied to types 'E' and 'boolean'.
+!!! error TS2365: Operator '==' cannot be applied to types 'E' and 'boolean'.
         e==a;
         e==i;
         e==e;
@@ -156,10 +156,10 @@
         n+s;
         n+b;
         ~~~
-!!! Operator '+' cannot be applied to types 'number' and 'boolean'.
+!!! error TS2365: Operator '+' cannot be applied to types 'number' and 'boolean'.
         n+i;
         ~~~
-!!! Operator '+' cannot be applied to types 'number' and 'I'.
+!!! error TS2365: Operator '+' cannot be applied to types 'number' and 'I'.
         n+n;
         n+e;
     
@@ -179,206 +179,206 @@
     
         i+n;
         ~~~
-!!! Operator '+' cannot be applied to types 'I' and 'number'.
+!!! error TS2365: Operator '+' cannot be applied to types 'I' and 'number'.
         i+s;
         i+b;
         ~~~
-!!! Operator '+' cannot be applied to types 'I' and 'boolean'.
+!!! error TS2365: Operator '+' cannot be applied to types 'I' and 'boolean'.
         i+a;
         i+i;
         ~~~
-!!! Operator '+' cannot be applied to types 'I' and 'I'.
+!!! error TS2365: Operator '+' cannot be applied to types 'I' and 'I'.
         i+e;
         ~~~
-!!! Operator '+' cannot be applied to types 'I' and 'E'.
+!!! error TS2365: Operator '+' cannot be applied to types 'I' and 'E'.
     
         e+n;
         e+s;
         e+b;
         ~~~
-!!! Operator '+' cannot be applied to types 'E' and 'boolean'.
+!!! error TS2365: Operator '+' cannot be applied to types 'E' and 'boolean'.
         e+a;
         e+i;
         ~~~
-!!! Operator '+' cannot be applied to types 'E' and 'I'.
+!!! error TS2365: Operator '+' cannot be applied to types 'E' and 'I'.
         e+e;
     
         n^a;
         n^s;
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         n^b;
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         n^i;
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         n^n;
         n^e;
     
         s^a;
         ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         s^n;
         ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         s^b;
         ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         s^i;
         ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         s^s;
         ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         s^e;
         ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     
         a^n;
         a^s;
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         a^b;
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         a^i;
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         a^a;
         a^e;
     
         i^n;
         ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         i^s;
         ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         i^b;
         ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         i^a;
         ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         i^i;
         ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         i^e;
         ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     
         e^n;
         e^s;
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         e^b;
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         e^a;
         e^i;
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         e^e;
     
         n-a;
         n-s;
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         n-b;
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         n-i;
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         n-n;
         n-e;
     
         s-a;
         ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         s-n;
         ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         s-b;
         ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         s-i;
         ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         s-s;
         ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         s-e;
         ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     
         a-n;
         a-s;
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         a-b;
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         a-i;
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         a-a;
         a-e;
     
         i-n;
         ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         i-s;
         ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         i-b;
         ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         i-a;
         ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         i-i;
         ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         i-e;
         ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     
         e-n;
         e-s;
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         e-b;
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         e-a;
         e-i;
           ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
         e-e;
     
     }

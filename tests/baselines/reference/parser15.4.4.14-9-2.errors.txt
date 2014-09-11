@@ -25,5 +25,5 @@
      }
     runTestCase(testcase);
     ~~~~~~~~~~~
-!!! Cannot find name 'runTestCase'.
+!!! error TS2304: Cannot find name 'runTestCase'.
     

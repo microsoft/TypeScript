@@ -1,36 +1,36 @@
-!!! Cannot find global type 'Array'.
-!!! Cannot find global type 'Boolean'.
-!!! Cannot find global type 'Function'.
-!!! Cannot find global type 'IArguments'.
-!!! Cannot find global type 'Number'.
-!!! Cannot find global type 'Object'.
-!!! Cannot find global type 'RegExp'.
-!!! Cannot find global type 'String'.
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Boolean'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'Number'.
+!!! error TS2318: Cannot find global type 'Object'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
 ==== tests/cases/compiler/typeCheckTypeArgument.ts (6 errors) ====
     /// <reference no-default-lib="true"/>
     
     var f: <T extends UNKNOWN>() => void;
                       ~~~~~~~
-!!! Cannot find name 'UNKNOWN'.
+!!! error TS2304: Cannot find name 'UNKNOWN'.
     
     interface IFoo<T extends UNKNOWN> { }
                              ~~~~~~~
-!!! Cannot find name 'UNKNOWN'.
+!!! error TS2304: Cannot find name 'UNKNOWN'.
     
     class Foo<T extends UNKNOWN> { }
                         ~~~~~~~
-!!! Cannot find name 'UNKNOWN'.
+!!! error TS2304: Cannot find name 'UNKNOWN'.
     
     function bar<T extends UNKNOWN>() { }
                            ~~~~~~~
-!!! Cannot find name 'UNKNOWN'.
+!!! error TS2304: Cannot find name 'UNKNOWN'.
     
     class Foo2 {
         method<T extends UNKNOWN>() { }
                          ~~~~~~~
-!!! Cannot find name 'UNKNOWN'.
+!!! error TS2304: Cannot find name 'UNKNOWN'.
     }
     
     (<T extends UNKNOWN>(a) => { });
                 ~~~~~~~
-!!! Cannot find name 'UNKNOWN'.
+!!! error TS2304: Cannot find name 'UNKNOWN'.

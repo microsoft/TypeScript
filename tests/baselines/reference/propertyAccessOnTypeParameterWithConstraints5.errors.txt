@@ -11,7 +11,7 @@
     
     class C<U extends T, T extends A> {
             ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         f() {
             var x: U;
             var a = x['foo'](); // should be string
@@ -23,30 +23,30 @@
     
     interface I<U extends T, T extends A> {
                 ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         foo: U;
     }
     var i: I<B, A>;
     var r2 = i.foo.notHere();
                    ~~~~~~~
-!!! Property 'notHere' does not exist on type 'B'.
+!!! error TS2339: Property 'notHere' does not exist on type 'B'.
     var r2b = i.foo['foo']();
     
     var a: {
         <U extends T, T extends A>(): U;
          ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     }
     // BUG 794164
     var r3: string = a().notHere();
                          ~~~~~~~
-!!! Property 'notHere' does not exist on type '{}'.
+!!! error TS2339: Property 'notHere' does not exist on type '{}'.
     var r3b: string = a()['foo']();
     
     var b = {
         foo: <U extends T, T extends A>(x: U): U => {
               ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             var a = x['foo'](); // should be string
             return a + x.notHere();
         },

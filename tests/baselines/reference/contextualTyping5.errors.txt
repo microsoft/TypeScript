@@ -1,5 +1,5 @@
 ==== tests/cases/compiler/contextualTyping5.ts (1 errors) ====
     class foo { public bar:{id:number;} = { }; }
                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Type '{}' is not assignable to type '{ id: number; }':
-!!!   Property 'id' is missing in type '{}'.
+!!! error TS2322: Type '{}' is not assignable to type '{ id: number; }':
+!!! error TS2322:   Property 'id' is missing in type '{}'.

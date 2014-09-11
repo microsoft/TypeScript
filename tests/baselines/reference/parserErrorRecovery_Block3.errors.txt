@@ -2,12 +2,12 @@
     class C  {
         private a(): boolean {
                      ~~~~~~~
-!!! A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
+!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
     
         private b(): boolean {
         ~~~~~~~
-!!! Statement expected.
+!!! error TS1129: Statement expected.
                      ~~~~~~~
-!!! A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
+!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
         }
     }

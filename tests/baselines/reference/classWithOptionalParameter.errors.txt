@@ -4,17 +4,17 @@
     class C {
         x?: string;
          ~
-!!! A class member cannot be declared optional.
+!!! error TS1112: A class member cannot be declared optional.
         f?() {}
          ~
-!!! A class member cannot be declared optional.
+!!! error TS1112: A class member cannot be declared optional.
     }
     
     class C2<T> {
         x?: T;
          ~
-!!! A class member cannot be declared optional.
+!!! error TS1112: A class member cannot be declared optional.
         f?(x: T) {}
          ~
-!!! A class member cannot be declared optional.
+!!! error TS1112: A class member cannot be declared optional.
     }

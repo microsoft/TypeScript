@@ -1,5 +1,5 @@
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ExtendsOrImplementsClauses/parserErrorRecovery_ExtendsOrImplementsClause1.ts (1 errors) ====
     class C extends {
                     ~
-!!! Identifier expected.
+!!! error TS1003: Identifier expected.
     }

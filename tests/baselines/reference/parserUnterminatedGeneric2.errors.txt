@@ -2,38 +2,38 @@
     declare module ng {
         interfaceICompiledExpression {
                                      ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'interfaceICompiledExpression'.
+!!! error TS2304: Cannot find name 'interfaceICompiledExpression'.
             (context: any, locals?: any): any;
                                              ~
-!!! '=>' expected.
+!!! error TS1005: '=>' expected.
             assign(context: any, value: any): any;
                           ~
-!!! ',' expected.
+!!! error TS1005: ',' expected.
                                       ~
-!!! ',' expected.
+!!! error TS1005: ',' expected.
                                             ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
             ~~~~~~
-!!! Cannot find name 'assign'.
+!!! error TS2304: Cannot find name 'assign'.
                    ~~~~~~~
-!!! Cannot find name 'context'.
+!!! error TS2304: Cannot find name 'context'.
                             ~~~
-!!! Cannot find name 'any'.
+!!! error TS2304: Cannot find name 'any'.
                                  ~~~~~
-!!! Cannot find name 'value'.
+!!! error TS2304: Cannot find name 'value'.
                                         ~~~
-!!! Cannot find name 'any'.
+!!! error TS2304: Cannot find name 'any'.
                                               ~~~
-!!! Cannot find name 'any'.
+!!! error TS2304: Cannot find name 'any'.
         }
     
         interface IQService {
             all(promises: IPromise < any > []): IPromise<
                                                          
-!!! '>' expected.
+!!! error TS1005: '>' expected.
                           ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'IPromise'.
+!!! error TS2304: Cannot find name 'IPromise'.
                                                 ~~~~~~~~~
-!!! Cannot find name 'IPromise'.
+!!! error TS2304: Cannot find name 'IPromise'.

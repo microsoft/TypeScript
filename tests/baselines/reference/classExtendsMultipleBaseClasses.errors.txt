@@ -3,6 +3,6 @@
     class B { }
     class C extends A,B { }
                      ~
-!!! '{' expected.
+!!! error TS1005: '{' expected.
                         ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.

@@ -16,8 +16,8 @@
     var f = (x: number) => { return x.toFixed() };
     var r5 = _.forEach<number>(c2, f); 
                                    ~
-!!! Argument of type '(x: number) => string' is not assignable to parameter of type '(x: number) => Date'.
+!!! error TS2345: Argument of type '(x: number) => string' is not assignable to parameter of type '(x: number) => Date'.
     var r6 = _.forEach<number>(c2, (x) => { return x.toFixed() }); 
                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Argument of type '(x: number) => string' is not assignable to parameter of type '(x: number) => Date'.
+!!! error TS2345: Argument of type '(x: number) => string' is not assignable to parameter of type '(x: number) => Date'.
     

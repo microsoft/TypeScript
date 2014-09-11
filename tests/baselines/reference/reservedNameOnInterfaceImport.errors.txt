@@ -5,6 +5,6 @@
         // Should error; 'test.istring' is a type, so this import conflicts with the 'string' type.
         import string = test.istring;
                ~~~~~~
-!!! Import name cannot be 'string'
+!!! error TS2438: Import name cannot be 'string'
     }
     

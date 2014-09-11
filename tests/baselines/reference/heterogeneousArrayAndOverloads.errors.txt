@@ -9,7 +9,7 @@
             this.test([]);
             this.test([1, 2, "hi", 5]); // Error
                       ~~~~~~~~~~~~~~~
-!!! Argument of type '{}[]' is not assignable to parameter of type 'string[]'.
-!!!   Type '{}' is not assignable to type 'string'.
+!!! error TS2345: Argument of type '{}[]' is not assignable to parameter of type 'string[]'.
+!!! error TS2345:   Type '{}' is not assignable to type 'string'.
         }
     }

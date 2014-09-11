@@ -5,7 +5,7 @@
         data: A<T>;
         get x(): A<T> {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return this.data;
         }
     }
@@ -13,4 +13,4 @@
     var c = new C<number>();
     var r: string = c.x;
         ~
-!!! Type 'A<number>' is not assignable to type 'string'.
+!!! error TS2323: Type 'A<number>' is not assignable to type 'string'.

@@ -12,8 +12,8 @@
     
     class C2 implements i1 {
           ~~
-!!! Class 'C2' incorrectly implements interface 'i1':
-!!!   Private property 'name' cannot be reimplemented.
+!!! error TS2421: Class 'C2' incorrectly implements interface 'i1':
+!!! error TS2421:   Private property 'name' cannot be reimplemented.
         private name:string;
     }
     
@@ -24,12 +24,12 @@
     class C4 extends C1 implements i1{ }
     class C5 extends C2 implements i1{ }
           ~~
-!!! Class 'C5' incorrectly implements interface 'i1':
-!!!   Private property 'name' cannot be reimplemented.
+!!! error TS2421: Class 'C5' incorrectly implements interface 'i1':
+!!! error TS2421:   Private property 'name' cannot be reimplemented.
     class C6 extends C3 implements i1{ }
           ~~
-!!! Class 'C6' incorrectly implements interface 'i1':
-!!!   Private property 'name' cannot be reimplemented.
+!!! error TS2421: Class 'C6' incorrectly implements interface 'i1':
+!!! error TS2421:   Private property 'name' cannot be reimplemented.
     
     /*
         2

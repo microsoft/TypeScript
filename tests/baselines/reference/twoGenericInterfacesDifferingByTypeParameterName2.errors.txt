@@ -7,10 +7,10 @@
     
     interface B<U, T> { // error
               ~
-!!! All declarations of an interface must have identical type parameters.
+!!! error TS2428: All declarations of an interface must have identical type parameters.
         y: V;
            ~
-!!! Cannot find name 'V'.
+!!! error TS2304: Cannot find name 'V'.
     }
     
     module M {
@@ -20,7 +20,7 @@
     
         interface B<U, T> { // error
                   ~
-!!! All declarations of an interface must have identical type parameters.
+!!! error TS2428: All declarations of an interface must have identical type parameters.
             y: T;
         }
     }
@@ -46,7 +46,7 @@
     module M3 {
         export interface B<U, T> { // error
                          ~
-!!! All declarations of an interface must have identical type parameters.
+!!! error TS2428: All declarations of an interface must have identical type parameters.
             y: T;
         }
     }

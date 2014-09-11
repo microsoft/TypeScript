@@ -13,4 +13,4 @@
     
     export var d = new c.b.c();
                          ~
-!!! Property 'b' does not exist on type 'typeof c'.
+!!! error TS2339: Property 'b' does not exist on type 'typeof c'.

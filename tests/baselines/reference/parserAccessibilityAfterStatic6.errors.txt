@@ -3,4 +3,4 @@
     {
     static public
                  
-!!! '}' expected.
+!!! error TS1005: '}' expected.

@@ -17,4 +17,4 @@
     
     export var d = new m2.m3.c();
                              ~
-!!! Property 'c' does not exist on type 'typeof m3'.
+!!! error TS2339: Property 'c' does not exist on type 'typeof m3'.

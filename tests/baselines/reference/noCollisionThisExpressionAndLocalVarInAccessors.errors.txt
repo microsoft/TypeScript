@@ -2,7 +2,7 @@
     class class1 {
         get a(): number {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var x2 = {
                 doStuff: (callback) => () => {
                     var _this = 2;
@@ -14,7 +14,7 @@
         }
         set a(val: number) {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var x2 = {
                 doStuff: (callback) => () => {
                     var _this = 2;
@@ -28,7 +28,7 @@
     class class2 {
         get a(): number {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var _this = 2;
             var x2 = {
                 doStuff: (callback) => () => {
@@ -40,7 +40,7 @@
         }
         set a(val: number) {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var _this = 2;
             var x2 = {
                 doStuff: (callback) => () => {

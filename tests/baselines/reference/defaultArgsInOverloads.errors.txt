@@ -2,19 +2,19 @@
     function fun(a: string);
     function fun(a = 3);
                  ~~~~~
-!!! A parameter initializer is only allowed in a function or constructor implementation.
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
     function fun(a = null) { }
     
     class C {
     	fun(a: string);
     	fun(a = 3);
     	    ~~~~~
-!!! A parameter initializer is only allowed in a function or constructor implementation.
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
     	fun(a = null) { }
     	static fun(a: string);
     	static fun(a = 3);
     	           ~~~~~
-!!! A parameter initializer is only allowed in a function or constructor implementation.
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
     	static fun(a = null) { }
     }
     
@@ -22,9 +22,9 @@
         fun(a: string);
         fun(a = 3);
             ~~~~~
-!!! A parameter initializer is only allowed in a function or constructor implementation.
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
     }
     
     var f: (a = 3) => number;
             ~~~~~
-!!! A parameter initializer is only allowed in a function or constructor implementation.
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.

@@ -2,6 +2,6 @@
     class foo<T> { }
     new foo<>();
            ~~
-!!! Type argument list cannot be empty.
+!!! error TS1099: Type argument list cannot be empty.
     ~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.

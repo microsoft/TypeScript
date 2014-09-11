@@ -5,4 +5,4 @@
     
     A.foo();
       ~~~
-!!! Property 'foo' does not exist on type 'typeof A'.
+!!! error TS2339: Property 'foo' does not exist on type 'typeof A'.

@@ -1,12 +1,12 @@
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/TypeArgumentLists/parserX_TypeArgumentList1.ts (5 errors) ====
     Foo<A,B,\ C>(4, 5, 6);
             
-!!! Invalid character.
+!!! error TS1127: Invalid character.
     ~~~
-!!! Cannot find name 'Foo'.
+!!! error TS2304: Cannot find name 'Foo'.
         ~
-!!! Cannot find name 'A'.
+!!! error TS2304: Cannot find name 'A'.
           ~
-!!! Cannot find name 'B'.
+!!! error TS2304: Cannot find name 'B'.
               ~
-!!! Cannot find name 'C'.
+!!! error TS2304: Cannot find name 'C'.

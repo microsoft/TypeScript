@@ -8,7 +8,7 @@
             function inner() {
                 console.log(_this); // Error as this doesnt not resolve to user defined _this
                             ~~~~~
-!!! Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.
+!!! error TS2400: Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.
                 return x => this;   // New scope.  So should inject new _this capture into function inner
             }
         }

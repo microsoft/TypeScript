@@ -4,7 +4,7 @@
     
     ///<reference path='typescript.ts' />
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! File 'typescript.ts' not found.
+!!! error TS6053: File 'typescript.ts' not found.
     
     module TypeScript {
     
@@ -197,7 +197,7 @@
             public itemCount: number = 0;
             public table = new HashEntry[];
                                         ~~
-!!! 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
     
             constructor (public size: number, public hashFn: (key) =>number,
                         public equalsFn: (key1, key2) =>boolean) {

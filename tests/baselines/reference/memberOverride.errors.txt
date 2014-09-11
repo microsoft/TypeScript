@@ -5,9 +5,9 @@
         a: "", 
         a: 5
         ~
-!!! Duplicate identifier 'a'.
+!!! error TS2300: Duplicate identifier 'a'.
     }
     
     var n: number = x.a;
         ~
-!!! Type 'string' is not assignable to type 'number'.
+!!! error TS2323: Type 'string' is not assignable to type 'number'.

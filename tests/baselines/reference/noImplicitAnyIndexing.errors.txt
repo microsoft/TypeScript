@@ -13,7 +13,7 @@
     // Should be implicit 'any' ; property access fails, no string indexer.
     var strRepresentation3 = MyEmusEnum["monehh"];
                              ~~~~~~~~~~~~~~~~~~~~
-!!! Index signature of object type implicitly has an 'any' type.
+!!! error TS7017: Index signature of object type implicitly has an 'any' type.
     
     // Should be okay; should be a MyEmusEnum
     var strRepresentation4 = MyEmusEnum["emu"];
@@ -22,12 +22,12 @@
     // Should report an implicit 'any'.
     var x = {}["hi"];
             ~~~~~~~~
-!!! Index signature of object type implicitly has an 'any' type.
+!!! error TS7017: Index signature of object type implicitly has an 'any' type.
     
     // Should report an implicit 'any'.
     var y = {}[10];
             ~~~~~~
-!!! Index signature of object type implicitly has an 'any' type.
+!!! error TS7017: Index signature of object type implicitly has an 'any' type.
     
     
     var hi: any = "hi";
@@ -37,7 +37,7 @@
     // Should report an implicit 'any'.
     var z1 = emptyObj[hi];
              ~~~~~~~~~~~~
-!!! Index signature of object type implicitly has an 'any' type.
+!!! error TS7017: Index signature of object type implicitly has an 'any' type.
     var z2 = (<any>emptyObj)[hi];
     
     interface MyMap<T> {

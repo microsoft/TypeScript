@@ -7,7 +7,7 @@
     
     utils.fold(); // error
     ~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     utils.fold(null); // no error
     utils.fold(null, null); // no error
     utils.fold(null, null, null); // error: Unable to invoke type with no call signatures

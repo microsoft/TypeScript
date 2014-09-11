@@ -7,8 +7,8 @@
     
     a = b; // Not ok - return types of "f" are different
     ~
-!!! Type 'C<Y>' is not assignable to type 'C<X>':
-!!!   Type 'Y' is not assignable to type 'X':
-!!!     Types of property 'f' are incompatible:
-!!!       Type '() => boolean' is not assignable to type '() => string':
-!!!         Type 'boolean' is not assignable to type 'string'.
+!!! error TS2322: Type 'C<Y>' is not assignable to type 'C<X>':
+!!! error TS2322:   Type 'Y' is not assignable to type 'X':
+!!! error TS2322:     Types of property 'f' are incompatible:
+!!! error TS2322:       Type '() => boolean' is not assignable to type '() => string':
+!!! error TS2322:         Type 'boolean' is not assignable to type 'string'.

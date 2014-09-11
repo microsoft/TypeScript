@@ -3,5 +3,5 @@
         "artist": string;
         artist: string;
         ~~~~~~
-!!! Duplicate identifier 'artist'.
+!!! error TS2300: Duplicate identifier 'artist'.
     }

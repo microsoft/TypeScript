@@ -6,5 +6,5 @@
     module m0 {
         import m8 = c.a.b.ma;
         ~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'c.a.b' has no exported member 'ma'.
+!!! error TS2305: Module 'c.a.b' has no exported member 'ma'.
     }

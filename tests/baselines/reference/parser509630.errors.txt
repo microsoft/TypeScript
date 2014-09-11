@@ -3,7 +3,7 @@
         public examples = [ // typing here
     }
     ~
-!!! Expression or comma expected.
+!!! error TS1137: Expression or comma expected.
     class Any extends Type {
     }
     

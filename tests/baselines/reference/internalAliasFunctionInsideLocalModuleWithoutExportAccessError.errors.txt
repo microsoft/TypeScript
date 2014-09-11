@@ -12,4 +12,4 @@
     }
     var d = c.b(11);
               ~
-!!! Property 'b' does not exist on type 'typeof c'.
+!!! error TS2339: Property 'b' does not exist on type 'typeof c'.

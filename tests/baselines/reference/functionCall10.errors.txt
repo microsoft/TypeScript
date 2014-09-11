@@ -3,9 +3,9 @@
     foo(0, 1); 
     foo('foo'); 
         ~~~~~
-!!! Argument of type 'string' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     foo();
     foo(1, 'bar');
            ~~~~~
-!!! Argument of type 'string' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     

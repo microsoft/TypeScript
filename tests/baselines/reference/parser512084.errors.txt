@@ -2,4 +2,4 @@
     class foo {
     
     
-!!! '}' expected.
+!!! error TS1005: '}' expected.

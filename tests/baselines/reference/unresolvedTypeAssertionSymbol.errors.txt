@@ -2,6 +2,6 @@
     var x = 1;
     var y = <asdf>x;
              ~~~~
-!!! Cannot find name 'asdf'.
+!!! error TS2304: Cannot find name 'asdf'.
      
     

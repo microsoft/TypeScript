@@ -11,10 +11,10 @@
     
     class B implements A {
           ~
-!!! Class 'B' incorrectly implements interface 'A':
-!!!   Index signatures are incompatible:
-!!!     Type 'Base' is not assignable to type 'Derived':
-!!!       Property 'bar' is missing in type 'Base'.
+!!! error TS2421: Class 'B' incorrectly implements interface 'A':
+!!! error TS2421:   Index signatures are incompatible:
+!!! error TS2421:     Type 'Base' is not assignable to type 'Derived':
+!!! error TS2421:       Property 'bar' is missing in type 'Base'.
         [x: string]: Base; // error
     }
     
@@ -37,25 +37,25 @@
     
         class B3<T extends Derived> implements A<T> {
               ~~
-!!! Class 'B3<T>' incorrectly implements interface 'A<T>':
-!!!   Index signatures are incompatible:
-!!!     Type 'Base' is not assignable to type 'T'.
+!!! error TS2421: Class 'B3<T>' incorrectly implements interface 'A<T>':
+!!! error TS2421:   Index signatures are incompatible:
+!!! error TS2421:     Type 'Base' is not assignable to type 'T'.
             [x: string]: Base; // error
         }
     
         class B4<T extends Derived> implements A<T> {
               ~~
-!!! Class 'B4<T>' incorrectly implements interface 'A<T>':
-!!!   Index signatures are incompatible:
-!!!     Type 'Derived' is not assignable to type 'T'.
+!!! error TS2421: Class 'B4<T>' incorrectly implements interface 'A<T>':
+!!! error TS2421:   Index signatures are incompatible:
+!!! error TS2421:     Type 'Derived' is not assignable to type 'T'.
             [x: string]: Derived; // error
         }
     
         class B5<T extends Derived2> implements A<T> {
               ~~
-!!! Class 'B5<T>' incorrectly implements interface 'A<T>':
-!!!   Index signatures are incompatible:
-!!!     Type 'Derived2' is not assignable to type 'T'.
+!!! error TS2421: Class 'B5<T>' incorrectly implements interface 'A<T>':
+!!! error TS2421:   Index signatures are incompatible:
+!!! error TS2421:     Type 'Derived2' is not assignable to type 'T'.
             [x: string]: Derived2; // error
         }
     }

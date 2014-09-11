@@ -2,7 +2,7 @@
     import a = require('externalModuleExportingGenericClass_file0');
     var v: a; // this should report error
            ~
-!!! Generic type 'C<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'C<T>' requires 1 type argument(s).
     var v2: any = (new a()).foo;
     var v3: number = (new a<number>()).foo;
     

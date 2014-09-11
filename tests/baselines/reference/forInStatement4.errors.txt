@@ -2,5 +2,5 @@
     var expr: any;
     for (var a: number in expr) {
              ~
-!!! The left-hand side of a 'for...in' statement cannot use a type annotation.
+!!! error TS2404: The left-hand side of a 'for...in' statement cannot use a type annotation.
     }

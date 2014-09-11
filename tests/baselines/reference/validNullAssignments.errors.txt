@@ -10,26 +10,26 @@
     enum E { A }
     E.A = null; // error
     ~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     class C { foo: string }
     var f: C;
     f = null; // ok
     C = null; // error
     ~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     interface I { foo: string }
     var g: I;
     g = null; // ok
     I = null; // error
     ~
-!!! Cannot find name 'I'.
+!!! error TS2304: Cannot find name 'I'.
     
     module M { export var x = 1; }
     M = null; // error
     ~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     var h: { f(): void } = null;
     
@@ -38,4 +38,4 @@
     }
     i = null; // error
     ~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.

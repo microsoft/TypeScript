@@ -7,8 +7,8 @@
         constructor() {
             super<T>();
                  ~
-!!! 'super' must be followed by an argument list or member access.
+!!! error TS1034: 'super' must be followed by an argument list or member access.
             ~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
         }
     }

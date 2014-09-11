@@ -3,10 +3,10 @@
     	class Visibility {
     	    public foo() { };
     	                    ~
-!!! Unexpected token. A constructor, method, accessor, or property was expected.
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
     	    private bar() { };
     	                     ~
-!!! Unexpected token. A constructor, method, accessor, or property was expected.
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
             private x: number;
     	    public y: number;
     	    public z: number;

@@ -1,8 +1,8 @@
 ==== tests/cases/conformance/parser/ecmascript5/Statements/parserDoStatement1.d.ts (2 errors) ====
     do {
     ~~
-!!! Statements are not allowed in ambient contexts.
+!!! error TS1036: Statements are not allowed in ambient contexts.
     }
     while (e);
            ~
-!!! Cannot find name 'e'.
+!!! error TS2304: Cannot find name 'e'.

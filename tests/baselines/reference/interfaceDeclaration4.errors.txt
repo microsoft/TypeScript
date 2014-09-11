@@ -18,9 +18,9 @@
     // Negative Case
     interface I3 extends Foo.I1 {
               ~~
-!!! Interface 'I3' incorrectly extends interface 'I1':
-!!!   Types of property 'item' are incompatible:
-!!!     Type 'number' is not assignable to type 'string'.
+!!! error TS2429: Interface 'I3' incorrectly extends interface 'I1':
+!!! error TS2429:   Types of property 'item' are incompatible:
+!!! error TS2429:     Type 'number' is not assignable to type 'string'.
         item:number;
     }
     
@@ -31,8 +31,8 @@
     // Err - not implemented item
     class C2 implements I4 {
           ~~
-!!! Class 'C2' incorrectly implements interface 'I4':
-!!!   Property 'item' is missing in type 'C2'.
+!!! error TS2421: Class 'C2' incorrectly implements interface 'I4':
+!!! error TS2421:   Property 'item' is missing in type 'C2'.
         public token: string;
     }
     
@@ -43,15 +43,15 @@
     
     class C3 implements Foo.I1 { }
           ~~
-!!! Class 'C3' incorrectly implements interface 'I1':
-!!!   Property 'item' is missing in type 'C3'.
+!!! error TS2421: Class 'C3' incorrectly implements interface 'I1':
+!!! error TS2421:   Property 'item' is missing in type 'C3'.
     
     // Negative case 
     interface Foo.I1 { }
                  ~
-!!! '{' expected.
+!!! error TS1005: '{' expected.
                      ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
                   ~~
-!!! Cannot find name 'I1'.
+!!! error TS2304: Cannot find name 'I1'.
     

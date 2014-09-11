@@ -5,7 +5,7 @@
      
         static fnOverload(foo: string){ } // error
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Duplicate function implementation.
+!!! error TS2393: Duplicate function implementation.
      
     }
     

@@ -5,6 +5,6 @@
     
     import x = m.m;
     ~~~~~~~~~~~~~~~
-!!! Import declaration conflicts with local declaration of 'x'
+!!! error TS2440: Import declaration conflicts with local declaration of 'x'
     var x = '';
     

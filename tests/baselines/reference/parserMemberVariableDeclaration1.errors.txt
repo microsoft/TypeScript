@@ -2,5 +2,5 @@
     class C {
       public public Foo;
              ~~~~~~
-!!! Accessibility modifier already seen.
+!!! error TS1028: Accessibility modifier already seen.
     }

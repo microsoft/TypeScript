@@ -11,36 +11,36 @@
     // null + boolean/Object
     var r1 = null + a;
              ~~~~~~~~
-!!! Operator '+' cannot be applied to types 'boolean' and 'boolean'.
+!!! error TS2365: Operator '+' cannot be applied to types 'boolean' and 'boolean'.
     var r2 = null + b;
              ~~~~~~~~
-!!! Operator '+' cannot be applied to types 'Object' and 'Object'.
+!!! error TS2365: Operator '+' cannot be applied to types 'Object' and 'Object'.
     var r3 = null + c;
              ~~~~~~~~
-!!! Operator '+' cannot be applied to types 'void' and 'void'.
+!!! error TS2365: Operator '+' cannot be applied to types 'void' and 'void'.
     var r4 = a + null;
              ~~~~~~~~
-!!! Operator '+' cannot be applied to types 'boolean' and 'boolean'.
+!!! error TS2365: Operator '+' cannot be applied to types 'boolean' and 'boolean'.
     var r5 = b + null;
              ~~~~~~~~
-!!! Operator '+' cannot be applied to types 'Object' and 'Object'.
+!!! error TS2365: Operator '+' cannot be applied to types 'Object' and 'Object'.
     var r6 = null + c;
              ~~~~~~~~
-!!! Operator '+' cannot be applied to types 'void' and 'void'.
+!!! error TS2365: Operator '+' cannot be applied to types 'void' and 'void'.
     
     // other cases
     var r7 = null + d;
              ~~~~~~~~
-!!! Operator '+' cannot be applied to types 'Number' and 'Number'.
+!!! error TS2365: Operator '+' cannot be applied to types 'Number' and 'Number'.
     var r8 = null + true;
              ~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'boolean' and 'boolean'.
+!!! error TS2365: Operator '+' cannot be applied to types 'boolean' and 'boolean'.
     var r9 = null + { a: '' };
              ~~~~~~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types '{ a: string; }' and '{ a: string; }'.
+!!! error TS2365: Operator '+' cannot be applied to types '{ a: string; }' and '{ a: string; }'.
     var r10 = null + foo();
               ~~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'void' and 'void'.
+!!! error TS2365: Operator '+' cannot be applied to types 'void' and 'void'.
     var r11 = null + (() => { });
               ~~~~~~~~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types '() => void' and '() => void'.
+!!! error TS2365: Operator '+' cannot be applied to types '() => void' and '() => void'.

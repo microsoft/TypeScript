@@ -2,16 +2,16 @@
     // these should be errors
     var x = null;                        // error at "x"
         ~
-!!! Variable 'x' implicitly has an 'any' type.
+!!! error TS7005: Variable 'x' implicitly has an 'any' type.
     var x1 = undefined;		             // error at "x1"
         ~~
-!!! Variable 'x1' implicitly has an 'any' type.
+!!! error TS7005: Variable 'x1' implicitly has an 'any' type.
     var widenArray = [null, undefined];  // error at "widenArray"
         ~~~~~~~~~~
-!!! Variable 'widenArray' implicitly has an 'any[]' type.
+!!! error TS7005: Variable 'widenArray' implicitly has an 'any[]' type.
     var emptyArray = [];		         // error at "emptyArray"
         ~~~~~~~~~~
-!!! Variable 'emptyArray' implicitly has an 'any[]' type.
+!!! error TS7005: Variable 'emptyArray' implicitly has an 'any[]' type.
     
     // these should not be error
     class AnimalObj {

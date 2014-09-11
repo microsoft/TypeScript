@@ -2,6 +2,6 @@
     "use strict";
     eval += 1;
     ~~~~
-!!! Invalid use of 'eval' in strict mode.
+!!! error TS1100: Invalid use of 'eval' in strict mode.
     ~~~~~~~~~
-!!! Operator '+=' cannot be applied to types '(x: string) => any' and 'number'.
+!!! error TS2365: Operator '+=' cannot be applied to types '(x: string) => any' and 'number'.

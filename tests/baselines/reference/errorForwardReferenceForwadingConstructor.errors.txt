@@ -4,7 +4,7 @@
     function f() {
         var d1 = new derived();
                  ~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
         var d2 = new derived(4);
     }
     

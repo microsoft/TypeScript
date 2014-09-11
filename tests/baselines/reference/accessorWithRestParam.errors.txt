@@ -3,8 +3,8 @@
     class C {
         set X(...v) { }
             ~
-!!! A 'set' accessor cannot have rest parameter.
+!!! error TS1053: A 'set' accessor cannot have rest parameter.
         static set X(...v2) { }
                    ~
-!!! A 'set' accessor cannot have rest parameter.
+!!! error TS1053: A 'set' accessor cannot have rest parameter.
     }

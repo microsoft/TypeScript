@@ -10,11 +10,11 @@
     
     class D extends C implements I { // error
           ~
-!!! Class 'D' incorrectly extends base class 'C':
-!!!   Private property 'x' cannot be reimplemented.
+!!! error TS2416: Class 'D' incorrectly extends base class 'C':
+!!! error TS2416:   Private property 'x' cannot be reimplemented.
           ~
-!!! Class 'D' incorrectly implements interface 'I':
-!!!   Private property 'x' cannot be reimplemented.
+!!! error TS2421: Class 'D' incorrectly implements interface 'I':
+!!! error TS2421:   Private property 'x' cannot be reimplemented.
         public foo(x: any) { return x; }
         private x = 2;
         private y = 3;
@@ -24,11 +24,11 @@
     
     class D2 extends C implements I { // error
           ~~
-!!! Class 'D2' incorrectly extends base class 'C':
-!!!   Private property 'x' cannot be reimplemented.
+!!! error TS2416: Class 'D2' incorrectly extends base class 'C':
+!!! error TS2416:   Private property 'x' cannot be reimplemented.
           ~~
-!!! Class 'D2' incorrectly implements interface 'I':
-!!!   Private property 'x' cannot be reimplemented.
+!!! error TS2421: Class 'D2' incorrectly implements interface 'I':
+!!! error TS2421:   Private property 'x' cannot be reimplemented.
         public foo(x: any) { return x; }
         private x = "";
         other(x: any) { return x; }

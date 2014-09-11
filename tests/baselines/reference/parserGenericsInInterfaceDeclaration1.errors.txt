@@ -2,7 +2,7 @@
     interface I<T> {
        v: A<T>;
           ~~~~
-!!! Cannot find name 'A'.
+!!! error TS2304: Cannot find name 'A'.
        f1<T>(): T;
        f2?<T>(): T;
        <T>(): void;

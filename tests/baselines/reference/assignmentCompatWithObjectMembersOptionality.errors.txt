@@ -73,34 +73,34 @@
     
         c = d; // error
         ~
-!!! Type 'D' is not assignable to type 'C':
-!!!   Required property 'opt' cannot be reimplemented with optional property in 'D'.
+!!! error TS2322: Type 'D' is not assignable to type 'C':
+!!! error TS2322:   Required property 'opt' cannot be reimplemented with optional property in 'D'.
         c = e; // error
         ~
-!!! Type 'E' is not assignable to type 'C':
-!!!   Required property 'opt' cannot be reimplemented with optional property in 'E'.
+!!! error TS2322: Type 'E' is not assignable to type 'C':
+!!! error TS2322:   Required property 'opt' cannot be reimplemented with optional property in 'E'.
         c = f; // ok
         c = a; // ok
     
         a = d; // error
         ~
-!!! Type 'D' is not assignable to type '{ opt: Base; }':
-!!!   Required property 'opt' cannot be reimplemented with optional property in 'D'.
+!!! error TS2322: Type 'D' is not assignable to type '{ opt: Base; }':
+!!! error TS2322:   Required property 'opt' cannot be reimplemented with optional property in 'D'.
         a = e; // error
         ~
-!!! Type 'E' is not assignable to type '{ opt: Base; }':
-!!!   Required property 'opt' cannot be reimplemented with optional property in 'E'.
+!!! error TS2322: Type 'E' is not assignable to type '{ opt: Base; }':
+!!! error TS2322:   Required property 'opt' cannot be reimplemented with optional property in 'E'.
         a = f; // ok
         a = c; // ok
     
         b = d; // error
         ~
-!!! Type 'D' is not assignable to type '{ opt: Base; }':
-!!!   Required property 'opt' cannot be reimplemented with optional property in 'D'.
+!!! error TS2322: Type 'D' is not assignable to type '{ opt: Base; }':
+!!! error TS2322:   Required property 'opt' cannot be reimplemented with optional property in 'D'.
         b = e; // error
         ~
-!!! Type 'E' is not assignable to type '{ opt: Base; }':
-!!!   Required property 'opt' cannot be reimplemented with optional property in 'E'.
+!!! error TS2322: Type 'E' is not assignable to type '{ opt: Base; }':
+!!! error TS2322:   Required property 'opt' cannot be reimplemented with optional property in 'E'.
         b = f; // ok
         b = a; // ok
         b = c; // ok

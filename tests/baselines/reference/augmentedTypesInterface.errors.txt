@@ -16,7 +16,7 @@
     
     class i2 {  // error
           ~~
-!!! Duplicate identifier 'i2'.
+!!! error TS2300: Duplicate identifier 'i2'.
         bar() {
             return 1;
         }
@@ -28,7 +28,7 @@
     }
     enum i3 { One }; // error
          ~~
-!!! Duplicate identifier 'i3'.
+!!! error TS2300: Duplicate identifier 'i3'.
     
     // interface then import
     interface i4 {

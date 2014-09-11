@@ -4,6 +4,6 @@
     var c;
     for (a in b[c] = b[c] || [], d) {
                                  ~
-!!! Cannot find name 'd'.
+!!! error TS2304: Cannot find name 'd'.
     
     }

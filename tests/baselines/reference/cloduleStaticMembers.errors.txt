@@ -6,14 +6,14 @@
     module Clod {
         var p = Clod.x;
                 ~~~~~~
-!!! Property 'Clod.x' is inaccessible.
+!!! error TS2341: Property 'Clod.x' is inaccessible.
         var q = x;
                 ~
-!!! Cannot find name 'x'.
+!!! error TS2304: Cannot find name 'x'.
     
         var s = Clod.y;
         var t = y; 
                 ~
-!!! Cannot find name 'y'.
+!!! error TS2304: Cannot find name 'y'.
     }
     

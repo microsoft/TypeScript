@@ -2,6 +2,6 @@
     interface Foo{
         public biz;
         ~~~~~~
-!!! Property or signature expected.
+!!! error TS1131: Property or signature expected.
     }
     

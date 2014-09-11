@@ -3,17 +3,17 @@
         declare class C {
             public publicMember;  // this should be an error
             ~~~~~~~~~~~~~~~~~~~~
-!!! Member 'publicMember' implicitly has an 'any' type.
+!!! error TS7008: Member 'publicMember' implicitly has an 'any' type.
             private privateMember;  // this should not be an error
     
             public publicFunction(x);  // this should be an error
             ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! 'publicFunction', which lacks return-type annotation, implicitly has an 'any' return type.
+!!! error TS7010: 'publicFunction', which lacks return-type annotation, implicitly has an 'any' return type.
                                   ~
-!!! Parameter 'x' implicitly has an 'any' type.
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
             private privateFunction(privateParam);  // this should not be an error
             private constructor(privateParam);
             ~~~~~~~
-!!! 'private' modifier cannot appear on a constructor declaration.
+!!! error TS1089: 'private' modifier cannot appear on a constructor declaration.
         }
     }

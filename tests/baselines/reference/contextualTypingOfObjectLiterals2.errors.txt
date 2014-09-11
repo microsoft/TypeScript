@@ -5,4 +5,4 @@
     function f2(args: Foo) { }
     f2({ foo: s => s.hmm }) // 's' should be 'string', so this should be an error
                      ~~~
-!!! Property 'hmm' does not exist on type 'string'.
+!!! error TS2339: Property 'hmm' does not exist on type 'string'.

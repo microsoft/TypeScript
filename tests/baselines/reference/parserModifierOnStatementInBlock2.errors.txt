@@ -2,8 +2,8 @@
     {
        declare var x = this;
                ~~~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
        ~~~~~~~
-!!! Cannot find name 'declare'.
+!!! error TS2304: Cannot find name 'declare'.
     }
     

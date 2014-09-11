@@ -1,10 +1,10 @@
 ==== tests/cases/conformance/parser/ecmascript5/Types/parserTypeQuery8.ts (4 errors) ====
     var v: typeof A<B>
                    ~
-!!! '=' expected.
+!!! error TS1005: '=' expected.
                       
-!!! Expression expected.
+!!! error TS1109: Expression expected.
                   ~
-!!! Cannot find name 'A'.
+!!! error TS2304: Cannot find name 'A'.
                     ~
-!!! Cannot find name 'B'.
+!!! error TS2304: Cannot find name 'B'.

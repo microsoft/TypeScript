@@ -4,13 +4,13 @@
     
     function foo(x: 'a');
     ~~~~~~~~~~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
     function foo(x: number) { }
     
     class C {
         foo(x: 'a');
         ~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         foo(x: number);
         foo(x: any) { }
     }
@@ -18,7 +18,7 @@
     class C2<T> {
         foo(x: 'a');
         ~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         foo(x: T);
         foo(x: any) { }
     }
@@ -26,7 +26,7 @@
     class C3<T extends String> {
         foo(x: 'a');
         ~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         foo(x: T);
         foo(x: any) { }
     }
@@ -34,44 +34,44 @@
     interface I {
         (x: 'a');
         ~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         (x: number);
         foo(x: 'a');
         ~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         foo(x: number);
     }
     
     interface I2<T> {
         (x: 'a');
         ~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         (x: T);
         foo(x: 'a');
         ~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         foo(x: T);
     }
     
     interface I3<T extends String> {
         (x: 'a');
         ~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         (x: T);
         foo(x: 'a');
         ~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         foo(x: T);
     }
     
     var a: {
         (x: 'a');
         ~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         (x: number);
         foo(x: 'a');
         ~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         foo(x: number);
     }
     

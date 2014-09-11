@@ -3,7 +3,7 @@
         constructor(x) { }
         constructor(y, x) { } // illegal, 2 constructor implementations
         ~~~~~~~~~~~~~~~~~~~~~
-!!! Multiple constructor implementations are not allowed.
+!!! error TS2392: Multiple constructor implementations are not allowed.
     }
     
     class D {

@@ -2,7 +2,7 @@
     function foo(x);
     function bar() { }
              ~~~
-!!! Function implementation name must be 'foo'.
+!!! error TS2389: Function implementation name must be 'foo'.
     function foo(x, y);
              ~~~
-!!! Function implementation is missing or not immediately following the declaration.
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.

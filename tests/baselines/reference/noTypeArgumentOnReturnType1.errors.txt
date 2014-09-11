@@ -3,7 +3,7 @@
      
      foo(): A{
             ~
-!!! Generic type 'A<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'A<T>' requires 1 type argument(s).
       return null;
      }
     }

@@ -1,4 +1,4 @@
 ==== tests/cases/compiler/propertyAccess5.ts (1 errors) ====
     undefined.toBAZ();
               ~~~~~
-!!! Property 'toBAZ' does not exist on type 'undefined'.
+!!! error TS2339: Property 'toBAZ' does not exist on type 'undefined'.

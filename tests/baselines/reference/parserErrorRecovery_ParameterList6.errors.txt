@@ -2,11 +2,11 @@
     class Foo {
         public banana (x: break) { }
                           ~~~~~
-!!! Type expected.
+!!! error TS1110: Type expected.
                                ~
-!!! Identifier expected.
+!!! error TS1003: Identifier expected.
                ~~~~~~
-!!! Function implementation is missing or not immediately following the declaration.
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
     }
     ~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.

@@ -114,7 +114,7 @@
     
     interface I18<T, U extends T> {
                      ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: U;
         foo: any;
     }

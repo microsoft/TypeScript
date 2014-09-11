@@ -15,5 +15,5 @@
         import a = A;
         function hello(): b.B { return null; }
                           ~~~
-!!! Cannot find name 'b'.
+!!! error TS2304: Cannot find name 'b'.
     }

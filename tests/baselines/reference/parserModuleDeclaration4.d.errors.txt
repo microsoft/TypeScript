@@ -1,9 +1,9 @@
 ==== tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration4.d.ts (2 errors) ====
     module M {
     ~~~~~~
-!!! A 'declare' modifier is required for a top level declaration in a .d.ts file.
+!!! error TS1046: A 'declare' modifier is required for a top level declaration in a .d.ts file.
       declare module M1 {
       ~~~~~~~
-!!! A 'declare' modifier cannot be used in an already ambient context.
+!!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
       }
     }

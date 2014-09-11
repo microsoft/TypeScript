@@ -2,8 +2,8 @@
     class C {
         static static foo = 1;
                ~~~~~~
-!!! 'static' modifier already seen.
+!!! error TS1030: 'static' modifier already seen.
         public static static bar() { }
                       ~~~~~~
-!!! 'static' modifier already seen.
+!!! error TS1030: 'static' modifier already seen.
     }

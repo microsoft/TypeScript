@@ -3,7 +3,7 @@
       // Not a constructor
       public constructor;
                         ~
-!!! '(' expected.
+!!! error TS1005: '(' expected.
       ~~~~~~~~~~~~~~~~~~~
-!!! Constructor implementation is missing.
+!!! error TS2390: Constructor implementation is missing.
     }

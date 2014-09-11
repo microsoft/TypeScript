@@ -2,7 +2,7 @@
     class C {
         static public get Foo() { }
                ~~~~~~
-!!! 'public' modifier must precede 'static' modifier.
+!!! error TS1029: 'public' modifier must precede 'static' modifier.
                           ~~~
-!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
     }

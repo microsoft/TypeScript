@@ -10,8 +10,8 @@
     
     interface S extends T {
               ~
-!!! Interface 'S' incorrectly extends interface 'T':
-!!!   Required property 'Foo' cannot be reimplemented with optional property in 'S'.
+!!! error TS2429: Interface 'S' incorrectly extends interface 'T':
+!!! error TS2429:   Required property 'Foo' cannot be reimplemented with optional property in 'S'.
         Foo?: Derived // error
     }
     
@@ -21,8 +21,8 @@
     
     interface S2 extends T2 {
               ~~
-!!! Interface 'S2' incorrectly extends interface 'T2':
-!!!   Required property '1' cannot be reimplemented with optional property in 'S2'.
+!!! error TS2429: Interface 'S2' incorrectly extends interface 'T2':
+!!! error TS2429:   Required property '1' cannot be reimplemented with optional property in 'S2'.
         1?: Derived; // error
     }
     
@@ -32,8 +32,8 @@
     
     interface S3 extends T3 {
               ~~
-!!! Interface 'S3' incorrectly extends interface 'T3':
-!!!   Required property '1' cannot be reimplemented with optional property in 'S3'.
+!!! error TS2429: Interface 'S3' incorrectly extends interface 'T3':
+!!! error TS2429:   Required property '1' cannot be reimplemented with optional property in 'S3'.
         '1'?: Derived; // error
     }
     
@@ -42,4 +42,4 @@
     var b: { Foo?: Derived; }
     var r = true ? a : b; // error
             ~~~~~~~~~~~~
-!!! No best common type exists between '{ Foo: Base; }' and '{ Foo?: Derived; }'.
+!!! error TS2367: No best common type exists between '{ Foo: Base; }' and '{ Foo?: Derived; }'.

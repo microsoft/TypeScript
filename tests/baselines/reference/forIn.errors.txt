@@ -2,7 +2,7 @@
     var arr = null;
     for (var i:number in arr) { // error
              ~
-!!! The left-hand side of a 'for...in' statement cannot use a type annotation.
+!!! error TS2404: The left-hand side of a 'for...in' statement cannot use a type annotation.
         var x1 = arr[i];
         var y1 = arr[i];
     }
@@ -22,5 +22,5 @@
        // error in the body
        k[l] = 1;
        ~
-!!! Cannot find name 'k'.
+!!! error TS2304: Cannot find name 'k'.
     }

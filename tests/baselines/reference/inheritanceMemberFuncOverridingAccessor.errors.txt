@@ -2,24 +2,24 @@
     class a {
         get x() {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return "20";
         }
         set x(aValue: string) {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     
         }
     }
     
     class b extends a {
           ~
-!!! Class 'b' incorrectly extends base class 'a':
-!!!   Types of property 'x' are incompatible:
-!!!     Type '() => string' is not assignable to type 'string'.
+!!! error TS2416: Class 'b' incorrectly extends base class 'a':
+!!! error TS2416:   Types of property 'x' are incompatible:
+!!! error TS2416:     Type '() => string' is not assignable to type 'string'.
         x() {
         ~
-!!! Class 'a' defines instance member accessor 'x', but extended class 'b' defines it as instance member function.
+!!! error TS2426: Class 'a' defines instance member accessor 'x', but extended class 'b' defines it as instance member function.
             return "20";
         }
     }

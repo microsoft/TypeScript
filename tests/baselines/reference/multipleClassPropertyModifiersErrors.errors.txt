@@ -2,19 +2,19 @@
     class C {
     	public public p1;
     	       ~~~~~~
-!!! Accessibility modifier already seen.
+!!! error TS1028: Accessibility modifier already seen.
     	private private p2;
     	        ~~~~~~~
-!!! Accessibility modifier already seen.
+!!! error TS1028: Accessibility modifier already seen.
     	static static p3;
     	       ~~~~~~
-!!! 'static' modifier already seen.
+!!! error TS1030: 'static' modifier already seen.
     	public private p4;
     	       ~~~~~~~
-!!! Accessibility modifier already seen.
+!!! error TS1028: Accessibility modifier already seen.
     	private public p5;
     	        ~~~~~~
-!!! Accessibility modifier already seen.
+!!! error TS1028: Accessibility modifier already seen.
     	public static p6;
     	private static p7;
     }

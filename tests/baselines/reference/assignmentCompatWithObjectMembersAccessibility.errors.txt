@@ -31,49 +31,49 @@
         a = d;
         a = e; // error
         ~
-!!! Type 'E' is not assignable to type '{ foo: string; }':
-!!!   Private property 'foo' cannot be reimplemented.
+!!! error TS2322: Type 'E' is not assignable to type '{ foo: string; }':
+!!! error TS2322:   Private property 'foo' cannot be reimplemented.
     
         b = a;
         b = i;
         b = d;
         b = e; // error
         ~
-!!! Type 'E' is not assignable to type 'Base':
-!!!   Private property 'foo' cannot be reimplemented.
+!!! error TS2322: Type 'E' is not assignable to type 'Base':
+!!! error TS2322:   Private property 'foo' cannot be reimplemented.
     
         i = a;
         i = b;
         i = d;
         i = e; // error
         ~
-!!! Type 'E' is not assignable to type 'I':
-!!!   Private property 'foo' cannot be reimplemented.
+!!! error TS2322: Type 'E' is not assignable to type 'I':
+!!! error TS2322:   Private property 'foo' cannot be reimplemented.
     
         d = a;
         d = b;
         d = i;
         d = e; // error
         ~
-!!! Type 'E' is not assignable to type 'D':
-!!!   Private property 'foo' cannot be reimplemented.
+!!! error TS2322: Type 'E' is not assignable to type 'D':
+!!! error TS2322:   Private property 'foo' cannot be reimplemented.
     
         e = a; // errror
         ~
-!!! Type '{ foo: string; }' is not assignable to type 'E':
-!!!   Private property 'foo' cannot be reimplemented.
+!!! error TS2322: Type '{ foo: string; }' is not assignable to type 'E':
+!!! error TS2322:   Private property 'foo' cannot be reimplemented.
         e = b; // errror
         ~
-!!! Type 'Base' is not assignable to type 'E':
-!!!   Private property 'foo' cannot be reimplemented.
+!!! error TS2322: Type 'Base' is not assignable to type 'E':
+!!! error TS2322:   Private property 'foo' cannot be reimplemented.
         e = i; // errror
         ~
-!!! Type 'I' is not assignable to type 'E':
-!!!   Private property 'foo' cannot be reimplemented.
+!!! error TS2322: Type 'I' is not assignable to type 'E':
+!!! error TS2322:   Private property 'foo' cannot be reimplemented.
         e = d; // errror
         ~
-!!! Type 'D' is not assignable to type 'E':
-!!!   Private property 'foo' cannot be reimplemented.
+!!! error TS2322: Type 'D' is not assignable to type 'E':
+!!! error TS2322:   Private property 'foo' cannot be reimplemented.
         e = e; 
     
     }
@@ -105,78 +105,78 @@
     
         a = b; // error
         ~
-!!! Type 'Base' is not assignable to type '{ foo: string; }':
-!!!   Private property 'foo' cannot be reimplemented.
+!!! error TS2322: Type 'Base' is not assignable to type '{ foo: string; }':
+!!! error TS2322:   Private property 'foo' cannot be reimplemented.
         a = i; // error
         ~
-!!! Type 'I' is not assignable to type '{ foo: string; }':
-!!!   Private property 'foo' cannot be reimplemented.
+!!! error TS2322: Type 'I' is not assignable to type '{ foo: string; }':
+!!! error TS2322:   Private property 'foo' cannot be reimplemented.
         a = d;
         a = e; // error
         ~
-!!! Type 'E' is not assignable to type '{ foo: string; }':
-!!!   Private property 'foo' cannot be reimplemented.
+!!! error TS2322: Type 'E' is not assignable to type '{ foo: string; }':
+!!! error TS2322:   Private property 'foo' cannot be reimplemented.
     
         b = a; // error
         ~
-!!! Type '{ foo: string; }' is not assignable to type 'Base':
-!!!   Private property 'foo' cannot be reimplemented.
+!!! error TS2322: Type '{ foo: string; }' is not assignable to type 'Base':
+!!! error TS2322:   Private property 'foo' cannot be reimplemented.
         b = i;
         b = d; // error
         ~
-!!! Type 'D' is not assignable to type 'Base':
-!!!   Private property 'foo' cannot be reimplemented.
+!!! error TS2322: Type 'D' is not assignable to type 'Base':
+!!! error TS2322:   Private property 'foo' cannot be reimplemented.
         b = e; // error
         ~
-!!! Type 'E' is not assignable to type 'Base':
-!!!   Private property 'foo' cannot be reimplemented.
+!!! error TS2322: Type 'E' is not assignable to type 'Base':
+!!! error TS2322:   Private property 'foo' cannot be reimplemented.
         b = b;
         
         i = a; // error
         ~
-!!! Type '{ foo: string; }' is not assignable to type 'I':
-!!!   Private property 'foo' cannot be reimplemented.
+!!! error TS2322: Type '{ foo: string; }' is not assignable to type 'I':
+!!! error TS2322:   Private property 'foo' cannot be reimplemented.
         i = b;
         i = d; // error
         ~
-!!! Type 'D' is not assignable to type 'I':
-!!!   Private property 'foo' cannot be reimplemented.
+!!! error TS2322: Type 'D' is not assignable to type 'I':
+!!! error TS2322:   Private property 'foo' cannot be reimplemented.
         i = e; // error
         ~
-!!! Type 'E' is not assignable to type 'I':
-!!!   Private property 'foo' cannot be reimplemented.
+!!! error TS2322: Type 'E' is not assignable to type 'I':
+!!! error TS2322:   Private property 'foo' cannot be reimplemented.
         i = i;
     
         d = a;
         d = b; // error
         ~
-!!! Type 'Base' is not assignable to type 'D':
-!!!   Private property 'foo' cannot be reimplemented.
+!!! error TS2322: Type 'Base' is not assignable to type 'D':
+!!! error TS2322:   Private property 'foo' cannot be reimplemented.
         d = i; // error
         ~
-!!! Type 'I' is not assignable to type 'D':
-!!!   Private property 'foo' cannot be reimplemented.
+!!! error TS2322: Type 'I' is not assignable to type 'D':
+!!! error TS2322:   Private property 'foo' cannot be reimplemented.
         d = e; // error
         ~
-!!! Type 'E' is not assignable to type 'D':
-!!!   Private property 'foo' cannot be reimplemented.
+!!! error TS2322: Type 'E' is not assignable to type 'D':
+!!! error TS2322:   Private property 'foo' cannot be reimplemented.
     
         e = a; // errror
         ~
-!!! Type '{ foo: string; }' is not assignable to type 'E':
-!!!   Private property 'foo' cannot be reimplemented.
+!!! error TS2322: Type '{ foo: string; }' is not assignable to type 'E':
+!!! error TS2322:   Private property 'foo' cannot be reimplemented.
         e = b; // errror
         ~
-!!! Type 'Base' is not assignable to type 'E':
-!!!   Private property 'foo' cannot be reimplemented.
+!!! error TS2322: Type 'Base' is not assignable to type 'E':
+!!! error TS2322:   Private property 'foo' cannot be reimplemented.
         e = i; // errror
         ~
-!!! Type 'I' is not assignable to type 'E':
-!!!   Private property 'foo' cannot be reimplemented.
+!!! error TS2322: Type 'I' is not assignable to type 'E':
+!!! error TS2322:   Private property 'foo' cannot be reimplemented.
         e = d; // errror
         ~
-!!! Type 'D' is not assignable to type 'E':
-!!!   Private property 'foo' cannot be reimplemented.
+!!! error TS2322: Type 'D' is not assignable to type 'E':
+!!! error TS2322:   Private property 'foo' cannot be reimplemented.
         e = e;
     
     }

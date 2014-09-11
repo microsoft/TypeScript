@@ -2,5 +2,5 @@
     interface I {
       [a:boolean]
        ~
-!!! An index signature parameter type must be 'string' or 'number'.
+!!! error TS1023: An index signature parameter type must be 'string' or 'number'.
     }

@@ -9,7 +9,7 @@
       }
       class PullTypeParameterSymbol <A,B,C> extends PullTypeSymbol {
                                                     ~~~~~~~~~~~~~~
-!!! Generic type 'PullTypeSymbol<A, B, C>' requires 3 type argument(s).
+!!! error TS2314: Generic type 'PullTypeSymbol<A, B, C>' requires 3 type argument(s).
       }
     }
      

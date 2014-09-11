@@ -2,6 +2,6 @@
     1
     /notregexp/a.foo();
      ~~~~~~~~~
-!!! Cannot find name 'notregexp'.
+!!! error TS2304: Cannot find name 'notregexp'.
                ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.

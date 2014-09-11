@@ -6,6 +6,6 @@
       // 'this' should not be available in a static initializer.
       log(this);
           ~~~~
-!!! 'this' cannot be referenced in a static property initializer.
+!!! error TS2334: 'this' cannot be referenced in a static property initializer.
      }
     }

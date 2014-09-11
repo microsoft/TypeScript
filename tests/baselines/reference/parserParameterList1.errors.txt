@@ -2,5 +2,5 @@
     class C {
        F(...A, B) { }
             ~
-!!! A rest parameter must be last in a parameter list.
+!!! error TS1014: A rest parameter must be last in a parameter list.
     }

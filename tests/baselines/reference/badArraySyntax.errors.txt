@@ -6,19 +6,19 @@
     var a1: Z[] = [];
     var a2 = new Z[];
                   ~~
-!!! 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
     var a3 = new Z[]();
                   ~~
-!!! 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
     var a4: Z[] = new Z[];
                        ~~
-!!! 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
     var a5: Z[] = new Z[]();
                        ~~
-!!! 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
     var a6: Z[][] = new   Z     [      ]   [  ];
                                 ~~~~~~~~
-!!! 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
                                            ~~~~
-!!! 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
     

@@ -8,25 +8,25 @@
     
     f2({ hello: 1 }) 
        ~~~~~~~~~~~~
-!!! Argument of type '{ hello: number; }' is not assignable to parameter of type 'I2'.
-!!!   Property 'value' is missing in type '{ hello: number; }'.
+!!! error TS2345: Argument of type '{ hello: number; }' is not assignable to parameter of type 'I2'.
+!!! error TS2345:   Property 'value' is missing in type '{ hello: number; }'.
     f2({ value: '' })
        ~~~~~~~~~~~~~
-!!! Argument of type '{ value: string; }' is not assignable to parameter of type 'I2'.
-!!!   Property 'doStuff' is missing in type '{ value: string; }'.
+!!! error TS2345: Argument of type '{ value: string; }' is not assignable to parameter of type 'I2'.
+!!! error TS2345:   Property 'doStuff' is missing in type '{ value: string; }'.
     f2({ value: '', what: 1 }) 
        ~~~~~~~~~~~~~~~~~~~~~~
-!!! Argument of type '{ value: string; what: number; }' is not assignable to parameter of type 'I2'.
-!!!   Property 'doStuff' is missing in type '{ value: string; what: number; }'.
+!!! error TS2345: Argument of type '{ value: string; what: number; }' is not assignable to parameter of type 'I2'.
+!!! error TS2345:   Property 'doStuff' is missing in type '{ value: string; what: number; }'.
     f2({ toString: (s) => s }) 
        ~~~~~~~~~~~~~~~~~~~~~~
-!!! Argument of type '{ toString: (s: any) => any; }' is not assignable to parameter of type 'I2'.
-!!!   Property 'value' is missing in type '{ toString: (s: any) => any; }'.
+!!! error TS2345: Argument of type '{ toString: (s: any) => any; }' is not assignable to parameter of type 'I2'.
+!!! error TS2345:   Property 'value' is missing in type '{ toString: (s: any) => any; }'.
     f2({ toString: (s: string) => s }) 
        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Argument of type '{ toString: (s: string) => string; }' is not assignable to parameter of type 'I2'.
-!!!   Property 'value' is missing in type '{ toString: (s: string) => string; }'.
+!!! error TS2345: Argument of type '{ toString: (s: string) => string; }' is not assignable to parameter of type 'I2'.
+!!! error TS2345:   Property 'value' is missing in type '{ toString: (s: string) => string; }'.
     f2({ value: '', toString: (s) => s.uhhh }) 
        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Argument of type '{ value: string; toString: (s: any) => any; }' is not assignable to parameter of type 'I2'.
-!!!   Property 'doStuff' is missing in type '{ value: string; toString: (s: any) => any; }'.
+!!! error TS2345: Argument of type '{ value: string; toString: (s: any) => any; }' is not assignable to parameter of type 'I2'.
+!!! error TS2345:   Property 'doStuff' is missing in type '{ value: string; toString: (s: any) => any; }'.

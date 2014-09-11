@@ -4,12 +4,12 @@
             _foo: '1',
             get foo(): string {
                 ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                 return this._foo;
             },
             set foo(value: string) {
                 ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                 this._foo = value;
             },
             test: function () {

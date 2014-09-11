@@ -11,5 +11,5 @@
     
     var b: A.B;
            ~~~
-!!! Module 'A' has no exported member 'B'.
+!!! error TS2305: Module 'A' has no exported member 'B'.
     A.B(1);

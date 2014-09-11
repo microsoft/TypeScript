@@ -5,25 +5,25 @@
     var x1: boolean;
     x1 += '';
     ~~
-!!! Type 'string' is not assignable to type 'boolean'.
+!!! error TS2323: Type 'string' is not assignable to type 'boolean'.
     
     var x2: number;
     x2 += '';
     ~~
-!!! Type 'string' is not assignable to type 'number'.
+!!! error TS2323: Type 'string' is not assignable to type 'number'.
     
     var x3: E;
     x3 += '';
     ~~
-!!! Type 'string' is not assignable to type 'E'.
+!!! error TS2323: Type 'string' is not assignable to type 'E'.
     
     var x4: {a: string};
     x4 += '';
     ~~
-!!! Type 'string' is not assignable to type '{ a: string; }':
-!!!   Property 'a' is missing in type 'String'.
+!!! error TS2322: Type 'string' is not assignable to type '{ a: string; }':
+!!! error TS2322:   Property 'a' is missing in type 'String'.
     
     var x5: void;
     x5 += '';
     ~~
-!!! Type 'string' is not assignable to type 'void'.
+!!! error TS2323: Type 'string' is not assignable to type 'void'.

@@ -3,20 +3,20 @@
     
     class any { }
           ~~~
-!!! Class name cannot be 'any'
+!!! error TS2414: Class name cannot be 'any'
     
     class number { }
           ~~~~~~
-!!! Class name cannot be 'number'
+!!! error TS2414: Class name cannot be 'number'
     
     class boolean { }
           ~~~~~~~
-!!! Class name cannot be 'boolean'
+!!! error TS2414: Class name cannot be 'boolean'
     class bool { } // not a predefined type anymore
     
     class string { }
           ~~~~~~
-!!! Class name cannot be 'string'
+!!! error TS2414: Class name cannot be 'string'
     
     
     

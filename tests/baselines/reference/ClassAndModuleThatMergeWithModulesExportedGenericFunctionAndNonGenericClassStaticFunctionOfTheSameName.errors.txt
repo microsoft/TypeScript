@@ -10,7 +10,7 @@
         // error: duplicate identifier expected
         export function fn<T>(x: T, y: T): T {
                         ~~
-!!! Duplicate identifier 'fn'.
+!!! error TS2300: Duplicate identifier 'fn'.
             return x;
         }
     }

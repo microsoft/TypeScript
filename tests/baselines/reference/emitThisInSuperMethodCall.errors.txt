@@ -10,7 +10,7 @@
                 function inner() {
                     super.sayHello();
                     ~~~~~
-!!! 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+!!! error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
                 }
             };
         }
@@ -19,7 +19,7 @@
                 () => {
                     super.sayHello();
                     ~~~~~
-!!! 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+!!! error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
                 }
             }
         }
@@ -27,7 +27,7 @@
             function inner() {
                 super.sayHello();
                 ~~~~~
-!!! 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+!!! error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
             }
         }
     }

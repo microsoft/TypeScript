@@ -30,7 +30,7 @@
             {
                 return 12345;
                        ~~~~~
-!!! Type 'number' is not assignable to type 'boolean'.
+!!! error TS2323: Type 'number' is not assignable to type 'boolean'.
             }
         }
     }

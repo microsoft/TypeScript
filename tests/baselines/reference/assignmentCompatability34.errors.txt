@@ -9,4 +9,4 @@
     }
     __test2__.__val__obj = __test1__.__val__obj4
     ~~~~~~~~~~~~~~~~~~~~
-!!! Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '<Tnumber>(a: Tnumber) => Tnumber'.
+!!! error TS2323: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '<Tnumber>(a: Tnumber) => Tnumber'.

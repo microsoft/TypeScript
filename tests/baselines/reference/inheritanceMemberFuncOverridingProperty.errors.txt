@@ -6,7 +6,7 @@
     class b extends a {
         x() {
         ~
-!!! Class 'a' defines instance member property 'x', but extended class 'b' defines it as instance member function.
+!!! error TS2425: Class 'a' defines instance member property 'x', but extended class 'b' defines it as instance member function.
             return "20";
         }
     }

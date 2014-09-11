@@ -5,7 +5,7 @@
         while (true) {
           break target;
           ~~~~~~~~~~~~~
-!!! Jump target cannot cross function boundary.
+!!! error TS1107: Jump target cannot cross function boundary.
         }
       }
     }

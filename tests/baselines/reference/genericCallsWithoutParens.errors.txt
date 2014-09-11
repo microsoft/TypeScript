@@ -2,17 +2,17 @@
     function f<T>() { }
     var r = f<number>; // parse error
                      ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
               ~~~~~~
-!!! Cannot find name 'number'.
+!!! error TS2304: Cannot find name 'number'.
     
     class C<T> {
         foo: T;
     }
     var c = new C<number>; // parse error
                          ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
                   ~~~~~~
-!!! Cannot find name 'number'.
+!!! error TS2304: Cannot find name 'number'.
     
     

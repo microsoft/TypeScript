@@ -2,24 +2,24 @@
     var x = 10;
     export = typeof x; // Error
     ~~~~~~~~
-!!! Cannot compile external modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.
              ~~~~~~
-!!! Identifier expected.
+!!! error TS1003: Identifier expected.
     
 ==== tests/cases/conformance/externalModules/foo2.ts (1 errors) ====
     export = "sausages"; // Error
              ~~~~~~~~~~
-!!! Identifier expected.
+!!! error TS1003: Identifier expected.
     
 ==== tests/cases/conformance/externalModules/foo3.ts (1 errors) ====
     export = class Foo3 {}; // Error
              ~~~~~
-!!! Identifier expected.
+!!! error TS1003: Identifier expected.
     
 ==== tests/cases/conformance/externalModules/foo4.ts (1 errors) ====
     export = true; // Error
              ~~~~
-!!! Identifier expected.
+!!! error TS1003: Identifier expected.
     
 ==== tests/cases/conformance/externalModules/foo5.ts (0 errors) ====
     export = undefined; // Valid.  undefined is an identifier in JavaScript/TypeScript
@@ -27,18 +27,18 @@
 ==== tests/cases/conformance/externalModules/foo6.ts (2 errors) ====
     export = void; // Error
              ~~~~
-!!! Identifier expected.
+!!! error TS1003: Identifier expected.
                  ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     
 ==== tests/cases/conformance/externalModules/foo7.ts (1 errors) ====
     export = Date || String; // Error
                   ~~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
     
 ==== tests/cases/conformance/externalModules/foo8.ts (1 errors) ====
     export = null; // Error
              ~~~~
-!!! Identifier expected.
+!!! error TS1003: Identifier expected.
     
     

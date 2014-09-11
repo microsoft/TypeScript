@@ -1,6 +1,6 @@
 ==== tests/cases/compiler/unterminatedRegexAtEndOfSource1.ts (2 errors) ====
     var a = /
             ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
              
-!!! Expression expected.
+!!! error TS1109: Expression expected.

@@ -37,8 +37,8 @@
     M.foo() // ok
     M.foo.x // error
           ~
-!!! Property 'x' does not exist on type 'typeof foo'.
+!!! error TS2339: Property 'x' does not exist on type 'typeof foo'.
     M.foo.y // ok
     M.foo.z // error
           ~
-!!! Property 'z' does not exist on type 'typeof foo'.
+!!! error TS2339: Property 'z' does not exist on type 'typeof foo'.

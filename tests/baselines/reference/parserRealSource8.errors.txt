@@ -4,40 +4,40 @@
     
     ///<reference path='typescript.ts' />
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! File 'typescript.ts' not found.
+!!! error TS6053: File 'typescript.ts' not found.
     
     module TypeScript {
     
         export class AssignScopeContext {
             constructor (public scopeChain: ScopeChain,
                                             ~~~~~~~~~~
-!!! Cannot find name 'ScopeChain'.
+!!! error TS2304: Cannot find name 'ScopeChain'.
                          public typeFlow: TypeFlow,
                                           ~~~~~~~~
-!!! Cannot find name 'TypeFlow'.
+!!! error TS2304: Cannot find name 'TypeFlow'.
                          public modDeclChain: ModuleDeclaration[]) {
                                               ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ModuleDeclaration'.
+!!! error TS2304: Cannot find name 'ModuleDeclaration'.
             }
         }
     
         export function pushAssignScope(scope: SymbolScope,
                                                ~~~~~~~~~~~
-!!! Cannot find name 'SymbolScope'.
+!!! error TS2304: Cannot find name 'SymbolScope'.
             context: AssignScopeContext,
             type: Type,
                   ~~~~
-!!! Cannot find name 'Type'.
+!!! error TS2304: Cannot find name 'Type'.
             classType: Type,
                        ~~~~
-!!! Cannot find name 'Type'.
+!!! error TS2304: Cannot find name 'Type'.
             fnc: FuncDecl) {
                  ~~~~~~~~
-!!! Cannot find name 'FuncDecl'.
+!!! error TS2304: Cannot find name 'FuncDecl'.
     
             var chain = new ScopeChain(null, context.scopeChain, scope);
                             ~~~~~~~~~~
-!!! Cannot find name 'ScopeChain'.
+!!! error TS2304: Cannot find name 'ScopeChain'.
             chain.thisType = type;
             chain.classType = classType;
             chain.fnc = fnc;
@@ -50,9 +50,9 @@
     
         export function instanceCompare(a: Symbol, b: Symbol) {
                                            ~~~~~~
-!!! Cannot find name 'Symbol'.
+!!! error TS2304: Cannot find name 'Symbol'.
                                                       ~~~~~~
-!!! Cannot find name 'Symbol'.
+!!! error TS2304: Cannot find name 'Symbol'.
             if (((a == null) || (!a.isInstanceProperty()))) {
                 return b;
             }
@@ -63,7 +63,7 @@
     
         export function instanceFilterStop(s: Symbol) {
                                               ~~~~~~
-!!! Cannot find name 'Symbol'.
+!!! error TS2304: Cannot find name 'Symbol'.
             return s.isInstanceProperty();
         }
     
@@ -71,18 +71,18 @@
     
             constructor (public select: (a: Symbol, b: Symbol) =>Symbol,
                                             ~~~~~~
-!!! Cannot find name 'Symbol'.
+!!! error TS2304: Cannot find name 'Symbol'.
                                                        ~~~~~~
-!!! Cannot find name 'Symbol'.
+!!! error TS2304: Cannot find name 'Symbol'.
                                                                  ~~~~~~
-!!! Cannot find name 'Symbol'.
+!!! error TS2304: Cannot find name 'Symbol'.
                                 public stop: (s: Symbol) =>boolean) { }
                                                  ~~~~~~
-!!! Cannot find name 'Symbol'.
+!!! error TS2304: Cannot find name 'Symbol'.
     
             public result: Symbol = null;
                            ~~~~~~
-!!! Cannot find name 'Symbol'.
+!!! error TS2304: Cannot find name 'Symbol'.
     
             public reset() {
                 this.result = null;
@@ -90,7 +90,7 @@
     
             public update(b: Symbol): boolean {
                              ~~~~~~
-!!! Cannot find name 'Symbol'.
+!!! error TS2304: Cannot find name 'Symbol'.
                 this.result = this.select(this.result, b);
                 if (this.result) {
                     return this.stop(this.result);
@@ -105,16 +105,16 @@
     
         export function preAssignModuleScopes(ast: AST, context: AssignScopeContext) {
                                                    ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
             var moduleDecl = <ModuleDeclaration>ast;
                               ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ModuleDeclaration'.
+!!! error TS2304: Cannot find name 'ModuleDeclaration'.
             var memberScope: SymbolTableScope = null;
                              ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'SymbolTableScope'.
+!!! error TS2304: Cannot find name 'SymbolTableScope'.
             var aggScope: SymbolAggregateScope = null;
                           ~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'SymbolAggregateScope'.
+!!! error TS2304: Cannot find name 'SymbolAggregateScope'.
     
             if (moduleDecl.name && moduleDecl.mod) {
                 moduleDecl.name.sym = moduleDecl.mod.symbol;
@@ -129,13 +129,13 @@
     
             memberScope = new SymbolTableScope(mod.members, mod.ambientMembers, mod.enclosedTypes, mod.ambientEnclosedTypes, mod.symbol);
                               ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'SymbolTableScope'.
+!!! error TS2304: Cannot find name 'SymbolTableScope'.
             mod.memberScope = memberScope;
             context.modDeclChain.push(moduleDecl);
             context.typeFlow.checker.currentModDecl = moduleDecl;
             aggScope = new SymbolAggregateScope(mod.symbol);
                            ~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'SymbolAggregateScope'.
+!!! error TS2304: Cannot find name 'SymbolAggregateScope'.
             aggScope.addParentScope(memberScope);
             aggScope.addParentScope(context.scopeChain.scope);
             pushAssignScope(aggScope, context, null, null, null);
@@ -147,16 +147,16 @@
     
         export function preAssignClassScopes(ast: AST, context: AssignScopeContext) {
                                                   ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
             var classDecl = <InterfaceDeclaration>ast;
                              ~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'InterfaceDeclaration'.
+!!! error TS2304: Cannot find name 'InterfaceDeclaration'.
             var memberScope: SymbolTableScope = null;
                              ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'SymbolTableScope'.
+!!! error TS2304: Cannot find name 'SymbolTableScope'.
             var aggScope: SymbolAggregateScope = null;
                           ~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'SymbolAggregateScope'.
+!!! error TS2304: Cannot find name 'SymbolAggregateScope'.
     
             if (classDecl.name && classDecl.type) {
                 classDecl.name.sym = classDecl.type.symbol;
@@ -168,11 +168,11 @@
                 var classSym = classType.symbol;
                 memberScope = <SymbolTableScope>context.typeFlow.checker.scopeOf(classType);
                                ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'SymbolTableScope'.
+!!! error TS2304: Cannot find name 'SymbolTableScope'.
     
                 aggScope = new SymbolAggregateScope(classType.symbol);
                                ~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'SymbolAggregateScope'.
+!!! error TS2304: Cannot find name 'SymbolAggregateScope'.
                 aggScope.addParentScope(memberScope);
                 aggScope.addParentScope(context.scopeChain.scope);
     
@@ -182,12 +182,12 @@
                 var instanceType = classType.instanceType;
                 memberScope = <SymbolTableScope>context.typeFlow.checker.scopeOf(instanceType);
                                ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'SymbolTableScope'.
+!!! error TS2304: Cannot find name 'SymbolTableScope'.
                 instanceType.memberScope = memberScope;
     
                 aggScope = new SymbolAggregateScope(instanceType.symbol);
                                ~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'SymbolAggregateScope'.
+!!! error TS2304: Cannot find name 'SymbolAggregateScope'.
                 aggScope.addParentScope(context.scopeChain.scope);
     
                 pushAssignScope(aggScope, context, instanceType, classType, null);
@@ -200,16 +200,16 @@
     
         export function preAssignInterfaceScopes(ast: AST, context: AssignScopeContext) {
                                                       ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
             var interfaceDecl = <InterfaceDeclaration>ast;
                                  ~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'InterfaceDeclaration'.
+!!! error TS2304: Cannot find name 'InterfaceDeclaration'.
             var memberScope: SymbolTableScope = null;
                              ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'SymbolTableScope'.
+!!! error TS2304: Cannot find name 'SymbolTableScope'.
             var aggScope: SymbolAggregateScope = null;
                           ~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'SymbolAggregateScope'.
+!!! error TS2304: Cannot find name 'SymbolAggregateScope'.
     
             if (interfaceDecl.name && interfaceDecl.type) {
                 interfaceDecl.name.sym = interfaceDecl.type.symbol;
@@ -218,11 +218,11 @@
             var interfaceType = ast.type;
             memberScope = <SymbolTableScope>context.typeFlow.checker.scopeOf(interfaceType);
                            ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'SymbolTableScope'.
+!!! error TS2304: Cannot find name 'SymbolTableScope'.
             interfaceType.memberScope = memberScope;
             aggScope = new SymbolAggregateScope(interfaceType.symbol);
                            ~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'SymbolAggregateScope'.
+!!! error TS2304: Cannot find name 'SymbolAggregateScope'.
             aggScope.addParentScope(memberScope);
             aggScope.addParentScope(context.scopeChain.scope);
             pushAssignScope(aggScope, context, null, null, null);
@@ -231,37 +231,37 @@
     
         export function preAssignWithScopes(ast: AST, context: AssignScopeContext) {
                                                  ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
             var withStmt = <WithStatement>ast;
                             ~~~~~~~~~~~~~
-!!! Cannot find name 'WithStatement'.
+!!! error TS2304: Cannot find name 'WithStatement'.
             var withType = withStmt.type;
     
             var members = new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable()));
                               ~~~~~~~~~~~~~
-!!! Cannot find name 'ScopedMembers'.
+!!! error TS2304: Cannot find name 'ScopedMembers'.
                                                 ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'DualStringHashTable'.
+!!! error TS2304: Cannot find name 'DualStringHashTable'.
                                                                         ~~~~~~~~~~~~~~~
-!!! Cannot find name 'StringHashTable'.
+!!! error TS2304: Cannot find name 'StringHashTable'.
                                                                                                ~~~~~~~~~~~~~~~
-!!! Cannot find name 'StringHashTable'.
+!!! error TS2304: Cannot find name 'StringHashTable'.
             var ambientMembers = new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable()));
                                      ~~~~~~~~~~~~~
-!!! Cannot find name 'ScopedMembers'.
+!!! error TS2304: Cannot find name 'ScopedMembers'.
                                                        ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'DualStringHashTable'.
+!!! error TS2304: Cannot find name 'DualStringHashTable'.
                                                                                ~~~~~~~~~~~~~~~
-!!! Cannot find name 'StringHashTable'.
+!!! error TS2304: Cannot find name 'StringHashTable'.
                                                                                                       ~~~~~~~~~~~~~~~
-!!! Cannot find name 'StringHashTable'.
+!!! error TS2304: Cannot find name 'StringHashTable'.
     
             var withType = new Type();
                                ~~~~
-!!! Cannot find name 'Type'.
+!!! error TS2304: Cannot find name 'Type'.
             var withSymbol = new WithSymbol(withStmt.minChar, context.typeFlow.checker.locationInfo.unitIndex, withType);
                                  ~~~~~~~~~~
-!!! Cannot find name 'WithSymbol'.
+!!! error TS2304: Cannot find name 'WithSymbol'.
             withType.members = members;
             withType.ambientMembers = ambientMembers;
             withType.symbol = withSymbol;
@@ -270,7 +270,7 @@
     
             var withScope = new TypeScript.SymbolScopeBuilder(withType.members, withType.ambientMembers, null, null, context.scopeChain.scope, withType.symbol);
                                            ~~~~~~~~~~~~~~~~~~
-!!! Property 'SymbolScopeBuilder' does not exist on type 'typeof TypeScript'.
+!!! error TS2339: Property 'SymbolScopeBuilder' does not exist on type 'typeof TypeScript'.
     
             pushAssignScope(withScope, context, null, null, null);
             withType.containedScope = withScope;
@@ -278,26 +278,26 @@
     
         export function preAssignFuncDeclScopes(ast: AST, context: AssignScopeContext) {
                                                      ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
             var funcDecl = <FuncDecl>ast;
                             ~~~~~~~~
-!!! Cannot find name 'FuncDecl'.
+!!! error TS2304: Cannot find name 'FuncDecl'.
     
             var container: Symbol = null;
                            ~~~~~~
-!!! Cannot find name 'Symbol'.
+!!! error TS2304: Cannot find name 'Symbol'.
             var localContainer: Symbol = null;
                                 ~~~~~~
-!!! Cannot find name 'Symbol'.
+!!! error TS2304: Cannot find name 'Symbol'.
             if (funcDecl.type) {
                 localContainer = ast.type.symbol;
             }
     
             var isStatic = hasFlag(funcDecl.fncFlags, FncFlags.Static);
                            ~~~~~~~
-!!! Cannot find name 'hasFlag'.
+!!! error TS2304: Cannot find name 'hasFlag'.
                                                       ~~~~~~~~
-!!! Cannot find name 'FncFlags'.
+!!! error TS2304: Cannot find name 'FncFlags'.
             var isInnerStatic = isStatic && context.scopeChain.fnc != null;
             // for inner static functions, use the parent's member scope, so local vars cannot be captured
             var parentScope = isInnerStatic ? context.scopeChain.fnc.type.memberScope : context.scopeChain.scope;
@@ -309,18 +309,18 @@
             if (context.scopeChain.thisType &&
                 (!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod))) {
                                             ~~~~~~~
-!!! Cannot find name 'hasFlag'.
+!!! error TS2304: Cannot find name 'hasFlag'.
                                                                        ~~~~~~~~
-!!! Cannot find name 'FncFlags'.
+!!! error TS2304: Cannot find name 'FncFlags'.
                 var instType = context.scopeChain.thisType;
     
                 if (!(instType.typeFlags & TypeFlags.IsClass) && !hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) {
                                            ~~~~~~~~~
-!!! Cannot find name 'TypeFlags'.
+!!! error TS2304: Cannot find name 'TypeFlags'.
                                                                   ~~~~~~~
-!!! Cannot find name 'hasFlag'.
+!!! error TS2304: Cannot find name 'hasFlag'.
                                                                                              ~~~~~~~~
-!!! Cannot find name 'FncFlags'.
+!!! error TS2304: Cannot find name 'FncFlags'.
                     if (!funcDecl.isMethod() || isStatic) {
                         parentScope = instType.constructorScope;
                     }
@@ -334,10 +334,10 @@
                         context.scopeChain.previous.scope.container.declAST &&
                         context.scopeChain.previous.scope.container.declAST.nodeType == NodeType.FuncDecl &&
                                                                                         ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                         (<FuncDecl>context.scopeChain.previous.scope.container.declAST).isConstructor) {
                           ~~~~~~~~
-!!! Cannot find name 'FuncDecl'.
+!!! error TS2304: Cannot find name 'FuncDecl'.
     
                             // if the parent is the class constructor, use the constructor scope
                         parentScope = instType.constructorScope;
@@ -359,9 +359,9 @@
     
             if (funcDecl.type == null || hasFlag(funcDecl.type.symbol.flags, SymbolFlags.TypeSetDuringScopeAssignment)) {
                                          ~~~~~~~
-!!! Cannot find name 'hasFlag'.
+!!! error TS2304: Cannot find name 'hasFlag'.
                                                                              ~~~~~~~~~~~
-!!! Cannot find name 'SymbolFlags'.
+!!! error TS2304: Cannot find name 'SymbolFlags'.
                 if (context.scopeChain.fnc && context.scopeChain.fnc.type) {
                     container = context.scopeChain.fnc.type.symbol;
                 }
@@ -369,11 +369,11 @@
                 var funcScope = null;
                 var outerFnc: FuncDecl = context.scopeChain.fnc;
                               ~~~~~~~~
-!!! Cannot find name 'FuncDecl'.
+!!! error TS2304: Cannot find name 'FuncDecl'.
                 var nameText = funcDecl.name ? funcDecl.name.actualText : null;
                 var fgSym: TypeSymbol = null;
                            ~~~~~~~~~~
-!!! Cannot find name 'TypeSymbol'.
+!!! error TS2304: Cannot find name 'TypeSymbol'.
     
                 if (isStatic) {
                     // In the case of function-nested statics, no member list will have bee initialized for the function, so we need
@@ -382,9 +382,9 @@
                     if (outerFnc.type.members == null && container.getType().memberScope) {
                         outerFnc.type.members = (<SymbolScopeBuilder>(<TypeSymbol>container).type.memberScope).valueMembers;
                                                   ~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'SymbolScopeBuilder'.
+!!! error TS2304: Cannot find name 'SymbolScopeBuilder'.
                                                                        ~~~~~~~~~~
-!!! Cannot find name 'TypeSymbol'.
+!!! error TS2304: Cannot find name 'TypeSymbol'.
                     }
                     funcScope = context.scopeChain.fnc.type.memberScope;
                     outerFnc.innerStaticFuncs[outerFnc.innerStaticFuncs.length] = funcDecl;
@@ -396,10 +396,10 @@
                         container.declAST &&
                         container.declAST.nodeType == NodeType.FuncDecl &&
                                                       ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                         (<FuncDecl>container.declAST).isConstructor &&
                           ~~~~~~~~
-!!! Cannot find name 'FuncDecl'.
+!!! error TS2304: Cannot find name 'FuncDecl'.
                         !funcDecl.isMethod()) {
                         funcScope = context.scopeChain.thisType.constructorScope;//locals;
                     }
@@ -428,11 +428,11 @@
                 if (!funcDecl.accessorSymbol && 
                     (funcDecl.fncFlags & FncFlags.ClassMethod) &&
                                          ~~~~~~~~
-!!! Cannot find name 'FncFlags'.
+!!! error TS2304: Cannot find name 'FncFlags'.
                     container && 
                     ((!fgSym || fgSym.declAST.nodeType != NodeType.FuncDecl) && funcDecl.isAccessor()) || 
                                                           ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                         (fgSym && fgSym.isAccessor())) 
                 {
                     funcDecl.accessorSymbol = context.typeFlow.checker.createAccessorSymbol(funcDecl, fgSym, container.getType(), (funcDecl.isMethod() && isStatic), true, funcScope, container);
@@ -440,7 +440,7 @@
     
                 funcDecl.type.symbol.flags |= SymbolFlags.TypeSetDuringScopeAssignment;
                                               ~~~~~~~~~~~
-!!! Cannot find name 'SymbolFlags'.
+!!! error TS2304: Cannot find name 'SymbolFlags'.
             }
     
             // Set the symbol for functions and their overloads
@@ -459,54 +459,54 @@
     
             var funcTable = new StringHashTable();
                                 ~~~~~~~~~~~~~~~
-!!! Cannot find name 'StringHashTable'.
+!!! error TS2304: Cannot find name 'StringHashTable'.
             var funcMembers = new ScopedMembers(new DualStringHashTable(funcTable, new StringHashTable()));
                                   ~~~~~~~~~~~~~
-!!! Cannot find name 'ScopedMembers'.
+!!! error TS2304: Cannot find name 'ScopedMembers'.
                                                     ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'DualStringHashTable'.
+!!! error TS2304: Cannot find name 'DualStringHashTable'.
                                                                                        ~~~~~~~~~~~~~~~
-!!! Cannot find name 'StringHashTable'.
+!!! error TS2304: Cannot find name 'StringHashTable'.
             var ambientFuncTable = new StringHashTable();
                                        ~~~~~~~~~~~~~~~
-!!! Cannot find name 'StringHashTable'.
+!!! error TS2304: Cannot find name 'StringHashTable'.
             var ambientFuncMembers = new ScopedMembers(new DualStringHashTable(ambientFuncTable, new StringHashTable()));
                                          ~~~~~~~~~~~~~
-!!! Cannot find name 'ScopedMembers'.
+!!! error TS2304: Cannot find name 'ScopedMembers'.
                                                            ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'DualStringHashTable'.
+!!! error TS2304: Cannot find name 'DualStringHashTable'.
                                                                                                      ~~~~~~~~~~~~~~~
-!!! Cannot find name 'StringHashTable'.
+!!! error TS2304: Cannot find name 'StringHashTable'.
             var funcStaticTable = new StringHashTable();
                                       ~~~~~~~~~~~~~~~
-!!! Cannot find name 'StringHashTable'.
+!!! error TS2304: Cannot find name 'StringHashTable'.
             var funcStaticMembers = new ScopedMembers(new DualStringHashTable(funcStaticTable, new StringHashTable()));
                                         ~~~~~~~~~~~~~
-!!! Cannot find name 'ScopedMembers'.
+!!! error TS2304: Cannot find name 'ScopedMembers'.
                                                           ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'DualStringHashTable'.
+!!! error TS2304: Cannot find name 'DualStringHashTable'.
                                                                                                    ~~~~~~~~~~~~~~~
-!!! Cannot find name 'StringHashTable'.
+!!! error TS2304: Cannot find name 'StringHashTable'.
             var ambientFuncStaticTable = new StringHashTable();
                                              ~~~~~~~~~~~~~~~
-!!! Cannot find name 'StringHashTable'.
+!!! error TS2304: Cannot find name 'StringHashTable'.
             var ambientFuncStaticMembers = new ScopedMembers(new DualStringHashTable(ambientFuncStaticTable, new StringHashTable()));
                                                ~~~~~~~~~~~~~
-!!! Cannot find name 'ScopedMembers'.
+!!! error TS2304: Cannot find name 'ScopedMembers'.
                                                                  ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'DualStringHashTable'.
+!!! error TS2304: Cannot find name 'DualStringHashTable'.
                                                                                                                  ~~~~~~~~~~~~~~~
-!!! Cannot find name 'StringHashTable'.
+!!! error TS2304: Cannot find name 'StringHashTable'.
     
             // REVIEW: Is it a problem that this is being set twice for properties and constructors?
             funcDecl.unitIndex = context.typeFlow.checker.locationInfo.unitIndex;
     
             var locals = new SymbolScopeBuilder(funcMembers, ambientFuncMembers, null, null, parentScope, localContainer);
                              ~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'SymbolScopeBuilder'.
+!!! error TS2304: Cannot find name 'SymbolScopeBuilder'.
             var statics = new SymbolScopeBuilder(funcStaticMembers, ambientFuncStaticMembers, null, null, parentScope, null);
                               ~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'SymbolScopeBuilder'.
+!!! error TS2304: Cannot find name 'SymbolScopeBuilder'.
     
             if (funcDecl.isConstructor && context.scopeChain.thisType) {
                 context.scopeChain.thisType.constructorScope = locals;
@@ -539,12 +539,12 @@
                 // for mapping when type checking
                 var fgSym = <TypeSymbol>ast.type.symbol;
                              ~~~~~~~~~~
-!!! Cannot find name 'TypeSymbol'.
+!!! error TS2304: Cannot find name 'TypeSymbol'.
                 if (((funcDecl.fncFlags & FncFlags.Signature) == FncFlags.None) && funcDecl.vars) {
                                           ~~~~~~~~
-!!! Cannot find name 'FncFlags'.
+!!! error TS2304: Cannot find name 'FncFlags'.
                                                                  ~~~~~~~~
-!!! Cannot find name 'FncFlags'.
+!!! error TS2304: Cannot find name 'FncFlags'.
                     context.typeFlow.addLocalsFromScope(locals, fgSym, funcDecl.vars,
                                                         funcTable, false);
                     context.typeFlow.addLocalsFromScope(statics, fgSym, funcDecl.statics,
@@ -555,7 +555,7 @@
                     for (var i = 0; i < len; i++) {
                         var paramSym: ParameterSymbol = signature.parameters[i];
                                       ~~~~~~~~~~~~~~~
-!!! Cannot find name 'ParameterSymbol'.
+!!! error TS2304: Cannot find name 'ParameterSymbol'.
                         context.typeFlow.checker.resolveTypeLink(locals,
                                                                     paramSym.parameter.typeLink, true);
                     }
@@ -566,37 +566,37 @@
     
             if (!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) {
                                            ~~~~~~~
-!!! Cannot find name 'hasFlag'.
+!!! error TS2304: Cannot find name 'hasFlag'.
                                                                       ~~~~~~~~
-!!! Cannot find name 'FncFlags'.
+!!! error TS2304: Cannot find name 'FncFlags'.
                 var thisType = (funcDecl.isConstructor && hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) ? context.scopeChain.thisType : null;
                                                           ~~~~~~~
-!!! Cannot find name 'hasFlag'.
+!!! error TS2304: Cannot find name 'hasFlag'.
                                                                                      ~~~~~~~~
-!!! Cannot find name 'FncFlags'.
+!!! error TS2304: Cannot find name 'FncFlags'.
                 pushAssignScope(locals, context, thisType, null, funcDecl);
             }
         }
     
         export function preAssignCatchScopes(ast: AST, context: AssignScopeContext) {
                                                   ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
             var catchBlock = <Catch>ast;
                               ~~~~~
-!!! Cannot find name 'Catch'.
+!!! error TS2304: Cannot find name 'Catch'.
             if (catchBlock.param) {
                 var catchTable = new ScopedMembers(new DualStringHashTable(new StringHashTable(), new StringHashTable())); // REVIEW: Should we be allocating a public table instead of a private one?
                                      ~~~~~~~~~~~~~
-!!! Cannot find name 'ScopedMembers'.
+!!! error TS2304: Cannot find name 'ScopedMembers'.
                                                        ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'DualStringHashTable'.
+!!! error TS2304: Cannot find name 'DualStringHashTable'.
                                                                                ~~~~~~~~~~~~~~~
-!!! Cannot find name 'StringHashTable'.
+!!! error TS2304: Cannot find name 'StringHashTable'.
                                                                                                       ~~~~~~~~~~~~~~~
-!!! Cannot find name 'StringHashTable'.
+!!! error TS2304: Cannot find name 'StringHashTable'.
                 var catchLocals = new SymbolScopeBuilder(catchTable, null, null, null, context.scopeChain.scope,
                                       ~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'SymbolScopeBuilder'.
+!!! error TS2304: Cannot find name 'SymbolScopeBuilder'.
                                                        context.scopeChain.scope.container);
                 catchBlock.containedScope = catchLocals;
                 pushAssignScope(catchLocals, context, context.scopeChain.thisType, context.scopeChain.classType, context.scopeChain.fnc);
@@ -605,56 +605,56 @@
     
         export function preAssignScopes(ast: AST, parent: AST, walker: IAstWalker) {
                                              ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                                                           ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                                                                        ~~~~~~~~~~
-!!! Cannot find name 'IAstWalker'.
+!!! error TS2304: Cannot find name 'IAstWalker'.
             var context:AssignScopeContext = walker.state;
             var go = true;
     
             if (ast) {
                 if (ast.nodeType == NodeType.List) {
                                     ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                     var list = <ASTList>ast;
                                 ~~~~~~~
-!!! Cannot find name 'ASTList'.
+!!! error TS2304: Cannot find name 'ASTList'.
                     list.enclosingScope = context.scopeChain.scope;
                 }
                 else if (ast.nodeType == NodeType.ModuleDeclaration) {
                                          ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                     preAssignModuleScopes(ast, context);
                 }
                 else if (ast.nodeType == NodeType.ClassDeclaration) {
                                          ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                     preAssignClassScopes(ast, context);
                 }
                 else if (ast.nodeType == NodeType.InterfaceDeclaration) {
                                          ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                     preAssignInterfaceScopes(ast, context);
                 }
                 else if (ast.nodeType == NodeType.With) {
                                          ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                     preAssignWithScopes(ast, context);
                 }
                 else if (ast.nodeType == NodeType.FuncDecl) {
                                          ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                     preAssignFuncDeclScopes(ast, context);
                 }
                 else if (ast.nodeType == NodeType.Catch) {
                                          ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                     preAssignCatchScopes(ast, context);
                 }
                 else if (ast.nodeType == NodeType.TypeRef) {
                                          ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                     go = false;
                 }
             }
@@ -664,20 +664,20 @@
     
         export function postAssignScopes(ast: AST, parent: AST, walker: IAstWalker) {
                                               ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                                                            ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                                                                         ~~~~~~~~~~
-!!! Cannot find name 'IAstWalker'.
+!!! error TS2304: Cannot find name 'IAstWalker'.
             var context:AssignScopeContext = walker.state;
             var go = true;
             if (ast) {
                 if (ast.nodeType == NodeType.ModuleDeclaration) {
                                     ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                     var prevModDecl = <ModuleDeclaration>ast;
                                        ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ModuleDeclaration'.
+!!! error TS2304: Cannot find name 'ModuleDeclaration'.
     
                     popAssignScope(context);
     
@@ -688,39 +688,39 @@
                 }
                 else if (ast.nodeType == NodeType.ClassDeclaration) {
                                          ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                     popAssignScope(context);
                 }
                 else if (ast.nodeType == NodeType.InterfaceDeclaration) {
                                          ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                     popAssignScope(context);
                 }
                 else if (ast.nodeType == NodeType.With) {
                                          ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                     popAssignScope(context);
                 }
                 else if (ast.nodeType == NodeType.FuncDecl) {
                                          ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                     var funcDecl = <FuncDecl>ast;
                                     ~~~~~~~~
-!!! Cannot find name 'FuncDecl'.
+!!! error TS2304: Cannot find name 'FuncDecl'.
                     if ((!funcDecl.isConstructor || hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) && !funcDecl.isOverload) {
                                                     ~~~~~~~
-!!! Cannot find name 'hasFlag'.
+!!! error TS2304: Cannot find name 'hasFlag'.
                                                                                ~~~~~~~~
-!!! Cannot find name 'FncFlags'.
+!!! error TS2304: Cannot find name 'FncFlags'.
                         popAssignScope(context);
                     }
                 }
                 else if (ast.nodeType == NodeType.Catch) {
                                          ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                     var catchBlock = <Catch>ast;
                                       ~~~~~
-!!! Cannot find name 'Catch'.
+!!! error TS2304: Cannot find name 'Catch'.
                     if (catchBlock.param) {
                         popAssignScope(context);
                     }

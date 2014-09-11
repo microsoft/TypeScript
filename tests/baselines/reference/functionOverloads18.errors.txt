@@ -1,6 +1,6 @@
 ==== tests/cases/compiler/functionOverloads18.ts (1 errors) ====
     function foo(bar:{a:number;});
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Overload signature is not compatible with function implementation.
+!!! error TS2394: Overload signature is not compatible with function implementation.
     function foo(bar:{a:string;}) { return {a:""} }
     

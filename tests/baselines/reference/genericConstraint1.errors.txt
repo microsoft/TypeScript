@@ -8,4 +8,4 @@
     var x = new C<number>();
     x.bar2<string>(2, "");
            ~~~~~~
-!!! Type 'string' does not satisfy the constraint 'number'.
+!!! error TS2344: Type 'string' does not satisfy the constraint 'number'.

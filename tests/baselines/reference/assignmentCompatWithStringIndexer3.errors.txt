@@ -7,7 +7,7 @@
     
     var a: A;
            ~
-!!! Cannot find name 'A'.
+!!! error TS2304: Cannot find name 'A'.
     var b1: { [x: string]: string; }
     a = b1; // error
     b1 = a; // error
@@ -22,13 +22,13 @@
             var b: { [x: string]: string; }
             a = b; // error
             ~
-!!! Type '{ [x: string]: string; }' is not assignable to type 'A<T>':
-!!!   Index signatures are incompatible:
-!!!     Type 'string' is not assignable to type 'T'.
+!!! error TS2322: Type '{ [x: string]: string; }' is not assignable to type 'A<T>':
+!!! error TS2322:   Index signatures are incompatible:
+!!! error TS2322:     Type 'string' is not assignable to type 'T'.
             b = a; // error
             ~
-!!! Type 'A<T>' is not assignable to type '{ [x: string]: string; }':
-!!!   Index signatures are incompatible:
-!!!     Type 'T' is not assignable to type 'string'.
+!!! error TS2322: Type 'A<T>' is not assignable to type '{ [x: string]: string; }':
+!!! error TS2322:   Index signatures are incompatible:
+!!! error TS2322:     Type 'T' is not assignable to type 'string'.
         }
     }

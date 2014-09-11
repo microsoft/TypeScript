@@ -2,5 +2,5 @@
     module M {
         export declare module "M" { }
                               ~~~
-!!! Ambient external modules cannot be nested in other modules.
+!!! error TS2435: Ambient external modules cannot be nested in other modules.
     }

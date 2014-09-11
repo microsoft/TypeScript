@@ -1,5 +1,5 @@
 ==== tests/cases/conformance/parser/ecmascript5/InterfaceDeclarations/parserInterfaceDeclaration8.ts (1 errors) ====
     interface string {
               ~~~~~~
-!!! Interface name cannot be 'string'
+!!! error TS2427: Interface name cannot be 'string'
     }

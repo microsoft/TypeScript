@@ -10,7 +10,7 @@
         // Should error.  M1 should bind to the variable, not to the module.
         class B extends M1.A<string> {
                            ~
-!!! Property 'A' does not exist on type 'number'.
+!!! error TS2339: Property 'A' does not exist on type 'number'.
         }
     }
     module M3 {

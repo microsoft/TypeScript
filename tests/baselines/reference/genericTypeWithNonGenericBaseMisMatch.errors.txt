@@ -4,23 +4,23 @@
     }
     class X<T extends { a: string }> implements I {
           ~
-!!! Class 'X<T>' incorrectly implements interface 'I':
-!!!   Types of property 'f' are incompatible:
-!!!     Type '(a: T) => void' is not assignable to type '(a: { a: number; }) => void':
-!!!       Types of parameters 'a' and 'a' are incompatible:
-!!!         Type 'T' is not assignable to type '{ a: number; }':
-!!!           Types of property 'a' are incompatible:
-!!!             Type 'string' is not assignable to type 'number'.
+!!! error TS2421: Class 'X<T>' incorrectly implements interface 'I':
+!!! error TS2421:   Types of property 'f' are incompatible:
+!!! error TS2421:     Type '(a: T) => void' is not assignable to type '(a: { a: number; }) => void':
+!!! error TS2421:       Types of parameters 'a' and 'a' are incompatible:
+!!! error TS2421:         Type 'T' is not assignable to type '{ a: number; }':
+!!! error TS2421:           Types of property 'a' are incompatible:
+!!! error TS2421:             Type 'string' is not assignable to type 'number'.
     	f(a: T): void { }
     }
     var x = new X<{ a: string }>();
     var i: I = x; // Should not be allowed -- type of 'f' is incompatible with 'I'
         ~
-!!! Type 'X<{ a: string; }>' is not assignable to type 'I':
-!!!   Types of property 'f' are incompatible:
-!!!     Type '(a: { a: string; }) => void' is not assignable to type '(a: { a: number; }) => void':
-!!!       Types of parameters 'a' and 'a' are incompatible:
-!!!         Type '{ a: string; }' is not assignable to type '{ a: number; }':
-!!!           Types of property 'a' are incompatible:
-!!!             Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type 'X<{ a: string; }>' is not assignable to type 'I':
+!!! error TS2322:   Types of property 'f' are incompatible:
+!!! error TS2322:     Type '(a: { a: string; }) => void' is not assignable to type '(a: { a: number; }) => void':
+!!! error TS2322:       Types of parameters 'a' and 'a' are incompatible:
+!!! error TS2322:         Type '{ a: string; }' is not assignable to type '{ a: number; }':
+!!! error TS2322:           Types of property 'a' are incompatible:
+!!! error TS2322:             Type 'string' is not assignable to type 'number'.
     

@@ -5,11 +5,11 @@
     }
     interface Deriver extends Base {
               ~~~~~~~
-!!! Interface 'Deriver' incorrectly extends interface 'Base':
-!!!   Types of property 'addEventListener' are incompatible:
-!!!     Type '(x: 'bar') => string' is not assignable to type '{ (x: string): any; (x: 'foo'): string; }'.
+!!! error TS2429: Interface 'Deriver' incorrectly extends interface 'Base':
+!!! error TS2429:   Types of property 'addEventListener' are incompatible:
+!!! error TS2429:     Type '(x: 'bar') => string' is not assignable to type '{ (x: string): any; (x: 'foo'): string; }'.
         addEventListener(x: 'bar'): string; // shouldn't need to redeclare the string overload
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
     }
     

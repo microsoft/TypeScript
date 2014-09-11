@@ -2,6 +2,6 @@
     function getObj() {
        ().toString();
         ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     }
     

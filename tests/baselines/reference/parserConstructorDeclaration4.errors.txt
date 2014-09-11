@@ -2,5 +2,5 @@
     class C {
       declare constructor() { }
       ~~~~~~~
-!!! 'declare' modifier cannot appear on a class element.
+!!! error TS1031: 'declare' modifier cannot appear on a class element.
     }

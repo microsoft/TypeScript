@@ -10,23 +10,23 @@
             public m2: string;
             public m22: C; // don't generate
             ~~~~~~~~~~~~~~
-!!! Public property 'm22' of exported class has or is using private name 'C'.
+!!! error TS4031: Public property 'm22' of exported class has or is using private name 'C'.
             public m23: E;
             public m24: I1;
             public m25: I2; // don't generate
             ~~~~~~~~~~~~~~~
-!!! Public property 'm25' of exported class has or is using private name 'I2'.
+!!! error TS4031: Public property 'm25' of exported class has or is using private name 'I2'.
             public m232(): E { return null;}
             public m242(): I1 { return null; }
             public m252(): I2 { return null; } // don't generate
                    ~~~~
-!!! Return type of public method from exported class has or is using private name 'I2'.
+!!! error TS4055: Return type of public method from exported class has or is using private name 'I2'.
             public m26(i:I1) {}
             public m262(i:I2) {}
                         ~~~~
-!!! Parameter 'i' of public method from exported class has or is using private name 'I2'.
+!!! error TS4073: Parameter 'i' of public method from exported class has or is using private name 'I2'.
             public m3():C { return new C(); }
                    ~~
-!!! Return type of public method from exported class has or is using private name 'C'.
+!!! error TS4055: Return type of public method from exported class has or is using private name 'C'.
         }
     }

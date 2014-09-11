@@ -2,7 +2,7 @@
     import Greeter = require("importAsBaseClass_0");
     class Hello extends Greeter { }
                         ~~~~~~~
-!!! Cannot find name 'Greeter'.
+!!! error TS2304: Cannot find name 'Greeter'.
     
 ==== tests/cases/compiler/importAsBaseClass_0.ts (0 errors) ====
     export class Greeter {

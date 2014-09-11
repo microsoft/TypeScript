@@ -5,45 +5,45 @@
         [x: number]: string;
         [x: number]: string;
         ~~~~~~~~~~~~~~~~~~~~
-!!! Duplicate number index signature.
+!!! error TS2375: Duplicate number index signature.
     }
     
     interface I {
         [x: number]: string;
         [x: number]: string;
         ~~~~~~~~~~~~~~~~~~~~
-!!! Duplicate number index signature.
+!!! error TS2375: Duplicate number index signature.
     }
     
     var a: {
         [x: number]: string;
         [x: number]: string;
         ~~~~~~~~~~~~~~~~~~~~
-!!! Duplicate number index signature.
+!!! error TS2375: Duplicate number index signature.
     }
     
     var b: {
         [x: number]: string;
         [x: number]: string
         ~~~~~~~~~~~~~~~~~~~
-!!! Duplicate number index signature.
+!!! error TS2375: Duplicate number index signature.
     } = { 1: '', "2": '' }
     
     class C2<T> {
         [x: number]: string;
         [x: number]: string;
         ~~~~~~~~~~~~~~~~~~~~
-!!! Duplicate number index signature.
+!!! error TS2375: Duplicate number index signature.
     }
     
     interface I<T> {
               ~
-!!! All declarations of an interface must have identical type parameters.
+!!! error TS2428: All declarations of an interface must have identical type parameters.
         [x: number]: string;
         ~~~~~~~~~~~~~~~~~~~~
-!!! Duplicate number index signature.
+!!! error TS2375: Duplicate number index signature.
         [x: number]: string;
         ~~~~~~~~~~~~~~~~~~~~
-!!! Duplicate number index signature.
+!!! error TS2375: Duplicate number index signature.
     }
     

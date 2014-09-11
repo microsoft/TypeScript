@@ -4,8 +4,8 @@
     foo('foo'); 
     foo('foo','bar');
               ~~~~~
-!!! Argument of type 'string' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     foo('foo', 1, 'bar');
     ~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     foo();

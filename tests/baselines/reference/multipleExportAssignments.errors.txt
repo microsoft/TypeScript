@@ -13,9 +13,9 @@
     };
     export = server;
     ~~~~~~~~~~~~~~~~
-!!! A module cannot have more than one export assignment.
+!!! error TS2308: A module cannot have more than one export assignment.
     export = connectExport;
     ~~~~~~~~~~~~~~~~~~~~~~~
-!!! A module cannot have more than one export assignment.
+!!! error TS2308: A module cannot have more than one export assignment.
      
     

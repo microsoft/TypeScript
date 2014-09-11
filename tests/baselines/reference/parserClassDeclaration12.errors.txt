@@ -2,6 +2,6 @@
     class C {
        constructor();
        ~~~~~~~~~~~~~~
-!!! Overload signature is not compatible with function implementation.
+!!! error TS2394: Overload signature is not compatible with function implementation.
        constructor(a) { }
     }

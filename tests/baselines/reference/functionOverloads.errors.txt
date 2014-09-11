@@ -4,4 +4,4 @@
     function foo(bar?: string): any { return "" };
     var x = foo(5);
                 ~
-!!! Argument of type 'number' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.

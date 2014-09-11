@@ -2,4 +2,4 @@
     var x;
     (1, x)=0;
     ~~~~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.

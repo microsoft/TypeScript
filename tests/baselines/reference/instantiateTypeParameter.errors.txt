@@ -2,11 +2,11 @@
     interface Foo<T> {
         var x: T<>;
         ~~~
-!!! Property or signature expected.
+!!! error TS1131: Property or signature expected.
                 ~~
-!!! Type argument list cannot be empty.
+!!! error TS1099: Type argument list cannot be empty.
                ~~~
-!!! Cannot find name 'T'.
+!!! error TS2304: Cannot find name 'T'.
     }
     ~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.

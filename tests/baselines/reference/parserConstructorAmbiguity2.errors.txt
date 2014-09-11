@@ -1,4 +1,4 @@
 ==== tests/cases/conformance/parser/ecmascript5/Generics/parserConstructorAmbiguity2.ts (1 errors) ====
     new Date<A
              ~
-!!! Cannot find name 'A'.
+!!! error TS2304: Cannot find name 'A'.

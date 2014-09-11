@@ -5,5 +5,5 @@
         C = 1 << 1,
         D,
         ~
-!!! Enum member must have initializer.
+!!! error TS1061: Enum member must have initializer.
     }

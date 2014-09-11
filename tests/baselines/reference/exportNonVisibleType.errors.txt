@@ -7,7 +7,7 @@
     var x: I1 = {a: "test", b: 42};
     export = x; // Should fail, I1 not exported.
     ~~~~~~~~~~~
-!!! Cannot compile external modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.
     
     
 ==== tests/cases/conformance/externalModules/foo2.ts (0 errors) ====

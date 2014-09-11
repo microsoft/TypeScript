@@ -12,22 +12,22 @@
     
             public fnope(x:string,...rest:number) {
                                   ~~~~~~~~~~~~~~
-!!! A rest parameter must be of an array type.
+!!! error TS2370: A rest parameter must be of an array type.
         
             }
     
             public fonly(...rest:string[]) {
                 builder="";
                 ~~~~~~~
-!!! Cannot find name 'builder'.
+!!! error TS2304: Cannot find name 'builder'.
                 for (var i=0;i<rest.length;i++) {
                     builder+=rest[i];
                     ~~~~~~~
-!!! Cannot find name 'builder'.
+!!! error TS2304: Cannot find name 'builder'.
                 }
                 return builder;
                        ~~~~~~~
-!!! Cannot find name 'builder'.
+!!! error TS2304: Cannot find name 'builder'.
             }
         }
     }
@@ -36,18 +36,18 @@
     var result="";
     result+=x.f(x,3,3); // bad first param
                 ~
-!!! Argument of type 'C' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'C' is not assignable to parameter of type 'string'.
     result+=x.f(3,"hello",3); // bad second param
                 ~
-!!! Argument of type 'number' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     result+=x.f("hello",3,3,3,3,3); // ok
     result+=x.f("hello"); // ok varargs length 0
     result+=x.fonly(3); // ok conversion
                     ~
-!!! Argument of type 'number' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     result+=x.fonly(x); // bad param
                     ~
-!!! Argument of type 'C' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'C' is not assignable to parameter of type 'string'.
     result+=x.fonly("a"); // ok 
     result+=x.fonly("a","b","c","d"); //ok 
     

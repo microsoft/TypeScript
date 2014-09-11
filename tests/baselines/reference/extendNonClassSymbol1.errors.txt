@@ -3,4 +3,4 @@
     var x = A;
     class C extends x { } // error, could not find symbol xs
                     ~
-!!! Cannot find name 'x'.
+!!! error TS2304: Cannot find name 'x'.

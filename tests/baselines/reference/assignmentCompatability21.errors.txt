@@ -9,7 +9,7 @@
     }
     __test2__.__val__obj = __test1__.__val__obj4
     ~~~~~~~~~~~~~~~~~~~~
-!!! Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '{ two: string[]; }':
-!!!   Types of property 'two' are incompatible:
-!!!     Type 'string' is not assignable to type 'string[]':
-!!!       Property 'push' is missing in type 'String'.
+!!! error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '{ two: string[]; }':
+!!! error TS2322:   Types of property 'two' are incompatible:
+!!! error TS2322:     Type 'string' is not assignable to type 'string[]':
+!!! error TS2322:       Property 'push' is missing in type 'String'.

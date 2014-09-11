@@ -6,10 +6,10 @@
     // Only difference here is order of type parameters
     function uFirst<U extends X<T>, T>(x: U) { }
                     ~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     function tFirst<T, U extends X<T>>(x: U) { }
                        ~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     var z: X<number> = null;
     
     // Both of these should be allowed

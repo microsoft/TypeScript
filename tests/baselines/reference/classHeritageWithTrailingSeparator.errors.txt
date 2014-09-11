@@ -2,5 +2,5 @@
     class C { foo: number }
     class D extends C, {
                      ~
-!!! '{' expected.
+!!! error TS1005: '{' expected.
     }

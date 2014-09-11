@@ -2,7 +2,7 @@
     class Foo2 {
         constructor(_this: number) { //Error
                     ~~~~~
-!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+!!! error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
             var lambda = () => {
                 return x => this;   // New scope.  So should inject new _this capture
             }
@@ -12,7 +12,7 @@
     class Foo3 {
         constructor(private _this: number) { // Error
                             ~~~~~
-!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+!!! error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
             var lambda = () => {
                 return x => this;   // New scope.  So should inject new _this capture
             }
@@ -24,7 +24,7 @@
         constructor(_this: string); // No code gen - no error
         constructor(_this: any) { // Error
                     ~~~~~
-!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+!!! error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
             var lambda = () => {
                 return x => this;   // New scope.  So should inject new _this capture
             }
@@ -36,7 +36,7 @@
         constructor(_this: string); // No code gen - no error
         constructor(private _this: any) { // Error
                             ~~~~~
-!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+!!! error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
             var lambda = () => {
                 return x => this;   // New scope.  So should inject new _this capture
             }

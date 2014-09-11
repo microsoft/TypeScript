@@ -3,7 +3,7 @@
     	foo: T;
     	length: number;
     	~~~~~~
-!!! Duplicate identifier 'length'.
+!!! error TS2300: Duplicate identifier 'length'.
     }
     
     function map<U>() {

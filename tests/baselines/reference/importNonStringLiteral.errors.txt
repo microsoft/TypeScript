@@ -2,7 +2,7 @@
     var x = "filename";
     import foo = require(x); // invalid
                          ~
-!!! String literal expected.
+!!! error TS1141: String literal expected.
                           ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
     

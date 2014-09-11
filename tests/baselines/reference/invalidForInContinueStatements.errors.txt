@@ -4,13 +4,13 @@
     // naked continue not allowed
     continue;
     ~~~~~~~~~
-!!! A 'continue' statement can only be used within an enclosing iteration statement.
+!!! error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
     
     // non-existent label
     ONE:
     for (var x in {}) continue TWO;
                       ~~~~~~~~~~~~~
-!!! A 'continue' statement can only jump to a label of an enclosing iteration statement.
+!!! error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
     
     // continue from inside function
     TWO:
@@ -18,7 +18,7 @@
         var fn = () => {
             continue TWO;
             ~~~~~~~~~~~~~
-!!! Jump target cannot cross function boundary.
+!!! error TS1107: Jump target cannot cross function boundary.
         }
     }
     
@@ -27,7 +27,7 @@
         var fn = function () {
             continue THREE;
             ~~~~~~~~~~~~~~~
-!!! Jump target cannot cross function boundary.
+!!! error TS1107: Jump target cannot cross function boundary.
         }
     }
     
@@ -35,7 +35,7 @@
     for (var x in {}) {
         continue FIVE;
         ~~~~~~~~~~~~~~
-!!! A 'continue' statement can only jump to a label of an enclosing iteration statement.
+!!! error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
         FIVE:
         for (var x in {}) { }
     }
@@ -47,5 +47,5 @@
     for (var x in {}) {
         continue NINE;
         ~~~~~~~~~~~~~~
-!!! A 'continue' statement can only jump to a label of an enclosing iteration statement.
+!!! error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
     }

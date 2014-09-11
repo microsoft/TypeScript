@@ -9,7 +9,7 @@
         }
         public _store = store; // should be an error.
                         ~~~~~
-!!! Cannot find name 'store'.
+!!! error TS2304: Cannot find name 'store'.
     }
     
     class Foo2 {

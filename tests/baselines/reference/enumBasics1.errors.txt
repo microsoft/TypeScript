@@ -26,7 +26,7 @@
     */
     E.A.A; // should error
         ~
-!!! Property 'A' does not exist on type 'E'.
+!!! error TS2339: Property 'A' does not exist on type 'E'.
     
     
     enum E2 {
@@ -37,6 +37,6 @@
     enum E2 { // should error for continued autonumbering
     	C,
     	~
-!!! In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
+!!! error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
     	D,
     }

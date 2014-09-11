@@ -9,5 +9,5 @@
     module C {
         export var y = C.bar; // error
                        ~~~~~
-!!! Property 'C.bar' is inaccessible.
+!!! error TS2341: Property 'C.bar' is inaccessible.
     }

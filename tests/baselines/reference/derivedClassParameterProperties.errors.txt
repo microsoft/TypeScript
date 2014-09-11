@@ -21,7 +21,7 @@
     ~~~~~~~~~~~~~~~~~~~~~~~~~
         }
     ~~~~~
-!!! A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
+!!! error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
     }
     
     class Derived3 extends Base {
@@ -41,7 +41,7 @@
     ~~~~~~~~~~~~~~~~~~~~~~~~~
         }
     ~~~~~
-!!! A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
+!!! error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
     }
     
     class Derived5 extends Base {
@@ -74,7 +74,7 @@
     ~~~~~~~~~~~~~~~~~~~~~~~~~
         }
     ~~~~~
-!!! A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
+!!! error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
     }
     
     class Derived8 extends Base {
@@ -103,7 +103,7 @@
     ~~~~~~~~~~~~~~~~~~~~~~~~~
         }
     ~~~~~
-!!! A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
+!!! error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
     }
     
     class Derived10<T> extends Base2<T> {

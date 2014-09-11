@@ -1,7 +1,7 @@
 ==== tests/cases/conformance/parser/ecmascript5/Statements/parserWhileStatement1.d.ts (2 errors) ====
     while (e) {
     ~~~~~
-!!! Statements are not allowed in ambient contexts.
+!!! error TS1036: Statements are not allowed in ambient contexts.
            ~
-!!! Cannot find name 'e'.
+!!! error TS2304: Cannot find name 'e'.
     }

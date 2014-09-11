@@ -10,7 +10,7 @@
     module clodule1 {
         function f(x: T) { }
                       ~
-!!! Cannot find name 'T'.
+!!! error TS2304: Cannot find name 'T'.
     }
     
     class clodule2<T>{
@@ -22,11 +22,11 @@
     module clodule2 {
         var x: T;
                ~
-!!! Cannot find name 'T'.
+!!! error TS2304: Cannot find name 'T'.
     
         class D<U extends T>{
                           ~
-!!! Cannot find name 'T'.
+!!! error TS2304: Cannot find name 'T'.
             id: string;
             value: U;
         }
@@ -41,7 +41,7 @@
     module clodule3 {
         export var y = { id: T };
                              ~
-!!! Cannot find name 'T'.
+!!! error TS2304: Cannot find name 'T'.
     }
     
     class clodule4<T>{
@@ -54,7 +54,7 @@
         class D {
             name: T;
                   ~
-!!! Cannot find name 'T'.
+!!! error TS2304: Cannot find name 'T'.
         }
     }
     

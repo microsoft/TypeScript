@@ -2,10 +2,10 @@
     class C {
         set x(y) { }
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         static set y(z) { }
                    ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     }
     
     module C {
@@ -14,5 +14,5 @@
     module C {
         export function x() { }
                         ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
     }

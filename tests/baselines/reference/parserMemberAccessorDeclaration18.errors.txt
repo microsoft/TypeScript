@@ -2,5 +2,5 @@
     class C {
        set Foo(...a) { }
            ~~~
-!!! A 'set' accessor cannot have rest parameter.
+!!! error TS1053: A 'set' accessor cannot have rest parameter.
     }

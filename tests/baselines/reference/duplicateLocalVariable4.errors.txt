@@ -6,4 +6,4 @@
     var x = E;
     var x = E.a;
         ~
-!!! Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'typeof E', but here has type 'E'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'typeof E', but here has type 'E'.

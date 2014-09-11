@@ -5,46 +5,46 @@
         [x: number]: string;
         [x: number]: string;
         ~~~~~~~~~~~~~~~~~~~~
-!!! Duplicate number index signature.
+!!! error TS2375: Duplicate number index signature.
     }
     
     interface String {
         [x: number]: string;
         ~~~~~~~~~~~~~~~~~~~~
-!!! Duplicate number index signature.
+!!! error TS2375: Duplicate number index signature.
         [x: number]: string;
         ~~~~~~~~~~~~~~~~~~~~
-!!! Duplicate number index signature.
+!!! error TS2375: Duplicate number index signature.
     }
     
     interface Array<T> {
         [x: number]: T;
         ~~~~~~~~~~~~~~~
-!!! Duplicate number index signature.
+!!! error TS2375: Duplicate number index signature.
         [x: number]: T;
         ~~~~~~~~~~~~~~~
-!!! Duplicate number index signature.
+!!! error TS2375: Duplicate number index signature.
     }
     
     class C {
         [x: number]: string;
         [x: number]: string;
         ~~~~~~~~~~~~~~~~~~~~
-!!! Duplicate number index signature.
+!!! error TS2375: Duplicate number index signature.
     }
     
     interface I {
         [x: number]: string;
         [x: number]: string;
         ~~~~~~~~~~~~~~~~~~~~
-!!! Duplicate number index signature.
+!!! error TS2375: Duplicate number index signature.
     }
     
     var a: {
         [x: number]: string;
         [x: number]: string;
         ~~~~~~~~~~~~~~~~~~~~
-!!! Duplicate number index signature.
+!!! error TS2375: Duplicate number index signature.
     }
     
     

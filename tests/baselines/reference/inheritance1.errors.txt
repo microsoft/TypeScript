@@ -14,15 +14,15 @@
     }
     class ImageBase extends Control implements SelectableControl{
           ~~~~~~~~~
-!!! Class 'ImageBase' incorrectly implements interface 'SelectableControl':
-!!!   Property 'select' is missing in type 'ImageBase'.
+!!! error TS2421: Class 'ImageBase' incorrectly implements interface 'SelectableControl':
+!!! error TS2421:   Property 'select' is missing in type 'ImageBase'.
     }
     class Image1 extends Control {
     }
     class Locations implements SelectableControl {
           ~~~~~~~~~
-!!! Class 'Locations' incorrectly implements interface 'SelectableControl':
-!!!   Property 'state' is missing in type 'Locations'.
+!!! error TS2421: Class 'Locations' incorrectly implements interface 'SelectableControl':
+!!! error TS2421:   Property 'state' is missing in type 'Locations'.
         select() { }
     }
     class Locations1 {
@@ -37,8 +37,8 @@
     b = sc;
     b = c;
     ~
-!!! Type 'Control' is not assignable to type 'Button':
-!!!   Property 'select' is missing in type 'Control'.
+!!! error TS2322: Type 'Control' is not assignable to type 'Button':
+!!! error TS2322:   Property 'select' is missing in type 'Control'.
     
     var t: TextBox;
     sc = t;
@@ -46,13 +46,13 @@
     t = sc;
     t = c;
     ~
-!!! Type 'Control' is not assignable to type 'TextBox':
-!!!   Property 'select' is missing in type 'Control'.
+!!! error TS2322: Type 'Control' is not assignable to type 'TextBox':
+!!! error TS2322:   Property 'select' is missing in type 'Control'.
     
     var i: ImageBase;
     sc = i;
     ~~
-!!! Type 'ImageBase' is not assignable to type 'SelectableControl'.
+!!! error TS2323: Type 'ImageBase' is not assignable to type 'SelectableControl'.
     c = i;
     i = sc;
     i = c;
@@ -60,8 +60,8 @@
     var i1: Image1;
     sc = i1;
     ~~
-!!! Type 'Image1' is not assignable to type 'SelectableControl':
-!!!   Property 'select' is missing in type 'Image1'.
+!!! error TS2322: Type 'Image1' is not assignable to type 'SelectableControl':
+!!! error TS2322:   Property 'select' is missing in type 'Image1'.
     c = i1;
     i1 = sc;
     i1 = c;
@@ -69,28 +69,28 @@
     var l: Locations;
     sc = l;
     ~~
-!!! Type 'Locations' is not assignable to type 'SelectableControl'.
+!!! error TS2323: Type 'Locations' is not assignable to type 'SelectableControl'.
     c = l;
     ~
-!!! Type 'Locations' is not assignable to type 'Control':
-!!!   Property 'state' is missing in type 'Locations'.
+!!! error TS2322: Type 'Locations' is not assignable to type 'Control':
+!!! error TS2322:   Property 'state' is missing in type 'Locations'.
     l = sc;
     l = c;
     ~
-!!! Type 'Control' is not assignable to type 'Locations':
-!!!   Property 'select' is missing in type 'Control'.
+!!! error TS2322: Type 'Control' is not assignable to type 'Locations':
+!!! error TS2322:   Property 'select' is missing in type 'Control'.
     
     var l1: Locations1;
     sc = l1;
     ~~
-!!! Type 'Locations1' is not assignable to type 'SelectableControl':
-!!!   Property 'state' is missing in type 'Locations1'.
+!!! error TS2322: Type 'Locations1' is not assignable to type 'SelectableControl':
+!!! error TS2322:   Property 'state' is missing in type 'Locations1'.
     c = l1;
     ~
-!!! Type 'Locations1' is not assignable to type 'Control':
-!!!   Property 'state' is missing in type 'Locations1'.
+!!! error TS2322: Type 'Locations1' is not assignable to type 'Control':
+!!! error TS2322:   Property 'state' is missing in type 'Locations1'.
     l1 = sc;
     l1 = c;
     ~~
-!!! Type 'Control' is not assignable to type 'Locations1':
-!!!   Property 'select' is missing in type 'Control'.
+!!! error TS2322: Type 'Control' is not assignable to type 'Locations1':
+!!! error TS2322:   Property 'select' is missing in type 'Control'.

@@ -3,37 +3,37 @@
     enum e1111 { One }
     var e1111 = 1; // error
         ~~~~~
-!!! Duplicate identifier 'e1111'.
+!!! error TS2300: Duplicate identifier 'e1111'.
     
     // enum then function
     enum e2 { One }
     function e2() { } // error
              ~~
-!!! Duplicate identifier 'e2'.
+!!! error TS2300: Duplicate identifier 'e2'.
     
     enum e3 { One }
     var e3 = () => { } // error
         ~~
-!!! Duplicate identifier 'e3'.
+!!! error TS2300: Duplicate identifier 'e3'.
     
     // enum then class
     enum e4 { One }
     class e4 { public foo() { } } // error
           ~~
-!!! Duplicate identifier 'e4'.
+!!! error TS2300: Duplicate identifier 'e4'.
     
     // enum then enum
     enum e5 { One }
     enum e5 { Two }
               ~~~
-!!! In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
+!!! error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
     
     enum e5a { One }
     enum e5a { One } // error
                ~~~
-!!! Duplicate identifier 'One'.
+!!! error TS2300: Duplicate identifier 'One'.
                ~~~
-!!! In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
+!!! error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
     
     // enum then internal module
     enum e6 { One } 

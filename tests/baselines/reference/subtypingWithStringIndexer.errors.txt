@@ -32,17 +32,17 @@
     
         class B3<T extends Base> extends A<T> {
               ~~
-!!! Class 'B3<T>' incorrectly extends base class 'A<T>':
-!!!   Index signatures are incompatible:
-!!!     Type 'Derived' is not assignable to type 'T'.
+!!! error TS2416: Class 'B3<T>' incorrectly extends base class 'A<T>':
+!!! error TS2416:   Index signatures are incompatible:
+!!! error TS2416:     Type 'Derived' is not assignable to type 'T'.
             [x: string]: Derived; // error
         }
     
         class B4<T extends Base> extends A<T> {
               ~~
-!!! Class 'B4<T>' incorrectly extends base class 'A<T>':
-!!!   Index signatures are incompatible:
-!!!     Type 'Derived2' is not assignable to type 'T'.
+!!! error TS2416: Class 'B4<T>' incorrectly extends base class 'A<T>':
+!!! error TS2416:   Index signatures are incompatible:
+!!! error TS2416:     Type 'Derived2' is not assignable to type 'T'.
             [x: string]: Derived2; // error
         }
     }

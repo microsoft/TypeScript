@@ -21,10 +21,10 @@
     
     var r = new Derived(); // error
             ~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     var r2 = new Derived2(1); // error
              ~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     var r3 = new Derived('', '');
     
     class Base2<T> {
@@ -48,8 +48,8 @@
     
     var d = new D2(); // error
             ~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     var d2 = new D2(new Date()); // error
              ~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     var d3 = new D2(new Date(), new Date()); // ok

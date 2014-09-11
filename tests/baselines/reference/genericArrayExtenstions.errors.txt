@@ -1,10 +1,10 @@
 ==== tests/cases/compiler/genericArrayExtenstions.ts (2 errors) ====
     export declare class ObservableArray<T> implements Array<T> { // MS.Entertainment.ObservableArray
                          ~~~~~~~~~~~~~~~
-!!! Cannot compile external modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.
                          ~~~~~~~~~~~~~~~
-!!! Class 'ObservableArray<T>' incorrectly implements interface 'T[]':
-!!!   Property 'length' is missing in type 'ObservableArray<T>'.
+!!! error TS2421: Class 'ObservableArray<T>' incorrectly implements interface 'T[]':
+!!! error TS2421:   Property 'length' is missing in type 'ObservableArray<T>'.
     concat<U extends T[]>(...items: U[]): T[];
     concat(...items: T[]): T[];
     }

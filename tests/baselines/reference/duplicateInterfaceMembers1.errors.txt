@@ -3,6 +3,6 @@
        x: number;
        x: number;
        ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
     }
     

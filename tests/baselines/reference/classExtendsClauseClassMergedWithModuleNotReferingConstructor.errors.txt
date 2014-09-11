@@ -10,7 +10,7 @@
         var A = 1;
         class B extends A {
                         ~
-!!! Type name 'A' in extends clause does not reference constructor function for 'A'.
+!!! error TS2419: Type name 'A' in extends clause does not reference constructor function for 'A'.
             b: string;
         }
     }

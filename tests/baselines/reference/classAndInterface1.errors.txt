@@ -2,4 +2,4 @@
     class cli { }
     interface cli { } // error
               ~~~
-!!! Duplicate identifier 'cli'.
+!!! error TS2300: Duplicate identifier 'cli'.

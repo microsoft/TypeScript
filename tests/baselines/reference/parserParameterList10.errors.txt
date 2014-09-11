@@ -2,7 +2,7 @@
     class C {
        foo(...bar = 0) { }
               ~~~
-!!! A rest parameter cannot have an initializer.
+!!! error TS1048: A rest parameter cannot have an initializer.
            ~~~~~~~~~~
-!!! A rest parameter must be of an array type.
+!!! error TS2370: A rest parameter must be of an array type.
     }

@@ -3,7 +3,7 @@
       public Blah() {
         this.Foo();
              ~~~
-!!! Property 'Foo' does not exist on type 'List'.
+!!! error TS2339: Property 'Foo' does not exist on type 'List'.
       }
       public static Foo() {}
     }

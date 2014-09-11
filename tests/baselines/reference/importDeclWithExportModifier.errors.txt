@@ -5,6 +5,6 @@
     }
     export import a = x.c;
     ~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'x' has no exported member 'c'.
+!!! error TS2305: Module 'x' has no exported member 'c'.
     var b: a;
     

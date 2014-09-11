@@ -16,4 +16,4 @@
     // needs to be a supertype of the LHS to win as the best common type.
     (c || e).dummy;
              ~~~~~
-!!! Property 'dummy' does not exist on type '{}'.
+!!! error TS2339: Property 'dummy' does not exist on type '{}'.

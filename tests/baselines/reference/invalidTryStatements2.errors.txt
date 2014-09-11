@@ -3,12 +3,12 @@
         try {
         } catch { // syntax error, missing '(x)'
                 ~
-!!! '(' expected.
+!!! error TS1005: '(' expected.
         }
     
         catch(x) { } // error missing try
         ~~~~~
-!!! 'try' expected.
+!!! error TS1005: 'try' expected.
     
         finally{ } // potential error; can be absorbed by the 'catch'
     }
@@ -16,10 +16,10 @@
     function fn2() {
         finally { } // error missing try
         ~~~~~~~
-!!! 'try' expected.
+!!! error TS1005: 'try' expected.
         catch (x) { } // error missing try
         ~~~~~
-!!! 'try' expected.
+!!! error TS1005: 'try' expected.
     
         // no error
         try {
@@ -30,12 +30,12 @@
         // error missing try
         finally {
         ~~~~~~~
-!!! 'try' expected.
+!!! error TS1005: 'try' expected.
         }
     
         // error missing try
         catch (x) {
         ~~~~~
-!!! 'try' expected.
+!!! error TS1005: 'try' expected.
         }
     }

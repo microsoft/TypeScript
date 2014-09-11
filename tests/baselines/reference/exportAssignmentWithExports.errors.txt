@@ -3,4 +3,4 @@
     class D { }
     export = D;
     ~~~~~~~~~~~
-!!! An export assignment cannot be used in a module with other exported elements.
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.

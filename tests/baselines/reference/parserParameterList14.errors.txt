@@ -2,5 +2,5 @@
     declare class C {
       foo(a = 1): void;
           ~~~~~
-!!! A parameter initializer is only allowed in a function or constructor implementation.
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
     }

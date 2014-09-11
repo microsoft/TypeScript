@@ -3,7 +3,7 @@
         var f;
         var prototype; // This should be error since prototype would be static property on class m
             ~~~~~~~~~
-!!! Duplicate identifier 'prototype'.
+!!! error TS2300: Duplicate identifier 'prototype'.
     }
     declare class m {
     }

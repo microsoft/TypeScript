@@ -2,5 +2,5 @@
     function foo():any {
      return ():void {};
                     ~
-!!! '=>' expected.
+!!! error TS1005: '=>' expected.
     }

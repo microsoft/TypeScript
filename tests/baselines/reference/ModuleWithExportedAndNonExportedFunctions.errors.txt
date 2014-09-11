@@ -28,7 +28,7 @@
     // these should be errors since the functions are not exported
     var fn2 = A.fn2;
                 ~~~
-!!! Property 'fn2' does not exist on type 'typeof A'.
+!!! error TS2339: Property 'fn2' does not exist on type 'typeof A'.
     var fng2 = A.fng2;
                  ~~~~
-!!! Property 'fng2' does not exist on type 'typeof A'.
+!!! error TS2339: Property 'fng2' does not exist on type 'typeof A'.

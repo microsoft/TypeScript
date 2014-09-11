@@ -28,7 +28,7 @@
     
     var a6: { fn<T, U extends T>(x: T, y: U): T };
                     ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     var b6: { fn(x: Base, y: C): Base };
     
     // operator <

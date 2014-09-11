@@ -10,4 +10,4 @@
     var t: M.A[] = [];
     var t2: M.B[] = [];
             ~~~
-!!! Module 'M' has no exported member 'B'.
+!!! error TS2305: Module 'M' has no exported member 'B'.

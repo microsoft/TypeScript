@@ -30,9 +30,9 @@
     
     a2 = b2; // should error
     ~~
-!!! Type 'X_1' is not assignable to type 'Y_1':
-!!!   Private property 'name' cannot be reimplemented.
+!!! error TS2322: Type 'X_1' is not assignable to type 'Y_1':
+!!! error TS2322:   Private property 'name' cannot be reimplemented.
     foo2(a2); // should error
          ~~
-!!! Argument of type 'Y_1' is not assignable to parameter of type 'X_1'.
+!!! error TS2345: Argument of type 'Y_1' is not assignable to parameter of type 'X_1'.
     

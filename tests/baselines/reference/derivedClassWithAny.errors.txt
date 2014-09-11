@@ -3,7 +3,7 @@
         x: number;
         get X(): number { return 1; }
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         foo(): number {
             return 1;
         }
@@ -11,7 +11,7 @@
         static y: number;
         static get Y(): number {
                    ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return 1;
         }
         static bar(): number {
@@ -23,7 +23,7 @@
         x: any;
         get X(): any {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return null;
         }
         foo(): any {
@@ -33,7 +33,7 @@
         static y: any;
         static get Y(): any {
                    ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return null;
         }
         static bar(): any {
@@ -46,7 +46,7 @@
         x: string;
         get X(): string{ return ''; }
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         foo(): string {
             return '';
         }
@@ -54,7 +54,7 @@
         static y: string;
         static get Y(): string {
                    ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return '';
         }
         static bar(): string {
@@ -69,8 +69,8 @@
     c = d;
     c = e;
     ~
-!!! Type 'E' is not assignable to type 'C':
-!!!   Types of property 'x' are incompatible:
-!!!     Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type 'E' is not assignable to type 'C':
+!!! error TS2322:   Types of property 'x' are incompatible:
+!!! error TS2322:     Type 'string' is not assignable to type 'number'.
     var r = c.foo(); // e.foo would return string
     

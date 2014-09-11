@@ -4,16 +4,16 @@
     	public a() {
     		s = 1;
     		~
-!!! Cannot find name 's'.
+!!! error TS2304: Cannot find name 's'.
     	}
     }
     
     // just want to make sure this one doesn't crash the compiler
     function Foo();
              ~~~
-!!! Function implementation is missing or not immediately following the declaration.
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
     class Foo {
           ~~~
-!!! Duplicate identifier 'Foo'.
+!!! error TS2300: Duplicate identifier 'Foo'.
      static bar;
     }

@@ -2,5 +2,5 @@
     class C {
       static constructor() { }
       ~~~~~~
-!!! 'static' modifier cannot appear on a constructor declaration.
+!!! error TS1089: 'static' modifier cannot appear on a constructor declaration.
     }

@@ -17,7 +17,7 @@
       var p2: foo.Provide;
       var p3:booz.bar;
              ~~~~~~~~
-!!! Module 'foo.bar.baz' has no exported member 'bar'.
+!!! error TS2305: Module 'foo.bar.baz' has no exported member 'bar'.
       var p22 = new provide.Provide();
     }
     

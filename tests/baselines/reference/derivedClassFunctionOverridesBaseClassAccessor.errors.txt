@@ -2,24 +2,24 @@
     class Base {
         get x() {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return 1;
         }
         set x(v) {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         }
     }
     
     // error
     class Derived extends Base {
           ~~~~~~~
-!!! Class 'Derived' incorrectly extends base class 'Base':
-!!!   Types of property 'x' are incompatible:
-!!!     Type '() => number' is not assignable to type 'number'.
+!!! error TS2416: Class 'Derived' incorrectly extends base class 'Base':
+!!! error TS2416:   Types of property 'x' are incompatible:
+!!! error TS2416:     Type '() => number' is not assignable to type 'number'.
         x() {
         ~
-!!! Class 'Base' defines instance member accessor 'x', but extended class 'Derived' defines it as instance member function.
+!!! error TS2426: Class 'Base' defines instance member accessor 'x', but extended class 'Derived' defines it as instance member function.
             return 1;
         }
     }

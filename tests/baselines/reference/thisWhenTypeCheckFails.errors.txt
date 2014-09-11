@@ -4,7 +4,7 @@
             var k = () => {
                 var s: string = this.n();
                     ~
-!!! Type 'void' is not assignable to type 'string'.
+!!! error TS2323: Type 'void' is not assignable to type 'string'.
             }
         }    
     }

@@ -5,7 +5,7 @@
     var f = function foo(...x) { }
     var f2 = (...x, ...y) => { }
                  ~
-!!! A rest parameter must be last in a parameter list.
+!!! error TS1014: A rest parameter must be last in a parameter list.
     
     class C {
         foo(...x) { }
@@ -15,7 +15,7 @@
         (...x);
         foo(...x, ...y);
                ~
-!!! A rest parameter must be last in a parameter list.
+!!! error TS1014: A rest parameter must be last in a parameter list.
     }
     
     var a: {
@@ -27,7 +27,7 @@
         foo(...x) { },
         a: function foo(...x, ...y) { },
                            ~
-!!! A rest parameter must be last in a parameter list.
+!!! error TS1014: A rest parameter must be last in a parameter list.
         b: (...x) => { }
     }
     

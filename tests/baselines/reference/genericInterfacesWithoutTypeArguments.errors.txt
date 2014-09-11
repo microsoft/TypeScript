@@ -3,8 +3,8 @@
     class C<T> { }
     var i: I;
            ~
-!!! Generic type 'I<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'I<T>' requires 1 type argument(s).
     var c: C<I>;
              ~
-!!! Generic type 'I<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'I<T>' requires 1 type argument(s).
     

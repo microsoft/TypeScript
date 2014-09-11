@@ -14,7 +14,7 @@
     
         function foo(greeting: string): Foo.Bar.Greeter {
                                         ~~~~~~~~~~~~~~~
-!!! Module 'Foo.Bar' has no exported member 'Greeter'.
+!!! error TS2305: Module 'Foo.Bar' has no exported member 'Greeter'.
             return new Greeter(greeting);
         }
     

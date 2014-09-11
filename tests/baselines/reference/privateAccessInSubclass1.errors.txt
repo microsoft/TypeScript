@@ -7,6 +7,6 @@
       myMethod() {
         this.options;
         ~~~~~~~~~~~~
-!!! Property 'Base.options' is inaccessible.
+!!! error TS2341: Property 'Base.options' is inaccessible.
       }
     }

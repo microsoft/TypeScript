@@ -11,8 +11,8 @@
         new (): boolean;
         "": string;
         ~~~~~~~~~~~
-!!! Property '""' of type 'string' is not assignable to string index type 'number'.
+!!! error TS2411: Property '""' of type 'string' is not assignable to string index type 'number'.
         d: string;
         ~~~~~~~~~~
-!!! Property 'd' of type 'string' is not assignable to string index type 'number'.
+!!! error TS2411: Property 'd' of type 'string' is not assignable to string index type 'number'.
     }

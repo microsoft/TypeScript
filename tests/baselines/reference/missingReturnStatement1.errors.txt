@@ -2,7 +2,7 @@
     class Foo {
         foo(): number {
                ~~~~~~
-!!! A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
+!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
             //return 4;
         }
     }

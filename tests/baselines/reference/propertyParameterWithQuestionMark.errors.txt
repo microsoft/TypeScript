@@ -6,11 +6,11 @@
     // x should not be an optional property
     var v: C = {}; // Should fail
         ~
-!!! Type '{}' is not assignable to type 'C':
-!!!   Property 'x' is missing in type '{}'.
+!!! error TS2322: Type '{}' is not assignable to type 'C':
+!!! error TS2322:   Property 'x' is missing in type '{}'.
     var v2: { x? }
     v = v2; // Should fail
     ~
-!!! Type '{ x?: any; }' is not assignable to type 'C':
-!!!   Required property 'x' cannot be reimplemented with optional property in '{ x?: any; }'.
+!!! error TS2322: Type '{ x?: any; }' is not assignable to type 'C':
+!!! error TS2322:   Required property 'x' cannot be reimplemented with optional property in '{ x?: any; }'.
     var v3: { x } = new C; // Should succeed

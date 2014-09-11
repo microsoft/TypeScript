@@ -1,8 +1,8 @@
 ==== tests/cases/conformance/parser/ecmascript5/Expressions/parserAssignmentExpression1.ts (3 errors) ====
     (foo()) = bar;
     ~~~~~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
      ~~~
-!!! Cannot find name 'foo'.
+!!! error TS2304: Cannot find name 'foo'.
               ~~~
-!!! Cannot find name 'bar'.
+!!! error TS2304: Cannot find name 'bar'.

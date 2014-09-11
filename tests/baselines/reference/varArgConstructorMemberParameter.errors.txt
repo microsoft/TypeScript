@@ -10,6 +10,6 @@
     class Foo3 {
         constructor (public ...args: string[]) { }
                             ~~~
-!!! ',' expected.
+!!! error TS1005: ',' expected.
     }
     

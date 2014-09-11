@@ -2,7 +2,7 @@
     class foo {
         constructor (private public a: number) {
                              ~~~~~~
-!!! Accessibility modifier already seen.
+!!! error TS1028: Accessibility modifier already seen.
         }
     }
     

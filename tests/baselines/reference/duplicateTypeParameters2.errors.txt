@@ -4,4 +4,4 @@
     
     interface I<T extends A, T extends B> {}
                              ~
-!!! Duplicate identifier 'T'.
+!!! error TS2300: Duplicate identifier 'T'.

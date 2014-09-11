@@ -1,5 +1,5 @@
 ==== tests/cases/compiler/InterfaceDeclaration8.ts (1 errors) ====
     interface string {
               ~~~~~~
-!!! Interface name cannot be 'string'
+!!! error TS2427: Interface name cannot be 'string'
     }

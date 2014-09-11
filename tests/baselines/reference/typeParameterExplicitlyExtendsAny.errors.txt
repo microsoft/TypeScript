@@ -3,7 +3,7 @@
         var t: T;
         t.blah; // Error
           ~~~~
-!!! Property 'blah' does not exist on type 'T'.
+!!! error TS2339: Property 'blah' does not exist on type 'T'.
         t.toString; // ok
     }
     
@@ -11,8 +11,8 @@
         var t: T;
         t.blah; // Error
           ~~~~
-!!! Property 'blah' does not exist on type 'T'.
+!!! error TS2339: Property 'blah' does not exist on type 'T'.
         t.toString; // ok
           ~~~~~~~~
-!!! Property 'toString' does not exist on type 'T'.
+!!! error TS2339: Property 'toString' does not exist on type 'T'.
     }

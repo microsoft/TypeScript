@@ -3,5 +3,5 @@
         public y;
         constructor(x = this.y) { }
                         ~~~~
-!!! 'this' cannot be referenced in constructor arguments.
+!!! error TS2333: 'this' cannot be referenced in constructor arguments.
     }

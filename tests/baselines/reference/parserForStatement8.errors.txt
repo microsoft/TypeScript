@@ -1,7 +1,7 @@
 ==== tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement8.ts (2 errors) ====
     for (this in b) {
          ~~~~
-!!! Invalid left-hand side in 'for...in' statement.
+!!! error TS2406: Invalid left-hand side in 'for...in' statement.
                  ~
-!!! Cannot find name 'b'.
+!!! error TS2304: Cannot find name 'b'.
     }

@@ -4,8 +4,8 @@
         var b: number;
         export = a;
         ~~~~~~~~~~~
-!!! A module cannot have more than one export assignment.
+!!! error TS2308: A module cannot have more than one export assignment.
         export = b;
         ~~~~~~~~~~~
-!!! A module cannot have more than one export assignment.
+!!! error TS2308: A module cannot have more than one export assignment.
     }

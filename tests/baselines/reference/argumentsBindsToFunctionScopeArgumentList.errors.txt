@@ -3,6 +3,6 @@
     function foo(a) {
         arguments = 10;  /// This shouldnt be of type number and result in error.
         ~~~~~~~~~
-!!! Type 'number' is not assignable to type 'IArguments':
-!!!   Property 'length' is missing in type 'Number'.
+!!! error TS2322: Type 'number' is not assignable to type 'IArguments':
+!!! error TS2322:   Property 'length' is missing in type 'Number'.
     }

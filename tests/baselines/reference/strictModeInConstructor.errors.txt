@@ -15,7 +15,7 @@
     ~~~~~~~~~~~~~~~~
         }
     ~~~~~
-!!! A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
+!!! error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
     }
     
     class C extends A {
@@ -40,7 +40,7 @@
     ~~~~~~~~~~~~~~~~~~~~~
         }
     ~~~~~
-!!! A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
+!!! error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
     }
     
     class Bs extends A {

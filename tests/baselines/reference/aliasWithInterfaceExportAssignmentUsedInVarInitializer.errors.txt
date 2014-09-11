@@ -2,7 +2,7 @@
     import moduleA = require("aliasWithInterfaceExportAssignmentUsedInVarInitializer_0");
     var d = b.q3;
             ~
-!!! Cannot find name 'b'.
+!!! error TS2304: Cannot find name 'b'.
 ==== tests/cases/compiler/aliasWithInterfaceExportAssignmentUsedInVarInitializer_0.ts (0 errors) ====
     interface c {
         q3: number;

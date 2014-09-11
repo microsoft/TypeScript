@@ -5,16 +5,16 @@
     // operand before !
     var BOOLEAN1 = b!;  //expect error
                     ~
-!!! ',' expected.
+!!! error TS1005: ',' expected.
                      ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     
     // miss parentheses
     var BOOLEAN2 = !b + b;
                    ~~~~~~
-!!! Operator '+' cannot be applied to types 'boolean' and 'number'.
+!!! error TS2365: Operator '+' cannot be applied to types 'boolean' and 'number'.
     
     // miss an operand
     var BOOLEAN3 =!;
                    ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.

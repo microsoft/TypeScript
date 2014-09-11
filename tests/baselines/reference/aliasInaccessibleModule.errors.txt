@@ -4,5 +4,5 @@
         }
         export import X = N;
         ~~~~~~~~~~~~~~~~~~~~
-!!! Import declaration 'X' is using private name 'N'.
+!!! error TS4000: Import declaration 'X' is using private name 'N'.
     }

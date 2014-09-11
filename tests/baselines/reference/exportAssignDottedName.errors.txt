@@ -2,9 +2,9 @@
     import foo1 = require('./foo1');
     export = foo1.x; // Error, export assignment must be identifier only
                  ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
                   ~
-!!! Cannot find name 'x'.
+!!! error TS2304: Cannot find name 'x'.
     
 ==== tests/cases/conformance/externalModules/foo1.ts (1 errors) ====
     export function x(){
@@ -13,5 +13,5 @@
     ~~~~~~~~~~~~~
     }
     ~
-!!! Cannot compile external modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.
     

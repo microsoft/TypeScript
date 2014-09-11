@@ -4,8 +4,8 @@
     // should be an error 
     class c1 implements i1 { private name:string; }
           ~~
-!!! Class 'c1' incorrectly implements interface 'i1':
-!!!   Private property 'name' cannot be reimplemented.
+!!! error TS2421: Class 'c1' incorrectly implements interface 'i1':
+!!! error TS2421:   Private property 'name' cannot be reimplemented.
      
     // should be ok 
     class c2 implements i1 { public name:string; }

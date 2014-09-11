@@ -25,7 +25,7 @@
     	constructor();
     	constructor(x?, private y?:string, public z?=0) {
     	                                          ~
-!!! Parameter cannot have question mark and initializer.
+!!! error TS1015: Parameter cannot have question mark and initializer.
             super(x);
     		this.x = x;
             this.gar = 5;

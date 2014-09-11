@@ -3,6 +3,6 @@
       M() {
         this.super<T>(0);
              ~~~~~
-!!! Property 'super' does not exist on type 'C'.
+!!! error TS2339: Property 'super' does not exist on type 'C'.
       }
     }

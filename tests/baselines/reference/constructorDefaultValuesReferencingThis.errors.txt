@@ -2,17 +2,17 @@
     class C {
         constructor(x = this) { }
                         ~~~~
-!!! 'this' cannot be referenced in constructor arguments.
+!!! error TS2333: 'this' cannot be referenced in constructor arguments.
     }
     
     class D<T> {
         constructor(x = this) { }
                         ~~~~
-!!! 'this' cannot be referenced in constructor arguments.
+!!! error TS2333: 'this' cannot be referenced in constructor arguments.
     }
     
     class E<T> {
         constructor(public x = this) { }
                                ~~~~
-!!! 'this' cannot be referenced in constructor arguments.
+!!! error TS2333: 'this' cannot be referenced in constructor arguments.
     }

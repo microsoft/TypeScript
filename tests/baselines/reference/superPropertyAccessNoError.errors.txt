@@ -33,7 +33,7 @@
     
         get a() {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var x = super.func();
             var x: string;
             return null;
@@ -41,7 +41,7 @@
     
         set a(n) {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var x = super.func();
             var x: string;
         }
@@ -53,7 +53,7 @@
     
         static get a() {
                    ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var x = super.func();
             var x: number;
             return null;
@@ -61,7 +61,7 @@
     
         static set a(n) {
                    ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var x = super.func();
             var x: number;
         }

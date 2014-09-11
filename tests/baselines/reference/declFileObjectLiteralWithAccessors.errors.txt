@@ -5,10 +5,10 @@
             b: 10,
             get x() { return x; },
                 ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             set x(a: number) { this.b = a; }
                 ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         };
     };
     var /*4*/point = makePoint(2);

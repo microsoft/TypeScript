@@ -3,7 +3,7 @@
         public static foo() { }
         public get x() {
                    ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return 1;
         }
     
@@ -15,26 +15,26 @@
             super.bar(); // OK
             super.x;  // error
                   ~
-!!! Property 'x' does not exist on type 'typeof C'.
+!!! error TS2339: Property 'x' does not exist on type 'typeof C'.
         }
     
         constructor() {
             super();
             super.bar(); // error
                   ~~~
-!!! Property 'bar' does not exist on type 'C'.
+!!! error TS2339: Property 'bar' does not exist on type 'C'.
             super.x;  // error
                   ~
-!!! Only public methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public methods of the base class are accessible via the 'super' keyword
         }
     
         public static get y() {
                           ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             super.bar(); // OK
             super.x; // error
                   ~
-!!! Property 'x' does not exist on type 'typeof C'.
+!!! error TS2339: Property 'x' does not exist on type 'typeof C'.
             return 1;
         }
     }

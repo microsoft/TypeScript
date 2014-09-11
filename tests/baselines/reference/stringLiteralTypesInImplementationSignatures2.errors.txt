@@ -4,51 +4,51 @@
     function foo(x: any);
     function foo(x: 'hi') { }
     ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! A signature with an implementation cannot use a string literal type.
+!!! error TS2381: A signature with an implementation cannot use a string literal type.
     
     class C {
         foo(x: string);
         foo(x: 'hi') { }
         ~~~~~~~~~~~~~~~~
-!!! A signature with an implementation cannot use a string literal type.
+!!! error TS2381: A signature with an implementation cannot use a string literal type.
     }
     
     interface I {
         (x: 'a');
         ~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         (x: 'hi');
         ~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         foo(x: 'a', y: 'a');
         ~~~~~~~~~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         foo(x: 'hi', y: 'hi');
         ~~~~~~~~~~~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
     }
     
     var a: {
         (x: 'hi');
         ~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         (x: 'a');
         ~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         foo(x: 'hi');
         ~~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         foo(x: 'a');
         ~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
     }
     
     var b = {
         foo(x: 'hi') { },
         ~~~~~~~~~~~~~~~~
-!!! A signature with an implementation cannot use a string literal type.
+!!! error TS2381: A signature with an implementation cannot use a string literal type.
         foo(x: 'a') { },
         ~~~
-!!! Duplicate identifier 'foo'.
+!!! error TS2300: Duplicate identifier 'foo'.
     }
     

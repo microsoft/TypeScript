@@ -5,7 +5,7 @@
     }
     declare class foo { } // Should error
                   ~~~
-!!! Duplicate identifier 'foo'.
+!!! error TS2300: Duplicate identifier 'foo'.
     
     
     declare class foo2 { }
@@ -14,7 +14,7 @@
     }
     declare function foo2(); // Should error
                      ~~~~
-!!! Duplicate identifier 'foo2'.
+!!! error TS2300: Duplicate identifier 'foo2'.
     
     
     function foo3() { }
@@ -23,4 +23,4 @@
     }
     class foo3 { } // Should error
           ~~~~
-!!! Duplicate identifier 'foo3'.
+!!! error TS2300: Duplicate identifier 'foo3'.

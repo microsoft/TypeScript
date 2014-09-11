@@ -104,11 +104,11 @@
     
     var r4 = foo16(E.A);
         ~~
-!!! Subsequent variable declarations must have the same type.  Variable 'r4' must be of type 'E', but here has type 'Object'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'r4' must be of type 'E', but here has type 'Object'.
     
     declare function foo17(x: {}): {};
     declare function foo17(x: E): E;
     
     var r4 = foo16(E.A);
         ~~
-!!! Subsequent variable declarations must have the same type.  Variable 'r4' must be of type 'E', but here has type 'Object'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'r4' must be of type 'E', but here has type 'Object'.

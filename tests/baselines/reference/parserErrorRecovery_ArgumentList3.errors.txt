@@ -2,10 +2,10 @@
     function foo() {
        bar(a,
        ~~~
-!!! Cannot find name 'bar'.
+!!! error TS2304: Cannot find name 'bar'.
            ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.
        return;
        ~~~~~~
-!!! Argument expression expected.
+!!! error TS1135: Argument expression expected.
     }

@@ -5,40 +5,40 @@
     
     class B<T extends U, U extends Array<number>> {
             ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         constructor(x: T, y: U) { return null; }
     }
     
     class C<T extends U, U extends String> {
             ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         constructor(x: T, y: U) { return null; }
     }
     
     class D<T extends U, U extends Number> {
             ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         constructor(x: T, y: U) { return null; }
     }
     
     interface I<T extends U, U extends Number> {
                 ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         new(x: T, y: U): string;
     }
     
     interface I2 {
         new<T extends U, U extends Boolean>(x: T, y: U): string;
             ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     }
     
     var a: { new<T extends U, U extends Array<string>>(x: T, y: U): string }
                  ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     var b = { new<T extends U, U extends RegExp>(x: T, y: U) { return ''; } }; // not a construct signature, function called new
                   ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     
     function foo1b(x: B<Array<number>, Array<number>>);
     function foo1b(x: B<Array<number>, Array<number>>); // error

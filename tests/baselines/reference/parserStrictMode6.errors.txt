@@ -2,6 +2,6 @@
     "use strict";
     eval++;
     ~~~~
-!!! Invalid use of 'eval' in strict mode.
+!!! error TS1100: Invalid use of 'eval' in strict mode.
     ~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.

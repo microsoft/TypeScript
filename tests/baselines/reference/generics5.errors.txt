@@ -10,7 +10,7 @@
     
     var v3: G<A, A>;               // Error, A not valid argument for U
             ~~~~~~~
-!!! Type 'A' does not satisfy the constraint 'B':
-!!!   Property 'b' is missing in type 'A'.
+!!! error TS2343: Type 'A' does not satisfy the constraint 'B':
+!!! error TS2343:   Property 'b' is missing in type 'A'.
     
     

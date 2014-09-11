@@ -2,13 +2,13 @@
     enum TopLevelEnum {
         ThisWasAllowedButShouldNotBe = this // Should not be allowed
                                        ~~~~
-!!! 'this' cannot be referenced in current location.
+!!! error TS2332: 'this' cannot be referenced in current location.
     }
     
     module ModuleEnum {
         enum EnumInModule {
             WasADifferentError = this // this was handled as if this was in a module
                                  ~~~~
-!!! 'this' cannot be referenced in current location.
+!!! error TS2332: 'this' cannot be referenced in current location.
         }
     }

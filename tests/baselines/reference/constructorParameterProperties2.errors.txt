@@ -11,7 +11,7 @@
         y: number;
         constructor(public y: number) { } // error
                            ~
-!!! Duplicate identifier 'y'.
+!!! error TS2300: Duplicate identifier 'y'.
     }
     
     var d: D;
@@ -21,7 +21,7 @@
         y: number;
         constructor(private y: number) { } // error
                             ~
-!!! Duplicate identifier 'y'.
+!!! error TS2300: Duplicate identifier 'y'.
     }
     
     var e: E;

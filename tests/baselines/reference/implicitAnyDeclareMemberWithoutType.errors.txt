@@ -3,24 +3,24 @@
     interface IFace {
         member1;  // error at "member1"
         ~~~~~~~~
-!!! Member 'member1' implicitly has an 'any' type.
+!!! error TS7008: Member 'member1' implicitly has an 'any' type.
         member2: string;
         constructor(c1, c2: string, c3);  // error at "c1, c3, "constructor"
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! 'constructor', which lacks return-type annotation, implicitly has an 'any' return type.
+!!! error TS7010: 'constructor', which lacks return-type annotation, implicitly has an 'any' return type.
                     ~~
-!!! Parameter 'c1' implicitly has an 'any' type.
+!!! error TS7006: Parameter 'c1' implicitly has an 'any' type.
                                     ~~
-!!! Parameter 'c3' implicitly has an 'any' type.
+!!! error TS7006: Parameter 'c3' implicitly has an 'any' type.
         funcOfIFace(f1, f2, f3: number);   // error at "f1, f2, funcOfIFace"
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! 'funcOfIFace', which lacks return-type annotation, implicitly has an 'any' return type.
+!!! error TS7010: 'funcOfIFace', which lacks return-type annotation, implicitly has an 'any' return type.
                     ~~
-!!! Parameter 'f1' implicitly has an 'any' type.
+!!! error TS7006: Parameter 'f1' implicitly has an 'any' type.
                         ~~
-!!! Parameter 'f2' implicitly has an 'any' type.
+!!! error TS7006: Parameter 'f2' implicitly has an 'any' type.
         new ();
         ~~~~~~~
-!!! Construct signature, which lacks return-type annotation, implicitly has an 'any' return type.
+!!! error TS7013: Construct signature, which lacks return-type annotation, implicitly has an 'any' return type.
     }
     

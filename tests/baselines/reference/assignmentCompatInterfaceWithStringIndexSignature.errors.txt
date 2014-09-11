@@ -15,5 +15,5 @@
     
     Biz(new Foo());
         ~~~~~~~~~
-!!! Argument of type 'Foo' is not assignable to parameter of type 'IHandlerMap'.
+!!! error TS2345: Argument of type 'Foo' is not assignable to parameter of type 'IHandlerMap'.
     

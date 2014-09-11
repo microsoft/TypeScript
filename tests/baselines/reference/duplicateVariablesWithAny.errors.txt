@@ -3,23 +3,23 @@
     var x: any;
     var x = 2; //error
         ~
-!!! Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'any', but here has type 'number'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'any', but here has type 'number'.
     
     var y = "";
     var y; //error
         ~
-!!! Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'string', but here has type 'any'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'string', but here has type 'any'.
     
     module N {
         var x: any;
         var x = 2; //error
             ~
-!!! Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'any', but here has type 'number'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'any', but here has type 'number'.
     
         var y = "";
         var y; //error
             ~
-!!! Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'string', but here has type 'any'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'string', but here has type 'any'.
     }
     
     var z: any;

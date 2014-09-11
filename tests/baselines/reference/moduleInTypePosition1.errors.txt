@@ -3,7 +3,7 @@
     import WinJS = require('moduleInTypePosition1_0');
     var x = (w1: WinJS) => { };
                  ~~~~~
-!!! Cannot find name 'WinJS'.
+!!! error TS2304: Cannot find name 'WinJS'.
     
 ==== tests/cases/compiler/moduleInTypePosition1_0.ts (0 errors) ====
     export class Promise {

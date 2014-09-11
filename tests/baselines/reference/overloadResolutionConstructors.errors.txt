@@ -27,7 +27,7 @@
     // No candidate overloads found
     new fn1({}); // Error
             ~~
-!!! Argument of type '{}' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type '{}' is not assignable to parameter of type 'number'.
     
     // Generic and non - generic overload where generic overload is the only candidate when called with type arguments
     interface fn2 {
@@ -45,7 +45,7 @@
     // Generic and non - generic overload where non - generic overload is the only candidate when called with type arguments
     new fn2<Date>('', 0); // Error
                   ~~
-!!! Argument of type 'string' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     
     // Generic and non - generic overload where non - generic overload is the only candidate when called without type arguments
     new fn2('', 0); // OK
@@ -71,7 +71,7 @@
     // Generic overloads with differing arity called with type argument count that doesn't match any overload
     new fn3<number, number, number, number>(); // Error
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     
     // Generic overloads with constraints called with type arguments that satisfy the constraints
     interface fn4 {
@@ -83,23 +83,23 @@
     new fn4<string, number>('', 3);
     new fn4<string, number>(3, ''); // Error
             ~~~~~~
-!!! Type 'string' does not satisfy the constraint 'number'.
+!!! error TS2344: Type 'string' does not satisfy the constraint 'number'.
                     ~~~~~~
-!!! Type 'number' does not satisfy the constraint 'string'.
+!!! error TS2344: Type 'number' does not satisfy the constraint 'string'.
                             ~
-!!! Argument of type 'number' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     new fn4<number, string>('', 3); // Error
             ~~~~~~
-!!! Type 'number' does not satisfy the constraint 'string'.
+!!! error TS2344: Type 'number' does not satisfy the constraint 'string'.
                     ~~~~~~
-!!! Type 'string' does not satisfy the constraint 'number'.
+!!! error TS2344: Type 'string' does not satisfy the constraint 'number'.
                             ~~
-!!! Argument of type 'string' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     new fn4<number, string>(3, ''); 
             ~~~~~~
-!!! Type 'number' does not satisfy the constraint 'string'.
+!!! error TS2344: Type 'number' does not satisfy the constraint 'string'.
                     ~~~~~~
-!!! Type 'string' does not satisfy the constraint 'number'.
+!!! error TS2344: Type 'string' does not satisfy the constraint 'number'.
     
     // Generic overloads with constraints called without type arguments but with types that satisfy the constraints
     new fn4('', 3);
@@ -110,17 +110,17 @@
     // Generic overloads with constraints called with type arguments that do not satisfy the constraints
     new fn4<boolean, Date>(null, null); // Error
             ~~~~~~~
-!!! Type 'boolean' does not satisfy the constraint 'string'.
+!!! error TS2344: Type 'boolean' does not satisfy the constraint 'string'.
                      ~~~~
-!!! Type 'Date' does not satisfy the constraint 'number'.
+!!! error TS2344: Type 'Date' does not satisfy the constraint 'number'.
     
     // Generic overloads with constraints called without type arguments but with types that do not satisfy the constraints
     new fn4(true, null); // Error
             ~~~~
-!!! Argument of type 'boolean' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
     new fn4(null, true); // Error
                   ~~~~
-!!! Argument of type 'boolean' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
     
     // Non - generic overloads where contextual typing of function arguments has errors
     interface fn5 {
@@ -130,8 +130,8 @@
     var fn5: fn5;
     var n = new fn5((n) => n.toFixed());
         ~
-!!! Subsequent variable declarations must have the same type.  Variable 'n' must be of type 'number', but here has type 'string'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'n' must be of type 'number', but here has type 'string'.
                              ~~~~~~~
-!!! Property 'toFixed' does not exist on type 'string'.
+!!! error TS2339: Property 'toFixed' does not exist on type 'string'.
     var s = new fn5((n) => n.substr(0));
     

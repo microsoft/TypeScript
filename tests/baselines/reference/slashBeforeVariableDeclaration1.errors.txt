@@ -1,4 +1,4 @@
 ==== tests/cases/compiler/slashBeforeVariableDeclaration1.ts (1 errors) ====
     \ declare var v;
     
-!!! Invalid character.
+!!! error TS1127: Invalid character.

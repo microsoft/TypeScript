@@ -2,13 +2,13 @@
     module M {
        |
        ~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.
        class C {
        }
        |
        ~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.
        enum E {
        }
         
-!!! '}' expected.
+!!! error TS1005: '}' expected.

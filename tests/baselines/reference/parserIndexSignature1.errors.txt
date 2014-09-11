@@ -2,5 +2,5 @@
     interface I {
       [...a]
           ~
-!!! An index signature cannot have a rest parameter.
+!!! error TS1017: An index signature cannot have a rest parameter.
     }

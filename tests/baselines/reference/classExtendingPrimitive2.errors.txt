@@ -3,9 +3,9 @@
     
     class C4a extends void {}
                       ~~~~
-!!! Identifier expected.
+!!! error TS1003: Identifier expected.
     class C5a extends null { }
                       ~~~~
-!!! Identifier expected.
+!!! error TS1003: Identifier expected.
                            ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.

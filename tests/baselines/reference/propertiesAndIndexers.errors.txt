@@ -16,59 +16,59 @@
     interface B extends A {
         [n: number]: string;
         ~~~~~~~~~~~~~~~~~~~~
-!!! Property '1' of type 'Z' is not assignable to numeric index type 'string'.
+!!! error TS2412: Property '1' of type 'Z' is not assignable to numeric index type 'string'.
         c: boolean;
         3: boolean;
         ~~~~~~~~~~~
-!!! Property '3' of type 'boolean' is not assignable to numeric index type 'string'.
+!!! error TS2412: Property '3' of type 'boolean' is not assignable to numeric index type 'string'.
         6(): string;
         ~~~~~~~~~~~~
-!!! Property '6' of type '() => string' is not assignable to numeric index type 'string'.
+!!! error TS2412: Property '6' of type '() => string' is not assignable to numeric index type 'string'.
     }
     
     interface B {
         4: boolean;
         ~~~~~~~~~~~
-!!! Property '4' of type 'boolean' is not assignable to numeric index type 'string'.
+!!! error TS2412: Property '4' of type 'boolean' is not assignable to numeric index type 'string'.
         5: string;
     }
     
     interface C extends A {
         [s: string]: number;
         ~~~~~~~~~~~~~~~~~~~~
-!!! Property '1' of type 'Z' is not assignable to string index type 'number'.
+!!! error TS2411: Property '1' of type 'Z' is not assignable to string index type 'number'.
         ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'a' of type 'Y' is not assignable to string index type 'number'.
+!!! error TS2411: Property 'a' of type 'Y' is not assignable to string index type 'number'.
         ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'b' of type 'X' is not assignable to string index type 'number'.
+!!! error TS2411: Property 'b' of type 'X' is not assignable to string index type 'number'.
         c: boolean;
         ~~~~~~~~~~~
-!!! Property 'c' of type 'boolean' is not assignable to string index type 'number'.
+!!! error TS2411: Property 'c' of type 'boolean' is not assignable to string index type 'number'.
         3: boolean;
         ~~~~~~~~~~~
-!!! Property '3' of type 'boolean' is not assignable to string index type 'number'.
+!!! error TS2411: Property '3' of type 'boolean' is not assignable to string index type 'number'.
     }
     
     interface D extends B, C {
               ~
-!!! Property '4' of type 'boolean' is not assignable to string index type 'number'.
+!!! error TS2411: Property '4' of type 'boolean' is not assignable to string index type 'number'.
               ~
-!!! Property '5' of type 'string' is not assignable to string index type 'number'.
+!!! error TS2411: Property '5' of type 'string' is not assignable to string index type 'number'.
               ~
-!!! Property '6' of type '() => string' is not assignable to string index type 'number'.
+!!! error TS2411: Property '6' of type '() => string' is not assignable to string index type 'number'.
               ~
-!!! Numeric index type 'string' is not assignable to string index type 'number'.
+!!! error TS2413: Numeric index type 'string' is not assignable to string index type 'number'.
         2: Z;
         ~~~~~
-!!! Property '2' of type 'Z' is not assignable to string index type 'number'.
+!!! error TS2411: Property '2' of type 'Z' is not assignable to string index type 'number'.
         ~~~~~
-!!! Property '2' of type 'Z' is not assignable to numeric index type 'string'.
+!!! error TS2412: Property '2' of type 'Z' is not assignable to numeric index type 'string'.
         Infinity: number;
         ~~~~~~~~~~~~~~~~~
-!!! Property 'Infinity' of type 'number' is not assignable to numeric index type 'string'.
+!!! error TS2412: Property 'Infinity' of type 'number' is not assignable to numeric index type 'string'.
         zoo: string;
         ~~~~~~~~~~~~
-!!! Property 'zoo' of type 'string' is not assignable to string index type 'number'.
+!!! error TS2411: Property 'zoo' of type 'string' is not assignable to string index type 'number'.
     }
     
     class P {
@@ -78,7 +78,7 @@
     class Q extends P {
         t: number;
         ~~~~~~~~~~
-!!! Property 't' of type 'number' is not assignable to string index type 'string'.
+!!! error TS2411: Property 't' of type 'number' is not assignable to string index type 'string'.
     }
     
     var c: {
@@ -86,5 +86,5 @@
         c: boolean;
         3: boolean;
         ~~~~~~~~~~~
-!!! Property '3' of type 'boolean' is not assignable to numeric index type 'string'.
+!!! error TS2412: Property '3' of type 'boolean' is not assignable to numeric index type 'string'.
     };

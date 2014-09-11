@@ -3,4 +3,4 @@
      e = -(3
     }
     ~
-!!! ')' expected.
+!!! error TS1005: ')' expected.

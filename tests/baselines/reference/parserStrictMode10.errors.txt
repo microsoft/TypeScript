@@ -2,5 +2,5 @@
     "use strict";
     function f(eval) {
                ~~~~
-!!! Invalid use of 'eval' in strict mode.
+!!! error TS1100: Invalid use of 'eval' in strict mode.
     }

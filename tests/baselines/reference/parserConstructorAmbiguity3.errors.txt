@@ -1,6 +1,6 @@
 ==== tests/cases/conformance/parser/ecmascript5/Generics/parserConstructorAmbiguity3.ts (2 errors) ====
     new Date<A>
                
-!!! Expression expected.
+!!! error TS1109: Expression expected.
              ~
-!!! Cannot find name 'A'.
+!!! error TS2304: Cannot find name 'A'.

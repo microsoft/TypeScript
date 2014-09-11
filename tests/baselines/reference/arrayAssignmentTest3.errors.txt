@@ -12,6 +12,6 @@
     
     var xx = new a(null, 7, new B());
                             ~~~~~~~
-!!! Argument of type 'B' is not assignable to parameter of type 'B[]'.
+!!! error TS2345: Argument of type 'B' is not assignable to parameter of type 'B[]'.
     
     

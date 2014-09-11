@@ -2,7 +2,7 @@
     class C { foo: string; }
     interface C { foo: string; } // error
               ~
-!!! Duplicate identifier 'C'.
+!!! error TS2300: Duplicate identifier 'C'.
     
     module M {
         class D {
@@ -11,7 +11,7 @@
     
         interface D { // error
                   ~
-!!! Duplicate identifier 'D'.
+!!! error TS2300: Duplicate identifier 'D'.
             bar: string;
         }
     }

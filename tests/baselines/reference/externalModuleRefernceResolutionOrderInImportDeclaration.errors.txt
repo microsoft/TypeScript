@@ -3,7 +3,7 @@
     import file1 = require('externalModuleRefernceResolutionOrderInImportDeclaration_file1');
     file1.foo();
           ~~~
-!!! Property 'foo' does not exist on type 'typeof "externalModuleRefernceResolutionOrderInImportDeclaration_file1"'.
+!!! error TS2339: Property 'foo' does not exist on type 'typeof "externalModuleRefernceResolutionOrderInImportDeclaration_file1"'.
     file1.bar();
     
     

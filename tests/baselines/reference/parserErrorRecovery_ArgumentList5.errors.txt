@@ -2,10 +2,10 @@
     function foo() {
        bar(a,)
             ~
-!!! Trailing comma not allowed.
+!!! error TS1009: Trailing comma not allowed.
        ~~~
-!!! Cannot find name 'bar'.
+!!! error TS2304: Cannot find name 'bar'.
            ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.
        return;
     }

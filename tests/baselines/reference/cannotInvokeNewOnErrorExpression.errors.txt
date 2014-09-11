@@ -5,6 +5,6 @@
     }
     var t = new M.ClassA[];
                         ~~
-!!! 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
                   ~~~~~~
-!!! Property 'ClassA' does not exist on type 'typeof M'.
+!!! error TS2339: Property 'ClassA' does not exist on type 'typeof M'.

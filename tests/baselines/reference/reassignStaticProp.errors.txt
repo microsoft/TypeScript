@@ -5,7 +5,7 @@
      
         static bar:string; // errror - duplicate id
                ~~~
-!!! Duplicate identifier 'bar'.
+!!! error TS2300: Duplicate identifier 'bar'.
      
     }
      
