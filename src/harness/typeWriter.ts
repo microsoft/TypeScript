@@ -86,7 +86,7 @@ class TypeWriterWalker {
             column: lineAndCharacter.character,
             syntaxKind: ts.SyntaxKind[node.kind],
             sourceText: sourceText,
-            type: this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.None)
+            type: this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation)
         });
     }
 

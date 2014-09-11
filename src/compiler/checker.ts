@@ -37,7 +37,9 @@ module ts {
 
         var emptyArray: any[] = [];
         var emptySymbols: SymbolTable = {};
-        
+
+        var compilerOptions = program.getCompilerOptions();
+
         var checker: TypeChecker = {
             getProgram: () => program,
             getDiagnostics: getDiagnostics,
@@ -907,8 +909,8 @@ module ts {
 
             // Get qualified name 
             if (enclosingDeclaration &&
-                // Properties/methods/Signatures/Constructors/TypeParameters do not need qualification
-                !(symbol.flags & (SymbolFlags.PropertyOrAccessor | SymbolFlags.Signature | SymbolFlags.Constructor | SymbolFlags.Method | SymbolFlags.TypeParameter))) {
+                // TypeParameters do not need qualification
+                !(symbol.flags & SymbolFlags.TypeParameter)) {
                 var symbolName: string;
                 while (symbol) {
                     var isFirstName = !symbolName;
@@ -943,20 +945,37 @@ module ts {
             writer.write(symbolToString(symbol, enclosingDeclaration, meaning));
         }
 
-        function createSingleLineTextWriter() {
+        function createSingleLineTextWriter(maxLength?: number) {
             var result = "";
+            var overflow = false;
+            function write(s: string) {
+                if (!overflow) {
+                    result += s;
+                    if (result.length > maxLength) {
+                        result = result.substr(0, maxLength - 3) + "...";
+                        overflow = true;
+                    }
+                }
+            }
             return {
-                write(s: string) { result += s; },
-                writeSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) { writeSymbolToTextWriter(symbol, enclosingDeclaration, meaning, this); },
-                writeLine() { result += " "; },
+                write: write,
+                writeSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
+                    writeSymbolToTextWriter(symbol, enclosingDeclaration, meaning, this);
+                },
+                writeLine() {
+                    write(" ");
+                },
                 increaseIndent() { },
                 decreaseIndent() { },
-                getText() { return result; }
+                getText() {
+                    return result;
+                }
             };
         }
 
         function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
-            var stringWriter = createSingleLineTextWriter();
+            var maxLength = compilerOptions.noErrorTruncation || flags & TypeFormatFlags.NoTruncation ? undefined : 100;
+            var stringWriter = createSingleLineTextWriter(maxLength);
             // TODO(shkamat): typeToString should take enclosingDeclaration as input, once we have implemented enclosingDeclaration
             writeTypeToTextWriter(type, enclosingDeclaration, flags, stringWriter);
             return stringWriter.getText();
@@ -1348,7 +1367,7 @@ module ts {
             return type;
 
             function checkImplicitAny(type: Type) {
-                if (!fullTypeCheck || !program.getCompilerOptions().noImplicitAny) {
+                if (!fullTypeCheck || !compilerOptions.noImplicitAny) {
                     return;
                 }
                 // We need to have ended up with 'any', 'any[]', 'any[][]', etc.
@@ -1451,7 +1470,7 @@ module ts {
                         }
                         // Otherwise, fall back to 'any'.
                         else {
-                            if (program.getCompilerOptions().noImplicitAny) {
+                            if (compilerOptions.noImplicitAny) {
                                 error(setter, Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_type_annotation, symbol.name);
                             }
 
@@ -3132,45 +3151,6 @@ module ts {
             return (type.flags & TypeFlags.Anonymous) && type.symbol && (type.symbol.flags & SymbolFlags.ObjectLiteral) ? true : false;
         }
 
-        function getWidenedTypeOfObjectLiteral(type: Type): Type {
-            var properties = getPropertiesOfType(type);
-            if (properties.length) {
-                var widenedTypes: Type[] = [];
-                var propTypeWasWidened: boolean = false;
-                forEach(properties, p => {
-                    var propType = getTypeOfSymbol(p);
-                    var widenedType = getWidenedType(propType);
-                    if (propType !== widenedType) {
-                        propTypeWasWidened = true;
-
-                        if (program.getCompilerOptions().noImplicitAny && getInnermostTypeOfNestedArrayTypes(widenedType) === anyType) {
-                            error(p.valueDeclaration, Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type, p.name, typeToString(widenedType));
-                        }
-                    }
-                    widenedTypes.push(widenedType);
-                });
-                if (propTypeWasWidened) {
-                    var members: SymbolTable = {};
-                    var index = 0;
-                    forEach(properties, p => {
-                        var symbol = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient, p.name);
-                        symbol.declarations = p.declarations;
-                        symbol.parent = p.parent;
-                        symbol.type = widenedTypes[index++];
-                        symbol.target = p;
-                        if (p.valueDeclaration) symbol.valueDeclaration = p.valueDeclaration;
-                        members[symbol.name] = symbol;
-                    });
-                    var stringIndexType = getIndexTypeOfType(type, IndexKind.String);
-                    var numberIndexType = getIndexTypeOfType(type, IndexKind.Number);
-                    if (stringIndexType) stringIndexType = getWidenedType(stringIndexType);
-                    if (numberIndexType) numberIndexType = getWidenedType(numberIndexType);
-                    type = createAnonymousType(type.symbol, members, emptyArray, emptyArray, stringIndexType, numberIndexType);
-                }
-            }
-            return type;
-        }
-
         function isArrayType(type: Type): boolean {
             return type.flags & TypeFlags.Reference && (<TypeReference>type).target === globalArrayType;
         }
@@ -3183,17 +3163,8 @@ module ts {
             return type;
         }
 
-        function getWidenedTypeOfArrayLiteral(type: Type): Type {
-            var elementType = (<TypeReference>type).typeArguments[0];
-            var widenedType = getWidenedType(elementType);
-
-            type = elementType !== widenedType ? createArrayType(widenedType) : type;
-
-            return type;
-        }
-
         /* If we are widening on a literal, then we may need to the 'node' parameter for reporting purposes */
-        function getWidenedType(type: Type): Type {
+        function getWidenedType(type: Type, supressNoImplicitAnyErrors?: boolean): Type {
             if (type.flags & (TypeFlags.Undefined | TypeFlags.Null)) {
                 return anyType;
             }
@@ -3204,6 +3175,54 @@ module ts {
                 return getWidenedTypeOfArrayLiteral(type);
             }
             return type;
+
+            function getWidenedTypeOfObjectLiteral(type: Type): Type {
+                var properties = getPropertiesOfType(type);
+                if (properties.length) {
+                    var widenedTypes: Type[] = [];
+                    var propTypeWasWidened: boolean = false;
+                    forEach(properties, p => {
+                        var propType = getTypeOfSymbol(p);
+                        var widenedType = getWidenedType(propType);
+                        if (propType !== widenedType) {
+                            propTypeWasWidened = true;
+
+                            if (!supressNoImplicitAnyErrors && program.getCompilerOptions().noImplicitAny && getInnermostTypeOfNestedArrayTypes(widenedType) === anyType) {
+                                error(p.valueDeclaration, Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type, p.name, typeToString(widenedType));
+                            }
+                        }
+                        widenedTypes.push(widenedType);
+                    });
+                    if (propTypeWasWidened) {
+                        var members: SymbolTable = {};
+                        var index = 0;
+                        forEach(properties, p => {
+                            var symbol = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient, p.name);
+                            symbol.declarations = p.declarations;
+                            symbol.parent = p.parent;
+                            symbol.type = widenedTypes[index++];
+                            symbol.target = p;
+                            if (p.valueDeclaration) symbol.valueDeclaration = p.valueDeclaration;
+                            members[symbol.name] = symbol;
+                        });
+                        var stringIndexType = getIndexTypeOfType(type, IndexKind.String);
+                        var numberIndexType = getIndexTypeOfType(type, IndexKind.Number);
+                        if (stringIndexType) stringIndexType = getWidenedType(stringIndexType);
+                        if (numberIndexType) numberIndexType = getWidenedType(numberIndexType);
+                        type = createAnonymousType(type.symbol, members, emptyArray, emptyArray, stringIndexType, numberIndexType);
+                    }
+                }
+                return type;
+            }
+
+            function getWidenedTypeOfArrayLiteral(type: Type): Type {
+                var elementType = (<TypeReference>type).typeArguments[0];
+                var widenedType = getWidenedType(elementType, supressNoImplicitAnyErrors);
+
+                type = elementType !== widenedType ? createArrayType(widenedType) : type;
+
+                return type;
+            }
         }
 
         function forEachMatchingParameterType(source: Signature, target: Signature, callback: (s: Type, t: Type) => void) {
@@ -3951,7 +3970,7 @@ module ts {
                 }
 
                 // Fall back to any.
-                if (program.getCompilerOptions().noImplicitAny && objectType !== anyType) {
+                if (compilerOptions.noImplicitAny && objectType !== anyType) {
                     error(node, Diagnostics.Index_signature_of_object_type_implicitly_has_an_any_type);
                 }
 
@@ -4049,19 +4068,6 @@ module ts {
             return getSignatureInstantiation(signature, getInferredTypes(context));
         }
 
-        // Inferentially type an expression by a contextual parameter type (section 4.12.2 in TypeScript spec)
-        function inferentiallyTypeExpession(expr: Expression, contextualType: Type, contextualMapper: TypeMapper): Type {
-            var type = checkExpressionWithContextualType(expr, contextualType, contextualMapper);
-            var signature = getSingleCallSignature(type);
-            if (signature && signature.typeParameters) {
-                var contextualSignature = getSingleCallSignature(contextualType);
-                if (contextualSignature && !contextualSignature.typeParameters) {
-                    type = getOrCreateTypeFromSignature(instantiateSignatureInContextOf(signature, contextualSignature, contextualMapper));
-                }
-            }
-            return type;
-        }
-
         function inferTypeArguments(signature: Signature, args: Expression[], excludeArgument?: boolean[]): Type[] {
             var typeParameters = signature.typeParameters;
             var context = createInferenceContext(typeParameters);
@@ -4070,7 +4076,7 @@ module ts {
             for (var i = 0; i < args.length; i++) {
                 if (!excludeArgument || excludeArgument[i] === undefined) {
                     var parameterType = getTypeAtPosition(signature, i);
-                    inferTypes(context, inferentiallyTypeExpession(args[i], parameterType, mapper), parameterType);
+                    inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, mapper), parameterType);
                 }
             }
             // Next, infer from those context sensitive arguments that are no longer excluded
@@ -4078,7 +4084,7 @@ module ts {
                 for (var i = 0; i < args.length; i++) {
                     if (excludeArgument[i] === false) {
                         var parameterType = getTypeAtPosition(signature, i);
-                        inferTypes(context, inferentiallyTypeExpession(args[i], parameterType, mapper), parameterType);
+                        inferTypes(context, checkExpressionWithContextualType(args[i], parameterType, mapper), parameterType);
                     }
                 }
             }
@@ -4296,7 +4302,7 @@ module ts {
                 var declaration = signature.declaration;
                 if (declaration && (declaration.kind !== SyntaxKind.Constructor && declaration.kind !== SyntaxKind.ConstructSignature)) {
                     // When resolved signature is a call signature (and not a construct signature) the result type is any
-                    if (program.getCompilerOptions().noImplicitAny) {
+                    if (compilerOptions.noImplicitAny) {
                         error(node, Diagnostics.new_expression_whose_target_lacks_a_construct_signature_implicitly_has_an_any_type);
                     }
                     return anyType;
@@ -4309,7 +4315,7 @@ module ts {
             var exprType = checkExpression(node.operand);
             var targetType = getTypeFromTypeNode(node.type);
             if (fullTypeCheck && targetType !== unknownType) {
-                var widenedType = getWidenedType(exprType);
+                var widenedType = getWidenedType(exprType, /*supressNoImplicitAnyErrors*/ true);
                 if (!(isTypeAssignableTo(targetType, widenedType))) {
                     checkTypeAssignableTo(exprType, targetType, node, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other_Colon, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
                 }
@@ -4342,7 +4348,7 @@ module ts {
                 var unwidenedType = checkAndMarkExpression(func.body, contextualMapper);
                 var widenedType = getWidenedType(unwidenedType);
 
-                if (fullTypeCheck && program.getCompilerOptions().noImplicitAny && widenedType !== unwidenedType && getInnermostTypeOfNestedArrayTypes(widenedType) === anyType) {
+                if (fullTypeCheck && compilerOptions.noImplicitAny && widenedType !== unwidenedType && getInnermostTypeOfNestedArrayTypes(widenedType) === anyType) {
                     error(func, Diagnostics.Function_expression_which_lacks_return_type_annotation_implicitly_has_an_0_return_type, typeToString(widenedType));
                 }
 
@@ -4364,7 +4370,7 @@ module ts {
                 var widenedType = getWidenedType(commonType);
 
                 // Check and report for noImplicitAny if the best common type implicitly gets widened to an 'any'/arrays-of-'any' type.
-                if (fullTypeCheck && program.getCompilerOptions().noImplicitAny && widenedType !== commonType && getInnermostTypeOfNestedArrayTypes(widenedType) === anyType) {
+                if (fullTypeCheck && compilerOptions.noImplicitAny && widenedType !== commonType && getInnermostTypeOfNestedArrayTypes(widenedType) === anyType) {
                     var typeName = typeToString(widenedType);
 
                     if (func.name) {
@@ -4782,6 +4788,23 @@ module ts {
         // have the wildcard function type; this form of type check is used during overload resolution to exclude
         // contextually typed function and arrow expressions in the initial phase.
         function checkExpression(node: Expression, contextualMapper?: TypeMapper): Type {
+            var type = checkExpressionNode(node, contextualMapper);
+            if (contextualMapper && contextualMapper !== identityMapper) {
+                var signature = getSingleCallSignature(type);
+                if (signature && signature.typeParameters) {
+                    var contextualType = getContextualType(node);
+                    if (contextualType) {
+                        var contextualSignature = getSingleCallSignature(contextualType);
+                        if (contextualSignature && !contextualSignature.typeParameters) {
+                            type = getOrCreateTypeFromSignature(instantiateSignatureInContextOf(signature, contextualSignature, contextualMapper));
+                        }
+                    }
+                }
+            }
+            return type;
+        }
+
+        function checkExpressionNode(node: Expression, contextualMapper: TypeMapper): Type {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     return checkIdentifier(<Identifier>node);
@@ -4909,7 +4932,7 @@ module ts {
                 checkCollisionWithCapturedThisVariable(node, node.name);
                 checkCollistionWithRequireExportsInGeneratedCode(node, node.name);
                 checkCollisionWithArgumentsInGeneratedCode(node);
-                if (program.getCompilerOptions().noImplicitAny && !node.type) {
+                if (compilerOptions.noImplicitAny && !node.type) {
                     switch (node.kind) {
                         case SyntaxKind.ConstructSignature:
                             error(node, Diagnostics.Construct_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type);
@@ -5465,7 +5488,7 @@ module ts {
             }
 
             // If there is no body and no explicit return type, then report an error.
-            if (fullTypeCheck && program.getCompilerOptions().noImplicitAny && !node.body && !node.type) {
+            if (fullTypeCheck && compilerOptions.noImplicitAny && !node.body && !node.type) {
                 // Ignore privates within ambient contexts; they exist purely for documentative purposes to avoid name clashing.
                 // (e.g. privates within .d.ts files do not expose type information)
                 if (!isPrivateWithinAmbient(node)) {
@@ -7099,7 +7122,7 @@ module ts {
         function shouldEmitDeclarations() {
             // If the declaration emit and there are no errors being reported in program or by checker
             // declarations can be emitted
-            return program.getCompilerOptions().declaration &&
+            return compilerOptions.declaration &&
                 !program.getDiagnostics().length &&
                 !getDiagnostics().length;
         }
