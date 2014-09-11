@@ -14,5 +14,5 @@
     
     var b: A.B;
            ~~~
-!!! Generic type 'B<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'B<T>' requires 1 type argument(s).
     b.foo();

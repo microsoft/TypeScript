@@ -4,12 +4,12 @@
     }
     class D<T> extends C<number> extends C<string> {
                                  ~~~~~~~
-!!! '{' expected.
+!!! error TS1005: '{' expected.
                                          ~~~~~~~~~~~
                                            ~~~~~~
-!!! Cannot find name 'string'.
+!!! error TS2304: Cannot find name 'string'.
         baz() { }
     ~~~~~~~~~~~~~
     }
     ~
-!!! Operator '>' cannot be applied to types 'boolean' and '{ baz: () => void; }'.
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and '{ baz: () => void; }'.

@@ -3,6 +3,6 @@
     {
     static public intI: number;
            ~~~~~~
-!!! 'public' modifier must precede 'static' modifier.
+!!! error TS1029: 'public' modifier must precede 'static' modifier.
     }
     

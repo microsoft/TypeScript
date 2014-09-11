@@ -10,7 +10,7 @@
     
     var c : mod1.C; // ERROR: C should not be visible
             ~~~~~~
-!!! Module 'mod1' has no exported member 'C'.
+!!! error TS2305: Module 'mod1' has no exported member 'C'.
     
     
     

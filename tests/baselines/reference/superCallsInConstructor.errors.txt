@@ -12,7 +12,7 @@
         constructor() {
             with(new C()) {
                  ~~~~~~~
-!!! All symbols within a 'with' block will be resolved to 'any'.
+!!! error TS2410: All symbols within a 'with' block will be resolved to 'any'.
                 foo();
                 super();
                 bar();

@@ -5,7 +5,7 @@
             var a = x['notHere'](); // should be string
             return a + x.notHere();
                          ~~~~~~~
-!!! Property 'notHere' does not exist on type 'T'.
+!!! error TS2339: Property 'notHere' does not exist on type 'T'.
         }
     }
     
@@ -17,7 +17,7 @@
     var i: I<Date>;
     var r2 = i.foo.notHere();
                    ~~~~~~~
-!!! Property 'notHere' does not exist on type 'Date'.
+!!! error TS2339: Property 'notHere' does not exist on type 'Date'.
     var r2b = i.foo['notHere']();
     
     var a: {
@@ -25,7 +25,7 @@
     }
     var r3: string = a().notHere();
                          ~~~~~~~
-!!! Property 'notHere' does not exist on type 'Date'.
+!!! error TS2339: Property 'notHere' does not exist on type 'Date'.
     var r3b: string = a()['notHere']();
     
     var b = {
@@ -33,7 +33,7 @@
             var a = x['notHere'](); // should be string
             return a + x.notHere();
                          ~~~~~~~
-!!! Property 'notHere' does not exist on type 'T'.
+!!! error TS2339: Property 'notHere' does not exist on type 'T'.
         },
         bar: b.foo().notHere()
     }

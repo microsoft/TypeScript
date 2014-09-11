@@ -2,5 +2,5 @@
     class X {
         public f(a: Array) { }
                     ~~~~~
-!!! Generic type 'Array<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
     }

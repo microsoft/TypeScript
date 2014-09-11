@@ -2,14 +2,14 @@
     module N {
         export class C4 extends M.B {
                                 ~~~
-!!! Module 'M' has no exported member 'B'.
+!!! error TS2305: Module 'M' has no exported member 'B'.
         }
     }
     
     module M {
         export class C5 extends B {
                                 ~
-!!! Cannot find name 'B'.
+!!! error TS2304: Cannot find name 'B'.
         }
     }
     

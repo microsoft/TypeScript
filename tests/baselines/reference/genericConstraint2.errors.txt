@@ -5,7 +5,7 @@
     
     function compare<T extends Comparable<T>>(x: T, y: T): number {
                      ~~~~~~~~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         if (x == null) return y == null ? 0 : -1;
         if (y == null) return 1;
         return x.comparer(y);
@@ -13,8 +13,8 @@
     
     class ComparableString implements Comparable<string>{
           ~~~~~~~~~~~~~~~~
-!!! Class 'ComparableString' incorrectly implements interface 'Comparable<string>':
-!!!   Property 'comparer' is missing in type 'ComparableString'.
+!!! error TS2421: Class 'ComparableString' incorrectly implements interface 'Comparable<string>':
+!!! error TS2421:   Property 'comparer' is missing in type 'ComparableString'.
         constructor(public currentValue: string) { }
     
         localeCompare(other) {
@@ -26,5 +26,5 @@
     var b = new ComparableString("b");
     var c = compare<ComparableString>(a, b);
                     ~~~~~~~~~~~~~~~~
-!!! Type 'ComparableString' does not satisfy the constraint 'Comparable<unknown>':
-!!!   Property 'comparer' is missing in type 'ComparableString'.
+!!! error TS2343: Type 'ComparableString' does not satisfy the constraint 'Comparable<unknown>':
+!!! error TS2343:   Property 'comparer' is missing in type 'ComparableString'.

@@ -17,7 +17,7 @@
     m1.health = 0;
     console.log((<any>m5.isAlive).toString());
     ~~~~~~~
-!!! Cannot find name 'console'.
+!!! error TS2304: Cannot find name 'console'.
     
     class GetSetMonster {
         constructor(public name: string, private _health: number) {
@@ -32,14 +32,14 @@
       // defines one in an object literal.
         get isAlive() {
             ~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return this._health > 0;
         }
     
       // Likewise, "set" can be used to define setters.
         set health(value: number) {
             ~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             if (value < 0) {
                 throw new Error('Health must be non-negative.')
         }

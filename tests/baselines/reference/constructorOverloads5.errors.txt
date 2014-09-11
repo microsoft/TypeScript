@@ -6,7 +6,7 @@
         export function RegExp(pattern: string, flags: string): RegExp;
         export class RegExp {
                      ~~~~~~
-!!! Duplicate identifier 'RegExp'.
+!!! error TS2300: Duplicate identifier 'RegExp'.
             constructor(pattern: string);
             constructor(pattern: string, flags: string);
             exec(string: string): string[];

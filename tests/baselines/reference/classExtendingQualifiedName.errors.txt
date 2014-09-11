@@ -5,6 +5,6 @@
     
         class D extends M.C {
                         ~~~
-!!! Module 'M' has no exported member 'C'.
+!!! error TS2305: Module 'M' has no exported member 'C'.
         }
     }

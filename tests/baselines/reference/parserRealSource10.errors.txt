@@ -4,7 +4,7 @@
     
     ///<reference path='typescript.ts' />
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! File 'typescript.ts' not found.
+!!! error TS6053: File 'typescript.ts' not found.
     
     module TypeScript {
         export enum TokenID {
@@ -129,22 +129,22 @@
     
         export var tokenTable = new TokenInfo[];
                                              ~~
-!!! 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
         export var nodeTypeTable = new string[];
                                              ~~
-!!! 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
                                        ~~~~~~
-!!! Cannot find name 'string'.
+!!! error TS2304: Cannot find name 'string'.
         export var nodeTypeToTokTable = new number[];
                                                   ~~
-!!! 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
                                             ~~~~~~
-!!! Cannot find name 'number'.
+!!! error TS2304: Cannot find name 'number'.
         export var noRegexTable = new boolean[];
                                              ~~
-!!! 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
                                       ~~~~~~~
-!!! Cannot find name 'boolean'.
+!!! error TS2304: Cannot find name 'boolean'.
     
         noRegexTable[TokenID.Identifier] = true;
         noRegexTable[TokenID.StringLiteral] = true;
@@ -195,26 +195,26 @@
                         public unopPrecedence: number, public unopNodeType: number,
                         public text: string, public ers: ErrorRecoverySet) { }
                                                          ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         }
     
         function setTokenInfo(tokenId: TokenID, reservation: number, binopPrecedence: number,
             binopNodeType: number, unopPrecedence: number, unopNodeType: number,
             text: string, ers: ErrorRecoverySet) {
                                ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
             if (tokenId !== undefined) {
                 tokenTable[tokenId] = new TokenInfo(tokenId, reservation, binopPrecedence,
                                                   binopNodeType, unopPrecedence, unopNodeType, text, ers);
                 if (binopNodeType != NodeType.None) {
                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                     nodeTypeTable[binopNodeType] = text;
                     nodeTypeToTokTable[binopNodeType] = tokenId;
                 }
                 if (unopNodeType != NodeType.None) {
                                     ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                     nodeTypeTable[unopNodeType] = text;
                 }
             }
@@ -222,773 +222,773 @@
     
         setTokenInfo(TokenID.Any, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "any", ErrorRecoverySet.PrimType);
                                                                                    ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                            ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                  ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Bool, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "boolean", ErrorRecoverySet.PrimType);
                                                                                     ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                             ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                       ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Break, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "break", ErrorRecoverySet.Stmt);
                                                                                           ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                   ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                           ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Case, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "case", ErrorRecoverySet.SCase);
                                                                                          ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                  ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                         ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Catch, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "catch", ErrorRecoverySet.Catch);
                                                                                           ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                   ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                           ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Class, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "class", ErrorRecoverySet.TypeScriptS);
                                                                                                 ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                         ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                 ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Const, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "const", ErrorRecoverySet.Var);
                                                                                                 ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                         ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                 ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Continue, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "continue", ErrorRecoverySet.Stmt);
                                                                                              ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                 ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Debugger, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.Debugger, "debugger", ErrorRecoverySet.Stmt);
                                                                                              ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                     ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Default, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "default", ErrorRecoverySet.SCase);
                                                                                             ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                     ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                               ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Delete, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.Delete, "delete", ErrorRecoverySet.Prefix);
                                                                                            ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                     ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Do, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "do", ErrorRecoverySet.Stmt);
                                                                                        ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                     ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Else, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "else", ErrorRecoverySet.Else);
                                                                                          ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                  ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                         ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Enum, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "enum", ErrorRecoverySet.TypeScriptS);
                                                                                                ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                        ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                               ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Export, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "export", ErrorRecoverySet.TypeScriptS);
                                                                                                  ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                          ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                   ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Extends, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "extends", ErrorRecoverySet.None);
                                                                                                   ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                           ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                     ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Declare, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "declare", ErrorRecoverySet.Stmt);
                                                                                        ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                          ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.False, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "false", ErrorRecoverySet.RLit);
                                                                                           ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                   ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                           ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Finally, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "finally", ErrorRecoverySet.Catch);
                                                                                             ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                     ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                               ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.For, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "for", ErrorRecoverySet.Stmt);
                                                                                         ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                 ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                       ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Function, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "function", ErrorRecoverySet.Func);
                                                                                              ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                 ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Constructor, Reservation.TypeScriptAndJSFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "constructor", ErrorRecoverySet.Func);
                                                                                                             ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                     ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                                   ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Get, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "get", ErrorRecoverySet.Func);
                                                                                    ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                            ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                  ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Set, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "set", ErrorRecoverySet.Func);
                                                                                    ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                            ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                  ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.If, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "if", ErrorRecoverySet.Stmt);
                                                                                        ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                     ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Implements, Reservation.TypeScriptAndJSFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "implements", ErrorRecoverySet.None);
                                                                                                            ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                    ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                                 ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Import, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "import", ErrorRecoverySet.TypeScriptS);
                                                                                                  ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                          ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                   ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.In, Reservation.TypeScriptAndJS, OperatorPrecedence.Relational, NodeType.In, OperatorPrecedence.None, NodeType.None, "in", ErrorRecoverySet.None);
                                                                                              ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                    ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                         ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.InstanceOf, Reservation.TypeScriptAndJS, OperatorPrecedence.Relational, NodeType.InstOf, OperatorPrecedence.None, NodeType.None, "instanceof", ErrorRecoverySet.BinOp);
                                                                                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                             ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Interface, Reservation.TypeScriptAndJSFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "interface", ErrorRecoverySet.TypeScriptS);
                                                                                                           ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                   ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                               ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Let, Reservation.JavascriptFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "let", ErrorRecoverySet.None);
                                                                                                ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                        ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                              ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Module, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "module", ErrorRecoverySet.TypeScriptS);
                                                                                       ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                               ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                        ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.New, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "new", ErrorRecoverySet.PreOp);
                                                                                         ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                 ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                       ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Number, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "number", ErrorRecoverySet.PrimType);
                                                                                       ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                               ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                        ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Null, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "null", ErrorRecoverySet.RLit);
                                                                                          ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                  ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                         ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Package, Reservation.JavascriptFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "package", ErrorRecoverySet.None);
                                                                                                    ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                            ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                      ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Private, Reservation.TypeScriptAndJSFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "private", ErrorRecoverySet.TypeScriptS);
                                                                                                         ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                 ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                           ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Protected, Reservation.JavascriptFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "protected", ErrorRecoverySet.None);
                                                                                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                              ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                          ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Public, Reservation.TypeScriptAndJSFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "public", ErrorRecoverySet.TypeScriptS);
                                                                                                        ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                         ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Return, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "return", ErrorRecoverySet.Stmt);
                                                                                            ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                    ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                             ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Static, Reservation.TypeScriptAndJSFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "static", ErrorRecoverySet.None);
                                                                                                        ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                         ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.String, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "string", ErrorRecoverySet.PrimType);
                                                                                       ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                               ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                        ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Super, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "super", ErrorRecoverySet.RLit);
                                                                                                 ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                         ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                 ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Switch, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "switch", ErrorRecoverySet.Stmt);
                                                                                            ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                    ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                             ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.This, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "this", ErrorRecoverySet.RLit);
                                                                                          ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                  ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                         ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Throw, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "throw", ErrorRecoverySet.Stmt);
                                                                                           ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                   ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                           ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.True, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "true", ErrorRecoverySet.RLit);
                                                                                          ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                  ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                         ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Try, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "try", ErrorRecoverySet.Stmt);
                                                                                         ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                 ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                       ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.TypeOf, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.Typeof, "typeof", ErrorRecoverySet.Prefix);
                                                                                            ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                     ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Var, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "var", ErrorRecoverySet.Var);
                                                                                         ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                 ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                       ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Void, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.Void, "void", ErrorRecoverySet.Prefix);
                                                                                          ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                   ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                          ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.With, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.With, "with", ErrorRecoverySet.Stmt);
                                                                                          ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                  ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                         ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.While, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "while", ErrorRecoverySet.While);
                                                                                           ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                   ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                           ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Yield, Reservation.JavascriptFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "yield", ErrorRecoverySet.None);
                                                                                                  ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                          ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                  ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
     
         setTokenInfo(TokenID.Identifier, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "identifier", ErrorRecoverySet.ID);
                                                                                     ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                             ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                          ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.NumberLiteral, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "numberLiteral", ErrorRecoverySet.Literal);
                                                                                        ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.RegularExpressionLiteral, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "regex", ErrorRecoverySet.RegExp);
                                                                                                   ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                           ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                   ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.StringLiteral, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "qstring", ErrorRecoverySet.Literal);
                                                                                        ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                          ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
     
         // Non-operator non-identifier tokens
         setTokenInfo(TokenID.Semicolon, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, ";", ErrorRecoverySet.SColon); // ;
                                                                                    ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                            ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.CloseParen, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, ")", ErrorRecoverySet.RParen); // )
                                                                                     ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                             ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                 ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.CloseBracket, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "]", ErrorRecoverySet.RBrack); // ]
                                                                                       ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                               ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                   ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.OpenBrace, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "{", ErrorRecoverySet.LCurly); // {
                                                                                    ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                            ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.CloseBrace, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "}", ErrorRecoverySet.RCurly); // }
                                                                                     ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                             ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                 ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.DotDotDot, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "...", ErrorRecoverySet.None); // ...
                                                                                    ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                            ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                  ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
     
         // Operator non-identifier tokens
         setTokenInfo(TokenID.Comma, Reservation.None, OperatorPrecedence.Comma, NodeType.Comma, OperatorPrecedence.None, NodeType.None, ",", ErrorRecoverySet.Comma); // ,
                                                                                 ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                          ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                              ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Equals, Reservation.None, OperatorPrecedence.Assignment, NodeType.Asg, OperatorPrecedence.None, NodeType.None, "=", ErrorRecoverySet.Asg); // =
                                                                                       ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                              ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                  ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.PlusEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgAdd, OperatorPrecedence.None, NodeType.None, "+=", ErrorRecoverySet.BinOp); // +=
                                                                                           ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                     ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                          ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.MinusEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgSub, OperatorPrecedence.None, NodeType.None, "-=", ErrorRecoverySet.BinOp); // -=
                                                                                            ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                           ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.AsteriskEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgMul, OperatorPrecedence.None, NodeType.None, "*=", ErrorRecoverySet.BinOp); // *=
                                                                                               ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                         ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                              ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
     
         setTokenInfo(TokenID.SlashEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgDiv, OperatorPrecedence.None, NodeType.None, "/=", ErrorRecoverySet.BinOp); // /=
                                                                                            ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                           ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.PercentEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgMod, OperatorPrecedence.None, NodeType.None, "%=", ErrorRecoverySet.BinOp); // %=
                                                                                              ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                        ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                             ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.AmpersandEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgAnd, OperatorPrecedence.None, NodeType.None, "&=", ErrorRecoverySet.BinOp); // &=
                                                                                                ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                          ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                               ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.CaretEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgXor, OperatorPrecedence.None, NodeType.None, "^=", ErrorRecoverySet.BinOp); // ^=
                                                                                            ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                           ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.BarEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgOr, OperatorPrecedence.None, NodeType.None, "|=", ErrorRecoverySet.BinOp); // |=
                                                                                          ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                   ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                        ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.LessThanLessThanEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgLsh, OperatorPrecedence.None, NodeType.None, "<<=", ErrorRecoverySet.BinOp); // <<=
                                                                                                       ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                 ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                       ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.GreaterThanGreaterThanEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgRsh, OperatorPrecedence.None, NodeType.None, ">>=", ErrorRecoverySet.BinOp); // >>=
                                                                                                             ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                       ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                             ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.GreaterThanGreaterThanGreaterThanEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgRs2, OperatorPrecedence.None, NodeType.None, ">>>=", ErrorRecoverySet.BinOp); // >>>=
                                                                                                                        ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                  ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                                         ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Question, Reservation.None, OperatorPrecedence.Conditional, NodeType.ConditionalExpression, OperatorPrecedence.None, NodeType.None, "?", ErrorRecoverySet.BinOp); // ?
                                                                                          ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                   ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                       ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Colon, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, ":", ErrorRecoverySet.Colon); // :
                                                                                ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                        ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                            ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.BarBar, Reservation.None, OperatorPrecedence.LogicalOr, NodeType.LogOr, OperatorPrecedence.None, NodeType.None, "||", ErrorRecoverySet.BinOp); // ||
                                                                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                               ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                    ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.AmpersandAmpersand, Reservation.None, OperatorPrecedence.LogicalAnd, NodeType.LogAnd, OperatorPrecedence.None, NodeType.None, "&&", ErrorRecoverySet.BinOp); // &&
                                                                                                   ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                             ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                  ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Bar, Reservation.None, OperatorPrecedence.BitwiseOr, NodeType.Or, OperatorPrecedence.None, NodeType.None, "|", ErrorRecoverySet.BinOp); // |
                                                                                   ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                         ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                             ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Caret, Reservation.None, OperatorPrecedence.BitwiseExclusiveOr, NodeType.Xor, OperatorPrecedence.None, NodeType.None, "^", ErrorRecoverySet.BinOp); // ^
                                                                                              ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                     ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                         ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.And, Reservation.None, OperatorPrecedence.BitwiseAnd, NodeType.And, OperatorPrecedence.None, NodeType.None, "&", ErrorRecoverySet.BinOp); // &
                                                                                    ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                           ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                               ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.EqualsEquals, Reservation.None, OperatorPrecedence.Equality, NodeType.Eq, OperatorPrecedence.None, NodeType.None, "==", ErrorRecoverySet.BinOp); // ==
                                                                                           ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                 ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                      ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.ExclamationEquals, Reservation.None, OperatorPrecedence.Equality, NodeType.Ne, OperatorPrecedence.None, NodeType.None, "!=", ErrorRecoverySet.BinOp); // !=
                                                                                                ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                           ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.EqualsEqualsEquals, Reservation.None, OperatorPrecedence.Equality, NodeType.Eqv, OperatorPrecedence.None, NodeType.None, "===", ErrorRecoverySet.BinOp); // ===
                                                                                                 ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                        ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                              ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.ExclamationEqualsEquals, Reservation.None, OperatorPrecedence.Equality, NodeType.NEqv, OperatorPrecedence.None, NodeType.None, "!==", ErrorRecoverySet.BinOp); // !==
                                                                                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                              ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                    ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.LessThan, Reservation.None, OperatorPrecedence.Relational, NodeType.Lt, OperatorPrecedence.None, NodeType.None, "<", ErrorRecoverySet.BinOp); // <
                                                                                         ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                               ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                   ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.LessThanEquals, Reservation.None, OperatorPrecedence.Relational, NodeType.Le, OperatorPrecedence.None, NodeType.None, "<=", ErrorRecoverySet.BinOp); // <=
                                                                                               ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                     ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                          ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.GreaterThan, Reservation.None, OperatorPrecedence.Relational, NodeType.Gt, OperatorPrecedence.None, NodeType.None, ">", ErrorRecoverySet.BinOp); // >
                                                                                            ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                  ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                      ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.GreaterThanEquals, Reservation.None, OperatorPrecedence.Relational, NodeType.Ge, OperatorPrecedence.None, NodeType.None, ">=", ErrorRecoverySet.BinOp); // >=
                                                                                                  ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                        ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                             ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.LessThanLessThan, Reservation.None, OperatorPrecedence.Shift, NodeType.Lsh, OperatorPrecedence.None, NodeType.None, "<<", ErrorRecoverySet.BinOp); // <<
                                                                                            ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                   ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                        ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.GreaterThanGreaterThan, Reservation.None, OperatorPrecedence.Shift, NodeType.Rsh, OperatorPrecedence.None, NodeType.None, ">>", ErrorRecoverySet.BinOp); // >>
                                                                                                  ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                         ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                              ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.GreaterThanGreaterThanGreaterThan, Reservation.None, OperatorPrecedence.Shift, NodeType.Rs2, OperatorPrecedence.None, NodeType.None, ">>>", ErrorRecoverySet.BinOp); // >>>
                                                                                                             ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                    ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                                          ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Plus, Reservation.None, OperatorPrecedence.Additive, NodeType.Add, OperatorPrecedence.Unary, NodeType.Pos, "+", ErrorRecoverySet.AddOp); // +
                                                                                   ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                           ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                              ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Minus, Reservation.None, OperatorPrecedence.Additive, NodeType.Sub, OperatorPrecedence.Unary, NodeType.Neg, "-", ErrorRecoverySet.AddOp); // -
                                                                                    ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                            ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                               ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Asterisk, Reservation.None, OperatorPrecedence.Multiplicative, NodeType.Mul, OperatorPrecedence.None, NodeType.None, "*", ErrorRecoverySet.BinOp); // *
                                                                                             ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                    ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                        ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Slash, Reservation.None, OperatorPrecedence.Multiplicative, NodeType.Div, OperatorPrecedence.None, NodeType.None, "/", ErrorRecoverySet.BinOp); // /
                                                                                          ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                 ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                     ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Percent, Reservation.None, OperatorPrecedence.Multiplicative, NodeType.Mod, OperatorPrecedence.None, NodeType.None, "%", ErrorRecoverySet.BinOp); // %
                                                                                            ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                   ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                       ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Tilde, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.Not, "~", ErrorRecoverySet.PreOp); // ~
                                                                                ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                         ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                            ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Exclamation, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.LogNot, "!", ErrorRecoverySet.PreOp); // !
                                                                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                               ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                     ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.PlusPlus, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.IncPre, "++", ErrorRecoverySet.PreOp); // ++
                                                                                   ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                            ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                   ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.MinusMinus, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.DecPre, "--", ErrorRecoverySet.PreOp); // --
                                                                                     ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                              ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                     ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.OpenParen, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "(", ErrorRecoverySet.LParen); // (
                                                                                    ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                            ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.OpenBracket, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "[", ErrorRecoverySet.LBrack); // [
                                                                                      ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                              ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                  ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.Dot, Reservation.None, OperatorPrecedence.Unary, NodeType.None, OperatorPrecedence.None, NodeType.None, ".", ErrorRecoverySet.Dot); // .
                                                                               ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                       ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                           ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.EndOfFile, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "<EOF>", ErrorRecoverySet.EOF); // EOF
                                                                                    ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                            ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                    ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
         setTokenInfo(TokenID.EqualsGreaterThan, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "=>", ErrorRecoverySet.None); // =>
                                                                                            ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                    ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                                                                                                                                                         ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ErrorRecoverySet'.
+!!! error TS2304: Cannot find name 'ErrorRecoverySet'.
     
         export function lookupToken(tokenId: TokenID): TokenInfo {
             return tokenTable[tokenId];
@@ -1033,10 +1033,10 @@
                     if (tokenInfo != undefined) {
                         if ((tokenInfo.unopNodeType != NodeType.None) ||
                                                        ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                             (tokenInfo.binopNodeType != NodeType.None)) {
                                                         ~~~~~~~~
-!!! Cannot find name 'NodeType'.
+!!! error TS2304: Cannot find name 'NodeType'.
                             return TokenClass.Operator;
                         }
                     }
@@ -1131,7 +1131,7 @@
         // TODO: new with length TokenID.LimFixed
         export var staticTokens = new Token[];
                                            ~~
-!!! 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
         export function initializeStaticTokens() {
             for (var i = 0; i <= TokenID.LimFixed; i++) {
                 staticTokens[i] = new Token(i);

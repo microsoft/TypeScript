@@ -4,65 +4,65 @@
         constructor() {
             super();
             ~~~~~
-!!! 'super' can only be referenced in a derived class.
+!!! error TS2335: 'super' can only be referenced in a derived class.
         }
     
         //super call in class member function with no base type
         fn() {
             super();
             ~~~~~
-!!! 'super' can only be referenced in a derived class.
+!!! error TS2335: 'super' can only be referenced in a derived class.
         }
     
         //super call in class accessor (get and set) with no base type
         get foo() {
             ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             super();
             ~~~~~
-!!! 'super' can only be referenced in a derived class.
+!!! error TS2335: 'super' can only be referenced in a derived class.
             return null;
         }
         set foo(v) {
             ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             super();
             ~~~~~
-!!! 'super' can only be referenced in a derived class.
+!!! error TS2335: 'super' can only be referenced in a derived class.
         }
     
         //super call in class member initializer with no base type
         p = super();
             ~~~~~
-!!! 'super' can only be referenced in a derived class.
+!!! error TS2335: 'super' can only be referenced in a derived class.
     
         //super call in static class member function with no base type
         static fn() {
             super();
             ~~~~~
-!!! 'super' can only be referenced in a derived class.
+!!! error TS2335: 'super' can only be referenced in a derived class.
         }
     
         //super call in static class member initializer with no base type
         static k = super();
                    ~~~~~
-!!! 'super' can only be referenced in a derived class.
+!!! error TS2335: 'super' can only be referenced in a derived class.
     
         //super call in static class accessor (get and set) with no base type
         static get q() {
                    ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             super();
             ~~~~~
-!!! 'super' can only be referenced in a derived class.
+!!! error TS2335: 'super' can only be referenced in a derived class.
             return null;
         }
         static set q(n) {
                    ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             super();
             ~~~~~
-!!! 'super' can only be referenced in a derived class.
+!!! error TS2335: 'super' can only be referenced in a derived class.
         }
     }
     
@@ -72,7 +72,7 @@
         constructor() {
             super<string>();
                  ~
-!!! 'super' must be followed by an argument list or member access.
+!!! error TS1034: 'super' must be followed by an argument list or member access.
             super();
         }
     }
@@ -86,30 +86,30 @@
         //super call in class member initializer of derived type
         t = super();
             ~~~~~
-!!! Super calls are not permitted outside constructors or in nested functions inside constructors
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
     
         fn() {
             //super call in class member function of derived type
             super();
             ~~~~~
-!!! Super calls are not permitted outside constructors or in nested functions inside constructors
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
         }
     
         //super call in class accessor (get and set) of derived type
         get foo() {
             ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             super();
             ~~~~~
-!!! Super calls are not permitted outside constructors or in nested functions inside constructors
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
             return null;
         }
         set foo(n) {
             ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             super();
             ~~~~~
-!!! Super calls are not permitted outside constructors or in nested functions inside constructors
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors
         }
     }
     

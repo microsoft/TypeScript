@@ -1,7 +1,7 @@
 ==== tests/cases/conformance/types/primitives/stringLiteral/stringLiteralType.ts (1 errors) ====
     var x: 'hi';
            ~~~~
-!!! Type expected.
+!!! error TS1110: Type expected.
     
     function f(x: 'hi');
     function f(x: string);

@@ -5,19 +5,19 @@
     var g: <T, U>(x: T, y: U) => T;
     var g: <T>(x: any, y: any) => any;
         ~
-!!! Subsequent variable declarations must have the same type.  Variable 'g' must be of type '<T, U>(x: T, y: U) => T', but here has type '<T>(x: any, y: any) => any'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'g' must be of type '<T, U>(x: T, y: U) => T', but here has type '<T>(x: any, y: any) => any'.
     
     var h: <T, U>(x: T, y: U) => T;
     var h: (x: any, y: any) => any;
         ~
-!!! Subsequent variable declarations must have the same type.  Variable 'h' must be of type '<T, U>(x: T, y: U) => T', but here has type '(x: any, y: any) => any'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'h' must be of type '<T, U>(x: T, y: U) => T', but here has type '(x: any, y: any) => any'.
     
     var i: <T, U>(x: T, y: U) => T;
     var i: <T, U>(x: any, y: string) => any;
         ~
-!!! Subsequent variable declarations must have the same type.  Variable 'i' must be of type '<T, U>(x: T, y: U) => T', but here has type '<T, U>(x: any, y: string) => any'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type '<T, U>(x: T, y: U) => T', but here has type '<T, U>(x: any, y: string) => any'.
     
     var j: <T, U>(x: T, y: U) => T;
     var j: <T, U>(x: any, y: any) => string;
         ~
-!!! Subsequent variable declarations must have the same type.  Variable 'j' must be of type '<T, U>(x: T, y: U) => T', but here has type '<T, U>(x: any, y: any) => string'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'j' must be of type '<T, U>(x: T, y: U) => T', but here has type '<T, U>(x: any, y: any) => string'.

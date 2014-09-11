@@ -2,4 +2,4 @@
     "use strict";
     03;
     ~~
-!!! Octal literals are not allowed in strict mode.
+!!! error TS1121: Octal literals are not allowed in strict mode.

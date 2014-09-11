@@ -2,9 +2,9 @@
     declare module "OuterModule" {
         import m2 = require("./SubModule");
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Import declaration in an ambient external module declaration cannot reference external module through relative external module name.
+!!! error TS2439: Import declaration in an ambient external module declaration cannot reference external module through relative external module name.
                             ~~~~~~~~~~~~~
-!!! Cannot find external module './SubModule'.
+!!! error TS2307: Cannot find external module './SubModule'.
         class SubModule {
             public static StaticVar: number;
             public InstanceVar: number;

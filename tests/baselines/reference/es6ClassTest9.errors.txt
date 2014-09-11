@@ -1,10 +1,10 @@
 ==== tests/cases/compiler/es6ClassTest9.ts (3 errors) ====
     declare class foo();
                      ~
-!!! '{' expected.
+!!! error TS1005: '{' expected.
                       ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     function foo() {}
              ~~~
-!!! Duplicate identifier 'foo'.
+!!! error TS2300: Duplicate identifier 'foo'.
     

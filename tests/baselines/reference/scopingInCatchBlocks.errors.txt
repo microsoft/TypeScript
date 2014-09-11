@@ -9,5 +9,5 @@
     
     var x = ex1; // should error
             ~~~
-!!! Cannot find name 'ex1'.
+!!! error TS2304: Cannot find name 'ex1'.
     

@@ -5,6 +5,6 @@
     foo();
     foo(1, 'bar');
         ~
-!!! Argument of type 'number' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     foo('foo', 1, 3);
     

@@ -16,7 +16,7 @@
                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 } 
     ~~~~~~~~~~~~~
-!!! Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
+!!! error TS2401: Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.
             }
         }
     }

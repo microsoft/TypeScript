@@ -1,39 +1,39 @@
 ==== tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors2.ts (17 errors) ====
     var tt1 = (a, (b, c)) => a+b+c;
                           ~~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
                ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.
                    ~
-!!! Cannot find name 'b'.
+!!! error TS2304: Cannot find name 'b'.
                       ~
-!!! Cannot find name 'c'.
+!!! error TS2304: Cannot find name 'c'.
                              ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.
                                ~
-!!! Cannot find name 'b'.
+!!! error TS2304: Cannot find name 'b'.
                                  ~
-!!! Cannot find name 'c'.
+!!! error TS2304: Cannot find name 'c'.
     var tt2 = ((a), b, c) => a+b+c;
                           ~~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
                 ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.
                     ~
-!!! Cannot find name 'b'.
+!!! error TS2304: Cannot find name 'b'.
                        ~
-!!! Cannot find name 'c'.
+!!! error TS2304: Cannot find name 'c'.
                              ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.
                                ~
-!!! Cannot find name 'b'.
+!!! error TS2304: Cannot find name 'b'.
                                  ~
-!!! Cannot find name 'c'.
+!!! error TS2304: Cannot find name 'c'.
     
     var tt3 = ((a)) => a;
                     ~~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
                 ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.
                        ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.

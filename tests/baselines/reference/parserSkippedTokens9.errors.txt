@@ -2,4 +2,4 @@
     ; // existing trivia
     /*foo*/ \ /*bar*/
             
-!!! Invalid character.
+!!! error TS1127: Invalid character.

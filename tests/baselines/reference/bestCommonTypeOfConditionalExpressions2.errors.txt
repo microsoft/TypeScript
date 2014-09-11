@@ -11,31 +11,31 @@
     
     var r2 = true ? 1 : '';
              ~~~~~~~~~~~~~
-!!! No best common type exists between 'number' and 'string'.
+!!! error TS2367: No best common type exists between 'number' and 'string'.
     var r9 = true ? derived : derived2;
              ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between 'Derived' and 'Derived2'.
+!!! error TS2367: No best common type exists between 'Derived' and 'Derived2'.
     
     function foo<T, U>(t: T, u: U) {
         return true ? t : u;
                ~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'U'.
+!!! error TS2367: No best common type exists between 'T' and 'U'.
     }
     
     function foo2<T extends U, U>(t: T, u: U) { // Error for referencing own type parameter
                   ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         return true ? t : u; // Ok because BCT(T, U) = U
                ~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'U'.
+!!! error TS2367: No best common type exists between 'T' and 'U'.
     }
     
     function foo3<T extends U, U extends V, V>(t: T, u: U) {
                   ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                                ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         return true ? t : u;
                ~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'U'.
+!!! error TS2367: No best common type exists between 'T' and 'U'.
     }

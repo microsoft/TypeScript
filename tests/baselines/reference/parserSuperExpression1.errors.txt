@@ -3,7 +3,7 @@
         private foo() {
             super.foo();
             ~~~~~
-!!! 'super' can only be referenced in a derived class.
+!!! error TS2335: 'super' can only be referenced in a derived class.
         }
     }
     
@@ -12,7 +12,7 @@
             private foo() {
                 super.foo();
                 ~~~~~
-!!! 'super' can only be referenced in a derived class.
+!!! error TS2335: 'super' can only be referenced in a derived class.
             }
         }
     }

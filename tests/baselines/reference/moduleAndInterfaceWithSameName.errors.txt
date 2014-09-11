@@ -21,7 +21,7 @@
     
     var z2 = Foo2.Bar.y; // Error for using interface name as a value.
                   ~~~
-!!! Property 'Bar' does not exist on type 'typeof Foo2'.
+!!! error TS2339: Property 'Bar' does not exist on type 'typeof Foo2'.
     
     module Foo3 {
         export module Bar {

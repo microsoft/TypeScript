@@ -2,6 +2,6 @@
     class C {
         public foo() { [1,2,3].map<any,any>((x) => { return this; })}
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     }
     

@@ -9,10 +9,10 @@
     
     e = f; 
     ~
-!!! Type 'F' is not assignable to type 'E'.
+!!! error TS2323: Type 'F' is not assignable to type 'E'.
     f = e; 
     ~
-!!! Type 'E' is not assignable to type 'F'.
+!!! error TS2323: Type 'E' is not assignable to type 'F'.
     e = 1; // ok
     f = 1; // ok
     var x: number = e; // ok
@@ -33,72 +33,72 @@
         var b: number = e; // ok
         var c: string = e;
             ~
-!!! Type 'E' is not assignable to type 'string'.
+!!! error TS2323: Type 'E' is not assignable to type 'string'.
         var d: boolean = e;
             ~
-!!! Type 'E' is not assignable to type 'boolean'.
+!!! error TS2323: Type 'E' is not assignable to type 'boolean'.
         var ee: Date = e;
             ~~
-!!! Type 'E' is not assignable to type 'Date':
-!!!   Property 'toDateString' is missing in type 'Number'.
+!!! error TS2322: Type 'E' is not assignable to type 'Date':
+!!! error TS2322:   Property 'toDateString' is missing in type 'Number'.
         var f: any = e; // ok
         var g: void = e;
             ~
-!!! Type 'E' is not assignable to type 'void'.
+!!! error TS2323: Type 'E' is not assignable to type 'void'.
         var h: Object = e;
         var i: {} = e;
         var j: () => {} = e;
             ~
-!!! Type 'E' is not assignable to type '() => {}'.
+!!! error TS2323: Type 'E' is not assignable to type '() => {}'.
         var k: Function = e;
             ~
-!!! Type 'E' is not assignable to type 'Function':
-!!!   Property 'apply' is missing in type 'Number'.
+!!! error TS2322: Type 'E' is not assignable to type 'Function':
+!!! error TS2322:   Property 'apply' is missing in type 'Number'.
         var l: (x: number) => string = e;
             ~
-!!! Type 'E' is not assignable to type '(x: number) => string'.
+!!! error TS2323: Type 'E' is not assignable to type '(x: number) => string'.
         ac = e;
         ~~
-!!! Type 'E' is not assignable to type 'C':
-!!!   Property 'foo' is missing in type 'Number'.
+!!! error TS2322: Type 'E' is not assignable to type 'C':
+!!! error TS2322:   Property 'foo' is missing in type 'Number'.
         ai = e;
         ~~
-!!! Type 'E' is not assignable to type 'I':
-!!!   Property 'foo' is missing in type 'Number'.
+!!! error TS2322: Type 'E' is not assignable to type 'I':
+!!! error TS2322:   Property 'foo' is missing in type 'Number'.
         var m: number[] = e;
             ~
-!!! Type 'E' is not assignable to type 'number[]':
-!!!   Property 'length' is missing in type 'Number'.
+!!! error TS2322: Type 'E' is not assignable to type 'number[]':
+!!! error TS2322:   Property 'length' is missing in type 'Number'.
         var n: { foo: string } = e;
             ~
-!!! Type 'E' is not assignable to type '{ foo: string; }':
-!!!   Property 'foo' is missing in type 'Number'.
+!!! error TS2322: Type 'E' is not assignable to type '{ foo: string; }':
+!!! error TS2322:   Property 'foo' is missing in type 'Number'.
         var o: <T>(x: T) => T = e;
             ~
-!!! Type 'E' is not assignable to type '<T>(x: T) => T'.
+!!! error TS2323: Type 'E' is not assignable to type '<T>(x: T) => T'.
         var p: Number = e;
         var q: String = e;
             ~
-!!! Type 'E' is not assignable to type 'String':
-!!!   Property 'charAt' is missing in type 'Number'.
+!!! error TS2322: Type 'E' is not assignable to type 'String':
+!!! error TS2322:   Property 'charAt' is missing in type 'Number'.
     
         function foo<T, U extends T, V extends Date, A extends Number, B extends E>(x: T, y: U, z: V) {
                         ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             x = e;
             ~
-!!! Type 'E' is not assignable to type 'T'.
+!!! error TS2323: Type 'E' is not assignable to type 'T'.
             y = e;
             ~
-!!! Type 'E' is not assignable to type 'U'.
+!!! error TS2323: Type 'E' is not assignable to type 'U'.
             z = e;
             ~
-!!! Type 'E' is not assignable to type 'V'.
+!!! error TS2323: Type 'E' is not assignable to type 'V'.
             var a: A = e;
                 ~
-!!! Type 'E' is not assignable to type 'A'.
+!!! error TS2323: Type 'E' is not assignable to type 'A'.
             var b: B = e;
                 ~
-!!! Type 'E' is not assignable to type 'B'.
+!!! error TS2323: Type 'E' is not assignable to type 'B'.
         }
     }

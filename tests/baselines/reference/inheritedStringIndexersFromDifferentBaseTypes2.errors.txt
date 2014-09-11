@@ -18,7 +18,7 @@
     }
     interface E extends A, D { } // error
               ~
-!!! Numeric index type '{}' is not assignable to string index type '{ a: any; }'.
+!!! error TS2413: Numeric index type '{}' is not assignable to string index type '{ a: any; }'.
     
     interface F extends A, D {
         [s: number]: {

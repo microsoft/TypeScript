@@ -3,7 +3,7 @@
     export class publicClassWithWithPrivateGetAccessorTypes {
         static get myPublicStaticMethod() { // Error
                    ~~~~~~~~~~~~~~~~~~~~
-!!! Return type of public static property getter from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets" but cannot be named.
+!!! error TS4038: Return type of public static property getter from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets" but cannot be named.
             return exporter.createExportedWidget1();
         }
         private static get myPrivateStaticMethod() {
@@ -11,7 +11,7 @@
         }
         get myPublicMethod() { // Error
             ~~~~~~~~~~~~~~
-!!! Return type of public property getter from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets" but cannot be named.
+!!! error TS4041: Return type of public property getter from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets" but cannot be named.
             return exporter.createExportedWidget1();
         }
         private get myPrivateMethod() {
@@ -19,7 +19,7 @@
         }
         static get myPublicStaticMethod1() { // Error
                    ~~~~~~~~~~~~~~~~~~~~~
-!!! Return type of public static property getter from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4038: Return type of public static property getter from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
             return exporter.createExportedWidget3();
         }
         private static get myPrivateStaticMethod1() {
@@ -27,7 +27,7 @@
         }
         get myPublicMethod1() { // Error
             ~~~~~~~~~~~~~~~
-!!! Return type of public property getter from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4041: Return type of public property getter from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
             return exporter.createExportedWidget3();
         }
         private get myPrivateMethod1() {
@@ -65,22 +65,22 @@
     export class publicClassWithPrivateModuleGetAccessorTypes {
         static get myPublicStaticMethod() { // Error
                    ~~~~~~~~~~~~~~~~~~~~
-!!! Return type of public static property getter from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets" but cannot be named.
+!!! error TS4038: Return type of public static property getter from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets" but cannot be named.
             return exporter.createExportedWidget2();
         }
         get myPublicMethod() { // Error
             ~~~~~~~~~~~~~~
-!!! Return type of public property getter from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets" but cannot be named.
+!!! error TS4041: Return type of public property getter from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets" but cannot be named.
             return exporter.createExportedWidget2();
         }
         static get myPublicStaticMethod1() { // Error
                    ~~~~~~~~~~~~~~~~~~~~~
-!!! Return type of public static property getter from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4038: Return type of public static property getter from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
             return exporter.createExportedWidget4();
         }
         get myPublicMethod1() { // Error
             ~~~~~~~~~~~~~~~
-!!! Return type of public property getter from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
+!!! error TS4041: Return type of public property getter from exported class has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
             return exporter.createExportedWidget4();
         }
     }

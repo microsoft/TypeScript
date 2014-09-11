@@ -3,6 +3,6 @@
     ~~~
     > 2;
     ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     ~~~
-!!! Operator '>' cannot be applied to types 'boolean' and 'number'.
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.

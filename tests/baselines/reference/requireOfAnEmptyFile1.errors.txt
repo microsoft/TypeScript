@@ -3,7 +3,7 @@
     
     import fs = require('requireOfAnEmptyFile1_b');
                         ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! File 'requireOfAnEmptyFile1_b.ts' is not an external module.
+!!! error TS2306: File 'requireOfAnEmptyFile1_b.ts' is not an external module.
     
 ==== tests/cases/compiler/requireOfAnEmptyFile1_b.ts (0 errors) ====
     

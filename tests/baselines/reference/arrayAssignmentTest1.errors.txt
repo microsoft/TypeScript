@@ -46,20 +46,20 @@
     
     var i1_error: I1 = []; // should be an error - is
         ~~~~~~~~
-!!! Type 'undefined[]' is not assignable to type 'I1':
-!!!   Property 'IM1' is missing in type 'undefined[]'.
+!!! error TS2322: Type 'undefined[]' is not assignable to type 'I1':
+!!! error TS2322:   Property 'IM1' is missing in type 'undefined[]'.
     var c1_error: C1 = []; // should be an error - is
         ~~~~~~~~
-!!! Type 'undefined[]' is not assignable to type 'C1':
-!!!   Property 'IM1' is missing in type 'undefined[]'.
+!!! error TS2322: Type 'undefined[]' is not assignable to type 'C1':
+!!! error TS2322:   Property 'IM1' is missing in type 'undefined[]'.
     var c2_error: C2 = []; // should be an error - is
         ~~~~~~~~
-!!! Type 'undefined[]' is not assignable to type 'C2':
-!!!   Property 'C2M1' is missing in type 'undefined[]'.
+!!! error TS2322: Type 'undefined[]' is not assignable to type 'C2':
+!!! error TS2322:   Property 'C2M1' is missing in type 'undefined[]'.
     var c3_error: C3 = []; // should be an error - is
         ~~~~~~~~
-!!! Type 'undefined[]' is not assignable to type 'C3':
-!!!   Property 'CM3M1' is missing in type 'undefined[]'.
+!!! error TS2322: Type 'undefined[]' is not assignable to type 'C3':
+!!! error TS2322:   Property 'CM3M1' is missing in type 'undefined[]'.
     
     
     arr_any = arr_i1; // should be ok - is
@@ -72,81 +72,81 @@
     arr_i1 = arr_c2; // should be ok - subtype relationship - is
     arr_i1 = arr_c3; // should be an error - is
     ~~~~~~
-!!! Type 'C3[]' is not assignable to type 'I1[]':
-!!!   Type 'C3' is not assignable to type 'I1':
-!!!     Property 'IM1' is missing in type 'C3'.
+!!! error TS2322: Type 'C3[]' is not assignable to type 'I1[]':
+!!! error TS2322:   Type 'C3' is not assignable to type 'I1':
+!!! error TS2322:     Property 'IM1' is missing in type 'C3'.
     
     arr_c1 = arr_c1; // should be ok - subtype relationship - is
     arr_c1 = arr_c2; // should be ok - subtype relationship - is
     arr_c1 = arr_i1; // should be an error - is
     ~~~~~~
-!!! Type 'I1[]' is not assignable to type 'C1[]':
-!!!   Type 'I1' is not assignable to type 'C1':
-!!!     Property 'C1M1' is missing in type 'I1'.
+!!! error TS2322: Type 'I1[]' is not assignable to type 'C1[]':
+!!! error TS2322:   Type 'I1' is not assignable to type 'C1':
+!!! error TS2322:     Property 'C1M1' is missing in type 'I1'.
     arr_c1 = arr_c3; // should be an error - is
     ~~~~~~
-!!! Type 'C3[]' is not assignable to type 'C1[]':
-!!!   Type 'C3' is not assignable to type 'C1':
-!!!     Property 'IM1' is missing in type 'C3'.
+!!! error TS2322: Type 'C3[]' is not assignable to type 'C1[]':
+!!! error TS2322:   Type 'C3' is not assignable to type 'C1':
+!!! error TS2322:     Property 'IM1' is missing in type 'C3'.
     
     arr_c2 = arr_c2; // should be ok - subtype relationship - is
     arr_c2 = arr_c1; // should be an error - subtype relationship - is
     ~~~~~~
-!!! Type 'C1[]' is not assignable to type 'C2[]':
-!!!   Type 'C1' is not assignable to type 'C2':
-!!!     Property 'C2M1' is missing in type 'C1'.
+!!! error TS2322: Type 'C1[]' is not assignable to type 'C2[]':
+!!! error TS2322:   Type 'C1' is not assignable to type 'C2':
+!!! error TS2322:     Property 'C2M1' is missing in type 'C1'.
     arr_c2 = arr_i1; // should be an error - subtype relationship - is
     ~~~~~~
-!!! Type 'I1[]' is not assignable to type 'C2[]':
-!!!   Type 'I1' is not assignable to type 'C2':
-!!!     Property 'C2M1' is missing in type 'I1'.
+!!! error TS2322: Type 'I1[]' is not assignable to type 'C2[]':
+!!! error TS2322:   Type 'I1' is not assignable to type 'C2':
+!!! error TS2322:     Property 'C2M1' is missing in type 'I1'.
     arr_c2 = arr_c3; // should be an error - is
     ~~~~~~
-!!! Type 'C3[]' is not assignable to type 'C2[]':
-!!!   Type 'C3' is not assignable to type 'C2':
-!!!     Property 'C2M1' is missing in type 'C3'.
+!!! error TS2322: Type 'C3[]' is not assignable to type 'C2[]':
+!!! error TS2322:   Type 'C3' is not assignable to type 'C2':
+!!! error TS2322:     Property 'C2M1' is missing in type 'C3'.
     
     // "clean up bug" occurs at this point
     // if you move these three expressions to another file, they raise an error
     // something to do with state from the above propagating forward?
     arr_c3 = arr_c2_2; // should be an error - is
     ~~~~~~
-!!! Type 'C2[]' is not assignable to type 'C3[]':
-!!!   Type 'C2' is not assignable to type 'C3':
-!!!     Property 'CM3M1' is missing in type 'C2'.
+!!! error TS2322: Type 'C2[]' is not assignable to type 'C3[]':
+!!! error TS2322:   Type 'C2' is not assignable to type 'C3':
+!!! error TS2322:     Property 'CM3M1' is missing in type 'C2'.
     arr_c3 = arr_c1_2; // should be an error - is
     ~~~~~~
-!!! Type 'C1[]' is not assignable to type 'C3[]':
-!!!   Type 'C1' is not assignable to type 'C3':
-!!!     Property 'CM3M1' is missing in type 'C1'.
+!!! error TS2322: Type 'C1[]' is not assignable to type 'C3[]':
+!!! error TS2322:   Type 'C1' is not assignable to type 'C3':
+!!! error TS2322:     Property 'CM3M1' is missing in type 'C1'.
     arr_c3 = arr_i1_2; // should be an error - is
     ~~~~~~
-!!! Type 'I1[]' is not assignable to type 'C3[]':
-!!!   Type 'I1' is not assignable to type 'C3':
-!!!     Property 'CM3M1' is missing in type 'I1'.
+!!! error TS2322: Type 'I1[]' is not assignable to type 'C3[]':
+!!! error TS2322:   Type 'I1' is not assignable to type 'C3':
+!!! error TS2322:     Property 'CM3M1' is missing in type 'I1'.
     
     arr_any = f1; // should be an error - is
     ~~~~~~~
-!!! Type '() => C1' is not assignable to type 'any[]':
-!!!   Property 'push' is missing in type '() => C1'.
+!!! error TS2322: Type '() => C1' is not assignable to type 'any[]':
+!!! error TS2322:   Property 'push' is missing in type '() => C1'.
     arr_any = o1; // should be an error - is
     ~~~~~~~
-!!! Type '{ one: number; }' is not assignable to type 'any[]':
-!!!   Property 'length' is missing in type '{ one: number; }'.
+!!! error TS2322: Type '{ one: number; }' is not assignable to type 'any[]':
+!!! error TS2322:   Property 'length' is missing in type '{ one: number; }'.
     arr_any = a1; // should be ok - is
     arr_any = c1; // should be an error - is
     ~~~~~~~
-!!! Type 'C1' is not assignable to type 'any[]':
-!!!   Property 'length' is missing in type 'C1'.
+!!! error TS2322: Type 'C1' is not assignable to type 'any[]':
+!!! error TS2322:   Property 'length' is missing in type 'C1'.
     arr_any = c2; // should be an error - is
     ~~~~~~~
-!!! Type 'C2' is not assignable to type 'any[]':
-!!!   Property 'length' is missing in type 'C2'.
+!!! error TS2322: Type 'C2' is not assignable to type 'any[]':
+!!! error TS2322:   Property 'length' is missing in type 'C2'.
     arr_any = c3; // should be an error - is
     ~~~~~~~
-!!! Type 'C3' is not assignable to type 'any[]':
-!!!   Property 'length' is missing in type 'C3'.
+!!! error TS2322: Type 'C3' is not assignable to type 'any[]':
+!!! error TS2322:   Property 'length' is missing in type 'C3'.
     arr_any = i1; // should be an error - is
     ~~~~~~~
-!!! Type 'I1' is not assignable to type 'any[]':
-!!!   Property 'length' is missing in type 'I1'.
+!!! error TS2322: Type 'I1' is not assignable to type 'any[]':
+!!! error TS2322:   Property 'length' is missing in type 'I1'.

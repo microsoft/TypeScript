@@ -1,4 +1,4 @@
 ==== tests/cases/conformance/parser/ecmascript5/Expressions/parserObjectCreation2.ts (1 errors) ====
     new new Foo()()
             ~~~
-!!! Cannot find name 'Foo'.
+!!! error TS2304: Cannot find name 'Foo'.

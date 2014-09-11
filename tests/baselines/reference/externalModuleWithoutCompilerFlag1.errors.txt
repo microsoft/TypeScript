@@ -3,5 +3,5 @@
     // Not on line 0 because we want to verify the error is placed in the appropriate location.
       export module M {
                     ~
-!!! Cannot compile external modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.
     }

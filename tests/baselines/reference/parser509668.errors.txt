@@ -3,5 +3,5 @@
       // Doesn't work, but should
       constructor (public ...args: string[]) { }
                           ~~~
-!!! ',' expected.
+!!! error TS1005: ',' expected.
     }

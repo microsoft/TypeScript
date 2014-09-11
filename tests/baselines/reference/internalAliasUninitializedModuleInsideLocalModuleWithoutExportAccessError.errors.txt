@@ -16,4 +16,4 @@
     
     export var z: c.b.I;
                   ~~~~~
-!!! Module '"tests/cases/compiler/internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError".c' has no exported member 'b'.
+!!! error TS2305: Module '"tests/cases/compiler/internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError".c' has no exported member 'b'.

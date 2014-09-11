@@ -1,8 +1,8 @@
 ==== tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens12.ts (3 errors) ====
     \ \ \
     
-!!! Invalid character.
+!!! error TS1127: Invalid character.
       
-!!! Invalid character.
+!!! error TS1127: Invalid character.
         
-!!! Invalid character.
+!!! error TS1127: Invalid character.

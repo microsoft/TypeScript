@@ -4,10 +4,10 @@
        public c() {
           v = 1;
           ~
-!!! Cannot find name 'v'.
+!!! error TS2304: Cannot find name 'v'.
           this.p = 1;
           s = 1;
           ~
-!!! Cannot find name 's'.
+!!! error TS2304: Cannot find name 's'.
        }
     }

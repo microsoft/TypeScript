@@ -8,8 +8,8 @@
     }
     class DerivedClass extends BaseClass {
           ~~~~~~~~~~~~
-!!! Class 'DerivedClass' incorrectly extends base class 'BaseClass':
-!!!   Private property '_init' cannot be reimplemented.
+!!! error TS2416: Class 'DerivedClass' incorrectly extends base class 'BaseClass':
+!!! error TS2416:   Private property '_init' cannot be reimplemented.
         constructor() {
             super();
         }

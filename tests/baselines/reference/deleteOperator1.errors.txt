@@ -4,4 +4,4 @@
     var y: any = delete a;
     var z: number = delete a;
         ~
-!!! Type 'boolean' is not assignable to type 'number'.
+!!! error TS2323: Type 'boolean' is not assignable to type 'number'.

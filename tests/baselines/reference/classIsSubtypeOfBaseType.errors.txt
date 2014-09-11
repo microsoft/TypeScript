@@ -11,10 +11,10 @@
     
     class Derived2 extends Base<{ bar: string; }> {
           ~~~~~~~~
-!!! Class 'Derived2' incorrectly extends base class 'Base<{ bar: string; }>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type '{ bar?: string; }' is not assignable to type '{ bar: string; }':
-!!!       Required property 'bar' cannot be reimplemented with optional property in '{ bar?: string; }'.
+!!! error TS2416: Class 'Derived2' incorrectly extends base class 'Base<{ bar: string; }>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type '{ bar?: string; }' is not assignable to type '{ bar: string; }':
+!!! error TS2416:       Required property 'bar' cannot be reimplemented with optional property in '{ bar?: string; }'.
         foo: {
             bar?: string; // error
         }

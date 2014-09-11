@@ -9,7 +9,7 @@
         thunk: (str: string) => {},
         thunk: (num: number) => {}
         ~~~~~
-!!! Duplicate identifier 'thunk'.
+!!! error TS2300: Duplicate identifier 'thunk'.
     });
     
     test({ // Should be OK.  Last 'thunk' is of correct type
@@ -19,12 +19,12 @@
         thunk: (str: string) => {}
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         ~~~~~
-!!! Duplicate identifier 'thunk'.
+!!! error TS2300: Duplicate identifier 'thunk'.
     });
     ~
-!!! Argument of type '{ thunk: (num: number) => void; }' is not assignable to parameter of type 'Thing'.
-!!!   Types of property 'thunk' are incompatible:
-!!!     Type '(num: number) => void' is not assignable to type '(str: string) => void':
-!!!       Types of parameters 'num' and 'str' are incompatible:
-!!!         Type 'number' is not assignable to type 'string'.
+!!! error TS2345: Argument of type '{ thunk: (num: number) => void; }' is not assignable to parameter of type 'Thing'.
+!!! error TS2345:   Types of property 'thunk' are incompatible:
+!!! error TS2345:     Type '(num: number) => void' is not assignable to type '(str: string) => void':
+!!! error TS2345:       Types of parameters 'num' and 'str' are incompatible:
+!!! error TS2345:         Type 'number' is not assignable to type 'string'.
     

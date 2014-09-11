@@ -7,4 +7,4 @@
     
     var z7 = foo("abc", 5); // Error
                  ~~~~~
-!!! Argument of type 'string' is not assignable to parameter of type 'Item'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'Item'.

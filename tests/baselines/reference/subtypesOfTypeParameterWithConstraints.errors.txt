@@ -7,40 +7,40 @@
     
     class D1<T extends U, U> extends C3<T> {
              ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: T;
         foo: T; // ok
     }
     
     class D2<T extends U, U> extends C3<U> {
           ~~
-!!! Class 'D2<T, U>' incorrectly extends base class 'C3<U>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'T' is not assignable to type 'U'.
+!!! error TS2416: Class 'D2<T, U>' incorrectly extends base class 'C3<U>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'T' is not assignable to type 'U'.
              ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: U;
         foo: T; // ok
         ~~~~~~~
-!!! Property 'foo' of type 'T' is not assignable to string index type 'U'.
+!!! error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'U'.
     }
     
     class D3<T extends U, U> extends C3<T> {
           ~~
-!!! Class 'D3<T, U>' incorrectly extends base class 'C3<T>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'U' is not assignable to type 'T'.
+!!! error TS2416: Class 'D3<T, U>' incorrectly extends base class 'C3<T>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'U' is not assignable to type 'T'.
              ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: T;
         foo: U; // error
         ~~~~~~~
-!!! Property 'foo' of type 'U' is not assignable to string index type 'T'.
+!!! error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'T'.
     }
     
     class D4<T extends U, U> extends C3<U> {
              ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: U;
         foo: U; // ok
     }
@@ -51,121 +51,121 @@
     // should all work
     class D5<T extends U, U extends V, V> extends C3<T> {
              ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                           ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: T;
         foo: T; // ok
     }
     
     class D6<T extends U, U extends V, V> extends C3<U> {
           ~~
-!!! Class 'D6<T, U, V>' incorrectly extends base class 'C3<U>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'T' is not assignable to type 'U'.
+!!! error TS2416: Class 'D6<T, U, V>' incorrectly extends base class 'C3<U>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'T' is not assignable to type 'U'.
              ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                           ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: U;
         foo: T;
         ~~~~~~~
-!!! Property 'foo' of type 'T' is not assignable to string index type 'U'.
+!!! error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'U'.
     }
     
     class D7<T extends U, U extends V, V> extends C3<V> {
           ~~
-!!! Class 'D7<T, U, V>' incorrectly extends base class 'C3<V>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'T' is not assignable to type 'V'.
+!!! error TS2416: Class 'D7<T, U, V>' incorrectly extends base class 'C3<V>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'T' is not assignable to type 'V'.
              ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                           ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: V;
         foo: T; // ok
         ~~~~~~~
-!!! Property 'foo' of type 'T' is not assignable to string index type 'V'.
+!!! error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'V'.
     }
     
     // test if U is a subtype of T, U, V
     // only a subtype of V and itself
     class D8<T extends U, U extends V, V> extends C3<T> {
           ~~
-!!! Class 'D8<T, U, V>' incorrectly extends base class 'C3<T>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'U' is not assignable to type 'T'.
+!!! error TS2416: Class 'D8<T, U, V>' incorrectly extends base class 'C3<T>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'U' is not assignable to type 'T'.
              ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                           ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: T;
         foo: U; // error
         ~~~~~~~
-!!! Property 'foo' of type 'U' is not assignable to string index type 'T'.
+!!! error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'T'.
     }
     
     class D9<T extends U, U extends V, V> extends C3<U> {
              ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                           ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: U;
         foo: U; // ok
     }
     
     class D10<T extends U, U extends V, V> extends C3<V> {
           ~~~
-!!! Class 'D10<T, U, V>' incorrectly extends base class 'C3<V>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'U' is not assignable to type 'V'.
+!!! error TS2416: Class 'D10<T, U, V>' incorrectly extends base class 'C3<V>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'U' is not assignable to type 'V'.
               ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                            ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: V;
         foo: U; // ok
         ~~~~~~~
-!!! Property 'foo' of type 'U' is not assignable to string index type 'V'.
+!!! error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'V'.
     }
     
     // test if V is a subtype of T, U, V
     // only a subtype of itself
     class D11<T extends U, U extends V, V> extends C3<T> {
           ~~~
-!!! Class 'D11<T, U, V>' incorrectly extends base class 'C3<T>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'V' is not assignable to type 'T'.
+!!! error TS2416: Class 'D11<T, U, V>' incorrectly extends base class 'C3<T>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'V' is not assignable to type 'T'.
               ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                            ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: T;
         foo: V; // error
         ~~~~~~~
-!!! Property 'foo' of type 'V' is not assignable to string index type 'T'.
+!!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'T'.
     }
     
     class D12<T extends U, U extends V, V> extends C3<U> {
           ~~~
-!!! Class 'D12<T, U, V>' incorrectly extends base class 'C3<U>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'V' is not assignable to type 'U'.
+!!! error TS2416: Class 'D12<T, U, V>' incorrectly extends base class 'C3<U>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'V' is not assignable to type 'U'.
               ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                            ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: U;
         foo: V; // error
         ~~~~~~~
-!!! Property 'foo' of type 'V' is not assignable to string index type 'U'.
+!!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'U'.
     }
     
     class D13<T extends U, U extends V, V> extends C3<V> {
               ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                            ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: V;
         foo: V; // ok
     }
@@ -175,166 +175,166 @@
     // should all work
     class D14<T extends U, U extends V, V extends Date> extends C3<Date> {
           ~~~
-!!! Class 'D14<T, U, V>' incorrectly extends base class 'C3<Date>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'T' is not assignable to type 'Date'.
+!!! error TS2416: Class 'D14<T, U, V>' incorrectly extends base class 'C3<Date>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'T' is not assignable to type 'Date'.
               ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                            ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: Date;
         foo: T; // ok
         ~~~~~~~
-!!! Property 'foo' of type 'T' is not assignable to string index type 'Date'.
+!!! error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'Date'.
     }
     
     class D15<T extends U, U extends V, V extends Date> extends C3<T> {
               ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                            ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: T;
         foo: T; // ok
     }
     
     class D16<T extends U, U extends V, V extends Date> extends C3<U> {
           ~~~
-!!! Class 'D16<T, U, V>' incorrectly extends base class 'C3<U>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'T' is not assignable to type 'U'.
+!!! error TS2416: Class 'D16<T, U, V>' incorrectly extends base class 'C3<U>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'T' is not assignable to type 'U'.
               ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                            ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: U;
         foo: T;
         ~~~~~~~
-!!! Property 'foo' of type 'T' is not assignable to string index type 'U'.
+!!! error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'U'.
     }
     
     class D17<T extends U, U extends V, V extends Date> extends C3<V> {
           ~~~
-!!! Class 'D17<T, U, V>' incorrectly extends base class 'C3<V>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'T' is not assignable to type 'V'.
+!!! error TS2416: Class 'D17<T, U, V>' incorrectly extends base class 'C3<V>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'T' is not assignable to type 'V'.
               ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                            ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: V;
         foo: T;
         ~~~~~~~
-!!! Property 'foo' of type 'T' is not assignable to string index type 'V'.
+!!! error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'V'.
     }
     
     // test if U is a subtype of T, U, V, Date
     // only a subtype of V, Date and itself
     class D18<T extends U, U extends V, V extends Date> extends C3<Date> {
           ~~~
-!!! Class 'D18<T, U, V>' incorrectly extends base class 'C3<Date>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'T' is not assignable to type 'Date'.
+!!! error TS2416: Class 'D18<T, U, V>' incorrectly extends base class 'C3<Date>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'T' is not assignable to type 'Date'.
               ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                            ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: Date;
         foo: T; // ok
         ~~~~~~~
-!!! Property 'foo' of type 'T' is not assignable to string index type 'Date'.
+!!! error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'Date'.
     }
     
     class D19<T extends U, U extends V, V extends Date> extends C3<T> {
           ~~~
-!!! Class 'D19<T, U, V>' incorrectly extends base class 'C3<T>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'U' is not assignable to type 'T'.
+!!! error TS2416: Class 'D19<T, U, V>' incorrectly extends base class 'C3<T>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'U' is not assignable to type 'T'.
               ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                            ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: T;
         foo: U; // error
         ~~~~~~~
-!!! Property 'foo' of type 'U' is not assignable to string index type 'T'.
+!!! error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'T'.
     }
     
     class D20<T extends U, U extends V, V extends Date> extends C3<U> {
               ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                            ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: U;
         foo: U; // ok
     }
     
     class D21<T extends U, U extends V, V extends Date> extends C3<V> {
           ~~~
-!!! Class 'D21<T, U, V>' incorrectly extends base class 'C3<V>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'U' is not assignable to type 'V'.
+!!! error TS2416: Class 'D21<T, U, V>' incorrectly extends base class 'C3<V>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'U' is not assignable to type 'V'.
               ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                            ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: V;
         foo: U;
         ~~~~~~~
-!!! Property 'foo' of type 'U' is not assignable to string index type 'V'.
+!!! error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'V'.
     }
     
     // test if V is a subtype of T, U, V, Date
     // only a subtype of itself and Date
     class D22<T extends U, U extends V, V extends Date> extends C3<Date> {
           ~~~
-!!! Class 'D22<T, U, V>' incorrectly extends base class 'C3<Date>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'T' is not assignable to type 'Date'.
+!!! error TS2416: Class 'D22<T, U, V>' incorrectly extends base class 'C3<Date>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'T' is not assignable to type 'Date'.
               ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                            ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: Date;
         foo: T; // ok
         ~~~~~~~
-!!! Property 'foo' of type 'T' is not assignable to string index type 'Date'.
+!!! error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'Date'.
     }
     
     class D23<T extends U, U extends V, V extends Date> extends C3<T> {
           ~~~
-!!! Class 'D23<T, U, V>' incorrectly extends base class 'C3<T>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'V' is not assignable to type 'T'.
+!!! error TS2416: Class 'D23<T, U, V>' incorrectly extends base class 'C3<T>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'V' is not assignable to type 'T'.
               ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                            ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: T;
         foo: V; // error
         ~~~~~~~
-!!! Property 'foo' of type 'V' is not assignable to string index type 'T'.
+!!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'T'.
     }
     
     class D24<T extends U, U extends V, V extends Date> extends C3<U> {
           ~~~
-!!! Class 'D24<T, U, V>' incorrectly extends base class 'C3<U>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'V' is not assignable to type 'U'.
+!!! error TS2416: Class 'D24<T, U, V>' incorrectly extends base class 'C3<U>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'V' is not assignable to type 'U'.
               ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                            ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: U;
         foo: V; // error
         ~~~~~~~
-!!! Property 'foo' of type 'V' is not assignable to string index type 'U'.
+!!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'U'.
     }
     
     class D25<T extends U, U extends V, V extends Date> extends C3<V> {
               ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                            ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: V;
         foo: V; // ok
     }
@@ -343,54 +343,54 @@
     // only a subtype of itself
     class D26<T extends U, U extends V, V extends Date> extends C3<Date> {
               ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                            ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: Date;
         foo: Date; // ok
     }
     
     class D27<T extends U, U extends V, V extends Date> extends C3<T> {
           ~~~
-!!! Class 'D27<T, U, V>' incorrectly extends base class 'C3<T>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'Date' is not assignable to type 'T'.
+!!! error TS2416: Class 'D27<T, U, V>' incorrectly extends base class 'C3<T>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'Date' is not assignable to type 'T'.
               ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                            ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: T;
         foo: Date; // error
         ~~~~~~~~~~
-!!! Property 'foo' of type 'Date' is not assignable to string index type 'T'.
+!!! error TS2411: Property 'foo' of type 'Date' is not assignable to string index type 'T'.
     }
     
     class D28<T extends U, U extends V, V extends Date> extends C3<U> {
           ~~~
-!!! Class 'D28<T, U, V>' incorrectly extends base class 'C3<U>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'Date' is not assignable to type 'U'.
+!!! error TS2416: Class 'D28<T, U, V>' incorrectly extends base class 'C3<U>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'Date' is not assignable to type 'U'.
               ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                            ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: U;
         foo: Date; // error
         ~~~~~~~~~~
-!!! Property 'foo' of type 'Date' is not assignable to string index type 'U'.
+!!! error TS2411: Property 'foo' of type 'Date' is not assignable to string index type 'U'.
     }
     
     class D29<T extends U, U extends V, V extends Date> extends C3<V> {
           ~~~
-!!! Class 'D29<T, U, V>' incorrectly extends base class 'C3<V>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'Date' is not assignable to type 'V'.
+!!! error TS2416: Class 'D29<T, U, V>' incorrectly extends base class 'C3<V>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'Date' is not assignable to type 'V'.
               ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                            ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: V;
         foo: Date; // error
         ~~~~~~~~~~
-!!! Property 'foo' of type 'Date' is not assignable to string index type 'V'.
+!!! error TS2411: Property 'foo' of type 'Date' is not assignable to string index type 'V'.
     }

@@ -11,5 +11,5 @@
     // Error, since y is not exported
     var y = A.y;
               ~
-!!! Property 'y' does not exist on type 'typeof A'.
+!!! error TS2339: Property 'y' does not exist on type 'typeof A'.
     

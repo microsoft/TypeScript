@@ -4,11 +4,11 @@
     var b: { one: number; two: string; };
     x = a;
     ~
-!!! Type '{ one: string; }' is not assignable to type '{ [x: string]: string; one: string; }':
-!!!   Index signature is missing in type '{ one: string; }'.
+!!! error TS2322: Type '{ one: string; }' is not assignable to type '{ [x: string]: string; one: string; }':
+!!! error TS2322:   Index signature is missing in type '{ one: string; }'.
     x = b; // error
     ~
-!!! Type '{ one: number; two: string; }' is not assignable to type '{ [x: string]: string; one: string; }':
-!!!   Types of property 'one' are incompatible:
-!!!     Type 'number' is not assignable to type 'string'.
+!!! error TS2322: Type '{ one: number; two: string; }' is not assignable to type '{ [x: string]: string; one: string; }':
+!!! error TS2322:   Types of property 'one' are incompatible:
+!!! error TS2322:     Type 'number' is not assignable to type 'string'.
     

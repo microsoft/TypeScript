@@ -2,12 +2,12 @@
     function foo() {
        bar(a,b
        ~~~
-!!! Cannot find name 'bar'.
+!!! error TS2304: Cannot find name 'bar'.
            ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.
              ~
-!!! Cannot find name 'b'.
+!!! error TS2304: Cannot find name 'b'.
        return;
        ~~~~~~
-!!! ',' expected.
+!!! error TS1005: ',' expected.
     }

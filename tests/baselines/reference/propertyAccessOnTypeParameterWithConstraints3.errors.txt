@@ -13,7 +13,7 @@
     
     class C<U extends A, T extends U> {
                          ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         f() {
             var x: T;
             // BUG 823818
@@ -33,7 +33,7 @@
     
     interface I<U extends A, T extends U> {
                              ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         foo: T;
     }
     var i: I<A, B>;
@@ -43,14 +43,14 @@
     var a: {
         <U extends A, T extends U>(): T;
                       ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         <U extends T, T extends A>(x: U): U;
          ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     }
     var r3 = a().foo(); // error, no inferences for U so it doesn't satisfy constraint
                  ~~~
-!!! Property 'foo' does not exist on type '{}'.
+!!! error TS2339: Property 'foo' does not exist on type '{}'.
     var r3b = a()['foo']();
     // parameter supplied for type argument inference for U
     var r3c = a(new B()).foo(); // valid call to an invalid function, U is inferred as B, which has a foo
@@ -59,7 +59,7 @@
     var b = {
         foo: <U extends A, T extends U>(x: T) => {
                            ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             // BUG 823818
             var a = x['foo'](); // should be string
             return a + x.foo();

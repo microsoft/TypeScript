@@ -2,5 +2,5 @@
     try {
     } catch (e: any) {
               ~
-!!! Catch clause parameter cannot have a type annotation.
+!!! error TS1013: Catch clause parameter cannot have a type annotation.
     }

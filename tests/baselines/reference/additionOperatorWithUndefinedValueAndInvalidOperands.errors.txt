@@ -11,36 +11,36 @@
     // undefined + boolean/Object
     var r1 = undefined + a;
              ~~~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'boolean' and 'boolean'.
+!!! error TS2365: Operator '+' cannot be applied to types 'boolean' and 'boolean'.
     var r2 = undefined + b;
              ~~~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'Object' and 'Object'.
+!!! error TS2365: Operator '+' cannot be applied to types 'Object' and 'Object'.
     var r3 = undefined + c;
              ~~~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'void' and 'void'.
+!!! error TS2365: Operator '+' cannot be applied to types 'void' and 'void'.
     var r4 = a + undefined;
              ~~~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'boolean' and 'boolean'.
+!!! error TS2365: Operator '+' cannot be applied to types 'boolean' and 'boolean'.
     var r5 = b + undefined;
              ~~~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'Object' and 'Object'.
+!!! error TS2365: Operator '+' cannot be applied to types 'Object' and 'Object'.
     var r6 = undefined + c;
              ~~~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'void' and 'void'.
+!!! error TS2365: Operator '+' cannot be applied to types 'void' and 'void'.
     
     // other cases
     var r7 = undefined + d;
              ~~~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'Number' and 'Number'.
+!!! error TS2365: Operator '+' cannot be applied to types 'Number' and 'Number'.
     var r8 = undefined + true;
              ~~~~~~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'boolean' and 'boolean'.
+!!! error TS2365: Operator '+' cannot be applied to types 'boolean' and 'boolean'.
     var r9 = undefined + { a: '' };
              ~~~~~~~~~~~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types '{ a: string; }' and '{ a: string; }'.
+!!! error TS2365: Operator '+' cannot be applied to types '{ a: string; }' and '{ a: string; }'.
     var r10 = undefined + foo();
               ~~~~~~~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types 'void' and 'void'.
+!!! error TS2365: Operator '+' cannot be applied to types 'void' and 'void'.
     var r11 = undefined + (() => { });
               ~~~~~~~~~~~~~~~~~~~~~~~
-!!! Operator '+' cannot be applied to types '() => void' and '() => void'.
+!!! error TS2365: Operator '+' cannot be applied to types '() => void' and '() => void'.

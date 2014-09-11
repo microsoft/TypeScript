@@ -7,6 +7,6 @@
     
             return () => message + this.name;
                                         ~~~~
-!!! Property 'name' does not exist on type 'TestFile'.
+!!! error TS2339: Property 'name' does not exist on type 'TestFile'.
         }
     }

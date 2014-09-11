@@ -1,10 +1,10 @@
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList7.ts (4 errors) ====
     Foo(a,,
           ~
-!!! Argument expression expected.
+!!! error TS1135: Argument expression expected.
            
-!!! ')' expected.
+!!! error TS1005: ')' expected.
     ~~~
-!!! Cannot find name 'Foo'.
+!!! error TS2304: Cannot find name 'Foo'.
         ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.

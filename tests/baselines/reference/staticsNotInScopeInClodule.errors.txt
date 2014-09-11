@@ -6,5 +6,5 @@
     module Clod {
         var p = x; // x isn't in scope here
                 ~
-!!! Cannot find name 'x'.
+!!! error TS2304: Cannot find name 'x'.
     }

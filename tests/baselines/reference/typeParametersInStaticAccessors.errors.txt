@@ -2,12 +2,12 @@
     class foo<T> {
         static get Foo(): () => T { return null; }
                    ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                                 ~
-!!! Static members cannot reference class type parameters.
+!!! error TS2302: Static members cannot reference class type parameters.
         static set Bar(v: { v: T }) { }
                    ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                                ~
-!!! Static members cannot reference class type parameters.
+!!! error TS2302: Static members cannot reference class type parameters.
     } 

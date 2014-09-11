@@ -43,7 +43,7 @@
     }
     declare export module m2 {
             ~~~~~~
-!!! 'export' modifier must precede 'declare' modifier.
+!!! error TS1029: 'export' modifier must precede 'declare' modifier.
     
         export var a: number;
     }

@@ -6,7 +6,7 @@
     
     var foo2: { [index]; } // should be an error
                  ~~~~~
-!!! An index signature parameter must have a type annotation.
+!!! error TS1022: An index signature parameter must have a type annotation.
     var bar2: { x : number; }
     
     var foo3: { ():void; }
@@ -16,8 +16,8 @@
     
     foo1 = bar1; // should be an error
     ~~~~
-!!! Type '{ x: number; }' is not assignable to type 'new () => any'.
+!!! error TS2323: Type '{ x: number; }' is not assignable to type 'new () => any'.
     foo2 = bar2; 
     foo3 = bar3; // should be an error
     ~~~~
-!!! Type '{ x: number; }' is not assignable to type '() => void'.
+!!! error TS2323: Type '{ x: number; }' is not assignable to type '() => void'.

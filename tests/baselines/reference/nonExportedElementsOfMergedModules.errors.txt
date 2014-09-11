@@ -13,7 +13,7 @@
         }
         B.x;
           ~
-!!! Property 'x' does not exist on type 'typeof B'.
+!!! error TS2339: Property 'x' does not exist on type 'typeof B'.
         B.y;
     }
     

@@ -2,16 +2,16 @@
     interface PropertyDescriptor {
         configurable?: boolean;
         ~~~~~~~~~~~~
-!!! Duplicate identifier 'configurable'.
+!!! error TS2300: Duplicate identifier 'configurable'.
         enumerable?: boolean;
         ~~~~~~~~~~
-!!! Duplicate identifier 'enumerable'.
+!!! error TS2300: Duplicate identifier 'enumerable'.
         value?: any;
         ~~~~~
-!!! Duplicate identifier 'value'.
+!!! error TS2300: Duplicate identifier 'value'.
         writable?: boolean;
         ~~~~~~~~
-!!! Duplicate identifier 'writable'.
+!!! error TS2300: Duplicate identifier 'writable'.
         get?(): any;
         set?(v: any): void;
     }

@@ -2,4 +2,4 @@
     interface foo{ }
     class foo{ }
           ~~~
-!!! Duplicate identifier 'foo'.
+!!! error TS2300: Duplicate identifier 'foo'.

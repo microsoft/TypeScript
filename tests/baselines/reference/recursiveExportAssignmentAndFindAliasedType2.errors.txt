@@ -7,7 +7,7 @@
     declare module "moduleC" {
         import self = require("moduleD");
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Circular definition of import alias 'self'.
+!!! error TS2303: Circular definition of import alias 'self'.
         export = self;
     }
     declare module "moduleD" {

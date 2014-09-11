@@ -3,8 +3,8 @@
     class C {
         set X(v = 0) { }
             ~
-!!! A 'set' accessor parameter cannot have an initializer.
+!!! error TS1052: A 'set' accessor parameter cannot have an initializer.
         static set X(v2 = 0) { }
                    ~
-!!! A 'set' accessor parameter cannot have an initializer.
+!!! error TS1052: A 'set' accessor parameter cannot have an initializer.
     }

@@ -4,4 +4,4 @@
     /* not copyright */
     import foo = require('./foo');
                          ~~~~~~~
-!!! Cannot find external module './foo'.
+!!! error TS2307: Cannot find external module './foo'.

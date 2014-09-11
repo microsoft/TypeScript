@@ -5,7 +5,7 @@
     
     declare function sort<U extends IComparable<U>>(items: U[]): U[];
                           ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     
     
     

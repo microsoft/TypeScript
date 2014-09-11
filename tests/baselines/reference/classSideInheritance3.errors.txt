@@ -16,8 +16,8 @@
     
     var r1: typeof A = B; // error
         ~~
-!!! Type 'typeof B' is not assignable to type 'typeof A'.
+!!! error TS2323: Type 'typeof B' is not assignable to type 'typeof A'.
     var r2: new (x: string) => A = B; // error
         ~~
-!!! Type 'typeof B' is not assignable to type 'new (x: string) => A'.
+!!! error TS2323: Type 'typeof B' is not assignable to type 'new (x: string) => A'.
     var r3: typeof A = C; // ok

@@ -2,7 +2,7 @@
     module M {
         export class C implements I {} // this should be an unresolved symbol I error
                                   ~
-!!! Cannot find name 'I'.
+!!! error TS2304: Cannot find name 'I'.
     }
     
     

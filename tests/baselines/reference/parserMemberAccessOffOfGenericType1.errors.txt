@@ -1,8 +1,8 @@
 ==== tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessOffOfGenericType1.ts (3 errors) ====
     var v = List<number>.makeChild();
                         ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
             ~~~~
-!!! Cannot find name 'List'.
+!!! error TS2304: Cannot find name 'List'.
                  ~~~~~~
-!!! Cannot find name 'number'.
+!!! error TS2304: Cannot find name 'number'.

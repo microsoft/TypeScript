@@ -4,7 +4,7 @@
     
     function foo<T, U extends T>(x: T, y: U): U { return y; }
                     ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     
     var r = foo(1, 2);
     var r = foo({}, 1);
@@ -23,7 +23,7 @@
     
     function foo2<T, U extends { length: T }>(x: T, y: U) { return y; }
                      ~~~~~~~~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     foo2(1, '');
     foo2({}, { length: 2 }); 
     foo2(1, { width: 3, length: 2 }); 

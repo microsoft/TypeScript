@@ -7,7 +7,7 @@
     var c: Comparer<any>;
     c = { compareTo: (x, y) => { return y; } };
                       ~
-!!! Parameter 'x' implicitly has an 'any' type.
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
                          ~
-!!! Parameter 'y' implicitly has an 'any' type.
+!!! error TS7006: Parameter 'y' implicitly has an 'any' type.
     var r = c.compareTo(1, '');

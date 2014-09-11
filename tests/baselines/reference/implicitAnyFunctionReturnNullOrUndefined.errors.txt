@@ -2,10 +2,10 @@
     // this should be an error
     function nullWidenFunction() { return null;}             // error at "nullWidenFunction"
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! 'nullWidenFunction', which lacks return-type annotation, implicitly has an 'any' return type.
+!!! error TS7010: 'nullWidenFunction', which lacks return-type annotation, implicitly has an 'any' return type.
     function undefinedWidenFunction() { return undefined; }  // error at "undefinedWidenFunction"
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! 'undefinedWidenFunction', which lacks return-type annotation, implicitly has an 'any' return type.
+!!! error TS7010: 'undefinedWidenFunction', which lacks return-type annotation, implicitly has an 'any' return type.
     
     class C {
         nullWidenFuncOfC() {  // error at "nullWidenFuncOfC"
@@ -14,7 +14,7 @@
     ~~~~~~~~~~~~~~~~~~~~
         }
     ~~~~~
-!!! 'nullWidenFuncOfC', which lacks return-type annotation, implicitly has an 'any' return type.
+!!! error TS7010: 'nullWidenFuncOfC', which lacks return-type annotation, implicitly has an 'any' return type.
     
         underfinedWidenFuncOfC() {  // error at "underfinedWidenFuncOfC"
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -22,7 +22,7 @@
     ~~~~~~~~~~~~~~~~~~~~~~~~~
         }
     ~~~~~
-!!! 'underfinedWidenFuncOfC', which lacks return-type annotation, implicitly has an 'any' return type.
+!!! error TS7010: 'underfinedWidenFuncOfC', which lacks return-type annotation, implicitly has an 'any' return type.
     }
     
     // this should not be an error

@@ -5,7 +5,7 @@
         constructor() {
             this.foo<string>();
             ~~~~~~~~~~~~~~~~~~
-!!! Untyped function calls may not accept type arguments.
+!!! error TS2347: Untyped function calls may not accept type arguments.
         }
     }
     

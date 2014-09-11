@@ -4,7 +4,7 @@
     
     ///<reference path='typescript.ts' />
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! File 'typescript.ts' not found.
+!!! error TS6053: File 'typescript.ts' not found.
     
     module TypeScript {
         // TODO: refactor indent logic for use in emit
@@ -16,9 +16,9 @@
     
             constructor (public outfile: ITextWriter, public parser: Parser) {
                                          ~~~~~~~~~~~
-!!! Cannot find name 'ITextWriter'.
+!!! error TS2304: Cannot find name 'ITextWriter'.
                                                                      ~~~~~~
-!!! Cannot find name 'Parser'.
+!!! error TS2304: Cannot find name 'Parser'.
             }
     
             public increaseIndent() {
@@ -33,7 +33,7 @@
                 if (this.builder.length > 0) {
                     CompilerDiagnostics.Alert(this.builder);
                     ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'CompilerDiagnostics'.
+!!! error TS2304: Cannot find name 'CompilerDiagnostics'.
                 }
                 var indentString = this.indentStrings[this.indentAmt];
                 if (indentString === undefined) {
@@ -60,11 +60,11 @@
     
         export function prePrintAST(ast: AST, parent: AST, walker: IAstWalker) {
                                          ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                                                       ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                                                                    ~~~~~~~~~~
-!!! Cannot find name 'IAstWalker'.
+!!! error TS2304: Cannot find name 'IAstWalker'.
             var pc: PrintContext = <PrintContext>walker.state;
     
             ast.print(pc);
@@ -75,11 +75,11 @@
     
         export function postPrintAST(ast: AST, parent: AST, walker: IAstWalker) {
                                           ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                                                        ~~~
-!!! Cannot find name 'AST'.
+!!! error TS2304: Cannot find name 'AST'.
                                                                     ~~~~~~~~~~
-!!! Cannot find name 'IAstWalker'.
+!!! error TS2304: Cannot find name 'IAstWalker'.
             var pc: PrintContext = <PrintContext>walker.state;
             pc.decreaseIndent();
             return ast;

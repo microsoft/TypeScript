@@ -5,14 +5,14 @@
     // operand before delete operator
     var BOOLEAN1 = ANY delete ;     //expect error
                        ~~~~~~
-!!! ',' expected.
+!!! error TS1005: ',' expected.
                               ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     
     // miss an operand
     var BOOLEAN2 = delete ;
                           ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     
     // delete global variable s
     class testADelx {

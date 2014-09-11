@@ -21,5 +21,5 @@
      var rr_v = o.name.r;
      var dd_v = o.name.d;
                        ~
-!!! Property 'd' does not exist on type 'Observable<string>'.
+!!! error TS2339: Property 'd' does not exist on type 'Observable<string>'.
     

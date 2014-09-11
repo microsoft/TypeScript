@@ -2,7 +2,7 @@
     class C {
         public public get Foo() { }
                ~~~~~~
-!!! Accessibility modifier already seen.
+!!! error TS1028: Accessibility modifier already seen.
                           ~~~
-!!! A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
     }

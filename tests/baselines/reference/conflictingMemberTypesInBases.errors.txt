@@ -12,7 +12,7 @@
     
     interface E extends B { } // Error here for extending B and D
               ~
-!!! Interface 'E' cannot simultaneously extend types 'B' and 'D':
-!!!   Named properties 'm' of types 'B' and 'D' are not identical.
+!!! error TS2320: Interface 'E' cannot simultaneously extend types 'B' and 'D':
+!!! error TS2320:   Named properties 'm' of types 'B' and 'D' are not identical.
     interface E extends D { } // No duplicate error here
     

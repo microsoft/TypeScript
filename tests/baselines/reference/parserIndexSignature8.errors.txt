@@ -1,8 +1,8 @@
 ==== tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature8.ts (2 errors) ====
     var foo: { [index: any]; }; // expect an error here
                 ~~~~~
-!!! An index signature parameter type must be 'string' or 'number'.
+!!! error TS1023: An index signature parameter type must be 'string' or 'number'.
     var foo2: { [index: RegExp]; }; // expect an error here
                  ~~~~~
-!!! An index signature parameter type must be 'string' or 'number'.
+!!! error TS1023: An index signature parameter type must be 'string' or 'number'.
     

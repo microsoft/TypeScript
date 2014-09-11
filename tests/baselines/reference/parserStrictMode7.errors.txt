@@ -2,4 +2,4 @@
     "use strict";
     ++eval;
       ~~~~
-!!! An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.

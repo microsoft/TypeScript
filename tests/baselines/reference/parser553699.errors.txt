@@ -3,7 +3,7 @@
       constructor() { }
       public banana (x: public) { }
                         ~~~~~~
-!!! Cannot find name 'public'.
+!!! error TS2304: Cannot find name 'public'.
     }
     
     class Bar {

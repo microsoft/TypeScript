@@ -8,8 +8,8 @@
     
     class C4 implements I1 {
           ~~
-!!! Class 'C4' incorrectly implements interface 'I1':
-!!!   Property 'iAny' is missing in type 'C4'.
+!!! error TS2421: Class 'C4' incorrectly implements interface 'I1':
+!!! error TS2421:   Property 'iAny' is missing in type 'C4'.
         public iObj:{ };
         public iNum:number;
         public iFn() { }

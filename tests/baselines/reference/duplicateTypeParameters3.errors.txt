@@ -2,7 +2,7 @@
     interface X {
     x: () => <A, A>() => void;
                  ~
-!!! Duplicate identifier 'A'.
+!!! error TS2300: Duplicate identifier 'A'.
     }
      
     

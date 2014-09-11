@@ -4,10 +4,10 @@
     
     f<number,string>.
                     ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
                      
-!!! Identifier expected.
+!!! error TS1003: Identifier expected.
       ~~~~~~
-!!! Cannot find name 'number'.
+!!! error TS2304: Cannot find name 'number'.
              ~~~~~~
-!!! Cannot find name 'string'.
+!!! error TS2304: Cannot find name 'string'.

@@ -1,8 +1,8 @@
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/LeftShifts/parserErrorRecovery_LeftShift1.ts (3 errors) ====
     retValue = bfs.VARIABLES >> );
                                 ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     ~~~~~~~~
-!!! Cannot find name 'retValue'.
+!!! error TS2304: Cannot find name 'retValue'.
                ~~~
-!!! Cannot find name 'bfs'.
+!!! error TS2304: Cannot find name 'bfs'.

@@ -9,40 +9,40 @@
     // Missing the second operand
     (ANY, );
           ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     (BOOLEAN, );
               ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     (NUMBER, );
              ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     (STRING, );
              ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     (OBJECT, );
              ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     
     // Missing the first operand
     (, ANY);
      ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     (, BOOLEAN);
      ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     (, NUMBER);
      ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     (, STRING);
      ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     (, OBJECT);
      ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     
     // Missing all operands
     ( , );
       ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
         ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.

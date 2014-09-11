@@ -1,35 +1,35 @@
 ==== tests/cases/compiler/staticsInAFunction.ts (14 errors) ====
     function boo{
                 ~
-!!! '(' expected.
+!!! error TS1005: '(' expected.
        static test()
        ~~~~~~
-!!! Statement expected.
+!!! error TS1129: Statement expected.
               ~~~~
-!!! Cannot find name 'test'.
+!!! error TS2304: Cannot find name 'test'.
        static test(name:string)
        ~~~~~~
-!!! Statement expected.
+!!! error TS1129: Statement expected.
                        ~
-!!! ',' expected.
+!!! error TS1005: ',' expected.
               ~~~~
-!!! Cannot find name 'test'.
+!!! error TS2304: Cannot find name 'test'.
                    ~~~~
-!!! Cannot find name 'name'.
+!!! error TS2304: Cannot find name 'name'.
                         ~~~~~~
-!!! Cannot find name 'string'.
+!!! error TS2304: Cannot find name 'string'.
        static test(name?:any){}
        ~~~~~~
-!!! Statement expected.
+!!! error TS1129: Statement expected.
                         ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
                              ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
               ~~~~
-!!! Cannot find name 'test'.
+!!! error TS2304: Cannot find name 'test'.
                    ~~~~
-!!! Cannot find name 'name'.
+!!! error TS2304: Cannot find name 'name'.
                          ~~~
-!!! Cannot find name 'any'.
+!!! error TS2304: Cannot find name 'any'.
     }
     

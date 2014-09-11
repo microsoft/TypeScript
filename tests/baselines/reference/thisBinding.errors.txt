@@ -9,7 +9,7 @@
     	f(x:I) {
     	    x.e;  // e not found
     	      ~
-!!! Property 'e' does not exist on type 'I'.
+!!! error TS2339: Property 'e' does not exist on type 'I'.
     	    x.z;  // ok 
     	}
         constructor() {

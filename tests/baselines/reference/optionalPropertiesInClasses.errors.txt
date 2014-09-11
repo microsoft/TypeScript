@@ -10,8 +10,8 @@
     
     class C2 implements ifoo { // ERROR - still need 'y'
           ~~
-!!! Class 'C2' incorrectly implements interface 'ifoo':
-!!!   Property 'y' is missing in type 'C2'.
+!!! error TS2421: Class 'C2' incorrectly implements interface 'ifoo':
+!!! error TS2421:   Property 'y' is missing in type 'C2'.
     	public x:number;
     }
     

@@ -10,4 +10,4 @@
     // grammar allows this for constructors
     var d = new x<any>(x); // no error
             ~~~~~~~~~~~~~
-!!! Untyped function calls may not accept type arguments.
+!!! error TS2347: Untyped function calls may not accept type arguments.

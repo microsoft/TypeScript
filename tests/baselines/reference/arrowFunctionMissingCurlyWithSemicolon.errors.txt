@@ -2,6 +2,6 @@
     // Should error at semicolon.
     var f = () => ;
                   ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     var b = 1 * 2 * 3 * 4;
     var square = (x: number) => x * x;

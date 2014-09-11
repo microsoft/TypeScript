@@ -3,7 +3,7 @@
     
     with (ooo.eee.oo.ah_ah.ting.tang.walla.walla) { // error
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! All symbols within a 'with' block will be resolved to 'any'.
+!!! error TS2410: All symbols within a 'with' block will be resolved to 'any'.
         bing = true; // no error
         bang = true; // no error
         
@@ -13,7 +13,7 @@
     
         class C {} // error   
         ~~~~~
-!!! Statement expected.
+!!! error TS1129: Statement expected.
         
         interface I {} // error
         
@@ -21,5 +21,5 @@
             
     }
     ~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.
     

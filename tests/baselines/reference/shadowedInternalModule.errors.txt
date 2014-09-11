@@ -13,7 +13,7 @@
         var A = { x: 0, y: 0 };
         import Point = A;
                        ~
-!!! Module 'A' is hidden by a local declaration with the same name
+!!! error TS2437: Module 'A' is hidden by a local declaration with the same name
     }
     
     module X {
@@ -32,7 +32,7 @@
     module Z {
         import Y = X.Y;
         ~~~~~~~~~~~~~~~
-!!! Import declaration conflicts with local declaration of 'Y'
+!!! error TS2440: Import declaration conflicts with local declaration of 'Y'
     
         var Y = 12;
     }

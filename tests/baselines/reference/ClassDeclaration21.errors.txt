@@ -3,5 +3,5 @@
         0();
         1() { }
         ~
-!!! Function implementation name must be '0'.
+!!! error TS2389: Function implementation name must be '0'.
     }

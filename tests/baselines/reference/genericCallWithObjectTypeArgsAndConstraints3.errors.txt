@@ -20,7 +20,7 @@
     
     function f2<T extends Base, U extends { x: T; y: T }>(a: U) {
                                 ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         var r: T;
         return r;
     }

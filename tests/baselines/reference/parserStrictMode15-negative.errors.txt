@@ -2,6 +2,6 @@
     "use strict";
     delete a[b];
            ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.
              ~
-!!! Cannot find name 'b'.
+!!! error TS2304: Cannot find name 'b'.

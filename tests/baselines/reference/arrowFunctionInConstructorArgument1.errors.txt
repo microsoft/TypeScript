@@ -4,5 +4,5 @@
     }
     var c = new C(() => { return asdf; } ) // should error
                                  ~~~~
-!!! Cannot find name 'asdf'.
+!!! error TS2304: Cannot find name 'asdf'.
     

@@ -18,11 +18,11 @@
     // error cases
     b = a = new A();
     ~
-!!! Type 'A' is not assignable to type 'B':
-!!!   Property 'value' is missing in type 'A'.
+!!! error TS2322: Type 'A' is not assignable to type 'B':
+!!! error TS2322:   Property 'value' is missing in type 'A'.
     a = b = new A();
         ~
-!!! Type 'A' is not assignable to type 'B'.
+!!! error TS2323: Type 'A' is not assignable to type 'B'.
     
     
     

@@ -5,25 +5,25 @@
         data: A<T>;
         get x(): A<T> {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         ~~~~~~~~~~~~~~~
             return this.data;
     ~~~~~~~~~~~~~~~~~~~~~~~~~
         }
     ~~~~~
-!!! 'get' and 'set' accessor must have the same type.
+!!! error TS2380: 'get' and 'set' accessor must have the same type.
         set x(v: A<string>) {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         ~~~~~~~~~~~~~~~~~~~~~
             this.data = v;
     ~~~~~~~~~~~~~~~~~~~~~~
             ~~~~~~~~~
-!!! Type 'A<string>' is not assignable to type 'A<T>':
-!!!   Type 'string' is not assignable to type 'T'.
+!!! error TS2322: Type 'A<string>' is not assignable to type 'A<T>':
+!!! error TS2322:   Type 'string' is not assignable to type 'T'.
         }
     ~~~~~
-!!! 'get' and 'set' accessor must have the same type.
+!!! error TS2380: 'get' and 'set' accessor must have the same type.
     }
     
     var x = new C();

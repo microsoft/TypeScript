@@ -4,5 +4,5 @@
     function foo(bar:{a:any;}[]):any{ return bar }
     var x = foo();
             ~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     

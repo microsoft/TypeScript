@@ -8,7 +8,7 @@
     
             MUnit.test(a);
             ~~~~~
-!!! Cannot find name 'MUnit'.
+!!! error TS2304: Cannot find name 'MUnit'.
                        ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.
     })();

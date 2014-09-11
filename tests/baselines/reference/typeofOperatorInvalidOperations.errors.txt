@@ -4,11 +4,11 @@
     // opreand before typeof
     var ANY = ANY typeof ;    //expect error
                   ~~~~~~
-!!! ',' expected.
+!!! error TS1005: ',' expected.
                          ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     
     // miss an operand
     var ANY1 = typeof ;
                       ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.

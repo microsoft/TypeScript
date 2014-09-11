@@ -6,7 +6,7 @@
     
         export var a, b2: number = 10, b;
                       ~~
-!!! Individual declarations in merged declaration b2 must be all exported or all local.
+!!! error TS2395: Individual declarations in merged declaration b2 must be all exported or all local.
         var m1;
         var a2, b22: number = 10, b222;
         var m3;
@@ -24,7 +24,7 @@
         declare var d1, d2;
         var b2;
             ~~
-!!! Individual declarations in merged declaration b2 must be all exported or all local.
+!!! error TS2395: Individual declarations in merged declaration b2 must be all exported or all local.
     
         declare var v1;
     }

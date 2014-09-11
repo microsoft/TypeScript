@@ -7,11 +7,11 @@
     var p: M.P;             // Used as ModuleName
     var m: M = M;           // Used as TypeName and PrimaryExpression (error on TypeName)
            ~
-!!! Cannot find name 'M'.
+!!! error TS2304: Cannot find name 'M'.
     var m2: typeof M = M;   // Used as PrimaryExpression in TypeQuery
     var x1 = M.a;           // Used as PrimaryExpression
     var x2 = m.a;           // Same as M.a
     var q: m.P;             // Error
            ~~~
-!!! Cannot find name 'm'.
+!!! error TS2304: Cannot find name 'm'.
     

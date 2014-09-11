@@ -8,7 +8,7 @@
     o = i;
     i = o;
     ~
-!!! Type 'Object' is not assignable to type 'I'.
+!!! error TS2323: Type 'Object' is not assignable to type 'I'.
      
     var a: {
         (): void
@@ -16,5 +16,5 @@
     o = a;
     a = o;
     ~
-!!! Type 'Object' is not assignable to type '() => void'.
+!!! error TS2323: Type 'Object' is not assignable to type '() => void'.
     

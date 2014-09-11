@@ -3,5 +3,5 @@
         1,
         1.0
         ~~~
-!!! Duplicate identifier '1.0'.
+!!! error TS2300: Duplicate identifier '1.0'.
     }

@@ -14,14 +14,14 @@
     interface indexErrors {
         [p2?: string];
          ~~
-!!! An index signature parameter cannot have a question mark.
+!!! error TS1019: An index signature parameter cannot have a question mark.
         [...p3: any[]];
             ~~
-!!! An index signature cannot have a rest parameter.
+!!! error TS1017: An index signature cannot have a rest parameter.
         [p4: string, p5?: string];
          ~~
-!!! An index signature must have exactly one parameter.
+!!! error TS1096: An index signature must have exactly one parameter.
         [p6: string, ...p7: any[]];
          ~~
-!!! An index signature must have exactly one parameter.
+!!! error TS1096: An index signature must have exactly one parameter.
     }

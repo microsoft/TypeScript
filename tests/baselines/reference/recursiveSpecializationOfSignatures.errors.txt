@@ -2,7 +2,7 @@
     class S0<B, A> {
     set S1(S2: S0<any,any>) {
         ~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     }
     constructor(public S17: S0<any, (S18) => A>) { }
     }

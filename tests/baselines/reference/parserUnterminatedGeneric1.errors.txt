@@ -2,8 +2,8 @@
      interface IQService {
             all(promises: IPromise < any > []): IPromise<
                                                          
-!!! '>' expected.
+!!! error TS1005: '>' expected.
                           ~~~~~~~~~~~~~~~~
-!!! Cannot find name 'IPromise'.
+!!! error TS2304: Cannot find name 'IPromise'.
                                                 ~~~~~~~~~
-!!! Cannot find name 'IPromise'.
+!!! error TS2304: Cannot find name 'IPromise'.

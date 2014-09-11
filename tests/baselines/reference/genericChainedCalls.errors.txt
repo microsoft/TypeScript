@@ -8,12 +8,12 @@
     var r1 = v1.func(num => num.toString()) 
                .func(str => str.length) // error, number doesn't have a length
                                 ~~~~~~
-!!! Property 'length' does not exist on type 'number'.
+!!! error TS2339: Property 'length' does not exist on type 'number'.
                .func(num => num.toString())
      
     var s1 = v1.func(num => num.toString()) 
     var s2 = s1.func(str => str.length) // should also error
                                 ~~~~~~
-!!! Property 'length' does not exist on type 'number'.
+!!! error TS2339: Property 'length' does not exist on type 'number'.
     var s3 = s2.func(num => num.toString())
     

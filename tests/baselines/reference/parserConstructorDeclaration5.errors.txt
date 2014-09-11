@@ -2,5 +2,5 @@
     class C {
       private constructor() { }
       ~~~~~~~
-!!! 'private' modifier cannot appear on a constructor declaration.
+!!! error TS1089: 'private' modifier cannot appear on a constructor declaration.
     }

@@ -2,7 +2,7 @@
     function f1(): { new (): number; } {
         return function () { return; }
                ~~~~~~~~~~~~~~~~~~~~~~~
-!!! Type '() => void' is not assignable to type 'new () => number'.
+!!! error TS2323: Type '() => void' is not assignable to type 'new () => number'.
     }; 
     
     var x = f1();

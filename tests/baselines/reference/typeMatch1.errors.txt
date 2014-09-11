@@ -18,15 +18,15 @@
     
     x6 = x7;
     ~~
-!!! Type 'D' is not assignable to type 'C':
-!!!   Private property 'x' cannot be reimplemented.
+!!! error TS2322: Type 'D' is not assignable to type 'C':
+!!! error TS2322:   Private property 'x' cannot be reimplemented.
     x6=C;
     ~~
-!!! Type 'typeof C' is not assignable to type 'C':
-!!!   Property 'x' is missing in type 'typeof C'.
+!!! error TS2322: Type 'typeof C' is not assignable to type 'C':
+!!! error TS2322:   Property 'x' is missing in type 'typeof C'.
     C==D;
     ~~~~
-!!! Operator '==' cannot be applied to types 'typeof C' and 'typeof D'.
+!!! error TS2365: Operator '==' cannot be applied to types 'typeof C' and 'typeof D'.
     C==C;
     
     

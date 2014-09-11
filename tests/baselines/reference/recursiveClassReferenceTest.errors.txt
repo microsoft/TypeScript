@@ -16,7 +16,7 @@
       
       		getDomNode(): Element;
       		              ~~~~~~~
-!!! Cannot find name 'Element'.
+!!! error TS2304: Cannot find name 'Element'.
     		
     		addWidget(widgetId:string, widget:IWidget);
     
@@ -58,7 +58,7 @@
     		public getDomNode() {
     			return domNode;
     			       ~~~~~~~
-!!! Cannot find name 'domNode'.
+!!! error TS2304: Cannot find name 'domNode'.
     		}
     		
     		public destroy() {
@@ -92,7 +92,7 @@
     		
     		public getMode(): IMode { return mode; }
     		                                 ~~~~
-!!! Cannot find name 'mode'.
+!!! error TS2304: Cannot find name 'mode'.
     	}
     	
     	export class Mode extends AbstractMode {
@@ -101,7 +101,7 @@
     		public getInitialState(): IState {
     			return new State(self);
     			                 ~~~~
-!!! Argument of type 'Window' is not assignable to parameter of type 'IMode'.
+!!! error TS2345: Argument of type 'Window' is not assignable to parameter of type 'IMode'.
     		}
     
     

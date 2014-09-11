@@ -6,5 +6,5 @@
     import x = m.m;
     import x = m.m;
            ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
     

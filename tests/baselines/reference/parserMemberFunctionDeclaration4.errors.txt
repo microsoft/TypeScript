@@ -2,5 +2,5 @@
     class C {
         export Foo() { }
         ~~~~~~
-!!! 'export' modifier cannot appear on a class element.
+!!! error TS1031: 'export' modifier cannot appear on a class element.
     }

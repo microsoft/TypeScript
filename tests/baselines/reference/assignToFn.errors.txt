@@ -8,6 +8,6 @@
     
         x.f="hello";
         ~~~
-!!! Type 'string' is not assignable to type '(n: number) => boolean'.
+!!! error TS2323: Type 'string' is not assignable to type '(n: number) => boolean'.
     }
     

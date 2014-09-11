@@ -3,7 +3,7 @@
       declare module M2 {
         declare module M3 {
         ~~~~~~~
-!!! A 'declare' modifier cannot be used in an already ambient context.
+!!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
         }
       }
     }

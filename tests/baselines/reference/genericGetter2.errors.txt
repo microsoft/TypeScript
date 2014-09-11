@@ -5,9 +5,9 @@
         data: A<T>;
         get x(): A {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                  ~
-!!! Generic type 'A<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'A<T>' requires 1 type argument(s).
             return this.data;
         }
     }

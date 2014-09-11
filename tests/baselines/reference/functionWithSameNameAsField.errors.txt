@@ -3,7 +3,7 @@
         public total: number;
         public total(total: number) {
                ~~~~~
-!!! Duplicate identifier 'total'.
+!!! error TS2300: Duplicate identifier 'total'.
             this.total = total;
             return this;
         }

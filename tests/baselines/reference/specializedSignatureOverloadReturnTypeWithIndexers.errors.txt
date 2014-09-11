@@ -15,5 +15,5 @@
         f(p: string): { [p: string]: string; };
         f(p: "spec"): { [p: number]: any; } // Should be error
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
     }

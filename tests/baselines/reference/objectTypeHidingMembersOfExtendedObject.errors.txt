@@ -11,21 +11,21 @@
         data: A;
         [x: string]: Object;
         ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'constructor' of type 'Function' is not assignable to string index type 'Object'.
+!!! error TS2411: Property 'constructor' of type 'Function' is not assignable to string index type 'Object'.
         ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'data' of type 'A' is not assignable to string index type 'Object'.
+!!! error TS2411: Property 'data' of type 'A' is not assignable to string index type 'Object'.
         ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'hasOwnProperty' of type '(v: string) => boolean' is not assignable to string index type 'Object'.
+!!! error TS2411: Property 'hasOwnProperty' of type '(v: string) => boolean' is not assignable to string index type 'Object'.
         ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'isPrototypeOf' of type '(v: Object) => boolean' is not assignable to string index type 'Object'.
+!!! error TS2411: Property 'isPrototypeOf' of type '(v: Object) => boolean' is not assignable to string index type 'Object'.
         ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'propertyIsEnumerable' of type '(v: string) => boolean' is not assignable to string index type 'Object'.
+!!! error TS2411: Property 'propertyIsEnumerable' of type '(v: string) => boolean' is not assignable to string index type 'Object'.
         ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'toLocaleString' of type '() => string' is not assignable to string index type 'Object'.
+!!! error TS2411: Property 'toLocaleString' of type '() => string' is not assignable to string index type 'Object'.
         ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'toString' of type '() => string' is not assignable to string index type 'Object'.
+!!! error TS2411: Property 'toString' of type '() => string' is not assignable to string index type 'Object'.
         ~~~~~~~~~~~~~~~~~~~~
-!!! Property 'valueOf' of type '() => Object' is not assignable to string index type 'Object'.
+!!! error TS2411: Property 'valueOf' of type '() => Object' is not assignable to string index type 'Object'.
     }
     
     class C {

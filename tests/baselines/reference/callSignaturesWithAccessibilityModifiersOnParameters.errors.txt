@@ -3,117 +3,117 @@
     
     function foo(public x, private y) { }
                  ~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
                            ~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
     var f = function foo(public x, private y) { }
                          ~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
                                    ~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
     var f2 = function (public x, private y) { }
                        ~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
                                  ~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
     var f3 = (x, private y) => { }
                  ~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
     var f4 = <T>(public x: T, y: T) => { }
                  ~~~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
     
     function foo2(private x: string, public y: number) { }
                   ~~~~~~~~~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
                                      ~~~~~~~~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
     var f5 = function foo(private x: string, public y: number) { }
                           ~~~~~~~~~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
                                              ~~~~~~~~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
     var f6 = function (private x: string, public y: number) { }
                        ~~~~~~~~~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
                                           ~~~~~~~~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
     var f7 = (private x: string, public y: number) => { }
               ~~~~~~~~~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
                                  ~~~~~~~~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
     var f8 = <T>(private x: T, public y: T) => { }
                  ~~~~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
                                ~~~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
     
     class C {
         foo(public x, private y) { }
             ~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
                       ~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
         foo2(public x: number, private y: string) { }
              ~~~~~~~~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
                                ~~~~~~~~~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
         foo3<T>(public x: T, private y: T) { }
                 ~~~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
                              ~~~~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
     }
     
     interface I {
         (private x, public y);
          ~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
                     ~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
         (private x: string, public y: number);
          ~~~~~~~~~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
                             ~~~~~~~~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
         foo(private x, public y);
             ~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
                        ~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
         foo(public x: number, y: string);
             ~~~~~~~~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
         foo3<T>(x: T, private y: T);
                       ~~~~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
     }
     
     var a: {
         foo(public x, private y);
             ~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
                       ~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
         foo2(private x: number, public y: string);
              ~~~~~~~~~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
                                 ~~~~~~~~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
     };
     
     var b = {
         foo(public x, y) { },
             ~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
         a: function foo(x: number, private y: string) { },
                                    ~~~~~~~~~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
         b: <T>(public x: T, private y: T) => { }
                ~~~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
                             ~~~~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
     }

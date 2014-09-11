@@ -9,5 +9,5 @@
     }
     __test2__.__val__aa = __test1__.__val__obj4
     ~~~~~~~~~~~~~~~~~~~
-!!! Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '{ [x: string]: any; }':
-!!!   Index signature is missing in type 'interfaceWithPublicAndOptional<number, string>'.
+!!! error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '{ [x: string]: any; }':
+!!! error TS2322:   Index signature is missing in type 'interfaceWithPublicAndOptional<number, string>'.

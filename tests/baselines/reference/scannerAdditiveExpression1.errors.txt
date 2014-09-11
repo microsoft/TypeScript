@@ -1,6 +1,6 @@
 ==== tests/cases/conformance/scanner/ecmascript5/scannerAdditiveExpression1.ts (2 errors) ====
     m.index+1+m[0].length;
     ~
-!!! Cannot find name 'm'.
+!!! error TS2304: Cannot find name 'm'.
               ~
-!!! Cannot find name 'm'.
+!!! error TS2304: Cannot find name 'm'.

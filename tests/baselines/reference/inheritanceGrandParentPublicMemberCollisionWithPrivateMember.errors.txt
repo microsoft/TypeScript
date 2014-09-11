@@ -7,8 +7,8 @@
     
     class C extends B {
           ~
-!!! Class 'C' incorrectly extends base class 'B':
-!!!   Private property 'myMethod' cannot be reimplemented.
+!!! error TS2416: Class 'C' incorrectly extends base class 'B':
+!!! error TS2416:   Private property 'myMethod' cannot be reimplemented.
         private myMethod() { }
     }
     

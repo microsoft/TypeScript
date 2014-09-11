@@ -2,47 +2,47 @@
     var aNumber: number;
     for (aNumber in {}) { }
          ~~~~~~~
-!!! The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
+!!! error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
     
     var aBoolean: boolean;
     for (aBoolean in {}) { }
          ~~~~~~~~
-!!! The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
+!!! error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
     
     var aRegExp: RegExp;
     for (aRegExp in {}) { }
          ~~~~~~~
-!!! The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
+!!! error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
     
     for (var idx : number in {}) { }
              ~~~
-!!! The left-hand side of a 'for...in' statement cannot use a type annotation.
+!!! error TS2404: The left-hand side of a 'for...in' statement cannot use a type annotation.
     
     function fn(): void { }
     for (var x in fn()) { }
                   ~~~~
-!!! The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
     
     var c : string, d:string, e;
     
     for (var x in c || d) { }
                   ~~~~~~
-!!! The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
     for (var x in e ? c : d) { }
                   ~~~~~~~~~
-!!! The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
     for (var x in 42 ? c : d) { }
                   ~~~~~~~~~~
-!!! The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
     for (var x in '' ? c : d) { }
                   ~~~~~~~~~~
-!!! The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
     for (var x in 42 ? d[x] : c[x]) { }
                   ~~~~~~~~~~~~~~~~
-!!! The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
     for (var x in c[23]) { }
                   ~~~~~
-!!! The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
     
     for (var x in (<T>(x: T) => x)) { }
     for (var x in function (x: string, y: number) { return x + y }) { }
@@ -51,7 +51,7 @@
         biz() : number{
             for (var x in this.biz()) { }
                           ~~~~~~~~~~
-!!! The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
             for (var x in this.biz) { }
             for (var x in this) { }
             return null;
@@ -62,7 +62,7 @@
             for (var x in this.baz) { }
             for (var x in this.baz()) { }
                           ~~~~~~~~~~
-!!! The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
     
             return null;
         }
@@ -72,14 +72,14 @@
         boz() {
             for (var x in this.biz()) { }
                           ~~~~~~~~~~
-!!! The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
             for (var x in this.biz) { }
             for (var x in this) { }
     
             for (var x in super.biz) { }
             for (var x in super.biz()) { }
                           ~~~~~~~~~~~
-!!! The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
             return null;
         }
     }
@@ -92,5 +92,5 @@
     
     for (var x in i[42]) { } 
                   ~~~~~
-!!! The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
     

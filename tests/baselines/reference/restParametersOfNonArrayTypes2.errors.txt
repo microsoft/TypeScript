@@ -7,60 +7,60 @@
     
     function foo(...x: MyThing) { }
                  ~~~~~~~~~~~~~
-!!! A rest parameter must be of an array type.
+!!! error TS2370: A rest parameter must be of an array type.
     var f = function foo(...x: MyThing) { }
                          ~~~~~~~~~~~~~
-!!! A rest parameter must be of an array type.
+!!! error TS2370: A rest parameter must be of an array type.
     var f2 = (...x: MyThing, ...y: MyThing) => { }
                  ~
-!!! A rest parameter must be last in a parameter list.
+!!! error TS1014: A rest parameter must be last in a parameter list.
               ~~~~~~~~~~~~~
-!!! A rest parameter must be of an array type.
+!!! error TS2370: A rest parameter must be of an array type.
                              ~~~~~~~~~~~~~
-!!! A rest parameter must be of an array type.
+!!! error TS2370: A rest parameter must be of an array type.
     
     class C {
         foo(...x: MyThing) { }
             ~~~~~~~~~~~~~
-!!! A rest parameter must be of an array type.
+!!! error TS2370: A rest parameter must be of an array type.
     }
     
     interface I {
         (...x: MyThing);
          ~~~~~~~~~~~~~
-!!! A rest parameter must be of an array type.
+!!! error TS2370: A rest parameter must be of an array type.
         foo(...x: MyThing, ...y: MyThing);
                ~
-!!! A rest parameter must be last in a parameter list.
+!!! error TS1014: A rest parameter must be last in a parameter list.
             ~~~~~~~~~~~~~
-!!! A rest parameter must be of an array type.
+!!! error TS2370: A rest parameter must be of an array type.
                            ~~~~~~~~~~~~~
-!!! A rest parameter must be of an array type.
+!!! error TS2370: A rest parameter must be of an array type.
     }
     
     var a: {
         (...x: MyThing);
          ~~~~~~~~~~~~~
-!!! A rest parameter must be of an array type.
+!!! error TS2370: A rest parameter must be of an array type.
         foo(...x: MyThing);
             ~~~~~~~~~~~~~
-!!! A rest parameter must be of an array type.
+!!! error TS2370: A rest parameter must be of an array type.
     }
     
     var b = {
         foo(...x: MyThing) { },
             ~~~~~~~~~~~~~
-!!! A rest parameter must be of an array type.
+!!! error TS2370: A rest parameter must be of an array type.
         a: function foo(...x: MyThing, ...y: MyThing) { },
                            ~
-!!! A rest parameter must be last in a parameter list.
+!!! error TS1014: A rest parameter must be last in a parameter list.
                         ~~~~~~~~~~~~~
-!!! A rest parameter must be of an array type.
+!!! error TS2370: A rest parameter must be of an array type.
                                        ~~~~~~~~~~~~~
-!!! A rest parameter must be of an array type.
+!!! error TS2370: A rest parameter must be of an array type.
         b: (...x: MyThing) => { }
             ~~~~~~~~~~~~~
-!!! A rest parameter must be of an array type.
+!!! error TS2370: A rest parameter must be of an array type.
     }
     
     
@@ -68,58 +68,58 @@
     
     function foo2(...x: MyThing2<string>) { }
                   ~~~~~~~~~~~~~~~~~~~~~~
-!!! A rest parameter must be of an array type.
+!!! error TS2370: A rest parameter must be of an array type.
     var f3 = function foo(...x: MyThing2<string>) { }
                           ~~~~~~~~~~~~~~~~~~~~~~
-!!! A rest parameter must be of an array type.
+!!! error TS2370: A rest parameter must be of an array type.
     var f4 = (...x: MyThing2<string>, ...y: MyThing2<string>) => { }
                  ~
-!!! A rest parameter must be last in a parameter list.
+!!! error TS1014: A rest parameter must be last in a parameter list.
               ~~~~~~~~~~~~~~~~~~~~~~
-!!! A rest parameter must be of an array type.
+!!! error TS2370: A rest parameter must be of an array type.
                                       ~~~~~~~~~~~~~~~~~~~~~~
-!!! A rest parameter must be of an array type.
+!!! error TS2370: A rest parameter must be of an array type.
     
     class C2 {
         foo(...x: MyThing2<string>) { }
             ~~~~~~~~~~~~~~~~~~~~~~
-!!! A rest parameter must be of an array type.
+!!! error TS2370: A rest parameter must be of an array type.
     }
     
     interface I2 {
         (...x: MyThing2<string>);
          ~~~~~~~~~~~~~~~~~~~~~~
-!!! A rest parameter must be of an array type.
+!!! error TS2370: A rest parameter must be of an array type.
         foo(...x: MyThing2<string>, ...y: MyThing2<string>);
                ~
-!!! A rest parameter must be last in a parameter list.
+!!! error TS1014: A rest parameter must be last in a parameter list.
             ~~~~~~~~~~~~~~~~~~~~~~
-!!! A rest parameter must be of an array type.
+!!! error TS2370: A rest parameter must be of an array type.
                                     ~~~~~~~~~~~~~~~~~~~~~~
-!!! A rest parameter must be of an array type.
+!!! error TS2370: A rest parameter must be of an array type.
     }
     
     var a2: {
         (...x: MyThing2<string>);
          ~~~~~~~~~~~~~~~~~~~~~~
-!!! A rest parameter must be of an array type.
+!!! error TS2370: A rest parameter must be of an array type.
         foo(...x: MyThing2<string>);
             ~~~~~~~~~~~~~~~~~~~~~~
-!!! A rest parameter must be of an array type.
+!!! error TS2370: A rest parameter must be of an array type.
     }
     
     var b2 = {
         foo(...x: MyThing2<string>) { },
             ~~~~~~~~~~~~~~~~~~~~~~
-!!! A rest parameter must be of an array type.
+!!! error TS2370: A rest parameter must be of an array type.
         a: function foo(...x: MyThing2<string>, ...y: MyThing2<string>) { },
                            ~
-!!! A rest parameter must be last in a parameter list.
+!!! error TS1014: A rest parameter must be last in a parameter list.
                         ~~~~~~~~~~~~~~~~~~~~~~
-!!! A rest parameter must be of an array type.
+!!! error TS2370: A rest parameter must be of an array type.
                                                 ~~~~~~~~~~~~~~~~~~~~~~
-!!! A rest parameter must be of an array type.
+!!! error TS2370: A rest parameter must be of an array type.
         b: (...x: MyThing2<string>) => { }
             ~~~~~~~~~~~~~~~~~~~~~~
-!!! A rest parameter must be of an array type.
+!!! error TS2370: A rest parameter must be of an array type.
     }

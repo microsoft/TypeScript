@@ -8,13 +8,13 @@
     class IntFooBad implements IFoo<number> {
         foo<string>(x: string): string { return null; }
             ~~~~~~
-!!! Type parameter name cannot be 'string'
+!!! error TS2368: Type parameter name cannot be 'string'
     }
     
     class StringFoo2 implements IFoo<string> {
         foo<string>(x: string): string { return null; }
             ~~~~~~
-!!! Type parameter name cannot be 'string'
+!!! error TS2368: Type parameter name cannot be 'string'
     }
     
     class StringFoo3 implements IFoo<string> {

@@ -3,19 +3,19 @@
         // super in a non class context
         var x = super;
                      ~
-!!! 'super' must be followed by an argument list or member access.
+!!! error TS1034: 'super' must be followed by an argument list or member access.
                 ~~~~~
-!!! 'super' can only be referenced in a derived class.
+!!! error TS2335: 'super' can only be referenced in a derived class.
         var y = () => super;
                            ~
-!!! 'super' must be followed by an argument list or member access.
+!!! error TS1034: 'super' must be followed by an argument list or member access.
                       ~~~~~
-!!! 'super' can only be referenced in a derived class.
+!!! error TS2335: 'super' can only be referenced in a derived class.
         var z = () => () => () => super;
                                        ~
-!!! 'super' must be followed by an argument list or member access.
+!!! error TS1034: 'super' must be followed by an argument list or member access.
                                   ~~~~~
-!!! 'super' can only be referenced in a derived class.
+!!! error TS2335: 'super' can only be referenced in a derived class.
     }
     
     class User {
@@ -34,22 +34,22 @@
             function inner() {
                 super.sayHello();
                 ~~~~~
-!!! 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+!!! error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
             }
     
             // super call in a lambda in an inner function in a constructor 
             function inner2() {
                 var x = () => super.sayHello();
                               ~~~~~
-!!! 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+!!! error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
             }
     
             // super call in a lambda in a function expression in a constructor 
             (function() { return () => super; })();
                                             ~
-!!! 'super' must be followed by an argument list or member access.
+!!! error TS1034: 'super' must be followed by an argument list or member access.
                                        ~~~~~
-!!! 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+!!! error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
         }
         sayHello(): void {
             // super call in a method
@@ -59,26 +59,26 @@
             function inner() {
                 var x = () => super.sayHello();
                               ~~~~~
-!!! 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+!!! error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
             }
     
             // super call in a lambda in a function expression in a constructor 
             (function() { return () => super; })();
                                             ~
-!!! 'super' must be followed by an argument list or member access.
+!!! error TS1034: 'super' must be followed by an argument list or member access.
                                        ~~~~~
-!!! 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
+!!! error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class
         }
         static staticFunction(): void {
             // super in static functions
             var s = super;
                          ~
-!!! 'super' must be followed by an argument list or member access.
+!!! error TS1034: 'super' must be followed by an argument list or member access.
             var x = () => super;
                                ~
-!!! 'super' must be followed by an argument list or member access.
+!!! error TS1034: 'super' must be followed by an argument list or member access.
             var y = () => () => () => super;
                                            ~
-!!! 'super' must be followed by an argument list or member access.
+!!! error TS1034: 'super' must be followed by an argument list or member access.
         }
     }

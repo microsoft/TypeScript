@@ -4,7 +4,7 @@
         interface y { a: Date }
         export = y;
         ~~~~~~~~~~~
-!!! An export assignment cannot be used in a module with other exported elements.
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
     }
      
     declare module "baz" {
@@ -18,6 +18,6 @@
      
         export = c;
         ~~~~~~~~~~~
-!!! An export assignment cannot be used in a module with other exported elements.
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
     }
     

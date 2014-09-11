@@ -5,7 +5,7 @@
     
       export function a(){  A.b();  } // A.b should be an unresolved symbol error
                               ~
-!!! Property 'b' does not exist on type 'typeof A'.
+!!! error TS2339: Property 'b' does not exist on type 'typeof A'.
     
     }
     

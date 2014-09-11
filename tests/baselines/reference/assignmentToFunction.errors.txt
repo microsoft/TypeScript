@@ -2,7 +2,7 @@
     function fn() { }
     fn = () => 3;
     ~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
     
     module foo {
         function xyz() {
@@ -10,6 +10,6 @@
             }
             bar = null;
             ~~~
-!!! Invalid left-hand side of assignment expression.
+!!! error TS2364: Invalid left-hand side of assignment expression.
         }
     }

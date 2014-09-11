@@ -3,16 +3,16 @@
                 constructor = constructor || function () { };
                 PluginUtilities.Utilities.markSupportedForProcessing(constructor);
                 ~~~~~~~~~~~~~~~
-!!! Cannot find name 'PluginUtilities'.
+!!! error TS2304: Cannot find name 'PluginUtilities'.
                 if (instanceMembers) {
                     initializeProperties(constructor.prototype, instanceMembers);
                     ~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'initializeProperties'.
+!!! error TS2304: Cannot find name 'initializeProperties'.
                 }
                 if (staticMembers) {
                     initializeProperties(constructor, staticMembers);
                     ~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'initializeProperties'.
+!!! error TS2304: Cannot find name 'initializeProperties'.
                 }
                 return constructor;
             }
@@ -24,17 +24,17 @@
                     constructor.prototype = Object.create(basePrototype);
                     PluginUtilities.Utilities.markSupportedForProcessing(constructor);
                     ~~~~~~~~~~~~~~~
-!!! Cannot find name 'PluginUtilities'.
+!!! error TS2304: Cannot find name 'PluginUtilities'.
                     Object.defineProperty(constructor.prototype, "constructor", { value: constructor, writable: true, configurable: true, enumerable: true });
                     if (instanceMembers) {
                         initializeProperties(constructor.prototype, instanceMembers);
                         ~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'initializeProperties'.
+!!! error TS2304: Cannot find name 'initializeProperties'.
                     }
                     if (staticMembers) {
                         initializeProperties(constructor, staticMembers);
                         ~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'initializeProperties'.
+!!! error TS2304: Cannot find name 'initializeProperties'.
                     }
                     return constructor;
                 } else {
@@ -48,7 +48,7 @@
                 for (i = 1, len = arguments.length; i < len; i++) {
                     initializeProperties(constructor.prototype, arguments[i]);
                     ~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'initializeProperties'.
+!!! error TS2304: Cannot find name 'initializeProperties'.
                 }
                 return constructor;
             }

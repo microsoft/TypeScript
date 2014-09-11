@@ -6,42 +6,42 @@
             [x: string]: string;
             [x: string]: string;
             ~~~~~~~~~~~~~~~~~~~~
-!!! Duplicate string index signature.
+!!! error TS2374: Duplicate string index signature.
         }
     
         interface String {
             [x: string]: string;
             [x: string]: string;
             ~~~~~~~~~~~~~~~~~~~~
-!!! Duplicate string index signature.
+!!! error TS2374: Duplicate string index signature.
         }
     
         interface Array<T> {
             [x: string]: T;
             [x: string]: T;
             ~~~~~~~~~~~~~~~
-!!! Duplicate string index signature.
+!!! error TS2374: Duplicate string index signature.
         }
     
         class C {
             [x: string]: string;
             [x: string]: string;
             ~~~~~~~~~~~~~~~~~~~~
-!!! Duplicate string index signature.
+!!! error TS2374: Duplicate string index signature.
         }
     
         interface I {
             [x: string]: string;
             [x: string]: string;
             ~~~~~~~~~~~~~~~~~~~~
-!!! Duplicate string index signature.
+!!! error TS2374: Duplicate string index signature.
         }
     
         var a: {
             [x: string]: string;
             [x: string]: string;
             ~~~~~~~~~~~~~~~~~~~~
-!!! Duplicate string index signature.
+!!! error TS2374: Duplicate string index signature.
         }
     }
     

@@ -2,4 +2,4 @@
     1 >>
     = 2;
     ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.

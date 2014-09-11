@@ -9,13 +9,13 @@
     export interface publicInterfaceWithPrivateParmeterTypes {
         new (param: privateClass): publicClass; // Error
              ~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of constructor signature from exported interface has or is using private name 'privateClass'.
+!!! error TS4065: Parameter 'param' of constructor signature from exported interface has or is using private name 'privateClass'.
         (param: privateClass): publicClass; // Error
          ~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of call signature from exported interface has or is using private name 'privateClass'.
+!!! error TS4067: Parameter 'param' of call signature from exported interface has or is using private name 'privateClass'.
         myMethod(param: privateClass): void; // Error
                  ~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of method from exported interface has or is using private name 'privateClass'.
+!!! error TS4075: Parameter 'param' of method from exported interface has or is using private name 'privateClass'.
     }
     
     export interface publicInterfaceWithPublicParmeterTypes {
@@ -39,23 +39,23 @@
     export class publicClassWithWithPrivateParmeterTypes {
         static myPublicStaticMethod(param: privateClass) { // Error
                                     ~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of public static method from exported class has or is using private name 'privateClass'.
+!!! error TS4070: Parameter 'param' of public static method from exported class has or is using private name 'privateClass'.
         }
         private static myPrivateStaticMethod(param: privateClass) {
         }
         myPublicMethod(param: privateClass) { // Error
                        ~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of public method from exported class has or is using private name 'privateClass'.
+!!! error TS4073: Parameter 'param' of public method from exported class has or is using private name 'privateClass'.
         }
         private myPrivateMethod(param: privateClass) {
         }
         constructor(param: privateClass, private param1: privateClass, public param2: privateClass) { // Error
                     ~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of constructor from exported class has or is using private name 'privateClass'.
+!!! error TS4063: Parameter 'param' of constructor from exported class has or is using private name 'privateClass'.
                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param1' of constructor from exported class has or is using private name 'privateClass'.
+!!! error TS4063: Parameter 'param1' of constructor from exported class has or is using private name 'privateClass'.
                                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param2' of constructor from exported class has or is using private name 'privateClass'.
+!!! error TS4063: Parameter 'param2' of constructor from exported class has or is using private name 'privateClass'.
         }
     }
     
@@ -100,7 +100,7 @@
     
     export function publicFunctionWithPrivateParmeterTypes(param: privateClass) { // Error
                                                            ~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of exported function has or is using private name 'privateClass'.
+!!! error TS4078: Parameter 'param' of exported function has or is using private name 'privateClass'.
     }
     export function publicFunctionWithPublicParmeterTypes(param: publicClass) {
     }
@@ -111,7 +111,7 @@
     
     export declare function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void; // Error
                                                                           ~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of exported function has or is using private name 'privateClass'.
+!!! error TS4078: Parameter 'param' of exported function has or is using private name 'privateClass'.
     export declare function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
     declare function privateAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
     declare function privateAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
@@ -119,39 +119,39 @@
     export interface publicInterfaceWithPrivateModuleParameterTypes {
         new (param: privateModule.publicClass): publicClass; // Error
              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of constructor signature from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4064: Parameter 'param' of constructor signature from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
         (param: privateModule.publicClass): publicClass; // Error
          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of call signature from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4066: Parameter 'param' of call signature from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
         myMethod(param: privateModule.publicClass): void; // Error
                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of method from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4074: Parameter 'param' of method from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
     }
     export class publicClassWithPrivateModuleParameterTypes {
         static myPublicStaticMethod(param: privateModule.publicClass) { // Error
                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of public static method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4069: Parameter 'param' of public static method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
         }
         myPublicMethod(param: privateModule.publicClass) { // Error
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of public method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4072: Parameter 'param' of public method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
         }
         constructor(param: privateModule.publicClass, private param1: privateModule.publicClass, public param2: privateModule.publicClass) { // Error
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of constructor from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4062: Parameter 'param' of constructor from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param1' of constructor from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4062: Parameter 'param1' of constructor from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
                                                                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param2' of constructor from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4062: Parameter 'param2' of constructor from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
         }
     }
     export function publicFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass) { // Error
                                                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of exported function has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4077: Parameter 'param' of exported function has or is using name 'privateModule.publicClass' from private module 'privateModule'.
     }
     export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void; // Error
                                                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of exported function has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4077: Parameter 'param' of exported function has or is using name 'privateModule.publicClass' from private module 'privateModule'.
     
     interface privateInterfaceWithPrivateModuleParameterTypes {
         new (param: privateModule.publicClass): publicClass;
@@ -181,13 +181,13 @@
         export interface publicInterfaceWithPrivateParmeterTypes {
             new (param: privateClass): publicClass; // Error
                  ~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of constructor signature from exported interface has or is using private name 'privateClass'.
+!!! error TS4065: Parameter 'param' of constructor signature from exported interface has or is using private name 'privateClass'.
             (param: privateClass): publicClass; // Error
              ~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of call signature from exported interface has or is using private name 'privateClass'.
+!!! error TS4067: Parameter 'param' of call signature from exported interface has or is using private name 'privateClass'.
             myMethod(param: privateClass): void; // Error
                      ~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of method from exported interface has or is using private name 'privateClass'.
+!!! error TS4075: Parameter 'param' of method from exported interface has or is using private name 'privateClass'.
         }
     
         export interface publicInterfaceWithPublicParmeterTypes {
@@ -211,23 +211,23 @@
         export class publicClassWithWithPrivateParmeterTypes {
             static myPublicStaticMethod(param: privateClass) { // Error
                                         ~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of public static method from exported class has or is using private name 'privateClass'.
+!!! error TS4070: Parameter 'param' of public static method from exported class has or is using private name 'privateClass'.
             }
             private static myPrivateStaticMethod(param: privateClass) {
             }
             myPublicMethod(param: privateClass) { // Error
                            ~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of public method from exported class has or is using private name 'privateClass'.
+!!! error TS4073: Parameter 'param' of public method from exported class has or is using private name 'privateClass'.
             }
             private myPrivateMethod(param: privateClass) {
             }
             constructor(param: privateClass, private param1: privateClass, public param2: privateClass) { // Error
                         ~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of constructor from exported class has or is using private name 'privateClass'.
+!!! error TS4063: Parameter 'param' of constructor from exported class has or is using private name 'privateClass'.
                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param1' of constructor from exported class has or is using private name 'privateClass'.
+!!! error TS4063: Parameter 'param1' of constructor from exported class has or is using private name 'privateClass'.
                                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param2' of constructor from exported class has or is using private name 'privateClass'.
+!!! error TS4063: Parameter 'param2' of constructor from exported class has or is using private name 'privateClass'.
             }
         }
     
@@ -272,7 +272,7 @@
     
         export function publicFunctionWithPrivateParmeterTypes(param: privateClass) { // Error
                                                                ~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of exported function has or is using private name 'privateClass'.
+!!! error TS4078: Parameter 'param' of exported function has or is using private name 'privateClass'.
         }
         export function publicFunctionWithPublicParmeterTypes(param: publicClass) {
         }
@@ -283,7 +283,7 @@
     
         export declare function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void; // Error
                                                                               ~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of exported function has or is using private name 'privateClass'.
+!!! error TS4078: Parameter 'param' of exported function has or is using private name 'privateClass'.
         export declare function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
         declare function privateAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
         declare function privateAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
@@ -291,39 +291,39 @@
         export interface publicInterfaceWithPrivateModuleParameterTypes {
             new (param: privateModule.publicClass): publicClass; // Error
                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of constructor signature from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4064: Parameter 'param' of constructor signature from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
             (param: privateModule.publicClass): publicClass; // Error
              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of call signature from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4066: Parameter 'param' of call signature from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
             myMethod(param: privateModule.publicClass): void; // Error
                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of method from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4074: Parameter 'param' of method from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
         }
         export class publicClassWithPrivateModuleParameterTypes {
             static myPublicStaticMethod(param: privateModule.publicClass) { // Error
                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of public static method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4069: Parameter 'param' of public static method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
             }
             myPublicMethod(param: privateModule.publicClass) { // Error
                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of public method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4072: Parameter 'param' of public method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
             }
             constructor(param: privateModule.publicClass, private param1: privateModule.publicClass, public param2: privateModule.publicClass) { // Error
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of constructor from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4062: Parameter 'param' of constructor from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
                                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param1' of constructor from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4062: Parameter 'param1' of constructor from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
                                                                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param2' of constructor from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4062: Parameter 'param2' of constructor from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
             }
         }
         export function publicFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass) { // Error
                                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of exported function has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4077: Parameter 'param' of exported function has or is using name 'privateModule.publicClass' from private module 'privateModule'.
         }
         export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void; // Error
                                                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of exported function has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4077: Parameter 'param' of exported function has or is using name 'privateModule.publicClass' from private module 'privateModule'.
     
         interface privateInterfaceWithPrivateModuleParameterTypes {
             new (param: privateModule.publicClass): publicClass;
@@ -642,13 +642,13 @@
         export interface publicInterfaceWithPrivateParmeterTypes {
             new (param: privateClass): publicClass; // Error
                  ~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of constructor signature from exported interface has or is using private name 'privateClass'.
+!!! error TS4065: Parameter 'param' of constructor signature from exported interface has or is using private name 'privateClass'.
             (param: privateClass): publicClass; // Error
              ~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of call signature from exported interface has or is using private name 'privateClass'.
+!!! error TS4067: Parameter 'param' of call signature from exported interface has or is using private name 'privateClass'.
             myMethod(param: privateClass): void; // Error
                      ~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of method from exported interface has or is using private name 'privateClass'.
+!!! error TS4075: Parameter 'param' of method from exported interface has or is using private name 'privateClass'.
         }
     
         export interface publicInterfaceWithPublicParmeterTypes {
@@ -672,23 +672,23 @@
         export class publicClassWithWithPrivateParmeterTypes {
             static myPublicStaticMethod(param: privateClass) { // Error
                                         ~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of public static method from exported class has or is using private name 'privateClass'.
+!!! error TS4070: Parameter 'param' of public static method from exported class has or is using private name 'privateClass'.
             }
             private static myPrivateStaticMethod(param: privateClass) {
             }
             myPublicMethod(param: privateClass) { // Error
                            ~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of public method from exported class has or is using private name 'privateClass'.
+!!! error TS4073: Parameter 'param' of public method from exported class has or is using private name 'privateClass'.
             }
             private myPrivateMethod(param: privateClass) {
             }
             constructor(param: privateClass, private param1: privateClass, public param2: privateClass) { // Error
                         ~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of constructor from exported class has or is using private name 'privateClass'.
+!!! error TS4063: Parameter 'param' of constructor from exported class has or is using private name 'privateClass'.
                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param1' of constructor from exported class has or is using private name 'privateClass'.
+!!! error TS4063: Parameter 'param1' of constructor from exported class has or is using private name 'privateClass'.
                                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param2' of constructor from exported class has or is using private name 'privateClass'.
+!!! error TS4063: Parameter 'param2' of constructor from exported class has or is using private name 'privateClass'.
             }
         }
     
@@ -733,7 +733,7 @@
     
         export function publicFunctionWithPrivateParmeterTypes(param: privateClass) { // Error
                                                                ~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of exported function has or is using private name 'privateClass'.
+!!! error TS4078: Parameter 'param' of exported function has or is using private name 'privateClass'.
         }
         export function publicFunctionWithPublicParmeterTypes(param: publicClass) {
         }
@@ -744,7 +744,7 @@
     
         export declare function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void; // Error
                                                                               ~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of exported function has or is using private name 'privateClass'.
+!!! error TS4078: Parameter 'param' of exported function has or is using private name 'privateClass'.
         export declare function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
         declare function privateAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
         declare function privateAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
@@ -752,39 +752,39 @@
         export interface publicInterfaceWithPrivateModuleParameterTypes {
             new (param: privateModule.publicClass): publicClass; // Error
                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of constructor signature from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4064: Parameter 'param' of constructor signature from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
             (param: privateModule.publicClass): publicClass; // Error
              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of call signature from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4066: Parameter 'param' of call signature from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
             myMethod(param: privateModule.publicClass): void; // Error
                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of method from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4074: Parameter 'param' of method from exported interface has or is using name 'privateModule.publicClass' from private module 'privateModule'.
         }
         export class publicClassWithPrivateModuleParameterTypes {
             static myPublicStaticMethod(param: privateModule.publicClass) { // Error
                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of public static method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4069: Parameter 'param' of public static method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
             }
             myPublicMethod(param: privateModule.publicClass) { // Error
                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of public method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4072: Parameter 'param' of public method from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
             }
             constructor(param: privateModule.publicClass, private param1: privateModule.publicClass, public param2: privateModule.publicClass) { // Error
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of constructor from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4062: Parameter 'param' of constructor from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
                                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param1' of constructor from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4062: Parameter 'param1' of constructor from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
                                                                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param2' of constructor from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4062: Parameter 'param2' of constructor from exported class has or is using name 'privateModule.publicClass' from private module 'privateModule'.
             }
         }
         export function publicFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass) { // Error
                                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of exported function has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4077: Parameter 'param' of exported function has or is using name 'privateModule.publicClass' from private module 'privateModule'.
         }
         export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void; // Error
                                                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Parameter 'param' of exported function has or is using name 'privateModule.publicClass' from private module 'privateModule'.
+!!! error TS4077: Parameter 'param' of exported function has or is using name 'privateModule.publicClass' from private module 'privateModule'.
     
         interface privateInterfaceWithPrivateModuleParameterTypes {
             new (param: privateModule.publicClass): publicClass;

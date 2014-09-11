@@ -21,7 +21,7 @@
     
     function other<T extends List<U>, U>() {
                    ~~~~~~~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         // error but wrong error
         // BUG 838247
         function foo3<V>(x: T);

@@ -6,12 +6,12 @@
     
         $ERROR('#6.1: var \\u0078x = 1; xx === 6. Actual: ' + (xx));
         ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
       }
     }
     catch (e) {
         $ERROR('#6.2: var \\u0078x = 1; xx === 6. Actual: ' + (xx));
         ~~~~~~
-!!! Cannot find name '$ERROR'.
+!!! error TS2304: Cannot find name '$ERROR'.
     
     }

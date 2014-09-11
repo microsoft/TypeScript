@@ -12,5 +12,5 @@
     
     console.log(s);
     ~~~~~~~
-!!! Cannot find name 'console'.
+!!! error TS2304: Cannot find name 'console'.
     

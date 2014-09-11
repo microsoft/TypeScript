@@ -14,4 +14,4 @@
     
     
     
-!!! '*/' expected.
+!!! error TS1010: '*/' expected.

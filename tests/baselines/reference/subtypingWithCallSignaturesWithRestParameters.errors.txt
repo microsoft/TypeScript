@@ -18,11 +18,11 @@
     
     interface I1C extends Base {
               ~~~
-!!! Interface 'I1C' incorrectly extends interface 'Base':
-!!!   Types of property 'a' are incompatible:
-!!!     Type '(...args: string[]) => number' is not assignable to type '(...args: number[]) => number':
-!!!       Types of parameters 'args' and 'args' are incompatible:
-!!!         Type 'string' is not assignable to type 'number'.
+!!! error TS2429: Interface 'I1C' incorrectly extends interface 'Base':
+!!! error TS2429:   Types of property 'a' are incompatible:
+!!! error TS2429:     Type '(...args: string[]) => number' is not assignable to type '(...args: number[]) => number':
+!!! error TS2429:       Types of parameters 'args' and 'args' are incompatible:
+!!! error TS2429:         Type 'string' is not assignable to type 'number'.
         a: (...args: string[]) => number; // error, type mismatch
     }
     
@@ -40,11 +40,11 @@
     
     interface I3B extends Base {
               ~~~
-!!! Interface 'I3B' incorrectly extends interface 'Base':
-!!!   Types of property 'a' are incompatible:
-!!!     Type '(x?: string) => number' is not assignable to type '(...args: number[]) => number':
-!!!       Types of parameters 'x' and 'args' are incompatible:
-!!!         Type 'string' is not assignable to type 'number'.
+!!! error TS2429: Interface 'I3B' incorrectly extends interface 'Base':
+!!! error TS2429:   Types of property 'a' are incompatible:
+!!! error TS2429:     Type '(x?: string) => number' is not assignable to type '(...args: number[]) => number':
+!!! error TS2429:       Types of parameters 'x' and 'args' are incompatible:
+!!! error TS2429:         Type 'string' is not assignable to type 'number'.
         a: (x?: string) => number; // error, incompatible type
     }
     
@@ -72,11 +72,11 @@
     
     interface I6C extends Base {
               ~~~
-!!! Interface 'I6C' incorrectly extends interface 'Base':
-!!!   Types of property 'a2' are incompatible:
-!!!     Type '(x: number, ...args: string[]) => number' is not assignable to type '(x: number, ...z: number[]) => number':
-!!!       Types of parameters 'args' and 'z' are incompatible:
-!!!         Type 'string' is not assignable to type 'number'.
+!!! error TS2429: Interface 'I6C' incorrectly extends interface 'Base':
+!!! error TS2429:   Types of property 'a2' are incompatible:
+!!! error TS2429:     Type '(x: number, ...args: string[]) => number' is not assignable to type '(x: number, ...z: number[]) => number':
+!!! error TS2429:       Types of parameters 'args' and 'z' are incompatible:
+!!! error TS2429:         Type 'string' is not assignable to type 'number'.
         a2: (x: number, ...args: string[]) => number; // error
     }
     
@@ -108,41 +108,41 @@
     
     interface I10B extends Base {
               ~~~~
-!!! Interface 'I10B' incorrectly extends interface 'Base':
-!!!   Types of property 'a3' are incompatible:
-!!!     Type '(x: number, y?: number, z?: number) => number' is not assignable to type '(x: number, y?: string, ...z: number[]) => number':
-!!!       Types of parameters 'y' and 'y' are incompatible:
-!!!         Type 'number' is not assignable to type 'string'.
+!!! error TS2429: Interface 'I10B' incorrectly extends interface 'Base':
+!!! error TS2429:   Types of property 'a3' are incompatible:
+!!! error TS2429:     Type '(x: number, y?: number, z?: number) => number' is not assignable to type '(x: number, y?: string, ...z: number[]) => number':
+!!! error TS2429:       Types of parameters 'y' and 'y' are incompatible:
+!!! error TS2429:         Type 'number' is not assignable to type 'string'.
         a3: (x: number, y?: number, z?: number) => number;  // error
     }
     
     interface I10C extends Base {
               ~~~~
-!!! Interface 'I10C' incorrectly extends interface 'Base':
-!!!   Types of property 'a3' are incompatible:
-!!!     Type '(x: number, ...z: number[]) => number' is not assignable to type '(x: number, y?: string, ...z: number[]) => number':
-!!!       Types of parameters 'z' and 'y' are incompatible:
-!!!         Type 'number' is not assignable to type 'string'.
+!!! error TS2429: Interface 'I10C' incorrectly extends interface 'Base':
+!!! error TS2429:   Types of property 'a3' are incompatible:
+!!! error TS2429:     Type '(x: number, ...z: number[]) => number' is not assignable to type '(x: number, y?: string, ...z: number[]) => number':
+!!! error TS2429:       Types of parameters 'z' and 'y' are incompatible:
+!!! error TS2429:         Type 'number' is not assignable to type 'string'.
         a3: (x: number, ...z: number[]) => number;  // error
     }
     
     interface I10D extends Base {
               ~~~~
-!!! Interface 'I10D' incorrectly extends interface 'Base':
-!!!   Types of property 'a3' are incompatible:
-!!!     Type '(x: string, y?: string, z?: string) => number' is not assignable to type '(x: number, y?: string, ...z: number[]) => number':
-!!!       Types of parameters 'x' and 'x' are incompatible:
-!!!         Type 'string' is not assignable to type 'number'.
+!!! error TS2429: Interface 'I10D' incorrectly extends interface 'Base':
+!!! error TS2429:   Types of property 'a3' are incompatible:
+!!! error TS2429:     Type '(x: string, y?: string, z?: string) => number' is not assignable to type '(x: number, y?: string, ...z: number[]) => number':
+!!! error TS2429:       Types of parameters 'x' and 'x' are incompatible:
+!!! error TS2429:         Type 'string' is not assignable to type 'number'.
         a3: (x: string, y?: string, z?: string) => number;  // error, incompatible types
     }
     
     interface I10E extends Base {
               ~~~~
-!!! Interface 'I10E' incorrectly extends interface 'Base':
-!!!   Types of property 'a3' are incompatible:
-!!!     Type '(x: number, ...z: string[]) => number' is not assignable to type '(x: number, y?: string, ...z: number[]) => number':
-!!!       Types of parameters 'z' and 'z' are incompatible:
-!!!         Type 'string' is not assignable to type 'number'.
+!!! error TS2429: Interface 'I10E' incorrectly extends interface 'Base':
+!!! error TS2429:   Types of property 'a3' are incompatible:
+!!! error TS2429:     Type '(x: number, ...z: string[]) => number' is not assignable to type '(x: number, y?: string, ...z: number[]) => number':
+!!! error TS2429:       Types of parameters 'z' and 'z' are incompatible:
+!!! error TS2429:         Type 'string' is not assignable to type 'number'.
         a3: (x: number, ...z: string[]) => number;  // error
     }
     
@@ -152,11 +152,11 @@
     
     interface I12 extends Base {
               ~~~
-!!! Interface 'I12' incorrectly extends interface 'Base':
-!!!   Types of property 'a4' are incompatible:
-!!!     Type '(x?: number, y?: number) => number' is not assignable to type '(x?: number, y?: string, ...z: number[]) => number':
-!!!       Types of parameters 'y' and 'y' are incompatible:
-!!!         Type 'number' is not assignable to type 'string'.
+!!! error TS2429: Interface 'I12' incorrectly extends interface 'Base':
+!!! error TS2429:   Types of property 'a4' are incompatible:
+!!! error TS2429:     Type '(x?: number, y?: number) => number' is not assignable to type '(x?: number, y?: string, ...z: number[]) => number':
+!!! error TS2429:       Types of parameters 'y' and 'y' are incompatible:
+!!! error TS2429:         Type 'number' is not assignable to type 'string'.
         a4: (x?: number, y?: number) => number; // error, type mismatch
     }
     
@@ -166,11 +166,11 @@
     
     interface I14 extends Base {
               ~~~
-!!! Interface 'I14' incorrectly extends interface 'Base':
-!!!   Types of property 'a4' are incompatible:
-!!!     Type '(x: number, y?: number) => number' is not assignable to type '(x?: number, y?: string, ...z: number[]) => number':
-!!!       Types of parameters 'y' and 'y' are incompatible:
-!!!         Type 'number' is not assignable to type 'string'.
+!!! error TS2429: Interface 'I14' incorrectly extends interface 'Base':
+!!! error TS2429:   Types of property 'a4' are incompatible:
+!!! error TS2429:     Type '(x: number, y?: number) => number' is not assignable to type '(x?: number, y?: string, ...z: number[]) => number':
+!!! error TS2429:       Types of parameters 'y' and 'y' are incompatible:
+!!! error TS2429:         Type 'number' is not assignable to type 'string'.
         a4: (x: number, y?: number) => number;  // error, second param has type mismatch
     }
     
@@ -180,21 +180,21 @@
     
     interface I16 extends Base {
               ~~~
-!!! Interface 'I16' incorrectly extends interface 'Base':
-!!!   Types of property 'a4' are incompatible:
-!!!     Type '(x: number, ...args: string[]) => number' is not assignable to type '(x?: number, y?: string, ...z: number[]) => number':
-!!!       Types of parameters 'args' and 'z' are incompatible:
-!!!         Type 'string' is not assignable to type 'number'.
+!!! error TS2429: Interface 'I16' incorrectly extends interface 'Base':
+!!! error TS2429:   Types of property 'a4' are incompatible:
+!!! error TS2429:     Type '(x: number, ...args: string[]) => number' is not assignable to type '(x?: number, y?: string, ...z: number[]) => number':
+!!! error TS2429:       Types of parameters 'args' and 'z' are incompatible:
+!!! error TS2429:         Type 'string' is not assignable to type 'number'.
         a4: (x: number, ...args: string[]) => number;  // error, rest param has type mismatch
     }
     
     interface I17 extends Base {
               ~~~
-!!! Interface 'I17' incorrectly extends interface 'Base':
-!!!   Types of property 'a4' are incompatible:
-!!!     Type '(...args: number[]) => number' is not assignable to type '(x?: number, y?: string, ...z: number[]) => number':
-!!!       Types of parameters 'args' and 'y' are incompatible:
-!!!         Type 'number' is not assignable to type 'string'.
+!!! error TS2429: Interface 'I17' incorrectly extends interface 'Base':
+!!! error TS2429:   Types of property 'a4' are incompatible:
+!!! error TS2429:     Type '(...args: number[]) => number' is not assignable to type '(x?: number, y?: string, ...z: number[]) => number':
+!!! error TS2429:       Types of parameters 'args' and 'y' are incompatible:
+!!! error TS2429:         Type 'number' is not assignable to type 'string'.
         a4: (...args: number[]) => number; // error
     }
     

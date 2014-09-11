@@ -8,9 +8,9 @@
     f(g<A, B>(7));
     f(g < A, B > 7); // Should error
     ~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     f(g < A, B > +(7)); // Should error
     ~~~~~~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     
     

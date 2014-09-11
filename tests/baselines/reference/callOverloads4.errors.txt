@@ -2,15 +2,15 @@
     
     function Foo():Foo;
                    ~~~
-!!! Cannot find name 'Foo'.
+!!! error TS2304: Cannot find name 'Foo'.
     function Foo(s:string):Foo;
              ~~~
-!!! Function implementation is missing or not immediately following the declaration.
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
                            ~~~
-!!! Cannot find name 'Foo'.
+!!! error TS2304: Cannot find name 'Foo'.
     class Foo {    
           ~~~
-!!! Duplicate identifier 'Foo'.
+!!! error TS2300: Duplicate identifier 'Foo'.
         bar1() { /*WScript.Echo("bar1");*/ }
         constructor(s: string);
         constructor(x: any) {
@@ -20,7 +20,7 @@
     
     var f1 = new Foo("hey");
              ~~~~~~~~~~~~~~
-!!! Only a void function can be called with the 'new' keyword.
+!!! error TS2350: Only a void function can be called with the 'new' keyword.
     
     
     f1.bar1();

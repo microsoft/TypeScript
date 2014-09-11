@@ -11,22 +11,22 @@
     
     import m = no;
     ~~~~~~~~~~~~~~
-!!! Cannot find name 'no'.
+!!! error TS2304: Cannot find name 'no'.
     import m2 = no.mod;
     ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'no'.
+!!! error TS2304: Cannot find name 'no'.
     import n = 5;
                ~
-!!! Identifier expected.
+!!! error TS1003: Identifier expected.
     import o = "s";
                ~~~
-!!! Identifier expected.
+!!! error TS1003: Identifier expected.
     import q = null;
                ~~~~
-!!! Identifier expected.
+!!! error TS1003: Identifier expected.
     import r = undefined;
     ~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'undefined'.
+!!! error TS2304: Cannot find name 'undefined'.
     
     
     var p = new provide.Provide();
@@ -38,7 +38,7 @@
       var p2: foo.Provide;
       var p3:booz.bar;
              ~~~~~~~~
-!!! Module 'foo.bar.baz' has no exported member 'bar'.
+!!! error TS2305: Module 'foo.bar.baz' has no exported member 'bar'.
       var p22 = new provide.Provide();
     }
     

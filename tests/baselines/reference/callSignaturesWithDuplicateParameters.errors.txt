@@ -3,81 +3,81 @@
     
     function foo(x, x) { }
                     ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
     var f = function foo(x, x) { }
                             ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
     var f2 = function (x, x) { }
                           ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
     var f3 = (x, x) => { }
                  ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
     var f4 = <T>(x: T, x: T) => { }
                        ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
     
     function foo2(x: string, x: number) { }
                              ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
     var f5 = function foo(x: string, x: number) { }
                                      ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
     var f6 = function (x: string, x: number) { }
                                   ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
     var f7 = (x: string, x: number) => { }
                          ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
     var f8 = <T>(x: T, y: T) => { }
     
     class C {
         foo(x, x) { }
                ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
         foo2(x: number, x: string) { }
                         ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
         foo3<T>(x: T, x: T) { }
                       ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
     }
     
     interface I {
         (x, x);
             ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
         (x: string, x: number);
                     ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
         foo(x, x);
                ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
         foo(x: number, x: string);
                        ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
         foo3<T>(x: T, x: T);
                       ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
     }
     
     var a: {
         foo(x, x);
                ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
         foo2(x: number, x: string);
                         ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
     };
     
     var b = {
         foo(x, x) { },
                ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
         a: function foo(x: number, x: string) { },
                                    ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
         b: <T>(x: T, x: T) => { }
                      ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
     }

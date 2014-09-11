@@ -1,9 +1,9 @@
 ==== tests/cases/conformance/parser/ecmascript5/parserNotRegex1.ts (2 errors) ====
       if (a.indexOf(-(4/3)))      // We should not get a regex here becuase of the / in the comment.
           ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.
       {
         return true;
         ~~~~~~
-!!! A 'return' statement can only be used within a function body.
+!!! error TS1108: A 'return' statement can only be used within a function body.
       }

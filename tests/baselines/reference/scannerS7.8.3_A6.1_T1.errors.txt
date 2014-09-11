@@ -13,6 +13,6 @@
     //CHECK#1
     0x
       
-!!! Hexadecimal digit expected.
+!!! error TS1125: Hexadecimal digit expected.
     
     

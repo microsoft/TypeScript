@@ -4,7 +4,7 @@
     
     function foo(x = 2);
                  ~~~~~
-!!! A parameter initializer is only allowed in a function or constructor implementation.
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
     function foo(x = 1) { }
     
     foo(1);
@@ -13,7 +13,7 @@
     class C {
         foo(x = 2);
             ~~~~~
-!!! A parameter initializer is only allowed in a function or constructor implementation.
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
         foo(x = 1) { }
     }
     
@@ -24,10 +24,10 @@
     var b = {
         foo(x = 1),
                   ~
-!!! '{' expected.
+!!! error TS1005: '{' expected.
         foo(x = 1) { },
         ~~~
-!!! Duplicate identifier 'foo'.
+!!! error TS2300: Duplicate identifier 'foo'.
     }
     
     b.foo();

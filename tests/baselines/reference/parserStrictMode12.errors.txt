@@ -2,4 +2,4 @@
     "use strict";
     var v = { set foo(eval) { } }
                       ~~~~
-!!! Invalid use of 'eval' in strict mode.
+!!! error TS1100: Invalid use of 'eval' in strict mode.

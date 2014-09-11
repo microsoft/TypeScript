@@ -2,4 +2,4 @@
     target:
       continue target;
       ~~~~~~~~~~~~~~~~
-!!! A 'continue' statement can only jump to a label of an enclosing iteration statement.
+!!! error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.

@@ -4,7 +4,7 @@
     function callb(a) { }
     callb((a) => { a.length; } ); // error, chose first overload
                      ~~~~~~
-!!! Property 'length' does not exist on type 'number'.
+!!! error TS2339: Property 'length' does not exist on type 'number'.
     
     function callb2(lam: (n: string) => void );
     function callb2(lam: (l: number) => void );

@@ -3,10 +3,10 @@
       f1() {
         if (a.b
             ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.
       }
       ~
-!!! ')' expected.
+!!! error TS1005: ')' expected.
       f2() {
       }
       f3() {

@@ -3,6 +3,6 @@
         var a: typeof x;
         var y: typeof T;
                       ~
-!!! Cannot find name 'T'.
+!!! error TS2304: Cannot find name 'T'.
         return a;
     }

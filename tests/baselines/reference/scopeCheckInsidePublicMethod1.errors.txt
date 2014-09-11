@@ -4,6 +4,6 @@
        public a() {
           s = 1; // ERR
           ~
-!!! Cannot find name 's'.
+!!! error TS2304: Cannot find name 's'.
        }
     }

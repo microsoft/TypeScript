@@ -3,7 +3,7 @@
     var myCars3 = new Array({});
     var myCars4: Array; // error
                  ~~~~~
-!!! Generic type 'Array<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
     var myCars5: Array<any>[];
      
     myCars = myCars3;

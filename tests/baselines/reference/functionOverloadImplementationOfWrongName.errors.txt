@@ -3,4 +3,4 @@
     function foo(x, y);
     function bar() { }
              ~~~
-!!! Function implementation name must be 'foo'.
+!!! error TS2389: Function implementation name must be 'foo'.

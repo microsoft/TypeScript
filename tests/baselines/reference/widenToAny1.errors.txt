@@ -5,5 +5,5 @@
     }
     var z1: number = foo1({ x: undefined, y: "def" });  // Best common type is any
         ~~
-!!! Type 'string' is not assignable to type 'number'.
+!!! error TS2323: Type 'string' is not assignable to type 'number'.
     

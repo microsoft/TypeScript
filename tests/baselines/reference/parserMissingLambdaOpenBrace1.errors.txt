@@ -2,18 +2,18 @@
     class C {
         where(filter: Iterator<T, boolean>): Query<T> {
                       ~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'Iterator'.
+!!! error TS2304: Cannot find name 'Iterator'.
                                              ~~~~~~~~
-!!! Cannot find name 'Query'.
+!!! error TS2304: Cannot find name 'Query'.
             return fromDoWhile(test =>
                    ~~~~~~~~~~~
-!!! Cannot find name 'fromDoWhile'.
+!!! error TS2304: Cannot find name 'fromDoWhile'.
                 var index = 0;
                 ~~~
-!!! '{' expected.
+!!! error TS1005: '{' expected.
                 return this.doWhile((item, i) => filter(item, i) ? test(item, index++) : true);
                             ~~~~~~~
-!!! Property 'doWhile' does not exist on type 'C'.
+!!! error TS2339: Property 'doWhile' does not exist on type 'C'.
             });
         }
     }

@@ -3,9 +3,9 @@
     module foo {
         export var x: T;
                       ~
-!!! Cannot find name 'T'.
+!!! error TS2304: Cannot find name 'T'.
         var y = <T>1;
                  ~
-!!! Cannot find name 'T'.
+!!! error TS2304: Cannot find name 'T'.
     }
     

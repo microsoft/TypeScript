@@ -2,6 +2,6 @@
     class base { private n() {} }
     class derived extends base { private n() {} }
           ~~~~~~~
-!!! Class 'derived' incorrectly extends base class 'base':
-!!!   Private property 'n' cannot be reimplemented.
+!!! error TS2416: Class 'derived' incorrectly extends base class 'base':
+!!! error TS2416:   Private property 'n' cannot be reimplemented.
     

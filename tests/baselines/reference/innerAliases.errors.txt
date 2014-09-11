@@ -19,10 +19,10 @@
     
     var c: D.inner.Class1;
            ~~~~~~~~~~~~~~
-!!! Module 'D' has no exported member 'inner'.
+!!! error TS2305: Module 'D' has no exported member 'inner'.
     
     c = new D.inner.Class1();
               ~~~~~
-!!! Property 'inner' does not exist on type 'typeof D'.
+!!! error TS2339: Property 'inner' does not exist on type 'typeof D'.
     
     

@@ -2,4 +2,4 @@
     var foo: number;
     foo.toBAZ();
         ~~~~~
-!!! Property 'toBAZ' does not exist on type 'number'.
+!!! error TS2339: Property 'toBAZ' does not exist on type 'number'.

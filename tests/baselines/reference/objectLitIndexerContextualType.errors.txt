@@ -12,16 +12,16 @@
     x = {
         s: t => t * t, // Should error
                 ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
                     ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     };
     x = {
         0: t => t * t, // Should error
                 ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
                     ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     };
     y = {
         s: t => t * t, // Should not error
@@ -29,7 +29,7 @@
     y = {
         0: t => t * t, // Should error
                 ~
-!!! The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
                     ~
-!!! The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     };

@@ -4,4 +4,4 @@
     var f = () => this;
     var a = new _this(); // Error
                 ~~~~~
-!!! Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.
+!!! error TS2400: Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.

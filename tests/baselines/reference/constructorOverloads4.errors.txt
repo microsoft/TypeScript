@@ -5,17 +5,17 @@
         }
         export function Function(...args: any[]): any;
                         ~~~~~~~~
-!!! Duplicate identifier 'Function'.
+!!! error TS2300: Duplicate identifier 'Function'.
         export function Function(...args: string[]): Function;
                         ~~~~~~~~
-!!! Duplicate identifier 'Function'.
+!!! error TS2300: Duplicate identifier 'Function'.
     }
     
     
     (new M.Function("return 5"))();
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot invoke an expression whose type lacks a call signature.
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
     M.Function("yo");
     ~~~~~~~~~~~~~~~~
-!!! Value of type 'typeof Function' is not callable. Did you mean to include 'new'?
+!!! error TS2348: Value of type 'typeof Function' is not callable. Did you mean to include 'new'?
     

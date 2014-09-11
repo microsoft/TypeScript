@@ -1,11 +1,11 @@
 ==== tests/cases/compiler/primitiveConstraints1.ts (2 errors) ====
     function foo1<T extends U, U>(t: T, u: U) { }
                   ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     foo1<string, number>('hm', 1); // no error
      
     function foo2<T, U extends T>(t: T, u: U) { }
                      ~~~~~~~~~~~
-!!! Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     foo2<number, string>(1, 'hm'); // error
     

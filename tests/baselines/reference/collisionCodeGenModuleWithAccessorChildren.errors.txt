@@ -5,7 +5,7 @@
             private y;
             set Z(M) {
                 ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                 this.y = x;
             }
         }
@@ -16,7 +16,7 @@
             private y;
             set Z(p) {
                 ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                 var M = 10;
                 this.y = x;
             }
@@ -28,7 +28,7 @@
             private y;
             set M(p) {
                 ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                 this.y = x;
             }
         }
@@ -38,7 +38,7 @@
         class f {
             get Z() {
                 ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                 var M = 10;
                 return x;
             }
@@ -49,7 +49,7 @@
         class e {
             get M() {
                 ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                 return x;
             }
         }

@@ -2,7 +2,7 @@
     class C {
         public f() { };
                       ~
-!!! Unexpected token. A constructor, method, accessor, or property was expected.
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
         private m;
     }
     

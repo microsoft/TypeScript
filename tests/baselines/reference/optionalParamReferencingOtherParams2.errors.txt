@@ -2,7 +2,7 @@
     var a = 1;
     function strange(x = a, y = b) { 
                                 ~
-!!! Initializer of parameter 'y' cannot reference identifier 'b' declared after it.
+!!! error TS2373: Initializer of parameter 'y' cannot reference identifier 'b' declared after it.
         var b = "";
         return y;
     }

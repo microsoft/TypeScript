@@ -1,5 +1,5 @@
 ==== tests/cases/conformance/parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration2.ts (1 errors) ====
     declare function Foo() {
                            ~
-!!! A function implementation cannot be declared in an ambient context.
+!!! error TS1037: A function implementation cannot be declared in an ambient context.
     }

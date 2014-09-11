@@ -2,22 +2,22 @@
     for (var x in String) {
         WScript.Echo(x);
         ~~~~~~~
-!!! Cannot find name 'WScript'.
+!!! error TS2304: Cannot find name 'WScript'.
     }
     for (x in String) {
         WScript.Echo(x);
         ~~~~~~~
-!!! Cannot find name 'WScript'.
+!!! error TS2304: Cannot find name 'WScript'.
     }
     for (var x2 in String)
     {
         WScript.Echo(x2);
         ~~~~~~~
-!!! Cannot find name 'WScript'.
+!!! error TS2304: Cannot find name 'WScript'.
     }
     for (x in String)
     {
         WScript.Echo(x);
         ~~~~~~~
-!!! Cannot find name 'WScript'.
+!!! error TS2304: Cannot find name 'WScript'.
     }

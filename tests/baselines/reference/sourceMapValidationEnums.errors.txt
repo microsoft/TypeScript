@@ -4,7 +4,7 @@
         y,
         x
         ~
-!!! Duplicate identifier 'x'.
+!!! error TS2300: Duplicate identifier 'x'.
     }
     enum e2 {
         x = 10,

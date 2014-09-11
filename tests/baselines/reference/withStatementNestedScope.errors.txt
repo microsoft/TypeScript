@@ -2,7 +2,7 @@
     var x = 1;
     with (x) {
           ~
-!!! All symbols within a 'with' block will be resolved to 'any'.
+!!! error TS2410: All symbols within a 'with' block will be resolved to 'any'.
         function f(a: number) {
             return 1;
         }

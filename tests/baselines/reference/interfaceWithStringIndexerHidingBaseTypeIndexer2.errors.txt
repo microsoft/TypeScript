@@ -21,5 +21,5 @@
     ~~~~~~~~~~~~~~~~~~
         }
     ~~~~~
-!!! Property '1' of type '{ a: number; }' is not assignable to numeric index type '{ a: number; b: number; }'.
+!!! error TS2412: Property '1' of type '{ a: number; }' is not assignable to numeric index type '{ a: number; b: number; }'.
     }

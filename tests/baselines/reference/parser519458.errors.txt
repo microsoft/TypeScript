@@ -1,7 +1,7 @@
 ==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser519458.ts (2 errors) ====
     import rect = module("rect"); var bar = new rect.Rect();
                         ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
     ~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'module'.
+!!! error TS2304: Cannot find name 'module'.
     

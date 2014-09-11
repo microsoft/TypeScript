@@ -7,7 +7,7 @@
     var c = new C();
     var c2 = new C(null); // error
              ~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     
     class D<T extends Date> {
         x = 2
@@ -17,4 +17,4 @@
     var d = new D();
     var d2 = new D(null); // error
              ~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.

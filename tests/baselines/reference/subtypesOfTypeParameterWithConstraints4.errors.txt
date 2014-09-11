@@ -6,26 +6,26 @@
         // error
         var r = true ? t : u;
                 ~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'U'.
+!!! error TS2367: No best common type exists between 'T' and 'U'.
         var r = true ? u : t;
                 ~~~~~~~~~~~~
-!!! No best common type exists between 'U' and 'T'.
+!!! error TS2367: No best common type exists between 'U' and 'T'.
     
         // error
         var r2 = true ? t : v;
                  ~~~~~~~~~~~~
-!!! No best common type exists between 'T' and 'V'.
+!!! error TS2367: No best common type exists between 'T' and 'V'.
         var r2 = true ? v : t;
                  ~~~~~~~~~~~~
-!!! No best common type exists between 'V' and 'T'.
+!!! error TS2367: No best common type exists between 'V' and 'T'.
     
         // error
         var r3 = true ? v : u;
                  ~~~~~~~~~~~~
-!!! No best common type exists between 'V' and 'U'.
+!!! error TS2367: No best common type exists between 'V' and 'U'.
         var r3 = true ? u : v;
                  ~~~~~~~~~~~~
-!!! No best common type exists between 'U' and 'V'.
+!!! error TS2367: No best common type exists between 'U' and 'V'.
     
         // ok
         var r4 = true ? t : new Foo();
@@ -38,10 +38,10 @@
         // BUG, should be error
         var r6 = true ? v : new Foo();
                  ~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between 'V' and 'Foo'.
+!!! error TS2367: No best common type exists between 'V' and 'Foo'.
         var r6 = true ? new Foo() : v;
                  ~~~~~~~~~~~~~~~~~~~~
-!!! No best common type exists between 'Foo' and 'V'.
+!!! error TS2367: No best common type exists between 'Foo' and 'V'.
     
     }
     
@@ -61,14 +61,14 @@
     
     class D3<T extends Foo, U extends Foo, V> extends B1<Foo> {
           ~~
-!!! Class 'D3<T, U, V>' incorrectly extends base class 'B1<Foo>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'V' is not assignable to type 'Foo':
-!!!       Property 'foo' is missing in type '{}'.
+!!! error TS2416: Class 'D3<T, U, V>' incorrectly extends base class 'B1<Foo>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'V' is not assignable to type 'Foo':
+!!! error TS2416:       Property 'foo' is missing in type '{}'.
         [x: string]: Foo;
         foo: V; // error
         ~~~~~~~
-!!! Property 'foo' of type 'V' is not assignable to string index type 'Foo'.
+!!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'Foo'.
     }
     
     class D4<T extends Foo, U extends Foo, V> extends B1<T> {
@@ -78,35 +78,35 @@
     
     class D5<T extends Foo, U extends Foo, V> extends B1<T> {
           ~~
-!!! Class 'D5<T, U, V>' incorrectly extends base class 'B1<T>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'U' is not assignable to type 'T'.
+!!! error TS2416: Class 'D5<T, U, V>' incorrectly extends base class 'B1<T>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'U' is not assignable to type 'T'.
         [x: string]: T;
         foo: U; // error
         ~~~~~~~
-!!! Property 'foo' of type 'U' is not assignable to string index type 'T'.
+!!! error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'T'.
     }
     
     class D6<T extends Foo, U extends Foo, V> extends B1<T> {
           ~~
-!!! Class 'D6<T, U, V>' incorrectly extends base class 'B1<T>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'V' is not assignable to type 'T'.
+!!! error TS2416: Class 'D6<T, U, V>' incorrectly extends base class 'B1<T>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'V' is not assignable to type 'T'.
         [x: string]: T;
         foo: V; // error
         ~~~~~~~
-!!! Property 'foo' of type 'V' is not assignable to string index type 'T'.
+!!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'T'.
     }
     
     class D7<T extends Foo, U extends Foo, V> extends B1<U> {
           ~~
-!!! Class 'D7<T, U, V>' incorrectly extends base class 'B1<U>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'T' is not assignable to type 'U'.
+!!! error TS2416: Class 'D7<T, U, V>' incorrectly extends base class 'B1<U>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'T' is not assignable to type 'U'.
         [x: string]: U;
         foo: T; // error
         ~~~~~~~
-!!! Property 'foo' of type 'T' is not assignable to string index type 'U'.
+!!! error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'U'.
     }
     
     class D8<T extends Foo, U extends Foo, V> extends B1<U> {
@@ -116,11 +116,11 @@
     
     class D9<T extends Foo, U extends Foo, V> extends B1<U> {
           ~~
-!!! Class 'D9<T, U, V>' incorrectly extends base class 'B1<U>':
-!!!   Types of property 'foo' are incompatible:
-!!!     Type 'V' is not assignable to type 'U'.
+!!! error TS2416: Class 'D9<T, U, V>' incorrectly extends base class 'B1<U>':
+!!! error TS2416:   Types of property 'foo' are incompatible:
+!!! error TS2416:     Type 'V' is not assignable to type 'U'.
         [x: string]: U;
         foo: V; // error
         ~~~~~~~
-!!! Property 'foo' of type 'V' is not assignable to string index type 'U'.
+!!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'U'.
     }

@@ -3,5 +3,5 @@
         prototype: number; // ok
         static prototype: C; // error
                ~~~~~~~~~
-!!! Duplicate identifier 'prototype'.
+!!! error TS2300: Duplicate identifier 'prototype'.
     }

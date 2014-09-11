@@ -5,6 +5,6 @@
     function x() {
         var _this = 5;
             ~~~~~
-!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+!!! error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
         x => { console.log(this.x); };
     }

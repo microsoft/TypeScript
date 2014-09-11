@@ -2,13 +2,13 @@
     
     		var selection = a, 
     		                ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.
     			position = b,
     			           ~
-!!! Cannot find name 'b'.
+!!! error TS2304: Cannot find name 'b'.
     			model = c,
     			        ~
-!!! Cannot find name 'c'.
+!!! error TS2304: Cannot find name 'c'.
     			support = d;
     			          ~
-!!! Cannot find name 'd'.
+!!! error TS2304: Cannot find name 'd'.

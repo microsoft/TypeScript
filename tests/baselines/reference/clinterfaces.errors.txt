@@ -3,11 +3,11 @@
         class C { }
         interface C { }
                   ~
-!!! Duplicate identifier 'C'.
+!!! error TS2300: Duplicate identifier 'C'.
         interface D { }
         class D { }
               ~
-!!! Duplicate identifier 'D'.
+!!! error TS2300: Duplicate identifier 'D'.
     }
     
     interface Foo<T> {
@@ -16,7 +16,7 @@
     
     class Foo<T>{
           ~~~
-!!! Duplicate identifier 'Foo'.
+!!! error TS2300: Duplicate identifier 'Foo'.
         b: number;
     }
     
@@ -26,7 +26,7 @@
     
     interface Bar<T> {
               ~~~
-!!! Duplicate identifier 'Bar'.
+!!! error TS2300: Duplicate identifier 'Bar'.
         a: string;
     }
     

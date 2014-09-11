@@ -9,9 +9,9 @@
     
     function Foo(); // error
              ~~~
-!!! Duplicate identifier 'Foo'.
+!!! error TS2300: Duplicate identifier 'Foo'.
              ~~~
-!!! Function implementation is missing or not immediately following the declaration.
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
     function F1(s:string);
     function F1(a:any) { return a;}
     
@@ -21,4 +21,4 @@
     f1.bar1();
     Foo();
     ~~~~~
-!!! Value of type 'typeof Foo' is not callable. Did you mean to include 'new'?
+!!! error TS2348: Value of type 'typeof Foo' is not callable. Did you mean to include 'new'?

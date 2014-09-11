@@ -7,14 +7,14 @@
     }
     var c1: C; // error
             ~
-!!! Generic type 'C<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'C<T>' requires 1 type argument(s).
     var i1: I; // error
             ~
-!!! Generic type 'I<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'I<T>' requires 1 type argument(s).
     var c2: C<I>; // should be an error
               ~
-!!! Generic type 'I<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'I<T>' requires 1 type argument(s).
     var i2: I<C>; // should be an error
               ~
-!!! Generic type 'C<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'C<T>' requires 1 type argument(s).
     

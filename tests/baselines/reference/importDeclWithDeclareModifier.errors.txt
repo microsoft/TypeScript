@@ -5,12 +5,12 @@
     }
     declare export import a = x.c;
     ~~~~~~~
-!!! A 'declare' modifier cannot be used with an import declaration.
+!!! error TS1079: A 'declare' modifier cannot be used with an import declaration.
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot compile external modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.
             ~~~~~~
-!!! 'export' modifier must precede 'declare' modifier.
+!!! error TS1029: 'export' modifier must precede 'declare' modifier.
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Module 'x' has no exported member 'c'.
+!!! error TS2305: Module 'x' has no exported member 'c'.
     var b: a;
     

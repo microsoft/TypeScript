@@ -2,17 +2,17 @@
     //Function overload signature with optional parameter followed by non-optional parameter
     function fn4a(x?: number, y: string);
                               ~
-!!! A required parameter cannot follow an optional parameter.
+!!! error TS1016: A required parameter cannot follow an optional parameter.
     function fn4a() { }
     
     function fn4b(n: string, x?: number, y: string);
                                          ~
-!!! A required parameter cannot follow an optional parameter.
+!!! error TS1016: A required parameter cannot follow an optional parameter.
     function fn4b() { }
     
     //Function overload signature with rest param followed by non-optional parameter
     function fn5(x: string, ...y: any[], z: string);
                                ~
-!!! A rest parameter must be last in a parameter list.
+!!! error TS1014: A rest parameter must be last in a parameter list.
     function fn5() { }
     

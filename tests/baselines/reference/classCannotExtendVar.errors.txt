@@ -3,7 +3,7 @@
     
     class Markup {
           ~~~~~~
-!!! Duplicate identifier 'Markup'.
+!!! error TS2300: Duplicate identifier 'Markup'.
         constructor() {
         }
     }

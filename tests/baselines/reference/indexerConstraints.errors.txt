@@ -17,7 +17,7 @@
     interface E {
         [n: number]: A;
         ~~~~~~~~~~~~~~~
-!!! Numeric index type 'A' is not assignable to string index type 'B'.
+!!! error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
     }
     
     // Inheritance
@@ -27,7 +27,7 @@
     interface G extends F {
         [n: number]: A;
         ~~~~~~~~~~~~~~~
-!!! Numeric index type 'A' is not assignable to string index type 'B'.
+!!! error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
     }
     
     // Other way
@@ -37,7 +37,7 @@
     interface I extends H {
         [s: string]: B;
         ~~~~~~~~~~~~~~~
-!!! Numeric index type 'A' is not assignable to string index type 'B'.
+!!! error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
     }
     
     // With hidden indexer
@@ -47,6 +47,6 @@
     interface K extends J {
         [n: number]: A;
         ~~~~~~~~~~~~~~~
-!!! Numeric index type 'A' is not assignable to string index type 'B'.
+!!! error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
         [s: string]: B;
     }

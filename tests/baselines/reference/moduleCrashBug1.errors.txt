@@ -18,7 +18,7 @@
     
     var m : _modes;
             ~~~~~~
-!!! Cannot find name '_modes'.
+!!! error TS2304: Cannot find name '_modes'.
     
     
     

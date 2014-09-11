@@ -3,5 +3,5 @@
     var a: Boolean;
     x = a;
     ~
-!!! Type 'Boolean' is not assignable to type 'boolean'.
+!!! error TS2323: Type 'Boolean' is not assignable to type 'boolean'.
     a = x;

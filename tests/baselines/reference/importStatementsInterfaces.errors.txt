@@ -23,7 +23,7 @@
         import b = a.inA;
         var m: typeof a;
                       ~
-!!! Cannot find name 'a'.
+!!! error TS2304: Cannot find name 'a'.
         var p: b.Point3D;
         var p = {x:0, y:0, z: 0 };
     }

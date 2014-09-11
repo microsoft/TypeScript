@@ -8,7 +8,7 @@
             public f();
             public g() { } // error body
                        ~
-!!! A function implementation cannot be declared in an ambient context.
+!!! error TS1037: A function implementation cannot be declared in an ambient context.
         }
     }
     

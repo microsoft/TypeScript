@@ -4,4 +4,4 @@
     module M { export var x = 1; }
     import a = M;
     ~~~~~~~~~~~~~
-!!! Import declaration conflicts with local declaration of 'a'
+!!! error TS2440: Import declaration conflicts with local declaration of 'a'

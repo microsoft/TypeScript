@@ -2,5 +2,5 @@
     // Shouldn't compile
     var x: { a: number; } = { b: 5 };
         ~
-!!! Type '{ b: number; }' is not assignable to type '{ a: number; }':
-!!!   Property 'a' is missing in type '{ b: number; }'.
+!!! error TS2322: Type '{ b: number; }' is not assignable to type '{ a: number; }':
+!!! error TS2322:   Property 'a' is missing in type '{ b: number; }'.

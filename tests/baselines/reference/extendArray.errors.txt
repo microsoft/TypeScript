@@ -7,9 +7,9 @@
       interface Array {
         collect(fn:(e:_element) => _element[]) : any[];
                       ~~~~~~~~
-!!! Cannot find name '_element'.
+!!! error TS2304: Cannot find name '_element'.
                                    ~~~~~~~~
-!!! Cannot find name '_element'.
+!!! error TS2304: Cannot find name '_element'.
       }
     }
     

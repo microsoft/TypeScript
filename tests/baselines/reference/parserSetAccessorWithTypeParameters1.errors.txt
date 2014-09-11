@@ -2,5 +2,5 @@
     class C {
        set foo<T>(v) { }
            ~~~
-!!! An accessor cannot have type parameters.
+!!! error TS1094: An accessor cannot have type parameters.
     }

@@ -2,5 +2,5 @@
     class C {
        set Foo(a: number, b: number) { }
            ~~~
-!!! A 'set' accessor must have exactly one parameter.
+!!! error TS1049: A 'set' accessor must have exactly one parameter.
     }

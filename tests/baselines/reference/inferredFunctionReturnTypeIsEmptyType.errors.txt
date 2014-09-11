@@ -15,5 +15,5 @@
     ~~~~~
     };
     ~
-!!! No best common type exists among return expressions.
+!!! error TS2354: No best common type exists among return expressions.
     

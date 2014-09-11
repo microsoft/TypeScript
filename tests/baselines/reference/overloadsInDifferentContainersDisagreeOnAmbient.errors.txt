@@ -7,5 +7,5 @@
     module M {
         export function f() { }
                         ~
-!!! Overload signatures must all be ambient or non-ambient.
+!!! error TS2384: Overload signatures must all be ambient or non-ambient.
     }

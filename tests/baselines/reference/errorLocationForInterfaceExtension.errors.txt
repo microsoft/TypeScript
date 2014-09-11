@@ -3,5 +3,5 @@
     
     interface x extends string { }
                         ~~~~~~
-!!! Cannot find name 'string'.
+!!! error TS2304: Cannot find name 'string'.
     

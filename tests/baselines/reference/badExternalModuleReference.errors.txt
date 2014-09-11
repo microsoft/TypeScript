@@ -1,7 +1,7 @@
 ==== tests/cases/compiler/badExternalModuleReference.ts (1 errors) ====
     import a1 = require("garbage");
                         ~~~~~~~~~
-!!! Cannot find external module 'garbage'.
+!!! error TS2307: Cannot find external module 'garbage'.
     export declare var a: {
         test1: a1.connectModule;
         (): a1.connectExport;

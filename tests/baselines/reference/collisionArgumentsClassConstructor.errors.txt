@@ -3,14 +3,14 @@
     class c1 {
         constructor(i: number, ...arguments) { // error
                                ~~~~~~~~~~~~
-!!! Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+!!! error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
             var arguments: any[]; // no error
         }
     }
     class c12 {
         constructor(arguments: number, ...rest) { // error
                     ~~~~~~~~~~~~~~~~~
-!!! Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+!!! error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
             var arguments = 10; // no error
         }
     }
@@ -34,7 +34,7 @@
     class c3 {
         constructor(public arguments: number, ...restParameters) { //arguments is error
                     ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+!!! error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
             var arguments = 10; // no error
         }
     }
@@ -59,7 +59,7 @@
         constructor(i: string, ...arguments); // no codegen no error
         constructor(i: any, ...arguments) { // error
                             ~~~~~~~~~~~~
-!!! Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+!!! error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
             var arguments: any[]; // no error
         }
     }
@@ -69,7 +69,7 @@
         constructor(arguments: string, ...rest); // no codegen no error
         constructor(arguments: any, ...rest) { // error
                     ~~~~~~~~~~~~~~
-!!! Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+!!! error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
             var arguments: any; // no error
         }
     }

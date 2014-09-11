@@ -9,7 +9,7 @@
     function foo(name: 'bye'): C;
     function foo(name: string): A; // error
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Overload signature is not compatible with function implementation.
+!!! error TS2394: Overload signature is not compatible with function implementation.
     function foo(name: any): Z {
         return null;
     }

@@ -2,10 +2,10 @@
     "use strict";
     var config = require("../config");
                  ~~~~~~~
-!!! Cannot find name 'require'.
+!!! error TS2304: Cannot find name 'require'.
     module.exports.route = function (server) {
     ~~~~~~
-!!! Cannot find name 'module'.
+!!! error TS2304: Cannot find name 'module'.
      
      // General Login Page
      server.get(config.env.siteRoot + "/auth/login", function (req, res, next) {

@@ -1,6 +1,6 @@
 ==== tests/cases/conformance/parser/ecmascript5/Expressions/parserUnaryExpression7.ts (2 errors) ====
     ++ new Foo();
        ~~~~~~~~~
-!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
            ~~~
-!!! Cannot find name 'Foo'.
+!!! error TS2304: Cannot find name 'Foo'.

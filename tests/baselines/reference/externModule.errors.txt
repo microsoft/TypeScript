@@ -1,24 +1,24 @@
 ==== tests/cases/compiler/externModule.ts (13 errors) ====
     declare module {
             ~~~~~~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
                    ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
     ~~~~~~~
-!!! Cannot find name 'declare'.
+!!! error TS2304: Cannot find name 'declare'.
             ~~~~~~
-!!! Cannot find name 'module'.
+!!! error TS2304: Cannot find name 'module'.
         export class XDate {
         ~~~~~~
-!!! Statement expected.
+!!! error TS1129: Statement expected.
                      ~~~~~
-!!! Cannot compile external modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.
     		public getDay():number;
     		       ~~~~~~
-!!! Function implementation is missing or not immediately following the declaration.
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
     		public getXDate():number;
     		       ~~~~~~~~
-!!! Function implementation is missing or not immediately following the declaration.
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
     		// etc.
     
     	    // Called as a function
@@ -34,11 +34,11 @@
     	    constructor(value: number);
     	    constructor();
     	    ~~~~~~~~~~~~~~
-!!! Constructor implementation is missing.
+!!! error TS2390: Constructor implementation is missing.
     	    
     	    static parse(string: string): number;
     	           ~~~~~
-!!! Function implementation is missing or not immediately following the declaration.
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
     	    static UTC(year: number, month: number): number;
     	    static UTC(year: number, month: number, date: number): number;
     	    static UTC(year: number, month: number, date: number, hours: number): number;
@@ -46,15 +46,15 @@
     	    static UTC(year: number, month: number, date: number, hours: number, minutes: number, seconds: number): number;
     	    static UTC(year: number, month: number, date: number, hours: number, minutes: number, seconds: number,
     	           ~~~
-!!! Function implementation is missing or not immediately following the declaration.
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
     		         ms: number): number;
     	    static now(): number;
     	           ~~~
-!!! Function implementation is missing or not immediately following the declaration.
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
         }
     }
     ~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.
     
     var d=new XDate();
     d.getDay();

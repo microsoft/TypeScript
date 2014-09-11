@@ -19,6 +19,6 @@
     ~~
     y
     ~
-!!! The operand of an increment or decrement operator must be a variable, property or indexer.
+!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
     
     

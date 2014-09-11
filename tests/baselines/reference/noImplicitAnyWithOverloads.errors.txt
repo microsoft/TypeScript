@@ -2,17 +2,17 @@
     interface A {
         foo;
         ~~~~
-!!! Member 'foo' implicitly has an 'any' type.
+!!! error TS7008: Member 'foo' implicitly has an 'any' type.
     }
     interface B { }
     
     function callb(lam: (l: A) => void);
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! 'callb', which lacks return-type annotation, implicitly has an 'any' return type.
+!!! error TS7010: 'callb', which lacks return-type annotation, implicitly has an 'any' return type.
     function callb(lam: (n: B) => void);
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! 'callb', which lacks return-type annotation, implicitly has an 'any' return type.
+!!! error TS7010: 'callb', which lacks return-type annotation, implicitly has an 'any' return type.
     function callb(a) { }
                    ~
-!!! Parameter 'a' implicitly has an 'any' type.
+!!! error TS7006: Parameter 'a' implicitly has an 'any' type.
     callb((a) => { a.foo; }); // error, chose first overload

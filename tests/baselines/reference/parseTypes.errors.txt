@@ -9,15 +9,15 @@
     y=f;
     y=g;
     ~
-!!! Type '(s: string) => void' is not assignable to type '() => number'.
+!!! error TS2323: Type '(s: string) => void' is not assignable to type '() => number'.
     x=g;
     ~
-!!! Type '(s: string) => void' is not assignable to type '() => number'.
+!!! error TS2323: Type '(s: string) => void' is not assignable to type '() => number'.
     w=g;
     ~
-!!! Type '(s: string) => void' is not assignable to type '{ [x: number]: number; }':
-!!!   Index signature is missing in type '(s: string) => void'.
+!!! error TS2322: Type '(s: string) => void' is not assignable to type '{ [x: number]: number; }':
+!!! error TS2322:   Index signature is missing in type '(s: string) => void'.
     z=g;
     ~
-!!! Type '(s: string) => void' is not assignable to type 'new () => number'.
+!!! error TS2323: Type '(s: string) => void' is not assignable to type 'new () => number'.
     

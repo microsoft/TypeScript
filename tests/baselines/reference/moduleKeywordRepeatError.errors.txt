@@ -3,6 +3,6 @@
     
     module.module { }
                   ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
     ~~~~~~
-!!! Cannot find name 'module'.
+!!! error TS2304: Cannot find name 'module'.

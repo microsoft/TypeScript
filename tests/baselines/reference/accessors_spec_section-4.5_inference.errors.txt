@@ -6,44 +6,44 @@
     
         public set InferredGetterFromSetterAnnotation(a: A) { }
                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         public get InferredGetterFromSetterAnnotation() { return new B(); }
                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     
         public get InferredGetterFromSetterAnnotation_GetterFirst() { return new B(); }
                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         public set InferredGetterFromSetterAnnotation_GetterFirst(a: A) { }
                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         
     
         public get InferredFromGetter() { return new B(); }
                    ~~~~~~~~~~~~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         public set InferredFromGetter(a) { }
                    ~~~~~~~~~~~~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     
         public set InferredFromGetter_SetterFirst(a) { }
                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         public get InferredFromGetter_SetterFirst() { return new B(); }
                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     
         public set InferredSetterFromGetterAnnotation(a) { }
                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         public get InferredSetterFromGetterAnnotation() : A { return new B(); }
                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     
         public get InferredSetterFromGetterAnnotation_GetterFirst() : A { return new B(); }
                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         public set InferredSetterFromGetterAnnotation_GetterFirst(a) { }
                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     }

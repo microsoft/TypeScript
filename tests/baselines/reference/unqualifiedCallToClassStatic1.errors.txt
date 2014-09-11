@@ -4,6 +4,6 @@
       // 'foo' cannot be called in an unqualified manner.
       foo();
       ~~~
-!!! Cannot find name 'foo'.
+!!! error TS2304: Cannot find name 'foo'.
      }
     }

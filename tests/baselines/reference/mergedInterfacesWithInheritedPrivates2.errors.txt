@@ -17,8 +17,8 @@
     
     class D extends C implements A { // error
           ~
-!!! Class 'D' incorrectly implements interface 'A':
-!!!   Private property 'w' cannot be reimplemented.
+!!! error TS2421: Class 'D' incorrectly implements interface 'A':
+!!! error TS2421:   Private property 'w' cannot be reimplemented.
         private w: number;
         y: string;
         z: string;
@@ -26,11 +26,11 @@
     
     class E extends C2 implements A { // error
           ~
-!!! Class 'E' incorrectly extends base class 'C2':
-!!!   Private property 'w' cannot be reimplemented.
+!!! error TS2416: Class 'E' incorrectly extends base class 'C2':
+!!! error TS2416:   Private property 'w' cannot be reimplemented.
           ~
-!!! Class 'E' incorrectly implements interface 'A':
-!!!   Property 'x' is missing in type 'E'.
+!!! error TS2421: Class 'E' incorrectly implements interface 'A':
+!!! error TS2421:   Property 'x' is missing in type 'E'.
         w: number;
         y: string;
         z: string;
@@ -39,7 +39,7 @@
     var a: A;
     var r = a.x; // error
             ~~~
-!!! Property 'C.x' is inaccessible.
+!!! error TS2341: Property 'C.x' is inaccessible.
     var r2 = a.w; // error
              ~~~
-!!! Property 'C2.w' is inaccessible.
+!!! error TS2341: Property 'C2.w' is inaccessible.

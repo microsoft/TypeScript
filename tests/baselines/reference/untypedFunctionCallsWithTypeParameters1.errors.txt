@@ -3,21 +3,21 @@
     var x = function () { return; };
     var r1 = x<number>();
              ~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     var y: any = x;
     var r2 = y<string>();
              ~~~~~~~~~~~
-!!! Untyped function calls may not accept type arguments.
+!!! error TS2347: Untyped function calls may not accept type arguments.
     
     var c: Function;
     var r3 = c<number>(); // should be an error
              ~~~~~~~~~~~
-!!! Untyped function calls may not accept type arguments.
+!!! error TS2347: Untyped function calls may not accept type arguments.
     
     class C implements Function {
           ~
-!!! Class 'C' incorrectly implements interface 'Function':
-!!!   Property 'apply' is missing in type 'C'.
+!!! error TS2421: Class 'C' incorrectly implements interface 'Function':
+!!! error TS2421:   Property 'apply' is missing in type 'C'.
         prototype = null;
         length = 1;
         arguments = null;
@@ -27,15 +27,15 @@
     var c2: C;
     var r4 = c2<number>(); // should be an error
              ~~~~~~~~~~~~
-!!! Cannot invoke an expression whose type lacks a call signature.
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
     
     class C2 extends Function { } // error
                      ~~~~~~~~
-!!! A class may only extend another class.
+!!! error TS2311: A class may only extend another class.
     var c3: C2;
     var r5 = c3<number>(); // error
              ~~~~~~~~~~~~
-!!! Cannot invoke an expression whose type lacks a call signature.
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
     
     interface I {
         (number): number;
@@ -43,7 +43,7 @@
     var z: I;
     var r6 = z<string>(1); // error
              ~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     
     interface callable2<T> {
         (a: T): T;
@@ -52,7 +52,7 @@
     var c4: callable2<number>;
     c4<number>(1);
     ~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     interface callable3<T> {
         (a: T): T;
     }
@@ -60,6 +60,6 @@
     var c5: callable3<number>;
     c5<string>(1); // error
     ~~~~~~~~~~~~~
-!!! Supplied parameters do not match any signature of call target.
+!!! error TS2346: Supplied parameters do not match any signature of call target.
     
     

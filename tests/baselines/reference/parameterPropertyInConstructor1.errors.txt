@@ -3,7 +3,7 @@
       class Customers {
         constructor(public names: string);
                     ~~~~~~~~~~~~~~~~~~~~
-!!! A parameter property is only allowed in a constructor implementation.
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
       }
     }
     

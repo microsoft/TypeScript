@@ -10,5 +10,5 @@
     // error not exported
     var b = A.Day.Monday;
               ~~~
-!!! Property 'Day' does not exist on type 'typeof A'.
+!!! error TS2339: Property 'Day' does not exist on type 'typeof A'.
     

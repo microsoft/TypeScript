@@ -1,6 +1,6 @@
 ==== tests/cases/conformance/parser/ecmascript5/ExportAssignments/parserExportAssignment1.ts (2 errors) ====
     export = foo
     ~~~~~~~~~~~~
-!!! Cannot compile external modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.
     ~~~~~~~~~~~~
-!!! Cannot find name 'foo'.
+!!! error TS2304: Cannot find name 'foo'.

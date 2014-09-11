@@ -6,6 +6,6 @@
     
         export var f: typeof Inner; // Since we dont unwind inner any more, it is error here
                    ~
-!!! Exported variable 'f' has or is using private name 'Inner'.
+!!! error TS4025: Exported variable 'f' has or is using private name 'Inner'.
     }
     

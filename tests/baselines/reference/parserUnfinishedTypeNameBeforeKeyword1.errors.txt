@@ -3,12 +3,12 @@
            ~~~~~~~~~~~~
     module TypeModule2 {
            ~~~~~~~~~~~
-!!! '=' expected.
+!!! error TS1005: '=' expected.
                        ~
-!!! ',' expected.
+!!! error TS1005: ',' expected.
     ~~~~~~
-!!! Cannot find name 'TypeModule1'.
+!!! error TS2304: Cannot find name 'TypeModule1'.
            ~~~~~~~~~~~
-!!! Cannot find name 'TypeModule2'.
+!!! error TS2304: Cannot find name 'TypeModule2'.
     }
     

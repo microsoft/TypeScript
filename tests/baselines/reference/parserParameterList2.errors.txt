@@ -2,5 +2,5 @@
     class C {
       F(A?= 0) { }
         ~
-!!! Parameter cannot have question mark and initializer.
+!!! error TS1015: Parameter cannot have question mark and initializer.
     }

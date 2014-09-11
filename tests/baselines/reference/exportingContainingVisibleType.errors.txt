@@ -2,7 +2,7 @@
     class Foo {
         public get foo() {
                    ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var i: Foo;
             return i; // Should be fine (previous bug report visibility error).
      

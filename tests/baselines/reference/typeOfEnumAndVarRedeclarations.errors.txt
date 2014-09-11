@@ -10,4 +10,4 @@
     var y = E;
     var y: { a: E; b: E;[x: number]: string;[x: number]: string } // two errors: the types are not identical and duplicate signatures
                                             ~~~~~~~~~~~~~~~~~~~
-!!! Duplicate number index signature.
+!!! error TS2375: Duplicate number index signature.

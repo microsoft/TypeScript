@@ -1,9 +1,9 @@
 ==== tests/cases/conformance/parser/ecmascript5/Statements/parserWithStatement1.d.ts (3 errors) ====
     with (foo) {
     ~~~~
-!!! Statements are not allowed in ambient contexts.
+!!! error TS1036: Statements are not allowed in ambient contexts.
           ~~~
-!!! Cannot find name 'foo'.
+!!! error TS2304: Cannot find name 'foo'.
           ~~~
-!!! All symbols within a 'with' block will be resolved to 'any'.
+!!! error TS2410: All symbols within a 'with' block will be resolved to 'any'.
     }

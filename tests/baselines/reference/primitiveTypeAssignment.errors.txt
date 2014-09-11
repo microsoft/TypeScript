@@ -1,13 +1,13 @@
 ==== tests/cases/compiler/primitiveTypeAssignment.ts (3 errors) ====
     var x = any;
             ~~~
-!!! Cannot find name 'any'.
+!!! error TS2304: Cannot find name 'any'.
     
     var y = number;
             ~~~~~~
-!!! Cannot find name 'number'.
+!!! error TS2304: Cannot find name 'number'.
     
     var z = boolean;
             ~~~~~~~
-!!! Cannot find name 'boolean'.
+!!! error TS2304: Cannot find name 'boolean'.
     

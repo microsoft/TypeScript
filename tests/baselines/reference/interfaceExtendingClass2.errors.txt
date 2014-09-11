@@ -4,7 +4,7 @@
         y() { }
         get Z() {
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return 1;
         }
         [x: string]: Object;
@@ -15,15 +15,15 @@
         ~~~~
             toString: () => {
     ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! Property 'a' of type '{ toString: () => {}; }' is not assignable to string index type 'Object'.
+!!! error TS2411: Property 'a' of type '{ toString: () => {}; }' is not assignable to string index type 'Object'.
                 return 1;
                 ~~~~~~
-!!! A 'return' statement can only be used within a function body.
+!!! error TS1108: A 'return' statement can only be used within a function body.
                 ~~~~~~
-!!! Property or signature expected.
+!!! error TS1131: Property or signature expected.
             };
             ~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.
         }
         ~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.

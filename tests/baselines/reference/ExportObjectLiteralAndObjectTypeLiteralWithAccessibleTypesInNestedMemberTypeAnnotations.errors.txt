@@ -8,11 +8,11 @@
         export var UnitSquare : {
             top: { left: Point, right: Point },
                               ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
                                               ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
             bottom: { left: Point, right: Point }
                                  ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
         } = null;
     }

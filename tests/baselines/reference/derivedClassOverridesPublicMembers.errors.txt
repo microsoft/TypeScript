@@ -7,20 +7,20 @@
         b(a: typeof x) { }
         get c() { return x; }
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         set c(v: typeof x) { }
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         d: (a: typeof x) => void;
     
         static r: typeof x;
         static s(a: typeof x) { }
         static get t() { return x; }
                    ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         static set t(v: typeof x) { }
                    ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         static u: (a: typeof x) => void;
     
         constructor(a: typeof x) { }
@@ -31,20 +31,20 @@
         b(a: typeof y) { }
         get c() { return y; }
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         set c(v: typeof y) { }
             ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         d: (a: typeof y) => void;
     
         static r: typeof y;
         static s(a: typeof y) { }
         static get t() { return y; }
                    ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         static set t(a: typeof y) { }
                    ~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         static u: (a: typeof y) => void;
     
         constructor(a: typeof y) { super(x) }

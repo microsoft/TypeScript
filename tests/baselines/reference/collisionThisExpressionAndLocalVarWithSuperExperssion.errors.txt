@@ -7,7 +7,7 @@
         public foo() {
             var _this = 10;
                 ~~~~~
-!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+!!! error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
             var f = () => super.foo();
         }
     }
@@ -16,7 +16,7 @@
             var f = () => {
                 var _this = 10;
                     ~~~~~
-!!! Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
+!!! error TS2399: Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.
                 return super.foo()
             }
         }

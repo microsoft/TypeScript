@@ -11,4 +11,4 @@
     
     var x: c.b;
            ~~~
-!!! Module '"tests/cases/compiler/internalAliasInterfaceInsideLocalModuleWithoutExportAccessError".c' has no exported member 'b'.
+!!! error TS2305: Module '"tests/cases/compiler/internalAliasInterfaceInsideLocalModuleWithoutExportAccessError".c' has no exported member 'b'.

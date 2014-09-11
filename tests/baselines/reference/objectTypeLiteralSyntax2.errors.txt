@@ -2,7 +2,7 @@
     var x: {
         foo: string,
                    ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
         bar: string
     }
     
@@ -14,4 +14,4 @@
     
     var z: { foo: string bar: string }
                          ~~~
-!!! ';' expected.
+!!! error TS1005: ';' expected.

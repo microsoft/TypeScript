@@ -2,5 +2,5 @@
     class C {
       F(A?, B) { }
             ~
-!!! A required parameter cannot follow an optional parameter.
+!!! error TS1016: A required parameter cannot follow an optional parameter.
     }

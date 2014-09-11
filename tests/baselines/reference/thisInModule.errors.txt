@@ -3,5 +3,5 @@
         var x;
         this.x = 5;
         ~~~~
-!!! 'this' cannot be referenced in a module body.
+!!! error TS2331: 'this' cannot be referenced in a module body.
     }

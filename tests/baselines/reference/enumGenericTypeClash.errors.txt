@@ -2,5 +2,5 @@
     class X<A,B,C> { }
     enum X { MyVal }
          ~
-!!! Duplicate identifier 'X'.
+!!! error TS2300: Duplicate identifier 'X'.
     

@@ -7,7 +7,7 @@
     
     interface A<T> { // error
               ~
-!!! All declarations of an interface must have identical type parameters.
+!!! error TS2428: All declarations of an interface must have identical type parameters.
         bar: T;
     }
     
@@ -18,7 +18,7 @@
     
         interface A { // error
                   ~
-!!! All declarations of an interface must have identical type parameters.
+!!! error TS2428: All declarations of an interface must have identical type parameters.
             foo: string;
         }
     }
@@ -44,7 +44,7 @@
     module M3 {
         export interface A<T> { // error
                          ~
-!!! All declarations of an interface must have identical type parameters.
+!!! error TS2428: All declarations of an interface must have identical type parameters.
             bar: T;
         }
     }

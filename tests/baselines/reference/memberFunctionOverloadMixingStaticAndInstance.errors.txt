@@ -3,34 +3,34 @@
         foo();
         static foo(); // error
                ~~~
-!!! Function overload must not be static.
+!!! error TS2388: Function overload must not be static.
                ~~~
-!!! Function implementation is missing or not immediately following the declaration.
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
     }
     
     class D {
         static foo();
         foo(); // error    
         ~~~
-!!! Function overload must be static.
+!!! error TS2387: Function overload must be static.
         ~~~
-!!! Function implementation is missing or not immediately following the declaration.
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
     }
     
     class E<T> {
         foo(x: T);
         static foo(x: number); // error
                ~~~
-!!! Function overload must not be static.
+!!! error TS2388: Function overload must not be static.
                ~~~
-!!! Function implementation is missing or not immediately following the declaration.
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
     }
     
     class F<T> {
         static foo(x: number);
         foo(x: T); // error    
         ~~~
-!!! Function overload must be static.
+!!! error TS2387: Function overload must be static.
         ~~~
-!!! Function implementation is missing or not immediately following the declaration.
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
     }

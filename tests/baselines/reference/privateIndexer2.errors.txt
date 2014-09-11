@@ -4,35 +4,35 @@
     var x = {
         private [x: string]: string;
                 ~
-!!! ':' expected.
+!!! error TS1005: ':' expected.
                   ~
-!!! ',' expected.
+!!! error TS1005: ',' expected.
                            ~
-!!! ',' expected.
+!!! error TS1005: ',' expected.
                                    ~
-!!! ':' expected.
+!!! error TS1005: ':' expected.
                     ~~~~~~
-!!! Cannot find name 'string'.
+!!! error TS2304: Cannot find name 'string'.
     }
     ~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.
     
     var y: {
         private[x: string]: string;
         ~~~~~~~
-!!! Property or signature expected.
+!!! error TS1131: Property or signature expected.
                  ~
-!!! ']' expected.
+!!! error TS1005: ']' expected.
                          ~
-!!! ';' expected.
+!!! error TS1005: ';' expected.
                           ~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.
         ~~~~~~~
-!!! Cannot find name 'private'.
+!!! error TS2304: Cannot find name 'private'.
                    ~~~~~~
-!!! Cannot find name 'string'.
+!!! error TS2304: Cannot find name 'string'.
                             ~~~~~~
-!!! Cannot find name 'string'.
+!!! error TS2304: Cannot find name 'string'.
     }
     ~
-!!! Declaration or statement expected.
+!!! error TS1128: Declaration or statement expected.

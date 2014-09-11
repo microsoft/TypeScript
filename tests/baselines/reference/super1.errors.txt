@@ -16,7 +16,7 @@
         public bar() {
             return super.super.foo;
                          ~~~~~
-!!! Property 'super' does not exist on type 'Sub1'.
+!!! error TS2339: Property 'super' does not exist on type 'Sub1'.
         }
     }
     
@@ -31,7 +31,7 @@
         public bar() {
             return super.prototype.foo = null;
                          ~~~~~~~~~
-!!! Property 'prototype' does not exist on type 'Base2'.
+!!! error TS2339: Property 'prototype' does not exist on type 'Base2'.
         }
     }
     
@@ -46,7 +46,7 @@
         public bar() {
             return super.bar();
                          ~~~
-!!! Property 'bar' does not exist on type 'Base3'.
+!!! error TS2339: Property 'bar' does not exist on type 'Base3'.
         }
     }
     
@@ -68,7 +68,7 @@
             public x() {
                 return super.x();
                        ~~~~~
-!!! 'super' can only be referenced in a derived class.
+!!! error TS2335: 'super' can only be referenced in a derived class.
             }
         }
     }

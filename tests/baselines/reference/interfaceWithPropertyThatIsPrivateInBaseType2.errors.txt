@@ -5,8 +5,8 @@
     
     interface Foo extends Base { // error
               ~~~
-!!! Interface 'Foo' incorrectly extends interface 'Base':
-!!!   Private property 'x' cannot be reimplemented.
+!!! error TS2429: Interface 'Foo' incorrectly extends interface 'Base':
+!!! error TS2429:   Private property 'x' cannot be reimplemented.
         x(): any;
     }
     
@@ -16,7 +16,7 @@
     
     interface Foo2<T> extends Base2<T> { // error
               ~~~~
-!!! Interface 'Foo2<T>' incorrectly extends interface 'Base2<T>':
-!!!   Private property 'x' cannot be reimplemented.
+!!! error TS2429: Interface 'Foo2<T>' incorrectly extends interface 'Base2<T>':
+!!! error TS2429:   Private property 'x' cannot be reimplemented.
         x(): any;
     }

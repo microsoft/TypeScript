@@ -1,22 +1,22 @@
 ==== tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts (8 errors) ====
     Foo<T>();
     ~~~
-!!! Cannot find name 'Foo'.
+!!! error TS2304: Cannot find name 'Foo'.
     Foo.Bar<T>();
     ~~~
-!!! Cannot find name 'Foo'.
+!!! error TS2304: Cannot find name 'Foo'.
     Foo<T>.Bar();
           ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     ~~~
-!!! Cannot find name 'Foo'.
+!!! error TS2304: Cannot find name 'Foo'.
         ~
-!!! Cannot find name 'T'.
+!!! error TS2304: Cannot find name 'T'.
     Foo<T>.Bar<T>();
           ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     ~~~
-!!! Cannot find name 'Foo'.
+!!! error TS2304: Cannot find name 'Foo'.
         ~
-!!! Cannot find name 'T'.
+!!! error TS2304: Cannot find name 'T'.
     

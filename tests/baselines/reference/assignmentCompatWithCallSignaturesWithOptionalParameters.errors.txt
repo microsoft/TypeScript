@@ -16,19 +16,19 @@
         a = (x?: number) => 1; // ok, same number of required params
         a = (x: number) => 1; // error, too many required params
         ~
-!!! Type '(x: number) => number' is not assignable to type '() => number'.
+!!! error TS2323: Type '(x: number) => number' is not assignable to type '() => number'.
         a = b.a; // ok
         a = b.a2; // ok
         a = b.a3; // error
         ~
-!!! Type '(x: number) => number' is not assignable to type '() => number'.
+!!! error TS2323: Type '(x: number) => number' is not assignable to type '() => number'.
         a = b.a4; // error
         ~
-!!! Type '(x: number, y?: number) => number' is not assignable to type '() => number'.
+!!! error TS2323: Type '(x: number, y?: number) => number' is not assignable to type '() => number'.
         a = b.a5; // ok
         a = b.a6; // error
         ~
-!!! Type '(x: number, y: number) => number' is not assignable to type '() => number'.
+!!! error TS2323: Type '(x: number, y: number) => number' is not assignable to type '() => number'.
     
     var a2: (x?: number) => number; 
         a2 = () => 1; // ok, same number of required params
@@ -41,7 +41,7 @@
         a2 = b.a5; // ok
         a2 = b.a6; // error
         ~~
-!!! Type '(x: number, y: number) => number' is not assignable to type '(x?: number) => number'.
+!!! error TS2323: Type '(x: number, y: number) => number' is not assignable to type '(x?: number) => number'.
     
     var a3: (x: number) => number; 
         a3 = () => 1; // ok, fewer required params
@@ -49,7 +49,7 @@
         a3 = (x: number) => 1; // ok, same number of required params
         a3 = (x: number, y: number) => 1;  // error, too many required params
         ~~
-!!! Type '(x: number, y: number) => number' is not assignable to type '(x: number) => number'.
+!!! error TS2323: Type '(x: number, y: number) => number' is not assignable to type '(x: number) => number'.
         a3 = b.a; // ok
         a3 = b.a2; // ok
         a3 = b.a3; // ok
@@ -57,7 +57,7 @@
         a3 = b.a5; // ok
         a3 = b.a6; // error
         ~~
-!!! Type '(x: number, y: number) => number' is not assignable to type '(x: number) => number'.
+!!! error TS2323: Type '(x: number, y: number) => number' is not assignable to type '(x: number) => number'.
     
     var a4: (x: number, y?: number) => number;
         a4 = () => 1; // ok, fewer required params

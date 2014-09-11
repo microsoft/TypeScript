@@ -6,13 +6,13 @@ decl.ts(3,26): error TS2307: Cannot find external module './baz'.
 ==== decl.ts (3 errors) ====
     import modErr  = require("./foo/bar.js");
                              ~~~~~~~~~~~~~~
-!!! Cannot find external module './foo/bar.js'.
+!!! error TS2307: Cannot find external module './foo/bar.js'.
     import modErr1 = require("baz");
                              ~~~~~
-!!! Cannot find external module 'baz'.
+!!! error TS2307: Cannot find external module 'baz'.
     import modErr2 = require("./baz");
                              ~~~~~~~
-!!! Cannot find external module './baz'.
+!!! error TS2307: Cannot find external module './baz'.
     
     //import modErr1 = require("\bar");
     

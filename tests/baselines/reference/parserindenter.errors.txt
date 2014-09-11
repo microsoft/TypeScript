@@ -16,48 +16,48 @@
     
     ///<reference path='formatting.ts' />
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! File 'formatting.ts' not found.
+!!! error TS6053: File 'formatting.ts' not found.
     
     
     module Formatting {
         export class Indenter implements ILineIndenationResolver  {
                                          ~~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ILineIndenationResolver'.
+!!! error TS2304: Cannot find name 'ILineIndenationResolver'.
     
             private indentationBag: IndentationBag;
                                     ~~~~~~~~~~~~~~
-!!! Cannot find name 'IndentationBag'.
+!!! error TS2304: Cannot find name 'IndentationBag'.
             private scriptBlockBeginLineNumber: number;
             private offsetIndentationDeltas: Dictionary_int_int;
                                              ~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'Dictionary_int_int'.
+!!! error TS2304: Cannot find name 'Dictionary_int_int'.
     
             constructor(
                 public logger: TypeScript.ILogger,
                                ~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                 public tree: ParseTree,
                              ~~~~~~~~~
-!!! Cannot find name 'ParseTree'.
+!!! error TS2304: Cannot find name 'ParseTree'.
                 public snapshot: ITextSnapshot,
                                  ~~~~~~~~~~~~~
-!!! Cannot find name 'ITextSnapshot'.
+!!! error TS2304: Cannot find name 'ITextSnapshot'.
                 public languageHostIndentation: string,
                 public editorOptions: Services.EditorOptions,
                                       ~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'Services'.
+!!! error TS2304: Cannot find name 'Services'.
                 public firstToken: TokenSpan,
                                    ~~~~~~~~~
-!!! Cannot find name 'TokenSpan'.
+!!! error TS2304: Cannot find name 'TokenSpan'.
                 public smartIndent: boolean) {
     
                 this.indentationBag = new IndentationBag(this.snapshot);
                                           ~~~~~~~~~~~~~~
-!!! Cannot find name 'IndentationBag'.
+!!! error TS2304: Cannot find name 'IndentationBag'.
                 this.scriptBlockBeginLineNumber = -1;
                 this.offsetIndentationDeltas = new Dictionary_int_int();     // text offset -> indentation delta
                                                    ~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'Dictionary_int_int'.
+!!! error TS2304: Cannot find name 'Dictionary_int_int'.
     
                 // by default the root (program) has zero indendation
                 this.tree.Root.SetIndentationOverride("");
@@ -69,13 +69,13 @@
     
             public GetIndentationEdits(token: TokenSpan, nextToken: TokenSpan, node: ParseNode, sameLineIndent: boolean): List_TextEditInfo {
                                               ~~~~~~~~~
-!!! Cannot find name 'TokenSpan'.
+!!! error TS2304: Cannot find name 'TokenSpan'.
                                                                     ~~~~~~~~~
-!!! Cannot find name 'TokenSpan'.
+!!! error TS2304: Cannot find name 'TokenSpan'.
                                                                                      ~~~~~~~~~
-!!! Cannot find name 'ParseNode'.
+!!! error TS2304: Cannot find name 'ParseNode'.
                                                                                                                           ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'List_TextEditInfo'.
+!!! error TS2304: Cannot find name 'List_TextEditInfo'.
                 if (this.logger.information()) {
                     this.logger.log("GetIndentationEdits(" +
                         "t1=[" + token.Span.startPosition() + "," + token.Span.endPosition()+ "], " +
@@ -90,7 +90,7 @@
                         var edit = result.get(i);
                         this.logger.log("edit: minChar=" + edit.position + ", limChar=" + (edit.position + edit.length) + ", text=\"" + TypeScript.stringToLiteral(edit.replaceWith, 30) + "\"");
                                                                                                                                         ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                     }
                 }
     
@@ -99,19 +99,19 @@
     
             public GetIndentationEditsWorker(token: TokenSpan, nextToken: TokenSpan, node: ParseNode, sameLineIndent: boolean): List_TextEditInfo {
                                                     ~~~~~~~~~
-!!! Cannot find name 'TokenSpan'.
+!!! error TS2304: Cannot find name 'TokenSpan'.
                                                                           ~~~~~~~~~
-!!! Cannot find name 'TokenSpan'.
+!!! error TS2304: Cannot find name 'TokenSpan'.
                                                                                            ~~~~~~~~~
-!!! Cannot find name 'ParseNode'.
+!!! error TS2304: Cannot find name 'ParseNode'.
                                                                                                                                 ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'List_TextEditInfo'.
+!!! error TS2304: Cannot find name 'List_TextEditInfo'.
                 var result = new List_TextEditInfo();
                                  ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'List_TextEditInfo'.
+!!! error TS2304: Cannot find name 'List_TextEditInfo'.
                 var indentationInfo: IndentationInfo = null;
                                      ~~~~~~~~~~~~~~~
-!!! Cannot find name 'IndentationInfo'.
+!!! error TS2304: Cannot find name 'IndentationInfo'.
     
                 // This handles the case:
                 //      return (
@@ -154,9 +154,9 @@
                         // check for label (identifier followed by a colon)
                         if (token.Token == AuthorTokenKind.atkIdentifier && nextToken != null && nextToken.Token == AuthorTokenKind.atkColon) {
                                            ~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorTokenKind'.
+!!! error TS2304: Cannot find name 'AuthorTokenKind'.
                                                                                                                     ~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorTokenKind'.
+!!! error TS2304: Cannot find name 'AuthorTokenKind'.
                             // This will make the label on the same level as the surrounding function/block
                             // ex: 
                             // {
@@ -188,7 +188,7 @@
                         // multi-line comments, apply delta indentation to all the other lines
                         if (token.Token == AuthorTokenKind.atkComment) {
                                            ~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorTokenKind'.
+!!! error TS2304: Cannot find name 'AuthorTokenKind'.
                             var commentEdits = this.GetCommentIndentationEdits(token);
                             commentEdits.foreach((item) => {
                                 result.add(item);
@@ -202,16 +202,16 @@
     
             private GetCommentIndentationEdits(token: TokenSpan): List_TextEditInfo {
                                                       ~~~~~~~~~
-!!! Cannot find name 'TokenSpan'.
+!!! error TS2304: Cannot find name 'TokenSpan'.
                                                                   ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'List_TextEditInfo'.
+!!! error TS2304: Cannot find name 'List_TextEditInfo'.
                 var result = new List_TextEditInfo();
                                  ~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'List_TextEditInfo'.
+!!! error TS2304: Cannot find name 'List_TextEditInfo'.
     
                 if (token.Token != AuthorTokenKind.atkComment)
                                    ~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorTokenKind'.
+!!! error TS2304: Cannot find name 'AuthorTokenKind'.
                     return result;
     
                 var commentLastLineNumber = this.snapshot.GetLineNumberFromPosition(token.Span.endPosition());
@@ -240,15 +240,15 @@
     
             static GetIndentSizeFromIndentText(indentText: string, editorOptions: Services.EditorOptions): number {
                                                                                   ~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'Services'.
+!!! error TS2304: Cannot find name 'Services'.
                 return GetIndentSizeFromText(indentText, editorOptions, /*includeNonIndentChars:*/ false);
                        ~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'GetIndentSizeFromText'.
+!!! error TS2304: Cannot find name 'GetIndentSizeFromText'.
             }
     
             static GetIndentSizeFromText(text: string, editorOptions: Services.EditorOptions, includeNonIndentChars: boolean): number {
                                                                       ~~~~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'Services'.
+!!! error TS2304: Cannot find name 'Services'.
                 var indentSize = 0;
     
                 for (var i = 0; i < text.length; i++) {
@@ -271,50 +271,50 @@
     
             private GetSpecialCaseIndentation(token: TokenSpan, node: ParseNode): IndentationInfo {
                                                      ~~~~~~~~~
-!!! Cannot find name 'TokenSpan'.
+!!! error TS2304: Cannot find name 'TokenSpan'.
                                                                       ~~~~~~~~~
-!!! Cannot find name 'ParseNode'.
+!!! error TS2304: Cannot find name 'ParseNode'.
                                                                                   ~~~~~~~~~~~~~~~
-!!! Cannot find name 'IndentationInfo'.
+!!! error TS2304: Cannot find name 'IndentationInfo'.
                 var indentationInfo: IndentationInfo = null;
                                      ~~~~~~~~~~~~~~~
-!!! Cannot find name 'IndentationInfo'.
+!!! error TS2304: Cannot find name 'IndentationInfo'.
     
                 switch (token.Token) {
                     case AuthorTokenKind.atkLCurly: // { is not part of the tree
                          ~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorTokenKind'.
+!!! error TS2304: Cannot find name 'AuthorTokenKind'.
                         indentationInfo = this.GetSpecialCaseIndentationForLCurly(node);
                         return indentationInfo;
     
                     case AuthorTokenKind.atkElse:   // else is not part of the tree
                          ~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorTokenKind'.
+!!! error TS2304: Cannot find name 'AuthorTokenKind'.
                     case AuthorTokenKind.atkRBrack: // ] is not part of the tree
                          ~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorTokenKind'.
+!!! error TS2304: Cannot find name 'AuthorTokenKind'.
                         indentationInfo = node.GetNodeStartLineIndentation(this);
                         return indentationInfo;
     
                     case AuthorTokenKind.atkRCurly: // } is not part of the tree
                          ~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorTokenKind'.
+!!! error TS2304: Cannot find name 'AuthorTokenKind'.
                         // if '}' is for a body-block, get indentation based on its parent.
                         if (node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkBlock && node.AuthorNode.EdgeLabel == AuthorParseNodeEdge.apneBody)
                                                             ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorParseNodeKind'.
+!!! error TS2304: Cannot find name 'AuthorParseNodeKind'.
                                                                                                                           ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorParseNodeEdge'.
+!!! error TS2304: Cannot find name 'AuthorParseNodeEdge'.
                             node = node.Parent;
                         indentationInfo = node.GetNodeStartLineIndentation(this);
                         return indentationInfo;
     
                     case AuthorTokenKind.atkWhile: // while (in do-while) is not part of the tree
                          ~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorTokenKind'.
+!!! error TS2304: Cannot find name 'AuthorTokenKind'.
                         if (node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkDoWhile) {
                                                             ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorParseNodeKind'.
+!!! error TS2304: Cannot find name 'AuthorParseNodeKind'.
                             indentationInfo = node.GetNodeStartLineIndentation(this);
                             return indentationInfo;
                         }
@@ -323,12 +323,12 @@
     
                     case AuthorTokenKind.atkSColon:
                          ~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorTokenKind'.
+!!! error TS2304: Cannot find name 'AuthorTokenKind'.
                         return this.GetSpecialCaseIndentationForSemicolon(token, node);
     
                     case AuthorTokenKind.atkComment:
                          ~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorTokenKind'.
+!!! error TS2304: Cannot find name 'AuthorTokenKind'.
                         return this.GetSpecialCaseIndentationForComment(token, node);
     
                     default:
@@ -338,28 +338,28 @@
     
             private GetSpecialCaseIndentationForLCurly(node: ParseNode): IndentationInfo {
                                                              ~~~~~~~~~
-!!! Cannot find name 'ParseNode'.
+!!! error TS2304: Cannot find name 'ParseNode'.
                                                                          ~~~~~~~~~~~~~~~
-!!! Cannot find name 'IndentationInfo'.
+!!! error TS2304: Cannot find name 'IndentationInfo'.
                 var indentationInfo: IndentationInfo = null;
                                      ~~~~~~~~~~~~~~~
-!!! Cannot find name 'IndentationInfo'.
+!!! error TS2304: Cannot find name 'IndentationInfo'.
     
                 if (node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkFncDecl ||
                                                     ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorParseNodeKind'.
+!!! error TS2304: Cannot find name 'AuthorParseNodeKind'.
                     node.AuthorNode.EdgeLabel == AuthorParseNodeEdge.apneThen || node.AuthorNode.EdgeLabel == AuthorParseNodeEdge.apneElse) {
                                                  ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorParseNodeEdge'.
+!!! error TS2304: Cannot find name 'AuthorParseNodeEdge'.
                                                                                                               ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorParseNodeEdge'.
+!!! error TS2304: Cannot find name 'AuthorParseNodeEdge'.
                         // flushed with the node (function & if)
                     indentationInfo = node.GetNodeStartLineIndentation(this);
                     return indentationInfo;
                 }
                 else if (node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkObject && !node.CanIndent()) {
                                                          ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorParseNodeKind'.
+!!! error TS2304: Cannot find name 'AuthorParseNodeKind'.
                     // if the open curly belongs to a non-indented object, do nothing here.
                     return null;
                 }
@@ -371,14 +371,14 @@
     
             private GetSpecialCaseIndentationForSemicolon(token: TokenSpan, node: ParseNode): IndentationInfo {
                                                                  ~~~~~~~~~
-!!! Cannot find name 'TokenSpan'.
+!!! error TS2304: Cannot find name 'TokenSpan'.
                                                                                   ~~~~~~~~~
-!!! Cannot find name 'ParseNode'.
+!!! error TS2304: Cannot find name 'ParseNode'.
                                                                                               ~~~~~~~~~~~~~~~
-!!! Cannot find name 'IndentationInfo'.
+!!! error TS2304: Cannot find name 'IndentationInfo'.
                 var indentationInfo: IndentationInfo = null;
                                      ~~~~~~~~~~~~~~~
-!!! Cannot find name 'IndentationInfo'.
+!!! error TS2304: Cannot find name 'IndentationInfo'.
     
                 if (this.smartIndent) {
                     indentationInfo = node.GetEffectiveChildrenIndentation(this);
@@ -388,16 +388,16 @@
                     // Indent all semicolons except the ones that belong to the for statement parts (initalizer, condition, itnrement)
                     if (node.AuthorNode.Details.Kind != AuthorParseNodeKind.apnkFor) {
                                                         ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorParseNodeKind'.
+!!! error TS2304: Cannot find name 'AuthorParseNodeKind'.
                         // The passed node is actually either the program or the list because semicolon doesn't belong
                         // to any statement in the tree, though the statement extends up to the semicolon position.
                         // To find the correct statement, we look for the adjacent node on the left of the semicolon.
                         var semiColonStartSpan = new Span(token.Span.startPosition(), 0);
                                                      ~~~~
-!!! Cannot find name 'Span'.
+!!! error TS2304: Cannot find name 'Span'.
                         node = ParseTree.FindCommonParentNode(semiColonStartSpan, semiColonStartSpan, node);
                                ~~~~~~~~~
-!!! Cannot find name 'ParseTree'.
+!!! error TS2304: Cannot find name 'ParseTree'.
                         indentationInfo = node.GetEffectiveChildrenIndentation(this);
                         return indentationInfo;
                     }
@@ -408,19 +408,19 @@
     
             private GetSpecialCaseIndentationForComment(token: TokenSpan, node: ParseNode): IndentationInfo {
                                                                ~~~~~~~~~
-!!! Cannot find name 'TokenSpan'.
+!!! error TS2304: Cannot find name 'TokenSpan'.
                                                                                 ~~~~~~~~~
-!!! Cannot find name 'ParseNode'.
+!!! error TS2304: Cannot find name 'ParseNode'.
                                                                                             ~~~~~~~~~~~~~~~
-!!! Cannot find name 'IndentationInfo'.
+!!! error TS2304: Cannot find name 'IndentationInfo'.
                 var indentationInfo: IndentationInfo = null;
                                      ~~~~~~~~~~~~~~~
-!!! Cannot find name 'IndentationInfo'.
+!!! error TS2304: Cannot find name 'IndentationInfo'.
     
                 // Only indent line comment and the first line of block comment
                 var twoCharSpan = token.Span.Intersection(new Span(token.Span.startPosition(), 2));
                                                               ~~~~
-!!! Cannot find name 'Span'.
+!!! error TS2304: Cannot find name 'Span'.
                 if (twoCharSpan != null && (twoCharSpan.GetText() == "//" || twoCharSpan.GetText() == "/*")) {
                     while (node.ChildrenIndentationDelta == null && node.Parent != null)
                         node = node.Parent;
@@ -438,51 +438,51 @@
     
             private CanIndentComment(token: TokenSpan, node: ParseNode): boolean {
                                             ~~~~~~~~~
-!!! Cannot find name 'TokenSpan'.
+!!! error TS2304: Cannot find name 'TokenSpan'.
                                                              ~~~~~~~~~
-!!! Cannot find name 'ParseNode'.
+!!! error TS2304: Cannot find name 'ParseNode'.
                 switch (node.AuthorNode.Details.Kind) {
                     case AuthorParseNodeKind.apnkProg:
                          ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorParseNodeKind'.
+!!! error TS2304: Cannot find name 'AuthorParseNodeKind'.
                     case AuthorParseNodeKind.apnkBlock:
                          ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorParseNodeKind'.
+!!! error TS2304: Cannot find name 'AuthorParseNodeKind'.
                     case AuthorParseNodeKind.apnkSwitch:
                          ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorParseNodeKind'.
+!!! error TS2304: Cannot find name 'AuthorParseNodeKind'.
                     case AuthorParseNodeKind.apnkCase:
                          ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorParseNodeKind'.
+!!! error TS2304: Cannot find name 'AuthorParseNodeKind'.
                     case AuthorParseNodeKind.apnkDefaultCase:
                          ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorParseNodeKind'.
+!!! error TS2304: Cannot find name 'AuthorParseNodeKind'.
                     case AuthorParseNodeKind.apnkIf:
                          ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorParseNodeKind'.
+!!! error TS2304: Cannot find name 'AuthorParseNodeKind'.
                     case AuthorParseNodeKind.apnkFor:
                          ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorParseNodeKind'.
+!!! error TS2304: Cannot find name 'AuthorParseNodeKind'.
                     case AuthorParseNodeKind.apnkForIn:
                          ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorParseNodeKind'.
+!!! error TS2304: Cannot find name 'AuthorParseNodeKind'.
                     case AuthorParseNodeKind.apnkWhile:
                          ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorParseNodeKind'.
+!!! error TS2304: Cannot find name 'AuthorParseNodeKind'.
                     case AuthorParseNodeKind.apnkWith:
                          ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorParseNodeKind'.
+!!! error TS2304: Cannot find name 'AuthorParseNodeKind'.
                     case AuthorParseNodeKind.apnkDoWhile:
                          ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorParseNodeKind'.
+!!! error TS2304: Cannot find name 'AuthorParseNodeKind'.
                     case AuthorParseNodeKind.apnkObject:
                          ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorParseNodeKind'.
+!!! error TS2304: Cannot find name 'AuthorParseNodeKind'.
                         return true;
     
                     case AuthorParseNodeKind.apnkFncDecl:
                          ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorParseNodeKind'.
+!!! error TS2304: Cannot find name 'AuthorParseNodeKind'.
                         // Comments before arguments are not indented.
                         // This code doesn't cover the cases of comment after the last argument or 
                         // when there are no arguments. Though this is okay since the only case we care about is:
@@ -491,9 +491,9 @@
                         var result = true;
                         var children = ParseNodeExtensions.FindChildrenWithEdge(node, AuthorParseNodeEdge.apneArgument);
                                        ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ParseNodeExtensions'.
+!!! error TS2304: Cannot find name 'ParseNodeExtensions'.
                                                                                       ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorParseNodeEdge'.
+!!! error TS2304: Cannot find name 'AuthorParseNodeEdge'.
                         children.foreach((argumentNode) => {
                             if (token.Span.startPosition() < argumentNode.AuthorNode.Details.StartOffset)
                                 result = false;
@@ -507,7 +507,7 @@
     
             private ApplyScriptBlockIndentation(languageHostIndentation: string, tree: ParseTree): void
                                                                                        ~~~~~~~~~
-!!! Cannot find name 'ParseTree'.
+!!! error TS2304: Cannot find name 'ParseTree'.
             {
                 if (languageHostIndentation == null || tree.StartNodeSelf == null)
                     return;
@@ -562,21 +562,21 @@
     
             private GetIndentEdit(indentInfo: IndentationInfo, tokenStartPosition: number, sameLineIndent: boolean): TextEditInfo {
                                               ~~~~~~~~~~~~~~~
-!!! Cannot find name 'IndentationInfo'.
+!!! error TS2304: Cannot find name 'IndentationInfo'.
                                                                                                                      ~~~~~~~~~~~~
-!!! Cannot find name 'TextEditInfo'.
+!!! error TS2304: Cannot find name 'TextEditInfo'.
                 var indentText = this.ApplyIndentationLevel(indentInfo.Prefix, indentInfo.Level);
     
                 if (sameLineIndent) {
                     return new TextEditInfo(tokenStartPosition, 0, indentText);
                                ~~~~~~~~~~~~
-!!! Cannot find name 'TextEditInfo'.
+!!! error TS2304: Cannot find name 'TextEditInfo'.
                 }
                 else {
                     var snapshotLine = this.snapshot.GetLineFromPosition(tokenStartPosition);
                     var currentIndentSpan = new Span(snapshotLine.startPosition(), tokenStartPosition - snapshotLine.startPosition());
                                                 ~~~~
-!!! Cannot find name 'Span'.
+!!! error TS2304: Cannot find name 'Span'.
                     var currentIndentText = this.snapshot.GetText(currentIndentSpan);
     
                     if (currentIndentText !== indentText) {
@@ -586,17 +586,17 @@
                                 var c = currentIndentText.charCodeAt(i);
                                 if (!StringUtils.IsWhiteSpace(c)) {
                                      ~~~~~~~~~~~
-!!! Cannot find name 'StringUtils'.
+!!! error TS2304: Cannot find name 'StringUtils'.
                                     Debug.Fail("Formatting error: Will remove user code when indenting the line: " + snapshotLine.getText());
                                     ~~~~~
-!!! Cannot find name 'Debug'.
+!!! error TS2304: Cannot find name 'Debug'.
                                     break;
                                 }
                             }
                         }
                         return new TextEditInfo(currentIndentSpan.start(), currentIndentSpan.length(), indentText);
                                    ~~~~~~~~~~~~
-!!! Cannot find name 'TextEditInfo'.
+!!! error TS2304: Cannot find name 'TextEditInfo'.
                     }
                 }
     
@@ -611,13 +611,13 @@
                 if (level < 0) {
                     if (StringUtils.IsNullOrEmpty(existingIndentation))
                         ~~~~~~~~~~~
-!!! Cannot find name 'StringUtils'.
+!!! error TS2304: Cannot find name 'StringUtils'.
                         return "";
     
                     var totalIndent = 0;
                     StringUtils.foreach(existingIndentation, (c) => {
                     ~~~~~~~~~~~
-!!! Cannot find name 'StringUtils'.
+!!! error TS2304: Cannot find name 'StringUtils'.
                         if (c == '\t')
                             totalIndent += tabSize;
                         else
@@ -638,12 +638,12 @@
             private GetIndentString(prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean): string {
                 var tabString = convertTabsToSpaces ? StringUtils.create(' ', tabSize) : "\t";
                                                       ~~~~~~~~~~~
-!!! Cannot find name 'StringUtils'.
+!!! error TS2304: Cannot find name 'StringUtils'.
     
                 var text = "";
                 if (!StringUtils.IsNullOrEmpty(prefix))
                      ~~~~~~~~~~~
-!!! Cannot find name 'StringUtils'.
+!!! error TS2304: Cannot find name 'StringUtils'.
                     text += prefix;
     
                 var pos = 0;
@@ -665,14 +665,14 @@
     
             private  ApplyIndentationDeltaFromParent(token: TokenSpan, node: ParseNode): IndentationInfo {
                                                             ~~~~~~~~~
-!!! Cannot find name 'TokenSpan'.
+!!! error TS2304: Cannot find name 'TokenSpan'.
                                                                              ~~~~~~~~~
-!!! Cannot find name 'ParseNode'.
+!!! error TS2304: Cannot find name 'ParseNode'.
                                                                                          ~~~~~~~~~~~~~~~
-!!! Cannot find name 'IndentationInfo'.
+!!! error TS2304: Cannot find name 'IndentationInfo'.
                 var indentationInfo: IndentationInfo = null;
                                      ~~~~~~~~~~~~~~~
-!!! Cannot find name 'IndentationInfo'.
+!!! error TS2304: Cannot find name 'IndentationInfo'.
     
                 var indentableParent = node;
                 while (indentableParent != null && !indentableParent.CanIndent())
@@ -680,7 +680,7 @@
     
                 if (indentableParent != null && indentableParent.AuthorNode.Details.Kind != AuthorParseNodeKind.apnkProg) {
                                                                                             ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorParseNodeKind'.
+!!! error TS2304: Cannot find name 'AuthorParseNodeKind'.
                     var parentIndentationDeltaSize = this.GetIndentationDelta(indentableParent.AuthorNode.Details.StartOffset, token.Span.startPosition());
                     if (parentIndentationDeltaSize !== undefined) {
                         indentationInfo = this.ApplyIndentationDelta1(token.Span.startPosition(), parentIndentationDeltaSize);
@@ -692,12 +692,12 @@
     
             private ApplyIndentationDelta1(tokenStartPosition: number, delta: number): IndentationInfo {
                                                                                        ~~~~~~~~~~~~~~~
-!!! Cannot find name 'IndentationInfo'.
+!!! error TS2304: Cannot find name 'IndentationInfo'.
                 // Get current indentation
                 var snapshotLine = this.snapshot.GetLineFromPosition(tokenStartPosition);
                 var currentIndentSpan = new Span(snapshotLine.startPosition(), tokenStartPosition - snapshotLine.startPosition());
                                             ~~~~
-!!! Cannot find name 'Span'.
+!!! error TS2304: Cannot find name 'Span'.
                 var currentIndent = this.snapshot.GetText(currentIndentSpan);
     
                 // Calculate new indentation from current-indentation and delta
@@ -706,7 +706,7 @@
     
             private ApplyIndentationDelta2(currentIndent: string, delta: number): IndentationInfo {
                                                                                   ~~~~~~~~~~~~~~~
-!!! Cannot find name 'IndentationInfo'.
+!!! error TS2304: Cannot find name 'IndentationInfo'.
                 if (delta == 0)
                     return null;
     
@@ -721,7 +721,7 @@
                 if (newIndent != null) {
                     return new IndentationInfo(newIndent, 0);
                                ~~~~~~~~~~~~~~~
-!!! Cannot find name 'IndentationInfo'.
+!!! error TS2304: Cannot find name 'IndentationInfo'.
                 }
     
                 return null;
@@ -730,7 +730,7 @@
             private GetIndentationDelta(tokenStartPosition: number, childTokenStartPosition: number/*?*/): number/*?*/ {
                 Debug.Assert(childTokenStartPosition !== undefined, "Error: caller must pass 'null' for undefined position");
                 ~~~~~
-!!! Cannot find name 'Debug'.
+!!! error TS2304: Cannot find name 'Debug'.
     
                 var indentationDeltaSize = this.offsetIndentationDeltas.GetValue(tokenStartPosition);
                 if (indentationDeltaSize === null) {
@@ -742,7 +742,7 @@
     
                     var origIndentText = this.snapshot.GetText(new Span(indentEditInfo.OrigIndentPosition, indentEditInfo.OrigIndentLength()));
                                                                    ~~~~
-!!! Cannot find name 'Span'.
+!!! error TS2304: Cannot find name 'Span'.
                     var newIndentText = indentEditInfo.Indentation();
     
                     var origIndentSize = Indenter.GetIndentSizeFromText(origIndentText, this.editorOptions, /*includeNonIndentChars*/true);
@@ -766,7 +766,7 @@
                         var childTokenLineStartPosition = this.snapshot.GetLineFromPosition(childTokenStartPosition).startPosition();
                         var childIndentText = this.snapshot.GetText(new Span(childTokenLineStartPosition, childTokenStartPosition - childTokenLineStartPosition));
                                                                         ~~~~
-!!! Cannot find name 'Span'.
+!!! error TS2304: Cannot find name 'Span'.
     
                         var childIndentSize = Indenter.GetIndentSizeFromIndentText(childIndentText, this.editorOptions);
     
@@ -783,12 +783,12 @@
     
             private FillInheritedIndentation(tree: ParseTree): void
                                                    ~~~~~~~~~
-!!! Cannot find name 'ParseTree'.
+!!! error TS2304: Cannot find name 'ParseTree'.
             {
                 var offset = -1;
                 var indentNode: ParseNode = null;
                                 ~~~~~~~~~
-!!! Cannot find name 'ParseNode'.
+!!! error TS2304: Cannot find name 'ParseNode'.
     
                 if (tree.StartNodeSelf != null) {
                     if (!this.smartIndent && tree.StartNodePreviousSibling !== null && tree.StartNodeSelf.AuthorNode.Label == 0 && tree.StartNodePreviousSibling.Label == 0) {
@@ -812,7 +812,7 @@
                     else {
                         var parent: ParseNode;
                                     ~~~~~~~~~
-!!! Cannot find name 'ParseNode'.
+!!! error TS2304: Cannot find name 'ParseNode'.
     
                         // Otherwise base on parent indentation.
                         if (this.smartIndent) {
@@ -840,7 +840,7 @@
                         // Skip Program since it has no indentation
                         if (parent != null && parent.AuthorNode.Details.Kind != AuthorParseNodeKind.apnkProg) {
                                                                                 ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorParseNodeKind'.
+!!! error TS2304: Cannot find name 'AuthorParseNodeKind'.
                             offset = parent.AuthorNode.Details.StartOffset;
                             indentNode = parent;
                         }
@@ -854,7 +854,7 @@
                     if (!this.smartIndent && tree.StartNodePreviousSibling !== null && indentNode.Parent != null) {
                         ParseNodeExtensions.GetChildren(indentNode.Parent).foreach((sibling) => {
                         ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ParseNodeExtensions'.
+!!! error TS2304: Cannot find name 'ParseNodeExtensions'.
                             if (sibling !== indentNode) {
                                 if (sibling.CanIndent())
                                     sibling.SetIndentationOverride(indentOverride);
@@ -887,7 +887,7 @@
             public GetLineIndentationForOffset(offset: number): string {
                 var indentationEdit: IndentationEditInfo;
                                      ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'IndentationEditInfo'.
+!!! error TS2304: Cannot find name 'IndentationEditInfo'.
     
                 // First check if we already have indentation info in our indentation bag
                 indentationEdit = this.indentationBag.FindIndent(offset);
@@ -910,11 +910,11 @@
     
             private RegisterIndentation(indent: TextEditInfo, sameLineIndent: boolean): void
                                                 ~~~~~~~~~~~~
-!!! Cannot find name 'TextEditInfo'.
+!!! error TS2304: Cannot find name 'TextEditInfo'.
             {
                 var indentationInfo: IndentationEditInfo = null;
                                      ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'IndentationEditInfo'.
+!!! error TS2304: Cannot find name 'IndentationEditInfo'.
     
                 if (sameLineIndent) {
                     // Consider the original indentation from the beginning of the line up to the indent position (or really the token position)
@@ -923,12 +923,12 @@
     
                     indentationInfo = IndentationEditInfo.create2(indent.Position, indent.ReplaceWith, lineStartPosition, lineIndentLength);
                                       ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'IndentationEditInfo'.
+!!! error TS2304: Cannot find name 'IndentationEditInfo'.
                 }
                 else {
                     indentationInfo = new IndentationEditInfo(indent);
                                           ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'IndentationEditInfo'.
+!!! error TS2304: Cannot find name 'IndentationEditInfo'.
                 }
     
                 this.indentationBag.AddIndent(indentationInfo);
@@ -938,14 +938,14 @@
             {
                 this.RegisterIndentation(new TextEditInfo(position, 0, indent), false);
                                              ~~~~~~~~~~~~
-!!! Cannot find name 'TextEditInfo'.
+!!! error TS2304: Cannot find name 'TextEditInfo'.
             }
     
             private AdjustStartOffsetIfNeeded(token: TokenSpan, node: ParseNode): void
                                                      ~~~~~~~~~
-!!! Cannot find name 'TokenSpan'.
+!!! error TS2304: Cannot find name 'TokenSpan'.
                                                                       ~~~~~~~~~
-!!! Cannot find name 'ParseNode'.
+!!! error TS2304: Cannot find name 'ParseNode'.
             {
                 if (token == null)
                     return;
@@ -955,42 +955,42 @@
                 switch (token.Token) {
                     case AuthorTokenKind.atkFunction:
                          ~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorTokenKind'.
+!!! error TS2304: Cannot find name 'AuthorTokenKind'.
                         updateStartOffset = node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkFncDecl;
                                                                             ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorParseNodeKind'.
+!!! error TS2304: Cannot find name 'AuthorParseNodeKind'.
                         break;
     
                     case AuthorTokenKind.atkLCurly:
                          ~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorTokenKind'.
+!!! error TS2304: Cannot find name 'AuthorTokenKind'.
                         updateStartOffset = node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkObject;
                                                                             ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorParseNodeKind'.
+!!! error TS2304: Cannot find name 'AuthorParseNodeKind'.
                         break;
     
                     case AuthorTokenKind.atkLBrack:
                          ~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorTokenKind'.
+!!! error TS2304: Cannot find name 'AuthorTokenKind'.
                         updateStartOffset = node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkArray;
                                                                             ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'AuthorParseNodeKind'.
+!!! error TS2304: Cannot find name 'AuthorParseNodeKind'.
                         break;
                 }
     
                 if (updateStartOffset) {
                     ParseNodeExtensions.SetNodeSpan(node, token.Span.startPosition(), node.AuthorNode.Details.EndOffset);
                     ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'ParseNodeExtensions'.
+!!! error TS2304: Cannot find name 'ParseNodeExtensions'.
                 }
             }
     
             private IsMultiLineString(token: TokenSpan): boolean {
                                              ~~~~~~~~~
-!!! Cannot find name 'TokenSpan'.
+!!! error TS2304: Cannot find name 'TokenSpan'.
                 return token.tokenID === TypeScript.TokenID.StringLiteral &&
                                          ~~~~~~~~~~
-!!! Cannot find name 'TypeScript'.
+!!! error TS2304: Cannot find name 'TypeScript'.
                     this.snapshot.GetLineNumberFromPosition(token.Span.endPosition()) > this.snapshot.GetLineNumberFromPosition(token.Span.startPosition());
             }
         }

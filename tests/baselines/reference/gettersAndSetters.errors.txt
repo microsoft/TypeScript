@@ -7,17 +7,17 @@
         
         public get Foo() { return this.fooBack;} // ok
                    ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         public set Foo(foo:string) {this.fooBack = foo;} // ok
                    ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     
         static get Bar() {return C.barBack;} // ok
                    ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         static set Bar(bar:string) {C.barBack = bar;} // ok
                    ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     
         public get = function() {} // ok
         public set = function() {} // ok
@@ -33,17 +33,17 @@
     
     var baz = c.Baz;
                 ~~~
-!!! Property 'Baz' does not exist on type 'C'.
+!!! error TS2339: Property 'Baz' does not exist on type 'C'.
     c.Baz = "bazv";
       ~~~
-!!! Property 'Baz' does not exist on type 'C'.
+!!! error TS2339: Property 'Baz' does not exist on type 'C'.
     
     // The Foo accessors' return and param types should be contextually typed to the Foo field
     var o : {Foo:number;} = {get Foo() {return 0;}, set Foo(val:number){val}}; // o
                                  ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                                                         ~~~
-!!! Accessors are only available when targeting ECMAScript 5 and higher.
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     
     var ofg = o.Foo;
     o.Foo = 0;

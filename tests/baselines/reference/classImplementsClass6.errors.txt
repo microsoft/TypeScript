@@ -20,7 +20,7 @@
     c2 = c;
     c.bar(); // error
       ~~~
-!!! Property 'bar' does not exist on type 'C'.
+!!! error TS2339: Property 'bar' does not exist on type 'C'.
     c2.bar(); // should error
        ~~~
-!!! Property 'bar' does not exist on type 'C2'.
+!!! error TS2339: Property 'bar' does not exist on type 'C2'.

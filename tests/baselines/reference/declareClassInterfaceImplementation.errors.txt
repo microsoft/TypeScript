@@ -5,8 +5,8 @@
     
     declare class Buffer implements IBuffer {
                   ~~~~~~
-!!! Class 'Buffer' incorrectly implements interface 'IBuffer':
-!!!   Index signature is missing in type 'Buffer'.
+!!! error TS2421: Class 'Buffer' incorrectly implements interface 'IBuffer':
+!!! error TS2421:   Index signature is missing in type 'Buffer'.
     
     }
     

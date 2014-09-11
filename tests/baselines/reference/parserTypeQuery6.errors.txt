@@ -1,4 +1,4 @@
 ==== tests/cases/conformance/parser/ecmascript5/Types/parserTypeQuery6.ts (1 errors) ====
     var v: typeof A.B;
                   ~
-!!! Cannot find name 'A'.
+!!! error TS2304: Cannot find name 'A'.

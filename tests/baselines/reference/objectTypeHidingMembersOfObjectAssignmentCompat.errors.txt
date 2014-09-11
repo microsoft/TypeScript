@@ -7,10 +7,10 @@
     var o: Object;
     o = i; // error
     ~
-!!! Type 'I' is not assignable to type 'Object':
-!!!   Types of property 'toString' are incompatible:
-!!!     Type '() => void' is not assignable to type '() => string':
-!!!       Type 'void' is not assignable to type 'string'.
+!!! error TS2322: Type 'I' is not assignable to type 'Object':
+!!! error TS2322:   Types of property 'toString' are incompatible:
+!!! error TS2322:     Type '() => void' is not assignable to type '() => string':
+!!! error TS2322:       Type 'void' is not assignable to type 'string'.
     i = o; // ok
     
     class C {
@@ -19,10 +19,10 @@
     var c: C;
     o = c; // error
     ~
-!!! Type 'C' is not assignable to type 'Object':
-!!!   Types of property 'toString' are incompatible:
-!!!     Type '() => void' is not assignable to type '() => string':
-!!!       Type 'void' is not assignable to type 'string'.
+!!! error TS2322: Type 'C' is not assignable to type 'Object':
+!!! error TS2322:   Types of property 'toString' are incompatible:
+!!! error TS2322:     Type '() => void' is not assignable to type '() => string':
+!!! error TS2322:       Type 'void' is not assignable to type 'string'.
     c = o; // ok
     
     var a = {
@@ -30,8 +30,8 @@
     }
     o = a; // error
     ~
-!!! Type '{ toString: () => void; }' is not assignable to type 'Object':
-!!!   Types of property 'toString' are incompatible:
-!!!     Type '() => void' is not assignable to type '() => string':
-!!!       Type 'void' is not assignable to type 'string'.
+!!! error TS2322: Type '{ toString: () => void; }' is not assignable to type 'Object':
+!!! error TS2322:   Types of property 'toString' are incompatible:
+!!! error TS2322:     Type '() => void' is not assignable to type '() => string':
+!!! error TS2322:       Type 'void' is not assignable to type 'string'.
     a = o; // ok

@@ -3,7 +3,7 @@
         foo: string;
         constructor(x = 1); // error
                     ~~~~~
-!!! A parameter initializer is only allowed in a function or constructor implementation.
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
         constructor() {
         }
     }
@@ -12,7 +12,7 @@
         foo: string;
         constructor(x = 1); // error
                     ~~~~~
-!!! A parameter initializer is only allowed in a function or constructor implementation.
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
         constructor() {
         }
     }

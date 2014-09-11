@@ -4,11 +4,11 @@
     
     f = g;
     ~
-!!! Type '(s: string, b?: boolean) => void' is not assignable to type '(s: string, n?: number) => void':
-!!!   Types of parameters 'b' and 'n' are incompatible:
-!!!     Type 'boolean' is not assignable to type 'number'.
+!!! error TS2322: Type '(s: string, b?: boolean) => void' is not assignable to type '(s: string, n?: number) => void':
+!!! error TS2322:   Types of parameters 'b' and 'n' are incompatible:
+!!! error TS2322:     Type 'boolean' is not assignable to type 'number'.
     g = f;
     ~
-!!! Type '(s: string, n?: number) => void' is not assignable to type '(s: string, b?: boolean) => void':
-!!!   Types of parameters 'n' and 'b' are incompatible:
-!!!     Type 'number' is not assignable to type 'boolean'.
+!!! error TS2322: Type '(s: string, n?: number) => void' is not assignable to type '(s: string, b?: boolean) => void':
+!!! error TS2322:   Types of parameters 'n' and 'b' are incompatible:
+!!! error TS2322:     Type 'number' is not assignable to type 'boolean'.

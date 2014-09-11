@@ -4,8 +4,8 @@
     }
     var x = IgnoreRulesSpecific.
             ~~~~~~~~~~~~~~~~~~~
-!!! Cannot find name 'IgnoreRulesSpecific'.
+!!! error TS2304: Cannot find name 'IgnoreRulesSpecific'.
     var y = Position.IgnoreRulesSpecific;
         ~
-!!! ',' expected.
+!!! error TS1005: ',' expected.
     

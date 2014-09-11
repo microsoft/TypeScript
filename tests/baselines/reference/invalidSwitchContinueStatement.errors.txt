@@ -5,6 +5,6 @@
         case 5:
             continue;
             ~~~~~~~~~
-!!! A 'continue' statement can only be used within an enclosing iteration statement.
+!!! error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
     }
     

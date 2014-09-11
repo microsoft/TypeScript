@@ -3,10 +3,10 @@
     class c1 { public foo() { } }
     var c1 = 1; // error
         ~~
-!!! Duplicate identifier 'c1'.
+!!! error TS2300: Duplicate identifier 'c1'.
     
     //// class then enum
     class c4 { public foo() { } }
     enum c4 { One } // error
          ~~
-!!! Duplicate identifier 'c4'.
+!!! error TS2300: Duplicate identifier 'c4'.

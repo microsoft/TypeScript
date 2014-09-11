@@ -29,5 +29,5 @@
     
     for () { // error
          ~
-!!! Expression expected.
+!!! error TS1109: Expression expected.
     }

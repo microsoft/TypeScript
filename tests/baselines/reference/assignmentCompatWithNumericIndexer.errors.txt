@@ -14,19 +14,19 @@
     a = b;
     b = a; // error
     ~
-!!! Type 'A' is not assignable to type '{ [x: number]: Derived; }':
-!!!   Index signatures are incompatible:
-!!!     Type 'Base' is not assignable to type 'Derived':
-!!!       Property 'bar' is missing in type 'Base'.
+!!! error TS2322: Type 'A' is not assignable to type '{ [x: number]: Derived; }':
+!!! error TS2322:   Index signatures are incompatible:
+!!! error TS2322:     Type 'Base' is not assignable to type 'Derived':
+!!! error TS2322:       Property 'bar' is missing in type 'Base'.
     
     var b2: { [x: number]: Derived2; }
     a = b2;
     b2 = a; // error
     ~~
-!!! Type 'A' is not assignable to type '{ [x: number]: Derived2; }':
-!!!   Index signatures are incompatible:
-!!!     Type 'Base' is not assignable to type 'Derived2':
-!!!       Property 'baz' is missing in type 'Base'.
+!!! error TS2322: Type 'A' is not assignable to type '{ [x: number]: Derived2; }':
+!!! error TS2322:   Index signatures are incompatible:
+!!! error TS2322:     Type 'Base' is not assignable to type 'Derived2':
+!!! error TS2322:       Property 'baz' is missing in type 'Base'.
     
     module Generics {
         class A<T extends Base> {
@@ -42,28 +42,28 @@
             var b: { [x: number]: Derived; }
             a = b; // error
             ~
-!!! Type '{ [x: number]: Derived; }' is not assignable to type 'A<T>':
-!!!   Index signatures are incompatible:
-!!!     Type 'Derived' is not assignable to type 'T'.
+!!! error TS2322: Type '{ [x: number]: Derived; }' is not assignable to type 'A<T>':
+!!! error TS2322:   Index signatures are incompatible:
+!!! error TS2322:     Type 'Derived' is not assignable to type 'T'.
             b = a; // error
             ~
-!!! Type 'A<T>' is not assignable to type '{ [x: number]: Derived; }':
-!!!   Index signatures are incompatible:
-!!!     Type 'T' is not assignable to type 'Derived':
-!!!       Property 'bar' is missing in type 'Base'.
+!!! error TS2322: Type 'A<T>' is not assignable to type '{ [x: number]: Derived; }':
+!!! error TS2322:   Index signatures are incompatible:
+!!! error TS2322:     Type 'T' is not assignable to type 'Derived':
+!!! error TS2322:       Property 'bar' is missing in type 'Base'.
     
             var b2: { [x: number]: Derived2; }
             a = b2; // error
             ~
-!!! Type '{ [x: number]: Derived2; }' is not assignable to type 'A<T>':
-!!!   Index signatures are incompatible:
-!!!     Type 'Derived2' is not assignable to type 'T'.
+!!! error TS2322: Type '{ [x: number]: Derived2; }' is not assignable to type 'A<T>':
+!!! error TS2322:   Index signatures are incompatible:
+!!! error TS2322:     Type 'Derived2' is not assignable to type 'T'.
             b2 = a; // error
             ~~
-!!! Type 'A<T>' is not assignable to type '{ [x: number]: Derived2; }':
-!!!   Index signatures are incompatible:
-!!!     Type 'T' is not assignable to type 'Derived2':
-!!!       Property 'baz' is missing in type 'Base'.
+!!! error TS2322: Type 'A<T>' is not assignable to type '{ [x: number]: Derived2; }':
+!!! error TS2322:   Index signatures are incompatible:
+!!! error TS2322:     Type 'T' is not assignable to type 'Derived2':
+!!! error TS2322:       Property 'baz' is missing in type 'Base'.
     
             var b3: { [x: number]: T; }
             a = b3; // ok
