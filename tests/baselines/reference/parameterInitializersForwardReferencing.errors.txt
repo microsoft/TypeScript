@@ -1,4 +1,4 @@
-==== tests/cases/compiler/defaultArgsForwardReferencing.ts (10 errors) ====
+==== tests/cases/conformance/functions/parameterInitializersForwardReferencing.ts (10 errors) ====
     function left(a, b = a, c = b) {
         a;
         b;
@@ -56,3 +56,7 @@
 !!! Initializer of parameter 'b' cannot reference identifier 'c' declared after it.
                                ~
 !!! Initializer of parameter 'c' cannot reference identifier 'd' declared after it.
+    
+    // Should not produce errors - can reference later parameters if they occur within a function expression initializer.
+    function f(a, b = function () { return c; }, c = b()) {
+    }

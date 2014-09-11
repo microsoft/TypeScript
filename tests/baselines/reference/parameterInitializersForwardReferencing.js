@@ -1,4 +1,4 @@
-//// [defaultArgsForwardReferencing.ts]
+//// [parameterInitializersForwardReferencing.ts]
 function left(a, b = a, c = b) {
     a;
     b;
@@ -37,7 +37,11 @@ class C {
 // Function expressions
 var x = (a = b, b = c, c = d) => { var d; };
 
-//// [defaultArgsForwardReferencing.js]
+// Should not produce errors - can reference later parameters if they occur within a function expression initializer.
+function f(a, b = function () { return c; }, c = b()) {
+}
+
+//// [parameterInitializersForwardReferencing.js]
 function left(a, b, c) {
     if (b === void 0) { b = a; }
     if (c === void 0) { c = b; }
@@ -97,3 +101,10 @@ var x = function (a, b, c) {
     if (c === void 0) { c = d; }
     var d;
 };
+// Should not produce errors - can reference later parameters if they occur within a function expression initializer.
+function f(a, b, c) {
+    if (b === void 0) { b = function () {
+        return c;
+    }; }
+    if (c === void 0) { c = b(); }
+}

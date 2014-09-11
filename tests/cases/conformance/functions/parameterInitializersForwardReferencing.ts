@@ -35,3 +35,7 @@ class C {
 
 // Function expressions
 var x = (a = b, b = c, c = d) => { var d; };
+
+// Should not produce errors - can reference later parameters if they occur within a function expression initializer.
+function f(a, b = function () { return c; }, c = b()) {
+}
