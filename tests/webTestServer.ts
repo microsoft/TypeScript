@@ -227,11 +227,15 @@ function handleRequestOperation(req: http.ServerRequest, res: http.ServerRespons
             send('success', res, null);
             break;
         case RequestType.DeleteFile:
-            fs.unlinkSync(reqPath);
+            if (fs.existsSync(reqPath)) {
+                fs.unlinkSync(reqPath);
+            }
             send('success', res, null);
             break;
         case RequestType.DeleteDir:
-            fs.rmdirSync(reqPath);
+            if (fs.existsSync(reqPath)) {
+                fs.rmdirSync(reqPath);
+            }
             send('success', res, null);
             break;
         case RequestType.AppendFile:
