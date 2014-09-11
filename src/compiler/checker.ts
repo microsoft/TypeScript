@@ -3468,29 +3468,6 @@ module ts {
             return getTypeOfSymbol(getExportSymbolOfValueSymbolIfExported(symbol));
         }
 
-        function getThisContainer(node: Node): Node {
-            while (true) {
-                node = node.parent;
-                if (!node) {
-                    return node;
-                }
-                switch (node.kind) {
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.FunctionExpression:
-                    case SyntaxKind.ModuleDeclaration:
-                    case SyntaxKind.Property:
-                    case SyntaxKind.Method:
-                    case SyntaxKind.Constructor:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                    case SyntaxKind.EnumDeclaration:
-                    case SyntaxKind.SourceFile:
-                    case SyntaxKind.ArrowFunction:
-                        return node;
-                }
-            }
-        }
-
         function captureLexicalThis(node: Node, container: Node): void {
             var classNode = container.parent && container.parent.kind === SyntaxKind.ClassDeclaration ? container.parent : undefined;
             getNodeLinks(node).flags |= NodeCheckFlags.LexicalThis;
@@ -3503,11 +3480,14 @@ module ts {
         }
 
         function checkThisExpression(node: Node): Type {
-            var container = getThisContainer(node);
+            // Stop at the first arrow function so that we can
+            // tell whether 'this' needs to be captured.
+            var container = getThisContainer(node, /* includeArrowFunctions */ true);
             var needToCaptureLexicalThis = false;
-            // skip arrow functions
-            while (container.kind === SyntaxKind.ArrowFunction) {
-                container = getThisContainer(container);
+
+            // Now skip arrow functions to get the "real" owner of 'this'.
+            if (container.kind === SyntaxKind.ArrowFunction) {
+                container = getThisContainer(container, /* includeArrowFunctions */ false);
                 needToCaptureLexicalThis = true;
             }
 
@@ -4405,37 +4385,6 @@ module ts {
             }
 
             return voidType;
-        }
-
-        // WARNING: This has the same semantics as the forEach family of functions,
-        //          in that traversal terminates in the event that 'visitor' supplies a truthy value.
-        function forEachReturnStatement<T>(body: Block, visitor: (stmt: ReturnStatement) => T): T {
-
-            return traverse(body);
-
-            function traverse(node: Node): T {
-                switch (node.kind) {
-                    case SyntaxKind.ReturnStatement:
-                        return visitor(node);
-                    case SyntaxKind.Block:
-                    case SyntaxKind.FunctionBlock:
-                    case SyntaxKind.IfStatement:
-                    case SyntaxKind.DoStatement:
-                    case SyntaxKind.WhileStatement:
-                    case SyntaxKind.ForStatement:
-                    case SyntaxKind.ForInStatement:
-                    case SyntaxKind.WithStatement:
-                    case SyntaxKind.SwitchStatement:
-                    case SyntaxKind.CaseClause:
-                    case SyntaxKind.DefaultClause:
-                    case SyntaxKind.LabelledStatement:
-                    case SyntaxKind.TryStatement:
-                    case SyntaxKind.TryBlock:
-                    case SyntaxKind.CatchBlock:
-                    case SyntaxKind.FinallyBlock:
-                        return forEachChild(node, traverse);
-                }
-            }
         }
 
         /// Returns a set of types relating to every return expression relating to a function block.
@@ -5854,17 +5803,6 @@ module ts {
 
         function checkBreakOrContinueStatement(node: BreakOrContinueStatement) {
             // TODO: Check that target label is valid
-        }
-
-        function getContainingFunction(node: Node): SignatureDeclaration {
-            while (true) {
-                node = node.parent;
-                if (!node || node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression ||
-                    node.kind === SyntaxKind.ArrowFunction || node.kind === SyntaxKind.Method || node.kind === SyntaxKind.Constructor ||
-                    node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor) {
-                    return <SignatureDeclaration>node;
-                }
-            }
         }
 
         function checkReturnStatement(node: ReturnStatement) {
