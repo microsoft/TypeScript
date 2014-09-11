@@ -66,7 +66,8 @@ module ts {
             getAugmentedPropertiesOfApparentType: getAugmentedPropertiesOfApparentType,
             getRootSymbol: getRootSymbol,
             getContextualType: getContextualType,
-            getFullyQualifiedName: getFullyQualifiedName
+            getFullyQualifiedName: getFullyQualifiedName,
+            getResolvedSignature: getResolvedSignature
         };
 
         var undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
@@ -4128,7 +4129,7 @@ module ts {
             return unknownSignature;
         }
 
-        function isCandidateSignature(node: CallExpression, signature: Signature) {
+        function signatureHasCorrectArity(node: CallExpression, signature: Signature) {
             var args = node.arguments || emptyArray;
             return args.length >= signature.minArgumentCount &&
                 (signature.hasRestParameter || args.length <= signature.parameters.length) &&
@@ -4142,15 +4143,15 @@ module ts {
         // interface B extends A { (x: 'foo'): string }
         // var b: B;
         // b('foo') // <- here overloads should be processed as [(x:'foo'): string, (x: string): void]
-        function collectCandidates(node: CallExpression, signatures: Signature[]): Signature[]{
-            var result: Signature[] = [];
+        function collectCandidates(node: CallExpression, signatures: Signature[], candidatesOutArray: Signature[]): Signature[]{
+            var result: Signature[] = candidatesOutArray || [];
             var lastParent: Node;
             var lastSymbol: Symbol;
             var cutoffPos: number = 0;
             var pos: number;
             for (var i = 0; i < signatures.length; i++) {
                 var signature = signatures[i];
-                if (isCandidateSignature(node, signature)) {
+                if (true) {
                     var symbol = signature.declaration && getSymbolOfNode(signature.declaration);
                     var parent = signature.declaration && signature.declaration.parent;
                     if (!lastSymbol || symbol === lastSymbol) {                        
@@ -4260,9 +4261,9 @@ module ts {
             return true;
         }
 
-        function resolveCall(node: CallExpression, signatures: Signature[]): Signature {
+        function resolveCall(node: CallExpression, signatures: Signature[], candidatesOutArray: Signature[]): Signature {
             forEach(node.typeArguments, checkSourceElement);
-            var candidates = collectCandidates(node, signatures);
+            var candidates = collectCandidates(node, signatures, candidatesOutArray);
             if (!candidates.length) {
                 error(node, Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);
                 return resolveErrorCall(node);
@@ -4278,20 +4279,24 @@ module ts {
             var relation = candidates.length === 1 ? assignableRelation : subtypeRelation;
             while (true) {
                 for (var i = 0; i < candidates.length; i++) {
+                    if (!signatureHasCorrectArity(node, candidates[i])) {
+                        continue;
+                    }
+
                     while (true) {
-                        var candidate = candidates[i];
-                        if (candidate.typeParameters) {
+                        var candidateWithCorrectArity = candidates[i];
+                        if (candidateWithCorrectArity.typeParameters) {
                             var typeArguments = node.typeArguments ?
-                                checkTypeArguments(candidate, node.typeArguments) :
-                                inferTypeArguments(candidate, args, excludeArgument);
-                            candidate = getSignatureInstantiation(candidate, typeArguments);
+                                checkTypeArguments(candidateWithCorrectArity, node.typeArguments) :
+                                inferTypeArguments(candidateWithCorrectArity, args, excludeArgument);
+                            candidateWithCorrectArity = getSignatureInstantiation(candidateWithCorrectArity, typeArguments);
                         }
-                        if (!checkApplicableSignature(node, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
+                        if (!checkApplicableSignature(node, candidateWithCorrectArity, relation, excludeArgument, /*reportErrors*/ false)) {
                             break;
                         }
                         var index = excludeArgument ? indexOf(excludeArgument, true) : -1;
                         if (index < 0) {
-                            return candidate;
+                            return candidateWithCorrectArity;
                         }
                         excludeArgument[index] = false;
                     }
@@ -4301,17 +4306,26 @@ module ts {
                 }
                 relation = assignableRelation;
             }
+
             // No signatures were applicable. Now report errors based on the last applicable signature with
             // no arguments excluded from assignability checks.
-            checkApplicableSignature(node, candidate, relation, undefined, /*reportErrors*/ true);
+            // If candidate is undefined, it means that no candidates had a suitable arity. In that case,
+            // skip the checkApplicableSignature check.
+            if (candidateWithCorrectArity) {
+                checkApplicableSignature(node, candidateWithCorrectArity, relation, undefined, /*reportErrors*/ true);
+            }
+            else {
+                error(node, Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);
+                return resolveErrorCall(node);
+            }
             return resolveErrorCall(node);
         }
 
-        function resolveCallExpression(node: CallExpression): Signature {
+        function resolveCallExpression(node: CallExpression, candidatesOutArray: Signature[]): Signature {
             if (node.func.kind === SyntaxKind.SuperKeyword) {
                 var superType = checkSuperExpression(node.func);
                 if (superType !== unknownType) {
-                    return resolveCall(node, getSignaturesOfType(superType, SignatureKind.Construct));
+                    return resolveCall(node, getSignaturesOfType(superType, SignatureKind.Construct), candidatesOutArray);
                 }
                 return resolveUntypedCall(node);
             }
@@ -4359,10 +4373,10 @@ module ts {
                 }
                 return resolveErrorCall(node);
             }
-            return resolveCall(node, callSignatures);
+            return resolveCall(node, callSignatures, candidatesOutArray);
         }
 
-        function resolveNewExpression(node: NewExpression): Signature {
+        function resolveNewExpression(node: NewExpression, candidatesOutArray: Signature[]): Signature {
             var expressionType = checkExpression(node.func);
             if (expressionType === unknownType) {
                 // Another error has already been reported
@@ -4397,7 +4411,7 @@ module ts {
             // that the user will not add any.
             var constructSignatures = getSignaturesOfType(expressionType, SignatureKind.Construct);
             if (constructSignatures.length) {
-                return resolveCall(node, constructSignatures);
+                return resolveCall(node, constructSignatures, candidatesOutArray);
             }
 
             // If ConstructExpr's apparent type is an object type with no construct signatures but
@@ -4406,7 +4420,7 @@ module ts {
             // operation is Any.
             var callSignatures = getSignaturesOfType(expressionType, SignatureKind.Call);
             if (callSignatures.length) {
-                var signature = resolveCall(node, callSignatures);
+                var signature = resolveCall(node, callSignatures, candidatesOutArray);
                 if (getReturnTypeOfSignature(signature) !== voidType) {
                     error(node, Diagnostics.Only_a_void_function_can_be_called_with_the_new_keyword);
                 }
@@ -4417,11 +4431,15 @@ module ts {
             return resolveErrorCall(node);
         }
 
-        function getResolvedSignature(node: CallExpression): Signature {
+        // candidatesOutArray is passed by signature help in the language service, and collectCandidates
+        // must fill it up with the appropriate candidate signatures
+        function getResolvedSignature(node: CallExpression, candidatesOutArray?: Signature[]): Signature {
             var links = getNodeLinks(node);
             if (!links.resolvedSignature) {
                 links.resolvedSignature = anySignature;
-                links.resolvedSignature = node.kind === SyntaxKind.CallExpression ? resolveCallExpression(node) : resolveNewExpression(node);
+                links.resolvedSignature = node.kind === SyntaxKind.CallExpression
+                    ? resolveCallExpression(node, candidatesOutArray)
+                    : resolveNewExpression(node, candidatesOutArray);
             }
             return links.resolvedSignature;
         }

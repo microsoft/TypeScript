@@ -3517,71 +3517,72 @@ module ts {
 
                 return -1;
             }
-            //// Technically signature help should only be triggered on these characters
-            //if (node.kind !== SyntaxKind.CommaToken && node.kind !== SyntaxKind.OpenParenToken && node.kind !== SyntaxKind.LessThanToken) {
-            //    return false;
-            //}
 
-            //if (node.kind === SyntaxKind.CommaToken) {
-            //    if (node.parent.kind !== SyntaxKind.SyntaxList) {
-            //        return false;
-            //    }
+            function getSignatureHelpArgumentContext(node: Node): {
+                argumentNode: Node;
+                argumentIndex: number;
+                isTypeArgument: boolean;
+            } {
+                // We only want this node if it is a token and it strictly contains the current position.
+                // Otherwise we want the previous token
+                var isToken = node.kind < SyntaxKind.Missing;
+                if (!isToken || position <= node.getStart() || position >= node.getEnd()) {
+                    // This is a temporary hack until we figure out our token story.
+                    // The correct solution is to get the previous token
+                    node = SignatureInfoHelpers.findClosestRightmostSiblingFromLeft(position, sourceFile);
 
-            //    // node becomes the containing SyntaxList
-            //    node = node.parent;
-            //}
+                    if (!node) {
+                        return undefined;
+                    }
+                    if (node.parent.kind === SyntaxKind.CallExpression || node.parent.kind === SyntaxKind.NewExpression) {
+                        if (node === (<CallExpression>node.parent).func) {
+                            node = node.parent.getChildAt(1);
+                        }
+                    }
+                }
 
-            //// node is open paren, less than, or a syntax list containing a comma
-            //if (node.parent.kind === SyntaxKind.CallExpression || node.parent.kind === SyntaxKind.NewExpression) {
-            //    return true;
-            //}
+                var signatureHelpAvailable = false;
+                for (var n = node; n.kind !== SyntaxKind.SourceFile; n = n.parent) {
+                    if (n.kind === SyntaxKind.FunctionBlock) {
+                        return undefined;
+                    }
+
+                    var index = getArgumentIndex(n);
+                    if (index >= 0) {
+                        return {
+                            argumentNode: n,
+                            argumentIndex: index,
+                            isTypeArgument: false
+                        }
+                    }
+
+
+                    // TODO: Handle previous token logic
+                    // TODO: Handle generic call with incomplete 
+
+                    return undefined;
+                }
+            }
 
             synchronizeHostData();
 
             // Decide whether to show signature help
             var sourceFile = getSourceFile(fileName);
             var node = getNodeAtPosition(sourceFile, position);
-            // We only want this node if it is a token and it strictly contains the current position.
-            // Otherwise we want the previous token
-            var isToken = node.kind < SyntaxKind.Missing;
-            if (!isToken || position <= node.getStart() || position >= node.getEnd()) {
-                // This is a temporary hack until we figure out our token story.
-                // The correct solution is to get the previous token
-                node = SignatureInfoHelpers.findClosestRightmostSiblingFromLeft(position, sourceFile);
-
-                if (!node) {
-                    return undefined;
-                }
-                if (node.parent.kind === SyntaxKind.CallExpression || node.parent.kind === SyntaxKind.NewExpression) {
-                    if (node === (<CallExpression>node.parent).func) {
-                        node = node.parent.getChildAt(1);
-                    }
-                }
-            }
-            
-            var signatureHelpAvailable = false;
-            for (var n = node; n.kind !== SyntaxKind.SourceFile; n = n.parent) {
-                if (n.kind === SyntaxKind.FunctionBlock) {
-                    break;
-                }
-
-                var index = getArgumentIndex(n);
-                if (index >= 0) {
-                    signatureHelpAvailable = true;
-                    break;
-                }
 
 
-                // TODO: Handle previous token logic
-                // TODO: Handle generic call with incomplete 
+            // Semantic filtering of signature help
+            var signatureHelpContext = getSignatureHelpArgumentContext(node);
+            if (signatureHelpContext) {
+                var call = <CallExpression>signatureHelpContext.argumentNode.parent;
+                var candidates = <Signature[]>[];
+                var resolvedSignature = typeInfoResolver.getResolvedSignature(call, candidates);
+                return candidates.length
+                    ? new SignatureHelpItems(undefined, undefined, undefined)
+                    : undefined;
             }
 
-
-            return signatureHelpAvailable
-                ? new SignatureHelpItems(undefined, undefined, undefined)
-                : undefined;
-
-
+            return undefined;
         }
 
         function getSignatureHelpCurrentArgumentState(fileName: string, position: number, applicableSpanStart: number): SignatureHelpState {
